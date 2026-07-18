@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-13T10:39:58.147Z",
-  "masterSha": "941fc265306274ff766fe3d71e01b3afb63953e4",
+  "generatedAt": "2026-07-17T13:09:33.361Z",
+  "masterSha": "6e8c4b4cf238d75c57562360f73c5316873a65fc",
   "adapter": "legacy(compileRoomShellData)",
   "invariants": [
     "determinism-shuffled-input",

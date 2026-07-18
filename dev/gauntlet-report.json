@@ -1,8 +1,8 @@
 {
   "run": {
-    "date": "2026-07-08",
+    "date": "2026-07-17",
     "seed": 20260702,
-    "commit": "0dd023b"
+    "commit": "6e8c4b4c"
   },
   "harnesses": [
     {
@@ -1688,14 +1688,14 @@
     {
       "id": "FUZZ",
       "status": "completed",
-      "invoked": 510,
+      "invoked": 530,
       "skipped": 0,
       "findings": 0,
       "stats": {
-        "invoked": 510,
+        "invoked": 530,
         "unknownTypesFired": 20,
-        "typesEnumerated": 98,
-        "typesRun": 98,
+        "typesEnumerated": 102,
+        "typesRun": 102,
         "familyNames": [
           "1-empty",
           "2-all-null",
@@ -1726,6 +1726,26 @@
           },
           {
             "type": "advance_clock",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "animal_care",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "animal_interview",
             "families": {
               "1-empty": "clean",
               "2-all-null": "clean",
@@ -2225,6 +2245,16 @@
             }
           },
           {
+            "type": "hp",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
             "type": "hp_changed",
             "families": {
               "1-empty": "clean",
@@ -2575,6 +2605,16 @@
             }
           },
           {
+            "type": "state_transition",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
             "type": "tarot_landed",
             "families": {
               "1-empty": "clean",
@@ -2728,7 +2768,7 @@
               {
                 "step": "6-rest(loop1)",
                 "ok": true,
-                "note": "hpCur 15 -> 15"
+                "note": "hpCur 4 -> 15"
               },
               {
                 "step": "7-levelup(loop1)",
@@ -2743,7 +2783,7 @@
               {
                 "step": "3-combat(loop2)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop2)",
@@ -2758,12 +2798,12 @@
               {
                 "step": "6-rest(loop2)",
                 "ok": true,
-                "note": "hpCur 0 -> 15"
+                "note": "hpCur 15 -> 25"
               },
               {
                 "step": "7-levelup(loop2)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 400"
               },
               {
                 "step": "2-travel-walk(loop3)",
@@ -2788,12 +2828,12 @@
               {
                 "step": "6-rest(loop3)",
                 "ok": true,
-                "note": "hpCur 4 -> 25"
+                "note": "hpCur 25 -> 25"
               },
               {
                 "step": "7-levelup(loop3)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop4)",
@@ -2818,12 +2858,12 @@
               {
                 "step": "6-rest(loop4)",
                 "ok": true,
-                "note": "hpCur 25 -> 25"
+                "note": "hpCur 11 -> 25"
               },
               {
                 "step": "7-levelup(loop4)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop5)",
@@ -2848,12 +2888,12 @@
               {
                 "step": "6-rest(loop5)",
                 "ok": true,
-                "note": "hpCur 0 -> 25"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop5)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop6)",
@@ -2883,7 +2923,7 @@
               {
                 "step": "7-levelup(loop6)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop7)",
@@ -2908,12 +2948,12 @@
               {
                 "step": "6-rest(loop7)",
                 "ok": true,
-                "note": "hpCur 22 -> 22"
+                "note": "hpCur 25 -> 35"
               },
               {
                 "step": "7-levelup(loop7)",
                 "ok": true,
-                "note": "level 2, xp 800"
+                "note": "level 3, xp 1000"
               },
               {
                 "step": "2-travel-walk(loop8)",
@@ -2923,7 +2963,7 @@
               {
                 "step": "3-combat(loop8)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop8)",
@@ -2938,12 +2978,12 @@
               {
                 "step": "6-rest(loop8)",
                 "ok": true,
-                "note": "hpCur 0 -> 25"
+                "note": "hpCur 35 -> 35"
               },
               {
                 "step": "7-levelup(loop8)",
                 "ok": true,
-                "note": "level 2, xp 800"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop9)",
@@ -2968,12 +3008,12 @@
               {
                 "step": "6-rest(loop9)",
                 "ok": true,
-                "note": "hpCur 25 -> 35"
+                "note": "hpCur 35 -> 35"
               },
               {
                 "step": "7-levelup(loop9)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop10)",
@@ -2983,7 +3023,7 @@
               {
                 "step": "3-combat(loop10)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop10)",
@@ -2998,12 +3038,12 @@
               {
                 "step": "6-rest(loop10)",
                 "ok": true,
-                "note": "hpCur 35 -> 35"
+                "note": "hpCur 0 -> 35"
               },
               {
                 "step": "7-levelup(loop10)",
                 "ok": true,
-                "note": "level 3, xp 1450"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop11)",
@@ -3013,7 +3053,7 @@
               {
                 "step": "3-combat(loop11)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop11)",
@@ -3028,12 +3068,12 @@
               {
                 "step": "6-rest(loop11)",
                 "ok": true,
-                "note": "hpCur 0 -> 35"
+                "note": "hpCur 35 -> 35"
               },
               {
                 "step": "7-levelup(loop11)",
                 "ok": true,
-                "note": "level 3, xp 1450"
+                "note": "level 3, xp 2350"
               },
               {
                 "step": "2-travel-walk(loop12)",
@@ -3058,12 +3098,12 @@
               {
                 "step": "6-rest(loop12)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 0 -> 35"
               },
               {
                 "step": "7-levelup(loop12)",
                 "ok": true,
-                "note": "level 3, xp 1450"
+                "note": "level 3, xp 2350"
               },
               {
                 "step": "2-travel-walk(loop13)",
@@ -3073,7 +3113,7 @@
               {
                 "step": "3-combat(loop13)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop13)",
@@ -3088,12 +3128,12 @@
               {
                 "step": "6-rest(loop13)",
                 "ok": true,
-                "note": "hpCur 0 -> 35"
+                "note": "hpCur 35 -> 45"
               },
               {
                 "step": "7-levelup(loop13)",
                 "ok": true,
-                "note": "level 3, xp 1450"
+                "note": "level 4, xp 2800"
               },
               {
                 "step": "2-travel-walk(loop14)",
@@ -3118,12 +3158,12 @@
               {
                 "step": "6-rest(loop14)",
                 "ok": true,
-                "note": "hpCur 35 -> 35"
+                "note": "hpCur 45 -> 45"
               },
               {
                 "step": "7-levelup(loop14)",
                 "ok": true,
-                "note": "level 3, xp 1900"
+                "note": "level 4, xp 3250"
               },
               {
                 "step": "2-travel-walk(loop15)",
@@ -3133,7 +3173,7 @@
               {
                 "step": "3-combat(loop15)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop15)",
@@ -3148,12 +3188,12 @@
               {
                 "step": "6-rest(loop15)",
                 "ok": true,
-                "note": "hpCur 35 -> 35"
+                "note": "hpCur 0 -> 45"
               },
               {
                 "step": "7-levelup(loop15)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 4, xp 3250"
               },
               {
                 "step": "2-travel-walk(loop16)",
@@ -3178,12 +3218,12 @@
               {
                 "step": "6-rest(loop16)",
                 "ok": true,
-                "note": "hpCur 35 -> 45"
+                "note": "hpCur 45 -> 45"
               },
               {
                 "step": "7-levelup(loop16)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 3700"
               },
               {
                 "step": "2-travel-walk(loop17)",
@@ -3208,12 +3248,12 @@
               {
                 "step": "6-rest(loop17)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 0 -> 45"
               },
               {
                 "step": "7-levelup(loop17)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 3700"
               },
               {
                 "step": "2-travel-walk(loop18)",
@@ -3223,7 +3263,7 @@
               {
                 "step": "3-combat(loop18)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop18)",
@@ -3238,12 +3278,12 @@
               {
                 "step": "6-rest(loop18)",
                 "ok": true,
-                "note": "hpCur 0 -> 45"
+                "note": "hpCur 45 -> 45"
               },
               {
                 "step": "7-levelup(loop18)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 4150"
               },
               {
                 "step": "2-travel-walk(loop19)",
@@ -3273,7 +3313,7 @@
               {
                 "step": "7-levelup(loop19)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 4600"
               },
               {
                 "step": "2-travel-walk(loop20)",
@@ -3283,7 +3323,7 @@
               {
                 "step": "3-combat(loop20)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop20)",
@@ -3298,12 +3338,12 @@
               {
                 "step": "6-rest(loop20)",
                 "ok": true,
-                "note": "hpCur 0 -> 45"
+                "note": "hpCur 45 -> 45"
               },
               {
                 "step": "7-levelup(loop20)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 5050"
               },
               {
                 "step": "2-travel-walk(loop21)",
@@ -3333,7 +3373,7 @@
               {
                 "step": "7-levelup(loop21)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 5500"
               },
               {
                 "step": "2-travel-walk(loop22)",
@@ -3363,7 +3403,7 @@
               {
                 "step": "7-levelup(loop22)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 5500"
               },
               {
                 "step": "2-travel-walk(loop23)",
@@ -3393,7 +3433,7 @@
               {
                 "step": "7-levelup(loop23)",
                 "ok": true,
-                "note": "level 4, xp 4150"
+                "note": "level 4, xp 5950"
               },
               {
                 "step": "2-travel-walk(loop24)",
@@ -3423,7 +3463,7 @@
               {
                 "step": "7-levelup(loop24)",
                 "ok": true,
-                "note": "level 4, xp 4600"
+                "note": "level 4, xp 6400"
               },
               {
                 "step": "2-travel-walk(loop25)",
@@ -3448,12 +3488,12 @@
               {
                 "step": "6-rest(loop25)",
                 "ok": true,
-                "note": "hpCur 45 -> 45"
+                "note": "hpCur 45 -> 55"
               },
               {
                 "step": "7-levelup(loop25)",
                 "ok": true,
-                "note": "level 4, xp 5050"
+                "note": "level 5, xp 6850"
               },
               {
                 "step": "8-forced-death",
@@ -3489,126 +3529,6 @@
               },
               {
                 "step": "3-combat(loop1)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop1)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop1)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop1)",
-                "ok": true,
-                "note": "hpCur 8 -> 8"
-              },
-              {
-                "step": "7-levelup(loop1)",
-                "ok": true,
-                "note": "level 1, xp 200"
-              },
-              {
-                "step": "2-travel-walk(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop2)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop2)",
-                "ok": true,
-                "note": "hpCur 8 -> 13"
-              },
-              {
-                "step": "7-levelup(loop2)",
-                "ok": true,
-                "note": "level 2, xp 400"
-              },
-              {
-                "step": "2-travel-walk(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop3)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop3)",
-                "ok": true,
-                "note": "hpCur 0 -> 0"
-              },
-              {
-                "step": "7-levelup(loop3)",
-                "ok": true,
-                "note": "level 2, xp 400"
-              },
-              {
-                "step": "2-travel-walk(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop4)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop4)",
-                "ok": true,
-                "note": "hpCur 0 -> 13"
-              },
-              {
-                "step": "7-levelup(loop4)",
-                "ok": true,
-                "note": "level 2, xp 400"
-              },
-              {
-                "step": "2-travel-walk(loop5)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop5)",
                 "ok": true,
                 "note": "PC fell"
               },
@@ -3677,7 +3597,7 @@
               {
                 "step": "3-combat(loop2)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop2)",
@@ -3692,12 +3612,12 @@
               {
                 "step": "6-rest(loop2)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 10 -> 17"
               },
               {
                 "step": "7-levelup(loop2)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 400"
               },
               {
                 "step": "2-travel-walk(loop3)",
@@ -3707,7 +3627,7 @@
               {
                 "step": "3-combat(loop3)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop3)",
@@ -3722,12 +3642,12 @@
               {
                 "step": "6-rest(loop3)",
                 "ok": true,
-                "note": "hpCur 0 -> 10"
+                "note": "hpCur 17 -> 17"
               },
               {
                 "step": "7-levelup(loop3)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop4)",
@@ -3736,6 +3656,636 @@
               },
               {
                 "step": "3-combat(loop4)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop4)",
+                "ok": true,
+                "note": "hpCur 15 -> 15"
+              },
+              {
+                "step": "7-levelup(loop4)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop5)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop5)",
+                "ok": true,
+                "note": "hpCur 15 -> 24"
+              },
+              {
+                "step": "7-levelup(loop5)",
+                "ok": true,
+                "note": "level 3, xp 1000"
+              },
+              {
+                "step": "2-travel-walk(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop6)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop6)",
+                "ok": true,
+                "note": "hpCur 24 -> 24"
+              },
+              {
+                "step": "7-levelup(loop6)",
+                "ok": true,
+                "note": "level 3, xp 1450"
+              },
+              {
+                "step": "2-travel-walk(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop7)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop7)",
+                "ok": true,
+                "note": "hpCur 24 -> 24"
+              },
+              {
+                "step": "7-levelup(loop7)",
+                "ok": true,
+                "note": "level 3, xp 1900"
+              },
+              {
+                "step": "2-travel-walk(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop8)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop8)",
+                "ok": true,
+                "note": "hpCur 24 -> 24"
+              },
+              {
+                "step": "7-levelup(loop8)",
+                "ok": true,
+                "note": "level 3, xp 2350"
+              },
+              {
+                "step": "2-travel-walk(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop9)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop9)",
+                "ok": true,
+                "note": "hpCur 24 -> 31"
+              },
+              {
+                "step": "7-levelup(loop9)",
+                "ok": true,
+                "note": "level 4, xp 2800"
+              },
+              {
+                "step": "2-travel-walk(loop10)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop10)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop10)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop10)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop10)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop10)",
+                "ok": true,
+                "note": "level 4, xp 2800"
+              },
+              {
+                "step": "2-travel-walk(loop11)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop11)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop11)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop11)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop11)",
+                "ok": true,
+                "note": "hpCur 0 -> 31"
+              },
+              {
+                "step": "7-levelup(loop11)",
+                "ok": true,
+                "note": "level 4, xp 2800"
+              },
+              {
+                "step": "2-travel-walk(loop12)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop12)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop12)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop12)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop12)",
+                "ok": true,
+                "note": "hpCur 31 -> 31"
+              },
+              {
+                "step": "7-levelup(loop12)",
+                "ok": true,
+                "note": "level 4, xp 3250"
+              },
+              {
+                "step": "2-travel-walk(loop13)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop13)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop13)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop13)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop13)",
+                "ok": true,
+                "note": "hpCur 31 -> 31"
+              },
+              {
+                "step": "7-levelup(loop13)",
+                "ok": true,
+                "note": "level 4, xp 3700"
+              },
+              {
+                "step": "2-travel-walk(loop14)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop14)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop14)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop14)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop14)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop14)",
+                "ok": true,
+                "note": "level 4, xp 3700"
+              },
+              {
+                "step": "2-travel-walk(loop15)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop15)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop15)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop15)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop15)",
+                "ok": true,
+                "note": "hpCur 0 -> 31"
+              },
+              {
+                "step": "7-levelup(loop15)",
+                "ok": true,
+                "note": "level 4, xp 3700"
+              },
+              {
+                "step": "2-travel-walk(loop16)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop16)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop16)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop16)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop16)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop16)",
+                "ok": true,
+                "note": "level 4, xp 3700"
+              },
+              {
+                "step": "2-travel-walk(loop17)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop17)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop17)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop17)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop17)",
+                "ok": true,
+                "note": "hpCur 0 -> 31"
+              },
+              {
+                "step": "7-levelup(loop17)",
+                "ok": true,
+                "note": "level 4, xp 3700"
+              },
+              {
+                "step": "2-travel-walk(loop18)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop18)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop18)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop18)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop18)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop18)",
+                "ok": true,
+                "note": "level 4, xp 3700"
+              },
+              {
+                "step": "2-travel-walk(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop19)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop19)",
+                "ok": true,
+                "note": "hpCur 0 -> 31"
+              },
+              {
+                "step": "7-levelup(loop19)",
+                "ok": true,
+                "note": "level 4, xp 3700"
+              },
+              {
+                "step": "2-travel-walk(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop20)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop20)",
+                "ok": true,
+                "note": "hpCur 31 -> 31"
+              },
+              {
+                "step": "7-levelup(loop20)",
+                "ok": true,
+                "note": "level 4, xp 4150"
+              },
+              {
+                "step": "2-travel-walk(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop21)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop21)",
+                "ok": true,
+                "note": "hpCur 0 -> 31"
+              },
+              {
+                "step": "7-levelup(loop21)",
+                "ok": true,
+                "note": "level 4, xp 4150"
+              },
+              {
+                "step": "2-travel-walk(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop22)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop22)",
+                "ok": true,
+                "note": "hpCur 31 -> 31"
+              },
+              {
+                "step": "7-levelup(loop22)",
+                "ok": true,
+                "note": "level 4, xp 4600"
+              },
+              {
+                "step": "2-travel-walk(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop23)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop23)",
+                "ok": true,
+                "note": "hpCur 31 -> 31"
+              },
+              {
+                "step": "7-levelup(loop23)",
+                "ok": true,
+                "note": "level 4, xp 5050"
+              },
+              {
+                "step": "2-travel-walk(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop24)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop24)",
+                "ok": true,
+                "note": "hpCur 31 -> 31"
+              },
+              {
+                "step": "7-levelup(loop24)",
+                "ok": true,
+                "note": "level 4, xp 5500"
+              },
+              {
+                "step": "2-travel-walk(loop25)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop25)",
                 "ok": true,
                 "note": "PC fell"
               },
@@ -3774,6 +4324,726 @@
               {
                 "step": "3-combat(loop1)",
                 "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop1)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop1)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop1)",
+                "ok": true,
+                "note": "hpCur 0 -> 11"
+              },
+              {
+                "step": "7-levelup(loop1)",
+                "ok": true,
+                "note": "level 1, xp 0"
+              },
+              {
+                "step": "2-travel-walk(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop2)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop2)",
+                "ok": true,
+                "note": "hpCur 11 -> 11"
+              },
+              {
+                "step": "7-levelup(loop2)",
+                "ok": true,
+                "note": "level 1, xp 200"
+              },
+              {
+                "step": "2-travel-walk(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop3)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop3)",
+                "ok": true,
+                "note": "hpCur 0 -> 11"
+              },
+              {
+                "step": "7-levelup(loop3)",
+                "ok": true,
+                "note": "level 1, xp 200"
+              },
+              {
+                "step": "2-travel-walk(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop4)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop4)",
+                "ok": true,
+                "note": "hpCur 11 -> 19"
+              },
+              {
+                "step": "7-levelup(loop4)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop5)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop5)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop5)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop6)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop6)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop6)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop7)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop7)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop7)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop8)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop8)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop8)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop9)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop9)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop9)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop10)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop10)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop10)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop10)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop10)",
+                "ok": true,
+                "note": "hpCur 19 -> 19"
+              },
+              {
+                "step": "7-levelup(loop10)",
+                "ok": true,
+                "note": "level 2, xp 600"
+              },
+              {
+                "step": "2-travel-walk(loop11)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop11)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop11)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop11)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop11)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop11)",
+                "ok": true,
+                "note": "level 2, xp 600"
+              },
+              {
+                "step": "2-travel-walk(loop12)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop12)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop12)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop12)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop12)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop12)",
+                "ok": true,
+                "note": "level 2, xp 600"
+              },
+              {
+                "step": "2-travel-walk(loop13)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop13)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop13)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop13)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop13)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop13)",
+                "ok": true,
+                "note": "level 2, xp 600"
+              },
+              {
+                "step": "2-travel-walk(loop14)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop14)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop14)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop14)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop14)",
+                "ok": true,
+                "note": "hpCur 19 -> 19"
+              },
+              {
+                "step": "7-levelup(loop14)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop15)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop15)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop15)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop15)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop15)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop15)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop16)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop16)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop16)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop16)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop16)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop16)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop17)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop17)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop17)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop17)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop17)",
+                "ok": true,
+                "note": "hpCur 19 -> 27"
+              },
+              {
+                "step": "7-levelup(loop17)",
+                "ok": true,
+                "note": "level 3, xp 1000"
+              },
+              {
+                "step": "2-travel-walk(loop18)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop18)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop18)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop18)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop18)",
+                "ok": true,
+                "note": "hpCur 27 -> 27"
+              },
+              {
+                "step": "7-levelup(loop18)",
+                "ok": true,
+                "note": "level 3, xp 1450"
+              },
+              {
+                "step": "2-travel-walk(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop19)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop19)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop19)",
+                "ok": true,
+                "note": "level 3, xp 1450"
+              },
+              {
+                "step": "2-travel-walk(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop20)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop20)",
+                "ok": true,
+                "note": "hpCur 0 -> 27"
+              },
+              {
+                "step": "7-levelup(loop20)",
+                "ok": true,
+                "note": "level 3, xp 1450"
+              },
+              {
+                "step": "2-travel-walk(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop21)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop21)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop21)",
+                "ok": true,
+                "note": "level 3, xp 1450"
+              },
+              {
+                "step": "2-travel-walk(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop22)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop22)",
+                "ok": true,
+                "note": "hpCur 0 -> 27"
+              },
+              {
+                "step": "7-levelup(loop22)",
+                "ok": true,
+                "note": "level 3, xp 1450"
+              },
+              {
+                "step": "2-travel-walk(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop23)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop23)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop23)",
+                "ok": true,
+                "note": "level 3, xp 1450"
+              },
+              {
+                "step": "2-travel-walk(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop24)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop24)",
+                "ok": true,
+                "note": "hpCur 0 -> 27"
+              },
+              {
+                "step": "7-levelup(loop24)",
+                "ok": true,
+                "note": "level 3, xp 1450"
+              },
+              {
+                "step": "2-travel-walk(loop25)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop25)",
+                "ok": true,
                 "note": "PC fell"
               },
               {
@@ -3811,7 +5081,7 @@
               {
                 "step": "3-combat(loop1)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop1)",
@@ -3826,12 +5096,12 @@
               {
                 "step": "6-rest(loop1)",
                 "ok": true,
-                "note": "hpCur 0 -> 12"
+                "note": "hpCur 1 -> 12"
               },
               {
                 "step": "7-levelup(loop1)",
                 "ok": true,
-                "note": "level 1, xp 0"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop2)",
@@ -3856,12 +5126,12 @@
               {
                 "step": "6-rest(loop2)",
                 "ok": true,
-                "note": "hpCur 1 -> 1"
+                "note": "hpCur 12 -> 20"
               },
               {
                 "step": "7-levelup(loop2)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 400"
               },
               {
                 "step": "2-travel-walk(loop3)",
@@ -3886,12 +5156,12 @@
               {
                 "step": "6-rest(loop3)",
                 "ok": true,
-                "note": "hpCur 0 -> 12"
+                "note": "hpCur 0 -> 20"
               },
               {
                 "step": "7-levelup(loop3)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 400"
               },
               {
                 "step": "2-travel-walk(loop4)",
@@ -3916,12 +5186,12 @@
               {
                 "step": "6-rest(loop4)",
                 "ok": true,
-                "note": "hpCur 10 -> 18"
+                "note": "hpCur 18 -> 20"
               },
               {
                 "step": "7-levelup(loop4)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop5)",
@@ -3946,12 +5216,12 @@
               {
                 "step": "6-rest(loop5)",
                 "ok": true,
-                "note": "hpCur 18 -> 20"
+                "note": "hpCur 20 -> 20"
               },
               {
                 "step": "7-levelup(loop5)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop6)",
@@ -3961,7 +5231,7 @@
               {
                 "step": "3-combat(loop6)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop6)",
@@ -3976,7 +5246,7 @@
               {
                 "step": "6-rest(loop6)",
                 "ok": true,
-                "note": "hpCur 20 -> 20"
+                "note": "hpCur 0 -> 20"
               },
               {
                 "step": "7-levelup(loop6)",
@@ -4051,7 +5321,7 @@
               {
                 "step": "3-combat(loop9)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop9)",
@@ -4066,12 +5336,12 @@
               {
                 "step": "6-rest(loop9)",
                 "ok": true,
-                "note": "hpCur 0 -> 28"
+                "note": "hpCur 28 -> 28"
               },
               {
                 "step": "7-levelup(loop9)",
                 "ok": true,
-                "note": "level 3, xp 1450"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop10)",
@@ -4081,7 +5351,7 @@
               {
                 "step": "3-combat(loop10)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop10)",
@@ -4096,7 +5366,7 @@
               {
                 "step": "6-rest(loop10)",
                 "ok": true,
-                "note": "hpCur 28 -> 28"
+                "note": "hpCur 0 -> 28"
               },
               {
                 "step": "7-levelup(loop10)",
@@ -4111,7 +5381,7 @@
               {
                 "step": "3-combat(loop11)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop11)",
@@ -4126,12 +5396,12 @@
               {
                 "step": "6-rest(loop11)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 28 -> 28"
               },
               {
                 "step": "7-levelup(loop11)",
                 "ok": true,
-                "note": "level 3, xp 1900"
+                "note": "level 3, xp 2350"
               },
               {
                 "step": "2-travel-walk(loop12)",
@@ -4141,7 +5411,7 @@
               {
                 "step": "3-combat(loop12)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop12)",
@@ -4156,12 +5426,12 @@
               {
                 "step": "6-rest(loop12)",
                 "ok": true,
-                "note": "hpCur 0 -> 28"
+                "note": "hpCur 28 -> 36"
               },
               {
                 "step": "7-levelup(loop12)",
                 "ok": true,
-                "note": "level 3, xp 1900"
+                "note": "level 4, xp 2800"
               },
               {
                 "step": "2-travel-walk(loop13)",
@@ -4186,12 +5456,12 @@
               {
                 "step": "6-rest(loop13)",
                 "ok": true,
-                "note": "hpCur 6 -> 6"
+                "note": "hpCur 36 -> 36"
               },
               {
                 "step": "7-levelup(loop13)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 4, xp 3250"
               },
               {
                 "step": "2-travel-walk(loop14)",
@@ -4216,12 +5486,12 @@
               {
                 "step": "6-rest(loop14)",
                 "ok": true,
-                "note": "hpCur 6 -> 36"
+                "note": "hpCur 36 -> 36"
               },
               {
                 "step": "7-levelup(loop14)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 3700"
               },
               {
                 "step": "2-travel-walk(loop15)",
@@ -4231,7 +5501,7 @@
               {
                 "step": "3-combat(loop15)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop15)",
@@ -4246,12 +5516,12 @@
               {
                 "step": "6-rest(loop15)",
                 "ok": true,
-                "note": "hpCur 0 -> 36"
+                "note": "hpCur 36 -> 36"
               },
               {
                 "step": "7-levelup(loop15)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 4150"
               },
               {
                 "step": "2-travel-walk(loop16)",
@@ -4281,7 +5551,7 @@
               {
                 "step": "7-levelup(loop16)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 4600"
               },
               {
                 "step": "2-travel-walk(loop17)",
@@ -4306,12 +5576,12 @@
               {
                 "step": "6-rest(loop17)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 0 -> 36"
               },
               {
                 "step": "7-levelup(loop17)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 4600"
               },
               {
                 "step": "2-travel-walk(loop18)",
@@ -4321,7 +5591,7 @@
               {
                 "step": "3-combat(loop18)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop18)",
@@ -4336,12 +5606,12 @@
               {
                 "step": "6-rest(loop18)",
                 "ok": true,
-                "note": "hpCur 0 -> 36"
+                "note": "hpCur 36 -> 36"
               },
               {
                 "step": "7-levelup(loop18)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 5050"
               },
               {
                 "step": "2-travel-walk(loop19)",
@@ -4371,7 +5641,7 @@
               {
                 "step": "7-levelup(loop19)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 5500"
               },
               {
                 "step": "2-travel-walk(loop20)",
@@ -4401,7 +5671,7 @@
               {
                 "step": "7-levelup(loop20)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 5500"
               },
               {
                 "step": "2-travel-walk(loop21)",
@@ -4411,7 +5681,7 @@
               {
                 "step": "3-combat(loop21)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop21)",
@@ -4426,12 +5696,12 @@
               {
                 "step": "6-rest(loop21)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 36 -> 36"
               },
               {
                 "step": "7-levelup(loop21)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 5950"
               },
               {
                 "step": "2-travel-walk(loop22)",
@@ -4441,7 +5711,7 @@
               {
                 "step": "3-combat(loop22)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop22)",
@@ -4456,12 +5726,12 @@
               {
                 "step": "6-rest(loop22)",
                 "ok": true,
-                "note": "hpCur 0 -> 36"
+                "note": "hpCur 36 -> 36"
               },
               {
                 "step": "7-levelup(loop22)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 6400"
               },
               {
                 "step": "2-travel-walk(loop23)",
@@ -4486,12 +5756,12 @@
               {
                 "step": "6-rest(loop23)",
                 "ok": true,
-                "note": "hpCur 36 -> 36"
+                "note": "hpCur 36 -> 44"
               },
               {
                 "step": "7-levelup(loop23)",
                 "ok": true,
-                "note": "level 4, xp 4150"
+                "note": "level 5, xp 6850"
               },
               {
                 "step": "2-travel-walk(loop24)",
@@ -4501,7 +5771,7 @@
               {
                 "step": "3-combat(loop24)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop24)",
@@ -4516,12 +5786,12 @@
               {
                 "step": "6-rest(loop24)",
                 "ok": true,
-                "note": "hpCur 0 -> 36"
+                "note": "hpCur 44 -> 44"
               },
               {
                 "step": "7-levelup(loop24)",
                 "ok": true,
-                "note": "level 4, xp 4150"
+                "note": "level 5, xp 7550"
               },
               {
                 "step": "2-travel-walk(loop25)",
@@ -4546,12 +5816,12 @@
               {
                 "step": "6-rest(loop25)",
                 "ok": true,
-                "note": "hpCur 36 -> 36"
+                "note": "hpCur 44 -> 44"
               },
               {
                 "step": "7-levelup(loop25)",
                 "ok": true,
-                "note": "level 4, xp 4600"
+                "note": "level 5, xp 8250"
               },
               {
                 "step": "8-forced-death",
@@ -4587,486 +5857,6 @@
               },
               {
                 "step": "3-combat(loop1)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop1)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop1)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop1)",
-                "ok": true,
-                "note": "hpCur 0 -> 10"
-              },
-              {
-                "step": "7-levelup(loop1)",
-                "ok": true,
-                "note": "level 1, xp 0"
-              },
-              {
-                "step": "2-travel-walk(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop2)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop2)",
-                "ok": true,
-                "note": "hpCur 0 -> 0"
-              },
-              {
-                "step": "7-levelup(loop2)",
-                "ok": true,
-                "note": "level 1, xp 0"
-              },
-              {
-                "step": "2-travel-walk(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop3)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop3)",
-                "ok": true,
-                "note": "hpCur 0 -> 10"
-              },
-              {
-                "step": "7-levelup(loop3)",
-                "ok": true,
-                "note": "level 1, xp 0"
-              },
-              {
-                "step": "2-travel-walk(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop4)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop4)",
-                "ok": true,
-                "note": "hpCur 0 -> 0"
-              },
-              {
-                "step": "7-levelup(loop4)",
-                "ok": true,
-                "note": "level 1, xp 0"
-              },
-              {
-                "step": "2-travel-walk(loop5)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop5)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop5)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop5)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop5)",
-                "ok": true,
-                "note": "hpCur 0 -> 10"
-              },
-              {
-                "step": "7-levelup(loop5)",
-                "ok": true,
-                "note": "level 1, xp 0"
-              },
-              {
-                "step": "2-travel-walk(loop6)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop6)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop6)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop6)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop6)",
-                "ok": true,
-                "note": "hpCur 10 -> 10"
-              },
-              {
-                "step": "7-levelup(loop6)",
-                "ok": true,
-                "note": "level 1, xp 200"
-              },
-              {
-                "step": "2-travel-walk(loop7)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop7)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop7)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop7)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop7)",
-                "ok": true,
-                "note": "hpCur 0 -> 0"
-              },
-              {
-                "step": "7-levelup(loop7)",
-                "ok": true,
-                "note": "level 1, xp 200"
-              },
-              {
-                "step": "2-travel-walk(loop8)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop8)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop8)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop8)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop8)",
-                "ok": true,
-                "note": "hpCur 0 -> 10"
-              },
-              {
-                "step": "7-levelup(loop8)",
-                "ok": true,
-                "note": "level 1, xp 200"
-              },
-              {
-                "step": "2-travel-walk(loop9)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop9)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop9)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop9)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop9)",
-                "ok": true,
-                "note": "hpCur 10 -> 17"
-              },
-              {
-                "step": "7-levelup(loop9)",
-                "ok": true,
-                "note": "level 2, xp 400"
-              },
-              {
-                "step": "2-travel-walk(loop10)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop10)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop10)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop10)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop10)",
-                "ok": true,
-                "note": "hpCur 17 -> 17"
-              },
-              {
-                "step": "7-levelup(loop10)",
-                "ok": true,
-                "note": "level 2, xp 600"
-              },
-              {
-                "step": "2-travel-walk(loop11)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop11)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop11)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop11)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop11)",
-                "ok": true,
-                "note": "hpCur 17 -> 17"
-              },
-              {
-                "step": "7-levelup(loop11)",
-                "ok": true,
-                "note": "level 2, xp 800"
-              },
-              {
-                "step": "2-travel-walk(loop12)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop12)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop12)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop12)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop12)",
-                "ok": true,
-                "note": "hpCur 17 -> 24"
-              },
-              {
-                "step": "7-levelup(loop12)",
-                "ok": true,
-                "note": "level 3, xp 1000"
-              },
-              {
-                "step": "2-travel-walk(loop13)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop13)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop13)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop13)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop13)",
-                "ok": true,
-                "note": "hpCur 0 -> 24"
-              },
-              {
-                "step": "7-levelup(loop13)",
-                "ok": true,
-                "note": "level 3, xp 1000"
-              },
-              {
-                "step": "2-travel-walk(loop14)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop14)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop14)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop14)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop14)",
-                "ok": true,
-                "note": "hpCur 0 -> 24"
-              },
-              {
-                "step": "7-levelup(loop14)",
-                "ok": true,
-                "note": "level 3, xp 1000"
-              },
-              {
-                "step": "2-travel-walk(loop15)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop15)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop15)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop15)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop15)",
-                "ok": true,
-                "note": "hpCur 24 -> 24"
-              },
-              {
-                "step": "7-levelup(loop15)",
-                "ok": true,
-                "note": "level 3, xp 1450"
-              },
-              {
-                "step": "2-travel-walk(loop16)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop16)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop16)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop16)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop16)",
-                "ok": true,
-                "note": "hpCur 0 -> 24"
-              },
-              {
-                "step": "7-levelup(loop16)",
-                "ok": true,
-                "note": "level 3, xp 1450"
-              },
-              {
-                "step": "2-travel-walk(loop17)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop17)",
                 "ok": true,
                 "note": "PC fell"
               },
@@ -5105,7 +5895,7 @@
               {
                 "step": "3-combat(loop1)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop1)",
@@ -5120,12 +5910,12 @@
               {
                 "step": "6-rest(loop1)",
                 "ok": true,
-                "note": "hpCur 0 -> 12"
+                "note": "hpCur 12 -> 12"
               },
               {
                 "step": "7-levelup(loop1)",
                 "ok": true,
-                "note": "level 1, xp 0"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop2)",
@@ -5135,7 +5925,7 @@
               {
                 "step": "3-combat(loop2)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop2)",
@@ -5150,12 +5940,12 @@
               {
                 "step": "6-rest(loop2)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 12 -> 20"
               },
               {
                 "step": "7-levelup(loop2)",
                 "ok": true,
-                "note": "level 1, xp 0"
+                "note": "level 2, xp 400"
               },
               {
                 "step": "2-travel-walk(loop3)",
@@ -5165,7 +5955,7 @@
               {
                 "step": "3-combat(loop3)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop3)",
@@ -5180,12 +5970,12 @@
               {
                 "step": "6-rest(loop3)",
                 "ok": true,
-                "note": "hpCur 0 -> 12"
+                "note": "hpCur 20 -> 20"
               },
               {
                 "step": "7-levelup(loop3)",
                 "ok": true,
-                "note": "level 1, xp 0"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop4)",
@@ -5210,12 +6000,12 @@
               {
                 "step": "6-rest(loop4)",
                 "ok": true,
-                "note": "hpCur 12 -> 12"
+                "note": "hpCur 20 -> 20"
               },
               {
                 "step": "7-levelup(loop4)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop5)",
@@ -5240,12 +6030,12 @@
               {
                 "step": "6-rest(loop5)",
                 "ok": true,
-                "note": "hpCur 12 -> 20"
+                "note": "hpCur 13 -> 28"
               },
               {
                 "step": "7-levelup(loop5)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 3, xp 1000"
               },
               {
                 "step": "2-travel-walk(loop6)",
@@ -5270,12 +6060,12 @@
               {
                 "step": "6-rest(loop6)",
                 "ok": true,
-                "note": "hpCur 20 -> 20"
+                "note": "hpCur 28 -> 28"
               },
               {
                 "step": "7-levelup(loop6)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop7)",
@@ -5285,7 +6075,7 @@
               {
                 "step": "3-combat(loop7)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop7)",
@@ -5300,12 +6090,12 @@
               {
                 "step": "6-rest(loop7)",
                 "ok": true,
-                "note": "hpCur 20 -> 20"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop7)",
                 "ok": true,
-                "note": "level 2, xp 800"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop8)",
@@ -5315,7 +6105,7 @@
               {
                 "step": "3-combat(loop8)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop8)",
@@ -5330,12 +6120,12 @@
               {
                 "step": "6-rest(loop8)",
                 "ok": true,
-                "note": "hpCur 9 -> 17"
+                "note": "hpCur 0 -> 28"
               },
               {
                 "step": "7-levelup(loop8)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop9)",
@@ -5345,7 +6135,7 @@
               {
                 "step": "3-combat(loop9)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop9)",
@@ -5360,12 +6150,12 @@
               {
                 "step": "6-rest(loop9)",
                 "ok": true,
-                "note": "hpCur 0 -> 28"
+                "note": "hpCur 28 -> 28"
               },
               {
                 "step": "7-levelup(loop9)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop10)",
@@ -5395,7 +6185,7 @@
               {
                 "step": "7-levelup(loop10)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop11)",
@@ -5405,7 +6195,7 @@
               {
                 "step": "3-combat(loop11)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop11)",
@@ -5420,12 +6210,12 @@
               {
                 "step": "6-rest(loop11)",
                 "ok": true,
-                "note": "hpCur 28 -> 28"
+                "note": "hpCur 0 -> 28"
               },
               {
                 "step": "7-levelup(loop11)",
                 "ok": true,
-                "note": "level 3, xp 1450"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop12)",
@@ -5435,7 +6225,7 @@
               {
                 "step": "3-combat(loop12)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop12)",
@@ -5450,7 +6240,7 @@
               {
                 "step": "6-rest(loop12)",
                 "ok": true,
-                "note": "hpCur 28 -> 28"
+                "note": "hpCur 0 -> 28"
               },
               {
                 "step": "7-levelup(loop12)",
@@ -5480,7 +6270,7 @@
               {
                 "step": "6-rest(loop13)",
                 "ok": true,
-                "note": "hpCur 0 -> 28"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop13)",
@@ -5510,7 +6300,7 @@
               {
                 "step": "6-rest(loop14)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 0 -> 28"
               },
               {
                 "step": "7-levelup(loop14)",
@@ -5540,7 +6330,7 @@
               {
                 "step": "6-rest(loop15)",
                 "ok": true,
-                "note": "hpCur 0 -> 28"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop15)",
@@ -5555,7 +6345,7 @@
               {
                 "step": "3-combat(loop16)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop16)",
@@ -5570,12 +6360,12 @@
               {
                 "step": "6-rest(loop16)",
                 "ok": true,
-                "note": "hpCur 28 -> 28"
+                "note": "hpCur 0 -> 28"
               },
               {
                 "step": "7-levelup(loop16)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop17)",
@@ -5585,7 +6375,7 @@
               {
                 "step": "3-combat(loop17)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop17)",
@@ -5600,12 +6390,12 @@
               {
                 "step": "6-rest(loop17)",
                 "ok": true,
-                "note": "hpCur 28 -> 36"
+                "note": "hpCur 0 -> 28"
               },
               {
                 "step": "7-levelup(loop17)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop18)",
@@ -5615,7 +6405,7 @@
               {
                 "step": "3-combat(loop18)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop18)",
@@ -5630,12 +6420,12 @@
               {
                 "step": "6-rest(loop18)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 28 -> 28"
               },
               {
                 "step": "7-levelup(loop18)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 3, xp 2350"
               },
               {
                 "step": "2-travel-walk(loop19)",
@@ -5645,7 +6435,7 @@
               {
                 "step": "3-combat(loop19)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop19)",
@@ -5660,7 +6450,7 @@
               {
                 "step": "6-rest(loop19)",
                 "ok": true,
-                "note": "hpCur 0 -> 36"
+                "note": "hpCur 28 -> 36"
               },
               {
                 "step": "7-levelup(loop19)",
@@ -5675,7 +6465,7 @@
               {
                 "step": "3-combat(loop20)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop20)",
@@ -5690,12 +6480,12 @@
               {
                 "step": "6-rest(loop20)",
                 "ok": true,
-                "note": "hpCur 36 -> 36"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop20)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 2800"
               },
               {
                 "step": "2-travel-walk(loop21)",
@@ -5705,7 +6495,7 @@
               {
                 "step": "3-combat(loop21)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop21)",
@@ -5720,12 +6510,12 @@
               {
                 "step": "6-rest(loop21)",
                 "ok": true,
-                "note": "hpCur 36 -> 36"
+                "note": "hpCur 0 -> 36"
               },
               {
                 "step": "7-levelup(loop21)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 2800"
               },
               {
                 "step": "2-travel-walk(loop22)",
@@ -5735,7 +6525,7 @@
               {
                 "step": "3-combat(loop22)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop22)",
@@ -5750,12 +6540,12 @@
               {
                 "step": "6-rest(loop22)",
                 "ok": true,
-                "note": "hpCur 14 -> 36"
+                "note": "hpCur 0 -> 36"
               },
               {
                 "step": "7-levelup(loop22)",
                 "ok": true,
-                "note": "level 4, xp 4150"
+                "note": "level 4, xp 2800"
               },
               {
                 "step": "2-travel-walk(loop23)",
@@ -5785,7 +6575,7 @@
               {
                 "step": "7-levelup(loop23)",
                 "ok": true,
-                "note": "level 4, xp 4600"
+                "note": "level 4, xp 3250"
               },
               {
                 "step": "2-travel-walk(loop24)",
@@ -5815,7 +6605,7 @@
               {
                 "step": "7-levelup(loop24)",
                 "ok": true,
-                "note": "level 4, xp 5050"
+                "note": "level 4, xp 3700"
               },
               {
                 "step": "2-travel-walk(loop25)",
@@ -5825,7 +6615,7 @@
               {
                 "step": "3-combat(loop25)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop25)",
@@ -5840,12 +6630,12 @@
               {
                 "step": "6-rest(loop25)",
                 "ok": true,
-                "note": "hpCur 36 -> 36"
+                "note": "hpCur 0 -> 36"
               },
               {
                 "step": "7-levelup(loop25)",
                 "ok": true,
-                "note": "level 4, xp 5500"
+                "note": "level 4, xp 3700"
               },
               {
                 "step": "8-forced-death",
@@ -5882,7 +6672,7 @@
               {
                 "step": "3-combat(loop1)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop1)",
@@ -5897,12 +6687,12 @@
               {
                 "step": "6-rest(loop1)",
                 "ok": true,
-                "note": "hpCur 0 -> 13"
+                "note": "hpCur 13 -> 13"
               },
               {
                 "step": "7-levelup(loop1)",
                 "ok": true,
-                "note": "level 1, xp 0"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop2)",
@@ -5912,7 +6702,7 @@
               {
                 "step": "3-combat(loop2)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop2)",
@@ -5927,7 +6717,7 @@
               {
                 "step": "6-rest(loop2)",
                 "ok": true,
-                "note": "hpCur 13 -> 13"
+                "note": "hpCur 0 -> 13"
               },
               {
                 "step": "7-levelup(loop2)",
@@ -5942,7 +6732,7 @@
               {
                 "step": "3-combat(loop3)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop3)",
@@ -5957,12 +6747,12 @@
               {
                 "step": "6-rest(loop3)",
                 "ok": true,
-                "note": "hpCur 8 -> 17"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop3)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop4)",
@@ -5987,12 +6777,12 @@
               {
                 "step": "6-rest(loop4)",
                 "ok": true,
-                "note": "hpCur 0 -> 22"
+                "note": "hpCur 0 -> 13"
               },
               {
                 "step": "7-levelup(loop4)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop5)",
@@ -6017,12 +6807,12 @@
               {
                 "step": "6-rest(loop5)",
                 "ok": true,
-                "note": "hpCur 0 -> 22"
+                "note": "hpCur 0 -> 13"
               },
               {
                 "step": "7-levelup(loop5)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop6)",
@@ -6052,7 +6842,7 @@
               {
                 "step": "7-levelup(loop6)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop7)",
@@ -6077,12 +6867,12 @@
               {
                 "step": "6-rest(loop7)",
                 "ok": true,
-                "note": "hpCur 0 -> 22"
+                "note": "hpCur 0 -> 13"
               },
               {
                 "step": "7-levelup(loop7)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop8)",
@@ -6092,7 +6882,7 @@
               {
                 "step": "3-combat(loop8)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop8)",
@@ -6107,12 +6897,12 @@
               {
                 "step": "6-rest(loop8)",
                 "ok": true,
-                "note": "hpCur 22 -> 22"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop8)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop9)",
@@ -6122,7 +6912,7 @@
               {
                 "step": "3-combat(loop9)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop9)",
@@ -6137,12 +6927,12 @@
               {
                 "step": "6-rest(loop9)",
                 "ok": true,
-                "note": "hpCur 22 -> 22"
+                "note": "hpCur 0 -> 13"
               },
               {
                 "step": "7-levelup(loop9)",
                 "ok": true,
-                "note": "level 2, xp 800"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop10)",
@@ -6152,7 +6942,7 @@
               {
                 "step": "3-combat(loop10)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop10)",
@@ -6167,12 +6957,12 @@
               {
                 "step": "6-rest(loop10)",
                 "ok": true,
-                "note": "hpCur 22 -> 31"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop10)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop11)",
@@ -6197,12 +6987,12 @@
               {
                 "step": "6-rest(loop11)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 0 -> 13"
               },
               {
                 "step": "7-levelup(loop11)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 1, xp 200"
               },
               {
                 "step": "2-travel-walk(loop12)",
@@ -6212,7 +7002,7 @@
               {
                 "step": "3-combat(loop12)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop12)",
@@ -6227,12 +7017,12 @@
               {
                 "step": "6-rest(loop12)",
                 "ok": true,
-                "note": "hpCur 0 -> 31"
+                "note": "hpCur 13 -> 22"
               },
               {
                 "step": "7-levelup(loop12)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 2, xp 400"
               },
               {
                 "step": "2-travel-walk(loop13)",
@@ -6257,12 +7047,12 @@
               {
                 "step": "6-rest(loop13)",
                 "ok": true,
-                "note": "hpCur 31 -> 31"
+                "note": "hpCur 22 -> 22"
               },
               {
                 "step": "7-levelup(loop13)",
                 "ok": true,
-                "note": "level 3, xp 1450"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop14)",
@@ -6287,12 +7077,12 @@
               {
                 "step": "6-rest(loop14)",
                 "ok": true,
-                "note": "hpCur 31 -> 31"
+                "note": "hpCur 22 -> 22"
               },
               {
                 "step": "7-levelup(loop14)",
                 "ok": true,
-                "note": "level 3, xp 1900"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop15)",
@@ -6302,7 +7092,7 @@
               {
                 "step": "3-combat(loop15)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop15)",
@@ -6317,12 +7107,12 @@
               {
                 "step": "6-rest(loop15)",
                 "ok": true,
-                "note": "hpCur 31 -> 31"
+                "note": "hpCur 0 -> 22"
               },
               {
                 "step": "7-levelup(loop15)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop16)",
@@ -6332,7 +7122,7 @@
               {
                 "step": "3-combat(loop16)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop16)",
@@ -6347,12 +7137,12 @@
               {
                 "step": "6-rest(loop16)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 22 -> 31"
               },
               {
                 "step": "7-levelup(loop16)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 3, xp 1000"
               },
               {
                 "step": "2-travel-walk(loop17)",
@@ -6382,7 +7172,7 @@
               {
                 "step": "7-levelup(loop17)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 3, xp 1000"
               },
               {
                 "step": "2-travel-walk(loop18)",
@@ -6407,12 +7197,12 @@
               {
                 "step": "6-rest(loop18)",
                 "ok": true,
-                "note": "hpCur 31 -> 40"
+                "note": "hpCur 31 -> 31"
               },
               {
                 "step": "7-levelup(loop18)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop19)",
@@ -6437,12 +7227,12 @@
               {
                 "step": "6-rest(loop19)",
                 "ok": true,
-                "note": "hpCur 0 -> 40"
+                "note": "hpCur 0 -> 31"
               },
               {
                 "step": "7-levelup(loop19)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop20)",
@@ -6467,12 +7257,12 @@
               {
                 "step": "6-rest(loop20)",
                 "ok": true,
-                "note": "hpCur 40 -> 40"
+                "note": "hpCur 31 -> 31"
               },
               {
                 "step": "7-levelup(loop20)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop21)",
@@ -6497,12 +7287,12 @@
               {
                 "step": "6-rest(loop21)",
                 "ok": true,
-                "note": "hpCur 40 -> 40"
+                "note": "hpCur 31 -> 31"
               },
               {
                 "step": "7-levelup(loop21)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 3, xp 2350"
               },
               {
                 "step": "2-travel-walk(loop22)",
@@ -6512,7 +7302,7 @@
               {
                 "step": "3-combat(loop22)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop22)",
@@ -6527,12 +7317,12 @@
               {
                 "step": "6-rest(loop22)",
                 "ok": true,
-                "note": "hpCur 0 -> 40"
+                "note": "hpCur 31 -> 40"
               },
               {
                 "step": "7-levelup(loop22)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 2800"
               },
               {
                 "step": "2-travel-walk(loop23)",
@@ -6542,7 +7332,7 @@
               {
                 "step": "3-combat(loop23)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop23)",
@@ -6557,12 +7347,12 @@
               {
                 "step": "6-rest(loop23)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 40 -> 40"
               },
               {
                 "step": "7-levelup(loop23)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 4, xp 3250"
               },
               {
                 "step": "2-travel-walk(loop24)",
@@ -6572,7 +7362,7 @@
               {
                 "step": "3-combat(loop24)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop24)",
@@ -6587,7 +7377,7 @@
               {
                 "step": "6-rest(loop24)",
                 "ok": true,
-                "note": "hpCur 0 -> 40"
+                "note": "hpCur 40 -> 40"
               },
               {
                 "step": "7-levelup(loop24)",
@@ -6602,7 +7392,7 @@
               {
                 "step": "3-combat(loop25)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop25)",
@@ -6617,12 +7407,12 @@
               {
                 "step": "6-rest(loop25)",
                 "ok": true,
-                "note": "hpCur 40 -> 40"
+                "note": "hpCur 0 -> 40"
               },
               {
                 "step": "7-levelup(loop25)",
                 "ok": true,
-                "note": "level 4, xp 4150"
+                "note": "level 4, xp 3700"
               },
               {
                 "step": "8-forced-death",
@@ -6674,6 +7464,500 @@
               {
                 "step": "6-rest(loop1)",
                 "ok": true,
+                "note": "hpCur 11 -> 11"
+              },
+              {
+                "step": "7-levelup(loop1)",
+                "ok": true,
+                "note": "level 1, xp 200"
+              },
+              {
+                "step": "2-travel-walk(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop2)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop2)",
+                "ok": true,
+                "note": "hpCur 11 -> 19"
+              },
+              {
+                "step": "7-levelup(loop2)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop3)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop3)",
+                "ok": true,
+                "note": "hpCur 19 -> 19"
+              },
+              {
+                "step": "7-levelup(loop3)",
+                "ok": true,
+                "note": "level 2, xp 600"
+              },
+              {
+                "step": "2-travel-walk(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop4)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop4)",
+                "ok": true,
+                "note": "hpCur 19 -> 19"
+              },
+              {
+                "step": "7-levelup(loop4)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop5)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop5)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop5)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop6)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop6)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop6)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop7)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop7)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop7)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop7)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop8)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop8)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop8)",
+                "ok": true,
+                "note": "hpCur 0 -> 19"
+              },
+              {
+                "step": "7-levelup(loop8)",
+                "ok": true,
+                "note": "level 2, xp 800"
+              },
+              {
+                "step": "2-travel-walk(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop9)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop9)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop9)",
+                "ok": true,
+                "note": "hpCur 19 -> 27"
+              },
+              {
+                "step": "7-levelup(loop9)",
+                "ok": true,
+                "note": "level 3, xp 1000"
+              },
+              {
+                "step": "2-travel-walk(loop10)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop10)",
+                "ok": true,
+                "note": "PC fell"
+              },
+              {
+                "step": "8-death-occurred-naturally",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "9-death-saves-and-rebirth",
+                "ok": true,
+                "note": "successorLanded=true, worldsOnPlane=1"
+              },
+              {
+                "step": "10-save-load-roundtrip",
+                "ok": true,
+                "note": "0 unexplained diffs"
+              }
+            ]
+          },
+          {
+            "cls": "Sorcerer",
+            "forcedDeath": false,
+            "harnessAborted": false,
+            "steps": [
+              {
+                "step": "1-new-world-and-creation",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "2-travel-walk(loop1)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop1)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop1)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop1)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop1)",
+                "ok": true,
+                "note": "hpCur 9 -> 9"
+              },
+              {
+                "step": "7-levelup(loop1)",
+                "ok": true,
+                "note": "level 1, xp 200"
+              },
+              {
+                "step": "2-travel-walk(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop2)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop2)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop2)",
+                "ok": true,
+                "note": "hpCur 9 -> 16"
+              },
+              {
+                "step": "7-levelup(loop2)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop3)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop3)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop3)",
+                "ok": true,
+                "note": "hpCur 0 -> 16"
+              },
+              {
+                "step": "7-levelup(loop3)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop4)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop4)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop4)",
+                "ok": true,
+                "note": "hpCur 0 -> 16"
+              },
+              {
+                "step": "7-levelup(loop4)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop5)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop5)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop5)",
+                "ok": true,
+                "note": "hpCur 0 -> 16"
+              },
+              {
+                "step": "7-levelup(loop5)",
+                "ok": true,
+                "note": "level 2, xp 400"
+              },
+              {
+                "step": "2-travel-walk(loop6)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop6)",
+                "ok": true,
+                "note": "PC fell"
+              },
+              {
+                "step": "8-death-occurred-naturally",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "9-death-saves-and-rebirth",
+                "ok": true,
+                "note": "successorLanded=true, worldsOnPlane=1"
+              },
+              {
+                "step": "10-save-load-roundtrip",
+                "ok": true,
+                "note": "0 unexplained diffs"
+              }
+            ]
+          },
+          {
+            "cls": "Warlock",
+            "forcedDeath": true,
+            "harnessAborted": false,
+            "steps": [
+              {
+                "step": "1-new-world-and-creation",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "2-travel-walk(loop1)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop1)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop1)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop1)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop1)",
+                "ok": true,
                 "note": "hpCur 10 -> 10"
               },
               {
@@ -6704,7 +7988,7 @@
               {
                 "step": "6-rest(loop2)",
                 "ok": true,
-                "note": "hpCur 0 -> 10"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop2)",
@@ -6749,7 +8033,7 @@
               {
                 "step": "3-combat(loop4)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop4)",
@@ -6764,12 +8048,12 @@
               {
                 "step": "6-rest(loop4)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 10 -> 17"
               },
               {
                 "step": "7-levelup(loop4)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 400"
               },
               {
                 "step": "2-travel-walk(loop5)",
@@ -6779,7 +8063,7 @@
               {
                 "step": "3-combat(loop5)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop5)",
@@ -6794,12 +8078,12 @@
               {
                 "step": "6-rest(loop5)",
                 "ok": true,
-                "note": "hpCur 0 -> 10"
+                "note": "hpCur 17 -> 17"
               },
               {
                 "step": "7-levelup(loop5)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop6)",
@@ -6824,12 +8108,12 @@
               {
                 "step": "6-rest(loop6)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 0 -> 17"
               },
               {
                 "step": "7-levelup(loop6)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop7)",
@@ -6854,12 +8138,12 @@
               {
                 "step": "6-rest(loop7)",
                 "ok": true,
-                "note": "hpCur 0 -> 10"
+                "note": "hpCur 0 -> 17"
               },
               {
                 "step": "7-levelup(loop7)",
                 "ok": true,
-                "note": "level 1, xp 200"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop8)",
@@ -6869,7 +8153,7 @@
               {
                 "step": "3-combat(loop8)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop8)",
@@ -6884,12 +8168,12 @@
               {
                 "step": "6-rest(loop8)",
                 "ok": true,
-                "note": "hpCur 10 -> 17"
+                "note": "hpCur 0 -> 17"
               },
               {
                 "step": "7-levelup(loop8)",
                 "ok": true,
-                "note": "level 2, xp 400"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop9)",
@@ -6914,12 +8198,12 @@
               {
                 "step": "6-rest(loop9)",
                 "ok": true,
-                "note": "hpCur 17 -> 17"
+                "note": "hpCur 10 -> 10"
               },
               {
                 "step": "7-levelup(loop9)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop10)",
@@ -6929,7 +8213,7 @@
               {
                 "step": "3-combat(loop10)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop10)",
@@ -6944,12 +8228,12 @@
               {
                 "step": "6-rest(loop10)",
                 "ok": true,
-                "note": "hpCur 0 -> 17"
+                "note": "hpCur 10 -> 24"
               },
               {
                 "step": "7-levelup(loop10)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 3, xp 1000"
               },
               {
                 "step": "2-travel-walk(loop11)",
@@ -6959,7 +8243,7 @@
               {
                 "step": "3-combat(loop11)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop11)",
@@ -6974,12 +8258,12 @@
               {
                 "step": "6-rest(loop11)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 24 -> 24"
               },
               {
                 "step": "7-levelup(loop11)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop12)",
@@ -7004,12 +8288,12 @@
               {
                 "step": "6-rest(loop12)",
                 "ok": true,
-                "note": "hpCur 0 -> 17"
+                "note": "hpCur 0 -> 24"
               },
               {
                 "step": "7-levelup(loop12)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop13)",
@@ -7034,12 +8318,12 @@
               {
                 "step": "6-rest(loop13)",
                 "ok": true,
-                "note": "hpCur 0 -> 17"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop13)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop14)",
@@ -7049,7 +8333,7 @@
               {
                 "step": "3-combat(loop14)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop14)",
@@ -7064,12 +8348,12 @@
               {
                 "step": "6-rest(loop14)",
                 "ok": true,
-                "note": "hpCur 17 -> 17"
+                "note": "hpCur 0 -> 24"
               },
               {
                 "step": "7-levelup(loop14)",
                 "ok": true,
-                "note": "level 2, xp 800"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop15)",
@@ -7079,7 +8363,7 @@
               {
                 "step": "3-combat(loop15)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop15)",
@@ -7094,12 +8378,12 @@
               {
                 "step": "6-rest(loop15)",
                 "ok": true,
-                "note": "hpCur 17 -> 24"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop15)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop16)",
@@ -7129,7 +8413,7 @@
               {
                 "step": "7-levelup(loop16)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop17)",
@@ -7139,7 +8423,7 @@
               {
                 "step": "3-combat(loop17)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop17)",
@@ -7154,7 +8438,7 @@
               {
                 "step": "6-rest(loop17)",
                 "ok": true,
-                "note": "hpCur 24 -> 24"
+                "note": "hpCur 0 -> 24"
               },
               {
                 "step": "7-levelup(loop17)",
@@ -7169,12 +8453,242 @@
               {
                 "step": "3-combat(loop18)",
                 "ok": true,
-                "note": "PC fell"
+                "note": "won"
               },
               {
-                "step": "8-death-occurred-naturally",
+                "step": "4-loot(loop18)",
                 "ok": true,
                 "note": null
+              },
+              {
+                "step": "5-shop(loop18)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop18)",
+                "ok": true,
+                "note": "hpCur 24 -> 24"
+              },
+              {
+                "step": "7-levelup(loop18)",
+                "ok": true,
+                "note": "level 3, xp 1900"
+              },
+              {
+                "step": "2-travel-walk(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop19)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop19)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop19)",
+                "ok": true,
+                "note": "hpCur 24 -> 24"
+              },
+              {
+                "step": "7-levelup(loop19)",
+                "ok": true,
+                "note": "level 3, xp 2350"
+              },
+              {
+                "step": "2-travel-walk(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop20)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop20)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop20)",
+                "ok": true,
+                "note": "hpCur 0 -> 24"
+              },
+              {
+                "step": "7-levelup(loop20)",
+                "ok": true,
+                "note": "level 3, xp 2350"
+              },
+              {
+                "step": "2-travel-walk(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop21)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop21)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop21)",
+                "ok": true,
+                "note": "hpCur 0 -> 0"
+              },
+              {
+                "step": "7-levelup(loop21)",
+                "ok": true,
+                "note": "level 3, xp 2350"
+              },
+              {
+                "step": "2-travel-walk(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop22)",
+                "ok": true,
+                "note": "no-op (no foe available)"
+              },
+              {
+                "step": "4-loot(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop22)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop22)",
+                "ok": true,
+                "note": "hpCur 0 -> 24"
+              },
+              {
+                "step": "7-levelup(loop22)",
+                "ok": true,
+                "note": "level 3, xp 2350"
+              },
+              {
+                "step": "2-travel-walk(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop23)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop23)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop23)",
+                "ok": true,
+                "note": "hpCur 24 -> 31"
+              },
+              {
+                "step": "7-levelup(loop23)",
+                "ok": true,
+                "note": "level 4, xp 2800"
+              },
+              {
+                "step": "2-travel-walk(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop24)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop24)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop24)",
+                "ok": true,
+                "note": "hpCur 31 -> 31"
+              },
+              {
+                "step": "7-levelup(loop24)",
+                "ok": true,
+                "note": "level 4, xp 3250"
+              },
+              {
+                "step": "2-travel-walk(loop25)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "3-combat(loop25)",
+                "ok": true,
+                "note": "won"
+              },
+              {
+                "step": "4-loot(loop25)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "5-shop(loop25)",
+                "ok": true,
+                "note": null
+              },
+              {
+                "step": "6-rest(loop25)",
+                "ok": true,
+                "note": "hpCur 31 -> 31"
+              },
+              {
+                "step": "7-levelup(loop25)",
+                "ok": true,
+                "note": "level 4, xp 3700"
+              },
+              {
+                "step": "8-forced-death",
+                "ok": true,
+                "note": "watchdog tripped at 25 iterations"
               },
               {
                 "step": "9-death-saves-and-rebirth",
@@ -7189,7 +8703,7 @@
             ]
           },
           {
-            "cls": "Sorcerer",
+            "cls": "Wizard",
             "forcedDeath": true,
             "harnessAborted": false,
             "steps": [
@@ -7266,7 +8780,7 @@
               {
                 "step": "3-combat(loop3)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop3)",
@@ -7281,12 +8795,12 @@
               {
                 "step": "6-rest(loop3)",
                 "ok": true,
-                "note": "hpCur 14 -> 14"
+                "note": "hpCur 0 -> 14"
               },
               {
                 "step": "7-levelup(loop3)",
                 "ok": true,
-                "note": "level 2, xp 600"
+                "note": "level 2, xp 400"
               },
               {
                 "step": "2-travel-walk(loop4)",
@@ -7316,7 +8830,7 @@
               {
                 "step": "7-levelup(loop4)",
                 "ok": true,
-                "note": "level 2, xp 800"
+                "note": "level 2, xp 600"
               },
               {
                 "step": "2-travel-walk(loop5)",
@@ -7341,12 +8855,12 @@
               {
                 "step": "6-rest(loop5)",
                 "ok": true,
-                "note": "hpCur 14 -> 20"
+                "note": "hpCur 14 -> 14"
               },
               {
                 "step": "7-levelup(loop5)",
                 "ok": true,
-                "note": "level 3, xp 1000"
+                "note": "level 2, xp 800"
               },
               {
                 "step": "2-travel-walk(loop6)",
@@ -7356,7 +8870,7 @@
               {
                 "step": "3-combat(loop6)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop6)",
@@ -7371,7 +8885,7 @@
               {
                 "step": "6-rest(loop6)",
                 "ok": true,
-                "note": "hpCur 0 -> 20"
+                "note": "hpCur 14 -> 20"
               },
               {
                 "step": "7-levelup(loop6)",
@@ -7386,7 +8900,7 @@
               {
                 "step": "3-combat(loop7)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop7)",
@@ -7401,12 +8915,12 @@
               {
                 "step": "6-rest(loop7)",
                 "ok": true,
-                "note": "hpCur 20 -> 20"
+                "note": "hpCur 0 -> 20"
               },
               {
                 "step": "7-levelup(loop7)",
                 "ok": true,
-                "note": "level 3, xp 1450"
+                "note": "level 3, xp 1000"
               },
               {
                 "step": "2-travel-walk(loop8)",
@@ -7436,7 +8950,7 @@
               {
                 "step": "7-levelup(loop8)",
                 "ok": true,
-                "note": "level 3, xp 1900"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop9)",
@@ -7461,12 +8975,12 @@
               {
                 "step": "6-rest(loop9)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 0 -> 20"
               },
               {
                 "step": "7-levelup(loop9)",
                 "ok": true,
-                "note": "level 3, xp 1900"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop10)",
@@ -7491,12 +9005,12 @@
               {
                 "step": "6-rest(loop10)",
                 "ok": true,
-                "note": "hpCur 0 -> 20"
+                "note": "hpCur 0 -> 0"
               },
               {
                 "step": "7-levelup(loop10)",
                 "ok": true,
-                "note": "level 3, xp 1900"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop11)",
@@ -7506,7 +9020,7 @@
               {
                 "step": "3-combat(loop11)",
                 "ok": true,
-                "note": "won"
+                "note": "no-op (no foe available)"
               },
               {
                 "step": "4-loot(loop11)",
@@ -7521,12 +9035,12 @@
               {
                 "step": "6-rest(loop11)",
                 "ok": true,
-                "note": "hpCur 20 -> 20"
+                "note": "hpCur 0 -> 20"
               },
               {
                 "step": "7-levelup(loop11)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 3, xp 1450"
               },
               {
                 "step": "2-travel-walk(loop12)",
@@ -7536,7 +9050,7 @@
               {
                 "step": "3-combat(loop12)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop12)",
@@ -7551,12 +9065,12 @@
               {
                 "step": "6-rest(loop12)",
                 "ok": true,
-                "note": "hpCur 0 -> 20"
+                "note": "hpCur 20 -> 20"
               },
               {
                 "step": "7-levelup(loop12)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 3, xp 1900"
               },
               {
                 "step": "2-travel-walk(loop13)",
@@ -7566,7 +9080,7 @@
               {
                 "step": "3-combat(loop13)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop13)",
@@ -7581,7 +9095,7 @@
               {
                 "step": "6-rest(loop13)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 20 -> 20"
               },
               {
                 "step": "7-levelup(loop13)",
@@ -7596,7 +9110,7 @@
               {
                 "step": "3-combat(loop14)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop14)",
@@ -7611,12 +9125,12 @@
               {
                 "step": "6-rest(loop14)",
                 "ok": true,
-                "note": "hpCur 0 -> 20"
+                "note": "hpCur 20 -> 26"
               },
               {
                 "step": "7-levelup(loop14)",
                 "ok": true,
-                "note": "level 3, xp 2350"
+                "note": "level 4, xp 2800"
               },
               {
                 "step": "2-travel-walk(loop15)",
@@ -7641,12 +9155,12 @@
               {
                 "step": "6-rest(loop15)",
                 "ok": true,
-                "note": "hpCur 20 -> 26"
+                "note": "hpCur 26 -> 26"
               },
               {
                 "step": "7-levelup(loop15)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 3250"
               },
               {
                 "step": "2-travel-walk(loop16)",
@@ -7656,7 +9170,7 @@
               {
                 "step": "3-combat(loop16)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop16)",
@@ -7671,12 +9185,12 @@
               {
                 "step": "6-rest(loop16)",
                 "ok": true,
-                "note": "hpCur 0 -> 26"
+                "note": "hpCur 26 -> 26"
               },
               {
                 "step": "7-levelup(loop16)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 3700"
               },
               {
                 "step": "2-travel-walk(loop17)",
@@ -7686,7 +9200,7 @@
               {
                 "step": "3-combat(loop17)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop17)",
@@ -7701,12 +9215,12 @@
               {
                 "step": "6-rest(loop17)",
                 "ok": true,
-                "note": "hpCur 0 -> 26"
+                "note": "hpCur 26 -> 26"
               },
               {
                 "step": "7-levelup(loop17)",
                 "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 4150"
               },
               {
                 "step": "2-travel-walk(loop18)",
@@ -7736,7 +9250,7 @@
               {
                 "step": "7-levelup(loop18)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 4600"
               },
               {
                 "step": "2-travel-walk(loop19)",
@@ -7746,7 +9260,7 @@
               {
                 "step": "3-combat(loop19)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop19)",
@@ -7761,12 +9275,12 @@
               {
                 "step": "6-rest(loop19)",
                 "ok": true,
-                "note": "hpCur 0 -> 26"
+                "note": "hpCur 26 -> 26"
               },
               {
                 "step": "7-levelup(loop19)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 5050"
               },
               {
                 "step": "2-travel-walk(loop20)",
@@ -7776,7 +9290,7 @@
               {
                 "step": "3-combat(loop20)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop20)",
@@ -7791,826 +9305,12 @@
               {
                 "step": "6-rest(loop20)",
                 "ok": true,
-                "note": "hpCur 0 -> 0"
+                "note": "hpCur 26 -> 26"
               },
               {
                 "step": "7-levelup(loop20)",
                 "ok": true,
-                "note": "level 4, xp 3250"
-              },
-              {
-                "step": "2-travel-walk(loop21)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop21)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop21)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop21)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop21)",
-                "ok": true,
-                "note": "hpCur 0 -> 26"
-              },
-              {
-                "step": "7-levelup(loop21)",
-                "ok": true,
-                "note": "level 4, xp 3250"
-              },
-              {
-                "step": "2-travel-walk(loop22)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop22)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop22)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop22)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop22)",
-                "ok": true,
-                "note": "hpCur 0 -> 0"
-              },
-              {
-                "step": "7-levelup(loop22)",
-                "ok": true,
-                "note": "level 4, xp 3250"
-              },
-              {
-                "step": "2-travel-walk(loop23)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop23)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop23)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop23)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop23)",
-                "ok": true,
-                "note": "hpCur 0 -> 26"
-              },
-              {
-                "step": "7-levelup(loop23)",
-                "ok": true,
-                "note": "level 4, xp 3250"
-              },
-              {
-                "step": "2-travel-walk(loop24)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop24)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop24)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop24)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop24)",
-                "ok": true,
-                "note": "hpCur 0 -> 0"
-              },
-              {
-                "step": "7-levelup(loop24)",
-                "ok": true,
-                "note": "level 4, xp 3250"
-              },
-              {
-                "step": "2-travel-walk(loop25)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop25)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop25)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop25)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop25)",
-                "ok": true,
-                "note": "hpCur 0 -> 26"
-              },
-              {
-                "step": "7-levelup(loop25)",
-                "ok": true,
-                "note": "level 4, xp 3250"
-              },
-              {
-                "step": "8-forced-death",
-                "ok": true,
-                "note": "watchdog tripped at 25 iterations"
-              },
-              {
-                "step": "9-death-saves-and-rebirth",
-                "ok": true,
-                "note": "successorLanded=true, worldsOnPlane=1"
-              },
-              {
-                "step": "10-save-load-roundtrip",
-                "ok": true,
-                "note": "0 unexplained diffs"
-              }
-            ]
-          },
-          {
-            "cls": "Warlock",
-            "forcedDeath": false,
-            "harnessAborted": false,
-            "steps": [
-              {
-                "step": "1-new-world-and-creation",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "2-travel-walk(loop1)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop1)",
-                "ok": true,
-                "note": "PC fell"
-              },
-              {
-                "step": "8-death-occurred-naturally",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "9-death-saves-and-rebirth",
-                "ok": true,
-                "note": "successorLanded=true, worldsOnPlane=1"
-              },
-              {
-                "step": "10-save-load-roundtrip",
-                "ok": true,
-                "note": "0 unexplained diffs"
-              }
-            ]
-          },
-          {
-            "cls": "Wizard",
-            "forcedDeath": true,
-            "harnessAborted": false,
-            "steps": [
-              {
-                "step": "1-new-world-and-creation",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "2-travel-walk(loop1)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop1)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop1)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop1)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop1)",
-                "ok": true,
-                "note": "hpCur 9 -> 9"
-              },
-              {
-                "step": "7-levelup(loop1)",
-                "ok": true,
-                "note": "level 1, xp 200"
-              },
-              {
-                "step": "2-travel-walk(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop2)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop2)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop2)",
-                "ok": true,
-                "note": "hpCur 0 -> 9"
-              },
-              {
-                "step": "7-levelup(loop2)",
-                "ok": true,
-                "note": "level 1, xp 200"
-              },
-              {
-                "step": "2-travel-walk(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop3)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop3)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop3)",
-                "ok": true,
-                "note": "hpCur 0 -> 9"
-              },
-              {
-                "step": "7-levelup(loop3)",
-                "ok": true,
-                "note": "level 1, xp 200"
-              },
-              {
-                "step": "2-travel-walk(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop4)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop4)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop4)",
-                "ok": true,
-                "note": "hpCur 9 -> 16"
-              },
-              {
-                "step": "7-levelup(loop4)",
-                "ok": true,
-                "note": "level 2, xp 400"
-              },
-              {
-                "step": "2-travel-walk(loop5)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop5)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop5)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop5)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop5)",
-                "ok": true,
-                "note": "hpCur 16 -> 16"
-              },
-              {
-                "step": "7-levelup(loop5)",
-                "ok": true,
-                "note": "level 2, xp 600"
-              },
-              {
-                "step": "2-travel-walk(loop6)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop6)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop6)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop6)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop6)",
-                "ok": true,
-                "note": "hpCur 16 -> 16"
-              },
-              {
-                "step": "7-levelup(loop6)",
-                "ok": true,
-                "note": "level 2, xp 800"
-              },
-              {
-                "step": "2-travel-walk(loop7)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop7)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop7)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop7)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop7)",
-                "ok": true,
-                "note": "hpCur 16 -> 23"
-              },
-              {
-                "step": "7-levelup(loop7)",
-                "ok": true,
-                "note": "level 3, xp 1000"
-              },
-              {
-                "step": "2-travel-walk(loop8)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop8)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop8)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop8)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop8)",
-                "ok": true,
-                "note": "hpCur 0 -> 23"
-              },
-              {
-                "step": "7-levelup(loop8)",
-                "ok": true,
-                "note": "level 3, xp 1000"
-              },
-              {
-                "step": "2-travel-walk(loop9)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop9)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop9)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop9)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop9)",
-                "ok": true,
-                "note": "hpCur 0 -> 0"
-              },
-              {
-                "step": "7-levelup(loop9)",
-                "ok": true,
-                "note": "level 3, xp 1000"
-              },
-              {
-                "step": "2-travel-walk(loop10)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop10)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop10)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop10)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop10)",
-                "ok": true,
-                "note": "hpCur 0 -> 23"
-              },
-              {
-                "step": "7-levelup(loop10)",
-                "ok": true,
-                "note": "level 3, xp 1000"
-              },
-              {
-                "step": "2-travel-walk(loop11)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop11)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop11)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop11)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop11)",
-                "ok": true,
-                "note": "hpCur 23 -> 23"
-              },
-              {
-                "step": "7-levelup(loop11)",
-                "ok": true,
-                "note": "level 3, xp 1450"
-              },
-              {
-                "step": "2-travel-walk(loop12)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop12)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop12)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop12)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop12)",
-                "ok": true,
-                "note": "hpCur 0 -> 23"
-              },
-              {
-                "step": "7-levelup(loop12)",
-                "ok": true,
-                "note": "level 3, xp 1450"
-              },
-              {
-                "step": "2-travel-walk(loop13)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop13)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop13)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop13)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop13)",
-                "ok": true,
-                "note": "hpCur 0 -> 23"
-              },
-              {
-                "step": "7-levelup(loop13)",
-                "ok": true,
-                "note": "level 3, xp 1450"
-              },
-              {
-                "step": "2-travel-walk(loop14)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop14)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop14)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop14)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop14)",
-                "ok": true,
-                "note": "hpCur 0 -> 0"
-              },
-              {
-                "step": "7-levelup(loop14)",
-                "ok": true,
-                "note": "level 3, xp 1450"
-              },
-              {
-                "step": "2-travel-walk(loop15)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop15)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop15)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop15)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop15)",
-                "ok": true,
-                "note": "hpCur 0 -> 23"
-              },
-              {
-                "step": "7-levelup(loop15)",
-                "ok": true,
-                "note": "level 3, xp 1450"
-              },
-              {
-                "step": "2-travel-walk(loop16)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop16)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop16)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop16)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop16)",
-                "ok": true,
-                "note": "hpCur 23 -> 23"
-              },
-              {
-                "step": "7-levelup(loop16)",
-                "ok": true,
-                "note": "level 3, xp 1900"
-              },
-              {
-                "step": "2-travel-walk(loop17)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop17)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop17)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop17)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop17)",
-                "ok": true,
-                "note": "hpCur 23 -> 23"
-              },
-              {
-                "step": "7-levelup(loop17)",
-                "ok": true,
-                "note": "level 3, xp 2350"
-              },
-              {
-                "step": "2-travel-walk(loop18)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop18)",
-                "ok": true,
-                "note": "won"
-              },
-              {
-                "step": "4-loot(loop18)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop18)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop18)",
-                "ok": true,
-                "note": "hpCur 23 -> 30"
-              },
-              {
-                "step": "7-levelup(loop18)",
-                "ok": true,
-                "note": "level 4, xp 2800"
-              },
-              {
-                "step": "2-travel-walk(loop19)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop19)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop19)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop19)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop19)",
-                "ok": true,
-                "note": "hpCur 0 -> 30"
-              },
-              {
-                "step": "7-levelup(loop19)",
-                "ok": true,
-                "note": "level 4, xp 2800"
-              },
-              {
-                "step": "2-travel-walk(loop20)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "3-combat(loop20)",
-                "ok": true,
-                "note": "no-op (no foe available)"
-              },
-              {
-                "step": "4-loot(loop20)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "5-shop(loop20)",
-                "ok": true,
-                "note": null
-              },
-              {
-                "step": "6-rest(loop20)",
-                "ok": true,
-                "note": "hpCur 0 -> 30"
-              },
-              {
-                "step": "7-levelup(loop20)",
-                "ok": true,
-                "note": "level 4, xp 2800"
+                "note": "level 4, xp 5500"
               },
               {
                 "step": "2-travel-walk(loop21)",
@@ -8635,12 +9335,12 @@
               {
                 "step": "6-rest(loop21)",
                 "ok": true,
-                "note": "hpCur 30 -> 30"
+                "note": "hpCur 26 -> 26"
               },
               {
                 "step": "7-levelup(loop21)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 5950"
               },
               {
                 "step": "2-travel-walk(loop22)",
@@ -8665,12 +9365,12 @@
               {
                 "step": "6-rest(loop22)",
                 "ok": true,
-                "note": "hpCur 0 -> 30"
+                "note": "hpCur 0 -> 26"
               },
               {
                 "step": "7-levelup(loop22)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 5950"
               },
               {
                 "step": "2-travel-walk(loop23)",
@@ -8680,7 +9380,7 @@
               {
                 "step": "3-combat(loop23)",
                 "ok": true,
-                "note": "no-op (no foe available)"
+                "note": "won"
               },
               {
                 "step": "4-loot(loop23)",
@@ -8695,12 +9395,12 @@
               {
                 "step": "6-rest(loop23)",
                 "ok": true,
-                "note": "hpCur 0 -> 30"
+                "note": "hpCur 26 -> 26"
               },
               {
                 "step": "7-levelup(loop23)",
                 "ok": true,
-                "note": "level 4, xp 3250"
+                "note": "level 4, xp 6400"
               },
               {
                 "step": "2-travel-walk(loop24)",
@@ -8725,12 +9425,12 @@
               {
                 "step": "6-rest(loop24)",
                 "ok": true,
-                "note": "hpCur 30 -> 30"
+                "note": "hpCur 26 -> 32"
               },
               {
                 "step": "7-levelup(loop24)",
                 "ok": true,
-                "note": "level 4, xp 3700"
+                "note": "level 5, xp 6850"
               },
               {
                 "step": "2-travel-walk(loop25)",
@@ -8755,12 +9455,12 @@
               {
                 "step": "6-rest(loop25)",
                 "ok": true,
-                "note": "hpCur 30 -> 30"
+                "note": "hpCur 32 -> 32"
               },
               {
                 "step": "7-levelup(loop25)",
                 "ok": true,
-                "note": "level 4, xp 4150"
+                "note": "level 5, xp 7550"
               },
               {
                 "step": "8-forced-death",

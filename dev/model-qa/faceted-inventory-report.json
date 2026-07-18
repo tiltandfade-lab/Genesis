@@ -2,2976 +2,2283 @@
   "generatedBy": "build/gen-sprite-registry.py",
   "spec": "VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1",
   "candidateCount": 252,
-  "registryJoinedCount": 252,
-  "unjoinedCandidates": [],
+  "registryJoinedCount": 0,
+  "unjoinedCandidates": [
+    "spr-fantasy-abominable-yeti",
+    "spr-fantasy-adult-blue-dragon",
+    "spr-fantasy-adult-bronze-dragon",
+    "spr-fantasy-adult-copper-dragon",
+    "spr-fantasy-adult-gold-dragon",
+    "spr-fantasy-adult-green-dragon",
+    "spr-fantasy-adult-silver-dragon",
+    "spr-fantasy-adult-white-dragon",
+    "spr-fantasy-air-elemental",
+    "spr-fantasy-allosaurus",
+    "spr-fantasy-ancient-black-dragon",
+    "spr-fantasy-ancient-blue-dragon",
+    "spr-fantasy-ancient-green-dragon",
+    "spr-fantasy-ancient-white-dragon",
+    "spr-fantasy-animated-armor",
+    "spr-fantasy-animated-flying-sword",
+    "spr-fantasy-ankheg",
+    "spr-fantasy-ankylosaurus",
+    "spr-fantasy-arcanaloth",
+    "spr-fantasy-arch-hag",
+    "spr-fantasy-archmage",
+    "spr-fantasy-awakened-shrub",
+    "spr-fantasy-bandit-enforcer",
+    "spr-fantasy-barbed-devil",
+    "spr-fantasy-bat-raven-owl-hawk",
+    "spr-fantasy-bearded-devil",
+    "spr-fantasy-blob-of-annihilation",
+    "spr-fantasy-blood-hawk-eagle",
+    "spr-fantasy-blue-dragon",
+    "spr-fantasy-bone-naga",
+    "spr-fantasy-brass-dragon",
+    "spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling",
+    "spr-fantasy-brazen-gorgon",
+    "spr-fantasy-bugbear-stalker",
+    "spr-fantasy-bugbear-stalker-strangler",
+    "spr-fantasy-bugbear-warrior",
+    "spr-fantasy-builder-dragonborn-land-worker-dragonborn",
+    "spr-fantasy-bulette",
+    "spr-fantasy-bulette-pup",
+    "spr-fantasy-cambion",
+    "spr-fantasy-carrion-crawler",
+    "spr-fantasy-centaur-trooper",
+    "spr-fantasy-centaur-warden",
+    "spr-fantasy-chasme",
+    "spr-fantasy-chimera",
+    "spr-fantasy-cockatrice",
+    "spr-fantasy-cockatrice-regent",
+    "spr-fantasy-commoner",
+    "spr-fantasy-copper-dragon-wyrmling-gold-dragon-wyrmling",
+    "spr-fantasy-couatl",
+    "spr-fantasy-crawling-claw",
+    "spr-fantasy-darkmantle",
+    "spr-fantasy-death-dog",
+    "spr-fantasy-death-knight",
+    "spr-fantasy-death-knight-aspirant",
+    "spr-fantasy-deep-brute",
+    "spr-fantasy-deep-brute-thonot",
+    "spr-fantasy-displacer-beast",
+    "spr-fantasy-domestic-animal-goat-goose-peacock-turkey",
+    "spr-fantasy-dragon-turtle",
+    "spr-fantasy-dragonborn-ship-s-purser-temple-acolyte",
+    "spr-fantasy-dretch",
+    "spr-fantasy-drider",
+    "spr-fantasy-dungeon-animal-canary-cave-rat-salamander-cricket",
+    "spr-fantasy-earth-elemental",
+    "spr-fantasy-elder-deep-thing",
+    "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses-hauler-elf",
+    "spr-fantasy-empyrean",
+    "spr-fantasy-empyrean-iota",
+    "spr-fantasy-ettercap",
+    "spr-fantasy-fire-elemental",
+    "spr-fantasy-fomorian",
+    "spr-fantasy-giant-boar",
+    "spr-fantasy-giant-centipede",
+    "spr-fantasy-giant-constrictor-snake",
+    "spr-fantasy-giant-crab",
+    "spr-fantasy-giant-crocodile",
+    "spr-fantasy-giant-eagle",
+    "spr-fantasy-giant-elk",
+    "spr-fantasy-giant-fire-beetle",
+    "spr-fantasy-giant-frog",
+    "spr-fantasy-giant-goat",
+    "spr-fantasy-giant-hyena",
+    "spr-fantasy-giant-lizard",
+    "spr-fantasy-giant-octopus",
+    "spr-fantasy-giant-owl",
+    "spr-fantasy-giant-rat",
+    "spr-fantasy-giant-scorpion",
+    "spr-fantasy-giant-seahorse",
+    "spr-fantasy-giant-shark",
+    "spr-fantasy-giant-spider",
+    "spr-fantasy-giant-squid",
+    "spr-fantasy-giant-toad",
+    "spr-fantasy-giant-vulture",
+    "spr-fantasy-giant-wasp",
+    "spr-fantasy-giant-weasel",
+    "spr-fantasy-gnoll-demoniac",
+    "spr-fantasy-gnoll-fang-of-the-beast",
+    "spr-fantasy-gnoll-pack-lord",
+    "spr-fantasy-gnoll-warrior",
+    "spr-fantasy-gnomish-alchemist-clockmaker-tinkerer-delver",
+    "spr-fantasy-gorgon",
+    "spr-fantasy-graveyard-revenant",
+    "spr-fantasy-gray-ooze",
+    "spr-fantasy-greater-mimic",
+    "spr-fantasy-greater-shadow",
+    "spr-fantasy-grell",
+    "spr-fantasy-grick",
+    "spr-fantasy-grick-ancient",
+    "spr-fantasy-griffon",
+    "spr-fantasy-half-dragon",
+    "spr-fantasy-harpy",
+    "spr-fantasy-harpy-matriarch",
+    "spr-fantasy-haunting-revenant",
+    "spr-fantasy-hell-hound",
+    "spr-fantasy-hezrou",
+    "spr-fantasy-hill-giant",
+    "spr-fantasy-hippogriff",
+    "spr-fantasy-homunculus",
+    "spr-fantasy-hook-horror",
+    "spr-fantasy-horned-devil",
+    "spr-fantasy-host-goliath-pampered-elite-goliath",
+    "spr-fantasy-hydra",
+    "spr-fantasy-ice-devil",
+    "spr-fantasy-ice-mephit",
+    "spr-fantasy-kobold-inventor-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name",
+    "spr-fantasy-kraken",
+    "spr-fantasy-lamia",
+    "spr-fantasy-lantern-sage",
+    "spr-fantasy-mage",
+    "spr-fantasy-manes-vaporspawn",
+    "spr-fantasy-manticore",
+    "spr-fantasy-merfolk-skirmisher",
+    "spr-fantasy-merfolk-wavebender",
+    "spr-fantasy-merrow",
+    "spr-fantasy-mezzoloth",
+    "spr-fantasy-mimic",
+    "spr-fantasy-mind-thief",
+    "spr-fantasy-mind-thief-arcanist",
+    "spr-fantasy-minotaur-of-the-horned-king",
+    "spr-fantasy-mummy",
+    "spr-fantasy-mummy-lord",
+    "spr-fantasy-myconid-sovereign",
+    "spr-fantasy-myconid-sprout",
+    "spr-fantasy-nalfeshnee",
+    "spr-fantasy-night-hag",
+    "spr-fantasy-nightmare",
+    "spr-fantasy-noble",
+    "spr-fantasy-nycaloth",
+    "spr-fantasy-ogre-howdah",
+    "spr-fantasy-oni",
+    "spr-fantasy-otyugh",
+    "spr-fantasy-owlbear",
+    "spr-fantasy-owlbear-cub",
+    "spr-fantasy-panther-hyena",
+    "spr-fantasy-pegasus",
+    "spr-fantasy-peryton",
+    "spr-fantasy-phase-spider",
+    "spr-fantasy-piercer",
+    "spr-fantasy-pixie",
+    "spr-fantasy-pixie-wonderbringer",
+    "spr-fantasy-priest-acolyte",
+    "spr-fantasy-primeval-owlbear",
+    "spr-fantasy-psychic-gray-ooze",
+    "spr-fantasy-purple-worm",
+    "spr-fantasy-quasit",
+    "spr-fantasy-rakshasa",
+    "spr-fantasy-red-dragon-wyrmling-white-dragon-wyrmling",
+    "spr-fantasy-remorhaz",
+    "spr-fantasy-ridden-wyvern",
+    "spr-fantasy-roc",
+    "spr-fantasy-roper",
+    "spr-fantasy-rust-monster",
+    "spr-fantasy-sahuagin-baron",
+    "spr-fantasy-sahuagin-priest",
+    "spr-fantasy-sahuagin-warrior",
+    "spr-fantasy-satyr",
+    "spr-fantasy-satyr-revelmaster",
+    "spr-fantasy-secret-eye",
+    "spr-fantasy-smoke-mephit",
+    "spr-fantasy-sphinx-of-valor",
+    "spr-fantasy-spirit-naga",
+    "spr-fantasy-sprite",
+    "spr-fantasy-stirge",
+    "spr-fantasy-stone-golem",
+    "spr-fantasy-succubus",
+    "spr-fantasy-tarrasque",
+    "spr-fantasy-the-twig-blight",
+    "spr-fantasy-tiefling-fortune-teller-rival",
+    "spr-fantasy-troglodyte",
+    "spr-fantasy-troll-amalgam",
+    "spr-fantasy-troll-limb",
+    "spr-fantasy-ultroloth",
+    "spr-fantasy-umber-hulk",
+    "spr-fantasy-undead-eye-tyrant",
+    "spr-fantasy-unicorn",
+    "spr-fantasy-vampire-spawn",
+    "spr-fantasy-venomous-snake-flying-snake",
+    "spr-fantasy-violet-fungus-necrohulk",
+    "spr-fantasy-void-monk-monk",
+    "spr-fantasy-void-monk-psion",
+    "spr-fantasy-void-monk-zerth",
+    "spr-fantasy-vrock",
+    "spr-fantasy-water-elemental",
+    "spr-fantasy-werebear",
+    "spr-fantasy-wereboar",
+    "spr-fantasy-wild-animal-a-lynx-kitten-peregrine-falcon-red-fox-kit-watcher-hawk",
+    "spr-fantasy-wild-animal-black-bear-mountain-goat",
+    "spr-fantasy-wyvern",
+    "spr-fantasy-yeti",
+    "spr-fantasy-yochlol",
+    "spr-fantasy-yuan-ti-abomination",
+    "spr-fantasy-yuan-ti-infiltrator",
+    "spr-pc-dragonborn-barbarian",
+    "spr-pc-dragonborn-bard",
+    "spr-pc-dragonborn-druid",
+    "spr-pc-dragonborn-paladin",
+    "spr-pc-dragonborn-rogue",
+    "spr-pc-dragonborn-sorcerer",
+    "spr-pc-dragonborn-wizard",
+    "spr-pc-dwarf-barbarian",
+    "spr-pc-dwarf-fighter",
+    "spr-pc-goliath-ranger",
+    "spr-pc-goliath-wizard",
+    "spr-pc-halfling-barbarian",
+    "spr-pc-halfling-bard",
+    "spr-pc-halfling-cleric",
+    "spr-pc-halfling-druid",
+    "spr-pc-halfling-fighter",
+    "spr-pc-halfling-monk",
+    "spr-pc-halfling-paladin",
+    "spr-pc-halfling-ranger",
+    "spr-pc-halfling-rogue",
+    "spr-pc-halfling-sorcerer",
+    "spr-pc-halfling-warlock",
+    "spr-pc-halfling-wizard",
+    "spr-pc-orc-cleric",
+    "spr-pc-orc-monk",
+    "spr-pc-orc-paladin",
+    "spr-pc-orc-ranger",
+    "spr-pc-orc-rogue",
+    "spr-pc-orc-warlock",
+    "spr-pc-orc-wizard",
+    "spr-pc-tiefling-barbarian",
+    "spr-pc-tiefling-bard",
+    "spr-pc-tiefling-fighter",
+    "spr-pc-tiefling-monk",
+    "spr-pc-tiefling-paladin",
+    "spr-pc-tiefling-ranger",
+    "spr-pc-tiefling-rogue",
+    "spr-pc-tiefling-warlock",
+    "spr-pc-tiefling-wizard"
+  ],
   "summaryByHeightSource": {
     "overlay": 0,
-    "measured": 192,
+    "measured": 0,
     "band-default": 0,
-    "missing": 60
+    "missing": 252
   },
   "slugs": {
     "spr-fantasy-abominable-yeti": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 12.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-adult-blue-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 20.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-adult-bronze-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 20.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-adult-copper-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 18.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-adult-gold-dragon": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-adult-green-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 18.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-adult-silver-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 20.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-adult-white-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 16.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-air-elemental": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-allosaurus": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 12.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ancient-black-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 32.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ancient-blue-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 35.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ancient-green-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 32.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ancient-white-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 28.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-animated-armor": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-animated-flying-sword": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 3.5,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ankheg": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ankylosaurus": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-arcanaloth": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-arch-hag": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-archmage": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-awakened-shrub": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-bandit-enforcer": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
-      "worldHeight": 5.9,
-      "heightSource": "measured",
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
       "sizeBand": null,
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-barbed-devil": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-bat-raven-owl-hawk": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-bearded-devil": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-blob-of-annihilation": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 20.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-blood-hawk-eagle": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-blue-dragon": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-bone-naga": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-brass-dragon": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-brass-dragon-wyrmling-bronze-dragon-wyrmling": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-brazen-gorgon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-bugbear-stalker": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-bugbear-stalker-strangler": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-bugbear-warrior": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-builder-dragonborn-land-worker-dragonborn": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-bulette": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-bulette-pup": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-cambion": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-carrion-crawler": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-centaur-trooper": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-centaur-warden": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-chasme": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-chimera": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-cockatrice": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 2.5,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-cockatrice-regent": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-commoner": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.7,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-copper-dragon-wyrmling-gold-dragon-wyrmling": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-couatl": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-crawling-claw": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "tiny"
-      ],
-      "worldHeight": 1.5,
-      "heightSource": "measured",
-      "sizeBand": "Tiny",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-darkmantle": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-death-dog": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 3.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-death-knight": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.2,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-death-knight-aspirant": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-deep-brute": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-deep-brute-thonot": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-displacer-beast": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-domestic-animal-goat-goose-peacock-turkey": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-dragon-turtle": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 24.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-dragonborn-ship-s-purser-temple-acolyte": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-dretch": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-drider": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-dungeon-animal-canary-cave-rat-salamander-cricket": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-earth-elemental": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-elder-deep-thing": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-elven-herbalist-elf-sells-cures-and-quietly-a-few-curses-hauler-elf": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-empyrean": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 18.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-empyrean-iota": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ettercap": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-fire-elemental": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-fomorian": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 16.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-boar": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 4.5,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-centipede": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 2.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-constrictor-snake": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 3.5,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-crab": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 2.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-crocodile": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 3.5,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-eagle": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-elk": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-fire-beetle": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 1.5,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-frog": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 2.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-goat": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-hyena": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-lizard": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 3.5,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-octopus": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-owl": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-rat": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 2.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-scorpion": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-seahorse": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-shark": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-spider": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-squid": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-toad": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-vulture": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-wasp": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-giant-weasel": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 2.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-gnoll-demoniac": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-gnoll-fang-of-the-beast": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-gnoll-pack-lord": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-gnoll-warrior": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-gnomish-alchemist-clockmaker-tinkerer-delver": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-gorgon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-graveyard-revenant": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-gray-ooze": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-greater-mimic": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-greater-shadow": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-grell": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-grick": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-grick-ancient": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-griffon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-half-dragon": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-harpy": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-harpy-matriarch": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.6,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-haunting-revenant": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 20.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-hell-hound": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 3.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-hezrou": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-hill-giant": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 18.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-hippogriff": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-homunculus": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "tiny"
-      ],
-      "worldHeight": 1.5,
-      "heightSource": "measured",
-      "sizeBand": "Tiny",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-hook-horror": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-horned-devil": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-host-goliath-pampered-elite-goliath": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-hydra": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 16.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ice-devil": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ice-mephit": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-kobold-inventor-halfling-orchard-keeper-elderly-halfling-knows-every-tree-in-the-grove-by-name": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-kraken": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 60.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-lamia": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-lantern-sage": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-mage": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-manes-vaporspawn": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 4.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-manticore": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-merfolk-skirmisher": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-merfolk-wavebender": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-merrow": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.5,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-mezzoloth": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-mimic": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-mind-thief": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-mind-thief-arcanist": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-minotaur-of-the-horned-king": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-mummy": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-mummy-lord": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-myconid-sovereign": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-myconid-sprout": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 2.5,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-nalfeshnee": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-night-hag": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-nightmare": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-noble": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-nycaloth": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ogre-howdah": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 11.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-oni": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-otyugh": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-owlbear": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-owlbear-cub": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 4.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-panther-hyena": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-pegasus": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-peryton": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-phase-spider": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-piercer": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-pixie": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "tiny"
-      ],
-      "worldHeight": 1.5,
-      "heightSource": "measured",
-      "sizeBand": "Tiny",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-pixie-wonderbringer": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "tiny"
-      ],
-      "worldHeight": 1.3,
-      "heightSource": "measured",
-      "sizeBand": "Tiny",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-priest-acolyte": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-primeval-owlbear": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 12.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-psychic-gray-ooze": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 4.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-purple-worm": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-quasit": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "tiny"
-      ],
-      "worldHeight": 1.3,
-      "heightSource": "measured",
-      "sizeBand": "Tiny",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-rakshasa": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-red-dragon-wyrmling-white-dragon-wyrmling": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-remorhaz": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "huge"
-      ],
-      "worldHeight": 12.0,
-      "heightSource": "measured",
-      "sizeBand": "Huge",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ridden-wyvern": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
       "sizeBand": null,
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-roc": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 20.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-roper": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-rust-monster": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 3.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-sahuagin-baron": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-sahuagin-priest": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-sahuagin-warrior": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-satyr": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-satyr-revelmaster": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.5,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-secret-eye": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-smoke-mephit": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-sphinx-of-valor": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-spirit-naga": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-sprite": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "tiny"
-      ],
-      "worldHeight": 1.5,
-      "heightSource": "measured",
-      "sizeBand": "Tiny",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-stirge": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "tiny"
-      ],
-      "worldHeight": 1.5,
-      "heightSource": "measured",
-      "sizeBand": "Tiny",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-stone-golem": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-succubus": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-tarrasque": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "gargantuan"
-      ],
-      "worldHeight": 50.0,
-      "heightSource": "measured",
-      "sizeBand": "Gargantuan",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-the-twig-blight": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 3.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-tiefling-fortune-teller-rival": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-troglodyte": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-troll-amalgam": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-troll-limb": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "small"
-      ],
-      "worldHeight": 2.0,
-      "heightSource": "measured",
-      "sizeBand": "Small",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-ultroloth": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-umber-hulk": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-undead-eye-tyrant": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-unicorn": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-vampire-spawn": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-venomous-snake-flying-snake": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-violet-fungus-necrohulk": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-void-monk-monk": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-void-monk-psion": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-void-monk-zerth": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 5.8,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-vrock": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-water-elemental": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 10.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-werebear": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 7.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-wereboar": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-wild-animal-a-lynx-kitten-peregrine-falcon-red-fox-kit-watcher-hawk": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-wild-animal-black-bear-mountain-goat": {
-      "tags": [
-        "fantasy",
-        "monster"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-fantasy-wyvern": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-yeti": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 8.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-yochlol": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-yuan-ti-abomination": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "large"
-      ],
-      "worldHeight": 9.0,
-      "heightSource": "measured",
-      "sizeBand": "Large",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-fantasy-yuan-ti-infiltrator": {
-      "tags": [
-        "fantasy",
-        "monster",
-        "medium"
-      ],
-      "worldHeight": 6.0,
-      "heightSource": "measured",
-      "sizeBand": "Medium",
-      "legacyAssetExists": true,
-      "registryEntry": true
+      "tags": [],
+      "worldHeight": null,
+      "heightSource": "missing",
+      "sizeBand": null,
+      "legacyAssetExists": false,
+      "registryEntry": false
     },
     "spr-pc-dragonborn-barbarian": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-dragonborn-bard": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-dragonborn-druid": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-dragonborn-paladin": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-dragonborn-rogue": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-dragonborn-sorcerer": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-dragonborn-wizard": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-dwarf-barbarian": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-dwarf-fighter": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-goliath-ranger": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-goliath-wizard": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-barbarian": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-bard": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-cleric": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-druid": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-fighter": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-monk": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-paladin": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-ranger": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-rogue": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-sorcerer": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-warlock": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-halfling-wizard": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-orc-cleric": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-orc-monk": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-orc-paladin": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-orc-ranger": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-orc-rogue": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-orc-warlock": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-orc-wizard": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-barbarian": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-bard": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-fighter": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-monk": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-paladin": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-ranger": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-rogue": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-warlock": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     },
     "spr-pc-tiefling-wizard": {
-      "tags": [
-        "pc",
-        "pc"
-      ],
+      "tags": [],
       "worldHeight": null,
       "heightSource": "missing",
       "sizeBand": null,
       "legacyAssetExists": false,
-      "registryEntry": true
+      "registryEntry": false
     }
   }
 }

@@ -2,7 +2,7 @@
 
 Auto-generated from dev/gauntlet-report.json. Do not hand-edit.
 
-Run: 2026-07-08 · seed 20260702 · commit 0dd023b
+Run: 2026-07-16 · seed 20260702 · commit e510cb65
 
 ## crash (0)
 

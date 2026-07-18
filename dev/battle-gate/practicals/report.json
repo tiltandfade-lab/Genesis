@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-07-16T00:51:30.129Z",
+  "notes": [],
+  "roomOverview": {
+    "path": "/Volumes/Genesis/Genesis/dev/battle-gate/practicals/room-overview.png",
+    "ok": true,
+    "meshCount": 8,
+    "lightCount": 5,
+    "glowCount": 0
+  },
+  "emitters": [
+    {
+      "x": -2,
+      "y": -0.019999999999999962,
+      "z": 1.52,
+      "fixtureId": "candle-cluster",
+      "mount": "floor",
+      "ownerSegIndex": null,
+      "emissiveIntensity": 1.5162285651507
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1.5,
+      "fixtureId": "lantern-handled",
+      "mount": "floor",
+      "ownerSegIndex": null,
+      "emissiveIntensity": 1.5939180437206195
+    },
+    {
+      "x": 2,
+      "y": 0.020000000000000018,
+      "z": 1.5,
+      "fixtureId": "brazier-low",
+      "mount": "floor",
+      "ownerSegIndex": null,
+      "emissiveIntensity": 1.5565641150662384
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -0.5,
+      "fixtureId": "crystal-faceted",
+      "mount": "floor",
+      "ownerSegIndex": null,
+      "emissiveIntensity": 1.5128899788062717
+    },
+    {
+      "x": 0,
+      "y": 1.1451064965847346,
+      "z": -2.84,
+      "fixtureId": "sconce-iron",
+      "mount": "wall",
+      "ownerSegIndex": 0,
+      "emissiveIntensity": 1.6437929242495368
+    }
+  ],
+  "roomCloseup": {
+    "path": "/Volumes/Genesis/Genesis/dev/battle-gate/practicals/room-closeup.png"
+  }
+}

@@ -1034,7 +1034,8 @@
   },
   "spr-fantasy-flameskull": {
     "scale": 0.58,
-    "verdict": "pass"
+    "verdict": "fail",
+    "note": "regen: questionable-res redo (Adam 2026-07-16)"
   },
   "spr-fantasy-flaming-skeleton": {
     "note": "⚠ auto-scale (art likely extends above head): est 5.8′",
@@ -1194,7 +1195,9 @@
     "verdict": "pass"
   },
   "spr-fantasy-giant-toad": {
-    "scale": 0.333
+    "scale": 0.333,
+    "verdict": "fail",
+    "note": "regen: questionable-res redo (Adam 2026-07-16)"
   },
   "spr-fantasy-giant-venomous-snake": {
     "scale": 0.667

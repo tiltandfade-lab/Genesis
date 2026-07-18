@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-13T04:13:36.060Z",
-  "masterSha": "0e109a8c4e7d2d3e530fca135e7f870eaf8f9583",
+  "generatedAt": "2026-07-16T11:21:18.796Z",
+  "masterSha": "e510cb65ad83f916ccb8f3e38ff820ce9348363d",
   "adapter": "kernel(PolygonKernel: unionCellRects+triangulateSurface, unsmoothed canonical topology)",
   "invariants": [
     "determinism-shuffled-input",

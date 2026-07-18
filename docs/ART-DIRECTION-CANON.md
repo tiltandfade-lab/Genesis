@@ -130,6 +130,15 @@ and for any future faceted regeneration; the prop/decal/fx/tile lanes are untouc
 ruling (their registers pend their own verdicts). The decision-capture rule continues to apply
 to BOTH files: figure-art rulings land here or in ART-DEPARTMENT.md the session they are made.
 
+## UI-icon delivery ruling (Adam, 2026-07-17 — additive)
+
+> "make sure any icons you create for the mock ups get generated the a chroma keyed sprite sheet of FF00FF so claude can isolate and apply the icon to the UI"
+
+Reusable icons created for mockups must therefore be delivered as a separate sprite sheet on a
+perfectly flat `#FF00FF` chroma-key background, with isolated cells and no baked UI panel or
+shadow. Screenshot-local incidental glyphs remain part of their rendered mockup and are not
+treated as extractable icon assets.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

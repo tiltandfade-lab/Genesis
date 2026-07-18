@@ -278,6 +278,57 @@
           -2.4273
         ]
       }
+    },
+    {
+      "base": "mini-wall-opening",
+      "pack": "kenney-mini-dungeon",
+      "slug": "wall-opening",
+      "fit": {
+        "ok": true,
+        "module": "kenney-mini-dungeon/wall-opening",
+        "scaleY": 1.1566,
+        "aperture": [
+          -0.5,
+          1.5
+        ],
+        "facePlane": -2.5,
+        "visibleFace": -2.2273,
+        "wallTop": 1.9,
+        "box": {
+          "min": [
+            -0.5,
+            -0.5,
+            -4.327
+          ],
+          "max": [
+            1.5,
+            1.813,
+            -2.227
+          ]
+        },
+        "size": [
+          2,
+          2.313,
+          2.1
+        ]
+      },
+      "productionCamera": {
+        "pitchDeg": 28,
+        "yawDeg": 45
+      },
+      "zoomCamera": {
+        "ok": true,
+        "yawDeg": 45,
+        "pitchDeg": 28,
+        "dist": 13,
+        "center": [
+          0.5,
+          0.6566,
+          -3.2773
+        ]
+      },
+      "note": "KGR-8 door workbench bonus card: kenney-mini-dungeon's wall-opening is the suite's ONLY wall-with-doorway module (the doorway-truth census). Mounted by the door-lineup machinery in the 2-cell study aperture; fused-tile mini grammar, reads short of the wall top under the wall-band parity factor — kit-true.",
+      "appendedAt": "2026-07-18T03:45:45.402Z"
     }
   ],
   "generatedAt": "2026-07-18T02:26:18.063Z"

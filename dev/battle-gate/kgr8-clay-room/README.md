@@ -23,6 +23,22 @@ kenney-modular-dungeon-kit modules**, uniform clay-grey matte, production camera
 
 Rig: `dev/battle-gate/capture-kgr8-clay-room.mjs` (harness pattern verbatim from
 `capture-ks3-kit-shells.mjs`). Re-run: `node dev/battle-gate/capture-kgr8-clay-room.mjs`.
+
+**THE DOOR-MOUNT LOCK (card 05 — Adam's card-04 read: "unfortunately the door is still wrong,
+give me the controls please so i can position that thing"):** the door workbench
+(`dev/door-workbench/` — `node dev/door-workbench/serve.mjs`) renders this same clay room live
+in the real engine and gives Adam the leaf controls (depth-in-wall z, thickness, side lap,
+height/head drop, sill height, reveal lining). His SAVE writes `door-mount-lock.json` in this
+folder (schema `genesis.kgr8-door-mount-lock.v1`, stamped "Adam's hand placement"); when that
+file exists this rig's leaf fit uses its values instead of the v4 defaults on every card run
+(logged + recorded as `doorMountLock` in the diagnosis JSON). Delete the file to fall back to
+pure v4. The fit implementation is the ONE shared file `dev/door-workbench/kgr8-leaf-fit.page.js`
+(v4-identical at defaults), evaluated by both the rig and the workbench page.
+`workbench-lock-verify*.png` + `workbench-lock-verify-diagnosis.json` are the recorded
+roundtrip proof (a test lock at zOffset +0.25 moved the rig's leaf z-center from −2.7492 to
+−2.4992). `kenney-doors/mini-wall-opening.png` + `-zoom.png` (`--mode miniwall`) are the
+doorway-truth bonus card: kenney-mini-dungeon's `wall-opening`, the suite's ONLY
+wall-with-doorway module, standing in the 2-cell study aperture.
 Machine evidence: `clay-01-diagnosis.json` (module manifest, stripped-prism counts — 26 floor +
 25 wall prism instances removed, ZERO prism shell in frame — parapet-cut list, final scene
 inventory). `lineup-modular.png` / `lineup-mini.png` + `lineup-manifest.json` are the module

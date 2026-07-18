@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!-- dev/door-workbench/workbench.html — KGR-8 DOOR-POSITIONING WORKBENCH.
+     Adam's order (card-04 read): "give me the controls please so i can position that thing".
+     Serve with: node dev/door-workbench/serve.mjs  →  http://127.0.0.1:5333/dev/door-workbench/workbench.html
+     The right pane is the REAL engine (genesis.html in an iframe) booted into the 5×5 clay
+     proving room by clay-room-boot.page.js; the left pane drives the shared leaf-fit helper
+     live and SAVE locks the numbers into dev/battle-gate/kgr8-clay-room/door-mount-lock.json,
+     which the capture rig consumes on its next run. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>KGR-8 Door Workbench</title>
+<style>
+  :root { --bg:#171512; --panel:#201d19; --ink:#f2efe9; --dim:#a09a8e; --line:#6b675f; --gold:#e6cd86; --accent:#8fb573; --warn:#d08a6a; }
+  html,body { margin:0; padding:0; height:100%; background:var(--bg); color:var(--ink);
+    font:14px/1.45 "SF Mono", Menlo, monospace; }
+  #app { display:flex; height:100vh; }
+  #panel { flex:0 0 352px; overflow-y:auto; background:var(--panel); border-right:1px solid var(--line); padding:14px 16px 24px; box-sizing:border-box; }
+  #stage { flex:1; min-width:0; position:relative; }
+  #engine { width:100%; height:100%; border:0; display:block; background:#0d0c0a; }
+  #bootveil { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(13,12,10,0.88); color:var(--dim); font-size:15px; text-align:center; padding:0 40px; }
+  h1 { font-size:15px; margin:0 0 2px; color:var(--gold); letter-spacing:0.06em; }
+  .sub { color:var(--dim); font-size:11px; margin:0 0 12px; }
+  #status { font-size:11.5px; color:var(--dim); border:1px solid var(--line); border-radius:4px; padding:6px 8px; margin-bottom:12px; min-height:16px; }
+  #status.ready { color:var(--accent); }
+  #status.err { color:var(--warn); }
+  .ctl { border:1px solid var(--line); border-radius:4px; padding:7px 9px 8px; margin-bottom:8px; cursor:pointer; }
+  .ctl.sel { border-color:var(--gold); background:#26221c; }
+  .ctl .row1 { display:flex; justify-content:space-between; align-items:baseline; }
+  .ctl .key { color:var(--dim); font-size:10px; }
+  .ctl label { font-size:12.5px; }
+  .ctl .val { color:var(--gold); font-size:13px; font-weight:700; }
+  .ctl input[type=range] { width:100%; margin:6px 0 0; accent-color:var(--gold); }
+  .ctl .hint { color:var(--dim); font-size:10px; margin-top:3px; }
+  .ctl.toggle .val { cursor:pointer; }
+  button { font:inherit; background:#2a261f; color:var(--ink); border:1px solid var(--line); border-radius:4px; padding:8px 10px; cursor:pointer; }
+  button:hover { border-color:var(--gold); }
+  #dollyBtn.on { border-color:var(--accent); color:var(--accent); }
+  #saveBtn { width:100%; margin-top:10px; background:#332c1d; border-color:var(--gold); color:var(--gold); font-weight:700; letter-spacing:0.05em; padding:11px 10px; }
+  #saveBtn:disabled { opacity:0.45; cursor:default; }
+  #saveMsg { font-size:11px; margin-top:6px; min-height:14px; color:var(--dim); }
+  #saveMsg.ok { color:var(--accent); }
+  #saveMsg.err { color:var(--warn); }
+  #measured { font-size:10.5px; color:var(--dim); border:1px solid var(--line); border-radius:4px; padding:7px 9px; margin-top:10px; white-space:pre; overflow-x:auto; }
+  #measured b { color:var(--ink); }
+  .cheat { font-size:10px; color:var(--dim); margin-top:12px; line-height:1.6; }
+  .cheat b { color:var(--ink); }
+  .camrow { display:flex; gap:8px; margin-top:2px; margin-bottom:10px; }
+  .camrow button { flex:1; font-size:12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="panel">
+    <h1>KGR-8 DOOR WORKBENCH</h1>
+    <p class="sub">the 5×5 clay proving room · real engine · frozen camera (pitch 28 / yaw 45)</p>
+    <div id="status">starting…</div>
+
+    <div class="camrow">
+      <button id="dollyBtn" title="key: D">Doorway dolly (D)</button>
+      <button id="resetBtn" title="reset all controls to the v4 defaults">Reset to v4</button>
+    </div>
+
+    <div id="controls"></div>
+
+    <button id="saveBtn" disabled>SAVE / LOCK — write door-mount-lock.json (S)</button>
+    <div id="saveMsg"></div>
+
+    <div id="measured">measurements arrive after boot…</div>
+
+    <div class="cheat">
+      <b>Keys</b> · <b>1–6</b> pick a control (or click it) · <b>↑/→</b> nudge up ·
+      <b>↓/←</b> nudge down · <b>Shift</b>+arrow = fine step (×⅒) · <b>R</b> toggle reveal lining ·
+      <b>D</b> doorway dolly · <b>S</b> save/lock.<br>
+      Depth z: 0 = centered in the wall slab; + moves the leaf toward the room.
+    </div>
+  </div>
+  <div id="stage">
+    <iframe id="engine" src="/genesis.html"></iframe>
+    <div id="bootveil">booting the engine…</div>
+  </div>
+</div>
+<script src="/dev/door-workbench/workbench.js"></script>
+</body>
+</html>

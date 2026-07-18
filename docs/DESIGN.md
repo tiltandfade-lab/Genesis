@@ -3,7 +3,7 @@ type: design-doc
 branch: Genesis
 status: living
 created: 2026-06-17
-updated: 2026-06-18
+updated: 2026-07-18
 canonical: true
 related:
   - "[[genesis.html]]"
@@ -15,6 +15,8 @@ related:
 # Genesis — Design Doc (canonical)
 
 This is the source-of-truth design doc for the Genesis branch. `README.md` is a short orientation pointer; this file holds the thinking. Update this in the same change as any architectural decision.
+
+> **Infra note (2026-07-18):** Repo came home to `~/Desktop/Work/projects/Genesis` (internal SSD); `/Volumes/Genesis/Genesis` is now the cold backup. **Git LFS is live** — all binaries are LFS-tracked, GitHub holds them (run `git lfs checkout` after a fresh clone). Heavy archival files (Reference PDFs, quarantine zips) live on the Google Drive **Genesis Cold Shelf** (`dev/cold-shelf/fetch-cold.mjs`). master rewritten to `e5511e98`. Full detail: CHANGELOG 2026-07-18 + HANDOFF Latest.
 
 ## Vision
 

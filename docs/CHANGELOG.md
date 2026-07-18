@@ -8,6 +8,19 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-18 — COME-HOME: repo back on the internal SSD + Git LFS live [Claude Opus 4.8, scheduled task]
+
+**Changed**
+- Repo migrated from the external `/Volumes/Genesis/Genesis` back to `~/Desktop/Work/projects/Genesis` (internal SSD). `git status` ~25 s → **0.16 s** warm. The external copy is left untouched as the cold backup (delete nothing there).
+- **Git LFS adopted** (git-lfs 3.7.1). History rewritten via `git lfs migrate import --everything`; all binaries now globally tracked (`*.png,*.jpg,*.psd,*.mov,*.zip`, …). **6.3 GB / 11,222 objects on GitHub LFS** (of the 10 GiB free tier). The 134 MB `quarantine-pack/pre-unification/originals-r2.zip` push blocker dissolved into an LFS pointer; rewritten history force-pushed for all 122 branches (Adam pre-authorized). master `3aa59f88` → **`e5511e98`**.
+- Launchers (`~/Desktop/Launchers/Open Genesis*.command`, Model QA, Light Lab) + `.claude/launch.json` rerouted home. After a fresh checkout, run `git lfs checkout` to smudge pointers to real content (the game needs it).
+
+**Added**
+- Cold shelf on Google Drive (`My Drive/Genesis Cold Shelf/`): Reference/*.pdf scans, quarantine-pack zips, faceted-harvest-2026-07-14, the sprite-r4 discarded round — restorable via `dev/cold-shelf/fetch-cold.mjs` (reads `dev/cold-shelf/manifest.json`). Reference/SRD-Data + _Index stayed in-repo.
+
+**Deferred**
+- ~8.5 GB orphan worktree dirs on `/Volumes/Genesis` (`…-spec.incomplete-20260716`, `…-kgr7-texture-readiness`, `…-kgr4c-promote`) left in place pending Adam's delete confirmation (possibly-unique generated art).
+
 ## 2026-07-16 — THE KENNEY-SOCKET WAVE LANDS + PIXEL-FIRST + the design meeting executed [Claude Fable 5, orchestrated]
 
 The 2026-07-15 design meeting's rulings (DESIGN.md, three entries) executed end-to-end overnight.

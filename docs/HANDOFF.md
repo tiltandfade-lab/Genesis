@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-11
+updated: 2026-07-18
 ---
 
 # Genesis — Session Hand-off
@@ -17,7 +17,21 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-16) — THE KENNEY-SOCKET WAVE: the kit engine stands + PIXEL-FIRST [Claude Fable 5, orchestrated]
+## ⭐ Latest (2026-07-18) — COME-HOME migration: repo on the internal SSD + Git LFS live [Claude Opus 4.8, scheduled task]
+
+The repo lives at `~/Desktop/Work/projects/Genesis` again (internal SSD) — `git status` is ~0.16 s warm
+(was ~25 s on the external). `/Volumes/Genesis/Genesis` is the untouched cold backup. **Git LFS is now
+live**: `.gitattributes` tracks all binaries globally; GitHub holds 6.3 GB / 11,222 LFS objects; the
+134 MB zip blocker is a pointer now; history was rewritten (`git lfs migrate import --everything`) and
+force-pushed for all 122 branches (master `3aa59f88` → `e5511e98`). Heavy archival files (Reference PDFs,
+quarantine zips, faceted-harvest, discarded round) moved to the Google Drive **Genesis Cold Shelf** —
+restore via `dev/cold-shelf/fetch-cold.mjs`. **On a fresh checkout run `git lfs checkout`** to smudge
+pointers to real content (the game needs it). Worktrees pruned to 1 (root). Launchers rerouted home.
+Follow-ups for Adam: confirm deletion of ~8.5 GB orphan worktree dirs still on `/Volumes/Genesis`;
+answer the batched design questions before the Dev Portal (DP-0/DP-1) + KGR-8 clay work
+(dungeon set → isometric prototype tiles first) proceeds.
+
+## 2026-07-16 — THE KENNEY-SOCKET WAVE: the kit engine stands + PIXEL-FIRST [Claude Fable 5, orchestrated]
 
 The design meeting's rulings executed (CHANGELOG 2026-07-16; DESIGN.md 2026-07-15 ×3 entries).
 Master pushed at every landing. THE STATE: **rooms assemble from socketed Kenney modules**

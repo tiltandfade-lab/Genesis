@@ -31,11 +31,20 @@ walls/floors/props/characters, HD-2D normal-mapped sprite citizens, all via clay
 application · normal-map spread. **Decals:** rolled size band per noun, free rotation, overlap
 allowed. **Characters:** rotate to face what they interact with; mirrored-back jank accepted.
 
-**Do next:** build the first clay card — one kit-built 5×5 room, one 5ft door, clay grey,
-current camera (Genesis-kgr4c, unit branch off integration, landed --no-ff, NEVER master).
-Then the ordered taste cards ride the clay room: camera angle → grid → normal-map three-ways
-(walls/floors, props, characters) → decal size/rotation/overlap → composed-angle characters.
-All links to Adam ABSOLUTE under /Volumes/Genesis/.
+**CLAY CARD 01 BUILT + GO'D (same day):** the all-Kenney 5×5 shell landed (`3aecc60f`,
+`dev/battle-gate/kgr8-clay-room/clay-01-shell.png` — real admission path, zero prism in frame)
+and **Adam ruled GO** ("looks pretty good... that's a go"; verbatim in ART-DIRECTION-CANON.md
+"CLAY GATE RULING"). **Rubble chips KEEP**, placement gets its own taste card. The door leaf
+failed the orchestrator read (proud of the thin kit wall plane — production leaf mounts are
+cell-center-relative) → wall-plane-relative mounting is the sandbox fix. Kit truths recorded in
+the card README: no flat-topped 1-cell aperture (kit gates are arched — door-law violations;
+butt-jointed wall ends + flat leaf is the lawful pattern), no 1×1 floor tile, mini-dungeon kit
+rejected (fused 2×2 boxes), curved corner posts.
+
+**Do next:** fix the leaf mount + re-shoot card 01, then the taste cards ride the clay room in
+order: **camera angle** (pitch options, one decision, frozen) → grid application → rubble
+placement → normal-map three-ways (walls/floors, props, characters) → decal size/rotation/
+overlap → composed-angle characters. All links to Adam ABSOLUTE under /Volumes/Genesis/.
 
 ## Prior (2026-07-17, night) — NIGHT RULINGS RECORDED; CLAY ROOM IS THE PROVING GROUND; 11 follow-ups were answered above [Adam + Claude Fable 5]
 

@@ -1,7 +1,10 @@
 # KGR-8 CLAY CARD 01 — the 5×5 proving room
 
 `clay-01-shell.png` — the first rung of the proving ladder (clay 5×5 → rolled 5-room → rolled
-14-room). One hand-authored 25 ft × 25 ft dungeon room, shell built **100% from
+14-room). **Adam's ruling: GO on the shell; rubble chips KEEP (placement taste-carded later).**
+Card 02 follow-ups live beside it: `clay-01b-doorfix.png` (unit 1 — the wall-plane-relative leaf
+mount; the card-01 leaf read as a proud slab beside a slot) and `camera-taste/` (unit 2 — the
+pitch taste card, Adam's pick freezes the production camera angle). One hand-authored 25 ft × 25 ft dungeon room, shell built **100% from
 kenney-modular-dungeon-kit modules**, uniform clay-grey matte, production camera angle
 (yaw 45°, rotationStep 0) with the production camera-side parapet cutaway (south+east walls at
 0.4 height), clean dark void beyond the walls, open top, nothing in the room.
@@ -22,7 +25,7 @@ decisions were read from.
 | `template-wall` | 8 | walls | 2-cell slabs, face ON the room boundary, thin body growing OUTWARD into the ring band |
 | `template-wall-half` | 3 | walls | 1-cell slab centered in each doorless side: wall–half–wall, mirroring the door side's wall–aperture–wall rhythm |
 | `template-wall-corner` | 4 | corners | square post AT each corner point, rotated per quadrant so its 0.5×0.5 body sits fully outward with both inner faces flush with the wall planes |
-| production flat leaf | 1 | door | the engine's own interactables door (state `shut`), archetype-standard 0.9×1.9 leaf |
+| production flat leaf | 1 | door | the engine's own interactables door (state `shut`), aperture-fit by `kgr8FitLeafToAperture` (card 02): scaled ~1.089× wide / ~1.147× tall to fill the 1-cell aperture, interior face coplanar with the wall face |
 
 Structural placement is cell + quarter-turn only. Wall/corner pieces take the engine's own
 `KIT_WALL_NATIVE_HEIGHT`-style scale-y correction to the board's `wallHeightBase` (2.4/2.075 ≈
@@ -30,8 +33,8 @@ Structural placement is cell + quarter-turn only. Wall/corner pieces take the en
 the kit's own 0.05-unit wall-vs-post height mismatch.
 
 The doorway is a 1-cell ABSENCE in the north wall run (wall butt ends are the jambs — zero proud
-surround; no jamb/header/arch/gatehouse anywhere). The leaf hinge is nudged +0.20 z into the
-aperture so the leaf reads as an inset panel behind a shadow reveal (see deviation 3).
+surround; no jamb/header/arch/gatehouse anywhere). Card 02 unit 1: the leaf is mounted
+WALL-PLANE-RELATIVE by the rig's `kgr8FitLeafToAperture` helper (see deviation 3).
 
 ## Admission path
 
@@ -51,10 +54,19 @@ was touched.
 2. **Darkness portal retired on this card only.** It mounts nearer the room than the shut leaf
    (portal z ≈ −2.63 vs leaf ≈ −3.0, measured off the live inventory) and would fully cover it.
    Cards with open doorways re-adopt the production portal.
-3. **Leaf-plane correction (+0.20 z).** Production mounts the leaf at the door CELL CENTER — the
-   wall mid-plane under 1-cell-thick prism walls, but half a cell OUTSIDE the thin kit slab. This
-   is a real thin-wall finding the KGR-8 door rebuild must own: the aperture/leaf mount needs to
-   be wall-plane-relative, not cell-center-relative.
+3. **Leaf-plane correction — `kgr8FitLeafToAperture` (card 02 unit 1).** Production mounts the
+   leaf at the door CELL CENTER — the wall mid-plane under 1-cell-thick prism walls, but half a
+   cell OUTSIDE the thin kit slab (the card-01 frame showed it proud with a slot behind — failed
+   the read). The helper derives everything from the mounted wall geometry: the face plane from
+   the flanking wall holders' own mount frames (the calibrated template-wall face sits at its
+   local z=0 plane), the aperture span + wall top from their world boxes, then scales the leaf to
+   fill the aperture (0.01/0.02 clearances) and lands its interior face coplanar with the wall
+   face. Absolute box-to-plane alignment — idempotent, re-asserted at shot time. Measured result:
+   face plane −2.5, aperture [−0.5, 0.5], wall thickness 0.498, dz +0.34 DERIVED (the old +0.20
+   magic offset is retired). The remaining thin dark line at the hinge-side jamb is the slab's own
+   0.15-deep reveal face in shade — real doorway geometry, not a gap. GRADUATION: the production
+   door rebuild must mount leaves wall-plane-relative and size them to the kit aperture; the
+   production 0.9-wide / 1.9-tall leaf constants are prism-era numbers.
 4. **Parapet-cut parity is a mirror.** `itrCameraSideBand` + `ITR_CUTAWAY_PARAPET_FRAC` (0.4) are
    a sealed closure; the fixture reapplies the identical published math to its own wall holders
    (8 pieces cut, listed in the diagnosis).
@@ -64,6 +76,17 @@ was touched.
    floor), `Theater.zoom(−1)` ×3 for the whole-shell framing (recorded in the diagnosis;
    `setInteriorBoard`'s small-board zoom bias otherwise frames a 5×5 for figures, cropping the
    shell).
+
+## The camera-angle taste card (card 02 unit 2 — `camera-taste/`)
+
+The finished room (fixed door) at four pitches, everything else held identical (yaw 45°, orbit
+distance 24.956 = production fit + the recorded 3-step zoom-out, center [0,0,0], persp FOV):
+`cam-a` 50° top-down · `cam-b` 35° CURRENT (`CAM_ELEV_DEG = 35`, theater-boot.js) · `cam-c` 28°
+intermediate · `cam-d` 22° cinematic low. Pitch burned into each frame; exact parameters in
+`camera-taste/README.md` + `camera-taste-params.json`; side-by-side in `camera-taste-card.png`.
+Adam names the winner; that number freezes as the production constant. Rig note: an engine re-fit
+re-places the camera between override and screenshot (measured: a 50° override rendered at 35°),
+so the rig freezes the camera object per shot — see runCameraTaste's own comments.
 
 ## Kit coverage gaps found (drive the next calibration/authoring tranche)
 

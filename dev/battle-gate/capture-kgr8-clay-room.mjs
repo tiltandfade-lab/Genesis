@@ -44,13 +44,16 @@
                      the probe: thin slabs lapping across the corner leave protruding fins)
      door   exactly ONE 5-ft (1-cell) aperture mid-north-wall — an absence in the wall run whose
             butt ends are the jambs (zero proud surround, THE DOOR LAW) — plus the production flat
-            leaf (state "shut") via the real interactables channel, hinge shifted +0.20z into the
-            aperture so the leaf reads as an inset panel behind a shadow reveal (see the
-            LEAF-PLANE CORRECTION comment). The darkness portal is retired ON THIS CARD ONLY —
-            it mounts nearer the room than the shut leaf and would fully cover it.
+            leaf (state "shut") via the real interactables channel, mounted WALL-PLANE-RELATIVE by
+            kgr8FitLeafToAperture (card 02 unit 1: face plane / aperture span / wall top all
+            measured off the mounted wall geometry; the leaf scales to fill the aperture and its
+            interior face lands coplanar with the wall face — the card-01 +0.20z magic offset is
+            retired; see installLeafHelper's own header). The darkness portal stays retired ON
+            THIS CARD ONLY — it mounts nearer the room than the shut leaf and would cover it.
 
    Run:   node dev/battle-gate/capture-kgr8-clay-room.mjs                  (the card)
           node dev/battle-gate/capture-kgr8-clay-room.mjs --mode lineup    (module contact probe)
+          node dev/battle-gate/capture-kgr8-clay-room.mjs --mode camera    (pitch taste card)
           node dev/battle-gate/capture-kgr8-clay-room.mjs --corner quad
    Out:   dev/battle-gate/kgr8-clay-room/clay-01-shell.png (+ clay-01-diagnosis.json;
           lineup mode writes lineup-modular.png / lineup-mini.png + lineup-manifest.json)
@@ -634,6 +637,103 @@ async function clayPass(page) {
   });
 }
 
+/* installLeafHelper — injects window.kgr8FitLeafToAperture into the page: the WALL-PLANE-RELATIVE
+   leaf mount (KGR-8 clay card 02, unit 1). Production mounts the leaf hinge at the door CELL
+   CENTER — the wall MID-PLANE under the old 1-cell-thick prism walls, but half a cell outside a
+   thin kit slab. This helper derives the mount from the MOUNTED WALL GEOMETRY itself instead:
+     1. face plane   = interior-most vertex of the two flanking wall pieces along the wall's
+                       interior normal, sampled in the slab band (world y 0.2–1.2 — above the base
+                       plinth flare, below the cap crest, so plinth/rubble/crest never skew it);
+     2. aperture     = the tangent-axis gap between the flanking pieces' slab-band vertex extents
+                       (same band, so base rubble at the threshold is excluded);
+     3. wall top     = max y of the flanking pieces; floor top = max y of the kit floor tiles.
+   The leaf is then scaled to FILL the aperture (width and height, 0.01/0.02 clearances) and
+   aligned so its interior face is COPLANAR with the wall face — a flat leaf in the wall plane,
+   flush, closing the aperture, zero proud surround (the door law). Alignment is absolute
+   (box-to-plane), so the helper is idempotent — safe to re-run at shot time.
+   MEASUREMENT NOTE (v1 lesson, kept for the graduation): a vertex-sampled "slab band" estimator
+   failed twice over — big flat faces carry no mid-height vertices (the band missed the real jamb
+   ends: aperture read 2.36 wide), and the wall's own protruding face details poke past the slab
+   plane (face read 0.27 interior of truth). The authoritative plane is the wall module's OWN
+   MOUNT FRAME: the normalized template-wall face sits at its local z=0 plane by calibration, so
+   the mounted holder's frame IS the wall plane; the jamb ends come from the calibrated piece
+   bounds (±1 tangent half-extent) via the holders' world boxes. Wall thickness is reported off
+   the same boxes (facePlane − outward extent) for the record — the production leaf (0.32 deep)
+   is deeper than the kit slab, so its back rides proud into the OUTWARD tunnel (invisible from
+   the room; the void side is not a composed view).
+   GRADUATION SHAPE for the production door rebuild: aperture-fit leaf sized from the wall
+   module's own mount-frame plane + calibrated extents, never cell-center + constant. The card-01
+   +0.20z magic offset is retired. Axes here are the north wall's (normal +z, tangent x);
+   production graduates this by feeding its own wall-normal/tangent frame. */
+async function installLeafHelper(page) {
+  await page.evaluate(() => {
+    window.kgr8FitLeafToAperture = function (K, opts) {
+      opts = opts || {};
+      const THREE = K.THREE;
+      const wallRole = opts.wallRole || "wall-n";
+      const clearW = opts.clearW != null ? opts.clearW : 0.01;   // per-side tangent clearance
+      const clearH = opts.clearH != null ? opts.clearH : 0.02;   // head clearance under the wall top
+      const flank = K.kitGroup.children.filter((h) => h.userData.role === wallRole);
+      if (flank.length < 2) return { ok: false, error: "flanking wall pieces not found for " + wallRole };
+      let hinge = null;
+      K.interiorGroup.children.forEach((c) => { if (c.userData && c.userData.bySourceRef && c.children.length) hinge = c.children[0]; });
+      if (!hinge) return { ok: false, error: "leaf hinge not found" };
+      // 1. the wall plane: the flanking holders' OWN mount frames — the calibrated template-wall
+      //    face sits at local z=0, so a north-wall holder's world z IS the interior face plane.
+      //    (See the MEASUREMENT NOTE in installLeafHelper's header for why never vertex-sampled.)
+      const planes = flank.map((h) => h.position.z);
+      const facePlane = Math.max(...planes);
+      const planeSpread = Math.max(...planes) - Math.min(...planes);
+      if (planeSpread > 1e-3) return { ok: false, error: "flanking walls disagree on the face plane: " + planeSpread };
+      // 2-3. aperture span + wall top + outward extent off the holders' world boxes (the
+      //    calibrated piece bounds end exactly at the ±1 tangent half-extent — clean jamb ends).
+      let wallTop = -Infinity, outwardMin = Infinity;
+      const flankBoxes = flank.map((h) => {
+        h.updateWorldMatrix(true, true);
+        const box = new THREE.Box3().setFromObject(h);
+        wallTop = Math.max(wallTop, box.max.y);
+        outwardMin = Math.min(outwardMin, box.min.z);
+        return { cx: (box.min.x + box.max.x) / 2, minX: box.min.x, maxX: box.max.x };
+      });
+      flankBoxes.sort((a, b) => a.cx - b.cx);
+      const apertureLeft = flankBoxes[0].maxX;
+      const apertureRight = flankBoxes[flankBoxes.length - 1].minX;
+      const apertureW = apertureRight - apertureLeft;
+      if (!(apertureW > 0.2)) return { ok: false, error: "degenerate aperture " + apertureW };
+      const wallThickness = +(facePlane - outwardMin).toFixed(4); // reported: slab + plinth depth
+      let floorTop = -Infinity;
+      K.kitGroup.children.forEach((h) => {
+        if (h.userData.role !== "floor") return;
+        const b = new THREE.Box3().setFromObject(h);
+        floorTop = Math.max(floorTop, b.max.y);
+      });
+      // measure the leaf, scale to fill, re-measure, align absolutely.
+      hinge.updateWorldMatrix(true, true);
+      let leafBox = new THREE.Box3().setFromObject(hinge);
+      const leafW = leafBox.max.x - leafBox.min.x;
+      const leafH = leafBox.max.y - leafBox.min.y;
+      const targetW = apertureW - 2 * clearW;
+      const targetH = (wallTop - floorTop) - clearH;
+      if (leafW > 1e-6) hinge.scale.x *= targetW / leafW;
+      if (leafH > 1e-6) hinge.scale.y *= targetH / leafH;
+      hinge.updateWorldMatrix(true, true);
+      leafBox = new THREE.Box3().setFromObject(hinge);
+      const dx = ((apertureLeft + apertureRight) / 2) - ((leafBox.min.x + leafBox.max.x) / 2);
+      const dy = floorTop - leafBox.min.y;
+      const dz = facePlane - leafBox.max.z; // interior faces coplanar — THE wall-plane mount
+      hinge.position.x += dx; hinge.position.y += dy; hinge.position.z += dz;
+      hinge.updateWorldMatrix(true, true);
+      const finalBox = new THREE.Box3().setFromObject(hinge);
+      return {
+        ok: true, facePlane: +facePlane.toFixed(4), wallTop: +wallTop.toFixed(4), wallThickness,
+        floorTop: +floorTop.toFixed(4), aperture: [+apertureLeft.toFixed(4), +apertureRight.toFixed(4)],
+        applied: { dx: +dx.toFixed(4), dy: +dy.toFixed(4), dz: +dz.toFixed(4), scaleX: +hinge.scale.x.toFixed(4), scaleY: +hinge.scale.y.toFixed(4) },
+        leafBox: { min: finalBox.min.toArray().map((n) => +n.toFixed(3)), max: finalBox.max.toArray().map((n) => +n.toFixed(3)) },
+      };
+    };
+  });
+}
+
 /* sceneInventory — every direct child of the interior group (and each interactables/kit child one
    level down): kind tags, mesh/instance counts, world-space AABB. The "what is actually standing
    on this board" audit the diagnosis JSON carries so nothing in the frame is unaccounted for. */
@@ -727,24 +827,9 @@ async function runCard(page, metrics) {
   const placed = await mountKitModules(page, modules, { applyCutaway: true, focusRect: prep.board.focusRect, wallHeightBase: prep.board.wallHeightBase });
   if (!placed.ok) throw new Error("kit module mount failed: " + placed.error);
   metrics.kit = { corner: CORNER, placed: placed.placed, parapetCut: placed.parapetCut, manifest: placed.manifest };
-  // THE LEAF-PLANE CORRECTION (fixture-scoped, documented in the README): production mounts the
-  // leaf hinge at the door CELL CENTER — the wall MID-PLANE under the old 1-cell-thick prism walls,
-  // but half a cell OUTSIDE the thin kit slab (slab face plan z=0.5, ~0.15 deep). Shift the hinge
-  // +0.20z so the leaf sits inside the aperture with a ~0.14 reveal behind the wall face — "a flat
-  // leaf in the wall plane" (door law), zero proud surround, and the shadowed reveal outlines the
-  // leaf so it still READS as a door on a uniform clay card (a perfectly flush clay leaf visually
-  // merges into the wall — measured on the v6 capture). Screen-map evidence for the underlying
-  // mismatch: the leaf base sat at plan z=0, a detached monolith behind the aperture.
-  metrics.leafShift = await page.evaluate(() => {
-    const K = window.__KGR8;
-    let shifted = 0;
-    K.interiorGroup.children.forEach((child) => {
-      if (child.userData && child.userData.bySourceRef) {
-        child.children.forEach((hinge) => { hinge.position.z += 0.20; shifted++; });
-      }
-    });
-    return { shifted, dz: 0.20 };
-  });
+  await installLeafHelper(page);
+  metrics.leafShift = await page.evaluate(() => window.kgr8FitLeafToAperture(window.__KGR8));
+  if (!metrics.leafShift.ok) throw new Error("leaf aperture fit failed: " + metrics.leafShift.error);
   const clay = await clayPass(page);
   if (!clay.ok) throw new Error("clay pass failed: " + clay.error);
   metrics.clay = clay;
@@ -815,17 +900,10 @@ async function runCard(page, metrics) {
   // state at shot time and take the final-state inventory the diagnosis records.
   await sleep(2500);
   metrics.clayFinal = await clayPass(page);
-  metrics.leafShiftFinal = await page.evaluate(() => {
-    const K = window.__KGR8;
-    let shifted = 0;
-    K.interiorGroup.children.forEach((child) => {
-      if (child.userData && child.userData.bySourceRef) {
-        child.children.forEach((hinge) => { if (Math.abs(hinge.position.z % 1) < 0.01) { hinge.position.z += 0.20; shifted++; } });
-      }
-    });
-    return { shifted };
-  });
+  // idempotent absolute alignment — a late interactables re-mount lands back on the wall plane.
+  metrics.leafShiftFinal = await page.evaluate(() => window.kgr8FitLeafToAperture(window.__KGR8));
   metrics.inventoryFinal = await sceneInventory(page);
+  if (MODE === "camera") { await runCameraTaste(page, metrics); return; }
   if (args.xray2) {
     const groups = [
       ["xray2-floor", "(o)=>o.userData.role==='floor'"],
@@ -860,6 +938,118 @@ async function runCard(page, metrics) {
   await shoot(page, SHOT + ".png");
   metrics.generatedAt = new Date().toISOString();
   fs.writeFileSync(path.join(outDir, SHOT.replace(/-shell$/, "") + "-diagnosis.json"), JSON.stringify(metrics, null, 2));
+}
+
+/* ─── KGR-8 CLAY CARD 02 UNIT 2 — THE CAMERA-ANGLE TASTE CARD ─────────────────────────────────────
+   Adam's explicit order (morning rulings: "camera angle (pitch options once the clay shell exists,
+   then frozen)"). Shoots the SAME finished clay room at a spread of camera PITCHES; his pick then
+   freezes forever as the production constant. ONLY pitch varies: the orbit center, distance
+   (production fit + the recorded zoom-out), and yaw are RECOVERED FROM THE LIVE PRODUCTION-FITTED
+   CAMERA and held identical across options — the center is the point where the current view ray
+   crosses the board's own x=z=0 axis (the interior fit always looks at the world-centered room),
+   yaw from the horizontal offset, distance from the ray parameter. Each frame carries its pitch
+   burned into the corner via a DOM label over the canvas (captured by the element screenshot), so
+   the winner can be named unambiguously; exact camera parameters per option land in
+   camera-taste/README.md + the diagnosis JSON. No production edits — pure camera override on the
+   settled fit, the same lever discipline as the zoom-out. */
+const CAMERA_PITCHES = [
+  { id: "a", deg: 50, note: "high / more top-down" },
+  { id: "b", deg: 35, note: "CURRENT production pitch (CAM_ELEV_DEG = 35)" },
+  { id: "c", deg: 28, note: "intermediate low" },
+  { id: "d", deg: 22, note: "cinematic low / near eye-level" },
+];
+async function runCameraTaste(page, metrics) {
+  const camDir = path.join(outDir, "camera-taste");
+  fs.mkdirSync(camDir, { recursive: true });
+  metrics.cameraTaste = [];
+  for (const opt of CAMERA_PITCHES) {
+    // label FIRST (its DOM append can trigger an engine re-fit that re-places the camera —
+    // measured: cam-a rendered at 35° despite a 50° override on the first pass of this unit)…
+    await page.evaluate((text) => {
+      let el = document.getElementById("kgr8-cam-label");
+      if (!el) {
+        el = document.createElement("div");
+        el.id = "kgr8-cam-label";
+        el.style.cssText = "position:absolute;left:12px;bottom:12px;z-index:99;background:rgba(10,9,8,0.85);color:#f2efe9;font:700 24px/1.35 monospace;padding:10px 16px;border:1px solid #6b675f;border-radius:4px;pointer-events:none";
+        document.querySelector(".theater-stage-canvas").appendChild(el);
+      }
+      el.textContent = text;
+    }, `pitch ${opt.deg}° — ${opt.note}`);
+    await sleep(400);
+    // …then override AND FREEZE the camera: instance-level locks on position x/y/z and a no-op
+    // instance lookAt, so whatever engine path re-places the camera between now and the CDP
+    // screenshot writes into a wall. Unfrozen right after the shot.
+    const applied = await page.evaluate((deg) => {
+      const K = window.__KGR8;
+      const THREE = K.THREE;
+      const cam = K.camera;
+      if (!cam) return { ok: false, error: "no live camera captured" };
+      const dir = new THREE.Vector3();
+      cam.getWorldDirection(dir);
+      const pos = cam.position.clone();
+      const denom = dir.x * dir.x + dir.z * dir.z;
+      if (denom < 1e-9) return { ok: false, error: "degenerate view direction" };
+      const t = -(pos.x * dir.x + pos.z * dir.z) / denom; // ray point on the x=z=0 axis = the fit center
+      if (!(t > 0)) return { ok: false, error: "fit center not in front of camera" };
+      const center = pos.clone().add(dir.clone().multiplyScalar(t));
+      const dist = t;
+      const yaw = Math.atan2(pos.x - center.x, pos.z - center.z);
+      const prevElevDeg = Math.atan2(pos.y - center.y, Math.hypot(pos.x - center.x, pos.z - center.z)) * 180 / Math.PI;
+      const rad = (deg * Math.PI) / 180;
+      const horiz = Math.cos(rad) * dist;
+      cam.position.set(center.x + Math.sin(yaw) * horiz, center.y + Math.sin(rad) * dist, center.z + Math.cos(yaw) * horiz);
+      cam.lookAt(center);
+      cam.updateProjectionMatrix();
+      // FREEZE (idempotent-safe: unfreeze always runs before the next freeze)
+      const fx = cam.position.x, fy = cam.position.y, fz = cam.position.z;
+      Object.defineProperty(cam.position, "x", { configurable: true, get: () => fx, set: () => {} });
+      Object.defineProperty(cam.position, "y", { configurable: true, get: () => fy, set: () => {} });
+      Object.defineProperty(cam.position, "z", { configurable: true, get: () => fz, set: () => {} });
+      cam.lookAt = function () {};
+      if (window.Theater._renderFrameForTest) window.Theater._renderFrameForTest();
+      return {
+        ok: true, pitchDeg: deg, prevPitchDeg: +prevElevDeg.toFixed(3),
+        yawDeg: +((yaw * 180) / Math.PI).toFixed(3), dist: +dist.toFixed(4),
+        center: center.toArray().map((n) => +n.toFixed(4)), pos: [fx, fy, fz].map((n) => +n.toFixed(4)),
+        fov: cam.fov || null, zoomLevel: null,
+      };
+    }, opt.deg);
+    if (!applied.ok) throw new Error("camera pitch override failed: " + applied.error);
+    await sleep(200);
+    await shoot(page, path.join("camera-taste", `cam-${opt.id}.png`));
+    await page.evaluate(() => {
+      const cam = window.__KGR8.camera;
+      const fx = cam.position.x, fy = cam.position.y, fz = cam.position.z;
+      delete cam.position.x; delete cam.position.y; delete cam.position.z;
+      cam.position.set(fx, fy, fz);
+      delete cam.lookAt;
+    });
+    metrics.cameraTaste.push({ id: opt.id, note: opt.note, ...applied });
+  }
+  await page.evaluate(() => { const el = document.getElementById("kgr8-cam-label"); if (el) el.remove(); });
+  // auto-write the freeze README with the exact recorded parameters
+  const rows = metrics.cameraTaste.map((r) =>
+    `| cam-${r.id} | ${r.pitchDeg}° | ${r.note} | yaw ${r.yawDeg}° | dist ${r.dist} | pos [${r.pos.join(", ")}] |`).join("\n");
+  fs.writeFileSync(path.join(camDir, "README.md"), `# KGR-8 camera-angle taste card
+
+The finished clay proving room (wall-plane-mounted leaf, card 02) shot at four camera PITCHES.
+Everything else is held identical: yaw ${metrics.cameraTaste[0].yawDeg}°, orbit distance
+${metrics.cameraTaste[0].dist} (the production interior fit + the recorded ${ZOOMOUT}-step zoom-out),
+orbit center [${metrics.cameraTaste[0].center.join(", ")}], perspective FOV ${metrics.cameraTaste[0].fov}.
+Pitch is burned into each frame's corner label. Adam names a winner; that pitch freezes as the
+production camera constant (today: CAM_ELEV_DEG = 35 in src/ui/theater-boot.js — cam-b).
+
+| frame | pitch | read | yaw | distance | camera position |
+| --- | --- | --- | --- | --- | --- |
+${rows}
+
+Recovered pre-override pitch (sanity: must equal the production constant): ${metrics.cameraTaste[0].prevPitchDeg}°.
+Contact sheet: camera-taste-card.png (2×2, a/b upper, c/d lower).
+Re-run: \`node dev/battle-gate/capture-kgr8-clay-room.mjs --mode camera\` then rebuild the sheet per
+the command in this folder's history (PIL side-by-side compose).
+`);
+  fs.writeFileSync(path.join(camDir, "camera-taste-params.json"), JSON.stringify(metrics.cameraTaste, null, 2) + "\n");
+  log("camera taste card written -> camera-taste/");
 }
 
 async function main() {

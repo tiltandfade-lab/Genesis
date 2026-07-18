@@ -1,0 +1,86 @@
+[
+  {
+    "id": "a",
+    "note": "high / more top-down",
+    "ok": true,
+    "pitchDeg": 50,
+    "prevPitchDeg": 35,
+    "yawDeg": 45,
+    "dist": 24.9557,
+    "center": [
+      0,
+      0,
+      0
+    ],
+    "pos": [
+      11.3429,
+      19.1172,
+      11.3429
+    ],
+    "fov": 20,
+    "zoomLevel": null
+  },
+  {
+    "id": "b",
+    "note": "CURRENT production pitch (CAM_ELEV_DEG = 35)",
+    "ok": true,
+    "pitchDeg": 35,
+    "prevPitchDeg": 50,
+    "yawDeg": 45,
+    "dist": 24.9557,
+    "center": [
+      0,
+      0,
+      0
+    ],
+    "pos": [
+      14.455,
+      14.314,
+      14.455
+    ],
+    "fov": 20,
+    "zoomLevel": null
+  },
+  {
+    "id": "c",
+    "note": "intermediate low",
+    "ok": true,
+    "pitchDeg": 28,
+    "prevPitchDeg": 35,
+    "yawDeg": 45,
+    "dist": 24.9557,
+    "center": [
+      0,
+      0,
+      0
+    ],
+    "pos": [
+      15.5808,
+      11.716,
+      15.5808
+    ],
+    "fov": 20,
+    "zoomLevel": null
+  },
+  {
+    "id": "d",
+    "note": "cinematic low / near eye-level",
+    "ok": true,
+    "pitchDeg": 22,
+    "prevPitchDeg": 28,
+    "yawDeg": 45,
+    "dist": 24.9557,
+    "center": [
+      0,
+      0,
+      0
+    ],
+    "pos": [
+      16.3614,
+      9.3486,
+      16.3614
+    ],
+    "fov": 20,
+    "zoomLevel": null
+  }
+]

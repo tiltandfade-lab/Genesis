@@ -66,7 +66,14 @@
                                                             kit gate pieces mounted in a 2-cell
                                                             doorway, one production frame + one
                                                             doorway zoom each)
+          node dev/battle-gate/capture-kgr8-clay-room.mjs --mode miniwall  (door-workbench bonus:
+                                                            kenney-mini-dungeon wall-opening — the
+                                                            suite's ONLY wall-with-doorway module —
+                                                            standing in the 2-cell study aperture)
           node dev/battle-gate/capture-kgr8-clay-room.mjs --corner quad
+   LOCK:  when dev/battle-gate/kgr8-clay-room/door-mount-lock.json exists (Adam's SAVE in the
+          door workbench, dev/door-workbench/), its values override the v4 leaf fit on every
+          card run; absent file = pure v4. See loadDoorMountLock below.
    Out:   dev/battle-gate/kgr8-clay-room/<shot>.png (+ <shot>-diagnosis.json) + <doorcard>.png
           (+ <doorcard>-grazing.png, both with the projected doorway audit quad in the diagnosis);
           lineup mode writes lineup-modular.png / lineup-mini.png + lineup-manifest.json;
@@ -94,6 +101,28 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..", "..");
 const outDir = path.join(__dirname, "kgr8-clay-room");
 fs.mkdirSync(outDir, { recursive: true });
+
+/* THE DOOR-MOUNT LOCK (KGR-8 door workbench — Adam's card-04 order: "give me the controls
+   please so i can position that thing"). When dev/battle-gate/kgr8-clay-room/door-mount-lock.json
+   exists (written ONLY by Adam's SAVE in dev/door-workbench/), its values override the
+   kgr8FitLeafToAperture v4 defaults on every leaf fit this rig performs. Absent file = pure v4
+   (additive change; delete the lock to fall back). The fit code itself now lives in
+   dev/door-workbench/kgr8-leaf-fit.page.js — ONE implementation evaluated by both this rig and
+   the workbench page, so Adam's on-screen placement and the rig's reproduction cannot drift. */
+const DOOR_MOUNT_LOCK_PATH = path.join(outDir, "door-mount-lock.json");
+const LEAF_FIT_SRC = fs.readFileSync(path.join(repoRoot, "dev", "door-workbench", "kgr8-leaf-fit.page.js"), "utf8");
+function loadDoorMountLock() {
+  if (!fs.existsSync(DOOR_MOUNT_LOCK_PATH)) return null;
+  try {
+    const lock = JSON.parse(fs.readFileSync(DOOR_MOUNT_LOCK_PATH, "utf8"));
+    if (!lock || typeof lock !== "object" || !lock.values || typeof lock.values !== "object") {
+      throw new Error("no .values object");
+    }
+    return lock;
+  } catch (e) {
+    throw new Error(`door-mount-lock.json exists but is unusable (${e.message}) — fix or delete it; refusing to silently fall back to v4`);
+  }
+}
 
 const args = {};
 for (let i = 2; i < process.argv.length; i += 2) args[process.argv[i].replace(/^--/, "")] = process.argv[i + 1];
@@ -866,6 +895,13 @@ async function installLeafHelper(page) {
       return result;
     };
   });
+  // KGR-8 DOOR WORKBENCH SUPERSEDE (card 05): the v4 body above is kept verbatim as the
+  // documented lesson-chain reference, then immediately overwritten by the SHARED helper
+  // (dev/door-workbench/kgr8-leaf-fit.page.js) — v4-identical at defaults, plus the workbench
+  // parameters (zOffset / headDrop / sillHeight / revealLining and the head infill) that
+  // door-mount-lock.json feeds. One implementation for rig AND workbench: what Adam positions
+  // on screen is exactly what this rig reproduces.
+  await page.evaluate((src) => { (0, eval)(src); }, LEAF_FIT_SRC);
 }
 
 /* sceneInventory — every direct child of the interior group (and each interactables/kit child one
@@ -962,7 +998,14 @@ async function runCard(page, metrics) {
   if (!placed.ok) throw new Error("kit module mount failed: " + placed.error);
   metrics.kit = { corner: CORNER, placed: placed.placed, parapetCut: placed.parapetCut, manifest: placed.manifest };
   await installLeafHelper(page);
-  metrics.leafShift = await page.evaluate(() => window.kgr8FitLeafToAperture(window.__KGR8));
+  // DOOR-MOUNT LOCK CONSUMPTION: Adam's workbench placement (when saved) overrides the v4 fit.
+  const doorLock = loadDoorMountLock();
+  if (doorLock) {
+    log("door-mount-lock.json present — Adam's hand placement overrides the v4 fit:", JSON.stringify(doorLock.values));
+    metrics.doorMountLock = doorLock;
+  }
+  const leafOpts = doorLock ? doorLock.values : null;
+  metrics.leafShift = await page.evaluate((o) => window.kgr8FitLeafToAperture(window.__KGR8, o || undefined), leafOpts);
   if (!metrics.leafShift.ok) throw new Error("leaf aperture fit failed: " + metrics.leafShift.error);
   const clay = await clayPass(page);
   if (!clay.ok) throw new Error("clay pass failed: " + clay.error);
@@ -1034,8 +1077,9 @@ async function runCard(page, metrics) {
   // state at shot time and take the final-state inventory the diagnosis records.
   await sleep(2500);
   metrics.clayFinal = await clayPass(page);
-  // idempotent absolute alignment — a late interactables re-mount lands back on the wall plane.
-  metrics.leafShiftFinal = await page.evaluate(() => window.kgr8FitLeafToAperture(window.__KGR8));
+  // idempotent absolute alignment — a late interactables re-mount lands back on the wall plane
+  // (same lock override as the first fit, so the re-assert cannot regress Adam's placement).
+  metrics.leafShiftFinal = await page.evaluate((o) => window.kgr8FitLeafToAperture(window.__KGR8, o || undefined), leafOpts);
   metrics.inventoryFinal = await sceneInventory(page);
   if (MODE === "camera") { await runCameraTaste(page, metrics); return; }
   if (MODE === "battlefield") { await runBattlefieldTaste(page, metrics); return; }
@@ -1688,6 +1732,127 @@ async function runKenneyDoors(page, metrics) {
   log("kenney door frames written -> kenney-doors/");
 }
 
+/* ─── KGR-8 DOOR-WORKBENCH BONUS CARD — kenney-mini-dungeon / wall-opening ────────────────────────
+   THE DOORWAY TRUTH (DESIGN.md 2026-07-17, Adam: "the kenney suite didn't come with doorways or
+   arches for the doors?"): kenney-modular-dungeon-kit has NO doorway/arch wall module at all;
+   kenney-mini-dungeon's `wall-opening` is the suite's ONE wall-with-doorway module — ordered
+   rendered so Adam judges it with his own eyes. Same board + mount machinery as the Kenney door
+   lineup (2-cell study aperture, real donor admission, aperture-centered, interior face on the
+   visible face plane, wall-band scale-y parity — the mini piece reads short of the wall top,
+   kit-true, like the mini gate did). One production frame + one doorway dolly, labels burned in,
+   APPENDED to the existing kenney-doors manifest. */
+async function runMiniWallOpening(page, metrics) {
+  const doorsDir = path.join(outDir, "kenney-doors");
+  fs.mkdirSync(doorsDir, { recursive: true });
+  const fx = clayPlan(2); // the 2-cell study aperture (wall-opening is a 2-cell fused-tile piece)
+  const prep = await prepBoard(page, fx, { stripPrism: true, lightProfile: "overcast", noLeaf: true });
+  if (!prep.ok) throw new Error("miniwall prep failed: " + prep.error);
+  metrics.strippedMeta = prep.strippedMeta;
+  const mounted = await mountBoard(page, prep.board);
+  if (!mounted.ok) throw new Error("miniwall mount failed: " + mounted.error);
+  await sleep(3000); // camera tween settle
+  const modules = kitRecipe(CORNER, "double");
+  const placed = await mountKitModules(page, modules, { applyCutaway: true, focusRect: prep.board.focusRect, wallHeightBase: prep.board.wallHeightBase });
+  if (!placed.ok) throw new Error("miniwall kit mount failed: " + placed.error);
+  const clay = await clayPass(page);
+  if (!clay.ok) throw new Error("miniwall clay pass failed: " + clay.error);
+  metrics.zoom = await page.evaluate((steps) => {
+    let level = null;
+    for (let i = 0; i < steps; i++) level = window.Theater.zoom(-1);
+    return { steps, level };
+  }, ZOOMOUT);
+  await sleep(800);
+  await clayPass(page);
+  await sleep(2500); // late-async settle (same discipline as runCard/runKenneyDoors)
+  await clayPass(page);
+  const gate = { pack: "kenney-mini-dungeon", slug: "wall-opening" };
+  const base = "mini-wall-opening"; // runKenneyDoors' own naming convention for this pack/slug
+  const fit = await mountGatePiece(page, gate, prep.board.wallHeightBase);
+  if (!fit.ok) throw new Error(base + " mount failed: " + fit.error);
+  await sleep(600);
+  const clayed = await clayPass(page);
+  if (!clayed.ok) throw new Error(base + " clay re-assert failed: " + clayed.error);
+  await page.evaluate((text) => {
+    let el = document.getElementById("kgr8-cam-label");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "kgr8-cam-label";
+      el.style.cssText = "position:absolute;left:12px;bottom:12px;z-index:99;background:rgba(10,9,8,0.85);color:#f2efe9;font:700 24px/1.35 monospace;padding:10px 16px;border:1px solid #6b675f;border-radius:4px;pointer-events:none";
+      document.querySelector(".theater-stage-canvas").appendChild(el);
+    }
+    el.textContent = text;
+  }, "kenney-mini-dungeon / wall-opening — the suite's ONLY wall-with-doorway module (2-cell)");
+  await sleep(400);
+  const prodCam = await page.evaluate(() => {
+    const K = window.__KGR8;
+    const cam = K.camera;
+    if (!cam) return null;
+    const dir = new K.THREE.Vector3();
+    cam.getWorldDirection(dir);
+    return {
+      pitchDeg: +(((Math.asin(Math.max(-1, Math.min(1, -dir.y)))) * 180) / Math.PI).toFixed(3),
+      yawDeg: +(((Math.atan2(-dir.x, -dir.z)) * 180) / Math.PI).toFixed(3),
+    };
+  });
+  await shoot(page, path.join("kenney-doors", base + ".png"));
+  const zoomCam = await page.evaluate((cfg) => {
+    const K = window.__KGR8;
+    const THREE = K.THREE;
+    const cam = K.camera;
+    if (!cam) return { ok: false, error: "no live camera captured" };
+    K.savedCam = { pos: cam.position.toArray(), quat: cam.quaternion.toArray() };
+    const dir = new THREE.Vector3();
+    cam.getWorldDirection(dir);
+    const yaw = Math.atan2(-dir.x, -dir.z);
+    const pitch = Math.asin(Math.max(-1, Math.min(1, -dir.y)));
+    const holder = K.gateHolder;
+    holder.updateWorldMatrix(true, true);
+    const gb = new THREE.Box3().setFromObject(holder);
+    const center = gb.getCenter(new THREE.Vector3());
+    const horiz = Math.cos(pitch) * cfg.dist;
+    cam.position.set(center.x + Math.sin(yaw) * horiz, center.y + Math.sin(pitch) * cfg.dist, center.z + Math.cos(yaw) * horiz);
+    cam.lookAt(center);
+    cam.updateProjectionMatrix();
+    const fx2 = cam.position.x, fy2 = cam.position.y, fz2 = cam.position.z;
+    Object.defineProperty(cam.position, "x", { configurable: true, get: () => fx2, set: () => {} });
+    Object.defineProperty(cam.position, "y", { configurable: true, get: () => fy2, set: () => {} });
+    Object.defineProperty(cam.position, "z", { configurable: true, get: () => fz2, set: () => {} });
+    cam.lookAt = function () {};
+    if (window.Theater._renderFrameForTest) window.Theater._renderFrameForTest();
+    return { ok: true, yawDeg: +((yaw * 180) / Math.PI).toFixed(3), pitchDeg: +((pitch * 180) / Math.PI).toFixed(3), dist: cfg.dist, center: center.toArray().map((n) => +n.toFixed(4)) };
+  }, { dist: 13 });
+  if (!zoomCam.ok) throw new Error(base + " zoom camera failed: " + zoomCam.error);
+  await sleep(200);
+  await shoot(page, path.join("kenney-doors", base + "-zoom.png"));
+  await page.evaluate(() => {
+    const K = window.__KGR8;
+    const cam = K.camera;
+    const fx2 = cam.position.x, fy2 = cam.position.y, fz2 = cam.position.z;
+    delete cam.position.x; delete cam.position.y; delete cam.position.z;
+    cam.position.set(fx2, fy2, fz2);
+    delete cam.lookAt;
+    if (K.savedCam) { cam.position.fromArray(K.savedCam.pos); cam.quaternion.fromArray(K.savedCam.quat); cam.updateMatrixWorld(true); K.savedCam = null; }
+    const el = document.getElementById("kgr8-cam-label");
+    if (el) el.remove();
+    if (K.gateHolder) { K.gateHolder.parent && K.gateHolder.parent.remove(K.gateHolder); K.gateHolder = null; }
+  });
+  const entry = {
+    base, pack: gate.pack, slug: gate.slug, fit, productionCamera: prodCam, zoomCamera: zoomCam,
+    note: "KGR-8 door workbench bonus card: kenney-mini-dungeon's wall-opening is the suite's ONLY wall-with-doorway module (the doorway-truth census). Mounted by the door-lineup machinery in the 2-cell study aperture; fused-tile mini grammar, reads short of the wall top under the wall-band parity factor — kit-true.",
+    appendedAt: new Date().toISOString(),
+  };
+  // APPEND to the existing kenney-doors manifest (never clobber the five-gate lineup's record).
+  const manifestPath = path.join(doorsDir, "kenney-doors-manifest.json");
+  let manifest = {};
+  try { manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8")); } catch (e) { log("kenney-doors-manifest.json unreadable, starting fresh:", e.message); }
+  manifest.gates = Array.isArray(manifest.gates) ? manifest.gates : [];
+  manifest.gates = manifest.gates.filter((g) => g && g.base !== base); // idempotent re-run
+  manifest.gates.push(entry);
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+  metrics.miniWallOpening = entry;
+  log("mini wall-opening frames written -> kenney-doors/" + base + ".png / -zoom.png (manifest appended)");
+}
+
 async function main() {
   const metrics = { mode: MODE, corner: CORNER, notes: [] };
   const server = await startServer();
@@ -1710,6 +1875,7 @@ async function main() {
         }
         if (MODE === "lineup") await runLineup(page, metrics);
         else if (MODE === "doors") await runKenneyDoors(page, metrics);
+        else if (MODE === "miniwall") await runMiniWallOpening(page, metrics);
         else await runCard(page, metrics);
         lastError = null;
         break;

@@ -42,7 +42,7 @@ request to be tweaked"
    (intensity, color, range, height, falloff) on real fixtures in the fixture room; the LL-1b
    "2 lab tunables live-replay" rides this. SAVE writes per-fixture-class light locks.
 
-## Candidate pages v2 (Claude's "anything else" — each awaits Adam's yes)
+## Pages v2 (APPROVED by Adam 2026-07-17: "yeah, all of that actually sounds very good")
 
 - **Time-of-day scrubber** — scrub the in-world clock; edit the CELESTIAL_ARC keyframes and
   daylit soft-shadow table live (Adam's standing red-pen items from 2026-07-15).
@@ -54,6 +54,21 @@ request to be tweaked"
   STEM_HEIGHT_U, framing targets) as sliders. Camera PITCH stays frozen (28°, law).
 - **Provenance Inspector** — click any staged object → its chain: walk fact → table roll →
   realized asset (read-only; the anti-drift boundary made visible).
+- **Extrusion Lab** (Adam's ask, 2026-07-17: "any way i can get an editor to tweak the settings
+  on sprite extrusion?") — pick any corpus sprite, live-generate its smooth-contour extruded
+  piece beside the flat standee under a directional light rig. Sliders: thickness/depth, bevel
+  width + angle, contour smoothing epsilon (facet count), side-shell tone/darkening, back-face
+  treatment (mirrored interim vs authored), foot/anchor line, composed-angle preview yaw. SAVE
+  writes an **extrusion recipe lock** per sprite class (character / environment / prop) — the
+  X1 extrusion spec's parameters made hand-tunable. Serves the A6 law (environmental sprites =
+  architecture-aligned extruded citizens) and the composed-standee ruling.
+
+**How the Extrusion Lab layers with the Provenance Inspector:** extrusion adds one link to the
+chain. The inspector's chain becomes: walk fact → table roll → chosen asset (sprite) →
+**extrusion recipe (which lock file + version + parameter values manufactured this geometry)**
+→ anchor derivation (which wall/floor/socket placed it, per A6). Clicking any extruded piece
+shows WHICH sprite and WHICH recipe stamped it — provenance covers not just what was chosen
+but how it was manufactured into 3D. The Lab writes the recipes; the Inspector reads them.
 
 ## Non-negotiables
 

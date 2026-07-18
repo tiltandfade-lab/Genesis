@@ -371,3 +371,25 @@ door — kenney-modular-dungeon-kit carries gate / gate-door / gate-door-window 
 gate-metal-bars and kenney-mini-dungeon one gate, all ~2-cell-wide ARCHED pieces. The
 Kenney-door study card is ordered so he judges them mounted in the clay room. Future lane:
 apply the Dungeon Builder's Guidebook door-type/state tables to the Kenney door objects.)
+
+## THE DOOR-TOOL CONTINGENCY + THE PORTAL SHAPE (Adam, 2026-07-17 — flagged "a thing to consider," not yet ordered)
+
+> "if you can't get this door right this time, is there a way you can develop a tool quickly
+> that will just allow me to position the door in relation to the walls so you can lock it in?
+> also, do you know how to just make a hollow door frame? if the door doesn't go all the way
+> up flush to the ceiling, which in most cases it wouldn't, there should ber some wall above
+> the actual portal of the door itself right? and if the door is a kenny door, the portal
+> should be arch shaped to match the exact arc of the kenney model."
+
+> "we don't have to do this now, but it is a thing to consider"
+
+(Digest — two banked items, neither builds yet: (1) **THE DOOR-POSITIONING TOOL** — the
+standing contingency: if the current thin-leaf card fails Adam's read, the next unit is a
+quick interactive positioner (the Donor/Socket Workbench pattern) where ADAM drags the leaf
+relative to the walls and his placement locks in as the mount constants. (2) **THE PORTAL
+SHAPE PRINCIPLE** — a doorway portal is DOOR-shaped, not wall-shaped: the aperture opening
+matches the door (with wall infill above the portal head, since doors normally stop short of
+the ceiling), and an arched Kenney door gets a portal cut to that model's exact arc. This is
+wall-plane infill — architecture, not ornament — and does not conflict with the door law's
+ban on PROUD surrounds. Feeds the room compiler v2 aperture design in
+KGR8-KENNEY-SHELL-REBUILD.md §3.3.)

@@ -372,6 +372,12 @@ before its closure.
 question 11 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
+**Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
+the running record. Append each question's framing, recommendation, Adam's answer, and every generated
+follow-up as the discussion happens. Do not silently replace an earlier ruling; preserve it and record
+any later correction or supersession explicitly. `HANDOFF.md` and `NEXT-STEPS.md` need not move again
+until Adam ends the session.
+
 ### 8.1 Identity and authority
 
 - **Original purpose is permanent engine truth.** It remains definite even when every living person
@@ -670,6 +676,63 @@ Resume **Wave 1, question 12 - Functional Roster and Site Scale**:
 > (population/throughput/support), and physical scale (builders, portals, ceilings, circulation, and
 > mixed-scale domains). Determine how the result governs guaranteed, supporting, random, secret, and
 > subordinate-complex allocations while deferring exact numeric bands where appropriate.
+
+**Open discussion frame - not yet a ruling:** "size" can describe three different things that often
+correlate but are not interchangeable:
+
+- **graph budget** - how many explorable functional domains, rooms, connections, loops, levels, and
+  subordinate complexes the site can contain;
+- **institutional capacity** - how many people, prisoners, patients, worshippers, goods, or other
+  users it was designed to hold or process, including staffing and support burden;
+- **physical scale domains** - who or what the architecture fits: halfling, human, giant, dragon,
+  vehicle, industrial machinery, pocket realm, or a recorded mixture, including ceiling height,
+  portal size, circulation width, reach, and furniture scale.
+
+Three working choices:
+
+1. **One master size.** Small/medium/large/extra-large controls all three. This is simple, but it
+   falsely equates room count, capacity, and bodily scale. A four-room giant tomb and a four-room
+   frontier jail have similar graph sizes but radically different architecture; a six-room magical
+   prison may hold hundreds through breach-linked cells.
+2. **Three independent size rolls.** Roll graph, capacity, and physical scale separately. This
+   preserves unusual sites, but unconstrained independence generates nonsense: a three-room mundane
+   jail for five hundred prisoners, or human operators unable to use their own giant-scaled doors.
+3. **A coupled three-axis profile.** Preserve all three values, but generate them causally rather than
+   independently. Purpose and intended throughput establish capacity; the operating model and its
+   choices about combined rooms, repeated rooms, and external services establish the functional
+   roster and graph demand; builders, occupants, doctrine, technology, and realm influence establish
+   one or more physical scale domains. History and Spice may create explained divergence. A simple
+   headline size can still be derived for UI and table routing, but it is never the hidden source of
+   truth.
+
+**Recommendation:** choice 3. It protects coherence without sacrificing the strange cases Genesis
+needs. The axes should govern different allocations:
+
+```text
+institutional capacity -> core/support coverage, repetition, staffing, supply, throughput
+graph budget           -> zones, connections, levels, protected random slots, room opportunities
+physical scale domains -> dimensions, clearances, portal classes, circulation, furniture, encounter space
+site/history complexity-> coordinated site secrets and subordinate-complex eligibility
+```
+
+The graph budget is not merely a raw room count. First reserve the guaranteed operating model, then
+reserve the purpose-and-size-proportional random/Spice share, then realize both through combined rooms,
+repetition, external dependencies, and multiple levels. Every realized room still receives a local
+discovery opportunity, while Major/Mythic secrets and subordinate complexes are budgeted at site or
+zone scale so a fifty-five-room prison does not produce fifty-five unrelated campaign revelations.
+
+Concrete results under this model:
+
+- **Frontier jail:** tiny graph, tiny capacity, human scale; one to four cells, sheriff/deputy space,
+  secure storage, external meals, a small protected random allocation, and room-level discoveries.
+- **Main city prison:** extra-large graph and capacity, human scale; repeated cellblocks and full
+  support functions, several zones/levels, a larger proportional random allocation, and a bounded
+  number of coordinated site-secret networks.
+- **Giant ossuary:** small graph, low present capacity, giant physical scale; only a few enormous
+  chambers, with human squatters occupying inserted or improvised human-scale pockets.
+- **Mage-colony prison:** modest visible graph, high effective capacity, mixed human/breach scale;
+  portal-cell banks and ward-control infrastructure are ordinary operating-model realizations rather
+  than automatically Mythic anomalies.
 
 Then continue questions 13-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.

@@ -4598,3 +4598,119 @@ inspectable.
 **Open follow-up:** should this roll-plus-arithmetic model govern quantity generation, with independent
 inputs exposed as editable rollers, derived counts calculated transparently, and no hidden rerolling to
 force a fit?
+
+#### 10.6.2 Follow-up - what makes the jail a frontier jail?
+
+Adam asks where the `frontier_jail` profile in the worked example comes from. It should **not** come
+from the jail independently rolling a broad flavor label after its purpose is known. It should be the
+readable shorthand for a factored parent-context and service-role profile.
+
+The current repository cannot yet make that determination robustly:
+
+- world nodes still carry a free-text type rather than a complete place taxonomy;
+- settlement fabric has the useful existing `PLACE_TIERS` hamlet/village/town/city scale;
+- region identity already provides economic and thematic bias vectors;
+- `frontier` is overloaded across the current game as a default realm/skin, a rumored prep-map frontier,
+  and the weird-west register. None of those facts alone means that a particular jail is a small local
+  frontier lockup.
+
+The redesign must not equate `realm: frontier` with `institutional profile: frontier jail`. A mage
+colony can be geographically frontier while possessing sophisticated custody infrastructure; a large
+city can contain a tiny district watch lockup; a frontier railhead can host a regional prison much
+larger than its resident population suggests.
+
+##### Recommended authority cascade
+
+```text
+explicit canon / authored premise
+  -> containing region, settlement, district, fort, route, or organization
+  -> settlement scale and development/logistics context
+  -> site's service catchment and institutional role
+  -> operator, doctrine, wealth, technology/magic norm, and history
+  -> contextual rolls fill only facts still unknown
+  -> purpose profile receives the resulting modifier stack
+```
+
+The important inputs are orthogonal rather than one master `frontier` enum:
+
+- **containing-place scale/population:** hamlet, village, town, city, metropolis, or an extensible
+  continuous/banded equivalent;
+- **development/settlement role:** camp, outpost, frontier/boom settlement, established center,
+  declining settlement, occupied settlement, and other authored states;
+- **service catchment:** one building, neighborhood, settlement, district, route, fort, region, nation,
+  realm network, or another explicit constituency;
+- **institutional tier/centrality:** local holding facility, district facility, regional institution,
+  central/specialist institution, satellite/annex, and purpose-family equivalents;
+- **connectivity and supply:** remoteness, route quality, external-provider access, reliability, buffers;
+- **operator and administrative capacity:** sheriff, watch, military, temple, guild, crown, private
+  contractor, magical order, occupying faction, or another operator;
+- **doctrine and norms:** detention practice, privacy, security, punishment, rehabilitation, magical or
+  technological expectation;
+- **history/current pressure:** original role, later growth/decline, war, migration, catastrophe,
+  occupation, or a recent event that changes load without rewriting the building's origin.
+
+`Frontier jail` is therefore a fixture/display label for a common conjunction such as:
+
+```text
+purpose: jail / local custody
+containing place: small frontier or boom settlement
+service catchment: local settlement and nearby route
+institutional tier: local lockup
+administrative complexity: low
+external-service reliance: high
+```
+
+The quantity and realization planner consumes the underlying facts, not the label. The label can select
+a strong authorable recipe, test fixture, or default table bundle, but it does not become a sealed
+template.
+
+##### Worked example
+
+Suppose world/settlement generation establishes:
+
+```text
+settlement scale: small town
+settlement role: mining boomtown on the governed edge
+route access: one seasonal road
+administrative centrality: local
+magic norm: uncommon
+```
+
+The town then generates or reveals a `jail` site. Its service-role roll is context-weighted toward a
+local sheriff's lockup, so the jail inherits the frontier/local modifier stack and receives the small
+load/coverage rollers described above.
+
+That result is probable, not mandatory. The same boomtown may roll or inherit `regional circuit seat`
+because it is the only rail/portal hub for a large catchment. Its jail then receives regional throughput,
+records, transfer, staffing, and custody coverage despite the settlement's modest resident population.
+Conversely, a city watch house may contain only a two-cell satellite lockup because the central prison
+exists elsewhere.
+
+A mage colony keeps local scale but raises magical/technological norms and changes eligible custody
+realizations. Portal cells become more plausible without the system pretending the jail serves a city's
+population. This is the already accepted context cascade applied quantitatively.
+
+##### Standalone sites
+
+If a jail is generated without an established settlement, the planner must first attach it to a minimal
+context anchor—fort, road post, mining camp, district, isolated institution, ruined settlement, or other
+service constituency. The site may roll that missing parent context from readable tables. It may not
+declare itself a `frontier jail` with no record of what frontier, population, operator, or catchment made
+that description true.
+
+##### Scope boundary
+
+Wave 2 does not need to finish the future settlement/region generator. It must define the required
+context interface and fallback rollers so dungeon quantities are not based on a nonexistent fact. The
+future bounded-place/settlement system owns full generation of those parent profiles, while compatibility
+adapters may initially translate the existing `PLACE_TIERS`, region vector, realm, node, and authored
+premise into the new fields.
+
+**Recommendation:** treat `frontier jail`, `city prison`, and similar names as human-readable composite
+fixtures, never primitive types. Parent context and service catchment establish the facts; contextual
+dice fill gaps; the jail's obligation/quantity tables consume the resulting modifier stack. This avoids
+both isolated nonsense rolls and a Cartesian catalog of jail templates.
+
+**Open follow-up:** should site profiles inherit this factored parent-context/service-role cascade, with
+`frontier jail` retained only as a readable recipe/test-fixture label and with the current overloaded
+`frontier` realm/prep terms explicitly forbidden from deciding institutional scale by themselves?

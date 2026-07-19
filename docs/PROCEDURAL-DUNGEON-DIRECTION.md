@@ -3021,3 +3021,136 @@ exist at all.
 **Open follow-up:** should this hierarchical supply model replace the misleading "no universal
 checklist" wording—universal need/resource vocabulary and cross-scale dependencies, but active meters
 owned at the regional, settlement, site, or local scope where they are actually meaningful?
+
+#### 10.2.2 Follow-up - how a systemic shortage changes NPCs
+
+Adam provisionally accepts the hierarchical model and asks the decisive rabbit-hole question: how does
+a system-wide shortage affect NPCs? A resource simulation that changes only a market number is not a
+living world. Simulating every citizen independently would be both expensive and less coherent than
+letting shared conditions propagate through actual social structure.
+
+The recommended cascade is:
+
+```text
+resource shock
+-> settlement policy, buffers, distribution, and faction response
+-> cohort/zone exposure
+-> salient NPC impact
+-> NPC choice and action
+-> feedback into the resource/faction/world state
+```
+
+##### 1. The city owns a pressure, not one identical outcome
+
+When supply crosses a meaningful threshold, create or advance a typed settlement pressure carrying:
+
+- affected resource/service and originating event;
+- current severity, trajectory, expected threshold, and uncertainty;
+- affected districts, institutions, routes, and population groups;
+- public policy and faction responses such as rationing, requisition, relief, hoarding, price control,
+  border restrictions, or import efforts;
+- observable tells and actionable intervention points;
+- links back to the damaged farms, stores, routes, and responsible events.
+
+This pressure establishes conditions. It does not decide that every hungry person riots or every
+merchant profiteers.
+
+##### 2. Cohorts absorb the broad simulation
+
+Aggregate people by causal exposure rather than by one universal social class list. Relevant cohort
+dimensions can include district, institution, occupation, faction, wealth/access, household/dependents,
+legal status, species needs, and supply priority. The same grain shortage may therefore reach:
+
+- granary workers and food merchants through stock and livelihood;
+- bakers and taverns through input scarcity;
+- poor districts through price/access pressure;
+- prisoners, patients, refugees, soldiers, or temple dependents through institutional ration policy;
+- farmers through destroyed property, lost work, injury, and displacement;
+- nobles or faction leaders through reserves, legitimacy, security, and political leverage;
+- smugglers, thieves, transporters, and importers through new opportunities and risks.
+
+The city can track an exposure/pressure state for these groups without minting every resident. Cohort
+responses affect ambient encounters, labor availability, services, crime, migration, disease, public
+order, faction recruitment, rumors, and the pool from which future NPCs emerge.
+
+##### 3. Named and salient NPCs personalize the pressure
+
+Known, contacted, contract-bound, faction-leading, thread-linked, or locally important NPCs receive an
+individual impact when the pressure reaches them. Filter inherited cohort exposure through stable
+facts already on or linked to the NPC:
+
+- home/current location and occupation;
+- employer, institution, faction, and access privileges;
+- wealth, stores, tools, property, transport, and alternate suppliers;
+- health, species requirements, injuries, and dependents;
+- want, bond, fear, motivation, leverage, honesty, and other canonical character levers;
+- prior relationship to the cause, affected people, factions, and player;
+- elapsed time and previous responses.
+
+The shortage may add a **situational need, pressure, or changed circumstance**; it does not overwrite the
+NPC's foundational want, personality, bond, or identity. A baker can still be proud, grieving, devout,
+or deceitful while urgently needing flour. Those combined facts produce the interesting response.
+
+Valid response families include conserving, substituting, sharing, organizing relief, seeking work,
+asking for help, bargaining, migrating, protecting dependents, enforcing policy, profiteering, hoarding,
+smuggling, stealing, protesting, joining a faction, exposing corruption, becoming ill, or escalating to
+violence. The selection is biased and constrained by the NPC's actual levers and opportunities; social
+class or profession never dictates moral behavior by itself.
+
+##### 4. Mechanical consequences land on existing kinds of state
+
+An NPC impact can legitimately change:
+
+- `status.condition` through hunger, illness, injury, exhaustion, or recovery;
+- `status.at` through displacement, work reassignment, migration, arrest, recruitment, or refuge;
+- services, stock, schedule, access, prices, available assistance, and contract terms;
+- a situational need/pressure reference and associated clock;
+- faction membership, standing, agenda clocks, leadership pressure, and occupation fronts;
+- relationships, debts, dependents, promises, rumors, and new story cards;
+- life-event eligibility and the consequences resolved by lazy World Turn catch-up.
+
+Do **not** automatically lower every NPC's attitude toward the player. Genesis attitude is a persistent
+stance toward this specific PC. It changes only when the NPC connects the player to the shortage,
+relief, profiteering, policy, faction, broken promise, or a relevant interaction. Likewise, cohort
+stability, combat morale, personal fear, and PC attitude remain related but distinct mechanics.
+
+##### 5. Salience controls detail, not whether the consequence exists
+
+- Unnamed ambient citizens remain represented by cohort state and changed encounter/population pools.
+- Untouched soft NPCs need not receive daily records; when materialized, their stable seed and cohort
+  history produce a response consistent with what happened.
+- Known/hard NPCs retain identity and receive deterministic lazy catch-up when revisited.
+- Highly salient NPCs and leaders may receive immediate event rolls or choices because their actions
+  materially feed back into the city.
+
+This composes with existing Genesis seams: codex identity and `status.condition`/`status.at`; persistent
+per-PC attitude; NPC wants and motivations; soft-versus-hard salience; faction clocks; and World Turn's
+lazy life events. The new work is to add typed pressure links and cohort propagation rather than create a
+second NPC system.
+
+##### Example lives under the same shortage
+
+- The baker loses ordinary flour, substitutes an unpopular grain, and offers the party a contract to
+  escort an importer. Their attitude toward the PC is unchanged until the party helps, exploits, or
+  obstructs them.
+- A rationed guard still eats, but their children do not. They enforce policy publicly while becoming
+  vulnerable to a relief promise, bribe, faction appeal, or moral break consistent with their bond and
+  honesty.
+- A wealthy merchant has reserves and no hunger condition, but gains commercial and political pressure:
+  sell fairly, hoard, import, donate, manipulate prices, or protect warehouses according to their
+  character and faction interests.
+- Prisoners receive reduced rations because the institution has low distribution priority. Health and
+  unrest clocks advance; a particular prisoner may organize mutual aid, collaborate with guards, plan a
+  break, or prey on others according to established traits and relationships.
+- A priest turns the temple into a food line, consuming temple reserves and creating new volunteers,
+  dependents, faction attention, and protection needs.
+
+**Recommendation:** adopt cohort-first, individual-on-salience propagation. System pressures alter an
+NPC's circumstances, needs, options, and consequences; canonical identity determines how the NPC
+responds. Named NPC actions feed back into the supply network and faction state. Preserve the hard rule
+that a systemic pressure never overwrites personality or silently changes PC attitude without a causal
+relationship.
+
+**Open follow-up:** is this the right NPC model for systemic shocks—cohort simulation for the population,
+personalized lazy or immediate impacts for salient NPCs, and two-way feedback from their choices into the
+city's shortage?

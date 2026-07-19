@@ -301,11 +301,11 @@ function extractConstLine(src, name) {
 group("B3 — RED-FIRST: itrKitDoorRestPose does not exist on master (pre-KS-2)");
 {
   let preKS2Src = "";
-  try { preKS2Src = execFileSync("git", ["show", "ef7850e3:src/ui/theater-boot.js"], { cwd: ROOT, encoding: "utf-8" }); }
+  try { preKS2Src = execFileSync("git", ["show", "7a64d524:src/ui/theater-boot.js"], { cwd: ROOT, encoding: "utf-8" }); }
   catch (e) { preKS2Src = ""; }
   const hadIt = preKS2Src.indexOf("function itrKitDoorRestPose(") >= 0;
-  ok(preKS2Src.length > 0, "master (ef7850e3, the KS-1 merge) source read for the red-first diff");
-  ok(!hadIt, "RED: itrKitDoorRestPose does not exist at ef7850e3 — proves this is a genuinely new function, not a rename");
+  ok(preKS2Src.length > 0, "master (7a64d524, the KS-1 merge) source read for the red-first diff");
+  ok(!hadIt, "RED: itrKitDoorRestPose does not exist at 7a64d524 — proves this is a genuinely new function, not a rename");
 }
 
 group("B4 — GREEN: itrKitDoorRestPose composes distinct leaf angles per state; broken removes the leaf");

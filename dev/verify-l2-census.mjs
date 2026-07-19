@@ -65,10 +65,10 @@ const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", detail));
 
 // Pinned to this branch's own fork point (docs/VQ2-RESPEC.md §3 unit L2's own branch instruction:
-// "off master (must include ac074f98, the S5 flip merge)") — NOT "HEAD", which moves forward once
+// "off master (must include 7eddabb5, the S5 flip merge)") — NOT "HEAD", which moves forward once
 // this unit's own commits land (see dev/verify-s5-faceted-flip.mjs's identical comment on the same
 // pitfall).
-const PRE_L2_REF = "ac074f98";
+const PRE_L2_REF = "7eddabb5";
 const gitShow = (ref, path) => execFileSync("git", ["show", `${ref}:${path}`], { cwd: ROOT, encoding: "utf-8" });
 
 // ============================================================================

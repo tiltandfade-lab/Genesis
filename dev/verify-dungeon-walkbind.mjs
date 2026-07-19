@@ -277,7 +277,19 @@ let sharedFixture; // reused by check 4 below
   const { nodeId, walk } = mountDungeonWalk(win, world, 8);
   win.applyEvent(world, { type: "prep_applied", payload: { overlays: { dungeon: { briefing: "test", segments: [] } } } });
   const pn = win.prepOf(world).nodes[nodeId];
-  const targetSeg = walk.segments.find((s) => s.num !== pn.cursor.current) || walk.segments[0];
+  // Room dims are generated with Date entropy (seeds don't reproduce rolls), so a fixed pick of
+  // "first non-current segment" occasionally lands on a room that coincidentally maps to the 4x3
+  // no-dims default — making [4c]'s "discriminating" assertion flaky (green locally, intermittently
+  // red on CI). Deterministically SELECT a non-current segment whose room maps to a NON-default grid;
+  // fall back to the first non-current segment if (astronomically rarely) none of the 8 rooms differ.
+  const nonCurrentSegs = walk.segments.filter((s) => s.num !== pn.cursor.current);
+  const discriminatingSeg = nonCurrentSegs.find((s) => {
+    const r = win.spatialRoomForSeg(pn, s.num);
+    if (!r) return false;
+    const g = win.cmGridFromCells({ w: r.w, d: r.d });
+    return !(g.bands === 4 && g.lanes === 3);
+  });
+  const targetSeg = discriminatingSeg || nonCurrentSegs[0] || walk.segments[0];
   const adv = win.applyEvent(world, { type: "walk_advance", payload: { toSeg: targetSeg.num, nodeId } });
   check("3a. walk_advance ok", adv && adv.ok === true, JSON.stringify(adv));
   check("3b. pn.cursor.current === target segNum", pn.cursor.current === targetSeg.num, pn.cursor.current);

@@ -144,12 +144,12 @@ function tieredFixture() {
 group("A0 — RED-FIRST: KIT_SHELL_ENABLED / itrKitShellWallRuns / itrKitShellFloorBlocks do not exist on the pre-KS-3 tip");
 {
   let preKS3Src = "";
-  try { preKS3Src = execFileSync("git", ["show", "c6ed1fcb:src/ui/theater-interior.js"], { cwd: ROOT, encoding: "utf-8" }); }
+  try { preKS3Src = execFileSync("git", ["show", "1a4bf607:src/ui/theater-interior.js"], { cwd: ROOT, encoding: "utf-8" }); }
   catch (e) { preKS3Src = ""; }
-  ok(preKS3Src.length > 0, "pre-KS-3 tip (c6ed1fcb, the MC-1 merge — feat/ks3-kit-shells' own branch point) source read for the red-first diff");
-  ok(preKS3Src.indexOf("function itrKitShellWallRuns(") < 0, "RED: itrKitShellWallRuns does not exist at c6ed1fcb — proves this is genuinely new");
-  ok(preKS3Src.indexOf("function itrKitShellFloorBlocks(") < 0, "RED: itrKitShellFloorBlocks does not exist at c6ed1fcb — proves this is genuinely new");
-  ok(preKS3Src.indexOf("KIT_SHELL_ENABLED") < 0, "RED: KIT_SHELL_ENABLED does not exist at c6ed1fcb — proves this is genuinely new");
+  ok(preKS3Src.length > 0, "pre-KS-3 tip (1a4bf607, the MC-1 merge — feat/ks3-kit-shells' own branch point) source read for the red-first diff");
+  ok(preKS3Src.indexOf("function itrKitShellWallRuns(") < 0, "RED: itrKitShellWallRuns does not exist at 1a4bf607 — proves this is genuinely new");
+  ok(preKS3Src.indexOf("function itrKitShellFloorBlocks(") < 0, "RED: itrKitShellFloorBlocks does not exist at 1a4bf607 — proves this is genuinely new");
+  ok(preKS3Src.indexOf("KIT_SHELL_ENABLED") < 0, "RED: KIT_SHELL_ENABLED does not exist at 1a4bf607 — proves this is genuinely new");
 }
 
 group("A1 — real admitted donor socket data sanity (dev/model-foundry/KS1-PROVENANCE.json) — the module-span constants this unit's placement math assumes");
@@ -317,14 +317,14 @@ group("C0 — shapes fixture set (octagon/L/tiered): mixed shells render without
   ok(board.kitShellFloors.some((b) => b.x < 6), "tiered fixture: the flat west half still kit-tiles");
 }
 
-group("D0 — FLAG-OFF BYTE-IDENTITY: KIT_SHELL_ENABLED=false reproduces the PRE-KS-3 (c6ed1fcb) prism-only output exactly, on all 4 fixtures");
+group("D0 — FLAG-OFF BYTE-IDENTITY: KIT_SHELL_ENABLED=false reproduces the PRE-KS-3 (1a4bf607) prism-only output exactly, on all 4 fixtures");
 {
   // load a SECOND, independent sandbox off the pre-KS-3 tip's own theater-interior.js — the strongest
   // form of this check: not just "kitShellWalls/Floors are empty" (which could pass even with a subtly
   // broken skip-condition) but a real structural diff of instances.wall/instances.floor against the
   // ACTUAL prior source, on every fixture this file defines.
   let preKS3Interior;
-  try { preKS3Interior = execFileSync("git", ["show", "c6ed1fcb:src/ui/theater-interior.js"], { cwd: ROOT, encoding: "utf-8" }); }
+  try { preKS3Interior = execFileSync("git", ["show", "1a4bf607:src/ui/theater-interior.js"], { cwd: ROOT, encoding: "utf-8" }); }
   catch (e) { preKS3Interior = null; }
   ok(!!preKS3Interior, "pre-KS-3 theater-interior.js source read for the flag-off comparison");
   if (preKS3Interior) {
@@ -335,8 +335,8 @@ group("D0 — FLAG-OFF BYTE-IDENTITY: KIT_SHELL_ENABLED=false reproduces the PRE
       const post = M.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
       PRE.sandbox.window.KIT_DOORS_ENABLED = true;
       const pre = PRE.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
-      ok(JSON.stringify(post.instances.wall) === JSON.stringify(pre.instances.wall), `${label}: KIT_SHELL_ENABLED=false -> instances.wall byte-identical to the pre-KS-3 (c6ed1fcb) output`);
-      ok(JSON.stringify(post.instances.floor) === JSON.stringify(pre.instances.floor), `${label}: KIT_SHELL_ENABLED=false -> instances.floor byte-identical to the pre-KS-3 (c6ed1fcb) output`);
+      ok(JSON.stringify(post.instances.wall) === JSON.stringify(pre.instances.wall), `${label}: KIT_SHELL_ENABLED=false -> instances.wall byte-identical to the pre-KS-3 (1a4bf607) output`);
+      ok(JSON.stringify(post.instances.floor) === JSON.stringify(pre.instances.floor), `${label}: KIT_SHELL_ENABLED=false -> instances.floor byte-identical to the pre-KS-3 (1a4bf607) output`);
       ok((post.kitShellWalls || []).length === 0 && (post.kitShellFloors || []).length === 0, `${label}: KIT_SHELL_ENABLED=false -> zero kitShellWalls/kitShellFloors entries`);
     });
   }
@@ -366,7 +366,7 @@ group("E0 — determinism: interiorBuildBoard(plan, opts) is byte-identical acro
 // are the real-browser capture cards this unit re-shot (dev/battle-gate/capture-ks3-kit-shells.mjs,
 // dev/battle-gate/ks3-kit-shells/*.png) — READ by the executor per the unit's own report, not
 // re-implemented as a pixel-diff here (this harness has no THREE, by design, per this file's own header).
-const KS3B_FORK_SHA = "89d690cc"; // fix/ks3b-shell-look's own branch point off master (git merge-base)
+const KS3B_FORK_SHA = "477ffb31"; // fix/ks3b-shell-look's own branch point off master (git merge-base)
 
 group("G0 — item 1 (THE FLOOR CHECKER) red-first: itrKitShellFloorBlocks stamps NO tone signal at the KS-3b fork point, a bounded per-block toneJitter after");
 {

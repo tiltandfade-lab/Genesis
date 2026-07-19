@@ -3276,3 +3276,129 @@ and consequence. Arithmetic defects are diagnostics, never story prompts.
 **Open follow-up:** does this sufficiently protect the experience—especially the laws that a severe
 failure needs causal provenance, missing/corrupt data preserves the last valid state rather than becoming
 zero supply, and release gates measure crisis incidence across large world/time corpora?
+
+#### 10.2.4 Final ruling - hierarchical light simulation with crisis safety
+
+Adam confirms the protection. Question 2 is resolved in its corrected form:
+
+- Genesis maintains a universal typed vocabulary for needs, resources, services, flows, dependencies,
+  buffers, shocks, and consequences, but does not duplicate a universal set of active local meters in
+  every place;
+- authoritative state lives at the highest shared meaningful scope—region, resource basin, settlement,
+  district/institution, site, zone, assembly, or exceptional individual—with downstream sites linking to
+  it and adding only meaningful local reserves, priorities, alternatives, or failure behavior;
+- purpose families author qualifying candidate systems; the causal/player-facing admission test decides
+  which receive mutable detail, while graded activation moves canonical latent facts into monitored,
+  active, foreground, and resolved/scarred states;
+- systemic shocks propagate through settlement policy/distribution into cohorts, then personalize for
+  salient NPCs through their stable location, role, access, relationships, resources, dependents, and
+  character levers;
+- circumstances and situational needs may change; foundational identity and per-PC attitude are never
+  silently overwritten. NPC choices feed back into supply networks, factions, occupation fronts, and
+  world state;
+- ordinary settlements are healthy by construction. Severe crisis requires causal provenance from an
+  authored/rolled pressure, recorded event, player action, established failing threshold, inherited
+  pressure, or deterministic consequence;
+- missing/corrupt data preserves the last valid state and raises diagnostics rather than becoming zero
+  supply or contamination;
+- buffers, competent responses, mitigation, recovery, and closed/scarred end states are authored
+  alongside escalation;
+- root-event rarity/distribution controls how often genuine local problems begin; simulation controls
+  their reach and consequence;
+- deterministic seed corpora, long-horizon soak metrics, incremental-versus-lazy equivalence,
+  idempotence, corruption canaries, and statistical crisis-incidence bounds are release gates. If every
+  town starves in a sweep, the build is red.
+
+#### 10.2.5 Future-question assignments seeded by question 2
+
+| Inherited ruling | Future owner |
+|---|---|
+| Universal cross-scale resource/service vocabulary with state owned at the highest shared meaningful scope | Remaining **Wave 2** ecology/profile writing defines candidate systems and dependencies; future **regions, settlements, economy, and World Turn** design owns the world-scale graph |
+| Purpose-authored eligibility and graded latent -> active -> foreground -> resolved lifecycle | Remaining **Wave 2** questions inventory and budget site systems; **Wave 9** owns strategic-card projection and active-hand pressure |
+| Cohort-first population effects and personalized impacts for salient NPCs without identity/attitude overwrite | Future **NPC/social/faction/World Turn** design owns pressure links, response rolls, catch-up, and feedback events |
+| Healthy-by-construction baseline, crisis provenance gate, last-known-good corruption behavior, and authored mitigation/recovery | **Wave 12** owns schema validation, transactionality, migrations, diagnostics, fuzz/mutation tests, and release gates |
+| Destruction, repair, supply interruption, occupation changes, and other events mutate the dependency graph explicitly | **Wave 8** owns environment/topology-changing event contracts; the world event system owns cross-scale propagation |
+| Exact locale-crisis incidence, cooldown, repetition, resilience, threshold, and recovery distributions remain taste/tuning work | Later **Wave 2** writing passes establish authored targets; statistical soak and playtest evidence tune them without weakening the provenance law |
+
+### 10.3 Question 3 - when does an obligation become its own room?
+
+In plain English: the roster knows that a site needs custody, oversight, food supply, sanitation,
+records, worship, drainage, processing, preservation, incubation, or another capability. How does it
+decide whether that need becomes a dedicated room, shares a room, lives as a fixture/assembly, spreads
+across a zone, happens through a scheduled procedure, or is supplied from outside the site?
+
+The system must avoid two opposite failures:
+
+- **one obligation = one room** bloats small sites and turns an operating model into an architectural
+  checklist—a frontier jail receives separate intake, records, evidence, guard, meal, sanitation, and
+  visitation rooms whether or not its capacity supports them;
+- **combine/externalize everything possible** creates magic multipurpose rooms and hollow sites—a desk,
+  cupboard, bucket, tavern delivery, and one barred corner allegedly satisfy an entire prison while all
+  graph capacity is handed to unrelated Spice.
+
+The useful realization forms are:
+
+- dedicated room or chamber;
+- repeated room/child assembly such as cells, niches, bays, stalls, beds, or workstations;
+- combined multifunction room with compatible concurrent or scheduled uses;
+- attached subroom, alcove, closet, fixture, or furniture assembly;
+- distributed zone/system such as drainage, ventilation, watch coverage, shelving, wards, or procession;
+- topology/threshold feature such as checkpoint, sally port, sluice, ritual boundary, or controlled
+  transition;
+- procedure or scheduled transformation of a space;
+- external service/dependency with a real provider, route, reliability, access, and failure behavior;
+- subordinate site, annex, inherited pocket, or Breach-linked domain when causally licensed.
+
+The research supports describing semantic requirements, relationships, counts/ranges, and hierarchical
+blocks before spatial realization. The current room grammar already contains a useful relationship
+vocabulary; this question decides the upstream allocation contract it will eventually consume.
+
+The recommended model is an authored **realization contract** on every obligation. It declares:
+
+- allowed and preferred realization forms;
+- minimum capacity/throughput and the scale curve that increases quantity;
+- whether the use can be concurrent, scheduled, shared, or combined;
+- privacy, security, contamination, acoustic, ritual, visibility, and access constraints;
+- required adjacency, separation, route, operator, support, storage, or disposal relationships;
+- conditions under which dedicated space becomes mandatory;
+- whether and how the obligation may be externalized;
+- acceptable degraded/failing forms;
+- eligible room/assembly recipe families and contextual modifiers.
+
+The planner then applies **dedication pressure**. Higher load, simultaneous demand, privacy/security,
+special equipment, contamination, long dwell time, restricted access, doctrinal importance, or dangerous
+failure push a capability toward its own room or zone. Low load, compatible schedules, shared operators,
+ordinary equipment, and acceptable external reliability permit combination or external service.
+
+Concrete examples:
+
+- In a frontier jail, oversight and records may share the sheriff's office; one barred room may contain
+  several stable cell children; meals come from a named tavern/cook route; sanitation may be a yard
+  privy; evidence might be a locked cabinet until caseload/security demands a dedicated store.
+- In a city prison, intake and public visitation conflict with secure circulation; food throughput,
+  sanitation, medical isolation, records volume, staff shifts, evidence security, and repeated custody
+  demand push several functions into rooms, suites, and cellblock assemblies.
+- A temple's purification might be a font at the threshold, an attached washing room, a river
+  procession, or an entire bathing court depending on doctrine, throughput, privacy, climate, and scale.
+- A cavern's drainage is a distributed flow across slopes, channels, pools, and exits—not a room called
+  "Drainage." A predator den may express feeding and waste through spatially separated habitat zones.
+- An alchemist's ventilation may be a distributed system, reagent storage a secure subroom, ordinary
+  sales and records a shared front room, and necromantic containment a dedicated hidden subordinate
+  domain because its hazard and secrecy demand separation.
+
+Externalization must be honest. "Meals come from town" requires a provider or abstract service node,
+route, cadence/reliability, access, and failure consequence; it cannot be a free deletion of the kitchen
+obligation. Combination must likewise preserve capacity, concurrency, privacy, circulation, and every
+player-facing function. The compiler may optimize realization but not erase obligations.
+
+Guaranteed operating-model capacity and protected discretionary/Spice capacity are reserved before
+this reconciliation. The system cannot compress the prison dishonestly to make more random rooms, nor
+consume every juicy slot because each capability demanded its own noun-room.
+
+**Recommendation:** give every obligation a typed menu of legal realization forms and dedication
+triggers. Let context and operational load decide shared versus dedicated space, with auditable reasons,
+while requiring external services and distributed systems to exist as real dependencies in the graph.
+
+**Open decision:** should this realization-contract and dedication-pressure model govern whether an
+obligation becomes a room, assembly, shared use, distributed system, procedure, external dependency, or
+causally licensed child site?

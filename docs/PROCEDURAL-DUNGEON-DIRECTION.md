@@ -4472,3 +4472,129 @@ the site to erase it.
 **Open decision:** should Wave 2 adopt this demand -> coverage -> assembly -> exact-count pipeline, with
 designed capacity and current load recorded separately so licensed overcrowding, vacancy, communal use,
 shifts, and external service remain possible?
+
+#### 10.6.1 Follow-up - rolls choose the causal inputs; arithmetic preserves their relationships
+
+Adam likes the model and asks whether demand, coverage, assembly, capacity, and current-load values are
+calculated by rolls. **Yes, primarily—but not as independent rolls for every final number.** Genesis
+should expose the meaningful choices as editable human-readable rollers, then use transparent arithmetic
+and constraints to derive dependent quantities.
+
+The recommended authority order is:
+
+```text
+established canon and world facts
+  -> context selects eligible purpose/profile tables
+  -> authored dice roll uncertain demand, doctrine, coverage, and partition inputs
+  -> transparent formulas derive dependent counts and capacities
+  -> bounded reconciliation resolves envelope and compatibility
+  -> exact result + every roll/formula/provenance become persistent canon
+```
+
+##### 1. Never reroll a known fact
+
+If lore or world state already establishes a college enrollment, prison population, active company,
+number of royal tombs, or known clutch, that value enters as an input. The site generator does not roll
+a contradictory replacement. If the value is unknown, it rolls from the narrowest eligible contextual
+table.
+
+Context chooses or weights the roller; it does not replace dice with a black-box optimizer. A frontier
+settlement, regional city, mage colony, wartime occupation, declining college, and recovering hive use
+different eligible rows/modifiers because they imply different demand and doctrine.
+
+##### 2. Roll the independent design choices
+
+Purpose-family profiles expose authorable tables for values such as:
+
+- ordinary and peak operational-load bands;
+- service doctrine: austere, ordinary, generous, redundant, segregated, ceremonial, emergency, and
+  purpose-specific equivalents;
+- capacity reserve or tolerated utilization;
+- privacy/communal mix, security classes, turnover, shift-sharing, and redundancy;
+- assembly size and partition: cells per block, students per house, beds per room, brood per chamber,
+  shelves per bay, workstations per shop, niches per burial cluster;
+- external-service reliance and reliability;
+- current occupancy/throughput state when it is not already established;
+- licensed history or pressure that can create a mismatch.
+
+These may be ordinary dice expressions, range tables, weighted d100 rows, or dice-plus-modifier tables in
+Markdown. The compiler can normalize them for speed, but the authoring face remains readable and
+modifiable.
+
+##### 3. Derive dependent counts rather than rerolling them independently
+
+Once the independent rolls are known, ordinary arithmetic preserves causality. Examples include:
+
+```text
+required beds = ceil(design load x reserve factor)
+ordinary shared cells = ceil(non-isolation custody capacity / beds per shared cell)
+residential beds = ceil(enrollment x residential fraction)
+houses = ceil(residential beds / rolled house capacity)
+brood chambers = ceil(brood capacity demand / rolled chamber capacity)
+service stations = ceil(peak throughput / rolled station throughput)
+```
+
+Exact formulas are purpose-specific authoring and later tuning, not universal ratios imposed on every
+realm. A fungal feeding bed, conjured meal ward, tavern delivery, prison kitchen, and communal cookfire
+can satisfy related supply demand through different quantities and cadence.
+
+Independent final-number rolls would allow contradictions such as rolling 180 prisoners, four total
+beds, twelve cellblocks, and no overcrowding state. The hybrid keeps dice in charge of uncertainty and
+math in charge of implications.
+
+##### Frontier-jail worked example
+
+Suppose established context selects the `frontier_jail` profile and no lore fixes its capacity:
+
+```text
+ordinary concurrent custody roll: 1d4 - 1 -> 2 prisoners
+surge reserve roll:                1d3     -> 2 additional places
+custody-doctrine roll:             d6 = 5  -> one isolation-capable cell; others may hold two
+external-food roll:                tavern contract, ordinary reliability
+
+derived design demand:             4 places
+derived realization:               1 isolation cell + 2 shared cells = 3 cells / 5 maximum places
+
+ordinary current-load roll:        1d3     -> 2 current prisoners
+current condition:                 functional, below capacity
+```
+
+If an established bandit roundup instead supplies six current prisoners, that canon overrides the
+ordinary current-load roll. The three-cell design persists and the one-person excess creates a licensed
+overcrowding state, response options, and evidence. The building does not resize itself after the fact.
+
+##### Large-site and living-site examples
+
+- A city prison can roll a custody-load band, reserve standard, custody mix, cell/dorm ratio, block
+  capacity, and specialist coverage. Arithmetic derives exact cells and blocks; one roll does not occur
+  per cell. Shared assembly truth keeps the result compact.
+- A college can use known or rolled enrollment, then roll residential fraction, room mix, house size,
+  and shared-service coverage. Arithmetic derives stable beds, rooms, houses, washrooms, and commons.
+- A hive can roll colony/load tier, lifecycle pressure, brood-cluster capacity, renewal cadence, and
+  redundancy. Arithmetic derives chambers and flow capacity while individual larvae remain cohorts
+  unless they become actionable.
+
+##### 4. Reconciliation is visible and bounded
+
+After calculation, the planner validates the exact demand against envelope, topology requirements, and
+legal realization families. It may use the already accepted reconciliation ladder—combine, share,
+schedule, externalize, partition, add an annex/child domain, preserve a licensed degraded state, or
+revise an unobserved envelope—but it records every change. It may not repeatedly reroll until it gets a
+convenient answer or silently truncate the demand.
+
+##### 5. Rolls happen once and remain inspectable
+
+The engine may auto-roll this plumbing instantly during generation; player-facing presentation can be
+reserved for rolls that create a meaningful discovery or choice. Regardless of who sees the animation,
+the workbench and provenance trace should show the original dice expression, result, modifiers, formula,
+derived value, reconciliation, and final stored canon. Modders continue editing rollers; the compiler
+does not become the only comprehensible authoring surface.
+
+**Recommendation:** use a hybrid **roll inputs, derive consequences** model. Dice determine uncertain
+load, doctrine, ratios, mixes, and assembly sizes; simple transparent formulas calculate the quantities
+that logically follow. Existing canon always outranks a roll, and every calculation is persisted and
+inspectable.
+
+**Open follow-up:** should this roll-plus-arithmetic model govern quantity generation, with independent
+inputs exposed as editable rollers, derived counts calculated transparently, and no hidden rerolling to
+force a fit?

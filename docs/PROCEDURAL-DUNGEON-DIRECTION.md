@@ -366,10 +366,10 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 checkpoint - questions 1-10 resolved; question 11 next
+## 8. Wave 1 checkpoint - questions 1-11 resolved; question 12 next
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 10 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+question 11 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
 ### 8.1 Identity and authority
@@ -488,16 +488,190 @@ violently resist the party. A history/secret result may license an older complex
 but the system does not put a dungeon under every building. Castle/manor construction tables are a
 future source audit. This extension is direction, not a build authorization.
 
-### 8.7 Pick up here
+### 8.7 Functional obligations and the minimum viable institution
 
-Resume **Wave 1, question 11**:
+Purpose profiles use **guaranteed functional obligations plus weighted realization**. A generated
+prison must contain enough prison to function, but it is not assembled from one rigid room checklist.
 
-> How should a purpose profile declare whole-dungeon functional obligations after rejecting absolute
-> purpose-only bans? The working vocabulary is core / supporting / compatible / exceptional /
-> conflicting. Decide what must be guaranteed, what remains weighted, how subordinate purpose and
-> institutional doctrine modify the profile, and what is deliberately deferred to exact table weights.
+- **Core** obligations are guaranteed capabilities. The roller/compiler may realize them as separate
+  rooms, combined rooms, repeated rooms, external services, or mixed-scale domains according to site
+  size and context; it may not omit them through bad luck.
+- **Supporting** obligations receive guaranteed coverage proportional to size, occupancy, and supply
+  model, while exact supporting functions remain weighted.
+- **Compatible** functions fill ordinary weighted capacity without a guarantee.
+- **Exceptional** functions require a stored causal license from doctrine, culture, subordinate
+  purpose, history, current occupation, Spice, or another established fact.
+- **Conflicting** functions do not enter the original-purpose roster ordinarily. A recorded
+  transformation or current-use overlay may introduce them, with the mismatch and its evidence
+  preserved. Physical and canonical impossibility remain separate hard refusals.
 
-Then continue questions 12-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+The guarantee is a **complete operating model**, not rooms alone:
+
+```text
+required spaces and capacities
++ essential operator roles
++ intended population and throughput
++ internal resources and procedures
++ external dependencies
++ active, failing, abandoned, or repurposed state
+```
+
+A frontier jail might need only one to four cells, a sheriff, an optional deputy, secure storage,
+and externally supplied meals. A major city prison may require cellblocks, intake, guard control,
+administration, food supply, sanitation, evidence storage, an infirmary, and shift staffing. An
+abandoned prison keeps the original operating model as historical truth but has no active staff;
+later occupants receive their own overlay.
+
+Every purpose-and-size profile also protects a **proportional random allocation**. Random functions,
+secrets, anomalies, subordinate complexes, and Spice-Curve outcomes are not leftover filler: they
+are the bread and butter that keeps an institution from becoming only a functional floor plan. An
+alchemist's shop may conceal a coherent necromancy laboratory beneath it; that surprise needs a
+cause, discovery path, evidence, and narrative handles rather than appearing as an orphan room.
+Exact quotas, percentages, and size thresholds remain deliberately deferred to table design.
+
+### 8.8 Time-indexed context cascade
+
+Generation follows this priority order:
+
+1. established canon and explicit premise;
+2. surrounding context **at the time of construction** - region, settlement, realm influence,
+   magic/technology, law, culture, wealth, and materials;
+3. commissioner, original operator, doctrine, design tradition, and intended scale;
+4. purpose, size, capacity, resource ecology, and guaranteed operating model;
+5. protected original random/Spice allocation;
+6. sequential historical transformations;
+7. present context, occupants, condition, and their relationship to inherited architecture;
+8. final current use, staffing, supply, restrictions, secrets, and unresolved consequences.
+
+Context changes probability and Spice classification rather than creating ordinary blacklists. An
+outer-realm prison cell may be Mythic in a mundane frontier jail, ordinary enough to be Textured or
+Strange in a mage colony, or inherited technology misunderstood by later residents. Current context
+does not retroactively rewrite original construction: a later retrofit or transformation must explain
+the change. In Genesis, such portal outcomes may be typed **breaches** into any eligible realm.
+
+### 8.9 Room secrets, discovery promises, and secret networks
+
+Retain the current principle that **every dungeon room receives a secret opportunity**, but do not
+interpret every opportunity as an independent Major secret. Secrets operate at two scales:
+
+- a room-scale opportunity may become a local note, tool, cache, anomaly, clue, tell, entrance,
+  observation point, contradiction, confirmation, or other discovery;
+- whole-site secrets coordinate larger truths, hidden complexes, routes, factions, transformations,
+  breaches, and campaign-scale revelations across several room opportunities.
+
+Every room must reward attention somehow, including empty rooms, but not every reward needs loot or
+even concealment. Quiet rooms may provide history, safety, acoustic information, practical knowledge,
+personal evidence, a resource dependency, or a clue while remaining quiet on entry. Major and Mythic
+secret counts must scale at the site level rather than multiplying without bound per room.
+
+No discovery packet may lead to nothing. It attaches to an existing generated entity, place, event,
+faction, resource, transformation, or truth when possible. Otherwise it creates a **promissory story
+card**: a stable minimal reference plus invariants and a fulfillment obligation. A child's note can
+canonize the barkeep's missing daughter, their relationship, a dated bandit-linked disappearance,
+the note's provenance, and unresolved status without generating her full network immediately.
+
+Promissory cards expand lazily:
+
+```text
+seeded    - canonical stub only
+tugged    - one nearby attachment or corroborating clue
+pursued   - working NPC/faction/place network
+committed - active clocks, opposition, consequences, and recurrence
+```
+
+The DM may promote a suitable card at a dramatically useful time. Player pursuit also forces enough
+materialization to answer the action honestly; a player who reaches the bandit camp cannot be told
+that the daughter has not been generated. Priority may cool when the player walks away, but the
+canonical promise never disappears.
+
+Secret spaces receive the same meaningful-room treatment, with bounded nesting. Hidden loot remains
+an occasional secret payoff, including tier-appropriate healing, antidotes, ammunition, tools, and
+other consumables. Informational leverage, shortcuts, safe rest, tactical advantage, hazard avoidance,
+and persistent discovery remain valid rewards that do not inflate treasure budgets.
+
+### 8.10 Contract cards and the DM's priority decks
+
+Asking an NPC "what's in it for me?" begins negotiation: terms, reward, known stakes, and the NPC's
+response become canonical, and the card rises sharply in priority. Actual agreement, accepting
+payment/authority, or acting toward the objective creates a **service guarantee**. The guarantee is
+not "put this in the next room"; it is "advance this within a bounded window of suitable
+opportunities."
+
+The DM receives a thin, relevance-filtered hand rather than the campaign's full unresolved index:
+
+```text
+MUST PLAY    - player-demanded facts, immediate consequences, expiring deadlines
+PLAY SOON    - accepted contracts and highly engaged threads
+PLAY IF FIT  - active factions, relationships, histories, and lower-pressure threads
+RESERVE      - dormant promises and lightly touched discoveries
+LOCAL SPICE  - new room-level opportunities after higher priorities are considered
+```
+
+The engine enforces this cascade. "ASAP" means the earliest semantically, geographically,
+spatially, and canonically legal opportunity. It records why a high-priority card was deferred,
+raises waiting pressure, and creates a diegetic delivery opportunity or dedicated hook-walk when a
+service horizon would otherwise expire. Contracts normally receive a **progress beat**, not instant
+resolution: a witness, route clue, faction response, related captive, fresh evidence, or other rooted
+advance may be the correct play.
+
+Rolled rooms retain their function, history, current use, and physical legality. Campaign cards give
+them relationships and relevance rather than turning them into blank narrative stages.
+
+### 8.11 Multi-beat social places, resource pressure, inventory, and preservation
+
+Narrative capacity is contextual rather than a one-beat universal limit. Taverns, markets, social
+halls, courts, temple services, prison yards, and similar gathering places may contain several
+independent or related beats. Use layered population:
+
+- institutional anchors such as proprietor, staff, security, and regulars;
+- foreground high-priority beats;
+- social clusters with shared immediate purposes;
+- stable latent NPC stubs with a role, purpose, and observable tell;
+- ambient population that establishes density without indexing everyone fully.
+
+The DM foregrounds a legible subset while the rest remains canonical or lazily expandable. Player
+attention promotes a cluster or individual through the same graded-attention model. This must be
+layered into the bounded-place/place-generation redesign rather than built as a separate crowd toy.
+
+Consumable supply and encounter pressure are planned jointly. Harder or more attritional sites may
+provide more expected opportunities for healing, antidotes, ammunition, tools, and safe rest. An
+optional secret cache gives the player a real earned advantage; the engine never reacts by silently
+upgrading later enemies. This joint budget is a future difficulty-setting lever.
+
+Inventory should be Baldur's-Gate-like and almost entirely automatic: every item occupies one UI
+tile, carries weight, goes directly into inventory on pickup, stacks and sorts routinely, equips into
+explicit character slots, and supports drag-and-drop transfer/equip/split behavior. Inventory creates
+resource choices, not packing labor. Its implementation wave should audit adoptable existing systems
+before authoring bespoke inventory machinery.
+
+Finally, apply the **golden-beat preservation law**:
+
+> Preserve the golden beat, not necessarily the mechanism that currently delivers it.
+
+Classify existing mechanisms as retain, rewire, recompose, or retire-with-replacement-proof. The
+current d200, per-room secret roll, NPC presence/attention, Hook Walks, breaches, empty-room results,
+and other productive systems are valuable evidence, not frozen architecture. Before implementation,
+the engine/table crosswalk must name each golden behavior's new home and provide an executable example
+that it still occurs.
+
+Existing Genesis proposals such as Walk Card Dealing are candidates, not predetermined answers. At
+every remaining question, sift the proposed system through the indexed research: semantic scene
+requirements and hierarchical blocks; room/door/template legality; path, lock/key, reward, and
+playability constraints; circulation and furnishing objectives; two-stage generation and expressivity
+measurement; and solver-escalation options. Preserve Genesis's vision while adopting elegant solved
+techniques rather than recreating them poorly.
+
+### 8.12 Pick up here
+
+Resume **Wave 1, question 12 - Functional Roster and Site Scale**:
+
+> What does a dungeon's size measure? Decide whether one headline size controls everything or whether
+> generation separates graph budget (rooms/connections/zones/levels), institutional capacity
+> (population/throughput/support), and physical scale (builders, portals, ceilings, circulation, and
+> mixed-scale domains). Determine how the result governs guaranteed, supporting, random, secret, and
+> subordinate-complex allocations while deferring exact numeric bands where appropriate.
+
+Then continue questions 13-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

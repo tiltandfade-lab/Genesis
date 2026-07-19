@@ -3154,3 +3154,125 @@ relationship.
 **Open follow-up:** is this the right NPC model for systemic shocks—cohort simulation for the population,
 personalized lazy or immediate impacts for salient NPCs, and two-way feedback from their choices into the
 city's shortage?
+
+#### 10.2.3 Follow-up - healthy by construction; crisis requires provenance
+
+Adam provisionally likes the systemic/NPC model but identifies the primary failure risk: a bugged resource
+count, missing source, incorrect lazy catch-up, or unstable feedback loop could make every generated town
+starve or suffer contaminated water. Genuine local crises should occur occasionally and become memorable,
+not appear every campaign because the simulator silently trends toward collapse.
+
+The design must separate two authorities:
+
+1. **Incident/content authority decides whether a new problem exists.** Authored settlement/region
+   pressures, Spice-aware problem rolls, recorded world events, player actions, faction outcomes, and
+   existing failing canon introduce shocks.
+2. **Simulation authority propagates and resolves an established cause.** It calculates buffers,
+   thresholds, exposure, responses, recovery, and downstream consequences. It may not manufacture an
+   initiating catastrophe from ordinary rounding drift or absent data.
+
+This yields the governing law:
+
+> Ordinary settlements are healthy by construction. Severe shortage, contamination, or systemic
+> failure requires traceable provenance.
+
+##### Viable baseline before play
+
+Every settlement/site operating model must pass a viability check under its declared ordinary state:
+
+- required demand is served by local production, stored reserves, imports, substitutes, or an explicit
+  accepted dependency;
+- supply routes and services are connected to real sources or are identified as external abstractions;
+- reserves/resilience can absorb normal variance appropriate to the settlement;
+- missing optional detail cannot be interpreted as zero supply;
+- a deliberately precarious or failing settlement records that condition, cause, tells, thresholds,
+  and consequence budget at generation.
+
+A healthy town may still contain poverty, crime, unequal distribution, hard work, ordinary illness, and
+specific households in distress. "Viable" prevents accidental universal catastrophe; it does not force
+utopia or blandness.
+
+##### Crisis provenance gate
+
+A system may enter a severe failure state only if the mutation cites at least one valid causal source:
+
+- an authored/rolled locale pressure with roll provenance;
+- a recorded environmental, historical, faction, occupation-front, or World Turn event;
+- a player-caused or player-enabled state change;
+- an elapsed threshold on an already canonical strained/failing dependency;
+- an inherited pressure from a linked region/settlement/site with its own valid provenance;
+- a deterministic downstream consequence of one of the above.
+
+The record preserves the root event and every propagation edge. "Food reserve became negative" is not
+provenance. "The Greenfield fires destroyed the summer grain stores, imports were blockaded, and the
+city exhausted its reserve after twelve days" is.
+
+If a calculation produces NaN, a negative impossible stock, an unknown unit, a missing source, an
+unversioned schema, a duplicate event application, or an impossible state transition, production code
+must preserve the last valid state, quarantine/reject the mutation, and emit a loud diagnostic. It must
+**fail closed against catastrophe** rather than treating corrupt or absent data as zero food or poisoned
+water. The DM may never narratively paper over an invalid transition.
+
+##### Buffers, competence, and recovery prevent death spirals
+
+The world contains dampening responses as well as escalation:
+
+- reserves, imports, substitutes, rationing, repair, mutual aid, migration, price response, relief,
+  seasonal renewal, faction intervention, magic/technology, and player action can stabilize a system;
+- pressures advance through legible stages rather than leaping from stable to mass starvation because
+  one rate missed by a fraction;
+- inhabitants and institutions act with context-appropriate competence instead of passively waiting to
+  die;
+- every systemic problem authors mitigation and recovery pathways alongside escalation;
+- resolved pressures close or leave scars rather than continuing to tick forever;
+- positive feedback loops are bounded, while negative feedback and recovery are deliberately present.
+
+Challenge severity and Spice remain separate. A Grounded crop fire can become a severe humanitarian
+crisis; a Mythic food source can solve one. Spice/content tables control the frequency and character of
+new initiating problems, while resource thresholds control their material consequences.
+
+##### Rarity and correlation live at the root-event level
+
+New ambient systemic problems consume authored region/settlement pressure capacity and obey repetition,
+cooldown, context, and distribution rules. Exact incidence is a later writing/soak decision rather than
+an invented percentage in this discussion. The acceptance target is qualitative but firm: a starving
+town is unusual enough to be notable across play, not an expected feature of every campaign.
+
+One regional fire may causally pressure several linked settlements; this is one geographically coherent
+root crisis with several manifestations, not several towns independently rolling starvation. The causal
+event should create variety in response—one town imports, another rations, another is captured by
+hoarders—without multiplying unrelated root failures.
+
+##### Verification must test population behavior, not only single fixtures
+
+Before this simulation can ship, its acceptance gate needs:
+
+- unit/invariant tests for nonnegative stocks, typed units, connected dependencies, bounded rates,
+  legal transitions, and valid provenance;
+- idempotence tests: the same event cannot apply twice, and the same elapsed interval cannot be charged
+  twice;
+- equivalence tests: incremental daily/threshold updates and one lazy catch-up over the same elapsed
+  time produce the same state;
+- mutation/canary tests for reversed signs, removed sources, missing fields, NaN, duplicate ticks,
+  broken recovery, and corrupt saves;
+- deterministic seed corpora and long-horizon no-player soak runs measuring settlement states, crisis
+  incidence, cause diversity, duration, recovery, and clustering;
+- statistical acceptance bounds derived from Adam-approved content distributions: most ordinary
+  settlements remain viable, severe crises track authored root-event frequency, and no unexplained
+  upward failure drift appears over simulated years;
+- adversarial fixtures for fire, drought, contamination, siege, blocked trade, population surges,
+  magical supply, multi-settlement dependency, and Breach-linked resources;
+- a workbench trace that answers: what changed, from which event, through which dependency, at what
+  threshold, who responded, and why the current state is legal.
+
+If a large seed/soak sweep produces "every town is starving," the build is red even if each individual
+calculation can be rationalized. Distribution is a product contract, not merely a playtest impression.
+
+**Recommendation:** adopt healthy-by-construction baselines, provenance-gated crises, last-known-good
+transactional updates, authored buffers/recovery, root-event rarity budgets, and statistical soak gates.
+The roller authors genuine locale problems; deterministic simulation gives those problems honest reach
+and consequence. Arithmetic defects are diagnostics, never story prompts.
+
+**Open follow-up:** does this sufficiently protect the experience—especially the laws that a severe
+failure needs causal provenance, missing/corrupt data preserves the last valid state rather than becoming
+zero supply, and release gates measure crisis incidence across large world/time corpora?

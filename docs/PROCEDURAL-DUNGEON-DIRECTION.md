@@ -3558,3 +3558,146 @@ plain-language decision trace before any coordinate solver runs.
 
 **Open follow-up:** does this concrete allocation pipeline match the intended design, especially the
 boundary that hard rules filter candidates while editable dice weights choose among the legal results?
+
+#### 10.3.2 Ruling and follow-up - large cities use a bounded active working set
+
+Adam accepts the allocation pipeline as a way to bring places to life, then asks how the same systemic
+depth avoids bloating or destroying the engine when a party enters a large city.
+
+The governing answer is:
+
+> A city is a hierarchy of aggregate systems and deterministic latent places, never one fully
+> instantiated dungeon graph, population, renderer scene, or DM context.
+
+This reinforces existing Genesis laws rather than adding a competing architecture:
+
+- `PLACE-GEN.md` already says settlements remain compositional while the Place Spine describes sites;
+- region identities generate deterministically on first touch;
+- World Turn resolves elapsed offscreen change lazily rather than ticking the whole world continuously;
+- the codex already distinguishes bounded soft entities from contacted hard canon and bounds its
+  recyclable soft pool;
+- the accepted digest is full-detail here-and-now plus a thin name-only wider roster;
+- the renderer shows one active room/site projection rather than the whole place graph.
+
+##### Canonical hierarchy
+
+```text
+city root
+  citywide identity, population/load bands, law, economy/resource networks
+  factions, major institutions, active pressures, transport/access spine
+  district summaries and stable latent ids/seeds
+
+district
+  dominant functions, cohorts, local supply shares, fronts, routes
+  important sites + weighted latent site opportunities
+
+bounded site
+  purpose/roster, topology, occupants, local systems, latent rooms/assemblies
+
+active room/assembly
+  full current geometry, cast, objects, opportunities, cards, and presentation
+```
+
+The city can canonically contain thousands of buildings and many thousands of people without minting a
+record for each. Counts, distributions, cohorts, service capacity, and stable generation seeds preserve
+the larger truth. A named building, NPC, street, supplier, or institution receives a stable stub when
+promised and expands only when required by arrival, attention, causality, a contract, or a due event.
+
+No expansion recursively generates every relationship. If a baker names a flour supplier, the supplier
+can begin as a stable promissory reference with invariants; their family, employees, warehouse rooms,
+and trade network do not all materialize until play needs them.
+
+##### Bounded active working set
+
+At any turn, the engine actively evaluates only:
+
+- the current district/site/room and its immediate connection context;
+- the active cast and contacted entities relevant to the scene;
+- due contracts, fronts, pressures, hazards, and world events;
+- directly affected dependencies whose thresholds may change;
+- a small near-term reserve/prefetch set of meaning-soft assets, never speculative narration.
+
+Everything else remains canonical but cold. A scheduler promotes records into the active set and demotes
+them after they stabilize or leave relevance. Demotion stops active work; it does not erase last state,
+identity, events, or deterministic catch-up rules.
+
+The cost target is therefore:
+
+> `work per turn = active local slice + due events + changed dependency frontier`, not total city
+> population, total building count, or total campaign canon.
+
+##### Shared systems update once
+
+A citywide grain shortage updates the authoritative city food network once. It then changes affected
+district/cohort summaries and queues only thresholds or salient NPC impacts that actually fire. The
+engine does not visit every tavern, household, prisoner, and market stall.
+
+Sites reference shared city state:
+
+```text
+city food pressure: strained
+district southbank exposure: high
+prison supply priority: low
+prison local reserve: three days
+```
+
+The prison becomes actively food-strained when its own threshold arrives. Until then, it carries the
+link and projected deadline, not a per-turn duplicate food calculation. A graph update propagates along
+dirty/affected dependency edges only; unchanged branches are not recomputed.
+
+##### Population remains cohort-first
+
+A large city may have aggregate cohorts for districts, institutions, occupations, factions, legal
+status, supply access, or species needs. Only scene anchors, contacted people, leaders, contract parties,
+thread-linked NPCs, and other salient individuals receive full records and personalized state. Ambient
+citizens are drawn consistently from the current cohort conditions when needed.
+
+Soft uncontacted NPCs remain bounded and recyclable under existing codex principles. Hard/known NPCs are
+never discarded; their individual catch-up resolves only when due or relevant. Long campaigns may grow
+the cold hard-canon store, but DM context and active simulation remain bounded.
+
+##### Navigation and rendering remain layered
+
+Urban movement stays an urban walk through districts, routes, thresholds, and institutions. Entering a
+manor, prison, temple, sewer access, or other bounded site opens that site's compiled graph. Entering a
+room materializes/renders the local room plan. Genesis never rasterizes an entire large city into one
+five-foot-cell map merely because the player arrived at its gate.
+
+Renderer and combat state receive only the active local plan. A controlled threshold may show a limited
+glimpse, but neighboring districts/buildings/rooms do not all become live geometry.
+
+##### Four independent budgets prevent four kinds of bloat
+
+1. **Materialization budget:** limits how many latent sites, rooms, NPCs, and networks expand in one
+   operation. Overflow remains stable queued stubs; required player-facing answers take priority.
+2. **Simulation budget:** limits active systems and dirty dependency propagation. Due hard consequences
+   cannot vanish; work queues deterministically across safe boundaries or uses authored aggregate forms.
+3. **Context budget:** the DM receives full local records plus thin references and due pressures, never
+   the city index or full supply graph.
+4. **Render budget:** only active geometry, cast, lights, and interactables mount; representation does not
+   define or force canon expansion.
+
+These budgets must never silently delete obligations, contacts, or consequences. They control
+resolution/materialization timing and representation, not truth. If immediate player action requires a
+record, it outranks speculative prefetch and low-priority background work.
+
+##### Persistence and maintenance
+
+Persist compact aggregate snapshots, hard/known records, event provenance, system thresholds, and
+materialized plans. Stable latent content stores ids/seeds/invariants rather than full payloads. Event
+logs can be compacted into validated snapshots while preserving important provenance; schema migration,
+cold-record compaction, storage ceilings, and deterministic replay belong to Wave 12.
+
+Acceptance tests should include large-city arrival, repeated district traversal, long campaign return,
+mass shortage propagation, thousands of latent site/NPC stubs, growing hard canon, and adversarial
+player attention. Metrics must separately report generation time, turn time, memory/save growth, digest
+size, mounted render objects, active systems, dirty edges, and fallback/queue rates.
+
+**Recommendation:** adopt hierarchical canon plus a bounded active working set. The city root owns shared
+systems; districts own aggregates; bounded sites compile on relevance; rooms and individuals expand on
+contact/attention; offscreen change catches up through events and thresholds. Every work surface remains
+bounded even while the persistent world grows.
+
+**Open follow-up:** is this the correct scale boundary—no monolithic city simulation or geometry, with
+cost tied to the active district/site/room and changed dependency frontier while the rest of the city
+remains compact deterministic canon?

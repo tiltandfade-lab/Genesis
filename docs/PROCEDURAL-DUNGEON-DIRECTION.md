@@ -5558,3 +5558,212 @@ state personal without replacing cohorts with a fully simulated crowd.
 **Open decision:** should this occupant-group + typed-claim + event-driven-front model govern contested
 sites, with room occupancy inherited from coherent zones and with shared resource dependencies treated
 as leverage rather than automatic hostility?
+
+#### 10.8.1 Follow-up - what constitutes a group and how many are generated?
+
+Adam finds the typed-claim/zone/front model solid and asks whether groups are merely faction rolls,
+whether meeting any independently motivated entity creates a group, how rogue actors and double agents
+survive group abstraction, and how the number of occupant populations is determined.
+
+The answer requires separating four structures:
+
+```text
+population cohort: non-overlapping home/count partition; prevents double-counting bodies
+operational/social group: people who share behavior, identity, routine, decision, or claim
+faction/organization: a persistent power with agenda, membership, and reach beyond one scene
+singular actor: one entity with personal motives and claims; may belong to zero, one, or many groups
+```
+
+A faction may project a local group/branch into a site, but most occupant groups are not new world
+factions. A cellblock cohort, work shift, household, class, refugee camp, patient ward, brood, predator
+family, or temporary coalition may matter collectively without receiving a world-level faction agenda
+and clock.
+
+The current engine makes this distinction especially necessary. World creation presently rolls a
+dominant faction plus `1d3` rivals with global agendas/clocks; factions have no authoritative node-bound
+population/branch model, and the current reputation helper chooses the first `member-of`/`serves`/`leads`
+faction link it finds. Those systems remain useful for great powers but cannot honestly represent
+overlapping local affiliation or double agency without extension.
+
+##### When does a group record exist?
+
+A group is warranted when collective tracking predicts play better than unrelated individuals. One or
+more of these normally applies:
+
+- shared leadership, decision procedure, command, vote, instinct, or coordinated behavior;
+- persistent collective identity, membership, household, caste, crew, class, order, or affiliation;
+- shared goal, grievance, claim, boundary, secret, doctrine, or opposition;
+- shared routine, schedule, resource dependency, supply arrangement, habitat, or response pattern;
+- a collective state change would matter: morale, strike, migration, lockdown, panic, schism, retreat,
+  recruitment, starvation, recovery, or territorial shift.
+
+Several strangers drinking in the same tavern are not automatically a group. Two prisoners in adjacent
+cells are not automatically a prisoner faction. They may remain separate actors within a shared
+detainee cohort until a common grievance, escape plan, gang, mutual defense, identity, or other
+collective behavior makes group state useful.
+
+A group can temporarily have one visible member when that actor represents a larger latent/external
+organization, is the last survivor, or is building/rebuilding membership. Otherwise a truly singular
+entity uses the same claim/relationship vocabulary directly on its actor record without pretending to
+be a population.
+
+##### An entity's own motives do not automatically create a group
+
+Encountering a motivated person, dragon, spirit, sentient door, prisoner, or monster creates or promotes
+an **actor**, not a faction. The actor may:
+
+- hold individual claims and goals;
+- belong to an already established group/faction;
+- reveal a latent group already promised by cohort/site/root state;
+- roll a licensed relationship that implies associates or an external organization, thereby creating a
+  promissory group/organization obligation;
+- recruit, persuade, summon, reproduce, organize, or ally during play, causing a new group to emerge
+  through an explicit event.
+
+A lone dragon occupying a vault is a singular claimant. Its cult, brood, servants, tribute network, or
+army—if actually present or causally promised—are groups. “The dragon has motives” alone does not mint
+followers.
+
+##### Group types are authored, not one generic faction die
+
+The minimum useful group types include:
+
+- household/kin/holding;
+- staff, shift, crew, team, class, ward, block, or operational cohort;
+- institution/order/guild/company and local branch;
+- faction, gang, cult, political current, or secret society;
+- constituency/condition cohort such as prisoners, refugees, patients, pilgrims, or guests;
+- ecological caste, colony, pack, herd, brood, symbiont, parasite, or predator population;
+- expedition, caravan, patrol, fleet, seasonal camp, or other mobile group;
+- temporary coalition, truce, protest, mutiny, escape party, or emergent front.
+
+Purpose-family, population, site-history, occupation, ecology, faction, route, and Spice tables decide
+which types are eligible. Human-readable dice still choose conditional and optional groups; the engine
+does not call one universal `roll faction count` function.
+
+##### How the number of populations/groups is determined
+
+The count should emerge through causal channels:
+
+```text
+1. purpose/current operation supplies required actor and population channels
+2. current load partitions people into non-overlapping population-owner cohorts
+3. operator doctrine/scale partitions shifts, blocks, houses, classes, wards, castes, or crews
+4. regional factions/institutions project only branches with a reason and claim here
+5. history/current occupation adds conquerors, refugees, contractors, squatters, infestations, etc.
+6. ecology adds eligible predators, prey, symbionts, parasites, and resource competitors
+7. protected optional/Spice opportunities can add hidden, aspirational, or exceptional claimants
+8. collective-meaning test merges trivial distinctions or splits a persistent consequential subgroup
+9. capacity/resource/zone reconciliation validates that every onsite group can exist or records why not
+```
+
+This distinguishes **headcount partition** from **overlapping affiliation**:
+
+- population-owner cohorts are exhaustive/non-overlapping for count;
+- memberships, organizations, gangs, factions, religions, secret societies, and coalitions may overlap
+  and do not add bodies merely because a person has another allegiance;
+- one person is counted once at their home/current population scope but may carry several memberships,
+  assignments, claims, and relationships.
+
+Group count therefore grows sublinearly with site population. A prison with 180 inmates does not need
+180 groups; it may have several stable cellblock cohorts and a small number of overlapping gangs,
+religious circles, work details, dissident networks, or secret roots. A hamlet jail with two unrelated
+prisoners may have no prisoner group at all.
+
+Required channels are not random: an operating prison needs operators and detainees/current custody
+load; an operating college needs institutional staff and students; a living hive needs its actual
+ecological functions. Optional splits, factions, visitors, infiltrators, secondary occupations, and
+hidden groups use contextual rollers and site/root budgets. Exact count curves remain writing/tuning,
+tested by scale and purpose rather than one universal cap.
+
+##### Hamlet-jail example
+
+```text
+population-owner cohorts:
+  local justice staff: sheriff + deputy
+  current detainees: two individuals
+
+operational/social groups:
+  sheriff's office / local watch: one small institutional group
+  detainees: no group unless they share a plan, identity, or collective state
+
+other possible records:
+  meal provider: external tavern relationship, not an onsite group
+  rat colony: ecological group only if rolled/material
+  infernal soap claimant: singular actor/root, not automatically a cult
+```
+
+If one detainee is secretly an agent of a regional faction, that creates a membership/assignment on the
+actor and perhaps a latent external branch promise. It does not create a second body or require the
+other prisoner to join.
+
+##### City-prison example
+
+```text
+non-overlapping count cohorts:
+  administration; guard shifts; contractor staff; inmate blocks; current visitors
+
+operational groups:
+  command staff; night shift; kitchen work detail; medical staff
+
+overlapping affiliations:
+  two inmate gangs; a guard association; a prison ministry; corrupt procurement ring;
+  possible secret cult spanning one guard, several inmates, and an external visitor
+```
+
+The cult's members remain counted in their guard/inmate/visitor population cohorts. The cult is a
+cross-cutting organization/claim group, not another population total.
+
+##### Rogue actors, dissidents, infiltrators, and double agents
+
+Group defaults are predictions, never mind control. Each materialized individual retains:
+
+- personal want, fear, bond, secret, attitude, and current pressure;
+- zero or more memberships with role/rank, loyalty/commitment, public/hidden visibility, and provenance;
+- assignment and access, which may differ from allegiance;
+- an individual stance toward each relevant group/front when it matters;
+- triggers that may produce dissent, defection, betrayal, reform, whistleblowing, or reconciliation.
+
+Important groups reserve sparse anchor/deviation roles such as leader, representative, loyalist,
+dissident, opportunist, victim, infiltrator, defector, or double agent. These are casting opportunities,
+not mandatory stereotypes in every group. When an ordinary latent member becomes salient, their
+person-to-group stance is rolled/materialized once and persists.
+
+A double agent is represented explicitly:
+
+```text
+population owner: prison guard shift (counted once)
+public membership/assignment: city prison guard
+hidden membership or obligation: inmate gang / rival faction / crown investigator
+access: guard routes, keys, schedules
+personal motive: money, coercion, loyalty, revenge, reform, or another rolled lever
+```
+
+Their public institution and hidden allegiance can pull different fronts. No single `factionId` field
+may overwrite that plurality, and group posture may not overwrite their per-PC attitude or foundational
+identity. Current first-faction reputation readers will need a compatibility extension when this system
+is specified; they are not authority for the redesigned model.
+
+##### Groups can form, split, merge, and dissolve through events
+
+Collective structure is not creation-only. Explicit events can:
+
+- create a coalition, escape party, mutual-aid group, cult, gang, council, or resistance;
+- promote a recurring informal cluster into a tracked group;
+- split a group when a subgroup develops a persistent consequential claim/posture;
+- merge groups under conquest, alliance, marriage, institutional reform, or ecological integration;
+- dissolve a group while retaining its history, former members, claims, and consequences.
+
+These state changes require provenance and update only affected relationships/zones/fronts. The player
+can therefore cause group formation rather than merely discover prewritten factions.
+
+**Recommendation:** derive group count from required population channels plus context-rolled occupation,
+history, ecology, faction-branch, and Spice overlays. Keep non-overlapping cohorts for headcount and
+allow overlapping memberships/claim groups for social truth. Create a group only when collective state
+matters; otherwise preserve the actor as singular. Guarantee sparse individual deviation so rogue actors
+and double agents remain first-class.
+
+**Open follow-up:** should Wave 2 adopt this cohort/group/faction/actor distinction, including causal
+group-count generation, overlapping public/hidden memberships, and the rule that an independently
+motivated entity remains singular unless collective behavior or a wider organization is actually
+licensed?

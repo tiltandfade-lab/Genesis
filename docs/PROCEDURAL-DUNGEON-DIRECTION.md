@@ -1529,6 +1529,51 @@ confirmed observations without rerolling or forcing the player to rediscover an 
 **Open decision:** choose the reveal model and decide whether obvious function names may be stated
 automatically when the architecture makes them unmistakable.
 
+#### 8.15.1 Ruling and follow-up - graded reveal accepted; who owns knowledge?
+
+Adam accepts **graded evidence and confidence**, including automatic naming of an obvious function when
+the visible architecture makes it unmistakable. The DM does not force the player to investigate an
+ordinary kitchen merely to earn the word "kitchen," and it does not leak original purpose, transformation
+history, secret mechanisms, or hidden card content merely because those facts are canonical.
+
+The accepted knowledge ladder is manifest -> legible -> specialist -> investigated -> concealed ->
+confirmed, with canon, observations, and beliefs/hypotheses stored separately. This creates one material
+follow-up for a party-based game: **who knows a specialist observation or discovery?**
+
+1. **Instant universal party knowledge.** Anything learned by one character becomes in-world knowledge
+   for every party member, including separated characters. This minimizes bookkeeping but breaks
+   witness logic, party splitting, secrets, and effects that target perception or memory.
+2. **Strict per-character knowledge.** Every observation stays with its witnesses until the player
+   explicitly makes characters communicate it. This is faithful but creates conversational chores and
+   risks making optimal play consist of repeatedly telling companions obvious facts.
+3. **Source-attributed knowledge with automatic ordinary sharing.** Every observation records witnesses,
+   source, confidence, shareability, and when/how it entered shared party knowledge. Co-present cooperative
+   characters automatically exchange ordinary findings; a specialist may voice the interpretation as
+   party chatter. Separated characters learn it only through reunion or a communication channel.
+   Canonical withholding, private visions, deception, curses, memory alteration, hostile relationships,
+   or deliberate secrecy can keep a fact individual.
+
+**Recommendation:** choice 3. The player should not micromanage "I tell everyone about the kitchen," but
+the world should still know that only the rogue saw the hidden hand signal, the wizard alone remembers a
+dream-realm sigil, or the separated scout has not yet warned the main group about the pit.
+
+A knowledge record may need:
+
+```text
+fact/observation id and canonical source
++ direct witnesses and interpreting character
++ perceived tell versus inferred meaning
++ confidence and supporting/contradicting evidence
++ shareability and current holders
++ communication event or automatic co-present share
++ deception, memory, secrecy, or expiry rules where canonically licensed
+```
+
+The player may see character-specific information because this is a single-player game while the DM
+still respects which characters know it in-world. Exact UI, companion autonomy, split-party narration,
+and communication mechanics belong to **Wave 6 - Creature Scale, Capacity, Squeezing, and Party
+Participation** and the later DM/interface waves; Question 15 needs only the knowledge ontology.
+
 Then continue questions 16-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

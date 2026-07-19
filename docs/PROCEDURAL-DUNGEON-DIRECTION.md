@@ -5996,3 +5996,205 @@ mistaking a moving diagram for an implementation contract.
 **Open process decision:** should we adopt this artifact ladder and, after Adam confirms, create the
 provisional architecture-sketch document now while continuing Question 8/Wave 2—explicitly withholding
 all `SPECCED` status and build authorization until the relevant closure/reconciliation gates?
+
+#### 10.8.4 Process ruling - sketch closed Wave 1 in the background
+
+Adam asks to begin the architecture work with closed Wave 1 while the live questionnaire continues.
+This accepts the artifact ladder with a narrower, safer first slice:
+
+- create `docs/PROCEDURAL-DUNGEON-ARCHITECTURE-SKETCH.md` as a living `DISCOVERY` document;
+- sketch **closed Wave 1 only** first, because its ontology and closure audit are stable enough to map;
+- preserve Wave 2 and later systems as named future consumers/owners rather than importing unsettled
+  answers into the Wave 1 architecture;
+- perform the drafting in the background on the existing design branch while the primary discussion
+  continues;
+- review/reconcile the draft before treating it as accepted architecture;
+- do not mark it `SPECCED`, authorize a build, edit code, run CI, change handoff/next steps, or commit it
+  independently;
+- later append/reconcile each wave only after its closure, except for explicitly provisional interface
+  placeholders needed to show a Wave 1 handoff.
+
+This is the first practical use of the architecture sketch as a contradiction detector rather than a
+premature implementation contract.
+
+#### 10.8.5 Final ruling - sparse plural groups, claims, and fronts
+
+Adam has confidence in the theoretical design while reserving confidence in implementation. With the
+anti-bloat laws and architecture-to-production process made explicit, Question 8 is resolved at the
+design level:
+
+- population cohorts, operational/social groups, factions/organizations, and singular actors are
+  distinct structures;
+- non-overlapping population-owner cohorts count bodies; overlapping membership and claim structures do
+  not mint duplicate people;
+- a group exists only when collective identity, decision, behavior, routine, resource dependency, claim,
+  or state change predicts play better than unrelated actors;
+- an independently motivated entity remains singular unless followers, associates, a wider organization,
+  or collective behavior are actually licensed or created through events;
+- groups arise causally from required operation/load partitions, doctrine, regional branches, history,
+  current occupation, ecology, optional allocations, and Spice—not one generic faction-count roll;
+- purpose/context-specific dice remain the authorable surface for optional groups, partition, branches,
+  deviation roles, and exceptional claimants;
+- material occupant groups carry purpose, population source, home/mobility, needs/providers,
+  relationships, typed claims, current pressure/front, and relevant event triggers;
+- physical, legal, customary/social, resource, religious/doctrinal, political/influence, aspirational,
+  and hidden claims compile coherent core/shared/scheduled/tolerated/contested/excluded/infiltrated zones;
+- sharing and dependency create leverage, not automatic hostility. Fronts require actual pressure;
+- rooms inherit zone defaults; deviations require cause. Events—not rerolls—change claims, posture,
+  routes, resources, and zones;
+- group posture does not overwrite individual identity, motive, per-PC attitude, or capacity for dissent;
+- individuals may hold plural public/hidden memberships, assignment/access, personal loyalties, and
+  group-specific stances. Rogue actors, dissidents, infiltrators, defectors, and double agents are
+  first-class sparse deviations;
+- groups may form, split, merge, or dissolve through explicit events while preserving provenance and
+  former relationships;
+- relationships remain sparse/causal; claims attach to functions/zones/resources; cohorts remain
+  aggregate; updates are event-driven; hierarchy stores shared defaults once; active projection stays
+  local; stable groups do not automatically receive clocks/cards;
+- implementation confidence remains to be earned through the architecture sketch, production-path trace,
+  staged specs, fixtures, and real gates. The theoretical ruling is not evidence that the system is
+  already built or cheap to implement.
+
+#### 10.8.6 Future-question assignments seeded by question 8
+
+| Inherited ruling | Future owner |
+|---|---|
+| Cohort/group/faction/actor distinction with one population owner and plural memberships | Future **NPC, faction, Codex, and population** specs own schemas, candidate/member promotion, migration, reputation semantics, and duplicate-count guards |
+| Typed claims compile occupation zones; rooms inherit defaults and deviations need cause | Remaining **Wave 2** owns ecology/profile content; **Waves 3-5** own spatial zone/function realization and evidence; **Wave 8** owns topology/environment mutations |
+| Group relations are sparse, causal, non-binary, and resource-aware | Future **faction/social/resource/World Turn** design owns edge vocabularies, event propagation, diplomacy, and catch-up |
+| Rogue actors and double agents use plural public/hidden membership plus personal stance | Future **NPC/social/knowledge** design owns reveal, access, loyalty, betrayal, attitude, and false-belief handling; current first-faction readers require compatibility work |
+| Group count emerges from causal channels and optional rollers rather than one faction die | Remaining **Wave 2** owns purpose/ecology group distributions and stress reports; **Wave 12** owns headcount conservation, incidence, saturation, and performance gates |
+| Stable cohorts do not automatically gain a clock/card; fronts require pressure | **Wave 9** owns strategic-card/front scheduling and active-hand projection; event systems own lifecycle |
+| Sparse/event-driven/active-slice laws are definitional | Every future spec/build inherits them; **Wave 12** proves bounded edge growth, event locality, latent/eager equivalence, save growth, and prompt budgets |
+
+### 10.9 Question 9 - how should operating, strained, dormant, and failing sites differ?
+
+In plain English: the room roster describes what a jail, college, inn, mine, temple, or hive is capable of
+doing. What changes when it is operating normally, overcrowded, understaffed, seasonal, partly shut down,
+starved of supplies, occupied, abandoned, or actively failing—and how do we avoid making every generated
+place dysfunctional just to create stories?
+
+Questions 1-8 now provide purpose obligations, flows, light simulation, realization forms, repeated
+assemblies, protected Spice, population/capacity, cast/occupant groups, claims, and regional dependency.
+The remaining ecology question is how **current operational state** modifies those stable structures.
+
+Three distinctions must survive:
+
+```text
+designed capability: what the architecture/institution/ecology was made and equipped to do
+current availability/performance: whether and how well the capability works now
+current demand/load: how much pressure is being placed upon it
+```
+
+A kitchen can exist and be usable but currently closed; work but be overloaded; lack fuel; be occupied
+by another group; operate through a substitute process; or have been permanently repurposed. Those are
+different truths with different evidence and recovery.
+
+##### Rejected extremes
+
+- **one universal site-health roll:** fast but incoherent. “Failing” does not say whether custody,
+  heat, food, sanitation, teaching, defense, drainage, or brood renewal failed, nor what caused it;
+- **independent condition roll for every room/function:** detailed but makes every large site a heap of
+  unrelated failures, manufactures constant crises, and breaks the healthy-by-construction law;
+- **all operating or all abandoned:** legible but erases partial use, seasonal dormancy, adaptive
+  substitutes, occupation, and the rich middle where play lives.
+
+#### Recommended capability-state and dependency-cause model
+
+Each material capability/flow can occupy a typed current state:
+
+```text
+available / normal
+strained / near threshold
+degraded / reduced coverage or quality
+substituted / supplied by another method
+dormant / seasonal / intentionally offline
+blocked / denied by access, claim, or occupation
+failed / not performing its obligation
+repurposed / no longer serving the original capability
+destroyed / physically incapable without rebuilding
+```
+
+These are an authoring vocabulary, not necessarily the final enum. A site-level summary is derived from
+the states of important capabilities; it does not overwrite them.
+
+Every non-normal state records:
+
+- affected capability/flow and scope;
+- cause/root/event and provenance;
+- onset/duration or seasonal schedule;
+- remaining capacity/coverage;
+- substitute, buffer, external provider, or competent response;
+- dependent groups/functions/zones;
+- sensory/operational evidence and player handles;
+- consequences at thresholds;
+- repair, recovery, adaptation, or terminal condition.
+
+##### State propagates through dependencies, not random neighboring failures
+
+```text
+cause/event
+  -> directly affected provider/route/storage/process
+  -> reduced availability/capacity
+  -> dependents compare demand against buffers/substitutes
+  -> only crossed thresholds change state or create consequences
+  -> response/recovery can arrest or reverse propagation
+```
+
+A blocked food shipment does not instantly make every prisoner starving. Stores, rationing, alternate
+suppliers, reduced menus, gardens, magic, theft, policy, and current population determine whether and
+when thresholds are crossed. The current Question 2 protections—provenance, buffers, competent response,
+last-known-good data, and authored recovery—remain mandatory.
+
+##### Examples
+
+- **Hamlet jail:** tavern meals are temporarily unavailable. The sheriff buys cold provisions, reducing
+  quality but maintaining custody. Only a longer interruption or surge load creates hunger, conflict, or
+  transfer pressure.
+- **City prison:** kitchen capacity remains normal but one cellblock exceeds design load; sanitation is
+  strained there, visitation is suspended, and a contractor offers a substitute. The entire prison is
+  not labeled simply “failing.”
+- **Residential college:** dorms are sound, enrollment is low, one house is dormant, and its rooms have
+  been loaned to visiting scholars. Current low demand creates vacancy/repurposing rather than failure.
+- **Inn:** ordinary rooms operate, a damaged wing is blocked, and festival transients exceed capacity;
+  locals rent spare rooms through an informal provider network.
+- **Mine:** pumping fails, making deeper extraction dormant while upper processing and storage continue;
+  water rises on an event clock and creates a recoverable strategic problem.
+- **Living habitat:** food flow is seasonally low and brood production intentionally slows; this is
+  healthy dormancy. A severed symbiotic nutrient route is degradation with a causal response.
+
+##### State should be generated causally
+
+Ordinary sites begin healthy/viable according to purpose and context. Non-normal states enter through:
+
+- established lore or premise;
+- current history/transformation/occupation rolls;
+- population-capacity mismatch admitted in Question 6;
+- regional dependency or route state;
+- group claim/front effects;
+- ecological season/lifecycle;
+- protected problem/Spice/root opportunities;
+- player action or later world events.
+
+A site may still be abandoned, ruined, occupied, or catastrophically failing when that is its rolled or
+authored premise. “Healthy by construction” means no unexplained systemic failure and no ubiquitous
+crisis bug; it does not mean every place is pleasant or currently successful.
+
+##### Roster and space remain stable
+
+Current state changes use, availability, staffing, access, evidence, and consequence. It does not erase
+the stable semantic room/assembly/topology plan. A shut kitchen remains a kitchen; a flooded mine level
+remains connected; an abandoned dorm retains its child identities. Permanent rebuilding/repurposing
+changes canonical function through explicit events and migrations rather than a status flag silently
+rewriting history.
+
+##### Recommendation
+
+Track current state per material capability/flow with explicit cause, remaining coverage, buffers,
+dependents, evidence, thresholds, and recovery. Derive site summaries; never roll one global health label
+as authority. Generate non-normal states from history, pressure, season, occupation, dependency, Spice,
+or events, and preserve normal competent operation as the common baseline.
+
+**Open decision:** should this capability-level state model govern operational condition, including the
+rules that site-wide health is derived, partial/dormant/substituted operation is first-class, and every
+failure must have cause, evidence, consequences, and a recovery or terminal path?

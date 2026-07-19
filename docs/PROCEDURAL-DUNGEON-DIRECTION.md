@@ -2234,6 +2234,113 @@ implementation questions, but they may not violate the seeded invariants or cont
 **Open decision:** approve, revise, or reject the proposed boundary between seeded canon,
 deterministically latent structure, and observed hard canon.
 
+#### 8.20.1 Ruling and follow-up - eager topology, depth-window card plan
+
+Adam accepts the staged commitment frontier in principle and sharpens its mechanical boundary. The
+dungeon's **doors/connections topology must be mathematical truth before exploration**. Details may
+materialize as the party approaches rooms, but neither the generator nor the DM may discover the actual
+graph ad hoc one doorway at a time. The DM should also begin with a planned sense of narrative-card
+distribution and dungeon escalation by room depth. The pacing system must prevent both failure modes:
+conservative hoarding that starves the early/middle dungeon and a full remaining hand dumped into the
+last few rooms.
+
+This is feasible as an extension of existing machinery rather than an aspiration delegated entirely to
+AI judgment. `place-semantics.js` already derives shortest-path room depth by breadth-first search and
+assigns shallow/mid/deep bands; `dungeon-walk.js` already uses graph depth for reward and elevation
+decisions. The redesign should generalize those seams into a stable topology record and an explicit
+card-placement scheduler.
+
+##### Eager mathematical skeleton
+
+Before the site becomes explorable, lock:
+
+- stable ids for the site, zones, levels, rooms/assemblies, and every traversable or discoverable edge;
+- the graph's doors, corridors, stairs, ladders, lifts, drops, crawlspaces, gates, Breaches, and
+  secret-edge eligibility, including directionality, lock/barrier type, and traversal constraints;
+- entry points, exits, critical routes, loops, branches, side pockets, choke points, finale candidates,
+  and required egress;
+- graph distances from each relevant entrance, normalized depth, critical-path position, branch depth,
+  zone membership, and topological roles such as entry, connector, hub, side room, deep pocket, or
+  terminal;
+- semantic room/assembly programs, capacity envelopes, mandatory functions, protected variation,
+  reservations, and enough causal placement to prove that every promised fact has a legal home.
+
+Approach-time generation may choose fine geometry, dressing, local inspection tells, exact lightweight
+loot, and expandable NPC detail from the fixed room program. It may not change established adjacency,
+invent or remove required capacity, invalidate a clue, or make a mapped route cease to exist. A secret
+door can remain concealed from the player without being absent from the canonical graph.
+
+##### Planned distribution, not a full free hand
+
+Major and mandatory cards are not left as an unordered deck for the DM to spend whenever convenient.
+Before exploration, each receives:
+
+- scope and causal chain;
+- semantic requirements, exclusions, preferences, and capacity cost;
+- priority and service horizon;
+- a chain role such as seed, tell, complication, corroboration, reveal, turn, or payoff;
+- an **earliest / preferred / latest depth window** expressed against normalized graph depth and
+  qualified by zone, branch, and topology role;
+- one or more eligible homes and any required separation or ordering from related beats.
+
+The recommended plan is hybrid:
+
+1. Structural commitments, mandatory operating functions, critical route facts, major secrets, and
+   causal reveals receive exact homes early when later consistency depends upon them.
+2. Softer narrative beats and local Spice receive bounded depth windows plus ranked candidate homes.
+   Their exact home may finalize when the party approaches, but only among unobserved legal candidates
+   and without breaking the planned chain.
+3. The DM receives a **small current hand**: due now, unusually strong fits now, due soon, and a small
+   reserve/local-Spice lane. It does not sort or remember the full unresolved deck.
+
+Depth means shortest-path and topological depth, not room visitation order and not simply "the last
+three rooms." Branch depth, zone transitions, alternate entrances, bypassed paths, and loops all modify
+the placement score. Soft assignments may be replanned across still-unobserved eligible homes when the
+party takes an unexpected route; locked homes and observed facts do not move.
+
+##### Anti-hoarding and anti-dump controls
+
+For every unresolved card, track placement slack:
+
+> `slack = remaining eligible unobserved homes before latest depth - unresolved placements competing for those homes`
+
+Low or zero slack makes a card due at the next legal home; the DM cannot keep deferring it for a
+hypothetical perfect room. Conversely, a card cannot use the final band merely because the scheduler
+failed to place it earlier. The generator validates narrative capacity and chain coverage before play,
+reserves finale capacity for actual payoffs/turns, and reports impossible schedules rather than treating
+the last rooms as overflow bins.
+
+Each depth/zone segment also has coverage targets. The precise cadence varies by site and chain, but the
+default shape is:
+
+- opening/shallow: establish function, pressure, occupant legibility, and one or more usable tells;
+- early-middle: let a person, faction, resource problem, or secret chain become actionable;
+- middle/deepening: complicate, contradict, corroborate, escalate, or advance a contract;
+- deep: reveal, transform, or force a costly consequence;
+- finale/terminal space: pay off, turn, resolve, or deliberately leave a charged future promise - not
+  deliver all missing exposition.
+
+If a room has legal narrative capacity, coverage is behind, and a relevant high-priority card is inside
+its preferred window, the default is **use it while it fits**. Deferral needs a concrete reason such as
+capacity conflict, causal order, needed separation, player knowledge, or a demonstrably stronger
+already-reserved home. Quiet-room protections still apply: pacing may leave the manifest layer calm
+while carrying a subtle tell, hidden resource, or latent connection.
+
+Dungeon escalation by depth governs pressure, stakes, resource strain, encounter commitment, and the
+phase of narrative chains. It does **not** impose an automatic Spice ramp. A shallow room may contain a
+Mythic root when causally licensed, and a deep room may remain Grounded; depth schedules revelation and
+play pressure rather than replacing the independent Spice roll.
+
+**Recommendation:** adopt the hybrid predeal plus depth-window scheduler: exact early homes where
+coherence requires them, bounded candidate homes for softer beats, a small due-now DM hand, explicit
+coverage targets, and slack-based pressure to play cards before their legal opportunities vanish. This
+keeps the engine flexible without asking the DM to improvise pacing from an ever-growing deck.
+
+**Open follow-up:** should this hybrid model be the Question 20 ruling, including (a) fully fixed graph
+topology before play, (b) approach-time deterministic detail, (c) exact early placement for structural
+and causally critical cards, and (d) depth windows, coverage targets, and slack pressure for movable
+cards?
+
 After question 20, continue every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

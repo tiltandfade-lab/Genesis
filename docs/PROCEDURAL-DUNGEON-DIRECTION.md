@@ -2,7 +2,7 @@
 type: design-study
 status: DISCOVERY
 created: 2026-07-18
-updated: 2026-07-18
+updated: 2026-07-19
 related:
   - "[[DUNGEON-GRAPH]]"
   - "[[ROOM-GRAMMAR]]"
@@ -363,10 +363,144 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 - what information reaches the player immediately versus through discovery;
 - whether the existing d200 becomes source material, a result table, or is retired.
 
-Wave 1 begins in the next design discussion. Nothing in this document licenses table replacement or
-compiler implementation before its closure.
+Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
+before its closure.
 
-## 8. Implementation hold
+## 8. Wave 1 checkpoint - questions 1-10 resolved; question 11 next
+
+**Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
+question 10 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+Wave 2 merely because these first rulings are strong.
+
+### 8.1 Identity and authority
+
+- **Original purpose is permanent engine truth.** It remains definite even when every living person
+  has forgotten it. This makes lore, investigation, and environmental evidence mechanically valuable.
+- A dungeon normally has one dominant original purpose plus zero to two subordinate complexes. The
+  dominant purpose gates the functional roster, but purpose alone does not absolutely ban a room.
+- Purpose compatibility is currently described as **core, supporting, compatible, exceptional, or
+  conflicting**. An exceptional/conflicting function needs culture, history, current use, or another
+  causal bridge; it is not silently rerolled. Physical and canonical impossibility are separate.
+- A sacrificial chamber may be native to a military fort whose operator doctrine binds sacrifice to
+  warfare, installed by a later cult, or licensed by a specific exceptional history. Exact profiles
+  and weights wait for the real table-design discussion.
+- Lore is the top authority. Purpose resolves through: established canon -> explicit place/adventure
+  premise -> creator/faction goal -> strong implication -> seeded purpose roll. The selected result
+  stores provenance; lower-authority compatible claims may become subordinate purposes.
+- The 2014 DMG purpose/history/chamber tables and the 2e *Dungeon Builder's Guidebook* approach,
+  property, repetition, emptiness, and permutation procedures are source material, not a direct
+  room-by-room runtime. Their authored frequencies should teach Genesis what a coherent whole needs.
+  Dice still express each need, but independent room rolls no longer create six kitchens and no gate.
+- The current seam is explicit: `Dungeon Type.md` already carries an Original Purpose column, while
+  `rollDungeonWalk()` stores only its archetype and atmosphere; the heterogeneous `Dungeon Area Type`
+  d200 then rolls independently per room. This is evidence for the redesign, not implementation
+  authorization.
+
+### 8.2 Builder, operator, doctrine, and scale
+
+The useful construction identity separates:
+
+```text
+commissioner
++ original operator
++ institutional doctrine
++ design tradition
++ intended occupants and scale domains
++ substrate
++ construction era
++ workforce, only when meaningful
+```
+
+- Original operator determines functional needs. Design tradition determines architectural language.
+  Intended occupants determine scale domains. The workforce is routinely recorded only when it
+  creates consequential lore or physical evidence: forced labor, sabotage, mixed craft, unfinished
+  work, or a comparable fact.
+- Institutional doctrine is a distinct identity field, derived from an established faction when one
+  exists and rolled only when missing. Militaristic-sacral, ascetic, mercantile, punitive, scholarly,
+  imperial, communal, extractive, funerary, and ecstatic institutions can express the same primary
+  purpose differently.
+- Mixed-scale construction is established from the beginning. A dragon vault maintained by kobolds
+  may contain a dragon domain, kobold service network, and explicit transition spaces; the renderer
+  does not invent that accommodation afterward.
+- Purpose may change multiple times before current occupants arrive. Designed function, intervening
+  use, current use, and occupant belief remain distinct truths.
+
+### 8.3 Resource ecology and occupancy
+
+"Kitchen" is an expression, not the upstream need. A place's **resource ecology** covers food, water,
+rest, air/heat, waste, population renewal, material inputs, and unusual creature requirements. It may
+produce farms, breeding pens, cisterns, storage, preparation, distribution, feeding, disposal, or an
+external supply route. A full ecology can contain several linked functions rather than one kitchen.
+
+Every site receives an occupancy model that filters how much support it needs:
+
+- externally supplied;
+- transient;
+- predatory;
+- self-sustaining;
+- dormant;
+- failing.
+
+This is a strategic system as well as dressing. Players may discover or disrupt water, food,
+ventilation, breeding, storage, waste, or supply dependencies.
+
+### 8.4 Age, instability, and historical transformations
+
+- Establish original purpose/operator/doctrine first. Then derive or roll construction era/relative
+  age and historical instability. Together they determine **zero to three consequential
+  transformations**; age alone never guarantees change.
+- Age bands are recent, established, old, ancient, primordial, and (only when licensed) unmoored.
+  Instability is stable, pressured, contested, or shattered. Established world history outranks rolls.
+- Roll transformations sequentially before applying the present occupation. Each transformation
+  carries **agent + action + affected functions + surviving evidence + unresolved consequence**.
+- Every transformation should give the DM at least one potential player handle: claimant, faction,
+  witness, record, route, resource, obligation, secret, or destination. Handles remain potential so
+  history does not flood the active campaign with mandatory quests.
+- History tables participate in the Spice Curve. One band governs a transformation's causal event;
+  its subresults express that event rather than independently stacking unrelated spicy details.
+  Grounded/Textured preserve ordinary causality, Strange introduces bounded wrongness, Volatile adds
+  an active escalating force, and Mythic may establish a durable new law.
+
+### 8.5 Current occupation and misunderstood architecture
+
+- Current occupants relate to inherited architecture by **continue, restore, adapt, squat, exploit,
+  deface, overgrow, or contest**. Large or factional sites may eventually apply different relationships
+  by zone; that follow-up remains inside Wave 1.
+- A room may have no current function while retaining a definite original function.
+- Occupants may misunderstand what they use. `originalFunction`, `currentFunction`, and an optional
+  `believedFunction` are distinct. This mismatch is a high-value D&D comedy, horror, discovery, and
+  interaction source rather than an error to correct.
+
+### 8.6 Bounded-place extension discovered
+
+The semantic technology is broader than a dungeon renderer: it is a prospective **bounded-place
+compiler** for dungeons, manors, castles, temples, warehouses, ships, sewers, and similar navigable
+sites. Do not collapse the walk families:
+
+- wilderness walks remain journeys through terrain and may discover or enter bounded sites;
+- urban walks remain social movement through districts and institutions, but may enter a compiled
+  manor/castle/site when detailed navigation matters;
+- the bounded site reuses purpose, owner, doctrine, occupancy, history, function, and spatial rules.
+
+For an urban manor, established ownership and lore remain canonical; party heat, affiliation, access
+status, and the owner's attitude determine whether the inhabitants welcome, watch, restrict, flee, or
+violently resist the party. A history/secret result may license an older complex beneath the manor,
+but the system does not put a dungeon under every building. Castle/manor construction tables are a
+future source audit. This extension is direction, not a build authorization.
+
+### 8.7 Pick up here
+
+Resume **Wave 1, question 11**:
+
+> How should a purpose profile declare whole-dungeon functional obligations after rejecting absolute
+> purpose-only bans? The working vocabulary is core / supporting / compatible / exceptional /
+> conflicting. Decide what must be guaranteed, what remains weighted, how subordinate purpose and
+> institutional doctrine modify the profile, and what is deliberately deferred to exact table weights.
+
+Then continue questions 12-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+in section 6 is satisfied and Adam explicitly confirms it.
+
+## 9. Implementation hold
 
 This discovery capture authorizes research, diagnostics, test-card generation, and design work. It
 does not authorize the procedural dungeon compiler, room-table rewrite, combat rewrite, renderer

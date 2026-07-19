@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-18
+updated: 2026-07-19
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -17,6 +17,21 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 **Auto-archive rule (2026-07-09):** at most 4 dated `## Do next (...)` blocks live here; older ones
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
+
+## Do next (2026-07-19 - PROCEDURAL DUNGEON WAVE 1 checkpoint; resume at question 11)
+
+Questions 1-10 and their follow-ups are recorded in `PROCEDURAL-DUNGEON-DIRECTION.md` section 8.
+Wave 1 is not closed and no implementation is authorized.
+
+1. ☐ **Resume at Wave 1 question 11:** settle whole-site obligation/affinity semantics using the
+   working core/supporting/compatible/exceptional/conflicting vocabulary, with no purpose-only room
+   blacklist. Exact weights may remain deferred to the table-design pass.
+2. ☐ Continue questions 12-20, chase every material follow-up, test the rulings against concrete
+   dungeon/manor edge cases, and obtain Adam's explicit Wave 1 closure before Wave 2.
+3. ☐ Later source audit: purpose/chamber/history procedures in the 2014 DMG and 2e DBG, plus the
+   castle/manor construction book if present on the cold shelf. Source their knowledge; do not copy
+   independent-room failure modes into runtime.
+4. ☐ **Opus owns the next full CI gate.** This is a fast docs checkpoint: no CI or push by Codex.
 
 ## Do next (2026-07-18 — PROCEDURAL DUNGEON DISCOVERY captured; Wave 1 opens)
 
@@ -76,18 +91,6 @@ extrusion plan · re-spec + orchestrate). Dispositions + the flip ruling in DESI
    physical standee (Adam's B3 taste gate first) → B4 kill size-inference.
 5. ☐ Adam's red-pen ledger: flip taste verdict (B3 sheets + sprite editor) · editor feet pass on
    band-default/missing heights · NPC-card + facade packets (ledger row 2) · r*-v2 dirs ruling.
-
-## Do next (2026-07-15 — AUTONOMOUS ARC LANDED: quick-fix + ENV/EXTERIOR complete, PL-3 verified)
-
-Master `c0a60b77` (CHANGELOG 2026-07-15): ☑ QUICK-FIX wave (P0 roots) · ☑ ENV-1/1b/1c/2/3/3b
-(daytime · cast shadows · the moving sun/moon · biomes · the first town) · ☑ PL-3 deltas (6 ledger
-items FIXED in real play). Adam's rulings registered in DESIGN.md (cast-shadows; celestial arc).
-
-1. ☐ **Stage E** — exposure floor + emissive-masked bloom (ledger #12/13). Spec off ledger evidence.
-2. ☐ **Combat-in-room + staging beats** (ledger #10/11) → then D5 archetypes.
-3. ☐ **P3-2 Stage B** — AUTO-FIRES on sprite-QA registry landing (standing delegation; quiet so far).
-4. ☐ Adam's packet: facade/NPC art (ImageGen/kit) · daylit-shadow + arc keyframe tuning · PL-1b rig
-   items (bot fights · transition camera · shop capture · record-less-settlement town read).
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 
@@ -229,4 +232,3 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O2. ☑ **Fragments for the opening surface — DONE 2026-06-19.** Authored 6–10 word sensory fragments for all 9 world-genesis tables (218 rows) + both pressure tables, held in a parallel `FRAG` map in `genesis.html` (no row-array surgery). Threaded through `lookup`/`rollTbl`/`rollPressure` (each now returns the row `idx` + fragment). **The player sees the fragment at the roll** (genesis cards + the triad nearby), and pressures stay veiled (player sees the fragment, DM holds danger+doom); the world view *after founding* shows real names (the reveal arc), and `handToDM` carries the truth. Bundle/entry rolls already read as fragments, so weren't duplicated. Verified: FRAG arrays align to row counts, runtime threading 0 misses in 9000 rolls, script parses clean.
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
-

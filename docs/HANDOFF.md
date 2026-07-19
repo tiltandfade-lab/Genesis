@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-18
+updated: 2026-07-19
 ---
 
 # Genesis — Session Hand-off
@@ -17,7 +17,29 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-18, later) — PROCEDURAL DUNGEON DISCOVERY: room compiler direction + research corpus [Codex]
+## ⭐ Latest (2026-07-19) - PROCEDURAL DUNGEON WAVE 1 CHECKPOINT: questions 1-10 resolved [Codex]
+
+Wave 1 remains **IN PROGRESS**. The authoritative checkpoint is
+`docs/PROCEDURAL-DUNGEON-DIRECTION.md` section 8. It now records: original purpose as permanent lore
+truth; lore-first purpose provenance; whole-site functional profiles sourced from the DMG/2e DBG
+rather than isolated room rolls; no purpose-only room blacklist; operator/doctrine/design/scale
+separation; resource ecology plus occupancy models; 0-3 Spice-Curve-active historical
+transformations; current-occupant relationships; unused rooms; and sincerely misunderstood
+architecture. It also records the emerging bounded-place seam for manors, castles, temples, ships,
+and similar sites while keeping dungeon, urban, and wilderness walks distinct.
+
+**Do next (pick up here):** resume Wave 1 at **question 11**, quoted verbatim in Direction section
+8.7: settle how a purpose profile declares core/supporting/compatible/exceptional/conflicting
+whole-dungeon obligations after rejecting absolute purpose-only bans. Then continue questions 12-20
+and every follow-up. Do not open Wave 2 or implement the compiler/tables until Adam explicitly closes
+Wave 1.
+
+**Verification/ownership:** docs and operating-policy checkpoint only. `FULL CI PENDING - Opus owns
+the next full gate`, per Adam. No full CI or push was performed by Codex. The operating contract now
+distinguishes fast checkpoint commits from final/evening clean close; both reuse the current worktree,
+and new worktrees skip LFS smudging unless their task genuinely requires assets.
+
+## Latest (2026-07-18, later) — PROCEDURAL DUNGEON DISCOVERY: room compiler direction + research corpus [Codex]
 
 The current design authority is `docs/PROCEDURAL-DUNGEON-DIRECTION.md`. It captures Adam's accepted
 direction: function-led rooms, a tile/slot architectural compiler, real small spaces, portal-first

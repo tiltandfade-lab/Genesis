@@ -76,6 +76,26 @@ measured convergence toward the approved mockups. Do not lower the visual target
 - **Remote:** private GitHub repo (`origin`). Push the branch and `master`; back up often. A solo
   repo, so "review" = run `/code-review` on the branch diff before merging rather than a human PR.
 
+### Commit modes (adopted 2026-07-19)
+
+**Fast checkpoint** and **final close** are different operations. Do not turn every request to save
+progress into the evening ritual.
+
+- **Fast checkpoint** - triggers include "checkpoint commit," "capture and commit," "commit these
+  docs," "merge this locally," and any explicit "no CI/no push" instruction. Reuse the session's
+  existing worktree and branch; do not create a fresh worktree merely to checkpoint the same lane.
+  Validate in proportion to the change (`git diff --check` plus doc/archive checks for docs-only;
+  relevant harnesses and `check-manifest` for modules), stage explicit paths, commit, and merge locally
+  only when authorized. Do not run the full CI-equivalent sweep or push unless Adam asks. Record
+  `FULL CI PENDING` in HANDOFF when another agent or the evening close owns it.
+- **Final/evening clean close** - triggers include explicit "clean close," "final close," "evening
+  close," "ship/push this," or `/genesis-clean-close`. Invoke the `genesis-clean-close` skill, run the
+  complete slow gate once over all accumulated checkpoints, then merge/push and confirm GitHub CI.
+- **LFS/worktree law:** neither mode should create a new worktree when the session already has one.
+  If isolation genuinely requires a new worktree, create it with `GIT_LFS_SKIP_SMUDGE=1` and materialize
+  only assets the task actually needs. A final close does not require a fresh checkout or bulk LFS
+  smudge.
+
 ## Parallel sessions (worktree-per-session — adopted 2026-07-08)
 
 Adam routinely runs **two+ Claude sessions at once** (e.g. an NPC/engine session and a models

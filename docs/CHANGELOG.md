@@ -8,6 +8,28 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-19 - PROCEDURAL DUNGEON WAVE 1 CHECKPOINT + FAST-COMMIT MODE [Codex]
+
+**Added**
+- Wave 1 questions 1-10 and follow-ups to `PROCEDURAL-DUNGEON-DIRECTION.md`: lore-first purpose
+  authority, operator/doctrine/construction identity, resource ecology and occupancy, historical
+  lineage, misunderstood rooms, and the bounded-place extension for manors/castles/other sites.
+- A two-mode git close policy in `CLAUDE.md`, `AGENTS.md`, and both Genesis clean-close skill variants:
+  proportional fast checkpoints versus the single full final/evening close.
+
+**Changed**
+- Purpose now gates a coherent whole-site roster without absolutely blacklisting rooms. The working
+  affinity vocabulary is core/supporting/compatible/exceptional/conflicting; culture and history can
+  make a sacrificial chamber native to a military fort.
+- The clean-close skill no longer triggers for docs checkpoints, local-only merges, or explicit
+  no-CI/no-push requests. Existing worktrees must be reused; genuinely new worktrees use
+  `GIT_LFS_SKIP_SMUDGE=1` unless the task needs binary assets.
+
+**Deferred**
+- Wave 1 remains open at question 11; exact purpose profiles/weights, questions 12-20, and all
+  follow-ups remain discussion work. No dungeon implementation is authorized.
+- `FULL CI PENDING - Opus owns the next full gate`; Codex intentionally ran no CI and did not push.
+
 ## 2026-07-18 (later) — PROCEDURAL DUNGEON DISCOVERY: research corpus + direction captured [Codex]
 
 **Added**
@@ -921,23 +943,3 @@ creatures — hence the regen lane).
 **Verification:** check-manifest OK · realm-wiring 78/0 · dm-events 70/0 · social 97/0 ·
 theater-sprites 10/0 · sprite-registry 6/0 · sprite-pipeline all-pass. Known pre-existing reds
 (digest-diet 58/1, creature-determinism grep-gate) unchanged, not from this branch.
-## 2026-07-09 (later still) — HQ-8: npc-life writers stamp location (Adam's two rulings closed)
-
-Adam ruled both HQ-review ledger items in-session: **(a)** settlement **population estimates** are
-the intended urban-development signal (registered into PLACE-GEN scope; the lodging-tier fallback
-stands until then) — **(b)** stamp the npc-life writers: **BUILT as HQ-8** (spec appended to
-`ANIMAL-SOCIAL-HQ.md`; single Sonnet executor, worktree-isolated, orchestrator re-gated).
-
-**Fixed:** the six place-bound npc-life writers stamp `nodeId` — companion desertion /
-pet-wanders / sidekick-departure / sidekick-death (companion codex `status.at`, party-node
-fallback; the death case reads the record before its `condition:"dead"` update), turn life-event
-(node already in scope), successor-thread. The bird knowledge scope's faces-sense is now live
-against real ledgers. Deliberately unstamped: backstory seeds, faction-turns, animal-tell-refresh
-(no location = invisible to witnesses = correct). Prose twins byte-unchanged.
-
-**Gates at close:** red-first proven on the pre-fix tree; u6 grew to 49/49; u1-u5 + fingerprint +
-dm-events 70/0 + gen 68/0 green; check-manifest OK; fuzz-events 520 calls 0 findings; diff
-eyes-on; gauntlet report churn reverted.
-
----
-

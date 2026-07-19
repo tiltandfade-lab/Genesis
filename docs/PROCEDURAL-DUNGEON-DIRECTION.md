@@ -5385,3 +5385,176 @@ cohorts. Let public places draw broadly but contextually; let operational staff 
 **Open follow-up:** should this occupation + membership + assignment + presence split govern the NPC
 model, with farmers and wildland residents owned by explicit rural/household/mobile population scopes
 and with current ambient-count dice retained only as scene-density demand rather than fresh-NPC counts?
+
+#### 10.7.2 Final ruling - cast from one connected population; preserve the NPC core
+
+Adam confirms that the model feels right. Question 7 is resolved:
+
+- the current NPC atom stack, coherence tiers, wants/levers, hooks, attitudes, realm-skinned role spine,
+  Codex identity/links, and soft-to-hard contact lifecycle remain the individual-NPC foundation;
+- `role` is retained and clarified as occupation/social archetype rather than being replaced by casting;
+- population ownership/home, memberships, institutional assignment/relation, schedule/availability,
+  physical presence, attention grade, and scene/cast reason become separately represented facts;
+- casting first uses established required actors, then compatible available locals, then deterministic
+  latent cohort slots, and mints a new context-legal NPC only when none exists;
+- hard NPC identity/occupation never rerolls to fit a scene. Unusual legal assignments become texture or
+  causal handles; impossible assignments enter reconciliation;
+- every required operational role receives a real actor, cohort, process, automation, ritual, or
+  external provider, but not every role or population slot requires an eager named NPC;
+- public places combine constrained staff, context-weighted locals, licensed transients, purpose-specific
+  visitors, and event/root actors. They are broad social casts, not uniform global role draws;
+- a detainee, patient, guest, student, worshipper, customer, or visitor retains an underlying occupation
+  and identity. The current institutional relation does not replace the whole person;
+- existing scene-count dice remain useful as density/presence demand, modified by population, capacity,
+  time, route traffic, temperature, and current state. They no longer authorize independent fresh-NPC
+  populations for every entered scene;
+- settlement-core, attached-rural, independent-community, dispersed-wildland, mobile/ranging,
+  transient, and seasonal populations remain distinct but related scopes;
+- farms/holdings, rural households, communities, and mobile groups use aggregate cohorts with stable
+  home/range/route relationships and promote individuals on attention;
+- each person or latent slot has one population owner for counting purposes while relationships and
+  service catchments may connect them to many places;
+- wilderness social encounters cast from nearby households/communities, mobile groups, working ranges,
+  and regional transients before minting a new outsider. Wilderness never means unpeopled by default;
+- the expected build is a medium casting/population reconstruction around a reusable NPC core, with low
+  runtime cost and backward-compatible `fields.role` fallback for old records.
+
+#### 10.7.3 Future-question assignments seeded by question 7
+
+| Inherited ruling | Future owner |
+|---|---|
+| NPC occupation, membership, assignment, presence, and cast reason are separate | Remaining **Wave 2** owns occupant-group/role coverage; future **NPC/social/Codex** specs own final schema, migration, schedules, and cast resolver |
+| Casting draws existing/local/latent candidates before minting | Future **NPC casting and on-demand generation** work owns candidate scoring, availability, promotion, duplication guards, and instrumentation |
+| Ambient scene dice express density rather than independent population creation | Future **NPC presence** reconstruction owns compatibility with current shrine/shop/tavern/market dice; **Wave 10** owns crowd presentation budgets |
+| Rural households, farms, communities, wildland residents, and mobile groups are explicit population scopes | Future **place/settlement/region/wilderness** design owns household/holding/mobile profiles and range/route materialization |
+| One population owner prevents double-counting while service/relationship edges may be plural | **Wave 12** owns persistence, identity, migration, and duplicate-person/slot invariants |
+| The current NPC core is preserved; `roleHint` cannot masquerade as proven assignment | Future implementation specs must audit every roleHint/roleClass/proprietor/ambient caller and retain old-save fallbacks |
+
+### 10.8 Question 8 - how should multiple populations share and contest one site?
+
+In plain English: a prison may contain guards, prisoners, a prisoner gang, visitors, contractors, vermin,
+and something living in an abandoned wing. A college may contain faculty, several houses, servants,
+visitors, a secret society, and a magical system with its own interests. How does Genesis preserve those
+distinct groups, decide where each belongs, and let their relationships change without assigning every
+room an unrelated random occupant?
+
+Wave 1 already chose **occupation zones** and event-driven fronts. It also established that claims can be
+physical, social, legal, political, religious, resource-based, influential, or aspirational. Question 8
+must turn that ontology into an authorable site-ecology program.
+
+The rejected extremes are:
+
+- **one master occupant/faction per site:** coherent and cheap, but it erases the living contested
+  dungeons Adam valued in Skyrim and the refugee/druid relationship that made BG3's grove compelling;
+- **independent occupant roll per room:** varied, but produces faction confetti, duplicated leaders,
+  impossible supply, no fronts, and no meaningful reason why adjoining rooms differ.
+
+#### Recommended occupant-group and typed-claim model
+
+Each current population enters the site as a group/cohort profile:
+
+```text
+identity and population source
+reason for being here
+goal and current pressure
+operator/leader or decision process
+home/base and mobility
+required resources and providers
+relationships to other groups
+typed claims over zones, functions, routes, and objects
+current front/state and event triggers
+```
+
+Groups need not be factions in the political sense. Prisoners, patients, students, pilgrims, refugees,
+predator families, prey herds, parasites, maintenance crews, and a bound intelligence can all be
+occupant groups when shared behavior and claims matter. Incidental individuals remain individuals.
+
+##### Typed claims produce zones
+
+For each relevant site zone/function, a group may hold:
+
+- **physical control:** can occupy, patrol, defend, or exclude;
+- **legal/title claim:** recognized owner/operator or lawful user;
+- **social/customary access:** belongs there by convention even without force or title;
+- **resource claim:** depends on or controls food, water, heat, tools, records, routes, ritual power;
+- **religious/doctrinal claim:** declares sacred authority, taboo, stewardship, or custodianship;
+- **political/influence claim:** can make others act there without direct occupation;
+- **aspirational claim:** wants control but does not yet possess it;
+- **hidden claim:** secretly uses, watches, feeds from, or manipulates the zone.
+
+The resulting zone relationship can be core-held, shared, scheduled, tolerated, dependent, contested,
+besieged, excluded, abandoned, infiltrated, or hidden. A room inherits its zone defaults; deviations need
+a stored cause such as an outpost, truce, secret route, local relationship, resource pocket, or event.
+
+##### Sharing is not automatically conflict
+
+Two populations may cooperate, depend on one another, coexist uneasily, hold a hierarchy, avoid each
+other, negotiate schedules, compete without violence, or be openly hostile. A relationship record should
+include attitude/posture, dependency, grievance, leverage, boundary rules, and escalation/de-escalation
+triggers rather than one universal hostility score.
+
+Examples:
+
+- prison guards physically control gates and legally operate the prison; inmates customarily control
+  parts of cellblocks and socially control information; a gang influences the kitchen through debt; a
+  chaplain has scheduled access across zones; a hidden claimant uses the drains;
+- college administration legally owns the buildings, houses socially control their dorms, faculty
+  control teaching spaces, servants control practical access, and a secret society claims a forgotten
+  observatory without anyone acknowledging it;
+- druids control the sacred inner grove, refugees occupy permitted outer ground and depend on the gate,
+  both require food/water/defense, and paranoid leadership converts shared pressure into a front without
+  making every individual personally hostile;
+- a cavern colony controls nesting chambers, predators range across hunting corridors, symbionts share
+  feeding zones, and parasites hold hidden biological claims rather than political territory.
+
+##### Functions and flows create leverage
+
+The site program already knows who supplies food, water, heat, sanitation, access, records, medicine,
+defense, and waste removal. Occupant claims attach to those functions. This produces usable leverage:
+
+- prisoners depend on guard-controlled doors but may control labor or information;
+- refugees depend on druid water access while supplying external trade or defense;
+- a college house controls an experimental heat source used by another house;
+- predators avoid a brood zone because the symbiont there controls a painful toxin;
+- the group holding a hidden route can bypass the nominal gatekeeper.
+
+Resource asymmetry creates choices and clues without requiring a crisis. It becomes a front only when a
+licensed pressure or action destabilizes the relationship.
+
+##### Event-driven fronts change coarse state
+
+No per-NPC territorial simulation is needed. Groups and zones update when meaningful events occur:
+
+```text
+player opens/closes a route
+leader or anchor changes
+resource/service fails or recovers
+contract/truce is made or broken
+casualties or reinforcements cross a threshold
+secret becomes known
+occupation succeeds or retreats
+external faction or regional event intervenes
+```
+
+An event changes claim strength, posture, allowed routes, presence schedule, resource access, front
+clock, or zone state. The engine then recomputes only affected groups/zones and deterministically catches
+up latent areas. Observed room truth changes through recorded events, never rerolls.
+
+##### Anchor individuals personalize group truth
+
+Each important group may have a bounded anchor cast—leader, representative, dissident, gatekeeper,
+victim, negotiator, or story owner—generated through Question 7's casting model. Individuals can differ
+from their group's current posture. A sympathetic druid remains a druid; a frightened guard remains part
+of the guard cohort; their personal attitudes and choices can feed back into the front without every
+member becoming a full simulation record.
+
+##### Recommendation
+
+Represent every material occupant population as a cohort/group with purpose, home, needs, relationships,
+and typed claims. Compile coherent occupation zones from those claims; allow shared and scheduled use;
+create fronts only from actual pressure; update through events. Use anchor individuals to make group
+state personal without replacing cohorts with a fully simulated crowd.
+
+**Open decision:** should this occupant-group + typed-claim + event-driven-front model govern contested
+sites, with room occupancy inherited from coherent zones and with shared resource dependencies treated
+as leverage rather than automatic hostility?

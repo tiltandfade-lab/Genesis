@@ -1363,6 +1363,95 @@ This remains approachable to a beginning developer or modder, gives the compiler
 and guarantees that even plumbing tables receive an intentional writing pass without asking engine code
 to parse literary prose as geometry.
 
+#### 8.14.2 Ruling and follow-up - typed handles for narrative-card placement
+
+Adam accepts **one readable row with distinct contract and flavor fields** and asks whether the contract
+needs tags so the DM can place narrative cards easily. The answer is **yes, but not unrestricted
+free-form tag soup**.
+
+The existing Walk Card Dealing proposal already scores `semanticAffinity`, topology, capacity, pacing,
+secret synergy, and reward fit, while the room-compiler research calls for semantic sockets and required
+affordances. Those systems need machine-readable handles. Inferring them from the DM fragment would make
+placement unreliable, expensive, hard to validate, and hostile to mods.
+
+Three choices:
+
+1. **No tags; infer from prose.** Easiest table writing, but the DM/compiler must guess that "newer
+   mortar" provides a wall anchor, concealed-space possibility, and custody-history evidence.
+2. **Flat free-form tags.** Every author adds arbitrary words such as `wall`, `clue`, `secret`, `prison`,
+   and `good-for-quest`. This initially works but quickly develops synonyms, typos, realm-specific
+   dialects, dead tags, and untestable card matching.
+3. **Controlled typed semantic contracts.** Rows use a small namespaced vocabulary for facts they
+   guarantee. The compiler validates those terms, inherits context from parent records, and emits an
+   effective affordance profile. Narrative cards declare hard requirements, soft preferences,
+   exclusions, scope, and capacity cost against the same vocabulary.
+
+**Recommendation:** choice 3. A row might remain compact and human-readable:
+
+```text
+Result: Recent transfer marks
+Contract: anchor:wall; evidence:custody-history; reveal:visual; payload:none
+Band: Grounded
+DM tell: Fresh tally cuts stop at seven. An older set beneath them was plastered over.
+```
+
+The row does not repeat facts supplied by its parents. If it was rolled for Cell 17 inside an active
+city prison, the compiled effective profile may merge:
+
+```text
+site: institution:prison; state:active; access:restricted
+zone: function:cellblock; surveillance:guarded; assembly:repeated-cells
+room: function:cell; privacy:isolated; anchors:[wall,bedding,door]
+row:  evidence:custody-history; reveal:visual
+```
+
+The normalized vocabulary should distinguish at least:
+
+- **function/identity** - what the site, room, object, or NPC is for;
+- **anchors/sockets** - wall, desk, body, prisoner, ledger, container, altar, portal, water, machinery;
+- **affordances** - conceal-small, hold-document, private-conversation, witness, rest, bypass, sabotage;
+- **access/state** - public, restricted, locked, guarded, submerged, ruined, occupied, observed;
+- **reveal vectors** - visual, acoustic, tactile, social, tool, lore, magic, breach resonance;
+- **payload/resource kinds** - evidence, consumable, treasure, route, NPC, hazard, lore, mechanism;
+- **scope/capacity** - child, room, zone, site, relational; minor/major beat capacity where relevant.
+
+These names are illustrative, not a prematurely locked ontology. Each term eventually belongs to a
+validated registry with definitions, aliases/deprecations, eligible parents, and mod-extension rules.
+Authoring validation fails loudly on an unknown term; runtime never silently treats a typo as a valid
+affordance.
+
+Narrative cards use richer placement contracts than a Boolean tag match:
+
+```text
+requiresAll: facts that make placement legal
+requiresAny: alternate legal anchors or reveal vectors
+prefers:     thematically stronger homes
+excludes:    contradictions or unsafe contexts
+scope:       child / room / zone / site / relational
+consumes:    narrative, secret, reward, or spatial capacity
+```
+
+For example, a hidden medicine card might require `affordance:conceal-small`, prefer
+`function:cell` or `function:infirmary`, exclude `state:submerged`, and consume a minor resource/secret
+slot. The missing-daughter note might accept a personal cache, writing surface, or document anchor;
+prefer a location connected to the barkeep, bandits, or custody; and require a reveal vector the party
+can eventually exercise. A MUST PLAY card still cannot violate its hard requirements; if no eligible
+home appears inside its service horizon, the scheduler creates the previously ruled diegetic delivery
+or dedicated hook opportunity.
+
+The DM does not sort raw tags manually. The engine uses the effective affordances to produce a thin
+ranked hand of legal narrative cards for the current room; the DM chooses, narrates, delays with a
+recorded reason, or lets the scheduler resolve according to priority. Hidden tags never become player
+knowledge merely because they exist in the contract.
+
+The controlled vocabulary is a real maintenance surface, but its cost is far lower than hardcoded
+purpose/realm/card combinations. It also makes mods scalable: a mod can reuse core affordances and may
+register namespaced additions with validation instead of teaching every engine stage new prose.
+
+**Open confirmation:** adopt controlled typed semantic contracts as the narrative-card placement
+language, with inheritance and compiler-derived effective affordances, rather than prose inference or
+flat tags.
+
 Then continue questions 15-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

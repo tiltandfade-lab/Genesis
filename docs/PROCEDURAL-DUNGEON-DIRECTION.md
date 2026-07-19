@@ -384,6 +384,14 @@ owner explicitly. The later discussion begins from that inherited ruling instead
 re-decide it. A deferral must likewise name its owner and does not remain an artificial blocker for the
 current question.
 
+**Option-integrity practice (2026-07-19):** do not force every question into three choices. Earlier
+frames often put one minimal failure mode first, one maximal failure mode second, and the recommended
+balanced synthesis third. The alternatives were real, but repeating that template creates positional
+anchoring and an illusion of choice. Going forward, present only materially viable alternatives, use as
+many or as few as the problem actually has, identify a dominated option as a failure mode rather than a
+candidate, and state directly when one architecture is clearly recommended. Do not manufacture a vote
+when the real decision is a priority order, threshold, or deliberate deferral.
+
 ### 8.1 Identity and authority
 
 - **Original purpose is permanent engine truth.** It remains definite even when every living person
@@ -1972,7 +1980,82 @@ escalation engine and does not force every dispute toward violence.
 **Open decision:** choose static, continuous, or event-driven occupation change, and confirm that
 contested claims may be social/political/resource-based as well as spatial and military.
 
-Then continue questions 19-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+Adam selects **event-driven occupation fronts** and confirms that contests may be spatial, social,
+political, legal, religious, ideological, or resource-based. Question 18 is resolved. Occupation is a
+coherent zoned present-tense layer with inherited room defaults and causal exceptions; overlapping
+claims are typed; sparse fronts update them through recorded triggers and world transitions rather than
+continuous simulation or automatic escalation.
+
+#### 8.18.2 Future-question assignments seeded by question 18
+
+| Inherited ruling | Future owner |
+|---|---|
+| Occupants claim coherent graph zones; rooms inherit zone defaults and deviate only through a stored cause | **Wave 2** owns occupancy/population/supply profiles; **Wave 3** owns zone boundaries and access; future faction/NPC systems own group generation |
+| Claims distinguish physical control, population, authority, resources, influence, knowledge/access, and aspiration | Future **faction/social/place systems** own diplomacy and relationship mechanics; schemas and persistence belong to **Wave 12** |
+| `contest` includes political, legal, religious, ideological, social, and resource conflict rather than implying combat | **Wave 7** must not turn every contested zone into an encounter; **Wave 9** owns negotiation/consequence cards and active pressures |
+| Sparse event-driven fronts advance only on recorded time transitions, player actions, supply changes, casualties, contracts, faction events, or revisits | World-clock/ledger work, **Wave 8** mutable state, **Wave 9** scheduling, and **Wave 12** persistence/acceptance inherit this trigger law |
+| Transitions leave physical, social, and documentary evidence and may stabilize, cool, negotiate, or resolve without escalation | **Wave 5** owns visible traces/dressing; future writing and DM systems own recaps, witnesses, messages, and nonviolent outcomes |
+| Use the smallest group set that explains the state; another group requires a distinct goal, claim/network, and player consequence | Future occupancy/faction table design owns expressivity and anti-noise tests; no universal faction-count constant is locked |
+
+### 8.19 Pick up here - question 19: what yields when the operating model does not fit?
+
+Coupled generation should prevent most contradictions, but established canon, fixed building shells,
+mods, unusual profile combinations, and preserved composite recipes can still create a site whose core
+operating model, support coverage, random/Spice allocation, occupants, and physical envelope do not all
+fit naively. The decision is not one of three competing architectures; it is the **authority and
+reconciliation order**.
+
+Examples:
+
+- a frontier jail has only four small rooms but still needs custody, control, secure storage, external
+  meals, and some room for discovery/Spice;
+- a canonically fixed manor shell acquires a subordinate intelligence office without gaining another
+  floor;
+- a city prison's rolled capacity implies sanitation and food throughput the available graph cannot
+  express as separate rooms;
+- a giant-built ruin is occupied by humans who cannot use every original interface;
+- a modded purpose profile requests two mutually incompatible required assemblies;
+- an already visited site gains a new occupant or story obligation and cannot rewrite observed walls.
+
+**Recommended reconciliation ladder:**
+
+1. **Prevent the mismatch upstream.** Purpose, operational load, graph scope, envelope, accommodation,
+   dependencies, and protected random share are coupled before room selection.
+2. **Satisfy capabilities without demanding one noun per room.** Combine compatible functions, use
+   repeated assemblies/subspaces, shift/time-share a room, or realize support through fixtures and
+   procedures.
+3. **Use honest external dependencies.** Meals, water, records, waste, staffing, and supplies may come
+   from outside only when context and access make that operating model plausible.
+4. **Use opportunity capacity as well as floor area.** A tiny jail's protected random/Spice allocation
+   may be a child's note, concealed medicine, a compromised deputy, an old foundation, or a secret
+   passage attached to a core room; it need not force a fifth dedicated random room. Larger profiles can
+   support dedicated random rooms, zones, and subordinate complexes.
+5. **Adjust unobserved low-authority structure within declared tolerances.** Expand dimensions, add a
+   level, change repetition count, or select another compatible recipe when canon and premise permit;
+   preserve the original roll and record reconciliation.
+6. **Add an annex, child site, or breach-linked domain only with causal license.** Never conjure an
+   off-map facility merely to hide a failed roster.
+7. **Yield optional realization before guaranteed capability.** Compatible choices, exact supporting
+   variants, decorative density, and redundant repetition may change; core capability, canonical facts,
+   physical legality, and the protected chance for meaningful variation may not silently disappear.
+8. **Before first contact, regenerate the lowest-authority incompatible choice.** Do not reroll lore,
+   explicit premise, observed geometry, or a high-priority canonical obligation to save a late recipe.
+9. **After contact, change only through world events.** Expansion, collapse, occupation, repair, or
+   revelation writes persistent history; the generator never edits remembered walls behind the player.
+10. **Fail honestly when no legal model exists.** Emit the conflicting requirements, attempted
+    reconciliations, and owning sources for workbench/modder repair rather than overlap rooms, create
+    fake doors, shrink circulation below legality, or drop a roll silently.
+
+This ladder treats a guaranteed function as a semantic capability, not an entitlement to its own room,
+and treats protected random/Spice capacity as meaningful variation, not a mandatory percentage of bare
+floor area. The later compiler may optimize realization, but it may not decide which truths deserve to
+exist.
+
+**Open decision:** review the authority/reconciliation ladder, especially whether tiny fixed sites may
+fulfill their protected random allocation through details, secrets, people, and history inside core
+rooms rather than through dedicated random rooms.
+
+Then continue question 20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

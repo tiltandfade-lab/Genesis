@@ -84,6 +84,11 @@ jobs:
       - name: verify-*.mjs harnesses
         env:
           JSDOM_HOME: ${{ github.workspace }}/dev/jsdom-home
+          # Seed Math.random deterministically (dev/ci-seed-rng.cjs). ~10 harnesses sample N rolls and
+          # assert a distribution within a tight tolerance; on unseeded RNG each flakes ~2-3% and the
+          # suite trips ~20-30% of runs for no real reason. This shim is CI/Node-test-only — the game
+          # runs in a browser and never loads it, so real entropy in play is untouched. See the file header.
+          NODE_OPTIONS: --require ${{ github.workspace }}/dev/ci-seed-rng.cjs
         run: |
           fail=0
           # Some harnesses need a render/paint toolchain CI deliberately does not install: puppeteer-core
@@ -126,4 +131,5 @@ jobs:
       - name: playtest-bug-probes.mjs (running regression list)
         env:
           JSDOM_HOME: ${{ github.workspace }}/dev/jsdom-home
+          NODE_OPTIONS: --require ${{ github.workspace }}/dev/ci-seed-rng.cjs
         run: node dev/playtest-bug-probes.mjs

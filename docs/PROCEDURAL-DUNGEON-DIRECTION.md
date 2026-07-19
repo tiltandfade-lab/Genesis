@@ -366,11 +366,12 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 running record - questions 1-19 resolved; question 20 next
+## 8. Wave 1 running record - questions 1-20 resolved; closure audit pending
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 19 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
-Wave 2 merely because these first rulings are strong.
+question 20 and its follow-ups. The initial questionnaire is resolved, but Wave 1 remains open for its
+closure audit and Adam's explicit confirmation. Do not open Wave 2 merely because these rulings are
+strong.
 
 **Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
 the running record. Append each question's framing, recommendation, Adam's answer, and every generated
@@ -2398,6 +2399,118 @@ the universal narrative-depth cadence with two separate schedulers:
 
 **Open follow-up:** approve this separation, including effective access depth as the basis of the
 mechanical gradient and depth as only an optional narrative-card constraint?
+
+#### 8.20.3 Final ruling - staged canon with separate narrative and risk/reward schedulers
+
+Adam confirms the separation. Question 20 is resolved:
+
+- the semantic room/assembly plan and complete mathematical connection topology become seeded canon
+  before exploration;
+- stable latent records may materialize fine detail deterministically as the party approaches or pays
+  attention, without changing topology, capacity, clues, promises, or other invariants;
+- structural and causally critical cards receive exact homes when coherence requires them; movable
+  cards retain typed eligible homes and any timing/topology constraints rather than entering a free
+  unbounded DM hand;
+- the DM receives a small relevance-filtered current hand, with coverage and slack/service-horizon
+  pressure preventing both conservative hoarding and final-room dumping;
+- narrative placement follows semantic fit, causality, attention, contracts, occupation, and the
+  individual card's topology/timing behavior. Depth is optional narrative metadata, never a universal
+  linear plot template;
+- expected challenge commitment and reward rise along a noisy **effective access-depth** gradient that
+  can include graph distance, barriers, hazards, hostile control, resources, route commitment, secret
+  knowledge, and available entrances;
+- local peaks, valleys, quiet spaces, difficult shallow rooms, rewarding noncombat rooms, and calm deep
+  rooms remain legal; reward/challenge correlation applies across routes and regions rather than as a
+  compulsory room-by-room exchange;
+- Spice remains an independent causal dimension. Mechanical depth escalation does not become automatic
+  supernatural escalation.
+
+Rejected models include pure eager population of every fine detail, unconstrained door-by-door lazy
+generation, a full unresolved narrative deck handed to the DM, finale rooms used as overflow, raw room
+number as the risk measure, and one prescribed shallow-to-deep narrative arc for every dungeon.
+
+#### 8.20.4 Future-question assignments seeded by question 20
+
+| Inherited ruling | Future owner |
+|---|---|
+| Full stable graph topology exists before play; exact geometry may materialize later only within fixed semantic/connection/capacity invariants | **Waves 3 and 4** own structural realization, topology proofs, portals, secret edges, circulation, and graph diagnostics |
+| Structural/causally critical cards may receive exact homes; movable cards use typed candidates, coverage, slack, and service horizons; the DM sees a small current hand | **Wave 9** owns scheduler formulas, hand limits, deferral traces, replanning, and DM presentation |
+| Narrative cards declare individual topology/timing behaviors; no universal depth-ordered plot template | **Wave 9** owns the card schema and cadence tests; every story/content system inherits the freedom constraint |
+| Expected challenge and reward rise noisily with effective access depth, with route/region correlation and local peaks, valleys, and quiet rooms | **Wave 7** and the future difficulty-setting system own budget curves, challenge/reward currencies, exploit tests, and tuning |
+| Approach-time detail is deterministic materialization, not unconstrained rerolling; observed/promised facts harden and later change through events | **Wave 12** owns persistence, save compatibility, provenance, migration, and deterministic replay gates; NPC, loot, and dressing systems own their typed expansion boundaries |
+| Alternate entrances and shortcuts preserve the bargain through effective access cost rather than physical distance alone | **Waves 3, 4, and 7** own topology metrics, access-state changes, and risk/reward validation |
+
+### 8.21 Wave 1 closure audit - awaiting Adam's explicit confirmation
+
+The twenty-question questionnaire and its generated follow-ups now establish a coherent Wave 1
+ontology. The audit finds these central locked decisions:
+
+1. A site retains definite original purpose, builder/operator/doctrine, resource ecology, history,
+   original/current/believed functions, and provenance even when occupants or players do not know them.
+2. Purpose produces a complete operating model through guaranteed capabilities and weighted
+   realization, not a rigid one-room-per-noun checklist.
+3. Structural scope, operational load, spatial envelope, and accommodation domains form a coupled,
+   extensible core; topology, state, history, challenge, discovery, realm physics, and realization
+   resolution remain separately named first-class profiles.
+4. Every purposeful site protects random/Spice allocation and room-level discovery opportunity. Even
+   the smallest site targets likely added spatial variation and every discretionary space carries at
+   least one juicy player handle, with mixed intensity preserving Grounded contrast.
+5. Repeated spaces compile as hierarchical assemblies with stable child identities and meaningful
+   variation. Search exposes a stable set of contextual opportunities without encouraging exhaustive
+   container clicking.
+6. The current d200 becomes decomposed source material: atomic typed rollers, preserved composite
+   recipes, band-first Spice organization, a dedicated flavor-writing pass, and replacement-proof for
+   its golden beats.
+7. History, subordinate purposes, current-use overlays, secrets, and occupation zones remain causally
+   distinct. Occupants can hold overlapping physical, social, legal, political, religious, resource,
+   influence, and aspirational claims that change through event-driven fronts.
+8. Spice belongs to scoped causal events. Child NPCs, loot, and other eligible entities retain their
+   own rolls; manifestations inherit their root; neither a Grounded parent ceiling nor a Mythic parent
+   floor cascades through the tree.
+9. Knowledge uses graded reveal, source attribution, party sharing, and protected private facts.
+   Discoveries attach to generated truth or create persistent promissory cards that must lead somewhere
+   when pursued.
+10. Seeded canon fixes semantic obligations and mathematical topology; fine detail may remain
+    deterministic latent structure. Narrative scheduling stays nonlinear, while challenge and reward
+    rise noisily with effective access depth.
+
+The material tensions raised during the wave have explicit reconciliations:
+
+- institutional coherence versus surprise -> guaranteed operating model plus protected variation;
+- tiny physical envelopes versus likely added space -> combination, external dependency, inherited
+  pockets, annexes, hidden domains, Breaches, or explicit diagnostic failure rather than silent overlap;
+- grounded sites versus spicy contents -> causal scoped Spice with no downward ceiling;
+- whole-site coherence versus affordable lazy generation -> eager invariants/topology plus deterministic
+  approach-time materialization and contact locks;
+- meaningful rooms versus tedious inspection -> automatic read, focused inspection, and systematic
+  sweep with stable opportunity lists and bounded presentation;
+- timely narrative use versus formulaic linear plots -> small hands, typed eligibility, coverage/slack,
+  and individually declared card behavior;
+- deeper escalation versus alternate routes -> effective access cost and noisy route/region budgets.
+
+Concrete examples exercised during discussion include the frontier jail, major city prison,
+mage-colony Breach prison, giant ossuary with human-scale insertions, alchemist shop over a necromancy
+laboratory, manor with an older hidden complex, contested multi-occupant sites, the child's note that
+roots into a missing-person campaign, and the sheriff's demonic bar of soap. No example currently
+forces a contradiction in the ontology.
+
+Deliberate implementation/tuning deferrals have named owners rather than remaining Wave 1 blockers:
+
+- exact room/variation probabilities, profile bands, roster distributions, and flavor corpus ->
+  **Wave 2**;
+- geometry, shells, assemblies, degradation, and fixed-topology realization -> **Waves 3-5**;
+- scale/capacity and encounter/resource curves -> **Waves 6-7** and difficulty design;
+- mutable topology and environmental strategy -> **Waves 8-9**;
+- narrative-card schema, scheduling, hands, and diagnostics -> **Wave 9**;
+- representational graphics choice -> **Wave 10**;
+- workbench teaching and modding UX -> **Wave 11**;
+- persistence, migration, recovery package, golden-beat replacement proofs, and acceptance gates ->
+  **Wave 12**;
+- automatic inventory implementation -> its future system design, preceded by an adoptable-system audit.
+
+**Audit result:** no unresolved blocker or material follow-up is currently known at Wave 1's ontology
+level. This is not yet a declaration of completion. Adam must challenge or explicitly confirm this
+summary before Wave 1 closes, and any resulting follow-up remains inside Wave 1 until exhausted.
 
 After question 20, continue every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.

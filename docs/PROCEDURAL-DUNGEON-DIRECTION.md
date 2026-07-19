@@ -5767,3 +5767,112 @@ and double agents remain first-class.
 group-count generation, overlapping public/hidden memberships, and the rule that an independently
 motivated entity remains singular unless collective behavior or a wider organization is actually
 licensed?
+
+#### 10.8.2 Follow-up - keeping the theory affordable and playable
+
+Adam accepts that the design sounds powerful **in theory**. The qualification is important: the model
+fails if implementation turns it into an all-to-all social graph, continuous territorial simulation,
+or a full individual membership ledger for unseen populations.
+
+The main risk is schema/content/integration complexity, not browser runtime. A bounded implementation
+can be cheap because the system reasons over a handful of group/cohort/zone records rather than every
+person and room.
+
+##### Hard anti-bloat laws
+
+1. **Population counts live only on non-overlapping owner cohorts.** Affiliations and memberships are
+   links, never duplicate population records.
+2. **Relationships are sparse and causal.** Store a group-to-group edge only when there is a claim,
+   dependency, active posture, history, front, contract, or other play-relevant reason. Never construct
+   an all-pairs matrix.
+3. **Claims attach first to functions/zones/routes/resources.** Rooms inherit zone state. Do not store
+   repeated copies of the same claim on every room or member.
+4. **Cohorts hold aggregate membership.** Exact member lists exist only for already materialized people
+   or when a mechanical promise requires a stable slot. A 100-person cellblock does not receive 100
+   membership edges at creation.
+5. **Group defaults apply until individual salience.** Latent members do not each roll loyalty, attitude,
+   secrets, and relationships. Promotion rolls/materializes the person's deviation once and persists it.
+6. **Event-driven updates only.** No group takes a turn merely because time passes. Due clocks, resource
+   threshold crossings, player actions, external events, and explicit fronts update the affected
+   dependency frontier.
+7. **Active-slice projection.** The DM sees only groups, fronts, anchors, and claims relevant to the
+   current site/zone/action. Stored world truth does not equal prompt content.
+8. **Hierarchy instead of flat expansion.** A regional faction may own a local branch; a prison owns
+   blocks; a college owns houses; a hive owns castes/niches. Parent defaults are stored once.
+9. **Not every group gets a clock or story card.** Stable staff, ordinary cohorts, and background
+   ecological populations can remain state records. A clock/card appears only when a live pressure,
+   promise, or change process exists.
+10. **Saturation is diagnostic, not erasure.** When too many consequential groups compete for a tiny
+    site, the planner nests branches, externalizes visitors/providers, merges distinctions that do not
+    affect play, or records the crowding/occupation cause. It does not silently discard a licensed root.
+
+##### Expected scale
+
+The design should be judged by meaningful records rather than one universal numeric cap:
+
+- a hamlet jail commonly has one operational group plus a few singular actors and external links;
+- a contested small dungeon may have two or three occupant groups, an ecological cohort, and one hidden
+  claimant;
+- a city prison may have several owner cohorts/operational subgroups and a bounded handful of
+  cross-cutting organizations, while hundreds of people remain aggregate;
+- a large city can contain many groups globally, but only the current district/site slice and directly
+  affected regional dependencies become active.
+
+Group count is therefore closer to the number of consequential collective distinctions than to
+population size. If a generated hamlet jail routinely produces nine organizations, the distributions or
+partition logic are wrong.
+
+##### Mechanical cost
+
+| Cost surface | Expected cost if bounded |
+|---|---|
+| Runtime generation | Low: expand required/conditional channels, partition a few cohorts, build sparse claims/edges |
+| Turn updates | Low: process due events and changed dependency frontier only |
+| Save size | Low-to-moderate: group/cohort records and sparse links; individual expansion dominates only after contact |
+| DM context | Lower than freehand memory: active summaries replace repeated reinvention; global records remain out of prompt |
+| Engine implementation | Medium-to-high: new group/cohort/claim/front schemas, casting integration, plural membership, migration, diagnostics |
+| Content/writing | Medium-to-high: purpose/ecology group channels, claim/relationship/deviation tables, realm/culture skins |
+| Long-term expansion | Favorable: new realms and purposes add data/profile rows rather than parallel NPC/faction engines |
+
+The model should be built coarse-first when its implementation wave arrives:
+
+```text
+1. population-owner cohorts + group/actor distinction
+2. plural memberships + sparse relationships
+3. typed zone/function/resource claims
+4. event-driven fronts and changed-frontier updates
+5. individual deviation/double-agent realization
+```
+
+This is a staging recommendation, not build authorization. Every stage must preserve the final ontology
+so later layers are additive rather than a second rewrite.
+
+##### Acceptance fixtures
+
+The existing stress corpus should add explicit group tests:
+
+- **hamlet jail:** staff + two detainees + external food, proving detainees need not become a faction;
+- **city prison:** non-overlapping count cohorts plus overlapping gangs/ministry/corrupt ring, proving no
+  headcount multiplication;
+- **grove-like contested refuge:** two dependent populations sharing resources and defense with
+  individual dissidents on both sides;
+- **college:** houses/faculty/staff plus a cross-cutting secret society and one double agent;
+- **living habitat:** caste/population owners plus symbiont, predator, and parasite claims without human
+  faction assumptions;
+- **singular claimant:** dragon or infernal intelligence remains one actor until followers are licensed.
+
+Required gates include headcount conservation, single population ownership, deterministic replay,
+bounded active projection, no all-pairs edge growth, latent-versus-eager equivalence, no hard-identity
+overwrite, plural-membership correctness, and event locality.
+
+**Cost judgment:** low runtime and save cost when sparse; medium-to-high implementation and authoring
+work; substantially less long-term fragility than asking the AI DM to remember every local faction,
+claim, double allegiance, and population count in prose.
+
+**Recommendation:** keep the accepted model, but make these anti-bloat laws part of its definition—not
+optional optimization. The game's simulation should be deep in consequence and shallow in update
+frequency.
+
+**Open follow-up:** do these coarse, sparse, event-driven boundaries make the group model practical
+enough to lock, particularly the bans on all-pairs relationships, eager member lists, per-group turns,
+and automatic clocks/cards for every cohort?

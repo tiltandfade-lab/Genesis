@@ -17,7 +17,28 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-18) — COME-HOME migration: repo on the internal SSD + Git LFS live [Claude Opus 4.8, scheduled task]
+## ⭐ Latest (2026-07-18, later) — PROCEDURAL DUNGEON DISCOVERY: room compiler direction + research corpus [Codex]
+
+The current design authority is `docs/PROCEDURAL-DUNGEON-DIRECTION.md`. It captures Adam's accepted
+direction: function-led rooms, a tile/slot architectural compiler, real small spaces, portal-first
+legality, strategic elevation, assembly-based dressing, bounded degradation, scale domains, persistent
+plans, and an engine that owns structural/decorative coordination while the DM keeps narrative and
+strategic choices. It also preserves the crucial distinction between a rolled noun and its legal
+placement: rolls state intent; the compiler coordinates space without silently deleting the roll.
+
+The evidence package is now in-repo: the long-form synthesis, an audited Genesis engine crosswalk, a
+22-page rendered report PDF, nine primary-source PDFs with a checksum/source ledger, and the first
+three-option interim-visualizer comparison. The visual ruling is explicit: any interim top-down or
+schematic presentation must retain the lovely lighting, normal maps, useful existing sprites, and
+general environmental beauty. The A/B/C choice is not locked; the first range-strip layout was
+confusing, B was the coolest but close to the current expensive target, and C remains promising.
+
+**Do next:** run Wave 1 (Dungeon Function, History, and Strange Compatibility). Exhaust its follow-up
+questions and get Adam's explicit closure before opening Wave 2; repeat that gate for every wave. Do
+not implement the compiler, rebuild tables, or switch renderers yet. Push local `master` before bed;
+this landing was intentionally kept local at Adam's request.
+
+## Latest (2026-07-18) — COME-HOME migration: repo on the internal SSD + Git LFS live [Claude Opus 4.8, scheduled task]
 
 The repo lives at `~/Desktop/Work/projects/Genesis` again (internal SSD) — `git status` is ~0.16 s warm
 (was ~25 s on the external). `/Volumes/Genesis/Genesis` is the untouched cold backup. **Git LFS is now

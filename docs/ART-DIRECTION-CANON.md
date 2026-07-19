@@ -139,6 +139,14 @@ perfectly flat `#FF00FF` chroma-key background, with isolated cells and no baked
 shadow. Screenshot-local incidental glyphs remain part of their rendered mockup and are not
 treated as extractable icon assets.
 
+## Interim visual-engine preservation ruling (Adam, 2026-07-18 — additive)
+
+> "what i don't want to lose is the lovely lighting we have developed, we may have to make smaller sprites per monster but we can still use the ones we have for a lot, i still want to get the normal maps and general environment beauty in the system if that's possible. i mean if all we get is a top down estimation of the room that's cool but you would have to talk me through it"
+
+Any interim visualizer proposal therefore has to be judged as a continuation of the established
+lighting, normal-map, sprite, and environmental-beauty work—not as permission to replace it with an
+unlit diagram. The exact interim layout remains a design-wave decision.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

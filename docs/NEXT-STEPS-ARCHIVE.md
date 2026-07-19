@@ -18,6 +18,22 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-14 evening — THE LEDGER ORDERS THE WAVES; Stage D + AgX + doors + PLAY-LENS landed)
+
+Evening block landed (master `67566b6a`): ☑ Stage D D0–D4 (stateful nouns end-to-end) · ☑ AgX
+FLIPPED LIVE · ☑ door package (D4b hinge/apron, D4c broken variants, D4d slim frames) · ☑ PLAY-LENS
+PL-1 rig + PL-2 ledger (`dev/play-lens/ledger.md`). **Adam delegated autonomous execution in the
+ledger order; P3-2 auto-fires when sprite-QA lands on master; ENV = wire + draft looks, cards at
+his return.**
+
+1. ◐ **QUICK-FIX WAVE** (ledger P0: rat casting bug · vanishing PC token · unanchored door leaves ·
+   wireframe fallback · degenerate arrival · tray head-clip).
+2. ☐ **ENV/EXTERIOR WAVE** — travel terrain + light-profile wiring (daytime) + the town tray.
+3. ☐ **Stage E** — exposure floor + emissive-masked bloom.
+4. ☐ Combat-in-room (S0-1 slice) + staging beats. Then D5 archetypes (gated on the door card pass).
+5. ☐ P3-2 Stage B — AUTO-FIRES on sprite-QA registry landing. PL-1b rig improvements ride the next
+   lens run; the lens re-runs after EVERY landed wave (standing law).
+
 ## Do next (2026-07-14 — PHASE-3 WAVE-1 CLOSED; Stage B teed up, gated on sprite-QA)
 
 Phase-3 Wave-1 landed (master `a23d2eb2`, CHANGELOG 2026-07-14): ☑ P3-1a Poisson (flag-off) ·

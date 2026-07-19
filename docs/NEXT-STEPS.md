@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-06-19
+updated: 2026-07-18
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -17,6 +17,21 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 **Auto-archive rule (2026-07-09):** at most 4 dated `## Do next (...)` blocks live here; older ones
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
+
+## Do next (2026-07-18 — PROCEDURAL DUNGEON DISCOVERY captured; Wave 1 opens)
+
+The research corpus, engine crosswalk, accepted direction, and unresolved forks now live in
+`PROCEDURAL-DUNGEON-DIRECTION.md`. This is a design lane only: it does not authorize a room-compiler,
+table, walk, or renderer cutover.
+
+1. ☐ **Run Wave 1: Dungeon Function, History, and Strange Compatibility.** Follow every answer into
+   its natural follow-up questions; capture decisions and unresolved tensions as they emerge.
+2. ☐ **Close Wave 1 explicitly.** Do not open Wave 2 until no material Wave 1 follow-up remains and
+   Adam confirms the wave is closed. Apply the same closure gate to every later wave.
+3. ☐ **Keep the current game build intact while discovery proceeds.** The existing rollers and
+   visual engine remain the executable baseline; structural replacement waits for a locked spec.
+4. ☐ **Push local `master` before bed.** This discovery landing is intentionally local until Adam
+   calls for the backup push.
 
 ## Do next (2026-07-16 — KENNEY-SOCKET WAVE LANDED; the meeting's order continues)
 
@@ -73,22 +88,6 @@ items FIXED in real play). Adam's rulings registered in DESIGN.md (cast-shadows;
 3. ☐ **P3-2 Stage B** — AUTO-FIRES on sprite-QA registry landing (standing delegation; quiet so far).
 4. ☐ Adam's packet: facade/NPC art (ImageGen/kit) · daylit-shadow + arc keyframe tuning · PL-1b rig
    items (bot fights · transition camera · shop capture · record-less-settlement town read).
-
-## Do next (2026-07-14 evening — THE LEDGER ORDERS THE WAVES; Stage D + AgX + doors + PLAY-LENS landed)
-
-Evening block landed (master `67566b6a`): ☑ Stage D D0–D4 (stateful nouns end-to-end) · ☑ AgX
-FLIPPED LIVE · ☑ door package (D4b hinge/apron, D4c broken variants, D4d slim frames) · ☑ PLAY-LENS
-PL-1 rig + PL-2 ledger (`dev/play-lens/ledger.md`). **Adam delegated autonomous execution in the
-ledger order; P3-2 auto-fires when sprite-QA lands on master; ENV = wire + draft looks, cards at
-his return.**
-
-1. ◐ **QUICK-FIX WAVE** (ledger P0: rat casting bug · vanishing PC token · unanchored door leaves ·
-   wireframe fallback · degenerate arrival · tray head-clip).
-2. ☐ **ENV/EXTERIOR WAVE** — travel terrain + light-profile wiring (daytime) + the town tray.
-3. ☐ **Stage E** — exposure floor + emissive-masked bloom.
-4. ☐ Combat-in-room (S0-1 slice) + staging beats. Then D5 archetypes (gated on the door card pass).
-5. ☐ P3-2 Stage B — AUTO-FIRES on sprite-QA registry landing. PL-1b rig improvements ride the next
-   lens run; the lens re-runs after EVERY landed wave (standing law).
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 
@@ -230,5 +229,4 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O2. ☑ **Fragments for the opening surface — DONE 2026-06-19.** Authored 6–10 word sensory fragments for all 9 world-genesis tables (218 rows) + both pressure tables, held in a parallel `FRAG` map in `genesis.html` (no row-array surgery). Threaded through `lookup`/`rollTbl`/`rollPressure` (each now returns the row `idx` + fragment). **The player sees the fragment at the roll** (genesis cards + the triad nearby), and pressures stay veiled (player sees the fragment, DM holds danger+doom); the world view *after founding* shows real names (the reveal arc), and `handToDM` carries the truth. Bundle/entry rolls already read as fragments, so weren't duplicated. Verified: FRAG arrays align to row counts, runtime threading 0 misses in 9000 rolls, script parses clean.
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
-
 

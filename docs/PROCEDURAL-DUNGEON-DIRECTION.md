@@ -852,6 +852,58 @@ challenge, history, discovery, realm physics, and realization resolution orthogo
 core count until concrete dungeon and cross-realm counterexamples stop exposing missing independent
 facts.
 
+#### 8.12.2 Clarification - what an orthogonal profile means
+
+"Orthogonal" does **not** mean optional flavor, unimportant, generated last, or unable to affect the
+four core profiles. It means **a separate named control knob rather than another meaning hidden inside
+the word size**. The profiles may constrain and modify one another through declared rules while
+remaining independently stored, authored, tested, and changed.
+
+The proposed division is:
+
+- core site-envelope profiles answer **how much site exists, what it was built to do, how much space
+  it occupies, and what can physically use it**;
+- orthogonal profiles answer **how that site is connected, what happened to it, what it is like now,
+  how dangerous and narratively dense it is, which physical laws apply, and how much detail the engine
+  has currently materialized**.
+
+Concrete comparisons:
+
+- Two twenty-room human forts may match on all four core profiles. One can be a straight defensive
+  sequence while the other is a looped hub with flanking routes. That is a **topology** difference,
+  not a larger fort.
+- The same city prison can be newly operational or built over six older institutions. Its footprint,
+  capacity, and architecture can match while its **temporal depth** and secret network differ.
+- The same warehouse can hold harmless grain or a sleeping dragon. **Challenge** changes enormously;
+  size does not.
+- Two otherwise identical archives can contain mundane tax ledgers or the evidence web of a kingdom-
+  wide conspiracy. **Discovery density** differs without one archive becoming physically larger.
+- A human-scale corridor in Fantasy and an equally sized corridor in a low-gravity realm share size
+  facts. The realm's **physics profile** changes movement, furnishing constraints, hazards, and
+  rendering, but does not need to redefine "medium corridor."
+- A prison's one hundred cells remain canonical whether all cell records are fully populated at site
+  creation or most begin as stable deterministic stubs. **Realization resolution** describes engine
+  detail and cost, not the prison's true extent.
+
+Keeping these profiles separate does not prevent interactions. A zero-gravity physics rule may remove
+ordinary floor-clearance assumptions; severe historical collapse may reduce currently usable capacity;
+a highly looped topology may support more secret routes; a Mythic breach may connect spatial envelopes
+that ordinary geometry could not. The rule records which profile modified which other result and why.
+
+The alternative is to call all of these "size axes." Then "large" can ambiguously mean many rooms,
+high capacity, old history, dangerous encounters, dense secrets, complex loops, expensive simulation,
+or strange physics. Tables and tests begin multiplying unrelated facts, and changing difficulty or
+history risks accidentally changing architecture.
+
+The actual open decision is therefore simpler than the terminology suggested:
+
+> Should **size/site envelope** remain responsible for amount, function, extent, and physical fit,
+> while topology, history, current state, danger, discovery, realm physics, and engine detail remain
+> equally first-class but separately named profiles?
+
+The recommendation remains **yes**. This gives every concern explicit authority while preventing one
+giant "size" variable from becoming the whole dungeon generator in disguise.
+
 Then continue questions 13-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

@@ -4017,3 +4017,162 @@ bounded signature layers, not exhaustive inventories.
 **Open follow-up:** approve this expanded test scope and factored variation profile—particularly the
 residential college countercase, living-habitat sentinel, and rule that semantic expression can be high
 while runtime/render detail remains bounded to active signature slots?
+
+#### 10.4.2 Final ruling - correlated repetition with plural stress cases
+
+Adam confirms the expanded scope. Question 4 is resolved:
+
+- repeated quantities arise from operational/ecological demand and compile as stable hierarchical
+  assemblies rather than filler or unrelated room rolls;
+- assemblies roll shared construction, function, support, access, state, and causal events before child
+  variation;
+- children vary sparsely through eligible position, capacity, occupancy, condition/history,
+  person/network, discovery, independent local Spice, and inherited-root manifestation channels;
+- editable dice retain authority while deterministic coverage, anti-repeat, and reserved-role techniques
+  prevent accidental monotony or implausible streaks;
+- variation authority is factored across construction standardization, operator curation, occupant
+  expression, tenure/turnover, privacy/control, material access, occupancy individuality,
+  history/condition, current pressure, and causal discovery/Spice;
+- mundane prison cells and ordinary hotel rooms may remain nearly uniform; college dormitories,
+  residential households, and boutique themes receive stronger occupant/operator expression;
+- semantic expression materializes through bounded signature layers rather than exhaustive inventories;
+- shared data is stored once, latent children remain sparse, and active-room/context/render budgets keep
+  runtime cost tied to current play;
+- Wave 2 uses a compact stress corpus: frontier jail, city prison, residential college, ordinary-versus-
+  boutique inn, and living habitat/cavern. Prison is no longer the universal design proxy.
+
+#### 10.4.3 Future-question assignments seeded by question 4
+
+| Inherited ruling | Future owner |
+|---|---|
+| Repeated units are correlated families with shared assembly truth and sparse typed child variation | Remaining **Wave 2** questions define quantity/distribution/Spice budgets; **Waves 3-5** realize assemblies, spaces, and dressing |
+| Variation authority is factored rather than one global percentage | **Wave 5** owns expression kits, furniture/dressing channels, signatures, and density; purpose/occupant systems supply the semantic inputs |
+| Frontier jail, city prison, residential college, ordinary/boutique inn, and living habitat form the minimum orthogonal semantic corpus | Every later wave must exercise relevant fixtures; **Wave 12** turns them into regression, distribution, performance, and migration gates |
+| High-expression rooms use bounded signature layers and local materialization rather than exhaustive inventories | **Waves 5, 10, and 12** own dressing, presentation, save growth, and active-slice performance |
+| Living habitats vary through biological/ecological state rather than personal expression | Remaining **Wave 2** ecology writing and future creature/habitat systems own the content; realm expansion must preserve the distinction |
+
+### 10.5 Question 5 - how should functional and spicy capacity be budgeted across scopes?
+
+In plain English: after the operating model and repeat demand are known, how much room/opportunity is
+reserved for required function, supporting ecology, discretionary spaces, local discoveries, secret
+networks, and Spice—and at which scope does each budget live?
+
+One universal "random-room percentage" is inadequate:
+
+- in a four-room jail, twenty percent rounds ambiguously and can erase the likely added-space ruling;
+- in a fifty-five-room prison, twenty percent may create eleven unrelated random rooms but still fail to
+  coordinate one strong site secret;
+- a natural cavern's variation lives partly in flows, pockets, ecology, strata, and routes rather than a
+  count of purpose-free rooms;
+- every room has a local discovery opportunity, but that does not mean every room consumes a major
+  narrative or high-Spice budget;
+- the Spice band distribution and the number/scope of eligible opportunities are independent controls.
+
+Two simpler sole-authority models also fail:
+
+- **fixed counts by headline size** are readable but make size a magic master variable and ignore
+  purpose load, exploration scope, temporal depth, ecology, and narrative density;
+- **fill obligations first, then use leftovers** makes variation disappear in demanding institutions
+  and contradicts the locked rule that protected random/Spice capacity is bread and butter, not filler.
+
+The recommended architecture uses **scope-specific protected budgets**.
+
+##### 1. Operating-model demand establishes a minimum, not the whole site
+
+Core/support obligations, repeated capacity, circulation, external-service manifestations, and legal
+degradation establish the minimum semantic demand. The generator may combine or externalize legally,
+but it cannot compress this demand dishonestly merely to make room for Spice.
+
+Protected variation is then part of the site's required exploration scope—not whatever remains after
+function. If the chosen envelope cannot legally hold both, the reconciliation ladder may enlarge the
+ordinary scope, add a causal annex/pocket/child site, use embedded variation where valid, or reject the
+profile as infeasible. It may not silently delete either side.
+
+##### 2. Separate budgets by causal scope
+
+```text
+site scope
+  root causal events, subordinate purposes, major secret networks, defining anomalies
+
+zone/assembly scope
+  occupation conflicts, shared transformations, repeated-family exceptions, resource failures
+
+room scope
+  discretionary rooms/functions, current-use twists, tactical/social/resource handles
+
+child/inspection scope
+  local notes, marks, caches, tells, objects, people, routines, practical discoveries
+```
+
+These budgets coordinate rather than stack blindly. A site-level escape history may reserve several
+cell-level manifestations; those cells inherit one event and do not each spend a new major-secret roll.
+
+##### 3. Preserve four distinct allocation channels
+
+- **Operational channel:** core/support capabilities, repetitions, and distributed systems needed for a
+  viable designed/current model.
+- **Discretionary spatial channel:** added rooms, annexes, pockets, alternate functions, inherited
+  spaces, subordinate domains, and other exploration surfaces not guaranteed by operation.
+- **Embedded/local channel:** discoveries, people, objects, state, history, tactical handles, and
+  expression inside otherwise ordinary rooms/children.
+- **Coordinated site/zone channel:** multi-room secrets, histories, factions, resource crises, routes,
+  Breaches, and major causal Spice whose manifestations span several spaces.
+
+The smallest site retains embedded opportunity and the locked **clear-majority target** for at least one
+added spatial variation. Larger exploration scopes increase both the expected number and possible size
+of discretionary spaces while keeping a meaningful proportional share rather than merely adding one
+token random room to a huge institution.
+
+##### 4. Opportunity frequency and Spice intensity remain orthogonal
+
+The site/profile determines how many opportunities exist and their scopes. Each eligible root/local
+event then uses the honest table class and adopted band-first Spice distribution. A small site does not
+dampen the Spice curve; a large site does not receive more Mythic roots simply because it has more cells.
+
+Controls against saturation include:
+
+- table-class ceilings;
+- root-event/site/zone opportunity budgets;
+- causal inheritance for manifestations;
+- bounded Commitment-class opportunities;
+- eligibility and context;
+- coordinated chains rather than independent rerolls;
+- mixed intensity, including concrete Grounded results for contrast.
+
+##### 5. Use allocation curves and authored dice, not one hidden optimizer
+
+Purpose-family/profile tables can expose human-readable quantities such as:
+
+- minimum and rolled discretionary spatial opportunities;
+- embedded opportunity cadence/coverage;
+- zone/root-event eligibility and count curves;
+- subordinate-complex chances and caps;
+- scale/load/history/context modifiers;
+- conversion/fallback rules when an ordinary dedicated space cannot fit.
+
+The compiler normalizes these into budgets, reserves them before assignment, and provides a trace. Exact
+numbers should be tuned through the orthogonal fixture corpus and seed/distribution reports rather than
+locked from intuition now.
+
+##### Example comparison
+
+- **Frontier jail:** viable custody/oversight/storage/external services; embedded discovery in every
+  realized room; clear-majority target for one added spatial variation; occasional larger hidden domain;
+  few site-level root opportunities but no downward Spice ceiling.
+- **City prison:** full operational suites and repeated blocks; multiple discretionary spaces/annexes
+  proportional to exploration scope; zone-level occupation/resource/history events; bounded coordinated
+  secret networks; many local discoveries without fifty-five unrelated major secrets.
+- **Residential college:** operating/teaching/residential services plus protected clubs, forgotten rooms,
+  workshops, traditions, student spaces, inherited foundations, and high expression; site-level academic
+  or magical pressures coordinate manifestations across dorms/classrooms.
+- **Living habitat:** required ecological flows/niches plus protected unusual pockets, symbioses,
+  mutations, prey remains, environmental transitions, and hidden routes; variation need not be a room.
+
+**Recommendation:** replace a single random-room percentage with protected, scope-specific operational,
+discretionary-spatial, embedded-local, and coordinated site/zone budgets. Reserve them before
+realization, keep opportunity count separate from Spice intensity, and tune visible dice curves through
+fixture/seed reports.
+
+**Open decision:** should this multi-scope protected-budget model govern how much function, spatial
+variation, local discovery, and coordinated Spice a site receives, with exact numeric curves deliberately
+deferred to fixture-based writing and distribution tests?

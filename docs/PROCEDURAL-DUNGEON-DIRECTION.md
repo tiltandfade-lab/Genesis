@@ -3701,3 +3701,161 @@ bounded even while the persistent world grows.
 **Open follow-up:** is this the correct scale boundary—no monolithic city simulation or geometry, with
 cost tied to the active district/site/room and changed dependency frontier while the rest of the city
 remains compact deterministic canon?
+
+#### 10.3.3 Final ruling - typed realizations and bounded hierarchical expansion
+
+Adam confirms the scale boundary. Question 3 is resolved:
+
+- obligations emit typed realization candidates—dedicated room, repeated assembly, legal shared use,
+  attached fixture/subroom, distributed system, topology feature, procedure, external service, or
+  causally licensed subordinate domain;
+- hard capacity, concurrency, access, security, privacy, contamination, support, doctrine, and physical
+  rules filter candidates before editable dice weights and soft scores choose among the legal results;
+- externalization requires a real provider/service abstraction, route, reliability/cadence, access,
+  buffer where appropriate, and failure consequence;
+- distributed systems emit network/zone/edge demands rather than being mislabeled as rooms;
+- the allocator commits constrained needs first, represents repetition compactly, performs bounded
+  constructive combination/backtracking, preserves protected variation, validates the operating model,
+  and emits a semantic graph plus plain-language decision trace before coordinates;
+- cities remain hierarchical aggregate canon with deterministic latent districts/sites/populations;
+  runtime work is bounded to the active local slice, due events, and changed dependency frontier;
+- materialization, simulation, DM-context, and renderer budgets control work/presentation without
+  deleting canon, obligations, or due consequences.
+
+#### 10.3.4 Future-question assignments seeded by question 3
+
+| Inherited ruling | Future owner |
+|---|---|
+| Obligation realization contracts define legal forms, hard filters, soft weights, dedicated triggers, externalization, and degradation | Remaining **Wave 2** questions define roster/repetition content; **Waves 3-5** consume the contracts in topology, rooms, assemblies, and dressing |
+| Semantic space/service graph is emitted before coordinates, with constrained obligations committed first and protected variation preserved | **Waves 3 and 4** own graph/topology realization and diagnostics without reopening semantic allocation authority |
+| External services and distributed systems remain real dependency structures | Remaining **Wave 2** ecology work and future **region/settlement/economy** systems own providers/flows; **Waves 3-5** own their spatial manifestations |
+| Settlements use aggregate city -> district -> site -> room hierarchy and a bounded active working set | Future **place/codex/World Turn** architecture owns materialization scheduling; **Wave 12** owns persistence, cold-state compaction, save growth, and stress gates |
+| Materialization, simulation, context, and render budgets never erase truth or due consequences | **Waves 9-12** own hand/context projection, visual scope, workbench metrics, and acceptance tests |
+
+### 10.4 Question 4 - how should repeated functions gain variation without losing identity?
+
+In plain English: a city prison may contain twelve cells, several guard posts, repeated bunk rooms, and
+rows of storage bays. How does Genesis make them feel like parts of one institution without producing
+twelve identical copies—or rolling each independently until every cell contains an unrelated demon,
+treasure cache, murder mystery, and architectural anomaly?
+
+Wave 1 already locked several constraints:
+
+- repeated spaces are hierarchical assemblies with stable child identities;
+- most cells may be visibly ordinary while some contain treasure, people, refusals, clues, or other
+  opportunities;
+- every realized room/child space retains a meaningful discovery opportunity;
+- scoped causal Spice permits independent child rolls but manifestations of one root event inherit
+  rather than rerolling;
+- major secrets and narrative revelations are budgeted/coordinated at site or zone scale rather than
+  multiplying once per child.
+
+The remaining Wave 2 problem is the **quantity and variation program**.
+
+Two sole-authority models fail:
+
+- **Exact cloning** is cheap and architecturally coherent, but turns exploration into checking twelve
+  interchangeable boxes. Local people, history, damage, use, and discovery disappear.
+- **Full independent rerolling** maximizes novelty but destroys shared construction and probability. A
+  cellblock stops feeling like one designed unit and high-band outcomes multiply with child count.
+
+The recommended model is a **correlated repeat family with controlled variation**.
+
+##### 1. Quantity is caused, not filler
+
+Repeat count comes from operational load, throughput, staffing, accommodation, duty cycle, redundancy,
+and history—not merely how many graph nodes remain. A prison's inmate capacity drives cell/bed count;
+guard coverage drives posts; a mine's extraction/transport load drives work faces, cart bays, and
+storage; a crypt's lineage/doctrine drives niches and tomb groups.
+
+The obligation contract may express exact count, dice range, capacity-per-unit, minimum/maximum, bay
+size, block size, phased growth, and degraded/lost capacity. Human-readable dice remain the source.
+
+##### 2. Generate the family before the children
+
+An assembly first rolls shared facts:
+
+- builder/design tradition, dimensions/scale, material, portal/fixture pattern, circulation, and
+  service/support system;
+- original purpose and capacity policy;
+- block/wing doctrine, security/access, occupancy, condition, and current-use overlay;
+- any site/zone causal event whose manifestations repeat through the family;
+- a variation budget and protected exceptions.
+
+Children inherit those facts. A twelve-cell block therefore shares bar design, wall rhythm, sightlines,
+sanitation method, ward system, and construction era unless an explicit alteration explains divergence.
+
+##### 3. Vary children across separate channels
+
+Each child may vary through eligible channels rather than rerolling its whole identity:
+
+- **position/role:** entrance-facing, observed, corner, deep, near service, blind spot, disciplinary,
+  accessible, prestigious, marginal;
+- **capacity/form:** single/shared, intact/partitioned, larger/smaller licensed variant;
+- **occupancy/current use:** occupied, vacant, reserved, storage overflow, quarantine, shrine, work,
+  abandoned, repurposed;
+- **condition/history:** repaired, scorched, damp, damaged, recently cleaned, escaped-from, inherited;
+- **person/network:** occupant, guard relationship, refusal, routine, claimant, social tie;
+- **local discovery:** note, mark, cache, tool, evidence, acoustic clue, route tell, practical resource;
+- **independent Spice opportunity:** eligible local event within table-class and site/zone budgets;
+- **root manifestation:** a tell/consequence of an already-rolled block/site event, inheriting its band
+  and causal identity rather than rolling again.
+
+No child needs to vary on every channel. An ordinary child can differ only by occupancy, wear, a name
+scratched in the wall, or what can be heard through it and still reward attention.
+
+##### 4. Use coverage and anti-repeat controls without hiding the dice
+
+Editable rollers define variant outcomes and weights. The compiler may use deterministic shuffle bags,
+weighted no-immediate-repeat rules, coverage reservations, or bounded rerolls to avoid implausible
+streaks and guarantee required roles. This is a compilation technique over human-readable dice, not a
+replacement for them.
+
+Examples:
+
+- if a twelve-cell block requires one observation cell and one sanitation access point, reserve those
+  roles before ordinary child variation;
+- a current occupancy target may establish seven occupied, three vacant, one quarantine, and one
+  storage-overflow cell, then deterministically assign them to legal positions;
+- a discovery family can ensure several quiet/local results, a few stronger clues/resources, and only
+  the site-budgeted number of coordinated major manifestations;
+- repeated identical rolls can sometimes remain—three empty clean cells in a row may be truthful rhythm—
+  but accidental long monotony or implausible streaks become measurable rather than invisible.
+
+##### 5. Variation has scope and cost
+
+The assembly records shared data once. Children store stable ids/seeds plus overrides, occupancy,
+discovery promises, and hard observed state. Latent children do not need full geometry, NPC networks, or
+item records until approached. This preserves distinct spaces without multiplying engine/context cost.
+
+##### Prison example
+
+A city prison rolls one twelve-cell block:
+
+```text
+shared: old civic masonry; iron grille fronts; central guard sightline; bucket collection at dawn
+current block state: overcrowded; one deputy faction skims supplies
+root event: a prior escape compromised the north service wall
+
+children:
+  1-5 ordinary occupied cells with different people/routines/local tells
+  6 shared overcrowded cell; disease pressure
+  7 empty observation cell; unusually clean
+  8 quarantine cell; food passed through a secondary hatch
+  9 storage-overflow cell; confiscated bedding and one practical cache
+  10 occupied cell; child-note promissory thread
+  11 vacant cell; root-event manifestation, mortar recently replaced
+  12 disciplinary cell; service-wall blind spot and concealed route evidence
+```
+
+The block reads as one designed institution. Its human stories and opportunities vary. The escape event
+has several correlated manifestations rather than independently rerolling a new major secret in every
+cell.
+
+**Recommendation:** derive repeat quantities from operational demand, roll one shared family/assembly,
+then apply bounded child variation through typed channels, protected roles, coverage/anti-repeat tools,
+and scoped causal Spice. Store shared facts once and child overrides sparsely.
+
+**Open decision:** should repeated spaces use this correlated-family model—causal quantity, shared
+assembly identity, sparse typed child variation, and deterministic coverage/repetition controls over
+editable rollers?

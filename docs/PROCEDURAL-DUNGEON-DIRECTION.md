@@ -1574,6 +1574,75 @@ still respects which characters know it in-world. Exact UI, companion autonomy, 
 and communication mechanics belong to **Wave 6 - Creature Scale, Capacity, Squeezing, and Party
 Participation** and the later DM/interface waves; Question 15 needs only the knowledge ontology.
 
+#### 8.15.2 Ruling and follow-up - protected private knowledge
+
+Adam selects **source-attributed knowledge with automatic ordinary sharing**, provided that facts which
+remain individual for canonical reasons are genuinely protected. Private knowledge is a high-value
+story mechanism, not an annotation the DM may casually collapse into party knowledge.
+
+Use explicit knowledge scopes and sharing policies:
+
+```text
+dm-only canon          - true but not yet perceived by any player character
+character-private      - held by named witnesses/knowers only
+party-shared           - ordinary cooperative party knowledge
+public/established     - broadly available in the relevant world context
+```
+
+A private record also needs a policy:
+
+- **shareable by choice** - the knower may communicate it; a player-controlled character's decision
+  belongs to the player;
+- **withheld by a canonical actor** - an NPC/companion conceals it for a stable goal, fear, loyalty,
+  shame, bargain, or relationship reason;
+- **conditionally shareable** - a curse, geas, language barrier, psychic block, memory damage, distance,
+  surveillance, or other established obstacle prevents ordinary communication;
+- **experiential/partial** - the knower can describe an experience but cannot transfer its full sensory,
+  magical, emotional, or prophetic certainty;
+- **unrecognized** - a character perceived the tell but has not understood what it means; later context
+  may promote it without retroactively giving other characters the original experience.
+
+Protection applies to every output channel, not narration alone. Until sharing becomes canonical, a
+private fact must not leak through:
+
+- automatic party journals or quest summaries;
+- another character's dialogue, action suggestions, or skill prompts;
+- map markers, room labels, codex entries, or objective text;
+- narrative-card placement that assumes an uninformed character can act on it;
+- DM recap language, NPC reactions, or renderer/UI telegraphs that expose the hidden answer.
+
+The record remains persistent across saves, rests, party splitting, companion departure, and revisits.
+If the sole knower dies, leaves, forgets, or refuses to share, the information may genuinely be lost to
+the active party until another evidence route appears. Secret networks should ordinarily provide fair
+independent evidence when progression requires the truth, but they need not erase the consequence of a
+lost personal confidence or private story.
+
+Private knowledge cannot be minted arbitrarily "for drama." It requires provenance and a canonical
+reason. The DM cannot decide that a player-controlled character silently withholds an ordinary finding;
+the player chooses. NPC companions may withhold according to their established goals, relationships,
+and knowledge policies. The DM may create pressure and opportunity around sharing, but not force the
+reveal merely because a priority card wants resolution.
+
+**Open follow-up - what does the human player see?** Character knowledge and player knowledge are not
+the same in a single-player party game:
+
+1. **Strict perspective secrecy.** The human sees only what the currently controlled/present character
+   knows. This minimizes metagaming but can hide excellent companion/private-character story from the
+   only human audience and makes party switching awkward.
+2. **Player sees every character's private record immediately.** The UI exposes all private knowledge
+   with holder labels while the DM enforces in-world separation. This supports dramatic irony but can
+   spoil NPC companion secrets and burdens the player with constant anti-metagaming.
+3. **Perspective-gated dramatic irony.** When a player-controlled character directly experiences a
+   private scene or discovery, the human sees it and a private journal entry identifies its holder;
+   other characters remain ignorant in-world. NPC/companion withheld facts remain hidden from the human
+   until an earned scene, viewpoint handoff, revelation, or explicit design license exposes them.
+   Shared facts promote into the ordinary party record.
+
+**Recommendation:** choice 3. It lets the game tell the player a rogue's private discovery or a wizard's
+vision without pretending the whole party knows, while preserving companion mysteries and earned
+revelations. The UI and DM must label viewpoint and holder clearly enough that dramatic irony feels
+intentional rather than like a continuity bug.
+
 Then continue questions 16-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

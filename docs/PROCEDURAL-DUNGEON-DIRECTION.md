@@ -366,10 +366,10 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 running record - questions 1-15 resolved; question 16 next
+## 8. Wave 1 running record - questions 1-16 resolved; question 17 next
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 15 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+question 16 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
 **Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
@@ -1710,7 +1710,75 @@ for Wave 2.
 **Open decision:** adopt the causal four-way distinction and preserve the existing zero-to-two
 subordinate-purpose bound pending later probability/allocation tables.
 
-Then continue questions 17-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+Adam selects **choice 3, causal nested purpose records**. Question 16 is resolved. Supporting functions
+serve another operating model; subordinate purposes have an independently meaningful goal, operator or
+beneficiary, bounded roster, and allocation; current-use overlays record later activity without
+rewriting construction; secrecy remains an access/reveal property rather than a purpose category. Zero
+to two direct subordinate purposes remains the default generation guardrail, not an absolute limit on
+child sites, transformations, occupations, Breaches, or later campaign development.
+
+#### 8.16.1 Future-question assignments seeded by question 16
+
+| Inherited ruling | Future owner |
+|---|---|
+| Supporting function versus independently rostered subordinate purpose is decided by goal/operator/beneficiary/operating-model independence, not thematic difference alone | **Wave 2 - Room Roster, Repetition, Spice, and Dungeon Ecology** owns profile schemas, mini-rosters, dependencies, weights, and allocation tests |
+| Subordinate-purpose allocations live inside the parent site envelope rather than minting another full dungeon budget | **Wave 2** owns capacity math and protected random shares; **Wave 3** owns spatial realization |
+| Integrated, zoned, annexed, embedded, breach-linked, concealed, and contested relationships are explicit rather than inferred from labels | **Wave 3** owns structural relationships; **Wave 4** owns breach/secret/access edges; history/current-occupation tables own their causal provenance |
+| Current-use overlays never rewrite original construction purpose | Future occupation/history work and **Wave 12** persistence/migration gates must retain original, intervening, current, and believed functions separately |
+| Secret is a reveal/access state layered over actual function/history/current use | **Wave 4 - Portals, Secrets, Vertical Connections, and Circulation** begins from this distinction and does not create "secret" as a substitute function |
+| Zero to two direct subordinate purposes is a default anti-purpose-soup guardrail, not a universal ontology limit | **Wave 2** must stress-test distributions and exceptional composite/realm cases before locking exact weights or recursion bounds |
+
+### 8.17 Pick up here - question 17: how should Spice remain coherent across a site?
+
+The design has already established that Spice is emergent, context-sensitive, and separate from scope;
+historical transformations receive one causal band whose subresults express the same event. The broader
+site still needs an ownership rule. Otherwise the engine may either paint every room with one global
+weirdness level or independently roll so many anomalies that a large dungeon becomes incoherent Spice
+confetti.
+
+Three approaches:
+
+1. **One site-wide Spice band.** A dungeon rolls Grounded through Mythic and every purpose, room,
+   history event, secret, and anomaly conforms to that level. This produces a strong register but makes
+   Mythic sites uniformly loud, prevents ordinary rooms inside strange places, and turns one roll into a
+   tonal escalation engine.
+2. **Independent Spice roll for every detail.** Every room, fixture, secret, transformation, and NPC
+   wrinkle rolls separately. This maximizes surprise but compounds high-band outcomes with site size and
+   produces unrelated weirdness rather than causal mystery.
+3. **Causal Spice graph.** Roll bands for eligible causal events - a purpose variation, construction
+   doctrine, historical transformation, current anomaly, secret network, breach, or other licensed
+   commitment. Each event owns one band and scope. Its dependent rooms, clues, symptoms, mechanics, and
+   consequences express that event rather than rerolling independent intensity. Ordinary Spark/Fork
+   details still vary locally within their honest ceilings. The site stores a summary of active causal
+   outcomes, not a temperature that forces later rolls upward.
+
+**Recommendation:** choice 3. An ordinary city prison may contain one Mythic prisoner whose cell exists
+across several realms; the rest of the institution remains grounded and functional. A Volatile curse in
+an ancient tomb may express through repeated dreams, sealed doors, altered corpses, and one escalating
+clock across several rooms - those are correlated manifestations of one result, not four Volatile rolls.
+A mage-colony prison may treat portal cells as Grounded/Textured infrastructure while one Strange breach
+failure creates flickering wards, contradictory inmate records, and impossible footprints.
+
+The causal graph should record:
+
+```text
+root event/card and provenance
++ Spice band
++ scope: child / room / zone / site / regional / planar / cosmic
++ causal license and context used for classification
++ affected entities, functions, rooms, and edges
++ manifestations/tells that inherit the root
++ persistent consequences and unresolved handles
+```
+
+This preserves the existing law that the world becomes stranger because rolled outcomes happen and
+persist, not because a hidden meter rises. A prior Mythic event may change canon and thereby make a later
+result eligible or contextually ordinary, but it does not mechanically heat every subsequent table.
+
+**Open decision:** choose whether Spice is site-wide, independently per detail, or owned by causal events
+whose manifestations inherit their intensity.
+
+Then continue questions 18-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

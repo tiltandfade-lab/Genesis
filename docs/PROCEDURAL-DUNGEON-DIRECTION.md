@@ -6343,3 +6343,198 @@ fraction of a full-agent simulation's runtime, save, authoring, and failure cost
 **Open decision:** should Wave 2 adopt layered cadence and coverage slots as the authority for temporal
 ecology, keeping most populations aggregate until active projection while preserving sparse exact
 schedules for important named people and commitments?
+
+#### 10.10.1 Final ruling - layered cadence must produce usable handles
+
+Adam accepts the recommendation and emphasizes the experiential payoff: if the gears can turn without
+breaking, the DM no longer has to improvise false continuity and the players gain many real handles for
+interacting with the world. Question 10 is resolved at the design level:
+
+- purpose/ecology profiles author meaningful rhythms, transition periods, and capability-coverage
+  requirements rather than continuous schedules for every person;
+- current time, season, realm cycle, operational state, group pressure, alarms, and recorded events
+  select the active cadence window;
+- population cohorts and role/coverage slots remain aggregate until observation, consequence, or active
+  projection requires exact people and locations;
+- the casting model binds active slots to established/local/latent people before minting replacements;
+  observed identities, promises, meaningful absences, and consequential movements harden persistently;
+- important named people may carry sparse exact routines and commitments without upgrading the whole
+  population into full-agent calendar simulation;
+- natural and living sites receive biological, ecological, tidal, seasonal, weather, realm, and
+  lifecycle cadence grammars rather than anthropomorphic office hours;
+- cadence is resolved at meaningful windows and transitions. Stable distant activity uses deterministic
+  lazy catch-up, not per-minute movement or all-NPC pathfinding;
+- off-hours and absences create information, social friction, risk, infiltration, waiting, alternate
+  contacts, messages, emergency access, or other contextual choices rather than arbitrary dead ends;
+- schedule detail is justified only when it changes evidence, access, occupancy, service, relationship,
+  vulnerability, opportunity, or consequence. Decorative calendars with no playable effect do not earn
+  their runtime, save, authoring, or DM-context cost;
+- the engine owns the causal schedule and its changes; the DM performs and interprets that truth rather
+  than inventing who should be present, why a routine changed, or whether the change persists;
+- implementation success must be proven on the production path. A schedule helper or paper architecture
+  does not satisfy this promise unless a real generated fixture persists, projects, mutates, and exposes
+  the intended player handles without simulation bloat or continuity breaks.
+
+#### 10.10.2 Future-question assignments seeded by question 10
+
+| Inherited ruling | Future owner |
+|---|---|
+| Purpose/ecology cadence plus coverage slots governs ordinary temporal activity | Remaining **Wave 2** authors cadence families, windows, and exceptions; future NPC/place systems own final casting integration |
+| Aggregate populations become exact only in the active slice; established people and commitments persist | **Wave 9** owns bounded DM projection; **Wave 12** owns deterministic catch-up, persistence, revisit, and no-duplicate-cast gates |
+| Schedule changes must create playable evidence, access, service, relationship, or consequence | Remaining **Wave 2** and Question 11 own semantic flow/handle eligibility; **Waves 3-5** own spatial routes, fixtures, and visible traces |
+| Operational state and recorded events causally override ordinary cadence | **Wave 8** owns mutations; future World Turn/time systems own event advancement and catch-up |
+| Natural/living sites use ecological and realm-specific cycles through shared interfaces | Remaining **Wave 2** owns ecological cadence content; realm packages extend the vocabulary without generator forks |
+| Exact schedules remain sparse and off-hours cannot create meaningless mandatory lockouts | Future **interaction/NPC/quest** design owns waiting, alternate contact, urgency, and appointment mechanics; **Wave 12** owns lockout/continuity stress tests |
+
+#### 10.10.3 Process checkpoint - closed Wave 1 architecture sketch
+
+The requested background architecture pass has produced
+`docs/PROCEDURAL-DUNGEON-ARCHITECTURE-SKETCH.md`. The primary session reviewed all 949 lines before
+committing it. It remains `type: design-study`, `status: DISCOVERY`, closed-Wave-1-only,
+non-`SPECCED`, and non-build-authorizing. It maps authority, conceptual ownership, current-code seams,
+invariants, stress fixtures, future-wave handoffs, and promise-to-production evidence without freezing
+Wave 2's unsettled schemas, algorithms, distributions, or performance budgets.
+
+### 10.11 Question 11 - how do operational flows become real player handles without becoming a commodity simulator?
+
+In plain English: a functioning jail needs food, water, custody, sanitation, records, staffing, and
+outside relationships; a mine needs air, drainage, supports, tools, workers, haulage, and waste removal;
+a living habitat needs nutrients, shelter, renewal, defense, and byproduct handling. Should those facts
+remain atmospheric prose, should Genesis simulate every ration and bucket, or should it store a smaller
+causal network that tells the DM what players can observe, influence, protect, exploit, repair, replace,
+or negotiate?
+
+Questions 2, 6, 9, and 10 established typed resources/services, capacity and demand, operational state,
+and cadence. The unresolved issue is their **playable site-level expression**. A resource total alone
+does not tell the DM where food comes from, who controls it, how it enters, what buffer exists, what
+depends on it, or what changes if the party interferes. A beautifully narrated kitchen alone does not
+prove the prison can feed anyone.
+
+Three approaches have distinct costs:
+
+1. **Dressing implication:** a kitchen, cistern, storeroom, ledger, pump, or mine cart merely suggests
+   that the system works. This is cheap, but breaks as soon as a player asks where supplies originate,
+   blocks a route, bribes a provider, damages the pump, frees a worker, or follows the waste channel.
+   The DM must then invent both the dependency and its retroactive consequences.
+2. **Unit commodity simulation:** count every meal, bucket, tool, prisoner ration, cartload, barrel,
+   gallon, shift, and minute. This can answer narrow questions precisely, but creates huge authoring,
+   persistence, tuning, and bug surfaces. False precision also makes ordinary shortages ubiquitous when
+   one rate or catch-up rule drifts.
+3. **Typed material dependency graph with graded realization:** store only the providers, transfers,
+   buffers, consumers, control points, byproducts, and thresholds that explain site operation or predict
+   play. Keep stable low-attention flows aggregate; give important, pressured, external, contested, or
+   Spice-bearing flows concrete evidence and interaction handles.
+
+#### Recommended material-flow contract
+
+Each material operational flow may identify:
+
+```text
+need / service / payload type
+  -> source or provider
+  -> transfer method, route, cadence, and access
+  -> storage, reserve, redundancy, or other buffer
+  -> process or capability served
+  -> consumers/dependents and current demand
+  -> byproduct, waste, output, or onward destination
+  -> capacity, reliability, current state, and thresholds
+  -> controller/claimant and responsible operator
+  -> evidence, interaction handles, and legal player operations
+  -> response, adaptation, recovery, and downstream consequences
+```
+
+This is a sparse capability/dependency graph, not another room graph and not a universal market
+simulation. Nodes can be site capabilities, assemblies, local groups, external providers, routes,
+buffers, or regional aggregates. Exact objects and quantities materialize only when inventory,
+transaction, tactical position, evidence, or a threshold makes them actionable.
+
+Flows can be physical resources, environmental conditions, services, throughput, or information and
+authority channels where the semantics genuinely predict operation. They should remain typed rather
+than collapsing food, air, legal permission, rumor, and magical containment into one interchangeable
+“resource point.”
+
+#### Which flows deserve concrete handles?
+
+Not every edge receives a bespoke minigame. A flow earns stronger realization when at least one is true:
+
+- it is required for a core capability or current population's viability;
+- it is external, scarce, strained, unreliable, capacity-limiting, or schedule-bound;
+- a group claims, contests, monopolizes, steals, rations, protects, or depends upon it;
+- a current operational state or historical transformation altered it;
+- it supports a secret, promise, contract, hazard, opportunity, or protected Spice root;
+- player abilities can meaningfully trace, divert, secure, repair, substitute, expose, negotiate, or
+  otherwise change it;
+- its physical route or control point affects topology, access, tactics, or discovery.
+
+Low-attention stable flows can remain aggregate and expose only a legible ambient manifestation. A
+working city water service need not generate every pipe and cup. But if the prison's water is rationed,
+the controlling valve, cistern, provider, schedule, claimant, or substitute must become knowable enough
+for play.
+
+#### Concrete examples
+
+- **Hamlet jail:** meals come from the tavern on a known cadence; a small reserve of cold provisions
+  buffers missed delivery; the sheriff controls distribution; waste leaves by a mundane local process.
+  Players can question the provider, intercept a message, deliver food during a disruption, notice a
+  changed ration, exploit delivery access, or arrange a substitute. Genesis does not count every bite.
+- **City prison:** kitchens, water, laundry, medicine, records, waste, guard relief, and prisoner transfer
+  form several shared systems. Cellblocks depend on them at different load. A blocked service corridor,
+  corrupted contractor, closed visitation process, or seized valve changes only the connected coverage
+  until thresholds propagate further.
+- **Residential college:** heat, meals, teaching, tuition/patronage, books, messages, cleaning, and room
+  assignment have different providers and calendars. A dormant house can lend space while its shared
+  boiler and archive relationships remain real.
+- **Inn:** food and drink arrive through suppliers, beds turn over through labor and laundry, stabling
+  consumes fodder, and local information travels through guests and staff. A festival pressures rooms
+  and food differently and creates overflow providers rather than one generic “busy” modifier.
+- **Mine:** airflow, drainage, supports, tools, labor, ore haulage, spoil removal, and lift capacity create
+  a compact causal system. Damaging or repairing the pump affects deep access according to water level,
+  buffers, alternate drainage, and crew response—not whatever consequence the DM invents in the moment.
+- **Contested grove:** refugees and druids may depend on the same gate, spring, stores, healers, or ritual
+  ground while holding different physical, customary, and doctrinal claims. Resource leverage can create
+  cooperation, negotiation, resentment, or exclusion without automatically creating combat.
+- **Living habitat:** prey/nutrient access, temperature, waste exchange, symbionts, brood care, migration,
+  and defense use ecological flow types. Cutting a nutrient route can produce migration, dormancy,
+  aggression, adaptation, or die-off according to the species/site program rather than a human economy
+  template.
+
+#### Player operations and consequences
+
+The semantic flow gives the interaction/action systems a lawful set of possibilities—observe, trace,
+ask, negotiate, purchase, deliver, guard, divert, ration, repair, replace, expose, steal, block, restore,
+or create a substitute—subject to knowledge, skill, access, ownership, ethics, physics, and context. It
+does not guarantee every verb is legal on every flow.
+
+A consequential operation produces a typed event against the affected provider, route, buffer,
+capability, claimant, or threshold. Question 9 recalculates operational coverage; Question 10 adjusts
+cadence/coverage; groups respond according to their claims and knowledge; physical and narrative
+evidence persists. Competent occupants use known buffers and responses. This is how the engine gives
+the DM causal truth without deciding how every actor must feel or narrating the outcome in advance.
+
+#### Guardrails
+
+- no per-unit simulation unless exact units are already actionable inventory, treasure, tactical
+  objects, or threshold evidence;
+- no all-pairs dependency graph; purpose/ecology profiles author sparse meaningful edges;
+- no cascading failure without capacity/buffer thresholds and a causal event;
+- no hidden dependency may produce player-facing consequences without fair manifestations or discovery
+  paths appropriate to the characters' knowledge;
+- no generic “resource” abstraction may erase materially different behavior;
+- no flow receives detailed realization solely because it can be modeled; it must explain operation,
+  constrain a decision, support an interaction, or deliver evidence;
+- player intervention creates a real advantage, liability, relationship change, or world consequence;
+  the engine does not secretly rebalance away the result;
+- DM projection stays local: current handles, nearby dependencies, due consequences, competent responses,
+  and relevant unknowns—not the entire site's or region's economy graph.
+
+#### Recommendation
+
+Adopt the typed material-dependency model with graded realization. Store enough causal structure to
+answer where an important flow comes from, how it moves, who controls it, what buffers it, what depends
+on it, how players can affect it, and what lawful consequences follow. Aggregate everything else until
+attention, pressure, or consequence justifies detail. This preserves the world-interaction payoff Adam
+wants without building a fragile per-ration economy simulator.
+
+**Open decision:** should material operational flows use this sparse dependency-and-handle contract,
+with concrete realization concentrated on core, pressured, external, contested, Spice-bearing, or
+player-actionable flows and exact quantities deferred until they become materially relevant?

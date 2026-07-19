@@ -5876,3 +5876,123 @@ frequency.
 **Open follow-up:** do these coarse, sparse, event-driven boundaries make the group model practical
 enough to lock, particularly the bans on all-pairs relationships, eager member lists, per-group turns,
 and automatic clocks/cards for every cohort?
+
+#### 10.8.3 Follow-up - when to translate theory into architecture and specs
+
+Adam has confidence in the theoretical design but not yet in implementation. That concern is grounded in
+repository evidence: several prior promises have exceeded their production wiring, including the
+`roleHint`/proprietor gap found during this discussion, the current lack of node-bound faction population,
+and the repository's own recorded **verify-green != wired** failure class. The deeper design work improves
+the odds, but prose depth alone cannot close the implementation gap.
+
+The best process is neither “finish all theory before drawing any architecture” nor “write build-ready
+specs after every questionnaire answer.” Use a staged artifact ladder:
+
+```text
+living direction / decision record             <- current file; discussion authority
+living architecture sketch (DISCOVERY)         <- start now; provisional flows, owners, records, seams
+wave-closure architecture reconciliation       <- challenge sketch against every ruling/fixture
+system specs (SPECCED)                          <- only for interfaces whose owning questions/waves closed
+build-unit queue + executable gates             <- only after spec lock and explicit build authorization
+implementation + production-path acceptance    <- proves promises reach the actual game
+```
+
+##### Start the architecture sketch now—but keep it visibly provisional
+
+A compact `PROCEDURAL-DUNGEON-ARCHITECTURE-SKETCH.md` would be valuable now because it forces each
+accepted idea to answer:
+
+- what record owns the truth;
+- which stage produces it;
+- which facts are rolled, derived, inherited, promoted, or event-mutated;
+- which current module/data surface it extends or replaces;
+- what remains latent versus materialized;
+- which systems consume it;
+- what is canonical, soft, provisional, or display-only;
+- what degradation/reconciliation happens when inputs conflict;
+- what runtime/save/DM-context budget contains it;
+- which later wave owns unresolved structure.
+
+Its current top-level flow might be sketched—not frozen—as:
+
+```text
+World/Region/Settlement Context
+  -> Population Profiles + Relationship/Dependency Edges
+  -> Purpose-Family Program + Demand Drivers
+  -> Service/Capacity Envelopes + Permeable Slippage
+  -> Site Obligations/Flows + Realization Contracts
+  -> Cohorts/Actors/Groups/Memberships/Claims/Fronts
+  -> Operational + Spatial + Local + Coordinated Spice Allocations
+  -> Semantic Assemblies/Children + Fixed Topology Requirements
+  -> later waves: geometry, portals, dressing, tactics, rendering
+```
+
+Candidate record names such as `PopulationProfile`, `DependencyEdge`, `SiteProgram`, `Cohort`, `Group`,
+`Membership`, `Claim`, and `Front` are useful handles in the sketch. Their final fields, JSON shapes, and
+module names must remain provisional until their questions and downstream constraints close.
+
+The sketch should update at **question closures or meaningful architecture corrections**, not duplicate
+every conversational paragraph. This running direction remains the complete discussion/provenance
+record; the sketch is the compact map.
+
+##### What should not be frozen yet
+
+While Wave 2 is only through Question 8 and generated follow-ups remain active, do not lock:
+
+- final schemas or version numbers;
+- exact population bands, demand ratios, group/slippage distributions, or performance thresholds;
+- module/function/API names;
+- final migration transforms;
+- downstream room/portal/geometry/dressing structures owned by later waves;
+- a build-unit queue or implementation order that assumes unanswered systems;
+- `SPECCED` status or build authorization.
+
+Otherwise later ideas will require either dishonest “spec compliance” around an obsolete architecture or
+constant retrofit churn that makes the spec cease to be authoritative.
+
+##### Use wave closure as the freeze gate
+
+At Wave 2 closure:
+
+1. reconcile every Wave 2 decision and future assignment into the architecture sketch;
+2. run contradiction cases across hamlet jail, city prison, residential college, ordinary/boutique inn,
+   living habitat, Leilon-like trade town, kobold processor, contested grove, singular claimant, and
+   double agent;
+3. audit current-code seams and label each `keep`, `extend`, `adapt`, `replace`, or `retire`;
+4. estimate data volume, generation work, update frontier, save growth, and prompt projection;
+5. identify which interfaces are truly Wave-2-owned versus dependent on Waves 3-12;
+6. freeze only the stable semantic interfaces into system specs; leave downstream consumers provisional;
+7. do not implement until the relevant build gate is explicitly authorized.
+
+Later waves amend the architecture sketch openly. They may supersede an earlier interface only through a
+recorded reconciliation, never by quietly retrofitting code or erasing the old decision.
+
+##### The promise-to-production trace is mandatory
+
+Every eventual spec requirement should carry a trace like:
+
+| Question | Required proof |
+|---|---|
+| Who produces the fact? | Real production entry point, not a helper called only by tests |
+| Where is it stored? | Canonical record/schema and migration behavior |
+| Who consumes it? | Actual planner/simulation/DM/render/gameplay call sites |
+| How does it change? | Typed event, authority, provenance, and reconciliation |
+| What does the player/DM see? | Bounded projection with knowledge/attention rules |
+| What happens when absent/corrupt/over budget? | Deterministic fallback, last-known-good behavior, diagnostic |
+| How is it proven? | Unit invariant + production-path integration + fixture/distribution/performance evidence |
+
+A helper-level green test is insufficient. A feature is not `BUILT` until a production path creates the
+fact, persists it, projects it to the intended consumer, responds to its mutation, and survives a real
+fixture. Visual or experiential promises still require captures/playtest evidence where appropriate.
+
+##### Recommendation
+
+Create the living architecture sketch now as a **contradiction detector and traceability map**, not a
+premature spec. Continue and close Wave 2's theoretical questions before freezing Wave 2 schemas or
+writing executable unit specs. At closure, reconcile the sketch, then spec only the stable interfaces
+whose dependencies are actually settled. This gains the insight of architectural thinking without
+mistaking a moving diagram for an implementation contract.
+
+**Open process decision:** should we adopt this artifact ladder and, after Adam confirms, create the
+provisional architecture-sketch document now while continuing Question 8/Wave 2—explicitly withholding
+all `SPECCED` status and build authorization until the relevant closure/reconciliation gates?

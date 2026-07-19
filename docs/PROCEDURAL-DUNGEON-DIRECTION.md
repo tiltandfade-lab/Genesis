@@ -366,10 +366,10 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 running record - questions 1-13 resolved; question 14 next
+## 8. Wave 1 running record - questions 1-14 resolved; question 15 next
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 13 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+question 14 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
 **Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
@@ -1452,7 +1452,84 @@ register namespaced additions with validation instead of teaching every engine s
 language, with inheritance and compiler-derived effective affordances, rather than prose inference or
 flat tags.
 
-Then continue questions 15-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+Adam confirms the system. Question 14 is resolved: decompose the current d200 into typed rollers and
+preserved composite recipes; organize eligible results through honest Spice bands and class ceilings;
+give every table a dedicated flavor-writing pass; author each row with distinct machine contract and DM
+tell fields; and compile controlled inherited semantic affordances for narrative-card placement.
+
+#### 8.14.3 Future-question assignments seeded by question 14
+
+| Inherited ruling | Future owner |
+|---|---|
+| Audit every d200 row into atomic facts, hierarchical recipes, history/state clauses, mechanisms, and licensed anomalies while preserving source ids/prose and golden composites | **Wave 2** owns functional/recipe decomposition; **Wave 3** owns shapes/structures; **Wave 4** owns portals/secrets/connectors; **Wave 5** owns fixtures/dressing/quiet-room material |
+| Every resulting roller is Spice-banded within its honest Spark/Fork/Commitment ceiling | The later **table-design and expressivity pass** owns band coverage, distribution audits, and edge-case rolls; no table receives fake high-Spice content merely to fill five bands |
+| Every table receives a flavor-writing pass, including Grounded plumbing tables | The future **writing/content wave** must gate for concreteness, usability, realm/purpose voice, repetition, and sufficient row variety separately from mechanical validation |
+| One row carries distinct result, typed contract, band/scope where relevant, and evocative DM tell | **Wave 12/table compiler** owns schema, validation, compiled normalization, provenance, and source-to-runtime traceability |
+| Controlled namespaced contracts compile inherited site/zone/room/row facts into effective affordances | **Waves 2-5** define their domain vocabularies; **Wave 9** consumes them for legal narrative-card matching; **Wave 12** owns registry/version/mod-extension rules |
+| Cards match with hard requirements, alternate anchors, soft preferences, exclusions, scope, and capacity rather than Boolean prose keywords | **Wave 9 - DM Strategic Cards and Environmental Authority** owns scoring, thin-hand presentation, service-horizon interaction, and validation |
+| Preserve a tagged, verified, LFS-complete recovery point plus Git bundle and materialized Google Drive archive before implementation | **Wave 12** first implementation gate; execute only after redesign/spec closure and explicit authorization, not during this discussion |
+
+### 8.15 Pick up here - question 15: what does the player know on entering a room?
+
+The engine may know original function, current function, believed function, occupants, history layers,
+resource systems, secrets, and narrative-card homes. The player should not receive that entire canonical
+record as a label, but ordinary architecture must also remain legible: recognizing an obvious kitchen
+should not require a ritual of searching every hearth.
+
+Questions 11 and 13 already constrain the answer:
+
+- entry provides an automatic room read of obvious occupants, exits, hazards, resources, function, and
+  salient anomalies;
+- hidden content remains behind perceptible tells, methods, skills, tools, context, and inspection;
+- the DM holds structured truth and opportunity records while surfacing only currently perceptible facts;
+- player discoveries persist rather than being forgotten between visits.
+
+Three approaches:
+
+1. **Canonical labels immediately.** The UI/DM states "original prison kitchen, later converted to a
+   cult dormitory; secret necromantic drain below." This is clear but destroys inference, discovery,
+   misinterpretation, and slow-drip history.
+2. **Sensory prose only until the player investigates.** Even an obvious barracks or chapel is never
+   named automatically. This protects mystery but makes the player fight the interface to understand
+   ordinary rooms and lets DM phrasing accidentally hide basic affordances.
+3. **Graded evidence and confidence.** The engine separates canonical truth from observations and
+   player beliefs. Obvious present facts and unmistakable functions are named automatically; visible
+   evidence is described; character expertise adds justified interpretations; focused action reveals
+   deeper original use or transformation; secrets remain gated. The player may hold an uncertain or
+   mistaken belief, but the engine does not lie without a canonical deception, illusion, or sincere
+   in-world misunderstanding.
+
+**Recommendation:** choice 3, using a reveal ladder:
+
+```text
+manifest     -> unmistakable current facts; automatic room read
+legible      -> ordinary function inferred from visible architecture; name when confidence is high
+specialist   -> character background, skill, tool, lore, or relationship supplies interpretation
+investigated -> focused action establishes history, mechanism, contradiction, or hidden relationship
+concealed    -> secret network, deception, inaccessible evidence, magic, or breach gate
+confirmed    -> corroborated truth recorded as player knowledge
+```
+
+Example: in a prison kitchen repurposed by cult squatters, entry reveals large hearths, grease channels,
+food-preparation surfaces, bedrolls, occult chalk, and visible occupants. The DM may simply call it an
+old institutional kitchen now used as a camp because that is architecturally obvious. It does not reveal
+the sealed necromantic drain, the date of conversion, or which cultist knows its purpose. A cook may
+recognize the meal throughput; a mason may notice the drain predates the ovens; a systematic magical
+inspection may expose the lower laboratory connection.
+
+Store at least three separate records:
+
+- **canon:** what is actually true, including source/provenance;
+- **observations:** what the party has directly perceived or established;
+- **beliefs/hypotheses:** current interpretation, confidence, supporting evidence, and contradictions.
+
+The DM narrates from the party's knowledge boundary, not from hidden canon. Revisit summaries can use
+confirmed observations without rerolling or forcing the player to rediscover an obvious room.
+
+**Open decision:** choose the reveal model and decide whether obvious function names may be stated
+automatically when the architecture makes them unmistakable.
+
+Then continue questions 16-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

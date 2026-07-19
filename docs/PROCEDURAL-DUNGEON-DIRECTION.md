@@ -366,10 +366,10 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 running record - questions 1-14 resolved; question 15 next
+## 8. Wave 1 running record - questions 1-15 resolved; question 16 next
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 14 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+question 15 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
 **Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
@@ -1643,7 +1643,74 @@ vision without pretending the whole party knows, while preserving companion myst
 revelations. The UI and DM must label viewpoint and holder clearly enough that dramatic irony feels
 intentional rather than like a continuity bug.
 
-Then continue questions 16-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+Adam selects **choice 3, perspective-gated dramatic irony**. Question 15 is resolved. Obvious rooms are
+legible without investigation taxes; deeper function/history/secret truth follows graded evidence;
+knowledge retains witnesses and provenance; ordinary co-present sharing is automatic; canonically
+private facts are protected across every output channel; and the human sees private discoveries made by
+player-controlled viewpoints without receiving unearned NPC/companion secrets.
+
+#### 8.15.3 Future-question assignments seeded by question 15
+
+| Inherited ruling | Future owner |
+|---|---|
+| Canon, observations, and beliefs/hypotheses are separate persistent records with confidence, evidence, and contradictions | **Wave 12 - Migration, Persistence, Acceptance Gates, and Build Order** owns schemas, migrations, save persistence, provenance, and knowledge regression gates |
+| The DM narrates from the active party/viewpoint knowledge boundary and may not leak hidden canon through recaps, prompts, objectives, maps, or card placement | **Wave 9 - DM Strategic Cards and Environmental Authority** owns prompt/digest partitioning and card eligibility; **Wave 10** owns player-facing leakage gates |
+| Co-present cooperative characters automatically share ordinary findings; split characters require reunion or communication | **Wave 6 - Creature Scale, Capacity, Squeezing, and Party Participation** owns splitting, witness sets, communication channels, and reunion behavior |
+| Canonically private knowledge has explicit holders and share policies; the player controls whether a player character voluntarily shares it | Future **party/companion and NPC social systems** own withholding motives, relationship effects, confessions, coercion, and agency protections |
+| Perspective-gated dramatic irony shows player-character private scenes to the human but preserves NPC/companion mysteries until earned | Future **companion narrative design**, **Wave 9**, and **Wave 10** own viewpoint scenes, private journals, holder labels, and revelation presentation |
+| Obvious function may be named automatically; specialist/investigated/concealed truth remains gated | **Wave 4** owns reveal vectors and secret access; future DM/writing passes own legible descriptions that neither obscure ordinary function nor leak hidden truth |
+
+### 8.16 Pick up here - question 16: support, subordinate purpose, occupation, or secret?
+
+The design already allows a primary purpose plus zero to two subordinate purposes, and it allows later
+occupants, hidden complexes, and exceptional functions. Those categories need sharper boundaries or the
+engine will label every interesting room cluster a "secondary purpose" and lose causal clarity.
+
+Concrete cases:
+
+- a prison kitchen exists to support imprisonment;
+- a military fort may include an independently operated prison wing;
+- a temple may include a library that serves worship, or a distinct scholarly order with its own goal;
+- an alchemist's public shop may conceal the proprietor's necromancy laboratory;
+- smugglers occupying an abandoned mine did not retroactively make smuggling its construction purpose;
+- a breach-linked cell realm may be part of a mage prison's original operating model or a later parasitic
+  incursion.
+
+Three approaches:
+
+1. **One primary purpose; everything else is a supporting/exceptional room.** This is simple but cannot
+   represent coherent secondary institutions, mixed commissions, hidden businesses, or purpose-built
+   annexes with their own staff and dependencies.
+2. **Any coherent cluster becomes another purpose.** This preserves variety but produces purpose soup:
+   kitchen, infirmary, archive, shrine, treasury, and cells all become peer institutions, inflating
+   guarantees and narrative importance.
+3. **Causal nested purpose records.** Classify by independence and history:
+   - a **supporting function** exists chiefly to make another purpose operate and does not carry an
+     independent goal/operating model;
+   - a **subordinate purpose** has a distinct goal or commission, recognizable functional roster,
+     operator/doctrine or beneficiary, and allocated spatial/operational envelope, while remaining
+     causally subordinate to the site;
+   - a **current-use overlay** records what later occupants do with inherited architecture without
+     rewriting its construction purpose;
+   - **secret** is a reveal/access state, not a purpose category. A hidden space still has an original
+     function, subordinate purpose, transformation, or current use underneath the secrecy.
+
+**Recommendation:** choice 3. A prison kitchen is support. A fort's separately administered jail wing
+may be a subordinate purpose. Smugglers in an old mine are a current-use overlay. The necromancy lab
+beneath the shop may be a concealed subordinate purpose if the proprietor deliberately built and
+operated both, or a later transformation if another actor added it. "Hidden" alone decides none of
+those questions.
+
+A subordinate purpose should require provenance and receive a bounded mini-operating model rather than
+merely a themed room. It may be spatially integrated, zoned, annexed, embedded, breach-linked, concealed,
+or contested. Its functional and random allocations live inside the parent site's total envelope so
+adding a subordinate purpose does not duplicate the whole dungeon budget. Exact allocation rules remain
+for Wave 2.
+
+**Open decision:** adopt the causal four-way distinction and preserve the existing zero-to-two
+subordinate-purpose bound pending later probability/allocation tables.
+
+Then continue questions 17-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

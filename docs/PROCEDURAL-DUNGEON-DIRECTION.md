@@ -2747,3 +2747,63 @@ expansion remains additive.
 **Open follow-up:** does this cost profile remain acceptable, with the hard boundary that roster ecology
 models coarse capabilities, flows, dependencies, and state changes but does not continuously simulate an
 institution's economy?
+
+#### 10.1.2 Follow-up - strategic simulation, not domestic accounting
+
+Adam confirms that the high writing cost is welcome—writing and flavor passes are a favorite part of
+development with AI assistance—and accepts the cost balance. He wants **some real simulation**, not a
+static dressing fiction, while agreeing that continuous per-person institutional accounting is beyond
+the useful boundary.
+
+The recommended middle is an **event-driven aggregate stock-and-flow model**:
+
+```text
+source -> route -> storage -> conversion/distribution -> consumers/use -> waste or export
+                     |                 |
+                  capacity          failure state
+```
+
+The roster establishes the nodes and dependencies. Simulation tracks only the resources and processes
+whose changing state can alter play. Population is normally aggregated by cohort, zone, function, or
+occupation group rather than simulated as one ration ledger per NPC.
+
+Examples:
+
+- a prison may track food reserve, water access, guard coverage, waste state, infirmary capacity, and
+  containment integrity. Destroying the cistern or freeing a cellblock changes demand, patrols, morale,
+  negotiations, escape pressure, and occupation fronts;
+- a mine may track airflow, drainage, supports, access to tools, cart throughput, and spoil blockage.
+  Opening a floodgate or collapsing a support changes accessible zones and worker behavior;
+- a living hive may track food input, incubation, brood density, territorial alarms, and waste/decay.
+  Killing one creature is local; destroying a feeding route changes the colony;
+- a magical prison may track ward charge, anchor integrity, operator attention, and Breach pressure.
+  Missed maintenance can advance a containment clock without simulating every rune continuously.
+
+Use the cheapest representation that preserves the strategic consequence:
+
+- exact small quantities when the number is legible and actionable, such as three days of water, two
+  functioning pumps, or four ward charges;
+- ordinal state when precision adds no play, such as stable -> strained -> critical -> failed;
+- clocks/thresholds for accumulating consequences such as hunger, flooding, disease, revolt, collapse,
+  pursuit, or containment failure;
+- boolean capability state for a simple on/off service;
+- flow/rate only when time and throughput materially affect player choices.
+
+Updates occur on meaningful triggers: player actions, rests or elapsed travel intervals, supply arrival
+or disruption, occupation-front events, major casualties/population changes, environmental damage,
+repair, or a scheduled threshold. Unvisited sites do not run high-frequency background loops. When a
+site becomes relevant again, deterministic **lazy catch-up** applies elapsed time and recorded events to
+the next meaningful thresholds, preserving world persistence without burning browser work continuously.
+
+This simulation must remain causal and inspectable. The player can discover the source, route, reserve,
+failure, and consequence; the DM receives the resulting pressure and legal strategic cards. The engine
+does not secretly subtract abstract supply merely to force a desired scene.
+
+**Recommendation:** adopt strategic, event-driven, aggregate simulation. Permit quantities, ordinal
+states, clocks, booleans, and rates per resource family, choosing the lowest precision that creates
+meaningful decisions. Ban per-NPC domestic accounting and continuous background ticking unless a future
+system proves a specific player-facing need.
+
+**Open follow-up:** is this the correct meaning of "some simulation"—aggregated causal resources and
+services, updated on meaningful events or lazy elapsed-time catch-up, with exact numbers only when the
+player can understand and act on them?

@@ -6198,3 +6198,148 @@ or events, and preserve normal competent operation as the common baseline.
 **Open decision:** should this capability-level state model govern operational condition, including the
 rules that site-wide health is derived, partial/dormant/substituted operation is first-class, and every
 failure must have cause, evidence, consequences, and a recovery or terminal path?
+
+#### 10.9.1 Final ruling - capability-level operational state
+
+Adam accepts the recommendation. Question 9 is resolved at the design level:
+
+- designed capability, current availability/performance, and current demand/load are separate truths;
+- material capabilities and flows carry their own current states; a site-wide condition is a derived
+  summary and may not erase a mixed operating picture;
+- normal, strained, degraded, substituted, dormant/seasonal/offline, blocked/denied, failed,
+  repurposed, and destroyed form the provisional authoring vocabulary. Later schema work may refine the
+  names without collapsing their semantic differences;
+- partial operation, intentional dormancy, and substitute provision are first-class states rather than
+  being mislabeled as generic failure;
+- ordinary generated sites begin viable and competently operated for their context. Non-normal states
+  require causal license from premise, history, transformation, occupation, capacity mismatch,
+  dependency, group pressure, ecology/season, protected Spice, player action, or a later world event;
+- every non-normal state identifies its affected scope, cause/provenance, remaining coverage, buffers or
+  substitutes, dependents, evidence/player handles, threshold consequences, and recovery/adaptation or
+  terminal path;
+- dependency effects propagate only when demand crosses remaining capacity, buffer, or substitute
+  thresholds. One outage does not randomly make adjacent functions fail;
+- current state changes use, access, staffing, performance, evidence, and consequences without silently
+  deleting the stable roster, semantic rooms, assemblies, topology, or history;
+- permanent repurposing, destruction, rebuilding, and restoration occur through explicit events and
+  preserve provenance.
+
+#### 10.9.2 Future-question assignments seeded by question 9
+
+| Inherited ruling | Future owner |
+|---|---|
+| Capability state is distinct from designed capacity and current load | Remaining **Wave 2** owns purpose/ecology state recipes and incidence; future settlement/resource simulation owns cross-site pressure |
+| Site health is derived from material capability states | Future **DM/Codex/UI** work owns bounded summaries; **Wave 12** owns schema, persistence, migration, and mixed-state invariants |
+| Partial, substituted, dormant, blocked, failed, repurposed, and destroyed states remain distinct | **Waves 3-5** own their spatial/material evidence; **Wave 8** owns state-changing events and physical consequences |
+| Failure needs causal provenance, thresholds, evidence, and recovery or terminal path | **Wave 9** owns strategic pressure/card projection; **Wave 12** owns provenance, last-known-good behavior, soak tests, and crisis-incidence gates |
+| Ordinary sites are healthy by construction and dependency failures propagate through buffers and thresholds | Remaining **Wave 2** authors buffers/substitutes and stress cases; future **World Turn/economy** work owns aggregate propagation and catch-up |
+
+No implementation claim follows from this ruling. Exact enums, formulas, thresholds, incidence rates,
+and persistence shapes wait for the architecture/specification and statistical acceptance passes.
+
+### 10.10 Question 10 - how should places live through hours, shifts, seasons, and cycles?
+
+In plain English: should a jail, college, inn, mine, temple, contested grove, or living hive appear frozen
+in one arrangement whenever the party arrives, or should its people and functions follow recognizable
+rhythms? If they do, how can Genesis produce the feeling of a lived-in schedule without continuously
+simulating the exact location and calendar of every person in a city?
+
+Question 9 says a capability can be available, strained, dormant, substituted, or failed. Time now has
+to matter: a kitchen that is closed between meals is not dormant in the same sense as a college house
+closed for the season, and an absent night deputy is different from a destroyed guard post.
+
+Three models are available:
+
+1. **Static occupancy:** populate the site once and leave everybody in their assigned rooms. This is
+   cheap and predictable, but produces innkeepers who never sleep, miners who never change shifts,
+   prisoners who never leave cells, and habitats with no feeding or resting cycle.
+2. **Continuous individual schedules:** give every person exact work, travel, meal, leisure, and sleep
+   appointments and simulate their movement at all times. This can look impressive at small scale but
+   becomes expensive and brittle in cities, mints unnecessary detail, makes catch-up difficult, and
+   turns minor scheduling errors into empty institutions.
+3. **Layered cadence, coverage slots, and active projection:** author the site's meaningful rhythms at
+   group/function scale, then cast and localize only the people and movements relevant to the active
+   place and time. Named individuals receive exact schedule commitments only when their identity or a
+   player promise makes that precision matter.
+
+#### Recommended cadence model
+
+Each purpose/ecology profile can declare a small number of meaningful temporal patterns:
+
+- open/service windows and off-hours behavior;
+- work, watch, teaching, worship, meal, intake, visitation, rest, migration, or maintenance cycles;
+- shift or coverage requirements for critical capabilities;
+- weekday/market-day/festival distinctions where the setting supports them;
+- seasonal, tidal, lunar, weather, breeding, feeding, bloom, molt, or realm-specific cycles;
+- transition periods such as shift change, closing, muster, evacuation, or communal meals;
+- exceptions created by Question 9 operational states, group fronts, alarms, emergencies, or events.
+
+The canonical schedule is therefore mostly a pattern of **activity and coverage demand**, not a giant
+calendar full of pre-minted NPC appointments:
+
+```text
+site/group cadence
+  -> current time/season/event window
+  -> required active capabilities and role/coverage slots
+  -> expected occupied zones, routes, and transition activity
+  -> cast established/local/latent people into relevant slots
+  -> project only active named movements and player-facing evidence
+```
+
+A coverage slot might say “one custody authority reachable overnight,” “two active mine crews below,”
+or “one healer on call.” It does not require the engine to invent and pathfind every deputy, miner, or
+novice while the party is elsewhere. When the party observes or interacts with the holder, the casting
+rules from Question 7 bind the slot to an existing appropriate person where possible and harden the
+result. Important named NPCs can carry sparse commitments—meeting the party at dawn, teaching every
+third day, guarding the east gate tonight—without upgrading the entire population into a calendar sim.
+
+#### Concrete examples
+
+- **Hamlet jail:** the sheriff handles daytime business; a deputy or reachable authority covers nights;
+  tavern meals arrive at established times; prisoners may have a yard or cleaning period. At 2 a.m. the
+  office can be dark without custody ceasing to exist. An alarm temporarily replaces the normal rhythm.
+- **City prison:** cellblocks use staggered watches, meals, exercise, visitation, hearings, laundry, and
+  maintenance. Genesis projects the relevant block and transition rather than moving every prisoner and
+  guard in the facility.
+- **Residential college:** classes, meals, study, worship, society meetings, dormitory activity, and
+  vacations create different populations by hour and season. A student established in the library is
+  still the same person when later cast into their dormitory context.
+- **Inn:** arrivals build toward evening, food service peaks around meals, rooms turn over after
+  departures, and a reduced night watch remains. A festival changes the load and adds overflow providers
+  without rewriting the ordinary schedule.
+- **Mine:** crews overlap at shift change, lifts and sorting peak around haul windows, maintenance may
+  occupy planned downtime, and a pump failure reroutes labor toward emergency coverage.
+- **Contested grove:** refugees and druids can share space while keeping different meal, worship,
+  patrol, council, and watch rhythms. Their overlap creates natural meetings or friction without a
+  universal hostility clock.
+- **Living habitat:** inhabitants follow feeding, rest, hunting, incubation, migration, or defensive
+  cycles. The grammar describes biological/ecological cadence rather than pretending the nest keeps
+  office hours.
+
+#### Guardrails against schedule bloat and player frustration
+
+- simulate stable distant cadence by lazy catch-up, not per-minute updates;
+- keep aggregate cohorts and coverage slots until observation or consequence requires named people;
+- compute candidate zones/routes at meaningful transitions, not continuous exact walking;
+- persist observed identities, promises, absences, and consequential movements; regenerate no hardened
+  fact merely because the party re-enters;
+- let operational problems modify the pattern causally instead of independently deleting scheduled
+  workers;
+- provide waiting, alternate contacts, emergency access, messages, forced entry, or other contextual
+  options where off-hours would otherwise create a meaningless hard lock;
+- use schedule changes as information and opportunity—quiet corridors, crowded meals, a missing guard,
+  a ritual underway—not as constant bookkeeping demanded from the player;
+- preserve uncertainty: the player/DM can know the usual pattern without receiving omniscient exact
+  coordinates for every person.
+
+#### Recommendation
+
+Adopt the layered cadence model: author meaningful site/group/activity rhythms and coverage needs, derive
+the current operating window from time/season/events, and project/cast exact people only inside the
+active slice. Give named NPCs sparse persistent commitments when story, contract, observation, or
+individual routine justifies them. This should deliver the lived-world value of scheduling at a small
+fraction of a full-agent simulation's runtime, save, authoring, and failure cost.
+
+**Open decision:** should Wave 2 adopt layered cadence and coverage slots as the authority for temporal
+ecology, keeping most populations aggregate until active projection while preserving sparse exact
+schedules for important named people and commitments?

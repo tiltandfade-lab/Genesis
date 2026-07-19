@@ -1,14 +1,14 @@
 ---
 name: genesis-clean-close
 description: >-
-  Close out a Genesis work session cleanly — the end-of-session ritual that keeps the docs and git
+  Perform the explicit final/evening close for a Genesis work session - the slow end-of-session ritual that keeps the docs and git
   history coherent. It surveys what changed, runs the FULL CI-equivalent gate (check-manifest + the whole
   verify-*.mjs sweep + verify-bridge.py + verify-table-lint.py + playtest-bug-probes.mjs), updates
   CHANGELOG.md + HANDOFF.md + NEXT-STEPS.md together, then commits on a type/slug branch and (with
-  confirmation) merges --no-ff to master, pushes, and confirms the GitHub CI run goes green. Use this whenever Adam
-  says "clean close", "close out", "wrap up", "land this", "ship it", "finish the session", "update the
-  changelog and push", "commit and back up", or invokes /genesis-clean-close — and proactively when a
-  Genesis unit of work is verified-green and ready to land. ONLY for the Genesis repo
+  confirmation) merges --no-ff to master, pushes, and confirms the GitHub CI run goes green. Use only when Adam
+  explicitly says "clean close", "final close", "evening close", "ship/push this", "commit and back up",
+  or invokes /genesis-clean-close. Do not use for a fast checkpoint, docs checkpoint, local-only merge,
+  or any request that explicitly says no CI or no push. ONLY for the Genesis repo
   (~/Desktop/Work/projects/Genesis); never the Shifting Vale / Playtest Sandbox vault.
 ---
 
@@ -22,6 +22,18 @@ ritual so nothing is forgotten between "it works" and "it's landed."
 Run the steps in order. Steps 1–4 are local and reversible — do them and keep moving. Steps 5–6 are
 outward-facing (merge to the stable line, push to GitHub) — **confirm before each**, because approval to
 build is not approval to publish.
+
+## Mode gate - stop if this is only a checkpoint
+
+Before Step 1, classify the request using `CLAUDE.md`/`AGENTS.md` **Commit modes**.
+
+- If Adam asks for a checkpoint, docs capture, local merge, or explicitly says no CI/no push, **do not
+  run this skill**. Reuse the current worktree; run proportional checks; commit explicit paths; mark
+  `FULL CI PENDING` for the named later owner.
+- Use this skill only for the explicit final/evening close. It may close several accumulated checkpoint
+  commits with one complete gate.
+- Never create a fresh worktree merely to enter this skill. If a genuinely separate lane requires one,
+  use `GIT_LFS_SKIP_SMUDGE=1`; a clean close does not require bulk LFS materialization.
 
 ## 1 — Survey what changed
 

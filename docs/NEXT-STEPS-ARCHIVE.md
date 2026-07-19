@@ -18,6 +18,18 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-15 — AUTONOMOUS ARC LANDED: quick-fix + ENV/EXTERIOR complete, PL-3 verified)
+
+Master `c0a60b77` (CHANGELOG 2026-07-15): ☑ QUICK-FIX wave (P0 roots) · ☑ ENV-1/1b/1c/2/3/3b
+(daytime · cast shadows · the moving sun/moon · biomes · the first town) · ☑ PL-3 deltas (6 ledger
+items FIXED in real play). Adam's rulings registered in DESIGN.md (cast-shadows; celestial arc).
+
+1. ☐ **Stage E** — exposure floor + emissive-masked bloom (ledger #12/13). Spec off ledger evidence.
+2. ☐ **Combat-in-room + staging beats** (ledger #10/11) → then D5 archetypes.
+3. ☐ **P3-2 Stage B** — AUTO-FIRES on sprite-QA registry landing (standing delegation; quiet so far).
+4. ☐ Adam's packet: facade/NPC art (ImageGen/kit) · daylit-shadow + arc keyframe tuning · PL-1b rig
+   items (bot fights · transition camera · shop capture · record-less-settlement town read).
+
 ## Do next (2026-07-14 evening — THE LEDGER ORDERS THE WAVES; Stage D + AgX + doors + PLAY-LENS landed)
 
 Evening block landed (master `67566b6a`): ☑ Stage D D0–D4 (stateful nouns end-to-end) · ☑ AgX

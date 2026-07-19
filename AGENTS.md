@@ -55,6 +55,18 @@ Then run the `dev/verify-*.mjs` harness for the surface you touched (jsdom; rend
 auto-skip without Chrome). Never hand-edit generated artifacts (`tables.js`/`tables.json`, `data/*.js`
 that say GENERATED) — regenerate from source (`build/*.py`, the Engine markdown).
 
+## Fast checkpoint vs. final close
+
+- A **fast checkpoint** saves a coherent pause: reuse the current session worktree, run proportional
+  checks, stage explicit paths, commit, and optionally merge locally when Adam authorizes it. Explicit
+  "no CI/no push" wins. Do not invoke the full clean-close sweep; mark `FULL CI PENDING` for the later
+  owner.
+- A **final/evening clean close** invokes `genesis-clean-close`: run the full slow gate once, merge,
+  push, and confirm GitHub CI.
+- Never create a new worktree merely to checkpoint an existing lane. If a genuinely new worktree is
+  required, use `GIT_LFS_SKIP_SMUDGE=1`; materialize only task-required LFS assets. Neither checkpoint
+  nor final close inherently requires bulk LFS checkout.
+
 ## THE ONE RULE THAT KEEPS MULTIPLE AGENTS SAFE (read CLAUDE.md "Parallel sessions")
 Adam runs 2+ agent sessions at once. **One session = one git worktree = one branch. `master` is the
 only shared surface.**

@@ -716,3 +716,18 @@ band on the parley table — fixed). All edit-source → compiled clean (**0 cov
 | Interim visualizer constraint | **Simplification may change framing, not abandon beauty.** Lighting, normal maps, useful existing sprites, and environmental beauty remain required. Range-strip, schematic-board, and hybrid-storyboard layouts remain unresolved; no option is locked. |
 
 Full authority and the twelve-wave map: `PROCEDURAL-DUNGEON-DIRECTION.md`.
+
+## Locked decisions (2026-07-19 - procedural dungeon Wave 1 checkpoint through question 10)
+
+| Decision | Choice |
+|---|---|
+| Purpose authority | **Original purpose is permanent engine truth.** Resolve it by established lore -> explicit place/adventure premise -> creator/faction goal -> strong implication -> seeded roll, preserving provenance and allowing zero to two subordinate purposes. |
+| Purpose compatibility | **Purpose gates; it does not blacklist.** Functions are core, supporting, compatible, exceptional, or conflicting. Culture/doctrine, history, and current use can make a sacrificial chamber native to a fort or otherwise explain it; only physical/canonical contradiction is truly invalid. Exact profiles and weights wait for table design. |
+| Whole-site generation | **Use the books to build a coherent whole, not to roll isolated rooms.** DMG/DBG purpose-specific frequencies become authored functional profiles; dice express roster needs without permitting accidental omission of the site's identity. |
+| Construction identity | Separate commissioner, original operator, institutional doctrine, design tradition, intended occupants/scale domains, substrate, construction era, and consequential workforce. Mixed-scale domains are construction truth, not renderer repair. |
+| Resource ecology | **Occupancy filters support.** Externally supplied, transient, predatory, self-sustaining, dormant, or failing sites express food/water/rest/air/waste/renewal/material needs through production, storage, preparation, distribution, consumption, disposal, or external supply - not one generic kitchen. |
+| Historical lineage | Purpose may change before present occupation. Relative age + instability determine 0-3 consequential transformations; each records agent, action, affected functions, evidence, and an unresolved player handle. One Spice Curve band governs each causal transformation. |
+| Inherited use | Current occupants continue, restore, adapt, squat, exploit, deface, overgrow, or contest inherited architecture. A room can be currently unused, and occupants may sincerely misunderstand it; original function, current function, and believed function remain distinct. |
+| Shared future seam | The emerging semantic core may become a bounded-place compiler for dungeons, manors, castles, temples, ships, and similar sites. Wilderness and urban walks keep distinct journey/social jobs and may enter those sites. Established lore remains the highest authority; access, affiliation, ownership, and heat govern urban-site reactions. No build is authorized. |
+
+Wave 1 is **not closed**. Resume at question 11 in `PROCEDURAL-DUNGEON-DIRECTION.md` section 8.7.

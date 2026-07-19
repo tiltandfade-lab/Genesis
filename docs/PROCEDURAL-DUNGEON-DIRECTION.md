@@ -734,6 +734,124 @@ Concrete results under this model:
   portal-cell banks and ward-control infrastructure are ordinary operating-model realizations rather
   than automatically Mythic anomalies.
 
+#### 8.12.1 Follow-up - do three axes actually cover the problem?
+
+Adam accepts the coupled-profile direction but explicitly rejects treating three as a magic number.
+Before locking the model, identify every genuinely independent sizing concern and evaluate the
+implementation and maintenance cost of adding it. All decisions must anticipate the Breach system's
+realm expansion. **Scalability, versatility, and modifiability are permanent design criteria**, not
+cleanup work for a later expansion.
+
+First distinguish two questions:
+
+- an **axis/profile** is an independently meaningful property such as operational capacity or spatial
+  extent;
+- a **band** is one label or range along that property, such as tiny/small/medium/large.
+
+Adding a band to a well-factored profile is usually a tuning/content cost. Adding a new profile is an
+integration cost. Neither is inherently a serious runtime cost; the dangerous cost comes from
+authoring and testing the Cartesian product of every band on every profile.
+
+**Initial finding:** the original three-axis proposal is not sufficient as written because "physical
+scale" conflates two independent facts:
+
+1. the site's total metric extent or volume; and
+2. the bodies, vehicles, machinery, and portals its interfaces accommodate.
+
+A one-room human-built cavern can be hundreds of feet across, while a four-room giant guard post may
+have little total extent but giant-scale doors, furniture, and circulation. A six-node mine may cross
+miles; a six-room house may fit on one lot. Graph scope and accommodation scale cannot recover this
+difference by themselves.
+
+The present recommendation is therefore a **provisional four-profile core**, not a locked magic four:
+
+1. **Structural/exploration scope** - canonical functional domains, enterable spaces, connections,
+   zones, levels, and room-level discovery surfaces. This replaces the misleading idea that one raw
+   room count is the whole graph budget.
+2. **Operational load** - designed simultaneous capacity, throughput over time, staffing, supply,
+   storage, and support burden. This may be a typed vector rather than one scalar: a prison holds
+   inmates, a court processes cases and visitors, and a mill processes material.
+3. **Spatial envelope** - footprint, volume, horizontal travel distance, and vertical extent. It may
+   be constrained by a building shell, geology, vehicle hull, city block, demiplane, or no ordinary
+   exterior at all.
+4. **Accommodation domains** - the scale and interface needs of intended bodies, vehicles, cargo,
+   machinery, portals, and furniture. A site or zone may carry several domains plus explicit
+   transitions between them.
+
+Other independent concerns remain first-class profiles, but should not be mislabeled as kinds of
+size:
+
+- **topology:** linearity, branching, loops, chokepoints, vertical connectivity, and portal edges;
+- **current state:** occupancy, density, activity, damage, abandonment, and resource failure;
+- **challenge/resource pressure:** danger, attrition, rest access, opposition, and expected supplies;
+- **temporal depth:** age, number and severity of transformations, and legibility of historical layers;
+- **discovery/narrative density:** coordinated secrets, promises, factions, and active story-card load;
+- **realm/physics profile:** gravity, geometry, time, matter, breach behavior, and other local laws;
+- **realization resolution:** how much canonical structure is instantiated in full detail now versus
+  held as deterministic persistent substructure for lazy expansion. This is an engine budget, never a
+  license to erase physical rooms or discoveries from canon.
+
+The distinction between canonical scope and realization resolution is essential for very large and
+realm-scale sites. A city prison may canonically contain eight cellblocks and hundreds of cells without
+requiring hundreds of heavyweight NPC/story records at first generation. Repeated cells can compile as
+a structural assembly with stable identities; any enterable cell still exists and receives its local
+discovery opportunity, while its deeper contents materialize deterministically when attention reaches
+it. The semantic-scene and hierarchical-block research supports this site -> zone -> room -> assembly
+shape; the two-stage generation research supports resolving semantic obligations before full geometry.
+
+Each site, zone, subordinate complex, and breach-linked destination may carry its own profile. The
+parent site holds an aggregate and the relationships among them. Thus a human prison, its giant-built
+buried foundation, and its pocket-realm cell bank do not need one compromised global scale. A breach is
+a typed edge between domains, with any size or physics transformation recorded on the edge.
+
+**Implementation and maintenance cost:**
+
+| Cost surface | Naive cross-product design | Factored profile design |
+|---|---|---|
+| Data/schema | Another axis appears everywhere | Add one versioned field/profile with provenance and defaults |
+| Tables/content | Authors every combination | Authors a universal spine plus profile- and realm-specific modifiers |
+| Generator | Nested conditionals for combinations | Each stage reads only the profiles it owns; constraints reconcile boundaries |
+| Rendering | Realm/size special cases spread through code | Compiler consumes resolved dimensions, interfaces, physics, and asset tags |
+| Persistence | Brittle positional records | Additive named fields, stable ids, schema version, deterministic migration |
+| Testing | Exhaust every combination | Boundary tests per profile, pairwise interactions, adversarial fixtures, and realm conformance tests |
+
+With five bands, exhaustive tables for three axes already imply `5^3 = 125` combinations; four imply
+`625`; five imply `3,125`. Genesis must not build that way. In the factored model, operational-roster
+rules read operational load; graph rules read structural scope and topology; the spatial compiler reads
+the envelope and accommodation domains; secrets read exploration scope, history, and narrative density;
+realm adapters supply data and constraints. Runtime work remains tiny compared with room compilation and
+rendering. Maintenance grows roughly with the new rules actually introduced, not with every theoretical
+combination.
+
+The current executable engine reinforces the need for this redesign: `SpatialPlan.rooms[].scaleDomain`
+is presently a single numeric multiplier assigned from large residents after the graph exists, and the
+semantic pass may grow rooms to fit. Preserve that useful golden beat - large inhabitants receive usable
+territory and transitional doors - but rewire it into construction-time accommodation domains rather
+than treating a late resident-size repair as the future ontology.
+
+An additional core profile should be admitted only when all of these hold:
+
+1. two sites can match on the existing core but differ materially on the candidate property;
+2. that difference changes at least two independent engine or player-facing decisions;
+3. it cannot be derived reliably from existing facts;
+4. it must persist, be queried, or carry provenance rather than existing only during compilation.
+
+Otherwise it belongs as a derived value, categorical profile, local constraint, or realm modifier.
+
+**Breach/realm scalability law:** keep the purpose, obligation, profile, hierarchy, and constraint
+language realm-neutral. A realm contributes registered data, laws, vocabulary, assets, modifiers, and
+solver constraints through shared interfaces; it does not add scattered `if realm == ...` branches to
+the base dungeon generator. Invalid extensions fail loudly in authoring/validation and degrade through
+declared runtime fallbacks. Realm-specific geometry should be local to zones/domains and breach edges,
+not a mutation of global assumptions. This follows Genesis's existing universal-spine plus realm-skin
+pattern and does not reopen the currently frozen founding realm-id slate unless Adam separately does so.
+
+**Open recommendation:** reinterpret choice 3 as a **coupled, extensible multi-profile model**. Begin
+with the four core profiles above, keep the exact number of bands unresolved, and keep topology, state,
+challenge, history, discovery, realm physics, and realization resolution orthogonal. Do not lock the
+core count until concrete dungeon and cross-realm counterexamples stop exposing missing independent
+facts.
+
 Then continue questions 13-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

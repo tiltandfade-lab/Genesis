@@ -3402,3 +3402,159 @@ while requiring external services and distributed systems to exist as real depen
 **Open decision:** should this realization-contract and dedication-pressure model govern whether an
 obligation becomes a room, assembly, shared use, distributed system, procedure, external dependency, or
 causally licensed child site?
+
+#### 10.3.1 Clarification - how realization works mechanically
+
+Adam asks for the question in simpler terms and for the actual mechanical path. The core decision is:
+
+> When is prison evidence a locked cabinet in the sheriff's office, when is it an attached closet, and
+> when is it a dedicated evidence room?
+
+An **obligation** is something the site must be able to do. A **realization** is the concrete way the
+site does it. The roster does not roll a room first and then invent a justification; it rolls or derives
+the required capability, evaluates its legal manifestations, and emits a space/service demand for the
+graph and room compiler.
+
+##### Mechanical input
+
+For each obligation instance, the planner knows:
+
+- purpose family and importance class;
+- designed load/capacity, throughput, and concurrent use;
+- original operators/users and their scale/access domains;
+- construction context, doctrine, resources, technology/magic, and spatial envelope;
+- privacy, security, hazard, contamination, acoustic, visibility, ritual, and support needs;
+- dependencies and relationships to other obligations;
+- external providers/routes already present in the surrounding settlement/region;
+- current state/history only after the original viable realization is solved.
+
+A human-readable source entry might conceptually say:
+
+```text
+Obligation: evidence custody
+Required for: prison/jail
+Quantity driver: case volume + security level
+Legal forms:
+  locked cabinet in oversight office     low volume; ordinary evidence; shared access acceptable
+  attached secure closet                 modest volume; restricted access
+  dedicated evidence room                high volume/security or hazardous items
+  external civic evidence store          real provider + guarded route + reliable access required
+Forbidden combinations:
+  food preparation; public waiting; sanitation; prisoner-controlled space
+Dedicated triggers:
+  hazardous evidence; high secrecy; high throughput; incompatible access schedules
+```
+
+The authored Markdown remains a roller/table. The compiler normalizes it into indexed fields so it can
+perform cheap eligibility checks rather than asking the AI to interpret prose.
+
+##### Mechanical pass
+
+The recommended constructive pass is:
+
+1. **Instantiate obligations.** Purpose, scale, occupancy, doctrine, and ecology produce concrete demand:
+   `custody:4`, `oversight:1`, `evidence:low`, `meals:external-eligible`, and so forth.
+2. **Expand hard dependencies.** Custody may require controlled access and observation; meal service may
+   require delivery, storage, distribution, and waste even when cooking is external.
+3. **Enumerate legal realization candidates.** Read the obligation's editable roller and filter by
+   capacity, context, envelope, provider availability, and hard compatibility.
+4. **Commit hard-dedicated needs first.** A hazardous alchemical process, secure vault, ritual sanctum,
+   or high-throughput cellblock cannot be squeezed into an incompatible multipurpose room.
+5. **Create repeated assemblies.** Quantities become compact assemblies—four cells in one cell room,
+   several cellblocks in a large prison—rather than unrelated top-level room rolls.
+6. **Test legal combinations.** Compatible obligations may share a room/assembly only if capacity,
+   concurrency, access, privacy, circulation, support, and contamination rules all survive.
+7. **Test external service candidates.** Externalization is legal only when a provider/service node,
+   route, cadence/reliability, access, and failure consequence exist.
+8. **Choose among remaining legal candidates.** Editable dice weights, context modifiers, variation
+   control, and soft composition scores select a result; hard truth is never traded for a higher score.
+9. **Emit a semantic space/service graph.** The output names room/assembly demands and relationships—
+   intake near public entry, cells behind control, evidence accessible to staff but not prisoners,
+   delivery route to storage—without choosing coordinates.
+10. **Validate the complete operating model and protected variation.** Every obligation has an honest
+    home/service; no room is overloaded; external links resolve; required capacity and protected
+    discretionary/Spice capacity remain. A small bounded backtrack revisits recent soft choices if the
+    set fails; impossible inputs produce diagnostics rather than deletion.
+
+The later topology/room compiler receives something like:
+
+```text
+space sheriff-office
+  satisfies: oversight, records
+  contains: evidence-cabinet
+  access: staff
+
+assembly cell-room
+  satisfies: custody capacity 4
+  children: cell-1, cell-2, cell-3, cell-4
+  requires: controlled-threshold, observation
+
+service meals
+  provider: tavern-red-lantern
+  route: rear-street -> jail-service-door
+  cadence: twice daily
+  local-buffer: one missed delivery
+  failure: ration pressure
+
+space discretionary-1
+  protected: true
+  requires: at least one juicy player handle
+```
+
+##### Hard rules versus weighted choice
+
+"Dedication pressure" should not be one mysterious number that can override reality. It is a readable
+summary of several factors:
+
+- **hard triggers** make a form mandatory or illegal: incompatible security zones, dangerous
+  contamination, required simultaneous use, physical capacity, unique machinery, canonical doctrine;
+- **soft pressures** alter weights among otherwise legal forms: prestige, convenience, privacy
+  preference, ordinary noise, desired redundancy, likely future growth, tradition, and aesthetic
+  composition.
+
+Thus hard constraints filter; dice and scores choose within the surviving set. The decision trace can
+say: `dedicated evidence room rejected: low case volume`; `external store rejected: no provider`;
+`cabinet accepted: capacity 4/6, staff access compatible`; `closet remained legal but lost the weighted
+roll`. Modders see tables and modifiers, not a black-box optimization verdict.
+
+##### Frontier-jail example, end to end
+
+Assume a four-prisoner jail with a sheriff and deputy in a small town:
+
+- `custody` cannot externalize and requires secure separation -> one cell-room assembly with four stable
+  cell children;
+- `oversight + records` share staff, access, schedule, and equipment -> legally combined sheriff office;
+- `evidence` is low-volume and nonhazardous -> cabinet/closet/dedicated/store are considered; cabinet wins;
+- `meals` finds a tavern provider and safe delivery route -> external service plus minimal local buffer;
+- `sanitation` finds a secure yard route -> privy assembly; chamber pots remain a degraded/failing form;
+- `staff rest` may be external lodging or a bunk alcove depending schedule and distance;
+- protected variation still creates likely additional spatial flavor, and every realized room/assembly
+  receives discovery/Spice opportunities under the accepted rules.
+
+Raise capacity, case volume, visitor throughput, staff shifts, disease control, or evidence hazard and
+the same contracts begin rejecting combination: intake separates from public visitation, records and
+evidence split, sanitation gains dedicated infrastructure, kitchens internalize, and cell rooms repeat
+as blocks.
+
+##### Distributed systems do not disappear
+
+Some obligations output graph-wide structures rather than room nodes. Ventilation creates intake,
+route, outlet, maintenance access, and affected-zone links. Drainage creates slopes/channels, collection,
+outflow, and blockage points. Patrol coverage maps posts, routes, sightlines, response times, and gaps.
+These systems may still require dedicated control or maintenance spaces, but the obligation itself is
+not mislabeled as one room.
+
+##### Cost/solver boundary
+
+This is a bounded constructive allocator, not a general-purpose optimal-building theorem prover. It
+orders the most constrained obligations first, scans indexed legal candidates, combines only declared
+compatibilities, and backtracks over a small recent choice set. The expensive geometric work still
+belongs to later waves. Runtime should remain small; the main cost is authoring honest contracts and
+tests.
+
+**Recommendation:** hard constraints first, compact repeated assemblies second, then roller-weighted
+choice among legal combined/dedicated/external/distributed realizations. Emit a semantic graph plus a
+plain-language decision trace before any coordinate solver runs.
+
+**Open follow-up:** does this concrete allocation pipeline match the intended design, especially the
+boundary that hard rules filter candidates while editable dice weights choose among the legal results?

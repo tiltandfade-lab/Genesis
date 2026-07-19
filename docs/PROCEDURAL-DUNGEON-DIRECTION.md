@@ -366,10 +366,10 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 running record - questions 1-17 resolved; question 18 next
+## 8. Wave 1 running record - questions 1-19 resolved; question 20 next
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 17 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+question 19 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
 **Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
@@ -2114,7 +2114,127 @@ ordinary geometry. Exact probabilities wait for Wave 2's expressivity tests.
 **Open confirmation:** keep a low but nonzero additional-room chance even at the smallest site sizes,
 using context-weighted room families and a causal capacity check rather than a size blacklist.
 
-Then continue question 20 and every resulting follow-up. Wave 1 remains open until the closure gate
+#### 8.19.2 Final ruling - this is a spicy restaurant
+
+Adam strengthens the structural-tail ruling: an extra discretionary room should be **likely even in a
+small purposeful site**, not held to a low rare chance. The additional space proved the design point by
+immediately producing a deep pool of local history, people, secrets, resources, corruption, inherited
+architecture, and realm possibility. Genesis should not serve bland food to protect a conservative
+dungeon distribution.
+
+The existing adopted spicy-world stance already supports this taste target: baseline band-first play is
+`25/25/25/17/8`, with three-quarters of eligible results Textured or hotter and one-quarter Volatile or
+Mythic. The dungeon redesign must not quietly restore the old conservative distribution or add a
+small-site dampener. Grounded results remain necessary contrast and are themselves concrete human
+pressure, never filler.
+
+Replace the prior "low but nonzero tail" recommendation with:
+
+- every purposeful site receives embedded variation;
+- even the smallest ordinary site has a **clear-majority target** for at least one additional spatial
+  variation - room, attic, cellar, shed, tunnel, inherited pocket, hidden domain, or comparable space;
+- exact probability and the chance of multiple additions scale with site/profile/context and are tuned
+  through Wave 2 expressivity/playtest, but "likely" is the acceptance target;
+- ordinary footprint and causal legality still constrain the shape; high-Spice licensed results may
+  create capacity beyond ordinary geometry;
+- a failed dedicated-space result falls back to embedded variation rather than producing bland null.
+
+Every discretionary space must contain at least one **juicy player handle**, but juicy is not synonymous
+with demonic, hostile, combat, loot, or Mythic. Valid handles include:
+
+- a person, relationship, refusal, divided loyalty, or social pressure;
+- useful or dangerous loot, supplies, evidence, contraband, or a practical resource;
+- a secret, clue, contradiction, route, mechanism, or tactical affordance;
+- an inherited function, historical transformation, claimant, or unresolved consequence;
+- a funny, unsettling, poignant, or realm-inflected object whose implications can grow under attention;
+- a high-band entity, breach, curse, or impossible space when the Commitment roll fires.
+
+Thus the extra bathroom might contain nothing more catastrophic than the sheriff's **demonic bar of
+soap**: perhaps it whispers confessions out of the hands it cleans, removes blood before it is spilled,
+smells like the realm that made it, has slowly altered the sheriff's dreams, or is simply an inexplicable
+object he regards as ordinary. It can remain a local Textured/Strange hook, seed a future promissory card,
+or prove to be one tell of a larger causal event. The same opportunity retains the potential to roll an
+actual demonic occupant or Mythic breach without requiring one every time.
+
+The flavor target is **high hook density with mixed intensity**:
+
+> Most generated places should offer something memorable to pursue; some of the surrounding people,
+> rooms, objects, procedures, and pressures remain Grounded so the spicy results retain contrast and the
+> world remains emotionally/materially legible.
+
+Question 19 is resolved. Its reconciliation ladder stands, amended so small-site structural variation
+is likely rather than rare.
+
+#### 8.19.3 Future-question assignments seeded by question 19
+
+| Inherited ruling | Future owner |
+|---|---|
+| Guaranteed functions are semantic capabilities, not mandatory one-room nouns; reconcile through combination, assemblies, procedures, external dependencies, and honest envelope changes | **Wave 2** owns roster/allocation logic; **Wave 3** owns legal realization and degradation |
+| Protected variation has embedded and structural channels; small sites target a clear majority with at least one added space, larger sites support more/larger additions | **Wave 2** owns exact distributions and expressivity/playtest gates; no size-only blacklist is allowed |
+| Every discretionary space guarantees at least one juicy player handle while preserving mixed Spice intensity | **Wave 2** owns handle-bearing room recipes; **Wave 4** owns secret/routes/reveal; future writing/loot/NPC systems own their channels |
+| SPICE-RAISE's spicy-world weights remain the play distribution; dungeon/site size does not dampen them | Future table/compiler work inherits band-first tier weights and honest class ceilings; playtests tune room-slot probability separately from band distribution |
+| Unobserved low-authority conflicts may reconcile with provenance; observed facts change only through world events; impossible sets fail diagnostically | **Waves 3 and 12** own compiler diagnostics, persistence, migration, workbench traces, and no-silent-drop gates |
+| Preexisting shells, annexes, child sites, and Breaches may create capacity only with causal license | **Wave 3** owns shell/annex geometry; **Wave 4** owns hidden/breach edges; history/purpose records own provenance |
+
+### 8.20 Pick up here - question 20: when does a generated site become canon?
+
+The accepted system is hierarchical, persistent, and capable of very large sites and realm-linked
+substructures. Fully generating every cell, NPC network, item, secret manifestation, and dressing detail
+at site creation is expensive and front-loads facts no player may reach. Rolling each room only when the
+door opens recreates incoherent room-by-room generation and lets future facts contradict earlier clues.
+The final initial question is therefore the **commitment frontier**: what must exist before exploration,
+what may remain deterministic latent structure, and what locks when observed?
+
+This is not a vote between two defensible extremes. Pure eager generation and pure improvisational lazy
+generation both violate accepted requirements. The recommended staged model is:
+
+#### Seeded canon - locked when the site is created
+
+- stable site id, seed, context, provenance, and authority chain;
+- original purpose, subordinate purposes, builder/operator/doctrine, and operating-model obligations;
+- structural scope, operational load, spatial envelope, accommodation domains, and topology profile;
+- history/transformations, resource ecology, original/current/believed-function distinctions;
+- present occupant groups, zone claims, active fronts, supply relationships, and current state;
+- root causal Spice events, major secret/story networks, required commitments, and allocation budgets;
+- a semantic site -> zone -> room/assembly plan sufficient to guarantee that functions, routes,
+  repeated spaces, connections, and protected variation have legal homes.
+
+#### Deterministic latent structure - stable but expandable
+
+- exact low-importance repeated-child contents;
+- minor NPC personality/network detail beyond established role, goal, tell, and relationship invariants;
+- local inspection opportunities and lightweight loot within already allocated budgets;
+- fine dressing, sensory variants, and presentation details;
+- exact geometry that can be compiled later from a fixed semantic room/assembly program without changing
+  established connections, capacity, or clues.
+
+Latent records receive stable ids/seeds and invariants. Expanding them is deterministic materialization,
+not a fresh unconstrained reroll. Player pursuit, proximity, narrative priority, a clue, a targeted
+search, or an implementation need may force expansion.
+
+#### Contact and observation locks
+
+- rolled plans may reconcile unobserved low-authority soft assignments only within their stored
+  constraints and with provenance;
+- once the party observes, acts upon, maps, learns, or is promised a fact, that fact becomes hard canon;
+- later movement, destruction, construction, occupation, revelation, disguise, or memory change occurs
+  through a recorded world event rather than retconning the generated record;
+- a player who reaches a promised destination receives enough materialization to answer the action
+  honestly; the engine cannot cite laziness as a reason the content does not exist.
+
+The DM sees the smallest relevant slice of seeded canon and latent opportunities, partitioned by
+knowledge and priority. The renderer receives only the active local plan. Neither needs the entire site
+or campaign index in context at once.
+
+**Recommendation:** adopt this staged commitment frontier. It preserves whole-site coherence and clues,
+supports huge/Breach-linked sites, controls engine/DM load, and still lets player attention root outward
+into rich detail. Exact eager/lazy cut points for geometry, NPCs, loot, and secrets become future-wave
+implementation questions, but they may not violate the seeded invariants or contact lock.
+
+**Open decision:** approve, revise, or reject the proposed boundary between seeded canon,
+deterministically latent structure, and observed hard canon.
+
+After question 20, continue every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

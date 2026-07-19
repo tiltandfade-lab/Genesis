@@ -366,10 +366,10 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 running record - questions 1-16 resolved; question 17 next
+## 8. Wave 1 running record - questions 1-17 resolved; question 18 next
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 16 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+question 17 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
 **Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
@@ -1834,7 +1834,81 @@ that without a parent ceiling:
 **Open confirmation:** adopt scoped independence, causal inheritance, no downward ceiling, and no upward
 averaging as the Spice-layer relationship.
 
-Then continue questions 18-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+Adam confirms. Question 17 is resolved. Spice belongs to scoped causal events; manifestations inherit
+their root; independent children retain eligible rolls; parent bands neither cap descendants nor become
+recolored by them; table classes, causal correlation, repeated-assembly variance, scope, and bounded
+Commitment opportunities prevent size-driven Spice saturation.
+
+#### 8.17.2 Future-question assignments seeded by question 17
+
+| Inherited ruling | Future owner |
+|---|---|
+| Eligible causal events own band, scope, context/license, affected records, manifestations, consequences, and handles | **Wave 2** owns Spice/event recipes and expressivity; **Wave 12** owns persistent schemas, provenance, and outcome-ledger integration |
+| Independent children may exceed parent bands; manifestations of one root inherit rather than reroll | Every later content/table wave; the compiler and validators must distinguish `independent` from `manifestationOf` and test both no-downward-ceiling and no-upward-averaging |
+| Spark/Fork/Commitment ceilings and bounded Commitment opportunities prevent large sites from accumulating automatic high-band noise | **Wave 2/table design** owns budgets and distributions; future difficulty settings must not silently turn the Spice Curve into a tone-escalation control |
+| Secret clues, rooms, and symptoms may express one causal root across a site | **Wave 4** owns network construction/reveal while preserving the single-root band and scope |
+| High-priority narrative cards may attach to eligible active Spice events but may not promote their bands merely through attention | **Wave 9** owns scheduling and reincorporation; player pursuit increases detail/priority, not intensity by fiat |
+| Realm/context changes classification and eligibility without imposing ordinary parent ceilings | Realm table/content work and all later waves inherit the universal-spine/context-license rule |
+
+### 8.18 Pick up here - question 18: how do current occupants claim and use a site?
+
+Question 8 established that occupants may continue, restore, adapt, squat, exploit, deface, overgrow,
+or contest inherited architecture. A large or factional dungeon cannot apply one relationship uniformly,
+but independent room-by-room occupation rolls would produce checkerboard nonsense. The engine needs a
+coherent present-tense territorial model.
+
+Examples:
+
+- goblins squat in a fort's outer barracks, exploit its kitchen, avoid the sealed command level, and
+  contest the gatehouse with bandits;
+- a cult restores a temple sanctuary while defacing older side chapels and using the crypt only for
+  disposal;
+- undead continue the original funerary function below a manor whose living owners sincerely know
+  nothing about them;
+- a breach faction controls one portal-linked zone but cannot safely cross the human-scale service
+  tunnels;
+- an abandoned prison may have vermin in storage, scavengers in intake, one occupied cellblock, and
+  genuinely unused wings.
+
+Three approaches:
+
+1. **One site-wide occupation relationship.** "Goblins squat here" applies everywhere. This is legible
+   but erases differentiated use, inaccessible zones, contested borders, and resource strategy.
+2. **Independent room occupation rolls.** Every room separately chooses occupant, current use, and
+   relationship to architecture. This creates variety but no territorial logic, supply path, patrol
+   behavior, or faction coherence.
+3. **Zoned occupation map.** Current factions/groups claim coherent graph regions according to access,
+   goals, population, resources, defenses, scale, and known hazards. Each zone inherits a dominant
+   relationship to architecture and may contain bounded room-level exceptions. Borders, shared systems,
+   buffers, concealed enclaves, unoccupied areas, and contested rooms are explicit.
+
+**Recommendation:** choice 3. A site's current-occupation layer should record:
+
+```text
+occupant/faction/group id and provenance
++ claimed zones and access routes
++ continue/restore/adapt/squat/exploit/deface/overgrow/contest relationship by zone
++ current functions, population pressure, staffing, and supply dependencies
++ controlled, patrolled, observed, avoided, unknown, contested, and unused spaces
++ borders, chokepoints, permissions, alarms, and communication paths
++ beliefs about inherited architecture and known/misunderstood hazards
++ relationships with other occupants and external suppliers/claimants
+```
+
+Rooms inherit the zone's occupant and relationship by default. A room deviates only through a stored
+cause: specialist use, local damage, secret resident, personal claim, hazard, transformation, or active
+story card. This produces coherent repetition without making every barracks room identical.
+
+No exact faction count should be a magic constant. Site scope, occupancy model, instability, current
+story obligations, access partitions, and available resources determine how many coherent groups fit.
+The generator should prefer the smallest set that explains the rolled present state; additional factions
+need distinct goals, territory or network, and player-facing consequences rather than existing only for
+variety.
+
+**Open decision:** choose the occupation model and whether ordinary rooms should inherit a zone-level
+relationship unless a causal exception overrides it.
+
+Then continue questions 19-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

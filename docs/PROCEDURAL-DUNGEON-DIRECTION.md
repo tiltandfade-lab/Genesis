@@ -4316,3 +4316,159 @@ legible.
 **Open follow-up:** should Spice expression follow this per-layer grammar and four-role causal model,
 with operational Spice explicitly allowed and local high-band results required to promote/bind a scoped
 root rather than appearing as untracked micro-table explosions?
+
+#### 10.5.2 Final ruling - mechanized causal promotion across every allocation layer
+
+Adam accepts the per-layer grammar and four causal roles. This connection was previously left to the
+AI DM: the DM might notice that a spicy object, procedure, room, and NPC fact belonged together and
+develop them into a coherent story. Genesis should mechanize that opportunity so coherence and eventual
+payoff do not depend on prompt memory or improvisational luck.
+
+Question 5 is resolved:
+
+- operational, discretionary-spatial, embedded-local, and coordinated site/zone allocations are all
+  Spice-capable;
+- each layer uses its own expression grammar and honest table classes rather than drawing every kind of
+  variation from one interchangeable anomaly table;
+- every spicy result records a causal role: root, manifestation, accent, or escalation;
+- every result records band, scope, owning layer/table, provenance, affected records, player handles,
+  persistence, and any required manifestations or future service obligation;
+- a result whose claims exceed its current slot's authority is not left as an orphan fact. The planner
+  binds it to a compatible existing root or promotes it into a new explicitly scoped root record;
+- promotion honors the rolled outcome. It may consume a protected root opportunity or create a tracked
+  overflow root that reduces later independent-root pressure; it may not silently reroll, erase, or
+  downgrade an already licensed result merely because an earlier allocation filled the ordinary curve;
+- band and scope remain orthogonal. A Mythic object can remain physically local, but it still receives a
+  tracked causal root if its implications, persistence, or promised payoff require one;
+- manifestations inherit their root's causal identity instead of multiplying the site's independent
+  high-band count. Saturation checks govern simultaneous unrelated roots, not the number of coherent
+  clues, symptoms, rooms, or procedures through which one root can become legible;
+- the DM receives an already-linked strategic/story mechanism with legal homes, reveal handles, and
+  escalation opportunities. The DM still decides how and when to play or develop movable material, but
+  is no longer solely responsible for inventing causal connections or remembering orphaned promises.
+
+A compiler trace for the demonic-soap example could therefore read:
+
+```text
+embedded/local opportunity -> Mythic result: soap houses a speaking infernal claimant
+authority check -> persistent agency and future consequence exceed disposable accent authority
+compatible root search -> none
+promotion -> local/site root `infernal-claimant-under-custody`
+reserved manifestations -> sheriff's cleansing routine; heatless washroom; scratched inmate warning
+DM card -> claimant may bargain, escape, reveal provenance, or alter custody through recorded events
+```
+
+The same mechanism can instead bind a scratched future-date tally, impossible cell adjacency, and
+portal-control procedure to an already existing outer-realm prison root. The engine supplies causal
+unity; the DM supplies performance, timing, adjudication, and adaptive development.
+
+#### 10.5.3 Future-question assignments seeded by question 5
+
+| Inherited ruling | Future owner |
+|---|---|
+| Operational, discretionary-spatial, embedded-local, and coordinated site/zone allocations have separate protected budgets and Spice-aware expression grammars | Remaining **Wave 2** questions define authoring inventories and distributions; **Waves 3-5** realize their spatial, portal, discovery, and dressing expressions |
+| Every spicy result is a root, manifestation, accent, or escalation with explicit provenance and scope | **Wave 9** owns strategic/story-card scheduling and DM presentation; **Wave 12** owns the persistent causal schema, replay, migration, and orphan-promise diagnostics |
+| Out-of-authority local results bind or promote without silently losing the rolled outcome | Remaining **Wave 2** table design owns eligibility and table-class declarations; **Wave 12** owns compiler invariants and overflow-root/saturation tests |
+| One root may license many coherent manifestations without those manifestations counting as independent high-band events | **Waves 4-5** own clue/secret/dressing reservation; **Wave 9** owns reveal and escalation cadence |
+| Exact allocation and Spice curves remain fixture-tuned rather than intuition-locked | Remaining **Wave 2** writing and distribution work uses the five-site stress corpus; **Wave 12** owns seeded statistical acceptance gates |
+
+### 10.6 Question 6 - how should operational demand become exact quantities?
+
+In plain English: what makes a jail receive three cells rather than one or fourteen, a college receive
+six residential houses rather than a flat list of bedrooms, or a hive receive four brood clusters
+rather than one chamber per creature? The engine needs exact stable spaces before play, but it should
+not derive them from a single crude size label or simulate every unseen resident.
+
+This is where structural scope, operational load, spatial envelope, occupancy/accommodation, and
+repeated assemblies must meet. Three broad mechanisms are available:
+
+1. **Fixed size packages** can say that a small jail always has two cells and a large prison always has
+   forty. They are readable and cheap, but become recognizable templates, handle current load poorly,
+   and multiply across cultures, doctrines, realms, and conditions.
+2. **Exact headcount arithmetic** can derive one bed per resident, one privy per fixed number, and one
+   guard per shift. This supplies causal quantities but creates false precision, sterile uniformity,
+   unnecessary population simulation, and huge graphs when the actual realization is communal,
+   scheduled, magical, biological, or external.
+3. **Demand, coverage, and assembly curves** can preserve authored dice while keeping the quantities
+   causal. This is the recommended foundation.
+
+#### Recommended quantity pipeline
+
+```text
+purpose/context/history
+  -> operational-load profile (normal, current, peak, throughput, duration)
+  -> capability-specific coverage standard and doctrine
+  -> rolled capacity, redundancy, privacy, segregation, and service ratios
+  -> assembly partition and realization family
+  -> exact canonical parent/child quantities and stable ids
+  -> reconcile capacity, envelope, and current state
+```
+
+The stages remain distinct controls:
+
+- **Demand** asks how many people, items, rituals, carts, bodies, worshippers, offspring, meals, or units
+  the function normally and currently serves.
+- **Coverage** asks how much capacity is required, including reserve, redundancy, privacy, security,
+  segregation, turnover, shift sharing, peak load, and accepted failure risk.
+- **Partition** asks whether the result becomes individual rooms, communal rooms, wings, houses,
+  clustered niches, scheduled/shared facilities, distributed systems, or external capacity.
+- **Materialization** asks how much detail is expanded now. It never changes the already canonical
+  counts, child identities, connections, or capacity.
+
+Purpose families should author human-readable quantity rollers and ratios, not hide everything in an
+optimizer. A jail profile might expose `1d4 cells`, an occupancy/crowding roll, segregation eligibility,
+and external-transfer reliability. A residence profile might roll single/double/communal mixes and
+house sizes. A habitat profile might roll brood-cluster capacity and renewal cadence. The compiler turns
+those rolls into exact stable records and emits the arithmetic/provenance in its trace.
+
+#### Concrete comparisons
+
+- **Frontier jail:** the settlement and enforcement load imply a handful of ordinary prisoners plus an
+  occasional surge. It may roll three cells, one of them double-capacity, with food externalized to the
+  tavern. If five prisoners are currently held, the jail is honestly overcrowded; the engine does not
+  secretly add a fourth cell or delete a prisoner. That mismatch can produce guard procedure, conflict,
+  transfer pressure, or a discretionary-space adaptation.
+- **City prison:** a population/justice profile creates a much larger custody load, then doctrine rolls
+  security classes, isolation, dormitory versus cell ratios, reserve, staffing coverage, and service
+  standards. The result partitions into cellblock assemblies and specialist wings. Each cell remains a
+  stable child space, but the planner and save can store shared block truth once and materialize only the
+  relevant slice.
+- **Residential college:** enrollment, residential fraction, tenure, wealth, and house doctrine produce
+  a bed demand; single/double/communal ratios and shared-service coverage partition it into several
+  houses and floors. A current enrollment decline leaves meaningful vacancies or repurposed rooms
+  rather than causing architecture to disappear.
+- **Boutique inn:** market demand constrains viable capacity, but operator curation and wealth may favor
+  fewer large individually themed suites over many standardized rooms. An ordinary inn at the same load
+  might make the opposite trade.
+- **Living habitat:** ecological throughput produces brood, feeding, waste, renewal, and defense
+  capacity. Hundreds of organisms can remain cohorts served by several stable chamber assemblies; the
+  engine does not create one room or heavyweight record per larva.
+
+#### Capacity mismatch is state, not generator failure
+
+Designed capacity and current demand should be allowed to diverge when history or present pressure
+causes it. That gap is often the most interesting truth in the site:
+
+- demand above capacity -> crowding, queues, rationing, unsafe substitution, shifts, annexes, external
+  transfers, or an explicit failing capability;
+- demand below capacity -> vacancy, mothballing, repurposing, territorial occupation, decay, or protected
+  discretionary use;
+- spatial envelope below legitimate program -> combine, schedule, externalize, build vertically, use an
+  annex/child site, record a degraded function, or revise the still-unobserved envelope through the
+  Wave 1 reconciliation ladder;
+- impossible residual mismatch -> a plain-language diagnostic, never silent truncation or overlap.
+
+This does not authorize the engine to manufacture crisis from bad arithmetic. The healthy-by-construction
+and crisis-provenance laws from Question 2 still apply. Ordinary capacity ratios should usually produce
+functional places; overcrowding, vacancy, and failure arise from licensed history/current-state rolls or
+real world events and come with mitigation/recovery possibilities.
+
+**Recommendation:** use authored demand, coverage, and assembly curves to produce exact canonical
+quantities. Treat size bands as readable modifiers and table selectors, not sole causes. Keep latent
+population/ecology in cohorts where appropriate, but make spatial children, capacities, and actionable
+occupants stable and exact. Preserve capacity mismatch as causal state rather than automatically resizing
+the site to erase it.
+
+**Open decision:** should Wave 2 adopt this demand -> coverage -> assembly -> exact-count pipeline, with
+designed capacity and current load recorded separately so licensed overcrowding, vacancy, communal use,
+shifts, and external service remain possible?

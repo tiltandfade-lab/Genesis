@@ -1156,6 +1156,60 @@ items, and obvious loose masonry; it should not automatically read invisible wri
 false wall, make a terrified prisoner trust the party, or recognize a cipher. Thoroughness guarantees
 coverage, while character capability and chosen method determine depth.
 
+#### 8.13.3 Ruling and follow-up - systematic search produces inspectable leads
+
+Adam selects **layered certainty by method**. This matches a real tabletop session: a careful search
+produces a list of things that can be investigated, while skill rolls and contextual obstacles govern
+what the party can learn or change about them.
+
+A systematic sweep therefore compiles a stable **inspection opportunity list** for its declared scope
+and method. An opportunity may record:
+
+```text
+stable target and physical/narrative anchor
++ currently perceivable tell
++ eligible approaches, skills, tools, spells, or relationships
++ contextual obstacle or access requirement
++ time, noise, danger, resource, or social cost
++ linked discovery packet or practical result
++ attempt state and materially new retry conditions
++ table/row/seed provenance
+```
+
+The opportunity is not itself a spoiler. The player should perceive the **tell**, not the hidden answer:
+
+- "The mortar around the third stone is newer" rather than "DC 15 secret compartment."
+- "One prisoner watches the guards before meeting your eyes" rather than "persuasion-gated witness."
+- "The bottom drawer stops short of the desk's full depth" rather than "hidden evidence cache."
+- "The faded sigil disappears under ordinary lamplight" rather than "requires magical illumination."
+
+Context gates are as important as numerical skill gates. A character may recognize the loose stone but
+still lack privacy, leverage, a crowbar, the correct language, enough time before patrol, permission to
+break evidence, or a safe way past its trap. Conversely, established knowledge, the right NPC, a prior
+clue, or a clever tool can bypass a roll honestly.
+
+Search state is persistent. Rephrasing the same attempt does not reroll the opportunity. A new skill,
+method, tool, relationship, clue, access route, or changed world state can reopen it; failure may reveal
+partial information or impose a consequence according to the owning reveal recipe rather than simply
+returning a content-free "no."
+
+**Open presentation follow-up:** who sees the inspection list?
+
+1. **Literal player checklist.** The UI lists every inspectable target and its available roll. This is
+   clear and accessible, but becomes gamey, advertises content density, and encourages clearing every
+   icon.
+2. **Unstructured prose only.** The DM mentions details without a machine-readable opportunity hand.
+   This feels natural but makes stable gating, persistence, aggregation, and reliable fulfillment much
+   harder.
+3. **Structured DM hand, narratively surfaced.** The engine maintains the full opportunity list. The DM
+   presents currently perceptible tells naturally, prioritizes a small relevant subset, summarizes
+   routine negatives, and responds to free-form player questions by querying the same stable records.
+   Accessibility modes may expose clearer prompts without turning every room into a checklist.
+
+**Recommendation:** choice 3. The structured list belongs behind the screen. The player receives a
+legible description and can ask or act freely; the DM receives enough stable structure to be fair,
+persistent, skill-aware, and consistent across revisits.
+
 Then continue questions 14-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

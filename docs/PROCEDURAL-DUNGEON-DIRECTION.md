@@ -904,6 +904,75 @@ The actual open decision is therefore simpler than the terminology suggested:
 The recommendation remains **yes**. This gives every concern explicit authority while preventing one
 giant "size" variable from becoming the whole dungeon generator in disguise.
 
+#### 8.12.3 Ruling - editable rollers, replayability, and the affordable representation
+
+Adam accepts the recommendation. Choice 3 now means a **coupled, extensible multi-profile model**:
+
+- size/site envelope governs structural scope, operational load, spatial extent, and accommodation;
+- topology, history, current state, challenge/resource pressure, discovery density, realm physics,
+  and realization resolution remain separate, equally authoritative, interacting profiles;
+- the four-profile envelope is the current sufficient core, not a sacred permanent count;
+- exact band counts and numeric thresholds remain open for the table-design and expressivity pass.
+
+The control knobs remain **editable rollers**. Human-readable tables are the authoring surface even
+when the compiler emits a different normalized runtime representation. This is not merely a convenient
+file format:
+
+- tables let a human see probability, alternatives, and exceptional outcomes directly;
+- they let Adam, beginning developers, and modders change the game without rewriting engine code;
+- they preserve dice, weighted uncertainty, and inspectable rulings as part of Genesis's D&D soul;
+- they make realm expansions additive content packs rather than generator forks;
+- they keep source authorship distinct from runtime optimization.
+
+The established author-in/compile-to discipline therefore applies to the redesign:
+
+```text
+human-readable roller tables and profile recipes
+        -> schema validation, reference resolution, and constraint compilation
+        -> normalized runtime records, indexes, and solver inputs
+```
+
+Generated runtime artifacts are never the normal editing surface. Each roll retains its table id,
+row, band, modifiers, seed/provenance, and any constraint-driven reconciliation so a modder can trace
+an in-game result back to editable source. Established canon or an explicit premise may fix a value;
+otherwise the value is obtained through its roller. "Control knob" does not mean an opaque hardcoded
+slider hidden from the table system.
+
+Avoid both implementation traps:
+
+1. do not author one giant table containing every profile and realm combination;
+2. do not bury realm-specific probability changes in scattered engine conditionals.
+
+Instead, a universal roller spine selects typed profile results, while purpose, context, doctrine,
+history, and realm tables apply readable weights, additions, replacements, constraints, and Spice
+licenses. The compiler validates that referenced tags and transformations exist. Engine stages consume
+the compiled result without taking table authorship away from humans.
+
+Adam also confirms the product priority:
+
+> Prefer TTRPG freedom and effectively unbounded replayability over Baldur's Gate 3-style authored
+> geometric accuracy. Genesis can afford the former and cannot afford the latter.
+
+A top-down grid/graph-based representation makes this breadth feasible. The semantic systems -
+purpose, history, topology, secrets, realm laws, persistence, and player-driven expansion - carry more
+value than expensive literal depiction of every possible place. This is not permission for a cheap or
+ugly presentation; it is a budget and product-soul ruling about where fidelity must live.
+
+**Open representation follow-up:** do not yet conflate three layers:
+
+1. **canonical connection graph** - which spaces, zones, sites, and realms connect, including typed
+   doors, passages, stairs, travel spans, and breaches;
+2. **canonical local spatial plan** - metric cells/slots, shapes, elevation, portals, circulation,
+   objects, and scale domains inside a room or locally coherent zone;
+3. **presentation projection** - top-down grid, graph map, isometric diorama, theater frame, prose, or
+   another view compiled from the same truth.
+
+The recommendation is to make graph plus local metric plan canonical and make **top-down the affordable
+default projection**, not the ontology of the world. This preserves the chosen freedom and cost ceiling
+without preventing later presentation improvements. It also serves Breaches: separate local grids can
+connect through typed realm edges without pretending that every plane, pocket realm, recursive hall,
+or non-Euclidean space fits one global Euclidean map.
+
 Then continue questions 13-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

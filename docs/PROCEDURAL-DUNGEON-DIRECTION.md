@@ -1037,6 +1037,68 @@ stone and medicine cache, Cell 31 evidence of an impossible former prisoner, and
 but still inspectable. Shared assemblies reduce cost and improve coherence; stable child identities,
 deterministic detail promotion, and bounded per-unit opportunities preserve TTRPG freedom.
 
+#### 8.13.1 Ruling and follow-up - the SNES cell model
+
+Adam selects **choice 3, hierarchical repeated assemblies**. The intended player-facing cadence is
+similar to old Squaresoft SNES exploration: most prison cells appear to contain nothing of immediate
+importance; some contain treasure; some contain an NPC who will talk; some contain an NPC who refuses
+to talk. Repetition supplies rhythm and makes exceptions legible rather than demanding that every cell
+perform as an authored set piece.
+
+The parent assembly owns shared facts and systems:
+
+```text
+cell count and layout pattern
++ guard/control/circulation structure
++ common construction and required fixtures
++ shared supply, sanitation, light, locks, and hazards
++ group history, current condition, and occupancy pressure
++ allowed child-state distribution and variance budget
+```
+
+Each enterable child receives a stable identity and a lightweight state rather than a full independent
+room generation:
+
+- **visibly empty/quiet** - no obvious actor, loot, or active event;
+- **environmental trace** - wear, residue, writing, damage, sound, smell, or practical evidence;
+- **resource/cache** - ordinary supplies, concealed consumables, treasure, contraband, or tools;
+- **occupied and receptive** - an NPC willing to engage under current conditions;
+- **occupied and guarded/refusing** - an NPC present but unwilling, unable, afraid, hostile, bound by
+  orders, or requiring changed circumstances before engagement;
+- **hazard/obstacle** - a local danger or access problem;
+- **secret/story-bearing** - a child carrying or contributing to a coordinated larger discovery.
+
+These states remain editable rollers compiled through the same author-in/compile-to pipeline. Purpose,
+current occupancy, history, resource pressure, and Spice alter weights. The parent prevents incoherent
+independent-roll excess: it can cap treasure, NPC density, exceptional variance, and major-secret
+participation while still permitting a rare run in which several unusual cells share one cause.
+
+An NPC refusing to talk is a legitimate state, not a generation failure. The record needs only the
+observable refusal and its stable cause or unlock condition initially; deeper personality and network
+materialize when player attention or changed circumstances require them. Refusal does not automatically
+create a quest, but it must remain consistent when revisited.
+
+**Open follow-up - what does "most cells are nothing" mean?** This must reconcile the SNES cadence with
+Question 11's ruling that every room receives a discovery opportunity and quiet rooms can reward
+attention:
+
+1. **Literally inert:** most cells have no actor, loot, useful observation, inspectable detail, or
+   gameplay contribution beyond floor space. This is maximally clean but partially reverses the
+   meaningful-room law.
+2. **Nothing obvious, lightweight on attention:** most cells look empty on entry and do not announce an
+   interaction. If deliberately examined or made relevant by another clue, they can yield a small
+   truthful observation - guard routine evidence, acoustics, old tally marks, recent absence, a usable
+   hiding/rest position, confirmation that a searched-for person was not held there, or participation
+   in a shared secret network. Most still contain no loot, NPC, quest, or unique spectacle.
+3. **Block-level meaning only:** ordinary cells remain inert individually, but searching or studying
+   the cellblock as a whole yields its environmental and discovery information. This avoids repetitive
+   inspection but makes individual cells less meaningful.
+
+**Recommendation:** choice 2 with a block-level convenience. "Nothing" should be the honest surface
+state and the common result, not a UI sparkle or mandatory bespoke vignette. Every enterable cell keeps
+a lightweight opportunity if attention or a clue targets it, while broad actions such as searching the
+cellblock can aggregate routine observations so the optimal play is not clicking forty identical doors.
+
 Then continue questions 14-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

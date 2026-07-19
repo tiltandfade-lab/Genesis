@@ -366,10 +366,10 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 checkpoint - questions 1-11 resolved; question 12 next
+## 8. Wave 1 running record - questions 1-12 resolved; question 13 next
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 11 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+question 12 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
 **Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
@@ -377,6 +377,12 @@ the running record. Append each question's framing, recommendation, Adam's answe
 follow-up as the discussion happens. Do not silently replace an earlier ruling; preserve it and record
 any later correction or supersession explicitly. `HANDOFF.md` and `NEXT-STEPS.md` need not move again
 until Adam ends the session.
+
+At the end of each question, add a **future-question assignments** block. If an answer already settles,
+constrains, or creates a requirement for a later questionnaire item, wave, or system, name that future
+owner explicitly. The later discussion begins from that inherited ruling instead of asking Adam to
+re-decide it. A deferral must likewise name its owner and does not remain an artificial blocker for the
+current question.
 
 ### 8.1 Identity and authority
 
@@ -667,7 +673,18 @@ playability constraints; circulation and furnishing objectives; two-stage genera
 measurement; and solver-escalation options. Preserve Genesis's vision while adopting elegant solved
 techniques rather than recreating them poorly.
 
-### 8.12 Pick up here
+#### 8.11.1 Future-question assignments seeded by question 11
+
+| Inherited ruling | Future owner |
+|---|---|
+| Per-room discovery opportunities plus coordinated site-secret networks; no discovery packet leads nowhere | **Wave 4 - Portals, Secrets, Vertical Connections, and Circulation** begins from this model and decides its spatial/reveal implementation rather than reopening the principle |
+| Promissory cards, attention promotion, contract service horizons, and the MUST PLAY -> LOCAL SPICE hand | **Wave 9 - DM Strategic Cards and Environmental Authority** owns scheduling details, capacity limits, deferral accounting, and DM interfaces |
+| Multi-beat social rooms with layered anchors, clusters, latent NPCs, and ambient population | Future **bounded-place/place-generation** discussion owns population compilation and presentation |
+| Joint danger, attrition, consumable, and rest budgeting with no reactive punishment for found loot | **Wave 7 - Tactical Affordances and Encounter Reshaping** and the future difficulty-setting system inherit this constraint |
+| Baldur's-Gate-like automatic inventory, weight, equipment slots, and drag-and-drop without packing labor | Future **inventory-system** design; audit adoptable systems before bespoke implementation |
+| Golden-beat preservation, research sift, and replacement-proof crosswalk | **Wave 12 - Migration, Persistence, Acceptance Gates, and Build Order** must turn these into migration and executable acceptance requirements |
+
+### 8.12 Functional Roster and Site Scale - resolved
 
 Resume **Wave 1, question 12 - Functional Roster and Site Scale**:
 
@@ -953,12 +970,12 @@ Adam also confirms the product priority:
 > Prefer TTRPG freedom and effectively unbounded replayability over Baldur's Gate 3-style authored
 > geometric accuracy. Genesis can afford the former and cannot afford the latter.
 
-A top-down grid/graph-based representation makes this breadth feasible. The semantic systems -
+A top-down grid/graph-based representation may make this breadth feasible. The semantic systems -
 purpose, history, topology, secrets, realm laws, persistence, and player-driven expansion - carry more
 value than expensive literal depiction of every possible place. This is not permission for a cheap or
 ugly presentation; it is a budget and product-soul ruling about where fidelity must live.
 
-**Open representation follow-up:** do not yet conflate three layers:
+**Representation implication - deliberately deferred:** do not yet conflate three layers:
 
 1. **canonical connection graph** - which spaces, zones, sites, and realms connect, including typed
    doors, passages, stairs, travel spans, and breaches;
@@ -967,13 +984,60 @@ ugly presentation; it is a budget and product-soul ruling about where fidelity m
 3. **presentation projection** - top-down grid, graph map, isometric diorama, theater frame, prose, or
    another view compiled from the same truth.
 
-The recommendation is to make graph plus local metric plan canonical and make **top-down the affordable
-default projection**, not the ontology of the world. This preserves the chosen freedom and cost ceiling
-without preventing later presentation improvements. It also serves Breaches: separate local grids can
-connect through typed realm edges without pretending that every plane, pocket realm, recursive hall,
-or non-Euclidean space fits one global Euclidean map.
+Whether graph plus local metric plan should be canonical, whether top-down should be the default
+projection, and what happens to the current graphics engine are **not Question 12 rulings**. Adam assigns
+them to **Wave 10 - Interim Visual Engine and Release Scope**, where the new graphics direction, target
+captures, production cost, and renderer alternatives can be judged together. Question 12 contributes
+only the already-accepted product constraint: favor TTRPG freedom and replayability over unaffordable
+BG3-style geometric accuracy.
 
-Then continue questions 13-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+#### 8.12.4 Future-question assignments seeded by question 12
+
+| Inherited ruling or open decision | Future owner |
+|---|---|
+| Structural scope, operational load, spatial envelope, and accommodation are separate but coupled; exact band counts remain open | **Wave 2 - Room Roster, Repetition, Spice, and Dungeon Ecology** owns profile tables, allocations, repeated-unit treatment, and expressivity testing |
+| Accommodation domains may vary by site, zone, and breach-linked subsite | **Wave 6 - Creature Scale, Capacity, Squeezing, and Party Participation** inherits construction-time domains and decides creature/party mechanics at their boundaries |
+| Topology is first-class but not a kind of size | **Wave 3** owns structural compilation and **Wave 4** owns portal/vertical/circulation edge semantics; neither should derive topology accidentally from room count alone |
+| Canonical scope and current realization resolution are distinct; stable latent substructure may expand deterministically | **Wave 12 - Migration, Persistence, Acceptance Gates, and Build Order** owns ids, save evolution, lazy materialization, and reproducibility gates |
+| Human-readable rollers remain the editable source; compiled records retain row/modifier/seed provenance | **Wave 12** and the table-compiler/modding work inherit this author-in/compile-to contract |
+| Realm expansion uses a universal semantic spine plus registered data, constraints, assets, and modifiers rather than scattered realm branches | Every later wave, especially **Waves 3, 4, 6, 10, and 12**; the frozen founding realm-id slate remains intact unless separately reopened |
+| Graph/local-grid/top-down/full-renderer choice | **Wave 10 - Interim Visual Engine and Release Scope**; explicitly deferred and not a Question 12 blocker |
+
+Question 12 is resolved. Its exact table bands remain deliberately deferred to their owning table and
+expressivity pass; no material functional/site-scale follow-up remains in Wave 1.
+
+### 8.13 Pick up here - question 13: repeated functions without cloned rooms
+
+Large institutions repeat functions: prison cells, barracks bays, dormitories, archive stacks,
+workshops, classrooms, storage vaults, treatment rooms, mine headings, and ritual stations. Decide what
+the engine treats as an individual room, a repeated physical unit, a functional domain, and a lazily
+expanded detail record. The decision must preserve honest explorable architecture and per-room
+discovery without forcing every repeated unit to carry a heavyweight independent story on creation.
+
+**Open discussion frame - not yet a ruling:** three approaches expose the tradeoff:
+
+1. **Every repeated unit is a fully independent room roll.** Forty prison cells receive forty complete
+   room generations. This maximizes immediate specificity but inflates generation, secrets, NPC/story
+   state, and DM attention; independent rolls also make a purpose-built cellblock look incoherently
+   random.
+2. **Collapse the whole repeated function into one abstract room.** "Cellblock: 40 cells" is one node
+   and one content packet. This is cheap, but produces facade architecture: individual doors and cells
+   either cannot be entered or have no persistent identity, violating exploration and the per-room
+   discovery principle.
+3. **Hierarchical repeated assemblies.** A parent functional domain rolls a count, shared layout and
+   infrastructure, invariant requirements, and a controlled variance recipe. It compiles real stable
+   child spaces or units. Every enterable child exists and can receive a lightweight local discovery;
+   player attention promotes a child to richer contents and relationships. Group-level history,
+   current use, and secrets create coordinated variation, while selected units receive exceptional
+   differences through purpose, occupants, history, or Spice.
+
+**Recommendation:** choice 3. A forty-cell prison should feel deliberately constructed as a cellblock,
+not like forty unrelated dungeons, while Cell 17 can still contain scratched names, Cell 22 a loose
+stone and medicine cache, Cell 31 evidence of an impossible former prisoner, and most cells quieter
+but still inspectable. Shared assemblies reduce cost and improve coherence; stable child identities,
+deterministic detail promotion, and bounded per-unit opportunities preserve TTRPG freedom.
+
+Then continue questions 14-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

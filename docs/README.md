@@ -144,6 +144,15 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 
+- `PROCEDURAL-DUNGEON-DIRECTION.md` — the current discovery authority for rebuilding architectural
+  and dressing rolls around a tile/slot room compiler; records accepted direction, unresolved forks,
+  and the strict question-wave closure protocol. No implementation is authorized by this document.
+- `PROCEDURAL-DUNGEON-RESEARCH.md` — deep technical synthesis of procedural room layout, furnishing,
+  playability constraints, and solver architecture, with direct implications for Genesis.
+- `PROCEDURAL-DUNGEON-ENGINE-CROSSWALK.md` — audited map from the research model to the current
+  dungeon graph, room grammar, walk, table, combat, and renderer seams.
+- `../Reference/Procedural-Dungeon-Research/SOURCE-INDEX.md` — verified source ledger for the bundled
+  nine-paper PDF corpus and the rendered research report.
 - `EXTRUDED-SPRITE-PROP-LIBRARY.md` — production plan for the realm-specific prop bank: generated
   silhouettes/faces/motifs routed through EXTRUDE, FACED_BOX, or MODEL; compiler, registry, QA,
   no-human workflow, and ES-0 through ES-5 rollout. (2026-07-12)

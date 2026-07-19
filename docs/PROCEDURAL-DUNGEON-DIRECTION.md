@@ -1778,6 +1778,62 @@ result eligible or contextually ordinary, but it does not mechanically heat ever
 **Open decision:** choose whether Spice is site-wide, independently per detail, or owned by causal events
 whose manifestations inherit their intensity.
 
+#### 8.17.1 Ruling and follow-up - no downward Spice ceiling
+
+Adam selects the **causal Spice graph** and identifies the crucial layering rule: a site-level Grounded
+result must not force its occupants, NPCs, loot, encounters, discoveries, or other child generators to
+remain Grounded. Those systems carry their own eligible Spice rolls. A Grounded dungeon can still become
+excellent through granular NPC, loot, secret, and local-detail variation.
+
+Use **scoped independence with causal inheritance**, not parent-band constraint:
+
+- **Independent child:** an NPC, item, secret, encounter, local detail, or later event rolls through its
+  own table class, context, scope, and Spice eligibility. Its result may exceed the site's construction/
+  history band.
+- **Causal manifestation:** when a child exists because of an already rolled root event, it inherits or
+  expresses that root's band and does not roll another independent intensity merely for being another
+  symptom.
+- **Context modifier:** parent purpose, region, realm, doctrine, history, and current state may change
+  row eligibility, classification, and weights, but they do not impose an ordinary maximum band.
+- **Hard constraint:** physical or canonical impossibility can still reject a result; that is the
+  compatibility system, not a Grounded parent suppressing Spice.
+
+Therefore:
+
+- a Grounded working prison may hold a Mythic NPC whose identity or condition is locally world-marking;
+- its loot may independently contain a high-band artifact if an eligible Commitment result and causal
+  placement explain how it is there;
+- one Strange hidden route may exist inside otherwise ordinary construction;
+- a Mythic site may still contain Grounded guards, meals, tools, vermin, furniture, and cells;
+- a mage-colony prison may classify portal infrastructure as Grounded while an individual inmate's
+  cross-realm nature rolls much higher.
+
+A high-band child does not retroactively rewrite the original dungeon as high-band construction. It
+adds its own scoped causal record to the site's active event graph. If the Mythic prisoner later tears
+open the prison, that consequence may create a new site-scale transformation through ordinary outcome/
+ledger rules.
+
+Apply two non-cascade laws:
+
+> **No downward ceiling:** a parent's band does not cap independently rolled descendants.
+
+> **No upward averaging:** a child's band does not recolor every ancestor or sibling; the site summary
+> lists the scoped active event rather than replacing the site's other truths with one maximum band.
+
+This layering needs anti-saturation safeguards. Large sites create more NPCs, loot, rooms, and details,
+so uncontrolled independent Commitment rolls would make high-band outcomes nearly inevitable. Prevent
+that without a parent ceiling:
+
+- Spark/Fork/Commitment class ceilings remain honest; most detail rolls cannot reach Volatile/Mythic;
+- site/zone budgets bound independent Commitment opportunities and major secret networks;
+- one root event supplies correlated manifestations instead of rerolling intensity per room;
+- repeated assemblies use parent variance budgets rather than one full high-ceiling roll per child;
+- scope remains separate, so a Mythic personal fact need not become a site-wide catastrophe;
+- player attention may deepen a child record but does not raise its band merely because it was pursued.
+
+**Open confirmation:** adopt scoped independence, causal inheritance, no downward ceiling, and no upward
+averaging as the Spice-layer relationship.
+
 Then continue questions 18-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

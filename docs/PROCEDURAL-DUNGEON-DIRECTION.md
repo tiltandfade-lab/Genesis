@@ -2807,3 +2807,128 @@ system proves a specific player-facing need.
 **Open follow-up:** is this the correct meaning of "some simulation"—aggregated causal resources and
 services, updated on meaningful events or lazy elapsed-time catch-up, with exact numbers only when the
 player can understand and act on them?
+
+#### 10.1.3 Final ruling - authoritative roster plus light strategic simulation
+
+Adam confirms the boundary. Question 1 is resolved:
+
+- every site begins from a purpose-family program of capabilities, flows, and dependencies;
+- named rooms, assemblies, procedures, and external services are rollable realizations of that program;
+- flat human-readable tables remain the friendly D&D/modding surface and strong authored packages
+  remain reusable recipes, but neither replaces semantic obligations as the authority;
+- constructed institutions, infrastructure, monuments/ceremonial sites, natural formations, living
+  habitats, and anomalies use suitable family grammars rather than forcing every site through a human
+  institutional template;
+- site ecology receives real but light simulation through aggregate resources/services, quantities when
+  useful, ordinal states, booleans, rates, clocks, meaningful event updates, and deterministic lazy
+  catch-up;
+- the engine does not continuously simulate every person's domestic activity or run every unvisited
+  site at high frequency;
+- the large writing/flavor pass is a desired part of development with AI assistance, not a reason to
+  flatten the design.
+
+The intended product distinction is important: Genesis should narrate consequences from persistent
+causal world state, not invent a plausible consequence only after the player asks. This can distinguish
+it from AI-dungeon experiences whose prose is responsive but whose places lack a durable systemic model.
+
+#### 10.1.4 Future-question assignments seeded by question 1
+
+| Inherited ruling | Future owner |
+|---|---|
+| Purpose-family programs author capabilities, flows, dependencies, quantities, and realization families | Remaining **Wave 2** questions define the vocabulary, simulation eligibility, roster allocation, repetition, ecology, Spice, and writing inventories |
+| Roster ecology uses aggregate event-driven state, exact quantities only when actionable, and lazy catch-up rather than continuous per-NPC simulation | **Wave 2** defines which systems qualify; **Wave 8** owns destructive/state-changing events; **Wave 12** owns persistence and catch-up verification |
+| Markdown rollers and recipe packages compile through semantic obligations | **Wave 11** owns authoring/modding/workbench experience; **Wave 12** owns compiler validation and migration gates |
+| Purpose/roster demand informs graph requirements before final room assignment | **Waves 3 and 4** own topology and structural realization without reopening the semantic authority |
+| The DM receives consequences and the active local slice, not the entire simulation graph | **Wave 9** owns strategic-card/digest projection and must preserve this context bound |
+
+### 10.2 Question 2 - which site systems deserve light simulation?
+
+In plain English: the roster can describe hundreds of facts, but which of them should receive mutable
+state, clocks, quantities, and causal updates? If everything becomes a system, Genesis recreates a
+colony simulator and buries the DM in state. If almost nothing becomes a system, the operating model is
+decorative lore and the game loses the distinction Adam wants.
+
+Three mechanisms have value, but again are not equal standalone answers:
+
+- A **universal checklist**—food, water, air, waste, staffing, security, morale everywhere—is easy to
+  understand but nonsensical for many sites. A sealed tomb does not need food simulation; an ooze colony
+  may not have morale; a magical archive may care more about humidity and ward stability than air.
+- **Activate only after player attention** keeps state cheap but makes the world retroactive. The engine
+  might decide that the besieged prison has no food problem until the player asks, losing preexisting
+  consequences and fair clues.
+- A **purpose-authored system registry with graded activation** can establish latent causal truth at site
+  creation while spending active simulation only where state, events, elapsed time, or player attention
+  make it relevant.
+
+The recommended admission test is:
+
+1. **Mutable state:** the candidate has at least two meaningfully different states, quantities, or
+   thresholds.
+2. **Causal structure:** it has a source, dependency, route, capacity, process, consumer, sink, failure,
+   or comparable relationship—not merely an atmospheric label.
+3. **Change driver:** player action, occupant action, damage, supply, time, weather, fronts, or another
+   recorded event can change it.
+4. **Player-facing consequence:** its state can affect access, danger, reward, inhabitants, services,
+   tactics, information, topology, contracts, or persistent world conditions.
+5. **Legibility and agency:** the system can produce tells and at least one way to investigate, exploit,
+   protect, repair, redirect, endure, negotiate around, or otherwise answer it.
+6. **Affordable abstraction:** the consequence survives aggregation; it does not require per-object or
+   per-person continuous simulation to remain honest.
+
+A fact that fails those tests remains canonical description, history, or discovery content. It does not
+receive a fake meter merely to look systemic.
+
+Candidate systems enter through authored layers:
+
+- **site-family foundations:** environmental continuity, access/circulation, stability, or another law
+  intrinsic to the kind of place;
+- **purpose-core systems:** custody in a prison, extraction/drainage in a mine, preservation/access in an
+  archive, procession/offerings in a ceremonial site;
+- **occupancy/resource systems:** supplies, shelter, renewal, security, waste, morale, or maintenance
+  required by the actual population and operating state;
+- **active context/front systems:** siege, overcrowding, plague, flooding, fire, labor conflict,
+  contested control, structural failure, or similar current pressure;
+- **anomaly/Spice systems:** Breach pressure, curse propagation, impossible geometry, living
+  architecture, or another causal event whose behavior changes over time.
+
+Not every canonical system must remain equally active. Use a graded lifecycle:
+
+```text
+latent invariant/fact
+-> monitored state
+-> active light simulation
+-> foreground pressure/card source
+-> resolved, stabilized, transformed, or scarred
+```
+
+Promotion is caused by the initial site state, approaching a threshold, a world event, dependency
+failure, player attention/action, or narrative commitment. Demotion stops active ticking but preserves
+the last state and future catch-up rules. The active-system budget scales with site complexity and
+current pressure; no universal magic count is assumed.
+
+Concrete distinctions:
+
+- A frontier jail may actively track custody/security while external meals remain a stable dependency.
+  If a blizzard or siege cuts delivery, food reserve promotes into an active clock. The sheriff's
+  demonic soap remains a discoverable object unless its dreams, confessions, or realm influence begin
+  changing people or events.
+- A city prison may begin with active staffing, food/water, sanitation, overcrowding/unrest, medical
+  capacity, and ward integrity because failures already interact at institutional scale.
+- A natural cavern may track drainage/flood level and structural stability while mineral color remains
+  descriptive. A predator's arrival can promote prey movement or territorial control into active
+  ecology.
+- An alchemist shop may track stock and ordinary heat only coarsely, while volatile reagents,
+  ventilation, and the concealed necromancy lab's containment form an interacting active system.
+
+Genesis already has compatible small precedents: deterministic character resource pools, stamped
+scene-risk pressure clocks, and persistent lazy codex state. The new layer should reuse their principle
+of typed state plus explicit events. It should not delegate site truth to an autonomous AI simulator.
+
+**Recommendation:** use the purpose-authored registry and admission test, seed qualifying systems as
+canonical latent state, and promote only relevant/pressured systems into active simulation. After this
+architecture is accepted, later Wave 2 questions can perform the deep writing pass family by family and
+decide which systems are foundational, optional, or context-activated for each purpose.
+
+**Open decision:** should light-sim eligibility follow this causal/player-facing admission test and
+graded lifecycle, with every purpose family authoring its own candidate systems instead of applying one
+universal checklist?

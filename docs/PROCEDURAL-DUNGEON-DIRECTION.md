@@ -3859,3 +3859,161 @@ and scoped causal Spice. Store shared facts once and child overrides sparsely.
 **Open decision:** should repeated spaces use this correlated-family model—causal quantity, shared
 assembly identity, sparse typed child variation, and deterministic coverage/repetition controls over
 editable rollers?
+
+#### 10.4.1 Correction and follow-up - countercases and scoped variation authority
+
+Adam identifies a design-monoculture risk: prison is a strong test for operating models, security,
+capacity, repeated sleeping/holding units, institutional support, and controlled circulation, but it
+naturally rewards standardization and restricted occupant expression. A system tuned only against
+prisons may incorrectly make dormitories, residential blocks, workshops, markets, studios, or other
+lived-in places feel like cellblocks.
+
+Adam accepts mild or even no visible variation as tolerable for mundane prison cells because occupants
+are allowed little property or expression. The same result is unacceptable for a college dormitory or
+residential block, where people shape private space. Ordinary hotels may remain mildly variant; a
+boutique hotel with themed rooms requires strong operator-authored variation. Variation needs scope and
+an honest engine-cost budget.
+
+##### Primary countercase - the residential college
+
+Add a **residential college/university hall** as the primary opposite-spectrum fixture alongside the
+frontier/city prison family.
+
+| Dimension | Prison | Residential college |
+|---|---|---|
+| Control | centralized, coercive, restricted | institutional but negotiated and semi-autonomous |
+| Repeated unit | cells designed to suppress difference | dorm rooms designed to support private life |
+| Occupant agency | low | high |
+| Property/expression | tightly limited | clothing, books, art, tools, hobbies, faith, culture, relationships |
+| Movement | controlled thresholds and schedules | porous circulation, class/social schedules, visitors |
+| Tenure | involuntary and administratively tracked | seasonal/term-based with turnover and accumulation |
+| Shared services | guard/control, rationing, sanitation | dining, study, bathing, recreation, teaching, administration |
+| Social graph | custody, hierarchy, contraband, solidarity/conflict | roommates, friends, rivals, mentors, clubs, romances, factions |
+| Failure modes | escape, abuse, unrest, containment failure | overcrowding, exclusion, academic conflict, supply/service failure, magical accident |
+
+A residential college also scales naturally into Genesis's realm future: mundane dorms, monastic
+schools, wizard colleges, martial academies, bardic conservatories, Breach-research institutes, or
+nonhuman communal education can share the semantic spine without sharing exact rooms or expression.
+
+##### Non-institutional sentinel - living habitat/cavern
+
+Keep at least one **living hive, fungal cavern, predator nesting complex, or comparable habitat** in the
+stress corpus. Its repeated chambers vary through biological stage, moisture, heat, food access,
+damage, brood state, predator pressure, symbiosis, and realm physics—not personal decoration. This
+prevents the prison/college comparison from silently assuming that all variation comes from human
+operators and residents.
+
+##### Small Wave 2 stress corpus
+
+Do not fully author every building type now. Use a compact orthogonal corpus to reject bad abstractions:
+
+1. **Frontier jail** - tiny, highly combined, externally supplied, likely added spicy space.
+2. **City prison** - large controlled repetition, layered security, institutional ecology.
+3. **Residential college hall** - repeated private units with high occupant expression, schedules, and
+   social networks.
+4. **Ordinary inn versus boutique inn pair** - similar hospitality function; low structural variation
+   and turnover traces versus strong operator-curated themes.
+5. **Living habitat/cavern** - distributed nonhuman ecology and non-personal repeat variation.
+
+These are semantic fixtures and writing probes, not five finished content products or geometry builds.
+Other purposes must eventually pass the same contracts, but this corpus is sufficient to expose many
+assumptions without turning the discovery wave into complete game authoring.
+
+##### Variation is a profile, not one percentage
+
+Replace any implied universal "variation amount" with a factored **variation-authority profile**. Useful
+independent inputs include:
+
+- **construction standardization:** how strongly shells, fixtures, and layouts repeat;
+- **operator curation:** whether the institution deliberately differentiates units—boutique themes,
+  ranks, houses, disciplines, luxury tiers, ceremonial identities;
+- **occupant expression license:** what residents are permitted and physically able to alter/display;
+- **tenure and turnover:** how long identity can accumulate versus how often rooms reset;
+- **privacy and control:** whether personal traces can persist unseen or are inspected/removed;
+- **material access/wealth:** what occupants can acquire, make, store, or maintain;
+- **occupancy individuality:** household, roommate, solitary, transient, mass cohort, brood, machinery;
+- **history/condition:** repairs, prior occupants, layered use, damage, inheritance, neglect;
+- **current pressure:** overcrowding, shortage, festival, mobilization, quarantine, exams, siege;
+- **causal Spice/discovery:** local independent opportunities and inherited manifestations under the
+  already accepted scope rules.
+
+These profiles interact but do not form an authored Cartesian matrix. Each layer contributes typed
+shared facts or sparse overrides through the channels it owns.
+
+##### What varies in different repeated-room families
+
+- **Mundane prison cell:** shell and fixtures nearly identical; variation may be only occupancy,
+  condition, confiscation/contraband, marks, sound, relationship, and discovery. Some cells can be
+  genuinely bare.
+- **Chain/ordinary hotel room:** standardized shell/furniture; mild wear, view, current guest trace,
+  service condition, prior incident, and occasional upgraded unit.
+- **Boutique hotel room:** shared hospitality obligations, but operator curation assigns stable room
+  themes, signature assemblies, names, sensory identities, and different guest affordances.
+- **College dorm room:** shared shell/service grid; occupant-linked bedding, wall/desk displays, books,
+  tools, hobbies, faith/culture, roommate relationships, prohibited items, routines, and discoveries.
+- **Residential block household:** stronger persistent household identity, multigenerational history,
+  economic adaptation, shared/private boundaries, neighbors, and local services.
+- **Brood chamber/hive cell:** shared biological construction; variation from development stage,
+  nutrition, caste/function, temperature, disease, damage, parasitism, and defense.
+
+No high-expression room requires a fully simulated inventory. The room receives a bounded set of
+**signature expressions** selected from the occupant/household/operator records plus lightweight ambient
+fill. Those signatures should reveal character or play opportunities; the renderer does not mount every
+sock, page, and spoon.
+
+##### Mechanical cost and scope control
+
+The correlated-family model remains cheap if variation is stored as sparse layers:
+
+```text
+shared assembly/base recipe
++ operator variant kit (optional)
++ occupant/household expression seed and references (optional)
++ condition/history overrides
++ current pressure/use
++ discovery/Spice opportunities
+```
+
+- **Latent child cost:** stable id/seed, profile refs, occupant/household ref, state, and sparse overrides;
+  no full object list, geometry, or NPC network until relevance.
+- **Materialization cost:** only the approached/active room resolves signature props and local detail.
+- **Render/context cost:** existing active-room and digest budgets still bind; high semantic variation
+  does not put the whole dormitory on screen or in the DM prompt.
+- **Runtime cost:** low, proportional to active materialized expression slots rather than total rooms.
+- **Save cost:** low-to-moderate over long play as contacted rooms harden; Wave 12 owns snapshot/compaction
+  stress gates.
+- **Authoring cost:** meaningful—the favorite writing work—but shared expression banks and typed kits
+  prevent unique hand-authored recipes for every room.
+- **QA cost:** higher but bounded by the small orthogonal fixture corpus and distribution/variety metrics.
+
+Wave 2 should decide variation authority, channels, budgets, inheritance, and fixture expectations.
+Wave 5 owns detailed furniture/dressing catalogs, expression kits, socket allocation, and visual density;
+Wave 10 owns how the renderer presents them. This prevents the current question from expanding into the
+full dressing build.
+
+##### College-dorm example
+
+A twelve-room dormitory can share structure, doors, beds/desks, plumbing, and institutional rules while
+carrying high sparse expression:
+
+```text
+shared: old college stone; two beds/desks per room; house colors at thresholds; communal washroom
+operator curation: floor belongs to the astronomy house; pinboards and lens-safe shutters
+current pressure: final examinations; one wing's warded heating is failing
+
+room A: meticulous roommates; star charts; repaired telescope; quiet-study agreement
+room B: one resident withdrew; half the room stripped; unopened letters remain
+room C: loud study society; improvised soundproofing; contraband stimulant cache
+room D: visiting Breach scholar; unfamiliar gravity anchors; neighbors resent the noise
+```
+
+The dorm remains one repeated family, but its rooms express people rather than only condition variants.
+
+**Revised recommendation:** keep the correlated-family model, add the variation-authority profile, and
+judge it against the small orthogonal corpus above. Use residential college as the primary human
+countercase and a living habitat as the non-institutional sentinel. High expression materializes as
+bounded signature layers, not exhaustive inventories.
+
+**Open follow-up:** approve this expanded test scope and factored variation profile—particularly the
+residential college countercase, living-habitat sentinel, and rule that semantic expression can be high
+while runtime/render detail remains bounded to active signature slots?

@@ -2932,3 +2932,92 @@ decide which systems are foundational, optional, or context-activated for each p
 **Open decision:** should light-sim eligibility follow this causal/player-facing admission test and
 graded lifecycle, with every purpose family authoring its own candidate systems instead of applying one
 universal checklist?
+
+#### 10.2.1 Correction and follow-up - universal needs, hierarchical supply networks
+
+Adam identifies an important flaw in the phrase "no universal food/water/morale system." A regional
+event must propagate into dependent settlements and sites even if each local purpose profile did not
+independently activate a food meter. If fires sweep the farmland supplying a large city, Genesis needs a
+canonical answer to how the city changes.
+
+Correct the ruling:
+
+> There is no universal checklist of **local active meters**, but there is a universal typed vocabulary
+> for needs, resources, services, flows, dependencies, shocks, buffers, and consequences across world
+> scales.
+
+The distinction is **where the authoritative state lives**. Shared production and supply should not be
+duplicated in every tavern, prison, manor, and barracks. A regional or settlement supply system owns the
+aggregate fact; dependent sites reference it and add local reserves, priority, alternatives, or failure
+behavior only when those differences matter.
+
+The simulation graph spans:
+
+```text
+realm/physics
+  -> region and resource basin
+  -> settlement and distribution network
+  -> district/faction/institution
+  -> bounded site
+  -> zone/assembly
+  -> individual actor or object only when exceptional
+```
+
+Edges may carry `produces`, `extracts`, `stores`, `imports`, `exports`, `routes`, `distributes`,
+`consumes`, `maintains`, `protects`, `substitutes-for`, `depends-on`, and `disposes-to` relationships.
+Resource families may include food, potable water, breathable air/ventilation, heat/fuel/energy,
+shelter, health/care, labor, transport, security/containment, waste capacity, population renewal,
+materials, and realm-specific equivalents. Applicability remains contextual: a sealed tomb may have no
+living food demand, while preservation atmosphere and ward charge are critical. **Morale is usually a
+derived cohort condition**, influenced by supply, safety, losses, legitimacy, faction pressure, and
+events—not a commodity stored like grain.
+
+##### Farmland-fire example
+
+The causal chain should be recorded, not improvised:
+
+1. A typed fire event affects one or more agricultural production areas, with scope, severity,
+   duration, timing in the growing/storage cycle, and provenance.
+2. Those areas lose some current stock, future production capacity, labor, infrastructure, routes, or
+   several of these. The event need not simulate each acre; an agricultural basin can be the aggregate
+   production node unless a named farm matters independently.
+3. The nearby city already has a food-demand profile, stored reserves, import routes, distribution
+   capacity, factional control, and substitutes. The lost production changes its projected balance.
+4. Buffers absorb the first shock. As thresholds are crossed, typed consequences become eligible:
+   reduced market stock, price increases, substitution, rationing, hoarding, smuggling, theft, relief
+   efforts, faction leverage, migration, malnutrition, disease pressure, unrest, or institutional
+   failure. Severity and order depend on the city's actual buffers and response, not a universal famine
+   script.
+5. Dependent sites inherit the settlement condition through their supply links. A well-connected noble
+   estate, an army granary, a corrupt merchant, a temple soup line, a prison with three days of local
+   stores, and a poor district can experience different timing and consequences without each owning a
+   duplicate regional agriculture simulation.
+6. Player actions can alter the graph: protect an import convoy, expose hoarding, negotiate grain,
+   repair irrigation, open a magical food source, raid a reserve, redirect distribution, or help a
+   faction weaponize the shortage. The resulting state persists.
+
+This is still light simulation. Recalculate or advance affected components on the fire event, meaningful
+time thresholds, player intervention, and lazy revisit catch-up—not every browser frame. Use exact
+quantities where legible and useful; otherwise use production capacity, reserve, demand, and pressure
+bands. A consequence roll may decide how institutions respond, but it may not invent or erase the
+underlying shortage.
+
+##### Existing Genesis seam
+
+The current engine has only a coarse regional `econTilt`; its drift wiring explicitly cannot infer even
+the direction of a price/stock change from prose, and `ECONOMY.md` deliberately defers dynamic
+supply/demand and regional prices. `WORLD-TURN.md` already supplies the correct operational precedent:
+script-owned events mutate persistent state, elapsed change resolves lazily on revisit, established
+clocks override generic drift, and the DM narrates from the mutation. The future supply network should
+extend that pattern rather than asking the AI to simulate markets freehand.
+
+**Revised recommendation:** adopt a hierarchical world dependency graph with universal resource/service
+types and scope ownership. Purpose families declare what they demand, produce, store, route, or depend
+upon; region/settlement/site systems instantiate only the nodes that exist; active tracking occurs at
+the highest shared scope plus meaningful local exceptions. Keep the causal/player-facing admission test
+for deciding which nodes receive detailed active state, not for deciding whether universal dependencies
+exist at all.
+
+**Open follow-up:** should this hierarchical supply model replace the misleading "no universal
+checklist" wording—universal need/resource vocabulary and cross-scale dependencies, but active meters
+owned at the regional, settlement, site, or local scope where they are actually meaningful?

@@ -1276,6 +1276,93 @@ semantic intent before geometry; constraint/template techniques legalize the sel
 row-by-row dispositions belong to the later table audit after the ontology is closed, not to Question
 14's conceptual ruling.
 
+#### 8.14.1 Ruling and follow-up - decompose, band, rewrite, and preserve a recovery point
+
+Adam selects **decompose the d200 while preserving strong composite recipes**. The row audit happens
+only after the redesign decisions are complete and the implementation waves are specced. No table or
+engine decomposition is authorized during this discussion.
+
+Every resulting editable roller must be organized through the canonical Spice Curve, and every table
+receives a deliberate writing pass to ensure that its results are sufficiently flavored. Keep two
+different quality axes explicit:
+
+- **Spice band** grades how far the result departs from ordinary genre reality;
+- **writing quality/flavor** determines whether the row is concrete, evocative, usable by the DM, and
+  native to the relevant purpose/context/realm even when it is Grounded.
+
+A richly written Grounded pantry is not "less flavorful" than a Mythic planar larder. Conversely,
+purple prose does not make a mechanically ordinary result Mythic.
+
+Table class still governs the honest ceiling:
+
+- **Spark** detail tables ordinarily cover Grounded and Textured;
+- **Fork** direction/architecture tables may reach Strange;
+- **Commitment** consequence/anomaly tables may carry Volatile and Mythic outcomes.
+
+Decomposition should improve this discipline. An ordinary room-shape table no longer needs a planar
+gate hidden at its hot end merely to cover all five bands; the Planar Gate belongs to a licensed
+Commitment/anomaly or composite-recipe table. Within every eligible band up to a table's honest ceiling,
+the authoring pass supplies sufficient coverage and variety for band-first rolling. Exact distributions
+remain governed by the region/context Spice system rather than by row order alone.
+
+**Mandatory pre-implementation recovery gate - assigned, not executed now:** after design decisions
+are complete and the actual redesign waves are specced, but before any destructive table/compiler/
+engine migration begins, preserve today's working game in a verified recovery package.
+
+Git answers most but not all of the concern:
+
+- a clean commit plus an immutable tag can reproduce every tracked ordinary Git file exactly;
+- the old build can be opened safely in a separate worktree at that tag without rewinding current work;
+- if redesign work has already landed on shared history, recovery can branch from the tag or revert the
+  redesign commits rather than using a destructive reset;
+- Git LFS commits store pointers, not the asset bytes themselves. Recovery also requires the referenced
+  LFS objects to remain available;
+- untracked/ignored files, browser-local saves, external cold-shelf material, and other local state are
+  not protected merely by a Git commit.
+
+The later gate should therefore create and verify all of the following before implementation:
+
+1. a clean named pre-redesign commit and immutable tag with recorded SHA;
+2. a fresh-worktree launch/check of that tag with the build-required LFS assets materialized;
+3. an explicit manifest and checksums for the required LFS/cold-shelf assets;
+4. a portable Git bundle containing Git history and refs - noting that a bundle still does not contain
+   LFS object payloads;
+5. a materialized working-tree archive for Google Drive, plus exported representative saves/seeds and
+   a small proof capture so recovery verifies behavior rather than files alone;
+6. confirmed remote/tag/LFS backup only when Adam authorizes the external push/upload at that future
+   gate.
+
+A zip of the materialized repository snapshot is useful disaster insurance, but the tag is the easier
+day-to-day rollback mechanism; the bundle plus asset manifest makes the archive auditable. Use both
+rather than trusting either Git history or one opaque zip alone. This task belongs to **Wave 12 -
+Migration, Persistence, Acceptance Gates, and Build Order** and becomes the first gate of the eventual
+implementation plan.
+
+**Open writing-schema follow-up:** how should each human-readable row preserve both machine precision
+and sufficient flavor?
+
+1. **One prose result cell.** Mechanics and flavor remain blended in one paragraph. This is pleasant to
+   read but forces the compiler/DM to infer requirements, dimensions, and relationships from prose.
+2. **Pure mechanical table plus separate flavor table.** This is precise but doubles lookup surfaces,
+   invites drift, and makes mod authoring harder.
+3. **One readable row with distinct contract and flavor fields.** A row carries a concise result name,
+   typed semantic/mechanical fields or tags, Spice band and scope where relevant, plus one evocative DM
+   fragment/tell. The compiler consumes the contract; the DM uses the flavor; both share one row id and
+   cannot drift apart silently.
+
+**Recommendation:** choice 3. For example, a cell-variance row could read as one ordinary Markdown row:
+
+```text
+Result: Recent transfer marks
+Contract: trace; custody-history; wall; no-loot
+Band: Grounded
+DM fragment/tell: Fresh tally cuts stop at seven. An older set beneath them was plastered over.
+```
+
+This remains approachable to a beginning developer or modder, gives the compiler reliable structure,
+and guarantees that even plumbing tables receive an intentional writing pass without asking engine code
+to parse literary prose as geometry.
+
 Then continue questions 15-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

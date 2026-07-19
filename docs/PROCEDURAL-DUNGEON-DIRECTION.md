@@ -2341,6 +2341,64 @@ topology before play, (b) approach-time deterministic detail, (c) exact early pl
 and causally critical cards, and (d) depth windows, coverage targets, and slack pressure for movable
 cards?
 
+#### 8.20.2 Correction - narrative freedom, mechanical depth gradient
+
+Adam rejects any formula that makes every dungeon tell the same shallow-establish, middle-complicate,
+deep-reveal story. A faction problem may already be visible outside the front gate; a contract may begin
+in town; the dungeon's defining secret may announce itself in the entrance hall; a deep room may provide
+quiet human context rather than a climax. Genesis wants escalation without converting graph depth into a
+mandatory narrative chronology.
+
+Revise the depth-window model accordingly:
+
+- **Narrative cards are topology-aware, not universally depth-monotonic.** Semantic fit, causal order,
+  player attention, contract priority, zone ownership, service horizon, and available capacity govern
+  placement. Depth is one optional constraint or preference, not a required field on every card.
+- Cards may declare different depth behaviors: pre-entry, entrance-facing, any-depth, depth-biased,
+  deep-gated, terminal, cross-zone, or route-spanning. A faction/front card can operate outside the site,
+  across the threshold, or throughout several occupation zones.
+- Seed -> complication -> reveal -> payoff is one useful chain shape, not the dungeon template. Chains
+  may begin before entry, reveal early and explore consequences later, fork across zones, recur through
+  several depths, resolve outside the dungeon, or remain a live campaign promise after the site.
+- Coverage targets prevent long accidental droughts and end-loading, but do not prescribe which kind of
+  beat belongs in each depth band. The scheduler asks whether meaningful material is being used at a
+  healthy cadence, not whether room five contains the designated complication.
+- Slack and service-horizon pressure still prevent hoarding. They apply to each card's actual eligible
+  topology and timing contract rather than forcing every card through the same shallow-to-deep window.
+
+Depth does carry a firmer **mechanical** promise: expected challenge commitment and expected reward
+increase as meaningful access depth increases. This should be a noisy overlapping gradient rather than
+a staircase where every successive room is harder and richer than the last:
+
+- deeper bands receive higher expected opposition/hazard/resource-pressure budgets and higher expected
+  reward value, rarity, strategic leverage, information value, or access value;
+- peaks, valleys, quiet rooms, empty-looking rooms, social rooms, shortcuts, and exceptionally dangerous
+  shallow guardians remain legal;
+- reward need not be treasure and challenge need not be combat; information, allies, routes, safety,
+  authority, equipment, discoveries, and campaign leverage can pay for social, traversal, puzzle,
+  attrition, legal, environmental, or combat risk;
+- reward and challenge correlate over a region or route, not as a compulsory one-room transaction;
+- Spice remains independent: deeper means higher expected commitment and payoff, not automatically more
+  supernatural or Mythic.
+
+Use **effective access depth**, not merely room number or unweighted distance from the front door. Its
+inputs can include graph distance, required transitions, locks/barriers, hazards, hostile control,
+resource cost, branch commitment, secret knowledge, and available entrances. A hidden rear entrance may
+land physically near a deep vault, but learning, reaching, or opening it carries access cost that
+preserves the risk/reward bargain. Occupation zones can create their own local gradients and contested
+thresholds inside the larger site.
+
+**Revised recommendation:** keep the hybrid commitment frontier and small current DM hand, but replace
+the universal narrative-depth cadence with two separate schedulers:
+
+1. a flexible narrative scheduler using semantic fit, causality, priority, attention, coverage, and each
+   card's individually declared topology/timing behavior; and
+2. a graph-based risk/reward scheduler that raises expected challenge commitment and reward with
+   effective access depth while deliberately distributing local peaks, valleys, and quiet spaces.
+
+**Open follow-up:** approve this separation, including effective access depth as the basis of the
+mechanical gradient and depth as only an optional narrative-card constraint?
+
 After question 20, continue every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

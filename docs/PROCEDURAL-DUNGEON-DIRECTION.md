@@ -366,10 +366,10 @@ Wave 1 must determine the ontology from which the roller is built. Its first que
 Wave 1 is in progress. Nothing in this document licenses table replacement or compiler implementation
 before its closure.
 
-## 8. Wave 1 running record - questions 1-12 resolved; question 13 next
+## 8. Wave 1 running record - questions 1-13 resolved; question 14 next
 
 **Status:** IN PROGRESS, not closed. This checkpoint records the 2026-07-18/19 discussion through
-question 12 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
+question 13 and its follow-ups. Resume at the exact question under **Pick up here** below. Do not open
 Wave 2 merely because these first rulings are strong.
 
 **Live-capture practice (2026-07-19):** during the remainder of this design session, this section is
@@ -1210,7 +1210,73 @@ returning a content-free "no."
 legible description and can ask or act freely; the DM receives enough stable structure to be fair,
 persistent, skill-aware, and consistent across revisits.
 
-Then continue questions 14-20 and every resulting follow-up. Wave 1 remains open until the closure gate
+Adam selects **choice 3, structured DM hand narratively surfaced**. Question 13 is resolved. Repeated
+spaces are coherent hierarchical assemblies with stable children; most children are quiet on the
+surface; broad searches aggregate routine inspection; systematic coverage finds everything the method
+can ordinarily reveal; gated opportunities remain gated by capability and context; and the full
+inspection list stays behind the screen while the DM presents perceptible tells naturally.
+
+#### 8.13.4 Future-question assignments seeded by question 13
+
+| Inherited ruling | Future owner |
+|---|---|
+| Parent functional domains compile stable repeated child spaces with invariant requirements, shared systems, controlled variance, and bounded exceptional children | **Wave 2 - Room Roster, Repetition, Spice, and Dungeon Ecology** owns repeat-count tables, variant recipes, density caps, and expressivity tests |
+| Repeated children must be real and enterable rather than facade labels | **Wave 3 - Architecture, Structural Stamps, and Degradation** owns their spatial assembly and legal degradation; **Wave 5** owns fixtures, dressing, clutter, and quiet-space presentation |
+| Every enterable child retains a lightweight local discovery opportunity, while parent/site networks coordinate larger truths | **Wave 4 - Portals, Secrets, Vertical Connections, and Circulation** owns reveal vectors, secret-network placement, and spatial access |
+| Search uses automatic read -> focused inspection -> systematic sweep; interchangeable clutter is one search surface; identical retries do not reroll | Future **interaction/action-resolution** design and **Wave 4** inherit time, skill, tool, spell, consequence, and retry mechanics |
+| The engine holds a stable inspection-opportunity hand and the DM narratively surfaces perceptible tells | **Wave 9 - DM Strategic Cards and Environmental Authority** owns hand capacity/prioritization; accessibility and player-facing presentation belong to **Wave 10** |
+| Receptive/refusing NPC states are persistent and causal but lazily expand under attention | Future **NPC/social and bounded-place generation** work inherits response states, unlock conditions, and revisit consistency |
+| Exhaustive generic-container play may yield bounded extra resources but is never required for ordinary comprehension or mandatory progression | Future loot/inventory/difficulty work and **Wave 7** inherit the reward curve, search cost, and progression-safety gates |
+
+### 8.14 Pick up here - question 14: what becomes of the current dungeon d200?
+
+The current `Dungeon Area Type` d200 is valuable, but it is not one clean kind of roller. A single row
+may simultaneously declare topology, function, shape, dimensions, a structural stamp, a side room,
+fixture state, history, hazard, vertical connection, secret, or anomaly. Concrete examples:
+
+- row 001 combines a narrow-passage shape, exact dimensions, and a blind side alcove;
+- row 150 combines the **Prison Block** function, a 30-by-50-foot envelope, a central circulation hall,
+  ten repeated cells, barred doors, and a present condition;
+- row 164 combines **Kitchen**, dimensions, cold-storage dependency, hearth fixtures, and collapse;
+- row 180 is primarily a multi-level structural/pit recipe;
+- row 195 is primarily a distortion/anomaly outcome rather than an ordinary room shape;
+- row 197 is a vertical transport mechanism plus gear-room assembly;
+- row 200 is a planar-gate function, special geometry, ritual fixture, gallery, and anomaly tell.
+
+Rolling this flat table independently for every graph node is exactly the behavior the function-first
+redesign is replacing. Deleting it wholesale would discard unusually rich authored material and violate
+the golden-beat preservation law.
+
+Three dispositions:
+
+1. **Keep the d200 as the final room roller.** Purpose/context merely filters or reweights whole rows.
+   This preserves the familiar table with little authoring work, but function, topology, architecture,
+   condition, and anomaly remain fused. It cannot guarantee a complete operating model cleanly and
+   makes new realms multiply whole-row variants.
+2. **Mine it for fragments and retire every whole row from runtime.** Split shapes, dimensions,
+   functions, side areas, structures, mechanisms, and anomalies into new rollers. This gives maximum
+   composability, but discards excellent authored relationships - such as a prison block's cells and
+   control hall - and risks rebuilding those relationships less elegantly.
+3. **Decompose it while preserving proven composite recipes.** Audit every row into typed components.
+   Atomic facts populate new human-readable rollers; coherent relationships become named hierarchical
+   room/assembly recipes; anomaly and history clauses move to their owning passes. Original row ids and
+   prose remain as provenance, regression fixtures, and a legacy composite recipe where the whole row
+   still expresses a useful arrangement. Purpose, context, site profiles, and topology decide which
+   components or recipes are eligible before geometry is compiled.
+
+**Recommendation:** choice 3. The new system should be able to invoke `Prison Block` as a coherent
+assembly recipe without letting a random flat d200 roll decide that an unrelated graph node must become
+one. `Planar Gate Room` may survive as a high-Spice licensed composite; its octagon, gate assembly,
+gallery, and ambient tell can also become reusable typed parts. The table remains a human-readable
+source and design corpus, but it no longer bears every generation responsibility at once.
+
+The research supports this split: semantic scene descriptions express mandatory/optional elements and
+relationships; hierarchical blocks preserve meaningful assemblies; two-stage generation resolves
+semantic intent before geometry; constraint/template techniques legalize the selected recipe. Exact
+row-by-row dispositions belong to the later table audit after the ontology is closed, not to Question
+14's conceptual ruling.
+
+Then continue questions 15-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
 ## 9. Implementation hold

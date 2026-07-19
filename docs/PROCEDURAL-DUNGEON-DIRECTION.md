@@ -5001,3 +5001,194 @@ latent/soft.
 **Open follow-up:** should Genesis use this latent regional-contract model—hardening only the minimum
 population/role/route/relationship facts required by already generated places—and should known extended
 demand widen the normal envelope while only genuinely unexplained slippage creates a contradiction root?
+
+#### 10.6.5 Final ruling - rolled populations, permeable capacity, connected latent places
+
+Adam confirms that the direction feels right: the place generator is becoming connected, living, and
+meaningfully simulated. Question 6 is resolved:
+
+- the small jail fixture is **hamlet jail**; `frontier` never substitutes for a population or
+  institutional-capacity tier;
+- one canonical population profile serves settlement presentation, economic tiering, ambient cohorts,
+  site demand, institutional capacity, and future simulation rather than each system inventing its own
+  scale;
+- population is stored as a stable rolled band, approximate estimate, credible range, provenance, and
+  confidence, with routine transient and seasonal/event populations represented separately;
+- established canon outranks rolls. Context selects eligible tables; editable dice choose independent
+  demand/doctrine/coverage/partition inputs; transparent arithmetic derives dependent quantities; every
+  result and reconciliation is persisted and inspectable;
+- purpose profiles declare the relevant demand driver—residents/households, justice catchment,
+  travelers/routes, regional constituency, production/input throughput, strategic mandate,
+  institutional population, or ecological load—rather than adding every population-like number into one
+  meaningless total;
+- designed capacity, current load, and current operating condition remain separate. Licensed mismatch
+  produces crowding, vacancy, repurposing, external service, shifts, failure, or another causal state;
+- ordinary capacity envelopes are permeable probability basins and causal alarms, not blacklists.
+  Purpose/context-specific relation rolls admit compressed, ordinary, expanded, and exceptional results;
+- known routes, catchments, markets, history, or mandates widen the legal envelope before rolling.
+  Genuinely unexplained slippage creates a tracked capacity-contradiction root with required flows,
+  manifestations, negative evidence, and player handles;
+- unrolled settlements can exert bounded influence through canonical anchors, relational stubs, aggregate
+  external networks, and typed population/route/trade/dependency edges;
+- once a generated place relies upon a relationship, the minimum counterpart and edge promises become
+  hard canon while unpromised neighbor districts, sites, NPCs, and internal details remain latent/soft;
+- later neighbor generation consumes inbound promises before rolling unconstrained facts. It cannot
+  retroactively reroll a visited place;
+- regional flows update through events and changed dependency frontiers, not per-person, per-merchant,
+  or per-shipment simulation.
+
+The simulation north star is now explicit: **engine-owned causal structure, aggregate state, and
+consequences; DM-owned performance, interpretation, and adaptive play.** A town can depend on an
+unmaterialized city because the relationship is real even while the city's details are not. The world
+feels simulated because dependencies constrain what happens, not because every background object ticks.
+
+Exact population-band ranges, settlement-frequency curves, purpose-specific demand ratios, and
+capacity-slippage weights remain authored/tuned Wave 2 work. Their acceptance evidence will be seed and
+distribution reports across settlement roles, purpose families, history states, realms, and the stress
+corpus; no single percentage is locked by intuition here.
+
+#### 10.6.6 Future-question assignments seeded by question 6
+
+| Inherited ruling | Future owner |
+|---|---|
+| One canonical population profile drives presentation, economy, cohorts, site demand, and institutional capacity | Remaining **Wave 2** defines the profile interface and quantity consumers; future **place/settlement generation** owns the complete population and settlement-role rollers |
+| Purpose-specific drivers turn population/catchment/throughput into exact stable site quantities | Remaining **Wave 2** authors purpose ratios, assembly curves, role coverage, and ecology; **Waves 3-5** realize the resulting spatial program |
+| Capacity envelopes are permeable; contextual slippage is rolled; unexplained mismatch promotes a root | Remaining **Wave 2** owns deviation tables and incidence targets; **Wave 9** owns promoted-card scheduling; **Wave 12** owns saturation, provenance, and distribution gates |
+| Minimal counterpart/relationship promises harden while unrolled neighbor detail remains latent | Future **region/settlement/world-graph** design owns typed edges, anchor/stub materialization, and reciprocal reconciliation; **Wave 12** owns persistence and migration |
+| Regional dependencies run as aggregate event-driven state | Future **economy, factions, travel, and World Turn** design owns propagation; **Wave 8** owns destructive route/service changes; **Wave 12** owns lazy-vs-incremental equivalence tests |
+| Proximity supplies weighted goods, NPC-origin, cultural, faction, rumor, and service influences without cloning the neighbor | Future **place, NPC, culture, faction, and economy** writing owns influence packets and anti-homogenization tests |
+
+### 10.7 Question 7 - how should a site's population become operators, occupants, and present people?
+
+In plain English: once Genesis knows a hamlet has about 180 residents and its jail has five designed
+places, who actually operates the jail, who is held there, who supplies it, and who is physically present
+when the party enters? The same question scales to a city prison, residential college, inn, monastery,
+mine, or living hive.
+
+Question 2 already locked cohort-first population effects with individualization on salience. Question 4
+locked sparse stable child variation. Question 6 now supplies population, demand, capacity, current load,
+and regional/transient inputs. The remaining decision is how those facts compile into a **role-complete
+site population** without eagerly generating every person or leaving the DM to invent whoever makes the
+place function.
+
+Two failure modes are already dominated:
+
+- **eager named cast:** generate every guard, prisoner, student, guest, worker, child, animal, and
+  relationship at site creation. This offers detail but explodes saves, DM context, simulation, writing,
+  and large-city generation;
+- **anonymous totals only:** store `2 guards, 3 prisoners` and let the DM invent identities and
+  relationships on demand. This is cheap but recreates the current freehand drift, weakens persistence,
+  and makes clues/contracts depend on prompt memory.
+
+#### Recommended role-coverage and salience model
+
+Compile population in layers:
+
+```text
+site operating model + current state
+  -> required actor/provider roles and coverage
+  -> stable cohorts, shifts, households, assemblies, and external links
+  -> small guaranteed anchor cast
+  -> deterministic latent individual seeds/slots where interaction is plausible
+  -> materialize/promote individuals when attention, discovery, contract, conflict, or story requires
+  -> preserve identity and relationships permanently after contact
+```
+
+##### 1. Roles are obligations, not automatically one NPC each
+
+A functional role declares what agency must exist:
+
+- operator/authority;
+- labor/service/maintenance;
+- resident, client, captive, patient, student, worshipper, guest, or consumer;
+- supplier/carrier/external provider;
+- dependent/family/household;
+- defender/enforcer;
+- claimant, dissident, infiltrator, trespasser, predator, parasite, or contested occupant;
+- ecological equivalents such as queen, brood, worker caste, feeder, symbiont, prey, decomposer, or
+  environmental process.
+
+One actor may satisfy several compatible roles; one role may require a cohort or shifts; automation,
+ritual, summoned labor, biological process, or external service may satisfy a role without an onsite
+person. The selected realization records who/what is responsible, schedule/availability, dependency,
+and failure behavior.
+
+##### 2. Stable cohorts carry background truth
+
+A city prison need not mint 180 prisoner biographies. It can store cellblock cohorts with count/range,
+composition, current condition, faction/zone alignment, routine, shared pressure, and stable seed. A
+college can store students by house/floor/program; an inn can store routine staff plus a transient guest
+cohort; a hive can store castes and brood stages.
+
+Cohorts are not interchangeable fog. They carry stable membership slots and causal state so later
+individualization is deterministic and cannot rewrite observations. A player who speaks to “the limping
+prisoner in block C” causes that slot to materialize as one persistent NPC drawn from the block's already
+fixed context.
+
+##### 3. A small anchor cast makes the place immediately playable
+
+Every socially actionable site should materialize a bounded set of people who define operation and
+immediate play:
+
+- authority or accessible representative;
+- current point-of-contact/gatekeeper;
+- any person required by an active contract, clue, conflict, or root;
+- one or more role/pressure anchors when the site would otherwise feel anonymous;
+- individuals already established by lore, relationships, or prior contact.
+
+This is not a fixed “three NPCs per site” rule. A one-person shrine may need one keeper; a market can
+surface several anchors; an abandoned ruin may have none; a contested social hall may carry multiple
+simultaneous beats under the already accepted social-space rule.
+
+##### 4. Presence is separate from membership
+
+The site roster records who belongs, works, resides, visits, or is supplied there. A schedule/state pass
+determines who is present in the active slice:
+
+- sheriff at the jail, deputy on patrol, tavern runner delivering meals;
+- prison night shift, cellblock lockdown, visitors waiting, kitchen crew active;
+- college residents in class, studying, asleep, absent, or gathered for a house event;
+- inn staff onsite, booked rooms occupied, travelers delayed by weather;
+- hive workers foraging outside while brood defenders remain.
+
+Time, current events, alarm state, occupation fronts, player actions, route failures, and contracts can
+change presence. Membership and identity do not reroll merely because the scene changed.
+
+##### 5. Attention promotes detail in grades
+
+Use the established attention ladder:
+
+- **cohort:** aggregate count/state only;
+- **latent slot:** stable seed plus inherited facts, not yet a full NPC record;
+- **anchor:** named/role-bearing and available to DM context;
+- **foreground:** full NPC mechanics, relationships, inventory/knowledge, and active needs as required;
+- **resolved/away/dead/transformed:** persistent outcome retained without occupying the live hand.
+
+A direct conversation, focused inspection, combat target, rescue, recruitment, contract, clue ownership,
+or strong player interest can promote a slot. Mere existence in a city does not.
+
+##### Stress-corpus examples
+
+- **Hamlet jail:** sheriff is likely the authority anchor; deputy may be a second anchor or stable offsite
+  role; two current prisoners can be latent slots until approached, unless one owns a clue/root; the
+  tavern meal provider is a hard external relationship, not an invented tray of food.
+- **City prison:** warden/shift command and root-relevant actors anchor the site; guards and inmates remain
+  block/shift cohorts with deterministic individual slots; only the active block and due cross-site
+  relationships enter DM context.
+- **Residential college:** master/porter and current-pressure anchors materialize; houses/floors hold
+  student cohorts; dorm-room occupants gain sparse signature seeds and promote when visited or discussed.
+- **Ordinary/boutique inn:** recurring staff are stable anchors; guest turnover uses transient cohorts and
+  stay records; a story-relevant guest promotes and persists after departure.
+- **Living habitat:** ecological roles and cohorts replace human job titles; a singular queen, wounded
+  beast, bonded symbiont, or intelligent negotiator becomes an anchor only when biologically or
+  narratively justified.
+
+##### Recommendation
+
+Use role-complete cohorts plus a bounded anchor cast and deterministic salience promotion. Guarantee that
+every operational role has a real actor, cohort, process, or external provider link, but do not require a
+named NPC for every slot. Keep membership, presence, attention grade, and current condition separate.
+This makes places operational and socially alive while keeping work proportional to the active slice.
+
+**Open decision:** should this role-coverage/cohort/anchor model govern site populations, including stable
+latent individual slots and the rule that role membership does not imply current physical presence?

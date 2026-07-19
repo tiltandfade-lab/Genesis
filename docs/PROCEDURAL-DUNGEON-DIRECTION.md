@@ -2512,6 +2512,15 @@ Deliberate implementation/tuning deferrals have named owners rather than remaini
 level. This is not yet a declaration of completion. Adam must challenge or explicitly confirm this
 summary before Wave 1 closes, and any resulting follow-up remains inside Wave 1 until exhausted.
 
+#### 8.21.1 Final closure - Adam confirmed
+
+Adam explicitly confirms that Wave 1's follow-ups are exhausted and closes the wave on 2026-07-19.
+The closure gate in section 6 is satisfied: all initial questions are answered, material contradictions
+and consequences were pursued, rulings survived the named examples, deferrals have owners, and the
+summary was explicitly accepted. Wave 2 is now authorized to open. A later contradiction may reopen
+Wave 1 only by naming the affected ruling and recording the supersession; it may not route around this
+closed ontology silently.
+
 After question 20, continue every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 
@@ -2521,3 +2530,104 @@ This discovery capture authorizes research, diagnostics, test-card generation, a
 does not authorize the procedural dungeon compiler, room-table rewrite, combat rewrite, renderer
 cutover, or destructive-environment implementation. Those builds wait for their owning wave and a
 locked spec.
+
+## 10. Wave 2 running record - Room Roster, Repetition, Spice, and Dungeon Ecology
+
+**Status:** IN PROGRESS. Wave 1 closed explicitly on 2026-07-19. Wave 2 inherits every ruling and
+future-question assignment above. It uses the same closure gate: initial questions alone do not close
+the wave, generated follow-ups remain in this section until exhausted, and Adam must explicitly accept
+the final closure audit before Wave 3 opens.
+
+### 10.1 Question 1 - what does the roster allocate before it creates rooms?
+
+In plain English: when Genesis knows that a site is a prison, temple, mine, natural cavern, creature
+den, or impossible living structure, what should it decide **before** it starts naming rooms? Wave 1
+established that a purposeful institution receives a complete operating model rather than a rigid room
+checklist. Wave 2 must now define the authorable unit that turns that principle into a roster.
+
+The current `Dungeon Area Type` d200 cannot own this job as written. It mixes connection topology,
+footprint/shape, structural features, dominant functions, attached subrooms, hazards, vertical movement,
+secret possibilities, and high-Spice anomalies in one flat result space. That mixture creates excellent
+composite inspiration but cannot prove that a prison contains custody/control, a mine moves ore and
+waste, or a self-sustaining lair can feed its occupants.
+
+The indexed technical research points toward a semantic intermediate layer:
+
+- semantic scene descriptions express types, attributes, relationships, counts/ranges, mandatory and
+  optional elements, and hierarchy before a solver chooses layout;
+- hierarchical blocks let repeated children such as cells, beds, shelves, niches, or workstations exist
+  stably without pretending each is an unrelated top-level room;
+- dungeon-wide playability constraints work over a graph and budgets rather than trusting isolated
+  local rolls;
+- the DMG/DBG purpose procedures remain useful authored evidence for what coherent wholes tend to need,
+  but their frequencies should teach purpose profiles rather than become an isolated-room runtime.
+
+There are three useful mechanisms here, but they are not equal candidates for sole authority:
+
+1. **Flat room-name distributions** are excellent human-readable roller content. A prison table can say
+   cellblock, intake, evidence store, infirmary, chapel, kitchen, yard, and so on. Used alone, however,
+   even good weights can omit necessities, clone too many rooms, and conceal supply dependencies.
+2. **Authored roster packages** are useful recipes and test fixtures: frontier jail, city prison wing,
+   monastic prison, mage-colony portal block. Used as the entire system, they create visible templates
+   and require an authored package for every purpose x size x culture x realm combination.
+3. **A typed obligation-and-flow program** can make the first two mechanisms work together. The purpose
+   profile declares what must happen and what moves through the site; human-readable rollers choose
+   among legal realizations; recipe packages provide particularly strong arrangements without becoming
+   mandatory blueprints.
+
+The recommended universal sequence is:
+
+```text
+purpose family and context
+  -> required roles, capabilities, flows, and dependencies
+  -> scale/occupancy/history-adjusted quantities and coverage
+  -> compatible room, zone, assembly, procedure, and external-service realizations
+  -> protected discretionary/Spice allocation
+  -> compiler reconciliation and diagnostics
+```
+
+A **capability** says what the site must accomplish; a **flow** says what enters, moves, waits, changes,
+or leaves. Neither assumes one room:
+
+- a frontier jail's `custody` capability might realize as one barred room divided into cells, while
+  `oversight + records` share the sheriff's office, food arrives from the tavern, waste leaves by bucket,
+  and one likely discretionary space adds local identity;
+- a city prison's same capabilities can realize as intake, classification, repeated cellblock
+  assemblies, guard control, kitchens, sanitation, infirmary, visitation, evidence, yards, and several
+  supply/service routes;
+- a mine moves workers, air, supports, water, ore, spoil, tools, and carts through extraction,
+  maintenance, processing, storage, and exit functions;
+- a temple moves congregants, clergy, offerings, ritual materials, teaching, purification, remains, and
+  waste according to doctrine rather than automatically demanding the same chapel blueprint.
+
+Natural and biological sites need the same planning discipline but must not be anthropomorphized into
+bad institutions. The proposed **purpose-family grammars** include at least:
+
+- constructed institution/workflow;
+- infrastructure/throughput network;
+- monument, burial, or ceremonial sequence;
+- natural formation and environmental flow;
+- habitat, nest, den, or living ecology;
+- anomaly, containment, or realm-physics system.
+
+A natural cavern program may therefore require geological continuity, drainage, airflow, access,
+sediment/mineral zones, and habitat opportunities without inventing an operator, kitchen, or guardroom.
+Current inhabitants add their own occupation/ecology overlay afterward. A living hive can have
+circulation, feeding, incubation, defense, waste, and renewal as biological functions rather than
+human room nouns.
+
+Each authored obligation should eventually expose modder-readable fields such as importance,
+quantity/coverage curve, dependencies, inputs/outputs, repeat policy, combinability, externalizability,
+eligible realization families, context modifiers, failure/degradation forms, and Spice-band hooks.
+Wave 2 should decide these concepts and their interactions; exact schema syntax and compiler code wait
+for specification/build work.
+
+**Recommendation:** make the obligation-and-flow program the authoritative roster layer. Preserve flat
+room rollers as the friendly D&D authoring surface and authored packages as strong recipes, but compile
+both through semantic obligations so the engine can guarantee identity, support natural/ecological
+sites, avoid Cartesian template explosion, and still roll surprising realizations.
+
+**Open decision:** should every site first generate a purpose-family program of capabilities, flows,
+and dependencies, with named rooms/assemblies/procedures/external services rolled afterward as their
+realizations—and should natural formations and living habitats receive their own grammars rather than
+being forced through an institutional template?

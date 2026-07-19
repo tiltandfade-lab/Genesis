@@ -1908,6 +1908,70 @@ variety.
 **Open decision:** choose the occupation model and whether ordinary rooms should inherit a zone-level
 relationship unless a causal exception overrides it.
 
+#### 8.18.1 Ruling and follow-up - contested zones must make the site feel alive
+
+Adam selects **occupation zones**. This is an old-school dungeon strength and a high-value world-life
+mechanism. Skyrim's strongest contested dungeons made multiple occupants feel like active inhabitants;
+the BG3 Grove's refugee tieflings and paranoid druids demonstrate that a contested place can be social,
+political, legal, religious, and resource-driven rather than merely two hostile encounter groups.
+
+Do not reduce control to one colored ownership layer. A zone may have overlapping claims:
+
+- **physical control** - who can presently occupy, fortify, patrol, or exclude;
+- **population presence** - who lives, works, hides, travels, or takes refuge there;
+- **legal/ritual authority** - who believes they have the right to command, judge, worship, or perform
+  necessary rites;
+- **resource dependence** - who needs its water, food, passage, shelter, workshop, gate, or magic;
+- **social influence** - who the inhabitants trust, fear, resent, obey, or sympathize with;
+- **knowledge/access** - who knows routes, mechanisms, passwords, dangers, and secret entries;
+- **claim/aspiration** - who wants the zone without currently controlling it.
+
+The Grove pattern can therefore represent druids holding ritual and legal authority, refugees holding
+population presence and moral/social claims, both depending on shared gates and supplies, and neither
+cleanly owning every common space. `contest` is a relationship among claims, not necessarily combat.
+
+This creates a simulation follow-up:
+
+1. **Static occupation snapshot.** Roll zones and factions once; they change only through direct player
+   action. This is cheap and legible but the site goes inert whenever the player looks away.
+2. **Continuous full simulation.** Individually simulate every patrol, resource use, NPC decision,
+   skirmish, and territorial move. This can create rich emergence but is unaffordable, difficult to
+   validate, and likely to produce important off-screen nonsense.
+3. **Event-driven occupation fronts.** Each group receives goals, pressures, dependencies, relationships,
+   controlled/desired zones, and a small number of clocks or state transitions. The engine advances them
+   on meaningful world time transitions, player actions, supply changes, casualties, contract outcomes,
+   faction events, or site revisits - not continuously per second. Resulting events update zone claims,
+   occupants, patrols, access, evidence, and story cards persistently.
+
+**Recommendation:** choice 3. It captures the feeling of a living contested dungeon without pretending
+Genesis can afford a total-world agent simulation.
+
+For example, goblins hold a fort's barracks, bandits hold its gatehouse, and both need the kitchen route.
+The kitchen edge begins contested. If the party destroys the bandits' stored food, opens a smugglers'
+tunnel, kills a goblin chief, negotiates shared access, rests for several days, or leaves during an
+active deadline, the relevant fronts advance. On return, the engine may establish a shifted patrol line,
+abandoned position, truce marker, corpses, new barricade, refugee cluster, or claimant message. Nothing
+changes merely because an invisible timer wanted drama; a recorded pressure and transition caused it.
+
+Fronts should normally be sparse:
+
+```text
+group goal and present stance
++ controlled, depended-on, and desired zones
++ relationship/claim layers
++ one or a few active pressures or clocks
++ legal triggers and transition outcomes
++ evidence left by each transition
++ player handles and narrative-card consequences
+```
+
+The World State Ledger records actual changes. The DM priority hand surfaces immediate and follow-up
+consequences. A front may cool, stabilize, negotiate, or resolve in either direction; it is not an
+escalation engine and does not force every dispute toward violence.
+
+**Open decision:** choose static, continuous, or event-driven occupation change, and confirm that
+contested claims may be social/political/resource-based as well as spatial and military.
+
 Then continue questions 19-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

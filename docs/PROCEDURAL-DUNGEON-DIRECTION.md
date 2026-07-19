@@ -537,7 +537,7 @@ required spaces and capacities
 + active, failing, abandoned, or repurposed state
 ```
 
-A frontier jail might need only one to four cells, a sheriff, an optional deputy, secure storage,
+A hamlet jail might need only one to four cells, a sheriff, an optional deputy, secure storage,
 and externally supplied meals. A major city prison may require cellblocks, intake, guard control,
 administration, food supply, sanitation, evidence storage, an infirmary, and shift staffing. An
 abandoned prison keeps the original operating model as historical truth but has no active staff;
@@ -565,7 +565,7 @@ Generation follows this priority order:
 8. final current use, staffing, supply, restrictions, secrets, and unresolved consequences.
 
 Context changes probability and Spice classification rather than creating ordinary blacklists. An
-outer-realm prison cell may be Mythic in a mundane frontier jail, ordinary enough to be Textured or
+outer-realm prison cell may be Mythic in a mundane hamlet jail, ordinary enough to be Textured or
 Strange in a mage colony, or inherited technology misunderstood by later residents. Current context
 does not retroactively rewrite original construction: a later retrofit or transformation must explain
 the change. In Genesis, such portal outcomes may be typed **breaches** into any eligible realm.
@@ -718,7 +718,7 @@ Three working choices:
 
 1. **One master size.** Small/medium/large/extra-large controls all three. This is simple, but it
    falsely equates room count, capacity, and bodily scale. A four-room giant tomb and a four-room
-   frontier jail have similar graph sizes but radically different architecture; a six-room magical
+   hamlet jail have similar graph sizes but radically different architecture; a six-room magical
    prison may hold hundreds through breach-linked cells.
 2. **Three independent size rolls.** Roll graph, capacity, and physical scale separately. This
    preserves unusual sites, but unconstrained independence generates nonsense: a three-room mundane
@@ -749,7 +749,7 @@ zone scale so a fifty-five-room prison does not produce fifty-five unrelated cam
 
 Concrete results under this model:
 
-- **Frontier jail:** tiny graph, tiny capacity, human scale; one to four cells, sheriff/deputy space,
+- **Hamlet jail:** tiny graph, tiny capacity, human scale; one to four cells, sheriff/deputy space,
   secure storage, external meals, a small protected random allocation, and room-level discoveries.
 - **Main city prison:** extra-large graph and capacity, human scale; repeated cellblocks and full
   support functions, several zones/levels, a larger proportional random allocation, and a bounded
@@ -2008,7 +2008,7 @@ reconciliation order**.
 
 Examples:
 
-- a frontier jail has only four small rooms but still needs custody, control, secure storage, external
+- a hamlet jail has only four small rooms but still needs custody, control, secure storage, external
   meals, and some room for discovery/Spice;
 - a canonically fixed manor shell acquires a subordinate intelligence office without gaining another
   floor;
@@ -2079,7 +2079,7 @@ still receives provenance, time of origin, function/current use, physical relati
 handles. Some results may help the institution incidentally; they are random because the operating
 model did not guarantee them.
 
-Examples for a small frontier jail:
+Examples for a small hamlet jail:
 
 | Possible extra space | Causal source | Why it belongs in the pool | Likely player value |
 |---|---|---|---|
@@ -2097,7 +2097,7 @@ Examples for a small frontier jail:
 | Extradimensional evidence cell or impossible lower room | High-Spice licensed event | Physically exceeds the shell only because its causal event changes ordinary geometry | Major secret network, realm access, world-marking prisoner or artifact |
 
 Not every example is equally "random" in every profile. A dedicated evidence room may be supporting in a
-city prison but discretionary in the frontier jail. A portal ward may be Grounded infrastructure in a
+city prison but discretionary in the hamlet jail. A portal ward may be Grounded infrastructure in a
 mage colony and a high-band anomaly in a mundane settlement. Context determines affinity and band rather
 than a universal list.
 
@@ -2488,7 +2488,7 @@ The material tensions raised during the wave have explicit reconciliations:
   and individually declared card behavior;
 - deeper escalation versus alternate routes -> effective access cost and noisy route/region budgets.
 
-Concrete examples exercised during discussion include the frontier jail, major city prison,
+Concrete examples exercised during discussion include the hamlet jail, major city prison,
 mage-colony Breach prison, giant ossuary with human-scale insertions, alchemist shop over a necromancy
 laboratory, manor with an older hidden complex, contested multi-occupant sites, the child's note that
 roots into a missing-person campaign, and the sheriff's demonic bar of soap. No example currently
@@ -2567,7 +2567,7 @@ There are three useful mechanisms here, but they are not equal candidates for so
 1. **Flat room-name distributions** are excellent human-readable roller content. A prison table can say
    cellblock, intake, evidence store, infirmary, chapel, kitchen, yard, and so on. Used alone, however,
    even good weights can omit necessities, clone too many rooms, and conceal supply dependencies.
-2. **Authored roster packages** are useful recipes and test fixtures: frontier jail, city prison wing,
+2. **Authored roster packages** are useful recipes and test fixtures: hamlet jail, city prison wing,
    monastic prison, mage-colony portal block. Used as the entire system, they create visible templates
    and require an authored package for every purpose x size x culture x realm combination.
 3. **A typed obligation-and-flow program** can make the first two mechanisms work together. The purpose
@@ -2589,7 +2589,7 @@ purpose family and context
 A **capability** says what the site must accomplish; a **flow** says what enters, moves, waits, changes,
 or leaves. Neither assumes one room:
 
-- a frontier jail's `custody` capability might realize as one barred room divided into cells, while
+- a hamlet jail's `custody` capability might realize as one barred room divided into cells, while
   `oversight + records` share the sheriff's office, food arrives from the tavern, waste leaves by bucket,
   and one likely discretionary space adds local identity;
 - a city prison's same capabilities can realize as intake, classification, repeated cellblock
@@ -2908,7 +2908,7 @@ current pressure; no universal magic count is assumed.
 
 Concrete distinctions:
 
-- A frontier jail may actively track custody/security while external meals remain a stable dependency.
+- A hamlet jail may actively track custody/security while external meals remain a stable dependency.
   If a blizzard or siege cuts delivery, food reserve promotes into an active clock. The sheriff's
   demonic soap remains a discoverable object unless its dreams, confessions, or realm influence begin
   changing people or events.
@@ -3330,7 +3330,7 @@ across a zone, happens through a scheduled procedure, or is supplied from outsid
 The system must avoid two opposite failures:
 
 - **one obligation = one room** bloats small sites and turns an operating model into an architectural
-  checklist—a frontier jail receives separate intake, records, evidence, guard, meal, sanitation, and
+  checklist—a hamlet jail receives separate intake, records, evidence, guard, meal, sanitation, and
   visitation rooms whether or not its capacity supports them;
 - **combine/externalize everything possible** creates magic multipurpose rooms and hollow sites—a desk,
   cupboard, bucket, tavern delivery, and one barred corner allegedly satisfy an entire prison while all
@@ -3372,7 +3372,7 @@ ordinary equipment, and acceptable external reliability permit combination or ex
 
 Concrete examples:
 
-- In a frontier jail, oversight and records may share the sheriff's office; one barred room may contain
+- In a hamlet jail, oversight and records may share the sheriff's office; one barred room may contain
   several stable cell children; meals come from a named tavern/cook route; sanitation may be a yard
   privy; evidence might be a locked cabinet until caseload/security demands a dedicated store.
 - In a city prison, intake and public visitation conflict with secure circulation; food throughput,
@@ -3517,7 +3517,7 @@ say: `dedicated evidence room rejected: low case volume`; `external store reject
 `cabinet accepted: capacity 4/6, staff access compatible`; `closet remained legal but lost the weighted
 roll`. Modders see tables and modifiers, not a black-box optimization verdict.
 
-##### Frontier-jail example, end to end
+##### Hamlet-jail example, end to end
 
 Assume a four-prisoner jail with a sheriff and deputy in a small town:
 
@@ -3907,7 +3907,7 @@ operators and residents.
 
 Do not fully author every building type now. Use a compact orthogonal corpus to reject bad abstractions:
 
-1. **Frontier jail** - tiny, highly combined, externally supplied, likely added spicy space.
+1. **Hamlet jail** - tiny, highly combined, externally supplied, likely added spicy space.
 2. **City prison** - large controlled repetition, layered security, institutional ecology.
 3. **Residential college hall** - repeated private units with high occupant expression, schedules, and
    social networks.
@@ -4038,7 +4038,7 @@ Adam confirms the expanded scope. Question 4 is resolved:
 - semantic expression materializes through bounded signature layers rather than exhaustive inventories;
 - shared data is stored once, latent children remain sparse, and active-room/context/render budgets keep
   runtime cost tied to current play;
-- Wave 2 uses a compact stress corpus: frontier jail, city prison, residential college, ordinary-versus-
+- Wave 2 uses a compact stress corpus: hamlet jail, city prison, residential college, ordinary-versus-
   boutique inn, and living habitat/cavern. Prison is no longer the universal design proxy.
 
 #### 10.4.3 Future-question assignments seeded by question 4
@@ -4047,7 +4047,7 @@ Adam confirms the expanded scope. Question 4 is resolved:
 |---|---|
 | Repeated units are correlated families with shared assembly truth and sparse typed child variation | Remaining **Wave 2** questions define quantity/distribution/Spice budgets; **Waves 3-5** realize assemblies, spaces, and dressing |
 | Variation authority is factored rather than one global percentage | **Wave 5** owns expression kits, furniture/dressing channels, signatures, and density; purpose/occupant systems supply the semantic inputs |
-| Frontier jail, city prison, residential college, ordinary/boutique inn, and living habitat form the minimum orthogonal semantic corpus | Every later wave must exercise relevant fixtures; **Wave 12** turns them into regression, distribution, performance, and migration gates |
+| Hamlet jail, city prison, residential college, ordinary/boutique inn, and living habitat form the minimum orthogonal semantic corpus | Every later wave must exercise relevant fixtures; **Wave 12** turns them into regression, distribution, performance, and migration gates |
 | High-expression rooms use bounded signature layers and local materialization rather than exhaustive inventories | **Waves 5, 10, and 12** own dressing, presentation, save growth, and active-slice performance |
 | Living habitats vary through biological/ecological state rather than personal expression | Remaining **Wave 2** ecology writing and future creature/habitat systems own the content; realm expansion must preserve the distinction |
 
@@ -4156,7 +4156,7 @@ locked from intuition now.
 
 ##### Example comparison
 
-- **Frontier jail:** viable custody/oversight/storage/external services; embedded discovery in every
+- **Hamlet jail:** viable custody/oversight/storage/external services; embedded discovery in every
   realized room; clear-majority target for one added spatial variation; occasional larger hidden domain;
   few site-level root opportunities but no downward Spice ceiling.
 - **City prison:** full operational suites and repeated blocks; multiple discretionary spaces/annexes
@@ -4199,7 +4199,7 @@ Eligible expressions include:
 - magical/technological/biological production, storage, distribution, waste, renewal, or containment;
 - strange dependency, substitute, resource ecology, service failure, or institutional bargain;
 - a function whose ordinary local context changes the classification—a Breach-cell bank may be expected
-  mage-colony infrastructure and Mythic in a frontier jail.
+  mage-colony infrastructure and Mythic in a hamlet jail.
 
 Examples:
 
@@ -4423,7 +4423,7 @@ those rolls into exact stable records and emits the arithmetic/provenance in its
 
 #### Concrete comparisons
 
-- **Frontier jail:** the settlement and enforcement load imply a handful of ordinary prisoners plus an
+- **Hamlet jail:** the settlement and enforcement load imply a handful of ordinary prisoners plus an
   occasional surge. It may roll three cells, one of them double-capacity, with food externalized to the
   tavern. If five prisoners are currently held, the jail is honestly overcrowded; the engine does not
   secretly add a fourth cell or delete a prisoner. That mismatch can produce guard procedure, conflict,
@@ -4542,9 +4542,9 @@ Independent final-number rolls would allow contradictions such as rolling 180 pr
 beds, twelve cellblocks, and no overcrowding state. The hybrid keeps dice in charge of uncertainty and
 math in charge of implications.
 
-##### Frontier-jail worked example
+##### Hamlet-jail worked example
 
-Suppose established context selects the `frontier_jail` profile and no lore fixes its capacity:
+Suppose established context selects the `hamlet_jail` fixture and no lore fixes its capacity:
 
 ```text
 ordinary concurrent custody roll: 1d4 - 1 -> 2 prisoners
@@ -4599,9 +4599,9 @@ inspectable.
 inputs exposed as editable rollers, derived counts calculated transparently, and no hidden rerolling to
 force a fit?
 
-#### 10.6.2 Follow-up - what makes the jail a frontier jail?
+#### 10.6.2 Follow-up - why the earlier frontier-jail label was insufficient
 
-Adam asks where the `frontier_jail` profile in the worked example comes from. It should **not** come
+Adam asks where the earlier `frontier_jail` label in the worked example came from. It should **not** come
 from the jail independently rolling a broad flavor label after its purpose is known. It should be the
 readable shorthand for a factored parent-context and service-role profile.
 
@@ -4614,7 +4614,7 @@ The current repository cannot yet make that determination robustly:
   and the weird-west register. None of those facts alone means that a particular jail is a small local
   frontier lockup.
 
-The redesign must not equate `realm: frontier` with `institutional profile: frontier jail`. A mage
+The redesign must not equate `realm: frontier` with `institutional profile: small local jail`. A mage
 colony can be geographically frontier while possessing sophisticated custody infrastructure; a large
 city can contain a tiny district watch lockup; a frontier railhead can host a regional prison much
 larger than its resident population suggests.
@@ -4649,7 +4649,8 @@ The important inputs are orthogonal rather than one master `frontier` enum:
 - **history/current pressure:** original role, later growth/decline, war, migration, catastrophe,
   occupation, or a recent event that changes load without rewriting the building's origin.
 
-`Frontier jail` is therefore a fixture/display label for a common conjunction such as:
+The earlier `frontier jail` wording was intended as a fixture/display label for a common conjunction such
+as:
 
 ```text
 purpose: jail / local custody
@@ -4695,8 +4696,8 @@ population. This is the already accepted context cascade applied quantitatively.
 If a jail is generated without an established settlement, the planner must first attach it to a minimal
 context anchor—fort, road post, mining camp, district, isolated institution, ruined settlement, or other
 service constituency. The site may roll that missing parent context from readable tables. It may not
-declare itself a `frontier jail` with no record of what frontier, population, operator, or catchment made
-that description true.
+derive `hamlet jail` merely from a frontier realm/development tag without the population, operator, and
+catchment facts that make the hamlet-scale description true.
 
 ##### Scope boundary
 
@@ -4706,11 +4707,146 @@ future bounded-place/settlement system owns full generation of those parent prof
 adapters may initially translate the existing `PLACE_TIERS`, region vector, realm, node, and authored
 premise into the new fields.
 
-**Recommendation:** treat `frontier jail`, `city prison`, and similar names as human-readable composite
-fixtures, never primitive types. Parent context and service catchment establish the facts; contextual
-dice fill gaps; the jail's obligation/quantity tables consume the resulting modifier stack. This avoids
-both isolated nonsense rolls and a Cartesian catalog of jail templates.
+**Recommendation:** treat settlement/site labels and `city prison` as human-readable composite fixtures,
+never primitive types. Parent context and service catchment establish the facts; contextual dice fill
+gaps; the jail's obligation/quantity tables consume the resulting modifier stack. This avoids both
+isolated nonsense rolls and a Cartesian catalog of jail templates.
 
 **Open follow-up:** should site profiles inherit this factored parent-context/service-role cascade, with
-`frontier jail` retained only as a readable recipe/test-fixture label and with the current overloaded
-`frontier` realm/prep terms explicitly forbidden from deciding institutional scale by themselves?
+the current overloaded `frontier` realm/prep terms explicitly forbidden from deciding institutional
+scale by themselves?
+
+#### 10.6.3 Ruling and follow-up - population is the ordinary demand gate
+
+Adam accepts the parent-context/service-role cascade and corrects the example's naming. The small-site
+fixture is now **hamlet jail**, not frontier jail. Every earlier use in this running direction has been
+updated. `Frontier` remains a realm/geographic/development descriptor where appropriate, but it is not a
+population category or institutional-capacity tier.
+
+This exposes a larger upstream requirement: every inhabited settlement or other population-bearing
+place needs one definite, persistent **population roll/profile**. It need not claim an exact census, but
+it must be concrete enough to gate downstream demand for jails, inns, markets, temples, sanitation,
+schools, workshops, processing sites, and other purposeful places.
+
+This reinforces Adam's already locked 2026-07-09 ruling that settlement population estimates should
+drive urban/rural presentation, `nodeEnvBand`, place-tier stock, and town-map composition. The dungeon
+redesign adds institutional demand and capacity to the same canonical population input; it must not
+create a parallel dungeon-only settlement scale.
+
+##### Recommended population record
+
+A single exact inhabitant count would imply a census the engine does not simulate and would fluctuate
+too sharply at service thresholds. A bare label such as `hamlet` is too vague for capacity arithmetic.
+The recommended middle is a stable rolled **estimate plus credible range and band**:
+
+```text
+populationProfile:
+  band: hamlet
+  estimate: about 180
+  credibleRange: 140-230
+  residentPopulation: about 180
+  routineTransientPopulation: 10-30
+  seasonalOrEventPopulation: none
+  currentPressure: ordinary
+  provenance: rolled from regional density + settlement role
+  confidence: estimated
+```
+
+The numbers above illustrate shape, not locked bands. Wave 2 must author and test the actual
+isolated/camp, hamlet, village, town, city, great-city/metropolis or other needed bands and dice. An
+explicit premise such as “a hamlet” selects the eligible population band; otherwise regional density,
+settlement role, access, terrain, history, realm conditions, and authored settlement-frequency dice
+choose it. A band-specific roller then creates the stable estimate/range.
+
+Population stays aggregate. Genesis does not mint 180 NPC records to justify a hamlet of about 180
+people. Cohorts, households, role coverage, and salient individuals represent it until play makes a
+specific person actionable.
+
+##### Population strongly gates ordinary capacity, but purpose declares its demand driver
+
+Resident population should completely or nearly completely gate the **ordinary local-service envelope**.
+A hamlet should not casually roll a city-sized local jail, bathhouse, school, market, or water system.
+However, not every purpose serves residents directly. Each purpose profile must name its primary demand
+driver:
+
+- **resident/household demand:** wells, ordinary local worship, household services, neighborhood shops;
+- **justice/service catchment:** jail, courthouse, records office, fire/watch coverage;
+- **traveler/route throughput:** inn, stable, customs post, caravan yard, port warehouse;
+- **regional constituency:** college, cathedral, specialist hospital, central prison, pilgrimage site;
+- **production/input throughput:** mine, mill, slaughterhouse, refinery, shipyard, granary;
+- **strategic mandate:** fort, arsenal, signal station, realm gate, disaster reserve;
+- **institutional population:** monastery, barracks, prison, boarding school, hospital;
+- **ecological load:** hive, den, spawning ground, fungal network, migratory refuge.
+
+Population remains the baseline gravitational constraint, while catchment and throughput explain legal
+departures. A city district can support a small satellite lockup because its site role is local holding;
+a hamlet can support a large inn at a major caravan crossing because travelers, not residents, are the
+primary demand base.
+
+##### Ordinary envelope and exceptional mismatch
+
+For each purpose, the relevant demand base plus doctrine/context produces an ordinary capacity envelope:
+
+```text
+population/catchment/throughput facts
+  -> purpose-specific demand driver
+  -> ordinary capacity envelope
+  -> rolled capacity within that envelope
+  -> compare against designed and current realized capacity
+```
+
+Most generation should stay inside that envelope. A result outside it is not merely “rare” and is not
+silently accepted. It creates a **capacity-contradiction obligation** that must resolve through a causal
+bridge such as:
+
+- nonlocal catchment, export market, pilgrimage, route traffic, or strategic mandate;
+- a much larger historical population, boom, war, occupation, or later decline;
+- planned expansion, failed megaproject, subsidy, vanity, corruption, or speculative construction;
+- hidden population, hidden resource/input, covert consumer, or concealed institution;
+- magical/technological production, storage, transport, or Breach-linked market;
+- explicit current failure, abandonment, partial operation, or repurposing.
+
+The bridge may be Grounded, Textured, Strange, Volatile, or Mythic. A former regional slaughterhouse in
+a declining hamlet is grounded history; a subterranean kobold-breeding operation is a much hotter hidden
+input. Scale mismatch creates an opportunity for Spice but does not automatically require supernatural
+content.
+
+##### Kobold-sausage example - absence becomes evidence
+
+A hamlet's resident population and surrounding ranch profile cannot license the rolled meat processor's
+capacity. The compiler must not shrug or reroll the building smaller. It records:
+
+```text
+observed plant capacity: regional
+ordinary local meat input: insufficient
+ordinary local consumers: insufficient
+capacity contradiction: source + labor + waste + distribution unexplained
+promoted root: concealed kobold-breeding and regional sausage operation
+required manifestations: hidden pens, feed flow, workers/complicity, waste route,
+                        packaging/records, outbound buyers or caravan route
+player handles: missing ranch supply, night deliveries, unusual bones, payroll discrepancy,
+                branded sausage distributed well beyond the hamlet
+```
+
+The juicy premise is not left as a clever sentence for the DM to remember. The same causal-promotion
+mechanism accepted in Question 5 creates the root and reserves enough operational, spatial, local, and
+network manifestations for investigation and payoff. The missing ranches are mechanically meaningful
+negative evidence.
+
+The inverse also matters. A settlement whose population exceeds an ordinary service's capacity must
+explain how the need is met or why it is failing: external/informal providers, rationing, queues,
+scheduled sharing, exclusion, recent growth, disaster, corruption, or a licensed systemic shortage.
+Healthy-by-construction still prevents unexplained universal misery.
+
+##### Recommendation
+
+Adopt one canonical population profile for every inhabited settlement/population-bearing place. Store a
+stable estimate, credible range, band, provenance, and relevant transient/seasonal overlays rather than
+an exact census. Purpose profiles declare which population, catchment, throughput, or ecological measure
+drives their demand. Population tightly gates ordinary local capacity; any material over- or under-scale
+result must acquire a causal bridge, dependency flows, manifestations, and player handles rather than
+surviving as unexplained generator noise.
+
+**Open follow-up:** should population be represented by this stable **band + estimate + credible range**
+profile—with transient/seasonal overlays kept separate—and should material service-capacity mismatches
+automatically become tracked causal obligations exactly as in the kobold-sausage example?

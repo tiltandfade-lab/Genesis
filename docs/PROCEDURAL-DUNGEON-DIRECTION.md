@@ -2631,3 +2631,119 @@ sites, avoid Cartesian template explosion, and still roll surprising realization
 and dependencies, with named rooms/assemblies/procedures/external services rolled afterward as their
 realizations—and should natural formations and living habitats receive their own grammars rather than
 being forced through an institutional template?
+
+#### 10.1.1 Ruling and follow-up - mechanical cost of the obligation layer
+
+Adam accepts the obligation-and-flow architecture as beautiful design and asks what it costs
+mechanically. The honest answer separates runtime, persistence, implementation, content, verification,
+DM context, and long-term maintenance.
+
+##### Runtime cost - low if the planner stays factored and bounded
+
+The current `rollDungeonWalk()` already builds a topology graph, runs breadth-first depth, assigns a
+whole-site loot budget, and then maps across every room to perform many independent table rolls. The
+future spatial pass performs room separation, rasterization, connection carving, and eventually bounded
+room-layout search. Against those costs, a roster planner operates on small structured lists:
+
+```text
+expand purpose-family obligations
+-> resolve quantities/dependencies/context modifiers
+-> select legal realization families
+-> combine or externalize compatible obligations
+-> assign the resulting room/assembly demand to graph capacity
+```
+
+For an ordinary site this is likely tens of obligation/flow records, not thousands. A fifty-five-room
+prison can hold its repeated cellblock demand as several assembly records with counts rather than
+expanding every cell into a heavyweight planning node. A reasonable constructive implementation is
+approximately linear in obligation/dependency count plus a bounded scan of eligible realizations and
+room slots. Bounded backtracking may reconsider a few conflicting assignments, but no pass is allowed
+to search the Cartesian product of every purpose, size, culture, realm, and room combination.
+
+No honest millisecond promise can be made before a prototype benchmark. The design target is that
+roster planning remains a small one-time generation cost—normally cheaper than spatializing and
+dressing the resulting rooms, invisible during ordinary turn play, and subject to a strict work budget
+with deterministic degradation or diagnostics when exceeded.
+
+##### Save and memory cost - low
+
+The added canonical data is compact: purpose/profile ids, obligation ids, quantities, selected
+realizations, dependency links, provenance, stable seeds, and external-service records. This should be
+kilobytes for ordinary sites and modest even for large ones. Stable repeated assemblies and latent
+children prevent a hundred-cell prison from requiring a hundred fully populated NPC/item/scene records
+at creation. Persisting the compiled roster costs far less than eagerly generating all of those details.
+
+##### DM/token cost - lower than the current conceptual model
+
+The AI DM does not receive the whole obligation graph each turn. The engine uses it to compile the site
+and exposes only the active room's purpose/current use, nearby dependencies, relevant failures,
+discoveries, and due cards. This removes from the DM the expensive job of remembering whether the prison
+ever received food, sanitation, oversight, or secure circulation. It is more engine structure but less
+prompt burden and less AI improvisational drift.
+
+##### Implementation cost - medium to high, but concentrated
+
+Genesis needs:
+
+- a versioned purpose-family/obligation schema and Markdown-table compiler support;
+- dependency, quantity, combination, externalization, and realization-selection passes;
+- a reconciliation/diagnostic layer between roster demand, site profiles, and graph capacity;
+- stable provenance and persistence for chosen plans;
+- compatibility projections while the old room-driven consumers still exist;
+- tests for minimum operating models, allowed variation, impossible sets, deterministic replay, and
+  cross-realm extension.
+
+This is a real new planning layer and should be treated as several coherent build units, not a tiny
+patch to `rollDungeonWalk()`. It also changes the future generation order: purpose/context and roster
+demand help establish graph requirements before final room assignment, instead of rolling a finished
+topology and then independently asking what every room happens to be.
+
+##### Content and writing cost - the largest near-term cost
+
+The system needs authored purpose profiles, flow vocabularies, realization families, dependencies,
+repeat policies, fallbacks, context modifiers, Spice bands, and a flavor pass. That is substantially
+more work than adding another column to the current d200. It is nevertheless reusable work:
+
+- `custody`, `oversight`, `water`, `waste`, `storage`, `procession`, `airflow`, `incubation`, and similar
+  concepts can serve many purposes;
+- a kitchen, camp cookfire, ration issue desk, external caterer, fungal feeding bed, and conjured-meal
+  ward can be different realizations of related supply needs;
+- size bands alter quantities/coverage instead of requiring complete duplicate templates;
+- cultures and realms modify shared profiles through data rather than cloning every purpose package;
+- strong authored packages remain optional recipes and test fixtures.
+
+The alternative's content cost looks smaller only at first. Complete templates multiply across purpose
+x size x doctrine x occupancy x history x realm, while flat tables require endless exception rules and
+manual repairs. The factored model pays a higher foundational authoring cost and a much lower expansion
+and maintenance cost.
+
+##### Primary complexity risk and guardrails
+
+The danger is not CPU use; it is accidentally building a universal economic simulator. The roster
+needs enough ecology to create spaces, dependencies, vulnerabilities, evidence, and play—not continuous
+per-ration logistics for every unseen prisoner.
+
+Recommended cost guardrails:
+
+1. Store typed obligations and coarse flows, not continuous material simulation.
+2. Resolve the roster once at creation; update it only after meaningful world events.
+3. Represent repeated children compactly with counts, stable ids/seeds, and deterministic expansion.
+4. Use constructive priority order and bounded backtracking; never exhaustive combination search.
+5. Factor universal concepts from purpose, culture, realm, and history modifiers.
+6. Compile human-readable rollers into indexed runtime records so eligibility checks are cheap.
+7. Give every pass a deterministic work budget, degradation ladder, and plain-language diagnostic.
+8. Benchmark ordinary, extra-large, mixed-scale, multi-occupation, and Breach-linked fixtures before
+   locking numeric performance budgets.
+
+**Cost judgment:** low runtime, low save growth, lower DM-context cost, medium-to-high engine work, high
+initial content/writing work, and lower long-term maintenance than template multiplication. The feature
+is affordable for a browser game if it remains a compile-once semantic planner rather than a live
+simulation.
+
+**Recommendation:** keep the accepted architecture and adopt the guardrails above. Its cost is spent in
+the correct place—authorable deterministic structure—while the player's turn loop stays light and realm
+expansion remains additive.
+
+**Open follow-up:** does this cost profile remain acceptable, with the hard boundary that roster ecology
+models coarse capabilities, flows, dependencies, and state changes but does not continuously simulate an
+institution's economy?

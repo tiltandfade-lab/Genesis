@@ -4850,3 +4850,154 @@ surviving as unexplained generator noise.
 **Open follow-up:** should population be represented by this stable **band + estimate + credible range**
 profile—with transient/seasonal overlays kept separate—and should material service-capacity mismatches
 automatically become tracked causal obligations exactly as in the kobold-sausage example?
+
+#### 10.6.4 Ruling and follow-up - permeable envelopes and latent regional contracts
+
+Adam accepts the stable population band + estimate + credible range, with transient and seasonal
+population rolled separately. He corrects the capacity language: results outside the ordinary envelope
+are often the interesting story generators, so the envelope must not become a hard exclusion wall. The
+design problem is controlling the rate and coherence of **slippage**, not eliminating it.
+
+The corrected law is:
+
+> The ordinary capacity envelope is a probability basin and causal alarm, not a blacklist. Results may
+> slip beyond it at an authored rate. What may never slip through is an unexplained contradiction.
+
+This supersedes the “hard gate” phrasing in section 10.6.3 while preserving its causal intent.
+Population strongly predicts ordinary local capacity; it does not veto exceptional capacity.
+
+##### Two kinds of apparent mismatch
+
+The planner must distinguish:
+
+1. **Known extended demand.** A site's local population looks too small, but an already established
+   route, regional catchment, pilgrimage, export market, strategic mandate, historical population, or
+   institutional constituency explains the scale. The purpose-specific envelope expands before the
+   capacity roll. This is coherent world structure, not necessarily a secret or Spice root.
+2. **Unexplained slippage.** Capacity rolls materially outside every established demand driver. The
+   result is admitted, then creates the capacity-contradiction obligation/root described above. The
+   causal bridge may be mundane, historical, criminal, magical, ecological, or realm-scale.
+
+Leilon's maritime warehouses, inns, docks, chandlers, customs functions, and trade-facing services need
+not be treated as anomalies merely because its resident population is small. Its halfway-point role and
+trade with much larger neighboring cities enlarge the relevant throughput and transient-demand
+envelopes. A regional-scale meat processor with no ranches, imports, export route, known history, or
+large consumers remains unexplained and therefore becomes a story generator.
+
+##### Slippage should be rolled deliberately
+
+Do not rely on accidental arithmetic tails. Each purpose/settlement-role pairing should author a
+capacity-relation table or modifier stack such as:
+
+```text
+compressed / underprovided
+ordinary within-envelope
+expanded but locally plausible
+exceptional mismatch requiring a causal bridge
+```
+
+The exact weights remain a Wave 2 writing/distribution decision. They should vary by purpose and
+context:
+
+- wells and ordinary household services remain tightly population-coupled;
+- inns, markets, docks, warehouses, courts, colleges, prisons, temples, and hospitals more readily
+  inherit route/catchment demand;
+- mines, processors, granaries, shipyards, and other production sites key strongly off inputs and export
+  networks rather than resident consumers;
+- ancient, declining, occupied, post-catastrophe, speculative, subsidized, magical, and Breach-linked
+  places have wider capacity variance;
+- settlement-level deviation/root budgets prevent every independent site from rolling an unrelated
+  major mismatch, while frequent smaller expansions, deficits, and peculiarities remain welcome.
+
+The target is a spicy world with meaningful contrast: most individual capacity relationships are
+legible, settlements receive recurring opportunities for notable deviation, and major unexplained
+mismatches are common enough to drive adventures without turning every building into an unrelated
+conspiracy. Exact incidence must be tuned through seeded settlement/site corpora and reported as visible
+distributions rather than chosen as a magic percentage now.
+
+##### Unrolled settlements still exert bounded influence
+
+“Not yet rolled” must mean **unmaterialized detail**, not nonexistent world. A generated settlement can
+depend on a neighbor without forcing that neighbor's streets, NPCs, shops, dungeons, and full simulation
+to be generated immediately.
+
+The regional graph needs three degrees of existence:
+
+1. **Canonical anchor.** Lore or the campaign premise already establishes a place's name, relative
+   location, broad scale, role, or relationship. Those facts are hard inputs even if nothing else about
+   the place has been generated.
+2. **Relational stub.** A generated place requires an external counterparty not yet detailed. Genesis
+   stores only the minimum typed constraints: `larger city to the north`, `regional grain market`,
+   `pilgrimage center`, `naval supplier`, or a named canonical place when available.
+3. **Aggregate outside network.** The relationship only requires an external market/provider at present.
+   The region can hold that aggregate influence until play or generation has reason to resolve it into
+   one or more concrete nodes.
+
+This extends Genesis's existing soft-canon and lock-on-contact direction, but requires finer hardness.
+Once a hard/generated Leilon depends on trade with Waterdeep, the minimal facts “Waterdeep is a much
+larger trade partner in this direction” and the connecting trade edge cannot be recycled merely because
+Waterdeep itself is unvisited. The **relationship constraint is hard**; Waterdeep's unpromised internal
+details remain latent or soft.
+
+##### Typed regional relationship edge
+
+A small durable edge can carry the useful truth:
+
+```text
+relationship: trade corridor / halfway port
+counterparties: Leilon <-> Waterdeep; Leilon <-> Neverwinter
+mode: coastal shipping + road
+volume band: regionally important
+directional flows: food, manufactures, passengers, mail, marine goods, rumors
+travel friction: distance + weather + route safety
+reliability/seasonality: rolled or canon-established
+dependency asymmetry: Leilon strongly dependent; large cities weakly dependent
+provenance/hardness: campaign lore / locked relational constraint
+unresolved promises: exact merchants, docks, guild agents, and shipments remain latent
+```
+
+The edge is not a continuously simulated caravan manifest. It is an event-driven dependency and content
+source. It can answer which service capacities are justified, what shortages follow a blockade, which
+outside factions care, and what kinds of news or people plausibly arrive.
+
+##### Leilon example
+
+Using Adam's campaign description, Leilon's eventual population profile might establish a small seaside
+town with modest resident population, then separately roll or inherit substantial transient and marine
+throughput because it sits between Waterdeep and Neverwinter. Purpose systems consume different slices:
+
+- housing, wells, ordinary neighborhood services -> resident estimate/range;
+- inns, stables, taverns, temporary holding, markets -> residents + routine transients + route traffic;
+- docks, warehouses, chandlers, customs, ship repair -> marine throughput and trade edges;
+- jail/watch -> resident justice demand + travelers + route risk + external transfer arrangements;
+- elite goods and specialist services -> partner-city market access and delivery reliability;
+- NPC origins, accents, fashions, rumors, factions, prices, shortages, and adventure hooks -> weighted
+  influence from both trade partners without cloning either city into Leilon.
+
+If Waterdeep and Neverwinter have not yet been fully rolled, their anchor/stub records still constrain
+Leilon. When either city is later generated, its planner reads every inbound relational promise first,
+then rolls only unconstrained facts. It must include a legal reciprocal connection to Leilon; it need not
+generate the exact merchant, quay, or political attitude until those details become relevant.
+
+Multiple inbound promises reconcile by authority and scope rather than last-writer-wins. If a later fact
+appears to conflict, Genesis preserves established observations and explains the change through route
+failure, history, faction policy, mistaken belief, or another explicit event. It never rerolls a visited
+Leilon to fit a newly materialized neighbor.
+
+##### Cost and simulation boundary
+
+This is cheap compared with generating neighboring settlements. Population profiles, relationship
+edges, coarse flow bands, reliability, provenance, and a few deferred obligations are small records.
+Ordinary turns update only due events and changed dependency frontiers. A storm closing the coastal route
+can affect Leilon's stock and pressure immediately while Waterdeep remains an aggregate supplier; no
+per-ship, per-merchant, or whole-city tick is required.
+
+**Recommendation:** adopt permeable capacity envelopes with explicit context-sensitive slippage rolls.
+Known regional relationships widen the legitimate demand envelope before capacity is rolled; unexplained
+departures become tracked causal roots. Let unrolled settlements exert influence through hard minimal
+anchors and typed relationship edges while their unpromised interiors, institutions, and people remain
+latent/soft.
+
+**Open follow-up:** should Genesis use this latent regional-contract model—hardening only the minimum
+population/role/route/relationship facts required by already generated places—and should known extended
+demand widen the normal envelope while only genuinely unexplained slippage creates a contradiction root?

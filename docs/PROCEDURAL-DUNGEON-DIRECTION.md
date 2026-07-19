@@ -5192,3 +5192,196 @@ This makes places operational and socially alive while keeping work proportional
 
 **Open decision:** should this role-coverage/cohort/anchor model govern site populations, including stable
 latent individual slots and the rule that role membership does not imply current physical presence?
+
+#### 10.7.1 Follow-up - current NPC reconstruction and the rural population
+
+Adam likes the model and asks whether the current NPC system mainly needs its role assignment replaced
+by casting, how broad public-place casts should be, and where farmers and people living outside
+settlements are counted.
+
+The repository audit shows a **medium population/casting reconstruction around a largely reusable NPC
+core**, not a wholesale NPC rewrite.
+
+##### What the current engine already has and should keep
+
+- `rollNPC()` already creates a useful individual identity: species/name, realm-skinned occupational
+  role archetype/label/note/class, coherence tier, visible behavior, want, and optional secret, bond,
+  fear, leverage, and immediate motivation.
+- The 35-archetype NPC Role Spine and eleven realm skins already separate universal play-angle from
+  realm-specific labels, drops, additions, and weights. Land-worker, wild-provider, hauler, host,
+  enforcer, and other reusable shapes are valuable population vocabulary.
+- `roleClass` can already filter a draw toward broad classes such as labor, service, authority, care,
+  faith, or trade.
+- Codex records already distinguish rolled atoms, player-safe fields, DM-only levers, typed links, place,
+  condition, known/unknown, and soft/hard lifecycle.
+- `codexRecontextualize()` already allows an untouched soft person to be reassigned without rewriting a
+  contacted person, and `codexContact()` canon-locks identity on interaction.
+- The coherence/attention/hook systems already support cheap archetype NPCs that deepen only through
+  interaction; children and animals already have lightweight partial records.
+- Region-aware names, realm role skins, Breach leakage, attitudes, relationships, NPC life events, and
+  renderer presence are all reusable surfaces.
+
+The existing `fields.role` can remain a compatibility/display field. Old saves need not have their NPCs
+rerolled.
+
+##### The current gaps are real but concentrated
+
+- `role` currently conflates occupation/social archetype with the job an NPC performs at a particular
+  institution or scene.
+- `roleHint` is recorded for the DM but, as `rollNPC()` itself documents, does not currently bias the
+  role roll. `buildingApproach()` asks for a proprietor through `roleHint`, but this does not prove that
+  the rolled person can operate that building.
+- generic inhabited nodes mint a fixed ambient pool of three soft NPCs;
+- typed scenes independently roll shrine/shop/tavern/market counts and mint fresh NPCs from broad realm
+  roles. Their useful `d2`, `d3`, `2d4`, and `3d6` counts currently express scene density, but do not
+  draw from a settlement population, site staff, household, visitor pool, shift, or schedule;
+- scene temperature controls density, but site capacity, current load, resident/transient population,
+  time of day, route traffic, and current event are not the population source;
+- a wilderness social encounter can produce encounter prose without binding the person to a persistent
+  farm, household, community, route, or regional cohort.
+
+Therefore the personality/lever roller needs additive fields and filters; the ambient/presence system
+needs the meaningful rewire.
+
+##### Casting does not replace occupation
+
+At least four facts currently called “role” must be kept distinct:
+
+```text
+occupation/archetype: what kind of work and social position shapes this person
+membership/home: what household, faction, settlement, institution, or mobile cohort they belong to
+site assignment/relation: sheriff, deputy, proprietor, prisoner, student, guest, supplier, visitor
+scene function/presence: why they are in this scene now—staffing, drinking, delivering, testifying
+```
+
+**Casting** chooses or promotes an NPC to satisfy an assignment or scene-presence need. It does not
+erase the occupation roll.
+
+Examples:
+
+- an `Enforcer`-archetype local may be assigned as the hamlet sheriff;
+- a `Land-worker` may own the tavern as a second livelihood, serve there seasonally, or simply be a
+  patron after work;
+- a prisoner's underlying occupation may be sailor, farmer, thief, healer, noble, or mage—`detainee`
+  is a current institutional relation/condition, not their entire identity;
+- a `Host` may operate the inn, while a spouse with a different occupation manages accounts;
+- a summoned clerk, sentient building, ritual rotation, or external provider may satisfy an
+  institutional assignment without forcing a conventional occupational label.
+
+The cast resolver should use this order:
+
+```text
+1. established actor required by canon/relationship/contract
+2. compatible known or soft local NPC who is available
+3. promote a deterministic latent slot from the appropriate household/cohort
+4. mint a new NPC from the correct context only if no legal candidate exists
+```
+
+It writes assignment, membership, schedule/presence, and cast provenance. It never rerolls a hard NPC's
+occupation to make them fit. An unusual but legal assignment becomes character texture or a causal
+handle; an impossible assignment triggers reconciliation.
+
+##### Public places use mixed cast lanes, not an unrestricted grab bag
+
+Taverns, markets, docks, festivals, temples, courts, and social halls can contain many occupations, but
+“any role” should mean **broad contextual eligibility**, not uniform selection from every NPC in the
+world.
+
+A public-scene cast combines:
+
+- **required staff/anchors:** proprietor, servers, guards, officiants, clerks, performers;
+- **local attendees:** drawn from resident households/cohorts according to schedule, custom, wealth,
+  access, and current pressure;
+- **transients:** travelers, sailors, merchants, pilgrims, messengers, or migrants licensed by the
+  population/route profile;
+- **purpose-specific visitors:** prisoners' families, advocates, suppliers, witnesses, patients,
+  students, worshippers, buyers, and sellers;
+- **event/root actors:** anyone whose contract, faction front, secret, or promoted story card requires
+  presence.
+
+Scene-count dice can survive as presentation/density rolls, but the resulting slots draw from these
+pools and are capped/modified by site capacity and active population. A farmer can absolutely be met in
+a tavern; a remote fisher can appear at market day; a city magnate can pass through a hamlet inn when a
+trade relationship licenses it. They are not duplicated simply because a new room is entered.
+
+A jail is mixed but not generally open-cast: staff assignments are constrained; detainees may come from
+many occupations; visitors/deliveries come from purpose-specific and route pools; someone with no
+custody, work, supply, legal, family, religious, or story reason to be inside needs an explicit cause.
+
+##### Rural and dispersed people need their own population scopes
+
+The settlement population record should not ambiguously swallow every nearby farmer, nor pretend the
+town walls contain everyone the town serves. The connected place system needs separable but linked
+population scopes:
+
+```text
+settlement-core residents
+attached hinterland / rural households
+independent nearby hamlets or communities
+dispersed wildland households and small groups
+mobile/ranging populations
+routine transients
+seasonal/event populations
+```
+
+Each person or latent slot has one population/home owner to prevent double-counting. Relationships and
+service catchments can connect that person to several places without counting them several times.
+
+- **Farms** are household/holding or farm-cluster child sites with aggregate residents, workers,
+  dependents, land/livestock/production, seasonal labor, market route, and service links. Genesis does
+  not generate every farmhand at region creation; it stores a cohort and promotes individuals when a
+  farm, road, market, contract, or event needs them.
+- **Rural residents** may belong to a town's attached hinterland and use its market, jail, temple,
+  healer, school, mill, and protection. They enlarge those service catchments without inflating the
+  town-core housing or well demand.
+- **Independent communities** retain their own population profile and relationships rather than being
+  treated as anonymous town hinterland.
+- **Dispersed wildland residents**—hermits, foresters, hunters, fishers, shepherds, prospectors,
+  wardens, hidden households, or realm-specific equivalents—belong to stable home/range cohorts.
+- **Mobile populations**—caravans, nomadic groups, migratory workers, patrols, bands, fleets, seasonal
+  camps—have a home affiliation where appropriate plus current route/range and seasonal counts.
+
+“Wilderness” is a spatial/environmental classification, not a claim that no people live there. Realm,
+culture, sovereignty, and established lore decide whether a group is attached to a settlement,
+independent, mobile, contested, hidden, or merely passing through. The engine must not collapse distinct
+peoples into a city's anonymous rural supply pool.
+
+##### Rural casting in play
+
+When a wilderness walk rolls a human/social contact, the cast resolver should first search:
+
+```text
+nearby farm/holding/community cohorts
+-> known mobile groups and route travelers
+-> people temporarily working/foraging/patrolling in this range
+-> regional transient/outsider pool
+-> new context-legal mint only when needed
+```
+
+The resulting person receives a stable home/range or route relationship. If the party later meets the
+same farmer at market or in the tavern, the engine can cast that existing NPC rather than rolling a
+duplicate. Conversely, a random traveler need not be falsely assigned to the nearest farm.
+
+##### Reconstruction cost
+
+| Surface | Expected change |
+|---|---|
+| NPC atom tables, coherence, wants/levers, names, realm role spine/skins | **Keep**; add contextual weights/filters only where useful |
+| Codex NPC identity, links, soft/hard contact, attitudes, hooks | **Keep and extend** with population owner, memberships, assignments, availability, cast provenance, and attention grade |
+| `fields.role` and old saves | **Keep as compatibility occupation/display**; missing new fields degrade safely |
+| `roleHint` / `roleClass` | **Refactor** into honest cast/assignment constraints; stop implying that a recorded hint proves staffing |
+| Generic and scene ambient minting | **Meaningful rewire**: counts become presence/density demand; source people from cohorts/cast resolver instead of always minting fresh NPCs |
+| Rural/wilderness people | **New aggregate layer**: household/community/mobile cohorts and home/range relationships, consumed by the same cast resolver |
+| Runtime | **Low**: filter small candidate pools, promote one slot, and materialize only active people |
+| Implementation/content | **Medium**: new population/cohort/casting records, adapters, migration, purpose staffing tables, rural profiles, and cross-scene tests |
+
+The result is closer to “replace how NPCs are selected and placed” than “replace what an NPC is.”
+
+**Recommendation:** retain the NPC role spine as **occupation/archetype**, then add membership, site
+assignment/relation, presence/schedule, and scene function as distinct fields. Replace independent
+ambient minting with a cast resolver over canonical settlement, hinterland, rural, mobile, and transient
+cohorts. Let public places draw broadly but contextually; let operational staff remain role-complete.
+
+**Open follow-up:** should this occupation + membership + assignment + presence split govern the NPC
+model, with farmers and wildland residents owned by explicit rural/household/mobile population scopes
+and with current ambient-count dice retained only as scene-density demand rather than fresh-NPC counts?

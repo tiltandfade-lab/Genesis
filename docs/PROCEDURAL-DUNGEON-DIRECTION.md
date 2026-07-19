@@ -4176,3 +4176,143 @@ fixture/seed reports.
 **Open decision:** should this multi-scope protected-budget model govern how much function, spatial
 variation, local discovery, and coordinated Spice a site receives, with exact numeric curves deliberately
 deferred to fixture-based writing and distribution tests?
+
+#### 10.5.1 Ruling and follow-up - every budget is Spice-capable
+
+Adam accepts the protected multi-scope budget model provided that Spice can roll **within** those
+budgets. Spice is not confined to discretionary rooms or a separate anomaly pass. The remaining
+follow-up is how each layer expresses it without flattening all tables into the same kind of weirdness or
+stacking unrelated high-band events.
+
+The governing distinction is:
+
+> Budget/layer answers **where and what kind of truth may change**. Spice band answers **how far that
+> eligible truth departs from ordinary expectation and how much consequence it can carry**.
+
+Every channel therefore receives Spice-aware authoring, but each owns different nouns and consequences.
+
+##### Operational budget - Spice changes how the place functions
+
+Eligible expressions include:
+
+- unusual provider, operator, procedure, staffing, schedule, doctrine, or access rule;
+- magical/technological/biological production, storage, distribution, waste, renewal, or containment;
+- strange dependency, substitute, resource ecology, service failure, or institutional bargain;
+- a function whose ordinary local context changes the classification—a Breach-cell bank may be expected
+  mage-colony infrastructure and Mythic in a frontier jail.
+
+Examples:
+
+- a prison's locks open only after the jailer recites each prisoner's true charge;
+- college heating comes from a small captive summer whose mood follows examinations;
+- a hive's food distribution carries ancestral memory through shared fungus;
+- a temple's purification font literally transfers confessed guilt into a sealed waste reliquary.
+
+Spice may not silently erase the capability. A Strange kitchen still feeds people unless it is
+canonically failing; a Mythic containment method still satisfies custody according to its stated law.
+Its unusual method creates handles, dependencies, evidence, and failure consequences.
+
+##### Discretionary spatial budget - Spice changes what extra space exists or how it connects
+
+Eligible expressions include:
+
+- hidden/forgotten room, annex, pocket, alternate route, vertical domain, inherited substrate;
+- impossible adjacency, conditional room, moving boundary, living chamber, secret connection;
+- subordinate purpose, forgotten expansion, contested pocket, Breach-linked child site;
+- ordinary added room containing a spicy current use, object, claimant, or history.
+
+Examples range from the sheriff's bathroom with a demonic bar of soap, through a college clubroom erased
+from official plans, to an alchemist's necromancy laboratory or a prison wing whose cells open into
+different realms.
+
+##### Embedded/local budget - Spice changes the immediate person, object, tell, state, or opportunity
+
+Eligible expressions include:
+
+- note, mark, possession, tool, cache, consumable, contraband, evidence, refusal, routine, relationship;
+- sensory wrongness, small mechanism, tactical affordance, local resource, occupant condition;
+- signature expression in a dorm/household, biological sign in a habitat, practical anomaly;
+- clue or manifestation tied to a larger root.
+
+Most local tables should be Spark/Fork-shaped and may stop below Mythic. Their hottest rows can still be
+powerful and memorable. A local result becomes Commitment-class only through an explicitly licensed
+table/result that creates or promotes a root event rather than smuggling campaign-scale canon through a
+micro-detail slot.
+
+Examples:
+
+- a prisoner's scratched tally includes days that have not happened;
+- a dorm-room star chart changes to show whoever sleeps beneath it;
+- shed chitin bears a route map of tunnels the party has not entered;
+- hidden healing supplies, a child's note, or the demonic soap create practical or narrative handles.
+
+##### Coordinated site/zone budget - Spice changes shared causes, patterns, systems, and laws
+
+Eligible expressions include:
+
+- root history, active front, resource crisis, faction relationship, site-wide secret, repeated law;
+- coordinated transformation, multi-room ritual, occupation-zone behavior, escalation clock;
+- Breach/realm connection, impossible physics, institutional curse, sentient system;
+- revelations and payoffs whose evidence/manifests reserve homes in several rooms or children.
+
+Examples:
+
+- the prison's inmates share one recurring dream that maps an outer realm;
+- a college house is unknowingly educating a star-bound intelligence through its students' work;
+- the hive treats injuries to any brood chamber as memories carried to every defender;
+- a mine's drainage network is slowly redirecting water toward a buried claimant.
+
+##### Four causal roles prevent stacking
+
+Every spicy result should declare one causal role:
+
+1. **Root:** creates a new scoped cause/event/law and consumes an eligible root opportunity.
+2. **Manifestation:** expresses an existing root through space, operation, person, object, or evidence;
+   inherits its band/cause and consumes manifestation capacity, not another root roll.
+3. **Accent:** an independent bounded local variation whose own table class limits consequence.
+4. **Escalation:** changes an existing root's state through a recorded trigger, clock, action, or event.
+
+This lets Spice run through every layer without independent multiplication. One Mythic prison-root may
+license a portal-control procedure, impossible cell adjacency, prisoners' matching drawings, and a
+soap-shaped clue. Those are coordinated manifestations of one event, not four Mythic roots.
+
+##### Mechanical roll sequence
+
+```text
+1. allocate opportunity at a scope/channel
+2. determine causal role: new root, manifestation, accent, or escalation
+3. select the owning table/recipe and enforce its honest table-class ceiling
+4. roll Spice band using the adopted context/tier distribution among supported bands
+5. roll an expression form/row appropriate to the channel and context
+6. bind or create causal provenance
+7. reserve required operational/spatial/local manifestations and player handles
+8. validate capability, capacity, compatibility, saturation, and persistence
+```
+
+Context can reclassify the same expression and change weights/eligibility. It cannot make a table exceed
+its honest authority. Opportunity frequency remains owned by scope budgets; band frequency remains owned
+by Spice distributions; expression remains owned by layer-specific tables.
+
+##### Stress-corpus comparison
+
+- **Prison:** operational Spice alters custody/control/resource methods; spatial Spice alters
+  cells/annexes/routes; local Spice appears in inmates, guards, evidence, contraband, fixtures; coordinated
+  Spice owns institutional histories, zone conflicts, and Breach/secret networks.
+- **Residential college:** operational Spice alters teaching, grading, housing, heat, libraries, or
+  discipline; spatial Spice creates clubrooms/labs/conditional halls; local Spice rides student work,
+  expression, relationships, and experiments; coordinated Spice owns houses, academic fronts, and shared
+  magical laws.
+- **Boutique inn:** operator curation can itself be Textured/Strange; local guests add accents; a themed
+  suite is not automatically a new root; a coordinated curse or sentient hospitality system is.
+- **Living habitat:** operational/ecological Spice changes feeding, renewal, waste, brood, or defense;
+  spatial Spice changes niches/tunnels; local Spice changes organisms/signs/resources; coordinated Spice
+  owns colony memory, realm law, or ecosystem transformation.
+
+**Recommendation:** make all four allocation channels Spice-capable through their own expression
+grammars and table classes. Require every spicy result to be a root, manifestation, accent, or escalation.
+This preserves abundant layered weirdness while keeping causality, authority, and high-band counts
+legible.
+
+**Open follow-up:** should Spice expression follow this per-layer grammar and four-role causal model,
+with operational Spice explicitly allowed and local high-band results required to promote/bind a scoped
+root rather than appearing as untracked micro-table explosions?

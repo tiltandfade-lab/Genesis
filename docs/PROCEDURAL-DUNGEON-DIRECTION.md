@@ -1099,6 +1099,63 @@ state and the common result, not a UI sparkle or mandatory bespoke vignette. Eve
 a lightweight opportunity if attention or a clue targets it, while broad actions such as searching the
 cellblock can aggregate routine observations so the optimal play is not clicking forty identical doors.
 
+#### 8.13.2 Ruling and follow-up - reward attention, not container clicking
+
+Adam accepts **nothing obvious, lightweight on attention, with block-level convenience**. Thorough
+players should receive some reward, but optimal play must not become the Bethesda pattern of inspecting
+every box, drawer, barrel, corpse, shelf, and cell individually. A chat interface naturally makes that
+behavior slower than clicking through a 3D room, but interaction friction alone is not the balancing
+mechanism: a player can still say "I search every container."
+
+Use **scope-and-intent search**:
+
+1. **Automatic room read** - entering or observing supplies obvious occupants, exits, major hazards,
+   visible resources, functional identity, and salient anomalies without a search tax.
+2. **Focused inspection** - the player names a target, suspicion, method, or question: examine Cell 17's
+   masonry, look for guard messages, check the desk for false compartments, use a pole under the beds.
+   The engine resolves the relevant opportunity with the chosen skill, tool, magic, risk, and time.
+3. **Systematic sweep** - the player declares a broad careful search of the cellblock, storeroom, office,
+   or repeated assembly. The engine aggregates interchangeable children/containers into one action,
+   advances the appropriate time/pressure/noise, and returns a concise packet of meaningful findings
+   rather than requiring dozens of turns.
+
+Per-room discovery opportunity does **not** imply per-container secret rolls. Interchangeable barrels,
+drawers, shelves, beds, and crates normally form one assembly-level search surface. A particular object
+receives stable independent identity only when purpose, state, a clue, an inhabitant, a resource record,
+history, Spice, or player action distinguishes it.
+
+This preserves both sides of the ruling:
+
+- careful play can uncover extra consumables, minor treasure, evidence, practical leverage, safer
+  routes, and story connections;
+- ordinary forward play receives the information necessary to understand and navigate the place;
+- mandatory progression and accepted-contract service are never gated solely behind an untelegraphed
+  exhaustive sweep of generic clutter;
+- repeating the same search wording does not mint new rolls. The discovery packet is stable until the
+  player brings a materially new method, clue, tool, spell, access state, or changed world state;
+- group searches report ordinary negatives concisely: "No other occupied cells, fresh messages, or
+  usable supplies" is valid evidence without forty separate empty responses.
+
+The chat interface therefore removes repetitive input without removing D&D search decisions. Search
+remains about **where, why, how, and at what cost**, not how many nouns the player lists.
+
+**Open follow-up - what does a systematic sweep guarantee?**
+
+1. **Guaranteed exhaustive discovery:** sufficient declared time finds every secret in the scope. This
+   strongly rewards patience but collapses skills, tools, magical reveal vectors, and uncertainty.
+2. **One broad roll:** the sweep samples everything through one check and may miss even routine facts.
+   This is quick but makes careful play feel arbitrarily fruitless and invites reroll fishing.
+3. **Layered certainty by method:** a systematic sweep automatically finds all routine information and
+   resources its declared method can reveal. Concealed, trapped, encoded, magical, socially withheld,
+   or otherwise gated opportunities still require the appropriate check, tool, clue, access, or spell.
+   The action resolves all eligible checks once and records what remains inaccessible without exposing
+   secret spoilers. Repetition gains nothing unless the approach or state changes.
+
+**Recommendation:** choice 3. Searching every cell visually should find ordinary scratches, abandoned
+items, and obvious loose masonry; it should not automatically read invisible writing, open a locked
+false wall, make a terrified prisoner trust the party, or recognize a cipher. Thoroughness guarantees
+coverage, while character capability and chosen method determine depth.
+
 Then continue questions 14-20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

@@ -2055,6 +2055,65 @@ exist.
 fulfill their protected random allocation through details, secrets, people, and history inside core
 rooms rather than through dedicated random rooms.
 
+#### 8.19.1 Correction and follow-up - small sites retain a structural-variation tail
+
+Adam accepts the reconciliation ladder and the use of in-room variation at every scale, but rejects an
+accidental hard reading of capacity: even a small jail should retain some chance to roll an additional
+room. "Small" sets an expected structural range and strongly affects probability; it does not create a
+purpose/size blacklist. A successful expansion roll establishes the additional capacity and its cause
+rather than squeezing an impossible room into the prior shell.
+
+Distinguish two channels of protected variation:
+
+1. **Embedded variation - always available.** Notes, people, caches, secrets, unusual fixtures,
+   relationships, history, compromised procedures, and small spatial pockets attach to core/supporting
+   rooms.
+2. **Structural variation - scale-weighted tail.** A dedicated discretionary room, annex, attic,
+   basement, tunnel, outbuilding, inherited chamber, hidden domain, or subordinate complex may be added.
+   Small sites have a low but nonzero chance; larger sites receive more expected slots and can support
+   larger outcomes. History, shell type, lot, geology, realm context, and Spice determine what can fit.
+
+`Random room` describes an **allocation channel**, not an ontological room type. Once selected, the room
+still receives provenance, time of origin, function/current use, physical relationship, and narrative
+handles. Some results may help the institution incidentally; they are random because the operating
+model did not guarantee them.
+
+Examples for a small frontier jail:
+
+| Possible extra space | Causal source | Why it belongs in the pool | Likely player value |
+|---|---|---|---|
+| Cramped evidence/records room | Optional original construction or later partition | A jail can function without a dedicated one, but a particular sheriff invested in it | Cold cases, confiscated object, forged ledger, missing-person link |
+| Deputy's bunk/ready room | Staffing variation | External lodging is sufficient, so the room is not guaranteed | Personal life, divided loyalty, emergency gear, off-shift witness |
+| Root cellar or cistern | Inherited building/support | The jail may occupy an older house, station, or civic shell | Water leverage, hidden cache, foundation clue, escape route |
+| Temporary quarantine or drunk cell | Local practice/history | Frontier crises produce ad hoc capacity beyond ordinary cells | Epidemic history, dangerous detainee, town prejudice, survivor clue |
+| Rear evidence shed or confiscation cage | Annex/outbuilding | Fits a small lot without enlarging the main jail unrealistically | Contraband, animal, wagon evidence, volatile seized goods |
+| Sealed former sheriff's office | Historical transformation | The institution contracted, changed leadership, or covered up an event | Old case wall, predecessor's fate, secret correspondence |
+| Prisoner-dug escape tunnel and pocket | Emergent alteration | Occupants changed the architecture without official knowledge | Route, tools, bandit connection, buried note, collapsed danger |
+| Smuggler or vigilante interview room | Concealed current/subordinate use | A corrupt deputy or town faction operates inside the institution | Faction leverage, illegal detention, blackmail, rescue opportunity |
+| Pre-jail crypt, mine assay vault, or storm shelter | Inherited substrate | The civic building reused an older foundation common to the settlement | Local lineage, unusual material, hidden entrance, old claimant |
+| Small shrine or last-rites niche | Doctrine/culture variation | Not needed for custody but plausible for a particular community | Prisoner promises, cleric connection, desecration, moral choice |
+| Ward room or breach-containment closet | Contextual magic/technology | Plausible in a mage colony; Strange or higher in a mundane frontier | Failed ward, realm clue, exceptional prisoner, dangerous shortcut |
+| Extradimensional evidence cell or impossible lower room | High-Spice licensed event | Physically exceeds the shell only because its causal event changes ordinary geometry | Major secret network, realm access, world-marking prisoner or artifact |
+
+Not every example is equally "random" in every profile. A dedicated evidence room may be supporting in a
+city prison but discretionary in the frontier jail. A portal ward may be Grounded infrastructure in a
+mage colony and a high-band anomaly in a mundane settlement. Context determines affinity and band rather
+than a universal list.
+
+The pool should still refuse unexplained nonsense. A fifty-seat banquet hall, giant foundry, or
+hundred-cell wing does not fit a four-room street jail unless a recorded annex, hidden child site,
+demiplane, transformation, or other exceptional license creates that capacity. The roll may change the
+known envelope honestly; it may not overlap the neighboring building or invent inaccessible facade
+space.
+
+**Revised recommendation:** site-size bands are soft distributions with explicit structural tails, not
+hard room-count caps. Embedded variation remains guaranteed; dedicated random-room probability and
+maximum ordinary footprint scale with the site; high-Spice and causally licensed results may exceed
+ordinary geometry. Exact probabilities wait for Wave 2's expressivity tests.
+
+**Open confirmation:** keep a low but nonzero additional-room chance even at the smallest site sizes,
+using context-weighted room families and a causal capacity check rather than a size blacklist.
+
 Then continue question 20 and every resulting follow-up. Wave 1 remains open until the closure gate
 in section 6 is satisfied and Adam explicitly confirms it.
 

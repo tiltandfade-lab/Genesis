@@ -17,7 +17,39 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
-## ⭐ Latest (2026-07-19) - PROCEDURAL DUNGEON WAVE 1 CHECKPOINT: questions 1-11 resolved [Codex]
+## ⭐ Latest (2026-07-19, later) — CI GREEN AGAIN + the Wave 1 design lane is fully on master [Claude Code]
+
+The evening clean close. Two things happened:
+
+1. **Master CI is green again.** It had been red for 4 straight runs (2026-07-18→19). PR #1
+   (`fix/ci-post-migration-lfs`) had already cured the LFS-migration byte-drift reds; the one
+   survivor was `dev/verify-wiring-a.mjs` §13c, which assumed six montages always cross a
+   5-day-out KO wake — false since HQ3-C2's partial-window interrupts (an interrupted montage
+   burns 360–1080 min, not 1440). Under CI's node-20 seeded stream enough montages interrupted
+   that the PC *correctly* stayed KO'd and the test misread engine truth as red. §13c now
+   montages until the clock actually crosses wakeAt, then asserts exactly-once wake
+   (`fix/ci-wiring-a-seed-flake`). Known residue: one unreproducible local red at
+   GENESIS_TEST_SEED=8 (not CI's seed) in ~21 runs — some nondeterminism beyond Math.random
+   survives the shim; not chased tonight.
+
+2. **The procedural-dungeon Wave 1 lane landed whole**: 79 docs commits merged --no-ff
+   (`PROCEDURAL-DUNGEON-DIRECTION.md` → 9,872 lines; + the 1,155-line ARCHITECTURE-SKETCH).
+   **Correction to the section below:** its "resume at question 12" pointer is stale — the
+   Direction file actually runs through question 20 + the Wave 1 audit + roster/light-sim/
+   realization/crit-cascade design, and stops at **open decision 3C** (typed
+   TerminalDisposition replacing the `obliterated` boolean). Wave 1 is still OPEN and no
+   implementation is authorized.
+
+**Verification:** full CI-equivalent gate run at this close — check-manifest OK, the whole
+verify-*.mjs sweep under CI's dep-skip posture + seed shim (zero real reds), verify-bridge,
+verify-table-lint, playtest-bug-probes — then the real GitHub CI run watched to a green
+conclusion. Both dungeon worktrees pruned after their branches merged.
+
+**Do next (pick up here):** put open decision 3C in front of Adam (end of
+`PROCEDURAL-DUNGEON-DIRECTION.md`), then continue closing Wave 1's remaining open decisions to
+Adam's explicit closure gate before Wave 2.
+
+## Latest (2026-07-19) - PROCEDURAL DUNGEON WAVE 1 CHECKPOINT: questions 1-11 resolved [Codex]
 
 Wave 1 remains **IN PROGRESS**. The authoritative checkpoint is
 `docs/PROCEDURAL-DUNGEON-DIRECTION.md` section 8. It now records: original purpose as permanent lore

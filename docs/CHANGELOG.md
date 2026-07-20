@@ -8,6 +8,31 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-19 (later) — CI GREENED + WAVE 1 DESIGN LANE LANDED [Claude Code]
+
+**Fixed**
+- The master CI red (4 straight failures since 2026-07-18): the one surviving real failure after
+  PR #1's LFS repairs was `dev/verify-wiring-a.mjs` §13c — a fixed six-montage count can't
+  guarantee crossing a 5-day-out wakeAt now that HQ3-C2 makes an interrupted rest burn a rolled
+  partial window (`restInterruptMinutes`: 360–1080 of 1440). Node 20 (CI) consumed the seeded
+  rest-risk stream differently than node 22 (local), interrupting enough montages that the KO'd
+  PC *correctly* stayed down. §13c now montages until the clock has actually crossed wakeAt
+  (bounded ×40) and asserts the crossing wakes exactly once — E21's real claim; the exactly-once
+  + no-refire assertions stay load-bearing. 10/10 green at the CI default seed + a 13-seed sweep.
+
+**Changed**
+- Landed `docs/procedural-dungeon-wave1-checkpoint` to master as one --no-ff merge (79 docs
+  commits): `PROCEDURAL-DUNGEON-DIRECTION.md` grew to 9,872 lines of settled Wave 1 rulings and
+  `PROCEDURAL-DUNGEON-ARCHITECTURE-SKETCH.md` (1,155 lines) was born. The lane's own HANDOFF
+  pointer ("resume at question 12") was stale — the file actually runs through question 20, a
+  Wave 1 audit, roster/light-sim/realization design, and ends at **open decision 3C** (typed
+  TerminalDisposition vs the `obliterated` boolean), awaiting Adam.
+- Discharged Codex's `FULL CI PENDING` marker: this close ran the full CI-equivalent gate
+  (check-manifest, the whole verify-*.mjs sweep with CI's dep-skip posture + seed shim,
+  verify-bridge, verify-table-lint, playtest-bug-probes) and pushed with the GitHub run watched
+  to green. Pruned the two merged dungeon worktrees (`Genesis-dungeon-wave1`,
+  `Genesis-procedural-dungeon`) + their branches.
+
 ## 2026-07-19 - PROCEDURAL DUNGEON WAVE 1 CHECKPOINT + FAST-COMMIT MODE [Codex]
 
 **Added**
@@ -905,41 +930,3 @@ creatures — hence the regen lane).
 - Token discipline: `.claude/settings.json` deny-list blocks Read on multi-MB generated artifacts
   (`tables.js` ≈ 2M tokens per Read was the 2M-token-session culprit); CLAUDE.md section added.
 
-## 2026-07-09 (later) — Realm-key expansion (+168 creatures) · SPRITE-TRANSITION T1–T4 · item sheets
-
-**Added**
-- `docs/REALM-KEY-EXPANSION-ROSTER.md` (APPROVED) — NPC/monster additions for the re-keyed realms
-  (chrome/gloom/suburb/lost-world/ash + cosmic/bright-kingdom passes; Pink Cult, Cindermarked cult,
-  Collector, gremlin realm-bleed pair, Zeal adepts, game-logic-being NPCs).
-- **Stat wave landed:** 168 new creatures to MM standard in `dev/model-qa/realm-bestiary-draft.json`
-  (19 Sonnet author→critic batches + the frontier-authored U0 weird dozen; `gen-realm-bestiary --check`
-  clean at **1,475 creatures across 11 realms**; PROVISIONAL pending Adam red-pen).
-  `data/realm-bestiary.js` regenerated at this close.
-- **SPRITE-TRANSITION locked + T1–T4 built** (`docs/SPRITE-TRANSITION.md`): creatures → 2D sprites
-  (OpenAI ImageGen sheets), 3D keeps trays/architecture; T2 `build/gen-sprite-sheet-manifests.py`
-  (181 sheets / 4,316 cells, slug-collision policy) + `slice-sprites.py --manifest-v2`; T3
-  `data/sprite-registry.js` (4,316 entries, 100% monster join coverage, redline overlay seam); T4
-  theater sprite-billboard channel in `figureFor` (10/10 harness, kill switch, base discs unchanged).
-- Sprite-sheet index expansions: expansion E1/E2 sheets per re-keyed realm (~173 creature prompts) +
-  **Item sheets from all 11 realm loot tables (571 items, object-icon template)**.
-- `docs/ASSET-SYNC.md` — 3D/heavy assets are request-on-demand (partial clone + sparse-checkout);
-  sprite-corpus backup gap flagged.
-
-**Changed**
-- DESIGN registry: sprite reversal recorded; MODEL-FOUNDRY re-scoped to trays/props/architecture;
-  SPRITE-SHEETS un-parked; ARCHITECTURE gains the Sprite Channel & Registry entry (wiki recompiled).
-- `docs/REALM-KEY-EXPANSION-STATS-SPEC.md` corrected to the real d8/8-row flavorTable contract.
-
-**Fixed**
-- Draft-JSON indent churn (integrator wrote indent=1; restored to indent=2 — true wave diff is
-  11,712+/1− by histogram). Recovered two commits knocked off-branch by a worktree-discipline slip
-  (executor worked in the session tree; both restored from the object store, re-verified).
-
-**Deferred**
-- T5 gloom vertical slice + tagging pilot (gated on Adam's first sheet PNGs); `item` kind in the v2
-  parser/registry; Pink-Cult + gloom demand-ladder faction-clock specs; hoverboard buff proposal;
-  Adam's red-pen on the 168.
-
-**Verification:** check-manifest OK · realm-wiring 78/0 · dm-events 70/0 · social 97/0 ·
-theater-sprites 10/0 · sprite-registry 6/0 · sprite-pipeline all-pass. Known pre-existing reds
-(digest-diet 58/1, creature-determinism grep-gate) unchanged, not from this branch.

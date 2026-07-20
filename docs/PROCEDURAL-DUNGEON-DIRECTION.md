@@ -9686,3 +9686,92 @@ meaningful structural variation without increasing ordinary-turn simulation cost
 **Open decision 3A:** should every Mythic `20/20` or `1/1` openly roll `d3 + 2` distinct lenses, producing
 a three-to-five-thread persistent cascade, with the declared core action consequence resolved in addition
 to and propagated through those lenses?
+
+#### 10.11.32 Ruling — Mythic cascades openly roll `d3 + 2` lenses
+
+Adam accepts the recommendation. Every Mythic `20/20` or `1/1` openly rolls `d3 + 2`, producing three to
+five distinct success or failure lenses with an average of four. Duplicate lenses reroll openly. A lens
+that cannot produce a legal, causally coherent typed effect is repaired or openly rerolled with provenance;
+it is never silently dropped to make implementation easier.
+
+The declared core consequence remains separately guaranteed by the `CheckContract`. Lenses specify the
+distinct persistent ways that consequence reaches into people, places, topology, law, knowledge, bonds,
+threats, and other canonical owners. A Mythic result therefore cannot fail to destroy the threatened town
+merely because the place lens was absent, nor can the same destroyed-town fact be counted as five effects
+by restating it five ways.
+
+The implementation must expose the count roll and lens rolls as part of the rare Mythic ritual, validate
+up to five effect adapters under one causal root, and atomically commit or repair the whole cascade before
+consequential narration. The ordinary-turn cost remains zero; the exceptional Mythic turn is allowed a
+clear, comprehensible burst of additional work.
+
+Decision 3A—Mythic cascade count—is closed.
+
+#### 10.11.33 Open decision 3B — separate tier, improbability, spectacle, and obliteration
+
+The current engine conflates several different meanings around the number eight:
+
+- `check.js` computes `absurdity` from how far a natural 20 or 1 defied the DC math;
+- Crit Magnitude independently rolls a second d20 to determine Standard, Amplified, or Mythic authority;
+- theater treats any crit magnitude `>= 8` as permission for a literal-looking reality-tear effect;
+- a confirmed killing crit with magnitude `>= 8` may set `obliterated`, removing the corpse from the
+  world rather than merely presenting a larger hit.
+
+That threshold does not match the tier table. On a natural 20, magnitude 8–10 is still Standard and has
+no lens. On a natural 1 the magnitude direction is inverted, so 11–20 is the mildest Standard failure—yet
+the current `>= 8` visual gate makes those milder failures especially likely to display the strongest
+“reality tear.” Among successful critical killing blows, `>= 8` also means 13 of 20 magnitude results, so
+65% may erase the corpse. Obliteration is not cosmetic: it affects remains, carried loot, evidence,
+necromancy, recovery, witnesses, and later room state.
+
+##### Option 1 — preserve `magnitude >= 8` as a universal spectacle/obliteration threshold
+
+This retains the current dramatic frequency and costs the least code churn. It leaves Standard crits
+looking reality-breaking, makes failure presentation run backward against the inverted magnitude table,
+and permits an arbitrary presentation threshold to make durable world-state decisions. **Not recommended.**
+
+##### Option 2 — promote the threshold into the Crit Magnitude tier table
+
+Reband magnitude 8–10 as Amplified and give those results lenses, then create a mirrored failure threshold.
+This would make the visuals and world authority agree, but it substantially changes the accepted outcome
+distribution merely to justify a legacy FX constant. It would also make Amplified changes much more common
+and still would not explain why every qualifying sword kill destroys the corpse. **Not recommended.**
+
+##### Option 3 — give each concept one owner and use semantic effects
+
+Keep the accepted Crit Magnitude bands unchanged, but separate four signals:
+
+1. Rename the check-math value conceptually to `defiedMargin`: it tells narration how much causal bridge is
+   needed when the natural result overturned the ordinary DC math; it grants no world-change tier.
+2. `critMagnitude` and its tier exclusively grant persistent lens/reach authority.
+3. Standard crits may receive forceful but nonliteral hit/fumble presentation. Amplified and Mythic beats
+   receive tier- and lens-aware spectacle. A Mythic ritual may visually stress the frame, but only an
+   applied topology/law/place effect leaves an actual rift or changed terrain in canon.
+4. `obliterated` remains a distinct terminal disposition owned by the resolved effect: an explicit
+   spell/damage/environment capability, a validated finisher rule supported by target and attack fiction,
+   or an Amplified/Mythic typed effect. A magnitude number alone does not delete remains.
+
+Examples:
+
+- A magnitude-9 Standard critical sword kill is spectacular but normally leaves the dead guard and their
+  keys in the cell block.
+- A magnitude-15 Amplified radiant killing blow may obliterate a vampire if its damage/effect contract and
+  lens support that disposition; the lens changes persist through their proper owners.
+- A natural-1/magnitude-18 Standard fumble is painful or memorable but does not display a cosmic rift just
+  because 18 exceeds eight.
+- A `1/1` during the crystal ritual may actually tear the planes because its Mythic cascade commits a
+  topology/Breach event, not because the theater selected a dramatic animation.
+
+This costs a small state/event migration and more semantic visual mappings, but it removes an expensive
+long-term ambiguity: presentation can no longer silently mutate corpse, loot, topology, or canon state.
+The redesign already requires effect adapters and transactional receipts, so those semantic owners are
+not an extra simulation layer.
+
+**Recommendation:** Option 3. Preserve dramatic crit presentation, but make visuals describe the resolved
+event rather than decide it. Retire `magnitude >= 8` as a universal authority threshold, keep the accepted
+tier table, distinguish `defiedMargin` from `critMagnitude`, and require a mechanically supported terminal
+effect before marking a target obliterated.
+
+**Open decision 3B:** should Genesis adopt this separation, preserving exciting crit visuals while
+removing the universal magnitude-8 reality-tear/obliteration rule and allowing persistent rifts, destroyed
+remains, and other canonical changes only through the resolved action/effect contract or typed lens?

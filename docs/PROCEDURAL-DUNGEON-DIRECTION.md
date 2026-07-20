@@ -9775,3 +9775,98 @@ effect before marking a target obliterated.
 **Open decision 3B:** should Genesis adopt this separation, preserving exciting crit visuals while
 removing the universal magnitude-8 reality-tear/obliteration rule and allowing persistent rifts, destroyed
 remains, and other canonical changes only through the resolved action/effect contract or typed lens?
+
+#### 10.11.34 Ruling — resolved effects own spectacle and terminal state
+
+Adam accepts Option 3. Genesis will retire `magnitude >= 8` as a universal reality-tear and obliteration
+authority threshold. The accepted Crit Magnitude bands remain unchanged.
+
+- `defiedMargin` (the current check-math `absurdity`) records how far a natural result overturned the
+  ordinary DC math and tells the DM how much causal explanation the narration owes;
+- Crit Magnitude alone grants Standard, Amplified, or Mythic reach and lens authority;
+- presentation describes the accepted receipt and may be spectacular without pretending a canonical
+  topology mutation occurred;
+- persistent terrain, law, topology, body, and item changes require a resolved action/effect capability
+  or validated typed lens rather than an FX threshold;
+- an ordinary Standard critical kill leaves the default corpse unless the attack/effect contract supports
+  a different terminal disposition.
+
+The implementation may preserve `absurdity` as a compatibility field during migration, but the contracts,
+documentation, and eventual public vocabulary must distinguish defied DC margin from the second d20's
+Crit Magnitude. The literal-looking reality-tear effect must either become a noncanonical presentation
+whose visual language cannot be mistaken for a persistent Breach, or be reserved for receipts that
+actually commit the corresponding world change.
+
+Decision 3B—the magnitude-8 seam—is closed.
+
+#### 10.11.35 Open decision 3C — “obliterated” is too coarse for terminal consequences
+
+Removing the numeric shortcut exposes an older modeling shortcut. The current `obliterated` boolean means
+“do not stage a corpse; remove the figure.” It cannot distinguish a body burned to ash, disintegrated,
+banished with its equipment, swallowed by a Breach, transformed into an object, or erased from existence.
+Those outcomes disagree about where the target is, what remains, where carried inventory goes, what
+evidence exists, whether recovery is possible, and what later visitors find.
+
+This matters directly to accepted canon. Ordinary PC death currently leaves a fixed corpse plus carried
+loot; rooms retain corpse traces; loot may be recovered until clock and context remove it; and witnessed
+history cannot be retconned. A single absence flag cannot safely override those rules.
+
+##### Option 1 — retain `obliterated: true` and hardcode each caller's side effects
+
+The renderer continues to receive one convenient flag while spells, crits, hazards, and Mythic events each
+manually decide loot and recovery elsewhere. This is initially cheap, but guarantees drift: one route will
+remove the miniature while leaving loot on an invisible corpse, another will destroy quest evidence, and
+a third will forget the target's destination. **Not recommended.**
+
+##### Option 2 — define one universal obliteration bundle
+
+Every obliteration means no body, no recoverable inventory, no recovery, and only a scorch/absence trace.
+This is consistent but fictionally destructive. Banishment should transport equipment, petrification
+should leave a stone body, divine translation may leave relics, and even disintegration may protect an
+explicitly anchored story item. It turns a rendering convenience into a metaphysical law. **Not
+recommended.**
+
+##### Option 3 — replace the boolean's authority with a typed `TerminalDisposition`
+
+Death or removal resolves a small semantic receipt whose axes are explicit:
+
+```text
+life/continuity: dead | banished | transformed | consumed | erased
+body/remains: intact | damaged | ash | fragments | object | none
+location/destination: current site | named holder/container | other place/realm | none
+inventory: on remains | dropped | transported | damaged bundle | destroyed bundle
+recovery: ordinary death rule | special requirement | blocked | impossible
+evidence/trace: corpse | stain/scorch | fragments | portal residue | object | witnessed absence
+identity/canon: observed history preserved; any name/soul/history effect must be explicitly licensed
+```
+
+Source/effect profiles fill those axes without simulating every atom:
+
+- an ordinary sword death uses the existing default—corpse intact, carried inventory on the corpse,
+  ordinary clock/context recovery;
+- fire may leave a charred corpse or ash according to effect intensity, with an inventory bundle rule and
+  explicit protected/story-item exceptions rather than one physics roll per item;
+- banishment moves the target and carried gear to a declared destination and leaves portal evidence but
+  no local corpse;
+- petrification leaves an object that still has location, identity, equipment relationships, and a
+  special recovery path;
+- Mythic erasure may set no remains and impossible ordinary recovery, but it is still a provenance-kept
+  event after everything previously witnessed—the engine does not rewrite old canon as though the target
+  never existed unless a separately licensed name/history lens says exactly what changes.
+
+The tabletop renderer may derive a compatibility projection such as `obliterated = body/remains is none`,
+but that projection no longer owns gameplay. Inventory, death/rebirth, topology, knowledge, quest, and
+visual systems consume their relevant disposition fields from the same receipt.
+
+The runtime cost is negligible because this resolves once per terminal event, not every turn. The build
+cost is moderate: migrate death/removal event shapes, define a compact set of reusable profiles, and add
+cross-system tests. Bounded bundle rules avoid per-item physics. This expense buys back large future costs
+in resurrection, loot, evidence, Breach travel, corpse persistence, and Mythic reconciliation.
+
+**Recommendation:** Option 3. Keep ordinary death's existing corpse-and-loot behavior as the default, but
+replace `obliterated` as world authority with a typed terminal-disposition receipt. Retain the boolean only
+as a temporary compatibility/render projection during migration.
+
+**Open decision 3C:** should terminal removal use this typed disposition model so burning, disintegration,
+banishment, transformation, planar consumption, and Mythic erasure each state what happens to the body,
+location, inventory, recovery, evidence, and identity rather than sharing one `obliterated` boolean?

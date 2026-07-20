@@ -6649,3 +6649,303 @@ secrets, or bypassing causal systems.
 details freely instantiated and canonized on demand, while topology, scarce resources, operational
 dependencies, secrets, named evidence, and higher-Spice facts require preexisting authority or a seeded
 oracle/promotion path?
+
+#### 10.11.2 Adversarial audit - holes, weaknesses, and hidden expenses in bounded improvisation
+
+Adam agrees with the direction and asks for an adversarial review before closing the follow-up. The
+model survives, but the initial phrase “ordinary plausible details freely instantiated” is too loose.
+The review exposes one conceptual correction, several current-engine gaps, and a genuinely expensive
+cross-system implementation surface.
+
+##### Central conceptual hole - there is no reliable “purely cosmetic noun” once players can act freely
+
+A stool is cosmetic until the player wedges a door with it. A curtain becomes rope, concealment, fuel,
+or evidence. Flour becomes a way to reveal invisible movement. A cup becomes a listening tool. A broken
+board becomes a lever or weapon. The player's creativity—not the table author's category—determines
+mechanical relevance.
+
+Therefore the system cannot safely let the DM name arbitrary physical objects as projection-only prose
+and decide later whether they were real. The moment a manipulable noun is narrated, at least these facts
+may already be committed:
+
+- existence and approximate location;
+- quantity or singular/plural extent;
+- material, scale, portability, and apparent condition;
+- ownership/access and who can see it;
+- compatibility with room capacity, circulation, sockets, and current state;
+- enough latent physical identity to answer later use without retroactive convenience or sabotage.
+
+Sensory wording and non-object phrasing can remain presentational. A named manipulable object cannot.
+This narrows but does not remove DM freedom: the DM may select and perform a **prevalidated latent
+affordance**; it should not become the sole authority that the affordance exists.
+
+##### Research sift - the indexed papers strengthen the constraint side, not the AI-improvisation side
+
+The procedural-dungeon research does not provide a solved AI canonization mechanism. Its strongest
+applicable result is the shared semantic legality model:
+
+- semantic scene descriptions declare types, relationships, counts, mandatory/optional elements, and
+  constraints before layout;
+- hierarchical assemblies and typed sockets give objects legal support and bounded capacity;
+- hard reservations protect portals, circulation, access faces, and required affordances;
+- deterministic candidate generation, scoring, fallback, and provenance make results reproducible;
+- the room compiler supplies the DM a licensed scene; the report explicitly says the DM should not add
+  a convenient table because generation failed or repair missing structure through narration.
+
+Our model can extend those ideas only if a compiled room keeps **unused but typed latent capacity**:
+available small-floor, furniture, wall, tabletop, container, textile, debris, tool-like, or other
+contextual affordance slots plus legal candidate families. The DM may choose/phrase within that reserve;
+the engine validates the slot and instantiates the fact. An improvised mechanically meaningful object
+cannot bypass the same footprint, socket, circulation, support, and ownership rules as a precompiled one.
+
+This reconciliation is a Genesis design extension, not a result proven by the papers. It needs its own
+acceptance evidence.
+
+##### Current production-path gaps - this cannot ride existing dressing unchanged
+
+The present repository makes the hidden expense concrete:
+
+1. `place-dressing.js` produces pure, deterministically re-derived visual dressing. It does not persist
+   player-created/interacted-with objects, and its catalog mostly carries slug, category, size, and
+   render strategy rather than general gameplay affordances.
+2. `walk-interactables.js` explicitly documents a persistence split: the projected
+   `plan.interactables[]` is re-derived while `state_transition` looks for a persisted prep-node array.
+   A mutation to only the projection can disappear on recompute.
+3. The current room pipeline does not yet share one authoritative occupancy, footprint, clearance,
+   socket, and reservation context across dressing, interactables, grammar, projection, and renderer.
+   An on-demand stool cannot honestly claim a legal location until that missing middle exists.
+4. `fact_canonized` records a generic ledger fact and grants XP. It is not a scoped room-assertion store,
+   object identity, ownership record, spatial binding, or promotion mechanism; using it for every cup or
+   stool would also create an XP exploit.
+5. The DM turn contract has no dressing-assertion/proposal event. `applyResponse` can reject an event
+   while still displaying narration that claimed the rejected outcome. That narration/event atomicity
+   gap is unacceptable if the DM says an object exists or an action succeeded before engine validation.
+6. The current digest exposes selected current dressing prose, not a compact room-local latent
+   affordance reserve, closed search domains, improvised assertions, or legal candidate properties.
+7. Promoted improvised objects have no guaranteed projection path back into the room view. Narration
+   could say the stool is wedged under the door while the visual scene continues to show neither stool
+   nor changed door state.
+8. Current `saveU` still serializes the whole universe into synchronous `localStorage`; the repository's
+   own storage measurements already identify main-thread and roughly 5 MB quota walls. Thousands of
+   small permanent assertions worsen an existing storage requirement unless incremental IndexedDB,
+   cold prose, compaction, and bounded hot projection are genuinely on the production path.
+
+This means the feature is not “one new table plus a prompt rule.” It crosses the room compiler, object
+catalog, action resolver, event contract, canonical storage, knowledge, inventory, renderer projection,
+DM digest, authoring tools, migrations, and verification.
+
+##### Failure mode 1 - leading questions become a loot/solution oracle
+
+If “is there a rope?” and “is there cord?”, “twine?”, “straps?”, “curtain?”, or “wire?” are independent
+queries, a patient player can synonym-walk until the DM creates the desired affordance. The same problem
+applies to containers, flammables, acids, ladders, cover, writing tools, valuables, and evidence.
+
+**Required mitigation:** queries and reserves operate on controlled semantic/affordance classes, not raw
+noun strings. Equivalent requests consume or inspect the same stable room reserve. A deterministic key
+such as site/room + affordance class + established method/state produces the same answer across retries,
+reloads, model phrasing, and aliases. Systematic search can close a finite class/surface without claiming
+omniscient absence of every noun imaginable.
+
+This creates a nontrivial controlled-vocabulary and synonym-normalization authoring cost, especially for
+mods and realms.
+
+##### Failure mode 2 - negative facts can grow without bound
+
+“No rope,” “no twine,” “no straps,” and every other failed query cannot each become a permanent global
+fact. Nor can one systematic sweep honestly prove the absence of every possible object or use.
+
+**Required mitigation:** store method-aware closure over finite semantic surfaces/classes:
+
+```text
+desk drawers systematically searched for ordinary papers and small valuables
+cell portable-tool reserve exhausted
+north-wall mounted-fixture slots observed
+hidden structural routes not resolved by this mundane visual sweep
+```
+
+Later queries reuse those closures. Different magic, tools, knowledge, access, or physical change may
+open another method without rerolling the same opportunity. This is more compact and honest than an
+infinite absence list, but it requires search-domain definitions and method compatibility rules.
+
+##### Failure mode 3 - impact is contextual, not an intrinsic item tier
+
+An ordinary stool may be a major tactical advantage if the only puzzle is holding a pressure plate. A
+mundane iron spike can defeat a door challenge; oil can transform a fire scene; chalk can defeat a maze.
+The catalog cannot classify all stools as “low consequence.”
+
+**Required mitigation:** validate both the object class and the **requested use** against current
+topology, reservations, challenge commitments, known mechanisms, inventory, and action physics. Ordinary
+objects remain honest tools—the engine must not secretly weaken them to preserve authored difficulty—but
+critical obstacles cannot be designed around the assumed absence of ubiquitous mundane affordances.
+Exact success remains an action-resolution question, not a DM gift or veto.
+
+##### Failure mode 4 - narration and engine truth can diverge in one turn
+
+The AI may narrate “you seize the lantern and jam it into the gears,” then emit an assertion or mutation
+the engine rejects for no reserve, wrong room, invalid state, ownership, or missing target. Showing the
+narration anyway has already lied to the player.
+
+**Required mitigation:** use two resolution paths:
+
+- **one-turn prevalidated path:** the current DM digest carries a small room-local reserve of already
+  legal affordance classes/slots and ids. The DM may spend/select one and narrate it while emitting an
+  assertion whose acceptance is mechanically guaranteed if the token is unused and the turn base
+  version matches;
+- **preflight path for ambiguous/high-impact requests:** the DM proposes an affordance/query or the
+  engine resolves the player's request before final narration. Only the accepted result enters the
+  narration turn. This may use the existing ask/roll continuation pattern conceptually, but final
+  protocol design belongs to specification.
+
+Every assertion/mutation needs atomic or version-checked application. Rejected consequential events
+must trigger a correction/resolution turn before player-facing success prose, not become a quiet
+`applied.ok:false` buried under contradictory narration.
+
+The hidden expense is latency: an extra AI round trip for every spoon would be intolerable. That is why
+the prevalidated local reserve is necessary and why two-step resolution must be limited to genuinely
+ambiguous or high-impact cases.
+
+##### Failure mode 5 - promotion can reveal missing properties retroactively
+
+If the DM stores only “stool,” later play may need material, weight, size, condition, ownership,
+flammability, break threshold, value, exact position, or whether it was nailed down. Inventing each
+property at the moment it becomes convenient produces drift.
+
+**Required mitigation:** the first assertion gets a stable id, seed, semantic class, licensed candidate
+family, owner/location/scope, and enough contextual invariants to derive later properties
+deterministically. Promotion expands from that seed inside the original envelope. It does not reroll a
+better stool because the player found a use for it.
+
+##### Failure mode 6 - “ordinary” changes across culture, condition, creature scale, and realm
+
+A rope, chair, written ledger, open flame, or lock may be commonplace, nonsensical, sacred, illegal, or
+physically incompatible depending on inhabitants and realm laws. Generic medieval clutter would erase
+the very context system the redesign is building.
+
+**Required mitigation:** use shared semantic affordance classes with context-specific realization and
+hard exclusions. Realm/culture/purpose/occupant/condition packages extend registered catalogs rather than
+forking the resolver. Accommodation domains and current state filter candidates before the DM sees
+them. This preserves scalability but creates a large writing/catalog-validation pass.
+
+##### Failure mode 7 - ownership, law, witness, and reaction are not optional metadata
+
+Taking a stool from an abandoned cell, a staffed tavern, a shrine, a refugee camp, and a noble's office
+are different acts. Free local object minting without inherited ownership and witness context becomes an
+economy, stealth, and social exploit.
+
+**Required mitigation:** improvised objects inherit owner/claimant, access, witness, ordinary value, and
+disposition defaults from their room/fixture/group unless overridden causally. Promotion into inventory
+atomically removes or changes the room assertion and triggers relevant theft, permission, relationship,
+or evidence events. One object cannot exist simultaneously in the room and the character sheet.
+
+##### Failure mode 8 - visual and semantic space can disagree
+
+The research correctly insists that mechanically meaningful things require legal footprints/sockets and
+access. On-demand physical nouns can overlap a doorway, occupy nonexistent wall support, block an aisle,
+or fail to appear in the renderer.
+
+**Required mitigation:** compile latent typed capacity and legal candidate positions with the room;
+instantiate against that capacity; reserve/update it transactionally; project promoted objects with a
+generic marker/model/icon/text fallback if bespoke art is absent. Later art can refine presentation, but
+the player must never have contradictory visual and canonical state.
+
+This is cheaper under the planned graph/grid/representational direction than BG3-grade geometry, but it
+is not free.
+
+##### Failure mode 9 - save, ledger, and prompt growth can defeat the graded model
+
+Persisting every narrated adjective would drown storage and the DM digest; persisting nothing destroys
+continuity. Duplicating the same assertion in room state, event ledger, DM prose, Codex, and renderer
+overlay multiplies cost.
+
+**Required mitigation:**
+
+- store one compact canonical room assertion with references from ledger/prose rather than copying the
+  full payload everywhere;
+- distinguish unobserved latent reserve, observed lightweight assertion, promoted object, and cold
+  historical event;
+- keep only the active room/nearby assertions in the DM digest; distant rooms expose counts/version and
+  pull-by-id summaries;
+- archive old narration separately from mechanical canon;
+- compact resolved/removed assertions without deleting their consequential history;
+- measure save bytes, digest bytes, synchronous work, assertion count, and promotion rate over long
+  seeded campaigns before setting caps.
+
+Even compact records matter because Genesis promises years-long browser worlds. A soak fixture should
+include thousands of visited rooms and repeated inquisitive play, not only a clean ten-room dungeon.
+
+##### Failure mode 10 - authoring and testing costs are larger than runtime costs
+
+Runtime lookup against a small reserve should be cheap. The expensive parts are:
+
+- authoring semantic affordance families, properties, exclusions, context substitutions, ownership
+  inheritance, reserve curves, search classes, method coverage, and fallbacks;
+- giving modders human-readable roller/recipe access without allowing uncontrolled tags to acquire
+  system authority;
+- defining generic manipulation/action rules for movable, breakable, combustible, containable,
+  wearable, climbable, wedge-like, cover-like, tool-like, and consumable objects;
+- verifying determinism, alias resistance, spatial legality, no duplication, inventory transfer,
+  ownership reactions, knowledge boundaries, event/narration atomicity, save migration, visual parity,
+  and performance;
+- tuning the boundary so the DM rarely refuses intuitive objects without becoming a wish machine.
+
+Genesis currently has eight principal interactable archetypes plus partial state primitives, not a
+universal environmental action ontology. The improvisation promise therefore depends on a substantial
+generic-affordance and event system. Without that build, the DM can name more things than the game can
+reliably resolve—the exact “promise versus implementation” gap Adam warned about.
+
+##### Relative cost assessment
+
+| Surface | Cost/risk | Why |
+|---|---:|---|
+| Sparse operational dependency graph itself | Moderate | Small typed graphs, aggregate state, event-driven updates |
+| Contextual dressing tables/grammars | High content cost | Purpose x culture x condition x realm expression, even when factored |
+| Lightweight assertion/promotion store | Moderate-high | Stable ids, seeds, room ownership, closure, migrations, compaction |
+| Shared spatial legality and latent sockets | High but already required | Also solves current dressing/interactable/portal composition gaps |
+| Generic environmental affordance/action resolver | High | Turns arbitrary ordinary nouns into honest mechanical play |
+| DM proposal/preflight and narration atomicity | High protocol risk | Crosses AI response, validation, latency, correction, and player trust |
+| Renderer parity for promoted objects | Moderate | Representational fallback contains art cost; state sync still required |
+| Long-campaign persistence/digest containment | High existing dependency | Current localStorage/full-save behavior is already a known wall |
+| Verification and mod safety | High ongoing cost | Infinite player phrasing and open-ended content require semantic property tests |
+
+The model is mechanically scalable **only** if most ordinary rooms use a small prevalidated latent
+reserve, assertions are compact, promoted objects are rare relative to narration, and the engine
+resolves classes rather than asking the AI or a heavy solver for each query. It is not cheap in
+architecture or authoring.
+
+##### Revised recommendation
+
+Keep bounded improvisation, but revise the authority contract:
+
+> The DM freely interprets and phrases the room, and may select/propose ordinary dressing from a
+> prevalidated contextual latent reserve. The engine owns whether a manipulable noun can exist, its
+> stable seed/identity, spatial and semantic legality, exhaustion, ownership, and consequential
+> promotion. Ambiguous or high-impact inventions resolve before final success narration.
+
+This is less permissive than “the DM can freely create any plausible ordinary object,” but much more
+reliable. It preserves tabletop responsiveness because the engine prepares flexible unused capacity
+instead of a closed object list. It also honors the research boundary: the DM performs a licensed world;
+it does not repair a missing room program or invent physical truth the engine cannot preserve.
+
+##### Required acceptance gates seeded by this audit
+
+- equivalent noun/affordance queries return one stable result and cannot refill a reserve;
+- a systematic sweep closes only declared classes/methods and never an infinite noun universe;
+- same room, seed, state, and query produce the same assertion across reload/model variation;
+- every narrated manipulable noun has an accepted assertion or preexisting canonical id;
+- a rejected consequential proposal cannot be displayed as successful narration;
+- promotion preserves seed/properties and cannot reroll a more useful variant under attention;
+- pickup/movement/state change updates room, inventory, ownership, witnesses, and visuals exactly once;
+- no assertion can create topology, Major treasure, named evidence, a secret, or high Spice without its
+  proper authority path;
+- every instantiated object occupies a legal reserve/socket or uses an explicit abstract/nonspatial
+  representation that cannot claim spatial affordances;
+- thousand-room/inquisitive-player soaks stay within save, digest, generation, and active-context budgets;
+- the hamlet jail stool, mine pump tool, college-dorm textile, contested-grove supply object, and
+  realm-incompatible ordinary-object cases all trace from query through canonization, use, mutation,
+  revisit, and DM/visual projection.
+
+**Open follow-up:** should Question 11 adopt this stricter revision—DM freedom as contextual selection,
+proposal, and performance over a prevalidated latent affordance reserve, with the engine owning
+existence/legality/persistence and preflight required for ambiguous or high-impact physical claims—while
+accepting that the generic-affordance resolver, narration atomicity, and long-campaign persistence work
+are major implementation expenses rather than small extensions?

@@ -29,12 +29,13 @@ O2.1-O2.11, additive G2.1-G2.2, prospective P2.12-P2.20, and every generated fol
 invention, precedent scope, pooled NPC casting, private DM deliberation, CrisisChain mechanics, cold-state
 ownership, stocks/ecology, custody, impossible sites, player/DM projection, and Wave 2 proof.
 
-**Do next:** open promoted **Wave 10 - Interim Visual Engine and Release Scope**, not Wave 3. Following Adam's
-rapid-sweep preference, surface P10.0-P10.12 plus G10.1-G10.2 together with short plain-English recommendations,
-examples, and costs. Deep-dive only the questions Adam flags or whose consequence audit reveals a material gap.
-Do not implement or select a renderer by convenience; Wave 10 must settle the shared SceneTray grammar and typed
-dungeon/interior, town/social, wilderness/exploration, travel/map, and battle adapters while preserving the useful
-graphics-engine wins and simplifying the release presentation.
+**Do next:** promoted **Wave 10 - Interim Visual Engine and Release Scope** is open at the full-wave rapid sweep in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.SWEEP. Await Adam's batch disposition on P10.0-P10.12 plus
+G10.1-G10.2. The recommendation is one renderer-neutral SceneTray contract with typed dungeon/interior,
+town/social, wilderness/exploration, travel/map, and battle adapters, normally shown as a lit shallow-oblique
+schematic/diorama with hybrid storyboard/cards; range/relationship remains a fallback/accessibility view, exact
+cells a tactical/workbench overlay, and the current full 3D theater a protected laboratory/future projection.
+Deep-dive every flagged/material follow-up. Do not implement or select a renderer by convenience.
 
 **Fable readiness:** the closed Waves 1-2 material is safe to send to Fable now for read-only critique,
 cross-reference, gap-finding, or Wave 10 preparation. It is not safe yet for an authoritative whole-system build

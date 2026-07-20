@@ -12123,3 +12123,208 @@ creative authority to build surprising throughlines, or should the DM have more 
 relation type? If accepted, the next follow-up will decide whether related growth may ever establish a new root
 with its own independent future, and exactly what event makes that descendant stop being “part of the callback”
 and become a first-class story thread.
+
+#### 10.G2.1.5 Foundational authority challenge - mechanize commitments, not imagination
+
+Adam provisionally likes the typed relation-growth direction but raises the decisive product question: how much
+room remains for the actual DM seat? Mechanizing facts, items, effects, cards, relations, and receipts is useful and
+necessary, but if the engine also chooses every noun, connection, consequence, and reward, the AI DM eventually
+becomes a prose renderer for a procedural story machine. That would discard one of Genesis's central advantages:
+an AI DM can invent an exact, surprising answer that no static item database or prewritten callback recipe contains.
+
+The paired communication keepsakes from the Gemini reference are the concrete test. Their identity, form, and
+relationship meaning were invented because they served what the players and NPCs had just accomplished. They
+did not need to pre-exist as a catalog row. Once invented, however, they needed exact holders, item identity,
+capabilities, limits, provenance, persistence, visual representation, and callback hooks. Adam wants that creative
+DM move retained and made real, not replaced with a generic rolled trinket.
+
+This concern is already constitutional. `DM-CHARTER.md` section 8.5 says that interpreting anti-drift as “the AI
+must never invent” is wrong and wastes the best thing about an AI DM. Its law is **invention is licensed, but
+captured**: mechanize first where the script has objective authority; when the DM invents, immediately enter the
+result into Codex/events/Ledger/other owners so it becomes durable canon. `ITEMS.md` already specifies that a
+bespoke DM-invented enchantment may be captured as a per-instance overlay. The recent callback wording therefore
+needs clarification, not a retreat from mechanization.
+
+##### The key correction to “the engine owns the nouns”
+
+“The engine owns the nouns” must mean:
+
+> No consequential noun may exist only in prose. The engine owns its canonical instantiation, identity,
+> objective mechanics, authority, custody, state, persistence, and reconciliation.
+
+It must **not** mean:
+
+> Every noun idea must originate in a static table or be selected by deterministic code before the DM may
+> imagine it.
+
+The June 30 ruling remains valuable for nouns whose independence creates play. A newly encountered NPC should
+normally be rolled because flaw, bond, fear, leverage, want, and motive prevent the DM from inventing a bespoke
+helper whose psychology conveniently serves the current scene. A room, hidden property, stock level, clue, or
+ordinary treasure likewise needs independent source authority. But an earned keepsake, exact consequence form,
+title, technique, relationship token, callback transformation, or connective explanation has a different job:
+its bespoke fit to established play is the point.
+
+A useful source test is:
+
+```text
+resistance-bearing noun
+  should surprise or constrain the DM independently -> roll/derive the substrate first
+
+expression-bearing noun
+  embodies earned play, interpretation, relationship, or consequence -> DM may synthesize
+
+hybrid noun
+  engine supplies envelope/substrate; DM authors exact identity, form, meaning, and proposed function;
+  engine compiles and validates the final instance
+```
+
+##### DM-seat options
+
+**Option 1 - catalog director/narrator.** The engine rolls or selects every NPC, place, item, callback descendant,
+effect, and reward. The DM chooses presentation, pacing, dialogue, and perhaps which optional card to play. This
+maximizes determinism and simple testing, but the DM seat is not genuinely creative. The paired comms can exist
+only if a table author anticipated them or a generic result happens to approximate them. Over time the DM becomes
+replaceable by templates plus a scheduler.
+
+**Option 2 - sovereign DM with post-hoc capture.** The DM freely invents nouns and mechanics, narrates them, then
+the engine records whatever it can. This preserves inventiveness but recreates Gemini's failures: mechanics may
+be impossible to encode, power may exceed the earned envelope, state may contradict canon, and the player may
+read a successful invention before validation rejects it. Post-hoc capture is too late for consequential truth.
+
+**Option 3 - transactional creative DM with a semantic compiler (recommended).** The DM may originate exact
+creative content through a new explicit `SYNTHESIZE` lane. The engine provides current truth, due obligations,
+available envelopes, mechanics vocabulary, and visual library; the DM authors what the invention *is for*, what
+it means, its exact form/identity, and proposed capabilities. The engine then compiles, constrains, and commits it
+before consequential narration. Validation harnesses invention; it does not substitute a random noun for the DM's
+idea merely because the idea was not in a database.
+
+The callback authority lanes become:
+
+```text
+REPLAY       project existing truth
+DERIVE       apply an authored consequence from current state
+ROLL         let the world supply an independently generated noun/result
+PROPOSE      offer a bounded connective fact/detail for validation
+SYNTHESIZE   DM authors a novel expression-bearing noun or structured effect inside a creation envelope;
+             engine compiles mechanics/ownership/persistence/visual binding and commits it
+```
+
+`SYNTHESIZE` is not limited to callback cards, although callbacks are a major source of its authority. It may also
+be licensed by an earned reward, Crit mandate, relationship payoff, transformation, quest resolution, adjudicated
+creative action, connective-weirdness budget, or another typed creation envelope. It is not a general permission
+to fill hidden rooms, convenient inventories, NPC motives, or unknown properties with whatever best serves the
+DM's immediate plan.
+
+##### What the creative DM seat still owns
+
+Even in a deeply mechanized Genesis, the DM remains responsible for:
+
+- deciding what established facts mean together and which surprising throughline is worth proposing;
+- selecting among optional cards, deferring them within service laws, and composing compatible facts into one
+  dramatic situation;
+- inventing names, forms, symbolism, voices, motives-in-action, misunderstandings, relationship expressions,
+  exact reward concepts, and connective explanations where licensed;
+- choosing NPC strategy and performance from canonical motives rather than following a fixed plot;
+- proposing complication/payoff forms inside receipts and creation envelopes;
+- interpreting rolls, pacing revelation, honoring quiet, escalating or releasing pressure, and deciding how
+  consequences feel without changing what the dice/state established;
+- creating expression-bearing nouns, artifacts, techniques, titles, scars, rituals, rumors, and callbacks whose
+  specific fit to play gives them value;
+- narrating the resulting world with taste, humor, emotional judgment, sensory intelligence, and responsiveness
+  no procedural scheduler can reduce to a complete table.
+
+The engine owns whether the proposal is licensed, what it may mechanically do, whether it contradicts truth,
+which objective owners change, and whether it was actually committed. The DM remains the author/director; the
+engine is world physics, rules referee, semantic compiler, and perfect ledger.
+
+##### Novel-item synthesis contract
+
+A DM-authored item need not exist in the static item database. The database should contain reliable base types,
+effect primitives, power bands, materials, conditions, presentation tags, and visual assets - a vocabulary and
+library, not the complete set of possible final artifacts.
+
+A proposed `InventionProposal` may contain:
+
+```text
+creation authority and source receipts
+story function, intended emotional payoff, and relation/callback root
+proposed name, form, motif, material, realm skin, and appearance
+intended holders/custody and whether instances are linked as a set
+desired capabilities/effects expressed in semantic terms
+proposed limits: range, duration, charges, action use, targets, stacking, recovery
+visual search/generation tags and required readable states
+future reaction/callback hooks
+```
+
+The engine supplies a `CreationEnvelope`:
+
+```text
+tier/rarity/power and mechanical-impact ceilings
+allowed effect primitives and combination budget
+base type/story-tool category or legal custom-instance form
+resource/action/attunement/charge/range/duration constraints
+ownership, knowledge, provenance, and item-group requirements
+asset-library domain, fallback strategy, and future exact-generation permission
+forbidden contradictions, unsupported effects, and IP/shipping boundary
+```
+
+The accepted `CreationReceipt` mints stable instance ids, a linked-set/group id where needed, base/custom
+mechanics, enchantment/effect overlays, codex provenance, custody, relationship hooks, visual binding, and
+reconciliation rules. If a desired mechanic exceeds the vocabulary or budget, the engine should preserve the
+DM's concept while negotiating the closest honest supported expression or invoking the rare novel/high-impact
+ruling path. It should not silently turn the invention into a different generic item.
+
+##### Paired-comms trace
+
+After the cooperative escape, the DM decides that the relationship payoff should be a pair of communicators whose
+form commemorates the allies and whose function rewards staying coordinated. That exact concept is DM-authored;
+no `paired-comms` catalog row is required.
+
+The engine verifies the earned reward envelope and existing participants, then compiles:
+
+- two stable item instances plus one linked-set relationship;
+- exact holders/custody and provenance to the shared escape;
+- a bounded communication capability and any coordinated benefit allowed by the power envelope;
+- range, duration, charges/recovery, action requirements, stacking, transfer, loss, breakage, and attunement if
+  relevant;
+- Codex text hooks and future callback/reaction handles;
+- a sprite selected by semantic tags from the available item-art library, with a deterministic fallback;
+- later, an exact no-human asset-generation request conforming to the slot's silhouette, dimensions, palette,
+  state variants, background/transparency, and art-direction contract.
+
+The DM may propose the mechanics as well as the fiction. The engine does not have to accept an unbounded benefit,
+but it should preserve the intended play pattern - paired communication and coordination - while fitting it into
+the earned envelope. A static database supplies components and comparable baselines; it does not define the outer
+limit of what the DM can create.
+
+##### Research and cost filter
+
+This correction is unusually well aligned with the downloaded procedural corpus. Tutenel et al. (2010) begin from
+the observation that designers think about **what a scene is**, not the algorithm for placing it, and compile that
+semantic description into a valid procedure. Tutenel et al. (2009) leave control of plans and class knowledge with
+the designer while the solver realizes legal placement. Merrell et al.'s mixed-initiative system lets the human fix
+meaningful furniture decisions while the optimizer proposes arrangements around them. Whitehead lets designers
+declare intent and requires the solver to satisfy it or report impossibility. These papers do not prove an AI-DM
+invention protocol or novel-item mechanic compiler, but they strongly support the division: preserve creative
+intent at the high-level semantic boundary; mechanize legality and realization beneath it.
+
+Option 3 carries a **high implementation cost**: creation-envelope schemas, a compositional effect vocabulary,
+power/stacking validators, custom item instances, linked-item sets, Codex/event/persistence integration, visual
+asset search, fallbacks, and a later governed image-generation pipeline. Content maintenance shifts from trying to
+pre-author every artifact to maintaining reusable primitives, examples, and incompatibilities. That is still a
+large job, but it scales with the grammar rather than the number of imaginable final items. The dominant QA risk
+is a mechanically legal composite that is situationally broken; tier fixtures, adversarial combinations, and long
+callback traces remain necessary.
+
+The alternative cost is product-level: if Genesis mechanizes away the AI's ability to originate exact artifacts,
+consequences, and connective inventions, it may become consistent but cease to be the game the Gemini reference
+proved was worth building.
+
+**Question for Adam:** choose or amend the DM-seat policy. The recommendation is Option 3 and the new
+`SYNTHESIZE` lane: the engine owns canonical instantiation and enforcement, not exclusive ideation. In particular,
+may the DM originate the exact identity, form, story purpose, and proposed mechanics of a novel item such as the
+paired comms, with the engine required to compile/validate/persist that concept inside an earned envelope rather
+than replace it with a rolled catalog item? If accepted, the next follow-up should define the creation-envelope
+bands - what the DM may synthesize freely as connective canon, what requires an earned reward/crit/relationship
+authority, and what must still begin from an independent engine roll because resistance rather than expression is
+the noun's job.

@@ -18,15 +18,15 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-19 - PROCEDURAL DUNGEON WAVE 1 checkpoint; resume at question 11)
+## Do next (2026-07-19 - PROCEDURAL DUNGEON WAVE 1 checkpoint; resume at question 12)
 
-Questions 1-10 and their follow-ups are recorded in `PROCEDURAL-DUNGEON-DIRECTION.md` section 8.
+Questions 1-11 and their follow-ups are recorded in `PROCEDURAL-DUNGEON-DIRECTION.md` section 8.
 Wave 1 is not closed and no implementation is authorized.
 
-1. ☐ **Resume at Wave 1 question 11:** settle whole-site obligation/affinity semantics using the
-   working core/supporting/compatible/exceptional/conflicting vocabulary, with no purpose-only room
-   blacklist. Exact weights may remain deferred to the table-design pass.
-2. ☐ Continue questions 12-20, chase every material follow-up, test the rulings against concrete
+1. ☐ **Resume at Wave 1 question 12 - Functional Roster and Site Scale:** decide how graph budget,
+   institutional capacity, and physical scale relate, then determine how they govern functional,
+   random, secret, and subordinate-complex allocations. Exact numeric bands may remain deferred.
+2. ☐ Continue questions 13-20, chase every material follow-up, test the rulings against concrete
    dungeon/manor edge cases, and obtain Adam's explicit Wave 1 closure before Wave 2.
 3. ☐ Later source audit: purpose/chamber/history procedures in the 2014 DMG and 2e DBG, plus the
    castle/manor construction book if present on the cold shelf. Source their knowledge; do not copy

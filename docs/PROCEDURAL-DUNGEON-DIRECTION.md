@@ -15233,3 +15233,99 @@ Wave 10, and implementation specs. Then G2.1 can enter its contradiction/materia
 **Question for Adam:** accept the bounded ActorCard -> provisional casting -> rooted canonical NPC lifecycle,
 including return-to-hand for untouched/unwoven candidates, compact DM reserve for exceptional candidates, eviction
 of noncanonical overflow, and permanent identity at the first continuity-bearing contact/evidence/action/lore edge?
+
+### 10.SWEEP.5 Clarification and acceptance - pooled casting capacity, not cleanup after accumulation
+
+Adam completes the bullet-programming analogy and confirms that section 10.SWEEP.4 understood the intended NPC
+lifecycle. The important optimization is stronger than periodically purging dead objects. A weapon can allocate a
+bounded bullet pool once, reuse an inactive bullet slot for the next shot, and derive the required capacity from
+its maximum fire rate and the maximum time/distance for which any bullet can remain live. Total bullets ever fired
+then does not determine memory use.
+
+Genesis should apply the same capacity-first law to **provisional casting**, while preserving the extra identity
+semantics that NPCs require:
+
+```text
+REUSABLE ACTOR SLOT POOL
+  fixed/bounded runtime capacity for candidates currently being generated, scored, or provisionally cast
+  an expired unrooted casting releases its slot for immediate reuse
+
+BOUNDED DM HAND / RESERVE
+  compact identities judged worth keeping for later legal casting
+  a returned card can remain the same promising person rather than being regenerated
+  retention is explicit and capped; generic candidates do not all enter the reserve
+
+CANONICAL NPC STORE
+  persistent world identities created only by rooting events
+  never recycled as anonymous runtime slots and never deleted merely because they are offscreen
+```
+
+The runtime ceiling is therefore based on **maximum simultaneous unresolved casting demand**, not on total NPCs
+ever considered. Its later budget should account for the maximum active SceneTrays, bounded procedural lookahead,
+the greatest number of provisionally staffed role slots inside that horizon, concurrent DM comparisons, and a
+small explicit reserve allowance. In rough capacity terms:
+
+```text
+required provisional slots
+  = peak concurrently staged unresolved roles
+  + peak comparison/selection workspace
+  + bounded safety margin
+
+retained identity cards
+  = active DM hand
+  + explicitly capped reserve
+```
+
+This is analogous to `fire rate x maximum bullet lifetime`, but the later implementation should measure actual
+peak concurrency rather than mistake the analogy for a final numeric formula. Exact values remain Wave 9/10 and
+implementation-spec work.
+
+#### Concrete dungeon/Gemini-game behavior
+
+A site solver may provisionally staff eight nearby roles while evaluating the player's reachable route. If five
+rooms fall outside the valid/relevant horizon without any rooting event, those five castings release their runtime
+slots immediately. The next site solve reuses the same slots; it does not allocate five more permanent NPC stubs.
+If one discarded-room candidate is the unusually strong scarred goblin negotiator, the DM may promote that compact
+card into the bounded reserve before releasing the provisional casting. The slot is free, while the promising
+identity remains available for a compatible later role. If the guard already mentioned that goblin as Varka, the
+rooting event instead creates canonical Varka; neither the slot nor a duplicate card may later masquerade as Varka.
+
+The same principle applies when the DM evaluates several possible allies, rivals, victims, or hostile specialists
+for an improvised Gemini-game response. The candidate workspace is reusable. Only the chosen/rooted participant
+enters world state; a particularly useful unused concept may be pinned in the finite hand/reserve. Helpfulness does
+not affect the lifecycle rule.
+
+#### Implementation and maintenance implications
+
+This refinement keeps the earlier **medium architecture cost** but makes the intended performance contract more
+testable. A later implementation needs:
+
+- an explicit fixed/bounded slot allocator or equivalent reuse discipline rather than unbounded append-only
+  candidate objects;
+- hard reset/rebind rules so names, motives, visual selections, knowledge, faction tags, and provenance cannot leak
+  from one recycled slot into another;
+- distinct ids for a reusable runtime slot, a retained ActorCard identity, a provisional casting attempt, and a
+  rooted canonical NPC;
+- deterministic save/load behavior for the bounded hand/reserve without serializing empty or disposable workspace;
+- capacity telemetry and stress tests proving memory follows peak concurrency rather than cumulative generation;
+- reference-integrity tests proving a rooted NPC can never be reclaimed by the provisional pool.
+
+The chief maintenance risk is stale-state leakage during slot reset; the chief design risk is accidentally treating
+the bounded reserve as a second unbounded Codex. Both require executable invariants. Tutenel's plan/instance split,
+Merrell's candidate pinning, Horswill's bounded summaries, and the reviewed constraint-based generation work remain
+consistent with this division. The exact three-store pooling policy is a Genesis-specific synthesis prompted by
+Adam's completed bullet analogy, not a rule claimed verbatim from those papers.
+
+#### Accepted ruling and final narrow follow-up
+
+Adam accepts the section 10.SWEEP.4 interpretation: an untouched, unwoven provisional NPC can return to the DM
+casting system, while a continuity-bearing NPC roots permanently. The completed analogy further establishes a
+capacity-first target: recycle provisional runtime slots continuously instead of creating then later purging an
+ever-growing history of candidate objects.
+
+One material boundary remains to confirm before this NPC follow-up is exhausted:
+
+**G2.1-NPC-POOL:** should ordinary expired candidates release/reset their reusable slot, while only candidates the
+DM/selector explicitly promotes retain their exact identity in a bounded hand/reserve? This is the recommended
+rule. Keeping every expired candidate's identity, even in compact form, would recreate the cumulative-growth
+problem at a different layer.

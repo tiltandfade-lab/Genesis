@@ -17053,3 +17053,82 @@ stays visible with the typed reason. The right rail carries the DM's narration, 
 Does Adam accept Option B? If so, exhaust pending-state, long-DM-response, and disappear/transfer edge cases, then
 close the object-inspector branch and return to the next Wave 10 follow-up. Wave 10 remains **OPEN**; no build is
 authorized.
+
+### 11.16 F10.3d ruling - card updates in place; the board must perform the receipt
+
+**Adam's ruling (2026-07-20):** accept Option B on the condition that the board supplies clear action feedback. The
+PC piece should visibly move when movement occurs; a chest should visibly open when its state changes; and actions
+should have appropriate sound feedback. The card may remain open and update, but it cannot be the only evidence
+that something happened in the world.
+
+The accepted object-transaction sequence is:
+
+1. an inside-card control submits a proposal; the card may show a compact pending/validation state but does not
+   mutate or promise the result;
+2. the deterministic rules layer validates and commits a typed receipt;
+3. the BattleMat performs that receipt immediately through the applicable actor path, object-state animation,
+   effect cue, sound cue, and accessible text equivalent;
+4. the open card refreshes from the new canonical projection rather than patching its own fields;
+5. the DM narrates the resolved event in the exclusive right conversation rail, without blocking local mechanical
+   feedback or duplicating the inspector.
+
+Concrete examples:
+
+- `Open`: if adjacency is required, the PC standee animates along the committed exact path, stopping for any
+  reactions. After arrival and successful resolution, the chest lid rotates or its governed closed/open visual
+  state swaps; hinges/lock receive an appropriate sound token and caption; then the card reads `Open` and reveals
+  only newly earned contents/evidence;
+- `Pick Lock`: a refusal leaves the card open with the typed reason and only a restrained UI refusal cue. A resolved
+  attempt performs the roll/result receipt, visible lock/object response, and perceptible sound—never a success
+  animation before the roll commits;
+- `Take`: custody transfer removes the scene object only when the receipt says it moved to inventory/another
+  holder. A pickup motion/cue makes the transfer legible; the board card closes because the board referent is gone;
+- `Activate`: a lever, door, light, platform, or invented object uses its governed state transition or a truthful
+  fallback pulse/marker/caption. The card refreshes or closes according to continued scene eligibility.
+
+Sound is additive feedback, never the sole carrier. Every consequential cue needs a visual and/or captioned
+equivalent; user audio settings and reduced-motion settings cannot make state unreadable. Conversely, animation
+and sound are viewpoint-gated: an inaudible distant latch, hidden trap, or unseen state change cannot leak through
+a global cue. The feedback layer consumes receipts and owns no game rules.
+
+Pending/latency/transfer edge cases close as follows:
+
+- dismissing the card while a valid action is pending does not cancel an already committed proposal; board
+  feedback and DM narration still occur. A separate explicit cancel is legal only before the transaction commits;
+- mechanical resolution and board feedback do not wait for AI narration. The DM may narrate afterward from the
+  same receipt;
+- receipt/object version ids prevent a late validation or DM response from repainting an obsolete card or reverting
+  a newer state;
+- refusal leaves the eligible card open; successful state change refreshes it; destruction, pickup, transfer out
+  of scene, loss of perception, or other ineligibility closes it;
+- save/load either resumes a declared resumable presentation or snaps to canonical final state with the receipt
+  available for recap; it never replays a state-changing action merely to reconstruct animation.
+
+This adds **medium-high feedback-system cost** beyond the inspector: receipt-to-presentation tokens, exact-path
+actor movement, interruptible trigger boundaries, governed state transitions, sound families, captions, reduced-
+motion fallbacks, stale-response guards, and native-resolution proof. The reusable grammar is cheaper to maintain
+than bespoke animation code for every object, but the product still needs a minimum feedback-quality bar.
+
+F10.3d and the inspector pending/latency/disappear/transfer branch are closed. One material follow-up remains before
+the inspector branch can close: how broad the minimum board-feedback grammar must be for pre-alpha.
+
+#### F10.3e - minimum board-action feedback grammar
+
+- **Option A - bespoke animation and sound for every action/object:** highest specificity, but it recreates the
+  content-production scope Wave 10 is trying to control and leaves procedural/invented objects without coverage.
+- **Option B - one generic pulse/click for everything:** cheap, but does not clearly distinguish movement, opening,
+  pickup, attack, spell, failure, or environmental state change.
+- **Option C - tiered receipt-driven feedback families with truthful fallbacks (recommended):** build reusable
+  movement, open/close, pickup/transfer, strike/impact, projectile, spell/area, activate/toggle, damage/heal,
+  failure/refusal, reveal, and environmental-change families. Use object-specific geometry/sprites/sounds where a
+  governed binding exists; otherwise use a consistent highlight/motion/effect/caption fallback tied to the exact
+  actor, object, path, and state transition. Bespoke polish may replace a fallback later without changing rules.
+
+Under Option C, a chest gets a real lid/sprite transition because its cheap geometry is governed; an invented
+turtle communicator might use a localized light/pulse, communicator sound family, and caption until bespoke art or
+animation exists. Neither becomes a silent database update, and neither requires the DM to fake mechanical
+feedback in prose.
+
+Does Adam accept Option C as the best-case/pre-alpha feedback architecture? If so, define the minimum slice and
+fallback quality gate, close the object-inspector branch, and resume the remaining Wave 10 visual questions. Wave
+10 remains **OPEN**; no build is authorized.

@@ -6,6 +6,24 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 board feedback) — THE CARD UPDATES; THE BOARD PERFORMS [Codex]
+
+This supersedes the smart-card pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3d Option B conditioned on clear board feedback. Inside-card actions keep an eligible card open
+through validation and refresh from canonical state, but committed receipts immediately animate the exact PC path
+and applicable object state, with appropriate localized sound plus visual/caption equivalents. A chest visibly
+opens; a pickup visibly transfers; failure never plays success feedback. Mechanics/board feedback do not wait for
+DM prose, while the right rail narrates the same receipt. Dismissal does not cancel committed work; versioning
+blocks stale repaint; refusal stays open; pickup/destruction/transfer/lost eligibility closes; save/load never
+re-executes actions for animation. F10.3d and latency/transfer edges are closed.
+
+**Do next:** ask F10.3e. Codex recommends tiered receipt-driven feedback families with governed object-specific
+bindings and truthful localized fallbacks, rather than bespoke animation for every noun or one generic pulse for
+everything. If accepted, define the minimum pre-alpha slice and fallback quality gate, close the inspector branch,
+and resume remaining Wave 10 visual questions.
+
 ## ⭐ Latest (2026-07-20, Wave 10 smart object card) — CLICK TO OPEN; CLICK AWAY TO DISMISS [Codex]
 
 This supersedes the full-board-inspector pickup below without deleting it. Design/docs only: no code, dependency

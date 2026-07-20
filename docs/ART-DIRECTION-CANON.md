@@ -335,6 +335,17 @@ SceneTray safe rectangle so the card never runs offscreen or hides beneath UI ch
 or multiple-card desktop. Exact placement, focus, responsive, cost, and action-result follow-up rules live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.15.
 
+## Receipt-driven board-animation and sound ruling (Adam, 2026-07-20 — additive)
+
+> "B is good as long as we have board animation to make it clear that the PC piece moved, or the chest opened, or there was a sound for feedback"
+
+An eligible object card remains open and refreshes after an inside action, but it cannot be the only feedback. A
+committed receipt drives the PC standee along its exact path, performs the object's truthful governed state change,
+and emits appropriate localized sound with visual/caption equivalents before or alongside DM narration. Mechanics
+and board feedback do not wait for AI prose, and success feedback never precedes commitment. Refusal, transfer,
+disappearance, accessibility, stale-response, and minimum-feedback-family questions live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.16.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

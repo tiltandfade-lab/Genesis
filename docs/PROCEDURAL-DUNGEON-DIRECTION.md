@@ -12620,3 +12620,195 @@ fully persistent and recoverable under their precommitted rules. If accepted, th
 adaptive counter should normally create pressure and choices, with hard nullification allowed only by an explicit
 higher-band authority; after that, G2.1 still must decide what happens when the engine cannot compile the DM's
 exact proposed mechanics without materially changing the concept.
+
+#### 10.G2.1.8 Ruling and generated follow-up - hostile causal windows accepted; when should the DM invent instead of retrieve?
+
+Adam accepts Option 3 for hostile and mixed-valence synthesis: causal commitment windows with counterplay,
+including full persistence/recoverability for physical hostile inventions under their precommitted rules. Before
+answering the next queued question about counter pressure versus hard nullification, Adam raises a necessary
+generated follow-up: how should the DM prioritize an invention over using an available SRD item or an existing
+Genesis-custom item?
+
+The choice cannot be “always invent” or “always retrieve.” The item catalog contains mechanically reliable types;
+it does not contain the complete set of meaningful identities the DM might create, and catalog presence does not
+establish fictional availability. Conversely, an AI DM should not create a mechanically unique rules object every
+time it imagines a distinctive shape. That would produce novelty noise, balance drift, an unreadable inventory,
+and an ever-growing QA surface.
+
+The existing `ITEMS.md` type/instance split already supplies the answer's foundation:
+
+```text
+type/base reference   reusable objective mechanics, often SRD or approved Genesis custom
+enchantment overlay   per-instance mechanical differences
+instance              stable copy, condition, custody, quantity, charges, attunement
+Codex link             unique identity, name, history, meaning, relationships, callbacks
+visual binding         exact readable appearance, library asset, composition, or governed generation
+```
+
+Invention and reuse are therefore not mutually exclusive. The DM can invent an entirely new *artifact identity*
+while the engine reuses an existing *mechanical type*. The useful priority question is not “new item or database
+item?” but “which layers must be new for this intended play pattern and meaning to survive?”
+
+##### Routing options
+
+**Option 1 - strict catalog-first.** Search existing world nouns, SRD items, and Genesis-custom items; use the
+closest legal match, permitting invention only when no item shares the requested effect category. This is cheap,
+balanced, and easy to render. It also flattens expressive rewards: a unique relationship payoff becomes ordinary
+Sending Stones merely because the catalog contains them, and “closest effect” may import the wrong limits, lore,
+form, or play pattern.
+
+**Option 2 - DM invention-first.** Let the DM create the exact item and mechanics whenever a synthesis envelope
+exists; consult the catalog only if the DM independently asks for a standard object. This preserves maximum
+spontaneity, but duplicates mechanics, creates incoherent synonyms, increases balance and maintenance debt, and
+turns an item library with hundreds of validated definitions into dead weight.
+
+**Option 3 - intent-first semantic fit, realized by the least-new-mechanics ladder (recommended).** The DM first
+states what the object means and how it should change play without being anchored to a catalog answer. The engine
+then retrieves existing world instances, SRD types, approved Genesis-custom types, and compatible overlays. It
+chooses or offers the lowest-complexity realization that preserves every declared semantic invariant. Fictional
+identity may remain fully novel even when mechanics are reused exactly. Full mechanical synthesis occurs only
+when retrieval or composition would materially damage the intended identity or play pattern.
+
+The core law is:
+
+> Reuse mechanics aggressively; never reuse them so aggressively that the DM's licensed creative point is lost.
+> Charge novelty by new rules complexity, not by new names, forms, histories, or symbolism.
+
+##### The least-new-mechanics ladder
+
+The resolver should walk these routes in order, but stop at the first route that honestly preserves the proposal's
+semantic invariants. “Earlier” is a complexity preference, not authority to overwrite the DM's concept.
+
+1. **Return an existing world instance.** If a viable established noun naturally serves the moment, reusing it can
+   create the strongest callback and costs no new object. This receives a cohesion bonus, not a mandate: the DM
+   must not drag back an unrelated item merely because it exists.
+2. **Mint an exact catalog instance.** Use an SRD or Genesis-custom item unchanged when its standard identity and
+   mechanics are actually the point or when the noun is routine. A guard needs a Spear; an ordinary cache contains
+   Rope; a random magic reward legitimately resolves to the catalog item rolled.
+3. **Invent identity over a catalog type.** Keep tested mechanics, but create a new name, form, material, visual,
+   provenance, ownership relationship, Codex record, and callback hooks. This is a real DM invention, not a mere
+   prose reskin, because its identity persists independently while its objective rules cite a known base.
+4. **Compose a bounded overlay.** Use a catalog base/type or effect pattern, then apply only the mechanical deltas
+   needed to preserve the intended play pattern: paired ownership, altered range, charges, trigger, target, cost,
+   drawback, condition interaction, or other supported primitive. The creation receipt records every delta.
+5. **Synthesize a custom instance from existing primitives.** No catalog item provides a suitable base, but the
+   desired function compiles from validated effects and limits. The result has no false catalog identity; it is a
+   first-class custom type/instance shape with bounded mechanics.
+6. **Request a new mechanical precedent.** The concept depends on a behavior outside the supported vocabulary.
+   This invokes the still-open compilation-failure/precedent question. The engine must negotiate, abstract, defer,
+   reject, or enter a governed precedent lane; it must not disguise unsupported mechanics as a familiar item.
+
+Routes 1-2 carry almost no novelty debt. Route 3 carries semantic/state/art debt but little rules debt. Route 4
+carries bounded combination and balance debt. Route 5 carries larger balance, interaction, documentation, and QA
+debt. Route 6 is exceptional. This makes the common creative move - a bespoke storied object using known rules -
+cheap enough for the DM to use confidently without making the world mechanically incoherent.
+
+##### Intent and fit contract
+
+Before retrieval, a C2+ `InventionProposal` should name a compact set of semantic invariants:
+
+```text
+story purpose and emotional/strategic role
+required play pattern: what choices or interactions should recur?
+required relationship/callback structure
+must-have capability; acceptable limits/costs
+form, motif, or provenance that carries meaning
+valence and intended pressure/payoff
+features that must not be imported
+```
+
+The engine retrieves candidates only after these are known and evaluates them on separate dimensions:
+
+- **authority and availability:** does the source envelope permit the item, and can the proposed owner/world source
+  actually produce it? A catalog row never conjures inventory by itself;
+- **play-pattern fit:** would the candidate create the same decisions, cadence, and counterplay?
+- **power/reach fit:** does it remain inside the current C-band, rarity, effect, and target limits?
+- **meaning/form fit:** can the exact relationship, antagonist signature, realm motif, or consequence survive?
+- **world-cohesion fit:** would reusing an established instance create a genuine throughline, or merely force a
+  callback because the database found a keyword?
+- **rules debt:** how many new primitives, exceptions, and interactions would the candidate require?
+- **saturation:** has this item/type/effect appeared so often that a different lawful expression would materially
+  improve discovery and world texture?
+
+Hard authority, contradiction, and power limits remain gates. The remaining scores guide a choice; they must not
+be collapsed into one opaque similarity number. The receipt should store the considered route, selected base or
+primitives, rejected near matches and material deltas, and a short `noveltyReason`. This lets later QA determine
+whether retrieval preserved intent or merely chose a convenient keyword match.
+
+##### When invention should win
+
+The DM should prefer a new identity or deeper synthesis when at least one material condition holds:
+
+- the exact form, symbolism, relationship, consequence, or antagonist signature is the earned payoff;
+- a catalog candidate shares an effect label but changes the intended recurring choice or emotional function;
+- existing items import inappropriate lore, custody, rarity, limitations, side effects, or visual meaning;
+- a custom form creates a strong lawful throughline among established facts that a generic result would lose;
+- a responsive enemy/dungeon invention expresses trackable knowledge and strategy rather than generic scaling;
+- repetition/saturation would make the catalog choice feel interchangeable, and the current envelope licenses
+  a meaningfully different expression;
+- the invention explores a supported combination of mechanics whose interaction is itself the point.
+
+The DM should prefer retrieval or a thin identity overlay when the object is routine, the catalog candidate is an
+honest exact fit, independent loot generation selected that type, mechanical novelty contributes nothing, or a
+returning world noun provides stronger cohesion than another new object.
+
+##### Paired-comms trace against the real catalog
+
+Genesis's SRD data already contains **Sending Stones**: a recognized pair whose known mechanics send to the other
+bearer and refresh at the next dawn. Under Option 3, the DM still begins with the desired turtle-shaped
+relationship keepsakes, their shared-escape provenance, exact holders, and intended coordination play pattern.
+The engine then presents the relevant mechanical fit without replacing the concept:
+
+- If Sending Stones' cadence and function preserve the intended play, use Route 3: two turtle communicators with
+  their own stable identity, Codex records, provenance, visuals, and callback hooks, mechanically grounded on the
+  validated Sending Stones definition.
+- If the intended play is short-range, frequent whispered coordination rather than one long-form use per dawn,
+  the catalog match is mechanically misleading. Use Route 4: retain a validated communication pattern but compile
+  different range, charge/recovery, action, interception, and pairing limits inside the C2 envelope.
+- If the communicators are meant to do something no supported communication/relationship primitive can express,
+  Route 6 is honest. Do not silently claim that ordinary Sending Stones implement it.
+
+The same rule works against the player. A bespoke suppression chain may ground its mechanical core in an existing
+condition, spell effect, or approved custom item while keeping a novel antagonist-specific identity. If its point
+is a new tactical interaction rather than another casting of an existing effect, the delta must be explicit and
+pay the higher route's complexity cost.
+
+##### DM discretion and novelty budgets
+
+The engine should not automatically choose the first database hit. It should return a compact candidate/delta
+comparison to the DM-side compiler: `reuse`, `identity-over-base`, `bounded-overlay`, or `full-synthesis`, including
+what each route preserves and loses. When more than one route is legal, the DM chooses because taste and dramatic
+specificity remain part of the seat.
+
+That discretion is bounded by **mechanical novelty debt**, not a crude count of invented nouns. A session can
+support many newly named, meaningful, mechanically familiar objects more safely than one poorly specified new
+rules primitive. C0/C1 identity does not consume a C2 envelope merely because it is original; consequential reach
+still does. C2-C4 authority controls impact, while the realization route controls implementation/maintenance debt.
+These are orthogonal ledgers.
+
+##### Research, implementation, and maintenance filter
+
+This ladder closely matches the procedural papers' semantic-compilation posture. Tutenel et al. separate the
+designer's high-level account of what a scene is from the solver's realization method; preserving invariants before
+retrieval prevents the available library from defining the design question. Mixed-initiative systems support
+showing high-value candidate choices and letting the creative seat fix what matters. Semantic classes and reusable
+plans support Route 3-5 composition without enumerating every final artifact. Whitehead's declarative approach
+supports reporting when no catalog or composition satisfies the proposal instead of silently substituting the
+nearest result. These papers support the pattern, not the exact Genesis item-routing policy.
+
+Option 3 has **medium implementation cost** on top of the already-accepted synthesis compiler: semantic tags and
+effect/play-pattern annotations for SRD and Genesis-custom items, candidate retrieval across catalog plus world
+instances, invariant/delta comparison, saturation and cohesion signals, route receipts, and UI/prompt context that
+shows only a few useful candidates. Its **maintenance advantage is large**: most novel artifacts reuse validated
+mechanics, while new primitives remain rare and visible. The main risks are semantic retrieval that anchors the DM
+too early, false similarity by shared keywords, a hidden bias that always selects cheap reuse, and unbounded
+overlays that are effectively full custom mechanics without admitting their cost.
+
+**Question for Adam:** should Genesis adopt Option 3 and the law “least-new mechanics, not least-new fiction”?
+The DM declares the invention's meaning and intended play first; the engine then checks existing world items, SRD
+items, Genesis-custom items, overlays, and supported primitives in that order, stopping only when a route preserves
+the declared invariants. In the turtle-comms example, the DM may keep the bespoke turtle identity and use Sending
+Stones as the mechanical base if its one-use-per-dawn play is right; if that cadence is wrong, the engine escalates
+to a bounded custom overlay rather than forcing the catalog match. If accepted, G2.1 returns to the queued question
+of pressure-versus-hard-nullification for adaptive hostile inventions, followed by the compilation-failure and
+new-precedent policy.

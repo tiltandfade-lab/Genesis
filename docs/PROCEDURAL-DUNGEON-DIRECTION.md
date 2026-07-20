@@ -7482,3 +7482,172 @@ weakening the original-purpose law for actual intentional construction.
 lineage-episode model, including explicit support for collective intent, unintended byproducts,
 designation, copying/relocation, composite sites, ongoing formation, and rare canonically
 plural/recursive origins?
+
+#### 10.11.5 Ruling and further exception - lineage is not boundary, institution, or compile scope
+
+Adam accepts the expanded lineage model as a useful clarification and asks whether any other exception
+remains. One deeper category does: lineage explains **how something came to be**, but does not by itself
+decide what counts as one site, which physical/ontological space it occupies, which institutions use it,
+or how much of it the engine can finitely compile.
+
+Conflating those concerns would break several important cases.
+
+##### Overlapping sites and institutions can share one substrate without merging identity
+
+The same grove can simultaneously be:
+
+- a natural ecosystem;
+- a druidic sacred site with ritual authority;
+- a refugee settlement with residential and supply needs;
+- a legal preserve recognized by a city;
+- a contested military approach.
+
+These are not merely five “current functions” on one flat site record, nor must they become one blended
+purpose. They may have different lineages, boundaries, operators, beneficiaries, schedules, knowledge,
+and claims while sharing physical ground. Likewise, a market operates in a civic square, a college
+occupies several older buildings, and a prison institution may span a fortress wing plus leased
+Breach-cell domains.
+
+Current occupation, subordinate purpose, and typed claims cover much of the play, but the architecture
+must not force every institution or place identity sharing geometry into one lineage.
+
+##### One site can be spatially distributed or discontinuous
+
+A mage prison may consist of an intake building, a remote administrative archive, and many portal-linked
+cell domains. A monastery may own isolated hermitages. A sewer authority, mine, canal system, caravan,
+or fortress network may function as one institution across separated spaces and routes.
+
+The operational whole can be one site/institution for purpose and simulation while its navigable domains
+are geographically or physically disjoint. Connections remain explicit typed routes/portals; “one site”
+does not imply one contiguous polygon or one renderer plan.
+
+##### A place can also be an entity
+
+A living fortress, colossal corpse, walking castle, sentient ship, world-tree, mimic colony, or
+slumbering god may be both:
+
+- an actor/entity with identity, state, motives, injury, knowledge, and relationships; and
+- a navigable domain containing rooms, occupants, flows, topology, and discoveries.
+
+Duplicating it as an unrelated NPC/creature and site creates drift. One canonical identity should link
+entity and place facets. Death, awakening, movement, injury, growth, or transformation may affect both
+through typed events. The corpse of a creature may become a new site lineage episode without pretending
+it was always architecture.
+
+##### Site identity can outlive or diverge from its physical fabric
+
+A fortress can be rebuilt completely and still be regarded canonically as the same fortress; an
+institution can move to another building while the old shell retains a separate place identity; a ship
+can replace every plank; a copied town can fork from the original; ruins may remain historically real
+after no navigable structure survives.
+
+Therefore continuity cannot be inferred only from shared coordinates or materials. Construction,
+relocation, copy, institutional succession, destruction, abandonment, and social recognition provide
+evidence, but a typed continuity/split/merge event must decide whether the canonical id persists, forks,
+or leaves a predecessor/successor relationship.
+
+Destroyed/former sites should retain lineage and evidence even when they no longer qualify for active
+bounded-site compilation.
+
+##### Canonically unbounded sites cannot have a fully seeded finite topology
+
+Wave 1 Question 20 correctly requires the complete topology of a **bounded site** before exploration.
+But realm expansion creates places whose canon is infinite, indefinite, recursively generated, or larger
+than any finite graph:
+
+- an endless archive or maze;
+- a realm-spanning root network;
+- a dream city that always has another district;
+- a procedural afterlife with no final outer wall;
+- a fractal Breach domain;
+- a wilderness-like underworld containing many bounded complexes.
+
+Pretending to pre-generate its entire topology is impossible. Quietly rolling arbitrary new doors on
+entry would violate the coherence law.
+
+There are two legal representations:
+
+1. **Realm/journey representation:** the unbounded domain remains a realm, region, wilderness/urban
+   walk, or network that contains discoverable bounded sites. Question 20's full-topology rule applies
+   to each bounded site, not the entire realm.
+2. **Stable frontier representation:** if the unbounded domain itself is locally navigated room by room,
+   seed its topology grammar, invariants, recurrence/branch laws, origin/physics, stable explored graph,
+   and deterministic frontier commitments. Every materialized edge/node becomes permanent canon; the
+   unbounded frontier remains a lawful generative process rather than an already finite hidden graph.
+
+The second case is a true exception to “all topology exists before exploration” and requires explicit
+Wave 3/4/12 design. It must not become the default dungeon generator or an excuse to improvise finite
+sites door by door.
+
+##### Compilation scope is not canonical extent
+
+Even a finite city prison may be too large to render or fully materialize at once. Conversely, one room
+inside an infinite archive may be compiled in precise detail. The active plan is a **materialization
+window**, not the truth about how much site exists.
+
+This reinforces the already accepted distinction between canonical scope and realization resolution,
+but extends it to unbounded domains:
+
+- canonical domain says finite, indefinite, recurring, or unbounded and stores its laws;
+- stable materialized topology records everything already generated/observed/promised;
+- active compilation selects a bounded local slice with legal interfaces to latent or unbounded
+  frontiers;
+- renderer/DM context receives only that slice;
+- leaving the active window does not delete, reroll, or contract canonical extent.
+
+##### Recommended conceptual separation
+
+Use four provisional concepts, without freezing names or schemas:
+
+```text
+domain / substrate
+  owns space, topology, physics, extent, mobility, and material form
+
+site identity / lineage
+  owns canonical place identity, origin episodes, continuity, predecessors/successors,
+  and relationships among one or more domains
+
+institution / ecology / occupation
+  owns purpose or imperative, operators/populations, operating model, use, claims,
+  and may overlap other institutions on shared domains
+
+materialization window
+  owns the finite semantic/spatial/render/DM slice currently expanded;
+  never decides canonical extent or identity
+```
+
+Most ordinary places collapse these cleanly in practice: one jail identity, one building domain, one
+jail institution, one active local plan. The separation costs little until an exception needs it.
+
+##### Guardrails
+
+- do not mint a separate site for every claim, faction, or temporary use; an independent identity needs
+  persistent lineage/boundary/institutional meaning that predicts play;
+- do not force overlapping institutions to share one purpose lineage merely because they share cells;
+- distributed sites use explicit route/domain relationships rather than fake continuous geometry;
+- entity/site dual citizenship uses linked facets over one canonical identity, not duplicated nouns;
+- continuity/fork/merge is event-owned and provenance-preserving, never inferred from a name match;
+- former/destroyed sites keep lineage but need no active site program when nothing navigable remains;
+- unboundedness requires explicit canonical license and topology/frontier laws. Missing scope data is not
+  “infinite”;
+- ordinary bounded sites retain complete seeded topology before play;
+- stable-frontier generation stores versioned invariants and every committed edge/node; it cannot reroll
+  explored space;
+- materialization windows stay bounded and must expose honest frontier/route interfaces without
+  pretending the unseen extent is already rendered.
+
+##### Revised recommendation
+
+Lock the lineage-episode clarification together with this separation of **domain, site identity,
+institution/occupation, and materialization window**. Add a narrowly licensed unbounded/stable-frontier
+exception to Question 20 while preserving full pre-entry topology for ordinary finite bounded sites.
+
+This covers overlapping sacred/social/ecological places, distributed portal institutions, living
+entity-sites, destroyed/predecessor sites, Ship-of-Theseus continuity, and infinite realm domains without
+turning the ordinary hamlet jail into a four-record bureaucracy. Ordinary cases may compile these
+concepts into one compact bundle; exceptions keep them distinct.
+
+**Open follow-up:** should this final boundary/identity clarification accompany the accepted lineage
+model—especially the rules that overlapping institutions may share a domain, entity-sites use linked
+facets, canonical identity can outlive material fabric, and truly unbounded domains use realm/journey or
+versioned stable-frontier generation rather than pretending their complete topology is finite?

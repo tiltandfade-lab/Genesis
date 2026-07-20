@@ -14884,3 +14884,196 @@ ACCEPT: G2.1-CERT, G2.1-CLOSE, P2.12, G2.2-MECH
 
 Any id may instead be amended or sent to deep dive. After these dispositions, run the Wave 2 contradiction and
 material-follow-up audit; do not declare closure automatically.
+
+### 10.SWEEP.3 Rulings and plain-language G2.1 deep dive
+
+Adam accepts P2.12 and the G2.2 mechanical baseline, while finding the G2.1 certification and closure language too
+abstract. Those two questions remain open and are restated here without the P-level shorthand as the primary
+explanation.
+
+#### Recorded rulings
+
+- **P2.12 - accepted.** A fact has one canonical owner. Active rooms, site summaries, and cold records are bounded
+  projections/handoffs rather than three approximate worlds. Activation never rerolls established truth; safe
+  multiplicity may compact; touched/named/unique/damaged/promised/transferred/callback-eligible facts remain exact;
+  deterministic catch-up preserves due consequences without duplication or loss.
+- **G2.2-MECH - accepted for now.** A CrisisChain is a small directed objective/front/dependency graph over
+  existing owners, not a progress bar or copied simulation. Ordinary resolved actions create contribution and
+  consequence receipts; outcomes change concrete world state. Exact graph parameters may refine during its owning
+  design/spec work. All player-facing UI/presentation remains assigned to promoted Wave 10.
+
+#### G2.1-CERT in plain English - can the game reuse a good rule the DM invented?
+
+##### The real question
+
+Suppose the DM invents the turtle comms during one world, the engine successfully turns them into balanced,
+trackable mechanics, and play proves they work. What is allowed to remember and reuse that *mechanical idea*?
+
+There are four increasingly broad scopes:
+
+```text
+1. THIS EXACT THING IN THIS WORLD
+   The two turtle comms, their holders, history, art, damage, and callbacks remain permanent here.
+
+2. OTHER COPIES OR DESCENDANTS IN THIS WORLD
+   An artificer studies them, a faction steals the technique, or a later callback creates a related device.
+   Reuse requires an in-world reason; engine knowledge does not give NPCs knowledge.
+
+3. THIS PLAYER'S PRIVATE LOCAL TOOLBOX
+   The story-free mechanical pattern may be offered in another world belonging to the same player.
+   It stays on that player's device/profile and carries none of the original names, holders, or story.
+
+4. THE OFFICIAL/SHARED GENESIS TOOLBOX
+   The story-free pattern becomes available to other players or ships as part of the game/service.
+   This is a product rule, not merely one world's canon.
+```
+
+Scopes 1 and 2 are already accepted. The unresolved decision is how cautious Genesis should be about scopes 3 and
+4.
+
+##### Concrete turtle-comms example
+
+The exact turtle comms never leave their world. In another world, a reusable mechanic might become whispering
+coins, paired beetle pins, bone flutes, mirrored badges, or something newly meaningful there. What travels is only
+a generic recipe such as:
+
+```text
+two linked holders
+bounded communication cadence/range
+transfer, breakage, interception, and recovery rules
+C2 power and counterplay limits
+```
+
+The original turtles, shared escape, relationships, names, private jokes, and visuals do not travel.
+
+##### Why a private local toolbox is safer
+
+If an automatically tested recipe enters only this player's local toolbox:
+
+- no world/story data must leave the device;
+- a mistake affects only that profile and can be removed or rolled back;
+- the player can opt out or delete the pattern;
+- Genesis can test whether automatic reuse is useful before operating a shared rules service;
+- another player cannot receive a broken, private, infringing, or context-dependent invention.
+
+It still needs mechanical tests, story stripping, versioning, and rollback, but the trust boundary is small.
+
+##### Why an official/shared toolbox needs more caution
+
+Making a recipe available to everyone risks:
+
+- promoting an item that only appeared balanced in one unusual party/world;
+- leaking proper nouns, private jokes, user text, personal information, or licensed/copyrighted references;
+- spreading an exploit, infinite resource loop, impossible migration, or hostile no-counterplay mechanic;
+- flooding the library with near-duplicates and low-quality model improvisations;
+- changing other players' games because one model call was persuasive rather than proven.
+
+Early shared promotion therefore needs stronger automated tests plus human/hybrid review and explicit policy/consent
+if evidence ever leaves the device. In the best-case future, a narrow low-risk recipe family may earn automatic
+shared promotion after its test/rollback system proves reliable. High-impact world-changing rules and genuinely new
+mechanical primitives remain more tightly governed.
+
+##### Options without shorthand
+
+**Option A - world only.** Inventions persist and may spread causally inside their world, but never enter a local
+cross-world or shared toolbox. Safest and simplest; the system never learns reusable patterns across worlds.
+
+**Option B - private local learning first; official sharing later and more carefully (recommended).** The player's
+private local toolbox may automatically accept story-stripped recipes after strong mechanical tests. The
+official/shared toolbox initially requires stricter testing, privacy/IP/provenance checks, and human/hybrid review;
+automation expands only where it earns trust. Shared learning may remain a later production feature rather than a
+launch requirement.
+
+**Option C - automatically share every tested recipe.** Fastest global learning and the strongest no-human ideal,
+but one automated test suite becomes the only barrier between a single improvisation and product-wide rules. This
+is too risky as the starting posture.
+
+##### Cost and recommendation
+
+Option B has medium cost for a private local library and very high eventual cost for a shared service: recipe
+stripping, testing, versioning, deduplication, migrations, consent/privacy/IP rules, rollback, and library quality.
+The shared layer can be deferred without shrinking the core in-world invention system.
+
+**Recommendation:** choose Option B. Always preserve exact inventions in their world. Permit causal copying within
+that world. Design for an optional private local cross-world toolbox that can learn automatically after tests. Treat
+official/shared learning as a later, separately scheduled product capability with stronger safeguards.
+
+#### G2.1-CLOSE in plain English - what exactly are we agreeing to stop discussing here?
+
+##### Closing does not mean building or finishing
+
+Closing G2.1 would mean:
+
+> We have settled the governing rules for how an ordinary scene fact becomes important, persists, creates
+> callbacks, and supports DM-authored inventions. We can move on because remaining detail has an explicit later
+> owner.
+
+It would **not** mean:
+
+- the system is implemented;
+- schemas, thresholds, weights, UI, or performance budgets are finished;
+- the best-case platform must ship all at once;
+- future evidence is forbidden from reopening the ruling;
+- G2.2, the SceneTray, items/containers, workbench, migration, or build order are somehow answered.
+
+##### What G2.1 has actually settled
+
+The proposed closure would lock these principles:
+
+1. incidental facts are promoted lazily when play relies on them, not eagerly simulated forever;
+2. promotion has typed stages, owners, evidence, location/state, legal affordances, dependencies, and disposition;
+3. moving on never erases consequential canon; cooled facts retain history and viable callback stubs;
+4. the DM receives a selective callback hand and may create related throughlines without treating every noun as
+   reusable or inventing retroactive evidence;
+5. the DM remains genuinely inventive: it may synthesize exact helpful, hostile, or mixed-valence nouns/effects
+   inside earned C0-C4 authority;
+6. the engine validates mechanics, power, causality, custody, knowledge, persistence, visuals, and callbacks before
+   narration; it does not own exclusive ideation;
+7. use/adapt/compose/invent decisions preserve semantic intent and reuse established mechanics where honest;
+8. impossible proposals negotiate hard versus soft intent, may abstract/defer honestly, and may create only safe
+   declarative precedents - never AI-authored executable code;
+9. precedents remain exact world canon and widen their reuse only through explicit world and product gates;
+10. the best-case platform is documented, while implementation scope is reweighed later against production value,
+    schedule, latency, reliability, privacy, and infrastructure.
+
+##### What remains open, and who owns it
+
+| Remaining detail | Later owner |
+|---|---|
+| Exact SceneFact/receipt fields and storage layout | eventual SceneFact/semantic-compiler spec |
+| Exact thresholds, card counts, service horizons, salience weights, and callback budgets | Wave 9 DM cards plus implementation tuning |
+| Crisis objective/contribution mechanics | G2.2 and later spec |
+| Crisis/invention/player-facing presentation | promoted Wave 10 shared SceneTray |
+| Containers, exact loot instances, object interaction | P2.16 ruling plus Wave 5/items spec |
+| Declarative recipe editor, diagnostics, corpus, and certification harness | Wave 11 workbench |
+| Save migration, recipe versions, privacy/sharing, release gates | Wave 12 |
+| Which best-case slice actually ships and when | Wave 12 production/build authorization |
+
+Assigning a detail later is not forgetting it. The master questionnaire carries the obligation and the later wave
+must inherit the accepted G2.1 constraints.
+
+##### Options without shorthand
+
+**Option A - keep G2.1 open until schemas, UI, tests, performance numbers, and build schedule are all specified.**
+This sounds thorough but would swallow Waves 5, 9-12 and recreate the exact “lost the main renderer plot” concern.
+
+**Option B - close the governing design now, with explicit assignments and a reopen rule (recommended).** Finish
+the certification choice, run the contradiction/material-follow-up audit, then close G2.1 if no uncovered authority
+gap remains. Later waves specify their own pieces without asking Adam to re-decide the principles.
+
+**Option C - remove the invention/precedent work from G2.1 and leave only basic SceneFact promotion.** This would
+discard a system Adam identified as core vision and separate inventions from the persistence/callback rules that
+make them real.
+
+##### Recommendation
+
+Choose Option B. G2.1 has become deep enough to govern later work and deep enough that continuing implementation
+design here would delay the shared SceneTray and the main procedural compiler. Closure preserves every accepted
+rule, every later assignment, and an explicit right to reopen on contradiction.
+
+#### Questions now before Adam
+
+1. **G2.1-CERT:** choose Option B - exact/world inventions always persist; optional private local learning may
+   automate after tests; official/shared learning is a later, more strongly governed product capability?
+2. **G2.1-CLOSE:** choose Option B - after certification and contradiction audit, close the governing design and
+   route detailed schemas/UI/tests/build choices to their named later waves rather than keeping G2.1 open forever?

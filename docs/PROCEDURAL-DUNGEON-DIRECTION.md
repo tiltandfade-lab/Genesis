@@ -13052,3 +13052,188 @@ recommendation permits intelligent, frightening counters without letting the DM 
 response to success. If accepted, the next G2.1 follow-up returns to what the creative resolver does when it cannot
 compile the DM's intended mechanics without materially changing the concept, including when a proposed solution
 may become a reusable precedent.
+
+#### 10.G2.1.11 Ruling and follow-up - graduated counters accepted; what happens when creative intent will not compile?
+
+Adam accepts Option 3's graduated hostile-counter authority. Ordinary adaptive responses create friction, contest,
+risk, or new choices; local/temporary denial requires stronger explicit authority plus proportionate tells and
+real counterplay; hard or durable nullification requires preexisting canonical mechanics or C3-C4 authority.
+Individually smaller effects may not stack into an undeclared higher tier, and the world may not reactively scale
+merely because the player's tool or tactic succeeds.
+
+The next question reaches the failure boundary of the newly accepted semantic creative resolver. The DM may
+propose an exact artifact, hazard, technique, ritual, relationship effect, or hostile adaptation whose intended
+play cannot be expressed by the current effect vocabulary, whose requested power exceeds the envelope, or whose
+mechanics conflict with canonical truth. Replacing it silently with the nearest catalog item destroys the DM seat;
+narrating an uncommitted mechanic destroys engine authority. Genesis needs an explicit transaction for the space
+between those failures.
+
+##### Compile-failure options
+
+**Option 1 - reject-only.** If the proposal cannot compile exactly inside the current envelope and mechanics
+vocabulary, reject it and ask the DM to invent something else. This is mechanically clean and inexpensive. It
+also trains the DM toward safe catalog-shaped ideas, wastes strong concepts over small implementation gaps, and
+makes the breadth of AI invention mostly theoretical.
+
+**Option 2 - automatic nearest safe substitute.** The engine changes range, trigger, effect, item type, or play
+pattern until some legal implementation exists, then commits it without a second creative decision. This gives
+fast turns and few outright failures, but it is the precise semantic-drift failure the resolver exists to prevent.
+A relationship communicator may become a generic one-use spell token; a clever suppression chain may become an
+ordinary restrained condition; the mechanics validate while the invention's point disappears.
+
+**Option 3 - bounded transactional negotiation with honest abstraction and a governed precedent lane
+(recommended).** The proposal declares hard invariants and soft preferences. The compiler may adjust soft
+parameters within predeclared tolerance, but a material change to an invariant returns a structured failure before
+narration. The DM and compiler then choose among a small set of legal revisions, an explicitly provisional
+abstraction, deferral as a tracked obligation, a declarative runtime precedent when the generic evaluator can
+safely host it, or final rejection. Nothing consequential becomes canon until one route commits.
+
+##### Intent-preservation transaction
+
+The recommended transaction has these terminal states:
+
+```text
+COMPILED
+  Exact intent and mechanics compile inside the envelope.
+
+CONSTRAINED
+  Only declared soft preferences change inside accepted tolerance; invariants and play pattern survive.
+
+NEGOTIATION_REQUIRED
+  A hard invariant, authority limit, or canonical fact conflicts. Return the smallest useful reason
+  plus two or three materially distinct legal routes; the DM chooses, revises, or declines.
+
+ABSTRACTED
+  The fiction can be honored through an honest generic mechanical interface without pretending the
+  missing fine-grained behavior exists. The abstraction is visible in the receipt and has an exit path.
+
+DEFERRED
+  The concept remains an explicit unfulfilled creation/design obligation. The world may contain a
+  prototype, damaged component, research path, or promised reward only if that fictional state is itself
+  honest; the engine cannot narrate the unavailable completed capability.
+
+PRECEDENT_COMMITTED
+  A new declarative recipe is created from supported triggers, effects, scopes, costs, and owners.
+  It is data interpreted by a bounded evaluator, never AI-written executable code.
+
+REJECTED
+  No legal realization preserves enough intent and no honest abstraction/defer path is appropriate.
+  No item/effect is minted and narration must acknowledge nothing as completed canon.
+```
+
+The DM should distinguish **hard invariants** from **soft preferences** before compilation. For turtle comms,
+“two linked physical keepsakes held by these allies” and “enable recurring coordination” may be hard; exact range,
+number of uses, activation action, and recharge cadence may be soft within the C2 envelope. The engine can tune a
+soft range without another exchange. It cannot replace the pair with one generic consumable or remove recurring
+coordination and claim success.
+
+##### Failure reasons and negotiation shape
+
+The compiler should return compact typed reasons rather than a vague refusal:
+
+- `AUTHORITY_EXCEEDED` - the requested impact, reach, permanence, or valence exceeds the source envelope;
+- `CANON_CONFLICT` - the proposal contradicts established identity, custody, knowledge, topology, or other truth;
+- `MISSING_PRIMITIVE` - no supported trigger/effect/state operation expresses a hard invariant;
+- `ILLEGAL_COMBINATION` - supported primitives interact in a forbidden or unbounded way;
+- `POWER_OR_STACKING` - the composite exceeds rarity/tier/action/stacking limits;
+- `OWNER_OR_TARGET_GAP` - no canonical owner, eligible target, or persistence path can host the change;
+- `COUNTERPLAY_FAILURE` - a hostile proposal creates denial beyond its tell, scope, or response authority;
+- `REALIZATION_ONLY_GAP` - art/animation/presentation is missing but mechanics and canon can still commit through
+  a deterministic fallback; visual absence alone must not reject the invention.
+
+A useful failure response names the violated invariant and offers genuinely different paths, not three cosmetic
+versions of the same engine preference. For example:
+
+```text
+Requested: turtle comms work continuously across the entire realm with no cost (C2 reward).
+Failure: AUTHORITY_EXCEEDED — reach and permanence exceed C2.
+
+Route A: short range, several uses per rest; preserves frequent coordination.
+Route B: any distance, one message per dawn; preserves separation-spanning contact.
+Route C: begin a quest/progress path toward a C3 network; preserve the larger concept as an earned future.
+```
+
+The negotiation happens inside the DM/compiler turn and should ordinarily be invisible to the player. It receives
+a strict attempt/time budget so one brilliant but impossible proposal does not stall play. If no result commits,
+the DM narrates a different legal beat or an honest in-fiction incompleteness, never a system apology disguised as
+world lore.
+
+##### Honest abstraction
+
+Abstraction is not a license to fake unsupported simulation. It is appropriate when the intended player-facing
+choice can be represented by an existing generic owner even though detailed internals are absent. Examples:
+
+- a novel tracking charm may grant a bounded, source-specific bonus or opportunity on an established check rather
+  than pretending Genesis simulates a new scent network;
+- a ritualized relationship technique may mint a once-per-rest coordinated reaction through supported action and
+  condition primitives while its richer fiction remains Codex truth;
+- a complex enemy listening device may create a typed interception risk and evidence trail without simulating
+  radio propagation room by room.
+
+The receipt records `abstracts`, the promised semantic behavior, actual mechanical projection, limitations, and
+an optional upgrade/migration hook. The DM may not narrate reliable behaviors outside that projection. A later
+mechanic can migrate the instance without erasing its identity or history.
+
+##### Governed runtime precedents
+
+A runtime precedent is permitted only when the proposal is novel as a *recipe*, not when it requires arbitrary
+new engine behavior. It may compose registered triggers, scopes, costs, contests, resources, conditions, effects,
+owners, persistence operations, and termination rules into a new declarative pattern. It must pass the same band,
+stacking, counterplay, determinism, serialization, and replay validation as a catalog definition. The accepted
+recipe receives a stable id, version, source world, creation receipt, and explicit reuse scope.
+
+The runtime may never execute AI-authored JavaScript, formulas outside a bounded expression grammar, unregistered
+state mutation, or prose-as-rules. If the concept truly needs a new primitive, that is an engine/design gap. The
+resolver can abstract or defer it and capture the missing primitive for later authoring; it cannot manufacture a
+hidden code path during play.
+
+Whether a successful precedent remains unique to its instance, becomes a reusable pattern inside the current
+world, or graduates into the cross-world Genesis custom library is deliberately the next follow-up. Automatic
+global promotion would turn one model improvisation into product law without adequate evidence.
+
+##### Concrete traces
+
+**Turtle comms:** if paired identity, recurring coordination, and relationship provenance are hard invariants,
+the compiler can negotiate range/charges/recovery as soft parameters. If a supported communication trigger plus
+linked-set owner expresses the result, commit a declarative recipe. If “the shells understand emotional subtext
+and alter future NPC decisions” needs unavailable belief simulation, abstract the immediate player choice or defer
+that extension; do not claim an ordinary communication primitive implements it.
+
+**Adaptive suppression chain:** if the DM asks for “teleportation fails everywhere forever after one touch,” a C2
+envelope returns `AUTHORITY_EXCEEDED` and `COUNTERPLAY_FAILURE`. Legal routes might contest teleportation while
+the chain is attached, suppress it inside the holder's reach with a break/steal path, or escalate the concept into
+a C3 project. The engine must not silently turn it into generic movement reduction while retaining the dramatic
+description of total magical imprisonment.
+
+**Novel dungeon bargain:** the DM proposes that a door opens only when a traveler gives up a personally meaningful
+memory, and the loss should influence future dialogue. If Genesis can store a named memory/callback relation and
+apply a bounded social/knowledge condition, it may become a declarative precedent. If memory semantics are not
+supported, an honest abstraction might spend an established bond/resource and mint a visible callback obligation.
+The DM cannot narrate forgotten facts while the engine still supplies those facts normally to every future NPC
+and digest.
+
+##### Research, implementation, and maintenance filter
+
+Whitehead's declarative approach is especially relevant here: a constraint system must expose unsatisfiable intent
+rather than silently corrupt it. Tutenel's semantic `what` versus procedural `how` supports treating the DM's hard
+invariants as compiler inputs and realizing them through reusable classes/plans. Mixed-initiative systems support
+returning a small legal alternative set to the author rather than taking the creative choice away. The research
+does not establish safe runtime rules evolution; Genesis's no-executable-code boundary, replay determinism, and
+promotion governance are necessary product rulings.
+
+Option 3 has **high architecture cost**: invariant/tolerance schemas, typed diagnostic reasons, bounded internal
+negotiation, a generic trigger-effect evaluator, safe declarative expressions, receipt/version/migration support,
+honest abstractions, deferred obligations, and replay/stacking/counterplay validation. It also imposes a latency
+budget and needs failure fixtures for attractive concepts the engine cannot support. Its long-term payoff is the
+core vision Adam identified: inventive AI direction can grow beyond the prewritten catalog without turning world
+physics into untracked prose or forcing every surprise through a human-coded special case.
+
+Option 1 is far cheaper but shrinks invention toward the existing vocabulary. Option 2 hides failure but destroys
+trust. Option 3 makes unsupported creativity a structured conversation and preserves strong ideas as abstractions,
+future obligations, or safe data-driven precedents without pretending the engine can do what it cannot.
+
+**Question for Adam:** should compile failure use Option 3's bounded transaction: preserve hard invariants, tune
+only declared soft preferences automatically, negotiate material changes before narration, allow explicitly honest
+abstraction or deferral, and permit new runtime precedents only as validated declarative recipes over registered
+primitives - never AI-authored executable code? If accepted, the next G2.1 follow-up decides precedent scope and
+promotion: unique instance, reusable within one world, or eligible for the reviewed cross-world custom library.

@@ -14775,3 +14775,112 @@ automation, and final release thresholds against them.
    strained/failing state, then loud refusal if physical/canonical truth still cannot coexist?
 3. **P2.20:** accept Option C's initial acceptance portfolio - twelve named golden sites, eight adversarial traces,
    and deterministic + batch/property + human/play proof layers?
+
+### 10.SWEEP.2 Rulings - P2.16, P2.18, and P2.20 accepted; final pending sweep
+
+Adam accepts all three deep-dive recommendations:
+
+- **P2.16 - Option C accepted.** Commit exact unique/plot/key/magic/limited/relationship items before reveal.
+  Commit ordinary fungible supplies as owned bounded holdings/envelopes, allocate containers/locations before the
+  player resolves them, and instantiate exact stable copies deterministically only when interaction requires them.
+  Custody and quantity changes conserve the same holding; catalog presence never creates world inventory.
+- **P2.18 - Option C accepted.** Preserve hard truth, try lawful alternate realizations, adjust only genuine
+  preferences, use allowed external support/schedules/capacity responses, turn credible shortages into explicit
+  strained/failing/dormant/transformed state, and refuse the result with a useful diagnostic if physical or
+  canonical facts still cannot coexist. No prose patch may pretend an impossible site works.
+- **P2.20 - Option C accepted.** Wave 2's initial acceptance portfolio is twelve named golden sites, eight
+  adversarial transition traces, and three proof layers: deterministic/golden, batch/property, and human/play
+  readability. Wave 2 locks the cases and pass semantics; promoted Wave 10 and Waves 11-12 later calibrate final
+  renderer, performance, automation, corpus-scale, and release thresholds.
+
+#### Future-owner assignments
+
+- P2.16's holding/custody truth constrains Wave 5 containers/interactables, the item/economy system, P2.12
+  activation/compaction, and Wave 12 persistence/migration. Exact item-family reserve schemas wait for a build spec.
+- P2.18's preservation/degradation/refusal order constrains Wave 3's spatial solver, Wave 4 dependency solvability,
+  every later domain adapter, and Wave 11 unsatisfied-case fixtures.
+- P2.20's golden sites become inherited clay/golden inputs for promoted Wave 10 and Wave 11; Wave 12 owns final
+  numeric release gates and build authorization.
+
+#### Final pending Wave 2 sweep
+
+Four baseline dispositions remain before the contradiction/follow-up audit.
+
+##### G2.1-CERT - local learning versus shared product learning
+
+**Recommendation:** profile-local P3 patterns may earn automatic promotion after executable gates because the
+recipe and evidence remain on one player's device/profile. Product/shared P3 promotion additionally requires
+canon/provenance stripping, opt-in data policy where information leaves the device, privacy/IP checks, stronger
+adversarial/migration/rollback evidence, and initially human/hybrid review. Individual low-risk domains may later
+graduate to reversible no-human product promotion after the harness proves trustworthy; C3-C4 and new-primitive
+cases retain stronger review.
+
+##### G2.1-CLOSE - stop expanding the invention branch
+
+**Recommendation:** after G2.1-CERT is ruled, close G2.1's design baseline. The branch has settled promotion,
+memory/callbacks, typed related growth, creative authority, envelopes, hostile symmetry/fairness, item routing,
+semantic compilation, failure negotiation, precedents, and best-case production slices. Exact fields, thresholds,
+weights, certification metrics, and implementation sequence belong to later specs/Waves 11-12. Reopen only for a
+real contradiction or uncovered player-facing authority gap.
+
+##### P2.12 - active room, site summary, and cold state
+
+The same fact must not live as three copies that later disagree. The recommendation is one canonical owner plus
+bounded projections and explicit handoffs:
+
+```text
+ACTIVE ROOM
+  exact currently relevant actors, items, props, conditions, positions, interactions, and due events
+
+SITE AGGREGATE
+  group/population summaries, holdings, flows, operating state, inactive rooms, clocks, obligations,
+  promoted facts, promises, and consequences
+
+COLD RECORD
+  last resolved time/version plus the compact owner state and event/cadence inputs needed for
+  deterministic catch-up; not a second approximate world
+```
+
+Entering/activating expands only the relevant slice from canonical site/room/roster state and committed seeds; it
+does not reroll established facts. Actions write through to the actual owners immediately. Leaving compacts only
+safe multiplicity; touched, promised, named, unique, consequential, damaged, transferred, or callback-eligible facts
+remain exact. Reactivation applies due events/cadences in legal order and reconciles atomically/idempotently so
+people, supplies, threats, and obligations neither duplicate nor vanish.
+
+**Recommendation:** accept this owner/projection/handoff model. Exact storage schemas and performance limits defer
+to architecture and Wave 12; the ownership and no-loss/no-duplication laws close here.
+
+##### G2.2-MECH - implementation-neutral CrisisChain closure bundle
+
+The UI remains deferred to promoted Wave 10. The mechanical baseline can still be settled:
+
+- use a CrisisChain only for a sustained multi-actor/multi-system situation where several contributions and state
+  changes matter across more than one beat; ordinary checks, combats, and clocks do not automatically become chains;
+- represent the crisis as a small directed graph of objectives/fronts/dependencies/terminal states, not one scalar
+  progress bar or a copied simulation;
+- reference canonical actors, roles, positions, props, resources, conditions, hazards, clocks, and owners; never
+  copy them into crisis-owned shadow state;
+- ordinary actions/checks/events resolve first, then issue typed contribution/consequence receipts to eligible
+  objectives; fictional contribution cannot counterfeit action economy or a die result;
+- success, failure, delay, sacrifice, abandonment, and partial resolution change concrete world state, unlock/block
+  graph nodes, advance threats, consume resources, move actors, or create obligations rather than merely adding or
+  subtracting progress points;
+- simultaneous/helping/offscreen contributions require canonical availability, communication, timing, position,
+  and resources. Group aggregation is permitted only when individual identity is not consequential;
+- the DM authors connective meaning and pacing inside validated outcomes. The engine owns eligibility, rolls,
+  clocks, resources, receipts, terminal state, and persistence;
+- expose a renderer-neutral projection contract: active objectives/fronts, known stakes/tells, participants,
+  available handles, pressures, and recent consequences. Promoted Wave 10 decides whether those appear as tray
+  elements, cards, tracks, highlights, narration, or another controlled combination.
+
+**Recommendation:** accept this mechanical bundle and defer all player-facing CrisisChain presentation to promoted
+Wave 10. Exact graph size, UI layout, animations, and display density are not Wave 2 blockers.
+
+#### Final batch response requested
+
+```text
+ACCEPT: G2.1-CERT, G2.1-CLOSE, P2.12, G2.2-MECH
+```
+
+Any id may instead be amended or sent to deep dive. After these dispositions, run the Wave 2 contradiction and
+material-follow-up audit; do not declare closure automatically.

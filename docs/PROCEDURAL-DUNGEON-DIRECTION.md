@@ -10131,3 +10131,186 @@ truth, or quest progress evaporate.
 **Open follow-up:** should Genesis lock this distinction and, specifically, guarantee that a magnitude-19
 success against a low-tier reward container spends at least one of its two bounded reward spreads improving
 that material reward within the legal envelope?
+
+#### 10.11.39 Ruling — crit rewards must react to the situation's genuine anchors
+
+Adam locks the anchor-coverage requirement because the crit must feel reactive to the situation at hand.
+This ruling inherits the newer “only `20/20` creates extra persistent world mutations” boundary:
+
+- a magnitude-19 **Legendary** success applies its bounded reward spreads across distinct genuinely active
+  character-expression, story-objective, world-context, or material anchors where possible;
+- a `20/20` **Mythic** success uses its persistent lens cascade to cover every genuinely active reward lane
+  before deepening a lane twice;
+- neither tier fabricates a class, quest, world, or material connection merely to fill a slot;
+- target/method affinity matters: a locked low-tier treasure chest strongly licenses material reward, while
+  a plea made through an invoked deity strongly licenses character/faith expression;
+- every reward and lens retains both its causal anchor ids and its effect/reward adapter provenance so the
+  engine can validate that the DM's proposed payoff is actually about this action.
+
+This closes the prior anchor-coverage follow-up. Exact bounded-spread count and the full success table await
+final confirmation after the following calibration exercise.
+
+#### 10.11.40 Provisional calibration exercise — situational skill-crit spreads
+
+Adam asks for a varied set of skill rolls and an initial reward sketch to test whether the new bands react
+properly. These examples are deliberately provisional and should be amended from the discussion rather
+than treated as final outcome tables. They demonstrate the compositional rule; implementation must not
+hardcode these exact authored scenes.
+
+##### Exercise A — thieves' tools: the jailer's low-tier confiscation chest
+
+**Situation:** a rogue opens the jailer's confiscation chest while trying to recover prisoners' property.
+The chest contents are still soft, currently allocated as low-tier loot. Evidence suggests the jailer has
+been skimming valuables. Active anchors are the rogue's demonstrated lockcraft, the recovery/corruption
+objective, the reward-bearing chest, and the jail institution.
+
+- **20/1–15:** the chest opens silently and cleanly; tools survive; its ordinary allocated contents are
+  accessible. No trap or extra compartment is invented unless the contract already included one.
+- **20/16–18:** one bounded spread follows strongest affinity—normally improve one low-tier loot component
+  by one legal step, or conserve a resource/avoid an established lock consequence if that is more valuable.
+- **20/19:** improve one low-tier loot component, then expose a coded confiscation/payroll record or another
+  attached corruption lead. Material and objective/story anchors both receive an earned payoff; later room
+  rewards are not reduced to reimburse the crit.
+- **20/20:** the core chest success remains, while three to five persistent lenses cover the active anchors.
+  A coherent Mythic braid might permanently mark stolen property with its rightful owner's name, change the
+  rogue through an earned key/lock affinity, reveal the full confiscation network, and transform the jail's
+  restitution relationship. The exact effects must come from rolled lenses and typed owners, not this
+  example as a canned answer.
+
+##### Exercise B — Persuasion/Religion: the cleric pleads with Lathander's would-be bandit
+
+**Situation:** the cleric explicitly invokes Lathander while persuading a bandit to stand down. The party is
+investigating the bandit operation; townsfolk and the location can plausibly witness or inherit the event.
+Active anchors are cleric/faith expression, the bandit quest, the bandit as a person, and the local world.
+
+- **20/1–15:** the bandit stands down and accepts the best ordinary lawful appeal with an unmistakably holy
+  moment of excellence; no permanent light or forced personality rewrite occurs.
+- **20/16–18:** one bounded spread might win immediate cooperation, elicit one useful operational fact, or
+  grant safe passage through a bandit checkpoint—the strongest relevant payoff beyond standing down.
+- **20/19:** the bandit stands down, reveals the hideout, and provides a password/map/weakness or makes a
+  credible immediate introduction. Character expression and quest objective are both rewarded without
+  founding a shrine or permanently transforming local law.
+- **20/20:** the canonical full braid becomes legal: genuine repentance/person change, hideout revelation,
+  permanent Light of Lathander/place-law change, and the community's organic shrine/bond response, plus any
+  fifth coherent rolled lens. Each effect covers a live anchor and commits through its real owner.
+
+##### Exercise C — Survival: the ranger tracks a missing child after a raid
+
+**Situation:** a ranger follows a child's trail through a storm-damaged forest before raiders move on. The
+trail, elapsed-time pressure, local hazards, and raider objective are established. Active anchors are the
+ranger's tracking method, rescue objective, child/raiders, and forest/weather context.
+
+- **20/1–15:** the ranger finds and follows the correct trail as efficiently and safely as the ordinary
+  situation permits; the DM cannot use weather as a hidden reason the guaranteed success fails.
+- **20/16–18:** one bounded spread finds a safe shortcut, preserves time/supplies, detects the raider ambush
+  early, or identifies a useful secondary sign.
+- **20/19:** the party reaches the child before the next danger beat and also learns the raiders' direction,
+  numbers, camp clue, or a safe return route. Rescue and hunt/world navigation receive two relevant payoffs.
+- **20/20:** the rescue succeeds and the forest may permanently answer the ranger's act through rolled
+  person/place/bond/fate/topology lenses: a path for the lost could root here, the raider threat could break,
+  and ranger/child/community bonds could become mechanically real. Nothing demands that exact pastoral
+  shape; active anchors constrain the rolled cascade.
+
+##### Exercise D — Arcana: stabilize the crystal holding a town outside a hell realm
+
+**Situation:** the wizard uses a legitimate planar procedure and scarce reagents to stabilize the failing
+crystal. Terminal town loss was telegraphed as a possible failure. Active anchors are arcane method and
+reagents, the stabilization objective, the crystal/town population, and the hell-realm boundary.
+
+- **20/1–15:** the crystal stabilizes and the town is saved within the procedure's best ordinary envelope.
+  The result is not weakened merely because the threatened value was enormous.
+- **20/16–18:** conserve a reagent, restore an auxiliary ward, identify the failure's school/signature, or
+  gain a bounded future advantage in maintaining this exact system.
+- **20/19:** stabilize the crystal, restore a secondary protective function, and identify the saboteur,
+  stress route, or hell signature. Mastery and objective/world knowledge both spread without installing a
+  new permanent planar law.
+- **20/20:** the successful stabilization may permanently rewrite the boundary, seal or transform the
+  Breach, elevate the doer, break the hell threat, and bind the town to a new protection through three to
+  five typed lenses. This is the sole band allowed to cross the ordinary procedural envelope persistently.
+
+##### Exercise E — Athletics: hold the collapsing gate while refugees escape
+
+**Situation:** a fighter braces a failing gate long enough for a known group of refugees to pass while an
+enemy force closes. Active anchors are the fighter's physical method, the rescue objective, refugees and
+pursuers, and the gate/settlement defense.
+
+- **20/1–15:** the fighter holds the gate for the full declared rescue window with strength and control;
+  the promised group escapes.
+- **20/16–18:** avoid exhaustion/injury, save one established straggler, recover a trapped resource, or
+  leave the gate usable long enough for the party's own escape.
+- **20/19:** all refugees escape and two bounded spreads might save the named trapped guard while exposing
+  a counterweight route that provides immediate leverage against the pursuers. No supernatural monument or
+  permanent strength boon appears.
+- **20/20:** rolled lenses might permanently change the gate so it can never bar refugees, mark/elevate the
+  fighter, forge a civic bond, and break or redirect the pursuit threat. The settlement may memorialize the
+  act only through committed social events, not a narration-only epilogue.
+
+##### Exercise F — Medicine: treat the poisoned mayor during negotiations
+
+**Situation:** a healer has a real antidotal method but limited doses. The mayor's survival affects an
+active treaty; signs of a particular poisoner are present. Active anchors are medical method/resources,
+patient survival, treaty/poisoning investigation, and the mayor/city factions.
+
+- **20/1–15:** the treatment succeeds at the best ordinary level permitted by its method—stabilization or
+  cure according to the declared contract—and is administered expertly.
+- **20/16–18:** conserve a dose, shorten recovery, identify the poison family, or retain a clean sample.
+- **20/19:** cure/stabilize the mayor, produce an extra bounded treatment from the existing dose, and/or
+  identify a signature that advances the poisoning investigation. Patient, resource, and quest lanes
+  receive appropriate payoffs without creating a permanent supernatural immunity.
+- **20/20:** persistent lenses may create a new cure, permanently change the patient/healer, break the
+  poison threat, reveal the full conspiracy, or found an enduring medical bond/institution. The rolled
+  anchors and lenses determine which of these are legal; “found a hospital” is not automatic.
+
+##### Exercise G — Deception: enter a cult under a false identity
+
+**Situation:** a bard assumes an established cover identity to enter a cult archive. The cover has prepared
+documents and known risks; the objective is to locate a prisoner and records. Active anchors are the bard's
+covercraft, infiltration objective, false identity, cult hierarchy, archive, and prisoner.
+
+- **20/1–15:** the guard accepts the cover to the best ordinary extent of the check and grants the intended
+  access; the DM may not immediately negate it with an unearned second suspicion roll.
+- **20/16–18:** receive an escort credential, learn a useful protocol, bypass one later ordinary challenge,
+  or attract less scrutiny.
+- **20/19:** gain archive access plus a high-value hierarchy/password clue and an immediate route toward the
+  prisoner or records. The cover and objective both pay off without becoming magically true.
+- **20/20:** only now may the lie acquire persistent world force through rolled name, faction, bond,
+  knowledge, or fate lenses—the cult's prophecy might recognize the persona, the false name might gain
+  power, or a faction split might root around it. Such effects may create obligations as well as boons and
+  must remain causally tied to the declared deception.
+
+##### Exercise H — Investigation: search an apparently empty prison cell
+
+**Situation:** scratch marks and mismatched mortar establish meaningful uncertainty; an authored or soft
+discovery opportunity exists. The player searches for what happened to the prior prisoner. Active anchors
+are investigative method, the missing-prisoner thread, the cell/jail history, and any attached NPC facts.
+
+- **20/1–15:** find and correctly notice the best ordinary discoverable evidence—the hidden child's note,
+  scrape pattern, loose stone, or other actual packet—and avoid a false “you find nothing” crit.
+- **20/16–18:** correctly interpret one additional implication, preserve fragile evidence, or learn how the
+  hiding place was accessed.
+- **20/19:** uncover the evidence plus two bounded payoffs such as a precise identity/location lead and a
+  concealed tier-appropriate consumable or route clue. Story and practical/material lanes may both pay.
+- **20/20:** rolled lenses can cause the discovery to become a permanent story/world hinge—open an
+  impossible passage, restore a lost bond, release dangerous truth, or transform the place—only when the
+  evidence and active anchors can causally bear that result.
+
+**No-roll control:** if the same cell has no clues, no soft discovery opportunity, no meaningful uncertainty,
+and no method capable of producing information, the DM does not call an Investigation check. A natural 20
+cannot be farmed from empty simulation. The room's accepted every-room discovery opportunity should normally
+prevent purposeless emptiness, but whatever exists must belong to generation/canon before the check grants
+access to it.
+
+##### Initial skeptical notes for the exercise
+
+- Reward spreads must not become miniature unrolled lenses; 16–19 cannot smuggle permanent mutations in
+  through phrases such as “the guard will trust you forever” or “you permanently learn all locks.”
+- A high magnitude cannot add a consequence outside the declared target/method simply because that lane is
+  mechanically convenient.
+- “Two spreads” need not mean two unrelated prizes. They may be a causal pair—evidence plus its usable
+  interpretation—so long as each is real and the degree is visibly better.
+- Story rewards should first reveal/advance established facts. When they mint a future story card, it must
+  attach to current canon with a service horizon rather than remain an unpayable hook.
+- Material bumps need a shared `RewardEnvelope`; otherwise every caller will interpret “slightly better”
+  differently and the economy will drift.
+- Mythic examples above are possibility sketches, not menus or deterministic recipes. The openly rolled
+  lenses still choose the actual axes.

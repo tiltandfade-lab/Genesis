@@ -6,6 +6,24 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 lens behavior) — SELECT A PC; GET A SPEAKABLE TARGET LENS [Codex]
+
+This supersedes the working-goal pickup below without deleting it. Design/docs only: no implementation, CI,
+worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam closes F10.1b's visibility behavior: EngagementLens is collapsed until a PC is selected. Selection opens the
+derived lens and places a readable label beneath every displayed character so the player can tell the DM “cast
+firebolt on Goblin 2” or “charge and bash Goblin 1.” Generic labels are stable scene-local parser handles resolving
+to canonical entity ids, not invented NPC names; movement/reclustering cannot renumber survivors, and known-name
+substitution remains viewpoint-gated. The BattleMat stays authoritative for position and action legality.
+
+**Do next:** F10.1d asks what “in range” means before an action has been named, because melee, movement, weapon,
+and spell ranges differ. Codex recommends opening on all perceived relevant citizens with concise truthful tags
+such as engaged / move + melee / 60 ft / beyond movement, then highlighting legal targets and dimming blocked ones
+once the action is known. This preserves natural-language-first play without falsely promising that every visible
+target is legal for every verb. After the ruling, audit labels across reinforcements, transformation, hidden
+identity, death/escape, and scene re-entry; then proceed to Card J/K object inspection. Wave 10 remains open.
+
 ## ⭐ Latest (2026-07-20, Wave 10 target accepted) — CARDS G-L ARE THE WORKING GOAL [Codex]
 
 This supersedes the hybrid-suite pickup immediately below without deleting it. Design/docs only: no code, CI,

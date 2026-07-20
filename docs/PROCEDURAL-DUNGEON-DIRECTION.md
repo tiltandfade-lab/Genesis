@@ -16200,3 +16200,68 @@ procedural engine.
 F10.1c is closed at the **working-goal** level. Wave 10 remains **OPEN at F10.1b**: settle whether Card H's
 EngagementLens is contextual/on demand as recommended, then F10.3b's Card J/K inspection split and the remaining
 F10/P10/G10 follow-ups. No implementation or Fable design-to-spec handoff is authorized yet.
+
+### 11.5 F10.1b ruling - selected-PC EngagementLens with speakable target labels
+
+**Adam's ruling (2026-07-20):** the EngagementLens remains collapsed until the player selects a PC. Selection opens
+the lens and shows characters in range for that PC, with a readable label beneath every character. The purpose is
+not merely spectacle: the labels give the player unambiguous natural-language handles such as “cast firebolt on
+Goblin 2” or “charge in and bash Goblin 1 in the face.”
+
+This closes the default-visibility branch of F10.1b:
+
+- no selected PC -> lens collapsed to its unobtrusive reopenable state;
+- selected PC -> lens expands without replacing or becoming independent of the authoritative BattleMat;
+- the selected PC remains visually anchored, while relevant cast members are composed into readable relationship/
+  elevation positions derived from their current board citizens;
+- every figure in the lens receives a legible speakable label beneath it;
+- a generic label such as `Goblin 2` is a scene reference that resolves to a stable canonical entity id. It is not
+  a new NPC name and must not change because figures reorder, move, enter another range band, or the lens reclusters;
+- a real name known to the viewpoint may replace the generic descriptor, while hidden identity and knowledge gates
+  remain intact;
+- the DM/parser resolves the player's wording to that entity id and validates the requested action against the
+  authoritative combat/map state. The lens never makes an illegal action legal.
+
+The decision fits the research-derived projection law: one canonical state may have a task-specific derived view,
+provided the projection retains identity/provenance and does not become a competing simulation. The EngagementLens
+is therefore an index into the same citizens and receipts, not a new encounter roster.
+
+#### Implementation and maintenance consequences
+
+- **Selection/lens state: low-medium.** PC selection, deselection, character switching, drawer opening, turn
+  changes, death/incapacitation, and scene exit need deterministic open/collapse transitions without camera churn.
+- **Target projection: medium-high.** Relevant cast, distance/reach, movement, line of sight, elevation, cover,
+  hidden state, allegiance, and action economy already have owners; the lens must consume their answers rather than
+  reimplement approximations.
+- **Speakable labels: medium.** Labels need scene-stable numbering, known-name substitution, collision avoidance,
+  enlarged-text behavior, controller/touch focus, screen-reader equivalents, and parser aliases. Save/load and
+  callbacks must preserve entity identity without falsely making a scene-local number part of world canon.
+- **Dynamic updates: medium.** Movement, summoning, transformation/guise changes, death, escape, reinforcements,
+  and range changes must update composition without relabeling surviving citizens or visually teleporting the
+  player's referent.
+
+#### F10.1d - what does “in range” mean before the action is named?
+
+Selecting only the PC does not identify one range rule. From the same square, a fighter might reach Goblin 1 with
+a melee attack, reach Goblin 2 only after moving/charging, target Goblin 3 with a bow, and target Goblin 4 with
+firebolt but not with a shorter spell. Three viable interpretations remain:
+
+1. **Show every currently perceived relevant character, with truthful relationship tags.** Labels might read
+   `Goblin 1 · engaged`, `Goblin 2 · move + melee`, `Goblin 3 · 60 ft`, and `Goblin 4 · beyond movement`. After the
+   player states an intent, the engine validates the exact action and can highlight legal targets or explain the
+   blocker. This preserves natural-language-first play and is the recommendation.
+2. **Show only targets for a selected action.** The player must choose Firebolt, Longbow, Charge, or another action
+   before the lens knows whom to display. This produces the cleanest legal target list but quietly adds a conventional
+   action-menu workflow in front of speaking to the DM.
+3. **Show anyone reachable by at least one currently legal action.** This opens immediately and filters more than
+   option 1, but “in range” may imply that the player's intended action works when only some unrelated action does.
+
+**Recommendation:** option 1. On PC selection, open a stable speakable cast view with concise truthful relation/
+distance tags. When the player's action becomes known—through an optional action hover or the submitted natural-
+language intent—the engine changes emphasis, not identity: legal targets brighten; illegal targets remain visible
+but dim with a short reason. That supports “firebolt on Goblin 2” without forcing an action-menu detour and without
+allowing the lens to promise legality before it knows the verb.
+
+Wave 10 remains **OPEN at F10.1d**. After the pre-action range population is ruled, audit label numbering across
+reinforcements, transformations, hidden identities, and scene re-entry before returning to F10.3b's Card J/K object-
+inspection split. No implementation is authorized.

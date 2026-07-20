@@ -207,6 +207,16 @@ surfaces, and scalable battlefield composition—without canonizing their genera
 ratios, typography, individual geometry, or unresolved interaction behavior. They are a convergence goal and
 comparison corpus, not final acceptance captures or permission to implement.
 
+## EngagementLens selection and speakable-label ruling (Adam, 2026-07-20 — additive)
+
+> "yea, it should collapse until a PC is selected, then it should appear and show who is in range for that character with a label under each character that way it will make it easier for the player to say to the DM I want to cast firebolt on goblin 2 or I want to charge in and bash gablin 1 in the face"
+
+The EngagementLens is normally collapsed. Selecting a PC opens it as a derived action-and-targeting aid populated
+from the authoritative SceneTray. Every displayed character receives a readable speakable label beneath the
+figure, allowing natural-language references such as “Goblin 2” to resolve to the intended scene citizen. The
+lens does not invent a second cast, position system, or combat authority. Exact pre-action range semantics and
+generic-label lifecycle remain follow-up decisions in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.5.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

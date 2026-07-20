@@ -15892,3 +15892,124 @@ marker/object is focused.
 Wave 10 remains **OPEN**. Resume at **F10.1**, then follow every material branch through P10.3-P10.7, G10.2,
 P10.9, and P10.12. Do not declare Wave 10 complete, begin Wave 3, or invoke the Fable design-to-spec gate until all
 P10.0-P10.12, G10.1-G10.2, and generated follow-ups are exhausted and Adam explicitly closes the wave.
+
+### 11.2 Full-shell correction - chat right, icon rail left, compact information drawers
+
+**Adam's ruling (2026-07-20):** isolated renderer cards are insufficient. Wave 10 must evaluate every candidate
+inside Genesis's real in-session shell. The game favors Disco Elysium's persistent, highly legible conversation
+over the BG1/BG2 model: chat belongs on the right in a translucent container; character-information icons belong
+on the left; opening character information must not replace the whole screen; and the primary design target is a
+desktop or horizontal-tablet aspect ratio.
+
+This changes the shell direction that Wave 10 must eventually hand to a build spec:
+
+```text
+default wide shell
+  left:   narrow character/action/map/journal/menu icon rail
+  center: SceneTray / PreAlpha BattleMat as the visual hero
+  right:  persistent DM conversation + pinned composer
+
+character-reference state
+  left:   icon rail + compact Character drawer
+  center: reframed SceneTray; EngagementLens collapses if necessary
+  right:  unchanged readable conversation
+```
+
+The older built `IN-SESSION-UI.md` three-zone orientation—persistent status sidebar, narration as center hero,
+slide-in information panel on the right—remains an honest record of the current implementation. It is **not the
+future Wave 10 target**. No code changes are authorized while this design wave remains open.
+
+#### Chest correction - cheap geometry before symbolic fallback
+
+Adam correctly identifies the ordinary chest as a poor marker-only example. It belongs in the inexpensive
+`FACED_BOX` construction class:
+
+- a rectangular body and simple lid own footprint, scale, collision, cover if applicable, world light, and shadow;
+- sprite-derived face textures supply identity on the visible front, side, and top/lid surfaces;
+- stateful geometry may rotate the lid for open, separate it for broken, and apply a looted/damaged binding without
+  minting a new object;
+- the prototype may derive the side/top treatment from one sprite, but an eventual tiny face atlas avoids stamping
+  a front latch or perspective cue identically onto every face.
+
+This does not abolish semantic markers. It sharpens F10.3's routing law: **if a noun has an honest cheap primitive
+recipe, use it.** Reserve markers for objects whose shape, state, or scale cannot be represented cheaply without
+lying, and reserve cards/narration for nonlocal or relational facts. A chest is cheap; a coiled astrolabe made of
+moving rings may begin as a marker plus sprite inspector; a portcullis needs blocking geometry regardless of art.
+
+#### Wide-shell candidate proportions and behavior
+
+The first candidate proportions are taste targets, not final numeric gates:
+
+| State | Rail | Character drawer | Central scene | Right chat |
+|---|---:|---:|---:|---:|
+| Default | about 5% | closed | about 64-66% | about 29-31% |
+| Character open | about 5% | about 20-22% | about 43-45% | about 29-31% |
+
+The right surface interprets “15% transparency” as approximately **85% opaque / 15% translucent**, not 15%
+opaque. A smoked near-black vellum fill plus a local text scrim lets scene light breathe through without placing
+variable map contrast directly behind letters. Large comfortable narration, relaxed line height, short measure,
+internal feed scrolling, and a pinned composer are non-negotiable. Avoid expensive glossy backdrop blur unless a
+measured prototype proves it necessary; opacity and a subtle gradient are cheaper and more predictable.
+
+The board camera owns a **safe presentation rectangle** for every shell state. Opening chat or a drawer must refit
+or reframe the projected scene so no usable tactical cell, selected citizen, known exit, or current hazard sits
+under UI. Large maps may zoom or pan within that safe rectangle, but transparency is never permission to make the
+player play through text.
+
+The left rail provides compact character identity/status plus Character, Actions, Map, Journal, and Menu access.
+The open Character drawer is a field dossier rather than a replacement screen: concise identity, HP/AC/conditions,
+compact abilities and key resources, plus Sheet/Inventory/History tabs with internal scrolling. Full detail can
+remain available inside those tabs, but the drawer does not try to show every proficiency, possession, spell, and
+history paragraph simultaneously.
+
+On constrained landscape widths, only one secondary information surface should expand at once. Opening Character
+collapses EngagementLens to a slim reopenable handle before shrinking the map or chat below readability. Closing
+the drawer restores the previous lens state. Exact minimum resolutions, pixel widths, and tablet breakpoints remain
+P10.10/P10.12 measurements rather than guessed law.
+
+#### Full-shell taste cards - still discussion evidence
+
+| Card | State tested | Initial read |
+|---|---|---|
+| [E - Full shell, chat right](../ui-sketches/mock-frames/procedural-dungeon/taste-card-e-full-shell-chat-right.png) | Left icon rail + authoritative board + expanded EngagementLens + persistent translucent right chat; textured-box chest on the map. | **Recommended default-shell candidate.** The game reads as conversation with a living tactical scene rather than an isolated map or dashboard. |
+| [F - Compact Character drawer](../ui-sketches/mock-frames/procedural-dungeon/taste-card-f-compact-character-drawer.png) | Character selected; compact dossier opens left of the reframed board; chat persists; EngagementLens collapses. | **Recommended information-state candidate.** It preserves play context, though exact drawer density and duplicate portrait treatment need refinement. |
+
+The cards' invented fighter, statistics, prose layout, icon art, combatants, and dungeon remain noncanonical. The
+chest demonstrates a representation class, not final chest art. Card F deliberately exposes a likely refinement:
+the rail portrait and drawer portrait need not both remain prominent.
+
+#### Implementation and maintenance cost
+
+- **Chest `FACED_BOX`: low per-class runtime cost, medium content-contract cost.** One reusable geometry recipe is
+  cheap; consistent dimensions, pivots, face mappings, state bindings, anchors, and fallback validation require a
+  governed asset contract.
+- **Persistent right chat: medium layout/accessibility cost.** It needs stable text measure, contrast testing over
+  every realm/light state, internal scrolling, streaming stability, focus order, and a pinned input across resizes.
+- **Safe-rectangle board reflow: medium-high renderer/UI integration cost.** Every rail/drawer/lens state changes
+  the legal camera rectangle and must preserve selection, viewpoint safety, and readable cell scale.
+- **Compact drawers: medium responsive-content cost.** Character, Actions, Map, and object inspection need
+  progressive disclosure, internal scrolling, controller/touch focus, and mutual-exclusion rules without losing
+  handlers or canonical state.
+- **Maintenance risk:** independently hard-coded percentages will drift. One shell layout state should publish the
+  current safe rectangle to the renderer and use shared minimum-width/priority laws; the renderer must not infer
+  layout by reading arbitrary DOM dimensions as game state.
+
+The downloaded procedural-layout papers do not decide whether chat belongs on the right or how transparent it
+should be. They do reinforce the semantic/construction split behind the chest correction and the requirement that
+presentation compile canonical state without deleting or falsifying it. The shell proportions remain a taste,
+legibility, device, and gameplay-capture decision for P10.12.
+
+#### Follow-ups refined by the shell correction
+
+- **F10.1a - full-shell baseline:** Are Cards E/F the correct family—left rail, central scene, persistent right
+  chat, compact left drawers, and automatic EngagementLens collapse while a drawer is open?
+- **F10.1b - persistent lens behavior:** With no drawer open, is EngagementLens normally expanded in combat as in
+  Card E, or normally collapsed and opened only when the player wants the selected-actor tableau?
+- **F10.3a - cheap primitive threshold:** Accept the rule “use honest cheap geometry before a marker,” then define
+  the first primitive classes after chest/body/lid, wall/block, column/cylinder, door/plane, and hazard/decal.
+- **F10.3b - object-inspector home:** Because chat now owns the right column, should marker/object inspection use
+  a small board-anchored card, a compact left drawer, or a temporary structured segment inside the chat flow?
+- **F10.6a - wide-device proof:** Capture default, drawer-open, large-map, split-party, and enlarged-text states at
+  the chosen desktop and minimum horizontal-tablet viewports before locking ratios or breakpoints.
+
+Wave 10 remains **OPEN at F10.1a**. These shell cards refine rather than close P10.1/P10.4-P10.6/P10.10/P10.12.

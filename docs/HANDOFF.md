@@ -6,6 +6,32 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 full shell) — CHAT RIGHT + COMPACT CHARACTER DRAWER [Codex]
+
+This supersedes the Wave 10 batch-1 pickup below without deleting it. Design/taste-card work only: no code, CI,
+worktree, LFS checkout, merge, push, or Fable design-to-spec handoff was authorized.
+
+Adam corrected two assumptions. First, ordinary chests should not fall to semantic pucks: a chest is cheap
+stateful `FACED_BOX` geometry with sprite-derived face textures, body/lid footprint, lighting, and shadows. Second,
+isolated renderer frames are not enough. Future Wave 10 candidates must live inside the game shell: narrow character
+and menu icons on the left, the SceneTray/BattleMat in the center, and persistent highly legible translucent DM chat
+on the right. Character information opens as a compact drawer rather than taking the screen. Desktop and horizontal
+tablet are the design targets.
+
+Taste Card E tests the default shell (left rail / central board + EngagementLens / right chat). Taste Card F opens
+the compact Character dossier, reframes the board, and collapses EngagementLens before sacrificing scene or chat
+legibility. Both are recorded in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.2 and saved under
+`ui-sketches/mock-frames/procedural-dungeon/`. Rough card ratios and 85%-opaque/15%-translucent chat are candidates,
+not final numeric gates. The board must receive a UI-safe presentation rectangle; transparent chat may not cover
+usable cells. `IN-SESSION-UI.md` now carries a no-build supersession notice so its current-shell record is not
+mistaken for the future Wave 10 target.
+
+**Do next:** resume at **F10.1a**. Ask Adam whether Cards E/F establish the correct full-shell family. Then decide
+whether EngagementLens is expanded by default or on demand (F10.1b), the first cheap primitive classes (F10.3a),
+where object inspection lives now that chat owns the right (F10.3b), and exact wide-device proof viewports
+(F10.6a). Continue through every earlier F10/P10/G10 branch; Wave 10 remains open until the full audit and Adam's
+explicit closure.
+
 ## ⭐ Latest (2026-07-20, Wave 10 batch 1) — PRE-ALPHA BATTLEMAT + ENGAGEMENT LENS [Codex]
 
 This supersedes the Wave-10-opening pickup below without deleting it. The lane remains design/taste-card work only.

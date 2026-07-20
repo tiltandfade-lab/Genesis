@@ -165,6 +165,18 @@ is explored as a derived companion lens, not presumed accepted as a second autho
 first-round taste cards are recorded in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.1. Their generated layouts,
 combatants, text, and UI details remain discussion evidence rather than canon.
 
+## Full in-session shell and chest ruling (Adam, 2026-07-20 — additive)
+
+> "i think chests would be easy enough to actually render on the map, it's just a rectangular cube with the sprite texture applied to each face."
+
+> "and ok, these screens work as isolated screens, but what about with the actual UI for the rest of the game? we are going Disco Elysium over BG1&2 so, chat to the right, easily legible, in a transparent bg container so the type should be able to be visible even on large battle maps, maybe it gets a 15% transparency or something like that. and icons on the left for character info, and we don't want character info taking up the whole screen when the tab is selected, let's assume this is a desktop game or a horizontal tablet game. so that aspect ratio should be designed for."
+
+Wave 10 visual evaluation must therefore use the complete in-session shell rather than isolated renderer frames.
+The working target is left icon rail, central scene, persistent readable translucent chat on the right, and compact
+information drawers that preserve the scene. Chests route to cheap textured box geometry before marker fallback.
+Taste Cards E/F and the still-open responsive/layout questions are recorded in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.2. Their invented content and exact proportions remain noncanonical.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

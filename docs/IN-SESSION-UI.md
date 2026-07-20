@@ -11,6 +11,17 @@ inputs:
 
 # In-Session UI Redesign — Build Spec
 
+> ## ⚠️ WAVE 10 DESIGN-SUPERSESSION NOTICE (2026-07-20 — no build authorized)
+>
+> This document remains the accurate build record/specification for the current in-session shell. Promoted
+> procedural-design Wave 10 has reopened the **future** shell orientation: a narrow left icon rail, the SceneTray /
+> PreAlpha BattleMat as the central visual hero, persistent highly legible translucent DM conversation on the
+> right, and compact left information drawers that do not replace the scene. That direction supersedes this spec's
+> persistent-status-left / narration-center / slide-in-panel-right orientation **for the next visual design**, but
+> does not authorize code changes or invalidate the existing implementation. Do not execute the new direction until
+> Wave 10 closes and produces a replacement implementation spec. Authority and taste cards:
+> `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.2.
+
 > ## ⚠️ ADDENDUM (2026-07-01, REV 2) — VISUAL FIDELITY: PORT THE MOCKUP EXACTLY
 >
 > **The first build (branch `feat/in-session-ui`, commit `0e09128`) was structurally right but diverged

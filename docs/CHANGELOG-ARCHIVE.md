@@ -14,6 +14,44 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-09 (later) — Realm-key expansion (+168 creatures) · SPRITE-TRANSITION T1–T4 · item sheets
+
+**Added**
+- `docs/REALM-KEY-EXPANSION-ROSTER.md` (APPROVED) — NPC/monster additions for the re-keyed realms
+  (chrome/gloom/suburb/lost-world/ash + cosmic/bright-kingdom passes; Pink Cult, Cindermarked cult,
+  Collector, gremlin realm-bleed pair, Zeal adepts, game-logic-being NPCs).
+- **Stat wave landed:** 168 new creatures to MM standard in `dev/model-qa/realm-bestiary-draft.json`
+  (19 Sonnet author→critic batches + the frontier-authored U0 weird dozen; `gen-realm-bestiary --check`
+  clean at **1,475 creatures across 11 realms**; PROVISIONAL pending Adam red-pen).
+  `data/realm-bestiary.js` regenerated at this close.
+- **SPRITE-TRANSITION locked + T1–T4 built** (`docs/SPRITE-TRANSITION.md`): creatures → 2D sprites
+  (OpenAI ImageGen sheets), 3D keeps trays/architecture; T2 `build/gen-sprite-sheet-manifests.py`
+  (181 sheets / 4,316 cells, slug-collision policy) + `slice-sprites.py --manifest-v2`; T3
+  `data/sprite-registry.js` (4,316 entries, 100% monster join coverage, redline overlay seam); T4
+  theater sprite-billboard channel in `figureFor` (10/10 harness, kill switch, base discs unchanged).
+- Sprite-sheet index expansions: expansion E1/E2 sheets per re-keyed realm (~173 creature prompts) +
+  **Item sheets from all 11 realm loot tables (571 items, object-icon template)**.
+- `docs/ASSET-SYNC.md` — 3D/heavy assets are request-on-demand (partial clone + sparse-checkout);
+  sprite-corpus backup gap flagged.
+
+**Changed**
+- DESIGN registry: sprite reversal recorded; MODEL-FOUNDRY re-scoped to trays/props/architecture;
+  SPRITE-SHEETS un-parked; ARCHITECTURE gains the Sprite Channel & Registry entry (wiki recompiled).
+- `docs/REALM-KEY-EXPANSION-STATS-SPEC.md` corrected to the real d8/8-row flavorTable contract.
+
+**Fixed**
+- Draft-JSON indent churn (integrator wrote indent=1; restored to indent=2 — true wave diff is
+  11,712+/1− by histogram). Recovered two commits knocked off-branch by a worktree-discipline slip
+  (executor worked in the session tree; both restored from the object store, re-verified).
+
+**Deferred**
+- T5 gloom vertical slice + tagging pilot (gated on Adam's first sheet PNGs); `item` kind in the v2
+  parser/registry; Pink-Cult + gloom demand-ladder faction-clock specs; hoverboard buff proposal;
+  Adam's red-pen on the 168.
+
+**Verification:** check-manifest OK · realm-wiring 78/0 · dm-events 70/0 · social 97/0 ·
+theater-sprites 10/0 · sprite-registry 6/0 · sprite-pipeline all-pass. Known pre-existing reds
+(digest-diet 58/1, creature-determinism grep-gate) unchanged, not from this branch.
 ## 2026-07-09 (later still) — HQ-8: npc-life writers stamp location (Adam's two rulings closed)
 
 Adam ruled both HQ-review ledger items in-session: **(a)** settlement **population estimates** are

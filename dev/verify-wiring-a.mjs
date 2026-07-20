@@ -444,10 +444,24 @@ console.log("\n--- 13. HQ2-2: koCheckWake wired into advanceClock (transition wi
   pc3.sheet.ko = { stable: true, cause: "test", at: { day: c3.day, min: c3.min }, wakeDay: c3.day + 5, wakeMin: c3.min };
   win3.passTime("montage"); // 1440 min — not yet past a 5-day-out wake
   check("13c-pre. one montage short of wakeAt leaves the PC still KO'd", pc3.sheet.ko !== null, JSON.stringify(pc3.sheet.ko));
-  for (let i = 0; i < 5; i++) win3.passTime("montage"); // now far past wakeAt
+  // HQ3-C2 makes an INTERRUPTED montage burn only a rolled partial window (restInterruptMinutes:
+  // 360-1080 of 1440), so a fixed montage count cannot guarantee crossing a 5-day-out wakeAt under
+  // an unlucky rest-risk stream (the 2026-07-19 CI red: 6 montages, several interrupted, clock still
+  // short of wakeAt — the wake CORRECTLY hadn't fired). Montage until the clock actually crosses
+  // wakeAt (bounded: worst case all-interrupted needs 20; koCheckWake fires inside the crossing
+  // passTime via advanceClock, per 13b) — E21's real claim, "crossing wakeAt wakes exactly once."
+  const wakeAtAbs = pc3.sheet.ko.wakeDay * 1440 + pc3.sheet.ko.wakeMin;
+  let guard13c = 0;
+  while (guard13c++ < 40) {
+    const cc = win3.clockOf(w3);
+    if (cc.day * 1440 + cc.min >= wakeAtAbs) break;
+    win3.passTime("montage");
+  }
+  const c13c = win3.clockOf(w3);
+  const crossed13c = c13c.day * 1440 + c13c.min >= wakeAtAbs;
   const wokeLedgerCount1 = (w3.ledger || []).filter(e => e.type === "outcome" && e.data && e.data.kind === "ko-wake").length;
-  check("13c. montage far past wakeAt wakes exactly once", pc3.sheet.ko === null && pc3.sheet.hpCur >= 1 && wokeLedgerCount1 === 1,
-    JSON.stringify({ ko: pc3.sheet.ko, wokeLedgerCount1 }));
+  check("13c. montage far past wakeAt wakes exactly once", crossed13c && pc3.sheet.ko === null && pc3.sheet.hpCur >= 1 && wokeLedgerCount1 === 1,
+    JSON.stringify({ crossed: crossed13c, ko: pc3.sheet.ko, wokeLedgerCount1 }));
   win3.passTime("montage"); // a second pass after already-woken must NOT re-fire (sh.ko already null)
   const wokeLedgerCount2 = (w3.ledger || []).filter(e => e.type === "outcome" && e.data && e.data.kind === "ko-wake").length;
   check("13c2. a subsequent passTime after wake does not re-fire ko-wake", wokeLedgerCount2 === 1, `count=${wokeLedgerCount2}`);

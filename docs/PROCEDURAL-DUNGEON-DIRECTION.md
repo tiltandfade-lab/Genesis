@@ -16833,3 +16833,86 @@ renaming migration. It prevents both permanent `Goblin 47` clutter and continuit
 Does Adam accept Option C? If so, test the final label edge cases for same-description collisions and secret
 identity changes; if no new policy choice appears, close the label branch and return to F10.3b. Wave 10 remains
 **OPEN**; no build is authorized.
+
+### 11.13 F10.1l ruling and label audit - rooted callbacks earn observed names, jokes remain aliases
+
+**Adam's ruling (2026-07-20):** accept Option C. A rooted unnamed citizen returning after its local combat-label
+scope receives a stable viewpoint-safe callback descriptor drawn only from observed facts. The old combat handle
+remains a historical/contextual alias. After a proper name is learned, the player may still jokingly call Varka
+`Goblin 2`; resolving the reference is mechanical, while interpreting the joke and Varka's response is the DM's
+social/narrative job.
+
+The cross-scope promotion contract is:
+
+- only a citizen that crossed the accepted continuity-rooting boundary earns a durable callback label; an ordinary
+  unrooted mook's local number expires with its label scope;
+- the callback descriptor uses known distinguishing evidence, role, action, relationship, or provenance—such as
+  `Aqueduct Envoy`. It never invents an unseen scar, secret rank, true species, or hidden allegiance;
+- if a learned proper name becomes available, it becomes the primary display label. Callback descriptors and old
+  local handles remain historical aliases for parser, recap, journal, and DM context;
+- player-coined nicknames may also resolve as contextual/party-language aliases when the DM or an explicit party
+  naming event establishes them. They never silently replace the canonical proper name or prove a hidden fact;
+- the semantic resolver identifies the referent first. The DM then decides whether using `Goblin 2` for Varka is
+  affectionate, teasing, dismissive, insulting, confusing, or irrelevant in the current relationship and scene;
+- if aliases collide across old scopes, current scene, recent discourse, selected target, and explicit qualifiers
+  may disambiguate. If more than one live referent remains plausible, the interface asks a short clarification
+  rather than guessing;
+- if two rooted unnamed citizens lack unique observed traits, use honest known provenance plus the historical
+  handle where needed—`Aqueduct Goblin (formerly Goblin 2)`—until play supplies a better distinction. Do not
+  fabricate one for elegance;
+- a secret replacement/disguise preserves the player's perceived label without transferring omniscient identity.
+  An intent addressed to `Varka` targets the visible referent the player believes to be Varka; the UI and DM may
+  not confirm whether the canonical Varka is actually present.
+
+These rules reuse the accepted canonical identity, rooting, callback-deck, viewpoint-knowledge, and semantic-
+resolver owners. The additional implementation cost is **moderate**: promoted display aliases, scoped historical
+aliases, collision/discourse resolution, party-nickname receipts, and belief-safe target mapping. They do not
+require permanent generic numbering or eager persistence of unrooted actors.
+
+The label audit finds no remaining material policy fork. Reinforcements, hidden reveal, flee/return,
+transformation, summon/split/merge, learned names, recurring unnamed callbacks, player jokes, collisions, and
+secret replacements all follow the same identity/viewpoint/alias law. F10.1k-F10.1l and the speakable-label branch
+are **closed** at Wave 10 design level. No build is authorized.
+
+#### F10.3b - where does full object inspection live?
+
+The deferred Card J/K decision now returns. In plain English: when the player selects a chest, lever, corpse,
+evidence trace, turtle communicator, or other scene object, should its full state and interaction controls cover
+part of the board or live in the persistent right conversation rail?
+
+- **Option A - Card J full board-anchored inspector:** identity and object remain spatially immediate, but the card
+  can cover tactical cells, routes, enemies, and evidence; collision-aware placement becomes difficult across
+  large fields, drawers, lens states, tablet widths, and clustered objects.
+- **Option B - Card K only in the right rail:** preserves every board cell and gives large readable content, but
+  the object can feel spatially detached and simple hover/focus questions must travel across the screen.
+- **Option C - tiny Card J spatial preview plus Card K full inspector (recommended):** hover/focus shows a small
+  collision-aware board tag with object name, obvious state, distance, and selection link. Selection opens the
+  complete inspector in a pinned focus slot in the right conversation rail. Only a resulting inspection/action
+  receipt enters the scrolling transcript; changing focus does not pollute conversation history.
+
+Chest example under Option C:
+
+```text
+board tag
+IRON CHEST · Closed · 5 ft
+
+right-rail focus inspector
+[canonical chest sprite]
+Closed · Heavy iron · Belongs to the watch
+Visible evidence: corroded lock; fresh drag marks
+[Examine] [Open] [Pick Lock]
+```
+
+Unknown traps, contents, ownership, or evidence remain absent until viewpoint knowledge permits them. Both
+surfaces derive from one canonical `ObjectFocusProjection`; neither owns object state, and every interaction emits
+the same validated `ActionIntent`/receipt used by prose input. On a small horizontal tablet, the board tag may
+collapse to icon/name while the right-rail inspector remains the accessible full surface.
+
+Option A has **high spatial-layout maintenance** and repeated occlusion QA. Option B has **medium shell/scroll
+cost** but weaker board linkage. Option C has **medium-high initial UI integration** because two coordinated
+projections exist, but lower long-term ambiguity: the preview stays intentionally tiny, the full controls have one
+stable home, and a single projection contract prevents drift.
+
+Does Adam accept Option C? If so, follow into inspector persistence, simultaneous object/character focus, and
+interaction-vs-conversation behavior until no material F10.3b branch remains. Wave 10 remains **OPEN**; no build is
+authorized.

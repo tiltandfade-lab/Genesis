@@ -6,6 +6,24 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 callback labels) — THE ENGINE KNOWS VARKA; THE DM HANDLES “GOBLIN 2” [Codex]
+
+This supersedes the local-label pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.1l Option C. Only rooted continuity-bearing unnamed citizens promote beyond a local label scope,
+using stable viewpoint-safe descriptors drawn from observed facts. Historical combat handles remain contextual
+aliases; a learned proper name becomes primary. The player may still jokingly call Varka `Goblin 2`: the engine
+resolves the referent, while the DM determines its social meaning and response. Player nicknames may become party-
+language aliases without overwriting canonical identity. Collisions ask clarification; secret replacement/disguise
+targets the perceived referent without leaking hidden truth. The complete label audit finds no remaining material
+fork, so F10.1k-F10.1l and the label branch are closed.
+
+**Do next:** return to F10.3b. Codex recommends Option C: a tiny collision-aware Card J board tag for spatial
+identity plus Card K's complete object inspector in a pinned right-rail focus slot. Focus changes do not pollute the
+chat transcript; only inspection/action receipts enter history. Follow into persistence, simultaneous object/
+character focus, and interaction-vs-conversation behavior.
+
 ## ⭐ Latest (2026-07-20, Wave 10 speakable labels) — LOCAL NUMBERS STAY STABLE; CANONICAL IDENTITY OUTLIVES THEM [Codex]
 
 This supersedes the route-ranking pickup below without deleting it. Design/docs only: no code, dependency

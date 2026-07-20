@@ -302,6 +302,17 @@ display while the active generic alias remains usable. Generic combat numbers do
 Exact lifecycle, save/replay, summon/split, cost, and later-callback follow-up rules live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.12.
 
+## Rooted callback-label and player-joke ruling (Adam, 2026-07-20 — additive)
+
+> "yeah of course, i mean the player might goof off and call them goblin 2 even after learning varka but that's the DM's problem"
+
+A rooted unnamed citizen returning beyond a local tactical scope receives a stable viewpoint-safe callback
+descriptor until a learned proper name becomes primary. Historical combat handles and established player
+nicknames remain resolvable aliases without overwriting canonical identity. The engine identifies the referent;
+the DM owns the social and narrative meaning of calling Varka `Goblin 2`. Ambiguity and secret-identity behavior
+must never leak hidden canon. The completed label audit and returned Card J/K inspector question live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.13.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

@@ -102,7 +102,7 @@ Wave 1 needs at least these conceptual hardness classes:
 |---|---|
 | Established canon | Lore, premise, observed fact, or accepted promise that cannot be rerolled |
 | Seeded canon | Rolled and stored site truth fixed before exploration |
-| Deterministic latent | Stable id, seed, invariants, and legal expansion space; details not yet expanded |
+| Deterministic latent | Stable id, independent seed, versioned commitment capsule/invariants, and legal expansion space; details not yet expanded |
 | Soft assignment | Unobserved low-authority choice that may reconcile within stored constraints |
 | Observed/acted-upon canon | A fact the party perceived, mapped, used, or relied upon; changes only by event |
 | Presentation | DM/UI/render wording or view that exposes only licensed truth |
@@ -110,7 +110,22 @@ Wave 1 needs at least these conceptual hardness classes:
 “Latent” means unresolved detail, never nonexistent structure. It cannot authorize a future reroll that
 changes established adjacency, capacity, clues, identities, promises, or causes.
 
-### 2.3 Provenance envelope
+### 2.3 Cross-version commitment capsules
+
+A seed is deterministic only inside the exact algorithm, table, compiler, and mod environment that
+consumes it. Durable latent canon therefore retains a content-addressed commitment capsule: stable id and
+independent seed; generator/contract version; source/mod id, revision, and hash; selected result/recipe;
+the normalized data-only semantic fragment needed for recovery; explicit invariants and legal variation;
+authority/provenance; and observation hardness.
+
+Explicit canonical facts are stored as values. Latent semantic commitments reference deduplicated
+immutable capsules. Only truly uncommitted presentation may use newer code without migration, and it may
+not alter semantic truth. Hashes verify but do not reconstruct. Semantic upgrades require explicit,
+deterministic, idempotent, provenance-preserving migrations; missing sources fall back to last-known-good
+data or an honest invariant-preserving placeholder, never a reroll. Saves may retain normalized mod data
+already referenced by commitments but never execute snapshotted historical mod code.
+
+### 2.4 Provenance envelope
 
 Every rolled, derived, promoted, or reconciled fact needs inspectable provenance. An illustrative
 provenance envelope may retain:
@@ -139,6 +154,7 @@ boundaries.
 | `DomainSubstrate` | Space, topology, physics, extent, mobility, material form, and explicit links to other domains | Site continuity or institutional ownership | World/site generation + topology | Spatial compilers, events, renderer |
 | `SiteIdentity` | Stable canonical identity, continuity, predecessor/successor relationships, linked domain facets | Automatic equivalence with one building, institution, faction, or current claimant | Site/world generation + lineage events | All site stages |
 | `SiteLineage` | Ordered origin episodes and, only when required, a small source/copy/graft/split/merge graph | Assumption that every origin was intentional construction; silent current-use overwrite | Canon/premise/origin-family rollers + history | Roster, history, discovery, identity projection |
+| `CommitmentCapsule` | Deduplicated versioned semantic fragment, selected recipe/result, source hash, independent seed contract, invariants, legal variation, recovery data | Executable historical generator/mod code or permission to rewrite old semantic truth | Every latent-commitment producer + compiler | Materializers, migrations, diagnostics, persistence |
 | `PurposeLineage` | Intended purposes and subordinate purposes belonging to intentional or designated episodes | Natural origin, behavioral imperative, ecological role, current use, or belief | Intentional construction/designation episodes | Roster, history, room programs |
 | `ConstructionIdentity` | For intentional episodes: commissioner, original operator, doctrine, design tradition, intended users/scale, substrate, era, consequential workforce | Universal origin grammar; present occupants or renderer repair | Intentional construction-context pass | Operating model, architecture, history |
 | `InstitutionEcologyOccupation` | Purpose or imperative, operators/populations, operating model, current use, and typed overlapping claims | Domain identity or automatic site-lineage merger | Purpose/ecology/occupation passes | Roster, fronts, resources, current projection |
@@ -457,6 +473,8 @@ Before an ordinary finite bounded site becomes explorable, seeded canon includes
 - complete mathematical doors/connections topology, including typed ordinary and secret edges;
 - semantic homes and invariants sufficient to prove that every required function, route, repeated
   child, protected variation, and critical card can exist legally.
+- versioned commitment capsules or explicit stored values sufficient to preserve every selected semantic
+  fact across table/compiler/mod changes.
 
 Exact geometry may remain latent only if later compilation cannot change connection, capacity, semantic
 home, clue, promise, or access invariants. A secret door can be hidden from the party while already
@@ -481,6 +499,11 @@ Within fixed invariants, later deterministic expansion may select:
 
 Approach-time expansion is materialization, not a new unconstrained roll. Once observed, acted upon,
 mapped, or promised, a fact hardens. Later alteration requires a recorded world event.
+
+New code may improve uncommitted wording, camera, lighting, rendering, and nonconsequential decorative
+expression around old truth. It cannot use a current table or algorithm to replace the selected semantic
+result in an old commitment. Independent per-record/component random streams prevent unrelated content
+insertions from cascading through latent records.
 
 ### 7.5 Capacity-first active stack and turn service
 
@@ -880,6 +903,9 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
 - Original, intervening, current, and believed functions never overwrite one another silently.
 - Established lore/premise outranks rolls; rolls outrank downstream convenience.
 - Every reconciliation, promotion, mutation, and observation has provenance.
+- A seed without its versioned commitment envelope is not durable latent canon; explicit facts and
+  selected semantic recipes survive source/compiler/mod changes through stored values or data-only
+  content-addressed capsules.
 
 ### Operating model and variation
 
@@ -968,6 +994,7 @@ These are semantic contradiction fixtures, not finished content packages or geom
 | Small fixed shell with overfull program | Reconciliation ladder, combination/externality/annex license, honest failure | Silent overlap, fake door, dropped capability, repeated reroll-until-fit |
 | Multi-entrance site | Effective access depth preserves risk/reward despite shortcuts | Raw room index used as difficulty; prescribed narrative order |
 | Empty/quiet repeated cells | Automatic read, focused search, systematic sweep, stable opportunities | Forty-click container play or literally meaningless facade rooms |
+| Old save with latent cell after table/compiler/mod change | Same selected room function, note/person/event invariants, legal discovery methods, improved presentation allowed, missing-mod diagnostic | Seed-only retcon, executable old-mod dependency, full eager materialization, or silent replacement payoff |
 
 Later waves add residential college, ordinary/boutique inn, regional trade, population, group-count,
 and other fixtures only when their owning decisions close. They are not retroactively treated as Wave 1
@@ -1030,7 +1057,7 @@ Wave 1 defines the semantic promises below and deliberately leaves their realiza
 | Card schema, legal-home scoring, thin hand, coverage/slack, service horizons, fronts, DM digest/knowledge partition | **Wave 9** |
 | Graph/local-plan/player-view choice, interim renderer, search/knowledge accessibility presentation, visual leakage | **Wave 10** |
 | Authoring workbench, roller editing, diagnostics, preference teaching, mod vocabulary UX | **Wave 11** |
-| Persistent lineage/domain/operational-state schemas, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, capacity-first performance/latency/soak gates, build order | **Wave 12** |
+| Persistent lineage/domain/operational-state schemas, content-addressed commitment capsules, mod/source compatibility, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, capacity-first performance/latency/soak gates, build order | **Wave 12** |
 | Baldur's-Gate-like automatic inventory and equipment UI | Separate future inventory design after adoptable-system audit |
 | Full bounded-place settlement/population/casting/economy architecture | Future place/settlement/NPC/economy work, constrained by later closed waves |
 

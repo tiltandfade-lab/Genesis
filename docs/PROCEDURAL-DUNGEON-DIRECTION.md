@@ -8419,3 +8419,128 @@ code improve uncommitted presentation; and require explicit migrations for seman
 and promises exactly, new presentation code may improve how unobserved detail is expressed, and save
 growth is controlled by deduplicated data-only commitment capsules rather than full eager generation or
 permanent bundles of every old engine?
+
+#### 10.11.17 Ruling — versioned commitment capsules preserve latent canon
+
+Adam accepts the recommendation as a necessary persistence protection he would not otherwise have
+considered. This explicitly clarifies Wave 1 Questions 9, 13, and 20 wherever a stable seed alone might
+have been read as durable cross-version determinism:
+
+- a bare seed is deterministic only inside the exact algorithm/table/mod environment that consumed it
+  and is never sufficient evidence of a permanent latent promise;
+- explicit canonical facts—including topology, adjacency, identities, selected functions, causal roots,
+  promise invariants, selected recipes, and observed consequential detail—are stored as values;
+- latent semantic commitments store stable id, independent seed, generator/contract version, source and
+  content hash, selected result/recipe id, normalized data-only semantic fragment, hard invariants, legal
+  variation envelope, authority/provenance, and observation hardness;
+- truly uncommitted presentation may use newer renderer, wording, camera, lighting, and decorative code
+  until observation, provided it cannot alter semantic truth;
+- content hashes verify identity but do not replace recoverable semantic data;
+- normalized capsules are content-addressed and deduplicated so repeated instances reference one
+  immutable recipe/version fragment rather than copying or eagerly expanding it;
+- new generator/table behavior applies to new commitments; semantic changes to old commitments require
+  explicit deterministic, idempotent, provenance-preserving migration;
+- per-record/component random streams prevent unrelated source insertions from cascading through latent
+  records;
+- missing/corrupt sources use last-known-good capsules or honest invariant-preserving fallbacks and never
+  silently reroll another fact;
+- saves retain mod id/version/hash/namespaces and referenced compiled data-only fragments, but never
+  execute snapshotted historical mod code;
+- Wave 12 must prove old-save expansion across table/compiler updates, migration chains, mod removal,
+  save/capsule growth, and corruption recovery.
+
+The latent-determinism-across-versions skeptical follow-up is exhausted.
+
+#### 10.11.18 Skeptical follow-up 6 — committed depth is not current accessibility
+
+Wave 1 Question 20 says challenge and reward should rise noisily with effective access depth rather than
+raw room order. The skeptical audit found that one `depth` value cannot remain authoritative after the
+party opens a shortcut, earns faction permission, destroys a barrier, repairs a lift, learns a secret
+route, changes size/form, or uses a Breach.
+
+Suppose a vault was allocated as difficult because reaching it normally required crossing three guarded
+zones and opening a master lock. The party later befriends the guards and repairs a freight lift directly
+to it. The vault is now easy for this party to reach. Its already committed guardian and treasure should
+not be moved, weakened, or devalued merely because the party earned a better route.
+
+##### Option 1 — one live effective-depth value
+
+Continuously recompute depth and let challenge/reward follow it. Navigation remains current, but opening a
+shortcut can trigger reactive enemy/reward relocation or scaling. It punishes player ingenuity and turns
+the world into an obvious adaptive treadmill. **Rejected.**
+
+##### Option 2 — one frozen original-depth value
+
+Keep the allocation depth forever and use it for everything. Committed placement is protected, but the
+engine, DM, pursuit, travel, reinforcements, and route UI now pretend the repaired lift does not exist.
+**Rejected.**
+
+##### Option 3 — three access views with separate authority
+
+Track three related but non-interchangeable views:
+
+```text
+commitment access profile
+  the route/barrier/risk/resource assumptions used when challenge, reward, and obligations were allocated
+  stored with the committed content as provenance; never rewritten by later convenience
+
+canonical current access profile
+  what routes actually exist and are usable now under current topology, barriers, permissions,
+  accommodation, hazards, and world state
+
+observer-known usable access
+  the routes a particular party, faction, or actor knows about and can actually exploit
+  derived from canonical access + knowledge + capabilities + permissions
+```
+
+Each profile is a typed route-cost vector rather than only a room number:
+
+- travel/time and path length;
+- barriers, keys, skill gates, permissions, and required methods;
+- expected exposure, attrition, and resource consumption;
+- accommodation/form constraints and party-splitting requirements;
+- reliability, timing windows, one-way risk, and escape options;
+- uncertainty where the observer's knowledge is incomplete.
+
+A friendly depth band may be derived for allocation, DM summaries, or UI, but the vector and its authority
+remain inspectable.
+
+##### What changes and what does not
+
+- Opening the freight lift changes canonical and known current access. It does not rewrite the vault's
+  commitment profile or relocate its treasure/guardian.
+- Discovering a secret passage changes the discovering party's known view. The passage may already have
+  existed in canonical access while remaining absent from other observers' views.
+- A collapse changes canonical current access through an event. It may strand committed content; the
+  engine does not teleport that content elsewhere to maintain a curve.
+- A key, spell, alliance, disguise, or transformation can make a route cheaper for one party. That is an
+  earned advantage, not a signal to restore difficulty through scaling.
+- Guards, factions, predators, and operations may react causally to a newly opened route through events,
+  schedules, fronts, and knowledge. Reinforcing a breached corridor because guards observed it is world
+  response; spawning stronger guards because the player's shortcut lowered a number is reactive scaling.
+- New event-created content may use the then-current world state as its own commitment context. Existing
+  content keeps the context under which it was committed.
+
+##### Concrete examples
+
+- **Prison:** a smuggler reveals a laundry chute past intake. The party bypasses two checkpoints. The
+  warden does not level-scale, but guards who discover the breach may seal or watch it.
+- **Mine:** repairing a lift makes the deep pump chamber quick to revisit. Its committed water pressure,
+  hazards, and repair cache stay put; travel and evacuation calculations use the lift.
+- **Contested grove:** druid permission makes a guarded route socially cheap for the party while refugees
+  still cannot use it. Canonical geometry is shared; observer-usable access differs by claim and identity.
+- **Breach prison:** a one-way planar edge may be fast inward but dangerous or impossible outward. A
+  scalar BFS depth cannot represent that asymmetry.
+- **Giant site:** a human tunnel is shallow for human squatters but unusable to the dragon. Accommodation
+  domains create actor-specific current access without rewriting the vault's allocation history.
+
+##### Recommendation
+
+Adopt Option 3. Use the commitment access profile only to justify and preserve allocated challenge,
+reward, and obligation placement. Use canonical current access for world mechanics. Derive observer-known
+usable access for the party and other actors. Changes happen through topology, knowledge, permission,
+capability, or state events; committed content never moves or scales merely to restore its former depth.
+
+**Open follow-up:** should these three views replace a single effective-depth authority—and do you agree
+that an earned shortcut is allowed to make committed content genuinely easier, while only causally aware
+world actors may respond rather than the engine secretly rebalancing it?

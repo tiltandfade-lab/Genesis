@@ -6,6 +6,36 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 exact-cell ruling + repository research) — MECHANIZE TACTICAL TRUTH; KEEP THE DM CREATIVE [Codex]
+
+This supersedes the exact-tactics audit pickup below without deleting it. Design/research/docs only: no code,
+dependency installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts exact `SpatialPlan` cells as the intended release combat authority because per-square DM approval
+would make battle drag when routine movement and tactical legality can resolve mechanically. The built 12-zone
+model remains current code until replacement, then becomes a derived accessibility/text/small-screen/degraded
+fallback. Non-combat trays may remain representational. This preserves the DM seat for open-ended intent,
+invention, ambiguous semantic compilation, opposition, consequences, and narration over validated mechanical
+truth rather than making the DM a slow cursor-validation service.
+
+Adam corrects the earlier auto-Dash proposal: normal movement is incrementally spendable, but continuing beyond
+it requires the player to explicitly select a legal Action/Bonus Action/resource source. The engine must never
+silently choose or spend that source. F10.1e and the payment half of F10.1f are closed.
+
+The repository scan recommends no imported tactical engine. Build a Genesis-owned `TacticalGridKernel` from
+`SpatialPlan`; a tiny permissively licensed priority queue is the strongest likely direct dependency. EasyStar.js,
+PathFinding.js, and rot.js are prototype/reference candidates; Foundry dnd5e is a strong structured target/template
+schema reference; navmesh/agent systems are deferred because they would create a competing spatial authority; GPL
+OpenXcom/Wesnoth are behavioral references only. The nine downloaded procedural papers reinforce preserving the
+canonical topology and compiling explicit constraints; none provides D&D tactical law or chooses the interface.
+All detail, links, costs, and the future bakeoff fixture are in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.7.
+
+**Do next:** ask F10.1g: before Dash is selected, show only currently affordable cells, or also show a dim locked
+outline of cells that a legal Dash could unlock? Codex recommends the locked planning preview; selecting it opens
+the source chooser but cannot move or spend. Then resolve warnings/undo for hazards and opportunity attacks,
+stable lens-label lifecycle, Card J/K inspection, and every remaining Wave 10 branch before explicit closure and
+Fable readiness.
+
 ## ⭐ Latest (2026-07-20, Wave 10 exact-tactics audit) — REPRESENT THE WORLD; DO NOT ABSTRACT AWAY COMBAT [Codex]
 
 This supersedes the selected-PC lens pickup below without deleting it. Design/research/docs only: no code, CI,

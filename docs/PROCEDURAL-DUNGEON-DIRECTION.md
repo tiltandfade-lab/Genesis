@@ -16426,3 +16426,85 @@ Wave 10 remains **OPEN at F10.1e**. If exact cells are accepted, immediately fol
 unambiguous second-tier destination auto-spends Dash without a confirmation, and how the chooser behaves when
 multiple Dash sources or hazards/reactions make the cost consequential. Then return to label lifecycle and F10.3b.
 No implementation is authorized.
+
+### 11.7 F10.1e ruling and F10.1f expansion - exact cells accepted; movement stays mechanical
+
+**Adam's ruling (2026-07-20):** exact-cell combat is worth the larger program. Requiring the player to ask the DM
+to approve every ordinary position and move would make battle unacceptably slow when the engine can resolve those
+facts mechanically. The exact BattleMat should therefore own ordinary movement and tactical legality. Adam also
+corrects the proposed XCOM-like auto-Dash behavior after comparing it to *Baldur's Gate 3*: the player may spend
+the character's normal movement allotment, but continuing beyond it requires explicitly selecting a legal Action
+or Bonus Action source first. The interface may not silently choose or spend that source.
+
+This **closes F10.1e** at the Wave 10 design level:
+
+- exact `SpatialPlan` cells, elevation, occupancy, and footprints become the intended release combat authority;
+- the built band/lane model remains current code until the replacement lands, then becomes a derived
+  accessibility/text/small-screen/degraded projection rather than a competing source of truth;
+- the selected-PC EngagementLens remains a cinematic, speakable, distance-labelled projection;
+- non-combat SceneTray adapters may remain representational where exact geometry has no player-facing value;
+- routine movement, routes, range, line of sight/effect, cover, target legality, and ordinary resource payment
+  resolve locally through deterministic mechanics and receipts. The DM need not approve each square;
+- the DM remains essential for open-ended intent, authored inventions, ambiguous semantic compilation, contextual
+  rulings, consequences, opposition, and narration. Mechanical tactical truth creates a firm surface for the DM's
+  invention rather than replacing the DM seat.
+
+#### F10.1f movement-payment ruling
+
+Movement is an incrementally spendable allowance, not itself an Action. At turn start, every cell reachable with
+the actor's remaining Speed is mechanically available. Moving partway reduces the remaining allowance and
+recomputes reachability. Crossing beyond that allowance requires the player to choose a legal extension source,
+for example `Dash - Action`, `Cunning Action: Dash - Bonus Action`, or another feature with its actual resource
+cost. Only after that explicit choice does the engine enlarge the spendable movement budget. A destination click
+must never auto-select among those sources or silently consume the only Action/Bonus Action.
+
+This closes the **payment** half of F10.1f. It deliberately leaves one presentation question open: whether cells
+that would become reachable after a legal Dash should be hidden until the player selects Dash, or shown beforehand
+as a dim locked planning preview that opens the source chooser without committing movement.
+
+#### Existing-system research - borrow primitives and contracts, not another game's engine
+
+The July 20 repository scan considered direct adoption, selective borrowing, schema study, and behavioral
+reference separately:
+
+| Candidate | What it offers | Genesis disposition |
+| --- | --- | --- |
+| [`mourner/tinyqueue`](https://github.com/mourner/tinyqueue) | A very small ESM binary-heap priority queue; ISC license; no runtime dependency tree. | **Best direct-adoption candidate** beneath a Genesis-owned bounded Dijkstra/A* kernel. The queue is generic and does not compete with `SpatialPlan` or combat law. Pin/vendor only after a build spec and license notice review. |
+| [`prettymuchbryce/easystarjs`](https://github.com/prettymuchbryce/easystarjs) | MIT browser-oriented A* with weighted tiles, per-point costs, avoided cells, directional entry rules, diagonals, and optional sliced calculation. | **Prototype/bakeoff candidate**, especially for route-to-hover-cell behavior. It is endpoint pathfinding over a 2D numeric grid, not a complete reachable-area, elevation, footprint, reaction, or action-economy kernel. Its old package architecture and extra heap dependency make direct adoption less attractive than the concepts. |
+| [`qiao/PathFinding.js`](https://github.com/qiao/PathFinding.js) | MIT grid library with A*, Dijkstra, breadth-first, bidirectional, and jump-point variants. | **Algorithm oracle/reference**, not the default runtime choice. Its broad fixture set is useful, but searches mutate grid node state and require cloning/reset discipline; its packaging and published-release cadence are old. |
+| [`ondras/rot.js`](https://github.com/ondras/rot.js) | BSD-3-Clause roguelike toolkit with A*/Dijkstra and several 2D field-of-view algorithms in classic-browser and module builds. | **Visibility/path reference and bakeoff candidate.** Its current path implementations assume unit edge cost, and its FOV models do not by themselves establish 3D line of effect through Genesis volumes. Do not import the whole toolkit merely to obtain one algorithm. |
+| [`foundryvtt/dnd5e`](https://github.com/foundryvtt/dnd5e) | A mature structured 5e item/spell data model, including separate affected-target and geometric-template records for entities, allies/enemies, points, cones, lines, spheres, cylinders, cubes, emanations, and distances. Software is MIT; SRD content is CC BY 4.0, with other assets carrying their own notices. | **Strong schema/reference candidate**, not a runtime dependency. Adapt the separation of `target.affects` from `target.template` to Genesis vocabulary and provenance, with an explicit license/attribution audit before copying any implementation or data. |
+| [`donmccurdy/three-pathfinding`](https://github.com/donmccurdy/three-pathfinding), [`isaac-mason/recast-navigation-js`](https://github.com/isaac-mason/recast-navigation-js), and [`Mugen87/yuka`](https://github.com/Mugen87/yuka) | Active MIT navigation-mesh and agent-AI tooling. | **Defer for the exact-cell core.** A navmesh generated beside `SpatialPlan` would create a second geometric authority and complicate deterministic cells, areas, and save state. Yuka may later inform enemy decision layers after tactical law exists. |
+| [`OpenXcom/OpenXcom`](https://github.com/OpenXcom/OpenXcom) and [`wesnoth/wesnoth`](https://github.com/wesnoth/wesnoth) | Mature turn-based movement, path-cost, occupancy, visibility, turn-resource, and AI behavior in shipped games. | **Behavioral research only.** Their GPL C++ code and different spatial/rules models make code adoption inappropriate. Study interaction laws and fixtures; do not lift implementation. |
+
+The research recommendation is a Genesis-owned **`TacticalGridKernel`** compiled from `SpatialPlan`, with no
+parallel navmesh or imported combat state. A bounded weighted Dijkstra flood should produce the exact reachable
+set and predecessor map for the current movement budget; route preview may use the same predecessor data or a
+deterministic A* query. A tiny generic priority queue is the only likely direct dependency. The kernel's adapters
+must own elevation transitions, difficult terrain, occupancy/footprints, doors, known hazards, diagonal policy,
+and movement modes. Visibility and line of effect need Genesis volume/elevation fixtures rather than an unmodified
+2D roguelike FOV rule. Foundry's target/template separation is the clearest existing model for the missing action
+target grammar, but Genesis remains the canonical owner.
+
+This also filters cleanly through the nine downloaded procedural-layout papers. Tutenel et al.'s semantic
+description/procedure split supports compiling canonical cell meaning into traversal rules; Horswill and Foged
+support explicit graph/path constraints and bounded summaries; Nepozitek and Gemrot support preserving the owned
+connectivity graph while solving a realization; Green et al. warn against collapsing architecture and furnishing
+into one stage. None of the papers supplies a D&D tactical engine or chooses a UI. Their useful constraint is that
+pathfinding and visibility consume the real generated topology and declared affordances rather than introducing a
+second persuasive-but-false map.
+
+#### Recommended future bakeoff - design evidence, not current build authority
+
+When a later spec authorizes implementation, compare a small Genesis-owned Dijkstra/A* implementation using
+`tinyqueue` against targeted EasyStar.js and rot.js prototypes on the same fixtures: flat room, difficult terrain,
+pit and door, elevation transition, occupied destination, large footprint, diagonal corner, 30-foot normal range,
+and explicit Dash expansion. Measure deterministic reachable sets, chosen routes, frame-time tails, bundle cost,
+save/replay stability, and ease of expressing Genesis-specific edge laws. The winner must fit the canonical
+contract; library convenience may not weaken it.
+
+**F10.1g - extended-range preview:** before Dash is chosen, should the board (A) show only cells affordable now,
+or (B, recommended) also show Dash-reachable cells as a dim locked planning outline whose selection opens the
+legal source chooser but cannot move or spend anything yet? After that ruling, follow the remaining consequential-
+movement warning/undo branch, stable label lifecycle, and F10.3b. Wave 10 remains **OPEN**. No implementation,
+dependency installation, CI, worktree, LFS checkout, merge, or push is authorized.

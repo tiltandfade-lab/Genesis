@@ -1,6 +1,6 @@
 ---
 type: system-spec
-status: BUILT 12-zone mechanics / SUPERSESSION REVIEW OPEN (the band×lane model below landed in `combat.js`, `combat-actions.js`, and `dm.js`; procedural-redesign Wave 10 section 11.6 is now evaluating exact `SpatialPlan` cells as battle authority. Preserve this model as current implementation and candidate fallback until Adam explicitly rules; do not extend it by convenience while the review is open.)
+status: BUILT LEGACY 12-zone mechanics / EXACT-CELL SUPERSESSION ACCEPTED FOR FUTURE BUILD (the band×lane model below remains current code in `combat.js`, `combat-actions.js`, and `dm.js` until an authorized replacement lands. Procedural-redesign Wave 10 section 11.7 accepts exact `SpatialPlan` cells as intended release combat authority and retains zones as a derived accessibility/text/small-screen/degraded fallback. Do not extend or remove either model by convenience; no implementation is authorized.)
 created: 2026-07-01
 related:
   - "[[COMBAT-TRACKER]]"
@@ -12,6 +12,15 @@ related:
 ---
 
 # The Battlemap — 12 zones, spoken moves, an honest diorama
+
+## §0.1 Supersession ruling (2026-07-20; design accepted, build not authorized)
+
+The complete 12-zone design below is preserved as the honest record of the system that was built. Adam has now
+accepted a future exact-cell combat authority derived from canonical `SpatialPlan` cells, elevation, occupancy,
+and footprints. When that replacement is eventually specified and implemented, zones become a deterministic
+accessibility/text/small-screen/degraded projection rather than an independent combat truth. Until then, this file
+still describes live combat behavior. See `PROCEDURAL-DUNGEON-DIRECTION.md` sections 11.6-11.7 for the scope audit,
+dual-input contract, movement-payment ruling, repository research, and open follow-ups.
 
 ## §0. Adam's forks (2026-07-01)
 

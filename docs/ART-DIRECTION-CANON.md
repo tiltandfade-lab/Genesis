@@ -233,6 +233,21 @@ is now the preferred exact-tactics candidate. Whether exact cells replace the cu
 authority remains an explicit Wave 10 decision in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.6; this ruling does
 not itself authorize the substantially larger mechanics build.
 
+## Exact-cell authority and explicit Dash-source ruling (Adam, 2026-07-20 — additive)
+
+> "well, i do think it's probably worth it, i think battle will take forever if you have to clear every single position and move with the DM first, whereas most of this stuff can be done mechanically
+>
+> this is also probably worth looking for some github repos or existing tactical battle systems online to see if we can borrow, learn, or adopt any of the technology to our engine
+>
+> ok, BG3 handles it by letting you use your full movement action but then it forces you to select an action or bonus action to continue that movement, so the FFT movement blocks actually make sense again in that context."
+
+Exact-cell combat is accepted as the intended release authority because routine position, movement, range, and
+target legality should resolve mechanically instead of requiring a DM round trip for each cell. The BattleMat's
+movement presentation must distinguish the currently spendable movement allowance from any extension requiring a
+Dash-like source. Continuing past the normal allowance requires the player to select the Action, Bonus Action, or
+other legal resource source explicitly; destination selection may not silently pay it. The exact visual treatment
+of not-yet-purchased extended cells remains F10.1g in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.7.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

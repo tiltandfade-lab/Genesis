@@ -15752,3 +15752,143 @@ The closed Waves 1-2 document remains safe for a read-only Fable review. This sw
 first design-to-spec gate: the representation portfolio, shared adapter contract, cross-mode continuity, and
 acceptance corpus have recommendations but no Adam rulings. Codex must notify Adam when Wave 10 survives its full
 follow-up/contradiction audit and closes.
+
+### 11.1 First batch disposition - PreAlpha BattleMat and derived EngagementLens
+
+**Adam's ruling (2026-07-20):** P10.0 is accepted. P10.8, P10.10, and P10.11 are accepted. P10.12's proposed
+same-state acceptance corpus is accepted as a baseline and remains open for its requested deep dive. G10.1 is
+accepted pending the concrete example below. G10.2 is accepted as a baseline and remains open for discussion.
+P10.9 is accepted as a baseline and remains open for its requested deep dive. P10.1, P10.3-P10.7, and the material
+parts of P10.2 remain in active deep dive. Silence closes nothing.
+
+Adam amends the interim visual target substantially. The release-direction candidate is no longer merely a vague
+“lit shallow-oblique schematic.” Its first concrete form is a **PreAlpha BattleMat**:
+
+- the central tactical scene is an attractive nearly top-down 3D square grid;
+- raised and depressed square cells carry elevation;
+- rectangular blocks carry wall runs, hard boundaries, and cover volumes;
+- cylinders carry columns and other round structural blockers;
+- the engine spends its visual budget first on tile form, material response, lovely lighting, normal maps,
+  practicals, contact/cast shadows, sprite citizenship, and overall composition—not exhaustive integrated props;
+- creatures and NPCs remain canonical pixel sprites grounded on the board;
+- a mechanically important object's footprint, blocking, cover, hazard, or traversal geometry must remain honest,
+  but an ordinary location-bearing noun without a suitable integrated model may appear as a small semantic marker;
+- hovering, focusing, or selecting that marker may reveal the noun's large canonical sprite/card, current state,
+  ownership, evidence, and licensed interactions without pretending that the sprite is full 3D geometry;
+- unknown or unrevealed nouns receive no marker merely to decorate or balance the board.
+
+This creates four initial visual construction levels without changing canonical identity:
+
+```text
+structural/tactical volume  -> tile, block, cylinder, opening, pit, hazard footprint
+live actor citizen          -> grounded canonical pixel sprite with scale/footprint
+semantic object marker      -> exact or bounded location + hover/focus sprite/card
+context/reserve projection  -> relational card, narration, or explicit unmounted reason
+```
+
+The exact routing law between those levels is not yet closed; it is the central P10.6/P10.7 follow-up. A marker may
+never hide a tactically relevant footprint. A chest that is only searchable may be a marker; a portcullis that
+blocks passage needs honest boundary geometry; a toppled wardrobe used as full cover needs a cover volume even if
+its visual identity still comes from a sprite/card.
+
+#### Derived side-view EngagementLens - plausible, but never a second combat owner
+
+Adam also proposes a classic side-view engagement tableau: the selected PC appears on the right, materially
+engaged enemies appear on the left at melee/near-or-ranged/far relationships, and simple plinths or recessed bands
+show elevation. Cycling the selected PC may recompose the tableau.
+
+This is technically and architecturally plausible if it is a **derived `EngagementLens`**, never an independent
+map or second action-resolution system:
+
+```text
+canonical battle state + selected actor
+  -> exact BattleMat projection owns cells, reach, paths, cover, line of sight, areas, and collisions
+  -> EngagementLens derives relevant cast, qualitative relationship bands, elevation class, and current states
+  -> choosing a different PC recomputes the lens from the same battle receipts
+```
+
+The lens may dramatize and clarify one actor's immediate problem. It may not independently decide movement,
+flanking, reach, cover, line of sight, area of effect, or exact distance. That prevents the two views from becoming
+contradictory games. It also solves the weakness of the first global range-strip mockup: the strip becomes
+contextual—“who matters to this PC now?”—rather than trying to flatten the whole battlefield at once.
+
+**Implementation/maintenance cost:** the PreAlpha BattleMat is still a real renderer project. It needs a legal
+height/footprint compiler, structural primitive recipes, controlled camera, materials/lights/shadows, sprite scale
+and anchoring, marker focus/inspection, state cues, responsive layout, and exact fallback rules. It is materially
+cheaper than demanding bespoke 3D construction for every noun, but not a cheap unlit diagram. The optional
+EngagementLens adds a moderate responsive-UI and projection cost: selected-actor relevance, crowd collapse,
+qualitative range bands, elevation plinths, multi-PC cycling, transitions, and strict same-id/same-state tests. Its
+largest maintenance risk is visual divergence from the board, so it must consume the same projected citizens and
+receipts rather than maintaining a parallel cast list.
+
+#### G10.1 concrete example - the moving lift and the turtle communicator
+
+Suppose a goblin carrying one of the DM-invented turtle communicators jumps onto a descending freight lift:
+
+1. On the BattleMat, the goblin's exact cell is stored relative to the lift's moving reference frame, not faked as
+   a permanently fixed floor cell. The communicator remains the same item id attached to the goblin's custody.
+2. When combat selects the fighter, the EngagementLens shows that goblin in the appropriate relationship band and
+   on a lower or descending plinth. It does not invent a new goblin or a duplicate communicator.
+3. The fighter knocks the communicator loose. The engine commits the transfer/drop receipt first; the board then
+   moves the same item id from the goblin to an object marker on the lift cell, and its inspector uses the same
+   canonical sprite/card and damaged/working state.
+4. The lift crashes to the pit floor. Rebuilding either view places the goblin, lift, and dropped communicator from
+   their current owners and attachment/location facts. Returning later shows the communicator at the crash site or
+   in whoever subsequently took custody—not back at its first room and not silently erased.
+
+In plain English: every view asks the world state **where this exact thing is now and what happened to it**. Views
+may simplify how that answer looks, but they may not keep their own competing answer.
+
+#### Procedural-research filter on the amendment
+
+The downloaded papers support the seams, not the taste verdict:
+
+- Tutenel supports compiling semantic intent into a legal realization rather than letting geometry create canon.
+- Green's architecture/furnishing separation supports spending exact geometry on board structure while routing
+  nonstructural nouns through marker/card/fallback representations.
+- Horswill and Foged support bounded graph/relationship summaries, which is the right role for EngagementLens.
+- Merrell supports comparing bounded candidate representations rather than committing from one attractive frame.
+- Henderson and Whitehead support explicit constraint cost and honest unsatisfied/fallback states; a missing prop
+  model must not produce a false substitute or erase the noun.
+
+None of those papers proves that a nearly top-down board or side-view lens is beautiful. That decision still needs
+same-state taste cards, gameplay-scale captures, and the P10.12 comprehension/beauty/performance bakeoff.
+
+#### First taste-card family - discussion evidence, not a renderer selection
+
+Four preview cards were generated from the same proposed visual grammar and saved as durable design references:
+
+| Card | Question it tests | Initial read |
+|---|---|---|
+| [A - PreAlpha BattleMat](../ui-sketches/mock-frames/procedural-dungeon/taste-card-a-prealpha-battlemat.png) | Can elevation, walls, cover, columns, actors, and markers make a beautiful central scene without integrated props? | **Yes.** Strongest minimum viable renderer statement. |
+| [B - Object Inspector](../ui-sketches/mock-frames/procedural-dungeon/taste-card-b-object-inspector.png) | Can a small exact marker hand off identity/state/interaction to a large sprite/card cleanly? | **Yes, provisionally.** Strong P10.2/P10.6 candidate; the interaction rows are illustrative, not rules. |
+| [C - Board + EngagementLens](../ui-sketches/mock-frames/procedural-dungeon/taste-card-c-board-engagement-lens.png) | Can the board stay authoritative while one PC receives a readable side-view relationship tableau? | **Recommended combined default candidate.** It keeps board truth primary and makes the lens contextual. |
+| [D - Expanded Engagement Focus](../ui-sketches/mock-frames/procedural-dungeon/taste-card-d-expanded-engagement-focus.png) | Should the side view temporarily dominate during the selected turn? | **Plausible optional focus mode, not recommended always-on.** It adds drama but gives up board context. |
+
+These cards are taste/architecture probes. They do not authorize their invented room layout, combatants, labels,
+action difficulties, UI proportions, or exact art. Card C is Codex's recommendation for the next iteration: board
+as the stable widescreen field, lens as a collapsible horizontal band, and Card B's inspector appearing only when a
+marker/object is focused.
+
+#### Generated follow-ups opened by the first batch
+
+- **F10.1 - default composition:** Is Card C the correct default family—BattleMat always primary, object inspector
+  contextual, EngagementLens collapsible—or should A/B remain default and the lens appear only on demand?
+- **F10.2 - exact-grid scope:** Which noncombat scenes deserve the exact 3D grid, and which should use a looser
+  zone/relationship substrate while preserving the same SceneTray identity?
+- **F10.3 - volume/marker/card routing:** Which mechanical properties force honest 3D volume, which permit a
+  marker plus sprite inspector, and which belong only in cards/reserve?
+- **F10.4 - lens population:** For several PCs, summons, swarms, and many enemies, who appears in the selected
+  actor's lens, how are groups collapsed, and when must the lens decline to simplify?
+- **F10.5 - honest precision language:** What exact visual grammar distinguishes exact cells, zones, relations,
+  estimates, unknowns, and hidden facts without turning the tray into a statistical dashboard?
+- **F10.6 - camera and beauty floor:** Which nearly top-down angle, zoom bounds, light/material stack, and gameplay-
+  size reference cards define the acceptable compromise?
+- **F10.7 - attention and history:** Which marker, physical trace, card, animation, sound, and accessibility cues
+  distinguish current affordance from durable history without “everything glows” clutter?
+- **F10.8 - continuity and proof:** Which cross-mode transitions and same-state captures prove that adapters and
+  EngagementLens preserve identity, state, knowledge, and performance rather than merely sharing a skin?
+
+Wave 10 remains **OPEN**. Resume at **F10.1**, then follow every material branch through P10.3-P10.7, G10.2,
+P10.9, and P10.12. Do not declare Wave 10 complete, begin Wave 3, or invoke the Fable design-to-spec gate until all
+P10.0-P10.12, G10.1-G10.2, and generated follow-ups are exhausted and Adam explicitly closes the wave.

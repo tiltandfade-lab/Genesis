@@ -147,6 +147,24 @@ Any interim visualizer proposal therefore has to be judged as a continuation of 
 lighting, normal-map, sprite, and environmental-beauty work—not as permission to replace it with an
 unlit diagram. The exact interim layout remains a design-wave decision.
 
+## Pre-alpha BattleMat and taste-card ruling (Adam, 2026-07-20 — additive)
+
+> "P10.1 we will do some taste cards here, this will be a deep dive"
+
+> "P10.2 ok here is where I am willing to come up with an interrim solution making use of sprites vs integrated objects into the scene. Ideally yes eventually obviously we want our rooms to look like XCOM and BG3 and Octopath Traveler, but until then...let's thing of things in terms of a gridded battlemat with elevated squares and depressed squares that indicate elevation, and blocks and cylinders that represent walls and columns that can be used as cover. If we can just get this 3D grid alone looking good, forget about rendering the objects for now. However, I do want the things in the scene to be represented by something....maybe a dot you can hover over with sprites of the object? we have these sprites built, we could make use of them. So we have the battlemap idea as our central scene. Optionally and potentially, we have our big sprites they are almost like final fantasy sprites, so what if we just made a very simple side view engagement scene? it might get complicated with more players, but we could potentially cycle through players and chance the side view of the battle zones? im sure what i am imagining is not clear, but literally imagine FF6 battle system. the selected PC is on the right, the enemies that are engaged with him are on the left at varying zones. melee is right in the PC sprite's face, ranged is a bit further away. Elevation could also be represented just by a little block that the sprite sits on. Let me know if this is nonsense or far fetched. combining the two views might prove difficult. though one could be more horizontal (the ff6 style battle) and the battle map style is more widescreen."
+
+> "P10.4 I would say we stick with a nearly top-down view but this should be determined by taste cards"
+
+> "p10.5 deep dive with taste cards"
+
+> "p10.6deep dive and hinges on decisions made about prop representation in the interrim...pre alpha visual engine"
+
+This ruling makes the nearly top-down 3D grid, elevation blocks/depressions, wall/cover blocks, columns, canonical
+sprites, and hover-revealed object representation the first pre-alpha taste target. The side-view engagement scene
+is explored as a derived companion lens, not presumed accepted as a second authoritative combat view. The four
+first-round taste cards are recorded in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.1. Their generated layouts,
+combatants, text, and UI details remain discussion evidence rather than canon.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

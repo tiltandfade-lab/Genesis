@@ -6,6 +6,39 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 batch 1) — PRE-ALPHA BATTLEMAT + ENGAGEMENT LENS [Codex]
+
+This supersedes the Wave-10-opening pickup below without deleting it. The lane remains design/taste-card work only.
+No code, CI, worktree, LFS checkout, merge, push, or Fable design-to-spec handoff was authorized. Four conceptual
+taste-card PNGs were generated and added under `ui-sketches/mock-frames/procedural-dungeon/`; they are discussion
+evidence rather than renderer implementation or accepted final UI.
+
+Adam accepted P10.0, P10.8, P10.10, and P10.11; accepted G10.1 after requesting an example; accepted G10.2,
+P10.9, and P10.12 as baselines while keeping their requested deep dives open; and opened P10.1/P10.3-P10.7 for
+deeper visual/mechanical work. P10.2 is amended around a concrete interim target:
+
+- an attractive nearly top-down 3D **PreAlpha BattleMat** is the central authoritative spatial projection;
+- raised/depressed grid cells encode elevation; blocks/cylinders encode walls, columns, blockers, and cover;
+- existing canonical pixel sprites remain actor citizens;
+- ordinary objects without integrated scene models may use exact/bounded semantic pucks whose focus inspector
+  reveals the large canonical object sprite/card and current state;
+- anything mechanically dependent on footprint/blocking/cover/hazard/traversal still requires honest geometry;
+- a classic side-view **EngagementLens** may put the selected PC on the right and relevant enemies on the left by
+  qualitative range/elevation, but it is derived from the same board citizens/receipts and never owns tactics.
+
+The four first-round cards and their evaluation are in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.1. Card C
+(board primary + lower collapsible EngagementLens) is Codex's current default recommendation; Card B supplies the
+contextual object inspector; Card D is plausible as an optional expanded focus mode but loses board context.
+
+**Do next:** resume at **F10.1**: Adam chooses whether Card C is the default composition or whether A/B remains the
+default and EngagementLens appears only on demand. Then exhaust F10.2-F10.8: exact-grid scope, volume/marker/card
+routing, lens population, honest precision language, camera/beauty taste cards, attention/history cues, and
+continuity/acceptance proof. Fold each ruling into P10.1/P10.3-P10.7, G10.2, P10.9, and P10.12. Wave 10 remains
+open and cannot close by baseline acceptance; it requires a contradiction audit and Adam's explicit closure.
+
+**Fable status:** closed Waves 1-2 remain safe for read-only critique. Do not use Fable for authoritative visual
+design-to-spec conversion until Wave 10 closes; explicitly tell Adam when that gate is reached.
+
 ## Graphics authority — read before the next visual unit
 
 `docs/GRAPHICS-CONVERGENCE-CHARTER.md` is now the governing graphics doctrine. It locks the protected

@@ -313,6 +313,17 @@ the DM owns the social and narrative meaning of calling Varka `Goblin 2`. Ambigu
 must never leak hidden canon. The completed label audit and returned Card J/K inspector question live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.13.
 
+## Full scrollable board-object-card ruling (Adam, 2026-07-20 — additive)
+
+> "no, i would rather see a board card that allows you to scroll within it's container to see the full description of the item. I think the right hand side should be for DM chat and narration exclusively."
+
+The complete object inspector belongs inside the central SceneTray/BattleMat as a bounded card visibly linked to
+the selected object. Identity, obvious state, and primary actions remain visible while the full known description
+and secondary content scroll within the card's own container. The persistent right rail is reserved exclusively
+for DM chat and narration; resolved object events may be narrated there, but structured inspector fields and
+controls do not live there. Card K is rejected as the primary inspector home. Exact data, scroll, cost, and open
+placement/persistence questions live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.14.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

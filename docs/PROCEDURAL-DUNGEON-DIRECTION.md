@@ -16916,3 +16916,77 @@ stable home, and a single projection contract prevents drift.
 Does Adam accept Option C? If so, follow into inspector persistence, simultaneous object/character focus, and
 interaction-vs-conversation behavior until no material F10.3b branch remains. Wave 10 remains **OPEN**; no build is
 authorized.
+
+### 11.14 F10.3b ruling - full scrollable inspector stays on the board
+
+**Adam's ruling (2026-07-20):** reject the recommended Card J-preview/Card K-full-inspector split. The player should
+receive a **full board card** for the selected object, with the complete known description and interaction content
+scrolling inside the card's own bounded container. The persistent right side remains exclusively for DM chat and
+narration, not structured object inspection or controls.
+
+This supersedes Card K as the proposed primary object-inspection home while preserving it as rejected taste
+evidence. Card J becomes the starting composition reference, amended from a small preview into a complete
+scrollable board inspector.
+
+The accepted F10.3b baseline is:
+
+- selecting an object opens one structured card inside the central SceneTray/BattleMat surface, visibly linked to
+  the selected canonical object through highlight and/or leader treatment;
+- the card has a bounded width and height. Identity, obvious state, and primary actions remain visible in a fixed
+  header/action region; longer description, known evidence, ownership, history, and secondary controls scroll
+  **inside the card**, never by scrolling the whole game shell;
+- the card can display a canonical sprite or governed fallback, full player-known description, state, distance,
+  evidence, custody/ownership, and currently legal interaction controls. Every row remains reveal- and viewpoint-
+  gated;
+- card actions submit the same validated `ActionIntent` used by direct board and prose input. The inspector owns no
+  gameplay state and does not mutate an object directly;
+- examination, opening, lockpicking, activation, pickup, or other resolved outcomes may receive ordinary DM
+  narration in the right rail because they happened in play. Raw object fields, persistent stat panels, and
+  interaction controls do not occupy that rail;
+- changing object focus updates/replaces the board card. It does not insert inspector snapshots into the DM
+  conversation transcript;
+- unknown traps, contents, provenance, evidence, and ownership remain absent. A scrollbar must never imply hidden
+  row count or reserve space that leaks secret information.
+
+Example:
+
+```text
+┌ IRON CHEST · Closed · 5 ft ──────────┐
+│ [canonical chest sprite]             │  fixed header
+│ [Examine] [Open] [Pick Lock]         │  fixed primary actions
+├──────────────────────────────────────┤
+│ Heavy iron construction...           │
+│ Known owner: the watch               │  internally scrollable known content
+│ Visible evidence: corroded lock...   │
+│ ...                                  │
+└──────────────────────────────────────┘
+```
+
+This decision accepts a **high spatial-layout/accessibility cost** rather than spending right-rail space. The board
+must manage card/object linkage, collision and occlusion, internal mouse-wheel/touch/keyboard scrolling, focus
+capture, controller navigation, camera/layout changes, large text, small landscape tablets, and interaction with
+movement/target overlays. A single `ObjectFocusProjection` still prevents state drift; the complexity moves into
+central-surface composition rather than duplicating data across board and chat.
+
+F10.3b's **home and scroll model are closed**. Placement, persistence, and simultaneous-focus behavior remain
+generated follow-ups.
+
+#### F10.3c - how does the full card avoid covering the game?
+
+- **Option A - automatic nearest-quadrant anchor:** place the card beside the object in the clearest available
+  quadrant and move it automatically as composition changes. Simple for the player, but it may jump and still fail
+  in crowded scenes.
+- **Option B - fixed board-edge inspector:** reserve a consistent strip inside the SceneTray and reframe the board
+  around it. Predictable, but permanently sacrifices board area while open and feels less directly attached.
+- **Option C - smart anchor with bounded pan plus optional drag/pin (recommended):** open beside the object in a
+  collision-safe quadrant with a leader; never cover the selected object or active PC. If no valid placement exists,
+  pan the board a bounded amount without changing tactical coordinates or zoom. The player may drag/pin the card
+  inside the SceneTray; a reset control restores automatic placement. On the smallest landscape target, fall back
+  to a board-edge card inside the central tray—not the DM rail.
+
+Option C has the highest interaction implementation cost, but it preserves spatial attachment, gives the player an
+escape from bad automatic placement, and supplies a deterministic minimum-width fallback. All variants require
+internal-scroll focus rules so wheel/touch input over the card never moves the camera accidentally.
+
+Does Adam accept Option C? If so, follow with one-card-versus-pinned-multiple persistence and the exact behavior
+when character focus or targeting begins. Wave 10 remains **OPEN**; no build is authorized.

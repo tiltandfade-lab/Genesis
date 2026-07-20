@@ -6,6 +6,23 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 object inspector) — FULL CARD ON THE BOARD; RIGHT RAIL IS THE DM [Codex]
+
+This supersedes the callback-label pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam rejects Codex's Card J-preview/Card K-full-inspector recommendation. F10.3b now places the complete object
+inspector in a bounded card inside the central SceneTray/BattleMat. Identity/obvious state/primary actions remain in
+a fixed region; full known description, evidence, ownership, history, and secondary controls scroll inside the
+card. It is visibly linked to the selected canonical object, reveal-gated, and submits ordinary validated intents.
+The right rail is exclusively DM chat and narration: resolved object actions may be narrated there, but structured
+object fields and controls do not live there. Card K remains rejected taste evidence. F10.3b home/scroll is closed.
+
+**Do next:** ask F10.3c. Codex recommends a smart object-adjacent anchor that never covers the object or active PC,
+uses a bounded board pan if no clear quadrant exists, permits drag/pin/reset inside the SceneTray, and falls back to
+a central-tray board-edge card at minimum landscape width. Then decide one-card-versus-multiple persistence and
+character/targeting focus conflicts.
+
 ## ⭐ Latest (2026-07-20, Wave 10 callback labels) — THE ENGINE KNOWS VARKA; THE DM HANDLES “GOBLIN 2” [Codex]
 
 This supersedes the local-label pickup below without deleting it. Design/docs only: no code, dependency

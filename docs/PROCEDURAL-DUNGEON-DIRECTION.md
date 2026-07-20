@@ -8834,3 +8834,74 @@ world's total capacity for secrets and weirdness.
 **Open follow-up:** does this preserve the spicy-restaurant mandate—lots of real juicy content remains in
 the place—while letting the DM serve it in comprehensible courses, with player attention able to pull any
 visible dish forward?
+
+#### 10.11.23 Ruling and follow-up — no backlog dump; coherent exposition bursts are licensed
+
+Adam accepts the causal-bundle and salience-stack direction. Genesis should avoid a mega-dump almost
+everywhere, with plausible exceptions at the very beginning or in a scene whose fiction genuinely calls
+for dense revelation—for example, meeting a long-lost mother who has much to explain about the character's
+childhood.
+
+This exposes a useful distinction:
+
+```text
+saturation dump
+  unrelated roots/cards/groups/problems all demand foreground because their queues are full
+
+coherent exposition burst
+  one source delivers many causally connected facts under a scene the player invited or the premise earned
+```
+
+A mother may reveal the father's identity, the cause of separation, the origin of an heirloom, a false
+family story, an old enemy, and why she disappeared. That is high information density but may still be one
+family-history situation with a natural causal order. It should not also force the prison contract,
+regional food shortage, demonic soap, and three unrelated NPC introductions into the same beat.
+
+##### Provisional exposition-burst license
+
+Temporarily raise the ordinary projection capacity only when all of the following are true:
+
+- the scene has an information-delivery purpose: opening orientation, requested briefing or history,
+  confession, reunion, testimony, debrief, will, archive, prophecy, formal judgment, or comparable event;
+- one speaker/source, topic, event, or tightly connected causal bundle explains the density;
+- the player explicitly asked, chose to listen/read, or entered a strongly telegraphed premise scene;
+- immediate danger or unresolved player action does not make the monologue absurd;
+- facts remain source-attributed canon, observation, belief, lie, uncertainty, or interpretation rather
+  than becoming omniscient truth merely because they were delivered together;
+- delivery has ordered beats and an interruption/resumption bookmark, so the player may ask, object,
+  leave, or return without losing the remaining packet;
+- actionable consequences and important names receive a compact journal/recap projection rather than
+  depending on perfect memory of a long passage;
+- unrelated due cards and scheduler backlog do not enter merely because the projection budget is
+  temporarily larger.
+
+The beginning of the game may receive a special orientation license because premise, immediate stakes,
+controls, and the first actionable context must be established. Even there, the engine should distinguish
+necessary orientation from a glossary recital: essential names and decisions enter the opening beat;
+deeper optional lore remains available through questions, Codex, play, and later revelation.
+
+Mechanically, an exposition packet may hold:
+
+```text
+source/speaker and witness/knowledge boundary
+topic/root and ordered fact dependencies
+truth/belief/lie/uncertainty attribution per fact
+trigger/consent and scene safety requirements
+interruption point and remaining/resumable facts
+new handles/promises created or resolved
+journal/recap summary
+```
+
+This does not require one uninterrupted wall of prose. The DM may stream the packet in coherent
+paragraphs, pause for reaction at natural hinges, and resume if the player wants more. The “burst” refers
+to how much connected truth the scene is licensed to transfer, not permission to seize player agency.
+
+##### Recommendation
+
+Keep Option 3's normal saturation law and add this narrow exposition-burst license. Treat a large but
+coherent player-invited revelation as one high-capacity scene. Never treat an overfull scheduler, too many
+active systems, or a final-room card backlog as an exposition justification.
+
+**Open follow-up:** does this capture the exception you mean—the opening and earned/requested revelation
+scenes may deliver substantially more connected information, but remain source-bound, interruptible,
+resumable, and protected from unrelated queue dumping?

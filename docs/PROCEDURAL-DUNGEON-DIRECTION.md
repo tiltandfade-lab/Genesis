@@ -10314,3 +10314,210 @@ access to it.
   differently and the economy will drift.
 - Mythic examples above are possibility sketches, not menus or deterministic recipes. The openly rolled
   lenses still choose the actual axes.
+
+#### 10.11.41 Extreme calibration pass — let `20/20` genuinely break the current game
+
+Adam finds the first exercise implementable but asks for a second pass that deliberately pushes the
+`20/20` outcomes far enough to break the game. The following are maximal five-lens possibility sketches,
+not fixed recipes. Each begins with the core success, covers the live reward anchors, and then spends all
+five persistent lenses without protecting the current quest structure, dungeon route, faction balance,
+resource loop, or future obstacle design.
+
+“Break the game” here means permanently invalidate or transform expected play structures through an honest
+canonical event. It does not mean corrupt saves, ignore typed ownership, invent unrelated wishes, retcon
+observed history without authority, or make the engine forget how the result occurred.
+
+##### Extreme A — the jailer's confiscation chest becomes the Key of Restitution
+
+The rogue's `20/20` opens the low-tier confiscation chest. A maximal coherent braid might commit:
+
+1. **Creation/character:** the master lock comes free as the **Key of Restitution**, a permanent storied
+   tool that can open any lock whose primary purpose is to secure stolen property or unjust confinement.
+2. **Local law/place:** throughout this jail, locks can no longer remain closed against the rightful owner
+   of what lies behind them; every qualifying door and strongbox resolves through that new rule.
+3. **Knowledge/quest:** the confiscation ledger completes itself with the full chain of stolen goods,
+   bribes, buyers, victims, and hidden caches—not merely the next clue in the investigation.
+4. **Bond/group:** every living victim whose property is here becomes aware that restitution is possible,
+   creating a claimant network rooted to the rogue's act rather than a generic friendly faction.
+5. **Threat/institution:** the jailer's corruption operation loses its secrecy, inventory control, and
+   institutional protection at once; its current quest structure ends or becomes an open political crisis.
+
+**What it breaks:** most of this jail dungeon, future ordinary locks tied to theft/imprisonment, the paced
+corruption investigation, and the planned low-tier reward envelope. The campaign must now react to a
+powerful new key, exposed network, claimant movement, and destabilized institution.
+
+##### Extreme B — the Light of Lathander becomes a regional dawn
+
+The cleric's `20/20` plea succeeds. A maximal version of the canonical result might commit:
+
+1. **Person/faith:** the bandit's repentance becomes a genuine permanent conversion of motive; he becomes
+   an active dawn-bearer rather than merely a cooperative informant.
+2. **Knowledge/quest:** every hideout, cache, password, patron, and intended raid the bandit truly knows is
+   released through correct witness boundaries, collapsing the investigation rather than feeding one clue.
+3. **Local law/place:** true dawn permanently shines at the site and suppresses undead, magical darkness,
+   and concealed violence within its domain according to a typed regional rule.
+4. **Bond/institution:** witnesses and later adherents found and maintain a shrine/order whose duties,
+   resources, NPC casting, and faction relationships root from the event.
+5. **Name/doer/threat:** the cleric's name becomes recognized by powers and enemies of the dawn; the local
+   bandit front fractures as every member receives a real opportunity to follow or reject the repentant
+   bandit's call.
+
+**What it breaks:** the bandit quest, secrecy around its operation, undead/darkness encounters in the new
+domain, local religious balance, and the cleric's prior anonymity. It creates a new institution and threat
+alignment the campaign must simulate.
+
+##### Extreme C — the Homeward Trail rewrites the forest
+
+The ranger's `20/20` tracking check finds the missing child. A maximal braid might commit:
+
+1. **Topology/place:** the child's path becomes the **Homeward Trail**, a persistent route that can connect
+   a genuinely lost innocent in this forest to the safest reachable refuge.
+2. **Local law/world:** paths subtly lengthen against kidnappers and shorten for rescuers who meet the
+   Trail's declared conditions; navigation in this forest now obeys that rule.
+3. **Threat/quest:** every currently captive child held by the same raider root receives a viable branch of
+   the Trail, immediately turning the single rescue into a mass escape and collapsing the raiders' leverage.
+4. **Knowledge:** the raiders' camp, travel network, collaborators, and concealed crossings become legible
+   through the Trail's evidence to the ranger and appropriate rescuers.
+5. **Doer/bond:** the ranger becomes the Trail's first warden, gaining a permanent, bounded ability to call
+   a homeward path for the genuinely lost while inheriting responsibility for what follows it.
+
+**What it breaks:** wilderness navigation difficulty, the current rescue arc, hidden raider geography,
+future “find the lost” problems in this forest, and potentially travel-resource assumptions. It creates a
+new terrain law and character capability rather than merely awarding a shortcut.
+
+##### Extreme D — the town crystal becomes a planar anchor and gate
+
+The wizard's `20/20` stabilization succeeds against the hell-realm absorption threat. A maximal braid might
+commit:
+
+1. **Place/local law:** the crystal becomes self-stabilizing and fixes the town's domain against involuntary
+   planar absorption; the original maintenance crisis cannot recur in the same form.
+2. **Topology:** the predatory Breach inverts into a controllable two-way gate whose keys and conditions are
+   explicitly attached to the crystal and its new keeper.
+3. **Restoration:** people, structures, and objects already partially taken by the ongoing absorption return
+   to the last recoverable coherent state allowed by established canon.
+4. **Threat:** the hell power's claim over this town and every dependency routed through this crystal is
+   severed; its front loses the asset and must respond from a fundamentally worse position.
+5. **Doer/bond:** the wizard becomes a living key/warden of the anchor, gaining real authority over the gate
+   and an enduring reciprocal obligation to the town and whatever waits beyond it.
+
+**What it breaks:** the town-destruction arc, recurring crystal maintenance, the current planar threat plan,
+travel topology between realms, and any assumption that the wizard lacks gate authority. The former crisis
+becomes a major campaign hub.
+
+##### Extreme E — the Refuge Gate denies the siege
+
+The fighter's `20/20` holds the collapsing gate for the refugees. A maximal braid might commit:
+
+1. **Local law/place:** the repaired/transformed **Refuge Gate** can never close against someone genuinely
+   fleeing unjust pursuit, and becomes supernaturally hard to destroy while sheltering them.
+2. **Topology/count:** every member of the declared refugee cohort—including cut-off stragglers still
+   causally inside the escape—finds the remaining distance compressed enough to cross during the hold.
+3. **Threat:** the pursuing formation's immediate siege front breaks: engines fail, command coherence
+   collapses, and the current assault can no longer continue as planned.
+4. **Doer:** the fighter gains the permanent mantle **Bearer of the Last Gate**, allowing an extraordinary
+   threshold-hold under explicit limits that future encounters must honor.
+5. **Bond/institution:** the refugees form an oathbound civic network around mutual sanctuary and the
+   fighter's deed, changing settlement politics, recruitment, shelter, and future obligations.
+
+**What it breaks:** the escape encounter, the siege's planned next phases, future gate-control plots at
+this site, ordinary crowd-distance constraints for the rescued cohort, and the fighter's prior capability
+envelope. It also creates a politically consequential refugee institution.
+
+##### Extreme F — the poison becomes the seed of a universal antidote
+
+The healer's `20/20` treatment cures the mayor. A maximal braid might commit:
+
+1. **Creation/knowledge:** the treatment produces a reproducible **First Antidote** formula that can adapt
+   to the poison family rather than cure only this patient.
+2. **Restoration/count:** every reachable victim poisoned from the same batch receives a viable cure path;
+   the mayor's treatment propagates through prepared doses and explicit medical logistics.
+3. **Truth/threat:** remaining samples visibly disclose their maker's signature, supply route, and intended
+   targets to qualified examination, collapsing the poisoners' secrecy.
+4. **Doer/person:** the healer acquires a permanent diagnostic gift for this poison family and becomes a
+   mechanically recognized authority, not merely someone narrated as famous.
+5. **Bond/institution:** the mayor, affected factions, and trained healers establish an antidote network
+   with stockpiles, duties, access rules, enemies, and a service horizon.
+
+**What it breaks:** the poisoning mystery, scarcity of its cure, future ordinary encounters using that
+poison family, parts of the potion economy, and the healer's prior diagnostic limits. It creates a public
+health institution and forces poison-using factions to adapt.
+
+##### Extreme G — the bard's false identity becomes a true office
+
+The bard's `20/20` deception gains access to the cult archive. A maximal braid might commit:
+
+1. **Name/local law:** the false identity becomes a real metaphysical office from this moment forward—wards,
+   oaths, and cult procedures recognize its bearer without rewriting evidence that the person did not
+   previously exist.
+2. **Fate/quest:** the cult's active prophecy resolves forward around that office, making the bard a lawful
+   candidate for authority and changing scheduled faction behavior.
+3. **Knowledge:** the archive opens its full relevant hierarchy, prisoner, patron, ritual, and weakness
+   corpus through correct knowledge boundaries rather than dispensing one clue at a time.
+4. **Bond/faction:** a consequential cult bloc transfers loyalty to the new office while an opposing bloc
+   rejects it, immediately splitting the faction into mechanically real groups.
+5. **Threat/topology:** the prisoner's wards recognize the office and release or relocate the captive along
+   a committed route; the current infiltration/rescue threat is resolved in a new political crisis.
+
+**What it breaks:** the infiltration sequence, archive-gating puzzle, prisoner-rescue route, cult hierarchy,
+prophecy plan, and the bard's identity boundaries. The lie becomes a durable source of authority and
+obligation rather than a temporary disguise.
+
+##### Extreme H — the empty cell becomes the Door of the Unforgotten
+
+The investigator's `20/20` search finds the hidden child's note and follows what happened to the prior
+prisoner. A maximal braid might commit:
+
+1. **Knowledge:** the note becomes a living evidentiary root that reveals every handler, transfer, false
+   record, and presently knowable destination in this prisoner's disappearance.
+2. **Topology:** the loose stone opens the **Door of the Unforgotten**, a persistent passage to the nearest
+   viable point on the missing prisoner's true route—even across a realm boundary if the causal trail goes
+   there.
+3. **Bond:** writer and finder become capable of bounded two-way correspondence through additions to the
+   note while both remain recoverably extant.
+4. **Restoration/quest:** if the missing person is alive and reachable, the route makes immediate rescue
+   possible; if established canon says otherwise, it instead restores remains, identity, proof, or the
+   truth required to resolve the loss without retconning death.
+5. **Place/local law:** this cell can no longer erase an unjust prisoner's identity from records or memory;
+   names and evidence suppressed here leave a discoverable trace.
+
+**What it breaks:** the paced disappearance mystery, prison transfer network, ordinary geographic rescue
+route, institutional cover-up, and perhaps inter-realm travel. A minor note becomes permanent infrastructure
+against enforced disappearance.
+
+##### Extreme I — surfaced Mythic bread ends the famine loop
+
+The offscreen baker normally receives no individual Crit Magnitude roll. In a surfaced royal-feast action,
+however, the player and baker use cursed grain to feed a famine-struck city and roll `20/20`. A maximal
+braid might commit:
+
+1. **Creation/material:** the bake produces a living starter whose bread multiplies enough to meet a
+   bounded daily subsistence load when maintained under explicit communal conditions.
+2. **Local law/restoration:** the grain curse reverses within the city's food domain, converting afflicted
+   stores into safe nourishment rather than merely purifying one batch.
+3. **Threat/world:** the active famine front ends in this city; hoarders, relief factions, prices, unrest,
+   migration, and enemies must react to the new abundance instead of continuing the shortage script.
+4. **Bond/institution:** a communal oven order forms around stewardship and fair distribution of the
+   starter, with rules, NPC roles, stores, failure modes, and service obligations.
+5. **Doer/name:** the responsible cook/baker gains a mechanically meaningful bread-name or blessing tied to
+   feeding communities, drawing gratitude, imitation, exploitation, and divine or factional attention.
+
+**What it breaks:** the food-shortage resource loop, famine quest, local staple economy, unrest schedule,
+and possibly future survival pressure in the city. The joke is only eligible because breadmaking became a
+real surfaced action with city-scale stakes; once eligible, the honest Mythic roll is not suppressed.
+
+##### Extreme-pass findings
+
+- A five-lens Mythic success should often end, obsolete, or transform the quest that produced it. Preserving
+  the planned adventure is not a protected invariant.
+- “Wondrous” does not mean consequence-free. New gates, titles, institutions, cures, and local laws create
+  attention, duties, enemies, migration, economic reactions, and maintenance—not as balance punishment,
+  but because the world honestly responds to a new fact.
+- Anchor coverage prevents game-breaking power from becoming arbitrary wish fulfillment. The Key of
+  Restitution opens unjust theft/imprisonment locks, not every door in existence; the scope is enormous but
+  causally shaped.
+- Mythic success may invalidate difficulty in its earned domain. The engine must not secretly restore the
+  same obstacle under a new name or reactively scale enemies to cancel the victory.
+- Typed effects and commitment capsules matter more, not less, at this scale. Each broken subsystem needs
+  an explicit new rule, owner, provenance root, evidence projection, and downstream invalidation/reaction
+  path.

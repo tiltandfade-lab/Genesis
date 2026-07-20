@@ -10736,3 +10736,86 @@ human-readable as one 15/3/1/1 pattern read upward for success and downward for 
 
 **Open decision:** should natural-1 magnitude lock to the exact inverted mirror—6–20 Standard, 3–5 one
 bounded complication lens, 2 two bounded complication lenses, and 1 Mythic `d3 + 2` persistent lenses?
+
+#### 10.11.46 Ruling — natural-1 magnitude is the exact inverted mirror
+
+Adam locks Option 1. Natural-1 magnitude uses the exact inverted 15/3/1/1 distribution:
+
+| Natural | Magnitude | Degree | Bonus resolution beyond core failure |
+|---:|---:|---|---|
+| 1 | 6–20 | **Standard Critical Failure** | Declared ordinary failure envelope; no bonus lens. |
+| 1 | 3–5 | **Amplified Critical Failure** | One situation-reactive bounded complication lens; no extra persistent world mutation. |
+| 1 | 2 | **Legendary Critical Failure** | Two distinct situation-reactive bounded complication lenses; no extra persistent world mutation. |
+| 1 | 1 | **Mythic Critical Failure** | Open `d3 + 2` persistent failure lenses under the snapshotted reach profile, plus the Mythic end of the declared core stakes. |
+
+The complete Crit Magnitude ritual is now human-readable as one pattern:
+
+```text
+natural 20 reads magnitude upward:   1–15 / 16–18 / 19 / 20
+natural 1 reads magnitude downward: 20–6  / 5–3   / 2  / 1
+degree face counts:                 15 Standard / 3 Amplified / 1 Legendary / 1 Mythic
+bonus lens counts:                  0 / 1 bounded / 2 bounded / d3+2 persistent
+```
+
+The exact mirror governs distribution, number of reward/complication axes, and persistent threshold. It
+does not require success and failure to share tone or core stakes: Standard success is stylish excellence;
+Standard failure is the ordinary declared failure; Mythic success is wondrous; Mythic failure follows the
+scene's fairly declared harm register and may be terminal when terminal danger was genuinely at stake.
+
+The legacy asymmetric failure table is superseded for redesign/spec purposes. The locked
+`CRIT-MAGNITUDE.md` and implementation remain unchanged until an authorized build/spec amendment.
+The mirrored-distribution decision is closed.
+
+#### 10.11.47 Open configurability follow-up — must success and failure share reach profile?
+
+The exact mirror need not force the optional Mythic reach ceiling to be identical in both directions.
+Different players may genuinely want:
+
+- restrained persistent miracles and restrained persistent catastrophes;
+- Worldbreaker triumphs but scene-rooted Mythic failures;
+- scene-rooted Mythic triumphs but Worldbreaker disasters;
+- Worldbreaker extremes in both directions.
+
+##### Option 1 — one linked reach setting
+
+`Mythic` or `Worldbreaker` applies to both `20/20` and `1/1`. This is simple, symmetric, and makes the
+setting easy to explain, but a player who wants extravagant earned victories without region-erasing
+fumbles cannot express that preference. It also hardcodes a coupling that the typed resolver does not
+mechanically require.
+
+##### Option 2 — expose separate success and failure settings immediately
+
+Players select reach for Mythic success and Mythic failure independently from the start. This gives full
+control but adds conceptual weight to an already unusual rules screen before many players have experienced
+one double extreme.
+
+##### Option 3 — independent engine fields, linked presets by default, advanced split later
+
+Store and snapshot independent capabilities from the beginning:
+
+```text
+crit.successMythicProfile: mythic | worldbreaker
+crit.failureMythicProfile: mythic | worldbreaker
+```
+
+The ordinary setup surface initially offers clear linked presets:
+
+- **Mythic:** restrained reach in both directions—the default;
+- **Worldbreaker:** expansive reach in both directions—the explicit chaos opt-in.
+
+An advanced control, later release, or mod may expose the mixed combinations without a save-schema or
+effect-contract migration:
+
+- **Heroic Wild:** Worldbreaker successes, restrained failures;
+- **Doom:** restrained successes, Worldbreaker failures.
+
+The two values obey the same nonretroactive between-resolution switching rule and are snapshotted by the
+`CheckContract`. Dice probability, mirrored lens count, anti-fishing, and anchor coverage never change.
+
+**Recommendation:** Option 3. It costs little in the foundational schema and validator because the same
+reach contract already resolves by direction, preserves a simple default UI, and honors Adam's long-term
+configurability goal without presenting every player with a wall of knobs.
+
+**Open follow-up:** should the engine represent success and failure Mythic reach independently from the
+start, while the initial player-facing settings expose only the linked Mythic and Worldbreaker presets and
+reserve mixed Heroic-Wild/Doom combinations for advanced configuration later?

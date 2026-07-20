@@ -281,6 +281,16 @@ unavailable. Preview remains freely cancelable; whole-turn rewind is not part of
 memory, default-seal, and follow-up route-ranking rules live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.10.
 
+## Resource-bounded safe-route ruling (Adam, 2026-07-20 — additive)
+
+> "yes"
+
+The BattleMat defaults to the safest known route within the movement budget the player has already authorized,
+then to lower movement cost. A safer route requiring a new payment tier and a shorter route carrying known danger
+appear as explicit alternatives rather than silently choosing Dash or exposure. Materially different consequence
+types remain labelled choices rather than an unexplained aggregate risk score. Exact ranking, tie-break, cost, and
+next label-lifecycle question live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.11.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

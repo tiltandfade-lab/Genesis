@@ -16699,3 +16699,74 @@ depends on shared consequence severity classes and stable tie-breaks rather than
 
 Does Adam accept Option C? After this, the exact-movement branch can return to stable EngagementLens label
 lifecycle and then F10.3b. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.11 F10.1j ruling - resource-bounded safe route with material alternatives
+
+**Adam's ruling (2026-07-20):** accept Option C. A destination click defaults to the safest known route available
+within the movement budget the player has already authorized, then to the lowest-cost route among equally safe
+candidates. The engine must not silently cross into Dash or silently accept a known danger merely because one path
+is shorter.
+
+The accepted route-ranking contract is:
+
+1. reject illegal paths and paths outside the currently authorized movement budget;
+2. among the remaining paths, prefer one with no known material consequence over one with known exposure;
+3. among consequence-equivalent paths, prefer lower movement cost;
+4. break exact ties deterministically from canonical cell/edge ids so save, replay, UI, prose, and DM receipts agree;
+5. compute a least-cost candidate separately and retain it only when its risk/resource profile materially differs
+   from the default;
+6. if a safer route needs a new payment tier—Action Dash, Bonus Action Dash, flight activation, or another resource—
+   present it beside the affordable risky route as an explicit choice. Neither route commits through display alone.
+
+“Safest” is not one opaque universal score. Consequence-free dominates known exposure within the same authorized
+budget. When two routes expose the actor to **different, non-dominating** known consequences—such as one possible
+opportunity attack versus breaking concealment and crossing fire—the interface shows the capped alternatives and
+their typed summaries rather than pretending the engine knows the player's tactical values. Wave 7 may later own
+rules-specific comparable magnitudes where the system genuinely has them; Wave 10 forbids hiding value judgments
+behind an unexplained route score.
+
+Examples:
+
+- with 30 feet remaining, `20 ft · Goblin 2 opportunity attack` versus `30 ft · no known exposure` defaults to the
+  safe 30-foot route and keeps the shortcut selectable;
+- with 30 feet remaining, `25 ft · exposed` versus `40 ft · no known exposure · Dash required` displays both and
+  requires the player to choose danger or a payment source;
+- equal risk and equal cost resolve through a stable tie-break, never animation timing or object iteration order.
+
+The implementation cost remains **moderate-high but bounded**: a least-exposure constrained search, a least-cost
+search, typed profile comparison, stable tie-breaks, and a small alternative cap. It does not authorize enumerating
+all paths or importing an external combat authority. This closes F10.1j and the current exact-movement follow-up
+branch.
+
+#### F10.1k - stable speakable-label lifecycle
+
+The deferred label question now returns. In plain English: how should handles such as `Goblin 2` behave when
+citizens die, reinforce, hide, transform, flee, and return?
+
+- **Option A - renumber the visible cast continuously:** compact, but “Goblin 2” may refer to a different creature
+  after a death or camera change and makes both click/prose commands unsafe.
+- **Option B - permanent world-global type numbers:** maximally persistent, but produces labels such as `Goblin 47`,
+  turns a UI handle into unintended world identity, and burdens saves forever.
+- **Option C - monotonic encounter/continuity-scope handles mapped to canonical ids (recommended):** assign a
+  visible citizen the next local handle when first revealed; never renumber or reuse a retired number inside that
+  scope. The same canonical citizen keeps its handle if it leaves and returns during the same encounter/site
+  continuity. A later unrelated scene may open a new label scope without changing the citizen's canonical identity.
+
+Under Option C:
+
+- `Goblin 1` dies; surviving `Goblin 2` stays `Goblin 2`; reinforcements become `Goblin 3` and `Goblin 4`;
+- a hidden goblin receives its handle only when revealed, so invisible reservations cannot leak enemy count;
+- if `Goblin 2` flees and returns during the encounter/continuous site episode, it remains `Goblin 2`;
+- if the player learns Goblin 2 is Varka, the display may become `Varka` while `Goblin 2` remains a valid parser
+  alias for the active scope;
+- a witnessed transformation may display `Wolf (Goblin 2)` or another truthful descriptor while preserving the
+  handle. A secret disguise or replacement never leaks canonical identity through the label;
+- rooted NPC identity, callbacks, and persistence belong to canonical entity records, not to preservation of a
+  generic combat number across the entire world.
+
+The implementation/maintenance cost is **moderate**: a saved `LabelScope`, monotonic per-descriptor counters,
+entity-id/alias maps, tombstones for retired handles, reveal-gated assignment, transformation/display rules, and
+parser tests. Runtime cost is tiny; most risk lies in visibility, save/re-entry, and alias correctness.
+
+Does Adam accept Option C? If so, exhaust any remaining label edge cases, then return to F10.3b's Card J/K object-
+inspection split. Wave 10 remains **OPEN**; no build is authorized.

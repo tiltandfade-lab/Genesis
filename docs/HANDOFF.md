@@ -6,6 +6,24 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 route ranking) — DEFAULT SAFE WITHIN THE BUDGET; SURFACE REAL TRADEOFFS [Codex]
+
+This supersedes the bounded-undo pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.1j Option C. Within the movement budget already authorized, destination selection defaults to no
+known material consequence, then lower movement cost, then a stable canonical tie-break. The engine retains a
+least-cost alternative only when its risk/resource profile materially differs. If the safe route requires a new
+payment tier while a risky route does not, both are explicit choices; neither Dash nor danger is silent. Different
+non-dominating consequence types remain typed alternatives rather than an opaque universal risk score. F10.1j and
+the current exact-movement branch are closed.
+
+**Do next:** ask F10.1k. Codex recommends monotonic encounter/continuity-scope labels mapped to canonical ids:
+never renumber or reuse `Goblin 2` within the scope; assign hidden citizens only when revealed; preserve the same
+handle across flee/return and witnessed transformation; allow a known proper name to replace display while keeping
+the generic alias active; do not carry generic combat numbers as permanent world identity. Exhaust label edge
+cases, then return to F10.3b Card J/K inspection.
+
 ## ⭐ Latest (2026-07-20, Wave 10 bounded movement undo) — FORGIVE MISCLICKS; NEVER REWIND CONSEQUENCES [Codex]
 
 This supersedes the movement-warning pickup below without deleting it. Design/docs only: no code, dependency

@@ -9493,3 +9493,120 @@ This creates three decisions to exhaust in order:
 a real uncertain check before dice, after which a Mythic double-crit is explicitly allowed to break the
 ordinary result envelope through validated lens events, while fictionally impossible no-method requests
 receive no roll and therefore cannot fish for reality-breaking success?
+
+#### 10.11.28 Ruling — legitimate stakes may include terminal catastrophe; no crit fishing
+
+Adam emphatically accepts the no-crit-fishing boundary and clarifies the high-stakes side. If a character
+is trying to stabilize the magic crystal holding an entire town together or preventing it from being
+absorbed into a hell plane, a 1/1 may absolutely send that town into oblivion, never to return.
+
+That is not an exception to the recommended `CheckContract`; it is exactly why the contract records stakes
+before dice. The engine must not use “fairness” to save a terminally threatened town after an honestly
+telegraphed Mythic failure. In this example the contract may own:
+
+```text
+target: the stabilizing crystal and its town/domain dependency
+method: a real but uncertain stabilization procedure
+ordinary failure envelope: instability, damage, partial planar absorption, or another authored result
+mythic failure envelope: terminal crystal collapse; town/domain absorbed or erased
+threatened values: site, population, routes, institutions, relationships, quests, regional dependencies
+stakes register: existential and already telegraphed
+legal terminal events: domain destruction/relocation, topology severance, population/site terminal state,
+                       quest/contract consequences, hell-plane Breach/root, survivor/death resolution
+```
+
+The base action consequence does not wait for a particular lens if the rolled check contract already
+licenses it. A 1/1 takes the failure to the Mythic end of the declared stakes—the town is gone—and the
+three-or-more lenses determine the distinct persistent cascade around that loss: perhaps the forbidden
+door opens, a local planar law curdles, a threat enters, a bloodline inherits a debt, and the doer is
+marked. The lens oracle enriches and spreads the catastrophe; it does not protect the advertised core
+stake through a lucky lens omission.
+
+Likewise, a low-stakes 1/1 may still break reality permanently, but it may not manufacture mass death or
+terminal loss that was not present in the scene. Stakes control the legal harm register; magnitude controls
+how deeply and strangely the lawful result propagates.
+
+No-crit-fishing is now explicit:
+
+- no meaningful uncertainty, method, or consequence means no roll;
+- an identical retry against unchanged facts does not create another check;
+- a new check requires a materially changed method, resource, position, assistance, target state, or
+  consequence, with provenance;
+- time, tools, consumables, exposure, noise, fatigue, witness response, clocks, and failed-attempt state
+  prevent costless repetition where retries are fictionally possible;
+- one plan is not split into artificial micro-checks merely to multiply natural-20 opportunities;
+- cohort/batch action uses the resolution's declared group dice rather than one hidden crit chance per
+  simulated member;
+- the DM may not call unnecessary checks to create drama or fish for either Mythic direction;
+- once a legitimate roll qualifies, no cooldown, saturation budget, or secret correction suppresses its
+  Crit Magnitude result.
+
+Decision 1—roll permission and the reality-breaking boundary—is closed.
+
+#### 10.11.29 Open decision 2 — exact Mythic frequency and roll eligibility
+
+Adam asks whether `20/20` is Mythic and whether a 5% chance followed by another 5% chance produces a 22%
+chance of two consecutive 20s across 50 rolls.
+
+Yes: Mythic success is natural 20 followed by magnitude 20. For one eligible action roll:
+
+```text
+P(20/20) = 1/20 × 1/20 = 1/400 = 0.25%
+P(1/1)   = 1/20 × 1/20 = 1/400 = 0.25%
+P(either Mythic extreme)   = 2/400 = 1/200 = 0.5%
+```
+
+The cumulative chance over repeated **eligible action rolls** is:
+
+| Eligible action rolls | At least one 20/20 | At least one 20/20 or 1/1 |
+|---:|---:|---:|
+| 10 | 2.5% | 4.9% |
+| 20 | 4.9% | 9.5% |
+| 50 | 11.8% | 22.2% |
+| 100 | 22.1% | 39.4% |
+
+So 22.2% is not the chance of at least one double-20 alone. It is the chance of at least one Mythic
+extreme in either direction across 50 eligible action opportunities. The double-20 success alone is about
+11.8%; the double-1 failure alone is also about 11.8%. These are cumulative chances, not a guarantee that
+one occurs every 200 or 400 rolls.
+
+The remaining mechanical question is what counts as an eligible roll.
+
+##### Option 1 — every d20 the software happens to roll
+
+Player actions, every minion attack/save, background simulation, batch checks, and internal resolution
+dice all receive independent magnitude opportunities. This makes world-breaking frequency depend on CPU
+implementation and crowd size; a large offscreen battle can create more Mythic canon than an entire
+player adventure. **Not recommended.**
+
+##### Option 2 — only the player's d20s
+
+This makes incidence legible and privileges player drama, but named enemies, allies, rivals, and world
+actors can never create equivalent dice-driven miracles or catastrophes. It weakens the brutal symmetric
+world and conflicts with the existing combat-crit ruling. **Not recommended.**
+
+##### Option 3 — every surfaced spotlight d20 resolution
+
+Full Crit Magnitude applies to:
+
+- every player-facing attack, check, save, and other independently resolved d20 whose result matters;
+- every individually narrated consequential roll by a named or currently foregrounded NPC/foe;
+- one explicit group/cohort resolution when minor actors act collectively;
+- any other roll deliberately promoted into a visible action beat with a real `CheckContract`.
+
+It does not apply independently to passive arithmetic, solver probes, background catch-up, hidden batch
+members, per-capita simulation, or other d20-shaped implementation details. Those systems may create one
+surfaced group action when their collective uncertainty matters.
+
+This interprets “any d20 action” as any real narrated action-resolution die, not any random number inside
+the program. Advantage/disadvantage, class mechanics, explicit rerolls, and special d20 systems still need
+an eligibility registry so no caller accidentally bypasses or duplicates the rule. The dice and magnitude
+remain open wherever the player can witness the beat.
+
+**Recommendation:** adopt Option 3. It preserves symmetry and genuine opponent/world miracles without
+letting internal simulation volume inflate Mythic incidence. Once a roll is eligible, use the exact honest
+table above—no cooldown, pity system, frequency correction, or cancellation.
+
+**Open decision 2:** should full Crit Magnitude apply to every surfaced spotlight d20 resolution—all
+player-facing d20s, individually narrated consequential named/foreground actor d20s, and consolidated
+group rolls—while internal, background, and per-unit batch dice cannot generate independent cascades?

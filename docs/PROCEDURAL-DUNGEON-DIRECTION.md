@@ -7787,3 +7787,83 @@ mutation/persistence/fallback/gate, and demonstrate that it fits the typed total
 **Open follow-up:** should this typed total-envelope rule become binding architecture, including the
 principle that canonical truth is preserved while optional active work is aggregated, deferred,
 compacted, or evicted by priority?
+
+#### 10.11.8 Challenge — are we treating an ordinary prison workload as an engine crisis?
+
+Adam challenged the premise: a purpose-built simulation such as *Prison Architect* handles substantially
+more agents and activity smoothly, so the city-prison fixture does not sound inherently expensive.
+
+That challenge is correct. The example is useful as an **integration fixture**, but it should not be
+treated as an expected breaking point or used to justify a small simulation. Hundreds of lightweight
+records, room assignments, schedules, group memberships, needs, and event checks are not inherently
+large work for a competently structured browser engine. A few thousand compact records and graph edges
+are also not, by themselves, an alarming scale. Exact production targets still require profiling rather
+than intuition.
+
+The meaningful distinction is not simply **how many people exist**. It is which kind of work the engine
+performs for each of them, at what frequency, and which surface receives the result:
+
+```text
+light simulation
+  compact location, schedule, role, group, need/pressure, condition, and intent state
+  updated in batches, on relevant ticks, or in response to events
+
+narrative materialization
+  individual history, voice, relationships, secrets, evidence, and interaction affordances
+  expanded under contact, attention, or causal relevance
+
+AI-DM projection
+  a bounded summary plus ids the DM may request
+  never a raw serialization of every actor and unresolved record
+
+visual projection
+  nearby visible actors and state, using batching/instancing/culling appropriate to the final engine
+
+persistence
+  stable canonical records plus deltas/events
+  not a full rewritten snapshot of every unchanged detail on every turn
+```
+
+For example, a major prison might keep 400 prisoners as individually stable lightweight actors with
+locations, schedules, conditions, affiliations, and current pressures. Twenty nearby or causally salient
+people may have fully active interaction models. Five may currently matter to the conversation. The DM
+receives a concise description of the visible crowd, relevant groups, named contacts, live pressures, and
+available pull-by-id details—not 400 biographies. If the player singles out prisoner 317, that actor's
+stable facts and seed materialize into richer detail without creating a replacement person.
+
+This is the already accepted graded-attention model applied to computational work. It preserves real
+individuals and a meaningful light simulation rather than replacing the prison with a decorative crowd.
+
+The actual risk is **unbounded heterogeneous work**, such as updating every distant city's population at
+full local frequency, pathfinding every actor every render frame, expanding every latent relationship and
+secret, rewriting every record into the save, and sending the entire result to the AI DM. A specialized
+management game keeps its hot simulation narrow and regular. Genesis has additional narrative,
+provenance, persistence, knowledge, discovery, and model-context surfaces, but those costs should be
+architecturally isolated rather than answered by shrinking the world.
+
+##### Revised recommendation — capacity-first envelopes, not scarcity-first caps
+
+Retain typed measurement and graceful fallback, but change their design posture:
+
+1. Set ambitious production-path capacity targets first. A dense major institution with several hundred
+   lightweight stable actors, multiple groups, operating pressures, events, and visible activity should
+   run normally without narrative degradation.
+2. Use compact data, batch/event-driven updates, spatial locality, deltas, renderer batching, and graded
+   narrative attention to meet those targets.
+3. Instrument each typed surface and reserve headroom. Do not spend a fictional universal complexity
+   currency during ordinary generation.
+4. Aggregate, defer, compact, or evict active work only when measured thresholds or distance/relevance
+   policies justify it. Preserve every canonical identity and consequence.
+5. Treat visible fallback activation in the normal city-prison fixture as an architecture or
+   implementation failure to investigate, not the intended steady state.
+6. Keep a pathological combined-load fixture above the target so graceful degradation is still proven.
+
+The city-prison fixture therefore changes role: it is the **minimum dense-simulation acceptance case**,
+not the maximum capacity case. The total-envelope rule remains valuable as observability, admission
+control for new systems, and a last-resort safety mechanism; it must not become a content rationing system
+or a reason to turn hundreds of viable actors into ten.
+
+**Revised open follow-up:** should the binding rule be **capacity-first typed envelopes**—requiring the
+ordinary dense-prison case to run at full intended fidelity, measuring each cost surface independently,
+and permitting graceful work shedding only beyond proven production targets or for genuinely cold/distant
+detail?

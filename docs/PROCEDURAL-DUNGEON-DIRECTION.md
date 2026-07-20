@@ -8179,3 +8179,119 @@ thresholds, and recovery metadata; and allow exact quantities only for mechanics
 **Open follow-up:** do these seven facets capture the necessary truth without becoming excessive—and is
 it acceptable that a capability may simultaneously project several friendly labels, such as intact,
 strained, partially blocked, and substituted, rather than being forced into one state?
+
+#### 10.11.14 Cross-domain stress pass — the prison model needs two generalizations
+
+Adam agrees that the factored model works for a prison kitchen and asks whether it holds everywhere
+else. A skeptical trace across constructed, natural, living, social, distributed, mobile, and realm
+systems finds that the model largely holds **within its proper scope**, but the literal seven-field form
+would still smuggle in constructed-site assumptions.
+
+##### What the model is for
+
+Use operational state only for a material capability or flow that:
+
+1. provides, transports, transforms, regulates, contains, protects, permits, communicates, or renews
+   something;
+2. can be available/effective for a defined scope against some reference envelope; and
+3. changes a dependent decision or consequence when its state changes.
+
+Do not force identity, history, ownership, belief, mood, relationship, aesthetic description, or every
+ordinary object's condition into this schema. Those truths keep their own owners.
+
+##### Correction 1 — replace designed capacity with a typed reference envelope
+
+`Designed capacity` is correct for a prison kitchen but teleological for an aquifer, living hive, wild
+ecosystem, or spontaneous Breach. Compare demand or pressure against the appropriate reference:
+
+| Family | Reference envelope example |
+|---|---|
+| Constructed service | intended throughput, occupancy, duty cycle, or engineered tolerance |
+| Natural system | sustainable range, recharge rate, seasonal norm, channel capacity, or observed equilibrium |
+| Living system | metabolic tolerance, renewal rate, life-cycle phase, or organism-scale capacity |
+| Magical/realm system | coherence range, traversal stability, charge/recovery cycle, or governing realm law |
+| Social/institutional system | mandate, customary coverage, staffed throughput, jurisdiction, or promised service level |
+
+The envelope records its authority and uncertainty. It may be an exact value where mechanics need one,
+but a band, estimate, or range is the ordinary roller-friendly form. “Healthy” means coherent relative to
+that envelope, not morally good, beneficial to the player, or intentionally designed.
+
+##### Correction 2 — physical integrity becomes an optional typed support condition
+
+Not every capability has a physical body. Replace the universal `physical integrity` facet with
+`support condition`, whose registered family may be:
+
+- constructed/material integrity;
+- biological vitality;
+- magical or planar coherence;
+- network continuity for a distributed route/service;
+- institutional support or authorization where that is a real causal substrate;
+- not applicable when availability and effectiveness already express the whole truth.
+
+These families do not become interchangeable numbers. Each defines its own human-readable bands,
+legal causes, evidence, transitions, and recovery. The shared engine asks only how the typed condition
+constrains availability/effectiveness and what event may change it.
+
+##### Revised universal core
+
+```text
+scope
+availability / coverage
+performance / effectiveness relative to a named obligation and standard
+operating mode
+access / control
+pressure / load relative to a typed reference envelope
+optional typed support condition
+
++ cause/provenance, time/schedule, evidence, buffers/substitutes,
+  dependency thresholds, and recovery/terminal metadata for non-normal state
+```
+
+`Quality` is not a free-floating moral or aesthetic score. When used, it names the beneficiary, output,
+and standard. An efficient torture system can be operationally effective while being morally monstrous;
+player/faction evaluation remains separate. A temple's ritual may be canonically effective under realm
+law while its priests falsely believe it has failed, or canon may be uncertain while rival beliefs remain
+separate knowledge records.
+
+##### Stress traces
+
+| Case | Factored state | Why one label fails |
+|---|---|---|
+| Drought-struck hamlet well | source coverage low; water quality normal; access open; casing intact; demand high; recharge envelope seasonal | `degraded` cannot distinguish clean scarcity from contamination or breakage |
+| Flooded mine | pump coverage zero; pump effectiveness failed; material condition damaged; demand above remaining capacity; lower workings inaccessible | `failing mine` erases still-working processing/storage and the causal pump dependency |
+| Residential college in summer | teaching/dormitory mode seasonally dormant; buildings intact; demand low; guest housing substituted into vacant rooms | `closed` or `failed` mislabels healthy cadence and adaptive use |
+| Contested temple | ritual service effective; access restricted by claimant; institutional authorization disputed; physical shrine intact; beliefs conflict | operational canon, claims, and belief cannot share one state enum |
+| Living hive | nutrient coverage reduced; adaptive emergency mode; biological vitality wounded; brood demand deliberately suppressed | `damaged` misses a living compensatory response |
+| Breach portal | traversal availability intermittent; effectiveness unstable; access requires attunement; planar coherence falling; current demand light | physical integrity is the wrong substrate, while `unstable` alone omits access and load |
+| Distributed fire watch | network coverage partial; local towers intact; one signal route blocked; substitute runners active; storm demand high | site-wide state needs shared scope plus sparse node/route exceptions |
+| Mobile caravan | trade service available only inside location/time windows; load varies by route; wagons intact; border access denied | availability depends on commitments and travel, not a permanent place label |
+
+##### Remaining edge protections and expenses
+
+- **multi-output processes:** split state by material output/obligation when one process can succeed at one
+  product and fail another; do not average them into one performance score;
+- **scope overlap:** inherit the highest honest shared state and store sparse cohort/zone exceptions;
+  contradictory overlaps need authority and reconciliation, not last-write-wins;
+- **stocks versus flows:** depletion, reserves, and irreversible loss remain resource facts feeding the
+  operational state; a status facet does not replace inventory or ecology;
+- **value neutrality:** operational effectiveness never implies player benefit or moral approval;
+- **belief separation:** observed/reported state may differ from canon without changing it;
+- **realm adapters:** registered condition/reference families extend the shared contract; free-form tags or
+  scattered realm conditionals do not;
+- **authoring and QA:** conversion laws, derived-label precedence, mixed-scope summaries, and mod fallbacks
+  remain a real Wave 12/schema expense.
+
+##### Revised recommendation
+
+Adopt **six universal operational facets plus one optional typed support-condition adapter**, all scoped
+to admitted material capabilities/flows. Replace designed capacity with the family-appropriate reference
+envelope. Keep cause, time, evidence, dependency, and recovery as required exception metadata. Derive
+friendly summaries without making them canon, and allow a system to carry several labels at once.
+
+This remains compact because healthy state is inherited, optional facets may be absent, shared conditions
+live at their highest honest scope, and only material exceptions create stored deltas.
+
+**Open follow-up:** should this corrected cross-domain form replace the literal seven-prison-facet model—
+especially the rules that natural/living/realm systems use typed reference envelopes, support condition is
+family-specific and optional, and the entire operational schema applies only to admitted capabilities and
+flows rather than every kind of world fact?

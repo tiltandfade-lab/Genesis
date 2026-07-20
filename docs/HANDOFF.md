@@ -6,6 +6,22 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 active-character lens) — FOLLOW THE TURN FOR NOW; PROVE IT IN PLAY [Codex]
+
+This supersedes the board/lens-split pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam rejects F10.3h's no-focus-theft recommendation and provisionally chooses Option A: the EngagementLens follows
+the current active turn character. Reactions and secondary effects animate inside that active tableau rather than
+recursively taking focus. Focus is presentation only; disabled/minimum-layout/accessibility settings still win and
+board feedback remains complete. Outside combat, PC selection still opens the lens. A mandatory playtest compares
+active-follow with selected-PC-only across party/enemy density, reactions, fast turns, drawers, and tablet layout;
+the design reopens explicitly if active-follow fails. F10.3h is provisionally closed.
+
+**Do next:** ask F10.3i. Codex recommends stable faction sides—party/companions left, hostiles right—with the active
+actor highlighted wherever it stands and action direction reversing on enemy turns. Then resolve neutral/third-
+party placement and manual collapse, close inspector/feedback with its playtest obligation, and resume F10.6b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 board/lens split) — BOARD EXPLAINS THE TACTICS; LENS PERFORMS THE DRAMA [Codex]
 
 This supersedes the interim-battle-feedback pickup below without deleting it. Design/docs only: no code,

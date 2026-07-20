@@ -17342,3 +17342,58 @@ Examples under Option B:
 
 Does Adam accept Option B? If so, the inspector/feedback branch has no remaining material follow-up and can close
 before F10.6b native-resolution proof. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.20 F10.3h ruling - active-character auto-follow, provisional pending playtest
+
+**Adam's ruling (2026-07-20):** reject the no-focus-theft recommendation and provisionally choose Option A. The
+EngagementLens should follow whoever the active character is. Adam explicitly marks this as a behavior that will
+require playtesting; use Option A for now rather than pretending the tradeoff is already proven.
+
+“Active character” means the current turn owner/active combat citizen, not every secondary reactor, projectile,
+hazard, summoned effect, or narration subject:
+
+- at turn/activation transition, the lens opens if combat presentation permits and changes its focused actor to
+  the new canonical active citizen;
+- the lens focus is presentation state derived from `activeActorId`; it does not change turn ownership, selection
+  legality, target state, or player control;
+- reactions, opportunity attacks, counter-effects, and environmental interrupts perform inside the active
+  citizen's current tableau without recursively stealing focus. The board pauses at the exact trigger and remains
+  authoritative;
+- outside turn-based combat, the earlier click/selection rule remains: selecting a PC opens that PC's lens;
+- if the lens is explicitly disabled, unavailable at the minimum layout, or suppressed by an accessibility mode,
+  auto-follow does not override the setting. The complete board/audio/caption feedback remains;
+- the player may still inspect/select citizens on the board without changing the active-turn lens unless a later
+  explicit focus control is accepted.
+
+The required playtest must compare at least active-follow versus selected-PC-only behavior across a one-PC duel,
+party combat, several enemies, reinforcements, opportunity reactions, fast enemy turns, character drawer use, and
+minimum landscape-tablet layout. Observe action comprehension, unwanted layout movement, target-selection errors,
+turn ownership recognition, animation skip rate, and whether players fight the focus. If active-follow fails, Wave
+10 reopens this ruling explicitly rather than silently changing it in implementation.
+
+The implementation cost is **medium focus/timeline work** plus meaningful visual QA: active-actor events,
+animation queue handoff, board/lens synchronization, layout transition restraint, user setting overrides, and
+turn-boundary tests. It is still cheaper than requiring every expressive beat on the 3D board.
+
+F10.3h is provisionally closed at design level with a mandatory playtest gate. It exposes a direct conflict with
+the earlier PC-left/enemy-right composition that must be ruled now.
+
+#### F10.3i - does the active actor change sides in the EngagementLens?
+
+- **Option A - active actor always on the left, targets on the right:** every turn reads in one action direction,
+  but party and enemy sides mirror repeatedly. Goblins jump from right to left on their turns, weakening faction
+  recognition and contradicting the left-side PC UI relationship.
+- **Option B - stable faction sides; active actor highlighted wherever it stands (recommended):** party/companions
+  remain on the left and hostiles on the right. On a PC turn the active actor attacks left-to-right; on an enemy
+  turn the highlighted active enemy acts right-to-left against the relevant party targets. Reactions animate from
+  their stable side without refocusing. A turn banner/halo/name identifies the active citizen.
+- **Option C - keep one selected PC on the left even when unrelated actors act:** preserves the earlier selected-PC
+  tableau but cannot honestly frame an enemy attacking a different companion or two non-selected citizens.
+
+Option B retains spatial/faction memory while still honoring active-character auto-follow. It costs more animation
+direction variants than Option A, but sprite mirroring, projectile direction, lunge/recoil, labels, and target
+framing can remain family-level rules. It also avoids UI whiplash from swapping the whole cast every turn.
+
+Does Adam accept Option B? If so, resolve neutral/third-party placement and manual-collapse behavior, close the
+inspector/feedback branch with its playtest obligation, and resume F10.6b. Wave 10 remains **OPEN**; no build is
+authorized.

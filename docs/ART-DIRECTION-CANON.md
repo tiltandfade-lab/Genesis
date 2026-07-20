@@ -376,6 +376,17 @@ projectile, spell, reaction, damage, healing, and character-performance animatio
 collapsed, disabled, or skipped lens never removes information or blocks play. Exact sequencing, duplication,
 cost, and open auto-focus behavior live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.19.
 
+## Active-character EngagementLens auto-follow ruling (Adam, 2026-07-20 — additive)
+
+> "no, i kind of think it should be whoever the active character is. i think that's soething that will require playtesting, but let's go with option A for now"
+
+In turn-based combat, the EngagementLens provisionally follows the canonical active turn character at activation
+boundaries. Reactions and secondary effect sources animate within that tableau rather than recursively stealing
+focus. This is a playtest-dependent default, not a proven final behavior; active-follow must be compared against
+selected-PC-only focus, and an explicit disabled/accessibility/minimum-layout state still suppresses the lens
+without losing board feedback. Exact focus, test, cost, and orientation follow-up rules live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.20.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

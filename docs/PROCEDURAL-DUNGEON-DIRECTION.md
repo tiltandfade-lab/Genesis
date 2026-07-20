@@ -15077,3 +15077,159 @@ rule, every later assignment, and an explicit right to reopen on contradiction.
    automate after tests; official/shared learning is a later, more strongly governed product capability?
 2. **G2.1-CLOSE:** choose Option B - after certification and contradiction audit, close the governing design and
    route detailed schemas/UI/tests/build choices to their named later waves rather than keeping G2.1 open forever?
+
+### 10.SWEEP.4 Ruling and material G2.1 follow-up - bounded reusable NPC casting cards
+
+Adam accepts G2.1-CERT's tiered invention-reuse recommendation: exact inventions persist in their world; causal
+in-world copying remains world truth; optional private local cross-world learning may automate after tests; an
+official/shared toolbox is a later, more strongly governed product capability.
+
+Before agreeing to close G2.1, Adam identifies a necessary memory/casting distinction. A strong NPC may be generated
+for a room the player never visits. If that NPC was not woven into the place, mentioned, used by simulation, or
+given committed lore, the candidate should be portable: it returns to the DM's casting hand and may be placed in a
+later legal scene. Genesis should not accumulate tens of thousands of permanent NPC stubs merely because prep or a
+candidate solve considered them. This is analogous to the programming lesson Adam heard about generating every
+bullet as a fresh long-lived object: lifecycle and reuse must be explicit or memory fills with objects that no
+longer serve play.
+
+#### The critical distinction - candidate card, role slot, casting, and canonical NPC
+
+```text
+ROLE SLOT
+  A site-owned need such as quartermaster, night guard, pilgrim, witness, prisoner, or merchant.
+  The role may be canonical before any exact individual fills it.
+
+ACTOR CARD
+  A compact portable candidate: stable card/seed, rolled identity kernel, personality handles,
+  compatibility tags, presentation hooks, and perhaps a DM reserve/pin. It has no world location,
+  custody, relationships, or history merely because it was generated.
+
+PROVISIONAL CASTING
+  A card is tentatively matched to a role/scene/place. The match may be scored, staged in hidden prep,
+  or offered to the DM. Until a rooting event commits it, no world entity exists and the card can return.
+
+CANONICAL NPC
+  A rooting event mints the stable codex entity and commits location/role/relationships/knowledge/
+  equipment/history/provenance. The card leaves the portable casting deck. The NPC can later move
+  only through world events, never by being silently recast elsewhere.
+```
+
+This preserves both simulation and portability. A fortress may canonically require a quartermaster role while the
+exact actor remains uncast. If the quartermaster's individual decisions affect stores, orders, rumors, or other
+people before player contact, the system must cast/root the individual at that point. If group/site owners can
+resolve the operation without individual psychology, the role may stay abstract until contact.
+
+#### Options
+
+**Option A - every generated NPC is immediately canon.** This matches the current broad `soft:true` codex-pool
+direction but scales poorly if generation becomes prolific. Unvisited scenes create permanent identities, locations,
+and stubs; the DM loses strong unused candidates to rooms that never mattered.
+
+**Option B - discard every unused NPC.** This keeps memory bounded but throws away unusually strong generated cast
+and forces the system to repeatedly pay generation/selection cost.
+
+**Option C - bounded reusable casting deck with two-phase binding (recommended).** Generate compact ActorCards,
+tentatively cast them without creating world truth, return untouched/unrooted cards to the deck, let the DM reserve
+especially good candidates, evict or seed-compact noncanonical overflow, and mint full NPC entities only on a
+rooting event.
+
+#### What roots a card into world canon?
+
+A card becomes a permanent NPC when any of the following commits:
+
+1. **Player contact or distinguishing evidence:** the player sees/interacts with the individual, hears a sufficiently
+   identifying voice, sees their distinctive action/evidence, or otherwise gains a continuity-bearing referent.
+2. **Canonical mention or record:** another NPC, document, map/roster, rumor, promise, quest, or known fact names or
+   distinctly describes this individual rather than only an anonymous role/group.
+3. **Individual action or consequence:** their motive, choice, knowledge, equipment, movement, order, crime, aid,
+   resource use, or other action changes canonical state even if the player has not met them.
+4. **Committed relationship or obligation:** the individual becomes an owner/target/member of a relationship,
+   contract, callback, clock, faction role, custody chain, service promise, or other durable edge.
+5. **Place/lore binding:** generated history, office, secret, residence, responsibility, ownership, or unique
+   compatibility makes this exact person part of a particular place/world fact.
+
+Generation, scoring, a hidden candidate gallery, an unused role hint, tentative placement in an unrevealed room,
+asset preview, or an uncommitted DM proposal does **not** root the card.
+
+An anonymous but causal person cannot be recycled merely because the player lacks their name. If the party hears a
+distinctive unseen prisoner, is shot by an unknown sentry, or finds evidence created by one specific actor, Genesis
+may root an anonymous stable NPC id and reveal the identity later. Player knowledge and engine identity remain
+separate.
+
+#### Return, reserve, eviction, and bounded memory
+
+- If a room is never entered and no action/lore/reference/relationship binds the tentative NPC, its casting expires
+  and the ActorCard returns to the eligible deck/hand.
+- A strong candidate may be marked `RESERVE` by the DM/selector and retained compactly for later casting. Reserve is
+  not canon and grants no current location or world knowledge.
+- The active hand remains thin and relevance-filtered. A somewhat larger bench/deck may store compact cards or only
+  deterministic seeds plus irreducible rolled traits. Exact capacities and replacement weights belong to Wave 9.
+- Noncanonical, unreserved overflow may be evicted because it is unrealized possibility, not erased world truth.
+  A deterministic seed may optionally permit rehydration without retaining full prose/state.
+- Compatibility tags filter legal casting by realm, population, role, scale, faction possibility, species, tone,
+  and other established constraints. The engine cannot rewrite an ActorCard's fixed identity merely to force a fit.
+- A rooted NPC never returns to the generic casting deck. Later reuse occurs through movement, faction strategy,
+  contracts, or callback cards referencing the same entity, not by duplicating or recasting them.
+
+This produces two different card systems that must not be confused:
+
+```text
+CASTING DECK
+  unrealized portable actor candidates; one card may eventually mint one canonical NPC
+
+CALLBACK / STRATEGIC DECK
+  references to existing canonical people/facts; replay moves or develops the same noun
+```
+
+#### Concrete examples
+
+**Unvisited jail:** prep tentatively casts a memorable scarred goblin negotiator as a prisoner. The player never
+enters the jail; no guard mentions the prisoner; the site simulation never uses their choices; no record or
+relationship binds them. The casting expires and the goblin card returns to the DM's reserve. A later caravan scene
+may legally cast that person as a captive, guide, or traveler if compatibility permits. There was no teleportation
+because the person did not yet exist in world canon.
+
+**Mentioned prisoner:** a guard says, “Varka in the third cell knows the old aqueduct,” creating a named person,
+location, knowledge, and clue edge. Varka roots immediately even if the player never visits. Varka cannot later be
+recast as a merchant elsewhere; any movement requires a real event.
+
+**Anonymous unseen sniper:** an arrow with a distinctive maker's mark hits the party from a roof, and the engine
+attributes the attack to one specific card. That actor roots anonymously because action, position, equipment, and
+evidence now require continuity. The name can remain unknown.
+
+**Quartermaster role:** the fortress program requires a quartermaster, but cold-state stock changes are owned by
+the garrison/group and no individual action matters yet. The role slot persists while the exact card remains
+portable. When the player meets the quartermaster or individual corruption/competence changes stores, one card is
+cast and rooted.
+
+#### Current-engine and research implications
+
+The existing prep system mints small `soft:true` NPC pools into `w.codex`. This new ruling does not authorize code
+change now, but it identifies a future redesign seam: truly unbound candidates should live as compact ActorCards
+outside canonical Codex; `soft` location assignment should not masquerade as world existence. A later spec must
+crosswalk/migrate the useful current pool behavior rather than deleting it blindly.
+
+Tutenel's distinction between class/plan candidates and placed instances supports separating ActorCard from
+canonical entity. Merrell's mixed initiative supports letting the DM pin a valuable candidate. Horswill's bounded
+summaries and Henderson's constraint-cost findings support thin active hands and compact inactive pools. None of the
+papers specifies NPC identity/canon commitment; the rooting law is Genesis-specific.
+
+Option C has **medium architecture cost**: ActorCard/RoleSlot/CastingBinding records, two-phase commit/rollback,
+rooting-event detection, reference integrity, bounded deck/hand policy, seed compaction/rehydration, compatibility
+filtering, and tests proving that unrooted candidates neither leak into world truth nor disappear after commitment.
+It substantially reduces long-session memory/state growth while preserving the best generated cast.
+
+#### Recommendation and closing follow-up
+
+Accept Option C and the rooting rules above. This amends “no erasure” precisely:
+
+> Canon is never erased merely because play moved on. Unrealized candidates are not canon; they may return to a
+> bounded casting deck or be evicted. Once contact, evidence, action, relationship, obligation, or lore roots a
+> candidate, the resulting NPC is permanent world identity and may only move/change through canonical events.
+
+If accepted, exact deck/hand capacities, replacement scores, UI, and generation budgets route to Wave 9, promoted
+Wave 10, and implementation specs. Then G2.1 can enter its contradiction/material-follow-up audit before closure.
+
+**Question for Adam:** accept the bounded ActorCard -> provisional casting -> rooted canonical NPC lifecycle,
+including return-to-hand for untouched/unwoven candidates, compact DM reserve for exceptional candidates, eviction
+of noncanonical overflow, and permanent identity at the first continuity-bearing contact/evidence/action/lore edge?

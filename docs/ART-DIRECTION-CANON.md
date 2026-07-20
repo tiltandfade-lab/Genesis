@@ -291,6 +291,17 @@ appear as explicit alternatives rather than silently choosing Dash or exposure. 
 types remain labelled choices rather than an unexplained aggregate risk score. Exact ranking, tie-break, cost, and
 next label-lifecycle question live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.11.
 
+## Monotonic local speakable-label ruling (Adam, 2026-07-20 — additive)
+
+> "yeah option C of course"
+
+Generic tactical labels remain stable within an encounter/continuous-site scope. Survivors are never renumbered,
+retired numbers are never reused, hidden citizens receive handles only when revealed, and same-scope return or a
+witnessed transformation preserves the handle without leaking hidden identity. Known proper names may replace the
+display while the active generic alias remains usable. Generic combat numbers do not become permanent world names.
+Exact lifecycle, save/replay, summon/split, cost, and later-callback follow-up rules live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.12.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

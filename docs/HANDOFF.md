@@ -6,6 +6,23 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 speakable labels) — LOCAL NUMBERS STAY STABLE; CANONICAL IDENTITY OUTLIVES THEM [Codex]
+
+This supersedes the route-ranking pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.1k Option C. Generic tactical labels are monotonic within an encounter/continuous-site scope:
+never renumber survivors or reuse retired numbers; number reinforcements and newly revealed citizens only as they
+appear; restore the same handle on same-scope return; keep the old alias when a learned proper name replaces
+display; preserve witnessed transformations; never leak hidden identity; and assign separate provenance-linked
+handles to independently targetable summons/splits. Scope data survives save/replay, but generic combat numbers are
+not permanent world names. F10.1k is closed.
+
+**Do next:** ask F10.1l. If an unnamed `Goblin 2` becomes rooted continuity-bearing canon and returns in a later
+story, Codex recommends a stable viewpoint-safe callback descriptor such as `Scarred Goblin`, with `Goblin 2`
+retained as a historical/parser alias until a learned proper name becomes primary. Ordinary unrooted mooks do not
+receive promotion. Then audit description collisions/secret identity and return to F10.3b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 route ranking) — DEFAULT SAFE WITHIN THE BUDGET; SURFACE REAL TRADEOFFS [Codex]
 
 This supersedes the bounded-undo pickup below without deleting it. Design/docs only: no code, dependency

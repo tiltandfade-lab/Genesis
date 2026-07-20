@@ -16770,3 +16770,66 @@ parser tests. Runtime cost is tiny; most risk lies in visibility, save/re-entry,
 
 Does Adam accept Option C? If so, exhaust any remaining label edge cases, then return to F10.3b's Card J/K object-
 inspection split. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.12 F10.1k ruling - monotonic local speakable handles accepted
+
+**Adam's ruling (2026-07-20):** accept Option C. Generic tactical labels are stable monotonic handles within an
+encounter or continuous-site continuity scope, mapped through the viewpoint projection to canonical entity ids.
+They are not continuously renumbered and are not permanent world-global creature numbers.
+
+The accepted label lifecycle is:
+
+- a revealed citizen receives the next unused local number for its truthful perceived descriptor; numbers are
+  never reassigned within the scope, even after death, departure, disappearance, or transformation;
+- surviving labels do not change when another citizen leaves the visible cast. `Goblin 2` stays `Goblin 2`;
+- reinforcements and newly revealed citizens take new numbers. Hidden reservations may not create visible gaps or
+  otherwise leak undiscovered population;
+- a canonical citizen leaving and returning within the same encounter/continuous-site scope recovers the same
+  handle from the saved entity/alias map;
+- when a proper name becomes known, it may replace the generic display label while the old handle remains an
+  accepted alias for the active scope;
+- a witnessed transformation preserves reference explicitly—for example `Wolf (Goblin 2)`—without allocating the
+  transformed citizen as an unrelated `Wolf 1`. Secret disguises, replacements, and mistaken identities project
+  only viewpoint-safe labels and never disclose the hidden canonical mapping;
+- summons, duplicates, or split citizens that become separately targetable receive separate handles with
+  provenance to their source. Merging or despawning them retires rather than recycles those handles;
+- label scope, counters, aliases, and tombstones survive save/load and deterministic replay. The generic display
+  numbers may end with the scope; canonical identity and history do not.
+
+This requires **moderate identity/projection work**: a saved `LabelScope`, per-descriptor monotonic counters,
+canonical-id and perceived-referent alias maps, retired-handle tombstones, reveal-gated assignment, transformation
+and split/merge events, parser resolution, and accessibility parity. Runtime/memory cost is small and bounded by
+the citizens surfaced in the active continuity scope. The system may compact closed-scope display metadata while
+retaining historical aliases only for canonical citizens whose continuity actually persists.
+
+This closes F10.1k's local-label policy. One material edge remains because of the already accepted NPC rooting,
+callback-stub, and provisional-card laws.
+
+#### F10.1l - an unnamed local handle returns in a later story
+
+Suppose `Goblin 2` bargains with the party, escapes, becomes continuity-bearing canon, and returns several sessions
+later before the player learns a proper name. What should the player-facing label do?
+
+- **Option A - keep `Goblin 2` forever:** recognition is easy, but a temporary combat handle becomes an awkward
+  world-global name and can collide with later label scopes.
+- **Option B - assign a fresh local number:** keeps scopes pure but throws away the exact callback recognition the
+  canonical identity earned.
+- **Option C - promote only rooted continuity-bearing citizens to a stable viewpoint-safe callback label
+  (recommended):** use a known distinguishing description such as `Scarred Goblin` or `Aqueduct Envoy`, chosen
+  from facts the player actually observed. Preserve `Goblin 2` as a historical/contextual alias for parser and
+  recap resolution, but do not keep it as the primary display name. Once a proper name is learned, that becomes the
+  display label while both prior aliases remain historical.
+
+Ordinary unrooted combatants never receive this promotion merely because a local number existed. The promotion
+occurs only when the citizen crossed the existing continuity-rooting boundary through meaningful contact, action,
+relationship, obligation, evidence, lore, or later callback selection. The callback label cannot invent a scar,
+rank, location, or relationship the player did not perceive, and it must disambiguate if two rooted citizens share
+the same description.
+
+The implementation cost is **moderate but shared with already accepted identity/callback work**: viewpoint-safe
+descriptor selection, uniqueness checks, alias history, rooting event integration, recap/parser resolution, and
+renaming migration. It prevents both permanent `Goblin 47` clutter and continuity loss.
+
+Does Adam accept Option C? If so, test the final label edge cases for same-description collisions and secret
+identity changes; if no new policy choice appears, close the label branch and return to F10.3b. Wave 10 remains
+**OPEN**; no build is authorized.

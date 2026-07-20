@@ -11697,3 +11697,130 @@ T0; explicit attention pins only identity/source/location/knowledge at T1; any c
 change must activate required facets at T2 before resolution; and only external dependencies or lasting canonical
 effects reach T3. If accepted, the next follow-up is how T1/T2 facts expire, compact, or remain addressable after
 the active scene without losing a later callback.
+
+#### 10.G2.1.2 Ruling and follow-up - staged T0-T3 triggers accepted; how does cooled truth survive?
+
+Adam chooses **Option 3, most definitely**. The trigger ladder is locked:
+
+- T0 is ambient source-backed projection without a new SceneFact record;
+- T1 pins identity, source, owner, location, observed description, and knowledge provenance when explicit
+  attention singles out a referent;
+- T2 validates and activates only the facets required by a consequential action, rule, threat, or receipt, before
+  resolution;
+- T3 projects any externally depended-on or lasting consequence into its canonical owners and durable history.
+
+Attention may request validation but never manufacture a useful property. No-roll state changes still commit
+through receipts. Same-turn connective DM invention is proposed and validated before consequential narration.
+
+The next question is what “expiry” means. Ending a scene may remove a fact from the hot working set, but it
+cannot make spilled oil unspill, return an embedded weapon, erase something the player learned, or destroy the
+causal source of a later keepsake. Conversely, keeping every pin, temporary condition, and intermediate edge at
+full active fidelity forever would eventually make the campaign its own performance and migration hazard.
+
+##### Lifecycle options
+
+**Option 1 - hard TTL and scene reset.** T1 pins disappear after an attention window; T2 facts disappear when
+their declared duration or the current scene ends unless manually promoted to T3. This is cheap and easy to
+project, but a generic scene boundary is not a physical cause. It would recreate game-world amnesia: an oil
+spill vanishes when combat ends, a previously examined cask loses identity, and a player cannot later refer to
+“the chain I wedged under the gate” unless a designer anticipated the callback.
+
+**Option 2 - retain every promoted fact forever at full fidelity.** Every T1 identity and T2 intermediate remains
+queryable as a live graph node with all facets and edges. This maximizes forensic continuity, but active lookup,
+save size, migration, reconciliation, DM projection, and QA grow with every examined shelf and resolved stunt.
+It confuses “the world remembers” with “every past detail stays in working memory.”
+
+**Option 3 - typed lifecycle, owner fold, and dormant callback stub (recommended).** Active SceneFacts move
+through an explicit lifecycle rather than generic deletion:
+
+```text
+live
+  currently served to rules/DM/rendering and participating in dependencies
+
+cooled
+  no longer in the active scene slice, but awaiting typed expiry, reconciliation,
+  owner-fold, or an already scheduled consequence
+
+folded
+  authoritative current state projected into the canonical item/place/entity/
+  condition/relationship/resource owner; detailed intermediate graph edges closed
+
+dormant
+  compact callback stub preserves addressability and unresolved causal obligations
+
+reactivated
+  rebuilt deterministically from owner state + receipts/stub when an activation key fires
+
+terminal
+  consumed/restored/expired/resolved by its typed rule; active mechanics close while
+  protected evidence, knowledge, history, and downstream provenance remain where required
+```
+
+Facts expire by typed cause, never merely because narration moved on:
+
+1. **terminal transition** - consumed, removed, cleaned, repaired, extinguished, extracted, discharged, or
+   otherwise resolved;
+2. **clock/duration** - a declared time or cadence expires and commits its terminal state;
+3. **dependency completion** - the last rule, promise, pursuit, route, evidence chain, or scheduled consequence
+   that requires the live edge resolves;
+4. **scope exit** - only facts whose contract explicitly says “scene/turn/encounter scoped” terminate here;
+5. **owner fold** - a physical or social state that continues outside the active slice becomes cold canonical
+   state on its true owner rather than remaining a hot SceneFact.
+
+A dormant callback stub is not a prose summary alone. At minimum it retains:
+
+```text
+stable fact/referent id and type
+canonical owner plus last authoritative location/state/time
+source receipt and protected causal parents
+unresolved dependencies, obligations, clocks, and terminal rule
+observer knowledge/evidence boundary
+activation keys and last projection summary
+hardness/version reference needed for deterministic reactivation
+```
+
+High-volume intermediate details may compact into typed deltas or an event digest once no future rule depends
+on them. Stable identity, current authoritative state, unresolved dependencies, player-earned knowledge,
+promissory commitments, and provenance needed by evidence/rewards may not be summarized away. Reactivation
+is triggered by returning to the owner/location, targeting the stable id, bringing a dependent entity into the
+active slice, a due clock/front, or a scheduler/card whose prerequisites cite the stub. The engine rebuilds the
+active facts from owner state and receipts; the DM does not reconstruct them from conversation memory.
+
+##### Concrete traces
+
+**Jail oil:** if the party cleans the spill before leaving, `leaking_oil` reaches a terminal state; the cask's
+remaining volume and any witnessed/evidentiary consequence fold to their owners, while disposable puddle
+geometry closes. If the oil remains, its quantity, location, affected threshold, cleanup/evaporation clock, and
+flammable/slippery capabilities fold into the room/cask owners and a dormant stub. Returning to the room or a
+guard patrol entering it reactivates the fact. If it burns, the temporary flame may expire while structural damage,
+lost lighting supply, smoke evidence, witnesses, and history remain independently authoritative.
+
+**Gemini mace and route:** if the mace is extracted during the same scene, the `embedded_in` edge terminates,
+but item condition, hull puncture, fuel loss, and event provenance fold as earned. If the mace remains behind,
+the item and vehicle share a durable relationship edge addressable from either owner. A solid-light route keeps
+its endpoints, load/access rules, dependencies, and exact duration while live. When it expires, movement access
+closes; any stranded positions, pursuit changes, witnesses, relationship payoff, or keepsake provenance remain.
+The later reward can cite a compact causal digest without keeping the entire chase graph hot forever.
+
+##### Research and cost filter
+
+Tutenel et al. (2009) explicitly cite generating only visible rooms while tracking changes and reapplying them
+when a room regenerates; their own hierarchical blocks likewise bound the active solve. Horswill and Foged show
+that small graph summaries can preserve the guarantee relevant to a scope. Henderson et al.'s difficulty with
+a-posteriori editing argues for storing narrow canonical deltas rather than resampling an old scene, while
+Whitehead's growing solve-time tails warn against feeding accumulated cold constraints into every turn. The
+existing Genesis versioned-commitment ruling supplies the deterministic reactivation precedent.
+
+Option 3 has a **medium implementation cost** for lifecycle transitions, owner-fold adapters, dormant indexes,
+activation routing, and traceable compaction. It has an ongoing **medium-low authoring cost** because every
+temporary type needs a terminal/duration rule and every durable type needs an owner-fold mapping. It greatly
+reduces hot-runtime and digest cost relative to Option 2 while preserving far more continuity than Option 1.
+The maintenance danger is lossy compaction: if a future affordance, evidence chain, observer boundary, or reward
+needs a field that was discarded, the callback becomes prose invention again. Acceptance traces must therefore
+prove reactivation after many turns and save/load, not merely immediate reuse.
+
+**Question for Adam:** choose or amend the lifecycle policy. The recommendation is Option 3: typed expiry,
+canonical owner-fold, and a small dormant callback stub that preserves addressability and unresolved causality
+without keeping cold facts in the active scene graph. If accepted, the next G2.1 follow-up is how the engine may
+validate an unknown-but-plausible property - such as a fuel line behind the struck panel - without either denying
+ordinary improvisation or allowing attention and DM convenience to create favorable facts retroactively.

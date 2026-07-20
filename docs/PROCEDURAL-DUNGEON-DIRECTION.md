@@ -7867,3 +7867,104 @@ or a reason to turn hundreds of viable actors into ten.
 ordinary dense-prison case to run at full intended fidelity, measuring each cost surface independently,
 and permitting graceful work shedding only beyond proven production targets or for genuinely cold/distant
 detail?
+
+#### 10.11.9 Latency challenge — Genesis must never develop a late-game turn barrier
+
+Adam accepted the capacity-first posture with an important qualification: limits are still necessary,
+especially in dense cities, where the limited active-stack model is appropriate. His concern was the
+actual processing cost and whether Genesis turns could degrade into a late-*Civilization* wait. The
+required experience is that the game begins responding almost as soon as the player submits an action.
+
+The prison workload should not create a late-game strategy-game pause. That failure happens only if the
+architecture creates a global synchronous turn barrier—for example, scanning or advancing every NPC,
+institution, dependency, route, clock, and distant settlement before the current action may resolve.
+Genesis must explicitly forbid that model.
+
+Compact state is cheap relative to the other surfaces. Hundreds of nearby actors with small records and
+sparse event-driven changes should not dominate a turn. The more plausible latency risks are:
+
+- unbounded per-turn graph scans or per-agent pathfinding regardless of relevance;
+- rebuilding large projections or saves instead of applying deltas;
+- expanding latent narrative records unnecessarily;
+- constructing an oversized DM digest;
+- requiring extra AI-model round trips;
+- waiting for model inference before streaming any visible response.
+
+The present development bridge documents a strict two-shell-call loop because each agent/tool cycle has
+historically cost roughly 10–15 seconds. That is a development harness limitation, not an acceptable
+player-facing architecture. The specced API-direct DM seat instead targets one streamed model call per
+normal turn. The existing launch law of routine turns within 15 seconds is now only an outer legacy
+ceiling; it does not satisfy this redesign's desired response feel.
+
+##### Proposed no-global-turn-barrier law
+
+Submitting an action synchronously advances only its **causal service frontier**:
+
+```text
+the player's action and direct targets
+  -> current room/view and immediately affected actors
+  -> required mechanical resolution and directly touched dependencies
+  -> already-due consequences whose trigger is now reached
+  -> minimal knowledge-safe DM digest
+  -> one streamed narration call on the normal path
+```
+
+It does not synchronously advance the entire city or world. Other work uses four mechanisms:
+
+1. **Event queues:** due time/trigger indexes wake only records whose conditions can currently fire.
+2. **Coarse regional advancement:** cold settlements and institutions advance through aggregate pressure
+   changes and scheduled events rather than resident-by-resident ticks.
+3. **Lazy deterministic catch-up:** when a cold place becomes relevant, elapsed time is reconciled from
+   its last canonical state, seed, rates, and intervening events without replaying every missed tick.
+4. **Bounded between-turn work:** safe prefetch, compaction, and projection may run outside the response
+   critical path, but state-changing results enter through versioned events and may not race or retcon the
+   active turn.
+
+Dense cities use a limited stack, not a reduced canon:
+
+```text
+hot     current action, room/view, direct actors, due consequences
+warm    current institution/block, nearby groups, likely next interactions
+cool    district aggregates, scheduled pressures, named promises
+cold    rest of city and world as persistent cohorts, indexes, and future events
+```
+
+Promotion and demotion among these layers changes update frequency and projection detail, never identity
+or already established fact.
+
+##### Provisional response-service targets
+
+The targets must separate Genesis's own work from provider/network inference so a slow model cannot hide
+an engine regression:
+
+| Milestone | Provisional acceptance target on the supported reference device/network |
+|---|---:|
+| Input acknowledged and immediate UI feedback | within 50 ms |
+| Local action resolution, event application, and digest dispatch — ordinary turn | p95 within 100 ms |
+| Local action resolution and dispatch — dense-city acceptance fixture | p95 within 250 ms |
+| First streamed narration token, end to end under normal provider conditions | target p95 within 1.5 s |
+| Complete routine narrated response | target p95 within 5 s while streaming throughout |
+
+These are ambitious product targets, not claimed current measurements. Model/provider variance needs its
+own telemetry and offline/error fallback. Deep, exceptional turns may finish later, but they should still
+acknowledge immediately and begin streaming within the same first-response target whenever possible.
+Routine turns may not spend an extra AI round trip. High-impact ambiguous actions may use a rarer
+preflight path, but the engine should resolve common actions, rolls, and prevalidated environmental
+affordances before the single narration request.
+
+Meeting the first-token target likely requires the API-direct seat, a low-latency model tier for routine
+beats, prompt-prefix caching, a compact digest, bounded output, immediate streaming, and no synchronous
+full-save or world-maintenance work. The player can begin reading while the rest of the response streams;
+there should be no silent “processing the world turn” interval.
+
+##### Revised recommendation
+
+Adopt capacity-first typed envelopes together with the no-global-turn-barrier and response-service laws.
+The dense prison remains a full-fidelity baseline. Dense cities activate the limited stack only to bound
+frequency and projection outside the causal frontier. Treat a p95 local dispatch above 250 ms in that
+fixture, or a routine extra model round trip, as a failed architecture gate rather than ordinary pacing.
+
+**Open follow-up:** are these the right experiential and architectural commitments—near-instant local
+acknowledgement, sub-quarter-second dense-city engine work, one streamed model call on routine turns, no
+full-world synchronous update, and approximately 1.5-second p95 first narration under normal provider
+conditions—with exact targets remaining provisional until real API-direct traces can test them?

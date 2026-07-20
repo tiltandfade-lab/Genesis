@@ -11824,3 +11824,134 @@ canonical owner-fold, and a small dormant callback stub that preserves addressab
 without keeping cold facts in the active scene graph. If accepted, the next G2.1 follow-up is how the engine may
 validate an unknown-but-plausible property - such as a fuel line behind the struck panel - without either denying
 ordinary improvisation or allowing attention and DM convenience to create favorable facts retroactively.
+
+#### 10.G2.1.3 Ruling and redirected follow-up - callback stubs feed a selective DM hand
+
+Adam accepts Option 3 with an explicit strengthening: moving on may cool or fold a fact, but may not erase it
+from the world. Some callback stubs should become cards in the DM's story hand so the originating noun or its
+consequences can recur with greater significance. The DM should also be able to use eligible stubs to propose
+related people, objects, evidence, consequences, or situations, building throughlines and cohesion rather than
+resetting to unrelated content. Adam also identifies the necessary limit: **not every noun is viable**. This
+eligibility boundary needs its own discussion before the previously queued unknown-property question.
+
+The first clarification is architectural:
+
+```text
+world-memory stub
+  cold canonical addressability; preserves what is true even when not in the DM's hand
+
+callback card
+  a relevance-filtered projection from an eligible stub into the existing narrative scheduler
+```
+
+These must not become synonyms. Every player-established T1+ referent remains reproducible through its source,
+canonical owner, or persistence stub; every durable T2/T3 consequence receives the owner-fold/history needed to
+prevent erasure. T0 ambient nouns remain reproducible from their seeded source without receiving individual
+records unless attention or consequence promotes them. Only a qualified subset of the cold index becomes a
+playable callback card. The card should preferably be a temporary projection/view over the stub, not a second
+permanent copy of its truth.
+
+##### Callback-eligibility options
+
+**Option 1 - every persistence stub becomes a DM card.** This guarantees recurrence opportunities, but the hand
+would fill with every examined spoon, door hinge, intact cask, incidental footprint, and answered question. The
+DM digest would become a campaign database query rather than a dramatic hand; repeated callbacks would feel
+compulsive and contrived, and the existing saturation/priority laws would be defeated.
+
+**Option 2 - only hand-authored callback flags become cards.** Authors mark nouns or fact types as callback-worthy
+in advance. This keeps the hand clean and gives precise tone control, but cannot recognize the core Gemini
+pattern: an ordinary prop became important because of what the players did with it. It makes player-authored
+significance subordinate to pre-authored significance.
+
+**Option 3 - broad memory, rule-qualified callback candidacy, opportunity-time card projection (recommended).**
+The world remembers every promoted referent/fact at the fidelity its tier requires. A stub becomes eligible for
+the DM hand only when it passes hard legality gates and earns sufficient contextual salience. Even then, the
+engine projects a card only when a current or approaching opportunity can play it legally.
+
+Hard candidacy gates:
+
+1. **canonical source** - the stub/owner and its current or terminal state are authoritative, not a discarded
+   adjective or unsourced DM recollection;
+2. **callback substance** - recurrence can expose a real state, consequence, relationship, evidence trail,
+   unresolved dependency, earned reward root, or meaningfully distinctive history;
+3. **typed connection path** - the proposed opportunity connects through the same object, actor, place, group,
+   witness, material/resource flow, lineage, dependency, causal descendant, or separately governed motif;
+   free semantic association is insufficient;
+4. **scope and knowledge legality** - geography, time, access, observer knowledge, ownership, and current
+   terminal disposition permit the callback form;
+5. **available recurrence budget** - the stub is not exhausted, on cooldown, superseded, or already paid off in
+   the same way;
+6. **projection fit** - the callback can create a handle, reaction, payoff, pressure, evidence beat, or coherent
+   texture without displacing a higher-priority player action, due consequence, or service obligation.
+
+Salience rises when the player named, selected, reused, carried, sacrificed, repaired, or deliberately returned
+to the referent; when it changed a roll, resource, position, outcome, relationship, or route; when it generated
+cost, risk, witness, evidence, a promise, or an unresolved clock; when a crit or rare transformation made it
+distinctive; and when later player attention confirms that it remains meaningful. Salience falls when the noun
+was generic, merely observed, indistinguishable from its family, fully resolved without evidence or relationship,
+repeatedly declined, recently paid off, or would require a conspicuous coincidence to reintroduce.
+
+Callback candidacy is not one permanent boolean. A stub can remain history-only, enter `RESERVE`, rise to
+`PLAY IF FIT`, become `PLAY SOON` through renewed player engagement, or become `MUST PLAY` when an unresolved
+clock, contract, direct consequence, or player demand makes it due. This reuses the accepted priority hand:
+
+```text
+MUST PLAY    due dependency/consequence or player-demanded return
+PLAY SOON    fresh high-salience callback with a legal near-term opportunity
+PLAY IF FIT  qualified throughline whose relation matches the present scene
+RESERVE      meaningful but currently cold callback candidate
+HISTORY ONLY addressable world truth, not currently a narrative card
+```
+
+The existing causal-bundle and saturation laws still apply. Several manifestations of one stub or consequence
+bundle count as one situation, and the DM sees a thin hand rather than every eligible candidate. Per-stub mode
+budgets, cooldowns, diminishing priority after payoff, and player-attention refresh prevent a beloved object from
+becoming a narrative black hole. A callback may be significant without being mechanically stronger; recurrence,
+recognition, evidence, inconvenience, relationship, or transformation can carry meaning without escalating loot
+or danger.
+
+##### Concrete viability traces
+
+**Ordinary spoon:** the player asks about a spoon, so its identity/knowledge can remain addressable. If they put
+it down and nothing depends on it, the stub is history-only. If they use it to expose poison, improvise a key,
+save an NPC, name it, or keep carrying it, the resulting evidence, relationship, item history, or repeated use can
+qualify it for `RESERVE` or `PLAY IF FIT`. The ontology does not declare “spoons are callback-worthy”; play does.
+
+**Jail oil:** merely seeing an intact interchangeable cask produces no DM card. Depleting the lighting supply,
+burning a threshold, leaving identifying soot, alerting guards, or creating an owed repair produces callback
+substance and typed connection paths. A future darkened cellblock, suspicious quartermaster, patrol reaction,
+supplier record, or scarred doorway could become a legal opportunity, subject to the next follow-up's exact
+related-generation authority.
+
+**Gemini mace:** the embedded mace qualifies strongly because a player-owned item changed position, damaged a
+vehicle, caused a leak, enabled later cooperation, attracted witnesses, and helped produce the escape and
+relationship payoff. Possible cards can recall the same item, its hull scar, an NPC nickname/story, later
+recognition, repair consequences, or provenance-driven keepsake. The engine still cannot revive an expired
+solid-light route or relocate a witness merely to force the callback.
+
+##### Research, implementation, and maintenance filter
+
+The procedural papers support the representation boundary more than the narrative scheduler. Tutenel's
+semantic classes, services, materials, features, and explicit relationships support typed connection paths and
+context-specific reuse; they do not license arbitrary association between nouns. Hierarchical blocks and
+dependency ordering support projecting a small relevant subproblem instead of serving the full index. Green et
+al.'s staged generator reinforces that the callback layer should consume canonical owners rather than rewrite
+architecture or furnishing. No scanned paper establishes a dramatic callback-deck policy; the existing Genesis
+priority hand, promissory-card ladder, causal-situation bundling, and saturation laws are the direct authorities
+for that portion of the recommendation.
+
+Option 3 adds a **medium implementation cost** for candidacy gates, salience events, opportunity matching,
+cooldowns/budgets, and card projection into the existing scheduler. Its content cost is **medium-low at the
+eligibility layer** if connection types and salience events are factorized rather than authored noun by noun.
+Related-generation recipes will add a separate content and QA cost in the next decision. The chief maintenance
+risks are false negatives that bury player-created meaning, false positives that make every touched prop recur,
+and feedback loops in which a callback gains salience merely because the DM played it. Player engagement and
+real consequences may refresh salience; DM repetition alone may not.
+
+**Question for Adam:** choose or amend the eligibility policy. The recommendation is Option 3: preserve every
+promoted truth through its owner/stub, but place only rule-qualified, contextually legal, sufficiently salient
+stubs into the DM's existing priority hand at opportunity time. Is the proposed viability test the right boundary,
+especially the rule that player-created significance can qualify an otherwise ordinary noun while mere DM
+repetition cannot? If accepted, the next follow-up will decide exactly what a callback card may authorize the DM
+to create *related to* its source stub, and which connections remain texture, proposals, engine-owned rolls, or
+forbidden retcons.

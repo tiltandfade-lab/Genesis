@@ -7262,3 +7262,223 @@ formation, ecology/imperative, and persistence records instead of fabricated tel
 
 **Open skeptical follow-up:** should this intentional-versus-emergent lineage distinction amend the
 closed Wave 1 vocabulary while preserving all existing purpose authority for constructed sites?
+
+#### 10.11.4 Follow-up - exceptions to the four-family lineage sketch
+
+Adam accepts the intentional-versus-emergent distinction and asks whether the proposed constructed,
+natural, living, and anomalous families overlook other cases. They do. Those four remain useful
+**authoring grammars**, but they are not a complete ontology of how places come into existence.
+
+The mistake would be replacing one universal “purpose/builder” template with a different closed enum.
+Many strong fantasy and ordinary-world sites cross families, lack a single creator, or inherit identity
+through copying, relocation, merger, designation, or recurring formation.
+
+##### Exception 1 - collective and vernacular construction without one commissioner
+
+A refugee camp, shantytown, bazaar, pilgrim settlement, frontier stockade, informal college quarter, or
+generations-old village may be intentional in aggregate without one commissioner, plan, operator, or
+construction date. Households and groups add structures incrementally in response to shared needs.
+
+The site can still have purposes and operating practices, but its origin agency is **distributed and
+accretive**. Inventing one founder or doctrine would erase meaningful social history. A later authority
+may formalize, regulate, wall, tax, or rename it without becoming its original creator.
+
+##### Exception 2 - anthropogenic but unintended places
+
+People or machines can cause a navigable site without intending to create that site:
+
+- a mine collapse opens a connected underworld;
+- abandoned extraction voids become a settlement;
+- quarrying exposes an older complex;
+- siege damage joins cellars and drains;
+- waste, spoil, wreckage, or repeated traffic forms usable terrain;
+- a magical experiment leaves a persistent folded space.
+
+These have causal agents and evidence but no original site purpose. The initiating activity had a
+purpose; the resulting place was a byproduct or accident. `agent != commissioner` and
+`cause != intended purpose` must remain legal.
+
+##### Exception 3 - self-building, automated, and inherited-intent sites
+
+A site may grow or assemble according to a program, instinct, artifact, dead creator's instruction, or
+realm law:
+
+- an ancient machine extends a facility after its makers vanish;
+- a living fortress grows rooms in response to occupants;
+- constructs replicate a forgotten template;
+- a colony's local behavior produces architecture without central intention;
+- a wish, divine decree, or ritual manifests a complete place without workforce or design tradition.
+
+Intent may exist at a distant source while current formation is automated or self-organizing. Record
+the program/imperative and its provenance; do not invent a present operator. “Constructed” and “living”
+can both be true.
+
+##### Exception 4 - socially designated places without architectural creation
+
+A sacred grove, market square, execution field, border, meeting stone, customary refuge, temporary
+court, or prison camp can become a meaningful bounded site because people **designate, claim, ritualize,
+or repeatedly use** an existing place. The institution has purpose, law, schedule, and social function,
+but the ground itself may be natural and largely unbuilt.
+
+The lineage needs a designation/institution episode layered over formation. Social purpose does not
+retroactively become the land's physical origin.
+
+##### Exception 5 - composite, grafted, and palimpsest sites
+
+Some sites are not one lineage with several later states. They combine components with distinct origins:
+
+- a cathedral built through a giant's ribcage;
+- a prison inserted into a natural cavern and linked to a pocket-realm cell bank;
+- a manor assembled around an older watchtower over an even older crypt;
+- a town occupying the deck and interior of a stranded planar vessel;
+- a living colony grafted onto machinery;
+- several buildings joined by siege tunnels into one explorable complex.
+
+Each component/domain retains its own lineage. A later **join/graft/integration episode** explains why
+the engine now treats them as one bounded navigable site. A single flat construction record would force
+one component's origin onto the others.
+
+##### Exception 6 - copied, echoed, mirrored, and relocated sites
+
+A place may inherit from another without sharing its location or full history:
+
+- a fortress is physically moved stone by stone;
+- a ship, walking castle, caravan, or migrating habitat changes location while retaining identity;
+- a realm produces an echo or corrupted copy of a town;
+- a dream, memory, illusion, simulation, or ritual reconstruction reproduces a known place;
+- a demiplane snapshots a prison wing and later diverges;
+- a Breach grafts part of one domain into another.
+
+The model must say whether identity is **continued, relocated, copied, echoed, projected, or forked**.
+A copy inherits source relationships and selected facts but gains its own id, subsequent events, and
+divergence. Relocation changes location, not origin. A convincing projection may be physically
+actionable and persistent without being ordinary matter.
+
+##### Exception 7 - mobile, temporary, seasonal, and dissolving sites
+
+Not every bounded site is stationary or permanent:
+
+- a caravan, fleet, marching camp, siegeworks, festival grounds, migrating hive, or walking fortress;
+- an ice palace that melts, a tidal complex accessible only at low water, or a fungal city that fruits
+  seasonally;
+- a dream site that exists only during a recurring condition;
+- a pocket realm sustained while a ritual, creature, or artifact remains active.
+
+These still need stable identity and lineage while location, footprint, availability, or material form
+changes through cadence/events. “Temporary” is a lifecycle, not permission to regenerate the site from
+nothing on every visit.
+
+##### Exception 8 - ongoing formation rather than a finished origin
+
+Caves erode, deltas deposit, coral grows, cities accrete, hives renew, and impossible geometries may
+continuously rewrite themselves. The origin is not only a past event. Formation can remain an active
+process with rate, conditions, boundaries, and evidence.
+
+Ordinary gradual change should update through coarse events/thresholds, not continuous geometry
+simulation. Material topology changes still require Wave 8's explicit mutation authority. The lineage
+record identifies the ongoing process that can lawfully generate those events.
+
+##### Exception 9 - split, merge, and disputed site identity
+
+One site can divide into independently operating sites; several can merge under one circulation or
+institutional boundary. Occupants, law, cartography, and the engine may disagree about whether a
+gatehouse, annex, Breach domain, or inhabited wreck is “part of” the same place.
+
+The engine needs a stable canonical hierarchy/relationship while allowing in-world classifications and
+beliefs to differ. Site identity is not determined solely by what inhabitants call it. A split/merge
+event preserves former ids and relationships rather than deleting history.
+
+##### Exception 10 - recursive, acausal, plural, or canonically indeterminate origins
+
+High-Spice sites may deliberately violate ordinary origin assumptions:
+
+- a time-looped archive was built from plans recovered from its own future ruins;
+- each realm contains an equally original version;
+- the site has no first construction event inside ordinary time;
+- several mutually incompatible origins are simultaneously true under a realm law;
+- the site changes origin when a defined ritual, observer, or timeline condition changes;
+- the canonically correct fact is that no single origin exists.
+
+This must not become an excuse for missing data or AI contradiction. **Canonically indeterminate** is a
+positive, licensed rule with a scope, behavior, evidence, constraints, and Spice authority. The engine
+may know that the origin is plural/recursive/observer-dependent even when it cannot store one ordinary
+first event. Grounded sites do not receive this escape hatch because their author forgot to decide.
+
+##### Exception 11 - player-created and campaign-transformed sites
+
+Players may build a bastion, join rooms, redirect a mine, establish a shrine, settle a ruin, grow a
+living refuge, move a camp, or create a portal network. The lineage model cannot be generation-only.
+Typed construction/designation/growth/join/split/relocation events must append campaign-created episodes
+with player agency and evidence while preserving the prior site.
+
+##### A simpler underlying model - lineage episodes rather than more top-level families
+
+Do not create eleven new mutually exclusive site families. Keep purpose-family grammars for authoring
+and use a composable lineage record beneath them. A provisional `LineageEpisode` needs concepts like:
+
+```text
+episode id and time/order
+mechanism: construct / excavate / grow / erode / deposit / manifest / designate /
+           transform / integrate / graft / copy / echo / relocate / split / merge / dissolve
+agency: none / individual / collective / institution / organism / automated program /
+        realm law / plural or canonically indeterminate
+intent: intended site / intended process with site as byproduct / accidental /
+        instinctive or self-organizing / recursive or not applicable
+source domains or parent lineages
+resulting domains/site relationship
+purpose, imperative, ecological role, or behavior only where each genuinely exists
+duration: instantaneous / phased / accretive / ongoing / cyclic
+continuity: new identity / continuation / relocation / copy / fork / graft / merge / split
+evidence, surviving constraints, provenance, and Spice license
+```
+
+These labels are conceptual, not a final schema or giant set of mandatory fields. Ordinary sites use a
+short linear sequence and compact defaults. Only copied, merged, grafted, split, or acausal sites need a
+small lineage graph. The representation should therefore be **linear by default, graph-capable by
+exception**, preventing every hamlet jail from paying for cosmic genealogy.
+
+This also sharpens existing distinctions:
+
+- **purpose** is intended function;
+- **imperative** is organism/program behavior without assuming reflective intent;
+- **ecological role** is what the site does in a system, not why it was created;
+- **current use** is what present actors do there;
+- **designation** is a social/legal/ritual episode that may add purpose without rebuilding the place;
+- **belief** is what an actor thinks the lineage/function is;
+- **origin uncertainty known by characters** is knowledge state;
+- **canonical plural/recursive origin** is a rare ontology fact, not uncertainty or missing data.
+
+##### Cost and guardrails
+
+This is mostly a semantic correction, not permission for an elaborate ancestry simulator. The hidden
+cost appears only if every site eagerly stores a general graph or every mechanism becomes a custom
+engine branch.
+
+Guardrails:
+
+- one or a few episodes for ordinary generated sites;
+- graph edges only for actual copy/graft/merge/split/source relationships;
+- stable shared mechanism vocabulary with realm extensions, not per-realm lineage engines;
+- optional fields selected by mechanism/agency, avoiding universal null-filled records;
+- no canonically indeterminate origin without explicit high-authority/Spice license and behavior rules;
+- ongoing processes update through coarse events and thresholds rather than continuous shape ticks;
+- movement/temporary availability changes site location/state without rerolling identity;
+- current-use overlays and beliefs never rewrite lineage;
+- player-created episodes use the same event/provenance path as generated ones;
+- compact summaries reach the DM; full lineage stays pull-by-id unless currently relevant.
+
+##### Revised recommendation
+
+Accept **definite, composable site lineage** as the universal Wave 1 truth. Keep constructed, natural,
+living, and anomalous purpose-family grammars as useful ordinary authoring routes, but do not treat them
+as an exhaustive exclusive origin enum. Represent ordinary lineage as a short ordered episode list and
+permit source/join/copy/split/recursive relationships only when causally licensed.
+
+This catches collective/vernacular, accidental/byproduct, designated, self-building, composite,
+relocated, copied, mobile, temporary, ongoing, player-created, and canonically plural sites without
+weakening the original-purpose law for actual intentional construction.
+
+**Open follow-up:** should the Wave 1 clarification use this linear-by-default, graph-capable-by-exception
+lineage-episode model, including explicit support for collective intent, unintended byproducts,
+designation, copying/relocation, composite sites, ongoing formation, and rare canonically
+plural/recursive origins?

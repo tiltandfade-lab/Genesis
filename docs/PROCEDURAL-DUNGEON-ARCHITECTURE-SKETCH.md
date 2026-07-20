@@ -143,6 +143,7 @@ boundaries.
 | `ConstructionIdentity` | For intentional episodes: commissioner, original operator, doctrine, design tradition, intended users/scale, substrate, era, consequential workforce | Universal origin grammar; present occupants or renderer repair | Intentional construction-context pass | Operating model, architecture, history |
 | `InstitutionEcologyOccupation` | Purpose or imperative, operators/populations, operating model, current use, and typed overlapping claims | Domain identity or automatic site-lineage merger | Purpose/ecology/occupation passes | Roster, fronts, resources, current projection |
 | `MaterializationWindow` | Finite active semantic, spatial, DM, and render slice with honest frontiers | Canonical site extent, lineage, or permission to reroll cold truth | Active-slice planner | DM, UI, renderer, persistence cache |
+| `CausalServiceFrontier` | Per-action hot facts, direct targets, touched dependencies, due consequences, typed cost telemetry, and bounded DM projection | A full-city/world turn barrier or permission to delete cold canon | Action resolver + indexed schedulers | Simulation, DM seat, persistence, performance gates |
 | `OperatingModel` | Required capabilities, operators, population/throughput, resources, procedures, dependencies, operating state | A rigid one-room-per-capability list | Purpose profile | Wave 2 roster and ecology |
 | `SiteProfileBundle` | Structural scope, operational load, spatial envelope, accommodation domains | Topology, danger, history, discovery, physics, or materialization hidden inside “size” | Context + purpose + rollers | Roster, topology, room and scale compilers |
 | `HistorySequence` | Ordered transformations with agent, action, affected functions, evidence, consequence | Present use silently replacing original purpose | History rollers and established events | Current occupation, discovery, knowledge |
@@ -460,6 +461,36 @@ Within fixed invariants, later deterministic expansion may select:
 
 Approach-time expansion is materialization, not a new unconstrained roll. Once observed, acted upon,
 mapped, or promised, a fact hardens. Later alteration requires a recorded world event.
+
+### 7.5 Capacity-first active stack and turn service
+
+Capacity limits are typed measurement surfaces, not one universal content currency. Generation time,
+mutable records/edges/events, save work, DM digest/model latency, renderer work, and player-facing handles
+retain independent targets. A dense major institution with several hundred stable lightweight actors,
+several groups, operating pressure, events, and visible activity is the minimum full-fidelity acceptance
+case, not an overload case.
+
+Dense cities bound update frequency and projection through a hot/warm/cool/cold stack. Promotion changes
+detail and cadence, never canonical identity or observed truth. A player action synchronously advances
+only its causal service frontier: direct targets, the current view, required mechanics, touched
+dependencies, already-due consequences, and a minimal knowledge-safe digest. Event indexes, coarse
+regional advancement, deterministic lazy catch-up, and versioned between-turn work handle everything
+outside that frontier. No action waits for a full-city or full-world sweep.
+
+The provisional response-service acceptance targets are:
+
+| Milestone | Target |
+|---|---:|
+| Input acknowledgement | within 50 ms |
+| Ordinary local resolution and DM dispatch | p95 within 100 ms |
+| Dense-city fixture local resolution and dispatch | p95 within 250 ms |
+| First streamed narration under normal provider conditions | target p95 within 1.5 s |
+| Complete routine streamed response | target p95 within 5 s |
+
+Engine and provider time are reported independently. The ordinary path uses one streamed model call;
+extra model round trips require exceptional ambiguous/high-impact preflight. Exact thresholds may change
+only through measured production-path evidence and explicit design reconciliation. The older 15-second
+routine launch ceiling is an outer legacy failure bound, not the target experience.
 
 ## 8. Discovery, promises, contracts, and knowledge
 
@@ -870,6 +901,12 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
 - Challenge and reward rise noisily with effective access depth, not raw room order.
 - Spice is not a depth ramp.
 - The DM receives a thin local hand/context, not the full unresolved index.
+- Capacity envelopes are per cost surface and capacity-first; they preserve headroom without rationing
+  the normal dense-institution baseline.
+- No action waits for a full-city/world turn sweep; synchronous work follows only the causal service
+  frontier and ordinary turns use one streamed model call.
+- Engine work targets immediate acknowledgement and sub-quarter-second dense-city dispatch; provider
+  latency is measured separately against the first-streamed-token target.
 - Optional resources are real earned advantages and never trigger reactive enemy scaling.
 - Impossible constraint sets fail diagnostically; no roll or guaranteed capability disappears silently.
 
@@ -880,7 +917,7 @@ These are semantic contradiction fixtures, not finished content packages or geom
 | Fixture | Wave 1 facts it must prove | Failure it should expose |
 |---|---|---|
 | Hamlet jail | Complete minimal custody model, external service, human scale, likely added space, juicy local handle | Small-size blacklist, one-room-per-obligation bloat, bland null fallback |
-| Major city prison | Repetition, zones, coordinated secrets, proportional variation, current-use/history layers | One independent Major secret and heavyweight record per cell |
+| Major city prison | Repetition, zones, coordinated secrets, proportional variation, current-use/history layers, several hundred stable lightweight actors, p95 local dispatch within 250 ms | One independent Major secret and heavyweight record per cell; fallback during normal dense operation; global synchronous turn sweep |
 | Mage-colony Breach prison | Context-sensitive classification, mixed domains, ordinary portal custody plus exceptional failure | “Portal always Mythic,” one global scale, realm fork |
 | Giant ossuary with human squatters | Low room count, huge envelope/accommodation, inserted human current-use pockets | One master size or late renderer-scale repair |
 | Alchemist shop over necromancy lab | Public primary purpose, concealed subordinate purpose or later transformation, legal discovery path | “Hidden” used as purpose; orphan surprise room |
@@ -955,7 +992,7 @@ Wave 1 defines the semantic promises below and deliberately leaves their realiza
 | Card schema, legal-home scoring, thin hand, coverage/slack, service horizons, fronts, DM digest/knowledge partition | **Wave 9** |
 | Graph/local-plan/player-view choice, interim renderer, search/knowledge accessibility presentation, visual leakage | **Wave 10** |
 | Authoring workbench, roller editing, diagnostics, preference teaching, mod vocabulary UX | **Wave 11** |
-| Persistent lineage/domain schemas, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, performance/soak gates, build order | **Wave 12** |
+| Persistent lineage/domain schemas, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, capacity-first performance/latency/soak gates, build order | **Wave 12** |
 | Baldur's-Gate-like automatic inventory and equipment UI | Separate future inventory design after adoptable-system audit |
 | Full bounded-place settlement/population/casting/economy architecture | Future place/settlement/NPC/economy work, constrained by later closed waves |
 

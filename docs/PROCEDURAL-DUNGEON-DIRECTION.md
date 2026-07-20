@@ -7968,3 +7968,103 @@ fixture, or a routine extra model round trip, as a failed architecture gate rath
 acknowledgement, sub-quarter-second dense-city engine work, one streamed model call on routine turns, no
 full-world synchronous update, and approximately 1.5-second p95 first narration under normal provider
 conditions—with exact targets remaining provisional until real API-direct traces can test them?
+
+#### 10.11.10 Ruling — capacity-first limits and near-immediate response
+
+Adam accepts the proposed targets as beautiful. The following are now binding architecture acceptance
+commitments, with numerical thresholds provisional until measured API-direct traces either validate them
+or justify an explicit revision:
+
+- capacity limits exist, but are measured per cost surface and protect headroom rather than rationing
+  ordinary content;
+- a dense major institution with several hundred stable lightweight actors, multiple groups, operational
+  pressures, events, and visible activity is a normal full-fidelity baseline;
+- dense cities use the hot/warm/cool/cold limited stack to bound update frequency and projection, never
+  to erase identities, facts, or consequences;
+- no player action waits for a full-city or full-world synchronous turn sweep;
+- synchronous work follows only the current action's causal service frontier, while indexes, coarse
+  advancement, deterministic catch-up, and safe bounded between-turn work handle the rest;
+- the normal turn uses one streamed model call; additional model round trips are exceptional and require
+  a genuinely ambiguous or high-impact preflight need;
+- immediate UI acknowledgement targets 50 ms, ordinary local resolution and dispatch 100 ms p95,
+  dense-city resolution and dispatch 250 ms p95, first streamed narration 1.5 seconds p95 under normal
+  provider conditions, and full routine narration 5 seconds p95 while streaming;
+- engine time and provider/model time are measured independently, so neither can hide the other's
+  regression;
+- the older 15-second routine launch ceiling remains only an outer legacy failure bound and is not an
+  acceptable target experience for this redesign.
+
+The total-complexity-envelope skeptical follow-up is exhausted.
+
+#### 10.11.11 Skeptical follow-up 3 — does one discovery opportunity per room scale?
+
+Wave 1 Question 9 protects one discovery opportunity for every enterable room or repeated child, while
+Question 13 makes repeated rooms stable children and permits automatic read, focused inspection, and
+systematic sweep. The skeptical audit found a remaining collision: a 400-cell prison should reward
+attention in every cell without requiring 400 heavyweight secret packets, 400 future quests, or 400
+nearly identical searches.
+
+In plain language, what exactly does “one discovery opportunity per room” promise when a site contains
+hundreds of similar rooms?
+
+##### Option 1 — one unique heavyweight discovery packet per room or child
+
+Every cell receives its own independently authored clue, treasure, secret, or story seed. This maximizes
+raw uniqueness but makes exhaustive inspection optimal, accumulates save and promise debt, dilutes strong
+discoveries, and creates an enormous writing burden. It also turns “nothing leads nowhere” into “every
+scratch mark begins a quest.” **Not recommended.**
+
+##### Option 2 — discoveries exist only at assembly, zone, or site scale
+
+The prison-cell block owns a few meaningful discoveries and ordinary individual cells are interchangeable
+facades. This is cheap, but it breaks the accepted promise that entering or attending to an individual
+room can matter. It would erase the child's-note style of emergence and make repeated spaces feel false.
+**Not recommended.**
+
+##### Option 3 — hierarchical discovery ecology with stable child opportunities
+
+Every enterable room or child retains a stable discovery opportunity, but **opportunity is not synonymous
+with unique hidden payload, independent secret, or future promise**. The assembly, zone, and site
+coordinate shared questions, patterns, causal roots, density, and exceptional outliers. A child may offer:
+
+- an automatic functional or sensory read;
+- local history, personal trace, confirmation, useful negative evidence, or pattern evidence;
+- a tactical, social, access, safety, or resource fact;
+- a small consumable or cache;
+- a manifestation or clue fragment attached to a larger root;
+- a genuinely unique secret, promise, or exceptional payoff when its allocation and tells justify one.
+
+Many routine child opportunities can be represented compactly as an assembly grammar plus stable child
+seed and sparse contacted deltas. They need not exist as 400 expanded prose records in the save or DM
+digest. Entering a child still produces its individual read; focused inspection can expand its licensed
+opportunity; a systematic sweep may resolve routine interchangeable surfaces in aggregate while
+preserving individually telegraphed or exceptional outliers.
+
+For example, a 400-cell prison block could carry the shared question, “Why did twelve prisoners disappear
+without transfer records?” Most cells provide quiet local value: occupancy traces, evidence about guard
+timing, confirmation that a hiding method is absent, a usable sightline, or an individual's marks. A sweep
+can assemble the common pattern without 400 separate commands. Cell 31 has the structurally licensed
+passage manifestation, cell 117 contains the child's note attached to a stable person/event, and cell 204
+contains a hidden potion. Those outliers remain individually real and discoverable; the other cells are
+not meaningless simply because their payoffs are quieter or shared.
+
+“No discovery leads nowhere” therefore means that pursuit produces a stable, applicable payoff or updates a
+canonical question. A terminal local answer, useful negative result, safe route, history fact, or confirmed
+pattern is a valid destination. Only an unresolved actionable claim whose fulfillment is deferred becomes
+a `StoryPromise` and consumes scheduler attention. Progression-critical truths require redundant fair
+evidence routes rather than one fragile child, container, or private knower.
+
+Player attention stays bounded separately from canonical opportunity count. The automatic read exposes
+salient information and tells; the DM presents only the most relevant current handles; focused and sweep
+actions reveal more by method. The design does not reward saying “I inspect every brick” 400 times, and it
+does not punish a player for declining to clear every repeated child.
+
+**Recommendation:** adopt Option 3 as the scaling interpretation of Wave 1 Questions 9 and 13. Preserve
+one stable opportunity per child, coordinate meaning and exceptional density hierarchically, allow routine
+opportunities to close locally or aggregate through a systematic sweep, and reserve story promises for
+genuinely deferred actionable obligations.
+
+**Open follow-up:** does this preserve the spirit of “every room rewards attention” without turning a large
+repeated site into exhaustive-search labor—and, specifically, are quiet confirmation, negative evidence,
+local utility, and pattern contribution sufficient payoffs when the assembly still contains individually
+telegraphed spicy outliers?

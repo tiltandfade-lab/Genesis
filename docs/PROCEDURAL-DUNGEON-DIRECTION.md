@@ -16990,3 +16990,66 @@ internal-scroll focus rules so wheel/touch input over the card never moves the c
 
 Does Adam accept Option C? If so, follow with one-card-versus-pinned-multiple persistence and the exact behavior
 when character focus or targeting begins. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.15 F10.3c ruling - ephemeral smart-tooltip card, automatic placement only
+
+**Adam's ruling (2026-07-20):** the full scrollable board card behaves like a well-designed **smart tooltip**, not
+a persistent window. It appears only when the player clicks an object. Any click outside the card hides it. The card
+chooses its own position from the object's screen position and must never run offscreen.
+
+This rejects F10.3c's recommended drag/pin complexity and selects a stricter automatic variant of Option A:
+
+- only one object card may be open. Clicking another object replaces it with that object's card; there is no
+  multi-card desktop, pinning, or manual dragging;
+- object hover may still provide ordinary highlight/cursor affordance, but the full card does not appear until
+  click/tap/keyboard activation. Mere pointer travel cannot cover the board with cards;
+- clicking inside the card—including scrolling, selecting text where allowed, focusing a row, or operating a
+  control—does not count as an outside click;
+- clicking anywhere outside dismisses the card and continues the underlying nonmodal board/UI interaction where
+  that interaction is otherwise legal. Dismissal may not consume a separate click or create a modal curtain;
+- `Escape`/controller Back dismisses the card. Focus returns predictably to the originating object or board;
+- the placement solver evaluates candidate sides/quadrants around the selected object's projected screen bounds,
+  scores occlusion against the object, active PC, important overlays, and occupied UI-safe regions, then chooses a
+  stable best fit;
+- the card is constrained to the central SceneTray's **safe rectangle**, excluding the left rail, right DM rail,
+  open character drawer, EngagementLens, viewport insets, and touch-safe margins. “On screen” does not mean hidden
+  underneath translucent chrome;
+- placement may flip sides and clamp/nudge within that safe rectangle. Responsive max width/height and internal
+  scrolling guarantee fit at the accepted minimum viewport. The card does not change tactical coordinates;
+- if composition or camera movement changes while the card is open, it repositions stably rather than drifting
+  offscreen. If the object leaves the visible/eligible projection, the card closes;
+- a leader/selection highlight preserves object linkage when the best card position is no longer immediately
+  adjacent. Secret facts never influence a player-visible placement choice in a way that leaks them.
+
+This simultaneously resolves the earlier persistence and simultaneous-focus forks: the card is ephemeral and
+single-focus. Clicking a character, destination, target, action menu, chat control, or empty board dismisses it as
+part of that new focus. Object-card state does not compete with targeting or the character dossier.
+
+The implementation cost is **medium-high UI geometry and input work**, lower than the rejected drag/pin design.
+It requires safe-rectangle ownership, deterministic candidate scoring, responsive size caps, internal-scroll event
+containment, outside-click routing, keyboard/controller focus restoration, touch behavior, and native-size
+occlusion fixtures. It does not require saved window positions, multiple-card layout, or pin-state persistence.
+
+F10.3c and the placement/persistence/multiple-focus branches are closed.
+
+#### F10.3d - what happens after an action inside the card?
+
+Suppose the player opens the chest card and clicks `Examine`, `Open`, `Pick Lock`, `Take`, or `Activate`:
+
+- **Option A - close immediately:** maximizes board visibility, but the player loses object context while validation
+  and DM narration occur and must reopen the card to see the new state.
+- **Option B - stay open through the object transaction and update in place (recommended):** the card shows pending/
+  refusal/resolved state without owning canon; the DM narrates the result in the right rail; the same card refreshes
+  from the new canonical object projection. It still closes on any outside click, when the object becomes
+  ineligible/disappears, or when focus moves elsewhere.
+- **Option C - always close after success but remain on refusal:** predictable in one sense, but creates different
+  spatial behavior based on outcome and makes multi-step object interaction unnecessarily click-heavy.
+
+Under Option B, `Open` may change `Iron Chest · Closed` to `Iron Chest · Open`, reveal only newly earned contents/
+evidence, and update the legal actions without creating a second card. Picking the chest up or destroying it closes
+the board card because its scene referent is gone; an inventory surface may then own it. A refused `Pick Lock`
+stays visible with the typed reason. The right rail carries the DM's narration, not a duplicate inspector.
+
+Does Adam accept Option B? If so, exhaust pending-state, long-DM-response, and disappear/transfer edge cases, then
+close the object-inspector branch and return to the next Wave 10 follow-up. Wave 10 remains **OPEN**; no build is
+authorized.

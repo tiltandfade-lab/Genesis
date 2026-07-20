@@ -324,6 +324,17 @@ for DM chat and narration; resolved object events may be narrated there, but str
 controls do not live there. Card K is rejected as the primary inspector home. Exact data, scroll, cost, and open
 placement/persistence questions live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.14.
 
+## Ephemeral smart-tooltip placement ruling (Adam, 2026-07-20 — additive)
+
+> "the card should only be visible on click, and any click off hides the menu, it should smartly decide its own position based on the position of the item, the card should never run off the screen. it is essentially a smart tooltip with good card design."
+
+Only clicking/activating an object opens its full scrollable board card; hover may highlight but does not open the
+card. One card exists at a time, and any outside click dismisses it while inside scrolling and controls remain
+interactive. Placement is automatic from the object's projected position and is constrained to the central
+SceneTray safe rectangle so the card never runs offscreen or hides beneath UI chrome. There is no pinning, dragging,
+or multiple-card desktop. Exact placement, focus, responsive, cost, and action-result follow-up rules live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.15.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

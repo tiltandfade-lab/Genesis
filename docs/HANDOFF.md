@@ -6,6 +6,23 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 smart object card) — CLICK TO OPEN; CLICK AWAY TO DISMISS [Codex]
+
+This supersedes the full-board-inspector pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam defines the full scrollable object inspector as an ephemeral smart tooltip. It appears only on object click/
+activation; hover may highlight but cannot open it. One card exists at a time. Any outside click dismisses it while
+continuing the underlying legal interaction; inside scroll/controls do not dismiss. There is no drag, pin, multi-
+card desktop, or saved position. Automatic placement scores quadrants around the object, remains inside the central
+SceneTray safe rectangle rather than under UI chrome, never runs offscreen, responds to layout/camera changes, and
+closes if the object leaves eligibility. F10.3c placement/persistence/simultaneous-focus is closed.
+
+**Do next:** ask F10.3d. Codex recommends keeping the card open through an inside action's validation and DM
+response, then refreshing it from canonical result state; it still closes on outside click, focus change, object
+disappearance, destruction, or transfer out of the scene. Exhaust pending/latency/transfer edge cases, then close
+the inspector branch.
+
 ## ⭐ Latest (2026-07-20, Wave 10 object inspector) — FULL CARD ON THE BOARD; RIGHT RAIL IS THE DM [Codex]
 
 This supersedes the callback-label pickup below without deleting it. Design/docs only: no code, dependency

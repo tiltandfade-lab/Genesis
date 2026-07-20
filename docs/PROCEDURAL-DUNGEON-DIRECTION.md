@@ -14423,3 +14423,89 @@ hybrid-to-automation certification posture and the promise to revisit Slices A-E
 before any build? If accepted, the next narrow follow-up is whether profile-local P3 promotion may eventually be
 fully automatic sooner than product/shared P3 promotion, which would retain stronger review, consent, provenance,
 and privacy gates.
+
+### 10.SWEEP Wave 2 full-question rapid sweep - awaiting Adam's batch dispositions
+
+Adam asks to see the whole active wave at once with concise recommendations so obvious agreements can be accepted
+in a batch and attention can concentrate on genuine disagreements. This is a discussion accelerator, not a weaker
+closure rule. A batch acceptance locks the stated baseline; it does not erase a material consequence discovered by
+the follow-up audit. Flagged questions receive the full plain-English/options/examples/research/cost treatment until
+their follow-ups are exhausted. Silence accepts nothing.
+
+Suggested response form:
+
+```text
+ACCEPT: G2.1-CERT, P2.12-P2.15, P2.17-P2.20
+DEEP DIVE: G2.2, P2.16
+AMEND: P2.14 - <change>
+```
+
+`ACCEPT REMAINING DEFAULTS` is also valid, but the ensuing consequence audit may still surface a real follow-up.
+
+#### Research shorthand used in the sweep
+
+| Tag | Paper contribution used as a filter |
+|---|---|
+| `T09` | Tutenel et al. 2009 - class/rule plans, hierarchical subproblems, hard placement legality |
+| `T10` | Tutenel et al. 2010 - high-level semantic intent, attributes/relationships/services compiled into procedures |
+| `Y11` | Yu et al. 2011 - distinct weighted functional/spatial relations and learned priors |
+| `M11` | Merrell et al. 2011 - mixed initiative: preserve fixed meaningful choices, suggest legal alternatives around them |
+| `H12` | Horswill/Foged 2012 - bounded graph summaries and global path/playability constraints |
+| `N18` | Nepozitek/Gemrot 2018 - preserve the designer connectivity graph while realizing geometry with constraints/backtracking |
+| `G19` | Green et al. 2019 - separate architecture from furnishing; combinations of stages materially change play |
+| `H19` | Henderson et al. 2019 - flexible constraint composition has multiplicative runtime/edit costs |
+| `W20` | Whitehead 2020 - declarative hard constraints, explicit satisfiability, honest unsatisfied results |
+
+The papers support representation and solving techniques; none of them answers Genesis's narrative, AI-DM,
+world-persistence, item-economy, or certification policy by itself.
+
+#### Settled O2.1-O2.11 - confirmation sweep, not automatic reopening
+
+| ID | Question already answered | Accepted baseline | Research filter / reopen only if |
+|---|---|---|---|
+| `O2.1` | What does the roster allocate before rooms? | Allocate typed functional obligations/capabilities, scale, operating demand, protected random/Spice capacity, and possible realizations before choosing room count. | `T09/T10/G19`; reopen only if later tray/compiler rules cannot consume the program. |
+| `O2.2` | Which systems deserve light simulation? | Simulate causal, player-facing stocks/flows/conditions/clocks; aggregate descriptive multiplicity and cold state through deterministic summaries. | `H12/H19`; reopen if an accepted player action cannot be resolved honestly from the sparse owners. |
+| `O2.3` | When does an obligation become a room? | Give it a room when independent access, persistent spatial work, capacity, privacy/security, or repeated play requires one; otherwise realize it as a zone, assembly, embedded feature, prop, route, relationship, or external dependency. | `T09/T10`; reopen if a realization routinely destroys function or produces room inflation. |
+| `O2.4` | How do repeats vary? | Use correlated families: shared institutional grammar plus per-instance layout, condition, use, ownership, evidence, and exception—not independent rerolls or clones. | `Y11/M11/G19`; reopen if variation erases readable identity or becomes cosmetic only. |
+| `O2.5` | How is functional/Spice capacity protected? | Budget functional, spatial, embedded, and coordinated Spice separately across site/room/assembly; high Spice needs causal authority and cannot consume core operating obligations. | `T10/G19`; reopen if budgets cannot prevent either sterile normality or incoherent anomaly stacking. |
+| `O2.6` | How does demand become quantity? | Capacity, population, cadence, supply model, risk, and reserve policy derive bounded exact quantities; no prose-only abundance or arbitrary precision. | `H12/H19`; reopen if quantities cannot drive play without commodity-sim overhead. |
+| `O2.7` | How does population become present people? | Keep bounded population/group pools and roles; schedules/state select active presence; player contact/importance promotes stable individuals through proper rollers rather than bespoke-fit invention. | `T09/H12`; reopen on identity loss, crowd cost, or insufficient social handles. |
+| `O2.8` | How do multiple populations share a site? | Groups own claims, roles, territory, access, resources, attitudes, knowledge, and conflicts over one shared site model; do not generate parallel incompatible dungeons. | `T10/N18`; reopen if overlap cannot express contest, coexistence, infiltration, or layered control. |
+| `O2.9` | How do operating states differ? | Operating, strained, dormant, failing, and transformed states alter obligation fulfillment, staffing, flow, maintenance, evidence, danger, and recovery—not merely prose tone. | `T10/H12`; reopen if state does not create different player handles. |
+| `O2.10` | How does time affect a site? | Use explicit cadences, events, clocks, active updates, and deterministic lazy catch-up; never continuously tick every noun or erase due consequences while cold. | `H12/H19`; reopen on long-time jumps, schedule contradictions, or unacceptable latency. |
+| `O2.11` | How do flows become player handles? | Project flows through sources, routes, storage, users, waste, evidence, failure points, leverage, and consequences; avoid full commodity markets unless another owner explicitly needs them. | `T10/H12`; reopen if players cannot investigate, exploit, protect, or disrupt operation. |
+
+#### Active additive decisions
+
+| ID | Plain-English question | Baseline recommendation | Cost/risk and likely deep-dive trigger |
+|---|---|---|---|
+| `G2.1-CERT` | How quickly may a successful DM-invented mechanic become reusable outside its originating world? | Accept the best-case semantic platform and P0-P4 lifecycle. Allow fully automated certification earlier for **profile-local P3**, where nothing leaves the player's device/profile. Keep **product/shared P3** behind stronger provenance, consent/privacy, adversarial, migration, rollback, and initially human/hybrid review; graduate individual low-risk domains to automation only after executable gates earn trust. | High platform cost, but off the live-turn path. Deep-dive if profile-local cross-world learning itself feels wrong, product sharing should never occur, or the desired end state is immediate no-human global promotion. `T10/M11/W20` support intent/constraint boundaries, not promotion policy. |
+| `G2.1-CLOSE` | Is SceneFactGraph promotion sufficiently settled to stop expanding this branch? | After disposing `G2.1-CERT`, close G2.1's design baseline: typed lazy promotion, T0-T3, non-erasing memory, selective callback hand, typed relation growth, creative `SYNTHESIZE`, C0-C4 envelopes, valence symmetry, causal hostile invention, graduated counters, transactional compilation, P0-P4 learning, and best-case/production-slice separation. Assign exact schemas, thresholds, weights, and certification metrics to later specs/workbench/implementation planning. | Reopen only for a contradiction, a missing authority owner, or a player-facing behavior not covered—not to continue speculative implementation design. |
+| `G2.2` | How should several actors, props, hazards, clocks, and actions cooperate in one crisis without becoming one progress bar? | Make `CrisisChain` a thin orchestration graph over existing owners. It stores objective/stakes, phase or front topology, eligible contribution types, actor roles, clocks, dependencies, branch/terminal conditions, and receipts; it references roster/props/conditions/resources rather than copying them. Contributions resolve through ordinary actions/checks/events. Failure changes concrete state or branches the crisis; it never merely subtracts abstract progress. The DM authors presentation and legal connective meaning. | Medium-high architecture and UX cost. Likely deep dive: graph versus phase structure, simultaneous contribution credit, partial success/failure, initiative integration, offscreen actors, UI, and when a crisis deserves this owner. `T09/T10/H12/N18/W20`. |
+
+#### Prospective P2.12-P2.20 sweep
+
+| ID | Plain-English question | Baseline recommendation | Cost/risk and likely deep-dive trigger |
+|---|---|---|---|
+| `P2.12` | How do active rooms, site summaries, and cold state exchange truth? | Every fact has one canonical owner and explicit projections. Activate a bounded slice with versioned handoff receipts; aggregate only information the site owner can preserve; catch up from elapsed events/cadences deterministically; reconcile atomically and idempotently so resources, actors, threats, and promises are never double-counted. | Medium architecture; critical risks are ownership ambiguity, stale reactivation, and long catch-up tails. `T09/H12/H19/W20`. |
+| `P2.13` | How does a site depend on roads, towns, factions, trade, migration, portals, and raids without simulating the whole region? | Use typed boundary edges/contracts: source/destination, commodity/service/population class, capacity, cadence, travel/risk, owner, current disruption, reserve, evidence, and next due delivery. Neighbor systems provide summaries; site resolution expands a shipment/group/event only when contacted or consequential. | Medium content/integration cost. Deep dive if regional politics/economy needs more than edge contracts or if exterior routes must be spatially exact early. `H12/N18/G19`. |
+| `P2.14` | What renews, spoils, reproduces, migrates, transforms, or permanently runs out? | Give consequential stocks a typed renewal/depletion law with source, capacity, cadence, conditions, sinks, evidence, and terminal floor. Use deterministic lazy catch-up and never spontaneous restock. Aggregate insignificant multiplicity; promote exact instances only on contact/importance. | Medium authoring and balance cost; danger is runaway feedback or fake precision. Deep dive on ecology reproduction, crafting chains, or seasonal systems. `T10/H12/H19`. |
+| `P2.15` | How do hunger, crowding, morale, labor, habitat, doctrine, and predation create site change? | Convert pressure summaries into bounded clocks/threshold events owned by populations/ecology/factions. They can move pools, alter roles/claims, cause conflict, dormancy, adaptation, flight, or collapse through causal receipts. Independent actors still come from population/roster owners; pressure cannot invent a perfectly useful NPC. | Medium-high content/interaction cost. Deep dive if emergent ecology needs continuous agents or if thresholds feel too board-game-like. `T09/H12/H19`. |
+| `P2.16` | How do loot, supplies, crafting outputs, containers, ownership, and player pickup stay surprising but real? | Use one custody chain: site holdings/process outputs -> typed reserves/containers/latent committed contents -> discovered exact instances -> claim/transfer events. Catalog availability never creates world inventory. Generation may commit hidden contents or a bounded latent roll before discovery; player knowledge stays separate. Pricing/rarity and operational use share existing item/economy owners. | High cross-system cost and likely deep dive: when hidden contents must be rolled, anti-save-scumming, theft/faction response, crafting recipes, treasure surprise, and DM-authored rewards. `T10/H12/W20`; papers do not solve loot economy. |
+| `P2.17` | How do sabotage, repair, liberation, occupation, theft, gifts, contamination, and route closure change operation? | Resolve typed operations against the site program: affected obligation/flow/group/stock/state, magnitude, duration, evidence, dependencies, recovery path, and downstream clocks. Wave 2 owns operating consequences; Wave 8 later owns detailed physical propagation/topology. Commit changes permanently and use lazy catch-up. | Medium-high adapter cost. Deep dive on site capture/governance, partial repair, competing operators, or C3-C4 reach. `T10/H12/G19`. |
+| `P2.18` | What happens when purpose, inhabitants, resources, space, and history cannot all fit? | Classify hard invariants, soft preferences, degradable obligations, and crisis-generating failures. Use ordered backtracking/relaxation; if no legal result survives, emit an explicit unsatisfied diagnostic or intentionally failing site state. Never hide contradiction through convenient prose or deleted obligations. | Medium solver/authoring cost; deep dive on the exact relaxation order or whether some impossible sites should generate as playable catastrophes. `T09/H19/W20`. |
+| `P2.19` | What should the DM and player actually see about site operation? | DM receives a bounded active projection: current owners/groups, due changes, relevant stocks/flows, legal handles, active/latent facts, risks, and reasons, with filtered peeks available. Players receive sensory evidence, NPC behavior, maps/records, visible shortages/abundance, and discoverable causal tells—not hidden dashboards or unexplained numbers. Wave 10 consumes this contract in the shared SceneTray. | Medium UI/context cost; deep dive on exact information tiers, player-facing meters, or DM context budgets. `T10/M11`. |
+| `P2.20` | What proves Wave 2 works before it closes? | Require a matrix across site family/size, supply model, operating state, group conflict, Spice, resource stress, intervention, long cold interval, activation boundary, and dense active slice. Evidence includes deterministic golden traces, property/constraint tests, unsatisfied cases, performance tails, DM projections, player-facing tells, and representative dungeon/town/wilderness examples. | Medium-high QA design cost now, large risk reduction later. Deep dive on quantitative budgets and corpus size may defer to Wave 11/12, but representative cases and pass/fail semantics must be settled here. All nine papers inform this gate. |
+
+#### Wave 2 batch-closure audit after dispositions
+
+After Adam returns batch dispositions:
+
+1. record each accepted baseline as a ruling without rewriting its original/prospective question;
+2. deep-dive only flagged ids and their material follow-ups;
+3. run a contradiction pass across Wave 1, O2.1-O2.11, G2.1/G2.2, P2.12-P2.20, the shared SceneTray handoff,
+   the semantic invention system, and the research constraints;
+4. name every exact schema/weight/threshold/content table/implementation concern deliberately deferred to a later
+   owner rather than treating it as an unanswered design principle;
+5. present one Wave 2 closure summary and require Adam's explicit agreement;
+6. only then open promoted Wave 10.

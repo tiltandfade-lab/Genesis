@@ -12328,3 +12328,171 @@ than replace it with a rolled catalog item? If accepted, the next follow-up shou
 bands - what the DM may synthesize freely as connective canon, what requires an earned reward/crit/relationship
 authority, and what must still begin from an independent engine roll because resistance rather than expression is
 the noun's job.
+
+#### 10.G2.1.6 Ruling and follow-up - transactional creative DM accepted; where do creation envelopes begin?
+
+Adam accepts Option 3 and the `SYNTHESIZE` lane. The DM may originate the exact identity, form, story purpose,
+and proposed mechanics of a novel expression-bearing noun such as the paired comms. The engine must compile,
+validate, bind, and persist that concept inside an earned envelope rather than replacing it with a random catalog
+result. Mechanization owns commitments and enforcement, not imagination.
+
+The next question is how authority is granted. A single ceiling such as “the DM may invent Minor items but not
+Major ones” is insufficient: an apparently ordinary forged letter may create more campaign leverage than a magic
+trinket, while an emotionally important paired communicator may have modest mechanics. Likewise, “items yes,
+NPCs no” misses hybrid cases such as an existing population supplying an independently rolled quartermaster whose
+exact reaction and relationship token are DM-authored.
+
+##### Envelope-allocation options
+
+**Option 1 - one universal invention-impact ceiling.** Give the DM a single current budget and allow any invented
+noun/effect below it. This is easy to explain but treats mechanical power, canonical reach, hidden knowledge,
+social leverage, topology, scarcity, and narrative obligation as interchangeable. It encourages arguments over
+one score and lets low-stat facts cause high-story consequences without the proper owner.
+
+**Option 2 - hard permission by noun category.** For example: the DM may invent items, titles, and sensory details;
+NPCs, places, clues, secrets, and routes must be rolled. This is safer, but too rigid. A DM-authored item can still
+break the economy; a DM-authored title may transform law; a rolled keepsake may lose its earned meaning; and most
+good throughlines combine several noun families.
+
+**Option 3 - two-axis creation matrix: source posture x impact band (recommended).** First decide whether the
+noun's job is expression, resistance, or a hybrid. Then apply the impact band licensed by the source event. This
+preserves DM authorship where bespoke fit is valuable while keeping independent world facts genuinely
+independent.
+
+##### Axis A - source posture
+
+```text
+EXPRESSIVE
+  Exact identity/form/meaning is the creative payoff. DM may originate the concept;
+  engine validates and instantiates it.
+
+RESISTANT
+  The noun must surprise, constrain, or exist independently of the DM's immediate need.
+  Engine roll/seed/owner resolution comes first; DM connects, interprets, names where permitted,
+  performs, and may synthesize downstream expression.
+
+HYBRID
+  Engine supplies substrate, truth, power envelope, or independent actor; DM authors exact
+  expression, relationship form, consequence shape, and proposed supported mechanics.
+```
+
+Ordinary population, NPC motives/levers, undiscovered rooms, hidden properties, stock/resource quantities,
+treasure availability, secret truth, hostile plans, and random world opportunities are normally `RESISTANT`.
+Keepsakes, earned titles, exact scars, relationship tokens, commemorative techniques, consequence metaphors,
+callback transformations, and connective explanations are normally `EXPRESSIVE` or `HYBRID`. Classification is
+by the noun's current job, not an eternal class rule: a rolled mundane mace can later become the expressive root
+of a synthesized technique or keepsake.
+
+##### Axis B - impact bands and their licenses
+
+**C0 - performance and noncanonical presentation.** No new consequential noun or world assertion. Voice,
+sentence rhythm, metaphor, sensory emphasis already licensed by canonical state, NPC performance, camera focus,
+and temporary wording live here. No receipt is required unless the wording asserts a persistent fact. C0 cannot
+smuggle in manipulable objects, hidden information, ownership, conditions, or mechanics.
+
+**C1 - local connective capture.** Context alone licenses a small synthesized detail inside an existing owner or
+prevalidated latent reserve. It may add an exact appearance, harmless inscription, nickname, ordinary local
+custom, minor relationship expression, low-impact prop form, or state-consistent connective explanation. It must
+not create scarce inventory, strategic leverage, a clue/secret, a new independent actor, topology, resource
+capacity, or a mechanical benefit. Persistent C1 facts are still captured. If a tally mark on a cask implies fraud
+or becomes evidence, it no longer fits C1 and must seek C2 authority.
+
+**C2 - earned expression and bounded story tool.** Requires a callback, relationship payoff, quest/contract beat,
+meaningful consequence, ordinary reward envelope, resolved discovery, or comparable source receipt. The DM may
+synthesize a new keepsake, paired/set item, title, contact form, rumor vehicle, bounded technique, evidence
+presentation, scar/adaptation, or other expression-bearing noun with modest typed mechanics and limited canonical
+reach. Paired comms live here in ordinary play. The exact concept is DM-authored; the engine supplies and enforces
+the tier/power, effect, custody, knowledge, persistence, and visual constraints.
+
+**C3 - major structural or mechanical creation.** Requires explicit Major reward, finale/quest transformation,
+high Crit mandate, major relationship or faction change, licensed topology/event authority, or another named
+creation source. It may create a significant magic item, durable route, institutional doctrine, settlement-scale
+resource change, new active front, powerful technique, or relationship/network structure. Appropriate world
+owners and independent rolls still supply resistance-bearing actors, hidden truth, and quantities. C3 is not
+available merely because a callback would be dramatic.
+
+**C4 - Mythic/Worldbreaker creation.** Requires the exact Crit Magnitude reach profile and effect/lens authority
+already accepted for campaign-changing creation. It may establish artifacts, formulas, offices, routes, regional
+laws/effects, or other permanent change at the licensed reach. Conservative Mythic and opt-in Worldbreaker remain
+distinct; the DM cannot voluntarily promote an ordinary beat to C4. Typed terminal disposition, continuity, and
+aftermath rules still bind the result.
+
+The bands are not a ladder the DM climbs through persuasive prose. Each comes from a source receipt/envelope.
+Within an authorized band, the DM has broad semantic authorship; the engine may constrain mechanics and illegal
+reach but should preserve the concept's intended play pattern and meaning.
+
+##### Worked authority comparisons
+
+**Paired comms after the cooperative escape:** `EXPRESSIVE/HYBRID + C2`. The relationship/reward receipt licenses
+a paired story tool. The DM authors the exact identity, commemorative form, intended communication/coordination
+play pattern, and proposed mechanics. The engine sets power, range, action/charge/stacking limits, mints linked
+instances, binds holders/provenance, and selects or later generates visuals. No prior item-database row is needed.
+
+**A quartermaster reacts to the burned jail:** the person is `RESISTANT`; the population/roster owner selects or
+rolls who occupies the relevant role and supplies independent motives/levers. The reaction form is `HYBRID C1/C2`
+depending on consequence: the DM may perform irritation and invent a state-consistent counting habit at C1; an
+accusation, debt, investigation, or relationship change requires C2 evidence/consequence authority. The DM may not
+invent an ideally corrupt quartermaster because that best serves the callback.
+
+**Supplier records connect the oil to a regional network:** the existence and contents of records, supplier,
+quantities, and culpability are `RESISTANT` and use flow/network/evidence owners. The callback card may request the
+connection and the DM may synthesize presentation, name/form where allowed, and connective meaning around the
+rolled truth. It cannot choose the guilty party first and backfill records.
+
+**The scorched doorway becomes “the Black Gate”:** a nickname and local story may begin as `EXPRESSIVE C1` if it
+only records how people refer to the existing scar. If the title becomes a rallying symbol, changes faction
+identity, creates reputation, or licenses mechanical/social leverage, it requires C2 or C3 authority as the reach
+grows. One wording does not silently acquire institutional power.
+
+**A Mythic antidote or world-changing key:** `EXPRESSIVE/HYBRID + C4` only when an eligible magnitude receipt
+licenses those creation lenses. The DM may author the astonishing exact form and meaning; the engine commits the
+reproducible formula, access law, affected scopes, evidence, owners, and campaign consequences. Worldbreaker
+configuration cannot be bypassed through ordinary `SYNTHESIZE`.
+
+##### How this keeps the DM seat large
+
+The matrix constrains *where authority comes from*, not the number of ideas the DM may have. A normal turn can
+contain unlimited C0 performance, a small amount of C1 capture where context permits, and any due/earned C2-C4
+envelopes. The DM can propose beyond the current envelope; the engine must route the proposal to a roll,
+clarification, deferred promise, progress path, or honest refusal rather than treating “not currently licensed” as
+“never imaginable.”
+
+The DM may also decide not to spend an optional expressive envelope immediately. It can hold a reward form,
+callback synthesis, or relationship token until a better legal beat within the service horizon. The engine tracks
+the obligation and budget without selecting the final creative answer in advance. This preserves actual direction
+and taste rather than turning envelopes into vending-machine outputs.
+
+##### Visual-library and generation implications
+
+Every accepted C1-C4 physical/item synthesis emits semantic visual requirements alongside mechanics: object
+family, silhouette, scale, mount/held/carried role, material, realm skin, palette, readable state variants,
+orientation, slot dimensions, background/transparency, and provenance motifs. The resolver first searches the
+large approved sprite/item library, may compose compatible approved parts where legal, and uses a deterministic
+fallback that preserves mechanics. A future exact-generation lane may create the missing bespoke slot image from
+the same receipt and art-direction contract. Visual absence cannot block canon or let the renderer substitute a
+mechanically different object.
+
+##### Research, implementation, and maintenance filter
+
+Tutenel et al. (2010) separate high-level `what` from compiled `how` and allow context-specific changes to
+semantic descriptions; this supports source posture plus impact constraints. Tutenel et al. (2009), Yu et al.,
+and Merrell et al. distinguish hard legality from weighted/designer-controlled composition. Mixed initiative lets
+the creative author fix meaningful choices while the solver handles validity around them. Whitehead's declarative
+solver shows the need to report unsatisfiability honestly rather than silently changing intent. Henderson et al.'s
+constraint-cost results warn that many simultaneous envelope dimensions can multiply runtime; common C1/C2
+combinations need compiled fast paths while rare C3/C4 synthesis may tolerate preflight.
+
+Option 3 has a **high architecture cost** but a manageable authoring shape: maintain envelope sources, semantic
+effect/relationship primitives, incompatibilities, representative fixtures, and visual tags rather than every final
+noun. Runtime cost should be low for C0/C1, bounded for compiled C2 patterns, and explicitly higher for rare C3/C4
+preflight. The main maintenance risks are impact laundering across several “small” C1 facts, misclassifying a
+resistance-bearing noun as expressive, and engine corrections that technically validate an item while destroying
+the DM's intended play pattern. Receipts must record the requested intent and any negotiated change so QA can
+detect that failure.
+
+**Question for Adam:** choose or amend the envelope policy. The recommendation is Option 3: source posture
+(`EXPRESSIVE`, `RESISTANT`, `HYBRID`) crossed with impact bands C0-C4, where paired comms ordinarily use an
+earned C2 envelope and independent NPC/place/secret/resource facts remain resistance-first. Does this leave the
+right amount of ordinary C1 connective freedom and earned C2 artifact freedom, or should either band be broader?
+If accepted, the next follow-up is what happens when the engine cannot compile the DM's proposed mechanics without
+materially changing the concept - reject, negotiate, abstract, defer, or create a new runtime precedent.

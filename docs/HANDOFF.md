@@ -17,6 +17,31 @@ reach the visual target. Read it before this handoff's historical graphics queue
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
 
+## ⭐ Latest (2026-07-20, later) — PROCEDURAL REDESIGN: WAVE 2 CLOSED; PROMOTED WAVE 10 NEXT [Codex]
+
+This supersedes the procedural-redesign pickup block immediately below without deleting its historical record.
+The session remains design/docs only. No implementation, CI, worktree, LFS checkout, merge, or push was authorized
+or performed. Local `master` remains ahead of `origin/master` and is not backed up remotely by this session.
+
+Adam explicitly closed **Wave 2** after the complete section 10.SWEEP.7 contradiction/material-follow-up audit.
+The authoritative closure is `docs/PROCEDURAL-DUNGEON-DIRECTION.md` section 10.SWEEP.8. It covers preserved
+O2.1-O2.11, additive G2.1-G2.2, prospective P2.12-P2.20, and every generated follow-up, including semantic
+invention, precedent scope, pooled NPC casting, private DM deliberation, CrisisChain mechanics, cold-state
+ownership, stocks/ecology, custody, impossible sites, player/DM projection, and Wave 2 proof.
+
+**Do next:** open promoted **Wave 10 - Interim Visual Engine and Release Scope**, not Wave 3. Following Adam's
+rapid-sweep preference, surface P10.0-P10.12 plus G10.1-G10.2 together with short plain-English recommendations,
+examples, and costs. Deep-dive only the questions Adam flags or whose consequence audit reveals a material gap.
+Do not implement or select a renderer by convenience; Wave 10 must settle the shared SceneTray grammar and typed
+dungeon/interior, town/social, wilderness/exploration, travel/map, and battle adapters while preserving the useful
+graphics-engine wins and simplifying the release presentation.
+
+**Fable readiness:** the closed Waves 1-2 material is safe to send to Fable now for read-only critique,
+cross-reference, gap-finding, or Wave 10 preparation. It is not safe yet for an authoritative whole-system build
+plan. The first strong visual design-to-spec handoff is after promoted Wave 10 closes; the full procedural
+design-to-build handoff is after every wave and the final cross-wave audit close. Explicitly notify Adam at both
+gates. Any code/spec execution still requires separate authorization.
+
 ## ⭐ Latest (2026-07-20) — PROCEDURAL REDESIGN HANDOFF: Wave 2 through Q11 + Gemini reference audit [Codex]
 
 This was a design-only session. No implementation, worktree creation, LFS checkout, CI, merge, or push was

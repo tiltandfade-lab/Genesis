@@ -6949,3 +6949,316 @@ proposal, and performance over a prevalidated latent affordance reserve, with th
 existence/legality/persistence and preflight required for ambiguous or high-impact physical claims—while
 accepting that the generic-affordance resolver, narration atomicity, and long-campaign persistence work
 are major implementation expenses rather than small extensions?
+
+#### 10.11.3 Ruling and cross-wave skeptical pass - every accepted ruling through Wave 2 Question 11
+
+Adam accepts the stricter improvisation boundary as more realistic and requests the same skeptical pass
+against every other ruling made so far. This section attacks—not merely summarizes—all twenty closed
+Wave 1 questions and Wave 2 Questions 1-11 against one another, the indexed research, the current
+production seams, realm expansion, long-campaign persistence, modding, player behavior, authoring cost,
+and the known “verify-green does not prove wired” failure class.
+
+The classifications used below are:
+
+- **CLARIFY BEFORE SPEC:** the principle can survive, but current language would create an incorrect
+  schema or authority boundary;
+- **DESIGN FOLLOW-UP:** a material decision remains and must be answered before its owning wave closes;
+- **MAJOR EXPENSE:** the theory is coherent but implementation/content/verification cost was easy to
+  underestimate;
+- **TUNING/ACCEPTANCE RISK:** exact distributions or experience gates determine whether the ruling is
+  good in play;
+- **VALID LATER-WAVE OWNER:** deliberately unresolved work is acceptable, but the eventual owner must
+  prove it rather than treating the prose as already built.
+
+These labels are not rejection votes. The question is whether each ruling has a lawful, affordable path
+to production and whether its interactions preserve the intended game.
+
+##### Executive verdict
+
+No accepted ruling should be discarded wholesale. The overall ontology remains unusually coherent.
+However, the pass finds:
+
+1. **one direct vocabulary collision:** mandatory original “purpose/builder/operator/doctrine” is
+   teleological and cannot describe an unbuilt cavern, emergent ecosystem, or uncreated anomaly without
+   inventing intent;
+2. **three schema traps:** operational condition cannot be one enum, deterministic latent data cannot
+   be seed-only across generator versions, and effective access depth cannot use one value for both
+   design-time placement and current post-shortcut accessibility;
+3. **four saturation threats:** discoveries/promises, independent Spice roots, latent regional
+   commitments, and active player handles can each remain bounded alone while overflowing together;
+4. **five major integration expenses:** generic environmental affordances, narration/event atomicity,
+   knowledge-safe DM projection, long-campaign storage/materialization, and the shared spatial legality
+   compiler;
+5. **a cumulative-complexity risk larger than any single ruling:** many sparse, event-driven, lazy,
+   “low-runtime” systems can still create a large schema, authoring, migration, validation, and
+   integration burden when combined.
+
+Wave 1 need not be silently reopened. Any accepted correction to a closed Wave 1 statement must name
+the affected ruling and be recorded as a clarification or supersession. The first such candidate is the
+intentional-versus-emergent lineage distinction at the end of this audit.
+
+##### Cross-cutting finding A - the total machine needs a budget, not only each subsystem
+
+Nearly every subsystem is individually bounded:
+
+- a small purpose program;
+- a sparse dependency graph;
+- a few groups and claims;
+- aggregate cohorts;
+- latent repeated children;
+- a thin DM hand;
+- active-room rendering;
+- event-driven cadence and state;
+- lightweight assertions and knowledge records.
+
+That does not prove their composition is bounded. One active city-prison scene could require purpose,
+population, capacity, operational flow, cadence, groups, claims, knowledge, discoveries, cards,
+affordances, topology, challenge, inventory, rendering, and event reconciliation simultaneously.
+Runtime may still be acceptable while integration becomes brittle and DM context becomes illegible.
+
+**Required correction:** every eventual architecture/spec pass needs a **total active-slice envelope**:
+record counts, dependency edges, mutable systems, projected handles, DM digest bytes, materialized
+objects, solver work, event applications, save growth, and fallback rates measured together on the same
+fixtures. “Each subsystem is cheap” is not acceptance evidence.
+
+The production path should be proven through a thin vertical slice before broad content expansion:
+
+```text
+one purpose program
+-> one complete roster and dependency chain
+-> one population/group/cadence realization
+-> one discovery/Spice root
+-> one legal room/affordance projection
+-> one player mutation
+-> persistence, revisit, DM truth, and visual truth
+```
+
+This is an architecture and acceptance requirement, not build authorization or a premature unit queue.
+
+##### Cross-cutting finding B - factoring avoids Cartesian code, not interaction writing or QA
+
+Purpose, culture, doctrine, realm, history, state, scale, occupants, cadence, and Spice are factored so
+Genesis does not author every full combination. That is correct. But important pairwise and triple-wise
+interactions still require content, exclusions, substitutions, and tests. AI assistance lowers drafting
+cost; it does not automatically lower taste, duplication, contradiction, IP, probability, or regression
+review cost.
+
+Every “large writing pass is welcome” ruling therefore inherits:
+
+- coverage reports over meaningful factor pairs rather than the full theoretical cross-product;
+- fallback-quality review when a specific combination lacks custom prose;
+- semantic duplication/contradiction lint;
+- realm and creature-scale incompatibility fixtures;
+- Adam's craft/taste gate for voice-critical content;
+- proof that generated variety is actually perceptible in play, not only different in JSON.
+
+##### Cross-cutting finding C - engine authority and AI performance require transactional seams
+
+The redesign repeatedly says the engine owns truth and the DM performs it. The current turn protocol can
+still display narration whose typed event failed. Knowledge, object existence, operational changes,
+contracts, schedule commitments, and discovery promotions all need the same correction exposed by the
+dressing audit: accepted state first or guaranteed prevalidated token, then final player-facing claim.
+
+This is not only a Question 11 expense. It affects every ruling that lets the DM bind, promote, defer,
+reveal, schedule, or mutate engine-owned facts.
+
+##### Cross-cutting finding D - permanence is more expensive than generation
+
+The design intentionally accumulates observed rooms, people, groups, private facts, relationships,
+promises, objects, state changes, and causal roots over years. Active generation can remain fast while
+save migration, storage, replay, compaction, indexes, and prompt retrieval become the dominant cost.
+Seed-only latent records also stop being deterministic when algorithms or tables change unless generator
+versions and source snapshots/migrations preserve their meaning.
+
+Wave 12 is a valid owner, but every earlier record proposal must already identify:
+
+- the minimum commitment stored before contact;
+- generator/table/schema version and provenance;
+- what hardens on observation;
+- what can compact and what must remain replayable;
+- how later code versions materialize the same promised fact;
+- the active projection and pull-by-id path;
+- corruption/last-known-good behavior.
+
+##### Wave 1 Question-by-question audit
+
+| Q | Accepted ruling under attack | Skeptical finding | Classification and required response |
+|---:|---|---|---|
+| 1 | Original purpose is permanent engine truth with lore-first authority | Correct for intentionally created sites, but false language for natural caverns, emergent habitats, weather-carved networks, and uncreated anomalies. Forcing a “purpose” invents teleology; forcing a creator invents canon. | **CLARIFY BEFORE SPEC.** Use a broader origin/formation lineage with an intentional-purpose variant. Preserve definite original purpose for constructed sites. |
+| 2 | Commissioner, operator, doctrine, tradition, occupants, substrate, era, and consequential workforce define construction identity | A single construction identity does not cover accretion, several building campaigns, mixed natural/constructed sites, or living growth. Mandatory fields would produce null clutter or fabricated builders. | **CLARIFY BEFORE SPEC / MAJOR CONTENT.** Make identity family-typed and layer/episode-specific; only intentional construction episodes require commissioner/operator/doctrine. |
+| 3 | Every site has resource ecology filtered by occupancy relationship | The occupancy labels are not mutually exclusive: a predator can be transient and externally dependent; a ruin can be dormant while squatters are self-sustaining. Activating all possible needs everywhere recreates the universal-meter problem. | **DESIGN FOLLOW-UP largely answered by Wave 2 Q2.** Treat relationships as composable facets and admit mutable systems only when causal/player-facing. Historical ecology may remain evidence without active meters. |
+| 4 | Age + instability generate zero to three consequential sequential transformations, each with evidence and a handle | “Zero to three” can be misread as all history rather than compressed play-relevant layers. Ancient sites may need more canon; giving every layer an unresolved future handle can create promise debt. | **CLARIFY/TUNING.** The bound applies to generated consequential layers, not total historical events. A handle may be self-contained evidence or closed local leverage, not automatically a campaign card. Stress primordial and heavily rebuilt sites. |
+| 5 | Current occupants continue/restore/adapt/squat/exploit/deface/overgrow/contest and may misunderstand inherited function | These verbs overlap. Occupants may restore one system, exploit another, and misunderstand a third. One site/zone enum will flatten the best cases. | **CLARIFY BEFORE SCHEMA.** Store a dominant relationship only for summary; material functions/zones carry sparse facets/claims with provenance. Wave 2 Q8 supplies the stronger model. |
+| 6 | The semantic core may become a bounded-place compiler for many site types | This is the largest scope-expansion risk. A ship moves, a sewer is a distributed network, a manor is embedded in urban law, and a living structure may change topology. One universal compiler can become a god-object. | **MAJOR ARCHITECTURE RISK.** Define bounded-site admission criteria and family adapters. Share authority/hierarchy/legality contracts, not necessarily one generation pipeline or one spatial solver. |
+| 7 | Every purposeful site receives a complete operating model plus protected variation | “Complete” is only as good as authored purpose profiles and can become an impossible completeness claim for mods. External services can become a loophole that hides missing functions. Core + protected variation can exceed a fixed shell. | **MAJOR CONTENT/VALIDATION.** Each purpose family needs an authored minimum viability contract, honest unknown-profile fallback, explicit external provider requirements, and diagnostic reconciliation. Never imply arbitrary mod purposes are complete because they compiled. |
+| 8 | Time-indexed context cascade separates construction context, history, and current use | Construction context may itself be ungenerated, creating circular world-generation demand. A site may have several construction campaigns with different contexts. A strict one-pass cascade can become brittle when later canon hardens. | **CLARIFY BEFORE SPEC.** Store the minimum contextual snapshot/promises needed per construction/transformation episode; do not eagerly generate the whole surrounding world. Reconcile later detail against promises by authority. |
+| 9 | Every room/child has a discovery opportunity; major secrets coordinate at site scale; nothing leads nowhere | Across hundreds of repeated children, “reward attention” can still become content, save, prompt, and search bloat. “Must lead somewhere” can accidentally promote every fragment into campaign debt. Critical truths can also become inaccessible if their only holder/evidence route disappears. | **DESIGN/TUNING RISK.** Assembly sweeps may satisfy many child opportunities through shared patterns; quiet confirmation/negative evidence can close locally; only genuinely promissory claims create future obligations; progression-critical truths require fair redundant evidence. |
+| 10 | Negotiation/acceptance raises contract priority; a thin hand and service horizons force timely progress | A service guarantee can become narrative teleportation or railroad pressure. “Earliest legal opportunity” may still feel formulaic. Contracts can become impossible through death, destruction, travel, or player neglect. | **MAJOR WAVE 9 EXPENSE.** Horizons must be opportunity/time/context-aware and allow diegetic failure, expiry, renegotiation, substitution, or consequence—never forced success. Scheduler acceptance needs player-agency and repetition tests. |
+| 11 | Social places allow several beats; resources/danger/rest plan jointly; inventory is BG-like; preserve golden beats | This question bundled crowd projection, difficulty economy, inventory UX, research process, and migration law. Each is coherent but they should not become one implementation unit. Multi-beat rooms can overload attention; joint supply can become hidden rubber-banding; “golden beat” can freeze accidental legacy behavior. | **VALID SEPARATE OWNERS / TUNING.** Bound foreground beats, generate supplies from site/difficulty plans rather than current HP, keep inventory independently specced, and maintain a finite approved golden corpus rather than preserving every quirk. |
+| 12 | Structural scope, operational load, spatial envelope, accommodation, and orthogonal profiles replace master size; rollers remain human-readable | Many first-class profiles can recreate a monolith as an implicit dependency web. Cycles such as capacity -> rooms -> envelope -> capacity may make generation order unstable. Controlled contracts can make “beginner-editable tables” intimidating. | **CLARIFY BEFORE SPEC / MAJOR TOOLING.** Every profile needs one owner, inputs, consumers, legal feedback/reconciliation, cycle diagnostics, and admission rule. Authoring must offer simple defaults plus advanced fields and actionable compiler errors. |
+| 13 | Repeated spaces are stable hierarchical children with sparse variation; search uses read/focus/sweep | Stable ids plus opportunities for every cell/bed/room can still grow saves. Coverage/anti-repeat algorithms can falsify dice if they silently override streaks. Sweep closure has the same synonym/negative-domain problem as dressing. | **MAJOR PERSISTENCE/TUNING.** Store indexed child seeds/invariants compactly, persist only contacted deltas, record every coverage correction, allow plausible streaks, and define finite method-sensitive search surfaces. |
+| 14 | Decompose the d200 into typed parts and preserved composites; controlled contracts + flavor; recovery proof | This is an enormous subjective migration. Decomposition can destroy the authored relationships that made rows memorable; the semantic registry can become tag bureaucracy and mods can break on vocabulary versions. | **MAJOR CONTENT/MIGRATION.** Retain original row ids/prose, legacy composite fixtures, row-by-row disposition, replacement proof, registry aliases/deprecations, simple authoring presets, and an expressivity comparison against the old d200. |
+| 15 | Canon/observations/beliefs separate; knowledge is source-attributed with private scopes and dramatic irony | Per-character confidence/evidence graphs can explode; LLM leakage can occur through any output; dramatic irony invites intentional metagaming. Not every ordinary fact merits a knowledge record. | **MAJOR PERSISTENCE/DM GATE.** Party-shared is the cheap default, private/specialist/contested facts are sparse exceptions, knowledge views are generated before prompting, and all output channels receive leakage tests. Progress cannot depend solely on one permanently lost private fact. |
+| 16 | Support, subordinate purpose, occupation, and secrecy are distinct; zero-to-two direct subordinate purposes is a default | Independence can be subjective, and recursive child purposes can reintroduce purpose soup despite a direct-child limit. Large castles/cities may legitimately exceed the default. | **TUNING/SCHEMA.** Require a mini-operating model, distinct goal/operator/beneficiary, and real allocation before promotion to purpose. Add hierarchy-depth/complexity budgets and stress large composites; do not turn every themed cluster into a purpose. |
+| 17 | Spice belongs to scoped causal roots; descendants retain independent rolls; no downward ceiling or upward recoloring | Independent NPC, loot, detail, and discovery authority can still saturate a grounded site with unrelated strong roots. Root/manifestation/accent distinctions can be judgment-heavy. | **MAJOR TUNING/VALIDATION.** Keep no tonal ceiling, but enforce independent-root opportunity budgets, active-attention limits, promotion accounting, causal inheritance, and statistical saturation reports across all layers combined. |
+| 18 | Occupants claim coherent zones through typed overlapping claims and event-driven fronts | Claim dimensions can multiply into a de facto all-pairs territorial sim; room inheritance may hide meaningful local exceptions. “Contest” can be over-read as combat. | **MAJOR SCHEMA/CONTENT, later tightened by Wave 2 Q8.** Materialize only play-predictive claims/edges, inherit defaults, record sparse exceptions, keep nonviolent outcomes, and measure active projection rather than total theoretical relations. |
+| 19 | Reconcile operating model, fixed shell, and likely added variation through combination/externality/annex/causal domains or honest failure | Honest failure is correct for authoring, but a rare legal seed that simply fails can strand generation. Repeatedly adding hidden pockets/annexes to save small sites can make every tiny place feel procedurally suspicious. | **DESIGN/TUNING.** Distinguish invalid authored program, retryable low-authority seed, and genuinely impossible premise; bound retries; preserve diagnostics; measure small-site extra-space frequency/size/repetition and allow embedded juicy handles when spatial addition is not licensed. |
+| 20 | Seed semantic topology before play; materialize detail deterministically; separate flexible narrative scheduling from effective-access risk/reward | Dynamic/living/non-Euclidean sites need initial topology plus mutation law, not an immutable future graph. Seed-only latent detail drifts across compiler versions. Effective access changes after shortcuts, faction shifts, or player-created routes; moving rewards/enemies afterward would become reactive scaling. | **CLARIFY BEFORE SPEC.** Fix initial topology and legal mutation rules; store generator/table versions and enough commitments for stable future expansion; separate design-time/planned access depth from current accessibility and never retroactively relocate committed rewards/opposition merely because a shortcut opened. |
+
+##### Wave 2 Question-by-question audit
+
+| Q | Accepted ruling under attack | Skeptical finding | Classification and required response |
+|---:|---|---|---|
+| 1 | Purpose-family obligation/flow programs author the roster; aggregate event-driven simulation supplies real consequences | A universal obligation shape may re-anthropomorphize natural/living sites or become so generic it says nothing. “Low runtime” hides purpose-family writing, fallback, and reconciliation cost. | **CLARIFY/MAJOR CONTENT.** Share a minimal interface—requirements, flows, dependencies, realization families, provenance—while allowing family-specific semantics. Prove at least one constructed, natural, living, and anomalous vertical trace. |
+| 2 | Typed hierarchical light simulation, healthy baselines, provenance-gated crises, buffers/recovery, and soak gates | “Healthy by construction” can sterilize ordinary emergent scarcity or hide arithmetic defects by freezing last-known-good forever. Highest-shared-scope state can create enormous eager fan-out. Units/rates across realms remain difficult. | **DESIGN FOLLOW-UP / MAJOR QA.** Canonical seasonal variance and threshold crossings may initiate pressure when they have modeled provenance; fail-closed needs visible diagnostics/recovery, not silent stasis; dependents update lazily through dirty frontiers; unit/type registries need conversion laws. |
+| 3 | Obligations realize through typed rooms/assemblies/shared uses/distributed systems/procedures/external services; cities use bounded hierarchy | Candidate combinations and backtracking can become solver explosion. A city is not a pure tree: utilities, routes, factions, and services cross district/site boundaries. Externalization can defer every hard problem. | **MAJOR ARCHITECTURE.** Use one ownership/materialization hierarchy plus sparse cross-links; commit constrained needs first; cap constructive search; declare degradation; require external service truth; report impossible programs. |
+| 4 | Repeated families share truth and vary through factored authority/signature layers across a plural stress corpus | The many variation knobs can become another overfit profile and AI-written signatures may converge to the same generic “personal detail.” Anti-repeat logic can suppress meaningful uniformity or plausible streaks. | **TUNING/CONTENT.** Measure perceptible diversity, repetition, correlation, and quiet rates; preserve authorial dice/provenance; keep invariant-heavy profiles genuinely uniform; use curated expression banks and real counterexamples beyond prisons. |
+| 5 | Four allocation layers are Spice-capable; every spicy result is root/manifestation/accent/escalation with mechanized promotion | The same event can be charged to multiple budgets; promotion can turn micro-detail into excessive root debt; classification may depend on interpretation. All-layer Spice plus no downward ceiling creates combined saturation risk. | **CLARIFY/TUNING.** One causal ledger must own cross-layer accounting; define deterministic promotion tests and bounded overflow behavior; report total independent roots/active manifestations, not each layer separately. |
+| 6 | Population/demand rolls derive quantities; envelopes are permeable; unrolled neighbors exert hard minimal relational promises | One population estimate risks becoming another master-size variable. Residents, households, workers, visitors, students, prisoners, catchment, and seasonal populations can overlap/double-count. Inbound promises from many generated neighbors can make a future city impossible before it rolls. | **DESIGN FOLLOW-UP / MAJOR RECONCILIATION.** Use a canonical population bundle with non-overlapping count owners and typed overlays/drivers, not one scalar; define reciprocal promise merging, conflict diagnostics, saturation, authority, and counterpart splitting before latent regional contracts freeze. |
+| 7 | Preserve NPC core; separate occupation, membership, assignment, presence, and cast reason; cast existing population before minting | Aggressive reuse can create “small world” repetition, deterministic first-match bias, or teleporting NPCs. Keeping legacy `role` can freeze a lossy field. One population owner can imply false belonging for migrants/diaspora/mobile people. | **DESIGN/TUNING.** Availability/travel/commitment are hard filters; candidate selection needs fair novelty/fit weights; `countOwner` is accounting, not identity; migration transfers counts explicitly; legacy role is compatibility display, not permanent schema authority. |
+| 8 | Cohorts/groups/factions/actors are distinct; claims/relationships are sparse; plural hidden memberships and event-driven fronts are first-class | “Create a group only when collective state matters” is partly hindsight: an unnoticed cult can matter before the party knows. Hidden memberships can leak through summaries. Group formation/split history and count conservation are complex migrations. | **MAJOR IMPLEMENTATION/KNOWLEDGE.** Store deterministic latent group candidates when causally licensed, activate on consequence/attention, partition canon from party knowledge, and prove headcount/membership transitions through formation/split/merge/dissolution fixtures. |
+| 9 | Operational state is tracked per capability/flow with partial, dormant, substituted, blocked, failed, repurposed, and destroyed distinctions | These labels are not mutually exclusive. A capability may be partly blocked, strained, substituted for one cohort, and physically intact at once. Encoding the vocabulary as one enum would immediately lose truth. | **CLARIFY BEFORE SPEC.** Factor operational condition into availability/coverage, performance, mode, access/claim, physical integrity, demand/load, scope, cause, and recovery; derive friendly labels and site summaries from those dimensions. |
+| 10 | Layered cadence and coverage slots create temporal life while most populations stay aggregate | Perfect schedules make people clockwork and invite metagame waiting. Lazy projection can spawn an actor despite travel time or a conflicting commitment. Realm cycles and calendars can become a time-standard problem. | **DESIGN/TUNING.** Store cadence windows, commitments, travel/availability constraints, bounded variance, and knowledge confidence rather than omniscient exact whereabouts; named conflicts reconcile before casting; realm cycles map through typed local calendars. |
+| 11 | Sparse dependency/handle flows plus prevalidated latent affordances let the DM support environmental creativity | The adversarial audit already found the central hole: every manipulable noun is potentially mechanical. Current dressing, event, persistence, inventory, and renderer paths cannot satisfy the promise as-is. | **MAJOR CROSS-SYSTEM EXPENSE; stricter ruling accepted.** DM selects/proposes/performs; engine validates existence, identity, legality, ownership, exhaustion, promotion, action consequences, and transactional narration. |
+
+##### Direct ruling interactions that need explicit combined gates
+
+1. **Purpose truth x natural/living grammars:** intentional purpose must become one lineage variant, not
+   a universal teleology.
+2. **Every-room discovery x stable repeated children x years-long saves:** child opportunities need
+   compact assembly representation, aggregated sweep, and sparse contacted deltas.
+3. **No downward Spice ceiling x all-layer Spice x spicy-small-site preference:** preserve surprising
+   children while measuring total unrelated roots and active attention load.
+4. **Healthy-by-construction x “spicy restaurant”:** juicy variation is not synonymous with crisis.
+   Stable places can be strange, personal, secretive, contested, or opportunity-rich without every
+   resource system failing.
+5. **Human-readable modding x controlled semantic contracts:** simple edits need defaults/presets;
+   advanced authority needs validated namespaced fields. Mod friendliness cannot mean unvalidated tags.
+6. **Fixed topology x living/realm-changing sites:** initial graph truth and legal mutation grammar must
+   coexist; mutation never licenses the DM to invent a retroactive edge.
+7. **Deterministic latent detail x evolving tables/code:** store generator/table version and sufficient
+   commitments; a bare seed is not forever determinism.
+8. **Effective access depth x shortcuts/state changes:** design-time placement and current accessibility
+   are separate. Earned shortcuts change play, not the historical location/value of already committed
+   content.
+9. **Thin DM context x abundant player handles:** active projection must rank handles and unknowns
+   without deleting canon; total digest/attention budgets need fixture evidence.
+10. **DM freedom x engine-owned decoration:** reactive description remains rich, but physical nouns and
+    consequential claims must consume prevalidated authority and persist transactionally.
+11. **Latent neighboring places x permanent authority:** inbound promises need reciprocal aggregation and
+    conflict resolution before later materialization; first writer cannot reserve an unlimited future
+    city.
+12. **All facts persistent x browser longevity:** canonical storage, hot projection, cold prose,
+    migrations, and compaction are part of the product promise, not Wave 12 cleanup.
+
+##### Expenses most likely to be underestimated
+
+| Expense | Why it hides during design discussion |
+|---|---|
+| Controlled semantic vocabulary and compiler | Each individual tag looks small; inheritance, aliases, conflicts, versions, mod namespaces, diagnostics, and migrations are the real system |
+| Purpose/ecology content | Factoring avoids full combinations but still requires minima, variants, pairwise interactions, context exclusions, substitutes, and authored fallbacks |
+| Generic environmental action model | “Let players use dressing” implies physics/affordances, ownership, inventory transfer, state, evidence, tactical effects, and renderer parity |
+| AI/engine transactional protocol | Typed events exist, but guaranteed event acceptance, preflight, correction turns, latency, and narration consistency are not solved by validation alone |
+| Knowledge-safe projection | Hidden canon, private holders, false beliefs, cards, maps, objectives, prompts, and visual tells create many leakage channels |
+| Deterministic lazy persistence | Stable ids/seeds are easy; cross-version expansion, snapshotting, compaction, replay, and migrations over years are hard |
+| Statistical taste gates | “Spicy but not saturated,” “varied but coherent,” “healthy but not bland,” and “alive but not busywork” require distributions and play evidence, not unit tests |
+| Integrated acceptance rigs | Every subsystem can pass alone while the city-prison vertical path is slow, contradictory, overfull, or absent from the production route |
+| Human review | AI makes writing plentiful; Adam still owns taste, and more generated content increases—not eliminates—the selection and regression burden |
+
+##### What this audit does not recommend
+
+It does **not** recommend flattening the game into static prose, discarding light simulation, reducing
+Spice to a global tone dial, eliminating free environmental interaction, returning to independent room
+rolls, or delaying all architecture thinking until every questionnaire answer exists. Those moves would
+remove the intended product advantage rather than solve the engineering problem.
+
+It recommends a stricter discipline:
+
+- one canonical owner per kind of truth;
+- factored variants instead of anthropomorphic universal fields;
+- total active-slice and persistence budgets across systems;
+- transactional DM/engine claims;
+- versioned deterministic latent commitments;
+- vertical production-path evidence before corpus expansion;
+- explicit acceptance of content/QA cost rather than repeatedly calling every sparse subsystem cheap.
+
+##### Material follow-up queue generated by the skeptical pass
+
+These questions must be exhausted one at a time before Wave 2 can close; findings that touch closed Wave
+1 must be recorded as explicit clarifications if Adam accepts them:
+
+1. **Intentional versus emergent site lineage:** replace universal purpose/builder language for natural,
+   living, and anomalous sites without weakening constructed-site purpose truth.
+2. **Total complexity envelope:** decide the end-to-end active-site budgets and vertical-slice proof
+   required before any broad implementation spec claims affordability.
+3. **Discovery scaling:** clarify what “one opportunity per room/child” means across huge repeated
+   assemblies, systematic sweeps, quiet results, and promise debt.
+4. **Operational-state factorization:** reject a single state enum and determine the minimal independent
+   dimensions from which summaries derive.
+5. **Latent determinism across versions:** decide what must be stored beyond a seed and how table/compiler
+   changes preserve unobserved promises.
+6. **Planned versus current access depth:** protect committed reward/challenge truth while shortcuts,
+   occupation, destruction, and knowledge change current reachability.
+7. **Latent regional-promise reconciliation:** prevent many already-generated places from overconstraining
+   an unmaterialized neighbor.
+8. **Integrated saturation:** measure discoveries, roots, groups, states, cards, and handles together,
+   not only in their separate budgets.
+9. **Transactional DM claims:** generalize the accepted dressing correction to contracts, discoveries,
+   knowledge, schedules, and environment mutations.
+
+The remaining question 11 flow ruling and its bounded-improvisation follow-up are accepted in principle,
+but Question 11 does not close until this generated queue has been worked through or assigned without an
+unresolved material consequence.
+
+##### First skeptical follow-up - intentional purpose versus emergent origin
+
+The current Wave 1 language should remain exact for built institutions:
+
+```text
+constructed site
+  -> commissioner / creator
+  -> intended purpose and beneficiaries
+  -> original operator and doctrine
+  -> design tradition, intended users, substrate, era, workforce where consequential
+```
+
+But other purpose families need equally definite non-teleological lineage:
+
+```text
+natural formation
+  -> formation processes, substrate, age, environmental flows, sustaining/altering forces
+
+living site or colony
+  -> organism/collective lineage, biological imperatives, ecological role,
+     growth/renewal process, symbioses and pressures
+
+emergent anomaly
+  -> originating event/condition/law, affected domain, persistence mechanism,
+     attractor/behavior, containment or relationship where one exists
+```
+
+A living structure may have an intentional creator; a cavern may have been deliberately expanded; an
+anomaly may have been engineered. Those facts add construction/transformation episodes rather than being
+assumed by family. Likewise, “ecological function” describes what a formation does in a system, not what
+someone intended it to do.
+
+The broader canonical record can be thought of provisionally as **site lineage**:
+
+- family and origin/formation mode;
+- intentional purpose only when intent exists;
+- origin agent/process/event and provenance;
+- formation/construction episodes in time order;
+- original ecological/operational role where meaningful;
+- later transformations, current uses, and occupant beliefs kept separate.
+
+This preserves the strongest Wave 1 principle—Genesis knows how the site came to be and does not let
+present occupants overwrite it—without forcing every cave to have a builder or every organism to have a
+commissioner.
+
+**Recommendation:** explicitly clarify Wave 1 Questions 1, 2, 7, and 8 so **definite site lineage** is
+universal, while **definite original purpose and construction identity** are mandatory only for
+intentional construction episodes. Natural, living, and anomalous families receive definite origin,
+formation, ecology/imperative, and persistence records instead of fabricated teleology.
+
+**Open skeptical follow-up:** should this intentional-versus-emergent lineage distinction amend the
+closed Wave 1 vocabulary while preserving all existing purpose authority for constructed sites?

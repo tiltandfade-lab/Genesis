@@ -346,6 +346,16 @@ and board feedback do not wait for AI prose, and success feedback never precedes
 disappearance, accessibility, stale-response, and minimum-feedback-family questions live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.16.
 
+## Tiered feedback-family target ruling (Adam, 2026-07-20 — additive)
+
+> "C is a great place to aim for, later we can get more specific if we need to for certain things"
+
+Receipt-driven feedback first uses a governed object/action-specific binding, then a reusable typed family, then a
+truthful localized visual/sound/caption fallback, and finally a tracked presentation gap rather than false or
+silent mechanics. Bespoke treatment may replace a fallback later without changing rules, receipt identity, save
+state, timing, viewpoint, or accessibility. Exact families, cost, and the open minimum-proof question live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.17.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

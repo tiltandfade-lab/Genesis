@@ -17132,3 +17132,67 @@ feedback in prose.
 Does Adam accept Option C as the best-case/pre-alpha feedback architecture? If so, define the minimum slice and
 fallback quality gate, close the object-inspector branch, and resume the remaining Wave 10 visual questions. Wave
 10 remains **OPEN**; no build is authorized.
+
+### 11.17 F10.3e ruling - tiered receipt-driven feedback families accepted
+
+**Adam's ruling (2026-07-20):** Option C is the right target. Genesis should aim for reusable receipt-driven
+feedback families with truthful fallbacks; later production can add more specific animation and sound for objects
+or actions that merit it.
+
+The accepted specificity ladder is:
+
+1. **governed specific binding:** use a real stateful construction-class response when one exists—chest lid,
+   door leaf, lever rotation, platform movement, exact projectile, authored spell family, or another validated
+   object/action binding;
+2. **typed family binding:** use a reusable movement, open/close, pickup/transfer, strike/impact, projectile,
+   spell/area, activate/toggle, damage/heal, failure/refusal, reveal, or environmental-change presentation;
+3. **truthful localized fallback:** if no specific visual exists, bind the exact actor/object/cell and receipt to a
+   restrained motion/highlight/effect, suitable sound-family token where perceptible, and explicit caption/state
+   change. Never substitute a misleading animation merely because it is prettier;
+4. **tracked coverage gap:** if even the fallback cannot represent the receipt honestly, report a typed presentation
+   gap for QA and rely on accessible text/DM narration while preserving mechanics. A gap may not erase, invent, or
+   delay the canonical result.
+
+Bespoke feedback is therefore an additive replacement for a fallback, not a new rules implementation. It inherits
+the same receipt id, target binding, timing, viewpoint filter, accessibility contract, performance budget, and
+deterministic replay semantics. Later specificity can improve taste without forcing save migrations or action-law
+forks.
+
+The architecture costs **medium-high initially and scales well afterward**: a versioned feedback registry,
+construction/action-family bindings, sound and caption tokens, deterministic timing, reduced-motion variants,
+coverage telemetry, and visual fixtures. Content maintenance becomes explicit—new actions declare a feedback
+family or a tracked gap—rather than depending on the DM to describe silent mechanics.
+
+This closes F10.3e's architecture choice. The best-case family bank is not a claim that every action receives
+bespoke feedback in pre-alpha.
+
+#### F10.3f - minimum pre-alpha feedback proof
+
+How broad must the first exact-cell/inspector slice be before this architecture counts as proven?
+
+- **Option A - object-only minimum:** exact PC movement plus chest open/pickup and generic refusal. Fastest, but it
+  does not prove that the same receipt grammar spans combat targeting, projectiles, areas, and damage.
+- **Option B - representative vertical spine (recommended):** prove exact movement/Dash with trigger pause; chest
+  and door open/close; pickup/custody transfer; one melee impact; Fire Bolt projectile; Fireball point/area effect;
+  damage/heal state feedback; one lever/platform or invented-object activate/toggle fallback; reveal; and typed
+  refusal. Other surfaced actions must at least receive the truthful localized fallback or a visible tracked gap—
+  never a silent update.
+- **Option C - complete family bank before proof:** strongest coverage, but turns the first slice into a broad
+  content-production milestone and delays learning whether the board/card/receipt architecture works.
+
+Option B's minimum quality gate is:
+
+- every committed perceptible receipt in the slice localizes feedback to the correct actor, path, object, cell, or
+  area and displays the resulting state without waiting for DM prose;
+- movement follows canonical cells/elevation and pauses at actual reaction/hazard boundaries;
+- object visuals and card fields agree after open/close/pickup/transfer;
+- projectile and area feedback agree with the exact targeting kernel and affected-citizen preview;
+- failure/refusal never plays success feedback; hidden or inaudible facts never leak;
+- sound has visual/caption parity, reduced motion remains legible, and dismissal/latency/save-load cannot duplicate
+  or suppress the canonical action;
+- the same deterministic fixture passes at the native desktop and minimum landscape-tablet proof sizes later
+  chosen by F10.6b, with performance gates later quantified by P10.7/F10.7.
+
+Does Adam accept Option B as the minimum proof while retaining the full Option C family architecture as the target?
+If so, close the object-inspector/feedback branch and resume F10.6b native-resolution proof. Wave 10 remains
+**OPEN**; no build is authorized.

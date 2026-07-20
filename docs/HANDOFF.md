@@ -6,6 +6,22 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 feedback architecture) — FAMILY FIRST; BESPOKE WHERE IT EARNS THE COST [Codex]
+
+This supersedes the board-feedback pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3e Option C as the target and allows later specific polish where needed. Feedback uses a governed
+specific binding when available, then a typed action/state family, then a truthful localized visual/sound/caption
+fallback, then a tracked presentation gap with accessible text/DM narration rather than false or silent mechanics.
+Bespoke treatment replaces a fallback without changing the receipt, rules, save state, timing, viewpoint, or
+accessibility. F10.3e is closed; this does not require bespoke pre-alpha coverage for every noun.
+
+**Do next:** ask F10.3f. Codex recommends a representative proof spine: exact movement/Dash/reaction pause;
+chest/door open-close; pickup transfer; melee impact; Fire Bolt; Fireball; damage/heal; activate/toggle fallback;
+reveal; and typed refusal. Other surfaced actions need a truthful fallback or tracked gap, never silence. If
+accepted, close inspector/feedback and resume F10.6b native-resolution proof.
+
 ## ⭐ Latest (2026-07-20, Wave 10 board feedback) — THE CARD UPDATES; THE BOARD PERFORMS [Codex]
 
 This supersedes the smart-card pickup below without deleting it. Design/docs only: no code, dependency

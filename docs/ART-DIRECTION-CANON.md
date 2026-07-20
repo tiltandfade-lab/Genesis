@@ -366,6 +366,16 @@ of the same canonical receipt and never becomes a second combat authority. The e
 split, costs, examples, and open fallback question live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.18.
 
+## Board-truth/EngagementLens-drama ruling (Adam, 2026-07-20 — additive)
+
+> "B is great for that"
+
+The BattleMat always shows the exact spatial, target/area, trigger, hazard, occupancy, object, custody, and minimum
+result truth needed to understand a receipt. The bottom EngagementLens may provide richer interim sprite melee,
+projectile, spell, reaction, damage, healing, and character-performance animation from the same receipt. A missing,
+collapsed, disabled, or skipped lens never removes information or blocks play. Exact sequencing, duplication,
+cost, and open auto-focus behavior live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.19.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

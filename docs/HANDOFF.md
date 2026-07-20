@@ -6,6 +6,22 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 board/lens split) — BOARD EXPLAINS THE TACTICS; LENS PERFORMS THE DRAMA [Codex]
+
+This supersedes the interim-battle-feedback pickup below without deleting it. Design/docs only: no code,
+dependency installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3g Option B. The BattleMat always shows exact path/destination/elevation/occupancy, reaction and
+hazard trigger cells, target/line/point/area/caught citizens, persistent hazards, object/environment/custody state,
+and minimum localized feedback. The optional bottom EngagementLens may provide richer sprite combat performance
+from the same receipt. One timeline/shared id prevents contradiction or double feedback; a collapsed, missing, or
+disabled lens never loses information or blocks play. F10.3g is closed.
+
+**Do next:** ask F10.3h. Codex recommends no feedback-driven auto-open or focus theft: the lens performs relevant
+receipts only while already visible for the selected PC, including hostile reactions against that PC. Board/audio/
+caption feedback remains complete for unselected actors and whenever layout, drawer, settings, or player choice
+collapses the lens. If accepted, close inspector/feedback and resume F10.6b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 interim battle feedback) — BOARD OWNS TRUTH; THE LENS MAY PERFORM IT [Codex]
 
 This supersedes the feedback-architecture pickup below without deleting it. Design/docs only: no code, dependency

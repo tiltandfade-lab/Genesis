@@ -17272,3 +17272,73 @@ Examples under Option B:
 Does Adam accept Option B? If so, define sequencing/fallback behavior when the lens is collapsed or disabled, close
 the inspector/feedback branch, and resume F10.6b native-resolution proof. Wave 10 remains **OPEN**; no build is
 authorized.
+
+### 11.19 F10.3g ruling - board carries tactical truth; lens carries expressive combat drama
+
+**Adam's ruling (2026-07-20):** accept Option B. The exact BattleMat always presents the spatial and persistent
+truth required to understand the action. The bottom EngagementLens may carry richer interim character/action
+performance from the same receipt.
+
+The mandatory board layer is:
+
+- exact path progression, destination, elevation, and occupancy;
+- reaction/hazard trigger cells and pauses;
+- exact entity/object target, line/path, selected point, area footprint, and affected-citizen indication;
+- persistent hazards, terrain/object state, open/closed/activated state, custody transfer, removal, and destruction;
+- localized minimum impact/state feedback sufficient to understand the result when the lens is unavailable.
+
+The optional lens layer may add:
+
+- sprite advance/lunge, wind-up, recoil, hit/heal reaction, and character-performance timing;
+- expressive projectile, spell, reaction, damage, and condition beats;
+- direct actor/target labels, distance/elevation context, and dramatic framing derived from the board state.
+
+One deterministic presentation timeline sequences both adapters:
+
+```text
+preview on board
+  -> commit receipt
+  -> begin/present exact board path or area
+  -> pause at a real reaction/impact boundary when required
+  -> play eligible lens performance + shared audio/caption
+  -> apply/show canonical resulting board and card state
+  -> continue interrupted path if the receipt permits
+  -> DM narration from the same receipt
+```
+
+The lens never changes the receipt, selection, position, area, damage, or action economy. If an expressive lens
+animation is missing, late, collapsed, disabled, or skipped, the board adapter still completes truthful feedback
+and play continues. The two surfaces cannot each emit separate sounds/damage numbers for one receipt; shared
+presentation ids suppress duplication.
+
+This split has **medium synchronization/timeline cost** and materially lower 3D animation-production cost. It
+requires adapter coverage checks, interruption points, shared ids, skip/fast-forward behavior, and captures with
+the lens both present and absent. It does not authorize lens-only spatial resolution.
+
+F10.3g is closed.
+
+#### F10.3h - may feedback auto-open or steal focus for the EngagementLens?
+
+- **Option A - auto-open/follow every acting citizen:** maximizes spectacle, but constantly reframes the board,
+  changes visible cast, and can fight the player's selected PC, object card, drawer, or target planning.
+- **Option B - never auto-open solely for feedback (recommended):** retain the already accepted rule that selecting
+  a PC opens its lens. The lens animates relevant receipts while it is already visible; it may show an enemy's
+  attack/reaction against that selected PC without changing selection. If the lens is collapsed by deselection,
+  drawer/layout pressure, minimum viewport, reduced-presentation setting, or player choice, the board plus shared
+  audio/caption families carry the complete result. Feedback never steals focus.
+- **Option C - auto-open only for “high-impact” events:** dramatic, but requires a salience policy, risks repeated
+  layout shifts, and can turn a presentation preference into an opaque importance judgment.
+
+Examples under Option B:
+
+- selected PC casts Fire Bolt: the already-open lens performs the cast/impact while the board shows exact target;
+- Goblin 2 opportunity-attacks the selected PC during movement: the board pauses at the trigger and the visible
+  lens performs the reaction beat;
+- an enemy attacks an unselected companion: the board performs complete feedback; the lens does not switch actors
+  or open itself;
+- opening the character drawer collapses the lens as already accepted; ongoing mechanics remain understandable on
+  the reframed board;
+- with the lens disabled or reduced motion enabled, no rule, target, consequence, or receipt disappears.
+
+Does Adam accept Option B? If so, the inspector/feedback branch has no remaining material follow-up and can close
+before F10.6b native-resolution proof. Wave 10 remains **OPEN**; no build is authorized.

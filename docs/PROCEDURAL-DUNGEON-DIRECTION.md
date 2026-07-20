@@ -10521,3 +10521,101 @@ real surfaced action with city-scale stakes; once eligible, the honest Mythic ro
 - Typed effects and commitment capsules matter more, not less, at this scale. Each broken subsystem needs
   an explicit new rule, owner, provenance root, evidence projection, and downstream invalidation/reaction
   path.
+
+#### 10.11.42 Ruling — conservative Mythic by default; Worldbreaker crits as an opt-in profile
+
+Adam wants both calibration passes as playable options. Default play uses the more conservative `20/20`
+outcomes from §10.11.40. An optional setting enables the deliberately game-breaking `20/20` outcomes from
+§10.11.41 because some players will love campaign-warping dice while others will hate them. Genesis should
+be highly configurable by the end, and future designs must preserve that direction.
+
+This is not a frequency, honesty, or eligibility toggle. Both modes retain:
+
+- surfaced-spotlight d20 eligibility and no crit fishing;
+- natural 20 followed by magnitude 20 as the 1-in-400 Mythic-success trigger;
+- open `d3 + 2` distinct lens draws;
+- persistent typed effects, atomic commit, provenance, and reactive anchor coverage;
+- no cooldown, pity correction, secret downgrade, or post-roll cancellation;
+- the rule that only magnitude 20 receives extra persistent world-mutation authority.
+
+The setting changes the **reach envelope and legal systemic depth** of those same honest lenses.
+
+##### Recommended user-facing profiles
+
+| Profile | Default | Mythic authority |
+|---|---:|---|
+| **Mythic** | **Yes** | Permanent, wondrous, and situation-reactive, but concentrated around the scene, active story, and directly attached owners. It may create the Light of Lathander, repentance, a hideout revelation, and an organically maintained shrine without routinely invalidating whole subsystems. |
+| **Worldbreaker** | No; explicit opt-in | May spend the same lenses at campaign/systemic depth: obsolete the current quest or dungeon route, create reusable capabilities, establish powerful local laws or institutions, change regional ecology/economy/faction balance, break threat fronts, or create consequential realm topology. |
+
+“Mythic” is the proposed default label rather than “Conservative,” because the default remains capable of
+permanent miracles and catastrophes and should not be framed as the lesser or cowardly way to play.
+“Worldbreaker” accurately warns and attracts the audience for the expansive mode.
+
+##### Same roll, different reach profile
+
+For the confiscation chest:
+
+- **Mythic:** the loot improves, the corruption network is revealed, a victim bond forms, and the jail or
+  rogue receives a permanent but site-rooted change;
+- **Worldbreaker:** the lock becomes the reusable Key of Restitution, all unjust locks in the institution
+  fail, the full operation collapses, and claimant politics restructure the region.
+
+For the planar crystal:
+
+- **Mythic:** the town is saved, the crystal receives a durable stabilizing law, the wizard/town bond
+  changes, and the hell threat suffers a lasting local defeat;
+- **Worldbreaker:** the crystal becomes a regional planar anchor and controlled gate, restores partially
+  absorbed structures, severs the hell power's claim, and grants the wizard a reusable gate authority.
+
+The DM does not decide which temperament to use after seeing the dice. The `CheckContract` snapshots the
+active campaign profile before the first d20, and the `CritMandate` inherits that profile/version. Lenses
+resolve against the corresponding reach permissions.
+
+##### Configurability architecture law
+
+Genesis should not implement this as scattered checks such as `if (worldbreaker)` inside individual
+spells, lenses, or renderers. A versioned, persisted `CampaignRulesProfile` should resolve player-facing
+presets into bounded mechanical capabilities:
+
+```text
+crit.mythicProfile
+crit.reach ceilings by spatial/domain, permanence, systemic depth, reversibility, and count
+crit.permissions for reusable capability, quest invalidation, topology, institution, economy/ecology,
+  faction/threat, and other typed effect families
+rules-profile id/version and mod/source provenance
+```
+
+Typed adapters ask the resolved capability contract whether a proposed effect is legal; narration and
+rendering consume the accepted receipt. The rule profile is saved with the campaign, exposed to the DM
+handoff, included in deterministic traces, and stored on every exceptional outcome so later profile or mod
+changes cannot reinterpret old canon.
+
+The source should remain human-readable and mod-friendly—preferably compiled from the same table/roller
+authoring idiom Genesis uses elsewhere—while runtime consumes a normalized profile. Presets provide a
+simple surface for ordinary players; eventual advanced controls may expose selected independent levers.
+Player-experience settings should remain orthogonal: Worldbreaker crits must not secretly imply harder
+combat, greater hunger, inflated enemies, or a different economy difficulty.
+
+This establishes a general forward rule for the redesign:
+
+> When a decision represents a genuine difference in desired play rather than a correctness invariant,
+> design a centralized, versioned control surface for it instead of hardcoding one taste as universal.
+
+Not every implementation constant becomes a checkbox. Settings must correspond to comprehensible play
+experiences, compose without contradiction, and use presets to prevent an unusable wall of knobs.
+
+##### Open follow-up — when may the profile change?
+
+Three plausible policies remain:
+
+1. **World-creation lock:** choose once when creating the campaign. Strong reproducibility, but too rigid
+   for players who discover their preference after several sessions.
+2. **Unrestricted live toggle:** change at any time. Flexible, but permits switching after seeing a natural
+   20 or while a cascade is being resolved and makes provenance ambiguous.
+3. **Nonretroactive between-resolution toggle:** allow changes between fully resolved turns/scenes; snapshot
+   the profile at `CheckContract` creation, forbid changes during a pending action/cascade, record the rules
+   change in the Ledger, and never upgrade/downgrade existing outcomes. **Recommended.**
+
+**Open follow-up:** should Mythic/Worldbreaker be a campaign setting that may be changed between resolved
+actions or scenes, with every change ledger-recorded and strictly nonretroactive, while the profile is
+frozen from check authorization through cascade commit?

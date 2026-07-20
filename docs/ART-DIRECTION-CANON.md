@@ -217,6 +217,22 @@ figure, allowing natural-language references such as “Goblin 2” to resolve t
 lens does not invent a second cast, position system, or combat authority. Exact pre-action range semantics and
 generic-label lifecycle remain follow-up decisions in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.5.
 
+## EngagementLens orientation and exact-tactics candidate (Adam, 2026-07-20 — additive)
+
+> "though, since all the character UI stuff is on the left, the PC character should also be on the left and enemies to the right. I mean, we probably want both options to be available in reality. The player should be able to click fireball and click the target if the target is within range. I think we should probably also shwo the range of available movement FFT style when it is the PCs turn. and the player can then pick that movement. I prefer the XCOM UI over the FFT UI for this because it essentially allows you an auto dash if you decide to move into the 2nd tier of movement range
+>
+> i think in the FF6 Style visualizer it should probably also say the distance in ft from the PC.
+>
+> I know this is starting to get high resolution and complicated, but I am not sure a representational battlefield is going to cut it in this gaming market. I am completely open to feedback here and I also do not know the scale of work i am proposing with my design choices"
+
+The selected PC belongs on the **left** of the EngagementLens, aligned conceptually with the left-side character
+UI; enemy/target figures compose to the right. Lens labels should include their distance in feet from the PC.
+Genesis should support both natural-language action declarations and direct tactical selection through one shared
+validated action path. FFT-like reachable-cell display with an XCOM-like normal-move/second-tier-Dash distinction
+is now the preferred exact-tactics candidate. Whether exact cells replace the current zone model as combat
+authority remains an explicit Wave 10 decision in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.6; this ruling does
+not itself authorize the substantially larger mechanics build.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

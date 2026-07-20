@@ -6,6 +6,35 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 exact-tactics audit) — REPRESENT THE WORLD; DO NOT ABSTRACT AWAY COMBAT [Codex]
+
+This supersedes the selected-PC lens pickup below without deleting it. Design/research/docs only: no code, CI,
+worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam amends the lens orientation: selected PC on the left, enemy/target figures on the right, each with a stable
+label and distance in feet. Both action-click/target-click and natural-language declarations should exist. On a
+PC's turn, Adam favors FFT-like movement cells with XCOM-like normal/Dash tiers and selection of the destination.
+He questions whether representational combat is sufficient for the market and asks for honest scope feedback.
+
+The audit finds that Genesis is spatially close but mechanically not exact-cell. `SpatialPlan` already owns 5-foot
+cells/elevation, but current combat deliberately compresses rooms into at most 4×3 band/lane zones; movement, Dash,
+cover, flanking, reactions, and AoE resolve there. Spell rows have range/prose but not a complete target/shape
+grammar, and `cast` does not yet validate full spatial targeting. A truthful XCOM overlay therefore requires a
+large combat-core promotion, not just UI: exact occupancy, traversal/pathfinding, target/area kernel, rule migration,
+dual-input proposals, persistence/fallback, and deep proof. Existing geometry, renderer, action budgets, spell data,
+and event machinery make a narrow vertical slice feasible.
+
+Codex recommends exact `SpatialPlan` cells as release combat authority; keep the zone model as a derived
+accessibility/text/small-screen fallback, retain the EngagementLens as cinematic/speakable projection, and let
+non-combat adapters remain representational where precision has no value. Spend production complexity on tactical
+truth and clear feedback, not AAA animation/prop scope. `BATTLEMAP.md` now flags its built zone model as under
+supersession review rather than inviting more zone-only work.
+
+**Do next:** ask F10.1e: does Adam accept exact cells as combat authority and zones as fallback? If yes, follow with
+F10.1f: an unambiguous second-tier destination may auto-spend Dash, but multiple legal Dash sources need a tiny cost
+chooser; decide whether consequential hazard/reaction exposure also requires confirmation. Then finish label
+lifecycle, Card J/K inspection, and all remaining Wave 10 branches before explicit closure/Fable readiness.
+
 ## ⭐ Latest (2026-07-20, Wave 10 lens behavior) — SELECT A PC; GET A SPEAKABLE TARGET LENS [Codex]
 
 This supersedes the working-goal pickup below without deleting it. Design/docs only: no implementation, CI,

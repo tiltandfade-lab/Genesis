@@ -1,6 +1,6 @@
 ---
 type: system-spec
-status: specced 2026-07-01 night — build-ready STRUCTURE (day-3/4, after COMBAT-TRACKER merges); ART waits on the STYLE-PROBES hybrid verdict (§II.0a discipline: no throwaway work either way).
+status: BUILT 12-zone mechanics / SUPERSESSION REVIEW OPEN (the band×lane model below landed in `combat.js`, `combat-actions.js`, and `dm.js`; procedural-redesign Wave 10 section 11.6 is now evaluating exact `SpatialPlan` cells as battle authority. Preserve this model as current implementation and candidate fallback until Adam explicitly rules; do not extend it by convenience while the review is open.)
 created: 2026-07-01
 related:
   - "[[COMBAT-TRACKER]]"

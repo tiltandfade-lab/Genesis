@@ -16265,3 +16265,164 @@ allowing the lens to promise legality before it knows the verb.
 Wave 10 remains **OPEN at F10.1d**. After the pre-action range population is ruled, audit label numbering across
 reinforcements, transformations, hidden identities, and scene re-entry before returning to F10.3b's Card J/K object-
 inspection split. No implementation is authorized.
+
+### 11.6 F10.1d expansion - dual input, exact movement candidate, and honest scope
+
+**Adam's ruling and concern (2026-07-20):** the selected PC should occupy the **left** side of the FF6-style
+EngagementLens, aligned with the left-side character UI, while enemies/targets occupy the right. Lens labels should
+include the distance in feet from the selected PC. Genesis should offer both interfaces in reality: the player may
+speak an intent to the DM or click an action and a legal target. On the PC's turn, the authoritative battlefield
+should show available movement FFT-style, with an XCOM-like second movement tier that can produce a Dash when the
+player chooses a farther destination. Adam questions whether a merely representational battlefield is competitive
+enough and asks for honest feedback and work scale.
+
+#### Feedback - exact tactics is justified, but it changes the combat model
+
+Codex agrees with the concern **for combat**. A purely representational view is sufficient for travel, many social
+scenes, and low-precision exploration. It is a weak default for a D&D-derived tactical battle once the engine owns
+5-foot movement, weapon/spell ranges, areas, cover, line of sight, elevation, hazards, reactions, creature
+footprints, and destructible routes. Hiding those facts behind repeated DM questions makes the AI feel less
+trustworthy and turns engine-owned information into interface friction.
+
+The recommendation is therefore a hybrid with one authority, not two competing games:
+
+```text
+combat authority
+  exact SpatialPlan cells + elevation + occupancy + path/range/target kernel
+  rendered directly by the high-resolution PreAlpha BattleMat
+
+derived combat presentations
+  EngagementLens: cinematic, speakable cast/distance view
+  zone/range view: accessibility, small-screen, prose, and degraded fallback
+  chat: natural-language action route
+
+non-combat adapters
+  may remain representational wherever exact cells are not owned or useful
+```
+
+This is a controlled return to a more exact battle adapter, not a return to the discarded requirement that every
+town, journey, conversation, and dungeon prop receive BG3-grade integrated 3D treatment. Spend the budget on
+**tactical truth, readable feedback, and deterministic procedural geometry**. Keep simple blocks, textured boxes,
+sprite citizens, and the lighting/shadow/material stack rather than taking on AAA animation and bespoke-model scope.
+
+The market references support the expectation without proving that exact grids alone sell a game:
+
+- the [XCOM 2 manual](https://www.feralinteractive.com/en/manuals/xcom2/latest/steam/) explicitly teaches a blue
+  one-action movement boundary, a yellow two-action Dash boundary, route waypoints, sight exposure, and hazards;
+- Larian's [BG3 HUD account](https://baldursgate3.game/news/community-update-15-absolute-frenzy_49) describes
+  hideable/filterable action decks intended to keep combat depth available without leaving every control onscreen,
+  while its official controller account preserves a quickly accessible tactical view;
+- Solasta made exact 3D-grid position and verticality a product pillar because flight, climbing, pushing, and
+  height must remain mechanically accurate ([developer account](https://www.solasta-game.com/solasta-crown-of-the-magister/news/9-dev-diary-2-what-is-verticality)).
+
+As of this review, the relevant Steam pages still show large positive audiences for exact/turn-based tactical
+reference points—[XCOM 2](https://store.steampowered.com/app/268500/XCOM_2/),
+[Baldur's Gate 3](https://store.steampowered.com/app/1086940/view/), and
+[Solasta](https://store.steampowered.com/app/1096530)—but review counts are not a causal market study. The useful
+inference is narrower: direct movement/target feedback is familiar genre language, not an exotic feature players
+must be persuaded to understand.
+
+The downloaded procedural-generation papers do not choose between zone and cell combat UI. Their relevant
+constraint is that generated presentation remain traceable to the generator's actual topology, constraints, and
+content rather than painting a tactically persuasive fiction. Exact combat cells are unusually well aligned with
+that principle because `SpatialPlan` already owns the walkable room geometry; the new work is to make combat consume
+that truth instead of compressing it to zones.
+
+#### What exists today - and why this is not merely a UI overlay
+
+The graphics/spatial pipeline already owns exact 5-foot `SpatialPlan` cells and elevation. Combat does **not**.
+Current `BATTLEMAP.md` and `combat.js` deliberately collapse a room into at most twelve positions:
+`Melee/Near/Far/Distant × left/center/right`. `cellDims` only decides how many of those zones fit. Movement, Dash,
+flanking, cover, attacks, and AoE helpers resolve in zone space. The spell corpus carries range strings and prose,
+but not a complete structured target/shape grammar; the current `cast` event primarily records the spell,
+concentration, time, and slot cost rather than validating an exact target and area against the room.
+
+Therefore:
+
+- drawing blue/yellow cells over the current room is **small-to-medium visual work but would be a lie** if combat
+  still stores only a band and lane;
+- promoting each combatant to an exact cell/elevation/footprint and making movement/targeting consume those records
+  is a **large core-system change**;
+- the existing room grid, elevation meshes, action budget, Dash action, reaction machinery, spell records,
+  citizens, and renderer make it materially cheaper than starting a tactics engine from nothing.
+
+#### Recommended interaction contract
+
+Both interaction styles compile into one `ActionIntent`; neither directly mutates combat:
+
+```text
+click route
+  select Fire Bolt -> select Goblin 2
+
+conversation route
+  "Cast fire bolt on Goblin 2"
+
+shared engine route
+  ActionIntent(actorId, actionId, targetDomain, targetRefs, chosenPath?)
+    -> validate range / sight / cover / resources / action economy / target rules
+    -> preview or typed refusal
+    -> commit receipt
+    -> DM narrates the same resolved event
+```
+
+The selected PC appears on the lens's left. Candidate figures appear on the right with a stable label and direct
+range, for example `Goblin 2 · 35 ft`. The BattleMat owns route and area precision. A distance label is the direct
+attack/effect distance; a movement hover separately reports path cost, because walking around a pit may cost 45 ft
+even when the target is 30 ft away in a straight line.
+
+Action targeting needs typed domains rather than “click the target” as a universal assumption:
+
+- Fire **Bolt** targets an entity/object;
+- Fire**ball** targets a point/cell, then previews the affected sphere and every citizen caught;
+- other actions require self, willing ally, object, cell, line, cone, cylinder/sphere/cube, path/wall, or
+  multi-target selection.
+
+On the PC's turn, the board should show two reachable sets:
+
+- **normal movement:** cells reachable with remaining Speed while preserving the Action;
+- **Dash movement:** a second color for cells requiring a legal Dash source.
+
+Hovering a cell previews the path, distance cost, destination elevation/cover, known hazards, and opportunity-
+attack exposure. Clicking a second-tier cell may automatically select Dash only when its cost source is
+unambiguous; if Action Dash, Cunning Action, Step of the Wind, or another resource can pay, a tiny cost chooser
+should prevent the interface from silently spending the wrong resource.
+
+#### Honest implementation scale
+
+This is not “make the overlay prettier.” A production version is a program of coherent units:
+
+1. **Exact combat citizens:** canonical cell/elevation/footprint occupancy for PCs, companions, foes, summons,
+   large creatures, and objects; migration/derived fallback from current zones.
+2. **Traversal kernel:** walkability, occupancy, pathfinding, speed budgets, difficult terrain, squeeze, climb,
+   jump, flight, doors, hazards, normal/Dash reachability, and deterministic preview/commit.
+3. **Target kernel:** structured action/spell target domains, exact ranges, visibility/line of effect, cover,
+   reach, areas, multi-targeting, and affected-citizen previews.
+4. **Combat-law migration:** flanking, opportunity attacks, reactions, elevation, cover, pushes, grapples,
+   hazards, creature sizes, AI tactics, and areas move from zone assumptions to the new kernel.
+5. **Dual-input interface:** action palettes, clickable figures/cells, lens labels/distances, hover explanations,
+   keyboard/controller/touch access, and natural-language alias parsing all submit the same proposals.
+6. **Continuity and proof:** save/load, re-entry, reinforcements, transformations, hidden citizens, split parties,
+   DM receipts, fallback zone projection, mutation tests, fuzz/property tests, and native-resolution visual gates.
+
+A narrow pre-alpha slice is much smaller: one selected PC; exact ground movement; normal/Dash coloring; one melee
+attack; Fire Bolt entity targeting; Fireball point/radius targeting; a few enemies; path/range labels; and the same
+action issued by click or chat. Flight, climbing, large-creature routing, every spell shape, destructible topology,
+and full enemy AI can follow. Even that slice is several coordinated engine/UI units, but it would prove the hard
+contract and exercise most of the eventual architecture.
+
+#### F10.1e - exact-cell combat authority
+
+**Recommendation:** promote exact `SpatialPlan` cells to combat authority for the release BattleMat. Keep the
+current band/lane system as a derived accessibility/text/small-screen fallback and migration seam, not a second
+source of truth. The EngagementLens remains cinematic and speakable. Non-combat SceneTray adapters may stay
+representational where exact geometry is unavailable or pointless.
+
+This reverses the earlier tentative posture that treated exact cells as a tactical/workbench overlay and zones as
+the ordinary combat authority. It is justified only if Adam accepts the larger core-system scope after seeing the
+audit above. If accepted, Wave 7 must deeply specify the tactical laws, while current Wave 10 locks the projection,
+input, fallback, and acceptance obligations without prematurely implementing them.
+
+Wave 10 remains **OPEN at F10.1e**. If exact cells are accepted, immediately follow with F10.1f: whether an
+unambiguous second-tier destination auto-spends Dash without a confirmation, and how the chooser behaves when
+multiple Dash sources or hazards/reactions make the cost consequential. Then return to label lifecycle and F10.3b.
+No implementation is authorized.

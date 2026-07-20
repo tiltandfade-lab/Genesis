@@ -9870,3 +9870,89 @@ as a temporary compatibility/render projection during migration.
 **Open decision 3C:** should terminal removal use this typed disposition model so burning, disintegration,
 banishment, transformation, planar consumption, and Mythic erasure each state what happens to the body,
 location, inventory, recovery, evidence, and identity rather than sharing one `obliterated` boolean?
+
+#### 10.11.36 Reopened foundational decision — recalibrate natural-20 magnitude bands
+
+After sleeping on the system, Adam reopens the successful Crit Magnitude distribution. His intended shape
+is now:
+
+```text
+natural 20 + magnitude 1–15: a badass guaranteed success with style and excellence
+natural 20 + magnitude 16–18: the next degree
+natural 20 + magnitude 19:    the next degree again
+natural 20 + magnitude 20:    the ultimate crit that can break a game
+```
+
+This supersedes the earlier assumed success split of Standard 1–10, Amplified-minor 11–14,
+Amplified-major 15–19, Mythic 20 if Adam locks the new calibration. No implementation or locked
+`CRIT-MAGNITUDE.md` edit occurs during this design ruling; the running direction records the proposed
+change first.
+
+The no-crit-fishing boundary still applies before dice. “Guaranteed success at whatever they were doing”
+means the best lawful success of the legitimate `CheckContract` the engine agreed to roll. It does not
+grant a roll to an impossible no-method request. Once the engine grants a real check and the player rolls
+a natural 20, however, magnitude 1–15 must not dilute that moment into partial success, a hidden cost, or
+an AI refusal. The attempted action succeeds cleanly and impressively inside its declared ordinary success
+envelope.
+
+##### Recommended mechanical meanings
+
+| Natural | Magnitude | Recommended tier | Mechanical authority |
+|---:|---:|---|---|
+| 20 | 1–15 | **Standard Critical Success** | Guaranteed best ordinary success, executed with style/excellence; no lens and no unrelated persistent mutation. |
+| 20 | 16–18 | **Amplified Critical Success** | Core success plus **one** distinct coherent lens; the act creates one wider or lasting advantage/consequence. |
+| 20 | 19 | **Legendary Critical Success** | Core success plus **two to three** distinct coherent lenses; persistent and capable of regional/systemic reach, but still operates through supported world systems. |
+| 20 | 20 | **Mythic Critical Success** | Core success plus the already accepted open `d3 + 2` lenses; permanent and explicitly licensed to cross an ordinary constraint through typed world change. |
+
+Concrete prison example—a character legitimately attempts to pick the master lock controlling a cell row:
+
+- **20/1–15:** the lock opens perfectly, silently, and without damaging the tools; the character looks
+  exceptionally competent. It does not secretly create a tunnel or rewrite the prison hierarchy.
+- **20/16–18:** the lock opens, and one lens might reveal the repeatable master-key geometry, giving the
+  party a durable access advantage elsewhere in this institution.
+- **20/19:** the lock opens, the character discovers that the same concealed mechanism controls the whole
+  cell block, and the exposed maintenance route/revealed corruption creates two or three persistent
+  consequences through topology, knowledge, and faction/person systems.
+- **20/20:** the mechanism yields in a way ordinary craft could not produce: perhaps every unjustly bound
+  door in the institution opens, an impossible passage manifests, and three to five coherent permanent
+  effects root outward. It may break the game's expected situation, but it still grows causally from the
+  legitimate act rather than granting an unrelated wish.
+
+Combat damage remains orthogonal: a Standard critical attack still uses the game's normal critical-damage
+rule. Higher degrees grant collateral, social, environmental, threat, body-state, topology, or other typed
+consequences; they do not multiply damage again merely because more lenses fired.
+
+##### Frequency and engine impact
+
+Because a natural 20 occurs on 5% of eligible d20s, the proposed successful degrees occur at these rates:
+
+| Successful degree | Share of natural-20 crits | Share of all eligible d20s |
+|---|---:|---:|
+| Standard, magnitude 1–15 | 75% | 3.75% |
+| Amplified, magnitude 16–18 | 15% | 0.75% |
+| Legendary, magnitude 19 | 5% | 0.25% |
+| Mythic, magnitude 20 | 5% | 0.25% |
+
+The Mythic `20/20` frequency remains exactly 1 in 400 eligible d20 actions. What changes is the middle:
+only 25% of natural-20 crits now create one or more lenses, down from 50% under the prior table. Across 50
+eligible actions, the chance of at least one successful Amplified-or-higher result is about 46.7%, while
+the chance of at least one `20/20` remains about 11.8%.
+
+This reduces world-mutation volume and validation/commit work while making ordinary natural 20s more
+consistently satisfying. The one-face magnitude-19 tier also gives the engine and player a clear
+“legendary but not game-breaking” ritual instead of hiding materially different authority inside a broad
+five-face band.
+
+**Recommendation:** adopt Adam's 15/3/1/1 face distribution and define the degrees as Standard (no lens),
+Amplified (one lens), Legendary (two to three lenses), and Mythic (`d3 + 2` lenses). This is cleaner,
+rarer where persistent mutation begins, and truer to the stated experience: most natural 20s are simply
+badass excellence; 19 is extraordinary canon; 20/20 is allowed to break the game.
+
+The failure table should be discussed immediately after this success distribution closes rather than
+being silently inferred. The clean mathematical mirror would be natural-1 magnitude 6–20 Standard, 3–5
+Amplified, 2 Legendary, and 1 Mythic, but tone and consequence direction require Adam's explicit ruling.
+The typed terminal-disposition follow-up remains open and is intentionally paused behind this reopened
+foundational calibration.
+
+**Open decision:** should the success table lock as 20/1–15 Standard with no lens, 20/16–18 Amplified with
+one lens, 20/19 Legendary with two to three lenses, and 20/20 Mythic with the accepted `d3 + 2` lenses?

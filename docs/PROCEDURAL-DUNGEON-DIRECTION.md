@@ -10819,3 +10819,77 @@ configurability goal without presenting every player with a wall of knobs.
 **Open follow-up:** should the engine represent success and failure Mythic reach independently from the
 start, while the initial player-facing settings expose only the linked Mythic and Worldbreaker presets and
 reserve mixed Heroic-Wild/Doom combinations for advanced configuration later?
+
+#### 10.11.48 Ruling — independent reach fields beneath simple linked presets
+
+Adam locks Option 3. The foundational campaign rules schema stores and snapshots Mythic-success reach and
+Mythic-failure reach independently:
+
+```text
+crit.successMythicProfile: mythic | worldbreaker
+crit.failureMythicProfile: mythic | worldbreaker
+```
+
+The initial player-facing interface exposes only the clear linked presets:
+
+- **Mythic** (default): `mythic / mythic`;
+- **Worldbreaker** (explicit opt-in): `worldbreaker / worldbreaker`.
+
+Later advanced configuration or mods may expose the already-supported mixed combinations without changing
+save shape or exceptional-outcome contracts:
+
+- **Heroic Wild:** `worldbreaker / mythic`;
+- **Doom:** `mythic / worldbreaker`.
+
+Each direction's field follows the same between-resolution, ledger-recorded, nonretroactive switching law.
+`CheckContract` snapshots the directionally applicable profile before dice, and no interface or DM action
+may switch it while resolution is pending. Frequency, mirrored 15/3/1/1 distribution, count, anchor
+coverage, persistence threshold, and dice honesty remain invariant across every combination.
+
+This closes the reach-direction configurability follow-up.
+
+#### 10.11.49 Resumed open decision — terminal disposition must outgrow `obliterated`
+
+The Crit Magnitude branch now returns to the paused §10.11.35 question. The current `obliterated` boolean
+only tells projection code not to stage a corpse. It cannot distinguish outcomes that the newly accepted
+Mythic/Worldbreaker failure profiles may produce, and the problem also exists for ordinary spells,
+environmental hazards, transformation, and Breach events independent of crits.
+
+The recommended typed `TerminalDisposition` records the resolved semantic axes once:
+
+```text
+life/continuity: dead | banished | transformed | consumed | erased
+body/remains: intact | damaged | ash | fragments | object | none
+location/destination: current site | named holder/container | other place/realm | none
+inventory: on remains | dropped | transported | damaged bundle | destroyed bundle
+recovery: ordinary death rule | special requirement | blocked | impossible
+evidence/trace: corpse | stain/scorch | fragments | portal residue | object | witnessed absence
+identity/canon: observed history preserved; exceptional name/soul/history changes require explicit authority
+```
+
+That makes materially different results stay different:
+
+- a fire death may leave a charred body, damaged inventory, and a scorch trace;
+- disintegration may leave no usable remains while applying its declared equipment rule;
+- banishment moves the living target and carried equipment to a named destination rather than killing it;
+- petrification leaves a located stone object with identity, equipment relationships, and a special
+  recovery route;
+- planar consumption moves or contains the target under a Breach/root owner and leaves causal evidence;
+- Mythic erasure may forbid ordinary recovery and leave no remains, but it remains a provenance-kept event
+  after prior history rather than pretending the target never existed unless a separately licensed lens
+  changes memory/name/history.
+
+The ordinary default remains intact corpse plus carried loot under the existing death/decay rules. Effects
+override only the axes they explicitly own. Bundle profiles avoid per-item physics while permitting
+protected/story-item exceptions. The renderer may temporarily derive `obliterated` as a compatibility
+projection, but the boolean no longer decides gameplay.
+
+The alternatives remain a caller-by-caller boolean with inevitable drift, or one universal obliteration
+bundle that incorrectly treats fire, banishment, petrification, and erasure as metaphysically identical.
+
+**Recommendation:** adopt the typed terminal-disposition receipt. It resolves only at death/removal events,
+so runtime cost is negligible; the moderate build cost prevents much larger contradictions across loot,
+corpse persistence, evidence, revival/recovery, quests, rendering, and Breach topology.
+
+**Resumed open decision:** should Genesis replace `obliterated` as world-state authority with this typed
+terminal-disposition model, retaining the boolean only as a temporary renderer compatibility field?

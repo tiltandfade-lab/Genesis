@@ -8688,3 +8688,149 @@ explicit story roots only when licensed, never as automatic garbage disposal.
 contracts—including the rule that generation order cannot give the first visited settlement unlimited
 authority over an unrolled neighbor, while genuinely observed named relationships such as Leilon–Waterdeep
 remain protected?
+
+#### 10.11.21 Ruling — latent regional promises reconcile reciprocally
+
+Adam accepts the reciprocal-ledger model as solving the problem well. This clarifies Wave 2 Question 6:
+
+- each latent counterpart anchor or aggregate outside network owns one versioned inbound-promise ledger;
+- generated sources harden only the minimum play-predictive relationship, flow, role, location, scale,
+  capacity, or historical constraint they genuinely require;
+- every promise records source/provenance, authority/hardness, time/season, magnitude/range, direction,
+  asymmetry, counterpart cardinality, merge key, splittability, legal alternate fulfillments, exclusions,
+  and observation/knowledge state;
+- reconciliation is deterministic and generation-order independent: duplicates unify, compatible demand
+  aggregates without double counting, established anchors bind, generic promises may split among legal
+  nodes, aggregate/satellite networks may fulfill network-scale need, eras reconcile historically, and
+  beliefs remain separate from canon;
+- an observed named relationship such as Leilon–Waterdeep cannot be redirected, while a generic
+  “regional grain market” does not reserve Waterdeep specifically unless its source established that fact;
+- a saturated latent anchor stops accepting optional specificity; new soft promises reuse compatible
+  edges, remain aggregate, split, or bind elsewhere;
+- genuinely incompatible hard facts fail diagnostically or become one explicitly licensed causal root;
+  they are never dropped, averaged, or repaired by last-writer-wins;
+- the counterpart planner consumes the reconciled constraint bundle before rolling unconstrained detail
+  and records reciprocal bindings back to every source;
+- ledger and distribution gates report duplicate merging, aggregate load, unresolved conflicts, source
+  concentration, counterpart saturation, and generation-order equivalence.
+
+The latent-regional-promise-reconciliation skeptical follow-up is exhausted.
+
+#### 10.11.22 Skeptical follow-up 8 — spicy layers can saturate together
+
+Genesis now allows meaningful content at many independently valid layers: site history, capability state,
+groups/claims, NPC deviations, room discoveries, repeated-child outliers, loot, environmental
+affordances, story promises, contracts, fronts, and scoped Spice roots. Each system may remain within its
+own distribution while their combination makes one scene noisy, incoherent, or cognitively exhausting.
+
+The problem is not that a prison contains a food crisis, a missing-daughter thread, a necromancy lab,
+contraband, a demonic bar of soap, faction tension, and valuable supplies. That is the desired spicy
+restaurant. The problem is presenting all seven as unrelated foreground emergencies in the same room and
+turn.
+
+##### Option 1 — trust each subsystem's independent cap
+
+Discoveries, roots, groups, cards, states, and handles each pass their own incidence rules. Their sum can
+still produce confetti, an overloaded DM digest, too many introduced nouns, and no clear player choice.
+**Rejected.**
+
+##### Option 2 — one global site complexity or Spice ceiling
+
+Count everything as points and stop generation at a site-wide maximum. This is easy to reason about but
+would flatten large sites, punish descendant independence, make a demonic soap consume the same kind of
+space as a prison-wide food crisis, and contradict the accepted no-downward-ceiling law. **Rejected.**
+
+##### Option 3 — causal situation bundles plus a typed saturation vector and salience stack
+
+First coalesce related facts into one **active situation** rather than counting every manifestation as an
+independent beat. Then measure canonical abundance separately from what is active and what is projected:
+
+```text
+canonical layer
+  all stable roots, discoveries, groups, states, promises, and handles that really exist
+
+active-situation layer
+  causal bundles currently changing, due, pursued, observed, or capable of near-term consequence
+
+projection layer
+  foreground beats, visible background pressures, and retrievable latent handles shown now
+```
+
+For example, one blocked food route may produce a strained kitchen, cold substitute meals, a contractor,
+guard rationing, prisoner anger, a black-market opportunity, and a faction demand. Those are seven useful
+manifestations of **one causal situation**, not seven unrelated roots or seven mandatory introductions.
+The missing-daughter note and concealed necromancy lab remain independent situations. The demonic soap may
+remain a local accent until attention or consequence promotes it.
+
+The saturation report remains a vector, not one exchangeable points number:
+
+- independent causal roots by Spice band and scope;
+- active situations/fronts and their causal overlap;
+- due contracts/promises and service horizons;
+- current operational exceptions and affected dependencies;
+- relevant groups, claims, named actors, and relationship edges;
+- available discovery/affordance handles and unresolved player questions;
+- foreground beats, new proper nouns, visible background pressures, and DM digest bytes;
+- quiet/contrast rate, promotion rate, deferral rate, player uptake, and stale-card churn.
+
+Exact healthy ranges are authored by scene/site family and measured rather than collapsed into one magic
+limit. A tavern, market, battlefield, council, and quiet cell support different simultaneous social and
+narrative loads. Licensed crises and climaxes may deliberately exceed ordinary projection ranges, but the
+override is explicit, temporary, and tested for comprehensibility.
+
+##### Salience behavior under pressure
+
+When the projection layer is crowded:
+
+1. immediate player action, observed danger, and due obligations remain foreground;
+2. causally related manifestations are narrated together as one situation;
+3. a social hub may foreground several compatible beats using its larger authored scene capacity;
+4. secondary situations remain perceptible as concise background tells rather than disappearing;
+5. optional cards wait within their service horizons; stable discoveries and promises remain canonical;
+6. player attention promotes the selected handle immediately and the stack rearranges around that choice;
+7. no committed fact, contract, critical evidence, or legal action is deleted, moved, recolored, or
+   rerolled to satisfy presentation capacity.
+
+“Quiet” therefore means **not presently competing for foreground narration**, not bland or meaningless.
+A quiet cell still has its stable opportunity. A quiet site interval still carries sensory identity,
+local utility, background pressure, and potential spicy outliers.
+
+##### City-prison trace
+
+In the kitchen during a shortage:
+
+- foreground: the cold-meal conflict and the people actively contesting it;
+- visible background: an officer watching the laundry door and an inmate concealing something;
+- retrievable handles: the child's-note trail, a suspicious soap dish, contractor records, and the
+  necromancy clue network;
+- active situations: food-route failure, missing daughter, hidden lab, plus any due contract;
+- manifestations of the food failure remain bundled rather than consuming separate root slots.
+
+If the player picks up the soap, questions the officer, or demands the contractor's records, that choice
+promotes the selected handle. Genesis does not decide that the soap is unimportant forever; it simply
+does not introduce every noun and mystery in the first paragraph.
+
+##### Acceptance evidence
+
+Seeded corpora and live traces must report the combined vector at room, assembly, zone, site, settlement,
+and active-DM-slice scopes. Gates should catch:
+
+- too many unrelated high-band roots co-active in ordinary scenes;
+- low manifestations-per-root, indicating confetti rather than causal depth;
+- excessive new proper nouns or foreground handles per turn;
+- repeated service-horizon deferral or final-room card dumping;
+- long stretches with no meaningful handles;
+- sites whose every room presents crisis urgency;
+- quiet rates that become blandness rather than contrast;
+- player-selected handles repeatedly losing priority to scheduler preferences.
+
+##### Recommendation
+
+Adopt Option 3. Preserve abundant layered canon and independent descendant Spice, but coalesce related
+facts into causal situations, measure integrated saturation as a typed vector, and bound simultaneous
+projection through scene-specific salience capacity. Tune sequencing and foreground competition, not the
+world's total capacity for secrets and weirdness.
+
+**Open follow-up:** does this preserve the spicy-restaurant mandate—lots of real juicy content remains in
+the place—while letting the DM serve it in comprehensible courses, with player attention able to pull any
+visible dish forward?

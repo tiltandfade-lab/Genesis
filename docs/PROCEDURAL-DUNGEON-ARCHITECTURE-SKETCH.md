@@ -175,6 +175,7 @@ boundaries.
 | `KnowledgeRecord` | Canon reference, observations, beliefs, witnesses, confidence, holder/scope, sharing policy | Hidden canon leaking into party output | Observation, interpretation, communication | DM digest, journal, UI, action eligibility |
 | `NarrativeCard` | Priority, eligibility, service horizon, causal role, legal homes, deferral reason | Permission to overwrite rolled room identity | Promise/contract/root/event systems | Wave 9 scheduler |
 | `AccessProfileSet` | Commitment-time allocation profile, canonical current route constraints, and observer-known usable projections over typed access costs | One depth scalar controlling both placement and current navigation; reactive reward/enemy scaling | Topology + commitment provenance + events + knowledge/capabilities | Navigation, DM, Waves 6-7 difficulty/reward planning |
+| `RegionalPromiseLedger` | Minimal inbound relationship/flow/role/history constraints, counterpart cardinality, reciprocal bindings, authority, merge/split/reconciliation provenance | Unlimited first-writer authority over latent neighbors or eagerly generated counterpart interiors | Generated places + region graph | Settlement planners, dependencies, migrations, diagnostics |
 
 Some records may later combine or split. The ownership distinction matters more than the names.
 
@@ -415,6 +416,21 @@ A realm supplies registered data, vocabulary, assets, modifiers, laws, and solve
 shared interfaces. It does not fork the generator with scattered realm-conditionals. A Breach is a
 typed edge between domains; transformations in size or physics belong on the domain/edge rather than
 mutating global assumptions.
+
+### 6.4 Reciprocal latent regional promises
+
+An unmaterialized settlement or aggregate outside network may exert real influence through one versioned
+inbound-promise ledger. Each source hardens only its minimum necessary relationship/flow/role/location/
+scale/history constraint and declares whether it requires one named counterpart, any compatible node,
+several legal nodes, or an aggregate network.
+
+Before counterpart generation, deterministic authority-ordered reconciliation unifies duplicates,
+aggregates compatible non-overlapping demand, binds established anchors, splits generic promises where
+legal, uses aggregate/satellite networks for network-scale needs, reconciles eras, and separates belief
+from canon. The counterpart consumes the resulting bundle before rolling unconstrained detail and writes
+reciprocal bindings back to every source. Observed named relationships cannot redirect; generic promises
+cannot reserve a specific city unnecessarily. Incompatible hard canon fails diagnostically or becomes an
+explicitly licensed causal root—never last-writer-wins.
 
 ## 7. Semantic hierarchy, repetition, and commitment frontier
 
@@ -934,6 +950,8 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
 - Topology, state, danger, history, discovery, physics, and materialization are not overloaded into size.
 - Realms extend shared semantic interfaces rather than forking the generator.
 - Repeated children are stable and enterable, not facades; shared truth is stored at their assembly.
+- Latent regional constraints reconcile through reciprocal ledgers independent of generation order;
+  named observed edges remain hard while generic demand may merge, split, or remain aggregate.
 
 ### Discovery, Spice, and knowledge
 
@@ -1003,6 +1021,7 @@ These are semantic contradiction fixtures, not finished content packages or geom
 | Multi-entrance site | Commitment/current/observer access separation preserves allocated risk/reward while shortcuts honestly change reachability | Raw room index used as difficulty; prescribed narrative order; shortcut-triggered relocation/scaling; current route ignored |
 | Empty/quiet repeated cells | Automatic read, focused search, systematic sweep, stable opportunities | Forty-click container play or literally meaningless facade rooms |
 | Old save with latent cell after table/compiler/mod change | Same selected room function, note/person/event invariants, legal discovery methods, improved presentation allowed, missing-mod diagnostic | Seed-only retcon, executable old-mod dependency, full eager materialization, or silent replacement payoff |
+| Leilon and unmaterialized trade partners | Named Waterdeep/Neverwinter edges preserved, generic regional demand reconciled, reciprocal bindings, generation-order equivalence | Visited-place retcon, first-writer city bloat, duplicate flows, or eager neighbor generation |
 
 Later waves add residential college, ordinary/boutique inn, regional trade, population, group-count,
 and other fixtures only when their owning decisions close. They are not retroactively treated as Wave 1
@@ -1067,7 +1086,7 @@ Wave 1 defines the semantic promises below and deliberately leaves their realiza
 | Authoring workbench, roller editing, diagnostics, preference teaching, mod vocabulary UX | **Wave 11** |
 | Persistent lineage/domain/operational-state schemas, content-addressed commitment capsules, mod/source compatibility, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, capacity-first performance/latency/soak gates, build order | **Wave 12** |
 | Baldur's-Gate-like automatic inventory and equipment UI | Separate future inventory design after adoptable-system audit |
-| Full bounded-place settlement/population/casting/economy architecture | Future place/settlement/NPC/economy work, constrained by later closed waves |
+| Full bounded-place settlement/population/casting/economy architecture, reciprocal regional-promise ledgers, and generation-order-independent counterpart reconciliation | Future place/settlement/NPC/economy work, constrained by later closed waves |
 
 No future owner may silently reopen or replace a Wave 1 invariant. A later contradiction must name the
 affected ruling, record the counterexample, and explicitly reconcile or supersede it in the living

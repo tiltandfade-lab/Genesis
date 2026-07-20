@@ -13403,3 +13403,310 @@ world-specific P0 canon; in-world reuse requires a causal P1 transmission path; 
 P2 candidates may seek certification into the cross-world P3 custom library; and rare repeated patterns may later
 become P4 core primitives? If accepted, the next follow-up chooses the P2-to-P3 certification owner: human review,
 automated gates, or a staged hybrid designed to graduate toward a trustworthy no-human pipeline.
+
+#### 10.G2.1.13 Ruling and best-case target - the semantic invention platform
+
+Adam enthusiastically accepts Option 3's P0-P4 direction and asks Genesis to document the best-case version of
+this newly articulated core system now. Implementation timing, depth, and production cuts will be reconsidered
+against the actual schedule when a build is proposed. The purpose of the present sketch is to preserve the full
+vision so later scope decisions are explicit tradeoffs rather than accidental reductions. This remains design-only;
+no implementation, worktree, CI, asset checkout, merge, or push is authorized.
+
+##### Best-case product promise
+
+Genesis should let an AI DM originate an exact new artifact, tool, hazard, technique, ritual, relationship token,
+adaptation, consequence form, or other licensed invention during play without requiring that final noun to have
+been anticipated by a static catalog. The engine should help the DM discover relevant existing mechanics, preserve
+the invention's semantic point, compile the least novel honest implementation, negotiate real conflicts, commit
+all affected state atomically, render a coherent visual, retain callback handles, observe how the invention behaves,
+and cautiously learn reusable patterns from proven results.
+
+The system succeeds only if all of these remain true together:
+
+- **The DM remains an author.** It chooses meaning, identity, intended play, and acceptable compromise; it does not
+  merely decorate a solver-selected catalog result.
+- **The world remains resistant.** Independent people, hidden truth, inventory, topology, quantities, and opportunity
+  still come from their proper owners; creative synthesis cannot manufacture convenience.
+- **Mechanics become real before narration.** Consequential claims commit through typed owners and receipts; no
+  prose-only item, condition, ability, route, or exception exists.
+- **Invention is valence-neutral.** Rewards, threats, temptations, costs, enemy tools, adaptive defenses, and mixed
+  consequences use the same authority, fairness, persistence, and counterplay laws.
+- **Worlds remain distinct.** A useful mechanic may travel through certification; proper nouns, relationships,
+  custody, secrets, history, and local visual identity never leak merely because a recipe is reusable.
+- **Learning is reversible and versioned.** Promotion never rewrites the past, and unsafe patterns can be quarantined,
+  repaired, migrated, or retired without erasing canonical history.
+
+##### Best-case turn experience
+
+The player should experience one coherent act of DM invention, not a visible configuration wizard. Most of the
+protocol runs inside the DM/compiler turn:
+
+```text
+1. AUTHORITY
+   A reward, consequence, actor preparation, callback, relationship, Crit, or other event grants
+   a typed C1-C4 creation envelope.
+
+2. INTENT
+   The DM proposes exact meaning, identity, intended recurring play, hard invariants, soft
+   preferences, valence, holders/targets, motif, and desired capabilities.
+
+3. RETRIEVAL
+   The resolver searches viable world instances, SRD/Genesis catalog definitions, certified custom
+   patterns, effect primitives, visual assets, and relevant callback stubs. Results are candidates,
+   never authority or mandatory answers.
+
+4. REALIZATION
+   The compiler tests USE -> ADAPT -> COMPOSE -> SYNTHESIZE -> PRECEDENT and finds the least-new
+   mechanics that preserve the hard invariants and intended play.
+
+5. NEGOTIATION
+   Soft parameters tune automatically within tolerance. Material conflicts return compact typed
+   diagnostics and a few genuinely different legal routes to the DM. The player sees none of this
+   plumbing unless a real player decision is required.
+
+6. COMMIT
+   One atomic transaction mints ids/recipes, mechanics, custody, knowledge, codex facts, relationships,
+   costs, resources, clocks, callbacks, visual binding, terminal rules, and provenance. Only then may
+   the DM narrate the completed invention.
+
+7. PLAY AND MEMORY
+   Use, transfer, damage, study, loss, destruction, ownership, counters, descendants, and callbacks
+   produce ordinary typed events. The noun remains in the world after its immediate dramatic job.
+
+8. EVIDENCE AND PROMOTION
+   Off the critical turn path, the system gathers deterministic traces, probes interactions, strips
+   canon, and may advance a recipe through P0-P4 under explicit certification gates.
+```
+
+The fast path should dominate ordinary play. Exact catalog use, identity-over-base, and common validated overlays
+should require little or no internal negotiation. Novel recipe compilation is rarer and bounded. Certification,
+corpus deduplication, adversarial simulation, and cross-world promotion occur asynchronously or between turns and
+must never make the player wait for product-library governance.
+
+##### Conceptual records
+
+The best-case design needs a small family of typed records rather than one overloaded invention blob. Names are
+provisional; responsibilities are the target:
+
+| Record | Owns |
+|---|---|
+| `CreationAuthority` | source receipt, C-band, valence/orientation, reach, owners/targets, effect/lens budget, expiration/service horizon |
+| `CreativeIntent` | story purpose, intended play pattern, hard invariants, soft preferences/tolerances, motif/form, forbidden substitutions |
+| `CandidateComparison` | viable world/catalog/pattern/primitive routes, preserved/lost invariants, mechanical deltas, authority and complexity findings |
+| `MechanicRecipe` | declarative triggers, scopes, costs, resources, contests, effects, conditions, stacking, recovery, termination, version dependencies |
+| `CompileDiagnostic` | typed unsatisfied reason, affected invariant, minimal conflict explanation, legal alternatives, attempt budget |
+| `CreationReceipt` | atomic committed ids, chosen route, recipe/version, custody, Codex/state mutations, provenance, visuals, callbacks, reconciliation |
+| `PrecedentRecord` | P0-P4 scope, source world/instance, reuse boundaries, transmission state, version lineage, quarantine/retirement status |
+| `EvidenceBundle` | deterministic play traces, adversarial probes, power comparisons, counterplay, transfers, terminal states, known failures |
+| `CertificationRecord` | canon-strip result, gate versions/results, reviewer/automation provenance, allowed domains/bands, rollback and migration plan |
+
+Every record has a bounded DM projection. The DM sees creative-relevant constraints and candidate deltas; it does
+not receive an unreadable dump of the item corpus, full state, or test harness. The engine retains the full audit
+trail outside the narration context.
+
+##### Conceptual owners
+
+The best-case platform can be understood as cooperating owners rather than one omniscient model call:
+
+- **Authority broker:** resolves whether invention is licensed now and which C-band, owners, targets, reach, valence,
+  resources, and effect families are available.
+- **Semantic retriever:** searches world memory/callbacks, SRD and Genesis catalogs, custom patterns, and effect
+  primitives after intent is declared; produces a small diverse candidate set with provenance.
+- **Intent compiler:** maps hard/soft semantics onto legal mechanics, detects unsupported primitives and effective
+  impact, and compares realization routes without changing the creative point silently.
+- **Negotiator:** gives the DM bounded, explainable alternative routes and tracks explicit invariant revisions.
+- **Commit coordinator:** validates current versions and applies all owner mutations atomically or none at all.
+- **Memory/callback owner:** creates viable stubs, related-growth handles, salience/service obligations, and later
+  promotion from mention to first-class thread.
+- **Visual resolver:** binds approved library art, composes legal parts, uses deterministic fallback, and may later
+  request an exact governed asset from the committed semantic/slot specification.
+- **Evidence and certification owner:** observes behavior off-turn, probes recipes, strips canon, versions results,
+  promotes or quarantines candidates, and produces migration/rollback instructions.
+
+These are authority seams, not a required file/module decomposition. Production may combine early owners as long
+as their records and trust boundaries remain explicit.
+
+##### Best-case mechanical language
+
+The declarative recipe grammar should be deliberately smaller than arbitrary game code but broad enough to
+compose meaningful new play. It should cover registered families such as:
+
+```text
+TRIGGERS     action, reaction, event, threshold, enter/leave, time, damage, check/save,
+             possession/transfer, relation change, use/charge, destruction, callback
+
+SUBJECTS     actor, item, linked set, place/zone, faction, relation, condition, resource,
+             route/edge, evidence, clock, bounded collection
+
+SCOPES       self, holder, linked counterpart, target, radius/zone, current scene/site,
+             named network, bounded reach profile
+
+COSTS        action/reaction, charge, resource, HP/damage, condition, exposure, time,
+             risk/contest, item state, relationship/faction cost
+
+EFFECTS      modify check/save/damage/AC/movement/resource, communicate, reveal/obscure,
+             contest, intercept, transfer, spawn owned consequence, add/remove condition,
+             advance/retard clock, suppress locally, transform state, mint callback/evidence
+
+LIMITS       duration, cadence, range, target cap, stacking, recharge, attunement,
+             break/repair/destruction, termination, immunity/resistance, counterplay source
+```
+
+Recipes can introduce new combinations and identities, not unregistered mutation verbs. When recurring creative
+failures reveal a missing general operation, P4 promotion may add a new primitive through the ordinary product
+design/build/test process. Runtime invention never expands its own executable authority.
+
+##### Domain adapters in the best case
+
+One semantic spine should serve multiple domains, but each domain keeps objective ownership and specialist gates:
+
+- **Items and linked sets:** base/enchantment/custom recipe, rarity/value, charges, attunement, custody, transfer,
+  condition, damage/destruction, Codex, visuals, loot/recovery.
+- **Hazards, traps, and environmental adaptations:** place/zone ownership, triggers, tells, avoidance/disarm,
+  reset/exhaustion, path playability, resource and damage severity, topology boundaries.
+- **Techniques, rituals, and relationship abilities:** learner/holder eligibility, action economy, teaching and
+  progression, rest/resource cadence, social/knowledge consequences, loss or transformation.
+- **Enemy/faction responses:** knowledge, time, preparation, material capacity, strategic owner, counter-strength
+  ladder, target scope, evidence, counterplay, recoverable physical nouns.
+- **Titles, rumors, evidence forms, scars, customs, and institutions:** identity/relationship owners, canonical
+  reach, audience knowledge, legal/social leverage, propagation, mutation, correction, callback growth.
+- **Place changes, routes, and structural inventions:** C3-C4 topology/event authority, graph and spatial owners,
+  access, traversability, destruction/repair, maps/knowledge, and existing-site history.
+- **Visual realization:** construction/slot class, silhouette, scale, state variants, material/realm skin, approved
+  asset provenance, fallback, and exact-generation specification after canon commits.
+
+The shared compiler handles intent, negotiation, recipes, receipts, precedent, and evidence. Domain adapters decide
+what effects mean in their systems and prohibit plausible-sounding cross-owner shortcuts. A custom item cannot
+rewrite topology; a rumor cannot create inventory; a visual cannot grant a mechanic.
+
+##### Best-case certification: staged hybrid graduating by trust domain
+
+The recommended best-case certification posture is neither permanent human bottleneck nor immediate autonomous
+global learning. It is a **staged hybrid designed to earn no-human operation separately for each recipe domain and
+impact band**:
+
+1. Every P2 candidate runs automated schema, authority, determinism, serialization, primitive-version, stacking,
+   recursion, resource-loop, terminal-state, counterplay, and canon-strip gates.
+2. Property/fuzz and adversarial scenario generation exercise transfers, destruction, repeated use, opposing use,
+   multiple owners, nested triggers, old saves, and interaction with representative SRD/custom baselines. Generated
+   probes only count when deterministic assertions evaluate them; model confidence is not a pass condition.
+3. Candidates first run in **shadow certification**: test replays and optional noncanonical simulations may measure
+   behavior, but the pattern is not offered to ordinary cross-world retrieval.
+4. Early P3 product promotion receives human review. Review captures reasons and new executable fixtures so human
+   judgment teaches the gate rather than becoming permanent invisible labor.
+5. A narrow domain/band may graduate to automatic P3 promotion only after coverage, false-promotion/rollback,
+   migration, and audit thresholds are met. High-risk C3-C4, new primitive combinations, privacy/provenance
+   ambiguity, and gate disagreements retain review.
+6. Autonomous lanes remain sampled, observable, reversible, versioned, and instantly quarantinable. Graduation can
+   be revoked when evidence changes.
+
+Cross-world scope should itself be typed. A **profile-local P3** may be reusable across one player's locally owned
+worlds without sending data anywhere. A **product/shared P3** requires canon stripping, provenance/IP/privacy
+clearance, explicit data-sharing policy/consent where user-world evidence leaves the device, and the stronger
+certification track. Neither scope imports originating fiction.
+
+This is the best-case route to the no-human content pipeline Adam wants: automation earns trust through executable
+evidence and narrow authority, then expands. “No human” is an achieved property of a certified lane, not an
+assumption made on day one.
+
+##### Best-case QA gates
+
+A release-quality harness should prove at least:
+
+1. **Intent preservation:** committed mechanics retain hard invariants and intended play; no nearest-match drift.
+2. **Authority and valence symmetry:** beneficial and hostile recipes obey the same bands, owners, reach, resources,
+   and persistence laws.
+3. **Fair counters:** friction, local denial, and durable nullification cannot be laundered across tiers or stacks.
+4. **Atomicity:** failed/stale transactions mint nothing; successful commits update every required owner once.
+5. **Persistence/custody:** transfer, loss, theft, damage, destruction, bardo/terminal state, and recovery cannot erase
+   nouns for scene convenience.
+6. **Callback continuity:** viable inventions produce playable stubs; descendants never inherit salience or authority
+   automatically and cannot invent retroactive causality.
+7. **Mechanical safety:** action/resource loops, recursion, stacking, unbounded collections, invalid targets, and
+   cross-owner mutation fail closed with useful diagnostics.
+8. **Replay/migration:** recipe versions serialize deterministically; corrections preserve history and migrate or
+   quarantine explicitly.
+9. **World isolation:** portable candidates contain no proper nouns, secret facts, holders, relationships, local
+   history, personal data, or assumed world availability.
+10. **Visual honesty:** missing bespoke art degrades to a deterministic representation without changing mechanics;
+    later generation binds to the same identity and state variants.
+11. **Experienced-play checks:** an ability left technically enabled but made practically worthless is detected as
+    effective nullification; a legal recipe that produces dull or incoherent play remains a certification failure.
+12. **Latency/budget:** ordinary USE/ADAPT/COMPOSE fast paths stay bounded; negotiation and rare C3-C4 preflight have
+    explicit attempt/time limits; certification never blocks the live turn.
+
+##### Best-case observability and player trust
+
+The player should not see compiler traces during ordinary narration, but the product needs inspectable provenance.
+An item/detail surface can explain in world-facing language what an invention does, its limits, holders, provenance,
+damage state, and known counters. Developer/QA views can show authority source, intent invariants, selected route,
+recipe graph/version, diagnostics, receipt mutations, callback stubs, and promotion status.
+
+Seeded/replay modes should reproduce both the world inputs and compiled result when model-authored semantics are
+recorded. Debugging must answer “why did this exist, why could it do that, when did it become true, who knew it,
+which rule version governed it, and why was this candidate reused?” without reconstructing truth from prose.
+
+##### Production-realization cuts - revisit at implementation time
+
+The best-case target does not require an all-or-nothing build. Production may choose among conforming slices:
+
+**Slice A - assistive authored identity.** Item lookup plus explicit `USE`/`ADAPT`/`INVENT`, hard/soft intent,
+existing base/overlay mechanics, atomic receipts, persistence, callbacks, and deterministic visual fallback. No
+runtime precedent beyond already supported overlays.
+
+**Slice B - world-local declarative compiler.** Generic registered trigger/effect recipes, typed diagnostics,
+bounded negotiation, honest abstraction/defer, P0/P1 precedent, and item plus one adversarial/hazard adapter.
+
+**Slice C - evidence and local learning.** P2 evidence bundles, shadow certification, version/migration/quarantine,
+canon stripping, deduplication, and profile-local certified patterns.
+
+**Slice D - broad semantic platform.** Domain adapters across items, hazards, techniques, factions, relationships,
+and place change; product/shared P3 catalog with staged review; governed exact visual generation.
+
+**Slice E - graduated autonomous ecosystem.** Certified low-risk domains auto-promote P2->P3 under reversible gates;
+recurring patterns propose P4 primitives; human work shifts to red-team fixtures, sampled audits, novel domains, and
+high-impact exceptions.
+
+Each slice should use compatible ids, intent/receipt shapes, and version boundaries so later depth extends rather
+than replaces earlier canon. At implementation planning, Genesis should compare player value, latency, authoring
+load, infrastructure cost, model reliability, security/privacy, and schedule. It may ship an earlier slice while
+retaining later slices as explicit target gaps. Production triage can defer features; it cannot silently redefine
+the accepted creative relationship between DM and engine.
+
+##### Research filter
+
+The best-case architecture uses the downloaded corpus as support, not proof. Tutenel et al. (2009/2010) support
+designer-authored plans/classes and high-level semantic scene intent realized by a generic solver. Merrell et al.
+support mixed initiative in which the creative user fixes meaningful choices and the generator proposes legal
+arrangements. Yu et al. support learned/weighted priors around hard functional relationships, which maps to candidate
+ranking so long as weights never override invariants. Whitehead supports declarative intent with honest
+satisfiability failure. Horswill supports executable global playability constraints rather than local plausibility
+alone. Nepozitek et al. and Green et al. reinforce separating high-level structure from a later realization step.
+Henderson et al. warn that increasing constraints and object counts have real runtime costs, supporting fast paths,
+bounded active sets, and off-turn certification.
+
+None of the papers supplies a self-evolving AI-DM mechanics language, precedent lifecycle, safety certification,
+or cross-world canon boundary. Those are Genesis-specific inventions built from the research's strongest common
+pattern: preserve high-level intent, make constraints explicit, separate structure from realization, keep authorship
+mixed-initiative, validate executable outcomes, and admit unsatisfied requests honestly.
+
+##### End-state cost and value
+
+The full target is a **very-high-cost platform capability**, not a feature checkbox. It needs semantic/effect
+authoring, catalog annotation, safe evaluators, authority adapters, transactionality, versioning/migrations,
+adversarial/property testing, world/profile/product storage boundaries, model-context design, observability,
+privacy/IP policy, visual generation governance, and long-duration play traces. The hardest maintenance problem is
+interaction growth: compositional primitives reduce authoring but do not remove the need to test important
+combinations and experienced play.
+
+Its value is equally foundational. It makes the AI DM's best inventions first-class game objects; lets mechanics
+grow without surrendering world physics; turns hostile improvisation into fair persistent opposition; converts
+callback stubs into real evolving culture and technology; reuses SRD/custom strength without letting the catalog
+dictate imagination; and gives Genesis a path from a static rules corpus toward a versioned, auditable, world-aware
+creative system.
+
+**Question for Adam:** does this best-case target capture the system you mean, including the staged
+hybrid-to-automation certification posture and the promise to revisit Slices A-E against the production schedule
+before any build? If accepted, the next narrow follow-up is whether profile-local P3 promotion may eventually be
+fully automatic sooner than product/shared P3 promotion, which would retain stronger review, consent, provenance,
+and privacy gates.

@@ -1,7 +1,7 @@
 # DUNGEON-GRAPH — marrying the walk topologies to a volumetric floor-plan engine
 
 type: system-spec
-status: SPECCED (Adam authorized BUILD ORDER 2026-07-10 PM — U1→U2→(U3∥U4); squeeze = geometry + a roll/DM hand-wave, no sprite; static figurines stand, but turn-based MECHANICAL REPOSITIONING of pieces as time passes is desired in-scene; end-of-day goal: battle scenes rendering in real dungeon rooms + loop testing)
+status: BUILT (U1-U4 + real-dungeon finale gate landed 2026-07-10; the original authorized build order was U1→U2→(U3∥U4). Later procedural-redesign waves may amend the generator's semantic/table inputs without erasing this spatial foundation. Squeeze remains geometry + a roll/DM hand-wave with no sprite; static figurines stand, while turn-based mechanical repositioning remains desired in-scene.)
 
 ## Verified anchors (orchestrator, 2026-07-10 PM — current tree)
 

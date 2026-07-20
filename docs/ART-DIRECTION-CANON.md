@@ -197,6 +197,16 @@ resolution target. Cards G-L are asset-informed high-resolution concept renders,
 pixel-perfect reproductions of the referenced assets. Their ruling and links live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.3.
 
+## Hybrid suite accepted as the working visual goal (Adam, 2026-07-20 — additive)
+
+> "i think these are good enough to establish a working goal. we are actually somewhat close to this correct? we were just in the middle of rebuilding our actual map generating rolls, that was part of this design questionnaire right?"
+
+Cards G-L now establish the working Wave 10 visual family. This accepts their common target—high-resolution 3D
+substrate, crisp pixel-art citizens, integrated left rail/central tray/right conversation, compact secondary
+surfaces, and scalable battlefield composition—without canonizing their generated prose, exact dungeon, icon art,
+ratios, typography, individual geometry, or unresolved interaction behavior. They are a convergence goal and
+comparison corpus, not final acceptance captures or permission to implement.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

@@ -16122,3 +16122,81 @@ any icons promoted into production must still receive the separate `#FF00FF` spr
 Wave 10 remains **OPEN at F10.1c**. Cards G-L supersede E/F only as renderer-register evidence; E/F remain useful
 historical evidence for the shell correction. No implementation, renderer selection, or Fable design-to-spec gate
 is authorized by these cards.
+
+### 11.4 F10.1c ruling - working visual goal accepted; map-generator lineage confirmed
+
+**Adam's ruling (2026-07-20):** Cards G-L are good enough to establish the working visual goal. Their shared
+high-resolution hybrid target is now accepted as the convergence family for continued Wave 10 discussion. This is
+not yet final UI, interaction, performance, or acceptance-corpus approval, and it does not authorize a build.
+
+#### Yes - the map-generating rebuild is part of this questionnaire
+
+The procedural-redesign questionnaire began because Genesis had already built a surprisingly capable low-level
+roll-to-room pipeline, while its higher-level room/site rolls and expensive renderer did not yet compose that power
+into consistently coherent, legible places. The thread did not abandon the map generator. It moved upstream long
+enough to decide what the generator must mean and downstream long enough to decide what its release projection must
+show before more tables, rolls, and renderer branches harden around the wrong contract.
+
+The existing built path is substantial:
+
+```text
+rollDungeonWalk()
+  graph topology + per-segment rolls/provenance
+    -> spatializePlan()
+       graph -> deterministic walkable SpatialPlan cells/rooms/doors
+    -> semanticizePlan()
+       roles, depth bands, scale domains, transition/squeeze meaning
+    -> dressPlan() / optional placeDistribute()
+       generated dressing and coordinate realization
+    -> interiorBuildBoard() / trayFrom({ kind: "interior" })
+       volumetric room shell, citizens, lights, shadows, active-room projection
+```
+
+Already-built ingredients materially close to Cards G-L include:
+
+- all twelve dungeon-walk graph topologies and the walk-to-`SpatialPlan` spatializer;
+- deterministic cell grids, room roles, depth/difficulty bands, scale domains, room-focus binding, and combat cells;
+- rolled dimensions, nonrectangular room shapes, exits derived from those shapes, structural dais/pit tiers, and
+  the later per-room elevation-profile roll;
+- volumetric prism/mesh floors, walls, pillars, doors, elevation surfaces, dressing coordinates, active-room
+  rendering, pixel standees, practical lights, alpha-aware cast shadows, contact grounding, and staged camera work;
+- a production `trayFrom` seam already capable of consuming interior plans, node/place records, settlements,
+  ordinary segments, and idle/exterior states.
+
+This makes the goal credible rather than speculative. It does **not** mean the cards are one polish pass away. The
+major remaining convergence gaps are:
+
+- Waves 1-2's new purpose/history/operating-model, functional-roster, repetition, Spice, population, flow,
+  promotion, callback, and ecology rulings have not been compiled back into revised generation tables and passes;
+- the release left-rail/central-tray/right-chat shell, safe-rectangle reflow, compact drawers, EngagementLens, and
+  object-inspection behavior are not built;
+- normal maps are not built, the cheap-primitive object library is incomplete, and asset binding still needs
+  deterministic scale/face/state/fallback contracts;
+- the current renderer contains more breadth and historical branches than the working goal requires; convergence
+  must preserve useful machinery while making one controlled path reliable;
+- no native high-resolution desktop/tablet capture corpus yet proves Card G-like composition, performance,
+  typography, sprite sampling, shadow quality, or cross-mode continuity.
+
+#### Where the remaining questionnaire leads
+
+- **Closed Wave 1** defines why a bounded place exists, its obligations, history, transformations, discovery,
+  scale/capacity, and story commitments—the semantic inputs the rebuilt site generator must roll and preserve.
+- **Closed Wave 2** defines the room/occupant roster, repeated families, Spice, operational state, stocks/flows,
+  casting/promotion, ecology pressure, and cold-state ownership—the systemic inputs behind the room rolls.
+- **Current Wave 10** fixes the shared visual output contract early so later generator detail serves an achievable
+  release tray rather than another renderer dead end.
+- **Waves 3-5** return directly to architecture/structural stamps, portals/circulation, and furniture/dressing. This
+  is where the accepted semantic rulings become concrete table schemas, compiler passes, reservations, placement
+  laws, and degradation behavior.
+- **Waves 6-9** then add scale/party capacity, tactical affordances, mutable environments, and DM strategic cards
+  without changing the settled visual substrate by convenience.
+- **Waves 11-12** define the teaching corpus, migration, persistence, acceptance gates, and executable build order.
+
+The practical answer is therefore: **Genesis is close in raw spatial/rendering ingredients and far enough away in
+semantic integration, UI convergence, and acceptance proof that the questionnaire is still doing necessary work.**
+The old pipeline should be treated as valuable foundation and clay, not discarded and not mistaken for the finished
+procedural engine.
+
+F10.1c is closed at the **working-goal** level. Wave 10 remains **OPEN at F10.1b**: settle whether Card H's
+EngagementLens is contextual/on demand as recommended, then F10.3b's Card J/K inspection split and the remaining
+F10/P10/G10 follow-ups. No implementation or Fable design-to-spec handoff is authorized yet.

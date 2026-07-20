@@ -6,6 +6,32 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 target accepted) — CARDS G-L ARE THE WORKING GOAL [Codex]
+
+This supersedes the hybrid-suite pickup immediately below without deleting it. Design/docs only: no code, CI,
+worktree, LFS checkout, merge, push, or Fable design-to-spec handoff was authorized.
+
+Adam accepts Cards G-L as good enough to establish the working visual goal. This accepts their common
+high-resolution 3D-substrate/canonical-pixel-layer and integrated-shell family, not their exact generated content,
+ratios, typography, icons, geometry, interaction behavior, normal-map implementation, or final acceptance.
+
+Genesis is meaningfully close in underlying ingredients. The dungeon walk graph, U1-U4 `SpatialPlan` pipeline,
+semantic roles/scale domains, real rolled sizes/shapes/elevation, doors/interactables, dressing realization,
+volumetric room renderer, pixel standees, practical lights, and cast/contact shadow foundations are built. The
+questionnaire is the map-generator redesign: Waves 1-2 defined the new site/room semantic inputs; Wave 10 fixes the
+release projection early; Waves 3-5 will turn those rulings into architecture, portal, furnishing, table, and
+compiler changes. Missing convergence includes the new shell/lens/inspection UI, normal maps, revised semantic
+tables/passes, governed primitive bindings, high-resolution proof, and one controlled cross-mode path.
+
+`DUNGEON-GRAPH.md` had a stale `SPECCED` header despite its U1-U4 and real-dungeon finale builds; its status now
+matches the implementation record. Detailed lineage and the built-versus-missing audit are in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.4.
+
+**Do next:** F10.1c is closed at working-goal level. Resume **F10.1b**: decide whether Card H's EngagementLens is
+contextual/on demand as recommended. Then settle Card J versus K inspection behavior, native high-resolution proof
+sizes, and every remaining F10/P10/G10 branch. Wave 10 remains open until its contradiction audit and Adam's
+explicit closure; only then announce the Fable design-to-spec gate.
+
 ## ⭐ Latest (2026-07-20, Wave 10 hybrid suite) — HIGH-RES 3D SUBSTRATE + PIXEL-ART LAYER [Codex]
 
 This supersedes the full-shell pickup below without deleting it. Design/taste-card work only: no code, CI,

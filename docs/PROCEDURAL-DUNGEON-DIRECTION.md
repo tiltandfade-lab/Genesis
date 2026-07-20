@@ -8068,3 +8068,114 @@ genuinely deferred actionable obligations.
 repeated site into exhaustive-search labor—and, specifically, are quiet confirmation, negative evidence,
 local utility, and pattern contribution sufficient payoffs when the assembly still contains individually
 telegraphed spicy outliers?
+
+#### 10.11.12 Ruling — hierarchical discoveries preserve room-level meaning
+
+Adam accepts the Option 3 model as functional. This clarifies Wave 1 Questions 9 and 13:
+
+- every enterable room or repeated child retains a stable discovery opportunity;
+- an opportunity is not necessarily concealed, unique, treasure-bearing, independently authored, or a
+  deferred narrative obligation;
+- automatic reads, local utility, quiet confirmation, useful negative evidence, personal or historical
+  traces, pattern contribution, and locally closed answers are valid payoffs;
+- assembly, zone, and site scopes coordinate shared questions, causal roots, pattern grammars,
+  exceptional density, and spicy outliers;
+- routine repeated-child opportunities may remain compact as assembly grammar plus stable child seed and
+  sparse contacted deltas;
+- systematic sweep may aggregate routine interchangeable surfaces without erasing individually
+  telegraphed, method-gated, spicy, or otherwise exceptional children;
+- occasional optional untelegraphed rewards may still reward exhaustive attention, but mandatory
+  progression and ordinary comprehension never require clearing every repeated child;
+- only a genuinely deferred actionable claim becomes a `StoryPromise` and consumes scheduler attention;
+- progression-critical truths retain redundant fair evidence routes.
+
+The discovery-scaling skeptical follow-up is exhausted.
+
+#### 10.11.13 Skeptical follow-up 4 — one operational label cannot describe a mixed system
+
+Wave 2 Question 9 already rejected one universal site-health roll and accepted state per material
+capability or flow. Its provisional vocabulary—normal, strained, degraded, substituted, dormant,
+blocked, failed, repurposed, destroyed—still contains a schema trap: these words are not mutually
+exclusive states.
+
+A city-prison kitchen can be physically intact, overloaded, performing at reduced quality, closed to one
+cellblock, supplied through an emergency contractor for another, and expected to recover after a road
+reopens. No single enum value can preserve that truth. Creating a combined enum such as
+`strained_substituted_partially_blocked` merely produces a combinatorial vocabulary.
+
+##### Option 1 — one primary state plus miscellaneous flags
+
+Choose `degraded` as the authoritative state and add flags such as `blocked`, `substituted`, and
+`damaged`. This looks simple initially, but the primary label arbitrarily wins, flags accumulate without
+clear ownership, and two systems may interpret the same combination differently. **Not recommended.**
+
+##### Option 2 — fully numeric continuous simulation for every capability
+
+Track exact supply, demand, throughput, quality, damage, access, and recovery values everywhere. This can
+support rich management play, but creates false precision, realm-unit problems, eager update pressure,
+and an authoring surface far removed from readable D&D rollers. **Not recommended as the universal
+model.** Exact quantities remain legal where a mechanic genuinely needs them.
+
+##### Option 3 — a small factored state with derived friendly labels
+
+Store a few independent facets for each **material exception** to the healthy inherited baseline:
+
+```text
+scope
+  which capability, flow, zone, cohort, route, or provider this record affects
+
+availability / coverage
+  how much of the intended need can currently be served, preferably as an honest band/range
+
+performance / quality
+  how well the available service is working
+
+operating mode
+  normal, substitute, emergency, intentionally dormant/seasonal, or serving a different current use
+
+access / control
+  open, restricted, denied, blocked, contested, and by whom
+
+physical integrity
+  intact, worn, damaged, disabled, destroyed, or absent where physical integrity is applicable
+
+demand / load
+  current demand relative to designed/available capacity, with exact numbers only when useful
+```
+
+Cause/provenance, onset or schedule, evidence, affected dependencies, buffers, thresholds, and recovery
+are required metadata on non-normal records rather than additional competing status values. Designed
+capability and capacity remain upstream truth, not current-state facets.
+
+The familiar vocabulary becomes a projection:
+
+- **strained**: load approaches or exceeds effective capacity while service still covers most demand;
+- **degraded**: performance/quality or coverage has materially fallen;
+- **substituted**: operating mode uses an alternate provider or process;
+- **dormant**: intentionally or seasonally offline under a licensed schedule/mode;
+- **blocked**: the relevant cohort cannot access an otherwise potentially available capability;
+- **failed**: required coverage has fallen below the functional threshold;
+- **repurposed**: current operating mode serves another use; permanent semantic change still requires an
+  event rather than a label;
+- **destroyed**: physical integrity prevents service without rebuilding.
+
+Several labels may truthfully appear in one summary because they are derived, not mutually exclusive
+canon. The DM might say, “The kitchen is intact but badly strained; Block C is on cold substitute meals
+while the contested service corridor remains closed.”
+
+Healthy default state is inherited and need not create a full record for every capability. Store sparse
+exceptions and shared state at the highest honest scope, then derive dependent views lazily through dirty
+frontiers. A zone or cohort gets a child exception only when its state actually differs. This preserves
+the limited-stack and response-time laws.
+
+Human-readable rollers author causes and facet changes in bands, not giant Cartesian combinations. A row
+may say “Festival overcrowding: demand/load +2 bands for lodging and sanitation; performance unchanged
+until buffers cross,” while the compiler produces the structured delta and preserves provenance.
+
+**Recommendation:** adopt Option 3. Treat the old status words as derived DM/UI labels over the seven
+facets above; store only causally licensed exceptions to inherited healthy state; require cause, evidence,
+thresholds, and recovery metadata; and allow exact quantities only for mechanics that need them.
+
+**Open follow-up:** do these seven facets capture the necessary truth without becoming excessive—and is
+it acceptable that a capability may simultaneously project several friendly labels, such as intact,
+strained, partially blocked, and substituted, rather than being forced into one state?

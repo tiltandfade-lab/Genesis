@@ -501,13 +501,21 @@ treasure-bearing, unique, Major, or independent. Quiet rewards include history, 
 practical knowledge, resource dependencies, confirmation/negative evidence, routes, leverage, or
 occasional tier-appropriate consumables.
 
+Repeated assemblies coordinate a hierarchical discovery ecology. Shared assembly grammar and stable
+child seeds may represent routine opportunities compactly; only contacted deltas and exceptional
+children need expanded records. Automatic reads preserve individual room meaning, focused inspection
+expands one licensed opportunity, and systematic sweep may aggregate routine interchangeable surfaces
+without consuming or erasing telegraphed, gated, spicy, or otherwise exceptional child opportunities.
+Optional untelegraphed rewards may reward exhaustive attention, but mandatory progression never depends
+on clearing every repeated child.
+
 Whole-site networks coordinate larger secrets, transformations, factions, hidden complexes, routes,
 Breaches, and revelations. Major/Mythic counts scale at site/zone scope rather than once per room.
 
-No discovery packet may lead to nothing. It must:
-
-1. attach to existing generated truth; or
-2. create a stable promissory story card with invariants and a fulfillment obligation.
+No discovery opportunity may lead to nothing when pursued. It must produce a stable applicable payoff,
+which may attach to existing generated truth, close or update a canonical question, provide local
+utility/confirmation/negative evidence, or reveal a deferred actionable claim. Only that final case
+creates a story promise with invariants and a fulfillment obligation.
 
 The missing-daughter note is the canonical stress example. It may fix a relationship, disappearance,
 date, bandit link, provenance, and unresolved status without eagerly generating the daughter, bandit
@@ -872,7 +880,11 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
 ### Discovery, Spice, and knowledge
 
 - Every enterable room/child has a discovery opportunity; not every opportunity is a secret or Major.
+- Repeated-child opportunities may compile from assembly grammar plus stable child seeds; systematic
+  sweep closes routine interchangeable surfaces without erasing exceptional children.
 - No discovery or promise leads nowhere when pursued.
+- Quiet confirmation, useful negative evidence, local utility, pattern contribution, and locally closed
+  answers are sufficient discovery payoffs; only deferred actionable claims create story promises.
 - Major secrets and high-band roots are coordinated at appropriate scope.
 - Secret spaces follow the same meaningful-room law and use bounded nesting.
 - Parent bands neither cap descendants nor recolor every sibling/ancestor.
@@ -917,7 +929,7 @@ These are semantic contradiction fixtures, not finished content packages or geom
 | Fixture | Wave 1 facts it must prove | Failure it should expose |
 |---|---|---|
 | Hamlet jail | Complete minimal custody model, external service, human scale, likely added space, juicy local handle | Small-size blacklist, one-room-per-obligation bloat, bland null fallback |
-| Major city prison | Repetition, zones, coordinated secrets, proportional variation, current-use/history layers, several hundred stable lightweight actors, p95 local dispatch within 250 ms | One independent Major secret and heavyweight record per cell; fallback during normal dense operation; global synchronous turn sweep |
+| Major city prison | Repetition, hierarchical discovery/sweep, coordinated secrets, proportional variation, current-use/history layers, several hundred stable lightweight actors, p95 local dispatch within 250 ms | One independent Major secret and heavyweight record per cell; exhaustive-search labor; fallback during normal dense operation; global synchronous turn sweep |
 | Mage-colony Breach prison | Context-sensitive classification, mixed domains, ordinary portal custody plus exceptional failure | “Portal always Mythic,” one global scale, realm fork |
 | Giant ossuary with human squatters | Low room count, huge envelope/accommodation, inserted human current-use pockets | One master size or late renderer-scale repair |
 | Alchemist shop over necromancy lab | Public primary purpose, concealed subordinate purpose or later transformation, legal discovery path | “Hidden” used as purpose; orphan surprise room |

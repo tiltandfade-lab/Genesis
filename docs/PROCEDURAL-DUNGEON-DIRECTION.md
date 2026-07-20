@@ -14509,3 +14509,269 @@ After Adam returns batch dispositions:
    owner rather than treating it as an unanswered design principle;
 5. present one Wave 2 closure summary and require Adam's explicit agreement;
 6. only then open promoted Wave 10.
+
+### 10.SWEEP.1 Batch dispositions and deep dives - P2.16, P2.18, and P2.20 open
+
+Adam responds to the first rapid sweep with selective acceptance and three requests for explanation. Silence on
+other ids is not acceptance.
+
+#### Recorded dispositions
+
+- **G2.2 - mechanical direction provisionally accepted; UI deferred.** The thin orchestration-graph baseline may
+  guide the eventual CrisisChain discussion, but its player-facing UI must not be chosen before the promoted shared
+  SceneTray/graphics-engine revision. G2.2 owns objective/stakes/topology/contributions/receipts and the projection
+  requirements; promoted Wave 10 P10.9-P10.10 owns how a crisis appears and is controlled in the release tray.
+- **P2.13 - accepted for now.** The sketched regional politics/economy simulation remains controlling; typed
+  boundary edges/contracts are sufficient for site dependencies unless later evidence shows a missing regional
+  owner. Do not expand Wave 2 into a second regional simulator.
+- **P2.14 - accepted.** Consequential stocks receive renewal/depletion rules with source, capacity, cadence,
+  conditions, sinks, evidence, and terminal floor; no spontaneous restocking.
+- **P2.15 - accepted with explicit expansion deferral.** Use population/ecology pressure summaries, clocks, and
+  threshold events rather than continuously simulating individuals. Deeper continuous ecology is a far-future
+  expansion candidate only after the bounded system proves itself; it is not a current closure or build blocker.
+- **P2.17 - accepted.** Typed player-caused changes update the site's obligations, flows, groups, stocks, and
+  operating state; Wave 8 later owns detailed physical/topological propagation.
+- **P2.19 - accepted and sharpened.** The ongoing simulation exists for engine truth and the DM's bounded
+  projection. Players should not manage statistical dashboards. They understand the world through DM description,
+  sensory evidence, NPC behavior, records/maps, visible abundance/shortage/failure, and actionable handles. Any
+  later UI supports those diegetic interactions rather than exposing the simulator as a management screen.
+- **P2.16 - OPEN:** Adam does not yet understand the proposed holdings/reserve/custody solution and requests a
+  plain explanation.
+- **P2.18 - OPEN:** the constraint terminology was not understandable and must be restated in ordinary language.
+- **P2.20 - OPEN:** Adam requests a more detailed acceptance plan.
+- **G2.1-CERT, G2.1-CLOSE, and P2.12 remain pending** because Adam did not disposition them in this batch.
+
+#### P2.16 deep dive - when does loot become an exact item?
+
+##### Plain-English problem
+
+Genesis needs treasure and supplies to be both surprising and real. Three bad outcomes must be avoided:
+
+1. generating every spoon, arrow, bottle, sack, and drawer as an exact saved object when the site is created;
+2. waiting until the player opens a container, then inventing whatever would be convenient or dramatic at that
+   moment (“quantum loot”);
+3. assuming that because an item exists in the SRD/custom catalog, this dungeon, shop, enemy, or chest owns one.
+
+The recommendation is **commit the available kind/amount/source early, resolve exact interchangeable instances
+late**. Important unique items are committed exactly early; ordinary fungible supplies can remain a bounded reserve
+until someone touches, uses, steals, equips, or discovers them.
+
+##### Options
+
+**Option A - eager exact inventory.** At site creation, roll and save the exact contents of every container,
+storeroom, rack, corpse, and pocket. This is maximally deterministic but creates enormous state/content work and
+spends generation time on objects the player may never approach.
+
+**Option B - unconstrained discovery-time loot.** Roll or let the DM invent contents only when opened. This is
+cheap, but unless an earlier envelope constrains the result it allows the world to adapt its loot to current player
+need, repeated reloads, or dramatic convenience.
+
+**Option C - committed holding/envelope, late exact instantiation (recommended).** The site first commits what its
+operation and treasure budget actually support. A container/location binds to some part of that holding before
+discovery. Exact common instances may be deterministically resolved later from the committed envelope/seed. Unique,
+plot-bearing, key/lock, magic, relationship, and otherwise consequential items are committed exactly before reveal.
+
+The custody chain is:
+
+```text
+site holding or process output
+  -> bounded reserve: kind, amount/value, quality, owner, source, allowed item family
+  -> container/location/actor allocation committed before reveal
+  -> deterministic exact resolution when exact identity matters
+  -> stable item instances when discovered/equipped/used/claimed
+  -> custody/quantity/condition changes remove the same value from the prior owner
+```
+
+##### Concrete examples
+
+**Fortress weapon rack:** the site has already committed seven shabby garrison-weapon equivalents because its
+staffing and armory support them. One rack owns four of those equivalents. When the player searches it, the seeded
+envelope may resolve two spears, a light crossbow, and bolts. Reloading does not change them. If guards armed
+themselves first, the rack reserve shrank and those exact equipped instances now belong to the guards; nothing is
+duplicated.
+
+**Monastery infirmary:** operation commits six ordinary medicine uses plus herb ingredients. That does not entitle
+the room to six magic healing potions. A potion appears only if a treasure/reward/crafting source separately
+licensed it. Using two medicine doses while the room is cold reduces the reserve; later discovery sees four.
+
+**Dragon hoard:** the hoard's value/rarity budget, major valuables, key/plot objects, and magic items are committed
+before discovery because exact identity affects power, callbacks, theft, faction knowledge, and save-scumming.
+Individual coins or interchangeable gems may remain aggregated until counted or transferred.
+
+**Turtle comms:** these never arise because “communication item” exists in a catalog. They are synthesized from an
+earned C2 relationship/reward envelope, committed as exact linked instances, then enter the same custody chain.
+
+##### Cost and research filter
+
+Option C has **medium-high implementation/content cost**: holdings/reserves, deterministic latent seeds, container
+binding, exact-instance promotion, item/currency conservation, custody/claim/transfer events, cold-state use, theft
+response, and anti-duplication fixtures. It saves large amounts of eager state and preserves surprise. Tutenel's
+semantic classes support holding families before exact instances; Horswill supports bounded summaries; Whitehead
+supports committing constraints before revealing a solution. The papers do not supply a loot economy or custody
+model; that policy is Genesis-specific.
+
+**Recommendation to accept:** Option C, with this threshold: commit unique/plot/key/magic/limited/relationship items
+exactly before reveal; commit ordinary fungible supplies as owned bounded envelopes and instantiate exact copies
+only when interaction requires them. Every container allocation is fixed before the player resolves its contents.
+
+#### P2.18 deep dive - what if the generated site cannot possibly work as requested?
+
+##### Plain-English problem
+
+Sometimes the generator's accepted facts do not fit together:
+
+- forty soldiers are assigned to six tiny rooms with no external camp or supply;
+- a full-sized dragon supposedly lives behind corridors it cannot traverse;
+- an “operating, self-sustaining monastery” has no water source or external supply;
+- a prison has cells but no lawful way for guards, food, waste, or prisoners to move;
+- a forge is required to operate but has no fuel, ventilation, workspace, or external service.
+
+Genesis must decide what may change, what becomes an intentional crisis, and when it must admit that generation
+failed. It cannot patch the contradiction with a sentence claiming everything somehow works.
+
+##### Options
+
+**Option A - always force a fit.** Reduce, move, externalize, or reinterpret whatever is necessary until a site is
+produced. This rarely fails generation, but it silently changes canon and makes rules unreliable.
+
+**Option B - reject every mismatch.** If any requested feature conflicts, discard the site and reroll. This keeps
+results clean but throws away interesting strained/ruined situations and can create long generation tails.
+
+**Option C - ordered preservation, honest failure state, then explicit refusal (recommended).** Preserve the facts
+that are truly fixed, try legal alternate layouts/realizations, allow flexible preferences to change, convert a
+support shortfall into an explicit strained/failing site only when that state makes causal sense, and refuse the
+result if physical/canonical requirements still cannot coexist.
+
+In ordinary words, the order is:
+
+```text
+1. Do not change established lore, player-promised facts, original purpose, or other declared hard truth.
+2. Try a different room/assembly/layout/route realization.
+3. Change preferences that were never promises: exact adjacency, decorative form, optional capacity, etc.
+4. Use an allowed external dependency, schedule, crowding condition, or support method if the site model permits it.
+5. If the shortfall is interesting and credible, make the site explicitly strained, failing, dormant, or transformed.
+6. If it is still physically or canonically impossible, stop and report exactly why instead of inventing an excuse.
+```
+
+##### Concrete examples
+
+**Forty soldiers, six rooms:** try bunks, shifts, adjacent camp, external lodging, or reduced active garrison only if
+those were flexible/authorized. Otherwise the fortress is explicitly overcrowded and strained, with sleep,
+sanitation, morale, and readiness consequences. It cannot be labeled comfortably operating.
+
+**Dragon in a tiny crypt:** a previously established dragon may have a legal guise, external lair, breached access,
+or servants if those facts are supported. If none applies, the placement fails. The engine cannot claim the dragon
+regularly walks through five-foot corridors.
+
+**Self-sustaining monastery with no water:** add a legal well/cistern/collection process if geometry and substrate
+allow it; otherwise change the supply model to external, or mark the monastery failing/abandoned. If “currently
+self-sustaining” was established canon and no water solution can exist, reject the generated layout.
+
+##### Cost and research filter
+
+Option C has **medium solver and content cost**: every profile needs fixed versus flexible facts, allowed alternate
+realizations, credible degradation/failure states, ordered diagnostics, and negative fixtures. Tutenel supports hard
+versus soft rules and backtracking; Henderson warns against piling on late constraints; Whitehead most directly
+supports saying “unsatisfied” when declared intent cannot be solved. This is one of the clearest places where the
+papers support the recommendation.
+
+**Recommendation to accept:** Option C. Interesting shortages become honest strained/failing sites; physical or
+canonical impossibility fails loudly. The engine never fixes contradiction by silently changing established truth.
+
+#### P2.20 deep dive - what evidence is enough to close Wave 2?
+
+##### Plain-English problem
+
+Wave 2 defines a large causal site model. A few attractive generated rooms cannot prove it. An exhaustive Cartesian
+test across every purpose, size, state, group, Spice band, resource, intervention, and time interval is also
+impossible. Genesis needs a deliberately chosen evidence portfolio that proves representative behavior, important
+cross-system transitions, honest failures, and bounded performance.
+
+##### Options
+
+**Option A - prose review plus a few examples.** Cheap and useful for early design, but it misses conservation,
+identity, catch-up, constraint, and interaction failures.
+
+**Option B - exhaustive combination matrix.** Theoretically thorough and practically unbounded; it would delay the
+project while still failing to judge whether individual sites feel coherent.
+
+**Option C - layered representative corpus (recommended).** Combine named golden sites, adversarial transition
+traces, later statistical/property batches, DM/player information reviews, and performance-tail measurement. Hard
+truth is executable where possible; coherence and legibility retain human/play review.
+
+##### Recommended minimum Wave 2 design corpus
+
+**Twelve named golden sites** should cover at least:
+
+1. small operating externally supplied guard post;
+2. small transient camp or service site;
+3. small dormant/abandoned place;
+4. medium self-sustaining monastery/commune;
+5. medium strained mine/workshop;
+6. medium failing prison or institution;
+7. medium predatory natural lair;
+8. medium infiltrated or layered-control site;
+9. large contested fortress with at least two populations;
+10. large settlement/urban institution with aggregated cold population;
+11. large mixed-scale or dragon-domain site;
+12. anomalous, living, or mobile bounded place proving non-institutional ownership.
+
+The set must span Grounded through Mythic where appropriate, every major supply model, operating/strained/dormant/
+failing states, single and multiple groups, ordinary and repeated room families, and both internal and external
+flows. One site may cover several dimensions, but no dimension may exist only as an unlabeled random sample.
+
+**Eight adversarial transition traces** should explicitly attempt:
+
+1. active room -> site aggregate -> long cold interval -> reactivation without double count;
+2. external delivery blocked, delayed, stolen, restored, and evidenced;
+3. stock renewal, use, spoilage/depletion, exact-item claim, transfer, and no duplication;
+4. population schedule/group conflict promoting stable individuals without identity drift;
+5. player sabotage followed by repair, occupation, or operator change;
+6. high-Spice exception pressure without loss of core function or illegal scope growth;
+7. impossible constraints producing credible failure state or an explicit unsatisfied diagnostic;
+8. SceneFact/callback/CrisisChain consumption of an early prop/resource/condition many turns later.
+
+**Three proof layers** then evaluate them:
+
+- **Deterministic/golden:** exact owners, quantities, receipts, transitions, identities, positions where relevant,
+  evidence, and outcomes match expected traces across save/load and repeated seeds.
+- **Batch/property:** later Wave 11/12 harnesses sample many seeds for obligation coverage, conservation, valid
+  dependencies, family variation, no impossible self-locks, bounded active slices, and solve/catch-up latency tails.
+- **Human/play readability:** the DM projection explains what matters; player-facing narration/tells expose useful
+  handles without dashboards; sites feel distinct, functional, surprising, and causally understandable.
+
+##### Proposed Wave 2 pass semantics
+
+- zero loss/duplication of consequential people, items, resources, obligations, promises, or ownership;
+- every hard invariant either passes or produces an explicit expected unsatisfied result;
+- every operating model exposes at least one lawful player-facing evidence/interaction handle for consequential
+  flows and failures;
+- cold-state reactivation is deterministic and preserves all due hard consequences;
+- repeated families remain recognizable without cloned instances;
+- Spice exceptions retain causal source and do not consume protected core obligations;
+- accepted interventions produce persistent operational consequences and recovery paths where applicable;
+- DM projections remain bounded and sufficient; player presentation remains diegetic and dashboard-free;
+- common-path and worst-tail budget categories are named here, while exact milliseconds/token/instance limits may be
+  calibrated in promoted Wave 10 and Waves 11-12 rather than invented without a prototype.
+
+##### Research and cost filter
+
+This corpus is a **high QA-authoring investment with low live-runtime cost**. Horswill motivates executable global
+playability/conservation constraints; Green's staged/persona evaluation warns that pipeline combinations matter;
+Henderson and Whitehead require solve-tail and unsatisfied-case evidence; Tutenel requires semantic/rule coverage;
+Yu/Merrell support judging functional relations and author-perceived quality in addition to raw validity; Nepozitek
+supports preservation of the high-level graph across realization. No paper justifies replacing representative human
+judgment with aggregate green counts.
+
+**Recommendation to accept:** Option C with twelve golden sites, eight adversarial transition traces, and three
+proof layers. Wave 2 locks the scenarios and pass semantics; Waves 10-12 later calibrate renderer, performance,
+automation, and final release thresholds against them.
+
+#### Questions now before Adam
+
+1. **P2.16:** accept Option C's split - exact early commitment for unique/plot/key/magic/limited/relationship items;
+   bounded owned envelopes with deterministic late instance resolution for ordinary fungible supplies?
+2. **P2.18:** accept Option C's ordered preservation - alternate realization, lawful flexible change, credible
+   strained/failing state, then loud refusal if physical/canonical truth still cannot coexist?
+3. **P2.20:** accept Option C's initial acceptance portfolio - twelve named golden sites, eight adversarial traces,
+   and deterministic + batch/property + human/play proof layers?

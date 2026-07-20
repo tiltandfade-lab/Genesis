@@ -9956,3 +9956,84 @@ foundational calibration.
 
 **Open decision:** should the success table lock as 20/1–15 Standard with no lens, 20/16–18 Amplified with
 one lens, 20/19 Legendary with two to three lenses, and 20/20 Mythic with the accepted `d3 + 2` lenses?
+
+#### 10.11.37 Follow-up — reward anchors keep the DM pointed at what the action earned
+
+Adam adds the missing control principle: the higher crit degrees must keep the DM on track about **what is
+being rewarded**. The Light of Lathander example is not a bag of interchangeable miracles. Its effects
+attach to several live sources:
+
+- **character/class expression:** a cleric invokes Lathander, so holy light and genuine repentance reward
+  the character fantasy and method actually brought to the scene;
+- **quest/objective:** the bandit's revelation of the hideout advances the concrete problem the party is
+  engaging;
+- **world/context:** permanent light and the community's organic construction and maintenance of a shrine
+  change the place and its future society.
+
+This clarifies that reward source and effect lens are two orthogonal systems:
+
+```text
+reward anchor = why this consequence belongs to this action
+effect lens   = what kind of canonical system change expresses it
+```
+
+For example, “the bandit repents” may use a person-changed lens while attaching to the cleric/Lathander
+character anchor. “The hideout is revealed” uses a hidden-truth lens attached to the quest anchor.
+“Permanent holy light” uses a place/local-law lens attached to both character and world anchors. “The
+townsfolk found a shrine” uses place/bond/group effects attached to the world anchor. Lenses remain useful
+because they specify mechanical owners; anchors prevent the DM from filling them with unrelated content.
+
+##### Recommended `RewardAnchorSet`
+
+The pre-roll `CheckContract` should capture a small provenance-backed set of active reward anchors:
+
+| Reward lane | Possible source | What it protects |
+|---|---|---|
+| **Character expression** | actively used class feature, deity/domain, oath, spell, skill, background, bond, item, form, or tactic | The result rewards how this character approached the problem, not a generic protagonist fantasy. |
+| **Story objective** | declared intent, quest, contract, investigation, pressure, promise, faction problem, or player-adopted thread | The result advances or transforms the problem actually in play rather than inventing unrelated content. |
+| **World context** | target NPC, place, institution, faction, realm, history, witnesses, ecology, or current condition | The result belongs to this world and leaves consequences in the owners that can persist. |
+
+The first lane should not literally mean “always use the class label.” If a cleric picks a mundane lock
+with thieves' tools, the engine must not inject Lathander merely because `class = cleric`. Lathander becomes
+an active anchor only when the declared method, feature, faith, established relationship, or scene fiction
+actually invokes that power. Likewise, a feat, heirloom, friendship, oath, species trait, or clever tactic
+may be the relevant character-expression anchor instead of class.
+
+The story-objective lane does not require a formal quest-log entry. Every check has declared intent, but a
+named quest, contract, or adopted story card attaches only when causally relevant. The engine may not claim
+that a random distant quest advanced merely to satisfy coverage. The world lane uses the actual target,
+place, factions, witnesses, and current canon; it does not generate a context-free “world reward.”
+
+##### Recommended coverage by degree
+
+- **Standard 20/1–15:** no persistent lens, but narration and the best ordinary success visibly reward the
+  active character/method and declared objective.
+- **Amplified 20/16–18:** the single lens must attach to the strongest causally relevant reward anchor; it
+  cannot become a generic bonus detached from the action.
+- **Legendary 20/19:** its two to three lenses should cover at least two distinct active reward lanes before
+  deepening one lane twice. If three lenses and three relevant lanes exist, cover all three.
+- **Mythic 20/20:** its three to five lenses must cover every relevant active reward lane before repeating
+  one. Additional lenses braid or deepen the same causal root. A missing lane is not fabricated merely to
+  meet a quota.
+
+Each planned `CritEffect` therefore carries both a lens id and one or more anchor ids. Atomic validation
+rejects an effect that has no causal anchor, contradicts its anchor, or double-counts the same mutation as
+several rewards. The DM still has enormous creative freedom in filling the rolled combination, but the
+engine can now tell whether the proposed consequence is actually about the character, objective, and
+world that earned it.
+
+This does not require bespoke outcome tables for every class × quest × location combination. Character
+features, quest facts, and world entities already provide the content handles; the twelve effect lenses
+provide reusable mechanical verbs. The Crit planner composes the two at resolution time and stores the
+provenance. The writing burden lies in good feature/domain/realm tags and adapter examples, not a
+Cartesian library of authored miracles.
+
+**Recommendation:** lock reward-anchor coverage as part of the proposed success table. Magnitude decides
+how many consequences may fire; the active anchor set decides what those consequences must reward; the
+lenses decide which persistent systems change. This preserves the DM's poetry while giving it a causal
+rail.
+
+**Open follow-up:** should Legendary and Mythic cascades be required to cover the relevant
+character-expression, story-objective, and world-context reward lanes as recommended—with no forced class,
+quest, or world attachment when that lane was not genuinely active—before any lane receives additional
+lenses?

@@ -270,6 +270,17 @@ each cell. Hidden traps, unseen creatures, undiscovered hazards, and secret reac
 Exact consequence classes, input parity, costs, and undo follow-up live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.9.
 
+## Bounded movement-undo ruling (Adam, 2026-07-20 — additive)
+
+> "option B is good, the new FFT had that and it worked really well"
+
+The BattleMat may offer Undo for a harmless committed movement segment, including restoration of its own movement
+or Dash payment, only until the segment causes or is followed by an external consequence such as a roll, reaction,
+hazard, reveal, other actor-state change, or committed action. Once sealed, the control explains why it is
+unavailable. Preview remains freely cancelable; whole-turn rewind is not part of this ruling. Exact receipt,
+memory, default-seal, and follow-up route-ranking rules live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.10.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

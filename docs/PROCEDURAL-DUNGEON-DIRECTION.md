@@ -16635,3 +16635,67 @@ route may undo the movement and its Dash payment together, provided no later act
 
 Does Adam accept Option B? If so, follow with the shorter-risky versus longer-safe route-ranking question before
 returning to stable label lifecycle and F10.3b. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.10 F10.1i ruling - bounded movement undo accepted
+
+**Adam's ruling (2026-07-20):** accept Option B. The newer *Final Fantasy Tactics* interaction used this kind of
+bounded undo and worked well. Genesis should likewise forgive a harmless movement misclick without permitting
+players to rewind reactions, rolls, discoveries, or consequences.
+
+The accepted undo contract is:
+
+- preview, route inspection, locked-cell inspection, and payment-source comparison are freely cancelable because
+  they have not changed canon;
+- after commitment, the current turn retains a bounded stack of the player's most recent reversible movement
+  segments rather than a snapshot of the entire turn or world;
+- a reversible segment may restore the actor's prior cell/elevation, movement allowance, and a movement-extension
+  payment such as Action Dash when those changes formed one transaction;
+- a segment seals as soon as it causes or is followed by a roll, reaction opportunity/choice/resolution, hazard
+  resolution, newly observed fact or citizen, other actor-state change, committed interaction/action, or another
+  external consequence;
+- a miss still seals an opportunity-attack route because the roll and reaction happened; learning that a hidden
+  enemy exists still seals movement even if no damage occurred;
+- any external mutation whose reversibility class has not been declared **seals by default**. A new subsystem must
+  opt into rollback with tests; UI convenience cannot guess that canon is safe to rewind;
+- the player sees why Undo is unavailable—`Sealed: Goblin 2 reaction resolved`, not a disabled control with no
+  explanation;
+- undo itself is a typed rollback receipt linked to the original movement receipt. The DM receives the surviving
+  state and does not need to narrate a preview or harmless reverted misclick as if it occurred in canon.
+
+This is a **moderate transactional/state cost**: reversible self-owned deltas, segment ids, seal reasons, a bounded
+current-turn stack, save/load treatment, animation reconciliation, and tests for every sealing class. It is far
+smaller and safer than whole-turn rewind. Memory is bounded by the number of unsealed movement segments in the
+active turn and is discarded when the turn advances or a segment seals; it is not a persistent history clone.
+
+This closes F10.1i. The newer FFT example is useful interaction evidence, not an imported rules authority.
+
+#### F10.1j - shorter risky route versus longer safe route
+
+In plain English: when the same destination has multiple legal paths, which one should a click choose by default?
+
+- **Option A - shortest path always:** deterministic and cheap, but may walk past an enemy or through fire when a
+  harmless route costs only five more feet.
+- **Option B - safest known path always:** protects the player, but can silently consume scarce movement or make a
+  destination appear to require Dash when a shorter exposed route does not.
+- **Option C - resource-bounded safe default with explicit material alternatives (recommended):** among routes
+  affordable with the movement budget the player has already authorized, default to the route with the fewest
+  known material consequences, then lowest movement cost. If avoiding danger crosses into a new payment tier—such
+  as requiring Action Dash while the risky route fits normal movement—show both as explicit route choices rather
+  than silently spending or silently accepting danger.
+
+Examples under Option C:
+
+- `20 ft through Goblin 2's reach` versus `30 ft around`, with 30 ft remaining: default to the safe 30-foot route
+  and keep the exposed shortcut selectable and clearly marked;
+- `25 ft exposed` versus `40 ft safe`, with 30 ft remaining: show `Fast · 25 ft · Opportunity attack possible`
+  and `Safe · 40 ft · Dash required`; neither the extra risk nor Dash is silently chosen;
+- two equally safe/equal-cost routes: use a stable deterministic tie-break so save/replay and spoken receipts do
+  not drift.
+
+The implementation cost is **moderate-high path-query work**, but bounded. The kernel need not enumerate every
+possible path: solve the least-exposure path within the authorized budget and the least-cost path, retain a second
+candidate only when their consequence/resource profiles materially differ, and cap alternatives. Maintenance
+depends on shared consequence severity classes and stable tie-breaks rather than authored route preferences.
+
+Does Adam accept Option C? After this, the exact-movement branch can return to stable EngagementLens label
+lifecycle and then F10.3b. Wave 10 remains **OPEN**; no build is authorized.

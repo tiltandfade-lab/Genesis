@@ -6,6 +6,23 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 bounded movement undo) — FORGIVE MISCLICKS; NEVER REWIND CONSEQUENCES [Codex]
+
+This supersedes the movement-warning pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.1i Option B and cites the newer FFT interaction as a successful example. Preview remains freely
+cancelable. A bounded current-turn movement stack may restore a recent segment's position, movement allowance, and
+same-transaction Dash payment only until it causes or is followed by a roll, reaction, hazard resolution, newly
+observed fact/citizen, other actor-state change, or committed action/interaction. Unknown external mutations seal
+by default; the UI names the seal reason. Undo creates a linked rollback receipt and never rewinds a whole turn.
+F10.1i is closed.
+
+**Do next:** ask F10.1j. Codex recommends the safest known route that fits the movement budget already authorized,
+then lowest movement cost. When the safe route requires a new payment tier but a shorter risky route does not,
+show both explicitly rather than silently choosing Dash or danger. After that ruling, return to stable
+EngagementLens label lifecycle and F10.3b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 movement warnings) — SAFE MOVES FLOW; KNOWN RISKS WARN ONCE [Codex]
 
 This supersedes the locked-movement-preview pickup below without deleting it. Design/docs only: no code,

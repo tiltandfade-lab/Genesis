@@ -12915,3 +12915,140 @@ semantic resolver deferred? The recommendation is Option 2 because it preserves 
 seat and gathers evidence before mechanizing this choice. If accepted, the prior “least-new mechanics” language
 becomes guidance rather than an engine priority law, and G2.1 returns to hostile-counter pressure versus hard
 nullification before the still-open compile-failure/precedent question.
+
+#### 10.G2.1.10 Clarification and ruling - the full creative resolver is core vision; how strong may adaptive counters be?
+
+Adam clarifies that “this sounds like new territory” was enthusiastic recognition, not a scope warning. He really
+likes the full intent-first semantic resolver and considers it core to his vision for Genesis: the prior proposal
+expressed a system he wanted but had not been able to articulate. Section 10.G2.1.9 therefore remains preserved as
+an accurate inventory of what is genuinely new, but its recommendation to defer that territory is rejected and
+superseded. Adam accepts Option 1 from 10.G2.1.9 and Option 3 from 10.G2.1.8 as the architectural direction. No
+implementation is authorized during this design discussion.
+
+The accepted core is:
+
+> The DM authors meaning, intended play, identity, and semantic invariants first. The resolver searches existing
+> world nouns, SRD and Genesis-custom definitions, overlays, and supported primitives; compares what each route
+> preserves or changes; and realizes the invention with the least new mechanical complexity that does not destroy
+> the creative point. The engine validates and persists the result. Catalog similarity never overrules intent,
+> and catalog presence never creates fictional availability.
+
+This is a creative compiler, not merely item lookup and not merely a narrator constraint. `USE`, `ADAPT`,
+`COMPOSE`, `SYNTHESIZE`, and eventually governed `PRECEDENT` are realization depths under one intent-first
+conversation. Fictional originality is cheap and encouraged when licensed; new mechanical primitives carry
+proportionally higher authority, validation, maintenance, and QA cost. When several legal realizations differ in
+meaning or play, the DM retains the creative choice; the resolver exposes consequences and legality rather than
+silently selecting the cheapest database match.
+
+The item system is the clearest first example because Genesis already has `base`/`ench`/`codexId`, but the vision
+is broader. The same semantic boundary can eventually serve licensed hostile tools, hazards, relationship tokens,
+techniques, rituals, scars/adaptations, titles, rumors, environmental responses, and other expression-bearing or
+hybrid inventions through domain owners. It does not erase the source-posture rule: resistance-bearing actors,
+hidden truths, inventories, topology, quantities, and independent opportunities still require their proper rolls
+or owners before the DM authors their expression.
+
+The previous minimal `USE`/`ADAPT`/`INVENT` policy survives as an early implementation slice of the accepted
+vision, not as its final boundary. Likewise, the detailed ladder, intent contract, candidate/delta comparison,
+mechanical novelty debt, saturation/cohesion signals, and honest precedent lane remain live design commitments
+whose exact schemas and weights need later specification and play evidence. “Core vision” authorizes preserving
+the architecture in planning; it does not authorize pretending every unresolved detail is already known.
+
+##### Return to the queued adversarial follow-up
+
+With causal commitment windows accepted, the next question is how strongly a synthesized adaptation may counter
+a player capability. This is separate from whether the invention is legal. An enemy may have knowledge, time,
+resources, and a valid C2 response envelope, yet a perfectly tailored answer can still make the player's earned
+tool or tactic irrelevant. Conversely, forbidding real counters can make intelligent enemies feel ceremonial.
+
+##### Counter-strength options
+
+**Option 1 - same-band hard counters.** Once a hostile invention has legal causal authority, it may partially or
+completely nullify the target capability within the same C-band as any other effect. A C2 adaptation may therefore
+shut off a C2 item or tactic if power arithmetic balances. This is simple and lets enemies feel ruthless, but it
+turns legal observation into automatic permission for perfect counters and invites reactive difficulty scaling.
+
+**Option 2 - pressure only.** Synthesized adaptations may increase cost, risk, noise, delay, exposure, or
+positioning demands, but may never disable, suppress, immunize against, or destroy the target capability. This
+strongly protects player expression and keeps every tool usable. It also makes some enemy preparation implausibly
+weak, prevents meaningful local wards and immunities, and denies the DM dramatic temporary reversals even when
+the world has clearly earned them.
+
+**Option 3 - graduated counter authority (recommended).** Most adaptive synthesis creates friction and new
+choices. Temporary or local denial requires a stronger explicit envelope plus tells and a real workaround. Hard
+nullification or permanent severance requires either preexisting canonical mechanics or higher-band authority
+that names the affected capability and consequence. No counter tier may be assembled through a stack of smaller
+effects whose combined result would require the higher tier.
+
+The graduated ladder is:
+
+```text
+FRICTION / CONTEST       ordinary C2 response
+  raise cost; introduce risk, interception, resistance, delay, position, limited charges,
+  or a meaningful opposing check; preserve a usable choice
+
+LOCAL / TEMPORARY DENIAL explicit strong C2 or C3 response, depending reach and duration
+  suppress in a bounded place/window/target set; require proportionate tell and a practical
+  bypass, disable-source, alternate route, or other counterplay
+
+HARD / DURABLE NULL      normally C3-C4, or already-established rules truth
+  immunity, permanent severance, destruction, broad suppression, or removal of the play pattern;
+  require named authority, causal preparation, strong evidence/tells, and full persistence/aftermath
+```
+
+An existing creature's independently established fire immunity or an already committed antimagic property is not
+a new adaptive invention; its ordinary encounter and reveal rules govern it. The DM may not select or spawn that
+answer retroactively because the player's fire tactic is succeeding. Novel adaptation begins from a world actor
+or system spending legal knowledge, time, resources, and an envelope - never from an invisible “player is too
+effective” signal. This preserves the already locked rule that optional discoveries do not trigger reactive enemy
+scaling.
+
+##### Concrete examples
+
+**Turtle comms:** a C2 enemy adaptation might introduce intermittent static, a chance of interception, a false
+reply that requires recognition, or a signal that exposes approximate location. A prepared lead-lined cell or
+breakable jamming shrine could temporarily deny them in one bounded place if strongly telegraphed and physically
+answerable. Retroactively declaring the pair useless everywhere, or permanently severing it through an ordinary
+C2 response, would be illegal. Permanent severance would need an established destruction rule or explicit C3+
+authority, and the severed objects/history would still persist.
+
+**Repeated fire tactics:** soot-sensing enemies, spreading smoke, firebreaks, volatile fuel risks, or partial fire
+resistance create friction and different choices. A preexisting fire elemental can be immune because that is
+independent creature truth. An adaptive dungeon may create a local suppression chamber or prepared guardian only
+through the proper owner, commitment window, band, and tells. It cannot make every later enemy immune because fire
+has become the player's best tactic.
+
+**Suppression chain:** a warden with justified knowledge and preparation may wield a chain that contests or
+locally suppresses teleportation while the prisoner remains in its bounded reach. The chain is a targetable,
+stealable, persistent source with defined limits. A cheap invisible effect that simply says “you can never
+teleport again” is a durable null and requires much higher authority, direct consequence law, and aftermath.
+
+The player does not need advance knowledge of every exact mechanic. Proportionate tell means the world communicates
+that unusual opposition exists at a time when observation, inference, retreat, sacrifice, or counteraction can
+matter. Surprise remains possible; unanswerable post-choice negation does not.
+
+##### Implementation and maintenance cost
+
+Option 3 adds **medium mechanical architecture cost** to the hostile-synthesis system: typed counter strength,
+scope/duration and target-reach validation, suppression-versus-destruction semantics, stacking/effective-null
+detection, causal knowledge/preparation receipts, telegraph/counterplay fields, and tests distinguishing ordinary
+resistance from functional denial. It also needs pressure accounting across several enemies or rooms so repeated
+friction does not become an undeclared global null.
+
+The content burden is manageable because domains can reuse counter primitives - contest, surcharge, intercept,
+delay, reveal, resist, local suppress, disable source, sever - rather than authoring a special answer to every
+ability. The maintenance danger on one side is a solver that technically leaves a capability usable but makes it
+practically worthless; on the other, overprotection can prevent the world from ever threatening a beloved tool.
+Golden traces must test the experienced play pattern, not only whether an enabled flag remained `true`.
+
+The research corpus supports typed hard constraints, semantic plans, and bounded mixed-initiative realization,
+but the exact fairness ladder is a Genesis game-design ruling rather than a result proved by the papers. It follows
+the same general discipline: author the desired pressure at a semantic level, compile it through explicit reach
+and legality, and fail honestly when the proposed counter cannot be supported.
+
+**Question for Adam:** should adaptive hostile inventions use Option 3's graduated authority: ordinary responses
+create friction and choices; local/temporary denial requires stronger explicit authority plus tells and real
+counterplay; hard or durable nullification requires preexisting canonical mechanics or C3-C4 authority? The
+recommendation permits intelligent, frightening counters without letting the DM erase an earned player tool in
+response to success. If accepted, the next G2.1 follow-up returns to what the creative resolver does when it cannot
+compile the DM's intended mechanics without materially changing the concept, including when a proposed solution
+may become a reusable precedent.

@@ -2,7 +2,7 @@
 type: design-study
 status: DISCOVERY
 created: 2026-07-18
-updated: 2026-07-19
+updated: 2026-07-20
 related:
   - "[[DUNGEON-GRAPH]]"
   - "[[ROOM-GRAMMAR]]"
@@ -342,6 +342,60 @@ never routed around silently.
 
 The order may change if a wave proves upstream of another, but the closure law does not.
 
+### Revised execution order - shared SceneTray promoted (2026-07-20)
+
+Adam identifies the main tray renderer as a product-critical dependency for getting Genesis off the ground. The
+initial ordering left Interim Visual Engine and Release Scope at Wave 10, after detailed architecture, portals,
+furnishing, scale, tactics, mutation, and DM-card decisions. That is too late: the renderer remains a projection,
+not a semantic owner, but its chosen spatial precision, scene grammar, object budget, interaction language, and
+visual target determine which upstream facts those later systems must compile and which expensive details can be
+deferred.
+
+The twelve subject-wave identities and ids remain preserved. Their **execution order** is now:
+
+```text
+1.  Wave 1  - Dungeon Function, History, and Strange Compatibility             CLOSED
+2.  Wave 2  - Room Roster, Repetition, Spice, and Dungeon Ecology              ACTIVE
+3.  Wave 10 - Interim Visual Engine and Release Scope                          PROMOTED NEXT
+4.  Wave 3  - Architecture, Structural Stamps, and Degradation
+5.  Wave 4  - Portals, Secrets, Vertical Connections, and Circulation
+6.  Wave 5  - Furniture Assemblies, Dressing, Clutter, and Empty Rooms
+7.  Wave 6  - Creature Scale, Capacity, Squeezing, and Party Participation
+8.  Wave 7  - Tactical Affordances and Encounter Reshaping
+9.  Wave 8  - Mutable and Destructible Environments
+10. Wave 9  - DM Strategic Cards and Environmental Authority
+11. Wave 11 - Workbench, Clay Corpus, and Teaching Loop
+12. Wave 12 - Migration, Persistence, Acceptance Gates, and Build Order
+```
+
+Wave 2 still must exhaust G2.1, G2.2, P2.12-P2.20, every generated follow-up, and its explicit closure gate. The
+promotion does not permit skipping the active wave. Once Wave 2 closes, Wave 10 opens before Wave 3. If later
+architecture/tactical evidence contradicts the selected tray contract, Wave 10 reopens explicitly; later waves may
+refine realization but may not silently drift back into the full renderer as the default.
+
+The promoted Wave 10 must settle, at design level:
+
+- one shared player-facing `SceneTray` grammar across dungeon/interior, town/social, wilderness/exploration,
+  travel/map, and battle scenes, with typed adapters rather than separate unrelated visualizers;
+- whether combat reconfigures the same established tray, which additional tactical precision it may reveal, and
+  how it avoids inventing positions that exploration never established;
+- the default spatial abstraction and uncertainty language: exact cells where required, zones/relations where
+  sufficient, and no false precision for facts the engine does not own;
+- the simplified composition budget: floor/ground, boundaries, connections, elevation, cast, focal/interactive
+  objects, hazards/cover, environmental state, and a bounded dressing layer;
+- the release camera/framing and representation choice among lit schematic, shallow-oblique tactical diorama,
+  hybrid storyboard, range/relationship fallback, and any controlled combination;
+- the preserve/rewire/archive boundary for current graphics wins: lighting, cast shadows, normal maps, materials,
+  sprites, palettes, effects, environmental beauty, state transitions, interaction tells, and useful asset libraries;
+- the rule that visual downgrade reduces generator complexity, scene breadth, and representational precision where
+  appropriate - it does **not** authorize a dead flat grid, abandonment of beauty, or deletion of the 3D engine;
+- a small cross-mode clay/capture corpus and measurable acceptance gate that proves the chosen tray on dungeon,
+  town, wilderness/exploration, travel/map, social, and battle states before later waves optimize for it.
+
+The current full 3D diorama remains a feature-flagged laboratory/future renderer and a source of proven lighting,
+material, sprite, effect, and staging techniques. The promoted wave chooses a simpler production projection; it
+does not destroy the research investment that made the simplification visually credible.
+
 ### Questionnaire preservation and additive Gemini-reference pass (2026-07-20)
 
 The original questionnaire has not been replaced. The preserved baseline consists of:
@@ -534,7 +588,7 @@ WAVE 2        O2.1-O2.11 answered
 CURRENT       G2.1 SceneFactGraph promotion, inside generated follow-ups after 10.G2.1.13
 PENDING NOW   profile-local versus product/shared P3 certification scope
 NEXT          finish G2.1 -> G2.2 CrisisChain -> P2.12
-AFTERWARD     P2.13-P2.20 -> Wave 2 closure audit -> Wave 3
+AFTERWARD     P2.13-P2.20 -> Wave 2 closure audit -> PROMOTED WAVE 10 -> Wave 3
 ```
 
 This means “return to Wave 2 Question 12” refers to continuing the Wave 2 numbering sequence. There was no
@@ -961,14 +1015,44 @@ CrisisChain, faction/actor knowledge, mutable environments, and creative envelop
 
 #### Wave 10 - Interim Visual Engine and Release Scope
 
-**Status:** prospective P10.1-P10.12 plus additive G10.1-G10.2. Inherits authoritative spatial/scene state from
-Waves 3-8 and refuses to change canon for presentation convenience.
+**Status:** **PROMOTED to the first wave after Wave 2**, prospective P10.0-P10.12 plus additive G10.1-G10.2. It
+inherits Wave 1/2 semantic, roster, flow, promotion, and authority truth; it sets the shared SceneTray target and
+required projections for Waves 3-9. Those later waves may expose explicit reopenings but may not let renderer
+convenience become canonical truth.
+
+##### Prospective amendment record - promotion to shared SceneTray gate
+
+This promotion adds P10.0 and expands three prospective questions. Their earlier 2026-07-20 wording is preserved
+here rather than silently overwritten:
+
+- `P10.1` previously asked: “Which range/relationship view, lit schematic, tactical diorama, hybrid storyboard,
+  exact cell board, text/card surface, and retained 3D theater roles best serve ordinary play, combat, exploration,
+  accessibility, debugging, and future expansion; which becomes the release default?” The expansion names the
+  shared town/social and travel/map adapters and asks for one controlled default experience.
+- `P10.9` previously asked: “Does combat reconfigure one persistent scene, switch views, or open a tactical layer;
+  how do conversation, investigation, CrisisChains, travel, split parties, and aftermath retain spatial and visual
+  memory across mode changes?” The expansion makes the shared scene identity across map, town, exploration,
+  dungeon, and battle explicit.
+- `P10.12` previously asked: “Which fixed canonical scenes, gameplay-scale captures, renderer comparisons, beauty
+  targets, secrets, promotions, scale extremes, topology changes, devices, accessibility paths, and failure
+  fallbacks decide the release default and prove it more truthful/useful than the current view?” The expansion
+  requires named cross-mode corpus coverage and adds simpler as an acceptance dimension.
+
+No accepted answer existed for these prospective questions. The amendment changes future coverage and execution
+priority, not a prior ruling.
+
+##### Shared SceneTray thesis and adapters
+
+- **P10.0 - one tray grammar, typed scene adapters:** What common `SceneTray` contract must dungeon/interior,
+  town/social, wilderness/exploration, travel/map, and battle share; which differences require typed adapters; and
+  how does combat reconfigure an established tray instead of replacing it with an unrelated tactical map?
 
 ##### Representation choice and canonical projection
 
-- **P10.1 - target representation portfolio:** Which range/relationship view, lit schematic, tactical diorama,
-  hybrid storyboard, exact cell board, text/card surface, and retained 3D theater roles best serve ordinary play,
-  combat, exploration, accessibility, debugging, and future expansion; which becomes the release default?
+- **P10.1 - target representation portfolio:** Which range/relationship view, lit schematic, shallow-oblique
+  tactical diorama, hybrid storyboard, exact cell board, text/card surface, and retained 3D theater roles best serve
+  ordinary play, town/social scenes, travel/map, exploration, combat, accessibility, debugging, and future
+  expansion; which controlled combination becomes the one release-default SceneTray experience?
 - **P10.2 - state-to-visual contract:** Under G10.1, how does every target view project current rooms/zones,
   connections, elevations, cast locations, scale, active props, hazards, conditions, damage, routes, vehicles,
   secrets, and transitions without inventing or omitting canonical nouns?
@@ -996,18 +1080,20 @@ Waves 3-8 and refuses to change canon for presentation convenience.
 
 ##### Modes, budgets, generation, and visual acceptance
 
-- **P10.9 - exploration/combat/noncombat continuity:** Does combat reconfigure one persistent scene, switch views,
-  or open a tactical layer; how do conversation, investigation, CrisisChains, travel, split parties, and aftermath
-  retain spatial and visual memory across mode changes?
+- **P10.9 - map/town/exploration/combat continuity:** How do travel/map, arrival, town/social interaction,
+  wilderness exploration, dungeon movement, investigation, CrisisChains, battle reconfiguration, split parties,
+  and aftermath retain one scene identity, cast/object continuity, and visual memory across adapters and mode
+  changes?
 - **P10.10 - performance, device, UI, and accessibility:** What frame/memory/load budgets, quality tiers, input
   modes, text alternatives, color/contrast, scale controls, reduced motion, screen-reader/live-region behavior, and
   fallback representations define the supported release surface?
 - **P10.11 - assets, exact generation, and rollback:** How do approved libraries, sockets, procedural composition,
   governed image generation, semantic slot specs, review/certification, caches, deterministic fallbacks, feature
   flags, and retained old assets make a no-human visual lane reversible and canon-safe?
-- **P10.12 - Wave 10 acceptance corpus:** Which fixed canonical scenes, gameplay-scale captures, renderer
-  comparisons, beauty targets, secrets, promotions, scale extremes, topology changes, devices, accessibility paths,
-  and failure fallbacks decide the release default and prove it more truthful/useful than the current view?
+- **P10.12 - Wave 10 acceptance corpus:** Which fixed canonical dungeon, town/social, wilderness/exploration,
+  travel/map, and battle scenes; gameplay-scale captures; renderer comparisons; beauty targets; secrets;
+  promotions; scale extremes; topology changes; devices; accessibility paths; and failure fallbacks decide the
+  release default and prove it simpler, more truthful, and more useful than the current composed 3D view?
 
 #### Wave 11 - Workbench, Clay Corpus, and Teaching Loop
 

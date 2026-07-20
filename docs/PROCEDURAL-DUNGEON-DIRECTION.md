@@ -15329,3 +15329,160 @@ One material boundary remains to confirm before this NPC follow-up is exhausted:
 DM/selector explicitly promotes retain their exact identity in a bounded hand/reserve? This is the recommended
 rule. Keeping every expired candidate's identity, even in compact form, would recreate the cumulative-growth
 problem at a different layer.
+
+### 10.SWEEP.6 Final NPC-pool ruling and material G2.1 follow-up - private DM deliberation sandbox
+
+Adam accepts G2.1-NPC-POOL. Ordinary expired candidates and incoherent/scrambled candidates with no useful
+continuity handles release and reset their reusable runtime slots. Only candidates explicitly promoted because
+they have worthwhile coherence, identity, relationship, motif, role, or callback handles retain their exact
+identity in the bounded DM hand/reserve. Rooted NPCs remain in the separate permanent canonical store. The NPC
+pool follow-up is exhausted; later numeric capacities and replacement weights retain their assigned owners.
+
+Adam also records an unrelated but directly relevant AI-DM research recollection: Hidden Door reportedly found
+that giving its DM/narrative agent a sandbox scratchpad—a place to think outside the system's action constraints—
+produced higher-quality, more consistent in-system actions. The exact source for that finding is not present in
+Genesis's downloaded nine-paper procedural-layout corpus, and a July 20 public-source check found descriptions of
+Hidden Door's decomposed narrative/game-state architecture but not the exact scratchpad experiment. Preserve the
+attribution as Adam's research recollection until the original video/paper/talk is identified; do not convert it
+into a falsely sourced empirical claim.
+
+The architectural insight is nevertheless strong and testable on its own. The DM needs somewhere to **consider**
+ideas that are not yet legal world actions. Otherwise, forcing every intermediate thought directly into the final
+event schema can make the model optimize for schema compliance before it has discovered the best dramatic or
+causal interpretation.
+
+#### Plain-English distinction
+
+The DM may privately ask itself questions such as:
+
+- What surprising connection would make these facts feel intentional rather than random?
+- Which existing NPC would care about this, and why?
+- What would a clever enemy attempt against the player with the resources it actually has?
+- Is the obvious SRD item less expressive than a licensed invention?
+- Could the turtle communicators become a relationship payoff, a liability, or an enemy interception vector?
+- Which candidate interpretation preserves the roll while making the room more memorable?
+
+Those are **thoughts and hypotheses**, not world facts. The DM can temporarily imagine impossible, contradictory,
+overpowered, or unsupported versions while comparing ideas. It receives canonical context, but every intermediate
+candidate does not have to satisfy the action/event grammar. Nothing in the sandbox can spend a resource, move an
+NPC, mint an item, reveal a secret, reserve a card, change a clock, or tell the player that something happened.
+
+The selected idea must then leave the sandbox through the same constrained proposal/validation boundary already
+accepted for creative invention and player action:
+
+```text
+read-only canonical snapshot + current dramatic/operational obligations
+  -> PRIVATE DELIBERATION SANDBOX
+       diverge: associate, hypothesize, compare, anticipate, reject, combine
+       converge: select an intended story/action meaning and identify assumptions
+  -> typed InventionProposal / ActionPlan / StrategyProposal / commit-header choice
+  -> engine resolves authority, targets, resources, knowledge, mechanics, versions, and consequences
+  -> accepted ResolutionReceipt / CreationReceipt or honest rejection/repair
+  -> player-visible narration from committed truth
+```
+
+The freedom is therefore **outside the final action schema**, not outside consequence, canon, or safety. The DM is
+free to think of flooding the prison, bribing the guard, inventing turtle communicators, or connecting a discarded
+saint's medal to an old vow. It is not free to assert any of those things happened until the engine finds or creates
+the required authority and commits the result.
+
+#### Options
+
+**Option A - direct constrained output only.** Require the DM to produce a valid action/header immediately from the
+active digest. This is cheapest and fastest, and remains appropriate for routine receipt narration, but can collapse
+creative search into the first schema-shaped answer and encourage locally compliant yet narratively dull choices.
+
+**Option B - sovereign scratchpad whose conclusions can directly become truth.** Let the DM reason freely and then
+trust its conclusion. This preserves creativity but erases the engine/DM boundary: unsupported assumptions in the
+scratchpad can become invented inventories, teleported NPCs, false knowledge, free resources, or narration the
+validator cannot honor. **Rejected.**
+
+**Option C - private, non-authoritative, tiered deliberation sandbox (recommended).** Let the DM explore freely in an
+ephemeral private workspace, require its chosen conclusion to compile into a typed proposal, and permit only the
+validated receipt to affect canon or visible narration.
+
+Use deliberation proportionally:
+
+```text
+ROUTINE
+  pre-resolved movement, attack, inventory, ordinary inspection, receipt narration
+  -> no separate scratchpad or only the model's minimal hidden reasoning
+
+CONTEXTUAL
+  callback choice, NPC tactic, scene composition, consequence form, clue connection
+  -> bounded private candidate comparison inside the normal turn budget where possible
+
+SYNTHESIS / HIGH IMPACT
+  new invention, major hostile plan, topology change, irreversible consequence, contradictory canon repair
+  -> larger deliberation budget and, when necessary, the already accepted preflight/second-call lane
+```
+
+This keeps a good routine turn from paying the latency/token cost of a miniature writers' room while giving the
+creative DM seat genuine room to operate when judgment matters.
+
+#### Concrete Genesis examples
+
+**Turtle communicators:** the sandbox may consider an SRD sending item, matching brass turtle shells, a one-way
+whisper token, a linked pair that warms near its partner, or a hostile interception weakness. It compares those
+against the relationship payoff and earned power envelope. The final `InventionProposal` selects the paired turtle
+concept and states its assumptions; the engine, not the scratchpad, establishes range, charges, custody, linked ids,
+and interception rules.
+
+**Enemy invention against the player:** an enemy strategist privately considers collapsing a stair, bribing a guide,
+poisoning a cistern, impersonating an ally, or jamming the turtle communicators. The sandbox can explore all five.
+The final `StrategyProposal` must use only the enemy's knowledge, time, access, resources, doctrine, and mechanical
+authority. A vivid thought is not a free hostile asset.
+
+**Dungeon throughline:** the DM sees a plague bell, an unpaid ferryman, and an unrooted scarred-goblin card. It may
+privately test several connections. If it selects the goblin as the ferryman's estranged former partner, casting,
+relationship, and lore proposals still require validation/rooting. Rejected private connections never become
+Codex debris.
+
+#### Persistence, privacy, and model portability
+
+Genesis should not require access to or storage of a provider's verbatim chain of thought. The capability may be
+implemented through provider-hidden reasoning, an ephemeral candidate blackboard, a compact plan/critic pass, or a
+separate bounded preflight. The contract is behavioral: the DM gets non-authoritative deliberation capacity before
+committing a typed proposal.
+
+By default, raw scratchpad material is ephemeral, noncanonical, absent from player saves/journals/Codex, and never
+projected to the player. Store the selected proposal, declared assumptions, compact reason/provenance tags,
+validation result, receipt, model/protocol version, and performance metrics needed for replay and QA. Development
+fixtures may capture fuller traces under explicit privacy/debug policy; production correctness must not depend on
+exposing private reasoning.
+
+The proposal validates against the current versioned snapshot at commit time. If state changes while the DM thinks,
+the proposal rebases, repairs, or fails without showing consequential prose. Scratchpad freedom is not a stale-write
+exception.
+
+#### Research and cost filter
+
+The downloaded procedural papers do **not** test LLM scratchpads. They support only adjacent divisions: Tutenel's
+semantic plans remain distinct from solver realization; Merrell permits candidate exploration and human pinning;
+constraint-based systems generate/evaluate several candidates before committing placement. That evidence supports
+separating ideation from legal realization, but it cannot establish that an AI-DM scratchpad improves story quality.
+Genesis must test that claim directly.
+
+Public Hidden Door descriptions found during the source check say that player language maps into structured game
+state, story threads/tropes provide controllable building blocks, and specialized models decompose the larger
+narrative task. Hidden Door's own demo commentary also describes AI transforming player words into intent and
+seeking interesting story paths while constraints fuel creative thinking. These are directionally compatible with
+Option C, but none of the located pages documents the recalled scratchpad comparison.
+
+Option C has **medium runtime/protocol and QA cost**. It consumes extra inference tokens and possibly latency on
+non-routine turns; requires read-only snapshot discipline, proposal/receipt separation, stale-version handling,
+scratchpad-leak tests, bounded budgets, privacy/retention policy, and A/B evaluation. Maintenance must prevent prompt
+changes from making the sandbox verbose but useless. Acceptance should compare direct-constrained versus tiered-
+deliberation turns on mechanical validity, contradiction rate, callback use, novelty without noun leakage, hostile
+fairness, human preference, latency, and cost.
+
+#### Recommendation and question
+
+Accept Option C as the best-case DM cognition boundary: private divergent/convergent thought may range beyond the
+final action grammar, but it is read-only and non-authoritative; only a typed, freshly validated proposal can alter
+the world or license player-visible consequences. Use no/minimal deliberation for routine receipts, bounded
+deliberation for contextual choices, and deeper preflight for synthesis/high-impact decisions. Preserve selected
+proposals and receipts, not raw private chain of thought, as the normal canonical/audit record.
+
+**G2.1-DM-SCRATCH:** accept that tiered private-deliberation model, subject to later A/B proof rather than treating
+the recalled Hidden Door result as sufficient evidence by itself?

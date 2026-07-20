@@ -12496,3 +12496,127 @@ earned C2 envelope and independent NPC/place/secret/resource facts remain resist
 right amount of ordinary C1 connective freedom and earned C2 artifact freedom, or should either band be broader?
 If accepted, the next follow-up is what happens when the engine cannot compile the DM's proposed mechanics without
 materially changing the concept - reject, negotiate, abstract, defer, or create a new runtime precedent.
+
+#### 10.G2.1.7 Ruling and follow-up - creation authority is valence-neutral; how does hostile synthesis stay fair?
+
+Adam accepts the recommended two-axis creation matrix and its current C1/C2 boundary, with one important
+clarification: the DM's synthesis authority is not a player-reward dispenser. The DM may invent things that help
+the player, oppose the player, burden the player, tempt the player, complicate an existing situation, or mix those
+valences, provided every creation uses the same source-posture, impact-band, provenance, persistence, knowledge,
+and reach constraints. An AI DM that can invent turtle comms but cannot invent an unforgettable enemy tool,
+dungeon adaptation, curse form, faction response, or consequential complication has lost half of the DM seat.
+
+An envelope therefore has no inherent `beneficial` flag. It has an authority source, impact/reach budget, eligible
+owners and targets, effect/lens permissions, causal and knowledge basis, and perhaps a dramatic orientation such
+as reward, opposition, cost, temptation, adaptation, or mixed consequence. The orientation guides composition; it
+does not change the legality test. A hostile C2 noun is just as canonical, lootable where physically appropriate,
+transferable where its rules permit, visually bound, and callback-eligible as a beneficial C2 noun. It cannot
+disappear when the encounter ends merely because it was invented to oppose the player.
+
+##### Concrete examples
+
+**The turtle comms acquire an enemy throughline:** after an antagonist has observed or learned about the paired
+communicators and has time, capability, and an opposition/adaptation receipt, the DM may synthesize a shell-shaped
+listening lure, a counter-signal ritual, or an NPC's distinctive attempt to impersonate one holder. The engine
+must compile the exact proposal within the authorized effect and impact band. The DM may not decide retroactively
+that the original communicators were always bugged unless that latent property was committed by their creation
+receipt or later installed through a trackable action. A counter should normally pressure the item's use, create a
+choice, or open a counterplay path rather than silently nullify the prized invention.
+
+**A dungeon learns from repeated fire:** an existing caretaker, ecology, curse, faction, or adaptive-dungeon owner
+may earn a response after the player repeatedly burns obstacles. Within a C2 adaptation envelope the DM might
+invent soot-sensing blind sentries, firebreak doors that redirect smoke, or an ash-fed hazard with an exploitable
+cooling weakness. The response begins now and persists. The DM cannot reveal that every previously cleared room
+always contained fireproof ambushers just because the player's tactic is working too well.
+
+**An enemy bears a bespoke suppression chain:** an enemy/front preparation receipt plus suitable resources may
+license a C2 or C3 item intended to interfere with teleportation. If the item is physical and the player defeats
+its holder, it remains in the world and may be captured, destroyed through its established rules, studied, sold,
+or used by another viable noun. Encounter balance does not authorize post-defeat deletion. If player ownership
+would be dangerous, that danger must be handled by the chain's precommitted costs, attunement, dependencies,
+custody pressures, or terminal disposition - not by declaring that it was only an enemy effect after the fact.
+
+**A failed delve creates a cruel opportunity:** a complication or consequence receipt may let the DM synthesize a
+new debt marker, predatory offer, curse expression, hostile rumor vehicle, or pursuer's tool even if no enemy had
+planned that exact form in advance. This is fair because the resolved failure licenses a new downstream fact. It
+does not license changing the room the player already searched, the contents of a letter already read, or what an
+NPC knew before the failure.
+
+##### Adversarial-timing options
+
+**Option 1 - exact authority symmetry with no additional timing rule.** Any envelope can point for or against the
+player, and ordinary validation is deemed sufficient. This is simple and maximizes improvisation, but it allows
+quantum traps and perfect reactive counters: the DM can wait for the player's choice and then synthesize whatever
+would punish it while claiming the impact budget was legal.
+
+**Option 2 - strict hostile precommit.** Anything opposing the player must be fully instantiated before the player
+enters the affected place, begins the scene, or selects the relevant tactic. This provides strong procedural
+fairness and easy replay auditing. It also makes an AI DM strangely inert: factions cannot respond creatively,
+dungeons cannot adapt, and consequences must be anticipated as an enormous combinatorial catalog.
+
+**Option 3 - causal commitment windows with counterplay (recommended).** Hostile synthesis is legal whenever a
+canonical owner or resolved event has current authority to cause a new fact. The creation must record when it
+became true, what caused it, what the responsible actor/system knew, which resources/time/reserve it used, its
+impact band, and how the player may perceive or answer it. It may respond to prior player behavior but cannot
+rewrite already resolved facts. This preserves live invention and makes opposition feel intelligent without
+letting the DM cheat.
+
+The recommended policy divides commitment into four practical windows:
+
+1. **Latent world content** must be committed before reveal or selected from a prevalidated latent reserve owned
+   by the dungeon/place/front. A hidden door, occupant, stockpile, secret property, or trap cannot be created after
+   the player's successful observation should have resolved it.
+2. **Prepared actor response** may be synthesized after an actor plausibly learns the relevant information and
+   receives enough time, access, and resources. Its receipt records the knowledge and preparation path. The DM may
+   author the exact clever response; the engine owns capacity and elapsed opportunity.
+3. **Immediate consequence** may be synthesized during resolution when a roll, cost, bargain, complication, or
+   triggered rule explicitly grants that envelope. It becomes true at that moment and cannot imply an unsupported
+   earlier history.
+4. **Ongoing systemic adaptation** may be synthesized by a licensed ecology, curse, faction, nemesis, or dungeon
+   director as its clocks/evidence/reserves permit. Adaptation should expose signals and counterplay proportional
+   to impact, and ordinarily pressure a successful player pattern rather than hard-nullify it.
+
+`Counterplay` need not mean advance warning of every surprise. It means the invention participates in the game's
+causal grammar: it leaves evidence, has limits, admits discovery or response, and does not exist solely as an
+unanswerable veto. A C1 hostile detail cannot be accumulated into leverage; C2-C4 hostile creations consume their
+proper envelopes and world resources. Repeated opposition aimed at the same player capability also needs pressure
+accounting so several individually legal creations do not quietly erase that capability from play.
+
+##### Callback and persistence consequences
+
+Hostile inventions enter the same noun/callback system already accepted for all viable canon. An enemy's named
+chain may become loot, evidence, a faction symbol, a later countermeasure, or the root of a related derivative.
+An adaptive ash sentry may survive, migrate, be copied, teach the player something, or leave a callback stub after
+destruction. The DM can later draw those stubs to create related allies, enemies, methods, materials, rumors, or
+institutions. Valence may change over time; provenance and identity do not.
+
+This symmetry is important to world cohesion. If only player-facing gifts persist while hostile inventions vanish
+after serving an encounter, the world reveals its scaffolding. If both persist, the DM's antagonism manufactures
+future handles rather than disposable difficulty.
+
+##### Research, implementation, and maintenance filter
+
+The procedural research supports constrained live response rather than either unconstrained fiat or exhaustive
+preauthoring. Tutenel's separation of semantic `what` from compiled `how` lets the DM author an exact hostile form
+while the engine verifies capacity and placement. Mixed-initiative work preserves authored high-value choices
+inside generated structure. Declarative constraint work, especially Whitehead's unsatisfiable-request handling,
+argues for explicit refusal or renegotiation when a desired counter has no legal knowledge, time, resource, or
+effect path. Plan- and graph-based approaches make causal ordering and already-resolved facts first-class rather
+than treating the current dramatic need as sufficient evidence.
+
+Option 3 adds **moderate-to-high implementation cost** beyond the creation matrix: causal and knowledge receipts,
+commitment timestamps/windows, actor resource/preparation checks, latent-reserve boundaries, telegraph/counterplay
+metadata, repeated-pressure accounting, and replay fixtures that attempt common forms of retroactive cheating.
+Maintenance must test both directions - an invention should not exceed its envelope merely because it hurts the
+player, and the engine should not sand down every hostile concept until opposition becomes generic. Option 1 is
+cheaper but cannot establish trust; Option 2 is auditable but carries an unbounded authoring/catalog cost and
+throws away one of an AI DM's strongest capabilities.
+
+**Question for Adam:** should hostile and mixed-valence synthesis use Option 3: causal commitment windows with
+counterplay? In plain English, the DM may invent against the player whenever a real actor, system, or resolved
+consequence has earned the right to cause something *now*; it may not invent something that must secretly have
+been true *before* the player's already-resolved choice. The recommendation also makes physical hostile inventions
+fully persistent and recoverable under their precommitted rules. If accepted, the next follow-up is whether an
+adaptive counter should normally create pressure and choices, with hard nullification allowed only by an explicit
+higher-band authority; after that, G2.1 still must decide what happens when the engine cannot compile the DM's
+exact proposed mechanics without materially changing the concept.

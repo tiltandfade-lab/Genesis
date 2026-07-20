@@ -11955,3 +11955,171 @@ especially the rule that player-created significance can qualify an otherwise or
 repetition cannot? If accepted, the next follow-up will decide exactly what a callback card may authorize the DM
 to create *related to* its source stub, and which connections remain texture, proposals, engine-owned rolls, or
 forbidden retcons.
+
+#### 10.G2.1.4 Ruling and follow-up - selective callback eligibility accepted; what related growth may a card license?
+
+Adam accepts Option 3 and its viability boundary. World memory remains broad; the DM's playable hand remains
+selective. Player-created consequence can qualify an ordinary noun, while mere repetition by the DM cannot make
+the DM's own callback increasingly salient. Callback cards are opportunity-time projections over canonical
+owners/stubs and use the existing priority/saturation scheduler.
+
+The next decision is the creative authority inside one of those cards. Adam wants the DM to use viable stubs not
+only to replay the original noun, but also to create related material that produces throughlines and greater world
+cohesion. The danger is that “related” ranges from a deterministic consequence to a loose aesthetic association;
+if those share one permission, a callback card becomes authority to retcon anything into relevance.
+
+##### Related-growth options
+
+**Option 1 - recall only.** A callback card may reproject the same object, scar, witness, fact, or unresolved clock,
+but may not generate a new related person, object, place, consequence, clue, relationship, or reward. This is
+maximally safe and cheap. It preserves continuity but produces a small-feeling world: the burned door can recur,
+yet the lighting shortage cannot affect new scenes and nobody may react unless they were fully generated earlier.
+
+**Option 2 - free associative DM expansion.** The card gives the DM authority to invent any semantically or
+thematically related material. Oil may produce a supplier, investigator, fire cult, scorched map, family history,
+or convenient new cask whenever the DM sees a narrative opportunity. This maximizes spontaneity but collapses
+the engine-owned-nouns law, permits retroactive convenience, confuses metaphor with causality, and creates
+recursive state growth whose provenance, scope, knowledge, and power cannot be tested reliably.
+
+**Option 3 - typed relation-growth envelope with four authority lanes (recommended).** A callback card does not
+itself mint arbitrary canon. It licenses a bounded generation request rooted in the source stub. The card declares
+which relation modes are legal, which canonical owner must receive the result, how much new canon/mechanical
+impact is available, which lane resolves it, and what must not be retconned.
+
+The four authority lanes are:
+
+```text
+REPLAY
+  project existing owner/stub truth; create no new canon
+
+DERIVE
+  apply an authored deterministic consequence/reaction from current state;
+  commit the resulting owner deltas and receipts
+
+ROLL
+  invoke an engine-owned table/generator/cast/flow/reward adapter inside the
+  card's typed relation and scope budget; the engine owns the new nouns
+
+PROPOSE
+  DM supplies a bounded low-impact connective candidate where no authored
+  result covers the situation; validator accepts/rejects/amends it and commits
+  before consequential narration
+```
+
+`PROPOSE` is not a bypass. A proposal cannot create a high-impact resource, NPC, route, hidden property,
+mechanical advantage, secret truth, terminal outcome, or campaign-scale relationship without moving through
+an appropriate engine-owned roll/adapter. The DM may choose the dramatic role - “let the burned threshold create
+a social reaction now” - while the engine determines which existing or newly rolled witness, guard, claimant,
+or institutional role legally fills it.
+
+##### Typed relation modes
+
+A viable stub may expose some subset of these modes:
+
+1. **direct recurrence** - the same object, actor, place, scar, condition, or relationship returns;
+2. **causal consequence** - resource loss, obstruction, repair, contamination, pursuit, operational strain,
+   institutional response, or another effect follows from current state;
+3. **evidence and knowledge** - witness testimony, tracks, residue, records, recognition, rumor, mistaken belief,
+   investigation, or revelation grows while preserving observer boundaries;
+4. **provenance and network** - maker, supplier, prior owner, maintainer, claimant, destination, sibling object,
+   contractual link, or regional dependency expands through an existing/latent network owner;
+5. **social reaction and cast** - a roster role or connected population supplies someone who remembers, wants,
+   fears, repairs, imitates, condemns, or bargains over the source fact;
+6. **transformation and descendant affordance** - a scar, adaptation, copied technique, repaired form, derivative
+   tool, new route, or changed operating practice follows through a typed transformation recipe;
+7. **pressure/front continuation** - an unresolved consequence becomes or advances a clock, pursuit, shortage,
+   dispute, obligation, or retaliatory response;
+8. **reward/keepsake payoff** - a bounded reward envelope consumes event, participant, relationship, and motif
+   provenance to mint an item, title, contact, technique, map, or story tool;
+9. **motif/analogy echo** - the DM may reuse imagery, phrasing, humor, fear, or aesthetic shape as texture through
+   the separate `Motif/CallbackDeck`; this creates no causal or mechanical relationship by implication.
+
+The distinction between **causal**, **provenance**, **social**, **evidentiary**, and **motif** edges is mandatory.
+Two things may rhyme without sharing an origin. A related image may be free narrative texture; a shared supplier,
+witness, bloodline, material flow, or mechanical capability must be validated canon.
+
+Each projected card should minimally contain:
+
+```text
+source stub/owner and current or terminal state
+why it qualified and current priority
+allowed relation modes and required destination owners
+eligible scopes, actors, opportunities, and knowledge boundaries
+authority lane per mode (REPLAY/DERIVE/ROLL/PROPOSE)
+new-canon count/band and mechanical-impact ceiling
+required table, adapter, recipe, or validation contract
+must-preserve invariants and forbidden retcons
+recurrence/mode budgets, cooldown, expiry, and payoff state
+result receipt plus descendant eligibility rule
+```
+
+##### Growth and anti-contrivance laws
+
+1. A card authorizes **a relation request**, not a predetermined favorable result.
+2. Every new fact receives its own canonical owner and a typed provenance edge back to the source stub.
+3. New related nouns do not automatically inherit the source's salience, callback budget, or priority. They must
+   earn viability through player engagement, consequence, or an unresolved hard dependency.
+4. A callback cannot create a property after seeing the roll whose stakes depended on that property. The queued
+   unknown-property follow-up still owns that pre-resolution boundary.
+5. Terminal facts recur only through legal residue, evidence, history, relationship, motif, restoration, or
+   transformation. The DM cannot physically replay a consumed object or expired route without a real return path.
+6. Geography, time, access, cast position, observer knowledge, resource quantities, and site/room legality remain
+   authoritative. A witness cannot appear where they never were; a supplier does not imply stock at the next site.
+7. Related growth enters the existing causal-bundle and saturation vector. A chain may deepen one situation but
+   may not bypass projection capacity or due higher-priority cards.
+8. Per-card and per-root growth budgets prevent recursive callback fractals. Player pursuit may deliberately
+   deepen the root; DM enthusiasm alone may not.
+9. Related generation may increase meaning without increasing mechanical power, threat scale, rarity, or Spice.
+10. No callback decides a player action, feeling, attachment, or interpretation. It offers a real handle and lets
+    the player decide whether the throughline matters.
+
+##### Concrete relation traces
+
+**Jail oil:** `REPLAY` can show the same scorched threshold or depleted cask. `DERIVE` can propagate an already
+owned lighting shortage into darker cells or a repair task. `ROLL` can ask the population/cast owner for the legal
+staff role who notices, the flow/network owner for a supplier or delivery record, or the evidence owner for how
+the oil/fire was traced. `PROPOSE` may contribute a low-impact detail such as the quartermaster's distinctive
+counting marks if validated and captured. Provenance may generate a supplier relationship; it does not place a
+convenient oil cask in the next boss room. A guard accusation requires knowledge/evidence; the DM cannot choose
+an unrelated rival as culprit for dramatic convenience.
+
+**Gemini mace:** direct recurrence can show the same mace, hull puncture, or repaired scar. A causal descendant
+may be a reinforcement plate or altered piloting practice; a social reaction may come from a tracked passenger,
+pursuer, owner, or repair crew; evidence may let someone recognize the vehicle; a keepsake envelope may recall
+the cooperation and escape. A motif echo may reuse the visual idea of an anchor without claiming that every
+vehicle shares the same fuel-line vulnerability. The mace cannot teleport between owners, and an expired route
+cannot return as physical access merely because its imagery is satisfying.
+
+**Ordinary spoon:** if the spoon exposed poison, an evidence card may lead to residue analysis, a witness who saw
+the serving, or a provenance roll for the kitchen/cutlery owner. A motif echo might let a later NPC jokingly call
+another improvised tool “the royal spoon.” None of those permissions automatically create a poison conspiracy,
+the culprit, or a magic spoon; those require the appropriate secret, cast, item, and resolution owners.
+
+##### Research, implementation, and maintenance filter
+
+The scanned procedural papers again support the relation contract rather than the dramatic policy itself.
+Tutenel et al. (2009/2010) attach materials, services, features, class relationships, scene-specific overrides,
+context, and dependency ordering to explicit semantic owners; this is a strong model for typed relation modes and
+compiled authority lanes, not for free association. Horswill and Foged require an explicit graph and declared
+scope before propagating a guarantee. Green et al. show why independent stages should consume previous output
+rather than rewrite it. Henderson and Whitehead warn that accumulating simultaneous late constraints increases
+runtime and can produce difficult tails; relation growth must therefore be budgeted and projected into bounded
+active slices. None of these papers proves a narrative throughline generator, so Genesis's accepted engine-owned
+nouns, card scheduler, causal bundles, promotion receipts, and saturation laws remain controlling authority.
+
+Option 3 has a **medium-high implementation cost** for a relation registry, card envelopes, authority-lane
+routing, owner adapters, budgets, and transactional receipts. Its **content cost is medium to high** because each
+site/prop/material/relationship family needs reusable relation recipes and honest negative cases. Runtime remains
+bounded because only cards in the thin opportunity-time hand invoke growth. The largest long-term cost is not
+storage but interaction QA: factorized types avoid Cartesian code, yet important combinations still need authored
+expectations and golden traces. Tests must prove both cohesion and restraint - meaningful descendants recur,
+while unrelated convenience, recursive salience inheritance, witness teleportation, motif-as-causality, and
+post-roll property invention fail loudly.
+
+**Question for Adam:** choose or amend the related-growth policy. The recommendation is Option 3: callback
+cards license typed, budgeted relation requests through `REPLAY`, `DERIVE`, `ROLL`, or validated `PROPOSE`, with
+the nine relation modes above and no automatic salience inheritance for descendants. Does this give the DM enough
+creative authority to build surprising throughlines, or should the DM have more direct authority over any lane or
+relation type? If accepted, the next follow-up will decide whether related growth may ever establish a new root
+with its own independent future, and exactly what event makes that descendant stop being “part of the callback”
+and become a first-class story thread.

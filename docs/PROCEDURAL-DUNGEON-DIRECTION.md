@@ -10619,3 +10619,120 @@ Three plausible policies remain:
 **Open follow-up:** should Mythic/Worldbreaker be a campaign setting that may be changed between resolved
 actions or scenes, with every change ledger-recorded and strictly nonretroactive, while the profile is
 frozen from check authorization through cascade commit?
+
+#### 10.11.43 Ruling — reach-profile changes are between-resolution and nonretroactive
+
+Adam locks the recommended switching policy. Mythic/Worldbreaker is a persisted campaign setting that may
+change between completely resolved actions or scenes. It is not permanently fixed at campaign creation,
+and it is never a live post-roll escalation switch.
+
+- `CheckContract` snapshots the active profile id, version, normalized capabilities, and mod/source
+  provenance before the first d20;
+- that snapshot remains immutable through natural roll, magnitude roll, lens/count rolls, plan validation,
+  atomic commit, and narration receipt;
+- the setting UI is unavailable while an action/cascade is pending;
+- every profile change is a sourced Ledger/rules event with the effective world time and prior/new profile;
+- existing outcomes retain the profile snapshot under which they were created and are never upgraded,
+  reduced, rerolled, or reinterpreted after a switch;
+- scheduled/deferred manifestations continue under their originating mandate, while genuinely new actions
+  use the currently active profile;
+- save/replay, DM handoff, debugging traces, and mod reconciliation expose the active and originating
+  profile rather than inferring temperament from prose.
+
+This allows players to discover their preferred style without permitting a natural 20 to be held open
+while the campaign changes from Mythic to Worldbreaker. The profile-switch follow-up is closed.
+
+#### 10.11.44 Consolidated ruling — successful Crit Magnitude ladder
+
+Adam previously accepts the conservative skill-crit spreads as implementable, clarifying that magnitude 19
+is essentially magnitude 20 with only two lenses and no extra permanence: it is difficult enough to reach
+after a natural 20 that it should be generous. Combined with the later two-profile ruling, the successful
+ladder now resolves as follows:
+
+| Natural | Magnitude | Degree | Bonus resolution beyond core success |
+|---:|---:|---|---|
+| 20 | 1–15 | **Standard Critical Success** | No bonus lens; guaranteed best lawful ordinary success with style and excellence. |
+| 20 | 16–18 | **Amplified Critical Success** | One situation-reactive bounded reward lens; no extra persistent world mutation. |
+| 20 | 19 | **Legendary Critical Success** | Two distinct situation-reactive bounded reward lenses; no extra persistent world mutation. |
+| 20 | 20 | **Mythic Critical Success** | Open `d3 + 2` persistent lenses resolved under the snapshotted Mythic or Worldbreaker reach profile. |
+
+The same orthogonal lens axes may guide all three elevated degrees, but the adapter mode differs:
+
+- **bounded reward mode** at 16–19 may improve mastery, material reward, information, access, objective
+  progress, immediate social response, or established character expression; it cannot independently
+  install a permanent supernatural/campaign system;
+- **persistent mutation mode** at 20 uses typed owner events and may create durable person, place, law,
+  topology, group, threat, knowledge, character, and other lens effects at the selected reach profile.
+
+“No extra permanence” does not erase ordinary transaction truth. An opened lock stays open, awarded loot
+remains awarded, witnesses retain learned facts, and quest progress remains committed. The restriction is
+that the magnitude-16–19 lens does not independently mint a permanent world rule, supernatural trait,
+institution, Breach, or equivalent mutation.
+
+Magnitude-19 reward lenses cover distinct genuine anchors where possible. A low-tier reward container
+guarantees one materially affiliated reward improvement inside its legal envelope, because the target
+itself makes that lane active; its other lens may reward story, mastery, objective, character, or another
+genuine target affinity. The engine never reduces a later reward to reimburse the crit.
+
+This closes the reopened successful-band distribution and its bounded-spread count. Playtest evidence may
+later tune content and caps, but the implementable contract is now 15 faces Standard, 3 faces one-lens
+Amplified, 1 face two-lens Legendary, and 1 face persistent Mythic.
+
+#### 10.11.45 Open decision — should natural-1 magnitude mirror 15/3/1/1?
+
+The successful ladder is now mathematically and experientially clean. The failure side still uses the old
+provisional distribution in `CRIT-MAGNITUDE.md`: ten Standard faces, four minor-Amplified faces, five
+major-Amplified faces, and one Mythic face. That would make half of all natural-1 failures generate bonus
+complication lenses while only one quarter of natural-20 successes generate bonus reward lenses.
+
+The magnitude die runs downward on a natural 1: lower is worse. Three plausible calibrations remain.
+
+##### Option 1 — exact 15/3/1/1 mirror
+
+| Natural | Magnitude | Degree | Bonus resolution beyond core failure |
+|---:|---:|---|---|
+| 1 | 6–20 | **Standard Critical Failure** | Core failure at the declared ordinary stakes; no bonus lens. |
+| 1 | 3–5 | **Amplified Critical Failure** | One bounded situation-reactive complication lens; no extra persistent world mutation. |
+| 1 | 2 | **Legendary Critical Failure** | Two distinct bounded complication lenses; no extra persistent world mutation. |
+| 1 | 1 | **Mythic Critical Failure** | Open `d3 + 2` persistent failure lenses under Mythic or Worldbreaker reach, plus the Mythic end of the declared core stakes. |
+
+This gives success and failure the same 75% Standard / 15% Amplified / 5% Legendary / 5% Mythic shape
+after their triggering natural. It is easy to understand, table, trace, and mod. **Recommended.**
+
+##### Option 2 — failure spikes only at the very bottom
+
+Make magnitude 3–20 Standard, magnitude 2 Legendary, and magnitude 1 Mythic, with no one-lens Amplified
+failure tier. This reduces disruptive fumble comedy/cost and makes failure less punishing than success is
+generous, but discards the useful middle complication beat. It fits a more forgiving profile but is not the
+best universal baseline.
+
+##### Option 3 — retain the legacy asymmetric failure table
+
+Keep 11–20 Standard, 7–10 one lens, 2–6 two-to-three lenses, and 1 Mythic. This makes natural-1 cascades
+twice as common as natural-20 reward spreads and preserves the earlier authored table, but it no longer
+matches the newly accepted degree structure and will make foregrounded combat/check failures generate much
+more narrative/state workload than successes. **Not recommended.**
+
+Concrete cult-infiltration calibration under Option 1:
+
+- **1/6–20:** the cover fails within declared ordinary stakes—the guard refuses access or initiates the
+  established suspicion response;
+- **1/3–5:** one additional bounded complication fires, such as a credential being retained, a checkpoint
+  alert, or a time/noise cost;
+- **1/2:** two complications might expose the cover to this cell of the cult and advance the prisoner's
+  danger clock, without making the false name a permanent curse;
+- **1/1:** the core stakes reach their lawful Mythic failure end and three to five persistent lenses may
+  curse the false identity, empower the prophecy, unleash the threat, transform faction alignments, or open
+  a terrible route at the selected reach profile.
+
+The town-crystal rule remains intact: on a legitimate existential stabilization check, `1/1` may send the
+town into oblivion because terminal loss was in the declared stakes. The rolled persistent lenses describe
+the additional causal cascade; the profile determines whether that cascade stays concentrated or becomes
+Worldbreaker-scale.
+
+**Recommendation:** Option 1, the exact inverted mirror. It preserves the same emotional rhythm in both
+directions, keeps persistent change exclusive to double extremes, and makes the full Crit Magnitude table
+human-readable as one 15/3/1/1 pattern read upward for success and downward for failure.
+
+**Open decision:** should natural-1 magnitude lock to the exact inverted mirror—6–20 Standard, 3–5 one
+bounded complication lens, 2 two bounded complication lenses, and 1 Mythic `d3 + 2` persistent lenses?

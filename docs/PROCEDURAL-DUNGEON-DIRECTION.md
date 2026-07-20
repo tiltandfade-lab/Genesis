@@ -8295,3 +8295,127 @@ live at their highest honest scope, and only material exceptions create stored d
 especially the rules that natural/living/realm systems use typed reference envelopes, support condition is
 family-specific and optional, and the entire operational schema applies only to admitted capabilities and
 flows rather than every kind of world fact?
+
+#### 10.11.15 Ruling — factored operational state uses family-typed reference and support
+
+Adam accepts the corrected cross-domain form as sound. This explicitly clarifies Wave 2 Question 9:
+
+- operational state applies only to admitted material capabilities and flows that provide, transport,
+  transform, regulate, contain, protect, permit, communicate, or renew something and whose changed state
+  predicts dependent play;
+- it does not become a universal schema for identity, history, ownership, belief, mood, relationship,
+  aesthetics, or every ordinary object's condition;
+- the universal facets are scope, availability/coverage, performance/effectiveness, operating mode,
+  access/control, and pressure/load;
+- pressure/load is evaluated against a typed reference envelope: engineered capacity, natural sustainable
+  range, living tolerance/renewal, magical/realm coherence law, or social/institutional mandate and
+  throughput as appropriate;
+- support condition is an optional registered family—material integrity, biological vitality,
+  magical/planar coherence, network continuity, institutional support, or not applicable—rather than one
+  universal physical-health number;
+- effectiveness and quality name their obligation, beneficiary/output, and standard; they never imply
+  moral approval or player benefit;
+- cause/provenance, time/schedule, evidence, buffers/substitutes, dependency thresholds, and
+  recovery/terminal state remain required metadata for material non-normal exceptions;
+- familiar labels such as strained, degraded, substituted, dormant, blocked, failed, repurposed, and
+  destroyed are derived summaries, and several may apply simultaneously;
+- healthy/default truth is inherited at the highest honest scope; store sparse exceptions and derive
+  dependent views lazily;
+- realm and mod extensions register reference/support families through shared contracts rather than
+  free-form tags or scattered conditional code.
+
+The operational-state-factorization skeptical follow-up is exhausted.
+
+#### 10.11.16 Skeptical follow-up 5 — can a seed preserve latent truth across game versions?
+
+Wave 1 fixes semantic topology and important commitments before exploration while allowing fine detail to
+materialize later. A bare seed reproduces the same result only while the algorithm, table contents, row
+order, compiler, mod set, and random-stream discipline remain unchanged. After an update, the same seed
+may select a different room, object, NPC trait, or clue. That would silently retcon an old persistent
+world precisely when the player finally reaches its latent content.
+
+In plain language: how can an old world keep its promises after Genesis or a mod changes, without saving
+every unvisited detail up front or permanently shipping every historical engine implementation?
+
+##### Option 1 — seed plus whatever code and tables are current
+
+This is compact and lets old worlds receive new generation improvements automatically. It is not durable
+determinism: inserting one table row, fixing an algorithm, or changing RNG consumption can alter latent
+canon. A hash detects the mismatch but cannot reconstruct the missing result. **Rejected.**
+
+##### Option 2 — eagerly generate and store every eventual detail, or bundle every old generator forever
+
+This preserves exact results, but recreates the save/generation bloat that latency and graded
+materialization are meant to avoid. Retaining executable historical generators and mod code forever also
+creates maintenance, security, and migration liabilities. **Not recommended as the universal answer.**
+
+##### Option 3 — versioned commitment capsules with tiered hardness
+
+Store enough immutable semantic commitment to preserve the promised fact, while leaving legal
+presentation detail latent. The record or deduplicated world manifest retains:
+
+```text
+stable record id and independent seed
+generator family + semantic-contract version
+table/mod/source id + revision/content hash
+selected result/recipe id
+normalized compiled semantic fragment required to reproduce the commitment
+explicit hard invariants, legal variation envelope, authority, and provenance
+observation/contact hardness
+```
+
+A hash is verification, not recovery. The small normalized semantic fragment—or a referenced immutable
+base-game compatibility capsule—is what survives when the authored source changes. Repeated instances
+share one content-addressed capsule by hash rather than copying the same row or recipe into every room.
+
+Use three commitment tiers:
+
+1. **Explicit canonical fact:** topology, adjacency, room function, identity, promise invariant, causal
+   root, selected recipe, or observed detail is stored as value and never regenerated from seed.
+2. **Latent semantic commitment:** store the selected normalized recipe/row fragment, constraints,
+   independent seed, and version. A later compiler may realize it only inside that immutable envelope.
+3. **Uncommitted presentation:** wording, camera, render implementation, and truly unselected decorative
+   variation may use newer code until observed, provided it cannot alter semantic truth. Observation
+   hardens any consequential presentation fact that play relies upon.
+
+For example, an unopened latent prison cell need not store every scratch and dust pile. It does store
+that child 117 owns the attached-note opportunity, the note's canonical relationship/event invariants,
+the applicable recipe capsule and seed, and its legal inspection methods. A future renderer may stage the
+cell better, but a table update cannot turn the note into a potion or assign it to another prisoner.
+
+##### Update and migration rules
+
+- New generators and tables apply automatically to new commitments, not silently to old semantic
+  commitments.
+- A migration may replace an old capsule only through an explicit versioned, deterministic, idempotent
+  mapping that proves invariant preservation and records provenance.
+- Pure presentation improvements may project old truth through new code without semantic migration.
+- Per-record/component independent random streams prevent inserting one result from cascading through
+  every later latent record.
+- Once observed, mapped, acted upon, or promised, consequential values are stored explicitly.
+- Missing or corrupt content uses a last-known-good normalized capsule or an honest deterministic
+  placeholder preserving hard invariants; it never silently rerolls a different truth.
+
+##### Mod handling
+
+A save records mod id, version, content hash, namespaces, and the normalized data-only fragments already
+referenced by commitments. It does not execute arbitrary snapshotted mod code. If a mod disappears, old
+committed facts continue through their safe compiled fragments where possible; new expansion requiring
+missing executable behavior fails diagnostically or uses a declared compatibility fallback. A mod update
+may supply aliases/migrations, but cannot seize old ids or rewrite observed canon.
+
+##### Cost and proof
+
+This costs more than seed-only saves but far less than eager full materialization when capsules are
+normalized, content-addressed, deduplicated, and stored once per referenced recipe/version. Wave 12 must
+measure capsule/save growth over years, old-save load time, compatibility-pack size, migration chains,
+missing-mod behavior, and exact latent expansion after table/compiler updates.
+
+**Recommendation:** adopt Option 3. Treat seed-only determinism as valid only inside an immutable
+versioned commitment envelope; store semantic values/capsules rather than old executable code; let new
+code improve uncommitted presentation; and require explicit migrations for semantic upgrades.
+
+**Open follow-up:** is this the right persistence bargain—old worlds keep their selected semantic facts
+and promises exactly, new presentation code may improve how unobserved detail is expressed, and save
+growth is controlled by deduplicated data-only commitment capsules rather than full eager generation or
+permanent bundles of every old engine?

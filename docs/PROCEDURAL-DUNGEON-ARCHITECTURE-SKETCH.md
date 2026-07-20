@@ -145,6 +145,7 @@ boundaries.
 | `MaterializationWindow` | Finite active semantic, spatial, DM, and render slice with honest frontiers | Canonical site extent, lineage, or permission to reroll cold truth | Active-slice planner | DM, UI, renderer, persistence cache |
 | `CausalServiceFrontier` | Per-action hot facts, direct targets, touched dependencies, due consequences, typed cost telemetry, and bounded DM projection | A full-city/world turn barrier or permission to delete cold canon | Action resolver + indexed schedulers | Simulation, DM seat, persistence, performance gates |
 | `OperatingModel` | Required capabilities, operators, population/throughput, resources, procedures, dependencies, operating state | A rigid one-room-per-capability list | Purpose profile | Wave 2 roster and ecology |
+| `OperationalStateDelta` | Scope, coverage, effectiveness, mode, access/control, pressure/load, optional typed support condition, cause/evidence/recovery | One mutually exclusive health enum or universal condition record for every fact/object | Capability/flow simulation + events | Dependencies, DM/UI summaries, Wave 8 mutation |
 | `SiteProfileBundle` | Structural scope, operational load, spatial envelope, accommodation domains | Topology, danger, history, discovery, physics, or materialization hidden inside “size” | Context + purpose + rollers | Roster, topology, room and scale compilers |
 | `HistorySequence` | Ordered transformations with agent, action, affected functions, evidence, consequence | Present use silently replacing original purpose | History rollers and established events | Current occupation, discovery, knowledge |
 | `ResourceEcology` | Needs, production, storage, distribution, consumption, disposal, external dependencies | Continuous per-person domestic simulation | Operating model + occupancy relationship | Wave 2 ecology, Wave 8 mutation |
@@ -267,6 +268,25 @@ The site's occupancy relationship filters support expectations:
 
 Wave 1 requires persistent causal dependencies and player handles. It does not decide Wave 2's exact
 light-simulation model or permit a universal continuous economy.
+
+### 4.5 Factored operational state
+
+Operational state applies only to admitted capabilities and flows whose availability/effectiveness can
+change dependent play. It never becomes a universal condition schema for identity, history, ownership,
+belief, mood, relationship, aesthetics, or every ordinary object.
+
+The shared facets are scope, availability/coverage, performance/effectiveness, operating mode,
+access/control, and pressure/load. Load is evaluated against a family-typed reference envelope:
+engineered capacity, natural sustainable range, living tolerance/renewal, magical coherence law, or
+social/institutional mandate and throughput. An optional registered support-condition family may express
+material integrity, biological vitality, magical/planar coherence, network continuity, institutional
+support, or not-applicable. These families share an interface, not interchangeable units.
+
+Cause/provenance, time/schedule, evidence, buffers/substitutes, dependency thresholds, and
+recovery/terminal behavior accompany material non-normal deltas. Healthy state inherits from the highest
+honest scope; child records exist only for real exceptions and dependent views update lazily. Friendly
+labels such as strained, blocked, substituted, dormant, failed, repurposed, or destroyed are derived and
+may coexist. They do not overwrite the factored canon.
 
 ## 5. Time-indexed generation and history
 
@@ -869,6 +889,12 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
 - Protected variation is never whatever remains after the functional plan.
 - Even the smallest purposeful site retains likely added spatial variation plus embedded opportunity.
 - Every discretionary space has at least one player handle; Grounded content remains valuable contrast.
+- Operational state is factored by scope, coverage, effectiveness, mode, access/control, pressure/load,
+  and optional family-typed support condition; no single health enum owns mixed truth.
+- Constructed, natural, living, magical, and institutional capabilities use typed reference envelopes
+  rather than pretending every system has designed capacity or physical integrity.
+- Healthy state is inherited; material exceptions require cause/evidence/recovery metadata and remain
+  sparse at their highest honest scope.
 
 ### Scale and hierarchy
 
@@ -930,11 +956,11 @@ These are semantic contradiction fixtures, not finished content packages or geom
 |---|---|---|
 | Hamlet jail | Complete minimal custody model, external service, human scale, likely added space, juicy local handle | Small-size blacklist, one-room-per-obligation bloat, bland null fallback |
 | Major city prison | Repetition, hierarchical discovery/sweep, coordinated secrets, proportional variation, current-use/history layers, several hundred stable lightweight actors, p95 local dispatch within 250 ms | One independent Major secret and heavyweight record per cell; exhaustive-search labor; fallback during normal dense operation; global synchronous turn sweep |
-| Mage-colony Breach prison | Context-sensitive classification, mixed domains, ordinary portal custody plus exceptional failure | “Portal always Mythic,” one global scale, realm fork |
+| Mage-colony Breach prison | Context-sensitive classification, mixed domains, ordinary portal custody plus exceptional failure, coherence reference/support state | “Portal always Mythic,” one global scale, realm fork, physical-integrity assumption for planar systems |
 | Giant ossuary with human squatters | Low room count, huge envelope/accommodation, inserted human current-use pockets | One master size or late renderer-scale repair |
 | Alchemist shop over necromancy lab | Public primary purpose, concealed subordinate purpose or later transformation, legal discovery path | “Hidden” used as purpose; orphan surprise room |
 | Manor with an older hidden complex | Established ownership/access, inherited substrate, bounded child site | Dungeon under every building or current context rewriting origin |
-| Contested fort/grove-like refuge | Overlapping physical/social/legal/resource claims and nonviolent front outcomes | One owner color, per-room faction confetti, forced combat |
+| Contested fort/grove-like refuge | Overlapping physical/social/legal/resource claims, factored capability access/support, conflicting beliefs, and nonviolent front outcomes | One owner color, one operational enum, canon/belief collapse, per-room faction confetti, forced combat |
 | Living fortress or world-tree settlement | One entity/site identity, linked facets, organic imperative, institutions sharing domains, material continuity events | Fake builder/purpose, duplicated identity, renderer owning canon |
 | Canonically endless archive | Stable topology laws, honest finite frontier, permanent node/edge commitment, bounded active window | Pretend finite preseed, rerolled explored space, arbitrary DM corridor creation |
 | Child's note / missing daughter | Local discovery becomes a persistent promise, then expands under attention | Flavor note with no canonical attachment or fulfillment |
@@ -994,17 +1020,17 @@ Wave 1 defines the semantic promises below and deliberately leaves their realiza
 
 | Wave 1 handoff | Owning future work |
 |---|---|
-| Purpose profiles, exact roster allocations, repeat counts/variance, ecology, protected opportunity curves, Spice inventories | **Wave 2** |
+| Purpose profiles, exact roster allocations, repeat counts/variance, ecology, typed operational reference/support families, protected opportunity curves, Spice inventories | **Wave 2** |
 | Structural stamps, legal room/assembly realization, shells, annexes, domain boundaries, entity-site spatial interfaces, deterministic degradation | **Wave 3** |
 | Explicit portal/secret/Breach/vertical and distributed-domain edges, circulation, reveal vectors, secret-network spatialization, licensed stable-frontier topology | **Wave 4** |
 | Furniture/fixture assemblies, dressing, expression, clutter, quiet-room staging, event traces | **Wave 5** |
 | Accommodation boundaries, squeezing, capacity, party participation/splitting, witness/communication sets | **Wave 6** |
 | Effective-access challenge/reward/attrition/resource curves and encounter reshaping | **Wave 7** |
-| Formation, movement, destruction, repair, copy/split/merge/continuity, topology/resource mutations, persistent environment events | **Wave 8** |
+| Formation, movement, destruction, repair, copy/split/merge/continuity, factored operational-state and topology/resource mutations, persistent environment events | **Wave 8** |
 | Card schema, legal-home scoring, thin hand, coverage/slack, service horizons, fronts, DM digest/knowledge partition | **Wave 9** |
 | Graph/local-plan/player-view choice, interim renderer, search/knowledge accessibility presentation, visual leakage | **Wave 10** |
 | Authoring workbench, roller editing, diagnostics, preference teaching, mod vocabulary UX | **Wave 11** |
-| Persistent lineage/domain schemas, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, capacity-first performance/latency/soak gates, build order | **Wave 12** |
+| Persistent lineage/domain/operational-state schemas, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, capacity-first performance/latency/soak gates, build order | **Wave 12** |
 | Baldur's-Gate-like automatic inventory and equipment UI | Separate future inventory design after adoptable-system audit |
 | Full bounded-place settlement/population/casting/economy architecture | Future place/settlement/NPC/economy work, constrained by later closed waves |
 

@@ -9055,3 +9055,163 @@ divergence as a failed turn protocol, not an ignorable event error.
 **Open follow-up:** does this strike the right balance—one streamed call remains the routine path and the
 DM retains expressive narration, but every consequential success/failure/object/mutation claim must rest
 on an engine-owned receipt or guaranteed token committed before the player sees the result?
+
+#### 10.11.26 Follow-up — guaranteed tokens are a fast lane, never the player's action menu
+
+Adam identifies the central product risk: transactional truth sounds necessary to make the game work,
+but if players may act only through prevalidated tokens then creative players are heavily limited. The
+beauty of an AI DM is that it can respond to almost anything; the corresponding failure is an
+over-permissive DM that lets desire substitute for possibility.
+
+That objection is correct. If Option 3 means a whitelist of legal commands, it fails Genesis's existing
+open-handoff law and the D&D soul of the redesign. The indexed research supports semantic affordances,
+hard/soft constraints, hierarchical assemblies, and candidate validation, but it does not solve open-ended
+AI adjudication. Genesis must add a compositional ruling layer rather than misrepresent the papers or
+turn their constraint vocabulary into a menu.
+
+The product law should be:
+
+> **Open intent, constrained outcome.** The player may attempt anything expressible in the fiction. The
+> engine and dice determine whether the required entities, properties, access, time, capability, cost,
+> uncertainty, and consequences support success. The AI may never grant success merely because the idea
+> is vivid or the player asks confidently.
+
+The visible handoff remains open; no numbered action menu is presented. Guaranteed tokens accelerate
+common and already-licensed actions behind the screen. They do not define the limit of imagination.
+
+##### Three resolution lanes
+
+###### Lane A — receipt/guaranteed fast lane
+
+Movement, ordinary inspection, inventory use, known attacks/spells, conversation, established
+interactables, common checks, and contextual latent affordances resolve engine-first or through guaranteed
+tokens. One streamed call remains normal.
+
+###### Lane B — compositional creative-action lane
+
+The AI compiles arbitrary player language into a structured plan made from registered semantic
+primitives and canonical properties:
+
+```text
+intent and desired effect
+targets and referenced/required objects
+primitive operations and ordering
+method, tools, capabilities, spell/rules authority
+preconditions and physical/social/magical constraints
+time, resource, exposure, noise, ownership, and collateral costs
+uncertainty/check/DC or deterministic result
+core state effects and dependent consequences
+```
+
+Useful cross-domain primitive families include:
+
+- inspect, compare, trace, reveal, and test;
+- take, carry, drag, throw, place, wedge, tie, attach, support, and combine;
+- open, close, lock, block, break, damage, disable, repair, and restore;
+- ignite, extinguish, heat, cool, pour, mix, contaminate, clean, release, and contain;
+- climb, cross, dig, brace, redirect, signal, conceal, distract, lure, and create cover;
+- ask, bargain, persuade, deceive, threaten, impersonate, recruit, testify, and coordinate;
+- deliver, steal, ration, substitute, reroute, sabotage, protect, and expose operational flows.
+
+These are semantic operations, not promises that every verb works on every target. They compose against
+material, scale, condition, attachment, mobility, containment, flammability, load-bearing, visibility,
+ownership, access, knowledge, motive, doctrine, resource, topology, and realm-law facts. Qualitative bands
+and typed effects handle most play; Genesis does not need a molecular physics simulation.
+
+The model may propose a plan in the hidden commit header. If every operation and consequence validates,
+the same-call narration proceeds. If the plan needs a ruling or legal repair, no claimed outcome is
+released and it moves to Lane C.
+
+###### Lane C — negotiated novel/high-impact ruling
+
+A genuinely ambiguous, multi-step, unsupported, or irreversible proposal receives preflight. The AI
+proposes an `ActionPlan` without success prose; the engine resolves targets, properties, checks, time,
+costs, effects, and legal event channels; then the DM narrates the receipt. The extra latency is the price
+of preserving a rare creative action, not a reason to forbid it or to slow every routine action.
+
+When no bespoke mechanic exists, the engine should resolve at the highest honest generic effect level it
+supports—object state, position/access, condition/hazard, resource/flow, advantage/check modifier,
+knowledge, relationship, progress/clock, or explicit topology event—and store a provenance-bearing
+`RulingReceipt`. Repeated materially equivalent attempts consult the precedent/signature so the DM does
+not give contradictory rulings simply because the phrasing changed. Precedent remains context-sensitive;
+one wooden tavern door does not establish that the same trick works on a planar vault.
+
+##### Honest adjudication ladder
+
+A creative proposal may produce:
+
+```text
+automatic success because the fiction and mechanics make it certain
+success after a check/roll
+partial success or success with a known cost/consequence
+meaningful progress requiring time or several steps
+failure after a fair uncertain attempt
+diegetic impossibility because a required fact/method is absent
+clarification because the intent or target is genuinely ambiguous
+```
+
+The engine should prefer “you can attempt it; here is what it requires or risks” over “that command is not
+implemented.” It must still say no when canon, physics, realm law, access, resources, or rules make the
+attempt impossible. Freedom to attempt is not entitlement to success.
+
+##### Concrete creative-action traces
+
+- **Wedge the jail door with a stool:** the stool must exist or consume a legal latent furniture reserve;
+  its size, strength, location, and attachment meet the door's force/state; the action commits the stool
+  and door state and creates noise/witness consequences.
+- **Throw flour into the air to expose an invisible creature:** flour must actually be available, dry,
+  accessible, and sufficient; air movement, visibility, creature position, and turn economy determine the
+  effect. The DM cannot invent flour because the tactic is clever.
+- **Ignite that flour:** the engine evaluates powder concentration, ignition source, enclosure, range,
+  fire/collapse risk, and collateral harm through qualitative hazard rules. It does not simply grant an
+  explosion because the player knows the trope.
+- **Redirect prison sewage into the hidden lab:** a multi-step plan checks discovered topology, valves or
+  breach methods, elevation/flow, capacity, time, contamination, witnesses, and dependent systems. It may
+  work brilliantly, partially flood the wrong zone, or prove impossible without another route.
+- **Impersonate a royal inspector:** attire/documents, witnesses, institutional knowledge, doctrine,
+  current alarm, relationships, and the social check matter; an AI cannot accept the title at face value.
+- **Dig through a wall:** material, thickness, support role, tools, time, noise, fatigue, custody response,
+  and collapse risk decide feasibility. “Not instantly” is not the same as “not allowed.”
+- **Fly to the moon with no method:** the open input is accepted, but the fictional attempt cannot achieve
+  the declared result. The DM responds honestly instead of rewarding confidence with a new power.
+
+##### Freedom also requires engine breadth
+
+This model is only a promise until Genesis builds and wires:
+
+- a controlled but extensible property/affordance vocabulary;
+- compositional action-plan and generic effect schemas;
+- context/realm/rules adapters and explicit exclusions;
+- target/version/ownership/knowledge/capability validation;
+- deterministic checks, costs, partial effects, and event application;
+- action precedents/ruling receipts and synonym-resistant identity;
+- persistence, inventory, renderer, topology, resource, social, combat, and DM integration;
+- graceful abstract resolution when exact simulation is unnecessary;
+- production-path creative-action gauntlets rather than helper-only validation.
+
+The papers' constraint techniques can legalize entities, space, paths, sockets, and required affordances.
+They do not remove this high implementation and content cost. Claiming “players can try anything” before
+the generic resolver reaches the actual DM turn path would repeat the promise-versus-implementation failure
+Adam warned about.
+
+Acceptance must sample adversarial off-book actions across environment, combat, social play, resources,
+magic, groups, knowledge, and multi-step plans. Reports distinguish one-call acceptance, preflight,
+clarification, fair refusal, invalid-model proposal, fallback, latency, state persistence, and repeat-
+ruling consistency. The target rates wait for real traces; the freedom contract does not.
+
+##### Revised recommendation
+
+Retain transactional narration, but amend Option 3 explicitly:
+
+> Guaranteed tokens are the common-action fast lane. They are never the legal-action whitelist. Arbitrary
+> player intent enters a compositional action planner; genuinely novel or high-impact plans receive a
+> slower engine-owned ruling. The engine should support broad generic consequences and honest costs while
+> refusing impossible outcomes. Consequential narration still waits for the accepted receipt.
+
+This aims for the tabletop virtue—responsive rulings over open intent—without the AI-DM vice of saying yes
+to everything.
+
+**Open follow-up:** is this the freedom boundary you want: the player can type and attempt anything, common
+actions stay fast, creative combinations are validated compositionally or receive a rarer ruling pass,
+and the engine may answer yes, roll, partial/cost, progress, failure, impossible, or clarify—but the AI may
+never convert open-ended input into automatic success?

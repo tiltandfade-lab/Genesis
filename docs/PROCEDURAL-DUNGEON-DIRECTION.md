@@ -9215,3 +9215,281 @@ to everything.
 actions stay fast, creative combinations are validated compositionally or receive a rarer ruling pass,
 and the engine may answer yes, roll, partial/cost, progress, failure, impossible, or clarify—but the AI may
 never convert open-ended input into automatic success?
+
+#### 10.11.27 Critical implementation follow-up — mechanizing Crit Magnitude as real world change
+
+Adam accepts rolls and identifies the critical implementation: Genesis's Crit Magnitude system is
+intended to occasionally produce a level of insanity that genuinely breaks reality. The compositional
+action and transactional-narration model must therefore distinguish “this attempt is impossible” from the
+rare dice result that is explicitly licensed to force a new impossible thing into canon.
+
+##### What already exists
+
+The locked `CRIT-MAGNITUDE.md` rule and current engine provide a strong dice ritual:
+
+```text
+natural 20 or natural 1 on a d20 action
+  -> openly roll a second d20 for magnitude
+  -> first die sets triumph/disaster
+  -> magnitude sets Standard / Amplified / Mythic band and nominal scope
+  -> Amplified/Mythic draws distinct success/failure lenses
+  -> the place lens may hand off to the Myth suite
+```
+
+`src/engine/crit.js` implements the band lookup and lens draw. `resolveCheck` gives natural 20 automatic
+success, natural 1 automatic failure, and computes `absurdity`—how far the natural result defied the DC
+math. Combat threads magnitude without adding damage. `crit_outcome` writes an abstract Ledger entry;
+Mythic results use the `canon` ledger type, and theater code can play an `absurdity` effect.
+
+That is not yet the promised world-mutation system. The current event does not:
+
+- permanently alter the person named by a person lens;
+- create the object/entity promised by a creation lens;
+- add a legal passage/Breach/topology mutation;
+- install and enforce a local law of nature;
+- create a mechanically meaningful bond, debt, name-power, fate tilt, boon, curse, or permanent wound;
+- reveal knowledge through the correct witness/holder boundary;
+- end/amplify a threat through its actual owner;
+- create the immediate and deferred manifestations of the cascade;
+- atomically validate that the AI's filled-in outcome matches the rolled lenses before narration.
+
+Today the lens is mostly prose plus a Ledger label. That is exactly the promise-versus-implementation gap
+the redesign must not carry forward.
+
+##### Concrete inconsistencies found in the current seam
+
+1. **Standard magnitude 8–10 currently reaches reality-tear presentation and combat obliteration.** The
+   locked success band says magnitude 1–10 is a standard critical success with no lens, yet theater treats
+   `magnitude >= 8` as `absurdity`, and a confirmed killing blow at that threshold may obliterate the
+   target. If retained, obliteration must be an explicitly separate combat-presentation rule; it cannot
+   silently redefine the Standard band as Mythic.
+2. **The coded Mythic “full cascade” is exactly three lenses.** The spec says 3+, and the canonical
+   Lathander example contains at least place transformation, permanent person change, hidden-truth reveal,
+   and enduring bond—four distinct lenses. The implementation cannot currently reproduce its own example.
+3. **`absurdity` is computed but not consumed by `rollCritMagnitude`.** Comments say it feeds the lens,
+   but the magnitude atom does not accept or retain it.
+4. **Amplified lens permanence is not mechanized.** An `outcome` ledger line may remain, but the actual
+   NPC, topology, law, knowledge, faction, threat, item, and capability state do not change.
+5. **Lens dice/count and reality authorization are not one transaction.** The engine can know the vector
+   while leaving the AI to invent an unvalidated consequence afterward.
+
+These are redesign findings, not implementation authorization in this session.
+
+##### Rejected mechanical approaches
+
+- **AI narration plus abstract Ledger entry:** current approach; expressive but does not make the world
+  obey the result.
+- **A bespoke outcome table for every verb, target, purpose, realm, and stakes combination:** would create
+  an impossible Cartesian corpus and still miss creative combinations.
+- **A generic numeric multiplier to damage/reward:** destroys the count×intensity/lens design and cannot
+  create the Light of Lathander, a hell-wound, a bond, a truth revelation, or a new law.
+
+##### Recommended pipeline — Check Contract to Crit Mandate to atomic Cascade Plan
+
+###### Step 0 — earn roll permission before dice
+
+The action resolver first decides that meaningful uncertainty exists. It records a `CheckContract`:
+
+```text
+declared intent and achievable standard effect
+targets, method, tools/capabilities, and current versions
+DC/rules source and normal success/failure envelope
+stakes, threatened values, witnesses, knowledge boundary, and causal anchors
+protected canon and legal event/effect families
+```
+
+Certain actions resolve without a roll. Fictionally impossible actions receive no roll and therefore
+cannot be spammed until a 20/20 creates the requested power. Flapping bare arms to fly to the moon does
+not receive a check. Attempting an unstable lunar ritual with a real planar method may receive one; a
+20/20 could then permanently open a moon-road because the roll and its causal anchor were legitimate.
+
+This is the key boundary:
+
+> A Mythic crit may break the ordinary outcome envelope of a legitimately rolled action. It may not
+> retroactively make an illegitimate no-method request into a roll.
+
+###### Step 1 — roll the direction and magnitude openly
+
+The action d20 resolves through the existing check/attack/save spine. A natural 20 or 1 produces the
+visible second d20. Standard results receive the best/worst legal ordinary interpretation. Amplified and
+Mythic results produce a stored `CritMandate`, not finished prose:
+
+```text
+check-contract id + action/scene anchors
+natural + magnitude + success/failure direction
+tier + reach/intensity authority + lens count
+distinct lens rows and table/source versions
+stakes register + absurdity/defied margin
+protected invariants + allowed mythic effect adapters
+```
+
+The `absurdity` score does not secretly promote the tier—the open magnitude die owns that. It tells the
+resolver how much causal bridge the outcome must visibly provide when the natural roll defied the normal
+math.
+
+###### Step 2 — replace one scalar scope with a reach vector
+
+Local/Regional/Planar remains useful presentation, but mechanical intensity needs several dimensions:
+
+```text
+affected subjects/count
+spatial/domain reach
+duration/permanence
+systemic depth and dependency propagation
+reversibility/recovery difficulty
+```
+
+The magnitude tier grants and requires a meaningful reach envelope. Not every amplified parry must alter
+an entire geographic region: permanently transforming one rival, founding a durable oath, exposing a
+regional conspiracy, or changing a lineage may spend the reach through duration/systemic depth instead.
+Mythic must permanently cross at least one ordinary constraint through an explicit Mythic license; it is
+not merely a louder standard success.
+
+###### Step 3 — resolve each lens through a typed effect adapter
+
+The twelve mirrored lens pairs map to shared world systems:
+
+| Lens axis | Required mechanical owner/effect family |
+|---|---|
+| Place transformed/scarred | domain/site transformation, operational/topology evidence, Myth-suite handoff |
+| Person changed/broken | NPC/creature traits, motives, relationships, conditions, identity-safe events |
+| New/right-or-wrong thing enters | persistent entity/item/ecology/root creation with commitment capsule |
+| Passage opens/forbidden door opens | explicit topology/Breach edge mutation and access/knowledge effects |
+| Local law bends | scoped realm/physics rule with target, behavior, evidence, duration, and enforcement |
+| Name becomes force/curse | reputation/name-trigger rule with witnesses, territory, powers, and effect |
+| Lost returns/lost beyond recovery | restoration or irreversible-loss events over an established target |
+| Bond forged/debt comes due | relationship, faction, pact, obligation, inheritance, and scheduler state |
+| Hidden truth revealed/dangerous truth released | canonical fact selection/creation authority, witness knowledge, evidence, propagation |
+| Fate favors/turns | persistent omen/fortune modifier, attention from powers, event triggers |
+| Threat broken/unleashed | threat/root/front lifecycle, dependent groups, consequences, recovery |
+| Doer elevated/diminished | feature/mark/boon/curse/condition and visible character-state projection |
+
+The AI synthesizes concrete content from the rolled lens plus the action/scene anchors, but outputs a
+structured `CritEffect` for the owning adapter:
+
+```text
+lens id + causal root + anchor ids
+effect family and typed payload
+reach-vector spend and permanence
+immediate atomic events
+deferred manifestations/promises with service horizons
+evidence, witnesses, and knowledge changes
+recovery/reversibility, if any
+source rolls, versions, and reconciliation trace
+```
+
+The engine validates existence, target/version, causal fit, tier authority, protected canon, topology,
+realm rules, safety, event support, and combined-cascade coherence. A lens that genuinely cannot attach is
+openly rerolled with provenance rather than silently dropped or filled with decorative prose.
+
+###### Step 4 — weave one causal cascade, not independent miracles
+
+All lenses share one `CausalCritRoot`. Immediate manifestations commit now; large aftermath may create
+minimal durable promises and event schedules rather than eagerly generating an entire shrine, cult,
+bloodline, or regional network. The Lathander result might atomically commit:
+
+- the enduring-light local law and transformed site/domain fact;
+- the bandit's permanent motive/relationship change;
+- the exact hidden-operation truth he now intends to reveal and his knowledge of it;
+- the enduring debt/bond;
+- a sourced settlement promise that a maintained shrine can emerge through later social events.
+
+The engine does not need to generate every future mason immediately, but none of those threads is merely
+a sentence the DM may forget.
+
+###### Step 5 — commit before consequential narration
+
+The finished `CritCascadePlan` is an atomic core transaction plus typed deferred reactions. It becomes a
+`ResolutionReceipt` under the transactional-narration law. Only after validation/application does the DM
+narrate the impossible thing becoming true. If one dependent lens effect cannot apply, the engine repairs
+or rerolls before prose; it never commits two lenses and quietly loses the third.
+
+Mythic topology/law/entity creation is a legal **event**, not a retcon: the world was one way, the dice
+broke it, and the provenance-preserving event changed it. Observed history remains intact.
+
+###### Step 6 — preserve stakes without capping the insanity
+
+The pre-roll stakes register controls harm and tone, not whether Mythic may break reality:
+
+- low-stakes 1/1 defaults to permanent, reality-bending memorable comedy or social/material disaster;
+- high-stakes 1/1 may become lethal, planar, or cosmically dark only when that danger was fairly present;
+- a 20/20 remains wondrous and world-altering, but its form grows from the attempted act rather than
+  granting any unrelated wish;
+- no cooldown, pity timer, saturation cap, or secret downgrade may suppress honest double-crit dice.
+
+The integrated salience system may pace the aftermath, but every rolled effect becomes canon.
+
+##### Combat remains mechanically orthogonal
+
+The ordinary combat crit still follows the 5.5e damage rule; magnitude does not multiply damage. Magnitude
+instead controls collateral, persistent, social, environmental, threat, and mythic consequences through
+the same lens adapters. A foe may be obliterated, transformed, spared into legend, exposed as something
+else, become a nemesis, break a threat root, open a Breach, or mark the battlefield—but only through a
+documented combat rule or validated lens/effect, not an accidental numeric threshold that conflicts with
+the tier table.
+
+##### The actual frequency must be confronted
+
+On straight independent d20s:
+
+- Mythic success `20/20` occurs on 1 in 400 eligible rolls (0.25%).
+- Mythic failure `1/1` occurs on 1 in 400 eligible rolls (0.25%).
+- Either Mythic extreme occurs on 1 in 200 eligible rolls (0.5%).
+- Any Amplified-or-Mythic result on either direction occurs on 1 in 20 eligible rolls (5%).
+- Across 50 eligible d20 rolls, the chance of at least one Mythic extreme is about 22%.
+
+That may be excellent for a dice-driven world, but it is not rare if every minion attack, internal
+simulation check, and batch update is eligible. The recommended interpretation of “any d20 action” is any
+**surfaced spotlight action roll**: every player action check, independently narrated named-actor action,
+and one explicit group/cohort roll where many minor actors are resolved together. Internal solver rolls,
+background simulation, and per-minion batch bookkeeping do not get independent reality-cascade chances.
+There is no hidden frequency throttle after a roll qualifies.
+
+This preserves honest player and major-opponent dice while keeping the world's mythic frequency tied to
+actual narrated action beats rather than CPU activity. The current path, which can magnitude-roll every
+foe attack, needs an explicit later ruling and distribution trace rather than being assumed correct.
+
+##### Full-cascade count recommendation
+
+Keep Amplified major at two to three distinct lenses. Change Mythic from the coded fixed three to an open
+`d3 + 2` distinct lenses (three to five, average four), which matches the spec's `3+` language and can
+reproduce the four-thread Lathander example. Display the lens draws as part of the exceptional dice ritual.
+If five cannot cohere, reroll incoherent lenses rather than reduce the magnitude.
+
+##### Acceptance gates
+
+The implementation is not complete when `critBand()` returns the correct string. It must prove, through
+the actual player/DM turn path:
+
+- every lens axis reaches its canonical owning system and persists/revisits;
+- immediate and deferred cascade threads share one root and all fulfill;
+- Mythic topology, realm-law, entity, NPC, knowledge, group, threat, and character mutations replay;
+- impossible no-method actions cannot fish for a roll;
+- high-absurdity lawful rolls visibly bridge the defied math;
+- low-stakes and high-stakes 1/1 registers differ without suppressing permanence;
+- no partial commit or narration/event divergence;
+- repeated/missing-mod/version-upgrade saves preserve the result through commitment capsules;
+- combat damage remains orthogonal and current magnitude-8 behavior is explicitly reconciled;
+- roll volume reports spotlight eligibility and realized Amplified/Mythic incidence;
+- latency remains exceptional but comprehensible through the visible multi-die ritual.
+
+##### Recommendation and generated decisions
+
+Adopt the `CheckContract -> CritMandate -> typed lens adapters -> atomic CritCascadePlan ->
+ResolutionReceipt -> narration` architecture. It preserves the original two-d20 soul while turning the
+result into actual engine-owned mutation rather than permissive AI fiction.
+
+This creates three decisions to exhaust in order:
+
+1. **Roll permission/reality boundary:** a legitimate uncertain action may break its ordinary envelope on
+   a Mythic result; a no-method impossible request receives no roll and cannot crit-fish.
+2. **Eligibility/frequency:** full Crit Magnitude applies to surfaced spotlight d20 actions, not internal
+   or per-unit batch simulation rolls; no cooldown applies once eligible.
+3. **Cascade/count and current seam:** Mythic draws 3–5 lenses rather than fixed three, and magnitude-8
+   obliteration/FX is either documented as a separate combat presentation rule or reconciled to the actual
+   tier/lens system.
+
+**Open decision 1:** should Genesis lock the roll-permission boundary as recommended—the engine must grant
+a real uncertain check before dice, after which a Mythic double-crit is explicitly allowed to break the
+ordinary result envelope through validated lens events, while fictionally impossible no-method requests
+receive no roll and therefore cannot fish for reality-breaking success?

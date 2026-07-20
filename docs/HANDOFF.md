@@ -6,6 +6,27 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 locked movement preview) — SHOW THE DESTINATION BEFORE SPENDING FOR IT [Codex]
+
+This supersedes the exact-cell/repository-research pickup below without deleting it. Design/docs only: no code,
+dependency installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.1g Option B over the BG3-style reveal-after-payment model. Cells affordable with movement
+remaining are fully active; cells that any currently legal Dash/movement-extension source could unlock appear as
+a dim outlined/hatched locked region. Selecting one filters the explicit source chooser and previews route cost,
+payment, and resources remaining, but cannot move or spend before confirmation. The regions recompute after
+partial movement and cannot expose hidden hazards.
+
+The preview must answer the player's actual purpose honestly. If Action Dash can reach a chest but opening it also
+costs an Action, it says the chest is reachable but cannot be opened this turn through that payment. A legal Bonus
+Action Dash may show that the Action remains. The same applies to engaging an enemy, pulling a lever, picking up a
+governed object, or another destination affordance. F10.1g and the F10.1f payment/presentation branch are closed.
+
+**Do next:** ask F10.1h. Codex recommends normal commitment for safe moves and one concise confirmation only when
+the chosen route has a **known material consequence** such as an opportunity attack, visible hazard, fall risk,
+broken concealment, or lost aura. Unknown hazards remain unknown. If accepted, immediately settle the narrower
+undo boundary, then stable label lifecycle, Card J/K inspection, and every remaining Wave 10 branch.
+
 ## ⭐ Latest (2026-07-20, Wave 10 exact-cell ruling + repository research) — MECHANIZE TACTICAL TRUTH; KEEP THE DM CREATIVE [Codex]
 
 This supersedes the exact-tactics audit pickup below without deleting it. Design/research/docs only: no code,
@@ -33,7 +54,7 @@ All detail, links, costs, and the future bakeoff fixture are in `PROCEDURAL-DUNG
 Adam then requested the relevant libraries locally. Source-only immutable snapshots now live in
 `Reference/Tactical-Combat-Research/`: TinyQueue, EasyStar.js, PathFinding.js, rot.js, three-pathfinding,
 recast-navigation-js, Yuka, and five schema-relevant Foundry dnd5e files, each with upstream license/provenance.
-The 4.4 MB archive has a SHA-256 manifest and source index. No package was installed, imported, built, or selected;
+The 4.1 MB archive has a SHA-256 manifest and source index. No package was installed, imported, built, or selected;
 GPL OpenXcom/Wesnoth and Foundry's 330 MB content/system tree were not copied.
 
 **Do next:** ask F10.1g: before Dash is selected, show only currently affordable cells, or also show a dim locked

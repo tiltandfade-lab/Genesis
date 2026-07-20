@@ -16515,3 +16515,61 @@ or (B, recommended) also show Dash-reachable cells as a dim locked planning outl
 legal source chooser but cannot move or spend anything yet? After that ruling, follow the remaining consequential-
 movement warning/undo branch, stable label lifecycle, and F10.3b. Wave 10 remains **OPEN**. No implementation,
 dependency installation, CI, worktree, LFS checkout, merge, or push is authorized.
+
+### 11.8 F10.1g ruling - dim locked extension preview accepted
+
+**Adam's ruling (2026-07-20):** accept Option B. The board should show where an additional movement source could
+let the character finish before the player spends anything. This is preferable to revealing the expanded range
+only after Dash is chosen: the player should not consume ordinary movement and discover too late that they are a
+few feet short of engaging an enemy, reaching treasure, or getting to an important object.
+
+The accepted presentation contract is:
+
+- cells affordable with the actor's **currently remaining** movement are fully active;
+- cells that one or more currently legal movement-extension sources could unlock appear as a dim, outlined or
+  hatched locked region. Color alone may not carry the distinction;
+- the locked region is the union of actually legal hypothetical results, not a generic second ring. Each cell
+  knows which sources can pay for that exact destination;
+- selecting a locked cell opens a chooser filtered to those sources and shows the route, total movement cost,
+  Action/Bonus Action/other resource payment, and what resources remain afterward;
+- nothing moves, spends, rolls, reveals, or commits until the player explicitly chooses a source and confirms the
+  validated route;
+- after partial movement or any state change, both active and locked regions recompute from the new canonical
+  position and remaining resources;
+- hidden traps, unseen enemies, and unknown terrain properties do not leak through the preview. It may warn only
+  from facts the player's viewpoint or rules engine is allowed to expose.
+
+The treasure example adds a necessary action-economy truth. “Can stand beside the chest” is not always “can open
+the chest this turn.” If the only route requires `Dash - Action` and opening the chest also costs an Action, the
+destination preview should say `Reachable with Action Dash; Open Chest unavailable this turn`. If `Cunning Action:
+Dash - Bonus Action` is legal, that source may truthfully show that the Action remains available. The same rule
+applies to reaching melee range, pulling a lever, picking up a governed object, administering aid, or any other
+destination affordance. The board forecasts only mechanics already known and does not promise narrative success.
+
+The incremental cost beyond the accepted tactical kernel is **moderate**: compute a bounded hypothetical
+reachable set for each distinct legal extension budget, merge them for presentation, retain source eligibility per
+cell, and keep the chooser/resource-after-state legible. The maintenance burden is concentrated in a typed
+movement-extension registry and destination-affordance cost queries rather than special-case UI rules for each
+class. Fixture coverage must include equal and unequal Dash sources, a source becoming unavailable after partial
+movement, and a reachable destination whose intended interaction cannot be paid afterward.
+
+This closes **F10.1g** and completes F10.1f's movement-tier/payment presentation branch. It does not authorize a
+build.
+
+#### F10.1h - known route consequences
+
+The next material question is what happens when an otherwise legal route is known to provoke an opportunity
+attack, cross visible fire or acid, risk a fall, break concealment, leave a protective aura, or consume a resource
+needed for the apparent destination interaction:
+
+- **Option A - confirm every move:** safest against misclicks, but battle becomes dialog-heavy and recreates the
+  friction exact mechanics are intended to remove.
+- **Option B - warn only on known material consequences (recommended):** safe movement commits normally. Route
+  hover always marks known exposure; selecting a materially risky route opens one concise confirmation showing
+  the trigger cells and likely mechanical consequences. Unknown hazards remain unknown.
+- **Option C - never confirm; rely on undo:** fastest initially, but post-reaction or post-reveal undo creates
+  canon, information, and save-scumming problems.
+
+Does Adam accept Option B as the warning baseline? If so, immediately follow into the narrower undo boundary:
+whether a movement receipt may be reversed only before it causes a roll, reaction, reveal, resource change, or
+other external consequence. Then continue to stable label lifecycle and F10.3b. Wave 10 remains **OPEN**.

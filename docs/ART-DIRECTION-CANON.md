@@ -248,6 +248,17 @@ Dash-like source. Continuing past the normal allowance requires the player to se
 other legal resource source explicitly; destination selection may not silently pay it. The exact visual treatment
 of not-yet-purchased extended cells remains F10.1g in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.7.
 
+## Locked movement-extension preview ruling (Adam, 2026-07-20 — additive)
+
+> "yeah, option b is preferred to the BG3 model it is nice to see where you could end up with an extra movement, that way you don't waste your movement only to find out you were just short of being able to engage or get that treasure or item or whatever."
+
+The BattleMat shows currently affordable movement cells as active and the cells unlockable by a currently legal
+movement extension as a dim outlined or hatched locked region. The distinction cannot depend on color alone.
+Selecting a locked destination previews its route and opens the legal payment-source chooser without moving or
+spending. Destination presentation must also state whether the chosen payment leaves the Action, Bonus Action, or
+other resource needed to engage, open, retrieve, activate, or otherwise use the destination affordance. Exact
+mechanics and remaining follow-ups live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.8.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

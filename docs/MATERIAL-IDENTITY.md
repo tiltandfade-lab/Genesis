@@ -7,6 +7,10 @@ identity comes from LIGHT COLOR, not material. Answer: yes, and it's cheap — p
 perturbation, no added geometry. This spec adds per-realm normal maps to the interior surfaces so each
 realm's stone/metal/tile reads distinct. Grounded, but gated behind a SPIKE — see §0.)
 
+> **2026-07-20 status clarification:** this proposal has not been implemented. The procedural-redesign Wave 10
+> taste cards simulate its intended modest surface response for visual evaluation only. A concept render is not
+> proof that the Lambert/Phong spike, derived maps, bindings, flags, performance gate, or capture gate exists.
+
 ## The goal
 Strip the torch color and every realm's dungeon reads as the same grey stone. A normal map (tangent-
 space RGB perturbing the surface normal per fragment) makes chrome read as brushed panel, gloom as

@@ -16013,3 +16013,112 @@ legibility, device, and gameplay-capture decision for P10.12.
   the chosen desktop and minimum horizontal-tablet viewports before locking ratios or breakpoints.
 
 Wave 10 remains **OPEN at F10.1a**. These shell cards refine rather than close P10.1/P10.4-P10.6/P10.10/P10.12.
+
+### 11.3 Corrected hybrid-renderer suite - high-resolution 3D substrate, pixel-art layer
+
+**Adam's correction (2026-07-20):** Cards E/F drifted toward rendering the entire product as pixel art. Genesis's
+visual system is instead 3D with a pixel-art layer. The scene substrate should retain real volume, smooth
+high-resolution edges, lights, cast shadows, contact/drop shadows, and material response. Adam also corrected the
+record: normal maps were never implemented. They may be simulated in these taste cards so the intended material
+future can be judged, but they cannot be counted as a preserved built win. The earlier QA captures also run below
+the intended product resolution and are references rather than a resolution target.
+
+The corrected visual boundary is:
+
+```text
+high-resolution 3D substrate
+  volumetric floor/wall/step cells, pits, blocks, cylinders, faced boxes
+  smooth rasterized geometry rather than a globally pixelated framebuffer
+  motivated practical lights and real cast shadows
+  restrained simulated normal response in taste cards only - NOT built
+  floating-stage darkness, selective atmosphere, strong readable silhouettes
+
+canonical pixel-art layer
+  actor sprites and available object/face/texture art
+  crisp texels rather than smeared bilinear filtering
+  thin physical shell or plinth when the sprite must exist in 3D
+  alpha-respecting cast shadow plus separate compact contact/drop shadow
+
+game shell
+  narrow left icon rail
+  central UI-safe SceneTray / PreAlpha BattleMat
+  persistent readable right conversation and composer
+  compact temporary drawers/lenses/inspectors, never unrelated full screens
+```
+
+This is a register boundary, not an instruction to make the 3D substrate look sterile. The simulated surface
+relief, bevel response, grime, practical-light falloff, and shadowing are there to make simple grid primitives feel
+like a beautiful dungeon. Nor does “high resolution” mean that sprite pixels should be cosmetically smoothed; the
+world and UI can be cleanly sampled while the canonical sprite register stays intentionally crisp.
+
+#### Actual Genesis evidence used
+
+The cards were generated with real Genesis captures and assets as image references where the generation limit
+allowed, including the golden full engine capture, BattleGate stage/composition frames, elevation and diegetic-light
+captures, the canonical human-fighter/goblin/skeleton sprites, fantasy floor/wall textures, chest sprites, and chest/
+crate face textures. The principal source paths are:
+
+- `dev/graphics-regression/captures/golden/full.png`, `dev/battle-gate/round3/stage-1440.png`,
+  `dev/elev1-profile-shots/elev1-dais.png`, and `dev/diegetic-light-shots/l4-torchlit-gloom.png`;
+- `assets/sprites-r4b/spr-pc-human-fighter-male.png`, `spr-fantasy-goblin-warrior.png`, and
+  `spr-fantasy-skeleton-archer.png`;
+- `assets/dressing/fantasy-obj-chest-closed.png` and `fantasy-obj-chest-open.png`;
+- `assets/textures/fantasy-floor-1.png`, `fantasy-wall-1.png`, and the fantasy crate face textures.
+
+Image generation does not perform a deterministic engine composite. These are therefore **asset-informed concept
+renders**, useful for composition and register judgments but not proof that exact sprites, UVs, normal maps, shadow
+passes, text rendering, or safe-rectangle behavior already run in Genesis.
+
+#### Full integrated-UI suite
+
+| Card | State tested | Initial read and recommendation |
+|---|---|---|
+| [G - Hybrid stage-first baseline](../ui-sketches/mock-frames/procedural-dungeon/taste-card-g-hybrid-stage-first.png) | Default left rail / high-resolution 3D BattleMat / right chat; lens collapsed. | **Recommended visual-substrate and default-shell baseline.** The map remains the visual hero, while the pixel citizens clearly belong to a lit physical stage. |
+| [H - Expanded EngagementLens](../ui-sketches/mock-frames/procedural-dungeon/taste-card-h-hybrid-expanded-engagement-lens.png) | Same substrate and shell; selected-PC side-view lens occupies roughly the lower quarter of the central scene. | Strong combat drama and sprite legibility, but it spends meaningful board height. **Recommend contextual/on-demand expansion, not permanent default.** |
+| [I - Compact Character drawer](../ui-sketches/mock-frames/procedural-dungeon/taste-card-i-hybrid-character-drawer.png) | Character dossier opens between rail and reframed map; lens remains collapsed; chat persists. | Validates the shell law and exposes the real cost in central width. **Recommend as the character-reference state**, with compact fields and internal tabs rather than a full replacement screen. |
+| [J - Board-anchored object inspector](../ui-sketches/mock-frames/procedural-dungeon/taste-card-j-hybrid-board-object-inspector.png) | A small structured card points directly to the selected 3D chest. | Spatially immediate, but can occlude map evidence and requires collision-aware placement. **Recommend only as a tiny preview or for sparse boards**, not the only full inspector. |
+| [K - Chat-embedded object inspector](../ui-sketches/mock-frames/procedural-dungeon/taste-card-k-hybrid-chat-object-inspector.png) | Chest focus becomes a structured segment in the right conversation surface; board remains unobstructed. | **Recommended primary object-inspection home.** It treats inspection as conversation with the world and preserves every tactical cell; cost is temporary transcript height. |
+| [L - Large battlefield mode](../ui-sketches/mock-frames/procedural-dungeon/taste-card-l-hybrid-large-battlefield.png) | Icon-first rail, slightly narrower chat, no lens, and a much larger multilevel field. | Confirms the shell can favor spatial scale without a dashboard. **Recommend a layout/camera state of the same SceneTray**, not another renderer. Chat and type minima must remain fixed while the stage absorbs the variation. |
+
+Cards G-L use generated example prose, stats, dungeon dressing, geometry, and iconography. None of those invented
+nouns or exact ratios are canon. The reusable icons visible inside the mockups are not delivered sprite assets;
+any icons promoted into production must still receive the separate `#FF00FF` sprite-sheet treatment required by
+`ART-DIRECTION-CANON.md`.
+
+#### Implementation and maintenance consequences
+
+- **Mixed-resolution compositing: medium-high.** The renderer must keep 3D edges, light, and UI typography clean
+  while sampling canonical sprite texels crisply. Camera zoom and device scaling cannot accidentally blur sprites
+  or make them crawl against the smooth stage.
+- **Real cast shadow + compact contact shadow: medium.** They solve different jobs and need separate dials. Sprite
+  alpha must shape the cast shadow; the contact mark must stay short and dark enough to ground the standee without
+  becoming a second fake sun.
+- **Future normal-map lane: medium engineering/QA, low-to-medium runtime if the spike succeeds.** The existing
+  `MATERIAL-IDENTITY.md` proposal still needs its material-compatibility spike, derived-map pipeline, bindings,
+  budget, realm tuning, A/B flag, performance measurement, and real captures. Taste-card relief cannot skip them.
+- **Higher-resolution release target: medium-high fill-rate and capture-corpus cost.** Shadow-map resolution,
+  transparent sprite edges, post effects, text, and large-board legibility all need proof at native desktop and
+  horizontal-tablet targets, not inference from historical low-resolution tests.
+- **Asset fidelity: medium production-contract cost.** Existing assets buy continuity, but every primitive class
+  still needs deterministic scale, anchoring, face mapping, filtering, state, and fallback rules. Generated mockups
+  are not a substitute for an actual-asset engine bakeoff.
+
+#### Refined open follow-ups
+
+- **F10.1c - hybrid visual substrate:** Is Card G the correct renderer boundary and default-shell family: smooth
+  high-resolution 3D substrate, crisp mounted pixel-art citizens, persistent right chat, and a normally collapsed
+  EngagementLens?
+- **F10.1b - lens behavior, now shown directly:** Should the lens remain contextual/on demand as recommended, or
+  should Card H's expanded state become the normal combat composition despite consuming about a quarter of the
+  board height?
+- **F10.3b - object-inspector home, now shown directly:** Should Card K's chat-embedded full inspector be primary,
+  with Card J reduced to a small spatial preview, or does direct board anchoring deserve the full interaction set?
+- **F10.6b - resolution proof:** Which native desktop and minimum horizontal-tablet sizes join P10.12's capture
+  corpus? Candidate proof sizes must include at least a high-resolution desktop frame and one minimum landscape
+  tablet frame; the final values remain unruled.
+- **F10.6c - material and shadow truth:** Later engine proof must show flat-versus-normal-mapped A/B captures and
+  separately controllable cast/contact shadows using the same scene, rather than treating these concepts as built.
+
+Wave 10 remains **OPEN at F10.1c**. Cards G-L supersede E/F only as renderer-register evidence; E/F remain useful
+historical evidence for the shell correction. No implementation, renderer selection, or Fable design-to-spec gate
+is authorized by these cards.

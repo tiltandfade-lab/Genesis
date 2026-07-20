@@ -6,6 +6,31 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 hybrid suite) — HIGH-RES 3D SUBSTRATE + PIXEL-ART LAYER [Codex]
+
+This supersedes the full-shell pickup below without deleting it. Design/taste-card work only: no code, CI,
+worktree, LFS checkout, merge, push, or Fable design-to-spec handoff was authorized.
+
+Adam corrected the renderer register and the implementation record. Genesis is not meant to render the entire
+frame as pixel art. Its physical scene is a clean high-resolution 3D diorama/battlemat with volumetric grid forms,
+elevation, cheap stateful geometry, practical lights, real cast shadows, and compact contact/drop shadows. Pixel
+art remains the canonical mounted actor/object/texture layer. Adam also confirms normal maps were never built:
+`MATERIAL-IDENTITY.md` remains `SPECCED-WITH-SPIKE`. New cards simulate restrained normal response only so the
+future material target can be judged; the old lower-resolution captures are references, not a product target.
+
+Six integrated-UI concept renders are saved under `ui-sketches/mock-frames/procedural-dungeon/` and recorded in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.3. They use real Genesis captures, sprites, textures, and chest art as
+references where image-generation limits allowed, but remain asset-informed concepts rather than engine captures:
+G stage-first baseline, H expanded EngagementLens, I compact Character drawer, J board-anchored object inspector,
+K chat-embedded inspector, and L large battlefield. Codex recommends G as the base, H contextually/on demand, I as
+the compact character state, K as the primary full object inspector with J reduced to a small preview, and L as a
+layout/camera state of the same SceneTray.
+
+**Do next:** ask **F10.1c**: does Card G establish the right visual substrate and default shell? Then rule on H's
+contextual lens behavior (F10.1b), J versus K for full object inspection (F10.3b), and the native high-resolution
+desktop/minimum-landscape-tablet proof sizes (F10.6b). Continue every earlier F10/P10/G10 branch. Wave 10 remains
+open and no Fable design-to-spec gate is available until the full contradiction audit and Adam's explicit closure.
+
 ## ⭐ Latest (2026-07-20, Wave 10 full shell) — CHAT RIGHT + COMPACT CHARACTER DRAWER [Codex]
 
 This supersedes the Wave 10 batch-1 pickup below without deleting it. Design/taste-card work only: no code, CI,

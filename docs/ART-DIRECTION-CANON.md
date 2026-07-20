@@ -177,6 +177,26 @@ information drawers that preserve the scene. Chests route to cheap textured box 
 Taste Cards E/F and the still-open responsive/layout questions are recorded in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.2. Their invented content and exact proportions remain noncanonical.
 
+## High-resolution hybrid-renderer correction (Adam, 2026-07-20 — additive)
+
+> "now can you show me a full suite of taste cards with UI integrated? I like this idea, what are some potential variations? also your render is full pixelart, but our engine is 3d with a pixel art layer on top, remember the lights with the cast shadows, the drop shadows and the normal maps? can you render some using as much f our actual assets as possible"
+
+> "we never actually implemented the normal maps, so can you go ahead and simulate those? also we are running at a higher resolution than most of those tests"
+
+The Wave 10 target is therefore not a globally pixel-art frame. The physical scene remains a clean,
+high-resolution 3D diorama/battlemat: volumetric floors, walls, elevation, columns, cover blocks, stateful cheap
+geometry, visible practical lights, and real cast shadows. Canonical pixel art is mounted into that scene as the
+actor/object/texture layer, with crisp texels, physical shells or plinths where needed, alpha-respecting cast
+shadows, and separate compact contact/drop shadows.
+
+Normal maps are **not an implemented Genesis win**. `MATERIAL-IDENTITY.md` is a `SPECCED-WITH-SPIKE` proposal.
+Wave 10 Cards G-L deliberately simulate modest normal-mapped relief so Adam can judge the intended material
+future, but neither the cards nor older renderer captures are build evidence. Likewise, older lower-resolution QA
+captures may establish composition, geometry, light, shadow, and asset provenance; they do not set the release
+resolution target. Cards G-L are asset-informed high-resolution concept renders, not deterministic screenshots or
+pixel-perfect reproductions of the referenced assets. Their ruling and links live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.3.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

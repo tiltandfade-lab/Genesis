@@ -10037,3 +10037,97 @@ rail.
 character-expression, story-objective, and world-context reward lanes as recommended—with no forced class,
 quest, or world attachment when that lane was not genuinely active—before any lane receives additional
 lenses?
+
+#### 10.11.38 Correction — only `20/20` creates extra persistent world mutations
+
+Adam draws a firmer boundary: only magnitude 20 should grant additional persistent states in the world.
+The lesser successful degrees may spread the reward into character, objective/story, world-context, or
+material lanes, but they should not install permanent supernatural/campaign mutations merely because the
+magnitude exceeded 15. A magnitude-19 success on a treasure-chest lock should, for example, improve a
+low-tier reward rather than found an institution or permanently rewrite the room.
+
+This requires precise terminology because all honest play changes stored state. The following remain
+ordinary persistent transaction results at every degree when the action earns them:
+
+- the picked lock remains open or broken according to the resolution;
+- acquired loot remains in inventory and leaves its prior holder/container;
+- a revealed established fact remains known to the appropriate witnesses;
+- quest progress, spent resources, time, noise, relationships, damage, and other normal consequences are
+  committed rather than forgotten;
+- a generated story lead/card may persist as a bounded promise for later fulfillment.
+
+The restriction is on **extra crit-authored world mutation**: 16–19 cannot use magnitude alone to create a
+new local law, permanent magical terrain, Breach, transformed person, supernatural bond, founded faction or
+institution, erased history, inherited curse, or equivalent durable canonical system. Those typed lens
+mutations are reserved for `20/20`.
+
+##### Revised successful degrees
+
+| Natural | Magnitude | Result | Extra authority beyond the core success |
+|---:|---:|---|---|
+| 20 | 1–15 | **Standard Critical Success** | None required: best lawful ordinary success, performed with style and excellence. |
+| 20 | 16–18 | **Amplified Critical Success** | **One bounded reward spread** attached to the strongest relevant reward lane. No persistent mutation lens. |
+| 20 | 19 | **Legendary Critical Success** | **Two bounded reward spreads**, preferably across distinct relevant lanes. No persistent mutation lens. |
+| 20 | 20 | **Mythic Critical Success** | The core success plus the accepted `d3 + 2` typed persistent lenses; cover every active reward lane before repeating one. |
+
+“Reward spread” is a bounded consequence inside systems that already exist. Eligible forms include:
+
+- **mastery:** faster, quieter, cleaner, safer, broader ordinary execution; tools/resources conserved;
+- **material:** improve a soft/unrevealed reward, add a bounded bonus reward, or improve its usefulness;
+- **story:** reveal an existing relevant fact, increase clue specificity, or mint/promote an attached
+  promissory story card without immediately changing the physical world;
+- **objective:** advance, simplify, expose, or create leverage against the active quest/contract/pressure;
+- **social:** a fitting immediate reaction, credibility gain, invitation, concession, or advantage through
+  the existing relationship/reputation systems;
+- **character expression:** a class/feature/faith/item/tactic payoff that remains inside established
+  capabilities rather than manufacturing a permanent new supernatural feature.
+
+The reward-anchor model therefore still governs 16–19, but lens coverage no longer does. Magnitude decides
+the number of bounded spreads; target and method affinity decide which lane should be favored. `20/20`
+alone hands those anchors to the persistent lens engine.
+
+##### Treasure-chest magnitude 19
+
+The pre-roll `CheckContract` should carry a `RewardEnvelope` for reward-bearing targets:
+
+```text
+container/reward-root id and commitment state
+base loot tier or unresolved allocation
+context/level/power cap and legal upgrade bands
+available material, story, mastery, and objective reward adapters
+crit-bonus provenance and already-claimed guard
+```
+
+On a `20/19` lockpick, the chest/material anchor has overwhelming target affinity, so at least one of the
+two reward spreads should pay through the treasure unless canon or safety makes that impossible:
+
+- if the contents are soft or not yet rolled and sit below the legal cap, promote one meaningful component
+  by one reward/rarity band or make an equivalent bounded bonus draw;
+- if the chest is already at its legal material ceiling, preserve it and spend that spread on a useful
+  consumable, hidden compartment, provenance clue, quest evidence, or another fitting non-power reward;
+- if contents were already observed and locked to canon, do not retcon them—the additional value must use
+  a lawful unobserved affordance or another active lane;
+- never downgrade a later room to “pay back” the crit. This is an earned, rare crit faucet recorded
+  separately for economy telemetry;
+- the same reward root cannot be checked repeatedly or split into several lock/trap/lid checks to farm
+  upgrades.
+
+For example, a low-tier prison pay-chest might replace a mundane consumable with a better tier-appropriate
+one and also expose a coded payroll entry connecting the jail to a smuggling quest. A wealthy vault already
+at its power cap might keep its treasure unchanged but add a hidden provenance ledger and allow the tools
+to survive a lock designed to destroy them. Neither result permanently changes local physics or creates a
+new shrine; both clearly reward the magnitude-19 success.
+
+This is cheaper and safer than giving 16–19 persistent lenses. The engine needs a small bounded reward
+adapter registry and reward-envelope checks, while the expensive typed world-mutation planner runs only on
+`20/20`. Crit bonuses remain auditable and rare enough to be genuine rewards rather than a replacement for
+ordinary dungeon budgeting.
+
+**Recommendation:** lock the revised table above. Use one bounded reward spread at 16–18, two at 19, and
+reserve `d3 + 2` persistent lens mutations exclusively for `20/20`. Preserve ordinary transactional
+consequences at every degree so “not world-persistent” never means that opened locks, obtained loot, learned
+truth, or quest progress evaporate.
+
+**Open follow-up:** should Genesis lock this distinction and, specifically, guarantee that a magnitude-19
+success against a low-tier reward container spends at least one of its two bounded reward spreads improving
+that material reward within the legal envelope?

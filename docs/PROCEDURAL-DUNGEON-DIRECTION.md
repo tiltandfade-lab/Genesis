@@ -10893,3 +10893,391 @@ corpse persistence, evidence, revival/recovery, quests, rendering, and Breach to
 
 **Resumed open decision:** should Genesis replace `obliterated` as world-state authority with this typed
 terminal-disposition model, retaining the boolean only as a temporary renderer compatibility field?
+
+#### 10.11.50 Ruling — terminal outcomes use typed disposition, not an authority boolean
+
+Adam accepts the typed `TerminalDisposition` model. `obliterated` may survive temporarily as a renderer and
+migration projection, but it no longer owns gameplay truth. Death, banishment, transformation, planar
+consumption, disintegration, petrification, and Mythic erasure resolve their life continuity, remains,
+destination, inventory, recovery, evidence, and identity/canon consequences explicitly.
+
+Ordinary death retains the existing default: an intact corpse plus carried loot, governed by normal
+clock/context recovery and disturbance. Special effects override only the disposition axes they actually
+license. Bundled equipment profiles prevent per-item physics while supporting explicit protected/story-item
+exceptions. Every terminal receipt preserves causal provenance and prior observed history unless a
+separately authorized name/memory/history effect changes what later actors know or remember.
+
+This closes the terminal-disposition follow-up.
+
+#### 10.11.51 External play reference audit — “Double Dragon Multiverse Campaign”
+
+Before continuing the redesign, Adam supplies the public Gemini conversation that inspired Genesis:
+
+<https://share.gemini.google/cDjGQD2scNiO>
+
+The public link resolves to the published Gemini share titled **Double Dragon Multiverse Campaign**. The
+page exposes 39 complete user/Gemini turn pairs and roughly 105,000 text characters. The first visible turn
+is Adam's full DM operating prompt; the final visible turn is Gemini explaining that its own active memory
+could only reach back to Danzig's later sleight-of-hand scene and had lost the beginning while attempting to
+generate a complete PDF. All 39 public user messages and all 39 public responses were present and read.
+
+Access limitation: the page marks the uploaded DMG attachment as not shown, so its file contents cannot be
+audited from the share. The two Gemini-generated PDF artifacts are visible as conversation events, but the
+analysis concerns the complete published textual exchange rather than trusting either incomplete PDF.
+
+This is a design reference, not content authorization to ship copyrighted franchise characters, lyrics,
+or songs. Genesis should reproduce the play dynamics through IP-clean archetype grammars, user-supplied
+local motifs, and mod/content surfaces rather than hardcoding the particular franchises.
+
+#### 10.11.52 What made the session exceptional
+
+The session's core pleasure was not merely energetic prose or familiar references. Gemini repeatedly took
+an action-created fact and turned it into the next playable affordance:
+
+```text
+failed attack
+  -> brandy-soaked/flammable character
+  -> snow chosen to remove flammability
+  -> failed detonator kick relocates the device into the roof
+  -> chrono-static blast becomes a realm-transition event
+  -> stolen flying vehicle accumulates position, damage, party-mode, and pursuit state
+  -> critical mace strike embeds a real anchor and punctures a fuel line
+  -> fuel trail becomes a solid-light route
+  -> route + vehicle + group call enables the portal escape
+  -> aftermath produces relationship-rooted loot and the next threat root
+```
+
+The fun therefore came from **causal generosity**: the DM treated player inventions, failures, props, NPC
+reactions, and prior consequences as handles instead of resetting each check into an isolated pass/fail.
+Specific strengths follow.
+
+##### 1. Failure created a new situation rather than a dead end
+
+Danzig's poor rolls drove prone, flammable, misplaced-device, wrong-control, dangling, spinning-vehicle,
+and other playable states. The consequences were immediately legible and created different choices. The
+player came to enjoy Danzig's bad-roll identity because failure generated authorship rather than withholding
+play.
+
+The correct Genesis lesson is not “turn every failure into secret success.” A failed roll must honestly
+miss its declared objective. It should then commit a concrete complication, changed position, cost, threat
+advance, lost resource, exposure, or new affordance from the established scene.
+
+##### 2. Props accumulated identity and mechanical history
+
+The door, tables, brandy shelf, snow, corpse, detonator, vehicle, dashboard controls, embedded mace, leaking
+fuel, grappling line, billboard, and portal were not disposable dressing. Interaction promoted them into
+stateful objects. Later narration reused their conditions instead of forgetting them. The embedded mace in
+particular became position anchor, constraint, fuel damage source, solid-light route cause, and eventual
+escape mechanism.
+
+This directly validates Wave 1's accepted promotion law: generated dressing may begin lightweight, but the
+moment a player relies on it, the engine must validate/promote it and give the DM real handles for state,
+affordances, exhaustion, effects, and later projection.
+
+##### 3. Player-supplied motifs became reciprocal play
+
+The players supplied catchphrases, musical cues, franchise recognition, jokes, and action framing. Gemini
+did not merely acknowledge them; NPCs answered, the scene's aesthetic shifted, and later beats reincorporated
+them. This made the experience feel co-authored rather than consumed.
+
+Genesis needs a safe distinction:
+
+- player language and motifs may become sourced callback/story cards and scene texture;
+- established creative contribution may earn Inspiration, advantage, a group-combo opportunity, reputation,
+  or another explicit bounded reward;
+- a joke or phrase may not counterfeit a natural crit or silently mint unbounded mechanics;
+- recurring user-supplied references remain local/mod/user content unless independently licensed for
+  shipped material.
+
+##### 4. The two players built one crisis together
+
+The best sequence was a cooperative action chain rather than two isolated turns. One player cleared the
+door so the other could kick the device; one caught passengers while the other piloted; Guidance supported
+a maneuver; the mace anchor enabled rescue and later propulsion; NPC allies occupied meaningful roles.
+
+Genesis needs a scene/challenge owner that can hold a shared objective, threat, cast positions, active
+assets, complications, clocks, and each contribution's effect on the next legal action. It must not reduce
+the sequence to an abstract progress bar, but an optional progress/risk summary may derive from the actual
+facts.
+
+##### 5. NPCs were immediately playable
+
+The turtle analogues had sharply legible voices, methods, wants, props, and combat roles. Food, technical
+analysis, aggression, and leadership gave players obvious social handles. The party's improvised relationship
+then paid out through help, banter, rescue, farewell, and a keepsake rooted in shared events.
+
+This is casting rather than generic NPC generation: stable identity plus live role in the current problem.
+It supports the redesign's cast resolver, group membership, motive, relationship, and salience promotion
+direction.
+
+##### 6. Pace came from escalating external pressure
+
+Every resolved beat exposed a next pressure: bounty hunter, detonator, realm blast, law patrol, hijacked
+vehicle, pursuers, gridlock, interceptor, tractor beam, portal. The story almost never returned to neutral
+between actions. The ending nevertheless supplied earned breathing room, social payoff, distinctive loot,
+and a new root connecting the set piece back to the original world.
+
+The mechanical target is a pressure/front hand that reacts to receipts—not a requirement that every turn
+invent a larger threat. Quiet beats, aftermath, and rests are necessary contrast. Salience and active-hand
+capacity decide when another pressure can enter.
+
+##### 7. The reward commemorated what actually happened
+
+The paired communication items were not anonymous treasure. Their form and cooperative initiative benefit
+referred to the relationship and shared escape. The later body search produced material loot, evidence,
+and a causal lead to the next threat.
+
+Genesis should mint exceptional keepsakes through reward envelopes that consume participant, motif,
+relationship, action, and event provenance. The item becomes a mechanical memory of play rather than a
+random rarity upgrade.
+
+#### 10.11.53 Where Gemini drifted—and what the engine must own
+
+The same transcript is an unusually clear failure audit because the prose remained entertaining while
+state and rules degraded.
+
+##### Identity and cast drift
+
+- The opening established four silhouettes but only some entered and received explicit positions.
+- Gemini initially mislabeled the red-bandana actor as Leo; Adam corrected the identity to Raph.
+- Later responses again used Leo in dialogue without a valid tracked location/entrance, and only after Adam
+  repeatedly asked where Leo was did the narration place him on a nearby vehicle and reunite all four.
+- The proprietor largely vanished from active casting during the transition and reappeared afterward with
+  a condition supplied by prose rather than an audited state path.
+
+Required owner: a `CastRoster`/entity projection with canonical id, aliases, group membership, current
+location/zone, continuity state, initiative/availability, motive, voice cues, equipment, knowledge,
+relationship, and last sourced transition. Narration may mention an actor only if the receipt includes that
+actor or a validated entrance/promotion event creates the reference.
+
+##### Character sheet and rule drift
+
+- Gemini offered a spell Rajrik did not know; Adam had to correct it.
+- It first missed Danzig's Dexterity modifier, then later accepted an erroneous +5 Athletics modifier even
+  though the supplied sheet supported +3.
+- Separate attacks reused one supplied roll; damage, NPC attacks, saves, and several benefits were rolled or
+  invented opaquely.
+- Resource/duration handling drifted: Guidance was reused after its check, Warding Flare was treated as a
+  short-rest recovery, and spell/feature ownership was not consistently derived from the sheet.
+- Position, action economy, reactions, difficulty, hit points, advantage/disadvantage, and rest effects were
+  sometimes handled for momentum rather than from one authoritative resolution spine.
+
+Required owner: the existing sheet/resources/combat/conditions systems must issue the legal action surface,
+modifier, roll mode, cost, DC/defense, damage/healing, duration/expiry, and receipt. The DM may frame and
+narrate but cannot substitute remembered arithmetic or improvise a missing feature.
+
+##### Dice-authority drift
+
+- A low noncritical roll was treated as though it carried magnitude authority.
+- A group catchphrase later triggered a large “magnitude” shield without the required natural result and
+  second d20.
+- At least one check explicitly missed its declared DC but narration still granted the practical objective.
+- Some failures generated excellent forward motion but quietly softened or reversed the actual result.
+
+Required owner: `CheckContract -> open dice -> ResolutionReceipt`. Crit Magnitude can fire only through the
+shared eligible d20 path. Creative-group energy needs a separate legal `Style/Combo` channel so the game can
+reward a synchronized call or audacious stunt without lying about the dice.
+
+##### Causality lived only in prose
+
+The strongest states—flammable, chilled, detonator location, chrono-static, vehicle orientation, passenger
+positions, embedded mace, fuel leak, party mode, gridlock, solid-light route, pursuit distance, portal,
+NPC allegiance, and keepsake provenance—were mostly remembered sentences. Gemini did remarkable short-term
+weaving with them, but no authoritative object ensured expiry, legality, replay, save/load, or later reaction.
+
+Required owner: a typed `SceneFactGraph` whose facts record source event, owners/targets, state, evidence,
+afforded actions, dependencies, expiry/consumption, and projection. DM invention becomes legal when it is
+validated and captured into that graph, Codex, Ledger, relationship, topology, item, condition, or other
+canonical owner in the same turn.
+
+#### 10.11.54 Recommended mechanical reconstruction
+
+Genesis's target is not “generate the same adventure.” It is:
+
+> reproduce Gemini's causal generosity and reciprocal improvisation while the engine owns everything that
+> Gemini forgot, miscalculated, fabricated, or silently softened.
+
+The recommended live loop is:
+
+```text
+served scene bundle
+  = CastRoster + SceneFactGraph + active pressures + places/props + player sheets + rules profile
+
+player declares arbitrary intent and method
+  -> ActionPlanner / CheckContract identifies targets, method, stakes, cost, legal effect envelope
+  -> engine exposes roll and applies modifiers/resources
+  -> receipt commits core result plus typed reward/complication/crit effects
+  -> new/changed SceneFacts expose the next real affordances
+  -> pressure/front hand reacts where due
+  -> DM narrates only the accepted bundle and may propose capture-ready connective invention
+```
+
+##### A. `SceneFactGraph` — the missing center
+
+Each promoted fact or condition should minimally carry:
+
+```text
+fact id/type; source event/roll; subject/target/holder; current location/zone
+state and mechanical tags; evidence/knowledge boundary
+affordances offered; dependencies and causal parents
+duration/expiry/consumption/exhaustion; protected canon
+projection needs; salience; owning adapter; reconciliation trace
+```
+
+Example chain:
+
+```text
+brandy_spill + character_in_zone -> soaked{flammable:true}
+character_enters_snow -> soaked diluted/removed; chilled added
+detonator moved_to roof -> blast origin changes
+mace embedded_in vehicle -> anchored position + vehicle hull damage
+hull damage at fuel line -> leaking fuel fact
+chrono/static + luminous fuel + later authorized combo -> traversable solid-light route
+```
+
+The final transformation requires a legal effect/combo receipt; mere prose adjacency cannot manufacture a
+bridge. But once committed, the route is real and can serve movement, pursuit, lighting, and later evidence.
+
+##### B. `CrisisChain` / cooperative scene challenge
+
+A live chase, escape, ritual, heist, negotiation, or environmental crisis needs a shared container:
+
+```text
+goal and failure stakes
+active threats/fronts and clocks
+cast/positions and turn/action ownership
+assets, temporary facts, complications, and spent resources
+legal contribution targets and combination opportunities
+progress/risk summary derived from facts
+terminal/transition conditions and aftermath obligations
+```
+
+Every roll must change an owned fact, cost, position, clock, knowledge state, or relationship. Suggestions
+for a new player may be derived from actual legal affordances; they are examples, never the action whitelist.
+
+##### C. `Style/Combo` is separate from Crit Magnitude
+
+The group-call shield was joyful but mechanically dishonest under the declared crit rule. Genesis should
+support the joy directly:
+
+- player/NPC contributions can attach motif/callback tags to a shared active beat;
+- an explicit rule may award Inspiration, advantage, temporary protection, coordinated movement, morale,
+  or a one-scene combo when requirements are satisfied;
+- every benefit declares duration, targets, stacking, costs, source contributions, and effect owner;
+- style never fabricates a natural result, upgrades a magnitude band, or bypasses the Crit mandate.
+
+This gives the DM permission to reward communal creativity without turning “say the magic phrase” into an
+unbounded exploit.
+
+##### D. `Motif/CallbackDeck` preserves player authorship
+
+Player-supplied phrases, jokes, music references, names, fears, and aesthetic framings may enter a local
+session deck with source, consent/visibility, attached actors/events, recurrence budget, tone, and mechanical
+permission. The DM may reincorporate them where semantically relevant. Most callbacks are texture; some
+attach to an explicit style, relationship, quest, or reward rule.
+
+This is related to—but distinct from—world-generation motifs. It is the campaign learning what these players
+find funny, heroic, frightening, or meaningful without granting the AI authority to rewrite mechanics.
+
+##### E. `CastRoster` prevents the Leonardo failure
+
+Groups require membership and individual state simultaneously. A four-member group can be established
+without eagerly generating every biography, but surfaced members must receive stable ids and positions.
+Identity constraints should prove:
+
+- red/blue/purple/orange cues resolve to one canonical actor each;
+- aliases and player corrections update the correct record with provenance;
+- absent/offscreen/dangling/on-roof/in-cockpit actors cannot speak or act from another zone;
+- reunification requires explicit movement/entrance/transition events;
+- the DM digest includes the current cast and does not rely on conversation memory.
+
+##### F. exceptional rewards mint from provenance
+
+The end-of-sequence keepsake pattern should consume the relationship/event record:
+
+```text
+participants + rescued/helped relationship
+shared motif and decisive actions
+reward envelope/power cap
+item function that recalls the play pattern
+holder/custody and future reaction hooks
+```
+
+This can produce party-synergy items, titles, contacts, techniques, maps, or story tools whose mechanics are
+bounded but whose meaning is unique to the campaign.
+
+#### 10.11.55 Alignment with current Genesis direction
+
+The reference strongly validates several systems already built or accepted:
+
+- DM Charter's central law that deterministic state—not DM memory—is authoritative;
+- Ledger/Codex/event provenance and same-turn capture of DM invention;
+- conditions with engine-owned duration/expiry, concentration, spell/feature/resource legality;
+- arbitrary-intent planning with `CheckContract`, transactional commit, and `ResolutionReceipt`;
+- Crit Magnitude's open dice, anchor coverage, typed adapters, and distinct configuration profiles;
+- narrative priority decks, salience, pressure/front scheduling, discovery cards, and persistent threat roots;
+- place-object promotion and validated environmental creativity;
+- cast/group/cohort distinctions and individual promotion on salience;
+- typed terminal disposition, corpse/loot persistence, and aftermath rooted in actual events.
+
+It also exposes important gaps that must enter later specs:
+
+1. a general-purpose typed `SceneFactGraph` rather than condition tags plus prose;
+2. a multi-actor `CrisisChain`/cooperative challenge owner;
+3. cast identity/location validation at narration time;
+4. a player-supplied `Motif/CallbackDeck` distinct from authored place motifs;
+5. a bounded `Style/Combo` reward channel distinct from crits;
+6. provenance-driven keepsake/reward minting;
+7. digest projection that serves all active props, positions, effects, resources, NPCs, and unresolved
+   pressures without overwhelming the DM;
+8. executable traces proving a state created early in a long scene can be legally consumed much later
+   without relying on context-window memory.
+
+No build is authorized by this reference analysis. These requirements should sift the redesign and later
+architecture/spec waves; they must not be bolted on as one giant subsystem without decomposition.
+
+#### 10.11.56 Tensions and future decisions surfaced by the reference
+
+##### Tutorial help versus player agency
+
+The explicit action examples helped the new player understand movement, actions, bonus actions, reactions,
+and possible checks. But later option lists sometimes became steering, repeated obvious advice, or framed
+the situation as a menu. This conflicts with Genesis's current default DM rule against volunteered tactical
+coaching.
+
+A likely resolution is a per-player assistance profile rather than one campaign-wide DM temperament:
+
+- **rules only:** answer questions and surface legal sheet/action information without suggestions;
+- **affordance examples:** show a small number of context-legal examples plus an explicit open-input lane;
+- **tutorial:** explain action economy and character features proactively, then taper as mastery grows.
+
+This remains a future design question; the reference proves both the value and the cost.
+
+##### Momentum versus honest failure
+
+Gemini sometimes preserved excitement by letting a missed DC achieve the practical objective. Genesis must
+instead preserve momentum through new state: failure may worsen position, advance threat, add cost, expose
+another route, or create a partial result only when the pre-roll contract authorized partial success. The
+DM cannot secretly change “failed to reach Donnie” into “reached Donnie with cosmetic scraping.”
+
+##### Improvisational freedom versus state explosion
+
+The scene generated many temporary objects and conditions quickly. Full simulation of every noun would be
+too expensive; prose-only handling recreates Gemini drift. The accepted promotion model is the balance:
+serve a bounded active scene bundle, promote only touched/relied-on nouns, aggregate inactive groups, give
+temporary facts explicit TTL/consumption, and archive/compact resolved facts into evidence/history when the
+scene ends.
+
+##### Escalation versus saturation
+
+The nonstop bomb-to-realm-to-police-to-chase-to-tank chain was exhilarating as a short session and exhausting
+as a universal cadence. Mythic configuration, salience capacity, pressure decks, quiet beats, and player
+momentum should determine when this density is legal. The engine should make this style reproducible without
+making every cellar search become a trans-dimensional pursuit.
+
+##### The design north star extracted from the game
+
+> Genesis should feel as willing as this Gemini session to let a ridiculous player idea become the next
+> real situation, while being categorically better at remembering who exists, where everyone is, what the
+> dice said, which resources were spent, how long effects last, what objects can do, and what consequences
+> remain after the laughter.

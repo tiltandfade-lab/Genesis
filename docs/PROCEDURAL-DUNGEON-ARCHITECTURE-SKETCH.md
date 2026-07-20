@@ -15,9 +15,10 @@ related:
 
 ## 0. Status and authority
 
-This is a living architecture sketch for **closed Wave 1 only: Dungeon Function, History, and
-Strange Compatibility**. It translates the accepted Wave 1 ontology into a compact map of conceptual
-records, ownership, flow, invariants, current-code seams, and future-wave handoffs.
+This is a living architecture sketch for **closed Wave 1: Dungeon Function, History, and Strange
+Compatibility**, including the explicit skeptical clarifications that amend its universal wording. It
+translates the accepted Wave 1 ontology into a compact map of conceptual records, ownership, flow,
+invariants, current-code seams, and future-wave handoffs.
 
 This document is deliberately:
 
@@ -41,14 +42,15 @@ Wave 1 establishes a persistent semantic site before it establishes a visual roo
 
 ```text
 authoritative world and premise facts
-  -> time-indexed construction context
-  -> original purpose and construction identity
+  -> definite site lineage and domain relationships
+  -> intentional purpose/construction identity OR natural/living/anomalous origin grammar
   -> complete operating-model obligations
   -> coupled site profiles and protected variation
   -> sequential history and inherited present use
   -> current occupation zones and sparse active fronts
   -> scoped Spice roots, discoveries, promises, and knowledge boundaries
-  -> fixed semantic hierarchy and mathematical connection topology
+  -> fixed semantic hierarchy and mathematical connection topology for ordinary finite sites
+  -> versioned topology laws and permanently committed frontiers for licensed unbounded domains
   -> deterministic latent detail inside already-fixed invariants
   -> later-wave spatial, gameplay, DM, and visual projections
 ```
@@ -60,10 +62,16 @@ The central boundary is:
 > and licensed strategic timing; it does not repair missing architecture or invent causal continuity
 > from orphan rolls.
 
-This semantic core may eventually serve any **bounded navigable site**: dungeon, manor, castle, temple,
-warehouse, ship, sewer, or comparable place. It does not collapse environment families. Wilderness
-walks remain terrain journeys; urban walks remain movement through districts and institutions; either
-may enter a bounded site when detailed navigation matters.
+This semantic core may eventually serve a bounded navigable site, a distributed institution linked
+across domains, an entity-site such as a ship or living fortress, or the bounded materialization window
+of a canonically unbounded domain. It does not collapse environment families. Wilderness walks remain
+terrain journeys; urban walks remain movement through districts and institutions; either may enter a
+bounded site when detailed navigation matters.
+
+Four concepts remain separate even when ordinary cases compile into one compact bundle: **domain or
+substrate** owns space and material extent; **site identity and lineage** own canonical continuity;
+**institution, ecology, and occupation** own purpose/imperative and current operation; and the
+**materialization window** owns only the finite active semantic, spatial, DM, and render slice.
 
 ## 2. Commitment and authority model
 
@@ -128,9 +136,13 @@ boundaries.
 
 | Conceptual record | Owns | Does not own | Primary producer | Future consumers |
 |---|---|---|---|---|
-| `SiteIdentity` | Stable site identity, bounded-place kind, authority chain | Room coordinates or renderer skin | Site/world generation | All site stages |
-| `PurposeLineage` | Dominant original purpose, subordinate purposes, supporting functions, current-use overlays | “Secret” as a purpose; current occupancy as original construction | Canon/premise/purpose rollers + history | Roster, history, discovery, room programs |
-| `ConstructionIdentity` | Commissioner, original operator, doctrine, design tradition, intended users/scale, substrate, era, consequential workforce | Present occupants or renderer repair | Construction-context pass | Operating model, architecture, history |
+| `DomainSubstrate` | Space, topology, physics, extent, mobility, material form, and explicit links to other domains | Site continuity or institutional ownership | World/site generation + topology | Spatial compilers, events, renderer |
+| `SiteIdentity` | Stable canonical identity, continuity, predecessor/successor relationships, linked domain facets | Automatic equivalence with one building, institution, faction, or current claimant | Site/world generation + lineage events | All site stages |
+| `SiteLineage` | Ordered origin episodes and, only when required, a small source/copy/graft/split/merge graph | Assumption that every origin was intentional construction; silent current-use overwrite | Canon/premise/origin-family rollers + history | Roster, history, discovery, identity projection |
+| `PurposeLineage` | Intended purposes and subordinate purposes belonging to intentional or designated episodes | Natural origin, behavioral imperative, ecological role, current use, or belief | Intentional construction/designation episodes | Roster, history, room programs |
+| `ConstructionIdentity` | For intentional episodes: commissioner, original operator, doctrine, design tradition, intended users/scale, substrate, era, consequential workforce | Universal origin grammar; present occupants or renderer repair | Intentional construction-context pass | Operating model, architecture, history |
+| `InstitutionEcologyOccupation` | Purpose or imperative, operators/populations, operating model, current use, and typed overlapping claims | Domain identity or automatic site-lineage merger | Purpose/ecology/occupation passes | Roster, fronts, resources, current projection |
+| `MaterializationWindow` | Finite active semantic, spatial, DM, and render slice with honest frontiers | Canonical site extent, lineage, or permission to reroll cold truth | Active-slice planner | DM, UI, renderer, persistence cache |
 | `OperatingModel` | Required capabilities, operators, population/throughput, resources, procedures, dependencies, operating state | A rigid one-room-per-capability list | Purpose profile | Wave 2 roster and ecology |
 | `SiteProfileBundle` | Structural scope, operational load, spatial envelope, accommodation domains | Topology, danger, history, discovery, physics, or materialization hidden inside “size” | Context + purpose + rollers | Roster, topology, room and scale compilers |
 | `HistorySequence` | Ordered transformations with agent, action, affected functions, evidence, consequence | Present use silently replacing original purpose | History rollers and established events | Current occupation, discovery, knowledge |
@@ -148,13 +160,26 @@ boundaries.
 
 Some records may later combine or split. The ownership distinction matters more than the names.
 
-## 4. Purpose, construction, and operating-model layering
+## 4. Lineage, purpose, construction, and operating-model layering
 
-### 4.1 Purpose lineage
+### 4.1 Site lineage and intentional purpose
 
-A site normally has one dominant original purpose and zero to two direct subordinate purposes. The
-zero-to-two count is a default anti-purpose-soup guardrail, not a universal ontology limit on child
-sites, historical occupations, Breaches, or campaign-created structures.
+Every site has definite lineage. A lineage episode may be intentional construction; natural formation;
+living growth; emergent anomaly; collective or vernacular accretion; unintended anthropogenic byproduct;
+automated or self-building formation; social designation; graft/composite/copy/relocation; mobile or
+temporary embodiment; split/merge continuity; player creation; or a rare canonically plural/recursive
+origin. Lineage is sequential by default and becomes a small provenance graph only when sources, copies,
+grafts, splits, merges, or recursive formation require it.
+
+An intentionally constructed site normally has one dominant original purpose and zero to two direct
+subordinate purposes. The zero-to-two count is a default anti-purpose-soup guardrail, not a universal
+ontology limit on child sites, historical occupations, Breaches, or campaign-created structures.
+Natural/living/anomalous families use their own origin grammar rather than receiving a fake builder.
+
+Keep intended purpose, behavioral imperative, ecological role, social designation, current use, and
+belief separate. A later designation may add an institution to a natural cave without rewriting how the
+cave formed. Multiple institutions may share and contest one domain without merging site identities or
+purpose lineages.
 
 Functions are classified causally:
 
@@ -246,24 +271,26 @@ light-simulation model or permit a universal continuous economy.
 
 ### 5.1 Context cascade
 
-The generation order is temporal, not a bag of simultaneous modifiers:
+The generation order is temporal, not a bag of simultaneous modifiers. Steps about commissioner,
+construction doctrine, and intended purpose apply only when the lineage episode is intentional:
 
 ```text
 1. established canon and premise
-2. construction-time region, settlement, realm influence, law, culture, wealth, materials,
-   technology, and magic
-3. commissioner, operator, doctrine, design tradition, and intended scale
-4. purpose, profiles, resource ecology, and guaranteed operating model
+2. origin-time region, settlement, realm influence, law, culture, wealth, materials, technology, magic,
+   ecology, and physics
+3. lineage mechanism; commissioner, operator, doctrine, design tradition, and intended scale only when
+   canonically applicable
+4. purpose, imperative, ecological role, profiles, resource ecology, and guaranteed operating model
 5. protected original discretionary/Spice allocation
 6. zero to three sequential historical transformations
 7. present context, occupants, condition, and relationship to inherited architecture
 8. current use, staffing, supply, restrictions, secrets, and unresolved consequences
 ```
 
-Present context cannot retroactively rewrite original construction. A later retrofit, occupation, or
-transformation must explain the difference. The same portal-cell technique may be ordinary in a mage
-colony and Mythic in a mundane hamlet because context changes eligibility/classification, not because the
-fact has no cause.
+Present context cannot retroactively rewrite original formation or construction. A later designation,
+retrofit, occupation, or transformation must explain the difference. The same portal-cell technique may
+be ordinary in a mage colony and Mythic in a mundane hamlet because context changes
+eligibility/classification, not because the fact has no cause.
 
 ### 5.2 Historical transformations
 
@@ -354,18 +381,23 @@ mutating global assumptions.
 
 ## 7. Semantic hierarchy, repetition, and commitment frontier
 
-### 7.1 Canonical hierarchy
+### 7.1 Canonical identity, domains, and hierarchy
 
 ```text
-bounded site
-  -> zones / levels / subordinate domains
-     -> rooms / functional domains / repeated assemblies
-        -> stable enterable children / inspection surfaces
-           -> deterministically latent details and occupants
+site identity and lineage
+  -> one or more domains/substrates connected by typed relationships
+     -> overlapping institutions/ecologies/occupations and their claims
+     -> zones / levels / subordinate domains
+        -> rooms / functional domains / repeated assemblies
+           -> stable enterable children / inspection surfaces
+              -> deterministically latent details and occupants
 ```
 
 Hierarchical storage prevents facade architecture without forcing every repeated child to become a
-heavyweight independent story record.
+heavyweight independent story record. Distributed sites use explicit links rather than fake continuous
+geometry. Entity-sites use linked entity and site facets over one canonical identity. Identity may
+outlive material fabric; formation, movement, destruction, copy, split, merge, and continuity remain
+event-owned.
 
 ### 7.2 Repeated assemblies
 
@@ -393,9 +425,10 @@ turning the site into an icon-clearing checklist.
 
 ### 7.3 Fixed before exploration
 
-Before a site becomes explorable, seeded canon includes:
+Before an ordinary finite bounded site becomes explorable, seeded canon includes:
 
-- site id, seed, context, purpose lineage, construction identity, and provenance;
+- site id, seed, context, domain relationships, site lineage, applicable purpose/construction episodes,
+  and provenance;
 - operating-model obligations and site/profile allocations;
 - history, resource ecology, current occupation zones/fronts, and root Spice events;
 - major secret/promise networks and required commitments;
@@ -407,6 +440,13 @@ Before a site becomes explorable, seeded canon includes:
 Exact geometry may remain latent only if later compilation cannot change connection, capacity, semantic
 home, clue, promise, or access invariants. A secret door can be hidden from the party while already
 existing in the graph.
+
+A canonically unbounded domain is a narrow exception, never the default for missing scope data. Prefer a
+realm/journey representation containing ordinary bounded sites. When canon truly requires indefinite
+local continuation, stable-frontier generation fixes versioned topology grammar, laws, invariants, and
+frontier interfaces before play, then permanently canonizes every committed node and edge. It cannot
+reroll explored space or become arbitrary door-by-door DM improvisation. Its materialization window is
+finite without pretending to be its canonical extent.
 
 ### 7.4 Materialized on approach or attention
 
@@ -773,7 +813,11 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
 
 ### Identity and authority
 
-- Original purpose remains definite engine truth even if forgotten in-world.
+- Site lineage remains definite engine truth even if forgotten in-world.
+- Intended purpose and construction identity remain definite for intentional episodes; natural, living,
+  emergent, or anomalous origins are not assigned fake builders or purposes.
+- Domain/substrate, site identity/lineage, institution/ecology/occupation, and materialization window do
+  not silently overwrite or collapse one another.
 - Original, intervening, current, and believed functions never overwrite one another silently.
 - Established lore/premise outranks rolls; rolls outrank downstream convenience.
 - Every reconciliation, promotion, mutation, and observation has provenance.
@@ -818,7 +862,9 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
 
 ### Topology, scheduling, and budgets
 
-- The complete semantic connection topology exists before exploration.
+- The complete semantic connection topology exists before exploration for ordinary finite bounded sites.
+- Canonically unbounded domains require explicit license, versioned topology/frontier laws, and permanent
+  commitment of generated nodes and edges; a finite materialization window never implies finite extent.
 - Latent expansion cannot alter topology, capacity, established clues, promises, or observed truth.
 - Narrative scheduling is nonlinear and card-specific; depth is not a universal story template.
 - Challenge and reward rise noisily with effective access depth, not raw room order.
@@ -840,15 +886,17 @@ These are semantic contradiction fixtures, not finished content packages or geom
 | Alchemist shop over necromancy lab | Public primary purpose, concealed subordinate purpose or later transformation, legal discovery path | “Hidden” used as purpose; orphan surprise room |
 | Manor with an older hidden complex | Established ownership/access, inherited substrate, bounded child site | Dungeon under every building or current context rewriting origin |
 | Contested fort/grove-like refuge | Overlapping physical/social/legal/resource claims and nonviolent front outcomes | One owner color, per-room faction confetti, forced combat |
+| Living fortress or world-tree settlement | One entity/site identity, linked facets, organic imperative, institutions sharing domains, material continuity events | Fake builder/purpose, duplicated identity, renderer owning canon |
+| Canonically endless archive | Stable topology laws, honest finite frontier, permanent node/edge commitment, bounded active window | Pretend finite preseed, rerolled explored space, arbitrary DM corridor creation |
 | Child's note / missing daughter | Local discovery becomes a persistent promise, then expands under attention | Flavor note with no canonical attachment or fulfillment |
 | Sheriff's demonic soap | Bounded local accent, manifestation, or promoted root remains distinguishable | Every spicy object becomes an unrelated site catastrophe |
 | Small fixed shell with overfull program | Reconciliation ladder, combination/externality/annex license, honest failure | Silent overlap, fake door, dropped capability, repeated reroll-until-fit |
 | Multi-entrance site | Effective access depth preserves risk/reward despite shortcuts | Raw room index used as difficulty; prescribed narrative order |
 | Empty/quiet repeated cells | Automatic read, focused search, systematic sweep, stable opportunities | Forty-click container play or literally meaningless facade rooms |
 
-Later waves add residential college, ordinary/boutique inn, living habitat, regional trade, population,
-group-count, and other fixtures only when their owning decisions close. They are not retroactively
-treated as Wave 1 architecture here.
+Later waves add residential college, ordinary/boutique inn, regional trade, population, group-count,
+and other fixtures only when their owning decisions close. They are not retroactively treated as Wave 1
+architecture here.
 
 ## 17. Promise-to-production traceability template
 
@@ -898,16 +946,16 @@ Wave 1 defines the semantic promises below and deliberately leaves their realiza
 | Wave 1 handoff | Owning future work |
 |---|---|
 | Purpose profiles, exact roster allocations, repeat counts/variance, ecology, protected opportunity curves, Spice inventories | **Wave 2** |
-| Structural stamps, legal room/assembly realization, shells, annexes, deterministic degradation | **Wave 3** |
-| Explicit portal/secret/Breach/vertical edges, circulation, reveal vectors, secret-network spatialization | **Wave 4** |
+| Structural stamps, legal room/assembly realization, shells, annexes, domain boundaries, entity-site spatial interfaces, deterministic degradation | **Wave 3** |
+| Explicit portal/secret/Breach/vertical and distributed-domain edges, circulation, reveal vectors, secret-network spatialization, licensed stable-frontier topology | **Wave 4** |
 | Furniture/fixture assemblies, dressing, expression, clutter, quiet-room staging, event traces | **Wave 5** |
 | Accommodation boundaries, squeezing, capacity, party participation/splitting, witness/communication sets | **Wave 6** |
 | Effective-access challenge/reward/attrition/resource curves and encounter reshaping | **Wave 7** |
-| Destruction, repair, topology/resource mutations, persistent environment events | **Wave 8** |
+| Formation, movement, destruction, repair, copy/split/merge/continuity, topology/resource mutations, persistent environment events | **Wave 8** |
 | Card schema, legal-home scoring, thin hand, coverage/slack, service horizons, fronts, DM digest/knowledge partition | **Wave 9** |
 | Graph/local-plan/player-view choice, interim renderer, search/knowledge accessibility presentation, visual leakage | **Wave 10** |
 | Authoring workbench, roller editing, diagnostics, preference teaching, mod vocabulary UX | **Wave 11** |
-| Persistent schemas, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, performance/soak gates, build order | **Wave 12** |
+| Persistent lineage/domain schemas, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, performance/soak gates, build order | **Wave 12** |
 | Baldur's-Gate-like automatic inventory and equipment UI | Separate future inventory design after adoptable-system audit |
 | Full bounded-place settlement/population/casting/economy architecture | Future place/settlement/NPC/economy work, constrained by later closed waves |
 

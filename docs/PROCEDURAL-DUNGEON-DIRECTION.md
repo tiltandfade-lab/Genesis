@@ -7651,3 +7651,139 @@ concepts into one compact bundle; exceptions keep them distinct.
 model—especially the rules that overlapping institutions may share a domain, entity-sites use linked
 facets, canonical identity can outlive material fabric, and truly unbounded domains use realm/journey or
 versioned stable-frontier generation rather than pretending their complete topology is finite?
+
+#### 10.11.6 Final skeptical clarification — definite lineage, separate boundaries, narrow unbounded exception
+
+Adam accepted the revised recommendation and guardrails.
+
+The universal requirement is now **definite site lineage**, not an assumption that every site was
+intentionally designed and built. Original purpose, commissioner, builder, operator, and doctrine are
+mandatory only for lineage episodes involving intentional construction. Other legal origin episodes
+include natural formation, living growth, emergent anomaly, collective or vernacular accretion,
+unintended anthropogenic byproduct, automated or self-building formation, later social designation,
+composite/graft formation, copy/echo/relocation, mobile or temporary embodiment, split/merge continuity,
+player creation, and rare canonically plural or recursive origins.
+
+Lineage is linear by default. It becomes a small provenance graph only when the canonical facts require
+sources, copies, grafts, splits, merges, or recursive formation. The engine keeps **intended purpose**,
+**behavioral imperative**, **ecological role**, **social designation**, **current use**, and **belief**
+separate so one cannot silently rewrite another.
+
+Four concepts are therefore distinct even when an ordinary jail compiles them into one compact bundle:
+
+```text
+domain / substrate
+  owns space, topology, physics, extent, mobility, and material form
+
+site identity / lineage
+  owns canonical identity, origin episodes, continuity, and predecessor/successor relationships
+
+institution / ecology / occupation
+  owns purpose or imperative, operators/populations, operating model, current use, and claims
+
+materialization window
+  owns the finite active semantic/spatial/render/DM slice, never canonical extent or identity
+```
+
+Consequences:
+
+- two or more institutions may overlap one domain without merging their identities or lineages, as with
+  the druids and refugees sharing and contesting the Grove;
+- a distributed institution may span discontiguous domains through explicit typed routes or links;
+- a living fortress, ship, world tree, or similar entity-site uses linked entity and site facets over one
+  canonical identity rather than duplicated nouns;
+- canonical identity may survive replacement or destruction of material fabric; split, merge, copy, and
+  continuity are explicit provenance-preserving events rather than name-based guesses;
+- destroyed or former sites retain lineage without requiring an active navigable program;
+- ordinary finite bounded sites still receive complete mathematical connection topology before entry;
+- a canonically unbounded domain uses either the realm/journey representation containing bounded sites,
+  or a narrowly licensed **stable-frontier** process that fixes topology grammar, laws, and invariants,
+  permanently canonizes every generated node and edge, and never improvises away explored space;
+- a materialization window is only the finite active slice, not a claim about the site's total extent.
+
+This explicitly clarifies Wave 1 Questions 1, 2, 6, 7, and 8 wherever their language assumed an
+intentional construction episode, and Question 20 wherever “complete topology before entry” was read as
+applying to canonically unbounded domains. It does **not** weaken Question 20 for ordinary finite sites.
+
+Future ownership is assigned as follows:
+
+- Wave 2 supplies family-specific purpose, imperative, ecology, occupation, and operating-model profiles;
+- Waves 3–4 own domain boundaries, topology, discontiguous links, entity-site spatial interfaces, and the
+  narrow stable-frontier realization contract;
+- Wave 8 owns formation, movement, destruction, restoration, copy, split, merge, and continuity events;
+- Wave 12 owns lineage/domain schemas, deterministic persistence, versioning, migration, and replay;
+- later place/NPC work owns entity-site dual citizenship and identity-safe projection.
+
+The intentional-versus-emergent lineage skeptical follow-up is exhausted.
+
+#### 10.11.7 Skeptical follow-up 2 — how much total machinery may be active at once?
+
+The next integration risk is cumulative cost. Each accepted subsystem may be individually lightweight,
+yet a crowded city prison could simultaneously activate repeated cells, shift staffing, several groups,
+a resource shortage, multiple secrets, a due contract, object improvisation, persistence, DM projection,
+and rendering. Per-system caps alone do not prevent their sum from overloading the browser, the AI DM,
+the save, or the player's attention.
+
+##### Option 1 — independent cap for every subsystem
+
+Each system stays under its own local maximum. This is easy to implement locally, but ten systems at
+their safe local maximum may still be unsafe together. No owner can answer whether the current active
+slice as a whole is affordable. **Not recommended.**
+
+##### Option 2 — one universal complexity-points number
+
+Everything spends from one scalar pool. This is superficially simple, but one renderer object, one save
+record, one DM token, one graph edge, and one player-facing decision are not interchangeable costs. A
+single number also hides hard ceilings and encourages tuning by folklore. **Not recommended.**
+
+##### Option 3 — typed total envelopes with priorities and graceful work shedding
+
+Keep canonical truth distinct from currently active work. A shared active-slice planner composes bounded
+work reported by owning subsystems across several measured envelopes:
+
+- generation/planning wall time;
+- active mutable records, graph edges, and scheduled events;
+- persistence bytes and save/write work;
+- DM digest size, model round trips, and latency;
+- renderer objects, geometry, lights, and projection work;
+- player-facing salient handles and unresolved cognitive load;
+- developer/QA complexity as a separate admission gate for adding a new persistent mechanism.
+
+The exact thresholds should not be invented during questionnaire design. They should be set from
+production-path profiling, including p50, p95, and worst-case traces.
+
+Work receives a service priority, not a claim to equal simulation time:
+
+```text
+P0  immediate player action, observed hard truth, or a required answer
+P1  due consequence, accepted contract, or visibly changing state
+P2  nearby supporting dependency or plausible next interaction
+P3  optional local detail and prefetch
+P4  distant speculative expansion
+```
+
+When an envelope is tight, the system may aggregate cohorts, share operating-system records, send compact
+DM summaries with pull-by-id detail, delay optional materialization, select signature manifestations,
+reduce decorative projection, schedule not-yet-due cards, or evict cold detail from active memory while
+preserving it in canonical storage. It may never drop an observed fact, a core obligation, a due event,
+critical evidence, or a player's immediate legal action. An immediate P0 action may temporarily borrow
+capacity by evicting or delaying lower-priority work, then compact afterward.
+
+The planner must not become a god object. Subsystems retain ownership of their truth and expose bounded
+work items with a cost class, priority, legal degradation, fallback, and persistence rule. The shared
+planner only composes the active slice and records why work was deferred or degraded.
+
+Before large corpus expansion, one adversarial production-path fixture should combine a crowded city
+prison shift change, food pressure, multiple groups, a due contract, a secret, an object the player
+manipulates, rendering, saving, and revisiting. It should measure turn/generation latency, digest and save
+growth, active records/edges/objects, player-facing handles, event backlog, and fallback/defer rates. The
+hamlet jail and Leilon dependency cases provide smaller and regional comparisons.
+
+**Recommendation:** adopt Option 3 as an architecture acceptance law, while leaving exact numerical
+budgets to measured profiling. Also require any proposed new persistent system to change at least two
+meaningful decisions, resist reliable derivation from existing truth, identify its owner/projection/
+mutation/persistence/fallback/gate, and demonstrate that it fits the typed total envelope.
+
+**Open follow-up:** should this typed total-envelope rule become binding architecture, including the
+principle that canonical truth is preserved while optional active work is aggregated, deferred,
+compacted, or evicted by priority?

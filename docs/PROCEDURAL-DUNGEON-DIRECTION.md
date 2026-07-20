@@ -8905,3 +8905,153 @@ active systems, or a final-room card backlog as an exposition justification.
 **Open follow-up:** does this capture the exception you mean—the opening and earned/requested revelation
 scenes may deliver substantially more connected information, but remain source-bound, interruptible,
 resumable, and protected from unrelated queue dumping?
+
+#### 10.11.24 Final ruling — integrated saturation with coherent exposition license
+
+Adam accepts the clarification. The integrated-saturation skeptical follow-up is resolved:
+
+- abundant layered canon and independent descendant Spice remain protected;
+- related manifestations coalesce into causal situations before saturation is assessed;
+- canonical abundance, active situations, and current projection are measured separately;
+- integrated saturation uses a typed vector and scene-family-specific ranges, never one global
+  complexity/Spice ceiling;
+- ordinary projection uses foreground beats, visible background pressures, and retrievable latent
+  handles; player attention immediately reprioritizes the selected handle;
+- scheduler backlog, final-room card pressure, and too many active systems never justify a mega-dump;
+- licensed openings and earned/requested information-delivery scenes may temporarily carry substantially
+  more connected information when one source/topic/causal bundle explains it;
+- exposition bursts remain source/knowledge-bound, truth/belief/lie-aware, interruptible, resumable,
+  journal-supported, and protected from unrelated queue insertion;
+- quiet means noncompeting salience, not absent meaning or reduced spicy potential;
+- Wave 9 and Wave 12 must prove combined-root/situation/handle/card/state/group saturation, exposition
+  comprehensibility, service-horizon behavior, proper-noun load, player-uptake priority, and absence of
+  final-room dumping.
+
+#### 10.11.25 Skeptical follow-up 9 — the DM may not narrate an event the engine rejects
+
+The final queue item attacks the boundary between AI performance and engine truth. A model can narrate,
+“You wrench the loose stool free, jam it into the gears, and the gate crashes open,” while its emitted
+object assertion or gate event later fails because the stool had no legal reserve, the gate was already
+destroyed, the target version changed, or the action lacked a required method. If the player has read the
+success prose, quietly recording `applied.ok:false` does not repair the lie.
+
+Genesis also cannot solve this by adding a separate proposal and narration model call to every ordinary
+action; that would violate the accepted one-call routine path and first-token targets.
+
+##### Option 1 — narrate freely, then apply whatever events validate
+
+This preserves speed and DM freedom but lets prose and canon diverge, allows partial event batches, and
+teaches the player that described success is unreliable. **Rejected.**
+
+##### Option 2 — proposal call, engine validation, then narration call on every turn
+
+This can make the final narration consistent with accepted state, but doubles routine model latency and
+cost, creates more failure seams, and makes environmental interaction sluggish. **Rejected as the normal
+path.** It remains legal for rare genuinely ambiguous/high-impact actions.
+
+##### Option 3 — engine-first resolution receipts plus guaranteed tokens and a buffered commit header
+
+Most actions follow one of two single-call-safe paths:
+
+1. **Pre-resolved action:** the engine already owns the target, rules, open roll/result, inventory,
+   resource cost, witnesses, and event consequences. It commits or version-locks the resolution and sends
+   the DM a `ResolutionReceipt` describing only facts it may narrate.
+2. **Guaranteed choice:** the active digest offers a small set of prevalidated, version-locked action or
+   latent-affordance tokens. The DM's structured response begins with a hidden compact commit header that
+   selects among those guaranteed choices. The engine validates and atomically applies that header before
+   releasing consequential narration from the same streamed model call.
+
+Illustrative receipt:
+
+```text
+turn id + base world version + nonce/expiry
+player intent and direct target ids/versions
+resolved roll/check/result and resource changes
+selected prevalidated action/affordance token
+atomic core event batch and dependent post-commit reactions
+knowledge/witness scopes and observation changes
+narration license: success/failure, established nouns, consequences, uncertainty, and prohibited claims
+```
+
+The DM may interpret, phrase, pace, characterize, and sensorially realize the receipt. It may not promote
+a failed attempt to success, invent an unlicensed consequential object, change a target, or narrate an
+uncommitted mutation.
+
+##### Transaction boundary
+
+```text
+player action
+  -> engine resolves common mechanics and/or supplies guaranteed tokens
+  -> one model stream emits hidden structured commit header first
+  -> schema + target/version + knowledge + resource + token validation
+  -> atomic application of the core transaction
+  -> consequential narration is released/streamed under the accepted receipt
+  -> independent causal reactions schedule from committed truth
+```
+
+The commit header is small and buffered rather than shown to the player. On the pre-resolved path there
+may be nothing left for the DM to select. On the guaranteed-choice path, every offered token is already
+legal at the locked version, so ordinary validation should be a fast acceptance rather than a solver or
+second AI round trip.
+
+Event batches distinguish:
+
+- **atomic core:** mutually dependent facts either all apply or none do—the stool is committed, consumed,
+  inserted, and the licensed gate state changes together;
+- **derived reactions:** guard response, faction knowledge, noise propagation, or later mechanical
+  consequences derive from the committed core and may schedule as explicit events;
+- **optional color:** prose that changes no canon and stays inside the prevalidated contextual reserve.
+
+##### Ambiguous and high-impact path
+
+If the engine cannot identify the intent/target, no guaranteed token covers it, or the action could cause
+a major topology, identity, contract, death, ownership, realm, or irreversible resource change, use a
+rarer preflight:
+
+```text
+intent/proposal without success narration
+  -> engine resolution/clarification/roll
+  -> accepted receipt
+  -> final narration call
+```
+
+The UI acknowledges immediately and may present neutral attempt framing, but it does not stream a claimed
+outcome before resolution. This exceptional path is measured separately and must not become the default
+for ordinary inspection, movement, conversation, inventory use, attacks, checks, or prevalidated dressing
+interaction.
+
+##### Failure and race behavior
+
+- Single-player actions receive P0 version priority; lower-priority background mutation cannot race a
+  locked direct target. State-changing background results enter through versioned events between safe
+  commit points.
+- A stale/invalid header exposes no consequential prose. The engine rebases where deterministic, uses a
+  safe receipt-grounded fallback narration, or performs one explicit retry/preflight; it never shows the
+  invalid success and quietly drops the event.
+- Invalid optional side events cannot partially survive if their narration depends on the rejected core.
+- Every committed receipt, selected token, applied event, rejection, fallback, latency, and visible
+  narration id is logged for replay and contradiction testing.
+- The engine must offer deterministic safe fallback wording for common outcomes so a malformed model
+  response does not require lying or freezing the game.
+
+##### Honest limit of prose validation
+
+No schema can mathematically prove that unrestricted natural-language prose contains no unsupported
+implication. Genesis narrows this risk by making consequential claims receipt-bound, forcing the commit
+header before visible result prose, restricting improvisable physical nouns to contextual reserves,
+partitioning knowledge before prompting, and testing narration against adversarial fixtures. Absolute
+semantic proof would require a second interpreter/critic or templated prose and would violate either
+latency or DM freedom. The acceptance claim must therefore be precise: **mechanical and canonical outcome
+claims are transactionally grounded; residual descriptive drift is monitored and corrected, not falsely
+declared impossible.**
+
+##### Recommendation
+
+Adopt Option 3. Resolve common mechanics engine-first, let the DM select only guaranteed version-locked
+tokens when choice remains, validate/apply a hidden commit header before releasing consequential prose,
+and reserve the two-stage preflight for genuinely ambiguous/high-impact actions. Treat narration/event
+divergence as a failed turn protocol, not an ignorable event error.
+
+**Open follow-up:** does this strike the right balance—one streamed call remains the routine path and the
+DM retains expressive narration, but every consequential success/failure/object/mutation claim must rest
+on an engine-owned receipt or guaranteed token committed before the player sees the result?

@@ -168,12 +168,14 @@ boundaries.
 | `SemanticSitePlan` | Stable site/zone/room/assembly hierarchy, functional homes, connection requirements | Fine placement, visual transforms, eagerly populated minor details | Semantic planning pass | Waves 3-5 compilers |
 | `RepeatedAssembly` | Shared construction/service truth, stable child ids, controlled variance | Fully independent heavyweight stories for every child | Roster + semantic planner | Search, discovery, room materialization |
 | `CausalSpiceEvent` | Root cause, band, scope, license, affected records, manifestations, consequences, handles | A global site-temperature ceiling or floor | Eligible Commitment/root roll or promotion | Discoveries, history, rooms, DM cards |
+| `CausalSituationBundle` | Related roots/manifests/states/groups/cards as one active situation, typed saturation contribution, foreground/background/latent projection | Permission to merge unrelated canon or impose a global Spice ceiling | Causal ledger + active scheduler | DM hand, digest, saturation reports |
 | `DiscoveryOpportunity` | Stable target, tell, methods/gates, cost, attached payoff or root | A guaranteed player-facing checklist or independent Major secret | Room/assembly/site discovery allocation | Search, knowledge, DM projection |
 | `StoryPromise` | Minimal canonical stub, invariants, attachments, fulfillment obligation, attention state | A fully generated unused network | Unattached discovery, contract, or canonical mention | DM scheduler and lazy materialization |
 | `OccupationZone` | Current occupant defaults and typed overlapping claims over a coherent region | Independent room-by-room occupant rolls | Present-occupation pass | Rooms, fronts, access, current use |
 | `OccupationFront` | Sparse pressure, triggers, transitions, affected claims/zones, evidence | Continuous group turns or inevitable escalation | Licensed pressure/event | World ledger, DM scheduler |
 | `KnowledgeRecord` | Canon reference, observations, beliefs, witnesses, confidence, holder/scope, sharing policy | Hidden canon leaking into party output | Observation, interpretation, communication | DM digest, journal, UI, action eligibility |
 | `NarrativeCard` | Priority, eligibility, service horizon, causal role, legal homes, deferral reason | Permission to overwrite rolled room identity | Promise/contract/root/event systems | Wave 9 scheduler |
+| `ExpositionPacket` | Source/topic, ordered connected facts, truth/belief attribution, consent/trigger, witness boundary, interruption/resumption, journal summary | Scheduler-backlog dump or permission to seize player agency | Opening/reunion/briefing/testimony/archive and similar licensed scenes | DM projection, knowledge, journal |
 | `AccessProfileSet` | Commitment-time allocation profile, canonical current route constraints, and observer-known usable projections over typed access costs | One depth scalar controlling both placement and current navigation; reactive reward/enemy scaling | Topology + commitment provenance + events + knowledge/capabilities | Navigation, DM, Waves 6-7 difficulty/reward planning |
 | `RegionalPromiseLedger` | Minimal inbound relationship/flow/role/history constraints, counterpart cardinality, reciprocal bindings, authority, merge/split/reconciliation provenance | Unlimited first-writer authority over latent neighbors or eagerly generated counterpart interiors | Generated places + region graph | Settlement planners, dependencies, migrations, diagnostics |
 
@@ -617,7 +619,27 @@ Gathering places may hold several beats. Institutional anchors, foreground beats
 stable latent people, and ambient population coexist; the DM foregrounds a legible subset. Wave 1 does
 not define Wave 2's population/casting schema.
 
-### 8.4 Graded reveal and knowledge ownership
+### 8.4 Integrated saturation and exposition
+
+Related discoveries, operational states, groups, cards, fronts, and manifestations coalesce into active
+causal situations before saturation is assessed. Reports keep canonical abundance, active situations,
+and current projection separate. The combined vector includes independent roots/bands/scopes, active
+situations, due obligations, operational exceptions, relevant groups/claims/actors, available handles,
+new proper nouns, foreground/background load, digest size, quiet contrast, promotion, deferral, uptake,
+and stale-card churn. Scene families have measured projection ranges; there is no global Spice ceiling.
+
+Normal projection distinguishes foreground beats, visible background pressures, and retrievable latent
+handles. Player attention promotes the selected handle immediately. Quiet means noncompeting salience,
+not missing meaning. Hard facts, critical evidence, legal actions, contracts, and promises never disappear
+to fit presentation capacity.
+
+A narrow exposition license permits an opening or earned/requested information-delivery scene to transfer
+substantially more **connected** truth from one source/topic/causal bundle. The packet remains
+truth/belief/lie-aware, witness-bound, interruptible, resumable, and journal-supported. Unrelated
+scheduler backlog cannot enter the burst, and high information density does not license one
+uninterruptible wall of prose.
+
+### 8.5 Graded reveal and knowledge ownership
 
 Canonical truth, observations, and beliefs/hypotheses remain separate. The reveal ladder is:
 
@@ -965,6 +987,12 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
 - Secret spaces follow the same meaningful-room law and use bounded nesting.
 - Parent bands neither cap descendants nor recolor every sibling/ancestor.
 - A manifestation inherits its root instead of rerolling a new independent intensity.
+- Related manifestations, states, groups, and cards bundle as causal situations before integrated
+  saturation is measured; canonical abundance, active situations, and projected salience stay separate.
+- Scene-specific salience capacity sequences foreground beats without imposing a global Spice ceiling;
+  player attention promotes the chosen visible handle.
+- Only opening or earned/requested source-coherent revelation scenes receive an exposition burst, which
+  remains interruptible, resumable, knowledge-bound, and protected from unrelated queue dumping.
 - The DM and every output channel respect player/character knowledge boundaries and private holders.
 - Search is stable and method-sensitive; identical retries do not mint new content.
 - Ordinary comprehension and mandatory progression never depend only on an untelegraphed exhaustive
@@ -1007,7 +1035,7 @@ These are semantic contradiction fixtures, not finished content packages or geom
 | Fixture | Wave 1 facts it must prove | Failure it should expose |
 |---|---|---|
 | Hamlet jail | Complete minimal custody model, external service, human scale, likely added space, juicy local handle | Small-size blacklist, one-room-per-obligation bloat, bland null fallback |
-| Major city prison | Repetition, hierarchical discovery/sweep, coordinated secrets, proportional variation, current-use/history layers, several hundred stable lightweight actors, p95 local dispatch within 250 ms | One independent Major secret and heavyweight record per cell; exhaustive-search labor; fallback during normal dense operation; global synchronous turn sweep |
+| Major city prison | Repetition, hierarchical discovery/sweep, coordinated secrets, causal situation bundling, integrated salience, proportional variation, current-use/history layers, several hundred stable lightweight actors, p95 local dispatch within 250 ms | One independent Major secret and heavyweight record per cell; unrelated mega-dump; exhaustive-search labor; fallback during normal dense operation; global synchronous turn sweep |
 | Mage-colony Breach prison | Context-sensitive classification, mixed domains, ordinary portal custody plus exceptional failure, coherence reference/support state | “Portal always Mythic,” one global scale, realm fork, physical-integrity assumption for planar systems |
 | Giant ossuary with human squatters | Low room count, huge envelope/accommodation, inserted human current-use pockets | One master size or late renderer-scale repair |
 | Alchemist shop over necromancy lab | Public primary purpose, concealed subordinate purpose or later transformation, legal discovery path | “Hidden” used as purpose; orphan surprise room |
@@ -1016,6 +1044,7 @@ These are semantic contradiction fixtures, not finished content packages or geom
 | Living fortress or world-tree settlement | One entity/site identity, linked facets, organic imperative, institutions sharing domains, material continuity events | Fake builder/purpose, duplicated identity, renderer owning canon |
 | Canonically endless archive | Stable topology laws, honest finite frontier, permanent node/edge commitment, bounded active window | Pretend finite preseed, rerolled explored space, arbitrary DM corridor creation |
 | Child's note / missing daughter | Local discovery becomes a persistent promise, then expands under attention | Flavor note with no canonical attachment or fulfillment |
+| Long-lost mother reunion | Dense connected family-history exposition, source/belief attribution, player interruption/resumption, journal summary | Unrelated queue dump, omniscient truth transfer, uninterruptible monologue, lost actionable facts |
 | Sheriff's demonic soap | Bounded local accent, manifestation, or promoted root remains distinguishable | Every spicy object becomes an unrelated site catastrophe |
 | Small fixed shell with overfull program | Reconciliation ladder, combination/externality/annex license, honest failure | Silent overlap, fake door, dropped capability, repeated reroll-until-fit |
 | Multi-entrance site | Commitment/current/observer access separation preserves allocated risk/reward while shortcuts honestly change reachability | Raw room index used as difficulty; prescribed narrative order; shortcut-triggered relocation/scaling; current route ignored |
@@ -1081,7 +1110,7 @@ Wave 1 defines the semantic promises below and deliberately leaves their realiza
 | Accommodation boundaries, squeezing, capacity, party participation/splitting, witness/communication sets | **Wave 6** |
 | Commitment-access challenge/reward/attrition/resource curves, current-access change behavior, and anti-reactive-scaling proofs | **Wave 7** |
 | Formation, movement, destruction, repair, copy/split/merge/continuity, factored operational-state and topology/resource mutations, persistent environment events | **Wave 8** |
-| Card schema, legal-home scoring, thin hand, coverage/slack, service horizons, fronts, DM digest/knowledge partition | **Wave 9** |
+| Card schema, causal situation bundling, integrated salience vector, exposition packets, legal-home scoring, thin hand, coverage/slack, service horizons, fronts, DM digest/knowledge partition | **Wave 9** |
 | Graph/local-plan/player-view choice, interim renderer, search/knowledge accessibility presentation, visual leakage | **Wave 10** |
 | Authoring workbench, roller editing, diagnostics, preference teaching, mod vocabulary UX | **Wave 11** |
 | Persistent lineage/domain/operational-state schemas, content-addressed commitment capsules, mod/source compatibility, migrations, deterministic replay, recovery package, compiler validation, golden-beat proofs, capacity-first performance/latency/soak gates, build order | **Wave 12** |

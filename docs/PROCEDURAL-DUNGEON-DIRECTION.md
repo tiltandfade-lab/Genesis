@@ -12812,3 +12812,106 @@ Stones as the mechanical base if its one-use-per-dawn play is right; if that cad
 to a bounded custom overlay rather than forcing the catalog match. If accepted, G2.1 returns to the queued question
 of pressure-versus-hard-nullification for adaptive hostile inventions, followed by the compilation-failure and
 new-precedent policy.
+
+#### 10.G2.1.9 Scope challenge - the item-routing proposal enters new territory
+
+Adam flags that the recommended intent-first/least-new-mechanics ladder sounds like new territory. That is
+correct, and the prior section remains a proposal rather than an accepted ruling. The discussion began with how
+the DM should choose invention versus an available SRD or Genesis-custom item, but the proposed answer expanded
+into semantic-invariant declaration, cross-catalog candidate retrieval, fit comparison, saturation scoring,
+novelty debt, rejected-candidate receipts, and automatic route escalation. Those pieces amount to a new runtime
+creative-assistance and mechanics-compilation subsystem. They are not implied merely by accepting DM synthesis.
+
+Several foundations are already established:
+
+- the item type/instance split and `base`/`ench`/`codexId` layers exist in `ITEMS.md` and built item data;
+- SRD and Genesis-authored item definitions can provide reliable mechanics;
+- the DM Charter licenses invention but requires capture;
+- the accepted G2.1 decisions allow the DM to author expression-bearing nouns inside typed creation envelopes;
+- an invented item must receive stable identity, mechanics, custody, provenance, persistence, visuals/fallbacks,
+  and callback eligibility.
+
+What is new and not yet authorized is an engine that decides or formally ranks whether creativity should use an
+existing item, a reskinned type, an overlay, a composite, or a wholly new precedent. The phrase “least-new
+mechanics, not least-new fiction” may still be a useful design principle, but implementing it as a mandatory
+scored resolver is a separate design problem with uncertain consequences for the DM seat.
+
+##### The actual branch now exposed
+
+**Option 1 - specify the full creative resolver now.** Continue the new territory and design the semantic intent
+schema, catalog/world retrieval, fit dimensions, ranking/choice protocol, novelty and saturation budgets,
+mechanical compiler, and precedent path as part of G2.1. This could eventually make invention scalable and
+auditable, but it substantially expands both the question and the implied implementation architecture before live
+evidence shows which decisions the DM actually needs help making.
+
+**Option 2 - lock a minimal DM-choice policy; defer the resolver (recommended).** The engine exposes relevant
+catalog mechanics when asked or when an obvious exact match exists, but it does not automatically prioritize a
+catalog result over invention. The DM chooses among `USE`, `ADAPT`, and `INVENT` inside the current envelope. The
+engine then validates and captures the chosen route. A lightweight rule encourages reuse when it loses nothing
+material and encourages invention when exact meaning, form, or play is the point. No fit score, novelty currency,
+saturation ledger, or rejected-candidate audit is required yet. The elaborate ladder remains preserved as a
+future research/design bank if play demonstrates repeated drift or duplication.
+
+**Option 3 - leave routing entirely to DM discretion.** Give the DM access to item lookup and let it use or ignore
+the catalog without any stated preference. The engine validates only the final proposal. This maximizes the seat
+and has the lowest immediate implementation cost, but provides no guidance against duplicate mechanics or
+catalog neglect and makes model behavior harder to evaluate consistently.
+
+##### Recommended minimal policy
+
+Under Option 2, the engine's role is assistance and validation, not creative ranking:
+
+```text
+USE    instantiate an existing world item or catalog definition;
+       source authority still determines whether it exists here.
+
+ADAPT  retain an existing mechanical base/effect but give this instance a new identity,
+       provenance, appearance, relationship, or bounded validated overlay.
+
+INVENT create a custom item inside the earned envelope when its exact identity or play pattern
+       materially serves the situation; compile what is currently supported and use the later
+       failure/precedent policy for what is not.
+```
+
+The DM can request a catalog search or receive a very small nonbinding suggestion such as “Sending Stones are an
+available mechanical analogue.” It is not forced to inspect or reject a ranked list before inventing. The DM can
+answer:
+
+- `USE`: “These are Sending Stones.”
+- `ADAPT`: “Use that communication cadence, but these are the turtle keepsakes from the escape, with their own
+  identities, holders, art, history, and callbacks.”
+- `INVENT`: “That cadence defeats the intended frequent short-range coordination; compile this bounded paired
+  communicator instead.”
+
+All three are legitimate. The engine checks authority, power, contradiction, mechanics, persistence, and custody
+after the DM chooses a route. It does not decide that similarity is creative sufficiency.
+
+The same applies to hostile invention. A warden's suppression chain may use an existing condition/effect, adapt
+one into a storied physical tool, or propose a novel tactical interaction. The adversary does not gain an item
+merely because its type exists in the catalog, and the DM does not need to invent a new rules primitive merely to
+make the warden distinctive.
+
+##### Costs and research posture
+
+Option 1 has **high and poorly bounded architecture/content cost**: semantic annotations across the item corpus,
+retrieval quality, model anchoring, explainable fit, compositional balance, novelty/saturation policy, and QA for
+cases where the resolver's cheapest answer destroys the creative point. The procedural papers support high-level
+semantic intent compiled into legal realization, but they do not prove that Genesis needs an automated item-choice
+resolver or tell it when an AI DM should prefer originality.
+
+Option 2 has **low-to-medium incremental cost**: make item lookup available to the DM/compiler, support explicit
+`USE`/`ADAPT`/`INVENT` intent, reuse the existing item layers, and log the chosen route in the creation receipt.
+It produces direct playtest evidence about catalog reuse and invention frequency without prematurely constructing
+a ranking system. Option 3 is cheapest, but its absence of a policy makes undesirable behavior difficult to call a
+bug rather than taste.
+
+The preserved ladder in the preceding section remains valuable as a research bank, not a locked requirement. If
+play shows endless redundant custom mechanics, catalog blindness, or generic catalog substitution, Genesis can
+promote only the machinery needed to correct the observed failure.
+
+**Question for Adam:** is the new territory itself something to explore now, or should G2.1 take Option 2 and stop
+at a minimal `USE`/`ADAPT`/`INVENT` choice owned by the DM, with catalog suggestions nonbinding and the automatic
+semantic resolver deferred? The recommendation is Option 2 because it preserves the newly protected creative DM
+seat and gathers evidence before mechanizing this choice. If accepted, the prior “least-new mechanics” language
+becomes guidance rather than an engine priority law, and G2.1 returns to hostile-counter pressure versus hard
+nullification before the still-open compile-failure/precedent question.

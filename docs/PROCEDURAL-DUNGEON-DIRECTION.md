@@ -11462,3 +11462,138 @@ can it legally enable later, and how do we obtain that reliability without simul
 scene? Exhaust its follow-ups, then G2.2, before returning to original Wave 2 Question 12. Do not declare Wave
 2 complete or open Wave 3 until its original questions, additive questions, and all generated follow-ups have
 passed the closure gate.
+
+### 10.G2.1 Additive question - SceneFactGraph promotion (opened; awaiting Adam)
+
+The preserved original questionnaire remains unchanged. This is the additive `G2.1` question placed before
+original Wave 2 Question 12 by section 10.11.57.
+
+In plain English: when play makes an ordinary generated thing or circumstance matter, what exact sliver of it
+becomes reliable engine truth, and what may that truth legally enable later? The design must make the Gemini
+reference's causal generosity reproducible without continuously simulating every bottle, chain link, straw
+pile, patch of snow, or descriptive noun in a room.
+
+#### Research sift for G2.1
+
+The nine downloaded primary papers in `Reference/Procedural-Dungeon-Research/papers/` were rescanned before
+opening this question. They do not directly solve persistent improvisational causality, but their strongest
+representation lessons apply:
+
+- Tutenel et al. (2009) make object classes, tagged features, legal regions, hierarchical blocks, ordered
+  plans, and backtracking explicit. A tabletop affords supported objects because it exposes a typed feature,
+  not because prose happens to mention a table. The same paper warns that a flat accumulation of features
+  approaches quadratic work and uses hierarchical subproblems to keep the active solve bounded.
+- Tutenel et al. (2010) separate designer-readable semantic scene descriptions from the ordered procedures
+  compiled from them. Objects carry attributes, predicates, services, materials, relationships, and context;
+  a dependency graph determines placement order. This supports authored semantic capability types and
+  source-owned relationships rather than downstream keyword inference.
+- Yu et al. (2011) and Merrell et al. (2011) show that accessibility, visibility, circulation, pairwise
+  relations, clearance, and composition are distinct terms. Their ablation examples demonstrate that
+  dropping one relation creates a specific failure even when the rest of the scene remains plausible. For
+  Genesis, a promoted fact should therefore expose only proved relationships and affordances, not inherit an
+  undifferentiated bundle of imagined properties.
+- Horswill and Foged (2012) obtain fast playability guarantees by propagating small numeric and finite-domain
+  summaries over a graph and by stating which paths count. This favors derived summaries over copying whole
+  simulations into a scene record, and explicit scope over a claim that a fact applies everywhere.
+- Nepozitek and Gemrot (2018) preserve a designer-owned connectivity graph while using configuration spaces,
+  chains, hard/soft constraints, and backtracking to realize it. This reinforces the rule that a consequential
+  change must preserve its canonical graph owner and pass a typed legality boundary.
+- Green et al. (2019) separate architecture from furnishing and show through expressivity and procedural-
+  persona evaluation that combinations of independent stages materially change play. Promotion must cross
+  owning adapters transactionally; the SceneFactGraph should not become a second architecture, furnishing,
+  population, or rules engine.
+- Henderson et al. (2019) make constraints highly flexible through rejection sampling, but measure the
+  multiplicative runtime cost of simultaneous constraints and identify a weakness in editing an already
+  sampled layout. That is a direct warning against validating arbitrary late mutations by repeatedly
+  regenerating the scene; promotion needs narrow state transitions on the existing canonical plan.
+- Whitehead (2020) demonstrates declarative room constraints and honest unsatisfiability, while also showing
+  longer solve-time tails and sampling bias as constraints accumulate. A future general solver may be an
+  escalation path, but it should not sit on every turn or replace explicit effect adapters.
+
+The combined lesson is not “put every noun in one universal ontology.” It is: keep a small semantic contract,
+name its dependencies and owner, distinguish hard permission from soft narrative fit, mutate an existing plan
+through a receipt, and bound the active graph.
+
+#### Viable promotion policies
+
+**Option A - closed interactable whitelist.** Only objects and conditions that an authored room recipe marked
+as interactable in advance may become mechanical truth. A jail's portcullis, restraint chain, lamp-oil barrel,
+and lock could participate; incidental straw, spilled soup, or an improvised snowbank could not unless their
+exact types were pre-authored. This has the smallest runtime and clearest tests, but it loses the Gemini game's
+defining ability to make an ordinary touched noun matter. Its low initial implementation cost becomes a high
+permanent content-authoring cost, and every omitted capability feels like the engine refusing a reasonable
+idea.
+
+**Option B - promote any mentioned noun into a generic fact/tag bag.** Player attention or DM narration may
+create a record and attach free-form tags such as `flammable`, `wedged`, `anchor`, or `route`. The brandy,
+snow, embedded mace, leaking fuel, and solid-light path are easy to express, as is nearly any dungeon stunt.
+Initial implementation and authoring are deceptively cheap. Long-term validation, migration, rendering,
+prompt projection, exploit prevention, and combination testing become unbounded; synonym drift and
+retroactively invented properties recreate Gemini's prose-only continuity problem under a database-shaped
+surface.
+
+**Option C - typed lazy promotion through resolution receipts (recommended).** All seven relevant source
+families are eligible - site, room, assembly, prop/material, condition, position, and relationship - but a
+whole descriptive object is not eagerly simulated. A stable referent and only the consequential facets are
+promoted when play targets or relies on them, a validated result changes them, or a later legal action needs
+them as an input. The promotion receipt must bind the new fact to an existing canonical owner, or atomically
+create a bounded DM-invented referent through the already accepted invention-validation seam.
+
+The minimum promoted contract should contain:
+
+```text
+identity/type and source event/roll
+canonical subject, target, holder, and owning adapter
+location/zone and current typed state
+evidence plus observer/knowledge boundary
+offered capability interfaces or affordance tokens
+causal parents and dependencies
+duration, expiry, consumption, exhaustion, or restoration rule
+protected-canon hardness and reconciliation trace
+salience plus DM/visual projection needs
+```
+
+Later actions may consume or transform the fact only through an authored typed reaction/effect recipe, an
+existing rules adapter, or a validated arbitrary-intent `CheckContract` that commits a new receipt. Prose
+adjacency is never sufficient. An afforded action is a permission surface, not a forced action menu and not a
+promise of success.
+
+Concrete dungeon example: a generated jail storeroom contains one lamp-oil cask because the site's lighting
+flow owns it. The player punctures it. A receipt promotes the cask referent only as far as needed and creates
+`leaking_oil` at that room location with remaining supply, slippery/flammable capability interfaces, visible
+evidence, and a consumption/cleanup rule. A later torch can ignite it only through the fire-material reaction
+adapter; the result consumes oil and creates an owned fire condition. The engine does not simulate every
+container in the storeroom. When the scene cools, resolved temporary facts compact into the cask's state, room
+damage/evidence, resource-flow loss, and Ledger history rather than remaining forever in the active scene
+graph.
+
+Concrete Gemini-reference example: the mace already has item identity and the vehicle has hull/position
+state. The hit receipt may create an `embedded_in` relationship and hull damage. A fuel leak follows only if
+a pre-existing fuel-line fact or a same-turn validated invention establishes that dependency. The leak may
+later supply a luminous trail, but a traversable solid-light route still requires a legal spell, combo, crit, or
+novel-action receipt. Once committed, the route is real for movement, pursuit, lighting, evidence, expiry, and
+projection. The system neither denies the ridiculous idea nor grants it because two colorful sentences were
+near each other.
+
+#### Cost assessment and recommendation
+
+Option C has a **medium-high concentrated implementation cost**: a type registry, promotion/transition
+receipts, adapter boundaries, bounded active-graph service, compaction/reconciliation, DM projection, and
+trace fixtures. Its **content cost is medium and ongoing** because materials, conditions, positions, and
+relationships need reusable capability/reaction recipes. Its **maintenance cost is lower than Option B's**
+because the combinatorial surface is factorized by type and unsupported transformations fail honestly. The
+largest risks are an overgrown universal ontology, duplicated authority between the graph and existing
+systems, digest bloat, and adapters whose cross-products are nominally type-safe but untested.
+
+The recommended guardrail is that `SceneFactGraph` is an active causal index and transaction surface, not a
+new owner of everything. Items stay item-owned, conditions condition-owned, positions spatial-owned,
+relationships relationship-owned, and site flows site-owned. The graph holds typed references/edges and the
+minimum live facets needed to compose the present scene, then projects durable outcomes back to their
+canonical owners.
+
+**Question for Adam:** choose or amend the promotion policy. The recommendation is Option C: every relevant
+source family is eligible, but only player-relied-on or mechanically changed facets are promoted through typed
+receipts; later affordances require typed recipes/adapters or another validated arbitrary-intent receipt; and
+resolved facts compact back into their true canonical owners. Follow-ups must still decide the exact promotion
+trigger, the granularity and expiry/compaction rules, how unknown-but-plausible properties are proposed, and
+the minimum authored capability grammar before `G2.1` can close.

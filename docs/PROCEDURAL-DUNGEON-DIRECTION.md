@@ -13237,3 +13237,169 @@ only declared soft preferences automatically, negotiate material changes before 
 abstraction or deferral, and permit new runtime precedents only as validated declarative recipes over registered
 primitives - never AI-authored executable code? If accepted, the next G2.1 follow-up decides precedent scope and
 promotion: unique instance, reusable within one world, or eligible for the reviewed cross-world custom library.
+
+#### 10.G2.1.12 Ruling and follow-up - transactional compilation accepted; how does a precedent earn wider reuse?
+
+Adam accepts Option 3's bounded transactional negotiation as necessary to make the core creative-resolver concept
+work correctly. Hard invariants must be preserved unless the DM explicitly revises them; soft preferences may be
+tuned within declared tolerances; material conflicts produce typed diagnostics and a bounded internal negotiation
+before narration. Honest abstraction, tracked deferral, declarative runtime precedents over registered primitives,
+and final rejection are legitimate outcomes. AI-authored executable code and prose-as-rules are forbidden.
+
+The next question is what happens after a declarative precedent works. The new artifact/effect must persist in its
+world, but persistence is not the same as general availability. Automatically putting every successful improvisation
+into the global catalog would let one context-specific model answer become default Genesis rules. Keeping every
+recipe permanently isolated would force the compiler to rediscover useful patterns and prevent the system from
+growing. Narrative canon, mechanical recipe, and product library therefore need separate promotion laws.
+
+##### Precedent-scope options
+
+**Option 1 - immediate global reuse.** Any `PRECEDENT_COMMITTED` recipe enters the Genesis-custom catalog and may
+be retrieved in every world. This makes the system learn quickly and amortizes invention cost immediately. It also
+promotes a recipe after almost no balance evidence, leaks world-specific motifs and assumptions, creates library
+spam, and allows a single strange edge case to become product law.
+
+**Option 2 - permanent world isolation.** A precedent remains attached to its originating instance/world forever.
+It may support that item's own callbacks but can never become a general candidate elsewhere. This strongly
+protects setting identity, privacy, balance, and shipping stability. It also wastes proven recipes, repeats
+negotiation/validation work, and prevents the resolver's mechanical vocabulary from learning over time.
+
+**Option 3 - layered precedent lifecycle with explicit promotion gates (recommended).** Every successful invention
+begins as instance/world canon. Its mechanics may become a reusable pattern inside the same world only through
+both mechanical validation and an in-world availability path. A canon-stripped recipe may separately enter a
+cross-world candidate pool after adequate traces and adversarial certification. Only a reviewed/certified version
+enters the durable Genesis-custom library. Fiction never crosses worlds merely because mechanics do.
+
+##### Recommended lifecycle
+
+```text
+P0 INSTANCE PRECEDENT
+  The exact committed invention. Its name, form, holders, history, visuals, relations, and mechanics
+  belong to this world and this instance/set. Always persistent; always callback-eligible where viable.
+
+P1 WORLD PATTERN
+  A reusable mechanical/crafting/ritual/tactical pattern inside the same world. Requires an in-world
+  transmission basis such as study, copying, teaching, faction research, manufacture, mutation,
+  observation, or independent rediscovery. Validation alone does not make NPCs know it.
+
+P2 PORTABLE CANDIDATE
+  A canon-stripped recipe graph plus evidence. Contains triggers/effects/costs/scopes/bands/counterplay,
+  never the originating world's proper nouns, custody, secrets, relationships, or assumed lore.
+  It is quarantined from ordinary retrieval while certification runs.
+
+P3 CERTIFIED CUSTOM PATTERN
+  A versioned, compatibility-tested Genesis-custom recipe eligible for cross-world retrieval.
+  It remains a candidate, not automatic fictional availability or a mandated answer.
+
+P4 CORE PRIMITIVE / STANDARD
+  Rare authored product promotion when repeated recipes expose a genuinely general mechanic that
+  belongs in the resolver vocabulary itself. Requires migration and backward-compatibility policy.
+```
+
+Promotion is not a single ladder every invention must climb. Many excellent inventions should remain P0 because
+their unrepeatable specificity is the point. A villain's one-off soul chain can be permanent, mechanically real,
+and richly callback-connected without becoming a craft recipe. P1 is world simulation: can someone here reproduce
+or teach this? P2-P4 are system learning: is the mechanic safe and general enough to offer elsewhere? Those are
+different questions and neither implies the other.
+
+##### Turtle-comms trace
+
+The original turtle comms are P0: their forms, pair identity, holders, shared-escape provenance, damage/loss state,
+visuals, and callbacks remain unique world canon.
+
+They become P1 only if the world earns replication. An artificer studies them, one holder teaches a bonding ritual,
+a faction steals their pattern, or a callback transformation produces a related paired device. The DM may use the
+P0 callback stubs to propose descendants, but no shop suddenly stocks turtle comms because the compiler knows their
+recipe.
+
+A portable candidate might strip that history into something like:
+
+```text
+paired-holder communicator
+bounded range or cadence
+linked-set break/loss behavior
+transfer and interception rules
+C2 power/counterplay profile
+```
+
+Another world could later realize that certified mechanic as whispering coins, mirrored beetle pins, bone flutes,
+or another locally meaningful invention. It would not inherit turtles, the escape, the original holders, or their
+relationships. Mechanical learning must not flatten world identity.
+
+##### Hostile-precedent trace
+
+A warden's suppression chain remains P0 and recoverable after defeat. If a faction studies or manufactures it,
+P1 makes reproduction a world event with material, knowledge, time, custody, and opposition consequences. The
+portable candidate may preserve only the safe mechanic: a targetable physical tether that locally contests one
+movement mode and provides a break/steal path. The originating villain's name, prison doctrine, victims, and secret
+methods remain local canon.
+
+An especially abusive P0 recipe may remain legal for its already-committed narrow circumstances yet fail P2
+certification. Certification failure does not retcon the original world. It blocks broader reuse, records the
+reason, and may constrain future copies through world consequences or recipe-version repair rather than erasure.
+
+##### Promotion evidence and certification
+
+A portable candidate needs more than “the compiler accepted it once.” Its evidence packet should include:
+
+- normalized declarative recipe and exact primitive/version dependencies;
+- originating C-band, intended play pattern, hard invariants, and abstraction status;
+- deterministic serialization/replay traces and migration data;
+- observed uses across materially different targets/situations where available;
+- stacking, recursion, resource-loop, ownership-transfer, destruction, and terminal-state adversarial probes;
+- hostile-counter and player-ownership traces where applicable;
+- power/reach comparisons against relevant SRD and Genesis-custom baselines;
+- known failure modes, counterplay obligations, saturation/frequency guidance, and forbidden combinations;
+- a provenance-scrub report proving no world secrets, personal data, or protected narrative identity travels with
+  the candidate.
+
+The exact certification owner - mandatory human review, fully automated gates, or a staged hybrid that can become
+no-human after the harness proves itself - is the next material follow-up if Option 3 is accepted. At minimum,
+cross-world/product promotion cannot occur through opaque model confidence alone.
+
+##### Versioning, repair, and retirement
+
+Every P0-P3 recipe keeps a stable identity and version. A later correction creates a new version and a migration
+or compatibility projection; it does not silently rewrite past outcomes. Existing instances retain provenance to
+the version that governed their history. Dangerous candidates can be quarantined from new use while old world
+state receives an explicit safe migration, limitation, or grandfathered local behavior according to severity.
+
+Duplicate candidates should be merged by mechanic graph and semantic invariants, not by name similarity. Two
+worlds may independently invent differently named paired communicators that reveal one reusable recipe; the P0
+identities stay separate. Conversely, two objects with similar names may encode different play patterns and must
+not be collapsed.
+
+##### Callback and DM-deck implications
+
+P0 callback stubs remain available to the DM in their originating world regardless of promotion. P1 adds lawful
+related-growth options: copies, schools, counterfeit versions, defensive responses, improved descendants, supply
+chains, cultural customs, and opposition built from the known pattern. The DM's callback deck uses those stubs to
+create cohesion, but every descendant still needs source posture, authority, causality, and impact validation.
+
+P2/P3 retrieval does not make a callback. A cross-world mechanical template has no relationship to a current
+world until the DM or engine earns and instantiates a locally meaningful identity. This prevents the global library
+from posing as memory.
+
+##### Research, implementation, and maintenance filter
+
+Semantic classes and reusable plans in the downloaded procedural research support separating an abstract reusable
+pattern from its contextual realization. Mixed-initiative and declarative systems support versioned reusable
+constraints and authored fixation of important meaning. The papers do not establish an automatically self-growing
+cross-world rules catalog or solve its safety, privacy, balance, and product-governance problems; the P0-P4
+lifecycle is a Genesis-specific extension.
+
+Option 3 has **high platform and maintenance cost**: recipe identity/versioning, world-local knowledge and
+replication events, canon stripping, evidence capture, quarantine, certification harnesses, duplicate detection,
+migrations, deprecation, and separate storage/retrieval boundaries for local versus portable patterns. Its benefit
+is equally structural: the creative compiler can learn without treating improvisation as disposable or allowing
+one world's fiction to contaminate another.
+
+Option 1 is initially cheap but creates an increasingly untrustworthy global corpus. Option 2 is safe but prevents
+the accepted core system from improving its reusable grammar. Option 3 lets permanence, world dissemination, and
+product learning proceed independently and visibly.
+
+**Question for Adam:** should successful precedents use Option 3's P0-P4 lifecycle: exact inventions persist as
+world-specific P0 canon; in-world reuse requires a causal P1 transmission path; only canon-stripped, evidence-backed
+P2 candidates may seek certification into the cross-world P3 custom library; and rare repeated patterns may later
+become P4 core primitives? If accepted, the next follow-up chooses the P2-to-P3 certification owner: human review,
+automated gates, or a staged hybrid designed to graduate toward a trustworthy no-human pipeline.

@@ -6538,3 +6538,114 @@ wants without building a fragile per-ration economy simulator.
 **Open decision:** should material operational flows use this sparse dependency-and-handle contract,
 with concrete realization concentrated on core, pressured, external, contested, Spice-bearing, or
 player-actionable flows and exact quantities deferred until they become materially relevant?
+
+#### 10.11.1 Follow-up - preserve DM dressing improvisation through bounded canonization
+
+Adam likes the dependency model but also wants the DM to freestyle with dressing when players interact
+with it. That freedom is important. A causal engine that refuses to recognize an ordinary stool, rag,
+bucket, loose board, desk drawer, lamp, chain, curtain, or piece of crockery unless it was eagerly stored
+would be less flexible than a tabletop session and would punish exactly the environmental creativity the
+new ecology is meant to support.
+
+The dependency graph and dressing improvisation should therefore have different authority:
+
+- **operational flow truth** fixes consequential providers, routes, buffers, capabilities, states,
+  claims, thresholds, and known absences before the DM narrates them;
+- **dressing grammar** defines a bounded envelope of ordinary plausible local details from room
+  function, fixtures, occupants, culture, materials, condition, history, current activity, and realm;
+- **DM improvisation** may select, combine, phrase, or roll an ordinary candidate inside that envelope
+  when a player asks a concrete question or attempts an environmental action;
+- **canonization** stores whatever the DM actually asserts at the lightest sufficient persistence tier,
+  then promotes it if the player observes, moves, consumes, damages, takes, relies upon, or attaches a
+  consequential fact to it.
+
+This gives three useful commitment levels:
+
+```text
+projection wording
+  expressive phrasing of already-licensed truth; no new mechanical noun is required
+
+observed dressing fact
+  a lightweight persistent assertion such as “a three-legged stool stands by the desk”
+
+promoted interactable / event participant
+  stable identity, affordances, state, ownership, location, and consequences because play now depends on it
+```
+
+Anything explicitly narrated to the player is canon at least as an observed dressing fact. It cannot
+vanish on revisit. The system need not immediately allocate a heavyweight inventory/entity record for
+every described cup; it can retain a compact assertion under the room/fixture and promote only the cups
+that become relevant.
+
+##### Example - hamlet jail
+
+The room program fixes one barred holding room, its legal exits, custody function, present condition,
+occupants, and any material supply or sanitation dependency. The dressing grammar may license a bench,
+stool, water bucket, chamber pot, blanket, writing tools, wall hooks, lantern, key peg, ordinary papers,
+or patched local construction according to the actual state.
+
+If the player asks, “Can I wedge the stool under the door?” the DM can establish a plausible stool,
+canonize it, and let the action system judge its shape, strength, access, and the door mechanics. The
+engine did not need to pre-simulate the stool.
+
+If the player asks, “Is that floor drain large enough to crawl through?” the DM cannot invent a new
+escape edge merely because drains are plausible in prisons. Traversable topology was fixed before
+exploration. The answer must come from the canonical room/portal plan: perhaps there is no drain, only a
+small waste channel, or a preexisting hidden maintenance route with its own reveal requirements.
+
+If the player searches the desk for “the prisoner-transfer ledger,” an ordinary blank ledger or routine
+record may be improvised if licensed. A specific incriminating record, secret clue, named transfer, or
+contract evidence must attach to an existing fact/root/promise or create a lawful promoted discovery;
+the DM cannot manufacture high-consequence canon merely because a desk has drawers.
+
+##### Improvisation boundaries
+
+The DM may freely establish a detail when it:
+
+- fits the effective room/fixture/occupant dressing grammar and current operational state;
+- is ordinary at the relevant context and Spice band;
+- does not contradict an observed absence, previous description, known inventory, current damage, or
+  access condition;
+- does not create or delete a traversable connection, required capability, major buffer, controlling
+  resource, named person, strategic asset, clue, threat, or high-band cause;
+- remains within a bounded local clutter/affordance budget where quantity or repeated invocation matters.
+
+The DM must consult fixed truth or request a seeded oracle/table result when the answer would:
+
+- change topology, access, capacity, operational state, or a dependency threshold;
+- create valuable/scarce inventory, a major tactical advantage, or material treasure;
+- establish hidden knowledge, named evidence, a secret, a promise, or another person's private fact;
+- introduce Strange/Volatile/Mythic content beyond an already licensed causal root;
+- contradict something the party already observed or reasonably exhausted through an earlier search;
+- produce a persistent consequence outside the local dressing authority.
+
+An oracle result does not mean the DM loses its voice. It supplies bounded authority—present/absent,
+quantity band, condition, ownership, or attachment—and the DM still performs the result in context.
+
+##### Avoiding player exploit loops
+
+Creative engagement should be rewarded, but repeated generic questions must not mint unlimited gear or
+new search chances. The same stable search/opportunity rules still apply:
+
+- a systematic sweep establishes routine dressing and absences within its method;
+- identical retries do not refill the room or reroll previously exhausted surfaces;
+- interchangeable clutter can be grouped under one surface or reserve instead of listing every object;
+- once a local reserve is consumed or an absence is established, later improvisation respects it;
+- improvised ordinary tools provide their honest affordances; the engine does not secretly weaken them
+  merely because the player found an unexpected use;
+- consequential improvisations enter the same event, ownership, inventory, evidence, and persistence
+  paths as pre-generated objects.
+
+##### Recommendation
+
+Add **bounded DM improvisation with progressive canonization** to the sparse dependency model. Pre-fix
+semantic structure and consequential operations; author generous contextual dressing grammars; let the
+DM instantiate ordinary plausible details in response to player attention; persist every asserted fact
+lightly; and promote only interacted-with or consequential details into full records. This preserves
+tabletop freedom while preventing improvisation from retconning topology, minting treasure, leaking
+secrets, or bypassing causal systems.
+
+**Open follow-up:** should the DM receive this bounded dressing authority, with ordinary plausible
+details freely instantiated and canonized on demand, while topology, scarce resources, operational
+dependencies, secrets, named evidence, and higher-Spice facts require preexisting authority or a seeded
+oracle/promotion path?

@@ -739,3 +739,20 @@ Full authority and the twelve-wave map: `PROCEDURAL-DUNGEON-DIRECTION.md`.
 | Preservation and research | **Preserve the golden beat, not necessarily its current mechanism.** Classify productive systems as retain, rewire, recompose, or retire-with-replacement-proof, and require an engine/table crosswalk plus executable examples before implementation. Walk Card Dealing and other Genesis proposals remain candidates; sift every remaining ruling through the indexed procedural-generation research and adopt elegant solved techniques where they serve the vision. |
 
 Wave 1 is **not closed**. Resume at question 12 in `PROCEDURAL-DUNGEON-DIRECTION.md` section 8.12.
+
+## Locked decisions (2026-07-20 — Wave 1 closed; Wave 2 through Question 11; reference-derived additions)
+
+This block supersedes the stale status line immediately above without deleting that historical checkpoint.
+Wave 1 closed explicitly in `PROCEDURAL-DUNGEON-DIRECTION.md` section 8.21.1. Wave 2 is open and its detailed
+authority lives in section 10 of that file.
+
+| Decision | Choice |
+|---|---|
+| Questionnaire preservation | Preserve the twelve original subject waves, all twenty Wave 1 questions, and Wave 2 Questions 1-11 verbatim in place. Future waves had subject headings rather than hidden prewritten twenty-question lists. Gemini-reference questions `G1.1-G12.2` are additive and cannot renumber, delete, or silently rewrite the originals. |
+| Wave 2 site model | Purpose-family obligation/flow programs drive room realization; causal/player-facing systems receive light simulation; repeated spaces are correlated families; functional, spatial, embedded, and coordinated Spice budgets remain protected; demand, population, groups, operating state, cadence, and material flows have typed sparse owners. |
+| Performance posture | Use capacity-first limits, active slices, event-driven propagation, deterministic lazy catch-up, compact DM projections, and bounded between-turn work. Routine local turns target near-immediate response; dense cities may aggregate cold state without erasing due hard consequences. |
+| Improvisation boundary | Players may attempt arbitrary intent. The engine owns checks, state, costs, resources, and receipts; the DM may select and describe validated contextual details. Failed rolls must honestly miss their declared objective while creating real complications or affordances rather than secret success. |
+| Crit Magnitude | Surfaced spotlight d20s use a second open magnitude roll after a natural 20/1. Success and failure bands mirror 15/3/1/1; conservative Mythic is the default and opt-in Worldbreaker reach is configurable independently by direction. Style/combination rewards must not counterfeit crit authority. |
+| Terminal outcomes | Typed `TerminalDisposition` owns life continuity, remains, destination, inventory, recovery, evidence, identity, and history consequences. `obliterated` may remain only as a compatibility projection. |
+| Gemini reference north star | Reproduce causal generosity and reciprocal improvisation while the engine remains authoritative about cast identity/location, dice, resources, durations, objects, knowledge, and consequences. Future obligations include `SceneFactGraph`, `CrisisChain`, `CastRoster`, `Motif/CallbackDeck`, bounded `Style/Combo`, and provenance-driven keepsakes. |
+| Next design position | Before original Wave 2 Question 12, exhaust `G2.1` SceneFact promotion and `G2.2` cooperative CrisisChain ownership plus every generated follow-up. Wave 2 cannot close without Adam's explicit agreement. |

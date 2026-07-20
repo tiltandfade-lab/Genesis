@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-19
+updated: 2026-07-20
 ---
 
 # Genesis — Session Hand-off
@@ -16,6 +16,99 @@ reach the visual target. Read it before this handoff's historical graphics queue
 `docs/GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` for evaluated tools and executable research gates.
 For any sprite/pixel-art generation or review work specifically, `docs/ART-DEPARTMENT.md` is the
 pixel register's canonical home — live-corpus state, the style law index, and the regen runbooks.
+
+## ⭐ Latest (2026-07-20) — PROCEDURAL REDESIGN HANDOFF: Wave 2 through Q11 + Gemini reference audit [Codex]
+
+This was a design-only session. No implementation, worktree creation, LFS checkout, CI, merge, or push was
+performed. The local `master` contains docs-only commits and is ahead of `origin/master`; do not assume that
+the work has been backed up remotely.
+
+### Current authority and exact questionnaire preservation
+
+Read `docs/PROCEDURAL-DUNGEON-DIRECTION.md` as the detailed authority. Wave 1 is explicitly **CLOSED** in
+section 8.21.1. Wave 2 is **OPEN** in section 10.
+
+The original questionnaire is still present:
+
+- all twelve original subject-wave headings remain in section 6;
+- all twenty original Wave 1 questions and their follow-ups remain in section 8;
+- original Wave 2 Questions 1-11 and their follow-ups remain in section 10.
+
+Future waves were stored as named subject sections to be expanded when reached; there was not a prewritten
+twenty-question list for every future wave. Section 6 now says this explicitly and adds a separately labeled
+`G1.1-G12.2` Gemini-reference question bank. These questions are additive: they do not renumber, delete, or
+silently rewrite the original questionnaire.
+
+### What this session locked
+
+Wave 2 Questions 1-10 establish purpose-family obligations/flows, light simulation, room-realization
+contracts, correlated repeated families, protected multi-scope Spice capacity, demand/coverage/assembly
+quantities, population/cohort/casting ownership, typed occupant groups and claims, factorized operational
+state, and layered cadence/coverage slots.
+
+Question 11 and its skeptical queue establish sparse material dependencies and playable handles; bounded
+transactional DM improvisation; definite but composable lineage; capacity-first simulation and near-immediate
+response targets; hierarchical discovery scaling; versioned latent commitments; separate committed/current/
+observer access; reciprocal regional-promise reconciliation; bounded exposition; arbitrary creative intent
+through engine-owned rolls; configurable Crit Magnitude profiles; exact mirrored success/failure magnitude
+bands; independent success/failure Mythic reach; and typed `TerminalDisposition` replacing `obliterated` as
+world authority.
+
+Adam then supplied the public Gemini game that inspired Genesis. All 39 published user/Gemini turn pairs were
+read; only its hidden uploaded DMG attachment was inaccessible. Sections 10.11.51-10.11.56 record the audit.
+The extracted north star is causal generosity with engine-owned continuity: action-created facts must become
+later affordances, while identity, position, dice, resources, duration, object state, knowledge, and lasting
+consequence remain authoritative. The audit adds future obligations for `SceneFactGraph`, `CrisisChain`,
+`CastRoster`, `Motif/CallbackDeck`, a bounded `Style/Combo` channel, and provenance-driven keepsakes.
+
+### Pick up here
+
+Section 10.11.57 is the live pointer. The old Question 11 skeptical queue is answered, but the Gemini audit
+adds two Wave 2 integration questions before original Question 12:
+
+1. **G2.1 — SceneFactGraph promotion:** when interaction makes an ordinary generated noun or condition
+   consequential, what becomes engine truth and what later actions may it legally enable without simulating
+   every noun?
+2. **G2.2 — CrisisChain ownership:** how should a cooperative crisis consume roster roles, material flows,
+   props, conditions, clocks, and contributions without creating a duplicate simulation or an abstract
+   progress-bar minigame?
+
+Ask G2.1 first. Briefly restate it in plain English, use concrete dungeon and Gemini-reference examples,
+identify relevant existing Genesis rulings, explain viable options and hidden costs, give a recommendation,
+then let Adam respond. Follow every answer recursively. Do not move to G2.2, original Question 12, or Wave 3
+until the current question's follow-ups are exhausted. Continue appending every discussion to the Direction
+file. No implementation is authorized.
+
+### Copy-ready new-chat prompt
+
+```text
+Continue the procedural dungeon redesign deep dive from the July 20 handoff.
+
+First read:
+- CLAUDE.md
+- docs/HANDOFF.md, especially the latest 2026-07-20 procedural-redesign block
+- docs/PROCEDURAL-DUNGEON-DIRECTION.md section 6's questionnaire-preservation/additive-reference bank
+- docs/PROCEDURAL-DUNGEON-DIRECTION.md sections 10.11.51-10.11.57
+- the latest procedural-dungeon decisions in docs/DESIGN.md
+
+Confirm that the preserved original questionnaire consists of the twelve original wave sections, all twenty
+Wave 1 questions, and Wave 2 Questions 1-11; future waves had subject headings rather than a hidden prewritten
+twenty-question list. Treat G1.1-G12.2 as additive questions, never replacements.
+
+Resume Wave 2 at G2.1 exactly where the handoff specifies. Briefly restate the question in plain English,
+explain the relevant options with concrete dungeon and Gemini-game examples, identify implementation and
+maintenance costs, give your recommendation, and let me respond. Follow every answer into its follow-up
+questions and keep diving until no material follow-up remains. Then proceed to G2.2 and afterward return to
+the original Wave 2 sequence at Question 12.
+
+Do not declare Wave 2 complete or begin Wave 3 until all original questions, additive questions, and generated
+follow-ups are exhausted and we explicitly agree to close it.
+
+Keep docs/PROCEDURAL-DUNGEON-DIRECTION.md as the running record and preserve all earlier text. This begins as
+design discussion. Do not implement code, run CI, create a worktree, check out LFS assets, merge, or push unless
+I explicitly ask. Commit coherent docs updates locally to master as previously authorized. If I request a
+checkpoint, use the fast-checkpoint procedure, not the final/evening clean-close procedure.
+```
 
 ## ⭐ Latest (2026-07-19, later) — CI GREEN AGAIN + the Wave 1 design lane is fully on master [Claude Code]
 

@@ -342,6 +342,163 @@ never routed around silently.
 
 The order may change if a wave proves upstream of another, but the closure law does not.
 
+### Questionnaire preservation and additive Gemini-reference pass (2026-07-20)
+
+The original questionnaire has not been replaced. The preserved baseline consists of:
+
+- the twelve named subject waves above;
+- Wave 1's complete original twenty-question sequence and every generated follow-up in section 8;
+- Wave 2's original Questions 1-11 and every generated follow-up so far in section 10.
+
+The future waves were intentionally preserved as subject sections to be expanded when reached; there was
+never a hidden, prewritten twenty-question list for every future wave. Do not fabricate one and call it the
+original. The questions below are a clearly labeled **additive reference bank** derived from the published
+Gemini play audit in sections 10.11.51-10.11.56. They do not renumber, delete, or silently rewrite an
+original question. When a future wave opens, integrate its `G` questions into that wave's ordinary sequence
+and exhaust their follow-ups under the same closure gate.
+
+For a closed wave, a `G` question is a validation question against its accepted ontology. It reopens the
+wave only if the answer contradicts an accepted ruling; otherwise its concrete mechanism remains with the
+named later owner.
+
+#### Wave 1 additive questions - function, history, and strange compatibility
+
+The section remains relevant. The reference validates its staged-canon, promotion, lineage, evidence, and
+player-handle laws rather than displacing them.
+
+- **G1.1:** When player interaction promotes incidental dressing into consequential truth, which original
+  purpose, lineage, occupation, history, or local-event record owns the new fact, and when may the interaction
+  create new canon rather than merely reveal existing canon?
+- **G1.2:** Can every site family provide causal ownership for action-created facts without pretending that
+  every natural, living, mobile, or anomalous site has an institutional builder or operator?
+
+#### Wave 2 additive questions - room roster, repetition, Spice, and ecology
+
+The section remains relevant. Its obligations, flows, populations, operating states, and material handles
+provide the source facts from which sustained improvisational chains can grow.
+
+- **G2.1:** Which generated site, room, assembly, prop, material, condition, position, and relationship facts
+  are eligible for promotion into a `SceneFactGraph`, and what minimum source, owner, location, state,
+  evidence, affordance, dependency, and expiry contract must promotion create?
+- **G2.2:** How should a multi-actor `CrisisChain` consume roster roles, material flows, active props,
+  conditions, clocks, and group contributions without duplicating the site simulation or reducing the scene
+  to an abstract progress bar?
+
+#### Wave 3 additive questions - architecture, structural stamps, and degradation
+
+The section remains relevant. The transcript proves that geometry must support physical consequences, not
+only static room presentation.
+
+- **G3.1:** How do moved devices, embedded weapons, broken hulls, temporary anchors, dangling characters,
+  vehicle orientation, and other action-created spatial facts bind to the semantic graph and local geometry
+  while respecting fixed topology and legal mutation authority?
+- **G3.2:** Which scars, damage states, improvised routes, and structural dependencies persist as physical
+  history, and which remain short-lived scene facts with an explicit terminal or restoration condition?
+
+#### Wave 4 additive questions - portals, secrets, vertical connections, and circulation
+
+The section remains relevant. The realm transition and later escape show that connections are causal objects
+with conditions and consequences, not merely exits.
+
+- **G4.1:** What exact causal receipt may create, move, invert, stabilize, or destroy a portal, Breach,
+  shortcut, improvised bridge, or vertical route, and how are endpoints, access conditions, travelers,
+  evidence, pursuit, and return paths preserved?
+- **G4.2:** How can a room-scale clue or action-created fact participate in a later site- or campaign-scale
+  discovery chain without relying on the DM's context-window memory or revealing hidden canon too early?
+
+#### Wave 5 additive questions - furniture assemblies, dressing, clutter, and empty rooms
+
+The section remains relevant. The brandy, snow, dashboard, mace, and fuel were valuable because apparently
+ordinary nouns became real interaction surfaces.
+
+- **G5.1:** What lightweight composition and interaction grammar lets touched dressing acquire states such
+  as wet, flammable, chilled, embedded, leaking, powered, blocked, or exhausted without turning every bottle,
+  drawer, and snowflake into a continuously simulated object?
+- **G5.2:** How may the DM freestyle a plausible physical detail in response to player attention, while one
+  transactional validation step prevents the invention from contradicting space, inventory, prior evidence,
+  or available affordances?
+
+#### Wave 6 additive questions - creature scale, capacity, squeezing, and party participation
+
+The section remains relevant. Leonardo's continuity failure demonstrates that group membership, individual
+identity, location, and availability must remain separate even during fast multi-actor scenes.
+
+- **G6.1:** What must a `CastRoster` record so an individual retains stable identity, aliases, group
+  membership, position/zone, condition, motive, equipment, knowledge, relationship, and last valid transition
+  through party splits, vehicles, scale changes, and realm transitions?
+- **G6.2:** How are simultaneous rescuers, pilots, passengers, pursuers, bystanders, large creatures, and
+  offscreen participants aggregated or individualized so cooperative scenes stay legible without eager
+  simulation of every actor?
+
+#### Wave 7 additive questions - tactical affordances and encounter reshaping
+
+The section remains relevant. The reference's strongest play came from cooperative consequences, but its
+dice drift shows that momentum cannot replace mechanical honesty.
+
+- **G7.1:** How does a failed action honestly miss its declared objective while still creating a concrete
+  complication, changed position, cost, threat advance, exposure, or new affordance that keeps play moving?
+- **G7.2:** What bounded `Style/Combo` rules reward synchronized creativity, callbacks, setup/payoff, and
+  multi-character contribution without fabricating a natural result, bypassing action economy, enabling
+  crit fishing, or trespassing on Crit Magnitude?
+
+#### Wave 8 additive questions - mutable and destructible environments
+
+The section remains relevant. The reference requires typed state transitions and causal permanence rather
+than prose-only destruction or one generic `obliterated` flag.
+
+- **G8.1:** How do environmental mutations declare causal parents, targets, dependencies, propagation,
+  duration, repair, evidence, and downstream affordances so an early fact can be legally consumed much later?
+- **G8.2:** How do ordinary damage, transformation, banishment, disintegration, planar consumption, and
+  Worldbreaker-scale permanence resolve through typed terminal disposition while preserving inventory,
+  remains, identity, witnesses, recovery possibilities, and prior history?
+
+#### Wave 9 additive questions - DM strategic cards and environmental authority
+
+The section remains relevant. The reference adds player-authored motifs, cast continuity, tutorial posture,
+and pressure cadence to the DM's existing priority-hand problem.
+
+- **G9.1:** How should a sourced `Motif/CallbackDeck` remember player phrases, humor, music references,
+  fears, relationships, and action styles with recurrence budgets and explicit mechanical permission, while
+  separating private/user-local material from shippable authored content?
+- **G9.2:** What active digest and validation boundary lets the DM sustain pressure, license quiet beats,
+  mention only valid cast members and facts, and offer per-player rules/tutorial assistance without turning
+  contextual examples into an action menu or tactical railroad?
+
+#### Wave 10 additive questions - interim visual engine and release scope
+
+The section remains relevant. A causal scene is only trustworthy if presentation shows the authoritative
+positions and consequential states rather than a visually convenient approximation.
+
+- **G10.1:** How does every target representation project current cast location, active props, conditions,
+  damage, routes, moving platforms/vehicles, and realm transitions at gameplay scale without inventing or
+  dropping canonical nouns?
+- **G10.2:** Which visual tells make promoted affordances and accumulated object history legible without
+  outlining every container, cluttering the interface, or exposing facts the viewpoint has not earned?
+
+#### Wave 11 additive questions - workbench, clay corpus, and teaching loop
+
+The section remains relevant. Authors and modders need to see why an improvisational chain worked or failed,
+not merely whether a final scene rendered.
+
+- **G11.1:** How can a human-readable roller/workbench author fact types, state transitions, combination
+  permissions, affordances, motif hooks, and fallback behavior while compiling them into controlled,
+  versioned contracts?
+- **G11.2:** What causal debugger and clay corpus prove that an early prop, actor, resource, clue, or
+  condition survives many turns, is consumed only when legal, produces a readable trace, and fails loudly
+  when narration attempts a Leonardo-style continuity error?
+
+#### Wave 12 additive questions - migration, persistence, acceptance gates, and build order
+
+The section remains relevant. Gemini's context loss turns save/load, replay, compaction, and long-scene
+continuity into product-defining acceptance requirements.
+
+- **G12.1:** What canonical facts, selected recipes, source versions, event receipts, cast transitions,
+  motif provenance, and causal edges must survive save/load, code/table evolution, context compaction, mod
+  removal, and lazy reactivation—and what may be safely summarized or regenerated?
+- **G12.2:** What deterministic, IP-clean golden-session trace proves that Genesis can reproduce causal
+  generosity across a long cooperative crisis while remaining exact about identities, locations, dice,
+  resources, durations, object states, knowledge boundaries, and lasting consequences?
+
 ## 7. Wave 1 setup - Dungeon Function, History, and Strange Compatibility
 
 Wave 1 must determine the ontology from which the roller is built. Its first questions should cover:
@@ -11281,3 +11438,27 @@ making every cellar search become a trans-dimensional pursuit.
 > real situation, while being categorically better at remembering who exists, where everyone is, what the
 > dice said, which resources were spent, how long effects last, what objects can do, and what consequences
 > remain after the laughter.
+
+#### 10.11.57 Questionnaire relevance ruling and next live position
+
+Adam asks that the Gemini lessons be inserted **additively** into every questionnaire section without losing
+the original questionnaire. The preservation statement and supplemental `G1.1-G12.2` bank now live in the
+question-wave protocol above.
+
+The relevance audit finds no obsolete original wave and no original question that should be deleted:
+
+- Wave 1's ontology remains valid and explicitly closed; its additive questions are validation against
+  staged canon, definite lineage, promotion, and non-institutional site families, not an automatic reopening.
+- Wave 2 Questions 1-11 remain valid. The original Question 11 material-flow ruling and its prior skeptical
+  queue through typed terminal disposition have all received answers. The Gemini reference exposes two new
+  Wave 2 integration questions—`G2.1 SceneFactGraph promotion` and `G2.2 CrisisChain ownership`—that must be
+  discussed before proceeding to original Question 12.
+- Waves 3-12 retain their original subject boundaries. Their new `G` questions sharpen the required
+  integration and acceptance evidence rather than replacing their planned architectural work.
+
+**Next live position:** Wave 2 remains open. Resume with **G2.1**, in plain English: when play turns an
+ordinary generated noun or condition into something consequential, exactly what becomes engine truth, what
+can it legally enable later, and how do we obtain that reliability without simulating every noun in the
+scene? Exhaust its follow-ups, then G2.2, before returning to original Wave 2 Question 12. Do not declare Wave
+2 complete or open Wave 3 until its original questions, additive questions, and all generated follow-ups have
+passed the closure gate.

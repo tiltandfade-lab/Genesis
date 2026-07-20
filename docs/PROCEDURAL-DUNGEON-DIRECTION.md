@@ -9610,3 +9610,79 @@ table above—no cooldown, pity system, frequency correction, or cancellation.
 **Open decision 2:** should full Crit Magnitude apply to every surfaced spotlight d20 resolution—all
 player-facing d20s, individually narrated consequential named/foreground actor d20s, and consolidated
 group rolls—while internal, background, and per-unit batch dice cannot generate independent cascades?
+
+#### 10.11.30 Ruling — Crit Magnitude belongs to surfaced spotlight d20 resolutions
+
+Adam locks Option 3. Full Crit Magnitude applies to every surfaced spotlight d20 resolution:
+
+- player-facing attacks, checks, saves, and other independently resolved consequential d20 actions;
+- individually narrated consequential d20 actions by named or foregrounded NPCs and foes;
+- one explicit consolidated resolution when a minor cohort acts collectively;
+- any otherwise-background action deliberately promoted into a visible action beat with a legitimate
+  `CheckContract`.
+
+Internal solver probes, passive arithmetic, background catch-up, hidden per-capita simulation, and the
+individual members of a batch do not receive independent Crit Magnitude opportunities. An offscreen baker
+does not accidentally make Mythic bread and rewrite the regional grain economy merely because the economy
+simulation used a d20-shaped random number. If the baking becomes a real surfaced contest—perhaps the
+player helps the royal baker complete a feast while a flour curse spreads through the ovens—its declared
+action rolls may qualify normally.
+
+The distinction is narrative-mechanical status, not actor privilege: the player, a foregrounded enemy,
+a named ally, or a surfaced cohort can all generate honest Mythic change. No actor receives an invisible
+volume advantage merely because the engine models more of its component actions. Eligibility must be
+registered at the shared d20 resolution spine so callers cannot accidentally bypass or duplicate it.
+
+Once eligible, a roll receives the honest magnitude result without cooldown, pity, suppression, or
+frequency correction. Decision 2—Crit Magnitude eligibility and frequency—is closed.
+
+#### 10.11.31 Open decision 3A — how many lenses constitute a Mythic cascade?
+
+The current spec promises a Mythic “full cascade (3+),” but the implementation fixes every `20/20` and
+`1/1` at exactly three distinct lenses. That cannot reproduce the canonical Light of Lathander example's
+four mechanical threads: transformed place/enduring light, changed person/repentant bandit, revealed
+truth/bandit operation, and forged bond/shrine obligation. Mythic count therefore needs an explicit rule.
+
+##### Option 1 — keep exactly three lenses
+
+Every Mythic result changes three distinct kinds of thing. This is fastest and most predictable, but it
+quietly narrows `3+` to three, cannot directly express the founding example, and makes every ultimate
+result structurally identical in count. A `20/20` plea might transform the shrine site, redeem the
+bandit, and reveal the operation, but the enduring bond must be folded into another effect or omitted.
+
+##### Option 2 — fix Mythic at four lenses
+
+Every Mythic result changes four distinct kinds of thing. This matches the average desired weight and the
+Lathander example while making implementation and presentation predictable. It still abandons count as a
+rolled axis, however: stabilizing the hell-crystal and winning a transcendent cooking contest would always
+produce the same number of persistent threads even though their content and reach differ.
+
+##### Option 3 — openly roll `d3 + 2` distinct lenses (three to five, average four)
+
+After `20/20` or `1/1`, roll the cascade count openly, then draw that many distinct success or failure
+lenses. Three creates a concentrated Mythic event, four matches the canonical example, and five creates a
+rare maximal braid. For the collapsing crystal:
+
+- a three-lens `1/1` might erase the town as the core loss while opening the hell passage, scarring a
+  survivor, and making the town's name a regional curse;
+- a five-lens `1/1` could additionally release a named threat and impose a debt upon the survivors.
+
+The core consequence licensed by the `CheckContract` does not consume or depend on drawing a particular
+lens; lenses describe the distinct persistent propagation around it. Duplicate or mechanically
+incoherent lenses are openly rerolled rather than silently reducing the count.
+
+The engine cost is bursty but small in aggregate. Compared with fixed three, `d3 + 2` adds an average of
+one typed effect only when a Mythic extreme occurs—about one extra effect per 200 eligible d20 actions on
+straight independent dice. A maximal event validates and commits five adapters instead of three, so its
+exceptional turn may take longer and needs a visible ritual/progress presentation. It does not require new
+adapter families or larger lens tables; it reuses the same twelve orthogonal axes. The real expense is
+writing and testing cross-lens coherence, rollback, and deferred fulfillment for up to five effects,
+which the atomic cascade system needs regardless if Mythic outcomes are to be real rather than prose.
+
+**Recommendation:** Option 3, `d3 + 2`. It preserves the original promise that magnitude controls both
+count and intensity, matches the `3+` spec and four-thread canonical example, and gives the rarest events
+meaningful structural variation without increasing ordinary-turn simulation cost.
+
+**Open decision 3A:** should every Mythic `20/20` or `1/1` openly roll `d3 + 2` distinct lenses, producing
+a three-to-five-thread persistent cascade, with the declared core action consequence resolved in addition
+to and propagated through those lenses?

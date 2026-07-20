@@ -1,0 +1,35 @@
+{
+  "name": "recast-navigation-root",
+  "private": true,
+  "workspaces": [
+    "packages/recast-navigation-wasm",
+    "packages/recast-navigation-core",
+    "packages/recast-navigation-generators",
+    "packages/recast-navigation-three",
+    "packages/recast-navigation-playcanvas",
+    "packages/recast-navigation",
+    "apps/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "yarn build:packages && yarn build:apps",
+    "build:packages": "yarn workspaces foreach -t -A --include @recast-navigation/wasm --include @recast-navigation/core --include @recast-navigation/generators --include recast-navigation --include @recast-navigation/three --include @recast-navigation/playcanvas run build",
+    "build:apps": "yarn workspaces foreach -A -t --include navmesh-website --include docs run build",
+    "build:examples": "yarn workspaces foreach -A -t --include three-vite-example --include three-vite-worker-example --include playcanvas-vite-example run build",
+    "test": "yarn test:packages && yarn test:node-smoke-test",
+    "test:packages": "(cd packages/recast-navigation && yarn test)",
+    "test:node-smoke-test": "(cd ./examples/three-node-cjs-example && yarn start) && (cd ./examples/three-node-esm-example && yarn start)",
+    "change": "yarn changeset",
+    "release": "yarn build && yarn test",
+    "publish": "changeset publish",
+    "version": "yarn changeset version && yarn install --mode update-lockfile",
+    "format": "yarn biome format --write apps/**/src packages/**/src packages/**/.storybook/stories examples/**/src",
+    "lint": "yarn biome lint --write apps/**/src packages/**/src packages/**/.storybook/stories examples/**/src"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
+    "@changesets/cli": "^2.26.2",
+    "vercel": "^33.7.0"
+  },
+  "packageManager": "yarn@4.1.1"
+}

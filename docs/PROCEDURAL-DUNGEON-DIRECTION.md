@@ -16486,6 +16486,13 @@ and movement modes. Visibility and line of effect need Genesis volume/elevation 
 2D roguelike FOV rule. Foundry's target/template separation is the clearest existing model for the missing action
 target grammar, but Genesis remains the canonical owner.
 
+The relevant source was archived on July 20 under
+`Reference/Tactical-Combat-Research/` with immutable upstream commit ids, licenses, selected tests, an explicit
+source index, and a SHA-256 manifest. The archive includes the four core queue/path/FOV candidates, source-only
+copies of three deferred nav/agent references, and only five schema-relevant Foundry dnd5e files. GPL full-game
+references and Foundry's large content tree were deliberately not copied. These are research inputs only: no
+package was installed, imported, built, or selected as a production dependency.
+
 This also filters cleanly through the nine downloaded procedural-layout papers. Tutenel et al.'s semantic
 description/procedure split supports compiling canonical cell meaning into traversal rules; Horswill and Foged
 support explicit graph/path constraints and bounded summaries; Nepozitek and Gemrot support preserving the owned

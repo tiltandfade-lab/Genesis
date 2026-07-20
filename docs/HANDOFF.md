@@ -30,6 +30,12 @@ OpenXcom/Wesnoth are behavioral references only. The nine downloaded procedural 
 canonical topology and compiling explicit constraints; none provides D&D tactical law or chooses the interface.
 All detail, links, costs, and the future bakeoff fixture are in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.7.
 
+Adam then requested the relevant libraries locally. Source-only immutable snapshots now live in
+`Reference/Tactical-Combat-Research/`: TinyQueue, EasyStar.js, PathFinding.js, rot.js, three-pathfinding,
+recast-navigation-js, Yuka, and five schema-relevant Foundry dnd5e files, each with upstream license/provenance.
+The 4.4 MB archive has a SHA-256 manifest and source index. No package was installed, imported, built, or selected;
+GPL OpenXcom/Wesnoth and Foundry's 330 MB content/system tree were not copied.
+
 **Do next:** ask F10.1g: before Dash is selected, show only currently affordable cells, or also show a dim locked
 outline of cells that a legal Dash could unlock? Codex recommends the locked planning preview; selecting it opens
 the source chooser but cannot move or spend. Then resolve warnings/undo for hazards and opportunity attacks,

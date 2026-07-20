@@ -11597,3 +11597,103 @@ receipts; later affordances require typed recipes/adapters or another validated 
 resolved facts compact back into their true canonical owners. Follow-ups must still decide the exact promotion
 trigger, the granularity and expiry/compaction rules, how unknown-but-plausible properties are proposed, and
 the minimum authored capability grammar before `G2.1` can close.
+
+#### 10.G2.1.1 Ruling and follow-up - typed lazy promotion accepted; what exactly triggers it?
+
+Adam chooses **Option C, as always**. All relevant source families may participate, but only the consequential
+referent and facets become active truth through typed receipts. `SceneFactGraph` is an active causal index and
+transaction surface, never a duplicate owner of the world's items, conditions, positions, relationships, rooms,
+or site flows. Later affordances require a typed adapter/recipe or another validated arbitrary-intent receipt, and
+resolved durable outcomes return to their canonical owners.
+
+The first material follow-up is the promotion threshold. “When the player relies on it” is directionally right but
+not mechanically exact. It could mean first narration, first question, first declared use, first roll, first changed
+state, or first need to survive beyond the scene. Those boundaries have different costs and different failure
+modes.
+
+##### Trigger options
+
+**Option 1 - full promotion on narration.** Every concrete noun the DM or renderer introduces immediately gets
+stable identity, state, capabilities, dependencies, and persistence rules. This makes every described shelf,
+bottle, snowbank, chain, stool, crack, and corpse maximally reliable before the player asks about it. It also
+creates the exact eager-simulation burden G2.1 exists to avoid: high save and digest growth, constant adapter
+work, noisy visuals, and large reconciliation/migration surfaces for nouns that never matter.
+
+**Option 2 - full promotion on player attention.** A noun is fully promoted when the player names, examines,
+points at, or asks about it. This is cheaper and more reciprocal than narration-time promotion, but curiosity can
+still explode the active graph. It also risks turning questions into creation: “Is there lamp oil in those jars?”
+must not manufacture lamp oil merely because the player found useful words, and asking what a mural depicts
+should not require the mural to acquire every physical capability it might someday have.
+
+**Option 3 - staged reference pinning, mechanical activation, and durable projection (recommended).** Use four
+distinct states rather than one magic promotion moment:
+
+```text
+T0 ambient projection
+  generated/narrated from an existing source; no new SceneFact record
+
+T1 pinned referent
+  player or validated DM proposal singles it out; lightweight stable identity,
+  source, owner, location, observed description, and knowledge provenance only
+
+T2 active fact
+  an action, rule, threat, or receipt depends on or changes it; before consequential
+  resolution, validate and materialize only the required typed facets and affordances
+
+T3 durable projection
+  the fact gains an external dependency, survives the active scene, changes a canonical
+  resource/place/entity/item/relationship, or supplies evidence/history; compact it into
+  the true owner plus Ledger/Codex history and retain a graph reference if still live
+```
+
+Player attention may pin a referent and request validation; it may not create a favorable property. A question
+about whether a cask contains oil resolves from its assembly/material-flow source, established evidence, an
+engine-owned roll, or a bounded DM-invention proposal. If the property remains unknown, the knowledge record
+may advance while the object's hidden mechanical truth remains protected.
+
+Promotion to T2 occurs at the **pre-resolution contract boundary**, not after the prose. If a player declares a
+consequential use, the planner must identify the target/tool/support/path, validate the needed capability facets,
+and construct the `CheckContract` before dice. A no-roll deterministic manipulation still receives a typed
+commit receipt if it changes state. If the DM needs one plausible connective detail, proposal, validation,
+referent/facet creation, and consequence commit remain atomic in the same turn; narration follows the accepted
+receipt.
+
+##### Concrete traces
+
+**Dungeon lamp-oil cask:** the storeroom assembly projects casks at T0. “Which cask feeds the lamps?” pins one
+at T1 and may reveal its site-flow relationship without creating a leak. “I puncture it and spread the oil across
+the threshold” forces T2 before the attack/tool check: cask identity, material, remaining supply, threshold
+location, tool interaction, and stakes become explicit. The receipt creates the leak/spread if earned. If the oil
+is cleaned before leaving, temporary active facts expire or become a small evidence record. If it burns the room,
+depletes the site's lighting supply, blocks a route, or remains for a returning patrol, T3 projects those durable
+effects to the room, flow, portal/path, witnesses, and history.
+
+**Gemini snow and mace:** mentioning snow outside is T0. Choosing to roll a soaked character in it pins the
+relevant snow zone and activates only the material/position interaction needed to dilute flammability and perhaps
+add `chilled`; it does not instantiate or simulate every snowflake. The mace and vehicle already have item/entity
+identity, so an embedding strike jumps directly through T2: the hit contract and receipt create the exact
+`embedded_in` edge and hull state. A fuel line is neither discovered nor created after the roll merely because a
+leak would be exciting; it must be pre-established or included in the pre-resolution validated invention. Any
+later route, pursuit, or aftermath dependency makes the necessary outcomes T3.
+
+##### Research and cost filter
+
+This staged trigger follows the research more closely than a single promotion event. Tutenel's semantic objects
+expose only typed features and compile relationships in dependency order; the dependent object does not gain
+every imagined property. Hierarchical subproblems bound feature growth. Horswill and Foged preserve small
+graph summaries at the scope where a guarantee matters. Green et al. keep architecture and furnishing stages
+separate, while Henderson et al.'s a-posteriori-editing limitation warns against regenerating an already sampled
+scene to honor a late mutation. The Genesis equivalent is a narrow, receipt-driven transition on the existing
+owner.
+
+T1 adds a low-cost reference/knowledge layer but needs per-scene caps, deduplication, and expiry so adversarial
+inspection cannot pin thousands of nouns. T2 bears the medium validation and adapter cost only for active play.
+T3 bears the expensive persistence, migration, digest, and reconciliation cost only when an actual dependency
+or lasting consequence justifies it. The main maintenance risk is blurred thresholds: if adapters silently jump
+from T0 to T3 or if “attention” manufactures properties, the staged model becomes nominal rather than real.
+
+**Question for Adam:** choose or amend the trigger policy. The recommendation is Option 3: narration remains
+T0; explicit attention pins only identity/source/location/knowledge at T1; any consequential dependency or
+change must activate required facets at T2 before resolution; and only external dependencies or lasting canonical
+effects reach T3. If accepted, the next follow-up is how T1/T2 facts expire, compact, or remain addressable after
+the active scene without losing a later callback.

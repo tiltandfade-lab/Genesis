@@ -356,6 +356,16 @@ silent mechanics. Bespoke treatment may replace a fallback later without changin
 state, timing, viewpoint, or accessibility. Exact families, cost, and the open minimum-proof question live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.17.
 
+## Representative proof and interim EngagementLens-animation ruling (Adam, 2026-07-20 — additive)
+
+> "yes, in the interrim we can think of things in terms of FF6 style battle in the bottom visualizer if that's easier to implement than on the 3d board"
+
+The representative pre-alpha feedback spine is accepted. Interim expressive combat animation may use the
+FF6-style bottom EngagementLens when cheaper than comparable 3D-board animation, but the lens remains a projection
+of the same canonical receipt and never becomes a second combat authority. The exact board/lens responsibility
+split, costs, examples, and open fallback question live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.18.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

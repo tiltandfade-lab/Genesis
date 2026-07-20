@@ -17196,3 +17196,79 @@ Option B's minimum quality gate is:
 Does Adam accept Option B as the minimum proof while retaining the full Option C family architecture as the target?
 If so, close the object-inspector/feedback branch and resume F10.6b native-resolution proof. Wave 10 remains
 **OPEN**; no build is authorized.
+
+### 11.18 F10.3f ruling - representative proof accepted; EngagementLens may carry interim combat animation
+
+**Adam's ruling (2026-07-20):** accept Option B as the pre-alpha feedback proof boundary while retaining the full
+tiered family architecture as the target. For the interim, some feedback may use the FF6-style bottom
+EngagementLens if that is easier than producing the corresponding animation directly on the 3D board.
+
+The accepted pre-alpha proof therefore covers:
+
+- exact movement and Dash, including reaction/hazard pauses;
+- chest and door open/close;
+- pickup and custody transfer;
+- one melee impact;
+- Fire Bolt projectile targeting/impact;
+- Fireball point selection, exact area, and affected-citizen feedback;
+- damage/heal state feedback;
+- one lever/platform or invented-object activation through the truthful fallback family;
+- reveal/discovery and typed refusal/failure;
+- truthful fallback or a visible tracked presentation gap for every other surfaced receipt, never silence.
+
+The proof may compose more than one presentation adapter from the same receipt:
+
+```text
+committed canonical receipt
+  -> BattleMat truth adapter
+       exact path / cells / area / object state / hazards / occupancy
+  -> EngagementLens drama adapter
+       sprite lunge / recoil / projectile / spell / reaction / damage beat
+  -> shared audio-caption adapter
+  -> object card refresh where eligible
+  -> DM narration when available
+```
+
+This does not restore a second combat model. The EngagementLens remains derived from exact positions, targets,
+distance, elevation, resources, and results. It cannot decide movement, reach, line of sight/effect, areas, cover,
+damage, or object state. A lens animation may be more expressive than the interim board response, but both consume
+the same receipt id and neither waits for DM prose.
+
+The representative proof costs **medium-high cross-projection integration** rather than complete bespoke 3D
+animation. The savings are real: canonical pixel sprites can lunge, recoil, cast, and react in the bottom lens while
+the high-resolution 3D substrate uses simple standee movement, route traces, cell/area overlays, state swaps,
+localized effects, and contact feedback. The added maintenance risk is synchronization; one deterministic
+presentation timeline must prevent lens drama, board truth, card state, audio, and narration from contradicting or
+double-playing a receipt.
+
+F10.3f's minimum proof boundary is closed. The new lens allowance creates one final material feedback fork.
+
+#### F10.3g - what may the EngagementLens replace in the interim?
+
+- **Option A - lens may carry nearly all action feedback:** the board may snap to final state while the lens shows
+  movement, attacks, spells, and reactions. Cheapest visually, but exact paths, trigger cells, and area causality
+  become hard to read and the board feels disconnected from its own authority.
+- **Option B - board carries spatial truth; lens carries expressive combat drama (recommended):** the board always
+  shows movement/path progression, trigger pauses, destination/occupancy, exact target/area, persistent hazards,
+  and object/custody state through simple truthful cues. The lens may carry the richer melee, projectile, spell,
+  reaction, damage, and character-performance animation. Audio/captions bind both. Object actions such as opening a
+  chest still need a visible board state change even if the lens or sound adds flavor.
+- **Option C - board must carry every animation now:** clearest single surface, but forfeits the proposed interim
+  production savings and pushes the BattleMat toward a much more expensive animation system before the core is
+  proven.
+
+Examples under Option B:
+
+- movement animates the standee or a clear path-progress marker across exact cells; the lens may show the selected
+  hero advancing, but cannot replace the path;
+- an opportunity attack pauses the board at its trigger cell; the lens shows the attacker strike/recoil beat;
+- Fire Bolt preserves its exact origin/target/ray cue on the board while the lens carries the expressive projectile
+  and impact;
+- Fireball preserves the chosen cell, sphere footprint, and caught citizens on the board while the lens may show a
+  stylized explosion/reaction tableau;
+- a chest changes from closed to open on the board; sound and card refresh reinforce it without moving object truth
+  into the combat lens.
+
+Does Adam accept Option B? If so, define sequencing/fallback behavior when the lens is collapsed or disabled, close
+the inspector/feedback branch, and resume F10.6b native-resolution proof. Wave 10 remains **OPEN**; no build is
+authorized.

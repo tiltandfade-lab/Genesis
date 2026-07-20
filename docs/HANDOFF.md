@@ -6,6 +6,22 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 interim battle feedback) — BOARD OWNS TRUTH; THE LENS MAY PERFORM IT [Codex]
+
+This supersedes the feedback-architecture pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3f Option B's representative proof spine while retaining the complete tiered family architecture
+as the target. He also allows the FF6-style bottom EngagementLens to carry interim feedback when that is easier
+than comparable 3D-board animation. The lens remains a receipt-driven projection, never a second combat model.
+F10.3f is closed.
+
+**Do next:** ask F10.3g. Codex recommends that the BattleMat always show spatial truth through simple cues—exact
+movement/path, trigger pauses, destination/occupancy, target/area, hazards, object/custody state—while the lens may
+carry richer melee, projectile, spell, reaction, damage, and character-performance animation from the same
+receipt. Then decide sequencing/fallback when the lens is collapsed or disabled, close inspector/feedback, and
+resume F10.6b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 feedback architecture) — FAMILY FIRST; BESPOKE WHERE IT EARNS THE COST [Codex]
 
 This supersedes the board-feedback pickup below without deleting it. Design/docs only: no code, dependency

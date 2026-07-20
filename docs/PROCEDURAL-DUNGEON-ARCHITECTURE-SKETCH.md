@@ -174,7 +174,7 @@ boundaries.
 | `OccupationFront` | Sparse pressure, triggers, transitions, affected claims/zones, evidence | Continuous group turns or inevitable escalation | Licensed pressure/event | World ledger, DM scheduler |
 | `KnowledgeRecord` | Canon reference, observations, beliefs, witnesses, confidence, holder/scope, sharing policy | Hidden canon leaking into party output | Observation, interpretation, communication | DM digest, journal, UI, action eligibility |
 | `NarrativeCard` | Priority, eligibility, service horizon, causal role, legal homes, deferral reason | Permission to overwrite rolled room identity | Promise/contract/root/event systems | Wave 9 scheduler |
-| `AccessDepthProfile` | Effective route/access cost used for noisy challenge/reward expectation | A universal narrative chronology or automatic Spice ramp | Topology + barriers/access state | Wave 7 difficulty/reward planning |
+| `AccessProfileSet` | Commitment-time allocation profile, canonical current route constraints, and observer-known usable projections over typed access costs | One depth scalar controlling both placement and current navigation; reactive reward/enemy scaling | Topology + commitment provenance + events + knowledge/capabilities | Navigation, DM, Waves 6-7 difficulty/reward planning |
 
 Some records may later combine or split. The ownership distinction matters more than the names.
 
@@ -729,25 +729,31 @@ Coverage and placement-slack prevent accidental drought, conservative hoarding, 
 Exact homes are fixed early when causal consistency requires them; softer cards retain ranked legal
 homes among unobserved candidates. The DM sees only the current thin hand.
 
-### 11.2 Noisy mechanical access-depth gradient
+### 11.2 Noisy mechanical access profiles
 
-Expected challenge commitment and reward rise with **effective access depth**, not raw room number:
+Expected challenge commitment and reward rise with a **commitment access profile**, not raw room number:
 
 ```text
-graph distance
-+ required transitions
-+ locks/barriers
-+ hazards and hostile control
-+ resource cost
-+ branch/route commitment
-+ secret knowledge/access requirements
-+ available alternate entrances
+travel/time and path length
++ required transitions, locks, barriers, methods, and permissions
++ expected exposure, attrition, and resource cost
++ accommodation/form and party-split requirements
++ route reliability, timing windows, one-way/escape risk
++ secret-knowledge assumptions and available alternate entrances
 ```
 
 The gradient is noisy and overlapping. Dangerous shallow guardians, rewarding social rooms, calm deep
 rooms, peaks, valleys, shortcuts, and quiet spaces remain valid. Challenge need not be combat. Reward
 may be information, allies, routes, safety, authority, equipment, discovery, or campaign leverage.
 Challenge and reward correlate across routes/regions rather than as one compulsory room transaction.
+
+The commitment profile remains provenance for already allocated challenge, reward, and obligations.
+Separate **canonical current access** records actual routes and constraints after topology, barrier,
+permission, hazard, and world-state events. **Observer-known usable access** derives what a particular
+party/faction/actor knows and can exploit given knowledge, capability, form, permission, and uncertainty.
+An earned shortcut may make committed content genuinely easier. Existing content never moves, weakens,
+strengthens, or changes value merely to restore its old gradient; only causally aware world actors
+respond through ordinary events and behavior.
 
 Spice remains independent. Deeper does not mean more supernatural.
 
@@ -962,7 +968,9 @@ Any later spec or implementation that violates one of these reopens Wave 1 expli
   commitment of generated nodes and edges; a finite materialization window never implies finite extent.
 - Latent expansion cannot alter topology, capacity, established clues, promises, or observed truth.
 - Narrative scheduling is nonlinear and card-specific; depth is not a universal story template.
-- Challenge and reward rise noisily with effective access depth, not raw room order.
+- Challenge and reward are committed against a noisy typed access profile, not raw room order.
+- Commitment access, canonical current access, and observer-known usable access remain separate; earned
+  shortcuts change current play without triggering content relocation or reactive scaling.
 - Spice is not a depth ramp.
 - The DM receives a thin local hand/context, not the full unresolved index.
 - Capacity envelopes are per cost surface and capacity-first; they preserve headroom without rationing
@@ -992,7 +1000,7 @@ These are semantic contradiction fixtures, not finished content packages or geom
 | Child's note / missing daughter | Local discovery becomes a persistent promise, then expands under attention | Flavor note with no canonical attachment or fulfillment |
 | Sheriff's demonic soap | Bounded local accent, manifestation, or promoted root remains distinguishable | Every spicy object becomes an unrelated site catastrophe |
 | Small fixed shell with overfull program | Reconciliation ladder, combination/externality/annex license, honest failure | Silent overlap, fake door, dropped capability, repeated reroll-until-fit |
-| Multi-entrance site | Effective access depth preserves risk/reward despite shortcuts | Raw room index used as difficulty; prescribed narrative order |
+| Multi-entrance site | Commitment/current/observer access separation preserves allocated risk/reward while shortcuts honestly change reachability | Raw room index used as difficulty; prescribed narrative order; shortcut-triggered relocation/scaling; current route ignored |
 | Empty/quiet repeated cells | Automatic read, focused search, systematic sweep, stable opportunities | Forty-click container play or literally meaningless facade rooms |
 | Old save with latent cell after table/compiler/mod change | Same selected room function, note/person/event invariants, legal discovery methods, improved presentation allowed, missing-mod diagnostic | Seed-only retcon, executable old-mod dependency, full eager materialization, or silent replacement payoff |
 
@@ -1052,7 +1060,7 @@ Wave 1 defines the semantic promises below and deliberately leaves their realiza
 | Explicit portal/secret/Breach/vertical and distributed-domain edges, circulation, reveal vectors, secret-network spatialization, licensed stable-frontier topology | **Wave 4** |
 | Furniture/fixture assemblies, dressing, expression, clutter, quiet-room staging, event traces | **Wave 5** |
 | Accommodation boundaries, squeezing, capacity, party participation/splitting, witness/communication sets | **Wave 6** |
-| Effective-access challenge/reward/attrition/resource curves and encounter reshaping | **Wave 7** |
+| Commitment-access challenge/reward/attrition/resource curves, current-access change behavior, and anti-reactive-scaling proofs | **Wave 7** |
 | Formation, movement, destruction, repair, copy/split/merge/continuity, factored operational-state and topology/resource mutations, persistent environment events | **Wave 8** |
 | Card schema, legal-home scoring, thin hand, coverage/slack, service horizons, fronts, DM digest/knowledge partition | **Wave 9** |
 | Graph/local-plan/player-view choice, interim renderer, search/knowledge accessibility presentation, visual leakage | **Wave 10** |

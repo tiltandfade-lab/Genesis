@@ -8544,3 +8544,147 @@ capability, or state events; committed content never moves or scales merely to r
 **Open follow-up:** should these three views replace a single effective-depth authority—and do you agree
 that an earned shortcut is allowed to make committed content genuinely easier, while only causally aware
 world actors may respond rather than the engine secretly rebalancing it?
+
+#### 10.11.19 Ruling — commitment, current, and observer access remain separate
+
+Adam accepts the recommendation. This explicitly clarifies Wave 1 Question 20:
+
+- one live or frozen `depth` value never owns allocation, current world mechanics, and actor knowledge;
+- the **commitment access profile** stores the typed route/barrier/risk/resource assumptions under which
+  challenge, reward, and obligations were allocated and remains attached as provenance;
+- **canonical current access** stores the routes and constraints that actually exist now after topology,
+  barrier, permission, hazard, accommodation, and world-state events;
+- **observer-known usable access** derives which current routes a particular party/faction/actor knows and
+  can exploit given knowledge, permissions, capabilities, form, and uncertainty;
+- access is a typed cost vector—time/path, gates/methods/permissions, exposure/attrition/resources,
+  accommodation/party split, reliability/timing/one-way escape, and uncertainty—not merely BFS room order;
+- earned keys, spells, alliances, transformations, discoveries, repairs, and shortcuts may make committed
+  content genuinely easier without moving, weakening, devaluing, or replacing it;
+- collapses and closures may make committed content harder or unreachable without teleporting it to
+  preserve a curve;
+- actors may respond only through causal observation/knowledge and ordinary events, schedules, fronts,
+  and operations; a hidden rebalance triggered by a lower depth score is prohibited;
+- new event-created content may use the then-current world as its own commitment context while existing
+  content retains its original allocation provenance.
+
+The planned-versus-current-access-depth skeptical follow-up is exhausted.
+
+#### 10.11.20 Skeptical follow-up 7 — many places may not reserve one latent neighbor independently
+
+Wave 2 Question 6 lets a generated settlement harden the minimum relational promise it needs from an
+unmaterialized neighbor. This protects connected worlds such as Leilon's dependence on Waterdeep and
+Neverwinter. The skeptical audit found the inverse danger: ten generated towns may independently demand
+facts from “the regional city” before that city rolls. Blindly adding those demands can force an impossible
+population, geography, economy, history, or collection of institutions.
+
+For example:
+
+- Leilon requires a much larger northern/southern maritime trade partner and food/manufacture flows;
+- six farming settlements export grain to a regional wholesale market;
+- a monastery refers patients to a specialist city hospital;
+- a fort receives orders and weapons from a regional capital;
+- three NPC histories name a dock fire, plague year, and deposed guild in what may be the same city;
+- a modded settlement says its neighboring city forbids magic while another established edge assumes a
+  legal mage college there.
+
+The future city should feel shaped by its region, not generated in isolation. It also cannot become an
+unlimited promise bucket whose every inbound statement hardens independently.
+
+##### Option 1 — first writer reserves hard counterpart facts directly
+
+The first generated town can establish a city role, institution, capacity, and relationship; later
+places add more. This preserves local continuity but creates first-writer bias and unbounded accretion.
+The latent city may become contradictory before it exists. **Rejected.**
+
+##### Option 2 — keep every external reference soft until the neighbor generates
+
+The city rolls freely, then previous settlements reinterpret their dependencies to fit it. This avoids
+constraint pressure but permits retroactive changes to visited places and makes their trade, supply, and
+history feel fake. **Rejected.**
+
+##### Option 3 — one reciprocal inbound-promise ledger per anchor/network
+
+Every latent counterpart or aggregate outside network owns a small ledger. Each promise records only the
+minimum play-predictive constraint:
+
+```text
+promise id + source place/fact
+candidate counterpart anchor or aggregate network
+relationship/flow/history type and direction
+magnitude/range, season/era, reliability, and dependency asymmetry
+required identity/location/scale/role envelope
+counterpart cardinality: must be this one / one compatible node / several legal nodes / aggregate network
+merge key, splittability, legal alternate fulfillments, and exclusions
+authority, hardness, observation/knowledge state, and provenance
+```
+
+Internal districts, streets, businesses, NPCs, and exact counterpart institutions remain unpromised
+unless a source truly requires and establishes them.
+
+Before the neighbor materializes, a reconciliation pass processes the whole inbound ledger in authority
+order:
+
+1. **Unify duplicates:** several sources describing the same trade edge or historical event add
+   provenance/evidence rather than multiplying capacity.
+2. **Aggregate compatible demand:** grain flows, travelers, referrals, and orders combine into typed
+   ranges without adding overlapping estimates twice.
+3. **Bind to an established compatible anchor:** canonical Waterdeep satisfies Leilon's Waterdeep edge;
+   a generic “larger city north” may bind to an existing suitable anchor.
+4. **Split when plurality is legal:** grain wholesale, naval supply, specialist medicine, and military
+   command need not all belong to one city if the original promises permitted several counterparties.
+5. **Use aggregate networks or satellite nodes:** a regional market, suburban warehouse belt, diocesan
+   system, port authority, or branch institution may satisfy a network-scale promise without bloating one
+   urban core.
+6. **Reconcile time:** former trade, a closed hospital, a deposed guild, and present service can coexist
+   when their eras differ and the history is causal.
+7. **Separate belief from canon:** an NPC report or local assumption may remain mistaken/contested when it
+   was never established as hard world truth.
+8. **Promote deliberate residual contradiction:** a licensed unresolved hard mismatch may become one
+   causal regional root with manifestations rather than several accidental inconsistencies.
+9. **Fail diagnostically on incompatible hard canon:** never drop, average, or last-write-wins two truly
+   incompatible established facts.
+
+The reconciled bundle constrains only the facts it actually entails. The city planner consumes identity,
+location, population/throughput envelopes, required reciprocal edges, minimum role/institution
+capabilities, and historical commitments first, then rolls its unconstrained details. Every source edge
+receives a reciprocal binding and reconciliation provenance.
+
+##### Leilon and grain-market example
+
+Leilon's named canonical Waterdeep and Neverwinter edges remain individually hard. If six farms also say
+they sell grain to “the coast city,” the ledger first determines whether those are reports of one shared
+wholesale flow, independent exports, or an aggregate market. It does not automatically create six giant
+warehouses in Waterdeep. Their combined magnitude may justify one wholesale district, several private
+buyers, a port-market network, or different counterpart cities within the original cardinality promises.
+
+If the aggregate flow exceeds Waterdeep's already hard envelope, the system first checks double-counting,
+season/era, and splittability. It may distribute soft/generic demand across Neverwinter, satellite ports,
+or an aggregate network. It may not redirect Leilon's observed named Waterdeep relationship. A genuinely
+hard excess becomes a diagnostic or an explicitly licensed causal mismatch, not silent population
+inflation.
+
+##### Saturation and generation boundaries
+
+- Hard established facts have no arbitrary discard budget, but each new generated source is allowed to
+  harden only its minimum necessary counterpart constraint.
+- Low-authority optional rolls preferentially reuse compatible edges/anchors, remain aggregate, or create
+  local flavor rather than reserving new counterpart institutions.
+- Ledger reports expose hard constraints, merged duplicates, aggregate demand, unresolved conflicts,
+  source concentration, and projected counterpart load before materialization.
+- A latent anchor that becomes saturated stops accepting optional specificity; new soft promises split,
+  aggregate, or bind elsewhere. Observed hard facts still enter and force explicit reconciliation.
+- Reconciliation is deterministic, provenance-preserving, and versioned so generation order cannot make
+  a different city merely because the player visited towns in another sequence.
+
+##### Recommendation
+
+Adopt Option 3. Preserve each visited place's minimum relational truth, but route every promise through a
+reciprocal ledger that deduplicates, aggregates, binds, splits, historicizes, or diagnoses before the
+counterpart rolls. Use counterpart cardinality and legal alternate fulfillments so a generic regional
+dependency does not reserve one specific city unnecessarily. Let hard residual contradictions become
+explicit story roots only when licensed, never as automatic garbage disposal.
+
+**Open follow-up:** should this reciprocal inbound-ledger and reconciliation ladder govern latent regional
+contracts—including the rule that generation order cannot give the first visited settlement unlimited
+authority over an unrolled neighbor, while genuinely observed named relationships such as Leilon–Waterdeep
+remain protected?

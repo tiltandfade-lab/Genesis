@@ -259,6 +259,17 @@ spending. Destination presentation must also state whether the chosen payment le
 other resource needed to engage, open, retrieve, activate, or otherwise use the destination affordance. Exact
 mechanics and remaining follow-ups live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.8.
 
+## Known-consequence-only movement warning ruling (Adam, 2026-07-20 — additive)
+
+> "yes, option b is good"
+
+Safe legal routes commit through the ordinary destination interaction without an extra modal. A route with a known
+material consequence receives one concise pre-commit warning whose path markers and summary identify the trigger
+cells without relying on color alone. The interface offers Continue/Choose Another Route rather than approval for
+each cell. Hidden traps, unseen creatures, undiscovered hazards, and secret reaction choices remain invisible.
+Exact consequence classes, input parity, costs, and undo follow-up live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.9.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

@@ -6,6 +6,24 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 movement warnings) — SAFE MOVES FLOW; KNOWN RISKS WARN ONCE [Codex]
+
+This supersedes the locked-movement-preview pickup below without deleting it. Design/docs only: no code,
+dependency installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.1h Option B. Safe legal movement commits through the ordinary destination action. A route with a
+known material consequence receives one concise pre-commit summary marking trigger cells and rules-visible classes
+such as opportunity-attack exposure, visible damaging terrain, fall risk, broken concealment, lost aura, or
+insufficient resources for the apparent destination interaction. It offers Continue/Choose Another Route rather
+than per-cell approval. Viewpoint filtering forbids leakage of hidden traps, unseen enemies, undiscovered hazards,
+or secret reaction choices. The same summary serves UI, accessibility, controller/touch, prose input, and DM
+receipts. F10.1h's warning baseline is closed.
+
+**Do next:** ask F10.1i. Codex recommends bounded undo of the latest movement segment—including its own movement or
+Dash payment—only until the move causes a roll, reaction, reveal, hazard resolution, newly observed fact, another
+actor-state change, or a later committed action. After Adam rules, decide whether pathfinding defaults to a shorter
+risky route or a longer safe route, then resume stable label lifecycle and F10.3b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 locked movement preview) — SHOW THE DESTINATION BEFORE SPENDING FOR IT [Codex]
 
 This supersedes the exact-cell/repository-research pickup below without deleting it. Design/docs only: no code,

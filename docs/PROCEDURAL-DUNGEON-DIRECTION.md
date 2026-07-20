@@ -16573,3 +16573,65 @@ needed for the apparent destination interaction:
 Does Adam accept Option B as the warning baseline? If so, immediately follow into the narrower undo boundary:
 whether a movement receipt may be reversed only before it causes a roll, reaction, reveal, resource change, or
 other external consequence. Then continue to stable label lifecycle and F10.3b. Wave 10 remains **OPEN**.
+
+### 11.9 F10.1h ruling - interrupt only for known material route consequences
+
+**Adam's ruling (2026-07-20):** accept Option B. A safe legal route should commit without another dialog. When the
+chosen route has a known material consequence, the interface gives one concise warning before commitment rather
+than asking the DM or confirming every ordinary move.
+
+The warning baseline is:
+
+- route hover and focus mark known consequence cells before selection, using shape/icon/text as well as color;
+- a safe route needs no confirmation beyond the ordinary destination commit;
+- a materially risky route receives one summary identifying the trigger location and consequence class—for
+  example opportunity-attack exposure, visible damaging terrain, known fall risk, broken concealment, departure
+  from a protective aura, or a payment that prevents the apparent destination interaction;
+- the summary offers `Continue` and `Choose Another Route`; it does not make the player clear each cell;
+- a warning states only rules-visible certainty. It may say that a known enemy **can attempt** an opportunity
+  attack or that visible fire has a known damage rule; it may not promise an attack result or reveal a hidden
+  reaction choice;
+- hidden traps, unseen creatures, undiscovered hazards, and secret consequences do not appear merely because the
+  path kernel evaluated the route internally;
+- the same consequence summary feeds direct input, controller/touch focus, accessibility text, and a natural-
+  language proposal. The DM receives the resulting receipt rather than performing routine route validation.
+
+Example:
+
+```text
+Route to Brass Chest · 45 ft · Dash (Action)
+Known exposure: Goblin 2 may make an opportunity attack when you leave this cell.
+Known terrain: crosses burning oil for 5 ft.
+Arrival: no Action remains to open the chest this turn.
+
+[Continue] [Choose Another Route]
+```
+
+This costs **moderate rule/UI integration** beyond pathfinding itself. Traversal edges need player-visible
+consequence annotations; the proposal compiler needs a typed summary; every warning must pass the viewpoint filter;
+and tests must prove that safe routes do not create modal fatigue while secret facts never leak. The maintenance
+cost belongs in shared consequence classes, not bespoke warnings per map or monster.
+
+This closes F10.1h's **warning baseline**. Two generated movement follow-ups remain material: the undo boundary and
+how the route solver ranks a shorter risky path against a longer safe path.
+
+#### F10.1i - conditional movement undo
+
+In plain English: after a movement click has committed, when may the player take it back?
+
+- **Option A - no undo after commitment:** strongest canonical simplicity, but a harmless misclick remains
+  punitive even when nothing observed or reacted to the move.
+- **Option B - bounded undo until an external consequence (recommended):** the current turn may roll back the most
+  recent movement segment, including its own movement/Dash payment, only while it has caused no roll, reaction,
+  reveal, hazard resolution, newly observed fact, other actor-state change, or subsequent committed action. Preview
+  is always cancelable. Once an external consequence occurs, the receipt is sealed and ordinary play continues.
+- **Option C - rewind the whole turn:** convenient, but requires broad state rollback and invites information gain,
+  reaction fishing, and save-scumming.
+
+Under Option B, moving ten harmless feet and noticing a misclick can be undone. Moving out of Goblin 2's reach and
+causing an opportunity-attack roll cannot be undone even if the attack misses. Entering a cell that reveals a
+previously unseen enemy cannot be undone. Selecting Action Dash and moving through an entirely consequence-free
+route may undo the movement and its Dash payment together, provided no later action has committed.
+
+Does Adam accept Option B? If so, follow with the shorter-risky versus longer-safe route-ranking question before
+returning to stable label lifecycle and F10.3b. Wave 10 remains **OPEN**; no build is authorized.

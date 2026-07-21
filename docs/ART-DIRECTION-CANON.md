@@ -432,6 +432,17 @@ narrative opening condition visibly overrides the calculation. The calculation i
 fallbacks, receipts, ties, reinforcement timing, and save/replay are the material integration work. Codex recommends
 the hybrid; it remains under discussion at revised F10.3l in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.24.
 
+## Deterministic bonus order with tie-only d20 ruling (Adam, 2026-07-20 — additive)
+
+> "I just meant A, if necessary ties can be settled with d20 rolls"
+
+Ordinary initiative is deterministic. Highest exact average-bonus faction/combat block acts first; members within
+it act from highest individual bonus to lowest. Only exact equal block averages or individual bonuses trigger open
+d20 tie-breaks, whose results are frozen for the encounter so the top-center portrait ribbon does not reshuffle
+between rounds. Initiative Advantage/Disadvantage requires an explicit deterministic translation before this
+becomes a complete rules contract; F10.3m and exact costs live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.25.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

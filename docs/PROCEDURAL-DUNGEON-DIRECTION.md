@@ -17699,3 +17699,71 @@ without discarding the accepted side-block ribbon:
 Does Adam want this locked as the best-case initiative law? If yes, settle equal-bonus/average ties first, then
 reinforcements, narrative overrides, ribbon overflow, and neutral/third-party lens placement. Wave 10 remains
 **OPEN**; no build is authorized.
+
+### 11.25 Revised F10.3l ruling and F10.3m expansion - deterministic bonus order; dice break ties only
+
+**Adam's ruling (2026-07-20):** lock the deterministic Option A reading. Ordinary initiative does not roll a d20.
+The highest-average initiative block acts first; citizens within a block act from highest initiative bonus to
+lowest. If necessary, equal priorities are settled with d20 rolls.
+
+The exact accepted ordering contract is:
+
+1. Every legal combat citizen exposes a canonical `initiativeBonus` with source/provenance.
+2. At combat start, group present citizens into current combat-side/faction `initiativeBlock`s.
+3. Compare block averages exactly. Implementation should retain `{sum,count}` and compare rational values by cross-
+   multiplication rather than rounding displayed decimals and creating false ties.
+4. Order blocks from highest exact average to lowest. Snapshot that order for the encounter.
+5. Inside each block, order citizens from highest individual `initiativeBonus` to lowest and retain those stable
+   portrait positions.
+6. If two or more block averages are exactly equal, each tied block makes one open, unmodified d20 tie roll. If two
+   or more citizens in one block have equal priority, each tied citizen makes one open, unmodified d20 tie roll.
+   Re-roll only unresolved exact ties. Player-side tie dice are player-open; adversary/other-block dice are also
+   shown under the existing open-adversary-dice posture.
+7. Record the tie results in the combat-start receipt and freeze them for the encounter. They do not reroll each
+   round, so the ribbon does not shuffle and save/replay reproduces the same order.
+8. The cursor advances through fixed portraits; available, active, and spent states remain distinct from down,
+   incapacitated, defeated, fled, hidden, or not-yet-arrived.
+
+This supersedes the old side d20 plus modifier and the prior freely chosen within-side order. It remains faction-
+chunked rather than cross-faction interleaving. The calculation itself stays trivial; the medium actor-state and
+edge-case integration described in section 11.24 remains future implementation work.
+
+#### Existing-rule audit - deterministic initiative cannot silently erase advantage/disadvantage
+
+The repository contains several initiative-roll modifiers that the new deterministic rule must translate:
+
+- SRD surprise imposes Disadvantage on Initiative;
+- class/subclass and sidekick features grant Advantage on Initiative;
+- canonical magic items such as the Awareness Ioun Stone, Sentinel Shield, Rod of Alertness, Weapon of Warning,
+  and other authored items grant Advantage;
+- Genesis realm items, dungeon/wilderness effects, art/background events, and composition tables grant advantage,
+  disadvantage, flat initiative bonuses, or special arrival priorities such as “Initiative 0.”
+
+Flat numeric bonuses can remain part of `initiativeBonus`. Advantage/disadvantage cannot, because the ordinary roll
+they modified no longer exists. Letting those entries do nothing would break character choices and existing
+procedural rewards/costs.
+
+#### F10.3m - what does initiative advantage/disadvantage mean without an ordinary roll?
+
+- **Option A - deterministic priority edge of +3/-3 (recommended):** derive `initiativePriority` from the canonical
+  bonus plus `+3` for net Advantage or `-3` for net Disadvantage. Multiple sources do not stack; one of each cancels,
+  following ordinary advantage/disadvantage law. Sort members and calculate block averages from priority, while the
+  sheet retains the true bonus separately. If an exact priority tie still reaches the d20 fallback, advantage or
+  disadvantage also applies to that tie roll only if it has not already been consumed into the ±3 edge—never count
+  it twice. Codex recommends simply using the edge and rolling an unmodified tie die.
+- **Option B - advantage/disadvantage affects ties only:** bonuses determine ordinary order; on an exact tie,
+  Advantage rolls 2d20 and keeps the higher while Disadvantage keeps the lower. This preserves the familiar dice
+  procedure but makes major class features and magic items irrelevant in most combats.
+- **Option C - retain initiative rolls only for affected citizens:** an advantaged or disadvantaged actor rolls
+  while ordinary actors use deterministic bonuses. This mixes incomparable random totals and fixed bonuses,
+  reintroduces most of the variance Adam just removed, and makes the ribbon harder to explain.
+
+**Codex recommendation: Option A.** The expected benefit of d20 Advantage is roughly three points, so a nonstacking
+integer ±3 priority edge is legible, deterministic, and materially preserves those features. It is not written back
+as a fake sheet bonus. Implementation/maintenance cost is **low-medium**: one normalized priority derivation,
+advantage cancellation, provenance/tooltips, block-average use, and fixtures covering surprise/items/features. It
+is lower and more consistent than reviving selective initiative rolls.
+
+Does Adam accept the ±3 deterministic priority edge? After this, settle reinforcement insertion, exact narrative-
+override authority, ribbon overflow, and neutral/third-party lens placement. Wave 10 remains **OPEN**; no build is
+authorized.

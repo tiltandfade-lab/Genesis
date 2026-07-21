@@ -6,6 +6,28 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 deterministic initiative) — BONUSES ORDER; DICE BREAK ONLY TRUE TIES [Codex]
+
+This supersedes the hybrid-initiative proposal below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam locks deterministic initiative Option A. Combat blocks are ordered by highest exact average canonical
+initiative bonus; members inside each block are ordered by highest individual bonus. Ordinary initiative has no
+d20. Exact tied averages receive one open unmodified d20 per tied block; equal individual bonuses receive one per
+tied citizen; reroll unresolved ties only. Results are receipted and frozen for the encounter, so portraits retain
+stable positions across rounds and save/replay. Compare averages as exact sum/count ratios, not rounded display
+decimals. Revised F10.3l and the basic tie procedure are closed.
+
+Repository audit exposes the next material edge: surprise, class/subclass and sidekick features, several SRD magic
+items, and Genesis procedural items/events grant initiative Advantage or Disadvantage. Removing ordinary rolls
+cannot silently make those choices inert.
+
+**Do next:** ask F10.3m. Codex recommends a deterministic nonstacking `initiativePriority` edge: canonical bonus
+plus 3 for net Advantage or minus 3 for net Disadvantage; one of each cancels. Sort citizens and average blocks from
+priority while preserving the true sheet bonus separately. Ties then use the accepted unmodified d20, avoiding
+double-counting the edge. Afterward settle reinforcement insertion, exact narrative overrides, ribbon overflow,
+and neutral/third-party lens placement. Wave 10 remains open; no build/Fable handoff is authorized.
+
 ## ⭐ Latest (2026-07-20, Wave 10 hybrid initiative proposal) — AVERAGE ORDERS THE BLOCK; BONUS ORDERS ITS ACTORS [Codex]
 
 This supersedes the side-block-initiative pickup below without deleting it. Design/docs only: no code, dependency

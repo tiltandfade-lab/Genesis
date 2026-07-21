@@ -6,6 +6,149 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, procedural-redesign fast checkpoint) — RESUME WAVE 10 AT F10.7A; THE WORLD CARRIES ATTENTION BEFORE UI GLOW [Codex]
+
+This supersedes the older Wave 10 pickups below without deleting them. The session remained design/docs-only: no
+code implementation, dependency installation, CI, worktree creation, LFS checkout, merge, push, or Fable
+design-to-spec handoff was authorized. Work was committed locally on `master` as Adam previously authorized for
+this design discussion. **FULL CI PENDING** for the later final/evening clean close.
+
+### Exact questionnaire position
+
+Wave 2 was explicitly closed by Adam earlier in this conversation. Wave 10 was then brought forward because the
+shared SceneTray/renderer boundary must be decided before more procedural room-generation detail hardens around the
+wrong output contract. Wave 10 remains **OPEN**.
+
+Resume at **F10.7a** in `docs/PROCEDURAL-DUNGEON-DIRECTION.md` section 11.41:
+
+> How does the board call attention to known interactables, evidence, hazards, promotion, selection, and history
+> without outlining all clutter or revealing secrets?
+
+Codex recommends **Option B — the restrained knowledge-and-attention ladder**:
+
+1. ambient/not singled out: ordinary physical/sprite/marker/reserve representation, no database-driven shimmer;
+2. noticed/known: show only earned physical evidence such as scratches, blood, disturbed dust, a draft, heraldry,
+   an open lid, scorch, or a known dropped-object marker;
+3. relevant/available: context may strengthen an already-known tell; player-invoked scan/accessibility focus may
+   add non-color UI without revealing unknown affordances;
+4. active/selected/targeted: strong temporary outline/ring/label/path/area treatment is legal;
+5. changed/historical: current physical state and plausible residue carry memory—broken door, open/empty chest,
+   extinguished brazier, blood, ash, moved cover—not a permanent “completed” halo.
+
+Option A outlines/icons every known interactive or historical noun and risks icon clutter. Option C leaves
+attention mainly to narration/cards and makes play slow and AI-dependent. Option B is medium-high reusable work:
+knowledge gating, physical-tell bindings, focus/target overlays, scan/accessibility projection, sound/caption parity,
+reduced-motion behavior, fallbacks, and clutter tests.
+
+Ask Adam to choose A/B/C. If he accepts B, follow every material branch into **F10.7b**: which historical traces
+stay physically visible, which coalesce or age, and how rendering remains bounded without erasing canonical world
+history. Do not jump to performance. The preserved questionnaire owns performance/device/accessibility tiers at
+**P10.10**, not P10.7.
+
+### Decisions closed or provisionally closed in the latest stretch
+
+- **F10.6c:** controlled same-scene shell-normal and sprite cast/contact-shadow proof accepted. Use the
+  `M0/S0/S1/S2/S3` isolation ladder, then full-stack Gloom/Chrome/Fantasy captures at 2560×1440, 1920×1080, and
+  1194×834. This is a future gate, not built evidence.
+- **F10.6d:** construction-class-routed normal response accepted provisionally. Geometry owns form; supported shell
+  and physical prop materials may receive restrained normals. Ordinary character normals remain unproven.
+- **F10.6d.1:** character normals must receive a fair `C0/C1/C2` challenge using real Genesis sprites: flat plus
+  accepted shadows, best governed automatic normal derivation, and a real reviewed art-aware normal. Measure
+  gameplay-scale benefit, fidelity, GPU/memory cost, and corpus-wide production cost. Evidence may close ordinary
+  normals, preserve only a hero/boss exception, or expand the lane.
+- **F10.6e:** mechanics-first pre-alpha physical starter kit accepted. Physically prove ground/elevation/traversal,
+  boundaries/portals, tactical cover/blockers, `FACED_BOX` chests/containers, simple round stateful objects,
+  motivated practicals, mechanisms, and hazards. Other nouns remain truthful marker/card/reserve representations
+  until canonical mechanics promote them; promotion preserves object identity and never invents collision.
+- **F10.6f:** invariant hybrid beauty floor plus mode-specific references accepted. Cards G/H/L currently cover
+  dungeon, selected action, and large-field targets. Integrated-shell **town/social** and
+  **wilderness/exploration** taste references are still required before Wave 10 closes.
+- **F10.6g:** governed overview, room/exploration, and action/combat focus ladder accepted with bounded immediate
+  player pan/zoom/rotation, one-step recenter, interruptible programmatic glides, player-known focus sets, and one UI
+  safe rectangle. Existing 12% exploration and 18% combat Medium-standee sizes are provisional capture benchmarks,
+  not universal scale mutations.
+- **F10.6h:** one gentle low-distortion perspective family is accepted **for now**: roughly 20-degree FOV,
+  35-degree elevation, and 45-degree dimetric yaw as the starting proof. FOV stays stable while focus changes camera
+  target/distance. Orthographic remains the mandatory same-state fallback if real captures do not show a material
+  depth/composition win without harming exact cells, sprites, picking, shadows, or supported viewports.
+
+Earlier Wave 10 decisions in this same session remain live, including exact-cell combat authority; previewable but
+unpaid Dash range; receipt-driven movement/object/combat feedback; the BattleMat-truth/EngagementLens-drama split;
+active-character lens follow pending playtest; stable party-left/hostile-right lens sides; deterministic
+bonus-ordered faction-block initiative with tie-only d20s and typed narrative-opening authority; crowded initiative
+handling; player-relative blue/red/grey allegiance glow defaults; the click-only scrollable smart board object card;
+and native desktop/tablet proof sizes. The procedural document owns the detailed contracts.
+
+### Questionnaire preservation and research authority
+
+Do not recreate or silently reorder the questionnaire. The preserved original consists of **twelve original wave
+sections, all twenty original Wave 1 questions, and original Wave 2 Questions 1–11**. Future waves originally had
+subject headings, not a hidden prewritten twenty-question list. **G1.1–G12.2 are additive questions, never
+replacements.** Generated `F…` follow-ups remain open until their material branches are exhausted.
+
+The nine downloaded procedural-system papers were scanned and are locally preserved at
+`Reference/Procedural-Dungeon-Research/papers/`; their synthesis and exact citations live in
+`docs/PROCEDURAL-DUNGEON-RESEARCH.md`. They are:
+
+1. Tutenel et al. 2009 — rule-based layout solving;
+2. Tutenel et al. 2010 — semantic scene description;
+3. Yu et al. 2011 — *Make It Home*;
+4. Merrell et al. 2011 — interactive furniture layout;
+5. Horswill and Foged 2012 — playability constraints;
+6. Nepozitek and Gemrot 2018 — tile-based dungeon generation;
+7. Green et al. 2019 — two-step dungeon generation;
+8. Henderson et al. 2019 — constrained furniture layouts;
+9. Whitehead 2020 — SMT dungeon layout.
+
+Filter design choices through what those papers actually establish: semantic intent before geometry, explicit
+hard/soft constraints, candidate comparison, staged generation, bounded summaries, honest unsatisfied/fallback
+states, and measured solver costs. They do **not** establish AI-DM invention policy, UI taste, camera taste, or
+normal-map value; those require Genesis-specific evidence.
+
+### Documentation and session process
+
+- `docs/PROCEDURAL-DUNGEON-DIRECTION.md` is the running questionnaire record and must preserve all earlier text.
+- `docs/ART-DIRECTION-CANON.md` receives only consolidated accepted visual/art rulings required by the repository
+  decision-capture law—not every mechanical answer.
+- `docs/DESIGN.md` is updated at a consolidated decision/wave closure, not after every answer.
+- `docs/HANDOFF.md` is updated at a real checkpoint/pause such as this one, not every round.
+- Do not declare Wave 10 complete, return to Wave 3, or invoke the Fable design-to-spec gate until all original,
+  additive, and generated Wave 10 follow-ups are exhausted and Adam explicitly agrees to close it. Closed Waves
+  1–2 are safe for read-only Fable review; the first Wave 10 design-to-spec handoff is not yet safe.
+- Continue as design discussion. Do not implement code, run full CI, create a worktree, materialize LFS assets,
+  merge, or push unless Adam explicitly asks. If he requests another checkpoint, use the fast-checkpoint procedure.
+
+### Ready-to-paste continuation prompt
+
+```text
+Continue the Genesis procedural-dungeon redesign from the 2026-07-20 fast-checkpoint handoff.
+
+Read CLAUDE.md, then the newest block at the top of docs/HANDOFF.md, then docs/PROCEDURAL-DUNGEON-DIRECTION.md
+sections 11.31-11.41 and the original Wave 10 questionnaire around P10.0-P10.12/G10.1-G10.2. Read the relevant
+research synthesis in docs/PROCEDURAL-DUNGEON-RESEARCH.md; the nine downloaded papers are already scanned and
+indexed in Reference/Procedural-Dungeon-Research/papers/.
+
+Confirm that the preserved original questionnaire has twelve original wave sections, all twenty Wave 1 questions,
+and Wave 2 Questions 1-11; future waves originally had subject headings rather than a hidden twenty-question list.
+G1.1-G12.2 are additive, never replacements.
+
+Resume Wave 10 at F10.7a exactly. Briefly restate the attention question in plain English, explain Options A/B/C
+with concrete dungeon and Gemini-DM examples, identify implementation and maintenance costs, and recommend Option
+B: a restrained ambient -> noticed -> relevant -> active -> historical attention ladder. Let me answer. Follow the
+answer through F10.7b's durable-history trace questions and every generated material follow-up before advancing.
+
+Do not confuse P10.7 with performance: P10.7 owns interaction, promotion, secret tells, attention, and accumulated
+history. Performance/device/accessibility tiers belong to P10.10 later. Do not skip P10.8 or P10.9, and do not
+declare Wave 10 complete until all original, additive, and generated follow-ups are exhausted and we explicitly
+agree to close it.
+
+Keep docs/PROCEDURAL-DUNGEON-DIRECTION.md as the running record and preserve earlier text. Consolidate only accepted
+visual rulings into docs/ART-DIRECTION-CANON.md. Do not update DESIGN until a consolidated closure or HANDOFF until
+an actual pause. This begins as design discussion: do not implement code, run full CI, create a worktree, check out
+LFS assets, merge, or push unless I explicitly ask. Coherent docs commits may be made locally to master as already
+authorized; use the fast-checkpoint procedure for a checkpoint.
+```
+
 ## ⭐ Latest (2026-07-20, Wave 10 opening authority) — FICTION MAY TRIGGER MECHANICS; PROSE CANNOT STEAL A FACTION TURN [Codex]
 
 This supersedes the allegiance-initiative pickup below without deleting it. Design/docs only: no code, dependency

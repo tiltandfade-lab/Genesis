@@ -18384,3 +18384,90 @@ floor rather than a vague aspiration.
 Does Adam accept Option A, amend one of the four sizes, or decline 1024×768 as a supported full-shell floor? After
 F10.6b, proceed to F10.6c material/shadow truth and the remaining P10/G10 deep dives. Wave 10 remains **OPEN**; no
 build is authorized.
+
+### 11.34 F10.6b ruling - three-point native-resolution proof; no 1024 full-shell promise
+
+**Adam's ruling (2026-07-20):** choose Option B. The required Wave 10/P10.12 capture matrix is:
+
+1. **2560×1440 native desktop:** beauty, large-field composition, crisp hybrid substrate/pixel citizenship, and
+   higher-resolution renderer target;
+2. **1920×1080 native desktop:** canonical gameplay acceptance gate for the dominant current desktop resolution;
+3. **1194×834 logical-point landscape tablet:** representative horizontal-tablet shell gate, tested with safe-area
+   insets and separately at its backing/device-pixel scale.
+
+Genesis does **not** promise the complete left-rail/central-SceneTray/right-chat shell at 1024×768 logical points in
+this ruling. That size may remain an exploratory or explicitly degraded/accessibility projection, but it cannot fail
+the release candidate merely because the full shell does not fit. If product scope later claims smaller-tablet
+support, reopen this gate explicitly and add a tested layout rather than silently inheriting Option A's rejected
+floor.
+
+At all three accepted gates, semantic and interaction invariants remain: canonical cast and state, exact tactical
+truth where owned, readable chat/type, usable inputs, initiative navigation, safe object cards/drawers, and
+accessibility equivalents. Presentation density/effect quality may scale only through the later P10.7/F10.7 budget
+law. F10.6b is closed.
+
+#### F10.6c - what controlled evidence proves normal response and sprite grounding?
+
+The Cards G-L simulated modest normal-mapped relief, but `MATERIAL-IDENTITY.md` correctly remains
+`SPECCED-WITH-SPIKE`. Its first legal scope is the interior shell—floor, walls, and doorframes—not figures, sprites,
+dressing, displacement, parallax, or a full PBR conversion. Separately, sprites need an alpha-shaped real cast
+shadow and a compact contact shadow; those solve different visual problems and require independent controls.
+
+- **Option A - same-scene isolation ladder plus final-stack captures (recommended):** use identical canonical
+  state, camera, albedo, light placement/intensity, exposure, and crop. Capture flat shell versus normal-enabled shell
+  while holding shadows constant; then isolate sprite no-shadow, cast-only, contact-only, and cast+contact states
+  while normal response remains fixed. Finish with the accepted full stack at all three F10.6b sizes and across the
+  representative Gloom/Chrome/Fantasy material identities.
+- **Option B - one flat/current capture and one fully polished capture:** cheapest persuasive comparison, but any
+  improvement could come from changed exposure, light, shadow, camera, post, or composition. It cannot prove which
+  layer works, tune cast versus contact independently, or diagnose a noisy normal map.
+- **Option C - accept the taste-card simulation and defer controlled proof:** no immediate capture cost, but treats
+  an unimplemented visual promise as if it were an engine win and leaves the release renderer boundary unverified.
+
+Option A's minimum unique capture states are:
+
+```text
+M0  normals OFF · cast ON  · contact ON   (flat-material comparison)
+S0  normals ON  · cast OFF · contact OFF  (ungrounded sprite baseline)
+S1  normals ON  · cast ON  · contact OFF  (cast-shadow contribution)
+S2  normals ON  · cast OFF · contact ON   (contact-grounding contribution)
+S3  normals ON  · cast ON  · contact ON   (accepted full stack; M1 normal comparison)
+```
+
+`M0` versus `S3` changes only normal response; `S0/S1/S2/S3` isolate sprite grounding. If a material fallback or
+missing derived map is under test, it must return truthfully to `M0` material response without changing scene
+identity, lighting, or geometry.
+
+The proof must establish more than visible difference:
+
+- the Lambert-versus-Phong spike chooses a supported material path before style judgment;
+- derived Sobel normals produce restrained surface feel rather than inflated grout, embossed stickers, crawling
+  noise, or false geometry;
+- Gloom, Chrome, and Fantasy remain distinguishable with light color held controlled enough to judge material;
+- normal maps remain one reversible/cacheable binding per supported surface kind within the existing texture/draw-
+  call guardrail;
+- cast shadows follow sprite alpha instead of rectangles and respond truthfully to motivated lights;
+- contact shadows remain compact/local and do not read as a second light source or duplicate silhouette;
+- missing/disabled normals, missing cast support, reduced effects, and save/rebuild land on deterministic fallbacks;
+- performance, texture memory, draw calls, edge filtering, pixel crispness, and visual comprehension are recorded at
+  the three accepted sizes. P10.7/F10.7 later sets final tier budgets; this proof supplies evidence rather than
+  guessing them.
+
+Do not change light rigs, camera, scene dressing, or exposure between compared frames to make the enabled state win.
+The full-stack beauty capture follows the isolation ladder; it does not replace it. First proof remains shell normals
+plus sprite cast/contact shadows. Prop-class normals and any extraordinary sprite-light-response experiment remain
+later P10.5/P10.6 questions, not scope smuggled into this gate.
+
+**Implementation/maintenance cost:** Option A is **medium-high spike/capture/QA work**, but most architecture is
+already bounded in `MATERIAL-IDENTITY.md`: material compatibility spike, derived map/cache, reversible flag, shadow
+controls, capture harness, three realm scenes, three resolutions, and measured review. Option B is low-medium but
+weak evidence; Option C carries the highest risk of discovering the target is unaffordable or ugly after committing
+the renderer.
+
+**Codex recommendation: Option A.** The target depends heavily on subtle material response and grounded pixel
+citizens. A controlled isolation ladder is the smallest honest proof that those are actual independent engine wins,
+not qualities painted into a mockup.
+
+Does Adam accept Option A? If so, F10.6c closes as a future capture gate—still no implementation—and the
+questionnaire returns to P10.5/P10.6 material/asset scope and the remaining Wave 10 deep dives. Wave 10 remains
+**OPEN**.

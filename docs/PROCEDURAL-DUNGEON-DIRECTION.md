@@ -18641,3 +18641,80 @@ Does Adam accept this as sufficient proof design, or should the eventual test in
 lighting condition, or success criterion? After this material follow-up is exhausted, proceed to F10.6e: which
 interim prop classes must be integrated geometry at pre-alpha versus sprite/marker/card representation. Wave 10
 remains **OPEN**; no build is authorized.
+
+### 11.37 F10.6d.1 ruling and F10.6e expansion - sprite challenge accepted; choose the pre-alpha physical-prop floor
+
+**Adam's ruling (2026-07-20):** the three-way `C0/C1/C2` challenge is sufficient proof design for now. Continue
+under construction-routed Option A, provisionally. Ordinary character normals are neither commissioned nor
+permanently rejected until the future gameplay-scale evidence closes, preserves, or expands that lane.
+
+#### F10.6e - in plain English, which objects must actually exist on the pre-alpha board?
+
+The question is not whether every noun deserves a beautiful bespoke 3D model. It is which small set of reusable
+physical recipes Genesis must possess before the board can honestly communicate movement, cover, openings,
+interaction, light, and object state. A complex noun may combine an exact mechanical proxy with a marker/card for
+identity; integrated geometry does not require pretending the proxy captures every visual detail.
+
+- **Option A - mechanics-first physical starter kit (recommended):** build the dungeon shell and a bounded family
+  of ubiquitous stateful primitives. Require geometry where position, obstruction, cover, traversal, motion, or an
+  open/broken/on/off state changes play. Give everything else a truthful marker/card or explicit unmounted reason.
+- **Option B - implement every construction class as a broad pre-alpha asset library:** make `EXTRUDE`,
+  `LAYERED_EXTRUDE`, `FACED_BOX`, `LATHE`, `SWEEP`, and `MODEL_RECIPE` production-capable across furniture,
+  mechanisms, dressing, and hero props before the first complete board. This reduces marker use, but converts the
+  renderer bootstrap into a major procedural-modeling and asset-admission project.
+- **Option C - structural shell plus chest exception:** render tiles, walls, columns, openings, hazards, and the
+  already accepted chest; use markers/cards for nearly every other object, including practical lights and simple
+  mechanisms. This is the fastest board, but likely makes the first playable world read as a good map covered in
+  UI symbols rather than the desired hybrid physical scene.
+
+Under Option A, the mandatory pre-alpha floor is:
+
+| Physical family | Minimum honest representation | Examples and limits |
+|---|---|---|
+| **Ground, elevation, and traversal** | Tiles/meshes own raised and depressed cells, ledges, pits, stairs/ramps where required, bridges, and moving platforms. | The freight lift carrying Varka must be real positioned geometry with a moving reference frame. A painted lift icon cannot own his elevation or collision. |
+| **Boundaries and portals** | Blocks, wall runs, cylinders, apertures, frames, door/gate leaves, portcullises, and hatches own collision, sight, cover, and open/closed/broken state. | A locked crypt door is a simple frame plus leaf; a raised portcullis clears its actual passage. Ornate identity may still come from face art and an inspector. |
+| **Tactical blockers and cover** | Any noun currently affecting footprint, blockage, climbability, or cover gets an honest primitive/composite volume. | A toppled wardrobe used as full cover may be a correctly sized box proxy plus wardrobe marker/card. Decorative upright furniture need not receive that geometry merely because it exists in narration. |
+| **Common box containers** | A reusable `FACED_BOX` body/lid recipe for chests is required; crates, cabinets, and sarcophagi may reuse it when their state or tactical presence matters. | The dungeon chest opens through lid motion and gives sound/animation feedback. Its latch is not stamped onto every face, and looting changes the same object's state rather than swapping in a new noun. |
+| **Simple round containers/blockers** | Existing cylinders plus governed material/state bindings cover barrels, vats, urns, or posts when they block, contain, break, roll, or explode. A general `LATHE` art pipeline is not required yet. | An explosive barrel needs position, size, collision, destroyed state, and visible feedback. A decorative bottle on a shelf can remain in the room card. |
+| **Motivated practical lights** | A tiny mount/body primitive plus emissive/`FX` supplies torches, lanterns, braziers, crystals, and similar visible light sources; canonical state owns lit/extinguished/broken. | The brazier visibly licenses its warm point light. Extinguishing it removes the flame/light without deleting the brazier. Ornate sculptural brazier modeling is deferred. |
+| **Simple mechanisms and floor conditions** | Cheap `EXTRUDE`/`LAYERED_EXTRUDE` plates or handles, plus `DECAL`/`FX` where appropriate, represent switches, levers, pressure plates, grates, stains, tracks, fire, mist, and hazard footprints. Mechanical truth remains in canonical state. | A pressure plate needs a readable bounded cell and depressed/armed state; poison gas may be an area plus FX. Neither needs a bespoke trap sculpture. |
+
+The following remain marker/card/reserve-first during pre-alpha unless their current mechanics promote them into
+one of the physical families above:
+
+- handheld, inventory-sized, or dropped items such as the turtle communicator, keys, letters, weapons, ingredients,
+  and loose treasure: exact/bounded marker plus smart object card when on the board;
+- complex machines, multi-ring astrolabes, strange magical instruments, statues, shrines, and focal curios:
+  marker/card by default, or a simple footprint/cover proxy plus identity card when they affect tactics;
+- ordinary tables, beds, shelves, market stock, crockery, books, and background dressing: projected only when
+  salient, interactive, or mechanically relevant; no field of decorative dots;
+- ropes, chains, pipes, roots, and rails: `SWEEP` only when their path affects traversal, restraint, cover, or a
+  mechanism; otherwise a sprite/decal/FX or reserve description;
+- bespoke `MODEL_RECIPE` furniture, monuments, traps, trees, and hero assemblies: valuable later quality work, but
+  not a prerequisite for proving the board, state projection, interaction loop, and procedural room compiler.
+
+Promotion is deterministic and state-driven. If the DM says an ordinary market table is now overturned for cover,
+the canonical action must first create that valid world-state change. The SceneProjection then upgrades the table
+from dressing/card to a sized cover proxy with the same object id; it does not improvise collision from prose or
+mint a duplicate table. If no honest proxy can represent the new mechanic, the action receives an explicit
+unsupported/alternate-realization response rather than fake geometry.
+
+In a concrete dungeon, this means the floor, walls, door, portcullis, pit, chest, brazier, pressure plate, and rubble
+barricade can all read and behave physically. A jeweled astrolabe and dropped turtle communicator may be precise
+markers opening rich cards. In the Gemini-driven game, the DM can still invent either object: invention creates
+trackable canonical properties first, and the renderer selects the best legal physical or marker representation
+from those properties rather than restricting the DM to the existing art catalog.
+
+**Implementation/maintenance cost:** Option A is **medium-high but bounded**. It needs the structural compiler,
+portal states, primitive cover proxies, one real `FACED_BOX` container recipe, cylinder/state reuse, simple
+practicals, basic plate/lever/decal/FX bindings, marker/card fallback, and promotion/rebuild tests. Option B is very
+high because every procedural model class, source-art contract, state kit, and QA corpus becomes critical path.
+Option C is low-medium but postpones too much of the physical feedback needed to judge the game honestly.
+
+**Codex recommendation: Option A.** It proves every important representation seam—structure, moving platform,
+portal, cover, container, practical light, mechanism, hazard, marker, card, and runtime promotion—without requiring
+Genesis to model the whole furniture catalog before the procedural board works.
+
+Does Adam accept Option A, prefer the broader Option B, or want to amend the starter-kit families? If Option A
+closes without another material prop follow-up, return next to P10.5/F10.6's gameplay-scale beauty floor, then
+P10.7 performance and degradation. Wave 10 remains **OPEN**; no build is authorized.

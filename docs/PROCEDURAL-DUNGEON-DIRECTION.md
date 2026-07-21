@@ -18149,3 +18149,66 @@ ideas mechanically real, ordered, replayable, and honest about what the player c
 
 Does Adam accept Option A? If so, the opening-authority branch can close and F10.3s can settle crowded-ribbon
 overflow. Neutral/third-party EngagementLens placement follows. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.31 F10.3r ruling - deterministic transactional opening window accepted
+
+**Adam's ruling (2026-07-20):** accept Option A. When one committed pre-combat trigger licenses several opening
+effects, collect every candidate from preexisting canonical state, classify its explicit `before`/`interrupt`/
+`after` timing, and order it by specific authored timing authority, then source `initiativePriority`, then one open
+d20 only for a remaining exact tie.
+
+Commit candidates sequentially and revalidate every remaining candidate after each receipt. A later candidate may
+resolve, change truthfully, or cancel with a typed reason; it never executes against stale state merely because it
+was present in the initial list. A committed cause is not undone retroactively—a cultist dying after touching the
+bell does not un-touch it—but a destroyed bow, moved target, lost resource, dead source, or invalidated condition may
+cancel a later opening whose own requirements no longer hold.
+
+Observable actions and consequences receive complete board/audio/caption/accessibility feedback. Player-facing
+projection may conceal only unearned source, owner, motive, duration, or rule text; the DM-side receipt retains full
+provenance. The narration rail dramatizes committed order and does not choose it. A compact `OPENING` ribbon phase
+may identify known sources/symbols before Round 1 without exposing hidden participants. F10.3r and the current
+opening-authority branch are closed.
+
+#### F10.3s - how should the initiative ribbon handle more portraits than fit across the board?
+
+- **Option A - one bounded row with adaptive tile size, then horizontal overflow navigation (recommended):** keep a
+  single unambiguous order line. Reduce tiles only to a legible minimum; beyond that, clip to a scrollable/steppable
+  viewport. The active tile automatically enters view. Edge chevrons and known offscreen counts state that more
+  revealed citizens exist without implying hidden slots. Wheel/trackpad, drag, buttons, keyboard, controller, and
+  touch all navigate the same order; focus/hover exposes the stable speakable label.
+- **Option B - wrap the ribbon into two or more rows:** exposes more portraits simultaneously, but steals a variable
+  amount of tactical board height, makes reading block/order direction ambiguous at row breaks, and causes large
+  layout jumps as reinforcements appear.
+- **Option C - collapse similar citizens into stack tiles such as `Goblin ×8`:** compact and visually calm, but
+  destroys the accepted individual bonus order, active/spent state, stable `Goblin 1`/`Varka` labels, targeting,
+  allegiance transfer, and reinforcement insertion unless the combat rules themselves canonically model that group
+  as one swarm/unit.
+
+Option A behavior:
+
+- the ribbon remains centered in the SceneTray's governed top safe gutter and never grows downward over cells;
+- tile sizes may step through a small approved desktop/tablet scale set, never shrink continuously into illegibility;
+- the current actor is always brought fully into view with restrained motion; reduced-motion mode changes the scroll
+  position without animated travel;
+- manual browsing is not immediately stolen by unrelated hover or board selection. Auto-follow resumes on the next
+  true active-actor transition, with a visible Return to Active control available sooner;
+- block separators/labels remain visible or receive sticky edge context so a clipped viewport never makes party,
+  hostile, or third-party portraits look like one faction;
+- left/right edge affordances show only counts of **revealed** offscreen tiles, such as `‹ 3`, never reserved spaces
+  or hidden totals. Defeated/fled/retired visible citizens follow the accepted state/retirement law;
+- the DOM/order owner retains the complete known sequence. Visual clipping does not remove accessible list items,
+  natural-language targeting aliases, controller traversal, or receipt focus;
+- extremely large battles may virtualize portrait rendering for performance, but virtualization may not aggregate
+  mechanically independent actors or change initiative truth. A canonical swarm/mob is one tile only when the
+  combat model says it is one actor.
+
+**Implementation/maintenance cost:** Option A is **medium responsive-UI work**: discrete tile scales, measured safe
+width, overflow viewport, active auto-follow, manual-browse grace, input parity, sticky block context, accessibility,
+reduced motion, reveal insertion, and dense fixtures. Option B is lower initial interaction work but high layout and
+order-comprehension debt. Option C is cheap only by silently changing mechanics.
+
+**Codex recommendation: Option A.** It preserves every individual mechanical citizen and one readable order axis
+while bounding the ribbon's claim on the battle board.
+
+Does Adam accept Option A? If so, audit active-follow versus manual browsing only as needed, then resolve neutral/
+third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is authorized.

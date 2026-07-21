@@ -422,6 +422,16 @@ within either side. The accepted shell may later receive a per-creature initiati
 portrait, label, layout, interaction, or accessibility work. Exact behavior and the open fixed-position/spent-state
 question live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.23.
 
+## Bonus-ordered faction-block initiative proposal (Adam, 2026-07-20 — additive)
+
+> "so each character has an initiative bonus right? why not just let the characters go in the order of their initiative bonus? how much more difficult is that to calculate? we can still keep it as Faction chunked turns, but within that faction turns go in order of initiative. faction with highest average initiative bonus should go first unless narrative says otherwise"
+
+The proposed ribbon order retains faction/chunk turns but gives them deterministic internal order: highest average
+initiative-bonus block first, then highest individual bonus first inside that block, unless an established typed
+narrative opening condition visibly overrides the calculation. The calculation is trivial; canonical actor state,
+fallbacks, receipts, ties, reinforcement timing, and save/replay are the material integration work. Codex recommends
+the hybrid; it remains under discussion at revised F10.3l in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.24.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

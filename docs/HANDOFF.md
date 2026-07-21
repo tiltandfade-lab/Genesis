@@ -6,6 +6,31 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 hybrid initiative proposal) — AVERAGE ORDERS THE BLOCK; BONUS ORDERS ITS ACTORS [Codex]
+
+This supersedes the side-block-initiative pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam proposes revising the freely ordered side blocks into deterministic faction/chunk initiative: every legal
+combat actor carries a canonical initiative bonus; the block with the highest snapshotted starting average acts
+first; members inside each block act by descending individual bonus. A typed canonical narrative condition may
+override the opening. Codex recommends the hybrid. It preserves fast block turns while making the portrait line a
+real order and letting every initiative bonus matter, without paying for fully interleaved BG3 scheduling.
+
+Repository audit: the PC already supplies `init` or Dexterity modifier, bestiary foes already carry `init`, and a
+sidekick has a stat chassis. Some hirelings, invented/provisional actors, hazards, and crisis activations need a
+normalized combat priority or honest governed fallback. Average/sort arithmetic is trivial; the medium work is the
+actor cursor, active/spent state, chassis/provenance, round reset, save/replay, receipts, reinforcement, and edge-
+case integration already largely implied by a useful portrait ribbon.
+
+Use combat-time initiative blocks rather than blindly political factions. Snapshot opening averages so later
+reinforcements cannot reorder prior turns. “Narrative says otherwise” must be a typed, visible, provenance-bearing
+opening override licensed by established fiction, never an unrecorded DM preference.
+
+**Do next:** ask whether Adam locks revised F10.3l. If yes, settle equal individual bonuses/equal block averages,
+then reinforcement timing, exact override authority, crowded-ribbon overflow, and neutral/third-party lens
+placement. Wave 10 remains open; no build or Fable handoff is authorized.
+
 ## ⭐ Latest (2026-07-20, Wave 10 initiative semantics) — SIDE BLOCKS STAY TRUE; PORTRAITS CARRY ACTOR IDENTITY [Codex]
 
 This supersedes the lens-collapse/initiative-ribbon pickup below without deleting it. Design/docs only: no code,

@@ -17599,3 +17599,103 @@ state plus reorder animation and more visual QA; Option C is low cost but leaves
 
 Does Adam accept Option A? If so, next settle crowded-ribbon overflow without leaking hidden counts, then neutral/
 third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.24 F10.3l revision - bonus-ordered actors inside average-priority faction blocks
+
+Adam proposes a stronger hybrid than the fixed-but-freely-ordered side block:
+
+> "so each character has an initiative bonus right? why not just let the characters go in the order of their initiative bonus? how much more difficult is that to calculate? we can still keep it as Faction chunked turns, but within that faction turns go in order of initiative. faction with highest average initiative bonus should go first unless narrative says otherwise"
+
+#### Plain answer - yes, and the arithmetic is almost free
+
+Every **mechanically realized combatant should** have one canonical initiative bonus. Genesis already has most of
+this seam:
+
+- the living PC supplies `pc.init` or currently falls back to the sheet's Dexterity modifier;
+- every resolved bestiary foe carries `init` from the stat block, falling back to zero when absent;
+- a promoted sidekick has a resolved creature `statBase`, from which initiative can be carried;
+- some hirelings, provisional/invented NPCs, hazards, and non-creature crisis actors do not yet expose a complete
+  combat initiative record. They need a canonical chassis/priority or an explicit governed fallback before joining
+  exact combat; the UI must not invent a flattering number merely to place them.
+
+Calculating Adam's rule is trivial:
+
+```text
+initiativeBlock.priority = average(live starting members' initiativeBonus)
+initiativeBlock.members  = members sorted by initiativeBonus descending
+combat block order       = priority descending, unless a typed opening override applies
+```
+
+Example:
+
+```text
+Party:    PC +3, Mira +1                 average +2.00
+Hostiles: Goblin 1 +2, Varka +2, Wolf +1 average +1.67
+
+ROUND 1    [ PC +3 ][ Mira +1 ]  |  [ Goblin 1 +2 ][ Varka +2 ][ Wolf +1 ]
+```
+
+The party block acts first. The PC acts before Mira; then the hostile block begins, with the two +2 goblins tied
+ahead of the +1 wolf. The ribbon keeps each portrait in that stable order and applies the accepted active/spent
+states as the cursor advances.
+
+This is **not** full BG3-style interleaving. A +5 goblin still does not jump between two party members once the
+party block has won. It is deterministic ordered activation **inside** faction/chunk turns, which preserves the
+speed and comprehensibility Adam wanted from side initiative while letting every initiative bonus matter.
+
+#### Difficulty and maintenance cost
+
+The numeric calculation is **low/trivial cost**: one linear average per block and one small sort. The product work
+is **medium**, not high:
+
+- introduce one normalized `initiativeBonus` projection instead of scattering PC Dexterity and foe `init` rules;
+- give every legal combat actor a `combatSideId`/initiative block, bonus provenance, active/spent state, and stable
+  tie position;
+- carry sidekick/hireling/invented-actor chassis into combat and refuse or visibly default unresolved actors;
+- snapshot block and member ordering, advance an actor cursor, reset availability each round, and preserve it in
+  save/replay/receipts;
+- handle down/incapacitated/fled actors, summons, reinforcements, allegiance changes, environmental activations,
+  reactions, and combat ending mid-block;
+- update DM/AI action envelopes, prose/accessibility twins, ribbon states, and deterministic verification.
+
+Most of that actor-state work was already implied by F10.3l's useful available/active/spent portraits. The extra
+cost of sorting by a number and averaging a block is negligible. Compared with full per-creature interleaving, this
+avoids the hardest cross-faction scheduling, delay/ready insertion, and continuous turn-queue churn.
+
+#### Necessary guardrails on “faction” and “narrative says otherwise”
+
+Use a combat-time **initiative block**, not blindly the persistent political-faction id. A guild hireling fighting
+beside the PC belongs to the party's current combat block; two hostile political factions cooperating in this fight
+may share a hostile block; a genuine three-way conflict may expose three blocks. Political identity remains canon,
+but present allegiance determines who acts together.
+
+The opening block priorities should be snapshotted when combat starts. Later reinforcements must not recalculate an
+average and retroactively make the whole round reorder. They insert at the correct initiative-bonus tier inside
+their block under a later explicit entry-timing rule.
+
+“Narrative says otherwise” must compile into a typed, player-legible `initiativeOverride` with provenance—an
+established ambush, surprise/preparation state, preemptive action, scenario rule, or other already-canonical fact.
+It cannot mean that the DM silently dislikes the calculated result. The opening receipt names the cause, and the
+ribbon/prose explains why the lower-average block acts first. This preserves the creative DM's authority to realize
+fiction while keeping the engine authoritative and the exception trackable.
+
+The procedural-research corpus does not determine whether average initiative is the best combat-balance rule. It
+does support this implementation posture: semantic facts compile into explicit constraints/priorities; ordering is
+deterministic and inspectable; exceptions are typed and provenance-bearing; missing actor data produces a governed
+fallback or honest refusal rather than an invented value. That is the Tutenel/Henderson/Whitehead/Merrell seam
+applied here, not a claim that those papers studied initiative.
+
+#### Revised F10.3l recommendation
+
+**Codex recommends accepting Adam's hybrid.** It supersedes the earlier “free choice inside a side” part of F10.3k
+without discarding the accepted side-block ribbon:
+
+- block order = highest snapshotted average initiative bonus first;
+- member order inside each block = highest initiative bonus first;
+- portraits keep stable positions and show available, active, and spent states;
+- a typed, visible, provenance-bearing opening override may supersede calculated block order;
+- arithmetic ties, reinforcement timing, and the exact override-authority list remain generated follow-ups.
+
+Does Adam want this locked as the best-case initiative law? If yes, settle equal-bonus/average ties first, then
+reinforcements, narrative overrides, ribbon overflow, and neutral/third-party lens placement. Wave 10 remains
+**OPEN**; no build is authorized.

@@ -1,6 +1,6 @@
 ---
 type: design-study
-status: REVIEW
+status: ACCEPTED
 created: 2026-07-21
 updated: 2026-07-21
 scope: cross-wave implementation proof structure

@@ -808,3 +808,12 @@ golden sites remain the eventual representative portfolio, not the first impleme
 process and traceability live in
 `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` and
 `procedural-dungeon-direction/FEATURE-PROMOTION-LEDGER.md`.
+
+### Acceptance of the phased visual-proof ladder (Adam, 2026-07-21)
+
+> "sounds great, let's move forward"
+
+The three-horizon visual phasing, mandatory EngagementLens MVP ruling, one-small-room-first Clay Pass ladder,
+multi-room/site/relational staging, incremental twelve-site portfolio, and feature-promotion traceability above are
+accepted. This acceptance fixes the visual production structure; exact implementation remains unauthorized until
+its later build gate.

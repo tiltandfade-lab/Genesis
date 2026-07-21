@@ -3,17 +3,18 @@ type: design-study-index
 status: OPEN
 wave: 10
 subject: Interim Visual Engine and Release Scope
-current_write_target: PHASING-AUDIT.md
+current_write_target: 05-consequence-presentation.md
 ---
 
 # Wave 10 — Interim Visual Engine and Release Scope
 
-Wave 10 is **OPEN**. It was promoted ahead of Waves 3-9. The current live task is the
-[prototype/MVP phasing audit](PHASING-AUDIT.md). **F10.8g is suspended rather than answered**: its prior closure
-corpus bundled mature presentation goals into the pre-alpha target and must be restated after Adam reviews the new
-phase cut. The starting focus policy remains automatic Option A; player-owned Option B remains the explicit later
-target over the same policy seam. F10.8e's automatic consequence brief remains outside the current target unless
-BattleMat-plus-Gemini comprehension evidence later reopens a narrow information-layer question.
+Wave 10 is **OPEN**. It was promoted ahead of Waves 3-9. Adam accepted the
+[prototype/MVP phasing audit](PHASING-AUDIT.md), [Clay Proof Ladder](../CLAY-PROOF-LADDER.md), and
+[Feature-Promotion Ledger](../FEATURE-PROMOTION-LEDGER.md) on 2026-07-21. The old F10.8g closure question is
+superseded; the phased F10.8g at section 11.68 now awaits Adam's explicit P10.8 closure answer. The starting focus
+policy remains automatic Option A; player-owned Option B remains the explicit later target over the same policy
+seam. F10.8e's automatic consequence brief remains outside the current target unless BattleMat-plus-Gemini
+comprehension evidence later reopens a narrow information-layer question.
 
 The phase audit now distinguishes a narrower physical-event proof from the playable MVP. Borderline behavior stays
 in the MVP with narrow breadth. The EngagementLens is mandatory because it is the pre-alpha battle system: BattleMat
@@ -35,8 +36,8 @@ until every original, additive, and generated follow-up is exhausted and Adam ex
 | [04](04-attention-interaction-and-history.md) | 11.42-11.56 | Attention ladder, interaction, secrets, knowledge, and durable history |
 | [05](05-consequence-presentation.md) | 11.57-current | Cue scheduling, interruption recovery, consequence presentation, and Gemini-led rewrite |
 
-The [phasing audit](PHASING-AUDIT.md) is the temporary current write target. It does not replace or renumber the
-chronological Wave 10 record.
+Append new accepted discussion to the current chronological part. The accepted [phasing audit](PHASING-AUDIT.md)
+does not replace or renumber that record.
 
 Append new accepted discussion to the current part. Start a new numbered part only at a material
 question boundary when the active file approaches roughly 2,000 lines or 150-200 KB; update this

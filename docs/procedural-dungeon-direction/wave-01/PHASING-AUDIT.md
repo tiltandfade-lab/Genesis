@@ -1,6 +1,6 @@
 ---
 type: design-study
-status: REVIEW
+status: ACCEPTED
 wave: 1
 created: 2026-07-21
 updated: 2026-07-21
@@ -8,9 +8,9 @@ updated: 2026-07-21
 
 # Wave 1 Prototype/MVP Phasing Audit
 
-This is a first-pass implementation-horizon audit of the closed Wave 1 direction. It does not reopen Wave 1's
-semantic answers. Its cut lines remain under review until Adam accepts or amends them. Terms follow the global
-[phasing framework](../PHASING-FRAMEWORK.md).
+This is the accepted implementation-horizon audit of the closed Wave 1 direction. It does not reopen Wave 1's
+semantic answers. Adam accepted the revised cut and small-pass delivery reframe on 2026-07-21. Terms follow the
+global [phasing framework](../PHASING-FRAMEWORK.md).
 
 ## Pre-alpha-critical foundation
 

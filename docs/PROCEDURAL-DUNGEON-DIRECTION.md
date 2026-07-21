@@ -54,20 +54,20 @@ No build is authorized by this discovery record.
 
 ### Current live position
 
-- The live task is the cross-wave prototype/MVP delivery reframe: the
+- Adam accepted the cross-wave prototype/MVP delivery reframe on 2026-07-21. The
   [Clay Proof Ladder](procedural-dungeon-direction/CLAY-PROOF-LADDER.md) and
   [Feature-Promotion Ledger](procedural-dungeon-direction/FEATURE-PROMOTION-LEDGER.md) organize revised cuts for
   [Wave 1](procedural-dungeon-direction/wave-01/PHASING-AUDIT.md),
   [Wave 2](procedural-dungeon-direction/wave-02/PHASING-AUDIT.md), and
-  [Wave 10](procedural-dungeon-direction/wave-10/PHASING-AUDIT.md) awaiting Adam's review.
+  [Wave 10](procedural-dungeon-direction/wave-10/PHASING-AUDIT.md).
 - Design waves no longer imply same-sized implementation waves. One retained small clay room is proved first;
   multi-room causality, site/cold simulation, relational simulation, and the twelve-site portfolio stage upward in
   separately gated Clay Passes.
 - A narrower engineering proof no longer defines the playable MVP. Borderline behavior remains in the MVP with
   narrowed breadth, and the EngagementLens is mandatory because it is the pre-alpha battle system.
-- Wave 10 remains **OPEN**. **F10.8g is suspended rather than answered** because its prior proof corpus bundled
-  mature feature goals into the pre-alpha target. After the phase cut is accepted or amended, F10.8g must be
-  restated as a phased closure question.
+- Wave 10 remains **OPEN**. The obsolete F10.8g was superseded because it bundled mature feature goals into the
+  pre-alpha target. The phased **F10.8g is now restated at section 11.68** and awaits Adam's explicit P10.8 closure
+  answer.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

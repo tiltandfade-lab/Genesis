@@ -12,8 +12,9 @@ This amendment corrects a weakness in the discovery record: many accepted answer
 system without saying which part must exist in pre-alpha and which part can be reached through a simpler honest
 scaffold. It does not revoke those destination rulings. It adds an implementation horizon to them.
 
-The framework is accepted as the way future questions must be decided. The first-pass Wave 1, Wave 2, and Wave 10
-classifications linked below are a review draft until Adam accepts or amends their cut lines.
+The framework is accepted as the way future questions must be decided. Adam accepted the revised Wave 1, Wave 2,
+and Wave 10 classifications plus the Clay Pass/feature-ledger delivery reframe on 2026-07-21. Later evidence may
+still amend a named cut through the promotion/reopening laws below.
 
 ## Three horizons, two required decision forms
 

@@ -956,3 +956,78 @@ The [Clay Proof Ladder](../CLAY-PROOF-LADDER.md) defines the passes. The
 playable MVP gate, ideal goal, and promotion trigger; an anonymous `later` is no longer sufficient. F10.8g remains
 suspended pending review of the combined reframe. P10.8 is open, P10.9 remains mandatory next, and no build is
 authorized.
+
+### 11.68 Combined phasing accepted - phased F10.8g P10.8 closure audit
+
+Adam accepted the revised phasing and small-pass delivery structure:
+
+> "sounds great, let's move forward"
+
+This accepts the three implementation horizons, the rule that borderline behavior stays in the playable MVP, the
+mandatory EngagementLens battle system, the retained one-room-first Clay Pass ladder, incremental growth toward the
+twelve golden sites, and the feature-promotion ledger. It does **not** by itself answer the explicit P10.8 closure
+question below.
+
+The obsolete F10.8g at 11.64 is superseded. It wrongly bundled mature presentation realization into one pre-alpha
+proof corpus. The phased audit is:
+
+#### P10.8 principle direction that must exist in the playable MVP
+
+1. **Canonical consequence authority:** mechanics commit exact facts once. BattleMat, EngagementLens, cards, audio/
+   captions where present, Gemini, and fallbacks consume shared receipt/presentation ids and never own or replay
+   mechanics.
+2. **Causal order now, throughput later:** receipts retain hard dependencies, causal groups, terminal obligations,
+   and identities from the start. The first presenter may run legal work serially. Parallel sibling playback,
+   compression, and richer channel arbitration remain promotions over the same graph.
+3. **Legible event performance:** representative movement, attack, reaction, damage/down, condition, object/door,
+   topology, hazard, destruction, and drop/custody changes receive visible transitions or performances—not terminal
+   state snaps plus prose alone—with truthful reduced fallbacks for unsupported variants.
+4. **BattleMat plus EngagementLens:** BattleMat remains exact tactical/spatial truth. The mandatory receipt-derived
+   EngagementLens stages every material combat beat; one MVP family is bespoke and other MVP combat verbs retain
+   truthful generic lens staging.
+5. **Conservative input without lost context:** consequential world commits may gate during material cues, but
+   composer drafts, DM scrolling/reading, and non-destructive inspection state survive. Fine-grained safe input and
+   one revalidated pending intent remain named feature goals.
+6. **Boundary-safe recovery:** skip, pause/background, save/load, refresh/crash recovery, and scene handoff land on
+   exact terminal state and known-consequence recap without duplicated mechanics. Rich semantic owed-obligation
+   checkpoints and presentation restoration remain promotions.
+7. **Fiction-first consequence language:** Gemini normally authors from validated fact/viewpoint anchors. Several
+   context-slotted minimum fictional clauses cover latency, invalid output, or unavailability without raw engine
+   vocabulary, dry repetition, hidden-source leakage, or backward duplicate narration.
+8. **Starting attention policy:** bounded automatic Option A direction may frame material causal groups and must
+   preserve/restore safe state. Player-owned Option B focus leases remain the accepted ideal and require the retained
+   A-versus-B playtest.
+9. **No automatic consequence brief by default:** F10.8e remains outside the MVP and gains no automatic future
+   entitlement. Only a repeated BattleMat-plus-Gemini comprehension failure that existing board/status/action/card
+   surfaces cannot repair may reopen a narrowly scoped aid.
+
+#### Retained proof and promotion structure
+
+- C1D proves the BattleMat/EngagementLens battle spine in one small room.
+- C1E adds reaction, condition, area/multi-target consequence, the full crit ladder for representative verbs, and
+  one bespoke lens family over the same seam.
+- C1F proves interruption/recovery and preserved non-destructive context.
+- C1G proves Gemini/fallback consequence language.
+- C2C proves a consequence in one room can mutate another room and recover exact multi-room truth.
+- Later operating/relational fixtures reuse the same receipts; they expand coverage rather than reopen a second
+  consequence engine.
+- Every mature goal above remains in the active feature-promotion ledger with a trigger and cannot disappear into
+  an anonymous backlog.
+
+This phased cut reduces first-pass choreography, arbitration, recovery, and UI scope, but it does not make the core
+cheap: receipt/dependency schemas, renderer non-ownership, exact event identities, generic lens staging, recovery
+cursors, viewpoint filters, Gemini anchors/fallback clauses, and retained fixtures are still medium-high
+architecture and QA work. The maintenance benefit is that every promotion extends one tested seam instead of
+creating a parallel presenter or later migration.
+
+G10.2 remains provisionally closed with P10.7 at section 11.56; P10.8 does not relocate interaction, secret tells,
+attention/history semantics, or performance/device/accessibility into consequence presentation. P10.9 still owns
+map/town/exploration/combat continuity. P10.10 still owns performance, device, and accessibility. P10.12/Wave 11-12
+own broader acceptance, budgets, corpus automation, migration, and final build authorization.
+
+**Phased F10.8g closure question:** does Adam explicitly agree to close **P10.8** at the design-questionnaire level
+on this phased basis—playable MVP obligations 1-9 above, small retained Clay Pass proofs, automatic Option A first,
+player-owned Option B retained as the ideal, and no automatic consequence brief unless evidence reopens it?
+
+A `yes` closes P10.8 only and advances to mandatory **P10.9 - map/town/exploration/combat continuity**. Wave 10
+remains open; no build is authorized.

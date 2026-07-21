@@ -1,6 +1,6 @@
 ---
 type: design-study
-status: REVIEW
+status: ACCEPTED
 wave: 10
 created: 2026-07-21
 updated: 2026-07-21
@@ -8,10 +8,11 @@ updated: 2026-07-21
 
 # Wave 10 Prototype/MVP Phasing Audit
 
-This first-pass audit applies the prototype/MVP lens to the open visual-engine wave. It is deliberately stricter
+This accepted audit applies the prototype/MVP lens to the open visual-engine wave. It is deliberately stricter
 about proving physical events than about immediately realizing every accepted interface, camera, material, history,
-and presentation ideal. The cut remains under review. P10.8 closure is suspended until this audit is accepted or
-amended. Terms follow the global [phasing framework](../PHASING-FRAMEWORK.md).
+and presentation ideal. Adam accepted the revised cut and small-pass delivery reframe on 2026-07-21. P10.8 itself
+still awaits explicit phased F10.8g closure in the running record. Terms follow the global
+[phasing framework](../PHASING-FRAMEWORK.md).
 
 ## Pre-alpha-critical foundation
 

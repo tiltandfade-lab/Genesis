@@ -1,6 +1,6 @@
 ---
 type: design-study
-status: REVIEW
+status: ACCEPTED
 wave: 2
 created: 2026-07-21
 updated: 2026-07-21
@@ -8,9 +8,9 @@ updated: 2026-07-21
 
 # Wave 2 Prototype/MVP Phasing Audit
 
-This first-pass audit separates the minimum persistent simulation contract from the richer ecology and Gemini-DM
-orchestration goals accepted in closed Wave 2. The cut remains under review. Terms follow the global
-[phasing framework](../PHASING-FRAMEWORK.md).
+This accepted audit separates the minimum persistent simulation contract from the richer ecology and Gemini-DM
+orchestration goals accepted in closed Wave 2. Adam accepted the revised cut and small-pass delivery reframe on
+2026-07-21. Terms follow the global [phasing framework](../PHASING-FRAMEWORK.md).
 
 ## Pre-alpha-critical foundation
 

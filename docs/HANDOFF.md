@@ -6,6 +6,22 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 opening authority) — FICTION MAY TRIGGER MECHANICS; PROSE CANNOT STEAL A FACTION TURN [Codex]
+
+This supersedes the allegiance-initiative pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3q Option A. Narrative setup uses the least powerful truthful typed authority: readiness/surprise/
+features alter priority; a validated already-triggered action/effect may resolve one pre-round opening receipt; only
+a named versioned scenario/system contract may force a whole block first/last. Freeform narration and late “I act
+before initiative” declarations cannot. Every exception is provenance-bearing and viewpoint-honest. F10.3q closes.
+
+**Do next:** ask F10.3r. Codex recommends a deterministic opening window when several triggers fire together:
+classify before/interrupt/after; explicit specific timing wins; otherwise use source initiative priority and the
+accepted tie-only d20; commit sequentially and revalidate remaining candidates. Show every observable consequence,
+but keep unearned source/motive/duration private. Then close opening authority and settle ribbon overflow followed by
+neutral/third-party lens placement. Wave 10 remains open; no build/Fable handoff is authorized.
+
 ## ⭐ Latest (2026-07-20, Wave 10 allegiance initiative) — SIDES CHANGE IMMEDIATELY; A TURN NEVER DUPLICATES [Codex]
 
 This supersedes the new-block pickup below without deleting it. Design/docs only: no code, dependency installation,

@@ -18069,3 +18069,83 @@ real trackable mechanics instead of invisible fiat—the core vision Adam establ
 
 Does Adam accept Option A? If so, audit conflicting/secret opening causes only as needed, then settle crowded-ribbon
 overflow and neutral/third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.30 F10.3q ruling and F10.3r expansion - narrative setup compiles into bounded opening authority
+
+**Adam's ruling (2026-07-20):** accept Option A. “Narrative says otherwise” is not freeform initiative fiat. The
+resolver uses the least powerful typed authority that truthfully realizes already-established fiction:
+
+1. readiness, surprise, features, items, and scene conditions normally modify deterministic initiative priority;
+2. one already-declared, validated, causally triggered action/effect may resolve as an opening receipt before Round
+   1 without granting its faction a whole block;
+3. only a named, versioned scenario/system contract may force an entire block first/last or to a fixed phase.
+
+Every opening exception carries provenance and an honest player-facing consequence. A quick declaration after
+hostility is obvious does not bypass initiative; hidden goblins normally use the surprise/priority law; a readied
+arrow needs an established trigger; a collapsing floor may resolve its triggered hazard; a boss/lair block override
+must already exist as an authored rule. F10.3q is closed.
+
+#### F10.3r - when several opening triggers fire together, who resolves first and what may stay secret?
+
+Example: the cultist touches the bell. That touch satisfies the PC's readied-arrow condition, starts an authored
+bells-and-fire trap, and licenses a boss reaction. All three cannot be ordered after the fact according to which
+outcome the DM prefers.
+
+- **Option A - deterministic opening window with viewpoint-safe receipts (recommended):** collect all candidate
+  openings licensed by the same committed trigger, classify their timing (`before`, `interrupt`, `after`), order
+  equal-timing candidates by explicit rule specificity/priority and then source `initiativePriority`, using the
+  accepted d20 only for a remaining exact tie. Commit one receipt at a time and revalidate later candidates. Show
+  every observable action/consequence and the honest existence of an exceptional opening, while withholding only
+  hidden source, motive, duration, or rule text the viewpoint has not earned.
+- **Option B - resolve every opening simultaneously as one batch:** appears neutral but cannot handle one opening
+  disabling another, interrupted movement, resource contention, death before a later action, or a trap whose trigger
+  remains committed after its triggering actor falls.
+- **Option C - let the DM choose the most dramatically satisfying order:** easy to narrate, but turns hidden timing
+  into untrackable outcome control and makes save/replay, tactical planning, and adversarial testing unreliable.
+
+Option A's opening-window contract:
+
+```text
+committed trigger receipt
+  -> collect licensed opening candidates from preexisting state
+  -> classify before / interrupt / after
+  -> explicit specific timing rule wins
+  -> otherwise higher source initiativePriority
+  -> otherwise one open d20 tie-break, frozen in the opening receipt
+  -> commit candidate
+  -> revalidate remaining candidates against new canonical state
+  -> continue or cancel with reason
+  -> begin Round 1 under frozen block order
+```
+
+Concrete consequences:
+
+- touching the bell commits first. If the trap says it fires **after** contact while the arrow is a legal interrupt,
+  the arrow resolves first; killing the cultist does not un-touch the bell, so the already-triggered trap may still
+  fire after revalidation;
+- two legal readied arrows with the same timing use their sources' initiative priorities, then a d20 only if still
+  tied. This ordering is receipted once, not improvised or rerolled;
+- if the first opening destroys the second archer's bow, moves its target out of legal reach, consumes the shared
+  resource, or otherwise invalidates that candidate, the later opening cancels with a typed reason rather than
+  resolving from stale state;
+- an unobserved magical item may be the DM-side provenance for an enemy's priority edge. The player sees the enemy
+  move with supernatural readiness or sees `opening order altered by an unseen factor` only when that fact itself is
+  perceptible; the UI does not expose the item name, exact duration, or hidden owner;
+- a visible collapsing floor receives visible board/audio/caption feedback and an ordinary known label. Secrecy is
+  never a reason to make an observable consequence silent.
+
+The right narration rail may dramatize these committed receipts but does not choose their order. The top ribbon may
+briefly show a compact `OPENING` phase and source portrait/symbol, then return to Round 1; the board remains complete
+when the EngagementLens is collapsed. Accessibility prose names known source, action, target/consequence, cancel
+reason where player-legible, and the transition into normal block order.
+
+**Implementation/maintenance cost:** Option A is **medium** beyond F10.3q: candidate collection, timing vocabulary,
+precedence, source priority/tie rolls, sequential transactional revalidation, cancellation receipts, secrecy
+projection, UI phase, save/replay, and conflict fixtures. Option B trades explicit work for stale-state bugs; Option
+C has low code cost but unacceptable fairness and reproducibility debt.
+
+**Codex recommendation: Option A.** It preserves causal chains and DM creativity while making simultaneous dramatic
+ideas mechanically real, ordered, replayable, and honest about what the player can know.
+
+Does Adam accept Option A? If so, the opening-authority branch can close and F10.3s can settle crowded-ribbon
+overflow. Neutral/third-party EngagementLens placement follows. Wave 10 remains **OPEN**; no build is authorized.

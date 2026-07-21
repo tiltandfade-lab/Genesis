@@ -483,6 +483,16 @@ duplicates a turn. The transfer cue preserves identity and player-known cause wi
 duration. Exact transaction boundaries, frozen-average behavior, costs, and the open narrative-override question
 live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.29.
 
+## Tiered typed narrative-opening authority ruling (Adam, 2026-07-20 — additive)
+
+> "A"
+
+Established narrative setup may affect initiative only through bounded trackable mechanics: priority conditions,
+one already-declared/validated/triggered opening receipt, or a rare named scenario/system whole-block rule. Freeform
+narration cannot simply place a faction first. The ribbon may show the honest known cause of an opening exception
+without leaking secret provenance. Exact authority tiers, examples, costs, and the simultaneous-opening follow-up
+live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.30.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

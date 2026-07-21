@@ -170,8 +170,11 @@ identity, losing state or knowledge, duplicating consequences, or silently inven
 Prove lineage/version identity, outgoing yield and incoming validation, single adapter ownership, cast and role
 continuity, object/custody state, damage/traces/hazards, viewpoint knowledge, honestly owned spatial anchors, pending
 obligations, consequence cursor, safe presentation restoration, and retry/rebuild. A simple crossfade is sufficient;
-the transition animation is not canonical. The exact promotion and later compaction of spatial precision remains
-subject to the active P10.9 follow-up rather than being invented by this pass.
+the transition animation is not canonical. Exercise the accepted precision ladder—exact cell/footprint, anchored
+local relation, zone/region/route, and unresolved/reserve—with provenance-bearing placement and compaction receipts.
+The pass must retain choice-changing relations and consequences while allowing meaningless grid detail to compact;
+it may not silently invent certainty or erase a tactically established fact. Exact authority among several legal
+placements remains subject to the active P10.9 follow-up rather than being invented by this pass.
 
 ## Stage 3 - small operating site simulation
 

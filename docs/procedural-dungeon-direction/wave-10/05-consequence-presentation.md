@@ -1204,3 +1204,88 @@ P10.10.
 
 Does Adam choose **A, B, or C**, or want to amend the precision tiers or compaction rule? P10.9 and Wave 10 remain
 **OPEN**; no build is authorized.
+
+### 11.71 F10.9b ruling and F10.9c expansion - typed precision receipts accepted; choose ambiguous-placement authority
+
+**Adam's ruling (2026-07-21):** "B for sure."
+
+F10.9b accepts **Option B: typed spatial precision tiers with provenance-bearing placement and compaction receipts**.
+Spatial truth distinguishes exact cell/footprint, anchored local relation, zone/region/route, and unresolved/reserve.
+A mode transition may increase precision only through a legal recorded source; it may not silently turn uncertainty
+into fact. Exact combat placement is canonical within its valid scene/substrate scope. On exit, the compaction
+receipt preserves every choice-changing relation and consequence while allowing irrelevant cell detail to become a
+coarser truthful fact. Gemini and every visual adapter consume that same precision/provenance law.
+
+This schema, placement/compaction receipt seam, round-trip recovery, and retention of meaningful consequences are
+**PLAYABLE PRE-ALPHA/MVP CRITICAL** and now part of C2D. Richer spatial-history explanation, editing, and visual
+morphing remain feature goals. Performance thresholds remain P10.10. F10.9b does not yet decide who chooses among
+several legal exact layouts; that authority affects player agency, tactical fairness, secrets, and reproducibility.
+
+#### F10.9c - who chooses when several exact placements all satisfy the established scene?
+
+In plain English: `near the north door` may permit six legal goblin cells. `Behind the spice stall` may permit two
+legal player positions. Several arrangements can respect every known fact but create different cover, distances,
+escape routes, and opening advantages. Who selects the committed arrangement without letting the renderer, Gemini,
+or hidden information quietly bias the fight?
+
+**Option A - the deterministic engine chooses every unresolved exact placement.** A seeded constraint solver takes
+the accepted anchors, footprints, collision rules, encounter intent, and secret state, then commits one legal batch.
+The player sees the resulting board but does not choose initial cells unless an earlier action established them.
+Gemini describes the committed result and never proposes geometry.
+
+- **Dungeon example:** the solver places the hero in one of the two legal cells behind the stall and the goblin in
+  one of six cells near the door. The same state/seed rebuilds identically, but the player may receive worse cover or
+  a different lane without having made that choice.
+- **Gemini-DM example:** Gemini can truthfully say where everyone ended up, but it cannot honor a natural player
+  expectation such as "I was keeping the stall between us" unless that sentence was already parsed into a hard
+  anchor before the transition.
+- **Cost:** **medium deterministic-solver and test work, low transition UI**, but high agency, expectation, and
+  tuning debt. Every surprising but legal placement becomes a policy/debugging problem.
+
+**Option B - partitioned authority with a secret-safe deterministic fallback (recommended).** Fixed exact facts
+stay fixed. For visible player-controlled actors or objects, the player chooses among a small legal highlighted set
+when the difference is tactically meaningful; an established stance such as `behind the stall` constrains that set.
+Hostile, neutral, hidden, and unresolved citizens are placed by a deterministic canonical resolver using their
+viewpoint-legal anchors, footprints, intent/policy, and secret state. Gemini may suggest fictional intent or choose
+among engine-supplied semantic policies, but only the validator commits cells. If player choice is immaterial,
+declined, timed out, interrupted, or unavailable, the same seeded fallback commits a legal result. Public conflicts
+ask for a legal re-choice or apply a disclosed priority receipt; hidden conflicts resolve without revealing that a
+hidden citizen exists.
+
+- **Dungeon example:** the player chooses either legal cell behind the stall because one protects the merchant and
+  one guards the alley. The engine places the north-door goblin and an unrevealed cellar ambusher from secret-safe
+  constraints. The board does not expose the ambusher's reserved footprint, and save/reload cannot reroll any
+  committed placement.
+- **Gemini-DM example:** Gemini may express that the goblin intends to hold the exit and can select a certified
+  `hold-exit` policy if the engine offered it. It cannot choose cell 22 directly, move the player's hero, inspect a
+  secret player choice, or invent a tactically superior arrangement outside the legal candidate set.
+- **Cost:** **medium-high reusable authority/UI/QA work**: legal-set previews, semantic placement policies,
+  validator receipts, secret-safe reservation/conflict handling, deterministic timeout/recovery, and adversarial
+  no-leak tests. Maintenance stays bounded because agency and hidden control have one explicit division.
+
+**Option C - Gemini composes the exact arrangement and the engine validates it.** Gemini receives the coarse scene,
+roles, legal candidates, and dramatic intent, proposes a complete placement batch, and retries or falls back if the
+validator rejects it. The engine owns legality but Gemini owns most selection.
+
+- **Dungeon example:** Gemini chooses a cinematic market tableau—hero shielding the merchant, goblin at the exit,
+  witnesses clustered behind the fountain—from legal candidates. A different valid composition may materially
+  alter opening tactics unless the accepted response is persisted before presentation.
+- **Gemini-DM example:** narration and composition can align closely, but prompt/version variation, latency, hidden
+  facts, and dramatic bias may make the DM appear to arrange fights for or against the player.
+- **Cost:** **medium engine validation plus high recurring prompt, latency, fairness, secrecy, replay, and support
+  cost**. A deterministic fallback is still required, so this adds another placement authority rather than
+  eliminating one.
+
+**Codex recommendation: Option B.** The player controls visible, tactically meaningful ambiguity that belongs to
+their characters; the deterministic engine protects legality, hostile intent, secrets, and reproducibility; Gemini
+contributes certified semantic intent and prose without becoming a covert tactical referee. The C2D proof can keep
+the first version small: one meaningful two-cell player choice, one deterministically placed visible opponent, one
+reserved hidden entrant, interruption/reload, and exact round-trip aftermath.
+
+If B is accepted, the next generated follow-up is **F10.9d: how should a mode transition stage the handoff so the
+player understands what persisted, what became newly exact, and what remains unresolved without adding the rejected
+mechanical-meta dump?** That is a continuity-specific visual-memory question, not P10.10 performance/device/
+accessibility work.
+
+Does Adam choose **A, B, or C**, or want to change the division among player, deterministic engine, and Gemini?
+P10.9 and Wave 10 remain **OPEN**; no build is authorized.

@@ -841,3 +841,16 @@ The outgoing adapter yields and the incoming adapter validates before projection
 sufficient for the playable MVP; transition animation is not canonical. Seamless morphs, richer camera memory,
 simultaneous split-view presentation, and broad adapter-specific polish remain feature goals. The first retained
 visual proof is one room crossing exploration -> BattleMat plus EngagementLens -> damaged aftermath without reset.
+
+### Provenance-bearing spatial precision across visual modes (Adam, 2026-07-21)
+
+> "B for sure"
+
+Spatial claims retain an honest visual and canonical precision tier: exact cell/footprint, anchored local relation,
+zone/region/route, or unresolved/reserve. A BattleMat transition may increase precision only through a legal,
+provenance-bearing placement receipt. Unresolved citizens remain unresolved or in reserve rather than receiving
+false visible certainty. When the exact board compacts into exploration, town, travel, or aftermath, every
+choice-changing relation and consequence survives while meaningless cell detail may become a coarser truthful fact.
+The compaction records what changed precision and why. A broken threshold, burning stall, dropped pack beside an
+injured merchant, blocked exit, or eastward flight cannot disappear merely because the grid closes; an irrelevant
+cell number need not become permanent world clutter.

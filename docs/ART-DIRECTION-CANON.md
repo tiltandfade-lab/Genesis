@@ -528,3 +528,16 @@ conditions, and hazards. Complex, handheld, small, or background nouns remain tr
 representations unless their canonical mechanics promote them into a physical family. Promotion preserves the same
 object identity and uses honest primitive/composite geometry; it never invents collision from prose or requires a
 bespoke 3D model merely because the AI DM invented the noun.
+
+## Mode-specific invariant hybrid beauty floor (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+This accepts Option B in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.38. Every normal playable SceneTray must
+preserve intentional composition, a clean high-resolution physical substrate, material and realm identity beyond
+mere hue shifts, motivated light and controlled darkness, grounded crisp canonical pixel citizens, tactical and
+semantic truth, a readable integrated shell, and composed truthful fallbacks. Expensive dressing and atmospheric
+accents vary when semantically licensed; Card G's exact dungeon density is not a universal content quota. The
+reference family remains mode-specific: the amended Cards G/H/L currently cover dungeon, selected action, and
+large-field presentation, while integrated-shell town/social and wilderness/exploration references are still
+required before Wave 10 closes.

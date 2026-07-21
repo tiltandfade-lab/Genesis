@@ -18813,3 +18813,73 @@ Does Adam accept Option B, prefer universal Card-G-level finish under Option A, 
 invariants/reference modes? If Option B is accepted, follow into the remaining F10.6 camera/zoom/play-scale bounds,
 including minimum actor/cell readability, before P10.7's performance and degradation laws. Wave 10 remains
 **OPEN**; no build is authorized.
+
+### 11.39 F10.6f ruling and F10.6g expansion - invariant hybrid beauty floor accepted; choose camera focus authority
+
+**Adam's ruling (2026-07-20):** accept Option B. Every normal playable SceneTray inherits the invariant hybrid
+beauty floor from section 11.38, while mode-specific references define how a dungeon, selected-combatant view,
+large field, town/social place, and wilderness/exploration place can satisfy it differently. Card G, amended Card
+H, and Card L remain the current dungeon/action/large-field targets. Integrated-shell town and wilderness taste
+references remain required before Wave 10 closes. F10.6f closes.
+
+#### F10.6g - when does the camera show the whole place versus moving close enough to read the action?
+
+The board cannot simultaneously show every cell of a large battlefield and keep every Medium standee large enough
+to read. That is a presentation conflict, not a geometry failure. The camera therefore needs a declared authority:
+does it always preserve the full field, does the system choose contextual fits, or may it become a freely directed
+cinematic camera?
+
+- **Option A - one full-board auto-fit plus manual zoom/pan:** the default always contains the complete current
+  board. The player zooms or pans when actors are too small. This is deterministic and cheapest, but makes ordinary
+  turns begin with tiny figures on large maps and pushes routine comprehension onto repeated manual camera work.
+- **Option B - governed focus ladder with player override (recommended):** retain a stable nearly top-down camera
+  family, but give it explicit overview, room/exploration, and action/combat fits. Canonical context chooses the
+  starting fit; bounded player pan/zoom/rotation may override it, and a one-step recenter returns to the current
+  canonical focus. Programmatic changes glide briefly and remain interruptible; direct player input responds
+  immediately.
+- **Option C - free cinematic orbit and zoom:** permit arbitrary pitch, yaw, distance, and target like a general 3D
+  tactics camera. This offers the most screenshots and close inspection, but creates the largest occlusion,
+  billboard, input, controller/touch, hidden-information, safe-rectangle, shadow, asset-backside, and QA burden.
+
+Option B's three fit states are:
+
+| Fit | What must remain in frame | Presentation target |
+|---|---|---|
+| **Overview** | The known current field or explored local site, its major topology, known exits/objectives, party locations, and revealed threats/hazards. | Spatial understanding; actors may become identification tokens at extreme scale, but cannot vanish or merge invisibly. Selecting one refocuses without changing state. |
+| **Room/exploration** | The focused room/place zone, its usable portals, current party/cast, salient interactables, and one-cell-equivalent breathing margin where applicable. | The existing Beauty Wave target of a Medium standee around **12% of central SceneTray height** is a provisional capture benchmark, not a world-scale mutation. |
+| **Action/combat** | Active actor, legal target/area, relevant route, reaction/hazard evidence, and enough surrounding cells to understand the choice and result. | The existing Beauty Wave target of a Medium standee around **18% of central SceneTray height** is a provisional benchmark; selected-actor EngagementLens may add identity/drama but cannot replace board truth. |
+
+The percentages are starting evidence targets inherited from the built camera work, not universal constants for
+Tiny, Huge, long, flying, or swarming bodies. The final gate measures representative silhouettes at 2560×1440,
+1920×1080, and 1194×834. It asks whether the actor, its speakable label, occupied cells, posture/state, and key
+equipment or anatomy remain identifiable at normal viewing distance. A diagnostic enlargement does not rescue an
+unreadable gameplay frame.
+
+Camera and UI share one safe-rectangle contract. Opening the object card, character drawer, right chat state,
+initiative ribbon, or EngagementLens causes a governed refit of the same focus; it never crops the active actor's
+head, the selected route/destination, a targeted area, or a known material consequence beneath UI. Closing the
+surface restores the prior player-adjusted view when still legal rather than forgetting it.
+
+The focus ladder may not become an information leak. It cannot center an unrevealed creature, reserve unexplained
+space for a secret room, pull back to include an unknown ambush, or frame a hidden trap. Only player-known canon and
+the legal action preview contribute to the fit. Large creatures, split parties, moving platforms, reinforcement
+reveals, and changing elevations recompute from current projected bounds; they do not trigger hand-authored camera
+exceptions.
+
+The existing engine makes Option B credible: it already owns a roughly 35-degree elevated/45-degree dimetric
+camera family, four yaw steps, auto-fit, manual zoom, room/beat fit concepts, headroom-aware containment, and
+interruptible refit glides. Those are useful mechanisms, not automatically accepted release tuning. The next
+material follow-up must decide whether the release BattleMat stays orthographic, uses the existing gentle
+perspective path in some modes, or proves one projection through a controlled same-state capture.
+
+**Implementation/maintenance cost:** Option B is **medium** because much of the mechanism exists, but safe-rectangle
+integration, canonical focus sets, view restoration, representative size gates, large-field fallback, and
+desktop/tablet capture proof remain. Option A is low-medium but spends player attention every turn. Option C is very
+high recurring camera/art/QA cost and works against the simplified pre-alpha asset strategy.
+
+**Codex recommendation: Option B.** It lets Card L show the battlefield, Card G show the room, and combat focus show
+the actual choice without creating three renderers or asking the player to repair the camera every turn.
+
+Does Adam accept Option B, prefer the fixed full-board Option A, or want free-camera Option C? If B is accepted,
+follow immediately into F10.6h's orthographic-versus-gentle-perspective choice and final minimum-scale treatment,
+then proceed to P10.7 performance/degradation. Wave 10 remains **OPEN**; no build is authorized.

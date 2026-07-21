@@ -18471,3 +18471,77 @@ not qualities painted into a mockup.
 Does Adam accept Option A? If so, F10.6c closes as a future capture gate—still no implementation—and the
 questionnaire returns to P10.5/P10.6 material/asset scope and the remaining Wave 10 deep dives. Wave 10 remains
 **OPEN**.
+
+### 11.35 F10.6c ruling and F10.6d expansion - controlled material/shadow proof accepted; route normals by construction
+
+**Adam's ruling (2026-07-20):** accept Option A as a future implementation/capture gate. The same canonical scene,
+camera, albedo, light placement/intensity, exposure, crop, and dressing must produce the controlled `M0/S0/S1/S2/
+S3` ladder from section 11.34. Flat-versus-normal response and no/cast/contact/both sprite shadows are independently
+observable before the full-stack beauty frame is judged.
+
+The full stack must then prove Gloom, Chrome, and Fantasy material identity at 2560×1440, 1920×1080, and 1194×834
+logical tablet layout/backing scale. Capture evidence includes compatibility-spike result, realm differentiation,
+normal restraint, alpha-shaped cast shadows, compact contact grounding, fallbacks, performance, texture memory,
+draw calls, filtering, pixel crispness, and comprehension. F10.6c closes as a specified future gate; it does not
+authorize implementing or running that gate now.
+
+#### F10.6d - after the shell proof, which props or sprites should receive normal response?
+
+Normal maps are useful only when their height interpretation is truthful. A floor texel recipe deliberately encodes
+grout and stone relief; a character sprite's painted highlights, eyes, cloak folds, transparent gaps, and single
+view do not automatically encode a valid tangent-space surface. Applying the same luminance-to-normal conversion to
+both would turn lighting paint into false dents and make pixel citizens crawl under moving lights.
+
+- **Option A - construction-class-routed normal response (recommended):** require derived normals for supported
+  shell recipes after F10.6c passes; allow governed reusable material/height recipes on structural primitives and
+  prop classes whose construction supports them; keep ordinary creature/NPC sprites normal-map-free and ground them
+  through alpha cast/contact shadows. Permit authored/generated normals for rare hero assets only after their own
+  same-state proof.
+- **Option B - generate normal maps for every visible asset, including sprites:** maximizes dynamic light response
+  but creates a large generation/cache/QA surface, makes single-view pixel art pretend to own volume it does not,
+  and risks noisy relief, halo edges, inconsistent faces, and per-asset exceptions dominating production.
+- **Option C - shell normals only, permanently:** safest first release and lowest maintenance, but leaves cheap
+  integrated chests, doors, columns, blocks, and later hero props unable to gain coherent material response even
+  when their construction recipes already own truthful faces/height.
+
+Option A routes by the accepted prop construction taxonomy:
+
+| Representation | Best-case normal-response law |
+|---|---|
+| Interior floor/wall/doorframe shell | Derived/cached recipe normal required after spike; modest realm-tuned scale; flat fallback. |
+| Structural tile/block/cylinder/opening | Geometry/vertex normals own form; optional class material micro-normal may describe stone, wood, metal, or soil without changing collision/elevation. |
+| `FACED_BOX` chest/crate | Body and lid remain actual box geometry. Each face may use a governed face/height/normal binding; hinges, seams, and lid state come from construction/state, not painted fake depth. |
+| `EXTRUDE`/`LAYERED_EXTRUDE` | Actual extrusion owns silhouette/depth. A modest front-face normal is allowed only from an explicit height recipe or reviewed asset binding, never blind brightness. |
+| `LATHE`/`SWEEP`/`MODEL_RECIPE` | Geometry owns major curvature/form; reusable material micro-normal is optional. Do not bake geometric handles, legs, rope coils, or moving parts into a normal map. |
+| `DECAL`/semantic marker/card art | Flat by default. A decal may alter material channels only when its semantic class says so; a marker/card never claims surface depth. |
+| Creature/NPC pixel standee | No automatic normal map. Preserve crisp canonical pixels, alpha-shaped cast shadow, compact contact shadow, stable lighting/grade, and optional non-geometric active glow. |
+| Rare hero/boss/keepsake asset | May earn an authored or governed generated normal binding with asset version, fallback, budget, and controlled A/B proof; absence never blocks canonical identity. |
+
+Examples:
+
+- a chest is not made physical by embossing its flat sprite. Its body/lid are `FACED_BOX` geometry; the wood/iron face
+  materials may carry restrained normal response while opening remains deterministic lid rotation;
+- a round column's cylinder geometry owns roundness. A stone micro-normal adds chisel/pore response but cannot move
+  its cover boundary or invent cracks;
+- Varka's pixel sprite remains visually stable as lighting moves. The board's motivated light, alpha cast shadow,
+  contact mark, color grade, and active glow make Varka belong without pretending the single sprite contains a 3D
+  facial normal field;
+- a unique dragon portrait/standee might later receive a reviewed hero normal asset, but the generic dragon remains
+  fully playable and beautiful through the ordinary sprite contract.
+
+Every normal binding records semantic material/class, source/derivation version, orientation/tangent convention,
+scale, cache key, supported lights/material path, fallback, memory cost, and QA state. Normal response may change
+shading only. It cannot establish geometry, collision, footprint, cover, openings, state, identity, or hidden facts.
+
+**Implementation/maintenance cost:** Option A is **medium-high but bounded**: shell generator plus a small reusable
+material-normal library, construction-class binding rules, selective prop/hero admission, cache/version/fallback,
+and representative QA. Option B is very high recurring asset cost and visual risk. Option C is low now but closes a
+valuable later quality lane unnecessarily.
+
+**Codex recommendation: Option A.** It preserves the high-resolution material ambition while letting actual
+geometry own form, pixel art remain crisp, and exceptional assets earn exceptional treatment instead of forcing an
+unreliable universal pipeline.
+
+Does Adam accept Option A? If so, follow into F10.6e: exactly which interim prop classes must be integrated geometry
+at pre-alpha versus sprite/marker/card representation, then return to P10.5 beauty-floor and P10.7 performance deep
+dives. Wave 10 remains **OPEN**; no build is authorized.

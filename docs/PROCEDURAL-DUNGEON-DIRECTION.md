@@ -23,8 +23,10 @@ verbatim; it did not consolidate or rewrite prior rulings.
    compiler boundary, visual-engine finding, and systems discovered.
 2. [Questionnaire and wave protocol](procedural-dungeon-direction/QUESTIONNAIRE.md) — immutable
    original wave structure, additive `G` reference questions, preservation contract, and closure law.
-3. The relevant wave index below.
-4. For live work, only the current part named by that wave index.
+3. [Prototype/MVP phasing framework](procedural-dungeon-direction/PHASING-FRAMEWORK.md) — mandatory
+   critical-versus-scaffold classification for all future rulings and the current cross-wave audit.
+4. The relevant wave index below.
+5. For live work, only the current part named by that wave index.
 
 The global [implementation hold](procedural-dungeon-direction/IMPLEMENTATION-HOLD.md) remains active.
 No build is authorized by this discovery record.
@@ -48,12 +50,17 @@ No build is authorized by this discovery record.
 
 ### Current live position
 
-- Wave 10 remains **OPEN** at **F10.8g** in
-  [consequence presentation](procedural-dungeon-direction/wave-10/05-consequence-presentation.md).
-- The open choice is explicit provisional P10.8 closure behind its named proof corpus, beginning with
-  automatic Option A focus and preserving player-owned Option B as the later target.
-- F10.8e's automatic consequence-brief lifecycle is proposed for retirement from the current target unless
-  BattleMat-plus-Gemini comprehension evidence reopens it; Adam has not yet approved that P10.8 closure audit.
+- The live task is the cross-wave [prototype/MVP phasing audit](procedural-dungeon-direction/PHASING-FRAMEWORK.md),
+  with first-pass cuts for [Wave 1](procedural-dungeon-direction/wave-01/PHASING-AUDIT.md),
+  [Wave 2](procedural-dungeon-direction/wave-02/PHASING-AUDIT.md), and
+  [Wave 10](procedural-dungeon-direction/wave-10/PHASING-AUDIT.md) awaiting Adam's review.
+- Wave 10 remains **OPEN**. **F10.8g is suspended rather than answered** because its prior proof corpus bundled
+  mature feature goals into the pre-alpha target. After the phase cut is accepted or amended, F10.8g must be
+  restated as a phased closure question.
+- Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
+  elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
+- F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later
+  entitlement; only BattleMat-plus-Gemini comprehension evidence may reopen a narrow information-layer question.
 - P10.9 remains mandatory after P10.8; performance/device/accessibility remains P10.10.
 - Wave 10 cannot close until every original, additive, and generated follow-up is exhausted and Adam
   explicitly agrees.
@@ -93,11 +100,12 @@ Existing documents may still cite this path plus a legacy section number. Use th
 | 11.14-11.33 | [Wave 10 Part 2](procedural-dungeon-direction/wave-10/02-inspection-feedback-and-combat.md) |
 | 11.34-11.41 | [Wave 10 Part 3](procedural-dungeon-direction/wave-10/03-visual-proof-camera-and-materials.md) |
 | 11.42-11.56 | [Wave 10 Part 4](procedural-dungeon-direction/wave-10/04-attention-interaction-and-history.md) |
-| 11.57-current | [Wave 10 Part 5 — current](procedural-dungeon-direction/wave-10/05-consequence-presentation.md) |
+| 11.57-current | [Wave 10 Part 5](procedural-dungeon-direction/wave-10/05-consequence-presentation.md) |
 
 ## File-growth rule
 
-Each wave owns a small `README.md` and bounded chronological parts. Append only to the current part.
+Each wave owns a small `README.md` and bounded chronological parts. Append only to the write target named by its
+wave index; a temporary cross-wave audit may own that target without replacing the chronological record.
 At a material question boundary near 2,000 lines or 150-200 KB, open the next numbered part and update
 both indexes. Bounded projection does not permit deletion: every accepted, rejected, provisional,
 parked, and reopened ruling remains in chronological authority.

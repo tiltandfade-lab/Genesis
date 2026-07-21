@@ -19,4 +19,7 @@ in [the questionnaire](../QUESTIONNAIRE.md); these parts preserve the complete c
 | [05](05-additive-questions.md) | 10.G2.1-10.G2.2 | Additive Gemini-reference questions and generated follow-ups |
 | [06](06-sweep-and-closure.md) | 10.SWEEP-10.SWEEP.8 | Rapid sweep, contradiction audit, and explicit closure |
 
+The cross-wave prototype/MVP review adds a first-pass [Wave 2 phasing audit](PHASING-AUDIT.md). It
+classifies implementation horizons without replacing the closed semantic record; its cut remains under review.
+
 Any later contradiction must reopen Wave 2 explicitly under the global closure protocol.

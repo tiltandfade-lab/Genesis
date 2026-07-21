@@ -861,3 +861,29 @@ the presentation-semantic invariants already required here.
 proof corpus, with automatic Option A focus as the starting target, player-owned Option B as the explicit later aim,
 and F10.8e retired unless BattleMat-plus-Gemini comprehension evidence reopens it? If yes, advance to preserved
 mandatory **P10.9 - map/town/exploration/combat continuity**. Wave 10 itself remains **OPEN**; no build is authorized.
+
+### 11.65 Prototype/MVP phase correction - F10.8g suspended pending cross-wave audit
+
+Adam identified that many accepted decisions describe the ideal destination without distinguishing an honest first
+prototype/MVP scaffold from a feature goal that cannot wait. This applies especially to Wave 10: the graphics engine
+must first prove robust physical event rendering, while much canonical tracking and simulation can be stored behind
+simpler projection.
+
+Therefore the F10.8g closure question above is **not answered and must not be presented again as written**. Its proof
+corpus mixes critical seams, representative pre-alpha verbs, and mature presentation goals. The new cross-wave
+[phasing framework](../PHASING-FRAMEWORK.md) and first-pass [Wave 10 audit](PHASING-AUDIT.md) now separate:
+
+1. pre-alpha-critical canonical authority, identities, receipts, viewpoint law, exact mechanical state, recovery,
+   representative physical-event truth, and minimum fiction-first consequence language;
+2. honest initial scaffolds such as serial cue playback, conservative input gating, terminal rebuild, simple card
+   placement, plain initiative, minimal camera direction, and narrow/optional EngagementLens use; and
+3. retained feature goals such as parallel choreography, fine-grained interaction leases, governed camera ladders,
+   rich materials, progressive history/attention projection, and evidence-triggered information aids.
+
+Automatic Option A direction remains the first scaffold and player-owned Option B the target over the same typed
+focus seam, but neither authorizes an elaborate director before the BattleMat physical-event corpus works. The full
+P10.7 attention/history behavior remains the feature goal; durable event/knowledge truth is the critical foundation.
+
+After Adam accepts or amends the phase cut, F10.8g must be restated in phased form and answered explicitly. P10.8 is
+still open; P10.9 remains mandatory next; performance/device/accessibility remains owned by P10.10; no build is
+authorized.

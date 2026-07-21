@@ -926,3 +926,11 @@ edge cases, and acceptance rather than making Adam decide the same principle aga
 
 
 <!-- END VERBATIM MIGRATION: original lines 309-1216 -->
+
+## Prototype/MVP phasing amendment (2026-07-21)
+
+The preserved questionnaire and additive bank above are unchanged. For every future ruling, the answer record must
+also apply the [prototype/MVP phasing framework](PHASING-FRAMEWORK.md): either name the honest pre-alpha scaffold,
+retained upgrade seam, feature goal, and promotion evidence, or state why the feature goal is pre-alpha-critical.
+An unresolved phase cut keeps the relevant closure audit provisional; it never deletes or replaces an original,
+additive, or generated follow-up.

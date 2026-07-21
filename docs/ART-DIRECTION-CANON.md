@@ -762,3 +762,18 @@ and recenter ownership without rewriting receipt/cue semantics. A-versus-B compa
 and starting with A does not protect it as the final behavior. Exact constraints, costs, examples, proof corpus, and
 the pending P10.8 closure question live in
 `procedural-dungeon-direction/wave-10/05-consequence-presentation.md` section 11.64.
+
+## Prototype/MVP scaffolds before mature graphics features (Adam's ruling, 2026-07-21 — additive)
+
+> "That's actually probably somethign we need to revisit with some earlier decisions, because we have recorded many decisions as the direction but not a phased plan to get there. I think in a lot of cases ddoing the simpler thing first, and using that as scaffolding to the more complex thing later is probably a good plan for a lot of this, especially with the robustness of the graphics engine. A lot of the tracking and simming is writing heavy right? that's not as big of an obstacle.
+>
+> I think we might want to review some of the decisions, you can use your judgement, where a decision might push pre-alpha out much further, but there is an interrim solution that will still get us our game, albeit in a more rudimentary form. We really have to think it terms of prototype and MVP rather than strictly ideal version of the game. So I think from now on that should be our framework (first this, with this as the feature goal) or (this feature goal cannot wait and is a critical part of the pre-alpha build)"
+
+Visual direction must now distinguish the honest first playable scaffold from the accepted mature feature goal. The
+graphics engine first proves actual canonical physical events, current board truth, and robust fallbacks at gameplay
+scale; richer camera governance, materials, cue choreography, attention/history projection, smart placement, and
+other expensive visual systems are phased behind named evidence unless their underlying authority seam cannot wait.
+Canonical ids, receipts, viewpoint law, event/history truth, renderer non-ownership, and deterministic adapter seams
+remain early foundations so later visual promotion extends rather than replaces the prototype. The cross-wave laws
+and first-pass classifications live in
+`procedural-dungeon-direction/PHASING-FRAMEWORK.md` and the three wave `PHASING-AUDIT.md` files.

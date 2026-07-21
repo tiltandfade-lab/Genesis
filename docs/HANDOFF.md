@@ -6,6 +6,24 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 initiative semantics) — SIDE BLOCKS STAY TRUE; PORTRAITS CARRY ACTOR IDENTITY [Codex]
+
+This supersedes the lens-collapse/initiative-ribbon pickup below without deleting it. Design/docs only: no code,
+dependency installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3k Option B. The top-center square-portrait ribbon preserves side-based initiative and presents the
+two canonical sides in winner-first blocks. It emphasizes the acting block and the particular citizen currently
+resolving a receipt, but does not invent a fixed speed order inside a side. A reaction may highlight its true source
+without gaining a new initiative slot. This is a reusable projection adapter: later per-creature initiative may
+change grouping/order without discarding portrait, label, state, safe-area, interaction, or accessibility work.
+F10.3k is closed.
+
+**Do next:** ask F10.3l. Codex recommends fixed portrait positions with non-color-only available/active/spent
+states: the resolving tile rises/frames, then retains a check/dim treatment when its activation is spent; down,
+defeated, fled, incapacitated, and hidden stay distinct. This needs medium actor-state/receipt integration but
+preserves identity better than moving spent portraits and answers who remains available. Then settle crowded-ribbon
+overflow and neutral/third-party lens placement before closing inspector/feedback and resuming F10.6b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 lens collapse + initiative ribbon) — LOCAL COLLAPSE STICKS; TURN IDENTITY MOVES TOP-CENTER [Codex]
 
 This supersedes the stable-lens-side pickup below without deleting it. Design/docs only: no code, dependency

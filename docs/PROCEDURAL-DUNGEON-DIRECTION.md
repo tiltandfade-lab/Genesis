@@ -17547,3 +17547,55 @@ labels, responsive layout, and accessibility contract.
 Does Adam accept Option B, or does the portrait-by-portrait BG3 behavior justify reopening the side-initiative law
 now? After this, exhaust ribbon state/overflow follow-ups and neutral/third-party lens placement before closing the
 inspector/feedback branch. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.23 F10.3k ruling - winner-first side-block initiative ribbon accepted
+
+**Adam's ruling (2026-07-20):** accept Option B. Genesis preserves side-based initiative for pre-alpha. The
+top-center ribbon presents the two canonical side blocks in initiative-winner-first order, with every revealed
+participant represented by a square portrait or governed non-creature activation symbol. It does not assign or
+imply a fixed speed order to citizens within a side.
+
+Example:
+
+```text
+ROUND 3    [ PC ][ Mira ]  |  [ Goblin 1 ][ Varka ][ Wolf ]
+             PARTY ACTS              HOSTILES
+```
+
+If the party won initiative, its block remains first for the encounter. The acting side receives a clear block-
+level treatment. When the PC casts Fire Bolt, the PC tile receives the individual active treatment; when Varka
+later resolves a hostile action, Varka's tile receives it without moving the hostile block or changing the stable
+EngagementLens faction sides. A reaction may highlight its actual source without becoming a new initiative slot.
+Hidden enemies still do not appear before reveal.
+
+The accepted ribbon is an **adapter over existing side initiative**, not decorative misinformation and not a new
+combat authority. A later per-creature-initiative upgrade may replace the grouping/order adapter while reusing the
+same portrait derivation, labels, active/state treatments, safe-area layout, interaction, and accessibility work.
+
+F10.3k is closed. It exposes a necessary actor-availability question because the current combat owner knows which
+side acts but does not yet own complete per-citizen activation state for allies.
+
+#### F10.3l - after one citizen acts, should their portrait move or stay put?
+
+- **Option A - fixed portrait positions with explicit available/active/spent states (recommended):** a citizen's
+  tile never changes position during the encounter. Available portraits remain fully present; the resolving citizen
+  rises/frames on the line; a completed activation leaves a non-color-only spent check and restrained dimming. Down,
+  defeated, fled, incapacitated, and hidden are distinct states rather than synonyms for spent. Example: after the
+  PC acts, `[PC✓][Mira]` stays in the same order, immediately showing that Mira remains available on the party side.
+- **Option B - move spent portraits behind a divider or to the block's tail:** available actors collect nearest the
+  active point and spent actors slide away. This makes remaining capacity obvious, but portraits continually change
+  position, weakens rapid identity recognition, complicates focus/tooltip anchoring, and visually suggests a queue
+  even though the side may choose any legal actor.
+- **Option C - show only acting side and current receipt source:** portraits remain fixed but receive no individual
+  available/spent state. This is the lowest-cost honest projection of today's combat model, but the ribbon cannot
+  answer the useful tactical question “who on this side still has an activation?”
+
+**Codex recommendation: Option A.** Stable positions preserve the fast visual memory Adam wants from square
+portraits, while explicit state makes the side-block ribbon materially more useful than the current side banner.
+It adds a **medium actor-state and receipt-integration cost**: canonical per-round availability/spent projection,
+ally seams, summon/reinforcement initialization, incapacitation, action completion, round reset, save/replay, and
+accessible text. It does not change who wins initiative or force an order within the side. Option B needs the same
+state plus reorder animation and more visual QA; Option C is low cost but leaves substantial ambiguity.
+
+Does Adam accept Option A? If so, next settle crowded-ribbon overflow without leaking hidden counts, then neutral/
+third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is authorized.

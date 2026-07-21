@@ -412,6 +412,16 @@ across humanoids and non-humanoids. The open question is whether those portraits
 side blocks or justify a separate per-creature initiative mechanics change; exact placement/crop/semantic costs and
 F10.3k live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.22.
 
+## Side-block initiative-ribbon ruling (Adam, 2026-07-20 — additive)
+
+> "B is great"
+
+The top-center portrait ribbon preserves side-based initiative. Portraits form winner-first party/hostile blocks;
+the acting block and currently resolving citizen receive clear treatment without implying a fixed speed order
+within either side. The accepted shell may later receive a per-creature initiative adapter without discarding its
+portrait, label, layout, interaction, or accessibility work. Exact behavior and the open fixed-position/spent-state
+question live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.23.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

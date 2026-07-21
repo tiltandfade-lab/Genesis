@@ -387,6 +387,16 @@ selected-PC-only focus, and an explicit disabled/accessibility/minimum-layout st
 without losing board feedback. Exact focus, test, cost, and orientation follow-up rules live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.20.
 
+## Stable EngagementLens faction-side ruling (Adam, 2026-07-20 — additive)
+
+> "B is where it's at"
+
+Party-controlled PCs and companions remain on the left of the EngagementLens and hostiles remain on the right.
+The active turn citizen receives strong non-color-only emphasis wherever it stands; party actions travel left-to-
+right, hostile actions right-to-left, and reactions originate from stable faction sides without stealing focus.
+Exact directional-family cost and open manual-collapse/third-party questions live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.21.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

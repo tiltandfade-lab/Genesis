@@ -17397,3 +17397,55 @@ framing can remain family-level rules. It also avoids UI whiplash from swapping 
 Does Adam accept Option B? If so, resolve neutral/third-party placement and manual-collapse behavior, close the
 inspector/feedback branch with its playtest obligation, and resume F10.6b. Wave 10 remains **OPEN**; no build is
 authorized.
+
+### 11.21 F10.3i ruling - stable faction sides with active actor highlighted
+
+**Adam's ruling (2026-07-20):** accept Option B. Party members and companions remain on the left of the
+EngagementLens; hostiles remain on the right. The lens follows the active character by highlighting and framing
+that citizen wherever it stands rather than mirroring the entire cast on hostile turns.
+
+The accepted orientation contract is:
+
+- party-controlled PCs and companions occupy the left faction band; hostiles occupy the right faction band;
+- the canonical active citizen receives a strong shape/halo/turn banner/name treatment that does not rely on color
+  alone;
+- PC/companion actions perform left-to-right; hostile actions perform right-to-left;
+- reactions originate from the reactor's stable faction side without changing active-character focus;
+- reusable feedback families support direction reversal through governed sprite facing/mirroring, projectile
+  direction, lunge/recoil anchors, cast poses, labels, and effect origin/target bindings;
+- the stable left-side party relationship remains aligned with the product's left character rail even while an
+  active enemy owns the turn;
+- the exact board remains authoritative if a crowded lens omits a nonessential figure; faction-side stability may
+  not alter target legality or citizen position.
+
+Example: on Goblin 2's turn, Goblin 2 remains on the right with the active-turn treatment and attacks the relevant
+companion on the left. During the PC's turn, Goblin 2's opportunity attack still comes from the right while the PC
+remains the active focus.
+
+This adds **medium presentation-family cost** rather than new mechanics: directional sprite/effect variants,
+active-state emphasis, stable cluster layout, and multi-actor capture fixtures. It reduces cognitive/layout churn
+relative to active-actor-always-left mirroring.
+
+F10.3i is closed. Manual collapse and neutral/third-party placement remain.
+
+#### F10.3j - how long does a manual lens collapse override active-follow?
+
+- **Option A - current beat/turn only:** the lens reopens automatically on the next active actor. This preserves
+  spectacle but can make a player repeatedly close a surface they do not currently want.
+- **Option B - current encounter until explicitly reopened (recommended):** active-follow is the default when
+  combat begins, but a deliberate collapse suppresses all automatic reopening for the rest of that encounter. A
+  compact Expand control remains. The next new combat restores the default unless the player has separately chosen
+  the global/accessibility `Lens Off` preference.
+- **Option C - collapse becomes a global preference:** respects the gesture strongly, but silently turns a local
+  layout decision into a lasting product setting and makes the lens seem to disappear in later sessions.
+
+Under Option B, collapsing during Goblin 2's turn keeps the lens closed through later PC/enemy turns; all feedback
+continues on the board/audio/caption stack. Manually reopening restores active-follow immediately. Character-drawer
+or minimum-layout suppression is temporary layout state, not the same as deliberate encounter-scoped collapse.
+
+The implementation cost is low: separate `autoFollow`, encounter `manualCollapse`, transient layout suppression,
+and global `Lens Off` states so one cause never overwrites another. Playtest must observe whether encounter reset is
+expected or surprising.
+
+Does Adam accept Option B? If so, rule neutral/third-party bands, then close inspector/feedback with the active-
+follow playtest obligation and resume F10.6b. Wave 10 remains **OPEN**; no build is authorized.

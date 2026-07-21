@@ -6,6 +6,21 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 stable lens sides) — PARTY LEFT; HOSTILES RIGHT; ACTIVE MARKER CARRIES THE TURN [Codex]
+
+This supersedes the active-character-lens pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3i Option B. Party-controlled PCs/companions remain on the left of the EngagementLens and hostiles
+remain on the right. The active actor receives a strong non-color-only turn treatment wherever it stands; party
+actions travel left-to-right, hostile actions right-to-left, and reactions originate from stable sides without
+stealing active focus. Directional variants remain reusable feedback-family work. F10.3i is closed.
+
+**Do next:** ask F10.3j. Codex recommends that deliberate manual collapse suppress active-follow for the current
+encounter until explicitly reopened; a new combat restores default behavior unless global/accessibility Lens Off
+is set. Then rule neutral/third-party placement, close inspector/feedback with the active-follow playtest gate, and
+resume F10.6b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 active-character lens) — FOLLOW THE TURN FOR NOW; PROVE IT IN PLAY [Codex]
 
 This supersedes the board/lens-split pickup below without deleting it. Design/docs only: no code, dependency

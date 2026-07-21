@@ -18287,3 +18287,100 @@ second spatial map.
 Does Adam accept Option A? If so, audit crowd filtering and transient control only if a material conflict remains,
 then the extended F10.3 inspector/feedback/lens branch can close with its mandatory active-follow playtest gate and
 resume F10.6b native-resolution proof. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.33 F10.3t ruling and extended F10.3 closure - three anchors, allegiance glows, mandatory playtest
+
+**Adam's ruling (2026-07-20):** provisionally accept Option A and require playtesting. Party-aligned citizens occupy
+the left EngagementLens anchor; citizens hostile to the party occupy the right, separated into labeled subclusters
+when several hostile factions also oppose one another; a mechanically participating independent block that is not
+hostile to the party occupies a smaller center/rear anchor. True bystanders remain off the combat lens. The board
+continues to own exact space.
+
+Adam also sets the allegiance-color target:
+
+> "good guys blue (unless player declares their team is a different color) bad guys red neutral guys grey (glow colors around active pieces and active initiative portraits
+>
+> we'll try A, that will need some play testing"
+
+“Good” and “bad” are player-facing shorthand, not objective moral canon. The presentation mapping is:
+
+- **party/current allies:** blue by default, or the player's declared team color;
+- **hostile to the party:** red;
+- **neutral/independent:** grey;
+- **active citizen:** the corresponding allegiance glow appears around both the exact board piece and its initiative
+  portrait, binding the two projections to one canonical actor.
+
+Color is a redundant identity channel, never the only one. The active citizen also receives a distinct ring/shape,
+turn glyph, portrait elevation/frame, label, and accessible text; reduced motion retains the static form. Faction
+block separators/badges and stable anchors remain legible in grayscale and common color-vision simulations. A
+player-selected team color is presentation preference, not world state. Its preview must prove contrast against the
+stage, hostile red, neutral grey, focus, selection, movement, and hazard cues; unsafe collisions require a truthful
+secondary outline/pattern rather than silently changing allegiance.
+
+Allegiance transfer uses the accepted receipt law: the same board piece and portrait move anchors/blocks once and
+adopt their new glow without refreshing activation or revealing secret control/duration. A dominated companion may
+therefore appear on the hostile side/red treatment while mechanically hostile; a charmed Varka joining the party may
+move left/blue or the chosen team color. The display states current relation, not moral essence.
+
+Mandatory F10.3 playtest/capture cases now include:
+
+1. one-PC duel and ordinary party-versus-hostile combat;
+2. independent guards attacking only cultists from the center/rear anchor;
+3. two non-party hostile blocks attacking one another and the party;
+4. reinforcement/new-block insertion, defection, surrender, charm/domination, and restoration;
+5. active-follow across fast turns, reactions, manual lens collapse, character drawer, and minimum layout;
+6. dense initiative overflow plus EngagementLens population filtering;
+7. default blue/red/grey, at least two custom party colors, grayscale, common color-vision simulations, reduced
+   motion, keyboard/controller/touch, and prose/screen-reader equivalents;
+8. comprehension questions: identify active citizen, current allegiance, source/target, who remains available, and
+   whether lens position is relational rather than an exact BattleMat cell.
+
+Reopen F10.3h/F10.3t if active-follow creates focus fighting, center/rear reads as physical position, custom colors
+collapse allegiance recognition, right-to-right actions become unclear, or filtering hides a material participant.
+Do not “fix” a failed playtest silently during implementation.
+
+F10.3t is provisionally closed. The extended F10.3 inspector/feedback/lens branch has no remaining material design
+follow-up and closes at questionnaire level with the mandatory playtest gate above. Wave 10 itself remains open.
+
+#### F10.6b - which native desktop and horizontal-tablet sizes must the visual target prove?
+
+This decision must separate **layout coordinates** from **backing/render resolution**. Desktop captures can use
+native pixels at device-pixel ratio 1. Tablet shell acceptance uses logical/CSS points plus safe-area insets, while
+the 3D canvas and crisp pixel assets must also be checked at the device's backing scale. A 1024-point-wide tablet is
+not a 1024-physical-pixel art target.
+
+Current market evidence supports testing more than one comfortable hero frame. Valve's June 2026 Steam Hardware
+Survey reports 1920×1080 as the primary display resolution for 51.12% of respondents and 2560×1440 for 21.44%.
+Apple's current design references enumerate iPad point canvases including 1194×834, 1080×810, and 1024×768. These
+sources do not choose Genesis's support floor, but they make a 1440p-only proof or one generic “tablet” capture
+insufficient.
+
+- **Option A - four-point proof matrix (recommended):** `2560×1440` desktop beauty/large-field target;
+  `1920×1080` canonical desktop gameplay gate; `1194×834` logical-point landscape tablet representative; and
+  `1024×768` logical-point hard layout floor. At the hard floor, chat/type/touch targets, exact board truth, object
+  card, initiative navigation, and all actions remain usable; the EngagementLens may default collapsed and character
+  drawers may reframe the board according to accepted laws. Test tablet backing scale separately.
+- **Option B - modern-target three-point matrix:** `2560×1440`, `1920×1080`, and `1194×834`; do not promise the full
+  shell at 1024×768. This reduces responsive work and gives the central board more room, but drops a real iPad-class
+  logical size and leaves no smaller-layout adversarial gate.
+- **Option C - two endpoints only:** `1920×1080` desktop and `1024×768` tablet. Cheapest corpus, but it never proves
+  the higher-resolution beauty target Adam explicitly requested and provides no intermediate tablet diagnosis when
+  the hard floor fails.
+
+Option A is a capture/acceptance matrix, not a promise to render every device at identical effect quality. Semantic
+invariants remain constant; P10.7/F10.7 may reduce shadow maps, post, particles, and other presentation costs at
+lower performance tiers. Add optional 4K/ultrawide exploratory captures later, but do not make them replace the four
+gates.
+
+**Implementation/maintenance cost:** Option A is **medium-high responsive/capture QA** across safe rectangles,
+rails, chat typography, cards/drawers, lens, initiative overflow, camera framing, touch targets, DPR sampling,
+sprites, shadows, and scene complexity. Option B is medium; Option C is low-medium but under-tests the accepted
+target.
+
+**Codex recommendation: Option A.** It gives the high-resolution engine a real beauty target, protects the dominant
+1080p desktop case, and makes “horizontal tablet” an executable promise with both a representative and adversarial
+floor rather than a vague aspiration.
+
+Does Adam accept Option A, amend one of the four sizes, or decline 1024×768 as a supported full-shell floor? After
+F10.6b, proceed to F10.6c material/shadow truth and the remaining P10/G10 deep dives. Wave 10 remains **OPEN**; no
+build is authorized.

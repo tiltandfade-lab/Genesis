@@ -179,9 +179,22 @@ For the pre-alpha party premise, noncombat owns one main-PC/party anchor and a c
 invented exact companion coordinates. Combat derives a bounded deployment zone from the established location,
 approach, and legal terrain. The one player-owned main PC and independently acting allies/sidekicks enter through
 that zone and formation contract. Narrative-only companion wandering cannot change location, custody, or placement;
-a validated detachment or other canonical event is required. The active P10.9 follow-up still decides whether the
-player places only the main PC, may rearrange companions inside the legal formation, or delegates all initial
-placement to the formation resolver. Exact allied combat behavior remains owned by later party/tactical questions.
+a validated detachment or other canonical event is required. For pre-alpha, the deterministic formation resolver
+places the whole party, including the main PC, within the legal zone and persists one non-rerollable placement batch.
+There is no initial deployment interaction. Exact allied combat behavior remains owned by later party/tactical
+questions.
+
+### C2E - bounded player deployment promotion (feature goal)
+
+**Primary question:** can the player place the main PC and optionally rearrange allies/sidekicks within the same
+legal deployment zone and formation constraints without changing hostile placement, leaking hidden citizens,
+rerolling the established approach, or taking direct control of allies after battle starts?
+
+This is the explicit post-pre-alpha promotion from automatic whole-party deployment to player-authored opening
+formation. Reuse C2D's candidate sets, deterministic default, placement batch, precision provenance, secret-safe
+reservations, interruption/recovery, and aftermath compaction. The player edits only viewpoint-legal party choices;
+declining or interrupting the placement pass retains C2D's canonical automatic result. This named pass preserves the
+goal without making its extra UI and tactical-balance work a prerequisite for the first playable battle handoff.
 
 ## Stage 3 - small operating site simulation
 

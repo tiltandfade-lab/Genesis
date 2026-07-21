@@ -1378,3 +1378,86 @@ promotion rather than a replacement.
 
 Does Adam choose **A, B, or C** for initial party placement, or want an editable formation preset before this choice?
 F10.9c remains open until this is answered. P10.9 and Wave 10 remain **OPEN**; no build is authorized.
+
+### 11.73 F10.9c.1 ruling and F10.9d expansion - automatic deployment first; player formation control is the goal
+
+**Adam's ruling (2026-07-21):** "Let's say C for pre-alpha, and B as the goal."
+
+F10.9c/F10.9c.1 accept the amended partitioned-authority law with **Option C for pre-alpha** and **Option B as the
+explicit feature goal**:
+
+- fixed established placements remain fixed;
+- the deterministic, secret-safe resolver places hostile, neutral, hidden, and unresolved citizens;
+- for pre-alpha it also places the entire party, including the main PC, inside the approach-bounded deployment zone
+  according to the canonical coarse formation and one persisted placement batch;
+- Gemini may express certified intent and narrate the result but cannot commit cells;
+- allies/sidekicks act independently after deployment, with exact behavior still owned by Waves 6-7;
+- C2E later adds player placement of the main PC plus optional rearrangement of allies within formation-legal,
+  viewpoint-safe cells. Decline/interruption falls back to the same automatic batch; player editing cannot move
+  hostiles, reveal hidden reservations, or reroll the established approach.
+
+This is a clean **pre-alpha -> feature-goal** phase boundary. C2D needs the deployment-zone derivation, formation
+resolver, deterministic batch, secret-safe constraints, previewable result, persistence, and recovery—the reusable
+architecture. It can omit the placement interaction, per-companion edit affordances, input recovery, and extra
+tactical-balance pass. Those later costs are named in C2E rather than disappearing into an anonymous backlog.
+F10.9c is now answered at the cross-mode placement-authority level; allied decision-making remains deliberately
+open for its own design owners.
+
+#### F10.9d - what should the player experience while the same scene changes modes?
+
+In plain English: exploration knows the party entered through the south arch, the north door is broken, a pack lies
+beside the merchant, and an unseen cellar threat remains unresolved. Battle now needs an exact board and automatic
+formation deployment. How should the transition make continuity feel trustworthy without displaying terms such as
+`SceneLineage`, `precision promoted`, `reserved entrant`, or `ward spent`?
+
+**Option A - simple crossfade plus one fiction-first Gemini bridge (recommended for pre-alpha).** The outgoing view
+holds long enough to preserve orientation, then crossfades or reframes into the BattleMat. Established landmarks,
+visible citizens, damage, and objects appear as the same visual identities in the destination. The grid and exact
+automatic deployment become visible without category labels or a continuity card. Gemini contributes one short
+fact-locked line that expresses approach and formation in ordinary language. Unresolved/hidden citizens remain
+absent; no UI explains their absence.
+
+- **Dungeon example:** the camera holds the south arch and broken north door; the BattleMat fades in with the party
+  clustered just inside the arch and the pack still beside the merchant. Gemini says, "You crowd through the arch,
+  shield and bow closing around you as steel comes free." Combat begins from the persisted automatic batch.
+- **Gemini-DM example:** the bridge prompt receives the established approach, visible landmarks, committed party
+  placement, and viewpoint-safe stakes. It never receives instructions to recite precision tiers or hidden reserve
+  state, and a fiction-first fallback covers latency or failure.
+- **Cost:** **low-medium transition/camera/identity work plus existing Gemini/fallback integration**. It is the
+  smallest honest proof, but continuity depends heavily on board identity and prose; weak event rendering may still
+  make the mode change feel like a reload.
+
+**Option B - a restrained diegetic continuity beat plus Gemini (feature-goal candidate).** Preserve the same
+crossfade, but stage a brief landmark-to-placement sequence: one or two established anchors hold visually, the
+incoming board resolves around them, carried/dropped objects and party citizens settle into their committed cells,
+and the camera rests on the first actionable composition. Subtle motion/value emphasis may guide the eye, but there
+are no mechanical badges, migration arrows, cards, or `preserved/newly exact/unresolved` labels. Gemini supplies a
+short fiction-first bridge synchronized to the visual beat.
+
+- **Dungeon example:** the broken doorway remains the compositional hinge while the table surface resolves; the
+  dropped pack stays visibly tied to the merchant, then the party standees settle inside the south deployment zone.
+  Nothing flashes where the hidden cellar entrant is reserved.
+- **Gemini-DM example:** Gemini mentions the crush through the arch and the merchant beside the fallen pack, but the
+  visuals carry identity and location continuity rather than requiring prose to enumerate every retained fact.
+- **Cost:** **medium-high reusable transition grammar, camera, timing, interruption, fallback, and cross-adapter
+  visual QA**. It becomes maintainable only after BattleMat events and stable visual identities are already proven.
+
+**Option C - an explicit continuity summary.** Before combat, a compact panel or annotated overlay identifies
+persisted objects/damage, newly exact placements, and unresolved elements in player-safe mechanical language. The
+board may also use arrows, pulses, or badges to show what moved or gained precision.
+
+- **Dungeon example:** a transition card lists `Broken north door: retained`, `Party formation: resolved`, and
+  `Cellar area: unresolved`, then arrows connect prior anchors to exact cells.
+- **Gemini-DM example:** Gemini may rewrite those entries into prose, but the structured layer still exposes the
+  underlying bookkeeping and can duplicate the clean DM account.
+- **Cost:** **high information-design, localization, state-lifecycle, accessibility, adapter, and maintenance work**,
+  with a high fiction-break and duplicate-explanation risk. It recreates the mechanical-meta dump already rejected
+  absent evidence of a comprehension failure.
+
+**Codex recommendation: Option A for pre-alpha, with Option B retained as the visual feature goal after actual
+BattleMat event rendering and identity continuity are proven.** Option C remains evidence-gated and has no automatic
+future entitlement. This follows the accepted scaffolding rule: prove that the scene and its events survive the
+mode change before investing in a richer information or transition layer.
+
+Does Adam choose **A, B, or C**, or a phased **A -> B**? F10.9d concerns continuity staging only; P10.10 still owns
+performance, device, and accessibility. P10.9 and Wave 10 remain **OPEN**; no build is authorized.

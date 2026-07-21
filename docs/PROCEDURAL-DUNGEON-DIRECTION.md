@@ -68,8 +68,9 @@ No build is authorized by this discovery record.
 - Wave 10 remains **OPEN**. Adam explicitly closed phased P10.8 at section 11.69, accepted F10.9a Option B's
   transactional SceneLineage handoff at section 11.70, and accepted F10.9b Option B's provenance-bearing precision
   tiers at section 11.71. Section 11.72 reframed F10.9c around a single player-owned main PC, independently acting
-  formation-bound allies/sidekicks, and an approach-bounded deployment zone. The live **F10.9c.1** question asks
-  whether the player places only the main PC, may rearrange companions, or delegates all initial placement.
+  formation-bound allies/sidekicks, and an approach-bounded deployment zone. Section 11.73 chooses automatic
+  whole-party formation deployment for pre-alpha and player PC placement plus optional ally rearrangement as the
+  C2E feature goal. The live **F10.9d** question asks how to stage that mode change without a mechanical-meta dump.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

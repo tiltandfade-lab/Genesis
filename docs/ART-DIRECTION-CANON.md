@@ -867,3 +867,14 @@ spatial truth, detach the companion, change custody, or affect battle placement 
 promotes that behavior. Truly independent noncombat companion activity remains a later feature goal. Exact allied
 combat behavior and the player's breadth of initial formation control remain open questions rather than hidden
 assumptions in this visual ruling.
+
+### Automatic formation deployment first; bounded party placement as the goal (Adam, 2026-07-21)
+
+> "Let's say C for pre-alpha, and B as the goal"
+
+For pre-alpha, the deterministic formation resolver places the whole party, including the main PC, within the legal
+approach-bounded deployment zone. There is no initial placement interaction, no free teleport across the BattleMat,
+and no reroll on reload. The explicit feature goal adds player placement of the main PC followed by optional
+rearrangement of allies/sidekicks within the same formation-legal, viewpoint-safe candidate cells. After commitment,
+allies still act independently. The later player control is an additive edit/preview layer over the retained
+automatic placement receipt, not a different geometry or combat authority.

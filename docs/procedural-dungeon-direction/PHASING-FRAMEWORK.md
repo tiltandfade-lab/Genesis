@@ -102,6 +102,12 @@ defining behavior in the MVP and narrow its content, animation, automation, devi
    identity; a supposedly critical ideal may prove safely scaffoldable. Record that evidence and amend the cut.
 12. **Discovery is not build authorization.** Wave 12 still owns the dependency graph, exact vertical slices,
     budgets, acceptance gates, and final authorization.
+13. **Design waves do not become implementation waves.** Accepted behavior maps into small retained vertical
+    [Clay Passes](CLAY-PROOF-LADDER.md). Several passes may be scheduled together, but each owns one primary risk,
+    independent evidence, and a coherent landing/rollback point.
+14. **Feature goals stay traceable.** Every ruling updates the
+    [feature-promotion ledger](FEATURE-PROMOTION-LEDGER.md); no ideal destination may survive only as prose inside a
+    large historical wave.
 
 ## Required record for future answers
 
@@ -114,6 +120,8 @@ After Adam chooses an option, the running record must add:
 - **Seam retained now:** identities, data, authority, adapter, policy, and save commitments that cannot be deferred.
 - **Promotion trigger:** named evidence or dependency, not “when there is time.”
 - **Known debt:** what the scaffold cannot yet do and how the game stays truthful without it.
+- **First Clay Pass and MVP gate:** the earliest retained proof and the integrated playable gate that prevent the
+  decision from becoming an ownerless future feature.
 
 If the phase cannot be chosen responsibly during the question, the ruling remains provisional and its closure audit
 must name the unresolved phasing question.

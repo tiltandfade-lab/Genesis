@@ -921,3 +921,38 @@ minimum floor.
 The revised [global phasing framework](../PHASING-FRAMEWORK.md), [Wave 1 audit](../wave-01/PHASING-AUDIT.md),
 [Wave 2 audit](../wave-02/PHASING-AUDIT.md), and [Wave 10 audit](PHASING-AUDIT.md) record the cut. F10.8g remains
 suspended until Adam finishes reviewing the revised audits; P10.8 remains open and no build is authorized.
+
+### 11.67 Small retained Clay Passes replace wave-sized implementation batches
+
+Adam reframed the delivery concern:
+
+> "ok, one more reframe. I think since we are basically thinking of things as MVP -> ideal feature we probably need to think about the implementation process as we go along. correct me if I am wrong and if this will be easier after all the decisions have been made, but I just want to make sure this implementation plan is organized and features don't get left behind in big design waves. I think I would rather do smaller wave passes, or organize several smaller wave passes in fable, rather than doing these big 8 wave total engine redesigns. In fable we discussed using the clay rooms as proof, and you and I discussed using 12 different clay rooms as proof, however I do think we need to start with a single relatively small clay room as proof, then stage up to multi-room to stage the simulation effects, and continue to stage up to the more complex relational simulations"
+
+The correction is accepted. Coarse implementation structure and feature traceability must develop alongside design;
+waiting until every semantic answer exists would make the exact dependency order easier, but would create too much
+risk that MVP obligations and ideal goals disappear into large historical waves. Exact schemas, estimates, file
+seams, budgets, and final ordering can remain provisional until their owners close and Wave 12 authorizes a build.
+
+Design waves now decide semantics; they do **not** become equivalently large implementation waves. Small retained
+**Clay Passes** prove vertical behavior through the necessary canon, compiler, mechanics, renderer/EngagementLens,
+Gemini, persistence, and QA seams. Fable may organize several ready passes in one work period, but each pass keeps one
+primary risk, its own gate, evidence, coherent landing, and rollback point.
+
+The staged direction is:
+
+1. one deterministic small room, divided into room-truth, movement/route, object/hazard/custody,
+   BattleMat-plus-EngagementLens battle-spine, combat-breadth, interruption/recovery, and DM-language passes;
+2. the smallest two/three-room fixture for connection continuity, one cross-room promise/payoff, and causal mutation;
+3. a small operating site for functional roster, repetition, one live flow, active/cold return, and procedural contrast;
+4. a relational site for multiple groups, rooted NPCs, claims/custody, SceneFact promotion, and one bounded crisis fork;
+5. incremental growth toward the accepted twelve golden sites and eight adversarial traces.
+
+The existing record says **twelve named golden sites**, not that twelve rooms must be implemented simultaneously.
+That accepted portfolio remains the eventual representative corpus. The single room and every later fixture stay
+retained as faster regression specimens rather than being thrown away when the next stage starts.
+
+The [Clay Proof Ladder](../CLAY-PROOF-LADDER.md) defines the passes. The
+[Feature-Promotion Ledger](../FEATURE-PROMOTION-LEDGER.md) maps every opened-wave decision family to a first proof,
+playable MVP gate, ideal goal, and promotion trigger; an anonymous `later` is no longer sufficient. F10.8g remains
+suspended pending review of the combined reframe. P10.8 is open, P10.9 remains mandatory next, and no build is
+authorized.

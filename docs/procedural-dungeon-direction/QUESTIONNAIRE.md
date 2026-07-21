@@ -935,3 +935,9 @@ the recognizable playable pre-alpha/MVP, then name the retained upgrade seam, fe
 or state why the feature goal is pre-alpha-critical. A borderline behavior stays in the MVP with narrow breadth.
 An unresolved phase cut keeps the relevant closure audit provisional; it never deletes or replaces an original,
 additive, or generated follow-up.
+
+Design-wave size does not determine implementation-unit size. Each accepted ruling must also map into the
+[feature-promotion ledger](FEATURE-PROMOTION-LEDGER.md) and the retained small-pass
+[Clay Proof Ladder](CLAY-PROOF-LADDER.md): first proof, playable MVP gate, ideal feature goal, and promotion evidence.
+Future wave audits report unmapped or ownerless goals explicitly. This traceability is additive to the preserved
+question/closure protocol and does not authorize implementation before Wave 12's final gate.

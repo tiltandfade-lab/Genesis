@@ -792,3 +792,19 @@ requires legible event performances and coherent tabletop citizenship, not termi
 board. Exact phasing corrections live in
 `procedural-dungeon-direction/wave-10/05-consequence-presentation.md` section 11.66 and the revised
 `procedural-dungeon-direction/wave-10/PHASING-AUDIT.md`.
+
+## One small retained clay room before multi-room and relational visual proof (Adam's ruling, 2026-07-21 — additive)
+
+> "ok, one more reframe. I think since we are basically thinking of things as MVP -> ideal feature we probably need to think about the implementation process as we go along. correct me if I am wrong and if this will be easier after all the decisions have been made, but I just want to make sure this implementation plan is organized and features don't get left behind in big design waves. I think I would rather do smaller wave passes, or organize several smaller wave passes in fable, rather than doing these big 8 wave total engine redesigns. In fable we discussed using the clay rooms as proof, and you and I discussed using 12 different clay rooms as proof, however I do think we need to start with a single relatively small clay room as proof, then stage up to multi-room to stage the simulation effects, and continue to stage up to the more complex relational simulations"
+
+Visual and implementation proof begins with one deterministic, relatively small retained clay room rather than a
+simultaneous multi-room or twelve-site engine batch. Separate passes first prove room truth/projection,
+movement/route, object/hazard/custody, the mandatory BattleMat-plus-EngagementLens battle spine, combat breadth,
+interruption/recovery, and DM consequence language. The retained corpus then stages upward to multi-room causality,
+a small operating site, relational simulation, and incremental golden sites. A Fable work period may organize
+several ready small passes, but each keeps one primary acceptance question, its own visual/executable evidence,
+coherent landing, and rollback point. Passed fixtures remain regression and capture specimens. The accepted twelve
+golden sites remain the eventual representative portfolio, not the first implementation batch. Exact cross-wave
+process and traceability live in
+`procedural-dungeon-direction/CLAY-PROOF-LADDER.md` and
+`procedural-dungeon-direction/FEATURE-PROMOTION-LEDGER.md`.

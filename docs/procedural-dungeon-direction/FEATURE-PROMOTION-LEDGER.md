@@ -1,0 +1,71 @@
+---
+type: design-study
+status: REVIEW
+created: 2026-07-21
+updated: 2026-07-21
+scope: opened-wave feature traceability
+---
+
+# Procedural Dungeon Feature-Promotion Ledger
+
+This ledger prevents accepted behavior from disappearing between large design waves and small implementation
+passes. It maps decision families, not every historical subquestion; the chronological wave records remain the
+semantic authority. Pass ids resolve through the [Clay Proof Ladder](CLAY-PROOF-LADDER.md).
+
+All implementation states below are **UNAUDITED**. A mapping is not a claim that current code lacks or already
+satisfies the feature, and it is not build authorization.
+
+## Ledger laws
+
+1. Every accepted or provisionally accepted decision family gets an MVP obligation or an explicit evidence-gated
+   non-applicability disposition, an ideal feature goal, a first proof pass, an MVP gate, and a promotion trigger.
+2. `Later`, `polish`, or `Wave 12` alone is not an owner. The destination and trigger must remain named.
+3. Future design-wave closure audits must check ledger coverage in addition to original/additive/generated question
+   coverage. This is traceability, not a replacement for Adam's explicit semantic closure.
+4. Passing a proof changes a row to `PROVED`, not `MVP`. The row becomes `MVP` only when its playable obligation
+   passes in the integrated slice. Mature promotion is recorded separately.
+5. A failed pass reopens the row's named seam or scope. It does not erase the accepted destination.
+6. New Waves 3-9/11-12 decisions append or refine rows; they do not become giant same-numbered implementation waves.
+
+## Initial opened-wave mapping
+
+| Decision family | Playable MVP obligation | First proof | MVP gate | Ideal feature goal / later owner | Promotion evidence | State |
+|---|---|---|---|---|---|---|
+| Site identity, provenance, canon commitment | Stable purpose/builder/current-use/provenance ids; committed facts do not reroll | C1A | C3A/C3C | Richer history/institution breadth; Waves 3-5 | Contrasting sites preserve identity without special cases | MAPPED; implementation unaudited |
+| Truth, knowledge, and claims | Canon truth, viewpoint knowledge, and unverified belief remain distinct | C1A/C1G | C2B/C4B | Graded knowledge/remount/claim projection; Waves 9-10 | Secret/callback corpus shows no leaks or false certainty | MAPPED; implementation unaudited |
+| Functional roster and site scale | Small site contains the capabilities/rooms its purpose requires | C3A | C3C | Multi-family scale/domain accommodation; Waves 3/6 | Additional families/scales cannot fit the small roster grammar | MAPPED; implementation unaudited |
+| History and current occupation | One or two transformations visibly alter present rooms/use | C2C | C3A/C3C | Deep time-indexed cascades and layered occupation | Longer callbacks require more than shallow ordered history | MAPPED; implementation unaudited |
+| Repetition and Spice | One repeated family varies locally; one scoped Spice root remains coherent | C3A | C3C | Hierarchical assemblies and multi-scope Spice; Waves 3-5 | Larger/denser sites clone or lose motif control | MAPPED; implementation unaudited |
+| Discovery and DM obligations | At least one stable cross-room promise/payoff and small obligation queue | C2B | C4C | Discovery networks, strategic hands, full attention ladder; Waves 9-10 | Longer play loses or over-repeats promises | MAPPED; implementation unaudited |
+| Party/social/inventory minimum | Normal party participation, one persistent dungeon relationship, exact consequential item custody | C1C/C1D | C4A/C4B | Split-party, richer social places, broad inventory ecology; Waves 5-6/9 | MVP cases cannot represent intended party/social/economic choice | MAPPED; implementation unaudited |
+| Canonical active/site/cold ownership | One owner and idempotent handoff for actors/items/groups/stocks/clocks/facts | C1F | C3B | Broader compaction and migration; Wave 12 | Long absences or new families exceed bounded owner forms | MAPPED; implementation unaudited |
+| Site operation, resources, and external contract | One visible stock/obligation flow, bounded clock, external contract, intervention, and return consequence | C3A | C3B | Multi-family ecology/regional reconciliation; Waves 8/12 | More sites need dependencies the bounded contracts cannot express | MAPPED; implementation unaudited |
+| NPC pooling and rooting | Several role candidates remain provisional; one legally roots and persists | C4A | C4A/C4C | Rich reusable casting precedents and social graph; Wave 11 | Repeated encounters lack variety or continuity | MAPPED; implementation unaudited |
+| Multiple groups and changing relations | At least two groups plus one legal relation/control change | C4A | C4C | Dynamic contested operation and politics | Three-way/longitudinal conflict exceeds small relation set | MAPPED; implementation unaudited |
+| SceneFact promotion and private deliberation | Every candidate family used by MVP has validated promotion; private candidates cannot mutate canon | C4B | C4C | Certified precedents and richer DM deliberation; Wave 11 | Repeated valid inventions require one-off handling | MAPPED; implementation unaudited |
+| CrisisChain | One bounded fork/convergence over existing owners and ordinary actions | C4C | C4C | Branching multi-actor orchestration | Parallel/nested crises exceed the small graph | MAPPED; implementation unaudited |
+| Critical magnitude | Full accepted ladder, including Mythic/Worldbreaker, for representative MVP verbs | C1E | C1E/C4C | Outcome-profile breadth across every domain | New verbs lack certified extreme consequences | MAPPED; implementation unaudited |
+| Shared shell and renderer boundary | Left rail, BattleMat/SceneTray, clean right DM rail; projection never owns mechanics | C1A | C1G | Responsive/device-rich shell; P10.10 | Target devices or mode continuity expose layout/ownership gaps | MAPPED; implementation unaudited |
+| BattleMat spatial truth and event performance | Exact cells/routes/targets/topology/state plus legible core physical transitions | C1A/C1B | C1D/C2C | Broad event families and presentation choreography | Generic fallbacks obscure material outcomes | MAPPED; implementation unaudited |
+| EngagementLens battle system | Lens stages every material combat beat; one family bespoke, other MVP verbs generically truthful | C1D | C1E | Broad bespoke families, active-follow/faction direction | Generic staging is correct but insufficiently expressive | MAPPED; implementation unaudited |
+| Object interaction, route agency, custody | Validated clicked actions, material route choice, visible object/custody change | C1B/C1C | C2C/C4B | Smart placement, richer route comparison, claims/title projection | Playtests show obstruction, ambiguity, or insufficient choice | MAPPED; implementation unaudited |
+| Initiative and causal cue order | Exact activation/reaction order; dependency-bearing cues may present serially | C1D | C1E/C1F | Faction ribbon polish, sibling overlap, compression | Serial presentation or plain order becomes hard to read | MAPPED; implementation unaudited |
+| Consequence input and recovery | Preserve drafts/reading/inspection; gate commits; terminal rebuild and recap never replay mechanics | C1F | C2C | Pending intent and semantic owed-obligation recovery | Players lose planning flow or miss consequences | MAPPED; implementation unaudited |
+| Gemini consequence language | Fact-locked prose plus several context-slotted fictional fallbacks for core families | C1C/C1G | C2B/C4C | Broad variation/tone/localization and compacted recovery | New verbs or longer failures become dry/repetitive | MAPPED; implementation unaudited |
+| Camera/focus policy | Minimal bounded auto-fit, skip/recenter, preserved safe state; Option A starts | C1D/C1F | C2C | Player-owned Option B focus leases and governed ladder | A/B tests show interruption or missed events | MAPPED; implementation unaudited |
+| Attention and accumulated history | Exact event/knowledge truth, DM prose, current board/card truth, invoked inspection | C1F/C1G | C2B/C3B | Ambient -> historical ladder and progressive history cards | Repeated comprehension failure survives existing surfaces | MAPPED; implementation unaudited |
+| Visual floor, props, and materials | Coherent tabletop silhouette/value/elevation/light/prop/sprite citizenship; retain working features | C1A | C1E/C3C | Rich material routing, normals, realm skins, broad props | Captures meet readability floor and material sameness is limiting | MAPPED; implementation unaudited |
+| Mode continuity | Reserved: P10.9 must define the playable map/town/exploration/combat handoff | C2A reserve | P10.9 owner | Mature cross-mode continuity | Pending P10.9 answers and corpus | UNMAPPED pending mandatory P10.9 |
+| Performance/device/accessibility | Reserved for P10.10; no cut inferred here | Later owner | P10.10 owner | Accepted device/performance/accessibility destination | Pending P10.10 answers and budgets | UNMAPPED pending mandatory P10.10 |
+| Twelve-site/eight-trace portfolio | Grow retained fixtures incrementally after C1-C4; do not batch all sites first | C1A onward | C5 | Wave 11 corpus automation and Wave 12 release gates | Missing coverage dimension justifies each added site | MAPPED; implementation unaudited |
+
+## Required update rhythm
+
+- **After a design ruling:** update its MVP/ideal/trigger mapping before advancing past the generated follow-up.
+- **At a design-wave audit:** report unmapped rows and ownerless feature goals explicitly.
+- **Before specifying a Clay Pass:** replace family-level language with exact inputs, outputs, files, dependencies,
+  fallbacks, and gates after auditing current code.
+- **After a pass lands:** attach evidence and status; retain the fixture.
+- **At MVP consolidation:** prove every critical/borderline row in an integrated playable trace, not only isolated
+  fixtures.
+- **At feature promotion:** record why the trigger fired and which retained MVP seam was extended.

@@ -19,6 +19,11 @@ The phase audit now distinguishes a narrower physical-event proof from the playa
 in the MVP with narrow breadth. The EngagementLens is mandatory because it is the pre-alpha battle system: BattleMat
 owns exact tactical truth, and the receipt-derived lens performs the active combatants and material combat beat.
 
+The cross-wave implementation reframe is recorded in the [Clay Proof Ladder](../CLAY-PROOF-LADDER.md) and
+[Feature-Promotion Ledger](../FEATURE-PROMOTION-LEDGER.md). It begins with separately gated passes over one retained
+small clay room, then stages multi-room causality, site/cold simulation, relational simulation, and the accepted
+twelve-site portfolio. This organization does not answer F10.8g or authorize a build.
+
 Do not skip P10.8 or P10.9. Performance/device/accessibility remains P10.10. Do not close Wave 10
 until every original, additive, and generated follow-up is exhausted and Adam explicitly agrees.
 

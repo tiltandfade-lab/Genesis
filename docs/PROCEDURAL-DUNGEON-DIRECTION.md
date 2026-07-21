@@ -25,8 +25,12 @@ verbatim; it did not consolidate or rewrite prior rulings.
    original wave structure, additive `G` reference questions, preservation contract, and closure law.
 3. [Prototype/MVP phasing framework](procedural-dungeon-direction/PHASING-FRAMEWORK.md) — mandatory
    critical-versus-scaffold classification for all future rulings and the current cross-wave audit.
-4. The relevant wave index below.
-5. For live work, only the current part named by that wave index.
+4. [Clay Proof Ladder](procedural-dungeon-direction/CLAY-PROOF-LADDER.md) — small retained vertical
+   passes from one room through multi-room, site simulation, relational simulation, and the golden portfolio.
+5. [Feature-Promotion Ledger](procedural-dungeon-direction/FEATURE-PROMOTION-LEDGER.md) — traceability
+   from accepted MVP obligations to first proof, integrated gate, ideal goal, and promotion evidence.
+6. The relevant wave index below.
+7. For live work, only the current part named by that wave index.
 
 The global [implementation hold](procedural-dungeon-direction/IMPLEMENTATION-HOLD.md) remains active.
 No build is authorized by this discovery record.
@@ -50,10 +54,15 @@ No build is authorized by this discovery record.
 
 ### Current live position
 
-- The live task is the cross-wave [prototype/MVP phasing audit](procedural-dungeon-direction/PHASING-FRAMEWORK.md),
-  with revised cuts for [Wave 1](procedural-dungeon-direction/wave-01/PHASING-AUDIT.md),
+- The live task is the cross-wave prototype/MVP delivery reframe: the
+  [Clay Proof Ladder](procedural-dungeon-direction/CLAY-PROOF-LADDER.md) and
+  [Feature-Promotion Ledger](procedural-dungeon-direction/FEATURE-PROMOTION-LEDGER.md) organize revised cuts for
+  [Wave 1](procedural-dungeon-direction/wave-01/PHASING-AUDIT.md),
   [Wave 2](procedural-dungeon-direction/wave-02/PHASING-AUDIT.md), and
   [Wave 10](procedural-dungeon-direction/wave-10/PHASING-AUDIT.md) awaiting Adam's review.
+- Design waves no longer imply same-sized implementation waves. One retained small clay room is proved first;
+  multi-room causality, site/cold simulation, relational simulation, and the twelve-site portfolio stage upward in
+  separately gated Clay Passes.
 - A narrower engineering proof no longer defines the playable MVP. Borderline behavior remains in the MVP with
   narrowed breadth, and the EngagementLens is mandatory because it is the pre-alpha battle system.
 - Wave 10 remains **OPEN**. **F10.8g is suspended rather than answered** because its prior proof corpus bundled

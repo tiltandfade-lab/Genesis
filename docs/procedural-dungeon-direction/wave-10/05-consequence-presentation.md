@@ -736,3 +736,128 @@ Does Adam accept Option B, prefer cinematic automatic direction under Option A, 
 Option C, or want to amend one focus lease? If accepted, perform the final P10.8 closure audit and proof-corpus pass
 before advancing to mandatory P10.9. F10.8e remains parked behind BattleMat proof and may reopen only from evidence.
 Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.64 F10.8f ruling and F10.8g closure audit - begin with automatic direction; preserve B as the later target
+
+**Adam's ruling (2026-07-21):** start with Option A and aim for Option B later.
+
+The pre-alpha proof target therefore auto-grants governed **material focus requests**. When a committed causal group
+needs to be seen, presentation may move/refit the camera, follow the accepted active-citizen EngagementLens behavior,
+foreground the shared sound cue, and follow current Gemini narration through the causal beat. This is the current
+behavior to build/test conceptually—not a claim that focus theft is the desirable final interaction.
+
+Option B remains the explicit later target: player-owned selection, inspection, composer, manual camera, and DM-
+history focus with bounded idle-only event framing. The upgrade must be a policy change over the same receipt/cue
+graph and focus-request stream, not a renderer rewrite.
+
+The starting Option A is constrained so it can mature rather than become disposable:
+
+1. **Focus unit is a material causal group:** the scheduler requests one framing for the fireball and its legal
+   sibling results, not six goblin close-ups. Cosmetic tails, repeated flinches, prose emphasis, and sound reverb do
+   not independently request camera/lens focus.
+2. **Causal order remains canonical:** automatic direction follows hard dependency edges and may group only legal
+   siblings. Camera choreography never decides which event occurred, who mattered, or what the terminal state is.
+3. **Player data is non-destructive even when focus is taken:** automatic direction may temporarily suspend/defocus
+   inspection, target planning, camera control, or consequential submission, but it cannot erase/edit/submit the
+   composer draft, spend/cancel a pending intent, mutate selection authority, or lose card/history scroll state.
+   Resolution completion restores the prior safe interaction state where still valid; canonical invalidation is
+   explained truthfully.
+4. **Skip/catch-up remains available:** the player may replace the camera sequence with the accepted static/terminal
+   rebuild and fiction-first consequence account. Skip changes presentation, never mechanics or causal history.
+5. **No hidden-source direction:** a camera move, lens population, sound, DM-scroll behavior, or focus duration may
+   not expose an unknown actor, mechanism, witness, owner, or future event. Direction frames only viewpoint-legal
+   evidence/results.
+6. **One presentation owner per channel:** board/lens/audio/caption/Gemini share receipt presentation ids; automatic
+   direction does not duplicate impact sound, damage expression, or narration merely because several adapters exist.
+7. **Policy seam is mandatory:** cue families emit typed focus requests with causal group, known source/result set,
+   required/optional framing, current safe fit, and terminal restore target. The starting policy grants material
+   requests automatically. The later Option B policy adds interaction leases, idle tests, deferral, and recenter
+   ownership without changing cue semantics.
+8. **A-versus-B playtest is retained:** record camera-tour burden, lost reading/typing context, skip behavior, event
+   comprehension, offscreen-state discovery, restored focus correctness, motion discomfort, and whether the player
+   fights the director. Evidence can promote B sooner; A is not protected as final merely because it ships first.
+
+Concrete starting behavior:
+
+- Threshold crossing/reaction/fall/gate collapse already shares one route view, so A performs the causal group in
+  place rather than manufacturing a pan.
+- An offscreen lift crash material to the next move receives one auto-fit containing the lift, relevant exits, and
+  terminal attachments/topology. It does not tour each passenger and dropped object.
+- A fireball affecting six visible goblins uses one area fit and one shared consequence window; exceptional death,
+  concentration, or dropped-custody results remain legible without six focus changes.
+- If the player was reading the gate card, A may suspend that inspection to show a remote reliquary/gas escalation,
+  but it preserves the card identity/scroll and returns afterward if the object remains eligible. The later B target
+  will keep the inspection in control and defer/request the event frame instead.
+- If Gemini is late during the auto-directed beat, the accepted fiction-first clause carries the same known causal
+  anchors. Camera completion never waits indefinitely for prose.
+
+**Implementation/maintenance cost:** starting A still requires **medium-high presentation-director work**—material
+focus requests, causal grouping, safe fits, state suspension/restoration, hidden-source filtering, shared channel
+ids, and skip/rebuild parity. It avoids B's first-pass interaction-lease/deferred-focus arbitration, but it is not a
+cheap sequence of arbitrary camera cuts. Preserving the policy seam adds modest cost now and prevents high rewrite
+cost later. The later B target adds interaction leases, idle detection, deferred recenter/follow, and DM-scroll/
+composer/card ownership tests.
+
+#### F10.8g - final P10.8/G10.2/generated-follow-up closure audit
+
+With F10.8f ruled, every **principle-level** P10.8 branch now has an answer or an explicit evidence-triggered
+non-applicability disposition:
+
+1. **Verb coverage and physical truth:** placement/reveal, movement, attack, reaction, damage, condition,
+   transformation, door/portal use, topology change, destruction, pickup/transfer, and scene transition consume
+   canonical receipts through typed board/lens/audio/caption/Gemini families. Missing bespoke animation falls back
+   truthfully; it never suppresses mechanics.
+2. **Order and concurrency:** dependency-bearing transactional cue graphs serialize hard causes, overlap legal
+   siblings, and compress typed repetition without losing identities, sources, material results, or terminal truth.
+3. **Input timing:** safe controls/drafting may remain; consequential commitment waits for a truth-complete decision
+   boundary; one pending intent is conservative, visibly uncommitted, and revalidated.
+4. **Interruption/recovery:** pause, skip, background, save/load, crash recovery, and scene switch persist canonical
+   truth plus owed semantic obligations, rebuild terminal/static presentation, and never replay mechanics.
+5. **Player-language narration:** Gemini normally rewrites exact anchors; deterministic fiction-first clauses handle
+   latency/failure. Sensory event leads, viewpoint-known actionable meaning may follow, secrets/uncertainty remain,
+   and raw engine vocabulary never enters ordinary player presentation.
+6. **Attention/focus:** pre-alpha begins with automatic material-causal direction under the constraints above; later
+   B is the named player-owned target over the same focus-request policy seam and mandatory comparative playtest.
+7. **Acknowledgment/brief branch:** ritual clicks are rejected. F10.8e's automatic `What changed` brief lifecycle is
+   **retired from the current target**, not silently unanswered: BattleMat event rendering plus clean Gemini prose
+   must first fail a comprehension playtest in a way existing physical state, feedback, DM prose, status/action
+   surfaces, or clicked inspection cannot repair. Only that evidence reopens a narrowly scoped information-layer
+   question.
+8. **G10.2 relationship:** interaction, promotion, secret tells, attention, and accumulated history remain closed
+   provisionally at P10.7/11.56 behind their review corpus. P10.8 does not replace those laws with consequence UI.
+
+The mandatory P10.8 proof corpus is:
+
+1. **Threshold chain:** exact movement, known reaction, damage/prone, one-use ward discharge, gate destruction,
+   topology blockage, auto-direction, actionable Gemini/fallback prose, and pending-intent invalidation.
+2. **Crowded area consequence:** six or more targets with simultaneous damage, at least one death/down, condition or
+   concentration change, dropped object/custody, typed cue compression, one causal framing, and no duplicate sound.
+3. **Moving platform catastrophe:** lift/vehicle motion, attached cast/objects, interruption, crash, damage, detach/
+   drop, elevation/topology/hazard change, one bounded material fit, and exact terminal rebuild.
+4. **Object interaction sequence:** click card, open/lockpick/fail/break/pickup/transfer, truthful physical state,
+   sound/caption family, card eligibility/update, Gemini prose, and no card-only mechanics.
+5. **Offscreen causal escalation:** death/reaction opens a mechanism, releases a hazard, moves citizens/objects, and
+   changes the next choice; A shows bounded causal direction while preserving/restoring non-destructive draft/card
+   state; later B comparison uses the same receipts.
+6. **Secret/viewpoint case:** visible result with hidden source plus a private/party-known consequence; camera,
+   sound, lens, fallback, labels, and prose leak no unknown noun, slot, count, or causal parent.
+7. **Interruption matrix:** pause, skip, tab background, missed frames, save/load, refresh/crash recovery, lens
+   collapse, and scene transition at several hard causal edges all land on identical state/history without duplicate
+   triggers, damage, custody, or narration.
+8. **Gemini failure matrix:** timely expressive prose, slow stream, invalid/missing anchor, interruption, unavailable
+   service, and context-compacted recovery all preserve causal facts, viewpoint, actionable clarity, forward-only
+   narration, and acceptable non-dry fallback language.
+9. **Focus restoration:** auto-direction begins while inspecting, targeting, panning, typing, or reading DM history;
+   A may suspend focus but preserves every safe state and restores/revalidates it. Record evidence for the B upgrade.
+10. **Scene continuity handoff:** dungeon action into aftermath/inspection and a legal scene transition preserves ids,
+    cast/object state, history, active hazards, camera orientation where lawful, and the same receipt account. This
+    tests the P10.8 transition seam without substituting for mandatory P10.9 mode-continuity discussion.
+
+A future failed corpus case reopens its named branch; it does not erase the rest of P10.8. Exact duration,
+throughput, device tier, accessibility preference, and performance budgets remain P10.10/P10.12 owners except for
+the presentation-semantic invariants already required here.
+
+**Closure question:** does Adam agree to close P10.8 provisionally at the design-questionnaire level behind this
+proof corpus, with automatic Option A focus as the starting target, player-owned Option B as the explicit later aim,
+and F10.8e retired unless BattleMat-plus-Gemini comprehension evidence reopens it? If yes, advance to preserved
+mandatory **P10.9 - map/town/exploration/combat continuity**. Wave 10 itself remains **OPEN**; no build is authorized.

@@ -8,10 +8,11 @@ current_write_target: 05-consequence-presentation.md
 
 # Wave 10 — Interim Visual Engine and Release Scope
 
-Wave 10 is **OPEN**. It was promoted ahead of Waves 3-9. The current live position is **F10.8f**:
-choose how camera, focus, sound, EngagementLens, and Gemini attention arbitrate committed consequences without
-stealing the player's active inspection/composer state.
-F10.8e is **PARKED AND UNANSWERED** after the automatic consequence-brief target was superseded.
+Wave 10 is **OPEN**. It was promoted ahead of Waves 3-9. The current live position is **F10.8g**:
+Adam must explicitly approve or reject provisional P10.8 closure behind the named proof corpus. The starting focus
+policy is automatic Option A; player-owned Option B is the explicit later target over the same policy seam.
+F10.8e remains **PARKED pending Adam's closure answer**; the F10.8g audit proposes retiring it from the current
+target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow information-layer question.
 
 Do not skip P10.8 or P10.9. Performance/device/accessibility remains P10.10. Do not close Wave 10
 until every original, additive, and generated follow-up is exhausted and Adam explicitly agrees.

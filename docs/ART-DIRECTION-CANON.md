@@ -746,3 +746,19 @@ not expose engine vocabulary or duplicate exact jobs already owned by establishe
 custody, selection, action, or click-invoked inspection surfaces. Exact epistemic rules, examples, costs, audit, and
 the open attention-arbitration question live in
 `procedural-dungeon-direction/wave-10/05-consequence-presentation.md` section 11.63.
+
+## Automatic material-event direction first; player-owned focus remains the later target (Adam's ruling, 2026-07-21 — additive)
+
+> "let's start with A and aim for B later"
+
+The pre-alpha consequence target automatically grants governed focus requests for material causal groups: board/
+camera framing, accepted active-citizen EngagementLens behavior, shared sound emphasis, and current Gemini narration
+may direct attention through the committed beat. One fireball or lift crash earns one readable causal fit, not a
+camera tour of every legal sibling; cosmetic/repeated cues do not independently seize focus. Automatic direction
+may suspend interaction but cannot erase, edit, submit, spend, or lose player drafts, pending intent, inspection,
+selection authority, or scroll state, and it restores/revalidates safe state afterward. Focus requests remain a
+typed policy seam so the later target can add player-owned interaction leases, idle-only bounded framing, deferral,
+and recenter ownership without rewriting receipt/cue semantics. A-versus-B comparison remains a mandatory playtest,
+and starting with A does not protect it as the final behavior. Exact constraints, costs, examples, proof corpus, and
+the pending P10.8 closure question live in
+`procedural-dungeon-direction/wave-10/05-consequence-presentation.md` section 11.64.

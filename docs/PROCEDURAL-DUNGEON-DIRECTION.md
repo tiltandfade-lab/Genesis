@@ -48,12 +48,12 @@ No build is authorized by this discovery record.
 
 ### Current live position
 
-- Wave 10 remains **OPEN** at **F10.8f** in
+- Wave 10 remains **OPEN** at **F10.8g** in
   [consequence presentation](procedural-dungeon-direction/wave-10/05-consequence-presentation.md).
-- The open choice is how camera, focus, sound, EngagementLens, and Gemini attention arbitrate a committed
-  consequence without stealing the player's active inspection/composer state.
-- F10.8e is **PARKED AND UNANSWERED** because automatic consequence briefs/callouts are not the
-  current visual target.
+- The open choice is explicit provisional P10.8 closure behind its named proof corpus, beginning with
+  automatic Option A focus and preserving player-owned Option B as the later target.
+- F10.8e's automatic consequence-brief lifecycle is proposed for retirement from the current target unless
+  BattleMat-plus-Gemini comprehension evidence reopens it; Adam has not yet approved that P10.8 closure audit.
 - P10.9 remains mandatory after P10.8; performance/device/accessibility remains P10.10.
 - Wave 10 cannot close until every original, additive, and generated follow-up is exhausted and Adam
   explicitly agrees.

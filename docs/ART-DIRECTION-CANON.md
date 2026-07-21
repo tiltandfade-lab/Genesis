@@ -541,3 +541,14 @@ accents vary when semantically licensed; Card G's exact dungeon density is not a
 reference family remains mode-specific: the amended Cards G/H/L currently cover dungeon, selected action, and
 large-field presentation, while integrated-shell town/social and wilderness/exploration references are still
 required before Wave 10 closes.
+
+## Governed overview/exploration/action camera ladder (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+This accepts Option B in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.39. The nearly top-down SceneTray camera uses
+governed overview, room/exploration, and action/combat fits derived only from player-known canonical focus sets.
+Bounded player pan, zoom, and rotation may override the starting fit, with immediate input and a one-step recenter;
+programmatic refits may glide briefly and interruptibly. UI surfaces publish one safe rectangle and refit the same
+scene without cropping required action evidence or forgetting the prior legal player-adjusted view. Full-board
+overview is available, but it is not forced as the default scale for every action on a large field.

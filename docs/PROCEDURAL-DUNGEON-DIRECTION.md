@@ -18883,3 +18883,88 @@ the actual choice without creating three renderers or asking the player to repai
 Does Adam accept Option B, prefer the fixed full-board Option A, or want free-camera Option C? If B is accepted,
 follow immediately into F10.6h's orthographic-versus-gentle-perspective choice and final minimum-scale treatment,
 then proceed to P10.7 performance/degradation. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.40 F10.6g ruling and F10.6h expansion - governed focus ladder accepted; choose one projection law
+
+**Adam's ruling (2026-07-20):** accept Option B. The SceneTray camera has governed overview,
+room/exploration, and action/combat fits, chosen from player-known canonical focus sets. Bounded player pan, zoom,
+and rotation override them; recenter returns to the current focus; player input is immediate while programmatic
+refits may glide briefly and interruptibly. UI changes publish one safe rectangle and refit without losing the
+prior legal player view. The existing 12% exploration and 18% combat Medium-standee targets remain provisional
+capture benchmarks. F10.6g closes.
+
+#### F10.6h - should the board be orthographic, gently perspective, or change projection by mode?
+
+All three candidates can use the accepted nearly top-down angle and governed focus ladder. The meaningful
+difference is whether distance changes apparent scale. Orthographic projection keeps near and far cells the same
+screen size; gentle perspective lets corridors, height, and foreground/background separation recede slightly.
+
+- **Option A - orthographic in every mode:** strongest board-game clarity, stable screen scale, easiest cell
+  comparison, and lowest billboard/occlusion variance. It can still show real 3D height, lighting, shadows, and
+  rotation, but long rooms and multilevel spaces may read flatter and less like the accepted XCOM/BG3/Octopath
+  aspiration.
+- **Option B - one gentle low-distortion perspective in every mode (recommended):** use the existing roughly
+  **20-degree field of view** as the starting lens, with a nearly top-down roughly 35-degree elevation and 45-degree
+  dimetric yaw. Overview, exploration, and action fits move camera distance/target while FOV stays stable. Exact
+  grid state remains authoritative; modest perspective adds depth without becoming a free cinematic camera.
+- **Option C - orthographic combat, gentle-perspective exploration/town:** gives each mode its locally strongest
+  projection, but combat start/end visibly changes the world's projection; safe rectangles, labels, marker cards,
+  shadows, sprite size, object picking, camera restoration, and every capture gate must work twice. It preserves two
+  camera personalities precisely when the redesign is trying to converge on one tray language.
+
+Under Option B, perspective is governed tightly:
+
+- FOV is a stable visual contract, not a dramatic zoom effect. Player and system zoom move the camera within
+  bounded fits; they do not pump the lens between wide-angle distortion and telephoto flattening.
+- The starting angle is the current 35-degree-elevation/45-degree-yaw family, but the same-state capture spike may
+  tune elevation within a narrow nearly top-down band if walls hide cells or the stage reads too flat. Four 90-degree
+  yaw steps remain available; arbitrary pitch/orbit does not.
+- Exact movement, reach, areas, cover, line of sight, elevation, and occupancy come from cells and receipts. A far
+  cell looking smaller never changes its cost or lets the renderer estimate legality by screen distance.
+- Depth of field, fog, bloom, or foreground occlusion may not blur/hide a currently selected actor, route,
+  destination, target area, known hazard, or interaction marker. Cosmetic depth yields to comprehension.
+- A projection change never occurs merely because combat starts. The same room, object ids, camera orientation,
+  and player-adjusted view persist; only the governed focus target/distance may change.
+
+#### Minimum-scale treatment - preserve world scale, enlarge the interface around it
+
+Genesis must not make a distant goblin physically Huge or make an ogre shrink to Medium just to normalize their
+screen height. World scale, footprint, and relative size remain canonical. When overview scale makes a citizen too
+small for individual art reading:
+
+1. retain the real sprite at true world scale and a truthful floor/footprint anchor;
+2. keep selected/active/faction treatment, speakable label, and picking target usable through governed screen-space
+   UI that does not pretend to be creature geometry;
+3. focus the camera or open the accepted EngagementLens/initiative portrait when the player requests individual
+   identity or action detail;
+4. collapse only nonconsequential crowds through the already accepted representative-count/area rule; named or
+   individually consequential citizens do not merge into one anonymous token;
+5. if true-scale art, labels, and cells cannot be separated without overlap, declare the overview an overview and
+   require a closer fit for individual targeting rather than lying with screen-space-scaled miniatures.
+
+The 12%/18% benchmarks remain useful for Medium figures, but final admission is a corpus test rather than one magic
+number. At all three accepted viewports, test Tiny, Small, Medium, Large, Huge, long/horizontal, flying, winged,
+many-limbed, and swarm silhouettes. Record screen-space opaque bounds, cell/footprint separation, label collision,
+selection hit target, edge stability, and whether identity/posture/key anatomy is readable at normal viewing
+distance. Do not let a close-up screenshot rescue a failed gameplay fit.
+
+The controlled projection proof uses the same canonical Gloom, Chrome, and Fantasy scenes, light/state/crop, UI
+safe rectangle, and focus set. Compare orthographic and 20-degree perspective before final tuning. Option B remains
+the recommendation only if gentle perspective materially improves depth/composition without breaking cell read,
+sprite citizenship, target selection, shadow truth, or the 2560×1440, 1920×1080, and 1194×834 capture gates. If it
+does not, orthographic Option A is the deterministic fallback; the taste-card look is not allowed to overrule real
+engine evidence.
+
+**Implementation/maintenance cost:** Option B is **low-medium incremental risk** because the engine already owns a
+20-degree perspective path, the 35/45 camera family, focus fitting, sprite tilt compensation, and containment tests.
+It still needs one converged projection path, screen-space UI aids, representative corpus captures, and occlusion/
+picking proof. Option A is lowest risk. Option C is medium-high recurring dual-path QA and continuity cost.
+
+**Codex recommendation: Option B with the controlled orthographic fallback.** It most directly pursues the accepted
+high-resolution physical-diorama target while keeping perspective subtle, stable, testable, and subordinate to the
+exact board.
+
+Does Adam accept Option B, prefer universal orthographic Option A, or want the mode-switching Option C? If B is
+accepted without another camera objection, F10.6's camera/beauty/material/prop branch closes provisionally behind
+its explicit future capture gates and the questionnaire proceeds to P10.7/F10.7 performance and graceful
+degradation. Wave 10 remains **OPEN**; no build is authorized.

@@ -473,6 +473,16 @@ reorder retroactively. Political faction alone does not earn a block—current c
 objectives do. Exact receipts, costs, and the open allegiance-transfer question live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.28.
 
+## Immediate allegiance transfer with conserved activation ruling (Adam, 2026-07-20 — additive)
+
+> "A"
+
+When an allegiance-changing receipt commits, the same portrait moves immediately to its destination combat block
+and all targeting/control/faction relations update, but its available/spent state follows it. Changing teams never
+duplicates a turn. The transfer cue preserves identity and player-known cause without leaking hidden motive or
+duration. Exact transaction boundaries, frozen-average behavior, costs, and the open narrative-override question
+live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.29.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

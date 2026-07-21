@@ -17980,3 +17980,92 @@ receipt follows the citizen so changing teams never creates time or a duplicate 
 
 Does Adam accept Option A? If so, settle exact narrative-opening override authority, then crowded-ribbon overflow
 and neutral/third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.29 F10.3p ruling and F10.3q expansion - allegiance moves now; activation time follows the citizen
+
+**Adam's ruling (2026-07-20):** accept Option A. A committed allegiance change immediately updates the canonical
+citizen's combat block, hostility, control, target legality, faction-sensitive auras, opportunity relations, and
+other side-dependent mechanics. The same citizen and portrait move to the destination block at the stable priority
+tier, carrying `actedRound` and current availability. Transfer never refreshes an activation.
+
+An already-spent actor remains spent. An unspent actor may act this round only if the destination block and tier
+remain ahead of the cursor; otherwise it waits. Commit a transfer at a mechanical receipt boundary, after completing
+or interrupting the causative action exactly as its rule says, never midway through unresolved state mutation.
+Temporary control ending transfers the same id back under the same law. Empty blocks retire without ghost slots;
+all affected block averages remain frozen so membership changes cannot oscillate initiative order.
+
+The ribbon/lens performs one purposeful non-color-only transfer cue with player-known cause, preserving identity,
+label, tie result, and spent state without revealing hidden controller, motive, or duration. F10.3p is closed.
+
+#### F10.3q - exactly when may “the narrative” override calculated opening order?
+
+The creative DM needs authority to honor real fictional setup, but “narrative says otherwise” cannot be an
+unreceipted license to discard initiative whenever a dramatic sentence sounds better. Several different situations
+must not be collapsed into one full-faction override.
+
+- **Option A - tiered typed opening authority (recommended):** use the least powerful rule that truthfully realizes
+  the established setup: readiness/surprise changes initiative priority; a legal already-committed trigger may
+  resolve one opening action/effect; only an explicit authored scenario/system rule may force a whole block first or
+  last. Every exception has provenance and player-legible cause.
+- **Option B - DM may declare any fictionally justified block first:** maximizes improvisational freedom but gives
+  the DM an invisible balance lever, makes initiative builds unreliable, permits contradictory rulings, and cannot
+  be reproduced or tested from world state.
+- **Option C - calculated priority can never be overridden:** maximally deterministic, but can force absurd results
+  when a bomb is already exploding, a readied arrow's trigger has committed, or a governed scenario explicitly
+  begins with an environmental beat.
+
+Option A has three ordered authority tiers:
+
+1. **Priority condition, not an override.** Established surprise, vigilance, preparation, item, feature, or scene
+   state applies the accepted `initiativeEdge` or a licensed flat modifier before averages freeze. Goblins hidden
+   behind a door against an unaware party usually impose Surprise/Disadvantage (`-3`) on the affected citizens; they
+   do not automatically receive a free hostile block.
+2. **One opening receipt before Round 1.** An action/effect already declared, validated, and causally triggered
+   before combat formally begins may resolve once, then deterministic block order begins unchanged. Examples: a PC's
+   valid “I loose the arrow if the cultist rings the bell” trigger fires when the bell is touched; a collapsing-floor
+   hazard already triggered resolves its fall; an assassin's released projectile resolves only if the ambush/setup
+   procedure actually licensed that release. This is not a whole block and cannot smuggle movement plus every ally's
+   actions into the opening.
+3. **Rare explicit block-order override.** Only a named, versioned scenario/system contract may state that a block
+   acts first/last or at a fixed phase—for example a boss-phase rule, scheduled lair/environment block, or validated
+   transition from a chase/breach procedure. The opening receipt names the rule and reason. Freeform narration alone
+   cannot create this tier.
+
+The precedence is:
+
+```text
+canonical pre-combat facts
+  -> apply priority edges/modifiers
+  -> resolve any licensed single opening receipt(s) in their governed order
+  -> apply rare explicit block-order contract if present
+  -> otherwise freeze exact average-priority order and tie results
+```
+
+Examples and boundaries:
+
+- “The goblins look ready” is narration, not authority. Their actual hidden/readied/surprise facts provide the rule.
+- A player shouting “I stab him before combat starts” does not evade initiative. It needs an already-established
+  legal trigger, deception/awareness resolution, or other validated setup; otherwise it enters ordinary order.
+- A cultist completing a ritual that triggers an explosion may commit the explosion as an opening hazard receipt;
+  the cultist faction does not thereby gain its whole block first.
+- An authored dragon phase that explicitly says `hostile block first` may override averages, with the ribbon and
+  accessible prose stating the known cause. If the cause is secret, show the observable honest consequence without
+  revealing its hidden explanation.
+- Conflicting opening authorities resolve by fixed authority/specificity and then an explicit tie procedure; the DM
+  may not choose whichever is most punishing after seeing the calculated order.
+
+This preserves DM invention: the DM may propose that an ambush, betrayal, unstable bridge, ritual threshold, or
+readied response matters. The resolver classifies that meaning into supported priority, opening-action, or rare
+block-order authority and validates it against canon. It is the same Wave 2 semantic-authorship/mechanical-
+compilation law applied to initiative.
+
+**Implementation/maintenance cost:** Option A is **medium**: a closed opening-authority vocabulary, source
+provenance, pre-round receipt phase, precedence/conflict rules, digest support, ribbon/prose explanation, secrecy
+projection, save/replay, and adversarial fixtures. Option B is cheap to prototype but high unbounded maintenance and
+fairness cost; Option C is low but breaks legitimate authored transitions.
+
+**Codex recommendation: Option A.** It gives the DM meaningful creative authority while ensuring inventions become
+real trackable mechanics instead of invisible fiat—the core vision Adam established in Wave 2.
+
+Does Adam accept Option A? If so, audit conflicting/secret opening causes only as needed, then settle crowded-ribbon
+overflow and neutral/third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is authorized.

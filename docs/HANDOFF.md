@@ -6,6 +6,23 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 allegiance initiative) — SIDES CHANGE IMMEDIATELY; A TURN NEVER DUPLICATES [Codex]
+
+This supersedes the new-block pickup below without deleting it. Design/docs only: no code, dependency installation,
+CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3p Option A. At an allegiance-changing receipt, update the same citizen's combat block, hostility,
+control, targeting, auras, and reactions immediately; move its portrait to the destination priority tier while
+carrying `actedRound` and availability. Already-spent citizens stay spent; unspent citizens act only if the new
+block/tier is ahead. Transfer at a transaction boundary, preserve identity/label/tie state, retire empty blocks, and
+never recalculate frozen averages. F10.3p is closed.
+
+**Do next:** ask F10.3q. Codex recommends tiered typed “narrative says otherwise” authority: established readiness/
+surprise modifies deterministic priority; a validated already-triggered action or hazard may resolve one opening
+receipt; only a named versioned scenario/system rule may force an entire block first/last. Freeform narration alone
+cannot. Then settle ribbon overflow and neutral/third-party lens placement. Wave 10 remains open; no build/Fable
+handoff is authorized.
+
 ## ⭐ Latest (2026-07-20, Wave 10 new initiative blocks) — NEW SIDES ENTER BY PRIORITY; SPENT TIME STAYS SPENT [Codex]
 
 This supersedes the reinforcement-initiative pickup below without deleting it. Design/docs only: no code,

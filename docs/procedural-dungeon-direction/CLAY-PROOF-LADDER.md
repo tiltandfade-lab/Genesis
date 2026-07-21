@@ -173,8 +173,15 @@ obligations, consequence cursor, safe presentation restoration, and retry/rebuil
 the transition animation is not canonical. Exercise the accepted precision ladder—exact cell/footprint, anchored
 local relation, zone/region/route, and unresolved/reserve—with provenance-bearing placement and compaction receipts.
 The pass must retain choice-changing relations and consequences while allowing meaningless grid detail to compact;
-it may not silently invent certainty or erase a tactically established fact. Exact authority among several legal
-placements remains subject to the active P10.9 follow-up rather than being invented by this pass.
+it may not silently invent certainty or erase a tactically established fact.
+
+For the pre-alpha party premise, noncombat owns one main-PC/party anchor and a coarse companion formation rather than
+invented exact companion coordinates. Combat derives a bounded deployment zone from the established location,
+approach, and legal terrain. The one player-owned main PC and independently acting allies/sidekicks enter through
+that zone and formation contract. Narrative-only companion wandering cannot change location, custody, or placement;
+a validated detachment or other canonical event is required. The active P10.9 follow-up still decides whether the
+player places only the main PC, may rearrange companions inside the legal formation, or delegates all initial
+placement to the formation resolver. Exact allied combat behavior remains owned by later party/tactical questions.
 
 ## Stage 3 - small operating site simulation
 

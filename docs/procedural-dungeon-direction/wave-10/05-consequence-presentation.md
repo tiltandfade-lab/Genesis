@@ -1289,3 +1289,92 @@ accessibility work.
 
 Does Adam choose **A, B, or C**, or want to change the division among player, deterministic engine, and Gemini?
 P10.9 and Wave 10 remain **OPEN**; no build is authorized.
+
+### 11.72 F10.9c control reframe and F10.9c.1 expansion - one player-owned PC; bound deployment and formation-resolved allies
+
+Adam reframed the placement-authority question:
+
+> "We want something like XCOM or FFT where you have placement but it is bounded to a zone. This brings us to a major decision about PC control. Let's assume for pre-alpha this is a single player game based around a single PC, everyone else is an ally/sidekick and the allies and sidekicks act independently of the main PC, which of course is it's own set of problems. But placement should be bounded to where those characters are at the start of battle, let's say generally these sidekicks and allies just hang around with the PC in a set formation, for the MVP I think that's fair behavior. Later on we can consider truly independent behavior like rogues wandering off in markets and stealing things etc. for now those things can be purely narrative and aren't exactly bound to spatial truth during non-combat scenes."
+
+Yes, this is coherent and narrows F10.9c in a useful way. The accepted pre-alpha premise is now:
+
+1. **One player-owned main PC:** the human's direct character authority centers on one PC. Allies and sidekicks are
+   persistent canonical citizens but act independently in combat. Their exact AI priorities, commands, loyalty,
+   mistakes, and recovery law remain explicit later Wave 6/7 questions; P10.9 does not pretend to solve them.
+2. **A canonical party anchor plus coarse formation outside combat:** a companion can be `with the PC`, `front`,
+   `rear`, `left`, `right`, or another small formation relation without owning a fabricated exact market/dungeon
+   cell. The formation carries presence, approach, and relative role, not continuous offscreen pathfinding.
+3. **An approach-bounded deployment zone:** entry direction, portal/route, party anchor, local obstacles, footprints,
+   surprise state where later defined, and established separations generate the legal starting zone. Placement
+   cannot teleport the PC or companions to any attractive cell on the board merely because battle began.
+4. **Formation-resolved companions:** allies and sidekicks begin in legal cells derived from their coarse formation
+   around the PC. If an intended offset collides or falls outside the zone, one deterministic fallback ordering
+   searches the nearest legal formation-preserving alternative and records the placement receipt. It cannot reroll
+   on reload.
+5. **Narrative wandering is not spatial authority:** Gemini may describe a rogue browsing stalls or drifting a few
+   paces away as color, but that prose alone cannot grant a stolen item, reveal a secret, detach the rogue, change
+   custody/location, or create an advantageous combat cell. A choice-changing excursion must first become a
+   validated action/event with the accepted truth, knowledge, and SceneFact laws. Truly independent noncombat
+   companion activity remains a named feature goal.
+6. **Meaningful exception states survive compaction:** a downed, captured, separated, hidden, fleeing, or explicitly
+   detached companion does not snap back into `with party` formation merely because combat or the exact board ends.
+   The canonical exception must resolve before ordinary formation attachment resumes.
+
+This is an **MVP simplification with retained seams**, not a declaration that companions lack identity or agency.
+It avoids simulating exact noncombat paths for every ally while retaining party presence, formation, exceptions,
+and a future promotion path to genuine independent behavior. It adds moderate party-anchor, formation-template,
+deployment-zone, collision fallback, and persistence work to C2D, but removes a much larger continuous companion
+navigation/simulation requirement from pre-alpha. The major autonomy/AI cost still exists and must be designed in
+Waves 6-7 before their build gate.
+
+The earlier F10.9c options are therefore narrowed rather than answered wholesale. Hostile/neutral/hidden placement
+still belongs to the deterministic secret-safe resolver, and Gemini still cannot commit cells. The remaining player
+control fork is:
+
+#### F10.9c.1 - how much of the allied formation may the player place before an MVP battle?
+
+**Option A - place only the main PC; resolve allies from the set formation (recommended for pre-alpha).** The legal
+PC cells are filtered so the formation can fit, unless the established scene already forces a broken formation.
+After the player commits the PC, the deterministic resolver places each ally/sidekick in formation order and shows
+the complete deployment before combat begins. The player may cancel and choose another still-legal PC cell, but
+does not drag independently acting allies.
+
+- **Dungeon example:** entering through the south arch produces a three-row deployment zone. The player places the
+  PC behind a pillar; the shield-bearing sidekick takes the formation's front slot and the archer takes rear-left.
+  Choosing a corner where those legal slots cannot fit is disabled or truthfully previewed as a broken formation.
+- **Gemini-DM example:** Gemini can describe the shield-bearer closing up in front and the archer hanging back after
+  the receipt commits them. It cannot decide that the archer wandered to a tactically superior balcony unless that
+  position was already canonically established.
+- **Cost:** **medium formation/deployment/preview work and low repeated pre-battle interaction cost**. It cleanly
+  expresses one-PC ownership, but players may blame the formation resolver for an ally's poor opening cell.
+
+**Option B - place the main PC, then optionally rearrange allies inside formation-legal cells.** The set formation
+produces the default deployment, but the player receives a bounded placement pass for companions before they become
+autonomous. Their candidate cells remain constrained by the party zone, formation radius, established exceptions,
+and collision/secret rules.
+
+- **Dungeon example:** the player places the PC, then swaps the shield-bearer and archer between two legal formation
+  cells to guard a visible side passage. Once battle starts, both allies act independently.
+- **Gemini-DM example:** Gemini narrates the committed arrangement and later autonomous choices, but it cannot undo
+  the player's legal opening deployment merely for drama.
+- **Cost:** **medium-high deployment UI, input, preview, recovery, and tactical-balance work**, plus repeated setup
+  friction. It provides squad-level opening agency even though the game otherwise centers one directly controlled
+  PC.
+
+**Option C - the formation resolver places the whole party, including the main PC.** The established approach and
+formation fully determine all allied cells. The player begins making spatial choices only after combat starts.
+
+- **Dungeon example:** entering through the south arch always rebuilds the same party formation around its derived
+  anchor. There is no deployment interaction.
+- **Gemini-DM example:** Gemini describes the committed entrance but does not choose it. Reproducibility is strong;
+  the promised bounded-placement fantasy is mostly absent.
+- **Cost:** **low placement UI and medium formation-policy work**, but high player-agency and expectation risk.
+
+**Codex recommendation: Option A for pre-alpha, with Option B retained as a feature promotion if formation outcomes
+feel unfair or players want more opening authorship.** A preserves the single-PC control premise, proves the bounded
+deployment loop, and leaves ally autonomy visible rather than giving the player a brief squad-control exception
+only at battle start. The formation preview, deterministic receipt, and candidate-set seams make B an additive
+promotion rather than a replacement.
+
+Does Adam choose **A, B, or C** for initial party placement, or want an editable formation preset before this choice?
+F10.9c remains open until this is answered. P10.9 and Wave 10 remain **OPEN**; no build is authorized.

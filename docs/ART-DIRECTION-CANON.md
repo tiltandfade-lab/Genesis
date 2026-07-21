@@ -854,3 +854,16 @@ choice-changing relation and consequence survives while meaningless cell detail 
 The compaction records what changed precision and why. A broken threshold, burning stall, dropped pack beside an
 injured merchant, blocked exit, or eastward flight cannot disappear merely because the grid closes; an irrelevant
 cell number need not become permanent world clutter.
+
+### One-PC bounded deployment with formation-bound companions (Adam, 2026-07-21)
+
+> "We want something like XCOM or FFT where you have placement but it is bounded to a zone. This brings us to a major decision about PC control. Let's assume for pre-alpha this is a single player game based around a single PC, everyone else is an ally/sidekick and the allies and sidekicks act independently of the main PC, which of course is it's own set of problems. But placement should be bounded to where those characters are at the start of battle, let's say generally these sidekicks and allies just hang around with the PC in a set formation, for the MVP I think that's fair behavior. Later on we can consider truly independent behavior like rogues wandering off in markets and stealing things etc. for now those things can be purely narrative and aren't exactly bound to spatial truth during non-combat scenes."
+
+The pre-alpha has one player-owned main PC. Allies and sidekicks remain canonically present with that PC through a
+coarse set formation outside combat and act independently once combat begins. Combat placement is bounded to a
+deployment zone derived from the party's established location and approach, rather than allowing free placement
+anywhere on the BattleMat. Noncombat prose may color a companion as wandering nearby, but cannot create exact
+spatial truth, detach the companion, change custody, or affect battle placement unless a validated canonical event
+promotes that behavior. Truly independent noncombat companion activity remains a later feature goal. Exact allied
+combat behavior and the player's breadth of initial formation control remain open questions rather than hidden
+assumptions in this visual ruling.

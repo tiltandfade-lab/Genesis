@@ -48,10 +48,10 @@ No build is authorized by this discovery record.
 
 ### Current live position
 
-- Wave 10 remains **OPEN** at **F10.8d.1** in
+- Wave 10 remains **OPEN** at **F10.8d.2** in
   [consequence presentation](procedural-dungeon-direction/wave-10/05-consequence-presentation.md).
-- The open choice is the clean fiction-first fallback when Gemini is late, unavailable, interrupted,
-  or invalid.
+- The open choice is whether the clean fiction-first fallback may state viewpoint-known actionable meaning
+  or only sensory evidence.
 - F10.8e is **PARKED AND UNANSWERED** because automatic consequence briefs/callouts are not the
   current visual target.
 - P10.9 remains mandatory after P10.8; performance/device/accessibility remains P10.10.
@@ -93,7 +93,7 @@ Existing documents may still cite this path plus a legacy section number. Use th
 | 11.14-11.33 | [Wave 10 Part 2](procedural-dungeon-direction/wave-10/02-inspection-feedback-and-combat.md) |
 | 11.34-11.41 | [Wave 10 Part 3](procedural-dungeon-direction/wave-10/03-visual-proof-camera-and-materials.md) |
 | 11.42-11.56 | [Wave 10 Part 4](procedural-dungeon-direction/wave-10/04-attention-interaction-and-history.md) |
-| 11.57-11.61 | [Wave 10 Part 5 — current](procedural-dungeon-direction/wave-10/05-consequence-presentation.md) |
+| 11.57-current | [Wave 10 Part 5 — current](procedural-dungeon-direction/wave-10/05-consequence-presentation.md) |
 
 ## File-growth rule
 

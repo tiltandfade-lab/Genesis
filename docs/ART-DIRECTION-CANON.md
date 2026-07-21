@@ -721,3 +721,15 @@ board-brief and map-callout mockups remain proof-gated exploration rather than a
 click-invoked smart-tooltip object inspector remains a separate requested interaction surface, not an automatic
 consequence notification. Exact supersession, examples, proof corpus, costs, and the open Gemini-failure fallback
 live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.61.
+
+## Fiction-first minimum-language fallback in the DM rail (Adam's ruling, 2026-07-21 — additive)
+
+> "Yeah, B sounds more ideal"
+
+Gemini remains the normal visible author of committed consequences. Every material receipt family also owns a
+tested, viewpoint-safe minimum fictional clause. If Gemini is late, unavailable, interrupted, or fails its factual
+anchors, Genesis presents that natural-language clause in the same DM conversation rail rather than blocking
+indefinitely, exposing raw mechanic fields, or opening another information surface. Once the fallback carries the
+beat, later Gemini prose continues forward without repeating or replacing it. The clause library is a minimum
+player-language contract, not a second voice target; exact behavior, costs, examples, and the open actionable-
+explicitness question live in `procedural-dungeon-direction/wave-10/05-consequence-presentation.md` section 11.62.

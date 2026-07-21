@@ -539,3 +539,90 @@ or want to amend the fallback? F10.8e remains **PARKED AND UNANSWERED**. Wave 10
 authorized.
 
 <!-- END VERBATIM MIGRATION: original lines 20558-21083 -->
+
+### 11.62 F10.8d.1 ruling and F10.8d.2 expansion - fiction-first fallback accepted; choose actionable explicitness
+
+**Adam's ruling (2026-07-21):** Option B sounds more ideal.
+
+Every material receipt family therefore owns a tested minimum player-language clause. Gemini receives the exact
+viewpoint-safe clauses as hard anchors and normally combines/rewrites them with the accepted freedom over rhythm,
+imagery, emphasis, emotion, character framing, and scene voice. If Gemini misses the presentation deadline, is
+unavailable/interrupted, or fails anchor validation, Genesis writes the deterministic fiction-first result into the
+same DM rail. It never exposes raw fields, opens a second consequence panel, or waits indefinitely. Once the fallback
+has carried the beat, later Gemini prose continues forward rather than repeating or replacing it. F10.8d.1 closes.
+
+#### F10.8d.2 - may the minimum prose state actionable meaning, or only describe sensory evidence?
+
+In plain English: after a threshold ward fires, `the carved light gutters into dead stone` is vivid sensory evidence.
+But does that tell the player the ward cannot fire again? Should the fallback report only what the character sees,
+translate every mechanic explicitly, or add a natural-language actionable conclusion only when this viewpoint has
+actually earned it?
+
+- **Option A - sensory fiction only:** the clause names visible/audible/physical change and stops: `The runes flare
+  and go dark.` This is maximally diegetic and never overexplains, but important known consequences may remain
+  ambiguous; the player may repeatedly test an already understood one-use mechanism or fail to realize that a route,
+  target, spell, condition, or custody state changed their next legal choice.
+- **Option B - sensory event plus viewpoint-known actionable meaning, still in fiction (recommended):** lead with
+  what happened in the world, then state the minimum consequence the active viewpoint can honestly use. A known
+  one-use ward may become `The runes gutter out; whatever charge waited in the threshold is gone.` A merely dark
+  mechanism of unknown recharge says only that it is dark or uncertain. Current legal actions, route previews,
+  established HP/status, and click-invoked inspection continue carrying their ordinary exact jobs; the DM prose
+  explains the fictional causal meaning without schema terms or a new dashboard.
+- **Option C - sensory prose followed by explicit mechanic translation:** `The runes go dark (ward spent; reaction
+  unavailable).` This makes rule consequence unmistakable and is cheap to test, but reintroduces engine vocabulary,
+  duplicates established UI, makes every dramatic beat feel tutorialized, and turns the clean DM rail into the
+  mechanical receipt dump Adam rejected.
+
+Option B treats actionable explicitness as an **epistemic projection**, not a universal tooltip:
+
+1. **Observed fact first:** describe the committed physical event/result that this viewpoint can perceive—impact,
+   fall, extinguishing light, broken gate, dropped key, receding flame, released captive, or changed allegiance
+   behavior.
+2. **Known consequence second, only when material:** state the smallest natural conclusion needed for the next
+   choice when the character/player has lawfully learned it. `The eastern way is choked with rubble` is both fiction
+   and route meaning. Do not append a lesson to every cosmetic or already obvious change.
+3. **Uncertainty remains language, not leakage:** if the ward may recharge and the viewpoint does not know whether
+   it is exhausted, say `The runes are dark now` or `For the moment, the threshold lies still`; never grant permanent
+   safety because the internal receipt contains a duration/owner the character cannot know.
+4. **Established exact UI keeps its job:** HP/resources, conditions, initiative, current legal actions, custody,
+   selection, paths, and object state remain on their accepted surfaces. Gemini/fallback prose need not recite
+   coordinates, arithmetic, internal ids, duration counters, or option legality already clear there.
+5. **No hidden-source repair:** actionable clarity cannot reveal the unseen hand, mechanism, motive, witness, owner,
+   or future response that caused an observed result. `The gate slams shut, sealing the western passage` can be
+   complete while its secret trigger remains absent.
+6. **Askable depth remains with the DM/card:** if the player asks whether a ward could recharge or clicks the known
+   mechanism, Gemini and the existing focused card may explain only the evidence, history, uncertainty, and actions
+   that viewpoint has earned. The automatic consequence beat stays short.
+
+Concrete dungeon/Gemini-DM examples:
+
+- **Known one-use ward:** the BattleMat shows flare/discharge/dark state. Minimum prose: `The threshold's carved
+  light gutters out. Whatever charge waited there is gone.` No `reactionSpent` label is needed.
+- **Unknown cycling ward:** the same visible dark state does not license permanence. Minimum prose: `The symbols dim
+  to embers. Whether they are dead or gathering strength, Mira cannot tell.` If even that uncertainty exceeds her
+  evidence, stop after the first sentence.
+- **Gate collapse:** physical rubble and route validation own exact topology. Minimum prose: `Iron and stone choke
+  the eastern way.` It need not say `blocked cell set`.
+- **Mira becomes prone:** the board/result treatment and established condition surface own exact state. Gemini may
+  say `The blow folds Mira onto the flagstones`; it need not append `(PRONE)` unless ordinary game vocabulary in an
+  existing status surface already does so.
+- **Concentration breaks:** if the viewpoint knows the bone-mask guard sustained the binding spell and sees the
+  captive's chains loosen, prose may connect them. If the caster/source is unknown, describe the chains loosening
+  without inventing or revealing the causal owner.
+- **Dropped communicator:** the board moves the object to its lawful cell. Prose calls attention only if the drop is
+  perceivable/material: `The turtle communicator skips from Varka's hand and comes to rest beside the brazier.`
+
+**Implementation/maintenance cost:** Option A is low clause-authoring cost and high ambiguity, repeated-query, and
+support debt. Option B is **medium-high semantic-language work**: materiality rules, knowledge/uncertainty variants,
+observation-to-consequence phrasing, entity inflection, established-UI deduplication, anchor validation, and
+clarity-without-overexplanation playtests. Option C is low-medium formatting/test work and very high immersion,
+terminology, repetition, and long-term copy debt.
+
+**Codex recommendation: Option B.** Let the fiction tell the player what the character can honestly act on, not
+merely what changed color and not how the engine encoded it. Sensory evidence leads; material known consequence may
+follow in ordinary language; uncertainty and secrets stay intact.
+
+Does Adam accept Option B, prefer sensory-only fallback under Option A, prefer explicit mechanic translation under
+Option C, or want to amend when actionable meaning may be stated? F10.8e remains **PARKED AND UNANSWERED**. If this
+closes, audit the remaining P10.8/G10.2 obligations—especially camera/focus/sound/Gemini attention—without reviving
+an automatic consequence brief. Wave 10 remains **OPEN**; no build is authorized.

@@ -18968,3 +18968,87 @@ Does Adam accept Option B, prefer universal orthographic Option A, or want the m
 accepted without another camera objection, F10.6's camera/beauty/material/prop branch closes provisionally behind
 its explicit future capture gates and the questionnaire proceeds to P10.7/F10.7 performance and graceful
 degradation. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.41 F10.6h ruling, sequence correction, and F10.7a expansion - gentle perspective provisional; attention without glow clutter
+
+**Adam's ruling (2026-07-20):** choose Option B for now. The working release projection is one stable gentle
+low-distortion perspective family, beginning from the existing roughly 20-degree FOV, 35-degree elevation, and
+45-degree dimetric yaw. Governed focus changes camera target/distance rather than pumping FOV; true world scale and
+exact cells remain authoritative. Orthographic remains the mandatory same-state evidence fallback. If gentle
+perspective does not materially improve depth/composition without harming cell read, sprite citizenship, picking,
+shadow truth, or the three accepted viewport gates, the implementation ruling returns to orthographic rather than
+protecting the concept image. F10.6h and the current F10.6 branch close **provisionally behind capture proof**.
+
+**Questionnaire sequence correction:** the closing sentence of section 11.40 mislabeled the next topic as
+performance/degradation. In the preserved Wave 10 questionnaire, **P10.7/F10.7 owns interaction, promotion, secret
+tells, attention, and accumulated history**. Performance/device/accessibility quality tiers belong to **P10.10**
+and remain later in the original sequence. No question is skipped or renumbered by this correction.
+
+#### F10.7a - how does the board call attention to something without making every useful object glow?
+
+The existing feedback rulings answer what happens after an action commits: receipts drive truthful board motion,
+state change, sound/caption, card refresh, and optional EngagementLens drama. This question is different. Before an
+action, how does the player distinguish ambient scenery, something noticed, something currently relevant, the
+selected target, and a place changed by history—without the renderer advertising secrets or covering the world in
+icons and outlines?
+
+- **Option A - explicit game-outline/icon language for every known interactive or historical noun:** clearest and
+  easiest to scan, but a busy room becomes an icon field; “can interact” overwhelms visual hierarchy, physical
+  evidence becomes cosmetic, and unknown secrets are difficult to distinguish from missing UI.
+- **Option B - restrained knowledge-and-attention ladder (recommended):** physical state, material evidence,
+  animation, motivated light, sound, composition, and object-card affordance do most of the work. Explicit outline,
+  ring, label, or icon appears only for current selection/targeting, urgency, accessibility, or a player-invoked
+  scan. Every cue is viewpoint-gated and tied to canonical knowledge.
+- **Option C - narration and cards carry attention:** the board remains visually pure and the DM describes useful
+  details. This is cheapest, but makes investigation and tactical interaction slow, gives poor direct-manipulation
+  feedback, and turns a missing visual binding into recurring AI narration work.
+
+Option B uses five states; these are projection states, not five new canonical object types:
+
+| Attention state | Ordinary presentation | Explicit UI allowance |
+|---|---|---|
+| **Ambient / not singled out** | The noun appears only through its normal legal physical, sprite, marker, or reserve representation. No interactable shimmer merely because an action exists in the database. | None beyond ordinary accessible scene description. |
+| **Noticed / known** | Show the evidence the viewpoint has actually earned: scratches, fresh blood, disturbed dust, a draft, ownership heraldry, a flickering mechanism, an open lid, a scorch, a dropped-object marker, or a concise spoken/sound cue when perceptible. | Inspectable cursor/focus semantics and accessible label may become available; no target glow required. |
+| **Relevant / available now** | Context may strengthen an already known tell: a nearby lever receives a restrained material/idle-motion cue when the player is operating its machine; a reachable chest accepts focus; a known burning doorway clearly animates and sounds hazardous. | Player-invoked scan, keyboard/controller focus, or accessibility setting may add a stable non-color icon/edge/base cue. Availability cannot invent a hidden affordance. |
+| **Active / selected / targeted** | Strong, brief, unmistakable focus treatment bound to the exact object, cell, path, area, or citizen; preserve the accepted blue/red/grey allegiance language and non-color shape/motion cues where relevant. | Outline/ring/label/area overlay/action preview is legal here and disappears or changes when focus changes. |
+| **Changed / historical** | Prefer the current physical state and plausible residue: broken door, open/looted chest, extinguished brazier, blood, ash, scorch, moved cover, empty mount, cracked floor, abandoned marker, or another canonical trace. | A card/history affordance may expose the fuller known account; history is not represented by leaving the old target outline permanently on. |
+
+Concrete examples:
+
+- an ordinary chest sits physically on the board without pulsing. When focused, its base/edge and board card make
+  selection explicit. After opening, the lid and contents knowledge change; after looting, the same chest remains
+  visibly open/empty rather than reverting or wearing a permanent “completed” halo;
+- a secret panel looks like ordinary wall until scratches, draft, map evidence, magic, or discovery is canonically
+  available to this viewpoint. The cue points to evidence first; it does not outline the unrevealed door behind it;
+- a punctured oil cask leaks a dark/glinting spill and changes sound/material behavior. Targeting it for ignition
+  adds the strong active overlay; the spill itself, not a floating exclamation point, carries ordinary relevance;
+- the dropped turtle communicator receives its precise object marker because its location and identity are known.
+  A localized pulse/sound may be canonical when it rings; it does not blink forever merely because it has actions;
+- a hostile fire field always carries readable animated shape/boundary and caption equivalents because it is an
+  active known hazard. A hidden pressure plate does not acquire that language until detected or triggered.
+
+Promotion may strengthen presentation only after canonical state or player context makes an existing affordance
+relevant. The DM cannot cause the renderer to glow an object as a hint without creating a viewpoint-legal tell.
+Conversely, lack of bespoke art cannot suppress a known interactable: the marker/card/fallback lane supplies a
+truthful focus target and accessible label.
+
+Every cue has a non-audio and non-color path. Persistent looping animation is budgeted and reduced-motion-safe;
+sound respects distance, occlusion, and viewpoint. A “highlight all known interactables” accessibility/scan command
+may temporarily expose the relevant/available set, but it cannot reveal secrets, unknown ownership, hidden hazards,
+or actions the player has not earned enough information to formulate.
+
+The procedural-layout papers support the separation of semantic facts from visual realization and the display of
+legal candidates/evidence, but they do not prescribe highlight taste. Genesis therefore binds cues to explicit
+knowledge/state constraints, then judges clutter and comprehension through representative captures and playtests.
+
+**Implementation/maintenance cost:** Option B is **medium-high but reusable**: attention-state derivation,
+viewpoint/knowledge gating, physical-tell bindings, selection/target overlays, scan/accessibility projection,
+audio/caption equivalence, reduced motion, fallback coverage, and clutter tests. Option A is medium implementation
+but high aesthetic debt. Option C is low renderer cost and high interaction/AI burden.
+
+**Codex recommendation: Option B.** It lets the world itself carry clues and scars while reserving overt game UI
+for the moment the player asks a concrete question of that world.
+
+Does Adam accept Option B, prefer the always-explicit Option A, or want narration-first Option C? If B is accepted,
+follow into F10.7b: which historical traces remain physically visible, which coalesce or age, and how the renderer
+stays bounded without erasing world history. Wave 10 remains **OPEN**; no build is authorized.

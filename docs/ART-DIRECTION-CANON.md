@@ -552,3 +552,15 @@ Bounded player pan, zoom, and rotation may override the starting fit, with immed
 programmatic refits may glide briefly and interruptibly. UI surfaces publish one safe rectangle and refit the same
 scene without cropping required action evidence or forgetting the prior legal player-adjusted view. Full-board
 overview is available, but it is not forced as the default scale for every action on a large field.
+
+## Provisional single gentle-perspective SceneTray family (Adam's ruling, 2026-07-20 — additive)
+
+> "B for now"
+
+This provisionally accepts Option B in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.40. The working SceneTray uses
+one stable, low-distortion gentle-perspective family, beginning from the existing roughly 20-degree FOV,
+35-degree elevation, and 45-degree dimetric yaw. Governed focus changes target/distance rather than changing FOV;
+exact cells and true world scale remain authoritative. Orthographic remains the mandatory same-state fallback: if
+real captures show that perspective harms cell comprehension, sprite citizenship, picking, shadow truth, or the
+accepted desktop/tablet gates without a material depth/composition gain, the release ruling returns to
+orthographic rather than protecting the taste-card inference.

@@ -443,6 +443,16 @@ between rounds. Initiative Advantage/Disadvantage requires an explicit determini
 becomes a complete rules contract; F10.3m and exact costs live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.25.
 
+## Deterministic initiative Advantage/Disadvantage ruling (Adam, 2026-07-20 — additive)
+
+> "A is good"
+
+Net initiative Advantage adds a nonstacking `+3` to derived initiative priority; net Disadvantage subtracts `3`;
+any amount of both cancels. The canonical sheet bonus remains unchanged, while portrait order and starting faction-
+block averages consume the derived priority. Tie-only d20s stay unmodified to prevent double counting. The exact
+accepted contract and open reinforcement-insertion question live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.26.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

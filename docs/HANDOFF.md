@@ -6,6 +6,24 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 initiative edge) — ADVANTAGE MOVES PRIORITY BY THREE; ARRIVALS CANNOT MOVE BACKWARD IN TIME [Codex]
+
+This supersedes the deterministic-initiative pickup below without deleting it. Design/docs only: no code,
+dependency installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3m Option A. Derive `initiativePriority` from canonical `initiativeBonus` plus a nonstacking `+3`
+for net Advantage or `-3` for net Disadvantage; any of both cancels. Preserve the real bonus and edge provenance
+separately. Sort members and average starting blocks from priority. Accepted tie-only d20s remain unmodified so the
+edge is never counted twice. Existing surprise, feature, item, sidekick, and procedural initiative effects retain
+deterministic meaning. F10.3m is closed.
+
+**Do next:** ask F10.3n. Codex recommends inserting a revealed reinforcement at its true priority slot. It may act
+this round only if its faction block and priority tier have not passed; otherwise it enters visibly waiting for next
+round. Opening block averages/order never recalculate. Specific summon timing and authored `Initiative 0` arrivals
+use typed overrides; an arrival effect is not secretly a full activation. Then audit a newly entering faction,
+opening overrides, ribbon overflow, and neutral/third-party lens placement. Wave 10 remains open; no build/Fable
+handoff is authorized.
+
 ## ⭐ Latest (2026-07-20, Wave 10 deterministic initiative) — BONUSES ORDER; DICE BREAK ONLY TRUE TIES [Codex]
 
 This supersedes the hybrid-initiative proposal below without deleting it. Design/docs only: no code, dependency

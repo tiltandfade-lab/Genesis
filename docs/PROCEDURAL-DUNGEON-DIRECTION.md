@@ -17767,3 +17767,75 @@ is lower and more consistent than reviving selective initiative rolls.
 Does Adam accept the ±3 deterministic priority edge? After this, settle reinforcement insertion, exact narrative-
 override authority, ribbon overflow, and neutral/third-party lens placement. Wave 10 remains **OPEN**; no build is
 authorized.
+
+### 11.26 F10.3m ruling and F10.3n expansion - deterministic initiative edge accepted; place reinforcements in time
+
+**Adam's ruling (2026-07-20):** accept Option A. A citizen's ordering value is a derived
+`initiativePriority = initiativeBonus + initiativeEdge`, where net Advantage contributes `+3`, net Disadvantage
+contributes `-3`, and no net state contributes zero. Multiple Advantage or Disadvantage sources do not stack; any
+amount of both cancels to zero under the ordinary cancellation law.
+
+The canonical sheet/stat-block `initiativeBonus` remains unchanged and separately inspectable. `initiativeEdge`
+records its source/provenance—surprise, feature, item, condition, realm effect, or other licensed rule—and expires
+when that source says it does. Member sorting and starting block averages use `initiativePriority`. If an exact tie
+survives, the accepted d20 tie-break is unmodified because the edge has already represented Advantage/Disadvantage;
+never apply the same source twice.
+
+Examples:
+
+- a ranger with canonical `+2` initiative and an Awareness Ioun Stone has priority `+5`;
+- a `+2` goblin surprised at combat start has priority `-1`;
+- a `+2` sidekick with two separate Advantage sources still has priority `+5`, not `+8`;
+- the same sidekick with at least one Advantage and at least one Disadvantage source returns to priority `+2`;
+- if two citizens remain tied at priority `+5`, they each make the accepted open unmodified d20 tie roll once and
+  keep that order for the encounter.
+
+This gives all audited initiative features a deterministic effect without selectively reviving ordinary initiative
+rolls. F10.3m is closed. Reinforcement insertion is now the next material ordering edge.
+
+#### F10.3n - when can a newly revealed reinforcement act?
+
+- **Option A - insert at its true priority position; act only if that position has not passed (recommended):** the
+  new citizen appears in its block at the sorted `initiativePriority` tier. If the block has not begun this round,
+  it acts normally. If the block is in progress and the cursor has not yet passed that tier, it may act when reached;
+  if its tier already passed or its block already finished, it is visibly waiting until next round. The encounter's
+  snapshotted block averages/order never recalculate.
+- **Option B - every reinforcement waits until next round:** insert the portrait immediately but mark it waiting,
+  regardless of when its block acts. This is simplest and prevents surprise extra actions, but a guard revealed
+  before the hostile block begins can stand inert through an entire round for no mechanical reason.
+- **Option C - every reinforcement acts immediately after arrival:** dramatic and easy to narrate, but it lets
+  summoning/reveal timing manufacture extra actions, interrupts the stable block cursor, and makes a high-priority
+  late arrival stronger than a high-priority citizen present from the start.
+
+Under Option A:
+
+```text
+Hostile block order: [ Varka +4 ][ Goblin 1 +2 ][ Wolf +1 ]
+Current cursor:                         ^ Goblin 1 resolving
+```
+
+- a second wolf at `+1` arrives now: its tier is still ahead, so it may act when the cursor reaches `+1`;
+- a captain at `+4` arrives now: that tier already passed, so its tile enters with a waiting marker and acts next
+  round;
+- either actor revealed during the earlier party block may act normally when the hostile block begins;
+- either actor revealed after the hostile block finishes waits until next round.
+
+Ties at the current tier join that still-open tier and use the accepted tie d20 only if a stable relative order is
+needed. A specific spell/feature that says a summon acts immediately after its summoner, or an authored scheduled
+arrival such as `Initiative 0`, compiles as an explicit timing override rather than being approximated by the
+generic rule. Arrival itself may carry a governed entry effect, but that effect is not secretly a full activation.
+
+The ribbon creates no hidden placeholder. On reveal it animates/inserts the actual portrait at its stable slot and
+states `available this round` or `waiting until next round` without color alone. Replays use the reveal receipt and
+cursor position, not a fresh timing guess.
+
+**Implementation/maintenance cost:** Option A is **medium-low beyond the already accepted cursor**: insertion by
+priority, passed-tier comparison, waiting state, reveal receipt, round reset, tie handling, and scheduled/specific-
+rule overrides. Option B is low; Option C is superficially low but creates high balance and interruption debt.
+
+**Codex recommendation: Option A.** It makes initiative priority matter without time travel, treats arrivals before
+their block fairly, and gives authored summon/arrival rules an explicit override seam.
+
+Does Adam accept Option A? If so, audit a genuinely new faction/block entering mid-combat, then lock exact opening-
+override authority, crowded-ribbon overflow, and neutral/third-party lens placement. Wave 10 remains **OPEN**; no
+build is authorized.

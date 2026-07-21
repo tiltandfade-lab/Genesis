@@ -6,6 +6,24 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 new initiative blocks) — NEW SIDES ENTER BY PRIORITY; SPENT TIME STAYS SPENT [Codex]
+
+This supersedes the reinforcement-initiative pickup below without deleting it. Design/docs only: no code,
+dependency installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3o Option A. A genuinely independent revealed combat side creates a block from its entry roster,
+freezes its exact average, and inserts by priority without changing existing blocks' relative order. It may act this
+round only if its rightful block slot remains ahead of the cursor; otherwise it waits. Later members never
+recalculate the average. Political faction alone is insufficient—current allegiance and independent objectives
+control combat blocks; undecided bystanders stay off-ribbon. F10.3o is closed.
+
+**Do next:** ask F10.3p. Codex recommends immediate allegiance truth with conserved activation state: at the
+committing receipt, targeting/control/aura/reaction relations change and the same portrait moves to the destination
+block, carrying `actedRound`. Already-spent citizens remain spent; unspent citizens act only if their destination
+block/tier is still ahead. Frozen block averages do not oscillate with transfers. Then settle opening override
+authority, ribbon overflow, and neutral/third-party lens placement. Wave 10 remains open; no build/Fable handoff is
+authorized.
+
 ## ⭐ Latest (2026-07-20, Wave 10 reinforcement initiative) — ARRIVALS JOIN THE FUTURE; THEY NEVER REWRITE THE PAST [Codex]
 
 This supersedes the initiative-edge pickup below without deleting it. Design/docs only: no code, dependency

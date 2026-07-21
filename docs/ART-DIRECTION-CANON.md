@@ -463,6 +463,16 @@ waiting marker and acts next round. Arrival never recalculates the block's froze
 portrait or placeholder leaks before reveal. Exact receipts, scheduled/specific timing overrides, costs, and the
 open new-faction question live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.27.
 
+## New-faction priority insertion ruling (Adam, 2026-07-20 — additive)
+
+> "A"
+
+A newly revealed independent combat side receives its own frozen entry-average block and inserts by priority into
+the remaining initiative future. If its rightful slot has passed, it waits until next round; existing blocks never
+reorder retroactively. Political faction alone does not earn a block—current combat allegiance and independent
+objectives do. Exact receipts, costs, and the open allegiance-transfer question live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.28.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

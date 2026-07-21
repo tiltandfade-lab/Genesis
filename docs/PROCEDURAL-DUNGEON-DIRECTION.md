@@ -17907,3 +17907,76 @@ the remaining future, never rewrite the already-spent past.
 Does Adam accept Option A? If so, settle later allegiance changes, then exact narrative-opening overrides,
 crowded-ribbon overflow, and neutral/third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is
 authorized.
+
+### 11.28 F10.3o ruling and F10.3p expansion - new blocks enter the remaining future
+
+**Adam's ruling (2026-07-20):** accept Option A. When a genuinely independent combat side becomes a revealed
+participant mid-encounter, create a new initiative block from its revealed entry roster, calculate its exact average
+priority, freeze that average, and insert the block among existing blocks without changing those blocks' relative
+order.
+
+The new block may act in the current round only if its rightful priority slot remains ahead of the round cursor. If
+that slot has passed, the whole block enters visibly waiting and begins at its stable position next round. Later
+members use F10.3n without recalculating the new block's entry average. A political faction id alone never creates
+an initiative block: present combat allegiance and independent objectives do. A guard helping the PC joins the
+party block; guards committed against both party and cult may become their own block; an undecided bystander stays
+off the initiative ribbon until it becomes a combat participant.
+
+The new-block receipt records entry roster, priorities/provenance, exact average, tie result if any, insertion slot,
+cursor position, eligibility, allegiance evidence visible to the player, and any typed timing override. F10.3o is
+closed.
+
+#### F10.3p - what happens when a citizen changes sides after acting or waiting?
+
+Examples include Varka accepting a mid-fight parley and helping the party, a dominated companion becoming hostile,
+a guard choosing one combat side, a charmed enemy temporarily treating former allies as enemies, or a mercenary
+defecting when morale breaks.
+
+- **Option A - change allegiance immediately, carry the citizen's round-activation state across the transfer
+  (recommended):** targeting, hostility, control, and faction-sensitive effects update at the committing receipt.
+  Move the portrait to the destination block at its stable priority tier, but carry `actedRound`/availability with
+  the citizen. An actor that already acted remains spent; an unspent actor may act only if the destination block and
+  tier have not passed; otherwise it waits. Never grant a second activation merely because the block changed.
+- **Option B - defer the whole allegiance change until next round:** the ribbon stays simple, but the citizen remains
+  mechanically allied with the wrong side after betrayal, charm, surrender, or domination has already become true.
+  Target legality, auras, opportunity attacks, and DM narration can contradict one another for the rest of the
+  round.
+- **Option C - transfer immediately and refresh the actor in the destination block:** visually direct but highly
+  exploitable. A citizen can act, defect, and act again; charm/domination becomes an unintended action-economy
+  engine.
+
+Option A examples:
+
+- Varka attacks on the hostile block, then defects before the party's next block: Varka moves to the party block
+  immediately for targeting and reactions but remains spent for the current round;
+- an unspent `+1` guard joins the party while the party block is currently resolving its `+3` PC: the guard's tier
+  remains ahead, so the guard may act at `+1` this round;
+- an unspent `+4` guard joins after the party cursor has passed `+4`: the guard waits until next round rather than
+  traveling backward;
+- a companion becomes dominated during the hostile block after already acting for the party: it moves to the
+  hostile block and is hostile immediately, but cannot receive another ordinary action this round;
+- ending a temporary charm transfers the same canonical citizen back under the same law; no duplicate portrait or
+  fresh activation is minted.
+
+If allegiance changes during that citizen's currently resolving receipt, complete or interrupt that receipt only as
+the causative rule explicitly says, then commit the transfer at a receipt boundary. Do not relocate a portrait
+halfway through an unresolved mechanical transaction. The transfer animation is purposeful state feedback: one
+portrait crosses between blocks with an icon/caption naming the player-known cause, preserving canonical id,
+speakable label, tie result, and `actedRound`. It may not reveal secret duration, controller identity, or hidden
+motive.
+
+For a genuinely independent destination, create/locate its block under F10.3o. If the departing citizen was the
+only member of a block, retire the empty block after the receipt; if it later reforms, it is a new entry event rather
+than a ghost placeholder. Existing block averages remain their frozen encounter/entry values even when membership
+changes; otherwise charm, death, or defection would make block order oscillate.
+
+**Implementation/maintenance cost:** Option A is **medium**: canonical combat allegiance, transferable actor
+availability, destination insertion, empty-block retirement, transaction-boundary sequencing, target/aura/reaction
+revalidation, ribbon/lens motion, accessibility text, save/replay, and tests. Option B is lower initiative-state cost
+but creates high cross-system inconsistency; Option C creates balance and exploit debt.
+
+**Codex recommendation: Option A.** Allegiance truth should change when the world changes, while the activation
+receipt follows the citizen so changing teams never creates time or a duplicate turn.
+
+Does Adam accept Option A? If so, settle exact narrative-opening override authority, then crowded-ribbon overflow
+and neutral/third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is authorized.

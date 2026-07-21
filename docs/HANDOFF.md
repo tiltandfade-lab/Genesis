@@ -6,6 +6,23 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 reinforcement initiative) — ARRIVALS JOIN THE FUTURE; THEY NEVER REWRITE THE PAST [Codex]
+
+This supersedes the initiative-edge pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3n Option A. A reinforcement joining an existing initiative block inserts at its true priority and
+may act in the current round only if both its block and tier remain ahead of the cursor. Otherwise it enters visibly
+waiting until next round. The original block average/order never recalculates. Specific summon timing, scheduled
+`Initiative 0`, and governed entry effects use typed overrides; arrival is not secretly a full activation. Reveal
+receipts preserve eligibility and the ribbon leaks no hidden portrait/count. F10.3n is closed.
+
+**Do next:** ask F10.3o. For a genuinely independent new combat side, Codex recommends creating a block from the
+revealed entry roster, freezing its average, and inserting it by priority. It may act this round only if its rightful
+block slot remains ahead of the cursor; otherwise it waits. Political faction alone does not create a block—current
+allegiance/independent objectives do. Then settle later allegiance changes, opening override authority, ribbon
+overflow, and neutral/third-party lens placement. Wave 10 remains open; no build/Fable handoff is authorized.
+
 ## ⭐ Latest (2026-07-20, Wave 10 initiative edge) — ADVANTAGE MOVES PRIORITY BY THREE; ARRIVALS CANNOT MOVE BACKWARD IN TIME [Codex]
 
 This supersedes the deterministic-initiative pickup below without deleting it. Design/docs only: no code,

@@ -17839,3 +17839,71 @@ their block fairly, and gives authored summon/arrival rules an explicit override
 Does Adam accept Option A? If so, audit a genuinely new faction/block entering mid-combat, then lock exact opening-
 override authority, crowded-ribbon overflow, and neutral/third-party lens placement. Wave 10 remains **OPEN**; no
 build is authorized.
+
+### 11.27 F10.3n ruling and F10.3o expansion - priority insertion without backward time
+
+**Adam's ruling (2026-07-20):** accept Option A. A newly revealed citizen joining an existing initiative block is
+inserted at its stable derived-priority tier. It may take an ordinary activation in the current round only when both
+its block and that tier remain ahead of the current cursor. If its tier or whole block has passed, its portrait enters
+with a non-color-only waiting marker and becomes available next round.
+
+The arrival receipt records the citizen id, block id, priority and provenance, reveal point, cursor position,
+computed insertion slot, current-round eligibility, and any specific timing override. The starting block average and
+block order remain frozen. Later members cannot improve or reduce a side's already-earned encounter position.
+
+Specific authored timing beats generic insertion: a summon that explicitly acts immediately after its summoner, a
+scheduled `Initiative 0` arrival, or a governed entry action uses a typed override. An entry effect is not silently a
+complete activation. Hidden placeholders/counts remain forbidden; the portrait appears only when the citizen is
+revealed as a participant. F10.3n is closed.
+
+#### F10.3o - what if the arrival belongs to a genuinely new combat faction/block?
+
+This is different from another wolf joining the existing hostile block. Examples include city guards entering a
+party-versus-cult fight without yet siding with either, two hostile factions turning on one another, or a dragon
+arriving with goals opposed to everyone already present.
+
+- **Option A - insert the new block by its frozen entry average, with no backward-time activation (recommended):**
+  calculate the new block's exact average from its revealed starting members at entry and freeze it. Insert it among
+  the existing blocks by priority while preserving existing blocks' relative order. If the new block's rightful
+  slot is still ahead of the round cursor, it may act this round; if that slot has passed, it waits until next round.
+- **Option B - append it to the end for this round, then sort it next round:** simple and guarantees an arrival never
+  interrupts remaining blocks, but a very fast third party revealed before its proper slot acts after everyone for
+  an arbitrary first round and then jumps elsewhere on the ribbon.
+- **Option C - give the new faction an immediate entry turn:** maximizes drama but treats arrival itself as a free
+  faction activation, encourages timing exploits, and can interrupt an action/receipt already resolving.
+
+Option A examples:
+
+```text
+Initial block order: PARTY +3 | HOSTILES +1
+Current cursor:      PARTY resolving
+```
+
+- city guards enter at average `+2`: their rightful block belongs between Party and Hostiles, so they may act this
+  round after Party and before Hostiles;
+- a dragon enters at average `+5`: its rightful slot is before the already-active Party block, so it enters visibly
+  waiting, then leads the next round;
+- scavengers enter at average `0` after the Hostile block has completed: their slot has passed with the round, so
+  they wait until next round.
+
+A citizen is not placed into a separate block merely because it belongs to a different political faction. The
+combat owner creates a new block only when present allegiance and independent objectives make it a genuinely
+separate acting side. A guard who has not joined the fight remains a scene citizen, not a hidden initiative tile; a
+guard who commits to helping the PC joins the party block under F10.3n; guards pursuing both sides become their own
+block. Viewpoint projection may describe their allegiance as uncertain without exposing DM-only intent.
+
+The new block's member positions and tie result freeze at entry. Subsequent reinforcements use F10.3n and do not
+recalculate its average. A later allegiance change requires a separate typed transfer rule rather than silently
+dragging a portrait between blocks mid-activation.
+
+**Implementation/maintenance cost:** Option A is **medium-low beyond accepted insertion machinery**: create/freeze a
+block at an entry receipt, compare its rational average, locate it relative to the round cursor, update the ribbon
+without hidden leakage, and persist it. Option B is slightly cheaper; Option C shifts cost into balance,
+interruption, and replay bugs.
+
+**Codex recommendation: Option A.** It extends the accepted priority law consistently: new information may enter
+the remaining future, never rewrite the already-spent past.
+
+Does Adam accept Option A? If so, settle later allegiance changes, then exact narrative-opening overrides,
+crowded-ribbon overflow, and neutral/third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is
+authorized.

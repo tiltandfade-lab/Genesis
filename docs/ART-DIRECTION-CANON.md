@@ -453,6 +453,16 @@ block averages consume the derived priority. Tie-only d20s stay unmodified to pr
 accepted contract and open reinforcement-insertion question live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.26.
 
+## Priority-position reinforcement insertion ruling (Adam, 2026-07-20 — additive)
+
+> "A"
+
+A revealed reinforcement joins its existing faction/combat block at its true derived-priority portrait position.
+It may act in the current round only when its block and tier have not passed; otherwise it enters with an explicit
+waiting marker and acts next round. Arrival never recalculates the block's frozen average/order, and no hidden
+portrait or placeholder leaks before reveal. Exact receipts, scheduled/specific timing overrides, costs, and the
+open new-faction question live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.27.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

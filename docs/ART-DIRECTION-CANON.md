@@ -564,3 +564,160 @@ exact cells and true world scale remain authoritative. Orthographic remains the 
 real captures show that perspective harms cell comprehension, sprite citizenship, picking, shadow truth, or the
 accepted desktop/tablet gates without a material depth/composition gain, the release ruling returns to
 orthographic rather than protecting the taste-card inference.
+
+## Provisional restrained knowledge-and-attention ladder (Adam's ruling, 2026-07-20 — additive)
+
+> "This is a real fork in the design. I guess Disco Elysium kind of had B, so we'll go B. it will require some playtesting though"
+
+The SceneTray provisionally uses an `ambient -> noticed -> relevant -> active -> historical` attention ladder.
+Ordinary scenery and interactables do not glow merely because an action exists. Noticed and relevant objects use
+viewpoint-earned physical or sensory evidence; strong outlines, rings, labels, icons, paths, and area treatments are
+reserved for active selection/targeting, urgency, player-invoked scan, or equivalent attention aid. Changed places
+prefer physical state and plausible residue over permanent completion UI. Unknown secrets receive no affordance cue
+beyond evidence the viewpoint has actually earned, and missing bespoke art uses a truthful marker/card/fallback
+rather than suppressing a known interactable. This is explicitly playtest-dependent; the required clutter,
+discoverability, secret-leakage, revisit, and equivalent-cue cases live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.42.
+
+## Layered durable-history projection (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+The SceneTray keeps canonical history complete while mounting a bounded, layered physical projection. Current
+mechanical/topological truth, identity-bearing objects, custody, protected evidence, promised callbacks, active
+hazards, and meaningful scars remain distinct. Only genuinely interchangeable low-consequence residue may
+coalesce into deterministic stain, debris, track, soot, or similar representative fields, with contributor history
+and lawful remounting preserved. Lower visual detail may simplify presentation but never cleans, repairs, ages, or
+forgets the world. Exact semantic protection, examples, costs, and the still-open lifecycle/evidence branches live
+in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.43.
+
+## Precision-honest historical remounting (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+When attention makes one coalesced or visually unmounted historical contributor relevant, the SceneTray restores
+that same stable fact through the strongest representation its current state and original precision license. Exact
+facts may remount at valid exact support; zone, relational, estimated, hidden, moved, covered, cleaned, repaired,
+carried, or destroyed facts keep those truths rather than gaining convenient coordinates or returning to an old
+position. One promoted contributor may temporarily split from its representative residue field and fold back later
+without expanding all clutter. Missing art uses a truthful marker/card/fallback. Exact support validation,
+examples, costs, and the still-open new-detail branch live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.46.
+
+## Evidence-led focused inspection state (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+Searchable residue remains ordinary physical material until noticed or deliberately focused. The SceneTray does
+not place universal magnifying-glass icons, hidden-capacity counts, progress bars, completion checks, or permanent
+exhausted halos over rubble, ash, blood, tracks, shelves, or wreckage. The focused card/interaction may state which
+known method was used, what this viewpoint learned, whether the same method is exhausted, and which stronger method
+is currently known and legal; defocus returns the material to ordinary presentation. Player-invoked scan never
+reveals unresolved slots, unknown methods, secret targets, or guaranteed contents. Exact inspection states, Gemini
+phrasing, costs, and the still-open causal-reopening branch live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.48.
+
+## Review-gated holder-aware card projection (Adam's ruling, 2026-07-20 — additive)
+
+> "B but should be flagged as a feature that needs review"
+
+The active SceneTray board, scan, focus, and actions show only acting-viewpoint plus applicable party-common
+knowledge. The clicked ephemeral card may progressively disclose material source, holder, uncertainty, conflicting
+claims, and human-earned private dramatic-irony perspective, but no unknown fact may produce a lock, blank tab,
+portrait, `???`, unread count, layout reservation, focus change, scan change, disabled control, or animation. Human-
+visible private content never enters an uninformed character's actions or narration. This direction is provisional:
+the exact layout, perspective controls, disclosure depth, and transfer affordances require the mandatory visual/
+interaction review and secret-leak/comprehension corpus in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.52.
+
+## Causal-history card with expressive Gemini retelling (Adam's ruling, 2026-07-20 — additive)
+
+> "B for now, as long as this doesn't result in dry storytelling"
+>
+> "B"
+
+The clicked history card may lead with current truth, a compact deterministic causal spine, and expandable known
+turning points/provenance rather than an exhaustive event log. Routine lifecycle and residue events may coalesce
+into readable known summaries; attributed conflicts remain distinct; hidden history creates no blank entry or gap.
+This structured card is not Gemini's required prose register. Gemini retells the same fact-locked spine with real
+freedom over voice, cadence, imagery, emphasis, emotional framing, known motifs/callbacks, and length, while current
+state, causality, custody, attribution, uncertainty, and viewpoint remain hard. The combined review rejects both
+invented colorful history and dry receipt-dump narration. Exact hierarchy, narrative envelope, examples, costs,
+and review corpus live in `PROCEDURAL-DUNGEON-DIRECTION.md` sections 11.52-11.54.
+
+## Viewpoint-known physical custody and ownership projection (Adam's ruling, 2026-07-20 — additive)
+
+> "Option B"
+
+The SceneTray shows current possession/control and genuinely visible seals, crests, tags, wear, container context,
+or restrictions as physical facts rather than one universal owner aura. The focused card separates holder/
+custodian, operational controller, visible mark/apparent origin, attributed claimant, known title, and licensed use
+only when material and viewpoint-earned. Pickup changes custody; gift, sale, loan, seizure, salvage, theft
+resolution, faction law, or another owned event changes title/permission. A mark does not prove ownership, a claim
+does not become truth, allegiance color never doubles as property color, and hidden ownership creates no badge,
+field, ordering, or hint. Exact roles, examples, costs, and review cases live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.55.
+
+## Dependency-preserving transactional cue scheduling (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+Committed receipt cues preserve hard causal order while genuinely simultaneous or independent consequences may
+overlap and repeated homogeneous feedback may compress through explicit family law. The BattleMat always carries
+the exact minimum movement, trigger, target/area, state, topology, hazard, condition, death, custody, and
+transformation truth; EngagementLens, camera, particles, sound, captions, and Gemini prose may add drama but never
+become the only record. Named/PC/topology/custody consequences cannot disappear into crowd compression. Pause,
+speed, skip, reduced motion, collapsed lens, or terminal rebuild changes presentation only and must land on the
+same committed state. Exact scheduler laws, examples, costs, and the open input-boundary question live in
+`PROCEDURAL-DUNGEON-DIRECTION.md` section 11.57.
+
+## Truth-complete decision boundaries during consequence playback (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+Consequential input reopens when every material fact needed for the next choice has become readable through the
+BattleMat, card, caption, or governed static/reduced-motion equivalent—not when every flourish ends and not while
+the board still depicts stale truth. Camera/accessibility/speed/pause/skip/catch-up controls, safe review, and
+composer drafting may remain available while required cues resolve. One pending intent must look uncommitted,
+editable, and cancelable; it cannot spend, leak unseen terminal state, or silently fire after revalidation. Particle
+decay, camera settle, sound reverb, lens flourish, and expressive Gemini prose may continue after the decision
+boundary only when they do not conceal cells, targets, labels, cards, or new feedback. Exact states, examples,
+costs, and the open interruption-recovery question live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.58.
+
+## Boundary-safe visual recovery after interrupted consequences (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+Pause may preserve an in-memory frame, but skip, background return, save/load, refresh, crash recovery, or scene
+transition must not depend on exact particles, camera/audio subframes, or unfinished Gemini wording. A lossy return
+rebuilds exact current BattleMat/card truth, realizes every still-owed material change through governed static or
+reduced-motion equivalents, and gives missed consequences an ordered readable summary before consequential input
+reopens. Obsolete flourishes cancel cleanly; no stale half-state, replayed mechanics, duplicate damage, invisible
+off-screen cue, or auto-fired draft is acceptable. Exact recovery laws, examples, costs, and the open acknowledgment
+question live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.59.
+
+## Nonblocking consequence brief and bounded change traces (Adam's ruling, 2026-07-20 — additive)
+
+> "B"
+
+At a decision boundary, material changes appear through exact current board/card truth plus one compact, causal
+`What changed` brief—not a modal receipt for every event and not transient board pulses alone. Immediate
+choice-changing facts stay anchored while input reopens; supporting source/result detail expands on demand; bounded
+recent-change treatments may persist through the next choice and then recede into the same inspectable history.
+Generic `OK` clicks are not required. Explicit confirmation is reserved for a materially altered pending action.
+Hidden consequences create no badge, blank row, count, or suggestive visual gap, and Gemini prose may dramatize but
+never replace the structured lane. Exact acknowledgment laws, examples, costs, and the open trace-lifecycle question
+live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.60.
+
+## Gemini-led consequence prose; BattleMat event proof before added information layers (Adam's ruling, 2026-07-21 — additive; supersedes the automatic brief target above)
+
+> "I think for now, we run it in gemini. I thnk i need proof that actual events can even be rendered in the battle map before I start thinking about adding information layers to it. Everything is still clean with the DM screen, plus the DM can write it into prose. I think getting a dump of all this mechanical meta info without a rewrite pass is just going to take the player out of the fiction of the game and make them wonder what the hell "ward spent" means"
+
+For the current proof target, the persistent right rail remains clean DM chat/narration plus the composer. Gemini
+rewrites fact-locked committed consequences into natural scene prose; player-facing output does not expose raw
+receipt fields or phrases such as `ward spent`. The BattleMat must first prove that actual canonical events and
+their current physical results can be rendered truthfully—movement, hit/fall/state, object state, topology, hazard,
+drop/custody—before Genesis adds an automatic `What changed` board brief, anchored consequence labels, or another
+information layer. The generated DM-led mockup is closest only **without** its structured `OUTCOME` block; the
+board-brief and map-callout mockups remain proof-gated exploration rather than accepted UI. The established
+click-invoked smart-tooltip object inspector remains a separate requested interaction surface, not an automatic
+consequence notification. Exact supersession, examples, proof corpus, costs, and the open Gemini-failure fallback
+live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.61.

@@ -887,3 +887,37 @@ P10.7 attention/history behavior remains the feature goal; durable event/knowled
 After Adam accepts or amends the phase cut, F10.8g must be restated in phased form and answered explicitly. P10.8 is
 still open; P10.9 remains mandatory next; performance/device/accessibility remains owned by P10.10; no build is
 authorized.
+
+### 11.66 Borderline features remain in the MVP - EngagementLens restored as the pre-alpha battle system
+
+Adam ruled:
+
+> "ok, if it's a borderline cut we include it for the MVP, anything else that was too drastic? we definitely have to have the engagement lens for pre-alpha because that IS the pre-alpha battle system"
+
+This corrects the first phasing audit in two ways. First, it distinguishes a deliberately incomplete **proof
+prototype** from the **playable pre-alpha/MVP**. Borderline behavior stays in the MVP and is narrowed in breadth;
+uncertainty is not resolved by cutting it. Second, the EngagementLens is mandatory in pre-alpha. The BattleMat owns
+exact tactical/spatial truth, while the receipt-derived EngagementLens performs the active combatants and material
+combat beat. A physical-event test without the lens may be an early engineering proof, but it is not the pre-alpha
+battle system.
+
+The skeptical second pass also restores these defining minimums to the playable MVP:
+
+1. representative core events need legible transitions/performances, not terminal state snaps plus prose alone;
+2. materially different routes retain player agency through at least one alternative or manual waypointing;
+3. dungeon discovery proves at least one cross-room promise/payoff;
+4. the procedural slice demonstrates at least two contrasting site configurations rather than one overfit fixture;
+5. active/cold return, group change, an external contract, and a bounded crisis fork make persistence/simulation felt;
+6. the full crit-magnitude ladder, including rare Mythic/Worldbreaker outcomes, exists for representative MVP verbs;
+7. rooted labels remain stable across relevant revisits;
+8. the tabletop visual floor remains playable rather than merely truthful; and
+9. minimum Gemini fallback language has enough context-slotted variation not to become a dry second voice.
+
+These are narrow behaviors, not mature breadth promises. Full EngagementLens families/animation, route comparison,
+discovery networks, site catalogs, regional simulation, crisis orchestration, materials, camera governance, and
+language breadth remain feature goals. Working capabilities are not removed merely because they are above the
+minimum floor.
+
+The revised [global phasing framework](../PHASING-FRAMEWORK.md), [Wave 1 audit](../wave-01/PHASING-AUDIT.md),
+[Wave 2 audit](../wave-02/PHASING-AUDIT.md), and [Wave 10 audit](PHASING-AUDIT.md) record the cut. F10.8g remains
+suspended until Adam finishes reviewing the revised audits; P10.8 remains open and no build is authorized.

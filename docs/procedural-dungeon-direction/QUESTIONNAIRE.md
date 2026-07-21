@@ -930,7 +930,8 @@ edge cases, and acceptance rather than making Adam decide the same principle aga
 ## Prototype/MVP phasing amendment (2026-07-21)
 
 The preserved questionnaire and additive bank above are unchanged. For every future ruling, the answer record must
-also apply the [prototype/MVP phasing framework](PHASING-FRAMEWORK.md): either name the honest pre-alpha scaffold,
-retained upgrade seam, feature goal, and promotion evidence, or state why the feature goal is pre-alpha-critical.
+also apply the [prototype/MVP phasing framework](PHASING-FRAMEWORK.md): distinguish any narrower proof prototype from
+the recognizable playable pre-alpha/MVP, then name the retained upgrade seam, feature goal, and promotion evidence,
+or state why the feature goal is pre-alpha-critical. A borderline behavior stays in the MVP with narrow breadth.
 An unresolved phase cut keeps the relevant closure audit provisional; it never deletes or replaces an original,
 additive, or generated follow-up.

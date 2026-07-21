@@ -15,6 +15,10 @@ phase cut. The starting focus policy remains automatic Option A; player-owned Op
 target over the same policy seam. F10.8e's automatic consequence brief remains outside the current target unless
 BattleMat-plus-Gemini comprehension evidence later reopens a narrow information-layer question.
 
+The phase audit now distinguishes a narrower physical-event proof from the playable MVP. Borderline behavior stays
+in the MVP with narrow breadth. The EngagementLens is mandatory because it is the pre-alpha battle system: BattleMat
+owns exact tactical truth, and the receipt-derived lens performs the active combatants and material combat beat.
+
 Do not skip P10.8 or P10.9. Performance/device/accessibility remains P10.10. Do not close Wave 10
 until every original, additive, and generated follow-up is exhausted and Adam explicitly agrees.
 

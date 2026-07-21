@@ -51,9 +51,11 @@ No build is authorized by this discovery record.
 ### Current live position
 
 - The live task is the cross-wave [prototype/MVP phasing audit](procedural-dungeon-direction/PHASING-FRAMEWORK.md),
-  with first-pass cuts for [Wave 1](procedural-dungeon-direction/wave-01/PHASING-AUDIT.md),
+  with revised cuts for [Wave 1](procedural-dungeon-direction/wave-01/PHASING-AUDIT.md),
   [Wave 2](procedural-dungeon-direction/wave-02/PHASING-AUDIT.md), and
   [Wave 10](procedural-dungeon-direction/wave-10/PHASING-AUDIT.md) awaiting Adam's review.
+- A narrower engineering proof no longer defines the playable MVP. Borderline behavior remains in the MVP with
+  narrowed breadth, and the EngagementLens is mandatory because it is the pre-alpha battle system.
 - Wave 10 remains **OPEN**. **F10.8g is suspended rather than answered** because its prior proof corpus bundled
   mature feature goals into the pre-alpha target. After the phase cut is accepted or amended, F10.8g must be
   restated as a phased closure question.

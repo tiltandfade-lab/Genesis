@@ -777,3 +777,18 @@ Canonical ids, receipts, viewpoint law, event/history truth, renderer non-owners
 remain early foundations so later visual promotion extends rather than replaces the prototype. The cross-wave laws
 and first-pass classifications live in
 `procedural-dungeon-direction/PHASING-FRAMEWORK.md` and the three wave `PHASING-AUDIT.md` files.
+
+## EngagementLens is mandatory in the playable pre-alpha battle system (Adam's ruling, 2026-07-21 — additive)
+
+> "ok, if it's a borderline cut we include it for the MVP, anything else that was too drastic? we definitely have to have the engagement lens for pre-alpha because that IS the pre-alpha battle system"
+
+A narrower engineering proof may temporarily exercise BattleMat event rendering without every pre-alpha
+presentation layer, but that proof is not the playable MVP. The pre-alpha battle system pairs exact tactical/spatial
+truth on the BattleMat with a mandatory receipt-derived EngagementLens that performs the active combatants and
+material combat beat. Its first breadth may be small—one complete representative combat family with truthful
+generic lens staging for the other MVP combat verbs—but the lens itself is not optional polish. Any genuinely
+borderline visual behavior stays in the MVP and is narrowed rather than cut. The playable visual floor likewise
+requires legible event performances and coherent tabletop citizenship, not terminal state snaps or a debug-looking
+board. Exact phasing corrections live in
+`procedural-dungeon-direction/wave-10/05-consequence-presentation.md` section 11.66 and the revised
+`procedural-dungeon-direction/wave-10/PHASING-AUDIT.md`.

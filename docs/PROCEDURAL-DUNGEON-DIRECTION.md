@@ -18545,3 +18545,99 @@ unreliable universal pipeline.
 Does Adam accept Option A? If so, follow into F10.6e: exactly which interim prop classes must be integrated geometry
 at pre-alpha versus sprite/marker/card representation, then return to P10.5 beauty-floor and P10.7 performance deep
 dives. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.36 F10.6d ruling and F10.6d.1 follow-up - construction routing accepted provisionally; sprites earn an honest challenge
+
+**Adam's ruling (2026-07-20):** settle provisionally on Option A, but do not treat ordinary character-sprite normal
+maps as a proven waste of time or resources. Before that lane is rejected, Genesis must show comparative evidence
+using its actual character art, actual board camera, actual gameplay scale, and actual lighting stack.
+
+This qualification is supported by the existing research record rather than opposed to it. Section 5 of
+`SPRITE-BILLBOARD-RESEARCH.md` finds that a flat billboard has one camera-facing surface normal and therefore can
+receive useful overall light/tint but cannot express directional anatomy, folds, or volume. Per-sprite normal maps
+are a legitimate documented upgrade, not nonsense. The same review also finds no research-derived sprite-size or
+cost threshold at which that upgrade becomes worthwhile. The downloaded procedural-layout papers do not answer a
+sprite-shading question; their applicable lesson is methodological: preserve hard truth constraints, compare legal
+candidates, measure cost, and expose the decision rather than hiding it in a generator. Therefore the prior
+recommendation remains a default production posture, not a foregone visual verdict.
+
+#### F10.6d.1 - what evidence may close, preserve, or expand the character-normal lane?
+
+Use one canonical encounter state and lock board geometry, character positions, camera, crop, albedo, filtering,
+light placement/intensity/color, exposure, cast shadows, contact shadows, color grade, and UI. Compare three
+character treatments:
+
+```text
+C0  ordinary sprite contract: flat character surface + accepted cast/contact grounding
+C1  best governed automatic normal derivation + the same cast/contact grounding
+C2  reviewed art-aware normal asset + the same cast/contact grounding
+```
+
+`C1` may test silhouette inflation, height/distance-field construction, or another reproducible automatic method,
+but blind albedo-luminance embossing is not accepted as the best automatic case merely because it is easy. `C2`
+must be a genuine best-case treatment whose surface directions respect face, body, equipment, folds, and transparent
+gaps; otherwise the test would prove only that a poor normal map looks poor. All three states use the same material
+response and only the character-normal binding changes.
+
+The representative set must include at least:
+
+- one ordinary upright PC or ally with a readable face and cloth;
+- one armored or hard-surface humanoid whose painted highlights could conflict with moving light;
+- one very small figure judged at true gameplay size;
+- one wide quadruped or horizontal creature;
+- one winged, many-limbed, or transparency-complex silhouette;
+- one large boss/hero candidate likely to benefit from exceptional treatment;
+- one dark-value sprite in a dim Gloom scene; and
+- one bright or reflective sprite in Chrome/Fantasy lighting.
+
+Use real Genesis sprites, including their source-resolution and alpha-edge behavior, rather than purpose-built test
+art. Capture the accepted 2560×1440, 1920×1080, and 1194×834 layouts. Judge true gameplay presentation first; a
+diagnostic enlargement may explain a result but cannot win a feature players cannot perceive on the board. Include
+several motivated light directions or a short deterministic light/character-motion trace so the test reveals false
+dents, highlight reversal, edge halos, shimmer/crawl, and painted-light versus simulated-light conflict that one
+still frame can conceal.
+
+The report must measure and show:
+
+1. **Visible benefit:** whether the normal-enabled sprite is consistently preferred for scene integration,
+   directional form, readability, and material response at gameplay scale—not merely visibly different when zoomed.
+2. **Identity/style fidelity:** whether face, silhouette, equipment, faceted/pixel planes, palette hierarchy, and
+   authored painted light remain stable as scene lighting changes. A normal map cannot make a canonical character
+   look dented, rubbery, embossed, wet, or like a different pose.
+3. **Grounding contribution:** whether `C1` or `C2` adds a meaningful win after alpha cast and contact shadows are
+   already present. It does not get credit for a grounding problem solved equally well by the cheaper shadow stack.
+4. **Runtime cost:** measured GPU frame time, texture memory, texture uploads/cache behavior, shader/material or
+   draw-call consequences, loading, and fallbacks across a representative combat crowd—not a theoretical claim
+   that one texture sample is cheap.
+5. **Production cost:** generation or authoring minutes, correction/rejection rate, map storage, version/cache
+   invalidation, alpha/tangent/orientation bugs, regeneration after sprite revision, and required visual-QA time,
+   extrapolated transparently across the actual admitted sprite corpus.
+
+Captures should be shuffled or otherwise unlabeled for the first visual preference pass, then unblinded for artifact
+diagnosis. Adam retains visual-acceptance authority, but the capture sheet also records the measurable costs so a
+subtle preference cannot silently become an unlimited per-asset obligation.
+
+The gate has three honest outcomes:
+
+- **Close ordinary character normals:** if neither `C1` nor `C2` produces a repeatable gameplay-scale improvement
+  after the shadow stack, or if the improvement is outweighed by fidelity failures and corpus-wide cost, retain
+  `C0` for ordinary sprites and record the evidence. This is the proof needed to call the broad lane wasteful.
+- **Preserve the exceptional lane:** if `C2` materially helps close/hero presentation but `C1` fails or the benefit
+  disappears at ordinary scale, retain reviewed normal assets only for rare hero, boss, or keepsake sprites whose
+  screen use earns the cost. This is compatible with provisional Option A.
+- **Reopen and expand the lane:** if `C1` or another governed reproducible path wins across representative ordinary
+  sprites within the renderer and production budgets, amend Option A and admit the proven sprite classes. The test
+  is not constructed to protect the recommendation from contrary evidence.
+
+This proof is a **medium isolated R&D/capture cost** and a low recurring cost if it closes the lane. It prevents a
+potentially much larger mistake in either direction: commissioning normal assets for the whole corpus without a
+visible payoff, or discarding a high-value integration technique because its cheapest version was poor.
+
+**Codex recommendation:** accept this three-way challenge gate and keep F10.6d provisional until it runs at the
+relevant implementation milestone. Continue the design questionnaire under construction-routed Option A; the
+later evidence may close, preserve, or expand sprite-normal scope without reopening unrelated shell/prop rulings.
+
+Does Adam accept this as sufficient proof design, or should the eventual test include another character type,
+lighting condition, or success criterion? After this material follow-up is exhausted, proceed to F10.6e: which
+interim prop classes must be integrated geometry at pre-alpha versus sprite/marker/card representation. Wave 10
+remains **OPEN**; no build is authorized.

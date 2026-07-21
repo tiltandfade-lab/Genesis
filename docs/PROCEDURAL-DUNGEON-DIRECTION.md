@@ -18718,3 +18718,98 @@ Genesis to model the whole furniture catalog before the procedural board works.
 Does Adam accept Option A, prefer the broader Option B, or want to amend the starter-kit families? If Option A
 closes without another material prop follow-up, return next to P10.5/F10.6's gameplay-scale beauty floor, then
 P10.7 performance and degradation. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.38 F10.6e ruling and F10.6f expansion - mechanics-first prop kit accepted; define the beauty floor
+
+**Adam's ruling (2026-07-20):** accept Option A. Pre-alpha must physically prove ground/elevation/traversal,
+boundaries/portals, tactical blockers and cover, the common `FACED_BOX` chest/container path, simple round
+containers/blockers, motivated practical lights, and simple mechanisms/conditions/hazards. Complex, small, and
+background nouns remain marker/card/reserve-first unless canonical mechanics promote them into a physical family.
+Promotion preserves the same object id and receives an honest proxy or explicit unsupported/alternate realization;
+the renderer never invents collision from prose. F10.6e closes.
+
+#### F10.6f - what does “beautiful enough at gameplay scale” actually require?
+
+Cards G-L establish a working visual family, but copying Card G's exact dungeon into every scene would be as wrong
+as accepting an unlit wireframe because its cells are legal. The beauty floor needs to preserve an intentional,
+coherent hybrid image while permitting different sites, modes, densities, weather, and performance tiers.
+
+- **Option A - Card-G-equivalent finish everywhere:** require every ordinary room, town street, wilderness segment,
+  and battle state to show approximately Card G's density of finished geometry, textured surfaces, practical
+  lights, shadows, and composed atmosphere. This is visually simple to police but turns one dungeon beauty frame
+  into an expensive universal content quota and may make daylight, sparse wilderness, or humble interiors feel
+  artificially over-dressed.
+- **Option B - invariant hybrid floor plus mode-specific reference frames (recommended):** lock the visual truths
+  that every playable frame must preserve, then judge composition against a small reference family for its actual
+  mode and density. Expensive accents may vary; legibility, citizenship, material/realm identity, and intentional
+  composition may not.
+- **Option C - mechanical legibility floor only:** pass when cells, doors, cover, actors, markers, and UI are
+  readable, with lighting/material beauty treated as later polish. This is the cheapest gate but directly violates
+  the accepted requirement that simplification preserve Genesis's visual-engine wins rather than become a diagram.
+
+Under Option B, every normal playable SceneTray must pass these invariants at its accepted native viewport:
+
+1. **Intentional composition:** the camera crop has a readable focal hierarchy and controlled negative space. The
+   tray cannot look like arbitrary legal cells surrounded by empty renderer darkness, and no required play area is
+   hidden beneath the left rail, right narration, initiative ribbon, drawer, card, or lens.
+2. **High-resolution physical substrate:** silhouettes, elevation, apertures, edges, and large material regions are
+   clean and stable at native output. Geometry does not become a globally pixelated framebuffer merely because
+   actors use canonical pixel art.
+3. **Material and realm identity:** floor, wall, structural, and cheap-prop materials respond coherently to light
+   and remain distinguishable through construction/albedo/material pattern and grade—not only by tinting the same
+   grey room blue, orange, or green. Normal response joins this floor only if the accepted controlled spike proves
+   it; the flat fallback must still compose beautifully.
+4. **Motivated light and controlled darkness:** local artificial light has a visible or spatially credible
+   practical; daylight, moonlight, weather, magic, and other environmental sources have equally credible scene
+   evidence. Darkness frames and directs attention without crushing important actors, paths, exits, or text.
+5. **Grounded pixel citizens:** sprites retain canonical pixels, scale, silhouette, foot anchor, and readable
+   palette. Contact grounding is present; cast-shadow behavior is alpha-shaped and light-consistent where the
+   scene's light supports it. No magenta fringe, rectangular shadow, filtering smear, edge crawl, or pasted-sticker
+   citizenship passes.
+6. **Tactical and semantic truth:** walkable cells, height changes, openings, cover, hazards, selected/active state,
+   known markers, and current object state remain readable without every object glowing. A beautiful frame that
+   obscures play fails; a correct frame with no visual hierarchy or material life also fails.
+7. **Readable game shell:** DM narration remains comfortable over the translucent right surface; active controls,
+   labels, object cards, and character drawers meet contrast, scale, focus, and safe-placement laws without asking
+   transparency to compensate for text laid directly over uncontrolled scene contrast.
+8. **Truthful fallback:** missing art, disabled normals, reduced shadow quality, absent atmosphere, or a deferred
+   model lands on a composed known representation—not a random substitute, invisible noun, glaring debug primitive,
+   or materially different world state.
+
+This is a reference-and-failure gate rather than an asset-count checklist. Fog, rain, bloom, floating motes,
+special decals, ornate props, and hero effects appear only when semantically licensed and within budget. A bright
+village noon can pass without torches or Gothic darkness; a barren salt flat can pass without clutter; both still
+need deliberate material, light, scale, composition, and citizen integration.
+
+The initial reference family should be:
+
+| Mode | Working comparison |
+|---|---|
+| Ordinary dungeon/battle | Card G substrate and full shell, amended by all later combat/UI rulings. |
+| Selected combatant / action focus | Card H's derived EngagementLens relationship, amended by its later orientation, labels, distance, initiative, and contextual-collapse rulings. |
+| Large or multilevel battle | Card L's spatial scale and restrained shell, with the same readability and material floor. |
+| Town/social street or public place | A new same-shell taste/capture frame is still required; dungeon blocks recolored as a town do not prove it. |
+| Wilderness/travel/exploration | A new same-shell taste/capture frame is still required; an empty green grid does not prove it. |
+
+Before Wave 10 closes, the town and wilderness references must establish the same visual grammar without demanding
+the dungeon's exact masonry density or lighting. Later P10.12 captures must use canonical same-state inputs and
+real engine assets; generated taste cards may set direction but cannot serve as build proof.
+
+The downloaded procedural-layout papers support separating semantic intent from legal realization, comparing
+candidates, and exposing fallbacks. They do not define visual beauty. That part must remain an explicit reference,
+capture, play-scale comprehension, and art-direction judgment rather than a solver score masquerading as taste.
+
+**Implementation/maintenance cost:** Option B is **medium-high renderer/art-direction/QA work**: stable hybrid
+sampling, camera composition, lighting/material tuning, grounding, responsive shell checks, fallback composition,
+and a small fixed cross-mode reference corpus. It is substantially cheaper than Option A's universal dressing quota
+and materially safer than Option C's “polish later” promise.
+
+**Codex recommendation: Option B.** It protects what makes Cards G-L desirable while allowing a dungeon, village,
+wilderness crossing, sparse ruin, and large tactical field to be beautiful for different reasons. It also exposes
+the current evidence gap honestly: the dungeon family has a target, while town and exploration still need their
+own integrated-shell taste cards.
+
+Does Adam accept Option B, prefer universal Card-G-level finish under Option A, or want to amend the mandatory
+invariants/reference modes? If Option B is accepted, follow into the remaining F10.6 camera/zoom/play-scale bounds,
+including minimum actor/cell readability, before P10.7's performance and degradation laws. Wave 10 remains
+**OPEN**; no build is authorized.

@@ -516,3 +516,15 @@ shorten, the §7 master prop prompt ("Do not shorten it"):
    generic starter-tier art… generic mobile-game loot") plus §3.2's facet scale law are the
    anti-WoW / anti-oversimplification gates for props. The 2026-07-14 prop drift happened
    because the pilot's queue JSON *shortened* §7 — shortening is the drift vector.
+
+## Mechanics-first pre-alpha physical-prop floor (Adam's ruling, 2026-07-20 — additive)
+
+> "A"
+
+This accepts Option A in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.37. The pre-alpha visual floor physically
+integrates ground/elevation/traversal, boundaries/portals, tactical blocker/cover proxies, the common `FACED_BOX`
+chest/container path, simple round containers/blockers, motivated practical lights, and simple mechanisms,
+conditions, and hazards. Complex, handheld, small, or background nouns remain truthful marker/card/reserve
+representations unless their canonical mechanics promote them into a physical family. Promotion preserves the same
+object identity and uses honest primitive/composite geometry; it never invents collision from prose or requires a
+bespoke 3D model merely because the AI DM invented the noun.

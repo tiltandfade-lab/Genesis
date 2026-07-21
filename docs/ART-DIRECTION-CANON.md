@@ -828,3 +828,16 @@ legible performance; the mandatory EngagementLens stages every material combat b
 serial over retained dependencies; recovery and fiction-first consequence language are MVP obligations; automatic
 focus A begins over a seam that retains player-owned B; and automatic consequence briefs remain evidence-gated.
 This closure does not authorize implementation or close Wave 10.
+
+### Transactional visual continuity across scene adapters (Adam, 2026-07-21)
+
+> "B for sure"
+
+Map, town/social, wilderness/exploration, dungeon, battle, and aftermath adapters preserve one scene through a
+typed, idempotent SceneLineage handoff rather than independent rebuilds or one universal live geometry. The handoff
+preserves canonical identity, cast and role continuity, object/custody state, damage, traces, hazards, viewpoint
+knowledge, honestly owned spatial anchors, pending obligations, consequence position, and safe presentation state.
+The outgoing adapter yields and the incoming adapter validates before projection. A simple crossfade or reframe is
+sufficient for the playable MVP; transition animation is not canonical. Seamless morphs, richer camera memory,
+simultaneous split-view presentation, and broad adapter-specific polish remain feature goals. The first retained
+visual proof is one room crossing exploration -> BattleMat plus EngagementLens -> damaged aftermath without reset.

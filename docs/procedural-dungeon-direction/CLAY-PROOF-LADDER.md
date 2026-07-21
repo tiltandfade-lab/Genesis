@@ -130,19 +130,21 @@ viewpoint-legal committed consequence without blocking, duplication, raw engine 
 Use the clean DM rail, fact-locked Gemini prose, and several context-slotted minimum fictional clauses. This pass
 consumes C1C-C1F receipts and recovery state; it does not create another consequence authority.
 
-## Stage 2 - multi-room causality
+## Stage 2 - multi-room causality and first mode handoff
 
 Stage 2 extends the retained room into the smallest multi-room fixture that can prove connections and consequences.
 Two rooms may be enough for the first seam; add a third only when a branch, return path, or intermediate state is the
-thing under test.
+thing under test. It also returns to the retained room for the first exploration -> battle -> aftermath adapter
+handoff rather than making a town or regional map the first continuity fixture.
 
 ### C2A - connection and continuity
 
 **Primary question:** can actors, objects, labels, viewpoint knowledge, active hazards, and current state cross a
 portal and return without reset or duplication?
 
-This is the first exact portal/circulation and cross-room continuity proof. It reserves—without deciding—the richer
-map/town/exploration/combat mode-continuity questions still owned by P10.9.
+This is the first exact portal/circulation and cross-room continuity proof. It supplies connection and return-state
+evidence to the richer map/town/exploration/combat mode-continuity contract owned by P10.9, but it does not replace
+the adapter-handoff proof below.
 
 ### C2B - promise and payoff
 
@@ -158,6 +160,18 @@ Gemini-led projection before building a discovery network or full attention ladd
 another room, and can both rooms rebuild the same truth after interruption?
 
 This is the first causal multi-room state-propagation gate, not yet a full operating-site simulation.
+
+### C2D - exploration, battle, and aftermath lineage handoff
+
+**Primary question:** can one retained room move from exploration or investigation into exact BattleMat plus
+EngagementLens combat and back into aftermath through one typed, idempotent SceneLineage handoff without changing
+identity, losing state or knowledge, duplicating consequences, or silently inventing spatial certainty?
+
+Prove lineage/version identity, outgoing yield and incoming validation, single adapter ownership, cast and role
+continuity, object/custody state, damage/traces/hazards, viewpoint knowledge, honestly owned spatial anchors, pending
+obligations, consequence cursor, safe presentation restoration, and retry/rebuild. A simple crossfade is sufficient;
+the transition animation is not canonical. The exact promotion and later compaction of spatial precision remains
+subject to the active P10.9 follow-up rather than being invented by this pass.
 
 ## Stage 3 - small operating site simulation
 

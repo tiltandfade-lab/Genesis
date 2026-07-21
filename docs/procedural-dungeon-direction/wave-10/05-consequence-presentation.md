@@ -1123,3 +1123,84 @@ them only after correct handoffs feel disorienting or insufficient in play.
 Does Adam choose **A, B, or C**, or want to amend the handoff bundle? Every answer will receive its phase/Clay Pass
 mapping and all generated continuity follow-ups before P10.9 can close. Wave 10 remains **OPEN**; no build is
 authorized.
+
+### 11.70 F10.9a ruling and F10.9b expansion - transactional SceneLineage accepted; choose the precision law
+
+**Adam's ruling (2026-07-21):** "B for sure."
+
+F10.9a accepts **Option B: a transactional SceneLineage handoff bundle**. Adapter changes preserve one lineage and
+typed, idempotent continuity receipt rather than asking each view to reconstruct what matters or mounting one
+universal exact world. The bundle carries versioned source/destination ownership, canonical time/location,
+participants and roles, objects/custody, damage/traces/hazards, viewpoint knowledge, known connections, honestly
+owned spatial anchors, pending causal/DM obligations, consequence cursor, and safe presentation state. The outgoing
+adapter yields and the incoming adapter validates; retry/rebuild cannot replay mechanics or mint a new scene.
+
+The phase mapping proposed at 11.69 is accepted. These identity, authority, provenance, and recovery seams are
+**PLAYABLE PRE-ALPHA/MVP CRITICAL**, not an ideal-only visual layer. **C2D** now proves one retained-room exploration
+or investigation -> BattleMat plus EngagementLens battle -> damaged aftermath handoff. A simple crossfade is enough
+for that pass. Seamless morphs, richer camera memory, simultaneous split-view presentation, and broad adapter polish
+remain feature goals. Travel, town, CrisisChain, split-party, and other continuity traces remain mandatory P10.9
+work; accepting the common bundle does not silently declare those cases solved or close P10.9.
+
+#### F10.9b - how does a coarser scene legally become exact enough for combat, and what survives when it becomes coarse again?
+
+In plain English: exploration may know that a goblin is `near the north door`, a merchant is `behind the spice
+stall`, or wolves are `following the eastern route`. Combat needs exact occupied cells, blocking objects, cover,
+reach, and routes. Where may that new precision come from, and after combat which exact details remain meaningful
+world facts rather than disposable grid coordinates?
+
+**Option A - let the destination adapter fill the grid, then discard its precision.** The battle adapter
+deterministically places every required participant/object from whatever broad relations are available. Its cells
+are presentation-local rather than canonical; exit keeps only ordinary event consequences that another system
+happens to promote.
+
+- **Dungeon example:** `near the north door` becomes a convenient goblin cell selected by the BattleMat. A dropped
+  key can be picked up during combat, but if no special aftermath rule translates its last cell, the exploration
+  view only knows that the key is somewhere in the room.
+- **Gemini-DM example:** Gemini may say the goblin was pinned against the door because that is what the board showed,
+  while the next adapter treats the placement as disposable and cannot safely use that relation.
+- **Cost:** **low-medium initial placement work**, but high recurring adapter, prose, debugging, and continuity debt.
+  It creates a hidden second class of facts that can matter tactically yet vanish at the mode boundary.
+
+**Option B - typed precision tiers with provenance-bearing placement and compaction receipts (recommended).** Every
+spatial claim names its honest tier and scope: exact cell/footprint, anchored local relation, zone/region/route, or
+unresolved/reserve. A transition may increase precision only through a legal placement receipt sourced from an
+existing anchor, deterministic constraint solution, or explicit player/DM authority still to be decided. The exact
+combat placement becomes canonical for its valid scene/substrate scope. On exit, a compaction receipt retains every
+choice-changing relation and consequence while allowing meaningless cell detail to become a coarser truthful fact;
+it records what changed precision and why rather than silently forgetting or pretending certainty.
+
+- **Dungeon example:** `near the north door` constrains the goblin to legal cells in that anchor. `Somewhere in the
+  crowd` stays unresolved or enters reserve instead of being falsely pinned down. A broken door, burning stall,
+  dropped pack beside an injured merchant, blocked exit, and eastward flight survive aftermath as anchored facts;
+  whether the pack was on cell 14 or 15 may compact when that distinction no longer changes play.
+- **Gemini-DM example:** Gemini may say, "The goblin sprawls at the splintered threshold; your pack lies beside the
+  merchant," because those relations remain supported. It may not convert an unresolved crowd position into a
+  witnessed hiding place or keep citing a meaningless grid coordinate after the grid is gone.
+- **Cost:** **medium-high reusable spatial-schema and QA work**: precision enums/scopes, source provenance,
+  constraint validation, placement/compaction receipts, conflict handling, save migration, Gemini filters, and
+  adversarial round trips. Maintenance is bounded because every adapter consumes the same law.
+
+**Option C - require complete exact spatial truth before a mode may become combat.** The source mode must fully
+spatialize all relevant actors, objects, occlusion, and routes before the BattleMat opens. Exact geometry remains
+canonical across exit, even if the coarser adapter does not display it.
+
+- **Dungeon example:** a market fight cannot begin until the crowd, stalls, doors, combatants, cover, and uncertain
+  entrants all have exact legal placement. A regional wolf encounter must resolve route-scale ambiguity into a
+  complete local encounter map before initiative starts.
+- **Gemini-DM example:** Gemini can describe any established location consistently, but spontaneous violence may
+  pause while the engine manufactures detail the prior scene never needed or honestly owned.
+- **Cost:** **very high generation latency, content, geometry, persistence, validation, and support cost**. It also
+  risks converting uncertainty into false certainty merely to satisfy the battle adapter.
+
+**Codex recommendation: Option B.** It preserves exact tactical truth without claiming that all modes possess exact
+geometry or letting meaningful combat facts evaporate. It is also the only option that scales naturally from the
+one-room C2D proof to town, travel, split-party, and CrisisChain transitions over the same provenance law.
+
+If B is accepted, the next generated follow-up is **F10.9c: who resolves a legal placement when several exact
+arrangements satisfy the same coarse facts, and how do player agency, Gemini authority, deterministic fallback, and
+secret information divide that choice?** Performance budgets and device/accessibility behavior remain reserved for
+P10.10.
+
+Does Adam choose **A, B, or C**, or want to amend the precision tiers or compaction rule? P10.9 and Wave 10 remain
+**OPEN**; no build is authorized.

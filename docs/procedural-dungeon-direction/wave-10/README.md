@@ -11,8 +11,9 @@ current_write_target: 05-consequence-presentation.md
 Wave 10 is **OPEN**. It was promoted ahead of Waves 3-9. Adam accepted the
 [prototype/MVP phasing audit](PHASING-AUDIT.md), [Clay Proof Ladder](../CLAY-PROOF-LADDER.md), and
 [Feature-Promotion Ledger](../FEATURE-PROMOTION-LEDGER.md) on 2026-07-21. Adam explicitly closed phased P10.8 at
-section 11.69. The live question is **F10.9a**, choosing the transactional authority for map/town/exploration/combat
-adapter handoff. P10.9 remains mandatory and open. The P10.8 starting focus policy remains automatic Option A;
+section 11.69 and accepted F10.9a Option B's transactional SceneLineage handoff at section 11.70. The live question
+is **F10.9b**, defining legal spatial-precision promotion and compaction across that handoff. P10.9 remains mandatory
+and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow
 information-layer question.

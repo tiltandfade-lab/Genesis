@@ -6,6 +6,33 @@ updated: 2026-07-20
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-20, Wave 10 lens collapse + initiative ribbon) — LOCAL COLLAPSE STICKS; TURN IDENTITY MOVES TOP-CENTER [Codex]
+
+This supersedes the stable-lens-side pickup below without deleting it. Design/docs only: no code, dependency
+installation, CI, worktree, LFS checkout, merge, push, or Fable handoff was authorized.
+
+Adam accepts F10.3j Option B for now. Deliberately collapsing the EngagementLens suppresses active-follow for the
+current encounter until explicit expansion; a new combat restores the default unless a distinct global or
+accessibility `Lens Off` preference is active. Transient drawer/minimum-layout suppression remains separate.
+F10.3j is closed.
+
+Adam also requires a BG3-positioned top-center initiative/order line with square portrait tiles vertically centered
+on it and derived from the large canonical sprites. The placement and portrait direction are accepted. Corpus
+inspection confirms a deterministic hybrid crop is feasible but a universal face crop is not: upright humanoids,
+wide worgs, huge dragons, sharks, amorphous creatures, and tiny caged animals require alpha/content bounds,
+silhouette presets, whole-subject fallback, and rare reusable per-asset focus overrides. No per-citizen crop debt or
+nondeterministic runtime recropping. The ribbon remains viewpoint-safe and does not spend either persistent side
+rail.
+
+The new surface exposes an existing law: Genesis v1 initiative is side-based and owns no per-creature turn order.
+The visual request alone does not silently supersede that rule.
+
+**Do next:** ask F10.3k. Codex recommends a winner-first side-block activation ribbon: portrait tiles show the
+participating roster, acting/spent side, and currently resolving citizen without pretending citizens have a fixed
+speed order inside their side. Literal portrait-by-portrait BG3 ordering requires explicitly reopening initiative
+mechanics; postponing the ribbon is the cheap alternative. After Adam rules, exhaust ribbon state/overflow and
+neutral/third-party lens placement, then close inspector/feedback with its playtest obligation and resume F10.6b.
+
 ## ⭐ Latest (2026-07-20, Wave 10 stable lens sides) — PARTY LEFT; HOSTILES RIGHT; ACTIVE MARKER CARRIES THE TURN [Codex]
 
 This supersedes the active-character-lens pickup below without deleting it. Design/docs only: no code, dependency

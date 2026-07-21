@@ -397,6 +397,21 @@ right, hostile actions right-to-left, and reactions originate from stable factio
 Exact directional-family cost and open manual-collapse/third-party questions live in
 `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.21.
 
+## Encounter-scoped lens collapse and top-center initiative-ribbon ruling (Adam, 2026-07-20 — additive)
+
+> "Option B is good enough for now.
+>
+> also i think we need an initiate order line. We can position it just like BG3 top center line, vertically centered on the line are the square portrait images (derived from big sprites) assuming there is a function smart enough to autocrop the sprites into portraits"
+
+A deliberate manual EngagementLens collapse suppresses active-follow for the current encounter until explicitly
+reopened; new combat restores the default unless a separate global/accessibility Lens Off preference is active.
+The intended combat shell adds a thin top-center initiative/order line with square portrait images vertically
+centered on it and derived from the canonical large sprites. Deterministic alpha/content-bound analysis,
+silhouette-aware presets, whole-subject fallback, and reusable per-asset focus overrides keep the crop truthful
+across humanoids and non-humanoids. The open question is whether those portraits present existing winner-first
+side blocks or justify a separate per-creature initiative mechanics change; exact placement/crop/semantic costs and
+F10.3k live in `PROCEDURAL-DUNGEON-DIRECTION.md` section 11.22.
+
 ## Prop canon (plan §3/§4/§7 on codex/extruded-prop-pilot — verbatim pointers, Adam 2026-07-14)
 
 Props and dressing are governed by three verbatim authorities on `codex/extruded-prop-pilot`

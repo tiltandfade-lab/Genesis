@@ -17449,3 +17449,101 @@ expected or surprising.
 
 Does Adam accept Option B? If so, rule neutral/third-party bands, then close inspector/feedback with the active-
 follow playtest obligation and resume F10.6b. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.22 F10.3j ruling and F10.3k expansion - encounter-scoped collapse; top-center initiative ribbon
+
+**Adam's ruling (2026-07-20):** accept F10.3j Option B as good enough for now. A deliberate manual collapse of the
+EngagementLens suppresses active-follow for the rest of the current encounter until the player explicitly expands
+it. A new combat restores the normal active-follow default unless the player has separately chosen a durable
+global/accessibility `Lens Off` preference. Character-drawer and minimum-layout suppression remain transient layout
+states and do not overwrite either manual encounter collapse or the durable preference.
+
+Adam also adds a required combat-shell element:
+
+> "also i think we need an initiate order line. We can position it just like BG3 top center line, vertically centered on the line are the square portrait images (derived from big sprites) assuming there is a function smart enough to autocrop the sprites into portraits"
+
+The **top-center initiative ribbon** is accepted as the intended visual direction. It belongs inside the central
+SceneTray safe rectangle, centered along the upper edge rather than spending either persistent side rail. A thin
+horizontal rule carries square portrait tiles centered vertically on it. It must leave a governed board-safe top
+gutter so neither tiles nor labels hide tactically important cells. The right rail remains DM chat/narration only;
+the left rail remains character/system navigation. The current compact round/acting-side language should be
+absorbed into or immediately adjacent to the ribbon rather than surviving as a competing third combat header.
+
+At minimum, the ribbon projection must:
+
+- show only citizens known to be participating from the player's viewpoint; hidden combatants do not leak through
+  an empty slot, count, silhouette, initiative gap, or preallocated spacing;
+- preserve each citizen's canonical id and stable speakable combat label, so two goblins using one sprite remain
+  distinct and the relevant tile can be focused as `Goblin 1`, `Goblin 2`, or learned `Varka`;
+- identify the acting side and, whenever a particular citizen is resolving a receipt, give that tile a strong
+  non-color-only active treatment; down, defeated, fled, spent, delayed, or unavailable states may not be conveyed
+  by color alone;
+- insert revealed reinforcements and remove/retire participants only when canonical combat state licenses it,
+  without renumbering survivors;
+- use a governed symbol tile for an environmental, lair, hazard, or crisis activation that has no creature sprite,
+  rather than inventing a portrait;
+- remain keyboard/controller/touch readable and expose the same round, side, citizen label, and state in accessible
+  text. Clicking a tile may focus/inspect its citizen, but may not silently change turn ownership or select an
+  illegal target.
+
+#### Portrait derivation - smart enough, deterministic, and honest about strange bodies
+
+The inspected Genesis `sprites-r4b` corpus makes automatic derivation feasible but rules out a universal face crop.
+Its canonical sources include upright humanoid 4:5 figures alongside wide quadrupeds, sharks, many-limbed monsters,
+huge dragons, and extremely small subjects such as a caged canary. The slicing pipeline already reasons about
+alpha/content bounds, and Stage C already calls for per-asset content bounds and anchors. Build on those assets
+rather than commissioning a second portrait library for pre-alpha:
+
+1. Resolve the sprite's keyed/alpha content bounds and ignore transparent padding.
+2. Apply an asset-level `portraitMode`/silhouette preset when known: an upright humanoid may use a head-and-torso
+   square; a quadruped may favor the head/front mass; a centered or amorphous creature uses a whole-subject square.
+3. Score the candidate square for subject occupancy and clipping. If confidence is low or the subject would be
+   mutilated, fall back to the entire sprite contained inside the square frame. A tiny but complete canary is better
+   than a confident crop of three pixels; a whole dragon is better than a wing mistaken for a face.
+4. Permit one optional deterministic per-**asset** focus override such as `{x,y,scale}`. Every citizen using that
+   sprite inherits it; individual NPC records do not accumulate hand-authored portrait crops.
+5. Derive/cache the thumbnail from the canonical sprite and asset-version key. Do not create a second identity or
+   let a nondeterministic runtime model recrop portraits between sessions.
+
+This is a **medium one-time asset/tooling and visual-QA cost**, then low per-citizen maintenance. A simple whole-
+sprite contain thumbnail is low cost and always available; convincing bust/head crops across the representative
+silhouette corpus add the medium work. A general face-detection dependency is not recommended: fantasy pixel
+creatures routinely violate its assumptions, while deterministic presets plus rare asset overrides are inspectable,
+cacheable, save/replay stable, and reusable anywhere Genesis needs a portrait.
+
+#### Existing combat-law conflict exposed by the ribbon
+
+Genesis currently locks **side-based initiative** in `COMBAT.md`, `INITIATIVE-UI.md`, and the DESIGN registry. The
+engine stores the acting `pc` or `enemy` side and deliberately has no canonical per-creature order; the existing
+stage highlights every live actor on the acting side. Therefore the accepted portrait ribbon does **not** by itself
+authorize a BG3-like per-creature initiative rewrite. Its visual meaning must be settled explicitly.
+
+#### F10.3k - what order do the portrait tiles actually represent?
+
+- **Option A - change to literal per-creature initiative now:** each PC, companion, goblin, and monster owns a fixed
+  place in the round, and the active marker advances portrait by portrait. This most closely matches BG3. It is also
+  a high mechanics migration: initiative rolling and ties, companion control, monster choice timing, ready/delay,
+  reactions, summons, reinforcements, incapacitation, round boundaries, AI/DM receipts, saves, accessibility prose,
+  balance, and tests all acquire actor-order state. It supersedes a deliberately locked solo-pacing rule.
+- **Option B - keep side initiative and make an honest side-block activation ribbon (recommended for pre-alpha):**
+  portraits are grouped into the two true initiative blocks in winner-first order. The acting block is emphasized;
+  the particular citizen currently resolving an action receives the active treatment. Within a side, portraits are
+  a roster/availability projection, not a falsely fixed speed order: the player may choose among legal party actors
+  and the DM may choose the legal hostile sequence. This needs actor-level active/spent projection to become fully
+  useful, but preserves the combat model and can later be rewired to per-creature ordering without replacing the
+  shell or portrait system. Example: `[PC][Mira] | [Goblin 1][Varka][Wolf]`, with the whole winning side first and
+  the currently resolving portrait raised on the line.
+- **Option C - postpone the portrait ribbon until per-creature initiative is built:** retain the current Round/You
+  Act/They Act banner and combatant strip so the interface cannot imply an order the rules do not own. This is the
+  lowest implementation and semantic risk, but gives up Adam's desired top-center identity/readability aid during
+  the pre-alpha period.
+
+**Codex recommendation: Option B.** It gives the top-center line immediate truthful work—who is in the fight,
+which side won, which side acts, which citizen is resolving, and who is still available—without smuggling a large
+combat-rules rewrite into a renderer questionnaire. The visual structure and portrait derivation are not throwaway:
+later per-creature initiative can change the grouping/order adapter while retaining the same tiles, active states,
+labels, responsive layout, and accessibility contract.
+
+Does Adam accept Option B, or does the portrait-by-portrait BG3 behavior justify reopening the side-initiative law
+now? After this, exhaust ribbon state/overflow follow-ups and neutral/third-party lens placement before closing the
+inspector/feedback branch. Wave 10 remains **OPEN**; no build is authorized.

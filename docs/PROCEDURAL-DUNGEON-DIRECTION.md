@@ -18212,3 +18212,78 @@ while bounding the ribbon's claim on the battle board.
 
 Does Adam accept Option A? If so, audit active-follow versus manual browsing only as needed, then resolve neutral/
 third-party EngagementLens placement. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.32 F10.3s ruling - bounded single-row initiative overflow accepted
+
+**Adam's ruling (2026-07-20):** accept Option A. The top-center initiative ribbon remains one bounded horizontal
+order axis. Portrait tiles step down only through a small approved set of legible desktop/tablet sizes; when the
+known roster still exceeds the safe width, the ribbon becomes horizontally navigable rather than wrapping or
+collapsing mechanically independent citizens into false stacks.
+
+The active portrait always enters fully into view on a true actor transition. Reduced-motion mode snaps rather than
+animates that movement. Manual browsing receives a grace state so hover, focus, or board inspection does not
+instantly steal the viewport; auto-follow resumes at the next true activation, while Return to Active remains
+available. Sticky block context and non-color-only separators prevent a clipped view from merging factions.
+
+Edge controls/counts expose only revealed offscreen tiles (`‹ 3`, `4 ›`), never hidden totals or reserved slots.
+All input modes navigate the same canonical order. Visual clipping or optional rendering virtualization never
+removes accessible order/list content, speakable aliases, targetability, receipt focus, or state. A stack tile is
+legal only when the combat model itself owns one swarm/mob actor. F10.3s and the initiative-ribbon overflow branch
+are closed.
+
+#### F10.3t - where do neutral and third-party actors stand in the EngagementLens?
+
+The accepted lens keeps party/companions on the left and hostiles on the right. A genuine three-way fight or an
+independent group cannot be forced into that binary without either falsely declaring allegiance or making actors
+jump sides whenever the active target changes.
+
+- **Option A - stable relationship anchors with a center/rear independent band (recommended):** party-aligned actors
+  stay left. Actors hostile to the party stay right, separated into labeled faction subclusters when several hostile
+  factions also oppose one another. A mechanically participating block that is independent but not hostile to the
+  party occupies a smaller center/rear anchor with a non-color-only neutral/independent badge. True bystanders stay
+  out of the combat lens. Allegiance receipts move the same citizen between anchors under F10.3p.
+- **Option B - place every non-party citizen on the right:** preserves a simple left/right silhouette but makes
+  undecided guards look hostile, compresses enemies who are fighting each other into one apparent team, and makes
+  right-to-right attacks difficult to read without substantial subcluster grammar.
+- **Option C - always place the active actor on the left and its targets on the right:** every exchange reads like a
+  classic duel, but factions mirror constantly and directly reverses the accepted stable-side F10.3i ruling.
+
+Option A examples:
+
+- the party remains left; cultists hostile to the party remain right;
+- city guards entering but opposing only the cultists appear in the center/rear independent anchor, with their
+  `GUARDS` block badge and action travelling toward the cultist subcluster;
+- if guards become hostile to everyone, they remain a distinct independent/right-side subcluster rather than being
+  visually absorbed into the cultists. Their attacks identify source and target even when both non-party clusters
+  occupy the right/center half;
+- if guards formally join the party, the committing allegiance receipt moves their portraits/figures to the left;
+  if Varka defects, Varka crosses from the hostile anchor to the party anchor once, carrying spent state;
+- a dominated companion becomes mechanically hostile and moves to the right for the duration known to the engine,
+  without revealing the controller or secret duration to the player;
+- an undecided guard who has not entered combat, a terrified witness, and an ordinary bystander remain board/canon
+  citizens but do not receive lens combat placement merely to balance the composition;
+- hazards, lair beats, and environmental activations use governed symbol/effect anchors rather than pretending to be
+  a faction of people.
+
+The center/rear anchor is a **relationship presentation**, not a claim that those citizens occupy center cells or
+higher elevation on the BattleMat. Exact positions, distance, cover, line of sight, and targeting remain board
+truth. A badge/shape and labeled action path distinguish relationship role without relying on screen position or
+color alone.
+
+For more factions than the lens can honestly stage, do not miniaturize everyone into noise. The active block, its
+material targets/reactors, and any immediate independent interrupter receive figures; other revealed participating
+blocks remain represented by labeled edge/block indicators and complete board feedback until materially involved.
+This is presentation filtering only—initiative portraits and board citizens remain individually available.
+
+**Implementation/maintenance cost:** Option A is **medium presentation work**: third anchor, block badges,
+subclusters, stable allegiance mapping, direction variants for center/right-to-right actions, transfer animation,
+crowd filtering, accessibility, and three-way fixtures. Option B is lower initial layout cost but higher semantic
+confusion; Option C discards the already accepted stability work.
+
+**Codex recommendation: Option A.** It preserves the party-left/hostile-right memory, gives genuine independence a
+truthful visual home, and lets allegiance changes become meaningful visible events without turning the lens into a
+second spatial map.
+
+Does Adam accept Option A? If so, audit crowd filtering and transient control only if a material conflict remains,
+then the extended F10.3 inspector/feedback/lens branch can close with its mandatory active-follow playtest gate and
+resume F10.6b native-resolution proof. Wave 10 remains **OPEN**; no build is authorized.

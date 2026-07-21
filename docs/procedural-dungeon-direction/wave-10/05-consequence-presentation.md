@@ -1031,3 +1031,95 @@ player-owned Option B retained as the ideal, and no automatic consequence brief 
 
 A `yes` closes P10.8 only and advances to mandatory **P10.9 - map/town/exploration/combat continuity**. Wave 10
 remains open; no build is authorized.
+
+### 11.69 Explicit phased P10.8 closure and F10.9a expansion - define the cross-adapter handoff
+
+**Adam's ruling (2026-07-21):** yes.
+
+P10.8 is explicitly **CLOSED at the design-questionnaire level** on the phased basis in section 11.68. The first
+presenter may be serial and conservative, but the accepted receipt/dependency seams, legible event performance,
+mandatory EngagementLens battle behavior, preserved non-destructive context, exact recovery, fiction-first Gemini
+fallbacks, Option-A-to-Option-B focus path, evidence gate on consequence UI, Clay Pass proofs, and feature-ledger
+promotions remain binding. A failed future proof reopens its named branch; it does not silently expand or shrink the
+closure. This does not close Wave 10 or authorize implementation.
+
+The questionnaire now advances exactly as promised to preserved mandatory **P10.9 - map/town/exploration/combat
+continuity**:
+
+> How do travel/map, arrival, town/social interaction, wilderness exploration, dungeon movement, investigation,
+> CrisisChains, battle reconfiguration, split parties, and aftermath retain one scene identity, cast/object
+> continuity, and visual memory across adapters and mode changes?
+
+The accepted 11.1 baseline is not being re-asked: one scene lineage and transition contract preserves ids, known
+connections, participants, carried/dropped objects, damage, traces, viewpoint, and a short origin/destination memory.
+Adapters may morph, reframe, or crossfade; a regional route and a jail cell do not pretend to share geometry. Combat
+may add precision only through a legal placement transition rooted in facts/relations the engine already owns.
+
+#### F10.9a - what exactly crosses the first playable adapter boundary?
+
+In plain English: the party is speaking with a merchant in a market. Violence starts, so the same place becomes an
+exact BattleMat and EngagementLens fight. Afterward the market must still contain the broken stall, dropped pack,
+injured merchant, fled witnesses, and whatever each viewpoint learned. How much explicit handoff state should bind
+those adapters in the MVP?
+
+**Option A - canonical-state rebuild with id continuity only.** Each mode closes, then the next adapter reconstructs
+from the current world model using shared scene/entity ids and a simple fade. The transition does not carry a
+specific origin frame, adapter anchors, participant roles, presentation cursor, short visual memory, or explicit
+precision provenance beyond whatever the destination can infer.
+
+- **Dungeon example:** investigation ends and combat reloads the room's actors/objects from canon. They are the same
+  ids, but the exact combat placement may be newly composed from broad room membership; aftermath rebuilds again.
+- **Gemini-DM example:** Gemini explains that the merchant dove behind the spice cart, but the incoming battle
+  adapter may not know whether that was established geometry, an approximate relation, or narration-only color.
+- **Cost:** **low-medium first-pass integration**, but high continuity, debugging, support, and later migration debt.
+  Repeated reconstruction can feel like the world resets even when ids technically survive.
+
+**Option B - transactional SceneLineage handoff bundle (recommended).** Every adapter transition commits one typed,
+idempotent handoff receipt. It names the lineage, source/destination adapter, canonical time/location, participants
+and roles, object/custody state, persistent damage/traces/hazards, viewpoint/knowledge scope, known connections,
+spatial anchors at their honestly owned precision, pending causal/DM obligations, consequence cursor, and safe
+presentation state to restore. The outgoing adapter yields; the incoming adapter validates and projects the same
+truth. Crossfade or simple reframe is sufficient for MVP—the transition animation is not canonical.
+
+- **Dungeon example:** `near the north door` may legally promote to exact combat cells through a placement receipt;
+  `somewhere in the crowd` may remain a relation or reserve entry. After combat, exact broken-door, dropped-item,
+  hazard, actor, and route consequences fold back into the coarser exploration view without retaining irrelevant
+  combat-grid precision forever.
+- **Gemini-DM example:** the wolves already following the party's travel route become the same actors in the forest
+  encounter. When survivors flee east, that direction and the dropped pack return to the route/arrival record;
+  Gemini may dramatize the chase but cannot recast new wolves or forget the pack.
+- **Cost:** **medium-high reusable architecture and QA**—lineage/version schemas, transactional ownership transfer,
+  precision provenance, adapter validation, compaction, recovery, transition fixtures, and migrations. It prevents
+  the much higher recurring cost of every adapter inventing its own continuity rules.
+
+**Option C - one universal live scene graph and continuous visual world.** Travel, town, wilderness, dungeon, and
+battle are all simultaneously mounted parts or zoom levels of one exact world graph. Mode change mainly changes
+camera and controls; there is little explicit handoff because every substrate remains live.
+
+- **Dungeon example:** zoom from a regional road through the market into exact combat cells, then back out while
+  retaining every stall, bystander, route, and combat coordinate in one live structure.
+- **Gemini-DM example:** Gemini can refer to any currently mounted relation or object at any scale, but the engine
+  must continuously decide which regional, town, crowd, interior, and battle facts deserve exact realization.
+- **Cost:** **very high world-streaming, simulation, renderer, memory, precision, migration, and content cost**. It
+  turns cross-mode continuity into the total-engine redesign the Clay Pass structure is intended to avoid and risks
+  fabricating exact geometry merely because the universal view wants it.
+
+**Research filter:** the procedural-dungeon synthesis supports preserving canonical graph/connection intent while
+different realization stages emit compatible projections, diagnostics, and fallbacks. It does not establish that
+regional, social, and combat modes should share one live geometry or prescribe a transition UX. Those are Genesis
+product/authority decisions proven through retained cross-mode fixtures, not claims supplied by the nine papers.
+
+**Codex recommendation: Option B.** It is the smallest architecture that makes “same world” enforceable instead of
+cosmetic. Option A is a useful throwaway proof technique but too weak for the playable MVP; Option C is the mature
+fantasy implemented as a premature universal engine.
+
+**Phase mapping if B is accepted:** the lineage id, single-owner handoff, precision provenance, cast/object/custody/
+knowledge/traces, and idempotent recovery are **PRE-ALPHA CRITICAL**. A proposed new **C2D** Clay Pass first proves
+one small exploration -> battle -> aftermath handoff in the retained room. The playable MVP later adds separately
+gated travel -> wilderness encounter -> route and town/social -> battle -> aftermath traces. Seamless morphs, richer
+camera memory, simultaneous split-view presentation, and broad adapter-specific polish remain feature goals; promote
+them only after correct handoffs feel disorienting or insufficient in play.
+
+Does Adam choose **A, B, or C**, or want to amend the handoff bundle? Every answer will receive its phase/Clay Pass
+mapping and all generated continuity follow-ups before P10.9 can close. Wave 10 remains **OPEN**; no build is
+authorized.

@@ -817,3 +817,14 @@ The three-horizon visual phasing, mandatory EngagementLens MVP ruling, one-small
 multi-room/site/relational staging, incremental twelve-site portfolio, and feature-promotion traceability above are
 accepted. This acceptance fixes the visual production structure; exact implementation remains unauthorized until
 its later build gate.
+
+### Phased P10.8 visual-consequence closure (Adam, 2026-07-21)
+
+> "yes"
+
+Adam explicitly closed P10.8 on the phased basis recorded in
+`procedural-dungeon-direction/wave-10/05-consequence-presentation.md` sections 11.68-11.69: core events require
+legible performance; the mandatory EngagementLens stages every material combat beat; the first presenter may remain
+serial over retained dependencies; recovery and fiction-first consequence language are MVP obligations; automatic
+focus A begins over a seam that retains player-owned B; and automatic consequence briefs remain evidence-gated.
+This closure does not authorize implementation or close Wave 10.

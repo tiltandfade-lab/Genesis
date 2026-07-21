@@ -93,9 +93,8 @@ Store the ids, receipts, dependencies, knowledge, and policy seams those goals r
 - F10.8e's automatic consequence brief remains outside the first target and gains no automatic later entitlement.
   It reopens only from observed comprehension failure.
 
-## P10.8 closure impact
+## P10.8 closure disposition
 
-F10.8g's earlier proof corpus described too much mature realization as one pre-alpha target. Do not answer that old
-closure question as written. After Adam accepts or amends this audit, restate F10.8g as a phased closure: critical
-seams and representative physical verbs first; named presentation goals later; P10.9 still mandatory immediately
-after P10.8 closes.
+Adam explicitly closed P10.8 on the phased basis at running-record section 11.69. Critical seams and representative
+physical verbs remain first; named presentation goals remain active promotions in the feature ledger. P10.9 is now
+active and mandatory.

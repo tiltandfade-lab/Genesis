@@ -59,6 +59,13 @@ satisfies the feature, and it is not build authorization.
 | Performance/device/accessibility | Reserved for P10.10; no cut inferred here | Later owner | P10.10 owner | Accepted device/performance/accessibility destination | Pending P10.10 answers and budgets | UNMAPPED pending mandatory P10.10 |
 | Twelve-site/eight-trace portfolio | Grow retained fixtures incrementally after C1-C4; do not batch all sites first | C1A onward | C5 | Wave 11 corpus automation and Wave 12 release gates | Missing coverage dimension justifies each added site | MAPPED; implementation unaudited |
 
+## Design-closure status
+
+- P10.8 transitions/verbs closed explicitly on its phased basis at Wave 10 running-record section 11.69.
+- P10.9 mode continuity is active at F10.9a. Its row remains unmapped until Adam chooses the handoff authority; the
+  recommended Option B would add a small C2D proof before broader town/travel MVP traces.
+- All implementation states remain unaudited and no build is authorized.
+
 ## Required update rhythm
 
 - **After a design ruling:** update its MVP/ideal/trigger mapping before advancing past the generated follow-up.

@@ -65,14 +65,13 @@ No build is authorized by this discovery record.
   separately gated Clay Passes.
 - A narrower engineering proof no longer defines the playable MVP. Borderline behavior remains in the MVP with
   narrowed breadth, and the EngagementLens is mandatory because it is the pre-alpha battle system.
-- Wave 10 remains **OPEN**. The obsolete F10.8g was superseded because it bundled mature feature goals into the
-  pre-alpha target. The phased **F10.8g is now restated at section 11.68** and awaits Adam's explicit P10.8 closure
-  answer.
+- Wave 10 remains **OPEN**. Adam explicitly closed phased P10.8 at section 11.69. The live question is **F10.9a**:
+  choose the cross-adapter handoff authority for mandatory P10.9 map/town/exploration/combat continuity.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later
   entitlement; only BattleMat-plus-Gemini comprehension evidence may reopen a narrow information-layer question.
-- P10.9 remains mandatory after P10.8; performance/device/accessibility remains P10.10.
+- P10.9 is now active and mandatory; performance/device/accessibility remains P10.10.
 - Wave 10 cannot close until every original, additive, and generated follow-up is exhausted and Adam
   explicitly agrees.
 

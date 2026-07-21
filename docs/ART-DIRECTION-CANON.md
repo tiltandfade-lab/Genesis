@@ -733,3 +733,16 @@ indefinitely, exposing raw mechanic fields, or opening another information surfa
 beat, later Gemini prose continues forward without repeating or replacing it. The clause library is a minimum
 player-language contract, not a second voice target; exact behavior, costs, examples, and the open actionable-
 explicitness question live in `procedural-dungeon-direction/wave-10/05-consequence-presentation.md` section 11.62.
+
+## Viewpoint-known actionable meaning remains inside fiction-first consequence prose (Adam's ruling, 2026-07-21 — additive)
+
+> "B is fine"
+
+Minimum consequence prose leads with the perceivable physical event and may state the smallest material actionable
+meaning the active viewpoint has actually earned. Known one-use exhaustion, blocked passage, lost concentration,
+dropped custody, or another immediate consequence may be expressed in ordinary scene language; unresolved recharge,
+duration, source, owner, motive, witness, or future response remains uncertain or absent. Gemini/fallback prose does
+not expose engine vocabulary or duplicate exact jobs already owned by established HP/status, initiative, route,
+custody, selection, action, or click-invoked inspection surfaces. Exact epistemic rules, examples, costs, audit, and
+the open attention-arbitration question live in
+`procedural-dungeon-direction/wave-10/05-consequence-presentation.md` section 11.63.

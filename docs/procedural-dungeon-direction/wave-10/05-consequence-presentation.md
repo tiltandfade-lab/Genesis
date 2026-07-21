@@ -626,3 +626,113 @@ Does Adam accept Option B, prefer sensory-only fallback under Option A, prefer e
 Option C, or want to amend when actionable meaning may be stated? F10.8e remains **PARKED AND UNANSWERED**. If this
 closes, audit the remaining P10.8/G10.2 obligations—especially camera/focus/sound/Gemini attention—without reviving
 an automatic consequence brief. Wave 10 remains **OPEN**; no build is authorized.
+
+### 11.63 F10.8d.2 ruling, P10.8 audit, and F10.8f expansion - known actionable meaning stays fictional; choose attention arbitration
+
+**Adam's ruling (2026-07-21):** Option B is fine.
+
+Minimum consequence prose leads with the viewpoint-perceivable physical event, then may state the smallest material
+actionable conclusion this viewpoint has actually earned. It does not expose engine vocabulary, duplicate exact
+jobs already owned by HP/status/initiative/path/custody/action surfaces, manufacture certainty about recharge or
+duration, or reveal a hidden source/owner/motive. Known one-use exhaustion, blocked passage, lost concentration,
+dropped custody, or another immediate consequence may be stated naturally; unresolved evidence remains unresolved
+in the language. F10.8d.2 closes.
+
+#### P10.8/G10.2 remaining-obligation audit
+
+Rechecking the preserved P10.8 wording, the accepted P10.7/G10.2 closure, F10.3 feedback laws, and every generated
+F10.8 branch yields this map:
+
+| Obligation | Settled owner | Audit result |
+|---|---|---|
+| Placement/reveal, movement, attack, reaction, damage, condition, transformation, door/portal use, topology change, destruction, pickup/transfer, and scene transition | F10.3d-F10.3g plus F10.8a | Receipt-driven typed feedback families and dependency-bearing cue graphs preserve exact event/state order; no second mechanics graph. |
+| Simultaneous/crowded consequences | F10.8a | Hard causal edges serialize; legal siblings overlap; typed repetition compresses without erasing identities or material terminal truth. |
+| Input while consequences play | F10.8b | Safe controls/drafting remain; consequential commits wait for a truth-complete decision boundary; one pending intent revalidates. |
+| Pause, skip, background, save/load, recovery, and scene switch | F10.8c | Canonical receipt cursor plus owed semantic obligations rebuilds truth without exact audiovisual serialization or mechanic replay. |
+| Automatic consequence brief/acknowledgment | F10.8d-F10.8e, superseded by 11.61 | No ritual clicks survive. The automatic board brief/callout target and its lifecycle question are parked until BattleMat event proof creates evidence that another layer is genuinely needed. This is a deliberate proof gate, not a skipped answer. |
+| Gemini timing/failure and player-language consequence | F10.8d.1-F10.8d.2 | Gemini normally rewrites hard anchors; deterministic fiction-first fallback prevents latency blocking/raw meta; known actionable meaning may be natural and viewpoint-safe. |
+| Interaction, promoted affordances, secret tells, attention, and accumulated history | P10.7/G10.2 closure at 11.56 | Already closed provisionally behind its review/playtest corpus. The discarded consequence brief does not reopen or replace it. |
+| Camera, focus, sound, and narrator attention under an in-flight causal chain | Existing F10.3h-F10.3j and F10.6g establish baselines only | **One material gap remains:** arbitrate a consequence's request for attention against active player inspection, camera control, composer focus, the EngagementLens, shared sound, and Gemini stream without hiding required truth or stealing control. |
+
+#### F10.8f - when a committed consequence wants attention, may presentation take it from the player?
+
+In plain English: the player is reading the shattered-gate card or drafting a response while a death reaction opens
+a reliquary elsewhere, gas spills out, and two guards move. The receipts are canonical and Gemini can narrate them.
+Should Genesis seize the camera/lens/focus to show every beat, never move anything automatically, or preserve the
+player's interaction focus while allowing bounded, interruptible event framing when comprehension truly requires it?
+
+- **Option A - cinematic auto-director owns every material beat:** camera pans/zooms to each causal source/result,
+  EngagementLens follows the highlighted actor/effect, sound takes foreground priority, the DM rail follows the new
+  narration, and inspection yields until the chain completes. This makes every event visible but creates camera
+  tours, focus theft, lost reading position, slow CrisisChains, motion burden, and fights the player's attempt to
+  understand or compose.
+- **Option B - player-owned interaction focus plus governed material-event framing (recommended):** selection,
+  object-card scroll/focus, composer cursor/draft, manual camera manipulation, and deliberately browsed DM history
+  are never stolen by a consequence. If the relevant source/result is already inside the safe view, localized board
+  feedback performs there. If it is outside view and material to the next choice, the camera may request one bounded
+  causal fit only when the player is not actively manipulating/inspecting; otherwise it updates the accepted current
+  focus for the existing recenter/follow path and lets fiction-first DM prose carry the immediate known meaning.
+  Turn/scene boundaries retain their accepted governed refits; cosmetic or repeated siblings never earn a refit.
+- **Option C - absolute manual camera and focus:** no committed consequence ever changes camera target, lens state,
+  DM-scroll position, sound emphasis, or selection. The board updates wherever events occur and Gemini narrates;
+  the player must pan/recenter/inspect manually. This best protects control and is simplest, but important offscreen
+  topology, custody, death, or hazard change can remain physically unseen, and repeated navigation becomes a tax.
+
+Option B extends rather than replaces the accepted camera/lens laws:
+
+1. **Selection and text focus are sacred:** a consequence does not close/replace a clicked object card, move its
+   internal scroll, change a selected target, blur the composer, submit/cancel a draft, or yank the DM transcript to
+   the bottom while the player is reading earlier prose. An object becoming ineligible through canonical state may
+   close/update its card under the existing law, with the reason carried truthfully.
+2. **Existing visible view first:** if the source, path/area, and material results fit inside the current safe
+   rectangle, animate them in place. Do not move the camera merely to make a better shot.
+3. **One causal fit, not a tour:** when several linked offscreen changes are immediately choice-relevant and the
+   player is idle, fit the smallest known causal set that remains readable. Do not pan source-to-child-to-grandchild
+   if one overview/static terminal fit plus Gemini prose communicates the chain.
+4. **Active manipulation defers refit:** recent drag/pan/zoom, board targeting, card interaction, drawer use,
+   composer editing, or DM-history browsing suppresses automatic movement. The event becomes the current governed
+   recenter/follow target without inserting another persistent notification layer. Required action validation and
+   fiction-first prose remain truthful meanwhile.
+5. **Combat lens baseline survives:** EngagementLens follows the canonical active citizen only at accepted
+   activation boundaries and within its provisional playtest gate. Reactions, hazards, secondary effects, and
+   narration subjects perform inside that tableau or on the board; they do not recursively refocus/open the lens.
+6. **Sound has one presentation owner:** board, lens, and Gemini do not emit duplicate impact/result audio for one
+   receipt. Known perceptible material sources receive governed priority; simultaneous siblings may share a mixed
+   family cue; hidden/inaudible sources do not reveal themselves. Sound never changes selection or camera by itself.
+7. **Gemini stream does not drive UI focus:** prose may arrive while the player reads or types. The rail preserves
+   their scroll/cursor; new text accumulates normally and can resume ordinary follow when the player returns. Gemini
+   naming a citizen or dramatic beat does not select it, move the camera, or reorder cues.
+8. **Decision-boundary truth remains:** if an offscreen consequence materially changes the pending intent, the
+   intent revalidation exposes the known fictional reason and requires a fresh preview/confirmation. Focus
+   protection cannot let stale action commit merely because the player declined a refit.
+
+Concrete dungeon/Gemini-DM examples:
+
+- The player is scrolling the shattered-gate card when a distant cultist death opens the reliquary. The card does
+  not vanish and the camera does not jump. The reliquary/gas/guard receipts update canonically; Gemini describes the
+  known escalation. When the player leaves the card, existing recenter/follow can frame the current material focus
+  if needed.
+- Mira crosses the threshold and triggers a reaction inside the current route view. The board pauses at the trigger,
+  performs hit/fall/gate state in place, and needs no camera move. A secondary reactor does not steal lens focus.
+- A lift crashes offscreen while the player is idle and the resulting elevation/topology controls the next move.
+  Genesis may perform one bounded fit containing the lift and relevant exits, not a sequence of dramatic zooms to
+  every passenger and dropped object.
+- Six goblins take one fireball inside the current view. The impact and legal sibling results share the view/sound
+  window. Camera shake, six pans, six lens openings, and six repeated Gemini clauses are all forbidden.
+- The player has scrolled upward in the DM rail to reread Varka's claim. New consequence prose enters the transcript
+  without snapping them to the bottom. Their composer draft and board selection remain untouched.
+
+**Implementation/maintenance cost:** Option A is high cinematic-director choreography plus very high focus,
+camera, timing, motion, and test debt. Option B is **high but reusable arbitration work**: interaction-activity
+leases, safe-view materiality checks, causal fit calculation, deferred recenter targets, DM-scroll ownership,
+selection/card/composer invariants, one-owner audio mixing, intent-delta integration, and crowded/offscreen fixtures.
+Option C is low-medium camera integration work and high comprehension, navigation, missed-event, and support debt.
+
+**Codex recommendation: Option B.** The world may ask for attention; it may not seize the player's hands. Show
+material events in the current view, use one bounded fit only when idle and necessary, preserve every active
+interaction focus, and let Gemini carry known offscreen causal meaning without becoming a camera director.
+
+Does Adam accept Option B, prefer cinematic automatic direction under Option A, prefer absolute manual focus under
+Option C, or want to amend one focus lease? If accepted, perform the final P10.8 closure audit and proof-corpus pass
+before advancing to mandatory P10.9. F10.8e remains parked behind BattleMat proof and may reopen only from evidence.
+Wave 10 remains **OPEN**; no build is authorized.

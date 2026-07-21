@@ -48,10 +48,10 @@ No build is authorized by this discovery record.
 
 ### Current live position
 
-- Wave 10 remains **OPEN** at **F10.8d.2** in
+- Wave 10 remains **OPEN** at **F10.8f** in
   [consequence presentation](procedural-dungeon-direction/wave-10/05-consequence-presentation.md).
-- The open choice is whether the clean fiction-first fallback may state viewpoint-known actionable meaning
-  or only sensory evidence.
+- The open choice is how camera, focus, sound, EngagementLens, and Gemini attention arbitrate a committed
+  consequence without stealing the player's active inspection/composer state.
 - F10.8e is **PARKED AND UNANSWERED** because automatic consequence briefs/callouts are not the
   current visual target.
 - P10.9 remains mandatory after P10.8; performance/device/accessibility remains P10.10.

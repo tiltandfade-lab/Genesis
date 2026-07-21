@@ -8,8 +8,9 @@ current_write_target: 05-consequence-presentation.md
 
 # Wave 10 — Interim Visual Engine and Release Scope
 
-Wave 10 is **OPEN**. It was promoted ahead of Waves 3-9. The current live position is **F10.8d.2**:
-choose whether the fiction-first fallback may state viewpoint-known actionable meaning or only sensory evidence.
+Wave 10 is **OPEN**. It was promoted ahead of Waves 3-9. The current live position is **F10.8f**:
+choose how camera, focus, sound, EngagementLens, and Gemini attention arbitrate committed consequences without
+stealing the player's active inspection/composer state.
 F10.8e is **PARKED AND UNANSWERED** after the automatic consequence-brief target was superseded.
 
 Do not skip P10.8 or P10.9. Performance/device/accessibility remains P10.10. Do not close Wave 10

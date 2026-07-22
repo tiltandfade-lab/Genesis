@@ -316,3 +316,167 @@ travel itself is proved.
 **Codex recommends Option B for all five.** P10.9 and Wave 10 remain open; F10.9g has additional route-event and
 matrix questions after this batch, and F10.9h's bounded-town ruling still requires its own generated follow-ups.
 Performance/device/accessibility remains P10.10; no build is authorized.
+
+### 11.79 F10.9g.6-F10.9g.10 ruling and authority reconciliation - existing Fray and animal systems govern
+
+Adam answered the full batch and required an authority search before travel invented either a second Fray curve or
+a second animal/horse model.
+
+#### F10.9g.6 / F10.9g.7 - rational macro-world and constraint-preserving refinement accepted
+
+Adam chose **Option B** for both questions. The initial low-resolution world uses deterministic macro geography and
+climate fields rather than independent biome cells or eager full-resolution generation. Local refinement is
+constraint-preserving: committed or observed nodes, routes, bearings, approximate costs, biomes, coasts, rivers,
+ranges, and relations cannot move or contradict prior narration merely because their surrounding cells gain detail.
+This confirms C2I's rational macro-region/refinement obligation.
+
+#### F10.9g.8 - Option B already exists as the Fray/Spice authority; extend it, never duplicate it
+
+Adam recalled correctly. The existing authority is distributed across four retained systems:
+
+1. `REGIONS-NAMES.md` and `src/engine/region.js` own one geographic `frayLevel(q,r)` plus the `FRAY_1`, `FRAY_2`,
+   and `FRAY_D` thresholds. External pressures bias rim-ward and each region exposes one `spiceTier`.
+2. `SPICE-RAISE.md` owns the accepted band-first distributions:
+   `baseline 25/25/25/17/8`, `fray1 10/20/35/25/10`, `fray2 0/10/35/35/20`, and
+   `rim 0/5/25/45/25` across Grounded/Textured/Strange/Volatile/Mythic. Walks and their DM digests already carry
+   this tier. The implementation harness passes **14/14**.
+3. The same accepted system already ratchets discovery-item opportunity through a separately gated Volatile+
+   threshold: the documented target rates are 25% baseline, 35% fray1, 55% fray2, and 70% rim. This is a loot curve
+   fed by the shared Fray authority, not a second outward-temperature system.
+4. `BREACH.md` owns a separate risk/reward tail: the same Fray thresholds widen Nightmare/Breach odds; those walks
+   carry top-of-band danger, special bounded lenses, Outlandish loot access, and reward premiums. Ordinary encounter
+   severity remains bounded by its normal tier/scene-risk owners rather than being silently restatted by Spice.
+
+Therefore F10.9g.8 accepts **Option B by reference**, not by creating new `travelFray`, `biomeSpice`, or
+`dangerTemperature` state. Macro-biome disorder, travel encounter gates, loot opportunities, and future route
+instability consume the existing `frayLevel`/`spiceTierAt` signals through their own capped matrices. The retained
+`SPICE-CURVE.md` anti-railroad law also remains binding: this is a geographic gradient, not world-age escalation or
+a timer that forces the campaign darker. What remains open is the travel-specific encounter/severity matrix and the
+new macro-biome distortion response, not the Fray or Spice distribution itself.
+
+#### F10.9g.9 - bounded mechanical choices first; physical route branching is the ideal
+
+Adam chose **Option B with Option C as the eventual ideal**. The first retained journey uses certified bounded
+choices that can alter time, exposure gates, resources, visibility, upcoming segments, and durable route conditions
+without turning the hidden substrate into a literal hex crawl. Later, once constraint-preserving local refinement
+and route promotion are proved, materially spatial choices may branch onto newly resolved physical corridors and
+rejoin, divert to, discover, or promote canonical nodes. The common TravelWalk/SceneLineage transaction remains the
+continuity owner at both horizons.
+
+This is a promotion target, not permission for every flavor choice to generate an unlimited high-resolution branch.
+The generated F10.9g.12 question will choose the first bounded branch shape that keeps the ideal reachable.
+
+#### F10.9g.10 - minimal capability first; existing animal citizen/card next; transport module later; full sim rejected
+
+Adam revised the phasing to **Option A first and Option B later**, explicitly rejecting Option C as an unnecessary
+goal. The first transport seam is the smallest canonical travel capability: the party truthfully has access to a
+horse, draft team, cart, or wagon and has the required rider/driver ability. It does not pretend to own custody,
+capacity, condition, upkeep, or hire-contract detail that has not been implemented.
+
+The authority audit found the existing horse/animal home that must not be duplicated:
+
+- `NPC-PARTIALS.md` and `rollPartial('animal')` already mint a lightweight animal citizen with realm-flavored kind,
+  a hook-pointing tell, a concrete need (`hungry`, `guarding`, `lost`, or `loyal`), Archetype coherence, and no
+  inappropriate adult moral/lever stack.
+- `ANIMAL-SOCIAL.md` promotes an animal that is named, repeatedly engaged, or befriended into a persistent codex
+  citizen with home/territory, attitude/care, witness knowledge, recurring presence, and the same retained partial
+  stack. Its focused promotion harness passes **44/44**; environment/realm/class minting passes **16/16**.
+- `MONSTER-PARLEY.md` and `src/world/companions.js` already own the optional travelling-pet tier for unusual
+  recruited creatures: loyalty/bond, neglect, harmed-by-kind response, wandering, and a stat chassis when needed.
+  Its focused harness passes **83/83**. An ordinary bought/domesticated horse does not need to pass the anomaly-law
+  monster recruitment gate merely to pull a wagon or carry a rider.
+
+Accordingly, the early Option A capability should reference the existing animal codex id when a living mount has
+individual identity, or the existing inventory/ownership fact for a simple vehicle. The basic animal NPC card—not a
+new transport-personality schema—owns the horse's name, kind, tell, need, attitude, and later personality growth.
+The later Option B **transport expansion/integration module** may add custody/hire, capacity/seats/load, operator
+eligibility, route compatibility, condition, feed/stabling, injury, repair, and vehicle/mount-specific interaction
+by extending those retained identities. A horse need not become an independently advancing full simulation to have
+a personality, card, bond, injuries, or meaningful behavior.
+
+The corrected pass mapping is:
+
+- **C2J:** minimal canonical possession/access and rider/driver capability, linked to the existing animal citizen or
+  vehicle/item identity; enough typed truth for Gemini and the journey-cost/encounter seams;
+- **C4E:** specialized travel assemblers and selected physically refined route branches over the common walk
+  contract; and
+- **C4F:** the later horse/wagon transport expansion and integration module, extending animal/custody/inventory
+  owners without replacing or duplicating them. Full independent simulation is not the destination.
+
+### 11.80 F10.9g.11-F10.9g.15 batch - journey commitment, bounded branches, persistence, gates, and camp days
+
+The authority reconciliation settles the Fray and animal-model questions but leaves five material travel mechanics
+before F10.9g can close. They are asked as one batch.
+
+#### F10.9g.11 - when does the engine commit upcoming travel segments?
+
+**Option A - roll the complete TravelWalk at departure.** This is today's retained behavior and the cheapest
+development scaffold. Later choices must modify, suppress, or replace already-rolled hidden segments.
+
+**Option B - deterministic staged commitment (recommended).** Departure commits the route, journey seed, known
+conditions, and first opportunity. Each later segment is derived and committed only after the preceding certified
+choice, keyed by journey/segment/choice provenance so save/load or retry cannot reroll it. Cost is medium cursor,
+seed, digest, and replay work; it supports real route choices without pre-canonizing futures the player invalidates.
+
+**Option C - Gemini invents the next segment when narration reaches it.** Flexible, but loses deterministic nouns,
+probability gates, replay, and route truth.
+
+#### F10.9g.12 - what is the first retained physical branch toward F10.9g.9's Option C ideal?
+
+**Option A - weights only, no corridor branch.** Choices alter probabilities and time but never create two spatially
+different ways forward.
+
+**Option B - one bounded fork and reconvergence (recommended).** A refined local corridor may offer two certified
+alternatives—road versus ridge, ford versus bridge, pass versus tunnel—with distinct biome/route cells, costs, and
+opportunity gates. They rejoin the same journey unless one legally discovers or promotes a different canonical
+node. Cost is medium-high refinement, path, preview, and compaction work; the retained fixture is small and proves
+the future arbitrary-route seam.
+
+**Option C - arbitrary player-drawn routing through every refined cell.** This is the far ideal's maximal form, with
+high pathfinding, map UX, encounter-density, node-promotion, save, and exploit cost.
+
+#### F10.9g.13 - which travel events remain true on a later trip?
+
+**Option A - every event is journey-local and rerolls away.** Simple, but a burned bridge, cleared bandit camp, or
+bargained toll keeper inexplicably resets.
+
+**Option B - material outcomes promote; incidental passage rerolls (recommended).** Weather, travelers, and an
+uneventful view remain journey-local unless another system persists them. A destroyed bridge, opened pass, claimed
+camp, discovered shrine, hostile patrol base, changed toll, or established relationship writes a durable edge
+condition, linked owner, or canonical node through validated receipts. Cost is medium promotion-schema and return-
+trip QA; it matches Genesis's ordinary candidate-to-canon law.
+
+**Option C - every segment and encountered detail becomes permanent map state.** Maximum memory, but rapidly fills
+the world, save, DM context, and map with irrelevant historical clutter.
+
+#### F10.9g.14 - how is the travel probability matrix evaluated?
+
+**Option A - one flat encounter-type roll per opportunity.** Cheap, but cannot distinguish a mandatory washed-out
+bridge from time exposure, severity, or Spice without overloading one table.
+
+**Option B - ordered gated matrix (recommended).** For each opportunity: resolve mandatory route/geography and
+durable conditions first; then exposure occurrence; then event family; then existing Fray/Spice band and ordinary
+tier/scene-risk severity gates; then biome/route/transport-compatible content. Each layer owns one decision and
+records provenance, preventing double danger/loot rolls. Cost is medium-high table design, simulation, and tuning,
+but it composes with the already-built Fray authority.
+
+**Option C - Gemini chooses which kind of event best fits the prose.** Natural sounding, but no enforceable cadence,
+fairness, rarity, or transport/route compatibility.
+
+#### F10.9g.15 - how do multi-day travel and camping enter the walk?
+
+**Option A - one uninterrupted journey; overnight rest is narration.** Cheapest, but food, rest risk, watch,
+weather, mount tending, and time-of-day owners cannot participate honestly.
+
+**Option B - explicit day-boundary/camp opportunities reuse existing rest machinery (recommended).** When elapsed
+travel crosses a day/rest threshold, the walk offers continue/push/camp as certified choices. Camping invokes the
+ordinary rest, watch/risk, resource, world-turn, companion/pet-tending, and time owners; the next travel segment
+resumes the same journey. A camp becomes a node only if it is claimed, revisitable, or materially changed. Cost is
+medium integration and strong reuse.
+
+**Option C - every overnight camp becomes a fully simulated canonical settlement/node.** Rich persistence, but
+creates map and simulation clutter for routine sleep stops.
+
+**Codex recommends Option B for all five.** P10.9 and Wave 10 remain open. F10.9g still requires at least one final
+audit after these answers; F10.9h's town follow-ups remain pending. Performance/device/accessibility stays P10.10;
+no build is authorized.

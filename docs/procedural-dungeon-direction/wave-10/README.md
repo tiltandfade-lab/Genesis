@@ -22,9 +22,13 @@ with participation roles; parent/child branches remain a later feature. Section 
 record for forced companion separation and prioritizes toggleable same-scene companion autonomy before split-party
 work. Section 11.77 accepts bounded certified same-scene autonomy plus perceptibility/interruptibility-gated notice
 and governed camera attention; stages one shared land-TravelWalk contract before specialized mode assemblers;
-separates route baseline from journey time; requires an exposure matrix, early canonical transport capability, and
-coherent locally refined macro-biomes that disorder toward the Fray; and chooses bounded canonical town fabric
-before scoped contiguous-town enrichment. The live batch is **F10.9g.6-F10.9g.10** at section 11.78. P10.9 remains
+separates route baseline from journey time; requires an exposure matrix; and chooses bounded canonical town fabric
+before scoped contiguous-town enrichment. Sections 11.79-11.80 accept deterministic rational macro geography with
+constraint-preserving refinement; reuse the existing Fray/Spice authority for outer biome disorder and travel
+consumers; stage bounded mechanical choices toward selected physical route branches; and correct transport to
+minimal possession/access plus rider/driver capability linked to the existing animal or item identity before a
+separate horse/wagon integration module. Full mount/vehicle simulation is not the goal. The live batch is
+**F10.9g.11-F10.9g.15** at section 11.80. P10.9 remains
 mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow

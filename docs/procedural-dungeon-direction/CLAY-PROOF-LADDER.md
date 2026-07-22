@@ -249,22 +249,26 @@ write-once baseline remains distinct from a particular journey's computed time?
 
 The retained fixture starts with one compact coherent region and one path from ordinary country toward a contrasting
 destination such as snowy mountains. It stores seeds, macro facts, and canon deltas rather than a fully realized
-world. Local refinement only adds detail inside uncertainty. A bounded Fray field may distort the outer fixture but
-must feed biome disorder, Spice, loot, and danger through separately tunable curves rather than one guaranteed
-lockstep scalar.
+world. Local refinement only adds detail inside uncertainty. Outer distortion consumes the retained geographic
+`frayLevel`/`spiceTierAt` authority and the accepted `SPICE-RAISE.md`/`BREACH.md` distributions; it must not mint a
+second travel- or biome-specific Fray/Spice field. Biome disorder, ordinary encounter gates, discovery-item
+opportunity, and breach danger/reward remain separately tunable consumers rather than one guaranteed lockstep
+scalar.
 
 ### C2J - early transport capability and road/wagon continuity
 
-**Primary question:** can one canonical transport asset and one route profile produce a mechanically distinct
-mounted-wilderness journey and road/wagon journey over the retained TravelWalk transaction without changing the
-route's canon, granting unowned transport, bypassing operator/terrain eligibility, or losing encounter and arrival
+**Primary question:** can one minimal canonical possession/access fact plus rider/driver capability produce a
+truthfully distinct mounted or wagon-assisted journey over the retained TravelWalk transaction without changing the
+route's canon, granting unavailable transport, bypassing operator eligibility, or losing encounter and arrival
 continuity?
 
-The asset record proves possession or hire, custody, availability, minimal rider/driver eligibility, seats/capacity,
-and route compatibility. Development may begin with a fact-locked Gemini prose plan. The playable pre-alpha gate
-adds actual pace/time and opportunity-matrix effects plus the wagon's capacity/road-dependency distinction. Full
-feed, fatigue, stabling, damage, repair, animal personality, hire economy, and generated road topology remain
-promotion candidates unless another retained system demonstrates an earlier dependency.
+C2J is deliberately not a full transport-asset simulation. A living mount with individual identity links to the
+existing animal partial/codex citizen; a simple cart or wagon links to its retained inventory/ownership identity.
+The early seam proves only access, operator capability, and the minimum typed pace/time or encounter effect the
+journey actually consumes. Development may precede those effects with a fact-locked Gemini prose plan. Custody/hire
+contracts, seats/load, route compatibility, condition, feed, fatigue, stabling, injury, repair, and deeper vehicle
+interaction belong to C4F unless evidence exposes an earlier hard dependency. Animal personality never moves into
+a new transport schema: `NPC-PARTIALS.md` and `ANIMAL-SOCIAL.md` remain its owners.
 
 ## Stage 3 - small operating site simulation
 
@@ -340,10 +344,23 @@ split-party pass is scheduled.
 families, probability gates, choices, route conditions, and audiovisual presentation while continuing to emit the
 same canonical TravelWalk/SceneLineage, ownership, time, consequence, save, and arrival contracts proved at C2H-J?
 
-This promotion may add richer road topology, junctions, traffic and faction control, mount/vehicle condition and
-upkeep, or per-mode content assemblers. It must not fork four independent persistence or canon systems. The
-promotion fires when the retained shared compiler produces correct but materially repetitive or implausible mode
-play, not merely because separate generators sound more complete.
+This promotion may add richer road topology, junctions, traffic and faction control, per-mode content assemblers,
+and selected refined physical forks that reconverge or legally promote a destination. It must not fork four
+independent persistence or canon systems. The promotion fires when the retained shared compiler produces correct
+but materially repetitive or implausible mode play, not merely because separate generators sound more complete.
+
+### C4F - horse and wagon expansion over retained animal and inventory owners (feature goal)
+
+**Primary question:** can horses, draft teams, carts, and wagons gain the specific custody, hire, capacity,
+condition, upkeep, route-compatibility, and interaction rules that play has demonstrated they need without replacing
+the existing animal citizen, pet/companion, inventory, ownership, route, or TravelWalk authorities?
+
+An ordinary domesticated horse uses `NPC-PARTIALS.md` and `ANIMAL-SOCIAL.md` for kind, tell, need, attitude, care,
+home, witness knowledge, recurring presence, and promotion. It does not pass the `MONSTER-PARLEY.md` anomaly gate
+merely to carry a rider, though unusual recruited creatures may continue through that existing pet path. Vehicles
+extend retained item/ownership identities. C4F adds transport-specific fields only as their mechanics become real;
+it does not target full independent simulation for every mount or vehicle. The promotion fires after C2J proves the
+minimal capability seam and actual play identifies which richer distinctions earn their cost.
 
 ## Stage 5 / C5 - grow the retained portfolio
 

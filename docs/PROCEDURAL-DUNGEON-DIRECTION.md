@@ -77,10 +77,13 @@ No build is authorized by this discovery record.
   separation and prioritizes toggleable same-scene companion autonomy before split-party work. Section 11.77 accepts
   bounded certified companion autonomy with perceptibility/interruptibility-gated notice and governed same-scene
   camera attention; a staged shared land-TravelWalk contract before specialized assemblers; route-baseline versus
-  journey-time separation; an exposure opportunity matrix; prose transport during development before typed
-  pre-alpha effects; early canonical mount possession/ability; a coherent locally refined macro-biome world that
-  disorders toward the Fray; and bounded canonical town fabric before scoped contiguous-town enrichment. The live
-  batch is **F10.9g.6-F10.9g.10** at section 11.78.
+  journey-time separation; an exposure opportunity matrix; and bounded canonical town fabric before scoped
+  contiguous-town enrichment. Sections 11.79-11.80 accept deterministic rational macro geography with
+  constraint-preserving refinement; bind outward biome disorder and future travel gates to the existing Fray/Spice
+  authority rather than a duplicate curve; stage certified mechanical route choices toward selected physical
+  branches; and correct transport to minimal possession/access plus rider/driver capability first, linked to the
+  existing animal or item identity, before a separate horse/wagon integration module. Full simulation of every
+  mount or vehicle is not the feature goal. The live batch is **F10.9g.11-F10.9g.15** at section 11.80.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

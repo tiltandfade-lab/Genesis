@@ -953,3 +953,16 @@ geography. Outward toward the Fray, rational adjacency and large-scale pattern i
 terrain sequence, color rhythm, and regional silhouettes may become stranger in controlled correlation with higher
 Spice, richer loot opportunity, and greater danger. Independent biome confetti is a far-Fray visual symptom, not the
 normal world-map language.
+
+### Existing animal card first; transport enrichment later (Adam, 2026-07-22)
+
+> "5. A at first, B later. Like we'll have to think about horses and wagons as it's own module of expansion and integration. I don't know why we would need to have every mount and vehicle begin as a full sim at any point. I mean horses should have personalities and a basic animal NPC card, we already have that sketched out in the docs somewhere. Make sure you find that and it doesn't get duplicated or overwritten"
+
+A horse that appears in play is first an existing animal citizen, not a transport-stat panel or a new visual card
+family. Its retained animal card owns the readable kind, hook-bearing tell, need, name, attitude/care, home or
+territory, and later recurring personality. The earliest travel presentation need only communicate truthful access
+and whether the party can ride or drive it; Gemini may carry the remaining fiction while the mechanical seam is
+small. A later horse/wagon module may progressively expose capacity, load, custody or hire, condition, feed,
+stabling, injury, and repair when those distinctions become playable. No visual target requires every mount or
+vehicle to become a full independent simulation, and no transport UI may duplicate or overwrite the existing animal
+identity/card.

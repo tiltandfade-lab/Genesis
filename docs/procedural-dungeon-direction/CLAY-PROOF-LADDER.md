@@ -324,8 +324,10 @@ C2M is a post-core pre-alpha town module, not a whole-city generator. It reuses 
 reusable grid cells and urban props, SceneLineage, active/site/cold ownership, and F10.9b precision compaction.
 Only the active venue needs exact geometry. Background population may stay pooled until material interaction roots
 an individual; no venue requires bespoke generated imagery, and no unseen citizen receives continuous pathfinding
-or invented activity. Remaining F10.9h questions refine the exact arrival, population, remount, companion-extension,
-and retained-fixture gates before this pass may be specced.
+or invented activity. The accepted fixture is one canonical arrival -> Urban Walk -> market interaction -> same-
+venue BattleMat battle -> aftermath -> leave/return trace. Material citizens promote; semantic venue deltas persist
+while disposable geometry compacts through provenance-bearing remount; companion action/attention hooks remain
+dormant until C4D. F10.9h's final boundary audit must close before this pass may be specced.
 
 ## Stage 3 - small operating site simulation
 

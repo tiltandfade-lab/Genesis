@@ -95,7 +95,9 @@ No build is authorized by this discovery record.
   and remains an optional later module behind practical cost/latency/determinism gates. F10.9g is closed on that
   phased basis. Section 11.85 accepts F10.9h.1-h.5 Option B across the board: one bounded district graph, reusable
   real-roll urban grids, same-venue BattleMat/aftermath continuity, bounded offscreen receipts, and short Urban Walk
-  transitions form the C2M post-core town module. The live batch is **F10.9h.6-F10.9h.10** at section 11.86.
+  transitions form the C2M post-core town module. Section 11.87 accepts h.6-h.10 Option B: exact journey arrival,
+  material-citizen promotion, semantic remount, dormant companion-autonomy hooks, and one integrated market-to-
+  battle-to-return fixture. The final town-continuity audit is **F10.9h.11-F10.9h.15** at section 11.88.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

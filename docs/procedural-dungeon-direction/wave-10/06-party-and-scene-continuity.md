@@ -909,3 +909,119 @@ Better coverage eventually, but recreates a large design-wave build instead of o
 identity, compaction, companion-extension, and proof seams; any remaining F10.9h questions will be limited to gaps
 exposed by this batch rather than hidden city-simulation breadth. P10.9 and Wave 10 remain open; performance,
 device, and accessibility remain P10.10.
+
+### 11.87 F10.9h.6-F10.9h.10 ruling - exact arrival; promoted citizens; semantic remount; retained town proof
+
+**Adam's ruling (2026-07-22):**
+
+> 1. B
+> 2. B
+> 3. B
+> 4. B
+> 5. B
+
+All five recommended Option B rulings are accepted.
+
+1. **F10.9h.6 - canonical arrival handoff.** A completed journey enters the district through a real gate, dock,
+   road, stable, or district-edge threshold. SceneLineage carries time, conditions, party/custody, transport,
+   approach, followers, obligations, and viewpoint facts. The town refines only destination-owned uncertainty; it
+   does not reset or reinterpret the journey. This is pre-alpha-critical inside C2M.
+2. **F10.9h.7 - material citizens promote; ambient population may remain pooled.** Naming, speaking, acting,
+   witnessing, holding property, becoming injured, entering a relationship, or carrying an unresolved obligation
+   roots a stable citizen with exact viewpoint state. Unengaged background population may remain a provenance-
+   bearing role/count/pool projection until interaction promotes an individual. Town memory therefore grows from
+   play rather than simulating or permanently storing every extra.
+3. **F10.9h.8 - semantic deltas survive; disposable geometry compacts.** Venue, threshold, actor, object, custody,
+   damage, hazard, access, knowledge, relationship, clock, and obligation truth persists. Exact cells survive only
+   while materially meaningful; other placement compacts to honest anchors/zones and deterministically remounts
+   through F10.9b's provenance-bearing precision law. Neither permanent cell snapshots nor seed-only rerolls own
+   revisit continuity.
+4. **F10.9h.9 - retain the autonomy seam now; enable roaming later.** Pre-alpha companions remain formation-bound
+   outside combat, but town venues and Urban Walk carry stable same-scene zones, thresholds, certified eligible-
+   action hooks, perceptibility, interruptibility, and a party anchor. C4D later enables bounded characterful
+   roaming over those contracts before any split-party work; this ruling does not pull full companion AI into C2M.
+5. **F10.9h.10 - one integrated retained fixture.** C2M proves one deterministic arrival -> Urban Walk -> market
+   interaction -> same-venue BattleMat battle -> aftermath -> leave/return trace. It exercises promoted citizen
+   identity, object/custody, damage, offscreen change, semantic compaction, save/load, and exact remount. A static
+   market capture is insufficient; multiple districts are not required.
+
+These rulings complete C2M's main fixture design at **medium-high bounded integration cost**. The cost lies in one
+round-trip trace and shared adapter contracts, not in broad town content or continuous simulation. C2M remains
+implementation-unaudited and unauthorized. The final town batch below audits five boundary cases that could still
+break its continuity; after Adam answers, F10.9h receives an explicit closure audit rather than another automatic
+expansion.
+
+### 11.88 F10.9h.11-F10.9h.15 final town-continuity audit - escalation, civic response, transport, schedules, departure
+
+#### F10.9h.11 - how does an active pursuit or fight cross a venue threshold?
+
+**Option A - end the first scene and roll an unrelated encounter in the destination venue.** Cheap, but can replace
+actors, erase wounds or pursuit order, duplicate time, and lose dropped or carried objects.
+
+**Option B - advance the same lineage over certified district edges (recommended).** A fleeing thief can leave the
+market through a known alley and enter the tannery yard as the same actor with the same wound, object, pursuers,
+clock, knowledge, and causal order. Only the current venue needs exact cells; the threshold receipt compacts the
+source and legally mounts the destination. Cost is medium adapter/routing QA, not a general city chase simulator.
+
+**Option C - keep every potentially entered venue exact and simultaneously active.** Seamless, but restores the
+continuous-town cost the bounded graph was chosen to avoid.
+
+#### F10.9h.12 - how do public violence, theft, and witnesses become civic consequences?
+
+**Option A - let the DM-seat model invent a plausible guard or reputation response.** Flexible prose, but can create
+knowledge nobody earned, ignore unseen crimes, or make law a provider-dependent mechanic.
+
+**Option B - preserve evidence and witness knowledge; existing owners create the response (recommended).** Seen
+acts, surviving witnesses, reported descriptions, identifiable property, faction relationships, clocks, and local
+law/authority facts produce canonical obligations or events through their proper social/world owners. The DM seat
+narrates those facts. Cost is medium integration and fixtures; P10.9 owns continuity only, while later social/world
+waves own the breadth and balance of law, reputation, investigation, and faction response.
+
+**Option C - add a universal town crime meter.** Easy to display, but collapses witness knowledge, evidence,
+different authorities, disputed claims, and local law into a duplicate morality system.
+
+#### F10.9h.13 - what happens to mounts, wagons, and cargo at a town threshold?
+
+**Option A - treat transport as automatically present wherever the party appears.** Cheap, but lets a wagon enter a
+tavern, forgets where a horse was left, and makes theft, access, cargo, or later departure incoherent.
+
+**Option B - commit a truthful custody/access anchor (recommended).** Arrival records whether the horse, draft team,
+wagon, and cargo remain with the party, wait at a gate, enter a yard, or transfer to a stable/holder. That location
+and access survive venue changes and departure. Cost is low-medium identity/custody work over C2J; feed, fees,
+condition, theft, capacity, and stable ecology promote only when their mechanics are implemented in C4F or another
+owner.
+
+**Option C - fully simulate stables, traffic, animal schedules, and vehicle storage in pre-alpha.** Rich, but turns a
+continuity anchor into the deep transport module already deferred.
+
+#### F10.9h.14 - how do time and schedules affect access to town venues?
+
+**Option A - venues remain available whenever selected.** Simple, but makes clocks, curfews, shop hours, gates,
+appointments, and prior offscreen updates fictional rather than canonical.
+
+**Option B - canonical clocks and conditions gate thresholds; presentation stays compact (recommended).** A closed
+shop, barred gate, curfew, appointment, market day, fire, quarantine, or faction control changes access and the
+mounted threshold state. The graph may offer waiting, another route, or an implemented action; the DM cannot open a
+closed venue by prose alone. Cost is medium clock/access integration, not continuous simulation of every shopkeeper.
+
+**Option C - run exact daily spatial schedules for every resident and venue.** Maximum local texture, with high
+behavior, content, save, tuning, and offscreen-simulation cost.
+
+#### F10.9h.15 - how does the party leave town and later return?
+
+**Option A - departure starts a fresh journey and revisiting regenerates the town.** Cheap, but discards gate,
+transport, damage, witnesses, custody, access, relationships, and unresolved obligations.
+
+**Option B - commit a district-threshold -> TravelWalk handoff and retain semantic town memory (recommended).** The
+party departs from a legal gate/dock/road with current time, condition, party/custody, transport, followers, and
+obligations. The town compacts under active/site/cold ownership and later remounts promoted citizens, material
+damage, access, knowledge, clocks, and unresolved consequences. Cost is medium symmetric handoff/recovery QA and is
+part of C2M's leave/return fixture.
+
+**Option C - keep the town live at exact resolution for the entire absence.** Unnecessary for durable consequences
+and contrary to the accepted bounded ownership model.
+
+**Codex recommends Option B for all five.** If accepted without amendment, these answers will exhaust the material
+generated F10.9h continuity questions and trigger an explicit F10.9h closure audit. They will not close P10.9 or
+Wave 10: CrisisChain and the remaining original continuity cases still follow. Performance, device, and
+accessibility remain P10.10.

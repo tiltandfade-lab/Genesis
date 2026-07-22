@@ -1010,3 +1010,24 @@ arena. Bodies, damage, fire, dropped goods, flight, relationships, and obligatio
 Moving between venues first uses a short Urban Walk or honest direct threshold; known-safe presentation may compact,
 but canonical time and due changes still occur. Offscreen town activity is receipt-driven rather than a visual claim
 that every street and citizen remains continuously simulated.
+
+### Promoted town citizens; semantic remount; dormant companion-roaming hooks (Adam, 2026-07-22)
+
+> 1. B
+> 2. B
+> 3. B
+> 4. B
+> 5. B
+
+This accepts the visual implications of F10.9h.6-h.10. A town arrival is the destination projection of the same
+journey, not a fresh establishing illustration. Materially encountered people retain stable visual identity;
+unengaged population may remain pooled or compact rather than becoming permanent simulated extras. A returning
+venue reconstructs its meaningful actors, objects, thresholds, damage, hazards, access, and custody while
+disposable exact placement may remount from truthful anchors. It neither freezes every incidental cell forever nor
+rerolls away visible consequences.
+
+Pre-alpha companions remain formation-bound outside combat. Town grids nevertheless retain same-scene zones,
+thresholds, party anchors, and action/attention hooks for the later C4D roaming feature; those dormant hooks do not
+visually imply that offscreen companion activity is already simulated. The retained town proof must visibly cover
+arrival, Urban Walk, market interaction, the same market becoming BattleMat combat, material aftermath, and a
+leave/return remount.

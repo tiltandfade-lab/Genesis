@@ -42,7 +42,7 @@ that authority.
 1. **One room first.** Begin with one deterministic, relatively small clay room. Do not make multi-room generation,
    site simulation, relational simulation, or all twelve golden sites prerequisites for proving the local loop.
 2. **Vertical, not layer-complete.** A pass proves a player-visible behavior through its required canon, compiler,
-   mechanics, renderer/EngagementLens, Gemini contract, persistence, and QA seams. It does not build an entire data
+  mechanics, renderer/EngagementLens, provider-neutral DM-seat contract, persistence, and QA seams. It does not build an entire data
    layer now and postpone proof that any of it becomes a game.
 3. **One primary risk per pass.** A pass may include supporting work, but its acceptance question is singular and
    explainable. If failure could have several unrelated causes, split the pass.
@@ -63,10 +63,10 @@ that authority.
     receipts, viewpoint law, renderer boundary, and persistence contract proven locally; they do not introduce a
     second authority.
 11. **Prove the connected BattleMat spine before module breadth.** The first dominant gate is canonical mechanics ->
-    BattleMat plus mandatory EngagementLens -> Gemini/fallback -> persistence/recovery in the retained small room.
+    BattleMat plus mandatory EngagementLens -> DM-seat model/fallback -> persistence/recovery in the retained small room.
     Travel, camp, route branching, macro-world, transport, town, and deeper simulation grow as separately gated
-    vertical modules over that spine. Gemini prose may bridge missing breadth but cannot masquerade as committed
-    mechanics or a second state owner.
+    vertical modules over that spine. DM-seat prose may bridge missing breadth but cannot masquerade as committed
+    mechanics or a second state owner; Gemini is one proving provider, not the product boundary.
 
 ## Stage 1 - one small retained clay room
 
@@ -103,7 +103,7 @@ making object interaction or combat part of its primary gate.
 **Primary question:** can the player inspect and act on the object, encounter one known hazard, change physical
 state, and pick up or transfer one unique object through validated receipts?
 
-This pass proves object-card authority, hazard/object state, custody, and Gemini fact anchors for noncombat actions.
+This pass proves object-card authority, hazard/object state, custody, and DM-seat fact anchors for noncombat actions.
 
 ### C1D - BattleMat/EngagementLens battle spine
 
@@ -131,13 +131,16 @@ custody, event-history, and knowledge truth without replay?
 Preserve composer/reading/inspection state and exact receipt/event cursors. Rich choreography and automatic
 consequence briefs are not required.
 
-### C1G - DM consequence language
+### C1G - provider-neutral DM-seat consequence language
 
-**Primary question:** can timely Gemini prose, latency, invalid anchors, and unavailability all communicate the same
-viewpoint-legal committed consequence without blocking, duplication, raw engine language, or a dry second voice?
+**Primary question:** can the selected supported DM model communicate the same viewpoint-legal committed consequence
+without blocking, duplication, raw engine language, provider-specific state, or a dry second voice when prose is
+timely, late, unavailable, or invalid?
 
-Use the clean DM rail, fact-locked Gemini prose, and several context-slotted minimum fictional clauses. This pass
-consumes C1C-C1F receipts and recovery state; it does not create another consequence authority.
+Use the clean provider-neutral DM rail, fact-locked model prose, and several context-slotted minimum fictional
+clauses. The seat exposes the same mechanics/actions, digest, tool/event schemas, and refusal contracts to every
+supported provider. This pass consumes C1C-C1F receipts and recovery state; it does not create another consequence
+authority or assume Gemini is the shipping boundary.
 
 ## Stage 2 - multi-room causality and first mode handoff
 
@@ -161,7 +164,7 @@ the adapter-handoff proof below.
 cross-room promise that later becomes relevant and pays off without invention or reminder clutter?
 
 This proves the minimum promissory discovery, knowledge separation, callback identity, causal history, and
-Gemini-led projection before building a discovery network or full attention ladder.
+DM-seat-led projection before building a discovery network or full attention ladder.
 
 ### C2C - multi-room mutation
 
@@ -191,7 +194,7 @@ that zone and formation contract. Narrative-only companion wandering cannot chan
 a validated detachment or other canonical event is required. For pre-alpha, the deterministic formation resolver
 places the whole party, including the main PC, within the legal zone and persists one non-rerollable placement batch.
 There is no initial deployment interaction. The mode change uses a simple orientation-preserving crossfade or
-reframe plus one short fact-locked Gemini/fallback bridge; stable landmarks, citizens, damage, and objects carry
+reframe plus one short fact-locked DM-seat/fallback bridge; stable landmarks, citizens, damage, and objects carry
 continuity without mechanical labels or a transition card. Exact allied combat behavior remains owned by later
 party/tactical questions.
 
@@ -219,9 +222,9 @@ goal without making its extra UI and tactical-balance work a prerequisite for th
 **Primary question:** after stable BattleMat events and scene identities are proven, can one or two established
 landmarks remain visually anchored while the incoming board resolves, persistent citizens/objects settle into their
 committed cells, and the camera reaches the first actionable composition without mechanical labels, hidden-state
-leaks, duplicated Gemini explanation, or interruption/recovery drift?
+leaks, duplicated DM-seat explanation, or interruption/recovery drift?
 
-This promotes C2D's simple crossfade plus Gemini bridge into a reusable visual transition grammar. It adds camera,
+This promotes C2D's simple crossfade plus DM-seat bridge into a reusable visual transition grammar. It adds camera,
 timing, landmark hold, citizen/object settling, interruption, fallback, and cross-adapter visual QA over the same
 SceneLineage handoff; it does not add a continuity summary or make animation canonical. The structured mechanical
 information layer remains evidence-gated and is not an automatic later milestone.
@@ -234,7 +237,7 @@ the same actor with exact location/custody, condition, inventory, and viewpoint 
 reaches or retrieves them?
 
 This pass proves harsh persistent separation without implementing split-party play. The cold companion owns no
-child SceneLineage, autonomous clock, hidden action, discovery, or Gemini-authored event. Ordinary consequences
+child SceneLineage, autonomous clock, hidden action, discovery, or DM-model-authored event. Ordinary consequences
 owned by the companion's site/holder/world may still affect them through canonical receipts. Save/load and remount
 must not duplicate, heal, relocate, reroll, or leak the companion. Independently advancing branches remain outside
 pre-alpha.
@@ -242,7 +245,7 @@ pre-alpha.
 ### C2H - retained canonical foot-travel trace
 
 **Primary question:** can one party depart from one canonical node, consume one short shared TravelWalk on foot,
-retain origin/destination/route/clock/biome/event identity through save/load and Gemini narration, then either arrive
+retain origin/destination/route/clock/biome/event identity through save/load and DM-seat narration, then either arrive
 at the same destination or turn back without teleportation, reroll, duplicate time, or SceneLineage reset?
 
 This is an audit-and-retain pass over the existing travel seam, not authority to redesign the world. A deterministic
@@ -253,6 +256,11 @@ or long rest, even the first prose-led camp presentation must pause this same cu
 `restRiders`/`restRecover` owner; real time, risk/interruption, recovery, resources, riders, ledger, and DM obligation
 effects occur before the same TravelWalk resumes. An explicit continue/push/camp decision surface remains a later
 promotion over this minimum integration.
+
+The visual fixture is a projection of the same real rolls onto the shared square-grid system: reusable biome cells,
+elevation/depression, route/crossing cells, blockers, simple props or truthful markers, and canonical pixel
+citizens. A node/edge or vector route may overlay reusable biome art only when the displayed relations remain
+canonical. C2H never requests a bespoke generated image for a segment or choice.
 
 ### C2I - coherent macro-biome and route/journey separation
 
@@ -278,10 +286,32 @@ continuity?
 C2J is deliberately not a full transport-asset simulation. A living mount with individual identity links to the
 existing animal partial/codex citizen; a simple cart or wagon links to its retained inventory/ownership identity.
 The early seam proves only access, operator capability, and the minimum typed pace/time or encounter effect the
-journey actually consumes. Development may precede those effects with a fact-locked Gemini prose plan. Custody/hire
+journey actually consumes. Development may precede those effects with a fact-locked DM-seat prose plan. Custody/hire
 contracts, seats/load, route compatibility, condition, feed, fatigue, stabling, injury, repair, and deeper vehicle
 interaction belong to C4F unless evidence exposes an earlier hard dependency. Animal personality never moves into
 a new transport schema: `NPC-PARTIALS.md` and `ANIMAL-SOCIAL.md` remain its owners.
+
+### C2K - one bounded grid-owned travel fork (post-core pre-alpha module)
+
+**Primary question:** can one reusable bridge/ford or road/ridge grammar create two certified grid/node routes,
+show only viewpoint-known differences, commit one choice without reroll, and reconverge on the same journey while
+save/load, turnback, time, exposure, and durable route truth remain exact?
+
+The fixture uses the same grid and route owners as C2H: no arbitrary drawing, general pathfinder, fully refined
+regional map, or bespoke generated scene. Both candidate corridors have stable ids and real cells/nodes; only
+selected future content commits. C2K runs after the C1A-D BattleMat/EngagementLens core and proves noncombat
+canonical choice -> visual projection -> DM-seat prose -> persistence before richer C4E branching.
+
+### C2L - travel segment -> BattleMat -> changed travel segment
+
+**Primary question:** can one enemy opportunity pause a TravelWalk, legally mount the same segment's biome,
+footing, visible route features, actors, objects, custody, and knowledge on BattleMat, then return wounds, deaths,
+retreat, dropped items, damage, route conditions, time, and obligations to the same cursor without reset or noun
+substitution?
+
+This is the pre-alpha-critical travel adapter trace over C2D. The DM-seat model narrates from the handoff but cannot
+choose different mechanics or replace exact nouns. The visualizer uses the same grid identities before, during, and
+after combat; no generic arena or prose-only wilderness fight satisfies the gate.
 
 ## Stage 3 - small operating site simulation
 
@@ -344,7 +374,7 @@ player's autonomy setting?
 The first retained proof is a market-scene rogue companion who may wander within the mounted scene and attempt one
 certified act that can create trouble while every actor, object, clock, and consequence remains under the same
 SceneLineage. The feature reuses validated actions, custody, knowledge, relationships, attention, and deterministic
-receipts; Gemini may express intent and outcome but cannot commit the act. The exact risk ceiling, hard red lines,
+receipts; the DM-seat model may express intent and outcome but cannot commit the act. The exact risk ceiling, hard red lines,
 notice/intervention law, and same-scene attention boundary are accepted at Wave 10 section 11.77: certified actions
 obey `Off`/`Cautious`/`Characterful`, player-owned risk ceilings and hard red lines; perceptible interruptible acts
 receive readable attempts; governed focus does not create a second view or repeated camera theft. Waves 6-7 still
@@ -355,7 +385,7 @@ split-party pass is scheduled.
 
 **Primary question:** can wilderness-foot, mounted, road, and vehicle travel gain genuinely different segment
 families, probability gates, choices, route conditions, and audiovisual presentation while continuing to emit the
-same canonical TravelWalk/SceneLineage, ownership, time, consequence, save, and arrival contracts proved at C2H-J?
+same canonical TravelWalk/SceneLineage, ownership, time, consequence, save, and arrival contracts proved at C2H-L?
 
 This promotion may add richer road topology, junctions, traffic and faction control, per-mode content assemblers,
 and selected refined physical forks that reconverge or legally promote a destination. It must not fork four
@@ -376,6 +406,19 @@ merely to carry a rider, though unusual recruited creatures may continue through
 extend retained item/ownership identities. C4F adds transport-specific fields only as their mechanics become real;
 it does not target full independent simulation for every mount or vehicle. The promotion fires after C2J proves the
 minimal capability seam and actual play identifies which richer distinctions earn their cost.
+
+### C4G - optional generated scene enrichment over canonical grid/node truth (feature candidate)
+
+**Primary question:** if image generation later becomes sufficiently cheap, fast, deterministic, safe, and
+available, can it enrich a travel or town scene without inventing geometry, replacing the playable grid/node
+projection, breaking identity between turns/providers, or making offline and fallback play second-class?
+
+The canonical grid, nodes/edges, rolls, actors, objects, routes, and mechanics exist and remain playable before the
+image request. Generated biome art may serve as reusable background material, or a per-scene image may become a
+non-authoritative visual layer whose failure reveals the same underlying truth. Acceptance requires bounded
+latency/cost, cache and seed/identity behavior, rights and safety policy, provider-independent fallback, viewpoint
+secrecy, and comparison against the retained grid capture. C4G is not a pre-alpha dependency and fires only when
+those external economics and quality gates become demonstrably practical.
 
 ## Stage 5 / C5 - grow the retained portfolio
 

@@ -647,3 +647,150 @@ useful ability to make a sparse scaffold feel like fiction.
 **Codex recommends B, B, B, B, A.** The branch capsule is optional until its timing is answered; travel-to-battle
 identity is not optional because it directly exercises the declared BattleMat priority. P10.9 and Wave 10 remain
 open; performance/device/accessibility stays P10.10 and no build is authorized.
+
+### 11.83 Final F10.9g rulings and closure audit - grid-owned travel projection; provider-neutral DM seat
+
+Adam accepted **B, B, B, B, A**, then corrected the generated visual examples so the implementation target could
+not be mistaken for bespoke per-choice illustration.
+
+#### F10.9g.12a - bounded fork capsule is a post-core pre-alpha module
+
+The small-room BattleMat/EngagementLens spine remains first. Once it is green, pre-alpha adds one reusable fork and
+reconvergence grammar—bridge/ford or road/ridge—over the staged TravelWalk. It has real certified route cells or
+nodes, viewpoint-known tradeoffs, one committed choice, one convergence, exact save/return behavior, and no
+arbitrary routing. This creates **C2K**, a bounded module rather than a general regional-pathfinding prerequisite.
+
+#### F10.9g.16 - travel combat remounts the same segment
+
+Option B is accepted and is pre-alpha-critical. The active travel cursor pauses; segment biome, footing, route
+features, cast, objects, custody, knowledge, and provenance legally place the encounter on BattleMat. After combat,
+the same segment receives wounded/dead/retreated actor state, dropped items, damage, changed route conditions,
+elapsed time, and obligations before travel resumes. This creates **C2L** as the travel-specific SceneLineage trace;
+the DM-seat model bridges it in prose but cannot substitute different nouns or mechanics.
+
+#### F10.9g.17 - reusable real-grid Wilderness Walk projection; bespoke imagery is later and optional
+
+Adam first accepted Option B, then rejected the image-generation mockups' apparent dependency on unique scenic art:
+
+> "ok, i have some feedback on those images already, because generally everything should be built on our grid system. that looks like a bespoke graphic, not a procedurally generated scene basic on a real grid and a real roll. Now these screens can be built from nodes, or vector art overlaying some biome art that we generate for background images, but we aren't going to be able to generate bespoke imagery per travel choice by pre-alpha. that might be it's own module later once image gen or if image gen becomes cheaper and faster"
+
+The correction is binding. Pre-alpha travel projection consumes real rolled fields and real spatial owners. Its
+primary path uses the shared square grid: reusable biome cells, elevation/depression, route/crossing cells,
+blockers, simple physical props or truthful markers, and canonical pixel citizens. A coarser travel screen may use
+canonical nodes/edges or vector routes over a **reusable** generated biome background, provided every displayed
+relation still comes from real rolls and no painted detail pretends to be mechanical geometry. The renderer never
+requests or requires a bespoke image for a segment, fork, or player choice.
+
+Runtime or per-choice image generation becomes a separately owned optional presentation module only if latency,
+price, determinism, rights, safety, continuity, offline behavior, and provider availability later make it practical.
+It may enrich a retained grid/node truth but cannot become the only map, invent collision, or replace canonical
+route state. The first two scenic image-generation mockups are therefore rejected as pre-alpha implementation
+targets; the corrected visible-grid mockups are discussion evidence, not acceptance captures.
+
+#### F10.9g.18 - partial journeys remain true
+
+Option B is accepted. Turning back or rerouting never refunds time, rests, resource changes, resolved encounters,
+discoveries, custody, or promoted route conditions. Return opportunities derive from current progress; a reroute
+starts only at a legally reached fork, node, or route position. Continuous per-minute hex tracking is unnecessary.
+
+#### F10.9g.19 - fact-bound improvisation through a provider-neutral DM seat
+
+Adam accepted Option A with an architectural correction:
+
+> "A as long is gemini is bound to as many mechanics as we have implemented and it knows how to use them, then we are ok with this. Gemini does a great job already in the raw chat with only a couple of PDFs as reference. Just remember it's not gemini exclusively. The DM seat is for any LLM the user wants. I think ultimately we are going to sell the game with a built in LLM like Llama, and offer either premium DMs at a data rate or monthly charge, or just open it up to gamers to put their own LLM API key in there and pay whatever they want for whichever they want."
+
+`Gemini` in earlier discussion names the current proving model, not the product boundary. The durable boundary is a
+**provider-neutral DM seat**. Any supported local, bundled, hosted, premium, or player-keyed model receives the same
+viewpoint-safe digest, canonical facts, available mechanics/actions, tool/event schemas, refusal contracts, and
+forward-only narration obligations. A model may improvise fiction and soft connective choices from those materials;
+implemented mechanical effects use certified actions and owners. A weaker or differently trained model does not
+gain permission to invent state merely because another model might infer the rules from prose.
+
+A bundled local model, metered or subscription premium DMs, and bring-your-own API keys are retained product and
+distribution candidates rather than locked pricing promises. Later architecture/product owners must decide model
+capability conformance, privacy, key custody, offline behavior, cost/rate display, fallback, licensing, and vendor
+failure. The core shell and documentation say **DM seat**, not `Gemini UI`; provider selection cannot fork world or
+mechanics contracts.
+
+#### F10.9g closure audit
+
+F10.9g now answers the shared TravelWalk transaction, endpoints/nodes, route baseline versus journey time,
+opportunity cadence and ordered gates, mode specialization, macro geography/refinement, existing Fray/Spice reuse,
+bounded choice and the first physical fork, staged commitment, persistence, transport phasing, real rest under a
+simple camp, travel visualization, combat remount, turnback/reroute, and DM-seat authority. Every accepted MVP and
+feature goal has a pass or later owner. No travel-specific generated question remains open. **F10.9g is closed at
+the design-questionnaire level on this phased basis.** P10.9 remains open for town and the remaining adapter cases;
+Wave 10 remains open and no build is authorized.
+
+### 11.84 F10.9h.1-F10.9h.5 batch - bounded town substrate, projection, battle continuity, offscreen life, and movement
+
+F10.9h already accepts a bounded canonical district/venue fabric before any more continuous town ideal. These five
+questions define the first retained town module.
+
+#### F10.9h.1 - what is the canonical substrate of the first playable town slice?
+
+**Option A - venue menu only.** Shops, tavern, gate, and market are independent destinations with no retained
+district adjacency or thresholds.
+
+**Option B - a bounded district graph with mounted venue grids (recommended).** A small canonical district owns
+venue nodes, thresholds, short route edges, known access, and one shared cast/object/condition fabric. Entering a
+venue or conflict mounts only the required grid scene; the graph preserves the surrounding town. Cost is medium and
+reuses node, Urban Walk, grid, and SceneLineage owners.
+
+**Option C - one continuous whole-town grid.** Maximum spatial continuity, with high generation, population,
+camera, save, and inactive-space cost.
+
+#### F10.9h.2 - how is an ordinary town/social venue first shown?
+
+**Option A - prose and cards over a neutral holding view.** Cheap, but does not prove that Urban Walk rolls reach
+the visualizer.
+
+**Option B - reusable urban grid/node scene grammar from real rolls (recommended).** Street, market, tavern, shop,
+gate, or courtyard scenes use reusable floor/threshold/elevation/blocker/prop families, canonical pixel citizens,
+and truthful marker/card fallback. A node/vector overlay may use reusable district or realm background art, but no
+venue requires bespoke generated imagery.
+
+**Option C - a unique generated illustration or bespoke map for every venue.** Attractive when successful, but not
+an acceptable pre-alpha content dependency.
+
+#### F10.9h.3 - what happens when a social or exploration scene becomes a town battle?
+
+**Option A - rebuild a generic combat arena.** Characters and broad flavor carry over; exact stalls, doors, items,
+and positions do not.
+
+**Option B - remount the same venue through SceneLineage (recommended and pre-alpha-critical).** The mounted town
+scene gains legal exact placement; citizens, thresholds, stalls, doors, hazards, custody, knowledge, and companion
+participation persist. After battle, bodies, damage, fire, dropped goods, flight routes, relationships, and
+obligations remain in the same market/tavern/street.
+
+**Option C - town combat occurs only in dedicated arena locations.** Simpler technically, but makes ordinary town
+violence discontinuous or impossible.
+
+#### F10.9h.4 - what may happen elsewhere in the bounded town while one venue is active?
+
+**Option A - everything outside the mounted venue freezes.** Deterministic, but town clocks, factions, shops, and
+known obligations cannot move.
+
+**Option B - bounded owner-driven updates without continuous spatial simulation (recommended).** World/site clocks,
+scheduled obligations, stocks, relationships, factions, and externally owned events may update through receipts.
+Unseen citizens do not walk simulated streets or discover things merely because the venue is offscreen. Returning
+mounts the resulting canonical state.
+
+**Option C - continuously simulate every street, venue, and citizen.** Expensive and contrary to the active/site/
+cold ownership model.
+
+#### F10.9h.5 - how does movement between town venues work first?
+
+**Option A - instantaneous venue jumps.** Fast, but erases travel burden, district events, access, and companion
+same-scene opportunities.
+
+**Option B - short Urban Walk transitions over canonical edges (recommended).** Moving between venue nodes consumes
+a bounded one-or-few-segment Urban Walk or a certified direct threshold. It can host a street beat, obstruction,
+companion action, or conflict without requiring every street cell to exist. Repeated trivial edges may compact once
+known and safe.
+
+**Option C - manually walk every continuous street tile.** Strong spatial presence, with high scale, camera,
+content-density, and inactive-town cost.
+
+**Codex recommends Option B for all five.** P10.9 remains open; performance/device/accessibility stays P10.10 and no
+build is authorized.

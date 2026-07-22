@@ -961,8 +961,35 @@ normal world-map language.
 A horse that appears in play is first an existing animal citizen, not a transport-stat panel or a new visual card
 family. Its retained animal card owns the readable kind, hook-bearing tell, need, name, attitude/care, home or
 territory, and later recurring personality. The earliest travel presentation need only communicate truthful access
-and whether the party can ride or drive it; Gemini may carry the remaining fiction while the mechanical seam is
-small. A later horse/wagon module may progressively expose capacity, load, custody or hire, condition, feed,
+and whether the party can ride or drive it; the selected DM-seat model may carry the remaining fiction while the
+mechanical seam is small. A later horse/wagon module may progressively expose capacity, load, custody or hire, condition, feed,
 stabling, injury, and repair when those distinctions become playable. No visual target requires every mount or
 vehicle to become a full independent simulation, and no transport UI may duplicate or overwrite the existing animal
 identity/card.
+
+### Grid-owned travel projection; bespoke per-choice imagery is a later optional module (Adam, 2026-07-22)
+
+> "ok, i have some feedback on those images already, because generally everything should be built on our grid system. that looks like a bespoke graphic, not a procedurally generated scene basic on a real grid and a real roll. Now these screens can be built from nodes, or vector art overlaying some biome art that we generate for background images, but we aren't going to be able to generate bespoke imagery per travel choice by pre-alpha. that might be it's own module later once image gen or if image gen becomes cheaper and faster"
+
+Pre-alpha wilderness and route-choice scenes are projections of real rolls through Genesis's shared spatial
+systems. The primary visual path uses reusable square-grid biome cells, elevation/depression, route and crossing
+cells, blockers, simple physical props or truthful markers, and canonical pixel citizens. A coarser screen may use
+canonical nodes/edges or vector routes over reusable generated biome art, but painted relationships cannot pretend
+to be mechanical geometry. No segment, fork, or player choice requires bespoke generated imagery.
+
+Per-choice or runtime image generation is a separately gated later presentation module only if cost, latency,
+determinism, rights, safety, continuity, offline behavior, and provider availability become practical. It may enrich
+retained grid/node truth but cannot invent collision, replace canonical routes, or become the only map. The first
+two scenic travel mockups generated on 2026-07-22 are rejected as pre-alpha implementation targets. The corrected
+visible-grid versions remain discussion evidence rather than accepted captures.
+
+### Provider-neutral DM seat; no Gemini-exclusive shell branding (Adam, 2026-07-22)
+
+> "A as long is gemini is bound to as many mechanics as we have implemented and it knows how to use them, then we are ok with this. Gemini does a great job already in the raw chat with only a couple of PDFs as reference. Just remember it's not gemini exclusively. The DM seat is for any LLM the user wants. I think ultimately we are going to sell the game with a built in LLM like Llama, and offer either premium DMs at a data rate or monthly charge, or just open it up to gamers to put their own LLM API key in there and pay whatever they want for whichever they want."
+
+The persistent right rail presents the **DM seat**, not a Gemini-branded product surface. Every supported bundled,
+local, hosted, premium, or player-keyed model consumes the same viewpoint-safe facts, implemented mechanics and
+available actions, tool/event contracts, and narration constraints. The active provider may be exposed in an
+appropriate settings/account surface, but changing providers does not create a different world, mechanic, or main
+shell relationship. Built-in, metered/subscription, and bring-your-own-key packaging remain product candidates;
+their exact vendors, labels, rates, and controls are not canonized by a visual mockup.

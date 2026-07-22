@@ -16,7 +16,8 @@ Option B's provenance-bearing precision tiers at section 11.71. Section 11.72 re
 player-owned main PC, independently acting formation-bound allies/sidekicks, and an approach-bounded deployment
 zone. Section 11.73 chooses automatic whole-party formation deployment for pre-alpha and player PC placement plus
 optional ally rearrangement as the C2E feature goal. Section 11.74 chooses a simple crossfade/reframe plus
-fiction-first Gemini bridge for pre-alpha and the restrained C2F diegetic continuity beat as the visual goal. The
+fiction-first DM-seat bridge for pre-alpha (with Gemini as the current proving provider) and the restrained C2F
+diegetic continuity beat as the visual goal. The
 section 11.75 reframe removes independently advancing split-party play from pre-alpha in favor of one party scene
 with participation roles; parent/child branches remain a later feature. Section 11.76 chooses a self-inert cold
 record for forced companion separation and prioritizes toggleable same-scene companion autonomy before split-party
@@ -29,14 +30,17 @@ consumers; stage bounded mechanical choices toward selected physical route branc
 minimal possession/access plus rider/driver capability linked to the existing animal or item identity before a
 separate horse/wagon integration module. Full mount/vehicle simulation is not the goal. Section 11.81 additionally
 accepts deterministic staged segment commitment, material-outcome promotion, and the ordered
-travel matrix are accepted; weight-only choices may scaffold a bounded physical branch; and a prose-led camp is
+travel matrix; weight-only choices may scaffold a bounded physical branch; and a prose-led camp is
 valid only when it invokes the real short/long-rest owner and resumes the same journey. The first implementation
-priority is the canonical-mechanics -> BattleMat plus EngagementLens -> Gemini/fallback -> persistence/recovery
-spine, followed by retained system modules. The live final travel-audit batch is **F10.9g.12a and
-F10.9g.16-F10.9g.19** at section 11.82. P10.9 remains
+priority is the canonical-mechanics -> BattleMat plus EngagementLens -> provider-neutral DM-seat/fallback ->
+persistence/recovery spine, followed by retained system modules. Section 11.83 accepts the post-core pre-alpha
+bounded travel fork, exact travel-to-BattleMat remount, persistent partial journeys, and fact-bound improvisation
+through any supported DM-seat model. Travel projection is grid/node owned and consumes real rolls; bespoke per-
+choice imagery is not a pre-alpha dependency and remains an optional later module behind practical gates. F10.9g
+is closed on that phased basis. The live batch is **F10.9h.1-F10.9h.5** at section 11.84. P10.9 remains
 mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
-brief remains outside the current target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow
+brief remains outside the current target unless BattleMat-plus-DM-seat comprehension evidence later reopens a narrow
 information-layer question.
 
 The phase audit now distinguishes a narrower physical-event proof from the playable MVP. Borderline behavior stays

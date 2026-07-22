@@ -73,8 +73,9 @@ No build is authorized by this discovery record.
   C2E feature goal. Section 11.74 chooses a simple crossfade/reframe plus fiction-first Gemini bridge for pre-alpha
   and the restrained C2F diegetic continuity beat as the visual goal. Section 11.75 removes independently advancing
   split-party play from pre-alpha in favor of one party scene with `inside`/`at portal`/`adjacent` participation;
-  parent/child branches remain a later feature. The live **F10.9e.1** question asks how to store a forcibly captured
-  or left-behind companion without quietly reintroducing split play.
+  parent/child branches remain a later feature. Section 11.76 chooses a self-inert cold record for forced companion
+  separation and prioritizes toggleable same-scene companion autonomy before split-party work. The live **F10.9f**
+  question defines the companion's autonomous action limits.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later
@@ -118,7 +119,8 @@ Existing documents may still cite this path plus a legacy section number. Use th
 | 11.14-11.33 | [Wave 10 Part 2](procedural-dungeon-direction/wave-10/02-inspection-feedback-and-combat.md) |
 | 11.34-11.41 | [Wave 10 Part 3](procedural-dungeon-direction/wave-10/03-visual-proof-camera-and-materials.md) |
 | 11.42-11.56 | [Wave 10 Part 4](procedural-dungeon-direction/wave-10/04-attention-interaction-and-history.md) |
-| 11.57-current | [Wave 10 Part 5](procedural-dungeon-direction/wave-10/05-consequence-presentation.md) |
+| 11.57-11.75 | [Wave 10 Part 5](procedural-dungeon-direction/wave-10/05-consequence-presentation.md) |
+| 11.76-current | [Wave 10 Part 6](procedural-dungeon-direction/wave-10/06-party-and-scene-continuity.md) |
 
 ## File-growth rule
 

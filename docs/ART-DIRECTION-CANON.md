@@ -903,3 +903,21 @@ advancing child scene, view switching, split screen, or branch-reconciliation pr
 SceneLineages remain an eventual feature goal. This limitation preserves canonical companion identity, party
 membership, participation, location, condition, and custody seams so later split play can extend the game without
 making its high architecture and visual cost part of the first playable proof.
+
+### Cold companion absence first; same-scene autonomy before split-party views (Adam, 2026-07-22)
+
+> "B
+>
+> i do think that eventually I would like for the companions to be able to act on their own within the scene I think i would rather implement that before party splitting. That way if I am in a market scene the rogue could wander off and get into trouble if he wanted. This could be toggleable in settings, but it could make for interesting gameplay. Though we probably would need to define limits on the actions of the \"rogue\" PC"
+
+A forcibly separated pre-alpha companion becomes a canonical but self-inert cold record: their identity, known or
+exact location, holder/custody, condition, inventory, viewpoint knowledge, and separation cause persist; externally
+owned site/world events may still affect them; they remount as the same citizen when the main-PC scene reaches or
+retrieves them. They receive no independent scene, action, discovery, or Gemini-authored advancement.
+
+Before any split-party presentation is built, the feature path adds toggleable companion autonomy **inside the one
+currently active scene**. A rogue companion may visibly leave formation, move elsewhere in a market, and undertake a
+bounded characterful action capable of causing trouble while the same scene, clock, cast, objects, and consequences
+remain mounted. The behavior must obey validated actions, viewpoint truth, an explicit player setting, and still-
+open action limits. It cannot silently become offscreen branch simulation. Exact risk and intervention rulings remain
+open rather than being invented by this canon entry.

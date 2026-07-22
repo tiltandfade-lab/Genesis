@@ -3,7 +3,7 @@ type: design-study-index
 status: OPEN
 wave: 10
 subject: Interim Visual Engine and Release Scope
-current_write_target: 05-consequence-presentation.md
+current_write_target: 06-party-and-scene-continuity.md
 ---
 
 # Wave 10 — Interim Visual Engine and Release Scope
@@ -18,9 +18,10 @@ zone. Section 11.73 chooses automatic whole-party formation deployment for pre-a
 optional ally rearrangement as the C2E feature goal. Section 11.74 chooses a simple crossfade/reframe plus
 fiction-first Gemini bridge for pre-alpha and the restrained C2F diegetic continuity beat as the visual goal. The
 section 11.75 reframe removes independently advancing split-party play from pre-alpha in favor of one party scene
-with participation roles; parent/child branches remain a later feature. The live **F10.9e.1** question asks how to
-store a forcibly captured or left-behind companion. P10.9 remains mandatory and open. The P10.8 starting focus
-policy remains automatic Option A;
+with participation roles; parent/child branches remain a later feature. Section 11.76 chooses a self-inert cold
+record for forced companion separation and prioritizes toggleable same-scene companion autonomy before split-party
+work. The live **F10.9f** question defines the companion's autonomous action limits. P10.9 remains mandatory and
+open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow
 information-layer question.
@@ -43,7 +44,8 @@ until every original, additive, and generated follow-up is exhausted and Adam ex
 | [02](02-inspection-feedback-and-combat.md) | 11.14-11.33 | Object inspection, receipt feedback, EngagementLens, and initiative |
 | [03](03-visual-proof-camera-and-materials.md) | 11.34-11.41 | Resolution proof, material routing, beauty floor, camera, and projection |
 | [04](04-attention-interaction-and-history.md) | 11.42-11.56 | Attention ladder, interaction, secrets, knowledge, and durable history |
-| **[05 — current](05-consequence-presentation.md)** | **11.57-current** | Consequence closure and cross-adapter continuity |
+| [05](05-consequence-presentation.md) | 11.57-11.75 | Consequence closure, cross-adapter continuity, and pre-alpha split-party boundary |
+| **[06 — current](06-party-and-scene-continuity.md)** | **11.76-current** | Companion continuity, same-scene autonomy, and remaining P10.9 cases |
 
 Append new accepted discussion to the current chronological part. The accepted [phasing audit](PHASING-AUDIT.md)
 does not replace or renumber that record.

@@ -217,6 +217,19 @@ timing, landmark hold, citizen/object settling, interruption, fallback, and cros
 SceneLineage handoff; it does not add a continuity summary or make animation canonical. The structured mechanical
 information layer remains evidence-gated and is not an automatic later milestone.
 
+### C2G - cold companion detachment and exact remount
+
+**Primary question:** can one companion leave the active party scene through a validated capture/separation receipt,
+remain a canonical but self-inert cold record, receive one externally owned site/world consequence, and remount as
+the same actor with exact location/custody, condition, inventory, and viewpoint knowledge when the main-PC scene
+reaches or retrieves them?
+
+This pass proves harsh persistent separation without implementing split-party play. The cold companion owns no
+child SceneLineage, autonomous clock, hidden action, discovery, or Gemini-authored event. Ordinary consequences
+owned by the companion's site/holder/world may still affect them through canonical receipts. Save/load and remount
+must not duplicate, heal, relocate, reroll, or leak the companion. Independently advancing branches remain outside
+pre-alpha.
+
 ## Stage 3 - small operating site simulation
 
 Grow to the smallest site—likely several rooms—that can have a recognizable purpose and operating model. Exact room
@@ -267,6 +280,20 @@ SceneFact promotion remain distinct and survive action, narration, and save/load
 and ordinary actions while the DM's small obligation queue preserves a prior promise and retires it legally?
 
 The crisis graph orchestrates existing owners; it does not become a second action economy or site simulator.
+
+### C4D - bounded same-scene companion autonomy (feature goal; precedes split-party work)
+
+**Primary question:** can a companion leave formation, choose and commit one personality-appropriate bounded action
+inside the currently active scene, create truthful object/social/attention consequences, and return or continue
+without taking control of the main PC, leaving the scene, inventing mechanics, leaking secrets, or bypassing the
+player's autonomy setting?
+
+The first retained proof is a market-scene rogue companion who may wander within the mounted scene and attempt one
+certified act that can create trouble while every actor, object, clock, and consequence remains under the same
+SceneLineage. The feature reuses validated actions, custody, knowledge, relationships, attention, and deterministic
+receipts; Gemini may express intent and outcome but cannot commit the act. The exact risk ceiling, hard red lines,
+notice/intervention law, and setting shape remain owned by active P10.9 and later Waves 6-7. C4D must be designed and
+proved before any independently advancing split-party pass is scheduled.
 
 ## Stage 5 / C5 - grow the retained portfolio
 

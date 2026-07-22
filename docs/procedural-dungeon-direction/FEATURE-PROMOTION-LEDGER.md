@@ -26,6 +26,9 @@ satisfies the feature, and it is not build authorization.
    passes in the integrated slice. Mature promotion is recorded separately.
 5. A failed pass reopens the row's named seam or scope. It does not erase the accepted destination.
 6. New Waves 3-9/11-12 decisions append or refine rows; they do not become giant same-numbered implementation waves.
+7. The first connected implementation priority is the retained canonical-mechanics -> BattleMat plus EngagementLens
+   -> Gemini/fallback -> persistence/recovery spine. Other accepted families become small vertical modules over its
+   owners; prose may bridge absent breadth but cannot count as committed mechanics or erase the mapped destination.
 
 ## Initial opened-wave mapping
 
@@ -56,7 +59,7 @@ satisfies the feature, and it is not build authorization.
 | Attention and accumulated history | Exact event/knowledge truth, DM prose, current board/card truth, invoked inspection | C1F/C1G | C2B/C3B | Ambient -> historical ladder and progressive history cards | Repeated comprehension failure survives existing surfaces | MAPPED; implementation unaudited |
 | Visual floor, props, and materials | Coherent tabletop silhouette/value/elevation/light/prop/sprite citizenship; retain working features | C1A | C1E/C3C | Rich material routing, normals, realm skins, broad props | Captures meet readability floor and material sameness is limiting | MAPPED; implementation unaudited |
 | Mode continuity | Typed idempotent SceneLineage handoff preserves lineage, ownership, cast/roles, objects/custody, damage/traces/hazards, viewpoint knowledge, obligations, consequence cursor, and recovery across exploration -> battle -> aftermath; spatial facts retain an honest exact/anchored/zone-or-route/unresolved tier and provenance-bearing placement/compaction receipt; pre-alpha staging is an orientation-preserving crossfade/reframe plus one short fiction-first Gemini/fallback bridge and no mechanical summary; broader required adapter traces remain owned by open P10.9 | C2D | C2D plus remaining P10.9-named MVP traces | C2F restrained landmark/placement continuity beat; seamless morphs, richer camera memory, simultaneous split-view presentation, broad adapter polish | Correct handoffs remain disorienting, or travel/town/split-party cases exceed the shared bundle | MAPPED IN PART; F10.9a-d accepted, generated P10.9 follow-ups active |
-| Land-travel, route, transport, and macro-biome continuity | Every journey endpoint is a canonical node; one shared TravelWalk/SceneLineage contract owns departure/cursor/clock/arrival/turnback while route baseline canon remains distinct from journey-specific time; a small rational macro-biome field refines locally without contradicting known geography and consumes the retained Fray/Spice authority rather than duplicating it; early transport is only truthful possession/access plus rider/driver capability linked to the existing animal citizen or item identity; development may use fact-locked prose before the minimum typed pace/time or encounter effect is playable | C2H | C2I/C2J | C4E specialized per-mode assemblers and selected physical route forks; C4F horse/wagon custody, capacity, condition, upkeep, and interaction over retained animal/inventory owners; richer probability matrices and generated road topology/conditions | Correct shared travel becomes repetitive or implausible by mode; route/world scale exceeds the retained macro/refinement constraints; play demonstrates that a transport distinction earns implementation cost | MAPPED IN PART; F10.9g.1-g.10 accepted, journey-commitment/matrix/camp questions active |
+| Land-travel, route, transport, and macro-biome continuity | Every journey endpoint is a canonical node; one shared TravelWalk/SceneLineage contract owns staged deterministic segment commitment, departure/cursor/clock/arrival/turnback, material promotion, and travel-to-battle return while route baseline canon remains distinct from journey-specific time; a prose-led interim camp still calls the real short/long-rest owner and resumes the same cursor; a small rational macro-biome field refines locally without contradicting known geography and consumes the retained Fray/Spice authority rather than duplicating it; early transport is only truthful possession/access plus rider/driver capability linked to the existing animal citizen or item identity | C2H after C1A-D core | C2I/C2J plus final F10.9g travel-to-battle/visual trace | C4E ordered probability matrix, explicit camp choices, specialized per-mode assemblers, and selected physical route forks; C4F horse/wagon custody, capacity, condition, upkeep, and interaction over retained animal/inventory owners; generated road topology/conditions | The connected BattleMat spine is green; correct shared travel becomes repetitive or implausible by mode; route/world scale exceeds retained constraints; play demonstrates that a transport distinction earns its cost | MAPPED IN PART; F10.9g.1-g.15 accepted with A -> B branch/camp phasing; final travel audit active |
 | Bounded town continuity | A compact canonical district/venue fabric reuses Urban Walk and SceneLineage; one market/district trace preserves cast, objects, thresholds/routes, damage, knowledge, and consequences through social/exploration/battle/aftermath mounts | Later P10.9 town proof | P10.9-named MVP trace | Scoped contiguous town slices, ambient citizens, companion roaming, and cross-venue events; no entitlement to simulate every street/building/resident | Bounded fabric feels like disconnected menus or cannot host accepted same-scene social/companion consequences | MAPPED IN PART; F10.9h direction accepted, generated town follow-ups open |
 | Performance/device/accessibility | Reserved for P10.10; no cut inferred here | Later owner | P10.10 owner | Accepted device/performance/accessibility destination | Pending P10.10 answers and budgets | UNMAPPED pending mandatory P10.10 |
 | Twelve-site/eight-trace portfolio | Grow retained fixtures incrementally after C1-C4; do not batch all sites first | C1A onward | C5 | Wave 11 corpus automation and Wave 12 release gates | Missing coverage dimension justifies each added site | MAPPED; implementation unaudited |
@@ -75,17 +78,21 @@ satisfies the feature, and it is not build authorization.
   branches as a later feature. F10.9e.1 chooses a self-inert cold companion record with externally owned world
   consequences and exact remount. Same-scene companion autonomy is prioritized at C4D before split-party work;
   F10.9f-f.2 accept bounded certified action authority, perceptibility/interruptibility-gated intervention, and
-  governed same-scene attention, while Waves 6-7 still own detailed behavior. F10.9g.1-g.10 accept one shared staged
-  TravelWalk contract before specialized assemblers, baseline-route versus journey-time separation, an exposure
-  opportunity matrix, coherent macro-biomes with constraint-preserving refinement, and bounded mechanical choices
-  that may later become selected physical route branches. Macro-biome disorder and travel gates consume the
-  existing Fray/Spice authority rather than minting a duplicate curve. Transport begins with minimal truthful
-  possession/access and rider/driver capability linked to the retained animal citizen or item identity; the later
-  C4F module adds only demonstrated horse/wagon integration needs, never a mandatory full simulation. C2H-J/C4E-F
-  own the staged proof/promotion path. F10.9h accepts bounded canonical town fabric before scoped contiguous-town
-  enrichment. Generated P10.9 follow-ups still own journey commitment, persistence, the travel probability matrix,
-  camp days, the town follow-ups, CrisisChain, and broader recovery/visual-memory obligations before its MVP gate
-  can be complete.
+  governed same-scene attention, while Waves 6-7 still own detailed behavior. F10.9g.1-g.15 accept one shared staged
+  TravelWalk contract before specialized assemblers, baseline-route versus journey-time separation, deterministic
+  segment commitment, material-outcome promotion, an ordered exposure/event/content matrix, coherent macro-biomes
+  with constraint-preserving refinement, and bounded mechanical choices that may later become selected physical
+  route branches. Option A weight choices may scaffold the desired bounded Option B fork; its pre-alpha timing
+  remains open at F10.9g.12a. Macro-biome disorder and travel gates consume the existing Fray/Spice authority rather
+  than minting a duplicate curve. A prose-led interim camp must still call the canonical short/long-rest owner and
+  resume the same journey; explicit day-boundary camp choices are the later promotion. Transport begins with
+  minimal truthful possession/access and rider/driver capability linked to the retained animal citizen or item
+  identity; the later C4F module adds only demonstrated horse/wagon integration needs, never a mandatory full
+  simulation. C2H-J/C4E-F own the staged proof/promotion path after the small-room BattleMat/EngagementLens core.
+  F10.9h accepts bounded canonical town fabric before scoped contiguous-town enrichment. Generated P10.9 follow-ups
+  still own fork timing, travel-to-battle remount, initial travel visualization, turnback/reroute truth, Gemini's
+  scaffold authority, the town follow-ups, CrisisChain, and broader recovery/visual-memory obligations before its
+  MVP gate can be complete.
 - All implementation states remain unaudited and no build is authorized.
 
 ## Required update rhythm

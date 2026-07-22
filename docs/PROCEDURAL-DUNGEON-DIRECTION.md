@@ -83,7 +83,12 @@ No build is authorized by this discovery record.
   authority rather than a duplicate curve; stage certified mechanical route choices toward selected physical
   branches; and correct transport to minimal possession/access plus rider/driver capability first, linked to the
   existing animal or item identity, before a separate horse/wagon integration module. Full simulation of every
-  mount or vehicle is not the feature goal. The live batch is **F10.9g.11-F10.9g.15** at section 11.80.
+  mount or vehicle is not the feature goal. Section 11.81 accepts deterministic staged segment commitment,
+  material-outcome promotion, and the ordered travel matrix; permits weight-only route choices before a bounded
+  physical branch; and permits prose-led camps only when they invoke the real short/long-rest owner and resume the
+  same journey. It also makes the canonical-mechanics -> BattleMat plus EngagementLens -> Gemini/fallback ->
+  persistence/recovery spine the first implementation priority, with travel/world/town depth added as retained
+  modules afterward. The live final travel-audit batch is **F10.9g.12a and F10.9g.16-F10.9g.19** at section 11.82.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

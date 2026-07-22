@@ -62,6 +62,11 @@ that authority.
 10. **Later stages cannot excuse weak earlier seams.** Multi-room and simulation passes consume the same room ids,
     receipts, viewpoint law, renderer boundary, and persistence contract proven locally; they do not introduce a
     second authority.
+11. **Prove the connected BattleMat spine before module breadth.** The first dominant gate is canonical mechanics ->
+    BattleMat plus mandatory EngagementLens -> Gemini/fallback -> persistence/recovery in the retained small room.
+    Travel, camp, route branching, macro-world, transport, town, and deeper simulation grow as separately gated
+    vertical modules over that spine. Gemini prose may bridge missing breadth but cannot masquerade as committed
+    mechanics or a second state owner.
 
 ## Stage 1 - one small retained clay room
 
@@ -72,6 +77,10 @@ materials, lights, mechanics, and adapters through the same owners the game uses
 The room grows through retained named scenario variants and traces. A later pass may add the opponent, hazard, or
 interruption point it needs, but it does not overwrite the earlier fixture/expected trace so the faster gate
 disappears.
+
+C1A-D form the first connected physical proof and therefore precede substantial work on travel/world/town module
+breadth. C1E-G then harden combat breadth, recovery, and DM language over the same core; they do not postpone proof
+that a canonical physical event can reach the actual BattleMat and EngagementLens.
 
 ### C1A - room truth and projection
 
@@ -239,7 +248,11 @@ at the same destination or turn back without teleportation, reroll, duplicate ti
 This is an audit-and-retain pass over the existing travel seam, not authority to redesign the world. A deterministic
 fixture may use the current coarse/random biome substrate during development. It must expose the current
 arrival-segment time debt and preserve a stable extension seam for route profile, biome corridor, transport, and
-bounded en-route choice rather than baking prose-only assumptions into the proof.
+bounded en-route choice rather than baking prose-only assumptions into the proof. If the journey stops for a short
+or long rest, even the first prose-led camp presentation must pause this same cursor and invoke the retained
+`restRiders`/`restRecover` owner; real time, risk/interruption, recovery, resources, riders, ledger, and DM obligation
+effects occur before the same TravelWalk resumes. An explicit continue/push/camp decision surface remains a later
+promotion over this minimum integration.
 
 ### C2I - coherent macro-biome and route/journey separation
 
@@ -348,6 +361,8 @@ This promotion may add richer road topology, junctions, traffic and faction cont
 and selected refined physical forks that reconverge or legally promote a destination. It must not fork four
 independent persistence or canon systems. The promotion fires when the retained shared compiler produces correct
 but materially repetitive or implausible mode play, not merely because separate generators sound more complete.
+It may also promote prose-led rests into explicit day-boundary continue/push/camp choices while continuing to call
+the existing rest owner rather than creating travel-specific recovery mechanics.
 
 ### C4F - horse and wagon expansion over retained animal and inventory owners (feature goal)
 

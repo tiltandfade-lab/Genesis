@@ -27,8 +27,13 @@ before scoped contiguous-town enrichment. Sections 11.79-11.80 accept determinis
 constraint-preserving refinement; reuse the existing Fray/Spice authority for outer biome disorder and travel
 consumers; stage bounded mechanical choices toward selected physical route branches; and correct transport to
 minimal possession/access plus rider/driver capability linked to the existing animal or item identity before a
-separate horse/wagon integration module. Full mount/vehicle simulation is not the goal. The live batch is
-**F10.9g.11-F10.9g.15** at section 11.80. P10.9 remains
+separate horse/wagon integration module. Full mount/vehicle simulation is not the goal. Section 11.81 additionally
+accepts deterministic staged segment commitment, material-outcome promotion, and the ordered
+travel matrix are accepted; weight-only choices may scaffold a bounded physical branch; and a prose-led camp is
+valid only when it invokes the real short/long-rest owner and resumes the same journey. The first implementation
+priority is the canonical-mechanics -> BattleMat plus EngagementLens -> Gemini/fallback -> persistence/recovery
+spine, followed by retained system modules. The live final travel-audit batch is **F10.9g.12a and
+F10.9g.16-F10.9g.19** at section 11.82. P10.9 remains
 mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow

@@ -480,3 +480,170 @@ creates map and simulation clutter for routine sleep stops.
 **Codex recommends Option B for all five.** P10.9 and Wave 10 remain open. F10.9g still requires at least one final
 audit after these answers; F10.9h's town follow-ups remain pending. Performance/device/accessibility stays P10.10;
 no build is authorized.
+
+### 11.81 F10.9g.11-F10.9g.15 ruling - staged journeys, material persistence, real rest under a simple camp, and BattleMat-first modules
+
+Adam accepted the batch with two important phase corrections and reframed implementation around a connected core
+followed by independently gated modules.
+
+#### F10.9g.11 - Option B; the Wilderness Walk already supplies much of the right skeleton
+
+Adam chose **Option B**. Departure commits the canonical route, journey seed, known conditions, and first segment;
+later segments commit deterministically after the preceding choice. The intuition that Wilderness Walk was designed
+for this is substantially right: it already models a journey as segments, keeps a canonical cursor and provenance,
+veils ahead-of-here content, and distinguishes walked truth from unwalked possibility. The retained implementation
+still rolls a whole linear segment array eagerly, so a future pass must move derivation behind the cursor without
+changing the existing walk contract. This is adaptation of the intended seam, not a replacement travel engine.
+
+#### F10.9g.12 - Option A is an acceptable scaffold; bounded physical Option B remains desired; pre-alpha timing open
+
+Adam chose **Option B as the desired branch**, allowed **Option A in the meantime**, and asked why B was estimated
+medium-high before deciding whether it earns pre-alpha scope.
+
+The cost is not the choice text or two encounter rolls. `rollWildernessWalk` explicitly produces a **linear route
+with no topology**, while the current cursor accepts a segment number but does not validate branching adjacency.
+The broad version of Option B would therefore need all of the following to agree:
+
+1. a stable fork/reconvergence topology and two corridor identities rather than only weighted future content;
+2. constraint-preserving local geography for both visible alternatives;
+3. deterministic staged commitment so choosing one branch cannot reroll, leak, or pre-canonize the other's events;
+4. truthful preview of known time, exposure, terrain, access, and route consequences without revealing hidden
+   content;
+5. save/load, turnback, durable edge-condition, map/visualizer, Gemini, and arrival behavior at the fork and merge;
+6. branch-aware tests that prevent duplicate time, events, destinations, and consequences.
+
+That general system is medium-high. A **bounded branch capsule** is smaller: one reusable fork grammar inserts two
+certified alternatives such as bridge/ford or road/ridge into the linear TravelWalk, shows only viewpoint-known
+tradeoffs, commits the selected segment packet, and reconverges on the same destination. It needs no arbitrary
+player-drawn path, general pathfinder, eagerly refined regional map, or unique authored map. This can be a medium
+post-core module and is the version Codex recommends considering for pre-alpha. Its value is not travel ornament:
+it is the smallest noncombat proof that a player choice changes canonical physical space, the visualizer projects
+the selected truth, Gemini narrates the same choice, and save/return preserve it. It should not block the first
+BattleMat/EngagementLens proof. F10.9g.12a below asks whether it enters pre-alpha after that core is green.
+
+#### F10.9g.13 / F10.9g.14 - Options B accepted
+
+Adam chose **Option B** for both. Material travel outcomes promote through ordinary candidate-to-canon law while
+incidental passage may reroll. A destroyed bridge, opened pass, changed toll, claimed camp, established
+relationship, or discovered shrine remains a durable edge condition, owner fact, or node; transient weather and
+travelers do not become permanent by default.
+
+The travel opportunity matrix uses ordered gates: mandatory geography/durable route condition, exposure occurrence,
+event family, the retained Fray/Spice band plus ordinary tier/scene-risk severity, and finally biome/route/transport-
+compatible content. Each layer owns one decision and provenance field so travel never double-rolls danger or loot.
+This is a later travel module over the connected spine, not a prerequisite for first BattleMat proof.
+
+#### F10.9g.15 - simple camp presentation first, but short/long rest mechanics are real; Option B remains ideal
+
+Adam accepted a phased answer: an **Option A-like presentation may remain for a while**, but stopping to rest must
+invoke the existing canonical short- or long-rest mechanic; **Option B's explicit day-boundary and camp choices
+remain the ideal**. This is not permission for Gemini prose to say the party rested while mechanics remain untouched.
+
+The authority audit confirms that `restRiders`/`restRecover` already provide the correct reusable owner for both UI-
+and DM-declared rest. The current focused harness passes **21/21** and covers hit-dice spending, short-rest resource
+recovery, long-rest recovery, partial time on interruption, the 24-hour benefit gate, and rest-risk obligations.
+The same gate also owns the established long-rest riders such as item recharge, exhaustion, concentration, temporary
+HP, camp cooking/lodging, wages, pet tending, rust maintenance, level-up claims, clock, ledger, and DM digest effects.
+
+The interim travel integration may therefore present one uninterrupted journey and let Gemini write the camp, but a
+certified stop/rest action must pause the same TravelWalk, call that canonical rest gate, advance the real clock,
+honor interruption/no-benefit outcomes, and resume the same cursor. The later camp module adds explicit
+continue/push/camp choices, watch/resource strategy, richer scene projection, and selective camp promotion. It does
+not create a second rest system.
+
+#### BattleMat-first connected spine, then modules
+
+Adam identified the implementation form now emerging: prove the bare connected game first, then realize deeper
+systems as bounded modules. The **first dominant uncertainty is the BattleMat system**, not whether every accepted
+travel, world, town, transport, history, or relational ideal can launch together.
+
+The connected proof must carry one canonical action and consequence through mechanics, BattleMat plus mandatory
+EngagementLens, Gemini/fallback prose, persistence, and recovery. It may use existing generators, restrained visual
+fixtures, generic truthful projection, and Gemini improvisation to bridge breadth. It may not use prose to invent or
+silently replace mechanical truth. Once that spine is green, modules add travel-to-combat continuity, staged
+journeys, rest/camp integration, ordered encounter gates, route branches, macro-world refinement, transport, towns,
+and deeper simulations one at a time. Every module extends the shared SceneLineage/receipt/owner seams, retains its
+fixture and gate, and can be scheduled with other small passes without becoming another engine-wide redesign.
+
+This phasing changes order and initial breadth, not the accepted feature destination. Critical and borderline MVP
+behavior remains mapped; mature systems gain explicit module owners instead of becoming prerequisites for proving
+that the game can render its central physical events at all.
+
+### 11.82 Final F10.9g travel audit batch - fork timing, travel-to-battle truth, first visualization, turnback, and DM improvisation
+
+These five questions close the material gaps exposed by the module reframe. If their answers generate no new
+travel-specific ambiguity, the next step will be an explicit F10.9g closure audit before advancing to F10.9h's town
+follow-ups.
+
+#### F10.9g.12a - when should the bounded physical branch capsule be built?
+
+**Option A - after pre-alpha.** Pre-alpha keeps weight/time choices only; physical fork/reconvergence waits for a
+later travel expansion. Cheapest, but the first playable build never proves noncombat spatial choice beyond a
+linear walk.
+
+**Option B - a post-core pre-alpha module (recommended).** First prove the small-room BattleMat/EngagementLens spine.
+Then add exactly one reusable bridge/ford or road/ridge capsule over the staged TravelWalk: two visible certified
+alternatives, one committed choice, one reconvergence, no arbitrary routing. This adds a medium bounded module, not
+a medium-high general route system, and proves canonical choice -> visualizer -> Gemini -> persistence outside
+combat.
+
+**Option C - foundational before BattleMat proof.** Build general branch/refinement support into the first connected
+spine. Architecturally ambitious, but reverses Adam's stated risk order.
+
+#### F10.9g.16 - what happens when a travel segment becomes a battle?
+
+**Option A - start a generic fresh battle.** The DM carries flavor across, but route objects, footing, cast, and
+damage do not share exact identity. Cheap and precisely the adapter discontinuity P10.9 exists to prevent.
+
+**Option B - pause and remount the same segment through SceneLineage (recommended and pre-alpha-critical).** The
+travel cursor pauses. Its biome, footing, visible route features, encounter actors, objects/custody, knowledge, and
+provenance feed the legal BattleMat placement. After combat, retreat direction, dead/wounded actors, dropped items,
+damage, route conditions, elapsed time, and obligations return to that same segment before the journey resumes.
+Gemini bridges the mode change but cannot substitute different nouns.
+
+**Option C - resolve travel combat abstractly in prose.** Avoids the adapter, but fails the central BattleMat proof
+for one of wilderness travel's most important events.
+
+#### F10.9g.17 - what is the first visual form of an ordinary noncombat travel segment?
+
+**Option A - prose over a neutral holding view.** Mechanically possible, but does not prove that rolled wilderness
+facts reach the visualizer.
+
+**Option B - one generic but truthful Wilderness Walk scene grammar (recommended).** Reuse a small scene/board
+fixture whose biome, route or crossing, footing/elevation, one rolled feature, relevant object, weather/light, and
+present actors are populated from the segment's real fields. Unsupported specificity falls back to honest simple
+terrain or props. It need not create unique geometry, a full regional map, or bespoke art for every segment.
+
+**Option C - unique locally refined geography for every segment.** Rich target, but makes worldgen and visual breadth
+prerequisites for proving the projection seam.
+
+#### F10.9g.18 - what survives when the player turns back or changes course mid-journey?
+
+**Option A - snap back to the origin and discard the partial trip.** Simple, but erases elapsed time, rests,
+encounters, discoveries, spent resources, and changed route state.
+
+**Option B - preserve resolved truth and stage the return/reroute (recommended).** Resolved segments, time, resource
+changes, rest outcomes, promoted facts, and durable route conditions remain. Turning back derives return
+opportunities from current journey progress; rerouting begins from a legal reached fork/node/route position. It may
+compact incidental scenery, but never refunds or rerolls the outward journey.
+
+**Option C - maintain an exact continuous hex coordinate for every travel minute.** Maximum fidelity, with much
+higher world, path, recovery, and UI cost than the bounded opportunity model requires.
+
+#### F10.9g.19 - what may Gemini improvise while a deeper travel module is still absent?
+
+**Option A - fiction and soft connective choices inside certified facts (recommended).** Gemini may describe the
+camp, weather, passage, local behavior, and consequences of committed facts, and may offer choices whose mechanical
+effect is either none or an existing validated action. Canonical time, rest, damage, resources, route changes,
+encounters, possession, and durable discoveries still pass through their owners. Missing mechanics stay missing
+rather than being disguised as prose authority.
+
+**Option B - temporary mechanical rulings that are captured afterward.** Flexible tabletop behavior, but risks
+contradictory state, retroactive capture, save/load gaps, and an invisible second rules engine.
+
+**Option C - no improvisation beyond templated fallback text.** Maximally enforceable but discards the AI DM's
+useful ability to make a sparse scaffold feel like fiction.
+
+**Codex recommends B, B, B, B, A.** The branch capsule is optional until its timing is answered; travel-to-battle
+identity is not optional because it directly exercises the declared BattleMat priority. P10.9 and Wave 10 remain
+open; performance/device/accessibility stays P10.10 and no build is authorized.

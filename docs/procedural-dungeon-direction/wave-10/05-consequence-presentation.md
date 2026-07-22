@@ -1541,3 +1541,90 @@ switching, simultaneous split presentation, and richly autonomous offscreen play
 
 Does Adam choose **A, B, or C**, or want to restrict what an off-focus companion branch may do in pre-alpha? P10.9
 and Wave 10 remain **OPEN**; no build is authorized.
+
+### 11.75 F10.9e scope correction and F10.9e.1 expansion - no split-party play in pre-alpha; decide forced detachment
+
+Adam challenged the premise that pre-alpha needs advancing split-party branches:
+
+> "should we even allow party splitting in a pre-alpha? that seems like an advanced feature, even the first BG games didn't allow it. I think that is something totally worth limiting in scope"
+
+Yes. The prior recommendation overreached by pulling future branch architecture into the first playable slice. It
+also drifted from the accepted Foundation section 2.4, which names party splitting as eventual and makes **scene
+participation** the near-term bridge. F10.9e is therefore reframed:
+
+1. **One advancing party scene in pre-alpha:** no voluntary split command, no off-focus companion scene, no view
+   switching, no simultaneous boards, and no child-branch reconciliation engine.
+2. **Scene participation handles constrained rooms:** companions may be `inside`, `at portal`, or `adjacent` while
+   retaining identity, party membership, custody, condition, and viewpoint truth. They need not all occupy the small
+   room or receive continuous exact noncombat cells.
+3. **Tactical division may remain one scene:** a portcullis, wall, chasm, elevation change, or closed door can place
+   actors on different parts of one exact BattleMat while the same encounter clock, initiative, receipts, and
+   consequence presenter own everyone. Physical separation alone does not require an independently advancing mode.
+4. **No narrative branch authority:** Gemini may describe concern, distance, or an ally outside the room, but cannot
+   invent an offscreen fight, discovery, theft, movement, or knowledge gain. No child scene exists for prose to
+   advance.
+5. **Retain only honest promotion seams:** canonical actor id, party membership, current participation/location,
+   condition, custody, knowledge, and owner fields must not assume everyone is always co-located. A later feature
+   may add transactional parent/child SceneLineages over those seams after Waves 6-7 define ally behavior and Wave
+   12 orders the build. Pre-alpha does not implement the graph merely because later migration should be possible.
+
+This removes **high branch-graph, offscreen-simulation, time-order, reconciliation, multi-view, and QA cost** from
+pre-alpha while preserving the actual single-PC game. It is a scope correction, not a deletion of eventual
+split-party play. The original P10.9 split-party concern is answered for the first horizon by an explicit
+non-support boundary plus truthful participation; the feature goal remains named and cannot vanish.
+
+One material exception remains. Persistent fiction can still capture a companion, leave them behind after a
+collapse, or otherwise remove them from the active party scene. That does not need to become playable split-party
+simulation, but it cannot become a continuity hole.
+
+#### F10.9e.1 - what does pre-alpha do with a companion who is forcibly and persistently separated?
+
+**Option A - prohibit persistent individual detachment in pre-alpha content.** Encounters and consequence tables may
+temporarily divide the exact board, but they cannot end with one surviving companion captured, stranded, or left at
+another location. The compiler/resolver rejects or converts such an outcome into a same-scene obstruction, whole-
+party consequence, ordinary down/retreat result, or immediate reunion.
+
+- **Dungeon example:** a portcullis may divide the fight, but the encounter cannot conclude until it opens, the
+  companion returns through another visible route on the same board, or a same-scene terminal outcome resolves them.
+- **Gemini-DM example:** Gemini cannot offer `the jailer drags your sidekick away` as a committed consequence unless
+  the whole active scene follows; it must stay color or select a licensed same-scene result.
+- **Cost:** **low persistence and UI cost, medium content-validation cost**, with high contrivance and consequence-
+  breadth risk. Interesting capture/loss outcomes may be visibly forbidden by the engine.
+
+**Option B - preserve a cold separated-companion record with no self-directed advancement (recommended).** The
+companion leaves active participation through one validated receipt that records canonical actor id, last/known
+location, holder/custody, condition, inventory, viewpoint knowledge, separation cause/time, and legal return or
+remount handles. They own no active child SceneLineage, take no independent actions, discover nothing, and do not
+advance through Gemini narration. Ordinary site/world events owned elsewhere may still affect their location or
+condition through canonical receipts; the companion is not immune merely because offscreen. They remount only when
+the main-PC scene reaches them or another validated transfer/reunion event returns them.
+
+- **Dungeon example:** the jailer escapes with the sidekick. The sidekick becomes `captured at lower cells` with
+  their carried key and wound intact. They do not secretly escape, fight guards, or find a tunnel. If the lower cells
+  flood through an ordinary site event, that event may affect them. When the PC reaches the cells, the same actor and
+  possessions remount into the active scene.
+- **Gemini-DM example:** Gemini may say, "The gate swallows your last sight of her," and later report only what the
+  PC knows. It cannot narrate her offscreen plans or success as fact. Reunion may reveal facts through her preserved
+  viewpoint only if a canonical event actually supplied them.
+- **Cost:** **medium identity/location/custody/persistence/remount and world-event integration work**, far below a
+  branch simulator. It preserves harsh outcomes and future promotion seams without pretending the companion is
+  living an independently simulated adventure.
+
+**Option C - allow a small menu of deterministic offscreen companion actions.** A cold separated companion may
+periodically `hold`, `hide`, `escape`, `seek reunion`, or suffer a bounded consequence according to a seeded policy,
+then later remount with those receipts. There is still no player view or direct control.
+
+- **Dungeon example:** the captured sidekick receives one hidden escape check or policy action while the PC travels
+  to the cells, possibly changing room, condition, or custody before rescue.
+- **Gemini-DM example:** Gemini narrates the result only after it becomes legally knowable, but the engine must now
+  schedule, resolve, persist, and reconcile an off-focus action economy.
+- **Cost:** **medium-high behavior, clock, secrecy, balance, recovery, and reconciliation work**. It is effectively
+  the first slice of the advanced child-branch feature under another name.
+
+**Codex recommendation: Option B.** It permits capture, loss, collapse, and delayed rescue without building split-
+party play. The cold record is canonical but inert as an actor; externally owned world consequences may affect it,
+and remount/reunion is exact. Option A is cheaper but narrows Genesis consequences too visibly. Option C defeats the
+scope cut.
+
+Does Adam choose **A, B, or C**, or want the cold record to be immune even to externally owned site/world events?
+P10.9 and Wave 10 remain **OPEN**; no build is authorized.

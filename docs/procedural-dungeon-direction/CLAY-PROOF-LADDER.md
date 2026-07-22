@@ -186,6 +186,13 @@ reframe plus one short fact-locked Gemini/fallback bridge; stable landmarks, cit
 continuity without mechanical labels or a transition card. Exact allied combat behavior remains owned by later
 party/tactical questions.
 
+Pre-alpha does not create independently advancing split-party child scenes. Tight-room participation remains inside
+one party SceneLineage through `inside`, `at portal`, and `adjacent` roles. A gate, wall, elevation change, or other
+exact obstruction may physically divide actors on the same BattleMat while one encounter clock and consequence
+order still own all participants; that is tactical separation, not a second offscreen game. Voluntary companion
+errands, child-scene advancement, view switching, and branch reconciliation remain feature goals. The active P10.9
+edge case still decides how a forcibly captured or left-behind companion is stored without introducing split play.
+
 ### C2E - bounded player deployment promotion (feature goal)
 
 **Primary question:** can the player place the main PC and optionally rearrange allies/sidekicks within the same

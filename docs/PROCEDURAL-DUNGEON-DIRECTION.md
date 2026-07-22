@@ -71,8 +71,10 @@ No build is authorized by this discovery record.
   formation-bound allies/sidekicks, and an approach-bounded deployment zone. Section 11.73 chooses automatic
   whole-party formation deployment for pre-alpha and player PC placement plus optional ally rearrangement as the
   C2E feature goal. Section 11.74 chooses a simple crossfade/reframe plus fiction-first Gemini bridge for pre-alpha
-  and the restrained C2F diegetic continuity beat as the visual goal. The live **F10.9e** question asks how the
-  SceneLineage branches, advances, and rejoins when the party is split.
+  and the restrained C2F diegetic continuity beat as the visual goal. Section 11.75 removes independently advancing
+  split-party play from pre-alpha in favor of one party scene with `inside`/`at portal`/`adjacent` participation;
+  parent/child branches remain a later feature. The live **F10.9e.1** question asks how to store a forcibly captured
+  or left-behind companion without quietly reintroducing split play.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

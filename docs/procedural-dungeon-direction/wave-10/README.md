@@ -17,8 +17,10 @@ player-owned main PC, independently acting formation-bound allies/sidekicks, and
 zone. Section 11.73 chooses automatic whole-party formation deployment for pre-alpha and player PC placement plus
 optional ally rearrangement as the C2E feature goal. Section 11.74 chooses a simple crossfade/reframe plus
 fiction-first Gemini bridge for pre-alpha and the restrained C2F diegetic continuity beat as the visual goal. The
-live **F10.9e** question asks how a split party branches, advances, and rejoins. P10.9 remains mandatory and open.
-The P10.8 starting focus policy remains automatic Option A;
+section 11.75 reframe removes independently advancing split-party play from pre-alpha in favor of one party scene
+with participation roles; parent/child branches remain a later feature. The live **F10.9e.1** question asks how to
+store a forcibly captured or left-behind companion. P10.9 remains mandatory and open. The P10.8 starting focus
+policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow
 information-layer question.

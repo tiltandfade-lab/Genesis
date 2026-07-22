@@ -890,3 +890,16 @@ badges, or a mechanical transition card. After truthful BattleMat events and sta
 visual feature goal adds a restrained landmark-to-placement continuity beat: one or two anchors hold while the board
 resolves, persistent citizens and objects settle into committed cells, and the camera rests on the first actionable
 composition. The structured mechanical continuity summary remains evidence-gated and has no automatic entitlement.
+
+### No independently advancing split-party presentation in pre-alpha (Adam, 2026-07-22)
+
+> "should we even allow party splitting in a pre-alpha? that seems like an advanced feature, even the first BG games didn't allow it. I think that is something totally worth limiting in scope"
+
+Pre-alpha presents one advancing party scene. Companions may participate as `inside`, `at portal`, or `adjacent`
+without receiving continuous independent noncombat coordinates or a second scene view. Actors may be physically
+divided by exact terrain on the same BattleMat while one encounter clock and consequence order remain active; that
+does not create an offscreen branch. Pre-alpha has no voluntary split command, companion errand view, independently
+advancing child scene, view switching, split screen, or branch-reconciliation presentation. Parent/child
+SceneLineages remain an eventual feature goal. This limitation preserves canonical companion identity, party
+membership, participation, location, condition, and custody seams so later split play can extend the game without
+making its high architecture and visual cost part of the first playable proof.

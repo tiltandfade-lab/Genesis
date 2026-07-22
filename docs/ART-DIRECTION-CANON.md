@@ -1092,3 +1092,27 @@ base-course/cornice/cap-or-nosing/curb-or-retaining roles, diagnostic-before-bea
 repeat, corner/endpoint/occlusion behavior, four-yaw readability, and unchanged tactics. Broader material families,
 profile sweeps, roof/beam/frame/bridge/town roles, normal/ORM channels, dedicated junction art, and measured shader/
 batching optimization remain the accepted feature goal rather than disappearing from the plan.
+
+### Final bounded-town continuity tells (Adam, 2026-07-22)
+
+> "B across the board"
+
+This accepts the visual implications of F10.9h.11-h.15. A pursuit crossing a market alley, gate, yard, or district
+edge remains the same event: the same actors, wounds, carried objects, pursuers, time, and visible consequences
+remount in the destination rather than becoming a generic replacement encounter. Only the active venue must be
+shown at exact resolution; presentation must not imply that every possible street remains continuously rendered.
+
+Public violence and theft may become visible civic consequences only through canonical witnesses, evidence,
+identifiable property, local authority, factions, and clocks. The DM prose may dramatize that response but cannot
+visually conjure guard knowledge or a universal crime meter that the world did not earn.
+
+Horses, wagons, draft teams, and cargo remain visibly anchored where custody/access truth places them—a gate, yard,
+stable/holder, or with the party. Do not put a wagon inside an incompatible venue or teleport transport between
+shots. Closed shops, barred gates, curfews, market days, fires, quarantines, appointments, and faction control must
+alter the visible/available threshold state when canonical clocks and conditions require it; prose alone cannot
+make a closed threshold look open.
+
+Town departure and return are symmetric scene-lineage projections. The legal gate, dock, or road, current party and
+transport condition, damage, promoted citizens, access, witness knowledge, clocks, and unresolved consequences
+survive semantic compaction and later remount. The presentation neither rerolls the town into a fresh illustration
+nor claims that incidental exact placement stayed live throughout the absence.

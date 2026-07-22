@@ -49,8 +49,10 @@ pipeline: Genesis already has generated single trim strips and generated wall-tr
 section 11.92 accepts all five recommended Option B choices and adds C1I after composition-first C1H. One
 manifest-driven material family, deterministic independent-strip packing, canonical-material-first selection,
 repeat-boundary segmentation, and TownTray reuse form the scaffold; profile/channel/material/shader breadth remains
-the named feature goal. The final town
-audit remains **F10.9h.11-F10.9h.15** at section 11.88. P10.9 remains
+the named feature goal. Section 11.93 accepts F10.9h.11-h.15 Option B across the board; section 11.94 closes the
+complete F10.9h family after its explicit coverage/authority/phasing audit. Section 11.95 opens the next five-case
+batch, **F10.9i-F10.9m**, covering dungeon traversal, investigation, CrisisChain projection/parallel pressure, and
+aftermath compaction. P10.9 remains
 mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-DM-seat comprehension evidence later reopens a narrow

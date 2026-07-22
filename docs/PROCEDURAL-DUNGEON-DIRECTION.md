@@ -109,13 +109,17 @@ No build is authorized by this discovery record.
   phased decisions. Section 11.92 accepts Option B across T10.1-T10.5: manifest-driven horizontal multi-band sheets,
   canonical-material-first variants, independently sourced/deterministically packed strips, repeat-boundary
   segmentation before shader optimization, and a separate composition-after-C1H C1I proof.
-  The final town-continuity audit remains
-  **F10.9h.11-F10.9h.15** at section 11.88.
+  Section 11.93 accepts F10.9h.11-h.15 Option B across the board: certified-lineage pursuits, evidence/witness-
+  grounded civic consequences, transport custody/access anchors, clock/condition access gates, and symmetric
+  departure/return. Section 11.94 explicitly closes the full F10.9h family after auditing h.1-h.15. The current
+  batch is **F10.9i-F10.9m** at section 11.95: dungeon traversal, investigation, CrisisChain projection/parallel
+  pressure, and aftermath compaction.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later
   entitlement; only BattleMat-plus-DM-seat comprehension evidence may reopen a narrow information-layer question.
-- P10.9 is now active and mandatory; performance/device/accessibility remains P10.10.
+- P10.9 is active and mandatory; F10.9g and F10.9h are closed family slices, while F10.9i-m remain live.
+  Performance/device/accessibility remains P10.10.
 - Wave 10 cannot close until every original, additive, and generated follow-up is exhausted and Adam
   explicitly agrees.
 

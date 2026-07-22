@@ -375,7 +375,14 @@ an individual; no venue requires bespoke generated imagery, and no unseen citize
 or invented activity. The accepted fixture is one canonical arrival -> Urban Walk -> market interaction -> same-
 venue BattleMat battle -> aftermath -> leave/return trace. Material citizens promote; semantic venue deltas persist
 while disposable geometry compacts through provenance-bearing remount; companion action/attention hooks remain
-dormant until C4D. F10.9h's final boundary audit must close before this pass may be specced.
+dormant until C4D.
+
+F10.9h closed at Wave 10 section 11.94. C2M now also carries one certified cross-venue escalation when the fixture
+needs it, one evidence/witness-grounded civic obligation, truthful horse/wagon/cargo custody/access at the threshold
+when transport is present, one clock/condition-gated venue access case, and the symmetric district-threshold ->
+TravelWalk departure. Only the active venue is exact; the chase handoff, civic consequence, transport anchor,
+schedule gate, compaction, departure, and return must preserve one lineage without requiring a general city chase,
+crime meter, stable ecology, exact resident schedules, or continuously live town.
 
 ## Stage 3 - small operating site simulation
 

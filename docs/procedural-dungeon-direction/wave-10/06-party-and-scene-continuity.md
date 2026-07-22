@@ -1191,3 +1191,175 @@ shader/batching optimization remain the feature goal.
 `docs/TRIM-SHEET-PIPELINE.md`, the Clay Proof Ladder, Feature-Promotion Ledger, Wave 10 phasing audit, and visual
 canon now carry this accepted path. No implementation or asset generation is authorized. The tangent is resolved
 and the questionnaire returns exactly to **F10.9h.11-F10.9h.15** at section 11.88.
+
+### 11.93 F10.9h.11-F10.9h.15 ruling - lineage pursuit, witnessed consequences, transport anchors, access gates, symmetric departure
+
+**Adam's ruling (2026-07-22):**
+
+> "B across the board"
+
+All five recommended Option B choices are accepted.
+
+1. **F10.9h.11 - active escalation crosses certified district edges through the same lineage.** A pursued or
+   fleeing actor remains the same actor with the same wounds, custody, pursuers, clock, knowledge, causal order, and
+   obligations. The source compacts honestly and the destination mounts legally; pre-alpha does not keep every
+   possible venue exact or replace the pursuit with an unrelated encounter.
+2. **F10.9h.12 - evidence and witness knowledge license civic consequences.** Seen acts, surviving witnesses,
+   reported descriptions, identifiable property, faction relations, clocks, and local law/authority facts enter
+   their proper social/world owners. The DM seat narrates canonical obligations/events but cannot invent guard
+   knowledge or replace the system with provider-dependent improvisation. P10.9 owns continuity; later social/world
+   owners retain law, reputation, investigation, and faction-response breadth.
+3. **F10.9h.13 - transport receives a truthful custody/access anchor at town thresholds.** A horse, draft team,
+   wagon, and cargo remain with the party, wait at a gate, enter a yard, or transfer to a stable/holder as exact
+   identity/custody/access truth. C2M consumes the early C2J transport record; feed, fees, condition, theft, capacity,
+   and stable ecology promote only when C4F or another owner implements them.
+4. **F10.9h.14 - canonical time and conditions gate venue thresholds.** Shops, gates, markets, appointments,
+   curfews, fires, quarantines, and faction control can open, close, or condition access. The district graph may
+   offer waiting, another legal route, or an implemented action; DM prose alone cannot open a canonically closed
+   venue. Exact daily spatial schedules for every resident are not required.
+5. **F10.9h.15 - departure is the symmetric district-threshold -> TravelWalk handoff.** Current time, party
+   condition, custody, transport, followers, knowledge, and obligations leave through a legal gate/dock/road. Town
+   state compacts under active/site/cold ownership and later remounts promoted citizens, material damage, access,
+   clocks, witness knowledge, and unresolved consequences. Neither a fresh town reroll nor continuous exact absence
+   simulation owns return.
+
+These rulings complete the generated boundary cases at medium bounded integration cost: pursuit and departure need
+transactional adapter/recovery fixtures; civic response needs evidence/viewpoint integration; transport needs a
+low-medium custody anchor; access needs clock/condition gates. They do not authorize a general city chase engine,
+universal crime meter, deep stable simulation, exact schedules for every citizen, or permanent full-resolution
+town storage.
+
+### 11.94 F10.9h explicit closure audit - bounded town continuity family closed
+
+F10.9h is now **CLOSED on its accepted phased basis**.
+
+#### Coverage audit
+
+- The parent F10.9h choice at section 11.77 selected bounded canonical district/venue fabric for pre-alpha and a
+  scoped contiguous-town feature goal rather than a menu-only town or universal continuous simulation.
+- F10.9h.1-h.5 at section 11.85 settle the canonical district graph, real-roll reusable venue projection, same-
+  venue BattleMat/aftermath identity, owner-driven offscreen receipts, and short Urban Walk/certified thresholds.
+- F10.9h.6-h.10 at section 11.87 settle exact journey arrival, material-citizen promotion, semantic compaction and
+  remount, dormant same-scene companion-autonomy hooks, and the integrated C2M arrival-to-return fixture.
+- F10.9h.11-h.15 at section 11.93 settle cross-venue pursuit, evidence/witness-grounded civic response, truthful
+  transport custody/access, clock/condition-gated venue access, and symmetric departure/return.
+- No material generated F10.9h continuity question remains unanswered. The fifteen follow-ups cover substrate,
+  projection, battle promotion, offscreen life, movement, arrival, citizen identity, remount, later autonomy,
+  retained proof, escalation, civic consequence inputs, transport, schedules/access, and departure.
+
+#### Authority and contradiction audit
+
+- One `SceneLineage`, district graph, venue identity, precision/compaction law, active/site/cold ownership model, and
+  object/custody truth remain authoritative. Town rendering, DM prose, BattleMat, TravelWalk, and later companion
+  autonomy consume them rather than inventing parallel state.
+- Only the mounted venue requires exact cells. Pursuit and departure prove transactional continuity without
+  contradicting the rejection of an always-live continuous city.
+- Witness/evidence inputs preserve viewpoint law and do not create a universal crime/morality meter. Later social,
+  faction, investigation, and law waves own response breadth and balance.
+- Transport anchors extend the accepted early possession/access/capability record without duplicating the animal
+  citizen or item identity and without smuggling the deferred C4F module into C2M.
+- Schedule/access gates reuse canonical clocks and conditions; they do not imply continuous exact resident paths.
+- Bounded semantic remount preserves material changes without freezing incidental exact placement forever or
+  rerolling established facts.
+
+#### MVP, feature-goal, and proof disposition
+
+- **Post-core pre-alpha obligation:** C2M proves one compact canonical arrival -> Urban Walk/threshold -> market
+  interaction -> same-venue BattleMat battle -> material aftermath -> bounded offscreen change -> leave/return
+  trace, including one promoted citizen, one custody/object consequence, one transport anchor where applicable, one
+  clock/condition access gate, and one witnessed or evidence-bearing civic obligation. A cross-edge escalation may
+  use one additional mounted venue only when needed by the retained fixture; it is not a general chase system.
+- **Feature goals retained:** selected contiguous town slices, richer ambient citizens and venue grammars, C4D
+  same-scene companion roaming, C4F horse/wagon integration, and owner-governed cross-venue events. Full simulation
+  of every building, resident, schedule, stable, or street is not the ideal by default.
+- **Promotion evidence:** C2M must retain identity, custody, damage, access, knowledge, clocks, witnesses,
+  obligations, and route truth through battle, threshold changes, compaction, save/load, departure, and return. A
+  correct but menu-like result can trigger selected contiguous visual enrichment without reopening universal-town
+  simulation.
+
+This closure is family-scoped. It does **not** close P10.9 or Wave 10. The original P10.9 continuity question still
+requires explicit treatment of dungeon movement, investigation, CrisisChain projection/transfer, and general
+aftermath compaction. G10.1-G10.2, P10.10-P10.12, every remaining original/generated follow-up, and Adam's explicit
+Wave 10 closure remain mandatory.
+
+### 11.95 F10.9i-F10.9m batch - dungeon traversal, investigation, CrisisChains, parallel pressure, aftermath
+
+This five-question batch covers the remaining material P10.9 mode-continuity cases exposed by the F10.9h closure.
+It does not reopen the closed travel or town families.
+
+#### F10.9i - how does dungeon movement cross room and subscene boundaries?
+
+**Option A - rebuild each entered room as a fresh scene from its seed.** Cheap mounting, but can move opened doors,
+dropped objects, hazards, bodies, companions, pursued actors, or route conditions and can lose the causal path by
+which the party arrived.
+
+**Option B - advance one site lineage through certified portals while mounting only the active exact room
+(recommended).** The site graph, room/portal ids, route, time, cast, custody, hazards, damage, knowledge,
+obligations, and prior room deltas remain canonical. The active room is exact; adjacent or relevant rooms retain
+honest anchors/site state and remount deterministically. Cost is medium portal/handoff/round-trip QA and directly
+extends C2A-C2D rather than inventing a dungeon streaming engine.
+
+**Option C - keep the entire visited dungeon exact and rendered simultaneously.** Literal spatial continuity, with
+unbounded geometry, actor, occlusion, update, save, and device cost that fights the active-room SceneTray contract.
+
+#### F10.9j - how does investigation focus on evidence without creating a second scene authority?
+
+**Option A - let DM prose alone describe every investigation detail.** Clean UI and flexible language, but weak
+object targeting, evidence identity, spatial grounding, and recovery when several clues or holders matter.
+
+**Option B - keep the mounted scene canonical; derive inspection/evidence views from the same ids (recommended).**
+Clicked objects, attention state, viewpoint knowledge, and certified evidence may open a card, close view, relation
+view, or DM-led focus keyed to the same actor/object/surface/event ids. No view duplicates the item, reveals unknown
+facts, or gains mutation authority. Cost is medium derived-projection, knowledge, focus, and recovery QA and reuses
+P10.7 rather than creating a detective minigame.
+
+**Option C - move investigation into a separate abstract clue board with its own objects and links.** Potentially
+expressive, but high synchronization/migration cost and a strong risk that convenient clue layout becomes false
+world truth.
+
+#### F10.9k - how does a CrisisChain request visual attention or scene change?
+
+**Option A - let the DM model translate abstract CrisisChain progress into whatever scene seems dramatic.** Fast
+and expressive, but provider-dependent, able to invent actors/locations, and liable to turn an abstract progress
+step into false physical truth.
+
+**Option B - CrisisChain nodes issue typed projection requests over existing canonical owners (recommended).** A
+node may request focus, a mounted actor/object, a legal threshold handoff, a material world action, or prose-only
+pressure according to its certified facts. Only materially spatial nodes reconfigure the tray; quiet/offscreen
+nodes remain clocks, obligations, or narration. Cost is medium adapter/schema/fixture work. CrisisChain mechanics
+remain with their later semantic owner; P10.9 owns continuity and projection only.
+
+**Option C - give every CrisisChain node a bespoke scene or cutscene.** Maximum spectacle, with high content,
+generation, pacing, recovery, and continuity cost and no guarantee that the beat deserves physical staging.
+
+#### F10.9l - how do simultaneous or branching CrisisChain pressures cross scene boundaries?
+
+**Option A - keep every affected venue exact and visible at once.** Shows simultaneity literally, but recreates the
+continuous-world and split-view costs already deferred.
+
+**Option B - one active exact scene plus causally ordered queued/aggregate receipts for the rest (recommended).**
+The player-facing branch advances through typed handoffs. Other legal branches remain active/site/cold clocks,
+obligations, or owner receipts until they become due, observable, or intervention-relevant. Dependency and
+viewpoint order decide presentation; no pressure freezes merely because it is offscreen. Cost is medium-high
+transaction/concurrency/recovery QA, but it reuses existing ownership rather than simulating every branch exactly.
+
+**Option C - collapse the whole CrisisChain into one universal progress meter.** Simple, but loses actors,
+resources, locations, evidence, branch ownership, and the concrete actions that make the crisis part of the world.
+
+#### F10.9m - when may battle or crisis aftermath stop being exact and compact?
+
+**Option A - clean the scene immediately once the encounter ends.** Cheap, but bodies, damage, dropped property,
+witnesses, hazards, access, pursuit, and unresolved choices can disappear before the player investigates or acts.
+
+**Option B - enter an explicit aftermath state, then compact by material relevance (recommended).** The same scene
+first exposes terminal actors, objects, damage, hazards, access, witness knowledge, custody, and obligations. Exact
+cells persist while they can change a choice or support an unresolved action; later compaction follows F10.9b with
+provenance-bearing anchors and owner handoff. Cost is medium relevance/obligation/recovery QA and avoids both instant
+cleanup and permanent battlefield snapshots.
+
+**Option C - retain every aftermath at exact cell resolution forever.** Maximum forensic fidelity, with growing
+save, migration, remount, and simulation cost for incidental positions that no longer matter.
+
+**Codex recommends Option B for all five.** F10.9i-m are the remaining material original-mode cases currently
+exposed by the P10.9 audit; their answers may generate bounded follow-ups. P10.9 and Wave 10 remain open, and
+performance/device/accessibility remains P10.10.

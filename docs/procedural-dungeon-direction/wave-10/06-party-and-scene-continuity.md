@@ -794,3 +794,118 @@ content-density, and inactive-town cost.
 
 **Codex recommends Option B for all five.** P10.9 remains open; performance/device/accessibility stays P10.10 and no
 build is authorized.
+
+### 11.85 F10.9h.1-F10.9h.5 ruling - bounded district graph; real-roll venue grids; continuous consequences
+
+**Adam's ruling (2026-07-22):** "B is correct across the board"
+
+All five recommended Option B rulings are accepted. They define one retained town module without converting the
+pre-alpha into a whole-city simulation.
+
+1. **F10.9h.1 - bounded district graph with mounted venue grids.** A compact district owns stable venue nodes,
+   thresholds, short route edges, known access, and a shared cast/object/condition fabric. Only the scene required
+   for current play needs exact grid realization. This is the smallest substrate that can remember where places
+   are and how play moves among them without keeping an entire town mounted.
+2. **F10.9h.2 - reusable urban grid/node projection from real rolls.** Streets, markets, taverns, shops, gates, and
+   courtyards use reusable cell, floor, threshold, elevation, blocker, prop, marker, and pixel-citizen families.
+   Reusable background art or vector/node overlays may enrich that projection, but bespoke venue imagery is not a
+   pre-alpha dependency and painted detail cannot claim mechanical geometry.
+3. **F10.9h.3 - same-venue social/exploration -> battle -> aftermath continuity.** This is critical inside the
+   retained town module. SceneLineage legally promotes the current venue to exact BattleMat placement instead of
+   loading a generic arena. Citizens, objects, doors, stalls, routes, custody, knowledge, and companion roles cross
+   the boundary; bodies, flight, fire, damage, dropped goods, changed relationships, and obligations return to the
+   same venue afterward.
+4. **F10.9h.4 - bounded owner-driven offscreen updates.** World/site clocks, schedules, obligations, stocks,
+   relationships, factions, and externally owned events may advance through canonical receipts while another
+   venue is active. Unseen citizens do not continuously pathfind, discover, or act merely because their streets are
+   unmounted. Active/site/cold ownership decides what can change and exact remount projects the result.
+5. **F10.9h.5 - short Urban Walk or certified threshold movement.** A venue edge consumes one or a few Urban Walk
+   segments, or a direct threshold where adjacency makes that honest. It can host access checks, obstructions,
+   street beats, companion opportunities, or conflict without requiring every street cell. Repeated known-safe
+   traversal may compact presentation, but it still commits truthful time and any due canonical updates.
+
+The combined implementation cost is **medium-high integration work** rather than high continuous-world work:
+district/venue ids and schemas, one real-roll urban projection grammar, Urban Walk mounting, SceneLineage
+promotion/compaction, active/site/cold receipts, save/rebuild, and one retained cross-adapter fixture. Maintenance is
+bounded because town adapters reuse shared identity, grid, action, clock, and receipt owners rather than creating
+venue-specific rules. This creates **C2M - bounded district -> mounted venue -> battle -> changed venue continuity**,
+a post-core pre-alpha module whose remaining exact proof trace is refined by the next town questions.
+
+### 11.86 F10.9h.6-F10.9h.10 batch - arrival, citizen identity, remount memory, companion seam, and proof trace
+
+#### F10.9h.6 - how does a completed journey become a town arrival?
+
+**Option A - finish travel, then independently load the town.** The destination name matches, but approach route,
+arrival time, weather, transport, party condition, pursuers, witnesses, cargo, and threshold relation may be lost or
+reinterpreted.
+
+**Option B - commit one travel-node -> district-threshold SceneLineage handoff (recommended).** The journey arrives
+at a canonical gate, dock, road, stable, or district edge. Time, conditions, party/custody, transport, known
+approach, followers, obligations, and viewpoint facts enter the town bundle; the mounted arrival scene may refine
+only what the destination legally owns. Cost is medium adapter and fixture work and is pre-alpha-critical for the
+town module because arrival cannot be a continuity reset.
+
+**Option C - keep the entire road and town simultaneously mounted.** Strongest literal continuity, with universal-
+world streaming and inactive-space cost the accepted transactional handoff deliberately avoids.
+
+#### F10.9h.7 - which visible town citizens retain individual identity?
+
+**Option A - every background figure becomes a permanent fully simulated NPC.** Maximum callback potential, with
+unbounded generation, save, schedule, relationship, and offscreen-behavior cost.
+
+**Option B - promote materially encountered citizens; pool or compact the rest (recommended).** Named people,
+speakers, action participants, witnesses, holders, relationship targets, injured actors, and anyone carrying an
+unresolved obligation retain stable identity and viewpoint state. Unengaged population can remain a role/count/
+pool projection with provenance until interaction promotes a member. Cost is medium identity/promotion QA and
+reuses the existing candidate-to-rooted-NPC seam.
+
+**Option C - reroll all non-quest townspeople whenever a venue remounts.** Cheap, but produces disappearing
+witnesses, duplicate merchants, lost injuries, and a town unable to remember ordinary player behavior.
+
+#### F10.9h.8 - what survives when a venue unmounts and is visited again?
+
+**Option A - preserve every exact cell and background placement forever.** Simple reconstruction, but freezes
+incidental composition into permanent world truth and scales save/migration cost with every visited room.
+
+**Option B - preserve semantic deltas and provenance; compact disposable geometry (recommended).** Stable venue,
+threshold, actor, object, custody, damage, hazard, access, knowledge, relationship, clock, and obligation facts
+survive. Exact cells persist only while materially meaningful; other positions compact to honest anchors/zones and
+receive a provenance-bearing deterministic remount. Cost is medium schema, migration, and round-trip testing and
+directly reuses F10.9b's accepted precision law.
+
+**Option C - save only the venue seed and reroll it on return.** Visually varied, but can move broken doors, restore
+burned stalls, lose dropped property, or contradict established spatial relations.
+
+#### F10.9h.9 - what town support should pre-alpha retain for later companion roaming?
+
+**Option A - add no town-specific autonomy seam until full companion AI work begins.** Cheapest immediately, but
+risks making C4D retrofit action zones, notice, thresholds, and return behavior into a venue contract that assumed
+only party formation.
+
+**Option B - retain participation zones and certified action/attention hooks now; enable roaming later (recommended).**
+Pre-alpha companions remain formation-bound outside combat under the accepted rule. Town venues and Urban Walk
+nevertheless expose stable same-scene zones, thresholds, eligible actions, perceptibility, interruptibility, and a
+party anchor so C4D can later let a rogue wander within the mounted scene. This is low-medium contract work now;
+personality scoring and autonomous commitment remain the later module and still precede split-party play.
+
+**Option C - ship full independent town roaming in pre-alpha.** Expressive, but pulls medium-high companion
+behavior, secrecy, intervention, balance, camera, and recovery work ahead of the BattleMat-first spine.
+
+#### F10.9h.10 - what retained fixture proves the first town module?
+
+**Option A - generate and display one market without a mode change.** Proves urban dressing, but not arrival,
+movement, identity, battle continuity, offscreen change, or re-entry.
+
+**Option B - one arrival -> Urban Walk -> market interaction -> same-venue battle -> aftermath -> leave/return trace
+(recommended).** One compact deterministic fixture exercises the district graph, real-roll projection, promoted
+citizen, object/custody, exact battle placement, material damage, bounded offscreen update, semantic compaction,
+save/load, and exact remount. Cost is medium-high integrated QA, but breadth remains one retained district and venue
+rather than several towns.
+
+**Option C - require several districts, venue families, schedules, and crisis types before the module counts.**
+Better coverage eventually, but recreates a large design-wave build instead of one small proof that can grow.
+
+**Codex recommends Option B for all five.** These choices complete the retained town module's main arrival,
+identity, compaction, companion-extension, and proof seams; any remaining F10.9h questions will be limited to gaps
+exposed by this batch rather than hidden city-simulation breadth. P10.9 and Wave 10 remain open; performance,
+device, and accessibility remain P10.10.

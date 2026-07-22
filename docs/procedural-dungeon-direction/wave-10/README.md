@@ -37,7 +37,9 @@ persistence/recovery spine, followed by retained system modules. Section 11.83 a
 bounded travel fork, exact travel-to-BattleMat remount, persistent partial journeys, and fact-bound improvisation
 through any supported DM-seat model. Travel projection is grid/node owned and consumes real rolls; bespoke per-
 choice imagery is not a pre-alpha dependency and remains an optional later module behind practical gates. F10.9g
-is closed on that phased basis. The live batch is **F10.9h.1-F10.9h.5** at section 11.84. P10.9 remains
+is closed on that phased basis. Section 11.85 accepts F10.9h.1-h.5 Option B across the board: one bounded district
+graph, reusable real-roll urban grids, same-venue BattleMat/aftermath continuity, bounded offscreen receipts, and
+short Urban Walk transitions form C2M. The live batch is **F10.9h.6-F10.9h.10** at section 11.86. P10.9 remains
 mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-DM-seat comprehension evidence later reopens a narrow

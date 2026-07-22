@@ -313,6 +313,20 @@ This is the pre-alpha-critical travel adapter trace over C2D. The DM-seat model 
 choose different mechanics or replace exact nouns. The visualizer uses the same grid identities before, during, and
 after combat; no generic arena or prose-only wilderness fight satisfies the gate.
 
+### C2M - bounded district -> mounted venue -> battle -> changed venue
+
+**Primary question:** can one compact canonical district graph mount a real-roll urban venue, move the party over a
+short Urban Walk or certified threshold, promote that same venue to exact BattleMat combat, fold material aftermath
+back into it, process one bounded owner-driven offscreen update, and remount the changed venue without identity,
+custody, damage, knowledge, clock, obligation, or route drift?
+
+C2M is a post-core pre-alpha town module, not a whole-city generator. It reuses stable nodes/edges/thresholds,
+reusable grid cells and urban props, SceneLineage, active/site/cold ownership, and F10.9b precision compaction.
+Only the active venue needs exact geometry. Background population may stay pooled until material interaction roots
+an individual; no venue requires bespoke generated imagery, and no unseen citizen receives continuous pathfinding
+or invented activity. Remaining F10.9h questions refine the exact arrival, population, remount, companion-extension,
+and retained-fixture gates before this pass may be specced.
+
 ## Stage 3 - small operating site simulation
 
 Grow to the smallest site—likely several rooms—that can have a recognizable purpose and operating model. Exact room

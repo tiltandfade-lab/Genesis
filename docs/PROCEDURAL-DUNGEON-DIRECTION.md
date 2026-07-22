@@ -93,7 +93,9 @@ No build is authorized by this discovery record.
   remount, persistent partial journeys, and fact-bound improvisation through any supported DM-seat model. Travel
   projection is grid/node owned and consumes real rolls; bespoke per-choice imagery is not a pre-alpha dependency
   and remains an optional later module behind practical cost/latency/determinism gates. F10.9g is closed on that
-  phased basis. The live batch is **F10.9h.1-F10.9h.5** at section 11.84.
+  phased basis. Section 11.85 accepts F10.9h.1-h.5 Option B across the board: one bounded district graph, reusable
+  real-roll urban grids, same-venue BattleMat/aftermath continuity, bounded offscreen receipts, and short Urban Walk
+  transitions form the C2M post-core town module. The live batch is **F10.9h.6-F10.9h.10** at section 11.86.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

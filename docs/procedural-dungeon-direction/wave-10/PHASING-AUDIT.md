@@ -3,7 +3,7 @@ type: design-study
 status: ACCEPTED
 wave: 10
 created: 2026-07-21
-updated: 2026-07-21
+updated: 2026-07-22
 ---
 
 # Wave 10 Prototype/MVP Phasing Audit
@@ -56,6 +56,7 @@ in the MVP with narrow breadth.
 | Consequence information layer | **No automatic brief in the first target**; use physical board truth, normal status/action surfaces, DM-seat/fallback prose, and clicked inspection | Only the narrow structured aid evidence proves necessary; the rejected raw mechanical dump never becomes the goal | Shared receipt ids allow a later adapter without changing mechanics | BattleMat-plus-DM-seat tests show a repeatable material comprehension failure other surfaces cannot repair. |
 | DM-seat clause breadth | Several context-slotted variants for each representative core family so fallback remains fictional and does not immediately sound like a dry second voice | Broader combination, localization, tone, provider conformance, and context-compacted recovery | Typed anchor schema, available-mechanics contract, and validated forward-only narration contract | New mechanics or supported models lack a natural truthful fallback, or longer fallback runs become materially repetitive. |
 | Property and custody projection | Current holder/location plus a visible state change and plain fictional account | Title, claims, licenses, disputed ownership, and holder-aware history surfaces | Exact unique-item identity/custody and separate attributed-ownership relation | The playable slice introduces theft, lending, claims, or contested ownership as core choices. |
+| Bounded town continuity | One compact district graph mounts reusable real-roll venue grids; a short Urban Walk/direct threshold leads to one social/exploration -> same-venue BattleMat -> changed-aftermath trace; bounded offscreen change uses active/site/cold receipts | Selected contiguous slices, richer ambient citizens, enabled same-scene companion roaming, broader venue families, and cross-venue events | Stable venue/edge/threshold ids, SceneLineage, precision compaction, rooted-NPC promotion, and certified action/attention hooks | The retained C2M fixture is correct but feels like disconnected menus, forgets material changes, or cannot support the next promoted town behavior. |
 | Visual proof corpus | A deterministic MVP corpus for the actual verbs above at gameplay scale, including both accepted contrasting site configurations and the required EngagementLens battle family | Multi-viewport beauty, materials, crowded cues, interruption, accessibility, and performance matrices | Reproducible scenarios and stable capture points | Each scaffold earns its richer acceptance gate; P10.10/P10.12 set budgets. |
 
 ## Recommended Wave 10 pre-alpha slice

@@ -993,3 +993,20 @@ available actions, tool/event contracts, and narration constraints. The active p
 appropriate settings/account surface, but changing providers does not create a different world, mechanic, or main
 shell relationship. Built-in, metered/subscription, and bring-your-own-key packaging remain product candidates;
 their exact vendors, labels, rates, and controls are not canonized by a visual mockup.
+
+### Real-roll bounded town projection and same-venue battle continuity (Adam, 2026-07-22)
+
+> "B is correct across the board"
+
+This accepts the five town rulings recorded at Wave 10 section 11.85. The first town view is not a bespoke venue
+illustration or one continuously rendered city. A compact canonical district graph mounts reusable urban square-
+grid or truthful node/vector scenes from real rolls. Streets, markets, taverns, shops, gates, and courtyards reuse
+floor, threshold, elevation, blocker, prop, marker, and pixel-citizen families; reusable background art may dress
+the projection but cannot claim mechanical geometry.
+
+When social or exploration play becomes combat, BattleMat remounts the **same venue**. Established citizens,
+thresholds, stalls, doors, objects, custody, knowledge, and companion participation cannot be replaced by a generic
+arena. Bodies, damage, fire, dropped goods, flight, relationships, and obligations remain in that venue afterward.
+Moving between venues first uses a short Urban Walk or honest direct threshold; known-safe presentation may compact,
+but canonical time and due changes still occur. Offscreen town activity is receipt-driven rather than a visual claim
+that every street and citizen remains continuously simulated.

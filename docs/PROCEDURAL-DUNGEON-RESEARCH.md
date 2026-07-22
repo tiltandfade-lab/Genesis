@@ -2,7 +2,7 @@
 type: research
 status: COMPLETE
 created: 2026-07-18
-updated: 2026-07-18
+updated: 2026-07-22
 related:
   - "[[PROCEDURAL-DUNGEON-DIRECTION]]"
   - "[[PROCEDURAL-DUNGEON-ENGINE-CROSSWALK]]"
@@ -965,6 +965,171 @@ Most importantly, it aligns with Genesis's existing philosophy: the rolls are ca
 
 ---
 
+## 13. FFT battle-map and GaneshaDx addendum (2026-07-22)
+
+This addendum examines Adam's 22-image `Reference/FFT Battle Maps/` collection and
+[Garmichael/GaneshaDx](https://github.com/Garmichael/GaneshaDx), a GPL-3.0 editor for the original
+PlayStation Final Fantasy Tactics maps. The images are a user-curated composition reference, not licensed production
+assets. The editor is evidence about useful data boundaries and tooling; Genesis should not copy its GPL code,
+import FFT assets, or let a reverse-engineered legacy format become an engine dependency.
+
+This is a research recommendation, not an accepted visual ruling or implementation authorization.
+
+### 13.1 What the reference images consistently demonstrate
+
+The maps are not interesting because they are small isometric dioramas. Their durable value is how strongly a
+finite grid is composed before it is dressed:
+
+- **Elevation appears as a few coherent masses, not per-cell height noise.** A raised fort, shelf, roof, ridge,
+  terrace, or bridge usually spans enough cells to become a tactical region with a readable silhouette.
+- **Every important height change creates a route decision.** Stairs, ramps, gates, bridges, ledges, falls, and
+  narrow approaches connect or separate plateaus. Height is valuable because access to it is shaped.
+- **One dominant landmark organizes the board.** The waterfall, gatehouse, church, ruined wall, giant tree, bridge,
+  or rock formation establishes orientation while also affecting routes, cover, sightlines, or encounter framing.
+- **Negative space defines the playable footprint.** Water, void, cliff, walls, and dense vegetation cut a clear
+  boundary and create bays, pockets, and flanks instead of presenting a filled rectangle.
+- **Maps usually have a primary movement spine plus one secondary opportunity.** A bridge or street carries the
+  obvious conflict while an elevated shelf, side stair, waterline, alley, or broken edge creates a flank, refuge,
+  shortcut, or delayed approach.
+- **Architecture performs most of the tactical work.** Props are relatively sparse. Buildings, terraces, walls,
+  waterways, and large natural forms create cover and obstruction, so the battlefield does not depend on noisy
+  scatter dressing.
+- **The skyline is intentionally asymmetric but visually balanced.** A tall mass often sits off-center and is
+  counterweighted by a lower route, open arena, water body, or secondary cluster. This makes the board memorable
+  from a diagonal camera without turning every cell into a focal point.
+- **The encounter is composed with the terrain.** Deployment pockets, likely first contact, high-ground advantage,
+  retreat routes, and contested connectors are legible as parts of the same layout rather than units scattered
+  after the map is finished.
+
+The most useful Genesis translation is therefore not “generate FFT maps.” It is **compile each rolled room or
+battlefield into a small number of readable tactical regions and connectors, then validate its composition from the
+actual gameplay camera**.
+
+### 13.2 What GaneshaDx makes explicit
+
+GaneshaDx separates tactical terrain from decorative mesh data. Its
+[`Terrain`](https://github.com/Garmichael/GaneshaDx/blob/main/Resources/ContentDataTypes/Terrains/Terrain.cs)
+stores X/Z dimensions and two terrain layers. Each
+[`TerrainTile`](https://github.com/Garmichael/GaneshaDx/blob/main/Resources/ContentDataTypes/Terrains/TerrainTile.cs)
+stores a surface kind, height, depth/thickness, shading, slope kind and slope height, pass-through-only,
+impassable, and unselectable flags. Flat, directional incline, convex-corner, and concave-corner slopes are named
+data rather than inferred from the final picture.
+
+Two editor tools expose a valuable round-trip discipline:
+
+- [`Greyboxer`](https://github.com/Garmichael/GaneshaDx/blob/main/Common/Greyboxer.cs) can rebuild surface and wall
+  polygons from tactical tiles; and
+- [`TerrainGenerator`](https://github.com/Garmichael/GaneshaDx/blob/main/Common/TerrainGenerator.cs) can inspect
+  polygons and derive upper/lower tactical tiles, height, slope, and passability.
+
+Genesis should keep mechanics flowing only from rolls -> compiler -> canonical grid -> renderer. It should not
+adopt visual mesh as runtime authority. The reverse direction is nevertheless useful as a **QA diagnostic**: inspect
+the emitted mesh and prove that it reconstructs the same traversable regions, elevation bands, connectors, voids,
+and blockers the canonical plan licensed.
+
+GaneshaDx also separates polygon render properties from terrain. Its
+[`PolygonRenderingProperties`](https://github.com/Garmichael/GaneshaDx/blob/main/Resources/ContentDataTypes/Polygons/PolygonRenderingProperties.cs)
+can hide faces for particular compass views, and its
+[`StageCamera`](https://github.com/Garmichael/GaneshaDx/blob/main/Environment/StageCamera.cs) snaps among four
+diagonal views and two elevations. Genesis already has a stronger dynamic ShotPlan/occlusion/cutaway system and
+should not replace it with authored per-direction visibility flags. The useful lesson is to test every generated
+board from four canonical yaws and reject or repair layouts whose landmarks, routes, actors, or critical elevation
+changes disappear from too many views.
+
+### 13.3 What Genesis already owns
+
+This pass does **not** justify rebuilding the spatializer or theater renderer. Genesis already has:
+
+- canonical five-foot cells and typed floor/door/water/wall/void legality;
+- rolled room shapes and coherent elevation profiles;
+- signed tier buffers, raised/sunken patches, terraces, split levels, galleries, chasms, stairs/ramps, and bridge
+  markers;
+- shape-generic tier contours, floors, risers, walls, apertures, and cell-to-triangle diagnostics;
+- deterministic provenance and degradation rather than silent omission;
+- an orthographic/dimetric camera with 90-degree rotation, fit logic, ShotPlan composition, and dynamic occlusion;
+  and
+- the accepted BattleMat rule that exact mechanics remain canonical while presentation consumes them.
+
+The reference corpus strengthens the existing multi-pass compiler direction. It does not replace it.
+
+### 13.4 Candidate engine additions
+
+The following candidates are worth carrying into the design waves and later specs.
+
+#### A. Tactical-region composition pass
+
+After structural legality but before fine dressing, derive a small graph of coherent tactical regions:
+
+- plateaus or elevation masses;
+- open arena/pocket;
+- primary route spine;
+- secondary flank, refuge, or shortcut where the roll and footprint allow it;
+- chokepoint/threshold connectors;
+- negative-space boundaries; and
+- one landmark anchor licensed by the room/place program.
+
+This pass scores composition. It never invents a landmark, route, or height the rolls did not license. A tiny simple
+room may correctly produce one region and no flank; the goal is readable structure, not mandatory FFT complexity.
+
+#### B. Explicit vertical-connector edges
+
+An elevation tier alone does not say how actors move between tiers. `SpatialPlanV2` should eventually carry typed
+connector edges such as stair, ramp, climb, ladder, jump/drop, bridge, lift, or blocked riser, including direction,
+height delta, width/capacity, required capability, and traversal cost. The renderer projects the connector; combat
+and pathfinding consume the same edge. A decorative staircase cannot make an unreachable tier legal, and a legal
+ramp cannot disappear because dressing selected a prettier prop.
+
+#### C. Reserved stacked-surface seam, not a pre-alpha requirement
+
+GaneshaDx's two tile levels demonstrate a compact way to represent a bridge above water, a roof above an interior,
+or an overpass above a lane. Genesis's current 2D cell plus tier model and `bridge:true` corridor marker should not
+be expanded into full stacked traversal before the BattleMat-first proof. The future plan should nevertheless avoid
+assuming one traversable surface per X/Z forever. A later promotion can add stable surface ids, vertical layer,
+support/overhead clearance, and connectors when an accepted fixture actually requires simultaneous upper and lower
+routes.
+
+#### D. Four-view composition and occlusion gate
+
+Every retained visual fixture should capture the four player camera rotations at gameplay scale and measure:
+
+- critical actor and objective visibility;
+- readable primary route and at least one legal approach;
+- landmark recognition;
+- distinguishable elevation bands and connectors;
+- excessive foreground wall/prop coverage;
+- camera-dependent false adjacency; and
+- whether dynamic cutaway/ghosting repairs the problem without erasing architectural mass.
+
+The goal is not equal beauty from every angle. It is no tactically dishonest or routinely unreadable angle.
+
+#### E. Greybox-first roll-to-board acceptance
+
+Before material polish, a generated map should pass as a plain clay/grid projection of one real rolled program.
+The debug view should show tactical regions, tier values, connectors, blockers, reservations, deployment zones,
+landmark source/provenance, and rejected/relaxed constraints. The dressed capture then proves that art preserves the
+same composition. This directly supports the accepted one-small-clay-room -> multi-room -> relational staging plan.
+
+### 13.5 Suggested composition diagnostics
+
+Do not hard-code an “FFT score.” Record transparent metrics that support human and corpus review:
+
+- number and area share of coherent elevation regions;
+- maximum adjacent height delta and whether it has a legal connector;
+- start/objective route count by supported mobility class;
+- primary-spine length, chokepoint count, and optional flank availability;
+- unreachable or tactically irrelevant islands;
+- cover/obstruction density by region rather than whole-map average;
+- landmark visibility from canonical yaws;
+- deployment-zone exposure and immediate high-ground asymmetry;
+- negative-space perimeter and narrow-neck distribution; and
+- four-view actor/route/connector occlusion failures.
+
+These are diagnostics and score terms, not universal hard minima. The room's purpose and rolls decide whether a
+flat arena, brutal single chokepoint, inaccessible balcony, or high-ground ambush is correct. The compiler's job is
+to make that intentional, legible, mechanically truthful, and reproducible.
+
+---
+
 ## References
 
 ### Included PDFs
@@ -983,6 +1148,7 @@ Most importantly, it aligns with Genesis's existing philosophy: the rolls are ca
 
 - Archmage Rises. "How to Procedurally Generate and Decorate 3D Dungeon Rooms in Unity C#." 2021. https://www.archmagerises.com/news/2021/6/12/how-to-procedurally-generate-and-decorate-3d-dungeon-rooms-in-unity-c
 - Edgar documentation. "Room templates." https://ondrejnepozitek.github.io/Edgar-Unity/docs/next/basics/room-templates/
+- Garmichael. "GaneshaDx: Map editor for Final Fantasy Tactics." GPL-3.0. https://github.com/Garmichael/GaneshaDx
 
 ### Genesis sources audited
 

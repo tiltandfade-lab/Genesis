@@ -1025,3 +1025,39 @@ and contrary to the accepted bounded ownership model.
 generated F10.9h continuity questions and trigger an explicit F10.9h closure audit. They will not close P10.9 or
 Wave 10: CrisisChain and the remaining original continuity cases still follow. Performance, device, and
 accessibility remain P10.10.
+
+### 11.89 Research tangent - FFT battle-map composition and GaneshaDx; F10.9h audit remains live
+
+Adam supplied 22 images under `Reference/FFT Battle Maps/` and the
+[GaneshaDx FFT map editor](https://github.com/Garmichael/GaneshaDx) for a focused elevation and composition study:
+
+> "here's a bit of a tangent. let's make sure we return to the design doc and these stuff might land somewhere else in the design doc but i've gathered some stuff that might be helpful for you to imagine how these maps should look and work
+>
+> here's a FFT map editor software
+> [Garmichael/GaneshaDx](https://github.com/Garmichael/GaneshaDx)
+>
+> and i have added a lot of new reference images in the reference/fft battle maps folder for you to study elevation and composition
+>
+> let me know if there's anything valuable you can learn here and add to our engine"
+
+The technical and visual findings are recorded as a non-binding addendum in
+`docs/PROCEDURAL-DUNGEON-RESEARCH.md` section 13. The reference set reinforces finite grid-owned boards whose
+elevation forms a few coherent tactical masses; typed connectors make height traversable; a landmark, primary
+spine, secondary opportunity, negative space, and sparse structural obstruction give each board legible identity.
+GaneshaDx also demonstrates a clean separation between tactical tiles and decorative polygons, a greybox round
+trip, two possible surfaces at one X/Z position, and canonical diagonal camera views.
+
+Genesis already owns tiered cells, rolled elevation profiles, shape-generic risers/walls, 90-degree camera rotation,
+ShotPlan composition, and dynamic occlusion. The addendum therefore does not propose copying FFT geometry, code, or
+assets. It identifies five candidates for later acceptance:
+
+1. a tactical-region composition pass between structural legality and fine dressing;
+2. explicit typed vertical-connector edges shared by pathfinding, combat, and rendering;
+3. a reserved future stacked-surface seam, without pulling multi-layer traversal into pre-alpha;
+4. four-view gameplay-scale composition/occlusion gates; and
+5. a greybox-first real-roll acceptance view plus transparent composition diagnostics.
+
+These are research candidates, not ART-DIRECTION-CANON rulings or build authorization. The images' production
+rights and individual provenance are not established, so the folder is reference-only and remains uncommitted. The
+live questionnaire position remains **F10.9h.11-F10.9h.15** at section 11.88; the tangent neither answers nor skips
+that batch.

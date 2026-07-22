@@ -97,7 +97,9 @@ No build is authorized by this discovery record.
   real-roll urban grids, same-venue BattleMat/aftermath continuity, bounded offscreen receipts, and short Urban Walk
   transitions form the C2M post-core town module. Section 11.87 accepts h.6-h.10 Option B: exact journey arrival,
   material-citizen promotion, semantic remount, dormant companion-autonomy hooks, and one integrated market-to-
-  battle-to-return fixture. The final town-continuity audit is **F10.9h.11-F10.9h.15** at section 11.88.
+  battle-to-return fixture. Section 11.89 records the non-binding FFT battle-map/GaneshaDx composition research
+  tangent without changing the questionnaire. The final town-continuity audit remains
+  **F10.9h.11-F10.9h.15** at section 11.88.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

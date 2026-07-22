@@ -1098,3 +1098,64 @@ The accepted implications are:
 
 This ruling does not authorize code, package/tool installation, asset generation, or a build. It also does not
 answer the held town-continuity questions. The live questionnaire remains **F10.9h.11-F10.9h.15** at section 11.88.
+
+### 11.91 Trim-sheet creation/implementation tangent - existing seam audited; five phased decisions open
+
+**Adam's request (2026-07-22):**
+
+> "I also just learned about trimsheets, that is something we need to figure out how to create and implement"
+
+This opens a high-priority supporting design tangent inside the accepted BattleMap/TownTray surface module. The
+detailed audit, recommended asset/runtime contract, phased proof, costs, fallbacks, and source links are recorded in
+`docs/TRIM-SHEET-PIPELINE.md`. No code or asset generation is authorized, and the tangent does not answer or skip
+the live F10.9h batch.
+
+The audit found that Genesis is not starting from zero:
+
+1. `REALM_TEXTURES` already registers generated `fantasy`, `gloom`, and `chrome` trim strips. Each folded runtime
+   image is 256x64; the prompt and provenance explicitly describe one front-elevation, left-right tileable band.
+2. `interiorBuildBoard` already carries `trimTextureFile` and `trimTextureWrap`, but `theater-boot.js` deliberately
+   left them GL-unwired because the older candidate geometry was not a proper trim run.
+3. The later wall-volume compiler now emits real base-course and cornice run ribbons with continuous perimeter U,
+   per-segment owners, and shared corner-miter/bevel geometry. The renderer mounts that `wallTrimGeometry` but gives
+   it `wallMat` rather than a trim material.
+4. The current single strips are not multi-slot trim sheets, and the current wall-like V coordinates cannot choose
+   named atlas bands. Directly swapping the texture would therefore be a screenshot patch rather than the system.
+5. General automatic unwrap remains unnecessary for these procedural runs. Their path, tangent, normal, length,
+   height, corners, and endpoints are already known. Complex reusable assets may still use the later offline unwrap
+   foundry.
+
+The recommended first system is a versioned manifest plus full-width horizontal bands. Generate or author each
+source strip independently, prove horizontal repetition, then let a deterministic packer own exact coordinates,
+gutters, fold variants, metadata, hashes, and provenance. Geometry supplies the physical profile and silhouette;
+the sheet supplies reusable material/detail bands. The first runtime path clamps the whole sheet and splits runs at
+repeat boundaries so every repeat maps U `0..1` inside one declared V band. A custom sub-rectangle repeat shader is
+an evidence-gated optimization, not a prerequisite.
+
+Variant selection should eventually follow the canonical architecture material or compatible material family,
+with realm grade secondary. This corrects the current realm-only trim registry without requiring every possible
+material at once. Missing art falls through compatible plain band -> geometry-only profile tinted from the base
+material -> untrimmed base surface; it never substitutes a visually false material.
+
+Five generated choices are now open as one batch:
+
+- **T10.1 first depth:** A direct single-strip wire; **B manifest-driven multi-band sheet first, then profile/channel
+  breadth (recommended)**; C full profiles/PBR/material breadth before first use.
+- **T10.2 variant authority:** A realm only; **B architecture material/family first with secondary realm grade
+  (recommended)**; C unique venue sheet.
+- **T10.3 creation:** A image-generated finished atlas; **B independent source strips plus deterministic manifest
+  packing (recommended)**; C manual-only authoring.
+- **T10.4 repetition:** A custom atlas-repeat shader first; **B full-width bands plus repeat-boundary segmentation,
+  shader only if measured (recommended)**; C separate texture/material per band.
+- **T10.5 proof placement:** A merge acceptance into C1H; **B keep C1H composition-first and add a separate C1I
+  trim-sheet architecture pilot (recommended)**; C defer until C2M TownTray.
+
+The proposed C1I primary question is whether one material family and one stable layout can route base-course,
+cornice, cap/nosing, and curb/retaining roles across real C1H procedural geometry at correct scale, repeat phase,
+corners, endpoints, occlusion ownership, and four-yaw readability while preserving tactics and a geometry-only
+fallback. This is medium bounded work after the composition seam. Multi-material profile/channel breadth is a
+larger later module.
+
+Adam has not yet answered T10.1-T10.5. The accepted Clay Proof Ladder and Feature-Promotion Ledger therefore remain
+unchanged until his ruling. The live original-questionnaire position remains **F10.9h.11-F10.9h.15** at section
+11.88.

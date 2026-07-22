@@ -1059,3 +1059,13 @@ deterministic world-aligned and perimeter/height UV projection, while general au
 offline foundry lane. Procedural projection stays the primary contract for generated floors, walls, risers, roofs,
 cliffs, and disposable mass. Offline automatic unwrap is reserved for reusable complex assets or baked chassis
 that actually require it; no live map waits on runtime unwrapping.
+
+### Trim-sheet creation and implementation must be designed (Adam, 2026-07-22)
+
+> "I also just learned about trimsheets, that is something we need to figure out how to create and implement"
+
+Trim sheets are now an explicit visual-engine design requirement inside the shared BattleMap/TownTray surface
+module. Genesis must determine a reproducible creation pipeline and a procedural geometry/UV/material implementation
+contract rather than treating trim as an isolated hand-authored decoration. No exact sheet layout, material
+authority, profile depth, channel set, runtime repeat method, or proof placement is canonized by this statement;
+those generated choices remain open in `TRIM-SHEET-PIPELINE.md` and Wave 10 section 11.91.

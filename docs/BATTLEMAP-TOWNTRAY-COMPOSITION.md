@@ -657,6 +657,9 @@ The largest risk is not triangle generation. It is keeping tactical legality, pr
 rendering, persistence, and remount on one data spine. A shared intermediate plan and retained fixtures reduce that
 maintenance cost; separate battle/town generators would multiply it.
 
+The requested trim-sheet creation/runtime lane is audited separately in `TRIM-SHEET-PIPELINE.md`. Its proposed C1I
+surface proof remains open and does not replace this document's composition-first C1H gate.
+
 Performance budgets, target device ceilings, search/candidate caps, mesh/texture budgets, and accessibility
 projections remain deliberately unchosen until P10.10.
 
@@ -702,3 +705,5 @@ study.
 - `GRAPHICS-PRODUCTION-RESEARCH-WAVE.md` section 3 — offline UV ownership and unexecuted xatlas proof.
 - `KENNEY-SOCKET-WAVE.md` — explicit record that general UV unwrap is not installed.
 - `ROOM-SHELL-COMPILER.md` — current world-aligned procedural architectural UV contract.
+- `TRIM-SHEET-PIPELINE.md` — open recommended manifest, asset-generation, run-UV, material, fallback, and proof
+  contract for architectural trim sheets.

@@ -44,7 +44,10 @@ citizen promotion, semantic remount, dormant companion-autonomy hooks, and one i
 return fixture. Section 11.89 records the FFT map/GaneshaDx research tangent; section 11.90 promotes its structural
 findings into a high-priority shared BattleMap/TownTray composition direction, maps the first quality proof to C1H,
 and corrects the assumption that general automatic UV unwrap is installed. The tangent does not move the
-questionnaire. The final town audit remains **F10.9h.11-F10.9h.15** at section 11.88. P10.9 remains
+questionnaire. Section 11.91 opens a second visual tangent for the requested trim-sheet creation/implementation
+pipeline: Genesis already has generated single trim strips and generated wall-trim runs, but they are not joined;
+five phased choices remain with Adam before the proposed C1I proof can enter the accepted ladder. The final town
+audit remains **F10.9h.11-F10.9h.15** at section 11.88. P10.9 remains
 mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-DM-seat comprehension evidence later reopens a narrow

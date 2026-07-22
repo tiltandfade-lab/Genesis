@@ -31,8 +31,10 @@ verbatim; it did not consolidate or rewrite prior rulings.
    from accepted MVP obligations to first proof, integrated gate, ideal goal, and promotion evidence.
 6. [BattleMap / TownTray Procedural Composition](BATTLEMAP-TOWNTRAY-COMPOSITION.md) — the accepted
    high-priority shared composition direction, current-engine/UV audit, C1H proof, surface-frame contract, and costs.
-7. The relevant wave index below.
-8. For live work, only the current part named by that wave index.
+7. [Architectural Trim-Sheet Pipeline](TRIM-SHEET-PIPELINE.md) — current-engine audit and open recommended
+   creation/runtime/proof contract for the shared BattleMap/TownTray surface module.
+8. The relevant wave index below.
+9. For live work, only the current part named by that wave index.
 
 The global [implementation hold](procedural-dungeon-direction/IMPLEMENTATION-HOLD.md) remains active.
 No build is authorized by this discovery record.
@@ -102,6 +104,9 @@ No build is authorized by this discovery record.
   battle-to-return fixture. Section 11.89 records the FFT battle-map/GaneshaDx research tangent; section 11.90
   promotes its structural composition findings into a high-priority shared BattleMap/TownTray direction, maps the
   first quality proof to C1H, and corrects the assumption that general automatic UV unwrap is already installed.
+  Section 11.91 opens the requested trim-sheet creation/implementation tangent, audits the already-generated but
+  unwired single strips and the now-landed wall-trim run geometry, and proposes a separate C1I pilot plus four other
+  phased decisions for Adam. No recommendation is accepted yet.
   The final town-continuity audit remains
   **F10.9h.11-F10.9h.15** at section 11.88.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but

@@ -1147,6 +1147,44 @@ later watlas carrier wave did not fire. This strengthens rather than weakens the
 world/local planar or triplanar projection remains the right path for disposable generated architecture, while
 offline unwrap is promoted only for reusable complex assets and paint-over bakes that actually require an atlas.
 
+### 13.7 Trim-sheet implementation audit (2026-07-22)
+
+Adam requested that Genesis determine how to create and implement trim sheets. The resulting local audit found a
+valuable near-join rather than a blank-slate system:
+
+- `src/ui/theater-interior.js` already registers one generated left-right tileable trim strip for each of the three
+  flagship realms and carries its file/wrap data into the tile kit;
+- the folded strips are 256x64 and retain source prompt, generation-call provenance, and fold metrics;
+- an older `src/ui/theater-boot.js` note deliberately leaves those files unwired because the then-available target
+  was not dedicated trim-run geometry;
+- `src/ui/theater-room-mesh.js` now emits base-course and cornice ribbons from the real wall contour, continuous
+  perimeter U, per-segment ownership, and shared miter/bevel points; and
+- `src/ui/theater-boot.js` mounts the resulting `wallTrimGeometry`, but still renders it through `wallMat`.
+
+The existing art is a **single strip**, not a multi-slot trim sheet, and the current trim mesh's literal wall-style
+V span cannot select semantic atlas bands. The first correct implementation is therefore not a one-line material
+swap. It needs named roles, a stable sheet layout, padded slot coordinates, repeat length/physical scale, visibility
+ownership, truthful material selection, and corner/endpoint fallbacks.
+
+The recommended system uses full-width horizontal bands. It generates or authors source strips independently and
+packs them deterministically from a versioned manifest; image generation supplies material detail but never exact
+atlas coordinates. Runtime generated runs are segmented at each repeat boundary, map U `0..1` within the band, and
+clamp V to its padded slot. This avoids repeating the whole atlas through texture-scope wrapping and avoids a custom
+shader in the first proof. A later shader optimization must earn its derivative/mipmap/device cost through P10.10
+evidence.
+
+This direction aligns with the official
+[Adobe Substance trim-sheet tutorial](https://www.adobe.com/learn/substance-3d-painter/web/trim-sheets-with-substance-painter),
+which frames trim sheets as a planned way to texture many real-time assets with one texture set. The
+[three.js texture contract](https://threejs.org/docs/pages/Texture.html) confirms that repeat/wrap operate on the
+texture and that mipmapping/filtering are texture concerns, supporting the bounded geometry-segmentation scaffold.
+The [Blender UV manual](https://docs.blender.org/manual/en/latest/editors/uv/introduction.html) reinforces that UVs
+are explicit mappings and complex shapes may require unwrap/packing; Genesis's known architectural runs can bypass
+that general step through direct parameterization, while complex reusable assets retain the offline unwrap lane.
+
+The full open recommendation, five generated choices, proof shape, costs, and fallbacks are in
+`docs/TRIM-SHEET-PIPELINE.md`. No option has yet been accepted.
+
 ---
 
 ## References

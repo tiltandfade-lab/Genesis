@@ -149,6 +149,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
   and dressing rolls around a tile/slot room compiler; records accepted direction, unresolved forks,
   and the strict question-wave closure protocol. No implementation is authorized by this document.
 - `BATTLEMAP-TOWNTRAY-COMPOSITION.md` (`type: design-study`) — accepted high-priority shared BattleMap/TownTray direction: current spatial/UV audit, `TacticalCompositionPlan`, region/connector/route/reservation passes, compact surface-frame art contract, C1H clay proof, corpus ladder, costs, and open specification decisions. No build authorization. (2026-07-22)
+- `TRIM-SHEET-PIPELINE.md` (`type: design-study`) — open high-priority supporting recommendation for architectural trim sheets: existing strip/run audit, semantic manifest, deterministic source-strip packing, repeat-safe run UVs, material/realm authority, geometry-profile boundary, fallbacks, costs, proposed C1I proof, and five decisions awaiting Adam. No build authorization. (2026-07-22)
 - `PROCEDURAL-DUNGEON-RESEARCH.md` — deep technical synthesis of procedural room layout, furnishing,
   playability constraints, and solver architecture, with direct implications for Genesis.
 - `PROCEDURAL-DUNGEON-ENGINE-CROSSWALK.md` — audited map from the research model to the current

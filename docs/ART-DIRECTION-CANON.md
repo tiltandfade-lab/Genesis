@@ -921,3 +921,35 @@ bounded characterful action capable of causing trouble while the same scene, clo
 remain mounted. The behavior must obey validated actions, viewpoint truth, an explicit player setting, and still-
 open action limits. It cannot silently become offscreen branch simulation. Exact risk and intervention rulings remain
 open rather than being invented by this canon entry.
+
+### Readable bounded companion attempts; governed same-scene camera; bounded town fabric (Adam, 2026-07-22)
+
+> "10.9f B
+> 10.9f.1 B
+> 10.9f.2 B
+> 10.9g Let's discuss this one further
+> 10.9h B with a scoped version of C on the horizon"
+
+An autonomous companion's perceptible same-scene action receives a readable intention/attempt beat without turning
+every action into an approval prompt. Intervention appears only when the main PC's viewpoint, attention, time, reach,
+and the action's actual interruptibility permit it; an unseen act does not reveal itself through a warning badge.
+The action may earn one governed causal camera reframe, widen, or focus request and an easy return/recenter path. It
+does not create a second viewport, hard-cut repeatedly away from the main PC, or require a mechanical alert card.
+
+Pre-alpha town presentation uses bounded canonical district/venue fabric: a compact market or district may remain
+mounted through social play, companion movement, conflict, battle, and damaged aftermath while preserving the same
+cast, objects, thresholds, and consequences. The later visual goal may connect selected town slices more
+continuously and populate them more richly, but it does not require seamless rendering or simulation of every
+street, building, and resident.
+
+### Coherent low-resolution biome world that visibly frays outward (Adam, 2026-07-22)
+
+> "10.9g.5 B, we also need to come up with a better biome distribution system, basically a low res world map from the start that allows us to increase resolution as we play but with more realistic biome arrangements, because just randomly scattering the biomes is kind of stupid, however it does make sense towards the fray as the world kind of devolves into more chaos. So we can actually start with a pretty small cohesive, rational world map based on real biome patterns, and that can auto-generate outward more randomly to represent the fraying edges of the world where spice gets spicier and loot gets lootier and danger gets dangerer"
+
+The ordinary inhabited map begins as a small, visually coherent low-resolution world: connected ranges, drainage,
+coasts, rain shadows, climate bands, and believable biome provinces establish a rational regional silhouette before
+local resolution exists. Approaching or playing in a region increases detail without moving or contradicting known
+geography. Outward toward the Fray, rational adjacency and large-scale pattern increasingly distort; biome borders,
+terrain sequence, color rhythm, and regional silhouettes may become stranger in controlled correlation with higher
+Spice, richer loot opportunity, and greater danger. Independent biome confetti is a far-Fray visual symptom, not the
+normal world-map language.

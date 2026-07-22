@@ -230,6 +230,42 @@ owned by the companion's site/holder/world may still affect them through canonic
 must not duplicate, heal, relocate, reroll, or leak the companion. Independently advancing branches remain outside
 pre-alpha.
 
+### C2H - retained canonical foot-travel trace
+
+**Primary question:** can one party depart from one canonical node, consume one short shared TravelWalk on foot,
+retain origin/destination/route/clock/biome/event identity through save/load and Gemini narration, then either arrive
+at the same destination or turn back without teleportation, reroll, duplicate time, or SceneLineage reset?
+
+This is an audit-and-retain pass over the existing travel seam, not authority to redesign the world. A deterministic
+fixture may use the current coarse/random biome substrate during development. It must expose the current
+arrival-segment time debt and preserve a stable extension seam for route profile, biome corridor, transport, and
+bounded en-route choice rather than baking prose-only assumptions into the proof.
+
+### C2I - coherent macro-biome and route/journey separation
+
+**Primary question:** can a small low-resolution rational macro-region deterministically refine one played corridor
+without contradicting any committed node, range, river, coast, biome, bearing, or route fact, while a route's
+write-once baseline remains distinct from a particular journey's computed time?
+
+The retained fixture starts with one compact coherent region and one path from ordinary country toward a contrasting
+destination such as snowy mountains. It stores seeds, macro facts, and canon deltas rather than a fully realized
+world. Local refinement only adds detail inside uncertainty. A bounded Fray field may distort the outer fixture but
+must feed biome disorder, Spice, loot, and danger through separately tunable curves rather than one guaranteed
+lockstep scalar.
+
+### C2J - early transport capability and road/wagon continuity
+
+**Primary question:** can one canonical transport asset and one route profile produce a mechanically distinct
+mounted-wilderness journey and road/wagon journey over the retained TravelWalk transaction without changing the
+route's canon, granting unowned transport, bypassing operator/terrain eligibility, or losing encounter and arrival
+continuity?
+
+The asset record proves possession or hire, custody, availability, minimal rider/driver eligibility, seats/capacity,
+and route compatibility. Development may begin with a fact-locked Gemini prose plan. The playable pre-alpha gate
+adds actual pace/time and opportunity-matrix effects plus the wagon's capacity/road-dependency distinction. Full
+feed, fatigue, stabling, damage, repair, animal personality, hire economy, and generated road topology remain
+promotion candidates unless another retained system demonstrates an earlier dependency.
+
 ## Stage 3 - small operating site simulation
 
 Grow to the smallest site—likely several rooms—that can have a recognizable purpose and operating model. Exact room
@@ -292,8 +328,22 @@ The first retained proof is a market-scene rogue companion who may wander within
 certified act that can create trouble while every actor, object, clock, and consequence remains under the same
 SceneLineage. The feature reuses validated actions, custody, knowledge, relationships, attention, and deterministic
 receipts; Gemini may express intent and outcome but cannot commit the act. The exact risk ceiling, hard red lines,
-notice/intervention law, and setting shape remain owned by active P10.9 and later Waves 6-7. C4D must be designed and
-proved before any independently advancing split-party pass is scheduled.
+notice/intervention law, and same-scene attention boundary are accepted at Wave 10 section 11.77: certified actions
+obey `Off`/`Cautious`/`Characterful`, player-owned risk ceilings and hard red lines; perceptible interruptible acts
+receive readable attempts; governed focus does not create a second view or repeated camera theft. Waves 6-7 still
+own personality/action scoring and behavior breadth. C4D must be proved before any independently advancing
+split-party pass is scheduled.
+
+### C4E - specialized travel assemblers over the retained contract (feature goal)
+
+**Primary question:** can wilderness-foot, mounted, road, and vehicle travel gain genuinely different segment
+families, probability gates, choices, route conditions, and audiovisual presentation while continuing to emit the
+same canonical TravelWalk/SceneLineage, ownership, time, consequence, save, and arrival contracts proved at C2H-J?
+
+This promotion may add richer road topology, junctions, traffic and faction control, mount/vehicle condition and
+upkeep, or per-mode content assemblers. It must not fork four independent persistence or canon systems. The
+promotion fires when the retained shared compiler produces correct but materially repetitive or implausible mode
+play, not merely because separate generators sound more complete.
 
 ## Stage 5 / C5 - grow the retained portfolio
 

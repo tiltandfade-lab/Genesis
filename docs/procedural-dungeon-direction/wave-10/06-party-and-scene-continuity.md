@@ -127,3 +127,192 @@ event or restoring approval prompts for every act.
 
 Does Adam choose **A, B, or C**, or want to amend the settings, risk ceiling, or hard red lines? P10.9 and Wave 10
 remain **OPEN**; no build is authorized.
+
+### 11.77 F10.9f-F10.9h batch ruling - bounded companion autonomy; staged land travel; bounded towns first
+
+Adam requested that questionnaire work proceed in batches of five rather than paying a documentation/checkpoint
+cost after every answer. The following accepted rulings therefore close the five-question batch together while
+leaving P10.9 and Wave 10 open.
+
+#### F10.9f / F10.9f.1 / F10.9f.2 - bounded autonomy with readable, governed same-scene presentation
+
+Adam chose **Option B** for all three companion-autonomy questions.
+
+1. **Action boundary:** the accepted target is the bounded-autonomy profile and hard-red-line law in section 11.76.
+   `Off`, `Cautious`, and `Characterful` remain player-owned settings. A certified action inside the selected risk
+   ceiling may commit without advance approval, but a companion cannot leave the active scene, control the main PC,
+   spend protected/shared resources, make binding party commitments, deliberately initiate lethal force against a
+   nonhostile, leak unowned knowledge, or invent mechanics and permissions. C4D must be playtested before any
+   independently advancing split-party feature.
+2. **Notice and intervention:** a perceptible autonomous act receives a readable intention/attempt beat rather than
+   a universal approval prompt or an invisible consequence lottery. The main PC may intervene only when viewpoint,
+   time, reach, attention, and the action's actual interruptibility make that legal. A quiet act the main PC could not
+   perceive does not expose itself merely to create a UI warning; its later consequences remain truthful. The
+   resolver, not Gemini timing prose, owns commitment and any intervention window.
+3. **Camera and attention:** the companion action uses the ordinary governed same-scene attention system. It may
+   earn one bounded causal reframe, widen, or focus request and a recenter path; it does not require a hard cinematic
+   cut, repeated camera theft, a second viewport, or a mechanical alert card. Exact action and consequence truth
+   remains on the mounted scene and in Gemini/fallback prose. Player-owned focus remains the later target over the
+   accepted automatic-focus scaffold.
+
+These rulings complete the generated F10.9f family at the continuity/presentation level. Waves 6-7 still own the
+companion behavior model, action scoring, personality breadth, and combat tactics. P10.10 still owns device,
+performance, input, and broad accessibility budgets.
+
+#### F10.9g - land travel is one staged TravelWalk contract before specialized mode assemblers
+
+The repository audit found that the current engine already implements the most important spine described by Adam:
+travel between canonical nodes becomes a `kind:"travel"` Wilderness Walk; the party remains at the origin until
+`walk_complete`; approximate route time and distance are write-once edge facts; sampled per-leg biomes skin the
+walk; clock time advances through the journey; turning back preserves partial elapsed time; and an established
+route rerolls current events without minting a new edge. The existing Segmented Travel Kit also supplies source
+tables for route type, scene geometry, event family, landmark, threat, complication, choice, and arrival. What does
+not yet exist is a route-type/transport model, a road network, mount or wagon travel semantics, coherent macro-biome
+generation, or active use of those segmented-travel tables by the land-travel compiler.
+
+Adam accepted the following staged package:
+
+1. **F10.9g.1 - Option B for the retained pre-alpha architecture; scoped Option A as the feature goal.** Foot,
+   mounted, road, and wagon travel first share one TravelWalk transaction, persistence, cursor, consequence, and
+   arrival contract parameterized by route, transport, pace, exposure, and biome. Later specialized wilderness,
+   mounted, road, and vehicle **content assemblers** may generate materially different choices and segment families,
+   but they continue to emit the common TravelWalk/SceneLineage contract rather than duplicating canon, save, clock,
+   or handoff machinery.
+2. **F10.9g.2 - Option B is the target.** A canonical route preserves endpoints, bearing, approximate baseline
+   distance/effort, route class, biome corridor, and durable conditions. A particular journey derives elapsed time
+   from that baseline plus mode, pace, compatibility, weather, and current route state. This is a **medium
+   implementation change**, not a new travel engine: extend the edge schema; migrate old `travelMin` safely as a
+   normal-foot baseline; add a pure journey-cost resolver; stop journey-specific overrides from rewriting the edge;
+   carry route/journey provenance through walk, ledger, digest, save/load, and tests; and correct the current
+   arrival-segment time-overrun debt. The costly horizon is a generated road topology and deep transport ecology,
+   not this semantic separation.
+
+   Adam said Option C could be an acceptable interim. The safe interpretation is deliberately narrower than
+   rerolling an experienced road: an **uncommitted first-travel estimate** may remain provisional during development,
+   and the current fixed-time edge plus prose-only transport may stand in until the resolver lands. Once a route has
+   been experienced or otherwise committed, arbitrary journey rerolls would violate the anti-drift law and are not
+   a safe scaffold. No interim overwrites an established route merely because the party later buys a horse.
+3. **F10.9g.3 - Option B.** Travel uses a bounded opportunity budget rather than a visible check every exact hex.
+   Approximate length/exposure provides the initial number of opportunities; a probability-and-gate matrix combines
+   route class, biome, pace, transport, time/weather, regional pressure, Fray/Spice, and durable route condition to
+   determine which opportunities become quiet passage, landmark, contact, problem, hazard, discovery, or enemy.
+   Current `roughly one opportunity per two leagues` behavior is acceptable scaffolding, not final balance.
+4. **F10.9g.4 - Option B for pre-alpha, with Option A acceptable during development.** Early development may give
+   Gemini a fact-locked prose plan over the current walk while transport has no full mechanical expression. The
+   playable pre-alpha requires typed transport capability, elapsed-time/pace effects, terrain and route
+   compatibility, and the wagon's capacity/road-dependency distinction. **Mount possession and rider/driver ability
+   must become canonical early**, before the polished travel matrix: Gemini cannot grant a horse, rider competence,
+   draft team, or wagon merely because it improves a scene. Detailed feed, fatigue, stabling, damage, repair, animal
+   bonds, and hire-economy behavior may promote later unless another system requires them sooner.
+5. **F10.9g.5 - Option B, expanded into a spatial-foundation requirement.** Genesis should begin from a small,
+   low-resolution but climatically and geographically plausible macro-world: connected mountain chains, drainage,
+   rain shadows, coasts, temperature bands, and coherent biome provinces. Deterministic local refinement increases
+   resolution where play approaches while preserving every committed macro fact. Distance toward the world's Fray
+   progressively relaxes those rational constraints so biome adjacency becomes stranger in controlled correlation
+   with stronger Spice, richer loot, and greater danger. Independent per-hex biome scatter is retained only as a
+   far-Fray failure mode, not the ordinary inhabited world.
+
+Every selected journey endpoint remains a canonical node. A transient roadside event may remain a travel segment;
+if the player adopts it as a destination, or its outcome changes future traversal, the system promotes an
+appropriate canonical node or durable edge condition. Urban Walk remains the right substrate for movement within a
+settlement; it is not the long-road system.
+
+The accepted small-pass mapping is now:
+
+- **C2H:** retain and audit one canonical foot journey between two nodes using the current common TravelWalk seam;
+- **C2I:** promote a coherent macro-biome/refinement fixture and baseline-route versus journey-cost distinction;
+- **C2J:** prove early transport possession/eligibility, then one mounted-wilderness and one road/wagon trace over
+  the same route contract; and
+- **C4E:** promote specialized per-mode content assemblers, richer road topology/conditions, and deeper mount/vehicle
+  ecology only after the common contract is retained.
+
+These pass names record dependencies and acceptance questions; they do not authorize implementation.
+
+#### F10.9h - bounded canonical town fabric first; scoped richer continuity on the horizon
+
+Adam chose **Option B with a scoped version of Option C on the horizon**. Pre-alpha towns are bounded canonical
+district/venue fabric rather than one menu card or a fully continuous city simulation. A town node may mount a small
+Urban Walk or district scene; entering a relevant venue, market conflict, chase, or battle preserves the same cast,
+objects, damage, route/threshold, knowledge, and consequence cursor through ordinary SceneLineage handoffs. The
+first proof needs only a compact market/district trace, not every street.
+
+The scoped Option C goal later allows selected contiguous town slices, ambient citizens, companion roaming, and
+cross-venue events where they materially improve play. It does not imply seamless simulation of every building,
+resident, or offscreen street, and it remains downstream of the retained bounded-town contract.
+
+### 11.78 F10.9g.6-F10.9g.10 batch - world substrate, refinement, Fray, route choice, and early transport records
+
+The accepted travel direction creates five material generated follow-ups before F10.9g can close. They are asked as
+one batch; no documentation/checkpoint pass occurs between individual answers.
+
+#### F10.9g.6 - what generates the initial low-resolution world?
+
+**Option A - independent biome cells with local smoothing.** Cheap and close to current hashing, but smoothing does
+not create drainage, mountain chains, coasts, rain shadows, or believable regional identity.
+
+**Option B - deterministic macro geography and climate fields, refined locally (recommended).** Generate a small
+coarse elevation/plate/coast field, broad temperature and moisture flow, connected watersheds/mountain barriers,
+and biome provinces; refine a macrocell deterministically only when play or map resolution needs it. The far Fray
+adds bounded distortions to these fields. Cost is medium-high worldgen design and invariant testing, but storage and
+runtime stay bounded because only seeds, macro facts, and canon deltas persist.
+
+**Option C - full high-resolution physical world simulation at world creation.** Strong global coherence, but high
+startup, tuning, save, migration, and unused-generation cost; it works against the lazy-world premise.
+
+#### F10.9g.7 - what may change when a coarse region gains resolution?
+
+**Option A - anything unvisited may move until first physical entry.** Flexible, but a visible mountain, known road,
+or promised snowy destination can drift before arrival.
+
+**Option B - refinement is constraint-preserving (recommended).** Committed/observed nodes, bearings, approximate
+route costs, biome identities, coasts, rivers, ranges, and known relations are fixed constraints. Refinement adds
+tributaries, passes, local cells, and scene-scale detail inside honest uncertainty; it never contradicts what was
+already shown or narrated. Cost is medium constraint/provenance work and high long-term anti-drift value.
+
+**Option C - resolve the entire world to final resolution before showing any part.** Simple canonically, but forfeits
+lazy expansion and spends work on places play may never approach.
+
+#### F10.9g.8 - how tightly are Fray, biome disorder, Spice, loot, and danger coupled?
+
+**Option A - one shared scalar directly increases all five together.** Easy to read, but mechanically predictable:
+every strange biome guarantees proportionally better treasure and worse enemies.
+
+**Option B - one Fray field feeds separate capped curves and probability matrices (recommended).** Distance/coherence
+supplies a common pressure, but biome irregularity, Spice tails, loot opportunity, encounter severity, and world
+instability respond through different bands and caps. They correlate without becoming a guaranteed lockstep reward
+formula. Cost is medium tuning and simulation evidence; it preserves surprise and prevents obvious Fray farming.
+
+**Option C - every subsystem rolls its own unrelated outward chaos.** High variety, but no learnable world law and
+no reliable sense that the map is actually fraying.
+
+#### F10.9g.9 - how much may an en-route player choice alter the journey?
+
+**Option A - prose and check flavor only.** The next segment, time, exposure, and route state do not change.
+
+**Option B - certified bounded route/pace choices alter the journey plan (recommended).** A sheltered cut, exposed
+ridge, fast road, horse push, camp, detour, or ford may change elapsed time, next opportunity weights/gates,
+resources, visibility, position on the route, and durable route conditions. It changes destination only when the
+player chooses an existing or legally promoted canonical node. Cost is medium plan-overlay, validation, and replay
+work; it makes travel choices mechanically real without building a literal hex crawl.
+
+**Option C - every choice branches onto a newly simulated high-resolution physical route.** Maximum spatial agency,
+but high pathfinding, worldgen, node-promotion, camera/map, save, and combinatorial content cost.
+
+#### F10.9g.10 - what is the earliest canonical form of a horse, draft team, or wagon?
+
+**Option A - an inventory tag such as `hasHorse`.** Cheap, but cannot express custody, hiring, loss, rider ability,
+seats, draft requirements, or the difference between a named horse and a borrowed wagon.
+
+**Option B - a canonical transport asset with capability references (recommended).** The party owns, hires, borrows,
+or is entrusted with an asset record carrying identity/provenance, custody, availability, seats/capacity, required
+operator ability, route/terrain compatibility, and optional links to named animal/vehicle citizens. It need not yet
+simulate feed, fatigue, injury, repair, or personality continuously. Cost is medium schema/custody/eligibility work
+and supplies the stable seam those later systems need.
+
+**Option C - every mount, draft animal, and vehicle is a full independently simulated actor from first proof.** Rich
+and future-complete, but high party, inventory, AI, condition, economy, combat, rendering, and save cost before land
+travel itself is proved.
+
+**Codex recommends Option B for all five.** P10.9 and Wave 10 remain open; F10.9g has additional route-event and
+matrix questions after this batch, and F10.9h's bounded-town ruling still requires its own generated follow-ups.
+Performance/device/accessibility remains P10.10; no build is authorized.

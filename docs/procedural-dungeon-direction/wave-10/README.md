@@ -20,8 +20,12 @@ fiction-first Gemini bridge for pre-alpha and the restrained C2F diegetic contin
 section 11.75 reframe removes independently advancing split-party play from pre-alpha in favor of one party scene
 with participation roles; parent/child branches remain a later feature. Section 11.76 chooses a self-inert cold
 record for forced companion separation and prioritizes toggleable same-scene companion autonomy before split-party
-work. The live **F10.9f** question defines the companion's autonomous action limits. P10.9 remains mandatory and
-open. The P10.8 starting focus policy remains automatic Option A;
+work. Section 11.77 accepts bounded certified same-scene autonomy plus perceptibility/interruptibility-gated notice
+and governed camera attention; stages one shared land-TravelWalk contract before specialized mode assemblers;
+separates route baseline from journey time; requires an exposure matrix, early canonical transport capability, and
+coherent locally refined macro-biomes that disorder toward the Fray; and chooses bounded canonical town fabric
+before scoped contiguous-town enrichment. The live batch is **F10.9g.6-F10.9g.10** at section 11.78. P10.9 remains
+mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow
 information-layer question.
@@ -45,7 +49,7 @@ until every original, additive, and generated follow-up is exhausted and Adam ex
 | [03](03-visual-proof-camera-and-materials.md) | 11.34-11.41 | Resolution proof, material routing, beauty floor, camera, and projection |
 | [04](04-attention-interaction-and-history.md) | 11.42-11.56 | Attention ladder, interaction, secrets, knowledge, and durable history |
 | [05](05-consequence-presentation.md) | 11.57-11.75 | Consequence closure, cross-adapter continuity, and pre-alpha split-party boundary |
-| **[06 — current](06-party-and-scene-continuity.md)** | **11.76-current** | Companion continuity, same-scene autonomy, and remaining P10.9 cases |
+| **[06 — current](06-party-and-scene-continuity.md)** | **11.76-current** | Companion continuity, land travel/world substrate, bounded towns, and remaining P10.9 cases |
 
 Append new accepted discussion to the current chronological part. The accepted [phasing audit](PHASING-AUDIT.md)
 does not replace or renumber that record.

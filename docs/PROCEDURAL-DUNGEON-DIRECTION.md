@@ -74,8 +74,13 @@ No build is authorized by this discovery record.
   and the restrained C2F diegetic continuity beat as the visual goal. Section 11.75 removes independently advancing
   split-party play from pre-alpha in favor of one party scene with `inside`/`at portal`/`adjacent` participation;
   parent/child branches remain a later feature. Section 11.76 chooses a self-inert cold record for forced companion
-  separation and prioritizes toggleable same-scene companion autonomy before split-party work. The live **F10.9f**
-  question defines the companion's autonomous action limits.
+  separation and prioritizes toggleable same-scene companion autonomy before split-party work. Section 11.77 accepts
+  bounded certified companion autonomy with perceptibility/interruptibility-gated notice and governed same-scene
+  camera attention; a staged shared land-TravelWalk contract before specialized assemblers; route-baseline versus
+  journey-time separation; an exposure opportunity matrix; prose transport during development before typed
+  pre-alpha effects; early canonical mount possession/ability; a coherent locally refined macro-biome world that
+  disorders toward the Fray; and bounded canonical town fabric before scoped contiguous-town enrichment. The live
+  batch is **F10.9g.6-F10.9g.10** at section 11.78.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

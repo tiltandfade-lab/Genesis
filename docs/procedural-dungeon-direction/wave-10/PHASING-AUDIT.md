@@ -52,6 +52,7 @@ in the MVP with narrow breadth.
 | Initiative presentation | Plain portrait/text row or compact ordered list | Winner-first faction blocks, smart crops, overflow, reinforcements, allegiance transfer animation | Stable activation entries and deterministic ordering separate from layout | Larger encounters are mechanically correct but hard to scan. |
 | Physical props and materials | Cheap primitives/derived faces and a small prop kit are acceptable only inside the critical playable visual floor; existing working lighting/sprites/features are retained | Routed materials, normals, richer shadows, realm skins, broader props, and the mature hybrid beauty target | Semantic surface/prop role and deterministic asset fallback | Native-resolution captures meet the visual floor and material sameness is now the limiting defect. |
 | Procedural BattleMap/TownTray composition | C1A first exposes stable composition/surface ids and clay diagnostics; C1H then proves one intentional real-roll battlefield with broad elevation masses, typed connectors, primary route, licensed landmark or structural dominant, reservations, negative space, dressed parity, and four-yaw truth; C2M reuses the same compiler for the market venue | A twelve-fixture structural portfolio, richer dungeon/town/wilderness recipes, optional stacked surfaces, and an offline unwrap foundry for reusable complex assets | One `TacticalCompositionPlan`/surface-frame boundary; current world/perimeter UV projection remains valid; layer id reserved at zero | The retained room remains noisy or empty, dressing changes tactics, town requires a fork, new structural families expose missing grammar, or a complex reusable asset actually requires offline unwrap. |
+| Architectural trim sheets | C1I follows C1H with one manifest-driven horizontal layout and one architecture-material family: independent source strips pack deterministically; named procedural runs use physical scale, clamped bands, repeat-boundary segmentation, explicit corner/endpoint/occlusion ownership, and geometry/plain fallback; clay tactics remain unchanged; C2M reuses the same authority | Broader material families, physical profile sweeps, roof/beam/frame/bridge/town roles, aligned normal/ORM channels, dedicated junction components, and measured shader/batching optimization | Stable layout/slot/run ids, canonical-material-first selection with secondary realm grade, deterministic provenance/fold reports, and geometry-owned silhouettes | C1I proves the contract; later captures show material sameness or missing silhouettes, town exposes a new role, or P10.10 shows geometry segmentation should promote to a shader. |
 | Camera behavior | Current/gentle view, simple bounded auto-fit for truly offscreen material events, skip/recenter | Governed overview/room/action ladder and player-owned Option B focus leases | Typed focus request and policy adapter; terminal restore target | A-versus-B tests show automatic direction interrupts reading/typing or misses events. |
 | Attention and accumulated-history UI | Store exact events/knowledge; project current truth on BattleMat, consequences in DM prose, and detail through clicked cards | Ambient -> noticed -> relevant -> active -> historical ladder, progressive holder-aware cards, causal remounting | Durable event/discovery ids, viewpoint knowledge, relevance/attention state as data rather than visual ownership | Comprehension tests fail despite truthful board state, prose, and invoked inspection. |
 | Durable history lifecycle | Exact canonical history plus a short viewpoint-known recap/current card state | Coalescence, aging, bounded traces, remount envelopes, opportunity resilience, and expressive retelling | Append-only causal identity, current projection, viewpoint knowledge, retirement reason | Long sessions make exact history noisy or cause unresolved discoveries to disappear from play. |
@@ -84,7 +85,9 @@ The high-priority composition module follows the same staging discipline. C1A fi
 composition/surface ids and a clay diagnostic over the existing room; C1D proves the playable BattleMat plus
 EngagementLens spine; C1H then proves one intentionally composed real-roll battlefield before broad travel/town
 recipe rollout. This retains a narrow first proof without accepting random-looking height/prop scatter as the
-pre-alpha map floor. C2M must reuse the same composition product for its market venue.
+pre-alpha map floor. C1I then proves one manifest-driven trim sheet as a separate primary risk; it cannot make C1H
+pass and does not require mature profile, channel, material-family, or shader breadth. C2M must reuse the same
+composition and trim-surface products for its market venue.
 
 ## Decisions that this audit changes operationally
 
@@ -101,6 +104,9 @@ pre-alpha map floor. C2M must reuse the same composition product for its market 
   critical; its full ambient-to-historical visual projection is not.
 - F10.8e's automatic consequence brief remains outside the first target and gains no automatic later entitlement.
   It reopens only from observed comprehension failure.
+- Trim-sheet work begins only after composition is proved in clay: C1I accepts one manifest/material family and
+  repeat-safe base-color run contract, while profile/channel/material breadth and shader optimization remain named
+  promotions. The scaffold cannot become a reason to delay C1D or let decorated geometry excuse a weak C1H map.
 
 ## P10.8 closure disposition
 

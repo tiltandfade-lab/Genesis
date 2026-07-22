@@ -1068,4 +1068,27 @@ Trim sheets are now an explicit visual-engine design requirement inside the shar
 module. Genesis must determine a reproducible creation pipeline and a procedural geometry/UV/material implementation
 contract rather than treating trim as an isolated hand-authored decoration. No exact sheet layout, material
 authority, profile depth, channel set, runtime repeat method, or proof placement is canonized by this statement;
-those generated choices remain open in `TRIM-SHEET-PIPELINE.md` and Wave 10 section 11.91.
+those generated choices were opened in `TRIM-SHEET-PIPELINE.md` and Wave 10 section 11.91 and resolved below.
+
+### Accepted trim-sheet scaffold and feature goal (Adam, 2026-07-22)
+
+> "your recs are fine"
+
+This accepts the recommended Option B choices T10.1-T10.5. Genesis first proves one manifest-driven horizontal
+multi-band sheet over real generated architecture. Architecture material or a compatible material family chooses
+the visual variant; realm grade/tint is secondary. Source strips may be generated or authored independently, but a
+deterministic packer owns exact sheet slots, gutters, fold variants, aligned channels, hashes, provenance, and
+reports. Do not ask image generation to own the final production atlas layout.
+
+The first runtime projection uses full-width horizontal bands, clamped sampling, and repeat-boundary run
+segmentation. A custom sub-rectangle repeat shader is a later measured optimization, not the visual prerequisite.
+Geometry owns the trim's physical profile, silhouette, corners, endpoints, existence, and occlusion relationship;
+the texture sheet owns reusable surface detail and declared material scale. Missing exact art falls back through a
+compatible plain band, geometry-only profile tinted from the canonical base material, or truthful untrimmed
+architecture—never a contradictory realm-matched material.
+
+C1H remains the clay composition gate. C1I separately proves one material family, one stable sheet layout, named
+base-course/cornice/cap-or-nosing/curb-or-retaining roles, diagnostic-before-beauty mapping, correct scale and
+repeat, corner/endpoint/occlusion behavior, four-yaw readability, and unchanged tactics. Broader material families,
+profile sweeps, roof/beam/frame/bridge/town roles, normal/ORM channels, dedicated junction art, and measured shader/
+batching optimization remain the accepted feature goal rather than disappearing from the plan.

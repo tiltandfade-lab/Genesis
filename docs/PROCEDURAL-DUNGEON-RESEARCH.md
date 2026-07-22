@@ -1185,6 +1185,19 @@ that general step through direct parameterization, while complex reusable assets
 The full open recommendation, five generated choices, proof shape, costs, and fallbacks are in
 `docs/TRIM-SHEET-PIPELINE.md`. No option has yet been accepted.
 
+### 13.8 Trim-sheet direction accepted (2026-07-22)
+
+Adam accepted the five recommended Option B choices from 13.7 and `TRIM-SHEET-PIPELINE.md`. The accepted first
+implementation shape is one manifest-driven full-width horizontal multi-band layout, canonical architecture-
+material/family selection with secondary realm grading, independent strip creation plus deterministic packing, and
+repeat-boundary run segmentation before any custom atlas-repeat shader. C1H remains the composition gate; the Clay
+Proof Ladder adds C1I as the separate retained surface proof before C2M TownTray reuse.
+
+The narrow proof does not discard the mature direction. Physical profile sweeps, broader architecture-material
+variants and architectural roles, aligned normal/ORM channels, dedicated cap/corner/junction components, and
+measured shader/batching optimization remain named promotions. General automatic unwrap still does not enter the
+procedural-run path.
+
 ---
 
 ## References

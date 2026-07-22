@@ -71,6 +71,10 @@ that authority.
     and diagnostics over the small room; C1H proves the first intentional real-roll battlefield before broad
     travel/town rollout. Town, wilderness, and dungeon recipes may differ, but none receives a parallel geometry,
     connector, route, reservation, provenance, or surface-art authority.
+13. **Prove composition before architectural surfacing.** C1H establishes the battlefield's real structural quality
+    in clay. C1I then proves one manifest-driven trim sheet over that retained geometry. Decorative detail may not
+    hide weak composition, change tactics, create a second material authority, or force mature profile/channel
+    breadth into the first proof.
 
 ## Stage 1 - one small retained clay room
 
@@ -87,7 +91,8 @@ breadth. C1E-G then harden combat breadth, recovery, and DM language over the sa
 that a canonical physical event can reach the actual BattleMat and EngagementLens. C1H is the high-priority
 composition-quality proof over that connected spine. It may begin once C1A-D's owners are stable and can run beside
 independent C1E-G hardening, but it must pass before broad BattleMap/TownTray recipe rollout claims the shared
-compiler works.
+compiler works. C1I follows C1H as a separate architectural-surface proof so composition and trim-sheet failures
+remain independently diagnosable; it must pass before C2M claims TownTray reuse of that surface authority.
 
 ### C1A - room truth and projection
 
@@ -166,6 +171,24 @@ This is the high-priority first rung of the shared BattleMap/TownTray module def
 `../BATTLEMAP-TOWNTRAY-COMPOSITION.md`. C2M must later consume the same region, route, connector, reservation,
 provenance, and surface-frame contracts for its market venue. General automatic UV unwrap and stacked traversable
 surfaces are not C1H prerequisites.
+
+### C1I - one manifest-driven trim-sheet architecture pilot
+
+**Primary question:** can one deterministic manifest-driven horizontal trim sheet route distinct base-course,
+cornice, cap/nosing, and curb/retaining roles across the real C1H procedural geometry at correct physical scale,
+repeat phase, corners, endpoints, occlusion ownership, and four-yaw readability—with a geometry-only fallback,
+unchanged tactics, and no unique per-map texture?
+
+Use one material family and one stable semantic layout. Prove a diagnostic sheet before beauty art; generate or
+author source strips independently and pack them deterministically with provenance; let architecture material or a
+compatible material family select the visual variant while realm grade remains secondary. The first runtime path
+uses full-width horizontal bands, clamped sampling, and repeat-boundary run segmentation. Base color is sufficient
+for this pass because geometry normals and scene light own physical response.
+
+C1I does not require the full architecture-material roster, physical profile-sweep breadth, roof/eave/storefront
+families, normal/ORM channels, dedicated junction art, a custom atlas-repeat shader, general automatic unwrap, or
+new tactical mechanics. Those remain named feature promotions in `../TRIM-SHEET-PIPELINE.md`. C2M reuses C1I's
+layout, run, material, fallback, and provenance contract rather than creating a town-only trim system.
 
 ## Stage 2 - multi-room causality and first mode handoff
 

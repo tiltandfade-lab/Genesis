@@ -1159,3 +1159,35 @@ larger later module.
 Adam has not yet answered T10.1-T10.5. The accepted Clay Proof Ladder and Feature-Promotion Ledger therefore remain
 unchanged until his ruling. The live original-questionnaire position remains **F10.9h.11-F10.9h.15** at section
 11.88.
+
+### 11.92 T10.1-T10.5 ruling - accepted Option B trim-sheet scaffold and C1I proof
+
+**Adam's ruling (2026-07-22):**
+
+> "your recs are fine"
+
+All five recommended Option B choices in section 11.91 are accepted.
+
+1. **T10.1 - manifest-driven multi-band scaffold first.** The first system is one real horizontal multi-band sheet
+   over generated runs. Direct legacy-strip wiring is not a sufficient proof; mature profile/PBR/material breadth is
+   not a prerequisite.
+2. **T10.2 - architecture material/family owns the variant.** A stable semantic layout is shared. Canonical
+   architecture material or a compatible family selects the visual variant; realm grade/tint is secondary. Missing
+   variants use compatible plain/geometry fallbacks rather than a false realm-matched material.
+3. **T10.3 - independent strips, deterministic manifest packing.** Image generation or another source may make band
+   candidates, but exact slots, gutters, folding, aligned channels, metadata, provenance, hashes, and reports belong
+   to the deterministic packer.
+4. **T10.4 - repeat-boundary segmentation first.** Full-width horizontal bands and clamped sampling route each
+   repeat safely inside one slot. A custom sub-rectangle repeat shader remains a P10.10 evidence-gated optimization.
+5. **T10.5 - separate C1I proof.** C1H remains composition-first. C1I then proves one trim-sheet architecture pilot
+   over the retained battlefield before C2M reuses the same surface authority for TownTray.
+
+The accepted C1I obligation is one material family, one stable layout, a diagnostic sheet before beauty art, base
+color first, named real procedural runs, correct physical scale/repeat/corner/endpoint/occlusion behavior, a
+geometry-only fallback, four-yaw proof, deterministic provenance, and no tactical change. Broader material families,
+profile sweeps, roof/beam/frame/bridge/town roles, normal/ORM channels, dedicated caps/corners/junctions, and measured
+shader/batching optimization remain the feature goal.
+
+`docs/TRIM-SHEET-PIPELINE.md`, the Clay Proof Ladder, Feature-Promotion Ledger, Wave 10 phasing audit, and visual
+canon now carry this accepted path. No implementation or asset generation is authorized. The tangent is resolved
+and the questionnaire returns exactly to **F10.9h.11-F10.9h.15** at section 11.88.

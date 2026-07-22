@@ -1,6 +1,6 @@
 ---
 type: design-study
-status: OPEN RECOMMENDATION; IMPLEMENTATION UNAUTHORIZED
+status: ACCEPTED DIRECTION; IMPLEMENTATION UNAUTHORIZED
 priority: HIGH SUPPORTING MODULE
 created: 2026-07-22
 updated: 2026-07-22
@@ -19,8 +19,8 @@ related:
 # Architectural Trim-Sheet Pipeline
 
 This study answers the design request to determine how Genesis should create and implement trim sheets. It records
-the current-engine audit, a recommended first scaffold and feature goal, the procedural UV/run contract, creation
-pipeline, fallbacks, proof shape, costs, and five choices still awaiting Adam's ruling.
+the current-engine audit, accepted first scaffold and feature goal, procedural UV/run contract, creation pipeline,
+fallbacks, proof shape, costs, and Adam's accepted T10.1-T10.5 Option B ruling in section 14.
 
 It does **not** authorize code, asset generation, package installation, or a build. Wave 12 still owns exact build
 ordering and authorization. Wave 10 P10.10 still owns performance, device, texture-memory, and accessibility
@@ -439,6 +439,8 @@ wall band is attractive.
 
 ### Proposed C1I - one trim-sheet architecture pilot
 
+This proposal was accepted as written at section 14 and now enters the Clay Proof Ladder as C1I.
+
 Add a separate retained pass immediately after C1H if Adam accepts the recommendation:
 
 **Primary question:** can one deterministic manifest-driven horizontal trim sheet route distinct base-course,
@@ -511,6 +513,9 @@ only from retained fixtures.
 
 ## 13. Five decisions awaiting Adam
 
+This preserved decision batch was resolved at section 14. The option text remains here as the rationale and cost
+record for the accepted all-B ruling.
+
 These are a generated visual-engine batch. Answering them does not move past F10.9h.11-F10.9h.15.
 
 ### T10.1 - first implementation depth
@@ -571,6 +576,40 @@ pass after the high-priority battlefield proof.
 
 **Option C - defer trim sheets until C2M TownTray.** Protects the first battlefield schedule, but risks discovering
 the surface contract only after town geometry and roles multiply.
+
+## 14. Accepted ruling - Option B across T10.1-T10.5
+
+**Adam's ruling (2026-07-22):**
+
+> "your recs are fine"
+
+Adam accepts all five recommended Option B choices:
+
+1. **T10.1 - real multi-band scaffold first.** Genesis begins with one manifest-driven horizontal multi-band trim
+   sheet on generated runs, then promotes physical profile and material-channel breadth. It does not spend a proof
+   on directly wiring one legacy strip, and it does not require the mature library before first use.
+2. **T10.2 - canonical material authority.** The stable sheet layout is shared; architecture material or compatible
+   material family chooses the visual variant; realm grade/tint is secondary. Honest plain/geometry fallbacks cover
+   missing variants. Venue identity never mints an automatic unique sheet.
+3. **T10.3 - independent sources, deterministic packing.** Generated or authored source strips remain separate
+   candidates with provenance. A manifest-owned build step alone controls final slot coordinates, gutters, folding,
+   aligned channels, hashes, and reports. Image generation does not paint the finished production atlas.
+4. **T10.4 - bounded repeat geometry before shader complexity.** Full-width horizontal bands, clamped sampling,
+   and repeat-boundary run segmentation form the first runtime path. A custom sub-rectangle repeat shader is a later
+   optimization only if P10.10 measurement shows that it earns its mip, derivative, batching, and device cost.
+5. **T10.5 - C1I is a separate retained proof.** C1H remains composition-first. C1I then proves trim-sheet
+   architecture over the accepted C1H battlefield before C2M reuses the same surface authority for TownTray.
+
+The accepted pre-alpha trim obligation is therefore narrow but real: one material family, one stable layout, a
+diagnostic sheet before beauty art, base color first, named roles on real procedural runs, correct scale/repeat/
+corner/endpoint/occlusion behavior, geometry-only fallback, four-yaw visual proof, and unchanged tactical truth.
+
+The feature goal remains a broader architecture-material library, physical profile sweeps, expanded roof/beam/
+frame/bridge/town roles, aligned material channels, dedicated caps/corners/junctions, and measured shader/batching
+optimization. None of that breadth becomes an unnamed precondition for C1I, and none is discarded.
+
+This ruling accepts a design and proof path only. It does not authorize code, asset generation, package changes,
+worktrees, CI expansion, merge, or push.
 
 ## References
 

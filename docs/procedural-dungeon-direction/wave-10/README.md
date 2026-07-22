@@ -46,7 +46,10 @@ findings into a high-priority shared BattleMap/TownTray composition direction, m
 and corrects the assumption that general automatic UV unwrap is installed. The tangent does not move the
 questionnaire. Section 11.91 opens a second visual tangent for the requested trim-sheet creation/implementation
 pipeline: Genesis already has generated single trim strips and generated wall-trim runs, but they are not joined;
-five phased choices remain with Adam before the proposed C1I proof can enter the accepted ladder. The final town
+section 11.92 accepts all five recommended Option B choices and adds C1I after composition-first C1H. One
+manifest-driven material family, deterministic independent-strip packing, canonical-material-first selection,
+repeat-boundary segmentation, and TownTray reuse form the scaffold; profile/channel/material/shader breadth remains
+the named feature goal. The final town
 audit remains **F10.9h.11-F10.9h.15** at section 11.88. P10.9 remains
 mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence

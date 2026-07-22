@@ -18,6 +18,27 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-15 later — VQ2 RESPEC: the sprite flip + demand census + Sol's laws; docs/VQ2-RESPEC.md is the order)
+
+Adam's directives folded (VQ2/SOL-SOLUTIONS as suggestions-for-law · sprite flip w/ v3 reserve ·
+faceted inventory (tags+heights, editor-tweakable) · gameplay rounds → demand-vs-null census ·
+extrusion plan · re-spec + orchestrate). Dispositions + the flip ruling in DESIGN.md 2026-07-15.
+
+1. ☑ **WAVE S COMPLETE (2026-07-15)** — S1–S6 all landed; **THE FLIP IS LIVE** (252 candidates,
+   v3 reserve intact, one-flag revert). B3 gallery landed same day (B2/B4 still open).
+2. ☑ **WAVE L COMPLETE (2026-07-15)** — L1 rig + L2 census + L3 PL-4 matrix landed;
+   **`dev/play-lens/DEMAND-LEDGER.md` is the fill-ordering instrument** (P0 #2 FIXED · P0 #1
+   reclassified lane-stacking · null-facade = the `frontier` REALM_TEXTURES key bug · shop panel
+   never renders under the battle stage · 21 NPC-card slugs = the art-packet list).
+3. ☐ **WAVE F — VQ2 build units, ledger-ordered:** F1 combat-in-room (P-F; should also unstack
+   the invisible rat) · F2 staging beats (P-D; owns the shop wiring gap) · F3 Stage E + P-A gates
+   (+ B3's daylit blow-out evidence) · quick-fix candidate: settlement-mint `frontier` re-key ·
+   F4 Kenney adapter pilot (P-B) · F5 town-slice (P-C, after F4) · F6 odd-rolls parked.
+4. ☑ X1 landed (extrusion spec + pilots on master) · ☐ X2 compiler slice after B2 · ☐ B2
+   physical standee (Adam's B3 taste gate first) → B4 kill size-inference.
+5. ☐ Adam's red-pen ledger: flip taste verdict (B3 sheets + sprite editor) · editor feet pass on
+   band-default/missing heights · NPC-card + facade packets (ledger row 2) · r*-v2 dirs ruling.
+
 ## Do next (2026-07-15 — AUTONOMOUS ARC LANDED: quick-fix + ENV/EXTERIOR complete, PL-3 verified)
 
 Master `c0a60b77` (CHANGELOG 2026-07-15): ☑ QUICK-FIX wave (P0 roots) · ☑ ENV-1/1b/1c/2/3/3b

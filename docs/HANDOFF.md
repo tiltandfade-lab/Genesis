@@ -1,12 +1,127 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-20
+updated: 2026-07-22
 ---
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-20, procedural-redesign fast checkpoint) — RESUME WAVE 10 AT F10.7A; THE WORLD CARRIES ATTENTION BEFORE UI GLOW [Codex]
+## ⭐ Latest (2026-07-22, procedural-redesign clean close) — F10.9H CLOSED; RESUME THE FIVE-QUESTION F10.9I-F10.9M BATCH [Codex]
+
+This is a full clean close of the design/docs stretch that began at the 2026-07-20 fast checkpoint. No gameplay
+code, generated asset, table, or renderer implementation was added. Wave 10 remains **OPEN**. The full local
+CI-equivalent gate is green on the close snapshot: `check-manifest.py` ended `RESULT: OK`; all 223
+`verify-*.mjs` harnesses produced 0 real reds and 17 expected optional-dependency skips; `verify-bridge.py` passed
+64/64; `verify-table-lint.py` passed 37/37; and `playtest-bug-probes.mjs` exited green with only its two already
+documented/WAI present cases. The untracked `Reference/FFT Battle Maps/` folder remains local, reference-only, and
+uncommitted because production rights/provenance have not been established.
+
+### Exact questionnaire position
+
+Resume at **F10.9i-F10.9m** in
+`docs/procedural-dungeon-direction/wave-10/06-party-and-scene-continuity.md` section **11.95**. Adam asked to
+receive questions in batches of five. Present these five together, in plain English, with concrete dungeon and
+provider-neutral DM-seat examples, honest prototype/MVP/feature-goal costs, and a recommendation of **Option B
+across all five**:
+
+1. **F10.9i — dungeon traversal:** certified room/subscene boundary transitions over one canonical lineage rather
+   than resets or one permanently mounted mega-scene;
+2. **F10.9j — investigation:** evidence and focused views remain projections over the same canonical ids rather
+   than a second hidden scene authority;
+3. **F10.9k — CrisisChain projection:** typed requests may focus, mount, or transition the scene, while prose alone
+   cannot rewrite spatial truth;
+4. **F10.9l — parallel pressure:** several active pressures keep independent clocks/receipts and one governed
+   foreground rather than cloning whole scenes or flattening everything into one chain; and
+5. **F10.9m — aftermath:** exact state persists while materially actionable, then compacts into semantic durable
+   history without erasing identity, custody, damage, evidence, access, or unresolved consequences.
+
+Let Adam answer the batch. Record the ruling and chase every material generated follow-up before deciding whether
+P10.9 can close. Do not advance to P10.10 merely because this batch is answered. P10.10 owns performance, device,
+and accessibility; P10.11 and P10.12 also remain later. Do not skip P10.9 or declare Wave 10 complete until every
+original, additive, and generated follow-up is exhausted and Adam explicitly agrees to close the wave.
+
+### What this design stretch established
+
+- The monolithic procedural-direction record was split without deleting or rewriting its history. The stable front
+  door is `docs/PROCEDURAL-DUNGEON-DIRECTION.md`; the Wave 10 index names the current bounded write target.
+- Prototype/MVP planning now uses a retained **Clay Proof Ladder** and **Feature-Promotion Ledger**. The first spine
+  is canonical mechanics -> exact BattleMat plus mandatory EngagementLens -> provider-neutral DM seat/fallback ->
+  persistence/recovery. A single small retained clay room comes first; multi-room, site/cold simulation,
+  relational simulation, and the twelve-site portfolio stage upward through separately gated modules. Borderline
+  cuts stay in the MVP with narrowed breadth rather than being silently deferred.
+- P10.7's information-layer direction was restrained after review: first prove that actual events can render
+  truthfully on the BattleMat. Mechanical meta language stays behind the DM seat unless a later comprehension test
+  earns a narrow player-facing layer. The DM seat is not Gemini-exclusive; Gemini is the current proving provider,
+  while the contract must support a bundled model, premium seats, and user-supplied model/API choices.
+- F10.9g closes land travel on a staged shared TravelWalk: deterministic rational macro-biomes that refine without
+  contradiction, existing Fray/Spice authority toward the world edge, grid/node-owned route segments, exact
+  journey persistence/remount, and minimal truthful transport possession/access plus rider/driver capability
+  before a separate horse/wagon module. Bespoke generated travel imagery is not a pre-alpha dependency.
+- F10.9h and all h.1-h.15 follow-ups are explicitly **CLOSED** on their phased basis. C2M proves one bounded
+  district, real-roll mounted venue, Urban Walk/threshold arrival, social/exploration -> battle -> aftermath
+  continuity, promoted material citizens, semantic remount, offscreen receipts, pursuit, evidence/witness civic
+  response, transport anchors, time/access gates, departure, and return.
+- FFT/GaneshaDx study promoted procedural battlefield composition to a high-priority shared BattleMap/TownTray
+  concern without licensing copied FFT assets, layouts, or code. C1H is the retained composition-first clay
+  battlefield proof. Automatic UV unwrapping is **not** currently installed as a general Genesis system; generated
+  architecture should emit direct procedural UVs first.
+- The accepted trim-sheet direction is manifest-driven, horizontal, multi-band, canonical-material-first, and
+  deterministically packed from independently sourced strips. Repeat-boundary segmentation precedes custom shader
+  optimization. C1I is a separate architecture-surface proof after C1H, before C2M reuse.
+
+### Questionnaire and documentation law
+
+The preserved original questionnaire still has **twelve original subject-wave sections, all twenty original Wave 1
+questions, and original Wave 2 Questions 1-11**. Later waves originally had subject headings rather than hidden
+twenty-question lists. **G1.1-G12.2 are additive, never replacements.** The nine downloaded papers remain scanned
+and indexed under `Reference/Procedural-Dungeon-Research/papers/`, with the relevant synthesis and citations in
+`docs/PROCEDURAL-DUNGEON-RESEARCH.md`.
+
+Keep the bounded Wave 10 part as the running chronological record and preserve all earlier text. Append accepted
+visual rulings to `docs/ART-DIRECTION-CANON.md` only when they are actually accepted. Do not update `DESIGN.md`
+until a consolidated wave/design closure. Update this HANDOFF only at a real pause. Continue as design discussion:
+do not implement code, create a worktree, materialize LFS assets, merge, push, or rerun full CI unless Adam
+explicitly asks. Coherent design-doc checkpoints use the fast-checkpoint procedure.
+
+### Ready-to-paste continuation prompt
+
+```text
+Continue the Genesis procedural-dungeon redesign from the 2026-07-22 full clean-close handoff.
+
+Read CLAUDE.md, then the newest block at the top of docs/HANDOFF.md, then the stable index
+docs/PROCEDURAL-DUNGEON-DIRECTION.md, the Wave 10 index at
+docs/procedural-dungeon-direction/wave-10/README.md, and section 11.95 in
+docs/procedural-dungeon-direction/wave-10/06-party-and-scene-continuity.md. Consult the Clay Proof Ladder,
+Feature-Promotion Ledger, docs/BATTLEMAP-TOWNTRAY-COMPOSITION.md, docs/TRIM-SHEET-PIPELINE.md, and the relevant
+synthesis in docs/PROCEDURAL-DUNGEON-RESEARCH.md only as needed. The nine research papers are already scanned and
+indexed in Reference/Procedural-Dungeon-Research/papers/.
+
+Confirm that the preserved questionnaire has twelve original subject-wave sections, all twenty Wave 1 questions,
+and Wave 2 Questions 1-11. Future waves originally had subject headings rather than hidden twenty-question lists.
+G1.1-G12.2 are additive, never replacements.
+
+Resume Wave 10 with the five-question F10.9i-F10.9m batch at section 11.95. Restate all five in plain English,
+explain Options A/B/C with concrete dungeon and provider-neutral DM-seat examples, distinguish prototype/MVP work
+from the ideal feature goal, identify implementation and maintenance costs, and recommend Option B across all five.
+Let me answer the batch. Record the answer, then follow every material generated follow-up before deciding whether
+P10.9 can close.
+
+F10.9h is closed on its phased basis; do not reopen it without a contradiction. P10.9 remains open. Performance,
+device, and accessibility belong to P10.10 later, followed by P10.11 and P10.12. Do not skip them. Do not declare
+Wave 10 complete until every original, additive, and generated follow-up is exhausted and we explicitly agree to
+close it.
+
+Keep docs/procedural-dungeon-direction/wave-10/06-party-and-scene-continuity.md as the current running record and
+preserve all earlier text. Consolidate only accepted visual rulings into docs/ART-DIRECTION-CANON.md. Do not update
+DESIGN until a consolidated wave/design closure or HANDOFF until an actual pause. This remains design discussion:
+do not implement code, create a worktree, check out LFS assets, merge, push, or run full CI unless I explicitly ask.
+Coherent documentation commits may be made locally as already authorized; use the fast-checkpoint procedure.
+
+The local Reference/FFT Battle Maps/ folder is untracked reference material with unresolved production provenance.
+Study it if useful, but do not stage or commit it.
+```
+
+## 2026-07-20 (procedural-redesign fast checkpoint) — RESUME WAVE 10 AT F10.7A; THE WORLD CARRIES ATTENTION BEFORE UI GLOW [Codex]
 
 This supersedes the older Wave 10 pickups below without deleting them. The session remained design/docs-only: no
 code implementation, dependency installation, CI, worktree creation, LFS checkout, merge, push, or Fable

@@ -8,6 +8,47 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-22 — WAVE 10 PHASED THROUGH BOUNDED TOWN CONTINUITY [Codex]
+
+**Added**
+- Split the oversized procedural-dungeon direction into an immutable stable index, preservation/protocol files,
+  bounded wave indexes, and bounded chronological wave parts without deleting the original record. Added the Clay
+  Proof Ladder and Feature-Promotion Ledger so every accepted ideal can retain an explicit scaffold, MVP gate,
+  feature goal, and promotion test.
+- Added the high-priority shared BattleMap/TownTray composition study derived from FFT-map and GaneshaDx analysis:
+  semantic plan before geometry, exact-cell authority, navigable elevation, landmarked encounter spaces, measured
+  composition diagnostics, C1H clay proof, and procedural UV/surface-frame requirements without copying FFT assets,
+  layouts, or code.
+- Added the accepted architectural trim-sheet pipeline: stable manifest, horizontal multi-band base-color sheets,
+  canonical-material-first variant selection, independently sourced/deterministically packed strips, run-aware UV
+  segmentation and fallback, plus a separate C1I proof after composition-first C1H.
+
+**Changed**
+- Reframed implementation around small retained proofs rather than same-sized design/build waves. The first playable
+  spine is canonical mechanics -> exact BattleMat plus mandatory EngagementLens -> provider-neutral DM seat and
+  fallback -> persistence/recovery; a single small clay room precedes multi-room, site/cold, relational, travel,
+  town, and portfolio modules. Borderline features remain in the MVP with narrowed breadth.
+- Closed F10.9g on staged land travel: deterministic rational macro-biomes, existing Fray/Spice edge authority,
+  persistent grid/node-owned journeys, route choices, encounter/remount continuity, and minimal transport identity
+  and capability before later horse/wagon integration. Bespoke generated choice imagery is not a pre-alpha
+  dependency.
+- Closed F10.9h and h.1-h.15 on bounded town continuity. C2M retains one canonical district/venue chain through
+  arrival, Urban Walk, real-roll venue, social/exploration, battle, aftermath, remount, pursuit, civic response,
+  transport anchoring, schedule/access gates, departure, and return.
+- Advanced the live Wave 10 record to the five-question F10.9i-F10.9m batch at section 11.95. P10.9 and Wave 10
+  remain open; performance/device/accessibility stays P10.10.
+
+**Deferred**
+- No procedural-dungeon, BattleMap/TownTray, trim-sheet, travel, town, companion-autonomy, or information-layer code
+  was implemented. C1H, C1I, C2M, the remaining P10.9 cases, P10.10-P10.12, and explicit Wave 10 closure remain
+  future work.
+- `Reference/FFT Battle Maps/` remains local and untracked pending production-rights/provenance review.
+
+**Verified**
+- Full local CI-equivalent close gate: manifest `RESULT: OK`; 223 verifier harnesses with 0 real reds and 17
+  expected optional-dependency skips; bridge 64/64; table lint 37/37; playtest probes green with only the two
+  already documented/WAI present cases.
+
 ## 2026-07-19 (later) — CI GREENED + WAVE 1 DESIGN LANE LANDED [Claude Code]
 
 **Fixed**
@@ -904,29 +945,4 @@ creatures — hence the regen lane).
 - Interior magenta-bleed auto-fix (legit purple art measures identical to bleed — review catches it).
 - Square-plane aspect: `buildSpriteBillboard` stretches non-square crops; revisit with an
   aspect-correct plane sized off `tex.image`.
-
-## 2026-07-09 (night) — Doc auto-archive rule + CI/token-discipline session close
-
-**Added**
-- `build/archive-docs.py` — rolls old entries out of the living docs into read-only archives.
-  **The rule (Adam's ruling):** `CHANGELOG.md` keeps the newest **25** entries (older →
-  `CHANGELOG-ARCHIVE.md`, newest-first order continuous across the two files); `NEXT-STEPS.md`
-  keeps at most **4** dated `## Do next` blocks (older → `NEXT-STEPS-ARCHIVE.md`; standing plan
-  sections never auto-archive; undated blocks left alone). Modes: dry-run (no args) / `--emit` /
-  `--check` (exit 1 when over cap — run it at session close). First roll: 77 entries
-  (2026-06-21 → 2026-07-04) archived, CHANGELOG 284 KB → ~84 KB.
-- `docs/CHANGELOG-ARCHIVE.md` — the overflow archive (registered in `docs/README.md`).
-
-**Changed**
-- CLAUDE.md: commands table + token-discipline section carry the archive rule; preambles of
-  CHANGELOG/NEXT-STEPS state their caps.
-
-**Context (same session, landed earlier as ac3f450 + 4611ee8)**
-- CI red wave greened: Math.random grep-gate comment false-positives reworded; `dm-contract.json`
-  regenerated (animal-social field drift); digest-diet 12 KB size guard de-flaked to a
-  median-of-5-seeds measurement (no real digest bloat — the seeded fixture had re-rolled onto a
-  fatter random scene). `verify-regions.mjs` fixtures seeded (byte-identical runs) after a
-  1-in-430 unreproducible sweep failure — future reds replay exactly.
-- Token discipline: `.claude/settings.json` deny-list blocks Read on multi-MB generated artifacts
-  (`tables.js` ≈ 2M tokens per Read was the 2M-token-session culprit); CLAUDE.md section added.
 

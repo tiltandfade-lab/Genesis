@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-19
+updated: 2026-07-22
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -17,6 +17,30 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 **Auto-archive rule (2026-07-09):** at most 4 dated `## Do next (...)` blocks live here; older ones
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
+
+## Do next (2026-07-22 — Wave 10 through bounded town continuity; resume F10.9i-F10.9m)
+
+Wave 10 remains OPEN. The stable direction index and Wave 10 index now route to the bounded current write target,
+`procedural-dungeon-direction/wave-10/06-party-and-scene-continuity.md`. F10.9g travel and the complete F10.9h
+town-continuity family are closed on their accepted phased bases. No implementation is authorized by this design
+record.
+
+1. ☐ **Ask the five-question F10.9i-F10.9m batch at section 11.95.** Cover certified dungeon boundary traversal,
+   investigation as a view over canonical ids, typed CrisisChain projection requests, parallel pressure ownership,
+   and aftermath exactness/compaction. Explain A/B/C, costs, and prototype/MVP/feature-goal placement; recommend B
+   across all five and let Adam answer the batch.
+2. ☐ Record the ruling and exhaust every material generated P10.9 follow-up. Do not advance merely because the five
+   parent choices are answered; close P10.9 only after an explicit coverage/authority/phasing audit.
+3. ☐ Continue through P10.10 (performance/device/accessibility), P10.11, P10.12, and additive G10.1-G10.2 without
+   skipping or fabricating hidden questionnaire questions. Wave 10 closes only when all original, additive, and
+   generated follow-ups are exhausted and Adam explicitly agrees.
+4. ☐ Preserve the phased implementation order when the design eventually becomes specs: one retained small clay
+   room and the canonical mechanics -> BattleMat + mandatory EngagementLens -> provider-neutral DM-seat/fallback ->
+   persistence/recovery spine first; C1H composition, C1I trim sheet, travel, C2M town, and wider simulation remain
+   separately promoted modules with named proof gates.
+5. ☐ Keep `Reference/FFT Battle Maps/` reference-only and untracked until provenance/production rights are settled.
+6. ☑ **Full clean-close gate ran 2026-07-22:** manifest OK; 223 verifiers, 17 expected dependency skips, 0 real
+   reds; bridge 64/64; table lint 37/37; playtest probes green.
 
 ## Do next (2026-07-19 later — CI GREEN + Wave 1 landed; resume at open decision 3C)
 
@@ -73,27 +97,6 @@ shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging be
 4. ☐ Polish, evidence-ordered: KS-3c wall-rim sawtooth · ELEV-1b · LL-1b · rest-prop collisions ·
    occlusion-aware combat cells.
 5. ☐ Then: ST-1 staging intelligence · town kit · B2 smooth-contour depth · ELEV-2 mechanics.
-
-## Do next (2026-07-15 later — VQ2 RESPEC: the sprite flip + demand census + Sol's laws; docs/VQ2-RESPEC.md is the order)
-
-Adam's directives folded (VQ2/SOL-SOLUTIONS as suggestions-for-law · sprite flip w/ v3 reserve ·
-faceted inventory (tags+heights, editor-tweakable) · gameplay rounds → demand-vs-null census ·
-extrusion plan · re-spec + orchestrate). Dispositions + the flip ruling in DESIGN.md 2026-07-15.
-
-1. ☑ **WAVE S COMPLETE (2026-07-15)** — S1–S6 all landed; **THE FLIP IS LIVE** (252 candidates,
-   v3 reserve intact, one-flag revert). B3 gallery landed same day (B2/B4 still open).
-2. ☑ **WAVE L COMPLETE (2026-07-15)** — L1 rig + L2 census + L3 PL-4 matrix landed;
-   **`dev/play-lens/DEMAND-LEDGER.md` is the fill-ordering instrument** (P0 #2 FIXED · P0 #1
-   reclassified lane-stacking · null-facade = the `frontier` REALM_TEXTURES key bug · shop panel
-   never renders under the battle stage · 21 NPC-card slugs = the art-packet list).
-3. ☐ **WAVE F — VQ2 build units, ledger-ordered:** F1 combat-in-room (P-F; should also unstack
-   the invisible rat) · F2 staging beats (P-D; owns the shop wiring gap) · F3 Stage E + P-A gates
-   (+ B3's daylit blow-out evidence) · quick-fix candidate: settlement-mint `frontier` re-key ·
-   F4 Kenney adapter pilot (P-B) · F5 town-slice (P-C, after F4) · F6 odd-rolls parked.
-4. ☑ X1 landed (extrusion spec + pilots on master) · ☐ X2 compiler slice after B2 · ☐ B2
-   physical standee (Adam's B3 taste gate first) → B4 kill size-inference.
-5. ☐ Adam's red-pen ledger: flip taste verdict (B3 sheets + sprite editor) · editor feet pass on
-   band-default/missing heights · NPC-card + facade packets (ledger row 2) · r*-v2 dirs ruling.
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 

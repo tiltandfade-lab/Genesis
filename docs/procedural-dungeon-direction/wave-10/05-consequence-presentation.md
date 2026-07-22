@@ -1461,3 +1461,83 @@ mode change before investing in a richer information or transition layer.
 
 Does Adam choose **A, B, or C**, or a phased **A -> B**? F10.9d concerns continuity staging only; P10.10 still owns
 performance, device, and accessibility. P10.9 and Wave 10 remain **OPEN**; no build is authorized.
+
+### 11.74 F10.9d ruling and F10.9e expansion - simple Gemini bridge first; diegetic continuity beat is the visual goal
+
+**Adam's ruling (2026-07-22):** "yes A->B is the way to go."
+
+F10.9d accepts the phased **Option A -> Option B** direction. C2D uses an orientation-preserving crossfade or
+reframe, stable landmark/citizen/object identities, the committed automatic deployment batch, and one short
+fact-locked Gemini/fallback bridge. It adds no continuity card, category label, migration arrow, or hidden-state
+explanation. C2F is the explicit later visual promotion: a restrained landmark-to-placement beat, citizen/object
+settling, and first-action composition after actual BattleMat event rendering and identity continuity are proven.
+Option C remains evidence-gated with no automatic future entitlement.
+
+The crossfade, identity carryover, Gemini bridge/fallback, interruption terminal state, and absence of duplicated or
+mechanical explanation are **PLAYABLE PRE-ALPHA/MVP obligations**. C2F's reusable transition choreography is a
+feature goal over the same handoff. Performance/device/accessibility remains P10.10. F10.9d does not make a new
+information layer canonical and does not close P10.9.
+
+#### F10.9e - what happens to scene identity when the party is genuinely split?
+
+In plain English: a portcullis drops between the main PC and a sidekick, an ally pursues a fleeing foe through
+another exit, or a capture moves one companion to a cell while the PC remains in the market. These are no longer
+mere formation offsets, but the game still has one persistent world and one human-controlled main PC. How should
+locations, time, objects, knowledge, obligations, and independent ally actions remain canonical until the branches
+rejoin?
+
+**Option A - keep one active SceneLineage and store detached companions as coarse offscreen status.** The main-PC
+scene remains the only advancing exact branch. A detached companion records location/status/custody and perhaps an
+owed outcome, but does not receive independent scene time, events, objects, or discovery until the PC reaches them
+or a scripted reconciliation resolves the separation.
+
+- **Dungeon example:** the portcullis falls. The sidekick becomes `separated beyond north gate`; their exact cell
+  compacts immediately and nothing changes on that side until the PC opens the gate or the DM resolves a predefined
+  return result.
+- **Gemini-DM example:** Gemini can remind the player that the sidekick is cut off, but any claim that they fought,
+  fled, found a lever, lost an item, or learned a secret must remain color unless another system specially promotes
+  it.
+- **Cost:** **low-medium branch-state and reconciliation work**, but high continuity, autonomy, exception, and
+  support debt. It makes the world freeze around anyone outside the active camera and conflicts with independently
+  acting allies once separation becomes mechanically real.
+
+**Option B - a parent SceneLineage with transactional child branches and one active projection (recommended).** A
+genuine separation commits child lineage receipts under the shared parent. Each branch owns its location/time,
+participants, objects/custody, hazards/traces, viewpoint knowledge, pending obligations, and consequence cursor;
+every canonical citizen or unique object belongs to exactly one active owner. Only the main-PC branch is directly
+interactive in pre-alpha. Off-focus companion branches may advance solely through bounded, validated clocks/events
+and the later approved ally-behavior policy—never through Gemini prose alone. Focus, save/load, and return rebuild
+from branch receipts. Rejoining commits one reconciliation receipt that orders elapsed events, transfers ownership,
+merges shared facts without leaking private knowledge, and retires or preserves unresolved child obligations.
+
+- **Dungeon example:** the portcullis creates north and south children. The PC acts south; the sidekick's north
+  branch remains owned and may later receive one validated `hold`, `seek exit`, or consequence receipt from its
+  approved behavior policy. The sidekick cannot exist on both boards or reroll events when the gate opens. Rejoining
+  preserves wounds, a dropped torch, changed gate state, elapsed time, and what only the sidekick saw.
+- **Gemini-DM example:** Gemini narrates only committed branch facts visible to the current viewpoint. It may voice
+  uncertainty about the sidekick, but cannot tell the player that the sidekick found the lever until knowledge
+  travels legally through reunion, communication, or another reveal event.
+- **Cost:** **high reusable lineage-graph, ownership, time-order, knowledge, recovery, and reconciliation QA work**.
+  The first interface can still show one scene at a time, avoiding simultaneous renderer and control complexity.
+  This architecture prevents much higher clone, lost-item, time paradox, secret-leak, and save-migration debt.
+
+**Option C - mount and simulate every split branch simultaneously.** Each separated group keeps a live exact scene,
+renderer, clock, AI loop, and consequence presenter. The player may switch views or see split-screen activity while
+branches advance in parallel; reunion merges continuously live state.
+
+- **Dungeon example:** the south-PC fight and north-sidekick escape both remain mounted and animate concurrently,
+  with the UI switching or dividing attention between them.
+- **Gemini-DM example:** Gemini must coordinate simultaneous viewpoint-safe narration and timing across both live
+  scenes without revealing one branch through the other or allowing prose order to change canonical event order.
+- **Cost:** **very high simulation scheduling, renderer, AI, input, camera, narration, save, performance, and
+  accessibility cost**. It prematurely combines split-party continuity with the broad live-world and simultaneous-
+  view engine rejected earlier.
+
+**Codex recommendation: Option B, phased narrowly.** The branch/ownership/reconciliation schema is critical because
+involuntary separation can occur even if pre-alpha offers no voluntary `send the rogue away` command. The first
+proof should use one short, deterministic separation with a single active PC view, one bounded off-focus companion
+receipt supplied by an approved later behavior seam, and exact reunion. Voluntary independent errands, player view
+switching, simultaneous split presentation, and richly autonomous offscreen play remain named feature goals.
+
+Does Adam choose **A, B, or C**, or want to restrict what an off-focus companion branch may do in pre-alpha? P10.9
+and Wave 10 remain **OPEN**; no build is authorized.

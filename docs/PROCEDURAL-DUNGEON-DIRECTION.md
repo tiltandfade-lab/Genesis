@@ -2,7 +2,7 @@
 type: design-study
 status: DISCOVERY
 created: 2026-07-18
-updated: 2026-07-21
+updated: 2026-07-22
 related:
   - "[[DUNGEON-GRAPH]]"
   - "[[ROOM-GRAMMAR]]"
@@ -70,7 +70,9 @@ No build is authorized by this discovery record.
   tiers at section 11.71. Section 11.72 reframed F10.9c around a single player-owned main PC, independently acting
   formation-bound allies/sidekicks, and an approach-bounded deployment zone. Section 11.73 chooses automatic
   whole-party formation deployment for pre-alpha and player PC placement plus optional ally rearrangement as the
-  C2E feature goal. The live **F10.9d** question asks how to stage that mode change without a mechanical-meta dump.
+  C2E feature goal. Section 11.74 chooses a simple crossfade/reframe plus fiction-first Gemini bridge for pre-alpha
+  and the restrained C2F diegetic continuity beat as the visual goal. The live **F10.9e** question asks how the
+  SceneLineage branches, advances, and rejoins when the party is split.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later

@@ -15,9 +15,10 @@ section 11.69, accepted F10.9a Option B's transactional SceneLineage handoff at 
 Option B's provenance-bearing precision tiers at section 11.71. Section 11.72 reframed F10.9c around a single
 player-owned main PC, independently acting formation-bound allies/sidekicks, and an approach-bounded deployment
 zone. Section 11.73 chooses automatic whole-party formation deployment for pre-alpha and player PC placement plus
-optional ally rearrangement as the C2E feature goal. The live **F10.9d** question chooses fiction-first transition
-staging without a mechanical-meta dump. P10.9 remains mandatory and open. The P10.8 starting focus policy remains
-automatic Option A;
+optional ally rearrangement as the C2E feature goal. Section 11.74 chooses a simple crossfade/reframe plus
+fiction-first Gemini bridge for pre-alpha and the restrained C2F diegetic continuity beat as the visual goal. The
+live **F10.9e** question asks how a split party branches, advances, and rejoins. P10.9 remains mandatory and open.
+The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence
 brief remains outside the current target unless BattleMat-plus-Gemini comprehension evidence later reopens a narrow
 information-layer question.

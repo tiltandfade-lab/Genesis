@@ -2,7 +2,7 @@
 type: design-study
 status: ACTIVE
 created: 2026-07-21
-updated: 2026-07-21
+updated: 2026-07-22
 scope: opened-wave feature traceability
 ---
 
@@ -55,7 +55,7 @@ satisfies the feature, and it is not build authorization.
 | Camera/focus policy | Minimal bounded auto-fit, skip/recenter, preserved safe state; Option A starts | C1D/C1F | C2C | Player-owned Option B focus leases and governed ladder | A/B tests show interruption or missed events | MAPPED; implementation unaudited |
 | Attention and accumulated history | Exact event/knowledge truth, DM prose, current board/card truth, invoked inspection | C1F/C1G | C2B/C3B | Ambient -> historical ladder and progressive history cards | Repeated comprehension failure survives existing surfaces | MAPPED; implementation unaudited |
 | Visual floor, props, and materials | Coherent tabletop silhouette/value/elevation/light/prop/sprite citizenship; retain working features | C1A | C1E/C3C | Rich material routing, normals, realm skins, broad props | Captures meet readability floor and material sameness is limiting | MAPPED; implementation unaudited |
-| Mode continuity | Typed idempotent SceneLineage handoff preserves lineage, ownership, cast/roles, objects/custody, damage/traces/hazards, viewpoint knowledge, obligations, consequence cursor, and recovery across exploration -> battle -> aftermath; spatial facts retain an honest exact/anchored/zone-or-route/unresolved tier and provenance-bearing placement/compaction receipt; broader required adapter traces remain owned by open P10.9 | C2D | C2D plus remaining P10.9-named MVP traces | Seamless morphs, richer camera memory, simultaneous split-view presentation, broad adapter polish | Correct handoffs remain disorienting, or travel/town/split-party cases exceed the shared bundle | MAPPED IN PART; F10.9a-b accepted, generated P10.9 follow-ups active |
+| Mode continuity | Typed idempotent SceneLineage handoff preserves lineage, ownership, cast/roles, objects/custody, damage/traces/hazards, viewpoint knowledge, obligations, consequence cursor, and recovery across exploration -> battle -> aftermath; spatial facts retain an honest exact/anchored/zone-or-route/unresolved tier and provenance-bearing placement/compaction receipt; pre-alpha staging is an orientation-preserving crossfade/reframe plus one short fiction-first Gemini/fallback bridge and no mechanical summary; broader required adapter traces remain owned by open P10.9 | C2D | C2D plus remaining P10.9-named MVP traces | C2F restrained landmark/placement continuity beat; seamless morphs, richer camera memory, simultaneous split-view presentation, broad adapter polish | Correct handoffs remain disorienting, or travel/town/split-party cases exceed the shared bundle | MAPPED IN PART; F10.9a-d accepted, generated P10.9 follow-ups active |
 | Performance/device/accessibility | Reserved for P10.10; no cut inferred here | Later owner | P10.10 owner | Accepted device/performance/accessibility destination | Pending P10.10 answers and budgets | UNMAPPED pending mandatory P10.10 |
 | Twelve-site/eight-trace portfolio | Grow retained fixtures incrementally after C1-C4; do not batch all sites first | C1A onward | C5 | Wave 11 corpus automation and Wave 12 release gates | Missing coverage dimension justifies each added site | MAPPED; implementation unaudited |
 
@@ -66,9 +66,11 @@ satisfies the feature, and it is not build authorization.
   F10.9b accepted typed precision tiers with provenance-bearing placement and compaction receipts. The family is
   mapped only in part. F10.9c assumes one player-owned main PC, formation-bound companions outside combat, and
   independent allied combat action; F10.9c.1 chooses automatic whole-party formation deployment for pre-alpha and
-  maps player-PC placement plus optional ally rearrangement to C2E as the explicit feature goal. Generated P10.9
-  follow-ups still own split-party, travel, town, CrisisChain, and broader recovery/visual-memory obligations before
-  its MVP gate can be complete. Waves 6-7 still own exact allied behavior.
+  maps player-PC placement plus optional ally rearrangement to C2E as the explicit feature goal. F10.9d chooses a
+  simple crossfade/reframe plus fiction-first Gemini bridge for pre-alpha and maps the restrained diegetic continuity
+  beat to C2F; a mechanical continuity summary remains evidence-gated. Generated P10.9 follow-ups still own
+  split-party, travel, town, CrisisChain, and broader recovery/visual-memory obligations before its MVP gate can be
+  complete. Waves 6-7 still own exact allied behavior.
 - All implementation states remain unaudited and no build is authorized.
 
 ## Required update rhythm

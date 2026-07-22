@@ -2,7 +2,7 @@
 type: design-study
 status: ACCEPTED
 created: 2026-07-21
-updated: 2026-07-21
+updated: 2026-07-22
 scope: cross-wave implementation proof structure
 ---
 
@@ -181,8 +181,10 @@ approach, and legal terrain. The one player-owned main PC and independently acti
 that zone and formation contract. Narrative-only companion wandering cannot change location, custody, or placement;
 a validated detachment or other canonical event is required. For pre-alpha, the deterministic formation resolver
 places the whole party, including the main PC, within the legal zone and persists one non-rerollable placement batch.
-There is no initial deployment interaction. Exact allied combat behavior remains owned by later party/tactical
-questions.
+There is no initial deployment interaction. The mode change uses a simple orientation-preserving crossfade or
+reframe plus one short fact-locked Gemini/fallback bridge; stable landmarks, citizens, damage, and objects carry
+continuity without mechanical labels or a transition card. Exact allied combat behavior remains owned by later
+party/tactical questions.
 
 ### C2E - bounded player deployment promotion (feature goal)
 
@@ -195,6 +197,18 @@ formation. Reuse C2D's candidate sets, deterministic default, placement batch, p
 reservations, interruption/recovery, and aftermath compaction. The player edits only viewpoint-legal party choices;
 declining or interrupting the placement pass retains C2D's canonical automatic result. This named pass preserves the
 goal without making its extra UI and tactical-balance work a prerequisite for the first playable battle handoff.
+
+### C2F - restrained diegetic continuity beat (visual feature goal)
+
+**Primary question:** after stable BattleMat events and scene identities are proven, can one or two established
+landmarks remain visually anchored while the incoming board resolves, persistent citizens/objects settle into their
+committed cells, and the camera reaches the first actionable composition without mechanical labels, hidden-state
+leaks, duplicated Gemini explanation, or interruption/recovery drift?
+
+This promotes C2D's simple crossfade plus Gemini bridge into a reusable visual transition grammar. It adds camera,
+timing, landmark hold, citizen/object settling, interruption, fallback, and cross-adapter visual QA over the same
+SceneLineage handoff; it does not add a continuity summary or make animation canonical. The structured mechanical
+information layer remains evidence-gated and is not an automatic later milestone.
 
 ## Stage 3 - small operating site simulation
 

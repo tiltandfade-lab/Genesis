@@ -878,3 +878,15 @@ and no reroll on reload. The explicit feature goal adds player placement of the 
 rearrangement of allies/sidekicks within the same formation-legal, viewpoint-safe candidate cells. After commitment,
 allies still act independently. The later player control is an additive edit/preview layer over the retained
 automatic placement receipt, not a different geometry or combat authority.
+
+### Simple fiction-first transition before a restrained diegetic continuity beat (Adam, 2026-07-22)
+
+> "yes A->B is the way to go"
+
+Pre-alpha preserves orientation and stable scene identities through a simple crossfade or reframe into the
+BattleMat plus one short fact-locked Gemini/fallback bridge. Established landmarks, visible citizens, damage,
+objects, and the automatic party deployment remain visually continuous without category labels, migration arrows,
+badges, or a mechanical transition card. After truthful BattleMat events and stable identities are proven, the
+visual feature goal adds a restrained landmark-to-placement continuity beat: one or two anchors hold while the board
+resolves, persistent citizens and objects settle into committed cells, and the camera rests on the first actionable
+composition. The structured mechanical continuity summary remains evidence-gated and has no automatic entitlement.

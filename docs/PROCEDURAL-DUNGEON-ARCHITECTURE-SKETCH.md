@@ -13,6 +13,10 @@ related:
 
 # Procedural Dungeon Architecture Sketch
 
+> **Wave 4 authority note (2026-07-22):** this preserved closed-Wave-1 sketch is conceptual context, not a parallel
+> design authority for portals, secret connections, vertical traversal, circulation, or connection mutation. Those
+> subjects are canonically decided in `procedural-dungeon-direction/wave-04/01-questionnaire-and-triage.md`.
+
 ## 0. Status and authority
 
 This is a living architecture sketch for **closed Wave 1: Dungeon Function, History, and Strange

@@ -1116,3 +1116,147 @@ Town departure and return are symmetric scene-lineage projections. The legal gat
 transport condition, damage, promoted citizens, access, witness knowledge, clocks, and unresolved consequences
 survive semantic compaction and later remount. The presentation neither rerolls the town into a fresh illustration
 nor claims that incidental exact placement stayed live throughout the absence.
+
+### No cloned dungeons; generated identity art plus procedural surface variation (Adam, 2026-07-22)
+
+> "there should never ever be a cloned dungeon with the way our system works, if we determine we need more sprites and trimsheets to assign to culture types then we generate those, we are fully embracing generative AI art in this project to cover our niche needs, though we might want to consider other solutions that don't require a new sprite for every single modification. I watched a guy yesterday making materials in substance designer and he had these substance mutators that he could call and get clean variations on whatever materials he wanted. he said he greated a graph that could update the materials and he also used normal map generation get get his materials even further. he also said he used smart materials in substance painter that allowed for grime to collect around corners, color variations to happen whenever he wanted etc...so we are using sprites as our main source of art, but there must be layers we can add to the sprites to get a lot further with a robust base of art right?"
+
+Genesis must not obtain variety by cloning a finished dungeon or by requiring a newly generated image for every
+surface modification. Generative AI art is an accepted production source for missing culture-, material-,
+component-, trim-, prop-, and identity-specific visual needs. It is complemented by deterministic transforms,
+parameterized material families, declared companion channels, trim/component assembly, geometry-aware masks, and
+source-backed decals or overlays. Generated or procedural variation never becomes authority to change a canonical
+noun, material, culture, history, condition, or mechanical shape.
+
+The pixel-art figure/creature corpus remains the principal identity and silhouette layer. Normal, roughness,
+height, palette, material-id, wear, condition, emissive, decal, and similar companion channels may deepen that art
+when their creation and use pass sprite-scale visual review. An inferred normal map is a candidate projection, not
+automatically ground-truth geometry; painted lighting must not become false relief, halos, or pillow shading.
+
+### Broad eventual mechanical citizenship with explicit delivery tiers (Adam, 2026-07-22)
+
+> "ideally everything has SOME kind of mechanical existence eventually, like every column should be destructible by the right amount of force. we need to tier out what is MVP and what is the dream here"
+
+The ideal physical world gives every meaningful structural citizen a generic material, footprint/volume,
+attachment/support relation, condition, and compatible force/state response before adding bespoke mechanics.
+Prototype and playable-MVP proofs may expose only a narrow interaction family, but they must retain the stable
+identity and promotion seam needed to add broader destruction and structural response later. Surface pixels,
+shader grain, grime flecks, and similar subordinate detail need not become independent simulated objects; their
+owning canonical surface or structure carries their truth.
+
+### Provenance-first scale domains and narratively licensed mismatch (Adam, 2026-07-22)
+
+> "i think we had a sketch of how this works written down, please search for that. in rare cases the big thing ends up in a small room and becomes a point of narration, but in most cases big things shouldn't exist in small rooms, and if big things are canon to the area, then big rooms should be canon to the area unless the origin of the space is different than that of the current inhabitants, colonies etc..."
+
+This reaffirms the existing builder-first, inhabitant-shaped, natural-selection, and repurposed-mismatch scale law
+in `procedural-dungeon-direction/FOUNDATION.md`. Large current inhabitants normally require a compatible connected
+scale domain. A large creature in incompatible architecture is exceptional and must remain a causally licensed,
+mechanically honest fact that the DM seat can recognize and narrate, not a routine renderer overlap or global room
+inflation.
+
+### Layered decay, repair, and material-history research is mandatory (Adam, 2026-07-22)
+
+> "we need to come up with solutions this wether it is normal maps, decals, substance design or what...i do not know all of the potential solutions here so i need your help researching and educating me"
+
+Wave 3 must compare structural mutation, material-family parameters, geometry-derived masks, normal/roughness/
+height channels, decals, trim/component variants, and generated exact art as distinct tools. History must remain
+source-backed and readable: the visual stack cannot apply indiscriminate ruin noise, imply damage or repair that
+did not occur, or substitute cosmetic wear for canonical structural state.
+
+### Material Maker becomes the no-cash procedural-material research lane (Adam, 2026-07-22)
+
+> "oh man, material maker is exactly the tech I was looking for, so go ahead and acquire that, and derive any research you need from the adobe docs because that will be serving us well going forward."
+
+Material Maker 1.7 was acquired as a locally installed, signed universal macOS application outside the Genesis
+repository. It is the preferred no-cash application for learning and prototyping the offline procedural-material
+foundry. Its parameter, randomness/seed, subgraph, PBR export, custom-output, and command-line batch-export
+contracts are relevant to Genesis. Adobe Substance Designer/Painter documentation remains an authorized research
+source for mature graph-instance, exposed-parameter, baked mesh-map, Smart Material, decal, and automation patterns.
+
+Neither application becomes runtime authority or a required player dependency. Material graphs produce admitted,
+versioned visual payloads and metadata; canonical material, culture, history, geometry, and mechanical state remain
+owned by Genesis. A future funded Substance-class lane may replace or complement the authoring tool without
+rewriting those owners.
+
+### Procedural culture identity should precede optional authored culture packs (Adam, 2026-07-22)
+
+> "is there any way to procedurally create a culture's visual identity and store that in play and make sure if that culture is canon to the site that it is visually represented in some way? rather than relying on authorship of culture packs? like we CAN create sprites and materials with culture packs in mind, but if the engine can derive culture procedurally then that is actually more inline with the overall vision of the engine"
+
+Wave 3 must treat an authored culture pack as optional enrichment or a cached compiled product, not the canonical
+source of a culture's appearance. When a fictional culture becomes canon, Genesis should be able to commit a stable,
+seeded, versioned visual constitution derived from its causal world facts and bounded variation. Sites then receive
+typed culture-imprint obligations according to relationship and era—builder, operator/patron, occupant/colony,
+conqueror, repairer, trader/influence, hidden/erased, or another explicit role—so culture is neither omitted nor
+allowed to overwrite unrelated provenance.
+
+The minimum procedural representation must survive missing bespoke art through consistent material/palette,
+geometry/rhythm, motif/trim, repair/maintenance, dressing/symbol, or other declared channels. Exact generated
+sprites, materials, trim sheets, decals, glyphs, clothing, and components may deepen the same constitution. A new
+site changes composition and history; it does not reroll the culture. A later cultural evolution becomes a new
+dated episode whose descendants and older sites retain provenance.
+
+### Spatial attachments resolve through TTRPG action authority, not renderer physics (Adam, 2026-07-22)
+
+> "b is good, just make sure it's not all physics and DC are the determining factors on wether or not that axe holds that rope, but yes that should be a possible action"
+
+Embedding an axe, tying a rope, and using it as an anchor is a legal candidate action. Genesis does not require a
+general rigid-body simulation to decide it. Material, existing condition, angle/depth, leverage, tool suitability,
+rope/load, character capability, declared approach, magic, time, and consequences inform the certified action,
+check/DC when applicable, and outcome profile. The committed receipt then records whether and how the attachment
+holds, its limits, and its failure consequences; physics/rendering consumes that result and never invents success.
+
+### Procedural cultural visual constitution accepted across all ten follow-ups (Adam, 2026-07-22)
+
+> "1. B
+> 2. B
+> 3. B
+> 4. B
+> 5. B
+> 6. B
+> 7. B
+> 8. B
+> 9. B
+> 10. B"
+
+This accepts the complete Wave 3 section 12.7 prototype-to-ideal cultural-visual pipeline. A stable procedural
+visual constitution owns a culture's identity; causal world facts plus bounded rolls create it; several invariants
+make it learnable without a single repeated emblem; typed relationship/epoch/visibility imprints guarantee honest
+site representation; mixed cultures retain chronological layers; bounded procedural glyph/shape grammar precedes
+exact generated art; admitted micro-packs compile and cache as needs arise; player recognition remains
+knowledge-governed; cultural change creates dated episodes rather than rewriting old work; and truthful procedural
+fallback must represent a materially present culture when exact art is missing.
+
+The accepted prototype creates and persists one constitution, then proves the same recognizable culture in one
+builder site and one later-occupied site without cloned composition. The playable MVP expands to several cultures,
+mixed lineage, admitted micro-packs, deterministic remount, and knowledge-safe recognition. The ideal retains
+evolution, schism, diaspora, colonization, trade diffusion, hybrid schools, broad generated expression, automated
+foundry output, player-earned recognition, and funded review.
+
+### One fixed production camera replaces four-yaw gameplay (Adam, 2026-07-22)
+
+> "we don't actually have to have the 4 yaw gameplay, we could design all levels around a fixed camera if that helps us solve geometry, camera, lighting, and prop problems"
+>
+> "2. B"
+
+Genesis uses one stable fixed production yaw, pitch, and projection family rather than four player-selectable
+gameplay yaws or a different chosen yaw for every site. Fixed does not mean frozen framing: governed overview,
+room/exploration, and action/combat focus; pan and zoom; immediate direct input; interruptible refits; safe-
+rectangle response; recentering; and truthful cutaway/ghosting remain. Player rotation is not part of the accepted
+prototype or playable-MVP camera direction.
+
+The provisional visual family remains the accepted gentle low-distortion perspective starting point, with the
+controlled same-state orthographic fallback if capture evidence shows that perspective harms board truth, sprite
+citizenship, picking, lighting/shadow behavior, performance, or accessibility. Exact camera constants remain
+capture-tuned; arbitrary orbit, per-mode projection changes, and per-site camera personalities are not implied.
+
+Procedural composition and noncanonical dressing should be judged through the production view. The camera may
+select among otherwise legal candidates and govern presentation, but it cannot alter canonical topology, routes,
+connectors, line of sight, scale, history, material state, or world orientation where that is meaningful. Required
+information blocked by foreground architecture or props is repaired with governed framing, cutaway/ghosting,
+semantic overlays, or reusable placement/composition rules—not contradictory narration or view-conditioned
+mechanics.
+
+Four-yaw gameplay beauty and acceptance are superseded. Optional nonproduction diagnostic views may still expose
+malformed geometry, false adjacency, or fragile composition, but they do not restore player rotation or require
+production-quality unseen backsides. The fixed camera is intended to concentrate quality in geometry composition,
+lighting, prop orientation, sprite presentation, and a single consistently authored Genesis view.

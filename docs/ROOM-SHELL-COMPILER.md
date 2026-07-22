@@ -6,6 +6,10 @@ the A1/A2 foundation, on Adam's ruling "everything reads as a map that would rol
 cell-prism geometry IS the map-feel; this is its direct fix. Implements the directive §4.1 nine-step
 compiler. Runs after A1 (needs the active-room keep-set); consumes nothing from A3/A4. Grounded.)
 
+> **Wave 4 authority note (2026-07-22):** this renderer/compiler projects an already-committed aperture. It does not
+> decide whether a connection exists, what its endpoints/state/access/knowledge are, or how it mutates. Those
+> semantic decisions belong to `procedural-dungeon-direction/wave-04/01-questionnaire-and-triage.md`.
+
 Read with: `docs/GRAPHICS-NORTH-STAR.md`, `docs/STAGE-A.md`, the directive §4.1, target frames
 `04-gloom-dungeon` (continuous ruin shell) + `12-gloom-octagon` (polygon shell + tiers).
 

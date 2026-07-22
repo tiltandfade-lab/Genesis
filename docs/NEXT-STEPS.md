@@ -18,29 +18,26 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-22 — Wave 10 through bounded town continuity; resume F10.9i-F10.9m)
+## Do next (2026-07-22 — Waves 3-5 closed; Wave 6 open; resume P6.1-P6.10)
 
-Wave 10 remains OPEN. The stable direction index and Wave 10 index now route to the bounded current write target,
-`procedural-dungeon-direction/wave-10/06-party-and-scene-continuity.md`. F10.9g travel and the complete F10.9h
-town-continuity family are closed on their accepted phased bases. No implementation is authorized by this design
-record.
+Wave 10 and Waves 3-5 are CLOSED on their recorded phased bases. Wave 6 is OPEN at section 15.2. No implementation
+or dependency admission is authorized by this design record.
 
-1. ☐ **Ask the five-question F10.9i-F10.9m batch at section 11.95.** Cover certified dungeon boundary traversal,
-   investigation as a view over canonical ids, typed CrisisChain projection requests, parallel pressure ownership,
-   and aftermath exactness/compaction. Explain A/B/C, costs, and prototype/MVP/feature-goal placement; recommend B
-   across all five and let Adam answer the batch.
-2. ☐ Record the ruling and exhaust every material generated P10.9 follow-up. Do not advance merely because the five
-   parent choices are answered; close P10.9 only after an explicit coverage/authority/phasing audit.
-3. ☐ Continue through P10.10 (performance/device/accessibility), P10.11, P10.12, and additive G10.1-G10.2 without
-   skipping or fabricating hidden questionnaire questions. Wave 10 closes only when all original, additive, and
-   generated follow-ups are exhausted and Adam explicitly agrees.
-4. ☐ Preserve the phased implementation order when the design eventually becomes specs: one retained small clay
-   room and the canonical mechanics -> BattleMat + mandatory EngagementLens -> provider-neutral DM-seat/fallback ->
-   persistence/recovery spine first; C1H composition, C1I trim sheet, travel, C2M town, and wider simulation remain
-   separately promoted modules with named proof gates.
-5. ☐ Keep `Reference/FFT Battle Maps/` reference-only and untracked until provenance/production rights are settled.
-6. ☑ **Full clean-close gate ran 2026-07-22:** manifest OK; 223 verifiers, 17 expected dependency skips, 0 real
-   reds; bridge 64/64; table lint 37/37; playtest probes green.
+1. ☐ **Re-present the corrected P6.1-P6.10 batch as easy numbers 1-10.** Explain A/B/C with concrete dungeon and
+   provider-neutral DM-seat examples; separate the no-cash MacBook Pro proof, playable MVP, and ideal feature goal;
+   identify costs; recommend B across all ten; and let Adam answer.
+2. ☐ **Start from the existing sprite corpus.** Genesis already has a roughly 2,000-sprite sized working corpus,
+   registry height provenance across thousands of entries, and live true-scale renderer paths. A small mixed-scale
+   cast is an integration/visual-QA slice, not new art bootstrap or a replacement corpus.
+3. ☐ Record Adam's answers and exhaust every material generated follow-up. Carry settled technical defaults without
+   ceremonially asking Adam for taste he has said he does not have, but surface genuine gameplay/presentation forks.
+4. ☐ Complete P6.11-P6.12/G6.1-G6.2, reconcile the Clay Proof Ladder and Feature-Promotion Ledger, then run the full
+   Wave 6 coverage, authority, contradiction, phasing, and generated-follow-up audit.
+5. ☐ Do not close Wave 6 until Adam explicitly agrees. Keep the global implementation hold active.
+6. ☐ Keep `Reference/FFT Battle Maps/` reference-only and untracked. The local S10 PDF remains indexed but ignored;
+   the tracked R1 Claude synopsis remains supplemental research evidence, not canon merely because it is retained.
+7. ☐ **FULL CI PENDING:** this fast checkpoint uses proportional docs/reference checks only. The final/evening close
+   owns the next complete CI-equivalent sweep, merge, push, and GitHub confirmation.
 
 ## Do next (2026-07-19 later — CI GREEN + Wave 1 landed; resume at open decision 3C)
 

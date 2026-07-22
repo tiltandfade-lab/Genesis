@@ -45,19 +45,72 @@ No build is authorized by this discovery record.
 |---:|---|---|---|
 | 1 | Dungeon Function, History, and Strange Compatibility | **CLOSED** | [Wave 1 index](procedural-dungeon-direction/wave-01/README.md) |
 | 2 | Room Roster, Repetition, Spice, and Dungeon Ecology | **CLOSED** | [Wave 2 index](procedural-dungeon-direction/wave-02/README.md) |
-| 3 | Architecture, Structural Stamps, and Degradation | Unopened | Create when opened |
-| 4 | Portals, Secrets, Vertical Connections, and Circulation | Unopened | Create when opened |
-| 5 | Furniture Assemblies, Dressing, Clutter, and Empty Rooms | Unopened | Create when opened |
-| 6 | Creature Scale, Capacity, Squeezing, and Party Participation | Unopened | Create when opened |
+| 3 | Architecture, Structural Stamps, and Degradation | **CLOSED** | [Wave 3 index](procedural-dungeon-direction/wave-03/README.md) |
+| 4 | Portals, Secrets, Vertical Connections, and Circulation | **CLOSED** | [Wave 4 index](procedural-dungeon-direction/wave-04/README.md) |
+| 5 | Furniture Assemblies, Dressing, Clutter, and Empty Rooms | **CLOSED** | [Wave 5 index](procedural-dungeon-direction/wave-05/README.md) |
+| 6 | Creature Scale, Capacity, Squeezing, and Party Participation | **OPEN — CURRENT** | [Wave 6 index](procedural-dungeon-direction/wave-06/README.md) |
 | 7 | Tactical Affordances and Encounter Reshaping | Unopened | Create when opened |
 | 8 | Mutable and Destructible Environments | Unopened | Create when opened |
 | 9 | DM Strategic Cards and Environmental Authority | Unopened | Create when opened |
-| 10 | Interim Visual Engine and Release Scope | **OPEN — CURRENT** | [Wave 10 index](procedural-dungeon-direction/wave-10/README.md) |
+| 10 | Interim Visual Engine and Release Scope | **CLOSED** | [Wave 10 index](procedural-dungeon-direction/wave-10/README.md) |
 | 11 | Workbench, Clay Corpus, and Teaching Loop | Unopened | Create when opened |
 | 12 | Migration, Persistence, Acceptance Gates, and Build Order | Unopened | Create when opened |
 
 ### Current live position
 
+- Wave 10 closed explicitly on its complete audited phased basis at section 11.132. All future implementation,
+  capture, playtest, accessibility/human-evidence, promotion, and renderer-selection gates remain binding. Wave 3
+  closes explicitly at section 12.15. Its full P3.1-P3.12/G3.1-G3.2 bank, decision-authority triage, Adam's full-bank
+  response, recovered scale/Ganesha evidence, material-variation research, revised ten-question deep dive,
+  accepted dispositions, Material Maker acquisition, and procedural culture-identity follow-up are
+  preserved in the [closed Wave 3 record](procedural-dungeon-direction/wave-03/01-questionnaire-and-triage.md).
+  P3.2/P3.9 close on the accepted procedural culture constitution/site-imprint/material-history pipeline, supported
+  by the locally retained and indexed Müller et al. CGA shape-grammar paper. Section 12.9's bounded current-solver
+  research confirms staged Option B, adds a non-authoritative solver-adapter seam, identifies Edgar/S6's
+  constructive pattern as the closest precedent, and reserves elkjs/Z3/CP-SAT for measured optional roles. Section
+  12.11 retains Claude's broader synopsis as supplemental research input R1, adds qualifying rectangular/orthogonal/
+  irregular floorplanning, six diagnostic hypotheses, and a falsifiable multi-room experiment while correcting
+  overclaims and admitting no tools. Sections 12.12-12.13 accept the amended P3.5/P3.12 Option B pipeline, preserve
+  Wave 2's twelve named golden sites with the later structural dimensions as a coverage overlay, and supersede
+  four-yaw gameplay acceptance with one fixed production camera family plus governed pan/zoom/focus/cutaway. Every
+  top-level Wave 3 family has a phased disposition. Section 12.14 completes the generated-follow-up, authority,
+  contradiction, phasing, and ledger audit with no current gap; section 12.15 records Adam's explicit closure.
+  Wave 4 opened at section 13 with its complete P4.1-P4.12/G4.1-G4.2 bank preserved in the
+  [current Wave 4 record](procedural-dungeon-direction/wave-04/01-questionnaire-and-triage.md). Section 13.1 records
+  Adam's full-bank triage and delegates P4.11/P4.12 technical handling. Sections 13.2-13.3 recover the one-in-six ->
+  one-per-segment -> accepted every-room-opportunity secret lineage, audit the current duplicated half-door model,
+  and establish the Wave 4 record as the single subject authority while preserving older sources as inherited law,
+  implementation evidence, research, or historical proposals. Section 13.4 presents the ten material decisions in
+  an easy-numbered Option A/B/C batch with Option B recommended throughout. Section 13.5 records Adam's acceptance
+  of Option B and its prototype -> MVP -> ideal pipeline across P4.1-P4.10 and G4.1-G4.2. Section 13.6 subtracts
+  already-settled topology, search, attention, knowledge, threshold-glimpse, forced-separation, irreversible-
+  preflight, and technical-schema questions rather than asking them ceremonially. Section 13.7 presents the ten
+  genuinely material generated follow-ups on corridor promotion, gate guarantees, falls, false beliefs, blind
+  portals, crossing order, risk disclosure, mapping, symmetric route control, and progressive secret reveal.
+  Section 13.8 accepts Option B across all ten, amending F4.4a so the retained D&D falling rule owns damage while
+  other causal fall outcomes remain additive. Section 13.9 completes the generated-follow-up, original/additive,
+  authority, contradiction, phasing, and ledger audit; the proposed Wave 4 phasing audit and C2N/C2O proofs preserve
+  narrow prototype/MVP cuts without losing the ideal. No material gap remains. Section 13.10 records Adam's
+  explicit Wave 4 closure. Wave 5 opened at section 14 with its complete P5.1-P5.12/G5.1-G5.2 bank
+  preserved in the [current Wave 5 record](procedural-dungeon-direction/wave-05/01-questionnaire-and-triage.md).
+  Section 14.1 audits the existing deterministic dressing, partial room grammar, stateful interactable, projection-
+  reserve, and separate-occupancy seams. Section 14.2 opens the first easy-numbered ten-question decision batch.
+  Section 14.3 records Adam's answers, recovers the indexed procedural-furnishing research and closed Wave 1/2
+  container/search/custody authority, clarifies subordinate material mutation, and identifies the prototype DM-
+  improvisation collision. Section 14.4 presents four generated material follow-ups on the first golden-site
+  fixture, uncatalogued-room fallback, culture-driven material mutation, and a C-shaped prototype over a retained B
+  mechanical-state seam. Section 14.5 accepts all four, folds culture arrivals into Wave 3's procedural constitution,
+  and defines class-by-class provider-neutral evidence rather than unconditional model trust. Section 14.6 presents
+  the remaining P5.11-P5.12/G5.1-G5.2 four-question batch. Section 14.7 accepts Option B across all four. Section
+  14.8 completes the generated-follow-up, original/additive, authority, contradiction, phasing, and ledger audit;
+  proposed C1J/C1K proofs preserve narrow guard-room and allowlisted-touched-state prototypes without losing the
+  ideal. No current material gap remains. Section 14.9 records Adam's explicit Wave 5 closure. Wave 6 is now
+  **OPEN** at section 15 with its complete P6.1-P6.12/G6.1-G6.2 bank preserved in the
+  [current Wave 6 record](procedural-dungeon-direction/wave-06/01-questionnaire-and-triage.md). Section 15.1 audits
+  inherited true-scale/domain/guise/party laws, explicitly starts from the existing roughly 2,000-sprite sized
+  working corpus, and names the current scalar-domain, squeeze-hand-wave, shared-body-contract, and missing-
+  CastRoster seams. Section 15.2 presents the first easy-numbered ten-question batch; P6.11-P6.12/G6.1-G6.2 remain
+  queued rather than omitted.
 - Adam accepted the cross-wave prototype/MVP delivery reframe on 2026-07-21. The
   [Clay Proof Ladder](procedural-dungeon-direction/CLAY-PROOF-LADDER.md) and
   [Feature-Promotion Ledger](procedural-dungeon-direction/FEATURE-PROMOTION-LEDGER.md) organize revised cuts for
@@ -69,7 +122,7 @@ No build is authorized by this discovery record.
   separately gated Clay Passes.
 - A narrower engineering proof no longer defines the playable MVP. Borderline behavior remains in the MVP with
   narrowed breadth, and the EngagementLens is mandatory because it is the pre-alpha battle system.
-- Wave 10 remains **OPEN**. Adam explicitly closed phased P10.8 at section 11.69, accepted F10.9a Option B's
+- In the now-closed Wave 10 record, Adam explicitly closed phased P10.8 at section 11.69, accepted F10.9a Option B's
   transactional SceneLineage handoff at section 11.70, and accepted F10.9b Option B's provenance-bearing precision
   tiers at section 11.71. Section 11.72 reframed F10.9c around a single player-owned main PC, independently acting
   formation-bound allies/sidekicks, and an approach-bounded deployment zone. Section 11.73 chooses automatic
@@ -111,17 +164,63 @@ No build is authorized by this discovery record.
   segmentation before shader optimization, and a separate composition-after-C1H C1I proof.
   Section 11.93 accepts F10.9h.11-h.15 Option B across the board: certified-lineage pursuits, evidence/witness-
   grounded civic consequences, transport custody/access anchors, clock/condition access gates, and symmetric
-  departure/return. Section 11.94 explicitly closes the full F10.9h family after auditing h.1-h.15. The current
-  batch is **F10.9i-F10.9m** at section 11.95: dungeon traversal, investigation, CrisisChain projection/parallel
-  pressure, and aftermath compaction.
+  departure/return. Section 11.94 explicitly closes the full F10.9h family after auditing h.1-h.15. Sections
+  11.95-11.96 accept F10.9i-F10.9m Option B across the board: one active exact dungeon room over a canonical site
+  lineage, derived evidence views, typed CrisisChain projection, independently owned parallel pressure, and
+  relevance-compacted aftermath. Section 11.98 accepts generated F10.9i.1, j.1, k.1, and m.1 Option B. F10.9l.1 is
+  phased: full owner/precondition arbitration remains the ideal, while an interim is allowed only with real
+  canonical mechanical state rather than prose or provider arbitration. Section 11.100 accepts a bounded
+  deterministic mechanical branch ledger for the MVP and retains full owner-specific fail/replan as the promoted
+  ideal. Section 11.101 closes P10.9 after its coverage/authority/contradiction/phasing/generated-follow-up audit.
+  Section 11.103 accepts F10.10a, b, c, and e Option B with Adam's current Intel MacBook Pro as the prototype target,
+  while F10.10d is amended to keyboard/mouse first and voice close behind. Section 11.104 records the current cloud-
+  testing answer and separates local low-tier truth, a rented GPU beauty oracle, real-device functional proof, and
+  assistive-technology proof. Section 11.106 accepts F10.10a.1-e.1 Option B: Mac low-tier truth, a later cloud
+  oracle, keyboard/mouse MVP followed by voice, editable push-to-talk drafts, and configurable causal-beat
+  accessibility. Section 11.108 accepts F10.10a.2-e.4 Option B, including measured reference tiers and telemetry,
+  player-controlled quality and input/privacy/accessibility settings, exact nonvisual tactics, and an amended
+  anti-pop loading law: a coherent lower tier may stream richer same-truth detail, but tactical truth and acceptable
+  base presentation precede reveal. Section 11.110 accepts F10.10a.3-e.7 Option B: outcome tiers, governed visual
+  refinement/reveal/Auto, identity-safe crowds, explicit focus and voice correction, separated audio channels,
+  usable spatial ordering, and a later human accessibility proof. Adam's current cash ceiling is the existing
+  roughly $200/month Claude/Codex commitment; cloud/device services, voice vendors, compensated research,
+  contractors, and hiring are funding-gated rather than current prototype assumptions. Section 11.112 accepts
+  F10.10a.4-e.10 Option B: a local retained proof and honest capability claims now, with bounded paid tests,
+  accessibility research, fundraising, and hiring triggered by evidence later. Section 11.113 audits every original
+  and generated P10.10 branch, resolves tablet/Mac/accessibility/streaming/resource tensions, maps prototype/MVP/
+  ideal owners, and finds no unmapped or ownerless feature. Section 11.114 records Adam's explicit Option B closure
+  of P10.10. Section 11.115 opens P10.11 with ten numbered binding/generation/cache/fallback/admission/provenance/
+  migration/renderer/distribution questions. Section 11.116 triages them by real decision authority: six strong
+  technical defaults may be carried by Codex, one needs Adam's taste only at retained visual evidence, and three
+  product/evidence choices should stay provisional until their triggers exist. Section 11.117 accepts that split;
+  section 11.118 dispositions every generated technical branch without founder rubber-stamping. Section 11.119
+  audits coverage, contradictions, ownership, prototype/MVP/ideal promotion, and deferred evidence gates; it finds
+  no current material gap and leaves one numbered Option B phased-closure confirmation. Section 11.120 records
+  Adam's explicit P10.11 closure. Section 11.121 opens P10.12 in a new bounded part with ten numbered questions and
+  labels their legitimate decision authority: Codex/evidence defaults, Adam's later retained-capture taste, later
+  funded human evidence, or Adam's final product selection. Section 11.122 accepts that split; section 11.123
+  dispositions every generated evidence-method branch. Section 11.124 audits the original and inherited corpus,
+  all contradictions, future owners, and prototype/MVP/ideal gates; it finds no current material gap and leaves one
+  numbered Option B phased-closure confirmation. Section 11.125 records Adam's explicit Option B closure of
+  P10.12. Section 11.126 reconciles the additive bank and confirms that G10.2 was already closed with P10.7 at
+  section 11.56 rather than still pending. Section 11.127 consolidates G10.1's moving-reference, attachment,
+  split-party, realm-transition, recovery, accessibility, and provider-neutral technical law; section 11.128 finds
+  no current gap and leaves one numbered Option B phased-closure confirmation. Section 11.129 records Adam's
+  explicit G10.1 Option B closure. Section 11.130 audits every prospective/additive question, generated root,
+  contradiction, owner, phase, and preservation obligation with no current gap; it leaves the separate explicit
+  Wave 10 closure confirmation pending. Section 11.131 clarifies that closing promoted Wave 10 would still leave
+  nine master-questionnaire waves: the seven deferred Waves 3-9 plus Waves 11-12.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.
 - F10.8e's automatic consequence-brief lifecycle remains outside the first target and has no automatic later
   entitlement; only BattleMat-plus-DM-seat comprehension evidence may reopen a narrow information-layer question.
-- P10.9 is active and mandatory; F10.9g and F10.9h are closed family slices, while F10.9i-m remain live.
-  Performance/device/accessibility remains P10.10.
-- Wave 10 cannot close until every original, additive, and generated follow-up is exhausted and Adam
-  explicitly agrees.
+- P10.9 is closed on its accepted phased basis at section 11.101. P10.10 is closed on its accepted phased basis at
+  section 11.114. P10.11 is closed on its accepted phased basis at section 11.120. P10.12 is closed on its accepted
+  phased basis at section 11.125. Additive G10.2 remains closed at section 11.56 and G10.1 closes at section 11.129.
+- The section 11.130 final audit finds every Wave 10 original, prospective, additive, and generated follow-up
+  exhausted. Section 11.132 records Adam's explicit Option B closure and advances to Wave 3. Wave 3 later closes at
+  section 12.15; Wave 4 closes explicitly at section 13.10; Wave 5 closes explicitly at section 14.9; Wave 6 is
+  current. Waves 6-9 and 11-12 remain in the master program.
 
 ## Questionnaire preservation
 
@@ -159,7 +258,13 @@ Existing documents may still cite this path plus a legacy section number. Use th
 | 11.34-11.41 | [Wave 10 Part 3](procedural-dungeon-direction/wave-10/03-visual-proof-camera-and-materials.md) |
 | 11.42-11.56 | [Wave 10 Part 4](procedural-dungeon-direction/wave-10/04-attention-interaction-and-history.md) |
 | 11.57-11.75 | [Wave 10 Part 5](procedural-dungeon-direction/wave-10/05-consequence-presentation.md) |
-| 11.76-current | [Wave 10 Part 6](procedural-dungeon-direction/wave-10/06-party-and-scene-continuity.md) |
+| 11.76-11.101 | [Wave 10 Part 6](procedural-dungeon-direction/wave-10/06-party-and-scene-continuity.md) |
+| 11.102-11.120 | [Wave 10 Part 7](procedural-dungeon-direction/wave-10/07-performance-device-accessibility.md) |
+| 11.121-11.132 | [Wave 10 Part 8](procedural-dungeon-direction/wave-10/08-release-tray-evidence-and-additive-guarantees.md) |
+| 12-12.15 | [Wave 3 record](procedural-dungeon-direction/wave-03/01-questionnaire-and-triage.md) |
+| 13-13.10 | [Wave 4 record](procedural-dungeon-direction/wave-04/01-questionnaire-and-triage.md) |
+| 14-14.9 | [Wave 5 record](procedural-dungeon-direction/wave-05/01-questionnaire-and-triage.md) |
+| 15-current | [Wave 6 record](procedural-dungeon-direction/wave-06/01-questionnaire-and-triage.md) |
 
 ## File-growth rule
 

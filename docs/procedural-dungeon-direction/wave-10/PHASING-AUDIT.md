@@ -31,7 +31,7 @@ still awaits explicit phased F10.8g closure in the running record. Terms follow 
 | Durable consequence/recovery seam | Receipt/event ids, terminal state, idempotent recovery, and no mechanical replay after skip/load/crash | Fancy interrupted choreography may wait; duplicated damage and lost custody cannot. |
 | Fictional consequence minimum | Every supported DM-seat model receives exact fact anchors and implemented mechanics/actions; core receipt families have a viewpoint-safe natural-language fallback | The DM rail cannot block forever, change mechanics by provider, or dump `ward spent` when a model fails. |
 | Playable visual floor | Existing usable sprites/lighting/material citizenship is preserved, and the MVP has coherent silhouette, value, elevation, light/shadow, prop, and sprite readability at gameplay scale; missing bespoke assets/effects fall back visibly and truthfully | A debug-looking board may prove data flow but is not an honest playable pre-alpha or the accepted tabletop identity. |
-| Shared battlefield composition floor | One real-roll retained room has coherent elevation masses rather than cell noise, mechanically shared visible connectors, a readable primary route, honest deployment/objective reservations, and four-yaw tactical legibility; BattleMap and TownTray retain one geometry authority | Exact cells alone can still produce a random-looking, strategically empty board, and separate town/battle generators would make same-venue continuity structurally false. |
+| Shared battlefield composition floor | One real-roll retained room has coherent elevation masses rather than cell noise, mechanically shared visible connectors, a readable primary route, honest deployment/objective reservations, and tactically honest fixed-production-view behavior across governed focus/cutaway states; BattleMap and TownTray retain one geometry authority | Exact cells alone can still produce a random-looking, strategically empty board, and separate town/battle generators would make same-venue continuity structurally false. |
 
 ## Proof/MVP scaffold -> feature goal
 
@@ -51,7 +51,7 @@ in the MVP with narrow breadth.
 | EngagementLens breadth | Mandatory selected/active-actor lens on every material combat beat, with target/opponent presence, generic truthful staging for every MVP verb, one complete bespoke combat family, material outcome feedback, and deterministic return to board truth | Full selected-PC active-follow, stable faction sides, broad bespoke combat citizenship, governed animation, and richer transitions | Derived adapter keyed to canonical actors/receipts; no mechanics ownership | Generic staging is readable but additional verbs, crowd states, or transitions need bespoke performance. |
 | Initiative presentation | Plain portrait/text row or compact ordered list | Winner-first faction blocks, smart crops, overflow, reinforcements, allegiance transfer animation | Stable activation entries and deterministic ordering separate from layout | Larger encounters are mechanically correct but hard to scan. |
 | Physical props and materials | Cheap primitives/derived faces and a small prop kit are acceptable only inside the critical playable visual floor; existing working lighting/sprites/features are retained | Routed materials, normals, richer shadows, realm skins, broader props, and the mature hybrid beauty target | Semantic surface/prop role and deterministic asset fallback | Native-resolution captures meet the visual floor and material sameness is now the limiting defect. |
-| Procedural BattleMap/TownTray composition | C1A first exposes stable composition/surface ids and clay diagnostics; C1H then proves one intentional real-roll battlefield with broad elevation masses, typed connectors, primary route, licensed landmark or structural dominant, reservations, negative space, dressed parity, and four-yaw truth; C2M reuses the same compiler for the market venue | A twelve-fixture structural portfolio, richer dungeon/town/wilderness recipes, optional stacked surfaces, and an offline unwrap foundry for reusable complex assets | One `TacticalCompositionPlan`/surface-frame boundary; current world/perimeter UV projection remains valid; layer id reserved at zero | The retained room remains noisy or empty, dressing changes tactics, town requires a fork, new structural families expose missing grammar, or a complex reusable asset actually requires offline unwrap. |
+| Procedural BattleMap/TownTray composition | C1A first exposes stable composition/surface ids and clay diagnostics; C1H then proves one intentional real-roll battlefield with broad elevation masses, typed connectors, primary route, licensed landmark or structural dominant, reservations, negative space, dressed parity, and fixed-production-view truth across governed focus/cutaway states; C2M reuses the same compiler for the market venue | Structural risks distributed across the twelve named golden sites, richer dungeon/town/wilderness recipes, optional stacked surfaces, and an offline unwrap foundry for reusable complex assets | One `TacticalCompositionPlan`/surface-frame boundary; current world/perimeter UV projection remains valid; layer id reserved at zero | The retained room remains noisy or empty, dressing changes tactics, the production view hides critical relations after legal repair, town requires a fork, new structural families expose missing grammar, or a complex reusable asset actually requires offline unwrap. |
 | Architectural trim sheets | C1I follows C1H with one manifest-driven horizontal layout and one architecture-material family: independent source strips pack deterministically; named procedural runs use physical scale, clamped bands, repeat-boundary segmentation, explicit corner/endpoint/occlusion ownership, and geometry/plain fallback; clay tactics remain unchanged; C2M reuses the same authority | Broader material families, physical profile sweeps, roof/beam/frame/bridge/town roles, aligned normal/ORM channels, dedicated junction components, and measured shader/batching optimization | Stable layout/slot/run ids, canonical-material-first selection with secondary realm grade, deterministic provenance/fold reports, and geometry-owned silhouettes | C1I proves the contract; later captures show material sameness or missing silhouettes, town exposes a new role, or P10.10 shows geometry segmentation should promote to a shader. |
 | Camera behavior | Current/gentle view, simple bounded auto-fit for truly offscreen material events, skip/recenter | Governed overview/room/action ladder and player-owned Option B focus leases | Typed focus request and policy adapter; terminal restore target | A-versus-B tests show automatic direction interrupts reading/typing or misses events. |
 | Attention and accumulated-history UI | Store exact events/knowledge; project current truth on BattleMat, consequences in DM prose, and detail through clicked cards | Ambient -> noticed -> relevant -> active -> historical ladder, progressive holder-aware cards, causal remounting | Durable event/discovery ids, viewpoint knowledge, relevance/attention state as data rather than visual ownership | Comprehension tests fail despite truthful board state, prose, and invoked inspection. |
@@ -113,3 +113,91 @@ composition and trim-surface products for its market venue.
 Adam explicitly closed P10.8 on the phased basis at running-record section 11.69. Critical seams and representative
 physical verbs remain first; named presentation goals remain active promotions in the feature ledger. P10.9 is now
 active and mandatory.
+
+## P10.9 closure disposition
+
+Adam accepted the final bounded mechanically stateful CrisisChain MVP phasing at running-record section 11.100.
+Section 11.101 then closed P10.9 on its phased basis after auditing every original mode, authority boundary,
+contradiction, proof/MVP/feature mapping, and generated follow-up. The first connected continuity obligation remains
+the typed SceneLineage C2D handoff; C2A-C2C, C2G-C2M, and C4C add retained bounded traces rather than one universal
+world simulation. Full owner-specific crisis fail/replan, richer cross-mode presentation, broader investigation,
+and deeper simulation remain promoted goals with named triggers. P10.10 is now active and mandatory; this closure
+does not close Wave 10 or authorize a build.
+
+## P10.10 closure disposition
+
+At running-record section 11.103 Adam accepted measured semantic-invariant quality tiers, the 60-preferred/30-floor
+law, presentation-before-semantics degradation, and bounded accessibility equivalence. His current Intel MacBook
+Pro is the prototype target rather than the high-beauty ceiling or an automatically declared release minimum.
+Keyboard/mouse comes first and voice is a close next priority; controller/touch/tablet release timing remains live.
+Section 11.104 maps local Mac low-tier proof, rented GPU high-tier evidence, real-device functional checks, and
+assistive-technology checks without treating any one service as all-device truth. Section 11.106 accepts the Mac
+low-tier floor, defers the cloud lane until the connected local proof earns it, puts keyboard/mouse in the playable
+MVP and voice next, chooses editable push-to-talk drafts, and requires configurable causal-beat accessibility.
+Section 11.108 accepts measured hardware/frame evidence, player-controlled tier/memory/input/privacy/accessibility
+policy, and exact nonvisual spatial access. Its anti-pop amendment allows ordinary mip/visual LOD streaming only
+after a coherent lower-tier scene with exact tactical truth is ready; noticeable upgrades wait for a safe boundary
+or stay deferred. Section 11.110 accepts outcome tiers, governed reveal/refinement/Auto, identity-safe crowds,
+focus/voice/audio arbitration, spatial ordering, and the eventual need for human accessibility evidence. It also
+records the current roughly $200/month Claude/Codex spend as the cash ceiling: the local Mac, retained fixtures,
+built-in VoiceOver, and cost-free automation form the present proof; paid hardware, voice vendors, compensated
+research, contractors, and hiring require a later evidence-linked funding gate. Section 11.112 accepts the entire
+F10.10a.4-e.10 resource batch Option B. The explicit section 11.113 audit finds every original and generated branch
+answered, resolves the tablet/touch, Mac/reference, accessibility/validation, streaming/pop, and ideal/current-cash
+boundaries, and maps retained proof to C1A/D/F/G/H/I and C2M while assigning asset/cache mechanics to P10.11 and the
+same-state release bakeoff/claims to P10.12. No unmapped row or ownerless feature remains. P10.10 awaits Adam's one
+numbered Option B closure confirmation. Adam accepted that confirmation at section 11.114. P10.10 is closed on this
+phased basis; no build or Wave 10 closure is implied.
+
+## P10.11 closure disposition
+
+Section 11.115 opens ten questions over stable semantic visual slots, deterministic admitted resolution, optional
+nonblocking exact-art enrichment, shipped/local/save ownership, offline/corrupt fallback, asset admission,
+provenance/licensing, migrations, old-renderer retirement, and shipped-versus-local distribution. Section 11.116
+then prevents unnecessary founder rubber-stamping: F10.11a, b, d, e, g, and h have strong technical Option B
+defaults Codex can carry; F10.11f needs Adam's taste on actual retained captures rather than schema; F10.11c, i, and
+j keep safe Option B policies until a real enrichment flow, P10.12 bakeoff, or distribution/economics evidence
+exists. Adam accepts that authority split at section 11.117. Section 11.118 resolves the generated compatibility,
+safe-rebind, cache pin/evict/cleanup, import/export, generation-consent, rights-state, appearance-pin, retirement-
+evidence, and zero-cash branches. The explicit section 11.119 audit finds no current technical gap, contradiction,
+unmapped lifecycle concern, or ownerless goal; deferred taste/product choices keep named triggers. P10.11 awaits
+Adam's one numbered Option B closure confirmation. Adam accepts it at section 11.120. P10.11 is closed on this
+phased basis; its later taste/product gates remain live promotions rather than missing decisions.
+
+## P10.12 closure disposition
+
+Section 11.121 opens the release-tray bakeoff with explicit decision-authority labels. The accepted full destination
+remains twelve golden sites, eight adversarial transitions, deterministic/property/human layers, and the twenty VQ
+frames as visual relationship targets. The first proof remains one small retained dungeon slice. F10.12a-d, g, and
+h carry Codex/evidence defaults; F10.12e returns to Adam only on real gameplay-scale captures; F10.12f and i require
+later funded human evidence appropriate to the claim; and F10.12j reserves final release selection for Adam after
+hard gates and representative tradeoffs exist. Adam accepts that split at section 11.122. Section 11.123 resolves
+fixture/candidate admission, veto, matched/best-legal capture, provider-control, milestone-sufficiency, systemic
+visual-iteration, human-claim, and selection-record branches. The explicit section 11.124 audit finds no current
+evidence-method gap, contradiction, unmapped inherited case, or ownerless goal; future capture/hardware/human/final-
+selection outcomes remain correctly evidence-gated. At section 11.124 P10.12 awaited one numbered Option B closure
+confirmation; Adam accepts it at section 11.125. P10.12 is closed on this phased basis;
+future capture, human-evidence, taste, and final-selection gates remain live promotions rather than completed work.
+
+## Additive G10.1-G10.2 disposition
+
+Section 11.126 corrects the stale grouped-open wording: G10.2 was already fully audited and explicitly closed with
+P10.7 at section 11.56, then re-audited without contradiction during P10.8. It is not reopened. Sections 11.127-
+11.128 consolidate G10.1 as a dynamic-citizen truth invariant rather than an entitlement to speculative mechanics.
+The first proof is one moving dungeon lift/passenger/item catastrophe on Adam's Mac; the playable MVP retains exact
+receipt-driven mount/update/drop/crash/remount/rebuild across BattleMat, EngagementLens, aftermath, recovery,
+accessibility/low tier, and provider-neutral DM narration. Bounded nested transports, transactional split-party
+lineages, and cross-realm transitions remain feature goals activated only by real owning mechanics and retained
+adversarial traces. Canonical versus renderer parentage, relation typing, cycles, precision downgrade, offscreen
+ownership, missing art, and proof growth are technically dispositioned. At section 11.128 G10.1 awaited one
+numbered Option B phased-closure confirmation; Adam accepts it at section 11.129. G10.1 is closed on this phased
+basis; all later promotion and retained-proof gates remain binding.
+
+## Final Wave 10 audit disposition
+
+Section 11.130 rechecks P10.0-P10.12, G10.1-G10.2, all generated follow-up roots and later families, composition/
+trim tangents, contradictions, proof/MVP/ideal ownership, preservation, and the Feature-Promotion Ledger. It finds
+no unanswered current question, undispositioned material follow-up, unresolved contradiction, unmapped decision
+family, or ownerless accepted feature goal. Implementation and evidence states remain unaudited. Section 11.131
+clarifies the larger sequence; section 11.132 records Adam's explicit Option B whole-wave closure and advances to
+Wave 3. All prototype/MVP/ideal promotion and evidence gates in this audit remain binding after closure.

@@ -3,6 +3,11 @@
 type: system-spec
 status: BUILT (U1-U4 + real-dungeon finale gate landed 2026-07-10; the original authorized build order was U1→U2→(U3∥U4). Later procedural-redesign waves may amend the generator's semantic/table inputs without erasing this spatial foundation. Squeeze remains geometry + a roll/DM hand-wave with no sprite; static figurines stand, while turn-based mechanical repositioning remains desired in-scene.)
 
+> **Wave 4 authority note (2026-07-22):** this is the built spatial-foundation record and current-engine evidence.
+> Its historical connection-point wording does not own the future semantic endpoint, secret, vertical, circulation,
+> or mutation contract; that authority lives in
+> `procedural-dungeon-direction/wave-04/01-questionnaire-and-triage.md`.
+
 ## Verified anchors (orchestrator, 2026-07-10 PM — current tree)
 
 - `src/engine/dungeon-walk.js:16` `DUNGEON_TOPOLOGIES` · `:477` `rollDungeonWalk`

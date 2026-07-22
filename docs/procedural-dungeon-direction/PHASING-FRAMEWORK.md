@@ -131,6 +131,7 @@ must name the unresolved phasing question.
 
 - [Wave 1 phasing audit](wave-01/PHASING-AUDIT.md)
 - [Wave 2 phasing audit](wave-02/PHASING-AUDIT.md)
+- [Wave 3 phasing audit](wave-03/PHASING-AUDIT.md)
 - [Wave 10 phasing audit](wave-10/PHASING-AUDIT.md)
 
 These audits classify decision families rather than rewriting every historical answer. The chronological wave

@@ -108,7 +108,10 @@ It does not require site simulation or a complete dungeon.
 portal through exact preview-versus-commit receipts?
 
 This pass proves exact cells, route agency, labels, portal use, and the preview-versus-commit boundary without also
-making object interaction or combat part of its primary gate.
+making object interaction or combat part of its primary gate. Wave 4 now requires this narrow portal to have one
+canonical connection id/version and shared endpoint/state owner; per-room exits, apertures, cards, map marks, and
+DM-seat facts are projections. C1B does not need the mature Connection family, but it may not prove movement through
+two independently rolled half-doors or provider narration.
 
 ### C1C - object, hazard, and custody
 
@@ -158,7 +161,8 @@ authority or assume Gemini is the shipping boundary.
 
 **Primary question:** can one real rolled room become a tactically and visually intentional battlefield—coherent
 elevation masses, typed visible connectors, a readable primary spine, a licensed landmark or dominant structural
-mass, honest deployment/objective space, shaped negative space, and tactically truthful four-yaw composition—without
+mass, honest deployment/objective space, shaped negative space, and tactically truthful fixed-production-view
+composition across governed focus/cutaway states—without
 copying an authored map, moving mechanics into the renderer, or losing source provenance?
 
 C1A first establishes stable composition and surface ids plus a greybox diagnostic view over the existing room.
@@ -166,6 +170,10 @@ C1H then introduces the smallest bounded `TacticalCompositionPlan` candidate/val
 improve that retained fixture. The dressed capture must preserve the clay plan's exact routes, connectors,
 reservations, and ids. The exact-cell BattleMap and mandatory EngagementLens remain the battle system; map quality
 does not become an excuse to postpone playable combat.
+
+Wave 3 section 12.13 supersedes the earlier four-player-yaw acceptance assumption. C1H uses one fixed production
+camera family with governed pan/zoom/focus and cutaway/ghosting. Optional nonproduction yaw diagnostics may expose
+geometry defects, but player rotation and equal multi-yaw beauty are not proof obligations.
 
 This is the high-priority first rung of the shared BattleMap/TownTray module defined in
 `../BATTLEMAP-TOWNTRAY-COMPOSITION.md`. C2M must later consume the same region, route, connector, reservation,
@@ -176,8 +184,8 @@ surfaces are not C1H prerequisites.
 
 **Primary question:** can one deterministic manifest-driven horizontal trim sheet route distinct base-course,
 cornice, cap/nosing, and curb/retaining roles across the real C1H procedural geometry at correct physical scale,
-repeat phase, corners, endpoints, occlusion ownership, and four-yaw readability—with a geometry-only fallback,
-unchanged tactics, and no unique per-map texture?
+repeat phase, corners, endpoints, occlusion ownership, and fixed-production-view readability across governed focus/
+cutaway states—with a geometry-only fallback, unchanged tactics, and no unique per-map texture?
 
 Use one material family and one stable semantic layout. Prove a diagnostic sheet before beauty art; generate or
 author source strips independently and pack them deterministically with provenance; let architecture material or a
@@ -189,6 +197,47 @@ C1I does not require the full architecture-material roster, physical profile-swe
 families, normal/ORM channels, dedicated junction art, a custom atlas-repeat shader, general automatic unwrap, or
 new tactical mechanics. Those remain named feature promotions in `../TRIM-SHEET-PIPELINE.md`. C2M reuses C1I's
 layout, run, material, fallback, and provenance contract rather than creating a town-only trim system.
+
+### C1J - one functional guard-room furnishing assembly
+
+**Primary question:** can the retained C1H clay geometry become one functioning small externally supplied guard-post
+room through a canonical furniture assembly—rather than a bag of attractive props—while preserving portals,
+circulation, tactical truth, culture/material identity, deterministic fallback, and provider-neutral DM facts?
+
+The clay shell, elevations, portal, reservations, and circulation commit before furniture. One bounded `RoomProgram`
+then requires a guard-workstation/observation function plus only the rest, storage, light, or supply support the
+selected room actually licenses. Required and optional roles, footprints, support sockets, orientation, access
+faces, working clearances, focal/circulation relations, and lawful substitutions/degradation remain explicit.
+Function, occupant/history evidence, tactical affordances, and optional visual dressing are separately reported.
+
+Use the simplest honest realization for each admitted prop: a full 3D object when silhouette/interaction/occlusion
+requires it, a shallow sprite extrusion for a surface-attached or strongly planar noun, and usually a primitive
+assembly with a solid/procedural admitted material. The Wave 3 culture constitution and site imprint select indexed
+material/palette/motif arrivals; visual assets never create the noun. Force at least one exact asset and one lawful
+fallback through the same semantic slot. Include one exact container/holding allocation and one aggregate search
+surface under the inherited Wave 1/2 laws. Capture clay/furnished and normal/fallback states at gameplay scale on
+the target MacBook Pro and expose the same obligations, degradations, and state to the DM seat.
+
+C1J does not build the full guard post, every common-room recipe, all twelve sites, mature clutter, broad prop art,
+or universal furniture layout solving. The retained fixture earns only the recipe/micro-assemblies and realization
+tiers it actually exercises.
+
+### C1K - allowlisted dressing assertion and touched state
+
+**Primary question:** can the provider-neutral DM seat propose one ordinary allowlisted guard-room detail, have it
+atomically accepted or rejected before establishment, commit minimum mechanical state, support one real use or
+mutation, and rebuild the same result without provider prose becoming a second world-state owner?
+
+Use a tiny fixture-specific allowlist such as stool, rag, cup, loose paper, or mundane tool. Retain one accepted
+proposal, one forbidden or spatially invalid proposal, one synonym/retry that cannot refill the opportunity, and one
+touched-state trace such as moved, wet, exhausted, embedded, or blocked. The accepted assertion stores stable id,
+class, quantity band, location/support, material/condition, ownership/access, observer knowledge, state, provenance,
+and promotion tier. Pickup, use, mutation, custody, visual projection, DM/fallback narration, save/load, and revisit
+must agree. Rejection must produce honest forward-only fiction without narrating success.
+
+C1K does not implement the ideal contextual latent-reserve system, broad material reactions, general physics,
+unbounded AI invention, or universal environmental actions. Passing one class may justify the next bounded class;
+it never grants a provider unconditional authority over canon.
 
 ## Stage 2 - multi-room causality and first mode handoff
 
@@ -205,6 +254,12 @@ portal and return without reset or duplication?
 This is the first exact portal/circulation and cross-room continuity proof. It supplies connection and return-state
 evidence to the richer map/town/exploration/combat mode-continuity contract owned by P10.9, but it does not replace
 the adapter-handoff proof below.
+
+P3.5's graph-realization experiment follows rather than inflates this first seam. After the two-room connection is
+real, a retained C2-era workbench fixture may freeze a small multi-room graph containing a loop, secret edge,
+vertical connector, and dead end. It compares bounded deterministic candidates, input-edge-to-connector
+traceability, rejected/unsatisfied evidence, and remount replay. It is an evidence fixture, not permission to make
+the first continuity pass an eight-room engine batch or to admit a solver dependency automatically.
 
 ### C2B - promise and payoff
 
@@ -383,6 +438,33 @@ when transport is present, one clock/condition-gated venue access case, and the 
 TravelWalk departure. Only the active venue is exact; the chase handoff, civic consequence, transport anchor,
 schedule gate, compaction, departure, and return must preserve one lineage without requiring a general city chase,
 crime meter, stable ecology, exact resident schedules, or continuously live town.
+
+### C2N - vertical and dangerous traversal transaction
+
+**Primary question:** can one two-level canonical connection resolve a materially risky group traversal—including
+editable crossing order, one fall, hanging/rescue eligibility, custody/displacement, partial completion, qualitative
+known stakes, interruption, save/load, and exact remount—without flattening elevation, inventing physics, or losing
+an actor/object?
+
+Use the retained D&D falling rule for numeric damage: 1d6 Bludgeoning per 10 feet, maximum 20d6, with the applicable
+Prone and liquid rules. Noise, dropped custody, lower-level displacement, hanging, pursuit position, separation, and
+rescue are separately licensed outcomes rather than damage substitutions. The proof may use a stair/ladder/shaft or
+one-person rope crossing; it need not implement broad flight, complex collapse, vehicles, every body scale, or
+independently advancing split-party branches. Persistent forced separation consumes C2G's exact self-inert cold
+record.
+
+### C2O - secret connection and epistemic map
+
+**Primary question:** can one precommitted hidden connection pass through tell -> located mechanism -> opened
+aperture -> viewpoint-true threshold evidence -> traversed/mapped endpoint while one caused false belief is fairly
+corrected, automatic mapping records only observed topology, and every player/DM/fallback/save projection avoids
+secret leakage?
+
+This pass extends C2B's one promise/payoff into the smallest bounded Secret Network. Room opportunities may supply
+the tell, corroboration, contradiction, or payoff without minting one independent secret per room. It exercises a
+stable secret/discovery id, graph-bound homes, clue/payload references, viewpoint holder/belief state, progressive
+reveal, honest map precision, and one optional annotation that remains a player claim rather than world truth. Broad
+faction maps, planted disinformation, campaign-scale chains, and many secret families remain promotions.
 
 ## Stage 3 - small operating site simulation
 

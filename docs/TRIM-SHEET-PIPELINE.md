@@ -362,8 +362,9 @@ single ornate band to fill arbitrary geometry would make motifs huge on curbs an
 The debug sheet and capture gate must show scale at:
 
 - one grid cell;
-- the expected gameplay camera;
-- the four supported yaws; and
+- the fixed production camera across representative governed focus/cutaway states;
+- an optional nonproduction diagnostic yaw only when it exposes a seam or malformed backside relevant to the
+  reusable geometry; and
 - at least two run lengths that are not exact multiples of the repeat.
 
 ## 7. Corners, endpoints, apertures, and branches
@@ -445,8 +446,11 @@ Add a separate retained pass immediately after C1H if Adam accepts the recommend
 
 **Primary question:** can one deterministic manifest-driven horizontal trim sheet route distinct base-course,
 cornice, cap/nosing, and curb/retaining roles across the real C1H procedural geometry at correct scale, repeat phase,
-corners, endpoints, occlusion ownership, and four-yaw readability—with a geometry-only fallback, unchanged tactics,
-and no unique per-map texture?
+corners, endpoints, occlusion ownership, and fixed-production-view readability across governed focus/cutaway states—
+with a geometry-only fallback, unchanged tactics, and no unique per-map texture?
+
+Wave 3 section 12.13 supersedes the earlier four-player-yaw acceptance assumption. Optional nonproduction yaws may
+remain geometry/fragility diagnostics, but C1I does not owe equal multi-yaw beauty or player rotation.
 
 The first pass uses:
 
@@ -602,7 +606,8 @@ Adam accepts all five recommended Option B choices:
 
 The accepted pre-alpha trim obligation is therefore narrow but real: one material family, one stable layout, a
 diagnostic sheet before beauty art, base color first, named roles on real procedural runs, correct scale/repeat/
-corner/endpoint/occlusion behavior, geometry-only fallback, four-yaw visual proof, and unchanged tactical truth.
+corner/endpoint/occlusion behavior, geometry-only fallback, fixed-production-view proof across governed focus/
+cutaway states, and unchanged tactical truth.
 
 The feature goal remains a broader architecture-material library, physical profile sweeps, expanded roof/beam/
 frame/bridge/town roles, aligned material channels, dedicated caps/corners/junctions, and measured shader/batching

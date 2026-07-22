@@ -36,7 +36,7 @@ The accepted direction is:
 
 1. **FFT-grade structural composition is a high-priority engine target.** “FFT-grade” means finite, legible,
    tactically expressive boards with coherent elevation masses, strong landmarks, meaningful approaches, shaped
-   negative space, and readable four-view composition. It does not mean copying an FFT map, asset, texture, code
+   negative space, and readable fixed-production-view composition. It does not mean copying an FFT map, asset, texture, code
    path, or exact arrangement.
 2. **BattleMap and TownTray share one composition compiler.** A market, courtyard, tavern, wilderness pocket, and
    dungeon chamber should not be five unrelated scene systems. They are recipes over one grid/surface, route,
@@ -49,6 +49,13 @@ The accepted direction is:
 5. **The UV premise is corrected below.** Genesis has production procedural UV projection for generated room
    architecture; it does not have a production general-purpose automatic UV unwrapper. General offline unwrap
    remains useful for reusable complex assets but should not become a runtime dependency for generated boards.
+
+**Later fixed-camera amendment, 2026-07-22:** Wave 3 section 12.13 supersedes this study's original four-player-yaw
+acceptance assumption. Genesis now targets one stable production yaw/pitch/projection family with governed pan,
+zoom, focus, recenter, and cutaway/ghosting; player rotation is not a prototype/playable-MVP requirement. Earlier
+four-view language below records the research path and is interpreted by the updated production-view gates. Optional
+nonproduction yaws may diagnose malformed geometry or fragile composition, but do not require equal beauty,
+production-quality unseen backsides, or player access.
 
 ## 2. What “near the FFT standard” means for Genesis
 
@@ -65,7 +72,7 @@ mechanics, rolls, art direction, and procedural constraints:
 - void, water, cliff, wall, building mass, and deliberately open floor shape meaningful negative space;
 - deployment, contact, objective, and retreat space are composed with the terrain rather than scattered afterward;
 - props reinforce the architecture and routes instead of carrying the whole composition;
-- the map remains tactically honest from all four supported diagonal camera yaws; and
+- the map remains tactically honest through the fixed production view and its governed focus/cutaway states; and
 - the same map can exist first as clay, then as a dressed Genesis board, without changing mechanics.
 
 This is a **structural** bar. Pixel citizens, Genesis materials, dynamic light, the shared shell, and the
@@ -387,11 +394,13 @@ source and composition provenance
 The frame is the bridge between procedural geometry and generated art. It tells the engine which projection a
 panel or decal needs, which way grain runs, where a trim strip repeats, and how an interaction face mounts.
 
-### Pass 8 - four-view composition and occlusion validation
+### Pass 8 - fixed-production-view composition and occlusion validation
 
-Capture and evaluate the four supported diagonal yaws at gameplay scale. Protect critical actor, objective,
-connector, route, and landmark visibility. Dynamic cutaway may repair foreground obstruction, but it may not erase
-so much architecture that elevation and negative space stop reading.
+Capture and evaluate the fixed production view at gameplay scale across governed overview, room/exploration, and
+action/combat focus plus representative cutaway/ghosting states. Protect critical actor, objective, connector,
+route, and landmark visibility. Dynamic cutaway may repair foreground obstruction, but it may not erase so much
+architecture that elevation and negative space stop reading. Optional nonproduction yaw diagnostics may expose
+malformed backsides, false adjacency, or candidate fragility without becoming player-facing beauty gates.
 
 ### Pass 9 - deterministic relaxation and fallback
 
@@ -534,7 +543,7 @@ Candidate selection may score:
 - cover density by region rather than global average;
 - deployment exposure and access to counterplay;
 - objective approach variety;
-- four-view visibility of actors, routes, connectors, and landmark;
+- production-view visibility of actors, routes, connectors, and landmark across governed focus/cutaway states;
 - value/light composition hooks; and
 - sparse, architecture-led dressing.
 
@@ -556,7 +565,7 @@ The clay/debug view should be able to show, without changing the scene:
 - blockers, cover, and line-of-sight summaries;
 - source references on every committed element;
 - constraint failures and the exact relaxation ladder used; and
-- four-yaw occlusion/visibility failures.
+- fixed-production-view occlusion/visibility failures by governed focus/cutaway state.
 
 ### 10.2 Acceptance ladder
 
@@ -565,19 +574,24 @@ The clay/debug view should be able to show, without changing the scene:
    drift.
 3. **One composed clay battlefield:** use a real Genesis roll to produce broad elevation masses, one primary spine,
    at least one typed connector, one licensed landmark/structural dominant, honest deployment/objective space, and
-   four-view readable clay captures.
+   production-view-readable clay captures across the governed focus/cutaway states.
 4. **Dressed parity:** apply material and sprite/component families; mechanics, routes, reservations, and provenance
    remain byte-equivalent.
 5. **Battle continuity:** exploration -> exact BattleMap plus EngagementLens -> damaged aftermath uses the same
    surfaces and ids.
 6. **TownTray reuse:** the C2M market fixture uses the same compiler and promotes the same venue into battle.
-7. **Structural portfolio:** accumulate twelve contrasting real-roll fixtures one at a time. They test archetypes,
-   not recreations of twelve FFT maps.
+7. **Structural portfolio:** distribute the structural risks below across the accepted Wave 2 twelve named golden
+   sites as real rolls license, accumulating retained fixtures one at a time. They are not recreations of twelve
+   FFT maps and the structural list does not replace the product/system corpus.
 8. **Multi-room and relational growth:** only after the earlier fixtures remain green.
 
-### 10.3 Suggested twelve-fixture dimensions
+### 10.3 Suggested twelve structural coverage dimensions
 
-The eventual corpus should cover distinct structural problems such as:
+These are twelve **structural coverage dimensions**, not twelve replacement golden sites. The product/system corpus
+remains Wave 2's named guard-post, camp/service, dormant-place, commune, mine/workshop, prison/institution, natural-
+lair, layered-control, contested-fortress, urban-institution, mixed-scale/dragon-domain, and anomalous/living/mobile
+site roster plus its eight adversarial traces. The eventual corpus should distribute distinct structural problems
+such as:
 
 - stepped courtyard;
 - basin and rim;
@@ -592,8 +606,8 @@ The eventual corpus should cover distinct structural problems such as:
 - market plaza with functional stalls/building mass; and
 - tight interior whose valid result is intentionally simple.
 
-These are coverage dimensions. Each fixture originates in Genesis rolls and records why its selected composition is
-legal.
+Each retained fixture originates in Genesis rolls and records why its selected composition is legal. One golden
+site may cover several structural dimensions, and no one-to-one pairing is frozen in advance.
 
 ## 11. Prototype-to-feature implementation ladder
 
@@ -615,7 +629,7 @@ Add a dedicated Stage-1 pass after the connected C1A-D battle spine and before b
 
 **Primary question:** can one real rolled room become a tactically and visually intentional battlefield—coherent
 elevation masses, typed connectors, a readable primary spine, licensed landmark or dominant structural mass,
-honest deployment/objective space, shaped negative space, and four-view legibility—without authored-map copying,
+honest deployment/objective space, shaped negative space, and fixed-production-view legibility—without authored-map copying,
 renderer-owned mechanics, or lost provenance?
 
 C1H is the first meaningful composition-quality gate. It consumes the exact-cell BattleMap and mandatory

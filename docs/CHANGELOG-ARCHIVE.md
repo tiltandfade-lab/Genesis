@@ -14,6 +14,30 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-09 (night) — Doc auto-archive rule + CI/token-discipline session close
+
+**Added**
+- `build/archive-docs.py` — rolls old entries out of the living docs into read-only archives.
+  **The rule (Adam's ruling):** `CHANGELOG.md` keeps the newest **25** entries (older →
+  `CHANGELOG-ARCHIVE.md`, newest-first order continuous across the two files); `NEXT-STEPS.md`
+  keeps at most **4** dated `## Do next` blocks (older → `NEXT-STEPS-ARCHIVE.md`; standing plan
+  sections never auto-archive; undated blocks left alone). Modes: dry-run (no args) / `--emit` /
+  `--check` (exit 1 when over cap — run it at session close). First roll: 77 entries
+  (2026-06-21 → 2026-07-04) archived, CHANGELOG 284 KB → ~84 KB.
+- `docs/CHANGELOG-ARCHIVE.md` — the overflow archive (registered in `docs/README.md`).
+
+**Changed**
+- CLAUDE.md: commands table + token-discipline section carry the archive rule; preambles of
+  CHANGELOG/NEXT-STEPS state their caps.
+
+**Context (same session, landed earlier as ac3f450 + 4611ee8)**
+- CI red wave greened: Math.random grep-gate comment false-positives reworded; `dm-contract.json`
+  regenerated (animal-social field drift); digest-diet 12 KB size guard de-flaked to a
+  median-of-5-seeds measurement (no real digest bloat — the seeded fixture had re-rolled onto a
+  fatter random scene). `verify-regions.mjs` fixtures seeded (byte-identical runs) after a
+  1-in-430 unreproducible sweep failure — future reds replay exactly.
+- Token discipline: `.claude/settings.json` deny-list blocks Read on multi-MB generated artifacts
+  (`tables.js` ≈ 2M tokens per Read was the 2M-token-session culprit); CLAUDE.md section added.
 ## 2026-07-09 (later) — Realm-key expansion (+168 creatures) · SPRITE-TRANSITION T1–T4 · item sheets
 
 **Added**

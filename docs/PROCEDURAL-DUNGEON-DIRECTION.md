@@ -29,8 +29,10 @@ verbatim; it did not consolidate or rewrite prior rulings.
    passes from one room through multi-room, site simulation, relational simulation, and the golden portfolio.
 5. [Feature-Promotion Ledger](procedural-dungeon-direction/FEATURE-PROMOTION-LEDGER.md) — traceability
    from accepted MVP obligations to first proof, integrated gate, ideal goal, and promotion evidence.
-6. The relevant wave index below.
-7. For live work, only the current part named by that wave index.
+6. [BattleMap / TownTray Procedural Composition](BATTLEMAP-TOWNTRAY-COMPOSITION.md) — the accepted
+   high-priority shared composition direction, current-engine/UV audit, C1H proof, surface-frame contract, and costs.
+7. The relevant wave index below.
+8. For live work, only the current part named by that wave index.
 
 The global [implementation hold](procedural-dungeon-direction/IMPLEMENTATION-HOLD.md) remains active.
 No build is authorized by this discovery record.
@@ -97,8 +99,10 @@ No build is authorized by this discovery record.
   real-roll urban grids, same-venue BattleMat/aftermath continuity, bounded offscreen receipts, and short Urban Walk
   transitions form the C2M post-core town module. Section 11.87 accepts h.6-h.10 Option B: exact journey arrival,
   material-citizen promotion, semantic remount, dormant companion-autonomy hooks, and one integrated market-to-
-  battle-to-return fixture. Section 11.89 records the non-binding FFT battle-map/GaneshaDx composition research
-  tangent without changing the questionnaire. The final town-continuity audit remains
+  battle-to-return fixture. Section 11.89 records the FFT battle-map/GaneshaDx research tangent; section 11.90
+  promotes its structural composition findings into a high-priority shared BattleMap/TownTray direction, maps the
+  first quality proof to C1H, and corrects the assumption that general automatic UV unwrap is already installed.
+  The final town-continuity audit remains
   **F10.9h.11-F10.9h.15** at section 11.88.
 - Automatic Option A focus remains the starting scaffold and player-owned Option B remains the later target, but
   elaborate direction does not precede proof that actual physical events render truthfully on the BattleMat.

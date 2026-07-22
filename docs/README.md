@@ -28,6 +28,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | Realm identity / style / touchstone | `REALM-HOOKS.md` (current, re-keyed) — `data/realms.js` is the older baseline |
 | Creature stats, names, per-realm rosters | `data/bestiary.js` (SRD/global) · `dev/model-qa/realm-bestiary-draft.json` (per-realm, compiled from `REALM-BESTIARY-DRAFT.md`) |
 | 3D model / render style rules (silhouette, value, pose) | `MODEL-FOUNDRY.md` (the 6 laws) |
+| Shared procedural battlefield and town-tray composition | `BATTLEMAP-TOWNTRAY-COMPOSITION.md` (high-priority accepted direction; implementation unauthorized) |
 | Table architecture (markdown source → compiled JSON) | `Two tracks run in parallel` section below + `compile-tables.py` |
 | Module list / what owns what symbol | `manifest.json` (repo root) |
 | Historical "what happened" / past sessions | `CHANGELOG.md` (newest first; older entries in `CHANGELOG-ARCHIVE.md`) |
@@ -147,6 +148,7 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 - `PROCEDURAL-DUNGEON-DIRECTION.md` — the current discovery authority for rebuilding architectural
   and dressing rolls around a tile/slot room compiler; records accepted direction, unresolved forks,
   and the strict question-wave closure protocol. No implementation is authorized by this document.
+- `BATTLEMAP-TOWNTRAY-COMPOSITION.md` (`type: design-study`) — accepted high-priority shared BattleMap/TownTray direction: current spatial/UV audit, `TacticalCompositionPlan`, region/connector/route/reservation passes, compact surface-frame art contract, C1H clay proof, corpus ladder, costs, and open specification decisions. No build authorization. (2026-07-22)
 - `PROCEDURAL-DUNGEON-RESEARCH.md` — deep technical synthesis of procedural room layout, furnishing,
   playability constraints, and solver architecture, with direct implications for Genesis.
 - `PROCEDURAL-DUNGEON-ENGINE-CROSSWALK.md` — audited map from the research model to the current

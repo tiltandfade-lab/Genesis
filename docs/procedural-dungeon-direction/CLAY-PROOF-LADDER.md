@@ -67,6 +67,10 @@ that authority.
     Travel, camp, route branching, macro-world, transport, town, and deeper simulation grow as separately gated
     vertical modules over that spine. DM-seat prose may bridge missing breadth but cannot masquerade as committed
     mechanics or a second state owner; Gemini is one proving provider, not the product boundary.
+12. **Compose BattleMap and TownTray through one spatial product.** C1A establishes stable composition/surface ids
+    and diagnostics over the small room; C1H proves the first intentional real-roll battlefield before broad
+    travel/town rollout. Town, wilderness, and dungeon recipes may differ, but none receives a parallel geometry,
+    connector, route, reservation, provenance, or surface-art authority.
 
 ## Stage 1 - one small retained clay room
 
@@ -80,7 +84,10 @@ disappears.
 
 C1A-D form the first connected physical proof and therefore precede substantial work on travel/world/town module
 breadth. C1E-G then harden combat breadth, recovery, and DM language over the same core; they do not postpone proof
-that a canonical physical event can reach the actual BattleMat and EngagementLens.
+that a canonical physical event can reach the actual BattleMat and EngagementLens. C1H is the high-priority
+composition-quality proof over that connected spine. It may begin once C1A-D's owners are stable and can run beside
+independent C1E-G hardening, but it must pass before broad BattleMap/TownTray recipe rollout claims the shared
+compiler works.
 
 ### C1A - room truth and projection
 
@@ -141,6 +148,24 @@ Use the clean provider-neutral DM rail, fact-locked model prose, and several con
 clauses. The seat exposes the same mechanics/actions, digest, tool/event schemas, and refusal contracts to every
 supported provider. This pass consumes C1C-C1F receipts and recovery state; it does not create another consequence
 authority or assume Gemini is the shipping boundary.
+
+### C1H - one composed real-roll clay battlefield
+
+**Primary question:** can one real rolled room become a tactically and visually intentional battlefield—coherent
+elevation masses, typed visible connectors, a readable primary spine, a licensed landmark or dominant structural
+mass, honest deployment/objective space, shaped negative space, and tactically truthful four-yaw composition—without
+copying an authored map, moving mechanics into the renderer, or losing source provenance?
+
+C1A first establishes stable composition and surface ids plus a greybox diagnostic view over the existing room.
+C1H then introduces the smallest bounded `TacticalCompositionPlan` candidate/validation pass that can materially
+improve that retained fixture. The dressed capture must preserve the clay plan's exact routes, connectors,
+reservations, and ids. The exact-cell BattleMap and mandatory EngagementLens remain the battle system; map quality
+does not become an excuse to postpone playable combat.
+
+This is the high-priority first rung of the shared BattleMap/TownTray module defined in
+`../BATTLEMAP-TOWNTRAY-COMPOSITION.md`. C2M must later consume the same region, route, connector, reservation,
+provenance, and surface-frame contracts for its market venue. General automatic UV unwrap and stacked traversable
+surfaces are not C1H prerequisites.
 
 ## Stage 2 - multi-room causality and first mode handoff
 

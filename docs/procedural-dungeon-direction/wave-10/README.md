@@ -41,7 +41,9 @@ is closed on that phased basis. Section 11.85 accepts F10.9h.1-h.5 Option B acro
 graph, reusable real-roll urban grids, same-venue BattleMat/aftermath continuity, bounded offscreen receipts, and
 short Urban Walk transitions form C2M. Section 11.87 accepts h.6-h.10 Option B: exact journey arrival, material-
 citizen promotion, semantic remount, dormant companion-autonomy hooks, and one integrated market-to-battle-to-
-return fixture. Section 11.89 records a non-binding FFT map/GaneshaDx research tangent without moving the
+return fixture. Section 11.89 records the FFT map/GaneshaDx research tangent; section 11.90 promotes its structural
+findings into a high-priority shared BattleMap/TownTray composition direction, maps the first quality proof to C1H,
+and corrects the assumption that general automatic UV unwrap is installed. The tangent does not move the
 questionnaire. The final town audit remains **F10.9h.11-F10.9h.15** at section 11.88. P10.9 remains
 mandatory and open. The P10.8 starting focus policy remains automatic Option A;
 player-owned Option B remains the explicit later target over the same policy seam. F10.8e's automatic consequence

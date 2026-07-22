@@ -1128,6 +1128,25 @@ These are diagnostics and score terms, not universal hard minima. The room's pur
 flat arena, brutal single chokepoint, inaccessible balcony, or high-ground ambush is correct. The compiler's job is
 to make that intentional, legible, mechanically truthful, and reproducible.
 
+### 13.6 Direction promotion and UV correction (2026-07-22)
+
+Adam promoted the composition findings above to a **high-priority shared BattleMap/TownTray direction**. The
+binding direction and provisional implementation architecture now live in
+`docs/BATTLEMAP-TOWNTRAY-COMPOSITION.md`. The five candidates in 13.4 are no longer disposable research ideas:
+
+- tactical-region composition and typed vertical connectors enter the high-priority feature path;
+- four-view and greybox-first proof enter the retained acceptance ladder;
+- the stacked-surface seam remains reserved rather than becoming a pre-alpha requirement; and
+- town venues consume the same composition product as battlefields instead of developing a second generator.
+
+The follow-up code/doc audit also corrected an assumption about UV tooling. Genesis already constructs production
+UVs for procedural architecture: floors and horizontal faces use world-aligned projection, while walls and risers
+use continuous perimeter distance and height. General automatic unwrap is **not** installed or proven in
+production. The xatlas adapter imported in the scratch probe, but the required WASM/worker unwrap never ran; the
+later watlas carrier wave did not fire. This strengthens rather than weakens the proposed engine boundary:
+world/local planar or triplanar projection remains the right path for disposable generated architecture, while
+offline unwrap is promoted only for reusable complex assets and paint-over bakes that actually require an atlas.
+
 ---
 
 ## References

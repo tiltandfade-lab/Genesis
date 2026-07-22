@@ -1061,3 +1061,40 @@ These are research candidates, not ART-DIRECTION-CANON rulings or build authoriz
 rights and individual provenance are not established, so the folder is reference-only and remains uncommitted. The
 live questionnaire position remains **F10.9h.11-F10.9h.15** at section 11.88; the tangent neither answers nor skips
 that batch.
+
+### 11.90 FFT composition promoted to a high-priority shared BattleMap/TownTray module; UV premise audited
+
+**Adam's ruling (2026-07-22):**
+
+> "ok these are high priority items and need to be analyzed in depth to be implemented into the procedural engine, if we can find a way to build maps nearing the quality of the FFT standard maps then we have ourselves a money printer.
+>
+> this is the battle map module, but also can be any town tray model as well, and i think with the automatic UV unwrapping that we should have implemented, we should be able to determine what shape sprites need to be generated for each surface/angle type in the game"
+
+This promotes section 11.89's composition findings from non-binding research into a **high-priority accepted
+direction**. The detailed current-engine audit, shared compiler boundary, phased proof plan, surface-frame/art
+contract, costs, failure controls, and still-open specification choices are recorded in
+`docs/BATTLEMAP-TOWNTRAY-COMPOSITION.md`.
+
+The accepted implications are:
+
+1. Genesis aims for the structural composition quality of strong FFT boards—coherent elevation masses, typed
+   connectors, landmark-led identity, primary and optional routes, shaped negative space, sparse structural
+   dressing, and readable four-yaw tactics—without copying maps, assets, code, or arrangements.
+2. BattleMap and TownTray consume the same future `TacticalCompositionPlan`. Venue-specific recipes may differ,
+   but grid/surface truth, regions, routes, connectors, reservations, provenance, material frames, and remount
+   identity do not fork.
+3. The accepted Clay Proof Ladder gains **C1H**, one high-priority composed real-roll clay battlefield after the
+   connected C1A-D battle spine and before broad travel/town rollout. C1A first establishes the stable
+   composition/surface diagnostic seam; C1H is the first actual composition-quality gate. C2M then proves TownTray
+   reuse through the retained market-to-battle-to-aftermath venue.
+4. Generated art uses a compact canonical surface-frame family rather than one bespoke image per map or camera:
+   horizontal top, vertical face, riser/retaining, slope, run strip, corners, stair/bridge/roof families, strict
+   top/front decals, and mount faces. Geometry owns final shape and orientation.
+5. The UV assumption is corrected. Production room architecture already has deterministic world-aligned floor UVs
+   and continuous perimeter/height wall-riser UVs. General automatic UV unwrap is not installed: xatlas import was
+   only a scratch probe, its WASM/worker execution was not proven, and the later watlas carrier never fired.
+   Procedural projection remains primary for generated architecture; offline unwrap remains a later build-time
+   foundry step for reusable complex assets or paint-over chassis that earn it.
+
+This ruling does not authorize code, package/tool installation, asset generation, or a build. It also does not
+answer the held town-continuity questions. The live questionnaire remains **F10.9h.11-F10.9h.15** at section 11.88.

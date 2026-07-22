@@ -1031,3 +1031,31 @@ thresholds, party anchors, and action/attention hooks for the later C4D roaming 
 visually imply that offscreen companion activity is already simulated. The retained town proof must visibly cover
 arrival, Urban Walk, market interaction, the same market becoming BattleMat combat, material aftermath, and a
 leave/return remount.
+
+### FFT-grade shared BattleMap/TownTray composition is high priority (Adam, 2026-07-22)
+
+> "ok these are high priority items and need to be analyzed in depth to be implemented into the procedural engine, if we can find a way to build maps nearing the quality of the FFT standard maps then we have ourselves a money printer.
+>
+> this is the battle map module, but also can be any town tray model as well, and i think with the automatic UV unwrapping that we should have implemented, we should be able to determine what shape sprites need to be generated for each surface/angle type in the game"
+
+FFT-standard **composition quality** is a high-priority target for Genesis's own procedurally generated maps:
+coherent elevation masses, typed and visible height connections, strong landmarks, readable primary approaches,
+meaningful optional opportunities where the real roll supports them, shaped negative space, sparse structural
+dressing, and tactically honest four-view composition. This is a quality reference, not authority to copy an FFT
+map, asset, texture, code path, or exact arrangement.
+
+BattleMap, SceneTray, and TownTray share one grid/surface composition compiler. A market, street, tavern,
+wilderness pocket, and dungeon chamber may use different recipes, but they retain the same region, route,
+connector, reservation, provenance, surface-frame, and rendering contracts. A town venue promoted to combat is the
+same venue, not a replacement arena.
+
+Generated architecture derives its final surface shape and orientation from real geometry. Reusable visual inputs
+are compact canonical surface families—horizontal panels, vertical faces, risers, slope planes, run strips,
+corners, stair/bridge/roof components, strict top/front decals, and named mount faces—rotated, repeated, clipped,
+and assembled by the engine. Do not generate one bespoke image per map, compass direction, or camera angle.
+
+The technical audit corrects the UV premise without changing the visual goal: current production room shells use
+deterministic world-aligned and perimeter/height UV projection, while general automatic unwrap remains an unlanded
+offline foundry lane. Procedural projection stays the primary contract for generated floors, walls, risers, roofs,
+cliffs, and disposable mass. Offline automatic unwrap is reserved for reusable complex assets or baked chassis
+that actually require it; no live map waits on runtime unwrapping.

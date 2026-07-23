@@ -83,6 +83,36 @@
         is actually called from mountClayRoom (wiring, not just defined-but-unused), and the Explain
         tab's overlay code carries the live "Provenance audit: ... groups tagged, ... orphans" line.
 
+   CL-R0 (docs/CLAYROOM-RESET-LADDER.md, 2026-07-23) — the durability invariant. The fixture was
+   79/79 green here while the settled browser frame showed the realm's own textured dungeon floor
+   (Adam: "It seems to have basic dungeon floor glued to it"); that gap IS finding CR-5, "the fixture
+   gate proved truth, not beauty". The repair replaces two hand-written material sweeps + a hardcoded
+   four-kind whitelist with a versioned engine-owned recipe (CLAY_DIAGNOSTIC_SURFACE_RECIPE) executed
+   from ONE lifecycle hook at setInteriorBoard's tail:
+    13. EXTENDED: 13e now evaluates the recipe's authored grid opacity live (was a source regex over a
+        theater-boot literal, which moved into the recipe); 13e2 asserts theater-boot consumes the
+        recipe rather than re-authoring a number; 13g/13h assert the CL-R0 coordinate fix (the grid is
+        built in the SPATIALIZED room's frame — before the fix it mounted (3,13) cells away and
+        rendered off-camera while auditing perfectly "owned").
+    14. 14g/14h REWRITTEN: they used to assert clayRoomFlattenStructure existed and that
+        CLAY_STRUCTURE_KINDS was exactly {floor,wall,doorframe,pillar}. That whitelist WAS the defect.
+        They now assert both are GONE. Red-first proof they died for real: they pass at the branch
+        base (3a789d0b) and went red the moment the sweeps were deleted.
+    17. 17b REWRITTEN + 17b2 ADDED: the literal `ITR_ROOM_SHELL = false` became a flag read so the
+        production-room-shell A/B is a ?clayshell=1 capture, not a source edit; the invariant is now
+        asserted in two parts (applied before setInteriorBoard, AND default still OFF).
+    18. NEW — the CL-R0 invariant proper. 18a-18g run LIVE against the real engine recipe: an unknown
+        or unresolvable role must resolve to the loud "unclaimed" route and NEVER to clay; every
+        structural role routes to clay; sprite/emitter stay passthrough so CL-R1/CL-R2 measure the real
+        surface; role-id mode gives every clay role a distinct colour; every live interiorKind
+        (including room-shell/kit-shell/-ghost, which the old whitelist could not reach) normalizes to
+        a recipe role. 18h-18m are source-text wiring over the additions region, because this harness
+        is deliberately THREE/DOM-free: the hook exists, re-applies surfaces + lights + provenance,
+        and — the mutation check — is actually CALLED from inside setInteriorBoard (delete that one
+        line and CR-1 returns); the per-frame light-reassert patch it replaced is gone; the census is
+        defined and exposed. The live GL proof is the capture receipt's texturedClayCount/unclaimed
+        pair in dev/clay-captures/cl-r0/after-receipt.json, banked at gameplay scale.
+
    Run:  node dev/verify-clay-room.mjs   (jsdom in ~/.genesis-jsdom — see CLAUDE.md) */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -405,10 +435,11 @@ const check = (name, cond, detail = "") =>
   } else {
     const region = bootSrc.slice(bi, ei + endMark.length);
 
+    // Signature widened by CL-R0's coordinate fix (record, roomRect) — see 13g.
     check("13a. a seam-grid builder function is defined in the additions region",
-      /function\s+clayRoomBuildSeamGrid\s*\(record\)\s*\{/.test(region));
+      /function\s+clayRoomBuildSeamGrid\s*\(\s*record,\s*roomRect\s*\)\s*\{/.test(region));
 
-    const fnMatch = region.match(/function\s+clayRoomBuildSeamGrid\s*\(record\)\s*\{([\s\S]*?)\n\}/);
+    const fnMatch = region.match(/function\s+clayRoomBuildSeamGrid\s*\(\s*record,\s*roomRect\s*\)\s*\{([\s\S]*?)\n\}/);
     const fnBody = fnMatch ? fnMatch[1] : "";
 
     // line count derived FROM record.dims — never a hardcoded cell count (the spec's own "(w+1)+(d+1)
@@ -422,18 +453,41 @@ const check = (name, cond, detail = "") =>
     check("13d. THREE.LineSegments is used to render the grid",
       /new\s+THREE\.LineSegments\s*\(/.test(fnBody));
 
-    // opacity in [0.25, 0.35] — parse the authored const rather than pattern-match a bare number in
-    // the material call, so this stays correct if the material construction line wraps/reformats.
-    const opacityMatch = region.match(/CLAY_GRID_OPACITY\s*=\s*(0?\.\d+|\d+(?:\.\d+)?)/);
-    const opacityVal = opacityMatch ? parseFloat(opacityMatch[1]) : NaN;
-    check("13e. an authored grid opacity value exists and falls in [0.25, 0.35]",
+    // opacity in [0.25, 0.35]. REWRITTEN for CL-R0: the authored value moved out of a literal in
+    // theater-boot.js and into CLAY_DIAGNOSTIC_SURFACE_RECIPE (src/engine/clay-room.js), because the
+    // grid's readability depends on what the recipe paints the floor — the original white-on-black
+    // choice stopped reading the instant CL-R0 restored legible clay. The check still enforces D12a's
+    // own 0.25-0.35 law; it now reads the value from the LIVE recipe (a real evaluation, stronger
+    // than the source-regex it replaces) and additionally asserts theater-boot consumes the recipe
+    // rather than re-authoring a number.
+    const gridWin = freshWin();
+    const opacityVal = gridWin.CLAY_DIAGNOSTIC_SURFACE_RECIPE.gridOpacity;
+    check("13e. the recipe's authored grid opacity falls in D12a's [0.25, 0.35]",
       Number.isFinite(opacityVal) && opacityVal >= 0.25 && opacityVal <= 0.35, String(opacityVal));
-    check("13f. that authored opacity constant is actually wired into the LineBasicMaterial",
-      /LineBasicMaterial\(\{[^}]*opacity:\s*CLAY_GRID_OPACITY/.test(fnBody), fnBody);
+    check("13e2. theater-boot reads grid colour+opacity FROM the recipe (never a re-authored literal)",
+      /function\s+clayRoomGridColor\(\)\{\s*return\s+CLAY_DIAGNOSTIC_SURFACE_RECIPE\.gridColor;/.test(region) &&
+      /function\s+clayRoomGridOpacity\(\)\{\s*return\s+CLAY_DIAGNOSTIC_SURFACE_RECIPE\.gridOpacity;/.test(region), region.slice(0, 0));
+    // ...and reads them at CALL time, never at module-eval time: theater-boot.js is loaded ALONE by
+    // several harnesses, and a top-level read of the engine module (a declared callTimeDep) throws
+    // ReferenceError before any test runs. Caught for real by the full verify sweep.
+    check("13e3. no module-eval-time read of the engine recipe outside a function body",
+      !/^const\s+\w+\s*=\s*CLAY_DIAGNOSTIC_SURFACE_RECIPE\./m.test(region),
+      "a module-scope const reads CLAY_DIAGNOSTIC_SURFACE_RECIPE at load time");
+    // CL-R0 coordinate fix: the grid must be built in the SPATIALIZED room's frame, not the record's
+    // local 0..4 frame. Before this fix it mounted (room.x, room.y) = (3, 13) cells away from the room
+    // and rendered off-camera while auditing perfectly "owned" — the exact class of defect the
+    // provenance audit's bbox field now exposes.
+    check("13g. the seam grid is offset by the spatialized room rect (never the record's local frame)",
+      /function\s+clayRoomBuildSeamGrid\s*\(\s*record,\s*roomRect\s*\)/.test(region) &&
+      /const\s+ox\s*=\s*roomRect/.test(fnBody) && /const\s+oz\s*=\s*roomRect/.test(fnBody), fnBody);
+    check("13h. mountClayRoom passes the real spatialized room rect into the grid builder",
+      /clayRoomBuildSeamGrid\s*\(\s*record\s*,\s*compiled\.room\s*\)/.test(region), region.slice(0, 0));
+    check("13f. the recipe-backed opacity reader is actually wired into the LineBasicMaterial",
+      /LineBasicMaterial\(\{[^}]*opacity:\s*clayRoomGridOpacity\(\)/.test(fnBody), fnBody);
 
     // "sit under the figures/objects visually (render order)" — a renderOrder below the scene
     // default (0) on the grid object.
-    check("13g. the grid mesh is given a renderOrder below the scene default (renders under other transparent draws)",
+    check("13i. the grid mesh is given a renderOrder below the scene default (renders under other transparent draws)",
       /grid\.renderOrder\s*=\s*-\d/.test(fnBody), fnBody);
   }
 }
@@ -472,13 +526,131 @@ const check = (name, cond, detail = "") =>
     check("14f. NO hand-built door interactable literal (archetype:\"door\") anywhere in the additions region",
       !/archetype:\s*"door"/.test(region), "matched archetype:\"door\"");
 
-    // clayRoomFlattenStructure (D2 step 3's structural-surface sibling to clayRoomFlattenFurniture)
-    // exists and its kind whitelist is exactly floor/wall/doorframe/pillar — a post-mount material
-    // SWAP over production InstancedMesh geometry, never a new mesh/hand-built instance data.
-    check("14g. clayRoomFlattenStructure is defined in the additions region",
-      /function\s+clayRoomFlattenStructure\s*\(\)\s*\{/.test(region));
-    check("14h. its kind whitelist covers exactly floor/wall/doorframe/pillar (D2 step 3's own structural-surface list)",
-      /CLAY_STRUCTURE_KINDS\s*=\s*\{\s*floor:\s*true,\s*wall:\s*true,\s*doorframe:\s*true,\s*pillar:\s*true\s*\}/.test(region));
+    // 14g/14h REWRITTEN for CL-R0 (docs/CLAYROOM-RESET-LADDER.md). They used to assert the existence
+    // of clayRoomFlattenStructure and that its hardcoded whitelist was EXACTLY
+    // {floor,wall,doorframe,pillar}. That whitelist was the defect: it was a renderer-side literal
+    // that could not cover skirt/portal/room-shell/kit-shell or anything added later, and the sweep
+    // ran once from mountClayRoom so every async rebuild undid it. RED-FIRST PROOF that these two
+    // died for real rather than by accident: run against the branch base (3a789d0b) they PASS; run
+    // straight after this unit's source edits they went RED, because both functions are deleted and
+    // CLAY_STRUCTURE_KINDS no longer exists anywhere in the file. They are replaced below by checks
+    // over the mechanism that took the job — a versioned engine-owned recipe plus one lifecycle hook.
+    check("14g. the deleted hand-written sweeps are GONE (no clayRoomFlattenStructure/Furniture)",
+      !/function\s+clayRoomFlatten(Structure|Furniture)\s*\(/.test(region), "a flatten sweep survives");
+    check("14h. the hardcoded kind whitelist is GONE (routes come from the recipe, not a literal)",
+      !/CLAY_STRUCTURE_KINDS/.test(region), "CLAY_STRUCTURE_KINDS survives");
+  }
+}
+
+// ============================================================================
+// CL-R0 (docs/CLAYROOM-RESET-LADDER.md) — THE DURABILITY INVARIANT.
+//
+// The one thing this pass exists to make impossible: a diagnostic Clayroom surface silently routing
+// through a dungeon/site material. Before CL-R0 the fixture was 79/79 green while the settled frame
+// showed the realm's own textured floor (measured: floor-region meanSaturation 175.4, neutralPct
+// 0.00%, dev/clay-captures/cl-r0/before-measure.json) — CR-5, "the fixture gate proved truth, not
+// beauty". These checks are the teeth for the repair.
+//
+// Split by what each can honestly prove:
+//   18a-18f  LIVE, in jsdom, against the real engine recipe — behaviour, not text.
+//   18g-18k  source-text wiring over the theater-boot additions region, because this harness is
+//            deliberately THREE/DOM-free (see the file header) and cannot mount GL. The live GL
+//            proof is the capture receipt's own texturedClayCount/unclaimed pair
+//            (dev/clay-captures/cl-r0/after-receipt.json), banked at gameplay scale.
+// ============================================================================
+{
+  const win = freshWin();
+  const recipe = win.CLAY_DIAGNOSTIC_SURFACE_RECIPE;
+
+  check("18a. CLAY_DIAGNOSTIC_SURFACE_RECIPE exists, is frozen, and carries id + version",
+    !!recipe && Object.isFrozen(recipe) && typeof recipe.id === "string" && typeof recipe.version === "number",
+    JSON.stringify(recipe && { id: recipe.id, version: recipe.version, frozen: recipe && Object.isFrozen(recipe) }));
+
+  // THE INVARIANT ITSELF: an unknown role must never resolve to clay. If it did, a new interior kind
+  // could quietly inherit the clay route's blessing while actually still carrying site material — the
+  // silent path CL-R0 forbids. The loud "unclaimed" route is what makes it visible instead.
+  const unknown = win.clayDiagnosticRouteFor("some-kind-invented-next-year", "clay");
+  check("18b. an UNKNOWN surface role resolves to the loud 'unclaimed' route, never to diagnostic-clay",
+    unknown.route === "unclaimed" && unknown.color === recipe.unclaimedColor, JSON.stringify(unknown));
+  const nullRole = win.clayDiagnosticRouteFor(null, "clay");
+  check("18c. a surface with NO resolvable role also resolves to 'unclaimed'",
+    nullRole.route === "unclaimed", JSON.stringify(nullRole));
+
+  // Every structural role the CL-R0 spec names must be claimed by the recipe, and claimed as clay.
+  const mustBeClay = ["floor", "wall", "riser", "trim", "portal", "furniture"];
+  const notClay = mustBeClay.filter((r) => win.clayDiagnosticRouteFor(r, "clay").route !== "diagnostic-clay");
+  check("18d. every structural role CL-R0 names routes to diagnostic-clay",
+    notClay.length === 0, "not routed to clay: " + JSON.stringify(notClay));
+
+  // ...and the roles whose whole point is to be seen honestly must NOT be painted over.
+  const mustPass = ["sprite", "emitter"];
+  const wrongly = mustPass.filter((r) => win.clayDiagnosticRouteFor(r, "clay").route !== "passthrough");
+  check("18e. sprite + emitter stay passthrough (CL-R1/CL-R2 must measure the REAL surface)",
+    wrongly.length === 0, "not passthrough: " + JSON.stringify(wrongly));
+
+  // role-id mode must give every clay-routed role a DISTINCT colour, or the diagnostic cannot tell a
+  // mis-routed surface from a correctly-routed one.
+  const clayRoles = Object.keys(recipe.roles).filter((r) => recipe.roles[r].route === "diagnostic-clay");
+  const roleColors = clayRoles.map((r) => win.clayDiagnosticRouteFor(r, "role-id").color);
+  check("18f. role-id mode assigns a DISTINCT colour to every clay-routed role",
+    new Set(roleColors).size === clayRoles.length,
+    clayRoles.length + " roles -> " + new Set(roleColors).size + " colours");
+
+  // The renderer's own interiorKind vocabulary must normalize onto recipe roles — including the
+  // room-shell/kit-shell kinds the old four-kind whitelist could never reach, and the -ghost cutaway
+  // copies. A kind that fell through here is exactly how "basic dungeon floor" survived.
+  const kindMap = {
+    floor: "floor", wall: "wall", doorframe: "doorframe", pillar: "pillar", skirt: "skirt",
+    portal: "portal", "wall-ghost": "wall", "room-shell-floor": "floor",
+    "room-shell-wall-stem": "wall", "room-shell-wall-upper": "wall", "room-shell-wall-trim": "trim",
+    "room-shell-riser": "riser", "kit-shell-wall": "wall", "kit-shell-floor": "floor",
+  };
+  const badKinds = Object.keys(kindMap).filter((k) => win.clayDiagnosticRoleForKind(k) !== kindMap[k]);
+  check("18g. every live interiorKind (incl. room-shell/kit-shell/-ghost) normalizes to its recipe role",
+    badKinds.length === 0, "unmapped: " + JSON.stringify(badKinds.map((k) => [k, win.clayDiagnosticRoleForKind(k)])));
+
+  {
+    const bootSrc = read("src/ui/theater-boot.js");
+    const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
+    const endMark = "CLAY-ROOM ADDITIONS END */";
+    const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
+    const region = (bi >= 0 && ei > bi) ? bootSrc.slice(bi, ei + endMark.length) : "";
+
+    // THE LIFECYCLE HOOK. This is the whole repair: the route must be re-applied from
+    // setInteriorBoard's own tail, which is the single funnel all five async replay sites pass
+    // through. A hook called only from mountClayRoom reproduces the original defect exactly.
+    check("18h. clayRoomAfterInteriorBoardRebuild() is defined in the additions region",
+      /function\s+clayRoomAfterInteriorBoardRebuild\s*\(\)\s*\{/.test(region));
+    const hookBody = (region.match(/function\s+clayRoomAfterInteriorBoardRebuild\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
+    check("18i. the hook re-applies the surface route AND the light profile AND provenance tagging",
+      /clayRoomApplyDiagnosticSurfaces\s*\(\s*\)/.test(hookBody) &&
+      /clayRoomApplyLightProfile\s*\(/.test(hookBody) &&
+      /clayRoomTagAllProvenance\s*\(\s*\)/.test(hookBody), hookBody);
+
+    // MUTATION CHECK (the "one known-bad replay mutation must fail" requirement, expressed at the
+    // level this harness can reach): the hook must actually be CALLED from inside setInteriorBoard.
+    // Delete that one call — the mutation that reintroduces CR-1 — and this goes RED. Searched
+    // OUTSIDE the additions region on purpose: a call that only exists inside the clay region is a
+    // call the production rebuild path never makes.
+    const outsideRegion = bootSrc.slice(0, bi) + bootSrc.slice(ei);
+    const setInteriorBoardBody = (outsideRegion.match(/function\s+setInteriorBoard\s*\([\s\S]*?\n\}/) || [""])[0];
+    check("18j. setInteriorBoard() itself calls the hook (the mutation: remove this line -> CR-1 returns)",
+      /clayRoomAfterInteriorBoardRebuild\s*\(\s*\)/.test(setInteriorBoardBody),
+      "hook not called from setInteriorBoard — every async rebuild would silently restore site materials");
+
+    // ...and the per-frame patch it replaced must be gone: clayRoomMaybeAutoMount must no longer
+    // reassert lights every frame, or the fixture still carries the asymmetry that hid CR-1.
+    const pollBody = (region.match(/function\s+clayRoomMaybeAutoMount\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
+    check("18k. the per-frame light-reassert patch is gone from clayRoomMaybeAutoMount",
+      !/clayRoomApplyLightProfile\s*\(/.test(pollBody), pollBody);
+
+    // The census is the provenance answer CL-R0 requires ("tell which system owns every visible
+    // surface") and the shape the live capture receipt asserts over.
+    check("18l. clayRoomSurfaceCensus() reports texturedClayCount and unclaimed",
+      /function\s+clayRoomSurfaceCensus\s*\(\)\s*\{/.test(region) &&
+      /texturedClayCount/.test(region) && /unclaimed/.test(region));
+    check("18m. the census is exposed as a read-only window.Theater diagnostic",
+      /window\.Theater\._claySurfaceCensusForTest\s*=/.test(bootSrc));
   }
 }
 
@@ -607,8 +779,18 @@ const check = (name, cond, detail = "") =>
     const mountBody = mountMatch ? mountMatch[1] : "";
     check("17a. mountClayRoom() saves the prior ITR_ROOM_SHELL value before overriding it",
       /CLAY_ROOM_PRIOR_ROOM_SHELL\s*=\s*ITR_ROOM_SHELL/.test(mountBody), mountBody);
-    check("17b. mountClayRoom() forces ITR_ROOM_SHELL = false before setInteriorBoard runs",
-      /ITR_ROOM_SHELL\s*=\s*false;[\s\S]*setInteriorBoard\s*\(\s*compiled\.board\s*\)/.test(mountBody), mountBody);
+    // REWRITTEN for CL-R0: the literal `ITR_ROOM_SHELL = false` became a flag read
+    // (clayRoomShellOverrideOn()) so the "does the fixture still read as clay through the PRODUCTION
+    // room-shell construction path?" A/B is a reproducible ?clayshell=1 capture instead of a source
+    // edit. The invariant this check protects is unchanged and is now asserted in TWO parts: the
+    // override is still applied before setInteriorBoard, AND its default is still OFF. A flag whose
+    // default drifted to true would silently restore the exact regression check 17 exists to catch.
+    check("17b. mountClayRoom() sets ITR_ROOM_SHELL from the flag reader before setInteriorBoard runs",
+      /ITR_ROOM_SHELL\s*=\s*clayRoomShellOverrideOn\(\);[\s\S]*setInteriorBoard\s*\(\s*compiled\.board\s*\)/.test(mountBody), mountBody);
+    const shellFnBody = (region.match(/function\s+clayRoomShellOverrideOn\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
+    check("17b2. clayRoomShellOverrideOn() defaults OFF (only ?clayshell=1 / GS.clayRoomShell opts in)",
+      /let\s+on\s*=\s*false/.test(shellFnBody) &&
+      /clayshell"\)\s*===\s*"1"/.test(shellFnBody), shellFnBody);
 
     const unmountMatch = region.match(/function\s+clayRoomUnmount\s*\(\)\s*\{([\s\S]*?)\n\}/);
     const unmountBody = unmountMatch ? unmountMatch[1] : "";

@@ -45,6 +45,8 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Current implementation map (what code exists) | `docs/ARCHITECTURE.md` | implementation evidence, NOT design target |
 | Session state / what happened / what's next | `docs/HANDOFF.md` · `docs/CHANGELOG.md` · `docs/NEXT-STEPS.md` | chronological operations surfaces |
 | Graphics governing charter | `docs/GRAPHICS-CONVERGENCE-CHARTER.md` | protected core + convergence law |
+| Is the Clayroom fixture trustworthy? (reset ladder CL-R0…CL-R6) | `docs/CLAYROOM-RESET-LADDER.md` | renderer/fixture-trust gate across passes; gates C1H/C1I/Guard Post 1 |
+| Golden-site structure/material catalog + the Guard Post brief | `docs/GOLDEN-SITES-CATALOG.md` | FFT relational grammar, GP-SHAPE-01, cultural mutation MVP/Ideal, seed law, FFT/import boundary |
 | Pixel sprite register (canon figure register) | `docs/ART-DEPARTMENT.md` | Adam's 2026-07-15 ruling; quote, never paraphrase |
 | Faceted RESERVE register + prop/decal/kit contracts | `docs/ART-DIRECTION-CANON.md` | sibling scope to ART-DEPARTMENT, not a rival |
 | DM persona/behavior | `docs/DM-CHARTER.md` | |
@@ -101,6 +103,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/CHASE-CONTRACT-FIX.md — implementation-evidence — system-spec/SPECCED(2026-07-04)
 - docs/CHASE-SOFT-RECALL.md — proposed — system-spec/SPECCED(2026-07-04)
 - docs/CHROME-REKEY.md — historical — design-note(2026-07-08) — ⚠ header "DRAFT awaiting taste pass" vs in-doc "RESOLVED — Adam's rulings 07-08 night"
+- docs/CLAYROOM-RESET-LADDER.md — current-canon — system-spec/CL-R0-BUILT-rest-SPECCED(2026-07-23) — the Clayroom reset/proof ladder's single owning spec; subordinate to CLAY-PROOF-LADDER (C1A…C5 ids stay there)
 - docs/CODEX.md — current-canon — system-spec/phases-1-5-built(2026-06-24)
 - docs/COMBAT-LIFECYCLE.md — current-canon — system-spec/built(2026-07-03)
 - docs/COMBAT-TRACKER.md — current-canon — system-spec/built(2026-07-01)
@@ -155,6 +158,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/GEOMETRY-ACCELERATION-TOOLCHAIN.md — proposed — system-spec/SPECCED(2026-07-12)
 - docs/GEOMETRY-OSS-INTEGRATION.md — proposed — system-spec/SPECCED(2026-07-12) — landed pieces tracked in CHANGELOG (geometry default flip)
 - docs/GIT-LFS-MIGRATION.md — operations (done) — runbook/"READY"(2026-07-10) — ⚠ stale: LFS live since 2026-07-18 per DESIGN.md infra note
+- docs/GOLDEN-SITES-CATALOG.md — accepted-supporting — design-study/ACCEPTED-DIRECTION-implementation-unauthorized(2026-07-23) — golden-site kit catalog + Guard Post brief; Desktop packet folded, routes detail to composition/trim/material owners
 - docs/GLOOM-KEY.md — current-canon — system-spec/SPEC-locked-throughline(2026-07-08)
 - docs/GRAPHICS-CONVERGENCE-CHARTER.md — current-canon — design-guide/ACTIVE(2026-07-12) — governing graphics authority
 - docs/GRAPHICS-CONVERGENCE-PLAN.md — current-canon — orchestration-plan/ACTIVE(2026-07-12) — governed_by charter

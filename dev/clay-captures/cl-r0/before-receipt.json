@@ -1,0 +1,520 @@
+{
+  "label": "before",
+  "capturedBy": "dev/capture-clayroom-fixture.cjs",
+  "url": "http://127.0.0.1:5176/genesis.html?clayroom=1",
+  "runtimePath": "genesis.html -> theater-boot.js clayRoomBootSelfMount() -> mountClayRoom() -> clayRoomBoardFrom() -> spatializePlan -> interiorBuildBoard -> setInteriorBoard (production interior channel)",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "deviceScaleFactor": 2
+  },
+  "regions": {
+    "full": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "floor": [
+      0.42,
+      0.73,
+      0.58,
+      0.86
+    ],
+    "sprite": [
+      0.25,
+      0.37,
+      0.35,
+      0.6
+    ],
+    "crate": [
+      0.53,
+      0.38,
+      0.69,
+      0.75
+    ],
+    "doorframe": [
+      0.84,
+      0.38,
+      0.95,
+      0.62
+    ]
+  },
+  "timeline": {
+    "early": {
+      "fixture": {
+        "id": "clay-c1a",
+        "version": 1,
+        "tier": "test",
+        "seed": 113311726,
+        "seedHex": "0x6c0ffee",
+        "dims": {
+          "w": 5,
+          "d": 5
+        },
+        "portal": {
+          "id": "portal-c1a",
+          "edge": "n",
+          "cell": "c-2-0",
+          "state": "closed"
+        },
+        "object": {
+          "id": "obj-crate-c1a",
+          "kind": "crate",
+          "cell": "c-3-2"
+        },
+        "citizen": {
+          "id": "cit-goblin-c1a",
+          "bestiaryId": "goblin-warrior",
+          "cell": "c-1-3",
+          "worldHeight": 3.5,
+          "heightSource": "measured"
+        },
+        "provenance": {
+          "pass": "C1A",
+          "derivation": "spatialize-plan",
+          "created": "2026-07-23"
+        }
+      },
+      "lightRecipe": {
+        "points": [
+          {
+            "side": "west",
+            "color": 16752714,
+            "intensity": 16,
+            "pos": {
+              "x": -0.8,
+              "y": 1.7,
+              "z": 0
+            }
+          },
+          {
+            "side": "east",
+            "color": 11452392,
+            "intensity": 9,
+            "pos": {
+              "x": 0.8,
+              "y": 1.7,
+              "z": 0
+            }
+          }
+        ],
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.18
+        }
+      },
+      "surfaceRecipe": null,
+      "camera": null,
+      "renderer": {
+        "backingPx": "2560x1440",
+        "cssPx": "1280x720",
+        "canvasCount": 1,
+        "shadowMap": true,
+        "cameraIsPerspective": true
+      },
+      "lights": {
+        "profileKey": "dark",
+        "ambient": 0.18,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "surfaces": [
+        {
+          "kind": "floor",
+          "isInstanced": true,
+          "count": 25,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": {
+            "hasImage": true,
+            "complete": true,
+            "repeat": [
+              7,
+              7
+            ]
+          }
+        },
+        {
+          "kind": "wall",
+          "isInstanced": true,
+          "count": 25,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": {
+            "hasImage": true,
+            "complete": true,
+            "repeat": [
+              1,
+              2.4
+            ]
+          }
+        },
+        {
+          "kind": "doorframe",
+          "isInstanced": true,
+          "count": 5,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": {
+            "hasImage": true,
+            "complete": true,
+            "repeat": [
+              1,
+              2.4
+            ]
+          }
+        },
+        {
+          "kind": "skirt",
+          "isInstanced": true,
+          "count": 24,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": null
+        },
+        {
+          "kind": "portal",
+          "isInstanced": true,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        }
+      ],
+      "texturedSurfaceCount": 3,
+      "surfaceOwners": null,
+      "provenanceAudit": null,
+      "stats": {
+        "boardBuilds": 3,
+        "boardSkips": 0
+      }
+    },
+    "settled": {
+      "fixture": {
+        "id": "clay-c1a",
+        "version": 1,
+        "tier": "test",
+        "seed": 113311726,
+        "seedHex": "0x6c0ffee",
+        "dims": {
+          "w": 5,
+          "d": 5
+        },
+        "portal": {
+          "id": "portal-c1a",
+          "edge": "n",
+          "cell": "c-2-0",
+          "state": "closed"
+        },
+        "object": {
+          "id": "obj-crate-c1a",
+          "kind": "crate",
+          "cell": "c-3-2"
+        },
+        "citizen": {
+          "id": "cit-goblin-c1a",
+          "bestiaryId": "goblin-warrior",
+          "cell": "c-1-3",
+          "worldHeight": 3.5,
+          "heightSource": "measured"
+        },
+        "provenance": {
+          "pass": "C1A",
+          "derivation": "spatialize-plan",
+          "created": "2026-07-23"
+        }
+      },
+      "lightRecipe": {
+        "points": [
+          {
+            "side": "west",
+            "color": 16752714,
+            "intensity": 16,
+            "pos": {
+              "x": -0.8,
+              "y": 1.7,
+              "z": 0
+            }
+          },
+          {
+            "side": "east",
+            "color": 11452392,
+            "intensity": 9,
+            "pos": {
+              "x": 0.8,
+              "y": 1.7,
+              "z": 0
+            }
+          }
+        ],
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.18
+        }
+      },
+      "surfaceRecipe": null,
+      "camera": null,
+      "renderer": {
+        "backingPx": "2560x1440",
+        "cssPx": "1280x720",
+        "canvasCount": 1,
+        "shadowMap": true,
+        "cameraIsPerspective": true
+      },
+      "lights": {
+        "profileKey": "dark",
+        "ambient": 0.18,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "surfaces": [
+        {
+          "kind": "floor",
+          "isInstanced": true,
+          "count": 25,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": {
+            "hasImage": true,
+            "complete": true,
+            "repeat": [
+              7,
+              7
+            ]
+          }
+        },
+        {
+          "kind": "wall",
+          "isInstanced": true,
+          "count": 25,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": {
+            "hasImage": true,
+            "complete": true,
+            "repeat": [
+              1,
+              2.4
+            ]
+          }
+        },
+        {
+          "kind": "doorframe",
+          "isInstanced": true,
+          "count": 5,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": {
+            "hasImage": true,
+            "complete": true,
+            "repeat": [
+              1,
+              2.4
+            ]
+          }
+        },
+        {
+          "kind": "skirt",
+          "isInstanced": true,
+          "count": 24,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": null
+        },
+        {
+          "kind": "portal",
+          "isInstanced": true,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#ffffff",
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        }
+      ],
+      "texturedSurfaceCount": 3,
+      "surfaceOwners": null,
+      "provenanceAudit": null,
+      "stats": {
+        "boardBuilds": 3,
+        "boardSkips": 0
+      }
+    }
+  },
+  "settleDelta": {
+    "texturedSurfaceCountEarly": 3,
+    "texturedSurfaceCountSettled": 3,
+    "boardBuildsEarly": 3,
+    "boardBuildsSettled": 3,
+    "surfacesChanged": false
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "consoleWarnings": [
+    "[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor: bracket-generic 1",
+    "[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor: bracket-generic 1",
+    "[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor: bracket-generic 1"
+  ]
+}

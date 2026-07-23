@@ -282,3 +282,52 @@ New here: placement masks come from the condition vector / mutator masks per §5
       lane's Stage B step 3).
 - [ ] DPR/render-scale quality setting — protected-core change, needs its charter entry.
 - [ ] Cowork memory — update the graphics-convergence memory with the lane's existence.
+
+## 9. Guard Post parent-seed roster (folded 2026-07-23 — consumer registration, not a scope change)
+
+Source: the Desktop working packet
+`~/Desktop/Genesis FFT Guard Post Study/analysis/GUARD-POST-MATERIAL-MAKER-1.3-SEED-GRAPH-SPEC.md`.
+Registered here because **this lane owns material authoring** and a second material authority is
+forbidden (canon/SYSTEM-OWNERSHIP §4). This section adds a *consumer roster and two laws*; it does
+not alter §1-§8, and it does not advance the lane past Adam's stopping point (§8 checklist).
+
+**Two founder rulings now recorded verbatim in `ART-DIRECTION-CANON.md` (2026-07-23):** authoring is
+pinned to **Material Maker 1.3** — the version that runs on the target MacBook, and nothing may
+depend on 1.4-1.7 nodes or project behaviour; and **every material is a fertile seed**, saved,
+reusable, versioned, with an explicit mutation lineage rather than a throwaway one-off batch. The
+three permitted mutation levels are **named configuration → child material graph → new family**, each
+carrying provenance back to its parent. This is the same mutator thinking §5 already describes,
+extended with lineage as a hard requirement.
+
+**The twelve Guard Post parent families** that the first golden site will consume:
+
+| id | Family |
+|---|---|
+| `GP-MM-M01` | Old operational stone — coursed |
+| `GP-MM-M02` | Old operational stone — local rubble |
+| `GP-MM-M03` | Dressed operational stone |
+| `GP-MM-M04` | Packed road and working apron |
+| `GP-MM-M05` | Quiet grass/soil ground |
+| `GP-MM-M06` | Geological outcrop rock (visibly distinct from masonry) |
+| `GP-MM-M07` | Structural timber |
+| `GP-MM-M08` | Forged iron |
+| `GP-MM-M09` | Roof/weather family (pending the roof choice) |
+| `GP-MM-M10` | Interior reveal and cut-section |
+| `GP-MM-M11` | Maintained-overgrowth response toolkit (damp, moss/lichen, crevice growth, cleared use, repair suppression) |
+| `GP-MM-M12` | Trim-role source strips (feeds `TRIM-SHEET-PIPELINE.md` §15) |
+
+**Two laws this roster must obey, both already implied by §1/§5 and now stated for the golden-site
+consumer:**
+
+1. **Condition masks consume canonical inputs and never invent history.** Exposure, drainage, slope,
+   traffic, and repair are rolled facts; the mask projects them. A renderer-side overgrowth roll is a
+   parallel authority and is forbidden.
+2. **One version/hash lineage end to end.** Source graph → exported maps → manifest → binding →
+   capture receipt all share it, so a frame can name the exact material version that produced it.
+
+**Gate.** These parents are proved in the Clayroom at **CL-R4**
+([CLAYROOM-RESET-LADDER.md](CLAYROOM-RESET-LADDER.md)) — channel interpretation, declared physical
+scale, stable UV frames, family-vs-role separation, and missing-channel fallback. The Guard Post then
+proves the selected combination, road/ground relation, repair story, and cultural selection
+([GOLDEN-SITES-CATALOG.md](GOLDEN-SITES-CATALOG.md)). Taste cards (§2) still gate engine wiring; this
+roster does not bypass them.

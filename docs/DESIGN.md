@@ -820,3 +820,52 @@ stable ids and never re-decides. Waves 7-9/11-12 hold **PROPOSED** records
 (`procedural-dungeon-direction/wave-07 … wave-12`) awaiting Adam's founder Batch 1
 (`canon/OPEN-QUESTIONS.md`) and per-wave acceptance; no wave closed, no build authorized, and
 no locked decision above was altered by the pass.
+
+## Locked decisions (2026-07-23 later — Clayroom reset ladder + golden-site catalog folded)
+
+The Desktop research/specification packet (`~/Desktop/Genesis Golden Sites - Structure and Material
+Catalog.md` and `~/Desktop/Genesis FFT Guard Post Study/`) was reconciled against current canon and
+folded into the repository. It was treated as **proposed source material, not automatic canon**; no
+conflict with an existing canonical ruling was found, and no existing ruling was changed. The
+Desktop packet remains intact and unmodified.
+
+- **The Clayroom is a deterministic procedural acceptance fixture** — not a miniature authored level
+  and not a freeform level editor. It must prove reusable renderer and construction rules before
+  those systems contaminate judgement of the Guard Post. Owning spec:
+  `CLAYROOM-RESET-LADDER.md` (new), which owns the reset ladder **CL-R0…CL-R6**, the retained
+  fixture family CL-F00…CL-F06, the diagnostic-clay surface contract, the clay capture/receipt law,
+  the Lighting Lab 2.0 recipe contract, the narrowly-scoped Sprite Editor crosshair delta, and the
+  Clayroom Workbench boundary. It is subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md`
+  (which keeps the C1A…C5 clay-pass ids) — a renderer-trust gate across passes, not a rival ladder.
+- **CL-R0 is BUILT** (2026-07-23): diagnostic clay is a versioned engine-owned recipe re-applied from
+  one `setInteriorBoard` lifecycle hook, so no asynchronous rebuild can restore site material.
+  Measured 0/0 textured clay surfaces across 3 rebuilds; mutation-proven both in the harness and in a
+  live capture. CL-R1…CL-R6 are specced and unbuilt. Remaining CL-R0 failures are recorded openly in
+  that file, not closed.
+- **Golden-site structure/material catalog + the Guard Post brief** land in
+  `GOLDEN-SITES-CATALOG.md` (new): the FFT relational shape grammar and anti-rules, `GP-SHAPE-01 —
+  Shoulder Overlook Through-Road`, the low-poly construction translation and bill-of-materials
+  families, the cultural-mutation MVP/Ideal tiers and acceptance gate, the lock audit
+  (LOCKED/WORKING/OPEN/DEFER), and the seed/reproducibility law. Detail routes to existing owners
+  rather than duplicating them — composition to `BATTLEMAP-TOWNTRAY-COMPOSITION.md`, trim to
+  `TRIM-SHEET-PIPELINE.md` §15, material authoring to `MATERIAL-LANE.md` §9.
+- **The FFT boundary is binding.** The study is a relational shape-grammar study — comparative map
+  morphology and grammar induction. It is **not** authorization to copy authored FFT maps. No FFT
+  mesh, texture, map, or other copyrighted game asset may become a Genesis production asset.
+- **Seed law for every golden site:** reproducible under a seed; supports changed landscape/road/post
+  layouts; rejects or falls back from broken candidates with a typed receipt, never broken geometry;
+  no seed-specific branch, hand-placed coordinate, or special-case patch — including for the retained
+  golden seed.
+- **Furnishings remain mostly narrative** until architectural soundness and tactical quality are
+  proven — but any furnishing that changes collision, cover, sight, support, practical-light
+  position, or interaction reach must receive the smallest truthful physical proxy. Invisible
+  tactical furniture is not permitted. (Adam's verbatim ruling: `ART-DIRECTION-CANON.md`, 2026-07-23.)
+- **Import discipline:** nothing binary was vendored from the 349 MB Desktop study — no map archive,
+  no five-angle corpus, no third-party tools, no Material Maker source tree, no historical images.
+  The written specifications were the deliverable; provenance for the historical lanes is summarized
+  in `GOLDEN-SITES-CATALOG.md` with the per-image ledger left at its Desktop path. Rationale per
+  asset is tabulated there.
+- **Adam's art rulings from the packet are recorded verbatim and dated** in `ART-DIRECTION-CANON.md`
+  per the decision-capture rule: the six Clayroom reset redlines, the FFT low-poly construction
+  language, the narrative-furnishing boundary, and the Material Maker 1.3 / every-material-is-a-seed
+  rulings.

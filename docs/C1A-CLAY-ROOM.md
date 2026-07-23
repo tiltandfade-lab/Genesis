@@ -236,3 +236,26 @@ was never broken — the door FRAME is real production output; the LEAF simply w
   PANEL mesh but applies rotation to its parent HINGE group (raycast descendants, rotate the
   parent) — never rotate the panel mesh directly; and swing state changes route through the
   connection record (ActionIntent → receipt), the hinge merely projects it.
+
+## Addendum D17 — the D2-step-3 material mechanism is superseded by CL-R0 (2026-07-23)
+
+C1A remains **truth-arrived** and this record stays closed. One mechanism inside it was replaced,
+and the replacement is owned elsewhere:
+
+- **Superseded:** `clayRoomFlattenFurniture` + `clayRoomFlattenStructure` (D2 step 3's two
+  hand-written material sweeps over the hardcoded whitelist `{floor, wall, doorframe, pillar}`,
+  applied once from `mountClayRoom`), and `clayRoomMaybeAutoMount`'s per-frame light reassert.
+  Both are **deleted**.
+- **By:** `CLAY_DIAGNOSTIC_SURFACE_RECIPE` (a versioned role→route table in
+  `src/engine/clay-room.js`) executed by `clayRoomApplyDiagnosticSurfaces()` from a single
+  post-rebuild lifecycle hook, `clayRoomAfterInteriorBoardRebuild()`, at `setInteriorBoard`'s tail.
+- **Why:** `setInteriorBoard` is re-entered from five asynchronous production replay sites outside
+  `mountClayRoom`. A one-shot sweep could not survive any of them, which is what produced Adam's
+  "It seems to have basic dungeon floor glued to it." D4's light profile and D12a's seam grid are
+  unchanged in intent; both now reassert through the same hook, and the grid's coordinate frame was
+  corrected (it had been building in the record's local frame after D15 moved render geometry onto
+  the spatializer — see CR-6).
+
+**Owner going forward: [CLAYROOM-RESET-LADDER.md](CLAYROOM-RESET-LADDER.md) §CL-R0.** RL-1 (door
+leaf) and RL-2 (clay lighting over the interior rig) remain C1B's, and RL-1 is now recorded there as
+a *visible* remaining failure rather than a deferred note — the frame contradicts the prose twin.

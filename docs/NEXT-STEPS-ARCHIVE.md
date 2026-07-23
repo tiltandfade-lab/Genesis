@@ -18,6 +18,21 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-18 — PROCEDURAL DUNGEON DISCOVERY captured; Wave 1 opens)
+
+The research corpus, engine crosswalk, accepted direction, and unresolved forks now live in
+`PROCEDURAL-DUNGEON-DIRECTION.md`. This is a design lane only: it does not authorize a room-compiler,
+table, walk, or renderer cutover.
+
+1. ☐ **Run Wave 1: Dungeon Function, History, and Strange Compatibility.** Follow every answer into
+   its natural follow-up questions; capture decisions and unresolved tensions as they emerge.
+2. ☐ **Close Wave 1 explicitly.** Do not open Wave 2 until no material Wave 1 follow-up remains and
+   Adam confirms the wave is closed. Apply the same closure gate to every later wave.
+3. ☐ **Keep the current game build intact while discovery proceeds.** The existing rollers and
+   visual engine remain the executable baseline; structural replacement waits for a locked spec.
+4. ☐ **Push local `master` before bed.** This discovery landing is intentionally local until Adam
+   calls for the backup push.
+
 ## Do next (2026-07-16 — KENNEY-SOCKET WAVE LANDED; the meeting's order continues)
 
 CHANGELOG 2026-07-16: ☑ KS-1/2/3/3b (the kit engine: adapter+sockets → door assembly → room

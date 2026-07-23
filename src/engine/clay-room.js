@@ -50,6 +50,111 @@ var CLAY_C1A_LIGHT_PROFILE = Object.freeze({
   ambient: Object.freeze({ color: 0xffffff, intensity: 0.18 })
 });
 
+/* ─── CL-R0 — CLAY_DIAGNOSTIC_SURFACE_RECIPE (docs/CLAYROOM-RESET-LADDER.md §CL-R0) ───────────────
+   The diagnostic-clay surface selection is DATA, not renderer code. The renderer executes routes;
+   this table decides them. It carries its own `id`/`version` so a capture receipt can name the
+   exact recipe that produced a frame (recipe identity, alongside the record's fixture identity).
+
+   Why a recipe at all: before CL-R0 the clay look was two hand-written material sweeps in
+   theater-boot.js keyed off a hardcoded four-kind whitelist, applied ONCE at mount. Every kind the
+   whitelist forgot (skirt, portal, room-shell, kit-shell) silently kept its production dungeon
+   material, and every asynchronous rebuild silently restored the ones it did cover. A table plus a
+   census makes both failures machine-visible instead of eye-visible.
+
+   ROUTES
+     diagnostic-clay  the surface is claimed by the fixture and rendered as flat neutral clay (or,
+                      in "role-id" mode, as this role's own flat identifying colour)
+     passthrough      the surface is DELIBERATELY left as production authored it, because the
+                      fixture's own question depends on seeing it honestly — the citizen's sprite
+                      art (CL-R2 measures its colour), a light emitter body (CL-R1 requires a
+                      visible physical source), the door leaf's own state colour (D12b)
+     unclaimed        no recipe entry matched. NEVER silently left alone: painted the loud
+                      UNCLAIMED colour and reported by clayRoomSurfaceCensus, so a newly-introduced
+                      interior kind cannot quietly reintroduce site material into the fixture.
+
+   The role vocabulary is CL-R0's own required list (floor, wall, riser, trim, portal, furniture,
+   emitter, sprite) plus the kinds this engine actually emits today. Roles with no geometry in the
+   5x5 fixture (riser/trim) are declared anyway: the recipe is the contract for the whole fixture
+   family (CL-F01..CL-F06), not for one room. */
+var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
+  id: "clay-diagnostic-surface",
+  version: 1,
+  modes: Object.freeze(["clay", "role-id"]),
+  defaultMode: "clay",
+  clayColor: "#8a8a8a",       // D7's own flat clay-grey, unchanged
+  unclaimedColor: "#ff00ff",  // loud: an unrouted surface must be impossible to mistake for clay
+  // D12a's seam grid is part of the diagnostic surface, so its colour belongs to the same recipe.
+  // It was authored WHITE against a near-black regressed floor; once CL-R0 made the floor legible
+  // clay, white-on-#8a8a8a stopped reading at all. A dark line is the contrast-correct choice
+  // against clay, and against the brighter role-id fills too. Opacity stays inside D12a's own
+  // 0.25-0.35 law.
+  gridColor: "#141414",
+  gridOpacity: 0.3,
+  roles: Object.freeze({
+    floor:     Object.freeze({ route: "diagnostic-clay", roleColor: "#5f8fbf" }),
+    wall:      Object.freeze({ route: "diagnostic-clay", roleColor: "#bf6f6f" }),
+    riser:     Object.freeze({ route: "diagnostic-clay", roleColor: "#bf8f4f" }),
+    trim:      Object.freeze({ route: "diagnostic-clay", roleColor: "#8fbf5f" }),
+    doorframe: Object.freeze({ route: "diagnostic-clay", roleColor: "#bfbf5f" }),
+    portal:    Object.freeze({ route: "diagnostic-clay", roleColor: "#5fbf9f" }),
+    pillar:    Object.freeze({ route: "diagnostic-clay", roleColor: "#9f6fbf" }),
+    skirt:     Object.freeze({ route: "diagnostic-clay", roleColor: "#4f5f6f" }),
+    furniture: Object.freeze({ route: "diagnostic-clay", roleColor: "#bf9f6f" }),
+    emitter:   Object.freeze({ route: "passthrough",     roleColor: "#ffd88a" }),
+    sprite:    Object.freeze({ route: "passthrough",     roleColor: "#ff5fbf" }),
+    door:      Object.freeze({ route: "passthrough",     roleColor: "#ffffff" }),
+    // Found by the CL-R0 census itself: the first routed capture reported nine UNCLAIMED surfaces —
+    // the citizen's own soft contact pool (addInteriorContactBlob, userData.contactBlob) and eight
+    // atmosphere motes (interiorBuildMotes, userData.motePiece). Neither is site material, so neither
+    // is a CR-1 defect; both were simply outside the old four-kind whitelist's imagination. They route
+    // to passthrough because CL-R2's contact/shadow contract must be judged on the REAL pool, not a
+    // grey stand-in. OPEN for CL-R1: whether the diagnostic modes should suppress atmosphere entirely
+    // (motes are additive ember quads — honest production output, but noise in a measurement rig).
+    "contact-shadow": Object.freeze({ route: "passthrough", roleColor: "#5fbfbf" }),
+    mote:             Object.freeze({ route: "passthrough", roleColor: "#bf5f5f" })
+  })
+});
+
+/* clayDiagnosticRoleForKind(kind) -> a normalized recipe role, or null.
+   Maps the renderer's OWN `userData.interiorKind` vocabulary (theater-boot.js's
+   interiorBuildInstancedMesh / room-shell / kit-shell tags) onto the recipe's role names. Pure
+   string work, deliberately in the engine module so the vocabulary is reviewable as data rather
+   than buried in a traversal. A `-ghost` suffix (the cutaway copy of a solid kind) resolves to the
+   SAME role as its solid: a ghosted wall is still a wall for diagnostic purposes. */
+function clayDiagnosticRoleForKind(kind){
+  if(!kind || typeof kind !== "string") return null;
+  var k = kind.replace(/-ghost$/, "");
+  if(k === "room-shell-floor" || k === "kit-shell-floor") return "floor";
+  if(k === "room-shell-wall-stem" || k === "room-shell-wall-upper" || k === "kit-shell-wall") return "wall";
+  if(k === "room-shell-wall-trim") return "trim";
+  if(k === "room-shell-riser") return "riser";
+  if(CLAY_DIAGNOSTIC_SURFACE_RECIPE.roles[k]) return k;
+  return null;
+}
+
+/* clayDiagnosticRouteFor(role, mode) -> {role, route, color} — the single resolution the renderer
+   consults per surface. An unknown role resolves to the UNCLAIMED route (never to clay), so the
+   default answer for "the recipe has never heard of this" is loud, not silent. */
+function clayDiagnosticRouteFor(role, mode){
+  var m = (mode === "role-id") ? "role-id" : CLAY_DIAGNOSTIC_SURFACE_RECIPE.defaultMode;
+  var entry = role ? CLAY_DIAGNOSTIC_SURFACE_RECIPE.roles[role] : null;
+  if(!entry){
+    return { role: role || null, route: "unclaimed", color: CLAY_DIAGNOSTIC_SURFACE_RECIPE.unclaimedColor };
+  }
+  if(entry.route === "passthrough") return { role: role, route: "passthrough", color: null };
+  return {
+    role: role,
+    route: "diagnostic-clay",
+    color: (m === "role-id") ? entry.roleColor : CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor
+  };
+}
+
+/* clayDiagnosticModeFrom(raw) -> "clay" | "role-id". One place decides how a mode string (a URL
+   flag, a console setting) is read, so the renderer never invents a third spelling. */
+function clayDiagnosticModeFrom(raw){
+  return (raw === "role-id" || raw === "roleid" || raw === "role") ? "role-id" : "clay";
+}
+
 // ─── small pure helpers (module-private) ──────────────────────────────────────────────────────
 function clayCellId(x, z){ return "c-" + x + "-" + z; }
 

@@ -21,6 +21,13 @@
      8. Telemetry leak grep-gate: src/engine/clay-room.js + the theater-boot.js additions region contain no
         fetch(|XMLHttpRequest|WebSocket.
      9. python3 build/check-manifest.py -> RESULT: OK.
+    10. Spec addendum D1a boot self-mount hook: the theater-boot.js clay-room additions region
+        defines clayRoomBootSelfMount() (calling both clayRoomShouldEnable() and mountClayRoom()) AND
+        invokes it as a bare, column-0 (module-top-level) statement — proving the self-mount fires at
+        BOOT, not only from inside clayRoomMaybeAutoMount's per-frame poll (which only ever runs once
+        a theater is already mounted and drawing frames — never on a cold title-screen boot, the
+        defect this addendum exists to fix). Source-text/convention check only (this harness never
+        executes theater-boot.js — see the note above); the live cold-load proof is the browser gate.
 
    Run:  node dev/verify-clay-room.mjs   (jsdom in ~/.genesis-jsdom — see CLAUDE.md) */
 import { readFileSync } from "node:fs";
@@ -267,6 +274,43 @@ const check = (name, cond, detail = "") =>
   const out = (res.stdout || "") + (res.stderr || "");
   check("9. python3 build/check-manifest.py -> RESULT: OK", res.status === 0 && /RESULT:\s*OK/.test(out),
     out.trim().split("\n").slice(-3).join(" | "));
+}
+
+// ============================================================================
+// 10. ⊗ D1a boot self-mount hook (orchestrator re-gate addendum) — source-text/convention check;
+//     this harness never executes theater-boot.js's module body (see this file's own header), so
+//     this proves the SHAPE of the fix (a top-level, not-poll-gated invocation), not runtime behavior
+//     — the live cold-load (genesis.html?clayroom=1, no game session) is the actual browser gate.
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
+  const endMark = "CLAY-ROOM ADDITIONS END */";
+  const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
+  if(bi === -1 || ei === -1 || ei < bi){
+    check("10. theater-boot.js clay-room additions region found for the boot-mount scan", false,
+      "not found yet — expected once the U2 wire-in lands");
+  } else {
+    const region = bootSrc.slice(bi, ei + endMark.length);
+
+    check("10a. clayRoomBootSelfMount() is defined in the additions region",
+      /function\s+clayRoomBootSelfMount\s*\(\s*\)\s*\{/.test(region));
+
+    const fnMatch = region.match(/function\s+clayRoomBootSelfMount\s*\(\)\s*\{([\s\S]*?)\n\}/);
+    const fnBody = fnMatch ? fnMatch[1] : "";
+    check("10b. clayRoomBootSelfMount() calls both clayRoomShouldEnable() and mountClayRoom()",
+      /clayRoomShouldEnable\s*\(\s*\)/.test(fnBody) && /mountClayRoom\s*\(\s*\)/.test(fnBody),
+      fnBody);
+
+    // Convention check (this file's own indentation style — every top-level function/const sits at
+    // column 0; every statement inside a function body is indented): a bare, UNINDENTED call proves
+    // the self-mount fires at MODULE TOP-LEVEL (boot time), not merely defined-but-uncalled, and not
+    // buried back inside some other function (e.g. clayRoomMaybeAutoMount, which only ever runs from
+    // renderTheaterFrame's per-frame poll and would silently reproduce the cold-boot defect this
+    // addendum exists to fix).
+    check("10c. clayRoomBootSelfMount() is invoked as a bare column-0 statement (module top-level, not only from renderTheaterFrame's poll)",
+      /^clayRoomBootSelfMount\(\);\s*$/m.test(region));
+  }
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

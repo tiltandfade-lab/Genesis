@@ -14655,4 +14655,41 @@ function clayRoomUnmount(){
   if(overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);
   if(hostEl && hostEl.parentNode) hostEl.parentNode.removeChild(hostEl);
 }
+
+// Spec addendum D1a (docs/C1A-CLAY-ROOM.md, orchestrator re-gate finding): clayRoomMaybeAutoMount's
+// own per-frame poll (hooked into renderTheaterFrame, this file's top) only ever RUNS once some
+// theater is already mounted and drawing frames — either the game's own board/interior mount kicks
+// off scheduleRender's rAF loop, or a harness calls measureRenderFps/measureComposerFps directly.
+// A COLD BOOT (title screen, no game session yet) never mounts anything and so never calls
+// renderTheaterFrame at all — verified live by the orchestrator loading genesis.html?clayroom=1 from
+// a blank tab: {theaterMounted:false, clayHost:false, canvases:0}. Light Lab's dormant-poll pattern
+// (D1's own precedent) is fine living entirely inside that poll because Light Lab is a LIVE-theater
+// accessory (it only ever makes sense once a board is already up); the clay room is a STANDALONE dev
+// surface (docs/C1A-CLAY-ROOM.md's own framing — "the game boots identically with the flag off") and
+// must self-mount at boot rather than wait on a frame that, on a cold title screen, may never come.
+//
+// Direct call, no setTimeout/microtask defer: this file's own <script type="module"> tag
+// (genesis.html:1541) makes theater-boot.js an implicitly-deferred module script. Per the HTML
+// spec, deferred/module scripts execute only once the document has finished parsing (document.body
+// and every element already exist), AFTER every classic synchronous <script> in the document —
+// including data/sprite-registry.js and the engine/clay-room.js tag (both load earlier, per D2's own
+// manifest note) and the page's own end-of-body classic boot script that sets up window.GS — even
+// though that classic script's <script> tag sits textually AFTER this module's tag in genesis.html
+// (classic scripts run synchronously as the parser reaches them; deferred/module scripts always run
+// after ALL of those, never before). This line also sits at the literal end of the file, after every
+// function this region defines and after `let S = createTheaterState();` (this file's line ~5011),
+// so there is no hoisting/ordering hazard to defer past. Net: a direct top-level call is exactly as
+// "ready" as it will ever be — a setTimeout(0) here would only add a frame of avoidable latency for a
+// dev-only cold-boot surface.
+//
+// Cost with the flag OFF (the byte-for-byte-identical-boot requirement): ONE clayRoomShouldEnable()
+// call — a location.search read, memoized — and nothing else. Same one-boolean-read-when-off law D1
+// already pays for the per-frame poll; this just pays it once, at boot, instead of (also) waiting for
+// a frame that a cold title screen never produces.
+function clayRoomBootSelfMount(){
+  if(S.clayRoomMounted) return;
+  if(!clayRoomShouldEnable()) return;
+  mountClayRoom();
+}
+clayRoomBootSelfMount();
 /* CLAY-ROOM ADDITIONS END */

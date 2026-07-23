@@ -1,0 +1,16 @@
+{
+  "probe": {
+    "backing": "2560x1440",
+    "css": "1280x720",
+    "lights": {
+      "profileKey": "dark",
+      "ambient": 0.18,
+      "hemi": 0.08,
+      "key": 0.05,
+      "fill": 0.02
+    }
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ]
+}

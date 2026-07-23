@@ -1178,6 +1178,31 @@ versioned visual payloads and metadata; canonical material, culture, history, ge
 owned by Genesis. A future funded Substance-class lane may replace or complement the authoring tool without
 rewriting those owners.
 
+### Material Maker pinned at 1.3; headless compile PROVEN; the SUBTLE-TEXTURE split (2026-07-23, folded from docs/MATERIAL-LANE.md)
+
+- **Correction to the section above:** 1.7 is GONE. The gate machine (Iris Plus 645) cannot run
+  Godot-4-based apps — MM 1.7 crashes in every renderer (shader-compiler ceiling, not fixable by
+  flags); Adam deleted the 1.7 app 2026-07-23. **Adam's machine is the gate on the game** (his
+  ruling): everything must run here; beauty shots may come from a higher-end sandbox.
+- **Pinned executable (adoption doctrine satisfied):** Material Maker **1.3** at
+  `/Applications/Material Maker 1.3.app`, binary sha256 prefix `597b199fae597c4f`.
+- **Headless compile contract PASSED:** `material_maker --export-material --target
+  "Godot/Godot 4 ORM" -o <outdir> <graph>.ptex` runs windowless on the gate machine; exports are
+  deterministic (byte-identical across runs, sha256-verified). `.ptex` graphs are JSON text —
+  agents author them directly; the GUI is for Adam's taste passes only. MM remains an **offline
+  compiler**, never runtime authority (evidence: MATERIAL-LANE §1c).
+- **SUBTLE-TEXTURE law split (MATERIAL-LANE §1e):** the *principle* KEEPS — low-contrast,
+  readable-at-glance, never noisy, never photographic; the stage stays quiet so the standees stay
+  the stars — and becomes the taste-card review bar. The *implementation clause* (64px boot-time
+  procedural CanvasTextures, grain 0.07–0.12) is SUPERSEDED by admitted MM output; the painters
+  remain the canonical fallback for any surface without an admitted material.
+- **PSX residue inventory recorded as legacy (MATERIAL-LANE §1f):** `psxEnabled`/`PSX_RES_SCALE`
+  escape hatch, `assets/textures-psx/` naming, the `antialias:false` rationale — steer by no
+  longer. NOT residue: NearestFilter on sprite/albedo texels and the TEXEL DENSITY LAW (pixel
+  canon, kept).
+- **The gate:** no material touches the engine until its taste card is PASS-ruled by Adam
+  (MATERIAL-LANE §2); Stage-B wiring rides the visual-proof track (clay room → guard's post).
+
 ### Procedural culture identity should precede optional authored culture packs (Adam, 2026-07-22)
 
 > "is there any way to procedurally create a culture's visual identity and store that in play and make sure if that culture is canon to the site that it is visually represented in some way? rather than relying on authorship of culture packs? like we CAN create sprites and materials with culture packs in mind, but if the engine can derive culture procedurally then that is actually more inline with the overall vision of the engine"

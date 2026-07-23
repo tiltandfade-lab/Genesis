@@ -228,7 +228,7 @@ headless macOS batch execution before joining the toolchain.
 | [OpenCV](https://github.com/opencv/opencv) | Apache-2.0 | adopt narrowly for image/mask operations |
 | [FastNoiseLite](https://github.com/Auburn/FastNoiseLite) | MIT, JS/GLSL and other ports | adopt as deterministic build-time/material noise primitive |
 | [texture-synthesis](https://github.com/EmbarkStudios/texture-synthesis) | MIT/Apache-2.0; archived | pinned optional CLI experiment only; one thread for determinism |
-| [Material Maker](https://github.com/RodZill4/material-maker) | MIT | defer pending macOS headless proof |
+| [Material Maker](https://github.com/RodZill4/material-maker) | MIT | **ADOPTED 2026-07-23** as the pinned offline material compiler — 1.3 (`597b199fae597c4f`), headless proof delivered on the gate machine; 1.7 rejected (Godot-4/Iris-645 ceiling); see `docs/MATERIAL-LANE.md` §1 |
 | [rembg](https://github.com/danielgatis/rembg) | MIT | sprite segmentation/negative-control research only |
 | [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN) | BSD-3-Clause | defer until controlled sprite-regeneration A/B |
 | [TripoSR](https://github.com/VAST-AI-Research/TripoSR) | MIT; roughly 6 GB VRAM | optional NVIDIA/remote geometry draft, never unreviewed production output |

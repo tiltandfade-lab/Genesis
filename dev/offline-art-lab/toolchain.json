@@ -13,11 +13,19 @@
     "headlessRequired": true,
     "exactPinsRequired": true
   },
+  "materialMaker": {
+    "version": "1.3",
+    "appPath": "/Applications/Material Maker 1.3.app",
+    "binarySha256Prefix": "597b199fae597c4f",
+    "headlessProof": "2026-07-23 — docs/MATERIAL-LANE.md §1c (deterministic byte-identical exports)",
+    "exportTarget": "Godot/Godot 4 ORM",
+    "note": "1.7 (Godot 4) rejected: Iris 645 shader-compiler ceiling; 1.7 app deleted 2026-07-23"
+  },
   "candidateRulings": {
     "trimesh": "ADOPT_SPIKE",
     "opencv": "ADOPT_NARROW",
     "texture-synthesis": "DEFER_ARCHIVED_PINNED_CLI_ONLY",
-    "material-maker": "DEFER_UNTIL_HEADLESS_MACOS_PROOF",
+    "material-maker": "ADOPT_OFFLINE_COMPILER_PINNED_1_3",
     "rembg": "ADOPT_SPRITE_NEGATIVE_CONTROL_ONLY",
     "real-esrgan": "DEFER_UNTIL_SPRITE_REGEN_AB_TEST",
     "triposr": "OPTIONAL_REMOTE_OR_NVIDIA_LAB_SPIKE",

@@ -8,6 +8,8 @@ operating contract — **`CLAUDE.md` is the authoritative, fuller version, so re
 ## Read these, in order
 1. **`CLAUDE.md`** (repo root) — THE operating contract: what this is, how to run it, the commands
    table, git workflow, the parallel-session discipline, disciplines, and gotchas. Read it fully first.
+   *(Material-lane sessions: your brief is `docs/CODEX-MATERIAL-BRIEF.md`; the lane's source of
+   truth is `docs/MATERIAL-LANE.md`.)*
 2. **`docs/HANDOFF.md`** — current state + "Do next"; read at the start of every session to see where
    things stand and what's in flight.
 3. **`docs/canon/README.md`** — the canonical front door (2026-07-22): the precedence law and the

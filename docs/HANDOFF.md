@@ -473,7 +473,9 @@ global implementation hold remains active.
 ### Reference and checkpoint boundaries
 
 - Material Maker 1.7 remains a signed universal application installed outside the repository; no graph or generated
-  texture has been admitted.
+  texture has been admitted. *(Superseded 2026-07-23: 1.7 deleted — Godot-4/Iris-645 hardware
+  ceiling; **1.3 pinned** with headless compile proven; the material lane is `docs/MATERIAL-LANE.md`.
+  Historical line preserved per the chronological-record law.)*
 - The Müller et al. PDF remains locally retained and indexed as S10; its PDF is ignored by the repository's global
   PDF rule and is not part of this commit.
 - `Reference/FFT Battle Maps/` remains local, untracked, reference-only, and must not be staged.

@@ -17,6 +17,10 @@ entirely. (Genesis was relocated here from that vault on 2026-06-25; they are no
 
 ## Run it
 
+**Location (2026-07-23):** the repo lives at `~/Desktop/Work/projects/Genesis/genesis` — a
+container (`Genesis/`) holding the repo (`genesis/`) plus any session worktrees as siblings
+inside it. The old flat `~/Desktop/Work/projects/Genesis` path is retired.
+
 Modular now (`genesis.html` loads `data/*.js` + `src/*.js`), so `file://` won't work —
 **double-clicking shows a blank page.** Serve over localhost:
 
@@ -109,7 +113,9 @@ Worktrees isolate the *working tree*, so live file-stomping becomes impossible; 
 only happen at merge-to-master, which is git's ordinary 3-way merge, not a surprise dirty file.
 
 - **Spin a session:** `git worktree add ../Genesis-<lane> -b <lane>/<slug>` (e.g. `../Genesis-npc`,
-  `../Genesis-models`), and run that session there. Prune with `git worktree remove` when done.
+  `../Genesis-models`) — from inside `genesis/`, `../` is the `Genesis/` container, so worktrees
+  land as siblings of `genesis/` inside it (contained, not scattered in `projects/`). Run that
+  session there. Prune with `git worktree remove` when done.
   `~/Desktop/Launchers/New Genesis Worktree.command` scaffolds one.
 - **Ownership lanes** (declare who owns what so merges rarely touch the same files):
   models/graphics → `dev/model-qa/`, `src/ui/theater-*`, `data/realm-{props,surfaces,bestiary}`,

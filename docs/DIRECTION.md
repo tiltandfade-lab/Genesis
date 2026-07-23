@@ -13,6 +13,19 @@ related:
 
 # DIRECTION — the 2026-07-03 reshape
 
+> **Status banner (2026-07-22, Fable canon pass):** this reshape is a **historical trajectory
+> snapshot**. Its portfolio diagnosis and doctrine validations stand, but its standing claims
+> are superseded in practice by later founder-authorized programs: the graphics-convergence
+> charter era (2026-07-12+), the sprite transition and pixel canon (07-09/07-15), and the
+> procedural-dungeon wave program (07-18 → 07-22) — whose accepted first implementation
+> priority (canonical mechanics → BattleMat + EngagementLens → provider-neutral DM seat →
+> persistence/recovery) now owns build sequencing, behind Wave 12's authorization gate. The
+> §3.4 spec-moratorium, §4 renderer gate, and "supersedes NEXT-STEPS ordering" claims should
+> be read historically; current routing = `docs/canon/README.md`. The §9 ship-gate and §8
+> freezes (multiplayer/VTT/UGC, T3/T4) remain live constraints where not explicitly superseded
+> (see `canon/PRODUCT-SCOPE.md` §5). Preserved verbatim below; a fresh DIRECTION reshape is a
+> candidate follow-up once the founder packet lands.
+
 ## §1 The read (condition vs. the stated goals)
 
 | Dimension | State | Evidence |

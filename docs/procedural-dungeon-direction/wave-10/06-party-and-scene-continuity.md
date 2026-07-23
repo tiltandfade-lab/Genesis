@@ -3,7 +3,7 @@ type: design-study
 status: OPEN
 wave: 10
 part: 6
-legacy_sections: "11.76-current"
+legacy_sections: "11.76-11.101"
 source: "[[PROCEDURAL-DUNGEON-DIRECTION]]"
 ---
 
@@ -1363,3 +1363,319 @@ save, migration, remount, and simulation cost for incidental positions that no l
 **Codex recommends Option B for all five.** F10.9i-m are the remaining material original-mode cases currently
 exposed by the P10.9 audit; their answers may generate bounded follow-ups. P10.9 and Wave 10 remain open, and
 performance/device/accessibility remains P10.10.
+
+### 11.96 F10.9i-F10.9m ruling - one site lineage, derived evidence, typed crisis projection, ordered pressure, material aftermath
+
+Adam accepted **Option B across all five**. He explicitly accepted the development pattern for F10.9i and F10.9j
+and accepted Codex's recommendations for F10.9k-F10.9m.
+
+1. **F10.9i - one canonical dungeon-site lineage crosses certified room and subscene portals.** Only the active
+   room requires exact mounted cells. Site/room/portal identity, route, time, cast, custody, hazards, damage,
+   viewpoint knowledge, obligations, and material prior-room deltas remain canonical and remount
+   deterministically. A provider-neutral DM seat narrates the validated handoff; it does not rebuild or revise the
+   room.
+2. **F10.9j - investigation views remain derived projections over canonical ids.** Cards, close views, relation
+   views, and DM-led focus may expose only certified viewpoint-known facts keyed to the existing actor, object,
+   surface, event, evidence, and holder identities. They gain no mutation or revelation authority, and a supported
+   DM provider receives the same fact/knowledge boundary.
+3. **F10.9k - CrisisChain nodes use typed projection requests over existing owners.** Focus, mount, legal threshold
+   handoff, material world action, and prose-only pressure remain distinct request forms. Only a certified spatial
+   fact may change the mounted tray. The CrisisChain's later semantic owner governs crisis mechanics; P10.9 governs
+   projection and continuity.
+4. **F10.9l - parallel pressures retain independent identity under one governed foreground.** One active scene is
+   exact. Other branches remain ordered active/site/cold clocks, obligations, or owner receipts until due,
+   observable, or intervention-relevant. Dependency and viewpoint order govern presentation; being offscreen does
+   not freeze a legal pressure or license omniscient narration.
+5. **F10.9m - aftermath is explicit before relevance-based compaction.** Terminal actors, objects, damage, hazards,
+   access, witness knowledge, custody, and obligations remain exact while they can change a choice or support an
+   unresolved action. Later owner handoff and provenance-bearing compaction retain material identity and relations
+   without preserving incidental cell detail forever.
+
+#### Prototype/MVP/feature-goal and cost disposition
+
+- **Proof prototypes:** C2A/C2C prove a two-room out-and-return with one offscreen material change; C2B proves one
+  stable evidence reference and payoff; C2D proves exploration/investigation -> BattleMat plus EngagementLens ->
+  actionable aftermath -> compaction/recovery in one lineage; C4C later proves one bounded CrisisChain
+  fork/convergence over existing owners. A green isolated proof is not the playable MVP.
+- **Playable MVP:** bounded dungeon traversal, investigation, crisis projection, parallel pressure, and aftermath
+  traces preserve their canonical ids, knowledge, custody, obligations, commit order, and recovery across the
+  supported adapters. Breadth may be narrow, but provider changes may not alter mechanics or truth.
+- **Feature goals:** richer multi-floor/adjacent-space presentation, derived investigation timelines or relation
+  maps, broader branching multi-actor CrisisChains, governed cutaways, and deeper forensic/ecological aftermath
+  remain promotions over the same owners. Neither an always-live mega-dungeon, an authoritative clue minigame,
+  bespoke scenes for every crisis node, universal split-view simulation, nor permanent exact battlefield storage
+  is the default ideal.
+- **Costs accepted:** medium portal/remount/evidence/projection/compaction work; medium-high deterministic
+  concurrency and recovery QA. The shared lineage, id, receipt, knowledge, and owner contracts concentrate rather
+  than duplicate long-term maintenance. P10.10 still owns measured performance/device/accessibility budgets.
+
+The ruling generates five bounded questions about the seams that make the accepted B pattern executable without
+creating hidden second authorities. They must be answered before an explicit P10.9 closure audit.
+
+### 11.97 F10.9i.1-F10.9m.1 generated follow-up batch - unmounted change, evidence memory, projection failure, concurrency, compaction authority
+
+#### 1. F10.9i.1 - who may change an unmounted dungeon room?
+
+**Option A - freeze every unmounted room until the party returns.** Cheap and deterministic, but a fleeing enemy,
+spreading flood, burning barricade, patrol, or countdown can stop unrealistically at the portal because it left the
+camera.
+
+**Option B - only canonical owners advance material offscreen changes through typed receipts (recommended).** A
+site, actor, hazard, clock, or later simulation owner may change its own facts without maintaining an exact hidden
+room. For example, a wounded cultist may cross a known portal and a flood may make a route impassable; the old room
+retains honest anchors and remounts exact geometry only when needed. Any supported DM seat receives the same
+viewpoint-safe results and cannot add unseen changes. Cost is medium owner/receipt/remount QA.
+
+**Option C - continuously simulate every visited room and actor.** This can produce rich emergence, but creates a
+second large simulation obligation before later operating-site/ecology owners define its useful breadth. Cost is
+very high implementation, save, migration, determinism, and maintenance work.
+
+**Prototype/MVP/goal:** a C2A/C2C proof advances one actor or hazard while a two-room fixture is unmounted; MVP
+supports a bounded family of owner-driven material changes with deterministic recovery; richer patrol, schedule,
+ecology, and operating-site behavior remains a later promotion rather than a universal hidden simulation.
+
+#### 2. F10.9j.1 - what investigation memory survives after a focused view closes?
+
+**Option A - retain nothing outside the current card and DM transcript.** Lowest UI/state cost, but cross-room clue
+comparison depends on model memory and transcript archaeology.
+
+**Option B - retain a small viewpoint-safe evidence index made only of canonical references (recommended).** A
+discovered blood mark, torn sleeve, and missing reliquary may remain findable by stable id with known source,
+holder/location, current status, and unresolved relation or obligation. A player or DM seat may compare them, but
+hypotheses remain attributed claims and the index cannot mint evidence or mutate the scene. Cost is medium derived-
+index, knowledge, stale-reference, and save/load QA.
+
+**Option C - ship a full manipulable case board as the first investigation authority.** Expressive pinning and
+linking arrive early, but relation editing can be mistaken for world truth and introduces substantial UI,
+synchronization, migration, and provider-explanation cost.
+
+**Prototype/MVP/goal:** C2B retains one clue across a room change and pays it off; MVP supports a small durable
+evidence/reference set with knowledge and custody truth; richer derived timelines, relation maps, and player theory
+tools remain a later investigation feature over the same ids.
+
+#### 3. F10.9k.1 - what happens when a CrisisChain projection request is illegal, hidden, unavailable, or interrupted?
+
+**Option A - ask the DM model to invent the nearest dramatic substitute.** This avoids a blank beat, but different
+providers may reveal a hidden shrine, teleport an absent actor, or fabricate a legal route.
+
+**Option B - validate mechanics/handoffs at their owner and degrade only the presentation (recommended).** An
+illegal threshold handoff does not occur. If a committed fact cannot safely mount or focus now, its projection may
+queue, no-op, or fall back to viewpoint-safe prose; interruption rebuilds terminal truth and never replays the
+world event. The DM seat receives the validated result plus the allowed fallback, independent of provider. Cost is
+medium validation, fallback-matrix, cursor, and retry/recovery QA.
+
+**Option C - block CrisisChain progress until the requested visual presentation succeeds.** This preserves the
+desired spectacle, but makes camera/render/provider availability part of mechanical progress and can deadlock
+offline or interrupted play.
+
+**Prototype/MVP/goal:** a narrow fixture proves one legal request, one rejected request, one safe prose fallback,
+and one interrupted rebuild; MVP covers the accepted typed request family; richer retry timing, focus leases, and
+diegetic choreography remain presentation promotions.
+
+#### 4. F10.9l.1 - how are conflicting parallel pressure receipts ordered and resolved?
+
+**Option A - apply them in wall-clock or arrival order.** Easy to wire, but network/provider timing can decide
+whether captors pass through a door before a fire seals it, producing nondeterministic saves and replays.
+
+**Option B - canonical clock/dependency order plus owner preconditions decides every commit (recommended).**
+Independent non-conflicting receipts may both land. When two branches contest the same door, actor, item, route, or
+resource, the later commit validates against the latest canonical version and deterministically succeeds, fails,
+or requests a legal owner-defined replan; it never wins by last-writer accident or DM preference. Presentation may
+aggregate only after commit order is settled. Cost is medium-high transaction, conflict-fixture, idempotency, and
+recovery QA.
+
+**Option C - let the DM model decide which branch is more dramatically important.** Flexible, but provider choice
+would change mechanics, hidden facts could leak into arbitration, and replay would not be deterministic.
+
+**Prototype/MVP/goal:** C4C proves one bounded two-branch conflict and convergence; MVP preserves independent ids,
+clocks, dependencies, preconditions, receipts, and replay order for its small crisis graph; nested crises and
+governed cutaways promote later over the same ordering seam.
+
+#### 5. F10.9m.1 - who decides when exact aftermath detail is no longer material?
+
+**Option A - use one timer or compact automatically on room exit.** Cheap, but a body, dropped key, spreading acid,
+line of sight, or pursuit route may lose exactness while an unresolved action still depends on it.
+
+**Option B - canonical owners and outstanding obligations license compaction under a conservative rule
+(recommended).** Exact placement remains while a pending action, active hazard, topology/access condition,
+pursuit, witness/evidence question, custody dispute, or certified next handoff still depends on it. Once no such
+dependency remains, a provenance-bearing receipt records retained semantic anchors and retired incidental detail.
+The DM seat may narrate or call attention to known facts but cannot delete them. Cost is medium materiality-policy,
+audit, remount, and new-event-family maintenance.
+
+**Option C - let the DM model judge what seems narratively important.** This may feel natural in one session, but
+different providers can erase different evidence or preserve incompatible spatial facts.
+
+**Prototype/MVP/goal:** C2D proves one explicit aftermath with a dropped key, body, hazard, and damaged portal,
+then compacts only the irrelevant cells; MVP covers the representative material families across exit/save/load/
+remount; richer decay, forensic, ecological, and institutional aftermath remains with later owners.
+
+**Codex recommends Option B for all five.** These are numbered 1-5 for direct response. Their answers may expose a
+final bounded contradiction or coverage question; P10.9 and Wave 10 remain open, and P10.10 remains the later owner
+of performance/device/accessibility.
+
+### 11.98 F10.9i.1-F10.9m.1 ruling - owner-driven remount, durable evidence, safe projection fallback, mechanically real pressure, conservative compaction
+
+Adam accepted the recommendations for Questions 1, 2, 3, and 5. For Question 4 he ruled: **“B is the ideal, C is
+ok interim as long as its not just prose with no mechanical state.”** The accepted substance is therefore phased;
+the literal provider-decided Option C at section 11.97 is not accepted because it would contradict the stated
+mechanical-state floor.
+
+1. **F10.9i.1 - canonical owners may advance material changes in unmounted dungeon rooms.** Site, actor, hazard,
+   clock, and later simulation owners act through typed receipts; the unmounted room does not require hidden exact
+   cell simulation. The retained C2A/C2C proof advances one actor or hazard and remounts deterministically. Bounded
+   owner-driven change belongs to the playable obligation; richer patrol/schedule/ecology breadth remains a later
+   operating-site promotion.
+2. **F10.9j.1 - a small viewpoint-safe evidence index survives focused views.** It stores canonical references,
+   known source, holder/location, current status, and unresolved relations or obligations without minting evidence
+   or converting hypotheses into facts. C2B proves one cross-room clue/payoff; the MVP retains a bounded evidence
+   set; richer derived timelines, relation maps, and theory tools remain later features.
+3. **F10.9k.1 - mechanics and handoffs validate at their owners; failed projection degrades only presentation.** An
+   illegal transition does not occur. An unavailable or hidden focus may queue, no-op, or use viewpoint-safe prose;
+   interruption rebuilds terminal truth without replay. The MVP covers the accepted typed request family with
+   deterministic provider-neutral fallbacks; richer focus leases and choreography promote later.
+4. **F10.9l.1 - full deterministic owner/precondition conflict arbitration is the ideal; any interim must still be
+   mechanically real.** Adam permits a simpler interim, but not a crisis whose progress or conflict result exists
+   only in prose and not literal DM-model arbitration. At minimum it needs canonical persistent state,
+   deterministic advancement, and provider-neutral consequences. Whether that interim may satisfy the playable
+   MVP or only an earlier proof remains the one material phasing question below.
+5. **F10.9m.1 - canonical owners and outstanding obligations conservatively license compaction.** Exact aftermath
+   persists while pending actions, hazards, topology/access, pursuit, evidence/witness questions, custody, or the
+   next certified handoff depend on it. A provenance-bearing receipt retires only incidental detail. C2D proves the
+   representative trace; later forensic/ecological/institutional breadth remains with later owners.
+
+Questions 1, 2, 3, and 5 generate no further material continuity branch before the P10.9 family audit. Question 4
+generates one final prototype-versus-MVP boundary question; answering it does not itself close P10.9 or Wave 10.
+
+### 11.99 F10.9l.2 generated follow-up - where may the mechanically stateful parallel-pressure interim stop?
+
+#### 1. F10.9l.2 - is the reduced mechanical pressure model only a proof scaffold, or may it satisfy the bounded playable MVP?
+
+Consider the party fighting in the gatehouse while a fire spreads and captors move a hostage toward the same door.
+The complete ideal gives each branch typed preconditions and lets its canonical owner succeed, fail, or replan
+against the latest version. The narrower alternative still needs real state; the question is how far it may ship.
+
+**Option A - allow the reduced model only in a proof prototype; require complete owner/precondition arbitration for
+the playable MVP.** A prototype may serialize two mechanical branch records, but the MVP must implement typed
+conflict validation and owner-defined replan before any bounded CrisisChain ships. This reaches the ideal earlier,
+with medium-high transaction/schema/fixture cost on the critical path.
+
+**Option B - let a deterministic mechanically persisted branch ledger satisfy the bounded MVP, then promote full
+owner/precondition arbitration (recommended).** Fire and hostage movement keep separate ids, clocks/state, causal
+receipts, and save/load history. A simple canonical rule serializes conflicts—for example, fire commits first and
+the hostage move mechanically pauses or fails at the now-blocked door. The DM seat narrates that result but cannot
+choose or revise it. The MVP does not yet support rich owner-specific replans; playtest pressure, larger graphs, or
+repeated blunt failures triggers the full accepted ideal. Cost is medium now and medium-high at promotion, with
+extra care to retain version/precondition seams rather than hard-code a universal meter.
+
+**Option C - permit an aggregate meter or prose-led result without independently queryable mechanical branch
+state.** Cheapest interim, but it cannot prove where the fire is, which route the captors attempted, why the move
+failed, or what can be intervened upon. A provider may then become the de facto conflict owner. This violates
+Adam's stated hard floor and is not recommended.
+
+**Prototype/MVP/feature goal:** the proof serializes two persistent branch states and reproduces their outcome
+after reload; under recommended Option B the playable MVP keeps that bounded deterministic ledger and one concrete
+intervention path; the feature promotion adds typed per-owner preconditions, deterministic fail/replan behavior,
+larger fork/convergence graphs, and governed cutaways. The promotion trigger is a crisis that the simple rule makes
+implausible, non-intervenable, or repeatedly blunt—not provider preference.
+
+**Codex recommends Option B.** It matches Adam's allowance for an interim while preserving a real mechanical game
+under every supported DM provider. P10.9 remains open pending this answer and an explicit family closure audit.
+
+### 11.100 F10.9l.2 ruling - bounded mechanical branch ledger may satisfy the MVP; full owner arbitration remains the ideal
+
+Adam accepted Codex's recommendation, **Option B**.
+
+Adam then clarified the standing response shorthand: when he says **“recs are solid,”** he accepts both Codex's
+recommended option letter and the accompanying **prototype -> playable MVP -> ideal/dream-feature pipeline**,
+including the stated retained seams and promotion triggers unless he adds an amendment.
+
+The bounded playable MVP may serialize a small CrisisChain through a deterministic, mechanically persisted branch
+ledger. Each pressure retains its own id, clock/state, causal receipts, save/load history, and at least one concrete
+intervention path. A simple canonical conflict rule may make a later branch pause or fail when an earlier committed
+fact blocks it. The provider-neutral DM seat receives and narrates the result; it cannot select the winner, change
+the branch state, or replace the mechanic with prose.
+
+Full typed per-owner preconditions, deterministic owner-defined fail/replan behavior, larger fork/convergence
+graphs, and governed cutaways remain the feature goal. Their promotion trigger is concrete evidence that the
+bounded ledger creates implausible, non-intervenable, or repeatedly blunt results. The proof prototype still begins
+with only two persistent branches and reload-equivalent outcome. This phasing preserves the full ideal's version,
+precondition, receipt, and ownership seams without putting its medium-high concurrency breadth on the first
+playable path.
+
+### 11.101 Explicit phased P10.9 closure audit - cross-mode continuity family closed
+
+P10.9 is now **CLOSED at the design-questionnaire level on its accepted phased basis**.
+
+#### Coverage audit
+
+- **Common adapter identity and precision:** F10.9a-F10.9b accept one typed, idempotent SceneLineage handoff and
+  honest exact/anchored/zone-or-route/unresolved precision with provenance-bearing placement and compaction
+  receipts.
+- **Battle placement and transition experience:** F10.9c-F10.9d retain one player-owned PC, deterministic
+  approach-bounded whole-party deployment for pre-alpha, independent allied action after placement, a simple
+  orientation-preserving crossfade/reframe, and one short fact-locked provider-neutral DM-seat/fallback bridge.
+  Player placement and the restrained diegetic continuity beat remain named promotions.
+- **Party continuity:** F10.9e-F10.9f keep one advancing party scene for pre-alpha, preserve forced persistent
+  separation as a self-inert cold canonical record, and stage bounded same-scene companion autonomy before any
+  independently advancing split-party lineage.
+- **Travel, wilderness, and arrival:** the closed F10.9g family covers one staged TravelWalk contract, route versus
+  journey truth, rational refining macro-biomes, Fray/Spice reuse, bounded physical route choice, material event
+  promotion, exact travel-to-BattleMat remount, partial-journey recovery, truthful early transport, and fact-bound
+  provider-neutral narration.
+- **Town and social continuity:** the closed F10.9h family covers a bounded district graph, real-roll mounted
+  venues, Urban Walk/threshold movement, same-venue battle/aftermath, material-citizen promotion, offscreen owner
+  receipts, pursuit, witnesses/evidence, civic obligations, transport anchors, time/access gates, and symmetric
+  departure/return.
+- **Dungeon, investigation, crises, and aftermath:** F10.9i-F10.9m plus generated i.1-m.1 and l.2 cover certified
+  room portals over one site lineage, owner-driven unmounted material change, derived evidence views and a durable
+  viewpoint-safe evidence index, typed CrisisChain projection with presentation-only fallback, one governed exact
+  foreground, mechanically persisted parallel branches, deterministic bounded conflict serialization, and
+  obligation-licensed semantic aftermath compaction.
+
+The original P10.9 list—travel/map, arrival, town/social interaction, wilderness exploration, dungeon movement,
+investigation, CrisisChains, battle reconfiguration, split parties, and aftermath—therefore has an explicit
+accepted disposition. No original mode was treated as solved merely because the common handoff exists.
+
+#### Authority and contradiction audit
+
+- One canonical owner, SceneLineage, id/version, event/receipt order, precision law, viewpoint boundary, custody
+  record, active/site/cold model, and persistence/recovery path govern every adapter. BattleMat, TravelWalk,
+  TownTray, cards, evidence views, the DM seat, and future crisis presentation consume that truth rather than
+  becoming parallel rules engines.
+- One active exact room or venue does not freeze the rest of the world: only certified owners may emit material
+  offscreen receipts. This preserves consequences without contradicting the rejection of an always-live universal
+  scene or hidden continuous simulation.
+- Automatic bounded deployment, simple crossfades, mechanically stateful serialized crises, and semantic
+  compaction are explicitly phased first forms. They retain the ids, candidate sets, versions, preconditions,
+  anchors, receipts, and triggers needed by their richer goals; none converts a reduced presentation into reduced
+  mechanics or provider-owned truth.
+- Same-scene companion autonomy remains distinct from independently advancing split-party play. A cold separated
+  companion is self-inert; externally owned consequences do not grant it an invisible action economy.
+- Derived evidence memory does not create a clue-board authority. Aftermath compaction does not erase unresolved
+  action, hazard, topology/access, pursuit, witness/evidence, custody, or handoff dependencies.
+- Performance, device, input, and accessibility costs were named but not decided here; P10.10 remains their owner.
+  Asset/generation/rollback and acceptance-corpus breadth remain P10.11 and P10.12.
+
+#### Proof, MVP, feature-goal, and generated-follow-up audit
+
+- C2A-C2D prove connections, cross-room promises/mutation, and the first exploration/investigation -> BattleMat
+  plus EngagementLens -> actionable aftermath handoff. C2G covers cold separation; C2H-C2L cover retained travel;
+  C2M covers bounded town continuity; C4C covers the mechanically stateful bounded crisis. Passing one proof does
+  not make the integrated playable MVP complete.
+- The playable MVP keeps narrow but real continuity across its supported dungeon, investigation, battle,
+  aftermath, travel, town, party, and CrisisChain traces. The provider-neutral DM seat may bridge presentation but
+  never missing mechanics.
+- Player-authored deployment, restrained diegetic transitions, richer investigation projections, broader
+  operating sites and towns, companion roaming, specialized travel, full per-owner crisis arbitration, governed
+  cutaways, and deeper forensic/ecological aftermath remain named promotions with retained seams and evidence
+  triggers.
+- F10.9f and all f.1-f.2 questions are answered; F10.9g and all g.1-g.19 questions are closed at section 11.83;
+  F10.9h and all h.1-h.15 questions are closed at section 11.94; F10.9i-F10.9m and generated i.1-m.1/l.2 are
+  answered at sections 11.96-11.100. No material generated P10.9 continuity question remains unanswered.
+
+A failed implementation proof or later contradiction may reopen its named seam, but does not erase this design
+closure or silently enlarge another owner. Wave 10 remains **OPEN**. The questionnaire advances to mandatory
+**P10.10 - performance, device, input, and accessibility**, followed by P10.11, P10.12, and additive G10.1-G10.2.
+Wave 10 still requires Adam's explicit final agreement after every original, additive, and generated follow-up is
+exhausted.

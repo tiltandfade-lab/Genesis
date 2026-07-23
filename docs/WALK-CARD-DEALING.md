@@ -11,6 +11,11 @@ related:
 
 # Walk Card Dealing and Secret Networks
 
+> **Wave 4 authority note (2026-07-22):** the dealing and `secretNetwork` material below is a preserved proposed
+> runtime seam, not the canonical secret-frequency, endpoint, or discovery schema. Wave 4 owns those decisions in
+> `procedural-dungeon-direction/wave-04/01-questionnaire-and-triage.md`; this document remains implementation evidence
+> and a candidate pattern.
+
 ## 0. Ruling
 
 A walk is generated like a deck being dealt into a graph.

@@ -2,11 +2,14 @@
 type: reference-index
 status: VERIFIED
 created: 2026-07-18
+updated: 2026-07-22
 ---
 
 # Source Index
 
-Retrieved 2026-07-18. Local PDF page numbers below refer to the page sequence reported by `pdfinfo`, not necessarily a venue's printed folio. All nine files passed `pdfinfo` and text-extraction checks.
+The original collection was retrieved 2026-07-18; S10 and supplemental research inputs R1 and R2 were added 2026-07-22.
+Local PDF page numbers below refer to the page sequence reported by `pdfinfo`, not necessarily a venue's printed
+folio. All ten PDF files passed `pdfinfo` and text-extraction checks.
 
 ## Primary article and implementation documentation
 
@@ -28,10 +31,32 @@ These two publishers do not provide official standalone PDFs for these pages. Th
 | S7 | `papers/07-green-2019-two-step-dungeon-generation.pdf` | Green et al., "Two-step Constructive Approaches for Dungeon Generation" (2019), 7 pages | Empirically supports separating architecture creation from furnishing and combining independent generators; adds expressivity metrics and persona-based playability evaluation. | https://pcgworkshop.com/archive/green2019constructive.pdf | `4bc679acedb55a0554ed00b14c778d6e921c48037028e1c9d42e1ec52daea524` |
 | S8 | `papers/08-henderson-2019-constrained-furniture-layouts.pdf` | Henderson, Subr, and Ferrari, "Automatic Generation of Constrained Furniture Layouts" (2019), 11 pages | A learned, data-driven alternative for class, count, location, orientation, motif, and abutment sampling with explicit traversability rejection. Useful later for priors, not as the first implementation. | https://arxiv.org/pdf/1711.10939 | `be05d973f42f9398c67ef0cb4698adf416ea4c3df201b090ca7b6821c2278ea6` |
 | S9 | `papers/09-whitehead-2020-smt-dungeon-layout.pdf` | Whitehead, "Spatial Layout of Procedural Dungeons Using Linear Constraints and SMT Solvers" (2020), 9 pages | Shows that declarative integer constraints can solve room bounds, separation, adjacency preferences, and designer control lines quickly. A plausible escalation path for structural layout. | https://pcgworkshop.com/archive/whitehead2020spatial.pdf | `72b818aaa54a0e3e185f796e2d7ea608933510e8883fa2ec01f41c3203a60d79` |
+| S10 | `papers/10-mueller-2006-procedural-modeling-buildings.pdf` | Müller, Wonka, Haegler, Ulmer, and Van Gool, "Procedural Modeling of Buildings" (2006), 10 pages | Introduces CGA shape: context-sensitive volumetric and surface shape grammar with scope subdivision, repetition, component insertion, occlusion/snap awareness, and rules that preserve architectural relationships. It supports Wave 3's procedural culture constitution, stamp/trim grammar, and geometry-assembly research, but it does not solve Genesis's canonical functional-graph embedding or tactical composition problem by itself. | https://peterwonka.net/Publications/pdfs/2006.SG.Mueller.ProceduralModelingOfBuildings.final.pdf | `d1658331d7936be4e5d0edddd5d3f30ab46e950a809ec8b7cb426e9ebdde0c85` |
+
+## Supplemental research inputs
+
+| ID | Local file | Work | Why it matters to Genesis | Authority | SHA-256 |
+| --- | --- | --- | --- | --- | --- |
+| R1 | `claude-wave-03-graph-to-space-solver-research-2026-07-22.md` | Claude, "Genesis Wave 3 — Graph-to-Space & Tactical-Composition Solver Research" (supplied by Adam, 2026-07-22) | Broad modern solver/floorplanning/PCG/geometry survey. It adds rectangular-dual and minimum-bends floorplanning, a rectangular -> orthogonal -> irregular representation ladder, candidate diagnostic metrics, a concrete eight-edge prototype fixture, and library/license leads. | Retained research input, **unverified in part**. Its packages, performance claims, algorithms, and recommendations require task-specific verification; it is not an accepted design ruling or dependency admission. | `96a03f1291916ec4fb2ece0a6eafa42cca38981b87b3aea7e2d843606421131a` |
+| R2 | `claude-tactics-rpg-tutorial-mining-2026-07-22.md` | Claude, "Tactics RPG Tutorial Corpus Mining — The Liquid Fire Unity (2015) + Godot remake (2023-2026)" (mined at Adam's request, 2026-07-22) | Mechanics distillation of the classic FFT-clone tutorial series against named Genesis gaps: the C1D exact-cell battle spine (one BFS traversal engine with injected predicates, `\|Δheight\| ≤ jump`, pass-over vs stop-on, the fly-range query bug class), the declarative range × area × effect-target targeting trinity, a deterministic LLM-free monster-tactics stack answering `docs/COMBAT.md`'s open AI-policy question (PlanOfAttack ≈ DM-bridge event; script proposes, DM disposes), status-as-effect-plus-condition-locks, victory conditions as typed observers, and an eight-item cross-cutting pitfall checklist. Negative finding F1: the corpus's board generation is height-noise, validating the TacticalCompositionPlan direction by omission. The appended Codex applicability audit dispositions every proposal, amends the universal-BFS/cell-only-target claims, protects existing Genesis mechanics and visual authority, and routes later evidence without creating an implementation obligation. | Retained research input. Descriptive lesson content verified by direct fetch 2026-07-22; **applicability mappings are proposals, not accepted rulings**. Closed Wave 10 decisions, C1H composition, current cell/tier/connector laws, existing monster-tactics authority, and Wave 8 mutation ownership are explicitly not reopened. Patterns only — no tutorial code, asset, layout, or dependency admission. | `addb77b2db49c65995c058cd44790b20228edc3516d2c15e2f130014d596b419` |
+
+R1 preserves the supplied synopsis verbatim after a repository retention note. The original attachment content had
+SHA-256 `313d453c71bf43f931b0e156ff444ac6324ea9287f299d7ec34960de1d3ff2d5`; the retained file's different hash reflects
+only the added metadata and cautionary preface.
+
+R2 was authored in-repo by Claude on 2026-07-22 (no separate original attachment; the hash covers the research plus
+the appended Codex applicability audit). Its full lesson-by-lesson URL index for both tutorial series lives inside
+the file itself. The mined tutorials are studied as patterns only; no tutorial code or asset enters Genesis.
 
 ## Reading order
 
-For Genesis implementation decisions, read S1, S2, S6, S3, S4, S7, S5, S9, then S8. This order moves from the exact semantic compiler model, through doors and topology, into circulation and composition, then gameplay constraints and optional future solvers.
+For Genesis implementation decisions, read S1, S2, S10, S6, S3, S4, S7, S5, S9, then S8. This order moves from
+the exact semantic compiler model through context-sensitive architecture grammar, doors and topology, circulation
+and composition, gameplay constraints, and optional future solvers.
+
+S10 is an author-hosted research copy of a published paper. Its local presence grants no permission to redistribute
+it as a game asset or to import third-party implementation code. Genesis uses its described concepts as research;
+all production grammar, code, data, and art remain independently created and governed by their own licenses.
 
 ## Citation convention in the report
 

@@ -47,7 +47,8 @@ The proposed compiler is not speculative. It is the synthesis of several mature 
 - room-template boundary compatibility and configuration spaces [S6];
 - separation of architecture from furnishing and automated expressivity/playability evaluation [S7];
 - learned layout priors as a later enhancement [S8];
-- declarative structural constraints through SMT as an escalation path [S9].
+- declarative structural constraints through SMT as an escalation path [S9]; and
+- context-sensitive volumetric and surface shape grammar for coherent architectural families [S10].
 
 Genesis already contains many of the hard ingredients: a canonical graph, deterministic random streams, rich rolls, provenance, reachable polygonal plans, a compiled shell, stateful interactables, realm skins, one-room rendering, and a deep verification culture. The work is therefore a consolidation and contract correction, not a restart.
 
@@ -257,6 +258,26 @@ Whitehead demonstrates that integer linear constraints expressed to an SMT solve
 Both are valuable, but neither should be Genesis's first move.
 
 SMT becomes attractive if structural layout, room transforms, and portal compatibility produce coupled cases that bounded constructive search handles poorly. Learned priors become attractive after Genesis has a large corpus of accepted layouts or a suitable licensed dataset and wants more human-like variation. Both require the same thing Genesis lacks today: a clear structured representation and explicit validity tests. Building the contract first does not foreclose them; it makes them possible.
+
+## 2.9 Context-sensitive architectural shape grammar
+
+Müller et al.'s CGA shape grammar separates the initial building mass from repeated subdivision and surface-detail
+rules. Scoped split/repeat operations, component insertion, transformations, and context-sensitive tests allow a
+compact grammar to create many coherent buildings while preserving relationships such as doors reaching legal
+terraces or streets, windows not intersecting walls, and terraces receiving railings [S10, Abstract and Sections
+3-5]. This is directly relevant to Genesis's accepted procedural `CultureVisualConstitution`, structural stamps,
+trim/component assembly, and site-imprint obligations.
+
+The paper does **not** solve Genesis's canonical functional graph, tactical route/elevation composition, exact
+five-foot mechanics, historical mutation, or multi-scale occupation. CGA-like grammar belongs downstream of—or in
+a constrained dialogue with—`SpatialPlanV2` legality and `TacticalCompositionPlan`. It can realize a culture's
+recognizable construction language after topology, portals, supports, reservations, and tactical relations have
+declared what may be built. It must not become a facade generator that paints over an illegal plan.
+
+The most promising translation is therefore a small independent grammar vocabulary keyed by stable semantic
+facts: scoped volume/subdivision, bay rhythm, repeat, conditional component insertion, material/trim role, named
+sockets, collision/occlusion tests, and culture-specific parameter ranges. Genesis adds deterministic provenance,
+mechanical ownership, explicit failure, history layers, and visual fallbacks around that vocabulary.
 
 ---
 
@@ -1198,6 +1219,27 @@ variants and architectural roles, aligned normal/ORM channels, dedicated cap/cor
 measured shader/batching optimization remain named promotions. General automatic unwrap still does not enter the
 procedural-run path.
 
+### 13.9 Fixed-camera and twelve-site interpretation amended (2026-07-22)
+
+Wave 3 section 12.13 supersedes the earlier inference that every retained production fixture must support four
+player-selectable camera yaws. Genesis now targets one stable fixed production yaw/pitch/projection family with
+governed pan, zoom, focus, recenter, safe-rectangle response, and cutaway/ghosting. C1H and later retained captures
+must prove tactical honesty, composition, lighting, prop/sprite citizenship, and occlusion repair through that
+production view and its governed focus states. Optional nonproduction yaws may remain cheap diagnostics for
+malformed geometry, false adjacency, or candidate fragility; they do not restore player rotation, equal-yaw beauty,
+or production-quality unseen-surface obligations.
+
+The research lesson survives in narrower form: camera-aware composition and explicit occlusion diagnostics still
+matter, but the fixed product view concentrates rather than multiplies the acceptance surface. The camera may score
+or select among otherwise legal candidates and guide noncanonical dressing. It may not alter graph topology,
+routes, connectors, line of sight, scale, canonical orientation, history, material state, or mechanics.
+
+The corpus interpretation is also corrected. Wave 2's twelve named golden sites remain the product/system corpus;
+section 10.3 of `BATTLEMAP-TOWNTRAY-COMPOSITION.md` supplies twelve structural composition risk dimensions to
+distribute across those real-roll sites where causally appropriate. The lists are not replacements and require no
+one-to-one pairing. This preserves operating-site, transition, cold-state, group, scale, and anomaly coverage while
+adding explicit battlefield-composition evidence.
+
 ---
 
 ## References
@@ -1213,6 +1255,7 @@ procedural-run path.
 - **S7.** Green, M. C. et al. "Two-step Constructive Approaches for Dungeon Generation." 2019. `Reference/Procedural-Dungeon-Research/papers/07-green-2019-two-step-dungeon-generation.pdf`.
 - **S8.** Henderson, P.; Subr, K.; Ferrari, V. "Automatic Generation of Constrained Furniture Layouts." 2019. `Reference/Procedural-Dungeon-Research/papers/08-henderson-2019-constrained-furniture-layouts.pdf`.
 - **S9.** Whitehead, J. "Spatial Layout of Procedural Dungeons Using Linear Constraints and SMT Solvers." 2020. `Reference/Procedural-Dungeon-Research/papers/09-whitehead-2020-smt-dungeon-layout.pdf`.
+- **S10.** Müller, P.; Wonka, P.; Haegler, S.; Ulmer, A.; Van Gool, L. "Procedural Modeling of Buildings." 2006. `Reference/Procedural-Dungeon-Research/papers/10-mueller-2006-procedural-modeling-buildings.pdf`.
 
 ### Live technical sources
 

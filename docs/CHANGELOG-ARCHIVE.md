@@ -14,6 +14,105 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-09 (late night) — PLACE-GEN build wave: places are realm-true from birth and render as dioramas
+
+**Added**
+- **Place Spine + skins (U0, PROVISIONAL):** `Engine/03. _Tables/05. Realms/Place Spine.md` (24 site
+  archetypes: weight, scale, GRID-LAW space band, staff band, castProfile) + `Place Skin -
+  {Frontier,Chrome,Gloom}.md` (relabel/drop/add/reweight + namePatterns). Adam's craft pass pending.
+- **`build/gen-place-skins.py` → `data/place-skins.js` (U1):** `PLACE_SPINE`/`PLACE_SKINS`/
+  `PLACE_SPACE_CELLS`/`placeForRealm` (+U3 `SCENE_BUCKET_BY_ARCHETYPE`, +U8 `SCENE_DRESSING_BY_
+  ARCHETYPE`/`sceneDressingForPlace`/`--census`). Missing skins legal → frontier fallback at roll time.
+- **GRID LAW (rewire-class, DESIGN-registered):** every generated space measures in real 5-ft cells;
+  1 band = 5 cells deep, 1 lane = 4 wide. `rollPlace` emits `rolled.dims` in cells (U2); node trays
+  render 1 tile = 1 cell (U7); typed-place fights derive their zone grid from cells (`cmGridFromCells`,
+  U11 — text-parse path byte-identical for everything else).
+- **Tray node source (U7):** `trayFrom({kind:"node"})` + `theaterNodeSourceFor` — a minted place
+  renders as its diorama (floor = dims, dressing-driven floor/light/props, deterministic scatter).
+  Screenshot-gated (`dev/battle-gate/capture-place-tray.mjs`, eyeballed: gloom diner reads).
+- **Cast wiring (U3):** anchor NPCs land on-class via `roleForRealm({filterCls})` filtered-pool
+  (never-dangle); ambient fill maps archetype → scene bucket.
+- **Breach leak (U5):** `rollPlace({hybridRealm})` minority cross-skin mints, SHARED `ROLE_HYBRID_K`
+  (one law with the NPC leak); leaked mints carry `dm.dressing.hybridProps` as the visual tell.
+- **Kit/district relabels (U6):** `BUILDING_KIT_REALM_LABELS` chrome/gloom (all 14 kits) + district
+  relabel map + chrome faction handles; frontier byte-identical (golden-tested).
+- **TIYL routing (U9):** origin settlements carry realm `itemsPool`/`dressing` pointers (pointers
+  only — settlements stay compositional; bardo presentation byte-identical).
+- **DM digest location line (U10):** typed nodes read "<name> — <archetype>, WxD ft, <light>
+  (props…)", 88 B, derived through the tray's own lookups (one derivation).
+- **Book gathers:** DMG14 settlements + random dungeons, DMG24 settlements + bastions
+  (`docs/PLACE-GATHER-*.md`, vision-read) + `dev/model-qa/dmg2014-page-index.json`.
+- **PLACE-ASSET-QUEUE** (`docs/PLACE-ASSET-QUEUE.md`, PROVISIONAL): 44 grounded entries (22 P1);
+  main finding = zero architecture-shell vocabulary in the prop stack. Sprite half translated to
+  `dev/model-qa/sprite-sheets/setting-dressing.md` (4 sheets / 47 cells) + INDEX line.
+
+**Changed**
+- Five thin settlement tables (Ruler Status / Race Relations / Mythology / Nearby / Relevancy) →
+  Master-Setting grade (d100, 5-band 66/20/9/4/1, DMG14 seeds, GRID-LAW dimensions; originals in
+  `zz_Archive/`, rows PROVISIONAL).
+- Merged origin/master mid-wave (the 3ceb4ad CI green wave) — the 3 pre-existing sweep reds
+  (digest-diet/dm-contract/creature-determinism) were already fixed there, not re-fixed.
+- `ROLE_HYBRID_K` const→let (mutation-guard testability; no production reassignment).
+
+**Verification** — every unit orchestrator-re-gated on its branch tip + the integrated tree; full
+`dev/verify-*.mjs` sweep ZERO failures at close; `check-manifest.py` OK throughout; combat byte-gate
+(tabletop-u1 45/45) intact; fuzz 520 calls / 0 findings.
+
+**Deferred** — HOOK-WALKS terminus-bias table (blocked on that spec locking; the `archetypeBias`
+parameter itself landed in U2); 8 backfill realm skins (craft lane); per-realm place-secret tables
+(Adam ruling open); interior generator (spec section first); P1 asset wave (Adam go/no-go);
+`sprite-sheet-prompts.md` shared template referenced by realm sheets but missing (pre-existing).
+
+## 2026-07-09 (sprite night) — fantasy realm sliced (896 sprites) + review tool + auto-scale + XL regen lane
+
+**Added**
+- **The whole fantasy realm + all PCs cut to production sprites** — 896 PNGs in `assets/sprites/`
+  (510 monsters / 75 NPCs / 75 animals / 20 kids / 216 PCs), sliced from Adam's ImageGen corpus at
+  `ui-sketches/sprite-sheets/` (183 source sheets). Padded sheets (ImageGen fills 5×5 grids) handled
+  by targeted crops; every sheet has a review contact sheet. **Corpus + cut sprites now COMMITTED**
+  (Adam's backup ruling — the "no git backup" risk is closed; `.gitignore` un-ignored them).
+- **`dev/sprite-review.py` + `dev/sprite-review.html`** — the sprite review tool (port 5179): browse
+  every cut sprite w/ registry tags; 7-band head-guide ladder w/ imperial heights (tiny 1′6″ →
+  titanic 36′) + a 6′ vector human silhouette on stage; per-sprite scale slider (0.1–8, titan range);
+  explicit **Save Changes** (no real-time writes; pass/fail fold in unsaved edits); pins; `flagged ⚠`
+  filter; writes `dev/model-qa/sprite-tags-overlay.json` directly (atomic) — no parser round-trips;
+  "regen registry" button folds rulings into `data/sprite-registry.js`.
+- **Auto-scale pass** — heights for all 896 sprites (PC species table deterministic; monsters/NPCs/
+  animals via estimation agents), `scale = head_ft/(6×plane)`: 852 applied, 410 flagged (`⚠` note:
+  height uncertain / art extends above head / clamped). Adam's rulings always win (6 skipped).
+- **Defringe pass in the slicer** (`defringe()` + `--defringe-dir`) — kills the universal magenta
+  halo (edge erode ×2 + edge-band despill; interior purples untouched). All 896 re-written in place.
+- **XL/titan/redo regen lane** (`build/gen-xl-regen-sheets.py`) — Adam's ruling: 9′+ creatures are
+  under-res at 25/sheet. Emits `dev/sprite-manifests/XL-REGEN-PROMPTS.md` (64 paste-ready blocks w/
+  anti-magenta-artifact rider: 24 titan solos ≥24′ · 39 XL 2×2 sheets = 155 creatures 9–24′ · 1 redo
+  sheet = 16 sub-9′ review fails) + `xl-regen-manifest.json` (original slugs — slices overwrite).
+  Tiers derive from Adam's own review-pass scales.
+- **`dev/sprite-manifests/REJECTS.md`** — generated regen shopping list (every `verdict:"fail"`
+  grouped by sheet w/ prompt source + cue + note); served at `/rejects` in the tool.
+
+**Changed**
+- `build/gen-sprite-registry.py` — DEFAULT_MANIFEST flipped fixture → real v2 manifest (the deferred
+  T2-integration flip); overlay now carries `scale`/`verdict`/`note` onto registry entries.
+- `src/ui/theater-boot.js` — billboard height × `entry.scale` (the heads-line-up calibration is
+  LIVE); `spriteEntryFor` skips `verdict:"fail"` (review-failed art falls through to 3D).
+  `verify-theater-sprites.mjs` +2 checks (12/0).
+- `build/slice-sprites.py` — `--manifest-path` override (regen lane); re-cut slugs still fail-ruled
+  print a re-review reminder (never silently cleared).
+
+**Fixed**
+- **Slicer wrote misassigned sprites on count-mismatch** (largest-N selection pulls blobs from
+  anywhere on a padded sheet; fantasy-monsters-21 proved it — tarrasque got invented row-5 art).
+  Fail path now QUARANTINES candidate crops under review/; production dir untouched.
+
+**Adam's review pass (first sitting):** 366 pass / 44 fail (fails mostly magenta bleed on big
+creatures — hence the regen lane).
+
+**Deferred**
+- `item` kind in the v2 parser/registry (13 fantasy item sheets + 571 item cells still unsliced).
+- Interior magenta-bleed auto-fix (legit purple art measures identical to bleed — review catches it).
+- Square-plane aspect: `buildSpriteBillboard` stretches non-square crops; revisit with an
+  aspect-correct plane sized off `tex.image`.
+
 ## 2026-07-09 (night) — Doc auto-archive rule + CI/token-discipline session close
 
 **Added**

@@ -100,7 +100,10 @@ remain independently diagnosable; it must pass before C2M claims TownTray reuse 
 object, stable ids, a playable tabletop visual floor, and no renderer-owned mechanics?
 
 This pass proves the room/cell identity seam, semantic-to-spatial projection, stable capture, and BattleMat shell.
-It does not require site simulation or a complete dungeon.
+It also establishes the smallest Wave 6 body seam: one retained existing-corpus citizen exposes a versioned
+rules-facing BodyForm whose D&D combat-control space and registry visual-height provenance reach the same canonical
+projection. This is an integration assertion, not a sprite-sizing or replacement-corpus pass. It does not require
+site simulation or a complete dungeon.
 
 ### C1B - local movement and route
 
@@ -108,7 +111,12 @@ It does not require site simulation or a complete dungeon.
 portal through exact preview-versus-commit receipts?
 
 This pass proves exact cells, route agency, labels, portal use, and the preview-versus-commit boundary without also
-making object interaction or combat part of its primary gate.
+making object interaction or combat part of its primary gate. Wave 4 now requires this narrow portal to have one
+canonical connection id/version and shared endpoint/state owner; per-room exits, apertures, cards, map marks, and
+DM-seat facts are projections. C1B does not need the mature Connection family, but it may not prove movement through
+two independently rolled half-doors or provider narration. Its retained body-aware case distinguishes normal
+movement, an explicit SRD Difficult Terrain/narrow-opening result, one ordinary stated DC for consequential
+uncertainty, and true blockage with lawful alternatives; renderer collision and DM prose never decide success.
 
 ### C1C - object, hazard, and custody
 
@@ -124,7 +132,10 @@ duplicating or losing mechanics?
 
 The lens appears for every material combat beat. Exact activation, movement, attack, hit/damage/down, target and
 active-actor identity, generic truthful lens staging, and deterministic return to board truth are canonical and
-visible. This is the first **battle-system** gate, not merely a renderer demo.
+visible. A small retained mixed-scale pair proves that actual occupied space, reach, base/picking, fixed-camera
+projection, and provider/accessibility facts consume the same BodyForm/version without visual scale compression.
+One already-supported form swap may join C1D/C2D recovery evidence when available, but does not block the basic duel.
+This is the first **battle-system** gate, not merely a renderer demo.
 
 ### C1E - combat consequence breadth
 
@@ -158,7 +169,8 @@ authority or assume Gemini is the shipping boundary.
 
 **Primary question:** can one real rolled room become a tactically and visually intentional battlefield—coherent
 elevation masses, typed visible connectors, a readable primary spine, a licensed landmark or dominant structural
-mass, honest deployment/objective space, shaped negative space, and tactically truthful four-yaw composition—without
+mass, honest deployment/objective space, shaped negative space, and tactically truthful fixed-production-view
+composition across governed focus/cutaway states—without
 copying an authored map, moving mechanics into the renderer, or losing source provenance?
 
 C1A first establishes stable composition and surface ids plus a greybox diagnostic view over the existing room.
@@ -166,6 +178,10 @@ C1H then introduces the smallest bounded `TacticalCompositionPlan` candidate/val
 improve that retained fixture. The dressed capture must preserve the clay plan's exact routes, connectors,
 reservations, and ids. The exact-cell BattleMap and mandatory EngagementLens remain the battle system; map quality
 does not become an excuse to postpone playable combat.
+
+Wave 3 section 12.13 supersedes the earlier four-player-yaw acceptance assumption. C1H uses one fixed production
+camera family with governed pan/zoom/focus and cutaway/ghosting. Optional nonproduction yaw diagnostics may expose
+geometry defects, but player rotation and equal multi-yaw beauty are not proof obligations.
 
 This is the high-priority first rung of the shared BattleMap/TownTray module defined in
 `../BATTLEMAP-TOWNTRAY-COMPOSITION.md`. C2M must later consume the same region, route, connector, reservation,
@@ -176,8 +192,8 @@ surfaces are not C1H prerequisites.
 
 **Primary question:** can one deterministic manifest-driven horizontal trim sheet route distinct base-course,
 cornice, cap/nosing, and curb/retaining roles across the real C1H procedural geometry at correct physical scale,
-repeat phase, corners, endpoints, occlusion ownership, and four-yaw readability—with a geometry-only fallback,
-unchanged tactics, and no unique per-map texture?
+repeat phase, corners, endpoints, occlusion ownership, and fixed-production-view readability across governed focus/
+cutaway states—with a geometry-only fallback, unchanged tactics, and no unique per-map texture?
 
 Use one material family and one stable semantic layout. Prove a diagnostic sheet before beauty art; generate or
 author source strips independently and pack them deterministically with provenance; let architecture material or a
@@ -189,6 +205,51 @@ C1I does not require the full architecture-material roster, physical profile-swe
 families, normal/ORM channels, dedicated junction art, a custom atlas-repeat shader, general automatic unwrap, or
 new tactical mechanics. Those remain named feature promotions in `../TRIM-SHEET-PIPELINE.md`. C2M reuses C1I's
 layout, run, material, fallback, and provenance contract rather than creating a town-only trim system.
+
+### C1J - one functional guard-room furnishing assembly
+
+**Primary question:** can the retained C1H clay geometry become one functioning small externally supplied guard-post
+room through a canonical furniture assembly—rather than a bag of attractive props—while preserving portals,
+circulation, tactical truth, culture/material identity, deterministic fallback, and provider-neutral DM facts?
+
+The clay shell, elevations, portal, reservations, and circulation commit before furniture. One bounded `RoomProgram`
+then requires a guard-workstation/observation function plus only the rest, storage, light, or supply support the
+selected room actually licenses. Required and optional roles, footprints, support sockets, orientation, access
+faces, working clearances, focal/circulation relations, and lawful substitutions/degradation remain explicit.
+Function, occupant/history evidence, tactical affordances, and optional visual dressing are separately reported.
+
+Use the simplest honest realization for each admitted prop: a full 3D object when silhouette/interaction/occlusion
+requires it, a shallow sprite extrusion for a surface-attached or strongly planar noun, and usually a primitive
+assembly with a solid/procedural admitted material. The Wave 3 culture constitution and site imprint select indexed
+material/palette/motif arrivals; visual assets never create the noun. Force at least one exact asset and one lawful
+fallback through the same semantic slot. Include one exact container/holding allocation and one aggregate search
+surface under the inherited Wave 1/2 laws. Capture clay/furnished and normal/fallback states at gameplay scale on
+the target MacBook Pro and expose the same obligations, degradations, and state to the DM seat.
+
+C1J does not build the full guard post, every common-room recipe, all twelve sites, mature clutter, broad prop art,
+or universal furniture layout solving. The retained fixture earns only the recipe/micro-assemblies and realization
+tiers it actually exercises.
+
+### C1K - allowlisted dressing assertion and touched state
+
+**Primary question:** can the provider-neutral DM seat propose one ordinary allowlisted guard-room detail, have it
+atomically accepted or rejected before establishment, commit minimum mechanical state, support one real use or
+mutation, and rebuild the same result without provider prose becoming a second world-state owner?
+
+Use a tiny fixture-specific allowlist such as stool, rag, cup, loose paper, or mundane tool. Retain one accepted
+proposal, one forbidden or spatially invalid proposal, one synonym/retry that cannot refill the opportunity, and one
+touched-state trace such as moved, wet, exhausted, embedded, or blocked. The accepted assertion stores stable id,
+class, quantity band, location/support, material/condition, ownership/access, observer knowledge, state, provenance,
+and promotion tier. Pickup, use, mutation, custody, visual projection, DM/fallback narration, save/load, and revisit
+must agree. Rejection must produce honest forward-only fiction without narrating success.
+
+Wave 6 uses this same fixture to prove one sparse semantic **Stub -> Working** promotion: light contact retains only
+the minimum noun/referent/owner/provenance/material delta, while actual use adds only the capabilities/state/custody
+components it needs. Active projection may later compact, but the same id and material facts do not demote or reroll.
+
+C1K does not implement the ideal contextual latent-reserve system, broad material reactions, general physics,
+unbounded AI invention, or universal environmental actions. Passing one class may justify the next bounded class;
+it never grants a provider unconditional authority over canon.
 
 ## Stage 2 - multi-room causality and first mode handoff
 
@@ -206,13 +267,21 @@ This is the first exact portal/circulation and cross-room continuity proof. It s
 evidence to the richer map/town/exploration/combat mode-continuity contract owned by P10.9, but it does not replace
 the adapter-handoff proof below.
 
+P3.5's graph-realization experiment follows rather than inflates this first seam. After the two-room connection is
+real, a retained C2-era workbench fixture may freeze a small multi-room graph containing a loop, secret edge,
+vertical connector, and dead end. It compares bounded deterministic candidates, input-edge-to-connector
+traceability, rejected/unsatisfied evidence, and remount replay. It is an evidence fixture, not permission to make
+the first continuity pass an eight-room engine batch or to admit a solver dependency automatically.
+
 ### C2B - promise and payoff
 
 **Primary question:** can an early clue, obstruction, resource fact, or visible consequence create one stable
 cross-room promise that later becomes relevant and pays off without invention or reminder clutter?
 
 This proves the minimum promissory discovery, knowledge separation, callback identity, causal history, and
-DM-seat-led projection before building a discovery network or full attention ladder.
+DM-seat-led projection before building a discovery network or full attention ladder. For Wave 6's cross-noun
+three-tier law, the promise/concept begins as a compact stable referent and grows only the knowledge, holder,
+obligation, evidence, and callback components earned by play rather than a prose essay or duplicated thread object.
 
 ### C2C - multi-room mutation
 
@@ -234,6 +303,11 @@ the transition animation is not canonical. Exercise the accepted precision ladde
 local relation, zone/region/route, and unresolved/reserve—with provenance-bearing placement and compaction receipts.
 The pass must retain choice-changing relations and consequences while allowing meaningless grid detail to compact;
 it may not silently invent certainty or erase a tactically established fact.
+
+Semantic depth remains orthogonal to that precision and to active/site/cold ownership. A Developed recurring actor
+may cross the handoff as a one-line roster projection while its sparse canonical components remain cold; a Tier-1
+Stub may remain active and exact when the current action depends on it. The adapter passes ids/component refs and
+deltas rather than copying monolithic actor/item/concept snapshots.
 
 For the pre-alpha party premise, noncombat owns one main-PC/party anchor and a coarse companion formation rather than
 invented exact companion coordinates. Combat derives a bounded deployment zone from the established location,
@@ -279,16 +353,17 @@ information layer remains evidence-gated and is not an automatic later milestone
 
 ### C2G - cold companion detachment and exact remount
 
-**Primary question:** can one companion leave the active party scene through a validated capture/separation receipt,
-remain a canonical but self-inert cold record, receive one externally owned site/world consequence, and remount as
-the same actor with exact location/custody, condition, inventory, and viewpoint knowledge when the main-PC scene
-reaches or retrieves them?
+**Primary question:** can one companion leave the active party scene through a validated forced-separation or
+PC-only constrained-crossing wait receipt, remain a canonical but self-inert waiting/cold record, receive one
+externally owned site/world consequence where supported, and remount as the same actor with exact location/custody,
+condition, inventory, and viewpoint knowledge when the main-PC scene reaches or retrieves them?
 
 This pass proves harsh persistent separation without implementing split-party play. The cold companion owns no
 child SceneLineage, autonomous clock, hidden action, discovery, or DM-model-authored event. Ordinary consequences
 owned by the companion's site/holder/world may still affect them through canonical receipts. Save/load and remount
 must not duplicate, heal, relocate, reroll, or leak the companion. Independently advancing branches remain outside
-pre-alpha.
+pre-alpha. A voluntarily continued PC-only crossing may use the same exact last-legal-anchor state, but supplies no
+general split command or companion activity.
 
 ### C2H - retained canonical foot-travel trace
 
@@ -384,6 +459,36 @@ TravelWalk departure. Only the active venue is exact; the chase handoff, civic c
 schedule gate, compaction, departure, and return must preserve one lineage without requiring a general city chase,
 crime meter, stable ecology, exact resident schedules, or continuously live town.
 
+### C2N - vertical and dangerous traversal transaction
+
+**Primary question:** can one two-level canonical connection resolve a materially risky group traversal—including
+editable crossing order, one fall, hanging/rescue eligibility, custody/displacement, partial completion, qualitative
+known stakes, interruption, save/load, and exact remount—without flattening elevation, inventing physics, or losing
+an actor/object?
+
+Use the retained D&D falling rule for numeric damage: 1d6 Bludgeoning per 10 feet, maximum 20d6, with the applicable
+Prone and liquid rules. Noise, dropped custody, lower-level displacement, hanging, pursuit position, separation, and
+rescue are separately licensed outcomes rather than damage substitutions. The proof may use a stair/ladder/shaft or
+one-person rope crossing; it need not implement broad flight, complex collapse, vehicles, every body scale, or
+independently advancing split-party branches. Persistent forced separation consumes C2G's exact self-inert cold
+record. Wave 6 additionally requires one body/geometry-constrained outcome to use the explicit SRD rule -> ordinary
+stated DC for remaining uncertainty -> honest blockage order, and one bounded rescue/cooperative case to name a
+primary actor, rescuer, legal helper/anchor, cohort pressure or witness, and one ineligible/self-inert participant
+without granting every present noun a full turn.
+
+### C2O - secret connection and epistemic map
+
+**Primary question:** can one precommitted hidden connection pass through tell -> located mechanism -> opened
+aperture -> viewpoint-true threshold evidence -> traversed/mapped endpoint while one caused false belief is fairly
+corrected, automatic mapping records only observed topology, and every player/DM/fallback/save projection avoids
+secret leakage?
+
+This pass extends C2B's one promise/payoff into the smallest bounded Secret Network. Room opportunities may supply
+the tell, corroboration, contradiction, or payoff without minting one independent secret per room. It exercises a
+stable secret/discovery id, graph-bound homes, clue/payload references, viewpoint holder/belief state, progressive
+reveal, honest map precision, and one optional annotation that remains a player claim rather than world truth. Broad
+faction maps, planted disinformation, campaign-scale chains, and many secret families remain promotions.
+
 ## Stage 3 - small operating site simulation
 
 Grow to the smallest site—likely several rooms—that can have a recognizable purpose and operating model. Exact room
@@ -423,6 +528,13 @@ spine.
 **Primary question:** can at least two groups occupy/contest/aid/oppose at the site, can a pooled candidate legally
 root into a persistent NPC, and can one relationship/control fact change without identity drift?
 
+Wave 6 sharpens the retained proof: an uncontacted `Guard 5` remains a cohort ordinal or provisional scene stub;
+one necessary pre-contact key/witness/action delta persists as a compact world-actor/cohort exception outside
+player-contact CastRoster; direct material interaction promotes the same id into a Tier-1 CastRoster Stub; actual
+mechanical recurrence promotes only needed components to Working; and one already-rich/Developed noun compacts to a
+roster line and remounts without lost identity, knowledge, custody, relationship, or transition truth. The semantic
+Stub -> Working -> Developed axis remains separate from active/site/cold and precision projection.
+
 ### C4B - claims, custody, and invention
 
 **Primary question:** can current possession, attributed ownership/claim, a discovered object/fact, and an approved
@@ -434,6 +546,10 @@ SceneFact promotion remain distinct and survive action, narration, and save/load
 and ordinary actions while the DM's small obligation queue preserves a prior promise and retires it legally?
 
 The crisis graph orchestrates existing owners; it does not become a second action economy or site simulator.
+Wave 6's participation ledger therefore records typed primary/helper/anchor/pilot/passenger/pursuer/witness/
+bystander/environmental roles, actual capability/location/action-or-resource windows, contribution receipts, and
+promotion triggers. Cohorts contribute only their lawful envelope; waiting parties contribute nothing; exact actors
+receive full turns only where the rules require them.
 
 ### C4D - bounded same-scene companion autonomy (feature goal; precedes split-party work)
 
@@ -498,6 +614,11 @@ adversarial transition traces**, and deterministic/batch/human proof layers. Add
 not as a single content or engine batch. Each new site should justify itself by covering a dimension the current
 corpus lacks: size, purpose, operating state, supply model, group conflict, scale, Spice, or non-institutional form.
 
+Wave 6 overlays—not duplicates—this portfolio with BodyForm/actual-scale, typed capacity, SRD/DC/blocked crossing,
+builder-domain mismatch, wait/reunion, cohort-to-CastRoster, three-tier sparse noun/compaction, supported carrier/
+form interruption, cooperative rescue, provider/accessibility/recovery, and Mac storage/context/performance risks.
+Admit the smallest diagnosable fixture for an uncovered risk; do not require an exhaustive Cartesian matrix.
+
 The twelve-site portfolio is an eventual representative acceptance set, not the first implementation milestone.
 The original accepted list and pass semantics remain in
 [Wave 2's closure record](wave-02/06-sweep-and-closure.md#recommended-minimum-wave-2-design-corpus).
@@ -523,3 +644,36 @@ Exact schemas, file seams, pass estimates, numeric budgets, final pass count, la
 passes may safely run in parallel remain provisional until their owning questions and code audits are complete.
 Waves 3-9 will add or refine Clay Passes rather than being translated wholesale into implementation projects. Wave
 11 still owns the workbench/debugger/corpus production design; Wave 12 consolidates the final authorized build plan.
+
+## Pass additions from the Waves 7-9/11-12 records (2026-07-22 Fable canon pass)
+
+**ALL FIVE ADDITIONS ARE NOW BOUND** — every owning wave was swept and explicitly closed at
+the 2026-07-22/23 founder-review session (W7 §16.7 · W8 §17.7 · W9 §18.7 · W11 §19.7 · W12
+§20.7). Original pending language preserved below with per-item binding notes:
+
+- **F8.1 "the breakable door"** — one retained mutation-spine pass between C1C and C2C (break/
+  burn on one door + one column: action → MutationOp → MaterialProfile → states → connection
+  delta / support stub → debris → tells → lens → save/remount → honest refusal). Fills the
+  Wave 3 ledger cell "first destructible proof owner to be reconciled with Wave 8."
+  **BOUND 2026-07-22 — Wave 8 closed at §17.7; this addition is no longer pending.** Adam's
+  F8.2 (wave-08 §17.6) additionally schedules a consolidated enumeration pass over this whole
+  ladder at the Wave 12 consolidation window.
+- **Wave 7 tactical-archetype variants** — named scenario variants over C1D/C1E/C2C/C2N (open
+  assault, chokepoint, elevation, hazard, stealth-open, retreat/pursuit, parley pivot, rescue
+  crisis, creative action, honest failure, mixed scale, replay) accumulated by uncovered risk.
+  **BOUND 2026-07-22 — Wave 7 closed at §16.7; this addition is no longer pending.**
+- **Wave 9 soak traces** — long-session card/motif/cadence traces riding C2B/C4C and the
+  state-hygiene harness (deferred promise, forced delivery, callback lifecycle, invalid play,
+  quiet session, compaction survival).
+  **BOUND 2026-07-22 — Wave 9 closed at §18.7; this addition is no longer pending.** The
+  closure's both-media rider adds targeted scenario fixtures beside the soaks; the four
+  carded-DM pitfalls (steered-feel, nagging, dryness, simultaneity) are named measurement
+  targets.
+- **Wave 11 first workbench pass** — Explain panel + WHY-ledger + sandbox over C1A artifacts;
+  autonomy-graduation drills on existing staged lanes.
+  **BOUND 2026-07-22 — Wave 11 closed at §19.7; this addition is no longer pending.**
+- **F12.1 storage-engine bakeoff fixture** — the reserved Wave 6 codec measurement, run beside
+  C3B on the Mac target (vetoes first, transparent comparison after).
+  **BOUND 2026-07-22/23 — Wave 12 closed at §20.7; this addition is no longer pending.**
+
+None of these change existing pass definitions; retained fixtures stay retained.

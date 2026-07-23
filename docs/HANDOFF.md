@@ -6,6 +6,480 @@ updated: 2026-07-22
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-22/23, founder-review session) — ALL TWELVE WAVES DESIGN-CLOSED; NO BUILD AUTHORIZED (Q12-B RESERVED) [Fable chairing, Adam ruling]
+
+The staged founder-review session ran from `docs/procedural-dungeon-direction/FABLE-FOUNDER-REVIEW-PROMPT.md`,
+interactive with Adam, docs-only. **The procedural-dungeon design program is complete: waves
+7, 8, 9, 11, 12 were swept in plain language and explicitly closed** (W7 §16.7 · W8 §17.7 ·
+W9 §18.7 · W11 §19.7 · W12 §20.7), joining closed 1-6/10. Everything recorded verbatim.
+
+### What was decided
+
+- **Founder Batch 1 answered:** Q7-A **B** (doctrine/INT-tiered acumen) · Q8-A **B**
+  (persistent-until-repaired) · Q9-A **B** (forward-leaning weaver; tune later via the
+  campaign-profile surface) · Q9-B **B** (reactive affordance help) · Q11-A **B** (workbench
+  internal now, creator surface tracked) · Q12-A **A** (local-first, zero telemetry).
+  New decision-index ids GEN-CBT-9, GEN-WLD-10, GEN-DM-11/12, GEN-PROD-5/6 — plus
+  **GEN-PROD-7, the no-dark-patterns law** ("i am not a data broker"), BINDING.
+- **Sweep riders now law:** DM performance layer never carded; the hand floor (never-empty
+  hand); harness-first, loosen-by-evidence; no-plot-armor offscreen (crisis threshold governs
+  *how*, never *whether*); no-unexplained-reversion; organic regrowth on ecology clocks only;
+  DMG-sourced material/door catalog over the BG3 two-force floor; heated-metal conduction
+  state; DC reveal-at-commit; three-tier worlds (live/test/experimental) bound at P12.1;
+  never-brick essential; crit-fail carve-out; the no-exit (gladiator) carve-out.
+- **Ten follow-ups tracked:** F7.1 stealth contract · F7.2 DM rule-bend-and-reconcile
+  (deferred founder vision) · F7.3 player-rolled physical dice mode · F8.1 breakable door ·
+  F8.2 consolidated clay-pass enumeration (→P12.10 window) · F9.1 hand-state rebuild · F9.2
+  the DM seat as a playable seat (sequel/multiplayer vision, deferred) · F9.3 cozy/peaceful
+  register (+ peace-TTRPG research gather) · F11.1 workbench-edit provenance · F12.1 storage
+  bakeoff. Plus instruments: harness-off DM A/B, digest A/B, Gemini-transcript gather (the
+  pacing touchstone isn't in Reference/ yet).
+- **Session-final rulings (wave-12 §20.7):** ship-travel v1 deferral CONFIRMED and promoted
+  to a full prototype→ideal sketch in MODULE-PHASING ("we do want it"); DOCS-INDEX tooling
+  (DI-1/2/3) DEFERRED with a mandatory re-scope precondition; **realm-order leaning: Lost
+  World first** (asset-transition economics) — decision reserved, OPEN-QUESTIONS Batch 2 #11.
+- **Founder direction (wave-11 §19.6.6):** next big production waves = geometry pass +
+  texture pass; target = golden site 1 ("the guard's post") looking decent across procedural
+  configurations; "we will clayroom for a while" first. Storytelling/mechanics judged working;
+  the visual engine is the unproven organ.
+
+### Registry state
+
+All ledger/ladder pending additions BOUND and applied; QUESTION-COVERAGE fully flipped
+(single reserved item: Q12-B); the questionnaire live bookmark, program front door
+(PROCEDURAL-DUNGEON-DIRECTION.md), MODULE-PHASING (now ACTIVE), and OPEN-QUESTIONS
+(Batch 1 discharged; Batch 2 grew #11 realm order) all agree. **The implementation hold
+stands; Q12-B is the single gate; its checklist lives at wave-12 §20.2 P12.12** (recovery
+package, slice-1 gate matrix, budgets remain the unchecked boxes).
+
+### Do next
+
+1. **Adam rest.** Then, when ready: the Q12-B checklist items (recovery-package gate is the
+   first mechanical step), or the visual-engine direction (clay-room geometry/texture passes
+   toward the guard's post) — Adam's declared priority.
+2. Mechanical follow-ups queued: Gemini-transcript gather · FOREVER-STORAGE wiring verify +
+   sidekick-data gather (MODULE-PHASING gaps 2-3) · DI re-scope before any DI execution.
+3. ~~FULL CI PENDING~~ — **discharged same session**: Adam requested the prioritization
+   document + a clean close with CI. `docs/FEATURE-PRIORITIZATION.md` now exists (the
+   readable order: arrival law, stages 0-7, prototype/MVP tests, parked features with
+   triggers; indexed in docs/README.md). The clean close ran the FULL CI-equivalent gate —
+   the one working-tree red (`verify-geometry-fixtures` scope guard) is the co-resident
+   sprite lane's dirty `theater-boot.js`, not this branch (branch diff has zero src/data
+   files) — then merged to master and confirmed the GitHub CI run green (details in the
+   close report / CHANGELOG 2026-07-23 later entry).
+
+---
+
+## 2026-07-22, canon pass — CANON MATERIALIZED; WAVES 7-9/11-12 PROPOSED; FOUNDER BATCH 1 WAS THE GATE [Fable]
+
+The requested canon-and-scope consolidation ran **docs-only** in the assigned session. No code,
+game data, generated artifact, asset, dependency, worktree, LFS materialization, staging,
+commit, merge, or push belongs to this update; the sprite/registry/renderer lane's dirty files
+and `Reference/FFT Battle Maps/` (untracked) were preserved untouched. **FULL CI PENDING** for
+the later final/evening close (this pass ran `git diff --check`, a full relative-link resolver
+over the new/edited docs, questionnaire-id coverage verification, stale-status sweeps, and
+`archive-docs --check` — all green).
+
+### What now exists
+
+- **`docs/canon/` — the whole-game canonical front door** (8 files): README (precedence law) ·
+  PRODUCT-SCOPE (identity, pillars, breadth, the three never-conflated scope tiers, non-goals,
+  unearned claims) · SYSTEM-OWNERSHIP (BUILT vs ACCEPTED owners, forbidden parallel
+  authorities, cutover law) · DECISION-INDEX (stable GEN-* ids + supersession chains) ·
+  QUESTION-COVERAGE (every id, all twelve waves) · OPEN-QUESTIONS (the founder packet) ·
+  GLOSSARY (binding senses) · DOCUMENT-MAP (~290-doc census + supersession map + health-debt
+  register). `PROCEDURAL-DUNGEON-DIRECTION.md` stays the program front door beneath it.
+- **Waves 7, 8, 9, 11, 12 — full PROPOSED records** (wave-0N/: README + 01-proposed-
+  dispositions §16-§20 + proposed PHASING-AUDIT). Across the 70 preserved bank questions:
+  **26 INHERITED · 30 FABLE-PROPOSED · 7 OPEN-ADAM · 6 EVIDENCE-GATED · 1 DEFERRED**, plus
+  generated F7.1 (stealth contract), F8.1 (breakable-door proof pass), F9.1 (hand-state
+  rebuild), F11.1 (workbench-edit provenance), F12.1 (storage/codec bakeoff — the instrument
+  Wave 6 reserved). Ladder/ledger additions are recorded as **pending Adam's acceptance** in
+  both files; nothing binds yet.
+- **Routing reconciled:** CLAUDE.md + docs/README.md route to the canon; DESIGN.md gained a
+  routing-note block (registry unchanged); ARCHITECTURE.md banner marks it evidence-tier;
+  DIRECTION.md banner marks the 07-03 reshape historical; QUESTIONNAIRE.md got a live-bookmark
+  refresh (verbatim text preserved).
+
+### Do next — NEXT SESSION IS STAGED
+
+**Run the founder-review session from the ready prompt:
+`docs/procedural-dungeon-direction/FABLE-FOUNDER-REVIEW-PROMPT.md`** (interactive with Adam;
+agenda: optional fast checkpoint of this uncommitted pass → founder Batch 1 → wave sweeps and
+explicit closures 7 → 8 → 9 → 11 → 12 → MODULE-PHASING confirms → DI go/no-go → close per
+Adam's word). The items below are that session's substance:
+
+1. **Adam: founder Batch 1** — `docs/canon/OPEN-QUESTIONS.md` (Q7-A enemy acumen · Q8-A
+   permanence default · Q9-A DM initiative · Q9-B assist default · Q11-A workbench identity ·
+   Q12-A privacy/telemetry; recommendations marked; Q12-B stays reserved).
+2. **Adam: sweep the five wave records** (batch-accept / deep-dive / amend per the Wave 2
+   sweep protocol), then close explicitly in order 7 → 8 → 9 → 11 → 12.
+3. At the next checkpoint/close: CHANGELOG entry for this pass + the standard gates. Waves
+   7-9/11-12 remain OPEN; no build is authorized; the implementation hold stands.
+
+**Same-day addenda (Adam's follow-up rulings):** (a) Codex routing — `AGENTS.md` read-order now
+carries the canon front door (item 3). (b) **Per-module three-horizon law extended game-wide:**
+`docs/canon/MODULE-PHASING.md` gives every module proof/MVP/ideal with sources (dungeon
+families stay ledger-routed); "(proposed)" rows await Adam with the wave sweep. (c) **Docs
+indexing mechanization approved in direction:** `docs/DOCS-INDEX-TOOLING.md` specs DI-1
+(`gen-docs-index.py` → `docs-index.json`), DI-2 (`check-docs.py` linter incl. single-authority
+claims), DI-3 (stale-status cleanup) — queued for the next ops window, after the founder
+packet, so cleanup encodes those rulings.
+
+## ⭐ Latest (2026-07-22, Wave 6 closure) — WAVE 6 CLOSED; FABLE CANON/SCOPE PASS READY [Codex]
+
+Adam explicitly closed Wave 6 on the complete section 15.7 phased audit. Section 15.8 records the closure; the
+Wave 6 record/README/phasing audit, stable index, and Feature-Promotion Ledger now agree. This records design
+disposition only: no implementation, dependency admission, proof, MVP, release claim, worktree, LFS materialization,
+merge, push, or full CI occurred. **FULL CI PENDING** for the later final/evening close. Concurrent sprite, registry,
+renderer, and review changes remain outside this docs lane.
+
+### New design-organization assignment
+
+Adam asks Fable to compare the accepted procedural-dungeon redesign with Genesis's scattered design corpus, create
+a better indexed ultimate canonical set that defines the game and its scope, and draft or supplement answers for
+the remaining Waves 7-9 and 11-12. The ready-to-use assignment is
+`docs/procedural-dungeon-direction/FABLE-CANON-AND-SCOPE-REFACTOR-PROMPT.md`.
+
+The prompt requires a routed modular canon rather than a giant copied summary: one canonical front door, product-
+scope contract, system-ownership map, stable decision/source index, full questionnaire-coverage matrix, genuine
+open-question packet, glossary, and document/supersession map. Chronological wave records, founder language,
+rejected options, historical proposals, and working Genesis capabilities remain preserved and linked.
+
+The remaining bank is exactly five waves and seventy preserved top-level questions before generated follow-ups:
+P7.1-P7.12/G7.1-G7.2, P8.1-P8.12/G8.1-G8.2, P9.1-P9.12/G9.1-G9.2, P11.1-P11.12/G11.1-G11.2, and
+P12.1-P12.12/G12.1-G12.2. Fable must classify each as `LOCKED`, `INHERITED`, `FABLE-PROPOSED`, `EVIDENCE-GATED`,
+`OPEN-ADAM`, or `DEFERRED`; recover already-settled law instead of re-asking it; make objective technical proposals;
+specify evidence gates instead of invented numbers; and reduce true founder choices to easy batches of at most ten.
+Fable may draft all five records and material generated follow-ups, but no later wave closes without Adam's explicit
+agreement and Wave 12 cannot authorize a build during this organization pass.
+
+### Do next
+
+Hand the ready prompt to Fable. Fable should complete the docs census, materialize the routed canon, draft the five
+remaining open/proposed wave records in dependency order 7 -> 8 -> 9 -> 11 -> 12, reconcile the Clay Proof Ladder
+and Feature-Promotion Ledger, run proportional docs/link/status checks, and return the smallest real founder-review
+packet. Do not implement code or treat cleaner documents as proof that the game is built.
+
+### Reference boundaries
+
+- The indexed R2 tactics-tutorial research and appended Genesis applicability audit remain supplemental evidence,
+  not mechanics, visual, dependency, or build authority.
+- `Reference/FFT Battle Maps/` remains local, reference-only, untracked, and must not be staged.
+- Preserve every earlier handoff block below.
+
+## ⭐ Latest (2026-07-22, Wave 6 complete bank) — ALL P6/G6 ANSWERS ACCEPTED; EXPLICIT CLOSURE PENDING [Codex]
+
+This remains a **documentation/reference design discussion**, not implementation or a final clean close. Adam has
+now accepted Option B across the complete P6.1-P6.12/G6.1-G6.2 bank. Sections 15.6-15.7 retain his final answers,
+the generated state-cost/compression follow-up, recovered prior authority, and the complete closure audit. No
+gameplay code, generated game asset, worktree, LFS materialization, merge, push, or full CI run belongs to this
+update. **FULL CI PENDING** for the later final/evening close. Concurrent sprite, registry-generator, renderer, and
+review changes remain outside this docs lane.
+
+### Final accepted refinements
+
+- **P6.11:** preserve actual relative scale as a product law because tabletop and many D&D representations seldom
+  make it legible. Canonical combat-control space remains distinct from anatomical/render dimensions; the fixed
+  camera, picking, bases, labels, accessibility, and provider-neutral DM seat must adapt without falsifying either.
+- **P6.12:** extend the retained evidence portfolio with Wave 6 risks instead of authoring a separate scale corpus:
+  mixed actual scale, capacity/crossing outcomes, form continuity, player-contact promotion, compaction/remount,
+  waiting-party truth, and typed participation.
+- **G6.1:** recover the earlier light-contact-stub law as a deliberately simple semantic-depth ladder. An
+  unmaterialized possibility is outside the ladder; a material noun then grows monotonically through `Stub` ->
+  `Working` -> `Developed` only when play earns more state. Semantic depth is independent of active/site/cold
+  activation and exact/anchored/zone/unresolved spatial precision. `Guard 5` remains cohort/latent before direct
+  material player contact unless an earlier continuity fact requires a compact stable exception.
+- **State cost/compression:** Adam is right that compact text-state bytes are ordinarily cheap. The real costs are
+  duplicated prose/objects, eager exact simulation, serializing or prompting the whole world, indexes/migrations,
+  and never-compacted history. The accepted direction is structural before codec-specific: one sparse canonical
+  record; stable ids and references instead of copies; current truth plus typed receipts; content-addressed
+  immutable payload deduplication; narration/transcript stored separately; chunked IndexedDB-style persistence;
+  rebuildable projections; and relevance-scoped retrieval. Planning envelopes are roughly 0.3-1 KB for a verbose
+  JSON Stub, 1-4 KB for a Working record, and several-to-tens of KB for a Developed record before archival
+  compaction. Those are measurement budgets, not schema promises. Exact JSON/binary/compression codec choice stays
+  with Wave 12 after representative saves and migrations exist.
+- **G6.2:** cooperative groups use typed, capability- and receipt-bearing participation. They never receive eager
+  per-person turns or invisible prose-only action economy; an exact self-inert waiting party contributes nothing.
+
+### Phasing and record state
+
+The Clay Proof Ladder and Feature-Promotion Ledger now carry the narrow prototype integrations, playable-MVP gates,
+later ideal goals, evidence-based promotions, and explicit exclusions. The new Wave 6 phasing audit finds no
+unanswered original, additive, or generated question; no unresolved authority contradiction; and no unmapped
+material feature family. All implementation remains unaudited: nothing is `PROVED` or `MVP`, and the rulings do not
+authorize a Cartesian sprite/form corpus, broad physics, general split-party play, per-person crowd simulation, or
+whole-world provider context.
+
+Wave 10 and Waves 3-5 remain **CLOSED** on their recorded phased bases. Wave 6 remains **OPEN solely pending Adam's
+explicit agreement to close it**. Do not infer closure from the complete answer bank or audit.
+
+### Do next
+
+Ask Adam for the single explicit Wave 6 closure agreement. If he agrees, append a short explicit-closure subsection
+to the Wave 6 record, mark the Wave 6 README/stable index/phasing audit consistently, preserve all earlier text, and
+checkpoint only if separately requested. Do not implement or advance to another wave before recording that answer.
+
+### Reference and checkpoint boundaries
+
+- The research file `Reference/Procedural-Dungeon-Research/claude-tactics-rpg-tutorial-mining-2026-07-22.md` remains
+  an untracked retained reference in this docs lane; its indexed hash includes the appended Genesis applicability
+  audit.
+- `Reference/FFT Battle Maps/` remains local, reference-only, untracked, and must not be staged.
+- Preserve every earlier chronological block below. Do not update `DESIGN.md` until the owning consolidated design
+  closure calls for it.
+- Continue as design discussion. Do not implement code, create a worktree, materialize LFS assets, merge, push, or
+  run full CI unless Adam explicitly asks.
+
+## ⭐ Latest (2026-07-22, Wave 6 first batch) — P6.1-P6.10 ACCEPTED; WAVE 6 OPEN AT P6.11-P6.12/G6.1-G6.2 [Codex]
+
+This remains a **documentation/reference design discussion**, not implementation or a final clean close. Adam
+accepted Option B across P6.1-P6.10 at section 15.4 with source and prior-authority refinements. The supplemental
+tactics-tutorial research R2 and its Genesis applicability audit are retained/indexed without admitting tutorial
+code, assets, layout, dependency, or mechanics authority. No gameplay code, generated game asset, worktree, LFS
+materialization, merge, push, or full CI run belongs to this update. **FULL CI PENDING** for the later final/evening
+close. Concurrent sprite, registry-generator, renderer, and review changes remain outside this docs lane.
+
+### Exact questionnaire position
+
+- Wave 10 and Waves 3-5 remain **CLOSED** on their recorded phased bases.
+- Wave 6 remains **OPEN**. Section 15.3 dispositions the tactics-tutorial research interruption. Section 15.4
+  accepts P6.1-P6.10 as B and follows every material follow-up generated by Adam's qualifications.
+- Section 15.5 presents P6.11-P6.12/G6.1-G6.2 as the final four easy-numbered questions with Option B recommended
+  throughout. Adam's answers are pending. Wave 6 still requires their dispositions, the final coverage/authority/contradiction/phasing audit,
+  closure-scale Clay Proof Ladder/ledger reconciliation, and Adam's explicit agreement before closure.
+
+### Binding first-batch refinements
+
+- **P6.1:** Genesis keeps the existing roughly two-thousand-sprite corpus, registry height provenance, live
+  true-scale renderer/guise paths, and retained working features. Local 2014 DMG p. 274 and MM pp. 6-7 were checked
+  alongside the current clean SRD 5.2.1. D&D size owns controlled combat space, not literal anatomy or sprite
+  bounds. The accepted shared `BodyForm` relates that space to posture/volume, support, reach, movement/object use,
+  load class, unusual topology, active form, and visual-height provenance. The small proof cast is integration/QA,
+  never art bootstrap or bulk rescaling.
+- **P6.2/P6.4:** typed activity capacity composes Waves 2-5's purpose, population, provenance, geometry,
+  reservation, access-face, assembly, traversal, and honest-failure owners. Builder/original-use scale remains
+  canonical; current occupants require a compatible domain, caused adaptation, or honest mismatch. Older resident-
+  scaled sketch language does not authorize retroactive resizing.
+- **P6.3:** explicit D&D/SRD rules resolve first; when a consequential attempted method remains uncertain, use an
+  ordinary relevant check/DC and stated consequence; true impossibility reports blockage and lawful state changes
+  or alternate routes. This honors Adam's request for DCs while avoiding continuous physics and gratuitous checks
+  on movement already resolved by the rules.
+- **P6.5:** no general voluntary split or independent companion action enters prototype/pre-alpha. If only the PC
+  clears a crossing, companions can remain at the last legal anchor as an exact self-inert **waiting party** while
+  only the main-PC SceneLineage advances. They do not move, act, roll, spend, discover, or receive provider-authored
+  turns. Existing externally owned consequence and exact reunion/remount law still applies. C4D same-scene autonomy
+  remains a later feature and still precedes independent split-party lineages.
+- **P6.6:** `CastRoster` now means the player-contact cast. `Guard 5` remains a cohort ordinal until direct material
+  interaction. Direct conversation, reciprocal/targeted attack, exchange, rescue, custody, personal action/check,
+  or another direct causal encounter promotes the same identity without rerolling it. A key, wound, witness fact,
+  named lore edge, or unseen causal action may still require a compact stable actor/cohort exception before contact;
+  that preserves Wave 2 continuity without fleshing every person into the active cast.
+- **P6.7-P6.10:** typed reference-frame citizens, one-entity/versioned-form changes, bounded real participation,
+  and viewpoint-legal diegetic plus accessible scale/access tells are accepted on their recorded prototype/MVP/ideal
+  boundaries. Accepting a relation contract does not promise every transport, transformation, crowd, or effect
+  family in the first playable slice.
+
+### Phasing and record state
+
+Section 15.4 maps the accepted batch to existing C1A/C1B/C1D/C1J/C2D/C2G/C2N/C4A/C4C/C4D/C4F seams rather than
+creating a giant Wave 6 build. The Feature-Promotion Ledger now has/refines BodyForm, typed-capacity/traversal,
+party-waiting, player-contact-cast, typed-participation, and dynamic-citizen rows. All remain mapped and
+implementation-unaudited; nothing is `PROVED` or `MVP`. The Wave 6 README and stable index point to section 15.4.
+
+### Do next
+
+Receive and record Adam's answers to section 15.5's P6.11-P6.12/G6.1-G6.2 questions. Recover the accepted
+P6.1-P6.10 boundaries rather than reopening them. Follow every generated material follow-up, then perform the full
+Wave 6 original/additive/generated, authority, contradiction, phasing, Clay Proof Ladder, and promotion-ledger
+audit. Do **not** close Wave 6 without Adam's explicit agreement.
+
+### Reference and checkpoint boundaries
+
+- The research file `Reference/Procedural-Dungeon-Research/claude-tactics-rpg-tutorial-mining-2026-07-22.md` remains
+  an untracked retained reference at this pause; its indexed hash includes the appended Codex applicability audit.
+- `Reference/FFT Battle Maps/` remains local, reference-only, untracked, and must not be staged.
+- Preserve all earlier chronological records and handoff blocks. Do not update `DESIGN.md` until the owning
+  consolidated design closure calls for it.
+- Continue as design discussion. Do not implement code, create a worktree, materialize LFS assets, merge, push, or
+  run full CI unless Adam explicitly asks.
+
+## ⭐ Latest (2026-07-22, procedural-redesign fast checkpoint) — WAVES 3-5 CLOSED; WAVE 6 OPEN AT P6.1-P6.10 [Codex]
+
+This is a **documentation/reference fast checkpoint**, not a final clean close. It carries the procedural-dungeon
+discussion through explicit Wave 3, Wave 4, and Wave 5 closure and opens Wave 6's first ten-question batch. It also
+retains the already-folded Claude graph-to-space research synopsis and the later fixed-camera, connection-authority,
+furnishing, and phasing reconciliations. No gameplay code, generated game asset, table, renderer implementation,
+worktree, LFS materialization, merge, push, or full CI run is part of this checkpoint. **FULL CI PENDING** for the
+later final/evening close. Concurrent sprite, registry-generator, renderer, and sprite-review changes in this tree
+remain outside the docs checkpoint and unstaged.
+
+### Exact questionnaire position
+
+- Wave 10 is **CLOSED** at section 11.132 on its complete phased basis.
+- Wave 3 is **CLOSED** explicitly at section 12.15. P3.5/P3.12 include the reconciled modern-solver research,
+  Wave 2's named twelve-site corpus plus structural coverage overlay, and one fixed production camera rather than a
+  four-yaw gameplay requirement.
+- Wave 4 is **CLOSED** explicitly at section 13.10. Its bounded record is the canonical detailed owner for dungeon
+  connections, portals, secrets, vertical traversal, circulation, connection mutation, and connection knowledge;
+  older sketches/specs remain preserved context or implementation evidence.
+- Wave 5 is **CLOSED** explicitly at section 14.9. Its accepted furnishing/empty-room/prop/assembly dispositions and
+  all generated follow-ups are reconciled through its phasing audit and the shared promotion records.
+- Wave 6 is **OPEN** at section 15.2. P6.1-P6.10 have been presented as the first easy-numbered batch, but Adam has
+  not accepted answers to that batch yet. P6.11-P6.12/G6.1-G6.2 remain visibly queued.
+
+### Existing sprite corpus correction
+
+Adam correctly rejected wording that made Wave 6 sound as though Genesis needed to discover creature scale from
+three hand-picked specimens. Genesis already has a roughly 2,000-sprite sized working corpus, generated registry
+height provenance across thousands of entries, and live true-scale renderer paths. Section 15.1 and P6.1 now say
+that plainly. A small retained mixed-scale cast is only an integration and visual-QA slice selected from the
+existing corpus. It is not new corpus authorship, a replacement corpus, or a foundational sprite-sizing pass.
+
+The remaining P6.1 question is architectural: whether mechanics, geometry, tactics, camera, renderer, persistence,
+and the provider-neutral DM seat should derive from the same canonical entity plus active `BodyForm` contract.
+Recommendation B remains intact; the corrected prototype audits existing registry truth through one retained
+mixed-scale scene and one existing form swap.
+
+### Research and authority retained
+
+Claude's supplied graph-to-space synopsis remains preserved verbatim-with-cautions as supplemental research input
+R1 at `Reference/Procedural-Dungeon-Research/claude-wave-03-graph-to-space-solver-research-2026-07-22.md` and remains
+indexed in `Reference/Procedural-Dungeon-Research/SOURCE-INDEX.md`. Its useful floorplanning, representation-ladder,
+diagnostic, and solver-bakeoff hypotheses are folded into closed Wave 3 without turning a candidate tool into canon
+or a runtime dependency. The local Müller procedural-building PDF remains indexed under the existing PDF-ignore
+policy rather than being smuggled into the commit.
+
+Wave 3's fixed-production-camera ruling is reconciled into the composition and trim acceptance records. Wave 4's
+canonical-authority notes route older portal/secret/circulation proposals to the bounded Wave 4 record. Wave 5's
+functional furnishing recipe direction starts with basic room geometry, uses a tiny prototype allowlist, and grows
+only when the DM seat and retained twelve-site evidence earn broader improvisation.
+
+### Do next
+
+Resume Wave 6 by re-presenting the corrected section 15.2 batch as easy numbered questions **1-10**. Explain Options
+A/B/C with concrete dungeon and provider-neutral DM-seat examples; distinguish the no-cash MacBook Pro proof,
+playable MVP, and ideal feature goal; name costs; recommend Option B across all ten; and let Adam answer. Do not
+treat a representative cast as missing art production, and recover existing authority instead of asking Adam to
+re-decide settled technical defaults ceremonially.
+
+Record Adam's answers and chase every material generated follow-up before advancing. P6.11-P6.12/G6.1-G6.2 still
+need dispositions, followed by a Wave 6 phasing/coverage/authority/contradiction audit and Adam's explicit closure.
+Do not declare Wave 6 complete by inference. The global implementation hold remains active.
+
+### Reference and checkpoint boundaries
+
+- `Reference/FFT Battle Maps/` remains local, reference-only, untracked, and must not be staged.
+- Material Maker remains an installed external research application; no graph, dependency, or generated texture is
+  admitted by this checkpoint.
+- Preserve all earlier chronological records and handoff blocks. Do not update `DESIGN.md` until the owning
+  consolidated design closure calls for it.
+- Continue as design discussion. Do not implement code, create a worktree, materialize LFS assets, merge, push, or
+  run full CI unless Adam explicitly asks.
+
+### Ready-to-paste continuation prompt
+
+```text
+Continue the Genesis procedural-dungeon redesign from the 2026-07-22 Waves 3-5 / Wave 6 fast checkpoint.
+
+Read CLAUDE.md, then the newest block at the top of docs/HANDOFF.md, the stable index
+docs/PROCEDURAL-DUNGEON-DIRECTION.md, the Wave 6 index at
+docs/procedural-dungeon-direction/wave-06/README.md, and sections 15-15.2 in
+docs/procedural-dungeon-direction/wave-06/01-questionnaire-and-triage.md. Consult the Clay Proof Ladder,
+Feature-Promotion Ledger, and earlier bounded wave records only as needed.
+
+Wave 10 and Waves 3-5 are closed on their recorded phased bases. Wave 6 is OPEN. Resume by presenting the corrected
+P6.1-P6.10 batch with easy numbered questions 1-10. Explain A/B/C using concrete dungeon and provider-neutral DM-seat
+examples, distinguish the no-cash MacBook Pro prototype from playable MVP and ideal feature goal, identify costs,
+recommend B across all ten, and let me answer.
+
+Important correction: Genesis already has a roughly 2,000-sprite sized working corpus, registry height provenance
+across thousands of entries, and live true-scale renderer paths. P6.1 is not an art-bootstrap or sprite-sizing task.
+Any small retained cast is only an integration/visual-QA slice drawn from the existing corpus. The real question is
+the shared canonical BodyForm/mechanics/capacity contract.
+
+P6.11-P6.12/G6.1-G6.2 remain queued. Follow every generated material follow-up before advancing, reconcile the
+phasing/promotion records, and do not close Wave 6 without my explicit agreement. Preserve the running record and
+earlier text. This remains design discussion: do not implement code, create a worktree, materialize LFS assets,
+merge, push, or run full CI unless explicitly asked. Keep Reference/FFT Battle Maps/ untracked.
+```
+
+## ⭐ Latest (2026-07-22, procedural-redesign fast checkpoint) — WAVE 10 CLOSED; WAVE 3 PAUSED AT SECTION 12.11 [Codex]
+
+This is a **documentation/reference fast checkpoint**, not a final clean close. It captures the completed Wave 10
+questionnaire closure, the opened Wave 3 architecture/stamp/degradation discussion, Material Maker and procedural-
+culture research, the retained Müller shape-grammar paper index, and the reconciled Claude graph-to-space research
+synopsis. No gameplay code, generated game asset, table, renderer implementation, dependency admission, worktree,
+merge, push, or full CI run is part of this checkpoint. **FULL CI PENDING** for the later final/evening close.
+Concurrent sprite/renderer changes in the shared root are outside this checkpoint and remain untouched.
+
+### Exact questionnaire position
+
+Wave 10 is **CLOSED** on its complete phased basis at section 11.132. P10.9-P10.12 and additive G10.1-G10.2 all
+received explicit closure and remain represented in the Clay Proof Ladder, Feature-Promotion Ledger, Wave 10
+phasing audit, and bounded Wave 10 parts.
+
+Wave 3 is **OPEN** at section **12.11** in
+`docs/procedural-dungeon-direction/wave-03/01-questionnaire-and-triage.md`. P3.1-P3.4, P3.6-P3.11, G3.1, and G3.2
+have accepted phased dispositions; P3.2/P3.9 include the accepted ten-part procedural cultural visual constitution,
+site-imprint, and material-history pipeline. P3.5 graph-to-space realization and P3.12 evidence-corpus reconciliation
+remain open. Adam deliberately paused before answering the ten-question section 12.10 batch so Claude's research
+could be retained and reconciled first.
+
+### Claude research retained and folded
+
+The full supplied synopsis is preserved as supplemental research input R1 at
+`Reference/Procedural-Dungeon-Research/claude-wave-03-graph-to-space-solver-research-2026-07-22.md` and indexed in
+`Reference/Procedural-Dungeon-Research/SOURCE-INDEX.md`. Its original attachment text is retained verbatim after a
+repository cautionary preface. Section 12.11 records the useful decision delta and corrections:
+
+- qualifying rectangular-dual, orthogonal, irregular, contact-graph, and minimum-bends floorplanning become
+  explicit candidate families, not a universal solver;
+- rectangular -> orthogonal -> irregular is a promising candidate-representation ladder that may never relax
+  canonical topology, provenance, scale, circulation, or catastrophe authority;
+- elevation coherence, chokepoint legibility, sightline/isovist behavior, landmark salience, shaped negative space,
+  and four-yaw readability become explainable diagnostic hypotheses whose usefulness/weights require captures;
+- a frozen multi-room loop/secret/vertical/dead-end fixture becomes the first falsifiable graph-realization
+  experiment after C1A/C1H establish the one-room seam; and
+- clingo-wasm, MiniZinc/Gecode, Z3, CP-SAT, geometry utilities, CSG, and derived-nav tools remain unadmitted
+  candidates behind task-specific license/runtime/determinism/performance/authority gates.
+
+The report's overclaims are not inherited. Rectangular duals do not cover every Genesis graph; exact package sizes,
+browser headers, determinism, performance, and implementation-size estimates remain measurements; clingo-wasm's
+wrapper is Apache-2.0 rather than MIT; the cited CP-SAT issue is not a timeless solver guarantee; and Claude's claim
+that the culture branch remained open was stale because Adam already closed P3.2/P3.9 at section 12.8.
+
+### Do next
+
+When Adam resumes, re-present or accept answers to the easy-numbered section 12.10 batch. All ten recommendations
+remain **Option B**, with these amendments:
+
+1. constructive candidate generation includes configuration-space placement and qualifying rectangular/
+   orthogonal/irregular floorplanning, without preselecting one universal algorithm;
+2. elkjs is visualization or an optional proposal only, while real floorplanning families receive the relevant
+   experiment;
+3. a measured exact-solver bakeoff may include clingo-wasm or offline MiniZinc/Gecode alongside Z3/CP-SAT, but no
+   backstop is an automatic MVP dependency; and
+4. WFC, shape grammar, Material Maker, trim, motif, and surface systems remain downstream of accepted structure.
+
+Questions 5-10 retain the twelve real-roll risk roster, cross-cutting coverage matrix, separate adversarial failure
+suite, layered truth/play/material/visual gates, Intel Mac/no-cash evidence path, and the claim that twelve passing
+sites demonstrate a system-backed vertical slice/pre-alpha beyond a one-off tech demo—not release readiness.
+
+Record Adam's answer, chase every material generated follow-up, reconcile the promotion/phasing ledgers, then run a
+complete Wave 3 coverage/authority/contradiction audit. Do not close Wave 3 without Adam's explicit agreement. The
+global implementation hold remains active.
+
+### Reference and checkpoint boundaries
+
+- Material Maker 1.7 remains a signed universal application installed outside the repository; no graph or generated
+  texture has been admitted.
+- The Müller et al. PDF remains locally retained and indexed as S10; its PDF is ignored by the repository's global
+  PDF rule and is not part of this commit.
+- `Reference/FFT Battle Maps/` remains local, untracked, reference-only, and must not be staged.
+- Preserve the full chronological records and earlier handoff blocks. Do not update `DESIGN.md` until the owning
+  consolidated design closure calls for it.
+
 ## ⭐ Latest (2026-07-22, procedural-redesign clean close) — F10.9H CLOSED; RESUME THE FIVE-QUESTION F10.9I-F10.9M BATCH [Codex]
 
 This is a full clean close of the design/docs stretch that began at the 2026-07-20 fast checkpoint. No gameplay

@@ -10,6 +10,11 @@ related:
 
 # Genesis Engine Crosswalk
 
+> **Wave 4 authority note (2026-07-22):** this read-only audit remains current-code evidence. Its suggested portal,
+> slot, and legality fields are candidate technical shapes, not accepted design rulings. Canonical decisions for
+> connections, secrets, vertical traversal, circulation, and mutation live in
+> `procedural-dungeon-direction/wave-04/01-questionnaire-and-triage.md`.
+
 ## Snapshot
 
 The primary read-only audit was performed at commit `a863de76ff6afd1931168763d9ad52b0e58b915a`

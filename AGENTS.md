@@ -10,14 +10,19 @@ operating contract — **`CLAUDE.md` is the authoritative, fuller version, so re
    table, git workflow, the parallel-session discipline, disciplines, and gotchas. Read it fully first.
 2. **`docs/HANDOFF.md`** — current state + "Do next"; read at the start of every session to see where
    things stand and what's in flight.
-3. **`docs/README.md`** — the full docs index + the `type:` taxonomy (which doc is which).
-4. **`docs/ART-DIRECTION-CANON.md`** — MANDATORY before any art/sprite/prop/decal/texture
+3. **`docs/canon/README.md`** — the canonical front door (2026-07-22): the precedence law and the
+   eight routed canon files. **"Where is the current ruling?" starts here, not with a corpus scan** —
+   `canon/DOCUMENT-MAP.md` §1 routes every major topic to its single owning doc, and its census
+   (§2-5) gives a one-line current/superseded/historical verdict for every design document, so a
+   stale spec found by grep can never be mistaken for current truth.
+4. **`docs/README.md`** — the full docs index + the `type:` taxonomy (which doc is which).
+5. **`docs/ART-DIRECTION-CANON.md`** — MANDATORY before any art/sprite/prop/decal/texture
    generation or review: Adam's verbatim art direction. QUOTE it, never paraphrase it, in every
    generation prompt. Any art ruling Adam gives you in conversation must be appended to that
    file (dated) and committed in the same session — a chat that isn't captured there is lost.
    Deep authority: `docs/FACETED-ART-REGENERATION-PRODUCTION-PLAN.md`; batch mechanics:
    `docs/FACETED-SHEET-TEMPLATE.md`.
-5. The specific **`docs/<SPEC>.md`** for your task (specs are `status: SPECCED|BUILT`; execute a
+6. The specific **`docs/<SPEC>.md`** for your task (specs are `status: SPECCED|BUILT`; execute a
    SPECCED one exactly unless capture evidence exposes a conflict with a canonical roll, a newer
    contract, or the accepted visual target; document the conflict before amending the spec).
 

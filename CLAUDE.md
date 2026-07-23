@@ -159,6 +159,9 @@ only happen at merge-to-master, which is git's ordinary 3-way merge, not a surpr
 ## Docs (all in `docs/`; only `README.md` + `table-registry.md` stay at repo root)
 
 - `docs/HANDOFF.md` — read first; current state + what's next.
+- **`docs/canon/README.md` — the canonical front door (2026-07-22): precedence law + product
+  scope + ownership map + decision index + question coverage + open founder questions +
+  glossary + document map. "Where is the current ruling?" starts here.
 - **Graphics governing authority:** `docs/GRAPHICS-CONVERGENCE-CHARTER.md` — protected core, visual
   compiler boundaries, mockup requirements, convergence ladder, open-source adoption law, and the
   required Claude graphics-session protocol.

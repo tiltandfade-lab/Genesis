@@ -248,6 +248,15 @@ Defer or reject when it:
 - produces attractive demos but no reproducible Genesis fixture;
 - makes procedural breadth dependent on a finite asset catalog.
 
+**Adopted under this doctrine — 2026-07-23:** Material Maker **1.3** as the pinned offline
+material compiler (MIT; `/Applications/Material Maker 1.3.app`, sha256 prefix
+`597b199fae597c4f`). Headless `--export-material` proven deterministic on the supported machine
+(`docs/MATERIAL-LANE.md` §1c); never runtime; Adam's taste-card PASS gate precedes any engine
+wiring (MATERIAL-LANE §2). Companion protected-core notice: **render scale (DPR) as a
+first-class quality setting** is an approved-direction renderer change that rides the clay-room
+DPR×material experiment (MATERIAL-LANE §4 steps 2/4) — evidence-gated, measured on the gate
+machine, never hot-patched.
+
 ## 6. No-human production contract
 
 Every graphics-production pipeline must define:

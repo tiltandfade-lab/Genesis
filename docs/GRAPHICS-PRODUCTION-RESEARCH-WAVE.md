@@ -147,6 +147,13 @@ Material Maker is an optional offline compiler because it supports `--export-mat
 requires a pinned executable and `.ptex` graph to export without GUI interaction on the supported
 machine. Until then, Genesis's deterministic JS/Pillow material recipes remain canonical.
 
+**2026-07-23 — the gate is PASSED.** Material Maker **1.3** pinned (`/Applications/Material
+Maker 1.3.app`, binary sha256 prefix `597b199fae597c4f`) exports `.ptex` graphs headlessly on
+the supported machine with byte-identical determinism (evidence: `docs/MATERIAL-LANE.md` §1c;
+1.7 rejected — Godot-4 shaders exceed the Iris 645). JS/Pillow recipes remain the canonical
+fallback until Stage-B supersession per MATERIAL-LANE §4; pins recorded in
+`dev/offline-art-lab/toolchain.json`.
+
 A CC0 64x64 single-channel blue-noise tile may be introduced for offline albedo/normal microvariation
 and quantization dithering. It must not restore the retired screen-space PSX dither. Preserve histogram
 mean, cap amplitude, record source/license, and hash generated outputs.

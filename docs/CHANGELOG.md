@@ -8,6 +8,35 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-23 (latest) — Q12-B FIRED · C1A CLAY ROOM ON THE REAL PIPELINE · RECOVERY→DRIVE [Fable, Adam ruling]
+
+### Added
+- **Q12-B gate FIRED** (wave-12 §20.9) — implementation hold lifts for Stage 1 (C1A→C1G) only;
+  Adam's eight pre-build answers verbatim, incl. the clay-lighting rider (production lighting,
+  full native resolution, two-temp opposing + low ambient).
+- **C1A clay room — TRUTH-ARRIVED** (`src/engine/clay-room.js`, theater-boot.js CLAY-ROOM region,
+  `dev/verify-clay-room.mjs` 79 checks): one canonical 5×5 room compiled + rendered through the
+  REAL `spatializePlan`→`interiorBuildBoard`→`setInteriorBoard` chain; dev-flag `?clayroom=1`,
+  boot self-mount, Facts/Explain/edit-refusal overlay, D13 provenance audit (0 orphans), seam grid.
+- **`.claude/skills/genesis-clay-pass`** — the front-end/back-end gate-split skill (Claude owns the
+  measurable back-end gate; Adam gates the visual) + THE TEETH LAW (rulings recorded only with
+  enforcing checks) + the plain-English capture-packet law.
+- **Material lane folded into canon** (`docs/MATERIAL-LANE.md` + `docs/CODEX-MATERIAL-BRIEF.md`):
+  Material Maker 1.3 pinned + headless-proven; SUBTLE-TEXTURE split; Codex Wave-1 authoring brief.
+- **TEETH-AUDIT-2026-07-23** — 57 Stage-1 laws classified (28 need teeth / 20 have / 9 stay prose).
+- **Stage-0 recovery package** — tag `pre-redesign-2026-07-23`, verified bundle + LFS-complete zip,
+  restore drill PASSED, migrated to Google Drive (double cloud copies), zero durable local residue.
+
+### Changed
+- **Repo relocated** into a parent container: `~/Desktop/Work/projects/Genesis/genesis` (worktree
+  convention + launchers + skill paths updated); the sprite lane's uncommitted prototype-admission
+  work parked on `feat/sprite-prototype-admission` (preserved, not merged — its lane's call).
+
+### Deferred
+- **C1A → C1B redlines:** RL-1 door leaf (wire `bindWalkInteractables`), RL-2 clay lighting over
+  the interior dimming. Door catalog + swing-clearance + socket schema authored into the C1B/C1H
+  specs (D14; structure-kit catalog is the C1H-opener writing task).
+
 ## 2026-07-23 (later) — FEATURE-PRIORITIZATION VIEW + CLEAN CLOSE [Fable]
 
 **Added**
@@ -853,43 +882,4 @@ to the prior tree = the server was serving stale code; kill-before-capture is no
 - U3 gate + task "battle scene in a real dungeon room + loop test" (hands off with U3).
 - Registry sizing fold (corpus-sizing + v3-sizing → sprite-registry), GUISE G1-G4, LFS
   migration (runbook ready), upscale decision (xBRZ candidate; card on Desktop).
-
-## 2026-07-10 — SPRITE-GEN-V2: the great sprite cleanup, perspective law, V3 regen wave (650 gated sprites), casting-grade tags
-
-**Added**
-- `docs/SPRITE-GEN-V2.md` — the regen-wave law book: eye-level perspective law (front/side/¾ compatible;
-  high-angle/top-down quarantined), size-tier grid ladder (titanic 1x1 → tiniest 8x8; humanoids ALWAYS 4x6),
-  per-realm finish law (grim realms grimy-dithered, bright realms cleaner), chroma-key law (magenta default,
-  pure green for chrome/suburb), Armed Toons Law, expression requirement, swarm pile-style law.
-- `docs/SPRITE-TAGS.md` — casting-grade tag schema: BINDING LAW (sprite fixed to its NPC once assigned),
-  EXPRESSION-VARIANT LAW (same form + different expression = same character, `expressionSet` ids),
-  CASTING LAW (DM casts sprites onto surprise-play characters via kind/role/age/build/mood/portability;
-  castability tiers unique/named/generic/crowd).
-- **Perspective survey** (`dev/model-qa/perspective-survey/`) — 9 vision agents classified all 2,431
-  uncommitted sprites per cell; contact sheets A/B/Q; final-verdicts.csv; Adam failed 80 in the new
-  review tool (`dev/perspective-review.py` → :5181, click-to-fail, writes rulings.json).
-- **REGEN-V3 packets** (`dev/model-qa/regen-v3/`) — 161 sheets / 755 sprites of exact codex prompts,
-  per-realm, with pre-generated slug manifests; style-refs/ (12 sweep-rated exemplar sheets); realm
-  expansions ruled + authored same day: cosmic tarot arcana (37), frontier tribal (34, dignity register),
-  suburb Amblin/Earthbound (34), gloom VHS-horror canon (34), bright-kingdom armed toons (Zelda+Mario grammar).
-- **V3 wave gated + sliced**: Adam's codex sessions delivered 143/161 sheets; 11 gate agents passed
-  142/143 on style; all 650 sprites sliced to transparent PNGs at `dev/sprite-sheets/incoming/v3/<realm>/`
-  with `v3-sizing.json` (pxHeight, band scale, qaFlags) and `v3-tags.json` (full casting schema, 650/650).
-- **Off-angle giveaway pack** — 78 quarantined sprites keyed to transparency, sorted by angle, CC0 README
-  (`dev/model-qa/quarantine-pack/` + zip on Desktop). Nothing deleted.
-- Round-2 codex packets (`regen-v3/round2/`): cosmic-r2 (15 missing), gloom-r2 (3), fixes-r2 (9).
-
-**Changed**
-- Worktrees pruned 21 → 1 (only the sprite-gen lane remains); 37 dead worktree-agent branches deleted
-  (each verified merged); parked WIP banked as commits on feat/craft-npc-situation +
-  claude/fantasy-sprite-slicing; all live branches pushed to origin.
-
-**Fixed**
-- The 2026-07-09 overnight codex blast (41 sheets straight onto master, no perspective lock) is fully
-  triaged: 78% usable under the eye-level law, rejects regenerated in V3, off-angle quarantined.
-
-**Deferred**
-- Round-2 codex run (18 missing + 9 fix sheets — packets ready for Adam's 3PM window); registry fold-in of
-  v3 sizing/tags; committed-corpus retro-tag + ash painterly check; NPC expression pass (law 2 wiring);
-  sprite lane's 59 uncommitted round-2 sheets still parked in its worktree.
 

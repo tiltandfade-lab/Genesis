@@ -5127,6 +5127,10 @@ function renderTheaterFrame(){
   // (lightLabMaybeAutoMount's own short-circuit) at the top of the one render call site. No DOM, no
   // listener, no timer exists until the flag actually flips true (lightLabShouldEnable's own header).
   lightLabMaybeAutoMount();
+  // C1A-CLAY-ROOM (docs/C1A-CLAY-ROOM.md D1): the SAME dormant-poll pattern as lightLabMaybeAutoMount
+  // just above — one boolean read when off, zero DOM/listeners until ?clayroom=1/GS.clayRoomEnabled
+  // actually flips true. See the CLAY-ROOM ADDITIONS block at this file's end for the definition.
+  clayRoomMaybeAutoMount();
   if(S.postChainEnabled && S.composer && S.composer.passes && S.composer.passes.length > 0){
     // LL-1 EMISSIVE-MASKED BLOOM: refresh the bloom pass's isolated emitter-only render for THIS frame
     // before the composer consumes it (Pass.render() itself never gets a live scene/camera — see
@@ -14294,3 +14298,483 @@ function unmountLightLab(){
   S.lightLabEls = null;
   S.lightLabMounted = false;
 }
+
+/* CLAY-ROOM ADDITIONS BEGIN — docs/C1A-CLAY-ROOM.md (Q12-B wave-12 gate, execution order U1->U2->U3;
+   D15 re-wire addendum, 2026-07-23, this unit).
+   D2 placement law: appended functions ONLY, plus at most two hook lines total added to the file's
+   pre-existing bodies — this file adds exactly ONE (the clayRoomMaybeAutoMount() poll call inside
+   renderTheaterFrame, beside lightLabMaybeAutoMount()'s own call, near this file's top). D1 clones
+   the Light Lab dormant pattern verbatim (lightLabShouldEnable/lightLabMaybeAutoMount, this file
+   ~14089-14110): a URL flag (?clayroom=1) OR a live console-settable GS.clayRoomEnabled, memoized
+   once, zero DOM/listeners until the flag actually flips true.
+
+   Everything below reads ONLY the frozen record src/engine/clay-room.js's clayRoomRecordFrom(seed)
+   returns — no rules verbs, no dice, no pathing, no event application (grep-gated by
+   dev/verify-clay-room.mjs check 7). D3: the interior (volumetric, perspective-composed) channel
+   with the FIXED camera setInteriorBoard already gives it by default (INTERIOR_CAM_MODE==="persp",
+   theater-interior.js:205) — this block never calls rotate()/zoom(), so "no rotation, no orbit"
+   (W3 law) holds by omission, not a new guard. D5: the default (non-psx) canvas path — mount() is
+   called with no `opts`, so S.psxEnabled stays its createTheaterState() default (false) and
+   applyPsxCanvasSize's own DPR-capped branch runs unmodified; no new DPR code here.
+
+   D15 RE-WIRE (docs/C1A-CLAY-ROOM.md spec addendum D15): the board-data path is now
+   src/engine/clay-room.js's clayRoomBoardFrom(record) — the REAL production compile chain (a pinned
+   synthetic walk fixture -> spatializePlan -> interiorBuildBoard), never a hand-assembled
+   instances/doorframe/kitDoors/interactables literal (the OLD clayRoomBoardDataFrom shim, deleted
+   this unit). mountClayRoom below calls it, then setInteriorBoard(compiled.board) directly — this
+   file adds only POST-mount, additive treatment over that PRODUCTION output: the D4 light-profile
+   override (clayRoomApplyLightProfile, unchanged), the D2-step-3 flat-grey material swaps
+   (clayRoomFlattenFurniture, unchanged; clayRoomFlattenStructure, new — floor/wall/doorframe/pillar),
+   the D12a seam grid (clayRoomBuildSeamGrid, unchanged), and D13 provenance tagging/audit (new). The
+   door LEAF (a swinging mesh with an open/closed pose) is production's own data.interactables
+   consumer (interiorBuildInteractables) fed by bindWalkInteractables in the real trayFrom pipeline —
+   a pipeline stage D15 does not name and this unit does not call, so board.interactables stays empty
+   (clay-room.js's own clayRoomBoardFrom sets it explicitly) rather than hand-built: the wall APERTURE
+   and frame (jambs/header/arch corbels — real interiorBuildBoard output) render; no leaf fills it.
+   Reported as a production-pipeline finding in this unit's own build report, never patched from here. */
+
+let CLAY_ROOM_URL_FLAG = null;
+// Holds ITR_ROOM_SHELL's pre-mount value across a mount/unmount cycle — see mountClayRoom's own
+// header note (the room-shell-compiler finding) for why the restore happens in clayRoomUnmount,
+// never immediately after setInteriorBoard.
+let CLAY_ROOM_PRIOR_ROOM_SHELL = true;
+function clayRoomShouldEnable(){
+  try {
+    if(typeof window === "undefined") return false;
+    if(window.GS && window.GS.clayRoomEnabled === true) return true;
+    if(CLAY_ROOM_URL_FLAG === null){
+      CLAY_ROOM_URL_FLAG = !!(window.location && window.location.search
+        && new URLSearchParams(window.location.search).get("clayroom") === "1");
+    }
+    return CLAY_ROOM_URL_FLAG;
+  } catch(e){}
+  return false;
+}
+function clayRoomMaybeAutoMount(){
+  if(S.clayRoomMounted){
+    // FOUND LIVE (a served-browser check of this exact mount): production's own async-texture-settle
+    // replay (spriteTextureFor's onLoad callback, this file's SPRITE_CHANNEL section — "S.boardKey =
+    // null; setInteriorBoard(S.lastBoard);", fired once the goblin's sprite PNG finishes loading) runs
+    // OUTSIDE mountClayRoom() entirely and re-triggers setInteriorBoard's own rigOn ambient/point
+    // overwrite, silently reverting clayRoomApplyLightProfile's one-time post-mount override back to
+    // the interior rig's own ITR_SCENE_AMBIENT (0.13) the instant that replay fires. A cheap per-frame
+    // reassert (3 light objects' color/intensity, no geometry rebuild) keeps D4's authored profile the
+    // honest final word regardless of when that replay lands — bounded, dev-only-surface cost, the
+    // same "pay only while the flag is actually on" discipline D1's dormant-poll law protects for the
+    // OFF state.
+    clayRoomApplyLightProfile(S.clayRoomRecord);
+    return;
+  }
+  if(!clayRoomShouldEnable()) return;
+  mountClayRoom();
+}
+
+// D7/D2 step 3 — flat, untextured clay-grey: the ONE color clayRoomFlattenFurniture (crate) and
+// clayRoomFlattenStructure (floor/wall/doorframe/pillar, below) swap onto ALREADY-BUILT PRODUCTION
+// geometry post-mount (never a hand-assembled instance array — see this region's own D15 header note
+// above for why that path is gone). No hand-derived wall-height/door-height/edge-offset constants
+// remain here: those numbers now come from the REAL spatializer + interiorBuildBoard chain
+// (src/engine/clay-room.js's clayRoomBoardFrom), never re-authored in this file.
+const CLAY_GREY = "#8a8a8a";
+
+// D4 — apply CLAY_C1A_LIGHT_PROFILE as the FINAL word on the mounted scene's ambient/point lights,
+// called AFTER setInteriorBoard so it supersedes that function's own rigOn block (which
+// unconditionally overwrites S.ambientLight/S.pointLights from the ITR_SCENE_*/ITR_BRIGHT_REALM_FILL
+// tables the instant it runs — see setInteriorBoard's own BW2-4 THE VALUE PLUNGE comment). Going
+// through applyLightProfile(key) itself was the OTHER D4-offered mechanism, but that requires a
+// LIGHT_PROFILES registry key (editing that table is explicitly out of scope) AND clamps ambient UP
+// to STAGE_AMBIENT_FLOOR (0.42 on the tabletop channel) — well past D4's <=0.25 ceiling. This
+// function mirrors applyLightProfile's OWN construction primitives (THREE.AmbientLight/
+// THREE.PointLight added to S.scene, teardown of any prior S.pointLights) without going through
+// either blocked path, so the record's authored ambient (0.18) lands UNCLAMPED. Mechanism +
+// effective values are reported verbatim in the build report — never claimed here as a visual result.
+function clayRoomApplyLightProfile(record){
+  if(!S.scene) return;
+  if(S.ambientLight){ S.scene.remove(S.ambientLight); S.ambientLight = null; }
+  (S.pointLights || []).forEach(function(l){ S.scene.remove(l); });
+  S.pointLights = [];
+  const profile = CLAY_C1A_LIGHT_PROFILE;
+  const ambient = new THREE.AmbientLight(profile.ambient.color, profile.ambient.intensity);
+  S.scene.add(ambient);
+  S.ambientLight = ambient;
+  const halfX = (record.dims.w - 1) / 2 + 1, halfZ = (record.dims.d - 1) / 2 + 1;
+  profile.points.forEach(function(p){
+    const light = new THREE.PointLight(p.color, p.intensity, 0, 0);
+    light.position.set(p.pos.x * halfX, p.pos.y, p.pos.z * halfZ);
+    S.scene.add(light);
+    S.pointLights.push(light);
+  });
+}
+
+// D2 step 3 "flat...clay-grey...never bespoke meshes" for the crate specifically: buildFurnitureAssembly
+// (called by interiorBuildFurniture, called by setInteriorBoard above) always textures its prisms via
+// furniturePanelMaterial (a procedural mottled canvas, or a REALM_TEXTURES file on a flagship realm) —
+// there is no data-only path to a flat furniture material the way the InstancedMesh floor/wall/
+// doorframe channel has (that channel's own null-texture branch). A one-line material SWAP over the
+// crate's ALREADY-BUILT production geometry (never new geometry, never a new Mesh) is the narrowest
+// fix: walk the furniture sub-tree setInteriorBoard just added to S.interiorGroup and replace each
+// prism's OWN material with one shared flat clay MeshLambertMaterial. Never touches the citizen's
+// sprite billboard (D2 step 3 names floor/wall/doorframe/crate only; the citizen stays its own sprite
+// art per D2 step 4 / D8) or the door leaf (its own itrDoorStateColor read stays intact, matching
+// D7's "door leaf via interiorBuildInteractables" law verbatim).
+let CLAY_FURNITURE_MATERIAL = null;
+function clayRoomFlattenFurniture(){
+  if(!S.interiorGroup) return;
+  if(!CLAY_FURNITURE_MATERIAL) CLAY_FURNITURE_MATERIAL = new THREE.MeshLambertMaterial({ color: CLAY_GREY });
+  S.interiorGroup.children.forEach(function(topChild){
+    (topChild.children || []).forEach(function(entryGroup){
+      if(!entryGroup.userData || !entryGroup.userData.furnitureKind) return;
+      entryGroup.traverse(function(node){
+        if(node.isMesh) node.material = CLAY_FURNITURE_MATERIAL;
+      });
+    });
+  });
+}
+
+// D15/D2 step 3 — the STRUCTURAL-surface sibling of clayRoomFlattenFurniture: a one-line material
+// SWAP over the floor/wall/doorframe/pillar InstancedMeshes setInteriorBoard's own
+// interiorBuildInstancedMesh already built (real production geometry, never new geometry/a new
+// Mesh) — the SAME "never a bespoke material" law D2 step 3 states, extended to the kinds
+// clayRoomFlattenFurniture doesn't cover. Each of those meshes is tagged `userData.interiorKind`
+// (theater-boot.js's own BW2-1b TEST/DIAGNOSTIC TAG, "which instance-kind this mesh is" — added for
+// a harness raycast check, reused here) — the whitelist below is exactly the kinds D2 step 3 names
+// (floor/wall/doorframe + pillar, the rooms >=6-cells-per-axis case); the skirt/portal/ghost kinds
+// interiorBuildInstancedMesh ALSO tags are deliberately left alone (never named by D2 step 3 — the
+// dark edge skirt is not one of "floor/wall/doorframe/crate"). A shared MeshLambertMaterial with no
+// `map` and no `vertexColors` renders every instance flat regardless of whatever per-instance color/
+// realm texture interiorBuildBoard/setInteriorBoard baked in (production picked "ash", a non-flagship
+// realm, specifically so no real texture FILE was ever fetched for this to override — clay-room.js's
+// own clayRoomBoardFrom header explains the choice) — genuinely flat, zero-grain, matching D7's
+// original "clay-grey ... zero grain/file texture" law verbatim.
+let CLAY_STRUCTURE_MATERIAL = null;
+const CLAY_STRUCTURE_KINDS = { floor: true, wall: true, doorframe: true, pillar: true };
+function clayRoomFlattenStructure(){
+  if(!S.interiorGroup) return;
+  if(!CLAY_STRUCTURE_MATERIAL) CLAY_STRUCTURE_MATERIAL = new THREE.MeshLambertMaterial({ color: CLAY_GREY });
+  S.interiorGroup.children.forEach(function(mesh){
+    if(!mesh || !mesh.isInstancedMesh) return;
+    const kind = mesh.userData && mesh.userData.interiorKind;
+    if(!kind || !CLAY_STRUCTURE_KINDS[kind]) return;
+    mesh.material = CLAY_STRUCTURE_MATERIAL;
+  });
+}
+
+// ─── D12a (Adam's founder redline, capture packet #1, 2026-07-23 — verbatim: "i need a semi-
+// transparent grid overlaying the seams of the tiles") ───────────────────────────────────────────
+// A semi-transparent THREE.LineSegments grid drawn exactly on every cell BOUNDARY of the record's
+// own floor — a visual truth aid, never a second source of cell geometry. Line COUNT is derived
+// FROM record.dims, never a hardcoded literal: (w+1) lines running along Z (one per x-boundary,
+// x=0..w) + (d+1) lines running along X (one per z-boundary, z=0..d) — exactly the spec's own
+// "(w+1)+(d+1) lines". Origin/cell-size math mirrors the SAME law the floor itself renders through:
+// cell size = 1 world unit = 5 ft (GRID LAW), origin = S.boardOrigin (setInteriorBoard's own
+// (minX+maxX)/2,(minZ+maxZ)/2 — the EXACT cx/cz every floor/wall/doorframe instance already
+// subtracts, interiorBuildInstancedMesh's own position.set line, this file ~8097) — read LIVE off S
+// rather than re-derived, so the grid can never drift from wherever the floor actually mounted; a
+// record.dims-only fallback (== the SAME (w-1)/2,(d-1)/2 setInteriorBoard would compute for this
+// record's own bounds) covers a harness/edge case where S.boardOrigin hasn't been set yet. y sits
+// just above the floor's own TOP surface via interiorFloorTopAt (the SAME derived-never-hand-tuned
+// law every other floor-contact mount in this file already uses) plus a small clearance
+// (CLAY_GRID_CLEARANCE, matching f1BuildCombatGrid's own +0.01 decal-clearance convention, this
+// file ~10411) — enough to clear z-fighting without visibly floating. LineBasicMaterial (linewidth
+// is capped at 1 on most GL backends — accepted per spec, never fought with a fatter-line shader).
+// depthWrite:false (this file's own standard transparent-decal pairing) keeps it from corrupting
+// the depth buffer other transparent draws (the citizen's sprite billboard) test against; a
+// renderOrder BELOW the scene default (0) draws it EARLY in the transparent queue so it composites
+// under later-drawn transparent geometry ("under the figures/objects", D12a), while ordinary
+// depth-tested opaque geometry (walls, the crate, the door) still correctly occludes it via the
+// normal depth test regardless of renderOrder. Added directly to S.scene (never as a child of
+// S.interiorGroup) so setInteriorBoard's own clearGroup(S.interiorGroup) — which reruns on every
+// async replay this mount can trigger (a sprite texture settling, the D12b kit-door template
+// warming) — can never silently wipe it the way a same-frame reassert would otherwise have to guard
+// against (mirrors clayRoomApplyLightProfile's own per-frame-reassert note just above, for the
+// SAME class of replay, minus the need for a reassert since nothing else in this file ever touches
+// S.scene's own top-level children list).
+const CLAY_GRID_COLOR = 0xffffff;
+const CLAY_GRID_OPACITY = 0.3;      // D12a law: 0.25-0.35
+const CLAY_GRID_CLEARANCE = 0.01;   // matches f1BuildCombatGrid's own +0.01 (this file ~10411)
+function clayRoomBuildSeamGrid(record){
+  if(!S.scene) return null;
+  const cx = (S.boardOrigin && typeof S.boardOrigin.cx === "number") ? S.boardOrigin.cx : (record.dims.w - 1) / 2;
+  const cz = (S.boardOrigin && typeof S.boardOrigin.cz === "number") ? S.boardOrigin.cz : (record.dims.d - 1) / 2;
+  const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, 0, 0); // this record's floor is flat — any cell answers the same value
+  const y = floorTop + CLAY_GRID_CLEARANCE;
+  const minX = -0.5 - cx, maxX = (record.dims.w - 1) + 0.5 - cx;
+  const minZ = -0.5 - cz, maxZ = (record.dims.d - 1) + 0.5 - cz;
+  const pts = [];
+  for(let ix = 0; ix <= record.dims.w; ix++){
+    const x = ix - 0.5 - cx;
+    pts.push(x, y, minZ, x, y, maxZ);
+  }
+  for(let iz = 0; iz <= record.dims.d; iz++){
+    const z = iz - 0.5 - cz;
+    pts.push(minX, y, z, maxX, y, z);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
+  const mat = new THREE.LineBasicMaterial({ color: CLAY_GRID_COLOR, transparent: true, opacity: CLAY_GRID_OPACITY, depthWrite: false });
+  const grid = new THREE.LineSegments(geo, mat);
+  grid.renderOrder = -1;
+  grid.userData.clayGrid = true;
+  S.scene.add(grid);
+  return grid;
+}
+
+// ─── D13 (docs/C1A-CLAY-ROOM.md spec addendum D15 point 4 — provenance audit) ──────────────────────
+// clayRoomTagProvenance(node,builder) stamps userData.clayProvenance = {builder,recordRef:"clay-c1a"}
+// on ONE node and records it in S.clayRoomProvenanceRoots — the tracked root SET
+// clayRoomProvenanceAudit walks. Scope is deliberately the clay mount's OWN attachment points
+// (S.interiorGroup as a whole — the real production board tree setInteriorBoard just populated,
+// floor/wall/doorframe/pillar/lights/pieces/furniture/dressing/interactables all nested under it;
+// S.clayGridMesh; the light-profile's own ambient+point lights), never mount()'s generic baseline
+// scaffolding (the hemisphere/key/fill lights and empty tile/prop/unit/shadow/fx groups every theater
+// instance gets regardless of clay) — that scaffolding traces to no record and tagging it would be a
+// false provenance claim, not an honest one. "Under a tagged group" (D15's own words) reads as: every
+// one of these tracked roots IS itself tagged at attachment time, so nothing in this tracked set can
+// ever be an orphan by construction; an entry only shows up missing if the node it names was never
+// built at all (e.g. mount() degraded, S.interiorGroup absent) — reported as an orphan then, honestly.
+function clayRoomTagProvenance(node, builder){
+  if(!node || !node.userData) return;
+  node.userData.clayProvenance = { builder: builder, recordRef: "clay-c1a" };
+  S.clayRoomProvenanceRoots = S.clayRoomProvenanceRoots || [];
+  S.clayRoomProvenanceRoots.push(node);
+}
+function clayRoomTagAllProvenance(){
+  S.clayRoomProvenanceRoots = [];
+  if(S.interiorGroup) clayRoomTagProvenance(S.interiorGroup, "setInteriorBoard"); // board/figure/lights/furniture — nested
+  if(S.clayGridMesh) clayRoomTagProvenance(S.clayGridMesh, "clayRoomBuildSeamGrid"); // grid
+  if(S.ambientLight) clayRoomTagProvenance(S.ambientLight, "clayRoomApplyLightProfile"); // lights
+  (S.pointLights || []).forEach(function(l){ clayRoomTagProvenance(l, "clayRoomApplyLightProfile"); }); // lights
+}
+// clayRoomProvenanceAudit() -> {tagged:[{type,builder}...], orphans:[{type}...]} — walks
+// S.clayRoomProvenanceRoots (populated by clayRoomTagAllProvenance at mount time), never all of
+// S.scene.children (see this section's own header note on why that scope would be dishonest).
+function clayRoomProvenanceAudit(){
+  const tagged = [], orphans = [];
+  (S.clayRoomProvenanceRoots || []).forEach(function(node){
+    if(node && node.userData && node.userData.clayProvenance){
+      tagged.push({ type: node.type, builder: node.userData.clayProvenance.builder });
+    } else if(node){
+      orphans.push({ type: node.type });
+    }
+  });
+  return { tagged: tagged, orphans: orphans };
+}
+
+// mountClayRoom() — D2/wire-in steps 1-5 (the overlay, step 6, is built by
+// clayRoomMountOverlay(record,host) — see the U3 addition below this comment once it lands). Never
+// throws (mirrors mountLightLab's own dormant-surface discipline): a WebGL-less environment degrades
+// to mount() returning false and this function no-oping.
+// D15 re-wire: step 3 (project the record through the real interior board builders) is now
+// clayRoomBoardFrom(record) — src/engine/clay-room.js's own real spatializer + interiorBuildBoard
+// chain — feeding setInteriorBoard directly; this file adds no board-data assembly of its own.
+//
+// ITR_ROOM_SHELL (this file's own module-scope flag, default true, line ~10103 — "ROOM-SHELL
+// COMPILER... flips ITR_ROOM_SHELL live") — found LIVE in the orchestrator's own browser re-gate:
+// setInteriorBoard's own room-shell compiler is ON BY DEFAULT for every interior board (not a
+// clay-specific mechanism), and it REPLACES the per-cell InstancedMesh floor/wall channel with a
+// separate, non-instanced, kit-realm-textured mesh trio (room-shell-floor/wall-stem/wall-upper/
+// wall-trim, tagged `kind` in _interiorGroupMeshInfoForTest) that clayRoomFlattenStructure's own
+// InstancedMesh-only sweep never touches by construction (it isn't an InstancedMesh at all) — so
+// with room-shell on, the floor/walls rendered their REAL, unflattened, dark realm colors instead
+// of clay grey (dark enough under D4's own low-ambient profile to read as void-black, the exact
+// "floor/walls didn't render" first read). Disabled the SAME way KIT_SHELL_ENABLED/KIT_DOORS_ENABLED
+// already are (an existing, documented dev/harness toggle — "flips ITR_ROOM_SHELL live", this file's
+// own comment at its definition — never a new mechanism): OFF only while the clay room stays mounted
+// (restored in clayRoomUnmount, not immediately here) because setInteriorBoard's own async replay
+// (the SPRITE_CHANNEL texture-settle callback this file's own header already documents) re-invokes
+// setInteriorBoard(S.lastBoard) OUTSIDE this function, and ITR_ROOM_SHELL is read fresh every one of
+// those calls — restoring it here would let that later replay silently rebuild an unflattened shell
+// again. This keeps geometry in the plain InstancedMesh/BoxGeometry family every other kind already
+// uses (D2 step 3's own "never a bespoke material... SAME InstancedMesh/BoxGeometry construction" law).
+function mountClayRoom(){
+  try {
+    if(S.clayRoomMounted) return;
+    const record = clayRoomRecordFrom(0x6c0ffee); // the CI seed, pinned per docs/C1A-CLAY-ROOM.md wire-in step 1
+
+    const host = document.createElement("div");
+    host.id = "clay-room-host";
+    host.style.cssText = "position:fixed;inset:0;z-index:9000;background:#000;";
+    document.body.appendChild(host);
+
+    const mounted = mount(host); // D5: no `opts` -> the default (non-psx) canvas path
+    if(!mounted){ document.body.removeChild(host); return; }
+
+    CLAY_ROOM_PRIOR_ROOM_SHELL = ITR_ROOM_SHELL;
+    ITR_ROOM_SHELL = false; // restored in clayRoomUnmount — see this function's own header note above
+
+    const compiled = clayRoomBoardFrom(record); // D15 — real spatializer + interiorBuildBoard (src/engine/clay-room.js)
+    setInteriorBoard(compiled.board);
+    clayRoomApplyLightProfile(record);
+    clayRoomFlattenFurniture();
+    clayRoomFlattenStructure(); // D15/D2 step 3 — flat clay-grey on floor/wall/doorframe/pillar, post-mount over PRODUCTION geometry
+    S.clayGridMesh = clayRoomBuildSeamGrid(record); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live
+    clayRoomTagAllProvenance(); // D13 — after every group above exists to tag
+    markDirty();
+    scheduleRender();
+
+    S.clayRoomMounted = true;
+    S.clayRoomHost = host;
+    S.clayRoomRecord = record;
+    clayRoomMountOverlay(record, host);
+  } catch(e) {
+    try { console.warn("qa: clay-room mount failed", e); } catch(e2){}
+  }
+}
+
+// D2 step 6 / D9 / D11 — the overlay panel, dormant-built the SAME way mountLightLab builds its own
+// (plain styled divs, no framework, panel.id-guarded against a stale double-mount). Two tabs:
+//   Facts   — clayRoomProse(record) shown VERBATIM (D9's own "same-facts-equivalence by
+//             construction" law: the overlay never re-derives or reformats a single fact).
+//   Explain — clayRoomExplain(record) VERBATIM, plus ONE edit affordance per BodyForm field
+//             (worldHeight/heightSource/sizeCategory/occupiedCells/bestiaryId) that calls
+//             clayRoomEditRefusal(field) and prints the typed refusal inline — D11's "no other
+//             workbench scope" law: this is the only interactive control the panel offers besides
+//             the tab switch and the close button.
+// Plus a `renderer size <w>x<h> @ dpr <n>` line (wire-in step 6's own countable capture-packet line)
+// read straight off the live S.renderer, never a re-derived guess.
+function clayRoomMountOverlay(record, host){
+  if(typeof document === "undefined") return;
+  const stale = document.getElementById("clay-room-overlay");
+  if(stale && stale.parentNode) stale.parentNode.removeChild(stale);
+
+  const panel = document.createElement("div");
+  panel.id = "clay-room-overlay";
+  panel.style.cssText =
+    "position:fixed;top:8px;right:8px;width:340px;max-height:92vh;overflow:auto;z-index:9001;" +
+    "background:rgba(20,20,24,0.94);border:1px solid #444;border-radius:6px;padding:8px;" +
+    "font:12px/1.3 -apple-system,sans-serif;color:#eee;box-shadow:0 4px 18px rgba(0,0,0,0.5);";
+
+  const title = document.createElement("div");
+  title.textContent = "CLAY ROOM (C1A) — dev only";
+  title.style.cssText = "font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;";
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "×";
+  closeBtn.style.cssText = "background:none;border:none;color:#ccc;font-size:16px;cursor:pointer;line-height:1;";
+  closeBtn.addEventListener("click", function(){ clayRoomUnmount(); });
+  title.appendChild(closeBtn);
+  panel.appendChild(title);
+
+  const rendererLine = document.createElement("div");
+  rendererLine.style.cssText = "color:#9ab;margin-bottom:6px;font:11px monospace;";
+  const size = (S.renderer && typeof S.renderer.getSize === "function") ? S.renderer.getSize(new THREE.Vector2()) : null;
+  const dpr = S.psxEnabled ? PSX_RES_SCALE : Math.min((typeof window !== "undefined" && window.devicePixelRatio) || 1, 2);
+  rendererLine.textContent = size
+    ? ("renderer size " + Math.round(size.x) + "x" + Math.round(size.y) + " @ dpr " + dpr)
+    : "renderer size unavailable";
+  panel.appendChild(rendererLine);
+
+  const tabBar = document.createElement("div");
+  tabBar.style.cssText = "display:flex;gap:4px;border-top:1px solid #333;padding-top:6px;margin-bottom:6px;";
+  const factsTabBtn = document.createElement("button");
+  factsTabBtn.textContent = "Facts";
+  const explainTabBtn = document.createElement("button");
+  explainTabBtn.textContent = "Explain";
+  [factsTabBtn, explainTabBtn].forEach(function(b){
+    b.style.cssText = "flex:1;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+  });
+  tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn);
+  panel.appendChild(tabBar);
+
+  const factsBody = document.createElement("pre");
+  factsBody.style.cssText = "white-space:pre-wrap;font:11px/1.4 monospace;color:#dde;margin:0;";
+  factsBody.textContent = clayRoomProse(record);
+
+  const explainBody = document.createElement("div");
+  explainBody.style.cssText = "display:none;";
+  const explainPre = document.createElement("pre");
+  explainPre.style.cssText = "white-space:pre-wrap;font:11px/1.4 monospace;color:#dde;margin:0 0 6px;";
+  // D13 (spec addendum D15 point 4) — one line, LIVE values off the real audit function, appended to
+  // clayRoomExplain(record)'s own verbatim text (never folded into that pure engine-module string,
+  // which has no S/scene access to compute this from).
+  const provenanceAudit = (typeof clayRoomProvenanceAudit === "function") ? clayRoomProvenanceAudit() : { tagged: [], orphans: [] };
+  explainPre.textContent = clayRoomExplain(record) +
+    "\nProvenance audit: " + provenanceAudit.tagged.length + " groups tagged, " + provenanceAudit.orphans.length + " orphans.";
+  explainBody.appendChild(explainPre);
+
+  const refusalHeader = document.createElement("div");
+  refusalHeader.textContent = "BodyForm fields (generated — edit refused):";
+  refusalHeader.style.cssText = "color:#9ab;margin-bottom:2px;";
+  explainBody.appendChild(refusalHeader);
+  const refusalOut = document.createElement("pre");
+  refusalOut.style.cssText = "white-space:pre-wrap;font:10px/1.4 monospace;color:#e8b;margin:4px 0 0;min-height:1em;";
+  ["worldHeight", "heightSource", "sizeCategory", "occupiedCells", "bestiaryId"].forEach(function(field){
+    const btn = document.createElement("button");
+    btn.textContent = "edit " + field;
+    btn.style.cssText = "font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:2px 5px;margin:0 4px 4px 0;";
+    btn.addEventListener("click", function(){
+      refusalOut.textContent = JSON.stringify(clayRoomEditRefusal(field));
+    });
+    explainBody.appendChild(btn);
+  });
+  explainBody.appendChild(refusalOut);
+
+  panel.appendChild(factsBody);
+  panel.appendChild(explainBody);
+
+  function clayShowTab(which){
+    factsBody.style.display = which === "facts" ? "" : "none";
+    explainBody.style.display = which === "explain" ? "" : "none";
+    factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
+    explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
+  }
+  factsTabBtn.addEventListener("click", function(){ clayShowTab("facts"); });
+  explainTabBtn.addEventListener("click", function(){ clayShowTab("explain"); });
+  clayShowTab("facts");
+
+  document.body.appendChild(panel);
+  S.clayRoomOverlayEl = panel;
+}
+
+// Dev-only teardown (the panel's own close button) — disposes the dedicated GL instance mountClayRoom
+// created (retire(), the SAME teardown mount() itself calls on every re-mount) and removes both DOM
+// hosts, then clears the mounted flag so a later flag re-flip (?clayroom=1 revisited, or
+// GS.clayRoomEnabled toggled again) can mount fresh. Never touches anything the normal game flow
+// owns — this dev surface only ever tears down what it itself built. retire() itself replaces `S`
+// with a fresh createTheaterState() (mirroring mount()'s own idempotent-re-mount teardown), so the
+// two DOM handles are captured BEFORE calling it, not read off S afterward.
+function clayRoomUnmount(){
+  if(!S.clayRoomMounted) return;
+  const overlayEl = S.clayRoomOverlayEl, hostEl = S.clayRoomHost;
+  retire();
+  ITR_ROOM_SHELL = CLAY_ROOM_PRIOR_ROOM_SHELL; // restore mountClayRoom's own ITR_ROOM_SHELL override — see that function's header note
+  if(overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);
+  if(hostEl && hostEl.parentNode) hostEl.parentNode.removeChild(hostEl);
+}
+
+// Spec addendum D1a (docs/C1A-CLAY-ROOM.md, orchestrator re-gate finding): clayRoomMaybeAutoMount's
+// own per-frame poll (hooked into renderTheaterFrame, this file's top) only ever RUNS once some
+// theater is already mounted and drawing frames — either the game's own board/interior mount kicks
+// off scheduleRender's rAF loop, or a harness calls measureRenderFps/measureComposerFps directly.
+// A COLD BOOT (title screen, no game session yet) never mounts anything and so never calls
+// renderTheaterFrame at all — verified live by the orchestrator loading genesis.html?clayroom=1 from
+// a blank tab: {theaterMounted:false, clayHost:false, canvases:0}. Light Lab's dormant-poll pattern
+// (D1's own precedent) is fine living entirely inside that poll because Light Lab is a LIVE-theater
+// accessory (it only ever makes sense once a board is already up); the clay room is a STANDALONE dev
+// surface (docs/C1A-CLAY-ROOM.md's own framing — "the game boots identically with the flag off") and
+// must self-mount at boot rather than wait on a frame that, on a cold title screen, may never come.
+//
+// Direct call, no setTimeout/microtask defer: this file's own <script type="module"> tag
+// (genesis.html:1541) makes theater-boot.js an implicitly-deferred module script. Per the HTML
+// spec, deferred/module scripts execute only once the document has finished parsing (document.body
+// and every element already exist), AFTER every classic synchronous <script> in the document —
+// including data/sprite-registry.js and the engine/clay-room.js tag (both load earlier, per D2's own
+// manifest note) and the page's own end-of-body classic boot script that sets up window.GS — even
+// though that classic script's <script> tag sits textually AFTER this module's tag in genesis.html
+// (classic scripts run synchronously as the parser reaches them; deferred/module scripts always run
+// after ALL of those, never before). This line also sits at the literal end of the file, after every
+// function this region defines and after `let S = createTheaterState();` (this file's line ~5011),
+// so there is no hoisting/ordering hazard to defer past. Net: a direct top-level call is exactly as
+// "ready" as it will ever be — a setTimeout(0) here would only add a frame of avoidable latency for a
+// dev-only cold-boot surface.
+//
+// Cost with the flag OFF (the byte-for-byte-identical-boot requirement): ONE clayRoomShouldEnable()
+// call — a location.search read, memoized — and nothing else. Same one-boolean-read-when-off law D1
+// already pays for the per-frame poll; this just pays it once, at boot, instead of (also) waiting for
+// a frame that a cold title screen never produces.
+function clayRoomBootSelfMount(){
+  if(S.clayRoomMounted) return;
+  if(!clayRoomShouldEnable()) return;
+  mountClayRoom();
+}
+clayRoomBootSelfMount();
+/* CLAY-ROOM ADDITIONS END */

@@ -193,3 +193,18 @@ completely broken."
 - **D12c packet format law (process):** every capture packet leads with plain-English
   "what this proves" per image — no registry-speak, no untranslated ids. Adopted into
   `.claude/skills/genesis-clay-pass/SKILL.md` the same day.
+
+## Addendum D13/D14 — the generalized guards (Adam's door review, 2026-07-23)
+
+- **D13 provenance audit (charter protected-core #6, made executable):** every object in the
+  clay scene graph must carry `{builder, recordRef}` provenance; the harness/diagnostic lists
+  any ownerless mesh and FAILS the pass on one. Lands with the wiring-audit re-wire unit; from
+  then on "is anything in this frame made up?" is machine-answered. Applies to every later
+  clay pass by inheritance.
+- **D14 door catalog → C1B (founder framing, verbatim):** "there are probably 10 types of
+  basic doors if not less, that should be something we just have a library of that get put in
+  it's actual graphed place at a graphed position that serves as a portal to the next room,
+  previous room, side room, secret room etc..." → This IS W4's canonical-connection owner +
+  W8's DMG door/material catalog; the C1B spec builds the typed door catalog (data) + the
+  connection record owning placement/state, renderer as pure projection, hinge law per THE
+  DOOR CONTRACT (D12b).

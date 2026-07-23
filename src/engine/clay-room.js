@@ -180,9 +180,19 @@ function clayRoomRecordFrom(seed){
     portal: portal,
     object: object,
     citizen: citizen,
+    // D15 (docs/C1A-CLAY-ROOM.md re-wire addendum): "spatialize-plan" — the RENDER geometry a theater
+    // mount projects from this record now compiles through the real spatializer (clayRoomBoardFrom/
+    // clayRoomWalkFixtureFrom, below), not a hand-assembled board-data shim. This does NOT reverse the
+    // D6 header's own reasoning above (a hand-rolled fixture fed to spatializePlan would be no more
+    // grounded than authoring the grid directly) — record.cells/.walls stay hand-authored in a simple
+    // local 0..4 frame, exactly as D6 argues; "spatialize-plan" documents that a DOWNSTREAM consumer
+    // (the theater mount) now derives ITS OWN geometry from this record's fields (dims/portal.edge/
+    // seed) via a real spatializePlan()/interiorBuildBoard() run, never that the record's own cells/
+    // walls arrays were re-derived from that run. version stays 1 (an added consumption path, not a
+    // shape-breaking migration).
     provenance: Object.freeze({
       pass: "C1A",
-      derivation: "structure-fact-shape",
+      derivation: "spatialize-plan",
       sourceRefs: sourceRefs,
       created: "2026-07-23"
     })
@@ -234,4 +244,172 @@ function clayRoomExplain(record){
 // branch, unused today since there is only the one source.
 function clayRoomEditRefusal(field){
   return { refused: true, reason: "generated-artifact", source: "data/sprite-registry.js" };
+}
+
+/* ─── D15 (docs/C1A-CLAY-ROOM.md re-wire addendum) — clayRoomWalkFixtureFrom / clayRoomDoorEdgeFor /
+   clayRoomBoardFrom: the ADAPTER that replaces theater-boot.js's old hand-assembled board-data shim
+   (clayRoomBoardDataFrom, deleted this unit) with the REAL production compile chain — a pinned
+   synthetic walk/segment fixture -> spatializePlan (src/engine/place-spatialize.js) ->
+   interiorBuildBoard (src/ui/theater-interior.js). Still pure (no THREE, no DOM): spatializePlan and
+   interiorBuildBoard are BOTH pure data functions (their own manifest.json desc strings: "no w/U/
+   render/DOM" / "no THREE/canvas/DOM"), and the KIT_SHELL_ENABLED/KIT_DOORS_ENABLED globals this
+   toggles are plain booleans. Precedent for an "engine" module calling straight into interiorBuildBoard
+   (a ui.theater-interior-owned symbol): src/engine/theater-data.js's own trayFrom does the identical
+   thing today (`interiorBuildBoard(dressedPlan, {...})`, that file's {kind:"interior",plan} branch) —
+   this is not a new layering shape, just the same one clay-room.js now also uses.
+
+   THE PINNED FIXTURE: a 2-segment chain (the clay room itself, "clay-room", + a stub target room,
+   "clay-beyond", that exists ONLY so spatializePlan has somewhere to carve the corridor/door FROM —
+   nothing about "clay-beyond" is ever rendered; interiorBuildBoard's own focusSegNum trim keeps only
+   the clay room's own cells+its own exit-door cell, see clayRoomBoardFrom below). Dims/areaType are
+   derived FROM the record (record.dims.w*5 feet, a plain "N' x N'" string dspDimsToCells parses back
+   to the SAME cell count — GRID LAW round-trip); "Square Chamber" as areaType carries no
+   SPATIAL_SHAPE_RULES keyword (shapeForArchetype's own fallback), so the room rasterizes as a plain
+   rect — the ONE shape this adapter is built for (a non-square/non-rect record throws rather than
+   silently drifting, see the guard below).
+
+   THE PINNED WALKID/TOPOLOGY: place-spatialize.js's own room-to-room layout (dspLayoutFor) has no
+   notion of compass direction — a 2-node chain's default ("linear"/"tree" groups) drifts EAST, and
+   "hub"/"onion"/"loop"/"web" groups pick a layout angle off `rng()`, itself seeded from
+   dspHashStr(opts.walkId). Landing the clay room's own exit door on record.portal.edge ("n") is
+   therefore a search-and-pin exercise, not a formula — CLAY_ROOM_WALK_TOPOLOGY/CLAY_ROOM_WALK_ATTEMPT
+   below are the result of exactly that search (topology "The Hub", walkId
+   "clay-room:clay-c1a:113311726:11" — record.seed 0x6c0ffee === 113311726 decimal — verified against
+   this file's own tip via a throwaway node/vm probe: `spatializePlan` produces a 5x5 room at plan
+   coords (3,13)-(7,17) whose sole exit door lands at (7,13), the room's own north row). PINNED, not
+   searched at runtime (mirrors D6's own "pinned fixture sourceRefs" precedent) — but never trusted
+   blindly either: clayRoomBoardFrom asserts the resolved door edge against record.portal.edge every
+   call and throws loudly if place-spatialize.js's own layout math ever drifts this pin off-course
+   (CLAUDE.md's "loud failure over silent default" law), rather than silently rendering a door on the
+   wrong wall. */
+var CLAY_ROOM_WALK_TOPOLOGY = "The Hub";
+var CLAY_ROOM_WALK_ATTEMPT = 11;
+
+// clayRoomWalkFixtureFrom(record) -> {segments, topology, walkId, focusSegNum} — the synthetic walk
+// fixture's OWN fields (dims/exits/areaType) derived from the record's dims + id + seed, per D15
+// point 2. Throws on a non-square record.dims (the only shape this pinned fixture/search covers).
+function clayRoomWalkFixtureFrom(record){
+  if(!record) throw new Error("clayRoomWalkFixtureFrom: record required");
+  if(!record.dims || record.dims.w !== record.dims.d){
+    throw new Error("clayRoomWalkFixtureFrom: only a square room (record.dims.w === record.dims.d) is supported by this pinned fixture — got " + JSON.stringify(record && record.dims));
+  }
+  var feet = record.dims.w * 5; // GRID LAW: 1 cell = 5 ft (src/engine/combat.js cmGridFromCells)
+  var dimsStr = feet + "' x " + feet + "'";
+  var roomId = "clay-room", beyondId = "clay-beyond";
+  var segments = [
+    { id: roomId, num: 1, label: roomId, isFinale: false, depth: 0,
+      exits: [{ targetId: beyondId }], light: "normal", dims: dimsStr, areaType: "Square Chamber" },
+    { id: beyondId, num: 2, label: beyondId, isFinale: false, depth: 1,
+      exits: [{ targetId: roomId }], light: "normal", dims: dimsStr, areaType: "Square Chamber" }
+  ];
+  var walkId = "clay-room:" + record.id + ":" + record.seed + ":" + CLAY_ROOM_WALK_ATTEMPT;
+  return { segments: segments, topology: CLAY_ROOM_WALK_TOPOLOGY, walkId: walkId, focusSegNum: 1 };
+}
+
+// clayRoomDoorEdgeFor(door, room) -> "n"|"s"|"e"|"w"|null — which of a SpatialPlan room rect's four
+// edges a door cell {x,y} sits on. Mirrors the record's OWN edge convention (clayRoomRecordFrom's
+// w-n-*/w-s-*/w-w-*/w-e-* wall rows: "n" = the smallest z/y row, "s" = the largest, "w" = the smallest
+// x column, "e" = the largest) so a plan-space door and a record-space portal.edge are directly
+// comparable. Pure geometry, no THREE.
+function clayRoomDoorEdgeFor(door, room){
+  if(!door || !room) return null;
+  if(door.y === room.y) return "n";
+  if(door.y === room.y + room.d - 1) return "s";
+  if(door.x === room.x) return "w";
+  if(door.x === room.x + room.w - 1) return "e";
+  return null; // a genuinely interior/degenerate cell — never expected for this pinned rect fixture
+}
+
+// ─── PUBLIC — clayRoomBoardFrom(record) -> {board, room, plan, fixture} (D15 wire-in) ─────────────
+// The full re-wired chain: clayRoomWalkFixtureFrom(record) -> spatializePlan -> assert the exit door
+// lands on record.portal.edge (loud failure otherwise) -> interiorBuildBoard (KIT_SHELL_ENABLED/
+// KIT_DOORS_ENABLED forced off for this one synchronous build — see the inline note) -> crate+citizen
+// staged onto board.furniture/board.pieces (the SAME plain caller-set fields src/engine/theater-data.js's
+// own trayFrom sets on every real production board, theater-boot.js's own "a plain field the caller
+// sets directly on the board object" convention for both), positioned from the record's own local
+// cell coordinates offset by the spatialized room's REAL rect (room.x/room.y) — the record's cells
+// stay authored in their simple 0..4 local frame; this offset is the one arithmetic step reconciling
+// that frame with wherever the spatializer's own layout actually placed the room. board.interactables/
+// board.dressing are left EMPTY (never hand-built) — see the door-leaf note in this function's body
+// and this unit's own build report for why, and CLAUDE.md's "an untagged/exempt/red state that tells
+// the truth beats a green that lies" for why that gap is reported, not patched.
+function clayRoomBoardFrom(record){
+  if(!record) throw new Error("clayRoomBoardFrom: record required");
+  var doSpatialize = (typeof spatializePlan !== "undefined") ? spatializePlan : null;
+  var doBuildBoard = (typeof interiorBuildBoard !== "undefined") ? interiorBuildBoard : null;
+  if(!doSpatialize) throw new Error("clayRoomBoardFrom: spatializePlan is not loaded (src/engine/place-spatialize.js must load before this call)");
+  if(!doBuildBoard) throw new Error("clayRoomBoardFrom: interiorBuildBoard is not loaded (src/ui/theater-interior.js must load before this call)");
+
+  var fixture = clayRoomWalkFixtureFrom(record);
+  var plan = doSpatialize(fixture.segments, fixture.topology, { walkId: fixture.walkId });
+
+  var room = null;
+  (plan.rooms || []).forEach(function(r){ if(r.segNum === fixture.focusSegNum) room = r; });
+  if(!room) throw new Error("clayRoomBoardFrom: spatializePlan produced no room for segNum " + fixture.focusSegNum);
+  if(room.w !== record.dims.w || room.d !== record.dims.d){
+    throw new Error("clayRoomBoardFrom: spatialized room is " + room.w + "x" + room.d +
+      ", expected " + record.dims.w + "x" + record.dims.d + " (record.dims) — a SPATIAL_MIN_CELL/MAX_CELL clamp or a dims-string parse drift");
+  }
+
+  var roomDoor = null;
+  (plan.doors || []).forEach(function(d){
+    if(roomDoor) return;
+    if(!d || d.betweenSegs.indexOf(fixture.focusSegNum) < 0) return;
+    if(d.x < room.x || d.x >= room.x + room.w || d.y < room.y || d.y >= room.y + room.d) return;
+    roomDoor = d;
+  });
+  if(!roomDoor) throw new Error("clayRoomBoardFrom: spatialized plan carries no door on the clay room's own exit — the pinned walkId/topology no longer carves one");
+  var doorEdge = clayRoomDoorEdgeFor(roomDoor, room);
+  if(doorEdge !== record.portal.edge){
+    throw new Error("clayRoomBoardFrom: pinned fixture (topology '" + fixture.topology + "', attempt " + CLAY_ROOM_WALK_ATTEMPT +
+      ") now resolves the exit door to edge '" + doorEdge + "', expected '" + record.portal.edge +
+      "' (record.portal.edge) — place-spatialize.js's own layout math drifted; re-derive CLAY_ROOM_WALK_ATTEMPT");
+  }
+
+  // KIT_SHELL_ENABLED/KIT_DOORS_ENABLED: theater-interior.js's OWN documented dev/harness escape
+  // hatch ("so a live session or a harness can flip it") — flipped OFF only for this one synchronous
+  // build so the clay pass stays in the plain prism/InstancedMesh family (D2 step 3's "never a
+  // bespoke material... SAME InstancedMesh/BoxGeometry construction" law): a kit-shelled wall/floor
+  // module is a donor-piece GLTF assembly, not a vertex-colored prism, and can't be flattened to clay
+  // grey the way every other structural mesh can (theater-boot.js's clayRoomFlattenStructure). Saved
+  // and restored around the call — this build is synchronous, and `board` is a fully-resolved plain-
+  // data snapshot the instant doBuildBoard returns, so no other board (this mount's own later async
+  // replays included) is ever affected by the flags being back at their prior values.
+  var priorKitShell = (typeof KIT_SHELL_ENABLED !== "undefined") ? KIT_SHELL_ENABLED : true;
+  var priorKitDoors = (typeof KIT_DOORS_ENABLED !== "undefined") ? KIT_DOORS_ENABLED : true;
+  var board;
+  try {
+    KIT_SHELL_ENABLED = false;
+    KIT_DOORS_ENABLED = false;
+    board = doBuildBoard(plan, { env: "dungeon", realmId: "ash", focusSegNum: fixture.focusSegNum });
+  } finally {
+    KIT_SHELL_ENABLED = priorKitShell;
+    KIT_DOORS_ENABLED = priorKitDoors;
+  }
+
+  var cellById = {};
+  (record.cells || []).forEach(function(c){ cellById[c.id] = c; });
+  var objectCell = cellById[record.object.cell];
+  var citizenCell = cellById[record.citizen.cell];
+  // D7/D2 step 4 — crate + goblin stage via their EXISTING production paths (data.furniture/
+  // data.pieces), positioned from the record: local cell coords + the room's real (room.x,room.y).
+  board.furniture = objectCell ? [{
+    slug: record.object.id, kind: record.object.kind, realmId: null,
+    x: room.x + objectCell.x, y: room.y + objectCell.z, roomSegNum: fixture.focusSegNum
+  }] : [];
+  board.pieces = citizenCell ? [{
+    slug: record.citizen.bestiaryId, cellX: room.x + citizenCell.x, cellY: room.y + citizenCell.z
+  }] : [];
+  // D15 point 1 — no hand-assembled interactables: the door LEAF (a swinging mesh with an open/closed
+  // pose) mounts only from a data.interactables entry (theater-boot.js's own "plain caller-set field"
+  // convention for that array too) — in production that array is populated by bindWalkInteractables
+  // (src/engine/theater-data.js's trayFrom), a pipeline stage D15 does not name and this unit does not
+  // call. Left empty rather than hand-built: the wall APERTURE + frame (jambs/header/arch corbels)
+  // still render — real interiorBuildBoard output, board.instances.doorframe — but with no leaf
+  // filling it. Reported as a production-pipeline finding in this unit's own build report, not patched
+  // from the clay side (this file's own D15 header note above + CLAUDE.md's validator-truth law).
+  board.interactables = [];
+  board.dressing = [];
+
+  return { board: board, room: room, plan: plan, fixture: fixture };
 }

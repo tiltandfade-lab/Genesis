@@ -42,16 +42,46 @@
         region defines a grid builder whose line-count math reads record.dims.w/record.dims.d (never
         a hardcoded cell count), uses THREE.LineSegments, and authors a material opacity in
         [0.25, 0.35].
-    14. ⊗ D12b-corrected wiring grep-gate (the coordinator's addendum — "a stubbed door can never
-        pass this harness again"): the additions region registers the portal as a real door
-        interactable (archetype:"door", feeding interiorBuildInteractables/
-        interiorBuildInteractableDoorMesh, theater-boot.js ~4335/4209) AND supplies the production
-        kitDoors minimal-plan field (widthAxisIsZ, feeding interiorBuildKitDoorMesh via
-        itrKitDoorMap, theater-boot.js ~4136/4340) — AND that no bespoke door-leaf geometry
-        (THREE.ExtrudeGeometry/THREE.Shape — the exact primitives the real leaf builder itself uses)
-        was hand-authored in this file's own additions region, and the single-box doorframe literal
-        (the production doorframe instanced-mesh channel's own input) was never expanded into a
-        hand-rolled multi-piece frame assembly.
+    14. [SUPERSEDED by D15, 2026-07-23 — see below] used to grep for the OLD hand-assembled
+        board-data shim's own door-wiring literals (archetype:"door", kitDoors:kitDoors,
+        CLAY_PORTAL_WIDTH_AXIS_IS_Z, the single-box doorframe literal). D15 deletes that shim
+        entirely (docs/C1A-CLAY-ROOM.md spec addendum D15 — "grey paint on real geometry is clay";
+        two prior door attempts failed feeding production builders outside their input assumptions).
+        RED-FIRST proof this check died for real, not by accident: run against tip 1b5111d1 (this
+        file's own pre-D15 state) 14a/14b/14c/14d/14g passed; run again straight after D15's source
+        edits landed (shim deleted, real chain wired) they went RED — the exact literals they grepped
+        for no longer exist anywhere in the file (51 passed, 5 failed at that point; recorded in this
+        unit's own build report). Check 14 below is REWRITTEN to test the NEW truth (D15's own
+        checklist items a/b/d); check 15 is NEW (item c, the jsdom compile check); check 16 is NEW
+        (D13 provenance-audit structural check).
+
+   D15 (docs/C1A-CLAY-ROOM.md re-wire addendum, 2026-07-23) — replace the hand-assembled board-data
+   shim with the REAL production compile chain (a pinned synthetic walk fixture -> spatializePlan ->
+   interiorBuildBoard -> setInteriorBoard), never a hand-built instances/doorframe/kitDoors/
+   interactables array:
+    14. wiring + negative grep-gate (D15 checklist items a/b, extended per the unit's own stronger
+        "no hand-built interactables either" reading): the additions region calls
+        clayRoomBoardFrom(record) (src/engine/clay-room.js's real spatializer+interiorBuildBoard
+        chain) and feeds its output straight to setInteriorBoard — AND contains NONE of
+        `instances:{floor` / `doorframe:[` / `kitDoors:[` (the task's own 3 banned literals) / a hand-
+        built door `archetype:` literal (the stronger interactables ban) anywhere in the region.
+    15. ⊗ jsdom compile check (D15 checklist item c, cloned from dev/verify-dungeon-interior.mjs's own
+        bootstrap idea but reusing THIS file's existing freshWin() full-manifest loader, which already
+        carries place-spatialize.js/theater-interior.js/clay-room.js in classicPaths — no second vm
+        sandbox needed): runs the adapter's synthetic fixture through the REAL spatializePlan +
+        interiorBuildBoard headlessly via win.clayRoomBoardFrom(record); asserts the 5x5 room's floor
+        cell count (25), >=1 door cell on record.portal.edge's own side (independently recomputed off
+        the returned room+plan.doors, never trusting clayRoomBoardFrom's own internal assertion
+        alone), byte-identical board JSON across two independent calls (determinism through the real
+        chain), crate/citizen positions derived from the record's own cells offset by the real room
+        rect, and that KIT_SHELL_ENABLED/KIT_DOORS_ENABLED land back at their prior values afterward
+        (the save/restore discipline around theater-interior.js's own dev/harness escape hatch).
+    16. D13 provenance-audit structural check (D15 checklist item d — grep-level, since this harness
+        never mounts real GL/a real THREE.Scene): clayRoomProvenanceAudit/clayRoomTagAllProvenance/
+        clayRoomTagProvenance are defined in the additions region, the tag literal
+        (userData.clayProvenance = {builder,recordRef:"clay-c1a"}) is present, clayRoomTagAllProvenance
+        is actually called from mountClayRoom (wiring, not just defined-but-unused), and the Explain
+        tab's overlay code carries the live "Provenance audit: ... groups tagged, ... orphans" line.
 
    Run:  node dev/verify-clay-room.mjs   (jsdom in ~/.genesis-jsdom — see CLAUDE.md) */
 import { readFileSync } from "node:fs";
@@ -409,8 +439,9 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
-// 14. ⊗ D12b-corrected wiring grep-gate (coordinator addendum) — proves the door renders through the
-//     EXISTING production door/interactable builder chain, never a bespoke re-modeled leaf/frame.
+// 14. D15 wiring + negative grep-gate — REWRITTEN (the old check 14a-g grepped for the hand-assembled
+//     shim's own door-wiring literals; D15 deletes that shim outright — see this file's own header
+//     note for the red-first proof this rewrite is grounded in, not just asserted).
 // ============================================================================
 {
   const bootSrc = read("src/ui/theater-boot.js");
@@ -418,37 +449,173 @@ const check = (name, cond, detail = "") =>
   const endMark = "CLAY-ROOM ADDITIONS END */";
   const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
   if(bi === -1 || ei === -1 || ei < bi){
-    check("14. theater-boot.js clay-room additions region found for the door-wiring scan", false,
-      "not found yet — expected once the D12b-corrected wiring lands");
+    check("14. theater-boot.js clay-room additions region found for the D15 wiring scan", false,
+      "not found yet — expected once the D15 re-wire lands");
   } else {
     const region = bootSrc.slice(bi, ei + endMark.length);
 
-    check("14a. the portal is registered as a real door interactable (archetype:\"door\") — feeds interiorBuildInteractables",
-      /archetype:\s*"door"/.test(region));
+    check("14a. mountClayRoom calls clayRoomBoardFrom(record) — the real spatializer+interiorBuildBoard chain (src/engine/clay-room.js)",
+      /clayRoomBoardFrom\s*\(\s*record\s*\)/.test(region));
 
-    check("14b. the door interactable's state reads record.portal.state (never a hardcoded literal)",
-      /state:\s*record\.portal\.state/.test(region));
+    check("14b. mountClayRoom feeds that output straight to setInteriorBoard (no intermediate hand-assembly)",
+      /setInteriorBoard\s*\(\s*compiled\.board\s*\)/.test(region));
 
-    check("14c. the production kitDoors minimal-plan field is supplied — feeds interiorBuildKitDoorMesh via itrKitDoorMap",
-      /kitDoors:\s*kitDoors\b/.test(region));
+    // NEGATIVE — the task's own 3 named banned literals (the OLD hand-assembled shim class) plus a
+    // hand-built door interactable literal (this unit's own stronger "no hand-built interactables
+    // either" reading of D15 point 1) must appear NOWHERE in the additions region.
+    check("14c. NO `instances:{floor` hand-assembled literal anywhere in the additions region",
+      !/instances:\{floor/.test(region), "matched instances:{floor");
+    check("14d. NO `doorframe:[` hand-assembled literal anywhere in the additions region",
+      !/doorframe:\[/.test(region), "matched doorframe:[");
+    check("14e. NO `kitDoors:[` hand-assembled literal anywhere in the additions region",
+      !/kitDoors:\[/.test(region), "matched kitDoors:[");
+    check("14f. NO hand-built door interactable literal (archetype:\"door\") anywhere in the additions region",
+      !/archetype:\s*"door"/.test(region), "matched archetype:\"door\"");
 
-    check("14d. the kitDoors entry carries widthAxisIsZ (the real per-entry orientation override)",
-      /widthAxisIsZ:\s*CLAY_PORTAL_WIDTH_AXIS_IS_Z\[record\.portal\.edge\]/.test(region));
+    // clayRoomFlattenStructure (D2 step 3's structural-surface sibling to clayRoomFlattenFurniture)
+    // exists and its kind whitelist is exactly floor/wall/doorframe/pillar — a post-mount material
+    // SWAP over production InstancedMesh geometry, never a new mesh/hand-built instance data.
+    check("14g. clayRoomFlattenStructure is defined in the additions region",
+      /function\s+clayRoomFlattenStructure\s*\(\)\s*\{/.test(region));
+    check("14h. its kind whitelist covers exactly floor/wall/doorframe/pillar (D2 step 3's own structural-surface list)",
+      /CLAY_STRUCTURE_KINDS\s*=\s*\{\s*floor:\s*true,\s*wall:\s*true,\s*doorframe:\s*true,\s*pillar:\s*true\s*\}/.test(region));
+  }
+}
 
-    // NEGATIVE checks — a stubbed/re-modeled door leaf never passes this harness again: the real
-    // leaf builder (interiorBuildInteractableDoorMesh, theater-boot.js) is the ONLY place
-    // ExtrudeGeometry/THREE.Shape legitimately build a door leaf; their absence here proves this
-    // file's own additions region never duplicated that geometry locally.
-    check("14e. no bespoke ExtrudeGeometry leaf construction in the additions region",
-      !/ExtrudeGeometry\s*\(/.test(region), "matched ExtrudeGeometry(");
-    check("14f. no bespoke THREE.Shape leaf construction in the additions region",
-      !/THREE\.Shape\s*\(/.test(region), "matched THREE.Shape(");
+// ============================================================================
+// 15. ⊗ jsdom compile check (D15 checklist item c) — runs the adapter's synthetic fixture through the
+//     REAL spatializePlan + interiorBuildBoard headlessly via win.clayRoomBoardFrom(record), reusing
+//     THIS file's own freshWin() full-manifest loader (place-spatialize.js/theater-interior.js/
+//     clay-room.js are all already in classicPaths — no second vm sandbox needed).
+// ============================================================================
+{
+  try {
+    const win = freshWin();
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    check("15a. record.provenance.derivation === \"spatialize-plan\" (D15 point 2)",
+      record.provenance.derivation === "spatialize-plan", record.provenance.derivation);
 
-    // the doorframe box stays the ORIGINAL single-object-literal shape (the production doorframe
-    // instanced-mesh channel's own input) — guards against a future session re-expanding it into a
-    // hand-rolled multi-piece jamb/lintel/leaf assembly (the exact class of fix this addendum forbids).
-    check("14g. the doorframe instances array stays the single-box literal (never expanded into a hand-rolled multi-piece frame)",
-      /const doorframe = portalCell \? \[\{/.test(region));
+    check("15b. win.clayRoomBoardFrom is a function", typeof win.clayRoomBoardFrom === "function");
+    const compiled = win.clayRoomBoardFrom(record);
+
+    check("15c. the 5x5 room compiles to exactly 25 floor instances",
+      compiled.board.instances.floor.length === 25, "floor=" + compiled.board.instances.floor.length);
+
+    // independently recompute the door edge off the returned room+plan.doors — never trusting
+    // clayRoomBoardFrom's own internal assertion alone (belt-and-suspenders).
+    const room = compiled.room;
+    const roomDoors = (compiled.plan.doors || []).filter((d) =>
+      d.betweenSegs.includes(compiled.fixture.focusSegNum) &&
+      d.x >= room.x && d.x < room.x + room.w && d.y >= room.y && d.y < room.y + room.d);
+    check("15d. >=1 door cell on the clay room's own exit", roomDoors.length >= 1, JSON.stringify(roomDoors));
+    const edgeOf = (d) => d.y === room.y ? "n" : d.y === room.y + room.d - 1 ? "s" : d.x === room.x ? "w" : d.x === room.x + room.w - 1 ? "e" : null;
+    check("15e. that door cell sits on record.portal.edge's own side (\"" + record.portal.edge + "\")",
+      roomDoors.some((d) => edgeOf(d) === record.portal.edge), JSON.stringify(roomDoors.map(edgeOf)));
+    check("15f. board.instances.doorframe carries >=1 real jamb/header instance for that door",
+      compiled.board.instances.doorframe.length >= 1, compiled.board.instances.doorframe.length);
+
+    check("15g. board.furniture[0] is positioned from the record (local cell + the real room rect origin)",
+      compiled.board.furniture.length === 1 &&
+      compiled.board.furniture[0].x === room.x + 3 && compiled.board.furniture[0].y === room.y + 2,
+      JSON.stringify(compiled.board.furniture));
+    check("15h. board.pieces[0] is positioned from the record (local cell + the real room rect origin)",
+      compiled.board.pieces.length === 1 &&
+      compiled.board.pieces[0].cellX === room.x + 1 && compiled.board.pieces[0].cellY === room.y + 3,
+      JSON.stringify(compiled.board.pieces));
+
+    check("15i. board.interactables/board.dressing are empty (never hand-built — D15's own closing law)",
+      Array.isArray(compiled.board.interactables) && compiled.board.interactables.length === 0 &&
+      Array.isArray(compiled.board.dressing) && compiled.board.dressing.length === 0);
+
+    // determinism through the REAL chain — two independent calls, byte-identical board.
+    const compiled2 = win.clayRoomBoardFrom(record);
+    check("15j. determinism — two independent clayRoomBoardFrom(record) calls produce a byte-identical board",
+      JSON.stringify(compiled.board) === JSON.stringify(compiled2.board));
+
+    // KIT_SHELL_ENABLED/KIT_DOORS_ENABLED save/restore discipline (theater-interior.js's own dev/
+    // harness escape hatch, flipped off only for the synchronous interiorBuildBoard call).
+    check("15k. KIT_SHELL_ENABLED is restored to its prior value (true) after clayRoomBoardFrom returns",
+      win.KIT_SHELL_ENABLED === true, win.KIT_SHELL_ENABLED);
+    check("15l. KIT_DOORS_ENABLED is restored to its prior value (true) after clayRoomBoardFrom returns",
+      win.KIT_DOORS_ENABLED === true, win.KIT_DOORS_ENABLED);
+  } catch(e) { check("15. jsdom compile check (module present, no throw)", false, e.stack || String(e)); }
+}
+
+// ============================================================================
+// 16. D13 provenance-audit structural check (D15 checklist item d) — grep-level: this harness never
+//     mounts real GL/a real THREE.Scene, so the LIVE "0 orphans" claim is the browser cold-load gate,
+//     not this harness (this file's own header note, checks 7/8/13's own precedent for that split).
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
+  const endMark = "CLAY-ROOM ADDITIONS END */";
+  const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
+  if(bi === -1 || ei === -1 || ei < bi){
+    check("16. theater-boot.js clay-room additions region found for the provenance-audit scan", false,
+      "not found yet — expected once D13 lands");
+  } else {
+    const region = bootSrc.slice(bi, ei + endMark.length);
+
+    check("16a. clayRoomProvenanceAudit() is defined in the additions region",
+      /function\s+clayRoomProvenanceAudit\s*\(\)\s*\{/.test(region));
+    check("16b. clayRoomTagAllProvenance() is defined in the additions region",
+      /function\s+clayRoomTagAllProvenance\s*\(\)\s*\{/.test(region));
+    check("16c. clayRoomTagProvenance(node,builder) is defined in the additions region",
+      /function\s+clayRoomTagProvenance\s*\(\s*node,\s*builder\s*\)\s*\{/.test(region));
+    check("16d. the tag literal stamps userData.clayProvenance = {builder,recordRef:\"clay-c1a\"}",
+      /node\.userData\.clayProvenance\s*=\s*\{\s*builder:\s*builder,\s*recordRef:\s*"clay-c1a"\s*\}/.test(region));
+
+    // wiring — clayRoomTagAllProvenance is actually CALLED from mountClayRoom, not just defined.
+    const fnMatch = region.match(/function\s+mountClayRoom\s*\(\)\s*\{([\s\S]*?)\n\}/);
+    const fnBody = fnMatch ? fnMatch[1] : "";
+    check("16e. mountClayRoom() actually calls clayRoomTagAllProvenance() (wiring, not dead code)",
+      /clayRoomTagAllProvenance\s*\(\s*\)/.test(fnBody), fnBody);
+
+    check("16f. the Explain-tab overlay carries a LIVE \"Provenance audit: ... groups tagged, ... orphans\" line",
+      /"\\nProvenance audit: "\s*\+\s*provenanceAudit\.tagged\.length\s*\+\s*" groups tagged, "\s*\+\s*provenanceAudit\.orphans\.length\s*\+\s*" orphans\."/.test(region));
+  }
+}
+
+// ============================================================================
+// 17. ⊗ ITR_ROOM_SHELL regression guard — a LIVE-BROWSER finding (this harness's own THREE/DOM-free
+//     discipline can't render GL to catch it directly; the red-first proof here is the orchestrator's
+//     own cold-load screenshot: with the fix ABSENT, theater-boot.js's own room-shell compiler
+//     (ITR_ROOM_SHELL, default true, its own "flips ITR_ROOM_SHELL live" comment at the definition)
+//     silently replaces the flat, InstancedMesh floor/wall/doorframe geometry clayRoomFlattenStructure
+//     flattens with a SEPARATE, non-instanced, REAL-kit-textured mesh trio
+//     (room-shell-floor/wall-stem/wall-upper/wall-trim) that sweep never touches (it isn't an
+//     InstancedMesh) — dark enough under D4's own low-ambient profile to read as "the floor/walls
+//     never rendered at all". Fixed by disabling ITR_ROOM_SHELL for the duration of the mount (the
+//     SAME "flip an existing dev/harness escape hatch" law KIT_SHELL_ENABLED/KIT_DOORS_ENABLED
+//     already use), restored in clayRoomUnmount (not immediately after setInteriorBoard) because the
+//     async texture-settle replay this file's own header documents re-invokes setInteriorBoard
+//     OUTSIDE mountClayRoom and reads ITR_ROOM_SHELL fresh each time.
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
+  const endMark = "CLAY-ROOM ADDITIONS END */";
+  const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
+  if(bi === -1 || ei === -1 || ei < bi){
+    check("17. theater-boot.js clay-room additions region found for the room-shell regression scan", false,
+      "not found yet — expected once the D15 re-wire lands");
+  } else {
+    const region = bootSrc.slice(bi, ei + endMark.length);
+
+    const mountMatch = region.match(/function\s+mountClayRoom\s*\(\)\s*\{([\s\S]*?)\n\}/);
+    const mountBody = mountMatch ? mountMatch[1] : "";
+    check("17a. mountClayRoom() saves the prior ITR_ROOM_SHELL value before overriding it",
+      /CLAY_ROOM_PRIOR_ROOM_SHELL\s*=\s*ITR_ROOM_SHELL/.test(mountBody), mountBody);
+    check("17b. mountClayRoom() forces ITR_ROOM_SHELL = false before setInteriorBoard runs",
+      /ITR_ROOM_SHELL\s*=\s*false;[\s\S]*setInteriorBoard\s*\(\s*compiled\.board\s*\)/.test(mountBody), mountBody);
+
+    const unmountMatch = region.match(/function\s+clayRoomUnmount\s*\(\)\s*\{([\s\S]*?)\n\}/);
+    const unmountBody = unmountMatch ? unmountMatch[1] : "";
+    check("17c. clayRoomUnmount() restores ITR_ROOM_SHELL from the saved prior value (never immediately after setInteriorBoard)",
+      /ITR_ROOM_SHELL\s*=\s*CLAY_ROOM_PRIOR_ROOM_SHELL/.test(unmountBody), unmountBody);
+    check("17d. the restore is NOT present inside mountClayRoom itself (would race the async texture-settle replay)",
+      !/ITR_ROOM_SHELL\s*=\s*CLAY_ROOM_PRIOR_ROOM_SHELL/.test(mountBody), mountBody);
   }
 }
 

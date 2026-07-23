@@ -14299,7 +14299,8 @@ function unmountLightLab(){
   S.lightLabMounted = false;
 }
 
-/* CLAY-ROOM ADDITIONS BEGIN — docs/C1A-CLAY-ROOM.md (Q12-B wave-12 gate, execution order U1->U2->U3).
+/* CLAY-ROOM ADDITIONS BEGIN — docs/C1A-CLAY-ROOM.md (Q12-B wave-12 gate, execution order U1->U2->U3;
+   D15 re-wire addendum, 2026-07-23, this unit).
    D2 placement law: appended functions ONLY, plus at most two hook lines total added to the file's
    pre-existing bodies — this file adds exactly ONE (the clayRoomMaybeAutoMount() poll call inside
    renderTheaterFrame, beside lightLabMaybeAutoMount()'s own call, near this file's top). D1 clones
@@ -14314,9 +14315,29 @@ function unmountLightLab(){
    theater-interior.js:205) — this block never calls rotate()/zoom(), so "no rotation, no orbit"
    (W3 law) holds by omission, not a new guard. D5: the default (non-psx) canvas path — mount() is
    called with no `opts`, so S.psxEnabled stays its createTheaterState() default (false) and
-   applyPsxCanvasSize's own DPR-capped branch runs unmodified; no new DPR code here. */
+   applyPsxCanvasSize's own DPR-capped branch runs unmodified; no new DPR code here.
+
+   D15 RE-WIRE (docs/C1A-CLAY-ROOM.md spec addendum D15): the board-data path is now
+   src/engine/clay-room.js's clayRoomBoardFrom(record) — the REAL production compile chain (a pinned
+   synthetic walk fixture -> spatializePlan -> interiorBuildBoard), never a hand-assembled
+   instances/doorframe/kitDoors/interactables literal (the OLD clayRoomBoardDataFrom shim, deleted
+   this unit). mountClayRoom below calls it, then setInteriorBoard(compiled.board) directly — this
+   file adds only POST-mount, additive treatment over that PRODUCTION output: the D4 light-profile
+   override (clayRoomApplyLightProfile, unchanged), the D2-step-3 flat-grey material swaps
+   (clayRoomFlattenFurniture, unchanged; clayRoomFlattenStructure, new — floor/wall/doorframe/pillar),
+   the D12a seam grid (clayRoomBuildSeamGrid, unchanged), and D13 provenance tagging/audit (new). The
+   door LEAF (a swinging mesh with an open/closed pose) is production's own data.interactables
+   consumer (interiorBuildInteractables) fed by bindWalkInteractables in the real trayFrom pipeline —
+   a pipeline stage D15 does not name and this unit does not call, so board.interactables stays empty
+   (clay-room.js's own clayRoomBoardFrom sets it explicitly) rather than hand-built: the wall APERTURE
+   and frame (jambs/header/arch corbels — real interiorBuildBoard output) render; no leaf fills it.
+   Reported as a production-pipeline finding in this unit's own build report, never patched from here. */
 
 let CLAY_ROOM_URL_FLAG = null;
+// Holds ITR_ROOM_SHELL's pre-mount value across a mount/unmount cycle — see mountClayRoom's own
+// header note (the room-shell-compiler finding) for why the restore happens in clayRoomUnmount,
+// never immediately after setInteriorBoard.
+let CLAY_ROOM_PRIOR_ROOM_SHELL = true;
 function clayRoomShouldEnable(){
   try {
     if(typeof window === "undefined") return false;
@@ -14348,171 +14369,13 @@ function clayRoomMaybeAutoMount(){
   mountClayRoom();
 }
 
-// D7/D2: a flat, untextured clay-grey — the ONLY color every clay instance authors (floor/wall/
-// doorframe/crate), so the interior channel's own null-texture branch (interiorBuildInstancedMesh,
-// this file's own header a few thousand lines up: `texture ? {map:texture} : {color:0xffffff}` +
-// per-instance vertex color) renders a genuinely flat Lambert surface with zero grain/file texture
-// — never a bespoke material, the SAME InstancedMesh/BoxGeometry construction every other interior
-// board uses.
+// D7/D2 step 3 — flat, untextured clay-grey: the ONE color clayRoomFlattenFurniture (crate) and
+// clayRoomFlattenStructure (floor/wall/doorframe/pillar, below) swap onto ALREADY-BUILT PRODUCTION
+// geometry post-mount (never a hand-assembled instance array — see this region's own D15 header note
+// above for why that path is gone). No hand-derived wall-height/door-height/edge-offset constants
+// remain here: those numbers now come from the REAL spatializer + interiorBuildBoard chain
+// (src/engine/clay-room.js's clayRoomBoardFrom), never re-authored in this file.
 const CLAY_GREY = "#8a8a8a";
-// Mirrors theater-interior.js's own untouched constants (never imported bare — see this file's own
-// ITR_FLOOR_HEIGHT_FALLBACK header, a few thousand lines up, on why a cross-file classic-script
-// const isn't reliably reachable here; these are the same AUTHORED VALUES, cited by source line for
-// traceability, not a second copy of a mechanism).
-const CLAY_WALL_HEIGHT = 2.4;       // theater-interior.js:935 ITR_WALL_HEIGHT_BASE
-const CLAY_FLOOR_HEIGHT = 0.2;      // theater-interior.js:936 ITR_FLOOR_HEIGHT
-const CLAY_DOOR_HEIGHT_FRAC = 0.85; // theater-interior.js:937 ITR_DOOR_HEIGHT_FRAC
-const CLAY_WALL_THICKNESS = 0.12;   // order-of-magnitude match to ITR_PORTAL_DEPTH (theater-interior.js:947, 0.12) — D7's own ITR_PORTAL_* citation
-
-// record.walls[].edge -> the fractional cell-local offset a thin wall/doorframe slab sits at, and
-// which footprint axis it spans full-width on (the other axis carries CLAY_WALL_THICKNESS). Pure
-// data, no THREE.
-const CLAY_EDGE_OFFSET = { n: { ox: 0, oz: -0.5 }, s: { ox: 0, oz: 0.5 }, w: { ox: -0.5, oz: 0 }, e: { ox: 0.5, oz: 0 } };
-
-// D12b-corrected: record.portal.edge -> the production kitDoors "widthAxisIsZ" field (theater-
-// interior.js's own itrDoorWidthAxisIsZ, :399-405 — "nearer E/W WALL run -> width axis X (false);
-// nearer N/S WALL run -> width axis Z (true)"), collapsed to a direct edge read since a portal on
-// this record's own n/s edge always sits in a straight east-west wall run (width axis X, false) and
-// a portal on the w/e edge always sits in a straight north-south wall run (width axis Z, true) — no
-// multi-cell wall-run scan needed (this record carries no SPATIAL_CELL `plan` grid to scan; see the
-// kitDoors wiring note in clayRoomBoardDataFrom below for why this field exists at all).
-const CLAY_PORTAL_WIDTH_AXIS_IS_Z = { n: false, s: false, w: true, e: true };
-
-// clayRoomBoardDataFrom(record) -> a setInteriorBoard(data)-shaped board object (theater-interior.js's
-// own interiorBuildBoard OUTPUT shape, that function's own header docstring) — authored DIRECTLY off
-// the record's own 25-cell grid rather than run through interiorBuildBoard itself (that function
-// requires a full spatializePlan()/semanticizePlan() multi-room dungeon PLAN, not a single pinned
-// room fixture — see src/engine/clay-room.js's own D6 header for the identical reasoning on the
-// engine side). The GEOMETRY/MATERIAL still routes entirely through PRODUCTION consumers from here:
-// setInteriorBoard -> interiorBuildInstancedMesh (floor/wall/doorframe), interiorBuildInteractables
-// (the door leaf), interiorBuildFurniture (the crate, via furnitureFor's own ITR_FURNITURE_RECIPES.crate
-// recipe), interiorBuildPieces (the goblin standee) — never a bespoke THREE.Mesh built here.
-function clayRoomBoardDataFrom(record){
-  const cellById = {};
-  record.cells.forEach(function(c){ cellById[c.id] = c; });
-
-  const floor = record.cells.map(function(c){
-    return { x: c.x, z: c.z, sx: 1, sy: CLAY_FLOOR_HEIGHT, sz: 1, color: CLAY_GREY };
-  });
-
-  const wall = [];
-  record.walls.forEach(function(w){
-    (w.cells || []).forEach(function(cellId){
-      // the portal cuts exactly this one segment on its own edge — every other perimeter segment
-      // (including this SAME cell's OTHER edge, at a corner) stays solid.
-      if(cellId === record.portal.cell && w.edge === record.portal.edge) return;
-      const cell = cellById[cellId];
-      if(!cell) return;
-      const off = CLAY_EDGE_OFFSET[w.edge];
-      const horizontal = (w.edge === "n" || w.edge === "s");
-      wall.push({
-        x: cell.x, z: cell.z, ox: off.ox, oz: off.oz,
-        sx: horizontal ? 1 : CLAY_WALL_THICKNESS,
-        sy: CLAY_WALL_HEIGHT,
-        sz: horizontal ? CLAY_WALL_THICKNESS : 1,
-        color: CLAY_GREY
-      });
-    });
-  });
-
-  const portalCell = cellById[record.portal.cell];
-  const portalOff = CLAY_EDGE_OFFSET[record.portal.edge];
-  const portalHorizontal = (record.portal.edge === "n" || record.portal.edge === "s");
-  const doorframe = portalCell ? [{
-    x: portalCell.x, z: portalCell.z, ox: portalOff.ox, oz: portalOff.oz,
-    sx: portalHorizontal ? 0.8 : CLAY_WALL_THICKNESS,
-    sy: CLAY_WALL_HEIGHT * CLAY_DOOR_HEIGHT_FRAC,
-    sz: portalHorizontal ? CLAY_WALL_THICKNESS : 0.8,
-    color: CLAY_GREY
-  }] : [];
-
-  // D12b-corrected (Adam's founder redline, capture packet #1, 2026-07-23, plus the orchestrator's
-  // re-gate — verbatim door contract: "at it's root it is an extruded rectangle exactly the same
-  // way a wall is, except it hinges outward on a fixed axis on one of it's corner vertices"): that
-  // IS interiorBuildInteractableDoorMesh's own prism leaf, byte-for-byte (theater-boot.js ~4209-
-  // 4279 — an ExtrudeGeometry built from itrDoorShape's rectangle, geo.translate re-anchors the
-  // local origin onto the hinge jamb edge, hinge.rotation.y is the swing) — so the fix is NEVER a bespoke leaf mesh
-  // here, only registering the portal so the REAL builder chain reaches it: data.interactables
-  // (archetype:"door") -> interiorBuildInteractables (theater-boot.js:4335) ->
-  // interiorBuildInteractableDoorMesh. `state` now reads record.portal.state (D12b instruction 1)
-  // instead of a hardcoded literal — the render is a projection of the canonical fact, never a
-  // second, independently-typed "closed".
-  const interactables = portalCell ? [{
-    archetype: "door", x: portalCell.x, y: portalCell.z, state: record.portal.state,
-    sourceRef: record.portal.id, slug: record.portal.id
-  }] : [];
-
-  // D12b-corrected, continued — "provide the minimal plan fields that builder needs" rather than
-  // re-derive/re-model: interiorBuildInteractableDoorMesh's PRISM leaf picks its own swing axis by
-  // scanning S.interiorFloorTopMap for floor at this cell's east/west neighbors (theater-boot.js
-  // ~4238-4239, `ew`) — a heuristic built for a CORRIDOR-THRESHOLD door cell (a real dungeon plan
-  // never floor-codes the door cell's own flanking wall-run neighbors; only a genuine east-west
-  // corridor floors both of them). This record's floor is authored per-CELL over the room's own
-  // full interior — every one of the 25 cells, INCLUDING the two cells flanking this portal along
-  // its own wall row (c-1-0/c-3-0), is legitimate interior floor (src/engine/clay-room.js's own D6
-  // header: an edge-trim wall model, not a wall-as-grid-cell model) — so that scan always finds
-  // floor on both sides regardless of which edge the portal actually sits on, and always concludes
-  // "east-west corridor". A genuine, reproducible misread for this record's topology (most likely
-  // Adam's "is it open, closed, or just broken" read on capture packet #1), not a fluke.
-  //
-  // The one real per-entry override the production door builder DOES expose for this exact decision
-  // is `data.kitDoors` (theater-interior.js's own sibling field to `data.instances`, KS-2 —
-  // itrKitDoorMap/interiorBuildKitDoorMesh, theater-boot.js:4136-4169 called via
-  // interiorBuildInteractables:4340): a {x,z,widthAxisIsZ} entry lets the door mount the full
-  // production kit assembly (frame + leaf on its own modeled hinge socket) at the CORRECT axis —
-  // CLAY_PORTAL_WIDTH_AXIS_IS_Z (this file, above) derives it the same way itrDoorWidthAxisIsZ
-  // resolves it (theater-interior.js:399-405), collapsed to a direct edge read since this record's
-  // own D6 authoring already KNOWS the portal sits in a straight, unambiguous run of its own edge —
-  // never a re-implementation of that function's multi-cell wall-run scan (this record carries no
-  // SPATIAL_CELL `plan` grid for such a scan to run over).
-  //
-  // UNREACHABLE FIELD (reported per the correction, not silently worked around): the PRISM fallback
-  // branch — the geometry that actually renders for however long the kit's async donor-piece
-  // template takes to warm, mountClayRoom's own first paint included — reads NO entry/kitDoors
-  // field for this decision at all; its `ew` scan (theater-boot.js ~4238-4239) is unconditional and
-  // self-computed from floorTopMap on every call, so this record's topology cannot be signaled to
-  // it through any input the board-data shape exposes. kitDoors is the only reachable override, and
-  // it only takes effect once kitDoorTemplateFor's donor-piece fetch resolves
-  // (interiorBuildKitDoorMesh, theater-boot.js:4136-4138) and the async "re-run the last board"
-  // replay (donorTemplateFor's own .then(), theater-boot.js:4029) fires.
-  const kitDoors = portalCell ? [{
-    x: portalCell.x, z: portalCell.z, widthAxisIsZ: CLAY_PORTAL_WIDTH_AXIS_IS_Z[record.portal.edge],
-    pack: "kenney-modular-dungeon-kit", slug: "gate-door"
-  }] : [];
-
-  const objectCell = cellById[record.object.cell];
-  const furniture = objectCell ? [{
-    slug: record.object.id, kind: record.object.kind, realmId: null, x: objectCell.x, y: objectCell.z
-  }] : [];
-
-  const citizenCell = cellById[record.citizen.cell];
-  // data.pieces[].slug is spriteEntryFor's OWN `recipeSlug` parameter — that function does the
-  // SPRITE_BY_BESTIARY_ID[recipeSlug] -> SPRITE_REGISTRY[idSlug] resolution ITSELF (TIER 1, this
-  // file's own spriteEntryFor header a few thousand lines up), so the bestiary id is what belongs
-  // here, never a pre-resolved registry slug (passing an already-resolved "spr-fantasy-..." slug
-  // would miss TIER 1 entirely and fall through to TIER 2's normalized-NAME scan, which a slug
-  // string never matches — found live: 0 resolved pieces, zero network request for the sprite PNG,
-  // in a served-browser check of this exact mount).
-  const pieces = citizenCell ? [{ slug: record.citizen.bestiaryId, cellX: citizenCell.x, cellY: citizenCell.z }] : [];
-
-  const bounds = { minX: 0, maxX: record.dims.w - 1, minZ: 0, maxZ: record.dims.d - 1 };
-
-  return {
-    kind: "interior3d",
-    env: "dungeon",
-    realmId: null,
-    wallHeightBase: CLAY_WALL_HEIGHT,
-    tileKit: { floorColor: CLAY_GREY, wallColor: CLAY_GREY, trimColor: CLAY_GREY, fog: { color: "#1a1a1a" }, fogWhisper: 0 },
-    fog: { color: "#1a1a1a" },
-    bounds: bounds,
-    focusRect: bounds,
-    instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: [] },
-    interactables: interactables,
-    kitDoors: kitDoors,
-    furniture: furniture,
-    pieces: pieces
-  };
-}
 
 // D4 — apply CLAY_C1A_LIGHT_PROFILE as the FINAL word on the mounted scene's ambient/point lights,
 // called AFTER setInteriorBoard so it supersedes that function's own rigOn block (which
@@ -14565,6 +14428,34 @@ function clayRoomFlattenFurniture(){
         if(node.isMesh) node.material = CLAY_FURNITURE_MATERIAL;
       });
     });
+  });
+}
+
+// D15/D2 step 3 — the STRUCTURAL-surface sibling of clayRoomFlattenFurniture: a one-line material
+// SWAP over the floor/wall/doorframe/pillar InstancedMeshes setInteriorBoard's own
+// interiorBuildInstancedMesh already built (real production geometry, never new geometry/a new
+// Mesh) — the SAME "never a bespoke material" law D2 step 3 states, extended to the kinds
+// clayRoomFlattenFurniture doesn't cover. Each of those meshes is tagged `userData.interiorKind`
+// (theater-boot.js's own BW2-1b TEST/DIAGNOSTIC TAG, "which instance-kind this mesh is" — added for
+// a harness raycast check, reused here) — the whitelist below is exactly the kinds D2 step 3 names
+// (floor/wall/doorframe + pillar, the rooms >=6-cells-per-axis case); the skirt/portal/ghost kinds
+// interiorBuildInstancedMesh ALSO tags are deliberately left alone (never named by D2 step 3 — the
+// dark edge skirt is not one of "floor/wall/doorframe/crate"). A shared MeshLambertMaterial with no
+// `map` and no `vertexColors` renders every instance flat regardless of whatever per-instance color/
+// realm texture interiorBuildBoard/setInteriorBoard baked in (production picked "ash", a non-flagship
+// realm, specifically so no real texture FILE was ever fetched for this to override — clay-room.js's
+// own clayRoomBoardFrom header explains the choice) — genuinely flat, zero-grain, matching D7's
+// original "clay-grey ... zero grain/file texture" law verbatim.
+let CLAY_STRUCTURE_MATERIAL = null;
+const CLAY_STRUCTURE_KINDS = { floor: true, wall: true, doorframe: true, pillar: true };
+function clayRoomFlattenStructure(){
+  if(!S.interiorGroup) return;
+  if(!CLAY_STRUCTURE_MATERIAL) CLAY_STRUCTURE_MATERIAL = new THREE.MeshLambertMaterial({ color: CLAY_GREY });
+  S.interiorGroup.children.forEach(function(mesh){
+    if(!mesh || !mesh.isInstancedMesh) return;
+    const kind = mesh.userData && mesh.userData.interiorKind;
+    if(!kind || !CLAY_STRUCTURE_KINDS[kind]) return;
+    mesh.material = CLAY_STRUCTURE_MATERIAL;
   });
 }
 
@@ -14628,10 +14519,73 @@ function clayRoomBuildSeamGrid(record){
   return grid;
 }
 
+// ─── D13 (docs/C1A-CLAY-ROOM.md spec addendum D15 point 4 — provenance audit) ──────────────────────
+// clayRoomTagProvenance(node,builder) stamps userData.clayProvenance = {builder,recordRef:"clay-c1a"}
+// on ONE node and records it in S.clayRoomProvenanceRoots — the tracked root SET
+// clayRoomProvenanceAudit walks. Scope is deliberately the clay mount's OWN attachment points
+// (S.interiorGroup as a whole — the real production board tree setInteriorBoard just populated,
+// floor/wall/doorframe/pillar/lights/pieces/furniture/dressing/interactables all nested under it;
+// S.clayGridMesh; the light-profile's own ambient+point lights), never mount()'s generic baseline
+// scaffolding (the hemisphere/key/fill lights and empty tile/prop/unit/shadow/fx groups every theater
+// instance gets regardless of clay) — that scaffolding traces to no record and tagging it would be a
+// false provenance claim, not an honest one. "Under a tagged group" (D15's own words) reads as: every
+// one of these tracked roots IS itself tagged at attachment time, so nothing in this tracked set can
+// ever be an orphan by construction; an entry only shows up missing if the node it names was never
+// built at all (e.g. mount() degraded, S.interiorGroup absent) — reported as an orphan then, honestly.
+function clayRoomTagProvenance(node, builder){
+  if(!node || !node.userData) return;
+  node.userData.clayProvenance = { builder: builder, recordRef: "clay-c1a" };
+  S.clayRoomProvenanceRoots = S.clayRoomProvenanceRoots || [];
+  S.clayRoomProvenanceRoots.push(node);
+}
+function clayRoomTagAllProvenance(){
+  S.clayRoomProvenanceRoots = [];
+  if(S.interiorGroup) clayRoomTagProvenance(S.interiorGroup, "setInteriorBoard"); // board/figure/lights/furniture — nested
+  if(S.clayGridMesh) clayRoomTagProvenance(S.clayGridMesh, "clayRoomBuildSeamGrid"); // grid
+  if(S.ambientLight) clayRoomTagProvenance(S.ambientLight, "clayRoomApplyLightProfile"); // lights
+  (S.pointLights || []).forEach(function(l){ clayRoomTagProvenance(l, "clayRoomApplyLightProfile"); }); // lights
+}
+// clayRoomProvenanceAudit() -> {tagged:[{type,builder}...], orphans:[{type}...]} — walks
+// S.clayRoomProvenanceRoots (populated by clayRoomTagAllProvenance at mount time), never all of
+// S.scene.children (see this section's own header note on why that scope would be dishonest).
+function clayRoomProvenanceAudit(){
+  const tagged = [], orphans = [];
+  (S.clayRoomProvenanceRoots || []).forEach(function(node){
+    if(node && node.userData && node.userData.clayProvenance){
+      tagged.push({ type: node.type, builder: node.userData.clayProvenance.builder });
+    } else if(node){
+      orphans.push({ type: node.type });
+    }
+  });
+  return { tagged: tagged, orphans: orphans };
+}
+
 // mountClayRoom() — D2/wire-in steps 1-5 (the overlay, step 6, is built by
 // clayRoomMountOverlay(record,host) — see the U3 addition below this comment once it lands). Never
 // throws (mirrors mountLightLab's own dormant-surface discipline): a WebGL-less environment degrades
 // to mount() returning false and this function no-oping.
+// D15 re-wire: step 3 (project the record through the real interior board builders) is now
+// clayRoomBoardFrom(record) — src/engine/clay-room.js's own real spatializer + interiorBuildBoard
+// chain — feeding setInteriorBoard directly; this file adds no board-data assembly of its own.
+//
+// ITR_ROOM_SHELL (this file's own module-scope flag, default true, line ~10103 — "ROOM-SHELL
+// COMPILER... flips ITR_ROOM_SHELL live") — found LIVE in the orchestrator's own browser re-gate:
+// setInteriorBoard's own room-shell compiler is ON BY DEFAULT for every interior board (not a
+// clay-specific mechanism), and it REPLACES the per-cell InstancedMesh floor/wall channel with a
+// separate, non-instanced, kit-realm-textured mesh trio (room-shell-floor/wall-stem/wall-upper/
+// wall-trim, tagged `kind` in _interiorGroupMeshInfoForTest) that clayRoomFlattenStructure's own
+// InstancedMesh-only sweep never touches by construction (it isn't an InstancedMesh at all) — so
+// with room-shell on, the floor/walls rendered their REAL, unflattened, dark realm colors instead
+// of clay grey (dark enough under D4's own low-ambient profile to read as void-black, the exact
+// "floor/walls didn't render" first read). Disabled the SAME way KIT_SHELL_ENABLED/KIT_DOORS_ENABLED
+// already are (an existing, documented dev/harness toggle — "flips ITR_ROOM_SHELL live", this file's
+// own comment at its definition — never a new mechanism): OFF only while the clay room stays mounted
+// (restored in clayRoomUnmount, not immediately here) because setInteriorBoard's own async replay
+// (the SPRITE_CHANNEL texture-settle callback this file's own header already documents) re-invokes
+// setInteriorBoard(S.lastBoard) OUTSIDE this function, and ITR_ROOM_SHELL is read fresh every one of
+// those calls — restoring it here would let that later replay silently rebuild an unflattened shell
+// again. This keeps geometry in the plain InstancedMesh/BoxGeometry family every other kind already
+// uses (D2 step 3's own "never a bespoke material... SAME InstancedMesh/BoxGeometry construction" law).
 function mountClayRoom(){
   try {
     if(S.clayRoomMounted) return;
@@ -14645,11 +14599,16 @@ function mountClayRoom(){
     const mounted = mount(host); // D5: no `opts` -> the default (non-psx) canvas path
     if(!mounted){ document.body.removeChild(host); return; }
 
-    const data = clayRoomBoardDataFrom(record);
-    setInteriorBoard(data);
+    CLAY_ROOM_PRIOR_ROOM_SHELL = ITR_ROOM_SHELL;
+    ITR_ROOM_SHELL = false; // restored in clayRoomUnmount — see this function's own header note above
+
+    const compiled = clayRoomBoardFrom(record); // D15 — real spatializer + interiorBuildBoard (src/engine/clay-room.js)
+    setInteriorBoard(compiled.board);
     clayRoomApplyLightProfile(record);
     clayRoomFlattenFurniture();
+    clayRoomFlattenStructure(); // D15/D2 step 3 — flat clay-grey on floor/wall/doorframe/pillar, post-mount over PRODUCTION geometry
     S.clayGridMesh = clayRoomBuildSeamGrid(record); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live
+    clayRoomTagAllProvenance(); // D13 — after every group above exists to tag
     markDirty();
     scheduleRender();
 
@@ -14724,7 +14683,12 @@ function clayRoomMountOverlay(record, host){
   explainBody.style.cssText = "display:none;";
   const explainPre = document.createElement("pre");
   explainPre.style.cssText = "white-space:pre-wrap;font:11px/1.4 monospace;color:#dde;margin:0 0 6px;";
-  explainPre.textContent = clayRoomExplain(record);
+  // D13 (spec addendum D15 point 4) — one line, LIVE values off the real audit function, appended to
+  // clayRoomExplain(record)'s own verbatim text (never folded into that pure engine-module string,
+  // which has no S/scene access to compute this from).
+  const provenanceAudit = (typeof clayRoomProvenanceAudit === "function") ? clayRoomProvenanceAudit() : { tagged: [], orphans: [] };
+  explainPre.textContent = clayRoomExplain(record) +
+    "\nProvenance audit: " + provenanceAudit.tagged.length + " groups tagged, " + provenanceAudit.orphans.length + " orphans.";
   explainBody.appendChild(explainPre);
 
   const refusalHeader = document.createElement("div");
@@ -14772,6 +14736,7 @@ function clayRoomUnmount(){
   if(!S.clayRoomMounted) return;
   const overlayEl = S.clayRoomOverlayEl, hostEl = S.clayRoomHost;
   retire();
+  ITR_ROOM_SHELL = CLAY_ROOM_PRIOR_ROOM_SHELL; // restore mountClayRoom's own ITR_ROOM_SHELL override — see that function's header note
   if(overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);
   if(hostEl && hostEl.parentNode) hostEl.parentNode.removeChild(hostEl);
 }

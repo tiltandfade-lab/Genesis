@@ -8,6 +8,25 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-23 (later) — FEATURE-PRIORITIZATION VIEW + CLEAN CLOSE [Fable]
+
+**Added**
+- `docs/FEATURE-PRIORITIZATION.md` (type: build-plan, Adam's request) — the readable answer to "what do
+  we build, in what order, what's prototype vs MVP, how tested, when declared arrived": the arrival law
+  (4 conditions for prototype-arrived, 5 for MVP-arrived), stages 0-7 in dependency order (visual proof
+  = Stage 2 per Adam's guard's-post priority), 21 per-feature prototype/MVP test rows, and every parked
+  feature with its named trigger. Derived view — ledger/ladder/wave records stay authoritative;
+  authorizes no build (Q12-B gates). Indexed in `docs/README.md`.
+
+**Changed**
+- Clean close (Adam: "clean close ... with a CI check"): full CI-equivalent gate run locally
+  (check-manifest OK · verify-*.mjs sweep with CI dep-skip emulation · verify-bridge 64/0 ·
+  verify-table-lint 37/0 · playtest-bug-probes) — the one working-tree red (`verify-geometry-fixtures`
+  scope-guard 7a/7b) is the co-resident sprite lane's dirty `src/ui/theater-boot.js`, not this branch
+  (branch diff vs master carries zero src/data files; all 52 geometry fixtures pass, 0 regressions).
+  Merged `docs/procedural-dungeon-waves-3-6-checkpoint` --no-ff to master, pushed, GitHub CI confirmed
+  green. NEXT-STEPS gained the 2026-07-23 Do-next block; HANDOFF's FULL-CI-PENDING marker discharged.
+
 ## 2026-07-23 — FOUNDER REVIEW: ALL TWELVE WAVES DESIGN-CLOSED [Fable chairing, Adam ruling]
 
 **Added**
@@ -873,53 +892,4 @@ to the prior tree = the server was serving stale code; kill-before-capture is no
 - Round-2 codex run (18 missing + 9 fix sheets — packets ready for Adam's 3PM window); registry fold-in of
   v3 sizing/tags; committed-corpus retro-tag + ash painterly check; NPC expression pass (law 2 wiring);
   sprite lane's 59 uncommitted round-2 sheets still parked in its worktree.
-
-## 2026-07-09 (late night) — PLACE-GEN build wave: places are realm-true from birth and render as dioramas
-
-**Added**
-- **Place Spine + skins (U0, PROVISIONAL):** `Engine/03. _Tables/05. Realms/Place Spine.md` (24 site
-  archetypes: weight, scale, GRID-LAW space band, staff band, castProfile) + `Place Skin -
-  {Frontier,Chrome,Gloom}.md` (relabel/drop/add/reweight + namePatterns). Adam's craft pass pending.
-- **`build/gen-place-skins.py` → `data/place-skins.js` (U1):** `PLACE_SPINE`/`PLACE_SKINS`/
-  `PLACE_SPACE_CELLS`/`placeForRealm` (+U3 `SCENE_BUCKET_BY_ARCHETYPE`, +U8 `SCENE_DRESSING_BY_
-  ARCHETYPE`/`sceneDressingForPlace`/`--census`). Missing skins legal → frontier fallback at roll time.
-- **GRID LAW (rewire-class, DESIGN-registered):** every generated space measures in real 5-ft cells;
-  1 band = 5 cells deep, 1 lane = 4 wide. `rollPlace` emits `rolled.dims` in cells (U2); node trays
-  render 1 tile = 1 cell (U7); typed-place fights derive their zone grid from cells (`cmGridFromCells`,
-  U11 — text-parse path byte-identical for everything else).
-- **Tray node source (U7):** `trayFrom({kind:"node"})` + `theaterNodeSourceFor` — a minted place
-  renders as its diorama (floor = dims, dressing-driven floor/light/props, deterministic scatter).
-  Screenshot-gated (`dev/battle-gate/capture-place-tray.mjs`, eyeballed: gloom diner reads).
-- **Cast wiring (U3):** anchor NPCs land on-class via `roleForRealm({filterCls})` filtered-pool
-  (never-dangle); ambient fill maps archetype → scene bucket.
-- **Breach leak (U5):** `rollPlace({hybridRealm})` minority cross-skin mints, SHARED `ROLE_HYBRID_K`
-  (one law with the NPC leak); leaked mints carry `dm.dressing.hybridProps` as the visual tell.
-- **Kit/district relabels (U6):** `BUILDING_KIT_REALM_LABELS` chrome/gloom (all 14 kits) + district
-  relabel map + chrome faction handles; frontier byte-identical (golden-tested).
-- **TIYL routing (U9):** origin settlements carry realm `itemsPool`/`dressing` pointers (pointers
-  only — settlements stay compositional; bardo presentation byte-identical).
-- **DM digest location line (U10):** typed nodes read "<name> — <archetype>, WxD ft, <light>
-  (props…)", 88 B, derived through the tray's own lookups (one derivation).
-- **Book gathers:** DMG14 settlements + random dungeons, DMG24 settlements + bastions
-  (`docs/PLACE-GATHER-*.md`, vision-read) + `dev/model-qa/dmg2014-page-index.json`.
-- **PLACE-ASSET-QUEUE** (`docs/PLACE-ASSET-QUEUE.md`, PROVISIONAL): 44 grounded entries (22 P1);
-  main finding = zero architecture-shell vocabulary in the prop stack. Sprite half translated to
-  `dev/model-qa/sprite-sheets/setting-dressing.md` (4 sheets / 47 cells) + INDEX line.
-
-**Changed**
-- Five thin settlement tables (Ruler Status / Race Relations / Mythology / Nearby / Relevancy) →
-  Master-Setting grade (d100, 5-band 66/20/9/4/1, DMG14 seeds, GRID-LAW dimensions; originals in
-  `zz_Archive/`, rows PROVISIONAL).
-- Merged origin/master mid-wave (the 3ceb4ad CI green wave) — the 3 pre-existing sweep reds
-  (digest-diet/dm-contract/creature-determinism) were already fixed there, not re-fixed.
-- `ROLE_HYBRID_K` const→let (mutation-guard testability; no production reassignment).
-
-**Verification** — every unit orchestrator-re-gated on its branch tip + the integrated tree; full
-`dev/verify-*.mjs` sweep ZERO failures at close; `check-manifest.py` OK throughout; combat byte-gate
-(tabletop-u1 45/45) intact; fuzz 520 calls / 0 findings.
-
-**Deferred** — HOOK-WALKS terminus-bias table (blocked on that spec locking; the `archetypeBias`
-parameter itself landed in U2); 8 backfill realm skins (craft lane); per-realm place-secret tables
-(Adam ruling open); interior generator (spec section first); P1 asset wave (Adam go/no-go);
-`sprite-sheet-prompts.md` shared template referenced by realm sheets but missing (pre-existing).
 

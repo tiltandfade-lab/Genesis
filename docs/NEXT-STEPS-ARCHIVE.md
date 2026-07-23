@@ -18,6 +18,29 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-16 — KENNEY-SOCKET WAVE LANDED; the meeting's order continues)
+
+CHANGELOG 2026-07-16: ☑ KS-1/2/3/3b (the kit engine: adapter+sockets → door assembly → room
+shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging beats (#11 closed) ·
+☑ ELEV-1 (Adam's table live) · ☑ LL-1 Stage-E mechanisms + LIGHT-LAB (parked) · ☑ PIXEL-FIRST
+(ART-DEPARTMENT.md canon; MC-1+MC-2 crud killed; faceted priced: 206/252 sound, 22 re-cuttable).
+
+0. ☑ **GREEN THE CI — DONE 2026-07-16** (master `fac1333e`, run 29499604640, all steps green after
+   60+ red runs). LL-1 `LIGHT_TUNABLES` cluster: the 3 vm-extraction harnesses now inject the real
+   aggregate + its dep-closure. 8 bucket-3 real-feature drifts fixed without weakening a single
+   assertion (table-usage regen · tabletop-u1/place-tray env1c `clockMin` re-baseline · walk-stamped
+   ELEV-1 PRNG-neutralize · theater-light-props call-site re-anchor · digest-diet 31-seed median ·
+   place-distribution A1 focus-filter · stage-c-terrain ELEV-1 door-aperture split). `gen-gallery-
+   paintings.py` needed no fix — it correctly PIL-dep-skips. **The gate is the FULL `dev/verify-*.mjs`
+   loop; reproduce CI's dep-skips locally with a fake empty `$HOME` (puppeteer-core unresolvable) +
+   real `JSDOM_HOME`** — else locally-installed puppeteer runs the 18 render harnesses CI skips.
+1. ☐ **ADAM'S WORD: originals restoration** (evidence complete; restore→re-clean→reference).
+2. ☐ **The proving run** — kit shells × rolled-walk spread, retina DPR, census (spec at head).
+3. ☐ **Playtest**: walk-gen + assembly edge cases.
+4. ☐ Polish, evidence-ordered: KS-3c wall-rim sawtooth · ELEV-1b · LL-1b · rest-prop collisions ·
+   occlusion-aware combat cells.
+5. ☐ Then: ST-1 staging intelligence · town kit · B2 smooth-contour depth · ELEV-2 mechanics.
+
 ## Do next (2026-07-15 later — VQ2 RESPEC: the sprite flip + demand census + Sol's laws; docs/VQ2-RESPEC.md is the order)
 
 Adam's directives folded (VQ2/SOL-SOLUTIONS as suggestions-for-law · sprite flip w/ v3 reserve ·

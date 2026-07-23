@@ -59,8 +59,14 @@ package, slice-1 gate matrix, budgets remain the unchecked boxes).
    toward the guard's post) — Adam's declared priority.
 2. Mechanical follow-ups queued: Gemini-transcript gather · FOREVER-STORAGE wiring verify +
    sidekick-data gather (MODULE-PHASING gaps 2-3) · DI re-scope before any DI execution.
-3. **FULL CI PENDING** — this session was docs-only and closed with a fast checkpoint (no
-   push); the next clean close runs the full gate.
+3. ~~FULL CI PENDING~~ — **discharged same session**: Adam requested the prioritization
+   document + a clean close with CI. `docs/FEATURE-PRIORITIZATION.md` now exists (the
+   readable order: arrival law, stages 0-7, prototype/MVP tests, parked features with
+   triggers; indexed in docs/README.md). The clean close ran the FULL CI-equivalent gate —
+   the one working-tree red (`verify-geometry-fixtures` scope guard) is the co-resident
+   sprite lane's dirty `theater-boot.js`, not this branch (branch diff has zero src/data
+   files) — then merged to master and confirmed the GitHub CI run green (details in the
+   close report / CHANGELOG 2026-07-23 later entry).
 
 ---
 

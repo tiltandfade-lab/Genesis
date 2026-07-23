@@ -14,6 +14,55 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-09 (late night) — PLACE-GEN build wave: places are realm-true from birth and render as dioramas
+
+**Added**
+- **Place Spine + skins (U0, PROVISIONAL):** `Engine/03. _Tables/05. Realms/Place Spine.md` (24 site
+  archetypes: weight, scale, GRID-LAW space band, staff band, castProfile) + `Place Skin -
+  {Frontier,Chrome,Gloom}.md` (relabel/drop/add/reweight + namePatterns). Adam's craft pass pending.
+- **`build/gen-place-skins.py` → `data/place-skins.js` (U1):** `PLACE_SPINE`/`PLACE_SKINS`/
+  `PLACE_SPACE_CELLS`/`placeForRealm` (+U3 `SCENE_BUCKET_BY_ARCHETYPE`, +U8 `SCENE_DRESSING_BY_
+  ARCHETYPE`/`sceneDressingForPlace`/`--census`). Missing skins legal → frontier fallback at roll time.
+- **GRID LAW (rewire-class, DESIGN-registered):** every generated space measures in real 5-ft cells;
+  1 band = 5 cells deep, 1 lane = 4 wide. `rollPlace` emits `rolled.dims` in cells (U2); node trays
+  render 1 tile = 1 cell (U7); typed-place fights derive their zone grid from cells (`cmGridFromCells`,
+  U11 — text-parse path byte-identical for everything else).
+- **Tray node source (U7):** `trayFrom({kind:"node"})` + `theaterNodeSourceFor` — a minted place
+  renders as its diorama (floor = dims, dressing-driven floor/light/props, deterministic scatter).
+  Screenshot-gated (`dev/battle-gate/capture-place-tray.mjs`, eyeballed: gloom diner reads).
+- **Cast wiring (U3):** anchor NPCs land on-class via `roleForRealm({filterCls})` filtered-pool
+  (never-dangle); ambient fill maps archetype → scene bucket.
+- **Breach leak (U5):** `rollPlace({hybridRealm})` minority cross-skin mints, SHARED `ROLE_HYBRID_K`
+  (one law with the NPC leak); leaked mints carry `dm.dressing.hybridProps` as the visual tell.
+- **Kit/district relabels (U6):** `BUILDING_KIT_REALM_LABELS` chrome/gloom (all 14 kits) + district
+  relabel map + chrome faction handles; frontier byte-identical (golden-tested).
+- **TIYL routing (U9):** origin settlements carry realm `itemsPool`/`dressing` pointers (pointers
+  only — settlements stay compositional; bardo presentation byte-identical).
+- **DM digest location line (U10):** typed nodes read "<name> — <archetype>, WxD ft, <light>
+  (props…)", 88 B, derived through the tray's own lookups (one derivation).
+- **Book gathers:** DMG14 settlements + random dungeons, DMG24 settlements + bastions
+  (`docs/PLACE-GATHER-*.md`, vision-read) + `dev/model-qa/dmg2014-page-index.json`.
+- **PLACE-ASSET-QUEUE** (`docs/PLACE-ASSET-QUEUE.md`, PROVISIONAL): 44 grounded entries (22 P1);
+  main finding = zero architecture-shell vocabulary in the prop stack. Sprite half translated to
+  `dev/model-qa/sprite-sheets/setting-dressing.md` (4 sheets / 47 cells) + INDEX line.
+
+**Changed**
+- Five thin settlement tables (Ruler Status / Race Relations / Mythology / Nearby / Relevancy) →
+  Master-Setting grade (d100, 5-band 66/20/9/4/1, DMG14 seeds, GRID-LAW dimensions; originals in
+  `zz_Archive/`, rows PROVISIONAL).
+- Merged origin/master mid-wave (the 3ceb4ad CI green wave) — the 3 pre-existing sweep reds
+  (digest-diet/dm-contract/creature-determinism) were already fixed there, not re-fixed.
+- `ROLE_HYBRID_K` const→let (mutation-guard testability; no production reassignment).
+
+**Verification** — every unit orchestrator-re-gated on its branch tip + the integrated tree; full
+`dev/verify-*.mjs` sweep ZERO failures at close; `check-manifest.py` OK throughout; combat byte-gate
+(tabletop-u1 45/45) intact; fuzz 520 calls / 0 findings.
+
+**Deferred** — HOOK-WALKS terminus-bias table (blocked on that spec locking; the `archetypeBias`
+parameter itself landed in U2); 8 backfill realm skins (craft lane); per-realm place-secret tables
+(Adam ruling open); interior generator (spec section first); P1 asset wave (Adam go/no-go);
+`sprite-sheet-prompts.md` shared template referenced by realm sheets but missing (pre-existing).
+
 ## 2026-07-09 (sprite night) — fantasy realm sliced (896 sprites) + review tool + auto-scale + XL regen lane
 
 **Added**

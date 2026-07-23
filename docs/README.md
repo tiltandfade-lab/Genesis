@@ -154,6 +154,10 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 
+- `FEATURE-PRIORITIZATION.md` (`type: build-plan`) — the readable answer to "what do we build, in
+  what order, what's prototype vs MVP, how is each tested, and when is it declared arrived" —
+  derived 2026-07-23 from the closed twelve-wave program (ladder/ledger/wave records stay
+  authoritative); stages 0-7 + parked features with triggers. Authorizes no build (Q12-B gates).
 - `PROCEDURAL-DUNGEON-DIRECTION.md` — the current discovery authority for rebuilding architectural
   and dressing rolls around a tile/slot room compiler; records accepted direction, unresolved forks,
   and the strict question-wave closure protocol. No implementation is authorized by this document.

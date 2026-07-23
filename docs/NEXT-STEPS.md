@@ -32,21 +32,20 @@ The Fable canon-and-scope pass ran docs-only on 2026-07-22. Waves 1-6/10 remain 
    · 7 OPEN-ADAM · 6 EVIDENCE-GATED · 1 DEFERRED across the 70-question bank, +5 generated.
 4. ☑ **Ladder/ledger reconciled as proposals** (F8.1 pass, W7 archetype overlay, W9 soak
    traces, F12.1 bakeoff fixture, new ledger rows) — apply only at Adam's acceptance.
-5. ☐ **ADAM: answer founder Batch 1** — `docs/canon/OPEN-QUESTIONS.md` (Q7-A, Q8-A, Q9-A,
-   Q9-B, Q11-A, Q12-A; ~6 easy A/B/C picks, recommendations marked).
-6. ☐ **ADAM: sweep the five wave records** (batch-accept ids / flag deep-dives / amend), then
-   close waves explicitly in dependency order 7 → 8 → 9 → 11 → 12.
+5. ☑ **ADAM: answer founder Batch 1** — DONE 2026-07-22 (B·B·B·B·B·A; recorded verbatim in the
+   owning §.4 sections; six new GEN-* ids).
+6. ☑ **ADAM: sweep the five wave records** — DONE 2026-07-22/23: all five swept in plain
+   language and explicitly CLOSED (§16.7 · §17.7 · §18.7 · §19.7 · §20.7).
 7. ☑ **Per-module three-horizon register** (Adam's ruling, same day): `docs/canon/
    MODULE-PHASING.md` — proof/MVP/ideal for every game module, dungeon families ledger-routed;
    "(proposed)" rows (ship-travel deferral chief among them) ride the same review as item 6.
-8. ☐ **Queued ops unit: DOCS-INDEX tooling** (`docs/DOCS-INDEX-TOOLING.md`, Adam approved the
-   direction 2026-07-22): DI-1 `gen-docs-index.py` → `docs-index.json` · DI-2 `check-docs.py`
-   linter (frontmatter/links/supersession/single-authority) · DI-3 stale-status cleanup sweep.
-   Execute at the next ops window, AFTER items 5-6 so the cleanup encodes those rulings.
+8. ◐ **Queued ops unit: DOCS-INDEX tooling** — DEFERRED 2026-07-23 (Adam, wave-12 §20.7):
+   still wanted, but execution must begin with a re-scope pass verifying what has changed
+   since the spec. Stays queued with that precondition.
 9. ☐ Keep `Reference/FFT Battle Maps/` reference-only and untracked; R1/R2 stay supplemental
    research, never canon or dependency admission.
-10. ☐ **FULL CI PENDING:** this pass ran proportional docs/link checks only. The final/evening
-    close owns the CI-equivalent sweep, checkpoint/merge/push, and GitHub confirmation.
+10. ☑ **FULL CI discharged** at the 2026-07-23 clean close (full local sweep + merge to
+    master + GitHub CI confirmed — see CHANGELOG 2026-07-23 later entry).
 
 ## Do next (2026-07-19 later — CI GREEN + Wave 1 landed; resume at open decision 3C)
 
@@ -81,28 +80,24 @@ table, walk, or renderer cutover.
 4. ☐ **Push local `master` before bed.** This discovery landing is intentionally local until Adam
    calls for the backup push.
 
-## Do next (2026-07-16 — KENNEY-SOCKET WAVE LANDED; the meeting's order continues)
+## Do next (2026-07-23 — ALL TWELVE WAVES DESIGN-CLOSED; the plan is a reading now)
 
-CHANGELOG 2026-07-16: ☑ KS-1/2/3/3b (the kit engine: adapter+sockets → door assembly → room
-shells → look pass) · ☑ F1 combat-in-room (#10 closed) · ☑ F2 staging beats (#11 closed) ·
-☑ ELEV-1 (Adam's table live) · ☑ LL-1 Stage-E mechanisms + LIGHT-LAB (parked) · ☑ PIXEL-FIRST
-(ART-DEPARTMENT.md canon; MC-1+MC-2 crud killed; faceted priced: 206/252 sound, 22 re-cuttable).
+The founder-review session (HANDOFF ⭐ 2026-07-22/23) closed waves 7/8/9/11/12 — the whole
+dungeon design program is CLOSED; no build authorized (Q12-B is the single gate). **The build
+order now lives in `docs/FEATURE-PRIORITIZATION.md`** (stages 0-7, prototype/MVP tests, the
+arrival law) — read that first; it supersedes older per-lane ordering for the program lane.
 
-0. ☑ **GREEN THE CI — DONE 2026-07-16** (master `fac1333e`, run 29499604640, all steps green after
-   60+ red runs). LL-1 `LIGHT_TUNABLES` cluster: the 3 vm-extraction harnesses now inject the real
-   aggregate + its dep-closure. 8 bucket-3 real-feature drifts fixed without weakening a single
-   assertion (table-usage regen · tabletop-u1/place-tray env1c `clockMin` re-baseline · walk-stamped
-   ELEV-1 PRNG-neutralize · theater-light-props call-site re-anchor · digest-diet 31-seed median ·
-   place-distribution A1 focus-filter · stage-c-terrain ELEV-1 door-aperture split). `gen-gallery-
-   paintings.py` needed no fix — it correctly PIL-dep-skips. **The gate is the FULL `dev/verify-*.mjs`
-   loop; reproduce CI's dep-skips locally with a fake empty `$HOME` (puppeteer-core unresolvable) +
-   real `JSDOM_HOME`** — else locally-installed puppeteer runs the 18 render harnesses CI skips.
-1. ☐ **ADAM'S WORD: originals restoration** (evidence complete; restore→re-clean→reference).
-2. ☐ **The proving run** — kit shells × rolled-walk spread, retina DPR, census (spec at head).
-3. ☐ **Playtest**: walk-gen + assembly edge cases.
-4. ☐ Polish, evidence-ordered: KS-3c wall-rim sawtooth · ELEV-1b · LL-1b · rest-prop collisions ·
-   occlusion-aware combat cells.
-5. ☐ Then: ST-1 staging intelligence · town kit · B2 smooth-contour depth · ELEV-2 mechanics.
+0. ☐ **Q12-B checklist mechanics, on Adam's word:** recovery-package gate (tag + bundle +
+   Drive archive + an actual restore drill) → slice-1 gate matrix → budgets. Nothing builds
+   before Q12-B fires.
+1. ☐ **Visual proof track (Adam's declared priority, wave-11 §19.6):** clay-room geometry
+   pass → texture pass → golden site 1 "the guard's post" rolling procedural configurations
+   unbroken (FEATURE-PRIORITIZATION Stage 2).
+2. ☐ Mechanical gathers queued: Gemini pacing-transcript into `Reference/` · FOREVER-STORAGE
+   wiring verify · sidekick-data gather · DI re-scope pass before any DI-1/2/3 execution
+   (deferred 2026-07-23 with that precondition).
+3. ☐ Standing content lanes unchanged (voice-review cohort · book gathers · the spec build
+   wave in Open threads below).
 
 ## Open threads — carried forward (STANDING section; never auto-archived)
 

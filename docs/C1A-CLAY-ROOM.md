@@ -210,4 +210,7 @@ completely broken."
   DOOR CONTRACT (D12b). Catalog entries additionally carry a **swing-clearance volume**
   (the door's 90-180° arc) consumed by furnishing/prop placement as a blocked zone
   (rides C1J's protected-circulation contract; adopted 2026-07-23 from Adam's
-  architecture review).
+  architecture review). C1B interaction note (same review): door picking detects the leaf
+  PANEL mesh but applies rotation to its parent HINGE group (raycast descendants, rotate the
+  parent) — never rotate the panel mesh directly; and swing state changes route through the
+  connection record (ActionIntent → receipt), the hinge merely projects it.

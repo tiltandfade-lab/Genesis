@@ -1,0 +1,831 @@
+{
+  "connections": [
+    {
+      "from": "gmm_n02c_coursed_cells_v001",
+      "from_port": 1,
+      "to": "stone_palette",
+      "to_port": 0
+    },
+    {
+      "from": "macro_field",
+      "from_port": 0,
+      "to": "macro_palette",
+      "to_port": 0
+    },
+    {
+      "from": "stone_palette",
+      "from_port": 0,
+      "to": "stone_macro_blend",
+      "to_port": 0
+    },
+    {
+      "from": "macro_palette",
+      "from_port": 0,
+      "to": "stone_macro_blend",
+      "to_port": 1
+    },
+    {
+      "from": "stone_macro_blend",
+      "from_port": 0,
+      "to": "joint_blend",
+      "to_port": 0
+    },
+    {
+      "from": "mortar_color",
+      "from_port": 0,
+      "to": "joint_blend",
+      "to_port": 1
+    },
+    {
+      "from": "gmm_n02c_coursed_cells_v001",
+      "from_port": 0,
+      "to": "joint_blend",
+      "to_port": 2
+    },
+    {
+      "from": "surface_height_blend",
+      "from_port": 0,
+      "to": "normal_map",
+      "to_port": 0
+    },
+    {
+      "from": "surface_height_blend",
+      "from_port": 0,
+      "to": "occlusion",
+      "to_port": 0
+    },
+    {
+      "from": "surface_field",
+      "from_port": 0,
+      "to": "roughness_response",
+      "to_port": 0
+    },
+    {
+      "from": "surface_field",
+      "from_port": 0,
+      "to": "surface_height_range",
+      "to_port": 0
+    },
+    {
+      "from": "surface_height_range",
+      "from_port": 0,
+      "to": "surface_height_blend",
+      "to_port": 0
+    },
+    {
+      "from": "height_zero",
+      "from_port": 0,
+      "to": "surface_height_blend",
+      "to_port": 1
+    },
+    {
+      "from": "gmm_n02c_coursed_cells_v001",
+      "from_port": 0,
+      "to": "surface_height_blend",
+      "to_port": 2
+    },
+    {
+      "from": "roughness_response",
+      "from_port": 0,
+      "to": "roughness_blend",
+      "to_port": 0
+    },
+    {
+      "from": "joint_roughness",
+      "from_port": 0,
+      "to": "roughness_blend",
+      "to_port": 1
+    },
+    {
+      "from": "gmm_n02c_coursed_cells_v001",
+      "from_port": 0,
+      "to": "roughness_blend",
+      "to_port": 2
+    },
+    {
+      "from": "joint_blend",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 0
+    },
+    {
+      "from": "metallic_zero",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 1
+    },
+    {
+      "from": "roughness_blend",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 2
+    },
+    {
+      "from": "normal_map",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 4
+    },
+    {
+      "from": "occlusion",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 5
+    },
+    {
+      "from": "surface_height_blend",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 6
+    }
+  ],
+  "label": "GP-MM-M01 / Frontier Broad Cool / v001",
+  "name": "gp_mm_m01_frontier_broad_cool_v001",
+  "node_position": {
+    "x": 0,
+    "y": 0
+  },
+  "nodes": [
+    {
+      "connections": [
+        {
+          "from": "coursed_pattern",
+          "from_port": 0,
+          "to": "gen_outputs",
+          "to_port": 0
+        },
+        {
+          "from": "coursed_pattern",
+          "from_port": 1,
+          "to": "per_unit_value",
+          "to_port": 0
+        },
+        {
+          "from": "per_unit_value",
+          "from_port": 0,
+          "to": "gen_outputs",
+          "to_port": 1
+        }
+      ],
+      "label": "GMM-N02C Coursed Construction Cells v001",
+      "longdesc": "Genesis versioned construction-cell node. Randomly splits coherent horizontal courses while retaining a readable datum, then emits bounded per-unit variation. Immutable once published.",
+      "name": "gmm_n02c_coursed_cells_v001",
+      "node_position": {
+        "x": -760,
+        "y": -100
+      },
+      "nodes": [
+        {
+          "name": "coursed_pattern",
+          "node_position": {
+            "x": -430,
+            "y": -70
+          },
+          "parameters": {
+            "bevel": 0.04,
+            "corner": 0.08,
+            "iterations": 7,
+            "min_size": 0.25,
+            "mortar": 0.05,
+            "round": 0.015,
+            "rows": 5
+          },
+          "seed": 180041,
+          "seed_locked": true,
+          "type": "bricks_uneven3_2"
+        },
+        {
+          "name": "per_unit_value",
+          "node_position": {
+            "x": -145,
+            "y": 30
+          },
+          "parameters": {
+            "edgecolor": 1
+          },
+          "seed": 410218,
+          "seed_locked": true,
+          "type": "fill_to_random_grey2"
+        },
+        {
+          "name": "gen_parameters",
+          "node_position": {
+            "x": -430,
+            "y": -270
+          },
+          "parameters": {
+            "param0": 5,
+            "param1": 7,
+            "param2": 0.25,
+            "param3": 0.05,
+            "param4": 0.04,
+            "param5": 0.015
+          },
+          "type": "remote",
+          "widgets": [
+            {
+              "label": "Course rows",
+              "linked_widgets": [
+                {
+                  "node": "coursed_pattern",
+                  "widget": "rows"
+                }
+              ],
+              "name": "param0",
+              "type": "linked_control"
+            },
+            {
+              "label": "Split iterations",
+              "linked_widgets": [
+                {
+                  "node": "coursed_pattern",
+                  "widget": "iterations"
+                }
+              ],
+              "name": "param1",
+              "type": "linked_control"
+            },
+            {
+              "label": "Minimum unit size",
+              "linked_widgets": [
+                {
+                  "node": "coursed_pattern",
+                  "widget": "min_size"
+                }
+              ],
+              "name": "param2",
+              "type": "linked_control"
+            },
+            {
+              "label": "Joint width",
+              "linked_widgets": [
+                {
+                  "node": "coursed_pattern",
+                  "widget": "mortar"
+                }
+              ],
+              "name": "param3",
+              "type": "linked_control"
+            },
+            {
+              "label": "Edge bevel",
+              "linked_widgets": [
+                {
+                  "node": "coursed_pattern",
+                  "widget": "bevel"
+                }
+              ],
+              "name": "param4",
+              "type": "linked_control"
+            },
+            {
+              "label": "Corner round",
+              "linked_widgets": [
+                {
+                  "node": "coursed_pattern",
+                  "widget": "round"
+                }
+              ],
+              "name": "param5",
+              "type": "linked_control"
+            }
+          ]
+        },
+        {
+          "name": "gen_inputs",
+          "node_position": {
+            "x": -700,
+            "y": -80
+          },
+          "parameters": {},
+          "ports": [],
+          "type": "ios"
+        },
+        {
+          "name": "gen_outputs",
+          "node_position": {
+            "x": 115,
+            "y": -70
+          },
+          "parameters": {},
+          "ports": [
+            {
+              "name": "height",
+              "type": "f"
+            },
+            {
+              "name": "unit_value",
+              "type": "f"
+            }
+          ],
+          "type": "ios"
+        }
+      ],
+      "parameters": {
+        "param0": 5,
+        "param1": 7,
+        "param2": 0.25,
+        "param3": 0.05,
+        "param4": 0.04,
+        "param5": 0.015
+      },
+      "seed": 180041,
+      "seed_locked": true,
+      "shortdesc": "Coherent coursed stone cells with bounded unit variation.",
+      "type": "graph"
+    },
+    {
+      "name": "macro_field",
+      "node_position": {
+        "x": -730,
+        "y": 300
+      },
+      "parameters": {
+        "folds": 0,
+        "iterations": 3,
+        "noise": 0,
+        "persistence": 0.42,
+        "scale_x": 1.25,
+        "scale_y": 1.25
+      },
+      "seed": 401180,
+      "seed_locked": true,
+      "type": "fbm2"
+    },
+    {
+      "name": "stone_palette",
+      "node_position": {
+        "x": -390,
+        "y": -40
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.41,
+              "g": 0.42,
+              "pos": 0,
+              "r": 0.41
+            },
+            {
+              "a": 1,
+              "b": 0.47,
+              "g": 0.48,
+              "pos": 0.5,
+              "r": 0.47
+            },
+            {
+              "a": 1,
+              "b": 0.52,
+              "g": 0.52,
+              "pos": 1,
+              "r": 0.5
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "macro_palette",
+      "node_position": {
+        "x": -390,
+        "y": 280
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.42,
+              "g": 0.43,
+              "pos": 0,
+              "r": 0.43
+            },
+            {
+              "a": 1,
+              "b": 0.52,
+              "g": 0.51,
+              "pos": 1,
+              "r": 0.49
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "stone_macro_blend",
+      "node_position": {
+        "x": -90,
+        "y": 40
+      },
+      "parameters": {
+        "amount": 0.18,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "mortar_color",
+      "node_position": {
+        "x": -110,
+        "y": -150
+      },
+      "parameters": {
+        "color": {
+          "a": 1,
+          "b": 0.34,
+          "g": 0.34,
+          "r": 0.33,
+          "type": "Color"
+        }
+      },
+      "type": "uniform"
+    },
+    {
+      "name": "joint_blend",
+      "node_position": {
+        "x": 190,
+        "y": -20
+      },
+      "parameters": {
+        "amount": 1,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "roughness_response",
+      "node_position": {
+        "x": 130,
+        "y": 270
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.91,
+              "g": 0.91,
+              "pos": 0,
+              "r": 0.91
+            },
+            {
+              "a": 1,
+              "b": 0.79,
+              "g": 0.79,
+              "pos": 1,
+              "r": 0.79
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "surface_field",
+      "node_position": {
+        "x": -160,
+        "y": 420
+      },
+      "parameters": {
+        "folds": 0,
+        "iterations": 4,
+        "noise": 0,
+        "persistence": 0.46,
+        "scale_x": 7.5,
+        "scale_y": 7.5
+      },
+      "seed": 411180,
+      "seed_locked": true,
+      "type": "fbm2"
+    },
+    {
+      "name": "surface_height_range",
+      "node_position": {
+        "x": 110,
+        "y": 430
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.92,
+              "g": 0.92,
+              "pos": 0,
+              "r": 0.92
+            },
+            {
+              "a": 1,
+              "b": 0.995,
+              "g": 0.995,
+              "pos": 1,
+              "r": 0.995
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "height_zero",
+      "node_position": {
+        "x": 120,
+        "y": 560
+      },
+      "parameters": {
+        "color": 0
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "name": "surface_height_blend",
+      "node_position": {
+        "x": 390,
+        "y": 440
+      },
+      "parameters": {
+        "amount": 1,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "joint_roughness",
+      "node_position": {
+        "x": 170,
+        "y": 650
+      },
+      "parameters": {
+        "color": 0.94
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "name": "roughness_blend",
+      "node_position": {
+        "x": 430,
+        "y": 620
+      },
+      "parameters": {
+        "amount": 1,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "normal_map",
+      "node_position": {
+        "x": 420,
+        "y": 170
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 0.56,
+        "param2": 0,
+        "param4": 1
+      },
+      "type": "normal_map"
+    },
+    {
+      "name": "occlusion",
+      "node_position": {
+        "x": 410,
+        "y": 320
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 16,
+        "param2": 0.82,
+        "param3": 1
+      },
+      "type": "occlusion2"
+    },
+    {
+      "name": "metallic_zero",
+      "node_position": {
+        "x": 510,
+        "y": -170
+      },
+      "parameters": {
+        "color": 0
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "export_paths": {},
+      "name": "Material",
+      "node_position": {
+        "x": 790,
+        "y": 40
+      },
+      "parameters": {
+        "albedo_color": {
+          "a": 1,
+          "b": 1,
+          "g": 1,
+          "r": 1,
+          "type": "Color"
+        },
+        "ao": 1,
+        "depth_scale": 0.08,
+        "emission_energy": 1,
+        "metallic": 1,
+        "normal": 1,
+        "roughness": 1,
+        "size": 9,
+        "sss": 0
+      },
+      "type": "material"
+    },
+    {
+      "name": "candidate_configurations",
+      "node_position": {
+        "x": 520,
+        "y": -360
+      },
+      "parameters": {
+        "param0": 0
+      },
+      "type": "remote",
+      "widgets": [
+        {
+          "configurations": {
+            "frontier-broad-cool": [
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 5,
+                "widget": "param0"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 7,
+                "widget": "param1"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 0.25,
+                "widget": "param2"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 0.05,
+                "widget": "param3"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 0.04,
+                "widget": "param4"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 0.015,
+                "widget": "param5"
+              },
+              {
+                "node": "macro_field",
+                "value": 1.25,
+                "widget": "scale_x"
+              },
+              {
+                "node": "macro_field",
+                "value": 1.25,
+                "widget": "scale_y"
+              },
+              {
+                "node": "normal_map",
+                "value": 0.56,
+                "widget": "param1"
+              }
+            ],
+            "patrol-tempered-earth": [
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 6,
+                "widget": "param0"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 9,
+                "widget": "param1"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 0.18,
+                "widget": "param2"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 0.047,
+                "widget": "param3"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 0.048,
+                "widget": "param4"
+              },
+              {
+                "node": "gmm_n02c_coursed_cells_v001",
+                "value": 0.02,
+                "widget": "param5"
+              },
+              {
+                "node": "macro_field",
+                "value": 1.6,
+                "widget": "scale_x"
+              },
+              {
+                "node": "macro_field",
+                "value": 1.6,
+                "widget": "scale_y"
+              },
+              {
+                "node": "normal_map",
+                "value": 0.62,
+                "widget": "param1"
+              }
+            ]
+          },
+          "label": "Bounded candidate",
+          "linked_widgets": [
+            {
+              "node": "gmm_n02c_coursed_cells_v001",
+              "widget": "param0"
+            },
+            {
+              "node": "gmm_n02c_coursed_cells_v001",
+              "widget": "param1"
+            },
+            {
+              "node": "gmm_n02c_coursed_cells_v001",
+              "widget": "param2"
+            },
+            {
+              "node": "gmm_n02c_coursed_cells_v001",
+              "widget": "param3"
+            },
+            {
+              "node": "gmm_n02c_coursed_cells_v001",
+              "widget": "param4"
+            },
+            {
+              "node": "gmm_n02c_coursed_cells_v001",
+              "widget": "param5"
+            },
+            {
+              "node": "macro_field",
+              "widget": "scale_x"
+            },
+            {
+              "node": "macro_field",
+              "widget": "scale_y"
+            },
+            {
+              "node": "normal_map",
+              "widget": "param1"
+            }
+          ],
+          "name": "param0",
+          "type": "config_control"
+        }
+      ]
+    },
+    {
+      "color": {
+        "a": 1,
+        "b": 0.17,
+        "g": 0.15,
+        "r": 0.12,
+        "type": "Color"
+      },
+      "label": "AUTHORING CONTRACT",
+      "name": "authoring_contract",
+      "node_position": {
+        "x": -820,
+        "y": -390
+      },
+      "size": {
+        "x": 720,
+        "y": 120
+      },
+      "text": "GP-MM-M01 / config frontier-broad-cool / seed 180041 / 512 target. Base operational construction only: no moss, grime, leaks, cracks, abandonment, wetness, or damage state.",
+      "title": "Genesis Guard Post base-material contract",
+      "type": "comment"
+    }
+  ],
+  "parameters": {},
+  "seed": 180041,
+  "seed_locked": true,
+  "type": "graph"
+}

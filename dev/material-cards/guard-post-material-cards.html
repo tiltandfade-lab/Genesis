@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Genesis Guard Post — Material Maker 1.3 Taste Cards</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f0eadb;
+      --muted: #a9a08f;
+      --gold: #cda24f;
+      --line: #403a31;
+      --panel: #171713;
+      --black: #0c0d0c;
+      --blue: #8da4bd;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--black); color: var(--ink); }
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: .01em;
+    }
+    #sheet { width: 2200px; margin: 0 auto; padding: 42px; }
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 22px;
+      margin-bottom: 24px;
+    }
+    .eyebrow { color: var(--gold); font-size: 16px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 5px 0 0; font-family: Georgia, serif; font-size: 46px; font-weight: 500; }
+    .batch { color: var(--muted); font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: right; }
+    .scope-note {
+      margin: 0 0 28px;
+      padding: 14px 18px;
+      border-left: 4px solid var(--gold);
+      background: #15140f;
+      color: #d8cfbd;
+      font: 18px/1.45 Georgia, serif;
+    }
+    .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; align-items: start; }
+    .card {
+      min-width: 0;
+      background: linear-gradient(180deg, #1b1b17, #131411);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 40px #0008;
+      padding: 24px;
+    }
+    .card-head { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: start; margin-bottom: 18px; }
+    .candidate-id { color: var(--gold); font: 700 14px/1.2 ui-monospace, monospace; letter-spacing: .08em; }
+    h2 { margin: 4px 0 3px; font: 500 30px/1.08 Georgia, serif; }
+    .family { color: var(--muted); font-size: 14px; }
+    .taste { max-width: 360px; color: #d4ccbc; font: italic 16px/1.4 Georgia, serif; text-align: right; }
+    .maps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    figure { margin: 0; }
+    .map-frame, .render-frame {
+      overflow: hidden;
+      background: #0d0e0d;
+      border: 1px solid #494236;
+      position: relative;
+    }
+    .map-frame { aspect-ratio: 1; }
+    .map-frame > img { width: 100%; height: 100%; display: block; object-fit: cover; image-rendering: pixelated; }
+    .repeat {
+      width: 100%;
+      height: 100%;
+      background-repeat: repeat;
+      background-size: 33.333% 33.333%;
+      image-rendering: pixelated;
+    }
+    figcaption {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 6px;
+      color: var(--muted);
+      font: 12px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .orm-key { color: var(--blue); font-size: 10px; text-transform: none; letter-spacing: 0; }
+    .renders { display: grid; grid-template-columns: 1.1fr 1.1fr .8fr; gap: 12px; margin-top: 16px; }
+    .render-frame { aspect-ratio: 16 / 10; }
+    .render-frame img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .render-label {
+      position: absolute;
+      left: 9px;
+      bottom: 8px;
+      padding: 4px 7px;
+      background: #090a09c9;
+      color: #eee5d2;
+      border: 1px solid #50483b;
+      font: 10px/1.2 ui-monospace, monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 18px 0 0;
+      padding: 14px 0 0;
+      border-top: 1px solid #353129;
+    }
+    .meta div { min-width: 0; }
+    .meta dt { margin: 0 0 3px; color: #81786a; font: 10px/1.2 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
+    .meta dd { margin: 0; overflow-wrap: anywhere; color: #d8d0c0; font: 12px/1.35 ui-monospace, monospace; }
+    .status {
+      display: inline-block;
+      border: 1px solid #6c5630;
+      color: #e6bf72;
+      padding: 2px 6px;
+      border-radius: 99px;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding-top: 22px;
+      color: #82796b;
+      font: 12px/1.4 ui-monospace, monospace;
+    }
+    body.single #sheet { width: 1500px; padding: 36px; }
+    body.single .cards { grid-template-columns: 1fr; }
+    body.single .card { padding: 30px; }
+    body.single .maps { grid-template-columns: repeat(4, 1fr); }
+    body.single .renders { grid-template-columns: 1fr 1fr 1fr; }
+    body.single .masthead { margin-bottom: 18px; }
+    body.app #sheet { width: 1400px; padding: 24px; }
+    body.app h1 { font-size: 34px; }
+    body.app .scope-note { font-size: 14px; margin-bottom: 18px; }
+    body.app .cards { gap: 16px; }
+    body.app .card { padding: 16px; }
+    body.app h2 { font-size: 22px; }
+    body.app .taste { font-size: 13px; max-width: 260px; }
+    body.app .maps, body.app .renders { gap: 8px; }
+    body.app .meta { grid-template-columns: repeat(2, 1fr); }
+  </style>
+</head>
+<body>
+  <main id="sheet">
+    <header class="masthead">
+      <div>
+        <div class="eyebrow">Genesis · Material Foundry · Guard Post</div>
+        <h1>Old Operational Stone — Candidate Taste Review</h1>
+      </div>
+      <div class="batch">GP-MM-STONE-V001<br>Material Maker 1.3 · 512 px · Godot 4 ORM</div>
+    </header>
+    <p class="scope-note">Base construction parents only. Maintained overgrowth is a separate condition-response layer and is intentionally absent from this review.</p>
+    <section class="cards" id="cards"></section>
+    <footer class="footer">
+      <span>Fixed render contract: three.js r166 · MeshStandardMaterial · AgX · sRGB albedo · linear normal/ORM · R=AO G=roughness B=metalness</span>
+      <span>Dimetric gameplay view: 45° yaw · 35° elevation · 20° FOV · canonical Goblin Warrior standee</span>
+    </footer>
+  </main>
+  <script type="module">
+    import * as THREE from "../../vendor/three/three.module.js";
+
+    const query = new URLSearchParams(location.search);
+    const candidateFilter = query.get("candidate");
+    const mode = query.get("mode") || "overview";
+    document.body.classList.toggle("single", Boolean(candidateFilter));
+    document.body.classList.toggle("app", mode === "app");
+
+    const manifest = await fetch("../material-lane/manifests/guard-post-stone-v001.json").then((response) => {
+      if (!response.ok) throw new Error(`manifest ${response.status}`);
+      return response.json();
+    });
+    const candidates = manifest.candidates.filter((candidate) => !candidateFilter || candidate.id === candidateFilter);
+    if (!candidates.length) throw new Error(`Unknown candidate ${candidateFilter}`);
+
+    const titleCase = (value) => value.split("-").map((part) => part[0].toUpperCase() + part.slice(1)).join(" ");
+    const assetUrl = (repoPath) => `../../${repoPath}`;
+    const shortHash = (value) => value.slice(0, 12);
+    const mapsFor = (candidate) => ({
+      albedo: assetUrl(candidate.outputs.albedo.path),
+      normal: assetUrl(candidate.outputs.normal.path),
+      orm: assetUrl(candidate.outputs.orm.path)
+    });
+
+    function cardMarkup(candidate) {
+      const maps = mapsFor(candidate);
+      return `
+        <article class="card" data-candidate="${candidate.id}">
+          <header class="card-head">
+            <div>
+              <div class="candidate-id">${candidate.id}</div>
+              <h2>${titleCase(candidate.configuration)}</h2>
+              <div class="family">${candidate.family} · <span class="status">candidate</span></div>
+            </div>
+            <div class="taste">${candidate.tasteIntent}</div>
+          </header>
+          <div class="maps">
+            <figure>
+              <div class="map-frame"><img src="${maps.albedo}" alt="${candidate.id} albedo"></div>
+              <figcaption><span>Albedo · 1×</span><span>sRGB</span></figcaption>
+            </figure>
+            <figure>
+              <div class="map-frame"><div class="repeat" style="background-image:url('${maps.albedo}')"></div></div>
+              <figcaption><span>Albedo · 3×3</span><span>seam test</span></figcaption>
+            </figure>
+            <figure>
+              <div class="map-frame"><img src="${maps.normal}" alt="${candidate.id} normal"></div>
+              <figcaption><span>Normal</span><span>linear</span></figcaption>
+            </figure>
+            <figure>
+              <div class="map-frame"><img src="${maps.orm}" alt="${candidate.id} ORM"></div>
+              <figcaption><span>ORM</span><span class="orm-key">R AO · G rough · B metal</span></figcaption>
+            </figure>
+          </div>
+          <div class="renders">
+            <figure>
+              <div class="render-frame" data-render="lit"><span class="render-label">lit wall · fixed rig</span></div>
+              <figcaption><span>Material</span><span>1 tile / 5 m</span></figcaption>
+            </figure>
+            <figure>
+              <div class="render-frame" data-render="gameplay"><span class="render-label">gameplay · standee scale</span></div>
+              <figcaption><span>Dimetric view</span><span>20° FOV</span></figcaption>
+            </figure>
+            <figure>
+              <div class="render-frame" data-render="clay"><span class="render-label">neutral clay</span></div>
+              <figcaption><span>Geometry control</span><span>same light</span></figcaption>
+            </figure>
+          </div>
+          <dl class="meta">
+            <div><dt>Seed / scale</dt><dd>${candidate.seed} · ${candidate.declaredScaleMeters.width}×${candidate.declaredScaleMeters.height} m</dd></div>
+            <div><dt>Source SHA</dt><dd>${shortHash(candidate.source.sha256)}</dd></div>
+            <div><dt>Albedo SHA</dt><dd>${shortHash(candidate.outputs.albedo.sha256)}</dd></div>
+            <div><dt>Normal / ORM SHA</dt><dd>${shortHash(candidate.outputs.normal.sha256)} / ${shortHash(candidate.outputs.orm.sha256)}</dd></div>
+            <div><dt>Custom node</dt><dd>${candidate.source.customNode}</dd></div>
+            <div><dt>Palette</dt><dd>${candidate.paletteIntent}</dd></div>
+            <div><dt>Construction</dt><dd>${candidate.family === "GP-MM-M01" ? "coherent split courses" : "two-axis fitted interlock"}</dd></div>
+            <div><dt>Face response</dt><dd>surface ${candidate.parameters.surfaceScale} · rough ${candidate.parameters.stoneRoughnessRange[0]}–${candidate.parameters.stoneRoughnessRange[1]}</dd></div>
+          </dl>
+        </article>`;
+    }
+
+    document.querySelector("#cards").innerHTML = candidates.map(cardMarkup).join("");
+
+    const loader = new THREE.TextureLoader();
+    const loadTexture = (url) => new Promise((resolve, reject) => loader.load(url, resolve, undefined, reject));
+    async function loadMaps(candidate) {
+      const urls = mapsFor(candidate);
+      const [albedo, normal, orm, standee] = await Promise.all([
+        loadTexture(urls.albedo),
+        loadTexture(urls.normal),
+        loadTexture(urls.orm),
+        loadTexture("../../assets/sprites/spr-fantasy-goblin-warrior.png")
+      ]);
+      albedo.colorSpace = THREE.SRGBColorSpace;
+      albedo.magFilter = THREE.NearestFilter;
+      albedo.minFilter = THREE.NearestMipmapNearestFilter;
+      normal.colorSpace = THREE.NoColorSpace;
+      orm.colorSpace = THREE.NoColorSpace;
+      normal.magFilter = orm.magFilter = THREE.LinearFilter;
+      normal.minFilter = orm.minFilter = THREE.LinearMipmapLinearFilter;
+      standee.colorSpace = THREE.SRGBColorSpace;
+      standee.magFilter = THREE.NearestFilter;
+      for (const texture of [albedo, normal, orm]) {
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(1, 1);
+      }
+      return { albedo, normal, orm, standee };
+    }
+
+    function lights(scene) {
+      scene.add(new THREE.AmbientLight(0xf3ead8, 0.18));
+      const key = new THREE.DirectionalLight(0xffe2b9, 2.45);
+      key.position.set(-4.2, 5.5, 5.8);
+      key.castShadow = true;
+      key.shadow.mapSize.set(1024, 1024);
+      key.shadow.camera.left = key.shadow.camera.bottom = -7;
+      key.shadow.camera.right = key.shadow.camera.top = 7;
+      key.shadow.bias = -0.0008;
+      scene.add(key);
+      const cool = new THREE.PointLight(0xaebfe8, 18, 16, 2);
+      cool.position.set(4.2, 2.8, 2.7);
+      scene.add(cool);
+    }
+
+    function wallGeometry() {
+      const geometry = new THREE.BoxGeometry(5, 3, 0.34, 1, 1, 1);
+      geometry.setAttribute("uv1", geometry.attributes.uv.clone());
+      return geometry;
+    }
+
+    function materialFor(mode, maps, candidate) {
+      if (mode === "clay") {
+        return new THREE.MeshStandardMaterial({ color: 0x8a8275, roughness: 0.86, metalness: 0 });
+      }
+      const material = new THREE.MeshStandardMaterial({
+        map: maps.albedo,
+        normalMap: maps.normal,
+        aoMap: maps.orm,
+        roughnessMap: maps.orm,
+        metalnessMap: maps.orm,
+        roughness: 1,
+        metalness: 1,
+        aoMapIntensity: 0.82
+      });
+      material.normalScale.set(candidate.parameters.normalStrength, candidate.parameters.normalStrength);
+      return material;
+    }
+
+    function addWall(scene, mode, maps, candidate) {
+      const wall = new THREE.Mesh(wallGeometry(), materialFor(mode, maps, candidate));
+      wall.position.y = 1.56;
+      wall.castShadow = true;
+      wall.receiveShadow = true;
+      scene.add(wall);
+      const cap = new THREE.Mesh(
+        new THREE.BoxGeometry(5.16, 0.18, 0.5),
+        new THREE.MeshStandardMaterial({ color: mode === "clay" ? 0x8a8275 : 0x67635b, roughness: 0.9 })
+      );
+      cap.position.set(0, 3.14, 0);
+      cap.castShadow = cap.receiveShadow = true;
+      scene.add(cap);
+    }
+
+    function addStandee(scene, standee) {
+      const spriteMaterial = new THREE.SpriteMaterial({
+        map: standee,
+        transparent: true,
+        alphaTest: 0.45,
+        toneMapped: false
+      });
+      const sprite = new THREE.Sprite(spriteMaterial);
+      sprite.center.set(0.5, 0);
+      sprite.position.set(1.25, 0.02, 1.15);
+      sprite.scale.set(1.12, 1.08, 1);
+      scene.add(sprite);
+      const shadow = new THREE.Mesh(
+        new THREE.CircleGeometry(0.42, 24),
+        new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.38, depthWrite: false })
+      );
+      shadow.rotation.x = -Math.PI / 2;
+      shadow.scale.set(1, 0.42, 1);
+      shadow.position.set(1.25, 0.012, 1.13);
+      scene.add(shadow);
+    }
+
+    function cameraFor(mode, aspect) {
+      const camera = new THREE.PerspectiveCamera(mode === "gameplay" ? 20 : 29, aspect, 0.1, 100);
+      if (mode === "gameplay") {
+        const radius = 13.5;
+        const yaw = THREE.MathUtils.degToRad(45);
+        const elevation = THREE.MathUtils.degToRad(35);
+        camera.position.set(
+          radius * Math.cos(elevation) * Math.sin(yaw),
+          radius * Math.sin(elevation) + 0.4,
+          radius * Math.cos(elevation) * Math.cos(yaw)
+        );
+        camera.lookAt(0, 1.22, 0);
+      } else {
+        camera.position.set(5.6, 3.7, 6.8);
+        camera.lookAt(0, 1.55, 0);
+      }
+      return camera;
+    }
+
+    function renderScene(frame, mode, maps, candidate) {
+      const width = Math.max(320, Math.round(frame.clientWidth));
+      const height = Math.max(200, Math.round(frame.clientHeight));
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(width, height, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.AgXToneMapping;
+      renderer.toneMappingExposure = 1.03;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x15181c);
+      lights(scene);
+      const floor = new THREE.Mesh(
+        new THREE.PlaneGeometry(18, 18),
+        new THREE.MeshStandardMaterial({ color: 0x343430, roughness: 0.96, metalness: 0 })
+      );
+      floor.rotation.x = -Math.PI / 2;
+      floor.receiveShadow = true;
+      scene.add(floor);
+      addWall(scene, mode, maps, candidate);
+      if (mode === "gameplay") addStandee(scene, maps.standee);
+      const camera = cameraFor(mode, width / height);
+      renderer.render(scene, camera);
+      const image = new Image();
+      image.alt = `${candidate.id} ${mode} three.js render`;
+      image.src = renderer.domElement.toDataURL("image/png");
+      frame.prepend(image);
+      renderer.dispose();
+      renderer.forceContextLoss();
+      scene.traverse((object) => {
+        object.geometry?.dispose?.();
+        if (object.material && !Array.isArray(object.material)) object.material.dispose?.();
+      });
+      return { mode, width, height };
+    }
+
+    const renderReport = [];
+    for (const candidate of candidates) {
+      const maps = await loadMaps(candidate);
+      const card = document.querySelector(`[data-candidate="${candidate.id}"]`);
+      const renders = [];
+      for (const frame of card.querySelectorAll("[data-render]")) {
+        renders.push(renderScene(frame, frame.dataset.render, maps, candidate));
+      }
+      renderReport.push({ candidateId: candidate.id, renders });
+    }
+    await document.fonts.ready;
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    window.__renderReport = {
+      threeRevision: THREE.REVISION,
+      renderer: "WebGLRenderer",
+      material: "MeshStandardMaterial",
+      toneMapping: "AgXToneMapping",
+      colorContract: "albedo=sRGB; normal+ORM=linear; ORM R=AO G=roughness B=metalness",
+      camera: "gameplay yaw=45 elevation=35 fov=20",
+      standee: "assets/sprites/spr-fantasy-goblin-warrior.png",
+      candidates: renderReport
+    };
+    window.__ready = true;
+  </script>
+</body>
+</html>

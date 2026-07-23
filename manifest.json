@@ -77,6 +77,7 @@
     "src/engine/place-semantics.js",
     "src/engine/place-projection.js",
     "src/engine/walk-scene.js",
+    "src/engine/clay-room.js",
     "src/engine/place-dressing.js",
     "src/engine/place-distribution.js",
     "src/engine/walk-interactables.js",
@@ -1526,6 +1527,23 @@
         "walkSceneFrom"
       ],
       "desc": "docs/WALK-NATIVE-A.md WDV-1 \u2014 the anti-drift boundary between the stored walk and the graphics engine (ui-sketches/mock-frames/vq-battle-scenes/WALK-NATIVE-DIORAMA-CONTRACT.md). walkSceneFrom({walkId,walk,segment,overlay,spatialRoom,live}) WRAPS walkSceneProjectionFrom (engine.place-projection) for cast/interactable/dressing/hidden cards \u2014 never re-deals or re-rolls \u2014 and ADDS the structure/connection/surface/practical/condition/atmosphere classification of the raw walk/segment fields the dealer ignores (areaType/dims/side, exits+door state, biome/skin register, light sources, dressing.condition, sensory/atmo prose, reveal-gated secret/loot/artFind). Every WalkScene entry is {role,sourceRef,...roleFields}; sourceRef={walkId,segmentNum,fieldPath,tableId,roll,overlayRef} with tableId/roll populated opportunistically off segment.rollRefs (WDV-2) and null otherwise. Pure engine data code with no THREE, DOM, RNG, or world writes; never mutates its inputs."
+    },
+    {
+      "id": "engine.clay-room",
+      "path": "src/engine/clay-room.js",
+      "type": "logic",
+      "owns": [
+        "clayRoomRecordFrom",
+        "clayRoomProse",
+        "clayRoomExplain",
+        "clayRoomEditRefusal",
+        "CLAY_C1A_LIGHT_PROFILE"
+      ],
+      "callTimeDeps": [
+        "SPRITE_BY_BESTIARY_ID",
+        "SPRITE_REGISTRY"
+      ],
+      "desc": "docs/C1A-CLAY-ROOM.md (Clay Pass 1, CLAY-PROOF-LADDER \u00a7C1A) \u2014 the canonical 5x5 clay room record: cells/walls/portal/crate/citizen through the SAME owners the game uses (SPRITE_BY_BESTIARY_ID -> SPRITE_REGISTRY for the citizen's BodyForm v1, GRID LAW 1 cell = 5 ft). clayRoomRecordFrom(seed) is a frozen, deterministic fixture (no RNG/DOM/THREE/world reads) \u2014 the room's geometry is fixed by design (a canonical reference room), seed is a plain provenance passthrough. clayRoomProse(record) is the GEN-LAW-3/TEXT-FIRST prose twin (every canonical fact as plain text); clayRoomExplain(record) is the D11 workbench-floor explain string; clayRoomEditRefusal(field) returns the typed refusal for the one generated source (data/sprite-registry.js) every BodyForm field traces to. CLAY_C1A_LIGHT_PROFILE is the D4 two-point-plus-ambient light data the theater-boot.js wire-in applies. Consumed by src/ui/theater-boot.js's clay-room mount (docs/C1A-CLAY-ROOM.md's dev-flag surface, ?clayroom=1). Added 2026-07-23."
     },
     {
       "id": "engine.place-dressing",

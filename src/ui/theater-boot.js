@@ -14415,11 +14415,14 @@ function clayRoomBoardDataFrom(record){
   }] : [];
 
   const citizenCell = cellById[record.citizen.cell];
-  // spriteEntryFor's own established access pattern for these two globals (this file's SPRITE_CHANNEL
-  // section) — guarded the same way, never a bare unqualified read.
-  const bestiaryIndex = (typeof SPRITE_BY_BESTIARY_ID !== "undefined") ? SPRITE_BY_BESTIARY_ID : null;
-  const citizenSlug = bestiaryIndex ? bestiaryIndex[record.citizen.bestiaryId] : null;
-  const pieces = (citizenCell && citizenSlug) ? [{ slug: citizenSlug, cellX: citizenCell.x, cellY: citizenCell.z }] : [];
+  // data.pieces[].slug is spriteEntryFor's OWN `recipeSlug` parameter — that function does the
+  // SPRITE_BY_BESTIARY_ID[recipeSlug] -> SPRITE_REGISTRY[idSlug] resolution ITSELF (TIER 1, this
+  // file's own spriteEntryFor header a few thousand lines up), so the bestiary id is what belongs
+  // here, never a pre-resolved registry slug (passing an already-resolved "spr-fantasy-..." slug
+  // would miss TIER 1 entirely and fall through to TIER 2's normalized-NAME scan, which a slug
+  // string never matches — found live: 0 resolved pieces, zero network request for the sprite PNG,
+  // in a served-browser check of this exact mount).
+  const pieces = citizenCell ? [{ slug: record.citizen.bestiaryId, cellX: citizenCell.x, cellY: citizenCell.z }] : [];
 
   const bounds = { minX: 0, maxX: record.dims.w - 1, minZ: 0, maxZ: record.dims.d - 1 };
 

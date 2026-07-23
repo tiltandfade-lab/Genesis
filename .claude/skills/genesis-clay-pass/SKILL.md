@@ -28,6 +28,15 @@ ON/OFF is Adam's ruling, always.
    re-gate · human eyes on actual output · ledger flip with evidence).
 4. The owning wave record for any contract the pass lands (the §.6 sweep riders are law).
 
+## The teeth law (Adam, 2026-07-23 — after the door stub)
+
+**A founder ruling is not "recorded" until its enforcing check exists in the same change** —
+a harness assertion, a grep-gate on the production caller, a validator rule — or is explicitly
+queued with a named owner and trigger. Prose binds nothing; checks bind. The door proved it:
+the law existed as words + working code, the executor flagged its own bypass, and only a
+mechanical gate ended the class. When Adam states a law, the deliverable is the sentence PLUS
+its teeth. ("Can the script own this?" applies to the dev process itself.)
+
 ## The assumption law (before any implementation)
 
 Unclear calls surface to Adam BEFORE code: batch them ≤10, plain English, ids in parentheses,

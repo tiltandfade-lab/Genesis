@@ -1358,3 +1358,23 @@ configurations, child graphs, and new families are the three permitted mutation 
 carries provenance back to its parent. No throwaway one-off texture batches. The owning pipeline
 document is `MATERIAL-LANE.md`; the Guard Post's own parent-seed roster and trim-strip sources route
 from `GOLDEN-SITES-CATALOG.md`.
+
+## CL-R0 packet review — walls, door, sprite (Adam, 2026-07-23 — additive; verbatim)
+
+> "also now seems like the walls are in the way again, though it's hard to tell at that zoom level"
+
+> "even from what i can see of the door i can already see it looks more like a popsicle than a door"
+
+> "sprite looks awful, i thought we had sprite citizenship nailed down like 10 days ago what happened,
+> not it just looks flat and sickly"
+
+All three confirmed against the banked `role-id` capture, not taken on faith. **Walls:** the near
+walls render at full height and eat the bottom third of the frame; the room reads as a pit rather
+than a diorama. **Door:** the frame is two thin flat planks and a cap with no reveal depth, standing
+taller than the wall — it violates the construction law that openings have depth, and wiring a leaf
+into it would not fix it. **Sprite:** root cause found — `spriteTextureFor()` never tagged the loaded
+PNG's colour space while every sibling texture path does, so sRGB bytes were treated as linear and
+gamma-encoded a second time on output (pale, chroma-collapsed). Not a regression: the sprite render
+path never tagged it; what was proven earlier was the art, the registry, and the review tool, which
+displays raw PNGs through the browser's own correct pipeline. Fixed and proven by A/B capture with
+lighting held constant. Disposition and evidence: `CLAYROOM-RESET-LADDER.md` findings 4-6.

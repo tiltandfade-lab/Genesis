@@ -180,6 +180,53 @@ the sprite still reads washed out (CR-4 → CL-R1/CL-R2, to be diagnosed causall
 saturation slider), and the two-temperature rig still does not read as two temperatures in the frame
 (CR-2 → CL-R1).
 
+**Adam's review of the CL-R0 packet (2026-07-23) — three findings, verbatim:**
+
+> "also now seems like the walls are in the way again, though it's hard to tell at that zoom level"
+
+> "even from what i can see of the door i can already see it looks more like a popsicle than a door"
+
+> "sprite looks awful, i thought we had sprite citizenship nailed down like 10 days ago what happened,
+> not it just looks flat and sickly"
+
+4. **The walls are in the frame — CONFIRMED, and it is not a zoom artefact.** The `role-id` capture
+   makes it unambiguous: the NEAR walls render at full height and their inner faces occupy the bottom
+   third of the composition, so the room reads as a pit viewed from above rather than a diorama, and
+   the far walls rise above the doorframe line. The clay fixture forces `ITR_ROOM_SHELL = false` and
+   builds through the plain InstancedMesh channel, which is very likely why the occlusion/cutaway
+   machinery that governs this in normal play is not engaging here — **unverified**, and the next
+   thing to check. Owner: **CL-R3** (cutaway/ghosting is on its required list), but the diagnosis
+   belongs in the next tranche, not to a guess here. Evidence:
+   `roleid-04-clean-no-overlay.png`.
+5. **The door reads as a popsicle — CONFIRMED, and worse than "the leaf isn't wired".** In `role-id`
+   the "doorframe" resolves to two thin flat planks and a cap, with **no reveal depth**, and the
+   members stand **taller than the surrounding wall**. This violates the construction law that
+   openings have depth (a hole/reveal with wall thickness, never a dark rectangle) and it is what
+   Adam's original D12b redline was pointing at. RL-1 must not be closed by wiring a leaf into a
+   frame that is itself wrong. Owner: **the next tranche**, ahead of CL-R1.
+6. **The sprite — ROOT CAUSE FOUND AND FIXED (CL-R1 item 4).** `spriteTextureFor()` never tagged the
+   loaded PNG's colour space, while every other authored colour texture in `theater-boot.js` does
+   (~891, ~944, ~13930). three r166 defaults `WebGLRenderer.outputColorSpace` to `SRGBColorSpace` and
+   this codebase never overrides it, so an untagged texture is sampled as if its sRGB bytes were
+   already linear and then gamma-encoded a **second** time on output: midtones lifted, chroma
+   collapsed. This is why the goblin rendered bone-white with its green skin and ochre leather gone.
+   **It is not a regression from ten days ago — the sprite path never tagged it.** What was proven
+   ten days ago was the art, the registry, and the review tool (`dev/sprite-review.html` shows raw
+   PNGs through the browser's own correct sRGB pipeline, so the art looked right there and wrong in
+   the engine).
+
+   Proven **causally**, not asserted: an A/B capture with the identical scene, identical lighting and
+   colour space as the only variable (`dev/clay-captures/cl-r1-sprite-ab/`). Measured over
+   non-neutral pixels — untagged `meanSat 42.2 / meanSpread 19.8`; tagged `60.2 / 25.1`; source art
+   `145.7 / 44.7`. Fixed, ON by default, with `?spritesrgb=0` retained so the A/B stays reproducible,
+   and harness check 19 as its teeth. **No saturation slider was involved.**
+
+   Still open after the fix: the render remains brighter than the source art. That is the *separate*
+   lighting-energy variable (two non-attenuating point lights, `distance:0, decay:0`, combined
+   authored intensity 25, plus the emissive readability floor) and stays CL-R1's, tested on its own.
+   **`dressingTextureFor()` (`theater-boot.js` ~9160) carries the identical untagged defect** and is
+   not fixed here — no fixture covers it, so it gets its own capture rather than a blind edit.
+
 **Capture framing note (Adam, 2026-07-23).** Adam asked whether the door was being framed behind the
 overlay console. It was not deliberate, but the overlay is anchored top-right, which is exactly where
 the north portal sits under the fixed production camera — so packet frames were partially occluding

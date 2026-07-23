@@ -801,5 +801,36 @@ const check = (name, cond, detail = "") =>
   }
 }
 
+// ============================================================================
+// 19. CL-R1 (docs/CLAYROOM-RESET-LADDER.md) — SPRITE COLOUR-SPACE INVARIANT.
+//
+// Adam, 2026-07-23: "the sprite is back to an overexposed undersaturated crappy looking piece of
+// paper". Cause, proven by A/B capture with lighting held constant: spriteTextureFor() never tagged
+// the loaded PNG's colour space, while every other authored colour texture in theater-boot.js does.
+// three r166 defaults WebGLRenderer.outputColorSpace to SRGBColorSpace and this codebase never
+// overrides it, so an untagged texture is sampled as if its sRGB bytes were linear and then encoded
+// to sRGB again on output — midtones lifted, chroma collapsed. Measured on non-neutral pixels:
+// untagged meanSat 42.2 / meanSpread 19.8; tagged 60.2 / 25.1; source art 145.7 / 44.7.
+//
+// This is a source-text check because the harness is THREE/DOM-free; the visual proof is
+// dev/clay-captures/cl-r1-sprite-ab/. Teeth: delete the tagging line and 19a goes red.
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const fn = (bootSrc.match(/function\s+spriteTextureFor\s*\(entry\)\s*\{[\s\S]*?\n\}/) || [""])[0];
+  check("19a. spriteTextureFor() tags the loaded PNG with THREE.SRGBColorSpace",
+    /tex\.colorSpace\s*=\s*THREE\.SRGBColorSpace/.test(fn),
+    "untagged sprite textures are double-gamma-encoded on output — pale, low-chroma standees");
+  const flagFn = (bootSrc.match(/function\s+spriteSrgbTaggingOn\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
+  check("19b. the colour-space A/B flag defaults ON (correctness, not a taste dial)",
+    /let\s+on\s*=\s*true/.test(flagFn), flagFn);
+  // The renderer must not silently change outputColorSpace out from under this reasoning: if it ever
+  // sets LinearSRGBColorSpace, the tagging above becomes wrong and this check should be revisited
+  // rather than the tag quietly removed.
+  check("19c. the renderer does not override outputColorSpace (three r166 default sRGB is assumed)",
+    !/outputColorSpace\s*=/.test(bootSrc),
+    "an outputColorSpace override exists — re-derive the sprite colour-space reasoning");
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

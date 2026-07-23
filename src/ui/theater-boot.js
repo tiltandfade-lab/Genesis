@@ -14330,7 +14330,20 @@ function clayRoomShouldEnable(){
   return false;
 }
 function clayRoomMaybeAutoMount(){
-  if(S.clayRoomMounted) return;
+  if(S.clayRoomMounted){
+    // FOUND LIVE (a served-browser check of this exact mount): production's own async-texture-settle
+    // replay (spriteTextureFor's onLoad callback, this file's SPRITE_CHANNEL section — "S.boardKey =
+    // null; setInteriorBoard(S.lastBoard);", fired once the goblin's sprite PNG finishes loading) runs
+    // OUTSIDE mountClayRoom() entirely and re-triggers setInteriorBoard's own rigOn ambient/point
+    // overwrite, silently reverting clayRoomApplyLightProfile's one-time post-mount override back to
+    // the interior rig's own ITR_SCENE_AMBIENT (0.13) the instant that replay fires. A cheap per-frame
+    // reassert (3 light objects' color/intensity, no geometry rebuild) keeps D4's authored profile the
+    // honest final word regardless of when that replay lands — bounded, dev-only-surface cost, the
+    // same "pay only while the flag is actually on" discipline D1's dormant-poll law protects for the
+    // OFF state.
+    clayRoomApplyLightProfile(S.clayRoomRecord);
+    return;
+  }
   if(!clayRoomShouldEnable()) return;
   mountClayRoom();
 }

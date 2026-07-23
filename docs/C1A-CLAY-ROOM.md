@@ -180,9 +180,16 @@ completely broken."
 - **D12a seam grid:** semi-transparent grid (opacity 0.25–0.35, neutral, just above the floor)
   at every cell boundary, derived from `record.dims` + the floor's own cell math — never
   hardcoded counts. Permanent fixture of the clay surface.
-- **D12b legible closed door:** `portal.state: "closed"` joins the record; prose twin says
-  "— the door is closed."; render = jambs + lintel + inset door leaf in distinct flat greys.
-  A glance must read "closed door," never "broken geometry."
+- **D12b legible closed door (CORRECTED same-day):** `portal.state: "closed"` joins the
+  record; prose twin says "— the door is closed." Render MUST route through the EXISTING
+  production door path (doorframe kit + hinged leaf via interiorBuildInteractables) by
+  ADAPTING the input shape — never bespoke/stubbed door geometry (the packet-#1 stub was the
+  WIRING-LAW defect class, accepted at re-gate in error). A wiring grep-gate in the harness
+  now asserts the production door-builder call. **THE DOOR CONTRACT (Adam, verbatim,
+  2026-07-23):** "at it's root it is an extruded rectangle exactly the same way a wall is,
+  except it hinges outward on a fixed axis on one of it's corner vertices, double doors are
+  the same except they hinge on opposite sides, mirroring each other." A glance must read
+  "closed door," never "broken geometry."
 - **D12c packet format law (process):** every capture packet leads with plain-English
   "what this proves" per image — no registry-speak, no untranslated ids. Adopted into
   `.claude/skills/genesis-clay-pass/SKILL.md` the same day.

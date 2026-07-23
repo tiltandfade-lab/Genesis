@@ -100,7 +100,10 @@ arrival law) — read that first; it supersedes older per-lane ordering for the 
    + the review tool; Adam PASS-rules cards. Stage B (engine wiring: albedo widening → the
    clay-room DPR×material experiment → Standard switch → render-scale setting → trim wiring)
    queues at the C1I window. The condition-vector/map-roller half (MATERIAL-LANE §5b) still
-   needs its own spec — owed.
+   needs its own spec — owed. **Object-alignment dev tool promoted** (Adam 2026-07-23, at the
+   C1A door redline): next workbench-floor increment after the Explain panel v0 — the
+   DEV-PORTAL spec's alignment/inspection surface, scoped to placing/nudging staged objects
+   with the result written back as data, never renderer-owned truth.
 2. ☐ Mechanical gathers queued: Gemini pacing-transcript into `Reference/` · FOREVER-STORAGE
    wiring verify · sidekick-data gather · DI re-scope pass before any DI-1/2/3 execution
    (deferred 2026-07-23 with that precondition).

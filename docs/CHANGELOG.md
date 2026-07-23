@@ -8,6 +8,33 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-23 — FOUNDER REVIEW: ALL TWELVE WAVES DESIGN-CLOSED [Fable chairing, Adam ruling]
+
+**Added**
+- Ran the staged founder-review session (2026-07-22/23, interactive, docs-only): Adam answered all six Batch-1
+  founder questions (Q7-A B · Q8-A B · Q9-A B · Q9-B B · Q11-A B · Q12-A A), then swept waves 7/8/9/11/12 in
+  plain language and explicitly closed each (§16.6-7 · §17.6-7 · §18.6-7 · §19.6-7 · §20.6-7). The procedural-
+  dungeon design program is complete; the implementation hold stands; Q12-B is the single reserved gate.
+- New decision-index ids GEN-CBT-9, GEN-WLD-10, GEN-DM-11/12, GEN-PROD-5/6, and the BINDING **GEN-PROD-7
+  no-dark-patterns law**. Ten follow-ups tracked (F7.1-3, F8.1-2, F9.1-3, F11.1, F12.1) including the DM
+  rule-bend-and-reconcile vision, the player-rolled physical dice mode, the playable-DM-seat product vision, and
+  the cozy/peaceful register.
+- Sweep riders recorded as law: hand floor, performance-layer freedom, harness-first/loosen-by-evidence,
+  no-plot-armor offscreen, no-unexplained-reversion, organic-regrowth-on-ecology-clocks, DMG-sourced material
+  catalog, heated-metal conduction, DC reveal-at-commit, three-tier worlds, never-brick essential.
+
+**Changed**
+- Applied every pending ladder/ledger addition (now BOUND): W7 tactical corpus + refinements, F8.1 breakable door
+  + W8 mutation row, W9 hand/cadence row, W11 workbench row, W12 persistence row + F12.1 instrument. Flipped
+  QUESTION-COVERAGE, the questionnaire live bookmark, the program front door, and OPEN-QUESTIONS (Batch 1
+  discharged; Batch 2 gained #11 realm-introduction order — Adam leaning Lost World). MODULE-PHASING is ACTIVE:
+  ship-travel deferral confirmed and promoted to a prototype→ideal sketch ("we do want it").
+
+**Deferred**
+- DOCS-INDEX tooling (DI-1/2/3): deferred with a mandatory re-scope precondition before execution. Gemini-
+  transcript gather, FOREVER-STORAGE wiring verify, and sidekick-data gather remain queued mechanical follow-ups.
+  FULL CI PENDING — fast checkpoint only, no push.
+
 ## 2026-07-22 — WAVE 10 PHASED THROUGH BOUNDED TOWN CONTINUITY [Codex]
 
 **Added**
@@ -895,54 +922,4 @@ to the prior tree = the server was serving stale code; kill-before-capture is no
 parameter itself landed in U2); 8 backfill realm skins (craft lane); per-realm place-secret tables
 (Adam ruling open); interior generator (spec section first); P1 asset wave (Adam go/no-go);
 `sprite-sheet-prompts.md` shared template referenced by realm sheets but missing (pre-existing).
-
-## 2026-07-09 (sprite night) — fantasy realm sliced (896 sprites) + review tool + auto-scale + XL regen lane
-
-**Added**
-- **The whole fantasy realm + all PCs cut to production sprites** — 896 PNGs in `assets/sprites/`
-  (510 monsters / 75 NPCs / 75 animals / 20 kids / 216 PCs), sliced from Adam's ImageGen corpus at
-  `ui-sketches/sprite-sheets/` (183 source sheets). Padded sheets (ImageGen fills 5×5 grids) handled
-  by targeted crops; every sheet has a review contact sheet. **Corpus + cut sprites now COMMITTED**
-  (Adam's backup ruling — the "no git backup" risk is closed; `.gitignore` un-ignored them).
-- **`dev/sprite-review.py` + `dev/sprite-review.html`** — the sprite review tool (port 5179): browse
-  every cut sprite w/ registry tags; 7-band head-guide ladder w/ imperial heights (tiny 1′6″ →
-  titanic 36′) + a 6′ vector human silhouette on stage; per-sprite scale slider (0.1–8, titan range);
-  explicit **Save Changes** (no real-time writes; pass/fail fold in unsaved edits); pins; `flagged ⚠`
-  filter; writes `dev/model-qa/sprite-tags-overlay.json` directly (atomic) — no parser round-trips;
-  "regen registry" button folds rulings into `data/sprite-registry.js`.
-- **Auto-scale pass** — heights for all 896 sprites (PC species table deterministic; monsters/NPCs/
-  animals via estimation agents), `scale = head_ft/(6×plane)`: 852 applied, 410 flagged (`⚠` note:
-  height uncertain / art extends above head / clamped). Adam's rulings always win (6 skipped).
-- **Defringe pass in the slicer** (`defringe()` + `--defringe-dir`) — kills the universal magenta
-  halo (edge erode ×2 + edge-band despill; interior purples untouched). All 896 re-written in place.
-- **XL/titan/redo regen lane** (`build/gen-xl-regen-sheets.py`) — Adam's ruling: 9′+ creatures are
-  under-res at 25/sheet. Emits `dev/sprite-manifests/XL-REGEN-PROMPTS.md` (64 paste-ready blocks w/
-  anti-magenta-artifact rider: 24 titan solos ≥24′ · 39 XL 2×2 sheets = 155 creatures 9–24′ · 1 redo
-  sheet = 16 sub-9′ review fails) + `xl-regen-manifest.json` (original slugs — slices overwrite).
-  Tiers derive from Adam's own review-pass scales.
-- **`dev/sprite-manifests/REJECTS.md`** — generated regen shopping list (every `verdict:"fail"`
-  grouped by sheet w/ prompt source + cue + note); served at `/rejects` in the tool.
-
-**Changed**
-- `build/gen-sprite-registry.py` — DEFAULT_MANIFEST flipped fixture → real v2 manifest (the deferred
-  T2-integration flip); overlay now carries `scale`/`verdict`/`note` onto registry entries.
-- `src/ui/theater-boot.js` — billboard height × `entry.scale` (the heads-line-up calibration is
-  LIVE); `spriteEntryFor` skips `verdict:"fail"` (review-failed art falls through to 3D).
-  `verify-theater-sprites.mjs` +2 checks (12/0).
-- `build/slice-sprites.py` — `--manifest-path` override (regen lane); re-cut slugs still fail-ruled
-  print a re-review reminder (never silently cleared).
-
-**Fixed**
-- **Slicer wrote misassigned sprites on count-mismatch** (largest-N selection pulls blobs from
-  anywhere on a padded sheet; fantasy-monsters-21 proved it — tarrasque got invented row-5 art).
-  Fail path now QUARANTINES candidate crops under review/; production dir untouched.
-
-**Adam's review pass (first sitting):** 366 pass / 44 fail (fails mostly magenta bleed on big
-creatures — hence the regen lane).
-
-**Deferred**
-- `item` kind in the v2 parser/registry (13 fantasy item sheets + 571 item cells still unsliced).
-- Interior magenta-bleed auto-fix (legit purple art measures identical to bleed — review catches it).
-- Square-plane aspect: `buildSpriteBillboard` stretches non-square crops; revisit with an
-  aspect-correct plane sized off `tex.image`.
 

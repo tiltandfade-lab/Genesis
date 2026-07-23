@@ -7,7 +7,7 @@ updated: 2026-07-22
 
 # Source Index
 
-The original collection was retrieved 2026-07-18; S10 and supplemental research input R1 were added 2026-07-22.
+The original collection was retrieved 2026-07-18; S10 and supplemental research inputs R1 and R2 were added 2026-07-22.
 Local PDF page numbers below refer to the page sequence reported by `pdfinfo`, not necessarily a venue's printed
 folio. All ten PDF files passed `pdfinfo` and text-extraction checks.
 
@@ -38,10 +38,15 @@ These two publishers do not provide official standalone PDFs for these pages. Th
 | ID | Local file | Work | Why it matters to Genesis | Authority | SHA-256 |
 | --- | --- | --- | --- | --- | --- |
 | R1 | `claude-wave-03-graph-to-space-solver-research-2026-07-22.md` | Claude, "Genesis Wave 3 — Graph-to-Space & Tactical-Composition Solver Research" (supplied by Adam, 2026-07-22) | Broad modern solver/floorplanning/PCG/geometry survey. It adds rectangular-dual and minimum-bends floorplanning, a rectangular -> orthogonal -> irregular representation ladder, candidate diagnostic metrics, a concrete eight-edge prototype fixture, and library/license leads. | Retained research input, **unverified in part**. Its packages, performance claims, algorithms, and recommendations require task-specific verification; it is not an accepted design ruling or dependency admission. | `96a03f1291916ec4fb2ece0a6eafa42cca38981b87b3aea7e2d843606421131a` |
+| R2 | `claude-tactics-rpg-tutorial-mining-2026-07-22.md` | Claude, "Tactics RPG Tutorial Corpus Mining — The Liquid Fire Unity (2015) + Godot remake (2023-2026)" (mined at Adam's request, 2026-07-22) | Mechanics distillation of the classic FFT-clone tutorial series against named Genesis gaps: the C1D exact-cell battle spine (one BFS traversal engine with injected predicates, `\|Δheight\| ≤ jump`, pass-over vs stop-on, the fly-range query bug class), the declarative range × area × effect-target targeting trinity, a deterministic LLM-free monster-tactics stack answering `docs/COMBAT.md`'s open AI-policy question (PlanOfAttack ≈ DM-bridge event; script proposes, DM disposes), status-as-effect-plus-condition-locks, victory conditions as typed observers, and an eight-item cross-cutting pitfall checklist. Negative finding F1: the corpus's board generation is height-noise, validating the TacticalCompositionPlan direction by omission. The appended Codex applicability audit dispositions every proposal, amends the universal-BFS/cell-only-target claims, protects existing Genesis mechanics and visual authority, and routes later evidence without creating an implementation obligation. | Retained research input. Descriptive lesson content verified by direct fetch 2026-07-22; **applicability mappings are proposals, not accepted rulings**. Closed Wave 10 decisions, C1H composition, current cell/tier/connector laws, existing monster-tactics authority, and Wave 8 mutation ownership are explicitly not reopened. Patterns only — no tutorial code, asset, layout, or dependency admission. | `addb77b2db49c65995c058cd44790b20228edc3516d2c15e2f130014d596b419` |
 
 R1 preserves the supplied synopsis verbatim after a repository retention note. The original attachment content had
 SHA-256 `313d453c71bf43f931b0e156ff444ac6324ea9287f299d7ec34960de1d3ff2d5`; the retained file's different hash reflects
 only the added metadata and cautionary preface.
+
+R2 was authored in-repo by Claude on 2026-07-22 (no separate original attachment; the hash covers the research plus
+the appended Codex applicability audit). Its full lesson-by-lesson URL index for both tutorial series lives inside
+the file itself. The mined tutorials are studied as patterns only; no tutorial code or asset enters Genesis.
 
 ## Reading order
 

@@ -1,0 +1,107 @@
+---
+type: canon
+status: ACTIVE — the authority map: which system owns which facts
+created: 2026-07-22
+owner: docs/canon/README.md (precedence law)
+---
+
+# System Ownership — who owns which truth
+
+The one law under everything: **every fact has exactly one owner; everything else is a
+projection.** (Wave 2 P2.12; `docs/DESIGN.md` anti-drift north star.) This map names the owners —
+both the systems that exist in code today and the accepted design-level owners the waves have
+ruled — and names the parallel authorities that are explicitly forbidden.
+
+Two columns of truth run through this file and must never be conflated:
+
+- **BUILT** — the owner exists in code now (`docs/ARCHITECTURE.md` is the detailed map; census
+  class `implementation-evidence`).
+- **ACCEPTED** — the owner is design-accepted by a closed wave but unbuilt (the Feature-Promotion
+  Ledger tracks its proof/MVP/goal path). Accepted owners do not retire built owners until Wave
+  12 authorizes a cutover with replacement proof.
+
+## 1. Canonical state owners (BUILT)
+
+| Fact family | Owner | Notes |
+|---|---|---|
+| Persistent universe / worlds | `U` + `world.state` accessor layer | "the world is the save file" |
+| All transient mutable state | `GS` (src/state.js) | new mutable state goes here, nowhere else |
+| Change-over-time (clock, canon facts, spatial facts, faction clocks, drift, spicy outcomes) | World State Ledger | the single home — no second history |
+| Entities (NPC/place/item/faction records + links) | `w.codex` | written only via `codex_*` events |
+| World geometry | node-graph (cognition) + lazy hex substrate (never stored, never in AI context) | `docs/SPATIAL-MODEL.md` |
+| Combat state (current) | combat resolver, `GS.combat` — 12-zone band/lane model | exact-cell successor ACCEPTED (below) |
+| Rules data (tables, items, spells, progression, bestiary) | Engine markdown + build/gen-*.py → generated `data/*.js`, `tables.js` | edit-source → compile-artifact; artifacts never hand-edited |
+| Module registry | `manifest.json` + check-manifest.py | the code spine |
+| DM↔engine interface | `EVENT-CONTRACT` typed events; payload repair ONCE in `dmFoldPayload`/`DM_EVENT_FIELDS` | never per-handler coercion |
+| DM transport (dev) | DM bridge mailbox (`dev/dm-bridge.py`, `src/world/dm.js`) | dumb mailbox; app applies events with its own mutators |
+
+## 2. Accepted design-level owners (ACCEPTED, unbuilt)
+
+| Fact family | Accepted owner | Ruled in |
+|---|---|---|
+| Site semantics (purpose, doctrine, history, obligations, ecology) | RoomProgram / purpose-family obligation programs | Waves 1-2 |
+| Spatial legality (cells, volumes, elevation, boundaries, zones, provenance) | `SpatialPlanV2` via the staged pipeline SpatialIntent → legality → `TacticalCompositionPlan` → `SurfaceAssemblyPlan` | Wave 3 P3.5 |
+| Connections, portals, secrets, vertical traversal, circulation | canonical `Connection` objects + traversal transactions + Secret Networks | Wave 4 (single subject authority) |
+| Furnishing, dressing, containers, touched state | hierarchical assemblies + tiered container truth + touched-dressing assertions | Wave 5 |
+| Bodies, capacity, participation, cast projection | `BodyForm` + typed activity-capacity envelopes + typed participation roles + player-contact `CastRoster` + Stub/Working/Developed ladder | Wave 6 |
+| Scene identity across modes | `SceneTray` contract + typed adapters + transactional `SceneLineage` handoffs | Wave 10 |
+| Exact tactical truth (future combat authority) | exact `SpatialPlan` cells on the BattleMat; zones/bands demote to derived fallback at cutover | Wave 10 §11.6-11.7 (F10.1e) |
+| Combat performance | EngagementLens — derived, receipt-consuming only | Wave 10 |
+| Promoted scene facts / DM invention | `SceneFactGraph` (index/transaction surface) + C0-C4 creation matrix + REPLAY/DERIVE/ROLL/PROPOSE/SYNTHESIZE lanes + P0-P4 precedent lifecycle | Wave 2 G2.1 |
+| Multi-actor crises | `CrisisChain` — thin orchestration graph over existing owners | Wave 2 G2.2 |
+| Crit resolution | `CheckContract` → `CritMandate` → `CritCascadePlan` → `ResolutionReceipt`; `TerminalDisposition` | Wave 2 §10.11.27-50 |
+| Land travel | one shared TravelWalk/SceneLineage contract; Fray/Spice authority reused, never duplicated | Wave 10 F10.9g |
+| Towns | bounded district graph + mounted real-roll venue grids | Wave 10 F10.9h |
+| Sparse persistence structure | one sparse canonical record per noun; typed refs; receipts; content-addressed dedup; separate narration; chunked persistence; scoped retrieval (codec = Wave 12) | Wave 6 §15.6 |
+
+## 3. Presentation and provider boundaries
+
+- **Projections own no facts.** BattleMat, EngagementLens, cards, maps, text views, audio, and DM
+  prose consume committed receipts. "The renderer never becomes the source of a fact"
+  (FOUNDATION §3). Renderer memory holds no gameplay state (Wave 10 P10.2).
+- **The DM (any provider) owns verbs and meaning, never nouns or numbers.** Engine rolls atoms
+  and owns every number; the DM interprets, narrates, connects, and — inside the earned
+  SYNTHESIZE envelope — authors identity/meaning that the engine compiles, validates, and
+  persists. "No consequential noun may exist only in prose" (Wave 2 G2.1.5).
+- **Provider input is proposals.** Propose → validate → commit/reject → narrate. An engine-
+  rejected event is never narrated as having happened (Wave 2 §10.11.25). AI-authored executable
+  code and prose-as-rules are forbidden (G2.1 compile law).
+- **The DM seat is provider-neutral.** One digest/tool/refusal contract for every supported
+  model; per-provider behavior differences may not alter world/mechanics outcomes (Wave 10
+  §11.83; `docs/SEAT-ADAPTER.md`).
+- **Recovery** replays no mechanics: canonical receipt cursor + terminal-state rebuild + recap
+  (Wave 10 F10.8c; C1F).
+
+## 4. Forbidden parallel authorities (name the collision, refuse it)
+
+1. **A second combat resolver.** EngagementLens, lens animation, or any view deciding movement/
+   reach/cover/LOS/damage. (Wave 10)
+2. **A second geometry generator for towns.** TownTray forks BattleMap's composition/surface
+   authority. (Wave 10 §11.90; ledger row "Shared procedural BattleMap/TownTray composition")
+3. **A second Fray/Spice curve** for travel, biomes, or anything else. Consumers tune separately;
+   the authority is single. (Wave 10 F10.9g; C2I)
+4. **A duplicate person/object store.** CastRoster or SceneFactGraph holding copies instead of
+   references. (Waves 2/6)
+5. **Narration as state.** Transcripts/prose as recovery authority or a second history. (Wave 6
+   §15.6; ledger)
+6. **Renderer-physics adjudication.** Physics/visuals deciding whether an action succeeded; TTRPG
+   action/DC resolution commits, renderer consumes. (Wave 3 P3.10 correction; Wave 6 P6.3)
+7. **Hand-edited generated artifacts.** `tables.js`, `data/*.js`, `dm-contract.json`,
+   `table-registry.md`, gauntlet reports — regenerate from source, never edit or hand-merge.
+   (CLAUDE.md)
+8. **Per-handler payload repair.** Normalization lives once at the contract boundary. (CLAUDE.md)
+9. **A second decision registry.** `docs/DESIGN.md` remains the chronological locked-decision
+   registry; [DECISION-INDEX.md](DECISION-INDEX.md) is its stable-id index, not a rival. Wave
+   records remain the semantic authority for their subjects; canon files route, they do not
+   re-decide.
+10. **Reactive difficulty scaling.** No system silently rescales because the player found a tool,
+    tactic, or cache. (Wave 1 §8.11; Wave 2 G2.1 counter law; `docs/DIFFICULTY.md`)
+
+## 5. Cutover law
+
+Where an ACCEPTED owner will replace a BUILT one (12-zone combat → exact cells; per-room door
+rolls → Connection records; current dungeon d200 → decomposed rollers + recipes; localStorage
+serialization → chunked persistence), the built system **keeps running and keeps its census
+protection** until Wave 12 authorizes the specific cutover with replacement proof (golden-beat
+preservation law, Wave 1 §8.11; PHASING-FRAMEWORK law 9: "the MVP floor is not a removal list").
+The IMPLEMENTATION-HOLD stands: nothing in this map authorizes a build.

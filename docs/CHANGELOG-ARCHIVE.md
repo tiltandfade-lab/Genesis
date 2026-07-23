@@ -14,6 +14,56 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-09 (sprite night) — fantasy realm sliced (896 sprites) + review tool + auto-scale + XL regen lane
+
+**Added**
+- **The whole fantasy realm + all PCs cut to production sprites** — 896 PNGs in `assets/sprites/`
+  (510 monsters / 75 NPCs / 75 animals / 20 kids / 216 PCs), sliced from Adam's ImageGen corpus at
+  `ui-sketches/sprite-sheets/` (183 source sheets). Padded sheets (ImageGen fills 5×5 grids) handled
+  by targeted crops; every sheet has a review contact sheet. **Corpus + cut sprites now COMMITTED**
+  (Adam's backup ruling — the "no git backup" risk is closed; `.gitignore` un-ignored them).
+- **`dev/sprite-review.py` + `dev/sprite-review.html`** — the sprite review tool (port 5179): browse
+  every cut sprite w/ registry tags; 7-band head-guide ladder w/ imperial heights (tiny 1′6″ →
+  titanic 36′) + a 6′ vector human silhouette on stage; per-sprite scale slider (0.1–8, titan range);
+  explicit **Save Changes** (no real-time writes; pass/fail fold in unsaved edits); pins; `flagged ⚠`
+  filter; writes `dev/model-qa/sprite-tags-overlay.json` directly (atomic) — no parser round-trips;
+  "regen registry" button folds rulings into `data/sprite-registry.js`.
+- **Auto-scale pass** — heights for all 896 sprites (PC species table deterministic; monsters/NPCs/
+  animals via estimation agents), `scale = head_ft/(6×plane)`: 852 applied, 410 flagged (`⚠` note:
+  height uncertain / art extends above head / clamped). Adam's rulings always win (6 skipped).
+- **Defringe pass in the slicer** (`defringe()` + `--defringe-dir`) — kills the universal magenta
+  halo (edge erode ×2 + edge-band despill; interior purples untouched). All 896 re-written in place.
+- **XL/titan/redo regen lane** (`build/gen-xl-regen-sheets.py`) — Adam's ruling: 9′+ creatures are
+  under-res at 25/sheet. Emits `dev/sprite-manifests/XL-REGEN-PROMPTS.md` (64 paste-ready blocks w/
+  anti-magenta-artifact rider: 24 titan solos ≥24′ · 39 XL 2×2 sheets = 155 creatures 9–24′ · 1 redo
+  sheet = 16 sub-9′ review fails) + `xl-regen-manifest.json` (original slugs — slices overwrite).
+  Tiers derive from Adam's own review-pass scales.
+- **`dev/sprite-manifests/REJECTS.md`** — generated regen shopping list (every `verdict:"fail"`
+  grouped by sheet w/ prompt source + cue + note); served at `/rejects` in the tool.
+
+**Changed**
+- `build/gen-sprite-registry.py` — DEFAULT_MANIFEST flipped fixture → real v2 manifest (the deferred
+  T2-integration flip); overlay now carries `scale`/`verdict`/`note` onto registry entries.
+- `src/ui/theater-boot.js` — billboard height × `entry.scale` (the heads-line-up calibration is
+  LIVE); `spriteEntryFor` skips `verdict:"fail"` (review-failed art falls through to 3D).
+  `verify-theater-sprites.mjs` +2 checks (12/0).
+- `build/slice-sprites.py` — `--manifest-path` override (regen lane); re-cut slugs still fail-ruled
+  print a re-review reminder (never silently cleared).
+
+**Fixed**
+- **Slicer wrote misassigned sprites on count-mismatch** (largest-N selection pulls blobs from
+  anywhere on a padded sheet; fantasy-monsters-21 proved it — tarrasque got invented row-5 art).
+  Fail path now QUARANTINES candidate crops under review/; production dir untouched.
+
+**Adam's review pass (first sitting):** 366 pass / 44 fail (fails mostly magenta bleed on big
+creatures — hence the regen lane).
+
+**Deferred**
+- `item` kind in the v2 parser/registry (13 fantasy item sheets + 571 item cells still unsliced).
+- Interior magenta-bleed auto-fix (legit purple art measures identical to bleed — review catches it).
+- Square-plane aspect: `buildSpriteBillboard` stretches non-square crops; revisit with an
+  aspect-correct plane sized off `tex.image`.
+
 ## 2026-07-09 (night) — Doc auto-archive rule + CI/token-discipline session close
 
 **Added**

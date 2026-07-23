@@ -3,7 +3,7 @@ type: design-doc
 branch: Genesis
 status: living
 created: 2026-06-17
-updated: 2026-07-18
+updated: 2026-07-22
 canonical: true
 related:
   - "[[genesis.html]]"
@@ -796,3 +796,27 @@ authority lives in section 10 of that file.
 | Creative precedent lifecycle and production posture | **P0-P4 layered learning accepted; best-case target first, production cut later.** Exact inventions remain persistent P0 world canon; P1 reproduction requires an in-world transmission path; canon-stripped evidence-backed P2 candidates may seek versioned P3 profile/product certification; rare proven patterns may become P4 core primitives through governed product work. The north-star semantic-invention platform, conceptual records/owners, declarative grammar, domain adapters, QA gates, hybrid-to-automation certification path, and conforming Slices A-E are sketched in `PROCEDURAL-DUNGEON-DIRECTION.md` section 10.G2.1.13. Implementation planning must reweigh value, schedule, latency, reliability, privacy, and infrastructure before authorizing a slice; production cuts may defer depth but may not silently redefine DM authorship or engine authority. No build is authorized. |
 | Shared SceneTray priority and revised execution order | **Promote Wave 10 to immediately after Wave 2.** The main release renderer is one simplified player-facing `SceneTray` grammar with typed adapters for dungeon/interior, town/social, wilderness/exploration, travel/map, and battle; combat reconfigures the established tray rather than creating an unrelated map. The promoted wave locks representation, spatial precision/uncertainty, composition budget, cross-mode continuity, camera, performance, beauty floor, and preserve/rewire/archive boundaries before Waves 3-9 optimize their semantic outputs. Simplification reduces generator complexity and scene breadth, not lighting, shadows, normal maps, materials, sprites, atmosphere, or beauty. The current full 3D diorama remains a feature-flagged laboratory/future renderer and is not deleted. No build is authorized. |
 | Next design position | Wave 2 is explicitly **CLOSED**. Promoted Wave 10 is **OPEN at F10.3r** after accepting tiered typed narrative opening authority. Decide simultaneous/conflicting openings and secret causes; Codex recommends a deterministic before/interrupt/after opening window ordered by explicit rule then source priority/tie die, sequentially committed and revalidated, with observable consequences shown but hidden provenance reveal-gated. Then settle crowded-ribbon overflow and neutral/third-party lens placement before closing inspector/feedback and resuming F10.6b plus remaining F10/P10/G10 branches. Do not begin Wave 3 or Fable design-to-spec. No implementation is authorized. |
+
+## Locked decisions (2026-07-22 — closed Waves 3-6 and canon/scope consolidation gate)
+
+This block supersedes the stale live-position row immediately above without deleting its historical checkpoint.
+Detailed semantic authority remains in the linked chronological wave records and phasing audits.
+
+| Decision | Choice |
+|---|---|
+| Closed procedural-design waves | **Waves 1-6 and promoted Wave 10 are explicitly CLOSED on their recorded phased bases.** Closure means their complete prospective/additive/generated question banks have accepted dispositions, contradiction/authority audits, retained proof -> playable MVP -> feature-goal mappings, named later owners, and promotion triggers. It does not claim implementation, evidence, CI, dependency admission, or release readiness. Current authority/index: `PROCEDURAL-DUNGEON-DIRECTION.md`; Wave 6 explicit closure: section 15.8. |
+| Wave 6 body/capacity/cast foundation | Preserve actual scale and the existing roughly 2,000-sprite sized corpus/height provenance/true-scale paths. One canonical versioned `BodyForm` relates D&D combat-control space to only needed anatomy/posture/support/reach/movement/load/visual provenance; typed activity capacity consumes canonical geometry/reservations; explicit SRD rules resolve first, ordinary DCs resolve consequential remaining uncertainty, and true blockage stays honest. Pre-alpha retains one advancing party scene with exact self-inert waiting companions for a PC-only crossing. Player contact promotes the same sparse CastRoster identity; semantic detail grows `Stub -> Working -> Developed` independently of active/site/cold and spatial precision, using structural compaction before a replaceable Wave 12 codec. Authority: Wave 6 sections 15.4-15.8. |
+| Canon and product-scope consolidation | **Fable may now perform the docs-only cross-repository canon/scope synthesis Adam requested.** It must create one routed modular canon, preserve chronological evidence and founder language, classify every remaining question, recover inherited answers, propose technical defaults, specify evidence gates, and reduce genuine founder choices. Ready assignment: `procedural-dungeon-direction/FABLE-CANON-AND-SCOPE-REFACTOR-PROMPT.md`. It may not implement, retire working systems, authorize a build, or silently close a wave. |
+| Next design position | The remaining subject waves are **7, 8, 9, 11, and 12**: seventy preserved P/G questions before generated follow-ups. They enter the Fable canon-and-scope pass in dependency order 7 -> 8 -> 9 -> 11 -> 12. Fable may draft proposed dispositions across all five; Adam's explicit agreement remains required to close each wave, and Wave 12 remains the final build-authorization gate. No implementation is authorized. |
+
+## Canon routing note (2026-07-22, later — the pass above executed; registry unchanged)
+
+The authorized Fable pass ran docs-only the same day. Its outputs route, they do not rule:
+**`docs/canon/README.md` is now the whole-game canonical front door** (precedence law +
+PRODUCT-SCOPE + SYSTEM-OWNERSHIP + DECISION-INDEX + QUESTION-COVERAGE + OPEN-QUESTIONS +
+GLOSSARY + DOCUMENT-MAP). This file remains exactly what it was — the chronological
+locked-decision registry (canon precedence tier 3); `canon/DECISION-INDEX.md` indexes it with
+stable ids and never re-decides. Waves 7-9/11-12 hold **PROPOSED** records
+(`procedural-dungeon-direction/wave-07 … wave-12`) awaiting Adam's founder Batch 1
+(`canon/OPEN-QUESTIONS.md`) and per-wave acceptance; no wave closed, no build authorized, and
+no locked decision above was altered by the pass.

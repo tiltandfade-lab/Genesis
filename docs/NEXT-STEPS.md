@@ -18,26 +18,35 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-22 — Waves 3-5 closed; Wave 6 open; resume P6.1-P6.10)
+## Do next (2026-07-22 later — canon pass EXECUTED; Adam's review packet is the gate)
 
-Wave 10 and Waves 3-5 are CLOSED on their recorded phased bases. Wave 6 is OPEN at section 15.2. No implementation
-or dependency admission is authorized by this design record.
+The Fable canon-and-scope pass ran docs-only on 2026-07-22. Waves 1-6/10 remain CLOSED; Waves
+7-9/11-12 now hold full PROPOSED records. Nothing closed, nothing built, nothing merged.
 
-1. ☐ **Re-present the corrected P6.1-P6.10 batch as easy numbers 1-10.** Explain A/B/C with concrete dungeon and
-   provider-neutral DM-seat examples; separate the no-cash MacBook Pro proof, playable MVP, and ideal feature goal;
-   identify costs; recommend B across all ten; and let Adam answer.
-2. ☐ **Start from the existing sprite corpus.** Genesis already has a roughly 2,000-sprite sized working corpus,
-   registry height provenance across thousands of entries, and live true-scale renderer paths. A small mixed-scale
-   cast is an integration/visual-QA slice, not new art bootstrap or a replacement corpus.
-3. ☐ Record Adam's answers and exhaust every material generated follow-up. Carry settled technical defaults without
-   ceremonially asking Adam for taste he has said he does not have, but surface genuine gameplay/presentation forks.
-4. ☐ Complete P6.11-P6.12/G6.1-G6.2, reconcile the Clay Proof Ladder and Feature-Promotion Ledger, then run the full
-   Wave 6 coverage, authority, contradiction, phasing, and generated-follow-up audit.
-5. ☐ Do not close Wave 6 until Adam explicitly agrees. Keep the global implementation hold active.
-6. ☐ Keep `Reference/FFT Battle Maps/` reference-only and untracked. The local S10 PDF remains indexed but ignored;
-   the tracked R1 Claude synopsis remains supplemental research evidence, not canon merely because it is retained.
-7. ☐ **FULL CI PENDING:** this fast checkpoint uses proportional docs/reference checks only. The final/evening close
-   owns the next complete CI-equivalent sweep, merge, push, and GitHub confirmation.
+1. ☑ **Close Wave 6 explicitly** (15.8; corpus/ledger protections intact).
+2. ☑ **Canon materialized:** `docs/canon/` — README (precedence law) · PRODUCT-SCOPE ·
+   SYSTEM-OWNERSHIP · DECISION-INDEX · QUESTION-COVERAGE · OPEN-QUESTIONS · GLOSSARY ·
+   DOCUMENT-MAP (census of ~290 docs + supersession map + health-debt register).
+3. ☑ **All five remaining waves drafted** in order 7→8→9→11→12 (wave-0N folders: README +
+   proposed dispositions + proposed phasing audit). Coverage: 26 INHERITED · 30 FABLE-PROPOSED
+   · 7 OPEN-ADAM · 6 EVIDENCE-GATED · 1 DEFERRED across the 70-question bank, +5 generated.
+4. ☑ **Ladder/ledger reconciled as proposals** (F8.1 pass, W7 archetype overlay, W9 soak
+   traces, F12.1 bakeoff fixture, new ledger rows) — apply only at Adam's acceptance.
+5. ☐ **ADAM: answer founder Batch 1** — `docs/canon/OPEN-QUESTIONS.md` (Q7-A, Q8-A, Q9-A,
+   Q9-B, Q11-A, Q12-A; ~6 easy A/B/C picks, recommendations marked).
+6. ☐ **ADAM: sweep the five wave records** (batch-accept ids / flag deep-dives / amend), then
+   close waves explicitly in dependency order 7 → 8 → 9 → 11 → 12.
+7. ☑ **Per-module three-horizon register** (Adam's ruling, same day): `docs/canon/
+   MODULE-PHASING.md` — proof/MVP/ideal for every game module, dungeon families ledger-routed;
+   "(proposed)" rows (ship-travel deferral chief among them) ride the same review as item 6.
+8. ☐ **Queued ops unit: DOCS-INDEX tooling** (`docs/DOCS-INDEX-TOOLING.md`, Adam approved the
+   direction 2026-07-22): DI-1 `gen-docs-index.py` → `docs-index.json` · DI-2 `check-docs.py`
+   linter (frontmatter/links/supersession/single-authority) · DI-3 stale-status cleanup sweep.
+   Execute at the next ops window, AFTER items 5-6 so the cleanup encodes those rulings.
+9. ☐ Keep `Reference/FFT Battle Maps/` reference-only and untracked; R1/R2 stay supplemental
+   research, never canon or dependency admission.
+10. ☐ **FULL CI PENDING:** this pass ran proportional docs/link checks only. The final/evening
+    close owns the CI-equivalent sweep, checkpoint/merge/push, and GitHub confirmation.
 
 ## Do next (2026-07-19 later — CI GREEN + Wave 1 landed; resume at open decision 3C)
 

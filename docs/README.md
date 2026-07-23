@@ -21,9 +21,12 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 
 | Looking for... | Go to |
 | --- | --- |
+| **The current ruling on anything (canonical front door)** | **`canon/README.md`** — precedence law, product scope, ownership map, decision index, question coverage, open founder questions, glossary, document map |
 | What to work on next / the live build queue | `NEXT-STEPS.md` (top section only — older queues archived in `NEXT-STEPS-ARCHIVE.md`) |
 | Orientation for a new session | `HANDOFF.md` |
-| Why a decision was made | `DESIGN.md` (locked decisions, dated) → then the linked spec |
+| Why a decision was made | `DESIGN.md` (locked decisions, dated) → `canon/DECISION-INDEX.md` for stable ids → then the linked spec |
+| Which document is current vs historical/superseded | `canon/DOCUMENT-MAP.md` (census + supersession map + health debt) |
+| Canon/scope consolidation assignment (executed 2026-07-22) | `procedural-dungeon-direction/FABLE-CANON-AND-SCOPE-REFACTOR-PROMPT.md` → output = `canon/` + PROPOSED wave-07…12 records awaiting Adam |
 | A subsystem's exact contract/behavior | the matching `type: system-spec` doc, listed below |
 | Realm identity / style / touchstone | `REALM-HOOKS.md` (current, re-keyed) — `data/realms.js` is the older baseline |
 | Creature stats, names, per-realm rosters | `data/bestiary.js` (SRD/global) · `dev/model-qa/realm-bestiary-draft.json` (per-realm, compiled from `REALM-BESTIARY-DRAFT.md`) |
@@ -35,6 +38,12 @@ Adam) can jump straight to the right doc instead of grepping/reading its way the
 | Something that used to be here | check `NEXT-STEPS-ARCHIVE.md` before assuming it's gone |
 
 ## Genres (the `type:` frontmatter taxonomy)
+
+**Canon** (`type: canon`) — the routed canonical front door (created 2026-07-22; the Fable
+canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/README.md`
+(precedence law) · `canon/PRODUCT-SCOPE.md` · `canon/SYSTEM-OWNERSHIP.md` ·
+`canon/DECISION-INDEX.md` · `canon/QUESTION-COVERAGE.md` · `canon/OPEN-QUESTIONS.md` ·
+`canon/GLOSSARY.md` · `canon/DOCUMENT-MAP.md`. Start here for "where is the current ruling?"
 
 **North star** (`type: design-guide`) — the dream, the look, and the ordered path; sits *above* the decision registry.
 

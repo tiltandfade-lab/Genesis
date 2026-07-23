@@ -14,6 +14,13 @@ compiles from (`build/gen-wiki.py` → `data/wiki.js`) — so keep it true; edit
 **Not** a decision log (that's `DESIGN.md`) and **not** a status snapshot (that's `HANDOFF.md`).
 This is the standing map: every system, what it is, how it works, where it lives.
 
+> **Canon routing note (2026-07-22):** this file maps the CURRENT implementation — evidence
+> tier 5 in the precedence law at `docs/canon/README.md`. The procedural-dungeon program
+> (Waves 1-6/10 closed; 7-9/11-12 proposed) has ACCEPTED design-level owners that are not yet
+> code (SpatialPlanV2, Connection objects, BattleMat exact cells, SceneLineage, BodyForm,
+> CastRoster, MutationOps …) — see `docs/canon/SYSTEM-OWNERSHIP.md` for the BUILT vs ACCEPTED
+> split and the cutover law. Nothing below is retired by those acceptances.
+
 ## The two spines & the through-line
 
 - **`manifest.json`** is the *code* spine — every module's id / path / owned globals / load order.

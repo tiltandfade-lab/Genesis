@@ -941,3 +941,25 @@ Design-wave size does not determine implementation-unit size. Each accepted ruli
 [Clay Proof Ladder](CLAY-PROOF-LADDER.md): first proof, playable MVP gate, ideal feature goal, and promotion evidence.
 Future wave audits report unmapped or ownerless goals explicitly. This traceability is additive to the preserved
 question/closure protocol and does not authorize implementation before Wave 12's final gate.
+
+## Live bookmark refresh (2026-07-22 — supersedes the §6 "Live bookmark" block above)
+
+The verbatim-migrated bookmark inside section 6 is preserved as historical text; the current
+position is:
+
+```text
+ALL 12 WAVES    CLOSED explicitly (W1 §8.21 · W2 §10.SWEEP.8 · W10 §11.132 · W3 §12.15 ·
+                W4 §13.10 · W5 §14.9 · W6 §15.8 · W7 §16.7 · W8 §17.7 · W9 §18.7 ·
+                W11 §19.7 · W12 §20.7 — founder-review session 2026-07-22/23)
+THE PROGRAM     DESIGN-COMPLETE. Implementation remains UNAUTHORIZED — Q12-B (wave-12
+                P12.12) is the single reserved gate; its checklist is visible at §20.2
+DONE 2026-07-22/23 founder Batch 1 ANSWERED (Q7-A B · Q8-A B · Q9-A B · Q9-B B · Q11-A B ·
+                Q12-A A); five waves swept in plain language + explicitly closed; 10
+                follow-ups tracked (F7.1-3 · F8.1-2 · F9.1-3 · F11.1 · F12.1); GEN-PROD-7
+                no-dark-patterns law; ship-travel deferral CONFIRMED w/ phased sketch
+                (MODULE-PHASING); DI tooling DEFERRED w/ re-scope precondition;
+                Lost-World realm-order leaning recorded (OPEN-QUESTIONS Batch 2)
+PENDING NOW     nothing in this program until Q12-B's checklist greens (recovery package,
+                gate matrix for slice 1, budgets) or Adam explicitly reopens a subject
+COVERAGE        every id mapped in docs/canon/QUESTION-COVERAGE.md
+```

@@ -48,13 +48,13 @@ No build is authorized by this discovery record.
 | 3 | Architecture, Structural Stamps, and Degradation | **CLOSED** | [Wave 3 index](procedural-dungeon-direction/wave-03/README.md) |
 | 4 | Portals, Secrets, Vertical Connections, and Circulation | **CLOSED** | [Wave 4 index](procedural-dungeon-direction/wave-04/README.md) |
 | 5 | Furniture Assemblies, Dressing, Clutter, and Empty Rooms | **CLOSED** | [Wave 5 index](procedural-dungeon-direction/wave-05/README.md) |
-| 6 | Creature Scale, Capacity, Squeezing, and Party Participation | **OPEN — CURRENT** | [Wave 6 index](procedural-dungeon-direction/wave-06/README.md) |
-| 7 | Tactical Affordances and Encounter Reshaping | Unopened | Create when opened |
-| 8 | Mutable and Destructible Environments | Unopened | Create when opened |
-| 9 | DM Strategic Cards and Environmental Authority | Unopened | Create when opened |
+| 6 | Creature Scale, Capacity, Squeezing, and Party Participation | **CLOSED** | [Wave 6 index](procedural-dungeon-direction/wave-06/README.md) |
+| 7 | Tactical Affordances and Encounter Reshaping | **CLOSED** (founder review 2026-07-22, §16.7) | [Wave 7 index](procedural-dungeon-direction/wave-07/README.md) |
+| 8 | Mutable and Destructible Environments | **CLOSED** (founder review 2026-07-22, §17.7) | [Wave 8 index](procedural-dungeon-direction/wave-08/README.md) |
+| 9 | DM Strategic Cards and Environmental Authority | **CLOSED** (founder review 2026-07-22, §18.7) | [Wave 9 index](procedural-dungeon-direction/wave-09/README.md) |
 | 10 | Interim Visual Engine and Release Scope | **CLOSED** | [Wave 10 index](procedural-dungeon-direction/wave-10/README.md) |
-| 11 | Workbench, Clay Corpus, and Teaching Loop | Unopened | Create when opened |
-| 12 | Migration, Persistence, Acceptance Gates, and Build Order | Unopened | Create when opened |
+| 11 | Workbench, Clay Corpus, and Teaching Loop | **CLOSED** (founder review 2026-07-22, §19.7) | [Wave 11 index](procedural-dungeon-direction/wave-11/README.md) |
+| 12 | Migration, Persistence, Acceptance Gates, and Build Order | **CLOSED** (founder review 2026-07-23, §20.7; Q12-B reserved — no build authorized) | [Wave 12 index](procedural-dungeon-direction/wave-12/README.md) |
 
 ### Current live position
 
@@ -110,7 +110,49 @@ No build is authorized by this discovery record.
   inherited true-scale/domain/guise/party laws, explicitly starts from the existing roughly 2,000-sprite sized
   working corpus, and names the current scalar-domain, squeeze-hand-wave, shared-body-contract, and missing-
   CastRoster seams. Section 15.2 presents the first easy-numbered ten-question batch; P6.11-P6.12/G6.1-G6.2 remain
-  queued rather than omitted.
+  queued rather than omitted. Section 15.3 retains and dispositions supplemental tactics-tutorial research R2,
+  protects the accepted visual/composition/mechanics owners, and routes later exact-cell query/preview evidence
+  without changing any P6.1-P6.10 option or creating a promotion-ledger obligation. Section 15.4 accepts Option B
+  across P6.1-P6.10 with current D&D/SRD size-space reconciliation, typed capacity over prior reservations, SRD-first
+  DC-based constrained movement, provenance-first scale domains, a one-lineage self-inert waiting-party seam for
+  PC-only crossings, player-contact CastRoster promotion, and partial proof/ledger mapping. The remaining
+  P6.11-P6.12/G6.1-G6.2 batch advances at section 15.5 as easy questions 1-4 with Option B recommended for governed
+  true-scale projection, incremental retained evidence, a reference-based player-contact CastRoster, and typed
+  cooperative aggregation. Section 15.6 accepts Option B across all four, recovers actual-scale and light-contact-
+  stub precedent, and retains a simple `Stub` -> `Working` -> `Developed` semantic-depth ladder independent of
+  active/site/cold activation and spatial precision. Structural compression uses one sparse canonical record,
+  references instead of copies, current truth plus typed receipts, deduplicated immutable payloads, separate
+  narration, chunked persistence, and scoped retrieval; measured codec choice remains with Wave 12. Section 15.7
+  and the [Wave 6 phasing audit](procedural-dungeon-direction/wave-06/PHASING-AUDIT.md) reconcile the complete bank,
+  generated follow-ups, authority, contradictions, Clay Proof Ladder, Feature-Promotion Ledger, and prototype/MVP/
+  ideal allocation with no current material gap. Section 15.8 records Adam's explicit Wave 6 closure. The five
+  remaining subject waves—7-9 and 11-12—now enter the requested Fable canon-and-scope consolidation pass before
+  ordinary sequential interviews; the pass may recover inherited answers and propose dispositions, but no later
+  wave closes without Adam's explicit agreement.
+- **2026-07-22 (later), the Fable canon-and-scope pass:** the requested consolidation ran
+  docs-only. The whole-game canonical front door now lives at [docs/canon/README.md](canon/README.md)
+  (precedence law, product scope, system ownership, decision index, complete question coverage,
+  open founder questions, glossary, document map); this file remains the dungeon-program front
+  door beneath it. Waves 7, 8, 9, 11, and 12 received full proposed-disposition records and
+  proposed phasing audits (wave-07 … wave-12 folders): across the seventy preserved bank
+  questions — 26 INHERITED recoveries, 30 FABLE-PROPOSED technical defaults, 6 EVIDENCE-GATED
+  items with named instruments, 1 explicit deferral with owner/trigger, and 7 genuine founder
+  items (Q7-A, Q8-A, Q9-A, Q9-B, Q11-A, Q12-A askable now; Q12-B reserved), plus generated
+  F7.1/F8.1/F9.1/F11.1/F12.1. The founder packet is
+  [docs/canon/OPEN-QUESTIONS.md](canon/OPEN-QUESTIONS.md) Batch 1. Every remaining wave stayed
+  OPEN/PROPOSED at that pass — closure required Adam's explicit agreement.
+- **2026-07-22/23, the founder-review session (Fable chairing, Adam ruling): THE PROGRAM
+  DESIGN-CLOSED.** Adam answered all six Batch-1 founder questions (Q7-A B · Q8-A B · Q9-A B ·
+  Q9-B B · Q11-A B · Q12-A A), then swept each remaining wave in plain language and closed it
+  explicitly: W7 §16.7 · W8 §17.7 · W9 §18.7 · W11 §19.7 · W12 §20.7. Sweep rulings bound
+  riders (the hand floor, harness-first/loosen-by-evidence, no-plot-armor offscreen, the
+  three-tier worlds, never-brick essential, performance-layer freedom) and minted ten tracked
+  follow-ups (F7.1-3 · F8.1-2 · F9.1-3 · F11.1 · F12.1) plus the GEN-PROD-7 no-dark-patterns
+  law. All pending Clay-Pass and ledger additions are BOUND/applied. Ship-travel's deferral
+  was confirmed with a phased sketch (MODULE-PHASING); DI tooling deferred with a re-scope
+  precondition; the Lost-World realm-order leaning recorded (OPEN-QUESTIONS Batch 2). **All
+  twelve waves are now design-closed. No implementation is authorized — Q12-B (wave-12
+  P12.12) remains the single reserved gate.**
 - Adam accepted the cross-wave prototype/MVP delivery reframe on 2026-07-21. The
   [Clay Proof Ladder](procedural-dungeon-direction/CLAY-PROOF-LADDER.md) and
   [Feature-Promotion Ledger](procedural-dungeon-direction/FEATURE-PROMOTION-LEDGER.md) organize revised cuts for
@@ -264,7 +306,7 @@ Existing documents may still cite this path plus a legacy section number. Use th
 | 12-12.15 | [Wave 3 record](procedural-dungeon-direction/wave-03/01-questionnaire-and-triage.md) |
 | 13-13.10 | [Wave 4 record](procedural-dungeon-direction/wave-04/01-questionnaire-and-triage.md) |
 | 14-14.9 | [Wave 5 record](procedural-dungeon-direction/wave-05/01-questionnaire-and-triage.md) |
-| 15-current | [Wave 6 record](procedural-dungeon-direction/wave-06/01-questionnaire-and-triage.md) |
+| 15-15.8 | [Wave 6 record](procedural-dungeon-direction/wave-06/01-questionnaire-and-triage.md) |
 
 ## File-growth rule
 

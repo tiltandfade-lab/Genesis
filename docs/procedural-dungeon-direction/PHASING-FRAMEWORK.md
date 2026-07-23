@@ -2,7 +2,7 @@
 type: design-study
 status: DISCOVERY
 created: 2026-07-21
-updated: 2026-07-21
+updated: 2026-07-22
 scope: cross-wave prototype and MVP phasing
 ---
 
@@ -132,6 +132,9 @@ must name the unresolved phasing question.
 - [Wave 1 phasing audit](wave-01/PHASING-AUDIT.md)
 - [Wave 2 phasing audit](wave-02/PHASING-AUDIT.md)
 - [Wave 3 phasing audit](wave-03/PHASING-AUDIT.md)
+- [Wave 4 phasing audit](wave-04/PHASING-AUDIT.md)
+- [Wave 5 phasing audit](wave-05/PHASING-AUDIT.md)
+- [Wave 6 phasing audit](wave-06/PHASING-AUDIT.md)
 - [Wave 10 phasing audit](wave-10/PHASING-AUDIT.md)
 
 These audits classify decision families rather than rewriting every historical answer. The chronological wave

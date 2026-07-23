@@ -372,3 +372,92 @@ suburbs, or cars, or stuff like that right." → Recorded as a leaning, not a lo
 World leads the second-realm candidates on asset-transition economics** (wilderness/dungeon
 texture sharing; no modern kit to build). The decision itself is reserved to Adam at
 expansion planning — carried in canon OPEN-QUESTIONS Batch 2.
+
+## 20.8 P12.12 checklist greening — 2026-07-23 (Fable gate session; mechanical, authorizes nothing)
+
+Executed per `docs/procedural-dungeon-direction/FABLE-Q12B-GATE-SESSION-PROMPT.md`. Every box
+of the P12.12 checklist, with evidence; this section makes Q12-B *askable* — it does not fire
+it. Adam's ruling, when it comes, gets its own dated section.
+
+1. **Every wave's dispositions accepted — GREEN.** Waves 1-6/10 closed in their records;
+   W7 §16.7 · W8 §17.7 · W9 §18.7 · W11 §19.7 · W12 §20.7 (2026-07-22/23 founder review).
+   QUESTION-COVERAGE: "The single reserved item is Q12-B (P12.12)."
+2. **The OPEN-ADAM batch resolved — GREEN.** Founder Batch 1 discharged (Q7-A B · Q8-A B ·
+   Q9-A B · Q9-B B · Q11-A B · Q12-A A, LOCKED) + GEN-PROD-7 no-dark-patterns law. Canon
+   OPEN-QUESTIONS Batch 2 holds only future-window decisions (e.g. realm order at expansion
+   planning); none gates the slice.
+3. **Recovery-package gate executed — GREEN; the restore drill PASSED.** Tag
+   `pre-redesign-2026-07-23` at `6ed2473d`; verified all-refs bundle (sha256 `fddaddf9…`);
+   LFS-complete materialized zip (sha256 `fcc98350…`, 8,089/8,089 LFS payloads real);
+   manifests; drill = archive-only restore → check-manifest OK → served → title screen +
+   creator flow live, zero console errors. Full evidence:
+   `STAGE-0-RECOVERY-EVIDENCE-2026-07-23.md`. Outstanding by law: W1 §8.14.1 item 6
+   (tag push + Drive upload) awaits Adam's explicit authorization.
+4. **Slice-1 gate matrix defined — GREEN.** `SLICE-1-GATE-MATRIX.md`: per-pass C1A→C1G
+   gates typed BLOCK/WARN under P12.9's typing law, standing gates, founder riders,
+   migration rider.
+5. **Budgets within the no-cash ceiling — GREEN.** The slice's marginal cost is $0 in
+   services (local compute, existing subscriptions/CI); GEN-LAW-9 untouched (matrix §6).
+6. **Rights/privacy posture chosen — GREEN.** Q12-A LOCKED at A (local-first, zero
+   telemetry, explicit-export sharing); GEN-PROD-7 binds above it.
+7. **No ownerless goal — GREEN.** Ledger sweep 2026-07-23: 61/61 rows carry a named
+   destination + trigger. Single flag inspected and kept as-is: F7.2's em-dash MVP-gate cell
+   is the honest non-applicability disposition of a deferred founder vision (its goal,
+   trigger, and owner are all named in the row) — not mechanically patched, per the
+   validator law.
+8. **Reopen triggers named — GREEN.** Any build-reality contradiction with a closed wave
+   reopens that wave explicitly (named contradiction, dated section) before code lands on
+   that subject (matrix §7).
+
+**Erratum recorded (label gloss, no reopen):** P12.10 step 1's parenthetical compresses the
+DM seat and save/recovery into the "C1C/C1D" labels; the ladder — the pass-id authority —
+holds the seat at C1G and save/recovery at C1F. The slice Q12-B names is therefore Stage 1 =
+C1A→C1G (the six FEATURE-PRIORITIZATION §3 features); the four glossed systems are all in
+it. Details: SLICE-1-GATE-MATRIX §1.
+
+## 20.9 Q12-B FIRED — 2026-07-23 (Adam; the implementation hold lifts for Stage 1 ONLY)
+
+With the §20.8 checklist green, the gate was presented in plain English with eight
+pre-implementation calls (each with a stated default, per the assumption law). **Adam answered
+all eight decisively in one message; under his standing decisive-answers doctrine ("when Adam
+resolves every open spec question concretely in one message, that's the build signal"), this
+fires Q12-B.** His answers, verbatim:
+
+> 1. yes, that's fine. how is it lit? i mean we already have a decent lighting system, I
+>    don't see why we would downgrade that just to meet some arbitrary "ugly." What I do want
+>    to see is the clay room running at full resolution of my macbook. lets get two lights at
+>    two dif temps on opposing sides of the room and a low intensity ambient light
+> 2. This is a decent cast
+> 3. yes, sonnet in the bridge is fine
+> 4. yes
+> 5. yes
+> 6. yes
+> 7. yes
+> 8. yes
+
+**The authorized slice (and nothing else):** Stage 1 of FEATURE-PRIORITIZATION §3 — the
+connected spine in one retained clay room, ladder passes C1A→C1G, the six Stage-1 features,
+ending at the felt milestone (Adam plays the C1D room fight, saves, quits, reloads, and it is
+all still true). C1H+ / C2+ / all other stages remain under the implementation hold.
+
+**Founder riders recorded from the firing message:**
+- **The clay-lighting rider (P12.12-R1):** clay ≠ downgraded lighting. The clay room renders
+  through the existing production lighting system at the MacBook's full native resolution,
+  staged with two lights at two different color temperatures on opposing sides of the room
+  plus one low-intensity ambient light. "Ugly" licenses grey untextured forms — never a
+  degraded renderer.
+- **Fixture cast confirmed:** 5×5 clay room · one door · one crate · duel = human guard vs
+  goblin · mixed-size pair = goblin + ogre (all SRD).
+- **DM seat for slice-1 tests + milestone: Sonnet in the bridge**; fallback paths exercised
+  synthetically.
+- Placement (dev-flagged beside the live game), no migration of Adam's existing browser
+  worlds, minimal open-dice surface, the three-checkpoint review cadence, and the bridge-run
+  milestone — all confirmed at their defaults.
+- **Front-end/back-end gate split (P12.12-R2, from this session):** Claude owns the back-end
+  gate with machine-measurable pass receipts; **Adam is the front-end gate** — Claude never
+  declares a visual "on"; capture packets carry only countable claims; Adam-approved captures
+  become machine-diffed goldens. Encoded in `.claude/skills/genesis-clay-pass/SKILL.md`.
+
+**Still open (not blocking the build):** W1 §8.14.1 item 6 — pushing the recovery tag/branch
+to GitHub and uploading the recovery archives to Google Drive await Adam's explicit word;
+until then every artifact stays local.

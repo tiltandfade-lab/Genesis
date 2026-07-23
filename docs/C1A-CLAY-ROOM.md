@@ -207,4 +207,7 @@ completely broken."
   previous room, side room, secret room etc..." → This IS W4's canonical-connection owner +
   W8's DMG door/material catalog; the C1B spec builds the typed door catalog (data) + the
   connection record owning placement/state, renderer as pure projection, hinge law per THE
-  DOOR CONTRACT (D12b).
+  DOOR CONTRACT (D12b). Catalog entries additionally carry a **swing-clearance volume**
+  (the door's 90-180° arc) consumed by furnishing/prop placement as a blocked zone
+  (rides C1J's protected-circulation contract; adopted 2026-07-23 from Adam's
+  architecture review).

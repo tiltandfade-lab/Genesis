@@ -1,7 +1,7 @@
 ---
 type: gate-evidence
-status: STAGE 0 EXECUTED 2026-07-23 — restore drill PASSED; external upload (W1 §8.14.1
-  item 6) awaiting Adam's authorization
+status: STAGE 0 COMPLETE 2026-07-23 — restore drill PASSED; Drive migration EXECUTED +
+  verified (double cloud copies); GitHub push rides the clean close
 created: 2026-07-23
 owner: wave-12 P12.12 checklist, box 3 (recovery package) / source law W1 §8.14.1
 ---

@@ -47,11 +47,14 @@ Unclear calls surface to Adam BEFORE code: batch them ≤10, plain English, ids 
    fixtures where the pass owns them · leak checks (world-tier + zero-telemetry) ·
    `check-manifest.py` · the jsdom CI sweep. Output: a one-page **pass receipt** listing every
    check that ran with links to evidence. This is the proof Adam signs off on for the back end.
-4. **Capture packet** (any pass with a visual surface) — fixed-camera captures (+ short
-   recording if motion matters) plus a **countable checklist**: only assertions Adam can
-   verify against pixels ("count 6 cells between goblin and door", "HP reads 4/11", "the lens
-   shows the same two figures as the board"). No aesthetic claims. Adam rules ON/OFF;
-   his redlines become fixtures (the W11 teaching loop).
+4. **Capture packet** (any pass with a visual surface) — capture FILES on disk (committed to
+   the retained corpus, never only inline in chat), plus a **plain-English cover**: for every
+   image, one short paragraph of "what this proves" in human words BEFORE any countable
+   claims — no registry-speak, no untranslated ids (Adam's 2026-07-23 packet-#1 ruling: "none
+   of this stuff makes any sense in plain english"). Then the countable checklist: only
+   assertions Adam can verify against pixels ("count 6 cells between goblin and door", "HP
+   reads 4/11"). If several shots share one scene, say plainly what VARIES between them. No
+   aesthetic claims. Adam rules ON/OFF; his redlines become fixtures (the W11 teaching loop).
 5. **Mint goldens** — captures Adam approved become regression goldens; from then on, drift
    from a golden is machine-detected (pixel/scene-graph diff), so his re-review is only needed
    when the picture is *supposed* to change.

@@ -170,3 +170,19 @@ D4 mechanism + effective ambient/light values · per-check pass/fail with the ha
 tail · which checks you proved red first (with the red output) · full-sweep baseline vs after ·
 deviations/uncertainties explicitly. Do not claim green you did not personally run; do not
 claim any visual quality.
+
+## Addendum D12 — founder redlines from capture packet #1 (Adam, 2026-07-23; law)
+
+Adam's packet-#1 ruling, verbatim: "i need a semi-transparent grid overlaying the seams of the
+tiles" · "i can't tell if that door is supposed to be open or closed or if it's just janky and
+completely broken."
+
+- **D12a seam grid:** semi-transparent grid (opacity 0.25–0.35, neutral, just above the floor)
+  at every cell boundary, derived from `record.dims` + the floor's own cell math — never
+  hardcoded counts. Permanent fixture of the clay surface.
+- **D12b legible closed door:** `portal.state: "closed"` joins the record; prose twin says
+  "— the door is closed."; render = jambs + lintel + inset door leaf in distinct flat greys.
+  A glance must read "closed door," never "broken geometry."
+- **D12c packet format law (process):** every capture packet leads with plain-English
+  "what this proves" per image — no registry-speak, no untranslated ids. Adopted into
+  `.claude/skills/genesis-clay-pass/SKILL.md` the same day.

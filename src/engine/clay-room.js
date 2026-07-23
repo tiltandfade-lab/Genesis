@@ -137,7 +137,13 @@ function clayRoomRecordFrom(seed){
 
   // Portal: north edge, the middle north cell (c-2-0) — that cell is ALSO a north wall cell
   // (w-n-2, above), so "portal on the north edge at a wall cell" (check 2) holds by construction.
-  var portal = Object.freeze({ id: "portal-c1a", edge: "n", cell: clayCellId(2, 0) });
+  // D12b (Adam's founder redline, capture packet #1, 2026-07-23 — "i can't tell if that door is
+  // supposed to be open or closed or if it's just janky and completely broken"): the record now
+  // carries an explicit `state` fact so the door's rendered pose is a PROJECTION of a canonical
+  // fact, never an unstated default a render layer has to invent. C1A only ever authors "closed"
+  // (this fixture room has no state-change verb yet — that's C1B+ scope); record stays version 1
+  // (an added field, not a shape-breaking migration).
+  var portal = Object.freeze({ id: "portal-c1a", edge: "n", cell: clayCellId(2, 0), state: "closed" });
 
   // Crate: an interior cell, distinct from the portal cell and the citizen cell below.
   var object = Object.freeze({ id: "obj-crate-c1a", kind: "crate", cell: clayCellId(3, 2) });
@@ -197,7 +203,7 @@ function clayRoomProse(record){
   var edgeCounts = { n: 0, s: 0, e: 0, w: 0 };
   (record.walls || []).forEach(function(w){ if(edgeCounts[w.edge] != null) edgeCounts[w.edge]++; });
   lines.push("Walls run the full perimeter: " + edgeCounts.n + " north, " + edgeCounts.s + " south, " + edgeCounts.e + " east, " + edgeCounts.w + " west segments.");
-  lines.push("Portal " + record.portal.id + " sits on the " + record.portal.edge + " edge at cell " + record.portal.cell + ".");
+  lines.push("Portal " + record.portal.id + " sits on the " + record.portal.edge + " edge at cell " + record.portal.cell + " — the door is " + record.portal.state + ".");
   lines.push("A crate (" + record.object.id + ") sits at cell " + record.object.cell + ".");
   lines.push("A goblin citizen (" + record.citizen.id + ") stands at cell " + record.citizen.cell +
     ", " + record.citizen.bodyForm.worldHeight + " ft tall (height source: " + record.citizen.bodyForm.heightSource + ").");

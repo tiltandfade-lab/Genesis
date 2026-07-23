@@ -14369,6 +14369,15 @@ const CLAY_WALL_THICKNESS = 0.12;   // order-of-magnitude match to ITR_PORTAL_DE
 // data, no THREE.
 const CLAY_EDGE_OFFSET = { n: { ox: 0, oz: -0.5 }, s: { ox: 0, oz: 0.5 }, w: { ox: -0.5, oz: 0 }, e: { ox: 0.5, oz: 0 } };
 
+// D12b-corrected: record.portal.edge -> the production kitDoors "widthAxisIsZ" field (theater-
+// interior.js's own itrDoorWidthAxisIsZ, :399-405 — "nearer E/W WALL run -> width axis X (false);
+// nearer N/S WALL run -> width axis Z (true)"), collapsed to a direct edge read since a portal on
+// this record's own n/s edge always sits in a straight east-west wall run (width axis X, false) and
+// a portal on the w/e edge always sits in a straight north-south wall run (width axis Z, true) — no
+// multi-cell wall-run scan needed (this record carries no SPATIAL_CELL `plan` grid to scan; see the
+// kitDoors wiring note in clayRoomBoardDataFrom below for why this field exists at all).
+const CLAY_PORTAL_WIDTH_AXIS_IS_Z = { n: false, s: false, w: true, e: true };
+
 // clayRoomBoardDataFrom(record) -> a setInteriorBoard(data)-shaped board object (theater-interior.js's
 // own interiorBuildBoard OUTPUT shape, that function's own header docstring) — authored DIRECTLY off
 // the record's own 25-cell grid rather than run through interiorBuildBoard itself (that function
@@ -14417,9 +14426,58 @@ function clayRoomBoardDataFrom(record){
     color: CLAY_GREY
   }] : [];
 
+  // D12b-corrected (Adam's founder redline, capture packet #1, 2026-07-23, plus the orchestrator's
+  // re-gate — verbatim door contract: "at it's root it is an extruded rectangle exactly the same
+  // way a wall is, except it hinges outward on a fixed axis on one of it's corner vertices"): that
+  // IS interiorBuildInteractableDoorMesh's own prism leaf, byte-for-byte (theater-boot.js ~4209-
+  // 4279 — an ExtrudeGeometry built from itrDoorShape's rectangle, geo.translate re-anchors the
+  // local origin onto the hinge jamb edge, hinge.rotation.y is the swing) — so the fix is NEVER a bespoke leaf mesh
+  // here, only registering the portal so the REAL builder chain reaches it: data.interactables
+  // (archetype:"door") -> interiorBuildInteractables (theater-boot.js:4335) ->
+  // interiorBuildInteractableDoorMesh. `state` now reads record.portal.state (D12b instruction 1)
+  // instead of a hardcoded literal — the render is a projection of the canonical fact, never a
+  // second, independently-typed "closed".
   const interactables = portalCell ? [{
-    archetype: "door", x: portalCell.x, y: portalCell.z, state: "closed",
+    archetype: "door", x: portalCell.x, y: portalCell.z, state: record.portal.state,
     sourceRef: record.portal.id, slug: record.portal.id
+  }] : [];
+
+  // D12b-corrected, continued — "provide the minimal plan fields that builder needs" rather than
+  // re-derive/re-model: interiorBuildInteractableDoorMesh's PRISM leaf picks its own swing axis by
+  // scanning S.interiorFloorTopMap for floor at this cell's east/west neighbors (theater-boot.js
+  // ~4238-4239, `ew`) — a heuristic built for a CORRIDOR-THRESHOLD door cell (a real dungeon plan
+  // never floor-codes the door cell's own flanking wall-run neighbors; only a genuine east-west
+  // corridor floors both of them). This record's floor is authored per-CELL over the room's own
+  // full interior — every one of the 25 cells, INCLUDING the two cells flanking this portal along
+  // its own wall row (c-1-0/c-3-0), is legitimate interior floor (src/engine/clay-room.js's own D6
+  // header: an edge-trim wall model, not a wall-as-grid-cell model) — so that scan always finds
+  // floor on both sides regardless of which edge the portal actually sits on, and always concludes
+  // "east-west corridor". A genuine, reproducible misread for this record's topology (most likely
+  // Adam's "is it open, closed, or just broken" read on capture packet #1), not a fluke.
+  //
+  // The one real per-entry override the production door builder DOES expose for this exact decision
+  // is `data.kitDoors` (theater-interior.js's own sibling field to `data.instances`, KS-2 —
+  // itrKitDoorMap/interiorBuildKitDoorMesh, theater-boot.js:4136-4169 called via
+  // interiorBuildInteractables:4340): a {x,z,widthAxisIsZ} entry lets the door mount the full
+  // production kit assembly (frame + leaf on its own modeled hinge socket) at the CORRECT axis —
+  // CLAY_PORTAL_WIDTH_AXIS_IS_Z (this file, above) derives it the same way itrDoorWidthAxisIsZ
+  // resolves it (theater-interior.js:399-405), collapsed to a direct edge read since this record's
+  // own D6 authoring already KNOWS the portal sits in a straight, unambiguous run of its own edge —
+  // never a re-implementation of that function's multi-cell wall-run scan (this record carries no
+  // SPATIAL_CELL `plan` grid for such a scan to run over).
+  //
+  // UNREACHABLE FIELD (reported per the correction, not silently worked around): the PRISM fallback
+  // branch — the geometry that actually renders for however long the kit's async donor-piece
+  // template takes to warm, mountClayRoom's own first paint included — reads NO entry/kitDoors
+  // field for this decision at all; its `ew` scan (theater-boot.js ~4238-4239) is unconditional and
+  // self-computed from floorTopMap on every call, so this record's topology cannot be signaled to
+  // it through any input the board-data shape exposes. kitDoors is the only reachable override, and
+  // it only takes effect once kitDoorTemplateFor's donor-piece fetch resolves
+  // (interiorBuildKitDoorMesh, theater-boot.js:4136-4138) and the async "re-run the last board"
+  // replay (donorTemplateFor's own .then(), theater-boot.js:4029) fires.
+  const kitDoors = portalCell ? [{
+    x: portalCell.x, z: portalCell.z, widthAxisIsZ: CLAY_PORTAL_WIDTH_AXIS_IS_Z[record.portal.edge],
+    pack: "kenney-modular-dungeon-kit", slug: "gate-door"
   }] : [];
 
   const objectCell = cellById[record.object.cell];
@@ -14450,6 +14508,7 @@ function clayRoomBoardDataFrom(record){
     focusRect: bounds,
     instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: [] },
     interactables: interactables,
+    kitDoors: kitDoors,
     furniture: furniture,
     pieces: pieces
   };
@@ -14509,6 +14568,66 @@ function clayRoomFlattenFurniture(){
   });
 }
 
+// ─── D12a (Adam's founder redline, capture packet #1, 2026-07-23 — verbatim: "i need a semi-
+// transparent grid overlaying the seams of the tiles") ───────────────────────────────────────────
+// A semi-transparent THREE.LineSegments grid drawn exactly on every cell BOUNDARY of the record's
+// own floor — a visual truth aid, never a second source of cell geometry. Line COUNT is derived
+// FROM record.dims, never a hardcoded literal: (w+1) lines running along Z (one per x-boundary,
+// x=0..w) + (d+1) lines running along X (one per z-boundary, z=0..d) — exactly the spec's own
+// "(w+1)+(d+1) lines". Origin/cell-size math mirrors the SAME law the floor itself renders through:
+// cell size = 1 world unit = 5 ft (GRID LAW), origin = S.boardOrigin (setInteriorBoard's own
+// (minX+maxX)/2,(minZ+maxZ)/2 — the EXACT cx/cz every floor/wall/doorframe instance already
+// subtracts, interiorBuildInstancedMesh's own position.set line, this file ~8097) — read LIVE off S
+// rather than re-derived, so the grid can never drift from wherever the floor actually mounted; a
+// record.dims-only fallback (== the SAME (w-1)/2,(d-1)/2 setInteriorBoard would compute for this
+// record's own bounds) covers a harness/edge case where S.boardOrigin hasn't been set yet. y sits
+// just above the floor's own TOP surface via interiorFloorTopAt (the SAME derived-never-hand-tuned
+// law every other floor-contact mount in this file already uses) plus a small clearance
+// (CLAY_GRID_CLEARANCE, matching f1BuildCombatGrid's own +0.01 decal-clearance convention, this
+// file ~10411) — enough to clear z-fighting without visibly floating. LineBasicMaterial (linewidth
+// is capped at 1 on most GL backends — accepted per spec, never fought with a fatter-line shader).
+// depthWrite:false (this file's own standard transparent-decal pairing) keeps it from corrupting
+// the depth buffer other transparent draws (the citizen's sprite billboard) test against; a
+// renderOrder BELOW the scene default (0) draws it EARLY in the transparent queue so it composites
+// under later-drawn transparent geometry ("under the figures/objects", D12a), while ordinary
+// depth-tested opaque geometry (walls, the crate, the door) still correctly occludes it via the
+// normal depth test regardless of renderOrder. Added directly to S.scene (never as a child of
+// S.interiorGroup) so setInteriorBoard's own clearGroup(S.interiorGroup) — which reruns on every
+// async replay this mount can trigger (a sprite texture settling, the D12b kit-door template
+// warming) — can never silently wipe it the way a same-frame reassert would otherwise have to guard
+// against (mirrors clayRoomApplyLightProfile's own per-frame-reassert note just above, for the
+// SAME class of replay, minus the need for a reassert since nothing else in this file ever touches
+// S.scene's own top-level children list).
+const CLAY_GRID_COLOR = 0xffffff;
+const CLAY_GRID_OPACITY = 0.3;      // D12a law: 0.25-0.35
+const CLAY_GRID_CLEARANCE = 0.01;   // matches f1BuildCombatGrid's own +0.01 (this file ~10411)
+function clayRoomBuildSeamGrid(record){
+  if(!S.scene) return null;
+  const cx = (S.boardOrigin && typeof S.boardOrigin.cx === "number") ? S.boardOrigin.cx : (record.dims.w - 1) / 2;
+  const cz = (S.boardOrigin && typeof S.boardOrigin.cz === "number") ? S.boardOrigin.cz : (record.dims.d - 1) / 2;
+  const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, 0, 0); // this record's floor is flat — any cell answers the same value
+  const y = floorTop + CLAY_GRID_CLEARANCE;
+  const minX = -0.5 - cx, maxX = (record.dims.w - 1) + 0.5 - cx;
+  const minZ = -0.5 - cz, maxZ = (record.dims.d - 1) + 0.5 - cz;
+  const pts = [];
+  for(let ix = 0; ix <= record.dims.w; ix++){
+    const x = ix - 0.5 - cx;
+    pts.push(x, y, minZ, x, y, maxZ);
+  }
+  for(let iz = 0; iz <= record.dims.d; iz++){
+    const z = iz - 0.5 - cz;
+    pts.push(minX, y, z, maxX, y, z);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
+  const mat = new THREE.LineBasicMaterial({ color: CLAY_GRID_COLOR, transparent: true, opacity: CLAY_GRID_OPACITY, depthWrite: false });
+  const grid = new THREE.LineSegments(geo, mat);
+  grid.renderOrder = -1;
+  grid.userData.clayGrid = true;
+  S.scene.add(grid);
+  return grid;
+}
+
 // mountClayRoom() — D2/wire-in steps 1-5 (the overlay, step 6, is built by
 // clayRoomMountOverlay(record,host) — see the U3 addition below this comment once it lands). Never
 // throws (mirrors mountLightLab's own dormant-surface discipline): a WebGL-less environment degrades
@@ -14530,6 +14649,7 @@ function mountClayRoom(){
     setInteriorBoard(data);
     clayRoomApplyLightProfile(record);
     clayRoomFlattenFurniture();
+    S.clayGridMesh = clayRoomBuildSeamGrid(record); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live
     markDirty();
     scheduleRender();
 

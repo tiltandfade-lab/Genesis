@@ -29,6 +29,30 @@
         defect this addendum exists to fix). Source-text/convention check only (this harness never
         executes theater-boot.js — see the note above); the live cold-load proof is the browser gate.
 
+   D12 addendum (Adam's founder redlines on capture packet #1, 2026-07-23 — verbatim: "i need a
+   semi-transparent grid overlaying the seams of the tiles" / "i can't tell if that door is supposed
+   to be open or closed or if it's just janky and completely broken"), plus the coordinator's re-gate
+   correction on D12b (render the door through the EXISTING production door/interactable builder,
+   never hand-built geometry):
+    11. ⊗ record.portal.state === "closed" (D12b instruction 1 — the record carries the fact, not
+        just the render).
+    12. ⊗ clayRoomProse(record) contains "the door is closed." verbatim (the prose twin reflects the
+        same fact the render projects — GEN-LAW-3/TEXT-FIRST, D9).
+    13. ⊗ D12a seam-grid grep-gate (source-text only, this harness never executes GL): the additions
+        region defines a grid builder whose line-count math reads record.dims.w/record.dims.d (never
+        a hardcoded cell count), uses THREE.LineSegments, and authors a material opacity in
+        [0.25, 0.35].
+    14. ⊗ D12b-corrected wiring grep-gate (the coordinator's addendum — "a stubbed door can never
+        pass this harness again"): the additions region registers the portal as a real door
+        interactable (archetype:"door", feeding interiorBuildInteractables/
+        interiorBuildInteractableDoorMesh, theater-boot.js ~4335/4209) AND supplies the production
+        kitDoors minimal-plan field (widthAxisIsZ, feeding interiorBuildKitDoorMesh via
+        itrKitDoorMap, theater-boot.js ~4136/4340) — AND that no bespoke door-leaf geometry
+        (THREE.ExtrudeGeometry/THREE.Shape — the exact primitives the real leaf builder itself uses)
+        was hand-authored in this file's own additions region, and the single-box doorframe literal
+        (the production doorframe instanced-mesh channel's own input) was never expanded into a
+        hand-rolled multi-piece frame assembly.
+
    Run:  node dev/verify-clay-room.mjs   (jsdom in ~/.genesis-jsdom — see CLAUDE.md) */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -310,6 +334,121 @@ const check = (name, cond, detail = "") =>
     // addendum exists to fix).
     check("10c. clayRoomBootSelfMount() is invoked as a bare column-0 statement (module top-level, not only from renderTheaterFrame's poll)",
       /^clayRoomBootSelfMount\(\);\s*$/m.test(region));
+  }
+}
+
+// ============================================================================
+// 11. ⊗ D12b instruction 1 — record.portal.state
+// ============================================================================
+{
+  try {
+    const win = freshWin();
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    check("11. record.portal.state === \"closed\"", record.portal.state === "closed", record.portal.state);
+  } catch(e) { check("11. record.portal.state (module present, no throw)", false, e.stack || String(e)); }
+}
+
+// ============================================================================
+// 12. ⊗ D12b instruction 1 — prose contains "the door is closed."
+// ============================================================================
+{
+  try {
+    const win = freshWin();
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const prose = win.clayRoomProse(record);
+    check("12. clayRoomProse(record) contains \"the door is closed.\" verbatim",
+      prose.indexOf("the door is closed.") >= 0, prose);
+  } catch(e) { check("12. prose \"door is closed\" (module present, no throw)", false, e.stack || String(e)); }
+}
+
+// ============================================================================
+// 13. ⊗ D12a seam-grid grep-gate (theater-boot.js additions region) — source-text only
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
+  const endMark = "CLAY-ROOM ADDITIONS END */";
+  const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
+  if(bi === -1 || ei === -1 || ei < bi){
+    check("13. theater-boot.js clay-room additions region found for the seam-grid scan", false,
+      "not found yet — expected once the D12a grid lands");
+  } else {
+    const region = bootSrc.slice(bi, ei + endMark.length);
+
+    check("13a. a seam-grid builder function is defined in the additions region",
+      /function\s+clayRoomBuildSeamGrid\s*\(record\)\s*\{/.test(region));
+
+    const fnMatch = region.match(/function\s+clayRoomBuildSeamGrid\s*\(record\)\s*\{([\s\S]*?)\n\}/);
+    const fnBody = fnMatch ? fnMatch[1] : "";
+
+    // line count derived FROM record.dims — never a hardcoded cell count (the spec's own "(w+1)+(d+1)
+    // lines, derived FROM record.dims"). Checks the actual loop-bound comparisons, not just any mention
+    // of the string "record.dims" (a comment alone would falsely pass a looser test).
+    check("13b. grid line count loops read <= record.dims.w (never a hardcoded literal)",
+      /<=\s*record\.dims\.w/.test(fnBody), fnBody);
+    check("13c. grid line count loops read <= record.dims.d (never a hardcoded literal)",
+      /<=\s*record\.dims\.d/.test(fnBody), fnBody);
+
+    check("13d. THREE.LineSegments is used to render the grid",
+      /new\s+THREE\.LineSegments\s*\(/.test(fnBody));
+
+    // opacity in [0.25, 0.35] — parse the authored const rather than pattern-match a bare number in
+    // the material call, so this stays correct if the material construction line wraps/reformats.
+    const opacityMatch = region.match(/CLAY_GRID_OPACITY\s*=\s*(0?\.\d+|\d+(?:\.\d+)?)/);
+    const opacityVal = opacityMatch ? parseFloat(opacityMatch[1]) : NaN;
+    check("13e. an authored grid opacity value exists and falls in [0.25, 0.35]",
+      Number.isFinite(opacityVal) && opacityVal >= 0.25 && opacityVal <= 0.35, String(opacityVal));
+    check("13f. that authored opacity constant is actually wired into the LineBasicMaterial",
+      /LineBasicMaterial\(\{[^}]*opacity:\s*CLAY_GRID_OPACITY/.test(fnBody), fnBody);
+
+    // "sit under the figures/objects visually (render order)" — a renderOrder below the scene
+    // default (0) on the grid object.
+    check("13g. the grid mesh is given a renderOrder below the scene default (renders under other transparent draws)",
+      /grid\.renderOrder\s*=\s*-\d/.test(fnBody), fnBody);
+  }
+}
+
+// ============================================================================
+// 14. ⊗ D12b-corrected wiring grep-gate (coordinator addendum) — proves the door renders through the
+//     EXISTING production door/interactable builder chain, never a bespoke re-modeled leaf/frame.
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
+  const endMark = "CLAY-ROOM ADDITIONS END */";
+  const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
+  if(bi === -1 || ei === -1 || ei < bi){
+    check("14. theater-boot.js clay-room additions region found for the door-wiring scan", false,
+      "not found yet — expected once the D12b-corrected wiring lands");
+  } else {
+    const region = bootSrc.slice(bi, ei + endMark.length);
+
+    check("14a. the portal is registered as a real door interactable (archetype:\"door\") — feeds interiorBuildInteractables",
+      /archetype:\s*"door"/.test(region));
+
+    check("14b. the door interactable's state reads record.portal.state (never a hardcoded literal)",
+      /state:\s*record\.portal\.state/.test(region));
+
+    check("14c. the production kitDoors minimal-plan field is supplied — feeds interiorBuildKitDoorMesh via itrKitDoorMap",
+      /kitDoors:\s*kitDoors\b/.test(region));
+
+    check("14d. the kitDoors entry carries widthAxisIsZ (the real per-entry orientation override)",
+      /widthAxisIsZ:\s*CLAY_PORTAL_WIDTH_AXIS_IS_Z\[record\.portal\.edge\]/.test(region));
+
+    // NEGATIVE checks — a stubbed/re-modeled door leaf never passes this harness again: the real
+    // leaf builder (interiorBuildInteractableDoorMesh, theater-boot.js) is the ONLY place
+    // ExtrudeGeometry/THREE.Shape legitimately build a door leaf; their absence here proves this
+    // file's own additions region never duplicated that geometry locally.
+    check("14e. no bespoke ExtrudeGeometry leaf construction in the additions region",
+      !/ExtrudeGeometry\s*\(/.test(region), "matched ExtrudeGeometry(");
+    check("14f. no bespoke THREE.Shape leaf construction in the additions region",
+      !/THREE\.Shape\s*\(/.test(region), "matched THREE.Shape(");
+
+    // the doorframe box stays the ORIGINAL single-object-literal shape (the production doorframe
+    // instanced-mesh channel's own input) — guards against a future session re-expanding it into a
+    // hand-rolled multi-piece jamb/lintel/leaf assembly (the exact class of fix this addendum forbids).
+    check("14g. the doorframe instances array stays the single-box literal (never expanded into a hand-rolled multi-piece frame)",
+      /const doorframe = portalCell \? \[\{/.test(region));
   }
 }
 

@@ -5127,6 +5127,10 @@ function renderTheaterFrame(){
   // (lightLabMaybeAutoMount's own short-circuit) at the top of the one render call site. No DOM, no
   // listener, no timer exists until the flag actually flips true (lightLabShouldEnable's own header).
   lightLabMaybeAutoMount();
+  // C1A-CLAY-ROOM (docs/C1A-CLAY-ROOM.md D1): the SAME dormant-poll pattern as lightLabMaybeAutoMount
+  // just above — one boolean read when off, zero DOM/listeners until ?clayroom=1/GS.clayRoomEnabled
+  // actually flips true. See the CLAY-ROOM ADDITIONS block at this file's end for the definition.
+  clayRoomMaybeAutoMount();
   if(S.postChainEnabled && S.composer && S.composer.passes && S.composer.passes.length > 0){
     // LL-1 EMISSIVE-MASKED BLOOM: refresh the bloom pass's isolated emitter-only render for THIS frame
     // before the composer consumes it (Pass.render() itself never gets a live scene/camera — see
@@ -14294,3 +14298,231 @@ function unmountLightLab(){
   S.lightLabEls = null;
   S.lightLabMounted = false;
 }
+
+/* CLAY-ROOM ADDITIONS BEGIN — docs/C1A-CLAY-ROOM.md (Q12-B wave-12 gate, execution order U1->U2->U3).
+   D2 placement law: appended functions ONLY, plus at most two hook lines total added to the file's
+   pre-existing bodies — this file adds exactly ONE (the clayRoomMaybeAutoMount() poll call inside
+   renderTheaterFrame, beside lightLabMaybeAutoMount()'s own call, near this file's top). D1 clones
+   the Light Lab dormant pattern verbatim (lightLabShouldEnable/lightLabMaybeAutoMount, this file
+   ~14089-14110): a URL flag (?clayroom=1) OR a live console-settable GS.clayRoomEnabled, memoized
+   once, zero DOM/listeners until the flag actually flips true.
+
+   Everything below reads ONLY the frozen record src/engine/clay-room.js's clayRoomRecordFrom(seed)
+   returns — no rules verbs, no dice, no pathing, no event application (grep-gated by
+   dev/verify-clay-room.mjs check 7). D3: the interior (volumetric, perspective-composed) channel
+   with the FIXED camera setInteriorBoard already gives it by default (INTERIOR_CAM_MODE==="persp",
+   theater-interior.js:205) — this block never calls rotate()/zoom(), so "no rotation, no orbit"
+   (W3 law) holds by omission, not a new guard. D5: the default (non-psx) canvas path — mount() is
+   called with no `opts`, so S.psxEnabled stays its createTheaterState() default (false) and
+   applyPsxCanvasSize's own DPR-capped branch runs unmodified; no new DPR code here. */
+
+let CLAY_ROOM_URL_FLAG = null;
+function clayRoomShouldEnable(){
+  try {
+    if(typeof window === "undefined") return false;
+    if(window.GS && window.GS.clayRoomEnabled === true) return true;
+    if(CLAY_ROOM_URL_FLAG === null){
+      CLAY_ROOM_URL_FLAG = !!(window.location && window.location.search
+        && new URLSearchParams(window.location.search).get("clayroom") === "1");
+    }
+    return CLAY_ROOM_URL_FLAG;
+  } catch(e){}
+  return false;
+}
+function clayRoomMaybeAutoMount(){
+  if(S.clayRoomMounted) return;
+  if(!clayRoomShouldEnable()) return;
+  mountClayRoom();
+}
+
+// D7/D2: a flat, untextured clay-grey — the ONLY color every clay instance authors (floor/wall/
+// doorframe/crate), so the interior channel's own null-texture branch (interiorBuildInstancedMesh,
+// this file's own header a few thousand lines up: `texture ? {map:texture} : {color:0xffffff}` +
+// per-instance vertex color) renders a genuinely flat Lambert surface with zero grain/file texture
+// — never a bespoke material, the SAME InstancedMesh/BoxGeometry construction every other interior
+// board uses.
+const CLAY_GREY = "#8a8a8a";
+// Mirrors theater-interior.js's own untouched constants (never imported bare — see this file's own
+// ITR_FLOOR_HEIGHT_FALLBACK header, a few thousand lines up, on why a cross-file classic-script
+// const isn't reliably reachable here; these are the same AUTHORED VALUES, cited by source line for
+// traceability, not a second copy of a mechanism).
+const CLAY_WALL_HEIGHT = 2.4;       // theater-interior.js:935 ITR_WALL_HEIGHT_BASE
+const CLAY_FLOOR_HEIGHT = 0.2;      // theater-interior.js:936 ITR_FLOOR_HEIGHT
+const CLAY_DOOR_HEIGHT_FRAC = 0.85; // theater-interior.js:937 ITR_DOOR_HEIGHT_FRAC
+const CLAY_WALL_THICKNESS = 0.12;   // order-of-magnitude match to ITR_PORTAL_DEPTH (theater-interior.js:947, 0.12) — D7's own ITR_PORTAL_* citation
+
+// record.walls[].edge -> the fractional cell-local offset a thin wall/doorframe slab sits at, and
+// which footprint axis it spans full-width on (the other axis carries CLAY_WALL_THICKNESS). Pure
+// data, no THREE.
+const CLAY_EDGE_OFFSET = { n: { ox: 0, oz: -0.5 }, s: { ox: 0, oz: 0.5 }, w: { ox: -0.5, oz: 0 }, e: { ox: 0.5, oz: 0 } };
+
+// clayRoomBoardDataFrom(record) -> a setInteriorBoard(data)-shaped board object (theater-interior.js's
+// own interiorBuildBoard OUTPUT shape, that function's own header docstring) — authored DIRECTLY off
+// the record's own 25-cell grid rather than run through interiorBuildBoard itself (that function
+// requires a full spatializePlan()/semanticizePlan() multi-room dungeon PLAN, not a single pinned
+// room fixture — see src/engine/clay-room.js's own D6 header for the identical reasoning on the
+// engine side). The GEOMETRY/MATERIAL still routes entirely through PRODUCTION consumers from here:
+// setInteriorBoard -> interiorBuildInstancedMesh (floor/wall/doorframe), interiorBuildInteractables
+// (the door leaf), interiorBuildFurniture (the crate, via furnitureFor's own ITR_FURNITURE_RECIPES.crate
+// recipe), interiorBuildPieces (the goblin standee) — never a bespoke THREE.Mesh built here.
+function clayRoomBoardDataFrom(record){
+  const cellById = {};
+  record.cells.forEach(function(c){ cellById[c.id] = c; });
+
+  const floor = record.cells.map(function(c){
+    return { x: c.x, z: c.z, sx: 1, sy: CLAY_FLOOR_HEIGHT, sz: 1, color: CLAY_GREY };
+  });
+
+  const wall = [];
+  record.walls.forEach(function(w){
+    (w.cells || []).forEach(function(cellId){
+      // the portal cuts exactly this one segment on its own edge — every other perimeter segment
+      // (including this SAME cell's OTHER edge, at a corner) stays solid.
+      if(cellId === record.portal.cell && w.edge === record.portal.edge) return;
+      const cell = cellById[cellId];
+      if(!cell) return;
+      const off = CLAY_EDGE_OFFSET[w.edge];
+      const horizontal = (w.edge === "n" || w.edge === "s");
+      wall.push({
+        x: cell.x, z: cell.z, ox: off.ox, oz: off.oz,
+        sx: horizontal ? 1 : CLAY_WALL_THICKNESS,
+        sy: CLAY_WALL_HEIGHT,
+        sz: horizontal ? CLAY_WALL_THICKNESS : 1,
+        color: CLAY_GREY
+      });
+    });
+  });
+
+  const portalCell = cellById[record.portal.cell];
+  const portalOff = CLAY_EDGE_OFFSET[record.portal.edge];
+  const portalHorizontal = (record.portal.edge === "n" || record.portal.edge === "s");
+  const doorframe = portalCell ? [{
+    x: portalCell.x, z: portalCell.z, ox: portalOff.ox, oz: portalOff.oz,
+    sx: portalHorizontal ? 0.8 : CLAY_WALL_THICKNESS,
+    sy: CLAY_WALL_HEIGHT * CLAY_DOOR_HEIGHT_FRAC,
+    sz: portalHorizontal ? CLAY_WALL_THICKNESS : 0.8,
+    color: CLAY_GREY
+  }] : [];
+
+  const interactables = portalCell ? [{
+    archetype: "door", x: portalCell.x, y: portalCell.z, state: "closed",
+    sourceRef: record.portal.id, slug: record.portal.id
+  }] : [];
+
+  const objectCell = cellById[record.object.cell];
+  const furniture = objectCell ? [{
+    slug: record.object.id, kind: record.object.kind, realmId: null, x: objectCell.x, y: objectCell.z
+  }] : [];
+
+  const citizenCell = cellById[record.citizen.cell];
+  // spriteEntryFor's own established access pattern for these two globals (this file's SPRITE_CHANNEL
+  // section) — guarded the same way, never a bare unqualified read.
+  const bestiaryIndex = (typeof SPRITE_BY_BESTIARY_ID !== "undefined") ? SPRITE_BY_BESTIARY_ID : null;
+  const citizenSlug = bestiaryIndex ? bestiaryIndex[record.citizen.bestiaryId] : null;
+  const pieces = (citizenCell && citizenSlug) ? [{ slug: citizenSlug, cellX: citizenCell.x, cellY: citizenCell.z }] : [];
+
+  const bounds = { minX: 0, maxX: record.dims.w - 1, minZ: 0, maxZ: record.dims.d - 1 };
+
+  return {
+    kind: "interior3d",
+    env: "dungeon",
+    realmId: null,
+    wallHeightBase: CLAY_WALL_HEIGHT,
+    tileKit: { floorColor: CLAY_GREY, wallColor: CLAY_GREY, trimColor: CLAY_GREY, fog: { color: "#1a1a1a" }, fogWhisper: 0 },
+    fog: { color: "#1a1a1a" },
+    bounds: bounds,
+    focusRect: bounds,
+    instances: { floor: floor, wall: wall, doorframe: doorframe, pillar: [] },
+    interactables: interactables,
+    furniture: furniture,
+    pieces: pieces
+  };
+}
+
+// D4 — apply CLAY_C1A_LIGHT_PROFILE as the FINAL word on the mounted scene's ambient/point lights,
+// called AFTER setInteriorBoard so it supersedes that function's own rigOn block (which
+// unconditionally overwrites S.ambientLight/S.pointLights from the ITR_SCENE_*/ITR_BRIGHT_REALM_FILL
+// tables the instant it runs — see setInteriorBoard's own BW2-4 THE VALUE PLUNGE comment). Going
+// through applyLightProfile(key) itself was the OTHER D4-offered mechanism, but that requires a
+// LIGHT_PROFILES registry key (editing that table is explicitly out of scope) AND clamps ambient UP
+// to STAGE_AMBIENT_FLOOR (0.42 on the tabletop channel) — well past D4's <=0.25 ceiling. This
+// function mirrors applyLightProfile's OWN construction primitives (THREE.AmbientLight/
+// THREE.PointLight added to S.scene, teardown of any prior S.pointLights) without going through
+// either blocked path, so the record's authored ambient (0.18) lands UNCLAMPED. Mechanism +
+// effective values are reported verbatim in the build report — never claimed here as a visual result.
+function clayRoomApplyLightProfile(record){
+  if(!S.scene) return;
+  if(S.ambientLight){ S.scene.remove(S.ambientLight); S.ambientLight = null; }
+  (S.pointLights || []).forEach(function(l){ S.scene.remove(l); });
+  S.pointLights = [];
+  const profile = CLAY_C1A_LIGHT_PROFILE;
+  const ambient = new THREE.AmbientLight(profile.ambient.color, profile.ambient.intensity);
+  S.scene.add(ambient);
+  S.ambientLight = ambient;
+  const halfX = (record.dims.w - 1) / 2 + 1, halfZ = (record.dims.d - 1) / 2 + 1;
+  profile.points.forEach(function(p){
+    const light = new THREE.PointLight(p.color, p.intensity, 0, 0);
+    light.position.set(p.pos.x * halfX, p.pos.y, p.pos.z * halfZ);
+    S.scene.add(light);
+    S.pointLights.push(light);
+  });
+}
+
+// D2 step 3 "flat...clay-grey...never bespoke meshes" for the crate specifically: buildFurnitureAssembly
+// (called by interiorBuildFurniture, called by setInteriorBoard above) always textures its prisms via
+// furniturePanelMaterial (a procedural mottled canvas, or a REALM_TEXTURES file on a flagship realm) —
+// there is no data-only path to a flat furniture material the way the InstancedMesh floor/wall/
+// doorframe channel has (that channel's own null-texture branch). A one-line material SWAP over the
+// crate's ALREADY-BUILT production geometry (never new geometry, never a new Mesh) is the narrowest
+// fix: walk the furniture sub-tree setInteriorBoard just added to S.interiorGroup and replace each
+// prism's OWN material with one shared flat clay MeshLambertMaterial. Never touches the citizen's
+// sprite billboard (D2 step 3 names floor/wall/doorframe/crate only; the citizen stays its own sprite
+// art per D2 step 4 / D8) or the door leaf (its own itrDoorStateColor read stays intact, matching
+// D7's "door leaf via interiorBuildInteractables" law verbatim).
+let CLAY_FURNITURE_MATERIAL = null;
+function clayRoomFlattenFurniture(){
+  if(!S.interiorGroup) return;
+  if(!CLAY_FURNITURE_MATERIAL) CLAY_FURNITURE_MATERIAL = new THREE.MeshLambertMaterial({ color: CLAY_GREY });
+  S.interiorGroup.children.forEach(function(topChild){
+    (topChild.children || []).forEach(function(entryGroup){
+      if(!entryGroup.userData || !entryGroup.userData.furnitureKind) return;
+      entryGroup.traverse(function(node){
+        if(node.isMesh) node.material = CLAY_FURNITURE_MATERIAL;
+      });
+    });
+  });
+}
+
+// mountClayRoom() — D2/wire-in steps 1-5 (the overlay, step 6, is built by
+// clayRoomMountOverlay(record,host) — see the U3 addition below this comment once it lands). Never
+// throws (mirrors mountLightLab's own dormant-surface discipline): a WebGL-less environment degrades
+// to mount() returning false and this function no-oping.
+function mountClayRoom(){
+  try {
+    if(S.clayRoomMounted) return;
+    const record = clayRoomRecordFrom(0x6c0ffee); // the CI seed, pinned per docs/C1A-CLAY-ROOM.md wire-in step 1
+
+    const host = document.createElement("div");
+    host.id = "clay-room-host";
+    host.style.cssText = "position:fixed;inset:0;z-index:9000;background:#000;";
+    document.body.appendChild(host);
+
+    const mounted = mount(host); // D5: no `opts` -> the default (non-psx) canvas path
+    if(!mounted){ document.body.removeChild(host); return; }
+
+    const data = clayRoomBoardDataFrom(record);
+    setInteriorBoard(data);
+    clayRoomApplyLightProfile(record);
+    clayRoomFlattenFurniture();
+    markDirty();
+    scheduleRender();
+
+    S.clayRoomMounted = true;
+    S.clayRoomHost = host;
+    S.clayRoomRecord = record;
+    // U3 overlay hook: clayRoomMountOverlay(record, host) attaches here once that unit lands.
+  } catch(e) {
+    try { console.warn("qa: clay-room mount failed", e); } catch(e2){}
+  }
+}
+/* CLAY-ROOM ADDITIONS END */

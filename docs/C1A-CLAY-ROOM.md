@@ -208,9 +208,12 @@ completely broken."
   W8's DMG door/material catalog; the C1B spec builds the typed door catalog (data) + the
   connection record owning placement/state, renderer as pure projection, hinge law per THE
   DOOR CONTRACT (D12b). Catalog entries additionally carry a **swing-clearance volume**
-  (the door's 90-180° arc) consumed by furnishing/prop placement as a blocked zone
+  (the door's 90-180° arc) consumed by furnishing/prop placement as a blocked zone (mechanism:
+  `Box3.intersectsBox()` against the frame+sweep volume at placement time)
   (rides C1J's protected-circulation contract; adopted 2026-07-23 from Adam's
-  architecture review). C1B interaction note (same review): door picking detects the leaf
+  architecture review). **NO-CSG law (same review, confirming existing practice):** wall openings are made by
+  omitting cell tiles, never by boolean subtraction — no CSG library ever enters the render
+  pipeline. C1B interaction note (same review): door picking detects the leaf
   PANEL mesh but applies rotation to its parent HINGE group (raycast descendants, rotate the
   parent) — never rotate the panel mesh directly; and swing state changes route through the
   connection record (ActionIntent → receipt), the hinge merely projects it.

@@ -6,7 +6,41 @@ updated: 2026-07-22
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-22/23, founder-review session) — ALL TWELVE WAVES DESIGN-CLOSED; NO BUILD AUTHORIZED (Q12-B RESERVED) [Fable chairing, Adam ruling]
+## ⭐ Latest (2026-07-23, Q12-B gate session) — Q12-B FIRED; C1A CLAY ROOM TRUTH-ARRIVED ON THE REAL PIPELINE [Fable, Adam ruling]
+
+The gate session ran from `docs/procedural-dungeon-direction/FABLE-Q12B-GATE-SESSION-PROMPT.md`,
+interactive with Adam. **Q12-B fired** (wave-12 §20.9, Adam's decisive eight-answer message) — the
+implementation hold lifts for **Stage 1 (C1A→C1G) only**.
+
+### What shipped
+- **C1A clay room, TRUTH-ARRIVED** on the real dungeon pipeline (`spatializePlan`→
+  `interiorBuildBoard`→`setInteriorBoard`; hand-assembled shim deleted after two shim-door
+  failures). `src/engine/clay-room.js` (frozen record + prose twin + explain + refusal),
+  theater-boot.js CLAY-ROOM region (dev-flag `?clayroom=1`, boot self-mount, D13 provenance audit
+  = 0 orphans, seam grid, two-temp light profile), `dev/verify-clay-room.mjs` **79/79** fresh.
+- **The door answer:** production door was never broken — the FRAME is real output; the LEAF just
+  wasn't wired (`bindWalkInteractables` uncalled). Deferred to C1B as RL-1; RL-2 = clay lighting
+  over the interior dimming.
+- **Stage 0 recovery** package built, drill PASSED, migrated to Drive (double cloud copies, zero
+  durable local residue). **Material lane** folded to canon + Codex Wave-1 brief. **Teeth audit**
+  (57 laws → 28 need teeth). New skill `genesis-clay-pass` + THE TEETH LAW.
+- **Repo relocated** to `~/Desktop/Work/projects/Genesis/genesis` (container). Sprite lane's
+  uncommitted prototype-admission work parked on `feat/sprite-prototype-admission` (its call to land).
+
+### Verification
+79/79 clay harness + check-manifest OK (personal re-gate); full CI-equivalent sweep green (dep-skips
+only); merged to master + pushed; GitHub CI confirmed green. Recovery on Drive verified by byte-size
++ transit checksum; sha256s recorded for restore-time integrity.
+
+### Do next (pick up here)
+1. **C1B** — local movement/route + the FIRST-CLASS DOOR: the door catalog (D14, ~10 types, socket
+   schema, swing-clearance), the canonical connection record owning placement/state, RL-1 leaf wire,
+   RL-2 lighting fix. `bindWalkInteractables` is the named leaf mechanism.
+2. **Material lane Stage A** — Codex authors Wave-1 `.ptex` (brief: `docs/CODEX-MATERIAL-BRIEF.md`);
+   our lane builds `dev/material-cards.mjs` + review tool; Adam PASS-rules cards.
+3. Teeth-audit NEEDS-TEETH items land with their owning passes (D13 provenance audit shipped).
+
+## 2026-07-22/23 (founder-review session) — ALL TWELVE WAVES DESIGN-CLOSED; NO BUILD AUTHORIZED (Q12-B RESERVED) [Fable chairing, Adam ruling]
 
 The staged founder-review session ran from `docs/procedural-dungeon-direction/FABLE-FOUNDER-REVIEW-PROMPT.md`,
 interactive with Adam, docs-only. **The procedural-dungeon design program is complete: waves

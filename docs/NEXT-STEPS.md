@@ -92,7 +92,10 @@ arrival law) — read that first; it supersedes older per-lane ordering for the 
    Adam's decisive-answers message fired the gate — the hold lifts for **Stage 1 (C1A→C1G) only**.
    C1A specced (`docs/C1A-CLAY-ROOM.md`) and executing. Still open: external backup push/upload
    (W1 §8.14.1 item 6) awaits Adam's word.
-1. ☐ **Visual proof track (Adam's declared priority, wave-11 §19.6):** clay-room geometry
+1. ☐ **Visual proof track — C1A LANDED 2026-07-23 (clay room truth-arrived on the real pipeline);
+   next is C1B (first-class doors: catalog + connection record + RL-1 leaf wire + RL-2 lighting),
+   then the geometry/texture passes toward the guard's post.** Original line:
+   **Visual proof track (Adam's declared priority, wave-11 §19.6):** clay-room geometry
    pass → texture pass → golden site 1 "the guard's post" rolling procedural configurations
    unbroken (FEATURE-PRIORITIZATION Stage 2). **Guard-post kit gaps for the C1H spec**
    (Adam's architecture review, 2026-07-23): the tile kit is interiors-only — the guard post

@@ -194,6 +194,25 @@ completely broken."
   "what this proves" per image — no registry-speak, no untranslated ids. Adopted into
   `.claude/skills/genesis-clay-pass/SKILL.md` the same day.
 
+## Addendum D16 — C1A TRUTH-ARRIVED + two deferred redlines (Adam, 2026-07-23)
+
+Adam's ruling on capture packet #2, verbatim: **"let's bank the truth."** C1A is **truth-arrived**:
+the clay room now renders through the REAL production pipeline (`spatializePlan` →
+`interiorBuildBoard` → `setInteriorBoard`; the hand-assembled shim is deleted), the D13 provenance
+audit reports **0 orphans** (every scene object owner-tagged), 79/79 harness green on a fresh
+personal re-gate, manifest OK, and Adam eyeballed the packet. Evidence: `2b9e30b6`,
+`dev/clay-captures/c1a/c1a-05..07`. The answer to the door saga, recorded: **the production door
+was never broken — the door FRAME is real production output; the LEAF simply wasn't wired.**
+
+**Two redlines deferred to C1B (named mechanisms, not mysteries — the teeth-law framing):**
+- **RL-1 door leaf.** The swinging leaf renders only when the pipeline stage `bindWalkInteractables`
+  (theater-boot.js) runs to populate `board.interactables`; the clay mount doesn't call it. C1B
+  (which makes doors first-class per D14) wires it. Production-pipeline finding, not a clay patch.
+- **RL-2 clay lighting.** Routing through `interiorBuildBoard` brought its own dim interior rig
+  (ITR_SCENE_* dimming) which overpowers the CLAY_C1A_LIGHT_PROFILE two-temp profile — the room
+  reads dark. The clay light profile must reassert over the interior channel's dimming (extend the
+  per-frame reassert already covering the async replay to also override the interior rig values).
+
 ## Addendum D13/D14 — the generalized guards (Adam's door review, 2026-07-23)
 
 - **D13 provenance audit (charter protected-core #6, made executable):** every object in the

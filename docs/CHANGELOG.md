@@ -8,6 +8,35 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-23 (latest) — Q12-B FIRED · C1A CLAY ROOM ON THE REAL PIPELINE · RECOVERY→DRIVE [Fable, Adam ruling]
+
+### Added
+- **Q12-B gate FIRED** (wave-12 §20.9) — implementation hold lifts for Stage 1 (C1A→C1G) only;
+  Adam's eight pre-build answers verbatim, incl. the clay-lighting rider (production lighting,
+  full native resolution, two-temp opposing + low ambient).
+- **C1A clay room — TRUTH-ARRIVED** (`src/engine/clay-room.js`, theater-boot.js CLAY-ROOM region,
+  `dev/verify-clay-room.mjs` 79 checks): one canonical 5×5 room compiled + rendered through the
+  REAL `spatializePlan`→`interiorBuildBoard`→`setInteriorBoard` chain; dev-flag `?clayroom=1`,
+  boot self-mount, Facts/Explain/edit-refusal overlay, D13 provenance audit (0 orphans), seam grid.
+- **`.claude/skills/genesis-clay-pass`** — the front-end/back-end gate-split skill (Claude owns the
+  measurable back-end gate; Adam gates the visual) + THE TEETH LAW (rulings recorded only with
+  enforcing checks) + the plain-English capture-packet law.
+- **Material lane folded into canon** (`docs/MATERIAL-LANE.md` + `docs/CODEX-MATERIAL-BRIEF.md`):
+  Material Maker 1.3 pinned + headless-proven; SUBTLE-TEXTURE split; Codex Wave-1 authoring brief.
+- **TEETH-AUDIT-2026-07-23** — 57 Stage-1 laws classified (28 need teeth / 20 have / 9 stay prose).
+- **Stage-0 recovery package** — tag `pre-redesign-2026-07-23`, verified bundle + LFS-complete zip,
+  restore drill PASSED, migrated to Google Drive (double cloud copies), zero durable local residue.
+
+### Changed
+- **Repo relocated** into a parent container: `~/Desktop/Work/projects/Genesis/genesis` (worktree
+  convention + launchers + skill paths updated); the sprite lane's uncommitted prototype-admission
+  work parked on `feat/sprite-prototype-admission` (preserved, not merged — its lane's call).
+
+### Deferred
+- **C1A → C1B redlines:** RL-1 door leaf (wire `bindWalkInteractables`), RL-2 clay lighting over
+  the interior dimming. Door catalog + swing-clearance + socket schema authored into the C1B/C1H
+  specs (D14; structure-kit catalog is the C1H-opener writing task).
+
 ## 2026-07-23 (later) — FEATURE-PRIORITIZATION VIEW + CLEAN CLOSE [Fable]
 
 **Added**

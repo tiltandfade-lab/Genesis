@@ -14520,9 +14520,123 @@ function mountClayRoom(){
     S.clayRoomMounted = true;
     S.clayRoomHost = host;
     S.clayRoomRecord = record;
-    // U3 overlay hook: clayRoomMountOverlay(record, host) attaches here once that unit lands.
+    clayRoomMountOverlay(record, host);
   } catch(e) {
     try { console.warn("qa: clay-room mount failed", e); } catch(e2){}
   }
+}
+
+// D2 step 6 / D9 / D11 — the overlay panel, dormant-built the SAME way mountLightLab builds its own
+// (plain styled divs, no framework, panel.id-guarded against a stale double-mount). Two tabs:
+//   Facts   — clayRoomProse(record) shown VERBATIM (D9's own "same-facts-equivalence by
+//             construction" law: the overlay never re-derives or reformats a single fact).
+//   Explain — clayRoomExplain(record) VERBATIM, plus ONE edit affordance per BodyForm field
+//             (worldHeight/heightSource/sizeCategory/occupiedCells/bestiaryId) that calls
+//             clayRoomEditRefusal(field) and prints the typed refusal inline — D11's "no other
+//             workbench scope" law: this is the only interactive control the panel offers besides
+//             the tab switch and the close button.
+// Plus a `renderer size <w>x<h> @ dpr <n>` line (wire-in step 6's own countable capture-packet line)
+// read straight off the live S.renderer, never a re-derived guess.
+function clayRoomMountOverlay(record, host){
+  if(typeof document === "undefined") return;
+  const stale = document.getElementById("clay-room-overlay");
+  if(stale && stale.parentNode) stale.parentNode.removeChild(stale);
+
+  const panel = document.createElement("div");
+  panel.id = "clay-room-overlay";
+  panel.style.cssText =
+    "position:fixed;top:8px;right:8px;width:340px;max-height:92vh;overflow:auto;z-index:9001;" +
+    "background:rgba(20,20,24,0.94);border:1px solid #444;border-radius:6px;padding:8px;" +
+    "font:12px/1.3 -apple-system,sans-serif;color:#eee;box-shadow:0 4px 18px rgba(0,0,0,0.5);";
+
+  const title = document.createElement("div");
+  title.textContent = "CLAY ROOM (C1A) — dev only";
+  title.style.cssText = "font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;";
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "×";
+  closeBtn.style.cssText = "background:none;border:none;color:#ccc;font-size:16px;cursor:pointer;line-height:1;";
+  closeBtn.addEventListener("click", function(){ clayRoomUnmount(); });
+  title.appendChild(closeBtn);
+  panel.appendChild(title);
+
+  const rendererLine = document.createElement("div");
+  rendererLine.style.cssText = "color:#9ab;margin-bottom:6px;font:11px monospace;";
+  const size = (S.renderer && typeof S.renderer.getSize === "function") ? S.renderer.getSize(new THREE.Vector2()) : null;
+  const dpr = S.psxEnabled ? PSX_RES_SCALE : Math.min((typeof window !== "undefined" && window.devicePixelRatio) || 1, 2);
+  rendererLine.textContent = size
+    ? ("renderer size " + Math.round(size.x) + "x" + Math.round(size.y) + " @ dpr " + dpr)
+    : "renderer size unavailable";
+  panel.appendChild(rendererLine);
+
+  const tabBar = document.createElement("div");
+  tabBar.style.cssText = "display:flex;gap:4px;border-top:1px solid #333;padding-top:6px;margin-bottom:6px;";
+  const factsTabBtn = document.createElement("button");
+  factsTabBtn.textContent = "Facts";
+  const explainTabBtn = document.createElement("button");
+  explainTabBtn.textContent = "Explain";
+  [factsTabBtn, explainTabBtn].forEach(function(b){
+    b.style.cssText = "flex:1;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+  });
+  tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn);
+  panel.appendChild(tabBar);
+
+  const factsBody = document.createElement("pre");
+  factsBody.style.cssText = "white-space:pre-wrap;font:11px/1.4 monospace;color:#dde;margin:0;";
+  factsBody.textContent = clayRoomProse(record);
+
+  const explainBody = document.createElement("div");
+  explainBody.style.cssText = "display:none;";
+  const explainPre = document.createElement("pre");
+  explainPre.style.cssText = "white-space:pre-wrap;font:11px/1.4 monospace;color:#dde;margin:0 0 6px;";
+  explainPre.textContent = clayRoomExplain(record);
+  explainBody.appendChild(explainPre);
+
+  const refusalHeader = document.createElement("div");
+  refusalHeader.textContent = "BodyForm fields (generated — edit refused):";
+  refusalHeader.style.cssText = "color:#9ab;margin-bottom:2px;";
+  explainBody.appendChild(refusalHeader);
+  const refusalOut = document.createElement("pre");
+  refusalOut.style.cssText = "white-space:pre-wrap;font:10px/1.4 monospace;color:#e8b;margin:4px 0 0;min-height:1em;";
+  ["worldHeight", "heightSource", "sizeCategory", "occupiedCells", "bestiaryId"].forEach(function(field){
+    const btn = document.createElement("button");
+    btn.textContent = "edit " + field;
+    btn.style.cssText = "font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:2px 5px;margin:0 4px 4px 0;";
+    btn.addEventListener("click", function(){
+      refusalOut.textContent = JSON.stringify(clayRoomEditRefusal(field));
+    });
+    explainBody.appendChild(btn);
+  });
+  explainBody.appendChild(refusalOut);
+
+  panel.appendChild(factsBody);
+  panel.appendChild(explainBody);
+
+  function clayShowTab(which){
+    factsBody.style.display = which === "facts" ? "" : "none";
+    explainBody.style.display = which === "explain" ? "" : "none";
+    factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
+    explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
+  }
+  factsTabBtn.addEventListener("click", function(){ clayShowTab("facts"); });
+  explainTabBtn.addEventListener("click", function(){ clayShowTab("explain"); });
+  clayShowTab("facts");
+
+  document.body.appendChild(panel);
+  S.clayRoomOverlayEl = panel;
+}
+
+// Dev-only teardown (the panel's own close button) — disposes the dedicated GL instance mountClayRoom
+// created (retire(), the SAME teardown mount() itself calls on every re-mount) and removes both DOM
+// hosts, then clears the mounted flag so a later flag re-flip (?clayroom=1 revisited, or
+// GS.clayRoomEnabled toggled again) can mount fresh. Never touches anything the normal game flow
+// owns — this dev surface only ever tears down what it itself built. retire() itself replaces `S`
+// with a fresh createTheaterState() (mirroring mount()'s own idempotent-re-mount teardown), so the
+// two DOM handles are captured BEFORE calling it, not read off S afterward.
+function clayRoomUnmount(){
+  if(!S.clayRoomMounted) return;
+  const overlayEl = S.clayRoomOverlayEl, hostEl = S.clayRoomHost;
+  retire();
+  if(overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);
+  if(hostEl && hostEl.parentNode) hostEl.parentNode.removeChild(hostEl);
 }
 /* CLAY-ROOM ADDITIONS END */

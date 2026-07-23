@@ -64,6 +64,16 @@ Restore = from the **zip archive alone** into a scratch directory (not from git)
   worlds is available as a follow-up if Adam wants it in the package.
 - **Ignored/untracked surfaces** (Reference PDFs — copyrighted, re-obtainable; `.dm/`
   mailbox scratch; `node_modules/`; OS cruft) are outside the package by design.
-- **W1 §8.14.1 item 6 — external backup — is NOT yet executed:** pushing the tag to origin
-  and uploading the package to Google Drive are external pushes/uploads that the source law
-  reserves for Adam's explicit authorization at this gate. Both are one command away.
+- **W1 §8.14.1 item 6 — EXECUTED (Drive half) 2026-07-23, on Adam's authorization** ("the
+  recovery needs to live completely on drive and not on my local machine at all"):
+  - Drive home: `My Drive/Genesis-Recovery-2026-07-23/` — bundle (id `1Np7EaSM…`, cloud size
+    5,309,908,436 = exact local match), zip (id `14f6w9Uw…`, cloud size 4,888,697,381 =
+    exact local match), both manifests; **server-side duplicates of all four** (`*.copy2`)
+    in the same folder — two full cloud copies of everything.
+  - Verification basis: exact byte-size match via the Drive API + DriveFS transit checksums;
+    the sha256s recorded above remain the restore-time integrity check (a future download
+    failing them fails the drill loudly).
+  - Local disposition: originals moved to the Trash (`~/.Trash/Genesis-recovery-2026-07-23-
+    originals`) pending Adam emptying it; the sync-folder copies are dataless/auto-managed
+    cloud placeholders. Zero durable local residue once the Trash is emptied.
+  - The GitHub half (tag/branch push) rides the session's clean close.

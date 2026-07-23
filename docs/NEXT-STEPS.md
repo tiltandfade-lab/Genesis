@@ -99,7 +99,14 @@ arrival law) — read that first; it supersedes older per-lane ordering for the 
    needs roof tiles, overhang/canopy, window/arrow-slit wall variants, exterior-face
    treatment; six-face socket-match schema is a candidate formalism for the still-open W3
    structural-grammar spec; blueprint validation (exit path exists, sockets align) precedes
-   any spawning. **The material lane rides this track
+   any spawning. **NAMED WRITING TASK — the STRUCTURE-KIT CATALOG spec** (Adam 2026-07-23):
+   authored declarative source (P11.3 pattern) defining piece taxonomy (floor · wall ·
+   wall-window/slit · doorframe · roof · overhang · pillar · stair …), six-face socket
+   schema, grid-law dimensions, realm-skin axis (material-lane trim sheets), per-piece
+   provenance/license. Kenney ruling applied: CC0 donor grammar + clay-phase stand-in
+   geometry, admitted INTO the contract (models-normalized), swapped native piece-by-piece
+   via the ALL-ART-IS-PLACEHOLDER seam when beauty passes earn it. Codex-able like the
+   material lane once the contract exists. Owner: Fable drafts next session (C1H opener). **The material lane rides this track
    (docs/MATERIAL-LANE.md, folded 2026-07-23):** Stage A open now — Codex authors Wave-1 `.ptex`
    materials (brief: `docs/CODEX-MATERIAL-BRIEF.md`) + our lane builds `dev/material-cards.mjs`
    + the review tool; Adam PASS-rules cards. Stage B (engine wiring: albedo widening → the

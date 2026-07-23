@@ -94,7 +94,12 @@ arrival law) — read that first; it supersedes older per-lane ordering for the 
    (W1 §8.14.1 item 6) awaits Adam's word.
 1. ☐ **Visual proof track (Adam's declared priority, wave-11 §19.6):** clay-room geometry
    pass → texture pass → golden site 1 "the guard's post" rolling procedural configurations
-   unbroken (FEATURE-PRIORITIZATION Stage 2). **The material lane rides this track
+   unbroken (FEATURE-PRIORITIZATION Stage 2). **Guard-post kit gaps for the C1H spec**
+   (Adam's architecture review, 2026-07-23): the tile kit is interiors-only — the guard post
+   needs roof tiles, overhang/canopy, window/arrow-slit wall variants, exterior-face
+   treatment; six-face socket-match schema is a candidate formalism for the still-open W3
+   structural-grammar spec; blueprint validation (exit path exists, sockets align) precedes
+   any spawning. **The material lane rides this track
    (docs/MATERIAL-LANE.md, folded 2026-07-23):** Stage A open now — Codex authors Wave-1 `.ptex`
    materials (brief: `docs/CODEX-MATERIAL-BRIEF.md`) + our lane builds `dev/material-cards.mjs`
    + the review tool; Adam PASS-rules cards. Stage B (engine wiring: albedo widening → the

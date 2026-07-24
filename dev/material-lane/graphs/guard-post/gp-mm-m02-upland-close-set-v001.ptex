@@ -1,0 +1,1350 @@
+{
+  "connections": [
+    {
+      "from": "gmm_n02r_fitted_rubble_cells_v001",
+      "from_port": 1,
+      "to": "stone_palette",
+      "to_port": 0
+    },
+    {
+      "from": "macro_field",
+      "from_port": 0,
+      "to": "macro_palette",
+      "to_port": 0
+    },
+    {
+      "from": "stone_palette",
+      "from_port": 0,
+      "to": "stone_macro_blend",
+      "to_port": 0
+    },
+    {
+      "from": "macro_palette",
+      "from_port": 0,
+      "to": "stone_macro_blend",
+      "to_port": 1
+    },
+    {
+      "from": "stone_grain_blend",
+      "from_port": 0,
+      "to": "joint_blend",
+      "to_port": 0
+    },
+    {
+      "from": "mortar_color",
+      "from_port": 0,
+      "to": "joint_blend",
+      "to_port": 1
+    },
+    {
+      "from": "construction_irregularity",
+      "from_port": 0,
+      "to": "joint_blend",
+      "to_port": 2
+    },
+    {
+      "from": "surface_height_blend",
+      "from_port": 0,
+      "to": "normal_map",
+      "to_port": 0
+    },
+    {
+      "from": "surface_height_blend",
+      "from_port": 0,
+      "to": "occlusion",
+      "to_port": 0
+    },
+    {
+      "from": "hewn_per_block",
+      "from_port": 0,
+      "to": "roughness_response",
+      "to_port": 0
+    },
+    {
+      "from": "surface_field",
+      "from_port": 0,
+      "to": "surface_height_range",
+      "to_port": 0
+    },
+    {
+      "from": "surface_height_range",
+      "from_port": 0,
+      "to": "hewn_height_mix",
+      "to_port": 0
+    },
+    {
+      "from": "hewn_per_block",
+      "from_port": 0,
+      "to": "hewn_facet_range",
+      "to_port": 0
+    },
+    {
+      "from": "hewn_facet_range",
+      "from_port": 0,
+      "to": "hewn_height_mix",
+      "to_port": 1
+    },
+    {
+      "from": "grain_height_mix",
+      "from_port": 0,
+      "to": "surface_height_blend",
+      "to_port": 0
+    },
+    {
+      "from": "hewn_per_block",
+      "from_port": 0,
+      "to": "hewn_albedo",
+      "to_port": 0
+    },
+    {
+      "from": "stone_macro_blend",
+      "from_port": 0,
+      "to": "stone_hewn_blend",
+      "to_port": 0
+    },
+    {
+      "from": "hewn_albedo",
+      "from_port": 0,
+      "to": "stone_hewn_blend",
+      "to_port": 1
+    },
+    {
+      "from": "grain_per_block",
+      "from_port": 0,
+      "to": "grain_height_range",
+      "to_port": 0
+    },
+    {
+      "from": "hewn_height_mix",
+      "from_port": 0,
+      "to": "grain_height_mix",
+      "to_port": 0
+    },
+    {
+      "from": "grain_height_range",
+      "from_port": 0,
+      "to": "grain_height_mix",
+      "to_port": 1
+    },
+    {
+      "from": "grain_per_block",
+      "from_port": 0,
+      "to": "grain_albedo",
+      "to_port": 0
+    },
+    {
+      "from": "stone_hewn_blend",
+      "from_port": 0,
+      "to": "stone_grain_blend",
+      "to_port": 0
+    },
+    {
+      "from": "grain_albedo",
+      "from_port": 0,
+      "to": "stone_grain_blend",
+      "to_port": 1
+    },
+    {
+      "from": "grain_per_block",
+      "from_port": 0,
+      "to": "grain_roughness",
+      "to_port": 0
+    },
+    {
+      "from": "roughness_response",
+      "from_port": 0,
+      "to": "face_roughness_mix",
+      "to_port": 0
+    },
+    {
+      "from": "grain_roughness",
+      "from_port": 0,
+      "to": "face_roughness_mix",
+      "to_port": 1
+    },
+    {
+      "from": "height_zero",
+      "from_port": 0,
+      "to": "surface_height_blend",
+      "to_port": 1
+    },
+    {
+      "from": "construction_irregularity",
+      "from_port": 0,
+      "to": "surface_height_blend",
+      "to_port": 2
+    },
+    {
+      "from": "face_roughness_mix",
+      "from_port": 0,
+      "to": "roughness_blend",
+      "to_port": 0
+    },
+    {
+      "from": "joint_roughness",
+      "from_port": 0,
+      "to": "roughness_blend",
+      "to_port": 1
+    },
+    {
+      "from": "construction_irregularity",
+      "from_port": 0,
+      "to": "roughness_blend",
+      "to_port": 2
+    },
+    {
+      "from": "gmm_n02r_fitted_rubble_cells_v001",
+      "from_port": 0,
+      "to": "construction_irregularity",
+      "to_port": 0
+    },
+    {
+      "from": "edge_warp_field",
+      "from_port": 0,
+      "to": "construction_irregularity",
+      "to_port": 1
+    },
+    {
+      "from": "construction_outline",
+      "from_port": 0,
+      "to": "block_fill",
+      "to_port": 0
+    },
+    {
+      "from": "construction_irregularity",
+      "from_port": 0,
+      "to": "construction_outline",
+      "to_port": 0
+    },
+    {
+      "from": "block_fill",
+      "from_port": 0,
+      "to": "block_uv",
+      "to_port": 0
+    },
+    {
+      "from": "hewn_facets",
+      "from_port": 0,
+      "to": "hewn_per_block",
+      "to_port": 0
+    },
+    {
+      "from": "block_uv",
+      "from_port": 0,
+      "to": "hewn_per_block",
+      "to_port": 1
+    },
+    {
+      "from": "grain_field",
+      "from_port": 0,
+      "to": "grain_per_block",
+      "to_port": 0
+    },
+    {
+      "from": "block_uv",
+      "from_port": 0,
+      "to": "grain_per_block",
+      "to_port": 1
+    },
+    {
+      "from": "joint_blend",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 0
+    },
+    {
+      "from": "metallic_zero",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 1
+    },
+    {
+      "from": "roughness_blend",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 2
+    },
+    {
+      "from": "normal_map",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 4
+    },
+    {
+      "from": "occlusion",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 5
+    },
+    {
+      "from": "surface_height_blend",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 6
+    }
+  ],
+  "label": "GP-MM-M02 / Upland Close Set / v001",
+  "name": "gp_mm_m02_upland_close_set_v001",
+  "node_position": {
+    "x": 0,
+    "y": 0
+  },
+  "nodes": [
+    {
+      "connections": [
+        {
+          "from": "fitted_pattern",
+          "from_port": 0,
+          "to": "gen_outputs",
+          "to_port": 0
+        },
+        {
+          "from": "fitted_pattern",
+          "from_port": 1,
+          "to": "per_unit_value",
+          "to_port": 0
+        },
+        {
+          "from": "per_unit_value",
+          "from_port": 0,
+          "to": "gen_outputs",
+          "to_port": 1
+        }
+      ],
+      "label": "GMM-N02R Fitted Rubble Construction Cells v001",
+      "longdesc": "Genesis versioned construction-cell node. Offsets a bounded rectilinear interlock in both axes for local fitted rubble without Voronoi fragmentation, then emits per-unit variation. Immutable once published.",
+      "name": "gmm_n02r_fitted_rubble_cells_v001",
+      "node_position": {
+        "x": -760,
+        "y": -100
+      },
+      "nodes": [
+        {
+          "name": "fitted_pattern",
+          "node_position": {
+            "x": -430,
+            "y": -70
+          },
+          "parameters": {
+            "bevel": 0.044,
+            "corner": 0.14,
+            "mortar": 0.045,
+            "randomness": 0.38,
+            "round": 0.022,
+            "x": 6,
+            "y": 6
+          },
+          "seed": 180042,
+          "seed_locked": true,
+          "type": "bricks_uneven4"
+        },
+        {
+          "name": "per_unit_value",
+          "node_position": {
+            "x": -145,
+            "y": 30
+          },
+          "parameters": {
+            "edgecolor": 1
+          },
+          "seed": 420218,
+          "seed_locked": true,
+          "type": "fill_to_random_grey2"
+        },
+        {
+          "name": "gen_parameters",
+          "node_position": {
+            "x": -430,
+            "y": -290
+          },
+          "parameters": {
+            "param0": 6,
+            "param1": 6,
+            "param2": 0.38,
+            "param3": 0.045,
+            "param4": 0.044,
+            "param5": 0.022,
+            "param6": 0.14
+          },
+          "type": "remote",
+          "widgets": [
+            {
+              "label": "Horizontal cells",
+              "linked_widgets": [
+                {
+                  "node": "fitted_pattern",
+                  "widget": "x"
+                }
+              ],
+              "name": "param0",
+              "type": "linked_control"
+            },
+            {
+              "label": "Vertical cells",
+              "linked_widgets": [
+                {
+                  "node": "fitted_pattern",
+                  "widget": "y"
+                }
+              ],
+              "name": "param1",
+              "type": "linked_control"
+            },
+            {
+              "label": "Fitting irregularity",
+              "linked_widgets": [
+                {
+                  "node": "fitted_pattern",
+                  "widget": "randomness"
+                }
+              ],
+              "name": "param2",
+              "type": "linked_control"
+            },
+            {
+              "label": "Joint width",
+              "linked_widgets": [
+                {
+                  "node": "fitted_pattern",
+                  "widget": "mortar"
+                }
+              ],
+              "name": "param3",
+              "type": "linked_control"
+            },
+            {
+              "label": "Edge bevel",
+              "linked_widgets": [
+                {
+                  "node": "fitted_pattern",
+                  "widget": "bevel"
+                }
+              ],
+              "name": "param4",
+              "type": "linked_control"
+            },
+            {
+              "label": "Corner round",
+              "linked_widgets": [
+                {
+                  "node": "fitted_pattern",
+                  "widget": "round"
+                }
+              ],
+              "name": "param5",
+              "type": "linked_control"
+            },
+            {
+              "label": "Corner region",
+              "linked_widgets": [
+                {
+                  "node": "fitted_pattern",
+                  "widget": "corner"
+                }
+              ],
+              "name": "param6",
+              "type": "linked_control"
+            }
+          ]
+        },
+        {
+          "name": "gen_inputs",
+          "node_position": {
+            "x": -700,
+            "y": -80
+          },
+          "parameters": {},
+          "ports": [],
+          "type": "ios"
+        },
+        {
+          "name": "gen_outputs",
+          "node_position": {
+            "x": 115,
+            "y": -70
+          },
+          "parameters": {},
+          "ports": [
+            {
+              "name": "height",
+              "type": "f"
+            },
+            {
+              "name": "unit_value",
+              "type": "f"
+            }
+          ],
+          "type": "ios"
+        }
+      ],
+      "parameters": {
+        "param0": 6,
+        "param1": 6,
+        "param2": 0.38,
+        "param3": 0.045,
+        "param4": 0.044,
+        "param5": 0.022,
+        "param6": 0.14
+      },
+      "seed": 180042,
+      "seed_locked": true,
+      "shortdesc": "Bounded local fitted-rubble cells with per-unit variation.",
+      "type": "graph"
+    },
+    {
+      "name": "macro_field",
+      "node_position": {
+        "x": -730,
+        "y": 300
+      },
+      "parameters": {
+        "folds": 0,
+        "iterations": 3,
+        "noise": 0,
+        "persistence": 0.42,
+        "scale_x": 1.65,
+        "scale_y": 1.65
+      },
+      "seed": 402180,
+      "seed_locked": true,
+      "type": "fbm2"
+    },
+    {
+      "name": "edge_warp_field",
+      "node_position": {
+        "x": -730,
+        "y": 485
+      },
+      "parameters": {
+        "folds": 0,
+        "iterations": 3,
+        "noise": 0,
+        "persistence": 0.44,
+        "scale_x": 6,
+        "scale_y": 6
+      },
+      "seed": 432180,
+      "seed_locked": true,
+      "type": "fbm2"
+    },
+    {
+      "name": "construction_irregularity",
+      "node_position": {
+        "x": -460,
+        "y": 470
+      },
+      "parameters": {
+        "amount": 0.022,
+        "eps": 0.04,
+        "mode": 0
+      },
+      "type": "warp"
+    },
+    {
+      "name": "stone_palette",
+      "node_position": {
+        "x": -390,
+        "y": -40
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.33,
+              "g": 0.37,
+              "pos": 0,
+              "r": 0.4
+            },
+            {
+              "a": 1,
+              "b": 0.39,
+              "g": 0.45,
+              "pos": 0.5,
+              "r": 0.49
+            },
+            {
+              "a": 1,
+              "b": 0.46,
+              "g": 0.52,
+              "pos": 1,
+              "r": 0.56
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "macro_palette",
+      "node_position": {
+        "x": -390,
+        "y": 280
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.33,
+              "g": 0.37,
+              "pos": 0,
+              "r": 0.4
+            },
+            {
+              "a": 1,
+              "b": 0.47,
+              "g": 0.53,
+              "pos": 1,
+              "r": 0.57
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "stone_macro_blend",
+      "node_position": {
+        "x": -90,
+        "y": 40
+      },
+      "parameters": {
+        "amount": 0.1,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "mortar_color",
+      "node_position": {
+        "x": -110,
+        "y": -150
+      },
+      "parameters": {
+        "color": {
+          "a": 1,
+          "b": 0.28,
+          "g": 0.29,
+          "r": 0.31,
+          "type": "Color"
+        }
+      },
+      "type": "uniform"
+    },
+    {
+      "name": "joint_blend",
+      "node_position": {
+        "x": 190,
+        "y": -20
+      },
+      "parameters": {
+        "amount": 1,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "roughness_response",
+      "node_position": {
+        "x": 130,
+        "y": 270
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.94,
+              "g": 0.94,
+              "pos": 0,
+              "r": 0.94
+            },
+            {
+              "a": 1,
+              "b": 0.64,
+              "g": 0.64,
+              "pos": 1,
+              "r": 0.64
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "hewn_facets",
+      "node_position": {
+        "x": -170,
+        "y": 710
+      },
+      "parameters": {
+        "param0": 4,
+        "param1": 3
+      },
+      "seed": 422180,
+      "seed_locked": true,
+      "type": "crystal"
+    },
+    {
+      "name": "block_fill",
+      "node_position": {
+        "x": -170,
+        "y": 1370
+      },
+      "parameters": {
+        "adjust": 0.03,
+        "remove_edges": 1,
+        "size": 9
+      },
+      "seed": 451180,
+      "seed_locked": true,
+      "type": "fill2"
+    },
+    {
+      "name": "construction_outline",
+      "node_position": {
+        "x": -430,
+        "y": 1370
+      },
+      "parameters": {},
+      "seed": 450180,
+      "seed_locked": true,
+      "type": "invert"
+    },
+    {
+      "name": "block_uv",
+      "node_position": {
+        "x": 95,
+        "y": 1370
+      },
+      "parameters": {
+        "mode": 0
+      },
+      "seed": 452180,
+      "seed_locked": true,
+      "type": "fill_to_uv2"
+    },
+    {
+      "name": "hewn_per_block",
+      "node_position": {
+        "x": 380,
+        "y": 710
+      },
+      "parameters": {
+        "inputs": 0,
+        "rotate": 22,
+        "scale": 0.18,
+        "sx": 1,
+        "sy": 1,
+        "variations": false
+      },
+      "seed": 461180,
+      "seed_locked": true,
+      "type": "custom_uv"
+    },
+    {
+      "name": "hewn_facet_range",
+      "node_position": {
+        "x": 95,
+        "y": 760
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.64,
+              "g": 0.64,
+              "pos": 0,
+              "r": 0.64
+            },
+            {
+              "a": 1,
+              "b": 0.995,
+              "g": 0.995,
+              "pos": 1,
+              "r": 0.995
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "hewn_height_mix",
+      "node_position": {
+        "x": 380,
+        "y": 770
+      },
+      "parameters": {
+        "amount": 0.56,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "hewn_albedo",
+      "node_position": {
+        "x": -60,
+        "y": 870
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.25,
+              "g": 0.28,
+              "pos": 0,
+              "r": 0.31
+            },
+            {
+              "a": 1,
+              "b": 0.48,
+              "g": 0.55,
+              "pos": 1,
+              "r": 0.6
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "stone_hewn_blend",
+      "node_position": {
+        "x": 190,
+        "y": 150
+      },
+      "parameters": {
+        "amount": 0.005,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "grain_field",
+      "node_position": {
+        "x": -175,
+        "y": 1010
+      },
+      "parameters": {
+        "folds": 0,
+        "iterations": 3,
+        "noise": 0,
+        "persistence": 0.45,
+        "scale_x": 18,
+        "scale_y": 18
+      },
+      "seed": 442180,
+      "seed_locked": true,
+      "type": "fbm2"
+    },
+    {
+      "name": "grain_per_block",
+      "node_position": {
+        "x": 95,
+        "y": 1130
+      },
+      "parameters": {
+        "inputs": 0,
+        "rotate": 35,
+        "scale": 0.28,
+        "sx": 1,
+        "sy": 1,
+        "variations": false
+      },
+      "seed": 471180,
+      "seed_locked": true,
+      "type": "custom_uv"
+    },
+    {
+      "name": "grain_height_range",
+      "node_position": {
+        "x": 90,
+        "y": 1010
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.88,
+              "g": 0.88,
+              "pos": 0,
+              "r": 0.88
+            },
+            {
+              "a": 1,
+              "b": 0.995,
+              "g": 0.995,
+              "pos": 1,
+              "r": 0.995
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "grain_height_mix",
+      "node_position": {
+        "x": 375,
+        "y": 1010
+      },
+      "parameters": {
+        "amount": 0.3,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "grain_albedo",
+      "node_position": {
+        "x": -55,
+        "y": 1130
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.23,
+              "g": 0.26,
+              "pos": 0,
+              "r": 0.29
+            },
+            {
+              "a": 1,
+              "b": 0.47,
+              "g": 0.54,
+              "pos": 1,
+              "r": 0.59
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "stone_grain_blend",
+      "node_position": {
+        "x": 420,
+        "y": 150
+      },
+      "parameters": {
+        "amount": 0.007,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "grain_roughness",
+      "node_position": {
+        "x": 110,
+        "y": 1210
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.96,
+              "g": 0.96,
+              "pos": 0,
+              "r": 0.96
+            },
+            {
+              "a": 1,
+              "b": 0.58,
+              "g": 0.58,
+              "pos": 1,
+              "r": 0.58
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "face_roughness_mix",
+      "node_position": {
+        "x": 390,
+        "y": 1210
+      },
+      "parameters": {
+        "amount": 0.5,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "surface_field",
+      "node_position": {
+        "x": -160,
+        "y": 420
+      },
+      "parameters": {
+        "folds": 0,
+        "iterations": 4,
+        "noise": 0,
+        "persistence": 0.46,
+        "scale_x": 8.5,
+        "scale_y": 8.5
+      },
+      "seed": 412180,
+      "seed_locked": true,
+      "type": "fbm2"
+    },
+    {
+      "name": "surface_height_range",
+      "node_position": {
+        "x": 110,
+        "y": 430
+      },
+      "parameters": {
+        "gradient": {
+          "interpolation": 1,
+          "points": [
+            {
+              "a": 1,
+              "b": 0.91,
+              "g": 0.91,
+              "pos": 0,
+              "r": 0.91
+            },
+            {
+              "a": 1,
+              "b": 0.995,
+              "g": 0.995,
+              "pos": 1,
+              "r": 0.995
+            }
+          ],
+          "type": "Gradient"
+        }
+      },
+      "type": "colorize"
+    },
+    {
+      "name": "height_zero",
+      "node_position": {
+        "x": 120,
+        "y": 560
+      },
+      "parameters": {
+        "color": 0
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "name": "surface_height_blend",
+      "node_position": {
+        "x": 390,
+        "y": 440
+      },
+      "parameters": {
+        "amount": 1,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "joint_roughness",
+      "node_position": {
+        "x": 170,
+        "y": 650
+      },
+      "parameters": {
+        "color": 0.94
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "name": "roughness_blend",
+      "node_position": {
+        "x": 430,
+        "y": 620
+      },
+      "parameters": {
+        "amount": 1,
+        "blend_type": 0
+      },
+      "type": "blend"
+    },
+    {
+      "name": "normal_map",
+      "node_position": {
+        "x": 420,
+        "y": 170
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 0.98,
+        "param2": 0,
+        "param4": 1
+      },
+      "type": "normal_map"
+    },
+    {
+      "name": "occlusion",
+      "node_position": {
+        "x": 410,
+        "y": 320
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 16,
+        "param2": 0.82,
+        "param3": 1
+      },
+      "type": "occlusion2"
+    },
+    {
+      "name": "metallic_zero",
+      "node_position": {
+        "x": 510,
+        "y": -170
+      },
+      "parameters": {
+        "color": 0
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "export_paths": {},
+      "name": "Material",
+      "node_position": {
+        "x": 790,
+        "y": 40
+      },
+      "parameters": {
+        "albedo_color": {
+          "a": 1,
+          "b": 1,
+          "g": 1,
+          "r": 1,
+          "type": "Color"
+        },
+        "ao": 1,
+        "depth_scale": 0.08,
+        "emission_energy": 1,
+        "metallic": 1,
+        "normal": 1,
+        "roughness": 1,
+        "size": 9,
+        "sss": 0
+      },
+      "type": "material"
+    },
+    {
+      "name": "candidate_configurations",
+      "node_position": {
+        "x": 520,
+        "y": -360
+      },
+      "parameters": {
+        "param0": 0
+      },
+      "type": "remote",
+      "widgets": [
+        {
+          "configurations": {
+            "upland-close-set": [
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 6,
+                "widget": "param0"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 6,
+                "widget": "param1"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.38,
+                "widget": "param2"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.045,
+                "widget": "param3"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.044,
+                "widget": "param4"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.022,
+                "widget": "param5"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.14,
+                "widget": "param6"
+              },
+              {
+                "node": "macro_field",
+                "value": 1.65,
+                "widget": "scale_x"
+              },
+              {
+                "node": "macro_field",
+                "value": 1.65,
+                "widget": "scale_y"
+              },
+              {
+                "node": "normal_map",
+                "value": 0.98,
+                "widget": "param1"
+              }
+            ],
+            "upland-heavy-fitted": [
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 4,
+                "widget": "param0"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 4,
+                "widget": "param1"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.26,
+                "widget": "param2"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.055,
+                "widget": "param3"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.035,
+                "widget": "param4"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.018,
+                "widget": "param5"
+              },
+              {
+                "node": "gmm_n02r_fitted_rubble_cells_v001",
+                "value": 0.12,
+                "widget": "param6"
+              },
+              {
+                "node": "macro_field",
+                "value": 1.35,
+                "widget": "scale_x"
+              },
+              {
+                "node": "macro_field",
+                "value": 1.35,
+                "widget": "scale_y"
+              },
+              {
+                "node": "normal_map",
+                "value": 1.02,
+                "widget": "param1"
+              }
+            ]
+          },
+          "label": "Bounded candidate",
+          "linked_widgets": [
+            {
+              "node": "gmm_n02r_fitted_rubble_cells_v001",
+              "widget": "param0"
+            },
+            {
+              "node": "gmm_n02r_fitted_rubble_cells_v001",
+              "widget": "param1"
+            },
+            {
+              "node": "gmm_n02r_fitted_rubble_cells_v001",
+              "widget": "param2"
+            },
+            {
+              "node": "gmm_n02r_fitted_rubble_cells_v001",
+              "widget": "param3"
+            },
+            {
+              "node": "gmm_n02r_fitted_rubble_cells_v001",
+              "widget": "param4"
+            },
+            {
+              "node": "gmm_n02r_fitted_rubble_cells_v001",
+              "widget": "param5"
+            },
+            {
+              "node": "gmm_n02r_fitted_rubble_cells_v001",
+              "widget": "param6"
+            },
+            {
+              "node": "macro_field",
+              "widget": "scale_x"
+            },
+            {
+              "node": "macro_field",
+              "widget": "scale_y"
+            },
+            {
+              "node": "normal_map",
+              "widget": "param1"
+            }
+          ],
+          "name": "param0",
+          "type": "config_control"
+        }
+      ]
+    },
+    {
+      "color": {
+        "a": 1,
+        "b": 0.17,
+        "g": 0.15,
+        "r": 0.12,
+        "type": "Color"
+      },
+      "label": "AUTHORING CONTRACT",
+      "name": "authoring_contract",
+      "node_position": {
+        "x": -820,
+        "y": -390
+      },
+      "size": {
+        "x": 720,
+        "y": 120
+      },
+      "text": "GP-MM-M02 / config upland-close-set / seed 180042 / 512 target. Base operational construction only: no moss, grime, leaks, cracks, abandonment, wetness, or damage state.",
+      "title": "Genesis Guard Post base-material contract",
+      "type": "comment"
+    }
+  ],
+  "parameters": {},
+  "seed": 180042,
+  "seed_locked": true,
+  "type": "graph"
+}

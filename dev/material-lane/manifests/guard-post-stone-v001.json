@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "batchId": "GP-MM-STONE-V001",
+  "status": "candidate",
+  "stage": "Stage A offline material foundry",
+  "scope": {
+    "site": "Guard Post",
+    "parents": [
+      "GP-MM-M01 old operational stone - coursed",
+      "GP-MM-M02 old operational stone - local rubble"
+    ],
+    "exclusions": [
+      "overgrowth",
+      "moss",
+      "wetness",
+      "leaks",
+      "cracks",
+      "damage",
+      "abandonment",
+      "maintenance state",
+      "site condition response"
+    ]
+  },
+  "compiler": {
+    "name": "Material Maker",
+    "version": "1.3",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "customNodeLibrary": {
+    "path": "dev/material-lane/library/genesis-guard-post-mm13-v001.json",
+    "sha256": "6a9cee25e56b6253014acd8eef8dc71300ed5c74a6a3f3cdbf0f59b4cb5392f3",
+    "nodes": [
+      {
+        "id": "GMM-N02C",
+        "name": "Coursed Construction Cells",
+        "version": "v001",
+        "immutable": true,
+        "purpose": "Coherent horizontal course datum with bounded split widths and per-unit value.",
+        "exposedParameters": {
+          "courseRows": {
+            "candidateRange": [
+              5,
+              6
+            ]
+          },
+          "splitIterations": {
+            "candidateRange": [
+              7,
+              9
+            ]
+          },
+          "minimumUnitSize": {
+            "candidateRange": [
+              0.18,
+              0.25
+            ]
+          },
+          "jointWidth": {
+            "candidateRange": [
+              0.047,
+              0.05
+            ]
+          },
+          "edgeBevel": {
+            "candidateRange": [
+              0.04,
+              0.048
+            ]
+          },
+          "cornerRound": {
+            "candidateRange": [
+              0.015,
+              0.02
+            ]
+          }
+        }
+      },
+      {
+        "id": "GMM-N02R",
+        "name": "Fitted Rubble Construction Cells",
+        "version": "v001",
+        "immutable": true,
+        "purpose": "Bounded rectilinear interlock in two axes; deliberately not Voronoi and not M01 with added noise.",
+        "exposedParameters": {
+          "horizontalCells": {
+            "candidateRange": [
+              4,
+              6
+            ]
+          },
+          "verticalCells": {
+            "candidateRange": [
+              4,
+              6
+            ]
+          },
+          "fittingIrregularity": {
+            "candidateRange": [
+              0.26,
+              0.38
+            ]
+          },
+          "jointWidth": {
+            "candidateRange": [
+              0.045,
+              0.055
+            ]
+          },
+          "edgeBevel": {
+            "candidateRange": [
+              0.035,
+              0.044
+            ]
+          },
+          "cornerRound": {
+            "candidateRange": [
+              0.018,
+              0.022
+            ]
+          },
+          "cornerRegion": {
+            "candidateRange": [
+              0.12,
+              0.14
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "id": "GP-MM-M01-C01",
+      "family": "GP-MM-M01",
+      "configuration": "frontier-broad-cool",
+      "tasteIntent": "Broad cool-grey courses cut from coarse split-face stone: disciplined construction, but visibly hewn rather than machined.",
+      "declaredScaleMeters": {
+        "width": 5,
+        "height": 5
+      },
+      "seed": 180041,
+      "source": {
+        "ptex": "dev/material-lane/graphs/guard-post/gp-mm-m01-frontier-broad-cool-v001.ptex",
+        "sha256": "0b3b8166cbaee221cb92c814a6af8fa855e3441903c8c8486d3152333cb9f141",
+        "customNode": "GMM-N02C@v001"
+      },
+      "parameters": {
+        "courseRows": 5,
+        "splitIterations": 7,
+        "minimumUnitSize": 0.25,
+        "jointWidth": 0.05,
+        "edgeBevel": 0.04,
+        "cornerRound": 0.015,
+        "macroScale": 1.25,
+        "normalStrength": 1.1,
+        "normalBakeStrength": 0.9,
+        "surfaceScale": 7.5,
+        "surfaceHeightRange": [
+          0.92,
+          0.995
+        ],
+        "perBlockFaceMapping": true,
+        "hewnFacetScale": [
+          3,
+          2
+        ],
+        "hewnReliefMinimum": 0.7,
+        "grainScale": 16,
+        "grainReliefMinimum": 0.9,
+        "edgeWarpStrength": 0.014,
+        "stoneRoughnessRange": [
+          0.62,
+          0.96
+        ]
+      },
+      "paletteIntent": "Cool neutral old stone; restrained face range; charcoal-grey joints that remain readable without black outlines.",
+      "outputs": {
+        "albedo": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m01-frontier-broad-cool-v001_albedo.png",
+          "sha256": "994c7d91020291f96638d91b367c0f2aeb793aa5b5c4e9006c0ece0f134e41dd"
+        },
+        "normal": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m01-frontier-broad-cool-v001_normal.png",
+          "sha256": "b5e2cee6e9357a732c76deacc5ea5845cbed18ac1f52dc6a1d1b536cd7a30ee4"
+        },
+        "orm": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m01-frontier-broad-cool-v001_orm.png",
+          "sha256": "dd5777d5ab1d4de5980dff1b1483ed69ecfd0deaa3a6a1493c76c5bcbd8216ca"
+        }
+      }
+    },
+    {
+      "id": "GP-MM-M01-C02",
+      "family": "GP-MM-M01",
+      "configuration": "patrol-tempered-earth",
+      "tasteIntent": "Tighter earth-grey courses with rough split faces, fine mineral grain, and small joint-edge deviations under institutional discipline.",
+      "declaredScaleMeters": {
+        "width": 5,
+        "height": 5
+      },
+      "seed": 180041,
+      "source": {
+        "ptex": "dev/material-lane/graphs/guard-post/gp-mm-m01-patrol-tempered-earth-v001.ptex",
+        "sha256": "11d3304014dee3eabfb594362cd0cce0b87a760135a1a8772b631a684b9dbe26",
+        "customNode": "GMM-N02C@v001"
+      },
+      "parameters": {
+        "courseRows": 6,
+        "splitIterations": 9,
+        "minimumUnitSize": 0.18,
+        "jointWidth": 0.047,
+        "edgeBevel": 0.048,
+        "cornerRound": 0.02,
+        "macroScale": 1.6,
+        "normalStrength": 1.14,
+        "normalBakeStrength": 0.95,
+        "surfaceScale": 9,
+        "surfaceHeightRange": [
+          0.9,
+          0.995
+        ],
+        "perBlockFaceMapping": true,
+        "hewnFacetScale": [
+          4,
+          3
+        ],
+        "hewnReliefMinimum": 0.67,
+        "grainScale": 18,
+        "grainReliefMinimum": 0.89,
+        "edgeWarpStrength": 0.018,
+        "stoneRoughnessRange": [
+          0.58,
+          0.96
+        ]
+      },
+      "paletteIntent": "Tempered earth-grey old stone with restrained ochre warmth and no condition-state tint.",
+      "outputs": {
+        "albedo": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m01-patrol-tempered-earth-v001_albedo.png",
+          "sha256": "8da69bcbfcb9fb7c0b749cc237b97ed15419adfe848ba1456b2ae31587ea9367"
+        },
+        "normal": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m01-patrol-tempered-earth-v001_normal.png",
+          "sha256": "e1a7ff67717747d805fb03f06a1c5c4316ca56fd74d2a77ea33d860aa68d90e3"
+        },
+        "orm": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m01-patrol-tempered-earth-v001_orm.png",
+          "sha256": "bddffd16af90f66eedbf7606e2cac533246c05111bf0cbe82014d41d3c29a46b"
+        }
+      }
+    },
+    {
+      "id": "GP-MM-M02-C01",
+      "family": "GP-MM-M02",
+      "configuration": "upland-heavy-fitted",
+      "tasteIntent": "Broad heavy local blocks with the deepest split-face planes, coarse mineral response, and the strongest fitted-edge irregularity.",
+      "declaredScaleMeters": {
+        "width": 5,
+        "height": 5
+      },
+      "seed": 180042,
+      "source": {
+        "ptex": "dev/material-lane/graphs/guard-post/gp-mm-m02-upland-heavy-fitted-v001.ptex",
+        "sha256": "df6acbc267f6e444bc1667f093d05b5cffaaa6fdf432209e78d176b1625cf76f",
+        "customNode": "GMM-N02R@v001"
+      },
+      "parameters": {
+        "horizontalCells": 4,
+        "verticalCells": 4,
+        "fittingIrregularity": 0.26,
+        "jointWidth": 0.055,
+        "edgeBevel": 0.035,
+        "cornerRound": 0.018,
+        "cornerRegion": 0.12,
+        "macroScale": 1.35,
+        "normalStrength": 1.2,
+        "normalBakeStrength": 1.02,
+        "surfaceScale": 6.5,
+        "surfaceHeightRange": [
+          0.89,
+          0.995
+        ],
+        "perBlockFaceMapping": true,
+        "hewnFacetScale": [
+          3,
+          2
+        ],
+        "hewnReliefMinimum": 0.6,
+        "grainScale": 14,
+        "grainReliefMinimum": 0.87,
+        "edgeWarpStrength": 0.026,
+        "stoneRoughnessRange": [
+          0.55,
+          0.97
+        ]
+      },
+      "paletteIntent": "Quiet upland grey-brown stone with modest mineral difference and readable, non-black joints.",
+      "outputs": {
+        "albedo": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m02-upland-heavy-fitted-v001_albedo.png",
+          "sha256": "e59e9f6a3e4cd0e25ca6db5f16d8a75e4b2193de0c41924fb3a035ae4f0f1d73"
+        },
+        "normal": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m02-upland-heavy-fitted-v001_normal.png",
+          "sha256": "734e9d0fae6f795dfab1642964c006435012e30888da17e920eb3a6237090859"
+        },
+        "orm": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m02-upland-heavy-fitted-v001_orm.png",
+          "sha256": "d885e14dcdc5fbcbc7e63e5475b70f824c267d68075a536387dba1596bb4f49e"
+        }
+      }
+    },
+    {
+      "id": "GP-MM-M02-C02",
+      "family": "GP-MM-M02",
+      "configuration": "upland-close-set",
+      "tasteIntent": "Closer-set warm local stone with smaller split planes, granular faces, and irregular fitted joints without small-stone confetti.",
+      "declaredScaleMeters": {
+        "width": 5,
+        "height": 5
+      },
+      "seed": 180042,
+      "source": {
+        "ptex": "dev/material-lane/graphs/guard-post/gp-mm-m02-upland-close-set-v001.ptex",
+        "sha256": "3c90c1f46382d57cdf06d953dd42165a2542eaf2070bbbcc1535a3fd64a540f1",
+        "customNode": "GMM-N02R@v001"
+      },
+      "parameters": {
+        "horizontalCells": 6,
+        "verticalCells": 6,
+        "fittingIrregularity": 0.38,
+        "jointWidth": 0.045,
+        "edgeBevel": 0.044,
+        "cornerRound": 0.022,
+        "cornerRegion": 0.14,
+        "macroScale": 1.65,
+        "normalStrength": 1.16,
+        "normalBakeStrength": 0.98,
+        "surfaceScale": 8.5,
+        "surfaceHeightRange": [
+          0.91,
+          0.995
+        ],
+        "perBlockFaceMapping": true,
+        "hewnFacetScale": [
+          4,
+          3
+        ],
+        "hewnReliefMinimum": 0.64,
+        "grainScale": 18,
+        "grainReliefMinimum": 0.88,
+        "edgeWarpStrength": 0.022,
+        "stoneRoughnessRange": [
+          0.58,
+          0.96
+        ]
+      },
+      "paletteIntent": "Warm earth-grey local stone; broader color family than M01, with no moss or site-condition tint.",
+      "outputs": {
+        "albedo": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m02-upland-close-set-v001_albedo.png",
+          "sha256": "88efcb7ca28747066674c5fdaa1f8271821798bde19789b5928f7109e0c0e8d2"
+        },
+        "normal": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m02-upland-close-set-v001_normal.png",
+          "sha256": "0a6253ae5afa04dd3cc0dc8b5dbab690cad961391cd6ac58b141aacdae39df2c"
+        },
+        "orm": {
+          "path": "dev/material-lane/exports/guard-post-mm13-v001/run-a/gp-mm-m02-upland-close-set-v001_orm.png",
+          "sha256": "9abfa1d30cb2b7b3d15ebc42e4f1630327de2b20b8a3ec9152d09123a33d344e"
+        }
+      }
+    }
+  ],
+  "channelSemantics": {
+    "albedo": "sRGB base color; no baked lighting or condition state",
+    "normal": "linear tangent-space normal; split-face planes plus subordinate granular response for low-poly wall slabs",
+    "orm": {
+      "red": "ambient occlusion",
+      "green": "roughness",
+      "blue": "metalness"
+    },
+    "height": "Retained inside every .ptex graph and emitted by Material Maker as an auxiliary heightmap; not a required runtime channel for this review."
+  },
+  "reviewNote": "Base construction parents only. Maintained overgrowth is a separate condition-response layer and is intentionally absent from this review.",
+  "receipt": "dev/material-lane/receipts/guard-post-mm13-export-receipt.json"
+}

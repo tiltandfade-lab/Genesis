@@ -1,0 +1,637 @@
+{
+  "schemaVersion": 1,
+  "proofId": "GENESIS-TRIM-SHEET-PROOF-V001",
+  "layoutId": "architecture-core-v1",
+  "version": 1,
+  "authoringSize": [
+    512,
+    512
+  ],
+  "runtimeSize": [
+    512,
+    512
+  ],
+  "colorSpace": "srgb",
+  "channels": [
+    "baseColor"
+  ],
+  "gutterPx": 8,
+  "packing": "full-width horizontal bands with vertical edge dilation",
+  "repeatContract": "clamped atlas plus repeat-boundary run segmentation",
+  "debugSheet": {
+    "path": "dev/trim-sheet-proof/generated/architecture-core-v1-debug.png",
+    "sha256": "3110f710ad593a935ede7aa0e19daf702824b9919d8f44b5bc19a094ef3284b0"
+  },
+  "claimBoundary": "This proves stable multi-band packing and mapped geometry reuse. Role bands are deterministic derivatives of each shipped single strip, not final independently authored production bands.",
+  "variants": [
+    {
+      "id": "fantasy-masonry",
+      "title": "Fantasy Masonry",
+      "realm": "fantasy",
+      "materialFamily": "warm-carved-stone",
+      "source": "assets/textures/fantasy-trim-1.png",
+      "sourceWrap": "repeat",
+      "sourceStorage": {
+        "kind": "lfs",
+        "oidSha256": "e99d86aa78e4d3d8ec4b4302ac99ec0bd6cf181b88f03d47381c729c7f4131d8",
+        "declaredSize": 28546
+      },
+      "sourceSha256": "e99d86aa78e4d3d8ec4b4302ac99ec0bd6cf181b88f03d47381c729c7f4131d8",
+      "sourceDimensions": [
+        256,
+        64
+      ],
+      "derivedRoleBands": true,
+      "output": {
+        "path": "dev/trim-sheet-proof/generated/fantasy-masonry-trim-sheet.png",
+        "sha256": "76e14d592177f2fa475bd7e7ec2a50f71728f3d0e6a98eeddfc9c203ac003a5d",
+        "dimensions": [
+          512,
+          512
+        ]
+      },
+      "slots": [
+        {
+          "slotId": "plain-band",
+          "semanticRole": "PLAIN_FALLBACK",
+          "rectPx": [
+            0,
+            8,
+            512,
+            48
+          ],
+          "repeatWorldLength": 0.5,
+          "physicalBandHeight": 0.08,
+          "profileId": "profile-flat-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            12
+          ],
+          "uvRect": [
+            0.0,
+            0.015625,
+            1.0,
+            0.09375
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "base-course",
+          "semanticRole": "BASE_COURSE",
+          "rectPx": [
+            0,
+            64,
+            512,
+            80
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.22,
+          "profileId": "profile-square-proud-01",
+          "sourceCrop": [
+            0,
+            36,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.125,
+            1.0,
+            0.15625
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "cornice",
+          "semanticRole": "CORNICE",
+          "rectPx": [
+            0,
+            152,
+            512,
+            96
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.28,
+          "profileId": "profile-bevel-proud-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.296875,
+            1.0,
+            0.1875
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "coping",
+          "semanticRole": "COPING",
+          "rectPx": [
+            0,
+            256,
+            512,
+            72
+          ],
+          "repeatWorldLength": 0.75,
+          "physicalBandHeight": 0.18,
+          "profileId": "profile-cap-flat-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            28
+          ],
+          "uvRect": [
+            0.0,
+            0.5,
+            1.0,
+            0.140625
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "nosing",
+          "semanticRole": "NOSING",
+          "rectPx": [
+            0,
+            336,
+            512,
+            64
+          ],
+          "repeatWorldLength": 0.5,
+          "physicalBandHeight": 0.12,
+          "profileId": "profile-nose-bevel-01",
+          "sourceCrop": [
+            0,
+            18,
+            256,
+            44
+          ],
+          "uvRect": [
+            0.0,
+            0.65625,
+            1.0,
+            0.125
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "curb",
+          "semanticRole": "CURB",
+          "rectPx": [
+            0,
+            408,
+            512,
+            96
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.24,
+          "profileId": "profile-square-proud-01",
+          "sourceCrop": [
+            0,
+            32,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.796875,
+            1.0,
+            0.1875
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        }
+      ]
+    },
+    {
+      "id": "gloom-crypt",
+      "title": "Gloom Crypt",
+      "realm": "gloom",
+      "materialFamily": "dark-carved-stone",
+      "source": "assets/textures/gloom-trim-1.png",
+      "sourceWrap": "repeat",
+      "sourceStorage": {
+        "kind": "lfs",
+        "oidSha256": "86fe29ceade04bc37778fd189fb677068c6b935f36e5f4d29aeabe92533bbef0",
+        "declaredSize": 32250
+      },
+      "sourceSha256": "86fe29ceade04bc37778fd189fb677068c6b935f36e5f4d29aeabe92533bbef0",
+      "sourceDimensions": [
+        256,
+        64
+      ],
+      "derivedRoleBands": true,
+      "output": {
+        "path": "dev/trim-sheet-proof/generated/gloom-crypt-trim-sheet.png",
+        "sha256": "60bf6895d74c08b84a29f1c47529c738f43f4f3009d2d7977d9f89b742062939",
+        "dimensions": [
+          512,
+          512
+        ]
+      },
+      "slots": [
+        {
+          "slotId": "plain-band",
+          "semanticRole": "PLAIN_FALLBACK",
+          "rectPx": [
+            0,
+            8,
+            512,
+            48
+          ],
+          "repeatWorldLength": 0.5,
+          "physicalBandHeight": 0.08,
+          "profileId": "profile-flat-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            12
+          ],
+          "uvRect": [
+            0.0,
+            0.015625,
+            1.0,
+            0.09375
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "base-course",
+          "semanticRole": "BASE_COURSE",
+          "rectPx": [
+            0,
+            64,
+            512,
+            80
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.22,
+          "profileId": "profile-square-proud-01",
+          "sourceCrop": [
+            0,
+            36,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.125,
+            1.0,
+            0.15625
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "cornice",
+          "semanticRole": "CORNICE",
+          "rectPx": [
+            0,
+            152,
+            512,
+            96
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.28,
+          "profileId": "profile-bevel-proud-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.296875,
+            1.0,
+            0.1875
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "coping",
+          "semanticRole": "COPING",
+          "rectPx": [
+            0,
+            256,
+            512,
+            72
+          ],
+          "repeatWorldLength": 0.75,
+          "physicalBandHeight": 0.18,
+          "profileId": "profile-cap-flat-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            28
+          ],
+          "uvRect": [
+            0.0,
+            0.5,
+            1.0,
+            0.140625
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "nosing",
+          "semanticRole": "NOSING",
+          "rectPx": [
+            0,
+            336,
+            512,
+            64
+          ],
+          "repeatWorldLength": 0.5,
+          "physicalBandHeight": 0.12,
+          "profileId": "profile-nose-bevel-01",
+          "sourceCrop": [
+            0,
+            18,
+            256,
+            44
+          ],
+          "uvRect": [
+            0.0,
+            0.65625,
+            1.0,
+            0.125
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "curb",
+          "semanticRole": "CURB",
+          "rectPx": [
+            0,
+            408,
+            512,
+            96
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.24,
+          "profileId": "profile-square-proud-01",
+          "sourceCrop": [
+            0,
+            32,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.796875,
+            1.0,
+            0.1875
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        }
+      ]
+    },
+    {
+      "id": "chrome-industrial",
+      "title": "Chrome Industrial",
+      "realm": "chrome",
+      "materialFamily": "painted-industrial-metal",
+      "source": "assets/textures/chrome-trim-1.png",
+      "sourceWrap": "mirror",
+      "sourceStorage": {
+        "kind": "lfs",
+        "oidSha256": "9115d966090e93496715297e979df22efe7cb386e40170b36986be019c1e93d6",
+        "declaredSize": 23337
+      },
+      "sourceSha256": "9115d966090e93496715297e979df22efe7cb386e40170b36986be019c1e93d6",
+      "sourceDimensions": [
+        256,
+        64
+      ],
+      "derivedRoleBands": true,
+      "output": {
+        "path": "dev/trim-sheet-proof/generated/chrome-industrial-trim-sheet.png",
+        "sha256": "99f12f64a316f6df2a6af75390b0063477192e8ca188ade9d772094864cb761a",
+        "dimensions": [
+          512,
+          512
+        ]
+      },
+      "slots": [
+        {
+          "slotId": "plain-band",
+          "semanticRole": "PLAIN_FALLBACK",
+          "rectPx": [
+            0,
+            8,
+            512,
+            48
+          ],
+          "repeatWorldLength": 0.5,
+          "physicalBandHeight": 0.08,
+          "profileId": "profile-flat-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            12
+          ],
+          "uvRect": [
+            0.0,
+            0.015625,
+            1.0,
+            0.09375
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "base-course",
+          "semanticRole": "BASE_COURSE",
+          "rectPx": [
+            0,
+            64,
+            512,
+            80
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.22,
+          "profileId": "profile-square-proud-01",
+          "sourceCrop": [
+            0,
+            36,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.125,
+            1.0,
+            0.15625
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "cornice",
+          "semanticRole": "CORNICE",
+          "rectPx": [
+            0,
+            152,
+            512,
+            96
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.28,
+          "profileId": "profile-bevel-proud-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.296875,
+            1.0,
+            0.1875
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "coping",
+          "semanticRole": "COPING",
+          "rectPx": [
+            0,
+            256,
+            512,
+            72
+          ],
+          "repeatWorldLength": 0.75,
+          "physicalBandHeight": 0.18,
+          "profileId": "profile-cap-flat-01",
+          "sourceCrop": [
+            0,
+            0,
+            256,
+            28
+          ],
+          "uvRect": [
+            0.0,
+            0.5,
+            1.0,
+            0.140625
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "nosing",
+          "semanticRole": "NOSING",
+          "rectPx": [
+            0,
+            336,
+            512,
+            64
+          ],
+          "repeatWorldLength": 0.5,
+          "physicalBandHeight": 0.12,
+          "profileId": "profile-nose-bevel-01",
+          "sourceCrop": [
+            0,
+            18,
+            256,
+            44
+          ],
+          "uvRect": [
+            0.0,
+            0.65625,
+            1.0,
+            0.125
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        },
+        {
+          "slotId": "curb",
+          "semanticRole": "CURB",
+          "rectPx": [
+            0,
+            408,
+            512,
+            96
+          ],
+          "repeatWorldLength": 1.0,
+          "physicalBandHeight": 0.24,
+          "profileId": "profile-square-proud-01",
+          "sourceCrop": [
+            0,
+            32,
+            256,
+            64
+          ],
+          "uvRect": [
+            0.0,
+            0.796875,
+            1.0,
+            0.1875
+          ],
+          "repeatAxis": "u",
+          "reversible": true,
+          "endpointPolicy": "plain-cap",
+          "fallbackSlotId": "plain-band"
+        }
+      ]
+    }
+  ]
+}

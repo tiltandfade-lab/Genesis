@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "proofId": "GENESIS-NORMAL-LAYER-AB-V001",
+  "generatedAt": "2026-07-24T01:16:23.806Z",
+  "harness": "dev/lit-texture-proof/normal-layer-proof.html",
+  "browser": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "captures": [
+    "dev/lit-texture-proof/out/normal-layer-proof-light-right.png",
+    "dev/lit-texture-proof/out/normal-layer-proof-light-left.png"
+  ],
+  "captureHashes": [
+    "cbbcd5a85b8c25f8a31571e5bd1835c342510ffe54292e2ad628f1e0d2c9cb5b",
+    "4dbfaf297b4d3e28c370d01cc5e2c3f462578ce29255502291988bfb11ab0cf9"
+  ],
+  "renderReports": [
+    {
+      "proofId": "GENESIS-NORMAL-LAYER-AB-V001",
+      "threeRevision": "166",
+      "renderer": "WebGLRenderer",
+      "material": "MeshStandardMaterial",
+      "toneMapping": "AgXToneMapping",
+      "colorContract": "albedo=sRGB; normal=linear tangent-space",
+      "light": {
+        "azimuth": 45,
+        "elevation": 34
+      },
+      "normalStrength": 1.2,
+      "comparisons": [
+        {
+          "id": "fantasy-floor",
+          "source": "assets/textures/fantasy-floor-1.png",
+          "geometry": "PlaneGeometry(4.8,3.2,1,1)",
+          "control": {
+            "albedo": "generated/fantasy-floor-albedo.png",
+            "normalMap": null
+          },
+          "layered": {
+            "albedo": "generated/fantasy-floor-albedo.png",
+            "normalMap": "generated/fantasy-floor-normal.png"
+          },
+          "onlyMaterialDelta": "normalMap"
+        },
+        {
+          "id": "fantasy-wall",
+          "source": "assets/textures/fantasy-wall-1.png",
+          "geometry": "PlaneGeometry(4.8,3.2,1,1)",
+          "control": {
+            "albedo": "generated/fantasy-wall-albedo.png",
+            "normalMap": null
+          },
+          "layered": {
+            "albedo": "generated/fantasy-wall-albedo.png",
+            "normalMap": "generated/fantasy-wall-normal.png"
+          },
+          "onlyMaterialDelta": "normalMap"
+        }
+      ]
+    },
+    {
+      "proofId": "GENESIS-NORMAL-LAYER-AB-V001",
+      "threeRevision": "166",
+      "renderer": "WebGLRenderer",
+      "material": "MeshStandardMaterial",
+      "toneMapping": "AgXToneMapping",
+      "colorContract": "albedo=sRGB; normal=linear tangent-space",
+      "light": {
+        "azimuth": 135,
+        "elevation": 34
+      },
+      "normalStrength": 1.2,
+      "comparisons": [
+        {
+          "id": "fantasy-floor",
+          "source": "assets/textures/fantasy-floor-1.png",
+          "geometry": "PlaneGeometry(4.8,3.2,1,1)",
+          "control": {
+            "albedo": "generated/fantasy-floor-albedo.png",
+            "normalMap": null
+          },
+          "layered": {
+            "albedo": "generated/fantasy-floor-albedo.png",
+            "normalMap": "generated/fantasy-floor-normal.png"
+          },
+          "onlyMaterialDelta": "normalMap"
+        },
+        {
+          "id": "fantasy-wall",
+          "source": "assets/textures/fantasy-wall-1.png",
+          "geometry": "PlaneGeometry(4.8,3.2,1,1)",
+          "control": {
+            "albedo": "generated/fantasy-wall-albedo.png",
+            "normalMap": null
+          },
+          "layered": {
+            "albedo": "generated/fantasy-wall-albedo.png",
+            "normalMap": "generated/fantasy-wall-normal.png"
+          },
+          "onlyMaterialDelta": "normalMap"
+        }
+      ]
+    }
+  ],
+  "sourceLineage": [
+    {
+      "id": "fantasy-floor",
+      "source": "assets/textures/fantasy-floor-1.png",
+      "sourceObjectSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+      "proofAlbedoSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+      "byteIdenticalToSourceObject": true,
+      "normalSha256": "a9894c7b0bcaceff51d76a5c55fbc0be8bb6f7df00e16441f6f61cd445b3c544"
+    },
+    {
+      "id": "fantasy-wall",
+      "source": "assets/textures/fantasy-wall-1.png",
+      "sourceObjectSha256": "db3393cb3f3ab4c0551eea678d68e56c689f1c6de43d967cfc4475b04f0ead21",
+      "proofAlbedoSha256": "db3393cb3f3ab4c0551eea678d68e56c689f1c6de43d967cfc4475b04f0ead21",
+      "byteIdenticalToSourceObject": true,
+      "normalSha256": "e6ed8a5b301b4d19eed6ab58a7891782a7844126d226864e014c5b3f6a9113c8"
+    }
+  ],
+  "pageErrors": []
+}

@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "proofId": "GENESIS-MATERIAL-CONDITION-WORKBENCH-V001",
+  "generatedAt": "2026-07-24T01:58:53.518Z",
+  "harness": "dev/material-workbench-proof/material-condition-workbench.html",
+  "browser": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "captures": [
+    {
+      "id": "age-only",
+      "path": "dev/material-workbench-proof/out/material-condition-age-only.png",
+      "sha256": "ca6e93957b227516765c78b3de9d3a333ecc2b543c79946ceadfcbffb9d69e30"
+    },
+    {
+      "id": "erosion-only",
+      "path": "dev/material-workbench-proof/out/material-condition-erosion-only.png",
+      "sha256": "503eea3f4f3284b874a31f8a124229b161a9838538c2af7a58af701287a7d741"
+    },
+    {
+      "id": "wetness-only",
+      "path": "dev/material-workbench-proof/out/material-condition-wetness-only.png",
+      "sha256": "82b725bdf5a035d59605ad785a4c0618a6db84cfc30e60e3ee8623f324310465"
+    },
+    {
+      "id": "combined",
+      "path": "dev/material-workbench-proof/out/material-condition-combined.png",
+      "sha256": "66582e8579fdeffbe8f623d0e19adcbfcea48e3e395a9b1217acc0dcdbb86589"
+    }
+  ],
+  "renderReports": [
+    {
+      "id": "age-only",
+      "report": {
+        "proofId": "GENESIS-MATERIAL-CONDITION-WORKBENCH-V001",
+        "threeRevision": "166",
+        "renderer": "WebGLRenderer",
+        "material": "MeshStandardMaterial",
+        "toneMapping": "AgXToneMapping",
+        "controls": {
+          "age": 0.85,
+          "erosion": 0,
+          "wetness": 0,
+          "normal": 1.2
+        },
+        "saveContract": {
+          "saveNew": "new tracked preset JSON",
+          "overwrite": "selected preset JSON only after diff",
+          "sourceMutation": false,
+          "bakeExportSeparate": true
+        },
+        "comparisons": [
+          {
+            "id": "fantasy-floor",
+            "className": "stone · irregular paver · floor",
+            "originalAlbedo": "generated/fantasy-floor-albedo.png",
+            "conditionSources": {
+              "age": "generated/fantasy-floor-age-mask.png",
+              "erosion": "generated/fantasy-floor-erosion-mask.png",
+              "wetness": "generated/fantasy-floor-wetness-mask.png"
+            },
+            "faceDiscolorationHeightGain": 0,
+            "jointDepth": 0.48,
+            "faceRelief": 0.026,
+            "normalBakeStrength": 7,
+            "channelsChanged": {
+              "age": [
+                "albedo",
+                "roughness"
+              ],
+              "erosion": [
+                "normal"
+              ],
+              "wetness": [
+                "albedo",
+                "roughness",
+                "normal"
+              ]
+            },
+            "compositeMetrics": {
+              "meanAlbedoDelta": 3.6789,
+              "meanNormalDelta": 0.002,
+              "meanRoughness": 0.853489,
+              "meanAppliedWetness": 0
+            }
+          },
+          {
+            "id": "fantasy-wall",
+            "className": "stone · coursed brick · wall",
+            "originalAlbedo": "generated/fantasy-wall-albedo.png",
+            "conditionSources": {
+              "age": "generated/fantasy-wall-age-mask.png",
+              "erosion": "generated/fantasy-wall-erosion-mask.png",
+              "wetness": "generated/fantasy-wall-wetness-mask.png"
+            },
+            "faceDiscolorationHeightGain": 0,
+            "jointDepth": 0.2,
+            "faceRelief": 0.008,
+            "normalBakeStrength": 2.8,
+            "channelsChanged": {
+              "age": [
+                "albedo",
+                "roughness"
+              ],
+              "erosion": [
+                "normal"
+              ],
+              "wetness": [
+                "albedo",
+                "roughness",
+                "normal"
+              ]
+            },
+            "compositeMetrics": {
+              "meanAlbedoDelta": 2.8417,
+              "meanNormalDelta": 0.0025,
+              "meanRoughness": 0.892706,
+              "meanAppliedWetness": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "erosion-only",
+      "report": {
+        "proofId": "GENESIS-MATERIAL-CONDITION-WORKBENCH-V001",
+        "threeRevision": "166",
+        "renderer": "WebGLRenderer",
+        "material": "MeshStandardMaterial",
+        "toneMapping": "AgXToneMapping",
+        "controls": {
+          "age": 0,
+          "erosion": 0.85,
+          "wetness": 0,
+          "normal": 1.2
+        },
+        "saveContract": {
+          "saveNew": "new tracked preset JSON",
+          "overwrite": "selected preset JSON only after diff",
+          "sourceMutation": false,
+          "bakeExportSeparate": true
+        },
+        "comparisons": [
+          {
+            "id": "fantasy-floor",
+            "className": "stone · irregular paver · floor",
+            "originalAlbedo": "generated/fantasy-floor-albedo.png",
+            "conditionSources": {
+              "age": "generated/fantasy-floor-age-mask.png",
+              "erosion": "generated/fantasy-floor-erosion-mask.png",
+              "wetness": "generated/fantasy-floor-wetness-mask.png"
+            },
+            "faceDiscolorationHeightGain": 0,
+            "jointDepth": 0.48,
+            "faceRelief": 0.026,
+            "normalBakeStrength": 7,
+            "channelsChanged": {
+              "age": [
+                "albedo",
+                "roughness"
+              ],
+              "erosion": [
+                "normal"
+              ],
+              "wetness": [
+                "albedo",
+                "roughness",
+                "normal"
+              ]
+            },
+            "compositeMetrics": {
+              "meanAlbedoDelta": 0,
+              "meanNormalDelta": 6.0087,
+              "meanRoughness": 0.842949,
+              "meanAppliedWetness": 0
+            }
+          },
+          {
+            "id": "fantasy-wall",
+            "className": "stone · coursed brick · wall",
+            "originalAlbedo": "generated/fantasy-wall-albedo.png",
+            "conditionSources": {
+              "age": "generated/fantasy-wall-age-mask.png",
+              "erosion": "generated/fantasy-wall-erosion-mask.png",
+              "wetness": "generated/fantasy-wall-wetness-mask.png"
+            },
+            "faceDiscolorationHeightGain": 0,
+            "jointDepth": 0.2,
+            "faceRelief": 0.008,
+            "normalBakeStrength": 2.8,
+            "channelsChanged": {
+              "age": [
+                "albedo",
+                "roughness"
+              ],
+              "erosion": [
+                "normal"
+              ],
+              "wetness": [
+                "albedo",
+                "roughness",
+                "normal"
+              ]
+            },
+            "compositeMetrics": {
+              "meanAlbedoDelta": 0,
+              "meanNormalDelta": 1.4429,
+              "meanRoughness": 0.885482,
+              "meanAppliedWetness": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "wetness-only",
+      "report": {
+        "proofId": "GENESIS-MATERIAL-CONDITION-WORKBENCH-V001",
+        "threeRevision": "166",
+        "renderer": "WebGLRenderer",
+        "material": "MeshStandardMaterial",
+        "toneMapping": "AgXToneMapping",
+        "controls": {
+          "age": 0,
+          "erosion": 0,
+          "wetness": 0.85,
+          "normal": 1.2
+        },
+        "saveContract": {
+          "saveNew": "new tracked preset JSON",
+          "overwrite": "selected preset JSON only after diff",
+          "sourceMutation": false,
+          "bakeExportSeparate": true
+        },
+        "comparisons": [
+          {
+            "id": "fantasy-floor",
+            "className": "stone · irregular paver · floor",
+            "originalAlbedo": "generated/fantasy-floor-albedo.png",
+            "conditionSources": {
+              "age": "generated/fantasy-floor-age-mask.png",
+              "erosion": "generated/fantasy-floor-erosion-mask.png",
+              "wetness": "generated/fantasy-floor-wetness-mask.png"
+            },
+            "faceDiscolorationHeightGain": 0,
+            "jointDepth": 0.48,
+            "faceRelief": 0.026,
+            "normalBakeStrength": 7,
+            "channelsChanged": {
+              "age": [
+                "albedo",
+                "roughness"
+              ],
+              "erosion": [
+                "normal"
+              ],
+              "wetness": [
+                "albedo",
+                "roughness",
+                "normal"
+              ]
+            },
+            "compositeMetrics": {
+              "meanAlbedoDelta": 5.3034,
+              "meanNormalDelta": 0.5948,
+              "meanRoughness": 0.703863,
+              "meanAppliedWetness": 0.188772
+            }
+          },
+          {
+            "id": "fantasy-wall",
+            "className": "stone · coursed brick · wall",
+            "originalAlbedo": "generated/fantasy-wall-albedo.png",
+            "conditionSources": {
+              "age": "generated/fantasy-wall-age-mask.png",
+              "erosion": "generated/fantasy-wall-erosion-mask.png",
+              "wetness": "generated/fantasy-wall-wetness-mask.png"
+            },
+            "faceDiscolorationHeightGain": 0,
+            "jointDepth": 0.2,
+            "faceRelief": 0.008,
+            "normalBakeStrength": 2.8,
+            "channelsChanged": {
+              "age": [
+                "albedo",
+                "roughness"
+              ],
+              "erosion": [
+                "normal"
+              ],
+              "wetness": [
+                "albedo",
+                "roughness",
+                "normal"
+              ]
+            },
+            "compositeMetrics": {
+              "meanAlbedoDelta": 6.038,
+              "meanNormalDelta": 0.1907,
+              "meanRoughness": 0.716241,
+              "meanAppliedWetness": 0.238056
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "combined",
+      "report": {
+        "proofId": "GENESIS-MATERIAL-CONDITION-WORKBENCH-V001",
+        "threeRevision": "166",
+        "renderer": "WebGLRenderer",
+        "material": "MeshStandardMaterial",
+        "toneMapping": "AgXToneMapping",
+        "controls": {
+          "age": 0.65,
+          "erosion": 0.55,
+          "wetness": 0.65,
+          "normal": 1.2
+        },
+        "saveContract": {
+          "saveNew": "new tracked preset JSON",
+          "overwrite": "selected preset JSON only after diff",
+          "sourceMutation": false,
+          "bakeExportSeparate": true
+        },
+        "comparisons": [
+          {
+            "id": "fantasy-floor",
+            "className": "stone · irregular paver · floor",
+            "originalAlbedo": "generated/fantasy-floor-albedo.png",
+            "conditionSources": {
+              "age": "generated/fantasy-floor-age-mask.png",
+              "erosion": "generated/fantasy-floor-erosion-mask.png",
+              "wetness": "generated/fantasy-floor-wetness-mask.png"
+            },
+            "faceDiscolorationHeightGain": 0,
+            "jointDepth": 0.48,
+            "faceRelief": 0.026,
+            "normalBakeStrength": 7,
+            "channelsChanged": {
+              "age": [
+                "albedo",
+                "roughness"
+              ],
+              "erosion": [
+                "normal"
+              ],
+              "wetness": [
+                "albedo",
+                "roughness",
+                "normal"
+              ]
+            },
+            "compositeMetrics": {
+              "meanAlbedoDelta": 5.1977,
+              "meanNormalDelta": 3.9373,
+              "meanRoughness": 0.742833,
+              "meanAppliedWetness": 0.144355
+            }
+          },
+          {
+            "id": "fantasy-wall",
+            "className": "stone · coursed brick · wall",
+            "originalAlbedo": "generated/fantasy-wall-albedo.png",
+            "conditionSources": {
+              "age": "generated/fantasy-wall-age-mask.png",
+              "erosion": "generated/fantasy-wall-erosion-mask.png",
+              "wetness": "generated/fantasy-wall-wetness-mask.png"
+            },
+            "faceDiscolorationHeightGain": 0,
+            "jointDepth": 0.2,
+            "faceRelief": 0.008,
+            "normalBakeStrength": 2.8,
+            "channelsChanged": {
+              "age": [
+                "albedo",
+                "roughness"
+              ],
+              "erosion": [
+                "normal"
+              ],
+              "wetness": [
+                "albedo",
+                "roughness",
+                "normal"
+              ]
+            },
+            "compositeMetrics": {
+              "meanAlbedoDelta": 4.9023,
+              "meanNormalDelta": 0.9124,
+              "meanRoughness": 0.759883,
+              "meanAppliedWetness": 0.182043
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "sourceLineage": [
+    {
+      "id": "fantasy-floor",
+      "source": "assets/textures/fantasy-floor-1.png",
+      "sourceObjectSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+      "proofAlbedoSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+      "byteIdenticalToSourceObject": true,
+      "class": "stone.irregular-paver.floor",
+      "structureContract": {
+        "faceDiscolorationHeightGain": 0,
+        "jointProposal": "thin local darkness plus oriented line support",
+        "faceReliefSource": "seeded periodic geometric field",
+        "jointDepth": 0.48,
+        "erosionDepth": 0.18,
+        "chipDepth": 0.14,
+        "faceRelief": 0.026,
+        "normalBakeStrength": 7
+      }
+    },
+    {
+      "id": "fantasy-wall",
+      "source": "assets/textures/fantasy-wall-1.png",
+      "sourceObjectSha256": "db3393cb3f3ab4c0551eea678d68e56c689f1c6de43d967cfc4475b04f0ead21",
+      "proofAlbedoSha256": "db3393cb3f3ab4c0551eea678d68e56c689f1c6de43d967cfc4475b04f0ead21",
+      "byteIdenticalToSourceObject": true,
+      "class": "stone.coursed-brick.wall",
+      "structureContract": {
+        "faceDiscolorationHeightGain": 0,
+        "jointProposal": "thin local darkness plus oriented line support",
+        "faceReliefSource": "seeded periodic geometric field",
+        "jointDepth": 0.2,
+        "erosionDepth": 0.075,
+        "chipDepth": 0.055,
+        "faceRelief": 0.008,
+        "normalBakeStrength": 2.8
+      }
+    }
+  ],
+  "pageErrors": []
+}

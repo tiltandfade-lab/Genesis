@@ -1,0 +1,374 @@
+{
+  "schemaVersion": 1,
+  "proofId": "GENESIS-MATERIAL-CONDITION-WORKBENCH-V001",
+  "method": "semantic-joint proposal plus class-scaled structure and deterministic condition masks",
+  "claimBoundary": "This proves independent deterministic age, erosion, and wetness controls on preserved source art. The automatic joint proposal remains an editable starting mask, not final semantic authorship.",
+  "textures": [
+    {
+      "id": "fantasy-floor",
+      "title": "Fantasy Floor",
+      "source": "assets/textures/fantasy-floor-1.png",
+      "sourceStorage": {
+        "kind": "lfs",
+        "oidSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+        "declaredSize": 118075
+      },
+      "class": "stone.irregular-paver.floor",
+      "seed": 42011,
+      "dimensions": [
+        256,
+        256
+      ],
+      "structureContract": {
+        "faceDiscolorationHeightGain": 0,
+        "jointProposal": "thin local darkness plus oriented line support",
+        "faceReliefSource": "seeded periodic geometric field",
+        "jointDepth": 0.48,
+        "erosionDepth": 0.18,
+        "chipDepth": 0.14,
+        "faceRelief": 0.026,
+        "normalBakeStrength": 7.0
+      },
+      "albedo": {
+        "path": "dev/material-workbench-proof/generated/fantasy-floor-albedo.png",
+        "sha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+        "byteIdenticalToSourceObject": true
+      },
+      "maps": {
+        "structure-mask": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-structure-mask.png",
+          "sha256": "6d579001d26ecaa8d5ce0b71135394b7ad904c113db6cd5ad6e34456c3278e0b",
+          "range": [
+            0,
+            255
+          ],
+          "mean": 34.2982,
+          "seamRms": {
+            "vertical": 32.3837,
+            "horizontal": 36.8275,
+            "verticalRelativeToInterior": 0.6627,
+            "horizontalRelativeToInterior": 0.7465
+          }
+        },
+        "height-base": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-height-base.png",
+          "sha256": "6f92313621d01f388a2ca7a16d5d0fae5d66687e280e9ab564ff9b833fea576f",
+          "range": [
+            58,
+            187
+          ],
+          "mean": 167.1736,
+          "seamRms": {
+            "vertical": 15.567,
+            "horizontal": 17.6378,
+            "verticalRelativeToInterior": 0.6634,
+            "horizontalRelativeToInterior": 0.7448
+          }
+        },
+        "normal-base": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-normal-base.png",
+          "sha256": "49dc77bfd18759832a7e3c3c6eddca945adf65175c3cdf91ce974f2d6b648abc",
+          "range": [
+            17,
+            255
+          ],
+          "mean": 166.25,
+          "seamRms": {
+            "vertical": 20.7024,
+            "horizontal": 52.8075,
+            "verticalRelativeToInterior": 0.7953,
+            "horizontalRelativeToInterior": 2.0365
+          }
+        },
+        "age-mask": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-age-mask.png",
+          "sha256": "eb239651ed76446f29ff82f5b302b6c1ed7b99eafc57498aa05260ddbff0c53e",
+          "range": [
+            0,
+            255
+          ],
+          "mean": 70.2654,
+          "seamRms": {
+            "vertical": 17.6983,
+            "horizontal": 12.8155,
+            "verticalRelativeToInterior": 0.7604,
+            "horizontalRelativeToInterior": 0.5534
+          }
+        },
+        "albedo-aged": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-albedo-aged.png",
+          "sha256": "364e11cc70394942ee0d9d966678124a44cf63a848125827c1beea89fc290d4a",
+          "range": [
+            42,
+            195
+          ],
+          "mean": 120.655,
+          "seamRms": {
+            "vertical": 9.1748,
+            "horizontal": 10.8156,
+            "verticalRelativeToInterior": 0.797,
+            "horizontalRelativeToInterior": 0.9026
+          }
+        },
+        "erosion-mask": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-erosion-mask.png",
+          "sha256": "17e091516343a1071e0b677421aabdf66e90f9cbc165cb1cffb267ba9f2a4dcc",
+          "range": [
+            0,
+            255
+          ],
+          "mean": 56.1289,
+          "seamRms": {
+            "vertical": 24.6122,
+            "horizontal": 35.0412,
+            "verticalRelativeToInterior": 0.6464,
+            "horizontalRelativeToInterior": 0.9049
+          }
+        },
+        "height-eroded": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-height-eroded.png",
+          "sha256": "a870230c1fa964fe1e60e97a1e710d415f8c1c318a30c3c8056e86fb5a181216",
+          "range": [
+            6,
+            187
+          ],
+          "mean": 152.1935,
+          "seamRms": {
+            "vertical": 16.7956,
+            "horizontal": 18.4989,
+            "verticalRelativeToInterior": 0.6682,
+            "horizontalRelativeToInterior": 0.7269
+          }
+        },
+        "normal-eroded": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-normal-eroded.png",
+          "sha256": "293d6ece55d5ae8d909da8f7a9a3bbbea90ff6dc612f135bfc4047b0089a03f8",
+          "range": [
+            9,
+            255
+          ],
+          "mean": 164.8276,
+          "seamRms": {
+            "vertical": 20.6597,
+            "horizontal": 51.6578,
+            "verticalRelativeToInterior": 0.824,
+            "horizontalRelativeToInterior": 2.072
+          }
+        },
+        "wetness-mask": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-wetness-mask.png",
+          "sha256": "3a8461c96b37cd36650b35e8a855aa937158dda9c095c88711097846f8265f2c",
+          "range": [
+            0,
+            255
+          ],
+          "mean": 56.6316,
+          "seamRms": {
+            "vertical": 38.878,
+            "horizontal": 34.7371,
+            "verticalRelativeToInterior": 0.8146,
+            "horizontalRelativeToInterior": 0.7197
+          }
+        },
+        "roughness-dry": {
+          "path": "dev/material-workbench-proof/generated/fantasy-floor-roughness-dry.png",
+          "sha256": "6992a3617a0a22efed4cea6e537a2f8fcca03fbef31ddad357de4291193dae2c",
+          "range": [
+            205,
+            232
+          ],
+          "mean": 214.9521,
+          "seamRms": {
+            "vertical": 1.3434,
+            "horizontal": 1.4922,
+            "verticalRelativeToInterior": 0.721,
+            "horizontalRelativeToInterior": 0.7975
+          }
+        }
+      }
+    },
+    {
+      "id": "fantasy-wall",
+      "title": "Fantasy Wall",
+      "source": "assets/textures/fantasy-wall-1.png",
+      "sourceStorage": {
+        "kind": "lfs",
+        "oidSha256": "db3393cb3f3ab4c0551eea678d68e56c689f1c6de43d967cfc4475b04f0ead21",
+        "declaredSize": 107354
+      },
+      "class": "stone.coursed-brick.wall",
+      "seed": 42012,
+      "dimensions": [
+        256,
+        256
+      ],
+      "structureContract": {
+        "faceDiscolorationHeightGain": 0,
+        "jointProposal": "thin local darkness plus oriented line support",
+        "faceReliefSource": "seeded periodic geometric field",
+        "jointDepth": 0.2,
+        "erosionDepth": 0.075,
+        "chipDepth": 0.055,
+        "faceRelief": 0.008,
+        "normalBakeStrength": 2.8
+      },
+      "albedo": {
+        "path": "dev/material-workbench-proof/generated/fantasy-wall-albedo.png",
+        "sha256": "db3393cb3f3ab4c0551eea678d68e56c689f1c6de43d967cfc4475b04f0ead21",
+        "byteIdenticalToSourceObject": true
+      },
+      "maps": {
+        "structure-mask": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-structure-mask.png",
+          "sha256": "49cfa3d554e9bbf7151110f176bb5efd09a95182e58c3e2b0c41abdd259c0a22",
+          "range": [
+            0,
+            255
+          ],
+          "mean": 33.4919,
+          "seamRms": {
+            "vertical": 6.3233,
+            "horizontal": 58.7534,
+            "verticalRelativeToInterior": 0.1859,
+            "horizontalRelativeToInterior": 1.0806
+          }
+        },
+        "height-base": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-height-base.png",
+          "sha256": "8977e044919f3fb22f7bc7fd28b320f2e8e26c9afa1fea5c044d6af082a1d759",
+          "range": [
+            132,
+            185
+          ],
+          "mean": 176.9013,
+          "seamRms": {
+            "vertical": 1.2748,
+            "horizontal": 11.6855,
+            "verticalRelativeToInterior": 0.1871,
+            "horizontalRelativeToInterior": 1.0743
+          }
+        },
+        "normal-base": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-normal-base.png",
+          "sha256": "611f60ace77d5036c2ef6780946986a34bd9ec7e2422146e3f36d70885fa317a",
+          "range": [
+            93,
+            255
+          ],
+          "mean": 169.795,
+          "seamRms": {
+            "vertical": 1.6852,
+            "horizontal": 18.6993,
+            "verticalRelativeToInterior": 0.3528,
+            "horizontalRelativeToInterior": 2.6021
+          }
+        },
+        "age-mask": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-age-mask.png",
+          "sha256": "97138b49a5b97531a8f2ec3d111b9c94ab5ade18f0256c767aaca3f603031d27",
+          "range": [
+            0,
+            255
+          ],
+          "mean": 48.1624,
+          "seamRms": {
+            "vertical": 3.3969,
+            "horizontal": 29.5216,
+            "verticalRelativeToInterior": 0.2154,
+            "horizontalRelativeToInterior": 1.2293
+          }
+        },
+        "albedo-aged": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-albedo-aged.png",
+          "sha256": "b5c90d9909df30ed7bdc0b21d71e04cc5ebcbcaf0b47ae778b1e9b1c57269874",
+          "range": [
+            51,
+            208
+          ],
+          "mean": 125.213,
+          "seamRms": {
+            "vertical": 8.7456,
+            "horizontal": 17.4205,
+            "verticalRelativeToInterior": 0.8147,
+            "horizontalRelativeToInterior": 1.2453
+          }
+        },
+        "erosion-mask": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-erosion-mask.png",
+          "sha256": "2f006fd6aeeee733d6689d16723200661bc82dbc4176473a0e460f29c494bd51",
+          "range": [
+            0,
+            255
+          ],
+          "mean": 58.1439,
+          "seamRms": {
+            "vertical": 23.3439,
+            "horizontal": 33.5451,
+            "verticalRelativeToInterior": 0.7342,
+            "horizontalRelativeToInterior": 0.7267
+          }
+        },
+        "height-eroded": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-height-eroded.png",
+          "sha256": "7dcfc3aebe02e0fb2f797f1fe6330a9d00d142860d19400507b4083eefd695ce",
+          "range": [
+            109,
+            185
+          ],
+          "mean": 170.6304,
+          "seamRms": {
+            "vertical": 2.1351,
+            "horizontal": 12.4116,
+            "verticalRelativeToInterior": 0.2932,
+            "horizontalRelativeToInterior": 1.0098
+          }
+        },
+        "normal-eroded": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-normal-eroded.png",
+          "sha256": "51567ba63913256d641d50c2288f2f2295a9b8016a4801d71d07e5d9343d00c7",
+          "range": [
+            80,
+            255
+          ],
+          "mean": 169.6746,
+          "seamRms": {
+            "vertical": 2.2384,
+            "horizontal": 18.7401,
+            "verticalRelativeToInterior": 0.4433,
+            "horizontalRelativeToInterior": 2.4937
+          }
+        },
+        "wetness-mask": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-wetness-mask.png",
+          "sha256": "c755ad8072a1a3ffbbad8cc717f7c53710197ca350c8bbd31664329ec3ad1885",
+          "range": [
+            0,
+            255
+          ],
+          "mean": 71.4169,
+          "seamRms": {
+            "vertical": 6.3212,
+            "horizontal": 47.4037,
+            "verticalRelativeToInterior": 0.2191,
+            "horizontalRelativeToInterior": 1.0823
+          }
+        },
+        "roughness-dry": {
+          "path": "dev/material-workbench-proof/generated/fantasy-wall-roughness-dry.png",
+          "sha256": "5a253d976afcec2454ff4e209a736dca3567d53c6d6a1d0914e663eef33488ce",
+          "range": [
+            215,
+            242
+          ],
+          "mean": 225.798,
+          "seamRms": {
+            "vertical": 0.6312,
+            "horizontal": 2.2256,
+            "verticalRelativeToInterior": 0.4523,
+            "horizontalRelativeToInterior": 1.0892
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "proofId": "GENESIS-UNEVEN-GROUND-PROOF-V001",
+  "generatedAt": "2026-07-24T02:59:32.782Z",
+  "browser": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "harness": {
+    "path": "dev/uneven-ground-proof/uneven-ground-proof.html",
+    "sha256": "c7e37db34412615f539e97d8478a281fc7300ed5c39f9d94ab09938f7b640221"
+  },
+  "generator": {
+    "path": "dev/uneven-ground-proof/terrain-generator.mjs",
+    "sha256": "985db761e3d764ae02cce57b3391fef51bb589ee9029e8048b34710a4db9c542"
+  },
+  "standee": {
+    "path": "assets/sprites/spr-fantasy-goblin-warrior.png",
+    "sha256": "d49935c34ebe4a3e3e97994c328754cfb0d20e7e1a805a3877d9d0399c819086"
+  },
+  "captures": [
+    {
+      "id": "beauty",
+      "path": "dev/uneven-ground-proof/out/uneven-ground-proof-beauty.png",
+      "sha256": "b5a8d713dc44afa52b1d929dad11d5c0f16745898c5bc933c453ed14decf62c1"
+    },
+    {
+      "id": "debug",
+      "path": "dev/uneven-ground-proof/out/uneven-ground-proof-debug.png",
+      "sha256": "66af2ae152c1e0b88bb61c6466ddeec13d27d684c9454718d163c823ae9bfe78"
+    }
+  ],
+  "renderReports": [
+    {
+      "id": "beauty",
+      "report": {
+        "proofId": "GENESIS-UNEVEN-GROUND-PROOF-V001",
+        "mode": "beauty",
+        "threeRevision": "166",
+        "renderer": "WebGLRenderer",
+        "material": "MeshStandardMaterial",
+        "camera": {
+          "fovDegrees": 20,
+          "elevationDegrees": 35,
+          "yawDegrees": 45
+        },
+        "grid": {
+          "columns": 65,
+          "rows": 49,
+          "widthMeters": 12,
+          "depthMeters": 9
+        },
+        "walkableSlopeLimitDegrees": 30,
+        "standee": "assets/sprites/spr-fantasy-goblin-warrior.png",
+        "profiles": [
+          {
+            "id": "meadow-road",
+            "seed": 1731,
+            "fingerprint": "06742f66",
+            "metrics": {
+              "profileId": "meadow-road",
+              "seed": 1731,
+              "minHeightMeters": -0.2336,
+              "maxHeightMeters": 0.268,
+              "reliefMeters": 0.5016,
+              "meanSlopeDegrees": 4.357,
+              "maxSlopeDegrees": 33.635,
+              "walkablePercent": 98.9,
+              "reservedPathPercent": 13.91,
+              "reservedPathMeanSlopeDegrees": 1.16,
+              "reservedPathMaxSlopeDegrees": 16.332,
+              "encounterPadRangeMeters": 0.0014,
+              "transitionAreaSquareMeters": 5.367,
+              "waterAreaSquareMeters": 0,
+              "maximumAllowedReliefMeters": 0.9,
+              "fingerprint": "06742f66"
+            },
+            "triangleCount": 6144,
+            "vertexCount": 3185,
+            "semantics": [
+              "broad-field",
+              "reserved-path",
+              "encounter-pad",
+              "transition-mask"
+            ]
+          },
+          {
+            "id": "upland-ruin",
+            "seed": 9427,
+            "fingerprint": "845601c3",
+            "metrics": {
+              "profileId": "upland-ruin",
+              "seed": 9427,
+              "minHeightMeters": -0.4982,
+              "maxHeightMeters": 0.7062,
+              "reliefMeters": 1.2045,
+              "meanSlopeDegrees": 10.73,
+              "maxSlopeDegrees": 53.073,
+              "walkablePercent": 94.25,
+              "reservedPathPercent": 5.78,
+              "reservedPathMeanSlopeDegrees": 6.751,
+              "reservedPathMaxSlopeDegrees": 19.625,
+              "encounterPadRangeMeters": 0.00304,
+              "transitionAreaSquareMeters": 13.65,
+              "waterAreaSquareMeters": 0,
+              "maximumAllowedReliefMeters": 1.6,
+              "fingerprint": "845601c3"
+            },
+            "triangleCount": 6144,
+            "vertexCount": 3185,
+            "semantics": [
+              "broad-field",
+              "reserved-path",
+              "encounter-pad",
+              "transition-mask"
+            ]
+          },
+          {
+            "id": "shore-margin",
+            "seed": 6319,
+            "fingerprint": "c5a73001",
+            "metrics": {
+              "profileId": "shore-margin",
+              "seed": 6319,
+              "minHeightMeters": -0.3514,
+              "maxHeightMeters": 0.5492,
+              "reliefMeters": 0.9006,
+              "meanSlopeDegrees": 5.497,
+              "maxSlopeDegrees": 54.021,
+              "walkablePercent": 99.06,
+              "reservedPathPercent": 1.19,
+              "reservedPathMeanSlopeDegrees": 2.7,
+              "reservedPathMaxSlopeDegrees": 12.294,
+              "encounterPadRangeMeters": 0.00365,
+              "transitionAreaSquareMeters": 8.775,
+              "waterAreaSquareMeters": 46.025,
+              "maximumAllowedReliefMeters": 1.25,
+              "fingerprint": "c5a73001"
+            },
+            "triangleCount": 6144,
+            "vertexCount": 3185,
+            "semantics": [
+              "broad-field",
+              "reserved-path",
+              "encounter-pad",
+              "transition-mask"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "debug",
+      "report": {
+        "proofId": "GENESIS-UNEVEN-GROUND-PROOF-V001",
+        "mode": "debug",
+        "threeRevision": "166",
+        "renderer": "WebGLRenderer",
+        "material": "MeshStandardMaterial",
+        "camera": {
+          "fovDegrees": 20,
+          "elevationDegrees": 35,
+          "yawDegrees": 45
+        },
+        "grid": {
+          "columns": 65,
+          "rows": 49,
+          "widthMeters": 12,
+          "depthMeters": 9
+        },
+        "walkableSlopeLimitDegrees": 30,
+        "standee": "assets/sprites/spr-fantasy-goblin-warrior.png",
+        "profiles": [
+          {
+            "id": "meadow-road",
+            "seed": 1731,
+            "fingerprint": "06742f66",
+            "metrics": {
+              "profileId": "meadow-road",
+              "seed": 1731,
+              "minHeightMeters": -0.2336,
+              "maxHeightMeters": 0.268,
+              "reliefMeters": 0.5016,
+              "meanSlopeDegrees": 4.357,
+              "maxSlopeDegrees": 33.635,
+              "walkablePercent": 98.9,
+              "reservedPathPercent": 13.91,
+              "reservedPathMeanSlopeDegrees": 1.16,
+              "reservedPathMaxSlopeDegrees": 16.332,
+              "encounterPadRangeMeters": 0.0014,
+              "transitionAreaSquareMeters": 5.367,
+              "waterAreaSquareMeters": 0,
+              "maximumAllowedReliefMeters": 0.9,
+              "fingerprint": "06742f66"
+            },
+            "triangleCount": 6144,
+            "vertexCount": 3185,
+            "semantics": [
+              "broad-field",
+              "reserved-path",
+              "encounter-pad",
+              "transition-mask"
+            ]
+          },
+          {
+            "id": "upland-ruin",
+            "seed": 9427,
+            "fingerprint": "845601c3",
+            "metrics": {
+              "profileId": "upland-ruin",
+              "seed": 9427,
+              "minHeightMeters": -0.4982,
+              "maxHeightMeters": 0.7062,
+              "reliefMeters": 1.2045,
+              "meanSlopeDegrees": 10.73,
+              "maxSlopeDegrees": 53.073,
+              "walkablePercent": 94.25,
+              "reservedPathPercent": 5.78,
+              "reservedPathMeanSlopeDegrees": 6.751,
+              "reservedPathMaxSlopeDegrees": 19.625,
+              "encounterPadRangeMeters": 0.00304,
+              "transitionAreaSquareMeters": 13.65,
+              "waterAreaSquareMeters": 0,
+              "maximumAllowedReliefMeters": 1.6,
+              "fingerprint": "845601c3"
+            },
+            "triangleCount": 6144,
+            "vertexCount": 3185,
+            "semantics": [
+              "broad-field",
+              "reserved-path",
+              "encounter-pad",
+              "transition-mask"
+            ]
+          },
+          {
+            "id": "shore-margin",
+            "seed": 6319,
+            "fingerprint": "c5a73001",
+            "metrics": {
+              "profileId": "shore-margin",
+              "seed": 6319,
+              "minHeightMeters": -0.3514,
+              "maxHeightMeters": 0.5492,
+              "reliefMeters": 0.9006,
+              "meanSlopeDegrees": 5.497,
+              "maxSlopeDegrees": 54.021,
+              "walkablePercent": 99.06,
+              "reservedPathPercent": 1.19,
+              "reservedPathMeanSlopeDegrees": 2.7,
+              "reservedPathMaxSlopeDegrees": 12.294,
+              "encounterPadRangeMeters": 0.00365,
+              "transitionAreaSquareMeters": 8.775,
+              "waterAreaSquareMeters": 46.025,
+              "maximumAllowedReliefMeters": 1.25,
+              "fingerprint": "c5a73001"
+            },
+            "triangleCount": 6144,
+            "vertexCount": 3185,
+            "semantics": [
+              "broad-field",
+              "reserved-path",
+              "encounter-pad",
+              "transition-mask"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "pageErrors": []
+}

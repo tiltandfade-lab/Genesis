@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "batchId": "GP-MM-STONE-V001",
+  "generatedAt": "2026-07-24T00:00:15.037Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceHashes": {
+    "dev/material-lane/graphs/guard-post/gp-mm-m01-frontier-broad-cool-v001.ptex": "0b3b8166cbaee221cb92c814a6af8fa855e3441903c8c8486d3152333cb9f141",
+    "dev/material-lane/graphs/guard-post/gp-mm-m01-patrol-tempered-earth-v001.ptex": "11d3304014dee3eabfb594362cd0cce0b87a760135a1a8772b631a684b9dbe26",
+    "dev/material-lane/graphs/guard-post/gp-mm-m02-upland-close-set-v001.ptex": "3c90c1f46382d57cdf06d953dd42165a2542eaf2070bbbcc1535a3fd64a540f1",
+    "dev/material-lane/graphs/guard-post/gp-mm-m02-upland-heavy-fitted-v001.ptex": "df6acbc267f6e444bc1667f093d05b5cffaaa6fdf432209e78d176b1625cf76f"
+  },
+  "outputHashes": {
+    "gp-mm-m01-frontier-broad-cool-v001_albedo.png": "994c7d91020291f96638d91b367c0f2aeb793aa5b5c4e9006c0ece0f134e41dd",
+    "gp-mm-m01-frontier-broad-cool-v001_normal.png": "b5e2cee6e9357a732c76deacc5ea5845cbed18ac1f52dc6a1d1b536cd7a30ee4",
+    "gp-mm-m01-frontier-broad-cool-v001_orm.png": "dd5777d5ab1d4de5980dff1b1483ed69ecfd0deaa3a6a1493c76c5bcbd8216ca",
+    "gp-mm-m01-patrol-tempered-earth-v001_albedo.png": "8da69bcbfcb9fb7c0b749cc237b97ed15419adfe848ba1456b2ae31587ea9367",
+    "gp-mm-m01-patrol-tempered-earth-v001_normal.png": "e1a7ff67717747d805fb03f06a1c5c4316ca56fd74d2a77ea33d860aa68d90e3",
+    "gp-mm-m01-patrol-tempered-earth-v001_orm.png": "bddffd16af90f66eedbf7606e2cac533246c05111bf0cbe82014d41d3c29a46b",
+    "gp-mm-m02-upland-close-set-v001_albedo.png": "88efcb7ca28747066674c5fdaa1f8271821798bde19789b5928f7109e0c0e8d2",
+    "gp-mm-m02-upland-close-set-v001_normal.png": "0a6253ae5afa04dd3cc0dc8b5dbab690cad961391cd6ac58b141aacdae39df2c",
+    "gp-mm-m02-upland-close-set-v001_orm.png": "9abfa1d30cb2b7b3d15ebc42e4f1630327de2b20b8a3ec9152d09123a33d344e",
+    "gp-mm-m02-upland-heavy-fitted-v001_albedo.png": "e59e9f6a3e4cd0e25ca6db5f16d8a75e4b2193de0c41924fb3a035ae4f0f1d73",
+    "gp-mm-m02-upland-heavy-fitted-v001_normal.png": "734e9d0fae6f795dfab1642964c006435012e30888da17e920eb3a6237090859",
+    "gp-mm-m02-upland-heavy-fitted-v001_orm.png": "d885e14dcdc5fbcbc7e63e5475b70f824c267d68075a536387dba1596bb4f49e"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 12,
+    "requiredChannels": [
+      "albedo",
+      "normal",
+      "orm"
+    ],
+    "cliTimeoutRecoveries": {
+      "runA": [],
+      "runB": []
+    }
+  },
+  "outputRoots": {
+    "runA": "dev/material-lane/exports/guard-post-mm13-v001/run-a",
+    "runB": "dev/material-lane/exports/guard-post-mm13-v001/run-b"
+  }
+}

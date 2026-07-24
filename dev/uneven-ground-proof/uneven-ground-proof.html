@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Genesis Uneven Ground Proof</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #ece7da;
+      --muted: #9d9a90;
+      --line: #383d39;
+      --gold: #d4ad58;
+      --green: #91bf94;
+      --blue: #8cb8c7;
+      --black: #090c0a;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--black); color: var(--ink); }
+    body {
+      min-height: 100vh;
+      font: 13px/1.43 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    button { font: inherit; }
+    #proof {
+      width: 1520px;
+      margin: 0 auto;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 16% -5%, #1c251d 0, transparent 31%),
+        linear-gradient(180deg, #0f1310, #090c0a);
+    }
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 28px;
+      align-items: end;
+      padding-bottom: 19px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      color: var(--gold);
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 5px 0 0;
+      font: 500 46px/1 Georgia, serif;
+      letter-spacing: -.025em;
+    }
+    .mode {
+      display: flex;
+      justify-content: flex-end;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+    .mode button {
+      padding: 7px 11px;
+      color: #c7c4ba;
+      border: 1px solid #4b514c;
+      background: #171b18;
+      cursor: pointer;
+    }
+    .mode button[aria-pressed="true"] {
+      color: #171308;
+      border-color: var(--gold);
+      background: var(--gold);
+    }
+    .tech { color: var(--muted); text-align: right; line-height: 1.55; }
+    .contract {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .contract > div {
+      min-height: 72px;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      background: #121613;
+      color: #c0bcb0;
+    }
+    .contract strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--green);
+      font-size: 11px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .profiles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+    .profile {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #171b18, #111411);
+    }
+    .profile-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 14px 15px 12px;
+      border-bottom: 1px solid #343a35;
+    }
+    h2 { margin: 0; font: 500 25px/1 Georgia, serif; }
+    .seed { color: var(--muted); font-size: 10px; text-align: right; }
+    .subtitle {
+      min-height: 37px;
+      padding: 9px 15px 7px;
+      color: #a7a398;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .render {
+      position: relative;
+      height: 510px;
+      margin: 0 14px;
+      overflow: hidden;
+      border: 1px solid #444b45;
+      background: #080b09;
+    }
+    .render canvas { display: block; width: 100%; height: 100%; }
+    .render-badge {
+      position: absolute;
+      z-index: 2;
+      top: 9px;
+      left: 9px;
+      padding: 4px 7px;
+      color: #eee7d8;
+      border: 1px solid #777060;
+      background: #080a09da;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .legend {
+      position: absolute;
+      z-index: 2;
+      right: 9px;
+      bottom: 9px;
+      display: none;
+      gap: 8px;
+      padding: 5px 7px;
+      border: 1px solid #5d635e;
+      background: #080a09dd;
+      color: #ded9cc;
+      font-size: 8px;
+      text-transform: uppercase;
+    }
+    body[data-mode="debug"] .legend { display: flex; }
+    .legend span::before {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-right: 4px;
+      content: "";
+      background: var(--swatch);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      padding: 12px 14px 15px;
+    }
+    .stats strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--blue);
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+    .stats span { color: #b2aea3; font-size: 10px; }
+    .boundary {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 18px;
+      padding-top: 13px;
+      color: #918e85;
+      border-top: 1px solid var(--line);
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+  <main id="proof">
+    <header class="masthead">
+      <div>
+        <div class="eyebrow">Genesis · Procedural Scene Ground · Proof V001</div>
+        <h1>Ground with intent, not a noise carpet.</h1>
+      </div>
+      <div>
+        <div class="mode" aria-label="Ground proof display mode">
+          <button type="button" data-mode="beauty">Material view</button>
+          <button type="button" data-mode="debug">Slope audit</button>
+        </div>
+        <div class="tech">65×49 deterministic height grid · 12m × 9m field<br>
+          20° FOV · 35° elevation · 45° dimetric yaw · real WebGL</div>
+      </div>
+    </header>
+
+    <section class="contract" aria-label="Procedural ground contract">
+      <div><strong>Broad landforms first</strong>Two low-frequency fields create swells and drainage. There is no high-frequency vertex chatter.</div>
+      <div><strong>Traversal is reserved</strong>Every profile flattens a seeded approach lane before dressing, so relief cannot erase the way through.</div>
+      <div><strong>Staging stays stable</strong>A semantic encounter pad remains nearly level enough for citizens, structures, and combat handoff.</div>
+      <div><strong>Steepness is explicit</strong>The audit marks walkable ground, guarded slopes, paths, pads, and water instead of hiding them in beauty lighting.</div>
+    </section>
+
+    <section class="profiles" id="profiles"></section>
+
+    <footer class="boundary">
+      <span>Proof boundary: this is a deterministic exterior-ground generator and acceptance harness, not runtime terrain wiring. The generated mesh reserves traversal and staging from semantic masks; future scene adapters must derive those masks from the rolled route, footing, water, landmark, and encounter facts.</span>
+      <span>GENESIS-UNEVEN-GROUND-PROOF-V001</span>
+    </footer>
+  </main>
+
+  <script type="module">
+    import * as THREE from "../../vendor/three/three.module.js";
+    import {
+      GROUND_PROOF_ID,
+      GROUND_PROFILES,
+      GRID,
+      MAX_WALKABLE_SLOPE_DEG,
+      generateGround,
+      groundHeightAt
+    } from "./terrain-generator.mjs";
+
+    const query = new URLSearchParams(location.search);
+    let activeMode = query.get("mode") === "debug" ? "debug" : "beauty";
+    const scenes = [];
+    const standeeUrl = "../../assets/sprites/spr-fantasy-goblin-warrior.png";
+
+    const grounds = GROUND_PROFILES.map((profile) => generateGround(profile.id));
+    document.querySelector("#profiles").innerHTML = grounds.map((ground) => `
+      <article class="profile" data-profile="${ground.profile.id}">
+        <header class="profile-head">
+          <h2>${ground.profile.title}</h2>
+          <div class="seed">seed ${ground.profile.seed}<br>${ground.metrics.fingerprint}</div>
+        </header>
+        <div class="subtitle">${ground.profile.subtitle}</div>
+        <div class="render" data-render>
+          <span class="render-badge">generated mesh · canonical standee scale</span>
+          <div class="legend" aria-label="Slope audit legend">
+            <span style="--swatch:#40aebd">route</span>
+            <span style="--swatch:#d0a84c">pad</span>
+            <span style="--swatch:#78a96d">walkable</span>
+            <span style="--swatch:#c95b43">steep</span>
+            <span style="--swatch:#406e91">water</span>
+          </div>
+        </div>
+        <div class="stats">
+          <div><strong>Relief</strong><span>${ground.metrics.reliefMeters.toFixed(2)}m</span></div>
+          <div><strong>Walkable</strong><span>${ground.metrics.walkablePercent.toFixed(1)}%</span></div>
+          <div><strong>Route max</strong><span>${ground.metrics.reservedPathMaxSlopeDegrees.toFixed(1)}°</span></div>
+          <div><strong>Pad variance</strong><span>${ground.metrics.encounterPadRangeMeters.toFixed(3)}m</span></div>
+        </div>
+      </article>
+    `).join("");
+
+    function color(hex) {
+      return new THREE.Color(hex);
+    }
+
+    const BEAUTY_PALETTES = {
+      "meadow-road": {
+        low: color(0x40583a), high: color(0x6f7b4f), path: color(0x776343),
+        pad: color(0x647049), wet: color(0x354d3b), rock: color(0x736c59)
+      },
+      "upland-ruin": {
+        low: color(0x514d37), high: color(0x77744d), path: color(0x846f4e),
+        pad: color(0x706c4c), wet: color(0x3e493d), rock: color(0x746959)
+      },
+      "shore-margin": {
+        low: color(0x6f6956), high: color(0x65734a), path: color(0x8a7653),
+        pad: color(0x697249), wet: color(0x4a4e43), rock: color(0x6f6b5e),
+        sand: color(0x9d8964), underwater: color(0x6b755f)
+      }
+    };
+    const DEBUG = {
+      walkable: color(0x6d9b68),
+      guarded: color(0xb88a43),
+      steep: color(0xc45342),
+      route: color(0x38a8bc),
+      pad: color(0xd1aa4c),
+      water: color(0x3d6d91)
+    };
+
+    function mixColor(a, b, amount) {
+      return a.clone().lerp(b, Math.max(0, Math.min(1, amount)));
+    }
+
+    function beautyColor(ground, index) {
+      const palette = BEAUTY_PALETTES[ground.profile.id];
+      const heightT = (ground.heights[index] - ground.metrics.minHeightMeters)
+        / Math.max(0.001, ground.metrics.reliefMeters);
+      let result = mixColor(palette.low, palette.high, heightT);
+      if (ground.profile.id === "shore-margin") {
+        const drySand = ground.masks.transition[index] * (1 - ground.masks.water[index]);
+        result = mixColor(result, palette.sand, drySand);
+        result = mixColor(result, palette.underwater, ground.masks.water[index] * 0.92);
+      }
+      result = mixColor(result, palette.wet, ground.masks.wet[index] * 0.72);
+      result = mixColor(result, palette.path, ground.masks.path[index] * 0.84);
+      result = mixColor(result, palette.pad, ground.masks.pad[index] * 0.42);
+      result = mixColor(result, palette.rock, Math.max(0, (ground.slopes[index] - 25) / 25) * 0.75);
+      const broadBand = ((index * 17 + ground.profile.seed) % 7 - 3) * 0.006;
+      result.offsetHSL(0, 0, broadBand);
+      return result;
+    }
+
+    function debugColor(ground, index) {
+      let result = ground.slopes[index] > MAX_WALKABLE_SLOPE_DEG
+        ? DEBUG.steep
+        : ground.slopes[index] > 22
+          ? DEBUG.guarded
+          : DEBUG.walkable;
+      if (ground.masks.water[index] > 0.55) result = DEBUG.water;
+      if (ground.masks.path[index] >= 0.72) result = DEBUG.route;
+      if (ground.masks.pad[index] >= 0.72) result = DEBUG.pad;
+      return result.clone();
+    }
+
+    function terrainGeometry(ground) {
+      const { columns, rows, widthMeters, depthMeters, stepX, stepZ } = ground.grid;
+      const positions = [];
+      const beauty = [];
+      const debug = [];
+      const indices = [];
+      for (let row = 0; row < rows; row += 1) {
+        const z = -depthMeters / 2 + row * stepZ;
+        for (let column = 0; column < columns; column += 1) {
+          const index = row * columns + column;
+          const x = -widthMeters / 2 + column * stepX;
+          positions.push(x, ground.heights[index], z);
+          const beautyValue = beautyColor(ground, index);
+          const debugValue = debugColor(ground, index);
+          beauty.push(beautyValue.r, beautyValue.g, beautyValue.b);
+          debug.push(debugValue.r, debugValue.g, debugValue.b);
+        }
+      }
+      for (let row = 0; row < rows - 1; row += 1) {
+        for (let column = 0; column < columns - 1; column += 1) {
+          const a = row * columns + column;
+          const b = a + 1;
+          const d = (row + 1) * columns + column;
+          const c = d + 1;
+          if ((row + column) % 2 === 0) indices.push(a, d, c, a, c, b);
+          else indices.push(a, d, b, b, d, c);
+        }
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setAttribute("color", new THREE.Float32BufferAttribute(beauty, 3));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      geometry.computeBoundingSphere();
+      return { geometry, beauty, debug, triangleCount: indices.length / 3 };
+    }
+
+    function skirtGeometry(ground) {
+      const { columns, rows, widthMeters, depthMeters, stepX, stepZ } = ground.grid;
+      const bottom = ground.metrics.minHeightMeters - 0.46;
+      const edge = [];
+      for (let column = 0; column < columns; column += 1) edge.push([column, 0]);
+      for (let row = 1; row < rows; row += 1) edge.push([columns - 1, row]);
+      for (let column = columns - 2; column >= 0; column -= 1) edge.push([column, rows - 1]);
+      for (let row = rows - 2; row > 0; row -= 1) edge.push([0, row]);
+      const positions = [];
+      const indices = [];
+      for (let index = 0; index < edge.length; index += 1) {
+        const [column, row] = edge[index];
+        const x = -widthMeters / 2 + column * stepX;
+        const z = -depthMeters / 2 + row * stepZ;
+        const y = ground.heights[row * columns + column];
+        positions.push(x, y, z, x, bottom, z);
+      }
+      for (let index = 0; index < edge.length; index += 1) {
+        const next = (index + 1) % edge.length;
+        const topA = index * 2;
+        const bottomA = topA + 1;
+        const topB = next * 2;
+        const bottomB = topB + 1;
+        indices.push(topA, bottomA, bottomB, topA, bottomB, topB);
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      return geometry;
+    }
+
+    function addStandee(scene, texture, ground, x, z) {
+      const y = groundHeightAt(ground, x, z);
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        alphaTest: 0.42,
+        toneMapped: false
+      }));
+      sprite.center.set(0.5, 0);
+      sprite.position.set(x, y + 0.025, z);
+      sprite.scale.set(1.12, 1.08, 1);
+      scene.add(sprite);
+      const shadow = new THREE.Mesh(
+        new THREE.CircleGeometry(0.4, 22),
+        new THREE.MeshBasicMaterial({
+          color: 0x000000,
+          transparent: true,
+          opacity: 0.34,
+          depthWrite: false
+        })
+      );
+      shadow.rotation.x = -Math.PI / 2;
+      shadow.scale.set(1, 0.42, 1);
+      shadow.position.set(x, y + 0.012, z);
+      scene.add(shadow);
+    }
+
+    function addBox(scene, ground, size, x, z, colorValue, yOffset = 0) {
+      const y = groundHeightAt(ground, x, z);
+      const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(...size),
+        new THREE.MeshStandardMaterial({ color: colorValue, roughness: 0.91 })
+      );
+      mesh.position.set(x, y + size[1] / 2 + yOffset, z);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      scene.add(mesh);
+      return mesh;
+    }
+
+    function addRock(scene, ground, x, z, scale, colorValue = 0x6f6859) {
+      const y = groundHeightAt(ground, x, z);
+      const mesh = new THREE.Mesh(
+        new THREE.DodecahedronGeometry(scale, 0),
+        new THREE.MeshStandardMaterial({ color: colorValue, roughness: 0.96, flatShading: true })
+      );
+      mesh.scale.set(1.28, 0.72, 1);
+      mesh.rotation.set(0.12, x * 0.47 + z, -0.08);
+      mesh.position.set(x, y + scale * 0.5, z);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      scene.add(mesh);
+    }
+
+    function addDressing(scene, ground) {
+      if (ground.profile.id === "meadow-road") {
+        addRock(scene, ground, -3.55, -1.68, 0.34);
+        addRock(scene, ground, 4.55, 2.8, 0.27);
+        addBox(scene, ground, [0.12, 0.62, 0.12], -4.35, 2.55, 0x59452e);
+        addBox(scene, ground, [0.82, 0.08, 0.12], -4.35, 2.55, 0x6e5535, 0.42);
+      } else if (ground.profile.id === "upland-ruin") {
+        addBox(scene, ground, [2.35, 0.3, 0.28], 1.42, -1.72, 0x746a57);
+        addBox(scene, ground, [0.28, 0.72, 1.55], 0.3, -0.65, 0x6c6352);
+        addBox(scene, ground, [0.28, 0.48, 1.0], 2.54, -0.62, 0x6c6352);
+        addRock(scene, ground, -3.7, -1.4, 0.58);
+        addRock(scene, ground, 3.85, 2.05, 0.47);
+        addRock(scene, ground, -1.9, 2.38, 0.37);
+      } else {
+        addRock(scene, ground, -0.5, 1.05, 0.45, 0x69675f);
+        addRock(scene, ground, 3.15, 1.55, 0.52, 0x69675f);
+        addRock(scene, ground, 4.1, 2.6, 0.3, 0x69675f);
+        const driftwood = addBox(scene, ground, [1.72, 0.13, 0.17], 1.25, 0.45, 0x604834, 0.04);
+        driftwood.rotation.y = -0.42;
+      }
+    }
+
+    function cameraFor(aspect) {
+      const camera = new THREE.PerspectiveCamera(20, aspect, 0.1, 80);
+      const radius = 22.2;
+      const yaw = THREE.MathUtils.degToRad(45);
+      const elevation = THREE.MathUtils.degToRad(35);
+      camera.position.set(
+        radius * Math.cos(elevation) * Math.sin(yaw),
+        radius * Math.sin(elevation) + 0.45,
+        radius * Math.cos(elevation) * Math.cos(yaw)
+      );
+      camera.lookAt(0, 0.08, 0);
+      return camera;
+    }
+
+    async function buildScene(ground, mount, standeeTexture) {
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+      renderer.setPixelRatio(1);
+      renderer.setSize(mount.clientWidth, mount.clientHeight, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.AgXToneMapping;
+      renderer.toneMappingExposure = 1.08;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      mount.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const sky = {
+        "meadow-road": 0x17211b,
+        "upland-ruin": 0x1c1c18,
+        "shore-margin": 0x17232a
+      }[ground.profile.id];
+      scene.background = new THREE.Color(sky);
+      scene.fog = new THREE.Fog(sky, 18, 31);
+      const camera = cameraFor(mount.clientWidth / mount.clientHeight);
+      const built = terrainGeometry(ground);
+      const material = new THREE.MeshStandardMaterial({
+        vertexColors: true,
+        roughness: 0.93,
+        metalness: 0,
+        flatShading: true
+      });
+      const terrain = new THREE.Mesh(built.geometry, material);
+      terrain.castShadow = true;
+      terrain.receiveShadow = true;
+      scene.add(terrain);
+
+      const wireframe = new THREE.LineSegments(
+        new THREE.WireframeGeometry(built.geometry),
+        new THREE.LineBasicMaterial({
+          color: 0xd8dfd8,
+          transparent: true,
+          opacity: 0.18,
+          depthWrite: false
+        })
+      );
+      wireframe.position.y = 0.006;
+      scene.add(wireframe);
+
+      const skirt = new THREE.Mesh(
+        skirtGeometry(ground),
+        new THREE.MeshStandardMaterial({ color: 0x403a2e, roughness: 0.96, flatShading: true })
+      );
+      skirt.castShadow = true;
+      skirt.receiveShadow = true;
+      scene.add(skirt);
+
+      if (ground.profile.id === "shore-margin") {
+        const water = new THREE.Mesh(
+          new THREE.PlaneGeometry(GRID.widthMeters + 0.1, GRID.depthMeters + 0.1),
+          new THREE.MeshStandardMaterial({
+            color: 0x38697b,
+            roughness: 0.28,
+            metalness: 0.02,
+            transparent: true,
+            opacity: 0.68,
+            depthWrite: false
+          })
+        );
+        water.rotation.x = -Math.PI / 2;
+        water.position.y = -0.075;
+        water.receiveShadow = true;
+        scene.add(water);
+      }
+
+      addDressing(scene, ground);
+      const standeePoints = {
+        "meadow-road": [2.55, 1.72],
+        "upland-ruin": [1.42, -0.58],
+        "shore-margin": [-2.42, -2.38]
+      }[ground.profile.id];
+      addStandee(scene, standeeTexture, ground, standeePoints[0], standeePoints[1]);
+
+      scene.add(new THREE.HemisphereLight(0xc7d4c2, 0x382f25, 1.42));
+      const key = new THREE.DirectionalLight(0xffdfb5, 3.6);
+      key.position.set(-5.5, 8.5, 7.5);
+      key.castShadow = true;
+      key.shadow.mapSize.set(1024, 1024);
+      key.shadow.camera.left = key.shadow.camera.bottom = -8;
+      key.shadow.camera.right = key.shadow.camera.top = 8;
+      key.shadow.bias = -0.0007;
+      scene.add(key);
+      const cool = new THREE.PointLight(ground.profile.id === "shore-margin" ? 0x87c9e1 : 0x91a8c2, 15, 16, 2);
+      cool.position.set(4.8, 3.2, 4.5);
+      scene.add(cool);
+
+      function setMode(mode) {
+        const source = mode === "debug" ? built.debug : built.beauty;
+        terrain.geometry.setAttribute("color", new THREE.Float32BufferAttribute(source, 3));
+        terrain.geometry.attributes.color.needsUpdate = true;
+        terrain.material.flatShading = mode !== "debug";
+        terrain.material.needsUpdate = true;
+        wireframe.visible = mode === "debug";
+        renderer.render(scene, camera);
+      }
+
+      function render() {
+        renderer.render(scene, camera);
+      }
+      scenes.push({
+        ground,
+        renderer,
+        terrain,
+        wireframe,
+        setMode,
+        render,
+        triangleCount: built.triangleCount
+      });
+      setMode(activeMode);
+    }
+
+    const standeeTexture = await new THREE.TextureLoader().loadAsync(standeeUrl);
+    standeeTexture.colorSpace = THREE.SRGBColorSpace;
+    standeeTexture.magFilter = THREE.NearestFilter;
+    standeeTexture.minFilter = THREE.NearestMipmapNearestFilter;
+    for (const ground of grounds) {
+      await buildScene(
+        ground,
+        document.querySelector(`[data-profile="${ground.profile.id}"] [data-render]`),
+        standeeTexture
+      );
+    }
+
+    function applyMode(mode) {
+      activeMode = mode;
+      document.body.dataset.mode = mode;
+      for (const button of document.querySelectorAll("[data-mode]")) {
+        button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
+      }
+      for (const state of scenes) state.setMode(mode);
+      if (window.__proofReport) window.__proofReport.mode = mode;
+    }
+    for (const button of document.querySelectorAll("[data-mode]")) {
+      button.addEventListener("click", () => applyMode(button.dataset.mode));
+    }
+    applyMode(activeMode);
+
+    window.__proofReport = {
+      proofId: GROUND_PROOF_ID,
+      mode: activeMode,
+      threeRevision: THREE.REVISION,
+      renderer: "WebGLRenderer",
+      material: "MeshStandardMaterial",
+      camera: { fovDegrees: 20, elevationDegrees: 35, yawDegrees: 45 },
+      grid: GRID,
+      walkableSlopeLimitDegrees: MAX_WALKABLE_SLOPE_DEG,
+      standee: "assets/sprites/spr-fantasy-goblin-warrior.png",
+      profiles: scenes.map((state) => ({
+        id: state.ground.profile.id,
+        seed: state.ground.profile.seed,
+        fingerprint: state.ground.metrics.fingerprint,
+        metrics: state.ground.metrics,
+        triangleCount: state.triangleCount,
+        vertexCount: state.ground.heights.length,
+        semantics: ["broad-field", "reserved-path", "encounter-pad", "transition-mask"]
+      }))
+    };
+    await document.fonts.ready;
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    window.__ready = true;
+  </script>
+</body>
+</html>

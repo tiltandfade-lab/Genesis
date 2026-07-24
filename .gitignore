@@ -69,6 +69,15 @@ dev/model-qa/battlemap-shots/
 dev/model-qa/proof-sheets/
 dev/diegetic-light-shots/
 
+# Material-lane compiled texture sets and rendered taste cards are deterministic
+# review artifacts. Commit their source graphs, manifests, receipts, and harnesses.
+dev/material-lane/exports/
+dev/material-cards/out/
+dev/lit-texture-proof/out/
+dev/material-workbench-proof/out/
+dev/trim-sheet-proof/out/
+dev/uneven-ground-proof/out/
+
 # Obsidian editor config (Adam's vault view state — never tracked)
 .obsidian/
 # STATE-HYGIENE-EVAL: scorecard artifacts are per-run outputs; baselines/budgets are committed truth

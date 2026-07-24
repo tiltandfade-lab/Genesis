@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "batchId": "GP-MM-STONE-V001",
+  "generatedAt": "2026-07-24T00:06:45.475Z",
+  "harness": "dev/material-cards/guard-post-material-cards.html",
+  "browser": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "captureCount": 6,
+  "captures": [
+    "dev/material-cards/out/guard-post-mm13-v001/guard-post-material-overview-full.png",
+    "dev/material-cards/out/guard-post-mm13-v001/guard-post-material-overview-app.png",
+    "dev/material-cards/out/guard-post-mm13-v001/gp-mm-m01-c01-material-card.png",
+    "dev/material-cards/out/guard-post-mm13-v001/gp-mm-m01-c02-material-card.png",
+    "dev/material-cards/out/guard-post-mm13-v001/gp-mm-m02-c01-material-card.png",
+    "dev/material-cards/out/guard-post-mm13-v001/gp-mm-m02-c02-material-card.png"
+  ],
+  "renderContract": {
+    "threeRevision": "166",
+    "renderer": "WebGLRenderer",
+    "material": "MeshStandardMaterial",
+    "toneMapping": "AgXToneMapping",
+    "colorContract": "albedo=sRGB; normal+ORM=linear; ORM R=AO G=roughness B=metalness",
+    "camera": "gameplay yaw=45 elevation=35 fov=20",
+    "standee": "assets/sprites/spr-fantasy-goblin-warrior.png",
+    "candidates": [
+      {
+        "candidateId": "GP-MM-M01-C01",
+        "renders": [
+          {
+            "mode": "lit",
+            "width": 354,
+            "height": 220
+          },
+          {
+            "mode": "gameplay",
+            "width": 354,
+            "height": 220
+          },
+          {
+            "mode": "clay",
+            "width": 320,
+            "height": 200
+          }
+        ]
+      },
+      {
+        "candidateId": "GP-MM-M01-C02",
+        "renders": [
+          {
+            "mode": "lit",
+            "width": 354,
+            "height": 220
+          },
+          {
+            "mode": "gameplay",
+            "width": 354,
+            "height": 220
+          },
+          {
+            "mode": "clay",
+            "width": 320,
+            "height": 200
+          }
+        ]
+      },
+      {
+        "candidateId": "GP-MM-M02-C01",
+        "renders": [
+          {
+            "mode": "lit",
+            "width": 354,
+            "height": 220
+          },
+          {
+            "mode": "gameplay",
+            "width": 354,
+            "height": 220
+          },
+          {
+            "mode": "clay",
+            "width": 320,
+            "height": 200
+          }
+        ]
+      },
+      {
+        "candidateId": "GP-MM-M02-C02",
+        "renders": [
+          {
+            "mode": "lit",
+            "width": 354,
+            "height": 220
+          },
+          {
+            "mode": "gameplay",
+            "width": 354,
+            "height": 220
+          },
+          {
+            "mode": "clay",
+            "width": 320,
+            "height": 200
+          }
+        ]
+      }
+    ]
+  },
+  "pageErrors": []
+}

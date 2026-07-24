@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Genesis Material Workbench — Condition Overrides</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #eee7d8;
+      --muted: #aaa191;
+      --gold: #d8a93f;
+      --green: #9fce9d;
+      --blue: #91b9cb;
+      --line: #3d3a32;
+      --panel: #171815;
+      --black: #0b0d0c;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--black); color: var(--ink); }
+    body {
+      min-height: 100vh;
+      font: 14px/1.42 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    button, input { font: inherit; }
+    #proof { width: 1520px; margin: 0 auto; padding: 28px; background: #0d0f0d; }
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      align-items: end;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow { color: var(--gold); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 4px 0 0; font: 500 48px/1 Georgia, serif; letter-spacing: -.025em; }
+    .contract { color: var(--muted); text-align: right; line-height: 1.6; }
+    .scope {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .scope > div {
+      min-height: 66px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      background: #161712;
+      color: #cfc7b8;
+    }
+    .scope strong { display: block; margin-bottom: 3px; color: var(--green); text-transform: uppercase; letter-spacing: .06em; }
+    .save-contract { border-left: 4px solid var(--gold) !important; }
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) 1.2fr;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 20px;
+      padding: 15px 17px;
+      border: 1px solid var(--line);
+      background: #111310;
+    }
+    .control-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .control output { color: var(--gold); font-weight: 800; }
+    input[type="range"] { width: 100%; accent-color: var(--gold); }
+    .presets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+    .presets button {
+      padding: 7px 9px;
+      color: #d8d0c0;
+      border: 1px solid #514b40;
+      background: #1b1c18;
+      cursor: pointer;
+    }
+    .presets button:hover { color: #fff4cf; border-color: var(--gold); }
+    .material {
+      margin-top: 18px;
+      padding: 20px 22px 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #171915, #121411);
+    }
+    .material-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 13px;
+    }
+    h2 { margin: 0; font: 500 30px/1 Georgia, serif; }
+    .class-name { color: var(--muted); }
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr 206px; gap: 13px; }
+    figure { margin: 0; }
+    .render-frame {
+      position: relative;
+      height: 322px;
+      overflow: hidden;
+      border: 1px solid #49463d;
+      background: #090b0a;
+    }
+    .render-frame canvas { width: 100%; height: 100%; display: block; }
+    .badge {
+      position: absolute;
+      z-index: 2;
+      top: 10px;
+      left: 10px;
+      padding: 5px 8px;
+      border: 1px solid #625b4d;
+      background: #090b09d9;
+      color: #eee6d7;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .conditioned .badge { border-color: #5d895b; color: #c9efc5; }
+    figcaption {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .maps { display: grid; grid-template-rows: repeat(3, 1fr); gap: 10px; }
+    .map {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 96px;
+      padding: 8px;
+      border: 1px solid #403d35;
+      background: #0d100e;
+    }
+    .map img { width: 82px; height: 82px; object-fit: cover; image-rendering: pixelated; }
+    .map strong { display: block; color: var(--ink); }
+    .map span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .material-foot {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #39362f;
+    }
+    .material-foot strong { display: block; margin-bottom: 2px; color: var(--blue); font-size: 11px; text-transform: uppercase; }
+    .material-foot span { color: #bbb2a2; font-size: 11px; }
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 18px;
+      padding: 14px 0 2px;
+      color: #8e8678;
+      border-top: 1px solid var(--line);
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <main id="proof">
+    <header class="masthead">
+      <div>
+        <div class="eyebrow">Genesis · Material Workbench · Proof V001</div>
+        <h1>Source art, changed by time.</h1>
+      </div>
+      <div class="contract">three.js r166 · MeshStandardMaterial · AgX<br>sRGB albedo · tangent normal · roughness map</div>
+    </header>
+
+    <section class="scope">
+      <div>
+        <strong>Non-destructive condition stack</strong>
+        Age changes finish; erosion changes semantic height; wetness darkens albedo, lowers roughness,
+        and softens wet micro-normal response. Each override can be zeroed independently.
+      </div>
+      <div class="save-contract">
+        <strong>Proposed repo write contract</strong>
+        Save New → a new tracked preset JSON. Overwrite → the selected preset only, after a diff.
+        Source PNG and .ptex files remain immutable; Bake/Export writes separately derived artifacts.
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Material condition controls">
+      <div class="control">
+        <div class="control-head"><label for="age">Age</label><output id="age-value"></output></div>
+        <input id="age" type="range" min="0" max="1" step=".01" value=".65">
+      </div>
+      <div class="control">
+        <div class="control-head"><label for="erosion">Erosion</label><output id="erosion-value"></output></div>
+        <input id="erosion" type="range" min="0" max="1" step=".01" value=".55">
+      </div>
+      <div class="control">
+        <div class="control-head"><label for="wetness">Wetness</label><output id="wetness-value"></output></div>
+        <input id="wetness" type="range" min="0" max="1" step=".01" value=".65">
+      </div>
+      <div class="control">
+        <div class="control-head"><label for="normal">Normal scale</label><output id="normal-value"></output></div>
+        <input id="normal" type="range" min="0" max="2" step=".05" value="1.2">
+      </div>
+      <div class="presets" aria-label="Condition presets">
+        <button type="button" data-preset="base">Base</button>
+        <button type="button" data-preset="age">Age only</button>
+        <button type="button" data-preset="erosion">Erosion only</button>
+        <button type="button" data-preset="wetness">Wetness only</button>
+      </div>
+    </section>
+
+    <section id="materials"></section>
+
+    <footer>
+      <span>Proof boundary: automatic joint proposals are editable starting masks. Reliable production authorship still requires a correction brush for missed or false structure.</span>
+      <span>GENESIS-MATERIAL-CONDITION-WORKBENCH-V001</span>
+    </footer>
+  </main>
+
+  <script type="module">
+    import * as THREE from "../../vendor/three/three.module.js";
+
+    const query = new URLSearchParams(location.search);
+    const specs = [
+      {
+        id: "fantasy-floor",
+        title: "Fantasy Floor",
+        className: "stone · irregular paver · floor",
+        orientation: "floor",
+        jointDepth: .48,
+        faceRelief: .026,
+        normalBakeStrength: 7,
+        wetRoughness: .12,
+        wetDarkening: .28
+      },
+      {
+        id: "fantasy-wall",
+        title: "Fantasy Wall",
+        className: "stone · coursed brick · wall",
+        orientation: "wall",
+        jointDepth: .20,
+        faceRelief: .008,
+        normalBakeStrength: 2.8,
+        wetRoughness: .18,
+        wetDarkening: .22
+      }
+    ];
+    const controls = {
+      age: document.querySelector("#age"),
+      erosion: document.querySelector("#erosion"),
+      wetness: document.querySelector("#wetness"),
+      normal: document.querySelector("#normal")
+    };
+    for (const key of Object.keys(controls)) {
+      if (query.has(key)) controls[key].value = query.get(key);
+    }
+
+    document.querySelector("#materials").innerHTML = specs.map((spec) => `
+      <article class="material" data-material="${spec.id}">
+        <header class="material-head">
+          <h2>${spec.title}</h2>
+          <div class="class-name">${spec.className}</div>
+        </header>
+        <div class="comparison-grid">
+          <figure>
+            <div class="render-frame" data-render="baseline"><span class="badge">A · preserved source + semantic structure</span></div>
+            <figcaption><span>Baseline</span><span>condition overrides: 0</span></figcaption>
+          </figure>
+          <figure class="conditioned">
+            <div class="render-frame" data-render="conditioned"><span class="badge">B · non-destructive condition stack</span></div>
+            <figcaption><span>Conditioned</span><span>age · erosion · wetness</span></figcaption>
+          </figure>
+          <div class="maps">
+            <div class="map">
+              <img src="generated/${spec.id}-structure-mask.png" alt="${spec.title} structural joint mask">
+              <div><strong>Structure</strong><span>joints, not face discoloration</span></div>
+            </div>
+            <div class="map">
+              <img src="generated/${spec.id}-erosion-mask.png" alt="${spec.title} erosion mask">
+              <div><strong>Erosion</strong><span>joint widening + edge chips</span></div>
+            </div>
+            <div class="map">
+              <img src="generated/${spec.id}-wetness-mask.png" alt="${spec.title} wetness mask">
+              <div><strong>Wetness</strong><span>cavities + pools / runoff</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="material-foot">
+          <div><strong>Joint depth</strong><span>${spec.jointDepth.toFixed(3)} class-scaled</span></div>
+          <div><strong>Face relief</strong><span>${spec.faceRelief.toFixed(3)} seeded geometry</span></div>
+          <div><strong>Discoloration → height</strong><span>0.000 direct gain</span></div>
+          <div><strong>Normal bake</strong><span>${spec.normalBakeStrength.toFixed(1)} before display scale</span></div>
+        </div>
+      </article>
+    `).join("");
+
+    async function loadPixels(url) {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = url;
+      await image.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+      context.drawImage(image, 0, 0);
+      return {
+        canvas,
+        context,
+        pixels: new Uint8ClampedArray(context.getImageData(0, 0, canvas.width, canvas.height).data)
+      };
+    }
+
+    function textureFromCanvas(canvas, colorSpace, linear) {
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.colorSpace = colorSpace;
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.magFilter = linear ? THREE.LinearFilter : THREE.NearestFilter;
+      texture.minFilter = linear ? THREE.LinearMipmapLinearFilter : THREE.NearestMipmapNearestFilter;
+      return texture;
+    }
+
+    function clonePixelCanvas(source) {
+      const canvas = document.createElement("canvas");
+      canvas.width = source.canvas.width;
+      canvas.height = source.canvas.height;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+      const imageData = context.createImageData(canvas.width, canvas.height);
+      imageData.data.set(source.pixels);
+      context.putImageData(imageData, 0, 0);
+      return { canvas, context, imageData };
+    }
+
+    function addLights(scene) {
+      scene.add(new THREE.HemisphereLight(0xc9c1b0, 0x20262a, .25));
+      const key = new THREE.DirectionalLight(0xffd49d, 3.25);
+      key.position.set(4.8, 5.6, 5.2);
+      scene.add(key);
+      const rake = new THREE.PointLight(0xc4ddff, 52, 15, 2);
+      rake.position.set(-3.4, 2.1, 3.8);
+      scene.add(rake);
+    }
+
+    function makeScene(frame, spec, maps, conditioned) {
+      const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.AgXToneMapping;
+      renderer.toneMappingExposure = 1.02;
+      frame.append(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0c0b);
+      addLights(scene);
+
+      const material = new THREE.MeshStandardMaterial({
+        map: conditioned ? maps.conditionAlbedo : maps.baseAlbedo,
+        normalMap: conditioned ? maps.conditionNormal : maps.baseNormal,
+        roughnessMap: conditioned ? maps.conditionRoughness : maps.baseRoughness,
+        roughness: 1,
+        metalness: 0,
+        side: THREE.DoubleSide
+      });
+      material.normalScale.set(Number(controls.normal.value), Number(controls.normal.value));
+      const geometry = new THREE.PlaneGeometry(4.8, 3.2, 1, 1);
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+
+      const repeat = spec.orientation === "floor" ? [2.2, 2.2] : [2.5, 1.8];
+      for (const texture of [material.map, material.normalMap, material.roughnessMap]) {
+        texture.repeat.set(...repeat);
+      }
+      const camera = new THREE.PerspectiveCamera(34, 1.55, .1, 100);
+      if (spec.orientation === "floor") {
+        mesh.rotation.x = -Math.PI / 2;
+        camera.position.set(0, 4.5, 4.9);
+        camera.lookAt(0, 0, -.2);
+      } else {
+        camera.position.set(0, .08, 6.2);
+        camera.lookAt(0, 0, 0);
+      }
+      return { camera, frame, material, mesh, renderer, scene, spec, conditioned };
+    }
+
+    const sourceRoles = [
+      "albedo", "albedo-aged", "normal-base", "normal-eroded",
+      "roughness-dry", "age-mask", "erosion-mask", "wetness-mask"
+    ];
+    const materialStates = [];
+    for (const spec of specs) {
+      const entries = await Promise.all(
+        sourceRoles.map(async (role) => [role, await loadPixels(`generated/${spec.id}-${role}.png`)])
+      );
+      const sources = Object.fromEntries(entries);
+      const albedoDynamic = clonePixelCanvas(sources.albedo);
+      const normalDynamic = clonePixelCanvas(sources["normal-base"]);
+      const roughnessDynamic = clonePixelCanvas(sources["roughness-dry"]);
+      const baseAlbedo = textureFromCanvas(sources.albedo.canvas, THREE.SRGBColorSpace, false);
+      const baseNormal = textureFromCanvas(sources["normal-base"].canvas, THREE.NoColorSpace, true);
+      const baseRoughness = textureFromCanvas(sources["roughness-dry"].canvas, THREE.NoColorSpace, true);
+      const conditionAlbedo = textureFromCanvas(albedoDynamic.canvas, THREE.SRGBColorSpace, false);
+      const conditionNormal = textureFromCanvas(normalDynamic.canvas, THREE.NoColorSpace, true);
+      const conditionRoughness = textureFromCanvas(roughnessDynamic.canvas, THREE.NoColorSpace, true);
+      const maps = {
+        baseAlbedo, baseNormal, baseRoughness,
+        conditionAlbedo, conditionNormal, conditionRoughness
+      };
+      const article = document.querySelector(`[data-material="${spec.id}"]`);
+      const renders = [
+        makeScene(article.querySelector('[data-render="baseline"]'), spec, maps, false),
+        makeScene(article.querySelector('[data-render="conditioned"]'), spec, maps, true)
+      ];
+      materialStates.push({
+        spec, sources, maps, renders,
+        dynamic: {
+          albedo: albedoDynamic,
+          normal: normalDynamic,
+          roughness: roughnessDynamic
+        },
+        metrics: {}
+      });
+    }
+
+    function composeCondition(state, amounts) {
+      const { sources, dynamic, spec } = state;
+      const base = sources.albedo.pixels;
+      const aged = sources["albedo-aged"].pixels;
+      const baseNormal = sources["normal-base"].pixels;
+      const erodedNormal = sources["normal-eroded"].pixels;
+      const dryRoughness = sources["roughness-dry"].pixels;
+      const ageMask = sources["age-mask"].pixels;
+      const wetMask = sources["wetness-mask"].pixels;
+      const outAlbedo = dynamic.albedo.imageData.data;
+      const outNormal = dynamic.normal.imageData.data;
+      const outRoughness = dynamic.roughness.imageData.data;
+      let albedoDelta = 0;
+      let normalDelta = 0;
+      let roughnessTotal = 0;
+      let activeWetness = 0;
+      const pixels = base.length / 4;
+
+      for (let index = 0; index < base.length; index += 4) {
+        const age = amounts.age;
+        const erosion = amounts.erosion;
+        const wet = amounts.wetness * (wetMask[index] / 255);
+        const ageLocal = amounts.age * (ageMask[index] / 255);
+        const erosionLocal = erosion;
+        const darkening = 1 - wet * spec.wetDarkening;
+        for (let channel = 0; channel < 3; channel++) {
+          const agedBlend = base[index + channel] * (1 - age) + aged[index + channel] * age;
+          const value = Math.round(Math.max(0, Math.min(255, agedBlend * darkening)));
+          outAlbedo[index + channel] = value;
+          albedoDelta += Math.abs(value - base[index + channel]);
+        }
+        outAlbedo[index + 3] = 255;
+
+        let nx = (baseNormal[index] / 255 * 2 - 1) * (1 - erosionLocal)
+          + (erodedNormal[index] / 255 * 2 - 1) * erosionLocal;
+        let ny = (baseNormal[index + 1] / 255 * 2 - 1) * (1 - erosionLocal)
+          + (erodedNormal[index + 1] / 255 * 2 - 1) * erosionLocal;
+        let nz = (baseNormal[index + 2] / 255 * 2 - 1) * (1 - erosionLocal)
+          + (erodedNormal[index + 2] / 255 * 2 - 1) * erosionLocal;
+        const wetFlatten = 1 - wet * .18;
+        nx *= wetFlatten;
+        ny *= wetFlatten;
+        const length = Math.max(Math.hypot(nx, ny, nz), 1e-8);
+        nx /= length; ny /= length; nz /= length;
+        const normalValues = [nx, ny, nz].map((value) => Math.round((value * .5 + .5) * 255));
+        for (let channel = 0; channel < 3; channel++) {
+          outNormal[index + channel] = normalValues[channel];
+          normalDelta += Math.abs(normalValues[channel] - baseNormal[index + channel]);
+        }
+        outNormal[index + 3] = 255;
+
+        const dry = dryRoughness[index] / 255;
+        const weatheredDry = Math.min(.98, dry + ageLocal * .045);
+        const roughness = weatheredDry * (1 - wet) + spec.wetRoughness * wet;
+        const roughByte = Math.round(roughness * 255);
+        outRoughness[index] = outRoughness[index + 1] = outRoughness[index + 2] = roughByte;
+        outRoughness[index + 3] = 255;
+        roughnessTotal += roughness;
+        activeWetness += wet;
+      }
+      dynamic.albedo.context.putImageData(dynamic.albedo.imageData, 0, 0);
+      dynamic.normal.context.putImageData(dynamic.normal.imageData, 0, 0);
+      dynamic.roughness.context.putImageData(dynamic.roughness.imageData, 0, 0);
+      state.maps.conditionAlbedo.needsUpdate = true;
+      state.maps.conditionNormal.needsUpdate = true;
+      state.maps.conditionRoughness.needsUpdate = true;
+      state.metrics = {
+        meanAlbedoDelta: Number((albedoDelta / pixels / 3).toFixed(4)),
+        meanNormalDelta: Number((normalDelta / pixels / 3).toFixed(4)),
+        meanRoughness: Number((roughnessTotal / pixels).toFixed(6)),
+        meanAppliedWetness: Number((activeWetness / pixels).toFixed(6))
+      };
+    }
+
+    function renderScene(state) {
+      const width = Math.max(460, Math.round(state.frame.clientWidth));
+      const height = Math.max(280, Math.round(state.frame.clientHeight));
+      state.renderer.setSize(width, height, false);
+      state.camera.aspect = width / height;
+      state.camera.updateProjectionMatrix();
+      const scale = Number(controls.normal.value);
+      state.material.normalScale.set(scale, scale);
+      state.renderer.render(state.scene, state.camera);
+    }
+
+    function currentAmounts() {
+      return {
+        age: Number(controls.age.value),
+        erosion: Number(controls.erosion.value),
+        wetness: Number(controls.wetness.value),
+        normal: Number(controls.normal.value)
+      };
+    }
+
+    function updateOutputs() {
+      for (const key of ["age", "erosion", "wetness"]) {
+        document.querySelector(`#${key}-value`).value = `${Math.round(Number(controls[key].value) * 100)}%`;
+      }
+      document.querySelector("#normal-value").value = Number(controls.normal.value).toFixed(2);
+    }
+
+    function renderAll() {
+      updateOutputs();
+      const amounts = currentAmounts();
+      for (const state of materialStates) {
+        composeCondition(state, amounts);
+        for (const render of state.renders) renderScene(render);
+      }
+      window.__proofReport = {
+        proofId: "GENESIS-MATERIAL-CONDITION-WORKBENCH-V001",
+        threeRevision: THREE.REVISION,
+        renderer: "WebGLRenderer",
+        material: "MeshStandardMaterial",
+        toneMapping: "AgXToneMapping",
+        controls: amounts,
+        saveContract: {
+          saveNew: "new tracked preset JSON",
+          overwrite: "selected preset JSON only after diff",
+          sourceMutation: false,
+          bakeExportSeparate: true
+        },
+        comparisons: materialStates.map((state) => ({
+          id: state.spec.id,
+          className: state.spec.className,
+          originalAlbedo: `generated/${state.spec.id}-albedo.png`,
+          conditionSources: {
+            age: `generated/${state.spec.id}-age-mask.png`,
+            erosion: `generated/${state.spec.id}-erosion-mask.png`,
+            wetness: `generated/${state.spec.id}-wetness-mask.png`
+          },
+          faceDiscolorationHeightGain: 0,
+          jointDepth: state.spec.jointDepth,
+          faceRelief: state.spec.faceRelief,
+          normalBakeStrength: state.spec.normalBakeStrength,
+          channelsChanged: {
+            age: ["albedo", "roughness"],
+            erosion: ["normal"],
+            wetness: ["albedo", "roughness", "normal"]
+          },
+          compositeMetrics: state.metrics
+        }))
+      };
+    }
+
+    const presets = {
+      base: { age: 0, erosion: 0, wetness: 0 },
+      age: { age: .85, erosion: 0, wetness: 0 },
+      erosion: { age: 0, erosion: .85, wetness: 0 },
+      wetness: { age: 0, erosion: 0, wetness: .85 }
+    };
+    for (const button of document.querySelectorAll("[data-preset]")) {
+      button.addEventListener("click", () => {
+        for (const [key, value] of Object.entries(presets[button.dataset.preset])) {
+          controls[key].value = value;
+        }
+        renderAll();
+      });
+    }
+    for (const input of Object.values(controls)) input.addEventListener("input", renderAll);
+    window.addEventListener("resize", renderAll);
+    await document.fonts.ready;
+    renderAll();
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    window.__ready = true;
+  </script>
+</body>
+</html>

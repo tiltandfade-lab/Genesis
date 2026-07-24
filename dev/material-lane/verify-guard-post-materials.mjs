@@ -162,6 +162,7 @@ check(library.lib.every((entry) => entry.label.endsWith("v001")), "custom-node v
 for (const candidate of manifest.candidates) {
   check(candidate.seed === (candidate.family === "GP-MM-M01" ? 180041 : 180042), `${candidate.id} fixed seed`);
   check(candidate.declaredScaleMeters.width === 5 && candidate.declaredScaleMeters.height === 5, `${candidate.id} scale`);
+  check(candidate.parameters.perBlockFaceMapping === true, `${candidate.id} per-block face mapping declared`);
   check(!Object.hasOwn(candidate, "conditionTags"), `${candidate.id} has no baked condition tags`);
   const graphFile = repoFile(candidate.source.ptex);
   check(sha256(graphFile) === candidate.source.sha256, `${candidate.id} source hash`);
@@ -169,6 +170,9 @@ for (const candidate of manifest.candidates) {
   const configNode = graph.nodes.find((entry) => entry.name === "candidate_configurations");
   check(Boolean(configNode), `${candidate.id} named configuration node`);
   check(Object.keys(configNode.widgets[0].configurations).length === 2, `${candidate.id} carries two bounded configs`);
+  for (const faceNode of ["block_fill", "block_uv", "hewn_per_block", "grain_per_block"]) {
+    check(graph.nodes.some((entry) => entry.name === faceNode), `${candidate.id} carries ${faceNode}`);
+  }
   const materialHeight = graph.connections.some(
     (connection) => connection.to === "Material" && connection.to_port === 6
   );

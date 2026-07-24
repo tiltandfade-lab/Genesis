@@ -237,7 +237,7 @@
             <div><dt>Custom node</dt><dd>${candidate.source.customNode}</dd></div>
             <div><dt>Palette</dt><dd>${candidate.paletteIntent}</dd></div>
             <div><dt>Construction</dt><dd>${candidate.family === "GP-MM-M01" ? "coherent split courses" : "two-axis fitted interlock"}</dd></div>
-            <div><dt>Face response</dt><dd>surface ${candidate.parameters.surfaceScale} · rough ${candidate.parameters.stoneRoughnessRange[0]}–${candidate.parameters.stoneRoughnessRange[1]}</dd></div>
+            <div><dt>Face response</dt><dd>per-block split ${candidate.parameters.hewnFacetScale[0]}×${candidate.parameters.hewnFacetScale[1]} · grain ${candidate.parameters.grainScale} · rough ${candidate.parameters.stoneRoughnessRange[0]}–${candidate.parameters.stoneRoughnessRange[1]}</dd></div>
           </dl>
         </article>`;
     }

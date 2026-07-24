@@ -2,6 +2,10 @@
 /**
  * Compile the Guard Post candidate batch twice with Material Maker 1.3 and
  * prove byte identity for all review channels.
+ *
+ * Material Maker accepts multiple source files per CLI invocation. Both
+ * evaluations are therefore staged with unique filenames and sent through one
+ * invisible process. This avoids repeatedly opening/focusing the Godot window.
  */
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -23,40 +27,77 @@ function sha256(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
 }
 
-function compile(runName, graphs) {
-  const out = path.join(exportDir, runName);
-  fs.rmSync(out, { recursive: true, force: true });
-  fs.mkdirSync(out, { recursive: true });
-  const logs = [];
-  const timeoutRecoveries = [];
-  for (const graph of graphs) {
-    const stem = path.basename(graph, ".ptex");
-    const result = spawnSync(
-      materialMaker,
-      [
-        "--export-material",
-        "--target",
-        "Godot/Godot 4 ORM",
-        "-o",
-        out,
-        path.join(graphDir, graph)
-      ],
-      { encoding: "utf8", timeout: 15000, killSignal: "SIGTERM" }
-    );
-    const logName = `${stem}.log`;
-    fs.writeFileSync(path.join(out, logName), `${result.stdout}${result.stderr}`);
-    const requiredPresent = requiredSuffixes.every((suffix) =>
-      fs.existsSync(path.join(out, `${stem}${suffix}`))
-    );
-    const timedOutAfterWriting =
-      result.error?.code === "ETIMEDOUT" && requiredPresent;
-    if (timedOutAfterWriting) timeoutRecoveries.push(graph);
-    if (result.status !== 0 && !timedOutAfterWriting) {
-      throw new Error(`Material Maker failed for ${graph} (${runName}): ${result.status}`);
+function compileBatch(graphs) {
+  const runNames = ["run-a", "run-b"];
+  const stagedSourceDir = path.join(exportDir, "_staged-sources");
+  const stagedOutputDir = path.join(exportDir, "_staged-outputs");
+  fs.rmSync(exportDir, { recursive: true, force: true });
+  fs.mkdirSync(stagedSourceDir, { recursive: true });
+  fs.mkdirSync(stagedOutputDir, { recursive: true });
+
+  const stagedGraphs = [];
+  for (const runName of runNames) {
+    for (const graph of graphs) {
+      const stem = path.basename(graph, ".ptex");
+      const stagedName = `${runName}__${stem}.ptex`;
+      const stagedPath = path.join(stagedSourceDir, stagedName);
+      fs.copyFileSync(path.join(graphDir, graph), stagedPath);
+      stagedGraphs.push(stagedPath);
     }
-    logs.push(logName);
   }
-  return { logs, out, timeoutRecoveries };
+
+  const result = spawnSync(
+    materialMaker,
+    [
+      "--no-window",
+      "--export-material",
+      "--target",
+      "Godot/Godot 4 ORM",
+      "-o",
+      stagedOutputDir,
+      ...stagedGraphs
+    ],
+    { encoding: "utf8", timeout: 180000, killSignal: "SIGTERM" }
+  );
+  const logName = "material-maker-batch.log";
+  fs.writeFileSync(path.join(exportDir, logName), `${result.stdout}${result.stderr}`);
+
+  const stagedRequiredPresent = stagedGraphs.every((graph) => {
+    const stem = path.basename(graph, ".ptex");
+    return requiredSuffixes.every((suffix) =>
+      fs.existsSync(path.join(stagedOutputDir, `${stem}${suffix}`))
+    );
+  });
+  const timedOutAfterWriting =
+    result.error?.code === "ETIMEDOUT" && stagedRequiredPresent;
+  if (result.status !== 0 && !timedOutAfterWriting) {
+    throw new Error(`Material Maker batch failed: ${result.status}\n${result.stderr}`);
+  }
+
+  const runs = {};
+  for (const runName of runNames) {
+    const out = path.join(exportDir, runName);
+    fs.mkdirSync(out, { recursive: true });
+    for (const graph of graphs) {
+      const stem = path.basename(graph, ".ptex");
+      for (const suffix of requiredSuffixes) {
+        const stagedFile = path.join(stagedOutputDir, `${runName}__${stem}${suffix}`);
+        const finalFile = path.join(out, `${stem}${suffix}`);
+        if (!fs.existsSync(stagedFile)) {
+          throw new Error(`Missing required staged export ${path.basename(stagedFile)}`);
+        }
+        fs.renameSync(stagedFile, finalFile);
+      }
+    }
+    runs[runName] = {
+      logs: [logName],
+      out,
+      timeoutRecoveries: timedOutAfterWriting ? ["batch"] : []
+    };
+  }
+  fs.rmSync(stagedSourceDir, { recursive: true, force: true });
+  fs.rmSync(stagedOutputDir, { recursive: true, force: true });
+  return runs;
 }
 
 function requiredFiles(out, graphs) {
@@ -81,8 +122,9 @@ const graphs = fs
 if (graphs.length !== 4) throw new Error(`Expected 4 candidate graphs, found ${graphs.length}`);
 if (!fs.existsSync(materialMaker)) throw new Error(`Material Maker binary missing: ${materialMaker}`);
 
-const runA = compile("run-a", graphs);
-const runB = compile("run-b", graphs);
+const runs = compileBatch(graphs);
+const runA = runs["run-a"];
+const runB = runs["run-b"];
 const filesA = requiredFiles(runA.out, graphs);
 const filesB = requiredFiles(runB.out, graphs);
 if (JSON.stringify(filesA) !== JSON.stringify(filesB)) throw new Error("Export file sets differ");

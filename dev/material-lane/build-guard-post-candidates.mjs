@@ -62,11 +62,43 @@ function setM01Earth(graph) {
     round: 0.02
   });
   Object.assign(node(graph, "macro_field").parameters, { scale_x: 1.6, scale_y: 1.6 });
+  Object.assign(node(graph, "edge_warp_field").parameters, { scale_x: 6, scale_y: 6 });
+  Object.assign(node(graph, "construction_irregularity").parameters, {
+    amount: 0.018,
+    eps: 0.035
+  });
   Object.assign(node(graph, "surface_field").parameters, { scale_x: 9, scale_y: 9 });
   node(graph, "surface_height_range").parameters.gradient = gradient([
     point(0, 0.9, 0.9, 0.9),
     point(1, 0.995, 0.995, 0.995)
   ]);
+  Object.assign(node(graph, "hewn_facets").parameters, { param0: 4, param1: 3 });
+  node(graph, "hewn_facet_range").parameters.gradient = gradient([
+    point(0, 0.67, 0.67, 0.67),
+    point(1, 0.995, 0.995, 0.995)
+  ]);
+  node(graph, "hewn_height_mix").parameters.amount = 0.54;
+  node(graph, "hewn_albedo").parameters.gradient = gradient([
+    point(0, 0.32, 0.31, 0.28),
+    point(1, 0.58, 0.54, 0.48)
+  ]);
+  node(graph, "stone_hewn_blend").parameters.amount = 0.005;
+  Object.assign(node(graph, "grain_field").parameters, { scale_x: 18, scale_y: 18 });
+  node(graph, "grain_height_range").parameters.gradient = gradient([
+    point(0, 0.89, 0.89, 0.89),
+    point(1, 0.995, 0.995, 0.995)
+  ]);
+  node(graph, "grain_height_mix").parameters.amount = 0.28;
+  node(graph, "grain_albedo").parameters.gradient = gradient([
+    point(0, 0.31, 0.3, 0.27),
+    point(1, 0.57, 0.53, 0.47)
+  ]);
+  node(graph, "stone_grain_blend").parameters.amount = 0.007;
+  node(graph, "grain_roughness").parameters.gradient = gradient([
+    point(0, 0.96, 0.96, 0.96),
+    point(1, 0.58, 0.58, 0.58)
+  ]);
+  node(graph, "face_roughness_mix").parameters.amount = 0.5;
   node(graph, "stone_palette").parameters.gradient = gradient([
     point(0, 0.39, 0.38, 0.35),
     point(0.5, 0.47, 0.45, 0.41),
@@ -83,12 +115,12 @@ function setM01Earth(graph) {
     r: 0.32,
     type: "Color"
   };
-  node(graph, "stone_macro_blend").parameters.amount = 0.22;
+  node(graph, "stone_macro_blend").parameters.amount = 0.1;
   node(graph, "roughness_response").parameters.gradient = gradient([
-    point(0, 0.89, 0.89, 0.89),
-    point(1, 0.76, 0.76, 0.76)
+    point(0, 0.94, 0.94, 0.94),
+    point(1, 0.64, 0.64, 0.64)
   ]);
-  node(graph, "normal_map").parameters.param1 = 0.62;
+  node(graph, "normal_map").parameters.param1 = 0.95;
   node(graph, "candidate_configurations").parameters.param0 = 1;
   node(graph, "authoring_contract").text =
     "GP-MM-M01 / config patrol-tempered-earth / seed 180041 / 512 target. Base operational construction only: no moss, grime, leaks, cracks, abandonment, wetness, or damage state.";
@@ -251,8 +283,8 @@ function makeM02ConfigControl(selected) {
     widgets: [
       {
         configurations: {
-          "upland-close-set": values([6, 6, 0.38, 0.045, 0.044, 0.022, 0.14], 1.65, 0.64),
-          "upland-heavy-fitted": values([4, 4, 0.26, 0.055, 0.035, 0.018, 0.12], 1.35, 0.58)
+          "upland-close-set": values([6, 6, 0.38, 0.045, 0.044, 0.022, 0.14], 1.65, 0.98),
+          "upland-heavy-fitted": values([4, 4, 0.26, 0.055, 0.035, 0.018, 0.12], 1.35, 1.02)
         },
         label: "Bounded candidate",
         linked_widgets: linked,
@@ -301,6 +333,15 @@ function makeM02(graph, config) {
     scale_x: isClose ? 1.65 : 1.35,
     scale_y: isClose ? 1.65 : 1.35
   });
+  node(graph, "edge_warp_field").seed = 432180;
+  Object.assign(node(graph, "edge_warp_field").parameters, {
+    scale_x: isClose ? 6 : 4.5,
+    scale_y: isClose ? 6 : 4.5
+  });
+  Object.assign(node(graph, "construction_irregularity").parameters, {
+    amount: isClose ? 0.022 : 0.026,
+    eps: 0.04
+  });
   node(graph, "surface_field").seed = 412180;
   Object.assign(node(graph, "surface_field").parameters, {
     scale_x: isClose ? 8.5 : 6.5,
@@ -309,6 +350,15 @@ function makeM02(graph, config) {
   node(graph, "surface_height_range").parameters.gradient = isClose
     ? gradient([point(0, 0.91, 0.91, 0.91), point(1, 0.995, 0.995, 0.995)])
     : gradient([point(0, 0.89, 0.89, 0.89), point(1, 0.995, 0.995, 0.995)]);
+  node(graph, "hewn_facets").seed = 422180;
+  Object.assign(node(graph, "hewn_facets").parameters, {
+    param0: isClose ? 4 : 3,
+    param1: isClose ? 3 : 2
+  });
+  node(graph, "hewn_facet_range").parameters.gradient = isClose
+    ? gradient([point(0, 0.64, 0.64, 0.64), point(1, 0.995, 0.995, 0.995)])
+    : gradient([point(0, 0.6, 0.6, 0.6), point(1, 0.995, 0.995, 0.995)]);
+  node(graph, "hewn_height_mix").parameters.amount = isClose ? 0.56 : 0.58;
   node(graph, "stone_palette").parameters.gradient = isClose
     ? gradient([
         point(0, 0.4, 0.37, 0.33),
@@ -323,6 +373,26 @@ function makeM02(graph, config) {
   node(graph, "macro_palette").parameters.gradient = isClose
     ? gradient([point(0, 0.4, 0.37, 0.33), point(1, 0.57, 0.53, 0.47)])
     : gradient([point(0, 0.39, 0.4, 0.38), point(1, 0.54, 0.51, 0.45)]);
+  node(graph, "hewn_albedo").parameters.gradient = isClose
+    ? gradient([point(0, 0.31, 0.28, 0.25), point(1, 0.6, 0.55, 0.48)])
+    : gradient([point(0, 0.3, 0.31, 0.29), point(1, 0.58, 0.55, 0.49)]);
+  node(graph, "grain_field").seed = 442180;
+  Object.assign(node(graph, "grain_field").parameters, {
+    scale_x: isClose ? 18 : 14,
+    scale_y: isClose ? 18 : 14
+  });
+  node(graph, "grain_height_range").parameters.gradient = isClose
+    ? gradient([point(0, 0.88, 0.88, 0.88), point(1, 0.995, 0.995, 0.995)])
+    : gradient([point(0, 0.87, 0.87, 0.87), point(1, 0.995, 0.995, 0.995)]);
+  node(graph, "grain_height_mix").parameters.amount = isClose ? 0.3 : 0.32;
+  node(graph, "grain_albedo").parameters.gradient = isClose
+    ? gradient([point(0, 0.29, 0.26, 0.23), point(1, 0.59, 0.54, 0.47)])
+    : gradient([point(0, 0.28, 0.29, 0.27), point(1, 0.57, 0.54, 0.48)]);
+  node(graph, "stone_grain_blend").parameters.amount = isClose ? 0.007 : 0.008;
+  node(graph, "grain_roughness").parameters.gradient = isClose
+    ? gradient([point(0, 0.96, 0.96, 0.96), point(1, 0.58, 0.58, 0.58)])
+    : gradient([point(0, 0.97, 0.97, 0.97), point(1, 0.55, 0.55, 0.55)]);
+  node(graph, "face_roughness_mix").parameters.amount = isClose ? 0.5 : 0.55;
   node(graph, "mortar_color").parameters.color = {
     a: 1,
     b: isClose ? 0.28 : 0.3,
@@ -330,12 +400,13 @@ function makeM02(graph, config) {
     r: isClose ? 0.31 : 0.31,
     type: "Color"
   };
-  node(graph, "stone_macro_blend").parameters.amount = isClose ? 0.23 : 0.2;
+  node(graph, "stone_macro_blend").parameters.amount = isClose ? 0.1 : 0.08;
+  node(graph, "stone_hewn_blend").parameters.amount = isClose ? 0.005 : 0.006;
   node(graph, "roughness_response").parameters.gradient = gradient([
-    point(0, isClose ? 0.89 : 0.92, isClose ? 0.89 : 0.92, isClose ? 0.89 : 0.92),
-    point(1, isClose ? 0.75 : 0.78, isClose ? 0.75 : 0.78, isClose ? 0.75 : 0.78)
+    point(0, isClose ? 0.94 : 0.95, isClose ? 0.94 : 0.95, isClose ? 0.94 : 0.95),
+    point(1, isClose ? 0.64 : 0.62, isClose ? 0.64 : 0.62, isClose ? 0.64 : 0.62)
   ]);
-  node(graph, "normal_map").parameters.param1 = isClose ? 0.64 : 0.58;
+  node(graph, "normal_map").parameters.param1 = isClose ? 0.98 : 1.02;
   node(graph, "candidate_configurations").parameters.param0 = isClose ? 0 : 1;
   const configIndex = graph.nodes.findIndex((entry) => entry.name === "candidate_configurations");
   graph.nodes[configIndex] = makeM02ConfigControl(isClose ? 0 : 1);

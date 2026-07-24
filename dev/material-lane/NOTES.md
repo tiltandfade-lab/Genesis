@@ -17,23 +17,26 @@ approved material roster.
 
 ## Candidate taste differences
 
-- `frontier-broad-cool`: calmest and most monumental M01; five broad cool-grey courses, shallow
-  edge response, strongest institutional read.
-- `patrol-tempered-earth`: tighter M01 coursing with a warmer mineral family and slightly stronger
-  normal response.
-- `upland-heavy-fitted`: lowest-count M02 interlock; broad heavy local units and the quietest
-  rubble palette.
-- `upland-close-set`: denser M02 fit and warmer mineral family, still bounded above the
-  small-stone/confetti threshold.
+- `frontier-broad-cool`: calmest and most monumental M01; five broad cool-grey courses with
+  low-count split-face planes and visible granular stone.
+- `patrol-tempered-earth`: tighter M01 coursing with a warmer mineral family, finer grain, and
+  slightly stronger hewn-face response.
+- `upland-heavy-fitted`: lowest-count M02 interlock; broad heavy local units, deepest fracture
+  planes, and strongest joint-edge irregularity.
+- `upland-close-set`: denser M02 fit and warmer mineral family with smaller split planes, still
+  bounded above the small-stone/confetti threshold.
 
 The two M01 instances share seed `180041`; the two M02 instances share seed `180042`. Same-family
 seed reuse makes the configuration comparison about scale, fit, palette, joint, and response
 rather than a lucky random draw.
 
-Stone faces also carry a separate, seed-locked surface field. It modulates shallow face height and
-roughness while the construction-cell mask preserves joints and bevels. The field is broad and
-low-amplitude by design: it removes the perfectly smooth CG plane without introducing scratches,
-cracks, damage, or high-frequency rock chatter.
+Stone faces carry three seed-locked response scales: a broad geological field, low-count angular
+split-face planes, and subordinate granular pits/ridges. The fracture and grain fields are remapped
+into each detected block's own seeded coordinates so adjacent stones do not read as one noisy
+sheet. Together they break the perfectly smooth CG plane without turning the wall into crystalline
+cells, stucco, scratches, or damage. A separate periodic edge warp introduces small changes in
+block outline and joint width while preserving the M01 course datum and the M02 fitted interlock.
+These are construction qualities, not weathering.
 
 ## Reproduction
 
@@ -45,7 +48,8 @@ node dev/material-cards/capture-guard-post-material-cards.mjs
 
 Material Maker is pinned to version 1.3 with binary SHA-256
 `597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb`. The compile script exports
-all four sources twice and fails if any albedo, normal, or ORM file differs byte-for-byte.
+all four sources twice inside one invisible Material Maker process and fails if any albedo, normal,
+or ORM file differs byte-for-byte.
 
 ## Limitations and next gate
 

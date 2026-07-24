@@ -1,7 +1,7 @@
 ---
 type: system-spec
 status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review candidate BUILT
-  (2026-07-24), close torch brightness accepted and expanded-falloff verdict pending; dedicated CL-F02
+  (2026-07-24), close torch brightness accepted and decay-1.5 verdict pending; dedicated CL-F02
   display affordances + CL-R2…CL-R6 remain
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
@@ -329,7 +329,7 @@ Required work:
   data**. Temporary UI state must not be the only authority. **BUILT:** authored JSON →
   deterministic compiled classic-script registry → shared engine/renderer/Lab consumers.
 
-**CL-R1 engineering candidate — BUILT 2026-07-24; close torch brightness accepted, expanded-falloff
+**CL-R1 engineering candidate — BUILT 2026-07-24; close torch brightness accepted, decay-1.5
 visual verdict pending.**
 
 - `data/light-profile-locks.json` is the one authored recipe authority: ten rolled world recipes plus
@@ -349,10 +349,11 @@ visual verdict pending.**
   fantasy rooms do not require torches everywhere. After the first 30 → 60-foot capture still read
   too restrained, he doubled it again: the current authored maximum is 120 feet (`rangeM` 36.576;
   renderer distance 24). The 120-foot result still concentrated too much energy near the flame, so
-  the current falloff broadens from decay 2.0 to 1.75; source brightness and shadow casting remain
-  unchanged. The exception is torch-specific. The Lighting Lab range control reaches 60 metres so
-  this value remains directly editable. Original, 2×, 4×, and expanded-falloff captures plus
-  measured comparisons live in the CL-R1 lighting evidence directory.
+  he broadened the falloff from decay 2.0 to 1.75, then asked for the same 0.25 outward step again.
+  The current decay is 1.50; source brightness and shadow casting remain unchanged. The exception is
+  torch-specific. The Lighting Lab range control reaches 60 metres so this value remains directly
+  editable. Original, 2×, 4×, and both expanded-falloff captures plus measured comparisons live in
+  the CL-R1 lighting evidence directory.
 - The washed-out sprite diagnosis is now a production-renderer causal matrix, not a taste guess:
   colour space, material response, sampling, tone mapping, compositing, and light energy change one
   at a time. The known-bad untagged-sRGB and intensity-31 mutations fail. There is still **no

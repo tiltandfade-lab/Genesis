@@ -1662,3 +1662,12 @@ After reviewing the 120-foot capture:
 The torch keeps its accepted source brightness, 120-foot maximum, and shadow casting. Its smooth
 falloff broadens modestly from decay 2.0 to 1.75 so more of the useful gradient lives away from the
 flame. This supersedes the preceding decay-2 value only; the torch-specific scope remains.
+
+## CLAYROOM FANTASY-TORCH FALLOFF, SECOND OUTWARD STEP (Adam, 2026-07-24 — binding; verbatim)
+
+After reviewing decay 1.75:
+
+> "ah so close, lets just incrase that one more tie by the same factor"
+
+Apply the same 0.25 outward step once more: decay 1.75 → 1.50. The accepted source brightness,
+120-foot maximum, color, shadows, and torch-only scope remain unchanged.

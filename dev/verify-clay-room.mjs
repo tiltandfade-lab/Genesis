@@ -746,7 +746,7 @@ const check = (name, cond, detail = "") =>
       torchCompiled.board.lights.length === 1
       && torchLight.distance === 24
       && torchLight.authoredRange === true
-      && torchLight.decay === 1.75
+      && torchLight.decay === 1.5
       && torchLight.castShadow === true,
       JSON.stringify(torchCompiled.board.lights));
   } catch(e) { check("15. jsdom compile check (module present, no throw)", false, e.stack || String(e)); }

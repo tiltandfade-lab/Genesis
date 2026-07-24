@@ -140,7 +140,7 @@
           "pos": { "x": 0, "y": 2.2, "z": 0.6 },
           "heightM": 3.3528,
           "rangeM": 36.576,
-          "falloff": 1.75,
+          "falloff": 1.5,
           "fixtureId": "sconce-torch-clay",
           "mount": "wall",
           "emitterLocal": { "x": 0, "y": 0.08, "z": 0.18 },

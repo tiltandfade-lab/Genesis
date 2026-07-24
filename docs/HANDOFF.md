@@ -21,10 +21,10 @@ Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolida
   grounded rooms do not need torches everywhere. The first 30 → 60-foot result was still too
   restrained, so the torch alone now reaches 120 feet (renderer distance 24) while keeping its
   intensity and real shadow casting unchanged. Adam then ruled that the gradient still needed to
-  move outward, so its smooth falloff is now modestly broader at decay 1.75 instead of 2.0. Saved
-  `torch`, `torch-range2x`, `torch-range4x`, and `torch-falloff175` frames preserve the visual
-  progression. The Lighting Lab range ceiling is 60 metres so the current authored value remains
-  editable.
+  move outward, first from decay 2.0 to 1.75 and then by the same 0.25 step to the current 1.50.
+  Saved `torch`, `torch-range2x`, `torch-range4x`, `torch-falloff175`, and `torch-falloff150` frames
+  preserve the visual progression. The Lighting Lab range ceiling is 60 metres so the current
+  authored value remains editable.
 - Lighting Lab now edits the full structured recipe, not a one-point shortcut, with bounded
   validation, undo/redo, authored reset, export, and deterministic compile/fold back to the same
   lock shape.
@@ -39,7 +39,7 @@ Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolida
   dungeon interior 288/288. **FULL CI PENDING.** One broad visual-protection harness still reports
   the torchlit old/new interior mean pixel delta `0.0177 > 0.01`; daylit and tabletop dark remain
   inside the threshold. This remains visible for Fable's re-gate rather than being weakened.
-- Adam's remaining visual ruling is the stop gate: the new expanded torch falloff, warm-vs-cool balance,
+- Adam's remaining visual ruling is the stop gate: the new decay-1.5 torch falloff, warm-vs-cool balance,
   immediate torch readability, and the intentionally flat neutral reference. The dedicated CL-F02 stepped
   sphere/cube display and advanced overlays remain open. Standee base/footprint and the
   small→human→largest scaling spectrum belong to CL-R2 after that ruling.

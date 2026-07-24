@@ -114,14 +114,47 @@ standable surface. Validation guarantees full reachability through `walk` + `cli
 alone; DC climbs are optional shortcuts and flanking spice. This preserves both the
 universal-access tone law and the gamble's fun.
 
-**The climb gamble (PARKED — post-MVP, Adam 2026-07-24):** player selects a `climb-dc`
-face → DC prompt → margin-graded outcomes per the standing degrees-of-failure doctrine:
-fail by 1–2 = lost grip (movement wasted, no fall); fail by 3+ = fall from current height
-(SRD: 1d6 per 10 ft + Prone). Crits compose with the existing Crit-Magnitude system
-(second-d20 spike) rather than minting new grammar; Adam's sketched rewards (regained
-movement, bonus action) are natural lens outputs there. MVP ships classes `walk` +
-`climb-cost` only — deterministic, FFT-legible — but every piece face carries its access
-class from day one so the gamble layers on without retrofit.
+**DC banding (Adam ruling 2026-07-24 — banded, script-owned):** DCs are banded and
+TAGGED ON THE PIECE by the script — 12 rough / 15 dressed / 17 slick (redline R3 closed
+as banded) — with the rolled condition vector modifying the band (wet/mossy +2). The DM
+never invents a climb DC (anti-drift: script owns the nouns and numbers; the DM's will
+acts through NPCs). Height scales RISK, not DC: one check per storey segment (4h = 10 ft)
+climbed, so a three-storey watchtower face is three rolls with a growing fall beneath —
+Adam's "big roll" feeling emerges from accumulated odds and stakes, not an inflated
+number. A guard on top is handled as threat response (readied attacks, the SRD shove),
+never as DC arithmetic.
+
+**The climb gamble (PARKED — post-MVP, Adam 2026-07-24; may be worked out in the clay
+room):** player selects a `climb-dc` face → DC prompt from the piece tag → margin-graded
+outcomes per the standing degrees-of-failure doctrine: fail by 1–2 = lost grip (movement
+wasted, no fall); fail by 3+ = fall from current height (SRD: 1d6 per 10 ft + Prone).
+Crits compose with the existing Crit-Magnitude system (second-d20 spike) rather than
+minting new grammar; Adam's sketched rewards (regained movement, bonus action) are
+natural lens outputs there. MVP ships classes `walk` + `climb-cost` only —
+deterministic, FFT-legible — but every piece face carries its access class from day one
+so the gamble bolts on without retrofit (Adam confirmed 2026-07-24).
+
+### 6a. Gear edits the access graph (Adam 2026-07-24: "I want those items to actually be useful")
+
+The reason climbing gear is useless in most video games is that those games have no
+access graph to edit. Genesis has one (§4), so SRD gear becomes a set of access-graph
+verbs — script-owned, countable, DM-narrated. All entries verified in
+`Reference/SRD-Data/equipment.md`:
+
+| item | SRD mechanic (verbatim-anchored) | access-graph verb |
+|---|---|---|
+| Grappling Hook (2 GP) | Utilize: throw at "a railing, a ledge, or another catch" within 50 ft; DC 13 Dex (Acrobatics) to catch; climb the tied rope | mints a temporary `climb-cost` route up a face to a declared **catch point** |
+| Rope (1 GP) | knot DC 10; burst DC 20; climbable when anchored | same minted route when anchored above (ally, piton, merlon) |
+| Climber's Kit (25 GP) | Utilize: anchor; "you can't fall more than 25 feet from the anchor point" | caps the gamble's fall outcome — fail-by-3+ becomes "caught by harness" |
+| Ladder (1 SP) | 10 ft tall; climb to move up/down | a carryable one-storey access piece (10 ft = exactly 4h) — deployable `ladder` edge; movement design still deferred |
+| Pole (5 CP) | vault: Advantage on jump Athletics checks | jump-assist modifier on gap edges |
+| Crowbar (2 GP) | Advantage where leverage applies | pairs with door/mutable-environment states (C1B, W8) |
+| Block and Tackle (1 GP) | hoist 4× normal lift | hauling edge — loot, allies, kegs up the wall |
+
+Piece consequence: merlons, ledges, and window sills declare themselves **catch points**
+in the socket schema — the grapple needs targets, which makes parapet geometry
+mechanically meaningful, not just cover. Bullywugs on the wall can cut the rope
+(burst DC 20, or a blade + narration): the minted edge is state, and state can die.
 
 ## 7. Roof families + build order (Adam confirmed 2026-07-24)
 
@@ -140,18 +173,24 @@ Vocabulary reference: `diagrams/structure-kit-roof-parapet-vocabulary.svg`.
 
 ## 8. Realm-skin axis + the material kit catalogue (bill of materials)
 
-Pieces demand materials; materials never demand pieces. The guard post's CLOSED shopping
-list (redline R8):
+Pieces demand materials; materials never demand pieces. Adam's ruling 2026-07-24
+(supersedes the pick-one-of-each gate in Codex's NOTES.md): author the FULL possibility
+roster per demand slot — ImageGen + MM make candidates cheap — and taste-pass in the
+review tool afterward. All four GP-MM-STONE-V001 candidates stay live.
 
-| demand | material | status |
+**The guard-post material possibility roster (redline R8 → this roster):**
+
+| demand slot | possibilities (each one cheap candidate) | status |
 |---|---|---|
-| wall field | M01 coursed stone + M02 fitted rubble | ✅ 4 candidates exported (GP-MM-STONE-V001); Adam picks one of each |
-| roof field (shed) | timber shingle/plank roofing | ☐ invent — next Codex batch |
-| timber set | post / beam / door / lintel | ☐ invent — next Codex batch |
-| interior floor | flagstone + plank | ☐ Wave-1 keys, already in CODEX-MATERIAL-BRIEF |
-| exterior ground | grass / dirt / worn path | ◐ uneven-ground + meadow-road proofs carry the technique |
-| trim bands | coping · base course · cornice (architecture-core-v1 roles) | ◐ layout proof landed; production bands owed |
-| condition | age / erosion / wetness overrides | ◐ workbench proof landed; §5b roller spec owed |
+| wall — masonry | M01 coursed ×2 ✅ · M02 fitted rubble ×2 ✅ · ashlar dressed · rough-hewn block · dry-stack fieldstone · brick · plastered/whitewashed rubble | 4 live, rest ☐ |
+| wall — timber | post-and-beam · plank siding · log/roundwood · timber-frame with wattle-daub infill · weathered grey | ☐ |
+| roof field | timber shake/shingle · plank-and-batten · slate · clay tile · thatch (reed/straw) · turf/sod · hide/canvas tarp (makeshift) | ☐ |
+| timber set | door/lintel/post/beam grain family (shared) | ☐ |
+| interior floor | flagstone · plank · packed earth · cobble · rush-strewn (paint layer) | ☐ Wave-1 keys partially briefed |
+| exterior ground | grass/meadow · worn path · mud · gravel/scree · marsh/bog (bullywug skin) | ◐ uneven-ground + meadow-road proofs |
+| trim bands | coping · base course · cornice · timber lintel band · carved motif band (culture arrivals) · rope-lashing band (makeshift) | ◐ architecture-core-v1 layout proven |
+| makeshift set | mud daub · wattle · stretched hide · bone/tusk stakes · scavenged plank patchwork · swamp-moss thatch | ☐ |
+| condition layers | age · erosion · wetness ✅ (workbench proof) · moss/algae · scorch · rust (MATERIAL-LANE mutator library) | ◐ |
 
 Skin binding: realm/culture selects the material picks and trim variants
 (CultureVisualConstitution → SiteCultureImprint per Wave 3); the rolled condition vector
@@ -184,6 +223,12 @@ paste to supersede this reconstruction). The repo already carries its terrain ha
 terraced approach, road skirting the base, shed-roofed supporting rooms in the yard.
 Plan sketch: `diagrams/guard-post-anchor-layout.svg`.
 
+**Codex-side documents to import + reconcile (seen by title 2026-07-24, contents not yet
+in-repo):** "Guard Post Cultural Mutation — MVP and Ideal" · "Updated catalog" ·
+"Updated lock audit." The second title implies Codex maintains its own catalog document —
+reconcile with THIS file before either calcifies (one catalog, one authority; this file
+is the declared source of truth unless Adam rules otherwise at import).
+
 ## 11. The procedural hook + the twelve-site expansion
 
 **Blueprint grammar:** rolled facts (site family, size, operating state, condition vector,
@@ -213,6 +258,16 @@ procedural shape language to construct anything the game needs.
 | 11 | mixed-scale / dragon | any | full kits | titan-scale (2×) piece variants, hoard terrain |
 | 12 | anomalous / living / mobile | exotic | smallest structural buy | organic/impossible connectors; biggest skin buy |
 
+**Vernacular 6 — makeshift/tribal (Adam addition 2026-07-24):** monster-built
+construction — lashed poles, scavenged plank patchwork, hide/canvas canopies, mud daub,
+wattle, bone/tusk stakes, crooked-geometry piece variants. Not a thirteenth site: a
+cross-cutting vernacular any site family can roll when its builders are tribal
+("imagine some bullywugs throwing one together in a swamp" — Adam). The bullywug
+checkpoint is the proof case: the SAME guard-post assembly grammar (watch position,
+barrier, gate, shelter) skinned makeshift. Site 1's grammar generalizing across builder
+cultures is exactly the cultural-mutation direction Codex is drafting
+("Guard Post Cultural Mutation — MVP and Ideal," §10).
+
 ## 12. Kenney donor law + provenance
 
 CC0 donor grammar (17 kits at `assets/models/`, castle-kit and fantasy-town-kit primary
@@ -221,14 +276,17 @@ donors for site 1) supplies clay-phase stand-in geometry, admitted INTO the cont
 ALL-ART-IS-PLACEHOLDER seam when beauty passes earn it. Every catalog entry carries
 `provenance` (author/source/license/donor-file) and survives the swap.
 
-## 13. Open redlines for Adam
+## 13. Redline log (round 1 answered 2026-07-24)
 
-- **R1** grid numbers (§2): h=2.5 ft, storey 4h, parapet 2h, slope 30°.
-- **R2** socket id set (§4): is the 7-id set minimal-but-sufficient?
-- **R3** climb DCs (§6): flat SRD 15, or per-class 12/15/17 banding?
-- **R4** guard-post piece list (§9): cuts/adds.
-- **R5** vernacular matrix (§11): assignments + which site carries hip roofs first.
-- **R6** anchor layout (§10): paste Codex's exact wording; confirm reconstruction.
-- **R7** climb gamble parked post-MVP (§6): confirm placement.
-- **R8** material picks (§8): one M01 + one M02 from the GP-MM-STONE-V001 cards; roof
-  material family for the shed planes.
+- **R1** grid numbers — ✅ LOCKED as proposed (h=2.5 ft, storey 4h, parapet 2h, 30°).
+- **R2** socket id set — ✅ locked provisionally ("we'll find out" — revisit at C1H evidence).
+- **R3** climb DCs — ✅ BANDED (12/15/17) + condition modifier + per-storey checks;
+  script-tagged, never DM-invented; threat handled as NPC response (§6).
+- **R4** guard-post piece list — ✅ stands as proposed ("can't identify anything missing yet").
+- **R5** vernaculars — ✅ grouping confirmed + vernacular 6 makeshift/tribal ADDED (§11);
+  hip-roof-first site still open (monastery proposed).
+- **R6** anchor layout — ◐ OPEN: Codex doc titles seen, contents pending import (§10).
+- **R7** climb gamble post-MVP — ✅ confirmed ("make sure bolt-on is ready to fire";
+  may be worked out in the clay room); gear verbs added (§6a).
+- **R8** material picks — ✅ superseded: full possibility roster authored instead (§8);
+  all four stone candidates stay live for the review-tool taste pass.

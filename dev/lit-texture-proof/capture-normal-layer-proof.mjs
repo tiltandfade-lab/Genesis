@@ -87,7 +87,7 @@ page.on("pageerror", (error) => pageErrors.push(`pageerror: ${error.message}`));
 
 async function capture(name, azimuth) {
   await page.setViewport({ width: 1600, height: 1500, deviceScaleFactor: 1 });
-  const url = `${origin}${proofPath}?azimuth=${azimuth}&elevation=34&normal=1.7`;
+  const url = `${origin}${proofPath}?azimuth=${azimuth}&elevation=34&normal=1.4`;
   await page.goto(url, { waitUntil: "networkidle0", timeout: 45000 });
   await page.waitForFunction(() => window.__ready === true, { timeout: 45000 });
   const report = await page.evaluate(() => window.__proofReport);

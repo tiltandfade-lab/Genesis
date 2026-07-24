@@ -65,6 +65,7 @@ for (const report of [reportA, reportB]) {
   check(report.threeRevision === "166", "three.js r166");
   check(report.renderer === "WebGLRenderer", "real WebGL renderer");
   check(report.material === "MeshStandardMaterial", "normal-capable material");
+  check(report.normalStrength === 1.4, "restrained normal strength");
   check(report.comparisons.length === 2, "floor and wall comparisons");
   for (const comparison of report.comparisons) {
     check(comparison.control.albedo === comparison.layered.albedo, `${comparison.id} identical albedo URL`);

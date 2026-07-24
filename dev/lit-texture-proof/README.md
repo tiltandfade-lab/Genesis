@@ -16,7 +16,8 @@ node dev/lit-texture-proof/verify-normal-layer-proof.mjs
 The capture script records the proof under light azimuths 45° and 135°. Their elevation and
 front-facing component are equal while their horizontal tangent components oppose, so the control
 panels keep comparable illumination while normal-driven highlights and shadows reverse. The
-production albedo copy is verified byte-for-byte against its Git LFS object.
+production albedo copy is verified byte-for-byte against its Git LFS object. Captures use a
+restrained normal scale of 1.4.
 
 This proves the channel-layering and rendering path. The automatically inferred luminance height
 is intentionally a prototype and its contrast is reduced to 80% around midpoint to keep the relief

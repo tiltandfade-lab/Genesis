@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "proofId": "GENESIS-NORMAL-LAYER-AB-V001",
-  "generatedAt": "2026-07-24T00:58:00.133Z",
+  "generatedAt": "2026-07-24T01:11:08.878Z",
   "harness": "dev/lit-texture-proof/normal-layer-proof.html",
   "browser": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   "captures": [
@@ -9,8 +9,8 @@
     "dev/lit-texture-proof/out/normal-layer-proof-light-left.png"
   ],
   "captureHashes": [
-    "8822d490173ab15fae31affe02aeb43dc655d1e70361c8ffa6b40bf64863f391",
-    "e1929133d2f7f332d7b493a9ff7dc4085b3ef434c2c69f5de8a0939156421044"
+    "d4cb27ad7dff10d0cb3a04a3656dcf0825ab0f013b021dc438d1b7df67e49c81",
+    "b9c6e4f41c815125147c3f5632c7c5edad804ed74d1be55cd9a8026ee53ade88"
   ],
   "renderReports": [
     {
@@ -24,7 +24,7 @@
         "azimuth": 45,
         "elevation": 34
       },
-      "normalStrength": 1.7,
+      "normalStrength": 1.4,
       "comparisons": [
         {
           "id": "fantasy-floor",
@@ -67,7 +67,7 @@
         "azimuth": 135,
         "elevation": 34
       },
-      "normalStrength": 1.7,
+      "normalStrength": 1.4,
       "comparisons": [
         {
           "id": "fantasy-floor",

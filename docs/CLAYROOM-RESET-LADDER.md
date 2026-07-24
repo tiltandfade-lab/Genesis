@@ -239,6 +239,34 @@ saturation slider), and the two-temperature rig still does not read as two tempe
    **`dressingTextureFor()` (`theater-boot.js` ~9160) carries the identical untagged defect** and is
    not fixed here — no fixture covers it, so it gets its own capture rather than a blind edit.
 
+**"Did we lose sprite citizenship and the wall cutaway?" — measured answers (Adam, 2026-07-23).**
+Neither was lost. Both claims were tested, not asserted.
+
+*Sprite colour was never held in the first place.* Every commit that has ever touched
+`src/ui/theater-boot.js` was scanned: `spriteTextureFor()` **never** tagged colour space in any of
+them. No verify harness ever gated sprite colour either — `colorSpace` appears zero times across
+every `dev/verify-*.mjs` at `master`. And the bone-white goblin is present in the **pre-change**
+`before-04-clean-no-overlay.png`, so nothing in this session caused it. What landed as "citizenship"
+(`f917617f`, BW2-4b — "lit sprites + the BRIGHTNESS LAW") made sprites *respond to light* and gated
+that with luminance ratios; colour fidelity was never in its scope and never had a test. The defect
+was masked because a dark dungeon interior hides a midtone lift — put the same sprite in a bright
+clay room and it is glaring. Fixed and proven; harness check 19 is the gate that should have existed.
+
+*The cutaway is alive and running in the clay fixture.* Live probe of the mounted room:
+`{total: 28, blocking: 0, faded: 0, disabledForTest: false}` — 28 wall occluders classified through
+the production `itrOcclusionClassify` path, on the same `setInteriorBoard` call the clay room makes.
+It is not bypassed, disabled, or lost. **Zero classify as blocking, which is correct**: the system
+fades occluders that block the camera→piece sight line, the camera sits above the near walls, and no
+wall actually blocks the goblin. So the walls Adam sees are not an occlusion failure — they are a
+*composition* problem (near walls rendered full height, eating the bottom third of the frame) that
+the cutaway system was never designed to solve. Correct owner: **CL-R3** wall construction plus the
+production camera, not a cutaway repair.
+
+One genuine gap surfaced by the probe and left open: all 28 entries report `materials: 0`, so no
+ghost meshes are bound to them — if one *did* classify as blocking there would be nothing for the
+fade tween to act on. Whether that is lazy-by-design (ghosts built only on first block) or a wiring
+gap is **not yet determined**, and must be settled before CL-R3 trusts the cutaway.
+
 **Capture framing note (Adam, 2026-07-23).** Adam asked whether the door was being framed behind the
 overlay console. It was not deliberate, but the overlay is anchored top-right, which is exactly where
 the north portal sits under the fixed production camera — so packet frames were partially occluding

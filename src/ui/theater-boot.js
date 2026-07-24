@@ -12796,6 +12796,23 @@ window.Theater._occlusionFadeEntryForTest = function(id){
 // the LIVE material.opacity value(s) actually mounted for this id's ghost mesh(es) right now — a
 // stricter proof than reading entry.opacity alone (that number is what the tween WROTE; this reads
 // what the real THREE material objects currently hold, catching any wiring gap between the two).
+// CL-R0/CL-R3 evidence seam (2026-07-23): the WHOLE live fade map, not one id at a time. Adam asked
+// whether the wall cutaway tech had been lost; answering that needs "how many occluders did this
+// frame classify, and how many are blocking", which no existing seam could report. Read-only.
+window.Theater._occlusionFadeSummaryForTest = function(){
+  if(!S.occlusionFadeState) return { total: 0, blocking: 0, faded: 0, disabledForTest: !!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST, rows: [] };
+  const rows = [];
+  S.occlusionFadeState.forEach(function(e, id){
+    rows.push({ id: id, blocking: !!e.blocking, opacity: e.opacity, materials: (e.materials || []).length });
+  });
+  return {
+    total: rows.length,
+    blocking: rows.filter(function(r){ return r.blocking; }).length,
+    faded: rows.filter(function(r){ return r.opacity != null && r.opacity < 0.99; }).length,
+    disabledForTest: !!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST,
+    rows: rows.slice(0, 60),
+  };
+};
 window.Theater._occlusionGhostMaterialOpacityForTest = function(id){
   const entry = S.occlusionFadeState && S.occlusionFadeState.get(id);
   if(!entry || !entry.materials) return null;

@@ -966,11 +966,14 @@ function buildWallBox(buf, p) {
   const capOutB = p.capOutB || { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
   const capTopY = yTop + capHeight;
   pushQuad(buf,
-    { x: capOutA.x, y: capTopY, z: capOutA.z }, { x: capOutB.x, y: capTopY, z: capOutB.z },
-    { x: capInB.x, y: capTopY, z: capInB.z }, { x: capInA.x, y: capTopY, z: capInA.z },
+    // Clockwise from below / counter-clockwise from the governed camera above. The old
+    // outA→outB→inB→inA order carried +Y vertex normals but DOWNWARD triangle winding, so
+    // back-face culling erased the tabletop crown and left only the vertical wall shell visible.
+    { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
+    { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
     { x: 0, y: 1, z: 0 },
-    { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity }, { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity },
-    { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, color);
+    { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity }, { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity },
+    { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, color);
   pushWallVerticalFace(buf, // cap's own outward lip (closes the overhang's outward edge)
     { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
     { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
@@ -1027,11 +1030,11 @@ function buildWallPrismFaces(buf, p) {
     { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, h, color);
   if (p.closeTop) {
     pushQuad(buf,
-      { x: outerA.x, y: yTop, z: outerA.z }, { x: outerB.x, y: yTop, z: outerB.z },
-      { x: innerB.x, y: yTop, z: innerB.z }, { x: innerA.x, y: yTop, z: innerA.z },
+      { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
+      { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
       { x: 0, y: 1, z: 0 },
-      { u: outerA.x * uvDensity, v: outerA.z * uvDensity }, { u: outerB.x * uvDensity, v: outerB.z * uvDensity },
-      { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, { u: innerA.x * uvDensity, v: innerA.z * uvDensity }, color);
+      { u: outerB.x * uvDensity, v: outerB.z * uvDensity }, { u: outerA.x * uvDensity, v: outerA.z * uvDensity },
+      { u: innerA.x * uvDensity, v: innerA.z * uvDensity }, { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, color);
   }
   if (p.closeBottom) {
     pushQuad(buf,
@@ -1063,11 +1066,11 @@ function buildWallTopCap(buf, p) {
   const capOutB = { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
   const capTopY = yTop + capHeight;
   pushQuad(buf,
-    { x: capOutA.x, y: capTopY, z: capOutA.z }, { x: capOutB.x, y: capTopY, z: capOutB.z },
-    { x: capInB.x, y: capTopY, z: capInB.z }, { x: capInA.x, y: capTopY, z: capInA.z },
+    { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
+    { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
     { x: 0, y: 1, z: 0 },
-    { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity }, { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity },
-    { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, color);
+    { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity }, { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity },
+    { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, color);
   pushWallVerticalFace(buf,
     { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
     { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },

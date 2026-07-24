@@ -116,6 +116,21 @@ function ownerTriangleCount(bundle, ownerRef, predicate) {
   }
   return count;
 }
+function upwardWindingFailures(bundle) {
+  let upward = 0, failures = 0;
+  const p = bundle.positions, n = bundle.normals, idx = bundle.indices;
+  for (let at = 0; at < idx.length; at += 3) {
+    const vis = [idx[at], idx[at + 1], idx[at + 2]];
+    if (!vis.every((vi) => n[vi * 3 + 1] > 0.99)) continue;
+    upward++;
+    const a = { x: p[vis[0] * 3], z: p[vis[0] * 3 + 2] };
+    const b = { x: p[vis[1] * 3], z: p[vis[1] * 3 + 2] };
+    const c = { x: p[vis[2] * 3], z: p[vis[2] * 3 + 2] };
+    const crossY = (b.z - a.z) * (c.x - a.x) - (b.x - a.x) * (c.z - a.z);
+    if (crossY <= 1e-9) failures++;
+  }
+  return { upward, failures };
+}
 
 console.log("\n=== 1. Rectangular room -> exactly 4 simplified wall segments ===");
 {
@@ -176,6 +191,12 @@ console.log("\n=== 2. Door aperture is a rectangular socket in its owning wall s
   check("2j. doorway owner emits no applied trim segment",
     !doorMoved.wallTrim.segments.some((s) => s.ownerSegIndex === doorMoved.apertures[0].ownerSegIndex),
     doorMoved.wallTrim.segments);
+  const stemWinding = upwardWindingFailures(doorMoved.wallStem);
+  const upperWinding = upwardWindingFailures(doorMoved.wallUpper);
+  check("2k. every horizontal wall/stem crown is front-facing from above (scene-tray top, never culled)",
+    stemWinding.upward > 0 && upperWinding.upward > 0 &&
+    stemWinding.failures === 0 && upperWinding.failures === 0,
+    { stemWinding, upperWinding });
 }
 
 console.log("\n=== 3. Floor triangulation covers the full walkable polygon ===");

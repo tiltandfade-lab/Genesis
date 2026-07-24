@@ -1505,3 +1505,19 @@ Binding consequences:
   assembly per piece. One owner supplies one cap; jambs/lintel expose only the faces that bound the
   aperture or terminate the wall. No overlapping caps, feet, hidden end plates, trim, or fragments
   may occupy the hole or project behind it.
+
+## THE SCENE-TRAY WALL CROWN (Adam, 2026-07-24 — additive; verbatim)
+
+> "ok, the easiest solution for the stray geometry is to actually render the top of the walls,
+> you're only rendering the vertical faces but not the top horizontal face that would give it the
+> full \"scene tray\" or tabletop module feel"
+
+Binding consequences:
+
+- Every visible wall volume, doorway wall segment, and retained cutaway stem exposes a closed,
+  horizontal top surface. A vertical shell without its crown is incomplete construction.
+- The crown is part of the wall body, not trim or ornament. It gives the room the solid
+  scene-tray/tabletop-module silhouette and visually resolves the wall's thickness.
+- Its triangles must be front-facing from the governed camera above: geometric winding and the
+  stored +Y normal must agree. A nominal top face that back-face culling erases does not satisfy
+  this rule.

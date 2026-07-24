@@ -413,3 +413,22 @@ mesh. The tab measures the real mounted leaf. Browser proof, closed→open→clo
 The browser is left on the open 105° endpoint with the State tab active so the sequence remains
 directly repeatable. Gates: clay 145/145 · d4-doors 206/206 · ks2-door-assembly 40/40 ·
 dungeon-interior 288/288 · manifest `RESULT: OK`.
+
+## Addendum D24 — the scene-tray wall crown (2026-07-24)
+
+Adam: "ok, the easiest solution for the stray geometry is to actually render the top of the walls,
+you're only rendering the vertical faces but not the top horizontal face that would give it the
+full \"scene tray\" or tabletop module feel"
+
+The crown geometry already existed in the wall buffers, but its vertex order wound every horizontal
+top triangle downward while its stored normals pointed +Y. Back-face culling therefore removed the
+wall tops from the governed camera above and left the vertical faces reading as stray, open shell
+fragments.
+
+All three crown paths now wind counter-clockwise from above: complete wall boxes, clean doorway
+prisms, and the continuous doorway-owner top cap. UVs remain world-projected; only vertex order
+changed. The shell gate now computes each nominal +Y triangle's actual cross-product and rejects
+downward or degenerate winding, so a fake "up" normal can no longer conceal the construction error.
+
+Gates: room-shell 52/52 · wall-volumes 35/35 · clay 145/145 · room-shell-oss · wall-runs-oss ·
+d4-doors · dungeon-interior · manifest `RESULT: OK`.

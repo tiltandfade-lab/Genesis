@@ -571,6 +571,9 @@ function clayRoomBoardFrom(record, opts){
       // ordinary relative-intensity × shared-gain path.
       renderIntensity: lightRecipe.mode === "diagnostic-studio" ? p.physicalIntensity : undefined,
       distance: p.rangeM / 1.524,
+      // Adam accepted the torch's local brightness and asked for twice the reach. Mark only that
+      // reviewed exception so the renderer does not also widen moonlight, lava, or diagnostic rigs.
+      authoredRange: lightRecipe.id === "torchlit",
       decay: p.falloff,
       castShadow: p.shadow.cast,
       shadowBias: p.shadow.bias,

@@ -8786,6 +8786,13 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       ? light.renderIntensity
       : (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain
     ) * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1);
+    // CL-R1: a shared light recipe is an intentional, reviewed physical range. Generic/generated
+    // interior lights still receive the small-pool safety cap, while recipe lights can opt into
+    // their declared reach without changing the intensity or inverse-square falloff at the source.
+    const declaredDistance = light.distance != null ? light.distance : 12;
+    const resolvedDistance = light.authoredRange
+      ? declaredDistance
+      : Math.min(declaredDistance, ITR_LIGHT_DISTANCE_CAP);
 
     // CL-R1 mode separation: environmental/celestial sources do not acquire a fake lamp housing
     // merely because the production board carries a light record. Only a source whose recipe says a
@@ -8817,7 +8824,7 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
         environmentalLight = new THREE.PointLight(
           light.color || "#ffffff",
           resolvedIntensity,
-          Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
+          resolvedDistance,
           light.decay != null ? light.decay : 2
         );
         environmentalLight.position.set(localX, localY, localZ);
@@ -8877,7 +8884,7 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       ? new THREE.SpotLight(
         light.color || "#ffbb66",
         resolvedIntensity,
-        Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
+        resolvedDistance,
         THREE.MathUtils.degToRad(light.spot && light.spot.coneDeg != null ? light.spot.coneDeg : 45),
         light.spot && light.spot.penumbra != null ? light.spot.penumbra : 0,
         light.decay != null ? light.decay : 2
@@ -8889,9 +8896,9 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       // key and fill are gained equally). LIGHT-CLOSE: a suppressed practical scales toward
       // ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (0 by default) — the sky fill carries the room instead.
       resolvedIntensity,
-      // BW2-4b item 1 — LIGHT RANGE CAP: tighten each pool to a small hot circle (the mock read) so the
-      // gaps between torches go genuinely dark (the BRIGHTNESS LAW's dark-corner requirement).
-      Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
+      // BW2-4b item 1 — generic lights retain the small-pool cap. A reviewed recipe may opt into its
+      // authored physical reach through resolvedDistance (the torch does; other profiles do not).
+      resolvedDistance,
       light.decay != null ? light.decay : 2
     );
     pl.position.set(el.x || 0, el.y || 0, el.z || 0);
@@ -15259,6 +15266,13 @@ function clayRoomLightingSnapshot(label){
       color: colorOf(t.pl),
       distance: t.pl ? n(t.pl.distance) : null,
       decay: t.pl ? n(t.pl.decay) : null,
+      castShadow: t.pl ? !!t.pl.castShadow : null,
+      shadowMapSize: t.pl && t.pl.shadow && t.pl.shadow.mapSize
+        ? [n(t.pl.shadow.mapSize.x), n(t.pl.shadow.mapSize.y)]
+        : null,
+      shadowCameraFar: t.pl && t.pl.shadow && t.pl.shadow.camera
+        ? n(t.pl.shadow.camera.far)
+        : null,
       pointPosition: t.pl && t.pl.position
         ? [n(t.pl.position.x), n(t.pl.position.y), n(t.pl.position.z)]
         : null,
@@ -15301,6 +15315,8 @@ function clayRoomLightingSnapshotsMatch(before, after){
     if(!a || a.pointUuid !== b.pointUuid || a.emitterUuid !== b.emitterUuid
       || a.materialUuid !== b.materialUuid || a.color !== b.color || a.state !== b.state
       || a.distance !== b.distance || a.decay !== b.decay
+      || a.castShadow !== b.castShadow || a.shadowCameraFar !== b.shadowCameraFar
+      || JSON.stringify(a.shadowMapSize) !== JSON.stringify(b.shadowMapSize)
       || JSON.stringify(a.pointPosition) !== JSON.stringify(b.pointPosition)
       || a.materialColor !== b.materialColor || a.materialEmissive !== b.materialEmissive
       || a.materialOpacity !== b.materialOpacity || !a.parity) return false;
@@ -17337,6 +17353,8 @@ function clayRoomMountOverlay(record, host){
         + " = " + l.emittedNormalized.toFixed(6));
       lines.push("  mesh    " + l.mesh.toFixed(6) + "/" + l.meshBase.toFixed(6)
         + " = " + l.meshNormalized.toFixed(6) + " · parity " + (l.parity ? "PASS" : "FAIL"));
+      lines.push("  range " + l.distance.toFixed(2) + " · decay " + l.decay.toFixed(2)
+        + " · shadows " + (l.castShadow ? "ON" : "OFF"));
       lines.push("  ids point " + String(l.pointUuid).slice(0, 8)
         + " · material " + String(l.materialUuid).slice(0, 8));
       const buttons = lightStateButtons[l.id];

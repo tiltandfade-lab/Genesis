@@ -1625,3 +1625,20 @@ The primary Move region is a filled highlight. The Dash-only extension is a holl
 locked-secondary meaning remains legible without color. Both regions, the selected route, movement cost, portal
 state, and final position must project engine query/receipt answers; the Clayroom renderer may not calculate a
 second path or movement rule.
+
+## CLAYROOM FANTASY-TORCH REACH (Adam, 2026-07-24 — binding; verbatim)
+
+> "i think the torch room brightness is about right, but unless we want torches everywhere, we
+> might want to extend the range of the torch 2x, make sure it still has a smooth falloff and casts
+> shadows"
+
+Binding consequences:
+
+- The accepted close-to-flame brightness stays fixed. Doubling reach is not permission to double
+  source intensity or flatten the room into uniform orange fill.
+- The lore-native `torchlit` recipe's maximum reach doubles from 30 feet to 60 feet (6 to 12
+  tabletop world units; authored `rangeM` 9.144 → 18.288).
+- Its smooth physical falloff remains decay 2, and the real point light continues to cast shadows
+  across the extended reach.
+- The extended-range exception belongs to the reviewed fantasy torch. It does not silently widen
+  moonlight, lava, diagnostic bulbs, or generic generated interior lights.

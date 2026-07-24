@@ -740,6 +740,15 @@ const check = (name, cond, detail = "") =>
       && compiled.board.lights[1].renderIntensity === 9
       && compiled.board.lights[0].flicker.seed !== compiled.board.lights[1].flicker.seed,
       JSON.stringify(compiled.board.lights));
+    const torchCompiled = win.clayRoomBoardFrom(record, { lightRecipeId: "torchlit" });
+    const torchLight = torchCompiled.board.lights[0];
+    check("15o. accepted torch brightness keeps inverse-square shadows while its reviewed reach doubles from 6 to 12",
+      torchCompiled.board.lights.length === 1
+      && torchLight.distance === 12
+      && torchLight.authoredRange === true
+      && torchLight.decay === 2
+      && torchLight.castShadow === true,
+      JSON.stringify(torchCompiled.board.lights));
   } catch(e) { check("15. jsdom compile check (module present, no throw)", false, e.stack || String(e)); }
 }
 

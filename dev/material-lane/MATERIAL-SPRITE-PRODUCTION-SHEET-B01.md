@@ -1,6 +1,6 @@
 ---
 type: material-source-sprite-production-sheet
-status: SOURCE-GATE-FAILED
+status: READY-FOR-AUTONOMOUS-RERUN
 batch: B01-timber-and-roof-fields
 workflow: sprite-first-mm-second
 ---
@@ -49,6 +49,10 @@ the construction read at 50% zoom.
 
 - 1× read: construction type is unmistakable.
 - 3×3 repeat: no visible left/right or top/bottom seam.
+- The final tile and 3×3 repeat are shown at an asserted 1:1 display ratio; join ticks identify
+  the exact boundaries under review.
+- Boundary, cadence, and modular-period checks use the applicable adapter contract in
+  `AUTONOMOUS-SEAM-MACHINERY.md`; a generic edge blend may not erase structural features.
 - 50% read: large value groups remain quiet behind a standee.
 - MM preview: structural joints may receive relief; painted grain, dither, and edge accents may
   not become noisy embossing.
@@ -61,3 +65,9 @@ this sheet is deliberately held at **SOURCE-GATE-FAILED**. No Batch 1 candidate 
 until it passes the source gate. See
 `manifests/b01-timber-roof-source-sprites-v001.json` for prompts, candidate paths, hashes, and
 measurements.
+
+The autonomous seam machinery was subsequently proven for period-aware plank-and-batten and
+modular slate. That proof does not promote the rejected v001–v003 Batch 1 candidates, but it moves
+this sheet to **READY-FOR-AUTONOMOUS-RERUN**. Production must use the routing table, gates, and
+Terra handoff in `AUTONOMOUS-SEAM-MACHINERY.md`. Unproven material adapters stop and report before
+MM; they do not receive a visual-only waiver.

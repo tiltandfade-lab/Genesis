@@ -26,7 +26,10 @@ material is now explicit:
 1. Generate the surface **source sprite** under the standing Genesis sprite-art law and approve its
    visual identity at play distance.
 2. Repair and prove the source sprite's required seams/repeat behavior. A source that merely looks
-   plausible at 1× but fails its repeat axis is not production-ready.
+   plausible at 1× but fails its repeat axis is not production-ready. Use the adapter routing,
+   machine gates, aspect-locked proof board, and receipt contract in
+   `dev/material-lane/AUTONOMOUS-SEAM-MACHINERY.md`. Structural seams/courses must use a
+   period-aware or modular adapter; generic edge blending may not erase construction cadence.
 3. Import that sprite into the versioned MM 1.3 graph as the albedo source.
 4. Use MM to interpret structural height and supply normal, AO, roughness, and height. MM augments
    the sprite; it does not replace, repaint, or procedurally reinvent the sprite's albedo identity.
@@ -36,6 +39,11 @@ material is now explicit:
 The proof fixture is `SPRITE-FIRST-MATERIAL-V001` under
 `dev/material-lane/` and `dev/material-cards/`. Its method passed; its three generated sources
 remain non-production evidence until their seam failures are repaired.
+
+`AUTONOMOUS-SEAM-PROOF-V001` subsequently proved the deterministic topology core for two adapters:
+period-aware plank-and-batten and modular toroidal slate. Its proof assets are technical fixtures,
+not automatic taste approvals. New families must select a compatible proven adapter or add and
+prove a material-specific adapter before MM.
 
 ## Your task
 

@@ -10,6 +10,9 @@ workflow: sprite-first-mm-second
 This proof removes human seam repair from the source-sprite stage while preserving ImageGen as
 the author of the material's visual character. It deliberately stops before Material Maker.
 
+The reusable production contract, algorithms, gates, failure registry, adapter-routing rules, and
+commercial extraction boundary are documented in `AUTONOMOUS-SEAM-MACHINERY.md`.
+
 ## Result
 
 Two different topology lanes pass:

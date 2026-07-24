@@ -326,3 +326,16 @@ meters), the snap amendment, and the implementation-status note.
 z −2.5 → two +0.01 nudges → −2.52 → snap wall-centre → **−2.61 exactly (the measured wall centre)**
 → snap boundary → −2.5. Harness 127/127 (checks 25a-h; 25a executed through the real compile chain).
 Evidence: `socketed-04-clean-no-overlay.png`, `tuner-panel.png`.
+
+## Addendum D20 — THE KINDERGARTEN DOOR (2026-07-23, night)
+
+Adam's rulings verbatim in ART-DIRECTION-CANON ("THE KINDERGARTEN DOOR" block). What changed,
+production-wide: the frame ornament (jambs/header/arch — D18's "fixed" door still carried it) and
+the reveal slabs are DELETED; a door cell now emits exactly three pieces of plain wall shaping a
+0.61 × 1.35 rectangle opening (two full-height sides + one band above), and the leaf is the 36"×80"
+prototype rectangle (0.6 × 4/3 u) filling it, hinged at its corner edge, socketed at the wall plane
+via the D19 mount (receipt: leaf world (0, 0.367, −2.5), size 0.6 × 1.333 × 0.32, zero warnings).
+`squeeze`/`transition` fields preserved on the new pieces (the dungeon-interior harness caught the
+silent data-contract break). Gates: clay 137/137 · d4-doors 203/203 (sandbox extended with the
+mount helper) · ks2 40/40 + dungeon-interior 288/288 (both rewritten red-first: same real
+properties, new grammar). Evidence: `dev/clay-captures/door/kindergarten-*`.

@@ -189,15 +189,15 @@ group("A2 — GREEN, end-to-end through interiorBuildBoard (prism path, KIT_DOOR
 [["corner door (plain rect room)", cornerDoorFixture()], ["octagon-notch door", octagonNotchDoorFixture()]].forEach(([label, fx]) => {
   M.sandbox.window.KIT_DOORS_ENABLED = false; // KS-2's own instruction: prove the prism-path fix with the kit flag stubbed off
   const board = M.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
-  const jambs = board.instances.doorframe.filter((e) => e.jamb && e.x === fx.doorCell.x && e.z === fx.doorCell.y);
-  ok(jambs.length === 2, `${label}: exactly 2 jamb prisms emitted (got ${jambs.length})`);
-  // widthAxisIsZ=false (this fixture's ground truth) -> jambs carry `ox` (offset along x) and a THIN
-  // sx (ITR_JAMB_WIDTH_FRAC), full sz (frameDepth) — the "onTopBottom" old-code shape. widthAxisIsZ=true
-  // would instead carry `oz`/thin sz/full sx. Assert the SHAPE matches the expected (correct) axis,
-  // not merely "differs from before" — a geometric assertion, per KS-2's own instruction.
+  // REWRITTEN 2026-07-23 (red-first — the jamb assertions went red at the exact commit THE DOOR
+  // CONTRACT deleted the jamb/header/arch ornament): the doorway is now the kindergarten form —
+  // two full-height wall SIDE pieces + one wall band over a 0.61 × 1.35 opening (36"×80" door +
+  // clearance). What THIS check still owns is the same thing it always owned: the AXIS shape.
+  const sides = board.instances.doorframe.filter((e) => e.doorwaySide && e.x === fx.doorCell.x && e.z === fx.doorCell.y);
+  ok(sides.length === 2, `${label}: exactly 2 doorway side pieces emitted (got ${sides.length})`);
   const wantOx = !fx.expectedWidthAxisIsZ;
-  const shapeOk = jambs.every((j) => wantOx ? (j.ox !== undefined && j.oz === undefined) : (j.oz !== undefined && j.ox === undefined));
-  ok(shapeOk, `${label}: jamb prisms carry the ${wantOx ? "ox (width along X)" : "oz (width along Z)"} shape matching the correct axis`);
+  const shapeOk = sides.every((j) => wantOx ? (j.ox !== undefined && j.oz === undefined) : (j.oz !== undefined && j.ox === undefined));
+  ok(shapeOk, `${label}: doorway sides carry the ${wantOx ? "ox (width along X)" : "oz (width along Z)"} shape matching the correct axis`);
   ok(board.kitDoors.length === 0, `${label}: KIT_DOORS_ENABLED=false -> zero kitDoors entries emitted`);
 });
 

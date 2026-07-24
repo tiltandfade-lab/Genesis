@@ -3829,8 +3829,15 @@ function itrDoorIsArched(entry){
   const low = text.toLowerCase();
   return ITR_DOOR_ARCH_KEYWORDS.some((k) => low.indexOf(k) >= 0);
 }
-const ITR_DOOR_WIDTH = 0.9;    // world units — a single-leaf door, referenced to the ~1.5u humanoid scale (GRAPHICS-ENGINE §H)
-const ITR_DOOR_HEIGHT = 1.9;   // world units — clears a standing humanoid with headroom under a typical wallHeightBase
+// THE DOOR CONTRACT (Adam, 2026-07-23): the door is an extruded rectangle that SITS IN — i.e.
+// FILLS — the doorway. The doorway is the full-cell hole (frame ornament deleted, theater-interior),
+// door-height (ITR_DOOR_HEIGHT_FRAC 0.85 × wallHeightBase 2.4 = 2.04) with a plain wall lintel
+// above. The leaf fills that hole with a small even clearance; the old 0.9 × 1.9 leaf left a 0.05
+// side gap against the retired jamb posts and a 0.14 transom slot the header used to hide.
+// KINDERGARTEN PROTOTYPE DOOR (Adam, 2026-07-23): "average door dimensions are 36\" wide by 80\"
+// tall... prototype door can be those dimensions." GRID LAW: 1 u = 5 ft = 60 in.
+const ITR_DOOR_WIDTH = 0.6;      // 36" / 60
+const ITR_DOOR_HEIGHT = 4 / 3;   // 80" / 60 = 1.3333 — fills theater-interior's 0.61 × 1.35 opening
 const ITR_DOOR_FALLBACK_DEPTH = 0.32; // D1's own registry value for every realm's door@* rows (data/interactables.js) — used only if extrudeDepth is somehow absent
 function itrDoorShape(arched){
   const w = ITR_DOOR_WIDTH, h = ITR_DOOR_HEIGHT;

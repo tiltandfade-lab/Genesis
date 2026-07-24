@@ -1438,3 +1438,31 @@ omission is the accepted wall treatment for the fixed production camera. Game-wi
 (flipping production dungeons from the render-time fade to compile-time omission) still rides its
 own production-scene capture packet before the default moves outside the clay fixture — the clay
 room proved the mechanism; a rolled multi-room dungeon frame proves the product.
+
+## THE KINDERGARTEN DOOR — ornament retired, prototype dimensions fixed (Adam, 2026-07-23 — additive; verbatim)
+
+> "ok, i have centered the door but seriously what the hell is the door. THE DOOR IS JUST AN
+> EXTRUDED RECTANGLE. you have all this extra crap behind it and on top of it like it has some kind
+> of ceremonial hat. it's an extruded rectangle that sits in a doorway, i gave you a diagram of what
+> a doorway was earlier. this is unbelievably frustrating"
+
+> "right, the dressing is on the doorway, not the door and for the purposes of getting a freaking
+> working prototype going, lets just focus on the bare minimum kindergarten version of door.
+> rectangle hole with rectangle door. also average door dimensions are 36" wide by 80" tall. we will
+> definitely need more doors than that in this game but prototype door can be those dimensions"
+
+Binding consequences, applied production-wide the same session:
+
+- **The door is one hinged extruded rectangle. The doorway is a rectangle hole in the wall.**
+  Dressing, when it ever returns, belongs to the DOORWAY, never the door — and none of it exists in
+  the prototype. DELETED: the jamb posts, the header prism, both arch corbel steps (BW2-5/D4d), and
+  the wall-thickness reveal slabs. What remains at a door cell is plain wall shaped around the hole:
+  two full-height side pieces and one band above the opening, wall-coloured, wall-scaled.
+- **Prototype door dimensions: 36" × 80"** = 0.6 × 1.3333 world units (GRID LAW, 1 u = 5 ft = 60 in),
+  in a 0.61 × 1.35 opening. More door types arrive later through D14's typed catalog; the prototype
+  is exactly this one.
+- The darkness card (the beyond-the-door void mask) sizes to the OPENING and sits past the outer
+  wall face — with the leaf closed it is fully hidden.
+- Teeth: `dev/verify-clay-room.mjs` check 27 (executed through the real compile chain);
+  `verify-ks2-door-assembly` and `verify-dungeon-interior` rewritten red-first to the new grammar
+  (their real properties — axis shape, squeeze-narrower-and-lower — preserved on the new pieces).

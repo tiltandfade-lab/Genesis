@@ -958,10 +958,7 @@ const ITR_PORTAL_GAP = 0.15;
 //   ox/oz — a world-space offset added to the instance's cell position (lets more than one prism
 //     occupy sub-regions of the SAME 1x1 cell — a jamb reveal sitting in the margin beside a narrower
 //     door frame, or a furniture assembly's several small prisms within one dressing cell).
-const ITR_ARCH_STEP1_HEIGHT = 0.22;      // first corbel step, world units
-const ITR_ARCH_STEP2_HEIGHT = 0.16;      // second (narrower) corbel step, stacked on step 1
-const ITR_ARCH_STEP1_WIDTH_FRAC = 0.92;  // fraction of the door's own wFrac footprint
-const ITR_ARCH_STEP2_WIDTH_FRAC = 0.7;
+// (arch-step consts retired 2026-07-23 — THE DOOR CONTRACT; the corbelled arch header is gone.)
 
 // ─── docs/STAGE-D-WAVE-SPECS.md D4d — DOORFRAME MASS FIX (Adam's "big ass column" ruling: "there's
 // a big ass column right in front of the door, so I can't really even see it"). The pre-unit frame
@@ -985,9 +982,18 @@ const ITR_ARCH_STEP2_WIDTH_FRAC = 0.7;
 //     the D4 leaf's full clear opening — stays COMPLETELY unobstructed between them. The arch-corbel
 //     steps (non-squeeze doors only, below) shift up by this same amount so they keep corbelling IN
 //     from the header's own footprint, never the old wide column's.
-const ITR_JAMB_WIDTH_FRAC = 0.12;
-const ITR_FRAME_PROUD = 0.05;
-const ITR_HEADER_HEIGHT = 0.14;
+// (ITR_JAMB_WIDTH_FRAC / ITR_FRAME_PROUD / ITR_HEADER_HEIGHT / the arch-step consts retired
+// 2026-07-23 by THE DOOR CONTRACT — the frame ornament is deleted; see the door branch below.)
+// THE KINDERGARTEN DOORWAY (Adam, 2026-07-23: "lets just focus on the bare minimum kindergarten
+// version of door. rectangle hole with rectangle door. also average door dimensions are 36\" wide by
+// 80\" tall"). GRID LAW: 1 world unit = 1 cell = 5 ft = 60 in. So the prototype DOOR is
+// 36/60 = 0.6 u wide × 80/60 = 1.3333 u tall (theater-boot's ITR_DOOR_WIDTH/HEIGHT), and the
+// DOORWAY is that rectangle plus a small even clearance, cut into the wall: two full-height wall
+// side pieces + one wall band above the opening. Wall-colored, wall-scaled — DOORWAY construction,
+// not door dressing. More door types come later via D14's catalog; this is the prototype.
+const ITR_DOORWAY_OPENING_W = 0.61;  // 36" leaf + clearance
+const ITR_DOORWAY_OPENING_H = 1.35;  // 80" leaf + clearance
+const ITR_DOORWAY_DEPTH = 0.3;       // the doorway masonry's own thickness (shell-wall-scaled)
 
 // ─── BW2-5 THE COLUMN DEMOTION (Adam 2026-07-10 night: "why are there so many uniform square
 // columns?") — bare square columns become a RARE accent (<=1 per room, most rooms earn none at all)
@@ -1671,86 +1677,40 @@ function interiorBuildBoard(plan, opts) {
         if (kitEligible) {
           kitDoors.push({ x, z: y, widthAxisIsZ, pack: "kenney-modular-dungeon-kit", slug: "gate-door" });
         } else {
-          const frameDepth = revealW + ITR_FRAME_PROUD; // hugs the wall plane: wall's own cut thickness + a small proud lip
-          const jambOffset = wFrac / 2 - ITR_JAMB_WIDTH_FRAC / 2; // jamb's OUTER edge lands flush with the aperture edge (== the old box's own edge)
+          // ─── THE DOOR CONTRACT, kindergarten form (Adam, 2026-07-23, verbatim: "THE DOOR IS JUST
+          // AN EXTRUDED RECTANGLE... it's an extruded rectangle that sits in a doorway" · "rectangle
+          // hole with rectangle door") ────────────────────────────────────────────────────────────
+          // The doorway is a RECTANGLE HOLE cut to the prototype door's own size (0.61 × 1.35 u —
+          // a 36"×80" door plus clearance), shaped by three pieces of PLAIN WALL: two full-height
+          // side pieces and one band above the opening. The door is the hinged extruded rectangle
+          // (theater-boot) filling the hole. Nothing else — jambs/header/arch/reveals are deleted.
+          // All three ride the doorframe kind so the mount-offset patch sockets the whole doorway
+          // at whichever wall plane the active wall system stands.
+          const dwSceneDir = sceneDirectionFor(kit.realmId, doorRoom && doorRoom.role);
+          const dwColor = itrDarkenHex(kit.wallColor, dwSceneDir.valueScript.wall);
+          const openW = ITR_DOORWAY_OPENING_W * (squeeze ? ITR_SQUEEZE_WIDTH_FRAC : 1);
+          const openH = Math.min(ITR_DOORWAY_OPENING_H * (squeeze ? ITR_SQUEEZE_HEIGHT_FRAC : 1), baseH - 0.05);
+          const sideW = (1 - openW) / 2;
+          const sideOff = openW / 2 + sideW / 2;
+          // `squeeze`/`transition` ride every piece — the same per-entry fields the retired frame
+          // pushes carried (downstream filters and harnesses key on them; dropping them was a
+          // silent data-contract break the dungeon-interior harness caught).
+          const dwFlags = { squeeze, transition: !!(d && d.transition) };
           [-1, 1].forEach((sign) => {
             doorframe.push(widthAxisIsZ
-              ? { x, z: y, sx: frameDepth, sy: h, sz: ITR_JAMB_WIDTH_FRAC, color: trimColor, squeeze, transition: !!(d && d.transition), oz: sign * jambOffset, jamb: true }
-              : { x, z: y, sx: ITR_JAMB_WIDTH_FRAC, sy: h, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), ox: sign * jambOffset, jamb: true });
+              ? Object.assign({ x, z: y, sx: ITR_DOORWAY_DEPTH, sy: baseH, sz: sideW, color: dwColor, oz: sign * sideOff, doorwaySide: true }, dwFlags)
+              : Object.assign({ x, z: y, sx: sideW, sy: baseH, sz: ITR_DOORWAY_DEPTH, color: dwColor, ox: sign * sideOff, doorwaySide: true }, dwFlags));
           });
-          // header/lintel: spans the FULL aperture width (same outer span the two jambs bracket) at the
-          // SAME slim depth, stacked ABOVE the jambs' own [0,h] span (yBase=h) — so that entire span,
-          // the D4 leaf's full clear opening, stays completely open between the jambs (nothing but the
-          // two slim posts occupies it).
-          doorframe.push(widthAxisIsZ
-            ? { x, z: y, sx: frameDepth, sy: ITR_HEADER_HEIGHT, sz: wFrac, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true }
-            : { x, z: y, sx: wFrac, sy: ITR_HEADER_HEIGHT, sz: frameDepth, color: trimColor, squeeze, transition: !!(d && d.transition), yBase: h, header: true });
-
-          // BW2-5 item 1: ARCH HEADER — "doorframe prisms gain an arch header (2-3 stacked prisms
-          // corbelling in)". Plain (non-squeeze) doors only — a squeeze crawl-space reads as a crude
-          // tight passage, never a dressed archway. Two narrowing prisms stack ABOVE the D4d header (its
-          // own yBase shifted up by ITR_HEADER_HEIGHT so the corbels keep narrowing IN from the header's
-          // own slim footprint, never the old wide column's) via `yBase` (BW2-5's own field — see the
-          // constants block's header comment).
-          if (!squeeze) {
-            // DOOR TRANCHE (Adam, 2026-07-23 — "taller than the wall", and the FFT-economy law that
-            // the production camera is the judge): the corbel stack's AUTHORED heights (0.14 header +
-            // 0.22 + 0.16) total h + 0.52 = 2.56 against a 2.4 wall — arch step 2 poked 0.16 above
-            // every standard doorway's own wall and read as loose geometry. Each step now takes only
-            // the height budget left below the wall top (baseH), in order; a step whose budget rounds
-            // to nothing is simply not emitted. At default dims: step 1 lands exactly flush with the
-            // wall top and step 2 is dropped; a taller-scaled wall (d.heightScale) regains both steps
-            // automatically because the budget scales with baseH.
-            const archStep1H = Math.min(ITR_ARCH_STEP1_HEIGHT, Math.max(0, baseH - (h + ITR_HEADER_HEIGHT)));
-            const archStep2H = Math.min(ITR_ARCH_STEP2_HEIGHT, Math.max(0, baseH - (h + ITR_HEADER_HEIGHT + archStep1H)));
-            if (archStep1H > 0.02) doorframe.push({
-              x, z: y, sx: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, sy: archStep1H,
-              sz: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, color: trimColor, yBase: h + ITR_HEADER_HEIGHT, archStep: 1,
-            });
-            if (archStep2H > 0.02) doorframe.push({
-              x, z: y, sx: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, sy: archStep2H,
-              sz: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, color: trimColor,
-              yBase: h + ITR_HEADER_HEIGHT + archStep1H, archStep: 2,
-            });
+          if (baseH - openH > 0.02) {
+            doorframe.push(widthAxisIsZ
+              ? Object.assign({ x, z: y, sx: ITR_DOORWAY_DEPTH, sy: baseH - openH, sz: openW, color: dwColor, yBase: openH, lintel: true }, dwFlags)
+              : Object.assign({ x, z: y, sx: openW, sy: baseH - openH, sz: ITR_DOORWAY_DEPTH, color: dwColor, yBase: openH, lintel: true }, dwFlags));
           }
         }
         track(x, y);
 
-        // BW2-5 item 1: WALL-THICKNESS REVEAL — "visible wall THICKNESS at openings (door reveals —
-        // the mock's doorways read deep)". The door frame's own footprint (wFrac) is narrower than the
-        // full 1x1 cell; the (1-wFrac)/2 margin on either side used to render as pure void (you could
-        // see clean through to whatever sits past the cell edge). Two thin WALL-colored jamb slabs fill
-        // exactly that margin, offset within the cell via the new `ox`/`oz` fields, oriented
-        // PERPENDICULAR to the pierced wall's own run. QF-D1 (2026-07-15): axis now reads `widthAxisIsZ`
-        // (the hoisted LOCAL WALL RUN scan, above) instead of the room-rect edge test this block used to
-        // derive independently — the old room-rect-edge rationale ("the door cell's own immediate
-        // 4-neighbors are frequently ALL floor-coded... a neighbor-WALL scan measurably missed most real
-        // doors") is superseded by itrDoorWidthAxisIsZ's own multi-cell scan (up to
-        // ITR_WALL_RUN_SCAN_MAX cells out, not just the immediate neighbor), which both correctly
-        // handles corner/notch cells room-rect membership got wrong AND keeps the room-rect read alive
-        // as that function's own documented tiebreak. Degrades to no reveal off a room's own edge
-        // (rare/degenerate topology, e.g. an interior door) — never throws.
-        if (revealW > 0.01 && doorRoom) {
-          const revealSceneDir = sceneDirectionFor(kit.realmId, doorRoom.role);
-          const revealColor = itrDarkenHex(kit.wallColor, revealSceneDir.valueScript.wall);
-          // sy = baseH (the FULL, un-fractioned wall height at this cell — same value every real WALL
-          // instance carries, never the door opening's own shorter `h`): dev/verify-dungeon-interior.mjs
-          // check 8 asserts every `wall` array entry sits at exactly the base wall height on a bare
-          // (non-scale-domain) plan — a reveal jamb IS conceptually part of the wall it's cut through
-          // (the wall continues at full height past the door's own lintel), so this is both the
-          // architecturally correct read AND keeps that invariant true.
-          [-1, 1].forEach((sign) => {
-            if (widthAxisIsZ) {
-              // the wall pierced runs NORTH-SOUTH -> the passage is through x, so the jambs sit at the
-              // NORTH/SOUTH (z) margins, full width (x).
-              wall.push({ x, z: y, sx: 1, sy: baseH, sz: revealW, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), oz: sign * (wFrac / 2 + revealW / 2) });
-            } else {
-              // the wall pierced runs EAST-WEST -> the jambs sit at the LEFT/RIGHT (x) margins, full
-              // depth (z).
-              wall.push({ x, z: y, sx: revealW, sy: baseH, sz: 1, color: revealColor, scaleDomain: (d ? (d.heightScale || 1.0) : 1.0), ox: sign * (wFrac / 2 + revealW / 2) });
-            }
-          });
-        }
+        // (BW2-5's wall-thickness reveal slabs were deleted by THE DOOR CONTRACT, 2026-07-23 — the
+        // doorway is the full-cell hole; the adjacent wall bodies' own faces are its reveal.)
 
         // STAGE-A A1 (docs/STAGE-A.md, docs/GRAPHICS-NORTH-STAR.md §4.3): DARKNESS PORTAL — a boundary
         // door whose OTHER side (plan.doors' own `betweenSegs`, the corridor-edge room pair U1 already
@@ -1769,13 +1729,17 @@ function interiorBuildBoard(plan, opts) {
             let dirX = 0, dirZ = 0;
             if (widthAxisIsZ) dirX = (x === doorRoom.x) ? -1 : 1;
             else dirZ = (y === doorRoom.y) ? -1 : 1;
-            const push = wFrac / 2 + ITR_PORTAL_DEPTH / 2 + ITR_PORTAL_GAP;
+            // KINDERGARTEN DOORWAY (2026-07-23): the card covers exactly the rectangle OPENING —
+            // the only see-through part of the door cell — measured from the cell edge.
+            const cardW = ITR_DOORWAY_OPENING_W * (squeeze ? ITR_SQUEEZE_WIDTH_FRAC : 1) + 0.04;
+            const cardH = Math.min(ITR_DOORWAY_OPENING_H * (squeeze ? ITR_SQUEEZE_HEIGHT_FRAC : 1), baseH - 0.05) + 0.04;
+            const push = 0.5 + ITR_PORTAL_DEPTH / 2 + ITR_PORTAL_GAP;
             portals.push({
               x, z: y,
               ox: dirX * push, oz: dirZ * push,
-              sx: dirX !== 0 ? ITR_PORTAL_DEPTH : wFrac,
-              sy: h,
-              sz: dirZ !== 0 ? ITR_PORTAL_DEPTH : wFrac,
+              sx: dirX !== 0 ? ITR_PORTAL_DEPTH : cardW,
+              sy: cardH,
+              sz: dirZ !== 0 ? ITR_PORTAL_DEPTH : cardW,
               // the SAME void/backdrop color this realm's fog already reads as (kit.fog.color) — the
               // card reads as "the same darkness beyond the map edge", not a new invented tone.
               color: kit.fog.color,

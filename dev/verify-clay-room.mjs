@@ -683,7 +683,7 @@ const check = (name, cond, detail = "") =>
     const edgeOf = (d) => d.y === room.y ? "n" : d.y === room.y + room.d - 1 ? "s" : d.x === room.x ? "w" : d.x === room.x + room.w - 1 ? "e" : null;
     check("15e. that door cell sits on record.portal.edge's own side (\"" + record.portal.edge + "\")",
       roomDoors.some((d) => edgeOf(d) === record.portal.edge), JSON.stringify(roomDoors.map(edgeOf)));
-    check("15f. board.instances.doorframe carries >=1 real jamb/header instance for that door",
+    check("15f. board.instances.doorframe carries >=1 instance for that door (since 2026-07-23: the lintel — see check 27)",
       compiled.board.instances.doorframe.length >= 1, compiled.board.instances.doorframe.length);
 
     check("15g. board.furniture[0] is positioned from the record (local cell + the real room rect origin)",
@@ -1080,6 +1080,53 @@ const check = (name, cond, detail = "") =>
   check("26d. listeners live on the clay host only (created at mount, removed at unmount — dormant law)",
     /clayRoomWirePanZoom\(host\)/.test(bootSrc) &&
     /host\.addEventListener\("wheel"/.test(bootSrc));
+}
+
+// ============================================================================
+// 27. THE KINDERGARTEN DOOR (Adam, 2026-07-23, verbatim: "THE DOOR IS JUST AN EXTRUDED RECTANGLE...
+// it's an extruded rectangle that sits in a doorway" · "lets just focus on the bare minimum
+// kindergarten version of door. rectangle hole with rectangle door. also average door dimensions
+// are 36\" wide by 80\" tall"). GRID LAW: 1 u = 60 in, so door = 0.6 × 1.3333 u in a 0.61 × 1.35
+// opening. Executed through the real compile chain. (This block REWRITES the same-day full-cell
+// version red-first: those checks went red at the exact commit the ruling superseded them.)
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const out = win.clayRoomBoardFrom(record);
+    const frames = (out.board.instances && out.board.instances.doorframe) || [];
+    const sides = frames.filter((f) => f.doorwaySide);
+    const lintels = frames.filter((f) => f.lintel);
+    check("27a. the doorway is EXACTLY three pieces of plain wall: two sides + one band over the opening",
+      frames.length === 3 && sides.length === 2 && lintels.length === 1 &&
+      !frames.some((f) => f.jamb || f.header || f.archStep),
+      JSON.stringify(frames));
+    const wallH = out.board.wallHeightBase || 2.4;
+    check("27b. the sides run full wall height and flank a 0.61 u opening",
+      sides.every((f) => Math.abs(f.sy - wallH) < 1e-6) &&
+      Math.abs(Math.abs(sides[0].ox || sides[0].oz || 0) - (0.61 / 2 + 0.195 / 2)) < 1e-3,
+      JSON.stringify(sides));
+    check("27c. the band spans opening-top (1.35) to the wall top, opening-wide",
+      lintels.length === 1 && Math.abs((lintels[0].yBase || 0) - 1.35) < 1e-6 &&
+      Math.abs((lintels[0].yBase || 0) + (lintels[0].sy || 0) - wallH) < 1e-6 &&
+      Math.abs((lintels[0].sx === 0.61 ? lintels[0].sx : lintels[0].sz) - 0.61) < 1e-6,
+      JSON.stringify(lintels));
+    const wallAtDoor = ((out.board.instances && out.board.instances.wall) || [])
+      .filter((wI) => wI.x === 5 && wI.z === 13);
+    check("27d. no reveal slabs (no wall-kind instance at the door cell)",
+      wallAtDoor.length === 0, JSON.stringify(wallAtDoor));
+    const card = ((out.board.portals) || [])[0];
+    check("27e. the darkness card covers the OPENING (0.65 × 1.39) and sits beyond the cell edge",
+      !!card && Math.abs(card.sx - 0.65) < 1e-3 && Math.abs(card.sy - 1.39) < 1e-3 &&
+      Math.abs(card.oz) > 0.5,
+      JSON.stringify(card));
+  } catch(e) {
+    check("27. kindergarten-door checks (chain executed)", false, e.stack || String(e));
+  }
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("27f. the leaf is the 36\"×80\" prototype rectangle (0.6 u × 4/3 u)",
+    /ITR_DOOR_WIDTH\s*=\s*0\.6;/.test(bootSrc) && /ITR_DOOR_HEIGHT\s*=\s*4\s*\/\s*3;/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

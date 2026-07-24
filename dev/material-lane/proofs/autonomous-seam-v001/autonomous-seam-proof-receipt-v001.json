@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "workflow": "ImageGen appearance -> deterministic sprite topology -> MM later",
+  "output_size": [
+    576,
+    576
+  ],
+  "gate": {
+    "boundary_jump_rule": "boundary RMS must not exceed the 95th percentile of ordinary internal adjacent-pixel jumps",
+    "topology_rule": "construction periods must close exactly over the output dimensions",
+    "visual_proof": "3x3 repeat outputs are mandatory"
+  },
+  "materials": {
+    "plank": {
+      "method": "best-phase crop plus deterministic opposing-edge lock",
+      "source": "dev/material-lane/source-sprites/b01-timber-roof-v001/roof-plank-batten-source-v003.png",
+      "crop": {
+        "x": 199,
+        "y": 111,
+        "width": 1024,
+        "height": 1024
+      },
+      "repair_band_source_pixels": 64,
+      "metrics": {
+        "legacy_left_right_rms": 0.0,
+        "legacy_top_bottom_rms": 0.0,
+        "internal_x_jump_p95": 25.602,
+        "internal_y_jump_p95": 6.474,
+        "x_boundary_to_internal_p95": 0.0,
+        "y_boundary_to_internal_p95": 0.0,
+        "boundary_jump_gate": true
+      },
+      "status": "PASS"
+    },
+    "slate": {
+      "method": "four ImageGen sprite units assembled on an exact toroidal grid",
+      "component_sheet": "dev/material-lane/proofs/autonomous-seam-v001/slate-components-alpha-v001.png",
+      "grid": {
+        "canvas": [
+          576,
+          576
+        ],
+        "x_step": 96,
+        "y_step": 72,
+        "columns": 6,
+        "rows": 8,
+        "stagger": 48
+      },
+      "topology_proof": {
+        "width_divisible_by_x_step": true,
+        "height_divisible_by_y_step": true,
+        "row_count_preserves_two-row_variant_period": true,
+        "column_count_preserves_two-column_variant_period": true
+      },
+      "metrics": {
+        "legacy_left_right_rms": 6.873,
+        "legacy_top_bottom_rms": 20.985,
+        "internal_x_jump_p95": 14.971,
+        "internal_y_jump_p95": 21.572,
+        "x_boundary_to_internal_p95": 0.459,
+        "y_boundary_to_internal_p95": 0.973,
+        "boundary_jump_gate": true
+      },
+      "status": "PASS"
+    }
+  },
+  "outputs": {
+    "plank": "dev/material-lane/proofs/autonomous-seam-v001/plank-autotile-v001.png",
+    "plank_repeat": "dev/material-lane/proofs/autonomous-seam-v001/plank-autotile-repeat-3x3-v001.png",
+    "slate": "dev/material-lane/proofs/autonomous-seam-v001/slate-autotile-v001.png",
+    "slate_repeat": "dev/material-lane/proofs/autonomous-seam-v001/slate-autotile-repeat-3x3-v001.png",
+    "board": "dev/material-lane/proofs/autonomous-seam-v001/autonomous-seam-proof-board-v001.png"
+  }
+}

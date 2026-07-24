@@ -18,6 +18,24 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-19 later — CI GREEN + Wave 1 landed; resume at open decision 3C)
+
+The whole Wave 1 design lane is on master (79 commits, --no-ff). The Direction file runs well past
+the old "question 12" pointer — through question 20, the Wave 1 audit, and roster/light-sim/
+realization/crit-cascade design — and stops at an open decision. Wave 1 is still OPEN; no
+implementation is authorized.
+
+1. ☐ **Resume at open decision 3C** (end of `PROCEDURAL-DUNGEON-DIRECTION.md`): typed
+   `TerminalDisposition` receipt replacing the `obliterated` boolean as world authority. Put it in
+   front of Adam; recommendation on file is Option 3.
+2. ☐ Chase Wave 1's remaining material follow-ups to Adam's explicit closure gate before Wave 2.
+3. ☐ Later source audit: purpose/chamber/history procedures in the 2014 DMG and 2e DBG, plus the
+   castle/manor construction book if present on the cold shelf. Source their knowledge; do not copy
+   independent-room failure modes into runtime.
+4. ☑ **The full CI gate ran at this close (2026-07-19)** — wiring-a §13c de-flaked
+   (`fix/ci-wiring-a-seed-flake`), full local sweep green, GitHub CI confirmed green after push.
+   Codex's `FULL CI PENDING` marker is discharged.
+
 ## Do next (2026-07-18 — PROCEDURAL DUNGEON DISCOVERY captured; Wave 1 opens)
 
 The research corpus, engine crosswalk, accepted direction, and unresolved forks now live in

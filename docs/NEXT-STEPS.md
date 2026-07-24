@@ -18,6 +18,33 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
+## Do next (2026-07-24 — CONSOLIDATION CLOSED; guard-post program fully specced; delegate the next wave)
+
+Master is the singular canonical line again (six --no-ff merges: root strays · CL-R0 reset ·
+door/C1B movement lane · GP-MM-STONE-V001 materials · sprite prototype admission · the
+structure-kit catalog session). `docs/STRUCTURE-KIT-CATALOG.md` is the guard-post/12-site
+structure spec — **its founder queue is EMPTY** (occupancy axis + arrival hook law minted;
+roof posture locked flat-deck-both-cultures with the cover promise invariant; repair story +
+edge patterns deliberately parked at card-time; numbers clay-deferred). Living golden-sites
+authority = `GOLDEN-SITES-CATALOG.md`; verbatim Desktop record archived in
+`Reference/FFT-Guard-Post-Study/`.
+
+1. ☐ **Delegate the next dev wave** (Adam + Fable, from this canonical state). The two
+   immediately-runnable parallel lanes:
+   a. **Codex material brief #2** — the STRUCTURE-KIT-CATALOG §8 possibility roster +
+      Institutional/Upland culture-pair cards (incl. deck-edge pattern candidates) +
+      overgrowth/condition responses per the MM 1.3 seed-graph spec. No dependency.
+   b. **Clay bench → component proof** — resume the CLAYROOM-RESET-LADDER (CL-R1+) toward
+      the open-top interior guard room (confirmed component proof; shuttered window locked).
+2. ☐ **Owed enforcing checks (teeth):** the arrival-hook validator (no site roll without an
+   active hook) · cover-class equality across cultural variants · merged socket registry
+   (CL-S08 base + catalog extensions) · all-standable-surfaces-reachable — land with the
+   first C1H validator work.
+3. ☐ **SPATIAL-MODEL rider owed:** guard post as route feature minted-as-node-when-entered —
+   design into the walk rework, not after it.
+4. ☐ Sprite prototype admissions ride until the full sprite review (frozen list; delete +
+   regen there).
+
 ## Do next (2026-07-23 later — CL-R0 BUILT; the Clayroom reset ladder is the gate to the Guard Post)
 
 The Desktop research packet is folded (`CLAYROOM-RESET-LADDER.md`, `GOLDEN-SITES-CATALOG.md`,
@@ -88,24 +115,6 @@ The Fable canon-and-scope pass ran docs-only on 2026-07-22. Waves 1-6/10 remain 
    research, never canon or dependency admission.
 10. ☑ **FULL CI discharged** at the 2026-07-23 clean close (full local sweep + merge to
     master + GitHub CI confirmed — see CHANGELOG 2026-07-23 later entry).
-
-## Do next (2026-07-19 later — CI GREEN + Wave 1 landed; resume at open decision 3C)
-
-The whole Wave 1 design lane is on master (79 commits, --no-ff). The Direction file runs well past
-the old "question 12" pointer — through question 20, the Wave 1 audit, and roster/light-sim/
-realization/crit-cascade design — and stops at an open decision. Wave 1 is still OPEN; no
-implementation is authorized.
-
-1. ☐ **Resume at open decision 3C** (end of `PROCEDURAL-DUNGEON-DIRECTION.md`): typed
-   `TerminalDisposition` receipt replacing the `obliterated` boolean as world authority. Put it in
-   front of Adam; recommendation on file is Option 3.
-2. ☐ Chase Wave 1's remaining material follow-ups to Adam's explicit closure gate before Wave 2.
-3. ☐ Later source audit: purpose/chamber/history procedures in the 2014 DMG and 2e DBG, plus the
-   castle/manor construction book if present on the cold shelf. Source their knowledge; do not copy
-   independent-room failure modes into runtime.
-4. ☑ **The full CI gate ran at this close (2026-07-19)** — wiring-a §13c de-flaked
-   (`fix/ci-wiring-a-seed-flake`), full local sweep green, GitHub CI confirmed green after push.
-   Codex's `FULL CI PENDING` marker is discharged.
 
 ## Do next (2026-07-23 — ALL TWELVE WAVES DESIGN-CLOSED; the plan is a reading now)
 

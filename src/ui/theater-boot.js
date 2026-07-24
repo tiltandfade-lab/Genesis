@@ -4457,6 +4457,7 @@ function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors
   const bySourceRef = {};
   const prevStates = S.interiorDoorStateBySourceRef || {};
   const nextStates = {};
+  let queuedDoorStateTween = false;
   const kitDoorMap = itrKitDoorMap(kitDoors);
   // door tranche: "x,z" -> {widthAxisIsZ}, same keying convention as itrKitDoorMap just above.
   const doorAxisMap = new Map();
@@ -4493,6 +4494,7 @@ function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors
           },
           onDone: () => { leaf.rotation.y = to.rotY; leaf.visible = to.visible; },
         });
+        queuedDoorStateTween = true;
       } else {
         // PRISM DOOR — byte-unchanged from pre-KS-2.
         const leaf = hinge.userData.leaf;
@@ -4536,11 +4538,15 @@ function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors
             hinge.userData.brokenVariant = (entry.state === "broken") ? to.variant : null;
           }
         });
+        queuedDoorStateTween = true;
       }
     }
     group.add(hinge);
     bySourceRef[sourceRef] = hinge;
   });
+  // A door transition can occur without a camera refit or room fade. It therefore owns its own
+  // render-loop kick instead of accidentally depending on another tween channel being present.
+  if(queuedDoorStateTween) startTweenLoop();
   S.interiorDoorStateBySourceRef = nextStates;
   group.userData = { bySourceRef: bySourceRef };
   return group;
@@ -13056,6 +13062,11 @@ window.Theater._claySurfaceCensusForTest = function(){
 window.Theater._wallOmissionForTest = function(){ return S.wallOmissionReport || null; };
 // door tranche — the applied door-mount offsets (shell-aware default + the workbench tune)
 window.Theater._doorMountForTest = function(){ return S.doorMountReport || null; };
+// Clayroom proof seam: read the REAL mounted hinge/leaf after a State-tab transition. This is
+// deliberately read-only; the State tab below is the only dev affordance that authors a transition.
+window.Theater._clayDoorProofForTest = function(){
+  return (typeof clayRoomDoorProofState === "function") ? clayRoomDoorProofState() : null;
+};
 window.Theater._clayProvenanceAuditForTest = function(){
   return (typeof clayRoomProvenanceAudit === "function") ? clayRoomProvenanceAudit() : null;
 };
@@ -14904,12 +14915,28 @@ function clayRoomAfterInteriorBoardRebuild(){
   // still holds the pre-rebuild pose — capturing here stored a contaminated "fit" (pan+zoom baked
   // in, then re-applied on top = double), and the tween then landed on the TRUE fit, wiping the pan
   // entirely (probe: afterNudgeRebuild snapped back to the fit; reset then restored the contaminated
-  // pose). drainTweens force-settles the camera glide to its END pose first — the same call
-  // setInteriorBoard itself makes at rebuild start, documented there as harmless for pose tweens —
-  // so the capture reads the genuine fit and the re-applied pan survives every rebuild.
-  drainTweens(S);
+  // pose). Settle ONLY the camera-pose tween to its END pose first. The old drainTweens(S) call
+  // force-finished every channel, including a newly queued door-state tween, which made the
+  // Clayroom incapable of proving that a door actually swings. Board teardown still uses the full
+  // drain; this live post-build hook preserves non-camera animation.
+  clayRoomSettleCameraPoseTween();
   clayRoomCaptureCamFit();
   clayRoomApplyCamPose();
+}
+
+function clayRoomSettleCameraPoseTween(){
+  if(!S.tweens || !S.tweens.length) return;
+  const keep = [], settle = [];
+  S.tweens.forEach(function(tw){
+    if(tw && tw.isCameraPoseTween) settle.push(tw);
+    else keep.push(tw);
+  });
+  S.tweens = keep;
+  settle.forEach(function(tw){
+    if(tw && typeof tw.onDone === "function"){
+      try { tw.onDone(); } catch(e){}
+    }
+  });
 }
 
 // ─── D12a (Adam's founder redline, capture packet #1, 2026-07-23 — verbatim: "i need a semi-
@@ -15131,6 +15158,34 @@ function clayRoomWirePanZoom(host){
   });
 }
 
+// Live proof read: board-authored state + the actual mounted hinge/leaf pose. The State tab and
+// browser harness both consume this one measurement so the UI cannot claim a swing that the scene
+// did not perform.
+function clayRoomDoorProofState(){
+  const authoredDoor = S.lastBoard && Array.isArray(S.lastBoard.interactables)
+    ? S.lastBoard.interactables.find(function(e){ return e && e.archetype === "door" && !e.reserve; })
+    : null;
+  let hinge = null;
+  if(S.interiorGroup){
+    S.interiorGroup.traverse(function(node){
+      if(!hinge && node.userData && node.userData.kind === "interactable" && node.userData.archetype === "door"){
+        hinge = node;
+      }
+    });
+  }
+  const leaf = hinge && hinge.userData ? hinge.userData.leaf : null;
+  const angleDeg = leaf ? leaf.rotation.y * 180 / Math.PI : null;
+  return {
+    sourceRef: authoredDoor ? authoredDoor.sourceRef : null,
+    authoredState: authoredDoor ? authoredDoor.state : null,
+    mountedState: hinge && hinge.userData ? hinge.userData.state : null,
+    hingeAngleDeg: angleDeg == null ? null : +angleDeg.toFixed(1),
+    leafVisible: !!(leaf && leaf.visible),
+    tweenActive: !!((S.tweens || []).some(function(tw){ return tw && tw.isDoorStateTween; })),
+    mount: S.doorMountReport && S.doorMountReport.perDoor ? S.doorMountReport.perDoor[0] || null : null,
+  };
+}
+
 // mountClayRoom() — D2/wire-in steps 1-5 (the overlay, step 6, is built by
 // clayRoomMountOverlay(record,host) — see the U3 addition below this comment once it lands). Never
 // throws (mirrors mountLightLab's own dormant-surface discipline): a WebGL-less environment degrades
@@ -15315,10 +15370,13 @@ function clayRoomMountOverlay(record, host){
   surfacesTabBtn.textContent = "Surfaces";
   const mountTabBtn = document.createElement("button");
   mountTabBtn.textContent = "Mount";
-  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn].forEach(function(b){
+  const stateTabBtn = document.createElement("button");
+  stateTabBtn.textContent = "State";
+  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn].forEach(function(b){
     b.style.cssText = "flex:1;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   });
-  tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn); tabBar.appendChild(mountTabBtn);
+  tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn);
+  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn);
   panel.appendChild(tabBar);
 
   const factsBody = document.createElement("pre");
@@ -15507,27 +15565,80 @@ function clayRoomMountOverlay(record, host){
   mountRows.exportBox.style.cssText = "width:100%;height:64px;font:10px monospace;background:#1a1a20;color:#cd9;border:1px solid #333;border-radius:3px;margin-top:2px;";
   mountBody.appendChild(mountRows.exportBox);
 
+  // State tab — an executable proof of the production door projection, not a second demo door.
+  // Each button clone-patches S.lastBoard.interactables and replays the SAME setInteriorBoard ->
+  // interiorBuildInteractables -> hinge tween path normal state projection uses. The canonical clay
+  // record stays frozen; this override lives only for the current dev session.
+  const stateBody = document.createElement("div");
+  stateBody.style.cssText = "display:none;font:11px/1.5 monospace;color:#dde;";
+  const stateIntro = document.createElement("div");
+  stateIntro.textContent = "production projection: board.interactables → 320ms hinge tween";
+  stateIntro.style.cssText = "color:#9ab;margin-bottom:6px;";
+  stateBody.appendChild(stateIntro);
+  const stateButtons = document.createElement("div");
+  stateButtons.style.cssText = "display:flex;gap:5px;margin-bottom:7px;";
+  const stateOut = document.createElement("div");
+  stateOut.style.cssText = "white-space:pre-wrap;color:#cd9;border-top:1px solid #333;padding-top:6px;";
+  function clayDoorStateRender(){
+    const proof = clayRoomDoorProofState();
+    stateOut.textContent = [
+      "authored " + (proof.authoredState || "—") + " · mounted " + (proof.mountedState || "—"),
+      "hinge " + (proof.hingeAngleDeg == null ? "—" : proof.hingeAngleDeg.toFixed(1) + "°") +
+        " · leaf " + (proof.leafVisible ? "visible" : "hidden"),
+      "tween " + (proof.tweenActive ? "ACTIVE" : "settled") +
+        (proof.mount ? " · mount dx " + proof.mount.dx + " dz " + proof.mount.dz + " dy " + proof.mount.dy : ""),
+    ].join("\n");
+  }
+  function clayDoorStateApply(nextState){
+    if(!S.lastBoard || S.lastBoard.kind !== "interior3d") return;
+    const rows = (S.lastBoard.interactables || []).map(function(entry){
+      return entry && entry.archetype === "door"
+        ? Object.assign({}, entry, { state: nextState })
+        : entry;
+    });
+    const nextBoard = Object.assign({}, S.lastBoard, { interactables: rows });
+    S.boardKey = null;
+    setInteriorBoard(nextBoard);
+    clayDoorStateRender();
+    setTimeout(clayDoorStateRender, ITR_DOOR_SWING_TWEEN_MS + 40);
+  }
+  [["shut", "Set door shut"], ["ajar", "Set door ajar"], ["open", "Set door open"]].forEach(function(def){
+    const b = document.createElement("button");
+    b.textContent = def[0];
+    b.setAttribute("aria-label", def[1]);
+    b.style.cssText = "flex:1;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+    b.addEventListener("click", function(){ clayDoorStateApply(def[0]); });
+    stateButtons.appendChild(b);
+  });
+  stateBody.appendChild(stateButtons);
+  stateBody.appendChild(stateOut);
+
   panel.appendChild(factsBody);
   panel.appendChild(explainBody);
   panel.appendChild(surfacesBody);
   panel.appendChild(mountBody);
+  panel.appendChild(stateBody);
 
   function clayShowTab(which){
     factsBody.style.display = which === "facts" ? "" : "none";
     explainBody.style.display = which === "explain" ? "" : "none";
     surfacesBody.style.display = which === "surfaces" ? "" : "none";
     mountBody.style.display = which === "mount" ? "" : "none";
+    stateBody.style.display = which === "state" ? "" : "none";
     factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
     explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
     surfacesTabBtn.style.background = which === "surfaces" ? "#3a3a44" : "#2a2a30";
     mountTabBtn.style.background = which === "mount" ? "#3a3a44" : "#2a2a30";
+    stateTabBtn.style.background = which === "state" ? "#3a3a44" : "#2a2a30";
     if(which === "surfaces") clayRenderSurfacesTab();
     if(which === "mount") clayMountRender();
+    if(which === "state") clayDoorStateRender();
   }
   factsTabBtn.addEventListener("click", function(){ clayShowTab("facts"); });
   explainTabBtn.addEventListener("click", function(){ clayShowTab("explain"); });
   surfacesTabBtn.addEventListener("click", function(){ clayShowTab("surfaces"); });
   mountTabBtn.addEventListener("click", function(){ clayShowTab("mount"); });
+  stateTabBtn.addEventListener("click", function(){ clayShowTab("state"); });
   clayShowTab("facts");
 
   document.body.appendChild(panel);

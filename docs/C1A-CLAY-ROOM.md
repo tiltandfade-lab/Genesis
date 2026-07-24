@@ -388,3 +388,28 @@ Teeth: `verify-room-shell` asserts one top cap, no hidden jamb/lintel end caps, 
 wall-volumes 35/35 · clay 140/140 · d4-doors 205/205 · ks2-door-assembly 40/40 ·
 dungeon-interior 288/288 · room-shell-oss 48/48 · wall-runs-oss 92/92 · manifest `RESULT: OK`.
 Evidence: `dev/clay-captures/door/codex-wall-socket-clean-flush-*`.
+
+## Addendum D23 — executable door proof (2026-07-24)
+
+Adam: "can you prove that the door works?"
+
+The first live attempt found a real Clayroom-only failure: `clayRoomAfterInteriorBoardRebuild`
+called the global `drainTweens(S)` to settle the camera fit, which also force-finished the newly
+queued door-state tween. The production hinge formulas existed, but this fixture could only show
+their endpoints as snaps. The hook now settles only `isCameraPoseTween` entries and preserves every
+other animation channel; door transitions also start their own render loop instead of depending on
+an unrelated camera/fade tween.
+
+The overlay now has a **State** proof tab. Its shut/ajar/open buttons clone-patch
+`S.lastBoard.interactables` and replay the normal `setInteriorBoard` →
+`interiorBuildInteractables` path; it does not mutate the frozen clay record or mount a demonstration
+mesh. The tab measures the real mounted leaf. Browser proof, closed→open→closed→ajar→open:
+
+- shut: 0.0°, settled, mount dz −0.64;
+- ajar: 22.0°, settled, same mount;
+- open: 105.0°, settled, same mount;
+- both directions reported `tween ACTIVE` during the governed 320 ms transition.
+
+The browser is left on the open 105° endpoint with the State tab active so the sequence remains
+directly repeatable. Gates: clay 145/145 · d4-doors 206/206 · ks2-door-assembly 40/40 ·
+dungeon-interior 288/288 · manifest `RESULT: OK`.

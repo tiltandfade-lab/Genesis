@@ -1079,8 +1079,9 @@ const check = (name, cond, detail = "") =>
   // the tween race (probe-caught): the rebuild hook must settle the camera glide BEFORE capturing
   // the fit, or the stored fit is contaminated and the pan dies at the tween's landing.
   const hookFn = (bootSrc.match(/function\s+clayRoomAfterInteriorBoardRebuild\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
-  check("26c. the rebuild hook drains tweens BEFORE capturing the camera fit (the probe-caught race)",
-    /drainTweens\(S\);[\s\S]*clayRoomCaptureCamFit\(\)/.test(hookFn), hookFn);
+  check("26c. the rebuild hook settles ONLY the camera tween before capturing fit (door animation survives)",
+    /clayRoomSettleCameraPoseTween\(\);[\s\S]*clayRoomCaptureCamFit\(\)/.test(hookFn) &&
+    !/^\s*drainTweens\(S\);/m.test(hookFn), hookFn);
   check("26d. listeners live on the clay host only (created at mount, removed at unmount — dormant law)",
     /clayRoomWirePanZoom\(host\)/.test(bootSrc) &&
     /host\.addEventListener\("wheel"/.test(bootSrc));
@@ -1138,6 +1139,31 @@ const check = (name, cond, detail = "") =>
     /doorframeFallbackSource\s*=\s*useCompiledRoomShell\s*\?\s*\[\]\s*:\s*\(inst\.doorframe\s*\|\|\s*\[\]\)/.test(bootSrc) &&
     /shellDoorSources\s*=\s*\(data\.doorAxes\s*&&\s*data\.doorAxes\.length\)\s*\?\s*data\.doorAxes/.test(bootSrc) &&
     /new Set\(shellDoorSources\.map/.test(bootSrc));
+}
+
+// ============================================================================
+// 28. EXECUTABLE DOOR PROOF (Adam, 2026-07-24: "can you prove that the door works?") — the
+// Clayroom State tab must drive the real board.interactables projection and leave the door tween
+// alive after the camera fit is stabilized. Browser proof supplies the visual/angle evidence.
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const settleFn = (bootSrc.match(/function\s+clayRoomSettleCameraPoseTween\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
+  check("28a. camera settling filters by isCameraPoseTween and retains every non-camera tween",
+    /isCameraPoseTween/.test(settleFn) && /else\s+keep\.push\(tw\)/.test(settleFn) &&
+    /S\.tweens\s*=\s*keep/.test(settleFn), settleFn);
+  check("28b. door state transitions kick their own tween render loop",
+    /if\(queuedDoorStateTween\)\s+startTweenLoop\(\)/.test(bootSrc));
+  check("28c. State tab offers shut / ajar / open controls through one board replay helper",
+    /stateTabBtn\.textContent\s*=\s*"State"/.test(bootSrc) &&
+    /\["shut",\s*"Set door shut"\][\s\S]*\["ajar",\s*"Set door ajar"\][\s\S]*\["open",\s*"Set door open"\]/.test(bootSrc) &&
+    /function\s+clayDoorStateApply\s*\(nextState\)[\s\S]*setInteriorBoard\(nextBoard\)/.test(bootSrc));
+  check("28d. State proof clone-patches board interactables and never mutates the frozen record",
+    /Object\.assign\(\{\},\s*entry,\s*\{\s*state:\s*nextState\s*\}\)/.test(bootSrc) &&
+    /Object\.assign\(\{\},\s*S\.lastBoard,\s*\{\s*interactables:\s*rows\s*\}\)/.test(bootSrc));
+  check("28e. browser-readable proof reports authored/mounted state, live hinge angle, tween, and mount",
+    /window\.Theater\._clayDoorProofForTest/.test(bootSrc) &&
+    /hingeAngleDeg/.test(bootSrc) && /tweenActive/.test(bootSrc) && /doorMountReport/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

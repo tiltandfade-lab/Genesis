@@ -512,6 +512,8 @@ function buildSandbox() {
     THREE, S, console,
     mf1EaseOutCubic: (t) => 1 - Math.pow(1 - t, 3),
   };
+  sandbox.tweenLoopStarts = 0;
+  sandbox.startTweenLoop = () => { sandbox.tweenLoopStarts++; };
   vm.createContext(sandbox);
   const body = [
     archKeywordsLine, widthLine, heightLine, fallbackDepthLine,
@@ -629,6 +631,7 @@ group("8 — PART B: a state_transition between two builds fires exactly one twe
   const entryOpen = [{ archetype: "door", x: 0, y: 0, state: "open", sourceRef: "d1", extrudeDepth: 0.32 }];
   const g2 = sandbox.interiorBuildInteractables(entryOpen, 0, 0, floorTopMap);
   ok(sandbox.S.tweens.length === 1, `a real state change (shut->open) for the SAME sourceRef fires exactly one tween (got ${sandbox.S.tweens.length})`);
+  ok(sandbox.tweenLoopStarts === 1, "the door transition starts its own render loop (never depends on a camera/fade tween)");
   const tw = sandbox.S.tweens[0];
   ok(tw.isDoorStateTween === true && tw.doorSourceRef === "d1", "the tween is tagged isDoorStateTween for sourceRef d1");
   const doorHinge2 = g2.children[0];

@@ -323,14 +323,26 @@ ALL-ART-IS-PLACEHOLDER seam when beauty passes earn it. Every catalog entry carr
 - **R8** material picks — ✅ superseded: full possibility roster authored instead (§8);
   all four stone candidates stay live for the review-tool taste pass.
 
-**The live founder queue now comes from the imported lock audit** (its "minimum choices"
-list, abridged): confirm GP-SHAPE-01 as first archetype · promote the FFT relational
-rules as the first taste constitution · confirm the open-top interior room as component
-proof · confirm Genesis-procedural-first/Kenney-fallback · run the cultural A/B before
-spatial mutation · choose the observation opening · choose the recent-repair story ·
-choose the roof/weather posture · defer realm A/B behind the culture proof · let the
-RoomProgram, not a furnishing catalog, gate furnishing work. Numbers stay deferred to
-clay evidence.
+**The lock-audit founder queue — RULED (Adam 2026-07-24):**
+
+- GP-SHAPE-01 first archetype — ✅ CONFIRMED.
+- FFT relational rules as first taste constitution — ✅ CONFIRMED.
+- Open-top interior guard room as component proof — ✅ CONFIRMED.
+- Genesis-procedural-first / Kenney-fallback — ✅ CONFIRMED.
+- Observation opening — ✅ LOCKED: **shuttered window** (culture-expressive for the A/B;
+  the slit arrives free with the parapet family later).
+- Recent-repair story — ⏳ CARD-TIME: deferred to the material cards (now
+  occupancy-flavored per §15).
+- Roof/weather posture — ◐ OPEN pending Adam (see `diagrams/guard-post-roof-postures.svg`).
+  Constraint discovered while explaining it: the locked mutation capsule requires
+  IDENTICAL TACTICAL PROMISES across the cultural pair, so a walkable roof deck on one
+  culture but not the other is illegal at MVP — the raised-observation function must
+  exist in both; only its construction may differ. Recommendation on record: both
+  cultures carry a walkable deck (Institutional = flat stone deck + crenellated parapet;
+  Upland = timber-railed deck), pitched-only/no-deck divergence becomes an Ideal-tier
+  spatial mutation; final call may ride to card/clay evidence with the repair story.
+- Realm A/B stays behind the culture proof; RoomProgram gates furnishing; numbers wait
+  for clay (all standing).
 
 ## 14. Gap survey — RULED, round 2 (Adam 2026-07-24)
 

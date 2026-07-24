@@ -7,8 +7,14 @@ realm: cross-realm (setting dressing, place-gen lane)
 
 # Sprite Batch Prompts — Setting Dressing (Part 2, PLACE-ASSET-QUEUE)
 
-**Not canon** (see `sprite-sheet-prompts.md`'s shared template/discipline — same mechanical
-grammar as the realm creature/item sheets, adapted below for flat/pictorial content). This file
+> **Production-format authority (2026-07-24):** The packet grammar demonstrated here is the
+> preferred grammar for new sprite production. Use [`PRODUCTION-FORMAT.md`](PRODUCTION-FORMAT.md)
+> for current grid, cell-aspect, canvas, QA, and receipt fields. Dressing cells must use the
+> mounted shape or effect body plan that truthfully fits the subject; character `4:5` and
+> provisional giant/titanic `4:6` defaults do not automatically apply.
+
+**Roster/content status: working, not canon.** This file uses the preferred realm-packet grammar,
+adapted below for flat/pictorial content. It
 translates Part 2 of `docs/PLACE-ASSET-QUEUE.md` — signs, banners/flags, paintings/posters/
 notices, window glows, graffiti tags, and FX sprites — into batch prompts, one sheet per the
 queue's own **Sheet plan** groupings. Names, realm tags, size classes, priorities, and briefs are

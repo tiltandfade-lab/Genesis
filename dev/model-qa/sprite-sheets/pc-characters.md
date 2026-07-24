@@ -7,7 +7,13 @@ realm: pc-characters
 
 # Sprite Batch Prompts — Player Characters (every race x class x gender)
 
-**Not canon** (see `sprite-sheet-prompts.md` for the full disclaimer + shared template). Every
+> **Production-format authority (2026-07-24):** The packet grammar demonstrated here is the
+> preferred grammar for new sprite production. Use [`PRODUCTION-FORMAT.md`](PRODUCTION-FORMAT.md)
+> for current grid, cell-aspect, canvas, QA, and receipt fields. Any `5×5` / `25 cells` value
+> below is historical batch data, not a universal default. New character cells default to
+> `4:5` width:height unless the subject needs another declared ratio.
+
+**Roster/content status: working, not canon.** Every
 combination of the game's 9 playable species (`data/species-backgrounds.js`) x 12 classes
 (`data/class-progression.js`) x 2 genders = **216 PC variants**, batched into
 25-per-sheet ChatGPT prompts. This is the character-creator roster, not a monster/NPC set — use
@@ -287,4 +293,3 @@ change):
 14. **Tiefling Warlock (Female)** -- eldritch energy coiling from an outstretched hand, patron's mark glowing
 15. **Tiefling Wizard (Male)** -- mid-spellcast, spellbook in one hand, arcane sigil forming at the other
 16. **Tiefling Wizard (Female)** -- mid-spellcast, spellbook in one hand, arcane sigil forming at the other
-

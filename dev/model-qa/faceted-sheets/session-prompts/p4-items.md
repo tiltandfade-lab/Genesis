@@ -1,3 +1,8 @@
+> **HISTORICAL COMPLETED/RETURN PACKET — DO NOT RE-RUN AS NEW PRODUCTION.** Its fixed 5×5,
+> 25-cell, square-canvas settings record the batch that produced its returns. New sprite packets
+> use `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` and choose aspect for compatible subject
+> groups.
+
 You are an item-sprite generation worker for the Genesis faceted art program. Your
 batch: the fantasy realm's full item universe — 375 items (175 SRD mundane + 200 magic) in 15
 sheets of 25. These are inventory/loot-card sprites; modest per-item resolution is fine. This

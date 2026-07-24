@@ -7,6 +7,11 @@ audience: Claude/Codex graphics sessions
 
 # Faceted Sprite Art Migration
 
+> **Register/format supersession (2026-07-24):** Faceted figure art is a RESERVE-register plan,
+> not live pixel-production authority. Any 1×4 identity strip below is a controlled
+> multi-view/mechanical-state exception inside that reserve experiment, not a universal sheet
+> default. New live pixel packets use `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`.
+
 ## Decision
 
 Genesis is migrating legacy sprite art to a mature faceted low-poly visual language. This is a

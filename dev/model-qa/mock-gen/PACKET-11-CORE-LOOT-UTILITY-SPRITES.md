@@ -1,7 +1,12 @@
 # PACKET-11 — CORE-3 LOOT + UTILITY SPRITES (item-get cards, pickups, affordances)
 
 type: codex-packet
-status: DRAFT (Fable, 2026-07-11 — fills inventory/readability gaps for fantasy, gloom, chrome)
+status: HISTORICAL DRAFT — fixed layout superseded 2026-07-24
+
+> **Do not execute as a new production packet.** Its item roster/briefs remain useful, but its
+> fixed 5×5 sheets and unqualified square-cell instruction are retired. Repacket through
+> `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`, choosing a truthful aspect for each compatible
+> item/body-plan group.
 
 ## Rationale
 

@@ -29,7 +29,7 @@ That second sentence is this file's job description. Everything below either poi
 doc/script that does the thing, or — where the pipeline doesn't yet reach all the way — says so
 honestly instead of pretending.
 
-## Adam's ruling (2026-07-16, verbatim) — the 4:5 cell law + the regen-v3 regen path
+## Adam's ruling (2026-07-16, verbatim) — the historical 4:5 finding + regen-v3 path
 
 From the round-4 big-creature regen review:
 
@@ -39,12 +39,15 @@ From the round-4 big-creature regen review:
 
 > "did you use the format from model-qa/sprite-sheets/ … the fantasy realm has an explicit style"
 
-Captured as law:
+Captured at the time; the blanket aspect clause is superseded by Adam's 2026-07-24
+subject-dependent ruling below. The successful 4:5 character result remains evidence and the
+round-4 files remain reproducibility records.
 
-- **4:5 CELL-ASPECT LAW.** Every sprite cell is **4:5 portrait** (taller than wide). The 1×1
-  square cell squashed proportions; 4:5 fixed it — the same reason humanoids are 4×6 (§3, "cells
-  taller than wide kill the short-leg squash"). The biggest creatures (gargantuan / titanic) get
-  their **OWN sheet** — one 4:5 cell — never crammed.
+- **4:5 CELL-ASPECT FINDING (blanket rule RETIRED 2026-07-24).** The 1×1 square cell squashed
+  character proportions; 4:5 fixed that batch. It is now the general character default, not a
+  universal sprite aspect. The biggest creatures (gargantuan/titanic) still get their **OWN
+  sheet**, but their cell aspect is selected and tested for their subject rather than inherited
+  from the character result.
 - **STYLE AUTHORITY (which style block a regen prompt quotes).** Regeneration prompts quote the
   explicit per-realm **`Style block:` line from `dev/model-qa/sprite-sheets/<realm>.md`** — NOT the
   `Style:` lines in `regen-v3/<realm>.md` (those read "clean crisp pixel art / naturalistic palette"
@@ -53,9 +56,10 @@ Captured as law:
   medium value contrast…"* plus that file's mechanical rules (orthographic side view; expressive
   mid-action pose — mid-lunge/cast/braced/snarling, never a T-pose; full body head-to-toe in-cell,
   no cropping; solid #FF00FF background).
-- **Round-4 regen path (supersedes the XL-REGEN path for big-creature regen).**
+- **Historical round-4 regen path (superseded for NEW production formatting 2026-07-24).**
   `build/gen-regenv3-bigboys.py` reworks the XL/titan regen into the proven regen-v3 sheet
-  architecture with the two rulings above baked in. It reads the registry + overlay, size-bands the
+  architecture with the two 2026-07-16 findings baked in. It reads the registry + overlay,
+  size-bands the
   regen set, and emits `dev/model-qa/regen-v3/round4/fantasy-r4.md` + `fantasy-r4-manifest.json`
   (GENERATED — never hand-edit; adjust the overlay and re-run). Size→sheet map, all cells 4:5:
   **gargantuan/titanic (eff ≥ 24 ft) → solo (own sheet, 1024×1280) · huge → 1 row×2 (1600×1000) ·
@@ -63,7 +67,9 @@ Captured as law:
   style block straight from `sprite-sheets/fantasy.md` so it cannot drift. Slugs are the originals,
   so slicing overwrites in place (same slice→defringe→unify→registry→review chain as Runbook A).
   Default scope = every Large+ monster + any smaller `verdict:fail`; `--fails-only` restricts to
-  fails + low-res (<110 px) + the true titans.
+  fails + low-res (<110 px) + the true titans. Do not use its fixed-ratio output for a new
+  production packet; modernize it against `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` after
+  the giant/titanic aspect tests rule exact ratios.
 
 ## Adam's ruling (2026-07-17, verbatim) — sprite-emote scope
 
@@ -98,6 +104,39 @@ Genesis sprites remain static source images with discrete emote variants where l
 runtime movement register includes procedural sprite warps for combat/interaction verbs and DM-hand
 piece movement. Those motion recipes are editable as deterministic runtime data through the Dev
 Portal's Warp & Motion Workshop; they are not authored frame sequences or replacement sprite art.
+
+## Adam's ruling (2026-07-24, verbatim) — preferred packet format + subject-dependent aspect
+
+> "before we start producing sprites, let me drop to a lower codex model, but that means the
+> sprite production sheet needs to be very explicit dev/model-qa/sprite-sheets has a great format
+> for batch sprite production, if you can find any conflicting sprite sheet formatting
+> instructions, please retire those and ensure that the formatting from these documents is the
+> preferred formatting. that's nto to overwrite the standing dynamic aspect ratio for different
+> things, make sure aspect ratio is considered for the subject of the sprite. characters are
+> generally 4:5, giant and titanic should probably be 4:6 but we will determine those exact ratios
+> through testing"
+
+Captured as law:
+
+- **PREFERRED PACKET FORMAT.** New production packets use the document grammar proven in
+  `dev/model-qa/sprite-sheets/`: exact realm `Style block:` → complete shared mechanical block →
+  named sheet sections → numbered row-major cells with explicit identity/pose cues. The executable
+  contract and copy-ready template are `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`.
+- **LOWER-MODEL EXPLICITNESS.** Every sheet states its subject class, body plan, size band, subject
+  count, grid columns, grid rows, capacity, cell aspect, aspect status/reason, requested canvas,
+  chroma key, camera, order, exact filename, inspection rules, and receipt. A worker never infers
+  them from a previous sheet or an unlabeled `4×6`.
+- **DYNAMIC ASPECT SURVIVES.** Aspect follows the subject's real silhouette and important
+  extremities. Characters generally start at **4:5**. **4:6 for giant/titanic subjects is a
+  PROVISIONAL TEST CANDIDATE**, not canonized as exact until comparative captures are ruled.
+  Long quadrupeds, serpents, vehicles, wings, items, and dressing use their truthful declared
+  aspect rather than a universal portrait cell.
+- **GRID IS NOT ASPECT.** Grid is always recorded as `gridColumns` + `gridRows`; one cell is always
+  recorded as `cellAspect W:H`. The proven 4-column × 6-row humanoid density does not mean a 4:6
+  humanoid cell.
+- **RETIRED CONFLICTS.** Fixed 6×6/36, fixed 5×5/25, fixed 1×4, universal square, universal 4:5,
+  and universal 4:6 remain historical packet facts but have no authority over new production.
+  Historical prompts and returned art remain intact for reproducibility.
 
 ---
 
@@ -169,9 +208,9 @@ trusting its `cut` count for anything precise.
 | Palette DATA (generated) | `dev/model-qa/realm-palettes/<realm>.json` ×13 | generated by `build/gen-realm-palettes.py` — never hand-edit |
 | Style-ref anchor images | `dev/model-qa/regen-v3/style-refs/<realm>-style-ref.png` ×12 | pc has none — aliases fantasy, see §4 |
 | Sprite casting/tag schema | `docs/SPRITE-TAGS.md` | binding law for slug metadata, layered on top of the manifest join key |
-| Cell aspect (4:5) + biggest-own-sheet | this file, "Adam's ruling (2026-07-16)" | quoted §3 grid ladder |
+| Packet format + subject-dependent cell aspect + biggest-own-sheet | this file, "Adam's ruling (2026-07-24)" + `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` | explicit format; character 4:5 default; giant/titanic 4:6 provisional |
 | Regen-prompt style block (per realm) | `dev/model-qa/sprite-sheets/<realm>.md` `Style block:` line | the canonical style a regen prompt quotes — NOT `regen-v3/<realm>.md`'s `Style:` lines |
-| Big-creature regen generator | `build/gen-regenv3-bigboys.py` → `regen-v3/round4/fantasy-r4.md` | Runbook A chain; supersedes the XL-REGEN path |
+| Historical big-creature regen generator | `build/gen-regenv3-bigboys.py` → `regen-v3/round4/fantasy-r4.md` | reproduces the 2026-07-16 packet; biggest-own-sheet finding retained, fixed 4:5 formatting retired |
 
 ---
 
@@ -184,9 +223,11 @@ trusting its `cut` count for anything precise.
 >
 > **Incompatible: `high-angle`, `top-down`.** Quarantined, never mixed in.
 
-### Grid ladder (SPRITE-GEN-V2.md §2)
+### Grid-density ladder + subject-dependent aspect (SPRITE-GEN-V2.md §2-3)
 
-| tier | size band | grid | per sheet |
+`gridColumns × gridRows` below describes sheet density, never cell aspect.
+
+| tier | size band | gridColumns × gridRows | per sheet |
 |---|---|---|---|
 | T0 | titanic | 1x1 | 1 |
 | T1 | gargantuan | 1x1 | 1 |
@@ -198,14 +239,14 @@ trusting its `cut` count for anything precise.
 | T7 | tiny | 7x7 | 49 |
 | T8 | tiniest of the tiny | 8x8 GRID | 64 |
 
-> **Humanoids: ALWAYS 4x6** (4 cols × 6 rows, 24/sheet) — proven more reliable on
-> leg length. Cells taller than wide kill the short-leg squash.
+> **Character density option: `gridColumns: 4`, `gridRows: 6`** (24/sheet) — proven more
+> reliable than the older crowded character batches when combined with portrait cells.
 
-**4:5 CELL-ASPECT LAW (Adam 2026-07-16, see the ruling above):** every sprite cell is **4:5
-portrait** (taller than wide), not square — the 1×1 square cell squashed proportions. The biggest
-creatures (gargantuan/titanic) get their **own sheet** (one 4:5 cell). This generalizes the humanoid
-4×6 rule to the whole ladder; canvas dims derive from 4:5 cells (solo 1024×1280, 1×2 → 1600×1000,
-2×2 → 1280×1600).
+**Current aspect law (Adam 2026-07-24):** aspect is subject-dependent. Characters generally use
+`cellAspect: 4:5`. Giant/titanic subjects keep their own sheet and begin with a **provisional**
+`cellAspect: 4:6` test candidate; exact ratios wait for comparative captures. Long or wide subjects
+use declared landscape cells. Square remains legal for genuinely square subjects. See the explicit
+decision and packet schema in `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`.
 
 ### Style law + CLEAN-SHAPES + per-realm finish (SPRITE-GEN-V2.md §4)
 
@@ -277,10 +318,10 @@ realm JSONs (+ `pc.json`) all currently read `"outline": "tbd"` — see §9.
 
 ## 4. Per-realm style table
 
-Touchstone lines quoted verbatim from `dev/model-qa/regen-v3/<realm>.md`'s `Setting:`/`Style:`/
-`Palette:` header lines (identical across every sheet in a realm's packet). Prompt-source paths
-are the packet used for the last completed regen wave; the original (T2, pre-regen) full-roster
-prompts live in `dev/model-qa/sprite-sheets/<realm>.md` and remain the join-key source for
+The table preserves touchstone lines from `dev/model-qa/regen-v3/<realm>.md`'s historical
+`Setting:` headers and identifies the packets used for the last completed regen wave. They are
+evidence, not the current prompt-style source. New production quotes the exact `Style block:` from
+`dev/model-qa/sprite-sheets/<realm>.md`, which also remains the roster/join-key source for
 `dev/sprite-manifests/v2-manifest.json` (§5).
 
 | realm | touchstone (Setting) | palette JSON | outline | status | regen-v3 packet | original roster prompts |
@@ -299,11 +340,11 @@ prompts live in `dev/model-qa/sprite-sheets/<realm>.md` and remain the join-key 
 | noir | "rain-slick noir port city — sepia and soot, streetlamp monochrome." | `realm-palettes/noir.json` | tbd | staged (17) | `regen-v3/noir.md` | `sprite-sheets/noir.md` |
 | gloom | "funerary gloom realm — desaturated mourning tones, bone, wilt." | `realm-palettes/gloom.json` | **full-near-black** | staged (16) | `regen-v3/gloom.md` + `round2/gloom-r2.md` (3 sheets, **never arrived**) | `sprite-sheets/gloom.md` |
 
-`Style:`/`Palette:` lines are consistent per-realm boilerplate (e.g. fantasy: *"clean crisp pixel
-art with realistic materials… Palette: naturalistic palette, species-true colors."*; theater:
-*"dense grimy dithered pixel art… Palette: narrow mud-olive palette with drab military tones."*)
-— every realm's full Setting/Style/Palette block is in its `regen-v3/<realm>.md` file, quoted
-into the prompt exactly (§6 clause 5), never re-typed from memory.
+Historical `regen-v3/<realm>.md` `Style:`/`Palette:` lines remain useful evidence (e.g. fantasy:
+*"clean crisp pixel art with realistic materials… Palette: naturalistic palette, species-true
+colors."*; theater: *"dense grimy dithered pixel art… Palette: narrow mud-olive palette with drab
+military tones."*). Do not substitute that shorter boilerplate for the current exact realm
+`Style block:` in `sprite-sheets/<realm>.md`.
 
 ---
 
@@ -343,13 +384,16 @@ source read, not assumed):
    — no flags, it reads the whole `sprite-sheets/` directory and rewrites the manifest). A wholly
    new creature needs a new numbered cell added to the realm's `.md` file first (the parser fails
    loud on numbering gaps).
-2. **Assemble the prompt, quoting §3/§4 verbatim** — never paraphrase. Per SPRITE-GEN-V2.md §10,
+2. **Assemble the prompt, quoting §3/§4 verbatim** — never paraphrase. Format the packet exactly
+   per `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`. Per SPRITE-GEN-V2.md §10,
    in this clause order: (1) subject block — slugs/labels/size bands from the manifest, (2) grid
-   clause — humanoid 4x6 or the §2 ladder tier for the subject's size band, canvas aspect per §3's
-   "canvas aspect = direction hint" rule, (3) perspective clause (quoted above; bug/tiny-creature
+   clause — explicit `gridColumns`, `gridRows`, `cellAspect`, aspect status/reason, and requested
+   canvas chosen for the subject under §2-3, (3) perspective clause (quoted above; bug/tiny-creature
    corollary: worm's-eye ground camera, side/three-quarter profile, "as if photographed by another
-   bug beside it"), (4) proportion clause, (5) style clause — quote the realm's exact `Setting:`/
-   `Style:`/`Palette:` lines from `dev/model-qa/regen-v3/<realm>.md` (§4 table), (6) expression
+   bug beside it"), (4) proportion clause, (5) style clause — quote the realm's exact
+   `Style block:` from `dev/model-qa/sprite-sheets/<realm>.md`, then add any applicable ruled
+   finish/outline clause from this file without paraphrasing (§4 table is historical evidence),
+   (6) expression
    clause (the FFVI standard, SPRITE-GEN-V2.md §10 clause 6), (7) palette clause (§3), (8) swarm
    clause if applicable, (9) chroma clause — the sheet's scan-palette-chosen key (§3 chroma-key
    law).
@@ -405,12 +449,13 @@ source read, not assumed):
    button in the UI POSTs to `/api/regen`, which runs `build/gen-sprite-registry.py` again so
    review rulings fold into `data/sprite-registry.js` without a manual re-run).
 
-### The fantasy-only XL/titan path (creatures 9ft+)
+### The fantasy-only XL/titan paths (historical formatting)
 
-> **Superseded (2026-07-16) for big-creature regen by `build/gen-regenv3-bigboys.py`** — the
-> regen-v3 round-4 path (4:5 cells, biggest-own-sheet, explicit `sprite-sheets/fantasy.md` style;
-> see the 2026-07-16 ruling above). The XL-REGEN generator below is kept for reference/history; new
-> big-creature regen goes through round-4.
+> **Both fixed-format generators are historical for NEW production.** The original XL path was
+> superseded in 2026-07-16 by `build/gen-regenv3-bigboys.py`; that round-4 generator itself still
+> hard-codes the now-retired universal 4:5 assumption. Preserve both for reproducibility, but route
+> any new big-creature packet through `PRODUCTION-FORMAT.md` and the 4:6 provisional comparison
+> until Adam rules exact giant/titanic ratios.
 
 
 Adam's ruling (quoted in `build/gen-xl-regen-sheets.py`'s docstring, 2026-07-09): *"creatures 9'
@@ -518,6 +563,7 @@ palette-conformed. The 10 staged realms are **not** — their palette JSONs are 
 | pc has no style-ref of its own | `STYLE_REF_ALIAS = {"pc": "fantasy"}` in `gen-realm-palettes.py`; pc's palette derives from fantasy's style-ref + pc's own corpus histogram — a deliberate fallback, not a bug, but never separately ruled on | **Adam**, if a distinct PC visual identity is ever wanted |
 | Round-2/3 regen outstanding | cosmic-r2 (15 sheets) and gloom-r2 (3 sheets) "never arrived" per SPRITE-GEN-V2.md §11 — the prompt packets exist (`regen-v3/round2/cosmic-r2.md`, `gloom-r2.md`) but no returned art was ever saved; ash was re-queued as round-3 after its committed corpus proved painterly-drifted | **mechanical** — re-run the existing packets through ImageGen; no new ruling needed |
 | Non-fantasy XL prompt files missing | `build/gen-xl-regen-sheets.py` is hardcoded `REALM = "fantasy"` (verified: no `--realm` flag, `REALM` is a module constant) — creatures 9ft+ in the 10 staged/parked realms have no titan/XL 2x regen path at all | **mechanical** — generalize the script to take a realm argument |
+| Fixed-aspect big-creature generator is historical | `build/gen-regenv3-bigboys.py` reproduces the 2026-07-16 all-4:5 packet and cannot express the 2026-07-24 subject-dependent/provisional giant-titanic aspect ruling | **mechanical after taste evidence** — modernize it against `sprite-sheets/PRODUCTION-FORMAT.md` once comparative captures lock exact ratios |
 | MC-1 magenta-crud cleanup | Named in DESIGN.md's 2026-07-15 PIXEL-FIRST entry ("MC-1 magenta-crud cleanup fires on the live pixel corpus") as the follow-up to Adam's "get the magenta crud cleaned up" ruling — **not yet run**: no matching entry in CHANGELOG.md or NEXT-STEPS.md as of this doc | **mechanical** — ruled, queued, not yet executed |
 | Staged realms aren't palette-conformed | See §7 step 3 — all 10 staged realms' palette JSONs report 0 corpus pixels sampled; `unify-corpus.py` has never touched them because they're not registry-`"cut"` yet | **mechanical**, sequenced after Runbook B's rename/join steps |
 | `unify-corpus.py` has no per-realm scope | Reprocesses every `status:"cut"` entry each run — fine at 2 live realms, will re-touch fantasy+pc's already-conformed files every time a 3rd realm folds in | **mechanical** — add a `--realm` filter before the first realm-fold lands |
@@ -527,6 +573,8 @@ palette-conformed. The 10 staged realms are **not** — their palette JSONs are 
 
 ## 10. Findability
 
-Cross-linked from `docs/README.md`'s index and `docs/HANDOFF.md`'s graphics-authority block
-(both edited in this same change, one line each) — per Adam's ruling, this file and its style
-authorities should never require archaeology to find again.
+Cross-linked from `docs/README.md`'s index and `docs/HANDOFF.md`'s graphics-authority block.
+The preferred batch-packet contract is
+`dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`; the realm packet index links it first. Per
+Adam's ruling, this file and its style/format authorities should never require archaeology to
+find again.

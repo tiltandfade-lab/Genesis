@@ -7,7 +7,14 @@ realm: cosmic
 
 # Sprite Batch Prompts — Cosmic (Egyptian / Hermetic / Enochian — true names, seals, sacred geometry)
 
-**Not canon** (see `sprite-sheet-prompts.md` for the full disclaimer + shared template). This
+> **Production-format authority (2026-07-24):** The packet grammar demonstrated here is the
+> preferred grammar for new sprite production. Use [`PRODUCTION-FORMAT.md`](PRODUCTION-FORMAT.md)
+> for current grid, cell-aspect, canvas, QA, and receipt fields. Any `5×5` / `25 cells` value
+> below is historical batch data, not a universal default. The `4:5` / `4:6 acceptable` language
+> below is likewise batch history; current character default is `4:5`, while giant/titanic `4:6`
+> remains a provisional test candidate.
+
+**Roster/content status: working, not canon.** This
 file batches EVERY creature in the Cosmic realm bestiary (117 monsters) plus a
 themed NPC roster (43 roles, drawn from the game's own NPC Role Spine + this realm's
 skin/adds) into 25-per-sheet ChatGPT prompts. Names + flavor are pulled verbatim from the live

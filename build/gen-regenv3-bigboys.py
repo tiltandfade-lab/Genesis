@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Genesis build — generate the ROUND-4 regen-v3 "big boys" packet (Adam 2026-07-16).
+"""HISTORICAL Genesis build — reproduce ROUND-4 regen-v3 "big boys" (Adam 2026-07-16).
+
+Do not use this generator's fixed layouts or blanket 4:5 cells to plan new production. The
+successful "biggest creatures get their own sheet" finding remains current; new packet format
+and subject-based cell aspect live in dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md. Character
+cells generally begin at 4:5. Giant/titanic 4:6 is a provisional test candidate, not yet locked.
 
 Reworks the XL/titan regen into the PROVEN regen-v3 per-realm sheet architecture, with
 Adam's two corrections:

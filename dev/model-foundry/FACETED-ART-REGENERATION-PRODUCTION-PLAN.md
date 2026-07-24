@@ -6,6 +6,10 @@
 **Primary operator:** a lower-cost Codex/model runner following this document literally  
 **Visual target:** mature, ornate, large-faceted polygonal fantasy art; never fake pixel art
 
+> **Scope note (2026-07-24):** This plan belongs to the faceted RESERVE/prop-construction lane.
+> Its controlled 1×4 identity-strip allowance is not the format for new live pixel batches.
+> Those use `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`, with dynamic subject-based aspect.
+
 ## 1. Purpose
 
 This document is a complete operating procedure for regenerating Genesis art into the approved

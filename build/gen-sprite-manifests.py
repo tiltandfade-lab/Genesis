@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Genesis build — generate ChatGPT-ready sprite-sheet prompt manifests from data/bestiary.js.
+"""HISTORICAL Genesis build — reproduce the retired fixed 6x6 sprite packet from the bestiary.
+
+Do not use this generator to plan new production. Its 6x6/36-cell output and single-hero format
+are retained only for exact historical reproduction. New packets follow
+dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md and must choose grid density and cell aspect for
+the subject.
 
 docs/BATTLE-THEATER.md §3 needs low-poly-era 2D creature art (a T2-sprites fallback/pack
 alternative) sourced the same way Adam's earlier art passes work: he pastes a fixed-format

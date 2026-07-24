@@ -4,6 +4,11 @@
 
 Reference-only generation. No registry, slicing, or runtime wiring.
 
+> **Format superseded 2026-07-24:** The fixed 1×4 recommendation below records this reference
+> spread only. It is not live production law. New pixel batches use
+> `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`, with grid and cell aspect declared separately
+> and aspect selected for the subject.
+
 ## New references
 
 ![Children](references/kids-1x4-bestiary-adjacent.png)
@@ -25,7 +30,7 @@ Reference-only generation. No registry, slicing, or runtime wiring.
 
 - Keep visible triangular low-poly planes; do not smooth them away.
 - Use mature proportions and severe/readable silhouettes.
-- Use the 1×4 horizontal layout for future sprite prompts.
+- Historical spread layout: 1×4 horizontal. Do not copy it as a universal future format.
 - Keep one subject per generous cell with narrow-base readability.
 - Use green chroma key for ordinary matte/cloth/stone subjects.
 - Do not use green chroma key for Chrome subjects with cyan/acid-green reflective surfaces; use a magenta key or another validated key color instead.

@@ -1,15 +1,19 @@
 ---
 type: scratch
-status: experimental
+status: HISTORICAL — roster/style research retained; production formatting superseded 2026-07-24
 created: 2026-07-09
 ---
 
 # Sprite Sheet Prompt Test — 2026-07-09
 
-**Not canon.** Genesis's ruled art direction is low-poly PS1-style 3D models
-(`docs/MODEL-FOUNDRY.md`); sprites were retired earlier in favor of that pipeline. This is
-Adam testing whether a 2D sprite-sheet lens is worth a second look — ChatGPT image-gen prompts
-only, no engine wiring implied.
+> **Do not use this as a new production template.** Its obsolete "sprites were retired" claim and
+> fixed 5×5 assumption are historical. The live pixel register is `docs/ART-DEPARTMENT.md`; the
+> preferred packet grammar derived from the successful realm documents is
+> `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`.
+
+This was Adam's original test of whether a 2D sprite-sheet lens was worth a second look. Its
+realm-style research and returned-art provenance remain useful, but later rulings supersede its
+pipeline status and universal numeric format.
 
 **Format:** each sheet is a 5×5 grid of **25 different monsters**, one static expressive-pose
 sprite per cell — not an animation cycle, not the same creature 25 times. Creature names +

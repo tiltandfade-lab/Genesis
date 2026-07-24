@@ -176,11 +176,16 @@ sprite, larger and often semi-transparent).
 
 ### Sheet plan
 
-Follow the existing per-realm `.md` sheet convention (`dev/model-qa/sprite-sheets/*.md`: 5×5 grid,
-25 cells, one style block per realm, magenta background, uniform scale) — but setting sprites are
-**flat/pictorial, not creature poses**, so each sheet gets its own style block emphasizing
-"flat graphic asset, front-on, no perspective foreshortening, transparent/magenta-keyed background,
-readable as a small billboard element" in place of the creature sheets' "mid-action pose" language.
+Follow the preferred per-realm packet grammar in
+`dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`: one exact Style block, a complete mechanical
+block, named sheet sections, explicit `gridColumns`, `gridRows`, `cellAspect`, and canvas pixels,
+then numbered row-major cells. The older `5×5` / `25 cells` realm packets are historical batch
+values, not the default for this queue. Setting sprites are **flat/pictorial, not creature
+poses**, so each sheet chooses a truthful mounted-shape/effect-body cell aspect and gets its own
+style block emphasizing "flat graphic asset, front-on, no perspective foreshortening,
+transparent/magenta-keyed background, readable as a small billboard element" in place of the
+creature sheets' "mid-action pose" language. Do not inherit character `4:5` or provisional
+giant/titanic `4:6` merely because those ratios exist.
 
 - **`signs-frontier` (12 cells):** hanging shingles (4 trade icons) + painted boards (3) + wanted
   poster (1) + ancestor portrait (1) + window-glow warm (2) + fog wisp (1, cross-realm-eligible).

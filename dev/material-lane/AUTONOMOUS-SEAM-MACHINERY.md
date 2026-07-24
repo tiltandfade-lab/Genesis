@@ -142,9 +142,15 @@ canvas_width  % x_step == 0
 canvas_height % y_step == 0
 ```
 
-5. Ensure every variant-cycle period divides the resulting row/column counts.
-6. Render a 3x3 uninterrupted field using one global draw order.
-7. Crop the central period as the final tile.
+5. Build a seeded variant grid whose dimensions exactly match the toroidal tile grid.
+6. Balance component usage and reject identical horizontal or vertical neighbours, including
+   neighbours across the wrapped boundaries.
+7. Keep every authored component upright: never rotate or flip a directional construction unit.
+8. Render a 3x3 uninterrupted field using the physical course draw order. For slate, lower
+   courses are laid first and upper courses overlap them so every rounded exposed edge remains
+   visibly downward.
+9. Crop the central period, then resize it to the declared delivery dimensions with
+   nearest-neighbour sampling.
 
 The “render a larger uninterrupted field, then crop the center” rule is essential for overlapping
 units. Drawing wrapped units directly onto one tile can reorder the first and last courses. That
@@ -160,15 +166,24 @@ created the rejected horizontal slate band exposed by the corrected proof board.
 | Columns | 6 |
 | Rows | 8 |
 | Stagger | 48 |
-| Component variant period | 2 columns x 2 rows |
+| Component library | 16 upright pieces (4 x 4 source sheet) |
+| Variant-grid period | 6 columns x 8 rows |
+| Variant seed | 73129 |
+| Working size | 576 x 576 |
+| Delivery size | 512 x 512 |
 
-Six columns and eight rows both preserve the two-step variant cycles.
+The full 6 x 8 variant grid is the repeat period. Its deterministic seeded assignment is balanced
+to within two uses per component and rejects identical orthogonal neighbours on the torus. This
+produces natural-looking variation without sacrificing exact repeat closure.
 
 ### Modular acceptance
 
 - Both grid dimensions divide the canvas exactly.
 - Variant periods close on both axes.
+- Directional components remain upright with their exposed edge facing the declared direction.
+- Variant distribution is balanced and has no identical orthogonal neighbours.
 - Global layer order is identical across tile boundaries.
+- Final output dimensions equal the receipt's declared delivery dimensions.
 - Boundary jumps are ordinary relative to internal transitions.
 - Copper-marked joins show no special row, column, gap, overlap, or value band.
 
@@ -233,7 +248,14 @@ boolean proof in the receipt and rejects any false value.
 The original proof board compressed a square repeat into a 3:1 rectangle. That board and every
 conclusion based on it were invalid. Aspect locking is now executable policy.
 
-### 5. Process exit
+### 5. Delivery-dimension integrity gate
+
+The topology workspace and delivery sprite may have different sizes. Every adapter must apply the
+declared nearest-neighbour delivery resize before writing its final tile. The builder and receipt
+must agree with the actual pixel dimensions of every emitted final tile. A technically seamless
+576px working canvas may not be reported or promoted as a 512px delivery asset.
+
+### 6. Process exit
 
 `build-autonomous-seam-proof.py` exits non-zero when a proven adapter misses any required
 technical gate. A receipt containing the word `PASS` is not sufficient if the process itself did

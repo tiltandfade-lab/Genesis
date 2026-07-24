@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "workflow": "ImageGen appearance -> deterministic sprite topology -> MM later",
+  "working_topology_size": [
+    576,
+    576
+  ],
+  "output_size": [
+    512,
+    512
+  ],
+  "gate": {
+    "boundary_jump_rule": "boundary RMS must not exceed 110% of the 95th percentile of ordinary internal adjacent-pixel jumps; the 10% allowance accounts only for final nearest-neighbour export quantization",
+    "topology_rule": "construction periods must close exactly over the output dimensions",
+    "construction_cadence_rule": "a period-aware construction material must retain a dark crevice feature at both circular boundaries; raw board-width variation is recorded but not treated as a missing-joint failure",
+    "visual_proof": "3x3 repeat outputs are mandatory",
+    "proof_board_rule": "every final-tile and repeat preview must remain aspect-locked at 1:1; the build exits non-zero on distortion",
+    "delivery_dimension_rule": "every final tile's actual pixel dimensions must equal the declared output_size before files or receipts are written"
+  },
+  "materials": {
+    "plank": {
+      "method": "detected crevice-to-crevice construction period plus top/bottom-only edge lock",
+      "source": "dev/material-lane/source-sprites/b01-autonomous-v001/roof-plank-batten-source-v004.png",
+      "crop": {
+        "x": 14,
+        "y": 264,
+        "width": 990,
+        "height": 990
+      },
+      "construction_boundaries": {
+        "left_crevice_x": 14,
+        "right_crevice_x": 1004
+      },
+      "top_bottom_repair_band_source_pixels": 64,
+      "metrics": {
+        "legacy_left_right_rms": 7.854,
+        "legacy_top_bottom_rms": 0.0,
+        "internal_x_jump_p95": 28.319,
+        "internal_y_jump_p95": 3.981,
+        "x_boundary_to_internal_p95": 0.277,
+        "y_boundary_to_internal_p95": 0.0,
+        "boundary_jump_gate": true
+      },
+      "construction_cadence": {
+        "detected_crevices": 13,
+        "median_circular_gap": 21.0,
+        "largest_circular_gap": 111.0,
+        "largest_to_median_gap": 5.286,
+        "left_boundary_feature_min": 35.088,
+        "right_boundary_feature_min": 69.811,
+        "boundary_feature_cutoff": 124.946,
+        "cadence_gate": true
+      },
+      "status": "PASS"
+    },
+    "slate": {
+      "method": "ImageGen sprite units assembled on an exact toroidal grid",
+      "component_sheet": "dev/material-lane/source-sprites/b01-autonomous-v004/roof-slate-components-alpha-v002.png",
+      "grid": {
+        "canvas": [
+          576,
+          576
+        ],
+        "x_step": 96,
+        "y_step": 72,
+        "columns": 6,
+        "rows": 8,
+        "stagger": 48,
+        "component_columns": 4,
+        "component_rows": 4,
+        "variant_seed": 73129,
+        "variant_grid": [
+          [
+            13,
+            8,
+            12,
+            0,
+            8,
+            15
+          ],
+          [
+            14,
+            0,
+            15,
+            3,
+            5,
+            4
+          ],
+          [
+            7,
+            11,
+            14,
+            9,
+            13,
+            11
+          ],
+          [
+            5,
+            3,
+            7,
+            2,
+            6,
+            9
+          ],
+          [
+            10,
+            2,
+            1,
+            13,
+            7,
+            14
+          ],
+          [
+            4,
+            3,
+            8,
+            1,
+            10,
+            0
+          ],
+          [
+            10,
+            5,
+            9,
+            6,
+            2,
+            15
+          ],
+          [
+            12,
+            11,
+            14,
+            7,
+            4,
+            9
+          ]
+        ],
+        "variant_counts": [
+          3,
+          2,
+          3,
+          3,
+          3,
+          3,
+          2,
+          4,
+          3,
+          4,
+          3,
+          3,
+          2,
+          3,
+          4,
+          3
+        ]
+      },
+      "topology_proof": {
+        "width_divisible_by_x_step": true,
+        "height_divisible_by_y_step": true,
+        "variant_grid_period_matches_tile_rows": true,
+        "variant_grid_period_matches_tile_columns": true,
+        "variant_distribution_is_balanced": true,
+        "all_components_keep_authored_rounded_edge_down": true,
+        "components_are_never_rotated_or_flipped": true,
+        "course_draw_order_preserves_visible_downward_edges": true,
+        "variant_grid_closes_on_both_axes": true,
+        "no_identical_horizontal_or_vertical_neighbors": true
+      },
+      "metrics": {
+        "legacy_left_right_rms": 5.598,
+        "legacy_top_bottom_rms": 20.734,
+        "internal_x_jump_p95": 25.339,
+        "internal_y_jump_p95": 24.218,
+        "x_boundary_to_internal_p95": 0.221,
+        "y_boundary_to_internal_p95": 0.856,
+        "boundary_jump_gate": true
+      },
+      "status": "PASS"
+    }
+  },
+  "outputs": {
+    "plank": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-plank.png",
+    "plank_repeat": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-plank-repeat-3x3.png",
+    "slate": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-slate.png",
+    "slate_repeat": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-slate-repeat-3x3.png",
+    "board": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-board.png"
+  }
+}

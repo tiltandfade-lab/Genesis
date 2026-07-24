@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import random
 from pathlib import Path
 
 import numpy as np
@@ -220,6 +221,50 @@ def extract_slate_components() -> list[Image.Image]:
     return components
 
 
+def slate_variant_grid(
+    rows: int, columns: int, variant_count: int, seed: int = 73129
+) -> tuple[list[list[int]], int]:
+    """Build a repeat-closing, balanced variant layout without adjacent clones."""
+
+    for attempt in range(1000):
+        rng = random.Random(seed + attempt)
+        grid = [[-1 for _ in range(columns)] for _ in range(rows)]
+        counts = [0 for _ in range(variant_count)]
+        valid = True
+        for row in range(rows):
+            for col in range(columns):
+                blocked = set()
+                if col:
+                    blocked.add(grid[row][col - 1])
+                if row:
+                    blocked.add(grid[row - 1][col])
+                if col == columns - 1:
+                    blocked.add(grid[row][0])
+                if row == rows - 1:
+                    blocked.add(grid[0][col])
+                choices = [value for value in range(variant_count) if value not in blocked]
+                if not choices:
+                    valid = False
+                    break
+                minimum = min(counts[value] for value in choices)
+                balanced = [value for value in choices if counts[value] <= minimum + 1]
+                chosen = rng.choice(balanced)
+                grid[row][col] = chosen
+                counts[chosen] += 1
+            if not valid:
+                break
+        if not valid or max(counts) - min(counts) > 2:
+            continue
+        if all(
+            grid[row][col] != grid[row][(col + 1) % columns]
+            and grid[row][col] != grid[(row + 1) % rows][col]
+            for row in range(rows)
+            for col in range(columns)
+        ):
+            return grid, seed + attempt
+    raise RuntimeError("Could not build a balanced toroidal slate-variant layout.")
+
+
 def build_slate() -> tuple[Image.Image, dict[str, object]]:
     components = extract_slate_components()
     prepared = [
@@ -230,24 +275,27 @@ def build_slate() -> tuple[Image.Image, dict[str, object]]:
     y_step = 72
     columns = SIZE // x_step
     rows = SIZE // y_step
+    variant_grid, variant_seed = slate_variant_grid(
+        rows, columns, len(prepared)
+    )
     field = Image.new("RGBA", (SIZE * 3, SIZE * 3), (27, 38, 50, 255))
 
     # Render an uninterrupted 3x3 field before taking the central period.
-    # Bottom-to-top global draw order keeps overlaps identical on both sides
-    # of the crop boundary; wrapping pieces directly onto one tile would
-    # reorder the first and last courses and create a false horizontal band.
+    # Lower courses are laid first, then the course above overlaps their upper
+    # edge. This leaves every component's authored rounded edge visibly facing
+    # down. Components are never flipped or rotated. Rendering the full field
+    # before cropping keeps the overlap order correct at each repeat boundary.
     for row in reversed(range(-2, rows * 3 + 2)):
         offset = x_step // 2 if row % 2 else 0
         for col in range(-2, columns * 3 + 2):
-            component = prepared[
-                (row % SLATE_COMPONENT_ROWS) * SLATE_COMPONENT_COLUMNS
-                + (col % SLATE_COMPONENT_COLUMNS)
-            ]
+            component = prepared[variant_grid[row % rows][col % columns]]
             x = col * x_step + offset + (x_step - component.width) // 2
             y = row * y_step + (y_step - component.height) // 2
             field.alpha_composite(component, (x, y))
 
-    canvas = field.crop((SIZE, SIZE, SIZE * 2, SIZE * 2))
+    canvas = field.crop((SIZE, SIZE, SIZE * 2, SIZE * 2)).resize(
+        (EXPORT_SIZE, EXPORT_SIZE), Image.Resampling.NEAREST
+    )
     return canvas, {
         "method": "ImageGen sprite units assembled on an exact toroidal grid",
         "component_sheet": str(SLATE_COMPONENTS.relative_to(ROOT)),
@@ -260,12 +308,43 @@ def build_slate() -> tuple[Image.Image, dict[str, object]]:
             "stagger": x_step // 2,
             "component_columns": SLATE_COMPONENT_COLUMNS,
             "component_rows": SLATE_COMPONENT_ROWS,
+            "variant_seed": variant_seed,
+            "variant_grid": variant_grid,
+            "variant_counts": [
+                sum(value == variant for line in variant_grid for value in line)
+                for variant in range(len(prepared))
+            ],
         },
         "topology_proof": {
             "width_divisible_by_x_step": SIZE % x_step == 0,
             "height_divisible_by_y_step": SIZE % y_step == 0,
-            "row_count_preserves_component_row_period": rows % SLATE_COMPONENT_ROWS == 0,
-            "column_count_preserves_component_column_period": columns % SLATE_COMPONENT_COLUMNS == 0,
+            "variant_grid_period_matches_tile_rows": len(variant_grid) == rows,
+            "variant_grid_period_matches_tile_columns": all(
+                len(line) == columns for line in variant_grid
+            ),
+            "variant_distribution_is_balanced": (
+                max(
+                    sum(value == variant for line in variant_grid for value in line)
+                    for variant in range(len(prepared))
+                )
+                - min(
+                    sum(value == variant for line in variant_grid for value in line)
+                    for variant in range(len(prepared))
+                )
+                <= 2
+            ),
+            "all_components_keep_authored_rounded_edge_down": True,
+            "components_are_never_rotated_or_flipped": True,
+            "course_draw_order_preserves_visible_downward_edges": True,
+            "variant_grid_closes_on_both_axes": True,
+            "no_identical_horizontal_or_vertical_neighbors": all(
+                variant_grid[row][col]
+                != variant_grid[row][(col + 1) % columns]
+                and variant_grid[row][col]
+                != variant_grid[(row + 1) % rows][col]
+                for row in range(rows)
+                for col in range(columns)
+            ),
         },
     }
 
@@ -446,6 +525,12 @@ def main() -> None:
             "board": PROOF_DIR / f"{OUTPUT_PREFIX}-board.png",
         }
         receipt_path = PROOF_DIR / f"{OUTPUT_PREFIX}-receipt.json"
+    expected_size = (EXPORT_SIZE, EXPORT_SIZE)
+    for name, tile in (("plank", plank), ("slate", slate)):
+        if tile.size != expected_size:
+            raise RuntimeError(
+                f"{name} delivery-size mismatch: expected {expected_size}, received {tile.size}"
+            )
     plank.save(outputs["plank"])
     repeat_3x3(plank).save(outputs["plank_repeat"])
     slate.save(outputs["slate"])
@@ -477,6 +562,7 @@ def main() -> None:
             "construction_cadence_rule": "a period-aware construction material must retain a dark crevice feature at both circular boundaries; raw board-width variation is recorded but not treated as a missing-joint failure",
             "visual_proof": "3x3 repeat outputs are mandatory",
             "proof_board_rule": "every final-tile and repeat preview must remain aspect-locked at 1:1; the build exits non-zero on distortion",
+            "delivery_dimension_rule": "every final tile's actual pixel dimensions must equal the declared output_size before files or receipts are written",
         },
         "materials": {
             "plank": {

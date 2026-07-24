@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-SLATE-V006",
+  "status": "TECHNICAL-SOURCE-PASS / TASTE-APPROVED",
+  "workflow": "ImageGen component library -> chroma-key alpha extraction -> deterministic toroidal assembly -> taste approval -> MM",
+  "generation": {
+    "mode": "built-in ImageGen",
+    "referenceSources": [
+      "dev/material-lane/source-sprites/b01-timber-roof-v001/roof-slate-source-v001.png",
+      "dev/material-lane/source-sprites/b01-timber-roof-v001/roof-slate-source-v002.png",
+      "dev/material-lane/source-sprites/b01-timber-roof-v001/roof-slate-source-v003.png"
+    ],
+    "prompt": "Create exactly sixteen separate individual hand-cut blue-grey slate roofing tile sprites in a clean 4-column by 4-row component sheet, matching the supplied large slate-roof sprites' grounded pixel art, restrained dither, and subtle within-family color variation. Every tile must be upright in the same orientation: straight or squared attachment edge at the top and visibly rounder, scalloped, or softly irregular exposed edge at the bottom. No tile may be upside down, sideways, rotated, mirrored, diamond-shaped, or pointed upward. Use a perfectly flat solid #00ff00 chroma-key background with no shadows, gradients, texture, grid lines, or cell borders. Keep one isolated slate centered in each implied cell at equal approximate scale with generous separation. Use a coherent dark blue-grey family with narrow natural variation across cool charcoal, smoky blue-grey, muted steel-blue, and a few slightly lighter weathered pieces; avoid a harsh checkerboard. Use broad quiet slate planes, slight handmade silhouette variation, and sparse mineral texture. Exactly 16 slates; neutral local albedo; no cast shadow, ambient occlusion, bevel lighting, vignette, labels, text, watermark, mortar, roof field, cracks, moss, damage story, or extra objects."
+  },
+  "componentSources": {
+    "chroma": {
+      "path": "dev/material-lane/source-sprites/b01-autonomous-v004/roof-slate-components-chroma-v002.png",
+      "sha256": "532d733ae9be8734bd70bb062d53b65314d00bae80a8e2efb40309f25929e1f6"
+    },
+    "alpha": {
+      "path": "dev/material-lane/source-sprites/b01-autonomous-v004/roof-slate-components-alpha-v002.png",
+      "sha256": "e7f0094fe9e6b8e2e1cb64e35471db9e739c7c1b25236bdcc46d1557c9c684d1",
+      "extraction": "remove_chroma_key.py --auto-key border --soft-matte --transparent-threshold 12 --opaque-threshold 220 --despill",
+      "validation": "RGBA; 1254x1254; all four corners alpha 0; opaque coverage 0.4928"
+    }
+  },
+  "assembly": {
+    "script": "dev/material-lane/build-autonomous-seam-proof.py",
+    "componentGrid": [4, 4],
+    "variantSeed": 73129,
+    "rules": [
+      "components are never rotated or flipped",
+      "rounded exposed edges remain visibly downward",
+      "variant distribution is balanced",
+      "identical variants may not touch horizontally or vertically",
+      "the variant grid and geometry close on both repeat axes"
+    ],
+    "receipt": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-receipt.json",
+    "workingSize": [576, 576],
+    "deliverySize": [512, 512],
+    "deliveryResize": "nearest-neighbour after topology construction"
+  },
+  "acceptedSource": {
+    "path": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-slate.png",
+    "sha256": "3a2e4a7dc4bd83693c5040e709c5fd738e67465b6f4229e5d6f9e66c55f3fa3f",
+    "repeatProof": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-slate-repeat-3x3.png",
+    "repeatProofSha256": "cd03142ed63631a3ebf3730674d867503c5f665fdfc85c967d4f52b9baf9ef90",
+    "technicalGate": "PASS",
+    "tasteGate": "APPROVED"
+  }
+}

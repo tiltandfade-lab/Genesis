@@ -86,3 +86,19 @@ MM 1.3 graphs, deterministic two-run export receipt, and verification report are
 `../material-cards/b01-autonomous-p1-mm-v001.html`. Albedo remains the approved source sprite;
 MM derives broad height, normal, AO, roughness, and zero metallic only. The other Batch 1 families
 remain pending their adapter/source pass.
+
+## Slate replacement checkpoint — 2026-07-24
+
+The original six-component slate was rejected after review because its course read could appear
+inverted and its rigid component order produced an artificial color pattern. The replacement uses
+a sixteen-component ImageGen library with every authored rounded edge facing down. A seeded,
+balanced toroidal variant grid closes on both axes, never rotates or flips a component, and forbids
+identical horizontal or vertical neighbours.
+
+The user-approved appearance was normalized from its 576px topology workspace to the truthful
+512px delivery asset `proofs/b01-autonomous-v006/b01-autonomous-v006-slate.png`. Its source record
+is `manifests/b01-autonomous-slate-v006.source.json`. The replacement MM graph and two-run receipts
+are `graphs/b01-autonomous-slate-mm-v002/`,
+`receipts/b01-autonomous-slate-mm-v002-export-receipt.json`, and
+`receipts/b01-autonomous-slate-mm-v002-verification.json`. The replacement is
+**TECHNICAL-SOURCE-PASS / TASTE-APPROVED / MM-PASS** and supersedes the v001 slate material.

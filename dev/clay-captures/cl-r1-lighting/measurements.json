@@ -1,0 +1,206 @@
+{
+  "dev/clay-captures/cl-r1-lighting/neutral-02-settled.png": {
+    "size": [
+      2560,
+      1440
+    ],
+    "regions": {
+      "full": {
+        "pixels": 3686400,
+        "meanLuma": 38.85,
+        "medianLuma": 24.94,
+        "p05Luma": 20.23,
+        "p95Luma": 65.64,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.01,
+        "meanSaturation": 87.13,
+        "meanChromaSpread": 14.92,
+        "neutralPct": 45.11
+      },
+      "floor": {
+        "pixels": 76483,
+        "meanLuma": 59.29,
+        "medianLuma": 65.64,
+        "p05Luma": 22.3,
+        "p95Luma": 65.64,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 42.09,
+        "meanChromaSpread": 8.45,
+        "neutralPct": 85.22
+      },
+      "sprite": {
+        "pixels": 84992,
+        "meanLuma": 64.47,
+        "medianLuma": 65.64,
+        "p05Luma": 64.64,
+        "p95Luma": 65.64,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 15.63,
+        "meanChromaSpread": 3.79,
+        "neutralPct": 98.12
+      },
+      "crate": {
+        "pixels": 218530,
+        "meanLuma": 59.94,
+        "medianLuma": 65.64,
+        "p05Luma": 21.37,
+        "p95Luma": 65.64,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 36.85,
+        "meanChromaSpread": 7.37,
+        "neutralPct": 88.2
+      },
+      "doorframe": {
+        "pixels": 97290,
+        "meanLuma": 39.57,
+        "medianLuma": 26.72,
+        "p05Luma": 20.29,
+        "p95Luma": 116.43,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 44.99,
+        "meanChromaSpread": 7.38,
+        "neutralPct": 55.71
+      }
+    }
+  },
+  "dev/clay-captures/cl-r1-lighting/diagnostic-02-settled.png": {
+    "size": [
+      2560,
+      1440
+    ],
+    "regions": {
+      "full": {
+        "pixels": 3686400,
+        "meanLuma": 36.57,
+        "medianLuma": 22.86,
+        "p05Luma": 20.23,
+        "p95Luma": 119.15,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.03,
+        "meanSaturation": 97.65,
+        "meanChromaSpread": 19.47,
+        "neutralPct": 35.04
+      },
+      "floor": {
+        "pixels": 76483,
+        "meanLuma": 21.49,
+        "medianLuma": 21.43,
+        "p05Luma": 21.21,
+        "p95Luma": 22.3,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 51.05,
+        "meanChromaSpread": 7.53,
+        "neutralPct": 85.12
+      },
+      "sprite": {
+        "pixels": 84992,
+        "meanLuma": 83.75,
+        "medianLuma": 78.96,
+        "p05Luma": 21.43,
+        "p95Luma": 165.94,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 134.8,
+        "meanChromaSpread": 67.9,
+        "neutralPct": 15.65
+      },
+      "crate": {
+        "pixels": 218530,
+        "meanLuma": 64.66,
+        "medianLuma": 54.23,
+        "p05Luma": 21.16,
+        "p95Luma": 142.02,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 60.91,
+        "meanChromaSpread": 17.19,
+        "neutralPct": 29.97
+      },
+      "doorframe": {
+        "pixels": 97290,
+        "meanLuma": 39.57,
+        "medianLuma": 26.72,
+        "p05Luma": 20.29,
+        "p95Luma": 116.43,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 44.99,
+        "meanChromaSpread": 7.38,
+        "neutralPct": 55.71
+      }
+    }
+  },
+  "dev/clay-captures/cl-r1-lighting/torch-02-settled.png": {
+    "size": [
+      2560,
+      1440
+    ],
+    "regions": {
+      "full": {
+        "pixels": 3686400,
+        "meanLuma": 30.52,
+        "medianLuma": 24.94,
+        "p05Luma": 17.88,
+        "p95Luma": 63.07,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.069,
+        "meanSaturation": 103.07,
+        "meanChromaSpread": 16.73,
+        "neutralPct": 27.41
+      },
+      "floor": {
+        "pixels": 76483,
+        "meanLuma": 23.29,
+        "medianLuma": 26.63,
+        "p05Luma": 7.28,
+        "p95Luma": 26.63,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 91.22,
+        "meanChromaSpread": 11.56,
+        "neutralPct": 17.4
+      },
+      "sprite": {
+        "pixels": 84992,
+        "meanLuma": 34.56,
+        "medianLuma": 27.99,
+        "p05Luma": 10.2,
+        "p95Luma": 81.66,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 126.47,
+        "meanChromaSpread": 26.3,
+        "neutralPct": 0.44
+      },
+      "crate": {
+        "pixels": 218530,
+        "meanLuma": 22.21,
+        "medianLuma": 26.63,
+        "p05Luma": 6.64,
+        "p95Luma": 26.63,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.315,
+        "meanSaturation": 88.57,
+        "meanChromaSpread": 10.15,
+        "neutralPct": 27.75
+      },
+      "doorframe": {
+        "pixels": 97290,
+        "meanLuma": 39.57,
+        "medianLuma": 26.72,
+        "p05Luma": 20.29,
+        "p95Luma": 116.43,
+        "clippedHighlightPct": 0.0,
+        "crushedShadowPct": 0.0,
+        "meanSaturation": 44.99,
+        "meanChromaSpread": 7.38,
+        "neutralPct": 55.71
+      }
+    }
+  }
+}

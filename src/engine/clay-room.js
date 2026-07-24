@@ -30,35 +30,9 @@
    dungeon segment once C1B's move/preview-commit work gives this room somewhere to be rolled FROM.
 */
 
-// ─── CLAY_C1A_LIGHT_PROFILE (D4, wave-12 founder rider P12.12-R1) ─────────────────────────────
-// Two points at two different color temperatures on OPPOSING sides of the room + one low ambient.
-// Shape mirrors LIGHT_PROFILES' own per-profile entries (src/ui/theater-boot.js ~6234-6280) —
-// `points[].pos` is a board-relative FRACTION (that file's own header: resolved against
-// S.boardHalfX/boardHalfZ), `points[].color`/`intensity` are plain THREE.PointLight args — so
-// whichever mechanism ends up consuming this (see docs/C1A-CLAY-ROOM.md D4 + the theater-boot.js
-// wire-in's own report) can treat it exactly like any other authored profile. Hex colors match the
-// two precedent profiles the spec names verbatim: warm 0xffa04a is torchlit's own point color
-// (theater-boot.js:6236), cool 0xaebfe8 is moonlit's own point color (theater-boot.js:6265);
-// intensities (16/9) sit in the same order as those two profiles' own points (18/8). Ambient is
-// authored at 0.18 (<=0.25, the D4 ceiling) — see the wire-in report for how this authored value
-// survives (or is superseded by) the interior channel's own readability floor.
-var CLAY_C1A_LIGHT_PROFILE = Object.freeze({
-  points: Object.freeze([
-    Object.freeze({
-      id: "clay-west-warm", side: "west", color: 0xffa04a, intensity: 16,
-      state: "steady",
-      flicker: Object.freeze({ seed: "clay-c1a:west-warm", amplitude: 0.12, cadenceMs: 480 }),
-      pos: Object.freeze({ x: -0.8, y: 1.7, z: 0 })
-    }),
-    Object.freeze({
-      id: "clay-east-cool", side: "east", color: 0xaebfe8, intensity: 9,
-      state: "steady",
-      flicker: Object.freeze({ seed: "clay-c1a:east-cool", amplitude: 0.12, cadenceMs: 480 }),
-      pos: Object.freeze({ x: 0.8, y: 1.7, z: 0 })
-    })
-  ]),
-  ambient: Object.freeze({ color: 0xffffff, intensity: 0.18 })
-});
+// CL-R1 lighting recipes no longer live in this fixture. The compatibility symbol
+// CLAY_C1A_LIGHT_PROFILE is projected by src/engine/light-recipes.js from the same
+// compiled lock that seeds the Light Lab.
 
 /* ─── CL-R0 — CLAY_DIAGNOSTIC_SURFACE_RECIPE (docs/CLAYROOM-RESET-LADDER.md §CL-R0) ───────────────
    The diagnostic-clay surface selection is DATA, not renderer code. The renderer executes routes;
@@ -492,8 +466,9 @@ function clayRoomDoorEdgeFor(door, room){
 // board.dressing are left EMPTY (never hand-built) — see the door-leaf note in this function's body
 // and this unit's own build report for why, and CLAUDE.md's "an untagged/exempt/red state that tells
 // the truth beats a green that lies" for why that gap is reported, not patched.
-function clayRoomBoardFrom(record){
+function clayRoomBoardFrom(record, opts){
   if(!record) throw new Error("clayRoomBoardFrom: record required");
+  opts = opts || {};
   var doSpatialize = (typeof spatializePlan !== "undefined") ? spatializePlan : null;
   var doBuildBoard = (typeof interiorBuildBoard !== "undefined") ? interiorBuildBoard : null;
   if(!doSpatialize) throw new Error("clayRoomBoardFrom: spatializePlan is not loaded (src/engine/place-spatialize.js must load before this call)");
@@ -557,39 +532,74 @@ function clayRoomBoardFrom(record){
     KIT_DOORS_ENABLED = priorKitDoors;
   }
 
-  // CL-R1 — the authored opposing pair travels through the SAME fixture-data -> fixture builder ->
-  // PointLight/emitter path as every production interior practical. The generated board already
-  // carries a deterministic production fixture recipe; clone its physical fixture fields rather
-  // than duplicating ITR_FIXTURE_RECIPES in this engine module. Only placement, colour, authored
-  // renderer intensity, identity, and the explicit per-light state belong to this named test recipe.
-  // `renderIntensity` is consumed by interiorBuildLights as an absolute renderer value; ordinary
-  // production rows keep their relative `intensity` + shared gain contract unchanged.
+  // CL-R1 — select a named recipe from the shared compiled registry. The default remains the
+  // opposing-pair diagnostic, but the workbench may rebuild this same production board with neutral
+  // truth or a lore-native rolled recipe. No Clayroom-only light values remain here.
+  var lightRecipeId = opts.lightRecipeId || "clay-opposing-pair";
+  var lightRecipe = opts.lightRecipe || lightRecipeFor(lightRecipeId);
+  if(!lightRecipe || lightRecipe.id !== lightRecipeId){
+    throw new Error("clayRoomBoardFrom: light recipe id mismatch for '" + lightRecipeId + "'");
+  }
   var fixtureTemplate = board.lights && board.lights[0];
-  if(!fixtureTemplate){
+  if(lightRecipe.lights.length && !fixtureTemplate){
     throw new Error("clayRoomBoardFrom: production interiorBuildBoard produced no fixture template for the CL-R1 opposing pair");
   }
   var roomCx = room.x + (room.w - 1) / 2;
   var roomCz = room.y + (room.d - 1) / 2;
   var roomHalfX = (room.w - 1) / 2 + 1;
   var roomHalfZ = (room.d - 1) / 2 + 1;
-  board.lights = CLAY_C1A_LIGHT_PROFILE.points.map(function(p){
+  board.lights = lightRecipe.lights.filter(function(p){ return p.enabled !== false; }).map(function(p){
+    var fixtureId = p.fixtureId || fixtureTemplate.fixtureId;
+    var kind = fixtureId && fixtureId.indexOf("torch") >= 0 ? "torch" : "lamp";
     return Object.assign({}, fixtureTemplate, {
       id: p.id,
       sourceRef: p.id,
+      recipeMode: lightRecipe.mode,
+      sourceClass: lightRecipe.source.class,
+      visibleEmitterRequired: lightRecipe.source.visibleEmitterRequired,
       x: roomCx + p.pos.x * roomHalfX,
       z: roomCz + p.pos.z * roomHalfZ,
       y: p.pos.y,
+      lightType: p.type,
+      temperatureK: p.temperatureK,
+      colorOverride: p.colorOverride,
       color: p.color,
-      renderIntensity: p.intensity,
-      state: p.state,
+      intensity: p.physicalIntensity,
+      intensityUnit: p.physicalIntensityUnit,
+      positionStrategy: p.positionStrategy,
+      // Preserve the already-reviewed diagnostic exposure exactly. Production practicals keep the
+      // ordinary relative-intensity × shared-gain path.
+      renderIntensity: lightRecipe.mode === "diagnostic-studio" ? p.physicalIntensity : undefined,
+      distance: p.rangeM / 1.524,
+      decay: p.falloff,
+      castShadow: p.shadow.cast,
+      shadowBias: p.shadow.bias,
+      shadowNormalBias: p.shadow.normalBias,
+      shadowMapSize: p.shadow.mapSize,
+      shadowBudgetPriority: p.shadow.budgetPriority,
+      spot: p.spot,
+      azimuthDeg: p.azimuthDeg,
+      elevationDeg: p.elevationDeg,
+      kind: kind,
+      fixtureId: fixtureId,
+      mount: p.mount || fixtureTemplate.mount,
+      emitterLocal: p.emitterLocal || fixtureTemplate.emitterLocal,
+      state: p.state || "steady",
       flicker: {
-        seed: p.flicker.seed,
+        seed: p.flicker.seed || ("clay-c1a:" + lightRecipe.id + ":" + p.id),
         amplitude: p.flicker.amplitude,
         cadenceMs: p.flicker.cadenceMs
       },
       forceVisiblePractical: true
     });
   });
+  board.lightRecipeLock = {
+    id: lightRecipe.id,
+    mode: lightRecipe.mode,
+    source: lightRecipe.source,
+    lockSetId: LIGHT_PROFILE_LOCKS_COMPILED.id,
+    lockSetVersion: LIGHT_PROFILE_LOCKS_COMPILED.version
+  };
 
   var cellById = {};
   (record.cells || []).forEach(function(c){ cellById[c.id] = c; });
@@ -645,7 +655,14 @@ function clayRoomBoardFrom(record){
   }];
   board.dressing = [];
 
-  return { board: board, room: room, plan: plan, fixture: fixture };
+  return {
+    board: board,
+    room: room,
+    plan: plan,
+    fixture: fixture,
+    lightRecipeId: lightRecipe.id,
+    lightRecipeMode: lightRecipe.mode
+  };
 }
 
 /* ─── C1B MOVEMENT ADAPTER ───────────────────────────────────────────────────────────────────

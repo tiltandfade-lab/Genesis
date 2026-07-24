@@ -1,7 +1,7 @@
 ---
 type: system-spec
-status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 lifecycle/local-state slice BUILT (2026-07-24);
-  remaining CL-R1 Lab 2.0 authoring + CL-R2…CL-R6 specced, unbuilt
+status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review candidate BUILT
+  (2026-07-24), Adam verdict pending; dedicated CL-F02 display affordances + CL-R2…CL-R6 remain
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
 authority: subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids) and
@@ -81,7 +81,7 @@ primary question.
 |---|---|---|---|
 | `CL-F00 room-truth` | Does the real production room stay honest after every rebuild? | 5×5 room, door, crate, one citizen, neutral clay, seam grid | **LIVE** (`?clayroom=1`) |
 | `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | unbuilt (CL-R3) |
-| `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | partial: local-state/lifecycle proof built; full Lab 2.0 bench unbuilt (CL-R1) |
+| `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | **core authoring/recipe system built; visual verdict pending**. Dedicated stepped bench + overlays remain (CL-R1) |
 | `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | unbuilt (CL-R2) |
 | `CL-F04 material-bench` | Do material channels, scale, UVs, roles, and fallbacks work? | floor, wall, riser, trim skeleton, timber, iron, ground | unbuilt (CL-R4) |
 | `CL-F05 trim-bench` | Does the `h6-v1` sheet project without hiding geometry defects? | straight/non-multiple runs, corners, endpoint, opening, stair, curb, T-junction | unbuilt (CL-R5) |
@@ -318,14 +318,43 @@ Three separately labelled modes, never conflated in UI or in a capture receipt:
 Required work:
 
 - Route the existing opposing warm/cool two-temperature rig through the generalized Lighting Lab
-  recipe system. **Do not leave it as Clayroom-only hardcoded state** — today
-  `clayRoomApplyLightProfile()` no longer constructs the point pair: the 2026-07-24 lifecycle slice
-  compiles two named records into `board.lights` and builds them through `interiorBuildLights()`.
-  Folding those named records into Lab 2.0's persistent structured-lock registry remains open.
+  recipe system. **BUILT in the 2026-07-24 candidate:** the pair is
+  `clay-opposing-pair` in the same persistent lock registry as every rolled recipe; the Clayroom
+  compiles it into `board.lights` and builds it through `interiorBuildLights()`.
 - Generalize the tunable recipe from a single key point to a bounded `lights[]` array, and admit the
-  Clayroom diagnostic pair as a **named test recipe**. Do not add more Clayroom-only light objects.
+  Clayroom diagnostic pair as a **named test recipe**. **BUILT:** zero-to-four validated entries;
+  no Clayroom-only light values remain.
 - Every gameplay light family's default recipe becomes editable through **structured, validated lock
-  data**. Temporary UI state must not be the only authority.
+  data**. Temporary UI state must not be the only authority. **BUILT:** authored JSON →
+  deterministic compiled classic-script registry → shared engine/renderer/Lab consumers.
+
+**CL-R1 engineering candidate — BUILT 2026-07-24; Adam visual verdict pending.**
+
+- `data/light-profile-locks.json` is the one authored recipe authority: ten rolled world recipes plus
+  two unrolled diagnostic recipes. `build/compile-light-locks.py` expands defaults, validates the
+  complete schema, rejects a fifth light, rejects an unmounted practical, rejects a non-lore world
+  practical, and rejects physical intensity above the declared Lab bound of 30.
+- The Lighting Lab edits the complete structured recipe in place: ambient, exposure, tone response,
+  bloom, sprite-readability floor, every bounded light's type/temperature/exact colour/intensity and
+  units/position/range/falloff/direction/spot/shadow/flicker/fixture/mount/emitter. Undo, redo,
+  authored reset, deterministic export, and compile/fold use that same shape.
+- The Clayroom exposes three honest buttons and receipts: neutral measurement, explicitly
+  non-diegetic warm/cool calibration bulbs, and a lore-native wall torch. The bulbs say `TEST ONLY`;
+  the torch says `LORE-NATIVE LIGHT`, owns a wall socket and visible flame/haft/cup, and does not
+  reuse the bulb body. Sun/moon/magic/environment sources remain fixtureless only when their recipe
+  explicitly says they are environmental.
+- The washed-out sprite diagnosis is now a production-renderer causal matrix, not a taste guess:
+  colour space, material response, sampling, tone mapping, compositing, and light energy change one
+  at a time. The known-bad untagged-sRGB and intensity-31 mutations fail. There is still **no
+  saturation slider**.
+- Final gameplay-scale frames, receipts, and measurements are in
+  `dev/clay-captures/cl-r1-lighting/`; the 13-card source-plus-six-pair comparison is
+  `dev/clay-captures/cl-r1-causality/causality-contact-sheet.png`.
+
+This is not a claim that every literal CL-F02 presentation affordance is finished. The dedicated
+stepped sphere/cube bench, seed/time-of-day preview, position/range/cone/shadow overlays, and
+one-click whole-matrix capture remain open. They do not create a second recipe or renderer
+authority when added.
 
 **CL-R1 lifecycle/local-state slice — BUILT 2026-07-24.** Every generated production practical now
 declares local state `steady` by default and owns deterministic flicker seed/amplitude data.
@@ -334,8 +363,8 @@ emissive intensity, and optional cone; steady siblings are untouched, and disabl
 authored baseline exactly. Clayroom preserves the actual ambient/rig/fixture/material identities
 across unchanged-lighting door/camera/fade/board rebuilds and records before/during/after proof.
 The stale scheduler root cause and movable/clamped/resettable diagnostic panel are specified in
-`C1A-CLAY-ROOM.md` D25. This does **not** promote the remaining persistent Lab 2.0 authoring work
-above to built.
+`C1A-CLAY-ROOM.md` D25. This lifecycle slice is now consumed by the shared persistent authoring
+system above.
 
 Required measurements (see §"Capture and receipt law"):
 
@@ -686,11 +715,12 @@ evidence in `dev/clay-captures/cl-r0/`.
   @9, white ambient 0.18) but `clayRoomApplyLightProfile()` constructs the lights directly, bypassing
   `applyLightProfile()`/`LIGHT_TUNABLES` to escape `STAGE_AMBIENT_FLOOR`. `LIGHT_TUNABLES.profiles`
   exposes exactly one key point per profile, so the pair cannot be edited **as a pair** anywhere.
-  **Disposition: MECHANISM EXISTS; AUTHORING CONNECTION MISSING — CL-R1.**
+  **Disposition: FIXED IN CL-R1 CANDIDATE — one named diagnostic recipe in the shared registry.**
 - **CR-3 — physical emitter truth is unclear.** `MEASURED (console).` The live mount logs
   `[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor:
   bracket-generic 1`, and the private opposing pair is not linked to visible fixture geometry.
-  **Disposition: MODE SEPARATION REQUIRED — CL-R1.**
+  **Disposition: FIXED IN CL-R1 CANDIDATE — diagnostic bulbs and lore-native world practicals are
+  separately labelled, validated, rendered, and receipted.**
 - **CR-4 — sprite citizenship is incomplete.** `PARTLY MEASURED.` `spriteTextureFor()` sets filtering
   but does **not** set `THREE.SRGBColorSpace` on the loaded PNG, while other authored colour textures
   in the same renderer explicitly do (`theater-boot.js` lines 891, 944, 13893) — a strong,
@@ -699,7 +729,8 @@ evidence in `dev/clay-captures/cl-r0/`.
   live interior sprite branch still stores `interiorFloorFrac` from the older optional `entry.floor`
   field, so the registry's two-axis `footX`/`footY` contract is not the live anchoring authority.
   `buildSpriteBillboardMesh()` still builds one `PlaneGeometry`; the specified thin side shell is
-  absent. **Disposition: PARTIAL CITIZENSHIP; VISUAL ACCEPTANCE WITHDRAWN — CL-R1 then CL-R2.**
+  absent. **Disposition: colour-space cause fixed and light energy bounded in CL-R1; complete
+  standee form/scale/footprint citizenship remains CL-R2 and still requires Adam's visual ruling.**
 - **CR-5 — the fixture gate proved truth, not beauty.** `MEASURED.` The C1A harness is strong on
   deterministic records, ids, provenance, production wiring, and light-profile shape; it did not
   establish a durable accepted visual baseline or a mutation-sensitive visual gate. **This is why the

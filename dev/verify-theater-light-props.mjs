@@ -39,6 +39,7 @@ const check = (name, cond, detail = "") =>
 const Figures = await import(FIGURES_URL);
 const { WHOLE_OBJECT_REGISTRY, loadWholeObjectBuilders } = Figures;
 const bootSrc = read("src/ui/theater-boot.js");
+const lightLock = JSON.parse(read("data/light-profile-locks.json"));
 
 // ============================================================================
 // 1. every "light:<key>" registry entry names a REAL LIGHT_PROFILES key
@@ -47,16 +48,14 @@ console.log("=== 1. light: registry keys match real LIGHT_PROFILES entries ===")
 {
   const lightKeys = Object.keys(WHOLE_OBJECT_REGISTRY).filter(k => k.startsWith("light:"));
   check("at least one light: registry entry exists", lightKeys.length > 0, lightKeys.length);
-  // scrape the real LIGHT_PROFILES key set out of theater-boot.js (a text-scan cross-reference —
-  // this module can't import that classic-script-adjacent ES-module const directly without pulling
-  // in the whole GL file, so a targeted regex over its own object-literal keys is the pure-layer way).
-  const profilesBlockMatch = bootSrc.match(/const LIGHT_PROFILES = \{([\s\S]*?)\n\};/);
-  check("theater-boot.js's LIGHT_PROFILES block is found (red if the table were ever renamed/removed)",
-    !!profilesBlockMatch, "");
-  const realProfileKeys = profilesBlockMatch
-    ? [...profilesBlockMatch[1].matchAll(/^\s*(?:"([\w-]+)"|([\w-]+)):\s*\{/gm)].map(m => m[1] || m[2])
-    : [];
-  check("scraped at least 9 real LIGHT_PROFILES keys", realProfileKeys.length >= 9, JSON.stringify(realProfileKeys));
+  // CL-R1 moved the authority from a private theater object literal to the validated authored lock.
+  // Read that source of truth directly; theater-boot's LIGHT_PROFILES is now a runtime compatibility
+  // projection and intentionally has no scrapeable literal block.
+  const profilesBlockMatch = /const LIGHT_PROFILES = Object\.freeze/.test(bootSrc);
+  check("theater-boot.js projects LIGHT_PROFILES from the shared compiled registry",
+    profilesBlockMatch && /LIGHT_RECIPE_REGISTRY/.test(bootSrc), "");
+  const realProfileKeys = Object.keys(lightLock.profiles || {});
+  check("shared lock carries at least 9 real LIGHT_PROFILES keys", realProfileKeys.length >= 9, JSON.stringify(realProfileKeys));
 
   const badKeys = lightKeys.filter(k => !realProfileKeys.includes(k.slice("light:".length)));
   check("every light: registry key names a REAL LIGHT_PROFILES entry", badKeys.length === 0, JSON.stringify(badKeys));

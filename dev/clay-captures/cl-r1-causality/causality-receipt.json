@@ -1,0 +1,934 @@
+{
+  "kind": "cl-r1-causal-capture",
+  "fixture": "CL-F00 production Clayroom",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "deviceScaleFactor": 2
+  },
+  "sourceSprite": "assets/sprites/spr-fantasy-goblin-warrior.png",
+  "isolationLaw": "same fixture/camera/geometry; one named renderer variable changed per A/B",
+  "cards": [
+    {
+      "id": "01-color-wrong-untagged",
+      "variable": "colour-space tagging only",
+      "expected": "known-bad: lifted midtones and reduced chroma",
+      "spriteClip": {
+        "x": 451.67750009400515,
+        "y": 373.2756117327903,
+        "width": 60.57926415461847,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 443.93426434262875,
+          "cy": 720.1341846116622,
+          "w": 32.77235220615796,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "02-color-production-srgb",
+      "variable": "colour-space tagging only",
+      "expected": "production: authored sRGB decoded once",
+      "spriteClip": {
+        "x": 451.67750009400515,
+        "y": 373.2756117327903,
+        "width": 60.57926415461847,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 443.93426434262875,
+          "cy": 720.1341846116622,
+          "w": 32.77235220615796,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "03-material-unlit",
+      "variable": "standee material response only",
+      "expected": "reference: source-colour/full-bright render",
+      "spriteClip": {
+        "x": 456.33700009609413,
+        "y": 373.2756117327903,
+        "width": 61.125470024721096,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 453.7994702169094,
+          "cy": 720.1341846116622,
+          "w": 33.50062669962813,
+          "h": 37.62200168541415,
+          "unlit": true
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "04-material-lit",
+      "variable": "standee material response only",
+      "expected": "production: light shapes value without changing colour-space",
+      "spriteClip": {
+        "x": 456.66982152481484,
+        "y": 373.2756117327903,
+        "width": 61.16448472972837,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 454.50412777935804,
+          "cy": 720.1341846116622,
+          "w": 33.552646306304496,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "05-sampling-wrong-linear",
+      "variable": "texture sampling only",
+      "expected": "known-bad: softened pixel edges",
+      "spriteClip": {
+        "x": 456.6277179460783,
+        "y": 373.50296639105505,
+        "width": 61.15388894875332,
+        "height": 62.199943183004414,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 454.40932484090985,
+          "cy": 721.2058759651145,
+          "w": 33.53851859833776,
+          "h": 38.529328210300605,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 0,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "06-sampling-production-nearest",
+      "variable": "texture sampling only",
+      "expected": "production: nearest magnification, governed linear minification",
+      "spriteClip": {
+        "x": 456.6277179460783,
+        "y": 373.50296639105505,
+        "width": 61.15388894875332,
+        "height": 62.199943183004414,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 454.40932484090985,
+          "cy": 721.2058759651145,
+          "w": 33.53851859833776,
+          "h": 38.529328210300605,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "07-tonemap-none",
+      "variable": "tone mapping only",
+      "expected": "comparison: no AgX shoulder",
+      "spriteClip": {
+        "x": 451.67750009400515,
+        "y": 373.2756117327903,
+        "width": 60.57926415461847,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 443.93426434262875,
+          "cy": 720.1341846116622,
+          "w": 32.77235220615796,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "none",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "08-tonemap-production-agx",
+      "variable": "tone mapping only",
+      "expected": "production: AgX highlight shoulder",
+      "spriteClip": {
+        "x": 451.67750009400515,
+        "y": 373.2756117327903,
+        "width": 60.57926415461847,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 443.93426434262875,
+          "cy": 720.1341846116622,
+          "w": 32.77235220615796,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "09-compositing-post-off",
+      "variable": "compositing only",
+      "expected": "comparison: direct renderer",
+      "spriteClip": {
+        "x": 451.67750009400515,
+        "y": 373.2756117327903,
+        "width": 60.57926415461847,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 443.93426434262875,
+          "cy": 720.1341846116622,
+          "w": 32.77235220615796,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": false,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "10-compositing-production-post",
+      "variable": "compositing only",
+      "expected": "production: renderer → grade/bloom/output chain",
+      "spriteClip": {
+        "x": 451.67750009400515,
+        "y": 373.2756117327903,
+        "width": 60.57926415461847,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 443.93426434262875,
+          "cy": 720.1341846116622,
+          "w": 32.77235220615796,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "11-energy-production-torch",
+      "variable": "light energy only",
+      "expected": "production authored torch energy",
+      "spriteClip": {
+        "x": 451.67750009400515,
+        "y": 373.2756117327903,
+        "width": 60.57926415461847,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 443.93426434262875,
+          "cy": 720.1341846116622,
+          "w": 32.77235220615796,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "torchlit",
+        "label": "Torchlit dungeon",
+        "rolled": true,
+        "mode": "production-practical",
+        "source": {
+          "class": "physical-practical",
+          "label": "open flame torch or wall sconce",
+          "loreNative": true,
+          "visibleEmitterRequired": true
+        },
+        "ambient": {
+          "color": 4864038,
+          "intensity": 0.21
+        },
+        "lights": [
+          {
+            "type": "point",
+            "temperatureK": 1900,
+            "colorOverride": true,
+            "intensityUnit": "tabletop-profile-unit",
+            "physicalIntensityUnit": "renderer-intensity",
+            "positionStrategy": "socket-relative",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "spot": {
+              "coneDeg": 45,
+              "penumbra": 0
+            },
+            "shadow": {
+              "cast": true,
+              "bias": -0.002,
+              "normalBias": 0,
+              "mapSize": 512,
+              "budgetPriority": 1
+            },
+            "fixtureId": "sconce-torch-clay",
+            "mount": "wall",
+            "emitterLocal": {
+              "x": 0,
+              "y": 0.08,
+              "z": 0.18
+            },
+            "flicker": {
+              "amplitude": 0.14,
+              "cadenceMs": 480,
+              "recipeId": "steady"
+            },
+            "id": "torch-key",
+            "label": "torch flame",
+            "enabled": true,
+            "color": 16752714,
+            "intensity": 18,
+            "physicalIntensity": 1.3,
+            "pos": {
+              "x": 0,
+              "y": 2.2,
+              "z": 0.6
+            },
+            "heightM": 3.3528,
+            "rangeM": 9.144,
+            "falloff": 2,
+            "state": "steady"
+          }
+        ]
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    },
+    {
+      "id": "12-energy-overpowered",
+      "variable": "light energy only",
+      "expected": "known-bad visual mutation at the Lab's maximum preview bound",
+      "spriteClip": {
+        "x": 456.66982152481484,
+        "y": 373.2756117327903,
+        "width": 61.16448472972837,
+        "height": 61.58296114608162,
+        "projected": {
+          "slug": "goblin-warrior",
+          "cx": 454.50412777935804,
+          "cy": 720.1341846116622,
+          "w": 33.552646306304496,
+          "h": 37.62200168541415,
+          "unlit": false
+        }
+      },
+      "recipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "torchlit",
+        "label": "Torchlit dungeon",
+        "rolled": true,
+        "mode": "production-practical",
+        "source": {
+          "class": "physical-practical",
+          "label": "open flame torch or wall sconce",
+          "loreNative": true,
+          "visibleEmitterRequired": true
+        },
+        "ambient": {
+          "color": 4864038,
+          "intensity": 0.21
+        },
+        "lights": [
+          {
+            "type": "point",
+            "temperatureK": 1900,
+            "colorOverride": true,
+            "intensityUnit": "tabletop-profile-unit",
+            "physicalIntensityUnit": "renderer-intensity",
+            "positionStrategy": "socket-relative",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "spot": {
+              "coneDeg": 45,
+              "penumbra": 0
+            },
+            "shadow": {
+              "cast": true,
+              "bias": -0.002,
+              "normalBias": 0,
+              "mapSize": 512,
+              "budgetPriority": 1
+            },
+            "fixtureId": "sconce-torch-clay",
+            "mount": "wall",
+            "emitterLocal": {
+              "x": 0,
+              "y": 0.08,
+              "z": 0.18
+            },
+            "flicker": {
+              "amplitude": 0.14,
+              "cadenceMs": 480,
+              "recipeId": "steady"
+            },
+            "id": "torch-key",
+            "label": "torch flame",
+            "enabled": true,
+            "color": 16752714,
+            "intensity": 18,
+            "physicalIntensity": 30,
+            "pos": {
+              "x": 0,
+              "y": 2.2,
+              "z": 0.6
+            },
+            "heightM": 3.3528,
+            "rangeM": 9.144,
+            "falloff": 2,
+            "state": "steady"
+          }
+        ]
+      },
+      "spriteFilters": {
+        "checked": 1,
+        "magNearestCount": 1,
+        "minLinearCount": 1,
+        "minNearestCount": 0
+      },
+      "tonemap": "agx",
+      "postChain": {
+        "enabled": true,
+        "passCount": 5,
+        "hasComposer": true
+      }
+    }
+  ],
+  "negativeControls": {
+    "overpoweredPreviewAccepted": true,
+    "outOfBoundsRejected": true
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "verdict": "PASS"
+}

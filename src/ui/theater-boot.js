@@ -5143,7 +5143,9 @@ function createTheaterState(){
     // lightLabReadoutTimer are this session's DOM-panel bookkeeping (torn down by unmountLightLab, or
     // at retire() below); lightLabProfileKey is which LIGHT_PROFILES entry the lab's dropdown currently
     // has selected for editing (independent of S.lightProfileKey, the profile actually RENDERED).
-    lightLabMounted: false, lightLabEls: null, lightLabReadoutTimer: null, lightLabProfileKey: null
+    lightLabMounted: false, lightLabEls: null, lightLabReadoutTimer: null,
+    lightLabProfileKey: null, lightLabLightIndex: 0,
+    lightLabUndo: [], lightLabRedo: [], lightLabDirty: false
   };
 }
 
@@ -5588,7 +5590,7 @@ function makeGradePass(){
       uniform sampler2D tDiffuse;
       uniform vec2 uResolution;
       uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
-      uniform float uExposureFloor;
+      uniform float uExposureFloor, uTonemapStrength;
       uniform vec3 uTint;
       ${AGX_TONEMAP_GLSL}
       void main(){
@@ -5602,7 +5604,11 @@ function makeGradePass(){
         // curve's own log2 domain instead of crushing to 0 (ledger #12/13). The curve itself
         // (AgXToneMapping/AGX_TONEMAP_GLSL, verbatim three.js port) is untouched.
         lin = max(lin, vec3(uExposureFloor));
+        vec3 untonemapped = lin;
         lin = AgXToneMapping(lin); // P3-3a: filmic shoulder — tonemap BEFORE the perceptual grade math
+        // Keep the authored 1.0 default on the byte-stable pre-Lab shader path. Only an intentional
+        // partial-strength preview pays for the blend.
+        if(uTonemapStrength < 0.9999) lin = mix(untonemapped, lin, uTonemapStrength);
         vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
         // exposure already applied inside AgXToneMapping (its own uExposure multiply, three's own convention)
         col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
@@ -5636,7 +5642,8 @@ function makeGradePass(){
       // every OTHER uniform here); updatePostSuiteGrade (below) pushes the LIVE LIGHT_TUNABLES.
       // gradeExposureFloor value onto this uniform on every mount/tunable-change, same as every other
       // grade dial — this seed is only ever the very first frame's value pre-first-push.
-      uExposureFloor: { value: GRADE_EXPOSURE_FLOOR }
+      uExposureFloor: { value: GRADE_EXPOSURE_FLOOR },
+      uTonemapStrength: { value: 1.0 }
     },
     vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
     fragmentShader: isAgx ? FS_AGX : FS_NONE
@@ -5818,6 +5825,11 @@ function updatePostSuiteGrade(kit, rigOn){
   // render" reaches for these — no separate push path to keep in sync with mountPostSuite's own call
   // site below). Untouched LIGHT_TUNABLES == the authored consts, so this is a no-op read in production.
   g.uExposureFloor.value = LIGHT_TUNABLES.gradeExposureFloor;
+  const activeRecipe = LIGHT_TUNABLES.profiles[S.lightProfileKey || LIGHT_DEFAULT_PROFILE];
+  if(g.uTonemapStrength){
+    g.uTonemapStrength.value = activeRecipe && activeRecipe.toneMap
+      ? activeRecipe.toneMap.strength : 1;
+  }
   if(S.postSuite.bloom){
     S.postSuite.bloom.threshold = LIGHT_TUNABLES.bloomThreshold;
     S.postSuite.bloom.strength = LIGHT_TUNABLES.bloomStrength;
@@ -6361,71 +6373,18 @@ function gradeColorLocal(hex, profile){
 // source's reach it's dark, and darkness is a gameplay element." The diegetic point(s) below are now
 // the read, not the ambient wash. Values are reversible for the re-shoot: each intensity is commented
 // with its pre-DIEGETIC-LIGHT number so Adam can dial any one back individually.
-const LIGHT_PROFILES = {
-  dark: {
-    ambient: { color: 0x8fa8c8, intensity: 0.25 }, // was 0.38
-    // ARENA round 3 (2026-07-04): dark was the only ambient-only profile left after the readability
-    // floor landed, and it still read as a flat near-black sheet — ambient alone gives Lambert
-    // materials zero directionality, so tile/figure facets all shade identically. ONE dim point
-    // (overhead-center, the table's own pattern) adds facet depth without changing the mood: its
-    // color is dark's own ambient hue lightened a touch (0x8fa8c8 family), and intensity 7 is the
-    // LOWEST point intensity in this table (moonlit 8, fungal-glow 9) — dark stays the dimmest of
-    // the point-lit profiles by construction.
-    points: [ { color: 0x9fb4d8, intensity: 7, pos: { x: 0, y: 3, z: 0 } } ],
-    flicker: 0
-  },
-  torchlit: {
-    ambient: { color: 0x4a3826, intensity: 0.21 }, // was 0.32
-    points: [ { color: 0xffa04a, intensity: 18, pos: { x: 0, y: 2.2, z: 0.6 } } ],
-    flicker: 0.14
-  },
-  lavalit: {
-    // "from below/edge tiles" (§2's own brief) — a literal below-floor Y is fully occluded by the tile
-    // column geometry from the fixed top-down-ish camera (tiles sit roughly y:[-0.5, +0.5+height]), so
-    // this reads as a low glow seeping up AT floor level rather than truly under it: still visibly the
-    // lowest/reddest point of any profile, but actually contributes light to the scene.
-    ambient: { color: 0x3a1c14, intensity: 0.2 }, // was 0.3
-    points: [ { color: 0xff5522, intensity: 22, pos: { x: 0, y: 0.15, z: 0 } } ],
-    flicker: 0.18
-  },
-  "fungal-glow": {
-    ambient: { color: 0x3a5a3a, intensity: 0.27 }, // was 0.42
-    points: [ { color: 0x7fdc6a, intensity: 9, pos: { x: 0.4, y: 1.0, z: 0.4 } } ],
-    flicker: 0.05
-  },
-  "magic-glow": {
-    ambient: { color: 0x4048a0, intensity: 0.26 }, // was 0.4
-    points: [ { color: 0x8a6bff, intensity: 14, pos: { x: -0.3, y: 1.6, z: 0.2 } } ],
-    flicker: 0.06
-  },
-  lamplit: {
-    ambient: { color: 0x40382a, intensity: 0.22 }, // was 0.34
-    points: [ { color: 0xffcf8a, intensity: 16, pos: { x: 0, y: 2.4, z: -0.5 } } ],
-    flicker: 0.1
-  },
-  moonlit: {
-    ambient: { color: 0x8fa0c8, intensity: 0.36 }, // was 0.55
-    points: [ { color: 0xaebfe8, intensity: 8, pos: { x: 0.5, y: 3, z: -0.5 } } ],
-    flicker: 0
-  },
-  daylit: {
-    // L-4: daylit/overcast/moonlit additionally get a brighter hemisphere override on interior boards
-    // (ITR_BRIGHT_PROFILES, applied in setInteriorBoard) — the sun/moon/sky IS their diegetic source.
-    ambient: { color: 0xd8dce0, intensity: 0.55 }, // was 0.85
-    points: [ { color: 0xfff2d8, intensity: 9, pos: { x: 0.4, y: 3, z: -0.4 } } ],
-    flicker: 0
-  },
-  overcast: {
-    ambient: { color: 0xa8adb5, intensity: 0.39 }, // was 0.6
-    points: [],
-    flicker: 0
-  },
-  voidlit: {
-    ambient: { color: 0x5a3a6e, intensity: 0.2 }, // was 0.3
-    points: [ { color: 0x9a5ad0, intensity: 11, pos: { x: 0, y: 1.2, z: 0 } } ],
-    flicker: 0.08
-  }
-};
+// CL-R1: LIGHT_PROFILES is now a compatibility projection of the persistent, validated lock
+// registry. The ten rolled profiles retain their exact authored numbers; the two unrolled Clayroom
+// recipes add clearly-labelled neutral and warm/cool diagnostic modes without entering gameplay
+// rolls. The registry is shared with src/engine/clay-room.js, so the workbench no longer owns a
+// private copy of its opposing pair.
+const LIGHT_PROFILES = Object.freeze((() => {
+  const out = {};
+  Object.keys(LIGHT_RECIPE_REGISTRY).forEach((key) => {
+    out[key] = lightRecipeLegacyProfile(LIGHT_RECIPE_REGISTRY[key]);
+  });
+  return out;
+})());
 const LIGHT_DEFAULT_PROFILE = "dark";
 // STAGE ARENA polish (Adam's G2 mandate, 2026-07-04) — readability floor: the board must never render
 // unreadably dark whatever the rolled room light. `dark` profile's own ambient (0.38) is the worst
@@ -6471,13 +6430,15 @@ function applyLightProfile(key){
   // moonlit sit just under) gets lifted. Color is read straight off the tunable either way — the floor
   // governs intensity alone, so the profile still owns the mood/hue, and points still carry each
   // profile's relative brightness identity.
-  const ambientIntensity = Math.max(tune.ambientIntensity, LIGHT_TUNABLES.stageAmbientFloor);
+  const ambientIntensity = tune.mode && tune.mode.indexOf("diagnostic-") === 0
+    ? tune.ambient.intensity
+    : Math.max(tune.ambient.intensity, LIGHT_TUNABLES.stageAmbientFloor);
   // REALM-RENDER-STYLE.md §3: grade the profile's authored color through the current board's render
   // profile (S.realmProfile, set by setBoard just before this call — see that function's own comment;
   // null pre-mount/pre-setBoard, which gradeColorLocal treats as a no-op) — same "colors are already
   // resolved" seam the tile tints and figure materials share. Intensity is untouched (the readability
   // floor's own "color stays authored, only intensity is floored" discipline extends here).
-  const ambientColor = gradeColorLocal(tune.ambientColor, S.realmProfile);
+  const ambientColor = gradeColorLocal(tune.ambient.color, S.realmProfile);
   const ambient = new THREE.AmbientLight(ambientColor, ambientIntensity);
   S.scene.add(ambient);
   S.ambientLight = ambient;
@@ -6491,25 +6452,33 @@ function applyLightProfile(key){
   // author exactly one point, per prop-light.js's ENGINE NOTE reserving ONE light per prop), and only
   // when an anchor actually resolved this call (S.lightPropAnchor null -> byte-identical position math
   // to before this unit, the guard's own "light behavior byte-identical" contract, §4 step 3).
-  profile.points.forEach((p, i) => {
+  const enabledLights = (tune.lights || []).filter((p) => p.enabled !== false);
+  enabledLights.forEach((p, i) => {
     // decay:0, distance:0 — a flat non-attenuating point light (see LIGHT_PROFILES' own header on why:
     // predictable per-profile intensity numbers regardless of board size, no physically-correct falloff
     // tuning needed per profile). LL-1: index 0 (every LIGHT_PROFILES entry authors at most one point)
     // reads the lab's own tunable color/intensity; any further point (none exist today) keeps its
     // authored value untouched — tune only ever overrides the ONE point this profile vocabulary has.
-    const pColor = (i === 0 && tune.pointColor != null) ? tune.pointColor : p.color;
-    const pIntensity = (i === 0 && tune.pointIntensity != null) ? tune.pointIntensity : p.intensity;
+    const pColor = p.color;
+    const pIntensity = p.intensity;
     const light = new THREE.PointLight(gradeColorLocal(pColor, S.realmProfile), pIntensity, 0, 0);
     if(i === 0 && S.lightPropAnchor){
       light.position.set(S.lightPropAnchor.x, S.lightPropAnchor.y, S.lightPropAnchor.z);
     } else {
-      light.position.set((p.pos.x || 0) * hx, p.pos.y != null ? p.pos.y : 1.5, (p.pos.z || 0) * hz);
+      light.position.set(
+        (p.pos.x || 0) * hx,
+        p.heightM != null ? p.heightM / 1.524 : (p.pos.y != null ? p.pos.y : 1.5),
+        (p.pos.z || 0) * hz
+      );
     }
     S.scene.add(light);
     S.pointLights.push(light);
   });
 
-  if(profile.flicker > 0) startLightFlicker(profile.flicker);
+  const flickerAmplitude = enabledLights.reduce((max, p) => {
+    return Math.max(max, p.flicker ? p.flicker.amplitude || 0 : 0);
+  }, 0);
+  if(flickerAmplitude > 0) startLightFlicker(flickerAmplitude);
 }
 
 /* ============================================================================================
@@ -6686,42 +6655,30 @@ const CELESTIAL_PROFILE_SET = { daylit: true, overcast: true, moonlit: true };
 // "how sprites react to light" consts (readability floor / dark-corner cap / torch-pool band) — not
 // every tunable-shaped number in this file.
 const LIGHT_TUNABLES = {
-  // per LIGHT_PROFILES key: {ambientColor, ambientIntensity} = the profile's "fill" (ambient wash);
-  // {pointColor, pointIntensity} = its "key" (the one authored point — see LIGHT_PROFILES' own header:
-  // every entry authors at most one). Deep-seeded (primitive values only, never a shared reference back
-  // into LIGHT_PROFILES) so mutating a tunable can never touch the authored table itself.
+  // Per profile, the full bounded recipe is mutable in preview: ambient plus zero-to-four named
+  // lights. It is deep-seeded from compiled locks, never a shared reference back into the frozen
+  // registry. This replaces LL-1's one-key-only {pointColor,pointIntensity} shortcut.
   profiles: (() => {
     const out = {};
-    for(const key in LIGHT_PROFILES){
-      const p = LIGHT_PROFILES[key];
-      out[key] = {
-        ambientColor: p.ambient.color,
-        ambientIntensity: p.ambient.intensity,
-        pointColor: p.points[0] ? p.points[0].color : null,
-        pointIntensity: p.points[0] ? p.points[0].intensity : null,
-      };
+    for(const key in LIGHT_RECIPE_REGISTRY){
+      out[key] = lightRecipeDeepClone(LIGHT_RECIPE_REGISTRY[key]);
     }
     return out;
   })(),
-  stageAmbientFloor: STAGE_AMBIENT_FLOOR,
-  gradeExposureFloor: GRADE_EXPOSURE_FLOOR,
-  bloomThreshold: BLOOM_THRESHOLD,
-  bloomStrength: BLOOM_STRENGTH,
-  gradeTintScale: GRADE_TINT_SCALE,
-  gradeTintMax: GRADE_TINT_MAX,
-  celestialArc: {
-    SUNRISE_MIN: CELESTIAL_ARC.SUNRISE_MIN,
-    SUNSET_MIN: CELESTIAL_ARC.SUNSET_MIN,
-    MIN_ELEV_ANGLE: CELESTIAL_ARC.MIN_ELEV_ANGLE,
-    OVERCAST_DESAT: CELESTIAL_ARC.OVERCAST_DESAT,
-    OVERCAST_SHADOW_DAMP: CELESTIAL_ARC.OVERCAST_SHADOW_DAMP,
-  },
+  stageAmbientFloor: LIGHT_LAB_COMPILED_SETTINGS.stageAmbientFloor,
+  gradeExposureFloor: LIGHT_LAB_COMPILED_SETTINGS.gradeExposureFloor,
+  bloomThreshold: LIGHT_LAB_COMPILED_SETTINGS.bloomThreshold,
+  bloomStrength: LIGHT_LAB_COMPILED_SETTINGS.bloomStrength,
+  gradeTintScale: LIGHT_LAB_COMPILED_SETTINGS.gradeTintScale,
+  gradeTintMax: LIGHT_LAB_COMPILED_SETTINGS.gradeTintMax,
+  celestialArc: lightRecipeDeepClone(LIGHT_LAB_COMPILED_SETTINGS.celestialArc),
   // BW2-4b "how sprites react to light" — see ITR_SPRITE_EMISSIVE_FLOOR/ITR_SCENE_AMBIENT/
   // ITR_LIGHT_RENDER_GAIN's own declarations (above) for the full brightness-law derivation.
-  spriteEmissiveFloor: ITR_SPRITE_EMISSIVE_FLOOR, // readability floor
-  sceneAmbient: ITR_SCENE_AMBIENT,                 // dark-corner cap (the BW2-4b "dark-corner floor")
-  lightRenderGain: ITR_LIGHT_RENDER_GAIN,           // torch-pool band (pool brightness/tightness)
+  spriteEmissiveFloor: LIGHT_LAB_COMPILED_SETTINGS.spriteEmissiveFloor,
+  sceneAmbient: LIGHT_LAB_COMPILED_SETTINGS.sceneAmbient,
+  lightRenderGain: LIGHT_LAB_COMPILED_SETTINGS.lightRenderGain,
 };
+const LIGHT_LAB_AUTHORED_BASELINE = lightRecipeDeepFreeze(lightRecipeDeepClone(LIGHT_TUNABLES));
 
 // min-of-day -> {x,y,z (unit direction), elevation (0..1), t (0..1, sunrise->sunset)}. Pure, total:
 // clamps `min` into [SUNRISE_MIN,SUNSET_MIN] first, so a daylit/overcast profile rolled outside that
@@ -8399,9 +8356,11 @@ const INTERIOR_SHADOW_MAP_SIZE = 512; // small per-light map — 4 lights x 512^
 // paying the shadow-map cost for.
 function interiorAssignShadowCasters(lights, cx, cz){
   const withDist = (lights || []).map((l, i) => ({
-    l, i, d: Math.hypot((l.x || 0) - cx, (l.z || 0) - cz)
-  }));
-  withDist.sort((a, b) => a.d - b.d);
+    l, i,
+    priority: Number.isFinite(l.shadowBudgetPriority) ? l.shadowBudgetPriority : 1,
+    d: Math.hypot((l.x || 0) - cx, (l.z || 0) - cz)
+  })).filter((row) => row.l.castShadow !== false);
+  withDist.sort((a, b) => b.priority - a.priority || a.d - b.d || a.i - b.i);
   const casterIdx = new Set(withDist.slice(0, INTERIOR_SHADOW_CASTER_CAP).map((w) => w.i));
   return (lights || []).map((l, i) => Object.assign({}, l, { castShadow: casterIdx.has(i) }));
 }
@@ -8615,6 +8574,12 @@ const ITR_FIXTURE_BODY_PARTS = {
     { geo: () => new THREE.BoxGeometry(0.055, 0.055, Math.max(0.06, el.z * 0.85)), pos: [0, el.y * 0.35, el.z * 0.42] },
     { geo: () => new THREE.CylinderGeometry(0.055, 0.08, 0.06, 8), pos: [0, el.y * 0.85, el.z] },
   ],
+  "sconce-torch-clay": (el) => [
+    // A legible, upright wooden haft and iron cup—not the short bracket + glowing orb used by the
+    // calibration bulb. Keeping the flame at `emitterLocal` preserves point/emitter co-location.
+    { geo: () => new THREE.CylinderGeometry(0.035, 0.045, 0.34, 7), pos: [0, el.y - 0.18, el.z] },
+    { geo: () => new THREE.CylinderGeometry(0.065, 0.09, 0.07, 8), pos: [0, el.y - 0.035, el.z] },
+  ],
   "bracket-generic": (el) => [
     { geo: () => new THREE.BoxGeometry(0.045, 0.045, Math.max(0.05, el.z * 0.85)), pos: [0, el.y * 0.4, el.z * 0.42] },
     { geo: () => new THREE.SphereGeometry(0.045, 6, 5), pos: [0, el.y * 0.9, el.z] },
@@ -8644,6 +8609,7 @@ const ITR_FIXTURE_BODY_PARTS = {
 const ITR_FIXTURE_EMITTER_GEO = {
   "sconce-iron": () => new THREE.ConeGeometry(0.04, 0.11, 6),
   "sconce-torch": () => new THREE.ConeGeometry(0.045, 0.13, 6),
+  "sconce-torch-clay": () => new THREE.ConeGeometry(0.08, 0.22, 7),
   "bracket-generic": () => new THREE.SphereGeometry(0.05, 6, 5),
   "brazier-low": () => new THREE.ConeGeometry(0.09, 0.22, 7),
   "candle-cluster": () => new THREE.ConeGeometry(0.03, 0.09, 6),
@@ -8816,6 +8782,61 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
     // genuinely diegetic OUTDOOR local source (a campfire) even under a bright profile; no light sets
     // it today, so every bright-profile light suppresses uniformly.
     const suppressPractical = !!isBrightRealm && ITR_BRIGHT_SUPPRESS_PRACTICALS && !light.forceVisiblePractical;
+    const resolvedIntensity = (light.renderIntensity != null
+      ? light.renderIntensity
+      : (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain
+    ) * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1);
+
+    // CL-R1 mode separation: environmental/celestial sources do not acquire a fake lamp housing
+    // merely because the production board carries a light record. Only a source whose recipe says a
+    // visible emitter is required goes through the fixture branch below. The direct branch still
+    // uses real THREE lights in this same production group; it simply has no counterfeit prop.
+    if(light.visibleEmitterRequired === false){
+      const localX = (light.x || 0) - cx;
+      const localY = light.y != null ? light.y : 3;
+      const localZ = (light.z || 0) - cz;
+      let environmentalLight;
+      if(light.lightType === "environment"){
+        // The scene already owns one shared HemisphereLight. A recipe-level environment source
+        // contributes colour/intensity without constructing a second hemisphere rig that could
+        // drift between tabletop and interior channels.
+        environmentalLight = new THREE.AmbientLight(light.color || "#ffffff", resolvedIntensity);
+        environmentalLight.position.set(localX, localY, localZ);
+      } else if(light.lightType === "directional"){
+        environmentalLight = new THREE.DirectionalLight(light.color || "#ffffff", resolvedIntensity);
+        const azimuth = THREE.MathUtils.degToRad(light.azimuthDeg != null ? light.azimuthDeg : 0);
+        const elevation = THREE.MathUtils.degToRad(light.elevationDeg != null ? light.elevationDeg : 45);
+        environmentalLight.position.set(
+          Math.cos(elevation) * Math.cos(azimuth) * 10,
+          Math.sin(elevation) * 10,
+          Math.cos(elevation) * Math.sin(azimuth) * 10
+        );
+        environmentalLight.target.position.set(0, 0, 0);
+        group.add(environmentalLight.target);
+      } else {
+        environmentalLight = new THREE.PointLight(
+          light.color || "#ffffff",
+          resolvedIntensity,
+          Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
+          light.decay != null ? light.decay : 2
+        );
+        environmentalLight.position.set(localX, localY, localZ);
+      }
+      if(light.castShadow && environmentalLight.shadow){
+        environmentalLight.castShadow = true;
+        const environmentalMapSize = [256, 512, 1024, 2048].indexOf(light.shadowMapSize) >= 0
+          ? light.shadowMapSize : INTERIOR_SHADOW_MAP_SIZE;
+        environmentalLight.shadow.mapSize.set(environmentalMapSize, environmentalMapSize);
+        environmentalLight.shadow.bias = light.shadowBias != null ? light.shadowBias : -0.002;
+        environmentalLight.shadow.normalBias = light.shadowNormalBias != null ? light.shadowNormalBias : 0;
+        casters++;
+      }
+      environmentalLight.userData = environmentalLight.userData || {};
+      environmentalLight.userData.lightId = String(light.id || light.sourceRef || "environment-light");
+      environmentalLight.userData.recipeMode = light.recipeMode || "production-environment";
+      group.add(environmentalLight);
+      return;
+    }
 
     // E0 — resolve WHERE the fixture physically stands: a wall mount snaps to its nearest C4.1a mount
     // slot (world position + inward normal, so it can never disagree with the wall itself); a floor
@@ -8852,28 +8873,41 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
     // position = group transform × emitterLocal (WALL-VOLUMES-PRACTICALS.md §E0), so it can never sit
     // anywhere but exactly where the fixture's own visible emitter submesh is.
     const el = light.emitterLocal || { x: 0, y: 0, z: 0 };
-    const pl = new THREE.PointLight(
+    const pl = light.lightType === "spot"
+      ? new THREE.SpotLight(
+        light.color || "#ffbb66",
+        resolvedIntensity,
+        Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
+        THREE.MathUtils.degToRad(light.spot && light.spot.coneDeg != null ? light.spot.coneDeg : 45),
+        light.spot && light.spot.penumbra != null ? light.spot.penumbra : 0,
+        light.decay != null ? light.decay : 2
+      )
+      : new THREE.PointLight(
       light.color || "#ffbb66",
       // BW2-4 item 1: render-side gain (see ITR_LIGHT_RENDER_GAIN) — the DATA intensity is the relative
       // value; this is the absolute decay-2 pool brightness. Preserves the fill<=60%-of-key ratio (both
       // key and fill are gained equally). LIGHT-CLOSE: a suppressed practical scales toward
       // ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (0 by default) — the sky fill carries the room instead.
-      (light.renderIntensity != null
-        ? light.renderIntensity
-        : (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain
-      ) * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1),
+      resolvedIntensity,
       // BW2-4b item 1 — LIGHT RANGE CAP: tighten each pool to a small hot circle (the mock read) so the
       // gaps between torches go genuinely dark (the BRIGHTNESS LAW's dark-corner requirement).
       Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
       light.decay != null ? light.decay : 2
     );
     pl.position.set(el.x || 0, el.y || 0, el.z || 0);
+    if(pl.isSpotLight){
+      pl.target.position.set(el.x || 0, (el.y || 0) - 1, el.z || 0);
+      fixture.group.add(pl.target);
+    }
     if(light.castShadow && !suppressPractical){
       pl.castShadow = true;
-      pl.shadow.mapSize.set(INTERIOR_SHADOW_MAP_SIZE, INTERIOR_SHADOW_MAP_SIZE);
+      const authoredMapSize = [256, 512, 1024, 2048].indexOf(light.shadowMapSize) >= 0
+        ? light.shadowMapSize : INTERIOR_SHADOW_MAP_SIZE;
+      pl.shadow.mapSize.set(authoredMapSize, authoredMapSize);
       pl.shadow.camera.near = 0.1;
       pl.shadow.camera.far = light.distance != null ? light.distance : 12;
-      pl.shadow.bias = -0.002;
+      pl.shadow.bias = light.shadowBias != null ? light.shadowBias : -0.002;
+      pl.shadow.normalBias = light.shadowNormalBias != null ? light.shadowNormalBias : 0;
       casters++;
     }
     fixture.group.add(pl);
@@ -13210,6 +13244,16 @@ window.Theater._clayLightingProofForTest = function(){
     ? { snapshot: clayRoomLightingSnapshot("test-read"), probe: S.clayRoomLightingProbe || null }
     : null;
 };
+window.Theater._clayLightingRecipeForTest = function(){
+  const id = S.clayRoomLightRecipeId || null;
+  const recipe = id && LIGHT_TUNABLES.profiles[id] ? LIGHT_TUNABLES.profiles[id] : null;
+  return recipe ? lightRecipeDeepClone(recipe) : null;
+};
+window.Theater._claySetLightingRecipeForTest = function(id){
+  return (typeof clayRoomSetLightingRecipe === "function")
+    ? clayRoomSetLightingRecipe(id, "clayroom-test-seam")
+    : false;
+};
 window.Theater._clayMovementProofForTest = function(){
   const session = (typeof clayRoomMovementSession === "function") ? clayRoomMovementSession() : null;
   if(!session || typeof tqMovementRanges !== "function") return null;
@@ -13345,6 +13389,21 @@ window.Theater.interiorPsxAudit = function(){
 // __spriteScreenRects projects every mounted sprite billboard's own world box to canvas-pixel space so
 // the harness knows WHERE to sample. Both exist only for dev/battle-gate/capture-lit-sprites.mjs.
 window.Theater.__setSpriteUnlitDebug = function(on){ SPRITE_UNLIT_DEBUG = !!on; };
+window.Theater._setSpriteSamplingForTest = function(mode){
+  const linearMutation = mode === "linear";
+  let changed = 0;
+  Object.keys(SPRITE_TEXTURE_CACHE).forEach((key) => {
+    const tex = SPRITE_TEXTURE_CACHE[key];
+    if(!tex || tex === "pending" || tex === "failed") return;
+    tex.magFilter = linearMutation ? THREE.LinearFilter : THREE.NearestFilter;
+    tex.minFilter = THREE.LinearFilter;
+    tex.generateMipmaps = false;
+    tex.needsUpdate = true;
+    changed++;
+  });
+  markDirty();
+  return { mode: linearMutation ? "linear-mutation" : "production-nearest-mag-linear-min", changed };
+};
 window.Theater.__spriteScreenRects = function(){
   const out = [];
   if(!S.interiorGroup || !S.camera || !S.renderer) return out;
@@ -14377,16 +14436,40 @@ window.Theater._freezeFantasyPropPilotLightForTest = function(){ stopLightFlicke
 // against LIGHT_TUNABLES.profiles[<the profile currently selected in the lab>] (defaults to whatever's
 // actually live, S.lightProfileKey) rather than a fixed key — the lab edits "the profile you're
 // looking at," and the dropdown (buildLightLabDom, below) is what changes which one that is.
+function lightLabNestedTarget(root, relative, meta){
+  const parts = relative.split(".");
+  let obj = root;
+  for(let i = 0; i < parts.length - 1; i++){
+    if(!obj || typeof obj !== "object"){
+      return Object.assign({ obj: null, field: parts[parts.length - 1] }, meta || {});
+    }
+    obj = obj[parts[i]];
+  }
+  return Object.assign({ obj, field: parts[parts.length - 1] }, meta || {});
+}
 function lightLabResolveTarget(path){
   if(path.indexOf("profile.") === 0){
     const key = (S.lightLabProfileKey && LIGHT_TUNABLES.profiles[S.lightLabProfileKey]) ? S.lightLabProfileKey
       : (S.lightProfileKey || LIGHT_DEFAULT_PROFILE);
-    return { obj: LIGHT_TUNABLES.profiles[key], field: path.slice("profile.".length), profileKey: key };
+    const profile = LIGHT_TUNABLES.profiles[key];
+    const relative = path.slice("profile.".length);
+    if(relative.indexOf("light.") === 0){
+      const index = Math.max(0, Math.min(
+        Number.isInteger(S.lightLabLightIndex) ? S.lightLabLightIndex : 0,
+        Math.max(0, (profile.lights || []).length - 1)
+      ));
+      return lightLabNestedTarget(
+        (profile.lights || [])[index],
+        relative.slice("light.".length),
+        { profileKey: key, lightIndex: index }
+      );
+    }
+    return lightLabNestedTarget(profile, relative, { profileKey: key });
   }
   if(path.indexOf("celestialArc.") === 0){
-    return { obj: LIGHT_TUNABLES.celestialArc, field: path.slice("celestialArc.".length) };
+    return lightLabNestedTarget(LIGHT_TUNABLES.celestialArc, path.slice("celestialArc.".length));
   }
-  return { obj: LIGHT_TUNABLES, field: path };
+  return lightLabNestedTarget(LIGHT_TUNABLES, path);
 }
 function getLightTunable(path){
   const t = lightLabResolveTarget(path);
@@ -14401,17 +14484,32 @@ function getLightTunable(path){
 // on the interior path — this covers the tabletop path, where postSuite may be stale/unmounted).
 function lightLabApplyTunables(){
   if(!S.mounted) return;
-  if(S.lastBoard){
+  if(S.clayRoomMounted && S.clayRoomLightRecipeId){
+    clayRoomSetLightingRecipe(S.clayRoomLightRecipeId, "light-lab-tunable");
+  } else if(S.lastBoard){
     if(S.isInteriorBoard) setInteriorBoard(S.lastBoard);
     else setBoard(S.lastBoard);
   } else if(S.lightProfileKey){
     applyLightProfile(S.lightProfileKey); // pre-setBoard/mount-time baseline (no board yet)
   }
+  const activeRecipe = LIGHT_TUNABLES.profiles[
+    (S.clayRoomMounted && S.clayRoomLightRecipeId) || S.lightLabProfileKey || S.lightProfileKey
+  ];
+  if(activeRecipe && activeRecipe.toneMap && activeRecipe.toneMap.profile !== GRADE_TONEMAP){
+    window.Theater._setGradeTonemapForTest(activeRecipe.toneMap.profile);
+  }
   if(S.postSuite){
-    S.postSuite.grade.uniforms.uExposureFloor.value = LIGHT_TUNABLES.gradeExposureFloor;
+    S.postSuite.grade.uniforms.uExposureFloor.value = activeRecipe
+      ? activeRecipe.exposureFloor : LIGHT_TUNABLES.gradeExposureFloor;
+    if(S.postSuite.grade.uniforms.uTonemapStrength){
+      S.postSuite.grade.uniforms.uTonemapStrength.value = activeRecipe
+        ? activeRecipe.toneMap.strength : 1;
+    }
     if(S.postSuite.bloom){
-      S.postSuite.bloom.threshold = LIGHT_TUNABLES.bloomThreshold;
-      S.postSuite.bloom.strength = LIGHT_TUNABLES.bloomStrength;
+      S.postSuite.bloom.threshold = activeRecipe
+        ? activeRecipe.bloom.threshold : LIGHT_TUNABLES.bloomThreshold;
+      S.postSuite.bloom.strength = activeRecipe
+        ? activeRecipe.bloom.strength : LIGHT_TUNABLES.bloomStrength;
     }
   }
   markDirty();
@@ -14420,7 +14518,70 @@ function lightLabApplyTunables(){
 function setLightTunable(path, value){
   const t = lightLabResolveTarget(path);
   if(!t.obj || !(t.field in t.obj)) return false;
+  S.lightLabUndo.push(lightRecipeDeepClone(LIGHT_TUNABLES));
+  if(S.lightLabUndo.length > 60) S.lightLabUndo.shift();
+  S.lightLabRedo = [];
   t.obj[t.field] = value;
+  if(t.profileKey && t.lightIndex != null){
+    const light = LIGHT_TUNABLES.profiles[t.profileKey].lights[t.lightIndex];
+    if(path === "profile.light.color") light.colorOverride = true;
+    if((path === "profile.light.temperatureK" || path === "profile.light.colorOverride")
+      && light.colorOverride === false){
+      light.color = lightRecipeKelvinColor(light.temperatureK);
+    }
+  }
+  const selectedProfileKey = (S.lightLabProfileKey && LIGHT_TUNABLES.profiles[S.lightLabProfileKey])
+    ? S.lightLabProfileKey : (S.lightProfileKey || LIGHT_DEFAULT_PROFILE);
+  const selectedProfile = LIGHT_TUNABLES.profiles[selectedProfileKey];
+  if(path === "profile.exposureFloor") LIGHT_TUNABLES.gradeExposureFloor = value;
+  if(path === "profile.bloom.threshold") LIGHT_TUNABLES.bloomThreshold = value;
+  if(path === "profile.bloom.strength") LIGHT_TUNABLES.bloomStrength = value;
+  if(path === "profile.spriteResponse.emissiveFloor") LIGHT_TUNABLES.spriteEmissiveFloor = value;
+  if(path === "gradeExposureFloor" && selectedProfile) selectedProfile.exposureFloor = value;
+  if(path === "bloomThreshold" && selectedProfile) selectedProfile.bloom.threshold = value;
+  if(path === "bloomStrength" && selectedProfile) selectedProfile.bloom.strength = value;
+  if(path === "spriteEmissiveFloor" && selectedProfile) selectedProfile.spriteResponse.emissiveFloor = value;
+  const profile = t.profileKey ? LIGHT_TUNABLES.profiles[t.profileKey] : null;
+  if(profile){
+    const report = lightRecipeValidate(profile);
+    if(!report.ok){
+      const prior = S.lightLabUndo.pop();
+      lightLabReplaceTunables(prior);
+      return false;
+    }
+  }
+  S.lightLabDirty = true;
+  lightLabApplyTunables();
+  return true;
+}
+function lightLabReplaceTunables(snapshot){
+  if(!snapshot || typeof snapshot !== "object") return false;
+  Object.keys(LIGHT_TUNABLES).forEach((key) => { delete LIGHT_TUNABLES[key]; });
+  Object.assign(LIGHT_TUNABLES, lightRecipeDeepClone(snapshot));
+  return true;
+}
+function lightLabResetAuthored(){
+  S.lightLabUndo.push(lightRecipeDeepClone(LIGHT_TUNABLES));
+  if(S.lightLabUndo.length > 60) S.lightLabUndo.shift();
+  S.lightLabRedo = [];
+  lightLabReplaceTunables(LIGHT_LAB_AUTHORED_BASELINE);
+  S.lightLabDirty = false;
+  lightLabApplyTunables();
+  return true;
+}
+function lightLabUndo(){
+  if(!S.lightLabUndo.length) return false;
+  S.lightLabRedo.push(lightRecipeDeepClone(LIGHT_TUNABLES));
+  lightLabReplaceTunables(S.lightLabUndo.pop());
+  S.lightLabDirty = JSON.stringify(LIGHT_TUNABLES) !== JSON.stringify(LIGHT_LAB_AUTHORED_BASELINE);
+  lightLabApplyTunables();
+  return true;
+}
+function lightLabRedo(){
+  if(!S.lightLabRedo.length) return false;
+  S.lightLabUndo.push(lightRecipeDeepClone(LIGHT_TUNABLES));
+  lightLabReplaceTunables(S.lightLabRedo.pop());
+  S.lightLabDirty = JSON.stringify(LIGHT_TUNABLES) !== JSON.stringify(LIGHT_LAB_AUTHORED_BASELINE);
   lightLabApplyTunables();
   return true;
 }
@@ -14432,15 +14593,61 @@ window.Theater._lightLabSetTunable = function(path, value){ return setLightTunab
 window.Theater._lightLabGetTunable = function(path){ return getLightTunable(path); };
 window.Theater._lightLabSchema = function(){ return LIGHT_TUNABLE_SCHEMA.map((e) => Object.assign({}, e)); };
 window.Theater._lightLabExport = function(){ return lightLabExportJSON(); };
+window.Theater._lightLabResetAuthored = function(){ return lightLabResetAuthored(); };
+window.Theater._lightLabUndo = function(){ return lightLabUndo(); };
+window.Theater._lightLabRedo = function(){ return lightLabRedo(); };
+window.Theater._lightLabHistory = function(){
+  return { undo: S.lightLabUndo.length, redo: S.lightLabRedo.length, dirty: !!S.lightLabDirty };
+};
+window.Theater._lightLabSelectForTest = function(profileKey, lightIndex){
+  if(!LIGHT_TUNABLES.profiles[profileKey]) return false;
+  S.lightLabProfileKey = profileKey;
+  S.lightLabLightIndex = Math.max(0, Number(lightIndex) || 0);
+  return true;
+};
 
 // The flat probe/UI manifest — one entry per bindable tunable. `group:"profile"` entries are relative
 // to whichever profile the lab's dropdown currently has selected (lightLabResolveTarget's own "profile."
 // prefix); every other entry is a direct LIGHT_TUNABLES (or LIGHT_TUNABLES.celestialArc) property.
 const LIGHT_TUNABLE_SCHEMA = [
-  { path: "profile.ambientIntensity", label: "Ambient intensity (fill)", type: "range", min: 0, max: 1.5, step: 0.01, group: "profile" },
-  { path: "profile.ambientColor", label: "Ambient color (fill)", type: "color", group: "profile" },
-  { path: "profile.pointIntensity", label: "Key intensity", type: "range", min: 0, max: 30, step: 0.5, group: "profile" },
-  { path: "profile.pointColor", label: "Key color", type: "color", group: "profile" },
+  { path: "profile.ambient.intensity", label: "Ambient intensity (fill)", type: "range", min: 0, max: 1.5, step: 0.01, group: "profile" },
+  { path: "profile.ambient.color", label: "Ambient color (fill)", type: "color", group: "profile" },
+  { path: "profile.exposureFloor", label: "Recipe exposure floor", type: "range", min: 0, max: 0.3, step: 0.005, group: "profile" },
+  { path: "profile.toneMap.profile", label: "Tone-map profile", type: "select", options: ["agx", "none"], group: "profile" },
+  { path: "profile.toneMap.strength", label: "Tone-map strength", type: "range", min: 0, max: 1, step: 0.01, group: "profile" },
+  { path: "profile.bloom.threshold", label: "Recipe bloom threshold", type: "range", min: 0, max: 2, step: 0.01, group: "profile" },
+  { path: "profile.bloom.strength", label: "Recipe bloom strength", type: "range", min: 0, max: 3, step: 0.05, group: "profile" },
+  { path: "profile.spriteResponse.emissiveFloor", label: "Recipe sprite readability", type: "range", min: 0, max: 0.3, step: 0.005, group: "profile" },
+  { path: "profile.light.enabled", label: "Fixture enabled", type: "checkbox", group: "light" },
+  { path: "profile.light.type", label: "Light type", type: "select", options: ["point", "spot", "directional", "environment"], group: "light" },
+  { path: "profile.light.temperatureK", label: "Temperature (Kelvin)", type: "range", min: 1000, max: 20000, step: 100, group: "light" },
+  { path: "profile.light.colorOverride", label: "Exact color override", type: "checkbox", group: "light" },
+  { path: "profile.light.intensity", label: "Tabletop intensity", type: "range", min: 0, max: 30, step: 0.5, group: "light" },
+  { path: "profile.light.physicalIntensity", label: "Physical fixture intensity", type: "range", min: 0, max: 30, step: 0.25, group: "light" },
+  { path: "profile.light.color", label: "Light color", type: "color", group: "light" },
+  { path: "profile.light.positionStrategy", label: "Position strategy", type: "select", options: ["board-relative", "socket-relative"], group: "light" },
+  { path: "profile.light.pos.x", label: "Board position X", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
+  { path: "profile.light.pos.y", label: "Board position Y", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
+  { path: "profile.light.pos.z", label: "Board position Z", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
+  { path: "profile.light.rangeM", label: "Range (metres)", type: "range", min: 0, max: 30, step: 0.25, group: "light" },
+  { path: "profile.light.heightM", label: "Source height (metres)", type: "range", min: 0, max: 8, step: 0.05, group: "light" },
+  { path: "profile.light.falloff", label: "Physical falloff", type: "range", min: 0, max: 2, step: 0.05, group: "light" },
+  { path: "profile.light.azimuthDeg", label: "Azimuth (degrees)", type: "range", min: -360, max: 360, step: 1, group: "light" },
+  { path: "profile.light.elevationDeg", label: "Elevation (degrees)", type: "range", min: -90, max: 90, step: 1, group: "light" },
+  { path: "profile.light.spot.coneDeg", label: "Spot cone (degrees)", type: "range", min: 1, max: 179, step: 1, group: "light" },
+  { path: "profile.light.spot.penumbra", label: "Spot penumbra", type: "range", min: 0, max: 1, step: 0.01, group: "light" },
+  { path: "profile.light.shadow.cast", label: "Cast shadow", type: "checkbox", group: "light" },
+  { path: "profile.light.shadow.bias", label: "Shadow bias", type: "range", min: -0.1, max: 0.1, step: 0.0005, group: "light" },
+  { path: "profile.light.shadow.normalBias", label: "Shadow normal bias", type: "range", min: 0, max: 1, step: 0.005, group: "light" },
+  { path: "profile.light.shadow.mapSize", label: "Shadow map size", type: "select-number", options: [256, 512, 1024, 2048], group: "light" },
+  { path: "profile.light.shadow.budgetPriority", label: "Shadow budget priority", type: "range", min: 0, max: 3, step: 1, group: "light" },
+  { path: "profile.light.flicker.amplitude", label: "Flicker amplitude", type: "range", min: 0, max: 0.5, step: 0.01, group: "light" },
+  { path: "profile.light.flicker.cadenceMs", label: "Flicker cadence (ms)", type: "range", min: 100, max: 5000, step: 20, group: "light" },
+  { path: "profile.light.fixtureId", label: "Physical fixture id", type: "text", group: "light" },
+  { path: "profile.light.mount", label: "Mount socket", type: "select", options: ["none", "floor", "wall", "ceiling"], group: "light" },
+  { path: "profile.light.emitterLocal.x", label: "Emitter local X", type: "range", min: -4, max: 4, step: 0.01, group: "light" },
+  { path: "profile.light.emitterLocal.y", label: "Emitter local Y", type: "range", min: -4, max: 4, step: 0.01, group: "light" },
+  { path: "profile.light.emitterLocal.z", label: "Emitter local Z", type: "range", min: -4, max: 4, step: 0.01, group: "light" },
   { path: "stageAmbientFloor", label: "Stage ambient floor (STAGE_AMBIENT_FLOOR)", type: "range", min: 0, max: 1, step: 0.01, group: "global" },
   { path: "gradeExposureFloor", label: "Exposure floor, pre-AgX (ledger #12/13)", type: "range", min: 0, max: 0.3, step: 0.005, group: "global" },
   { path: "bloomThreshold", label: "Bloom threshold (linear)", type: "range", min: 0, max: 2, step: 0.01, group: "global" },
@@ -14474,24 +14681,30 @@ function lightLabExportJSON(){
   const profiles = {};
   for(const key in LIGHT_TUNABLES.profiles){
     const p = LIGHT_TUNABLES.profiles[key];
-    profiles[key] = {
-      ambientColor: hex(p.ambientColor), ambientIntensity: p.ambientIntensity,
-      pointColor: p.pointColor != null ? hex(p.pointColor) : null, pointIntensity: p.pointIntensity,
-    };
+    profiles[key] = lightRecipeDeepClone(p);
+    profiles[key].ambient.color = hex(p.ambient.color);
+    profiles[key].lights.forEach((light, index) => {
+      light.color = hex(p.lights[index].color);
+    });
   }
   return {
-    _unit: "LL-1", _generatedAt: new Date().toISOString(),
+    kind: "light-profile-lock-set",
+    schemaVersion: LIGHT_RECIPE_LOCK_SCHEMA_VERSION,
+    id: LIGHT_PROFILE_LOCKS_COMPILED.id,
+    version: LIGHT_PROFILE_LOCKS_COMPILED.version,
+    settings: {
+      stageAmbientFloor: LIGHT_TUNABLES.stageAmbientFloor,
+      gradeExposureFloor: LIGHT_TUNABLES.gradeExposureFloor,
+      bloomThreshold: LIGHT_TUNABLES.bloomThreshold,
+      bloomStrength: LIGHT_TUNABLES.bloomStrength,
+      gradeTintScale: LIGHT_TUNABLES.gradeTintScale,
+      gradeTintMax: LIGHT_TUNABLES.gradeTintMax,
+      celestialArc: Object.assign({}, LIGHT_TUNABLES.celestialArc),
+      spriteEmissiveFloor: LIGHT_TUNABLES.spriteEmissiveFloor,
+      sceneAmbient: LIGHT_TUNABLES.sceneAmbient,
+      lightRenderGain: LIGHT_TUNABLES.lightRenderGain,
+    },
     profiles,
-    stageAmbientFloor: LIGHT_TUNABLES.stageAmbientFloor,
-    gradeExposureFloor: LIGHT_TUNABLES.gradeExposureFloor,
-    bloomThreshold: LIGHT_TUNABLES.bloomThreshold,
-    bloomStrength: LIGHT_TUNABLES.bloomStrength,
-    gradeTintScale: LIGHT_TUNABLES.gradeTintScale,
-    gradeTintMax: LIGHT_TUNABLES.gradeTintMax,
-    celestialArc: Object.assign({}, LIGHT_TUNABLES.celestialArc),
-    spriteEmissiveFloor: LIGHT_TUNABLES.spriteEmissiveFloor,
-    sceneAmbient: LIGHT_TUNABLES.sceneAmbient,
-    lightRenderGain: LIGHT_TUNABLES.lightRenderGain,
   };
 }
 
@@ -14542,7 +14755,18 @@ function lightLabField(entry){
   const valOut = document.createElement("span");
   valOut.style.cssText = "flex:0 0 48px;text-align:right;color:#9c9;";
   let input;
-  if(entry.type === "color"){
+  if(entry.type === "checkbox"){
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = getLightTunable(entry.path) !== false;
+    input.style.cssText = "flex:0 0 28px;height:16px;";
+    valOut.textContent = input.checked ? "ON" : "OFF";
+    input.addEventListener("change", () => {
+      setLightTunable(entry.path, !!input.checked);
+      valOut.textContent = input.checked ? "ON" : "OFF";
+      lightLabRefreshReadouts();
+    });
+  } else if(entry.type === "color"){
     input = document.createElement("input");
     input.type = "color";
     input.style.cssText = "flex:0 0 28px;height:16px;border:none;padding:0;background:none;";
@@ -14553,6 +14777,35 @@ function lightLabField(entry){
       const v = lightLabHexStrToNum(input.value);
       setLightTunable(entry.path, v);
       valOut.textContent = input.value;
+      lightLabRefreshReadouts();
+    });
+  } else if(entry.type === "select" || entry.type === "select-number"){
+    input = document.createElement("select");
+    input.style.cssText = "flex:1 1 96px;min-width:0;background:#222;color:#eee;border:1px solid #444;";
+    (entry.options || []).forEach((optionValue) => {
+      const option = document.createElement("option");
+      option.value = String(optionValue);
+      option.textContent = String(optionValue);
+      input.appendChild(option);
+    });
+    input.value = String(getLightTunable(entry.path));
+    valOut.textContent = input.value;
+    input.addEventListener("change", () => {
+      const value = entry.type === "select-number" ? Number(input.value) : input.value;
+      setLightTunable(entry.path, value);
+      valOut.textContent = input.value;
+      lightLabRefreshReadouts();
+    });
+  } else if(entry.type === "text"){
+    input = document.createElement("input");
+    input.type = "text";
+    input.value = String(getLightTunable(entry.path) || "");
+    input.style.cssText = "flex:1 1 96px;min-width:0;background:#222;color:#eee;border:1px solid #444;";
+    valOut.textContent = "";
+    input.addEventListener("change", () => {
+      if(!setLightTunable(entry.path, input.value)){
+        input.value = String(getLightTunable(entry.path) || "");
+      }
       lightLabRefreshReadouts();
     });
   } else {
@@ -14584,15 +14837,37 @@ function lightLabRebuildProfileFields(container){
     container.appendChild(lightLabField(entry).row);
   });
 }
+function lightLabRebuildLightFields(container){
+  container.innerHTML = "";
+  const profile = LIGHT_TUNABLES.profiles[S.lightLabProfileKey];
+  if(!profile || !profile.lights || !profile.lights.length){
+    const empty = document.createElement("div");
+    empty.textContent = "No local light in this recipe; ambient/environment is the source.";
+    empty.style.cssText = "color:#7a8494;margin:3px 0 6px;";
+    container.appendChild(empty);
+    return;
+  }
+  LIGHT_TUNABLE_SCHEMA.filter((e) => e.group === "light").forEach((entry) => {
+    container.appendChild(lightLabField(entry).row);
+  });
+}
 
 function lightLabRefreshReadouts(){
   if(!S.lightLabMounted || !S.lightLabEls || !S.lightLabEls.readout) return;
   const gates = (window.Theater._lumaGatesForTest && S.mounted) ? window.Theater._lumaGatesForTest() : null;
   const el = S.lightLabEls.readout;
-  if(!gates){ el.textContent = "P-A readouts: no live board mounted."; return; }
+  const recipe = LIGHT_TUNABLES.profiles[S.lightLabProfileKey] || LIGHT_TUNABLES.profiles[LIGHT_DEFAULT_PROFILE];
+  const historyLine = "preview " + (S.lightLabDirty ? "DIRTY" : "AUTHORED")
+    + " · undo " + S.lightLabUndo.length + " · redo " + S.lightLabRedo.length;
+  if(!gates){
+    el.textContent = recipe.id + " · " + recipe.mode + "\n" + historyLine
+      + "\nP-A readouts: no live board mounted.";
+    return;
+  }
   const pct = (v) => (v == null ? "—" : (v * 100).toFixed(1) + "%");
   el.textContent =
-    "P-A readouts (docs/VQ2-RESPEC.md §1) — profile: " + (gates.lightProfile || "—") +
+    recipe.id + " · " + recipe.mode + "\n" + historyLine +
+    "\nP-A readouts (docs/VQ2-RESPEC.md §1) — live profile: " + (gates.lightProfile || "—") +
     "\n  tray-edge luma: " + pct(gates.trayEdgeLuma) + "  (gate: <=12%)" +
     "\n  PC-face luma:   " + pct(gates.pcFaceLuma) + (gates.pcUnitFound ? "" : "  (no PC unit on this board)") + "  (gate: >=18%)" +
     "\n  frame median:   " + pct(gates.frameMedianLuma) + "  (compare across profiles for the >=6% separation gate)";
@@ -14633,30 +14908,82 @@ function mountLightLab(){
   select.style.cssText = "width:100%;margin-bottom:4px;background:#222;color:#eee;border:1px solid #444;";
   Object.keys(LIGHT_TUNABLES.profiles).forEach((key) => {
     const opt = document.createElement("option");
-    opt.value = key; opt.textContent = key;
+    const recipe = LIGHT_TUNABLES.profiles[key];
+    opt.value = key;
+    opt.textContent = (recipe.rolled ? "WORLD · " : "TEST · ") + recipe.label;
     select.appendChild(opt);
   });
   select.value = S.lightLabProfileKey || S.lightProfileKey || LIGHT_DEFAULT_PROFILE;
   S.lightLabProfileKey = select.value;
+  const recipeInfo = document.createElement("div");
+  recipeInfo.style.cssText = "color:#9ab;margin:2px 0 5px;font:10px/1.35 monospace;";
   const profFields = document.createElement("div");
+  const lightHeader = document.createElement("div");
+  lightHeader.textContent = "Named light / fixture";
+  lightHeader.style.cssText = "color:#9ab;border-top:1px solid #333;padding-top:5px;margin-top:5px;";
+  const lightSelect = document.createElement("select");
+  lightSelect.style.cssText = "width:100%;margin:3px 0 4px;background:#222;color:#eee;border:1px solid #444;";
+  const lightFields = document.createElement("div");
+  function refreshRecipeEditor(){
+    const profile = LIGHT_TUNABLES.profiles[S.lightLabProfileKey];
+    lightLabRebuildProfileFields(profFields);
+    lightSelect.innerHTML = "";
+    (profile && profile.lights ? profile.lights : []).forEach((light, index) => {
+      const opt = document.createElement("option");
+      opt.value = String(index);
+      opt.textContent = light.label + " · " + light.id;
+      lightSelect.appendChild(opt);
+    });
+    const count = profile && profile.lights ? profile.lights.length : 0;
+    S.lightLabLightIndex = Math.max(0, Math.min(S.lightLabLightIndex || 0, Math.max(0, count - 1)));
+    lightSelect.value = String(S.lightLabLightIndex);
+    lightSelect.disabled = count === 0;
+    if(profile){
+      const invariants = profile.spriteResponse.invariants;
+      const selectedLight = count ? profile.lights[S.lightLabLightIndex] : null;
+      recipeInfo.textContent =
+        profile.mode + " · source: " + profile.source.label
+        + (profile.source.loreNative ? " · lore-native" : " · diagnostic only")
+        + "\nsprite invariants (read-only): " + invariants.colorSpace + " · "
+        + invariants.magnificationFilter + " mag / " + invariants.minificationFilter
+        + " min · " + invariants.alphaMode
+        + (selectedLight
+          ? "\nunits: " + selectedLight.intensityUnit + " / " + selectedLight.physicalIntensityUnit
+            + " · " + selectedLight.positionStrategy
+          : "\nno local light; ambient/environment only");
+    } else {
+      recipeInfo.textContent = "recipe unavailable";
+    }
+    lightLabRebuildLightFields(lightFields);
+  }
   select.addEventListener("change", () => {
     S.lightLabProfileKey = select.value;
-    lightLabRebuildProfileFields(profFields);
+    S.lightLabLightIndex = 0;
+    refreshRecipeEditor();
+  });
+  lightSelect.addEventListener("change", () => {
+    S.lightLabLightIndex = Number(lightSelect.value) || 0;
+    refreshRecipeEditor();
   });
   const previewBtn = document.createElement("button");
   previewBtn.textContent = "Preview this profile on the live board";
   previewBtn.style.cssText = "width:100%;margin:2px 0 6px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;";
   previewBtn.addEventListener("click", () => {
     if(!S.mounted) return;
-    applyLightProfile(select.value);
+    if(S.clayRoomMounted) clayRoomSetLightingRecipe(select.value, "light-lab-preview");
+    else applyLightProfile(select.value);
     markDirty(); scheduleRender();
     lightLabRefreshReadouts();
   });
   profSection.appendChild(select);
+  profSection.appendChild(recipeInfo);
   profSection.appendChild(previewBtn);
   profSection.appendChild(profFields);
+  profSection.appendChild(lightHeader);
+  profSection.appendChild(lightSelect);
+  profSection.appendChild(lightFields);
   panel.appendChild(profSection);
-  lightLabRebuildProfileFields(profFields);
+  refreshRecipeEditor();
 
   ["global", "celestial", "sprite"].forEach((group) => {
     const section = document.createElement("div");
@@ -14680,16 +15007,35 @@ function mountLightLab(){
   readoutSection.appendChild(readout);
   panel.appendChild(readoutSection);
 
+  const historyActions = document.createElement("div");
+  historyActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:6px;";
+  [
+    ["UNDO", () => lightLabUndo()],
+    ["REDO", () => lightLabRedo()],
+    ["RESET", () => lightLabResetAuthored()]
+  ].forEach((def) => {
+    const button = document.createElement("button");
+    button.textContent = def[0];
+    button.style.cssText = "font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+    button.addEventListener("click", () => {
+      def[1]();
+      refreshRecipeEditor();
+      lightLabRefreshReadouts();
+    });
+    historyActions.appendChild(button);
+  });
+  panel.appendChild(historyActions);
+
   // export
   const exportBtn = document.createElement("button");
-  exportBtn.textContent = "EXPORT current values (JSON)";
+  exportBtn.textContent = "SAVE AUTHORED LOCK (JSON)";
   exportBtn.style.cssText = "width:100%;margin-top:6px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   exportBtn.addEventListener("click", () => {
     const json = JSON.stringify(lightLabExportJSON(), null, 2);
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = "light-lab-export.json";
+    a.href = url; a.download = "light-profile-locks.json";
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
@@ -14800,7 +15146,11 @@ function clayRoomMaybeAutoMount(){
 // identity returns without replacing a light object, material, or scheduler.
 function clayRoomApplyLightProfile(record){
   if(!S.scene) return;
-  const profile = CLAY_C1A_LIGHT_PROFILE;
+  const recipeId = S.clayRoomLightRecipeId
+    || (S.clayRoomCompiled && S.clayRoomCompiled.lightRecipeId)
+    || "clay-opposing-pair";
+  const recipe = LIGHT_TUNABLES.profiles[recipeId] || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+  const profile = lightRecipeLegacyProfile(recipe);
   const ambientIsAuthored = !!(S.ambientLight && S.ambientLight.userData
     && S.ambientLight.userData.clayLightId === "clay-ambient");
   const hasForeignProfilePoints = !!(S.pointLights && S.pointLights.length);
@@ -14808,8 +15158,13 @@ function clayRoomApplyLightProfile(record){
     if(S.ambientLight) S.scene.remove(S.ambientLight);
     const ambient = new THREE.AmbientLight(profile.ambient.color, profile.ambient.intensity);
     ambient.userData.clayLightId = "clay-ambient";
+    ambient.userData.clayLightRecipeId = recipe.id;
     S.scene.add(ambient);
     S.ambientLight = ambient;
+  } else {
+    S.ambientLight.color.setHex(profile.ambient.color);
+    S.ambientLight.intensity = profile.ambient.intensity;
+    S.ambientLight.userData.clayLightRecipeId = recipe.id;
   }
   if(hasForeignProfilePoints){
     // The old scheduler captured these exact profile point objects/bases. Stop it at the ownership
@@ -14819,9 +15174,52 @@ function clayRoomApplyLightProfile(record){
     S.pointLights = [];
     startLightFlicker(0, S.interiorLightTargets || []);
   }
+  // The two diagnostic modes answer light questions without the production camera/hemi rig adding
+  // an uncredited third temperature. World-facing production modes keep that real scene rig intact.
+  if(recipe.mode.indexOf("diagnostic-") === 0){
+    [S.hemiLight, S.keyLight, S.fillLight, S.interiorCameraKey].forEach(function(light){
+      if(light) light.intensity = 0;
+    });
+  }
   if(!S.clayRoomLightingBaseline && (S.interiorLightTargets || []).length){
     S.clayRoomLightingBaseline = clayRoomLightingSnapshot("authored-baseline");
   }
+}
+
+function clayRoomSetLightingRecipe(recipeId, reason){
+  if(!S.clayRoomRecord || !LIGHT_TUNABLES.profiles[recipeId]) return false;
+  const recipe = lightRecipeDeepClone(LIGHT_TUNABLES.profiles[recipeId]);
+  const validation = lightRecipeValidate(recipe);
+  if(!validation.ok){
+    try { console.warn("qa: rejected invalid Clayroom lighting recipe", recipeId, validation.errors); } catch(e){}
+    return false;
+  }
+  const compiled = clayRoomBoardFrom(S.clayRoomRecord, {
+    lightRecipeId: recipeId,
+    lightRecipe: recipe
+  });
+  S.clayRoomCompiled = compiled;
+  S.clayRoomLightRecipeId = recipeId;
+  S.clayRoomLightingBaseline = null;
+  S.boardKey = null;
+  const session = clayRoomMovementSession();
+  setInteriorBoard(
+    (session && clayRoomMovementBoardFromState(session.state)) || compiled.board,
+    { roomTransition: false, reason: reason || "clayroom-light-recipe" }
+  );
+  // A recipe change is the one rebuild that SHOULD replace lighting identity. Do not present that
+  // expected replacement as a lifecycle failure in the same readout used for geometry-only replays.
+  S.clayRoomLightingProbeToken = (S.clayRoomLightingProbeToken || 0) + 1;
+  S.clayRoomLightingProbe = {
+    label: "recipe switch → " + recipeId,
+    expectedReplacement: true,
+    preserved: false,
+    duringPass: true,
+    afterPass: true
+  };
+  if(typeof S.clayRoomRefreshLightCatalog === "function") S.clayRoomRefreshLightCatalog();
+  if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
+  return true;
 }
 
 function clayRoomLightingSnapshot(label){
@@ -14954,6 +15352,13 @@ function clayRoomSetLightState(lightId, nextState){
 }
 
 function clayRoomRestoreAuthoredLightBaseline(){
+  const recipeId = S.clayRoomLightRecipeId || "clay-opposing-pair";
+  if(LIGHT_LAB_AUTHORED_BASELINE.profiles[recipeId]){
+    LIGHT_TUNABLES.profiles[recipeId] = lightRecipeDeepClone(
+      LIGHT_LAB_AUTHORED_BASELINE.profiles[recipeId]
+    );
+    clayRoomSetLightingRecipe(recipeId, "clayroom-authored-baseline");
+  }
   (S.interiorLightTargets || []).forEach(function(t){
     t.state = "steady";
     t.sampleIndex = 0;
@@ -15886,25 +16291,28 @@ function clayRoomBuildWorkbenchChrome(record){
     h.style.cssText = "margin:2px 0 7px;color:#8e9baa;font:600 10px monospace;letter-spacing:.12em;";
     return h;
   }
-  rail.appendChild(railHeading("CATALOG · APPROVED PRODUCTION"));
+  rail.appendChild(railHeading("CATALOG · LIVE FIXTURE SLICE"));
   const catalog = [
     ["STRUCTURE", "10 ft wall", "room-shell"],
     ["PROP", "Crate · 3 ft", record.object.id],
     ["INTERACTABLE", "Door · 36 × 80 in", record.portal.id],
-    ["LIGHT", "Warm west practical", "clay-west-warm"],
-    ["LIGHT", "Cool east practical", "clay-east-cool"],
+    ["DIAGNOSTIC LIGHT", "Warm calibration bulb", "clay-west-warm"],
+    ["DIAGNOSTIC LIGHT", "Cool calibration bulb", "clay-east-cool"],
     ["SPRITE", "Goblin", record.citizen.bestiaryId],
   ];
   catalog.forEach(function(row){
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.claySelect = row[2];
+    if(row[2] === "clay-west-warm") b.dataset.clayLightCatalogSlot = "0";
+    if(row[2] === "clay-east-cool") b.dataset.clayLightCatalogSlot = "1";
     b.style.cssText = "width:100%;text-align:left;background:#20242b;color:#e0e5ea;border:1px solid #333a44;border-radius:4px;padding:7px 8px;margin:0 0 5px;cursor:pointer;";
-    b.innerHTML = "<small style='display:block;color:#8290a1;font:9px monospace'>" + row[0] + "</small>" + row[1] +
-      "<small style='float:right;color:#6fcf91;font:9px monospace'>MOUNTED</small>";
+    b.innerHTML = "<small data-clay-light-kind style='display:block;color:#8290a1;font:9px monospace'>" + row[0] + "</small>" +
+      "<span data-clay-light-label>" + row[1] + "</span>" +
+      "<small data-clay-light-status style='float:right;color:#6fcf91;font:9px monospace'>MOUNTED</small>";
     b.addEventListener("click", function(){
-      S.clayRoomSelectedId = row[2];
-      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(row[2], "catalog");
+      S.clayRoomSelectedId = b.dataset.claySelect;
+      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(b.dataset.claySelect, "catalog");
     });
     rail.appendChild(b);
   });
@@ -15918,24 +16326,26 @@ function clayRoomBuildWorkbenchChrome(record){
     ["Door", record.portal.id],
     ["Crate", record.object.id],
     ["Goblin", record.citizen.bestiaryId],
-    ["Warm light", "clay-west-warm"],
-    ["Cool light", "clay-east-cool"],
+    ["Warm calibration bulb", "clay-west-warm"],
+    ["Cool calibration bulb", "clay-east-cool"],
   ].forEach(function(row){
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.claySceneId = row[1];
+    if(row[1] === "clay-west-warm") b.dataset.clayLightSceneSlot = "0";
+    if(row[1] === "clay-east-cool") b.dataset.clayLightSceneSlot = "1";
     b.textContent = "◇  " + row[0];
     b.style.cssText = "display:block;width:100%;text-align:left;background:transparent;color:#cbd3dc;border:0;border-left:2px solid transparent;padding:5px 7px;cursor:pointer;font:11px monospace;";
     b.addEventListener("click", function(){
-      S.clayRoomSelectedId = row[1];
-      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(row[1], "scene");
+      S.clayRoomSelectedId = b.dataset.claySceneId;
+      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(b.dataset.claySceneId, "scene");
     });
     scene.appendChild(b);
   });
   rail.appendChild(scene);
   const safety = document.createElement("div");
   safety.style.cssText = "margin-top:14px;padding:8px;border:1px solid #4d4431;background:#242117;color:#d7c58c;font:10px/1.4 monospace;";
-  safety.textContent = "Catalog is an admitted fixture slice. Placement edits are session-only; sockets and defaults remain locked.";
+  safety.textContent = "The light rows mirror the current recipe. Diagnostic bulbs never masquerade as world fixtures; placement edits remain session-only.";
   rail.appendChild(safety);
 
   const viewport = document.createElement("div");
@@ -16041,6 +16451,7 @@ function mountClayRoom(){
     // precisely what later replays could not reproduce.
     S.clayRoomRecord = record;
     S.clayRoomCompiled = compiled;
+    S.clayRoomLightRecipeId = compiled.lightRecipeId || "clay-opposing-pair";
     S.clayRoomDiagnosticActive = true;
     setInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
     S.clayGridMesh = clayRoomBuildSeamGrid(record, compiled.room); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live; compiled.room is the spatializer's REAL room rect (CL-R0 coordinate fix)
@@ -16817,9 +17228,26 @@ function clayRoomMountOverlay(record, host){
   const lightsBody = document.createElement("div");
   lightsBody.style.cssText = "display:none;font:10px/1.45 monospace;color:#dde;";
   const lightsIntro = document.createElement("div");
-  lightsIntro.textContent = "production practicals · deterministic local state · one sample drives mesh + emitted light";
+  lightsIntro.textContent = "Three honest modes: neutral measurement · warm/cool test bulbs · lore-native world practical";
   lightsIntro.style.cssText = "color:#9ab;margin-bottom:6px;";
   lightsBody.appendChild(lightsIntro);
+  const lightingModeActions = document.createElement("div");
+  lightingModeActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  const lightingModeButtons = {};
+  [
+    ["clay-neutral-truth", "NEUTRAL"],
+    ["clay-opposing-pair", "WARM / COOL"],
+    ["torchlit", "FANTASY TORCH"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Use " + def[0] + " lighting recipe");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){ clayRoomSetLightingRecipe(def[0], "clayroom-mode-button"); });
+    lightingModeActions.appendChild(button);
+    lightingModeButtons[def[0]] = button;
+  });
+  lightsBody.appendChild(lightingModeActions);
   const lightsActions = document.createElement("div");
   lightsActions.style.cssText = "display:flex;gap:5px;margin-bottom:7px;";
   const restoreLightsBtn = document.createElement("button");
@@ -16834,7 +17262,16 @@ function clayRoomMountOverlay(record, host){
   });
   lightsBody.appendChild(lightsActions);
   const lightStateButtons = {};
-  (S.interiorLightTargets || []).forEach(function(target){
+  const lightRows = document.createElement("div");
+  lightsBody.appendChild(lightRows);
+  let lightRowsKey = "";
+  function clayLightsBuildRows(){
+    const nextKey = (S.interiorLightTargets || []).map(function(target){ return target.id; }).join("|");
+    if(nextKey === lightRowsKey) return;
+    lightRowsKey = nextKey;
+    lightRows.innerHTML = "";
+    Object.keys(lightStateButtons).forEach(function(key){ delete lightStateButtons[key]; });
+    (S.interiorLightTargets || []).forEach(function(target){
     const row = document.createElement("div");
     row.style.cssText = "display:grid;grid-template-columns:1fr auto auto;gap:5px;align-items:center;margin:4px 0;";
     const label = document.createElement("span");
@@ -16852,19 +17289,27 @@ function clayRoomMountOverlay(record, host){
     steady.addEventListener("click", function(){ clayRoomSetLightState(target.id, "steady"); clayLightsRender(); });
     flicker.addEventListener("click", function(){ clayRoomSetLightState(target.id, "flickering"); clayLightsRender(); });
     row.appendChild(label); row.appendChild(steady); row.appendChild(flicker);
-    lightsBody.appendChild(row);
+    lightRows.appendChild(row);
     lightStateButtons[target.id] = { steady: steady, flicker: flicker };
-  });
+    });
+  }
   const lightsOut = document.createElement("pre");
   lightsOut.id = "clay-room-lighting-readout";
   lightsOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
   lightsBody.appendChild(lightsOut);
   function clayLightsRender(){
+    clayLightsBuildRows();
     const snap = clayRoomLightingSnapshot("panel");
+    const activeRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
+      || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+    const authoredRecipe = LIGHT_LAB_AUTHORED_BASELINE.profiles[activeRecipe.id] || activeRecipe;
+    const activeProfile = lightRecipeLegacyProfile(authoredRecipe);
+    const recipeIsAuthored = JSON.stringify(activeRecipe) === JSON.stringify(authoredRecipe);
     const baselineActive = !!(snap.ambient
-      && snap.ambient.intensity === CLAY_C1A_LIGHT_PROFILE.ambient.intensity
-      && snap.ambient.color === CLAY_C1A_LIGHT_PROFILE.ambient.color
-      && snap.lights.length === CLAY_C1A_LIGHT_PROFILE.points.length
+      && recipeIsAuthored
+      && snap.ambient.intensity === activeProfile.ambient.intensity
+      && snap.ambient.color === activeProfile.ambient.color
+      && snap.lights.length === activeProfile.points.length
       && snap.lights.every(function(l){
         return l.state === "steady" && l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity;
       }));
@@ -16873,6 +17318,9 @@ function clayRoomMountOverlay(record, host){
     const isolationPass = flickering.length === 1 && steady.length >= 1
       && steady.every(function(l){ return l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity; });
     const lines = [
+      "recipe " + activeRecipe.id + " · " + activeRecipe.mode,
+      "source " + activeRecipe.source.label
+        + (activeRecipe.source.loreNative ? " · LORE-NATIVE" : " · DIAGNOSTIC ONLY"),
       "authored baseline " + (baselineActive ? "PASS" : "inactive (restore available)"),
       "one-light isolation " + (flickering.length === 1 ? (isolationPass ? "PASS" : "FAIL") : "arm exactly one flicker"),
       "ambient " + (snap.ambient ? snap.ambient.intensity.toFixed(2) : "—")
@@ -16901,12 +17349,18 @@ function clayRoomMountOverlay(record, host){
     lines.push("");
     if(!probe){
       lines.push("animation guard: not run");
+    } else if(probe.expectedReplacement){
+      lines.push("animation guard: " + probe.label);
+      lines.push("  lighting identity replacement EXPECTED · next geometry-only rebuild must preserve it");
     } else {
       lines.push("animation guard: " + probe.label);
       lines.push("  object/material preservation " + (probe.preserved ? "PASS" : "FAIL"));
       lines.push("  before → during " + (probe.duringPass ? "PASS" : "FAIL"));
       lines.push("  before → after " + (probe.afterPass == null ? "pending…" : (probe.afterPass ? "PASS" : "FAIL")));
     }
+    Object.keys(lightingModeButtons).forEach(function(id){
+      lightingModeButtons[id].style.background = id === activeRecipe.id ? "#35516a" : "#2a2a30";
+    });
     lightsOut.textContent = lines.join("\n");
   }
   restoreLightsBtn.addEventListener("click", function(){
@@ -16919,6 +17373,7 @@ function clayRoomMountOverlay(record, host){
     setInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-lighting-proof" });
     clayLightsRender();
   });
+  S.clayRoomRefreshLights = clayLightsRender;
 
   panel.appendChild(factsBody);
   panel.appendChild(explainBody);
@@ -16948,6 +17403,7 @@ function clayRoomMountOverlay(record, host){
     if(which === "mount") clayMountRender();
     if(which === "state") clayDoorStateRender();
     if(which === "movement") clayMovementRender();
+    else clayRoomDisposeMovementOverlay();
     if(which === "lights") clayLightsRender();
     if(CLAY_ROOM_PANEL_POSITION){
       const panelRect = panel.getBoundingClientRect();
@@ -16962,10 +17418,44 @@ function clayRoomMountOverlay(record, host){
     if(id === record.citizen.id || id === record.citizen.bestiaryId) return {
       name: "Goblin", type: "APPROVED CHARACTER SPRITE", ref: record.citizen.bestiaryId, tab: "facts", socket: false, sprite: true
     };
-    if(id === "clay-west-warm") return { name: "Warm west practical", type: "LIGHT · STEADY DEFAULT", ref: id, tab: "lights", socket: false, sprite: false };
-    if(id === "clay-east-cool") return { name: "Cool east practical", type: "LIGHT · STEADY DEFAULT", ref: id, tab: "lights", socket: false, sprite: false };
+    const activeRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
+      || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+    const activeLight = (activeRecipe.lights || []).find(function(light){ return light.id === id; });
+    if(activeLight) return {
+      name: activeLight.label,
+      type: activeRecipe.mode.indexOf("diagnostic-") === 0 ? "DIAGNOSTIC LIGHT" : "LORE-NATIVE LIGHT",
+      ref: id,
+      tab: "lights",
+      socket: false,
+      sprite: false
+    };
     return { name: "Room shell · 10 ft", type: "STRUCTURE", ref: "clay-c1a", tab: "surfaces", socket: false, sprite: false };
   }
+  S.clayRoomRefreshLightCatalog = function(){
+    const activeRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
+      || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+    const lights = (activeRecipe.lights || []).filter(function(light){ return light.enabled !== false; });
+    const diagnostic = activeRecipe.mode.indexOf("diagnostic-") === 0;
+    document.querySelectorAll("[data-clay-light-catalog-slot]").forEach(function(button){
+      const light = lights[Number(button.dataset.clayLightCatalogSlot)];
+      button.style.display = light ? "" : "none";
+      if(!light) return;
+      button.dataset.claySelect = light.id;
+      const kind = button.querySelector("[data-clay-light-kind]");
+      const label = button.querySelector("[data-clay-light-label]");
+      const status = button.querySelector("[data-clay-light-status]");
+      if(kind) kind.textContent = diagnostic ? "DIAGNOSTIC LIGHT" : "LORE-NATIVE LIGHT";
+      if(label) label.textContent = light.label;
+      if(status) status.textContent = diagnostic ? "TEST ONLY" : "MOUNTED";
+    });
+    document.querySelectorAll("[data-clay-light-scene-slot]").forEach(function(button){
+      const light = lights[Number(button.dataset.clayLightSceneSlot)];
+      button.style.display = light ? "" : "none";
+      if(!light) return;
+      button.dataset.claySceneId = light.id;
+      button.textContent = "◇  " + light.label;
+    });
+  };
   S.clayRoomWorkbenchSelect = function(id, source){
     const info = claySelectionInfo(id);
     S.clayRoomSelectedId = id;
@@ -17029,6 +17519,7 @@ function clayRoomMountOverlay(record, host){
     clayPanelDockRight();
   }
   S.clayRoomWorkbenchSelect(S.clayRoomSelectedId || record.portal.id, "initial");
+  S.clayRoomRefreshLightCatalog();
   S.clayRoomLightReadoutTimer = setInterval(function(){
     if(S.clayRoomMounted && lightsBody.style.display !== "none") clayLightsRender();
   }, 120);

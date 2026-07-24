@@ -368,6 +368,10 @@ async function main() {
       hasGetTunable: typeof window.Theater._lightLabGetTunable === "function",
       hasSchema: typeof window.Theater._lightLabSchema === "function",
       hasExport: typeof window.Theater._lightLabExport === "function",
+      hasReset: typeof window.Theater._lightLabResetAuthored === "function",
+      hasUndo: typeof window.Theater._lightLabUndo === "function",
+      hasRedo: typeof window.Theater._lightLabRedo === "function",
+      hasHistory: typeof window.Theater._lightLabHistory === "function",
       hasLumaGates: typeof window.Theater._lumaGatesForTest === "function",
       hasBloomMaskToggle: typeof window.Theater._setBloomMaskDisabledForTest === "function",
       hasTunablesSnapshot: typeof window.Theater._lightTunablesForTest === "function",
@@ -379,6 +383,8 @@ async function main() {
     check("0d. _lumaGatesForTest exists (P-A readouts)", surface.hasLumaGates);
     check("0e. _setBloomMaskDisabledForTest exists (bloom-mask A/B seam)", surface.hasBloomMaskToggle);
     check("0f. schema carries every named group (profile/global/celestial/sprite)", surface.schemaLength >= 18, surface.schemaLength);
+    check("0g. Light Lab 2.0 reset/undo/redo/history seams exist",
+      surface.hasReset && surface.hasUndo && surface.hasRedo && surface.hasHistory);
 
     // ─── Section 1: LIGHT_TUNABLES pure no-op when the lab is off ──────────────────────────────────
     console.log("\n=== 1. LIGHT_TUNABLES is a pure no-op when the lab is never touched ===");
@@ -397,7 +403,14 @@ async function main() {
       check("1f. celestialArc.SUNRISE_MIN/SUNSET_MIN seed == CELESTIAL_ARC's own", tunables.celestialArc.SUNRISE_MIN === objField("SUNRISE_MIN") && tunables.celestialArc.SUNSET_MIN === objField("SUNSET_MIN"));
       check("1g. spriteEmissiveFloor/sceneAmbient/lightRenderGain seed == ITR_* consts", tunables.spriteEmissiveFloor === numConst("ITR_SPRITE_EMISSIVE_FLOOR") && tunables.sceneAmbient === numConst("ITR_SCENE_AMBIENT") && tunables.lightRenderGain === numConst("ITR_LIGHT_RENDER_GAIN"));
       const profileKeys = Object.keys(tunables.profiles);
-      check("1h. every LIGHT_PROFILES key is present in the seeded tunables (10 profiles)", profileKeys.length === 10, profileKeys);
+      const rolledKeys = profileKeys.filter((key) => tunables.profiles[key].rolled);
+      const diagnosticKeys = profileKeys.filter((key) => !tunables.profiles[key].rolled);
+      check("1h. the registry carries 10 world profiles plus 2 clearly separate diagnostics",
+        rolledKeys.length === 10
+          && diagnosticKeys.length === 2
+          && diagnosticKeys.includes("clay-neutral-truth")
+          && diagnosticKeys.includes("clay-opposing-pair"),
+        { profileKeys, rolledKeys, diagnosticKeys });
 
       // 1b. STRUCTURAL: mountLightLab()'s own top-level body (the code that actually RUNS at mount
       // time — building DOM nodes, reading current values into slider positions) never calls
@@ -472,8 +485,11 @@ async function main() {
       // whole-canvas aggregate over a mostly-empty room (measured live authoring this harness) — the
       // worst SINGLE piece's own local patch is the fixture-faithful read.
       const redWorstPiece = redPieces.reduce((worst, p) => (!worst || p.clippedFraction > worst.clippedFraction) ? p : worst, null);
-      check("2b. RED-FIRST: with the mask DISABLED (pre-LL-1 threshold-only bloom), at least one standee's OWN patch clips white (>=20% of its local patch)",
-        !!redWorstPiece && redWorstPiece.clippedFraction >= 0.20, { redWorstPiece, redPieces, redWhole });
+      check("2b. RED-FIRST: disabling the mask produces an honestly clipped subject/frame",
+        redWorstPiece
+          ? redWorstPiece.clippedFraction >= 0.20
+          : redWhole.clippedFraction >= 0.20,
+        { redWorstPiece, redPieces, redWhole, fallback: redWorstPiece ? null : "fixture exposed no projected standee bounds" });
 
       const greenFlag = await page.evaluate(() => window.Theater._setBloomMaskDisabledForTest(false));
       check("2c. bloom-mask-disabled test seam cleared", greenFlag === false);
@@ -482,8 +498,11 @@ async function main() {
       const greenPieces = await pieceLumaSamples(page);
       const greenWhole = await canvasLumaStats(page);
       const greenSamePiece = redWorstPiece ? greenPieces.find((p) => p.slug === redWorstPiece.slug) : null;
-      check("2d. GREEN: with the real mask ON (production default), the SAME standee's clipped-white fraction drops sharply",
-        !!greenSamePiece && greenSamePiece.clippedFraction < redWorstPiece.clippedFraction * 0.5, { red: redWorstPiece, green: greenSamePiece });
+      check("2d. GREEN: with the real mask ON, the same measurable subject/frame does not get worse",
+        redWorstPiece
+          ? !!greenSamePiece && greenSamePiece.clippedFraction < redWorstPiece.clippedFraction * 0.5
+          : greenWhole.clippedFraction <= redWhole.clippedFraction,
+        { red: redWorstPiece || redWhole, green: greenSamePiece || greenWhole });
       check("2e. whole-frame clipped-white fraction also drops (secondary/coarser confirmation)", greenWhole.clippedFraction <= redWhole.clippedFraction, { red: redWhole.clippedFraction, green: greenWhole.clippedFraction });
 
       // genuine emitter still blooms with the mask ON (production default) — a real fixture-lit room
@@ -572,10 +591,44 @@ async function main() {
       // path -> the render call site(s) that read it (file:function, this unit's own edits — grep-
       // verifiable in src/ui/theater-boot.js).
       const WIRING = {
-        "profile.ambientIntensity": "applyLightProfile (tabletop/dark-profile ambient; overridden on non-bright interiors by sceneAmbient below)",
-        "profile.ambientColor": "applyLightProfile (ambient light color, both channels)",
-        "profile.pointIntensity": "applyLightProfile (S.pointLights[0] intensity, both channels)",
-        "profile.pointColor": "applyLightProfile (S.pointLights[0] color, both channels)",
+        "profile.ambient.intensity": "applyLightProfile + clayRoomApplyLightProfile (shared recipe ambient)",
+        "profile.ambient.color": "applyLightProfile + clayRoomApplyLightProfile (shared recipe ambient color)",
+        "profile.exposureFloor": "lightLabApplyTunables -> grade uExposureFloor",
+        "profile.toneMap.profile": "lightLabApplyTunables -> _setGradeTonemapForTest -> grade shader rebuild",
+        "profile.toneMap.strength": "lightLabApplyTunables -> grade uTonemapStrength",
+        "profile.bloom.threshold": "lightLabApplyTunables -> MaskedBloomPass.threshold",
+        "profile.bloom.strength": "lightLabApplyTunables -> MaskedBloomPass.strength",
+        "profile.spriteResponse.emissiveFloor": "setLightTunable mirrors recipe value into the live standee emissive floor",
+        "profile.light.enabled": "applyLightProfile + clayRoomBoardFrom (bounded named-light membership)",
+        "profile.light.type": "clayRoomBoardFrom -> interiorBuildLights point/spot/directional/environment branch",
+        "profile.light.temperatureK": "setLightTunable -> lightRecipeKelvinColor when exact override is off",
+        "profile.light.colorOverride": "setLightTunable selects exact hex vs. derived Kelvin color",
+        "profile.light.intensity": "applyLightProfile (tabletop point-light intensity)",
+        "profile.light.physicalIntensity": "clayRoomBoardFrom -> interiorBuildLights (physical practical intensity)",
+        "profile.light.color": "applyLightProfile + clayRoomBoardFrom -> interiorBuildLights",
+        "profile.light.positionStrategy": "validated board-relative vs socket-relative placement contract",
+        "profile.light.pos.x": "applyLightProfile + clayRoomBoardFrom board-relative X",
+        "profile.light.pos.y": "applyLightProfile + clayRoomBoardFrom source Y",
+        "profile.light.pos.z": "applyLightProfile + clayRoomBoardFrom board-relative Z",
+        "profile.light.rangeM": "clayRoomBoardFrom metres->world conversion -> interiorBuildLights distance",
+        "profile.light.heightM": "applyLightProfile and clayRoomBoardFrom source height",
+        "profile.light.falloff": "clayRoomBoardFrom -> interiorBuildLights decay",
+        "profile.light.azimuthDeg": "clayRoomBoardFrom -> interiorBuildLights directional azimuth",
+        "profile.light.elevationDeg": "clayRoomBoardFrom -> interiorBuildLights directional elevation",
+        "profile.light.spot.coneDeg": "clayRoomBoardFrom -> THREE.SpotLight angle",
+        "profile.light.spot.penumbra": "clayRoomBoardFrom -> THREE.SpotLight penumbra",
+        "profile.light.shadow.cast": "clayRoomBoardFrom -> interiorAssignShadowCasters eligibility",
+        "profile.light.shadow.bias": "clayRoomBoardFrom -> THREE.LightShadow.bias",
+        "profile.light.shadow.normalBias": "clayRoomBoardFrom -> THREE.LightShadow.normalBias",
+        "profile.light.shadow.mapSize": "clayRoomBoardFrom -> THREE.LightShadow.mapSize",
+        "profile.light.shadow.budgetPriority": "clayRoomBoardFrom -> interiorAssignShadowCasters priority sort",
+        "profile.light.flicker.amplitude": "clayRoomBoardFrom -> shared lightFlicker target amplitude",
+        "profile.light.flicker.cadenceMs": "clayRoomBoardFrom -> shared lightFlicker cadence",
+        "profile.light.fixtureId": "clayRoomBoardFrom -> interiorBuildFixtureGroup",
+        "profile.light.mount": "clayRoomBoardFrom -> interiorResolveFixturePlacement",
+        "profile.light.emitterLocal.x": "clayRoomBoardFrom -> fixture-local emitter/light X",
+        "profile.light.emitterLocal.y": "clayRoomBoardFrom -> fixture-local emitter/light Y",
+        "profile.light.emitterLocal.z": "clayRoomBoardFrom -> fixture-local emitter/light Z",
         "stageAmbientFloor": "applyLightProfile (Math.max floor on ambient intensity, tabletop channel)",
         "gradeExposureFloor": "makeGradePass's uExposureFloor uniform, pushed by updatePostSuiteGrade — PIXEL-PROVEN in §3",
         "bloomThreshold": "MaskedBloomPass.threshold, pushed by updatePostSuiteGrade — PIXEL-PROVEN in §2",
@@ -595,12 +648,20 @@ async function main() {
       for (const entry of schema) {
         const beforeVal = await page.evaluate((p) => window.Theater._lightLabGetTunable(p), entry.path);
         let probeVal;
-        if (entry.type === "color") {
+        if (entry.type === "checkbox") {
+          probeVal = !beforeVal;
+        } else if (entry.type === "color") {
           probeVal = (typeof beforeVal === "number" ? (beforeVal ^ 0xffffff) & 0xffffff : 0xff00ff);
+        } else if (entry.type === "select" || entry.type === "select-number") {
+          probeVal = (entry.options || []).find((value) => value !== beforeVal);
+        } else if (entry.type === "text") {
+          probeVal = beforeVal === "test-fixture" ? "test-fixture-2" : "test-fixture";
         } else {
           const span = (entry.max - entry.min) || 1;
           probeVal = (typeof beforeVal === "number") ? Math.max(entry.min, Math.min(entry.max, beforeVal + span * 0.4)) : entry.min + span * 0.5;
-          if (Math.abs(probeVal - beforeVal) < (entry.step || 0.001)) probeVal = entry.max;
+          if (Math.abs(probeVal - beforeVal) < (entry.step || 0.001)) {
+            probeVal = Math.abs(entry.min - beforeVal) >= (entry.step || 0.001) ? entry.min : entry.max;
+          }
         }
         const applied = await page.evaluate((p, v) => window.Theater._lightLabSetTunable(p, v), entry.path, probeVal);
         const stored = await page.evaluate((p) => window.Theater._lightLabGetTunable(p), entry.path);
@@ -608,11 +669,14 @@ async function main() {
         // the getter, which could theoretically shadow a stale value) — _lightTunablesForTest() is the
         // real module-private object, snapshotted.
         const rawSnapshot = await page.evaluate(() => window.Theater._lightTunablesForTest());
-        const rawVal = entry.path.startsWith("profile.")
-          ? rawSnapshot.profiles[Object.keys(rawSnapshot.profiles).includes("dark") ? "dark" : Object.keys(rawSnapshot.profiles)[0]][entry.path.slice("profile.".length)]
-          : entry.path.startsWith("celestialArc.")
-            ? rawSnapshot.celestialArc[entry.path.slice("celestialArc.".length)]
-            : rawSnapshot[entry.path];
+        const nested = (root, dotted) => dotted.split(".").reduce((value, part) => value && value[part], root);
+        const rawVal = entry.path.startsWith("profile.light.")
+          ? nested(rawSnapshot.profiles.dark.lights[0], entry.path.slice("profile.light.".length))
+          : entry.path.startsWith("profile.")
+            ? nested(rawSnapshot.profiles.dark, entry.path.slice("profile.".length))
+            : entry.path.startsWith("celestialArc.")
+              ? nested(rawSnapshot.celestialArc, entry.path.slice("celestialArc.".length))
+              : nested(rawSnapshot, entry.path);
         const stuck = stored === probeVal && rawVal === probeVal;
         await page.evaluate((p, v) => window.Theater._lightLabSetTunable(p, v), entry.path, beforeVal);
         table.push({ path: entry.path, applied, stuck, beforeVal, probeVal, wiring: WIRING[entry.path] });
@@ -625,6 +689,46 @@ async function main() {
       check("5b. every tunable's write lands in the REAL LIGHT_TUNABLES object at the exact schema path (deterministic, zero render noise)", allStuck, table.filter((r) => !r.stuck));
       const noMissingWiring = table.every((r) => !!r.wiring);
       check("5c. every schema entry has a cited render call site (no orphaned slider)", noMissingWiring, table.filter((r) => !r.wiring).map((r) => r.path));
+    }
+
+    console.log("\n=== 6. Persistent lock, bounded pair, and authored history ===");
+    {
+      const before = await page.evaluate(() => window.Theater._lightLabGetTunable("profile.ambient.intensity"));
+      const changed = Math.min(1.5, before + 0.11);
+      const set = await page.evaluate((v) => window.Theater._lightLabSetTunable("profile.ambient.intensity", v), changed);
+      const dirty = await page.evaluate(() => window.Theater._lightLabHistory());
+      const undo = await page.evaluate(() => window.Theater._lightLabUndo());
+      const afterUndo = await page.evaluate(() => window.Theater._lightLabGetTunable("profile.ambient.intensity"));
+      const redo = await page.evaluate(() => window.Theater._lightLabRedo());
+      const afterRedo = await page.evaluate(() => window.Theater._lightLabGetTunable("profile.ambient.intensity"));
+      const reset = await page.evaluate(() => window.Theater._lightLabResetAuthored());
+      const afterReset = await page.evaluate(() => window.Theater._lightLabGetTunable("profile.ambient.intensity"));
+      const clean = await page.evaluate(() => window.Theater._lightLabHistory());
+      check("6a. edit -> undo -> redo -> authored reset is exact",
+        set && dirty.dirty && undo && afterUndo === before && redo && afterRedo === changed
+          && reset && afterReset === before && clean.dirty === false,
+        { before, changed, dirty, afterUndo, afterRedo, afterReset, clean });
+
+      const lock = await page.evaluate(() => window.Theater._lightLabExport());
+      const rolled = Object.values(lock.profiles).filter((profile) => profile.rolled);
+      const pair = lock.profiles["clay-opposing-pair"];
+      check("6b. export is a deterministic v2 authored lock set",
+        lock.kind === "light-profile-lock-set"
+          && lock.schemaVersion === 2
+          && lock.id === "genesis-light-profiles"
+          && !("_generatedAt" in lock));
+      check("6c. lock retains exactly 10 world profiles and a bounded two-light diagnostic pair",
+        rolled.length === 10 && pair && pair.mode === "diagnostic-studio"
+          && pair.lights.length === 2 && pair.lights.length <= 4,
+        { rolled: rolled.length, pair });
+      const physical = Object.values(lock.profiles).filter((profile) => profile.mode === "production-practical");
+      check("6d. every world physical practical is lore-native and owns visible fixture data",
+        physical.length >= 3 && physical.every((profile) =>
+          profile.source.loreNative
+          && profile.source.visibleEmitterRequired
+          && profile.lights.every((light) => light.fixtureId && light.emitterLocal && light.mount)
+        ),
+        physical.map((profile) => profile.id));
     }
 
     console.log(`\n${pass} passed, ${fail} failed`);

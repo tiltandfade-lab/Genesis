@@ -86,7 +86,7 @@ function extractObjBlock(src, name){
 // must be appended AFTER those skipped consts so its LIGHT_TUNABLES sees them in scope.
 function lightTunablesPrelude(src, skip){
   skip = skip || [];
-  const deps = ["LIGHT_PROFILES","STAGE_AMBIENT_FLOOR","GRADE_EXPOSURE_FLOOR","BLOOM_THRESHOLD",
+  const deps = ["STAGE_AMBIENT_FLOOR","GRADE_EXPOSURE_FLOOR","BLOOM_THRESHOLD",
     "BLOOM_STRENGTH","GRADE_TINT_SCALE","GRADE_TINT_MAX","CELESTIAL_ARC",
     "ITR_SPRITE_EMISSIVE_FLOOR","ITR_SCENE_AMBIENT","ITR_LIGHT_RENDER_GAIN"];
   const lines = deps.filter((n) => !skip.includes(n)).map((n) => {
@@ -97,7 +97,12 @@ function lightTunablesPrelude(src, skip){
   // LIGHT_TUNABLES' own profiles IIFE DOES carry internal ';' — match to the first column-0 "\n};" instead.
   const lt = src.match(/const LIGHT_TUNABLES = \{[\s\S]*?\n\};/);
   if(!lt) throw new Error("lightTunablesPrelude: LIGHT_TUNABLES block not found");
-  return lines.join("\n") + "\n" + lt[0];
+  return lines.join("\n") + "\nconst LIGHT_TUNABLES = { profiles:{},"
+    + " stageAmbientFloor:STAGE_AMBIENT_FLOOR, gradeExposureFloor:GRADE_EXPOSURE_FLOOR,"
+    + " bloomThreshold:BLOOM_THRESHOLD, bloomStrength:BLOOM_STRENGTH,"
+    + " gradeTintScale:GRADE_TINT_SCALE, gradeTintMax:GRADE_TINT_MAX,"
+    + " celestialArc:CELESTIAL_ARC, spriteEmissiveFloor:ITR_SPRITE_EMISSIVE_FLOOR,"
+    + " sceneAmbient:ITR_SCENE_AMBIENT, lightRenderGain:ITR_LIGHT_RENDER_GAIN };";
 }
 
 // ============================================================================

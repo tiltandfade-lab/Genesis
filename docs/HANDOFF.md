@@ -6,6 +6,36 @@ updated: 2026-07-24
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-24, CL-R1 visual checkpoint) — SHARED LIGHT RECIPES + LORE-NATIVE TORCH [Codex]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolidated master
+`6e86ba52`. **Not merged or pushed. CL-R2 has not begun.**
+
+- One authored/compiled recipe registry now drives the rolled world profiles, Lighting Lab, and
+  Clayroom. It carries ten rolled recipes plus neutral and warm/cool diagnostics, with at most four
+  lights and complete ambient/exposure/tone/bloom/sprite/light/fixture/shadow/flicker fields.
+- The Clayroom has three honest modes: neutral measurement; warm/cool calibration bulbs visibly
+  marked `TEST ONLY`; and a grounded, wall-mounted fantasy torch visibly marked lore-native.
+  Environmental sun/moon/magic sources do not invent counterfeit lamp housings.
+- Lighting Lab now edits the full structured recipe, not a one-point shortcut, with bounded
+  validation, undo/redo, authored reset, export, and deterministic compile/fold back to the same
+  lock shape.
+- The washed-out goblin was tested one cause at a time through the production renderer. The causal
+  sheet separates colour-space tagging, lit/unlit material response, sampling, tone mapping,
+  compositing, and light energy. Wrong sRGB interpretation and intensity above 30 are executable
+  negative controls; no saturation slider was added.
+- Final evidence: `dev/clay-captures/cl-r1-lighting/` (three modes, early/settled/explain/clean
+  frames, receipts, measurements) and `dev/clay-captures/cl-r1-causality/` (13-card contact sheet,
+  receipt, measurements). All final captures recorded zero console errors/warnings.
+- Focused gates: light locks 12/12; Light Lab 41/41; Clayroom 175/175; practical fixtures 98/98;
+  dungeon interior 288/288. **FULL CI PENDING.** One broad visual-protection harness still reports
+  the torchlit old/new interior mean pixel delta `0.0177 > 0.01`; daylit and tabletop dark remain
+  inside the threshold. This remains visible for Fable's re-gate rather than being weakened.
+- Adam's visual ruling is the stop gate: torch darkness/pool, warm-vs-cool balance, immediate torch
+  readability, and the intentionally flat neutral reference. The dedicated CL-F02 stepped
+  sphere/cube display and advanced overlays remain open. Standee base/footprint and the
+  small→human→largest scaling spectrum belong to CL-R2 after that ruling.
+
 ## ⭐ Latest (2026-07-24, evening) — THE CONSOLIDATION CLOSE: singular canonical master [Claude Fable 5]
 
 Adam called the consolidation: every live lane merged --no-ff to master, serialized, in

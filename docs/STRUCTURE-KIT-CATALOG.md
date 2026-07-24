@@ -249,11 +249,13 @@ rung C brings the shed/weather roof, rung D the tower cap.
   through-road`; sibling table archetypes: switchback-watch, road-cut-checkpoint,
   terrace-gate.
 
-Authorities now in-repo: the working catalog at `GOLDEN-SITES-WORKING-CATALOG.md`
-(verbatim import of the Desktop record) and the study at
-`Reference/FFT-Guard-Post-Study/` (analysis specs + lock audit; heavy binaries stayed
-Desktop-local — see its IMPORT-NOTE.md). The lock audit's LOCKED/WORKING/OPEN grid is
-the authority snapshot; THIS file consumes it and must not contradict it. Also imported
+Authorities now in-repo (resolved at the 2026-07-24 consolidation close): the LIVING
+golden-sites authority is `GOLDEN-SITES-CATALOG.md` (the door-lane session's structured
+2026-07-23 fold of the Desktop packet — discovered at merge); the full verbatim Desktop
+record is preserved as `Reference/FFT-Guard-Post-Study/DESKTOP-CATALOG-SNAPSHOT.md`,
+beside the study (analysis specs + lock audit; heavy binaries stayed Desktop-local — see
+IMPORT-NOTE.md). The lock audit's LOCKED/WORKING/OPEN grid is the authority snapshot;
+THIS file consumes it and must not contradict it. Also imported
 with it: the C1A finding that the clay room's **visual acceptance is withdrawn**
 (clay-override regression, Lighting Lab bypass, washed goblin) with the reset ladder in
 `analysis/CLAYROOM-RESET-PROOF-LADDER-AND-DEV-WORKBENCH.md` — the `Genesis-clayroom`

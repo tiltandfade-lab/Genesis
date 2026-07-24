@@ -8,7 +8,48 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-07-23 (latest) — CL-R0 CLAYROOM RESET BUILT · DESKTOP RESEARCH PACKET FOLDED [Claude]
+## 2026-07-24 (latest) — THE CONSOLIDATION CLOSE — five lanes merged to a singular canonical master [Claude Fable 5]
+
+### Added
+- **`docs/STRUCTURE-KIT-CATALOG.md`** — the structure-kit spec for the twelve golden sites,
+  closed through three founder ruling rounds in one session: tone laws (fun over realism ·
+  FFT masterclass rule · near-universal access · stairs/rocks/terracing over ladders), grid
+  law (5-ft cell, h=2.5 ft, storey 4h, ≤30° slopes), two-tier grain (pieces + assemblies),
+  socket schema reconciled onto CL-S08, geometry/paint split by gameplay legibility,
+  SRD-native access classes (walk / climb-cost / climb-DC banded 12/15/17, one check per
+  storey, DC climbs never a sole route) with gear as PLANNED access-graph verbs, roof order
+  parapet→shed→gable→hip, the corrected growth ladder (open-top guard room first, tower
+  LAST — the atalaya finding), the full material possibility roster, six vernaculars incl.
+  makeshift/tribal, the **OCCUPANCY AXIS** (invariant functional topology × rolled
+  who-runs-it-now), the **ARRIVAL HOOK LAW** (no site arrival without an active
+  band-appropriate hook — enforcing check owed), and the LOCKED roof posture (flat deck
+  both cultures; cover promise invariant, edge pattern culture-expressive). The guard-post
+  founder queue is EMPTY — everything else is deliberately card-time or clay-deferred.
+- **`docs/diagrams/`** — new standing home for design diagrams (Adam's ruling: save keepers
+  to docs so Adam + Codex can use them): roof/parapet/terracing vocabulary · GP-SHAPE-01
+  anchor-layout plan · roof postures sheet.
+- **`Reference/FFT-Guard-Post-Study/`** — the Desktop study imported (analysis specs, lock
+  audit, cohort overview, reference index, verbatim Desktop catalog snapshot); ~335 MB of
+  app/map/reference binaries deliberately stay Desktop-local per IMPORT-NOTE.md.
+- **`Reference/FFT Battle Maps/` + border-stray tools** — untracked root artifacts rescued
+  (the 22-image taste corpus, bleed-audit kit, Q12-B session prompt).
+- **GP-MM-STONE-V001** (Codex lane merged) — four deterministic MM 1.3 stone parents
+  (M01 coursed = Institutional / M02 fitted rubble = Upland ×2 tastes each), byte-identical
+  dual exports re-proven independently at close, plus the normal-layer, condition-workbench,
+  trim-sheet-layout, and uneven-ground proofs.
+- **Prototype sprite admission path** (merged) — previously fail-ruled sprites render via
+  `prototypeAdmitted` flags (`dev/model-qa/prototype-admissions.json`); prototype-only
+  pending the full sprite review.
+
+### Changed
+- **Catalog authority resolved:** `docs/GOLDEN-SITES-CATALOG.md` (door-lane 2026-07-23
+  fold) is the living golden-sites authority; the verbatim Desktop record moved to
+  `Reference/FFT-Guard-Post-Study/DESKTOP-CATALOG-SNAPSHOT.md`.
+- **CL-R0 clayroom reset + C1B door/movement lanes merged** (their own 2026-07-23/24
+  entries below/above stand as written; Codex's FULL CI PENDING marker is discharged by
+  this close's gate run).
+
+## 2026-07-23 — CL-R0 CLAYROOM RESET BUILT · DESKTOP RESEARCH PACKET FOLDED [Claude]
 
 ### Added
 - **`docs/CLAYROOM-RESET-LADDER.md`** — the single owning specification for the Clayroom reset/proof
@@ -898,31 +939,4 @@ to the prior tree = the server was serving stale code; kill-before-capture is no
 **Added (art)**
 - 25 DRESSING-GEN codex sheets landed + backed up UNGATED (flagships flora/clutter/objects +
   effects core + all accents + ash). VP2 gate/slice/fold is next session's first move.
-
-## 2026-07-10 (evening) — WILDERMYTH GRAMMAR: engine marriage BUILT + dressing-gen packets + finale loop gate 5/5
-
-**Added**
-- North star: docs/GRAPHICS-ENGINE.md (Part I recipe + Part II research-grounded marriage;
-  Wildermyth research digests committed). Identity: DF sim × Daggerfall breadth × Wildermyth
-  presentation.
-- ENGINE WAVE (all landed, each --no-ff + orchestrator re-gate): STANDEE VERBS
-  (src/ui/standee-verbs.js, 61 checks; combat hurt/down routes sprites); GR2 dressing
-  channel (src/engine/place-dressing.js dressPlan + card render w/ placeholders, 371);
-  GR1 REALM_MATERIALS (12 realms, seeded low-contrast painters, 187); GR3+GR4 hemisphere
-  key + per-realm grade + whisper fog + diorama skirt (254).
-- FINALE LOOP GATE 5/5 (dev/battle-gate/dungeon-loop/): five REAL rolled dungeons
-  (Web/Ruin/Figure-8/Loop topologies, chrome/gloom/fantasy) end-to-end — roll → prep →
-  combat_start → volumetric render → standee verbs — zero fixture, zero breaks. Caught+
-  fixed 2 verify-green-but-not-wired bugs (trayFrom interior never called dressPlan;
-  findUnit blind to interior pieces).
-- Sprite queue: DRESSING-GEN packets (50 sheets/852 cells, flora+clutter+objects×12 +
-  effects core/accents, Wildermyth construction rules in every prompt) + round-3
-  magenta-fails addendum (12 Adam-failed sprites, ANTI-MAGENTA clause).
-- sprite-review floor-line setter; interior camera focusRect + CUTAWAY WALLS; sprite
-  standee tilt (squash killed); SPRITE PURITY (billboards exempt from PSX).
-
-**Known open**
-- Interior PIECE SCALE misreads (mediums render giant in rooms — loop-gate contact sheet);
-  fix rides the registry sizing fold. AO knob off by default (Adam pending final word).
-- Codex waves pending: round-3 + dressing-gen (packets ready, RUN-NOTES order).
 

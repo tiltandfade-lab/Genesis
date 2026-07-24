@@ -406,7 +406,10 @@ function makeStubGroup(scaleX, children){
 // Dressing/Furniture.
 // ----------------------------------------------------------------------------
 {
-  const sibStart = bootSrc.indexOf("function setInteriorBoard(data)");
+  // Signature-agnostic lookup (C1B added a renderOpts param — the old exact-arity
+  // indexOf silently sliced garbage and failed all three checks while the fade law
+  // itself was intact).
+  const sibStart = bootSrc.indexOf("function setInteriorBoard(");
   const sibEnd = bootSrc.indexOf("\nfunction ", sibStart + 30);
   const sibSrc = bootSrc.slice(sibStart, sibEnd > 0 ? sibEnd : sibStart + 8000);
   check("B4a. setInteriorBoard gates the crossfade on isRoomTransition = !!S.lastBoard (skips the very first reveal)",

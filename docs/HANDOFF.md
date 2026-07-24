@@ -6,7 +6,37 @@ updated: 2026-07-24
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-24, C1B Clayroom movement lab) — 15×15 MOVE/DASH + CANONICAL PORTAL [Codex]
+## ⭐ Latest (2026-07-24, evening) — THE CONSOLIDATION CLOSE: singular canonical master [Claude Fable 5]
+
+Adam called the consolidation: every live lane merged --no-ff to master, serialized, in
+one integration close. Six merges, zero content conflicts (the door branch contained the
+reset branch; the sprite/clayroom overlap on theater-boot.js auto-resolved):
+
+1. `chore/root-strays-2026-07-24` — untracked root artifacts rescued (FFT Battle Maps
+   corpus, bleed-audit kit, Q12-B session prompt).
+2. `feat/cl-r0-clayroom-reset` — the Clayroom reset (CL-R0; replay-safe clay + Lab-wired rig).
+3. `codex/clayroom-door-socket` — door socket/leaf + C1B 15×15 movement lab +
+   `engine.tactical-query` (the two Codex entries below record the detail).
+4. `codex/guard-post-materials-mm13` — GP-MM-STONE-V001 four stone parents + the
+   normal/condition/trim/uneven-ground proofs (determinism independently re-proven:
+   181-check verify PASS + fresh double-export byte-identical on the gate machine).
+5. `feat/sprite-prototype-admission` — fail-ruled sprites render via `prototypeAdmitted`
+   (prototype-only; frozen list `dev/model-qa/prototype-admissions.json`; full sprite
+   review still owns final fate).
+6. `docs/structure-kit-catalog` — the guard-post speccing session: STRUCTURE-KIT-CATALOG
+   (founder queue EMPTY — occupancy axis, arrival hook law, locked flat-deck roof posture,
+   corrected growth ladder), docs/diagrams/ (3 sheets), the FFT-Guard-Post-Study import.
+
+**Catalog authority resolved at close:** `docs/GOLDEN-SITES-CATALOG.md` (door-lane fold,
+2026-07-23) is the living authority; the verbatim Desktop record is preserved at
+`Reference/FFT-Guard-Post-Study/DESKTOP-CATALOG-SNAPSHOT.md`. Codex's FULL CI PENDING
+marker (below) is discharged by this close's full gate run (results in CHANGELOG +
+the close commit). Worktrees pruned after verification; next wave of dev delegated from
+this canonical state — the two immediately runnable lanes are Codex's material brief
+(STRUCTURE-KIT-CATALOG §8 roster + culture-pair cards) and the clay bench toward the
+open-top guard-room component proof.
+
+## ⭐ (2026-07-24, C1B Clayroom movement lab) — 15×15 MOVE/DASH + CANONICAL PORTAL [Codex]
 
 Worktree `worktrees/Genesis-clayroom-door`, branch `codex/clayroom-door-socket`, continuing from the
 docked Concept 1 Clayroom checkpoint.

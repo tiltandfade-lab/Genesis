@@ -15,10 +15,10 @@
        that old arithmetic and proves it would have produced pillars in 100/100 seeded rooms).
 
    Checks:
-     1. door ARCH HEADER: every non-squeeze door earns 2 additional doorframe-kind stacked prisms
-        (yBase>0, narrowing widths) — a squeeze door earns none.
-     2. WALL-THICKNESS REVEAL: every plain (non-squeeze, wFrac<1) door on an axis with a real WALL
-        neighbor earns 2 extra wall-kind jamb instances with a nonzero ox/oz offset.
+     1. KINDERGARTEN DOORWAY (D20, 2026-07-23): every door cell earns exactly 2 doorwaySide
+        pieces + at most 1 lintel band; arch/corbel ornament stays DELETED (no archStep prisms).
+     2. REVEAL SLABS DELETED (D20/D21): zero offset reveal-jamb wall instances remain; reveal
+        surfaces are owned by the wall volume on the compiled-shell path.
      3. determinism: same (plan,opts) twice -> byte-identical instances/furniture/wallProps/daisTop.
      4. COLUMN DEMOTION rarity: swept across 100 seeds, pillar (profile-carrying, non-cap) instances
         appear in <=15% of eligible-room-seed pairs (RARE, not "every room, every seed" like pre-unit),
@@ -30,7 +30,7 @@
         taller `sy` there, same mechanism VP3's own micro-steps already use elsewhere).
      7. FURNITURE CHANNEL: every blocker-primary plan.dressing entry has a matching board.furniture
         entry (same x/y/roomSegNum/slug), whose `kind` is one of the 6 named furniture kinds;
-        furnitureFor(kind,realm) resolves a real 2-6 prism recipe for every kind.
+        furnitureFor(kind,realm) resolves a real 1-6 prism recipe for every kind (crate = one honest box since c580d5fd).
      8. PROP PERSPECTIVE LAW (addendum): every wall-hang plan.dressing entry has a matching
         board.wallProps entry with depth>0 and a resolved wallSide; extrusionPropFor degrades to a
         real default archetype+depth on an unrecognized slug (never throws).
@@ -45,12 +45,11 @@
         EXACTLY the 4 known kinds (floor/wall/doorframe/pillar) on an 80-room plan — re-proven here
         since this unit added 3 new SIBLING arrays (furniture/wallProps/daisTop) that must never leak
         into `instances` itself.
-    13. D4d (docs/STAGE-D-WAVE-SPECS.md) DOORFRAME MASS FIX: every plain-frame doorframe prism (jamb
-        or header, archStep==null) is slim on at least one axis (min(sx,sz) <= the named
-        ITR_JAMB_WIDTH_FRAC-scale slim budget) — never a wFrac x wFrac column on BOTH axes at once
-        (the pre-fix shape, RED-FIRST-proven against 2045dbcc: every plain-frame instance measured
-        sx=sz=0.8). The aperture cross-section between the two jambs (the gap the D4 leaf fills)
-        stays >= half the aperture's own width, i.e. genuinely open, not merely "technically nonzero".
+    13. KINDERGARTEN DOORWAY MASS (D20): doorway pieces are tagged plain wall (doorwaySide/lintel,
+        never untagged ornament); the open gap between the sides is human-door-scale (0.5..0.8 u,
+        genuinely open); the lintel spans exactly that gap, sits above a real walk-through height,
+        and tops out at wall height. Supersedes D4d's ornament-slim budget — doorway construction
+        is wall mass now, per Adam's ruling in ART-DIRECTION-CANON ("THE KINDERGARTEN DOOR").
 
    Run:  node dev/verify-bw2-5-silhouette.mjs */
 import { readFileSync } from "node:fs";
@@ -118,46 +117,45 @@ function fullPlan(fixture, walkId, realmId) {
   return M.dressPlan(spatial, { realmId, walkId });
 }
 
-group("1 — ARCH HEADER: non-squeeze doors gain 2 stacked doorframe prisms (yBase>0); squeeze doors gain none");
+group("1 — KINDERGARTEN DOORWAY (D20, Adam 2026-07-23): 2 doorwaySide pieces + <=1 lintel per door cell; arch/corbel ornament DELETED");
 {
-  // D4d (docs/STAGE-D-WAVE-SPECS.md) sync note: pre-D4d, a plain door emitted exactly ONE non-arch
-  // doorframe prism (the solid wFrac x wFrac box), so counting non-arch prisms WAS counting doors.
-  // D4d splits that single box into 3 prisms per door (2 jambs + 1 header, tagged `jamb`/`header`,
-  // neither carrying archStep) — a raw prism count now over-counts doors 3x. RED-FIRST proof (run
-  // against this same fixture, post-D4d, pre-this-sync): the old `!d.squeeze && d.archStep == null`
-  // filter counted 54 prisms for 18 real doors, so `archSteps.length === plainDoors.length*2` (36 ===
-  // 108) failed — a false regression signal, not a real one (still exactly 2 arch steps per real
-  // door). Fixed by counting DISTINCT door CELLS (unique x,z among plain-frame prisms) instead of
-  // raw prism instances — never weakened: still asserts the exact "2 arch steps per non-squeeze
-  // door, 0 for squeeze" property, just counted honestly against the new multi-prism-per-door shape.
+  // D20 "THE KINDERGARTEN DOOR" (C1A-CLAY-ROOM.md; Adam's ruling verbatim in ART-DIRECTION-CANON)
+  // deleted the D4d frame ornament production-wide: no jamb/header prisms, no archStep corbels, no
+  // reveal slabs. A door cell now emits exactly three pieces of plain wall shaping the 0.61 x 1.35
+  // opening: two full-height doorwaySide pieces + one lintel band above. This group's job is
+  // unchanged — doors earn a real constructed surround, deterministically shaped — asserted
+  // against the ruled grammar, INCLUDING that the deleted ornament stays deleted.
   const plan = fullPlan(buildChainFixture(10), "bw2-5-arch", "fantasy");
   const board = M.interiorBuildBoard(plan, { realmId: "fantasy" });
-  const plainFramePrisms = board.instances.doorframe.filter((d) => !d.squeeze && d.archStep == null);
-  const plainDoorCells = new Set(plainFramePrisms.map((d) => d.x + "," + d.z));
-  const archSteps = board.instances.doorframe.filter((d) => d.archStep != null);
-  ok(plainFramePrisms.length > 0, "at least one plain door frame prism exists");
-  ok(plainDoorCells.size > 0, "at least one distinct plain door cell exists");
-  ok(archSteps.length > 0, "at least one arch-header prism exists");
-  ok(archSteps.length === plainDoorCells.size * 2, `every plain door CELL earns exactly 2 arch-header prisms (${archSteps.length} steps / ${plainDoorCells.size} door cells)`);
-  ok(archSteps.every((a) => typeof a.yBase === "number" && a.yBase > 0), "every arch-header prism carries yBase>0 (stacked ABOVE the main frame)");
-  const step1 = archSteps.filter((a) => a.archStep === 1), step2 = archSteps.filter((a) => a.archStep === 2);
-  ok(step1.length > 0 && step2.length > 0, "both corbel steps (1 and 2) are present");
-  if (step1.length && step2.length) {
-    ok(step2[0].sx < step1[0].sx, `step 2 is narrower than step 1 (corbelling IN: ${step2[0].sx} < ${step1[0].sx})`);
-    ok(step2[0].yBase > step1[0].yBase, "step 2 stacks ABOVE step 1 (yBase increases)");
-  }
+  const frames = board.instances.doorframe;
+  const sides = frames.filter((d) => d.doorwaySide);
+  const lintels = frames.filter((d) => d.lintel);
+  const doorCells = new Set(sides.map((d) => d.x + "," + d.z));
+  ok(sides.length > 0, "at least one doorwaySide piece exists");
+  ok(doorCells.size > 0, "at least one distinct door cell exists");
+  ok(sides.length === doorCells.size * 2, `every door CELL earns exactly 2 doorwaySide pieces (${sides.length} sides / ${doorCells.size} door cells)`);
+  ok(lintels.length <= doorCells.size, `at most one lintel band per door cell (${lintels.length} lintels / ${doorCells.size} cells)`);
+  ok(lintels.every((l) => typeof l.yBase === "number" && l.yBase > 0), "every lintel sits ABOVE the opening (yBase>0 = the opening height)");
+  ok(frames.every((d) => d.archStep == null), "arch/corbel ornament stays DELETED (no archStep prisms — D20)");
+  ok(frames.every((d) => d.doorwaySide || d.lintel), "every doorframe piece is doorwaySide or lintel (no untagged ornament survives)");
+  // exactly one of ox/oz is nonzero per side (perpendicular to the passage, never diagonal) — the
+  // geometric discipline the old reveal-jamb group asserted, now on the pieces that own it.
+  ok(sides.every((s) => ((s.ox || 0) !== 0) !== ((s.oz || 0) !== 0)), "every doorwaySide offsets along exactly ONE axis");
+  ok(sides.every((s) => s.sy > 0), "every doorwaySide has a real height (a volume, not a plane)");
 }
 
-group("2 — WALL-THICKNESS REVEAL: plain doors on a real WALL axis earn 2 jamb wall instances with nonzero ox/oz");
+group("2 — REVEAL SLABS DELETED (D20/D21): no offset reveal-jamb wall instances; reveals are wall-owned");
 {
+  // Pre-D20 this group required 2 offset jamb wall instances per door (the wall-thickness reveal
+  // slabs). D20 deleted them; D21 makes the compiled shell's own wall volume carry the reveal
+  // surfaces. The prism fallback path must therefore emit ZERO offset reveal-slab wall instances —
+  // asserting the deletion HOLDS is this group's new job (same red-first discipline as ks2's D20
+  // rewrite; a reappearing reveal slab is the regression this now catches).
   const plan = fullPlan(buildChainFixture(10), "bw2-5-reveal", "gloom");
   const board = M.interiorBuildBoard(plan, { realmId: "gloom" });
-  const jambs = board.instances.wall.filter((w) => (w.ox || 0) !== 0 || (w.oz || 0) !== 0);
-  ok(jambs.length > 0, `at least one door-reveal jamb wall instance exists (found ${jambs.length})`);
-  ok(jambs.length % 2 === 0, "jambs come in pairs (left/right or fore/aft of the opening)");
-  ok(jambs.every((j) => j.sy > 0), "every jamb has a real height (a volume, not a plane)");
-  // exactly one of ox/oz is nonzero per jamb (perpendicular to the passage, never diagonal)
-  ok(jambs.every((j) => ((j.ox || 0) !== 0) !== ((j.oz || 0) !== 0)), "every jamb offsets along exactly ONE axis");
+  const offsetWalls = board.instances.wall.filter((w) => (w.ox || 0) !== 0 || (w.oz || 0) !== 0);
+  ok(offsetWalls.length === 0, `reveal-slab wall instances stay DELETED (found ${offsetWalls.length} offset wall instances — D20/D21 own reveals in the wall volume)`);
+  ok(board.instances.doorframe.some((d) => d.doorwaySide), "doorway construction exists in the doorframe channel instead");
 }
 
 group("3 — determinism: same (plan,opts) twice -> byte-identical instances/furniture/wallProps/daisTop");
@@ -252,8 +250,10 @@ group("7 — FURNITURE CHANNEL: every blocker dressing entry has a matching boar
   });
   ["crate", "cabinet", "barrel-cluster", "table", "bench", "shelf-unit"].forEach((kind) => {
     const recipe = M.furnitureFor(kind, "chrome");
-    ok(recipe && Array.isArray(recipe.prisms) && recipe.prisms.length >= 2 && recipe.prisms.length <= 6,
-      `furnitureFor("${kind}") resolves a 2-6 prism assembly (got ${recipe && recipe.prisms && recipe.prisms.length})`);
+    // 1-6 since c580d5fd (Clayroom workbench): the crate is ONE honest 0.6^3 box (C1B's real
+    // crate blocker) — the job here is furnitureFor totality + a real assembly, not chunk count.
+    ok(recipe && Array.isArray(recipe.prisms) && recipe.prisms.length >= 1 && recipe.prisms.length <= 6,
+      `furnitureFor("${kind}") resolves a 1-6 prism assembly (got ${recipe && recipe.prisms && recipe.prisms.length})`);
   });
   const unknown = M.furnitureFor("not-a-real-kind", "chrome");
   ok(unknown && unknown.kind === "crate", "an unknown kind degrades to \"crate\" rather than throwing");
@@ -314,41 +314,43 @@ group("12 — REGRESSION: board.instances still emits EXACTLY the 4 known kinds 
     "furniture/wallProps/daisTop are present as top-level sibling arrays");
 }
 
-group("13 — D4d DOORFRAME MASS FIX: plain-frame prisms are slim (never a wFrac x wFrac column); aperture stays open between jambs");
+group("13 — KINDERGARTEN DOORWAY MASS (D20): plain wall shaping a real human-scale opening; aperture stays open");
 {
-  // Named slim budget: a jamb post is <= ~0.15 cell wide (spec); the header's own slim (depth) axis
-  // rides on revealW + a small proud lip, always << the aperture's own wFrac span for any realistic
-  // door. SLIM_BUDGET here is deliberately generous (0.2, above the 0.15 jamb spec but far below the
-  // pre-fix 0.8 column) so this check keys on "is it a column" (both axes wide), not on the exact
-  // jamb-width tuning number (that's ITR_JAMB_WIDTH_FRAC's own job, asserted implicitly by the header
-  // check below reading the real wFrac span).
-  const SLIM_BUDGET = 0.2;
+  // D20 superseded D4d's ornament-slim discipline: doorway pieces are now plain WALL (two
+  // full-height sides + one band above the opening), so wall-mass thickness is legitimate. The
+  // surviving job is the half this group always protected — the APERTURE: the leaf-sized gap
+  // between the sides is genuinely open (a human door, not a sliver, not a gate), and the lintel
+  // spans exactly that gap and tops out at wall height. Squeeze doors keep their own narrowed
+  // grammar and are excluded, as before.
   const plan = fullPlan(buildChainFixture(10), "d4d-slim-budget", "fantasy");
   const board = M.interiorBuildBoard(plan, { realmId: "fantasy" });
-  const plainFramePrisms = board.instances.doorframe.filter((d) => !d.squeeze && d.archStep == null);
-  ok(plainFramePrisms.length > 0, "at least one plain-frame prism exists");
-  const columns = plainFramePrisms.filter((f) => Math.min(f.sx, f.sz) > SLIM_BUDGET);
-  ok(columns.length === 0, `NO plain-frame prism is a column on both axes (${columns.length}/${plainFramePrisms.length} exceed the ${SLIM_BUDGET} slim budget on both sx and sz)`);
-  ok(plainFramePrisms.every((f) => f.jamb || f.header), "every plain-frame prism is tagged jamb or header (never an untagged solid box)");
-
-  // aperture cross-section: per door cell, the two jambs' own combined footprint (aperture width -
-  // 2x jamb width) must leave a real open gap, not a sliver — the D4 leaf fills exactly this gap.
+  const plain = board.instances.doorframe.filter((d) => !d.squeeze);
+  ok(plain.length > 0, "at least one plain doorway piece exists");
+  ok(plain.every((f) => f.doorwaySide || f.lintel), "every plain doorway piece is tagged doorwaySide or lintel (never an untagged solid box)");
   const byCell = new Map();
-  plainFramePrisms.forEach((f) => {
+  plain.forEach((f) => {
     const key = f.x + "," + f.z;
     if (!byCell.has(key)) byCell.set(key, []);
     byCell.get(key).push(f);
   });
   let checkedCells = 0;
-  byCell.forEach((prisms) => {
-    const jambs = prisms.filter((p) => p.jamb);
-    const header = prisms.find((p) => p.header);
-    if (jambs.length !== 2 || !header) return;
-    const apertureWidth = Math.max(header.sx, header.sz); // the header's own wFrac-bearing dimension
-    const jambWidth = Math.max(jambs[0].sx, jambs[0].sz) === apertureWidth
-      ? Math.min(jambs[0].sx, jambs[0].sz) : Math.max(jambs[0].sx, jambs[0].sz);
-    const openGap = apertureWidth - 2 * jambWidth;
-    ok(openGap >= apertureWidth * 0.5, `door cell aperture gap (${openGap.toFixed(3)}) is >= half the aperture width (${apertureWidth.toFixed(3)}) — genuinely open, not a sliver`);
+  byCell.forEach((pieces) => {
+    const sides = pieces.filter((p) => p.doorwaySide);
+    const lintel = pieces.find((p) => p.lintel);
+    if (sides.length !== 2) return;
+    // each side sits at |offset| = openW/2 + sideW/2 along its ONE offset axis; the open gap
+    // between the two inner faces is therefore 2*(|off| - sideW/2).
+    const off = Math.abs(sides[0].ox || sides[0].oz || 0);
+    const sideW = (sides[0].ox || 0) !== 0 ? sides[0].sx : sides[0].sz;
+    const openGap = 2 * (off - sideW / 2);
+    ok(openGap >= 0.5 && openGap <= 0.8, `door cell open gap (${openGap.toFixed(3)}) is human-door-scale (0.5..0.8 u) — genuinely open, not a sliver`);
+    if (lintel) {
+      // the lintel's width-axis span = its dimension along the same axis the sides offset on
+      const lintelSpan = (sides[0].ox || 0) !== 0 ? lintel.sx : lintel.sz;
+      ok(Math.abs(lintelSpan - openGap) <= 0.03, `lintel spans the opening (span ${lintelSpan.toFixed(3)} vs gap ${openGap.toFixed(3)})`);
+      ok(lintel.yBase > 0.9, `lintel base (${lintel.yBase.toFixed(3)}) sits above a real walk-through opening`);
+      ok(Math.abs(lintel.yBase + lintel.sy - sides[0].sy) <= 0.03, "lintel tops out at wall height (yBase + sy == side height)");
+    }
     checkedCells++;
   });
   ok(checkedCells > 0, `at least one door cell's aperture cross-section was checked (${checkedCells} checked)`);

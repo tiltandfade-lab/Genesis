@@ -899,6 +899,10 @@ function itrRoomLights(room, plan, kit, dressingByRoom) {
       kind, roomSegNum: room.segNum,
       fixtureId: fx.fixtureId, mount: fx.mount, ownerSegIndex: null,
       emitterLocal: fx.emitterLocal, sourceRef: fx.sourceRef,
+      // CL-R1: local state belongs to the practical record. Production defaults to steady; a caller
+      // may opt this one light into deterministic flicker without changing any sibling practical.
+      state: "steady",
+      flicker: { seed: fx.sourceRef, amplitude: 0.06, cadenceMs: 480 },
     };
   });
   if (!list.length) return list;

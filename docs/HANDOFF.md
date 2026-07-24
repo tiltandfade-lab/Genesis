@@ -1,10 +1,31 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-22
+updated: 2026-07-24
 ---
 
 # Genesis — Session Hand-off
+
+## ⭐ Latest (2026-07-24, Clayroom lighting diagnostics) — LOCAL LIGHT STATE + LIFECYCLE PROOF [Codex]
+
+Worktree `worktrees/Genesis-clayroom-door`, branch `codex/clayroom-door-socket`, continuing from
+`25120b8d`.
+
+- Clayroom's warm/cool pair is now two named records built by the real production practical path;
+  ambient remains authored at 0.18. Production practical records default to explicit local
+  `state:"steady"` and carry deterministic per-light flicker data.
+- Root cause of the animation lighting jump was a stale shared flicker interval retaining bases for
+  profile point lights that Clayroom replaced. The ownership handoff now stops/rebinds that timer,
+  and unchanged-lighting Clayroom rebuilds preserve the actual ambient, rig, fixture group,
+  `PointLight`s, emitter materials, states, samples, and scheduler.
+- The Lights tab reports live object/material identities, emitted and mesh normalized values,
+  same-sample parity, isolation, baseline return, and before/during/after door/camera/fade/rebuild
+  guards. The panel is draggable by its header, viewport-clamped, resize-safe, persistent across
+  rebuilds/animations, and has a visible reset/readout.
+- Regression gates: `verify-clay-room` 157/157; `verify-bw3-4-light-shafts` 62/62; production browser
+  proof covers both bulbs, one-light flicker isolation, baseline restoration, door states, rebuild
+  fade, and panel drag/reset. See `C1A-CLAY-ROOM.md` D25 and the verbatim ruling in
+  `ART-DIRECTION-CANON.md`.
 
 ## ⭐ Latest (2026-07-23 later, Clayroom reset session) — CL-R0 BUILT; DESKTOP PACKET FOLDED [Claude]
 

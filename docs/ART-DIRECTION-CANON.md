@@ -1521,3 +1521,35 @@ Binding consequences:
 - Its triangles must be front-facing from the governed camera above: geometric winding and the
   stored +Y normal must agree. A nominal top face that back-face culling erases does not satisfy
   this rule.
+
+## CLAYROOM LIGHT OWNERSHIP + LOCAL BULB STATE (Adam, 2026-07-24 — additive; verbatim)
+
+> "Fix lighting changing during unrelated animations.
+> - Currently, firing an animation can temporarily change the bulb/light settings and make the room
+> look different.
+> - Instrument the actual light objects and materials before, during, and after door/camera
+> animations to identify the root cause.
+> - Door, camera, fade, and board-rebuild animations must not modify or reinitialize the authored
+> lighting state.
+> - Do not conceal the issue with forced per-frame resets."
+
+> "Give each lightbulb an explicit local state.
+> - Default state: steady.
+> - Optional state: flickering.
+> - Flicker must be per-light, not a global effect applied to every bulb.
+> - A steady bulb must remain visually and photometrically steady.
+> - When a bulb is flickering, its visible brightness/emissive appearance and its actual emitted
+> light intensity must follow the same flicker sample on the same frame.
+> - Prefer a deterministic seeded flicker pattern so captures and tests are reproducible."
+
+Binding consequences:
+
+- Light state belongs to each practical record. Missing/ordinary production state resolves to
+  `steady`; `flickering` is an explicit per-light opt-in with its own seed and amplitude.
+- One normalized deterministic sample multiplies both the real `PointLight.intensity` and the
+  visible emitter material's emissive intensity on that tick. A steady sibling is never touched.
+- Geometry-only board rebuilds and door/camera/fade animations preserve authored ambient, rig,
+  practical objects, emitter materials, scheduler state, and values when the lighting identity is
+  unchanged. Reinitializing them and then forcing values back every frame does not satisfy the law.
+- Diagnostic proof reads the actual production objects/materials before, during, and after the
+  governed animations, including their stable identities and normalized mesh/light parity.

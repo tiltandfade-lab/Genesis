@@ -44,8 +44,18 @@
 // survives (or is superseded by) the interior channel's own readability floor.
 var CLAY_C1A_LIGHT_PROFILE = Object.freeze({
   points: Object.freeze([
-    Object.freeze({ side: "west", color: 0xffa04a, intensity: 16, pos: Object.freeze({ x: -0.8, y: 1.7, z: 0 }) }),
-    Object.freeze({ side: "east", color: 0xaebfe8, intensity: 9, pos: Object.freeze({ x: 0.8, y: 1.7, z: 0 }) })
+    Object.freeze({
+      id: "clay-west-warm", side: "west", color: 0xffa04a, intensity: 16,
+      state: "steady",
+      flicker: Object.freeze({ seed: "clay-c1a:west-warm", amplitude: 0.12, cadenceMs: 480 }),
+      pos: Object.freeze({ x: -0.8, y: 1.7, z: 0 })
+    }),
+    Object.freeze({
+      id: "clay-east-cool", side: "east", color: 0xaebfe8, intensity: 9,
+      state: "steady",
+      flicker: Object.freeze({ seed: "clay-c1a:east-cool", amplitude: 0.12, cadenceMs: 480 }),
+      pos: Object.freeze({ x: 0.8, y: 1.7, z: 0 })
+    })
   ]),
   ambient: Object.freeze({ color: 0xffffff, intensity: 0.18 })
 });
@@ -509,6 +519,40 @@ function clayRoomBoardFrom(record){
     KIT_SHELL_ENABLED = priorKitShell;
     KIT_DOORS_ENABLED = priorKitDoors;
   }
+
+  // CL-R1 — the authored opposing pair travels through the SAME fixture-data -> fixture builder ->
+  // PointLight/emitter path as every production interior practical. The generated board already
+  // carries a deterministic production fixture recipe; clone its physical fixture fields rather
+  // than duplicating ITR_FIXTURE_RECIPES in this engine module. Only placement, colour, authored
+  // renderer intensity, identity, and the explicit per-light state belong to this named test recipe.
+  // `renderIntensity` is consumed by interiorBuildLights as an absolute renderer value; ordinary
+  // production rows keep their relative `intensity` + shared gain contract unchanged.
+  var fixtureTemplate = board.lights && board.lights[0];
+  if(!fixtureTemplate){
+    throw new Error("clayRoomBoardFrom: production interiorBuildBoard produced no fixture template for the CL-R1 opposing pair");
+  }
+  var roomCx = room.x + (room.w - 1) / 2;
+  var roomCz = room.y + (room.d - 1) / 2;
+  var roomHalfX = (room.w - 1) / 2 + 1;
+  var roomHalfZ = (room.d - 1) / 2 + 1;
+  board.lights = CLAY_C1A_LIGHT_PROFILE.points.map(function(p){
+    return Object.assign({}, fixtureTemplate, {
+      id: p.id,
+      sourceRef: p.id,
+      x: roomCx + p.pos.x * roomHalfX,
+      z: roomCz + p.pos.z * roomHalfZ,
+      y: p.pos.y,
+      color: p.color,
+      renderIntensity: p.intensity,
+      state: p.state,
+      flicker: {
+        seed: p.flicker.seed,
+        amplitude: p.flicker.amplitude,
+        cadenceMs: p.flicker.cadenceMs
+      },
+      forceVisiblePractical: true
+    });
+  });
 
   var cellById = {};
   (record.cells || []).forEach(function(c){ cellById[c.id] = c; });

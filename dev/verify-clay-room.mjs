@@ -290,6 +290,12 @@ const check = (name, cond, detail = "") =>
       Math.sign(profile.points[0].pos.x) !== Math.sign(profile.points[1].pos.x),
       `${profile.points[0].pos.x} vs ${profile.points[1].pos.x}`);
     check("5d. ambient intensity <= 0.25 as authored", profile.ambient.intensity <= 0.25, profile.ambient.intensity);
+    check("5e. every authored bulb has explicit local default state steady",
+      profile.points.every((p) => p.state === "steady"), JSON.stringify(profile.points));
+    check("5f. each bulb owns a distinct deterministic flicker seed",
+      profile.points.every((p) => p.flicker && p.flicker.seed && p.flicker.amplitude > 0) &&
+      new Set(profile.points.map((p) => p.flicker.seed)).size === profile.points.length,
+      JSON.stringify(profile.points.map((p) => p.flicker)));
   } catch(e) { check("5. light profile shape (module present, no throw)", false, e.stack || String(e)); }
 }
 
@@ -717,6 +723,15 @@ const check = (name, cond, detail = "") =>
       win.KIT_SHELL_ENABLED === true, win.KIT_SHELL_ENABLED);
     check("15l. KIT_DOORS_ENABLED is restored to its prior value (true) after clayRoomBoardFrom returns",
       win.KIT_DOORS_ENABLED === true, win.KIT_DOORS_ENABLED);
+    check("15m. CL-R1 compiles exactly two named steady lights through real production fixture records",
+      compiled.board.lights.length === 2
+      && compiled.board.lights.every((l) => l.id && l.fixtureId && l.emitterLocal && l.state === "steady"),
+      JSON.stringify(compiled.board.lights));
+    check("15n. the opposing pair carries authored absolute renderer intensities 16/9 and unique seeds",
+      compiled.board.lights[0].renderIntensity === 16
+      && compiled.board.lights[1].renderIntensity === 9
+      && compiled.board.lights[0].flicker.seed !== compiled.board.lights[1].flicker.seed,
+      JSON.stringify(compiled.board.lights));
   } catch(e) { check("15. jsdom compile check (module present, no throw)", false, e.stack || String(e)); }
 }
 
@@ -1164,6 +1179,45 @@ const check = (name, cond, detail = "") =>
   check("28e. browser-readable proof reports authored/mounted state, live hinge angle, tween, and mount",
     /window\.Theater\._clayDoorProofForTest/.test(bootSrc) &&
     /hingeAngleDeg/.test(bootSrc) && /tweenActive/.test(bootSrc) && /doorMountReport/.test(bootSrc));
+}
+
+// ============================================================================
+// 29. CL-R1 PANEL + LIGHTING LIFECYCLE REGRESSIONS (2026-07-24).
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("29a. panel header is an explicit drag handle and button targets are excluded from drag start",
+    /clay-room-panel-drag-handle/.test(bootSrc)
+    && /pointerdown/.test(bootSrc)
+    && /closest\("button"\)/.test(bootSrc));
+  check("29b. panel placement clamps against both viewport axes and exposes an obvious reset",
+    /window\.innerWidth\s*-\s*panel\.offsetWidth/.test(bootSrc)
+    && /window\.innerHeight\s*-\s*panel\.offsetHeight/.test(bootSrc)
+    && /Reset Clayroom panel position/.test(bootSrc));
+  check("29c. panel position lives outside the board state and is reused after overlay construction",
+    /let\s+CLAY_ROOM_PANEL_POSITION\s*=\s*null/.test(bootSrc)
+    && /if\(CLAY_ROOM_PANEL_POSITION\)/.test(bootSrc));
+  check("29d. unchanged Clayroom lighting identity detaches and reuses the real fixture group",
+    /function\s+interiorLightingIdentityFor/.test(bootSrc)
+    && /preserveInteriorLighting/.test(bootSrc)
+    && /S\.interiorGroup\.remove\(preservedLightsBuilt\.group\)/.test(bootSrc)
+    && /preserveInteriorLighting\s*\?\s*preservedLightsBuilt/.test(bootSrc));
+  check("29e. a preserved rebuild skips profile and rig reinitialization (no per-frame reset)",
+    /if\(!preserveInteriorLighting\)\s*\{\s*applyLightProfile/.test(bootSrc)
+    && /if\(rigOn\s*&&\s*!preserveInteriorLighting\)/.test(bootSrc)
+    && !/renderTheaterFrame[\s\S]{0,400}clayRoomApplyLightProfile/.test(bootSrc));
+  check("29f. live proof snapshots actual point/emitter/material identities and normalized parity",
+    /pointUuid/.test(bootSrc) && /emitterUuid/.test(bootSrc) && /materialUuid/.test(bootSrc)
+    && /emittedNormalized/.test(bootSrc) && /meshNormalized/.test(bootSrc)
+    && /_clayLightingProofForTest/.test(bootSrc));
+  check("29g. probe records before/during/after animation snapshots and requires preservation",
+    /clayRoomRecordLightingProbe/.test(bootSrc)
+    && /before-rebuild/.test(bootSrc) && /during-animation/.test(bootSrc) && /after-animation/.test(bootSrc)
+    && /duringPass:\s*!!preserved/.test(bootSrc));
+  check("29h. authored-baseline control disables every flicker and restores sample 1 exactly once",
+    /Restore authored lighting baseline/.test(bootSrc)
+    && /function\s+clayRoomRestoreAuthoredLightBaseline/.test(bootSrc)
+    && /lightFlickerApplySample\(t,\s*1\)/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

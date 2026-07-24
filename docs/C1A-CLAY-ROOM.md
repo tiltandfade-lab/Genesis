@@ -432,3 +432,45 @@ downward or degenerate winding, so a fake "up" normal can no longer conceal the 
 
 Gates: room-shell 52/52 · wall-volumes 35/35 · clay 145/145 · room-shell-oss · wall-runs-oss ·
 d4-doors · dungeon-interior · manifest `RESULT: OK`.
+
+## Addendum D25 — movable diagnostics and animation-stable local lights (2026-07-24)
+
+Adam's ruling is recorded verbatim in ART-DIRECTION-CANON under **CLAYROOM LIGHT OWNERSHIP + LOCAL
+BULB STATE**. This addendum records the implementation mechanism and proof.
+
+The lighting jump was a lifecycle defect, not a tone-setting problem. `setInteriorBoard()` started
+the shared flicker interval with the production practical targets and a base array for the then-live
+scene profile points. `clayRoomApplyLightProfile()` subsequently removed those profile points and
+installed the Clayroom pair without stopping/rebinding that interval. Its next 480 ms tick therefore
+applied stale bases and random deltas to a different light array. Door-state proof replays happened
+to expose it because they rebuild the board and start door, camera, and fade animation together.
+
+The repair:
+
+- The warm west 16 / cool east 9 pair now compiles as two named `board.lights` records and is built
+  by the real `interiorBuildLights()` production fixture path. The fixture body, emitter mesh,
+  wall/floor mount, range, decay, and `PointLight` are production objects; Clayroom mounts no
+  demonstration lights or meshes. The low white ambient remains authored at 0.18.
+- Every production practical record carries local `state:"steady"` by default plus deterministic
+  flicker recipe data. `flickering` is opt-in per target. The seeded normalized sample multiplies the
+  actual emitted intensity, visible emitter emissive intensity, and optional cone on the same tick.
+  Disabling flicker writes sample 1 once and stops the scheduler when no local light remains active.
+- `interiorLightingIdentityFor()` excludes door/interactable state but includes every input that can
+  affect the rig, fixture recipe, values, geometry-owned mount slots, or placement. On an unchanged
+  Clayroom lighting identity, the production fixture group is detached before the geometry sweep,
+  then reattached; ambient/rig application and scheduler startup are skipped. Door, camera, fade,
+  and board-rebuild animation therefore preserve object/material UUIDs and authored values instead
+  of reinitializing them. There is no per-frame corrective reset.
+- The **Lights** tab reads the live production objects and reports emitted/base, mesh/base, their
+  normalized sample, parity, object/material identity, one-light isolation, authored-baseline
+  status, and before/during/after animation-guard results. The State tab and rebuild/fade proof use
+  the real board replay path.
+- The panel title is a pointer drag handle; its buttons are excluded from drag start. Position is
+  clamped inside the viewport, retained across board rebuilds/animations, re-clamped on resize, and
+  restored by the visible **reset pos** button with a live viewport-clamp readout.
+
+Teeth: `dev/verify-clay-room.mjs` checks 5e/f, 15m/n, and 29a–h; the rewritten
+`dev/verify-bw3-4-light-shafts.mjs` item 3 executes deterministic local flicker, exact normalized
+mesh/light/cone parity, steady-sibling isolation, seeded replay, null-cone safety, and baseline
+restoration. Live browser proof exercises shut/ajar/open plus rebuild/fade while recording stable
+UUIDs before/during/after.

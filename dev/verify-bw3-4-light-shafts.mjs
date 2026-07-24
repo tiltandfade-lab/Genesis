@@ -431,88 +431,75 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, E0 fixtures + gated co
 }
 
 // ============================================================================
-// ITEM 3 — FLICKER SYNC: lightFlickerStep (pure tick function), fake-clock (mocked Math.random).
+// ITEM 3 — LOCAL FLICKER SYNC: deterministic seeded sample, per-light state, exact mesh/light parity.
 // ============================================================================
-console.log("\n=== ITEM 3 — flicker sync (theater-boot.js source extraction, fake-clock) ===");
+console.log("\n=== ITEM 3 — local deterministic flicker sync (theater-boot.js source extraction) ===");
 {
-  const fn = extractFn(bootSrc, "lightFlickerStep");
-  check("3a-setup. lightFlickerStep extracted from the real source", !!fn);
+  const flickerFns = [
+    "lightFlickerHash32", "lightFlickerNormalizedSample",
+    "lightFlickerApplySample", "lightFlickerStep"
+  ].map((name) => extractFn(bootSrc, name));
+  check("3a-setup. deterministic flicker helpers extracted from the real source", flickerFns.every(Boolean));
 
-  if(fn){
-    const factory = new Function(fn + "\nreturn lightFlickerStep;");
-    const lightFlickerStep = factory();
+  if(flickerFns.every(Boolean)){
+    const factory = new Function(flickerFns.join("\n")
+      + "\nreturn { lightFlickerNormalizedSample, lightFlickerApplySample, lightFlickerStep };");
+    const { lightFlickerNormalizedSample, lightFlickerApplySample, lightFlickerStep } = factory();
 
-    function makeTarget(baseIntensity, baseOpacity, baseConeOpacity){
+    function makeTarget(id, state, baseIntensity, baseEmissiveIntensity, baseConeOpacity){
       return {
-        pl: { intensity: baseIntensity },
-        marker: { material: { opacity: baseOpacity } },
+        id, sourceRef: id, state, seed: "seed:" + id, sampleIndex: 0, normalizedSample: 1,
+        pl: { intensity: baseIntensity, userData: {} },
+        marker: { material: { emissiveIntensity: baseEmissiveIntensity }, userData: {} },
         cone: { material: { opacity: baseConeOpacity } },
-        baseIntensity, baseOpacity, baseConeOpacity,
-        amplitude: 0.06
+        emissiveFlicker: true,
+        baseIntensity, baseEmissiveIntensity, baseOpacity: 1, baseConeOpacity,
+        amplitude: 0.12
       };
     }
 
-    const origRandom = Math.random;
-    function withFakeRandom(seqOrConst, fn2){
-      let i = 0;
-      const seq = Array.isArray(seqOrConst) ? seqOrConst : [seqOrConst];
-      Math.random = () => { const v = seq[i % seq.length]; i++; return v; };
-      try { return fn2(); } finally { Math.random = origRandom; }
-    }
+    const flickering = makeTarget("west", "flickering", 16, 1.6, 0.3);
+    const steady = makeTarget("east", "steady", 9, 1.6, 0.2);
+    lightFlickerStep([], [], [flickering, steady], 0, 1);
+    const emittedNorm = flickering.pl.intensity / flickering.baseIntensity;
+    const meshNorm = flickering.marker.material.emissiveIntensity / flickering.baseEmissiveIntensity;
+    const coneNorm = flickering.cone.material.opacity / flickering.baseConeOpacity;
+    check("3b. one deterministic normalized sample drives emitted light + visible emitter on the same tick",
+      Math.abs(emittedNorm - meshNorm) < 1e-9 && Math.abs(emittedNorm - flickering.normalizedSample) < 1e-9,
+      JSON.stringify({ emittedNorm, meshNorm, sample: flickering.normalizedSample }));
+    check("3c. the optional cone rides that exact normalized sample too",
+      Math.abs(coneNorm - emittedNorm) < 1e-9, JSON.stringify({ coneNorm, emittedNorm }));
+    check("3d. a steady sibling is photometrically and visibly untouched by another light's flicker",
+      steady.pl.intensity === steady.baseIntensity
+      && steady.marker.material.emissiveIntensity === steady.baseEmissiveIntensity
+      && steady.normalizedSample === 1,
+      JSON.stringify(steady));
+    check("3e. the flickering target actually moved away from baseline",
+      Math.abs(flickering.normalizedSample - 1) > 1e-6, flickering.normalizedSample);
 
-    // 3b/3c: a single controlled tick (Math.random pinned to 0.9 for every draw) — marker and cone
-    // must move by the IDENTICAL raw delta off their own (different) bases: proves the cone rides the
-    // marker's own swing rather than an independently-rolled random of its own.
-    let t1;
-    withFakeRandom(0.9, () => {
-      t1 = makeTarget(1.0, 0.85, 0.3);
-      lightFlickerStep([], [], [t1], t1.amplitude);
-    });
-    const deltaMarker1 = t1.marker.material.opacity - t1.baseOpacity;
-    const deltaCone1 = t1.cone.material.opacity - t1.baseConeOpacity;
-    check("3b. FLICKER SYNC: marker and cone opacity move by the IDENTICAL delta off their own bases (tick 1)",
-      Math.abs(deltaMarker1 - deltaCone1) < 1e-9, JSON.stringify({ deltaMarker1, deltaCone1 }));
-    check("3c. tick 1 actually moved opacity away from base (not a vacuous zero-delta tick)",
-      Math.abs(deltaMarker1) > 1e-6, deltaMarker1);
+    const replay = makeTarget("west", "flickering", 16, 1.6, 0.3);
+    lightFlickerStep([], [], [replay], 0, 1);
+    check("3f. DETERMINISM: identical seed + sample index reproduces byte-identical light/material values",
+      replay.pl.intensity === flickering.pl.intensity
+      && replay.marker.material.emissiveIntensity === flickering.marker.material.emissiveIntensity
+      && replay.normalizedSample === flickering.normalizedSample);
+    check("3g. per-light seeds are load-bearing (same tick, different light id -> different sample)",
+      lightFlickerNormalizedSample("seed:west", 1, 0.12)
+      !== lightFlickerNormalizedSample("seed:east", 1, 0.12));
 
-    // 3d: a SECOND, DIFFERENT controlled draw (0.1) reproduces the same "identical delta" property in
-    // the OPPOSITE direction — proves 3b isn't a coincidence of one particular random draw.
-    let t2;
-    withFakeRandom(0.1, () => {
-      t2 = makeTarget(1.0, 0.85, 0.3);
-      lightFlickerStep([], [], [t2], t2.amplitude);
-    });
-    const deltaMarker2 = t2.marker.material.opacity - t2.baseOpacity;
-    const deltaCone2 = t2.cone.material.opacity - t2.baseConeOpacity;
-    check("3d. FLICKER SYNC holds on a second, oppositely-signed random draw too", Math.abs(deltaMarker2 - deltaCone2) < 1e-9, JSON.stringify({ deltaMarker2, deltaCone2 }));
-    check("3e. the two controlled draws produced opposite-signed swings (0.9 vs 0.1 really drove different deltas)",
-      Math.sign(deltaMarker1) !== Math.sign(deltaMarker2), JSON.stringify({ deltaMarker1, deltaMarker2 }));
+    const noCone = makeTarget("no-cone", "flickering", 5, 1.2, 0.1);
+    noCone.cone = null;
+    let noConeThrew = false;
+    try { lightFlickerStep([], [], [noCone], 0, 2); } catch(e) { noConeThrew = true; }
+    check("3h. ⊗ MUTATION/null-safety: a flickering target with no cone still updates light + emitter",
+      !noConeThrew && noCone.pl.intensity !== noCone.baseIntensity
+      && noCone.marker.material.emissiveIntensity !== noCone.baseEmissiveIntensity);
 
-    // 3f: determinism — the SAME fake-clock sequence reproduces byte-identical opacities.
-    let t3;
-    withFakeRandom(0.9, () => {
-      t3 = makeTarget(1.0, 0.85, 0.3);
-      lightFlickerStep([], [], [t3], t3.amplitude);
-    });
-    check("3f. DETERMINISM: the same fake-clock draw (0.9) reproduces the identical marker+cone opacity as tick 1",
-      t3.marker.material.opacity === t1.marker.material.opacity && t3.cone.material.opacity === t1.cone.material.opacity);
-
-    // 3g: null-safe — a target with no cone (pre-unit shape) must not throw, marker still updates.
-    let t4;
-    withFakeRandom(0.9, () => {
-      t4 = { pl: { intensity: 1.0 }, marker: { material: { opacity: 0.85 } }, baseIntensity: 1.0, baseOpacity: 0.85, amplitude: 0.06 };
-      lightFlickerStep([], [], [t4], t4.amplitude);
-    });
-    check("3g. ⊗ MUTATION/null-safety: a target with NO cone field never throws, and its marker still updates",
-      t4.marker.material.opacity !== 0.85);
-
-    // 3h: pl.intensity (the actual PointLight) rides the SAME raw per-tick delta the marker/cone are
-    // derived from — the light itself takes the full delta, marker/cone take delta*0.5 (source's own
-    // "the marker's own opacity is nudged by the same delta*0.5" convention) — so this asserts the
-    // 2x proportionality, not a bare equality.
-    const deltaIntensity1 = t1.pl.intensity - t1.baseIntensity;
-    check("3h. the light's own pl.intensity moves by 2x the marker/cone swing (all three ride ONE underlying delta, marker/cone at half rate)",
-      Math.abs(deltaIntensity1 - deltaMarker1 * 2) < 1e-9, JSON.stringify({ deltaIntensity1, deltaMarker1 }));
+    lightFlickerApplySample(flickering, 1);
+    check("3i. disabling flicker can restore the exact authored light + material baseline in one write",
+      flickering.pl.intensity === flickering.baseIntensity
+      && flickering.marker.material.emissiveIntensity === flickering.baseEmissiveIntensity
+      && flickering.normalizedSample === 1);
   }
 }
 

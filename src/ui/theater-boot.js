@@ -5107,7 +5107,10 @@ function createTheaterState(){
     // + flickerRaf/flickerRunning drive the flicker tick (tickLightFlicker) — a SEPARATE, cheap-by-design
     // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
     // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
-    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null, fillLight: null, interiorCameraKey: null,
+    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, flickerTick: 0,
+    interiorFlickerTargets: [], interiorLightTargets: [], interiorLightsBuilt: null,
+    interiorLightingKey: null, interiorLightingPreservedThisBuild: false,
+    keyLight: null, fillLight: null, interiorCameraKey: null,
     hemiLight: null, // GR3: the shared soft hemisphere key, added once at mount() — see mount()'s own comment
     // BEAUTY-WAVE-3 BW3-0 (docs/BEAUTY-WAVE-3.md, THE COMPOSER SEAM): the postprocessing chain, built
     // once at mount() (needs a live renderer) and disposed at retire(). Default ON, but the render
@@ -6982,21 +6985,16 @@ function mountLightProp(data, cx, cz){
    ~2x/sec ONLY for flicker profiles; keep it cheap"). Deliberately NOT the tween rAF chain (theater-
    verbs.js's tickTweens runs every frame while >=1 verb tween is live — a torch flicker isn't a verb,
    it's ambient scene mood that should keep going for the ENTIRE time a flicker profile is mounted, verb
-   tweens or no) and NOT a plain rAF loop either (60fps for a "randomly nudge one light's intensity"
-   effect is wasted work the render-on-demand discipline this file otherwise holds to would flag) — a
-   setInterval at ~2Hz is the cheapest mechanism that still reads as a living flame: each tick nudges
-   every current point light's intensity by a small random delta around its profile base and calls
-   markDirty() once. Self-stopping: stopLightFlicker (called at the top of every applyLightProfile, and
-   from retire()) clears the interval, so a flicker never survives past the profile that requested it or
-   past retire(). */
-// BEAUTY-WAVE.md VP6 item 2 (THE LIFE PASS — torch flicker): interior light sources JOIN this same
-// channel rather than growing a second setInterval — startLightFlicker's third param is an optional
-// list of {pl, marker, baseIntensity, baseOpacity} entries (interiorBuildLights, below, builds these)
-// that the SAME 480ms tick also nudges, at a fixed LOW amplitude (bounded here, never per-call —
-// verify-vp6-life-pass.mjs's "flicker amplitude bound" check reads this const directly) so a torch-lit
-// interior room never reads as more violently flickering than the tabletop `torchlit` profile (0.14)
-// already established. The marker mesh's OWN opacity is nudged by the same delta*0.5 so the visible
-// flame-quad pulses IN SYNC with its light's intensity swing, never independently randomized.
+   tweens or no) and NOT a plain rAF loop either (60fps for a low-frequency practical pulse is wasted
+   work the render-on-demand discipline this file otherwise holds to would flag). A setInterval at
+   ~2Hz is the cheapest mechanism that still reads as a living flame. CL-R1 makes the sample seeded
+   and local: only targets whose own state is `flickering` update; steady targets are never written.
+   Self-stopping: stopLightFlicker (called at profile ownership changes and from retire()) clears the
+   interval, so a flicker never survives past its owner or past retire(). */
+// BEAUTY-WAVE.md VP6 item 2 (THE LIFE PASS — torch flicker): opted-in interior sources share this
+// scheduler rather than growing one interval per fixture. Each target owns {state,seed,amplitude,
+// pl,marker,bases}; the same normalized seeded sample scales the actual PointLight and its visible
+// emitter material. The default amplitude remains below the tabletop torchlit profile's 0.14.
 const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
 // BW3-4 addendum: the per-tick nudge math pulled out to a PURE function (explicit args, no S/closure
 // reads) — same "pure step, thin scheduler wraps it" split VP6's own mote drift already keeps
@@ -7005,51 +7003,91 @@ const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
 // setInterval, and lets the light-CONE card (this unit) ride the identical delta the marker already
 // does — never a second independently-randomized swing (that would desync the shaft from its own
 // marker/light, the exact "flicker sync" this unit's spec calls for).
-function lightFlickerStep(pointLights, bases, interiorTargets, amplitude){
+function lightFlickerHash32(value){
+  let h = 2166136261 >>> 0;
+  const s = String(value || "");
+  for(let i = 0; i < s.length; i++){
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  h += h << 13; h ^= h >>> 7; h += h << 3; h ^= h >>> 17; h += h << 5;
+  return h >>> 0;
+}
+function lightFlickerNormalizedSample(seed, sampleIndex, amplitude){
+  const h = lightFlickerHash32(String(seed || "light") + ":" + String(sampleIndex || 0));
+  const unit = h / 4294967295;
+  const a = Math.max(0, Math.min(0.45, Number(amplitude) || 0));
+  return 1 + (unit * 2 - 1) * a;
+}
+function lightFlickerApplySample(target, sample){
+  if(!target) return;
+  const normalized = Number.isFinite(sample) ? sample : 1;
+  if(target.pl){
+    target.pl.intensity = Math.max(0, target.baseIntensity * normalized);
+    target.pl.userData = target.pl.userData || {};
+    target.pl.userData.flickerSample = normalized;
+    target.pl.userData.lightState = target.state;
+  }
+  if(target.marker && target.marker.material){
+    if(target.emissiveFlicker){
+      target.marker.material.emissiveIntensity = Math.max(0, target.baseEmissiveIntensity * normalized);
+    } else {
+      target.marker.material.opacity = Math.max(0, Math.min(1, target.baseOpacity * normalized));
+    }
+    target.marker.userData = target.marker.userData || {};
+    target.marker.userData.flickerSample = normalized;
+    target.marker.userData.lightState = target.state;
+  }
+  if(target.cone && target.cone.material){
+    target.cone.material.opacity = Math.max(0, Math.min(1, target.baseConeOpacity * normalized));
+  }
+  target.normalizedSample = normalized;
+}
+function lightFlickerStep(pointLights, bases, interiorTargets, amplitude, tickIndex){
   (pointLights || []).forEach((l, i) => {
     const base = bases[i] != null ? bases[i] : l.intensity;
-    l.intensity = Math.max(0.05, base + (Math.random() * 2 - 1) * amplitude);
+    const sample = lightFlickerNormalizedSample("profile:" + i, tickIndex || 0, amplitude);
+    l.intensity = Math.max(0.05, base * sample);
   });
   (interiorTargets || []).forEach((t) => {
-    const delta = (Math.random() * 2 - 1) * t.amplitude;
-    t.pl.intensity = Math.max(0.05, t.baseIntensity + delta);
-    if(t.marker && t.marker.material){
-      // E0 — VISIBLE PRACTICALS: a fixture's own emitter submesh (t.emissiveFlicker, WALL-VOLUMES-
-      // PRACTICALS.md §E0's "collect flicker on the emitter submesh's material — emissiveIntensity
-      // pulse") flickers its EMISSIVE INTENSITY, never opacity — a solid, opaque flame/bulb/crystal
-      // fading transparent reads as ghosting, not guttering. The legacy additive-glow-disc marker
-      // (only reachable behind ITR_GLOW_DISC_DIAGNOSTIC now) keeps its own original opacity-pulse
-      // contract, untouched, for whichever diagnostic capture still mounts it.
-      if(t.emissiveFlicker){
-        t.marker.material.emissiveIntensity = Math.max(0, t.baseEmissiveIntensity + delta * 1.5);
-      } else {
-        t.marker.material.opacity = Math.max(0.2, Math.min(1, t.baseOpacity + delta * 0.5));
-      }
-    }
-    // BW3-4: the light-cone card rides the SAME delta*0.5 swing as the marker above (its own base
-    // opacity is much lower — see ITR_LIGHT_CONE_OPACITY — so this is a proportional nudge off that
-    // lower base, never a re-rolled random of its own); floor-clamped just above zero rather than the
-    // marker's 0.2 (a near-invisible shaft at the bottom of a flicker dip is fine, a near-invisible
-    // marker quad reads as a snuffed-out flame — the two clamps intentionally differ).
-    if(t.cone && t.cone.material){
-      t.cone.material.opacity = Math.max(0.05, Math.min(1, t.baseConeOpacity + delta * 0.5));
-    }
+    if(t.state !== "flickering") return;
+    const index = tickIndex != null ? tickIndex : ((t.sampleIndex || 0) + 1);
+    t.sampleIndex = index;
+    const sample = lightFlickerNormalizedSample(t.seed || t.id, index, t.amplitude);
+    // CL-R1: one normalized deterministic sample drives the physical PointLight, the visible
+    // emitter material, and the optional shaft on this exact tick. A steady sibling is never visited.
+    lightFlickerApplySample(t, sample);
   });
 }
 function startLightFlicker(amplitude, interiorTargets){
   stopLightFlicker();
   const bases = S.pointLights.map(l => l.intensity);
   S.interiorFlickerTargets = interiorTargets || [];
+  S.flickerTick = 0;
+  const hasProfileFlicker = amplitude > 0 && S.pointLights.length > 0;
+  const hasLocalFlicker = S.interiorFlickerTargets.some(t => t && t.state === "flickering");
+  if(!hasProfileFlicker && !hasLocalFlicker) return;
   S.flickerRaf = setInterval(() => {
     if(!S.mounted){ stopLightFlicker(); return; }
-    lightFlickerStep(S.pointLights, bases, S.interiorFlickerTargets, amplitude);
-    if(!S.pointLights.length && !(S.interiorFlickerTargets || []).length){ stopLightFlicker(); return; }
+    S.flickerTick++;
+    lightFlickerStep(
+      hasProfileFlicker ? S.pointLights : [],
+      bases,
+      S.interiorFlickerTargets,
+      amplitude,
+      S.flickerTick
+    );
+    if(!hasProfileFlicker && !S.interiorFlickerTargets.some(t => t && t.state === "flickering")){
+      stopLightFlicker();
+      return;
+    }
     markDirty();
   }, 480); // ~2x/sec per §2's own cadence note
 }
 function stopLightFlicker(){
   if(S.flickerRaf != null){ clearInterval(S.flickerRaf); S.flickerRaf = null; }
   S.interiorFlickerTargets = [];
+  S.flickerTick = 0;
 }
 
 /* §4 texture hooks. TextureLoader is async by nature; loaded textures land in S.textures keyed by
@@ -7695,6 +7733,10 @@ function setBoard(data){
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
   clearGroup(S.interiorGroup); // DUNGEON-GRAPH.md U3: a combat board must not leave a prior interior tray's meshes on stage
+  S.interiorLightsBuilt = null;
+  S.interiorLightTargets = [];
+  S.interiorLightingKey = null;
+  S.interiorLightingPreservedThisBuild = false;
   // REALM-PROPS-WIRING.md §3: recomputed fresh every setBoard call (swept the same way tile/prop
   // groups are — a stale prior board's occupied zones never survive a re-render). Populated in the
   // prop-mount loop below, exposed for a future placement-pass consumer (never read/enforced by
@@ -8745,9 +8787,8 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
   const assigned = interiorAssignShadowCasters(lights, cx, cz);
   let casters = 0;
   let glowCount = 0;
-  // VP6 item 2: every interior light source joins the shared flicker channel (startLightFlicker,
-  // above) at INTERIOR_LIGHT_FLICKER_AMPLITUDE — collected here (not started here) so setInteriorBoard
-  // can hand the finished list to ONE startLightFlicker call alongside the board's own S.pointLights.
+  // VP6/CL-R1: every nonsuppressed source exposes a local-state target to the shared scheduler, but
+  // only a target explicitly authored `state:"flickering"` is updated. Steady is the default.
   const flickerTargets = [];
   // E0-1 (docs/PHASE-3-WAVE-1-SPECS.md): one entry per fixture that actually LANDED on a real wall
   // segment ({ownerSegIndex, materials: [bodyClone, emitterMat]}) — collected here (pure, no S.*
@@ -8811,7 +8852,10 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       // value; this is the absolute decay-2 pool brightness. Preserves the fill<=60%-of-key ratio (both
       // key and fill are gained equally). LIGHT-CLOSE: a suppressed practical scales toward
       // ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (0 by default) — the sky fill carries the room instead.
-      (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1),
+      (light.renderIntensity != null
+        ? light.renderIntensity
+        : (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain
+      ) * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1),
       // BW2-4b item 1 — LIGHT RANGE CAP: tighten each pool to a small hot circle (the mock read) so the
       // gaps between torches go genuinely dark (the BRIGHTNESS LAW's dark-corner requirement).
       Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
@@ -8863,13 +8907,37 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
     // faint-but-nonzero torch flutter on a light that's supposed to read as OFF).
     if(!suppressPractical){
       const fallbackConeOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
+      const localState = light.state === "flickering" ? "flickering" : "steady";
+      const localFlicker = light.flicker || {};
+      const lightId = String(light.id || light.sourceRef || ("interior-light-" + flickerTargets.length));
+      fixture.group.userData = fixture.group.userData || {};
+      pl.userData = pl.userData || {};
+      fixture.emitter.userData = fixture.emitter.userData || {};
+      fixture.group.userData.lightId = lightId;
+      fixture.group.userData.lightState = localState;
+      pl.userData.lightId = lightId;
+      pl.userData.lightState = localState;
+      pl.userData.flickerSample = 1;
+      fixture.emitter.userData.lightId = lightId;
+      fixture.emitter.userData.lightState = localState;
+      fixture.emitter.userData.flickerSample = 1;
       flickerTargets.push({
+        id: lightId,
+        sourceRef: light.sourceRef || lightId,
+        state: localState,
+        seed: String(localFlicker.seed || light.sourceRef || lightId),
+        cadenceMs: Math.max(120, Number(localFlicker.cadenceMs) || 480),
+        sampleIndex: 0,
+        normalizedSample: 1,
         pl, marker: fixture.emitter, cone: cone ? cone.mesh : null,
         emissiveFlicker: true, // E0 — pulse the emitter's OWN emissiveIntensity, not a disc's opacity (see lightFlickerStep)
         baseIntensity: pl.intensity,
         baseEmissiveIntensity: ITR_FIXTURE_EMISSIVE_INTENSITY,
+        baseOpacity: fixture.emitter.material.opacity != null ? fixture.emitter.material.opacity : 1,
         baseConeOpacity: (cone && cone.mesh.material) ? cone.mesh.material.opacity : fallbackConeOpacity,
-        amplitude: INTERIOR_LIGHT_FLICKER_AMPLITUDE
+        amplitude: Math.max(0, Math.min(0.45,
+          localFlicker.amplitude != null ? Number(localFlicker.amplitude) : INTERIOR_LIGHT_FLICKER_AMPLITUDE
+        ))
       });
     }
   });
@@ -10544,6 +10612,23 @@ function f1BuildCombatGrid(legalCells, cx, cz, floorTopMap){
   return group;
 }
 
+function interiorLightingIdentityFor(data, variant){
+  // Lighting objects may survive a geometry-only replay only when every input that can affect their
+  // fixture recipe, placement, scene rig, or authored value is identical. Door/interactable state is
+  // intentionally absent: a hinge swing is not a lighting authoring change.
+  return JSON.stringify({
+    realmId: data && data.realmId,
+    lightProfile: data && data.lightProfile,
+    lights: (data && data.lights) || [],
+    bounds: data && data.bounds,
+    focusRect: data && data.focusRect,
+    walls: data && data.instances && data.instances.wall,
+    doorAxes: data && data.doorAxes,
+    roomShell: ITR_ROOM_SHELL,
+    rig: !variant || variant.rig !== false,
+  });
+}
+
 function setInteriorBoard(data){
   if(!S.mounted || !data) return;
   // BEAUTY-WAVE-4.md MF-1: capture the TRUE live camera pose as the very FIRST thing this function
@@ -10566,6 +10651,21 @@ function setInteriorBoard(data){
   const dirtyKey = "interior:" + JSON.stringify(variant) + ":" + JSON.stringify(data);
   if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
   S.boardKey = dirtyKey;
+  const nextLightingKey = S.clayRoomDiagnosticActive
+    ? interiorLightingIdentityFor(data, variant)
+    : null;
+  const preserveInteriorLighting = !!(
+    S.clayRoomDiagnosticActive
+    && S.interiorLightsBuilt
+    && S.interiorLightsBuilt.group
+    && S.interiorLightsBuilt.group.parent === S.interiorGroup
+    && S.interiorLightingKey === nextLightingKey
+  );
+  const preservedLightsBuilt = preserveInteriorLighting ? S.interiorLightsBuilt : null;
+  const clayLightingProbeBefore = S.clayRoomDiagnosticActive
+    ? clayRoomLightingSnapshot("before-rebuild")
+    : null;
+  S.interiorLightingPreservedThisBuild = preserveInteriorLighting;
   // BEAUTY-WAVE-4.md MF-2 item 4 (ROOM TRANSITION CROSSFADE): only a REAL swap gets the crossfade —
   // "walk/travel BOARD SWAPS", not this mount's very first room reveal (nothing to hide a cut FROM
   // yet; the dressing/piece cascade already wired into interiorBuildPieces/Dressing/Furniture is that
@@ -10593,6 +10693,7 @@ function setInteriorBoard(data){
   window.Theater.stats.boardBuilds++;
   drainTweens(S);
   clearGroup(S.fxGroup);
+  if(preserveInteriorLighting) S.interiorGroup.remove(preservedLightsBuilt.group);
   S.lastBoard = data;
   // STAGE-A A4 — a genuinely NEW board object (not a same-object rebuild: rotate()/zoom/variant-only
   // replays never change `data`'s own identity, matching setInteriorVariant's own "null S.boardKey,
@@ -10800,7 +10901,7 @@ function setInteriorBoard(data){
   // (an honest "no GR3 grade" baseline) and dims the shared hemisphere key to 0 for THIS render — no
   // product caller ever sets S.interiorVariant, so this is a no-op everywhere except the study card.
   const rigOn = variant.rig !== false;
-  if(S.hemiLight) S.hemiLight.intensity = rigOn ? HEMI_INTENSITY_DEFAULT : 0;
+  if(!preserveInteriorLighting && S.hemiLight) S.hemiLight.intensity = rigOn ? HEMI_INTENSITY_DEFAULT : 0;
   const gradeProfile = (rigOn && kit.gradeStrength)
     ? { sat: 1, tintAmt: kit.gradeStrength, contrast: 1, tint: hexStrToNum(kit.gradeTint) }
     : null;
@@ -10831,7 +10932,9 @@ function setInteriorBoard(data){
   S.lightPropAnchor = null; // interior boards carry no light-prop registry mapping (data.light absent) — plain profile lighting
   // interior boards may name their own profile (the tile kits are dark-value surfaces; the "dark"
   // default reads near-black on them — study card v1/v2). Falls back to the standing default.
-  applyLightProfile((data.lightProfile && LIGHT_PROFILES[data.lightProfile]) ? data.lightProfile : LIGHT_DEFAULT_PROFILE);
+  if(!preserveInteriorLighting){
+    applyLightProfile((data.lightProfile && LIGHT_PROFILES[data.lightProfile]) ? data.lightProfile : LIGHT_DEFAULT_PROFILE);
+  }
 
   // LIGHT-CLOSE unit (2026-07-11) — hoisted OUTSIDE `if(rigOn)` below: the fill-number override
   // (rigOn-gated, unchanged) AND two NEW consumers that must see the SAME classification regardless of
@@ -10865,7 +10968,7 @@ function setInteriorBoard(data){
   // (variant.rig === false) is untouched. MUST run BEFORE interiorBuildLights + startLightFlicker below
   // so the flicker bases (startLightFlicker snapshots S.pointLights[i].intensity) capture the plunged
   // fill, not the pre-plunge value. See ITR_SCENE_* constants (near HEMI_*) for the tuned numbers.
-  if(rigOn){
+  if(rigOn && !preserveInteriorLighting){
     const brightFill = isBrightRealm ? itrBrightRealmFillFor(data.realmId, kit) : null;
     // BW2-4b item 6 — THE GLOOM LIFT: gloom ONLY gets a small ambient bump (fantasy is the reference
     // register — never brightened). Every other non-bright/non-emissive realm keeps ITR_SCENE_AMBIENT
@@ -11664,8 +11767,13 @@ function setInteriorBoard(data){
   const wallMountData = S.interiorLastRoomShell
     ? { mountSlots: mountSlotsForPlacement, wallSegments: S.interiorLastRoomShell.wallSegments }
     : null;
-  const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces, isBrightRealm, wallMountData);
+  const lightsBuilt = preserveInteriorLighting
+    ? preservedLightsBuilt
+    : interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces, isBrightRealm, wallMountData);
   S.interiorGroup.add(lightsBuilt.group);
+  S.interiorLightsBuilt = lightsBuilt;
+  S.interiorLightTargets = lightsBuilt.flickerTargets;
+  S.interiorLightingKey = nextLightingKey;
   S.interiorShadowCasterCount = lightsBuilt.casters;
   S.interiorLightCount = (data.lights || []).length;
   // E0-1 (docs/PHASE-3-WAVE-1-SPECS.md) — WALL-FIXTURE OCCLUSION-FADE LINKAGE: this is the ONE call
@@ -11702,7 +11810,9 @@ function setInteriorBoard(data){
   // calls stopLightFlicker first), so this call is the one that actually starts ticking for an interior
   // board with any lights at all; a light-less room (lightsBuilt.flickerTargets === []) is a clean no-op
   // (startLightFlicker's own interval self-stops when both lists are empty).
-  if(lightsBuilt.flickerTargets.length) startLightFlicker(INTERIOR_LIGHT_FLICKER_AMPLITUDE, lightsBuilt.flickerTargets);
+  if(!preserveInteriorLighting && lightsBuilt.flickerTargets.length){
+    startLightFlicker(INTERIOR_LIGHT_FLICKER_AMPLITUDE, lightsBuilt.flickerTargets);
+  }
 
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
   // (data.pieces, a plain field the caller sets directly on the board object — independent of
@@ -11932,6 +12042,13 @@ function setInteriorBoard(data){
   // Costs one boolean read (S.clayRoomDiagnosticActive) per interior rebuild in normal play; the
   // function is declared in this file's CLAY-ROOM ADDITIONS region and hoists.
   clayRoomAfterInteriorBoardRebuild();
+  if(clayLightingProbeBefore){
+    clayRoomRecordLightingProbe(
+      "door/camera/fade/board rebuild",
+      clayLightingProbeBefore,
+      preserveInteriorLighting
+    );
+  }
 
   markDirty();
 }
@@ -13066,6 +13183,11 @@ window.Theater._doorMountForTest = function(){ return S.doorMountReport || null;
 // deliberately read-only; the State tab below is the only dev affordance that authors a transition.
 window.Theater._clayDoorProofForTest = function(){
   return (typeof clayRoomDoorProofState === "function") ? clayRoomDoorProofState() : null;
+};
+window.Theater._clayLightingProofForTest = function(){
+  return (typeof clayRoomLightingSnapshot === "function")
+    ? { snapshot: clayRoomLightingSnapshot("test-read"), probe: S.clayRoomLightingProbe || null }
+    : null;
 };
 window.Theater._clayProvenanceAuditForTest = function(){
   return (typeof clayRoomProvenanceAudit === "function") ? clayRoomProvenanceAudit() : null;
@@ -14629,33 +14751,174 @@ function clayRoomMaybeAutoMount(){
 // "CLAY_DIAGNOSTIC_SURFACE_RECIPE is not defined"). manifest.json declares the module as a
 // callTimeDep precisely because that is the contract: call time, not load time.
 
-// D4 — apply CLAY_C1A_LIGHT_PROFILE as the FINAL word on the mounted scene's ambient/point lights,
-// called AFTER setInteriorBoard so it supersedes that function's own rigOn block (which
-// unconditionally overwrites S.ambientLight/S.pointLights from the ITR_SCENE_*/ITR_BRIGHT_REALM_FILL
-// tables the instant it runs — see setInteriorBoard's own BW2-4 THE VALUE PLUNGE comment). Going
-// through applyLightProfile(key) itself was the OTHER D4-offered mechanism, but that requires a
-// LIGHT_PROFILES registry key (editing that table is explicitly out of scope) AND clamps ambient UP
-// to STAGE_AMBIENT_FLOOR (0.42 on the tabletop channel) — well past D4's <=0.25 ceiling. This
-// function mirrors applyLightProfile's OWN construction primitives (THREE.AmbientLight/
-// THREE.PointLight added to S.scene, teardown of any prior S.pointLights) without going through
-// either blocked path, so the record's authored ambient (0.18) lands UNCLAMPED. Mechanism +
-// effective values are reported verbatim in the build report — never claimed here as a visual result.
+// D4 / CL-R1 — the authored ambient remains a scene-level light, but the opposing point pair now
+// arrives through board.lights -> interiorBuildLights, the real production practical path. This hook
+// therefore removes only applyLightProfile's unrelated tabletop/profile points and installs the
+// authored 0.18 ambient. It is idempotent: a geometry/door rebuild that preserved the lighting
+// identity returns without replacing a light object, material, or scheduler.
 function clayRoomApplyLightProfile(record){
   if(!S.scene) return;
-  if(S.ambientLight){ S.scene.remove(S.ambientLight); S.ambientLight = null; }
-  (S.pointLights || []).forEach(function(l){ S.scene.remove(l); });
-  S.pointLights = [];
   const profile = CLAY_C1A_LIGHT_PROFILE;
-  const ambient = new THREE.AmbientLight(profile.ambient.color, profile.ambient.intensity);
-  S.scene.add(ambient);
-  S.ambientLight = ambient;
-  const halfX = (record.dims.w - 1) / 2 + 1, halfZ = (record.dims.d - 1) / 2 + 1;
-  profile.points.forEach(function(p){
-    const light = new THREE.PointLight(p.color, p.intensity, 0, 0);
-    light.position.set(p.pos.x * halfX, p.pos.y, p.pos.z * halfZ);
-    S.scene.add(light);
-    S.pointLights.push(light);
+  const ambientIsAuthored = !!(S.ambientLight && S.ambientLight.userData
+    && S.ambientLight.userData.clayLightId === "clay-ambient");
+  const hasForeignProfilePoints = !!(S.pointLights && S.pointLights.length);
+  if(!ambientIsAuthored){
+    if(S.ambientLight) S.scene.remove(S.ambientLight);
+    const ambient = new THREE.AmbientLight(profile.ambient.color, profile.ambient.intensity);
+    ambient.userData.clayLightId = "clay-ambient";
+    S.scene.add(ambient);
+    S.ambientLight = ambient;
+  }
+  if(hasForeignProfilePoints){
+    // The old scheduler captured these exact profile point objects/bases. Stop it at the ownership
+    // boundary before removing them, then bind the local-state scheduler to production practicals.
+    stopLightFlicker();
+    S.pointLights.forEach(function(l){ S.scene.remove(l); });
+    S.pointLights = [];
+    startLightFlicker(0, S.interiorLightTargets || []);
+  }
+  if(!S.clayRoomLightingBaseline && (S.interiorLightTargets || []).length){
+    S.clayRoomLightingBaseline = clayRoomLightingSnapshot("authored-baseline");
+  }
+}
+
+function clayRoomLightingSnapshot(label){
+  function n(v){ return Number.isFinite(v) ? +v.toFixed(6) : null; }
+  function colorOf(light){
+    return light && light.color && typeof light.color.getHex === "function" ? light.color.getHex() : null;
+  }
+  function rigLight(light){
+    return light ? { uuid: light.uuid, intensity: n(light.intensity), color: colorOf(light) } : null;
+  }
+  const targets = (S.interiorLightTargets || []).map(function(t){
+    const emitted = t.pl ? t.pl.intensity : null;
+    const mesh = t.marker && t.marker.material
+      ? (t.emissiveFlicker ? t.marker.material.emissiveIntensity : t.marker.material.opacity)
+      : null;
+    const baseMesh = t.emissiveFlicker ? t.baseEmissiveIntensity : t.baseOpacity;
+    const emittedNormalized = t.baseIntensity ? emitted / t.baseIntensity : null;
+    const meshNormalized = baseMesh ? mesh / baseMesh : null;
+    return {
+      id: t.id,
+      sourceRef: t.sourceRef,
+      state: t.state,
+      sampleIndex: t.sampleIndex || 0,
+      normalizedSample: n(t.normalizedSample),
+      emitted: n(emitted),
+      emittedBase: n(t.baseIntensity),
+      emittedNormalized: n(emittedNormalized),
+      mesh: n(mesh),
+      meshBase: n(baseMesh),
+      meshNormalized: n(meshNormalized),
+      parity: emittedNormalized != null && meshNormalized != null
+        ? Math.abs(emittedNormalized - meshNormalized) < 0.000001
+        : false,
+      pointUuid: t.pl ? t.pl.uuid : null,
+      emitterUuid: t.marker ? t.marker.uuid : null,
+      materialUuid: t.marker && t.marker.material ? t.marker.material.uuid : null,
+      color: colorOf(t.pl),
+      distance: t.pl ? n(t.pl.distance) : null,
+      decay: t.pl ? n(t.pl.decay) : null,
+      pointPosition: t.pl && t.pl.position
+        ? [n(t.pl.position.x), n(t.pl.position.y), n(t.pl.position.z)]
+        : null,
+      materialColor: t.marker && t.marker.material && t.marker.material.color
+        ? t.marker.material.color.getHex()
+        : null,
+      materialEmissive: t.marker && t.marker.material && t.marker.material.emissive
+        ? t.marker.material.emissive.getHex()
+        : null,
+      materialOpacity: t.marker && t.marker.material ? n(t.marker.material.opacity) : null,
+    };
   });
+  return {
+    label: label || "",
+    at: Date.now(),
+    ambient: S.ambientLight ? {
+      uuid: S.ambientLight.uuid,
+      intensity: n(S.ambientLight.intensity),
+      color: colorOf(S.ambientLight),
+    } : null,
+    rig: {
+      hemi: rigLight(S.hemiLight),
+      key: rigLight(S.keyLight),
+      fill: rigLight(S.fillLight),
+      cameraKey: rigLight(S.interiorCameraKey),
+    },
+    lights: targets,
+  };
+}
+
+function clayRoomLightingSnapshotsMatch(before, after){
+  if(!before || !after || !before.ambient || !after.ambient) return false;
+  if(before.ambient.uuid !== after.ambient.uuid
+    || before.ambient.intensity !== after.ambient.intensity
+    || before.ambient.color !== after.ambient.color
+    || JSON.stringify(before.rig) !== JSON.stringify(after.rig)) return false;
+  if(before.lights.length !== after.lights.length) return false;
+  return before.lights.every(function(b){
+    const a = after.lights.find(function(row){ return row.id === b.id; });
+    if(!a || a.pointUuid !== b.pointUuid || a.emitterUuid !== b.emitterUuid
+      || a.materialUuid !== b.materialUuid || a.color !== b.color || a.state !== b.state
+      || a.distance !== b.distance || a.decay !== b.decay
+      || JSON.stringify(a.pointPosition) !== JSON.stringify(b.pointPosition)
+      || a.materialColor !== b.materialColor || a.materialEmissive !== b.materialEmissive
+      || a.materialOpacity !== b.materialOpacity || !a.parity) return false;
+    // Flickering is allowed to move by definition; steady means byte-stable photometric + visible.
+    if(a.state === "steady"){
+      return a.emitted === b.emitted && a.mesh === b.mesh
+        && a.emittedNormalized === 1 && a.meshNormalized === 1;
+    }
+    return true;
+  });
+}
+
+function clayRoomRecordLightingProbe(label, before, preserved){
+  const during = clayRoomLightingSnapshot("during-animation");
+  const token = (S.clayRoomLightingProbeToken || 0) + 1;
+  S.clayRoomLightingProbeToken = token;
+  S.clayRoomLightingProbe = {
+    label: label,
+    preserved: !!preserved,
+    before: before,
+    during: during,
+    after: null,
+    duringPass: !!preserved && clayRoomLightingSnapshotsMatch(before, during),
+    afterPass: null,
+  };
+  setTimeout(function(){
+    if(!S.clayRoomDiagnosticActive || S.clayRoomLightingProbeToken !== token) return;
+    const after = clayRoomLightingSnapshot("after-animation");
+    S.clayRoomLightingProbe.after = after;
+    S.clayRoomLightingProbe.afterPass = clayRoomLightingSnapshotsMatch(before, after);
+  }, 900);
+}
+
+function clayRoomSetLightState(lightId, nextState){
+  const target = (S.interiorLightTargets || []).find(function(t){ return t && t.id === lightId; });
+  if(!target) return false;
+  target.state = nextState === "flickering" ? "flickering" : "steady";
+  target.sampleIndex = 0;
+  target.normalizedSample = 1;
+  if(target.pl) target.pl.userData.lightState = target.state;
+  if(target.marker) target.marker.userData.lightState = target.state;
+  if(target.pl && target.pl.parent && target.pl.parent.userData){
+    target.pl.parent.userData.lightState = target.state;
+  }
+  if(target.state === "steady") lightFlickerApplySample(target, 1);
+  startLightFlicker(0, S.interiorLightTargets || []);
+  markDirty();
+  return true;
+}
+
+function clayRoomRestoreAuthoredLightBaseline(){
+  (S.interiorLightTargets || []).forEach(function(t){
+    t.state = "steady";
+    t.sampleIndex = 0;
+    lightFlickerApplySample(t, 1);
+  });
+  startLightFlicker(0, S.interiorLightTargets || []);
+  markDirty();
 }
 
 /* ─── CL-R0 (docs/CLAYROOM-RESET-LADDER.md) — THE DIAGNOSTIC SURFACE ROUTE ────────────────────────
@@ -15316,6 +15579,7 @@ function clayRoomShellOverrideOn(){
 //             the tab switch and the close button.
 // Plus a `renderer size <w>x<h> @ dpr <n>` line (wire-in step 6's own countable capture-packet line)
 // read straight off the live S.renderer, never a re-derived guess.
+let CLAY_ROOM_PANEL_POSITION = null;
 function clayRoomMountOverlay(record, host){
   if(typeof document === "undefined") return;
   const stale = document.getElementById("clay-room-overlay");
@@ -15324,19 +15588,96 @@ function clayRoomMountOverlay(record, host){
   const panel = document.createElement("div");
   panel.id = "clay-room-overlay";
   panel.style.cssText =
-    "position:fixed;top:8px;right:8px;width:340px;max-height:92vh;overflow:auto;z-index:9001;" +
+    "position:fixed;top:8px;right:8px;width:390px;max-height:92vh;overflow:auto;z-index:9001;" +
     "background:rgba(20,20,24,0.94);border:1px solid #444;border-radius:6px;padding:8px;" +
     "font:12px/1.3 -apple-system,sans-serif;color:#eee;box-shadow:0 4px 18px rgba(0,0,0,0.5);";
 
   const title = document.createElement("div");
-  title.textContent = "CLAY ROOM (C1A) — dev only";
-  title.style.cssText = "font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;";
+  title.id = "clay-room-panel-drag-handle";
+  title.setAttribute("aria-label", "Drag Clayroom panel");
+  title.style.cssText = "font-weight:600;margin-bottom:4px;display:flex;gap:6px;justify-content:space-between;align-items:center;cursor:move;user-select:none;touch-action:none;";
+  const titleText = document.createElement("span");
+  titleText.textContent = "CLAY ROOM (C1A) — dev only";
+  titleText.style.cssText = "flex:1;";
+  title.appendChild(titleText);
+  const resetPositionBtn = document.createElement("button");
+  resetPositionBtn.textContent = "reset pos";
+  resetPositionBtn.setAttribute("aria-label", "Reset Clayroom panel position");
+  resetPositionBtn.style.cssText = "background:#2a2a30;border:1px solid #555;border-radius:3px;color:#ccd;font:10px monospace;cursor:pointer;padding:2px 5px;";
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "×";
+  closeBtn.setAttribute("aria-label", "Close Clayroom");
   closeBtn.style.cssText = "background:none;border:none;color:#ccc;font-size:16px;cursor:pointer;line-height:1;";
   closeBtn.addEventListener("click", function(){ clayRoomUnmount(); });
+  title.appendChild(resetPositionBtn);
   title.appendChild(closeBtn);
   panel.appendChild(title);
+
+  const panelPositionLine = document.createElement("div");
+  panelPositionLine.id = "clay-room-panel-position";
+  panelPositionLine.style.cssText = "color:#7f9;margin-bottom:5px;font:10px monospace;";
+  panel.appendChild(panelPositionLine);
+  function clayPanelClamp(left, top){
+    const pad = 8;
+    const maxLeft = Math.max(pad, window.innerWidth - panel.offsetWidth - pad);
+    const maxTop = Math.max(pad, window.innerHeight - panel.offsetHeight - pad);
+    return {
+      left: Math.max(pad, Math.min(maxLeft, Number(left) || pad)),
+      top: Math.max(pad, Math.min(maxTop, Number(top) || pad)),
+    };
+  }
+  function clayPanelPlace(left, top, remember){
+    const pos = clayPanelClamp(left, top);
+    panel.style.left = Math.round(pos.left) + "px";
+    panel.style.top = Math.round(pos.top) + "px";
+    panel.style.right = "auto";
+    if(remember !== false) CLAY_ROOM_PANEL_POSITION = { left: pos.left, top: pos.top };
+    const rect = panel.getBoundingClientRect();
+    const inside = rect.left >= 0 && rect.top >= 0
+      && rect.right <= window.innerWidth + 0.5 && rect.bottom <= window.innerHeight + 0.5;
+    panelPositionLine.textContent = "panel x " + Math.round(rect.left) + " y " + Math.round(rect.top)
+      + " · viewport clamp " + (inside ? "PASS" : "FAIL");
+  }
+  function clayPanelResetPosition(){
+    CLAY_ROOM_PANEL_POSITION = null;
+    clayPanelPlace(window.innerWidth - panel.offsetWidth - 8, 8, false);
+  }
+  resetPositionBtn.addEventListener("click", function(ev){
+    ev.stopPropagation();
+    clayPanelResetPosition();
+  });
+  let panelDrag = null;
+  title.addEventListener("pointerdown", function(ev){
+    if(ev.button !== 0 || (ev.target && ev.target.closest && ev.target.closest("button"))) return;
+    const rect = panel.getBoundingClientRect();
+    panelDrag = { pointerId: ev.pointerId, dx: ev.clientX - rect.left, dy: ev.clientY - rect.top };
+    title.setPointerCapture(ev.pointerId);
+    ev.preventDefault();
+  });
+  function clayPanelDragMove(ev){
+    if(!panelDrag || panelDrag.pointerId !== ev.pointerId) return;
+    clayPanelPlace(ev.clientX - panelDrag.dx, ev.clientY - panelDrag.dy, true);
+  }
+  function clayPanelEndDrag(ev){
+    if(!panelDrag || panelDrag.pointerId !== ev.pointerId) return;
+    panelDrag = null;
+    if(title.hasPointerCapture(ev.pointerId)) title.releasePointerCapture(ev.pointerId);
+  }
+  // Listen on window as well as using capture: automation and older pointer implementations may
+  // not retarget every move to the captured element once the cursor leaves the narrow title row.
+  window.addEventListener("pointermove", clayPanelDragMove);
+  window.addEventListener("pointerup", clayPanelEndDrag);
+  window.addEventListener("pointercancel", clayPanelEndDrag);
+  S.clayRoomPanelDragCleanup = function(){
+    window.removeEventListener("pointermove", clayPanelDragMove);
+    window.removeEventListener("pointerup", clayPanelEndDrag);
+    window.removeEventListener("pointercancel", clayPanelEndDrag);
+  };
+  S.clayRoomPanelResizeHandler = function(){
+    const rect = panel.getBoundingClientRect();
+    clayPanelPlace(rect.left, rect.top, !!CLAY_ROOM_PANEL_POSITION);
+  };
+  window.addEventListener("resize", S.clayRoomPanelResizeHandler);
 
   const rendererLine = document.createElement("div");
   rendererLine.style.cssText = "color:#9ab;margin-bottom:6px;font:11px monospace;";
@@ -15372,11 +15713,14 @@ function clayRoomMountOverlay(record, host){
   mountTabBtn.textContent = "Mount";
   const stateTabBtn = document.createElement("button");
   stateTabBtn.textContent = "State";
-  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn].forEach(function(b){
+  const lightsTabBtn = document.createElement("button");
+  lightsTabBtn.textContent = "Lights";
+  lightsTabBtn.setAttribute("aria-label", "Clayroom lighting proof");
+  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, lightsTabBtn].forEach(function(b){
     b.style.cssText = "flex:1;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   });
   tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn);
-  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn);
+  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(lightsTabBtn);
   panel.appendChild(tabBar);
 
   const factsBody = document.createElement("pre");
@@ -15613,11 +15957,120 @@ function clayRoomMountOverlay(record, host){
   stateBody.appendChild(stateButtons);
   stateBody.appendChild(stateOut);
 
+  // CL-R1 Lights tab — reads and controls the real production fixture targets. No demonstration
+  // meshes/lights are mounted here; every value comes from the live PointLight + emitter material.
+  const lightsBody = document.createElement("div");
+  lightsBody.style.cssText = "display:none;font:10px/1.45 monospace;color:#dde;";
+  const lightsIntro = document.createElement("div");
+  lightsIntro.textContent = "production practicals · deterministic local state · one sample drives mesh + emitted light";
+  lightsIntro.style.cssText = "color:#9ab;margin-bottom:6px;";
+  lightsBody.appendChild(lightsIntro);
+  const lightsActions = document.createElement("div");
+  lightsActions.style.cssText = "display:flex;gap:5px;margin-bottom:7px;";
+  const restoreLightsBtn = document.createElement("button");
+  restoreLightsBtn.textContent = "authored baseline";
+  restoreLightsBtn.setAttribute("aria-label", "Restore authored lighting baseline");
+  const rebuildLightsBtn = document.createElement("button");
+  rebuildLightsBtn.textContent = "rebuild/fade proof";
+  rebuildLightsBtn.setAttribute("aria-label", "Run Clayroom board rebuild lighting proof");
+  [restoreLightsBtn, rebuildLightsBtn].forEach(function(b){
+    b.style.cssText = "flex:1;font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+    lightsActions.appendChild(b);
+  });
+  lightsBody.appendChild(lightsActions);
+  const lightStateButtons = {};
+  (S.interiorLightTargets || []).forEach(function(target){
+    const row = document.createElement("div");
+    row.style.cssText = "display:grid;grid-template-columns:1fr auto auto;gap:5px;align-items:center;margin:4px 0;";
+    const label = document.createElement("span");
+    label.textContent = target.id;
+    label.style.cssText = "color:#cd9;";
+    const steady = document.createElement("button");
+    steady.textContent = "steady";
+    steady.setAttribute("aria-label", "Set " + target.id + " steady");
+    const flicker = document.createElement("button");
+    flicker.textContent = "flicker";
+    flicker.setAttribute("aria-label", "Set " + target.id + " flickering");
+    [steady, flicker].forEach(function(b){
+      b.style.cssText = "font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:2px 5px;";
+    });
+    steady.addEventListener("click", function(){ clayRoomSetLightState(target.id, "steady"); clayLightsRender(); });
+    flicker.addEventListener("click", function(){ clayRoomSetLightState(target.id, "flickering"); clayLightsRender(); });
+    row.appendChild(label); row.appendChild(steady); row.appendChild(flicker);
+    lightsBody.appendChild(row);
+    lightStateButtons[target.id] = { steady: steady, flicker: flicker };
+  });
+  const lightsOut = document.createElement("pre");
+  lightsOut.id = "clay-room-lighting-readout";
+  lightsOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
+  lightsBody.appendChild(lightsOut);
+  function clayLightsRender(){
+    const snap = clayRoomLightingSnapshot("panel");
+    const baselineActive = !!(snap.ambient
+      && snap.ambient.intensity === CLAY_C1A_LIGHT_PROFILE.ambient.intensity
+      && snap.ambient.color === CLAY_C1A_LIGHT_PROFILE.ambient.color
+      && snap.lights.length === CLAY_C1A_LIGHT_PROFILE.points.length
+      && snap.lights.every(function(l){
+        return l.state === "steady" && l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity;
+      }));
+    const flickering = snap.lights.filter(function(l){ return l.state === "flickering"; });
+    const steady = snap.lights.filter(function(l){ return l.state === "steady"; });
+    const isolationPass = flickering.length === 1 && steady.length >= 1
+      && steady.every(function(l){ return l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity; });
+    const lines = [
+      "authored baseline " + (baselineActive ? "PASS" : "inactive (restore available)"),
+      "one-light isolation " + (flickering.length === 1 ? (isolationPass ? "PASS" : "FAIL") : "arm exactly one flicker"),
+      "ambient " + (snap.ambient ? snap.ambient.intensity.toFixed(2) : "—")
+        + " · rig hemi/key/fill/cam "
+        + ["hemi", "key", "fill", "cameraKey"].map(function(k){
+          return snap.rig[k] ? snap.rig[k].intensity.toFixed(3) : "—";
+        }).join("/"),
+      ""
+    ];
+    snap.lights.forEach(function(l){
+      const sample = l.normalizedSample == null ? "—" : l.normalizedSample.toFixed(6);
+      lines.push(l.id + " [" + l.state + "] sample " + sample);
+      lines.push("  emitted " + l.emitted.toFixed(6) + "/" + l.emittedBase.toFixed(6)
+        + " = " + l.emittedNormalized.toFixed(6));
+      lines.push("  mesh    " + l.mesh.toFixed(6) + "/" + l.meshBase.toFixed(6)
+        + " = " + l.meshNormalized.toFixed(6) + " · parity " + (l.parity ? "PASS" : "FAIL"));
+      lines.push("  ids point " + String(l.pointUuid).slice(0, 8)
+        + " · material " + String(l.materialUuid).slice(0, 8));
+      const buttons = lightStateButtons[l.id];
+      if(buttons){
+        buttons.steady.style.background = l.state === "steady" ? "#35543b" : "#2a2a30";
+        buttons.flicker.style.background = l.state === "flickering" ? "#684a28" : "#2a2a30";
+      }
+    });
+    const probe = S.clayRoomLightingProbe;
+    lines.push("");
+    if(!probe){
+      lines.push("animation guard: not run");
+    } else {
+      lines.push("animation guard: " + probe.label);
+      lines.push("  object/material preservation " + (probe.preserved ? "PASS" : "FAIL"));
+      lines.push("  before → during " + (probe.duringPass ? "PASS" : "FAIL"));
+      lines.push("  before → after " + (probe.afterPass == null ? "pending…" : (probe.afterPass ? "PASS" : "FAIL")));
+    }
+    lightsOut.textContent = lines.join("\n");
+  }
+  restoreLightsBtn.addEventListener("click", function(){
+    clayRoomRestoreAuthoredLightBaseline();
+    clayLightsRender();
+  });
+  rebuildLightsBtn.addEventListener("click", function(){
+    if(!S.lastBoard || S.lastBoard.kind !== "interior3d") return;
+    S.boardKey = null;
+    setInteriorBoard(S.lastBoard);
+    clayLightsRender();
+  });
+
   panel.appendChild(factsBody);
   panel.appendChild(explainBody);
   panel.appendChild(surfacesBody);
   panel.appendChild(mountBody);
   panel.appendChild(stateBody);
+  panel.appendChild(lightsBody);
 
   function clayShowTab(which){
     factsBody.style.display = which === "facts" ? "" : "none";
@@ -15625,23 +16078,37 @@ function clayRoomMountOverlay(record, host){
     surfacesBody.style.display = which === "surfaces" ? "" : "none";
     mountBody.style.display = which === "mount" ? "" : "none";
     stateBody.style.display = which === "state" ? "" : "none";
+    lightsBody.style.display = which === "lights" ? "" : "none";
     factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
     explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
     surfacesTabBtn.style.background = which === "surfaces" ? "#3a3a44" : "#2a2a30";
     mountTabBtn.style.background = which === "mount" ? "#3a3a44" : "#2a2a30";
     stateTabBtn.style.background = which === "state" ? "#3a3a44" : "#2a2a30";
+    lightsTabBtn.style.background = which === "lights" ? "#3a3a44" : "#2a2a30";
     if(which === "surfaces") clayRenderSurfacesTab();
     if(which === "mount") clayMountRender();
     if(which === "state") clayDoorStateRender();
+    if(which === "lights") clayLightsRender();
+    const panelRect = panel.getBoundingClientRect();
+    clayPanelPlace(panelRect.left, panelRect.top, !!CLAY_ROOM_PANEL_POSITION);
   }
   factsTabBtn.addEventListener("click", function(){ clayShowTab("facts"); });
   explainTabBtn.addEventListener("click", function(){ clayShowTab("explain"); });
   surfacesTabBtn.addEventListener("click", function(){ clayShowTab("surfaces"); });
   mountTabBtn.addEventListener("click", function(){ clayShowTab("mount"); });
   stateTabBtn.addEventListener("click", function(){ clayShowTab("state"); });
+  lightsTabBtn.addEventListener("click", function(){ clayShowTab("lights"); });
   clayShowTab("facts");
 
   document.body.appendChild(panel);
+  if(CLAY_ROOM_PANEL_POSITION){
+    clayPanelPlace(CLAY_ROOM_PANEL_POSITION.left, CLAY_ROOM_PANEL_POSITION.top, true);
+  } else {
+    clayPanelResetPosition();
+  }
+  S.clayRoomLightReadoutTimer = setInterval(function(){
+    if(S.clayRoomMounted && lightsBody.style.display !== "none") clayLightsRender();
+  }, 120);
   S.clayRoomOverlayEl = panel;
 }
 
@@ -15655,10 +16122,16 @@ function clayRoomMountOverlay(record, host){
 function clayRoomUnmount(){
   if(!S.clayRoomMounted) return;
   const overlayEl = S.clayRoomOverlayEl, hostEl = S.clayRoomHost;
+  const panelResizeHandler = S.clayRoomPanelResizeHandler;
+  const panelDragCleanup = S.clayRoomPanelDragCleanup;
+  const lightReadoutTimer = S.clayRoomLightReadoutTimer;
   // CL-R0: stand the lifecycle hook down BEFORE retire(). retire() swaps in a fresh
   // createTheaterState() (so the flag would clear anyway), but any setInteriorBoard that fires
   // during teardown must not try to re-route a tree that is being disposed.
   S.clayRoomDiagnosticActive = false;
+  if(panelDragCleanup) panelDragCleanup();
+  if(panelResizeHandler) window.removeEventListener("resize", panelResizeHandler);
+  if(lightReadoutTimer != null) clearInterval(lightReadoutTimer);
   retire();
   ITR_ROOM_SHELL = CLAY_ROOM_PRIOR_ROOM_SHELL; // restore mountClayRoom's own ITR_ROOM_SHELL override — see that function's header note
   if(overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);

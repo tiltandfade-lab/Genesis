@@ -14636,7 +14636,7 @@ const LIGHT_TUNABLE_SCHEMA = [
   { path: "profile.light.pos.x", label: "Board position X", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
   { path: "profile.light.pos.y", label: "Board position Y", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
   { path: "profile.light.pos.z", label: "Board position Z", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
-  { path: "profile.light.rangeM", label: "Range (metres)", type: "range", min: 0, max: 30, step: 0.25, group: "light" },
+  { path: "profile.light.rangeM", label: "Range (metres)", type: "range", min: 0, max: 60, step: 0.25, group: "light" },
   { path: "profile.light.heightM", label: "Source height (metres)", type: "range", min: 0, max: 8, step: 0.05, group: "light" },
   { path: "profile.light.falloff", label: "Physical falloff", type: "range", min: 0, max: 2, step: 0.05, group: "light" },
   { path: "profile.light.azimuthDeg", label: "Azimuth (degrees)", type: "range", min: -360, max: 360, step: 1, group: "light" },

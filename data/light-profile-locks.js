@@ -246,7 +246,7 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
             "z": 0.6
           },
           "heightM": 3.3528,
-          "rangeM": 18.288,
+          "rangeM": 36.576,
           "falloff": 2
         }
       ]

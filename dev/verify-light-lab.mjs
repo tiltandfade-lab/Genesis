@@ -362,21 +362,28 @@ async function main() {
 
     // ─── Section 0: module surface ──────────────────────────────────────────────────────────────────
     console.log("\n=== 0. Module surface ===");
-    const surface = await page.evaluate(() => ({
-      hasLightLab: typeof window.Theater.lightLab === "function",
-      hasSetTunable: typeof window.Theater._lightLabSetTunable === "function",
-      hasGetTunable: typeof window.Theater._lightLabGetTunable === "function",
-      hasSchema: typeof window.Theater._lightLabSchema === "function",
-      hasExport: typeof window.Theater._lightLabExport === "function",
-      hasReset: typeof window.Theater._lightLabResetAuthored === "function",
-      hasUndo: typeof window.Theater._lightLabUndo === "function",
-      hasRedo: typeof window.Theater._lightLabRedo === "function",
-      hasHistory: typeof window.Theater._lightLabHistory === "function",
-      hasLumaGates: typeof window.Theater._lumaGatesForTest === "function",
-      hasBloomMaskToggle: typeof window.Theater._setBloomMaskDisabledForTest === "function",
-      hasTunablesSnapshot: typeof window.Theater._lightTunablesForTest === "function",
-      schemaLength: window.Theater._lightLabSchema().length,
-    }));
+    const surface = await page.evaluate(() => {
+      const schema = window.Theater._lightLabSchema();
+      const rangeControl = schema.find((entry) => entry.path === "profile.light.rangeM");
+      const torch = typeof lightRecipeFor === "function" ? lightRecipeFor("torchlit") : null;
+      return {
+        hasLightLab: typeof window.Theater.lightLab === "function",
+        hasSetTunable: typeof window.Theater._lightLabSetTunable === "function",
+        hasGetTunable: typeof window.Theater._lightLabGetTunable === "function",
+        hasSchema: typeof window.Theater._lightLabSchema === "function",
+        hasExport: typeof window.Theater._lightLabExport === "function",
+        hasReset: typeof window.Theater._lightLabResetAuthored === "function",
+        hasUndo: typeof window.Theater._lightLabUndo === "function",
+        hasRedo: typeof window.Theater._lightLabRedo === "function",
+        hasHistory: typeof window.Theater._lightLabHistory === "function",
+        hasLumaGates: typeof window.Theater._lumaGatesForTest === "function",
+        hasBloomMaskToggle: typeof window.Theater._setBloomMaskDisabledForTest === "function",
+        hasTunablesSnapshot: typeof window.Theater._lightTunablesForTest === "function",
+        schemaLength: schema.length,
+        rangeMax: rangeControl ? rangeControl.max : null,
+        torchRangeM: torch && torch.lights[0] ? torch.lights[0].rangeM : null,
+      };
+    });
     check("0a. window.Theater.lightLab exists", surface.hasLightLab);
     check("0b. _lightLabSetTunable/_lightLabGetTunable exist", surface.hasSetTunable && surface.hasGetTunable);
     check("0c. _lightLabSchema/_lightLabExport exist", surface.hasSchema && surface.hasExport);
@@ -385,6 +392,9 @@ async function main() {
     check("0f. schema carries every named group (profile/global/celestial/sprite)", surface.schemaLength >= 18, surface.schemaLength);
     check("0g. Light Lab 2.0 reset/undo/redo/history seams exist",
       surface.hasReset && surface.hasUndo && surface.hasRedo && surface.hasHistory);
+    check("0h. the Lab's range control can reach the current authored fantasy torch value",
+      surface.rangeMax >= surface.torchRangeM,
+      JSON.stringify({ rangeMax: surface.rangeMax, torchRangeM: surface.torchRangeM }));
 
     // ─── Section 1: LIGHT_TUNABLES pure no-op when the lab is off ──────────────────────────────────
     console.log("\n=== 1. LIGHT_TUNABLES is a pure no-op when the lab is never touched ===");

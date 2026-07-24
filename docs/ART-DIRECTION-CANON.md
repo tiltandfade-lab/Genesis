@@ -1642,3 +1642,13 @@ Binding consequences:
   across the extended reach.
 - The extended-range exception belongs to the reviewed fantasy torch. It does not silently widen
   moonlight, lava, diagnostic bulbs, or generic generated interior lights.
+
+## CLAYROOM FANTASY-TORCH REACH, SECOND DOUBLING (Adam, 2026-07-24 — binding; verbatim)
+
+After reviewing the first doubled-range capture:
+
+> "it's still a little too restrained, let's double it one more time"
+
+This supersedes only the preceding 60-foot maximum. The torch now reaches 120 feet (24 tabletop
+world units; authored `rangeM` 36.576). Its already-accepted close brightness, decay-2 falloff,
+shadow casting, and torch-only scope remain unchanged.

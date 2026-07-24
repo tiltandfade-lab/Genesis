@@ -742,9 +742,9 @@ const check = (name, cond, detail = "") =>
       JSON.stringify(compiled.board.lights));
     const torchCompiled = win.clayRoomBoardFrom(record, { lightRecipeId: "torchlit" });
     const torchLight = torchCompiled.board.lights[0];
-    check("15o. accepted torch brightness keeps inverse-square shadows while its reviewed reach doubles from 6 to 12",
+    check("15o. accepted torch brightness keeps inverse-square shadows while reviewed reach extends to 24",
       torchCompiled.board.lights.length === 1
-      && torchLight.distance === 12
+      && torchLight.distance === 24
       && torchLight.authoredRange === true
       && torchLight.decay === 2
       && torchLight.castShadow === true,

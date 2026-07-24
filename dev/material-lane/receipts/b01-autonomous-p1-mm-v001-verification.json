@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B01-P1-approved-source-to-MM-v001",
+  "result": "PASS",
+  "thresholds": {
+    "albedoMaeMax": 3,
+    "albedoCorrelationMin": 0.99,
+    "heightStdDevMin": 1,
+    "normalXYStdDevMin": 0.35,
+    "roughnessByteTolerance": 1
+  },
+  "materials": [
+    {
+      "id": "roof-plank-batten",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-receipt.json",
+        "status": "PASS",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 23.7551,
+        "normalStdDevRgb": [
+          33.5241,
+          3.8243,
+          9.7766
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.6899,
+          173.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 173,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "roof-slate",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.3618,
+        "pixelCorrelation": 0.9995,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-receipt.json",
+        "status": "PASS",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 22.0778,
+        "normalStdDevRgb": [
+          18.1635,
+          16.9579,
+          6.4449
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.1214,
+          198.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 199,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

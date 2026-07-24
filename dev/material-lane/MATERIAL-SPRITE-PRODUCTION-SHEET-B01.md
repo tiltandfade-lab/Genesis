@@ -1,6 +1,6 @@
 ---
 type: material-source-sprite-production-sheet
-status: IN-PRODUCTION-AUTONOMOUS
+status: P1-MM-PASS
 batch: B01-timber-and-roof-fields
 workflow: sprite-first-mm-second
 ---
@@ -79,6 +79,10 @@ gates at the required 512px delivery size. The accepted source sprites, native 3
 join-marked proof board, and machine receipt are in `proofs/b01-autonomous-v001/`; generation
 prompts and hashes are in `manifests/b01-autonomous-p1-v001.source.json`.
 
-These two entries are **TECHNICAL-SOURCE-PASS / TASTE-PENDING**. No MM graph exists yet: source
-character must be accepted before depth/PBR derivation. The other Batch 1 families remain pending
-their adapter/source pass.
+These two entries are **TECHNICAL-SOURCE-PASS / TASTE-APPROVED / MM-PASS**. Their conservative
+MM 1.3 graphs, deterministic two-run export receipt, and verification report are respectively in
+`graphs/b01-autonomous-p1-v001/`, `receipts/b01-autonomous-p1-mm-v001-export-receipt.json`, and
+`receipts/b01-autonomous-p1-mm-v001-verification.json`. The review card is
+`../material-cards/b01-autonomous-p1-mm-v001.html`. Albedo remains the approved source sprite;
+MM derives broad height, normal, AO, roughness, and zero metallic only. The other Batch 1 families
+remain pending their adapter/source pass.

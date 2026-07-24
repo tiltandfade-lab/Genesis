@@ -331,3 +331,45 @@ spatial mutation · choose the observation opening · choose the recent-repair s
 choose the roof/weather posture · defer realm A/B behind the culture proof · let the
 RoomProgram, not a furnishing catalog, gate furnishing work. Numbers stay deferred to
 clay evidence.
+
+## 14. Open design areas the plan does not yet cover (gap survey 2026-07-24)
+
+Areas no current authority fleshes out for Guard Post 1 — each needs a founder pass
+(scope ruling), then a spec home. Recommendations marked ®.
+
+1. **The garrison + the checkpoint social loop.** The post IS its guards, and most
+   players will meet it NOT fighting: toll, papers, search, bribe, bluff, parley.
+   Needs: garrison size band + shift/post assignments as rolled facts (CastRoster,
+   RoomProgram), and a gate-interaction archetype wired to the existing NPC
+   attitude/parley subsystem. ® MVP: rolled garrison band + one gate-interaction table;
+   the social loop is the site's front door, combat its failure mode.
+2. **Supply-state scope.** "Externally supplied" is locked identity; Wave 2's traces
+   (delivery blocked/stolen/restored) are acceptance obligations. ® MVP freezes state at
+   `operating` with supply cadence as rolled flavor (the cart on the road); the
+   strained/dormant dial arrives with site 3 (dormant/abandoned) evidence.
+3. **Encounter integration.** Deployment zones by approach side, threat signaling,
+   cover/elevation truth from pieces, the flank route — the EngagementLens binding for
+   this site. ® Spec with the C1H composition work; the reserved
+   footing/deployment/flank masks already exist in the construction sequence (step 8).
+4. **Walk/map placement.** A guard post is inherently a ROUTE feature (it controls a
+   road between places), not a destination node. Does it mint as node, route event, or
+   both? ® Route-edge site minted as a node when entered — needs a small SPATIAL-MODEL
+   rider; flag before the walk rework so it's designed in, not patched.
+5. **Aftermath states.** Garrison wiped → what persists? (Wave 2: sabotage → repair,
+   occupation, or operator change.) ® MVP: two aftermath states (held/abandoned-after),
+   written to the ledger; reoccupation waves later.
+6. **Destructibility scope (W8).** Can the gate arm break, the lean-to burn? ® MVP:
+   gate/barrier states (open/closed/broken) as data; structural destruction defers.
+7. **Time/weather/lighting for the golden frame** (lock audit OPEN). ® Hero capture at
+   one canonical daylight; one night variant with practical light (brazier/lantern) as
+   the second capture — proves CL-M08 without a weather system.
+8. **Spice-band scope.** Golden seed at Grounded/Textured. ® One Strange-band variant
+   enters the acceptance corpus only after the culture A/B passes; Volatile+ waits for
+   later sites.
+9. **Acceptance-gate structure** (counts stay deferred): hero seed + changed-seed
+   contact sheet + adversarial envelopes; Claude owns the countable back-end gates,
+   Adam rules the visual sheets (teeth law / front-back split). Structure can lock now,
+   numbers after clay.
+10. **Sequencing dependency:** the clayroom reset (`feat/cl-r0-clayroom-reset`) blocks
+    the bench; bench admissions block the component proof; Codex's next material brief
+    (roster §8 + culture-pair cards) can run in parallel now.

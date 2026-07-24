@@ -1466,3 +1466,25 @@ Binding consequences, applied production-wide the same session:
 - Teeth: `dev/verify-clay-room.mjs` check 27 (executed through the real compile chain);
   `verify-ks2-door-assembly` and `verify-dungeon-interior` rewritten red-first to the new grammar
   (their real properties — axis shape, squeeze-narrower-and-lower — preserved on the new pieces).
+
+## THE DOOR / DOOR-FRAME SPLIT — the definition, and the lane handoff (Adam, 2026-07-23 — additive; verbatim)
+
+> "you still just have the idea of 'door' wrong. the door and door frame are two separate objects,
+> the door frame should generally be constructed as a piece of the wall, and the door is an object
+> that goes in the hole in the wall but i am handing this job to codex since fable can't seem to
+> understand what a door is."
+
+The binding definition, stated once and owned here:
+
+1. **The door frame is WALL.** It is constructed as a piece of the wall — same body, same plane,
+   same thickness, continuous with it. It is not an applied assembly, not proud of the wall face,
+   not a separate-looking object. (The 2026-07-23 builds repeatedly failed this: ornament first,
+   then infill pieces standing proud of the wall body at a different plane.)
+2. **The door is a separate OBJECT** — the 36"×80" hinged extruded rectangle (the kindergarten
+   ruling above) — that goes IN the hole in the wall. Two objects, two jobs; only the door is an
+   object.
+
+**LANE HANDOFF: the door/doorway geometry job belongs to CODEX** (the independent visual-acceptance
+owner per AGENTS.md). Claude's lane retains what already works around it: the mount/tuner slice
+(DEV-PORTAL §6.1), the record/board data derivation, the harnesses, and the capture rig. Codex brief:
+`docs/CODEX-DOOR-BRIEF.md`.

@@ -1427,3 +1427,14 @@ state machine. This ruling supersedes the render-time camera-side upper fade
 (`wallUpperCameraSideBlockingSet`) for the fixed camera once the test passes, and moots the
 open clay-fixture shell-default question (near walls that occlude staged floor are simply not
 built as uppers at all).
+
+### Wall-omission test ACCEPTED on the capture packet (Adam, 2026-07-23 — additive; verbatim)
+
+> "and yes, the omission looks best"
+
+Ruled on the 2026-07-23 evening packet's A/B row (omit vs fade vs instanced,
+`dev/clay-captures/cl-r3a/`). The camera-side wall-omission ruling above passes its clay test:
+omission is the accepted wall treatment for the fixed production camera. Game-wide promotion
+(flipping production dungeons from the render-time fade to compile-time omission) still rides its
+own production-scene capture packet before the default moves outside the clay fixture — the clay
+room proved the mechanism; a rolled multi-room dungeon frame proves the product.

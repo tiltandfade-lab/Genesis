@@ -1,0 +1,3246 @@
+{
+  "schemaVersion": 1,
+  "proofId": "GENESIS-TRIM-SHEET-PROOF-V001",
+  "generatedAt": "2026-07-24T02:29:19.064Z",
+  "harness": "dev/trim-sheet-proof/trim-sheet-proof.html",
+  "browser": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "manifest": {
+    "path": "dev/trim-sheet-proof/generated/trim-sheet-manifest.json",
+    "sha256": "ae2a09b1cdae503bebbcd17232b8d86f37fdd13db08f74c517576edc54b51db0"
+  },
+  "captures": [
+    {
+      "id": "beauty",
+      "path": "dev/trim-sheet-proof/out/trim-sheet-proof-beauty.png",
+      "sha256": "47b3afb90fce96be474343bfdd9617fcdf6c22f50fd3bd652bda259de9da38cd"
+    },
+    {
+      "id": "debug",
+      "path": "dev/trim-sheet-proof/out/trim-sheet-proof-debug.png",
+      "sha256": "1815d91802d0105c0d9f09ecc2891111c46a6c45bff9d74df67bc9ad5ed6ca20"
+    }
+  ],
+  "renderReports": [
+    {
+      "id": "beauty",
+      "report": {
+        "proofId": "GENESIS-TRIM-SHEET-PROOF-V001",
+        "layoutId": "architecture-core-v1",
+        "mode": "beauty",
+        "threeRevision": "166",
+        "renderer": "WebGLRenderer",
+        "material": "MeshStandardMaterial",
+        "colorSpace": "SRGBColorSpace",
+        "wrap": "ClampToEdgeWrapping",
+        "repeatContract": "clamped atlas plus repeat-boundary run segmentation",
+        "variants": [
+          {
+            "id": "fantasy-masonry",
+            "realm": "fantasy",
+            "sourceSheet": "./generated/fantasy-masonry-trim-sheet.png",
+            "slots": [
+              {
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "rectPx": [
+                  0,
+                  8,
+                  512,
+                  48
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "rectPx": [
+                  0,
+                  64,
+                  512,
+                  80
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "rectPx": [
+                  0,
+                  152,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "rectPx": [
+                  0,
+                  256,
+                  512,
+                  72
+                ],
+                "repeatWorldLength": 0.75
+              },
+              {
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "rectPx": [
+                  0,
+                  336,
+                  512,
+                  64
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "rectPx": [
+                  0,
+                  408,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              }
+            ],
+            "runs": [
+              {
+                "id": "base-back",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "base-side",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "cornice-back",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "cornice-side",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "coping-platform",
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "length": 2.35,
+                "repeatWorldLength": 0.75,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.27,
+                "segmentCount": 4,
+                "maxSegmentLength": 0.75,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.361328,
+                    0.498047
+                  ]
+                },
+                "slotVRange": [
+                  0.359375,
+                  0.5
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.58,
+                    "u0": 0.226667,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.58,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.08,
+                    "length": 0.27,
+                    "u0": 0,
+                    "u1": 0.36
+                  }
+                ]
+              },
+              {
+                "id": "nosing-platform",
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "length": 2.35,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.02,
+                "segmentCount": 6,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.220703,
+                    0.341797
+                  ]
+                },
+                "slotVRange": [
+                  0.21875,
+                  0.34375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.33,
+                    "u0": 0.34,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.33,
+                    "length": 0.02,
+                    "u0": 0,
+                    "u1": 0.04
+                  }
+                ]
+              },
+              {
+                "id": "curb-front",
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "length": 3.75,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.31,
+                "phaseEnd": 0.06,
+                "segmentCount": 5,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.017578,
+                    0.201172
+                  ]
+                },
+                "slotVRange": [
+                  0.015625,
+                  0.203125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.69,
+                    "u0": 0.31,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3.69,
+                    "length": 0.06,
+                    "u0": 0,
+                    "u1": 0.06
+                  }
+                ]
+              },
+              {
+                "id": "plain-pilaster",
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "length": 1.33,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.08,
+                "phaseEnd": 0.41,
+                "segmentCount": 3,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.892578,
+                    0.982422
+                  ]
+                },
+                "slotVRange": [
+                  0.890625,
+                  0.984375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.42,
+                    "u0": 0.16,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.42,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.92,
+                    "length": 0.41,
+                    "u0": 0,
+                    "u1": 0.82
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "gloom-crypt",
+            "realm": "gloom",
+            "sourceSheet": "./generated/gloom-crypt-trim-sheet.png",
+            "slots": [
+              {
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "rectPx": [
+                  0,
+                  8,
+                  512,
+                  48
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "rectPx": [
+                  0,
+                  64,
+                  512,
+                  80
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "rectPx": [
+                  0,
+                  152,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "rectPx": [
+                  0,
+                  256,
+                  512,
+                  72
+                ],
+                "repeatWorldLength": 0.75
+              },
+              {
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "rectPx": [
+                  0,
+                  336,
+                  512,
+                  64
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "rectPx": [
+                  0,
+                  408,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              }
+            ],
+            "runs": [
+              {
+                "id": "base-back",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "base-side",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "cornice-back",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "cornice-side",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "coping-platform",
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "length": 2.35,
+                "repeatWorldLength": 0.75,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.27,
+                "segmentCount": 4,
+                "maxSegmentLength": 0.75,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.361328,
+                    0.498047
+                  ]
+                },
+                "slotVRange": [
+                  0.359375,
+                  0.5
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.58,
+                    "u0": 0.226667,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.58,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.08,
+                    "length": 0.27,
+                    "u0": 0,
+                    "u1": 0.36
+                  }
+                ]
+              },
+              {
+                "id": "nosing-platform",
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "length": 2.35,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.02,
+                "segmentCount": 6,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.220703,
+                    0.341797
+                  ]
+                },
+                "slotVRange": [
+                  0.21875,
+                  0.34375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.33,
+                    "u0": 0.34,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.33,
+                    "length": 0.02,
+                    "u0": 0,
+                    "u1": 0.04
+                  }
+                ]
+              },
+              {
+                "id": "curb-front",
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "length": 3.75,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.31,
+                "phaseEnd": 0.06,
+                "segmentCount": 5,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.017578,
+                    0.201172
+                  ]
+                },
+                "slotVRange": [
+                  0.015625,
+                  0.203125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.69,
+                    "u0": 0.31,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3.69,
+                    "length": 0.06,
+                    "u0": 0,
+                    "u1": 0.06
+                  }
+                ]
+              },
+              {
+                "id": "plain-pilaster",
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "length": 1.33,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.08,
+                "phaseEnd": 0.41,
+                "segmentCount": 3,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.892578,
+                    0.982422
+                  ]
+                },
+                "slotVRange": [
+                  0.890625,
+                  0.984375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.42,
+                    "u0": 0.16,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.42,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.92,
+                    "length": 0.41,
+                    "u0": 0,
+                    "u1": 0.82
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "chrome-industrial",
+            "realm": "chrome",
+            "sourceSheet": "./generated/chrome-industrial-trim-sheet.png",
+            "slots": [
+              {
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "rectPx": [
+                  0,
+                  8,
+                  512,
+                  48
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "rectPx": [
+                  0,
+                  64,
+                  512,
+                  80
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "rectPx": [
+                  0,
+                  152,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "rectPx": [
+                  0,
+                  256,
+                  512,
+                  72
+                ],
+                "repeatWorldLength": 0.75
+              },
+              {
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "rectPx": [
+                  0,
+                  336,
+                  512,
+                  64
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "rectPx": [
+                  0,
+                  408,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              }
+            ],
+            "runs": [
+              {
+                "id": "base-back",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "base-side",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "cornice-back",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "cornice-side",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "coping-platform",
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "length": 2.35,
+                "repeatWorldLength": 0.75,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.27,
+                "segmentCount": 4,
+                "maxSegmentLength": 0.75,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.361328,
+                    0.498047
+                  ]
+                },
+                "slotVRange": [
+                  0.359375,
+                  0.5
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.58,
+                    "u0": 0.226667,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.58,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.08,
+                    "length": 0.27,
+                    "u0": 0,
+                    "u1": 0.36
+                  }
+                ]
+              },
+              {
+                "id": "nosing-platform",
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "length": 2.35,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.02,
+                "segmentCount": 6,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.220703,
+                    0.341797
+                  ]
+                },
+                "slotVRange": [
+                  0.21875,
+                  0.34375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.33,
+                    "u0": 0.34,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.33,
+                    "length": 0.02,
+                    "u0": 0,
+                    "u1": 0.04
+                  }
+                ]
+              },
+              {
+                "id": "curb-front",
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "length": 3.75,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.31,
+                "phaseEnd": 0.06,
+                "segmentCount": 5,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.017578,
+                    0.201172
+                  ]
+                },
+                "slotVRange": [
+                  0.015625,
+                  0.203125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.69,
+                    "u0": 0.31,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3.69,
+                    "length": 0.06,
+                    "u0": 0,
+                    "u1": 0.06
+                  }
+                ]
+              },
+              {
+                "id": "plain-pilaster",
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "length": 1.33,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.08,
+                "phaseEnd": 0.41,
+                "segmentCount": 3,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.892578,
+                    0.982422
+                  ]
+                },
+                "slotVRange": [
+                  0.890625,
+                  0.984375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.42,
+                    "u0": 0.16,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.42,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.92,
+                    "length": 0.41,
+                    "u0": 0,
+                    "u1": 0.82
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "debug",
+      "report": {
+        "proofId": "GENESIS-TRIM-SHEET-PROOF-V001",
+        "layoutId": "architecture-core-v1",
+        "mode": "debug",
+        "threeRevision": "166",
+        "renderer": "WebGLRenderer",
+        "material": "MeshStandardMaterial",
+        "colorSpace": "SRGBColorSpace",
+        "wrap": "ClampToEdgeWrapping",
+        "repeatContract": "clamped atlas plus repeat-boundary run segmentation",
+        "variants": [
+          {
+            "id": "fantasy-masonry",
+            "realm": "fantasy",
+            "sourceSheet": "./generated/architecture-core-v1-debug.png",
+            "slots": [
+              {
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "rectPx": [
+                  0,
+                  8,
+                  512,
+                  48
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "rectPx": [
+                  0,
+                  64,
+                  512,
+                  80
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "rectPx": [
+                  0,
+                  152,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "rectPx": [
+                  0,
+                  256,
+                  512,
+                  72
+                ],
+                "repeatWorldLength": 0.75
+              },
+              {
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "rectPx": [
+                  0,
+                  336,
+                  512,
+                  64
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "rectPx": [
+                  0,
+                  408,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              }
+            ],
+            "runs": [
+              {
+                "id": "base-back",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "base-side",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "cornice-back",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "cornice-side",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "coping-platform",
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "length": 2.35,
+                "repeatWorldLength": 0.75,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.27,
+                "segmentCount": 4,
+                "maxSegmentLength": 0.75,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.361328,
+                    0.498047
+                  ]
+                },
+                "slotVRange": [
+                  0.359375,
+                  0.5
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.58,
+                    "u0": 0.226667,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.58,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.08,
+                    "length": 0.27,
+                    "u0": 0,
+                    "u1": 0.36
+                  }
+                ]
+              },
+              {
+                "id": "nosing-platform",
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "length": 2.35,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.02,
+                "segmentCount": 6,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.220703,
+                    0.341797
+                  ]
+                },
+                "slotVRange": [
+                  0.21875,
+                  0.34375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.33,
+                    "u0": 0.34,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.33,
+                    "length": 0.02,
+                    "u0": 0,
+                    "u1": 0.04
+                  }
+                ]
+              },
+              {
+                "id": "curb-front",
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "length": 3.75,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.31,
+                "phaseEnd": 0.06,
+                "segmentCount": 5,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.017578,
+                    0.201172
+                  ]
+                },
+                "slotVRange": [
+                  0.015625,
+                  0.203125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.69,
+                    "u0": 0.31,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3.69,
+                    "length": 0.06,
+                    "u0": 0,
+                    "u1": 0.06
+                  }
+                ]
+              },
+              {
+                "id": "plain-pilaster",
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "length": 1.33,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.08,
+                "phaseEnd": 0.41,
+                "segmentCount": 3,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.892578,
+                    0.982422
+                  ]
+                },
+                "slotVRange": [
+                  0.890625,
+                  0.984375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.42,
+                    "u0": 0.16,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.42,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.92,
+                    "length": 0.41,
+                    "u0": 0,
+                    "u1": 0.82
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "gloom-crypt",
+            "realm": "gloom",
+            "sourceSheet": "./generated/architecture-core-v1-debug.png",
+            "slots": [
+              {
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "rectPx": [
+                  0,
+                  8,
+                  512,
+                  48
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "rectPx": [
+                  0,
+                  64,
+                  512,
+                  80
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "rectPx": [
+                  0,
+                  152,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "rectPx": [
+                  0,
+                  256,
+                  512,
+                  72
+                ],
+                "repeatWorldLength": 0.75
+              },
+              {
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "rectPx": [
+                  0,
+                  336,
+                  512,
+                  64
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "rectPx": [
+                  0,
+                  408,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              }
+            ],
+            "runs": [
+              {
+                "id": "base-back",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "base-side",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "cornice-back",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "cornice-side",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "coping-platform",
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "length": 2.35,
+                "repeatWorldLength": 0.75,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.27,
+                "segmentCount": 4,
+                "maxSegmentLength": 0.75,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.361328,
+                    0.498047
+                  ]
+                },
+                "slotVRange": [
+                  0.359375,
+                  0.5
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.58,
+                    "u0": 0.226667,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.58,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.08,
+                    "length": 0.27,
+                    "u0": 0,
+                    "u1": 0.36
+                  }
+                ]
+              },
+              {
+                "id": "nosing-platform",
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "length": 2.35,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.02,
+                "segmentCount": 6,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.220703,
+                    0.341797
+                  ]
+                },
+                "slotVRange": [
+                  0.21875,
+                  0.34375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.33,
+                    "u0": 0.34,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.33,
+                    "length": 0.02,
+                    "u0": 0,
+                    "u1": 0.04
+                  }
+                ]
+              },
+              {
+                "id": "curb-front",
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "length": 3.75,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.31,
+                "phaseEnd": 0.06,
+                "segmentCount": 5,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.017578,
+                    0.201172
+                  ]
+                },
+                "slotVRange": [
+                  0.015625,
+                  0.203125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.69,
+                    "u0": 0.31,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3.69,
+                    "length": 0.06,
+                    "u0": 0,
+                    "u1": 0.06
+                  }
+                ]
+              },
+              {
+                "id": "plain-pilaster",
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "length": 1.33,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.08,
+                "phaseEnd": 0.41,
+                "segmentCount": 3,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.892578,
+                    0.982422
+                  ]
+                },
+                "slotVRange": [
+                  0.890625,
+                  0.984375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.42,
+                    "u0": 0.16,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.42,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.92,
+                    "length": 0.41,
+                    "u0": 0,
+                    "u1": 0.82
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "chrome-industrial",
+            "realm": "chrome",
+            "sourceSheet": "./generated/architecture-core-v1-debug.png",
+            "slots": [
+              {
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "rectPx": [
+                  0,
+                  8,
+                  512,
+                  48
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "rectPx": [
+                  0,
+                  64,
+                  512,
+                  80
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "rectPx": [
+                  0,
+                  152,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              },
+              {
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "rectPx": [
+                  0,
+                  256,
+                  512,
+                  72
+                ],
+                "repeatWorldLength": 0.75
+              },
+              {
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "rectPx": [
+                  0,
+                  336,
+                  512,
+                  64
+                ],
+                "repeatWorldLength": 0.5
+              },
+              {
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "rectPx": [
+                  0,
+                  408,
+                  512,
+                  96
+                ],
+                "repeatWorldLength": 1
+              }
+            ],
+            "runs": [
+              {
+                "id": "base-back",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "base-side",
+                "slotId": "base-course",
+                "semanticRole": "BASE_COURSE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.720703,
+                    0.873047
+                  ]
+                },
+                "slotVRange": [
+                  0.71875,
+                  0.875
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "cornice-back",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 5.4,
+                "repeatWorldLength": 1,
+                "phaseStart": 0,
+                "phaseEnd": 0.4,
+                "segmentCount": 6,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 4,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 5,
+                    "length": 0.4,
+                    "u0": 0,
+                    "u1": 0.4
+                  }
+                ]
+              },
+              {
+                "id": "cornice-side",
+                "slotId": "cornice",
+                "semanticRole": "CORNICE",
+                "length": 3.3,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.4,
+                "phaseEnd": 0.7,
+                "segmentCount": 4,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.517578,
+                    0.701172
+                  ]
+                },
+                "slotVRange": [
+                  0.515625,
+                  0.703125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.6,
+                    "u0": 0.4,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.6,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.6,
+                    "length": 0.7,
+                    "u0": 0,
+                    "u1": 0.7
+                  }
+                ]
+              },
+              {
+                "id": "coping-platform",
+                "slotId": "coping",
+                "semanticRole": "COPING",
+                "length": 2.35,
+                "repeatWorldLength": 0.75,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.27,
+                "segmentCount": 4,
+                "maxSegmentLength": 0.75,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.361328,
+                    0.498047
+                  ]
+                },
+                "slotVRange": [
+                  0.359375,
+                  0.5
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.58,
+                    "u0": 0.226667,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.58,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.75,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.08,
+                    "length": 0.27,
+                    "u0": 0,
+                    "u1": 0.36
+                  }
+                ]
+              },
+              {
+                "id": "nosing-platform",
+                "slotId": "nosing",
+                "semanticRole": "NOSING",
+                "length": 2.35,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.17,
+                "phaseEnd": 0.02,
+                "segmentCount": 6,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.220703,
+                    0.341797
+                  ]
+                },
+                "slotVRange": [
+                  0.21875,
+                  0.34375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.33,
+                    "u0": 0.34,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.33,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.83,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.33,
+                    "length": 0.02,
+                    "u0": 0,
+                    "u1": 0.04
+                  }
+                ]
+              },
+              {
+                "id": "curb-front",
+                "slotId": "curb",
+                "semanticRole": "CURB",
+                "length": 3.75,
+                "repeatWorldLength": 1,
+                "phaseStart": 0.31,
+                "phaseEnd": 0.06,
+                "segmentCount": 5,
+                "maxSegmentLength": 1,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.017578,
+                    0.201172
+                  ]
+                },
+                "slotVRange": [
+                  0.015625,
+                  0.203125
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.69,
+                    "u0": 0.31,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 1.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 2.69,
+                    "length": 1,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 3.69,
+                    "length": 0.06,
+                    "u0": 0,
+                    "u1": 0.06
+                  }
+                ]
+              },
+              {
+                "id": "plain-pilaster",
+                "slotId": "plain-band",
+                "semanticRole": "PLAIN_FALLBACK",
+                "length": 1.33,
+                "repeatWorldLength": 0.5,
+                "phaseStart": 0.08,
+                "phaseEnd": 0.41,
+                "segmentCount": 3,
+                "maxSegmentLength": 0.5,
+                "nonExactRepeat": true,
+                "uvRange": {
+                  "u": [
+                    0,
+                    1
+                  ],
+                  "v": [
+                    0.892578,
+                    0.982422
+                  ]
+                },
+                "slotVRange": [
+                  0.890625,
+                  0.984375
+                ],
+                "chunks": [
+                  {
+                    "startWorld": 0,
+                    "length": 0.42,
+                    "u0": 0.16,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.42,
+                    "length": 0.5,
+                    "u0": 0,
+                    "u1": 1
+                  },
+                  {
+                    "startWorld": 0.92,
+                    "length": 0.41,
+                    "u0": 0,
+                    "u1": 0.82
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "sourceLineage": [
+    {
+      "id": "fantasy-masonry",
+      "source": "assets/textures/fantasy-trim-1.png",
+      "sourceObjectSha256": "e99d86aa78e4d3d8ec4b4302ac99ec0bd6cf181b88f03d47381c729c7f4131d8",
+      "packedSheet": "dev/trim-sheet-proof/generated/fantasy-masonry-trim-sheet.png",
+      "packedSheetSha256": "76e14d592177f2fa475bd7e7ec2a50f71728f3d0e6a98eeddfc9c203ac003a5d",
+      "derivedRoleBands": true
+    },
+    {
+      "id": "gloom-crypt",
+      "source": "assets/textures/gloom-trim-1.png",
+      "sourceObjectSha256": "86fe29ceade04bc37778fd189fb677068c6b935f36e5f4d29aeabe92533bbef0",
+      "packedSheet": "dev/trim-sheet-proof/generated/gloom-crypt-trim-sheet.png",
+      "packedSheetSha256": "60bf6895d74c08b84a29f1c47529c738f43f4f3009d2d7977d9f89b742062939",
+      "derivedRoleBands": true
+    },
+    {
+      "id": "chrome-industrial",
+      "source": "assets/textures/chrome-trim-1.png",
+      "sourceObjectSha256": "9115d966090e93496715297e979df22efe7cb386e40170b36986be019c1e93d6",
+      "packedSheet": "dev/trim-sheet-proof/generated/chrome-industrial-trim-sheet.png",
+      "packedSheetSha256": "99f12f64a316f6df2a6af75390b0063477192e8ca188ade9d772094864cb761a",
+      "derivedRoleBands": true
+    }
+  ],
+  "pageErrors": []
+}

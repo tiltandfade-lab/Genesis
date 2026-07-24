@@ -75,6 +75,7 @@ dev/material-lane/exports/
 dev/material-cards/out/
 dev/lit-texture-proof/out/
 dev/material-workbench-proof/out/
+dev/trim-sheet-proof/out/
 
 # Obsidian editor config (Adam's vault view state — never tracked)
 .obsidian/

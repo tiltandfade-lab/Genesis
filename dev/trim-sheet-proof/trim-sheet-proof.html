@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Genesis Trim Sheet Proof</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #e9e4d7;
+      --muted: #9e9a8f;
+      --line: #373b39;
+      --panel: #151816;
+      --panel-2: #101311;
+      --gold: #d6ad55;
+      --green: #89bc95;
+      --blue: #84afc2;
+      --black: #090b0a;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--black); color: var(--ink); }
+    body {
+      min-height: 100vh;
+      font: 13px/1.42 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    button { font: inherit; }
+    #proof {
+      width: 1520px;
+      margin: 0 auto;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 15% 0%, #1c211c 0, transparent 31%),
+        linear-gradient(180deg, #0f1210, #0a0c0b);
+    }
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      align-items: end;
+      padding-bottom: 19px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      color: var(--gold);
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 5px 0 0;
+      font: 500 46px/1 Georgia, serif;
+      letter-spacing: -.025em;
+    }
+    .mode {
+      display: flex;
+      justify-content: flex-end;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+    .mode button {
+      padding: 7px 11px;
+      color: #c7c3b8;
+      border: 1px solid #4b504c;
+      background: #171a18;
+      cursor: pointer;
+    }
+    .mode button[aria-pressed="true"] {
+      color: #171309;
+      border-color: var(--gold);
+      background: var(--gold);
+    }
+    .tech { color: var(--muted); text-align: right; line-height: 1.55; }
+    .contract {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .contract > div {
+      min-height: 72px;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      background: #121512;
+      color: #beb9ad;
+    }
+    .contract strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--green);
+      font-size: 11px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .sheet-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+    .sheet {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #171a17, #111311);
+    }
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 18px;
+      padding: 14px 15px 12px;
+      border-bottom: 1px solid #343936;
+    }
+    h2 { margin: 0; font: 500 25px/1 Georgia, serif; }
+    .family { color: var(--muted); font-size: 10px; text-align: right; }
+    .atlas {
+      position: relative;
+      margin: 14px auto 12px;
+      width: 418px;
+      height: 418px;
+      overflow: hidden;
+      border: 1px solid #4b514d;
+      background: #0c0e0d;
+    }
+    .atlas img { display: block; width: 100%; height: 100%; image-rendering: auto; }
+    .slot-label {
+      position: absolute;
+      left: 7px;
+      padding: 2px 5px;
+      color: #eee9dd;
+      border: 1px solid #ffffff38;
+      background: #090b0ad9;
+      font-size: 9px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .render {
+      position: relative;
+      height: 326px;
+      margin: 0 14px;
+      overflow: hidden;
+      border: 1px solid #424844;
+      background: #080a09;
+    }
+    .render canvas { display: block; width: 100%; height: 100%; }
+    .render-badge {
+      position: absolute;
+      z-index: 2;
+      top: 9px;
+      left: 9px;
+      padding: 4px 7px;
+      border: 1px solid #6c6657;
+      background: #080a09d9;
+      color: #e8dfca;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .sheet-foot {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 12px 14px 15px;
+    }
+    .sheet-foot strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--blue);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    .sheet-foot span { color: #aaa69b; font-size: 10px; }
+    .boundary {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 25px;
+      margin-top: 18px;
+      padding-top: 13px;
+      color: #8f8c83;
+      border-top: 1px solid var(--line);
+      font-size: 10px;
+    }
+    body[data-mode="debug"] .render-badge {
+      color: #fff;
+      border-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <main id="proof">
+    <header class="masthead">
+      <div>
+        <div class="eyebrow">Genesis · Trim Sheet Contract · Proof V001</div>
+        <h1>One layout. Six roles. Three worlds.</h1>
+      </div>
+      <div>
+        <div class="mode" aria-label="Proof display mode">
+          <button type="button" data-mode="beauty">Material sheets</button>
+          <button type="button" data-mode="debug">UV diagnostic</button>
+        </div>
+        <div class="tech">512² atlas · full-width horizontal bands · 8px dilated gutters<br>
+          ClampToEdge · segmented world repeats · MeshStandardMaterial</div>
+      </div>
+    </header>
+
+    <section class="contract" aria-label="Trim sheet proof contract">
+      <div><strong>Stable coordinates</strong>Every material family uses architecture-core-v1. Geometry never needs realm-specific UVs.</div>
+      <div><strong>No atlas wrapping</strong>Runs split at each world-repeat boundary, so U resets inside the selected band—not across the sheet.</div>
+      <div><strong>Corner continuity</strong>The 5.4m back run hands its phase to a 3.3m side run. Odd lengths do not stretch the motif.</div>
+      <div><strong>Six semantic roles</strong>Plain fallback, base course, cornice, coping, nosing, and curb remain independently addressable.</div>
+    </section>
+
+    <section class="sheet-grid" id="sheets"></section>
+
+    <footer class="boundary">
+      <span>Proof boundary: these six role bands are deterministic crops and grades of each shipped realm strip. The atlas layout and projection are real; final production sheets should replace the derived bands with independently authored role art.</span>
+      <span>GENESIS-TRIM-SHEET-PROOF-V001</span>
+    </footer>
+  </main>
+
+  <script type="module">
+    import * as THREE from "../../vendor/three/three.module.js";
+
+    const query = new URLSearchParams(location.search);
+    const manifest = await fetch("./generated/trim-sheet-manifest.json").then((response) => {
+      if (!response.ok) throw new Error(`Manifest request failed: ${response.status}`);
+      return response.json();
+    });
+    const debugSheet = "./generated/architecture-core-v1-debug.png";
+    const requestedMode = query.get("mode") === "debug" ? "debug" : "beauty";
+    let activeMode = requestedMode;
+    const renderStates = [];
+
+    const slotLabelPositions = {
+      "plain-band": 3,
+      "base-course": 14,
+      "cornice": 31,
+      "coping": 51,
+      "nosing": 67,
+      "curb": 82
+    };
+
+    document.querySelector("#sheets").innerHTML = manifest.variants.map((variant) => `
+      <article class="sheet" data-variant="${variant.id}">
+        <header class="sheet-head">
+          <h2>${variant.title}</h2>
+          <div class="family">${variant.realm}<br>${variant.materialFamily}</div>
+        </header>
+        <div class="atlas">
+          <img data-atlas alt="${variant.title} six-band trim sheet">
+          ${variant.slots.map((slot) => `
+            <span class="slot-label" style="top:${slotLabelPositions[slot.slotId]}%">${slot.semanticRole.replaceAll("_", " ")}</span>
+          `).join("")}
+        </div>
+        <div class="render" data-render>
+          <span class="render-badge">mapped architecture · real WebGL</span>
+        </div>
+        <div class="sheet-foot">
+          <div><strong>Shared layout</strong><span>${manifest.layoutId}</span></div>
+          <div><strong>L-run</strong><span>5.4m + 3.3m</span></div>
+          <div><strong>Visible roles</strong><span>all 6 slots</span></div>
+        </div>
+      </article>
+    `).join("");
+
+    function vector(values) {
+      return new THREE.Vector3(...values);
+    }
+
+    function createRunGeometry({ start, tangent, cross, normal, length, slot, phaseOrigin = 0, id }) {
+      const origin = vector(start);
+      const along = vector(tangent).normalize();
+      const across = vector(cross);
+      const outward = vector(normal).normalize();
+      const frontWinding = along.clone().cross(across).dot(outward) >= 0;
+      const repeat = slot.repeatWorldLength;
+      const [, y, , height] = slot.rectPx;
+      const v0 = 1 - ((y + height - 1) / manifest.runtimeSize[1]);
+      const v1 = 1 - ((y + 1) / manifest.runtimeSize[1]);
+      const positions = [];
+      const normals = [];
+      const uvs = [];
+      const indices = [];
+      const chunks = [];
+      let cursor = 0;
+      let vertex = 0;
+
+      while (cursor < length - 1e-7) {
+        const worldPhase = phaseOrigin + cursor;
+        let localPhase = ((worldPhase % repeat) + repeat) % repeat;
+        if (repeat - localPhase < 1e-6) localPhase = 0;
+        const segmentLength = Math.min(length - cursor, repeat - localPhase);
+        const p0 = origin.clone().addScaledVector(along, cursor);
+        const p1 = origin.clone().addScaledVector(along, cursor + segmentLength);
+        const p2 = p1.clone().add(across);
+        const p3 = p0.clone().add(across);
+        const u0 = localPhase / repeat;
+        const u1 = (localPhase + segmentLength) / repeat;
+
+        for (const point of [p0, p1, p2, p3]) positions.push(point.x, point.y, point.z);
+        for (let index = 0; index < 4; index += 1) normals.push(outward.x, outward.y, outward.z);
+        uvs.push(u0, v0, u1, v0, u1, v1, u0, v1);
+        if (frontWinding) {
+          indices.push(vertex, vertex + 1, vertex + 2, vertex, vertex + 2, vertex + 3);
+        } else {
+          indices.push(vertex, vertex + 2, vertex + 1, vertex, vertex + 3, vertex + 2);
+        }
+        chunks.push({
+          startWorld: Number(cursor.toFixed(5)),
+          length: Number(segmentLength.toFixed(5)),
+          u0: Number(u0.toFixed(6)),
+          u1: Number(u1.toFixed(6))
+        });
+        cursor += segmentLength;
+        vertex += 4;
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+      geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+      geometry.setIndex(indices);
+      geometry.computeBoundingSphere();
+
+      return {
+        geometry,
+        report: {
+          id,
+          slotId: slot.slotId,
+          semanticRole: slot.semanticRole,
+          length,
+          repeatWorldLength: repeat,
+          phaseStart: Number((((phaseOrigin % repeat) + repeat) % repeat).toFixed(5)),
+          phaseEnd: Number(((((phaseOrigin + length) % repeat) + repeat) % repeat).toFixed(5)),
+          segmentCount: chunks.length,
+          maxSegmentLength: Math.max(...chunks.map((chunk) => chunk.length)),
+          nonExactRepeat: Math.abs((length / repeat) - Math.round(length / repeat)) > 1e-6,
+          uvRange: {
+            u: [Math.min(...chunks.map((chunk) => chunk.u0)), Math.max(...chunks.map((chunk) => chunk.u1))],
+            v: [Number(v0.toFixed(6)), Number(v1.toFixed(6))]
+          },
+          slotVRange: [
+            Number((1 - ((y + height) / manifest.runtimeSize[1])).toFixed(6)),
+            Number((1 - (y / manifest.runtimeSize[1])).toFixed(6))
+          ],
+          chunks
+        }
+      };
+    }
+
+    function addBox(scene, size, position, material, bevel = false) {
+      const geometry = bevel
+        ? new THREE.BoxGeometry(size[0], size[1], size[2], 2, 1, 2)
+        : new THREE.BoxGeometry(...size);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(...position);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      scene.add(mesh);
+      return mesh;
+    }
+
+    function buildScene(variant, mount) {
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+      renderer.setPixelRatio(1);
+      renderer.setSize(mount.clientWidth, mount.clientHeight, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.AgXToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      mount.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(variant.id === "gloom-crypt" ? 0x090d0f : 0x111714);
+      scene.fog = new THREE.Fog(scene.background, 10, 18);
+      const camera = new THREE.PerspectiveCamera(31, mount.clientWidth / mount.clientHeight, .1, 40);
+      camera.position.set(6.4, 4.25, 7.4);
+      camera.lookAt(-.25, 1.13, 1.25);
+
+      let resolveTexture;
+      const textureReady = new Promise((resolve) => { resolveTexture = resolve; });
+      const texture = new THREE.TextureLoader().load(
+        variant.output.path.replace("dev/trim-sheet-proof/", "./"),
+        () => {
+          render();
+          resolveTexture();
+        }
+      );
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.magFilter = THREE.LinearFilter;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+
+      const trimMaterial = new THREE.MeshStandardMaterial({
+        map: texture,
+        roughness: variant.realm === "chrome" ? .38 : .76,
+        metalness: variant.realm === "chrome" ? .58 : .02,
+        side: THREE.DoubleSide
+      });
+      const palette = {
+        fantasy: { wall: 0x777060, floor: 0x343731, block: 0x59564b },
+        gloom: { wall: 0x292d30, floor: 0x171b1e, block: 0x25292c },
+        chrome: { wall: 0x303a42, floor: 0x182128, block: 0x2c3740 }
+      }[variant.realm];
+      const wallMaterial = new THREE.MeshStandardMaterial({ color: palette.wall, roughness: .94 });
+      const floorMaterial = new THREE.MeshStandardMaterial({ color: palette.floor, roughness: .9 });
+      const blockMaterial = new THREE.MeshStandardMaterial({ color: palette.block, roughness: .82 });
+
+      addBox(scene, [9, .12, 8], [0, -.08, 2.1], floorMaterial);
+      addBox(scene, [5.55, 2.75, .14], [-.18, 1.36, -.08], wallMaterial);
+      addBox(scene, [.14, 2.75, 3.4], [-2.97, 1.36, 1.62], wallMaterial);
+      addBox(scene, [2.35, .56, 1.42], [.5, .28, 1.8], blockMaterial);
+      addBox(scene, [3.75, .24, .56], [-.4, .12, 3.18], blockMaterial);
+      addBox(scene, [.38, 2.05, .38], [1.9, 1.02, .14], blockMaterial);
+
+      const slots = Object.fromEntries(variant.slots.map((slot) => [slot.slotId, slot]));
+      const runSpecs = [
+        {
+          id: "base-back", slot: slots["base-course"], start: [2.5, .04, .001],
+          tangent: [-1, 0, 0], cross: [0, .22, 0], normal: [0, 0, 1], length: 5.4
+        },
+        {
+          id: "base-side", slot: slots["base-course"], start: [-2.899, .04, .001],
+          tangent: [0, 0, 1], cross: [0, .22, 0], normal: [1, 0, 0], length: 3.3, phaseOrigin: 5.4
+        },
+        {
+          id: "cornice-back", slot: slots.cornice, start: [2.5, 2.39, .001],
+          tangent: [-1, 0, 0], cross: [0, .28, 0], normal: [0, 0, 1], length: 5.4
+        },
+        {
+          id: "cornice-side", slot: slots.cornice, start: [-2.899, 2.39, .001],
+          tangent: [0, 0, 1], cross: [0, .28, 0], normal: [1, 0, 0], length: 3.3, phaseOrigin: 5.4
+        },
+        {
+          id: "coping-platform", slot: slots.coping, start: [-.675, .565, 1.09],
+          tangent: [1, 0, 0], cross: [0, 0, 1.42], normal: [0, 1, 0], length: 2.35, phaseOrigin: .17
+        },
+        {
+          id: "nosing-platform", slot: slots.nosing, start: [-.675, .445, 2.511],
+          tangent: [1, 0, 0], cross: [0, .12, 0], normal: [0, 0, 1], length: 2.35, phaseOrigin: .17
+        },
+        {
+          id: "curb-front", slot: slots.curb, start: [-2.275, .01, 3.461],
+          tangent: [1, 0, 0], cross: [0, .24, 0], normal: [0, 0, 1], length: 3.75, phaseOrigin: .31
+        },
+        {
+          id: "plain-pilaster", slot: slots["plain-band"], start: [1.705, .36, .335],
+          tangent: [0, 1, 0], cross: [.39, 0, 0], normal: [0, 0, 1], length: 1.33, phaseOrigin: .08
+        }
+      ];
+      const runReports = [];
+      for (const spec of runSpecs) {
+        const { geometry, report } = createRunGeometry(spec);
+        const mesh = new THREE.Mesh(geometry, trimMaterial);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        scene.add(mesh);
+        runReports.push(report);
+      }
+
+      const hemi = new THREE.HemisphereLight(0xbfd6e2, 0x342c21, 1.45);
+      scene.add(hemi);
+      const key = new THREE.DirectionalLight(0xffe0b7, 3.5);
+      key.position.set(4.5, 7.5, 6);
+      key.castShadow = true;
+      key.shadow.mapSize.set(1024, 1024);
+      key.shadow.camera.left = -6;
+      key.shadow.camera.right = 6;
+      key.shadow.camera.top = 6;
+      key.shadow.camera.bottom = -6;
+      scene.add(key);
+      const rim = new THREE.PointLight(variant.realm === "chrome" ? 0x42bce8 : 0x7698bd, 12, 8, 2);
+      rim.position.set(-2.5, 2.4, 3.3);
+      scene.add(rim);
+
+      function render() {
+        renderer.render(scene, camera);
+      }
+
+      renderStates.push({ variant, renderer, scene, texture, runReports, render });
+      render();
+      return textureReady;
+    }
+
+    function atlasPath(variant) {
+      return activeMode === "debug"
+        ? debugSheet
+        : variant.output.path.replace("dev/trim-sheet-proof/", "./");
+    }
+
+    async function applyMode(mode) {
+      activeMode = mode;
+      document.body.dataset.mode = mode;
+      for (const button of document.querySelectorAll("[data-mode]")) {
+        button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
+      }
+      const loads = [];
+      for (const state of renderStates) {
+        const path = atlasPath(state.variant);
+        const image = document.querySelector(`[data-variant="${state.variant.id}"] [data-atlas]`);
+        image.src = path;
+        loads.push(new Promise((resolve, reject) => {
+          new THREE.TextureLoader().load(path, (nextTexture) => {
+            nextTexture.colorSpace = THREE.SRGBColorSpace;
+            nextTexture.wrapS = THREE.ClampToEdgeWrapping;
+            nextTexture.wrapT = THREE.ClampToEdgeWrapping;
+            nextTexture.magFilter = THREE.LinearFilter;
+            nextTexture.minFilter = THREE.LinearMipmapLinearFilter;
+            nextTexture.anisotropy = Math.min(8, state.renderer.capabilities.getMaxAnisotropy());
+            for (const child of state.scene.children) {
+              if (child.material?.map === state.texture) child.material.map = nextTexture;
+            }
+            state.texture.dispose();
+            state.texture = nextTexture;
+            state.render();
+            resolve();
+          }, undefined, reject);
+        }));
+      }
+      await Promise.all([
+        ...loads,
+        ...[...document.images].map((image) => image.complete
+          ? Promise.resolve()
+          : new Promise((resolve, reject) => {
+              image.addEventListener("load", resolve, { once: true });
+              image.addEventListener("error", reject, { once: true });
+            }))
+      ]);
+    }
+
+    for (const variant of manifest.variants) {
+      await buildScene(
+        variant,
+        document.querySelector(`[data-variant="${variant.id}"] [data-render]`)
+      );
+    }
+    for (const button of document.querySelectorAll("[data-mode]")) {
+      button.addEventListener("click", () => applyMode(button.dataset.mode));
+    }
+    await applyMode(requestedMode);
+
+    window.__proofReport = {
+      proofId: manifest.proofId,
+      layoutId: manifest.layoutId,
+      mode: activeMode,
+      threeRevision: THREE.REVISION,
+      renderer: "WebGLRenderer",
+      material: "MeshStandardMaterial",
+      colorSpace: "SRGBColorSpace",
+      wrap: "ClampToEdgeWrapping",
+      repeatContract: manifest.repeatContract,
+      variants: renderStates.map((state) => ({
+        id: state.variant.id,
+        realm: state.variant.realm,
+        sourceSheet: atlasPath(state.variant),
+        slots: state.variant.slots.map((slot) => ({
+          slotId: slot.slotId,
+          semanticRole: slot.semanticRole,
+          rectPx: slot.rectPx,
+          repeatWorldLength: slot.repeatWorldLength
+        })),
+        runs: state.runReports
+      }))
+    };
+    window.__ready = true;
+  </script>
+</body>
+</html>

@@ -1671,3 +1671,28 @@ After reviewing decay 1.75:
 
 Apply the same 0.25 outward step once more: decay 1.75 → 1.50. The accepted source brightness,
 120-foot maximum, color, shadows, and torch-only scope remain unchanged.
+
+## CLAYROOM OPEN-FLAME DANCE (Adam, 2026-07-24 — binding; verbatim)
+
+> "ok, now a real flame sconce will dance a bit, with a slight modulation in directionality and
+> intensity at random intervals, can i see some proof of that"
+
+After reviewing the first stepped implementation:
+
+> "what fps we running at here, that looked choppy af"
+
+> "ok so fix that please"
+
+Binding consequences:
+
+- The reviewed open-flame torch is an explicit `flickering` practical even though ordinary generated
+  practicals still default to `steady`. This does not authorize global flicker.
+- It chooses deterministic, seeded intensity and direction targets at irregular intervals. The
+  current authored recipe uses ±10% intensity, a 420 ms cadence with 55% interval variation, and a
+  0.025-local-unit directional bound.
+- The visible flame and real point-light origin remain co-located and move together inside that
+  bound. This is a tiny flame-origin dance that changes highlights and cast shadows; it does not
+  convert a wall sconce into a spotlight.
+- Target changes must be interpolated continuously on `requestAnimationFrame` at the display refresh
+  rate (normally 60 FPS), never presented as one-to-four hard jumps per second. Seeded target choice
+  remains reproducible; the path between targets is smooth.

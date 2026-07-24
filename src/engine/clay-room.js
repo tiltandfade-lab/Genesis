@@ -591,7 +591,9 @@ function clayRoomBoardFrom(record, opts){
       flicker: {
         seed: p.flicker.seed || ("clay-c1a:" + lightRecipe.id + ":" + p.id),
         amplitude: p.flicker.amplitude,
-        cadenceMs: p.flicker.cadenceMs
+        cadenceMs: p.flicker.cadenceMs,
+        intervalJitter: p.flicker.intervalJitter,
+        directionAmplitude: p.flicker.directionAmplitude
       },
       forceVisiblePractical: true
     });

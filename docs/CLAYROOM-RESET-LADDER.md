@@ -1,7 +1,7 @@
 ---
 type: system-spec
 status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review candidate BUILT
-  (2026-07-24), close torch brightness accepted and decay-1.5 verdict pending; dedicated CL-F02
+  (2026-07-24), close torch brightness accepted and smooth decay-1.5 flame review live; dedicated CL-F02
   display affordances + CL-R2…CL-R6 remain
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
@@ -330,7 +330,7 @@ Required work:
   deterministic compiled classic-script registry → shared engine/renderer/Lab consumers.
 
 **CL-R1 engineering candidate — BUILT 2026-07-24; close torch brightness accepted, decay-1.5
-visual verdict pending.**
+falloff and smooth open-flame motion available for live visual review.**
 
 - `data/light-profile-locks.json` is the one authored recipe authority: ten rolled world recipes plus
   two unrolled diagnostic recipes. `build/compile-light-locks.py` expands defaults, validates the
@@ -354,6 +354,12 @@ visual verdict pending.**
   torch-specific. The Lighting Lab range control reaches 60 metres so this value remains directly
   editable. Original, 2×, 4×, and both expanded-falloff captures plus measured comparisons live in
   the CL-R1 lighting evidence directory.
+- The reviewed torch is now an authored open flame rather than a steady bulb. It chooses seeded
+  irregular targets around a 420 ms cadence (55% interval variation), modulates intensity by at
+  most ±10%, and moves the real light origin and visible flame together within a 0.025-local-unit
+  bound. The target sequence remains deterministic for proof, but the renderer glides between
+  targets on every display frame (normally 60 FPS), so light, flame, highlights, and cast shadows
+  dance continuously rather than jumping a few times per second.
 - The washed-out sprite diagnosis is now a production-renderer causal matrix, not a taste guess:
   colour space, material response, sampling, tone mapping, compositing, and light energy change one
   at a time. The known-bad untagged-sRGB and intensity-31 mutations fail. There is still **no
@@ -367,11 +373,13 @@ stepped sphere/cube bench, seed/time-of-day preview, position/range/cone/shadow 
 one-click whole-matrix capture remain open. They do not create a second recipe or renderer
 authority when added.
 
-**CL-R1 lifecycle/local-state slice — BUILT 2026-07-24.** Every generated production practical now
+**CL-R1 lifecycle/local-state slice — BUILT 2026-07-24.** Every generated production practical still
 declares local state `steady` by default and owns deterministic flicker seed/amplitude data.
-`flickering` is a per-light opt-in. One normalized sample drives the real `PointLight`, emitter
-emissive intensity, and optional cone; steady siblings are untouched, and disabling returns the
-authored baseline exactly. Clayroom preserves the actual ambient/rig/fixture/material identities
+`flickering` is a per-light opt-in; the reviewed open-flame torch is one such explicit opt-in.
+One continuously interpolated normalized sample drives the real `PointLight`, emitter emissive
+intensity, optional cone, and the co-located flame/light-origin movement; steady siblings are
+untouched, and disabling returns the authored baseline exactly. Clayroom preserves the actual
+ambient/rig/fixture/material identities
 across unchanged-lighting door/camera/fade/board rebuilds and records before/during/after proof.
 The stale scheduler root cause and movable/clamped/resettable diagnostic panel are specified in
 `C1A-CLAY-ROOM.md` D25. This lifecycle slice is now consumed by the shared persistent authoring

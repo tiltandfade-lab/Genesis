@@ -70,6 +70,11 @@ check("6. compiled recipes carry the complete per-recipe/per-light authoring con
     && runtime.torch.lights[0].positionStrategy === "socket-relative"
     && runtime.torch.lights[0].rangeM === 36.576
     && runtime.torch.lights[0].falloff === 1.5
+    && runtime.torch.lights[0].state === "flickering"
+    && runtime.torch.lights[0].flicker.recipeId === "open-flame-dance-v1"
+    && runtime.torch.lights[0].flicker.amplitude === 0.1
+    && runtime.torch.lights[0].flicker.intervalJitter === 0.55
+    && runtime.torch.lights[0].flicker.directionAmplitude === 0.025
     && runtime.torch.lights[0].shadow.cast === true
     && runtime.torch.lights[0].shadow.mapSize === 512,
   runtime.torch);

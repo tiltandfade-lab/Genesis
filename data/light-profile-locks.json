@@ -141,10 +141,17 @@
           "heightM": 3.3528,
           "rangeM": 36.576,
           "falloff": 1.5,
+          "state": "flickering",
           "fixtureId": "sconce-torch-clay",
           "mount": "wall",
           "emitterLocal": { "x": 0, "y": 0.08, "z": 0.18 },
-          "flicker": { "amplitude": 0.14, "cadenceMs": 480 }
+          "flicker": {
+            "recipeId": "open-flame-dance-v1",
+            "amplitude": 0.1,
+            "cadenceMs": 420,
+            "intervalJitter": 0.55,
+            "directionAmplitude": 0.025
+          }
         }
       ]
     },

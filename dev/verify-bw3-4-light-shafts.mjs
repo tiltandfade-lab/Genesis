@@ -442,24 +442,46 @@ console.log("\n=== ITEM 3 — local deterministic flicker sync (theater-boot.js 
 {
   const flickerFns = [
     "lightFlickerHash32", "lightFlickerNormalizedSample",
+    "lightFlickerIntervalMs", "lightFlickerDirectionSample",
+    "lightFlickerSmoothProgress", "lightFlickerInterpolatedState",
     "lightFlickerApplySample", "lightFlickerStep"
   ].map((name) => extractFn(bootSrc, name));
   check("3a-setup. deterministic flicker helpers extracted from the real source", flickerFns.every(Boolean));
 
   if(flickerFns.every(Boolean)){
     const factory = new Function(flickerFns.join("\n")
-      + "\nreturn { lightFlickerNormalizedSample, lightFlickerApplySample, lightFlickerStep };");
-    const { lightFlickerNormalizedSample, lightFlickerApplySample, lightFlickerStep } = factory();
+      + "\nreturn { lightFlickerNormalizedSample, lightFlickerIntervalMs, lightFlickerDirectionSample, lightFlickerSmoothProgress, lightFlickerInterpolatedState, lightFlickerApplySample, lightFlickerStep };");
+    const {
+      lightFlickerNormalizedSample,
+      lightFlickerIntervalMs,
+      lightFlickerDirectionSample,
+      lightFlickerSmoothProgress,
+      lightFlickerInterpolatedState,
+      lightFlickerApplySample,
+      lightFlickerStep
+    } = factory();
 
     function makeTarget(id, state, baseIntensity, baseEmissiveIntensity, baseConeOpacity){
+      function vec(x, y, z){
+        return { x, y, z, set(nx, ny, nz){ this.x = nx; this.y = ny; this.z = nz; } };
+      }
       return {
         id, sourceRef: id, state, seed: "seed:" + id, sampleIndex: 0, normalizedSample: 1,
-        pl: { intensity: baseIntensity, userData: {} },
-        marker: { material: { emissiveIntensity: baseEmissiveIntensity }, userData: {} },
+        pl: { intensity: baseIntensity, position: vec(0, 0.08, 0.18), userData: {} },
+        marker: {
+          material: { emissiveIntensity: baseEmissiveIntensity },
+          position: vec(0, 0.08, 0.18),
+          rotation: { x: 0, y: 0, z: 0 },
+          userData: {}
+        },
         cone: { material: { opacity: baseConeOpacity } },
         emissiveFlicker: true,
         baseIntensity, baseEmissiveIntensity, baseOpacity: 1, baseConeOpacity,
-        amplitude: 0.12
+        basePointPosition: { x: 0, y: 0.08, z: 0.18 },
+        baseMarkerPosition: { x: 0, y: 0.08, z: 0.18 },
+        baseMarkerRotation: { x: 0, y: 0, z: 0 },
+        cadenceMs: 420, intervalJitter: 0.55,
+        amplitude: 0.12, directionAmplitude: 0.025
       };
     }
 
@@ -505,7 +527,68 @@ console.log("\n=== ITEM 3 — local deterministic flicker sync (theater-boot.js 
       flickering.pl.intensity === flickering.baseIntensity
       && flickering.marker.material.emissiveIntensity === flickering.baseEmissiveIntensity
       && flickering.normalizedSample === 1);
+    const danced = makeTarget("dance", "flickering", 16, 1.6, 0.3);
+    lightFlickerStep([], [], [danced], 0, 3);
+    const danceRadius = Math.hypot(
+      danced.directionSample.x,
+      danced.directionSample.y,
+      danced.directionSample.z
+    );
+    check("3j. a flickering flame moves the real light origin and visible emitter together",
+      danceRadius > 0
+      && danced.pl.position.x === danced.marker.position.x
+      && danced.pl.position.y === danced.marker.position.y
+      && danced.pl.position.z === danced.marker.position.z,
+      JSON.stringify({ direction: danced.directionSample, point: danced.pl.position, marker: danced.marker.position }));
+    check("3k. directional dance stays inside the authored flame-volume bound",
+      danceRadius <= danced.directionAmplitude * 1.05,
+      JSON.stringify({ danceRadius, bound: danced.directionAmplitude }));
+    const intervals = [1, 2, 3, 4, 5, 6].map((index) =>
+      lightFlickerIntervalMs(danced.seed, index, danced.cadenceMs, danced.intervalJitter)
+    );
+    const replayedIntervals = [1, 2, 3, 4, 5, 6].map((index) =>
+      lightFlickerIntervalMs(danced.seed, index, danced.cadenceMs, danced.intervalJitter)
+    );
+    check("3l. seeded interval variation is irregular, bounded, and exactly reproducible",
+      new Set(intervals).size > 1
+      && intervals.every((ms) => ms >= 120 && ms <= 651)
+      && JSON.stringify(intervals) === JSON.stringify(replayedIntervals),
+      JSON.stringify(intervals));
+    lightFlickerApplySample(danced, 1);
+    check("3m. steady/reset returns intensity, flame lean, and co-located positions to authored baseline",
+      danced.pl.intensity === danced.baseIntensity
+      && danced.marker.material.emissiveIntensity === danced.baseEmissiveIntensity
+      && danced.pl.position.x === danced.basePointPosition.x
+      && danced.pl.position.y === danced.basePointPosition.y
+      && danced.pl.position.z === danced.basePointPosition.z
+      && danced.marker.position.x === danced.baseMarkerPosition.x
+      && danced.marker.rotation.x === danced.baseMarkerRotation.x
+      && danced.marker.rotation.z === danced.baseMarkerRotation.z);
+    const fromDirection = { x: -0.02, y: 0.001, z: 0.01 };
+    const toDirection = { x: 0.02, y: -0.001, z: -0.01 };
+    const middle = lightFlickerInterpolatedState(
+      0.9, 1.1, fromDirection, toDirection, 0.5
+    );
+    check("3n. frame interpolation glides through the exact midpoint instead of stepping target-to-target",
+      Math.abs(middle.sample - 1) < 1e-12
+      && Math.abs(middle.direction.x) < 1e-12
+      && Math.abs(middle.direction.y) < 1e-12
+      && Math.abs(middle.direction.z) < 1e-12,
+      JSON.stringify(middle));
+    check("3o. the easing curve is bounded, monotonic at representative frame positions, and exact at both ends",
+      lightFlickerSmoothProgress(0) === 0
+      && lightFlickerSmoothProgress(1) === 1
+      && lightFlickerSmoothProgress(0.25) > 0
+      && lightFlickerSmoothProgress(0.25) < lightFlickerSmoothProgress(0.5)
+      && lightFlickerSmoothProgress(0.5) < lightFlickerSmoothProgress(0.75)
+      && lightFlickerSmoothProgress(0.75) < 1);
   }
+  const liveLoop = extractFn(bootSrc, "startLightFlicker") || "";
+  const stopLoop = extractFn(bootSrc, "stopLightFlicker") || "";
+  check("3p. production flame animation is display-rate rAF interpolation, not a stepped interval",
+    liveLoop.includes("requestAnimationFrame(frame)")
+    && !liveLoop.includes("setInterval")
+    && stopLoop.includes("cancelAnimationFrame"));
 }
 
 // ============================================================================

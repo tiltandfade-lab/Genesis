@@ -6,7 +6,7 @@ updated: 2026-07-24
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-24, CL-R1 visual checkpoint) — SHARED LIGHT RECIPES + LORE-NATIVE TORCH [Codex]
+## ⭐ Latest (2026-07-24, CL-R1 visual checkpoint) — SHARED LIGHT RECIPES + SMOOTH LORE-NATIVE TORCH [Codex]
 
 Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolidated master
 `6e86ba52`. **Not merged or pushed. CL-R2 has not begun.**
@@ -25,6 +25,12 @@ Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolida
   Saved `torch`, `torch-range2x`, `torch-range4x`, `torch-falloff175`, and `torch-falloff150` frames
   preserve the visual progression. The Lighting Lab range ceiling is 60 metres so the current
   authored value remains editable.
+- The torch is now authored as a living open flame: deterministic irregular targets around 420 ms,
+  ±10% intensity, and a tiny bounded direction shift. The visible flame and real shadow-casting
+  point light remain co-located. The first proof exposed hard 240–720 ms pose jumps; Adam rejected
+  that as choppy. The production loop now interpolates every display frame (normally 60 FPS), while
+  keeping the seeded target sequence reproducible and throttling text telemetry so it cannot steal
+  time from the visual animation.
 - Lighting Lab now edits the full structured recipe, not a one-point shortcut, with bounded
   validation, undo/redo, authored reset, export, and deterministic compile/fold back to the same
   lock shape.
@@ -35,12 +41,13 @@ Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolida
 - Final evidence: `dev/clay-captures/cl-r1-lighting/` (three modes, early/settled/explain/clean
   frames, receipts, measurements) and `dev/clay-captures/cl-r1-causality/` (13-card contact sheet,
   receipt, measurements). All final captures recorded zero console errors/warnings.
-- Focused gates: light locks 12/12; Light Lab 42/42; Clayroom 176/176; practical fixtures 98/98;
-  dungeon interior 288/288. **FULL CI PENDING.** One broad visual-protection harness still reports
+- Focused gates: light locks 12/12; Light Lab 42/42; Clayroom 176/176; local lighting 69/69;
+  practical fixtures 98/98; dungeon interior 288/288. **FULL CI PENDING.** One broad
+  visual-protection harness still reports
   the torchlit old/new interior mean pixel delta `0.0177 > 0.01`; daylit and tabletop dark remain
   inside the threshold. This remains visible for Fable's re-gate rather than being weakened.
-- Adam's remaining visual ruling is the stop gate: the new decay-1.5 torch falloff, warm-vs-cool balance,
-  immediate torch readability, and the intentionally flat neutral reference. The dedicated CL-F02 stepped
+- The live stop gate now includes the smooth decay-1.5 torch flame, warm-vs-cool balance, immediate
+  torch readability, and the intentionally flat neutral reference. The dedicated CL-F02 stepped
   sphere/cube display and advanced overlays remain open. Standee base/footprint and the
   small→human→largest scaling spectrum belong to CL-R2 after that ruling.
 

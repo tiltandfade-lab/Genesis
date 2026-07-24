@@ -5110,9 +5110,9 @@ function createTheaterState(){
     // groups are swept by clearGroup on every setBoard; lights are their own small set, added directly
     // to S.scene, disposed+removed explicitly by applyLightProfile's own teardown each call rather than
     // routed through clearGroup, since THREE.Light has no geometry/material to dispose). lightProfileKey
-    // + flickerRaf/flickerRunning drive the flicker tick (tickLightFlicker) — a SEPARATE, cheap-by-design
-    // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
-    // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
+    // + flickerRaf drives the smooth flame animation loop. Seeded targets still arrive at irregular,
+    // low-frequency intervals, but the real light and visible flame now glide between them on each
+    // display frame instead of visibly stepping from one target to the next.
     ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, flickerTick: 0,
     interiorFlickerTargets: [], interiorLightTargets: [], interiorLightsBuilt: null,
     interiorLightingKey: null, interiorLightingPreservedThisBuild: false,
@@ -6944,18 +6944,17 @@ function mountLightProp(data, cx, cz){
   S.lightPropAnchor = { x: snapped.x, y: flameY, z: snapped.z };
 }
 
-/* FLICKER (§2's own "optional flicker for torch/lava... a low-frequency setInterval that marks dirty
-   ~2x/sec ONLY for flicker profiles; keep it cheap"). Deliberately NOT the tween rAF chain (theater-
-   verbs.js's tickTweens runs every frame while >=1 verb tween is live — a torch flicker isn't a verb,
-   it's ambient scene mood that should keep going for the ENTIRE time a flicker profile is mounted, verb
-   tweens or no) and NOT a plain rAF loop either (60fps for a low-frequency practical pulse is wasted
-   work the render-on-demand discipline this file otherwise holds to would flag). A setInterval at
-   ~2Hz is the cheapest mechanism that still reads as a living flame. CL-R1 makes the sample seeded
-   and local: only targets whose own state is `flickering` update; steady targets are never written.
-   Self-stopping: stopLightFlicker (called at profile ownership changes and from retire()) clears the
-   interval, so a flicker never survives past its owner or past retire(). */
+/* FLICKER (§2's own "optional flicker for torch/lava"). Each source chooses seeded, irregular
+   intensity and direction targets at its authored cadence, then glides between those targets on the
+   display's requestAnimationFrame clock. The randomness therefore remains low-frequency and legible,
+   while the visible flame, emitted light, highlights, and shadows move continuously instead of
+   stepping every few hundred milliseconds. This is its own ambient animation loop rather than the
+   verb tween chain. CL-R1 keeps samples seeded and local: only targets whose own state is
+   `flickering` update; steady targets are never written. Self-stopping: stopLightFlicker (called at
+   profile ownership changes and from retire()) cancels the frame, so a flame never survives past its
+   owner or past retire(). */
 // BEAUTY-WAVE.md VP6 item 2 (THE LIFE PASS — torch flicker): opted-in interior sources share this
-// scheduler rather than growing one interval per fixture. Each target owns {state,seed,amplitude,
+// loop rather than growing one animation chain per fixture. Each target owns {state,seed,amplitude,
 // pl,marker,bases}; the same normalized seeded sample scales the actual PointLight and its visible
 // emitter material. The default amplitude remains below the tabletop torchlit profile's 0.14.
 const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
@@ -6963,7 +6962,7 @@ const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
 // reads) — same "pure step, thin scheduler wraps it" split VP6's own mote drift already keeps
 // (startMoteDrift's rAF loop vs the per-mote math it runs). Lets a deterministic fake-clock harness
 // drive one tick directly (dev/verify-bw3-4-light-shafts.mjs) without needing S.mounted/a live
-// setInterval, and lets the light-CONE card (this unit) ride the identical delta the marker already
+// scheduler, and lets the light-CONE card (this unit) ride the identical delta the marker already
 // does — never a second independently-randomized swing (that would desync the shaft from its own
 // marker/light, the exact "flicker sync" this unit's spec calls for).
 function lightFlickerHash32(value){
@@ -6982,13 +6981,63 @@ function lightFlickerNormalizedSample(seed, sampleIndex, amplitude){
   const a = Math.max(0, Math.min(0.45, Number(amplitude) || 0));
   return 1 + (unit * 2 - 1) * a;
 }
-function lightFlickerApplySample(target, sample){
+function lightFlickerIntervalMs(seed, sampleIndex, cadenceMs, intervalJitter){
+  const base = Math.max(120, Math.min(5000, Number(cadenceMs) || 480));
+  const jitter = Math.max(0, Math.min(0.9, Number(intervalJitter) || 0));
+  const h = lightFlickerHash32(String(seed || "light") + ":interval:" + String(sampleIndex || 0));
+  const unit = h / 4294967295;
+  return Math.max(120, Math.round(base * (1 - jitter + unit * jitter * 2)));
+}
+function lightFlickerDirectionSample(seed, sampleIndex, directionAmplitude){
+  const amplitude = Math.max(0, Math.min(0.08, Number(directionAmplitude) || 0));
+  if(!amplitude) return { x: 0, y: 0, z: 0 };
+  const prefix = String(seed || "light") + ":direction:" + String(sampleIndex || 0);
+  const angle = (lightFlickerHash32(prefix + ":angle") / 4294967295) * Math.PI * 2;
+  const radiusUnit = lightFlickerHash32(prefix + ":radius") / 4294967295;
+  const verticalUnit = lightFlickerHash32(prefix + ":vertical") / 4294967295;
+  const radius = amplitude * (0.45 + radiusUnit * 0.55);
+  return {
+    x: Math.cos(angle) * radius,
+    y: (verticalUnit * 2 - 1) * amplitude * 0.22,
+    z: Math.sin(angle) * radius
+  };
+}
+function lightFlickerSmoothProgress(progress){
+  const t = Math.max(0, Math.min(1, Number(progress) || 0));
+  return t * t * (3 - 2 * t);
+}
+function lightFlickerInterpolatedState(fromSample, toSample, fromDirection, toDirection, progress){
+  const t = lightFlickerSmoothProgress(progress);
+  const from = fromDirection || { x: 0, y: 0, z: 0 };
+  const to = toDirection || { x: 0, y: 0, z: 0 };
+  return {
+    sample: fromSample + (toSample - fromSample) * t,
+    direction: {
+      x: from.x + (to.x - from.x) * t,
+      y: from.y + (to.y - from.y) * t,
+      z: from.z + (to.z - from.z) * t
+    }
+  };
+}
+function lightFlickerApplySample(target, sample, direction){
   if(!target) return;
   const normalized = Number.isFinite(sample) ? sample : 1;
+  const directional = direction && Number.isFinite(direction.x)
+    ? direction : { x: 0, y: 0, z: 0 };
   if(target.pl){
     target.pl.intensity = Math.max(0, target.baseIntensity * normalized);
+    if(target.basePointPosition && target.pl.position && typeof target.pl.position.set === "function"){
+      target.pl.position.set(
+        target.basePointPosition.x + directional.x,
+        target.basePointPosition.y + directional.y,
+        target.basePointPosition.z + directional.z
+      );
+    }
     target.pl.userData = target.pl.userData || {};
     target.pl.userData.flickerSample = normalized;
+    target.pl.userData.directionSample = {
+      x: directional.x, y: directional.y, z: directional.z
+    };
     target.pl.userData.lightState = target.state;
   }
   if(target.marker && target.marker.material){
@@ -6997,14 +7046,33 @@ function lightFlickerApplySample(target, sample){
     } else {
       target.marker.material.opacity = Math.max(0, Math.min(1, target.baseOpacity * normalized));
     }
+    if(target.baseMarkerPosition && target.marker.position && typeof target.marker.position.set === "function"){
+      target.marker.position.set(
+        target.baseMarkerPosition.x + directional.x,
+        target.baseMarkerPosition.y + directional.y,
+        target.baseMarkerPosition.z + directional.z
+      );
+    }
+    if(target.marker.rotation && target.baseMarkerRotation){
+      const amplitude = Math.max(0.000001, Number(target.directionAmplitude) || 0);
+      target.marker.rotation.x = target.baseMarkerRotation.x + (directional.z / amplitude) * 0.12;
+      target.marker.rotation.y = target.baseMarkerRotation.y;
+      target.marker.rotation.z = target.baseMarkerRotation.z - (directional.x / amplitude) * 0.12;
+    }
     target.marker.userData = target.marker.userData || {};
     target.marker.userData.flickerSample = normalized;
+    target.marker.userData.directionSample = {
+      x: directional.x, y: directional.y, z: directional.z
+    };
     target.marker.userData.lightState = target.state;
   }
   if(target.cone && target.cone.material){
     target.cone.material.opacity = Math.max(0, Math.min(1, target.baseConeOpacity * normalized));
   }
   target.normalizedSample = normalized;
+  target.directionSample = {
+    x: directional.x, y: directional.y, z: directional.z
+  };
 }
 function lightFlickerStep(pointLights, bases, interiorTargets, amplitude, tickIndex){
   (pointLights || []).forEach((l, i) => {
@@ -7017,9 +7085,15 @@ function lightFlickerStep(pointLights, bases, interiorTargets, amplitude, tickIn
     const index = tickIndex != null ? tickIndex : ((t.sampleIndex || 0) + 1);
     t.sampleIndex = index;
     const sample = lightFlickerNormalizedSample(t.seed || t.id, index, t.amplitude);
+    const direction = lightFlickerDirectionSample(
+      t.seed || t.id,
+      index,
+      t.directionAmplitude
+    );
     // CL-R1: one normalized deterministic sample drives the physical PointLight, the visible
-    // emitter material, and the optional shaft on this exact tick. A steady sibling is never visited.
-    lightFlickerApplySample(t, sample);
+    // emitter material, optional shaft, and co-located flame/light dance on this exact tick. A steady
+    // sibling is never visited.
+    lightFlickerApplySample(t, sample, direction);
   });
 }
 function startLightFlicker(amplitude, interiorTargets){
@@ -7030,25 +7104,136 @@ function startLightFlicker(amplitude, interiorTargets){
   const hasProfileFlicker = amplitude > 0 && S.pointLights.length > 0;
   const hasLocalFlicker = S.interiorFlickerTargets.some(t => t && t.state === "flickering");
   if(!hasProfileFlicker && !hasLocalFlicker) return;
-  S.flickerRaf = setInterval(() => {
+  const startTime = typeof performance !== "undefined" && performance.now
+    ? performance.now() : Date.now();
+  const profileTracks = bases.map((base, index) => ({
+    base: base,
+    index: 1,
+    fromSample: 1,
+    toSample: lightFlickerNormalizedSample("profile:" + index, 1, amplitude),
+    startedAt: startTime,
+    intervalMs: 480
+  }));
+  S.interiorFlickerTargets.forEach((target) => {
+    if(!target || target.state !== "flickering") return;
+    target.flickerEventIndex = 0;
+    target.lastIntervalMs = null;
+    target.nextIntervalMs = lightFlickerIntervalMs(
+      target.seed,
+      1,
+      target.cadenceMs,
+      target.intervalJitter
+    );
+    target.flickerFromSample = Number.isFinite(target.normalizedSample)
+      ? target.normalizedSample : 1;
+    target.flickerToSample = lightFlickerNormalizedSample(
+      target.seed || target.id,
+      1,
+      target.amplitude
+    );
+    target.flickerFromDirection = Object.assign(
+      { x: 0, y: 0, z: 0 },
+      target.directionSample || {}
+    );
+    target.flickerToDirection = lightFlickerDirectionSample(
+      target.seed || target.id,
+      1,
+      target.directionAmplitude
+    );
+    target.flickerStartedAt = startTime;
+    target.sampleIndex = 1;
+  });
+  function frame(now){
+    S.flickerRaf = null;
     if(!S.mounted){ stopLightFlicker(); return; }
     S.flickerTick++;
-    lightFlickerStep(
-      hasProfileFlicker ? S.pointLights : [],
-      bases,
-      S.interiorFlickerTargets,
-      amplitude,
-      S.flickerTick
-    );
+    if(hasProfileFlicker){
+      profileTracks.forEach((track, index) => {
+        let catchUpGuard = 0;
+        while(now >= track.startedAt + track.intervalMs){
+          track.startedAt += track.intervalMs;
+          track.index++;
+          track.fromSample = track.toSample;
+          track.toSample = lightFlickerNormalizedSample(
+            "profile:" + index,
+            track.index,
+            amplitude
+          );
+          // A backgrounded tab can resume after thousands of target intervals. Preserve continuity
+          // for ordinary gaps without making the first visible frame pay an unbounded catch-up loop.
+          if(++catchUpGuard >= 64){
+            track.startedAt = now;
+            break;
+          }
+        }
+        const state = lightFlickerInterpolatedState(
+          track.fromSample,
+          track.toSample,
+          null,
+          null,
+          (now - track.startedAt) / track.intervalMs
+        );
+        if(S.pointLights[index]){
+          S.pointLights[index].intensity = Math.max(0.05, track.base * state.sample);
+        }
+      });
+    }
+    S.interiorFlickerTargets.forEach((target) => {
+      if(!target || target.state !== "flickering") return;
+      let catchUpGuard = 0;
+      while(now >= target.flickerStartedAt + target.nextIntervalMs){
+        target.flickerStartedAt += target.nextIntervalMs;
+        target.lastIntervalMs = target.nextIntervalMs;
+        target.flickerEventIndex = (target.flickerEventIndex || 0) + 1;
+        target.flickerFromSample = target.flickerToSample;
+        target.flickerFromDirection = target.flickerToDirection;
+        target.sampleIndex = target.flickerEventIndex + 1;
+        target.flickerToSample = lightFlickerNormalizedSample(
+          target.seed || target.id,
+          target.sampleIndex,
+          target.amplitude
+        );
+        target.flickerToDirection = lightFlickerDirectionSample(
+          target.seed || target.id,
+          target.sampleIndex,
+          target.directionAmplitude
+        );
+        target.nextIntervalMs = lightFlickerIntervalMs(
+          target.seed,
+          target.sampleIndex,
+          target.cadenceMs,
+          target.intervalJitter
+        );
+        if(++catchUpGuard >= 64){
+          target.flickerStartedAt = now;
+          break;
+        }
+      }
+      const state = lightFlickerInterpolatedState(
+        target.flickerFromSample,
+        target.flickerToSample,
+        target.flickerFromDirection,
+        target.flickerToDirection,
+        (now - target.flickerStartedAt) / target.nextIntervalMs
+      );
+      lightFlickerApplySample(target, state.sample, state.direction);
+    });
     if(!hasProfileFlicker && !S.interiorFlickerTargets.some(t => t && t.state === "flickering")){
       stopLightFlicker();
       return;
     }
+    // The scene stays display-rate smooth; the text telemetry is deliberately cheaper so rebuilding
+    // its DOM cannot steal time from the flame/shadow animation the panel is describing.
+    if(S.flickerTick % 6 === 0 && typeof S.clayRoomRefreshLights === "function"){
+      S.clayRoomRefreshLights();
+    }
     markDirty();
-  }, 480); // ~2x/sec per §2's own cadence note
+    S.flickerRaf = requestAnimationFrame(frame);
+  }
+  S.flickerRaf = requestAnimationFrame(frame);
 }
 function stopLightFlicker(){
-  if(S.flickerRaf != null){ clearInterval(S.flickerRaf); S.flickerRaf = null; }
+  if(S.flickerRaf != null){ cancelAnimationFrame(S.flickerRaf); S.flickerRaf = null; }
   S.interiorFlickerTargets = [];
   S.flickerTick = 0;
 }
@@ -8975,14 +9160,32 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
         state: localState,
         seed: String(localFlicker.seed || light.sourceRef || lightId),
         cadenceMs: Math.max(120, Number(localFlicker.cadenceMs) || 480),
+        intervalJitter: Math.max(0, Math.min(0.9,
+          Number(localFlicker.intervalJitter) || 0
+        )),
+        directionAmplitude: Math.max(0, Math.min(0.08,
+          Number(localFlicker.directionAmplitude) || 0
+        )),
         sampleIndex: 0,
         normalizedSample: 1,
+        directionSample: { x: 0, y: 0, z: 0 },
         pl, marker: fixture.emitter, cone: cone ? cone.mesh : null,
         emissiveFlicker: true, // E0 — pulse the emitter's OWN emissiveIntensity, not a disc's opacity (see lightFlickerStep)
         baseIntensity: pl.intensity,
         baseEmissiveIntensity: ITR_FIXTURE_EMISSIVE_INTENSITY,
         baseOpacity: fixture.emitter.material.opacity != null ? fixture.emitter.material.opacity : 1,
         baseConeOpacity: (cone && cone.mesh.material) ? cone.mesh.material.opacity : fallbackConeOpacity,
+        basePointPosition: { x: pl.position.x, y: pl.position.y, z: pl.position.z },
+        baseMarkerPosition: {
+          x: fixture.emitter.position.x,
+          y: fixture.emitter.position.y,
+          z: fixture.emitter.position.z
+        },
+        baseMarkerRotation: {
+          x: fixture.emitter.rotation.x,
+          y: fixture.emitter.rotation.y,
+          z: fixture.emitter.rotation.z
+        },
         amplitude: Math.max(0, Math.min(0.45,
           localFlicker.amplitude != null ? Number(localFlicker.amplitude) : INTERIOR_LIGHT_FLICKER_AMPLITUDE
         ))
@@ -12832,7 +13035,7 @@ function retire(){
   if(S.resizeHandler) window.removeEventListener("resize", S.resizeHandler);
   if(S.raf) cancelAnimationFrame(S.raf);
   if(S.tweenRaf) cancelAnimationFrame(S.tweenRaf); // T3: stop the verb tween loop too, not just render-on-demand's raf
-  stopLightFlicker(); // BOARD LIGHTING: the ~2Hz setInterval flicker tick outlives raf/tweenRaf otherwise
+  stopLightFlicker(); // BOARD LIGHTING: the smooth ambient flame rAF outlives raf/tweenRaf otherwise
   stopMoteDrift(); // VP6 item 3: the mote drift rAF chain is its own loop, outlives raf/tweenRaf otherwise
   drainTweens(S); // A2: run every abandoned tween's onDone (restores shared materials etc.) BEFORE any dispose below
   clearGroup(S.tileGroup);
@@ -14266,7 +14469,7 @@ window.Theater._interiorBuildMotesForTest = function(seedStr, bounds, kind, ligh
 window.Theater._interiorBuildLightConeForTest = function(light, height){ return interiorBuildLightCone(light, height); };
 // runs ONE flicker tick synchronously against caller-supplied stand-ins (never S.pointLights/
 // S.interiorFlickerTargets) — a deterministic fake-clock harness drives Math.random itself and reads
-// the result back, rather than racing startLightFlicker's real 480ms setInterval.
+// the result back, rather than racing startLightFlicker's live requestAnimationFrame interpolation.
 window.Theater._lightFlickerStepForTest = function(pointLights, bases, interiorTargets, amplitude){
   return lightFlickerStep(pointLights, bases, interiorTargets, amplitude);
 };
@@ -14626,6 +14829,7 @@ const LIGHT_TUNABLE_SCHEMA = [
   { path: "profile.bloom.strength", label: "Recipe bloom strength", type: "range", min: 0, max: 3, step: 0.05, group: "profile" },
   { path: "profile.spriteResponse.emissiveFloor", label: "Recipe sprite readability", type: "range", min: 0, max: 0.3, step: 0.005, group: "profile" },
   { path: "profile.light.enabled", label: "Fixture enabled", type: "checkbox", group: "light" },
+  { path: "profile.light.state", label: "Local light state", type: "select", options: ["steady", "flickering"], group: "light" },
   { path: "profile.light.type", label: "Light type", type: "select", options: ["point", "spot", "directional", "environment"], group: "light" },
   { path: "profile.light.temperatureK", label: "Temperature (Kelvin)", type: "range", min: 1000, max: 20000, step: 100, group: "light" },
   { path: "profile.light.colorOverride", label: "Exact color override", type: "checkbox", group: "light" },
@@ -14650,6 +14854,8 @@ const LIGHT_TUNABLE_SCHEMA = [
   { path: "profile.light.shadow.budgetPriority", label: "Shadow budget priority", type: "range", min: 0, max: 3, step: 1, group: "light" },
   { path: "profile.light.flicker.amplitude", label: "Flicker amplitude", type: "range", min: 0, max: 0.5, step: 0.01, group: "light" },
   { path: "profile.light.flicker.cadenceMs", label: "Flicker cadence (ms)", type: "range", min: 100, max: 5000, step: 20, group: "light" },
+  { path: "profile.light.flicker.intervalJitter", label: "Flicker interval variation", type: "range", min: 0, max: 0.9, step: 0.01, group: "light" },
+  { path: "profile.light.flicker.directionAmplitude", label: "Flame direction dance", type: "range", min: 0, max: 0.08, step: 0.001, group: "light" },
   { path: "profile.light.fixtureId", label: "Physical fixture id", type: "text", group: "light" },
   { path: "profile.light.mount", label: "Mount socket", type: "select", options: ["none", "floor", "wall", "ceiling"], group: "light" },
   { path: "profile.light.emitterLocal.x", label: "Emitter local X", type: "range", min: -4, max: 4, step: 0.01, group: "light" },
@@ -15245,6 +15451,17 @@ function clayRoomLightingSnapshot(label){
     const baseMesh = t.emissiveFlicker ? t.baseEmissiveIntensity : t.baseOpacity;
     const emittedNormalized = t.baseIntensity ? emitted / t.baseIntensity : null;
     const meshNormalized = baseMesh ? mesh / baseMesh : null;
+    const pointPosition = t.pl && t.pl.position
+      ? [n(t.pl.position.x), n(t.pl.position.y), n(t.pl.position.z)]
+      : null;
+    const emitterPosition = t.marker && t.marker.position
+      ? [n(t.marker.position.x), n(t.marker.position.y), n(t.marker.position.z)]
+      : null;
+    const direction = t.directionSample || { x: 0, y: 0, z: 0 };
+    const directionRadius = Math.sqrt(
+      direction.x * direction.x + direction.y * direction.y + direction.z * direction.z
+    );
+    const directionAmplitude = Number(t.directionAmplitude) || 0;
     return {
       id: t.id,
       sourceRef: t.sourceRef,
@@ -15273,9 +15490,27 @@ function clayRoomLightingSnapshot(label){
       shadowCameraFar: t.pl && t.pl.shadow && t.pl.shadow.camera
         ? n(t.pl.shadow.camera.far)
         : null,
-      pointPosition: t.pl && t.pl.position
-        ? [n(t.pl.position.x), n(t.pl.position.y), n(t.pl.position.z)]
+      pointPosition: pointPosition,
+      emitterPosition: emitterPosition,
+      basePointPosition: t.basePointPosition
+        ? [n(t.basePointPosition.x), n(t.basePointPosition.y), n(t.basePointPosition.z)]
         : null,
+      baseEmitterPosition: t.baseMarkerPosition
+        ? [n(t.baseMarkerPosition.x), n(t.baseMarkerPosition.y), n(t.baseMarkerPosition.z)]
+        : null,
+      directionSample: { x: n(direction.x), y: n(direction.y), z: n(direction.z) },
+      directionAmplitude: n(directionAmplitude),
+      directionWithinBounds: directionAmplitude === 0
+        ? directionRadius < 0.000001
+        : directionRadius <= directionAmplitude * 1.05,
+      coLocated: !!pointPosition && !!emitterPosition
+        && pointPosition.every(function(value, index){
+          return Math.abs(value - emitterPosition[index]) < 0.000001;
+        }),
+      cadenceMs: t.cadenceMs,
+      intervalJitter: n(t.intervalJitter),
+      lastIntervalMs: t.lastIntervalMs == null ? null : n(t.lastIntervalMs),
+      nextIntervalMs: t.nextIntervalMs == null ? null : n(t.nextIntervalMs),
       materialColor: t.marker && t.marker.material && t.marker.material.color
         ? t.marker.material.color.getHex()
         : null,
@@ -15317,13 +15552,19 @@ function clayRoomLightingSnapshotsMatch(before, after){
       || a.distance !== b.distance || a.decay !== b.decay
       || a.castShadow !== b.castShadow || a.shadowCameraFar !== b.shadowCameraFar
       || JSON.stringify(a.shadowMapSize) !== JSON.stringify(b.shadowMapSize)
-      || JSON.stringify(a.pointPosition) !== JSON.stringify(b.pointPosition)
+      || JSON.stringify(a.basePointPosition) !== JSON.stringify(b.basePointPosition)
+      || JSON.stringify(a.baseEmitterPosition) !== JSON.stringify(b.baseEmitterPosition)
+      || a.directionAmplitude !== b.directionAmplitude
+      || a.cadenceMs !== b.cadenceMs || a.intervalJitter !== b.intervalJitter
       || a.materialColor !== b.materialColor || a.materialEmissive !== b.materialEmissive
-      || a.materialOpacity !== b.materialOpacity || !a.parity) return false;
+      || a.materialOpacity !== b.materialOpacity || !a.parity
+      || !a.coLocated || !a.directionWithinBounds) return false;
     // Flickering is allowed to move by definition; steady means byte-stable photometric + visible.
     if(a.state === "steady"){
       return a.emitted === b.emitted && a.mesh === b.mesh
-        && a.emittedNormalized === 1 && a.meshNormalized === 1;
+        && a.emittedNormalized === 1 && a.meshNormalized === 1
+        && JSON.stringify(a.pointPosition) === JSON.stringify(b.pointPosition)
+        && JSON.stringify(a.emitterPosition) === JSON.stringify(b.emitterPosition);
     }
     return true;
   });
@@ -15369,6 +15610,7 @@ function clayRoomSetLightState(lightId, nextState){
 
 function clayRoomRestoreAuthoredLightBaseline(){
   const recipeId = S.clayRoomLightRecipeId || "clay-opposing-pair";
+  const authoredRecipe = LIGHT_LAB_AUTHORED_BASELINE.profiles[recipeId] || null;
   if(LIGHT_LAB_AUTHORED_BASELINE.profiles[recipeId]){
     LIGHT_TUNABLES.profiles[recipeId] = lightRecipeDeepClone(
       LIGHT_LAB_AUTHORED_BASELINE.profiles[recipeId]
@@ -15376,7 +15618,10 @@ function clayRoomRestoreAuthoredLightBaseline(){
     clayRoomSetLightingRecipe(recipeId, "clayroom-authored-baseline");
   }
   (S.interiorLightTargets || []).forEach(function(t){
-    t.state = "steady";
+    const authoredLight = authoredRecipe && (authoredRecipe.lights || []).find(function(light){
+      return light.id === t.id;
+    });
+    t.state = authoredLight && authoredLight.state === "flickering" ? "flickering" : "steady";
     t.sampleIndex = 0;
     lightFlickerApplySample(t, 1);
   });
@@ -17327,7 +17572,10 @@ function clayRoomMountOverlay(record, host){
       && snap.ambient.color === activeProfile.ambient.color
       && snap.lights.length === activeProfile.points.length
       && snap.lights.every(function(l){
-        return l.state === "steady" && l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity;
+        const authoredLight = activeProfile.points.find(function(point){ return point.id === l.id; });
+        if(!authoredLight || l.state !== authoredLight.state || !l.parity) return false;
+        return l.state === "flickering"
+          || (l.emittedNormalized === 1 && l.meshNormalized === 1);
       }));
     const flickering = snap.lights.filter(function(l){ return l.state === "flickering"; });
     const steady = snap.lights.filter(function(l){ return l.state === "steady"; });
@@ -17355,6 +17603,13 @@ function clayRoomMountOverlay(record, host){
         + " = " + l.meshNormalized.toFixed(6) + " · parity " + (l.parity ? "PASS" : "FAIL"));
       lines.push("  range " + l.distance.toFixed(2) + " · decay " + l.decay.toFixed(2)
         + " · shadows " + (l.castShadow ? "ON" : "OFF"));
+      lines.push("  dance Δ "
+        + [l.directionSample.x, l.directionSample.y, l.directionSample.z]
+          .map(function(value){ return value.toFixed(3); }).join("/")
+        + " · co-located " + (l.coLocated && l.directionWithinBounds ? "PASS" : "FAIL"));
+      lines.push("  interval last/next "
+        + (l.lastIntervalMs == null ? "—" : l.lastIntervalMs.toFixed(0))
+        + "/" + (l.nextIntervalMs == null ? "—" : l.nextIntervalMs.toFixed(0)) + " ms");
       lines.push("  ids point " + String(l.pointUuid).slice(0, 8)
         + " · material " + String(l.materialUuid).slice(0, 8));
       const buttons = lightStateButtons[l.id];

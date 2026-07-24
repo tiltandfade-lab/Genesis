@@ -747,7 +747,12 @@ const check = (name, cond, detail = "") =>
       && torchLight.distance === 24
       && torchLight.authoredRange === true
       && torchLight.decay === 1.5
-      && torchLight.castShadow === true,
+      && torchLight.castShadow === true
+      && torchLight.state === "flickering"
+      && torchLight.flicker.amplitude === 0.1
+      && torchLight.flicker.cadenceMs === 420
+      && torchLight.flicker.intervalJitter === 0.55
+      && torchLight.flicker.directionAmplitude === 0.025,
       JSON.stringify(torchCompiled.board.lights));
   } catch(e) { check("15. jsdom compile check (module present, no throw)", false, e.stack || String(e)); }
 }
@@ -1231,9 +1236,10 @@ const check = (name, cond, detail = "") =>
     /clayRoomRecordLightingProbe/.test(bootSrc)
     && /before-rebuild/.test(bootSrc) && /during-animation/.test(bootSrc) && /after-animation/.test(bootSrc)
     && /duringPass:\s*!!preserved/.test(bootSrc));
-  check("29h. authored-baseline control disables every flicker and restores sample 1 exactly once",
+  check("29h. authored-baseline control restores each recipe's authored local state and sample 1",
     /Restore authored lighting baseline/.test(bootSrc)
     && /function\s+clayRoomRestoreAuthoredLightBaseline/.test(bootSrc)
+    && /authoredLight\s*&&\s*authoredLight\.state\s*===\s*"flickering"/.test(bootSrc)
     && /lightFlickerApplySample\(t,\s*1\)/.test(bootSrc));
 }
 

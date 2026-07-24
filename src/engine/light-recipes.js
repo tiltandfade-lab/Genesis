@@ -93,6 +93,7 @@ function lightRecipeValidate(profile) {
     if (!/^(board-relative|socket-relative)$/.test(light.positionStrategy || "")) errors.push(label + ".positionStrategy is invalid");
     if (!lightRecipeFiniteInRange(light.azimuthDeg, -360, 360)) errors.push(label + ".azimuthDeg is invalid");
     if (!lightRecipeFiniteInRange(light.elevationDeg, -90, 90)) errors.push(label + ".elevationDeg is invalid");
+    if (!/^(steady|flickering)$/.test(light.state || "")) errors.push(label + ".state is invalid");
     if (!light.spot || !lightRecipeFiniteInRange(light.spot.coneDeg, 1, 179)
       || !lightRecipeFiniteInRange(light.spot.penumbra, 0, 1)) errors.push(label + ".spot is invalid");
     if (!light.shadow || typeof light.shadow.cast !== "boolean"
@@ -102,7 +103,9 @@ function lightRecipeValidate(profile) {
       || !lightRecipeFiniteInRange(light.shadow.budgetPriority, 0, 3)) errors.push(label + ".shadow is invalid");
     if (!light.flicker || !light.flicker.recipeId
       || !lightRecipeFiniteInRange(light.flicker.amplitude, 0, 0.5)
-      || !lightRecipeFiniteInRange(light.flicker.cadenceMs, 100, 5000)) errors.push(label + ".flicker is invalid");
+      || !lightRecipeFiniteInRange(light.flicker.cadenceMs, 100, 5000)
+      || !lightRecipeFiniteInRange(light.flicker.intervalJitter, 0, 0.9)
+      || !lightRecipeFiniteInRange(light.flicker.directionAmplitude, 0, 0.08)) errors.push(label + ".flicker is invalid");
     if (profile.source && profile.source.visibleEmitterRequired) {
       if (!light.fixtureId) errors.push(label + ".fixtureId is required");
       if (!light.emitterLocal) errors.push(label + ".emitterLocal is required");
@@ -120,7 +123,12 @@ function lightRecipeNormalize(profile) {
     if (light.colorOverride === false) light.color = lightRecipeKelvinColor(light.temperatureK);
     light.enabled = light.enabled !== false;
     light.state = light.state || "steady";
-    light.flicker = Object.assign({ amplitude: 0, cadenceMs: 480 }, light.flicker || {});
+    light.flicker = Object.assign({
+      amplitude: 0,
+      cadenceMs: 480,
+      intervalJitter: 0,
+      directionAmplitude: 0
+    }, light.flicker || {});
   });
   var report = lightRecipeValidate(copy);
   if (!report.ok) throw new Error("invalid light recipe '" + (copy.id || "?") + "': " + report.errors.join("; "));

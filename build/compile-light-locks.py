@@ -227,6 +227,9 @@ def validate_lock(lock: object) -> dict:
             finite_number(light.get("heightM"), f"{llabel}.heightM", 0, 20)
             finite_number(light.get("rangeM"), f"{llabel}.rangeM", 0, 100)
             finite_number(light.get("falloff"), f"{llabel}.falloff", 0, 2)
+            if "state" in light:
+                require(light["state"] in {"steady", "flickering"},
+                        f"{llabel}.state must be steady/flickering")
             finite_number(light.get("azimuthDeg"), f"{llabel}.azimuthDeg", -360, 360)
             finite_number(light.get("elevationDeg"), f"{llabel}.elevationDeg", -90, 90)
             spot = light.get("spot")
@@ -247,6 +250,10 @@ def validate_lock(lock: object) -> dict:
                     f"{llabel}.flicker.recipeId is required")
             finite_number(flicker.get("amplitude"), f"{llabel}.flicker.amplitude", 0, 0.5)
             finite_number(flicker.get("cadenceMs"), f"{llabel}.flicker.cadenceMs", 100, 5000)
+            finite_number(flicker.get("intervalJitter", 0),
+                          f"{llabel}.flicker.intervalJitter", 0, 0.9)
+            finite_number(flicker.get("directionAmplitude", 0),
+                          f"{llabel}.flicker.directionAmplitude", 0, 0.08)
             require(light.get("mount") in ALLOWED_MOUNTS, f"{llabel}.mount is invalid")
             validate_vec3(light.get("emitterLocal"), f"{llabel}.emitterLocal", -4, 4)
             if source["visibleEmitterRequired"]:

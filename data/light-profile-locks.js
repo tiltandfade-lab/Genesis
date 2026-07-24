@@ -230,9 +230,11 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
             "z": 0.18
           },
           "flicker": {
-            "recipeId": "steady",
-            "amplitude": 0.14,
-            "cadenceMs": 480
+            "recipeId": "open-flame-dance-v1",
+            "amplitude": 0.1,
+            "cadenceMs": 420,
+            "intervalJitter": 0.55,
+            "directionAmplitude": 0.025
           },
           "id": "torch-key",
           "label": "torch flame",
@@ -247,7 +249,8 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           },
           "heightM": 3.3528,
           "rangeM": 36.576,
-          "falloff": 1.5
+          "falloff": 1.5,
+          "state": "flickering"
         }
       ]
     },

@@ -902,5 +902,47 @@ const check = (name, cond, detail = "") =>
     /raw\s*===\s*"1"/.test(flagFn) && /raw\s*===\s*"0"/.test(flagFn), flagFn);
 }
 
+// ============================================================================
+// 22. CL-R3a — THE OMISSION DECISION, EXECUTED (not grepped).
+//
+// Adam, 2026-07-23: "please make sure you prove everything you do." Check 21 proves the WIRING by
+// source text; this check runs the actual decision function headless. wallUpperCameraSideBlockingSet
+// (src/ui/theater-shot.js, pure) is the single geometry authority the omission keys on; the live
+// boot calls it with yawDeg = S.rotationStep*90 + CAM_YAW_OFFSET_DEG, and CAM_YAW_OFFSET_DEG = 45
+// with rotationStep 0 under the fixed camera — so yaw 45 below is the REAL production yaw, not a
+// convenient synthetic. Segments mirror the clay room's own plan rect (3,13)-(7,17). Expected, and
+// confirmed live by the banked receipt (omit-receipt.json: omitted segs at mids 7.5/15.5 + 5/17.5):
+// the +x (east) and +z (south) edges are camera-side; north/west are not; out-of-band never is.
+// ============================================================================
+{
+  // theater-shot.js is an ES-module boundary file (manifest type:"module", NOT in the classic
+  // loadOrder), so freshWin() never loads it — but its own manifest contract says "plain-Node
+  // importable + unit-testable", which is exactly what this check exercises: a REAL import of the
+  // production file, same pattern as dev/verify-theater-shot.mjs.
+  const shotMod = await import(new URL("../src/ui/theater-shot.js", import.meta.url));
+  const fn = shotMod.wallUpperCameraSideBlockingSet;
+  check("22a. wallUpperCameraSideBlockingSet is executable in the harness (pure, no GL needed)",
+    typeof fn === "function");
+  if(typeof fn === "function"){
+    const fr = { minX: 3, maxX: 7, minZ: 13, maxZ: 17 };   // the clay room's own spatialized rect
+    const segs = [
+      { a: { x: 3, z: 13 }, b: { x: 7, z: 13 } },   // 0 north edge — far side under a +x/+z camera
+      { a: { x: 7, z: 13 }, b: { x: 7, z: 17 } },   // 1 east edge — camera side
+      { a: { x: 3, z: 17 }, b: { x: 7, z: 17 } },   // 2 south edge — camera side
+      { a: { x: 3, z: 13 }, b: { x: 3, z: 17 } },   // 3 west edge — far side
+      { a: { x: 30, z: 30 }, b: { x: 34, z: 30 } }, // 4 out of the focus band entirely
+    ];
+    const got = fn({ focusRect: fr, wallSegments: segs, cx: 5, cz: 15, yawDeg: 45 });
+    check("22b. the east + south edges (camera side at the real yaw 45°) are selected",
+      got.has(1) && got.has(2), JSON.stringify([...got]));
+    check("22c. the north + west edges (far side) are NOT selected",
+      !got.has(0) && !got.has(3), JSON.stringify([...got]));
+    check("22d. an out-of-band segment is NOT selected (the occludes-staged-floor condition)",
+      !got.has(4), JSON.stringify([...got]));
+    check("22e. the harness result matches the banked live receipt (2 camera-side of 4 room edges)",
+      got.size === 2, "got.size=" + got.size);
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -388,6 +388,19 @@ production shell compiler (now the clay default; `?clayshell=0` restores the ins
   mount-socket warning — it only ever fired on the instanced path, which has no mount-slot data.
   Confirmed across the three receipts: omit NONE · fade-only NONE · instanced WARNS.
 
+**CL-R3a proof ledger (Adam's standing instruction, 2026-07-23: "please make sure you prove
+everything you do" — every claim above, with its evidence):**
+
+| Claim | Proof |
+|---|---|
+| The omission selects exactly the camera-side walls | Executed, not grepped: harness check 22 imports `wallUpperCameraSideBlockingSet` (plain-Node, per its manifest contract) and runs it on the clay room's own rect at the REAL production yaw (45° — `CAM_YAW_OFFSET_DEG=45`, rotationStep 0): east+south in, north+west out, out-of-band out. Matches the live receipt (`omitted` mids 7.5/15.5 + 5/17.5). Arithmetic: seg1 dot +2.12, seg2 +1.77, seg0 −2.12, seg3 −1.77 against the camera direction from the receipt's own pose. |
+| The decision is deterministic | `omit-receipt.json` early == settled (byte-equal JSON); an independent page load in a separate probe reproduced the identical set. |
+| The torch genuinely wall-mounts under the shell | Live probe: `{fixtureId: "bracket-generic", mount: "wall", ownerSegIndex: 3}` in both omit and fade modes; the instanced probe shows `mount: "floor"` + the warning. |
+| Mechanics are untouched by omission | `grep wallUpper src/engine/ src/world/` → 0 hits; the mesh list is consumed only by render + harness code. Walls' mechanical existence never derived from upper meshes. |
+| Omit vs fade is visually near-identical here | Pixel diff of the two clean frames: mean 2.74/channel, 0.027% of pixels differ >10/channel, and the diff clusters are mote particles + torch flicker, not walls. |
+| **CORRECTION — the shadow argument was overstated.** | The PROPERTY is proven (uppers set `castShadow = true`, theater-boot.js:11389, and exist at 0.08 opacity in fade mode; THREE's shadow pass ignores opacity), but in THIS fixture the interior light throws wall shadows outward, so the visible difference is nil (the pixel diff above bounds it). In this scene, omission's real advantages over fade are **determinism** (receipt data, not render state) and **cost** (no mesh/material/tween). The shadow benefit becomes visible only in fixtures where a faded wall sits between a light and staged floor — untested, and claimed as nothing more. |
+| Region measurements banked | `dev/clay-captures/cl-r3a/measure.json` (omit / fade-only / instanced, declared regions). |
+
 Still open in CL-R3a's scope: the staged+latched trigger's executable test (rides C1B's door state
 machine) · aperture carve-out (CL-F01 bench) · strategic-view all-walls (the toggle does not exist
 yet) · promotion of the omission to production (Adam's call, after he eyeballs the capture).

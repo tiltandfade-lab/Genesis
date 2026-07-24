@@ -1,0 +1,114 @@
+[
+ {
+  "file": "spr-fantasy-swarm-of-bats.png",
+  "strayPx": 609,
+  "blobs": 3,
+  "mainPx": 7943,
+  "strayPct": 7.1
+ },
+ {
+  "file": "spr-fantasy-elk.png",
+  "strayPx": 366,
+  "blobs": 1,
+  "mainPx": 24031,
+  "strayPct": 1.5
+ },
+ {
+  "file": "spr-fantasy-swarm-of-stirges.png",
+  "strayPx": 276,
+  "blobs": 3,
+  "mainPx": 399,
+  "strayPct": 40.9
+ },
+ {
+  "file": "spr-fantasy-clockwork-law-construct-duodrone.png",
+  "strayPx": 239,
+  "blobs": 1,
+  "mainPx": 15472,
+  "strayPct": 1.5
+ },
+ {
+  "file": "spr-fantasy-drowned-husk.png",
+  "strayPx": 224,
+  "blobs": 1,
+  "mainPx": 24805,
+  "strayPct": 0.9
+ },
+ {
+  "file": "spr-fantasy-galeb-duhr.png",
+  "strayPx": 211,
+  "blobs": 1,
+  "mainPx": 27035,
+  "strayPct": 0.8
+ },
+ {
+  "file": "spr-fantasy-seahorse.png",
+  "strayPx": 162,
+  "blobs": 2,
+  "mainPx": 11475,
+  "strayPct": 1.4
+ },
+ {
+  "file": "spr-fantasy-astral-raider-dracomancer.png",
+  "strayPx": 92,
+  "blobs": 1,
+  "mainPx": 18631,
+  "strayPct": 0.5
+ },
+ {
+  "file": "spr-fantasy-colossus.png",
+  "strayPx": 81,
+  "blobs": 1,
+  "mainPx": 31248,
+  "strayPct": 0.3
+ },
+ {
+  "file": "spr-fantasy-dust-mephit.png",
+  "strayPx": 80,
+  "blobs": 1,
+  "mainPx": 13907,
+  "strayPct": 0.6
+ },
+ {
+  "file": "spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men.png",
+  "strayPx": 76,
+  "blobs": 1,
+  "mainPx": 22818,
+  "strayPct": 0.3
+ },
+ {
+  "file": "spr-fantasy-swarm-of-insects.png",
+  "strayPx": 73,
+  "blobs": 2,
+  "mainPx": 11388,
+  "strayPct": 0.6
+ },
+ {
+  "file": "spr-fantasy-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault.png",
+  "strayPx": 66,
+  "blobs": 1,
+  "mainPx": 16579,
+  "strayPct": 0.4
+ },
+ {
+  "file": "spr-fantasy-pixie-wonderbringer.png",
+  "strayPx": 40,
+  "blobs": 1,
+  "mainPx": 10701,
+  "strayPct": 0.4
+ },
+ {
+  "file": "spr-fantasy-performer-legend.png",
+  "strayPx": 27,
+  "blobs": 1,
+  "mainPx": 20453,
+  "strayPct": 0.1
+ },
+ {
+  "file": "spr-fantasy-empyrean.png",
+  "strayPx": 23,
+  "blobs": 1,
+  "mainPx": 26785,
+  "strayPct": 0.1
+ }
+]

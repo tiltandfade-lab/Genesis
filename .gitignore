@@ -74,6 +74,7 @@ dev/diegetic-light-shots/
 dev/material-lane/exports/
 dev/material-cards/out/
 dev/lit-texture-proof/out/
+dev/material-workbench-proof/out/
 
 # Obsidian editor config (Adam's vault view state — never tracked)
 .obsidian/

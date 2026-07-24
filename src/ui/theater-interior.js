@@ -1657,7 +1657,16 @@ function interiorBuildBoard(plan, opts) {
         // up with the kit mesh), while the wall-thickness reveal + STAGE-A A1 darkness-portal blocks
         // further down are UNCHANGED (they render the surrounding WALL, not the frame, regardless of
         // which frame geometry fills the aperture).
-        doorAxes.push({ x, z: y, widthAxisIsZ }); // every door cell, kit or prism — the leaf's one axis authority
+        // Every door cell, kit or prism — the leaf's one axis authority, plus the OUTWARD edge signs
+        // (which way "out of the room" points along the passage axis, from the pierced room's own
+        // rect). Pure geometry facts; the renderer decides what to DO with them (the door-mount
+        // offset is a projection concern — where the wall system it built actually stands).
+        let edgeSignX = 0, edgeSignZ = 0;
+        if (doorRoom) {
+          if (!widthAxisIsZ) edgeSignZ = (y <= doorRoom.y) ? -1 : ((y >= doorRoom.y + doorRoom.d - 1) ? 1 : 0);
+          else edgeSignX = (x <= doorRoom.x) ? -1 : ((x >= doorRoom.x + doorRoom.w - 1) ? 1 : 0);
+        }
+        doorAxes.push({ x, z: y, widthAxisIsZ, edgeSignX, edgeSignZ });
         const kitEligible = !!KIT_DOORS_ENABLED && itrKitDoorEligible(x, y, plan, widthAxisIsZ, squeeze);
         if (kitEligible) {
           kitDoors.push({ x, z: y, widthAxisIsZ, pack: "kenney-modular-dungeon-kit", slug: "gate-door" });

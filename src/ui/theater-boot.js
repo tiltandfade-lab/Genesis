@@ -4235,6 +4235,67 @@ function itrDoorHingeSign(sourceRef){
 // template has finished its async preload (interiorBuildKitDoorMesh returns non-null only then), the
 // kit assembly renders INSTEAD of the prism hinge+leaf below — every prism path survives as the
 // unconditional fallback (kitDoorInfo absent, or the template still cold) per the wave's own posture.
+// ─── DOOR MOUNT OFFSET (Adam, 2026-07-23: "it is not socketed into the wall, it is floating out in
+// front of the wall") ────────────────────────────────────────────────────────────────────────────
+// Measured cause (census bb probe, dev/clay-captures/door/): the whole door assembly — frame prisms,
+// reveal, portal card, leaf — is authored at the door CELL's centre (leaf z −2.0), while the
+// room-shell wall system stands at the room BOUNDARY (north wall body centred z −2.61, inner face
+// −2.465). Half a cell of daylight between a door and its wall. The instanced wall channel puts
+// walls ON cells, so the cell-centre convention was correct there — this is a wall-SYSTEM-dependent
+// projection fact, so it is resolved HERE in the renderer, not in the data layer: theater-interior
+// emits pure outward edge signs (doorAxes), and this helper turns them into a world offset.
+//   along: ITR_DOOR_MOUNT_ALONG_SHELL (cell centre → boundary line, 0.5) when the shell wall system
+//     is active, 0 for the instanced system — plus the live tune's own along.
+//   tune (GS.doorMountTune, the clay workbench's Door tab): per-axis offsets {along, lateral,
+//     vertical}. A RECIPE OVERRIDE consumed at build time — the tuner never drags meshes; it edits
+//     these numbers and replays the board, per the Workbench law ("allowed edits become validated
+//     table rows, versioned recipes/locks, or renderer invariants").
+const ITR_DOOR_MOUNT_ALONG_SHELL = 0.5;
+function itrDoorMountFor(axisInfo){
+  if(!axisInfo) return null;
+  const tune = (typeof GS !== "undefined" && GS && GS.doorMountTune) ? GS.doorMountTune : {};
+  const shellOn = (typeof ITR_ROOM_SHELL !== "undefined") ? !!ITR_ROOM_SHELL : false;
+  const along = (shellOn ? ITR_DOOR_MOUNT_ALONG_SHELL : 0) + (typeof tune.along === "number" ? tune.along : 0);
+  const lateral = (typeof tune.lateral === "number") ? tune.lateral : 0;
+  const dy = (typeof tune.vertical === "number") ? tune.vertical : 0;
+  return {
+    dx: (axisInfo.edgeSignX || 0) * along + (axisInfo.widthAxisIsZ ? 0 : lateral),
+    dz: (axisInfo.edgeSignZ || 0) * along + (axisInfo.widthAxisIsZ ? lateral : 0),
+    dy: dy,
+  };
+}
+// "x,z" -> {dx,dz,dy}, recomputed every rebuild from the board's own doorAxes + the live tune, and
+// reported on S.doorMountReport so every capture receipt names the applied offsets.
+function itrDoorMountMapFrom(doorAxes){
+  const map = new Map();
+  const report = { shellOn: (typeof ITR_ROOM_SHELL !== "undefined") ? !!ITR_ROOM_SHELL : false,
+    alongDefault: ITR_DOOR_MOUNT_ALONG_SHELL,
+    tune: (typeof GS !== "undefined" && GS && GS.doorMountTune) ? GS.doorMountTune : null,
+    perDoor: [] };
+  (doorAxes || []).forEach(function(a){
+    if(!a) return;
+    const m = itrDoorMountFor(a);
+    if(!m) return;
+    map.set(Math.round(a.x) + "," + Math.round(a.z), m);
+    report.perDoor.push({ x: a.x, z: a.z, dx: +m.dx.toFixed(3), dz: +m.dz.toFixed(3), dy: +m.dy.toFixed(3) });
+  });
+  S.doorMountReport = report;
+  return map;
+}
+// applies a door-mount map to a list of instance rows (doorframe / portal kinds) — always a CLONE,
+// never a mutation, so a replayed S.lastBoard can never compound offsets across rebuilds.
+function itrApplyDoorMounts(list, mountMap){
+  if(!mountMap || !mountMap.size || !list || !list.length) return list;
+  return list.map(function(row){
+    if(!row) return row;
+    const m = mountMap.get(Math.round(row.x) + "," + Math.round(row.z));
+    if(!m) return row;
+    return Object.assign({}, row, {
+      ox: (row.ox || 0) + m.dx, oz: (row.oz || 0) + m.dz,
+      yBase: (row.yBase || 0) + m.dy,
+    });
+  });
+}
 function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile, doorAxisInfo){
   if(kitDoorInfo){
     const kitMesh = interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo.widthAxisIsZ, realmId, realmProfile);
@@ -4278,7 +4339,10 @@ function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorIn
 
   const hinge = new THREE.Group();
   const floorTop = interiorFloorTopAt(floorTopMap, entry.x, entry.y);
-  hinge.position.set((entry.x || 0) - (cx || 0), floorTop, (entry.y || 0) - (cz || 0));
+  // door-mount offset (see itrDoorMountFor above): the leaf mounts where the WALL is, not where the
+  // cell centre is — same offset the frame/portal rows get, so the assembly moves as one thing.
+  const doorMount = itrDoorMountFor(doorAxisInfo) || { dx: 0, dz: 0, dy: 0 };
+  hinge.position.set((entry.x || 0) - (cx || 0) + doorMount.dx, floorTop + doorMount.dy, (entry.y || 0) - (cz || 0) + doorMount.dz);
   hinge.rotation.y = leafSpansZ ? Math.PI / 2 : 0;
 
   // D4c: rest pose (rotation only) comes from the ONE shared pose function itrDoorRestPose — the
@@ -10999,9 +11063,12 @@ function setInteriorBoard(data){
   // texture at proper value, THEN apply the recess-darken (ITR_SCENE_DOORFRAME_VALUE) so it reads a
   // touch darker than the wall — a recessed textured stone arch, per the mock. Untextured (no wallTex)
   // keeps the old plain trim-value darken. rigOn-gated so the study baseline stays honest.
+  // door-mount map for THIS rebuild (doorAxes + live tune; writes S.doorMountReport)
+  const doorMountMap = itrDoorMountMapFrom(data.doorAxes);
   let doorList = wallTex
     ? itrNeutralizeInstanceColors(inst.doorframe, kit.wallColor).map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) }))
     : (rigOn ? inst.doorframe.map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) })) : inst.doorframe);
+  doorList = itrApplyDoorMounts(doorList, doorMountMap); // socket the frame into its wall (clone, never a mutation)
   // DOORFRAME OCCLUSION FIX (found live re-gating dev/verify-bw2-1b-occlusion.mjs --with-render, checks
   // 31/32/35): doorframes (the main frame body AND BW2-5's own arch-header prisms) were NEVER wired into
   // the S-1/A4 occlusion classify pass — only wall/pillar/furniture were (this unit's own STAGE-A A4
@@ -11519,7 +11586,7 @@ function setInteriorBoard(data){
   // interiorBuildBoard, A1 addition), a sibling of `instances` same as skirt just above (never counted
   // toward the "4 known instance kinds" data-shape check). Untextured flat dark slab (the card IS a
   // flat void-color read, not a surface that wants grain) — null texture, same convention skirt uses.
-  const portalMesh = interiorBuildInstancedMesh(data.portals, cx, cz, null, variant, "portal");
+  const portalMesh = interiorBuildInstancedMesh(itrApplyDoorMounts(data.portals, doorMountMap), cx, cz, null, variant, "portal");
   // BW2-5: furniture-class blocker volumes + wall-hang extrusion props (THE PROP PERSPECTIVE LAW) —
   // built further below (after dressing) since both read S.interiorFloorTopMap; declared here so the
   // mesh-count/group-add sweep stays one place. See interiorBuildFurniture/interiorBuildWallProps.
@@ -12958,6 +13025,8 @@ window.Theater._claySurfaceCensusForTest = function(){
 // CL-R3a — the omission decision set, verbatim off S (deterministic board data, echoed into every
 // capture receipt so a frame names exactly which wall segments were omitted and by which rule).
 window.Theater._wallOmissionForTest = function(){ return S.wallOmissionReport || null; };
+// door tranche — the applied door-mount offsets (shell-aware default + the workbench tune)
+window.Theater._doorMountForTest = function(){ return S.doorMountReport || null; };
 window.Theater._clayProvenanceAuditForTest = function(){
   return (typeof clayRoomProvenanceAudit === "function") ? clayRoomProvenanceAudit() : null;
 };
@@ -14747,7 +14816,14 @@ function clayRoomSurfaceCensus(){
       if(mesh.geometry){
         if(!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
         const bb = mesh.geometry.boundingBox;
-        if(bb) size = [+(bb.max.x - bb.min.x).toFixed(3), +(bb.max.y - bb.min.y).toFixed(3), +(bb.max.z - bb.min.z).toFixed(3)];
+        if(bb){
+          size = [+(bb.max.x - bb.min.x).toFixed(3), +(bb.max.y - bb.min.y).toFixed(3), +(bb.max.z - bb.min.z).toFixed(3)];
+          // world centre of the geometry's own bb (translate-only — exact for the unrotated shell/
+          // instanced meshes this exists to locate; a rotated mesh's pos field is already honest).
+          worldPos = [+(worldPos[0] + (bb.min.x + bb.max.x) / 2).toFixed(3),
+                      +(worldPos[1] + (bb.min.y + bb.max.y) / 2).toFixed(3),
+                      +(worldPos[2] + (bb.min.z + bb.max.z) / 2).toFixed(3)];
+        }
       }
     } catch(e){}
     const row = {
@@ -15108,10 +15184,12 @@ function clayRoomMountOverlay(record, host){
   explainTabBtn.textContent = "Explain";
   const surfacesTabBtn = document.createElement("button");
   surfacesTabBtn.textContent = "Surfaces";
-  [factsTabBtn, explainTabBtn, surfacesTabBtn].forEach(function(b){
+  const mountTabBtn = document.createElement("button");
+  mountTabBtn.textContent = "Mount";
+  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn].forEach(function(b){
     b.style.cssText = "flex:1;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   });
-  tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn);
+  tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn); tabBar.appendChild(mountTabBtn);
   panel.appendChild(tabBar);
 
   const factsBody = document.createElement("pre");
@@ -15173,22 +15251,152 @@ function clayRoomMountOverlay(record, host){
     surfacesBody.textContent = lines.join("\n");
   }
 
+  // ── Mount tab — DEV-PORTAL.md §6.1 Object Workbench, the DOOR-MOUNT SLICE (landed early; see the
+  // spec's own implementation-status note). Adam, 2026-07-23: "i need the dev tool to just do it
+  // myself, make sure there is some kind of snapping and individual axis control." Conformance:
+  //   - §6.1's nudge ladder verbatim: click/arrow 0.01 · Shift 0.001 · Alt 0.10 (world units).
+  //   - individual axes: depthInWall (along, + = deeper into the wall) · sideLap (lateral along the
+  //     wall run) · sill (vertical). Mapped onto GS.doorMountTune {along, lateral, vertical}.
+  //   - named snap candidates per the spec amendment: cell-centre / boundary / wall-centre (the
+  //     wall-centre candidate is MEASURED off the built wall body nearest the door, live).
+  //   - portal rule 4: edits mutate only the in-memory tune and replay the board — never a mesh
+  //     drag, never a JS-constant rewrite. The lock-shaped export (kind:object-mount) is the save
+  //     surrogate until the portal's lock compiler exists.
+  const mountBody = document.createElement("div");
+  mountBody.style.cssText = "display:none;font:11px/1.5 monospace;color:#dde;";
+  function clayMountTune(){ 
+    if(typeof GS === "undefined" || !GS) return null;
+    if(!GS.doorMountTune) GS.doorMountTune = { along: 0, lateral: 0, vertical: 0 };
+    return GS.doorMountTune;
+  }
+  function clayMountReplay(){
+    S.boardKey = null;
+    if(S.lastBoard && S.lastBoard.kind === "interior3d") setInteriorBoard(S.lastBoard);
+  }
+  // wall-centre snap: measure the built wall body nearest the door along its passage axis — the
+  // same translate-only bb-centre read the census uses, scoped to room-shell wall meshes.
+  function clayMountWallCentreAlong(){
+    const axes = (S.lastBoard && S.lastBoard.doorAxes && S.lastBoard.doorAxes[0]) || null;
+    if(!axes || !S.interiorGroup) return null;
+    const passageIsZ = !axes.widthAxisIsZ;
+    const doorWorld = passageIsZ ? (axes.z - (S.boardOrigin ? S.boardOrigin.cz : 0)) : (axes.x - (S.boardOrigin ? S.boardOrigin.cx : 0));
+    let best = null, bestD = Infinity;
+    S.interiorGroup.traverse(function(node){
+      if(!node.isMesh || !node.userData || String(node.userData.interiorKind || "").indexOf("wall") < 0) return;
+      if(!node.geometry) return;
+      if(!node.geometry.boundingBox) node.geometry.computeBoundingBox();
+      const bb = node.geometry.boundingBox; if(!bb) return;
+      const c = passageIsZ ? (node.position.z + (bb.min.z + bb.max.z) / 2) : (node.position.x + (bb.min.x + bb.max.x) / 2);
+      const thick = passageIsZ ? (bb.max.z - bb.min.z) : (bb.max.x - bb.min.x);
+      if(thick > 1) return; // a wall RUN measured along its run axis, not its thickness — skip
+      const d = Math.abs(c - doorWorld);
+      if(d < bestD){ bestD = d; best = c; }
+    });
+    if(best === null) return null;
+    // convert the wall-centre world coord into a NET along value (cell centre -> wall centre,
+    // outward-signed), then into the TUNE value (net minus the anchor-derivation default).
+    const sign = passageIsZ ? (axes.edgeSignZ || 0) : (axes.edgeSignX || 0);
+    if(!sign) return null;
+    const net = (best - doorWorld) * sign;
+    return net - ITR_DOOR_MOUNT_ALONG_SHELL;
+  }
+  const mountRows = {};
+  function clayMountRender(){
+    const tune = clayMountTune(); if(!tune) return;
+    const rep = S.doorMountReport;
+    mountRows.depthInWall.textContent = (tune.along >= 0 ? "+" : "") + tune.along.toFixed(3);
+    mountRows.sideLap.textContent = (tune.lateral >= 0 ? "+" : "") + tune.lateral.toFixed(3);
+    mountRows.sill.textContent = (tune.vertical >= 0 ? "+" : "") + tune.vertical.toFixed(3);
+    mountRows.applied.textContent = rep && rep.perDoor[0]
+      ? ("applied dx " + rep.perDoor[0].dx + "  dz " + rep.perDoor[0].dz + "  dy " + rep.perDoor[0].dy +
+         "  (anchor default along " + rep.alongDefault + ", shell " + rep.shellOn + ")")
+      : "no door mounted";
+    mountRows.exportBox.value = JSON.stringify({
+      kind: "object-mount", id: "door", version: 1,
+      fixture: "clay-c1a", recipe: "camera-side-wall-omission v1 + clay-diagnostic-surface v1",
+      values: { depthInWallU: tune.along, sideLapU: tune.lateral, sillU: tune.vertical },
+      appliedWorld: rep && rep.perDoor[0] ? rep.perDoor[0] : null,
+    });
+  }
+  function clayMountNudge(axis, dir, ev){
+    const tune = clayMountTune(); if(!tune) return;
+    const step = ev && ev.shiftKey ? 0.001 : (ev && ev.altKey ? 0.10 : 0.01); // §6.1's ladder verbatim
+    tune[axis] = +(tune[axis] + dir * step).toFixed(3);
+    clayMountReplay(); clayMountRender();
+  }
+  function clayMountSnap(which){
+    const tune = clayMountTune(); if(!tune) return;
+    if(which === "cell-centre") tune.along = -ITR_DOOR_MOUNT_ALONG_SHELL; // net 0 from the cell
+    else if(which === "boundary") tune.along = 0;                        // the anchor default
+    else if(which === "wall-centre"){
+      const v = clayMountWallCentreAlong();
+      if(v !== null) tune.along = +v.toFixed(3);
+    }
+    clayMountReplay(); clayMountRender();
+  }
+  [["depthInWall", "along", "depth into wall"], ["sideLap", "lateral", "lateral along run"], ["sill", "vertical", "vertical"]].forEach(function(def){
+    const row = document.createElement("div");
+    row.style.cssText = "display:flex;align-items:center;gap:5px;margin:3px 0;";
+    const label = document.createElement("span");
+    label.textContent = def[0]; label.title = def[2];
+    label.style.cssText = "width:86px;color:#9ab;";
+    const minus = document.createElement("button"); minus.textContent = "−";
+    const value = document.createElement("span"); value.style.cssText = "width:64px;text-align:center;";
+    const plus = document.createElement("button"); plus.textContent = "+";
+    [minus, plus].forEach(function(b){ b.style.cssText = "font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:1px 8px;"; });
+    minus.addEventListener("click", function(ev){ clayMountNudge(def[1], -1, ev); });
+    plus.addEventListener("click", function(ev){ clayMountNudge(def[1], +1, ev); });
+    row.appendChild(label); row.appendChild(minus); row.appendChild(value); row.appendChild(plus);
+    mountBody.appendChild(row);
+    mountRows[def[0]] = value;
+  });
+  const stepNote = document.createElement("div");
+  stepNote.textContent = "click ±0.01 · shift-click ±0.001 · alt-click ±0.10 (world units; 1 = 1 cell = 5 ft)";
+  stepNote.style.cssText = "color:#7a8494;margin:2px 0 6px;";
+  mountBody.appendChild(stepNote);
+  const snapRow = document.createElement("div");
+  snapRow.style.cssText = "display:flex;gap:4px;margin:2px 0 6px;";
+  ["cell-centre", "boundary", "wall-centre"].forEach(function(which){
+    const b = document.createElement("button");
+    b.textContent = "snap " + which;
+    b.style.cssText = "flex:1;font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:3px;";
+    b.addEventListener("click", function(){ clayMountSnap(which); });
+    snapRow.appendChild(b);
+  });
+  mountBody.appendChild(snapRow);
+  mountRows.applied = document.createElement("div");
+  mountRows.applied.style.cssText = "color:#9ab;margin:4px 0;";
+  mountBody.appendChild(mountRows.applied);
+  const exportLabel = document.createElement("div");
+  exportLabel.textContent = "lock export (kind:object-mount — copy; the portal's SAVE pipeline lands with DEV-PORTAL):";
+  exportLabel.style.cssText = "color:#7a8494;margin-top:6px;";
+  mountBody.appendChild(exportLabel);
+  mountRows.exportBox = document.createElement("textarea");
+  mountRows.exportBox.readOnly = true;
+  mountRows.exportBox.style.cssText = "width:100%;height:64px;font:10px monospace;background:#1a1a20;color:#cd9;border:1px solid #333;border-radius:3px;margin-top:2px;";
+  mountBody.appendChild(mountRows.exportBox);
+
   panel.appendChild(factsBody);
   panel.appendChild(explainBody);
   panel.appendChild(surfacesBody);
+  panel.appendChild(mountBody);
 
   function clayShowTab(which){
     factsBody.style.display = which === "facts" ? "" : "none";
     explainBody.style.display = which === "explain" ? "" : "none";
     surfacesBody.style.display = which === "surfaces" ? "" : "none";
+    mountBody.style.display = which === "mount" ? "" : "none";
     factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
     explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
     surfacesTabBtn.style.background = which === "surfaces" ? "#3a3a44" : "#2a2a30";
+    mountTabBtn.style.background = which === "mount" ? "#3a3a44" : "#2a2a30";
     if(which === "surfaces") clayRenderSurfacesTab();
+    if(which === "mount") clayMountRender();
   }
   factsTabBtn.addEventListener("click", function(){ clayShowTab("facts"); });
   explainTabBtn.addEventListener("click", function(){ clayShowTab("explain"); });
   surfacesTabBtn.addEventListener("click", function(){ clayShowTab("surfaces"); });
+  mountTabBtn.addEventListener("click", function(){ clayShowTab("mount"); });
   clayShowTab("facts");
 
   document.body.appendChild(panel);

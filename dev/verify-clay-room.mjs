@@ -1008,5 +1008,53 @@ const check = (name, cond, detail = "") =>
   }
 }
 
+// ============================================================================
+// 25. DOOR MOUNT (Adam, 2026-07-23: "it is not socketed into the wall, it is floating out in front
+// of the wall" + "i need the dev tool to just do it myself, make sure there is some kind of
+// snapping and individual axis control").
+//
+// Measured cause: door assembly authored at the CELL centre (leaf z −2.0) while the shell wall
+// stands at the room boundary (body centre z −2.61) — 0.61 world units of daylight. The fix is the
+// anchor-derivation seam DEV-PORTAL.md §6.1's consumer contract names: theater-interior emits pure
+// outward edge signs on doorAxes; the renderer computes the mount (shell-aware default + the
+// workbench tune) and applies it to frame rows, portal rows, and the leaf hinge as ONE offset.
+// The tuner is §6.1's door-mount slice, landed early per the spec's implementation-status note —
+// NOT a reinvented tool.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const out = win.clayRoomBoardFrom(record);
+    const a = (out.board.doorAxes || [])[0] || null;
+    check("25a. doorAxes carries the OUTWARD edge signs (north door: edgeSignZ −1, edgeSignX 0)",
+      !!a && a.edgeSignZ === -1 && a.edgeSignX === 0, JSON.stringify(a));
+  } catch(e) {
+    check("25a. doorAxes edge signs (chain executed)", false, e.stack || String(e));
+  }
+
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("25b. itrDoorMountFor computes the offset from edge signs + shell mode + GS.doorMountTune",
+    /function\s+itrDoorMountFor\s*\(axisInfo\)/.test(bootSrc) &&
+    /ITR_DOOR_MOUNT_ALONG_SHELL/.test(bootSrc) &&
+    /GS\.doorMountTune/.test(bootSrc));
+  check("25c. frame rows, portal rows, and the leaf hinge all consume the SAME mount (one offset, one assembly)",
+    /doorList\s*=\s*itrApplyDoorMounts\(doorList,\s*doorMountMap\)/.test(bootSrc) &&
+    /itrApplyDoorMounts\(data\.portals,\s*doorMountMap\)/.test(bootSrc) &&
+    /hinge\.position\.set\([\s\S]{0,140}?doorMount\.dx[\s\S]{0,140}?doorMount\.dz\)/.test(bootSrc));
+  check("25d. the row patch is a CLONE (a replayed S.lastBoard can never compound offsets)",
+    /return\s+Object\.assign\(\{\},\s*row,\s*\{\s*\n?\s*ox:/.test(bootSrc));
+  check("25e. the applied mounts are reported + exposed (S.doorMountReport / _doorMountForTest)",
+    /S\.doorMountReport\s*=\s*report/.test(bootSrc) &&
+    /window\.Theater\._doorMountForTest/.test(bootSrc));
+  // tuner conformance to DEV-PORTAL §6.1 (source-text — the GL exercise is the browser probe):
+  check("25f. the tuner uses §6.1's nudge ladder verbatim (0.01 / shift 0.001 / alt 0.10)",
+    /ev\.shiftKey\s*\?\s*0\.001\s*:\s*\(ev\s*&&\s*ev\.altKey\s*\?\s*0\.10\s*:\s*0\.01\)/.test(bootSrc));
+  check("25g. the tuner offers the three named snap candidates (cell-centre / boundary / wall-centre)",
+    /"cell-centre",\s*"boundary",\s*"wall-centre"/.test(bootSrc));
+  check("25h. the tuner exports the lock SHAPE (kind:object-mount) — never rewrites a JS constant",
+    /kind:\s*"object-mount"/.test(bootSrc));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

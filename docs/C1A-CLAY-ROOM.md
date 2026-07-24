@@ -297,3 +297,32 @@ implemented: mount slots on omitted segments are filtered before nearest-slot re
 fixture on west seg 4, built; zero warnings). The TEXT-FIRST contradiction (prose "the door is
 closed." over an open gap) is discharged: record, prose, and render now agree on the door's cell,
 state, and pose.
+
+## Addendum D19 — the door SOCKET + the §6.1 mount tuner (2026-07-23, late)
+
+Adam on the D18 result: "the door is still not correct, it is not socketed into the wall, it is
+floating out in front of the wall. Here's the part where i need the dev tool to just do it myself,
+make sure there is some kind of snapping and individual axis control."
+
+**Measured cause (census bb probe):** the whole door assembly was authored at the door CELL's centre
+(leaf z −2.0) while the shell wall system stands at the room BOUNDARY (wall body centre z −2.61,
+inner face −2.465) — 0.61 world units of daylight. A wall-SYSTEM-dependent projection fact, so it is
+resolved in the renderer: `theater-interior` emits pure outward edge signs on `doorAxes`;
+`itrDoorMountFor` (theater-boot) computes the mount — shell-aware default
+`ITR_DOOR_MOUNT_ALONG_SHELL = 0.5` (cell centre → boundary) plus the live tune — and ONE offset is
+applied to the frame rows, the portal-card rows, and the leaf hinge (clone-patched, never mutated,
+so replays cannot compound). Applied mounts are reported (`S.doorMountReport`) and ride every
+capture receipt.
+
+**The tool was NOT reinvented.** DEV-PORTAL.md §6.1 (Object Workbench) already specs it: the door-
+mount cluster landed early as that section's first slice, in the clay overlay's Mount tab, conformant
+to the spec — per-axis control (depthInWall/sideLap/sill), the §6.1 nudge ladder verbatim (0.01 /
+shift 0.001 / alt 0.10), three named snap candidates (cell-centre / boundary / wall-centre, the last
+MEASURED off the built wall live), and a lock-shaped `kind:object-mount` export as the save surrogate
+until the portal's lock compiler exists. The spec carries the units amendment (world units, not
+meters), the snap amendment, and the implementation-status note.
+
+**Live-proven round trip** (`/tmp` probe, receipts in `dev/clay-captures/door/`): default socketed
+z −2.5 → two +0.01 nudges → −2.52 → snap wall-centre → **−2.61 exactly (the measured wall centre)**
+→ snap boundary → −2.5. Harness 127/127 (checks 25a-h; 25a executed through the real compile chain).
+Evidence: `socketed-04-clean-no-overlay.png`, `tuner-panel.png`.

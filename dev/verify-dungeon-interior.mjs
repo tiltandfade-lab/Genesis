@@ -258,20 +258,23 @@ group("5 — a transition/squeeze door instance is narrower+lower than a plain d
   const plan = M.spatializePlan(fixture, "The Spine", { walkId: "u3-squeeze-door" });
   const semPlan = M.semanticizePlan(plan, fixture, [{ segNum: 1, scaleVsHuman: 3.0, apex: false }]);
   const board = M.interiorBuildBoard(semPlan, { realmId: "chrome" });
-  const squeezeJambs = board.instances.doorframe.filter((d) => d.squeeze && d.jamb);
-  const plainJambs = board.instances.doorframe.filter((d) => !d.squeeze && d.jamb);
-  const squeezeHeaders = board.instances.doorframe.filter((d) => d.squeeze && d.header);
-  const plainHeaders = board.instances.doorframe.filter((d) => !d.squeeze && d.header);
-  ok(squeezeJambs.length > 0, "at least one squeeze doorframe jamb instance exists (mixed-domain fixture)");
-  if (squeezeJambs.length && plainJambs.length) {
-    ok(squeezeJambs[0].sy < plainJambs[0].sy, `squeeze door jamb sy (${squeezeJambs[0].sy}) < plain door jamb sy (${plainJambs[0].sy})`);
+  // REWRITTEN 2026-07-23 (red-first — the jamb/header vocabulary died at the commit THE DOOR
+  // CONTRACT replaced the frame ornament with the kindergarten doorway: two full-height wall SIDE
+  // pieces + one wall band over a 0.61 × 1.35 opening). The check's REAL property is unchanged and
+  // still asserted: a squeeze passage reads NARROWER and LOWER than a plain door. In the new
+  // grammar that property lives in the opening geometry — a squeeze door's band (lintel) starts
+  // LOWER (its opening is height-scaled down) and spans a NARROWER opening.
+  const squeezeLintels = board.instances.doorframe.filter((d) => d.squeeze && d.lintel);
+  const plainLintels = board.instances.doorframe.filter((d) => !d.squeeze && d.lintel);
+  ok(squeezeLintels.length > 0, "at least one squeeze doorway band (lintel) exists (mixed-domain fixture)");
+  if (squeezeLintels.length && plainLintels.length) {
+    ok(squeezeLintels[0].yBase < plainLintels[0].yBase,
+      `squeeze opening top (${squeezeLintels[0].yBase}) < plain opening top (${plainLintels[0].yBase})`);
+    const squeezeWidth = Math.min(squeezeLintels[0].sx, squeezeLintels[0].sz) === squeezeLintels[0].sx && squeezeLintels[0].sx !== 0.3 ? squeezeLintels[0].sx : Math.max(squeezeLintels[0].sx === 0.3 ? 0 : squeezeLintels[0].sx, squeezeLintels[0].sz === 0.3 ? 0 : squeezeLintels[0].sz);
+    const plainWidth = Math.max(plainLintels[0].sx === 0.3 ? 0 : plainLintels[0].sx, plainLintels[0].sz === 0.3 ? 0 : plainLintels[0].sz);
+    ok(squeezeWidth < plainWidth, `squeeze opening width (${squeezeWidth}) < plain opening width (${plainWidth})`);
   }
-  if (squeezeHeaders.length && plainHeaders.length) {
-    const squeezeWidth = Math.max(squeezeHeaders[0].sx, squeezeHeaders[0].sz);
-    const plainWidth = Math.max(plainHeaders[0].sx, plainHeaders[0].sz);
-    ok(squeezeWidth < plainWidth, `squeeze door header width (${squeezeWidth}) < plain door header width (${plainWidth})`);
-  }
-  if (!(squeezeJambs.length && plainJambs.length)) {
+  if (!(squeezeLintels.length && plainLintels.length)) {
     console.log("  (no plain door in this fixture to compare against — squeeze-vs-squeeze check skipped, not a failure)");
   }
 }

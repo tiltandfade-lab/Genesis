@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Clayroom packet — 2026-07-23</title>
+<style>
+body{background:#141418;color:#ddd;font:15px/1.5 -apple-system,sans-serif;max-width:1200px;margin:24px auto;padding:0 16px}
+h1{font-size:22px} h2{font-size:17px;margin:36px 0 4px;color:#fff}
+p.why{margin:2px 0 10px;color:#b8c0cc} p.prov{margin:0 0 8px;font:12px monospace;color:#7a8494}
+img{width:100%;border:1px solid #333;border-radius:4px;image-rendering:auto}
+.row{display:flex;gap:10px}.row div{flex:1}
+.cap{font:12px monospace;color:#9ab;margin:4px 0 0}
+.warn{color:#e8a86a}
+</style></head><body>
+<h1>Clayroom capture packet — 2026-07-23 evening</h1>
+<p class="prov">fixture clay-c1a · seed 0x6c0ffee (113311726) · surface recipe clay-diagnostic-surface v1 ·
+camera persp fov20 @ [6.27, 6.21, 6.27]→origin · 1280×720 @ dpr 2 · production renderer, panel hidden ·
+full receipts beside each PNG</p>
+
+<h2>1. Where the day started</h2>
+<p class="why">Your complaint, verified: the realm's textured dungeon floor glued onto the clay room, near-black frame, bone-white sprite.</p>
+<img src="cl-r0/before-04-clean-no-overlay.png">
+
+<h2>2. CL-R0 — the clay reset held, and exposed the next two problems</h2>
+<p class="why">Diagnostic clay now survives every rebuild (0 textured surfaces across 3 rebuilds). But this frame is also the one you flagged: full-height walls eating the bottom of the frame, and the popsicle door.</p>
+<img src="cl-r0/after-04-clean-no-overlay.png">
+
+<h2>3. Your wall ruling, live — the new default</h2>
+<p class="why">Camera-side walls (east + south) are simply not built above their low stems. Room fully open, torch properly wall-mounted on the west wall, goblin in its real colours. The stems at the bottom edges are the "a wall still blocks movement and cover here" markers — FFT's floor-edge grammar.</p>
+<img src="cl-r3a/omit-04-clean-no-overlay.png">
+
+<h2>4. The A/B row</h2>
+<div class="row">
+<div><img src="cl-r3a/omit-04-clean-no-overlay.png"><p class="cap">OMIT (new default) — walls not built; decision is receipt data</p></div>
+<div><img src="cl-r3a/fade-only-04-clean-no-overlay.png"><p class="cap">FADE (?wallomit=0) — walls built + faded to 8%; near-identical here (pixel diff 2.7/255)</p></div>
+<div><img src="cl-r3a/instanced-04-clean-no-overlay.png"><p class="cap">OLD PATH (?clayshell=0) — full-height walls; mount warning fires</p></div>
+</div>
+
+<h2>5. The sprite — source art | engine before | engine after</h2>
+<p class="why">Left: the authored goblin. Middle: what the engine rendered — the missing colour-space tag double-gamma'd it to bone white. Right: the fix, same scene and lighting, colour space the only change. Still brighter than source — that remaining gap is the CL-R1 light-energy work, untouched on purpose.</p>
+<img src="cl-r1-sprite-ab/packet-sprite-3way.png">
+
+<h2>6. The door — fixed (four defects, each proven)</h2>
+<p class="why">Before: the popsicle — and it was hiding three more lies. The carved door was two cells from where the
+record and prose twin said it was (the edge-only check let it through); there was no leaf at all; and the arch
+corbels poked 0.16 above the wall. After: the record's cell IS the carved cell (exact-cell assert now throws on
+drift), the closed leaf mounts through the production hinge builder — an extruded rectangle hinged on its corner
+edge, your door contract — oriented by the same wall-axis authority that orients the frame, and every frame prism
+fits inside the wall. Bonus: the re-rolled torch landed on an omitted wall and floated, so your ruling's
+placement clause is now real — mount slots on omitted walls are filtered out (receipt: torch on the west wall,
+seg 4, built).</p>
+<div class="row">
+<div><img src="cl-r3a/packet-door-crop.png"><p class="cap">BEFORE — the popsicle (no leaf, over-tall arch, cell lie undetected)</p></div>
+<div><img src="door/packet-door-after-crop.png"><p class="cap">MID — leaf mounted, but floating 0.61 units in front of the wall (your catch)</p></div>
+<div><img src="door/packet-door-socketed-crop.png"><p class="cap">AFTER — socketed: the whole assembly (frame + leaf + portal card) mounts at the wall, one offset</p></div>
+</div>
+<p class="why" style="margin-top:8px">And the tool you asked for — DEV-PORTAL §6.1's Object Workbench door-mount slice, landed early
+in the clay overlay's <b>Mount</b> tab rather than reinvented: per-axis control (depthInWall / sideLap / sill),
+the spec's own nudge ladder (±0.01, shift ±0.001, alt ±0.10), three snap candidates (cell-centre · boundary ·
+wall-centre — wall-centre is <i>measured off the built wall live</i>: snapping put the leaf at −2.61 exactly), and a
+lock-shaped export (kind:object-mount) so your tuned values land as data. Live-proven round trip:
+−2.5 → nudge ×2 → −2.52 → snap wall-centre → −2.61 → snap boundary → −2.5, no compounding.</p>
+<img src="door/tuner-panel.png">
+<p class="prov">receipts: door/closed-receipt.json (leaf world (−0.45,−0.3,−2) · size 0.9×1.9×0.32 · state shut ·
+fixture west seg 4) · harness 119/119 incl. red-first checks 23a-d/24a · production door harnesses 203/203 + 40/40</p>
+<h2>6b. THE KINDERGARTEN DOOR — final</h2>
+<p class="why">Your ruling, verbatim: "rectangle hole with rectangle door", 36"×80". The frame ornament
+(jamb posts, header, arch corbels — the ceremonial hat) and the reveal slabs are deleted production-wide.
+A door cell is now plain wall shaped around a 0.61×1.35 hole, and the door is one 0.6×1.333 hinged
+rectangle filling it, socketed at the wall plane. Receipt: leaf world (0, 0.37, −2.5), zero warnings.</p>
+<img src="door/kindergarten-04-clean-no-overlay.png">
+
+<h2>7. The tripwire works</h2>
+<p class="why">The known-bad mutation (rebuild hook deleted): the dungeon floor comes straight back and the harness goes red. This is what now prevents a repeat of this morning silently.</p>
+<img src="cl-r0/mutation-no-hook-02-settled.png">
+</body></html>

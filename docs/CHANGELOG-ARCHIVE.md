@@ -14,6 +14,45 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-10 (afternoon) — corpus retro-tagged, DUNGEON-GRAPH U1/U2/U4 live, codex packets hardened, floor-line tool
+
+**Added**
+- `dev/model-qa/corpus-tags.json` — casting-grade SPRITE-TAGS for all 896 committed sprites
+  (28 vision agents, text-first/image-wins) + `corpus-sizing.json` (true scale, feet/5.5) +
+  `ash-drift-report.json`. FINDING: sheet fantasy-npcs-2 = systemic label/art misassignment
+  (14/18 mismatches); 13 sprites relabeled-to-art via new overlay `name` override in
+  gen-sprite-registry.py; orphaned roles re-queued.
+- **DUNGEON-GRAPH built (U1/U2/U4)**: `src/engine/place-spatialize.js` (walk graph → verified
+  cell-grid SpatialPlan, 12 topologies, deterministic, 9/9), `src/engine/place-semantics.js`
+  (roles, depth=difficulty bands, SCALE DOMAINS + prison-rule regrowth, 26/26),
+  walk binding in prep.js/dm.js (pn.spatial, cursor→room, combat cellDims from the real room,
+  time-pass repositioning seam, 20/20; fuzz 0, monkey 0-aborted). U3 (volumetric renderer +
+  study card) IN FLIGHT on feat/dungeon-u3-render at close.
+- Specs: docs/DUNGEON-GRAPH.md (SPECCED, anchors verified), docs/GUISE.md (universal
+  sprite-swap: lycanthropes→synths→dragons), docs/GIT-LFS-MIGRATION.md (runbook, Adam priority).
+- Round-3 codex packet (`dev/model-qa/regen-v3/round3/`, 10 sheets/184 cells incl. 46 alt
+  fills) + RUN-NOTES run order; ALL round-2+3 packets hardened: expression fail-check,
+  worm's-eye BUG COROLLARY in every camera line, 3-attempt cap, never-discard-takes,
+  chat-recovery step 0.
+- sprite-review tool: click-to-set FLOOR line (overlay `floor` → registry fold-through).
+
+**Changed**
+- SPRITE-GEN-V2: §10 expression clause → the FFVI EXPRESSIVE CREATURE LAW; new §10b ADDITIVE
+  FOLD LAW + §10c NO-BLANK-SLOTS LAW; perspective clause BUG COROLLARY.
+- Codex round-2 arrivals folded additively: 4 sheets PASS re-sliced (9 sprites);
+  cosmic-large-v3-09 REJECTED (content regression) — old art kept, redo queued.
+- Painterly-ash confirmed (9 npc/kids/animal sheets) → quarantine-pack/painterly-ash + Desktop
+  zip; rosters re-authored under ash grit in round 3.
+
+**Fixed**
+- Recovered this worktree's deleted .git/worktrees admin dir (disk-cleanup collateral).
+- Disk: worktrees pruned 6→3, magenta lane's 58 parked sheets committed+pushed before removal.
+
+**Deferred**
+- U3 gate + task "battle scene in a real dungeon room + loop test" (hands off with U3).
+- Registry sizing fold (corpus-sizing + v3-sizing → sprite-registry), GUISE G1-G4, LFS
+  migration (runbook ready), upscale decision (xBRZ candidate; card on Desktop).
+
 ## 2026-07-10 — SPRITE-GEN-V2: the great sprite cleanup, perspective law, V3 regen wave (650 gated sprites), casting-grade tags
 
 **Added**

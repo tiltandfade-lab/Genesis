@@ -1285,3 +1285,206 @@ Four-yaw gameplay beauty and acceptance are superseded. Optional nonproduction d
 malformed geometry, false adjacency, or fragile composition, but they do not restore player rotation or require
 production-quality unseen backsides. The fixed camera is intended to concentrate quality in geometry composition,
 lighting, prop orientation, sprite presentation, and a single consistently authored Genesis view.
+
+## Clayroom reset redlines (Adam, 2026-07-23 — additive; verbatim)
+
+Given while reviewing the live C1A Clayroom at `genesis.html?clayroom=1`. Recorded here per this
+file's own DECISION-CAPTURE RULE; the owning specification that discharges them is
+`CLAYROOM-RESET-LADDER.md` (rung noted after each).
+
+> "The clay room in it's current state sucks."
+
+> "It seems to have basic dungeon floor glued to it"
+
+> "it doesn't seem to have any ability to have my two temp lighting system in it."
+
+> "the sprite is back to an overexposed undersaturated crappy looking piece of paper that has been
+> through the washing machine."
+
+> "I know for sure I still want the lighting lab and i want to be able to basically adjust the
+> default settings for every type of light that could be rolled in the game"
+
+> "i still want the vertical and horizontal baseline editor added to the sprite sheet"
+
+Discharge routing: dungeon-floor inheritance → **CL-R0** (BUILT 2026-07-23; the diagnostic-clay
+surface is now a versioned recipe re-applied from one `setInteriorBoard` lifecycle hook, so no
+asynchronous rebuild can restore site material). Two-temperature rig not editable → **CL-R1**
+(generalize the tunable light recipe to a bounded `lights[]` and admit the opposing pair as a named
+test recipe; do not leave it as Clayroom-only hardcoded state). Washed-out sprite → **CL-R1 then
+CL-R2**, diagnosed causally across colour-space tagging, texture sampling, tone mapping, light
+energy, material response, and compositing — **never** an arbitrary saturation slider; colour space,
+alpha mode, and authored sprite saturation are invariants, not taste sliders. Lighting Lab as the
+editor for every rolled light family's defaults → **CL-R1 / Lighting Lab 2.0**, editing *recipes and
+defaults* through structured validated lock data, never arbitrary scene patches. Vertical/horizontal
+baseline editor → the narrowly-scoped Sprite Editor crosshair delta (`footX`/`footY`); the existing
+`dev/sprite-review.py` tool is **extended, never replaced**.
+
+## Guard Post low-poly construction language and the narrative-furnishing boundary (Adam, 2026-07-23 — additive; verbatim)
+
+> "ok, well remember we are expressing these things in the very low poly language of the FFT map
+> construction. So can you make that translation?"
+
+> "for now, we are going to keep the majority of furnishings narrative, the DM can talk about them,
+> they can affect the scene and the world, but they are essentially imaginary until we can prove the
+> architectural soundness and tactical juiciness of the scene itself"
+
+The Guard Post — and the golden sites generally — is not a miniature realistic building made from
+hundreds of small modelled parts. It is a legible tactical diorama: a few broad terrain masses, a
+road that is real geometry, continuous architectural runs, deep readable openings, and a handful of
+large silhouette pieces. The material system supplies construction rhythm and age; it does not
+pretend to be geometry. This is a translation of FFT's economical map language into Genesis's own
+procedural construction grammar — **not** a copied FFT map, mesh, texture, palette, or arrangement.
+
+The furnishing boundary is a boundary, not a deferral of quality: furnishing facts may remain
+DM-visible and world-persistent without physical models until the architecture and tactical scene
+are proven. **But if a furnishing changes collision, cover, sight, support, practical-light position,
+or exact interaction reach, it must receive the smallest truthful physical proxy — invisible tactical
+furniture is not permitted.** Detail routing lives in `GOLDEN-SITES-CATALOG.md`.
+
+## Material authoring is Material Maker 1.3, and every material is a seed (Adam, 2026-07-23 — additive; verbatim)
+
+> "can you also spec out how the materials would be made in material maker? i have that working now
+> and that is what we will be using for our material design. i could only get v1.3 working on this
+> mac book, so that's what we are stuck with."
+
+> "we want to save, re-use, and modify anything we make in MM, so we don't just use and throw away,
+> every material should be considered a fertile seed for a future mutated version of that same
+> material"
+
+Material authoring is pinned to **Material Maker 1.3** — the version that runs on the target
+MacBook. Nothing may depend on nodes or project behaviour introduced in 1.4–1.7. Every material is
+authored as a saved, reusable, **versioned seed graph** with an explicit mutation lineage: named
+configurations, child graphs, and new families are the three permitted mutation levels, and each
+carries provenance back to its parent. No throwaway one-off texture batches. The owning pipeline
+document is `MATERIAL-LANE.md`; the Guard Post's own parent-seed roster and trim-strip sources route
+from `GOLDEN-SITES-CATALOG.md`.
+
+## CL-R0 packet review — walls, door, sprite (Adam, 2026-07-23 — additive; verbatim)
+
+> "also now seems like the walls are in the way again, though it's hard to tell at that zoom level"
+
+> "even from what i can see of the door i can already see it looks more like a popsicle than a door"
+
+> "sprite looks awful, i thought we had sprite citizenship nailed down like 10 days ago what happened,
+> not it just looks flat and sickly"
+
+All three confirmed against the banked `role-id` capture, not taken on faith. **Walls:** the near
+walls render at full height and eat the bottom third of the frame; the room reads as a pit rather
+than a diorama. **Door:** the frame is two thin flat planks and a cap with no reveal depth, standing
+taller than the wall — it violates the construction law that openings have depth, and wiring a leaf
+into it would not fix it. **Sprite:** root cause found — `spriteTextureFor()` never tagged the loaded
+PNG's colour space while every sibling texture path does, so sRGB bytes were treated as linear and
+gamma-encoded a second time on output (pale, chroma-collapsed). Not a regression: the sprite render
+path never tagged it; what was proven earlier was the art, the registry, and the review tool, which
+displays raw PNGs through the browser's own correct pipeline. Fixed and proven by A/B capture with
+lighting held constant. Disposition and evidence: `CLAYROOM-RESET-LADDER.md` findings 4-6.
+
+## Camera-side wall omission — the FFT wall grammar (Adam, 2026-07-23 — RULED FOR TEST; verbatim)
+
+> "alright, we need to change wall modeling behavior in general. we have settled on a fixed camera
+> for the game I believe, with maybe an optional toggle for a top down strategic view, either of
+> those allows for us to just not render walls that are blocking the field of play, look at the
+> final fantasy tactics maps if you need a reference for how they handled walls. now we might render
+> a situation where there is an enclosed space held shut by a door, but honestly i think as soon as
+> the door opens, in most cases the wall blocking the floor from the camera should disappear. can
+> you think of edge cases where this doesnt work?"
+
+Claude surveyed the edge cases (information/epistemics, re-concealment, mechanics readability,
+wall-mounted content, sight-without-passage openings, structural masses, multi-story, L-shape
+non-occluding walls, the strategic view, shared walls at C2A); Adam accepted the resulting shape:
+
+> "yes, that sounds good enough to test."
+
+**Status: RULED FOR TEST — direction locked for the test tranche; final law lands with clay
+evidence.** The accepted test shape, binding for that tranche:
+
+1. **Omission is compile-time, not render-time.** Under the fixed production camera (W3 §12.13),
+   "camera-side" is a static fact of the layout: a wall segment whose face is camera-facing AND
+   occludes staged floor builds NO upper volume. Deterministic, part of the board data and its
+   receipt — not a per-frame fade. The sight-line fade machinery remains only for dynamic
+   piece-occlusion (a pillar between camera and a figure).
+2. **The trigger is STAGING, latched — not raw door state.** A sealed space renders sealed; its
+   concealing walls come down when the space becomes staged play space (party enters / engagement
+   spills through the threshold), and once staged they stay down until the space leaves play. A
+   door slamming shut mid-scene never re-conceals actors. Sight through a cracked door reveals the
+   doorway's own sight-cone, not the whole room.
+3. **The stem stays.** A removed wall keeps its low stem/curb as the footprint truth-marker —
+   removed walls still block movement, LOS, and cover, and the player must be able to count that.
+   Zero-trace removal only at composed map edges with void beyond (the FFT map-edge grammar).
+4. **Carve-outs:** structural/terrain masses (retaining walls, cliff faces, risers) are never
+   omitted; sight-granting apertures (slits, deep windows, portcullises, bars) never trigger
+   removal — sight is not passage; the top-down strategic view renders ALL walls (it is the
+   map-reading mode; suppression is keyed per camera mode on the governed camera ladder).
+5. **Placement prefers visible walls.** Since visibility is compile-time known, meaningful
+   wall-mounted content (levers, sconces, observation faces) biases to camera-visible walls at
+   placement time — a solver constraint, never a renderer patch.
+
+Deferred with named owners: multi-story building cutaway (no enterable multi-story interior is
+rolled yet); shared-wall staging across adjacent revealed rooms (C2A); the strategic-view toggle
+itself (camera-ladder mode work). TEETH: the enforcing checks land with the CL-R3a wall tranche
+(`CLAYROOM-RESET-LADDER.md`); the staged/latch trigger's executable test lands with C1B's door
+state machine. This ruling supersedes the render-time camera-side upper fade
+(`wallUpperCameraSideBlockingSet`) for the fixed camera once the test passes, and moots the
+open clay-fixture shell-default question (near walls that occlude staged floor are simply not
+built as uppers at all).
+
+### Wall-omission test ACCEPTED on the capture packet (Adam, 2026-07-23 — additive; verbatim)
+
+> "and yes, the omission looks best"
+
+Ruled on the 2026-07-23 evening packet's A/B row (omit vs fade vs instanced,
+`dev/clay-captures/cl-r3a/`). The camera-side wall-omission ruling above passes its clay test:
+omission is the accepted wall treatment for the fixed production camera. Game-wide promotion
+(flipping production dungeons from the render-time fade to compile-time omission) still rides its
+own production-scene capture packet before the default moves outside the clay fixture — the clay
+room proved the mechanism; a rolled multi-room dungeon frame proves the product.
+
+## THE KINDERGARTEN DOOR — ornament retired, prototype dimensions fixed (Adam, 2026-07-23 — additive; verbatim)
+
+> "ok, i have centered the door but seriously what the hell is the door. THE DOOR IS JUST AN
+> EXTRUDED RECTANGLE. you have all this extra crap behind it and on top of it like it has some kind
+> of ceremonial hat. it's an extruded rectangle that sits in a doorway, i gave you a diagram of what
+> a doorway was earlier. this is unbelievably frustrating"
+
+> "right, the dressing is on the doorway, not the door and for the purposes of getting a freaking
+> working prototype going, lets just focus on the bare minimum kindergarten version of door.
+> rectangle hole with rectangle door. also average door dimensions are 36" wide by 80" tall. we will
+> definitely need more doors than that in this game but prototype door can be those dimensions"
+
+Binding consequences, applied production-wide the same session:
+
+- **The door is one hinged extruded rectangle. The doorway is a rectangle hole in the wall.**
+  Dressing, when it ever returns, belongs to the DOORWAY, never the door — and none of it exists in
+  the prototype. DELETED: the jamb posts, the header prism, both arch corbel steps (BW2-5/D4d), and
+  the wall-thickness reveal slabs. What remains at a door cell is plain wall shaped around the hole:
+  two full-height side pieces and one band above the opening, wall-coloured, wall-scaled.
+- **Prototype door dimensions: 36" × 80"** = 0.6 × 1.3333 world units (GRID LAW, 1 u = 5 ft = 60 in),
+  in a 0.61 × 1.35 opening. More door types arrive later through D14's typed catalog; the prototype
+  is exactly this one.
+- The darkness card (the beyond-the-door void mask) sizes to the OPENING and sits past the outer
+  wall face — with the leaf closed it is fully hidden.
+- Teeth: `dev/verify-clay-room.mjs` check 27 (executed through the real compile chain);
+  `verify-ks2-door-assembly` and `verify-dungeon-interior` rewritten red-first to the new grammar
+  (their real properties — axis shape, squeeze-narrower-and-lower — preserved on the new pieces).
+
+## THE DOOR / DOOR-FRAME SPLIT — the definition, and the lane handoff (Adam, 2026-07-23 — additive; verbatim)
+
+> "you still just have the idea of 'door' wrong. the door and door frame are two separate objects,
+> the door frame should generally be constructed as a piece of the wall, and the door is an object
+> that goes in the hole in the wall but i am handing this job to codex since fable can't seem to
+> understand what a door is."
+
+The binding definition, stated once and owned here:
+
+1. **The door frame is WALL.** It is constructed as a piece of the wall — same body, same plane,
+   same thickness, continuous with it. It is not an applied assembly, not proud of the wall face,
+   not a separate-looking object. (The 2026-07-23 builds repeatedly failed this: ornament first,
+   then infill pieces standing proud of the wall body at a different plane.)
+2. **The door is a separate OBJECT** — the 36"×80" hinged extruded rectangle (the kindergarten
+   ruling above) — that goes IN the hole in the wall. Two objects, two jobs; only the door is an
+   object.
+
+**LANE HANDOFF: the door/doorway geometry job belongs to CODEX** (the independent visual-acceptance
+owner per AGENTS.md). Claude's lane retains what already works around it: the mount/tuner slice
+(DEV-PORTAL §6.1), the record/board data derivation, the harnesses, and the capture rig. Codex brief:
+`docs/CODEX-DOOR-BRIEF.md`.

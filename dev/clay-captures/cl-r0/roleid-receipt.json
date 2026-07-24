@@ -1,0 +1,1192 @@
+{
+  "label": "roleid",
+  "capturedBy": "dev/capture-clayroom-fixture.cjs",
+  "url": "http://127.0.0.1:5176/genesis.html?clayroom=1&claysurface=role-id",
+  "runtimePath": "genesis.html -> theater-boot.js clayRoomBootSelfMount() -> mountClayRoom() -> clayRoomBoardFrom() -> spatializePlan -> interiorBuildBoard -> setInteriorBoard (production interior channel)",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "deviceScaleFactor": 2
+  },
+  "regions": {
+    "full": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "floor": [
+      0.42,
+      0.73,
+      0.58,
+      0.86
+    ],
+    "sprite": [
+      0.25,
+      0.37,
+      0.35,
+      0.6
+    ],
+    "crate": [
+      0.53,
+      0.38,
+      0.69,
+      0.75
+    ],
+    "doorframe": [
+      0.84,
+      0.38,
+      0.95,
+      0.62
+    ]
+  },
+  "timeline": {
+    "early": {
+      "fixture": {
+        "id": "clay-c1a",
+        "version": 1,
+        "tier": "test",
+        "seed": 113311726,
+        "seedHex": "0x6c0ffee",
+        "dims": {
+          "w": 5,
+          "d": 5
+        },
+        "portal": {
+          "id": "portal-c1a",
+          "edge": "n",
+          "cell": "c-2-0",
+          "state": "closed"
+        },
+        "object": {
+          "id": "obj-crate-c1a",
+          "kind": "crate",
+          "cell": "c-3-2"
+        },
+        "citizen": {
+          "id": "cit-goblin-c1a",
+          "bestiaryId": "goblin-warrior",
+          "cell": "c-1-3",
+          "worldHeight": 3.5,
+          "heightSource": "measured"
+        },
+        "provenance": {
+          "pass": "C1A",
+          "derivation": "spatialize-plan",
+          "created": "2026-07-23"
+        }
+      },
+      "lightRecipe": {
+        "points": [
+          {
+            "side": "west",
+            "color": 16752714,
+            "intensity": 16,
+            "pos": {
+              "x": -0.8,
+              "y": 1.7,
+              "z": 0
+            }
+          },
+          {
+            "side": "east",
+            "color": 11452392,
+            "intensity": 9,
+            "pos": {
+              "x": 0.8,
+              "y": 1.7,
+              "z": 0
+            }
+          }
+        ],
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.18
+        }
+      },
+      "surfaceRecipe": {
+        "id": "clay-diagnostic-surface",
+        "version": 1,
+        "modes": [
+          "clay",
+          "role-id"
+        ],
+        "defaultMode": "clay",
+        "clayColor": "#8a8a8a",
+        "unclaimedColor": "#ff00ff",
+        "gridColor": "#141414",
+        "gridOpacity": 0.3,
+        "roles": {
+          "floor": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5f8fbf"
+          },
+          "wall": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf6f6f"
+          },
+          "riser": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf8f4f"
+          },
+          "trim": {
+            "route": "diagnostic-clay",
+            "roleColor": "#8fbf5f"
+          },
+          "doorframe": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bfbf5f"
+          },
+          "portal": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5fbf9f"
+          },
+          "pillar": {
+            "route": "diagnostic-clay",
+            "roleColor": "#9f6fbf"
+          },
+          "skirt": {
+            "route": "diagnostic-clay",
+            "roleColor": "#4f5f6f"
+          },
+          "furniture": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf9f6f"
+          },
+          "emitter": {
+            "route": "passthrough",
+            "roleColor": "#ffd88a"
+          },
+          "sprite": {
+            "route": "passthrough",
+            "roleColor": "#ff5fbf"
+          },
+          "door": {
+            "route": "passthrough",
+            "roleColor": "#ffffff"
+          },
+          "contact-shadow": {
+            "route": "passthrough",
+            "roleColor": "#5fbfbf"
+          },
+          "mote": {
+            "route": "passthrough",
+            "roleColor": "#bf5f5f"
+          }
+        }
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          6.2674,
+          6.2062,
+          6.2674
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 100
+      },
+      "renderer": {
+        "backingPx": "2560x1440",
+        "cssPx": "1280x720",
+        "canvasCount": 1,
+        "shadowMap": true,
+        "cameraIsPerspective": true
+      },
+      "lights": {
+        "profileKey": "dark",
+        "ambient": 0.18,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "surfaces": [
+        {
+          "kind": "floor",
+          "isInstanced": true,
+          "count": 25,
+          "triangleCount": 12,
+          "colorHex": "#5f8fbf",
+          "mapInfo": null
+        },
+        {
+          "kind": "wall",
+          "isInstanced": true,
+          "count": 25,
+          "triangleCount": 12,
+          "colorHex": "#bf6f6f",
+          "mapInfo": null
+        },
+        {
+          "kind": "doorframe",
+          "isInstanced": true,
+          "count": 5,
+          "triangleCount": 12,
+          "colorHex": "#bfbf5f",
+          "mapInfo": null
+        },
+        {
+          "kind": "skirt",
+          "isInstanced": true,
+          "count": 24,
+          "triangleCount": 12,
+          "colorHex": "#4f5f6f",
+          "mapInfo": null
+        },
+        {
+          "kind": "portal",
+          "isInstanced": true,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#5fbf9f",
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        }
+      ],
+      "texturedSurfaceCount": 0,
+      "surfaceOwners": {
+        "recipe": {
+          "id": "clay-diagnostic-surface",
+          "version": 1,
+          "mode": "role-id"
+        },
+        "surfaces": [
+          {
+            "role": "floor",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/floor",
+            "instances": 25,
+            "textured": false,
+            "colorHex": "#5f8fbf",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/wall",
+            "instances": 25,
+            "textured": false,
+            "colorHex": "#bf6f6f",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "doorframe",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/doorframe",
+            "instances": 5,
+            "textured": false,
+            "colorHex": "#bfbf5f",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "skirt",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/skirt",
+            "instances": 24,
+            "textured": false,
+            "colorHex": "#4f5f6f",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "portal",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/portal",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#5fbf9f",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#000000",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "furniture",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#bf9f6f",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "furniture",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#bf9f6f",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          }
+        ],
+        "unclaimed": [],
+        "texturedClayCount": 0
+      },
+      "provenanceAudit": {
+        "tagged": [
+          {
+            "type": "Group",
+            "builder": "setInteriorBoard",
+            "bbox": {
+              "min": [
+                -3.5,
+                -0.9,
+                -3.5
+              ],
+              "max": [
+                3.5,
+                2.241,
+                3.5
+              ]
+            }
+          },
+          {
+            "type": "LineSegments",
+            "builder": "clayRoomBuildSeamGrid",
+            "bbox": {
+              "min": [
+                -2.5,
+                -0.29,
+                -2.5
+              ],
+              "max": [
+                2.5,
+                -0.29,
+                2.5
+              ]
+            }
+          },
+          {
+            "type": "AmbientLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          },
+          {
+            "type": "PointLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          },
+          {
+            "type": "PointLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          }
+        ],
+        "orphans": []
+      },
+      "stats": {
+        "boardBuilds": 3,
+        "boardSkips": 0
+      }
+    },
+    "settled": {
+      "fixture": {
+        "id": "clay-c1a",
+        "version": 1,
+        "tier": "test",
+        "seed": 113311726,
+        "seedHex": "0x6c0ffee",
+        "dims": {
+          "w": 5,
+          "d": 5
+        },
+        "portal": {
+          "id": "portal-c1a",
+          "edge": "n",
+          "cell": "c-2-0",
+          "state": "closed"
+        },
+        "object": {
+          "id": "obj-crate-c1a",
+          "kind": "crate",
+          "cell": "c-3-2"
+        },
+        "citizen": {
+          "id": "cit-goblin-c1a",
+          "bestiaryId": "goblin-warrior",
+          "cell": "c-1-3",
+          "worldHeight": 3.5,
+          "heightSource": "measured"
+        },
+        "provenance": {
+          "pass": "C1A",
+          "derivation": "spatialize-plan",
+          "created": "2026-07-23"
+        }
+      },
+      "lightRecipe": {
+        "points": [
+          {
+            "side": "west",
+            "color": 16752714,
+            "intensity": 16,
+            "pos": {
+              "x": -0.8,
+              "y": 1.7,
+              "z": 0
+            }
+          },
+          {
+            "side": "east",
+            "color": 11452392,
+            "intensity": 9,
+            "pos": {
+              "x": 0.8,
+              "y": 1.7,
+              "z": 0
+            }
+          }
+        ],
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.18
+        }
+      },
+      "surfaceRecipe": {
+        "id": "clay-diagnostic-surface",
+        "version": 1,
+        "modes": [
+          "clay",
+          "role-id"
+        ],
+        "defaultMode": "clay",
+        "clayColor": "#8a8a8a",
+        "unclaimedColor": "#ff00ff",
+        "gridColor": "#141414",
+        "gridOpacity": 0.3,
+        "roles": {
+          "floor": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5f8fbf"
+          },
+          "wall": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf6f6f"
+          },
+          "riser": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf8f4f"
+          },
+          "trim": {
+            "route": "diagnostic-clay",
+            "roleColor": "#8fbf5f"
+          },
+          "doorframe": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bfbf5f"
+          },
+          "portal": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5fbf9f"
+          },
+          "pillar": {
+            "route": "diagnostic-clay",
+            "roleColor": "#9f6fbf"
+          },
+          "skirt": {
+            "route": "diagnostic-clay",
+            "roleColor": "#4f5f6f"
+          },
+          "furniture": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf9f6f"
+          },
+          "emitter": {
+            "route": "passthrough",
+            "roleColor": "#ffd88a"
+          },
+          "sprite": {
+            "route": "passthrough",
+            "roleColor": "#ff5fbf"
+          },
+          "door": {
+            "route": "passthrough",
+            "roleColor": "#ffffff"
+          },
+          "contact-shadow": {
+            "route": "passthrough",
+            "roleColor": "#5fbfbf"
+          },
+          "mote": {
+            "route": "passthrough",
+            "roleColor": "#bf5f5f"
+          }
+        }
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          6.2674,
+          6.2062,
+          6.2674
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 100
+      },
+      "renderer": {
+        "backingPx": "2560x1440",
+        "cssPx": "1280x720",
+        "canvasCount": 1,
+        "shadowMap": true,
+        "cameraIsPerspective": true
+      },
+      "lights": {
+        "profileKey": "dark",
+        "ambient": 0.18,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "surfaces": [
+        {
+          "kind": "floor",
+          "isInstanced": true,
+          "count": 25,
+          "triangleCount": 12,
+          "colorHex": "#5f8fbf",
+          "mapInfo": null
+        },
+        {
+          "kind": "wall",
+          "isInstanced": true,
+          "count": 25,
+          "triangleCount": 12,
+          "colorHex": "#bf6f6f",
+          "mapInfo": null
+        },
+        {
+          "kind": "doorframe",
+          "isInstanced": true,
+          "count": 5,
+          "triangleCount": 12,
+          "colorHex": "#bfbf5f",
+          "mapInfo": null
+        },
+        {
+          "kind": "skirt",
+          "isInstanced": true,
+          "count": 24,
+          "triangleCount": 12,
+          "colorHex": "#4f5f6f",
+          "mapInfo": null
+        },
+        {
+          "kind": "portal",
+          "isInstanced": true,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#5fbf9f",
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        }
+      ],
+      "texturedSurfaceCount": 0,
+      "surfaceOwners": {
+        "recipe": {
+          "id": "clay-diagnostic-surface",
+          "version": 1,
+          "mode": "role-id"
+        },
+        "surfaces": [
+          {
+            "role": "floor",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/floor",
+            "instances": 25,
+            "textured": false,
+            "colorHex": "#5f8fbf",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/wall",
+            "instances": 25,
+            "textured": false,
+            "colorHex": "#bf6f6f",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "doorframe",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/doorframe",
+            "instances": 5,
+            "textured": false,
+            "colorHex": "#bfbf5f",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "skirt",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/skirt",
+            "instances": 24,
+            "textured": false,
+            "colorHex": "#4f5f6f",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "portal",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "interiorBuildInstancedMesh/portal",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#5fbf9f",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#000000",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "furniture",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#bf9f6f",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "furniture",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#bf9f6f",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "mote",
+            "route": "passthrough",
+            "group": "moteGroup",
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffb066",
+            "instanceColorNeutralized": false
+          }
+        ],
+        "unclaimed": [],
+        "texturedClayCount": 0
+      },
+      "provenanceAudit": {
+        "tagged": [
+          {
+            "type": "Group",
+            "builder": "setInteriorBoard",
+            "bbox": {
+              "min": [
+                -3.5,
+                -0.9,
+                -3.5
+              ],
+              "max": [
+                3.5,
+                2.186,
+                3.5
+              ]
+            }
+          },
+          {
+            "type": "LineSegments",
+            "builder": "clayRoomBuildSeamGrid",
+            "bbox": {
+              "min": [
+                -2.5,
+                -0.29,
+                -2.5
+              ],
+              "max": [
+                2.5,
+                -0.29,
+                2.5
+              ]
+            }
+          },
+          {
+            "type": "AmbientLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          },
+          {
+            "type": "PointLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          },
+          {
+            "type": "PointLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          }
+        ],
+        "orphans": []
+      },
+      "stats": {
+        "boardBuilds": 3,
+        "boardSkips": 0
+      }
+    }
+  },
+  "settleDelta": {
+    "texturedSurfaceCountEarly": 0,
+    "texturedSurfaceCountSettled": 0,
+    "boardBuildsEarly": 3,
+    "boardBuildsSettled": 3,
+    "surfacesChanged": false
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "consoleWarnings": [
+    "[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor: bracket-generic 1",
+    "[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor: bracket-generic 1",
+    "[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor: bracket-generic 1"
+  ]
+}

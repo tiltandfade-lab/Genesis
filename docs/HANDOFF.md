@@ -6,6 +6,60 @@ updated: 2026-07-22
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-23 later, Clayroom reset session) — CL-R0 BUILT; DESKTOP PACKET FOLDED [Claude]
+
+Ran from Adam's Desktop research/specification packet (`~/Desktop/Genesis Golden Sites - Structure
+and Material Catalog.md` + `~/Desktop/Genesis FFT Guard Post Study/`). Packet treated as **proposed
+source material, not automatic canon**; reconciled against current owning documents; **no conflict
+with any current canonical ruling was found** and none was changed. The Desktop packet is intact.
+Worktree `worktrees/Genesis-clayroom`, branch `feat/cl-r0-clayroom-reset`. **Not merged, not pushed.**
+
+### Documentation
+- **`docs/CLAYROOM-RESET-LADDER.md`** (new) — the one owning spec for the reset/proof ladder
+  CL-R0…CL-R6, fixture family CL-F00…CL-F06, the diagnostic-clay contract, the clay capture/receipt
+  law, Lighting Lab 2.0's recipe contract, the bounded Sprite Editor delta, the Workbench boundary.
+  Subordinate to CLAY-PROOF-LADDER, which keeps the C1A…C5 ids.
+- **`docs/GOLDEN-SITES-CATALOG.md`** (new) — golden-site kit catalog + Guard Post brief; FFT
+  relational grammar as a *study*, never authorization to copy authored FFT maps; per-asset
+  not-vendored audit for the 349 MB Desktop study (nothing binary imported).
+- Amended existing owners rather than forking authority: `ART-DIRECTION-CANON.md` (Adam's four
+  2026-07-23 ruling blocks, verbatim + dated), `TRIM-SHEET-PIPELINE.md` §15, `MATERIAL-LANE.md` §9,
+  `C1A-CLAY-ROOM.md` D17, plus DESIGN/NEXT-STEPS/CHANGELOG/DOCUMENT-MAP/README registration.
+
+### Code — CL-R0
+Diagnostic clay is now a **versioned engine-owned recipe** (`CLAY_DIAGNOSTIC_SURFACE_RECIPE`)
+executed from **one post-rebuild lifecycle hook** at `setInteriorBoard`'s tail — the single funnel all
+five async replay sites pass through. Deleted the two hand-written material sweeps, the hardcoded
+four-kind whitelist, and the per-frame light-reassert patch. Added `clayRoomSurfaceCensus()`, a
+`Surfaces` overlay tab, three read-only `window.Theater` diagnostics, `dev/capture-clayroom-fixture.cjs`,
+`dev/measure-clay-capture.py`, and `dev/verify-clay-room.mjs` check 18.
+
+### Verification
+`verify-clay-room` **100/100**; `check-manifest` **RESULT: OK**. Full `dev/verify-*.mjs` sweep: **12 reds, all baseline-identical** — the same 12 fail with
+this branch's code and with `master`'s code in the same tree, so **zero new reds**. Cause is
+environmental, not a regression: this worktree was created with `GIT_LFS_SKIP_SMUDGE=1`, so every
+sprite/texture PNG except the one goblin asset materialized for this work is an LFS pointer file.
+Chrome is present, so these render/measure harnesses actually run rather than dep-skipping, and then
+measure null/zero standee and texture patches. The 12: `verify-bw2-3-material-texel`,
+`verify-diegetic-light`, `verify-env1-light-profiles`, `verify-env1b-tabletop-shadows`,
+`verify-env1c-celestial-arc`, `verify-gallery-pass`, `verify-interior-camera-frustum`,
+`verify-light-lab`, `verify-mf4-turn-rhythm`, `verify-occlusion-fade`, `verify-room-shell-render`,
+`verify-shot-compose`. A full-LFS tree is required to gate them honestly — that belongs to the CI
+close, not to this checkpoint.
+Mutation-proven twice (harness 18j red; live capture returns the dungeon material). Measured at
+gameplay scale: textured diagnostic-clay surfaces **3→0** early and settled across 3 rebuilds; floor
+mean saturation **175.4→29.2**; whole-frame near-black **46.8%→0.04%**. Evidence + receipts in
+`dev/clay-captures/cl-r0/`.
+
+### Do next
+1. **The door.** RL-1 is worse than "wire the leaf": the record and prose twin say closed, the frame
+   shows an open gap in geometry that does not read as a doorway. Live TEXT-FIRST contradiction.
+2. **CL-R1** — generalize the light recipe to a bounded `lights[]`, admit the opposing pair as a named
+   test recipe, split diagnostic rig from rolled practicals, fix the `bracket-generic` mount degrade,
+   and diagnose the washed-out sprite **causally** (no saturation slider).
+3. Then the Sprite Editor crosshair delta, then CL-R2…CL-R6, then Guard Post 1.
+4. **FULL CI PENDING** — fast checkpoint, not an evening close.
+
 ## ⭐ Latest (2026-07-23, Q12-B gate session) — Q12-B FIRED; C1A CLAY ROOM TRUTH-ARRIVED ON THE REAL PIPELINE [Fable, Adam ruling]
 
 The gate session ran from `docs/procedural-dungeon-direction/FABLE-Q12B-GATE-SESSION-PROMPT.md`,

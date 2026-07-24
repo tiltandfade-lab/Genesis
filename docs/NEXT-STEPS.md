@@ -18,6 +18,48 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
+## Do next (2026-07-23 later — CL-R0 BUILT; the Clayroom reset ladder is the gate to the Guard Post)
+
+The Desktop research packet is folded (`CLAYROOM-RESET-LADDER.md`, `GOLDEN-SITES-CATALOG.md`,
+`ART-DIRECTION-CANON` verbatim rulings, `TRIM-SHEET-PIPELINE` §15, `MATERIAL-LANE` §9). **Guard Post
+1 may not start until CL-R0…CL-R6 pass.** CL-R0 is built; the rest are specced and unbuilt.
+
+1. ☑ **CL-R0 — durable diagnostic-clay reset.** Versioned recipe + one `setInteriorBoard` lifecycle
+   hook; 0/0 textured clay surfaces across 3 rebuilds; mutation-proven in harness and live capture.
+   Evidence `dev/clay-captures/cl-r0/`. Remaining CL-R0 failures are listed openly in the ladder doc
+   (mount-socket warning, the door, the bypassed room-shell path) — they are **not** closed.
+2. ☑ **CL-R3a — camera-side wall omission — BUILT 2026-07-23.** Compile-time omission live in the
+   clay fixture (shell default ON; `?wallomit=0` / `?clayshell=0` A/Bs banked in
+   `dev/clay-captures/cl-r3a/`); cascade: the mount-socket warning discharged. Awaiting Adam's
+   eyeball on the `omit` capture + the production-promotion call. Original scope line follows:
+   Compile-time omission: camera-facing ∧ occludes staged floor → stem only, no upper; staged+latched
+   trigger law recorded, its executable test rides C1B's door state machine; carve-outs for
+   structural masses / apertures / the strategic view. Test in CL-F00, A/B against `shell-ab-04`.
+   Supersedes the render-time camera-side fade for the fixed camera; moots the shell-default question.
+3. ☑ **The door — DONE 2026-07-23 evening** (C1A-CLAY-ROOM.md D18: cell truth + leaf + axis
+   authority + arch clamp + placement bias; door/closed capture banked). Original scope line: RL-1 was deferred to C1B as "just wire the leaf". It is worse: the record says
+   `portal.state:"closed"`, the prose twin says "the door is closed.", and the render shows an open
+   gap framed by two thin planks with no reveal depth, standing taller than the wall. Build the
+   doorway as a hole-with-reveal in an honest-thickness wall (the omission tranche gives it that
+   wall), then wire the leaf per THE DOOR CONTRACT. A live TEXT-FIRST contradiction, not a chore.
+4. ☐ **CL-R1 — colour/light/tone-response truth.** Generalize the tunable light recipe from one key
+   point to a bounded `lights[]`; admit the Clayroom opposing warm/cool pair as a **named test
+   recipe** (it is currently hardcoded and deliberately bypasses `applyLightProfile`/`LIGHT_TUNABLES`
+   to escape the ambient clamp — CR-2). Keep three labelled modes: diagnostic neutral truth · the
+   opposing-pair dev rig · real rolled production recipes. Split diagnostic studio lights from rolled
+   practicals and fix the `bracket-generic` mount-socket degrade (CR-3). Diagnose the washed-out
+   sprite **causally** — colour-space tagging (`spriteTextureFor` sets no `SRGBColorSpace` while
+   sibling textures do), texture sampling, tone mapping, light energy (two non-attenuating points at
+   combined intensity 25), material response, compositing — tested separately. **No saturation
+   slider.** Bank causal A/B captures and measurements.
+5. ☐ **Sprite Editor crosshair delta** (bounded, after the lighting/colour causality is stable):
+   draggable vertical guide writing canonical `footX`, the existing horizontal arm writing `footY`,
+   drag either arm or the crossing point, migrate the overlay `floor` value, show pixel + normalized
+   coords, preserve every existing capability, and make the runtime consume `footX`/`footY`. Extend
+   `dev/sprite-review.py` — **do not build a replacement editor.**
+6. ☐ **CL-R2…CL-R6** in order, then Guard Post 1 composition (`GOLDEN-SITES-CATALOG.md`).
+7. ☐ **FULL CI PENDING** for this branch — this was a fast checkpoint, not an evening close.
+
 ## Do next (2026-07-22 later — canon pass EXECUTED; Adam's review packet is the gate)
 
 The Fable canon-and-scope pass ran docs-only on 2026-07-22. Waves 1-6/10 remain CLOSED; Waves
@@ -64,21 +106,6 @@ implementation is authorized.
 4. ☑ **The full CI gate ran at this close (2026-07-19)** — wiring-a §13c de-flaked
    (`fix/ci-wiring-a-seed-flake`), full local sweep green, GitHub CI confirmed green after push.
    Codex's `FULL CI PENDING` marker is discharged.
-
-## Do next (2026-07-18 — PROCEDURAL DUNGEON DISCOVERY captured; Wave 1 opens)
-
-The research corpus, engine crosswalk, accepted direction, and unresolved forks now live in
-`PROCEDURAL-DUNGEON-DIRECTION.md`. This is a design lane only: it does not authorize a room-compiler,
-table, walk, or renderer cutover.
-
-1. ☐ **Run Wave 1: Dungeon Function, History, and Strange Compatibility.** Follow every answer into
-   its natural follow-up questions; capture decisions and unresolved tensions as they emerge.
-2. ☐ **Close Wave 1 explicitly.** Do not open Wave 2 until no material Wave 1 follow-up remains and
-   Adam confirms the wave is closed. Apply the same closure gate to every later wave.
-3. ☐ **Keep the current game build intact while discovery proceeds.** The existing rollers and
-   visual engine remain the executable baseline; structural replacement waits for a locked spec.
-4. ☐ **Push local `master` before bed.** This discovery landing is intentionally local until Adam
-   calls for the backup push.
 
 ## Do next (2026-07-23 — ALL TWELVE WAVES DESIGN-CLOSED; the plan is a reading now)
 

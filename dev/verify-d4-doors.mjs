@@ -420,6 +420,11 @@ const itrDoorHingeSignSrc = extractFn(bootSrc, "itrDoorHingeSign");
 const itrDoorBrokenTipRadSrc = extractFn(bootSrc, "itrDoorBrokenTipRad");
 const interiorBuildInteractableDoorMeshSrc = extractFn(bootSrc, "interiorBuildInteractableDoorMesh");
 const itrDoorRestPoseSrc = extractFn(bootSrc, "itrDoorRestPose");
+// door tranche 2026-07-23: interiorBuildInteractableDoorMesh now consumes the door-mount helper
+// (socketing the leaf at the active wall system's own plane) — extracted into the sandbox like its
+// siblings so the render-path checks keep executing the REAL production function.
+const itrDoorMountForSrc = extractFn(bootSrc, "itrDoorMountFor");
+const doorMountConstLine = extractConstLine(bootSrc, "ITR_DOOR_MOUNT_ALONG_SHELL");
 const interiorBuildInteractablesSrc = extractFn(bootSrc, "interiorBuildInteractables");
 // KS-2 (docs/KENNEY-SOCKET-WAVE.md) CONTRACT CHANGE: interiorBuildInteractables now unconditionally
 // calls itrKitDoorMap(kitDoors) at its own top (theater-boot.js) to build the per-cell kit-eligibility
@@ -520,7 +525,13 @@ function buildSandbox() {
     shatterMinCountLine, shatterMaxCountLine, shatterCellLine, shatterApronCellsLine,
     shatterClearLaneLine, shatterSizeMinLine, shatterSizeMaxLine, shatterThicknessLine, shatterJitterFracLine,
     itrDoorShatterCountSrc, itrDoorShatterShardsSrc, itrDoorShatterShapeForSrc, itrDoorBuildShatterShardMeshSrc,
-    interiorFloorTopAtSrc, itrDoorRestPoseSrc, itrKitDoorMapSrc, interiorBuildInteractableDoorMeshSrc,
+    interiorFloorTopAtSrc, itrDoorRestPoseSrc, itrKitDoorMapSrc,
+    // door tranche 2026-07-23: the mount helper + its const, before the consumer that calls it.
+    // The sandbox has no GS/ITR_ROOM_SHELL — itrDoorMountFor's own typeof-guards degrade both to
+    // "absent" (no tune, instanced mode, along 0), which is exactly the pre-mount behaviour these
+    // Part B pose/shape checks were written against.
+    doorMountConstLine, itrDoorMountForSrc,
+    interiorBuildInteractableDoorMeshSrc,
     interiorBuildInteractablesSrc,
     "this.itrDoorShape=itrDoorShape; this.itrDoorIsArched=itrDoorIsArched;",
     "this.itrDoorHingeSign=itrDoorHingeSign; this.itrDoorBrokenTipRad=itrDoorBrokenTipRad;",

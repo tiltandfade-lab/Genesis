@@ -196,11 +196,29 @@ Selected objects expose anchor-relative values, never raw arbitrary world transf
  yawDeg, pitchDeg, rollDeg, scaleX, scaleY, scaleZ, anchorId, mount}
 ```
 
-Arrow keys nudge X/Z by 0.01 m; Shift = 0.001 m; Alt = 0.10 m. Page shows anchor axes, owning
+Arrow keys nudge X/Z by 0.01; Shift = 0.001; Alt = 0.10. Page shows anchor axes, owning
 wall/floor/socket, collision box, and request queue. Doorway Dolly temporarily aligns the camera with
 the selected aperture. Save writes `kind:object-mount`, id = object class/slug; consumer applies the
 lock after anchor derivation and before collision/provenance stamping. Gate: locked and previewed
 transform match within `1e-6`; door aperture remains traversable; no object loses owner provenance.
+
+**Units amendment (2026-07-23):** offsets are WORLD UNITS (1 unit = 1 cell = 5 ft, the GRID LAW),
+not meters — the engine has no meter anywhere; the original `M` suffixes read as meters and are
+retired. **Snap amendment (Adam's ask, same day: "make sure there is some kind of snapping and
+individual axis control"):** each axis carries named snap candidates computed from the live anchor —
+for a door mount: `cell-centre` (the authored cell), `boundary` (the room-rect line, the anchor
+derivation's own default), `wall-centre` (the built wall body's measured centre). Snapping sets the
+offset to a candidate; it never bypasses the value pipeline.
+
+**Implementation status (2026-07-23, door-mount slice landed EARLY):** the clay fixture's door
+tranche shipped the first §6.1 increment ahead of the portal shell, inside the clay overlay
+(`?clayroom=1` → "Mount" tab): the door-mount cluster with this section's nudge ladder, per-axis
+control (`depthInWall` / `sideLap` / `sill` — mapped to the runtime's along/lateral/vertical), the
+three snap candidates above, live world-pos readout, and a lock-SHAPED JSON export
+(`kind:object-mount`, id `door`). The live tune rides `GS.doorMountTune`, consumed at board build by
+`itrDoorMountFor` (theater-boot.js — the anchor-derivation seam this section's consumer contract
+names). The export is the save surrogate until this spec's lock compiler/write API exist; the portal
+build absorbs this cluster as the §6.1 page's first control group, it does not rebuild it.
 
 ### 6.2 Sprite Editor
 

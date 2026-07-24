@@ -8,6 +8,88 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-23 (latest) — CL-R0 CLAYROOM RESET BUILT · DESKTOP RESEARCH PACKET FOLDED [Claude]
+
+### Added
+- **`docs/CLAYROOM-RESET-LADDER.md`** — the single owning specification for the Clayroom reset/proof
+  ladder **CL-R0…CL-R6**, the retained fixture family CL-F00…CL-F06, the diagnostic-clay surface
+  contract, the clay capture/receipt law, Lighting Lab 2.0's recipe contract, the bounded Sprite
+  Editor crosshair delta, and the Clayroom Workbench boundary. Subordinate to CLAY-PROOF-LADDER
+  (which keeps the C1A…C5 ids) — a renderer-trust gate across passes, not a rival ladder.
+- **`docs/GOLDEN-SITES-CATALOG.md`** — golden-site structure/material catalog + the Guard Post brief:
+  FFT relational shape grammar and anti-rules, `GP-SHAPE-01`, the low-poly construction translation,
+  cultural-mutation MVP/Ideal and acceptance gate, lock audit, seed law, and the binding FFT/import
+  boundary with a per-asset not-vendored rationale.
+- **`CLAY_DIAGNOSTIC_SURFACE_RECIPE`** (`src/engine/clay-room.js`) — versioned role→route table
+  (`diagnostic-clay` | `passthrough` | `unclaimed`; modes `clay` | `role-id`) plus
+  `clayDiagnosticRoleForKind` / `clayDiagnosticRouteFor` / `clayDiagnosticModeFrom`.
+- **`clayRoomSurfaceCensus()`** + a `Surfaces` overlay tab + `window.Theater._claySurfaceCensusForTest`
+  / `_clayProvenanceAuditForTest` / `_clayCameraPoseForTest` — machine-answerable "which system owns
+  every visible surface".
+- **`dev/capture-clayroom-fixture.cjs`** (gameplay-scale before/after captures with a full receipt:
+  fixture + recipe identity, camera, runtime path, light values, surface census, settle timeline, and
+  a panel-hidden clean frame) and **`dev/measure-clay-capture.py`** (luma/clipping/chroma over
+  declared regions). Evidence in `dev/clay-captures/cl-r0/`.
+- **`dev/verify-clay-room.mjs` check 18** — the CL-R0 durability invariant (97 checks total).
+
+### Added (later the same session)
+- **Camera-side wall-omission ruling (RULED FOR TEST) + CL-R3a BUILT** — Adam's FFT wall-grammar
+  ruling captured verbatim in ART-DIRECTION-CANON; compile-time omission (camera-facing ∧ occludes
+  staged floor → stem only) live in the clay fixture through the production shell compiler, decision
+  set as versioned receipt data, harness check 21, A/B captures in `dev/clay-captures/cl-r3a/`.
+  Cascades: clay shell default ON (17b2 rewritten red-first), mount-socket warning discharged,
+  fade-aware material swap (check 20) keeps the remaining cutaway linkage intact.
+- **Sprite sRGB root-cause fix** — `spriteTextureFor` never tagged colour space (three r166 outputs
+  sRGB); proven by A/B (`dev/clay-captures/cl-r1-sprite-ab/`), ON by default, check 19.
+
+### Changed
+- **Diagnostic clay is now durable.** Deleted `clayRoomFlattenStructure`/`clayRoomFlattenFurniture`
+  (a one-shot sweep over a hardcoded four-kind whitelist) and the per-frame light-reassert patch;
+  replaced by one post-rebuild hook `clayRoomAfterInteriorBoardRebuild()` at `setInteriorBoard`'s
+  tail — the single funnel all five async replay sites pass through.
+- `docs/ART-DIRECTION-CANON.md` — Adam's 2026-07-23 rulings appended verbatim (six Clayroom reset
+  redlines; FFT low-poly construction language; the narrative-furnishing boundary; Material Maker 1.3
+  and every-material-is-a-fertile-seed).
+- `docs/TRIM-SHEET-PIPELINE.md` §15 (proposed `genesis-architecture-core-h6-v1` realization) and
+  `docs/MATERIAL-LANE.md` §9 (Guard Post parent-seed roster + lineage law) — amendments to the
+  existing owners, never a parallel authority.
+- `docs/C1A-CLAY-ROOM.md` addendum D17 — records which mechanism CL-R0 superseded and why.
+
+### Fixed
+- **CR-1** the settled Clayroom frame showed the realm's textured dungeon floor (floor-region mean
+  saturation 175.4 → 29.2; whole-frame near-black 46.8% → 0.04%).
+- **CR-6** the D12a seam grid had never rendered — it was built in the record's local frame and
+  mounted (3, 13) cells away from the room, off-camera, while auditing "owned". The provenance audit
+  now reports a world bbox per owned root.
+- **CR-7** per-instance `setColorAt` tint defeated the clay material swap; claimed instances are now
+  neutralized (recorded in the census).
+- **CR-8** the census was scoped to `S.interiorGroup`; it now walks `S.scene` and attributes each
+  mesh to its owning group.
+- **CR-9** a module-eval-time read of the engine recipe broke every harness that loads
+  `theater-boot.js` alone; recipe reads are call-time only, asserted by the harness.
+
+### Deferred
+- **CL-R0 is not fully clean and this is not hidden:** the `bracket-generic` mount-socket warning
+  still fires (CR-3 → CL-R1); the door still renders as an open gap while the record and prose twin
+  both say closed (RL-1, now a visible TEXT-FIRST contradiction, not a wiring chore); the room-shell
+  construction path is still bypassed (`?clayshell=1` makes the A/B reproducible; default unmoved →
+  CL-R3). The washed-out sprite (CR-4) and the unreadable two-temperature rig (CR-2) are CL-R1/CL-R2.
+- **FULL CI PENDING** — fast checkpoint, not an evening close. No merge, no push.
+- **Sweep honesty correction:** an earlier report in this session said the full verify sweep was
+  clean apart from one red. That was read from a still-running sweep and was wrong. Full `dev/verify-*.mjs` sweep: **12 reds, all baseline-identical** — the same 12 fail with
+this branch's code and with `master`'s code in the same tree, so **zero new reds**. Cause is
+environmental, not a regression: this worktree was created with `GIT_LFS_SKIP_SMUDGE=1`, so every
+sprite/texture PNG except the one goblin asset materialized for this work is an LFS pointer file.
+Chrome is present, so these render/measure harnesses actually run rather than dep-skipping, and then
+measure null/zero standee and texture patches. The 12: `verify-bw2-3-material-texel`,
+`verify-diegetic-light`, `verify-env1-light-profiles`, `verify-env1b-tabletop-shadows`,
+`verify-env1c-celestial-arc`, `verify-gallery-pass`, `verify-interior-camera-frustum`,
+`verify-light-lab`, `verify-mf4-turn-rhythm`, `verify-occlusion-fade`, `verify-room-shell-render`,
+`verify-shot-compose`. A full-LFS tree is required to gate them honestly — that belongs to the CI
+close, not to this checkpoint.
+
+---
+
 ## 2026-07-23 (latest) — Q12-B FIRED · C1A CLAY ROOM ON THE REAL PIPELINE · RECOVERY→DRIVE [Fable, Adam ruling]
 
 ### Added
@@ -843,43 +925,4 @@ to the prior tree = the server was serving stale code; kill-before-capture is no
 - Interior PIECE SCALE misreads (mediums render giant in rooms — loop-gate contact sheet);
   fix rides the registry sizing fold. AO knob off by default (Adam pending final word).
 - Codex waves pending: round-3 + dressing-gen (packets ready, RUN-NOTES order).
-
-## 2026-07-10 (afternoon) — corpus retro-tagged, DUNGEON-GRAPH U1/U2/U4 live, codex packets hardened, floor-line tool
-
-**Added**
-- `dev/model-qa/corpus-tags.json` — casting-grade SPRITE-TAGS for all 896 committed sprites
-  (28 vision agents, text-first/image-wins) + `corpus-sizing.json` (true scale, feet/5.5) +
-  `ash-drift-report.json`. FINDING: sheet fantasy-npcs-2 = systemic label/art misassignment
-  (14/18 mismatches); 13 sprites relabeled-to-art via new overlay `name` override in
-  gen-sprite-registry.py; orphaned roles re-queued.
-- **DUNGEON-GRAPH built (U1/U2/U4)**: `src/engine/place-spatialize.js` (walk graph → verified
-  cell-grid SpatialPlan, 12 topologies, deterministic, 9/9), `src/engine/place-semantics.js`
-  (roles, depth=difficulty bands, SCALE DOMAINS + prison-rule regrowth, 26/26),
-  walk binding in prep.js/dm.js (pn.spatial, cursor→room, combat cellDims from the real room,
-  time-pass repositioning seam, 20/20; fuzz 0, monkey 0-aborted). U3 (volumetric renderer +
-  study card) IN FLIGHT on feat/dungeon-u3-render at close.
-- Specs: docs/DUNGEON-GRAPH.md (SPECCED, anchors verified), docs/GUISE.md (universal
-  sprite-swap: lycanthropes→synths→dragons), docs/GIT-LFS-MIGRATION.md (runbook, Adam priority).
-- Round-3 codex packet (`dev/model-qa/regen-v3/round3/`, 10 sheets/184 cells incl. 46 alt
-  fills) + RUN-NOTES run order; ALL round-2+3 packets hardened: expression fail-check,
-  worm's-eye BUG COROLLARY in every camera line, 3-attempt cap, never-discard-takes,
-  chat-recovery step 0.
-- sprite-review tool: click-to-set FLOOR line (overlay `floor` → registry fold-through).
-
-**Changed**
-- SPRITE-GEN-V2: §10 expression clause → the FFVI EXPRESSIVE CREATURE LAW; new §10b ADDITIVE
-  FOLD LAW + §10c NO-BLANK-SLOTS LAW; perspective clause BUG COROLLARY.
-- Codex round-2 arrivals folded additively: 4 sheets PASS re-sliced (9 sprites);
-  cosmic-large-v3-09 REJECTED (content regression) — old art kept, redo queued.
-- Painterly-ash confirmed (9 npc/kids/animal sheets) → quarantine-pack/painterly-ash + Desktop
-  zip; rosters re-authored under ash grit in round 3.
-
-**Fixed**
-- Recovered this worktree's deleted .git/worktrees admin dir (disk-cleanup collateral).
-- Disk: worktrees pruned 6→3, magenta lane's 58 parked sheets committed+pushed before removal.
-
-**Deferred**
-- U3 gate + task "battle scene in a real dungeon room + loop test" (hands off with U3).
-- Registry sizing fold (corpus-sizing + v3-sizing → sprite-registry), GUISE G1-G4, LFS
-  migration (runbook ready), upscale decision (xBRZ candidate; card on Desktop).
 

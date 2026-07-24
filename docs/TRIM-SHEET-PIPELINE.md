@@ -634,3 +634,46 @@ worktrees, CI expansion, merge, or push.
   `dev/model-qa/faceted-sheets/t1tiles-returns/` - current single-strip prompt, candidates, and provenance.
 - `build/fold-textures-report.json` and `dev/verify-bw2-3-material-texel.mjs` - current 256x64 fold and validation
   contract.
+
+## 15. Proposed v1 realization — `genesis-architecture-core-h6-v1` (folded 2026-07-23)
+
+**Status: PROPOSED REALIZATION of the §14 accepted contract. Not a second authority, and not a build
+authorization.** Source: the Desktop working packet
+`~/Desktop/Genesis FFT Guard Post Study/analysis/GUARD-POST-TRIM-SHEET-MM1.3-SPEC.md`, folded into
+this file because §14 already accepted Option B across T10.1-T10.5 and this is the first concrete
+layout that satisfies it. Consumer view lives in [GOLDEN-SITES-CATALOG.md](GOLDEN-SITES-CATALOG.md);
+the clay gate that must pass first is **CL-R5** in [CLAYROOM-RESET-LADDER.md](CLAYROOM-RESET-LADDER.md).
+
+The contract in one sentence:
+
+> Material Maker 1.3 authors six reusable, horizontally seamless PBR source bands **independently**.
+> A deterministic manifest packer — not Material Maker, not image generation, not the runtime
+> renderer — places those bands into one stable full-width horizontal layout. Procedural low-poly
+> geometry owns every physical profile, corner, endpoint, aperture, and occlusion relation. **The
+> sheet owns only reusable material-scale surface response.**
+
+**The six semantic bands:** `plain-band`, `base-course`, `cornice-belt`, `coping-cap`,
+`stair-nosing`, `curb-retaining`. Deliberately modest: enough to give a site a coherent base course,
+wall belt, cap, nosing, and retaining/curb language without turning a building into ornate miniature
+architecture or making trim carry the cultural read by itself. This is a shared BattleMap/TownTray
+architectural surface contract, **not a one-site atlas** — C2M reuses it rather than creating a
+town-only trim system.
+
+**Product layers, kept separate** (each row has exactly one owner): base tileable material → the
+Material Maker seed family · trim source band → a Material Maker role graph · packed trim sheet →
+the deterministic manifest packer · profile geometry → the low-poly structure compiler · exact
+endpoint/junction → geometry/component grammar · condition projection → canonical state + engine
+masks · runtime material → the renderer.
+
+**Phasing.** Phase A is the **diagnostic** six-colour sheet (`gp-trim-debug-h6-v1`) — base colour is
+sufficient, because geometry normals and scene light own physical response. Phase B is the first
+beauty obligation (`gp-trim-stone-institutional-v1`, `gp-trim-stone-upland-v1`). Phase C is aligned
+channel promotion. **Diagnostic before beauty is not optional**: it is the only way a trim failure
+and a composition failure stay independently diagnosable (CLAY-PROOF-LADDER delivery law 13).
+
+Everything else in that Desktop spec — exact pixel layout, slot construction briefs, the low-poly
+profile catalog, MM 1.3 source organization and custom nodes, the batchable square-source contract,
+the packing pipeline, U/V mapping, corner/endpoint/aperture/T-junction handling, the fallback ladder,
+and the acceptance gate — remains available at the source path above and is folded here only as far
+as this document's §4 contract and §10 promotion path already license. It becomes repository detail
+when C1I is authorized, not before.

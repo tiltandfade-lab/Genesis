@@ -236,3 +236,106 @@ was never broken — the door FRAME is real production output; the LEAF simply w
   PANEL mesh but applies rotation to its parent HINGE group (raycast descendants, rotate the
   parent) — never rotate the panel mesh directly; and swing state changes route through the
   connection record (ActionIntent → receipt), the hinge merely projects it.
+
+## Addendum D17 — the D2-step-3 material mechanism is superseded by CL-R0 (2026-07-23)
+
+C1A remains **truth-arrived** and this record stays closed. One mechanism inside it was replaced,
+and the replacement is owned elsewhere:
+
+- **Superseded:** `clayRoomFlattenFurniture` + `clayRoomFlattenStructure` (D2 step 3's two
+  hand-written material sweeps over the hardcoded whitelist `{floor, wall, doorframe, pillar}`,
+  applied once from `mountClayRoom`), and `clayRoomMaybeAutoMount`'s per-frame light reassert.
+  Both are **deleted**.
+- **By:** `CLAY_DIAGNOSTIC_SURFACE_RECIPE` (a versioned role→route table in
+  `src/engine/clay-room.js`) executed by `clayRoomApplyDiagnosticSurfaces()` from a single
+  post-rebuild lifecycle hook, `clayRoomAfterInteriorBoardRebuild()`, at `setInteriorBoard`'s tail.
+- **Why:** `setInteriorBoard` is re-entered from five asynchronous production replay sites outside
+  `mountClayRoom`. A one-shot sweep could not survive any of them, which is what produced Adam's
+  "It seems to have basic dungeon floor glued to it." D4's light profile and D12a's seam grid are
+  unchanged in intent; both now reassert through the same hook, and the grid's coordinate frame was
+  corrected (it had been building in the record's local frame after D15 moved render geometry onto
+  the spatializer — see CR-6).
+
+**Owner going forward: [CLAYROOM-RESET-LADDER.md](CLAYROOM-RESET-LADDER.md) §CL-R0.** RL-1 (door
+leaf) and RL-2 (clay lighting over the interior rig) remain C1B's, and RL-1 is now recorded there as
+a *visible* remaining failure rather than a deferred note — the frame contradicts the prose twin.
+
+## Addendum D18 — THE DOOR TRANCHE: RL-1 discharged + three more defects (2026-07-23 evening)
+
+Adam: "now let's fix the door once and for all." Four defects, each proven red-first in
+`dev/verify-clay-room.mjs` and visually in `dev/clay-captures/door/`:
+
+1. **The cell lie (new — nobody had caught it).** The record and prose twin say the portal is at
+   `c-2-0`; the attempt-11 pinned fixture carved the door at plan (7,13) = local `c-4-0`, and the
+   EDGE-only assert let prose and render disagree about WHERE the door is for the fixture's whole
+   life. Fixed: attempt 60 (first walkId in 1-200 whose carved door lands at the record's exact
+   cell) + the assert upgraded to exact-cell (check 23a red→green).
+2. **RL-1, the missing leaf.** `clayRoomBoardFrom` now derives `board.interactables` FROM the record
+   (the same way it stages the crate and citizen): state mapped through production vocabulary
+   (prose "closed" → state "shut", per walk-interactables' own word list), slug/extrudeDepth from
+   `INTERACTABLES_REGISTRY`, position = the carved cell the exact-cell assert just proved. The
+   closed leaf mounts through the UNCHANGED production hinge builder — an extruded rectangle hinged
+   on its corner edge (THE DOOR CONTRACT verbatim). Supersedes D15 point 1's "left empty" (its ban
+   on hand-built RENDER-layer literals stands; this is canonical board data in the engine layer).
+   Checks 15i (rewritten red-first), 23b/23c.
+3. **The perpendicular leaf (found by the new placement census).** The leaf first mounted 90° wrong —
+   a monolith jutting into the room — because the consumer re-derived orientation from an east-west
+   floor-neighbor heuristic that misfires for any door on a room's own edge row. Fixed at the
+   authority level: `theater-interior` now emits `board.doorAxes` (its own `itrDoorWidthAxisIsZ`
+   multi-cell wall-run scan — the SAME answer that orients the frame) and the leaf consumes it;
+   the old heuristic survives only as the axes-less-caller fallback. Check 24a red→green;
+   `verify-d4-doors` 203/203 confirms production doors unbroken.
+4. **The arch overshoot.** Corbel step 2 topped out at h+0.52 = 2.56 against the 2.4 wall (Adam:
+   "taller than the wall"). Each stacked frame element now takes only the height budget below the
+   wall top; at default dims step 1 lands flush and step 2 is not emitted; taller-scaled walls
+   regain both automatically. Check 23d red→green; production-wide, `verify-dungeon-interior`
+   288/288.
+
+**Cascade:** the attempt re-pin re-rolled the room's torch onto the omission-ruled south wall — a
+floating fixture, the exact edge case Adam's wall ruling deferred to placement. Its clause 5 is now
+implemented: mount slots on omitted segments are filtered before nearest-slot resolution (receipt:
+fixture on west seg 4, built; zero warnings). The TEXT-FIRST contradiction (prose "the door is
+closed." over an open gap) is discharged: record, prose, and render now agree on the door's cell,
+state, and pose.
+
+## Addendum D19 — the door SOCKET + the §6.1 mount tuner (2026-07-23, late)
+
+Adam on the D18 result: "the door is still not correct, it is not socketed into the wall, it is
+floating out in front of the wall. Here's the part where i need the dev tool to just do it myself,
+make sure there is some kind of snapping and individual axis control."
+
+**Measured cause (census bb probe):** the whole door assembly was authored at the door CELL's centre
+(leaf z −2.0) while the shell wall system stands at the room BOUNDARY (wall body centre z −2.61,
+inner face −2.465) — 0.61 world units of daylight. A wall-SYSTEM-dependent projection fact, so it is
+resolved in the renderer: `theater-interior` emits pure outward edge signs on `doorAxes`;
+`itrDoorMountFor` (theater-boot) computes the mount — shell-aware default
+`ITR_DOOR_MOUNT_ALONG_SHELL = 0.5` (cell centre → boundary) plus the live tune — and ONE offset is
+applied to the frame rows, the portal-card rows, and the leaf hinge (clone-patched, never mutated,
+so replays cannot compound). Applied mounts are reported (`S.doorMountReport`) and ride every
+capture receipt.
+
+**The tool was NOT reinvented.** DEV-PORTAL.md §6.1 (Object Workbench) already specs it: the door-
+mount cluster landed early as that section's first slice, in the clay overlay's Mount tab, conformant
+to the spec — per-axis control (depthInWall/sideLap/sill), the §6.1 nudge ladder verbatim (0.01 /
+shift 0.001 / alt 0.10), three named snap candidates (cell-centre / boundary / wall-centre, the last
+MEASURED off the built wall live), and a lock-shaped `kind:object-mount` export as the save surrogate
+until the portal's lock compiler exists. The spec carries the units amendment (world units, not
+meters), the snap amendment, and the implementation-status note.
+
+**Live-proven round trip** (`/tmp` probe, receipts in `dev/clay-captures/door/`): default socketed
+z −2.5 → two +0.01 nudges → −2.52 → snap wall-centre → **−2.61 exactly (the measured wall centre)**
+→ snap boundary → −2.5. Harness 127/127 (checks 25a-h; 25a executed through the real compile chain).
+Evidence: `socketed-04-clean-no-overlay.png`, `tuner-panel.png`.
+
+## Addendum D20 — THE KINDERGARTEN DOOR (2026-07-23, night)
+
+Adam's rulings verbatim in ART-DIRECTION-CANON ("THE KINDERGARTEN DOOR" block). What changed,
+production-wide: the frame ornament (jambs/header/arch — D18's "fixed" door still carried it) and
+the reveal slabs are DELETED; a door cell now emits exactly three pieces of plain wall shaping a
+0.61 × 1.35 rectangle opening (two full-height sides + one band above), and the leaf is the 36"×80"
+prototype rectangle (0.6 × 4/3 u) filling it, hinged at its corner edge, socketed at the wall plane
+via the D19 mount (receipt: leaf world (0, 0.367, −2.5), size 0.6 × 1.333 × 0.32, zero warnings).
+`squeeze`/`transition` fields preserved on the new pieces (the dungeon-interior harness caught the
+silent data-contract break). Gates: clay 137/137 · d4-doors 203/203 (sandbox extended with the
+mount helper) · ks2 40/40 + dungeon-interior 288/288 (both rewritten red-first: same real
+properties, new grammar). Evidence: `dev/clay-captures/door/kindergarten-*`.

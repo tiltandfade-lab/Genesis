@@ -1540,7 +1540,11 @@
         "CLAY_C1A_LIGHT_PROFILE",
         "clayRoomWalkFixtureFrom",
         "clayRoomDoorEdgeFor",
-        "clayRoomBoardFrom"
+        "clayRoomBoardFrom",
+        "CLAY_DIAGNOSTIC_SURFACE_RECIPE",
+        "clayDiagnosticRoleForKind",
+        "clayDiagnosticRouteFor",
+        "clayDiagnosticModeFrom"
       ],
       "callTimeDeps": [
         "SPRITE_BY_BESTIARY_ID",
@@ -1550,7 +1554,7 @@
         "KIT_SHELL_ENABLED",
         "KIT_DOORS_ENABLED"
       ],
-      "desc": "docs/C1A-CLAY-ROOM.md (Clay Pass 1, CLAY-PROOF-LADDER \u00a7C1A) \u2014 the canonical 5x5 clay room record: cells/walls/portal/crate/citizen through the SAME owners the game uses (SPRITE_BY_BESTIARY_ID -> SPRITE_REGISTRY for the citizen's BodyForm v1, GRID LAW 1 cell = 5 ft). clayRoomRecordFrom(seed) is a frozen, deterministic fixture (no RNG/DOM/THREE/world reads) \u2014 the room's geometry is fixed by design (a canonical reference room), seed is a plain provenance passthrough. clayRoomProse(record) is the GEN-LAW-3/TEXT-FIRST prose twin (every canonical fact as plain text); clayRoomExplain(record) is the D11 workbench-floor explain string; clayRoomEditRefusal(field) returns the typed refusal for the one generated source (data/sprite-registry.js) every BodyForm field traces to. CLAY_C1A_LIGHT_PROFILE is the D4 two-point-plus-ambient light data the theater-boot.js wire-in applies. Consumed by src/ui/theater-boot.js's clay-room mount (docs/C1A-CLAY-ROOM.md's dev-flag surface, ?clayroom=1). Added 2026-07-23. D15 RE-WIRE (2026-07-23): clayRoomWalkFixtureFrom(record)/clayRoomDoorEdgeFor(door,room)/clayRoomBoardFrom(record) replace theater-boot.js's old hand-assembled board-data shim with the REAL production compile chain (a pinned synthetic walk fixture -> spatializePlan -> interiorBuildBoard), staying pure (both are pure data functions); record.provenance.derivation is now \"spatialize-plan\"."
+      "desc": "docs/C1A-CLAY-ROOM.md (Clay Pass 1, CLAY-PROOF-LADDER \u00a7C1A) \u2014 the canonical 5x5 clay room record: cells/walls/portal/crate/citizen through the SAME owners the game uses (SPRITE_BY_BESTIARY_ID -> SPRITE_REGISTRY for the citizen's BodyForm v1, GRID LAW 1 cell = 5 ft). clayRoomRecordFrom(seed) is a frozen, deterministic fixture (no RNG/DOM/THREE/world reads) \u2014 the room's geometry is fixed by design (a canonical reference room), seed is a plain provenance passthrough. clayRoomProse(record) is the GEN-LAW-3/TEXT-FIRST prose twin (every canonical fact as plain text); clayRoomExplain(record) is the D11 workbench-floor explain string; clayRoomEditRefusal(field) returns the typed refusal for the one generated source (data/sprite-registry.js) every BodyForm field traces to. CLAY_C1A_LIGHT_PROFILE is the D4 two-point-plus-ambient light data the theater-boot.js wire-in applies. Consumed by src/ui/theater-boot.js's clay-room mount (docs/C1A-CLAY-ROOM.md's dev-flag surface, ?clayroom=1). Added 2026-07-23. D15 RE-WIRE (2026-07-23): clayRoomWalkFixtureFrom(record)/clayRoomDoorEdgeFor(door,room)/clayRoomBoardFrom(record) replace theater-boot.js's old hand-assembled board-data shim with the REAL production compile chain (a pinned synthetic walk fixture -> spatializePlan -> interiorBuildBoard), staying pure (both are pure data functions); record.provenance.derivation is now \"spatialize-plan\". CL-R0 (docs/CLAYROOM-RESET-LADDER.md, 2026-07-23): CLAY_DIAGNOSTIC_SURFACE_RECIPE is the versioned role->route table for diagnostic clay (routes diagnostic-clay | passthrough | unclaimed; modes clay | role-id); clayDiagnosticRoleForKind(kind) normalizes the renderer own userData.interiorKind vocabulary (incl. room-shell/kit-shell/-ghost) onto recipe roles; clayDiagnosticRouteFor(role,mode) resolves one surface, defaulting an UNKNOWN role to the loud unclaimed route rather than to clay; clayDiagnosticModeFrom(raw) is the single reader for the mode string. Consumed by theater-boot.js clayRoomApplyDiagnosticSurfaces/clayRoomSurfaceCensus, driven from the one setInteriorBoard tail hook clayRoomAfterInteriorBoardRebuild."
     },
     {
       "id": "engine.place-dressing",

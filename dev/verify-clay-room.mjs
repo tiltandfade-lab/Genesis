@@ -1056,5 +1056,31 @@ const check = (name, cond, detail = "") =>
     /kind:\s*"object-mount"/.test(bootSrc));
 }
 
+// ============================================================================
+// 26. CLAY CAMERA PAN/ZOOM (Adam, 2026-07-23: "i need to be able to pan around the room because the
+// control panel is blocking the door") — the GOVERNED verbs only, W3 §12.13. Source-text teeth;
+// the live proof is the pose probe (fit → pan → zoom → nudge-rebuild → reset, bearing −135.000 and
+// pitch −35.000 held throughout, pan surviving the rebuild, reset exact).
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const applyFn = (bootSrc.match(/function\s+clayRoomApplyCamPose\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
+  // bearing/pitch preservation BY CONSTRUCTION: position and target take the SAME ground offset, and
+  // zoom is a scalar along the existing ray — no rotation verb exists anywhere in the pose math.
+  check("26a. pan applies the SAME offset to position and target; zoom dollies along the existing ray",
+    /target\.x\s*\+=\s*off\.x/.test(applyFn) && /pos\.x\s*\+=\s*off\.x/.test(applyFn) &&
+    /pos\.sub\(target\)\.multiplyScalar\(zoom\)\.add\(target\)/.test(applyFn), applyFn);
+  check("26b. no rotation/orbit verb in the pose math (fixed bearing + pitch, the governed-camera law)",
+    !/rotation|rotateY|spherical|azimuth/i.test(applyFn), applyFn);
+  // the tween race (probe-caught): the rebuild hook must settle the camera glide BEFORE capturing
+  // the fit, or the stored fit is contaminated and the pan dies at the tween's landing.
+  const hookFn = (bootSrc.match(/function\s+clayRoomAfterInteriorBoardRebuild\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
+  check("26c. the rebuild hook drains tweens BEFORE capturing the camera fit (the probe-caught race)",
+    /drainTweens\(S\);[\s\S]*clayRoomCaptureCamFit\(\)/.test(hookFn), hookFn);
+  check("26d. listeners live on the clay host only (created at mount, removed at unmount — dormant law)",
+    /clayRoomWirePanZoom\(host\)/.test(bootSrc) &&
+    /host\.addEventListener\("wheel"/.test(bootSrc));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

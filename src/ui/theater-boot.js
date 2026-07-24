@@ -14869,6 +14869,18 @@ function clayRoomAfterInteriorBoardRebuild(){
   clayRoomApplyDiagnosticSurfaces();
   clayRoomApplyLightProfile(S.clayRoomRecord);
   clayRoomTagAllProvenance();
+  // pan/zoom survives rebuilds without compounding: capture THIS rebuild's fresh camera fit, then
+  // re-derive the pose from fit ∘ offset ∘ zoom (see the CLAY CAMERA PAN/ZOOM block).
+  // PROBE-CAUGHT (2026-07-23): placeCameraTweened GLIDES to the new fit, so at this hook the camera
+  // still holds the pre-rebuild pose — capturing here stored a contaminated "fit" (pan+zoom baked
+  // in, then re-applied on top = double), and the tween then landed on the TRUE fit, wiping the pan
+  // entirely (probe: afterNudgeRebuild snapped back to the fit; reset then restored the contaminated
+  // pose). drainTweens force-settles the camera glide to its END pose first — the same call
+  // setInteriorBoard itself makes at rebuild start, documented there as harmless for pose tweens —
+  // so the capture reads the genuine fit and the re-applied pan survives every rebuild.
+  drainTweens(S);
+  clayRoomCaptureCamFit();
+  clayRoomApplyCamPose();
 }
 
 // ─── D12a (Adam's founder redline, capture packet #1, 2026-07-23 — verbatim: "i need a semi-
@@ -15007,6 +15019,86 @@ function clayRoomProvenanceAudit(){
   return { tagged: tagged, orphans: orphans };
 }
 
+/* ─── CLAY CAMERA PAN/ZOOM (Adam, 2026-07-23: "i need to be able to pan around the room because the
+   control panel is blocking the door") ─────────────────────────────────────────────────────────────
+   The GOVERNED camera verbs only (W3 §12.13: fixed camera with governed pan/zoom/focus; the
+   Workbench ruling forbids unlocked production camera PITCH): panning translates the camera position
+   and its look target by the SAME ground-plane offset, and zoom dollies along the existing view ray
+   — bearing and pitch are mathematically unchanged by both. No orbit, no rotation, dev-surface only
+   (listeners exist solely on the clay host, which is created at clay mount and removed at unmount).
+
+   Pose model: every rebuild re-fits the camera (placeCameraTweened), so the pan must survive
+   rebuilds without compounding — the FIT pose is captured once per rebuild
+   (clayRoomCaptureCamFit, called from the one lifecycle hook) and the final pose is always
+   pose = fit ∘ offset ∘ zoom, recomputed from scratch. Drag = grab convention (the room follows
+   the cursor). Double-click resets. */
+const CLAY_CAM_ZOOM_MIN = 0.35, CLAY_CAM_ZOOM_MAX = 2.5;
+function clayRoomCaptureCamFit(){
+  if(!S.camera) return;
+  const t = S.cameraLookTarget ? S.cameraLookTarget.clone() : new THREE.Vector3(0, 0, 0);
+  S.clayCamFit = { pos: S.camera.position.clone(), target: t };
+  if(!S.clayCamOffset) S.clayCamOffset = { x: 0, z: 0 };
+  if(!S.clayCamZoom) S.clayCamZoom = 1;
+}
+function clayRoomApplyCamPose(){
+  if(!S.camera || !S.clayCamFit) return;
+  const off = S.clayCamOffset || { x: 0, z: 0 };
+  const zoom = S.clayCamZoom || 1;
+  const target = S.clayCamFit.target.clone(); target.x += off.x; target.z += off.z;
+  const pos = S.clayCamFit.pos.clone(); pos.x += off.x; pos.z += off.z;
+  // dolly along the existing ray — direction (and therefore bearing+pitch) preserved exactly
+  pos.sub(target).multiplyScalar(zoom).add(target);
+  S.camera.position.copy(pos);
+  if(S.cameraLookTarget) S.cameraLookTarget.copy(target);
+  S.camera.lookAt(target);
+  markDirty();
+  scheduleRender();
+}
+function clayRoomWirePanZoom(host){
+  if(!host || host.__clayPanWired) return;
+  host.__clayPanWired = true;
+  let dragging = false, lastX = 0, lastY = 0;
+  host.style.cursor = "grab";
+  host.addEventListener("pointerdown", function(ev){
+    if(ev.button !== 0) return;
+    dragging = true; lastX = ev.clientX; lastY = ev.clientY;
+    host.style.cursor = "grabbing";
+    try { host.setPointerCapture(ev.pointerId); } catch(e){}
+  });
+  host.addEventListener("pointermove", function(ev){
+    if(!dragging || !S.camera || !S.clayCamFit) return;
+    const dxPx = ev.clientX - lastX, dyPx = ev.clientY - lastY;
+    lastX = ev.clientX; lastY = ev.clientY;
+    const target = S.clayCamFit.target, pos = S.camera.position;
+    const dist = pos.distanceTo(S.cameraLookTarget || target);
+    const fovRad = (S.camera.fov || 20) * Math.PI / 180;
+    const worldPerPx = (2 * dist * Math.tan(fovRad / 2)) / Math.max(1, host.clientHeight);
+    // ground-plane screen axes from the camera's own bearing (never re-derived constants)
+    const dir = new THREE.Vector3().subVectors(S.cameraLookTarget || target, pos);
+    const right = new THREE.Vector3(dir.z, 0, -dir.x).normalize();     // screen-right on the ground
+    const fwd = new THREE.Vector3(dir.x, 0, dir.z).normalize();        // screen-up on the ground
+    const off = S.clayCamOffset || (S.clayCamOffset = { x: 0, z: 0 });
+    off.x += (-right.x * dxPx + fwd.x * dyPx) * worldPerPx;            // grab: the room follows the cursor
+    off.z += (-right.z * dxPx + fwd.z * dyPx) * worldPerPx;
+    clayRoomApplyCamPose();
+  });
+  const endDrag = function(){ dragging = false; host.style.cursor = "grab"; };
+  host.addEventListener("pointerup", endDrag);
+  host.addEventListener("pointerleave", endDrag);
+  host.addEventListener("wheel", function(ev){
+    ev.preventDefault();
+    if(!S.clayCamFit) return;
+    const factor = ev.deltaY > 0 ? 1.1 : 0.9;
+    S.clayCamZoom = Math.min(CLAY_CAM_ZOOM_MAX, Math.max(CLAY_CAM_ZOOM_MIN, (S.clayCamZoom || 1) * factor));
+    clayRoomApplyCamPose();
+  }, { passive: false });
+  host.addEventListener("dblclick", function(){
+    S.clayCamOffset = { x: 0, z: 0 };
+    S.clayCamZoom = 1;
+    clayRoomApplyCamPose();
+  });
+}
+
 // mountClayRoom() — D2/wire-in steps 1-5 (the overlay, step 6, is built by
 // clayRoomMountOverlay(record,host) — see the U3 addition below this comment once it lands). Never
 // throws (mirrors mountLightLab's own dormant-surface discipline): a WebGL-less environment degrades
@@ -15070,6 +15162,7 @@ function mountClayRoom(){
 
     S.clayRoomMounted = true;
     S.clayRoomHost = host;
+    clayRoomWirePanZoom(host); // governed pan/zoom (drag · wheel · dblclick reset) — dev host only
     clayRoomMountOverlay(record, host);
   } catch(e) {
     try { console.warn("qa: clay-room mount failed", e); } catch(e2){}
@@ -15175,6 +15268,10 @@ function clayRoomMountOverlay(record, host){
   recipeLine.textContent = "surface recipe " + CLAY_DIAGNOSTIC_SURFACE_RECIPE.id +
     " v" + CLAY_DIAGNOSTIC_SURFACE_RECIPE.version + " mode " + clayRoomSurfaceMode();
   panel.appendChild(recipeLine);
+  const camHint = document.createElement("div");
+  camHint.textContent = "drag canvas to pan · wheel to zoom · double-click to reset";
+  camHint.style.cssText = "color:#7a8494;margin-bottom:6px;font:10px monospace;";
+  panel.appendChild(camHint);
 
   const tabBar = document.createElement("div");
   tabBar.style.cssText = "display:flex;gap:4px;border-top:1px solid #333;padding-top:6px;margin-bottom:6px;";

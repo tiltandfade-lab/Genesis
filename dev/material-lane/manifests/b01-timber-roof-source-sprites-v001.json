@@ -23,5 +23,16 @@
     {"slug":"roof-turf-sod","source_v001":"source-sprites/b01-timber-roof-v001/roof-turf-sod-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-turf-sod-source-v002.png","left_right_rms":22.55,"top_bottom_rms":54.20,"sha256":"eb0405ca6c011cc5aca4509c8b0e8c3a4640dbb39f2bee0f8f0063c4631434af","status":"FAIL"},
     {"slug":"roof-hide-canvas-tarp","source_v001":"source-sprites/b01-timber-roof-v001/roof-hide-canvas-tarp-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-hide-canvas-tarp-source-v002.png","left_right_rms":25.68,"top_bottom_rms":26.04,"sha256":"722086f154382a5aeb7ab1d4721f103534a0c5f568d8d18a480c1d7d23cdaeff","status":"FAIL"}
   ],
+  "edge_lock_trial_v003": {
+    "purpose": "Controlled prompt-variation test after the v001/v002 source gate failure.",
+    "prompt_delta": "Describe an infinite flat 2D repeating material pattern rather than a roof plane; require zero perspective, zero directional lighting, no start/end row, and opposite-edge continuation at the same phase.",
+    "result": "Improved visual orthography and at least one axis per tested asset, but no asset passed the two-axis repeat proof.",
+    "candidates": [
+      {"slug":"roof-plank-batten","path":"source-sprites/b01-timber-roof-v001/roof-plank-batten-source-v003.png","left_right_rms":15.14,"top_bottom_rms":7.42,"status":"FAIL"},
+      {"slug":"roof-slate","path":"source-sprites/b01-timber-roof-v001/roof-slate-source-v003.png","left_right_rms":12.26,"top_bottom_rms":8.91,"status":"FAIL"},
+      {"slug":"roof-clay-tile","path":"source-sprites/b01-timber-roof-v001/roof-clay-tile-source-v003.png","left_right_rms":26.90,"top_bottom_rms":13.53,"status":"FAIL"},
+      {"slug":"roof-hide-canvas-tarp","path":"source-sprites/b01-timber-roof-v001/roof-hide-canvas-tarp-source-v003.png","left_right_rms":16.69,"top_bottom_rms":11.23,"status":"FAIL"}
+    ]
+  },
   "result": "SOURCE-GATE-FAILED; no Material Maker graphs or PBR maps were created."
 }

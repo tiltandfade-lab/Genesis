@@ -1009,6 +1009,75 @@ function buildWallBox(buf, p) {
   }
 }
 
+// buildWallPrismFaces — a CLEAN wall-volume primitive used for a doorway's subdivisions. Unlike
+// buildWallBox it adds no decorative cap slab, footing, or unconditional internal end faces. That is
+// deliberate: a doorway is one wall volume with a hole, not three standalone architectural boxes.
+// Callers choose exactly which closure faces are physically exposed; buildWallTopCap then adds one
+// continuous cap over the whole owner segment instead of one overlapping cap per subdivision.
+function buildWallPrismFaces(buf, p) {
+  const { innerA, innerB, outerA, outerB, n, tX, tZ, yBase, yTop, color, u0, u1, uvDensity } = p;
+  const h = yTop - yBase;
+  pushWallVerticalFace(buf,
+    { x: innerA.x, y: yBase, z: innerA.z }, { x: innerB.x, y: yBase, z: innerB.z },
+    { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
+    { x: n.x, y: 0, z: n.z }, u0, u1, 0, h, color);
+  pushWallVerticalFace(buf,
+    { x: outerB.x, y: yBase, z: outerB.z }, { x: outerA.x, y: yBase, z: outerA.z },
+    { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
+    { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, h, color);
+  if (p.closeTop) {
+    pushQuad(buf,
+      { x: outerA.x, y: yTop, z: outerA.z }, { x: outerB.x, y: yTop, z: outerB.z },
+      { x: innerB.x, y: yTop, z: innerB.z }, { x: innerA.x, y: yTop, z: innerA.z },
+      { x: 0, y: 1, z: 0 },
+      { u: outerA.x * uvDensity, v: outerA.z * uvDensity }, { u: outerB.x * uvDensity, v: outerB.z * uvDensity },
+      { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, { u: innerA.x * uvDensity, v: innerA.z * uvDensity }, color);
+  }
+  if (p.closeBottom) {
+    pushQuad(buf,
+      { x: outerB.x, y: yBase, z: outerB.z }, { x: outerA.x, y: yBase, z: outerA.z },
+      { x: innerA.x, y: yBase, z: innerA.z }, { x: innerB.x, y: yBase, z: innerB.z },
+      { x: 0, y: -1, z: 0 },
+      { u: outerB.x * uvDensity, v: outerB.z * uvDensity }, { u: outerA.x * uvDensity, v: outerA.z * uvDensity },
+      { u: innerA.x * uvDensity, v: innerA.z * uvDensity }, { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, color);
+  }
+  if (p.closeA) {
+    pushWallVerticalFace(buf,
+      { x: outerA.x, y: yBase, z: outerA.z }, { x: innerA.x, y: yBase, z: innerA.z },
+      { x: outerA.x, y: yTop, z: outerA.z }, { x: innerA.x, y: yTop, z: innerA.z },
+      { x: -tX, y: 0, z: -tZ }, 0, 1, 0, h, color);
+  }
+  if (p.closeB) {
+    pushWallVerticalFace(buf,
+      { x: innerB.x, y: yBase, z: innerB.z }, { x: outerB.x, y: yBase, z: outerB.z },
+      { x: innerB.x, y: yTop, z: innerB.z }, { x: outerB.x, y: yTop, z: outerB.z },
+      { x: tX, y: 0, z: tZ }, 0, 1, 0, h, color);
+  }
+}
+
+function buildWallTopCap(buf, p) {
+  const { innerA, innerB, outerA, outerB, n, yTop, capHeight, capOverhang, color, u0, u1, uvDensity } = p;
+  const capInA = { x: innerA.x + n.x * capOverhang, z: innerA.z + n.z * capOverhang };
+  const capInB = { x: innerB.x + n.x * capOverhang, z: innerB.z + n.z * capOverhang };
+  const capOutA = { x: outerA.x - n.x * capOverhang, z: outerA.z - n.z * capOverhang };
+  const capOutB = { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
+  const capTopY = yTop + capHeight;
+  pushQuad(buf,
+    { x: capOutA.x, y: capTopY, z: capOutA.z }, { x: capOutB.x, y: capTopY, z: capOutB.z },
+    { x: capInB.x, y: capTopY, z: capInB.z }, { x: capInA.x, y: capTopY, z: capInA.z },
+    { x: 0, y: 1, z: 0 },
+    { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity }, { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity },
+    { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, color);
+  pushWallVerticalFace(buf,
+    { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
+    { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
+    { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, capHeight, color);
+  pushWallVerticalFace(buf,
+    { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
+    { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
+    { x: n.x, y: 0, z: n.z }, u0, u1, 0, capHeight, color);
+}
+
 /* buildBevelBridgeParams(cornerPoint, outA, outB) -> buildWallBox params for the small notch-filling box
    a G3 ACUTE corner needs (docs/STAGE-G3-WALL-RUNS.md's "bevel for acute/unstable" branch). At an
    ordinary MITER corner, segment j's own outerB and segment j+1's own outerA already coincide (one
@@ -2010,25 +2079,25 @@ function compileRoomShellData(cells, opts) {
             openingBottomY, openingTopY,
           });
 
-          const boxBase = {
+          const prismBase = {
             n, tX: tangent.dx, tZ: tangent.dz,
-            capHeight: wallCapHeight, capOverhang: wallCapOverhang,
             color: wallColor, uvDensity,
           };
-          const buildLeft = (buf, yBase, yTop, footing) => buildWallBox(buf, Object.assign({}, boxBase, {
+          const buildLeft = (buf, yBase, yTop, closure) => buildWallPrismFaces(buf, Object.assign({}, prismBase, {
             innerA, innerB: openingInnerA, outerA, outerB: openingOuterA,
-            yBase, yTop, footing, u0, u1: openingU0,
-          }));
-          const buildRight = (buf, yBase, yTop, footing) => buildWallBox(buf, Object.assign({}, boxBase, {
+            yBase, yTop, u0, u1: openingU0,
+          }, closure));
+          const buildRight = (buf, yBase, yTop, closure) => buildWallPrismFaces(buf, Object.assign({}, prismBase, {
             innerA: openingInnerB, innerB, outerA: openingOuterB, outerB,
-            yBase, yTop, footing, u0: openingU1, u1,
-          }));
+            yBase, yTop, u0: openingU1, u1,
+          }, closure));
 
           // Persistent lower wall body: only the two jamb-side bands exist. Nothing crosses the
-          // rectangular opening at floor/stem height.
+          // rectangular opening at floor/stem height. These are clean prisms with one plain closure
+          // face each — no footing or cap overhangs protruding into/from the aperture.
           const stemBaseY = baseY, stemTopY = baseY + wallStemHeight;
-          buildLeft(wallStemBuf, stemBaseY, stemTopY, wallFooting);
-          buildRight(wallStemBuf, stemBaseY, stemTopY, wallFooting);
+          buildLeft(wallStemBuf, stemBaseY, stemTopY, { closeTop: true, closeA: true, closeB: true });
+          buildRight(wallStemBuf, stemBaseY, stemTopY, { closeTop: true, closeA: true, closeB: true });
           wallStemSegmentsOut.push({ ownerSegIndex, tier });
           pushWallVerticalFace(wallBuf,
             { x: innerA.x, y: stemBaseY, z: innerA.z }, { x: openingInnerA.x, y: stemBaseY, z: openingInnerA.z },
@@ -2045,55 +2114,48 @@ function compileRoomShellData(cells, opts) {
           const upperHeight = Math.max(0, h - wallStemHeight);
           if (upperVisible && upperHeight > 1e-9) {
             const vertStart = wallUpperBuf.positions.length / 3, idxStart = wallUpperBuf.indices.length;
-            buildLeft(wallUpperBuf, stemTopY, baseY + h, 0);
-            buildRight(wallUpperBuf, stemTopY, baseY + h, 0);
+            // Only the segment's two OUTER ends close here. Hole-facing jamb reveals stop exactly at
+            // openingTopY; they do not continue as hidden/coplanar faces inside the lintel solid.
+            buildLeft(wallUpperBuf, stemTopY, baseY + h, { closeA: true });
+            buildRight(wallUpperBuf, stemTopY, baseY + h, { closeB: true });
+            const revealTopY = Math.min(openingTopY, baseY + h);
+            if (revealTopY > stemTopY + 1e-9) {
+              pushWallVerticalFace(wallUpperBuf, // left jamb reveal, faces into the opening
+                { x: openingInnerA.x, y: stemTopY, z: openingInnerA.z },
+                { x: openingOuterA.x, y: stemTopY, z: openingOuterA.z },
+                { x: openingInnerA.x, y: revealTopY, z: openingInnerA.z },
+                { x: openingOuterA.x, y: revealTopY, z: openingOuterA.z },
+                { x: tangent.dx, y: 0, z: tangent.dz }, 0, 1, 0, revealTopY - stemTopY, wallColor);
+              pushWallVerticalFace(wallUpperBuf, // right jamb reveal
+                { x: openingOuterB.x, y: stemTopY, z: openingOuterB.z },
+                { x: openingInnerB.x, y: stemTopY, z: openingInnerB.z },
+                { x: openingOuterB.x, y: revealTopY, z: openingOuterB.z },
+                { x: openingInnerB.x, y: revealTopY, z: openingInnerB.z },
+                { x: -tangent.dx, y: 0, z: -tangent.dz }, 0, 1, 0, revealTopY - stemTopY, wallColor);
+            }
             if (openingTopY < baseY + h - 1e-9) {
-              buildWallBox(wallUpperBuf, Object.assign({}, boxBase, {
+              buildWallPrismFaces(wallUpperBuf, Object.assign({}, prismBase, {
                 innerA: openingInnerA, innerB: openingInnerB,
                 outerA: openingOuterA, outerB: openingOuterB,
-                yBase: openingTopY, yTop: baseY + h, footing: 0,
+                yBase: openingTopY, yTop: baseY + h, closeBottom: true,
                 u0: openingU0, u1: openingU1,
               }));
-              // buildWallBox deliberately has no generic bottom face; this downward-facing quad is
-              // the lintel underside, i.e. the top reveal of the hole through the wall thickness.
-              pushQuad(wallUpperBuf,
-                { x: openingOuterB.x, y: openingTopY, z: openingOuterB.z },
-                { x: openingOuterA.x, y: openingTopY, z: openingOuterA.z },
-                { x: openingInnerA.x, y: openingTopY, z: openingInnerA.z },
-                { x: openingInnerB.x, y: openingTopY, z: openingInnerB.z },
-                { x: 0, y: -1, z: 0 },
-                { u: openingOuterB.x * uvDensity, v: openingOuterB.z * uvDensity },
-                { u: openingOuterA.x * uvDensity, v: openingOuterA.z * uvDensity },
-                { u: openingInnerA.x * uvDensity, v: openingInnerA.z * uvDensity },
-                { u: openingInnerB.x * uvDensity, v: openingInnerB.z * uvDensity },
-                wallColor);
             }
+            // ONE continuous wall cap for the owner segment. The previous implementation called
+            // buildWallBox three times (left/right/lintel), creating overlapping cap slabs and
+            // internal end faces — the live "fragments shooting out the back / bits in the door."
+            buildWallTopCap(wallUpperBuf, {
+              innerA, innerB, outerA, outerB, n, yTop: baseY + h,
+              capHeight: wallCapHeight, capOverhang: wallCapOverhang,
+              color: wallColor, u0, u1, uvDensity,
+            });
             const vertCount = wallUpperBuf.positions.length / 3 - vertStart;
             const idxCount = wallUpperBuf.indices.length - idxStart;
             wallUpperSegmentsOut.push({ ownerSegIndex, tier, vertStart, vertCount, idxStart, idxCount });
           }
 
-          // Wall trim stops at the hole instead of bridging it. These are still wall-surface ribbons,
-          // never an applied frame, and share the owner segment's material/plane.
-          if (wallTrimOn) {
-            const trimHeight = Math.min(0.05, wallStemHeight * 0.25);
-            const trimProud = wallCapOverhang * 0.5;
-            const trimOuterA = { x: outerA.x - n.x * trimProud, z: outerA.z - n.z * trimProud };
-            const trimOpeningOuterA = { x: openingOuterA.x - n.x * trimProud, z: openingOuterA.z - n.z * trimProud };
-            const trimOpeningOuterB = { x: openingOuterB.x - n.x * trimProud, z: openingOuterB.z - n.z * trimProud };
-            const trimOuterB = { x: outerB.x - n.x * trimProud, z: outerB.z - n.z * trimProud };
-            const pushDoorTrim = (a, b, tu0, tu1, y0, y1) => pushWallVerticalFace(wallTrimBuf,
-              { x: a.x, y: y0, z: a.z }, { x: b.x, y: y0, z: b.z },
-              { x: a.x, y: y1, z: a.z }, { x: b.x, y: y1, z: b.z },
-              { x: -n.x, y: 0, z: -n.z }, tu0, tu1, 0, y1 - y0, wallColor);
-            pushDoorTrim(trimOuterA, trimOpeningOuterA, u0, openingU0, stemBaseY, stemBaseY + trimHeight);
-            pushDoorTrim(trimOpeningOuterB, trimOuterB, openingU1, u1, stemBaseY, stemBaseY + trimHeight);
-            pushDoorTrim(trimOuterA, trimOpeningOuterA, u0, openingU0,
-              stemTopY - trimHeight / 2, stemTopY + trimHeight / 2);
-            pushDoorTrim(trimOpeningOuterB, trimOuterB, openingU1, u1,
-              stemTopY - trimHeight / 2, stemTopY + trimHeight / 2);
-            wallTrimSegmentsOut.push({ ownerSegIndex, tier });
-          }
+          // No applied trim on the doorway owner. Adjacent wall courses terminate at the opening;
+          // adding independent doorway trim is exactly how a wall socket turns back into a frame.
           return;
         }
 

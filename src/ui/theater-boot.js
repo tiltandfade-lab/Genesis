@@ -4251,18 +4251,27 @@ function itrDoorHingeSign(sourceRef){
 // walls ON cells, so the cell-centre convention was correct there — this is a wall-SYSTEM-dependent
 // projection fact, so it is resolved HERE in the renderer, not in the data layer: theater-interior
 // emits pure outward edge signs (doorAxes), and this helper turns them into a world offset.
-//   along: ITR_DOOR_MOUNT_ALONG_SHELL (cell centre → boundary line, 0.5) when the shell wall system
-//     is active, 0 for the instanced system — plus the live tune's own along.
+//   along: ITR_DOOR_MOUNT_ALONG_SHELL (cell centre → boundary line, 0.5) plus
+//     ITR_DOOR_DEPTH_IN_WALL_DEFAULT (the leaf half-depth minus a 0.02-u face projection) when the
+//     shell wall system is active, 0 for the instanced system — plus/overridden by the live tune.
 //   tune (GS.doorMountTune, the clay workbench's Door tab): per-axis offsets {along, lateral,
 //     vertical}. A RECIPE OVERRIDE consumed at build time — the tuner never drags meshes; it edits
 //     these numbers and replays the board, per the Workbench law ("allowed edits become validated
 //     table rows, versioned recipes/locks, or renderer invariants").
 const ITR_DOOR_MOUNT_ALONG_SHELL = 0.5;
+// Adam live-tuned +0.14 on 2026-07-23 and identified the construction error precisely: putting the
+// LEAF CENTRE on the wall's inner/front face leaves half of a centred 0.32-u extrusion sticking into
+// the room. The construction default is therefore derived, not guessed: sink the centre by half the
+// leaf depth, then leave a 0.02-u face projection so its front is NEARLY flush and still readable.
+const ITR_DOOR_FRONT_FACE_PROJECTION = 0.02;
+const ITR_DOOR_DEPTH_IN_WALL_DEFAULT = ITR_DOOR_FALLBACK_DEPTH / 2 - ITR_DOOR_FRONT_FACE_PROJECTION;
 function itrDoorMountFor(axisInfo){
   if(!axisInfo) return null;
   const tune = (typeof GS !== "undefined" && GS && GS.doorMountTune) ? GS.doorMountTune : {};
   const shellOn = (typeof ITR_ROOM_SHELL !== "undefined") ? !!ITR_ROOM_SHELL : false;
-  const along = (shellOn ? ITR_DOOR_MOUNT_ALONG_SHELL : 0) + (typeof tune.along === "number" ? tune.along : 0);
+  const depthInWall = typeof tune.along === "number"
+    ? tune.along : (shellOn ? ITR_DOOR_DEPTH_IN_WALL_DEFAULT : 0);
+  const along = (shellOn ? ITR_DOOR_MOUNT_ALONG_SHELL : 0) + depthInWall;
   const lateral = (typeof tune.lateral === "number") ? tune.lateral : 0;
   const dy = (typeof tune.vertical === "number") ? tune.vertical : 0;
   return {
@@ -4276,7 +4285,9 @@ function itrDoorMountFor(axisInfo){
 function itrDoorMountMapFrom(doorAxes){
   const map = new Map();
   const report = { shellOn: (typeof ITR_ROOM_SHELL !== "undefined") ? !!ITR_ROOM_SHELL : false,
-    alongDefault: ITR_DOOR_MOUNT_ALONG_SHELL,
+    alongDefault: ITR_DOOR_MOUNT_ALONG_SHELL + ITR_DOOR_DEPTH_IN_WALL_DEFAULT,
+    boundaryAlong: ITR_DOOR_MOUNT_ALONG_SHELL,
+    depthInWallDefault: ITR_DOOR_DEPTH_IN_WALL_DEFAULT,
     tune: (typeof GS !== "undefined" && GS && GS.doorMountTune) ? GS.doorMountTune : null,
     perDoor: [] };
   (doorAxes || []).forEach(function(a){
@@ -15094,10 +15105,13 @@ function clayRoomWirePanZoom(host){
     // ground-plane screen axes from the camera's own bearing (never re-derived constants)
     const dir = new THREE.Vector3().subVectors(S.cameraLookTarget || target, pos);
     const right = new THREE.Vector3(dir.z, 0, -dir.x).normalize();     // screen-right on the ground
-    const fwd = new THREE.Vector3(dir.x, 0, dir.z).normalize();        // screen-up on the ground
+    const fwd = new THREE.Vector3(dir.x, 0, dir.z).normalize();        // camera-forward on the ground
     const off = S.clayCamOffset || (S.clayCamOffset = { x: 0, z: 0 });
-    off.x += (-right.x * dxPx + fwd.x * dyPx) * worldPerPx;            // grab: the room follows the cursor
-    off.z += (-right.z * dxPx + fwd.z * dyPx) * worldPerPx;
+    // This offset moves the CAMERA, so it must follow the requested screen motion to make the
+    // rendered room follow the pointer in this fixed-bearing rig. Both signs are browser-verified:
+    // dragging right keeps the room moving right; dragging down keeps it moving down.
+    off.x += (right.x * dxPx + fwd.x * dyPx) * worldPerPx;
+    off.z += (right.z * dxPx + fwd.z * dyPx) * worldPerPx;
     clayRoomApplyCamPose();
   });
   const endDrag = function(){ dragging = false; host.style.cursor = "grab"; };
@@ -15381,7 +15395,9 @@ function clayRoomMountOverlay(record, host){
   mountBody.style.cssText = "display:none;font:11px/1.5 monospace;color:#dde;";
   function clayMountTune(){ 
     if(typeof GS === "undefined" || !GS) return null;
-    if(!GS.doorMountTune) GS.doorMountTune = { along: 0, lateral: 0, vertical: 0 };
+    if(!GS.doorMountTune) GS.doorMountTune = {
+      along: ITR_DOOR_DEPTH_IN_WALL_DEFAULT, lateral: 0, vertical: 0
+    };
     return GS.doorMountTune;
   }
   function clayMountReplay(){
@@ -15442,7 +15458,7 @@ function clayRoomMountOverlay(record, host){
   function clayMountSnap(which){
     const tune = clayMountTune(); if(!tune) return;
     if(which === "cell-centre") tune.along = -ITR_DOOR_MOUNT_ALONG_SHELL; // net 0 from the cell
-    else if(which === "boundary") tune.along = 0;                        // the anchor default
+    else if(which === "boundary") tune.along = 0;                        // centre plane on wall face
     else if(which === "wall-centre"){
       const v = clayMountWallCentreAlong();
       if(v !== null) tune.along = +v.toFixed(3);

@@ -1488,3 +1488,20 @@ The binding definition, stated once and owned here:
 owner per AGENTS.md). Claude's lane retains what already works around it: the mount/tuner slice
 (DEV-PORTAL §6.1), the record/board data derivation, the harnesses, and the capture rig. Codex brief:
 `docs/CODEX-DOOR-BRIEF.md`.
+
+## THE FLUSH-FACE DOOR + CLEAN WALL SOCKET (Adam, 2026-07-23 — additive; verbatim)
+
+> "Seems like the doorframe construction is dirty, there are fragments of geometry shooting out the
+> back, looks like there is bits in the door too, where i put the door is where it should sit, with
+> the front nearly flush with the front face of the wall. still not sure why you and claude both
+> want to just the door out, it makes no sense. are you centering the center of the door to the front
+> face of the wall or something? why would you do that?"
+
+Binding consequences:
+
+- “Flush” governs the door's **front face**, never its centre plane. For the 0.32-deep prototype,
+  the accepted default is 0.14 into the wall from the boundary, leaving the face only 0.02 proud.
+- The doorway remains wall construction, but subdividing it may not duplicate the complete wall
+  assembly per piece. One owner supplies one cap; jambs/lintel expose only the faces that bound the
+  aperture or terminate the wall. No overlapping caps, feet, hidden end plates, trim, or fragments
+  may occupy the hole or project behind it.

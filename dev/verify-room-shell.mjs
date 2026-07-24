@@ -102,6 +102,20 @@ function verticalTriangleCovers(bundle, planeAxis, planeValue, alongAxis, alongV
   }
   return false;
 }
+function ownerTriangleCount(bundle, ownerRef, predicate) {
+  let count = 0;
+  const p = bundle.positions, n = bundle.normals, idx = bundle.indices;
+  const start = ownerRef.idxStart, end = start + ownerRef.idxCount;
+  for (let at = start; at < end; at += 3) {
+    const vis = [idx[at], idx[at + 1], idx[at + 2]];
+    const verts = vis.map((vi) => ({
+      x: p[vi * 3], y: p[vi * 3 + 1], z: p[vi * 3 + 2],
+      nx: n[vi * 3], ny: n[vi * 3 + 1], nz: n[vi * 3 + 2],
+    }));
+    if (predicate(verts)) count++;
+  }
+  return count;
+}
 
 console.log("\n=== 1. Rectangular room -> exactly 4 simplified wall segments ===");
 {
@@ -147,6 +161,21 @@ console.log("\n=== 2. Door aperture is a rectangular socket in its owning wall s
     Math.abs(doorMoved.apertures[0].openingBottomY) < 1e-6 &&
     Math.abs(doorMoved.apertures[0].openingTopY - 1.35) < 1e-6,
     doorMoved.apertures[0]);
+  const doorwayUpperRef = doorMoved.wallUpper.segments.find((s) => s.ownerSegIndex === doorMoved.apertures[0].ownerSegIndex);
+  const topCapTriangles = ownerTriangleCount(doorMoved.wallUpper, doorwayUpperRef,
+    (vs) => vs.every((v) => v.ny > 0.99));
+  check("2h. doorway owner has ONE continuous top cap (2 triangles), not three overlapping box caps",
+    topCapTriangles === 2, topCapTriangles);
+  const openingHalf = doorMoved.apertures[0].openingWidth / 2;
+  const internalFaceTriangles = ownerTriangleCount(doorMoved.wallUpper, doorwayUpperRef, (vs) =>
+    (vs.every((v) => Math.abs(v.z - (2 - openingHalf)) < 1e-6) ||
+     vs.every((v) => Math.abs(v.z - (2 + openingHalf)) < 1e-6)) &&
+    vs.every((v) => v.y > doorMoved.apertures[0].openingTopY + 1e-6));
+  check("2i. no hidden jamb/lintel end-cap faces continue above the opening inside the solid wall",
+    internalFaceTriangles === 0, internalFaceTriangles);
+  check("2j. doorway owner emits no applied trim segment",
+    !doorMoved.wallTrim.segments.some((s) => s.ownerSegIndex === doorMoved.apertures[0].ownerSegIndex),
+    doorMoved.wallTrim.segments);
 }
 
 console.log("\n=== 3. Floor triangulation covers the full walkable polygon ===");

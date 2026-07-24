@@ -361,3 +361,30 @@ d4-doors 203/203 · ks2-door-assembly 40/40 · dungeon-interior 288/288 · room-
 wall-runs-oss 92/92 · manifest `RESULT: OK`. Production headless evidence:
 `dev/clay-captures/door/codex-wall-socket-*` and the role-ID structural pass
 `dev/clay-captures/door/codex-wall-socket-role-id-*`.
+
+## Addendum D22 — flush means the FACE, and the socket must be clean (2026-07-23)
+
+Adam's live correction:
+
+> "where i put the door is where it should sit, with the front nearly flush with the front face of
+> the wall. still not sure why you and claude both want to just the door out, it makes no sense. are
+> you centering the center of the door to the front face of the wall or something?"
+
+Yes: D19's shell default put the centred leaf's **centre plane** on the wall boundary, leaving half
+of its 0.32 depth in the room. The accepted live tune was `depthInWall +0.140`: half-depth (0.16)
+minus a 0.02 face projection. That is now the derived default, not a hidden correction; the Mount
+tab opens at +0.140 and reports applied dz −0.64.
+
+The first D21 shell carve also reused the complete wall-box builder for each jamb and lintel. Each
+sub-box brought its own cap, footing, and unconditional end closures, producing overlapping hidden
+faces and the visible fragments behind/inside the doorway. The socket now uses clean wall prisms:
+one continuous owner cap, only exposed end closures, explicit reveals to opening height, and one
+lintel underside. There is no doorway trim and no independent frame object.
+
+The same browser pass corrected the tool's grab-pan contract. It was empirically inverted on both
+axes; the camera offset now makes the rendered room follow the pointer (right→right, down→down).
+Teeth: `verify-room-shell` asserts one top cap, no hidden jamb/lintel end caps, and no doorway trim;
+`verify-clay-room` asserts the face projection and pan signs. Gates: room-shell 51/51 ·
+wall-volumes 35/35 · clay 140/140 · d4-doors 205/205 · ks2-door-assembly 40/40 ·
+dungeon-interior 288/288 · room-shell-oss 48/48 · wall-runs-oss 92/92 · manifest `RESULT: OK`.
+Evidence: `dev/clay-captures/door/codex-wall-socket-clean-flush-*`.

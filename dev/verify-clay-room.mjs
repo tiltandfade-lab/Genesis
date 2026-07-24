@@ -1038,6 +1038,10 @@ const check = (name, cond, detail = "") =>
     /function\s+itrDoorMountFor\s*\(axisInfo\)/.test(bootSrc) &&
     /ITR_DOOR_MOUNT_ALONG_SHELL/.test(bootSrc) &&
     /GS\.doorMountTune/.test(bootSrc));
+  check("25b2. shell default sinks the centred leaf by half-depth minus 0.02 so its front face is nearly flush",
+    /ITR_DOOR_FRONT_FACE_PROJECTION\s*=\s*0\.02/.test(bootSrc) &&
+    /ITR_DOOR_DEPTH_IN_WALL_DEFAULT\s*=\s*ITR_DOOR_FALLBACK_DEPTH\s*\/\s*2\s*-\s*ITR_DOOR_FRONT_FACE_PROJECTION/.test(bootSrc) &&
+    /along:\s*ITR_DOOR_DEPTH_IN_WALL_DEFAULT/.test(bootSrc));
   check("25c. frame rows, portal rows, and the leaf hinge all consume the SAME mount (one offset, one assembly)",
     /doorList\s*=\s*itrApplyDoorMounts\(doorList,\s*doorMountMap\)/.test(bootSrc) &&
     /itrApplyDoorMounts\(data\.portals,\s*doorMountMap\)/.test(bootSrc) &&
@@ -1080,6 +1084,9 @@ const check = (name, cond, detail = "") =>
   check("26d. listeners live on the clay host only (created at mount, removed at unmount — dormant law)",
     /clayRoomWirePanZoom\(host\)/.test(bootSrc) &&
     /host\.addEventListener\("wheel"/.test(bootSrc));
+  check("26e. grab-pan uses browser-verified same-sign camera offsets so the rendered room follows the pointer",
+    /right\.x\s*\*\s*dxPx\s*\+\s*fwd\.x\s*\*\s*dyPx/.test(bootSrc) &&
+    /right\.z\s*\*\s*dxPx\s*\+\s*fwd\.z\s*\*\s*dyPx/.test(bootSrc));
 }
 
 // ============================================================================

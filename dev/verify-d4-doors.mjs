@@ -425,6 +425,8 @@ const itrDoorRestPoseSrc = extractFn(bootSrc, "itrDoorRestPose");
 // siblings so the render-path checks keep executing the REAL production function.
 const itrDoorMountForSrc = extractFn(bootSrc, "itrDoorMountFor");
 const doorMountConstLine = extractConstLine(bootSrc, "ITR_DOOR_MOUNT_ALONG_SHELL");
+const doorFrontProjectionLine = extractConstLine(bootSrc, "ITR_DOOR_FRONT_FACE_PROJECTION");
+const doorDepthDefaultLine = extractConstLine(bootSrc, "ITR_DOOR_DEPTH_IN_WALL_DEFAULT");
 const interiorBuildInteractablesSrc = extractFn(bootSrc, "interiorBuildInteractables");
 // KS-2 (docs/KENNEY-SOCKET-WAVE.md) CONTRACT CHANGE: interiorBuildInteractables now unconditionally
 // calls itrKitDoorMap(kitDoors) at its own top (theater-boot.js) to build the per-cell kit-eligibility
@@ -487,6 +489,8 @@ const itrDoorBuildShatterShardMeshSrc = extractFn(bootSrc, "itrDoorBuildShatterS
  ["ITR_DOOR_SWING_AJAR_DEG", swingAjarDegLine], ["ITR_DOOR_SWING_OPEN_DEG", swingOpenDegLine],
  ["ITR_DOOR_BROKEN_TIP_BASE_DEG", brokenTipBaseDegLine], ["ITR_DOOR_BROKEN_TIP_JITTER_MULT", brokenTipJitterMultLine],
  ["ITR_DOOR_BROKEN_GROUND_CLEARANCE", brokenGroundClearanceLine],
+ ["ITR_DOOR_FRONT_FACE_PROJECTION", doorFrontProjectionLine],
+ ["ITR_DOOR_DEPTH_IN_WALL_DEFAULT", doorDepthDefaultLine],
  ["itrDoorSeedUnit", itrDoorSeedUnitSrc], ["ITR_DOOR_BROKEN_VARIANTS", brokenVariantsLine],
  ["ITR_DOOR_BROKEN_VARIANT_FORCE_FOR_TEST", brokenVariantForceLine], ["itrDoorBrokenVariantFor", itrDoorBrokenVariantForSrc],
  ["ITR_DOOR_HANGING_SWING_MIN_DEG", hangingSwingMinLine], ["ITR_DOOR_HANGING_SWING_MAX_DEG", hangingSwingMaxLine],
@@ -530,7 +534,7 @@ function buildSandbox() {
     // The sandbox has no GS/ITR_ROOM_SHELL — itrDoorMountFor's own typeof-guards degrade both to
     // "absent" (no tune, instanced mode, along 0), which is exactly the pre-mount behaviour these
     // Part B pose/shape checks were written against.
-    doorMountConstLine, itrDoorMountForSrc,
+    doorMountConstLine, doorFrontProjectionLine, doorDepthDefaultLine, itrDoorMountForSrc,
     interiorBuildInteractableDoorMeshSrc,
     interiorBuildInteractablesSrc,
     "this.itrDoorShape=itrDoorShape; this.itrDoorIsArched=itrDoorIsArched;",

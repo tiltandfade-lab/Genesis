@@ -201,15 +201,36 @@ saturation slider), and the two-temperature rig still does not read as two tempe
 > "sprite looks awful, i thought we had sprite citizenship nailed down like 10 days ago what happened,
 > not it just looks flat and sickly"
 
-4. **The walls are in the frame — CONFIRMED, and it is not a zoom artefact.** The `role-id` capture
-   makes it unambiguous: the NEAR walls render at full height and their inner faces occupy the bottom
-   third of the composition, so the room reads as a pit viewed from above rather than a diorama, and
-   the far walls rise above the doorframe line. The clay fixture forces `ITR_ROOM_SHELL = false` and
-   builds through the plain InstancedMesh channel, which is very likely why the occlusion/cutaway
-   machinery that governs this in normal play is not engaging here — **unverified**, and the next
-   thing to check. Owner: **CL-R3** (cutaway/ghosting is on its required list), but the diagnosis
-   belongs in the next tranche, not to a guess here. Evidence:
-   `roleid-04-clean-no-overlay.png`.
+4. **The walls are in the frame — ROOT CAUSE FOUND, MECHANISM RESTORED, DEFAULT AWAITS ADAM.**
+   Answered by A/B, not by guess. Production keeps near walls out of the frame with a **camera-side
+   upper-band suppression** (`wallUpperCameraSideBlockingSet`, P3-1d restoring BW2-5): camera-side
+   wall segments drop their opaque upper volume *regardless of any specific occluded subject*. That
+   mechanism lives in the ROOM-SHELL wall path (always-opaque low stem + per-segment fading uppers) —
+   and the clay mount forces `ITR_ROOM_SHELL = false`, an accommodation for the OLD flatten sweep
+   (which could not touch non-instanced meshes) that CL-R0 deleted. So the fixture had opted out of
+   the very wall construction that carries the near-wall treatment; the sight-line fade that remained
+   was working correctly and had nothing to do (probe: `{total: 28, blocking: 0}` — no wall blocked
+   the goblin).
+
+   Running the A/B (`?clayshell=1`) exposed a second, real CL-R0 bug: the clay material swap SEVERED
+   the cutaway's fade linkage. Probe with the shell on: `{blocking: 2, faded: 2}` — the two near
+   wall-uppers correctly classified and tweened to opacity 0.08 **on their old materials**, while the
+   meshes rendered the shared clay material at 1.0 (opaque dark slabs; the cutaway "visibly broken"
+   while its state machine ran perfectly). Fixed with a fade-aware swap: a fade-linked mesh gets a
+   per-mesh clay CLONE carrying the entry's current opacity, and the fade entry's materials array is
+   re-pointed at the clone. Teeth: harness check 20. Evidence:
+   `shell-ab-04-clean-no-overlay.png` — near walls ghosted, room fully readable, stems intact.
+
+   This also settles the previously-open `materials: 0` question for the shell path: it WAS a wiring
+   gap, mine, now fixed. For the InstancedMesh path, `materials: 0` on non-blocking entries is
+   consistent with lazy ghost-mesh creation (ghosts built only when a wall actually blocks) and has
+   not been proven to be a defect.
+
+   **Open ruling for Adam (front-end gate):** production's default is `ITR_ROOM_SHELL = true` — the
+   clay fixture bypassing it sits badly with "every fixture uses the production construction path."
+   With the fade-aware swap in, `?clayshell=1` now renders correctly, so the remaining question is
+   whether the clay room should DEFAULT to the shell path. That changes the fixture's look, so it is
+   Adam's call, made on the banked A/B pair (`after-04` vs `shell-ab-04`), not Claude's.
 5. **The door reads as a popsicle — CONFIRMED, and worse than "the leaf isn't wired".** In `role-id`
    the "doorframe" resolves to two thin flat planks and a cap, with **no reveal depth**, and the
    members stand **taller than the surrounding wall**. This violates the construction law that
@@ -262,10 +283,10 @@ wall actually blocks the goblin. So the walls Adam sees are not an occlusion fai
 the cutaway system was never designed to solve. Correct owner: **CL-R3** wall construction plus the
 production camera, not a cutaway repair.
 
-One genuine gap surfaced by the probe and left open: all 28 entries report `materials: 0`, so no
-ghost meshes are bound to them — if one *did* classify as blocking there would be nothing for the
-fade tween to act on. Whether that is lazy-by-design (ghosts built only on first block) or a wiring
-gap is **not yet determined**, and must be settled before CL-R3 trusts the cutaway.
+One genuine gap surfaced by the probe was left open here and is now SETTLED — see finding 4 below:
+in the room-shell path it was a real wiring gap (the clay swap severed the fade tween's material
+linkage; fixed, harness check 20), and in the InstancedMesh path `materials: 0` on non-blocking
+entries is consistent with lazy ghost-mesh creation and has not been shown to be a defect.
 
 **Capture framing note (Adam, 2026-07-23).** Adam asked whether the door was being framed behind the
 overlay console. It was not deliberate, but the overlay is anchored top-right, which is exactly where

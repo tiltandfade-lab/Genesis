@@ -832,5 +832,29 @@ const check = (name, cond, detail = "") =>
     "an outputColorSpace override exists — re-derive the sprite colour-space reasoning");
 }
 
+// ============================================================================
+// 20. CL-R0 (docs/CLAYROOM-RESET-LADDER.md) — FADE-AWARE MATERIAL SWAP.
+//
+// Found live by the ?clayshell=1 A/B (2026-07-23): the room-shell wall-upper meshes carry
+// per-segment cloned materials whose opacity the cutaway tween mutates between rebuilds
+// (fadeEntry.materials). A naive shared-material swap severed that linkage — the probe showed the
+// camera-side suppression classifying both near walls as blocking and tweening THEIR OLD materials
+// to 0.08 while the meshes rendered the shared clay material at 1.0: opaque dark slabs, the cutaway
+// "visibly broken" while its state machine ran perfectly. The route must re-point the fade entry at
+// a per-mesh clay clone carrying the entry's current opacity. Source-text teeth (this harness is
+// THREE/DOM-free); the visual proof is dev/clay-captures/cl-r0/shell-ab-04-clean-no-overlay.png.
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const fn = (bootSrc.match(/function\s+clayRoomApplyDiagnosticSurfaces\s*\(\)\s*\{[\s\S]*?\n\}/) || [""])[0];
+  check("20a. the diagnostic route checks S.occlusionFadeState for a fade entry referencing the old material",
+    /S\.occlusionFadeState/.test(fn) && /e\.materials\.indexOf\(priorMat\)/.test(fn), fn.slice(0,0));
+  check("20b. a fade-linked mesh gets a per-mesh CLONE carrying the entry's current opacity (never the shared material)",
+    /clayDiagnosticMaterialFor\(decision\.color\)\.clone\(\)/.test(fn) &&
+    /clayMat\.opacity\s*=\s*\(typeof\s+fadeEntry\.opacity/.test(fn), fn.slice(0,0));
+  check("20c. the fade entry's materials array is re-pointed at the clone (the tween drives what the mesh renders)",
+    /fadeEntry\.materials\s*=\s*fadeEntry\.materials\.map/.test(fn), fn.slice(0,0));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

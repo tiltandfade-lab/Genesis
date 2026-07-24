@@ -14616,7 +14616,34 @@ function clayRoomApplyDiagnosticSurfaces(){
     // "unclaimed" lands here too, deliberately: it is painted the loud UNCLAIMED colour rather than
     // left carrying whatever site material production gave it. A kind this recipe has never heard of
     // must be visible as a hole in the recipe, never as plausible-looking dungeon stone.
-    mesh.material = clayDiagnosticMaterialFor(decision.color);
+    //
+    // FADE-AWARE SWAP (found live 2026-07-23, the ?clayshell=1 A/B): the room-shell wall-upper meshes
+    // carry per-segment cloned materials whose OPACITY is mutated between rebuilds by the cutaway
+    // tween (itrOcclusionClassify's fadeEntry.materials — see the wall-upper build site ~11378). A
+    // naive `mesh.material = shared` swap severs that linkage: the probe showed the camera-side
+    // suppression correctly classifying the two near walls as blocking and tweening THEIR OLD
+    // materials to opacity 0.08 while the mesh rendered the shared clay material at 1.0 — opaque dark
+    // slabs, the cutaway visibly "not working" while its state machine ran perfectly. So: if the
+    // material being replaced is referenced by any live fade entry, the clay material is CLONED per
+    // mesh (a shared material can't hold per-segment opacity), given the entry's CURRENT opacity +
+    // transparent flag, and the entry's materials array is re-pointed at the clone — the tween keeps
+    // driving the exact material the mesh renders, before and after every clay re-route.
+    const priorMat = (mesh.material && !Array.isArray(mesh.material)) ? mesh.material : null;
+    let fadeEntry = null;
+    if(priorMat && S.occlusionFadeState){
+      S.occlusionFadeState.forEach(function(e){
+        if(!fadeEntry && e.materials && e.materials.indexOf(priorMat) >= 0) fadeEntry = e;
+      });
+    }
+    if(fadeEntry){
+      const clayMat = clayDiagnosticMaterialFor(decision.color).clone();
+      clayMat.transparent = true;
+      clayMat.opacity = (typeof fadeEntry.opacity === "number") ? fadeEntry.opacity : 1;
+      mesh.material = clayMat;
+      fadeEntry.materials = fadeEntry.materials.map(function(m){ return m === priorMat ? clayMat : m; });
+    } else {
+      mesh.material = clayDiagnosticMaterialFor(decision.color);
+    }
     if(mesh.isInstancedMesh && mesh.instanceColor){
       const white = new THREE.Color(1, 1, 1);
       for(let i = 0; i < mesh.count; i++) mesh.setColorAt(i, white);

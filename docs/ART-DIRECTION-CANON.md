@@ -1652,3 +1652,13 @@ After reviewing the first doubled-range capture:
 This supersedes only the preceding 60-foot maximum. The torch now reaches 120 feet (24 tabletop
 world units; authored `rangeM` 36.576). Its already-accepted close brightness, decay-2 falloff,
 shadow casting, and torch-only scope remain unchanged.
+
+## CLAYROOM FANTASY-TORCH FALLOFF (Adam, 2026-07-24 — binding; verbatim)
+
+After reviewing the 120-foot capture:
+
+> "that's a little better, though i think the falloff needs to scale outward a bit"
+
+The torch keeps its accepted source brightness, 120-foot maximum, and shadow casting. Its smooth
+falloff broadens modestly from decay 2.0 to 1.75 so more of the useful gradient lives away from the
+flame. This supersedes the preceding decay-2 value only; the torch-specific scope remains.

@@ -69,7 +69,7 @@ check("6. compiled recipes carry the complete per-recipe/per-light authoring con
     && runtime.torch.lights[0].temperatureK === 1900
     && runtime.torch.lights[0].positionStrategy === "socket-relative"
     && runtime.torch.lights[0].rangeM === 36.576
-    && runtime.torch.lights[0].falloff === 2
+    && runtime.torch.lights[0].falloff === 1.75
     && runtime.torch.lights[0].shadow.cast === true
     && runtime.torch.lights[0].shadow.mapSize === 512,
   runtime.torch);

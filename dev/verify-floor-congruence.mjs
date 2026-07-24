@@ -27,10 +27,10 @@
      5. Tier heights preserved — floor tier/elevationY set + riser loTier/hiTier/height set are
         BYTE-IDENTICAL pre-fix vs post-fix for the real row-101 fixture (tier grouping/heights are
         never touched by this render-only fix).
-     6. No-op guarantee — a plain rect room (no smoothShape) is byte-identical to the pre-fix module;
-        a COMPLEX (multi-ring, e.g. dais-ring) rect room with smoothShape===null is ALSO byte-identical
-        (Decisions: "retire buildFloorCells for smoothMode diagonal/radial only... rect default keeps
-        it"); an L-shaped room with no qualifying staircase run stays byte-identical too.
+     6. No-op guarantee (floor-owned projection since 2026-07-24) — untouched-path fixtures keep
+        floor/risers/cellTriangleMap byte-identical to the pre-fix module. Wall buffers are excluded:
+        ruled post-baseline wall evolution (C1B 10-ft walls, trim runs) is legitimate and has its own
+        harnesses; this unit only ever owned the floor/riser miter paths.
      7. Determinism — same cells + opts -> byte-identical buffers across two independent compiles.
 
    Run:  node dev/verify-floor-congruence.mjs */
@@ -324,32 +324,42 @@ if (preFix) {
     return cells;
   }
 
+  // FLOOR-OWNED PROJECTION (2026-07-24): this unit was a render-only FLOOR/RISER miter fix, and
+  // group 6's original whole-output byte-diff silently policed the WALL buffers too. Ruled changes
+  // then landed on walls after the pinned baseline (C1B: Adam's 10-foot wall ruling changed wall
+  // height 2.4->2.0 u; the wall-trim runs grew) and the whole-output diff began failing on
+  // legitimate, recorded evolution — not on this unit's own surface. The no-op guarantee now
+  // compares exactly what the unit owned: floor + risers + cellTriangleMap. Wall geometry has its
+  // own harnesses (room-shell, wall-runs, octagon-miter).
+  const floorOwned = (d) => ({ floor: d.floor, risers: d.risers, cellTriangleMap: d.cellTriangleMap });
+  const sameFloor = (a, b) => JSON.stringify(floorOwned(a)) === JSON.stringify(floorOwned(b));
+
   const rect = rectRoom(8, 8);
   const rectPre = preFix.compileRoomShellData(rect, {});
   const rectPost = compileRoomShellData(rect, {});
-  check("6a. plain rect room (no smoothShape): byte-identical pre-fix vs post-fix", JSON.stringify(rectPre) === JSON.stringify(rectPost));
+  check("6a. plain rect room (no smoothShape): floor/riser output byte-identical pre-fix vs post-fix", sameFloor(rectPre, rectPost));
 
   const complexRect = complexRectRoom();
   const complexRectPre = preFix.compileRoomShellData(complexRect, {});
   const complexRectPost = compileRoomShellData(complexRect, {});
-  check("6b. COMPLEX (annular) rect room, smoothShape===null: byte-identical pre-fix vs post-fix (the buildFloorCells rect-default path this unit's own Decisions say must stay untouched)",
-    JSON.stringify(complexRectPre) === JSON.stringify(complexRectPost));
+  check("6b. COMPLEX (annular) rect room, smoothShape===null: floor/riser output byte-identical pre-fix vs post-fix (the buildFloorCells rect-default path this unit's own Decisions say must stay untouched)",
+    sameFloor(complexRectPre, complexRectPost));
   check("6b-sanity. the complex-rect fixture genuinely has >1 tier and the hole tier is annular (2 rings)",
     complexRectPre.meta.tierCount === 2);
 
   const lCells = lShapeRoom(8, 8);
   const lBarePre = preFix.compileRoomShellData(lCells, {});
   const lBarePost = compileRoomShellData(lCells, {});
-  check("6c. L-shaped room, untagged: byte-identical pre-fix vs post-fix", JSON.stringify(lBarePre) === JSON.stringify(lBarePost));
+  check("6c. L-shaped room, untagged: floor/riser output byte-identical pre-fix vs post-fix", sameFloor(lBarePre, lBarePost));
   const lTaggedPre = preFix.compileRoomShellData(lCells, { smoothShape: "L" });
   const lTaggedPost = compileRoomShellData(lCells, { smoothShape: "L" });
-  check("6d. L-shaped room tagged 'L' (no qualifying staircase run — a genuine architectural corner only): byte-identical pre-fix vs post-fix",
-    JSON.stringify(lTaggedPre) === JSON.stringify(lTaggedPost));
+  check("6d. L-shaped room tagged 'L' (no qualifying staircase run — a genuine architectural corner only): floor/riser output byte-identical pre-fix vs post-fix",
+    sameFloor(lTaggedPre, lTaggedPost));
 
   const octPre = preFix.compileRoomShellData(octagonRoom(12, 12), { smoothShape: "octagon" });
   const octPost = compileRoomShellData(octagonRoom(12, 12), { smoothShape: "octagon" });
-  check("6e. simple (non-annular) tagged octagon room (C4.1a's own Phase-0 wall-miter fixture): byte-identical pre-fix vs post-fix (this unit never touches a simple single-ring tier's own floor path)",
-    JSON.stringify(octPre) === JSON.stringify(octPost));
+  check("6e. simple (non-annular) tagged octagon room (C4.1a's own Phase-0 wall-miter fixture): floor/riser output byte-identical pre-fix vs post-fix (this unit never touches a simple single-ring tier's own floor path)",
+    sameFloor(octPre, octPost));
 }
 
 // ─── 7. Determinism ─────────────────────────────────────────────────────────────────────────────

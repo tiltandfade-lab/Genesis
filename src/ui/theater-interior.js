@@ -1490,6 +1490,14 @@ function interiorBuildBoard(plan, opts) {
   const idx = (x, y) => y * plan.cellW + x;
   const floor = [], wall = [], doorframe = [], pillar = [];
   const kitDoors = []; // KS-2: one entry per KIT_DOORS_ENABLED-eligible door cell — {x,z,widthAxisIsZ,pack,slug}
+  // DOOR TRANCHE (2026-07-23): one entry per door cell, kit-eligible or not — {x,z,widthAxisIsZ}.
+  // itrDoorWidthAxisIsZ (the multi-cell wall-run scan, computed once per door below) is THE authority
+  // for which axis the pierced wall runs; the frame has always consumed it, but the leaf
+  // (interiorBuildInteractableDoorMesh) re-derived orientation from a lone east-west floor-neighbor
+  // heuristic that misfires for a door on the room's own edge row (both lateral neighbors are room
+  // floor there) — the clay fixture's leaf mounted PERPENDICULAR to its wall, a monolith jutting
+  // into the room. The board now carries the frame's own answer so frame and leaf can never disagree.
+  const doorAxes = [];
   const portals = []; // STAGE-A A1 — DARKNESS PORTAL cards, populated in the DOOR branch below
   let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
   const track = (x, z) => { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z); };
@@ -1649,6 +1657,7 @@ function interiorBuildBoard(plan, opts) {
         // up with the kit mesh), while the wall-thickness reveal + STAGE-A A1 darkness-portal blocks
         // further down are UNCHANGED (they render the surrounding WALL, not the frame, regardless of
         // which frame geometry fills the aperture).
+        doorAxes.push({ x, z: y, widthAxisIsZ }); // every door cell, kit or prism — the leaf's one axis authority
         const kitEligible = !!KIT_DOORS_ENABLED && itrKitDoorEligible(x, y, plan, widthAxisIsZ, squeeze);
         if (kitEligible) {
           kitDoors.push({ x, z: y, widthAxisIsZ, pack: "kenney-modular-dungeon-kit", slug: "gate-door" });
@@ -1675,14 +1684,24 @@ function interiorBuildBoard(plan, opts) {
           // own slim footprint, never the old wide column's) via `yBase` (BW2-5's own field — see the
           // constants block's header comment).
           if (!squeeze) {
-            doorframe.push({
-              x, z: y, sx: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, sy: ITR_ARCH_STEP1_HEIGHT,
+            // DOOR TRANCHE (Adam, 2026-07-23 — "taller than the wall", and the FFT-economy law that
+            // the production camera is the judge): the corbel stack's AUTHORED heights (0.14 header +
+            // 0.22 + 0.16) total h + 0.52 = 2.56 against a 2.4 wall — arch step 2 poked 0.16 above
+            // every standard doorway's own wall and read as loose geometry. Each step now takes only
+            // the height budget left below the wall top (baseH), in order; a step whose budget rounds
+            // to nothing is simply not emitted. At default dims: step 1 lands exactly flush with the
+            // wall top and step 2 is dropped; a taller-scaled wall (d.heightScale) regains both steps
+            // automatically because the budget scales with baseH.
+            const archStep1H = Math.min(ITR_ARCH_STEP1_HEIGHT, Math.max(0, baseH - (h + ITR_HEADER_HEIGHT)));
+            const archStep2H = Math.min(ITR_ARCH_STEP2_HEIGHT, Math.max(0, baseH - (h + ITR_HEADER_HEIGHT + archStep1H)));
+            if (archStep1H > 0.02) doorframe.push({
+              x, z: y, sx: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, sy: archStep1H,
               sz: wFrac * ITR_ARCH_STEP1_WIDTH_FRAC, color: trimColor, yBase: h + ITR_HEADER_HEIGHT, archStep: 1,
             });
-            doorframe.push({
-              x, z: y, sx: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, sy: ITR_ARCH_STEP2_HEIGHT,
+            if (archStep2H > 0.02) doorframe.push({
+              x, z: y, sx: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, sy: archStep2H,
               sz: wFrac * ITR_ARCH_STEP2_WIDTH_FRAC, color: trimColor,
-              yBase: h + ITR_HEADER_HEIGHT + ITR_ARCH_STEP1_HEIGHT, archStep: 2,
+              yBase: h + ITR_HEADER_HEIGHT + archStep1H, archStep: 2,
             });
           }
         }
@@ -1936,6 +1955,7 @@ function interiorBuildBoard(plan, opts) {
     // assembly or fall back to the prism hinge+leaf — pure placement data (position/rotation axis),
     // no THREE, no state; the state->pose mapping stays entirely theater-boot.js's job (D0's own split).
     kitDoors: kitDoors,
+    doorAxes: doorAxes,
     // KS-3 (docs/KENNEY-SOCKET-WAVE.md): siblings of `instances`/`kitDoors` above — one entry per
     // kit-tiled wall module / floor block (pure placement data, no THREE; theater-boot.js's GL layer
     // owns the actual donor-piece mount). `instances.wall`/`instances.floor` above already omit every

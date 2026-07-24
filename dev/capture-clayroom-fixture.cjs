@@ -79,6 +79,8 @@ function pageProbe() {
     // CL-R3a — the compile-time wall-omission decision set (ruleId/version/active/omitted/built), so
     // the receipt names exactly which wall segments were omitted and by which rule.
     wallOmission: T._wallOmissionForTest ? T._wallOmissionForTest() : null,
+    // door tranche — where each practical light fixture physically mounted (the placement-bias proof)
+    fixtures: T._interiorFixtureEmittersForTest ? T._interiorFixtureEmittersForTest() : null,
     provenanceAudit: T._clayProvenanceAuditForTest ? T._clayProvenanceAuditForTest() : null,
     stats: T.stats ? { boardBuilds: T.stats.boardBuilds, boardSkips: T.stats.boardSkips } : null,
   };

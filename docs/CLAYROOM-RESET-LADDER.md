@@ -172,7 +172,11 @@ CL-R0's own required list is not fully discharged. These are the items still red
    the production shell compiler the torch wall-mounts correctly and no capture warns (three
    receipts: omit NONE · fade-only NONE · instanced WARNS). The deeper CR-3 question — labelling
    the diagnostic rig vs a rolled practical so the two are never conflated — remains **CL-R1**'s.
-2. **The door does not read as a door — and now contradicts the prose twin in plain sight.** The
+2. **RESOLVED 2026-07-23 evening — see C1A-CLAY-ROOM.md addendum D18** (the door tranche: cell-lie
+   fix + record-derived leaf through the production hinge builder + axis authority + arch clamp +
+   the placement-bias clause). Evidence `dev/clay-captures/door/`; checks 23/24 red-first; original
+   finding text preserved below.
+   **The door does not read as a door — and now contradicts the prose twin in plain sight.** The
    record carries `portal.state: "closed"` and `clayRoomProse` says "the door is closed."; the frame
    shows an open black gap between jambs. RL-1 (the leaf renders only when `bindWalkInteractables`
    populates `board.interactables`, which the clay mount never calls) was deferred to C1B — but with

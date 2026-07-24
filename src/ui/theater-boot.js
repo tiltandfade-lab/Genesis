@@ -4235,7 +4235,7 @@ function itrDoorHingeSign(sourceRef){
 // template has finished its async preload (interiorBuildKitDoorMesh returns non-null only then), the
 // kit assembly renders INSTEAD of the prism hinge+leaf below — every prism path survives as the
 // unconditional fallback (kitDoorInfo absent, or the template still cold) per the wave's own posture.
-function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile){
+function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile, doorAxisInfo){
   if(kitDoorInfo){
     const kitMesh = interiorBuildKitDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo.widthAxisIsZ, realmId, realmProfile);
     if(kitMesh) return kitMesh;
@@ -4260,17 +4260,26 @@ function interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorIn
   leaf.castShadow = true; leaf.receiveShadow = true;
   leaf.userData = { isDoorLeaf: true };
 
-  // corridor-axis orientation: floor on BOTH the east and west neighbor cells means the corridor runs
-  // east-west, so the wall (and the door filling it) plane runs north-south — rotate the default
-  // (north-south-spanning) leaf 90 degrees. Degrades to the default orientation (never throws) when
-  // floorTopMap can't resolve either axis (a harness board with no floor instances at all).
+  // ORIENTATION (door tranche, 2026-07-23): the board's own doorAxes answer — computed by
+  // theater-interior's itrDoorWidthAxisIsZ, the SAME multi-cell wall-run scan that orients the
+  // frame — is authoritative when present: widthAxisIsZ means the pierced wall runs along Z, so the
+  // leaf (which spans X at rest, jambs offset along ±x) rotates 90° to span Z; a width-along-X door
+  // stays unrotated. The old east-west floor-neighbor heuristic remains ONLY as the fallback for a
+  // caller that supplies no axes (a bare harness board): it misfires for any door on a room's own
+  // edge row — both lateral neighbors are room floor there — which is exactly how the clay
+  // fixture's closed leaf mounted perpendicular to its wall.
   const rx = Math.round(entry.x), ry = Math.round(entry.y);
-  const ew = !!(floorTopMap && floorTopMap.has((rx - 1) + "," + ry) && floorTopMap.has((rx + 1) + "," + ry));
+  let leafSpansZ;
+  if(doorAxisInfo && typeof doorAxisInfo.widthAxisIsZ === "boolean"){
+    leafSpansZ = doorAxisInfo.widthAxisIsZ;
+  } else {
+    leafSpansZ = !!(floorTopMap && floorTopMap.has((rx - 1) + "," + ry) && floorTopMap.has((rx + 1) + "," + ry));
+  }
 
   const hinge = new THREE.Group();
   const floorTop = interiorFloorTopAt(floorTopMap, entry.x, entry.y);
   hinge.position.set((entry.x || 0) - (cx || 0), floorTop, (entry.y || 0) - (cz || 0));
-  hinge.rotation.y = ew ? Math.PI / 2 : 0;
+  hinge.rotation.y = leafSpansZ ? Math.PI / 2 : 0;
 
   // D4c: rest pose (rotation only) comes from the ONE shared pose function itrDoorRestPose — the
   // tween path (interiorBuildInteractables, below) computes its FROM/TO the same way, so a fresh
@@ -4361,16 +4370,20 @@ function itrKitDoorMap(kitDoors){
    so the existing prism tween code below is untouched (wrapped in the else branch, byte-identical).
    KS-3 retrofit: `realmId`/`realmProfile` thread straight through to interiorBuildInteractableDoorMesh
    -> interiorBuildKitDoorMesh -> kitDoorTemplateFor, closing the realm-grading-passthrough deviation. */
-function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors, realmId, realmProfile){
+function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors, realmId, realmProfile, doorAxes){
   const group = new THREE.Group();
   const bySourceRef = {};
   const prevStates = S.interiorDoorStateBySourceRef || {};
   const nextStates = {};
   const kitDoorMap = itrKitDoorMap(kitDoors);
+  // door tranche: "x,z" -> {widthAxisIsZ}, same keying convention as itrKitDoorMap just above.
+  const doorAxisMap = new Map();
+  (doorAxes || []).forEach((a) => { if(a) doorAxisMap.set(Math.round(a.x) + "," + Math.round(a.z), a); });
   (interactables || []).forEach((entry) => {
     if(!entry || entry.archetype !== "door") return; // D4 SCOPE: doors ship first (BW5 IA-4) — other archetypes render in D5
     const kitDoorInfo = entry.x != null && entry.y != null ? kitDoorMap.get(Math.round(entry.x) + "," + Math.round(entry.y)) : null;
-    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile);
+    const doorAxisInfo = entry.x != null && entry.y != null ? doorAxisMap.get(Math.round(entry.x) + "," + Math.round(entry.y)) : null;
+    const hinge = interiorBuildInteractableDoorMesh(entry, cx, cz, floorTopMap, kitDoorInfo, realmId, realmProfile, doorAxisInfo);
     if(!hinge) return;
     const sourceRef = entry.sourceRef;
     nextStates[sourceRef] = entry.state;
@@ -11372,7 +11385,8 @@ function setInteriorBoard(data){
         S.wallOmissionReport.omitted.push({ segIndex: entry.ownerSegIndex, mid: segMid });
         return;
       }
-      S.wallOmissionReport.built.push(entry.ownerSegIndex);
+      // built entries carry their mids too (door-tranche receipt gap: built:[0,1,4] was unanswerable)
+      S.wallOmissionReport.built.push({ segIndex: entry.ownerSegIndex, mid: segMid });
       // C4.1b: each upper mesh gets its OWN cloned material — never the shared `wallMat` the stem/trim
       // meshes use. Independent per-segment opacity is the entire point of C4.1a's own "one mesh per
       // segment" decision (theater-boot.js:8907's own comment); sharing `wallMat` here would make
@@ -11531,8 +11545,22 @@ function setInteriorBoard(data){
   // E0 — Seam for wall mounts: thread C4.1a's own mount-slot data (S.interiorLastRoomShell, built by
   // the shell block above) in so a wall-mount light can snap to its nearest slot; absent (ITR_ROOM_SHELL
   // off, or a shell that produced zero slots) degrades every wall-mount fixture to floor, defensively.
+  // Wall-omission ruling clause 5 (ART-DIRECTION-CANON, Adam 2026-07-23): "meaningful wall-mounted
+  // content biases to camera-visible walls at placement time — a solver constraint, never a renderer
+  // patch." Found live in the door tranche: the re-pinned walkId re-rolled the room's torch onto the
+  // SOUTH wall, which the omission ruling doesn't build — the fixture hung mid-air on a wall that
+  // isn't there. Slots on omitted segments are filtered out ahead of nearest-slot resolution
+  // (S.wallOmissionReport was just written by the shell block above, same rebuild). If the filter
+  // would empty the list entirely (cannot happen while far walls always build — defensively), the
+  // unfiltered list stands rather than degrading every wall fixture to floor.
+  let mountSlotsForPlacement = S.interiorLastRoomShell ? S.interiorLastRoomShell.mountSlots : null;
+  if(mountSlotsForPlacement && S.wallOmissionReport && S.wallOmissionReport.active && S.wallOmissionReport.omitted.length){
+    const omittedSegs = new Set(S.wallOmissionReport.omitted.map((o) => o.segIndex));
+    const visibleSlots = mountSlotsForPlacement.filter((sl) => sl && !omittedSegs.has(sl.ownerSegIndex));
+    if(visibleSlots.length) mountSlotsForPlacement = visibleSlots;
+  }
   const wallMountData = S.interiorLastRoomShell
-    ? { mountSlots: S.interiorLastRoomShell.mountSlots, wallSegments: S.interiorLastRoomShell.wallSegments }
+    ? { mountSlots: mountSlotsForPlacement, wallSegments: S.interiorLastRoomShell.wallSegments }
     : null;
   const lightsBuilt = interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces, isBrightRealm, wallMountData);
   S.interiorGroup.add(lightsBuilt.group);
@@ -11667,7 +11695,7 @@ function setInteriorBoard(data){
   // interiorBuildInteractables' own header for the full render-keystone contract). KS-2:
   // data.kitDoors is interiorBuildBoard's OWN output (theater-interior.js, a sibling of data.instances)
   // — unlike interactables/pieces/dressing above, this one IS produced by interiorBuildBoard itself.
-  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap, data.kitDoors, data.realmId, S.realmProfile);
+  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap, data.kitDoors, data.realmId, S.realmProfile, data.doorAxes);
   S.interiorGroup.add(interactablesGroup);
   // D4 — E0-1 FADE COMPLIANCE (the SAME append-never-overwrite pattern the wall-fixture block above
   // uses, docs/PHASE-3-WAVE-1-SPECS.md E0-1): a door on an occlusion-suppressed wall segment fades
@@ -14706,10 +14734,29 @@ function clayRoomSurfaceCensus(){
     const decision = clayDiagnosticRouteFor(role, mode);
     const mat = (mesh.material && !Array.isArray(mesh.material)) ? mesh.material : null;
     const textured = !!(mat && mat.map);
+    // CR-6's lesson made permanent (the seam grid audited "owned" while rendering 13 cells away, and
+    // the door tranche found the leaf owned-but-perpendicular): provenance without PLACEMENT is half
+    // an answer. Every census row now carries the mesh's world position and its geometry's local
+    // bounding size, computed without importing THREE into this diagnostic (the Vector3 comes from
+    // position.constructor — the instance's own class).
+    let worldPos = null, size = null;
+    try {
+      const v = new mesh.position.constructor();
+      mesh.getWorldPosition(v);
+      worldPos = [+v.x.toFixed(3), +v.y.toFixed(3), +v.z.toFixed(3)];
+      if(mesh.geometry){
+        if(!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox();
+        const bb = mesh.geometry.boundingBox;
+        if(bb) size = [+(bb.max.x - bb.min.x).toFixed(3), +(bb.max.y - bb.min.y).toFixed(3), +(bb.max.z - bb.min.z).toFixed(3)];
+      }
+    } catch(e){}
     const row = {
       role: decision.role,
       route: decision.route,
       group: groupName,
+      pos: worldPos,
+      size: size,
+      rotY: +((mesh.rotation && mesh.rotation.y) || 0).toFixed(3),
       builder: (mesh.userData && mesh.userData.interiorKind) ? "interiorBuildInstancedMesh/" + mesh.userData.interiorKind
         : (mesh.userData && mesh.userData.spriteSlug) ? "buildSpriteBillboard"
         : (mesh.userData && mesh.userData.furnitureKind) ? "buildFurnitureAssembly"

@@ -259,3 +259,41 @@ and the replacement is owned elsewhere:
 **Owner going forward: [CLAYROOM-RESET-LADDER.md](CLAYROOM-RESET-LADDER.md) §CL-R0.** RL-1 (door
 leaf) and RL-2 (clay lighting over the interior rig) remain C1B's, and RL-1 is now recorded there as
 a *visible* remaining failure rather than a deferred note — the frame contradicts the prose twin.
+
+## Addendum D18 — THE DOOR TRANCHE: RL-1 discharged + three more defects (2026-07-23 evening)
+
+Adam: "now let's fix the door once and for all." Four defects, each proven red-first in
+`dev/verify-clay-room.mjs` and visually in `dev/clay-captures/door/`:
+
+1. **The cell lie (new — nobody had caught it).** The record and prose twin say the portal is at
+   `c-2-0`; the attempt-11 pinned fixture carved the door at plan (7,13) = local `c-4-0`, and the
+   EDGE-only assert let prose and render disagree about WHERE the door is for the fixture's whole
+   life. Fixed: attempt 60 (first walkId in 1-200 whose carved door lands at the record's exact
+   cell) + the assert upgraded to exact-cell (check 23a red→green).
+2. **RL-1, the missing leaf.** `clayRoomBoardFrom` now derives `board.interactables` FROM the record
+   (the same way it stages the crate and citizen): state mapped through production vocabulary
+   (prose "closed" → state "shut", per walk-interactables' own word list), slug/extrudeDepth from
+   `INTERACTABLES_REGISTRY`, position = the carved cell the exact-cell assert just proved. The
+   closed leaf mounts through the UNCHANGED production hinge builder — an extruded rectangle hinged
+   on its corner edge (THE DOOR CONTRACT verbatim). Supersedes D15 point 1's "left empty" (its ban
+   on hand-built RENDER-layer literals stands; this is canonical board data in the engine layer).
+   Checks 15i (rewritten red-first), 23b/23c.
+3. **The perpendicular leaf (found by the new placement census).** The leaf first mounted 90° wrong —
+   a monolith jutting into the room — because the consumer re-derived orientation from an east-west
+   floor-neighbor heuristic that misfires for any door on a room's own edge row. Fixed at the
+   authority level: `theater-interior` now emits `board.doorAxes` (its own `itrDoorWidthAxisIsZ`
+   multi-cell wall-run scan — the SAME answer that orients the frame) and the leaf consumes it;
+   the old heuristic survives only as the axes-less-caller fallback. Check 24a red→green;
+   `verify-d4-doors` 203/203 confirms production doors unbroken.
+4. **The arch overshoot.** Corbel step 2 topped out at h+0.52 = 2.56 against the 2.4 wall (Adam:
+   "taller than the wall"). Each stacked frame element now takes only the height budget below the
+   wall top; at default dims step 1 lands flush and step 2 is not emitted; taller-scaled walls
+   regain both automatically. Check 23d red→green; production-wide, `verify-dungeon-interior`
+   288/288.
+
+**Cascade:** the attempt re-pin re-rolled the room's torch onto the omission-ruled south wall — a
+floating fixture, the exact edge case Adam's wall ruling deferred to placement. Its clause 5 is now
+implemented: mount slots on omitted segments are filtered before nearest-slot resolution (receipt:
+fixture on west seg 4, built; zero warnings). The TEXT-FIRST contradiction (prose "the door is
+closed." over an open gap) is discharged: record, prose, and render now agree on the door's cell,
+state, and pose.

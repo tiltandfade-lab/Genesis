@@ -695,9 +695,16 @@ const check = (name, cond, detail = "") =>
       compiled.board.pieces[0].cellX === room.x + 1 && compiled.board.pieces[0].cellY === room.y + 3,
       JSON.stringify(compiled.board.pieces));
 
-    check("15i. board.interactables/board.dressing are empty (never hand-built — D15's own closing law)",
-      Array.isArray(compiled.board.interactables) && compiled.board.interactables.length === 0 &&
-      Array.isArray(compiled.board.dressing) && compiled.board.dressing.length === 0);
+    // 15i REWRITTEN by the door tranche (2026-07-23; red-first — the old "interactables must be
+    // empty" assertion went red the moment the record-derived door entry landed, which is the
+    // supersession working as intended). D15's ban was on HAND-BUILT render-layer literals; the
+    // adapter deriving canonical board DATA from the record (the same way it stages the crate and
+    // the citizen) is the production shape, and RL-1 is discharged by it. Dressing stays empty.
+    check("15i. board.interactables carries the record-derived door only; board.dressing stays empty",
+      Array.isArray(compiled.board.interactables) && compiled.board.interactables.length === 1 &&
+      compiled.board.interactables[0].archetype === "door" &&
+      Array.isArray(compiled.board.dressing) && compiled.board.dressing.length === 0,
+      JSON.stringify({ interactables: compiled.board.interactables, dressing: compiled.board.dressing }));
 
     // determinism through the REAL chain — two independent calls, byte-identical board.
     const compiled2 = win.clayRoomBoardFrom(record);
@@ -941,6 +948,63 @@ const check = (name, cond, detail = "") =>
       !got.has(4), JSON.stringify([...got]));
     check("22e. the harness result matches the banked live receipt (2 camera-side of 4 room edges)",
       got.size === 2, "got.size=" + got.size);
+  }
+}
+
+// ============================================================================
+// 23. THE DOOR (Adam, 2026-07-23: "now let's fix the door once and for all") — all EXECUTED through
+// the real compile chain (win.clayRoomBoardFrom -> spatializePlan -> interiorBuildBoard), red-first:
+//   23a exposed the CELL LIE — the record says portal c-2-0 (plan 5,13) but the pinned fixture carved
+//       the door at (7,13); the old assert checked only the EDGE, so prose and render disagreed on
+//       WHERE the door is for the fixture's whole life.
+//   23b/23c prove the leaf: board.interactables carries the record-derived door entry in the
+//       production shape (state "shut" — wiResolveDoorState's own word list maps prose "closed" to
+//       state "shut"), so interiorBuildInteractables mounts a CLOSED leaf; RL-1 discharged.
+//   23d exposed the ARCH OVERSHOOT: doorframe arch step 2 topped out at h+0.52 = 2.56 against a 2.4
+//       wall — Adam's "taller than the wall". Every doorframe prism must fit inside the wall height.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const out = win.clayRoomBoardFrom(record);
+    // the portal's own local cell -> plan coords through the REAL spatialized room rect
+    const cellMatch = String(record.portal.cell).match(/^c-(\d+)-(\d+)$/);
+    const wantX = out.room.x + Number(cellMatch[1]);
+    const wantY = out.room.y + Number(cellMatch[2]);
+    const door = (out.plan.doors || []).find((d) => d && d.betweenSegs && d.betweenSegs.indexOf(1) >= 0);
+    check("23a. the carved door cell EQUALS record.portal.cell (the prose twin's cell is the rendered cell)",
+      !!door && door.x === wantX && door.y === wantY,
+      `record says (${wantX},${wantY}); spatializer carved (${door && door.x},${door && door.y})`);
+
+    const ia = out.board.interactables || [];
+    check("23b. board.interactables carries exactly one record-derived door entry",
+      ia.length === 1 && ia[0].archetype === "door" && ia[0].sourceRef === record.portal.id,
+      JSON.stringify(ia));
+    check("23c. the entry's state is production-vocabulary \"shut\" (prose \"closed\" mapped, not passed raw)",
+      ia.length === 1 && ia[0].state === "shut" && ia[0].x === (door && door.x) && ia[0].y === (door && door.y),
+      JSON.stringify(ia[0] || null));
+
+    // 24 (red-first): the leaf mounted PERPENDICULAR to the north wall — a monolith jutting into the
+    // room (probe: hinge rotY π/2, leaf spanning Z at world (0,·,−1.55)). Cause: the consumer's own
+    // east-west-neighbor heuristic misfires for a door on the room's edge row (both lateral
+    // neighbors are room floor). The authority for the pierced wall's axis is theater-interior's
+    // itrDoorWidthAxisIsZ (the multi-cell wall-run scan that already orients the FRAME); the board
+    // must carry that answer to the leaf, never let the leaf re-derive it worse.
+    const axes = out.board.doorAxes || [];
+    check("24a. board.doorAxes carries the frame's own axis answer for the door cell",
+      axes.length === 1 && axes[0].x === (door && door.x) && axes[0].z === (door && door.y) &&
+      axes[0].widthAxisIsZ === false,
+      JSON.stringify(axes));
+
+    const frames = (out.board.instances && out.board.instances.doorframe) || [];
+    const wallH = out.board.wallHeightBase || 2.4;
+    const over = frames.filter((f) => ((f.yBase || 0) + (f.sy || 0)) > wallH + 1e-6);
+    check("23d. every doorframe prism (jamb/header/arch) fits INSIDE the wall height",
+      frames.length > 0 && over.length === 0,
+      "over-height prisms: " + JSON.stringify(over.map((f) => ({ yBase: f.yBase, sy: f.sy, top: (f.yBase || 0) + (f.sy || 0), wallH }))));
+  } catch(e) {
+    check("23. door checks (chain executed without throw)", false, e.stack || String(e));
   }
 }
 

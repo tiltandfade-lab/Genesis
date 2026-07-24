@@ -388,7 +388,14 @@ function clayRoomEditRefusal(field){
    (CLAUDE.md's "loud failure over silent default" law), rather than silently rendering a door on the
    wrong wall. */
 var CLAY_ROOM_WALK_TOPOLOGY = "The Hub";
-var CLAY_ROOM_WALK_ATTEMPT = 11;
+// ATTEMPT 60 (was 11) — THE DOOR TRANCHE (Adam, 2026-07-23: "fix the door once and for all"). The
+// attempt-11 pin satisfied the old EDGE-only assert while carving the door at plan (7,13) = local
+// c-4-0 — but the record (and therefore the prose twin) says the portal is at c-2-0. The fixture
+// spent its whole life rendering the door two cells from where the text said it was, and the
+// edge-only assert let it. Attempt 60 is the first walkId (probe over attempts 1-200, same seed/
+// topology) whose carved door lands at local c-2-0 exactly; the assert below is now EXACT-CELL, so
+// this class of truth drift throws instead of shipping.
+var CLAY_ROOM_WALK_ATTEMPT = 60;
 
 // clayRoomWalkFixtureFrom(record) -> {segments, topology, walkId, focusSegNum} — the synthetic walk
 // fixture's OWN fields (dims/exits/areaType) derived from the record's dims + id + seed, per D15
@@ -470,6 +477,17 @@ function clayRoomBoardFrom(record){
       ") now resolves the exit door to edge '" + doorEdge + "', expected '" + record.portal.edge +
       "' (record.portal.edge) — place-spatialize.js's own layout math drifted; re-derive CLAY_ROOM_WALK_ATTEMPT");
   }
+  // DOOR TRANCHE (2026-07-23): the EDGE check above proved insufficient — attempt 11 passed it while
+  // carving the door two cells from record.portal.cell, so the prose twin named a cell the render
+  // never showed. The assert is now exact: the carved cell must BE the record's cell.
+  var portalCellMatch = String(record.portal.cell).match(/^c-(\d+)-(\d+)$/);
+  var portalPlanX = room.x + Number(portalCellMatch[1]);
+  var portalPlanY = room.y + Number(portalCellMatch[2]);
+  if(roomDoor.x !== portalPlanX || roomDoor.y !== portalPlanY){
+    throw new Error("clayRoomBoardFrom: pinned fixture carved the door at plan (" + roomDoor.x + "," + roomDoor.y +
+      ") but record.portal.cell '" + record.portal.cell + "' is plan (" + portalPlanX + "," + portalPlanY +
+      ") — the prose twin would lie about WHERE the door is; re-derive CLAY_ROOM_WALK_ATTEMPT");
+  }
 
   // KIT_SHELL_ENABLED/KIT_DOORS_ENABLED: theater-interior.js's OWN documented dev/harness escape
   // hatch ("so a live session or a harness can flip it") — flipped OFF only for this one synchronous
@@ -505,15 +523,38 @@ function clayRoomBoardFrom(record){
   board.pieces = citizenCell ? [{
     slug: record.citizen.bestiaryId, cellX: room.x + citizenCell.x, cellY: room.y + citizenCell.z
   }] : [];
-  // D15 point 1 — no hand-assembled interactables: the door LEAF (a swinging mesh with an open/closed
-  // pose) mounts only from a data.interactables entry (theater-boot.js's own "plain caller-set field"
-  // convention for that array too) — in production that array is populated by bindWalkInteractables
-  // (src/engine/theater-data.js's trayFrom), a pipeline stage D15 does not name and this unit does not
-  // call. Left empty rather than hand-built: the wall APERTURE + frame (jambs/header/arch corbels)
-  // still render — real interiorBuildBoard output, board.instances.doorframe — but with no leaf
-  // filling it. Reported as a production-pipeline finding in this unit's own build report, not patched
-  // from the clay side (this file's own D15 header note above + CLAUDE.md's validator-truth law).
-  board.interactables = [];
+  // DOOR TRANCHE (2026-07-23, supersedes D15 point 1's "left empty" — RL-1 discharged): the leaf
+  // mounts from a data.interactables entry, and this adapter now derives that entry FROM THE RECORD,
+  // exactly the way it already stages the crate (board.furniture) and the citizen (board.pieces)
+  // from record fields. This is canonical board DATA derived in the engine layer — not the
+  // hand-built render-layer geometry D15 banned (that ban stands; theater-boot builds nothing here).
+  //   state: the record's prose fact is "closed"; the production state vocabulary is shut/open/
+  //     broken, and walk-interactables' own word list (wiResolveDoorState, src/engine/
+  //     walk-interactables.js — "closed" sits in the shut row) is the mapping authority. Mirrored
+  //     inline rather than called: wiResolveDoorState is that module's private helper (its manifest
+  //     `owns` is bindWalkInteractables alone), the same layering precedent as claySourceRef.
+  //   slug/extrudeDepth: read from the SAME generated registry production reads
+  //     (INTERACTABLES_REGISTRY, data/interactables.js), realm row first, chrome fallback —
+  //     mirroring wiRegistryEntry's own lookup; absent rows degrade to nulls and the consumer's
+  //     documented ITR_DOOR_FALLBACK_DEPTH path, exactly production's degrade.
+  //   x/y: the CARVED door cell — which the exact-cell assert above just proved IS the record's
+  //     portal cell, so record fact, prose twin, and render agree on where the door is.
+  var doorState = (record.portal.state === "closed") ? "shut" : record.portal.state;
+  var doorReg = null;
+  if(typeof INTERACTABLES_REGISTRY !== "undefined" && INTERACTABLES_REGISTRY){
+    var doorRealmReg = INTERACTABLES_REGISTRY["ash"] || INTERACTABLES_REGISTRY["chrome"];
+    doorReg = doorRealmReg ? (doorRealmReg["door@" + doorState] || null) : null;
+  }
+  board.interactables = [{
+    archetype: "door",
+    state: doorState,
+    slug: doorReg ? doorReg.slug : null,
+    extrudeDepth: doorReg ? doorReg.extrudeDepth : null,
+    name: "door",
+    x: roomDoor.x, y: roomDoor.y,
+    roomSegNum: fixture.focusSegNum,
+    sourceRef: record.portal.id
+  }];
   board.dressing = [];
 
   return { board: board, room: room, plan: plan, fixture: fixture };

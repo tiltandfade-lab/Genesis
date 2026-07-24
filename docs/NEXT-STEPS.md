@@ -36,7 +36,8 @@ The Desktop research packet is folded (`CLAYROOM-RESET-LADDER.md`, `GOLDEN-SITES
    trigger law recorded, its executable test rides C1B's door state machine; carve-outs for
    structural masses / apertures / the strategic view. Test in CL-F00, A/B against `shell-ab-04`.
    Supersedes the render-time camera-side fade for the fixed camera; moots the shell-default question.
-3. ☐ **The door.** RL-1 was deferred to C1B as "just wire the leaf". It is worse: the record says
+3. ☑ **The door — DONE 2026-07-23 evening** (C1A-CLAY-ROOM.md D18: cell truth + leaf + axis
+   authority + arch clamp + placement bias; door/closed capture banked). Original scope line: RL-1 was deferred to C1B as "just wire the leaf". It is worse: the record says
    `portal.state:"closed"`, the prose twin says "the door is closed.", and the render shows an open
    gap framed by two thin planks with no reveal depth, standing taller than the wall. Build the
    doorway as a hole-with-reveal in an honest-thickness wall (the omission tranche gives it that

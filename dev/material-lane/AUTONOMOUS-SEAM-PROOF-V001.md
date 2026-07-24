@@ -14,13 +14,15 @@ the author of the material's visual character. It deliberately stops before Mate
 
 Two different topology lanes pass:
 
-1. **Continuous / plank-and-batten** — selects the best opposing-edge phase from the ImageGen
-   source, blends only a narrow wrapped border band, and locks both edge pairs.
+1. **Period-aware / plank-and-batten** — detects two matching construction crevices, crops a
+   complete crevice-to-crevice period, preserves that vertical construction boundary, and repairs
+   only the non-structural top/bottom edge.
 2. **Modular / slate** — extracts four ImageGen-authored slate sprites and assembles them on a
    toroidal staggered grid whose row, column, and variant periods divide the square canvas exactly.
 
 The builder emits the final source sprite, a 3x3 repeat, a combined proof board, and a JSON
-receipt. It exits non-zero if either material misses its topology gate.
+receipt. It exits non-zero if either material misses its topology gate or if the proof renderer
+attempts to display a square tile or repeat at a non-square aspect ratio.
 
 Run:
 
@@ -55,8 +57,10 @@ moss, cracks, props, watermark, or extra objects. Do not use #00ff00 inside any 
 ## Acceptance
 
 The boundary transition must be no stronger than the 95th percentile of ordinary internal
-neighbor transitions. Modular periods must close exactly over the output dimensions. A 3x3
-repeat is mandatory evidence.
+neighbor transitions. A wrapped construction material's largest circular crevice gap may not
+exceed 1.65x its median crevice gap. Modular periods must close exactly over the output
+dimensions. A 3x3 repeat is mandatory evidence, displayed at an asserted 1:1 aspect ratio with
+join locations marked by copper ticks.
 
 This is a **technical topology proof**, not a final taste approval. The slate's small variant set
 still produces visible repetition, and both sources may need quieter albedo treatment before they

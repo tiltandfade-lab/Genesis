@@ -59,42 +59,97 @@ def seam_metrics(image: Image.Image) -> dict[str, float | bool]:
     }
 
 
-def best_crop_origin(arr: np.ndarray, target: int) -> tuple[int, int]:
-    """Find a crop whose opposing border neighborhoods already match well."""
+def vertical_construction_cadence(image: Image.Image) -> dict[str, float | int | bool]:
+    arr = np.asarray(image.convert("RGB"), dtype=np.float32)
+    luminance = (
+        0.2126 * arr[:, :, 0] + 0.7152 * arr[:, :, 1] + 0.0722 * arr[:, :, 2]
+    )
+    profile = luminance.mean(axis=0)
+    cutoff = float(np.percentile(profile, 10))
+    dark_columns = np.flatnonzero(profile <= cutoff)
+    groups: list[list[int]] = []
+    for x in dark_columns.tolist():
+        if not groups or x > groups[-1][-1] + 1:
+            groups.append([x])
+        else:
+            groups[-1].append(x)
 
-    height, width = arr.shape[:2]
-    max_x = width - target
-    max_y = height - target
+    width = image.width
+    if len(groups) >= 2 and groups[0][0] == 0 and groups[-1][-1] == width - 1:
+        wrapped = [x - width for x in groups[-1]] + groups[0]
+        groups = [wrapped] + groups[1:-1]
 
-    def x_cost(x: int) -> float:
-        left = arr[:, x : x + 8]
-        right = arr[:, x + target - 8 : x + target][:, ::-1]
-        return rms(left - right)
+    centers: list[int] = []
+    for group in groups:
+        center = min(group, key=lambda x: profile[x % width]) % width
+        centers.append(center)
+    centers = sorted(set(centers))
+    if len(centers) < 3:
+        return {
+            "detected_crevices": len(centers),
+            "cadence_gate": False,
+        }
 
-    def y_cost(y: int) -> float:
-        top = arr[y : y + 8]
-        bottom = arr[y + target - 8 : y + target][::-1]
-        return rms(top - bottom)
+    circular_gaps = [
+        (centers[(index + 1) % len(centers)] - centers[index]) % width
+        for index in range(len(centers))
+    ]
+    median_gap = float(np.median(circular_gaps))
+    max_gap = float(max(circular_gaps))
+    return {
+        "detected_crevices": len(centers),
+        "median_circular_gap": round(median_gap, 3),
+        "largest_circular_gap": round(max_gap, 3),
+        "largest_to_median_gap": round(max_gap / max(median_gap, 0.001), 3),
+        "cadence_gate": bool(max_gap <= median_gap * 1.65),
+    }
 
-    x = min(range(max_x + 1), key=x_cost)
-    y = min(range(max_y + 1), key=y_cost)
-    return x, y
+
+def find_vertical_construction_period(arr: np.ndarray) -> tuple[int, int]:
+    """Find two matching dark construction crevices roughly one tile apart."""
+
+    column_rgb = arr[:, :, :3].mean(axis=0)
+    luminance = (
+        0.2126 * column_rgb[:, 0]
+        + 0.7152 * column_rgb[:, 1]
+        + 0.0722 * column_rgb[:, 2]
+    )
+    dark_cutoff = float(np.percentile(luminance, 20))
+    candidates: list[tuple[float, int, int]] = []
+    for start in range(8, min(240, arr.shape[1] - 968)):
+        if luminance[start] > dark_cutoff:
+            continue
+        for end in range(start + 960, min(start + 1081, arr.shape[1] - 8)):
+            if luminance[end] > dark_cutoff:
+                continue
+            left = column_rgb[start - 5 : start + 6]
+            right = column_rgb[end - 5 : end + 6]
+            construction_phase_cost = rms(left - right)
+            boundary_jump = rms(arr[:, end - 1, :3] - arr[:, start, :3])
+            candidates.append(
+                (boundary_jump + 0.05 * construction_phase_cost, start, end)
+            )
+    if not candidates:
+        raise RuntimeError("Could not identify a repeat-closing pair of plank crevices.")
+    _, start, end = min(candidates)
+    return start, end
 
 
-def lock_opposing_edges(arr: np.ndarray, band: int = 64) -> np.ndarray:
-    """Blend opposing border pairs to one shared edge without touching the core."""
+def best_y_origin(arr: np.ndarray, x0: int, x1: int) -> int:
+    size = x1 - x0
+    costs: list[tuple[float, int]] = []
+    for y in range(arr.shape[0] - size + 1):
+        top = arr[y : y + 8, x0:x1, :3]
+        bottom = arr[y + size - 8 : y + size, x0:x1, :3][::-1]
+        costs.append((rms(top - bottom), y))
+    return min(costs)[1]
+
+
+def lock_top_bottom(arr: np.ndarray, band: int = 64) -> np.ndarray:
+    """Close only the non-structural horizontal edge of a vertical material."""
 
     out = arr.astype(np.float32).copy()
-    height, width = out.shape[:2]
-
-    for i in range(band):
-        keep = 0.5 - 0.5 * math.cos(math.pi * i / (band - 1))
-        left = out[:, i].copy()
-        right = out[:, width - 1 - i].copy()
-        shared = (left + right) * 0.5
-        out[:, i] = shared * (1.0 - keep) + left * keep
-        out[:, width - 1 - i] = shared * (1.0 - keep) + right * keep
-
+    height = out.shape[0]
     for i in range(band):
         keep = 0.5 - 0.5 * math.cos(math.pi * i / (band - 1))
         top = out[i].copy()
@@ -109,16 +164,18 @@ def lock_opposing_edges(arr: np.ndarray, band: int = 64) -> np.ndarray:
 def build_plank() -> tuple[Image.Image, dict[str, object]]:
     source = rgba(PLANK_SOURCE)
     arr = np.asarray(source)
-    target = 1024
-    x, y = best_crop_origin(arr[:, :, :3], target)
-    crop = arr[y : y + target, x : x + target]
-    locked = lock_opposing_edges(crop, band=64)
+    x0, x1 = find_vertical_construction_period(arr)
+    target = x1 - x0
+    y = best_y_origin(arr, x0, x1)
+    crop = arr[y : y + target, x0:x1]
+    locked = lock_top_bottom(crop, band=64)
     tile = Image.fromarray(locked).resize((SIZE, SIZE), Image.Resampling.NEAREST)
     return tile, {
-        "method": "best-phase crop plus deterministic opposing-edge lock",
+        "method": "detected crevice-to-crevice construction period plus top/bottom-only edge lock",
         "source": str(PLANK_SOURCE.relative_to(ROOT)),
-        "crop": {"x": x, "y": y, "width": target, "height": target},
-        "repair_band_source_pixels": 64,
+        "crop": {"x": x0, "y": y, "width": target, "height": target},
+        "construction_boundaries": {"left_crevice_x": x0, "right_crevice_x": x1},
+        "top_bottom_repair_band_source_pixels": 64,
     }
 
 
@@ -140,35 +197,31 @@ def extract_slate_components() -> list[Image.Image]:
     return components
 
 
-def place_wrapped(canvas: Image.Image, sprite: Image.Image, x: int, y: int) -> None:
-    width, height = canvas.size
-    for dx in (-width, 0, width):
-        for dy in (-height, 0, height):
-            canvas.alpha_composite(sprite, (x + dx, y + dy))
-
-
 def build_slate() -> tuple[Image.Image, dict[str, object]]:
     components = extract_slate_components()
     prepared = [
         ImageOps.contain(component, (102, 92), Image.Resampling.NEAREST)
         for component in components
     ]
-    canvas = Image.new("RGBA", (SIZE, SIZE), (27, 38, 50, 255))
     x_step = 96
     y_step = 72
     columns = SIZE // x_step
     rows = SIZE // y_step
+    field = Image.new("RGBA", (SIZE * 3, SIZE * 3), (27, 38, 50, 255))
 
-    # Bottom-to-top draw order preserves a coherent shingle overlap while the
-    # modulo variant pattern closes over both dimensions.
-    for row in reversed(range(-2, rows + 2)):
+    # Render an uninterrupted 3x3 field before taking the central period.
+    # Bottom-to-top global draw order keeps overlaps identical on both sides
+    # of the crop boundary; wrapping pieces directly onto one tile would
+    # reorder the first and last courses and create a false horizontal band.
+    for row in reversed(range(-2, rows * 3 + 2)):
         offset = x_step // 2 if row % 2 else 0
-        for col in range(-2, columns + 2):
+        for col in range(-2, columns * 3 + 2):
             component = prepared[(row % 2) * 2 + (col % 2)]
             x = col * x_step + offset + (x_step - component.width) // 2
             y = row * y_step + (y_step - component.height) // 2
-            place_wrapped(canvas, component, x, y)
+            field.alpha_composite(component, (x, y))
 
+    canvas = field.crop((SIZE, SIZE, SIZE * 2, SIZE * 2))
     return canvas, {
         "method": "four ImageGen sprite units assembled on an exact toroidal grid",
         "component_sheet": str(SLATE_COMPONENTS.relative_to(ROOT)),
@@ -197,22 +250,108 @@ def repeat_3x3(tile: Image.Image) -> Image.Image:
     return repeated
 
 
-def label(draw: ImageDraw.ImageDraw, xy: tuple[int, int], text: str) -> None:
-    draw.text(xy, text, fill=(238, 228, 205, 255), font=ImageFont.load_default())
+def font(size: int) -> ImageFont.ImageFont:
+    try:
+        return ImageFont.truetype("DejaVuSans.ttf", size)
+    except OSError:
+        return ImageFont.load_default()
+
+
+def square_preview(image: Image.Image, size: int) -> Image.Image:
+    if image.width != image.height:
+        raise RuntimeError(
+            f"QA proof input must be 1:1; received {image.width}x{image.height}"
+        )
+    preview = ImageOps.contain(image, (size, size), Image.Resampling.NEAREST)
+    if preview.width != preview.height:
+        raise RuntimeError(
+            f"QA renderer distorted a 1:1 input to {preview.width}x{preview.height}"
+        )
+    return preview
 
 
 def qa_board(plank: Image.Image, slate: Image.Image) -> Image.Image:
-    board = Image.new("RGBA", (1600, 900), (19, 22, 27, 255))
+    board = Image.new("RGBA", (1440, 1720), (19, 22, 27, 255))
     draw = ImageDraw.Draw(board)
-    label(draw, (40, 24), "AUTONOMOUS SPRITE-FIRST SEAM PROOF — final tile + 3x3 repeat")
-    for row, (name, tile) in enumerate((("PLANK / WRAP-REPAIR", plank), ("SLATE / MODULAR", slate))):
-        y = 70 + row * 410
-        preview = tile.resize((330, 330), Image.Resampling.NEAREST)
-        repeat = repeat_3x3(tile).resize((990, 330), Image.Resampling.NEAREST)
-        board.alpha_composite(preview, (40, y + 34))
-        board.alpha_composite(repeat, (410, y + 34))
-        label(draw, (40, y), name)
-        label(draw, (410, y), "3x3 repeat")
+    ink = (238, 228, 205, 255)
+    quiet = (174, 181, 187, 255)
+    border = (82, 91, 101, 255)
+    draw.text(
+        (40, 28),
+        "AUTONOMOUS SPRITE-FIRST SEAM PROOF",
+        fill=ink,
+        font=font(26),
+    )
+    draw.text(
+        (40, 66),
+        "All previews are aspect-locked 1:1. Copper ticks identify the 3x3 tile joins.",
+        fill=quiet,
+        font=font(16),
+    )
+    for row, (name, tile) in enumerate((("PLANK / PERIOD-AWARE", plank), ("SLATE / MODULAR", slate))):
+        y = 120 + row * 790
+        preview = square_preview(tile, 520)
+        repeated_source = repeat_3x3(tile)
+        repeated = square_preview(repeated_source, 720)
+        preview_xy = (40, y + 92)
+        repeated_xy = (650, y + 52)
+        board.alpha_composite(preview, preview_xy)
+        board.alpha_composite(repeated, repeated_xy)
+        draw.rectangle(
+            (
+                preview_xy[0] - 1,
+                preview_xy[1] - 1,
+                preview_xy[0] + preview.width,
+                preview_xy[1] + preview.height,
+            ),
+            outline=border,
+        )
+        draw.rectangle(
+            (
+                repeated_xy[0] - 1,
+                repeated_xy[1] - 1,
+                repeated_xy[0] + repeated.width,
+                repeated_xy[1] + repeated.height,
+            ),
+            outline=border,
+        )
+        guide = (202, 137, 82, 255)
+        for division in (1, 2):
+            join_x = repeated_xy[0] + repeated.width * division // 3
+            join_y = repeated_xy[1] + repeated.height * division // 3
+            draw.line(
+                (join_x, repeated_xy[1] - 12, join_x, repeated_xy[1] + 8),
+                fill=guide,
+                width=2,
+            )
+            draw.line(
+                (
+                    join_x,
+                    repeated_xy[1] + repeated.height - 8,
+                    join_x,
+                    repeated_xy[1] + repeated.height + 12,
+                ),
+                fill=guide,
+                width=2,
+            )
+            draw.line(
+                (repeated_xy[0] - 12, join_y, repeated_xy[0] + 8, join_y),
+                fill=guide,
+                width=2,
+            )
+            draw.line(
+                (
+                    repeated_xy[0] + repeated.width - 8,
+                    join_y,
+                    repeated_xy[0] + repeated.width + 12,
+                    join_y,
+                ),
+                fill=guide,
+                width=2,
+            )
+        draw.text((40, y), name, fill=ink, font=font(22))
+        draw.text((40, y + 40), "FINAL TILE - 576x576", fill=quiet, font=font(15))
+        draw.text((650, y), "3x3 REPEAT - 1728x1728", fill=quiet, font=font(15))
     return board
 
 
@@ -235,8 +374,13 @@ def main() -> None:
     qa_board(plank, slate).save(outputs["board"])
 
     plank_metrics = seam_metrics(plank)
+    plank_cadence = vertical_construction_cadence(plank)
     slate_metrics = seam_metrics(slate)
-    plank_status = "PASS" if plank_metrics["boundary_jump_gate"] else "FAIL"
+    plank_status = (
+        "PASS"
+        if plank_metrics["boundary_jump_gate"] and plank_cadence["cadence_gate"]
+        else "FAIL"
+    )
     slate_status = (
         "PASS"
         if slate_metrics["boundary_jump_gate"]
@@ -250,12 +394,15 @@ def main() -> None:
         "gate": {
             "boundary_jump_rule": "boundary RMS must not exceed the 95th percentile of ordinary internal adjacent-pixel jumps",
             "topology_rule": "construction periods must close exactly over the output dimensions",
+            "construction_cadence_rule": "a wrapped construction material fails when its largest circular crevice gap exceeds 1.65x its median crevice gap",
             "visual_proof": "3x3 repeat outputs are mandatory",
+            "proof_board_rule": "every final-tile and repeat preview must remain aspect-locked at 1:1; the build exits non-zero on distortion",
         },
         "materials": {
             "plank": {
                 **plank_recipe,
                 "metrics": plank_metrics,
+                "construction_cadence": plank_cadence,
                 "status": plank_status,
             },
             "slate": {

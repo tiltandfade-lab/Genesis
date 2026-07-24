@@ -1378,3 +1378,52 @@ gamma-encoded a second time on output (pale, chroma-collapsed). Not a regression
 path never tagged it; what was proven earlier was the art, the registry, and the review tool, which
 displays raw PNGs through the browser's own correct pipeline. Fixed and proven by A/B capture with
 lighting held constant. Disposition and evidence: `CLAYROOM-RESET-LADDER.md` findings 4-6.
+
+## Camera-side wall omission — the FFT wall grammar (Adam, 2026-07-23 — RULED FOR TEST; verbatim)
+
+> "alright, we need to change wall modeling behavior in general. we have settled on a fixed camera
+> for the game I believe, with maybe an optional toggle for a top down strategic view, either of
+> those allows for us to just not render walls that are blocking the field of play, look at the
+> final fantasy tactics maps if you need a reference for how they handled walls. now we might render
+> a situation where there is an enclosed space held shut by a door, but honestly i think as soon as
+> the door opens, in most cases the wall blocking the floor from the camera should disappear. can
+> you think of edge cases where this doesnt work?"
+
+Claude surveyed the edge cases (information/epistemics, re-concealment, mechanics readability,
+wall-mounted content, sight-without-passage openings, structural masses, multi-story, L-shape
+non-occluding walls, the strategic view, shared walls at C2A); Adam accepted the resulting shape:
+
+> "yes, that sounds good enough to test."
+
+**Status: RULED FOR TEST — direction locked for the test tranche; final law lands with clay
+evidence.** The accepted test shape, binding for that tranche:
+
+1. **Omission is compile-time, not render-time.** Under the fixed production camera (W3 §12.13),
+   "camera-side" is a static fact of the layout: a wall segment whose face is camera-facing AND
+   occludes staged floor builds NO upper volume. Deterministic, part of the board data and its
+   receipt — not a per-frame fade. The sight-line fade machinery remains only for dynamic
+   piece-occlusion (a pillar between camera and a figure).
+2. **The trigger is STAGING, latched — not raw door state.** A sealed space renders sealed; its
+   concealing walls come down when the space becomes staged play space (party enters / engagement
+   spills through the threshold), and once staged they stay down until the space leaves play. A
+   door slamming shut mid-scene never re-conceals actors. Sight through a cracked door reveals the
+   doorway's own sight-cone, not the whole room.
+3. **The stem stays.** A removed wall keeps its low stem/curb as the footprint truth-marker —
+   removed walls still block movement, LOS, and cover, and the player must be able to count that.
+   Zero-trace removal only at composed map edges with void beyond (the FFT map-edge grammar).
+4. **Carve-outs:** structural/terrain masses (retaining walls, cliff faces, risers) are never
+   omitted; sight-granting apertures (slits, deep windows, portcullises, bars) never trigger
+   removal — sight is not passage; the top-down strategic view renders ALL walls (it is the
+   map-reading mode; suppression is keyed per camera mode on the governed camera ladder).
+5. **Placement prefers visible walls.** Since visibility is compile-time known, meaningful
+   wall-mounted content (levers, sconces, observation faces) biases to camera-visible walls at
+   placement time — a solver constraint, never a renderer patch.
+
+Deferred with named owners: multi-story building cutaway (no enterable multi-story interior is
+rolled yet); shared-wall staging across adjacent revealed rooms (C2A); the strategic-view toggle
+itself (camera-ladder mode work). TEETH: the enforcing checks land with the CL-R3a wall tranche
+(`CLAYROOM-RESET-LADDER.md`); the staged/latch trigger's executable test lands with C1B's door
+state machine. This ruling supersedes the render-time camera-side upper fade
+(`wallUpperCameraSideBlockingSet`) for the fixed camera once the test passes, and moots the
+open clay-fixture shell-default question (near walls that occlude staged floor are simply not
+built as uppers at all).

@@ -226,11 +226,12 @@ saturation slider), and the two-temperature rig still does not read as two tempe
    consistent with lazy ghost-mesh creation (ghosts built only when a wall actually blocks) and has
    not been proven to be a defect.
 
-   **Open ruling for Adam (front-end gate):** production's default is `ITR_ROOM_SHELL = true` — the
-   clay fixture bypassing it sits badly with "every fixture uses the production construction path."
-   With the fade-aware swap in, `?clayshell=1` now renders correctly, so the remaining question is
-   whether the clay room should DEFAULT to the shell path. That changes the fixture's look, so it is
-   Adam's call, made on the banked A/B pair (`after-04` vs `shell-ab-04`), not Claude's.
+   **RULED 2026-07-23 — superseded by the camera-side wall-omission ruling** (ART-DIRECTION-CANON,
+   "Camera-side wall omission", RULED FOR TEST). The shell-default question is MOOT: under the
+   ruling, a wall segment that is camera-facing and occludes staged floor is not built as an upper
+   at all — compile-time omission with the stem retained, replacing the render-time camera-side
+   fade for the fixed camera. The clay fixture adopts the shell path WITH omission in the CL-R3a
+   test tranche.
 5. **The door reads as a popsicle — CONFIRMED, and worse than "the leaf isn't wired".** In `role-id`
    the "doorframe" resolves to two thin flat planks and a cap, with **no reveal depth**, and the
    members stand **taller than the surrounding wall**. This violates the construction law that
@@ -361,8 +362,17 @@ Prove in neutral clay: floor field and exposed slab sides · straight wall with 
 inner and outer faces · convex and concave corners · endpoint and T-junction ownership ·
 opening/aperture, frame, threshold, hinged leaf, and swing clearance · broad raised and sunken
 region · riser/retaining run with inside/outside corner, endpoint, cap · one-cell and wide stair with
-landings · shallow ramp · half-height blocker/parapet base · square and round support · deterministic
-cutaway/ghosting · mount/join sockets and provenance.
+landings · shallow ramp · half-height blocker/parapet base · square and round support · **camera-side wall omission per the
+2026-07-23 wall-grammar ruling** (compile-time: camera-facing ∧ occludes staged floor → stem only;
+staged+latched trigger; structural-mass/aperture/strategic-view carve-outs — ART-DIRECTION-CANON is
+the verbatim authority) · deterministic cutaway/ghosting for what remains (dynamic piece-occlusion
+only) · mount/join sockets and provenance.
+
+**CL-R3a (pulled forward, next tranche):** test the wall-omission ruling in `CL-F00` — near walls
+build stems only, far walls full, the door wall (north = far) untouched; omission set is
+deterministic board data in the capture receipt; A/B at gameplay scale against `shell-ab-04`.
+Pulled ahead of CL-R1's remainder because wall composition contaminates every lighting judgement
+made through the fixture.
 
 Crenellations, arrow slits, roof silhouette, signalling devices, and guard-specific defences stay
 **out** of this gate unless a generic construction need independently licenses them.

@@ -28,11 +28,17 @@ The Desktop research packet is folded (`CLAYROOM-RESET-LADDER.md`, `GOLDEN-SITES
    hook; 0/0 textured clay surfaces across 3 rebuilds; mutation-proven in harness and live capture.
    Evidence `dev/clay-captures/cl-r0/`. Remaining CL-R0 failures are listed openly in the ladder doc
    (mount-socket warning, the door, the bypassed room-shell path) — they are **not** closed.
-2. ☐ **The door.** RL-1 was deferred to C1B as "just wire the leaf". With clay applied and the
-   overlay out of the frame it is worse than that: the record says `portal.state:"closed"`, the prose
-   twin says "the door is closed.", and the render shows an open black gap framed by geometry that
-   does not read as a doorway. Treat as a live TEXT-FIRST contradiction, not a wiring chore.
-3. ☐ **CL-R1 — colour/light/tone-response truth.** Generalize the tunable light recipe from one key
+2. ☐ **CL-R3a — camera-side wall omission (Adam's 2026-07-23 wall-grammar ruling, RULED FOR TEST).**
+   Compile-time omission: camera-facing ∧ occludes staged floor → stem only, no upper; staged+latched
+   trigger law recorded, its executable test rides C1B's door state machine; carve-outs for
+   structural masses / apertures / the strategic view. Test in CL-F00, A/B against `shell-ab-04`.
+   Supersedes the render-time camera-side fade for the fixed camera; moots the shell-default question.
+3. ☐ **The door.** RL-1 was deferred to C1B as "just wire the leaf". It is worse: the record says
+   `portal.state:"closed"`, the prose twin says "the door is closed.", and the render shows an open
+   gap framed by two thin planks with no reveal depth, standing taller than the wall. Build the
+   doorway as a hole-with-reveal in an honest-thickness wall (the omission tranche gives it that
+   wall), then wire the leaf per THE DOOR CONTRACT. A live TEXT-FIRST contradiction, not a chore.
+4. ☐ **CL-R1 — colour/light/tone-response truth.** Generalize the tunable light recipe from one key
    point to a bounded `lights[]`; admit the Clayroom opposing warm/cool pair as a **named test
    recipe** (it is currently hardcoded and deliberately bypasses `applyLightProfile`/`LIGHT_TUNABLES`
    to escape the ambient clamp — CR-2). Keep three labelled modes: diagnostic neutral truth · the
@@ -42,13 +48,13 @@ The Desktop research packet is folded (`CLAYROOM-RESET-LADDER.md`, `GOLDEN-SITES
    sibling textures do), texture sampling, tone mapping, light energy (two non-attenuating points at
    combined intensity 25), material response, compositing — tested separately. **No saturation
    slider.** Bank causal A/B captures and measurements.
-4. ☐ **Sprite Editor crosshair delta** (bounded, after the lighting/colour causality is stable):
+5. ☐ **Sprite Editor crosshair delta** (bounded, after the lighting/colour causality is stable):
    draggable vertical guide writing canonical `footX`, the existing horizontal arm writing `footY`,
    drag either arm or the crossing point, migrate the overlay `floor` value, show pixel + normalized
    coords, preserve every existing capability, and make the runtime consume `footX`/`footY`. Extend
    `dev/sprite-review.py` — **do not build a replacement editor.**
-5. ☐ **CL-R2…CL-R6** in order, then Guard Post 1 composition (`GOLDEN-SITES-CATALOG.md`).
-6. ☐ **FULL CI PENDING** for this branch — this was a fast checkpoint, not an evening close.
+6. ☐ **CL-R2…CL-R6** in order, then Guard Post 1 composition (`GOLDEN-SITES-CATALOG.md`).
+7. ☐ **FULL CI PENDING** for this branch — this was a fast checkpoint, not an evening close.
 
 ## Do next (2026-07-22 later — canon pass EXECUTED; Adam's review packet is the gate)
 

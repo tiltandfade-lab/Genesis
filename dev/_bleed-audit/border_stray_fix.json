@@ -1,0 +1,601 @@
+{
+ "glob": "spr-fantasy-*.png",
+ "scanned": 680,
+ "flagged": 16,
+ "cleaned": [
+  "spr-fantasy-astral-raider-dracomancer",
+  "spr-fantasy-clockwork-law-construct-duodrone",
+  "spr-fantasy-colossus",
+  "spr-fantasy-drowned-husk",
+  "spr-fantasy-dust-mephit",
+  "spr-fantasy-elk",
+  "spr-fantasy-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault",
+  "spr-fantasy-empyrean",
+  "spr-fantasy-galeb-duhr",
+  "spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men",
+  "spr-fantasy-performer-legend",
+  "spr-fantasy-pixie-wonderbringer",
+  "spr-fantasy-seahorse"
+ ],
+ "exemptSwarms": [
+  "spr-fantasy-swarm-of-bats",
+  "spr-fantasy-swarm-of-insects",
+  "spr-fantasy-swarm-of-stirges"
+ ],
+ "skippedForEyes": [],
+ "reportOnly": false,
+ "sprites": [
+  {
+   "slug": "spr-fantasy-astral-raider-dracomancer",
+   "mainPx": 18631,
+   "strayPxTotal": 92,
+   "strays": [
+    {
+     "areaPx": 92,
+     "bbox": [
+      0,
+      50,
+      7,
+      66
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      149.1,
+      143.6,
+      138.2
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -10.4
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 18631,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-clockwork-law-construct-duodrone",
+   "mainPx": 15472,
+   "strayPxTotal": 239,
+   "strays": [
+    {
+     "areaPx": 239,
+     "bbox": [
+      278,
+      145,
+      288,
+      181
+     ],
+     "borders": [
+      "R"
+     ],
+     "meanRGB": [
+      56.6,
+      39.0,
+      24.6
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -14.5
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 15472,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-colossus",
+   "mainPx": 31248,
+   "strayPxTotal": 81,
+   "strays": [
+    {
+     "areaPx": 81,
+     "bbox": [
+      121,
+      207,
+      132,
+      218
+     ],
+     "borders": [
+      "B"
+     ],
+     "meanRGB": [
+      76.8,
+      63.0,
+      53.8
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -9.5
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 31248,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-drowned-husk",
+   "mainPx": 24805,
+   "strayPxTotal": 224,
+   "strays": [
+    {
+     "areaPx": 224,
+     "bbox": [
+      221,
+      200,
+      232,
+      230
+     ],
+     "borders": [
+      "R"
+     ],
+     "meanRGB": [
+      58.1,
+      37.3,
+      21.7
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -15.6
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 24805,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-dust-mephit",
+   "mainPx": 13907,
+   "strayPxTotal": 80,
+   "strays": [
+    {
+     "areaPx": 80,
+     "bbox": [
+      1,
+      84,
+      12,
+      99
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      133.9,
+      107.0,
+      84.4
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -23.0
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 13907,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-elk",
+   "mainPx": 24031,
+   "strayPxTotal": 366,
+   "strays": [
+    {
+     "areaPx": 366,
+     "bbox": [
+      0,
+      21,
+      11,
+      74
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      48.3,
+      39.3,
+      30.7
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -10.3
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 24031,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-elven-scribe-elf-copies-manuscripts-for-the-town-archive-meticulous-to-a-fault",
+   "mainPx": 16579,
+   "strayPxTotal": 66,
+   "strays": [
+    {
+     "areaPx": 66,
+     "bbox": [
+      48,
+      213,
+      71,
+      217
+     ],
+     "borders": [
+      "B"
+     ],
+     "meanRGB": [
+      121.2,
+      110.3,
+      101.7
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -9.4
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 16579,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-empyrean",
+   "mainPx": 26785,
+   "strayPxTotal": 23,
+   "strays": [
+    {
+     "areaPx": 23,
+     "bbox": [
+      103,
+      208,
+      108,
+      219
+     ],
+     "borders": [
+      "B"
+     ],
+     "meanRGB": [
+      49.7,
+      45.4,
+      48.5
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": 1.5
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 26785,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-galeb-duhr",
+   "mainPx": 27035,
+   "strayPxTotal": 211,
+   "strays": [
+    {
+     "areaPx": 211,
+     "bbox": [
+      0,
+      145,
+      12,
+      168
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      92.7,
+      73.0,
+      54.1
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -19.1
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 27035,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-goliath-dockworker-goliath-moves-cargo-alone-that-takes-four-other-men",
+   "mainPx": 22818,
+   "strayPxTotal": 76,
+   "strays": [
+    {
+     "areaPx": 76,
+     "bbox": [
+      49,
+      0,
+      72,
+      4
+     ],
+     "borders": [
+      "T"
+     ],
+     "meanRGB": [
+      60.9,
+      38.3,
+      19.8
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -18.5
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 22818,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-performer-legend",
+   "mainPx": 20453,
+   "strayPxTotal": 27,
+   "strays": [
+    {
+     "areaPx": 27,
+     "bbox": [
+      191,
+      60,
+      198,
+      70
+     ],
+     "borders": [
+      "R"
+     ],
+     "meanRGB": [
+      189.0,
+      139.1,
+      82.7
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -57.8
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 20453,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-pixie-wonderbringer",
+   "mainPx": 10701,
+   "strayPxTotal": 40,
+   "strays": [
+    {
+     "areaPx": 40,
+     "bbox": [
+      0,
+      111,
+      7,
+      124
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      189.0,
+      157.6,
+      119.6
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -40.8
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 10701,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-seahorse",
+   "mainPx": 11475,
+   "strayPxTotal": 162,
+   "strays": [
+    {
+     "areaPx": 127,
+     "bbox": [
+      0,
+      24,
+      12,
+      39
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      152.3,
+      146.4,
+      143.6
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -9.0
+    },
+    {
+     "areaPx": 35,
+     "bbox": [
+      0,
+      75,
+      5,
+      83
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      165.5,
+      162.6,
+      158.9
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -12.1
+    }
+   ],
+   "action": "cleaned",
+   "mainPxAfter": 11475,
+   "straysAfter": 0
+  },
+  {
+   "slug": "spr-fantasy-swarm-of-bats",
+   "mainPx": 7943,
+   "strayPxTotal": 609,
+   "strays": [
+    {
+     "areaPx": 339,
+     "bbox": [
+      84,
+      0,
+      124,
+      19
+     ],
+     "borders": [
+      "T"
+     ],
+     "meanRGB": [
+      44.2,
+      28.9,
+      26.0
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -3.0
+    },
+    {
+     "areaPx": 57,
+     "bbox": [
+      203,
+      85,
+      216,
+      95
+     ],
+     "borders": [
+      "R"
+     ],
+     "meanRGB": [
+      23.2,
+      17.5,
+      20.0
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": 2.2
+    },
+    {
+     "areaPx": 213,
+     "bbox": [
+      65,
+      157,
+      98,
+      175
+     ],
+     "borders": [
+      "B"
+     ],
+     "meanRGB": [
+      29.3,
+      20.2,
+      22.9
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": 2.3
+    }
+   ],
+   "action": "exempt-swarm"
+  },
+  {
+   "slug": "spr-fantasy-swarm-of-insects",
+   "mainPx": 11388,
+   "strayPxTotal": 73,
+   "strays": [
+    {
+     "areaPx": 37,
+     "bbox": [
+      1,
+      86,
+      10,
+      92
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      29.6,
+      23.8,
+      25.3
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": 0.7
+    },
+    {
+     "areaPx": 36,
+     "bbox": [
+      106,
+      173,
+      117,
+      178
+     ],
+     "borders": [
+      "B"
+     ],
+     "meanRGB": [
+      19.2,
+      14.4,
+      16.1
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": 1.1
+    }
+   ],
+   "action": "exempt-swarm"
+  },
+  {
+   "slug": "spr-fantasy-swarm-of-stirges",
+   "mainPx": 399,
+   "strayPxTotal": 276,
+   "strays": [
+    {
+     "areaPx": 145,
+     "bbox": [
+      68,
+      12,
+      84,
+      35
+     ],
+     "borders": [
+      "R"
+     ],
+     "meanRGB": [
+      79.9,
+      64.6,
+      57.0
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -8.2
+    },
+    {
+     "areaPx": 70,
+     "bbox": [
+      0,
+      45,
+      16,
+      60
+     ],
+     "borders": [
+      "L"
+     ],
+     "meanRGB": [
+      61.6,
+      50.4,
+      46.0
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -4.8
+    },
+    {
+     "areaPx": 61,
+     "bbox": [
+      72,
+      60,
+      84,
+      73
+     ],
+     "borders": [
+      "R"
+     ],
+     "meanRGB": [
+      62.1,
+      49.9,
+      44.3
+     ],
+     "meanAlpha": 255.0,
+     "magentaExcessMean": -6.2
+    }
+   ],
+   "action": "exempt-swarm"
+  }
+ ]
+}

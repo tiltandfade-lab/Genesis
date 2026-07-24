@@ -1611,3 +1611,17 @@ Binding consequences:
 
 Selected concept receipt:
 `dev/clay-captures/workbench-concepts/concept-1-docked-studio.png`.
+
+## CLAYROOM FULL MOVEMENT-LAB SCALE (Adam, 2026-07-24 — binding)
+
+> "we likely need to expand the clayroom to full test movement. 5x5 doesn't really test the full movement grid highlight with the dash secondary highlight"
+
+The retained Clayroom movement fixture must be large enough to display an ordinary 30-foot movement region and a
+materially distinct second 30-foot Dash extension at the same time. The original 5×5 C1A room remains historical
+proof provenance, but it is not an adequate C1B movement fixture. The live retained fixture is therefore 15×15
+cells under the existing 1-cell-equals-5-feet law.
+
+The primary Move region is a filled highlight. The Dash-only extension is a hollow outlined/hatched region whose
+locked-secondary meaning remains legible without color. Both regions, the selected route, movement cost, portal
+state, and final position must project engine query/receipt answers; the Clayroom renderer may not calculate a
+second path or movement rule.

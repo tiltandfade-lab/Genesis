@@ -74,6 +74,7 @@
     "src/engine/walk-archetypes.js",
     "src/engine/dungeon-walk.js",
     "src/engine/place-spatialize.js",
+    "src/engine/tactical-query.js",
     "src/engine/place-semantics.js",
     "src/engine/place-projection.js",
     "src/engine/walk-scene.js",
@@ -1502,6 +1503,28 @@
       "desc": "DUNGEON-GRAPH.md U1 \u2014 the spatializer. spatializePlan(segments, topologyName, opts) turns a walk's segment graph (rooms=nodes, exits=edges \u2014 the src/engine/walk.js:593-625 shape rollDungeonWalk et al already produce) into a walkable cell-grid SpatialPlan (DUNGEON-GRAPH.md 'Shared data shape': seed/topology/cellW/cellD/cells Uint8Array of SPATIAL_CELL codes VOID|FLOOR|WALL|DOOR|WATER/rooms[]/corridors[]/doors[]/domains[]). Pure engine-layer data code \u2014 no w/U/render/DOM. Deterministic: seed hashes opts.walkId (mulberry32, same reference pattern as src/ui/theater-boot.js's) \u2014 never Math.random/Date.now un-seeded, so the same walk id reproduces a byte-identical cells buffer. Pipeline: per-topology layout seed (Hub/Stronghold radial, Onion concentric, Loop/Web ring, Branch tree-drift, everything else linear-drift) \u2192 room rect placement \u2192 AABB separation \u2192 corridor carving along EXITS ONLY (never an invented edge) \u2192 rasterize (VOID 8-adjacent to FLOOR/DOOR/WATER becomes WALL; corridor/room-perimeter meets become DOOR) \u2192 BFS reachability verify from the entry segment's room \u2192 on failure, mutate the seed and retry (\u22645 more attempts), then honest-fail (throws naming the topology+seed \u2014 never a hand-patched plan). Web/Labyrinth Fragment crossing edges are caught generically at corridor-carve time (a corridor whose cells overlap an already-carved corridor's cells gets bridge:true) rather than via a topology-special-cased geometry check. U2 (semantics/scale domains)/U3 (volumetric renderer)/U4 (walk binding) consume this output; out of scope here per spec. STAGE-C C1 (docs/STAGE-C.md, size fidelity, 2026-07-12): a room's footprint now sizes from the rolled segment.dims (dspDimsToCells, feet/5 rounded, clamped [SPATIAL_MIN_CELL,SPATIAL_MAX_CELL]=[4,24]) instead of a blind rng() 4-7 draw, behind the reversible SPATIAL_SHAPES flag (default ON; OFF = pre-C1 byte-identical random rect); rooms[].dimsRef additively threads the dims sourceRef. Rooms stay rectangular this wave (C2 tiers/C3 shapes are separate queued units). STAGE-C C2 (docs/STAGE-C.md, structural terrain, 2026-07-12): dspParseSideTerrain(side, room, seed) keyword-scans segment.side (raised/dais/platform/step-up/elevated/gallery/balcony -> tier +1; sunken/pit/pool/below/lower/recess -> tier -1) into a single per-room terrain patch (rooms[].terrain=[{cells,tier,kind}], the DUNGEON-GRAPH.md U6 shape), stamped onto a new parallel plan.tiers Int8Array (same indexing as cells) the render seam folds into floor height. Corner/wall location disambiguation uses a SEPARATE hash chain (dspTerrainSeedHash) off this build's own seed, never the shared rng() stream. Behind the shared SPATIAL_SHAPES flag; missing/unparseable side -> no terrain, never throws. STAGE-C C3 (docs/STAGE-C.md, real shapes, 2026-07-12): shapeForArchetype(areaType) substring-classifies segment.areaType into a shape tag (rect/circle/octagon/ellipse/L/T/cross/cave); rasterizeShape(shape,wCells,dCells,seed) rasterizes that shape as a staircased orthogonal footprint inside the C1 bbox (rooms[].shape/rooms[].cells replace the filled rect for a non-rect shape), and door cells are now derived FROM the shape polygon\u2019s own boundary faces (dspRoomDoorAnchor/dspChooseDoorCell, bound to each doors[].toSeg) instead of a corridor-crosses-a-rectangle test. A rect archetype (or SPATIAL_SHAPES off) takes the exact pre-C3 code path, byte-identical."
     },
     {
+      "id": "engine.tactical-query",
+      "path": "src/engine/tactical-query.js",
+      "type": "logic",
+      "owns": [
+        "TQ_VERSION",
+        "tqCellId",
+        "tqCellCoord",
+        "tqSpaceFromSpatialPlan",
+        "tqStateFrom",
+        "tqConnectionAssessment",
+        "tqMovementRanges",
+        "tqMovementPreview",
+        "tqMovementCommit",
+        "tqConnectionStateCommit",
+        "tqReceiptProse"
+      ],
+      "loadTimeDeps": [
+        "SPATIAL_CELL"
+      ],
+      "desc": "C1B exact movement owner. Pure deterministic land-cell query kernel over a committed SpatialPlan: immutable query spaces and state, 30-ft move versus Dash reach bands, deterministic orthogonal path/cost receipts, alternate via routes, one canonical connection with shared endpoints/state, body-aware ordinary/difficult/blocked traversal assessment, and exact preview-versus-commit receipts. Consequential traversal uncertainty uses an explicit CheckContract; preview reveals qualitative difficulty/stakes but commit requires a caller-supplied player d20 and then reveals the exact DC. No GS/U/world/DOM/THREE/RNG/time reads and no mutation of inputs; renderer and narration only project these answers."
+    },
+    {
       "id": "engine.place-semantics",
       "path": "src/engine/place-semantics.js",
       "type": "logic",
@@ -1541,6 +1564,7 @@
         "clayRoomWalkFixtureFrom",
         "clayRoomDoorEdgeFor",
         "clayRoomBoardFrom",
+        "clayRoomMovementFixtureFrom",
         "CLAY_DIAGNOSTIC_SURFACE_RECIPE",
         "clayDiagnosticRoleForKind",
         "clayDiagnosticRouteFor",
@@ -1552,9 +1576,12 @@
         "spatializePlan",
         "interiorBuildBoard",
         "KIT_SHELL_ENABLED",
-        "KIT_DOORS_ENABLED"
+        "KIT_DOORS_ENABLED",
+        "tqCellId",
+        "tqSpaceFromSpatialPlan",
+        "tqStateFrom"
       ],
-      "desc": "docs/C1A-CLAY-ROOM.md (Clay Pass 1, CLAY-PROOF-LADDER \u00a7C1A) \u2014 the canonical 5x5 clay room record: cells/walls/portal/crate/citizen through the SAME owners the game uses (SPRITE_BY_BESTIARY_ID -> SPRITE_REGISTRY for the citizen's BodyForm v1, GRID LAW 1 cell = 5 ft). clayRoomRecordFrom(seed) is a frozen, deterministic fixture (no RNG/DOM/THREE/world reads) \u2014 the room's geometry is fixed by design (a canonical reference room), seed is a plain provenance passthrough. clayRoomProse(record) is the GEN-LAW-3/TEXT-FIRST prose twin (every canonical fact as plain text); clayRoomExplain(record) is the D11 workbench-floor explain string; clayRoomEditRefusal(field) returns the typed refusal for the one generated source (data/sprite-registry.js) every BodyForm field traces to. CLAY_C1A_LIGHT_PROFILE is the D4 two-point-plus-ambient light data the theater-boot.js wire-in applies. Consumed by src/ui/theater-boot.js's clay-room mount (docs/C1A-CLAY-ROOM.md's dev-flag surface, ?clayroom=1). Added 2026-07-23. D15 RE-WIRE (2026-07-23): clayRoomWalkFixtureFrom(record)/clayRoomDoorEdgeFor(door,room)/clayRoomBoardFrom(record) replace theater-boot.js's old hand-assembled board-data shim with the REAL production compile chain (a pinned synthetic walk fixture -> spatializePlan -> interiorBuildBoard), staying pure (both are pure data functions); record.provenance.derivation is now \"spatialize-plan\". CL-R0 (docs/CLAYROOM-RESET-LADDER.md, 2026-07-23): CLAY_DIAGNOSTIC_SURFACE_RECIPE is the versioned role->route table for diagnostic clay (routes diagnostic-clay | passthrough | unclaimed; modes clay | role-id); clayDiagnosticRoleForKind(kind) normalizes the renderer own userData.interiorKind vocabulary (incl. room-shell/kit-shell/-ghost) onto recipe roles; clayDiagnosticRouteFor(role,mode) resolves one surface, defaulting an UNKNOWN role to the loud unclaimed route rather than to clay; clayDiagnosticModeFrom(raw) is the single reader for the mode string. Consumed by theater-boot.js clayRoomApplyDiagnosticSurfaces/clayRoomSurfaceCensus, driven from the one setInteriorBoard tail hook clayRoomAfterInteriorBoardRebuild."
+      "desc": "docs/C1A-CLAY-ROOM.md (Clay Pass 1 plus retained C1B movement proof) \u2014 the canonical 15x15 clay movement-lab record: 225 cells, 10-ft human-room walls, one canonical Connection/portal, a real crate blocker, one difficult-terrain shoulder, and an approved goblin citizen through the SAME owners the game uses (SPRITE_BY_BESTIARY_ID -> SPRITE_REGISTRY for BodyForm v1, spatializePlan -> interiorBuildBoard, GRID LAW 1 cell = 5 ft). The founder-expanded fixture is large enough to distinguish a filled 30-ft Move band from a non-color-only hollow Dash extension. clayRoomRecordFrom(seed) is frozen and deterministic (no RNG/DOM/THREE/world reads); clayRoomMovementFixtureFrom(record,compiled) adapts that real SpatialPlan to engine.tactical-query without creating renderer mechanics. clayRoomProse(record) is the GEN-LAW-3/TEXT-FIRST prose twin; clayRoomExplain(record) is the workbench explain string; clayRoomEditRefusal(field) returns the typed generated-source refusal. CLAY_C1A_LIGHT_PROFILE and CLAY_DIAGNOSTIC_SURFACE_RECIPE retain the authored two-practical lighting and diagnostic surface routes across every production board replay. Consumed by src/ui/theater-boot.js's ?clayroom=1 workbench. Added 2026-07-23; expanded for C1B on 2026-07-24."
     },
     {
       "id": "engine.place-dressing",

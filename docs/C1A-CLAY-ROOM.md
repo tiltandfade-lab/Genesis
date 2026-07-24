@@ -14,6 +14,12 @@ projection of canonical rolled facts (§11.1: "prove that composition remains a 
 canonical rolls"); the greybox diagnostic reads over existing geometry paths. Deliberately
 untextured grey; NOT the visual-quality claim (that is C1H+).
 
+**Current retained fixture:** Addendum D27 supersedes only the live fixture's 5×5 dimensions and
+C1A-local placements. Adam's C1B inspection found that 5×5 cannot prove a distinct 30-foot Move
+region plus Dash-only extension, so the same production compile path now retains a 15×15 movement
+lab. The C1A record id/version and historical acceptance evidence remain provenance, not a claim
+that the live surface is still 5×5.
+
 ## Decisions (recorded with grounds — do NOT re-litigate)
 
 - **D1 dev flag:** clone the Light Lab dormant pattern (theater-boot.js:14094-14116):
@@ -521,3 +527,51 @@ to persist.
 Teeth: `dev/verify-clay-room.mjs` check 30a–g; `dev/verify-room-shell.mjs` check 4a/4a-trim.
 Selected concept receipt:
 `dev/clay-captures/workbench-concepts/concept-1-docked-studio.png`.
+
+## Addendum D27 — C1B full movement lab, route receipts, and canonical portal crossing (2026-07-24)
+
+Adam's binding scale ruling is recorded verbatim in ART-DIRECTION-CANON under **CLAYROOM FULL
+MOVEMENT-LAB SCALE**. The original 5×5 fixture could not display an ordinary 30-foot range and a
+separate Dash-only extension. The retained fixture is now 15×15 (225 exact cells) with the existing
+10-foot human-room walls and one-cell-equals-5-feet law.
+
+The enlarged fixture keeps the production chain intact:
+
+- `clayRoomWalkFixtureFrom(record)` still produces the pinned walk input consumed by the real
+  `spatializePlan` → `interiorBuildBoard` path. The exact north portal is local `c-6-0`; the fixture
+  re-pin is attempt 48. The approved goblin starts at `c-6-10`, the real production crate blocks
+  `c-6-7`, the east waypoint is `c-7-7`, and the west waypoint `c-5-7` is Difficult Terrain.
+- `record.connection` is the only mechanical owner for the hinged door's id, version, endpoints,
+  clearance, and state. The portal, door leaf, map cell, and UI are projections. Portal commit opens
+  that same Connection and moves the actor to the real neighboring SpatialPlan endpoint; it never
+  invents a room-local half-door.
+- `src/engine/tactical-query.js` is the pure deterministic mechanics owner. It adapts exact
+  SpatialPlan cells, blockers, costs, actors, and Connections; computes orthogonal Move/Dash reach;
+  returns immutable previews; refuses stale previews; and commits revisioned movement/connection
+  receipts. Neither Theater nor the diagnostic panel calculates pathing or success.
+- The same Connection carries body-aware ordinary, Difficult Terrain/narrow-opening, and blocked
+  cases. Optional consequential uncertainty is an explicit CheckContract: preview discloses
+  qualitative difficulty/stakes but not the DC; commit requires a caller-supplied d20 and then
+  reveals the DC/result. The renderer never rolls.
+
+The **Move** tab projects the production query directly: cyan filled cells are currently affordable
+Move destinations; amber hollow diamonds are Dash-only destinations, so the secondary tier remains
+distinct without color; the white route line is the exact preview receipt. Controls select Move or
+Dash, automatic/east-safe/west-difficult routing, portal use, commit, and explicit session reset.
+The readout exposes revision, actor cell/scene, the single Connection owner/state, range counts,
+body cases, preview prose, committed receipt, and real `move-step` animation progress.
+
+Mechanical session truth lives in `GS.clayRoomMovementSession`, not a THREE object. Commit changes
+that state once, replays the receipt cell-by-cell through the existing production standee verb, and
+only then projects the final board. Rebuilds use `roomTransition:false`, so movement does not trigger
+the false travel fade; the D25 lighting identity guard preserves authored practical objects,
+materials, values, and local light state through the replay. Movement is session-only and never
+rewrites the door socket or production default.
+
+Teeth: `dev/verify-tactical-query.mjs` executes the real 15×15 SpatialPlan adapter, range tiers,
+blocker/Difficult Terrain routing, stale-preview refusal, Connection crossing, body cases, hidden-DC
+contract, deterministic receipts, and input immutability. `dev/verify-clay-room.mjs` checks 31a–j
+for fixture/manifest/UI/animation/lighting ownership. Live browser proof completed a 12-step Dash
+route, then a 3-step canonical portal crossing: actor found, exact steps settled, Connection open,
+actor projected into `clay-beyond`, one-light flicker isolation PASS, mesh/emitted sample parity
+PASS, authored baseline restoration PASS, and before/during/after lighting preservation PASS.

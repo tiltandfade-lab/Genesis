@@ -6,6 +6,33 @@ updated: 2026-07-24
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-24, C1B Clayroom movement lab) — 15×15 MOVE/DASH + CANONICAL PORTAL [Codex]
+
+Worktree `worktrees/Genesis-clayroom-door`, branch `codex/clayroom-door-socket`, continuing from the
+docked Concept 1 Clayroom checkpoint.
+
+- Adam ruled that the 5×5 fixture could not test a full 30-foot movement highlight plus a distinct
+  Dash secondary highlight. The retained production-compiled room is now 15×15 / 225 cells with
+  10-foot walls, approved goblin, real crate blocker, an east safe route, and a west Difficult
+  Terrain route.
+- New pure `engine.tactical-query` owns exact reach, deterministic route/cost previews, immutable
+  revisioned commits, stale-preview refusal, body-aware traversal, hidden-DC CheckContracts, and one
+  canonical Connection with two real SpatialPlan endpoints. Theater only projects its answers.
+- The Move tab shows filled Move cells, hollow-diamond Dash-only cells, exact receipt routes, range
+  counts, revision/actor/Connection truth, portal preview/commit, and real `move-step` progress.
+  Session movement cannot rewrite a production socket/default. Portal commit opens the one
+  Connection and projects the actor into `clay-beyond`.
+- Movement board replays suppress travel-only fade and retain the D25 production lighting identity.
+  Live proof completed a 12-step Dash and 3-step portal crossing (`actor FOUND`, every step settled),
+  then reconfirmed one-light flicker isolation, mesh/emitted sample parity, authored baseline return,
+  and before/during/after object/material preservation.
+- One approved goblin sprite was materialized from its existing Git LFS object for the browser proof;
+  the tracked asset remains clean and is not part of the commit.
+- Regression gates: tactical query 31/31; Clayroom 175/175; standee verbs 71/71; local lighting
+  62/62; manifest OK. Canon and the Clay proof ladder record the bounded 15×15 C1B ruling.
+- **FULL CI PENDING** for the later Fable-led merge/clean close. This checkpoint does not merge or
+  push while the parallel Guard Room lane is still moving.
+
 ## ⭐ Latest (2026-07-24, Clayroom lighting diagnostics) — LOCAL LIGHT STATE + LIFECYCLE PROOF [Codex]
 
 Worktree `worktrees/Genesis-clayroom-door`, branch `codex/clayroom-door-socket`, continuing from

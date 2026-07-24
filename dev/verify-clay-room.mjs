@@ -6,7 +6,7 @@
 
    Red-first checks (⊗ in docs/C1A-CLAY-ROOM.md's own Verification list):
      1. ⊗ Determinism: two fresh windows, same seed -> JSON.stringify byte-identical; different seed -> differs.
-     2. ⊗ Truth shape: 25 cells stable ids; full perimeter walls; portal on the north edge at a wall cell;
+     2. ⊗ Truth shape: 225 cells stable ids; full perimeter walls; portal on the north edge at a wall cell;
         crate cell != portal cell != citizen cell; record.tier === "test"; Object.isFrozen(record); version===1.
      3. ⊗ BodyForm provenance: bodyForm.worldHeight/heightSource strictly equal the goblin's SPRITE_REGISTRY
         values; MUTATION CHECK — stub spr-fantasy-goblin-warrior's worldHeight to null and confirm
@@ -69,8 +69,8 @@
         bootstrap idea but reusing THIS file's existing freshWin() full-manifest loader, which already
         carries place-spatialize.js/theater-interior.js/clay-room.js in classicPaths — no second vm
         sandbox needed): runs the adapter's synthetic fixture through the REAL spatializePlan +
-        interiorBuildBoard headlessly via win.clayRoomBoardFrom(record); asserts the 5x5 room's floor
-        cell count (25), >=1 door cell on record.portal.edge's own side (independently recomputed off
+        interiorBuildBoard headlessly via win.clayRoomBoardFrom(record); asserts the retained 15x15 room's
+        floor cell count (225), >=1 door cell on record.portal.edge's own side (independently recomputed off
         the returned room+plan.doors, never trusting clayRoomBoardFrom's own internal assertion
         alone), byte-identical board JSON across two independent calls (determinism through the real
         chain), crate/citizen positions derived from the record's own cells offset by the real room
@@ -185,13 +185,14 @@ const check = (name, cond, detail = "") =>
     const win = freshWin();
     const record = win.clayRoomRecordFrom(0x6c0ffee);
 
-    check("2a. 25 cells with stable ids", Array.isArray(record.cells) && record.cells.length === 25 &&
-      new Set(record.cells.map(c => c.id)).size === 25, "cells=" + (record.cells && record.cells.length));
+    check("2a. 225 cells with stable ids (15x15 C1B movement lab)",
+      Array.isArray(record.cells) && record.cells.length === 225 &&
+      new Set(record.cells.map(c => c.id)).size === 225, "cells=" + (record.cells && record.cells.length));
 
     const edges = { n: 0, s: 0, e: 0, w: 0 };
     (record.walls || []).forEach(w => { if(edges[w.edge] != null) edges[w.edge]++; });
     check("2b. full perimeter walls (all four edges populated)",
-      edges.n === 5 && edges.s === 5 && edges.e === 5 && edges.w === 5, JSON.stringify(edges));
+      edges.n === 15 && edges.s === 15 && edges.e === 15 && edges.w === 15, JSON.stringify(edges));
 
     const northWallCells = new Set();
     (record.walls || []).filter(w => w.edge === "n").forEach(w => (w.cells || []).forEach(id => northWallCells.add(id)));
@@ -678,8 +679,8 @@ const check = (name, cond, detail = "") =>
     check("15b. win.clayRoomBoardFrom is a function", typeof win.clayRoomBoardFrom === "function");
     const compiled = win.clayRoomBoardFrom(record);
 
-    check("15c. the 5x5 room compiles to exactly 25 floor instances",
-      compiled.board.instances.floor.length === 25, "floor=" + compiled.board.instances.floor.length);
+    check("15c. the 15x15 movement lab compiles to exactly 225 floor instances",
+      compiled.board.instances.floor.length === 225, "floor=" + compiled.board.instances.floor.length);
 
     // independently recompute the door edge off the returned room+plan.doors — never trusting
     // clayRoomBoardFrom's own internal assertion alone (belt-and-suspenders).
@@ -694,13 +695,18 @@ const check = (name, cond, detail = "") =>
     check("15f. board.instances.doorframe carries >=1 instance for that door (since 2026-07-23: the lintel — see check 27)",
       compiled.board.instances.doorframe.length >= 1, compiled.board.instances.doorframe.length);
 
+    const objectLocal = record.cells.find((cell) => cell.id === record.object.cell);
+    const citizenLocal = record.cells.find((cell) => cell.id === record.citizen.cell);
     check("15g. board.furniture[0] is positioned from the record (local cell + the real room rect origin)",
-      compiled.board.furniture.length === 1 &&
-      compiled.board.furniture[0].x === room.x + 3 && compiled.board.furniture[0].y === room.y + 2,
+      compiled.board.furniture.length === 1 && objectLocal &&
+      compiled.board.furniture[0].x === room.x + objectLocal.x &&
+      compiled.board.furniture[0].y === room.y + objectLocal.z,
       JSON.stringify(compiled.board.furniture));
     check("15h. board.pieces[0] is positioned from the record (local cell + the real room rect origin)",
-      compiled.board.pieces.length === 1 &&
-      compiled.board.pieces[0].cellX === room.x + 1 && compiled.board.pieces[0].cellY === room.y + 3,
+      compiled.board.pieces.length === 1 && citizenLocal &&
+      compiled.board.pieces[0].cellX === room.x + citizenLocal.x &&
+      compiled.board.pieces[0].cellY === room.y + citizenLocal.z &&
+      compiled.board.pieces[0].fid === record.citizen.id,
       JSON.stringify(compiled.board.pieces));
 
     // 15i REWRITTEN by the door tranche (2026-07-23; red-first — the old "interactables must be
@@ -807,10 +813,9 @@ const check = (name, cond, detail = "") =>
     // (clayRoomShellOverrideOn()) so the "does the fixture still read as clay through the PRODUCTION
     // room-shell construction path?" A/B is a reproducible ?clayshell=1 capture instead of a source
     // edit. The invariant this check protects is unchanged and is now asserted in TWO parts: the
-    // override is still applied before setInteriorBoard, AND its default is still OFF. A flag whose
-    // default drifted to true would silently restore the exact regression check 17 exists to catch.
+    // override is still applied before the first setInteriorBoard projection.
     check("17b. mountClayRoom() sets ITR_ROOM_SHELL from the flag reader before setInteriorBoard runs",
-      /ITR_ROOM_SHELL\s*=\s*clayRoomShellOverrideOn\(\);[\s\S]*setInteriorBoard\s*\(\s*compiled\.board\s*\)/.test(mountBody), mountBody);
+      /ITR_ROOM_SHELL\s*=\s*clayRoomShellOverrideOn\(\);[\s\S]*setInteriorBoard\s*\(\s*clayRoomMovementBoardFromState/.test(mountBody), mountBody);
     const shellFnBody = (region.match(/function\s+clayRoomShellOverrideOn\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
     // 17b2 REWRITTEN for CL-R3a (red-first: the default flip turned the old assertion red before this
     // check changed). Under the 2026-07-23 wall-omission ruling the clay fixture adopts the PRODUCTION
@@ -1174,10 +1179,11 @@ const check = (name, cond, detail = "") =>
   check("28c. State tab offers shut / ajar / open controls through one board replay helper",
     /stateTabBtn\.textContent\s*=\s*"State"/.test(bootSrc) &&
     /\["shut",\s*"Set door shut"\][\s\S]*\["ajar",\s*"Set door ajar"\][\s\S]*\["open",\s*"Set door open"\]/.test(bootSrc) &&
-    /function\s+clayDoorStateApply\s*\(nextState\)[\s\S]*setInteriorBoard\(nextBoard,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
-  check("28d. State proof clone-patches board interactables and never mutates the frozen record",
-    /Object\.assign\(\{\},\s*entry,\s*\{\s*state:\s*nextState\s*\}\)/.test(bootSrc) &&
-    /Object\.assign\(\{\},\s*S\.lastBoard,\s*\{\s*interactables:\s*rows\s*\}\)/.test(bootSrc));
+    /function\s+clayDoorStateApply\s*\(nextState\)[\s\S]*clayRoomApplyMovementBoard\(session\.state,\s*"clayroom-door-state"\)/.test(bootSrc));
+  check("28d. State proof commits canonical Connection state before projecting board interactables",
+    /tqConnectionStateCommit\(session\.fixture\.space,\s*session\.state/.test(bootSrc) &&
+    /session\.state\s*=\s*committed\.state/.test(bootSrc) &&
+    /clayRoomApplyMovementBoard\(session\.state,\s*"clayroom-door-state"\)/.test(bootSrc));
   check("28e. browser-readable proof reports authored/mounted state, live hinge angle, tween, and mount",
     /window\.Theater\._clayDoorProofForTest/.test(bootSrc) &&
     /hingeAngleDeg/.test(bootSrc) && /tweenActive/.test(bootSrc) && /doorMountReport/.test(bootSrc));
@@ -1250,7 +1256,7 @@ const check = (name, cond, detail = "") =>
   check("30d. state/rebuild helpers explicitly suppress travel-only room transitions",
     /function\s+setInteriorBoard\s*\(data,\s*renderOpts\)/.test(bootSrc)
     && /renderOpts\.roomTransition\s*!==\s*false/.test(bootSrc)
-    && /setInteriorBoard\(nextBoard,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
+    && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
     && /setInteriorBoard\(S\.lastBoard,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
   check("30e. Concept 1 shell exposes persistent Catalog, Scene, Viewport, and Inspector regions",
     /clay-room-workbench-catalog/.test(bootSrc)
@@ -1272,6 +1278,109 @@ const check = (name, cond, detail = "") =>
     && /if\(S\.resizeHandler\)\s*S\.resizeHandler\(\)/.test(bootSrc)
     && /minTop\s*=\s*52/.test(bootSrc)
     && /panel docked right · viewport clamp PASS/.test(bootSrc));
+}
+
+// ============================================================================
+// 31. C1B FULL MOVEMENT LAB (founder expansion, 2026-07-24).
+// The 5x5 starting fixture could not distinguish an ordinary 30-ft range from its Dash extension.
+// This gate executes the actual 15x15 SpatialPlan adapter and TacticalQueryKernel, then checks that
+// the dev renderer only projects its range/preview/receipt answers through the real standee verb.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const compiled = win.clayRoomBoardFrom(record);
+    const fixture = win.clayRoomMovementFixtureFrom(record, compiled);
+    const ranges = win.tqMovementRanges(fixture.space, fixture.state, fixture.actorId);
+    check("31a. C1B record explicitly carries 30-ft movement, route waypoints, and one Connection owner",
+      record.dims.w === 15 && record.dims.d === 15
+      && record.movement.speedFt === 30
+      && record.movement.routeWaypoints.east && record.movement.routeWaypoints.west
+      && record.portal.connectionId === record.connection.id
+      && record.portal.connectionVersion === record.connection.version,
+      JSON.stringify(record));
+    check("31b. movement fixture consumes the same SpatialPlan and maps the real crate to one blocker",
+      fixture.space.planSeed === compiled.plan.seed
+      && fixture.space.cells.find((cell) => cell.id === fixture.localCells.crate).blocked === true,
+      JSON.stringify(fixture.localCells));
+    check("31c. ordinary and Dash highlights are non-empty, disjoint, and the door is Dash-only",
+      ranges.moveCellIds.length > 0 && ranges.dashCellIds.length > 0
+      && ranges.moveCellIds.every((id) => !ranges.dashCellIds.includes(id))
+      && !ranges.moveCellIds.includes(fixture.localCells.portal)
+      && ranges.dashCellIds.includes(fixture.localCells.portal),
+      JSON.stringify(ranges));
+    const east = win.tqMovementPreview(fixture.space, fixture.state, {
+      actorId: fixture.actorId,
+      destinationCellId: fixture.localCells.portal,
+      pace: "dash",
+      viaCellId: fixture.localCells.east,
+      routeLabel: "east of the crate"
+    });
+    const west = win.tqMovementPreview(fixture.space, fixture.state, {
+      actorId: fixture.actorId,
+      destinationCellId: fixture.localCells.portal,
+      pace: "dash",
+      viaCellId: fixture.localCells.west,
+      routeLabel: "west difficult shoulder"
+    });
+    check("31d. east route reaches the door at exactly 60 ft; west difficult route is lawfully refused",
+      east.ok && east.route.costFt === 60 && !west.ok && west.reason === "out-of-range"
+      && west.detail.costFt > east.route.costFt,
+      JSON.stringify({ east, west }));
+    const staged = win.tqMovementCommit(fixture.space, fixture.state, east);
+    const cross = win.tqMovementPreview(fixture.space, staged.state, {
+      actorId: fixture.actorId,
+      connectionId: fixture.connectionId,
+      pace: "move"
+    });
+    const crossed = win.tqMovementCommit(fixture.space, staged.state, cross);
+    check("31e. preview/commit route is exact and portal use opens one shared Connection endpoint",
+      staged.ok && staged.receipt.route.cells.join(">") === east.route.cells.join(">")
+      && cross.ok && crossed.ok
+      && crossed.state.connections[0].state === "open"
+      && crossed.state.actors[0].sceneId === "clay-beyond",
+      JSON.stringify(crossed));
+    const conn = fixture.space.connections[0];
+    const ordinary = win.tqConnectionAssessment(conn, record.citizen.bodyForm);
+    const difficult = win.tqConnectionAssessment(conn, Object.assign({}, record.citizen.bodyForm, { sizeCategory: "Large" }));
+    const blocked = win.tqConnectionAssessment(conn, Object.assign({}, record.citizen.bodyForm, { sizeCategory: "Huge" }));
+    const uncertain = win.tqConnectionAssessment(conn, record.citizen.bodyForm, "force-warped-frame");
+    check("31f. same real connection proves ordinary, SRD difficult, checked uncertainty, and true blockage",
+      ordinary.kind === "ordinary"
+      && difficult.kind === "difficult"
+      && blocked.kind === "blocked" && blocked.alternatives.length >= 2
+      && uncertain.kind === "uncertain" && uncertain.checkContract.dcRevealed === false
+      && !JSON.stringify(uncertain).includes("\"dc\":"),
+      JSON.stringify({ ordinary, difficult, blocked, uncertain }));
+  } catch(e) {
+    check("31a-f. C1B production movement chain executes without throw", false, e.stack || String(e));
+  }
+
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("31g. renderer projects kernel range bands with distinct fill and hollow-diamond shapes",
+    /ranges\.moveCellIds/.test(bootSrc)
+    && /new\s+THREE\.BoxGeometry\(0\.86/.test(bootSrc)
+    && /ranges\.dashCellIds/.test(bootSrc)
+    && /new\s+THREE\.RingGeometry\(0\.26,\s*0\.40,\s*4\)/.test(bootSrc)
+    && /rangeBand\s*=\s*"move"/.test(bootSrc)
+    && /rangeBand\s*=\s*"dash"/.test(bootSrc));
+  check("31h. committed receipt cells drive the existing production move-step verb one cell at a time",
+    /function\s+clayRoomAnimateMovementReceipt/.test(bootSrc)
+    && /receipt\.route/.test(bootSrc)
+    && /playStandeeVerb\(actor,\s*"move-step"/.test(bootSrc)
+    && /setTimeout\(playNext,\s*0\)/.test(bootSrc)
+    && /actorFound/.test(bootSrc)
+    && /completedSteps/.test(bootSrc)
+    && /if\(onProgress\)\s*onProgress\(\)/.test(bootSrc));
+  check("31i. session movement truth lives in GS and every movement rebuild suppresses travel fade",
+    /GS\.clayRoomMovementSession/.test(bootSrc)
+    && /session\.state\s*=\s*committed\.state/.test(bootSrc)
+    && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
+  check("31j. live proof exposes revision, actor, Connection, exact ranges, preview, receipt, and overlay",
+    /window\.Theater\._clayMovementProofForTest/.test(bootSrc)
+    && /stateRevision/.test(bootSrc) && /lastReceipt/.test(bootSrc)
+    && /clayRoomMovementOverlaySummary/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

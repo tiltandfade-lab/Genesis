@@ -13205,6 +13205,25 @@ window.Theater._clayLightingProofForTest = function(){
     ? { snapshot: clayRoomLightingSnapshot("test-read"), probe: S.clayRoomLightingProbe || null }
     : null;
 };
+window.Theater._clayMovementProofForTest = function(){
+  const session = (typeof clayRoomMovementSession === "function") ? clayRoomMovementSession() : null;
+  if(!session || typeof tqMovementRanges !== "function") return null;
+  const actor = session.state.actors.find(function(row){ return row.id === session.fixture.actorId; });
+  const connection = session.state.connections.find(function(row){ return row.id === session.fixture.connectionId; });
+  return {
+    stateRevision: session.state.revision,
+    actor: actor ? { id: actor.id, sceneId: actor.sceneId, cellId: actor.cellId, speedFt: actor.speedFt } : null,
+    connection: connection ? {
+      id: connection.id, version: connection.version, state: connection.state
+    } : null,
+    ranges: tqMovementRanges(session.fixture.space, session.state, session.fixture.actorId),
+    preview: session.preview || null,
+    lastReceipt: session.lastReceipt || null,
+    busy: !!session.busy,
+    animation: session.animationProof || null,
+    overlay: S.clayRoomMovementOverlaySummary || null
+  };
+};
 window.Theater._clayProvenanceAuditForTest = function(){
   return (typeof clayRoomProvenanceAudit === "function") ? clayRoomProvenanceAudit() : null;
 };
@@ -14697,9 +14716,11 @@ function unmountLightLab(){
    ~14089-14110): a URL flag (?clayroom=1) OR a live console-settable GS.clayRoomEnabled, memoized
    once, zero DOM/listeners until the flag actually flips true.
 
-   Everything below reads ONLY the frozen record src/engine/clay-room.js's clayRoomRecordFrom(seed)
-   returns — no rules verbs, no dice, no pathing, no event application (grep-gated by
-   dev/verify-clay-room.mjs check 7). D3: the interior (volumetric, perspective-composed) channel
+   C1A surfaces below read the frozen record from clayRoomRecordFrom(seed). C1B movement projects
+   immutable TacticalQueryKernel range/preview/commit receipts and feeds their exact cells into the
+   existing move-step standee verb; this renderer still owns no rules, die resolution, or event
+   application (grep-gated by dev/verify-clay-room.mjs check 7). D3: the interior
+   (volumetric, perspective-composed) channel
    with the FIXED camera setInteriorBoard already gives it by default (INTERIOR_CAM_MODE==="persp",
    theater-interior.js:205) — this block never calls rotate()/zoom(), so "no rotation, no orbit"
    (W3 law) holds by omission, not a new guard. D5: the default (non-psx) canvas path — mount() is
@@ -15300,6 +15321,262 @@ function clayRoomBuildSeamGrid(record, roomRect){
   return grid;
 }
 
+/* ─── C1B MOVEMENT PROJECTION ─────────────────────────────────────────────────────────────────
+   The production TacticalQueryKernel owns cells, cost, legality, route choice, connection use, and
+   preview/commit receipts. These helpers only project its immutable answers into the real Theater:
+   a filled primary band, a hollow diamond Dash extension, an exact route line, and one move-step
+   standee animation per receipt cell. No rule math lives here.
+*/
+function clayRoomMovementSession(){
+  return (typeof GS !== "undefined" && GS) ? GS.clayRoomMovementSession || null : null;
+}
+function clayRoomMovementPoint(cellId){
+  const coord = (typeof tqCellCoord === "function") ? tqCellCoord(cellId) : null;
+  if(!coord || !S.boardOrigin) return null;
+  const floorY = interiorFloorTopAt(S.interiorFloorTopMap, coord.x, coord.y);
+  return new THREE.Vector3(
+    coord.x - S.boardOrigin.cx,
+    floorY + 0.025,
+    coord.y - S.boardOrigin.cz
+  );
+}
+function clayRoomDisposeMovementOverlay(){
+  const group = S.clayRoomMovementOverlayGroup;
+  if(!group) return;
+  if(group.parent) group.parent.remove(group);
+  group.traverse(function(node){
+    if(node.geometry && node.geometry.dispose) node.geometry.dispose();
+    if(node.material){
+      const mats = Array.isArray(node.material) ? node.material : [node.material];
+      mats.forEach(function(mat){ if(mat && mat.dispose) mat.dispose(); });
+    }
+  });
+  S.clayRoomMovementOverlayGroup = null;
+}
+function clayRoomMovementCellInFocus(cellId){
+  const coord = (typeof tqCellCoord === "function") ? tqCellCoord(cellId) : null;
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  return !!(coord && room
+    && coord.x >= room.x && coord.x < room.x + room.w
+    && coord.y >= room.y && coord.y < room.y + room.d);
+}
+function clayRoomRenderMovementOverlay(ranges, preview){
+  clayRoomDisposeMovementOverlay();
+  if(!S.scene || !ranges) return;
+  const group = new THREE.Group();
+  group.userData.clayMovementOverlay = true;
+  const moveGeo = new THREE.BoxGeometry(0.86, 0.018, 0.86);
+  const moveMat = new THREE.MeshBasicMaterial({
+    color: 0x43b9df, transparent: true, opacity: 0.26,
+    depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2
+  });
+  (ranges.moveCellIds || []).forEach(function(cellId){
+    if(!clayRoomMovementCellInFocus(cellId)) return;
+    const point = clayRoomMovementPoint(cellId); if(!point) return;
+    const tile = new THREE.Mesh(moveGeo, moveMat);
+    tile.position.copy(point);
+    tile.userData.rangeBand = "move";
+    tile.userData.cellId = cellId;
+    tile.renderOrder = 20;
+    group.add(tile);
+  });
+  const dashGeo = new THREE.RingGeometry(0.26, 0.40, 4);
+  const dashMat = new THREE.MeshBasicMaterial({
+    color: 0xf2bd54, transparent: true, opacity: 0.75,
+    side: THREE.DoubleSide, depthWrite: false, depthTest: false
+  });
+  (ranges.dashCellIds || []).forEach(function(cellId){
+    if(!clayRoomMovementCellInFocus(cellId)) return;
+    const point = clayRoomMovementPoint(cellId); if(!point) return;
+    const diamond = new THREE.Mesh(dashGeo, dashMat);
+    diamond.rotation.x = -Math.PI / 2;
+    diamond.rotation.z = Math.PI / 4;
+    diamond.position.copy(point);
+    diamond.position.y += 0.015;
+    diamond.userData.rangeBand = "dash";
+    diamond.userData.cellId = cellId;
+    diamond.renderOrder = 21;
+    group.add(diamond);
+  });
+  const origin = clayRoomMovementPoint(ranges.originCellId);
+  if(origin){
+    const originMesh = new THREE.Mesh(
+      new THREE.RingGeometry(0.34, 0.45, 24),
+      new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, depthTest: false })
+    );
+    originMesh.rotation.x = -Math.PI / 2;
+    originMesh.position.copy(origin);
+    originMesh.position.y += 0.035;
+    originMesh.userData.rangeBand = "origin";
+    originMesh.renderOrder = 23;
+    group.add(originMesh);
+  }
+  if(preview && preview.ok && preview.route && preview.route.cells){
+    const routePoints = preview.route.cells
+      .filter(clayRoomMovementCellInFocus)
+      .map(clayRoomMovementPoint)
+      .filter(Boolean)
+      .map(function(point){ point.y += 0.06; return point; });
+    if(routePoints.length >= 2){
+      const line = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(routePoints),
+        new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95, depthTest: false })
+      );
+      line.userData.clayMovementRoute = true;
+      line.renderOrder = 24;
+      group.add(line);
+    }
+    routePoints.forEach(function(point, index){
+      const marker = new THREE.Mesh(
+        new THREE.CircleGeometry(index === routePoints.length - 1 ? 0.16 : 0.09, 16),
+        new THREE.MeshBasicMaterial({
+          color: index === routePoints.length - 1 ? 0x79e5a3 : 0xffffff,
+          side: THREE.DoubleSide, depthTest: false
+        })
+      );
+      marker.rotation.x = -Math.PI / 2;
+      marker.position.copy(point);
+      marker.position.y += 0.01;
+      marker.userData.clayMovementStep = index;
+      marker.renderOrder = 25;
+      group.add(marker);
+    });
+  }
+  S.scene.add(group);
+  S.clayRoomMovementOverlayGroup = group;
+  S.clayRoomMovementOverlaySummary = {
+    revision: ranges.stateRevision,
+    originCellId: ranges.originCellId,
+    moveCells: ranges.moveCellIds.length,
+    dashCells: ranges.dashCellIds.length,
+    previewId: preview ? preview.id : null,
+    previewOk: preview ? preview.ok : null
+  };
+  markDirty();
+  scheduleRender();
+}
+function clayRoomMovementRangesRender(){
+  const session = clayRoomMovementSession();
+  if(!session) return null;
+  const ranges = tqMovementRanges(session.fixture.space, session.state, session.fixture.actorId);
+  clayRoomRenderMovementOverlay(ranges, session.preview);
+  return ranges;
+}
+function clayRoomMovementPickAt(ev, host){
+  const session = clayRoomMovementSession();
+  if(!session || !S.camera || !S.boardOrigin || !host) return false;
+  const rect = host.getBoundingClientRect();
+  if(rect.width <= 0 || rect.height <= 0) return false;
+  const pointer = new THREE.Vector2(
+    ((ev.clientX - rect.left) / rect.width) * 2 - 1,
+    -((ev.clientY - rect.top) / rect.height) * 2 + 1
+  );
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(pointer, S.camera);
+  const floorY = interiorFloorTopAt(
+    S.interiorFloorTopMap,
+    session.state.actors[0].cellId ? tqCellCoord(session.state.actors[0].cellId).x : 0,
+    session.state.actors[0].cellId ? tqCellCoord(session.state.actors[0].cellId).y : 0
+  );
+  const point = new THREE.Vector3();
+  if(!raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -floorY), point)) return false;
+  const cellId = tqCellId(
+    Math.round(point.x + S.boardOrigin.cx),
+    Math.round(point.z + S.boardOrigin.cz)
+  );
+  if(!session.fixture.space.cells.some(function(cell){ return cell.id === cellId; })) return false;
+  if(S.clayRoomMovementPreviewCell) S.clayRoomMovementPreviewCell(cellId);
+  return true;
+}
+function clayRoomMovementBoardFromState(state){
+  const compiled = S.clayRoomCompiled;
+  if(!compiled || !compiled.board || !state) return null;
+  const session = clayRoomMovementSession();
+  const actor = state.actors.find(function(row){ return row.id === session.fixture.actorId; });
+  const connection = state.connections.find(function(row){ return row.id === session.fixture.connectionId; });
+  const base = compiled.board;
+  let pieces = [];
+  if(actor && actor.sceneId === "clay-room"){
+    const coord = tqCellCoord(actor.cellId);
+    pieces = (base.pieces || []).map(function(piece){
+      return Object.assign({}, piece, { cellX: coord.x, cellY: coord.y });
+    });
+  }
+  const interactables = (base.interactables || []).map(function(entry){
+    return entry.connectionId === session.fixture.connectionId
+      ? Object.assign({}, entry, { state: connection ? connection.state : "shut" })
+      : entry;
+  });
+  return Object.assign({}, base, { pieces: pieces, interactables: interactables });
+}
+function clayRoomApplyMovementBoard(state, reason){
+  const board = clayRoomMovementBoardFromState(state);
+  if(!board) return;
+  S.boardKey = null;
+  setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-movement-commit" });
+  clayRoomMovementRangesRender();
+}
+function clayRoomAnimateMovementReceipt(receipt, onDone, onProgress){
+  const session = clayRoomMovementSession();
+  const actor = session && (findUnit(session.fixture.actorId) || clayRoomNodeForSelection(session.fixture.actorId));
+  const cells = receipt && receipt.route ? receipt.route.cells || [] : [];
+  if(session){
+    session.animationProof = {
+      receiptId: receipt ? receipt.id : null,
+      actorFound: !!actor,
+      requestedSteps: Math.max(0, cells.length - 1),
+      startedSteps: 0,
+      completedSteps: 0,
+      selectionProbe: S.clayRoomSelectionProbe || null,
+      status: actor && cells.length >= 2 ? "active" : "degraded-no-mounted-actor"
+    };
+  }
+  if(!actor || cells.length < 2){
+    if(onProgress) onProgress();
+    if(onDone) onDone();
+    return;
+  }
+  if(onProgress) onProgress();
+  const fromPoint = clayRoomMovementPoint(cells[0]);
+  const visualOffset = fromPoint ? {
+    x: actor.position.x - fromPoint.x,
+    z: actor.position.z - fromPoint.z
+  } : { x: 0, z: 0 };
+  let index = 1;
+  function playNext(){
+    if(index >= cells.length){
+      session.animationProof.status = "settled";
+      if(onProgress) onProgress();
+      if(onDone) onDone();
+      return;
+    }
+    const point = clayRoomMovementPoint(cells[index++]);
+    if(!point){ playNext(); return; }
+    point.x += visualOffset.x;
+    point.z += visualOffset.z;
+    point.y = actor.position.y;
+    bindStandeeCtx(buildTheaterCtx());
+    session.animationProof.startedSteps++;
+    if(onProgress) onProgress();
+    const started = playStandeeVerb(actor, "move-step", {
+      targetPos: point,
+      // tickTweens replaces its live list at the end of each pass. Schedule the next cell after
+      // that pass completes so a tween created from onDone cannot be discarded as re-entrant work.
+      onDone: function(){
+        session.animationProof.completedSteps++;
+        if(onProgress) onProgress();
+        setTimeout(playNext, 0);
+      }
+    });
+    if(started) startTweenLoop();
+    else {
+      session.animationProof.status = "degraded-verb-refused";
+      playNext();
+    }
+  }
+  playNext();
+}
+
 // ─── D13 (docs/C1A-CLAY-ROOM.md spec addendum D15 point 4 — provenance audit) ──────────────────────
 // clayRoomTagProvenance(node,builder) stamps userData.clayProvenance = {builder,recordRef:"clay-c1a"}
 // on ONE node and records it in S.clayRoomProvenanceRoots — the tracked root SET
@@ -15393,10 +15670,17 @@ function clayRoomApplyCamPose(){
 function clayRoomNodeForSelection(id){
   if(!id || !S.interiorGroup) return null;
   let found = null;
+  const probe = { requested: String(id), visited: 0, candidates: [] };
   S.interiorGroup.traverse(function(node){
     if(found || !node) return;
+    probe.visited++;
     const ud = node.userData || {};
-    if(ud.sceneObjectId === id || ud.lightId === id || ud.dressingSlug === id){
+    const candidate = ud.unitId || ud.sceneObjectId || ud.lightId || ud.dressingSlug;
+    if(candidate != null && probe.candidates.length < 12) probe.candidates.push(String(candidate));
+    if(String(ud.sceneObjectId || "") === String(id)
+      || String(ud.unitId || "") === String(id)
+      || String(ud.lightId || "") === String(id)
+      || String(ud.dressingSlug || "") === String(id)){
       found = node;
       return;
     }
@@ -15405,6 +15689,8 @@ function clayRoomNodeForSelection(id){
       found = node;
     }
   });
+  probe.found = !!found;
+  S.clayRoomSelectionProbe = probe;
   return found;
 }
 function clayRoomHighlightSelection(id){
@@ -15493,7 +15779,10 @@ function clayRoomWirePanZoom(host){
   host.addEventListener("pointerup", function(ev){
     const wasClick = dragging && !moved;
     endDrag();
-    if(wasClick) clayRoomPickAt(ev, host);
+    if(wasClick){
+      if(S.clayRoomMovementPickMode && clayRoomMovementPickAt(ev, host)) return;
+      clayRoomPickAt(ev, host);
+    }
   });
   host.addEventListener("pointerleave", endDrag);
   host.addEventListener("wheel", function(ev){
@@ -15719,15 +16008,38 @@ function mountClayRoom(){
     ITR_ROOM_SHELL = clayRoomShellOverrideOn(); // restored in clayRoomUnmount — see this function's own header note above
 
     const compiled = clayRoomBoardFrom(record); // D15 — real spatializer + interiorBuildBoard (src/engine/clay-room.js)
+    const movementFixture = clayRoomMovementFixtureFrom(record, compiled);
+    // C1B mechanical session truth lives in GS, not in the renderer state. Rebuilds and animations
+    // may replace THREE objects, but they keep this exact revisioned query state. Closing/reopening
+    // the dev surface within one app session also keeps it until the explicit Movement reset.
+    if(!GS.clayRoomMovementSession
+      || !GS.clayRoomMovementSession.fixture
+      || GS.clayRoomMovementSession.fixture.space.id !== movementFixture.space.id){
+      GS.clayRoomMovementSession = {
+        version: 1,
+        fixture: movementFixture,
+        initialState: movementFixture.state,
+        state: movementFixture.state,
+        preview: null,
+        lastReceipt: null,
+        pace: "dash",
+        route: "east"
+      };
+    } else {
+      GS.clayRoomMovementSession.fixture = movementFixture;
+      GS.clayRoomMovementSession.initialState = movementFixture.state;
+    }
     // CL-R0: the record and the diagnostic-active flag are set BEFORE the first setInteriorBoard so
     // that build's own tail hook (clayRoomAfterInteriorBoardRebuild) applies the surface route, the
     // light profile, and provenance exactly the way every LATER rebuild will. One code path for the
     // first frame and the thousandth — the previous version's separate post-mount call sequence is
     // precisely what later replays could not reproduce.
     S.clayRoomRecord = record;
+    S.clayRoomCompiled = compiled;
     S.clayRoomDiagnosticActive = true;
-    setInteriorBoard(compiled.board);
+    setInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
     S.clayGridMesh = clayRoomBuildSeamGrid(record, compiled.room); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live; compiled.room is the spatializer's REAL room rect (CL-R0 coordinate fix)
+    clayRoomMovementRangesRender();
     clayRoomTagAllProvenance(); // D13 — re-tag now that the grid (built after the hook ran) exists
     markDirty();
     scheduleRender();
@@ -16023,7 +16335,7 @@ function clayRoomMountOverlay(record, host){
   panel.appendChild(camHint);
 
   const tabBar = document.createElement("div");
-  tabBar.style.cssText = "display:flex;gap:4px;border-top:1px solid #333;padding-top:6px;margin-bottom:6px;";
+  tabBar.style.cssText = "display:flex;flex-wrap:wrap;gap:4px;border-top:1px solid #333;padding-top:6px;margin-bottom:6px;";
   const factsTabBtn = document.createElement("button");
   factsTabBtn.textContent = "Facts";
   const explainTabBtn = document.createElement("button");
@@ -16034,14 +16346,17 @@ function clayRoomMountOverlay(record, host){
   mountTabBtn.textContent = "Mount";
   const stateTabBtn = document.createElement("button");
   stateTabBtn.textContent = "State";
+  const movementTabBtn = document.createElement("button");
+  movementTabBtn.textContent = "Move";
+  movementTabBtn.setAttribute("aria-label", "Clayroom production movement proof");
   const lightsTabBtn = document.createElement("button");
   lightsTabBtn.textContent = "Lights";
   lightsTabBtn.setAttribute("aria-label", "Clayroom lighting proof");
-  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, lightsTabBtn].forEach(function(b){
-    b.style.cssText = "flex:1;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, lightsTabBtn].forEach(function(b){
+    b.style.cssText = "flex:1 1 46px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   });
   tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn);
-  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(lightsTabBtn);
+  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(movementTabBtn); tabBar.appendChild(lightsTabBtn);
   panel.appendChild(tabBar);
 
   const factsBody = document.createElement("pre");
@@ -16232,6 +16547,215 @@ function clayRoomMountOverlay(record, host){
   mountRows.exportBox.style.cssText = "width:100%;height:64px;font:10px monospace;background:#1a1a20;color:#cd9;border:1px solid #333;border-radius:3px;margin-top:2px;";
   mountBody.appendChild(mountRows.exportBox);
 
+  // C1B Move tab — every answer comes from src/engine/tactical-query.js over the SAME SpatialPlan
+  // that built the visible room. Filled cyan cells are the ordinary 30-ft band; hollow amber
+  // diamonds are the additional Dash band, so the distinction survives without colour. Clicking
+  // the real floor chooses a destination; only the kernel decides whether the preview is lawful.
+  const movementBody = document.createElement("div");
+  movementBody.style.cssText = "display:none;font:10px/1.45 monospace;color:#dde;";
+  const movementIntro = document.createElement("div");
+  movementIntro.innerHTML =
+    "<div style='color:#9ab;margin-bottom:5px'>PRODUCTION SPATIALPLAN → TACTICAL QUERY → RECEIPT → MOVE-STEP</div>" +
+    "<div><span style='color:#43b9df'>■ filled</span> MOVE 30 ft · <span style='color:#f2bd54'>◇ hollow</span> DASH +30 ft</div>" +
+    "<div style='color:#7a8494;margin:3px 0 7px'>Move tab active: click a floor cell to preview. Pan still works by dragging.</div>";
+  movementBody.appendChild(movementIntro);
+  const movementPace = document.createElement("div");
+  movementPace.style.cssText = "display:flex;gap:5px;margin-bottom:5px;";
+  const movePaceBtn = document.createElement("button");
+  movePaceBtn.textContent = "MOVE · 30 ft";
+  const dashPaceBtn = document.createElement("button");
+  dashPaceBtn.textContent = "DASH · 60 ft";
+  [movePaceBtn, dashPaceBtn].forEach(function(button){
+    button.style.cssText = "flex:1;font:10px monospace;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+    movementPace.appendChild(button);
+  });
+  movementBody.appendChild(movementPace);
+  const movementRoute = document.createElement("div");
+  movementRoute.style.cssText = "display:flex;gap:5px;margin-bottom:5px;";
+  const autoRouteBtn = document.createElement("button");
+  autoRouteBtn.textContent = "AUTO";
+  const eastRouteBtn = document.createElement("button");
+  eastRouteBtn.textContent = "EAST / SAFE";
+  const westRouteBtn = document.createElement("button");
+  westRouteBtn.textContent = "WEST / DIFFICULT";
+  [autoRouteBtn, eastRouteBtn, westRouteBtn].forEach(function(button){
+    button.style.cssText = "flex:1;font:9px monospace;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+    movementRoute.appendChild(button);
+  });
+  movementBody.appendChild(movementRoute);
+  const movementActions = document.createElement("div");
+  movementActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px;";
+  const previewDoorBtn = document.createElement("button");
+  previewDoorBtn.textContent = "PREVIEW DOOR";
+  const usePortalBtn = document.createElement("button");
+  usePortalBtn.textContent = "PREVIEW PORTAL USE";
+  const commitMoveBtn = document.createElement("button");
+  commitMoveBtn.textContent = "COMMIT PREVIEW";
+  const resetMoveBtn = document.createElement("button");
+  resetMoveBtn.textContent = "RESET MOVEMENT";
+  [previewDoorBtn, usePortalBtn, commitMoveBtn, resetMoveBtn].forEach(function(button){
+    button.style.cssText = "font:9px monospace;background:#252a32;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+    movementActions.appendChild(button);
+  });
+  commitMoveBtn.style.background = "#254536";
+  resetMoveBtn.style.background = "#49352e";
+  movementBody.appendChild(movementActions);
+  const movementOut = document.createElement("pre");
+  movementOut.id = "clay-room-movement-readout";
+  movementOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
+  movementBody.appendChild(movementOut);
+
+  function clayMovementSession(){
+    return clayRoomMovementSession();
+  }
+  function clayMovementVia(session){
+    if(session.route === "east") return session.fixture.localCells.east;
+    if(session.route === "west") return session.fixture.localCells.west;
+    return null;
+  }
+  function clayMovementPreview(request){
+    const session = clayMovementSession();
+    if(!session || session.busy) return;
+    session.preview = tqMovementPreview(session.fixture.space, session.state, request);
+    clayMovementRender();
+  }
+  function clayMovementPreviewCell(cellId){
+    const session = clayMovementSession();
+    if(!session) return;
+    clayMovementPreview({
+      actorId: session.fixture.actorId,
+      destinationCellId: cellId,
+      pace: session.pace,
+      viaCellId: clayMovementVia(session),
+      routeLabel: session.route === "west"
+        ? "west difficult shoulder"
+        : (session.route === "east" ? "east of the crate" : "shortest lawful route")
+    });
+  }
+  S.clayRoomMovementPreviewCell = clayMovementPreviewCell;
+  function clayMovementRender(readoutOnly){
+    const session = clayMovementSession();
+    if(!session) return;
+    const actor = session.state.actors.find(function(row){ return row.id === session.fixture.actorId; });
+    const connection = session.state.connections.find(function(row){ return row.id === session.fixture.connectionId; });
+    const ranges = tqMovementRanges(session.fixture.space, session.state, session.fixture.actorId);
+    if(!readoutOnly) clayRoomRenderMovementOverlay(ranges, session.preview);
+    movePaceBtn.style.background = session.pace === "move" ? "#24516a" : "#2a2a30";
+    dashPaceBtn.style.background = session.pace === "dash" ? "#6a4d24" : "#2a2a30";
+    autoRouteBtn.style.background = session.route === "auto" ? "#3a3a44" : "#2a2a30";
+    eastRouteBtn.style.background = session.route === "east" ? "#35543b" : "#2a2a30";
+    westRouteBtn.style.background = session.route === "west" ? "#684a28" : "#2a2a30";
+    commitMoveBtn.disabled = !session.preview || !session.preview.ok || !!session.busy;
+    commitMoveBtn.style.opacity = commitMoveBtn.disabled ? "0.5" : "1";
+    const conn = session.fixture.space.connections[0];
+    const ordinary = tqConnectionAssessment(conn, actor.bodyForm);
+    const largeBody = Object.assign({}, actor.bodyForm, { sizeCategory: "Large" });
+    const hugeBody = Object.assign({}, actor.bodyForm, { sizeCategory: "Huge" });
+    const difficult = tqConnectionAssessment(conn, largeBody);
+    const blocked = tqConnectionAssessment(conn, hugeBody);
+    const uncertain = tqConnectionAssessment(conn, actor.bodyForm, "force-warped-frame");
+    const lines = [
+      "STATE rev " + session.state.revision + " · actor " + actor.sceneId + " / " + actor.cellId,
+      "CONNECTION " + connection.id + " v" + connection.version + " · " + connection.state + " · one owner",
+      "RANGE move " + ranges.moveCellIds.length + " cells · dash-only " + ranges.dashCellIds.length + " cells",
+      "DOOR " + (ranges.moveCellIds.indexOf(session.fixture.localCells.portal) >= 0 ? "MOVE" :
+        (ranges.dashCellIds.indexOf(session.fixture.localCells.portal) >= 0 ? "DASH" : "OUT OF RANGE")),
+      "",
+      "BODY CASES (same production connection)",
+      "  Small → " + ordinary.kind,
+      "  Large → " + difficult.kind + " · " + difficult.reason,
+      "  Huge  → " + blocked.kind + " · alternatives " + blocked.alternatives.length,
+      "  optional warped-frame method → " + uncertain.kind + " · exact DC hidden until commit",
+      ""
+    ];
+    if(session.preview){
+      lines.push(tqReceiptProse(session.preview));
+    } else {
+      lines.push("No preview. Click a floor cell or use a preview button.");
+    }
+    if(session.lastReceipt){
+      lines.push("", "LAST COMMIT", tqReceiptProse(session.lastReceipt));
+    }
+    const animation = session.animationProof;
+    lines.push("", "ANIMATION " + (session.busy ? "ACTIVE · receipt already committed" : "settled"));
+    if(animation){
+      lines.push("  actor " + (animation.actorFound ? "FOUND" : "MISSING")
+        + " · steps " + animation.completedSteps + "/" + animation.requestedSteps
+        + " · " + animation.status);
+      if(!animation.actorFound && animation.selectionProbe){
+        lines.push("  lookup " + animation.selectionProbe.visited + " nodes · candidates "
+          + (animation.selectionProbe.candidates.join(", ") || "none"));
+      }
+    }
+    movementOut.textContent = lines.join("\n");
+  }
+  movePaceBtn.addEventListener("click", function(){
+    const session = clayMovementSession(); if(!session) return;
+    session.pace = "move"; clayMovementRender();
+  });
+  dashPaceBtn.addEventListener("click", function(){
+    const session = clayMovementSession(); if(!session) return;
+    session.pace = "dash"; clayMovementRender();
+  });
+  autoRouteBtn.addEventListener("click", function(){
+    const session = clayMovementSession(); if(!session) return;
+    session.route = "auto"; clayMovementRender();
+  });
+  eastRouteBtn.addEventListener("click", function(){
+    const session = clayMovementSession(); if(!session) return;
+    session.route = "east"; clayMovementRender();
+  });
+  westRouteBtn.addEventListener("click", function(){
+    const session = clayMovementSession(); if(!session) return;
+    session.route = "west"; clayMovementRender();
+  });
+  previewDoorBtn.addEventListener("click", function(){
+    const session = clayMovementSession(); if(!session) return;
+    clayMovementPreviewCell(session.fixture.localCells.portal);
+  });
+  usePortalBtn.addEventListener("click", function(){
+    const session = clayMovementSession(); if(!session) return;
+    clayMovementPreview({
+      actorId: session.fixture.actorId,
+      connectionId: session.fixture.connectionId,
+      pace: session.pace,
+      routeLabel: "use canonical north connection"
+    });
+  });
+  commitMoveBtn.addEventListener("click", function(){
+    const session = clayMovementSession();
+    if(!session || session.busy || !session.preview || !session.preview.ok) return;
+    const committed = tqMovementCommit(session.fixture.space, session.state, session.preview);
+    if(!committed.ok){
+      session.preview = committed;
+      clayMovementRender();
+      return;
+    }
+    session.state = committed.state;
+    session.lastReceipt = committed.receipt;
+    session.preview = null;
+    session.busy = true;
+    const lightBefore = clayRoomLightingSnapshot("before-movement-animation");
+    clayRoomRecordLightingProbe("movement " + committed.receipt.id, lightBefore, true);
+    clayMovementRender();
+    clayRoomAnimateMovementReceipt(committed.receipt, function(){
+      clayRoomApplyMovementBoard(session.state, "clayroom-movement-receipt");
+      session.busy = false;
+      clayMovementRender();
+    }, function(){ clayMovementRender(true); });
+  });
+  resetMoveBtn.addEventListener("click", function(){
+    const session = clayMovementSession(); if(!session || session.busy) return;
+    session.state = session.initialState;
+    session.preview = null;
+    session.lastReceipt = null;
+    session.animationProof = null;
+    session.pace = "dash";
+    session.route = "east";
+    clayRoomApplyMovementBoard(session.state, "clayroom-movement-reset");
+    clayMovementRender();
+  });
+
   // State tab — an executable proof of the production door projection, not a second demo door.
   // Each button clone-patches S.lastBoard.interactables and replays the SAME setInteriorBoard ->
   // interiorBuildInteractables -> hinge tween path normal state projection uses. The canonical clay
@@ -16239,7 +16763,7 @@ function clayRoomMountOverlay(record, host){
   const stateBody = document.createElement("div");
   stateBody.style.cssText = "display:none;font:11px/1.5 monospace;color:#dde;";
   const stateIntro = document.createElement("div");
-  stateIntro.textContent = "production projection: board.interactables → 320ms hinge tween";
+  stateIntro.textContent = "canonical Connection commit → board.interactables projection → 320ms hinge tween";
   stateIntro.style.cssText = "color:#9ab;margin-bottom:6px;";
   stateBody.appendChild(stateIntro);
   const stateButtons = document.createElement("div");
@@ -16257,16 +16781,19 @@ function clayRoomMountOverlay(record, host){
     ].join("\n");
   }
   function clayDoorStateApply(nextState){
-    if(!S.lastBoard || S.lastBoard.kind !== "interior3d") return;
-    const rows = (S.lastBoard.interactables || []).map(function(entry){
-      return entry && entry.archetype === "door"
-        ? Object.assign({}, entry, { state: nextState })
-        : entry;
+    const session = clayMovementSession();
+    if(!session || session.busy) return;
+    const committed = tqConnectionStateCommit(session.fixture.space, session.state, {
+      connectionId: session.fixture.connectionId,
+      state: nextState
     });
-    const nextBoard = Object.assign({}, S.lastBoard, { interactables: rows });
-    S.boardKey = null;
-    setInteriorBoard(nextBoard, { roomTransition: false, reason: "clayroom-door-state" });
+    if(!committed.ok) return;
+    session.state = committed.state;
+    session.lastReceipt = committed.receipt;
+    session.preview = null;
+    clayRoomApplyMovementBoard(session.state, "clayroom-door-state");
     clayDoorStateRender();
+    clayMovementRender();
     setTimeout(clayDoorStateRender, ITR_DOOR_SWING_TWEEN_MS + 40);
   }
   [["shut", "Set door shut"], ["ajar", "Set door ajar"], ["open", "Set door open"]].forEach(function(def){
@@ -16393,6 +16920,7 @@ function clayRoomMountOverlay(record, host){
   panel.appendChild(surfacesBody);
   panel.appendChild(mountBody);
   panel.appendChild(stateBody);
+  panel.appendChild(movementBody);
   panel.appendChild(lightsBody);
 
   function clayShowTab(which){
@@ -16401,16 +16929,20 @@ function clayRoomMountOverlay(record, host){
     surfacesBody.style.display = which === "surfaces" ? "" : "none";
     mountBody.style.display = which === "mount" ? "" : "none";
     stateBody.style.display = which === "state" ? "" : "none";
+    movementBody.style.display = which === "movement" ? "" : "none";
     lightsBody.style.display = which === "lights" ? "" : "none";
     factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
     explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
     surfacesTabBtn.style.background = which === "surfaces" ? "#3a3a44" : "#2a2a30";
     mountTabBtn.style.background = which === "mount" ? "#3a3a44" : "#2a2a30";
     stateTabBtn.style.background = which === "state" ? "#3a3a44" : "#2a2a30";
+    movementTabBtn.style.background = which === "movement" ? "#3a3a44" : "#2a2a30";
     lightsTabBtn.style.background = which === "lights" ? "#3a3a44" : "#2a2a30";
+    S.clayRoomMovementPickMode = which === "movement";
     if(which === "surfaces") clayRenderSurfacesTab();
     if(which === "mount") clayMountRender();
     if(which === "state") clayDoorStateRender();
+    if(which === "movement") clayMovementRender();
     if(which === "lights") clayLightsRender();
     if(CLAY_ROOM_PANEL_POSITION){
       const panelRect = panel.getBoundingClientRect();
@@ -16481,8 +17013,9 @@ function clayRoomMountOverlay(record, host){
   surfacesTabBtn.addEventListener("click", function(){ clayShowTab("surfaces"); });
   mountTabBtn.addEventListener("click", function(){ clayShowTab("mount"); });
   stateTabBtn.addEventListener("click", function(){ clayShowTab("state"); });
+  movementTabBtn.addEventListener("click", function(){ clayShowTab("movement"); });
   lightsTabBtn.addEventListener("click", function(){ clayShowTab("lights"); });
-  clayShowTab("facts");
+  clayShowTab("movement");
 
   document.body.appendChild(panel);
   if(CLAY_ROOM_PANEL_POSITION){

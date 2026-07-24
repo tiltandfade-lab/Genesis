@@ -31,8 +31,8 @@
        tierHeights: Map<tier:number, worldY:number> | plain object — floor TOP height per tier (the
          SAME derivation theater-boot.js's interiorFloorTopAt already uses: ITR_FLOOR_BASE_Y + sy).
          Computed from `cells` automatically (per-tier average) when omitted.
-       wallHeight: number — uniform wall height for this room's exterior ring (default 2.4, mirrors
-         theater-interior.js's ITR_WALL_HEIGHT_BASE fallback).
+       wallHeight: number — uniform wall height for this room's exterior ring (default 2.0 / 10 ft, mirrors
+         theater-interior.js's 10-foot ITR_WALL_HEIGHT_BASE fallback).
        wallHeightForSegment(segMeta) -> number — OPTIONAL per-segment override (segMeta:
          {a,b,mid:{x,z},kind,tier}). Lets the caller apply camera-relative parapet cutaway (the
          existing focusRect near-wall shortening) to compiled segments without this pure module ever
@@ -118,7 +118,7 @@ const ROOM_SHELL_POLYGON_KERNEL = "legacy";
 // scoped engineering choice, not a rediscovery of theater-interior.js's own constants (this module
 // stays decoupled from that file) — if ITR_STEP_MAX or ITR_DAIS_STEP ever change, re-check this margin.
 const ROOM_SHELL_TIER_QUANTUM = 0.2;
-const DEFAULT_WALL_HEIGHT = 2.4; // mirrors theater-interior.js's ITR_WALL_HEIGHT_BASE fallback (kept in sync by comment, not import — pure module stays decoupled)
+const DEFAULT_WALL_HEIGHT = 2; // 10 ft; mirrors theater-interior.js's ITR_WALL_HEIGHT_BASE fallback
 const DEFAULT_BEVEL_WIDTH = 0.06;
 const DEFAULT_BEVEL_DROP = 0.03;
 const DEFAULT_UV_DENSITY = 1;
@@ -912,8 +912,8 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
 
 /* buildWallBox(buf, p) — C4.1a's core primitive: pushes ONE vertical architectural band [p.yBase,p.yTop]
    of a wall segment into `buf` as a real capped box (inner face, outer face, an overhanging top-cap
-   slab, two end caps closing the box's own thickness cross-section, and an optional footing skirt at
-   the base) — replacing the old "one two-triangle plane" wall quad. Pure geometry, no THREE/camera.
+   slab, optional exposed end caps closing the box's thickness cross-section, and an optional footing
+   skirt at the base) — replacing the old "one two-triangle plane" wall quad. Pure geometry, no THREE/camera.
 
    p: { innerA, innerB, outerA, outerB — {x,z} world points (outer = inner offset -n*wallThickness,
          computed by the caller so this function stays a dumb box-builder), n — inward unit normal,
@@ -921,7 +921,9 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
          capOverhang, footing (0 = no footing skirt — only the STEM band gets one), color, u0, u1 (this
          segment's own ring-perimeter arc-length span, reused verbatim as the vertical faces' own U),
          uvDensity (world-unit texture repeat, for the two horizontal faces: cap top + footing ledge),
-         capInA, capInB, capOutA, capOutB, footOutA, footOutB — OPTIONAL explicit lip point overrides (UNIT G3,
+         closeA/closeB — false when a neighboring wall volume owns that joined miter (true/default
+         at exposed door/open/riser ends), capInA, capInB, capOutA, capOutB, footOutA, footOutB —
+         OPTIONAL explicit lip point overrides (UNIT G3,
          docs/STAGE-G3-WALL-RUNS.md's "build the stem, upper, cap, footing, and trim from the SAME run
          contour"). When omitted (every legacy call site, byte-identical), derived internally exactly as
          before (innerA/innerB and outerA/outerB offset by n*capOverhang / n*footing). When supplied (the oss wall-run
@@ -932,9 +934,10 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
          caller hand this function an already-corner-correct lip point instead). }
 
    SCOPING SIMPLIFICATION (documented — C4.1a's own "a few long quads" mandate, no exact corner miter
-   chased BY THIS FUNCTION ITSELF): each segment's own end caps are built independently of its ring
-   neighbors (no shared-corner miter solve here, unlike insetOffset's exact 2D miter for the FLOOR
-   bevel) — at a real 90-degree room corner this leaves a measured ~0.31-world-unit GAP (not overlap —
+   chased BY THIS FUNCTION ITSELF): the caller decides whether each end is physically exposed; this
+   primitive does not inspect ring neighbors. The caller also owns the shared-corner miter solve
+   (unlike insetOffset's exact 2D miter for the FLOOR bevel) — without that supplied solve a real
+   90-degree room corner leaves a measured ~0.31-world-unit GAP (not overlap —
    docs/STAGE-G3-WALL-RUNS.md's own ruling corrects this file's earlier, wrong, claim that it was an
    invisible overlap) between two adjacent segments' own independently-computed outer-corner geometry
    UNLESS the caller supplies pre-mitered outerA/outerB/capInA/capInB/capOutA/capOutB/footOutA/footOutB (the oss wall-
@@ -982,17 +985,21 @@ function buildWallBox(buf, p) {
     { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
     { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
     { x: n.x, y: 0, z: n.z }, u0, u1, 0, capHeight, color);
-  // end caps — close the box's own thickness cross-section at BOTH 'a' and 'b' (frame 01's "exposed
-  // ends"): every wall segment gets both unconditionally (see this function's own header for why no
-  // neighbor-aware skip is needed post-simplification — a door-adjacent end IS the jamb face).
-  pushWallVerticalFace(buf,
-    { x: outerA.x, y: yBase, z: outerA.z }, { x: innerA.x, y: yBase, z: innerA.z },
-    { x: outerA.x, y: yTop, z: outerA.z }, { x: innerA.x, y: yTop, z: innerA.z },
-    { x: -tX, y: 0, z: -tZ }, 0, 1, 0, h, color);
-  pushWallVerticalFace(buf,
-    { x: innerB.x, y: yBase, z: innerB.z }, { x: outerB.x, y: yBase, z: outerB.z },
-    { x: innerB.x, y: yTop, z: innerB.z }, { x: outerB.x, y: yTop, z: outerB.z },
-    { x: tX, y: 0, z: tZ }, 0, 1, 0, h, color);
+  // End caps belong only at physically exposed ends (door/riser/open adjacency). At a wall-to-wall
+  // miter the neighboring volumes already meet; emitting both cross-sections there creates internal
+  // coplanar/intersecting polygons that show up as crusty corner trim under grazing light.
+  if(p.closeA !== false) {
+    pushWallVerticalFace(buf,
+      { x: outerA.x, y: yBase, z: outerA.z }, { x: innerA.x, y: yBase, z: innerA.z },
+      { x: outerA.x, y: yTop, z: outerA.z }, { x: innerA.x, y: yTop, z: innerA.z },
+      { x: -tX, y: 0, z: -tZ }, 0, 1, 0, h, color);
+  }
+  if(p.closeB !== false) {
+    pushWallVerticalFace(buf,
+      { x: innerB.x, y: yBase, z: innerB.z }, { x: outerB.x, y: yBase, z: outerB.z },
+      { x: innerB.x, y: yTop, z: innerB.z }, { x: outerB.x, y: yTop, z: outerB.z },
+      { x: tX, y: 0, z: tZ }, 0, 1, 0, h, color);
+  }
   // footing skirt — a projecting ledge courses OUT past the outer face at the band's own base (only
   // ever passed a nonzero `footing` for the STEM band; the upper band never re-foots itself).
   if (footing > 0) {
@@ -2221,6 +2228,10 @@ function compileRoomShellData(cells, opts) {
 
           const ownerSegIndex = wallSegmentsOut.length;
           wallSegmentsOut.push({ a: seg.a, b: seg.b, tier, height: h });
+          const prevSeg = segments[(i - 1 + segments.length) % segments.length];
+          const nextSeg = segments[(i + 1) % segments.length];
+          const closeA = !prevSeg || prevSeg.kind !== "wall";
+          const closeB = !nextSeg || nextSeg.kind !== "wall";
 
           // ── STEM — always opaque, always emitted, the persistent capped tray-edge body ──
           const stemBaseY = baseY, stemTopY = baseY + wallStemHeight;
@@ -2231,6 +2242,7 @@ function compileRoomShellData(cells, opts) {
             capInA: ossOuter && ossOuter.capInA, capInB: ossOuter && ossOuter.capInB,
             capOutA: ossOuter && ossOuter.capOutA, capOutB: ossOuter && ossOuter.capOutB,
             footOutA: ossOuter && ossOuter.footOutA, footOutB: ossOuter && ossOuter.footOutB,
+            closeA, closeB,
           });
           wallStemSegmentsOut.push({ ownerSegIndex, tier });
           // DEPRECATED legacy `.walls` bundle — stem INNER FACE ONLY (see wallBuf's own header comment
@@ -2254,6 +2266,7 @@ function compileRoomShellData(cells, opts) {
               footing: 0, color: wallColor, u0, u1, uvDensity,
               capInA: ossOuter && ossOuter.capInA, capInB: ossOuter && ossOuter.capInB,
               capOutA: ossOuter && ossOuter.capOutA, capOutB: ossOuter && ossOuter.capOutB,
+              closeA, closeB,
             });
             const vertCount = wallUpperBuf.positions.length / 3 - vertStart;
             const idxCount = wallUpperBuf.indices.length - idxStart;
@@ -2262,6 +2275,8 @@ function compileRoomShellData(cells, opts) {
 
           // ── TRIM — optional, cosmetic base-course + cornice ribbons ──
           if (wallTrimOn) {
+            const trimVertStart = wallTrimBuf.positions.length / 3;
+            const trimIdxStart = wallTrimBuf.indices.length;
             const trimHeight = Math.min(0.05, wallStemHeight * 0.25);
             const trimProud = wallCapOverhang * 0.5;
             // UNIT G3: same substitution as the stem's own capOutA/footOutA — a corner-mitered trim lip
@@ -2276,7 +2291,13 @@ function compileRoomShellData(cells, opts) {
               { x: trimOuterA.x, y: stemTopY - trimHeight / 2, z: trimOuterA.z }, { x: trimOuterB.x, y: stemTopY - trimHeight / 2, z: trimOuterB.z },
               { x: trimOuterA.x, y: stemTopY + trimHeight / 2, z: trimOuterA.z }, { x: trimOuterB.x, y: stemTopY + trimHeight / 2, z: trimOuterB.z },
               { x: -n.x, y: 0, z: -n.z }, u0, u1, 0, trimHeight, wallColor);
-            wallTrimSegmentsOut.push({ ownerSegIndex, tier });
+            wallTrimSegmentsOut.push({
+              ownerSegIndex, tier,
+              vertStart: trimVertStart,
+              vertCount: wallTrimBuf.positions.length / 3 - trimVertStart,
+              idxStart: trimIdxStart,
+              idxCount: wallTrimBuf.indices.length - trimIdxStart,
+            });
           }
 
           // ── MOUNT SLOT(s) — inner-face candidate transforms, DATA only (E0 consumes them) ──

@@ -4541,6 +4541,7 @@ function interiorBuildInteractables(interactables, cx, cz, floorTopMap, kitDoors
         queuedDoorStateTween = true;
       }
     }
+    hinge.userData.sceneObjectId = sourceRef;
     group.add(hinge);
     bySourceRef[sourceRef] = hinge;
   });
@@ -4577,7 +4578,7 @@ const KIT_FLOOR_PACK = "kenney-modular-dungeon-kit", KIT_FLOOR_SLUG = "template-
 // jamb/corner/reveal cells share one consistent wall height, never a visible height seam at the mixed
 // shell's own kit<->prism boundary.
 const KIT_WALL_NATIVE_HEIGHT = 2.075;
-const KIT_WALL_FALLBACK_HEIGHT_BASE = 2.4; // mirrors ITR_WALL_HEIGHT_BASE — used only if a caller omits data.wallHeightBase
+const KIT_WALL_FALLBACK_HEIGHT_BASE = 2; // 10 ft; mirrors ITR_WALL_HEIGHT_BASE
 // interiorFloorTopAt's own convention: a baseline (unraised) floor cell's TOP sits at
 // ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK (both already defined above in this file) — kit floor
 // tiles are v1-scoped to baseline-only cells (itrKitShellFloorBlocks' own header), so that fixed world Y
@@ -8914,6 +8915,7 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       pl.userData = pl.userData || {};
       fixture.emitter.userData = fixture.emitter.userData || {};
       fixture.group.userData.lightId = lightId;
+      fixture.group.userData.sceneObjectId = lightId;
       fixture.group.userData.lightState = localState;
       pl.userData.lightId = lightId;
       pl.userData.lightState = localState;
@@ -9214,6 +9216,8 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
       if(anchor){ p = Object.assign({}, p, { cellX: anchor.x, cellY: anchor.y }); }
     }
     const g = built.group;
+    g.userData.sceneObjectId = p.sourceRef || p.id || p.slug;
+    g.userData.spriteSlug = p.slug;
     const floorFrac = (typeof base.floor === "number") ? base.floor : 0;
     // BW2-4b item 7c — BLOCKER-CELL EXCLUSION: shift a piece off any pillar/doorframe cell it landed on
     // (the loop-05 wolf-on-a-pillar) to the nearest clear cell before any contact/kilter/clip math reads
@@ -9465,9 +9469,14 @@ function buildFurnitureAssembly(entry, fadeOpacity){
   recipe.prisms.forEach((p) => {
     const geo = new THREE.BoxGeometry(Math.max(0.02, p.sx), Math.max(0.02, p.sy), Math.max(0.02, p.sz));
     const mat = furniturePanelMaterial(entry.realmId, p.face, baseColorHex);
+    const topMat = p.topFace ? furniturePanelMaterial(entry.realmId, p.topFace, baseColorHex) : mat;
     if(isFading) Object.assign(mat, { transparent: true, opacity: fadeOpacity, depthWrite: false });
+    if(isFading && topMat !== mat) Object.assign(topMat, { transparent: true, opacity: fadeOpacity, depthWrite: false });
     materials.push(mat);
-    const mesh = new THREE.Mesh(geo, mat);
+    if(topMat !== mat) materials.push(topMat);
+    // THREE.BoxGeometry material groups are +X, -X, +Y, -Y, +Z, -Z. A crate remains one six-sided
+    // box; the top merely selects its admitted top face tile instead of inventing lid geometry.
+    const mesh = new THREE.Mesh(geo, topMat === mat ? mat : [mat, mat, topMat, mat, mat, mat]);
     mesh.position.set(p.dx || 0, (p.yBase || 0) + p.sy / 2, p.dz || 0);
     mesh.castShadow = !isFading;
     mesh.receiveShadow = !isFading;
@@ -9475,6 +9484,7 @@ function buildFurnitureAssembly(entry, fadeOpacity){
   });
   group.userData.furnitureKind = recipe.kind;
   group.userData.dressingSlug = entry.slug;
+  group.userData.sceneObjectId = entry.slug;
   group.userData.occlusionGhost = isFading;
   group.userData.occlusionMaterials = materials; // interiorBuildFurniture's own fade-entry wiring reads this
   return group;
@@ -9499,6 +9509,7 @@ function interiorBuildFurniture(furniture, cx, cz, floorTopMap, classifyFn){
     const floorTop = interiorFloorTopAt(floorTopMap, f.x || 0, f.y || 0);
     g.position.set((f.x || 0) - (cx || 0), floorTop, (f.y || 0) - (cz || 0));
     g.userData.dressingSlug = f.slug;
+    g.userData.sceneObjectId = f.slug;
     group.add(g);
     mountEntries.push({ group: g, key: f.slug + ":" + f.x + "," + f.y });
   });
@@ -9555,7 +9566,7 @@ const ITR_WALL_SIDE_YAW = { n: 0, s: Math.PI, w: -Math.PI / 2, e: Math.PI / 2 };
 // Both named + dialable per the spec's own "Adam dials from the next re-shoot" clause.
 const ITR_WALLHANG_HEIGHT_FRAC = 0.5;  // mount Y = floorTop + wallHeightBase * this fraction (mid-wall)
 const ITR_WALLHANG_WALL_OFFSET = 0.5;  // half a cell (GRID LAW: cellSize=1, theater-interior.js) toward the wall
-const ITR_WALLHANG_FALLBACK_WALL_HEIGHT = 2.4; // mirrors ITR_WALL_HEIGHT_BASE (theater-interior.js) for a caller that omits wallHeightBase
+const ITR_WALLHANG_FALLBACK_WALL_HEIGHT = 2; // 10 ft; mirrors ITR_WALL_HEIGHT_BASE
 // unit normal pointing FROM the cell center TOWARD the adjacent wall cell it's keyed off — same
 // plan-x->world-x / plan-y->world-z axis mapping interiorBuildWallProps' own position.set already
 // uses, keyed off the SAME entry.wallSide ITR_WALL_SIDE_YAW reads (one resolution, two consumers).
@@ -10629,8 +10640,9 @@ function interiorLightingIdentityFor(data, variant){
   });
 }
 
-function setInteriorBoard(data){
+function setInteriorBoard(data, renderOpts){
   if(!S.mounted || !data) return;
+  renderOpts = renderOpts || {};
   // BEAUTY-WAVE-4.md MF-1: capture the TRUE live camera pose as the very FIRST thing this function
   // does — before drainTweens() (a few lines down) gets a chance to force-complete an in-flight
   // camera-pose tween to ITS end pose. drainTweens' own job is legitimate (force-settle tweens whose
@@ -10676,7 +10688,11 @@ function setInteriorBoard(data){
   // what "the rebuild happens under it" means when the rebuild itself is synchronous. The fade back to
   // transparent (revealing the NEW room) is pushed once the rebuild + camera fit are done, at this
   // function's own tail below.
-  const isRoomTransition = !!S.lastBoard;
+  // A full-screen fade is travel grammar, never generic rebuild grammar. Same-board async settles,
+  // camera/material replays, and explicitly-local Clayroom state edits rebuild in place.
+  const isRoomTransition = !!S.lastBoard
+    && data !== S.lastBoard
+    && renderOpts.roomTransition !== false;
   if(isRoomTransition && S.transitionEl){
     S.transitionEl.style.opacity = "1";
   }
@@ -11327,7 +11343,7 @@ function setInteriorBoard(data){
     // read off the post-cutaway `wallList` below (a DIFFERENT, deliberately-deferred concern; see the
     // parapet callback's own comment for what IS carried over and what isn't).
     const roomWallHeight = (inst.wall && inst.wall.length && typeof inst.wall[0].sy === "number")
-      ? inst.wall[0].sy : (data.wallHeightBase || 2.4);
+      ? inst.wall[0].sy : (data.wallHeightBase || 2);
     // PARAPET PARITY: reapplies the SAME camera-facing cutaway the per-cell path computes above
     // (BW2-5 item 2) per COMPILED SEGMENT, so the compiled shell doesn't regress "camera sees into the
     // room" — the one piece of the existing per-cell view-dependent machinery this unit carries
@@ -15185,6 +15201,7 @@ function clayRoomAfterInteriorBoardRebuild(){
   clayRoomSettleCameraPoseTween();
   clayRoomCaptureCamFit();
   clayRoomApplyCamPose();
+  if(S.clayRoomSelectedId) clayRoomHighlightSelection(S.clayRoomSelectedId);
 }
 
 function clayRoomSettleCameraPoseTween(){
@@ -15373,14 +15390,81 @@ function clayRoomApplyCamPose(){
   markDirty();
   scheduleRender();
 }
+function clayRoomNodeForSelection(id){
+  if(!id || !S.interiorGroup) return null;
+  let found = null;
+  S.interiorGroup.traverse(function(node){
+    if(found || !node) return;
+    const ud = node.userData || {};
+    if(ud.sceneObjectId === id || ud.lightId === id || ud.dressingSlug === id){
+      found = node;
+      return;
+    }
+    if(id === "room-shell" && ud.interiorKind
+      && /^(room-shell|floor|wall|trim|skirt)/.test(String(ud.interiorKind))){
+      found = node;
+    }
+  });
+  return found;
+}
+function clayRoomHighlightSelection(id){
+  if(S.clayRoomSelectionHelper && S.clayRoomSelectionHelper.parent){
+    S.clayRoomSelectionHelper.parent.remove(S.clayRoomSelectionHelper);
+  }
+  S.clayRoomSelectionHelper = null;
+  const node = clayRoomNodeForSelection(id);
+  if(!node || !S.scene) return;
+  const helper = new THREE.BoxHelper(node, 0x6fcfff);
+  helper.material.depthTest = false;
+  helper.material.transparent = true;
+  helper.material.opacity = 0.9;
+  helper.renderOrder = 999;
+  helper.userData.claySelectionHelper = true;
+  S.scene.add(helper);
+  S.clayRoomSelectionHelper = helper;
+  markDirty();
+  scheduleRender();
+}
+function clayRoomPickAt(ev, host){
+  if(!S.camera || !S.interiorGroup || !host) return null;
+  const rect = host.getBoundingClientRect();
+  if(rect.width <= 0 || rect.height <= 0) return null;
+  const pointer = new THREE.Vector2(
+    ((ev.clientX - rect.left) / rect.width) * 2 - 1,
+    -((ev.clientY - rect.top) / rect.height) * 2 + 1
+  );
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(pointer, S.camera);
+  const hits = raycaster.intersectObjects(S.interiorGroup.children, true);
+  for(let i = 0; i < hits.length; i++){
+    let node = hits[i].object;
+    while(node && node !== S.interiorGroup){
+      const ud = node.userData || {};
+      const id = ud.sceneObjectId || ud.lightId || ud.dressingSlug;
+      if(id){
+        S.clayRoomSelectedId = id;
+        if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(id, "viewport");
+        return id;
+      }
+      if(ud.interiorKind && /^(room-shell|floor|wall|trim|skirt)/.test(String(ud.interiorKind))){
+        S.clayRoomSelectedId = "room-shell";
+        if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect("room-shell", "viewport");
+        return "room-shell";
+      }
+      node = node.parent;
+    }
+  }
+  return null;
+}
 function clayRoomWirePanZoom(host){
   if(!host || host.__clayPanWired) return;
   host.__clayPanWired = true;
-  let dragging = false, lastX = 0, lastY = 0;
+  let dragging = false, lastX = 0, lastY = 0, startX = 0, startY = 0, moved = false;
   host.style.cursor = "grab";
   host.addEventListener("pointerdown", function(ev){
     if(ev.button !== 0) return;
-    dragging = true; lastX = ev.clientX; lastY = ev.clientY;
+    dragging = true; moved = false;
+    startX = lastX = ev.clientX; startY = lastY = ev.clientY;
     host.style.cursor = "grabbing";
     try { host.setPointerCapture(ev.pointerId); } catch(e){}
   });
@@ -15388,6 +15472,7 @@ function clayRoomWirePanZoom(host){
     if(!dragging || !S.camera || !S.clayCamFit) return;
     const dxPx = ev.clientX - lastX, dyPx = ev.clientY - lastY;
     lastX = ev.clientX; lastY = ev.clientY;
+    if(Math.hypot(ev.clientX - startX, ev.clientY - startY) > 4) moved = true;
     const target = S.clayCamFit.target, pos = S.camera.position;
     const dist = pos.distanceTo(S.cameraLookTarget || target);
     const fovRad = (S.camera.fov || 20) * Math.PI / 180;
@@ -15405,7 +15490,11 @@ function clayRoomWirePanZoom(host){
     clayRoomApplyCamPose();
   });
   const endDrag = function(){ dragging = false; host.style.cursor = "grab"; };
-  host.addEventListener("pointerup", endDrag);
+  host.addEventListener("pointerup", function(ev){
+    const wasClick = dragging && !moved;
+    endDrag();
+    if(wasClick) clayRoomPickAt(ev, host);
+  });
   host.addEventListener("pointerleave", endDrag);
   host.addEventListener("wheel", function(ev){
     ev.preventDefault();
@@ -15449,6 +15538,137 @@ function clayRoomDoorProofState(){
   };
 }
 
+// Concept 1 — DOCKED STUDIO. The shell is deliberately DOM-only and dev-only; the center host still
+// mounts the real Theater renderer and every list entry refers to an object already supplied by the
+// production Clayroom record. Catalog buttons do not manufacture demo meshes.
+function clayRoomWorkbenchDimensions(){
+  const compact = typeof window !== "undefined" && window.innerWidth < 900;
+  return {
+    catalog: S.clayRoomCatalogCollapsed ? 42 : (compact ? 170 : 260),
+    inspector: compact ? 250 : 390,
+  };
+}
+function clayRoomApplyWorkbenchLayout(){
+  const dims = clayRoomWorkbenchDimensions();
+  const rail = document.getElementById("clay-room-workbench-catalog");
+  const viewport = document.getElementById("clay-room-workbench-viewport");
+  const panel = document.getElementById("clay-room-overlay");
+  if(rail){
+    rail.style.width = dims.catalog + "px";
+    rail.style.padding = S.clayRoomCatalogCollapsed ? "8px 5px" : "12px";
+    Array.from(rail.children).forEach(function(child){
+      child.style.visibility = S.clayRoomCatalogCollapsed ? "hidden" : "visible";
+    });
+  }
+  if(viewport){
+    viewport.style.left = dims.catalog + "px";
+    viewport.style.right = dims.inspector + "px";
+  }
+  if(panel && !CLAY_ROOM_PANEL_POSITION) panel.style.width = dims.inspector + "px";
+}
+function clayRoomBuildWorkbenchChrome(record){
+  const top = document.createElement("div");
+  top.id = "clay-room-workbench-topbar";
+  top.style.cssText = "position:fixed;left:0;right:0;top:0;height:44px;z-index:9003;background:#15171b;border-bottom:1px solid #39404a;color:#e8edf2;display:flex;align-items:center;padding:0 14px;gap:14px;font:11px/1.2 monospace;box-sizing:border-box;";
+  top.innerHTML =
+    "<strong style='font:600 13px -apple-system,sans-serif;letter-spacing:.04em'>GENESIS · CLAYROOM</strong>" +
+    "<span style='color:#91a0b2'>DOCKED STUDIO · CONCEPT 1</span>" +
+    "<span style='margin-left:auto;color:#77d39a'>SESSION ONLY</span>" +
+    "<span style='color:#aab4c0'>1 cell = 5 ft · walls = 10 ft · human = 6 ft reference</span>";
+  const catalogToggle = document.createElement("button");
+  catalogToggle.type = "button";
+  catalogToggle.textContent = "catalog ◀";
+  catalogToggle.setAttribute("aria-label", "Collapse or expand Clayroom catalog");
+  catalogToggle.style.cssText = "order:-1;background:#252a32;color:#ccd5df;border:1px solid #414955;border-radius:3px;padding:4px 6px;font:9px monospace;cursor:pointer;";
+  top.appendChild(catalogToggle);
+
+  const rail = document.createElement("aside");
+  rail.id = "clay-room-workbench-catalog";
+  rail.style.cssText = "position:fixed;left:0;top:44px;bottom:0;width:260px;z-index:9002;background:#17191e;border-right:1px solid #39404a;color:#dce3ea;overflow:hidden auto;padding:12px;box-sizing:border-box;font:11px/1.35 -apple-system,sans-serif;transition:width 120ms ease;";
+
+  function railHeading(text){
+    const h = document.createElement("div");
+    h.textContent = text;
+    h.style.cssText = "margin:2px 0 7px;color:#8e9baa;font:600 10px monospace;letter-spacing:.12em;";
+    return h;
+  }
+  rail.appendChild(railHeading("CATALOG · APPROVED PRODUCTION"));
+  const catalog = [
+    ["STRUCTURE", "10 ft wall", "room-shell"],
+    ["PROP", "Crate · 3 ft", record.object.id],
+    ["INTERACTABLE", "Door · 36 × 80 in", record.portal.id],
+    ["LIGHT", "Warm west practical", "clay-west-warm"],
+    ["LIGHT", "Cool east practical", "clay-east-cool"],
+    ["SPRITE", "Goblin", record.citizen.bestiaryId],
+  ];
+  catalog.forEach(function(row){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.claySelect = row[2];
+    b.style.cssText = "width:100%;text-align:left;background:#20242b;color:#e0e5ea;border:1px solid #333a44;border-radius:4px;padding:7px 8px;margin:0 0 5px;cursor:pointer;";
+    b.innerHTML = "<small style='display:block;color:#8290a1;font:9px monospace'>" + row[0] + "</small>" + row[1] +
+      "<small style='float:right;color:#6fcf91;font:9px monospace'>MOUNTED</small>";
+    b.addEventListener("click", function(){
+      S.clayRoomSelectedId = row[2];
+      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(row[2], "catalog");
+    });
+    rail.appendChild(b);
+  });
+
+  const scene = document.createElement("section");
+  scene.id = "clay-room-workbench-scene";
+  scene.style.cssText = "border-top:1px solid #333a44;margin-top:12px;padding-top:10px;";
+  scene.appendChild(railHeading("SCENE · LIVE PRODUCTION OBJECTS"));
+  [
+    ["Room shell", "room-shell"],
+    ["Door", record.portal.id],
+    ["Crate", record.object.id],
+    ["Goblin", record.citizen.bestiaryId],
+    ["Warm light", "clay-west-warm"],
+    ["Cool light", "clay-east-cool"],
+  ].forEach(function(row){
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.claySceneId = row[1];
+    b.textContent = "◇  " + row[0];
+    b.style.cssText = "display:block;width:100%;text-align:left;background:transparent;color:#cbd3dc;border:0;border-left:2px solid transparent;padding:5px 7px;cursor:pointer;font:11px monospace;";
+    b.addEventListener("click", function(){
+      S.clayRoomSelectedId = row[1];
+      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(row[1], "scene");
+    });
+    scene.appendChild(b);
+  });
+  rail.appendChild(scene);
+  const safety = document.createElement("div");
+  safety.style.cssText = "margin-top:14px;padding:8px;border:1px solid #4d4431;background:#242117;color:#d7c58c;font:10px/1.4 monospace;";
+  safety.textContent = "Catalog is an admitted fixture slice. Placement edits are session-only; sockets and defaults remain locked.";
+  rail.appendChild(safety);
+
+  const viewport = document.createElement("div");
+  viewport.id = "clay-room-workbench-viewport";
+  viewport.style.cssText = "position:fixed;left:260px;right:390px;top:44px;bottom:0;z-index:9000;background:#000;transition:left 120ms ease;";
+  const host = document.createElement("div");
+  host.id = "clay-room-host";
+  host.style.cssText = "position:absolute;inset:0;background:#000;";
+  viewport.appendChild(host);
+
+  document.body.appendChild(top);
+  document.body.appendChild(rail);
+  document.body.appendChild(viewport);
+  catalogToggle.addEventListener("click", function(){
+    S.clayRoomCatalogCollapsed = !S.clayRoomCatalogCollapsed;
+    catalogToggle.textContent = S.clayRoomCatalogCollapsed ? "catalog ▶" : "catalog ◀";
+    rail.setAttribute("aria-expanded", S.clayRoomCatalogCollapsed ? "false" : "true");
+    clayRoomApplyWorkbenchLayout();
+    setTimeout(function(){
+      if(S.resizeHandler) S.resizeHandler();
+      markDirty(); scheduleRender();
+    }, 140);
+  });
+  clayRoomApplyWorkbenchLayout();
+  return { host: host, chrome: [top, rail, viewport] };
+}
+
 // mountClayRoom() — D2/wire-in steps 1-5 (the overlay, step 6, is built by
 // clayRoomMountOverlay(record,host) — see the U3 addition below this comment once it lands). Never
 // throws (mirrors mountLightLab's own dormant-surface discipline): a WebGL-less environment degrades
@@ -15480,13 +15700,15 @@ function mountClayRoom(){
     if(S.clayRoomMounted) return;
     const record = clayRoomRecordFrom(0x6c0ffee); // the CI seed, pinned per docs/C1A-CLAY-ROOM.md wire-in step 1
 
-    const host = document.createElement("div");
-    host.id = "clay-room-host";
-    host.style.cssText = "position:fixed;inset:0;z-index:9000;background:#000;";
-    document.body.appendChild(host);
+    const workbench = clayRoomBuildWorkbenchChrome(record);
+    const host = workbench.host;
 
     const mounted = mount(host); // D5: no `opts` -> the default (non-psx) canvas path
-    if(!mounted){ document.body.removeChild(host); return; }
+    if(!mounted){
+      workbench.chrome.forEach(function(el){ if(el && el.parentNode) el.parentNode.removeChild(el); });
+      return;
+    }
+    S.clayRoomWorkbenchChrome = workbench.chrome;
 
     CLAY_ROOM_PRIOR_ROOM_SHELL = ITR_ROOM_SHELL;
     // CL-R0 note: the room-shell compiler stays OFF by default (see this function's header), but the
@@ -15587,9 +15809,10 @@ function clayRoomMountOverlay(record, host){
 
   const panel = document.createElement("div");
   panel.id = "clay-room-overlay";
+  panel.setAttribute("data-region", "clay-room-workbench-inspector");
   panel.style.cssText =
-    "position:fixed;top:8px;right:8px;width:390px;max-height:92vh;overflow:auto;z-index:9001;" +
-    "background:rgba(20,20,24,0.94);border:1px solid #444;border-radius:6px;padding:8px;" +
+    "position:fixed;top:44px;right:0;bottom:0;width:" + clayRoomWorkbenchDimensions().inspector + "px;overflow:auto;z-index:9002;box-sizing:border-box;" +
+    "background:rgba(20,20,24,0.98);border-left:1px solid #444;padding:10px;" +
     "font:12px/1.3 -apple-system,sans-serif;color:#eee;box-shadow:0 4px 18px rgba(0,0,0,0.5);";
 
   const title = document.createElement("div");
@@ -15597,12 +15820,12 @@ function clayRoomMountOverlay(record, host){
   title.setAttribute("aria-label", "Drag Clayroom panel");
   title.style.cssText = "font-weight:600;margin-bottom:4px;display:flex;gap:6px;justify-content:space-between;align-items:center;cursor:move;user-select:none;touch-action:none;";
   const titleText = document.createElement("span");
-  titleText.textContent = "CLAY ROOM (C1A) — dev only";
+  titleText.textContent = "INSPECTOR · CLAY ROOM C1A";
   titleText.style.cssText = "flex:1;";
   title.appendChild(titleText);
   const resetPositionBtn = document.createElement("button");
-  resetPositionBtn.textContent = "reset pos";
-  resetPositionBtn.setAttribute("aria-label", "Reset Clayroom panel position");
+  resetPositionBtn.textContent = "dock right";
+  resetPositionBtn.setAttribute("aria-label", "Reset Clayroom panel position and dock right");
   resetPositionBtn.style.cssText = "background:#2a2a30;border:1px solid #555;border-radius:3px;color:#ccd;font:10px monospace;cursor:pointer;padding:2px 5px;";
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "×";
@@ -15617,17 +15840,95 @@ function clayRoomMountOverlay(record, host){
   panelPositionLine.id = "clay-room-panel-position";
   panelPositionLine.style.cssText = "color:#7f9;margin-bottom:5px;font:10px monospace;";
   panel.appendChild(panelPositionLine);
+
+  const selectionCard = document.createElement("section");
+  selectionCard.id = "clay-room-selection-inspector";
+  selectionCard.style.cssText = "border:1px solid #39404a;background:#181b20;padding:8px;margin:0 0 8px;";
+  const selectionKicker = document.createElement("div");
+  selectionKicker.textContent = "SELECTED · LIVE PRODUCTION OBJECT";
+  selectionKicker.style.cssText = "color:#8290a1;font:9px monospace;letter-spacing:.1em;";
+  const selectionName = document.createElement("div");
+  selectionName.style.cssText = "font:600 15px -apple-system,sans-serif;color:#eef3f7;margin:2px 0;";
+  const selectionMeta = document.createElement("div");
+  selectionMeta.style.cssText = "color:#9da8b5;font:10px/1.35 monospace;margin-bottom:7px;";
+  selectionCard.appendChild(selectionKicker);
+  selectionCard.appendChild(selectionName);
+  selectionCard.appendChild(selectionMeta);
+  const scopeRow = document.createElement("div");
+  scopeRow.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:6px;";
+  const instanceScopeBtn = document.createElement("button");
+  instanceScopeBtn.textContent = "INSTANCE";
+  instanceScopeBtn.title = "Move or tune only this Clayroom instance; session-only by default.";
+  const stateScopeBtn = document.createElement("button");
+  stateScopeBtn.textContent = "STATE";
+  stateScopeBtn.title = "Edit the selected production object's named state.";
+  const socketScopeBtn = document.createElement("button");
+  socketScopeBtn.textContent = "🔒 SOCKET";
+  socketScopeBtn.title = "Protected authored socket. Use the explicit Mount tab and lock export.";
+  const defaultScopeBtn = document.createElement("button");
+  defaultScopeBtn.textContent = "🔒 DEFAULT";
+  defaultScopeBtn.title = "Protected production default; an overwrite affects future rolls.";
+  [instanceScopeBtn, stateScopeBtn, socketScopeBtn, defaultScopeBtn].forEach(function(b){
+    b.style.cssText = "font:9px monospace;background:#252a32;color:#cad2dc;border:1px solid #414955;border-radius:3px;padding:5px 2px;cursor:pointer;";
+    scopeRow.appendChild(b);
+  });
+  instanceScopeBtn.style.cssText += "background:#24516a;border-color:#4b9bc3;color:#eefaff;";
+  socketScopeBtn.style.opacity = "0.72";
+  defaultScopeBtn.style.opacity = "0.72";
+  selectionCard.appendChild(scopeRow);
+  const sessionLaw = document.createElement("div");
+  sessionLaw.textContent = "SESSION ONLY · Clayroom movement does not rewrite a production socket.";
+  sessionLaw.style.cssText = "padding:5px 6px;background:#17271f;color:#79d69a;border-left:2px solid #4da66d;font:9px/1.35 monospace;";
+  selectionCard.appendChild(sessionLaw);
+  const editorActions = document.createElement("div");
+  editorActions.style.cssText = "display:flex;gap:5px;margin-top:6px;";
+  const spriteEditorBtn = document.createElement("button");
+  spriteEditorBtn.textContent = "open sprite editor ↗";
+  const materialEditorBtn = document.createElement("button");
+  materialEditorBtn.textContent = "material editor";
+  materialEditorBtn.title = "Shared Material Editor seam; the admitted MM mapping pass is next.";
+  [spriteEditorBtn, materialEditorBtn].forEach(function(b){
+    b.style.cssText = "flex:1;font:9px monospace;background:#252a32;color:#ccd5df;border:1px solid #414955;border-radius:3px;padding:5px;cursor:pointer;";
+    editorActions.appendChild(b);
+  });
+  materialEditorBtn.disabled = true;
+  materialEditorBtn.style.opacity = "0.55";
+  selectionCard.appendChild(editorActions);
+  const saveActions = document.createElement("div");
+  saveActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:5px;";
+  const saveVariantBtn = document.createElement("button");
+  saveVariantBtn.textContent = "SAVE AS NEW STATE";
+  saveVariantBtn.title = "Session-state scaffold; persistence will land through a versioned recipe.";
+  const overwriteDefaultBtn = document.createElement("button");
+  overwriteDefaultBtn.textContent = "🔒 OVERWRITE DEFAULT";
+  overwriteDefaultBtn.title = "Protected. DEFAULT changes apply to FUTURE ROLLS.";
+  overwriteDefaultBtn.disabled = true;
+  [saveVariantBtn, overwriteDefaultBtn].forEach(function(b){
+    b.style.cssText = "font:9px monospace;background:#252a32;color:#ccd5df;border:1px solid #414955;border-radius:3px;padding:5px;";
+    saveActions.appendChild(b);
+  });
+  overwriteDefaultBtn.style.opacity = "0.55";
+  selectionCard.appendChild(saveActions);
+  const futureRolls = document.createElement("div");
+  futureRolls.textContent = "DEFAULT OVERWRITE → FUTURE ROLLS · locked until explicit promotion";
+  futureRolls.style.cssText = "color:#a69773;font:9px monospace;margin-top:4px;";
+  selectionCard.appendChild(futureRolls);
+  panel.appendChild(selectionCard);
   function clayPanelClamp(left, top){
-    const pad = 8;
+    const pad = 8, minTop = 52; // keep the floating title below the persistent 44px workbench bar
     const maxLeft = Math.max(pad, window.innerWidth - panel.offsetWidth - pad);
-    const maxTop = Math.max(pad, window.innerHeight - panel.offsetHeight - pad);
+    const maxTop = Math.max(minTop, window.innerHeight - panel.offsetHeight - pad);
     return {
       left: Math.max(pad, Math.min(maxLeft, Number(left) || pad)),
-      top: Math.max(pad, Math.min(maxTop, Number(top) || pad)),
+      top: Math.max(minTop, Math.min(maxTop, Number(top) || minTop)),
     };
   }
   function clayPanelPlace(left, top, remember){
     const pos = clayPanelClamp(left, top);
+    panel.style.bottom = "auto";
+    panel.style.maxHeight = "calc(100vh - 60px)";
+    panel.style.border = "1px solid #444";
+    panel.style.borderRadius = "6px";
     panel.style.left = Math.round(pos.left) + "px";
     panel.style.top = Math.round(pos.top) + "px";
     panel.style.right = "auto";
@@ -15638,9 +15939,21 @@ function clayRoomMountOverlay(record, host){
     panelPositionLine.textContent = "panel x " + Math.round(rect.left) + " y " + Math.round(rect.top)
       + " · viewport clamp " + (inside ? "PASS" : "FAIL");
   }
-  function clayPanelResetPosition(){
+  function clayPanelDockRight(){
     CLAY_ROOM_PANEL_POSITION = null;
-    clayPanelPlace(window.innerWidth - panel.offsetWidth - 8, 8, false);
+    panel.style.width = clayRoomWorkbenchDimensions().inspector + "px";
+    panel.style.left = "auto";
+    panel.style.right = "0";
+    panel.style.top = "44px";
+    panel.style.bottom = "0";
+    panel.style.maxHeight = "none";
+    panel.style.border = "0";
+    panel.style.borderLeft = "1px solid #444";
+    panel.style.borderRadius = "0";
+    panelPositionLine.textContent = "panel docked right · viewport clamp PASS · drag title to float";
+  }
+  function clayPanelResetPosition(){
+    clayPanelDockRight();
   }
   resetPositionBtn.addEventListener("click", function(ev){
     ev.stopPropagation();
@@ -15651,6 +15964,8 @@ function clayRoomMountOverlay(record, host){
     if(ev.button !== 0 || (ev.target && ev.target.closest && ev.target.closest("button"))) return;
     const rect = panel.getBoundingClientRect();
     panelDrag = { pointerId: ev.pointerId, dx: ev.clientX - rect.left, dy: ev.clientY - rect.top };
+    // Dragging the dedicated inspector title undocks it without disturbing any control below.
+    clayPanelPlace(rect.left, rect.top, true);
     title.setPointerCapture(ev.pointerId);
     ev.preventDefault();
   });
@@ -15674,8 +15989,14 @@ function clayRoomMountOverlay(record, host){
     window.removeEventListener("pointercancel", clayPanelEndDrag);
   };
   S.clayRoomPanelResizeHandler = function(){
-    const rect = panel.getBoundingClientRect();
-    clayPanelPlace(rect.left, rect.top, !!CLAY_ROOM_PANEL_POSITION);
+    if(CLAY_ROOM_PANEL_POSITION){
+      const rect = panel.getBoundingClientRect();
+      clayPanelPlace(rect.left, rect.top, true);
+    } else {
+      clayPanelDockRight();
+    }
+    clayRoomApplyWorkbenchLayout();
+    if(S.resizeHandler) S.resizeHandler();
   };
   window.addEventListener("resize", S.clayRoomPanelResizeHandler);
 
@@ -15804,7 +16125,9 @@ function clayRoomMountOverlay(record, host){
   }
   function clayMountReplay(){
     S.boardKey = null;
-    if(S.lastBoard && S.lastBoard.kind === "interior3d") setInteriorBoard(S.lastBoard);
+    if(S.lastBoard && S.lastBoard.kind === "interior3d"){
+      setInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-mount-edit" });
+    }
   }
   // wall-centre snap: measure the built wall body nearest the door along its passage axis — the
   // same translate-only bb-centre read the census uses, scoped to room-shell wall meshes.
@@ -15942,7 +16265,7 @@ function clayRoomMountOverlay(record, host){
     });
     const nextBoard = Object.assign({}, S.lastBoard, { interactables: rows });
     S.boardKey = null;
-    setInteriorBoard(nextBoard);
+    setInteriorBoard(nextBoard, { roomTransition: false, reason: "clayroom-door-state" });
     clayDoorStateRender();
     setTimeout(clayDoorStateRender, ITR_DOOR_SWING_TWEEN_MS + 40);
   }
@@ -16061,7 +16384,7 @@ function clayRoomMountOverlay(record, host){
   rebuildLightsBtn.addEventListener("click", function(){
     if(!S.lastBoard || S.lastBoard.kind !== "interior3d") return;
     S.boardKey = null;
-    setInteriorBoard(S.lastBoard);
+    setInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-lighting-proof" });
     clayLightsRender();
   });
 
@@ -16089,9 +16412,70 @@ function clayRoomMountOverlay(record, host){
     if(which === "mount") clayMountRender();
     if(which === "state") clayDoorStateRender();
     if(which === "lights") clayLightsRender();
-    const panelRect = panel.getBoundingClientRect();
-    clayPanelPlace(panelRect.left, panelRect.top, !!CLAY_ROOM_PANEL_POSITION);
+    if(CLAY_ROOM_PANEL_POSITION){
+      const panelRect = panel.getBoundingClientRect();
+      clayPanelPlace(panelRect.left, panelRect.top, true);
+    } else {
+      clayPanelDockRight();
+    }
   }
+  function claySelectionInfo(id){
+    if(id === record.portal.id) return { name: "Door", type: "INTERACTABLE", ref: id, tab: "state", socket: true, sprite: false };
+    if(id === record.object.id) return { name: "Crate · 3 ft", type: "PROP · FACED_BOX", ref: id, tab: "surfaces", socket: false, sprite: false };
+    if(id === record.citizen.id || id === record.citizen.bestiaryId) return {
+      name: "Goblin", type: "APPROVED CHARACTER SPRITE", ref: record.citizen.bestiaryId, tab: "facts", socket: false, sprite: true
+    };
+    if(id === "clay-west-warm") return { name: "Warm west practical", type: "LIGHT · STEADY DEFAULT", ref: id, tab: "lights", socket: false, sprite: false };
+    if(id === "clay-east-cool") return { name: "Cool east practical", type: "LIGHT · STEADY DEFAULT", ref: id, tab: "lights", socket: false, sprite: false };
+    return { name: "Room shell · 10 ft", type: "STRUCTURE", ref: "clay-c1a", tab: "surfaces", socket: false, sprite: false };
+  }
+  S.clayRoomWorkbenchSelect = function(id, source){
+    const info = claySelectionInfo(id);
+    S.clayRoomSelectedId = id;
+    selectionName.textContent = info.name;
+    selectionMeta.textContent = info.type + " · " + info.ref + " · selected from " + (source || "workbench");
+    spriteEditorBtn.disabled = !info.sprite;
+    spriteEditorBtn.style.opacity = info.sprite ? "1" : "0.5";
+    socketScopeBtn.style.opacity = info.socket ? "1" : "0.55";
+    socketScopeBtn.textContent = info.socket ? "🔒 SOCKET" : "SOCKET — N/A";
+    stateScopeBtn.style.opacity = info.tab === "state" || info.tab === "lights" ? "1" : "0.7";
+    document.querySelectorAll("[data-clay-scene-id]").forEach(function(b){
+      const active = b.dataset.claySceneId === id
+        || (id === record.citizen.bestiaryId && b.dataset.claySceneId === record.citizen.id);
+      b.style.borderLeftColor = active ? "#6fcfff" : "transparent";
+      b.style.background = active ? "#202b35" : "transparent";
+      b.style.color = active ? "#f0f8ff" : "#cbd3dc";
+    });
+    clayRoomHighlightSelection(id);
+  };
+  instanceScopeBtn.addEventListener("click", function(){
+    sessionLaw.textContent = "INSTANCE · SESSION ONLY · transforms here never rewrite the production socket.";
+  });
+  stateScopeBtn.addEventListener("click", function(){
+    const info = claySelectionInfo(S.clayRoomSelectedId);
+    clayShowTab(info.tab);
+  });
+  socketScopeBtn.addEventListener("click", function(){
+    const info = claySelectionInfo(S.clayRoomSelectedId);
+    if(info.socket){
+      sessionLaw.textContent = "SOCKET PROTECTED · Mount tab edits a session tune and exports an object-mount lock.";
+      clayShowTab("mount");
+    } else {
+      sessionLaw.textContent = "No socket on this selection. Clayroom movement stays instance-local.";
+    }
+  });
+  defaultScopeBtn.addEventListener("click", function(){
+    sessionLaw.textContent = "DEFAULT PROTECTED · an explicit promoted overwrite would affect FUTURE ROLLS.";
+  });
+  spriteEditorBtn.addEventListener("click", function(){
+    const info = claySelectionInfo(S.clayRoomSelectedId);
+    if(!info.sprite) return;
+    window.open("dev/sprite-review.html?sprite=" + encodeURIComponent(info.ref), "genesis-sprite-editor");
+  });
+  saveVariantBtn.addEventListener("click", function(){
+    const info = claySelectionInfo(S.clayRoomSelectedId);
+    sessionLaw.textContent = "SESSION STATE CAPTURED · " + info.name + " · persistence awaits versioned recipe save.";
+  });
   factsTabBtn.addEventListener("click", function(){ clayShowTab("facts"); });
   explainTabBtn.addEventListener("click", function(){ clayShowTab("explain"); });
   surfacesTabBtn.addEventListener("click", function(){ clayShowTab("surfaces"); });
@@ -16104,8 +16488,9 @@ function clayRoomMountOverlay(record, host){
   if(CLAY_ROOM_PANEL_POSITION){
     clayPanelPlace(CLAY_ROOM_PANEL_POSITION.left, CLAY_ROOM_PANEL_POSITION.top, true);
   } else {
-    clayPanelResetPosition();
+    clayPanelDockRight();
   }
+  S.clayRoomWorkbenchSelect(S.clayRoomSelectedId || record.portal.id, "initial");
   S.clayRoomLightReadoutTimer = setInterval(function(){
     if(S.clayRoomMounted && lightsBody.style.display !== "none") clayLightsRender();
   }, 120);
@@ -16122,6 +16507,7 @@ function clayRoomMountOverlay(record, host){
 function clayRoomUnmount(){
   if(!S.clayRoomMounted) return;
   const overlayEl = S.clayRoomOverlayEl, hostEl = S.clayRoomHost;
+  const workbenchChrome = (S.clayRoomWorkbenchChrome || []).slice();
   const panelResizeHandler = S.clayRoomPanelResizeHandler;
   const panelDragCleanup = S.clayRoomPanelDragCleanup;
   const lightReadoutTimer = S.clayRoomLightReadoutTimer;
@@ -16136,6 +16522,7 @@ function clayRoomUnmount(){
   ITR_ROOM_SHELL = CLAY_ROOM_PRIOR_ROOM_SHELL; // restore mountClayRoom's own ITR_ROOM_SHELL override — see that function's header note
   if(overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);
   if(hostEl && hostEl.parentNode) hostEl.parentNode.removeChild(hostEl);
+  workbenchChrome.forEach(function(el){ if(el && el.parentNode) el.parentNode.removeChild(el); });
 }
 
 // Spec addendum D1a (docs/C1A-CLAY-ROOM.md, orchestrator re-gate finding): clayRoomMaybeAutoMount's

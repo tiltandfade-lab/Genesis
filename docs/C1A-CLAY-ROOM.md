@@ -474,3 +474,50 @@ Teeth: `dev/verify-clay-room.mjs` checks 5e/f, 15m/n, and 29a–h; the rewritten
 mesh/light/cone parity, steady-sibling isolation, seeded replay, null-cone safety, and baseline
 restoration. Live browser proof exercises shut/ajar/open plus rebuild/fade while recording stable
 UUIDs before/during/after.
+
+## Addendum D26 — false travel fade removed; 10-foot room + Concept 1 foundation (2026-07-24)
+
+Adam's scale, crate, clean-corner, approved-content, safe-scope, and Concept 1 rulings are recorded
+verbatim in ART-DIRECTION-CANON under **CLAYROOM HUMAN SCALE, SIMPLE CRATE, AND DOCKED STUDIO**.
+
+The apparent lighting reset on a door-state change was isolated to the actual screen path: light
+and emitter UUIDs, intensities, emissive samples, ambient, and rig values stayed unchanged, while
+`setInteriorBoard()` classified every prior-board replay as a room transition. A Clayroom state
+clone therefore snapped the full-screen transition overlay opaque, then faded it away. That made
+the room look dark and ramp back even though the light objects had never changed.
+
+`setInteriorBoard(data, renderOpts)` now reserves the overlay for genuine board-object travel.
+Same-board async/material/camera replays skip it by identity, and Clayroom door, mount, and lighting
+proof replays explicitly pass `roomTransition:false`. This is event-boundary correction, not a
+per-frame lighting reset; genuine production room travel retains its fade.
+
+The room-scale correction is production data, not a camera cheat:
+
+- default wall height is 2 world units = 10 ft in the interior compiler, room-shell compiler, kit
+  fallback, and wall-hang fallback;
+- the crate recipe is one 0.6 × 0.6 × 0.6 world-unit box (3 ft), with side/top face groups mapped
+  separately on the same BoxGeometry and no lid/cap geometry;
+- wall-to-wall miter joins no longer emit internal end-cap polygons; door/open/riser ends remain
+  closed, and trim segments expose exact vertex/index slices for regression inspection.
+
+The selected **Concept 1 / Docked Studio** foundation now wraps the real renderer:
+
+- left: admitted production Catalog plus live Scene list;
+- center: the production Theater viewport, with click raycasting into the actual room objects and
+  a live selection outline;
+- right: the existing diagnostics as a dedicated Inspector that can be dragged to undock and
+  **dock right** to reset;
+- scope bar: `INSTANCE`, `STATE`, protected `SOCKET`, and protected `DEFAULT`, with `SESSION ONLY`
+  and `FUTURE ROLLS` consequences written in the UI;
+- object routing: door/light selection opens the relevant production State/Lights diagnostics;
+  sprite selection exposes the existing Sprite Editor link; the shared Material Editor seam is
+  shown but disabled until the admitted MM material-mapping pass lands.
+
+The Catalog mounts no demo content. Its current entries are exactly the fixture's existing room
+shell, door, crate, two production practicals, and approved goblin character sprite. “Save as new
+state” is visibly a session-state scaffold; default overwrite remains locked instead of pretending
+to persist.
+
+Teeth: `dev/verify-clay-room.mjs` check 30a–g; `dev/verify-room-shell.mjs` check 4a/4a-trim.
+Selected concept receipt:
+`dev/clay-captures/workbench-concepts/concept-1-docked-studio.png`.

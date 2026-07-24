@@ -615,6 +615,28 @@ table-fact edits · direct generated-artifact edits · unlocked production camer
 slider that compensates for incorrect colour management · a "make pretty" control with no
 reproducible recipe.
 
+### Selected shell — Concept 1 / Docked Studio (Adam, 2026-07-24)
+
+The selected workbench shell is a persistent left Catalog/Scene rail, room-dominant center
+production viewport, and dedicated right Inspector rail. The inspector can undock by title drag and
+returns through **dock right**. This is a navigation/edit-scope shell over the existing tools, not a
+new builder.
+
+Selection is by the live Scene list or raycast against the real production object tree. Each
+selection declares one of four scopes:
+
+- `INSTANCE` — default, session-only Clayroom placement/tuning;
+- `STATE` — named state on the selected production object;
+- `SOCKET` — protected construction authority, reached only through the anchor-relative Object
+  Workbench/lock path;
+- `DEFAULT` — protected recipe/catalog authority; promotion applies to future rolls.
+
+Catalog admission is existing approved production content only. All character sprites are approved
+for selection, but their identities/measurements still come from the registry. Materials route to
+the shared Material Editor and admitted MM graphs; Clayroom does not create a parallel material
+editor or fabricate normal maps. The selected concept image is
+`dev/clay-captures/workbench-concepts/concept-1-docked-studio.png`.
+
 ## Guard Post entry gate
 
 Guard Post 1 may begin its real composition pass when:

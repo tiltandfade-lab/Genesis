@@ -327,7 +327,9 @@ const check = (name, cond, detail = "") =>
       "not found yet — expected once the U2 wire-in lands");
   } else {
     const region = bootSrc.slice(bi, ei + endMark.length);
-    const hit = region.match(/d20|roll|applyEvent|attack/);
+    // "FUTURE ROLLS" is workbench provenance language, not a gameplay mechanic invocation.
+    const mechanicsRegion = region.replace(/future rolls/gi, "");
+    const hit = mechanicsRegion.match(/d20|roll|applyEvent|attack/);
     check("7. theater-boot.js clay-room additions contain no d20|roll|applyEvent|attack tokens",
       !hit, hit ? ("matched \"" + hit[0] + "\" near index " + hit.index) : "");
   }
@@ -1172,7 +1174,7 @@ const check = (name, cond, detail = "") =>
   check("28c. State tab offers shut / ajar / open controls through one board replay helper",
     /stateTabBtn\.textContent\s*=\s*"State"/.test(bootSrc) &&
     /\["shut",\s*"Set door shut"\][\s\S]*\["ajar",\s*"Set door ajar"\][\s\S]*\["open",\s*"Set door open"\]/.test(bootSrc) &&
-    /function\s+clayDoorStateApply\s*\(nextState\)[\s\S]*setInteriorBoard\(nextBoard\)/.test(bootSrc));
+    /function\s+clayDoorStateApply\s*\(nextState\)[\s\S]*setInteriorBoard\(nextBoard,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
   check("28d. State proof clone-patches board interactables and never mutates the frozen record",
     /Object\.assign\(\{\},\s*entry,\s*\{\s*state:\s*nextState\s*\}\)/.test(bootSrc) &&
     /Object\.assign\(\{\},\s*S\.lastBoard,\s*\{\s*interactables:\s*rows\s*\}\)/.test(bootSrc));
@@ -1218,6 +1220,58 @@ const check = (name, cond, detail = "") =>
     /Restore authored lighting baseline/.test(bootSrc)
     && /function\s+clayRoomRestoreAuthoredLightBaseline/.test(bootSrc)
     && /lightFlickerApplySample\(t,\s*1\)/.test(bootSrc));
+}
+
+// ============================================================================
+// 30. CL-R2 CONCEPT 1 + HUMAN-SCALE REGRESSIONS (2026-07-24).
+// Adam selected concept 1: a persistent catalog rail, room-dominant viewport, and dedicated
+// inspector rail. Door-state replays are local state edits, not travel, so they must never fire the
+// full-screen room transition. The authored room defaults to ten-foot walls (2 world units) and the
+// crate is one human-scale six-sided box with explicit side/top face mapping.
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const interiorSrc = read("src/ui/theater-interior.js");
+  const shellSrc = read("src/ui/theater-room-mesh.js");
+  check("30a. authored/default wall height is 10 ft (2 world units) across compiler + shell + renderer fallbacks",
+    /ITR_WALL_HEIGHT_BASE\s*=\s*2;/.test(interiorSrc)
+    && /DEFAULT_WALL_HEIGHT\s*=\s*2;/.test(shellSrc)
+    && /KIT_WALL_FALLBACK_HEIGHT_BASE\s*=\s*2;/.test(bootSrc)
+    && /ITR_WALLHANG_FALLBACK_WALL_HEIGHT\s*=\s*2;/.test(bootSrc));
+  const crateRecipe = (interiorSrc.match(/crate:\s*Object\.freeze\(\[([\s\S]*?)\]\),/) || [])[1] || "";
+  check("30b. crate recipe is exactly one human-scale box with explicit side/top face labels",
+    (crateRecipe.match(/\{\s*dx:/g) || []).length === 1
+    && /sx:\s*0\.6,\s*sy:\s*0\.6,\s*sz:\s*0\.6/.test(crateRecipe)
+    && /face:\s*"crate-body"/.test(crateRecipe)
+    && /topFace:\s*"crate-top"/.test(crateRecipe), crateRecipe);
+  check("30c. furniture builder maps the BoxGeometry top group separately without adding geometry",
+    /const\s+topMat\s*=\s*p\.topFace/.test(bootSrc)
+    && /\[mat,\s*mat,\s*topMat,\s*mat,\s*mat,\s*mat\]/.test(bootSrc));
+  check("30d. state/rebuild helpers explicitly suppress travel-only room transitions",
+    /function\s+setInteriorBoard\s*\(data,\s*renderOpts\)/.test(bootSrc)
+    && /renderOpts\.roomTransition\s*!==\s*false/.test(bootSrc)
+    && /setInteriorBoard\(nextBoard,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
+    && /setInteriorBoard\(S\.lastBoard,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
+  check("30e. Concept 1 shell exposes persistent Catalog, Scene, Viewport, and Inspector regions",
+    /clay-room-workbench-catalog/.test(bootSrc)
+    && /clay-room-workbench-scene/.test(bootSrc)
+    && /clay-room-workbench-viewport/.test(bootSrc)
+    && /clay-room-workbench-inspector/.test(bootSrc));
+  check("30f. inspector makes edit scope explicit and keeps socket/default protected",
+    /SESSION ONLY/.test(bootSrc)
+    && /INSTANCE/.test(bootSrc) && /STATE/.test(bootSrc)
+    && /SOCKET/.test(bootSrc) && /DEFAULT/.test(bootSrc)
+    && /FUTURE ROLLS/.test(bootSrc));
+  check("30g. real scene objects carry selection identities and the viewport uses production raycasting",
+    /sceneObjectId/.test(bootSrc)
+    && /function\s+clayRoomPickAt/.test(bootSrc)
+    && /new\s+THREE\.Raycaster/.test(bootSrc));
+  check("30h. narrow workbench can collapse Catalog and resizes the real renderer; floating title stays below the top bar",
+    /Collapse or expand Clayroom catalog/.test(bootSrc)
+    && /S\.clayRoomCatalogCollapsed/.test(bootSrc)
+    && /if\(S\.resizeHandler\)\s*S\.resizeHandler\(\)/.test(bootSrc)
+    && /minTop\s*=\s*52/.test(bootSrc)
+    && /panel docked right · viewport clamp PASS/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

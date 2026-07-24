@@ -258,8 +258,10 @@ console.log("\n=== 4. World-UVs continuous across two adjacent (non-seam) wall s
   // header comment) and legitimately STILL measures 4 quads (one per segment) by design, not by defect.
   // RED-FIRST (checked live): asserting the OLD claim — "the wall geometry IS just one quad per
   // segment, nothing more" — against `data.wallStem` (the real new stem-volume bundle) fails, because
-  // wallStem carries far more than a single quad per segment (inner+outer+cap-top+cap-lips+2 end
-  // caps+footing-top+footing-face = 9 quads/segment at these opts). This is the concrete "single
+  // wallStem carries far more than a single quad per segment (inner+outer+cap-top+cap-lips+
+  // footing-top+footing-face = 7 quads/segment at these opts). Joined wall corners deliberately
+  // omit their internal end caps; only a door/riser/open adjacency owns an exposed cap. This is the
+  // concrete "single
   // two-triangle plane" claim this unit's own frame-01 acceptance criterion retires.
   const w = data.walls; // deprecated legacy bundle — intentionally still 1 quad/segment, see above
   const legacyQuadCount = w.positions.length / 3 / 4;
@@ -267,11 +269,15 @@ console.log("\n=== 4. World-UVs continuous across two adjacent (non-seam) wall s
     legacyQuadCount === 4, legacyQuadCount);
   const stemVertsPerSegment = data.wallStem.positions.length / 3 / data.wallStem.segments.length;
   check("4a. ⊗ RED-FIRST retired: the real wallStem volume is NOT a single quad — each of the 4 wall segments' " +
-    "own stem carries >=8 quads' worth of verts (32) — inner+outer+cap(top+2 lips)+2 endCaps+footing(top+face), " +
+    "own stem carries exactly 7 quads (28 verts) — inner+outer+cap(top+2 lips)+footing(top+face), with joined-corner end caps omitted, " +
     "not the old plane's 4 (this exact assertion against `.walls`, the pre-C4.1a shape, would read 4 -> RED)",
-    stemVertsPerSegment >= 32, stemVertsPerSegment);
+    stemVertsPerSegment === 28, stemVertsPerSegment);
   check("4a-upper. every one of the 4 (default all-visible) segments also has its OWN upper-volume entry",
     data.wallUpper.segments.length === 4, data.wallUpper.segments.length);
+  check("4a-trim. every trim ribbon exposes a precise non-overlapping geometry slice for corner diagnostics",
+    data.wallTrim.segments.length === 4
+      && data.wallTrim.segments.every((s) => s.vertCount === 8 && s.idxCount === 12),
+    data.wallTrim.segments);
   check("4a-cap. the stem volume's own top-cap face resolves as a near-horizontal (|ny|>=0.99) triangle set",
     (() => {
       const idx = data.wallStem.indices, nrm = data.wallStem.normals;

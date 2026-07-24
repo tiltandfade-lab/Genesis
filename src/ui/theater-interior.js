@@ -936,7 +936,7 @@ function itrRoomLights(room, plan, kit, dressingByRoom) {
   return list;
 }
 
-const ITR_WALL_HEIGHT_BASE = 2.4;   // world units — taller than GLB_TARGET_HEIGHT (1.5, a human figure)
+const ITR_WALL_HEIGHT_BASE = 2;     // world units = 10 ft (GRID LAW: 1 u = 5 ft), human-room default
 const ITR_FLOOR_HEIGHT = 0.2;
 const ITR_DOOR_HEIGHT_FRAC = 0.85;  // a normal doorframe reads slightly lower than the full wall
 const ITR_SQUEEZE_HEIGHT_FRAC = 0.5;
@@ -1015,8 +1015,7 @@ const ITR_COLUMN_PROFILES = Object.freeze(["square", "round", "tapered", "broken
 const ITR_FURNITURE_KINDS = Object.freeze(["crate", "cabinet", "barrel-cluster", "table", "bench", "shelf-unit"]);
 const ITR_FURNITURE_RECIPES = Object.freeze({
   crate: Object.freeze([
-    { dx: 0, dz: 0, yBase: 0, sx: 0.7, sy: 0.9, sz: 0.7, face: "crate-body" },
-    { dx: 0, dz: 0, yBase: 0.9, sx: 0.76, sy: 0.08, sz: 0.76, face: "crate-lid" },
+    { dx: 0, dz: 0, yBase: 0, sx: 0.6, sy: 0.6, sz: 0.6, face: "crate-body", topFace: "crate-top" },
   ]),
   cabinet: Object.freeze([
     { dx: 0, dz: 0, yBase: 0, sx: 0.7, sy: 0.05, sz: 0.46, face: "cabinet-plinth" },

@@ -6,8 +6,8 @@
     576
   ],
   "output_size": [
-    576,
-    576
+    512,
+    512
   ],
   "gate": {
     "boundary_jump_rule": "boundary RMS must not exceed 110% of the 95th percentile of ordinary internal adjacent-pixel jumps; the 10% allowance accounts only for final nearest-neighbour export quantization",
@@ -19,42 +19,42 @@
   "materials": {
     "plank": {
       "method": "detected crevice-to-crevice construction period plus top/bottom-only edge lock",
-      "source": "dev/material-lane/source-sprites/b01-timber-roof-v001/roof-plank-batten-source-v003.png",
+      "source": "dev/material-lane/source-sprites/b01-autonomous-v001/roof-plank-batten-source-v004.png",
       "crop": {
-        "x": 32,
-        "y": 179,
-        "width": 1070,
-        "height": 1070
+        "x": 14,
+        "y": 264,
+        "width": 990,
+        "height": 990
       },
       "construction_boundaries": {
-        "left_crevice_x": 32,
-        "right_crevice_x": 1102
+        "left_crevice_x": 14,
+        "right_crevice_x": 1004
       },
       "top_bottom_repair_band_source_pixels": 64,
       "metrics": {
-        "legacy_left_right_rms": 7.728,
+        "legacy_left_right_rms": 7.854,
         "legacy_top_bottom_rms": 0.0,
-        "internal_x_jump_p95": 28.561,
-        "internal_y_jump_p95": 6.945,
-        "x_boundary_to_internal_p95": 0.271,
+        "internal_x_jump_p95": 28.319,
+        "internal_y_jump_p95": 3.981,
+        "x_boundary_to_internal_p95": 0.277,
         "y_boundary_to_internal_p95": 0.0,
         "boundary_jump_gate": true
       },
       "construction_cadence": {
-        "detected_crevices": 11,
-        "median_circular_gap": 68.0,
-        "largest_circular_gap": 70.0,
-        "largest_to_median_gap": 1.029,
-        "left_boundary_feature_min": 60.682,
-        "right_boundary_feature_min": 63.521,
-        "boundary_feature_cutoff": 135.97,
+        "detected_crevices": 13,
+        "median_circular_gap": 21.0,
+        "largest_circular_gap": 111.0,
+        "largest_to_median_gap": 5.286,
+        "left_boundary_feature_min": 35.088,
+        "right_boundary_feature_min": 69.811,
+        "boundary_feature_cutoff": 124.946,
         "cadence_gate": true
       },
       "status": "PASS"
     },
     "slate": {
       "method": "ImageGen sprite units assembled on an exact toroidal grid",
-      "component_sheet": "dev/material-lane/proofs/autonomous-seam-v001/slate-components-alpha-v001.png",
+      "component_sheet": "dev/material-lane/source-sprites/b01-autonomous-v001/roof-slate-components-alpha-v001.png",
       "grid": {
         "canvas": [
           576,
@@ -65,7 +65,7 @@
         "columns": 6,
         "rows": 8,
         "stagger": 48,
-        "component_columns": 2,
+        "component_columns": 3,
         "component_rows": 2
       },
       "topology_proof": {
@@ -75,22 +75,22 @@
         "column_count_preserves_component_column_period": true
       },
       "metrics": {
-        "legacy_left_right_rms": 7.167,
-        "legacy_top_bottom_rms": 21.417,
-        "internal_x_jump_p95": 12.984,
-        "internal_y_jump_p95": 21.417,
-        "x_boundary_to_internal_p95": 0.552,
-        "y_boundary_to_internal_p95": 1.0,
+        "legacy_left_right_rms": 21.308,
+        "legacy_top_bottom_rms": 21.066,
+        "internal_x_jump_p95": 20.439,
+        "internal_y_jump_p95": 24.74,
+        "x_boundary_to_internal_p95": 1.043,
+        "y_boundary_to_internal_p95": 0.851,
         "boundary_jump_gate": true
       },
       "status": "PASS"
     }
   },
   "outputs": {
-    "plank": "dev/material-lane/proofs/autonomous-seam-v001/plank-autotile-v001.png",
-    "plank_repeat": "dev/material-lane/proofs/autonomous-seam-v001/plank-autotile-repeat-3x3-v001.png",
-    "slate": "dev/material-lane/proofs/autonomous-seam-v001/slate-autotile-v001.png",
-    "slate_repeat": "dev/material-lane/proofs/autonomous-seam-v001/slate-autotile-repeat-3x3-v001.png",
-    "board": "dev/material-lane/proofs/autonomous-seam-v001/autonomous-seam-proof-board-v001.png"
+    "plank": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-plank.png",
+    "plank_repeat": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-plank-repeat-3x3.png",
+    "slate": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-slate.png",
+    "slate_repeat": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-slate-repeat-3x3.png",
+    "board": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-board.png"
   }
 }

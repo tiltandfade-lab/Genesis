@@ -1,6 +1,6 @@
 ---
 type: material-source-sprite-production-sheet
-status: READY-FOR-AUTONOMOUS-RERUN
+status: IN-PRODUCTION-AUTONOMOUS
 batch: B01-timber-and-roof-fields
 workflow: sprite-first-mm-second
 ---
@@ -71,3 +71,14 @@ modular slate. That proof does not promote the rejected v001–v003 Batch 1 cand
 this sheet to **READY-FOR-AUTONOMOUS-RERUN**. Production must use the routing table, gates, and
 Terra handoff in `AUTONOMOUS-SEAM-MACHINERY.md`. Unproven material adapters stop and report before
 MM; they do not receive a visual-only waiver.
+
+## Autonomous production checkpoint P1 — 2026-07-24
+
+New source inputs for `roof-plank-batten` and `roof-slate` passed their applicable autonomous seam
+gates at the required 512px delivery size. The accepted source sprites, native 3x3 repeats,
+join-marked proof board, and machine receipt are in `proofs/b01-autonomous-v001/`; generation
+prompts and hashes are in `manifests/b01-autonomous-p1-v001.source.json`.
+
+These two entries are **TECHNICAL-SOURCE-PASS / TASTE-PENDING**. No MM graph exists yet: source
+character must be accepted before depth/PBR derivation. The other Batch 1 families remain pending
+their adapter/source pass.

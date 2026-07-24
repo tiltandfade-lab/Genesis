@@ -148,6 +148,18 @@ both).
 | floor region — mean luma | 28.1 | 154.1 |
 | whole frame — % crushed to near-black | 46.8% | **0.04%** |
 
+**Sweep state, stated honestly.** Full `dev/verify-*.mjs` sweep: **12 reds, all baseline-identical** — the same 12 fail with
+this branch's code and with `master`'s code in the same tree, so **zero new reds**. Cause is
+environmental, not a regression: this worktree was created with `GIT_LFS_SKIP_SMUDGE=1`, so every
+sprite/texture PNG except the one goblin asset materialized for this work is an LFS pointer file.
+Chrome is present, so these render/measure harnesses actually run rather than dep-skipping, and then
+measure null/zero standee and texture patches. The 12: `verify-bw2-3-material-texel`,
+`verify-diegetic-light`, `verify-env1-light-profiles`, `verify-env1b-tabletop-shadows`,
+`verify-env1c-celestial-arc`, `verify-gallery-pass`, `verify-interior-camera-frustum`,
+`verify-light-lab`, `verify-mf4-turn-rhythm`, `verify-occlusion-fade`, `verify-room-shell-render`,
+`verify-shot-compose`. A full-LFS tree is required to gate them honestly — that belongs to the CI
+close, not to this checkpoint.
+
 **Not yet passing in CL-R0** — see "Remaining CL-R0 failures" below. The reset is durable; the
 fixture is not yet clean.
 

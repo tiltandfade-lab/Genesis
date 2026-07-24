@@ -35,7 +35,17 @@ four-kind whitelist, and the per-frame light-reassert patch. Added `clayRoomSurf
 `dev/measure-clay-capture.py`, and `dev/verify-clay-room.mjs` check 18.
 
 ### Verification
-`verify-clay-room` **97/97**; `check-manifest` **RESULT: OK**; full `dev/verify-*.mjs` sweep clean.
+`verify-clay-room` **100/100**; `check-manifest` **RESULT: OK**. Full `dev/verify-*.mjs` sweep: **12 reds, all baseline-identical** — the same 12 fail with
+this branch's code and with `master`'s code in the same tree, so **zero new reds**. Cause is
+environmental, not a regression: this worktree was created with `GIT_LFS_SKIP_SMUDGE=1`, so every
+sprite/texture PNG except the one goblin asset materialized for this work is an LFS pointer file.
+Chrome is present, so these render/measure harnesses actually run rather than dep-skipping, and then
+measure null/zero standee and texture patches. The 12: `verify-bw2-3-material-texel`,
+`verify-diegetic-light`, `verify-env1-light-profiles`, `verify-env1b-tabletop-shadows`,
+`verify-env1c-celestial-arc`, `verify-gallery-pass`, `verify-interior-camera-frustum`,
+`verify-light-lab`, `verify-mf4-turn-rhythm`, `verify-occlusion-fade`, `verify-room-shell-render`,
+`verify-shot-compose`. A full-LFS tree is required to gate them honestly — that belongs to the CI
+close, not to this checkpoint.
 Mutation-proven twice (harness 18j red; live capture returns the dungeon material). Measured at
 gameplay scale: textured diagnostic-clay surfaces **3→0** early and settled across 3 rebuilds; floor
 mean saturation **175.4→29.2**; whole-frame near-black **46.8%→0.04%**. Evidence + receipts in

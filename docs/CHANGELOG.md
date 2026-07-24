@@ -65,6 +65,18 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
   construction path is still bypassed (`?clayshell=1` makes the A/B reproducible; default unmoved →
   CL-R3). The washed-out sprite (CR-4) and the unreadable two-temperature rig (CR-2) are CL-R1/CL-R2.
 - **FULL CI PENDING** — fast checkpoint, not an evening close. No merge, no push.
+- **Sweep honesty correction:** an earlier report in this session said the full verify sweep was
+  clean apart from one red. That was read from a still-running sweep and was wrong. Full `dev/verify-*.mjs` sweep: **12 reds, all baseline-identical** — the same 12 fail with
+this branch's code and with `master`'s code in the same tree, so **zero new reds**. Cause is
+environmental, not a regression: this worktree was created with `GIT_LFS_SKIP_SMUDGE=1`, so every
+sprite/texture PNG except the one goblin asset materialized for this work is an LFS pointer file.
+Chrome is present, so these render/measure harnesses actually run rather than dep-skipping, and then
+measure null/zero standee and texture patches. The 12: `verify-bw2-3-material-texel`,
+`verify-diegetic-light`, `verify-env1-light-profiles`, `verify-env1b-tabletop-shadows`,
+`verify-env1c-celestial-arc`, `verify-gallery-pass`, `verify-interior-camera-frustum`,
+`verify-light-lab`, `verify-mf4-turn-rhythm`, `verify-occlusion-fade`, `verify-room-shell-render`,
+`verify-shot-compose`. A full-LFS tree is required to gate them honestly — that belongs to the CI
+close, not to this checkpoint.
 
 ---
 

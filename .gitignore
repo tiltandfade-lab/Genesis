@@ -73,6 +73,7 @@ dev/diegetic-light-shots/
 # review artifacts. Commit their source graphs, manifests, receipts, and harnesses.
 dev/material-lane/exports/
 dev/material-cards/out/
+dev/lit-texture-proof/out/
 
 # Obsidian editor config (Adam's vault view state — never tracked)
 .obsidian/

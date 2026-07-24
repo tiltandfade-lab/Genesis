@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "proofId": "GENESIS-NORMAL-LAYER-AB-V001",
+  "method": "periodic-plus-smooth luminance height to tangent-space normal",
+  "claimBoundary": "This proves independent normal-map layering on unchanged albedo. It does not claim luminance inference is final production sprite authoring.",
+  "textures": [
+    {
+      "id": "fantasy-floor",
+      "source": "assets/textures/fantasy-floor-1.png",
+      "sourceStorage": {
+        "kind": "lfs",
+        "oidSha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+        "declaredSize": 118075
+      },
+      "dimensions": [
+        256,
+        256
+      ],
+      "normalStrength": 8.0,
+      "albedo": {
+        "path": "dev/lit-texture-proof/generated/fantasy-floor-albedo.png",
+        "sha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b",
+        "byteIdenticalToSourceObject": true
+      },
+      "height": {
+        "path": "dev/lit-texture-proof/generated/fantasy-floor-height.png",
+        "sha256": "b7ad4fda04203ffa223351603b483dffed729374b0109aa280bf42daec96656b",
+        "contrast": 0.8,
+        "range": [
+          25,
+          230
+        ]
+      },
+      "normal": {
+        "path": "dev/lit-texture-proof/generated/fantasy-floor-normal.png",
+        "sha256": "a9894c7b0bcaceff51d76a5c55fbc0be8bb6f7df00e16441f6f61cd445b3c544",
+        "meanZ": 0.868411,
+        "seamRms": {
+          "vertical": 19.2819,
+          "horizontal": 42.1051,
+          "verticalRelativeToInterior": 0.7967,
+          "horizontalRelativeToInterior": 1.6571
+        }
+      }
+    },
+    {
+      "id": "fantasy-wall",
+      "source": "assets/textures/fantasy-wall-1.png",
+      "sourceStorage": {
+        "kind": "lfs",
+        "oidSha256": "db3393cb3f3ab4c0551eea678d68e56c689f1c6de43d967cfc4475b04f0ead21",
+        "declaredSize": 107354
+      },
+      "dimensions": [
+        256,
+        256
+      ],
+      "normalStrength": 7.0,
+      "albedo": {
+        "path": "dev/lit-texture-proof/generated/fantasy-wall-albedo.png",
+        "sha256": "db3393cb3f3ab4c0551eea678d68e56c689f1c6de43d967cfc4475b04f0ead21",
+        "byteIdenticalToSourceObject": true
+      },
+      "height": {
+        "path": "dev/lit-texture-proof/generated/fantasy-wall-height.png",
+        "sha256": "0285e603260b9ba4a179f4baaa092f0f191b8ff6c7330e83a4191544feff50ec",
+        "contrast": 0.8,
+        "range": [
+          25,
+          230
+        ]
+      },
+      "normal": {
+        "path": "dev/lit-texture-proof/generated/fantasy-wall-normal.png",
+        "sha256": "e6ed8a5b301b4d19eed6ab58a7891782a7844126d226864e014c5b3f6a9113c8",
+        "meanZ": 0.871705,
+        "seamRms": {
+          "vertical": 21.0317,
+          "horizontal": 56.7956,
+          "verticalRelativeToInterior": 0.9886,
+          "horizontalRelativeToInterior": 2.0756
+        }
+      }
+    }
+  ]
+}

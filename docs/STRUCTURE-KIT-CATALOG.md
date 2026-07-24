@@ -332,44 +332,59 @@ choose the roof/weather posture · defer realm A/B behind the culture proof · l
 RoomProgram, not a furnishing catalog, gate furnishing work. Numbers stay deferred to
 clay evidence.
 
-## 14. Open design areas the plan does not yet cover (gap survey 2026-07-24)
+## 14. Gap survey — RULED, round 2 (Adam 2026-07-24)
 
-Areas no current authority fleshes out for Guard Post 1 — each needs a founder pass
-(scope ruling), then a spec home. Recommendations marked ®.
+1. **Checkpoint social loop — IN.** Rolled garrison band + one gate-interaction
+   archetype wired to the NPC attitude/parley subsystem; the social loop is the site's
+   front door, combat its failure mode. Interaction resolution is driven by faction
+   states + the player's relationship to them (battle · hello · trade · tribute).
+   Extended by Adam into the occupancy axis (§15).
+2. **Garrison — IN**, generalized: the roster spec follows the occupancy roll (§15) —
+   soldiers, bandits, traders, or nobody-but-what-remains.
+3. **Walk/map placement — ruled:** inherently a route feature but not exclusively — also
+   a point of investigation. Minted as a node when entered; SPATIAL-MODEL rider owed
+   before the walk rework. Plus the ARRIVAL HOOK LAW (§15).
+4. **Supply-state — ruled as recommended:** frozen at `operating` for site 1; cadence as
+   rolled flavor; the strained/dormant dial arrives with site 3.
+5. **Aftermath — ruled and extended:** held / abandoned-after states in MVP, and the
+   consequence chain is canon: a change of guard eventually discovers the bodies or the
+   empty garrison → the owning faction goes ON ALERT and searches for whoever did it.
+   Faction clock in the ledger; the world answers back.
+6. **Destructibility — ruled:** get it standing first, but destructibility WILL be a
+   mechanic — build with it in mind. Schema consequence: every piece carries reserved
+   fields (material class, break-state slot) from day one; no behavior yet.
+7. **Golden-frame light — ruled as recommended:** canonical daylight hero + one night
+   variant with practical light.
+8. **Spice band — ruled as recommended:** Grounded/Textured golden seed; one Strange
+   variant after the culture A/B.
+9. **Acceptance-gate structure — ruled as recommended:** hero seed + changed-seed sheet
+   + adversarial envelopes; countable back-end gates mine, visual sheets Adam's.
+10. **Sequencing — ruled:** worktree consolidation to a canonical repo comes soon
+    (clayroom is in a good spot), AFTER this writing/speccing session finishes.
 
-1. **The garrison + the checkpoint social loop.** The post IS its guards, and most
-   players will meet it NOT fighting: toll, papers, search, bribe, bluff, parley.
-   Needs: garrison size band + shift/post assignments as rolled facts (CastRoster,
-   RoomProgram), and a gate-interaction archetype wired to the existing NPC
-   attitude/parley subsystem. ® MVP: rolled garrison band + one gate-interaction table;
-   the social loop is the site's front door, combat its failure mode.
-2. **Supply-state scope.** "Externally supplied" is locked identity; Wave 2's traces
-   (delivery blocked/stolen/restored) are acceptance obligations. ® MVP freezes state at
-   `operating` with supply cadence as rolled flavor (the cart on the road); the
-   strained/dormant dial arrives with site 3 (dormant/abandoned) evidence.
-3. **Encounter integration.** Deployment zones by approach side, threat signaling,
-   cover/elevation truth from pieces, the flank route — the EngagementLens binding for
-   this site. ® Spec with the C1H composition work; the reserved
-   footing/deployment/flank masks already exist in the construction sequence (step 8).
-4. **Walk/map placement.** A guard post is inherently a ROUTE feature (it controls a
-   road between places), not a destination node. Does it mint as node, route event, or
-   both? ® Route-edge site minted as a node when entered — needs a small SPATIAL-MODEL
-   rider; flag before the walk rework so it's designed in, not patched.
-5. **Aftermath states.** Garrison wiped → what persists? (Wave 2: sabotage → repair,
-   occupation, or operator change.) ® MVP: two aftermath states (held/abandoned-after),
-   written to the ledger; reoccupation waves later.
-6. **Destructibility scope (W8).** Can the gate arm break, the lean-to burn? ® MVP:
-   gate/barrier states (open/closed/broken) as data; structural destruction defers.
-7. **Time/weather/lighting for the golden frame** (lock audit OPEN). ® Hero capture at
-   one canonical daylight; one night variant with practical light (brazier/lantern) as
-   the second capture — proves CL-M08 without a weather system.
-8. **Spice-band scope.** Golden seed at Grounded/Textured. ® One Strange-band variant
-   enters the acceptance corpus only after the culture A/B passes; Volatile+ waits for
-   later sites.
-9. **Acceptance-gate structure** (counts stay deferred): hero seed + changed-seed
-   contact sheet + adversarial envelopes; Claude owns the countable back-end gates,
-   Adam rules the visual sheets (teeth law / front-back split). Structure can lock now,
-   numbers after clay.
-10. **Sequencing dependency:** the clayroom reset (`feat/cl-r0-clayroom-reset`) blocks
-    the bench; bench admissions block the component proof; Codex's next material brief
-    (roster §8 + culture-pair cards) can run in parallel now.
+## 15. The occupancy axis + the arrival hook law (Adam rulings 2026-07-24)
+
+**The occupancy axis.** "We need to think about what a guard post actually is… it's easy
+to imagine it as a military checkpoint, and it will be that, but what else could it be?"
+The guard post's LOCKED spatial sentence and functional topology (controlled threshold
+on a route + observation + occupied room) stay invariant; **who runs it now** is a
+rolled axis, alongside culture (construction) and condition (history). Adam's named
+examples: military checkpoint (base) · dungeon-entrance guard · bandit toll post ·
+makeshift trading post · haunted ruin. The occupancy roll selects the interaction
+archetype, the roster, dressing, condition emphasis, faction binding, and hooks — the
+structure kit does not change. This composes with machinery that already exists: the
+Desktop capsule's builder/occupier/repairer chronological layers ARE this axis's
+material expression, and the makeshift vernacular (§11) is its construction expression.
+Coverage dividend: bandit/trader/haunted occupancies of site 1 bank early evidence
+toward site families 2 (service), 3 (dormant), and 8 (infiltrated) without new
+structure.
+
+**The ARRIVAL HOOK LAW (site-scoped).** "I don't think ANY node should roll without
+some kind of active hook." Every rolled site arrival presents an active hook,
+band-appropriate: Grounded = procedural/social friction ("they need to see your
+papers"); Textured/Strange = wrongness cues ("something is off about the guards — their
+uniforms don't seem to fit quite right"). The hook is a rolled fact the DM expresses,
+not DM invention (anti-drift). Registration: this law belongs to the site/arrival
+grammar and needs its enforcing check (a site roll without a hook fails validation)
+before it counts as recorded — teeth law applies. Cross-reference at fold time:
+REALM-HOOKS / HOOK-WALKS lanes and the standing hooks-earn-their-keep calibration.

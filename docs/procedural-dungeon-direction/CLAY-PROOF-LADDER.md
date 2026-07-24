@@ -82,6 +82,11 @@ Use the existing deterministic 5x5 `clay-room` direction as the starting fixture
 cannot exercise the required production path. Keep authored fixture inputs small; route rendered geometry,
 materials, lights, mechanics, and adapters through the same owners the game uses.
 
+**C1B inspection result (Adam, 2026-07-24):** later inspection proved that 5×5 cannot show the normal 30-foot
+movement highlight and its separate Dash-only extension. The retained live fixture expands to 15×15 for C1B while
+preserving the C1A record identity/provenance and production compile chain. This is a bounded proof-fixture
+expansion, not authorization for broad room-shape or world-generation work.
+
 The room grows through retained named scenario variants and traces. A later pass may add the opponent, hazard, or
 interruption point it needs, but it does not overwrite the earlier fixture/expected trace so the faster gate
 disappears.

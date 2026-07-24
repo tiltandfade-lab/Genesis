@@ -31,8 +31,8 @@
        tierHeights: Map<tier:number, worldY:number> | plain object — floor TOP height per tier (the
          SAME derivation theater-boot.js's interiorFloorTopAt already uses: ITR_FLOOR_BASE_Y + sy).
          Computed from `cells` automatically (per-tier average) when omitted.
-       wallHeight: number — uniform wall height for this room's exterior ring (default 2.4, mirrors
-         theater-interior.js's ITR_WALL_HEIGHT_BASE fallback).
+       wallHeight: number — uniform wall height for this room's exterior ring (default 2.0 / 10 ft, mirrors
+         theater-interior.js's 10-foot ITR_WALL_HEIGHT_BASE fallback).
        wallHeightForSegment(segMeta) -> number — OPTIONAL per-segment override (segMeta:
          {a,b,mid:{x,z},kind,tier}). Lets the caller apply camera-relative parapet cutaway (the
          existing focusRect near-wall shortening) to compiled segments without this pure module ever
@@ -118,7 +118,7 @@ const ROOM_SHELL_POLYGON_KERNEL = "legacy";
 // scoped engineering choice, not a rediscovery of theater-interior.js's own constants (this module
 // stays decoupled from that file) — if ITR_STEP_MAX or ITR_DAIS_STEP ever change, re-check this margin.
 const ROOM_SHELL_TIER_QUANTUM = 0.2;
-const DEFAULT_WALL_HEIGHT = 2.4; // mirrors theater-interior.js's ITR_WALL_HEIGHT_BASE fallback (kept in sync by comment, not import — pure module stays decoupled)
+const DEFAULT_WALL_HEIGHT = 2; // 10 ft; mirrors theater-interior.js's ITR_WALL_HEIGHT_BASE fallback
 const DEFAULT_BEVEL_WIDTH = 0.06;
 const DEFAULT_BEVEL_DROP = 0.03;
 const DEFAULT_UV_DENSITY = 1;
@@ -148,6 +148,11 @@ const DEFAULT_WALL_CAP_HEIGHT = 0.06;     // top-cap slab thickness
 const DEFAULT_WALL_CAP_OVERHANG = 0.035;  // 0.025-0.06 band — cap projection past each face per side
 const DEFAULT_WALL_FOOTING = 0.06;        // 0.04-0.10 band — base-course projection past the outer face
 const DEFAULT_WALL_MOUNT_EYE_HEIGHT = 1.4; // world Y of a default inner-face mount slot ("eye-height band")
+// THE DOOR / DOOR-FRAME SPLIT (Adam, 2026-07-23): these are the clear dimensions of the rectangular
+// SOCKET cut into the wall body, not dimensions of a separate frame object. At 1 world unit = 60 in,
+// the independently-rendered 36"×80" leaf is 0.6×4/3 u; the extra clearance belongs to the wall hole.
+const DEFAULT_DOOR_OPENING_WIDTH = 0.61;
+const DEFAULT_DOOR_OPENING_HEIGHT = 1.35;
 
 function cellKey(x, z) { return x + "," + z; }
 
@@ -907,8 +912,8 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
 
 /* buildWallBox(buf, p) — C4.1a's core primitive: pushes ONE vertical architectural band [p.yBase,p.yTop]
    of a wall segment into `buf` as a real capped box (inner face, outer face, an overhanging top-cap
-   slab, two end caps closing the box's own thickness cross-section, and an optional footing skirt at
-   the base) — replacing the old "one two-triangle plane" wall quad. Pure geometry, no THREE/camera.
+   slab, optional exposed end caps closing the box's thickness cross-section, and an optional footing
+   skirt at the base) — replacing the old "one two-triangle plane" wall quad. Pure geometry, no THREE/camera.
 
    p: { innerA, innerB, outerA, outerB — {x,z} world points (outer = inner offset -n*wallThickness,
          computed by the caller so this function stays a dumb box-builder), n — inward unit normal,
@@ -916,7 +921,9 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
          capOverhang, footing (0 = no footing skirt — only the STEM band gets one), color, u0, u1 (this
          segment's own ring-perimeter arc-length span, reused verbatim as the vertical faces' own U),
          uvDensity (world-unit texture repeat, for the two horizontal faces: cap top + footing ledge),
-         capInA, capInB, capOutA, capOutB, footOutA, footOutB — OPTIONAL explicit lip point overrides (UNIT G3,
+         closeA/closeB — false when a neighboring wall volume owns that joined miter (true/default
+         at exposed door/open/riser ends), capInA, capInB, capOutA, capOutB, footOutA, footOutB —
+         OPTIONAL explicit lip point overrides (UNIT G3,
          docs/STAGE-G3-WALL-RUNS.md's "build the stem, upper, cap, footing, and trim from the SAME run
          contour"). When omitted (every legacy call site, byte-identical), derived internally exactly as
          before (innerA/innerB and outerA/outerB offset by n*capOverhang / n*footing). When supplied (the oss wall-run
@@ -927,9 +934,10 @@ function pushWallVerticalFace(buf, aBottom, bBottom, aTop, bTop, normal, u0, u1,
          caller hand this function an already-corner-correct lip point instead). }
 
    SCOPING SIMPLIFICATION (documented — C4.1a's own "a few long quads" mandate, no exact corner miter
-   chased BY THIS FUNCTION ITSELF): each segment's own end caps are built independently of its ring
-   neighbors (no shared-corner miter solve here, unlike insetOffset's exact 2D miter for the FLOOR
-   bevel) — at a real 90-degree room corner this leaves a measured ~0.31-world-unit GAP (not overlap —
+   chased BY THIS FUNCTION ITSELF): the caller decides whether each end is physically exposed; this
+   primitive does not inspect ring neighbors. The caller also owns the shared-corner miter solve
+   (unlike insetOffset's exact 2D miter for the FLOOR bevel) — without that supplied solve a real
+   90-degree room corner leaves a measured ~0.31-world-unit GAP (not overlap —
    docs/STAGE-G3-WALL-RUNS.md's own ruling corrects this file's earlier, wrong, claim that it was an
    invisible overlap) between two adjacent segments' own independently-computed outer-corner geometry
    UNLESS the caller supplies pre-mitered outerA/outerB/capInA/capInB/capOutA/capOutB/footOutA/footOutB (the oss wall-
@@ -961,11 +969,14 @@ function buildWallBox(buf, p) {
   const capOutB = p.capOutB || { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
   const capTopY = yTop + capHeight;
   pushQuad(buf,
-    { x: capOutA.x, y: capTopY, z: capOutA.z }, { x: capOutB.x, y: capTopY, z: capOutB.z },
-    { x: capInB.x, y: capTopY, z: capInB.z }, { x: capInA.x, y: capTopY, z: capInA.z },
+    // Clockwise from below / counter-clockwise from the governed camera above. The old
+    // outA→outB→inB→inA order carried +Y vertex normals but DOWNWARD triangle winding, so
+    // back-face culling erased the tabletop crown and left only the vertical wall shell visible.
+    { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
+    { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
     { x: 0, y: 1, z: 0 },
-    { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity }, { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity },
-    { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, color);
+    { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity }, { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity },
+    { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, color);
   pushWallVerticalFace(buf, // cap's own outward lip (closes the overhang's outward edge)
     { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
     { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
@@ -974,17 +985,21 @@ function buildWallBox(buf, p) {
     { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
     { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
     { x: n.x, y: 0, z: n.z }, u0, u1, 0, capHeight, color);
-  // end caps — close the box's own thickness cross-section at BOTH 'a' and 'b' (frame 01's "exposed
-  // ends"): every wall segment gets both unconditionally (see this function's own header for why no
-  // neighbor-aware skip is needed post-simplification — a door-adjacent end IS the jamb face).
-  pushWallVerticalFace(buf,
-    { x: outerA.x, y: yBase, z: outerA.z }, { x: innerA.x, y: yBase, z: innerA.z },
-    { x: outerA.x, y: yTop, z: outerA.z }, { x: innerA.x, y: yTop, z: innerA.z },
-    { x: -tX, y: 0, z: -tZ }, 0, 1, 0, h, color);
-  pushWallVerticalFace(buf,
-    { x: innerB.x, y: yBase, z: innerB.z }, { x: outerB.x, y: yBase, z: outerB.z },
-    { x: innerB.x, y: yTop, z: innerB.z }, { x: outerB.x, y: yTop, z: outerB.z },
-    { x: tX, y: 0, z: tZ }, 0, 1, 0, h, color);
+  // End caps belong only at physically exposed ends (door/riser/open adjacency). At a wall-to-wall
+  // miter the neighboring volumes already meet; emitting both cross-sections there creates internal
+  // coplanar/intersecting polygons that show up as crusty corner trim under grazing light.
+  if(p.closeA !== false) {
+    pushWallVerticalFace(buf,
+      { x: outerA.x, y: yBase, z: outerA.z }, { x: innerA.x, y: yBase, z: innerA.z },
+      { x: outerA.x, y: yTop, z: outerA.z }, { x: innerA.x, y: yTop, z: innerA.z },
+      { x: -tX, y: 0, z: -tZ }, 0, 1, 0, h, color);
+  }
+  if(p.closeB !== false) {
+    pushWallVerticalFace(buf,
+      { x: innerB.x, y: yBase, z: innerB.z }, { x: outerB.x, y: yBase, z: outerB.z },
+      { x: innerB.x, y: yTop, z: innerB.z }, { x: outerB.x, y: yTop, z: outerB.z },
+      { x: tX, y: 0, z: tZ }, 0, 1, 0, h, color);
+  }
   // footing skirt — a projecting ledge courses OUT past the outer face at the band's own base (only
   // ever passed a nonzero `footing` for the STEM band; the upper band never re-foots itself).
   if (footing > 0) {
@@ -1002,6 +1017,75 @@ function buildWallBox(buf, p) {
       { x: footOutB.x, y: yBase, z: footOutB.z }, { x: footOutA.x, y: yBase, z: footOutA.z },
       { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, footH, color);
   }
+}
+
+// buildWallPrismFaces — a CLEAN wall-volume primitive used for a doorway's subdivisions. Unlike
+// buildWallBox it adds no decorative cap slab, footing, or unconditional internal end faces. That is
+// deliberate: a doorway is one wall volume with a hole, not three standalone architectural boxes.
+// Callers choose exactly which closure faces are physically exposed; buildWallTopCap then adds one
+// continuous cap over the whole owner segment instead of one overlapping cap per subdivision.
+function buildWallPrismFaces(buf, p) {
+  const { innerA, innerB, outerA, outerB, n, tX, tZ, yBase, yTop, color, u0, u1, uvDensity } = p;
+  const h = yTop - yBase;
+  pushWallVerticalFace(buf,
+    { x: innerA.x, y: yBase, z: innerA.z }, { x: innerB.x, y: yBase, z: innerB.z },
+    { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
+    { x: n.x, y: 0, z: n.z }, u0, u1, 0, h, color);
+  pushWallVerticalFace(buf,
+    { x: outerB.x, y: yBase, z: outerB.z }, { x: outerA.x, y: yBase, z: outerA.z },
+    { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
+    { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, h, color);
+  if (p.closeTop) {
+    pushQuad(buf,
+      { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
+      { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
+      { x: 0, y: 1, z: 0 },
+      { u: outerB.x * uvDensity, v: outerB.z * uvDensity }, { u: outerA.x * uvDensity, v: outerA.z * uvDensity },
+      { u: innerA.x * uvDensity, v: innerA.z * uvDensity }, { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, color);
+  }
+  if (p.closeBottom) {
+    pushQuad(buf,
+      { x: outerB.x, y: yBase, z: outerB.z }, { x: outerA.x, y: yBase, z: outerA.z },
+      { x: innerA.x, y: yBase, z: innerA.z }, { x: innerB.x, y: yBase, z: innerB.z },
+      { x: 0, y: -1, z: 0 },
+      { u: outerB.x * uvDensity, v: outerB.z * uvDensity }, { u: outerA.x * uvDensity, v: outerA.z * uvDensity },
+      { u: innerA.x * uvDensity, v: innerA.z * uvDensity }, { u: innerB.x * uvDensity, v: innerB.z * uvDensity }, color);
+  }
+  if (p.closeA) {
+    pushWallVerticalFace(buf,
+      { x: outerA.x, y: yBase, z: outerA.z }, { x: innerA.x, y: yBase, z: innerA.z },
+      { x: outerA.x, y: yTop, z: outerA.z }, { x: innerA.x, y: yTop, z: innerA.z },
+      { x: -tX, y: 0, z: -tZ }, 0, 1, 0, h, color);
+  }
+  if (p.closeB) {
+    pushWallVerticalFace(buf,
+      { x: innerB.x, y: yBase, z: innerB.z }, { x: outerB.x, y: yBase, z: outerB.z },
+      { x: innerB.x, y: yTop, z: innerB.z }, { x: outerB.x, y: yTop, z: outerB.z },
+      { x: tX, y: 0, z: tZ }, 0, 1, 0, h, color);
+  }
+}
+
+function buildWallTopCap(buf, p) {
+  const { innerA, innerB, outerA, outerB, n, yTop, capHeight, capOverhang, color, u0, u1, uvDensity } = p;
+  const capInA = { x: innerA.x + n.x * capOverhang, z: innerA.z + n.z * capOverhang };
+  const capInB = { x: innerB.x + n.x * capOverhang, z: innerB.z + n.z * capOverhang };
+  const capOutA = { x: outerA.x - n.x * capOverhang, z: outerA.z - n.z * capOverhang };
+  const capOutB = { x: outerB.x - n.x * capOverhang, z: outerB.z - n.z * capOverhang };
+  const capTopY = yTop + capHeight;
+  pushQuad(buf,
+    { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
+    { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
+    { x: 0, y: 1, z: 0 },
+    { u: capOutB.x * uvDensity, v: capOutB.z * uvDensity }, { u: capOutA.x * uvDensity, v: capOutA.z * uvDensity },
+    { u: capInA.x * uvDensity, v: capInA.z * uvDensity }, { u: capInB.x * uvDensity, v: capInB.z * uvDensity }, color);
+  pushWallVerticalFace(buf,
+    { x: outerB.x, y: yTop, z: outerB.z }, { x: outerA.x, y: yTop, z: outerA.z },
+    { x: capOutB.x, y: capTopY, z: capOutB.z }, { x: capOutA.x, y: capTopY, z: capOutA.z },
+    { x: -n.x, y: 0, z: -n.z }, u1, u0, 0, capHeight, color);
+  pushWallVerticalFace(buf,
+    { x: innerA.x, y: yTop, z: innerA.z }, { x: innerB.x, y: yTop, z: innerB.z },
+    { x: capInA.x, y: capTopY, z: capInA.z }, { x: capInB.x, y: capTopY, z: capInB.z },
+    { x: n.x, y: 0, z: n.z }, u0, u1, 0, capHeight, color);
 }
 
 /* buildBevelBridgeParams(cornerPoint, outA, outB) -> buildWallBox params for the small notch-filling box
@@ -1651,6 +1735,10 @@ function compileRoomShellData(cells, opts) {
   const wallCapHeight = typeof opts.wallCapHeight === "number" ? opts.wallCapHeight : DEFAULT_WALL_CAP_HEIGHT;
   const wallCapOverhang = typeof opts.wallCapOverhang === "number" ? opts.wallCapOverhang : DEFAULT_WALL_CAP_OVERHANG;
   const wallFooting = typeof opts.wallFooting === "number" ? opts.wallFooting : DEFAULT_WALL_FOOTING;
+  const doorOpeningWidth = typeof opts.doorOpeningWidth === "number"
+    ? opts.doorOpeningWidth : DEFAULT_DOOR_OPENING_WIDTH;
+  const doorOpeningHeight = typeof opts.doorOpeningHeight === "number"
+    ? opts.doorOpeningHeight : DEFAULT_DOOR_OPENING_HEIGHT;
   const wallTrimOn = typeof opts.wallTrim === "boolean" ? opts.wallTrim : true;
   const upperVisibleForSegment = typeof opts.upperVisibleForSegment === "function"
     ? opts.upperVisibleForSegment : function () { return true; };
@@ -1924,7 +2012,6 @@ function compileRoomShellData(cells, opts) {
         const insetA = inset[i], insetB = inset[(i + 1) % inset.length];
 
         if (seg.kind === "door") {
-          aperturesOut.push({ a: seg.a, b: seg.b, tier });
           // A door segment contributes ZERO inset width of its OWN, but its two flanking (wall/riser)
           // neighbor segments still pull insetA/insetB inward by their own bevelWidth (insetPolygon
           // sums BOTH adjacent segments' contributions per vertex) — so the main body's own inset
@@ -1948,6 +2035,137 @@ function compileRoomShellData(cells, opts) {
               { u: flushInnerB.x * uvDensity, v: flushInnerB.z * uvDensity }, { u: trueB.x * uvDensity, v: trueB.z * uvDensity },
               floorColorAt ? hexToRgb01(nearestFloorColor(seg)) : null);
           }
+
+          // THE DOOR / DOOR-FRAME SPLIT (Adam, 2026-07-23): a doorway is a rectangular SOCKET in
+          // this wall segment's own continuous body. It therefore inherits the wall's inner plane,
+          // outer plane, thickness, top and material. The independently-rendered hinged leaf consumes
+          // the opening; there is no separate proud "doorway object" on the compiled-shell path.
+          //
+          // No CSG is required for today's one-cell boundary aperture: split this one volume into two
+          // narrow wall bands beside the opening plus the wall band above it. These are subdivisions
+          // of ONE owner segment (one wallSegmentsOut row / one upper visibility handle), not three
+          // renderer instances. Their hole-facing end faces and the lintel underside are the reveal
+          // surfaces of the wall thickness itself.
+          const segMeta = {
+            a: seg.a, b: seg.b,
+            mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 },
+            kind: "doorway", tier,
+          };
+          const h = wallHeightForSegment(segMeta);
+          const baseY = elevationY - (floorDetailOn ? bevelDrop : 0);
+          const wallColor = wallColorForSegment ? hexToRgb01(wallColorForSegment(segMeta)) : null;
+          const tangent = directionOf(seg);
+          const segLength = Math.max(1e-9, Math.hypot(seg.b.x - seg.a.x, seg.b.z - seg.a.z));
+          const clearW = Math.max(0.05, Math.min(doorOpeningWidth, segLength - 0.04));
+          const clearH = Math.max(0.05, Math.min(doorOpeningHeight, (baseY + h) - elevationY - 0.02));
+          const sideLen = (segLength - clearW) / 2;
+          const openingStartT = sideLen / segLength;
+          const openingEndT = 1 - openingStartT;
+          const pointAt = (t) => ({
+            x: seg.a.x + (seg.b.x - seg.a.x) * t,
+            z: seg.a.z + (seg.b.z - seg.a.z) * t,
+          });
+          const innerA = pointAt(0), openingInnerA = pointAt(openingStartT);
+          const openingInnerB = pointAt(openingEndT), innerB = pointAt(1);
+          const outward = (p) => ({ x: p.x - n.x * wallThickness, z: p.z - n.z * wallThickness });
+          const outerA = outward(innerA), openingOuterA = outward(openingInnerA);
+          const openingOuterB = outward(openingInnerB), outerB = outward(innerB);
+          const openingU0 = u0 + (u1 - u0) * openingStartT;
+          const openingU1 = u0 + (u1 - u0) * openingEndT;
+          const openingBottomY = elevationY;
+          const openingTopY = openingBottomY + clearH;
+
+          const ownerSegIndex = wallSegmentsOut.length;
+          wallSegmentsOut.push({
+            a: seg.a, b: seg.b, tier, height: h, kind: "doorway",
+            opening: {
+              width: clearW, height: clearH,
+              bottomY: openingBottomY, topY: openingTopY,
+            },
+          });
+          aperturesOut.push({
+            a: seg.a, b: seg.b, tier, ownerSegIndex,
+            openingWidth: clearW, openingHeight: clearH,
+            openingBottomY, openingTopY,
+          });
+
+          const prismBase = {
+            n, tX: tangent.dx, tZ: tangent.dz,
+            color: wallColor, uvDensity,
+          };
+          const buildLeft = (buf, yBase, yTop, closure) => buildWallPrismFaces(buf, Object.assign({}, prismBase, {
+            innerA, innerB: openingInnerA, outerA, outerB: openingOuterA,
+            yBase, yTop, u0, u1: openingU0,
+          }, closure));
+          const buildRight = (buf, yBase, yTop, closure) => buildWallPrismFaces(buf, Object.assign({}, prismBase, {
+            innerA: openingInnerB, innerB, outerA: openingOuterB, outerB,
+            yBase, yTop, u0: openingU1, u1,
+          }, closure));
+
+          // Persistent lower wall body: only the two jamb-side bands exist. Nothing crosses the
+          // rectangular opening at floor/stem height. These are clean prisms with one plain closure
+          // face each — no footing or cap overhangs protruding into/from the aperture.
+          const stemBaseY = baseY, stemTopY = baseY + wallStemHeight;
+          buildLeft(wallStemBuf, stemBaseY, stemTopY, { closeTop: true, closeA: true, closeB: true });
+          buildRight(wallStemBuf, stemBaseY, stemTopY, { closeTop: true, closeA: true, closeB: true });
+          wallStemSegmentsOut.push({ ownerSegIndex, tier });
+          pushWallVerticalFace(wallBuf,
+            { x: innerA.x, y: stemBaseY, z: innerA.z }, { x: openingInnerA.x, y: stemBaseY, z: openingInnerA.z },
+            { x: innerA.x, y: stemTopY, z: innerA.z }, { x: openingInnerA.x, y: stemTopY, z: openingInnerA.z },
+            { x: n.x, y: 0, z: n.z }, u0, openingU0, 0, wallStemHeight, wallColor);
+          pushWallVerticalFace(wallBuf,
+            { x: openingInnerB.x, y: stemBaseY, z: openingInnerB.z }, { x: innerB.x, y: stemBaseY, z: innerB.z },
+            { x: openingInnerB.x, y: stemTopY, z: openingInnerB.z }, { x: innerB.x, y: stemTopY, z: innerB.z },
+            { x: n.x, y: 0, z: n.z }, openingU1, u1, 0, wallStemHeight, wallColor);
+
+          // Independently suppressible upper: both side bands continue to wall-top and the lintel is
+          // the SAME wall volume above the clear opening. One slice contains all three subdivisions.
+          const upperVisible = upperVisibleForSegment(segMeta);
+          const upperHeight = Math.max(0, h - wallStemHeight);
+          if (upperVisible && upperHeight > 1e-9) {
+            const vertStart = wallUpperBuf.positions.length / 3, idxStart = wallUpperBuf.indices.length;
+            // Only the segment's two OUTER ends close here. Hole-facing jamb reveals stop exactly at
+            // openingTopY; they do not continue as hidden/coplanar faces inside the lintel solid.
+            buildLeft(wallUpperBuf, stemTopY, baseY + h, { closeA: true });
+            buildRight(wallUpperBuf, stemTopY, baseY + h, { closeB: true });
+            const revealTopY = Math.min(openingTopY, baseY + h);
+            if (revealTopY > stemTopY + 1e-9) {
+              pushWallVerticalFace(wallUpperBuf, // left jamb reveal, faces into the opening
+                { x: openingInnerA.x, y: stemTopY, z: openingInnerA.z },
+                { x: openingOuterA.x, y: stemTopY, z: openingOuterA.z },
+                { x: openingInnerA.x, y: revealTopY, z: openingInnerA.z },
+                { x: openingOuterA.x, y: revealTopY, z: openingOuterA.z },
+                { x: tangent.dx, y: 0, z: tangent.dz }, 0, 1, 0, revealTopY - stemTopY, wallColor);
+              pushWallVerticalFace(wallUpperBuf, // right jamb reveal
+                { x: openingOuterB.x, y: stemTopY, z: openingOuterB.z },
+                { x: openingInnerB.x, y: stemTopY, z: openingInnerB.z },
+                { x: openingOuterB.x, y: revealTopY, z: openingOuterB.z },
+                { x: openingInnerB.x, y: revealTopY, z: openingInnerB.z },
+                { x: -tangent.dx, y: 0, z: -tangent.dz }, 0, 1, 0, revealTopY - stemTopY, wallColor);
+            }
+            if (openingTopY < baseY + h - 1e-9) {
+              buildWallPrismFaces(wallUpperBuf, Object.assign({}, prismBase, {
+                innerA: openingInnerA, innerB: openingInnerB,
+                outerA: openingOuterA, outerB: openingOuterB,
+                yBase: openingTopY, yTop: baseY + h, closeBottom: true,
+                u0: openingU0, u1: openingU1,
+              }));
+            }
+            // ONE continuous wall cap for the owner segment. The previous implementation called
+            // buildWallBox three times (left/right/lintel), creating overlapping cap slabs and
+            // internal end faces — the live "fragments shooting out the back / bits in the door."
+            buildWallTopCap(wallUpperBuf, {
+              innerA, innerB, outerA, outerB, n, yTop: baseY + h,
+              capHeight: wallCapHeight, capOverhang: wallCapOverhang,
+              color: wallColor, u0, u1, uvDensity,
+            });
+            const vertCount = wallUpperBuf.positions.length / 3 - vertStart;
+            const idxCount = wallUpperBuf.indices.length - idxStart;
+            wallUpperSegmentsOut.push({ ownerSegIndex, tier, vertStart, vertCount, idxStart, idxCount });
+          }
+
+          // No applied trim on the doorway owner. Adjacent wall courses terminate at the opening;
+          // adding independent doorway trim is exactly how a wall socket turns back into a frame.
           return;
         }
 
@@ -2010,6 +2228,10 @@ function compileRoomShellData(cells, opts) {
 
           const ownerSegIndex = wallSegmentsOut.length;
           wallSegmentsOut.push({ a: seg.a, b: seg.b, tier, height: h });
+          const prevSeg = segments[(i - 1 + segments.length) % segments.length];
+          const nextSeg = segments[(i + 1) % segments.length];
+          const closeA = !prevSeg || prevSeg.kind !== "wall";
+          const closeB = !nextSeg || nextSeg.kind !== "wall";
 
           // ── STEM — always opaque, always emitted, the persistent capped tray-edge body ──
           const stemBaseY = baseY, stemTopY = baseY + wallStemHeight;
@@ -2020,6 +2242,7 @@ function compileRoomShellData(cells, opts) {
             capInA: ossOuter && ossOuter.capInA, capInB: ossOuter && ossOuter.capInB,
             capOutA: ossOuter && ossOuter.capOutA, capOutB: ossOuter && ossOuter.capOutB,
             footOutA: ossOuter && ossOuter.footOutA, footOutB: ossOuter && ossOuter.footOutB,
+            closeA, closeB,
           });
           wallStemSegmentsOut.push({ ownerSegIndex, tier });
           // DEPRECATED legacy `.walls` bundle — stem INNER FACE ONLY (see wallBuf's own header comment
@@ -2043,6 +2266,7 @@ function compileRoomShellData(cells, opts) {
               footing: 0, color: wallColor, u0, u1, uvDensity,
               capInA: ossOuter && ossOuter.capInA, capInB: ossOuter && ossOuter.capInB,
               capOutA: ossOuter && ossOuter.capOutA, capOutB: ossOuter && ossOuter.capOutB,
+              closeA, closeB,
             });
             const vertCount = wallUpperBuf.positions.length / 3 - vertStart;
             const idxCount = wallUpperBuf.indices.length - idxStart;
@@ -2051,6 +2275,8 @@ function compileRoomShellData(cells, opts) {
 
           // ── TRIM — optional, cosmetic base-course + cornice ribbons ──
           if (wallTrimOn) {
+            const trimVertStart = wallTrimBuf.positions.length / 3;
+            const trimIdxStart = wallTrimBuf.indices.length;
             const trimHeight = Math.min(0.05, wallStemHeight * 0.25);
             const trimProud = wallCapOverhang * 0.5;
             // UNIT G3: same substitution as the stem's own capOutA/footOutA — a corner-mitered trim lip
@@ -2065,7 +2291,13 @@ function compileRoomShellData(cells, opts) {
               { x: trimOuterA.x, y: stemTopY - trimHeight / 2, z: trimOuterA.z }, { x: trimOuterB.x, y: stemTopY - trimHeight / 2, z: trimOuterB.z },
               { x: trimOuterA.x, y: stemTopY + trimHeight / 2, z: trimOuterA.z }, { x: trimOuterB.x, y: stemTopY + trimHeight / 2, z: trimOuterB.z },
               { x: -n.x, y: 0, z: -n.z }, u0, u1, 0, trimHeight, wallColor);
-            wallTrimSegmentsOut.push({ ownerSegIndex, tier });
+            wallTrimSegmentsOut.push({
+              ownerSegIndex, tier,
+              vertStart: trimVertStart,
+              vertCount: wallTrimBuf.positions.length / 3 - trimVertStart,
+              idxStart: trimIdxStart,
+              idxCount: wallTrimBuf.indices.length - trimIdxStart,
+            });
           }
 
           // ── MOUNT SLOT(s) — inner-face candidate transforms, DATA only (E0 consumes them) ──
@@ -2390,6 +2622,7 @@ export {
   DEFAULT_RADIAL_SMOOTH_BLEND,
   DEFAULT_WALL_THICKNESS, DEFAULT_WALL_STEM_HEIGHT, DEFAULT_WALL_CAP_HEIGHT, DEFAULT_WALL_CAP_OVERHANG,
   DEFAULT_WALL_FOOTING, DEFAULT_WALL_MOUNT_EYE_HEIGHT,
+  DEFAULT_DOOR_OPENING_WIDTH, DEFAULT_DOOR_OPENING_HEIGHT,
   // UNIT G2 — PolygonKernel floor integration (dev/verify-room-shell-oss.mjs's own direct import surface)
   ROOM_SHELL_POLYGON_KERNEL, unitStepClassifyRing, deriveKernelRingsForTier, validateRenderTransform,
   DEFAULT_RENDER_TRANSFORM_AREA_TOLERANCE, groupInsetsForKernelTriangulation, buildParityDiagnostics,

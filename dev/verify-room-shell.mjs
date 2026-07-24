@@ -87,6 +87,50 @@ function planarFloorArea(data) {
   }
   return area;
 }
+function verticalTriangleCovers(bundle, planeAxis, planeValue, alongAxis, alongValue, yValue) {
+  const axisIndex = planeAxis === "x" ? 0 : 2;
+  const alongIndex = alongAxis === "x" ? 0 : 2;
+  const p = bundle.positions, idx = bundle.indices;
+  for (let t = 0; t < idx.length; t += 3) {
+    const tri = [idx[t], idx[t + 1], idx[t + 2]].map((vi) => ({
+      plane: p[vi * 3 + axisIndex],
+      x: p[vi * 3 + alongIndex],
+      z: p[vi * 3 + 1],
+    }));
+    if (!tri.every((v) => Math.abs(v.plane - planeValue) < 1e-6)) continue;
+    if (pointInTriangle2D(alongValue, yValue, tri[0], tri[1], tri[2])) return true;
+  }
+  return false;
+}
+function ownerTriangleCount(bundle, ownerRef, predicate) {
+  let count = 0;
+  const p = bundle.positions, n = bundle.normals, idx = bundle.indices;
+  const start = ownerRef.idxStart, end = start + ownerRef.idxCount;
+  for (let at = start; at < end; at += 3) {
+    const vis = [idx[at], idx[at + 1], idx[at + 2]];
+    const verts = vis.map((vi) => ({
+      x: p[vi * 3], y: p[vi * 3 + 1], z: p[vi * 3 + 2],
+      nx: n[vi * 3], ny: n[vi * 3 + 1], nz: n[vi * 3 + 2],
+    }));
+    if (predicate(verts)) count++;
+  }
+  return count;
+}
+function upwardWindingFailures(bundle) {
+  let upward = 0, failures = 0;
+  const p = bundle.positions, n = bundle.normals, idx = bundle.indices;
+  for (let at = 0; at < idx.length; at += 3) {
+    const vis = [idx[at], idx[at + 1], idx[at + 2]];
+    if (!vis.every((vi) => n[vi * 3 + 1] > 0.99)) continue;
+    upward++;
+    const a = { x: p[vis[0] * 3], z: p[vis[0] * 3 + 2] };
+    const b = { x: p[vis[1] * 3], z: p[vis[1] * 3 + 2] };
+    const c = { x: p[vis[2] * 3], z: p[vis[2] * 3 + 2] };
+    const crossY = (b.z - a.z) * (c.x - a.x) - (b.x - a.x) * (c.z - a.z);
+    if (crossY <= 1e-9) failures++;
+  }
+  return { upward, failures };
+}
 
 console.log("\n=== 1. Rectangular room -> exactly 4 simplified wall segments ===");
 {
@@ -103,11 +147,11 @@ console.log("\n=== 1. Rectangular room -> exactly 4 simplified wall segments ===
     big.meta.wallSegmentCount === 4, big.meta.wallSegmentCount);
 }
 
-console.log("\n=== 2. Door aperture survives simplification as its own segment ===");
+console.log("\n=== 2. Door aperture is a rectangular socket in its owning wall segment ===");
 {
   const doorAtStart = compileRoomShellData(rectRoom(6, 5, { x: 2, z: 0 }), {});
-  check("2a. one door on the north wall -> 5 wall segments (one wall run split in two) + 1 aperture",
-    doorAtStart.meta.wallSegmentCount === 5 && doorAtStart.apertures.length === 1,
+  check("2a. one door on the north wall -> 6 owner segments (two split runs + socket wall) + 1 aperture",
+    doorAtStart.meta.wallSegmentCount === 6 && doorAtStart.apertures.length === 1,
     { walls: doorAtStart.meta.wallSegmentCount, apertures: doorAtStart.apertures.length });
   // RED-FIRST: move the door to a DIFFERENT edge (east wall) and confirm the harness tracks the
   // ACTUAL door position, not a hardcoded index/count.
@@ -115,13 +159,44 @@ console.log("\n=== 2. Door aperture survives simplification as its own segment =
   check("2b. door relocated to the east wall -> aperture segment sits on x=5.5 (the east boundary), not the north wall",
     Math.abs(doorMoved.apertures[0].a.x - 5.5) < 1e-6 && Math.abs(doorMoved.apertures[0].b.x - 5.5) < 1e-6,
     doorMoved.apertures[0]);
-  check("2c. door segment excluded from the wall quad list (no wall quad spans across the door's own z=2 center)",
-    doorMoved.walls.segments.every((s) => {
-      if (Math.abs(s.a.x - 5.5) > 1e-6 || Math.abs(s.b.x - 5.5) > 1e-6) return true; // not on the east wall run at all
-      const lo = Math.min(s.a.z, s.b.z), hi = Math.max(s.a.z, s.b.z);
-      return !(lo <= 2 && hi >= 2); // no solid wall segment covers the door's own center z=2
-    }),
-    doorMoved.walls.segments);
+  const socket = doorMoved.walls.segments.find((s) => s.kind === "doorway");
+  check("2c. the aperture is owned by a wall segment carrying the 0.61 × 1.35 clear socket",
+    !!socket && doorMoved.apertures[0].ownerSegIndex === doorMoved.walls.segments.indexOf(socket) &&
+    Math.abs(socket.opening.width - 0.61) < 1e-6 &&
+    Math.abs(socket.opening.height - 1.35) < 1e-6,
+    { socket, aperture: doorMoved.apertures[0] });
+  check("2d. no stem/side wall face crosses the opening center below the lintel",
+    !verticalTriangleCovers(doorMoved.wallStem, "x", 5.5, "z", 2, 0.14) &&
+    !verticalTriangleCovers(doorMoved.wallUpper, "x", 5.5, "z", 2, 0.8));
+  check("2e. the same wall surface continues above the opening as a lintel",
+    verticalTriangleCovers(doorMoved.wallUpper, "x", 5.5, "z", 2, 1.8));
+  check("2f. the wall continues beside the opening at full height (not two floating frame posts)",
+    verticalTriangleCovers(doorMoved.wallUpper, "x", 5.5, "z", 1.6, 0.8));
+  check("2g. aperture metadata measures from the floor plane to its exact opening top",
+    Math.abs(doorMoved.apertures[0].openingBottomY) < 1e-6 &&
+    Math.abs(doorMoved.apertures[0].openingTopY - 1.35) < 1e-6,
+    doorMoved.apertures[0]);
+  const doorwayUpperRef = doorMoved.wallUpper.segments.find((s) => s.ownerSegIndex === doorMoved.apertures[0].ownerSegIndex);
+  const topCapTriangles = ownerTriangleCount(doorMoved.wallUpper, doorwayUpperRef,
+    (vs) => vs.every((v) => v.ny > 0.99));
+  check("2h. doorway owner has ONE continuous top cap (2 triangles), not three overlapping box caps",
+    topCapTriangles === 2, topCapTriangles);
+  const openingHalf = doorMoved.apertures[0].openingWidth / 2;
+  const internalFaceTriangles = ownerTriangleCount(doorMoved.wallUpper, doorwayUpperRef, (vs) =>
+    (vs.every((v) => Math.abs(v.z - (2 - openingHalf)) < 1e-6) ||
+     vs.every((v) => Math.abs(v.z - (2 + openingHalf)) < 1e-6)) &&
+    vs.every((v) => v.y > doorMoved.apertures[0].openingTopY + 1e-6));
+  check("2i. no hidden jamb/lintel end-cap faces continue above the opening inside the solid wall",
+    internalFaceTriangles === 0, internalFaceTriangles);
+  check("2j. doorway owner emits no applied trim segment",
+    !doorMoved.wallTrim.segments.some((s) => s.ownerSegIndex === doorMoved.apertures[0].ownerSegIndex),
+    doorMoved.wallTrim.segments);
+  const stemWinding = upwardWindingFailures(doorMoved.wallStem);
+  const upperWinding = upwardWindingFailures(doorMoved.wallUpper);
+  check("2k. every horizontal wall/stem crown is front-facing from above (scene-tray top, never culled)",
+    stemWinding.upward > 0 && upperWinding.upward > 0 &&
+    stemWinding.failures === 0 && upperWinding.failures === 0,
+    { stemWinding, upperWinding });
 }
 
 console.log("\n=== 3. Floor triangulation covers the full walkable polygon ===");
@@ -183,8 +258,10 @@ console.log("\n=== 4. World-UVs continuous across two adjacent (non-seam) wall s
   // header comment) and legitimately STILL measures 4 quads (one per segment) by design, not by defect.
   // RED-FIRST (checked live): asserting the OLD claim — "the wall geometry IS just one quad per
   // segment, nothing more" — against `data.wallStem` (the real new stem-volume bundle) fails, because
-  // wallStem carries far more than a single quad per segment (inner+outer+cap-top+cap-lips+2 end
-  // caps+footing-top+footing-face = 9 quads/segment at these opts). This is the concrete "single
+  // wallStem carries far more than a single quad per segment (inner+outer+cap-top+cap-lips+
+  // footing-top+footing-face = 7 quads/segment at these opts). Joined wall corners deliberately
+  // omit their internal end caps; only a door/riser/open adjacency owns an exposed cap. This is the
+  // concrete "single
   // two-triangle plane" claim this unit's own frame-01 acceptance criterion retires.
   const w = data.walls; // deprecated legacy bundle — intentionally still 1 quad/segment, see above
   const legacyQuadCount = w.positions.length / 3 / 4;
@@ -192,11 +269,15 @@ console.log("\n=== 4. World-UVs continuous across two adjacent (non-seam) wall s
     legacyQuadCount === 4, legacyQuadCount);
   const stemVertsPerSegment = data.wallStem.positions.length / 3 / data.wallStem.segments.length;
   check("4a. ⊗ RED-FIRST retired: the real wallStem volume is NOT a single quad — each of the 4 wall segments' " +
-    "own stem carries >=8 quads' worth of verts (32) — inner+outer+cap(top+2 lips)+2 endCaps+footing(top+face), " +
+    "own stem carries exactly 7 quads (28 verts) — inner+outer+cap(top+2 lips)+footing(top+face), with joined-corner end caps omitted, " +
     "not the old plane's 4 (this exact assertion against `.walls`, the pre-C4.1a shape, would read 4 -> RED)",
-    stemVertsPerSegment >= 32, stemVertsPerSegment);
+    stemVertsPerSegment === 28, stemVertsPerSegment);
   check("4a-upper. every one of the 4 (default all-visible) segments also has its OWN upper-volume entry",
     data.wallUpper.segments.length === 4, data.wallUpper.segments.length);
+  check("4a-trim. every trim ribbon exposes a precise non-overlapping geometry slice for corner diagnostics",
+    data.wallTrim.segments.length === 4
+      && data.wallTrim.segments.every((s) => s.vertCount === 8 && s.idxCount === 12),
+    data.wallTrim.segments);
   check("4a-cap. the stem volume's own top-cap face resolves as a near-horizontal (|ny|>=0.99) triangle set",
     (() => {
       const idx = data.wallStem.indices, nrm = data.wallStem.normals;

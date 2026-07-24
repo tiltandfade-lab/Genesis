@@ -14,6 +14,12 @@ projection of canonical rolled facts (§11.1: "prove that composition remains a 
 canonical rolls"); the greybox diagnostic reads over existing geometry paths. Deliberately
 untextured grey; NOT the visual-quality claim (that is C1H+).
 
+**Current retained fixture:** Addendum D27 supersedes only the live fixture's 5×5 dimensions and
+C1A-local placements. Adam's C1B inspection found that 5×5 cannot prove a distinct 30-foot Move
+region plus Dash-only extension, so the same production compile path now retains a 15×15 movement
+lab. The C1A record id/version and historical acceptance evidence remain provenance, not a claim
+that the live surface is still 5×5.
+
 ## Decisions (recorded with grounds — do NOT re-litigate)
 
 - **D1 dev flag:** clone the Light Lab dormant pattern (theater-boot.js:14094-14116):
@@ -339,3 +345,233 @@ via the D19 mount (receipt: leaf world (0, 0.367, −2.5), size 0.6 × 1.333 × 
 silent data-contract break). Gates: clay 137/137 · d4-doors 203/203 (sandbox extended with the
 mount helper) · ks2 40/40 + dungeon-interior 288/288 (both rewritten red-first: same real
 properties, new grammar). Evidence: `dev/clay-captures/door/kindergarten-*`.
+
+## Addendum D21 — THE DOORWAY IS THE WALL (Codex lane close, 2026-07-23)
+
+Adam's correction, verbatim in ART-DIRECTION-CANON "THE DOOR / DOOR-FRAME SPLIT": "the door and
+door frame are two separate objects, the door frame should generally be constructed as a piece of
+the wall, and the door is an object that goes in the hole in the wall."
+
+D20's three plain wall prisms survive only as the non-compiled/kit fallback. On the production
+Clayroom compiled-shell path, the door boundary is now a real `kind:"doorway"` wall owner:
+`compileRoomShellData` subdivides that one wall volume around a 0.61 × 1.35 clear rectangular
+socket, preserving the same inner plane, outer plane, thickness, material, cap, footing, trim,
+upper-omission handle, and wall-owner index as the surrounding shell. No wall face crosses the
+opening below the lintel; the hole-facing wall-thickness faces and lintel underside are the reveal
+surfaces. The renderer suppresses all fallback frame instances when that compiled shell owns the
+socket and derives the aperture from `board.doorAxes`, while the accepted 36"×80" hinged leaf,
+darkness card, state behavior, and D19 mount tuner remain separate and unchanged.
+
+Gates personally run on the Codex lane: room-shell 48/48 · wall-volumes 35/35 · clay 138/138 ·
+d4-doors 203/203 · ks2-door-assembly 40/40 · dungeon-interior 288/288 · room-shell-oss 48/48 ·
+wall-runs-oss 92/92 · manifest `RESULT: OK`. Production headless evidence:
+`dev/clay-captures/door/codex-wall-socket-*` and the role-ID structural pass
+`dev/clay-captures/door/codex-wall-socket-role-id-*`.
+
+## Addendum D22 — flush means the FACE, and the socket must be clean (2026-07-23)
+
+Adam's live correction:
+
+> "where i put the door is where it should sit, with the front nearly flush with the front face of
+> the wall. still not sure why you and claude both want to just the door out, it makes no sense. are
+> you centering the center of the door to the front face of the wall or something?"
+
+Yes: D19's shell default put the centred leaf's **centre plane** on the wall boundary, leaving half
+of its 0.32 depth in the room. The accepted live tune was `depthInWall +0.140`: half-depth (0.16)
+minus a 0.02 face projection. That is now the derived default, not a hidden correction; the Mount
+tab opens at +0.140 and reports applied dz −0.64.
+
+The first D21 shell carve also reused the complete wall-box builder for each jamb and lintel. Each
+sub-box brought its own cap, footing, and unconditional end closures, producing overlapping hidden
+faces and the visible fragments behind/inside the doorway. The socket now uses clean wall prisms:
+one continuous owner cap, only exposed end closures, explicit reveals to opening height, and one
+lintel underside. There is no doorway trim and no independent frame object.
+
+The same browser pass corrected the tool's grab-pan contract. It was empirically inverted on both
+axes; the camera offset now makes the rendered room follow the pointer (right→right, down→down).
+Teeth: `verify-room-shell` asserts one top cap, no hidden jamb/lintel end caps, and no doorway trim;
+`verify-clay-room` asserts the face projection and pan signs. Gates: room-shell 51/51 ·
+wall-volumes 35/35 · clay 140/140 · d4-doors 205/205 · ks2-door-assembly 40/40 ·
+dungeon-interior 288/288 · room-shell-oss 48/48 · wall-runs-oss 92/92 · manifest `RESULT: OK`.
+Evidence: `dev/clay-captures/door/codex-wall-socket-clean-flush-*`.
+
+## Addendum D23 — executable door proof (2026-07-24)
+
+Adam: "can you prove that the door works?"
+
+The first live attempt found a real Clayroom-only failure: `clayRoomAfterInteriorBoardRebuild`
+called the global `drainTweens(S)` to settle the camera fit, which also force-finished the newly
+queued door-state tween. The production hinge formulas existed, but this fixture could only show
+their endpoints as snaps. The hook now settles only `isCameraPoseTween` entries and preserves every
+other animation channel; door transitions also start their own render loop instead of depending on
+an unrelated camera/fade tween.
+
+The overlay now has a **State** proof tab. Its shut/ajar/open buttons clone-patch
+`S.lastBoard.interactables` and replay the normal `setInteriorBoard` →
+`interiorBuildInteractables` path; it does not mutate the frozen clay record or mount a demonstration
+mesh. The tab measures the real mounted leaf. Browser proof, closed→open→closed→ajar→open:
+
+- shut: 0.0°, settled, mount dz −0.64;
+- ajar: 22.0°, settled, same mount;
+- open: 105.0°, settled, same mount;
+- both directions reported `tween ACTIVE` during the governed 320 ms transition.
+
+The browser is left on the open 105° endpoint with the State tab active so the sequence remains
+directly repeatable. Gates: clay 145/145 · d4-doors 206/206 · ks2-door-assembly 40/40 ·
+dungeon-interior 288/288 · manifest `RESULT: OK`.
+
+## Addendum D24 — the scene-tray wall crown (2026-07-24)
+
+Adam: "ok, the easiest solution for the stray geometry is to actually render the top of the walls,
+you're only rendering the vertical faces but not the top horizontal face that would give it the
+full \"scene tray\" or tabletop module feel"
+
+The crown geometry already existed in the wall buffers, but its vertex order wound every horizontal
+top triangle downward while its stored normals pointed +Y. Back-face culling therefore removed the
+wall tops from the governed camera above and left the vertical faces reading as stray, open shell
+fragments.
+
+All three crown paths now wind counter-clockwise from above: complete wall boxes, clean doorway
+prisms, and the continuous doorway-owner top cap. UVs remain world-projected; only vertex order
+changed. The shell gate now computes each nominal +Y triangle's actual cross-product and rejects
+downward or degenerate winding, so a fake "up" normal can no longer conceal the construction error.
+
+Gates: room-shell 52/52 · wall-volumes 35/35 · clay 145/145 · room-shell-oss · wall-runs-oss ·
+d4-doors · dungeon-interior · manifest `RESULT: OK`.
+
+## Addendum D25 — movable diagnostics and animation-stable local lights (2026-07-24)
+
+Adam's ruling is recorded verbatim in ART-DIRECTION-CANON under **CLAYROOM LIGHT OWNERSHIP + LOCAL
+BULB STATE**. This addendum records the implementation mechanism and proof.
+
+The lighting jump was a lifecycle defect, not a tone-setting problem. `setInteriorBoard()` started
+the shared flicker interval with the production practical targets and a base array for the then-live
+scene profile points. `clayRoomApplyLightProfile()` subsequently removed those profile points and
+installed the Clayroom pair without stopping/rebinding that interval. Its next 480 ms tick therefore
+applied stale bases and random deltas to a different light array. Door-state proof replays happened
+to expose it because they rebuild the board and start door, camera, and fade animation together.
+
+The repair:
+
+- The warm west 16 / cool east 9 pair now compiles as two named `board.lights` records and is built
+  by the real `interiorBuildLights()` production fixture path. The fixture body, emitter mesh,
+  wall/floor mount, range, decay, and `PointLight` are production objects; Clayroom mounts no
+  demonstration lights or meshes. The low white ambient remains authored at 0.18.
+- Every production practical record carries local `state:"steady"` by default plus deterministic
+  flicker recipe data. `flickering` is opt-in per target. The seeded normalized sample multiplies the
+  actual emitted intensity, visible emitter emissive intensity, and optional cone on the same tick.
+  Disabling flicker writes sample 1 once and stops the scheduler when no local light remains active.
+- `interiorLightingIdentityFor()` excludes door/interactable state but includes every input that can
+  affect the rig, fixture recipe, values, geometry-owned mount slots, or placement. On an unchanged
+  Clayroom lighting identity, the production fixture group is detached before the geometry sweep,
+  then reattached; ambient/rig application and scheduler startup are skipped. Door, camera, fade,
+  and board-rebuild animation therefore preserve object/material UUIDs and authored values instead
+  of reinitializing them. There is no per-frame corrective reset.
+- The **Lights** tab reads the live production objects and reports emitted/base, mesh/base, their
+  normalized sample, parity, object/material identity, one-light isolation, authored-baseline
+  status, and before/during/after animation-guard results. The State tab and rebuild/fade proof use
+  the real board replay path.
+- The panel title is a pointer drag handle; its buttons are excluded from drag start. Position is
+  clamped inside the viewport, retained across board rebuilds/animations, re-clamped on resize, and
+  restored by the visible **reset pos** button with a live viewport-clamp readout.
+
+Teeth: `dev/verify-clay-room.mjs` checks 5e/f, 15m/n, and 29a–h; the rewritten
+`dev/verify-bw3-4-light-shafts.mjs` item 3 executes deterministic local flicker, exact normalized
+mesh/light/cone parity, steady-sibling isolation, seeded replay, null-cone safety, and baseline
+restoration. Live browser proof exercises shut/ajar/open plus rebuild/fade while recording stable
+UUIDs before/during/after.
+
+## Addendum D26 — false travel fade removed; 10-foot room + Concept 1 foundation (2026-07-24)
+
+Adam's scale, crate, clean-corner, approved-content, safe-scope, and Concept 1 rulings are recorded
+verbatim in ART-DIRECTION-CANON under **CLAYROOM HUMAN SCALE, SIMPLE CRATE, AND DOCKED STUDIO**.
+
+The apparent lighting reset on a door-state change was isolated to the actual screen path: light
+and emitter UUIDs, intensities, emissive samples, ambient, and rig values stayed unchanged, while
+`setInteriorBoard()` classified every prior-board replay as a room transition. A Clayroom state
+clone therefore snapped the full-screen transition overlay opaque, then faded it away. That made
+the room look dark and ramp back even though the light objects had never changed.
+
+`setInteriorBoard(data, renderOpts)` now reserves the overlay for genuine board-object travel.
+Same-board async/material/camera replays skip it by identity, and Clayroom door, mount, and lighting
+proof replays explicitly pass `roomTransition:false`. This is event-boundary correction, not a
+per-frame lighting reset; genuine production room travel retains its fade.
+
+The room-scale correction is production data, not a camera cheat:
+
+- default wall height is 2 world units = 10 ft in the interior compiler, room-shell compiler, kit
+  fallback, and wall-hang fallback;
+- the crate recipe is one 0.6 × 0.6 × 0.6 world-unit box (3 ft), with side/top face groups mapped
+  separately on the same BoxGeometry and no lid/cap geometry;
+- wall-to-wall miter joins no longer emit internal end-cap polygons; door/open/riser ends remain
+  closed, and trim segments expose exact vertex/index slices for regression inspection.
+
+The selected **Concept 1 / Docked Studio** foundation now wraps the real renderer:
+
+- left: admitted production Catalog plus live Scene list;
+- center: the production Theater viewport, with click raycasting into the actual room objects and
+  a live selection outline;
+- right: the existing diagnostics as a dedicated Inspector that can be dragged to undock and
+  **dock right** to reset;
+- scope bar: `INSTANCE`, `STATE`, protected `SOCKET`, and protected `DEFAULT`, with `SESSION ONLY`
+  and `FUTURE ROLLS` consequences written in the UI;
+- object routing: door/light selection opens the relevant production State/Lights diagnostics;
+  sprite selection exposes the existing Sprite Editor link; the shared Material Editor seam is
+  shown but disabled until the admitted MM material-mapping pass lands.
+
+The Catalog mounts no demo content. Its current entries are exactly the fixture's existing room
+shell, door, crate, two production practicals, and approved goblin character sprite. “Save as new
+state” is visibly a session-state scaffold; default overwrite remains locked instead of pretending
+to persist.
+
+Teeth: `dev/verify-clay-room.mjs` check 30a–g; `dev/verify-room-shell.mjs` check 4a/4a-trim.
+Selected concept receipt:
+`dev/clay-captures/workbench-concepts/concept-1-docked-studio.png`.
+
+## Addendum D27 — C1B full movement lab, route receipts, and canonical portal crossing (2026-07-24)
+
+Adam's binding scale ruling is recorded verbatim in ART-DIRECTION-CANON under **CLAYROOM FULL
+MOVEMENT-LAB SCALE**. The original 5×5 fixture could not display an ordinary 30-foot range and a
+separate Dash-only extension. The retained fixture is now 15×15 (225 exact cells) with the existing
+10-foot human-room walls and one-cell-equals-5-feet law.
+
+The enlarged fixture keeps the production chain intact:
+
+- `clayRoomWalkFixtureFrom(record)` still produces the pinned walk input consumed by the real
+  `spatializePlan` → `interiorBuildBoard` path. The exact north portal is local `c-6-0`; the fixture
+  re-pin is attempt 48. The approved goblin starts at `c-6-10`, the real production crate blocks
+  `c-6-7`, the east waypoint is `c-7-7`, and the west waypoint `c-5-7` is Difficult Terrain.
+- `record.connection` is the only mechanical owner for the hinged door's id, version, endpoints,
+  clearance, and state. The portal, door leaf, map cell, and UI are projections. Portal commit opens
+  that same Connection and moves the actor to the real neighboring SpatialPlan endpoint; it never
+  invents a room-local half-door.
+- `src/engine/tactical-query.js` is the pure deterministic mechanics owner. It adapts exact
+  SpatialPlan cells, blockers, costs, actors, and Connections; computes orthogonal Move/Dash reach;
+  returns immutable previews; refuses stale previews; and commits revisioned movement/connection
+  receipts. Neither Theater nor the diagnostic panel calculates pathing or success.
+- The same Connection carries body-aware ordinary, Difficult Terrain/narrow-opening, and blocked
+  cases. Optional consequential uncertainty is an explicit CheckContract: preview discloses
+  qualitative difficulty/stakes but not the DC; commit requires a caller-supplied d20 and then
+  reveals the DC/result. The renderer never rolls.
+
+The **Move** tab projects the production query directly: cyan filled cells are currently affordable
+Move destinations; amber hollow diamonds are Dash-only destinations, so the secondary tier remains
+distinct without color; the white route line is the exact preview receipt. Controls select Move or
+Dash, automatic/east-safe/west-difficult routing, portal use, commit, and explicit session reset.
+The readout exposes revision, actor cell/scene, the single Connection owner/state, range counts,
+body cases, preview prose, committed receipt, and real `move-step` animation progress.
+
+Mechanical session truth lives in `GS.clayRoomMovementSession`, not a THREE object. Commit changes
+that state once, replays the receipt cell-by-cell through the existing production standee verb, and
+only then projects the final board. Rebuilds use `roomTransition:false`, so movement does not trigger
+the false travel fade; the D25 lighting identity guard preserves authored practical objects,
+materials, values, and local light state through the replay. Movement is session-only and never
+rewrites the door socket or production default.
+
+Teeth: `dev/verify-tactical-query.mjs` executes the real 15×15 SpatialPlan adapter, range tiers,
+blocker/Difficult Terrain routing, stale-preview refusal, Connection crossing, body cases, hidden-DC
+contract, deterministic receipts, and input immutability. `dev/verify-clay-room.mjs` checks 31a–j
+for fixture/manifest/UI/animation/lighting ownership. Live browser proof completed a 12-step Dash
+route, then a 3-step canonical portal crossing: actor found, exact steps settled, Connection open,
+actor projected into `clay-beyond`, one-light flicker isolation PASS, mesh/emitted sample parity
+PASS, authored baseline restoration PASS, and before/during/after lighting preservation PASS.

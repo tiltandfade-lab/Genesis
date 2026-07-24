@@ -5,13 +5,13 @@
    call time (the one non-determinism a caller could introduce, `seed`, is a plain passthrough
    field — see clayRoomRecordFrom's own header), no world reads/writes.
 
-   Proves ONE canonical 5x5 clay room compiles to a stable, frozen record — exact cells, full
+   Proves ONE canonical clay room compiles to a stable, frozen record — exact cells, full
    perimeter walls, one portal, one crate, one goblin citizen, through the SAME owners the game
    uses (SPRITE_BY_BESTIARY_ID -> SPRITE_REGISTRY for the citizen's BodyForm) — never a parallel
    room compiler. 1 cell = 5 ft, GRID LAW (src/engine/combat.js cmGridFromCells's own header:
    "mint emits dims:{w,d} in cells, 1 tile = 1 cell = 5 ft").
 
-   D6 (docs/C1A-CLAY-ROOM.md) derivation-path note: the record's CANONICAL GEOMETRY (the 5x5 cell
+   D6 (docs/C1A-CLAY-ROOM.md) derivation-path note: the record's CANONICAL GEOMETRY (the cell
    grid, its perimeter walls, and the portal/crate/citizen cell placements) is authored HERE, not
    derived through walkSceneFrom(src/engine/walk-scene.js) — walkSceneFrom classifies an ALREADY-
    ROLLED dungeon segment's prose fields (areaType/dims/side/exits) into WalkScene fact entries; it
@@ -44,8 +44,18 @@
 // survives (or is superseded by) the interior channel's own readability floor.
 var CLAY_C1A_LIGHT_PROFILE = Object.freeze({
   points: Object.freeze([
-    Object.freeze({ side: "west", color: 0xffa04a, intensity: 16, pos: Object.freeze({ x: -0.8, y: 1.7, z: 0 }) }),
-    Object.freeze({ side: "east", color: 0xaebfe8, intensity: 9, pos: Object.freeze({ x: 0.8, y: 1.7, z: 0 }) })
+    Object.freeze({
+      id: "clay-west-warm", side: "west", color: 0xffa04a, intensity: 16,
+      state: "steady",
+      flicker: Object.freeze({ seed: "clay-c1a:west-warm", amplitude: 0.12, cadenceMs: 480 }),
+      pos: Object.freeze({ x: -0.8, y: 1.7, z: 0 })
+    }),
+    Object.freeze({
+      id: "clay-east-cool", side: "east", color: 0xaebfe8, intensity: 9,
+      state: "steady",
+      flicker: Object.freeze({ seed: "clay-c1a:east-cool", amplitude: 0.12, cadenceMs: 480 }),
+      pos: Object.freeze({ x: 0.8, y: 1.7, z: 0 })
+    })
   ]),
   ambient: Object.freeze({ color: 0xffffff, intensity: 0.18 })
 });
@@ -74,7 +84,7 @@ var CLAY_C1A_LIGHT_PROFILE = Object.freeze({
 
    The role vocabulary is CL-R0's own required list (floor, wall, riser, trim, portal, furniture,
    emitter, sprite) plus the kinds this engine actually emits today. Roles with no geometry in the
-   5x5 fixture (riser/trim) are declared anyway: the recipe is the contract for the whole fixture
+   fixture (riser/trim) are declared anyway: the recipe is the contract for the whole fixture
    family (CL-F01..CL-F06), not for one room. */
 var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
   id: "clay-diagnostic-surface",
@@ -216,7 +226,11 @@ function clayGoblinBodyForm(){
 // field alone already guarantees that, honestly — the geometry underneath truly doesn't vary,
 // which is the whole point of a canonical fixture room).
 function clayRoomRecordFrom(seed){
-  var dims = Object.freeze({ w: 5, d: 5 });
+  // C1B founder ruling (2026-07-24): 5x5 could not prove the standard 30-ft movement highlight
+  // against a distinct Dash extension. The retained deterministic room is now a 15x15 movement
+  // lab: twelve 5-ft steps fit between the staged actor's lawful detour and the north threshold.
+  // That gives the primary six-cell range and the next six-cell Dash band both real territory.
+  var dims = Object.freeze({ w: 15, d: 15 });
 
   var cells = [];
   for(var z = 0; z < dims.d; z++){
@@ -240,26 +254,55 @@ function clayRoomRecordFrom(seed){
   }
   walls = Object.freeze(walls);
 
-  // Portal: north edge, the middle north cell (c-2-0) — that cell is ALSO a north wall cell
-  // (w-n-2, above), so "portal on the north edge at a wall cell" (check 2) holds by construction.
+  // Portal: north edge at c-6-0 — that cell is ALSO a north wall cell, so "portal on the north
+  // edge at a wall cell" holds by construction. The slight off-centre placement is the exact cell
+  // the real pinned SpatialPlan carves for this 15x15 fixture (see CLAY_ROOM_WALK_ATTEMPT).
   // D12b (Adam's founder redline, capture packet #1, 2026-07-23 — "i can't tell if that door is
   // supposed to be open or closed or if it's just janky and completely broken"): the record now
   // carries an explicit `state` fact so the door's rendered pose is a PROJECTION of a canonical
   // fact, never an unstated default a render layer has to invent. C1A only ever authors "closed"
   // (this fixture room has no state-change verb yet — that's C1B+ scope); record stays version 1
   // (an added field, not a shape-breaking migration).
-  var portal = Object.freeze({ id: "portal-c1a", edge: "n", cell: clayCellId(2, 0), state: "closed" });
+  var connection = Object.freeze({
+    id: "connection-clay-north",
+    version: 1,
+    kind: "hinged-door",
+    state: "shut",
+    clearanceSize: "Medium",
+    endpointSceneIds: Object.freeze(["clay-room", "clay-beyond"])
+  });
+  // portal.state is an explicit text/render projection of connection.state. Connection is the
+  // sole mechanical state owner; the portal never rolls or owns an independent half-door.
+  var portal = Object.freeze({
+    id: "portal-c1a",
+    connectionId: connection.id,
+    connectionVersion: connection.version,
+    edge: "n",
+    cell: clayCellId(6, 0),
+    state: connection.state === "shut" ? "closed" : connection.state
+  });
 
-  // Crate: an interior cell, distinct from the portal cell and the citizen cell below.
-  var object = Object.freeze({ id: "obj-crate-c1a", kind: "crate", cell: clayCellId(3, 2) });
+  // The real production crate blocks the center line. East and west detours are both lawful; the
+  // west shoulder is difficult terrain, making the two route receipts materially different.
+  var object = Object.freeze({ id: "obj-crate-c1a", kind: "crate", cell: clayCellId(6, 7) });
 
   // Citizen: another distinct interior cell.
   var bodyForm = clayGoblinBodyForm();
   var citizen = Object.freeze({
     id: "cit-goblin-c1a",
     bestiaryId: CLAY_C1A_CITIZEN_BESTIARY_ID,
-    cell: clayCellId(1, 3),
+    cell: clayCellId(6, 10),
     bodyForm: bodyForm
+  });
+  var movement = Object.freeze({
+    version: 1,
+    pass: "C1B",
+    speedFt: 30,
+    difficultCells: Object.freeze([clayCellId(5, 7)]),
+    routeWaypoints: Object.freeze({
+      east: clayCellId(7, 7),
+      west: clayCellId(5, 7)
+    })
   });
 
   // Provenance — see this file's own header for why derivation is "structure-fact-shape" (D6 path
@@ -270,8 +313,10 @@ function clayRoomRecordFrom(seed){
     Object.freeze({ role: "structure", sourceRef: claySourceRef("dims"), value: dims }),
     Object.freeze({ role: "structure", sourceRef: claySourceRef("walls"), value: walls.length }),
     Object.freeze({ role: "structure", sourceRef: claySourceRef("portal"), value: portal }),
+    Object.freeze({ role: "connection", sourceRef: claySourceRef("connection"), value: connection }),
     Object.freeze({ role: "structure", sourceRef: claySourceRef("object"), value: object }),
-    Object.freeze({ role: "structure", sourceRef: claySourceRef("citizen.bodyForm"), value: bodyForm })
+    Object.freeze({ role: "structure", sourceRef: claySourceRef("citizen.bodyForm"), value: bodyForm }),
+    Object.freeze({ role: "movement", sourceRef: claySourceRef("movement"), value: movement })
   ]);
 
   var record = {
@@ -282,9 +327,11 @@ function clayRoomRecordFrom(seed){
     dims: dims,
     cells: cells,
     walls: walls,
+    connection: connection,
     portal: portal,
     object: object,
     citizen: citizen,
+    movement: movement,
     // D15 (docs/C1A-CLAY-ROOM.md re-wire addendum): "spatialize-plan" — the RENDER geometry a theater
     // mount projects from this record now compiles through the real spatializer (clayRoomBoardFrom/
     // clayRoomWalkFixtureFrom, below), not a hand-assembled board-data shim. This does NOT reverse the
@@ -319,9 +366,13 @@ function clayRoomProse(record){
   (record.walls || []).forEach(function(w){ if(edgeCounts[w.edge] != null) edgeCounts[w.edge]++; });
   lines.push("Walls run the full perimeter: " + edgeCounts.n + " north, " + edgeCounts.s + " south, " + edgeCounts.e + " east, " + edgeCounts.w + " west segments.");
   lines.push("Portal " + record.portal.id + " sits on the " + record.portal.edge + " edge at cell " + record.portal.cell + " — the door is " + record.portal.state + ".");
+  lines.push("Canonical connection " + record.connection.id + " version " + record.connection.version + " owns that door's " + record.connection.state + " state and joins " + record.connection.endpointSceneIds.join(" to ") + ".");
   lines.push("A crate (" + record.object.id + ") sits at cell " + record.object.cell + ".");
   lines.push("A goblin citizen (" + record.citizen.id + ") stands at cell " + record.citizen.cell +
     ", " + record.citizen.bodyForm.worldHeight + " ft tall (height source: " + record.citizen.bodyForm.heightSource + ").");
+  lines.push("Movement proof: " + record.movement.speedFt + " ft speed; east waypoint " +
+    record.movement.routeWaypoints.east + "; west waypoint " + record.movement.routeWaypoints.west +
+    " is difficult terrain; Dash extends the primary range by another " + record.movement.speedFt + " ft.");
   return lines.join("\n");
 }
 
@@ -379,23 +430,19 @@ function clayRoomEditRefusal(field){
    dspHashStr(opts.walkId). Landing the clay room's own exit door on record.portal.edge ("n") is
    therefore a search-and-pin exercise, not a formula — CLAY_ROOM_WALK_TOPOLOGY/CLAY_ROOM_WALK_ATTEMPT
    below are the result of exactly that search (topology "The Hub", walkId
-   "clay-room:clay-c1a:113311726:11" — record.seed 0x6c0ffee === 113311726 decimal — verified against
-   this file's own tip via a throwaway node/vm probe: `spatializePlan` produces a 5x5 room at plan
-   coords (3,13)-(7,17) whose sole exit door lands at (7,13), the room's own north row). PINNED, not
+   "clay-room:clay-c1a:113311726:48" — record.seed 0x6c0ffee === 113311726 decimal — verified against
+   this file's own tip via a node/vm probe: `spatializePlan` produces a 15x15 room at plan
+   coords (4,20)-(18,34) whose sole exit door lands at (10,20), local c-6-0). PINNED, not
    searched at runtime (mirrors D6's own "pinned fixture sourceRefs" precedent) — but never trusted
    blindly either: clayRoomBoardFrom asserts the resolved door edge against record.portal.edge every
    call and throws loudly if place-spatialize.js's own layout math ever drifts this pin off-course
    (CLAUDE.md's "loud failure over silent default" law), rather than silently rendering a door on the
    wrong wall. */
 var CLAY_ROOM_WALK_TOPOLOGY = "The Hub";
-// ATTEMPT 60 (was 11) — THE DOOR TRANCHE (Adam, 2026-07-23: "fix the door once and for all"). The
-// attempt-11 pin satisfied the old EDGE-only assert while carving the door at plan (7,13) = local
-// c-4-0 — but the record (and therefore the prose twin) says the portal is at c-2-0. The fixture
-// spent its whole life rendering the door two cells from where the text said it was, and the
-// edge-only assert let it. Attempt 60 is the first walkId (probe over attempts 1-200, same seed/
-// topology) whose carved door lands at local c-2-0 exactly; the assert below is now EXACT-CELL, so
-// this class of truth drift throws instead of shipping.
-var CLAY_ROOM_WALK_ATTEMPT = 60;
+// ATTEMPT 48 — re-pinned when the founder-expanded C1B fixture moved from 5x5 to 15x15. It puts the
+// real carved north door at local c-6-0 exactly. The exact-cell assert below remains the authority;
+// any later spatializer drift throws instead of letting prose and render disagree.
+var CLAY_ROOM_WALK_ATTEMPT = 48;
 
 // clayRoomWalkFixtureFrom(record) -> {segments, topology, walkId, focusSegNum} — the synthetic walk
 // fixture's OWN fields (dims/exits/areaType) derived from the record's dims + id + seed, per D15
@@ -510,6 +557,40 @@ function clayRoomBoardFrom(record){
     KIT_DOORS_ENABLED = priorKitDoors;
   }
 
+  // CL-R1 — the authored opposing pair travels through the SAME fixture-data -> fixture builder ->
+  // PointLight/emitter path as every production interior practical. The generated board already
+  // carries a deterministic production fixture recipe; clone its physical fixture fields rather
+  // than duplicating ITR_FIXTURE_RECIPES in this engine module. Only placement, colour, authored
+  // renderer intensity, identity, and the explicit per-light state belong to this named test recipe.
+  // `renderIntensity` is consumed by interiorBuildLights as an absolute renderer value; ordinary
+  // production rows keep their relative `intensity` + shared gain contract unchanged.
+  var fixtureTemplate = board.lights && board.lights[0];
+  if(!fixtureTemplate){
+    throw new Error("clayRoomBoardFrom: production interiorBuildBoard produced no fixture template for the CL-R1 opposing pair");
+  }
+  var roomCx = room.x + (room.w - 1) / 2;
+  var roomCz = room.y + (room.d - 1) / 2;
+  var roomHalfX = (room.w - 1) / 2 + 1;
+  var roomHalfZ = (room.d - 1) / 2 + 1;
+  board.lights = CLAY_C1A_LIGHT_PROFILE.points.map(function(p){
+    return Object.assign({}, fixtureTemplate, {
+      id: p.id,
+      sourceRef: p.id,
+      x: roomCx + p.pos.x * roomHalfX,
+      z: roomCz + p.pos.z * roomHalfZ,
+      y: p.pos.y,
+      color: p.color,
+      renderIntensity: p.intensity,
+      state: p.state,
+      flicker: {
+        seed: p.flicker.seed,
+        amplitude: p.flicker.amplitude,
+        cadenceMs: p.flicker.cadenceMs
+      },
+      forceVisiblePractical: true
+    });
+  });
+
   var cellById = {};
   (record.cells || []).forEach(function(c){ cellById[c.id] = c; });
   var objectCell = cellById[record.object.cell];
@@ -521,7 +602,12 @@ function clayRoomBoardFrom(record){
     x: room.x + objectCell.x, y: room.y + objectCell.z, roomSegNum: fixture.focusSegNum
   }] : [];
   board.pieces = citizenCell ? [{
-    slug: record.citizen.bestiaryId, cellX: room.x + citizenCell.x, cellY: room.y + citizenCell.z
+    id: record.citizen.id,
+    sourceRef: record.citizen.id,
+    fid: record.citizen.id,
+    slug: record.citizen.bestiaryId,
+    cellX: room.x + citizenCell.x,
+    cellY: room.y + citizenCell.z
   }] : [];
   // DOOR TRANCHE (2026-07-23, supersedes D15 point 1's "left empty" — RL-1 discharged): the leaf
   // mounts from a data.interactables entry, and this adapter now derives that entry FROM THE RECORD,
@@ -553,9 +639,157 @@ function clayRoomBoardFrom(record){
     name: "door",
     x: roomDoor.x, y: roomDoor.y,
     roomSegNum: fixture.focusSegNum,
-    sourceRef: record.portal.id
+    sourceRef: record.portal.id,
+    connectionId: record.connection.id,
+    connectionVersion: record.connection.version
   }];
   board.dressing = [];
 
   return { board: board, room: room, plan: plan, fixture: fixture };
+}
+
+/* ─── C1B MOVEMENT ADAPTER ───────────────────────────────────────────────────────────────────
+   clayRoomMovementFixtureFrom(record, compiled) projects the REAL SpatialPlan returned above into
+   TacticalQueryKernel input. Geometry still comes only from spatializePlan. The crate contributes
+   one occupied blocker, the record's west shoulder contributes difficult terrain, and both carved
+   door cells become endpoints of ONE canonical Connection. No independently-authored half-door
+   exists: record.connection owns identity/version/state; portal and board.interactables project it.
+*/
+function clayRoomMovementFixtureFrom(record, compiled){
+  if(!record || !record.movement || !record.connection){
+    throw new Error("clayRoomMovementFixtureFrom: C1B record with movement and connection required");
+  }
+  if(!compiled || !compiled.plan || !compiled.room){
+    throw new Error("clayRoomMovementFixtureFrom: clayRoomBoardFrom output required");
+  }
+  if(typeof tqCellId !== "function" || typeof tqSpaceFromSpatialPlan !== "function" || typeof tqStateFrom !== "function"){
+    throw new Error("clayRoomMovementFixtureFrom: src/engine/tactical-query.js must load before this call");
+  }
+  var plan = compiled.plan;
+  var room = compiled.room;
+  var targetRoom = (plan.rooms || []).find(function(candidate){
+    return candidate && candidate.segNum !== compiled.fixture.focusSegNum;
+  });
+  if(!targetRoom) throw new Error("clayRoomMovementFixtureFrom: target room missing");
+
+  var roomDoor = (plan.doors || []).find(function(door){
+    return door
+      && door.betweenSegs.indexOf(compiled.fixture.focusSegNum) >= 0
+      && door.x >= room.x && door.x < room.x + room.w
+      && door.y >= room.y && door.y < room.y + room.d;
+  });
+  var targetDoor = (plan.doors || []).find(function(door){
+    return door
+      && door.betweenSegs.indexOf(compiled.fixture.focusSegNum) >= 0
+      && door.x >= targetRoom.x && door.x < targetRoom.x + targetRoom.w
+      && door.y >= targetRoom.y && door.y < targetRoom.y + targetRoom.d;
+  });
+  if(!roomDoor || !targetDoor) throw new Error("clayRoomMovementFixtureFrom: both canonical connection endpoints required");
+
+  function localPlanId(localId){
+    var match = String(localId || "").match(/^c-(\d+)-(\d+)$/);
+    if(!match) throw new Error("clayRoomMovementFixtureFrom: invalid local cell " + localId);
+    return tqCellId(room.x + Number(match[1]), room.y + Number(match[2]));
+  }
+  function outwardId(door, owner){
+    var edge = clayRoomDoorEdgeFor(door, owner);
+    if(edge === "n") return tqCellId(door.x, door.y - 1);
+    if(edge === "s") return tqCellId(door.x, door.y + 1);
+    if(edge === "w") return tqCellId(door.x - 1, door.y);
+    if(edge === "e") return tqCellId(door.x + 1, door.y);
+    throw new Error("clayRoomMovementFixtureFrom: door endpoint is not on its room boundary");
+  }
+  var passageCellIds = [];
+  (plan.corridors || []).forEach(function(corridor){
+    if(corridor.fromSeg !== compiled.fixture.focusSegNum && corridor.toSeg !== compiled.fixture.focusSegNum) return;
+    (corridor.cells || []).forEach(function(cell){
+      var insideCurrent = cell.x >= room.x && cell.x < room.x + room.w
+        && cell.y >= room.y && cell.y < room.y + room.d;
+      var insideTarget = cell.x >= targetRoom.x && cell.x < targetRoom.x + targetRoom.w
+        && cell.y >= targetRoom.y && cell.y < targetRoom.y + targetRoom.d;
+      var isEndpoint = (cell.x === roomDoor.x && cell.y === roomDoor.y)
+        || (cell.x === targetDoor.x && cell.y === targetDoor.y);
+      if((insideCurrent || insideTarget) && !isEndpoint) return;
+      var id = tqCellId(cell.x, cell.y);
+      if(passageCellIds.indexOf(id) < 0) passageCellIds.push(id);
+    });
+  });
+  var connection = {
+    id: record.connection.id,
+    version: record.connection.version,
+    kind: record.connection.kind,
+    state: record.connection.state,
+    clearanceSize: record.connection.clearanceSize,
+    endpoints: [
+      {
+        sceneId: "clay-room",
+        cellId: tqCellId(roomDoor.x, roomDoor.y),
+        outwardCellId: outwardId(roomDoor, room)
+      },
+      {
+        sceneId: "clay-beyond",
+        cellId: tqCellId(targetDoor.x, targetDoor.y),
+        outwardCellId: outwardId(targetDoor, targetRoom)
+      }
+    ],
+    passageCellIds: passageCellIds,
+    checkContracts: [{
+      id: "check-clay-warped-frame",
+      method: "force-warped-frame",
+      skill: "athletics",
+      ability: "str",
+      dc: 15,
+      difficulty: "ordinary consequential uncertainty",
+      objective: "force the warped door and cross",
+      stakes: "failure leaves the actor at the near threshold and costs time",
+      licenses: ["position-change", "time-cost"]
+    }],
+    alternatives: [
+      "use the ordinary working hinge",
+      "choose a smaller body form",
+      "use another route"
+    ]
+  };
+  var sceneIdBySegNum = {};
+  sceneIdBySegNum[compiled.fixture.focusSegNum] = "clay-room";
+  sceneIdBySegNum[targetRoom.segNum] = "clay-beyond";
+  var space = tqSpaceFromSpatialPlan(plan, {
+    id: "space-clay-c1b",
+    tier: "test",
+    sceneIdBySegNum: sceneIdBySegNum,
+    blockedCells: [localPlanId(record.object.cell)],
+    difficultCells: record.movement.difficultCells.map(localPlanId),
+    connections: [connection]
+  });
+  var state = tqStateFrom(space, {
+    id: "state-clay-c1b",
+    tier: "test",
+    actors: [{
+      id: record.citizen.id,
+      sceneId: "clay-room",
+      cellId: localPlanId(record.citizen.cell),
+      speedFt: record.movement.speedFt,
+      bodyForm: record.citizen.bodyForm,
+      checkModifiers: { athletics: 2 }
+    }],
+    connections: [{ id: record.connection.id, state: record.connection.state }]
+  });
+  return Object.freeze({
+    version: 1,
+    space: space,
+    state: state,
+    actorId: record.citizen.id,
+    connectionId: record.connection.id,
+    localCells: Object.freeze({
+      origin: localPlanId(record.citizen.cell),
+      portal: localPlanId(record.portal.cell),
+      crate: localPlanId(record.object.cell),
+      east: localPlanId(record.movement.routeWaypoints.east),
+      west: localPlanId(record.movement.routeWaypoints.west)
+    }),
+    rooms: Object.freeze({
+      current: Object.freeze({ sceneId: "clay-room", segNum: room.segNum }),
+      beyond: Object.freeze({ sceneId: "clay-beyond", segNum: targetRoom.segNum })
+    })
+  });
 }

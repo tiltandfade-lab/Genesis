@@ -1,6 +1,6 @@
 ---
 type: codex-brief
-status: ACTIVE — Adam handed the door/doorway geometry lane to Codex, 2026-07-23
+status: IMPLEMENTED ON codex/clayroom-door-socket — pending Adam visual acceptance, 2026-07-23
 consumer: Codex (independent visual-acceptance owner, AGENTS.md)
 authority: ART-DIRECTION-CANON.md "THE DOOR / DOOR-FRAME SPLIT" + "THE KINDERGARTEN DOOR" +
   "Camera-side wall omission" (all verbatim, all 2026-07-23) · C1A-CLAY-ROOM.md D12b/D14/D18-D20

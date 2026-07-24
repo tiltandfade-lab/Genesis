@@ -1,6 +1,7 @@
 ---
 type: system-spec
-status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1…CL-R6 specced, unbuilt
+status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 lifecycle/local-state slice BUILT (2026-07-24);
+  remaining CL-R1 Lab 2.0 authoring + CL-R2…CL-R6 specced, unbuilt
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
 authority: subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids) and
@@ -80,7 +81,7 @@ primary question.
 |---|---|---|---|
 | `CL-F00 room-truth` | Does the real production room stay honest after every rebuild? | 5×5 room, door, crate, one citizen, neutral clay, seam grid | **LIVE** (`?clayroom=1`) |
 | `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | unbuilt (CL-R3) |
-| `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | unbuilt (CL-R1) |
+| `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | partial: local-state/lifecycle proof built; full Lab 2.0 bench unbuilt (CL-R1) |
 | `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | unbuilt (CL-R2) |
 | `CL-F04 material-bench` | Do material channels, scale, UVs, roles, and fallbacks work? | floor, wall, riser, trim skeleton, timber, iron, ground | unbuilt (CL-R4) |
 | `CL-F05 trim-bench` | Does the `h6-v1` sheet project without hiding geometry defects? | straight/non-multiple runs, corners, endpoint, opening, stair, curb, T-junction | unbuilt (CL-R5) |
@@ -318,12 +319,23 @@ Required work:
 
 - Route the existing opposing warm/cool two-temperature rig through the generalized Lighting Lab
   recipe system. **Do not leave it as Clayroom-only hardcoded state** — today
-  `clayRoomApplyLightProfile()` constructs its two lights directly and deliberately bypasses
-  `applyLightProfile()`/`LIGHT_TUNABLES` to escape the global ambient clamp (finding CR-2).
+  `clayRoomApplyLightProfile()` no longer constructs the point pair: the 2026-07-24 lifecycle slice
+  compiles two named records into `board.lights` and builds them through `interiorBuildLights()`.
+  Folding those named records into Lab 2.0's persistent structured-lock registry remains open.
 - Generalize the tunable recipe from a single key point to a bounded `lights[]` array, and admit the
   Clayroom diagnostic pair as a **named test recipe**. Do not add more Clayroom-only light objects.
 - Every gameplay light family's default recipe becomes editable through **structured, validated lock
   data**. Temporary UI state must not be the only authority.
+
+**CL-R1 lifecycle/local-state slice — BUILT 2026-07-24.** Every generated production practical now
+declares local state `steady` by default and owns deterministic flicker seed/amplitude data.
+`flickering` is a per-light opt-in. One normalized sample drives the real `PointLight`, emitter
+emissive intensity, and optional cone; steady siblings are untouched, and disabling returns the
+authored baseline exactly. Clayroom preserves the actual ambient/rig/fixture/material identities
+across unchanged-lighting door/camera/fade/board rebuilds and records before/during/after proof.
+The stale scheduler root cause and movable/clamped/resettable diagnostic panel are specified in
+`C1A-CLAY-ROOM.md` D25. This does **not** promote the remaining persistent Lab 2.0 authoring work
+above to built.
 
 Required measurements (see §"Capture and receipt law"):
 
@@ -602,6 +614,28 @@ transforms as the primary save format · per-seed patching · culture or realm p
 table-fact edits · direct generated-artifact edits · unlocked production camera pitch · a saturation
 slider that compensates for incorrect colour management · a "make pretty" control with no
 reproducible recipe.
+
+### Selected shell — Concept 1 / Docked Studio (Adam, 2026-07-24)
+
+The selected workbench shell is a persistent left Catalog/Scene rail, room-dominant center
+production viewport, and dedicated right Inspector rail. The inspector can undock by title drag and
+returns through **dock right**. This is a navigation/edit-scope shell over the existing tools, not a
+new builder.
+
+Selection is by the live Scene list or raycast against the real production object tree. Each
+selection declares one of four scopes:
+
+- `INSTANCE` — default, session-only Clayroom placement/tuning;
+- `STATE` — named state on the selected production object;
+- `SOCKET` — protected construction authority, reached only through the anchor-relative Object
+  Workbench/lock path;
+- `DEFAULT` — protected recipe/catalog authority; promotion applies to future rolls.
+
+Catalog admission is existing approved production content only. All character sprites are approved
+for selection, but their identities/measurements still come from the registry. Materials route to
+the shared Material Editor and admitted MM graphs; Clayroom does not create a parallel material
+editor or fabricate normal maps. The selected concept image is
+`dev/clay-captures/workbench-concepts/concept-1-docked-studio.png`.
 
 ## Guard Post entry gate
 

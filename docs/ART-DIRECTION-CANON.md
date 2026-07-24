@@ -1488,3 +1488,140 @@ The binding definition, stated once and owned here:
 owner per AGENTS.md). Claude's lane retains what already works around it: the mount/tuner slice
 (DEV-PORTAL §6.1), the record/board data derivation, the harnesses, and the capture rig. Codex brief:
 `docs/CODEX-DOOR-BRIEF.md`.
+
+## THE FLUSH-FACE DOOR + CLEAN WALL SOCKET (Adam, 2026-07-23 — additive; verbatim)
+
+> "Seems like the doorframe construction is dirty, there are fragments of geometry shooting out the
+> back, looks like there is bits in the door too, where i put the door is where it should sit, with
+> the front nearly flush with the front face of the wall. still not sure why you and claude both
+> want to just the door out, it makes no sense. are you centering the center of the door to the front
+> face of the wall or something? why would you do that?"
+
+Binding consequences:
+
+- “Flush” governs the door's **front face**, never its centre plane. For the 0.32-deep prototype,
+  the accepted default is 0.14 into the wall from the boundary, leaving the face only 0.02 proud.
+- The doorway remains wall construction, but subdividing it may not duplicate the complete wall
+  assembly per piece. One owner supplies one cap; jambs/lintel expose only the faces that bound the
+  aperture or terminate the wall. No overlapping caps, feet, hidden end plates, trim, or fragments
+  may occupy the hole or project behind it.
+
+## THE SCENE-TRAY WALL CROWN (Adam, 2026-07-24 — additive; verbatim)
+
+> "ok, the easiest solution for the stray geometry is to actually render the top of the walls,
+> you're only rendering the vertical faces but not the top horizontal face that would give it the
+> full \"scene tray\" or tabletop module feel"
+
+Binding consequences:
+
+- Every visible wall volume, doorway wall segment, and retained cutaway stem exposes a closed,
+  horizontal top surface. A vertical shell without its crown is incomplete construction.
+- The crown is part of the wall body, not trim or ornament. It gives the room the solid
+  scene-tray/tabletop-module silhouette and visually resolves the wall's thickness.
+- Its triangles must be front-facing from the governed camera above: geometric winding and the
+  stored +Y normal must agree. A nominal top face that back-face culling erases does not satisfy
+  this rule.
+
+## CLAYROOM LIGHT OWNERSHIP + LOCAL BULB STATE (Adam, 2026-07-24 — additive; verbatim)
+
+> "Fix lighting changing during unrelated animations.
+> - Currently, firing an animation can temporarily change the bulb/light settings and make the room
+> look different.
+> - Instrument the actual light objects and materials before, during, and after door/camera
+> animations to identify the root cause.
+> - Door, camera, fade, and board-rebuild animations must not modify or reinitialize the authored
+> lighting state.
+> - Do not conceal the issue with forced per-frame resets."
+
+> "Give each lightbulb an explicit local state.
+> - Default state: steady.
+> - Optional state: flickering.
+> - Flicker must be per-light, not a global effect applied to every bulb.
+> - A steady bulb must remain visually and photometrically steady.
+> - When a bulb is flickering, its visible brightness/emissive appearance and its actual emitted
+> light intensity must follow the same flicker sample on the same frame.
+> - Prefer a deterministic seeded flicker pattern so captures and tests are reproducible."
+
+Binding consequences:
+
+- Light state belongs to each practical record. Missing/ordinary production state resolves to
+  `steady`; `flickering` is an explicit per-light opt-in with its own seed and amplitude.
+- One normalized deterministic sample multiplies both the real `PointLight.intensity` and the
+  visible emitter material's emissive intensity on that tick. A steady sibling is never touched.
+- Geometry-only board rebuilds and door/camera/fade animations preserve authored ambient, rig,
+  practical objects, emitter materials, scheduler state, and values when the lighting identity is
+  unchanged. Reinitializing them and then forcing values back every frame does not satisfy the law.
+- Diagnostic proof reads the actual production objects/materials before, during, and after the
+  governed animations, including their stable identities and normalized mesh/light parity.
+
+## CLAYROOM HUMAN SCALE, SIMPLE CRATE, AND DOCKED STUDIO (Adam, 2026-07-24 — additive; verbatim)
+
+> "it looks more like a museum artifact display podium for a statue. except it's too tall. also i
+> think in general the vertical sizing of things is off in this room. let's default to 10 ft walls,
+> and have everything sized for humans for now.
+>
+> if it's a crate, a simple 6 sided box will do. crate doesn't need extra geometry, it just needs a
+> good sprite texture mapping with a little bit of nromal mapping
+>
+> also, i notice the trim on the corners is a little crusty, there's some polygon overlapping"
+
+> "for materials we will want to be able to use the same material editor, though we will need to do
+> a material creation pass soon and apply all the MM mappings to them"
+
+> "yes, only existing, approved production stuff. we might need to refine how that is defined. I
+> think the sprites should be good. I set all of the character sprites to be approved but i dont
+> think that decision has been merged with master or made canon yet, even though it is"
+
+> "session only be default for sure"
+
+> "future rolls"
+
+> "we'll go with the safest model"
+
+After reviewing the three deliberately different generated workbench concepts, Adam selected the
+first:
+
+> "i actually prefer 1"
+
+Binding consequences:
+
+- **Human-room default:** ordinary interior walls are 10 feet high = 2 world units under GRID LAW.
+  Door, fixture, furniture, sprite, and camera scale are judged against humans in that room; special
+  scale domains must be explicit rather than leaking into the default.
+- **Crate:** one human-scale six-sided box, not a stacked lid/body assembly or display podium. Its
+  production FACED_BOX maps admitted side and top tiles onto the one box. A normal channel may be
+  attached only through the admitted shared Material Editor / MM mapping pass; inferred or fabricated
+  normal data is not canon.
+- **Clean wall joins:** adjoining wall/trim volumes may not emit overlapping internal end faces.
+  Door/open/riser boundaries retain exposed closures; wall-to-wall miters do not.
+- **Concept 1 / Docked Studio is the Clayroom workbench layout:** persistent approved-production
+  Catalog and live Scene rail on the left, the production room dominant in the center viewport, and
+  a dedicated Inspector rail on the right. The inspector may undock by dragging its title and has an
+  obvious dock/reset action.
+- **Approved production content only.** The Catalog must never use demonstration-only objects to
+  prove an editor feature. All existing character sprites are approved production inputs for this
+  catalog; registry/provenance remains authoritative for their identities and measurements.
+- **Safest edit scope:** object movement/tuning defaults to `INSTANCE · SESSION ONLY`. `STATE` is an
+  explicit named-state path. `SOCKET` and `DEFAULT` are visibly separate and protected; Clayroom
+  movement cannot silently rewrite a production socket. A promoted default overwrite applies to
+  **future rolls**, never retroactively to the current placed instance.
+- Sprite selection links to the existing Sprite Editor with that sprite active. Material selection
+  uses the same shared Material Editor; the forthcoming material-creation pass admits and applies
+  the MM mappings rather than duplicating a Clayroom-only material tool.
+
+Selected concept receipt:
+`dev/clay-captures/workbench-concepts/concept-1-docked-studio.png`.
+
+## CLAYROOM FULL MOVEMENT-LAB SCALE (Adam, 2026-07-24 — binding)
+
+> "we likely need to expand the clayroom to full test movement. 5x5 doesn't really test the full movement grid highlight with the dash secondary highlight"
+
+The retained Clayroom movement fixture must be large enough to display an ordinary 30-foot movement region and a
+materially distinct second 30-foot Dash extension at the same time. The original 5×5 C1A room remains historical
+proof provenance, but it is not an adequate C1B movement fixture. The live retained fixture is therefore 15×15
+cells under the existing 1-cell-equals-5-feet law.
+
+The primary Move region is a filled highlight. The Dash-only extension is a hollow outlined/hatched region whose
+locked-secondary meaning remains legible without color. Both regions, the selected route, movement cost, portal
+state, and final position must project engine query/receipt answers; the Clayroom renderer may not calculate a
+second path or movement rule.

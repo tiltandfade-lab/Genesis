@@ -899,6 +899,10 @@ function itrRoomLights(room, plan, kit, dressingByRoom) {
       kind, roomSegNum: room.segNum,
       fixtureId: fx.fixtureId, mount: fx.mount, ownerSegIndex: null,
       emitterLocal: fx.emitterLocal, sourceRef: fx.sourceRef,
+      // CL-R1: local state belongs to the practical record. Production defaults to steady; a caller
+      // may opt this one light into deterministic flicker without changing any sibling practical.
+      state: "steady",
+      flicker: { seed: fx.sourceRef, amplitude: 0.06, cadenceMs: 480 },
     };
   });
   if (!list.length) return list;
@@ -932,7 +936,7 @@ function itrRoomLights(room, plan, kit, dressingByRoom) {
   return list;
 }
 
-const ITR_WALL_HEIGHT_BASE = 2.4;   // world units — taller than GLB_TARGET_HEIGHT (1.5, a human figure)
+const ITR_WALL_HEIGHT_BASE = 2;     // world units = 10 ft (GRID LAW: 1 u = 5 ft), human-room default
 const ITR_FLOOR_HEIGHT = 0.2;
 const ITR_DOOR_HEIGHT_FRAC = 0.85;  // a normal doorframe reads slightly lower than the full wall
 const ITR_SQUEEZE_HEIGHT_FRAC = 0.5;
@@ -1011,8 +1015,7 @@ const ITR_COLUMN_PROFILES = Object.freeze(["square", "round", "tapered", "broken
 const ITR_FURNITURE_KINDS = Object.freeze(["crate", "cabinet", "barrel-cluster", "table", "bench", "shelf-unit"]);
 const ITR_FURNITURE_RECIPES = Object.freeze({
   crate: Object.freeze([
-    { dx: 0, dz: 0, yBase: 0, sx: 0.7, sy: 0.9, sz: 0.7, face: "crate-body" },
-    { dx: 0, dz: 0, yBase: 0.9, sx: 0.76, sy: 0.08, sz: 0.76, face: "crate-lid" },
+    { dx: 0, dz: 0, yBase: 0, sx: 0.6, sy: 0.6, sz: 0.6, face: "crate-body", topFace: "crate-top" },
   ]),
   cabinet: Object.freeze([
     { dx: 0, dz: 0, yBase: 0, sx: 0.7, sy: 0.05, sz: 0.46, face: "cabinet-plinth" },
@@ -1681,11 +1684,12 @@ function interiorBuildBoard(plan, opts) {
           // AN EXTRUDED RECTANGLE... it's an extruded rectangle that sits in a doorway" · "rectangle
           // hole with rectangle door") ────────────────────────────────────────────────────────────
           // The doorway is a RECTANGLE HOLE cut to the prototype door's own size (0.61 × 1.35 u —
-          // a 36"×80" door plus clearance), shaped by three pieces of PLAIN WALL: two full-height
-          // side pieces and one band above the opening. The door is the hinged extruded rectangle
-          // (theater-boot) filling the hole. Nothing else — jambs/header/arch/reveals are deleted.
-          // All three ride the doorframe kind so the mount-offset patch sockets the whole doorway
-          // at whichever wall plane the active wall system stands.
+          // a 36"×80" door plus clearance). On the production compiled-shell path,
+          // compileRoomShellData cuts that socket into the wall volume itself and theater-boot omits
+          // every row below. These three plain prisms remain DATA only as the honest non-shell/kit
+          // fallback: two full-height side pieces and one band above the opening. The door is always
+          // the separately-hinged extruded rectangle (theater-boot) filling the hole. Nothing else —
+          // ornamental jambs/header/arch/reveal slabs remain deleted.
           const dwSceneDir = sceneDirectionFor(kit.realmId, doorRoom && doorRoom.role);
           const dwColor = itrDarkenHex(kit.wallColor, dwSceneDir.valueScript.wall);
           const openW = ITR_DOORWAY_OPENING_W * (squeeze ? ITR_SQUEEZE_WIDTH_FRAC : 1);

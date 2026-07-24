@@ -1,0 +1,36 @@
+<svg viewBox="0 0 640 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="at ad" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif">
+<title id="at">Guard-post anchor layout — GP-SHAPE-01 shoulder-overlook through-road (locked form)</title>
+<desc id="ad">Plan sketch of the locked golden form: a roadside guard post built into a hill shoulder beside a genuine road narrowing, with a gate barrier controlling the pass-through road, a working terrace, retaining run, and a rock outcrop pinching the far side.</desc>
+<rect x="0" y="0" width="640" height="540" fill="#FFFFFF"/>
+<path d="M0,90 C140,70 300,90 380,150 C430,190 420,260 380,310 C340,355 250,370 150,380 C80,388 20,380 0,370 Z" fill="#EAF3DE" stroke="#639922"/>
+<path d="M0,140 C120,120 240,140 300,190 C340,230 335,280 300,315 C255,350 170,355 90,352 C40,350 0,345 0,340 Z" fill="#C0DD97" stroke="#639922"/>
+<path d="M0,190 C90,175 170,190 205,225 C235,255 230,295 195,318 C150,342 80,340 0,330 Z" fill="#97C459" stroke="#3B6D11"/>
+<path d="M0,440 C160,420 280,398 355,378 C440,355 560,332 640,322 L640,352 C560,362 445,378 368,400 C290,424 165,452 0,474 Z" fill="#D3D1C7" stroke="#888780"/>
+<path d="M0,458 C170,436 300,412 372,390 C450,368 565,345 640,338" fill="none" stroke="#888780" stroke-dasharray="10 8"/>
+<line x1="252" y1="384" x2="360" y2="356" stroke="#5F5E5A" stroke-width="4"/>
+<polygon points="292,352 366,338 380,364 306,380" fill="#F1EFE8" stroke="#B4B2A9"/>
+<rect x="298" y="308" width="54" height="42" fill="#B4B2A9" stroke="#444441" stroke-width="2"/>
+<rect x="318" y="346" width="14" height="6" fill="#0F6E56"/>
+<line x1="366" y1="362" x2="380" y2="392" stroke="#444441" stroke-width="5"/>
+<rect x="362" y="356" width="9" height="9" fill="#444441"/>
+<rect x="376" y="388" width="9" height="9" fill="#444441"/>
+<polygon points="388,404 412,398 424,410 416,426 396,428 386,416" fill="#B4B2A9" stroke="#5F5E5A"/>
+<polygon points="416,384 434,380 440,390 430,398 418,394" fill="#B4B2A9" stroke="#5F5E5A"/>
+<text x="70" y="162" font-size="12" fill="#27500A">hill shoulder</text>
+<text x="272" y="290" font-size="12" fill="#444441" text-anchor="end">guard post — embedded</text>
+<line x1="276" y1="294" x2="300" y2="312" stroke="#B4B2A9"/>
+<text x="368" y="300" font-size="12" fill="#0F6E56">observation face</text>
+<line x1="366" y1="304" x2="330" y2="344" stroke="#B4B2A9"/>
+<text x="466" y="316" font-size="12" fill="#444441">gate / barrier</text>
+<line x1="464" y1="320" x2="374" y2="376" stroke="#B4B2A9"/>
+<text x="470" y="356" font-size="12" fill="#444441">working terrace</text>
+<line x1="468" y1="352" x2="376" y2="356" stroke="#B4B2A9"/>
+<text x="500" y="428" font-size="12" fill="#5F5E5A">narrowing</text>
+<line x1="498" y1="424" x2="386" y2="396" stroke="#B4B2A9"/>
+<text x="452" y="470" font-size="12" fill="#5F5E5A">rock outcrop</text>
+<line x1="450" y1="466" x2="414" y2="422" stroke="#B4B2A9"/>
+<text x="200" y="352" font-size="12" fill="#5F5E5A" text-anchor="end">retaining run</text>
+<line x1="204" y1="356" x2="268" y2="380" stroke="#B4B2A9"/>
+<text x="66" y="502" font-size="12" fill="#444441">road — pass-through</text>
+<text x="320" y="530" font-size="12" fill="#5F5E5A" text-anchor="middle">GP-SHAPE-01 shoulder-overlook through-road — locked golden form (Adam 2026-07-23)</text>
+</svg>

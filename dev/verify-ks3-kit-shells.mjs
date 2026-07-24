@@ -317,29 +317,34 @@ group("C0 — shapes fixture set (octagon/L/tiered): mixed shells render without
   ok(board.kitShellFloors.some((b) => b.x < 6), "tiered fixture: the flat west half still kit-tiles");
 }
 
-group("D0 — FLAG-OFF BYTE-IDENTITY: KIT_SHELL_ENABLED=false reproduces the PRE-KS-3 (1a4bf607) prism-only output exactly, on all 4 fixtures");
+group("D0 — FLAG-OFF INDEPENDENCE: KIT_SHELL_ENABLED=false yields pure prism output, invariant to flag history, on all 4 fixtures");
 {
-  // load a SECOND, independent sandbox off the pre-KS-3 tip's own theater-interior.js — the strongest
-  // form of this check: not just "kitShellWalls/Floors are empty" (which could pass even with a subtly
-  // broken skip-condition) but a real structural diff of instances.wall/instances.floor against the
-  // ACTUAL prior source, on every fixture this file defines.
-  let preKS3Interior;
-  try { preKS3Interior = execFileSync("git", ["show", "1a4bf607:src/ui/theater-interior.js"], { cwd: ROOT, encoding: "utf-8" }); }
-  catch (e) { preKS3Interior = null; }
-  ok(!!preKS3Interior, "pre-KS-3 theater-interior.js source read for the flag-off comparison");
-  if (preKS3Interior) {
-    const PRE = loadModules(Object.assign({}, REAL_SOURCE, { theaterInterior: preKS3Interior }));
-    [["rect", rectFixture()], ["octagon", octagonFixture()], ["L", lFixture()], ["tiered", tieredFixture()]].forEach(([label, fx]) => {
-      M.sandbox.window.KIT_SHELL_ENABLED = false;
-      M.sandbox.window.KIT_DOORS_ENABLED = true;
-      const post = M.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
-      PRE.sandbox.window.KIT_DOORS_ENABLED = true;
-      const pre = PRE.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
-      ok(JSON.stringify(post.instances.wall) === JSON.stringify(pre.instances.wall), `${label}: KIT_SHELL_ENABLED=false -> instances.wall byte-identical to the pre-KS-3 (1a4bf607) output`);
-      ok(JSON.stringify(post.instances.floor) === JSON.stringify(pre.instances.floor), `${label}: KIT_SHELL_ENABLED=false -> instances.floor byte-identical to the pre-KS-3 (1a4bf607) output`);
-      ok((post.kitShellWalls || []).length === 0 && (post.kitShellFloors || []).length === 0, `${label}: KIT_SHELL_ENABLED=false -> zero kitShellWalls/kitShellFloors entries`);
-    });
-  }
+  // Formerly a byte-diff against the frozen 1a4bf607 source. That frozen comparison could not
+  // survive RULED evolution of the prism path itself — D20 "THE KINDERGARTEN DOOR" (2026-07-23,
+  // Adam's ruling in ART-DIRECTION-CANON) deliberately deleted the reveal-slab wall instances the
+  // frozen tip emits, so the diff began failing on a legitimate change, not a leak. The job this
+  // group protects is narrower and permanent: the kit-shell system must be INERT when the flag is
+  // off. Asserted three ways, each of which a subtly broken skip-condition would still fail:
+  //   1. zero kitShellWalls/kitShellFloors entries;
+  //   2. flag-history independence — building with the flag ON first, then OFF, is byte-identical
+  //      to building OFF-only in a fresh sandbox (no state bleeds through the flag);
+  //   3. no wall/floor instance carries kit provenance (pack/slug/module fields).
+  [["rect", rectFixture()], ["octagon", octagonFixture()], ["L", lFixture()], ["tiered", tieredFixture()]].forEach(([label, fx]) => {
+    const FRESH = loadModules(REAL_SOURCE);
+    FRESH.sandbox.window.KIT_SHELL_ENABLED = false;
+    FRESH.sandbox.window.KIT_DOORS_ENABLED = true;
+    const offOnly = FRESH.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
+    M.sandbox.window.KIT_SHELL_ENABLED = true;
+    M.sandbox.window.KIT_DOORS_ENABLED = true;
+    M.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
+    M.sandbox.window.KIT_SHELL_ENABLED = false;
+    const offAfterOn = M.interiorBuildBoard(fx.plan, { realmId: "fantasy", env: "dungeon" });
+    ok((offOnly.kitShellWalls || []).length === 0 && (offOnly.kitShellFloors || []).length === 0, `${label}: KIT_SHELL_ENABLED=false -> zero kitShellWalls/kitShellFloors entries`);
+    ok(JSON.stringify(offAfterOn.instances.wall) === JSON.stringify(offOnly.instances.wall), `${label}: instances.wall is flag-history-independent (off-after-on == off-only)`);
+    ok(JSON.stringify(offAfterOn.instances.floor) === JSON.stringify(offOnly.instances.floor), `${label}: instances.floor is flag-history-independent (off-after-on == off-only)`);
+    const kitTagged = [...offOnly.instances.wall, ...offOnly.instances.floor].filter((i) => i.pack || i.slug || i.module);
+    ok(kitTagged.length === 0, `${label}: no flag-off wall/floor instance carries kit provenance (found ${kitTagged.length})`);
+  });
 }
 
 group("E0 — determinism: interiorBuildBoard(plan, opts) is byte-identical across two runs on the SAME fixture/seed (kit shell included)");

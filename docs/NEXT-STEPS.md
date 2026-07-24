@@ -28,7 +28,10 @@ The Desktop research packet is folded (`CLAYROOM-RESET-LADDER.md`, `GOLDEN-SITES
    hook; 0/0 textured clay surfaces across 3 rebuilds; mutation-proven in harness and live capture.
    Evidence `dev/clay-captures/cl-r0/`. Remaining CL-R0 failures are listed openly in the ladder doc
    (mount-socket warning, the door, the bypassed room-shell path) — they are **not** closed.
-2. ☐ **CL-R3a — camera-side wall omission (Adam's 2026-07-23 wall-grammar ruling, RULED FOR TEST).**
+2. ☑ **CL-R3a — camera-side wall omission — BUILT 2026-07-23.** Compile-time omission live in the
+   clay fixture (shell default ON; `?wallomit=0` / `?clayshell=0` A/Bs banked in
+   `dev/clay-captures/cl-r3a/`); cascade: the mount-socket warning discharged. Awaiting Adam's
+   eyeball on the `omit` capture + the production-promotion call. Original scope line follows:
    Compile-time omission: camera-facing ∧ occludes staged floor → stem only, no upper; staged+latched
    trigger law recorded, its executable test rides C1B's door state machine; carve-outs for
    structural masses / apertures / the strategic view. Test in CL-F00, A/B against `shell-ab-04`.

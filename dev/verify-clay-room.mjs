@@ -788,9 +788,15 @@ const check = (name, cond, detail = "") =>
     check("17b. mountClayRoom() sets ITR_ROOM_SHELL from the flag reader before setInteriorBoard runs",
       /ITR_ROOM_SHELL\s*=\s*clayRoomShellOverrideOn\(\);[\s\S]*setInteriorBoard\s*\(\s*compiled\.board\s*\)/.test(mountBody), mountBody);
     const shellFnBody = (region.match(/function\s+clayRoomShellOverrideOn\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
-    check("17b2. clayRoomShellOverrideOn() defaults OFF (only ?clayshell=1 / GS.clayRoomShell opts in)",
-      /let\s+on\s*=\s*false/.test(shellFnBody) &&
-      /clayshell"\)\s*===\s*"1"/.test(shellFnBody), shellFnBody);
+    // 17b2 REWRITTEN for CL-R3a (red-first: the default flip turned the old assertion red before this
+    // check changed). Under the 2026-07-23 wall-omission ruling the clay fixture adopts the PRODUCTION
+    // room-shell wall construction by default — the original force-off was an accommodation for the
+    // deleted flatten sweep, and its dark-walls symptom was fixed by the fade-aware swap (check 20).
+    // The invariant this protects flips accordingly: default ON, ?clayshell=0 restores the plain
+    // InstancedMesh channel for the A/B.
+    check("17b2. clayRoomShellOverrideOn() defaults ON (production construction; ?clayshell=0 opts out)",
+      /let\s+on\s*=\s*true/.test(shellFnBody) &&
+      /clayshell"\)\s*===\s*"0"/.test(shellFnBody), shellFnBody);
 
     const unmountMatch = region.match(/function\s+clayRoomUnmount\s*\(\)\s*\{([\s\S]*?)\n\}/);
     const unmountBody = unmountMatch ? unmountMatch[1] : "";
@@ -854,6 +860,46 @@ const check = (name, cond, detail = "") =>
     /clayMat\.opacity\s*=\s*\(typeof\s+fadeEntry\.opacity/.test(fn), fn.slice(0,0));
   check("20c. the fade entry's materials array is re-pointed at the clone (the tween drives what the mesh renders)",
     /fadeEntry\.materials\s*=\s*fadeEntry\.materials\.map/.test(fn), fn.slice(0,0));
+}
+
+// ============================================================================
+// 21. CL-R3a (docs/CLAYROOM-RESET-LADDER.md §CL-R3a) — CAMERA-SIDE WALL OMISSION.
+//
+// Adam's 2026-07-23 ruling (ART-DIRECTION-CANON "Camera-side wall omission", RULED FOR TEST): under
+// the fixed camera, a wall segment that is camera-facing AND occludes staged floor builds NO upper
+// volume — compile-time omission with the stem retained — replacing the render-time camera-side
+// fade for the fixed camera. Source-text teeth (THREE/DOM-free harness); the live proof is the
+// capture receipt's own wallOmission block (dev/clay-captures/cl-r3a/).
+// ============================================================================
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+
+  // The decision derives from the SAME static geometry test the fade used (no second authority).
+  check("21a. the omission decision reads wallUpperCameraSideBlockingSet's output (one geometry authority)",
+    /wallOmissionActive\s*&&\s*wallUpperCameraSideBlocking\.has\(entry\.ownerSegIndex\)/.test(bootSrc),
+    "omission must key on the existing camera-side set, never a re-derived geometry test");
+
+  // Omission SKIPS the build (return before any mesh/material work) — not a hidden or faded mesh.
+  // capture through the guard's own `return;` (a `[\s\S]*?}` would stop at the report-row object
+  // literal's closing brace and miss the return)
+  const loopMatch = bootSrc.match(/wallOmissionActive\s*&&\s*wallUpperCameraSideBlocking\.has\(entry\.ownerSegIndex\)\)\{([\s\S]*?return;)/);
+  check("21b. an omitted segment builds nothing (records + returns; no mesh, no material, no fade entry)",
+    !!loopMatch && /omitted\.push/.test(loopMatch[1]) &&
+    !/new\s+THREE\.Mesh/.test(loopMatch[1]), loopMatch ? loopMatch[1] : "guard not found");
+
+  // The decision set is recorded as deterministic, versioned board data.
+  check("21c. S.wallOmissionReport carries ruleId + version + active + omitted + built",
+    /S\.wallOmissionReport\s*=\s*\{\s*\n?\s*ruleId:\s*"camera-side-wall-omission",\s*version:\s*1/.test(bootSrc) &&
+    /omitted:\s*\[\],\s*built:\s*\[\]/.test(bootSrc));
+  check("21d. the report is exposed read-only (window.Theater._wallOmissionForTest)",
+    /window\.Theater\._wallOmissionForTest\s*=\s*function\(\)\{\s*return\s+S\.wallOmissionReport/.test(bootSrc));
+
+  // Gate: ON in the clay fixture (the ruled test bed), OFF in normal play, ?wallomit both ways.
+  const flagFn = (bootSrc.match(/function\s+clayWallOmissionOn\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
+  check("21e. clayWallOmissionOn() defaults to the clay fixture's own enablement (test bed ON, production OFF)",
+    /CLAY_WALL_OMISSION_FLAG\s*=\s*\(on\s*===\s*null\)\s*\?\s*clayRoomShouldEnable\(\)\s*:\s*on/.test(flagFn), flagFn);
+  check("21f. ?wallomit=1 and ?wallomit=0 both override (the A/B stays reproducible)",
+    /raw\s*===\s*"1"/.test(flagFn) && /raw\s*===\s*"0"/.test(flagFn), flagFn);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

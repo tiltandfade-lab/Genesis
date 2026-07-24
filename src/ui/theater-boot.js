@@ -11320,6 +11320,23 @@ function setInteriorBoard(data){
     // wallUpperRawBlocking: the UNION consumed by the assembler block below — a segment fades if either
     // treatment says so (P3-1d Decision item 2: "the two treatments coexist").
     const wallUpperRawBlocking = new Set([...wallUpperRayBlocking, ...wallUpperCameraSideBlocking]);
+    // CL-R3a (Adam's 2026-07-23 camera-side wall-omission ruling, RULED FOR TEST — verbatim authority
+    // ART-DIRECTION-CANON "Camera-side wall omission"; test spec CLAYROOM-RESET-LADDER §CL-R3a).
+    // Under the FIXED production camera, wallUpperCameraSideBlockingSet's output is a STATIC fact of
+    // the layout (focusRect + wallSegments + a fixed yaw — nothing per-frame in it), so the ruling
+    // promotes it from a fade TARGET to a compile-time build decision: an omitted segment builds NO
+    // upper volume at all (the stem below stays — the mechanics truth-marker). The ray-blocking set
+    // keeps driving the fade for segments that DO build (dynamic piece-occlusion — a pillar between
+    // camera and a figure — is still a render-time question). Gated by clayWallOmissionOn(): ON by
+    // default in the clay fixture (the ruled test bed), OFF in normal play until the test passes and
+    // Adam promotes the ruling; ?wallomit=1/0 overrides either way for the A/B. The decision set is
+    // recorded on S.wallOmissionReport (deterministic, exposed via _wallOmissionForTest) so every
+    // capture receipt names exactly which segments were omitted and by which rule/version.
+    const wallOmissionActive = (typeof clayWallOmissionOn === "function") && clayWallOmissionOn();
+    S.wallOmissionReport = {
+      ruleId: "camera-side-wall-omission", version: 1, active: wallOmissionActive,
+      omitted: [], built: []
+    };
     if(shell.floorGeometry){
       const m = new THREE.Mesh(shell.floorGeometry, floorMat);
       m.position.set(-cx, 0, -cz);
@@ -11345,6 +11362,17 @@ function setInteriorBoard(data){
     const wallUpperMeshList = [];
     (shell.wallUpperMeshes || []).forEach((entry) => {
       if(!entry.geometry) return;
+      // CL-R3a omission (see the ruling note above wallOmissionReport): camera-side segments build
+      // no upper AT ALL when the ruling is active — not a mesh faded to 0.08, no mesh. This also
+      // stops the ghost-shadow artefact (THREE's shadow pass ignores opacity, so a faded upper still
+      // cast a full shadow; an omitted one cannot). The stem/trim meshes are untouched.
+      const segMidSeg = shell.wallSegments[entry.ownerSegIndex];
+      const segMid = segMidSeg ? { x: (segMidSeg.a.x + segMidSeg.b.x) / 2, z: (segMidSeg.a.z + segMidSeg.b.z) / 2 } : null;
+      if(wallOmissionActive && wallUpperCameraSideBlocking.has(entry.ownerSegIndex)){
+        S.wallOmissionReport.omitted.push({ segIndex: entry.ownerSegIndex, mid: segMid });
+        return;
+      }
+      S.wallOmissionReport.built.push(entry.ownerSegIndex);
       // C4.1b: each upper mesh gets its OWN cloned material — never the shared `wallMat` the stem/trim
       // meshes use. Independent per-segment opacity is the entire point of C4.1a's own "one mesh per
       // segment" decision (theater-boot.js:8907's own comment); sharing `wallMat` here would make
@@ -12899,6 +12927,9 @@ window.Theater.interiorBoardOrigin = function(){ return S.boardOrigin ? { cx: S.
 window.Theater._claySurfaceCensusForTest = function(){
   return (typeof clayRoomSurfaceCensus === "function" && S.interiorGroup) ? clayRoomSurfaceCensus() : null;
 };
+// CL-R3a — the omission decision set, verbatim off S (deterministic board data, echoed into every
+// capture receipt so a frame names exactly which wall segments were omitted and by which rule).
+window.Theater._wallOmissionForTest = function(){ return S.wallOmissionReport || null; };
 window.Theater._clayProvenanceAuditForTest = function(){
   return (typeof clayRoomProvenanceAudit === "function") ? clayRoomProvenanceAudit() : null;
 };
@@ -14922,20 +14953,48 @@ function mountClayRoom(){
   }
 }
 
+// CL-R3a (Adam's 2026-07-23 wall-omission ruling, RULED FOR TEST) — clayWallOmissionOn(): should
+// camera-side wall segments build NO upper volume (compile-time omission, stem retained)? Default:
+// ON exactly when the clay fixture is enabled (the ruled test bed), OFF in normal play until the
+// test passes and Adam promotes the ruling game-wide. ?wallomit=1 forces on anywhere, ?wallomit=0
+// forces off (the fade-only A/B). Memoized like every other clay flag.
+let CLAY_WALL_OMISSION_FLAG = null;
+function clayWallOmissionOn(){
+  if(CLAY_WALL_OMISSION_FLAG === null){
+    let on = null;
+    try {
+      if(typeof window !== "undefined" && window.location && window.location.search){
+        const raw = new URLSearchParams(window.location.search).get("wallomit");
+        if(raw === "1") on = true;
+        else if(raw === "0") on = false;
+      }
+      if(on === null && typeof window !== "undefined" && window.GS && typeof window.GS.wallOmission === "boolean"){
+        on = window.GS.wallOmission;
+      }
+    } catch(e){}
+    CLAY_WALL_OMISSION_FLAG = (on === null) ? clayRoomShouldEnable() : on;
+  }
+  return CLAY_WALL_OMISSION_FLAG;
+}
+
 // CL-R0 — `?clayshell=1` (or GS.clayRoomShell === true) re-enables setInteriorBoard's own room-shell
 // compiler for the clay fixture. Default OFF, preserving the pre-CL-R0 behaviour exactly; the flag
 // exists so the "does the fixture still read as clay through the PRODUCTION room-shell construction
 // path?" A/B is a reproducible capture rather than a source edit. Memoized like every other clay flag.
+// CL-R3a: default flipped ON (was OFF) — the clay fixture now adopts the PRODUCTION room-shell wall
+// construction (stem + uppers) by default, per the wall-omission ruling's test spec: with omission
+// active, near walls simply build stem-only, so the old "shell walls read dark/opaque" reason for
+// forcing the shell off is gone (and it was already fixed by the fade-aware swap, harness check 20).
+// ?clayshell=0 (or GS.clayRoomShell === false) restores the plain InstancedMesh channel for the A/B.
 let CLAY_ROOM_SHELL_FLAG = null;
 function clayRoomShellOverrideOn(){
   if(CLAY_ROOM_SHELL_FLAG === null){
-    let on = false;
+    let on = true;
     try {
       if(typeof window !== "undefined"){
-        if(window.GS && window.GS.clayRoomShell === true) on = true;
-        else if(window.location && window.location.search){
-          on = new URLSearchParams(window.location.search).get("clayshell") === "1";
-        }
+        if(window.GS && window.GS.clayRoomShell === false) on = false;
+        else if(window.location && window.location.search
+          && new URLSearchParams(window.location.search).get("clayshell") === "0") on = false;
       }
     } catch(e){}
     CLAY_ROOM_SHELL_FLAG = on;

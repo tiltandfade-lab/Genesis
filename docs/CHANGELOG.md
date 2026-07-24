@@ -32,6 +32,16 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
   declared regions). Evidence in `dev/clay-captures/cl-r0/`.
 - **`dev/verify-clay-room.mjs` check 18** — the CL-R0 durability invariant (97 checks total).
 
+### Added (later the same session)
+- **Camera-side wall-omission ruling (RULED FOR TEST) + CL-R3a BUILT** — Adam's FFT wall-grammar
+  ruling captured verbatim in ART-DIRECTION-CANON; compile-time omission (camera-facing ∧ occludes
+  staged floor → stem only) live in the clay fixture through the production shell compiler, decision
+  set as versioned receipt data, harness check 21, A/B captures in `dev/clay-captures/cl-r3a/`.
+  Cascades: clay shell default ON (17b2 rewritten red-first), mount-socket warning discharged,
+  fade-aware material swap (check 20) keeps the remaining cutaway linkage intact.
+- **Sprite sRGB root-cause fix** — `spriteTextureFor` never tagged colour space (three r166 outputs
+  sRGB); proven by A/B (`dev/clay-captures/cl-r1-sprite-ab/`), ON by default, check 19.
+
 ### Changed
 - **Diagnostic clay is now durable.** Deleted `clayRoomFlattenStructure`/`clayRoomFlattenFurniture`
   (a one-shot sweep over a hardcoded four-kind whitelist) and the per-frame light-reassert patch;

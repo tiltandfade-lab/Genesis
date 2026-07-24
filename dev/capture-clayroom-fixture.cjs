@@ -76,6 +76,9 @@ function pageProbe() {
     // map (i.e. did NOT end up on the diagnostic clay route) at this instant.
     texturedSurfaceCount: meshes ? meshes.filter((m) => !!m.mapInfo).length : null,
     surfaceOwners: T._claySurfaceCensusForTest ? T._claySurfaceCensusForTest() : null,
+    // CL-R3a — the compile-time wall-omission decision set (ruleId/version/active/omitted/built), so
+    // the receipt names exactly which wall segments were omitted and by which rule.
+    wallOmission: T._wallOmissionForTest ? T._wallOmissionForTest() : null,
     provenanceAudit: T._clayProvenanceAuditForTest ? T._clayProvenanceAuditForTest() : null,
     stats: T.stats ? { boardBuilds: T.stats.boardBuilds, boardSkips: T.stats.boardSkips } : null,
   };

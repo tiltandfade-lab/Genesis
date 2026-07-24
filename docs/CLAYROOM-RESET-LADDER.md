@@ -167,11 +167,11 @@ fixture is not yet clean.
 
 CL-R0's own required list is not fully discharged. These are the items still red:
 
-1. **Zero mount-socket warnings — STILL FAILING.** Every capture logs
-   `[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor:
-   bracket-generic 1`. This is finding CR-3: a practical light fixture is degrading its mount and
-   the frame carries a physical emitter with no valid socket. Owner: **CL-R1** (the diagnostic-rig
-   vs rolled-practical mode split). CL-R0 exposed it; CL-R0 does not fix it.
+1. **Zero mount-socket warnings — RESOLVED 2026-07-23 by CL-R3a's shell default.** The warning
+   only ever fired on the instanced path, which carries no mount-slot data; with the clay fixture on
+   the production shell compiler the torch wall-mounts correctly and no capture warns (three
+   receipts: omit NONE · fade-only NONE · instanced WARNS). The deeper CR-3 question — labelling
+   the diagnostic rig vs a rolled practical so the two are never conflated — remains **CL-R1**'s.
 2. **The door does not read as a door — and now contradicts the prose twin in plain sight.** The
    record carries `portal.state: "closed"` and `clayRoomProse` says "the door is closed."; the frame
    shows an open black gap between jambs. RL-1 (the leaf renders only when `bindWalkInteractables`
@@ -226,8 +226,8 @@ saturation slider), and the two-temperature rig still does not read as two tempe
    consistent with lazy ghost-mesh creation (ghosts built only when a wall actually blocks) and has
    not been proven to be a defect.
 
-   **RULED 2026-07-23 — superseded by the camera-side wall-omission ruling** (ART-DIRECTION-CANON,
-   "Camera-side wall omission", RULED FOR TEST). The shell-default question is MOOT: under the
+   **RULED 2026-07-23 and DISCHARGED by CL-R3a the same day** (ART-DIRECTION-CANON,
+   "Camera-side wall omission", RULED FOR TEST; build evidence in §CL-R3a above). The shell-default question is MOOT: under the
    ruling, a wall segment that is camera-facing and occludes staged floor is not built as an upper
    at all — compile-time omission with the stem retained, replacing the render-time camera-side
    fade for the fixed camera. The clay fixture adopts the shell path WITH omission in the CL-R3a
@@ -368,11 +368,29 @@ staged+latched trigger; structural-mass/aperture/strategic-view carve-outs — A
 the verbatim authority) · deterministic cutaway/ghosting for what remains (dynamic piece-occlusion
 only) · mount/join sockets and provenance.
 
-**CL-R3a (pulled forward, next tranche):** test the wall-omission ruling in `CL-F00` — near walls
-build stems only, far walls full, the door wall (north = far) untouched; omission set is
-deterministic board data in the capture receipt; A/B at gameplay scale against `shell-ab-04`.
-Pulled ahead of CL-R1's remainder because wall composition contaminates every lighting judgement
-made through the fixture.
+**CL-R3a — BUILT 2026-07-23.** The wall-omission ruling tested in `CL-F00`, all through the
+production shell compiler (now the clay default; `?clayshell=0` restores the instanced A/B):
+
+- `wallUpperCameraSideBlockingSet`'s static output is promoted from fade TARGET to compile-time
+  build decision: an omitted segment builds **no upper at all** (stem retained). One geometry
+  authority — the omission keys on the exact set the fade used.
+- Decision recorded as deterministic versioned board data (`S.wallOmissionReport`, ruleId
+  `camera-side-wall-omission` v1) and echoed into every capture receipt. The banked `omit` receipt:
+  `omitted: [seg 1 (east, mid 7.5/15.5), seg 2 (south, mid 5/17.5)] · built: [0 (north/door),
+  3 (west/torch)]` — exactly the two camera-side walls, nothing else.
+- Gate: ON by default in the clay fixture only (`clayWallOmissionOn()`); `?wallomit=1/0` overrides
+  both ways; production keeps the render-time fade until Adam promotes the ruling game-wide.
+- Evidence at gameplay scale: `dev/clay-captures/cl-r3a/` — `omit` (stems only, clean), `fade-only`
+  (?wallomit=0 — uppers built + faded to 0.08; visually near-identical in the bright clay room, but
+  the invisible walls still cast full shadows and cost mesh+tween), `instanced` (?clayshell=0 — the
+  old full-height wall frame). Teeth: harness check 21 (109/109).
+- **Cascade finding:** adopting the shell default also discharged the `bracket-generic`
+  mount-socket warning — it only ever fired on the instanced path, which has no mount-slot data.
+  Confirmed across the three receipts: omit NONE · fade-only NONE · instanced WARNS.
+
+Still open in CL-R3a's scope: the staged+latched trigger's executable test (rides C1B's door state
+machine) · aperture carve-out (CL-F01 bench) · strategic-view all-walls (the toggle does not exist
+yet) · promotion of the omission to production (Adam's call, after he eyeballs the capture).
 
 Crenellations, arrow slits, roof silhouette, signalling devices, and guard-specific defences stay
 **out** of this gate unless a generic construction need independently licenses them.

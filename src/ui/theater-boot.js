@@ -2936,7 +2936,11 @@ const SPRITE_JOIN_NAME_FALLBACK_WARNED = new Set();
    collide too (e.g. an overlay relabel divorces a slug's display name from its own bestiary id while
    another creature's real name matches the ORIGINAL name) — the id map sidesteps the whole class:
    one id, one slug, no ambiguity. A slug the map points at that isn't (yet) `status:"cut"` or is
-   `verdict:"fail"` falls through to TIER 2 exactly like a plain miss, never a broken lookup.
+   `verdict:"fail"` falls through to TIER 2 exactly like a plain miss, never a broken lookup —
+   EXCEPT a fail entry carrying prototypeAdmitted:true (the 2026-07-22 prototype admission,
+   dev/model-qa/prototype-admissions.json folded by build/gen-sprite-registry.py): Adam's fail
+   ruling stands in the overlay/review queue, but the art renders until the focused full sprite
+   review re-rules it (delete that file + regen to restore strict gating).
 
    TIER 2 — the pre-S4 normalized-name linear scan (unchanged): join recipeSlug against
    SPRITE_REGISTRY's `name` field per the spec's shared-data-shapes section ("cell name <->
@@ -2960,7 +2964,8 @@ function spriteEntryFor(recipeSlug){
     const idSlug = SPRITE_BY_BESTIARY_ID[recipeSlug];
     if(idSlug){
       const idEntry = SPRITE_REGISTRY[idSlug];
-      if(idEntry && idEntry.status === "cut" && idEntry.verdict !== "fail"){
+      if(idEntry && idEntry.status === "cut"
+         && (idEntry.verdict !== "fail" || idEntry.prototypeAdmitted === true)){
         return Object.assign({ slug: idSlug }, idEntry);
       }
       // id-mapped slug isn't (yet) render-eligible — falls through to TIER 2 as a real miss,
@@ -2974,7 +2979,7 @@ function spriteEntryFor(recipeSlug){
   for(const regKey in SPRITE_REGISTRY){
     const e = SPRITE_REGISTRY[regKey];
     if(!e || !e.name || e.status !== "cut") continue;
-    if(e.verdict === "fail") continue; // review-failed art never renders — falls through to the 3D chain
+    if(e.verdict === "fail" && e.prototypeAdmitted !== true) continue; // review-failed art never renders (unless prototype-admitted) — falls through to the 3D chain
     if(normalizeSpriteKey(e.name) === wantKey){
       SPRITE_JOIN_NAME_FALLBACK_COUNT++;
       // CR-1 item 4 — warn once per distinct recipeSlug per session; the counter above still

@@ -91,6 +91,13 @@ INVENTORY_REPORT = os.path.join(ROOT, "dev", "model-qa", "faceted-inventory-repo
 # CR-1 item 2 — the SPRITE_BY_BESTIARY_ID collision persistence report (see
 # write_collisions_report / build_bestiary_id_map below).
 COLLISIONS_REPORT = os.path.join(ROOT, "dev", "model-qa", "sprite-join-collisions.json")
+# 2026-07-22 prototype admission (Adam's ruling: "re-map those for now until I have focused
+# time to do a full sprite review"): the slugs FROZEN in this file render despite their
+# verdict:"fail" ruling. The overlay ruling itself is untouched (the review queue stays true);
+# entries get prototypeAdmitted:true and become id-map-eligible at the LOWEST tie-break tier.
+# Delete the file (or remove a slug) + regen to restore strict gating; a slug whose overlay
+# verdict is no longer "fail" is skipped (a real re-rule always supersedes the admission).
+PROTO_ADMISSIONS = os.path.join(ROOT, "dev", "model-qa", "prototype-admissions.json")
 # SRD size-band midpoint ladder (draft values, Adam re-tunes) — worldHeight's fallback when no
 # measured `feet` exists for a slug. heightSource records which branch fired; a slug with
 # neither feet nor a resolvable size NEVER gets a guessed number (worldHeight:null, loud).
@@ -391,7 +398,9 @@ def build_bestiary_id_map(entries):
 
     Only `status:"cut"` entries are eligible (spriteEntryFor never resolves a pending entry) and
     a `verdict:"fail"` entry is excluded (review-failed art must still fall through to the 3D
-    chain). On a genuine collision — two different cut entries joined to the SAME bestiary id, a
+    chain) — UNLESS it carries prototypeAdmitted:true (the 2026-07-22 prototype admission,
+    fold_prototype_admissions below), in which case it is eligible at a 4th, lowest tie-break
+    tier: any non-fail sprite for the same id still beats it. On a genuine collision — two different cut entries joined to the SAME bestiary id, a
     real duplicate-art situation, not a normalization artifact — CR-1 item 2 (2026-07-15
     adversarial review) replaces the old "first in slug-sorted order wins" tie-break (arbitrary
     once the faceted-migration wave ships fresher art alongside legacy-reviewed pieces — the
@@ -410,12 +419,16 @@ def build_bestiary_id_map(entries):
     for slug in sorted(entries.keys()):
         e = entries[slug]
         frame = e.get("frame")
-        if not frame or e.get("status") != "cut" or e.get("verdict") == "fail":
+        if not frame or e.get("status") != "cut":
+            continue
+        if e.get("verdict") == "fail" and not e.get("prototypeAdmitted"):
             continue
         by_frame.setdefault(frame, []).append(slug)
 
     def tier(slug):
         e = entries[slug]
+        if e.get("verdict") == "fail":
+            return 3  # prototype-admitted fail (only fails admitted above reach here) — always last resort
         if e.get("qaStatus") == QA_STATUS_CANDIDATE:
             return 0
         if e.get("verdict") == "pass":
@@ -437,6 +450,26 @@ def build_bestiary_id_map(entries):
             if s != winner:
                 collisions.append((frame, winner, s))
     return by_id, collisions
+
+
+def fold_prototype_admissions(entries, copy_on_write=False):
+    """dev/model-qa/prototype-admissions.json (Adam's 2026-07-22 prototype ruling) — set
+    prototypeAdmitted:true on each FROZEN-listed slug whose overlay verdict is still "fail".
+    A slug that has since been re-ruled (verdict no longer "fail") is skipped: a real review
+    ruling always supersedes the admission. Returns the admitted slugs. copy_on_write=True is
+    for --check's dry pass (its shallow-copied dict shares entry objects with the real one, so
+    mutating in place would leak the fold into check-mode's untouched return value)."""
+    admissions = load_json(PROTO_ADMISSIONS, default=None) or {}
+    admitted = []
+    for slug in admissions.get("slugs") or []:
+        e = entries.get(slug)
+        if not e or e.get("verdict") != "fail":
+            continue
+        if copy_on_write:
+            e = entries[slug] = dict(e)
+        e["prototypeAdmitted"] = True
+        admitted.append(slug)
+    return admitted
 
 
 def write_collisions_report(collisions):
@@ -502,6 +535,8 @@ def emit_entry(slug, e):
         fields.append(f'floor:{json.dumps(e["floor"])}')
     if e.get("verdict") is not None:
         fields.append(f'verdict:{js_str(e["verdict"])}')
+    if e.get("prototypeAdmitted"):
+        fields.append("prototypeAdmitted:true")
     if e.get("note") is not None:
         fields.append(f'note:{js_str(e["note"])}')
     # S3 / B1 — standee contract (always present).
@@ -550,7 +585,11 @@ HEADER = (
     "top-level global, SPRITE_BY_BESTIARY_ID = {bestiaryId: slug} — a deterministic index built "
     "from every cut entry's own bestiary-joined `frame` field, consulted FIRST (exact match) by "
     "src/ui/theater-boot.js's spriteEntryFor, before its normalized-display-name fallback scan "
-    "(the miscast-join fix, ledger P0 #1). Regenerate; never hand-edit. */\n"
+    "(the miscast-join fix, ledger P0 #1). 2026-07-22 prototype admission (Adam): entries listed "
+    "in dev/model-qa/prototype-admissions.json keep their verdict:\"fail\" ruling but carry "
+    "prototypeAdmitted:true — spriteEntryFor renders them and the id map admits them at the "
+    "lowest tie-break tier, until the focused full sprite review (delete that file + regen to "
+    "restore strict gating). Regenerate; never hand-edit. */\n"
 )
 
 
@@ -727,8 +766,10 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
         dry_orphans_added = fold_in_orphans(dry_entries, faceted_cut_slugs, bestiary_by_realm,
                                             corpus_sizing, v3_by_sheet_cell, overlay,
                                             admit_faceted=admit_faceted)
+        dry_admitted = fold_prototype_admissions(dry_entries, copy_on_write=True)
         dry_bestiary_id_map, dry_id_collisions = build_bestiary_id_map(dry_entries)
         print(f"CHECK: S4 orphan fold-in (dry) would add {len(dry_orphans_added)} slug(s)")
+        print(f"CHECK: prototype admissions (dry) would admit {len(dry_admitted)} fail-ruled slug(s)")
         print(f"CHECK: S4 bestiary-id map (dry) would resolve {len(dry_bestiary_id_map)} id(s), "
               f"{len(dry_id_collisions)} collision(s)")
         return entries, coverage, warn_unjoined
@@ -743,6 +784,14 @@ def build_registry(manifest_path, check_only=False, overlay_path=OVERLAY, out_pa
     print(f"S4 orphan fold-in: {len(orphans_added)} slug(s) added directly from the faceted cut report (no v2-manifest cell)")
     runtime_candidate_count = sum(1 for e in entries.values() if e.get("runtimeAdmitted") == "candidate")
     print(f"S5 flip: {runtime_candidate_count} entries runtimeAdmitted=\"candidate\" (admit_faceted={admit_faceted})")
+
+    # 2026-07-22 prototype admission — AFTER the orphan fold-in (so faceted-direct slugs are
+    # admissible too), BEFORE the id map (so admitted slugs become id-map-eligible).
+    admitted = fold_prototype_admissions(entries)
+    if admitted:
+        print(f"PROTOTYPE ADMISSIONS: {len(admitted)} verdict:\"fail\" slug(s) render for the "
+              f"prototype (dev/model-qa/prototype-admissions.json — delete + regen at the full "
+              f"sprite review to restore strict gating)")
 
     # S4 Part A — the deterministic bestiary-id -> slug index (theater-boot.js's spriteEntryFor
     # consults this FIRST, before its normalized-name fallback scan).
@@ -798,7 +847,8 @@ def write_rejects(entries, sheet_meta, cell_cue):
         for slug, e in sorted(items, key=lambda kv: kv[1]["cell"]):
             note = f" — **note:** {e['note']}" if e.get("note") else ""
             cue = f"\n  - cue: {cell_cue[slug]}" if cell_cue.get(slug) else ""
-            out.append(f"- cell {e['cell']} — **{e['name']}** (`{slug}`){note}{cue}\n")
+            proto = " — *prototype-admitted, renders until re-ruled*" if e.get("prototypeAdmitted") else ""
+            out.append(f"- cell {e['cell']} — **{e['name']}** (`{slug}`){proto}{note}{cue}\n")
         out.append("\n")
     if not fails:
         out.append("_No rejects — nothing awaiting regen._\n")

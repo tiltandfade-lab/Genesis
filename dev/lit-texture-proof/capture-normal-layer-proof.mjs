@@ -87,7 +87,7 @@ page.on("pageerror", (error) => pageErrors.push(`pageerror: ${error.message}`));
 
 async function capture(name, azimuth) {
   await page.setViewport({ width: 1600, height: 1500, deviceScaleFactor: 1 });
-  const url = `${origin}${proofPath}?azimuth=${azimuth}&elevation=34&normal=1.4`;
+  const url = `${origin}${proofPath}?azimuth=${azimuth}&elevation=34&normal=1.2`;
   await page.goto(url, { waitUntil: "networkidle0", timeout: 45000 });
   await page.waitForFunction(() => window.__ready === true, { timeout: 45000 });
   const report = await page.evaluate(() => window.__proofReport);
@@ -129,6 +129,17 @@ try {
   console.log("Captured normal-layer A/B proof under opposed tangent-light directions.");
   for (const capturePath of receipt.captures) console.log(capturePath);
 } finally {
-  await browser.close();
-  server.close();
+  let closeTimeout;
+  await Promise.race([
+    browser.close(),
+    new Promise((resolve) => {
+      closeTimeout = setTimeout(resolve, 5000);
+      closeTimeout.unref?.();
+    })
+  ]);
+  clearTimeout(closeTimeout);
+  const browserProcess = browser.process();
+  if (browserProcess && browserProcess.exitCode === null) browserProcess.kill("SIGTERM");
+  server.closeAllConnections?.();
+  await new Promise((resolve) => server.close(resolve));
 }

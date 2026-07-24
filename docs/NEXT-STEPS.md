@@ -31,11 +31,14 @@ authority = `GOLDEN-SITES-CATALOG.md`; verbatim Desktop record archived in
 
 1. ☐ **Delegate the next dev wave** (Adam + Fable, from this canonical state). The two
    immediately-runnable parallel lanes:
-   a. **Codex material brief #2** — the STRUCTURE-KIT-CATALOG §8 possibility roster +
-      Institutional/Upland culture-pair cards (incl. deck-edge pattern candidates) +
-      overgrowth/condition responses per the MM 1.3 seed-graph spec. No dependency.
-   b. **Clay bench → component proof** — resume the CLAYROOM-RESET-LADDER (CL-R1+) toward
-      the open-top interior guard room (confirmed component proof; shuttered window locked).
+   a. **Codex material brief #2 — WRITTEN: `docs/CODEX-MATERIAL-BRIEF-2.md`** (the
+      STRUCTURE-KIT-CATALOG §8 possibility roster + culture-pair/deck-edge candidates +
+      condition masks; six stop-and-report batches). No dependency; hand to Codex.
+   b. **Clay ladder brief — WRITTEN: `docs/CODEX-CLAY-LADDER-BRIEF.md`** (CL-R1 colour/light
+      causality → CL-R2 sprite citizenship → CL-R3 construction bench consuming the catalog's
+      grid/socket/piece contracts). Guard Post rung A opens after the ladder. Hand to Codex.
+   Fable + Adam meanwhile: thin briefs for the remaining eleven sites in vernacular-coverage
+   order (camp → lair → monastery → urban unlock all six vernaculars; the rest recombine).
 2. ☐ **Owed enforcing checks (teeth):** the arrival-hook validator (no site roll without an
    active hook) · cover-class equality across cultural variants · merged socket registry
    (CL-S08 base + catalog extensions) · all-standable-surfaces-reachable — land with the

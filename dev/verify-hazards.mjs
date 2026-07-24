@@ -129,10 +129,22 @@ check("integration: condition_add{exhaustion} increments sh.exhaustion (0→1)",
 win.applyEvent(world, { type: "condition_add", payload: { target: "pc", condition: "exhaustion", n: 2 }, source: "declared" });
 check("integration: condition_add{exhaustion, n:2} adds 2 more (1→3)", sheet.exhaustion === 3);
 
-// a long rest decrements exhaustion by 1
-win.applyEvent(world, { type: "rest", payload: { kind: "long" }, source: "declared" });
-check("integration: a long rest decrements exhaustion by 1 (3→2)", sheet.exhaustion === 2);
-// a SHORT rest does NOT touch exhaustion
+// a COMPLETED long rest decrements exhaustion by 1. restRisk can legitimately interrupt a rest
+// (restRiders skips recovery when it does), and the interruption roll's stream position shifts
+// whenever upstream code changes — asserting on one fixed attempt is the seeded-stream flake class
+// the 2026-07-19 CI lesson bans (loop-until-crossed, never fixed-position). Retry until a rest
+// completes; an interrupted attempt grants no recovery and sets no once-per-24h stamp, so retries
+// stay valid. 12 straight interruptions would itself be a real bug worth failing on.
+let longRestRes = null;
+for (let attempt = 0; attempt < 12; attempt++) {
+  longRestRes = win.applyEvent(world, { type: "rest", payload: { kind: "long" }, source: "declared" });
+  if (!(longRestRes && longRestRes.interrupted)) break;
+}
+check("integration: a COMPLETED long rest decrements exhaustion by 1 (3→2)",
+  !(longRestRes && longRestRes.interrupted) && sheet.exhaustion === 2,
+  JSON.stringify({ interrupted: longRestRes && longRestRes.interrupted, exhaustion: sheet.exhaustion }));
+// a SHORT rest does NOT touch exhaustion (true whether or not the short rest is interrupted —
+// completed short rests grant no exhaustion recovery, interrupted ones grant no recovery at all)
 win.applyEvent(world, { type: "rest", payload: { kind: "short" }, source: "declared" });
 check("integration: a short rest does NOT decrement exhaustion (stays 2)", sheet.exhaustion === 2);
 

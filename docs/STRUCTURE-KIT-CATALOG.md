@@ -71,9 +71,13 @@ parameter ranges.
 
 Every piece declares, per face (±X, ±Y, ±Z):
 
-- **socket id** — from a small enumerated set (v1 proposal): `open` (exterior air),
-  `wall-join`, `floor-join`, `roof-pitch-join`, `terrain-join`, `walk-surface`,
-  `none` (sealed).
+- **socket id** — from a small enumerated set. RECONCILE (2026-07-24): the imported
+  Clayroom bench already carries a socket schema (CL-S08: `floor-mount`, `wall-mount`,
+  `top-surface`, `hinge`, `butt-join-n/e/s/w`, scale in 5-ft grid units — proven through
+  the Kenney-socket pilots). That schema is the base; this catalog's additions extend it
+  rather than compete: `terrain-join`, `roof-pitch-join`, `walk-surface` (the standable
+  contract), `catch` (grapple targets, §6a), `open`/`none`. One merged registry, one
+  authority, owed at C1H validator time.
 - **access class** — §6.
 - **skin band** — which material/trim band paints this face (§8).
 
@@ -134,7 +138,7 @@ natural lens outputs there. MVP ships classes `walk` + `climb-cost` only —
 deterministic, FFT-legible — but every piece face carries its access class from day one
 so the gamble bolts on without retrofit (Adam confirmed 2026-07-24).
 
-### 6a. Gear edits the access graph (Adam 2026-07-24: "I want those items to actually be useful")
+### 6a. Gear edits the access graph — status: PLANNED BUILD (Adam 2026-07-24: "let's plan on those mechanics being built into the game")
 
 The reason climbing gear is useless in most video games is that those games have no
 access graph to edit. Genesis has one (§4), so SRD gear becomes a set of access-graph
@@ -207,27 +211,54 @@ pillar/post · crate stack (access prop, shared with prop lane).
 **Assembly tier:** watchtower storey · tower parapet cap · post-house bay · lean-to bay ·
 yard wall run · yard gate · wall-walk stair · terraced yard.
 
-**Growth ladder = degeneration chain (Adam + Fable, 2026-07-24):** rung A watchtower alone
-→ rung B tower + post house → rung C walled yard. Built upward, each rung is a reviewed,
-legal configuration; when the roller degenerates a small-budget site, it lands on a proven
-rung. Rung A's rolled variety axes: footprint, storeys, cap (parapet/shed), materials,
-condition.
+**Growth ladder = degeneration chain (principle: Adam + Fable 2026-07-24; rungs CORRECTED
+against the imported lock audit).** My earlier watchtower-first rung A was WRONG: the
+imported study proves a solitary watchtower is not a valid Guard Post 1 topology (the
+atalaya finding — it watches but cannot satisfy the LOCKED pass-through-road control).
+The corrected ladder is the Desktop catalog's GP-D02 exploration order:
+
+1. **Rung A — attached/interior open-top guard room** (one rectangular room, controlled
+   door, observation opening, workstation/storage zone) — the smallest step from retained
+   C1A and the first C1J assembly; no roof, no shell, no vertical circulation.
+2. **Rung B — wall/gate checkpoint** with an exterior threshold (the gate/barrier
+   controlling the road).
+3. **Rung C — freestanding roadside post** with full weather shell and roof.
+4. **Rung D — small tower stage** (stairs, vertical sightlines, roof, cutaway logic).
+
+The degeneration-chain property survives the correction: built upward, every rung remains
+a reviewed legal configuration the roller can degenerate onto. Roof build order (§7)
+composes cleanly: rung A is open-top (no roof), rung B brings the parapet/defensive edge,
+rung C brings the shed/weather roof, rung D the tower cap.
 
 ## 10. Anchor layout (Codex recommendation — prose pending, redline R6)
 
-First layout to build: **hillside guard facility with a road passing by it, and the guard
-house's supporting rooms** (Codex, via Adam 2026-07-24 — exact wording not yet in-repo;
-paste to supersede this reconstruction). The repo already carries its terrain halves:
-`upland-ruin` (raised knoll · eroded gully · approach route · level pad) and `meadow-road`
-(preserved travel lane) in `dev/uneven-ground-proof/`. Composition: knoll-top tower,
-terraced approach, road skirting the base, shed-roofed supporting rooms in the yard.
-Plan sketch: `diagrams/guard-post-anchor-layout.svg`.
+**RESOLVED 2026-07-24 — the Desktop study is imported and its rulings are LOCKED
+(2026-07-23, Adam):**
 
-**Codex-side documents to import + reconcile (seen by title 2026-07-24, contents not yet
-in-repo):** "Guard Post Cultural Mutation — MVP and Ideal" · "Updated catalog" ·
-"Updated lock audit." The second title implies Codex maintains its own catalog document —
-reconcile with THIS file before either calcifies (one catalog, one authority; this file
-is the declared source of truth unless Adam rules otherwise at import).
+- Golden form: **roadside post built into a hill shoulder** (my earlier knoll-top
+  reconstruction is superseded; the plan sketch is redrawn to the locked form).
+- Primary spatial sentence: **the guardroom occupies the hill shoulder beside a genuine
+  road narrowing; a gate/barrier controls the pass-through threshold.**
+- First material/history expression: **maintained overgrown stone** — an operating post,
+  never a ruin; overgrowth is condition/history, not culture or realm.
+- First cultural pair on the same canonical layout: **Institutional Frontier Works vs
+  Upland Vernacular Station** (construction mutates, functional topology invariant —
+  MVP; spatial mutation is Ideal). Codex's GP-MM-STONE-V001 batch is this pair's wall
+  fields: M01 coursed = Institutional, M02 fitted rubble = Upland.
+- First composition archetype (confirmation queued): `GP-SHAPE-01 — shoulder-overlook
+  through-road`; sibling table archetypes: switchback-watch, road-cut-checkpoint,
+  terrace-gate.
+
+Authorities now in-repo: the working catalog at `GOLDEN-SITES-WORKING-CATALOG.md`
+(verbatim import of the Desktop record) and the study at
+`Reference/FFT-Guard-Post-Study/` (analysis specs + lock audit; heavy binaries stayed
+Desktop-local — see its IMPORT-NOTE.md). The lock audit's LOCKED/WORKING/OPEN grid is
+the authority snapshot; THIS file consumes it and must not contradict it. Also imported
+with it: the C1A finding that the clay room's **visual acceptance is withdrawn**
+(clay-override regression, Lighting Lab bypass, washed goblin) with the reset ladder in
+`analysis/CLAYROOM-RESET-PROOF-LADDER-AND-DEV-WORKBENCH.md` — the `Genesis-clayroom`
+worktree (`feat/cl-r0-clayroom-reset`) is that lane.
+Plan sketch: `diagrams/guard-post-anchor-layout.svg` (locked form).
 
 ## 11. The procedural hook + the twelve-site expansion
 
@@ -285,8 +316,18 @@ ALL-ART-IS-PLACEHOLDER seam when beauty passes earn it. Every catalog entry carr
 - **R4** guard-post piece list — ✅ stands as proposed ("can't identify anything missing yet").
 - **R5** vernaculars — ✅ grouping confirmed + vernacular 6 makeshift/tribal ADDED (§11);
   hip-roof-first site still open (monastery proposed).
-- **R6** anchor layout — ◐ OPEN: Codex doc titles seen, contents pending import (§10).
-- **R7** climb gamble post-MVP — ✅ confirmed ("make sure bolt-on is ready to fire";
-  may be worked out in the clay room); gear verbs added (§6a).
+- **R6** anchor layout — ✅ CLOSED by import: LOCKED golden form = roadside post built
+  into a hill shoulder; primary spatial sentence locked (§10); sketch redrawn.
+- **R7** climb gamble post-MVP — ✅ confirmed; gear access-verbs promoted to PLANNED
+  BUILD mechanics (Adam 2026-07-24) riding the access-graph work (§6a).
 - **R8** material picks — ✅ superseded: full possibility roster authored instead (§8);
   all four stone candidates stay live for the review-tool taste pass.
+
+**The live founder queue now comes from the imported lock audit** (its "minimum choices"
+list, abridged): confirm GP-SHAPE-01 as first archetype · promote the FFT relational
+rules as the first taste constitution · confirm the open-top interior room as component
+proof · confirm Genesis-procedural-first/Kenney-fallback · run the cultural A/B before
+spatial mutation · choose the observation opening · choose the recent-repair story ·
+choose the roof/weather posture · defer realm A/B behind the culture proof · let the
+RoomProgram, not a furnishing catalog, gate furnishing work. Numbers stay deferred to
+clay evidence.

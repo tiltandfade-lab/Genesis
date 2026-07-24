@@ -333,14 +333,20 @@ ALL-ART-IS-PLACEHOLDER seam when beauty passes earn it. Every catalog entry carr
   the slit arrives free with the parapet family later).
 - Recent-repair story — ⏳ CARD-TIME: deferred to the material cards (now
   occupancy-flavored per §15).
-- Roof/weather posture — ◐ OPEN pending Adam (see `diagrams/guard-post-roof-postures.svg`).
-  Constraint discovered while explaining it: the locked mutation capsule requires
-  IDENTICAL TACTICAL PROMISES across the cultural pair, so a walkable roof deck on one
-  culture but not the other is illegal at MVP — the raised-observation function must
-  exist in both; only its construction may differ. Recommendation on record: both
-  cultures carry a walkable deck (Institutional = flat stone deck + crenellated parapet;
-  Upland = timber-railed deck), pitched-only/no-deck divergence becomes an Ideal-tier
-  spatial mutation; final call may ride to card/clay evidence with the repair story.
+- Roof/weather posture — ✅ LOCKED (Adam 2026-07-24, refined same session): **flat
+  walkable deck in BOTH cultures.** The tactical invariants are the deck and the
+  DEFENSIVE-EDGE PROMISE — "both cultures would want SOMETHING to hide behind" — so the
+  cover CLASS granted at the deck edge is identical across the pair; the edge's
+  construction and pattern are culture-expressive (Institutional = crenellated stone
+  parapet; Upland = its own realization — timber rail, rubble upstand, or other; exact
+  patterns taste-pass at the material/clay cards). Validation consequence: cultural
+  variants must prove cover-class equality at the deck edge (countable gate). Pitched or
+  no-deck postures are Ideal-tier spatial mutations for later cultures/sites.
+  **Design rationale (Adam, verbatim intent):** guards holding the deck advantage keeps
+  them at their best (or worst) behavior at checkpoints, AND it mints the player goal —
+  take that position and the advantage is yours. Elevation-as-objective generalizes:
+  every golden site should ask what its "deck" is.
+  (Options sheet preserved: `diagrams/guard-post-roof-postures.svg`.)
 - Realm A/B stays behind the culture proof; RoomProgram gates furnishing; numbers wait
   for clay (all standing).
 

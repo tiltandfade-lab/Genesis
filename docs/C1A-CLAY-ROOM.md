@@ -339,3 +339,25 @@ via the D19 mount (receipt: leaf world (0, 0.367, −2.5), size 0.6 × 1.333 × 
 silent data-contract break). Gates: clay 137/137 · d4-doors 203/203 (sandbox extended with the
 mount helper) · ks2 40/40 + dungeon-interior 288/288 (both rewritten red-first: same real
 properties, new grammar). Evidence: `dev/clay-captures/door/kindergarten-*`.
+
+## Addendum D21 — THE DOORWAY IS THE WALL (Codex lane close, 2026-07-23)
+
+Adam's correction, verbatim in ART-DIRECTION-CANON "THE DOOR / DOOR-FRAME SPLIT": "the door and
+door frame are two separate objects, the door frame should generally be constructed as a piece of
+the wall, and the door is an object that goes in the hole in the wall."
+
+D20's three plain wall prisms survive only as the non-compiled/kit fallback. On the production
+Clayroom compiled-shell path, the door boundary is now a real `kind:"doorway"` wall owner:
+`compileRoomShellData` subdivides that one wall volume around a 0.61 × 1.35 clear rectangular
+socket, preserving the same inner plane, outer plane, thickness, material, cap, footing, trim,
+upper-omission handle, and wall-owner index as the surrounding shell. No wall face crosses the
+opening below the lintel; the hole-facing wall-thickness faces and lintel underside are the reveal
+surfaces. The renderer suppresses all fallback frame instances when that compiled shell owns the
+socket and derives the aperture from `board.doorAxes`, while the accepted 36"×80" hinged leaf,
+darkness card, state behavior, and D19 mount tuner remain separate and unchanged.
+
+Gates personally run on the Codex lane: room-shell 48/48 · wall-volumes 35/35 · clay 138/138 ·
+d4-doors 203/203 · ks2-door-assembly 40/40 · dungeon-interior 288/288 · room-shell-oss 48/48 ·
+wall-runs-oss 92/92 · manifest `RESULT: OK`. Production headless evidence:
+`dev/clay-captures/door/codex-wall-socket-*` and the role-ID structural pass
+`dev/clay-captures/door/codex-wall-socket-role-id-*`.

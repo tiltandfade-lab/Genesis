@@ -10,7 +10,7 @@
      3. ⊗ Footing — a base skirt projects wallFooting past the outer face at y~=0.
      4. Stem/upper separability — distinct bundles, same ownerSegIndex keying.
      5. ⊗ Upper omission — upperVisibleForSegment=()=>false empties wallUpper, wallStem stays intact.
-     6. Mount slots — every wall segment yields >=1 inner-face slot; door segments yield ZERO.
+     6. Mount slots — every solid wall segment yields >=1 inner-face slot; doorway sockets yield ZERO.
      7. Segment-count invariant preserved — a no-door 6x5 room and an 18x12 room both -> 4 wall segments.
      8. Determinism — same cells+opts -> byte-identical buffers across two independent builds.
 
@@ -223,26 +223,34 @@ console.log("\n=== 5. ⊗ Upper omission — upperVisibleForSegment=()=>false em
     { upper: mixed.wallUpper.segments.length, stem: mixed.wallStem.segments.length });
 }
 
-console.log("\n=== 6. Mount slots — every wall segment yields >=1 inner-face slot; doors yield ZERO ===");
+console.log("\n=== 6. Mount slots — every solid wall segment yields >=1 inner-face slot; doorway sockets yield ZERO ===");
 {
   const cells = rectRoom(6, 4, { x: 2, z: 0 });
   const data = compileRoomShellData(cells, {});
   const wallSegCount = data.walls.segments.length;
-  check("6a. mountSlots has >=1 entry per wall segment (" + wallSegCount + " segments)",
-    data.mountSlots.length >= wallSegCount, data.mountSlots.length);
+  const solidSegIndexes = data.walls.segments
+    .map((seg, i) => seg.kind === "doorway" ? -1 : i)
+    .filter((i) => i >= 0);
+  const doorwaySegIndexes = data.walls.segments
+    .map((seg, i) => seg.kind === "doorway" ? i : -1)
+    .filter((i) => i >= 0);
+  check("6a. mountSlots has exactly one entry per solid wall segment (" + solidSegIndexes.length + " of " + wallSegCount + " owners)",
+    data.mountSlots.length === solidSegIndexes.length, data.mountSlots.length);
   const bySeg = new Map();
   data.mountSlots.forEach((slot) => {
     if (!bySeg.has(slot.ownerSegIndex)) bySeg.set(slot.ownerSegIndex, []);
     bySeg.get(slot.ownerSegIndex).push(slot);
   });
-  check("6b. every wall segment index owns at least one slot",
-    data.walls.segments.every((_, i) => bySeg.has(i) && bySeg.get(i).length >= 1));
-  const normalsMatch = data.walls.segments.every((seg, i) => {
+  check("6b. every solid wall segment index owns at least one slot",
+    solidSegIndexes.every((i) => bySeg.has(i) && bySeg.get(i).length >= 1));
+  const normalsMatch = solidSegIndexes.every((i) => {
+    const seg = data.walls.segments[i];
     const n = segmentNormal(seg);
     return bySeg.get(i).every((slot) => Math.abs(slot.normal.x - n.x) < 1e-6 && Math.abs(slot.normal.z - n.z) < 1e-6);
   });
   check("6c. every slot's own normal equals its owning segment's segmentNormal (inward)", normalsMatch);
-  const onInnerPlane = data.walls.segments.every((seg, i) => {
+  const onInnerPlane = solidSegIndexes.every((i) => {
+    const seg = data.walls.segments[i];
     return bySeg.get(i).every((slot) => {
       // the slot's worldPos (x,z) must lie ON the segment's own a->b line (the inner face plane).
       const dx = seg.b.x - seg.a.x, dz = seg.b.z - seg.a.z;
@@ -254,14 +262,13 @@ console.log("\n=== 6. Mount slots — every wall segment yields >=1 inner-face s
   });
   check("6d. every slot's own worldPos (x,z) sits ON the segment's inner-face line", onInnerPlane);
 
-  // door segments yield ZERO mount slots — no ownerSegIndex in mountSlots ever points at a door.
+  // Doorway sockets are now real wall owners, but still yield ZERO mount slots: their center is the
+  // opening/leaf, not a legal wall-hanging surface.
   check("6e. exactly one door aperture present in this fixture (sanity)", data.apertures.length === 1, data.apertures.length);
-  // a door contributes NO wall segment at all (kind:"door" skips the wall branch entirely, see
-  // compileRoomShellData's own door branch) — so there is no ownerSegIndex to even check against; the
-  // real assertion is that mountSlots.length never exceeds wall-segment count with door slots mixed in
-  // (i.e., mountSlots count == sum of exactly 1 per wall segment here, no extras from the door).
-  check("6f. mountSlots count equals exactly 1 per wall segment (no extra door-sourced slots)",
-    data.mountSlots.length === wallSegCount, { mountSlots: data.mountSlots.length, wallSegCount });
+  check("6f. exactly one doorway owner exists and no mount slot points at it",
+    doorwaySegIndexes.length === 1 && !bySeg.has(doorwaySegIndexes[0]) &&
+    data.apertures[0].ownerSegIndex === doorwaySegIndexes[0],
+    { doorwaySegIndexes, mountOwners: [...bySeg.keys()], aperture: data.apertures[0] });
 }
 
 console.log("\n=== 7. Segment-count invariant preserved (C4/C3b collapse logic untouched) ===");

@@ -148,6 +148,11 @@ const DEFAULT_WALL_CAP_HEIGHT = 0.06;     // top-cap slab thickness
 const DEFAULT_WALL_CAP_OVERHANG = 0.035;  // 0.025-0.06 band — cap projection past each face per side
 const DEFAULT_WALL_FOOTING = 0.06;        // 0.04-0.10 band — base-course projection past the outer face
 const DEFAULT_WALL_MOUNT_EYE_HEIGHT = 1.4; // world Y of a default inner-face mount slot ("eye-height band")
+// THE DOOR / DOOR-FRAME SPLIT (Adam, 2026-07-23): these are the clear dimensions of the rectangular
+// SOCKET cut into the wall body, not dimensions of a separate frame object. At 1 world unit = 60 in,
+// the independently-rendered 36"×80" leaf is 0.6×4/3 u; the extra clearance belongs to the wall hole.
+const DEFAULT_DOOR_OPENING_WIDTH = 0.61;
+const DEFAULT_DOOR_OPENING_HEIGHT = 1.35;
 
 function cellKey(x, z) { return x + "," + z; }
 
@@ -1651,6 +1656,10 @@ function compileRoomShellData(cells, opts) {
   const wallCapHeight = typeof opts.wallCapHeight === "number" ? opts.wallCapHeight : DEFAULT_WALL_CAP_HEIGHT;
   const wallCapOverhang = typeof opts.wallCapOverhang === "number" ? opts.wallCapOverhang : DEFAULT_WALL_CAP_OVERHANG;
   const wallFooting = typeof opts.wallFooting === "number" ? opts.wallFooting : DEFAULT_WALL_FOOTING;
+  const doorOpeningWidth = typeof opts.doorOpeningWidth === "number"
+    ? opts.doorOpeningWidth : DEFAULT_DOOR_OPENING_WIDTH;
+  const doorOpeningHeight = typeof opts.doorOpeningHeight === "number"
+    ? opts.doorOpeningHeight : DEFAULT_DOOR_OPENING_HEIGHT;
   const wallTrimOn = typeof opts.wallTrim === "boolean" ? opts.wallTrim : true;
   const upperVisibleForSegment = typeof opts.upperVisibleForSegment === "function"
     ? opts.upperVisibleForSegment : function () { return true; };
@@ -1924,7 +1933,6 @@ function compileRoomShellData(cells, opts) {
         const insetA = inset[i], insetB = inset[(i + 1) % inset.length];
 
         if (seg.kind === "door") {
-          aperturesOut.push({ a: seg.a, b: seg.b, tier });
           // A door segment contributes ZERO inset width of its OWN, but its two flanking (wall/riser)
           // neighbor segments still pull insetA/insetB inward by their own bevelWidth (insetPolygon
           // sums BOTH adjacent segments' contributions per vertex) — so the main body's own inset
@@ -1947,6 +1955,144 @@ function compileRoomShellData(cells, opts) {
               { u: trueA.x * uvDensity, v: trueA.z * uvDensity }, { u: flushInnerA.x * uvDensity, v: flushInnerA.z * uvDensity },
               { u: flushInnerB.x * uvDensity, v: flushInnerB.z * uvDensity }, { u: trueB.x * uvDensity, v: trueB.z * uvDensity },
               floorColorAt ? hexToRgb01(nearestFloorColor(seg)) : null);
+          }
+
+          // THE DOOR / DOOR-FRAME SPLIT (Adam, 2026-07-23): a doorway is a rectangular SOCKET in
+          // this wall segment's own continuous body. It therefore inherits the wall's inner plane,
+          // outer plane, thickness, top and material. The independently-rendered hinged leaf consumes
+          // the opening; there is no separate proud "doorway object" on the compiled-shell path.
+          //
+          // No CSG is required for today's one-cell boundary aperture: split this one volume into two
+          // narrow wall bands beside the opening plus the wall band above it. These are subdivisions
+          // of ONE owner segment (one wallSegmentsOut row / one upper visibility handle), not three
+          // renderer instances. Their hole-facing end faces and the lintel underside are the reveal
+          // surfaces of the wall thickness itself.
+          const segMeta = {
+            a: seg.a, b: seg.b,
+            mid: { x: (seg.a.x + seg.b.x) / 2, z: (seg.a.z + seg.b.z) / 2 },
+            kind: "doorway", tier,
+          };
+          const h = wallHeightForSegment(segMeta);
+          const baseY = elevationY - (floorDetailOn ? bevelDrop : 0);
+          const wallColor = wallColorForSegment ? hexToRgb01(wallColorForSegment(segMeta)) : null;
+          const tangent = directionOf(seg);
+          const segLength = Math.max(1e-9, Math.hypot(seg.b.x - seg.a.x, seg.b.z - seg.a.z));
+          const clearW = Math.max(0.05, Math.min(doorOpeningWidth, segLength - 0.04));
+          const clearH = Math.max(0.05, Math.min(doorOpeningHeight, (baseY + h) - elevationY - 0.02));
+          const sideLen = (segLength - clearW) / 2;
+          const openingStartT = sideLen / segLength;
+          const openingEndT = 1 - openingStartT;
+          const pointAt = (t) => ({
+            x: seg.a.x + (seg.b.x - seg.a.x) * t,
+            z: seg.a.z + (seg.b.z - seg.a.z) * t,
+          });
+          const innerA = pointAt(0), openingInnerA = pointAt(openingStartT);
+          const openingInnerB = pointAt(openingEndT), innerB = pointAt(1);
+          const outward = (p) => ({ x: p.x - n.x * wallThickness, z: p.z - n.z * wallThickness });
+          const outerA = outward(innerA), openingOuterA = outward(openingInnerA);
+          const openingOuterB = outward(openingInnerB), outerB = outward(innerB);
+          const openingU0 = u0 + (u1 - u0) * openingStartT;
+          const openingU1 = u0 + (u1 - u0) * openingEndT;
+          const openingBottomY = elevationY;
+          const openingTopY = openingBottomY + clearH;
+
+          const ownerSegIndex = wallSegmentsOut.length;
+          wallSegmentsOut.push({
+            a: seg.a, b: seg.b, tier, height: h, kind: "doorway",
+            opening: {
+              width: clearW, height: clearH,
+              bottomY: openingBottomY, topY: openingTopY,
+            },
+          });
+          aperturesOut.push({
+            a: seg.a, b: seg.b, tier, ownerSegIndex,
+            openingWidth: clearW, openingHeight: clearH,
+            openingBottomY, openingTopY,
+          });
+
+          const boxBase = {
+            n, tX: tangent.dx, tZ: tangent.dz,
+            capHeight: wallCapHeight, capOverhang: wallCapOverhang,
+            color: wallColor, uvDensity,
+          };
+          const buildLeft = (buf, yBase, yTop, footing) => buildWallBox(buf, Object.assign({}, boxBase, {
+            innerA, innerB: openingInnerA, outerA, outerB: openingOuterA,
+            yBase, yTop, footing, u0, u1: openingU0,
+          }));
+          const buildRight = (buf, yBase, yTop, footing) => buildWallBox(buf, Object.assign({}, boxBase, {
+            innerA: openingInnerB, innerB, outerA: openingOuterB, outerB,
+            yBase, yTop, footing, u0: openingU1, u1,
+          }));
+
+          // Persistent lower wall body: only the two jamb-side bands exist. Nothing crosses the
+          // rectangular opening at floor/stem height.
+          const stemBaseY = baseY, stemTopY = baseY + wallStemHeight;
+          buildLeft(wallStemBuf, stemBaseY, stemTopY, wallFooting);
+          buildRight(wallStemBuf, stemBaseY, stemTopY, wallFooting);
+          wallStemSegmentsOut.push({ ownerSegIndex, tier });
+          pushWallVerticalFace(wallBuf,
+            { x: innerA.x, y: stemBaseY, z: innerA.z }, { x: openingInnerA.x, y: stemBaseY, z: openingInnerA.z },
+            { x: innerA.x, y: stemTopY, z: innerA.z }, { x: openingInnerA.x, y: stemTopY, z: openingInnerA.z },
+            { x: n.x, y: 0, z: n.z }, u0, openingU0, 0, wallStemHeight, wallColor);
+          pushWallVerticalFace(wallBuf,
+            { x: openingInnerB.x, y: stemBaseY, z: openingInnerB.z }, { x: innerB.x, y: stemBaseY, z: innerB.z },
+            { x: openingInnerB.x, y: stemTopY, z: openingInnerB.z }, { x: innerB.x, y: stemTopY, z: innerB.z },
+            { x: n.x, y: 0, z: n.z }, openingU1, u1, 0, wallStemHeight, wallColor);
+
+          // Independently suppressible upper: both side bands continue to wall-top and the lintel is
+          // the SAME wall volume above the clear opening. One slice contains all three subdivisions.
+          const upperVisible = upperVisibleForSegment(segMeta);
+          const upperHeight = Math.max(0, h - wallStemHeight);
+          if (upperVisible && upperHeight > 1e-9) {
+            const vertStart = wallUpperBuf.positions.length / 3, idxStart = wallUpperBuf.indices.length;
+            buildLeft(wallUpperBuf, stemTopY, baseY + h, 0);
+            buildRight(wallUpperBuf, stemTopY, baseY + h, 0);
+            if (openingTopY < baseY + h - 1e-9) {
+              buildWallBox(wallUpperBuf, Object.assign({}, boxBase, {
+                innerA: openingInnerA, innerB: openingInnerB,
+                outerA: openingOuterA, outerB: openingOuterB,
+                yBase: openingTopY, yTop: baseY + h, footing: 0,
+                u0: openingU0, u1: openingU1,
+              }));
+              // buildWallBox deliberately has no generic bottom face; this downward-facing quad is
+              // the lintel underside, i.e. the top reveal of the hole through the wall thickness.
+              pushQuad(wallUpperBuf,
+                { x: openingOuterB.x, y: openingTopY, z: openingOuterB.z },
+                { x: openingOuterA.x, y: openingTopY, z: openingOuterA.z },
+                { x: openingInnerA.x, y: openingTopY, z: openingInnerA.z },
+                { x: openingInnerB.x, y: openingTopY, z: openingInnerB.z },
+                { x: 0, y: -1, z: 0 },
+                { u: openingOuterB.x * uvDensity, v: openingOuterB.z * uvDensity },
+                { u: openingOuterA.x * uvDensity, v: openingOuterA.z * uvDensity },
+                { u: openingInnerA.x * uvDensity, v: openingInnerA.z * uvDensity },
+                { u: openingInnerB.x * uvDensity, v: openingInnerB.z * uvDensity },
+                wallColor);
+            }
+            const vertCount = wallUpperBuf.positions.length / 3 - vertStart;
+            const idxCount = wallUpperBuf.indices.length - idxStart;
+            wallUpperSegmentsOut.push({ ownerSegIndex, tier, vertStart, vertCount, idxStart, idxCount });
+          }
+
+          // Wall trim stops at the hole instead of bridging it. These are still wall-surface ribbons,
+          // never an applied frame, and share the owner segment's material/plane.
+          if (wallTrimOn) {
+            const trimHeight = Math.min(0.05, wallStemHeight * 0.25);
+            const trimProud = wallCapOverhang * 0.5;
+            const trimOuterA = { x: outerA.x - n.x * trimProud, z: outerA.z - n.z * trimProud };
+            const trimOpeningOuterA = { x: openingOuterA.x - n.x * trimProud, z: openingOuterA.z - n.z * trimProud };
+            const trimOpeningOuterB = { x: openingOuterB.x - n.x * trimProud, z: openingOuterB.z - n.z * trimProud };
+            const trimOuterB = { x: outerB.x - n.x * trimProud, z: outerB.z - n.z * trimProud };
+            const pushDoorTrim = (a, b, tu0, tu1, y0, y1) => pushWallVerticalFace(wallTrimBuf,
+              { x: a.x, y: y0, z: a.z }, { x: b.x, y: y0, z: b.z },
+              { x: a.x, y: y1, z: a.z }, { x: b.x, y: y1, z: b.z },
+              { x: -n.x, y: 0, z: -n.z }, tu0, tu1, 0, y1 - y0, wallColor);
+            pushDoorTrim(trimOuterA, trimOpeningOuterA, u0, openingU0, stemBaseY, stemBaseY + trimHeight);
+            pushDoorTrim(trimOpeningOuterB, trimOuterB, openingU1, u1, stemBaseY, stemBaseY + trimHeight);
+            pushDoorTrim(trimOuterA, trimOpeningOuterA, u0, openingU0,
+              stemTopY - trimHeight / 2, stemTopY + trimHeight / 2);
+            pushDoorTrim(trimOpeningOuterB, trimOuterB, openingU1, u1,
+              stemTopY - trimHeight / 2, stemTopY + trimHeight / 2);
+            wallTrimSegmentsOut.push({ ownerSegIndex, tier });
           }
           return;
         }
@@ -2390,6 +2536,7 @@ export {
   DEFAULT_RADIAL_SMOOTH_BLEND,
   DEFAULT_WALL_THICKNESS, DEFAULT_WALL_STEM_HEIGHT, DEFAULT_WALL_CAP_HEIGHT, DEFAULT_WALL_CAP_OVERHANG,
   DEFAULT_WALL_FOOTING, DEFAULT_WALL_MOUNT_EYE_HEIGHT,
+  DEFAULT_DOOR_OPENING_WIDTH, DEFAULT_DOOR_OPENING_HEIGHT,
   // UNIT G2 — PolygonKernel floor integration (dev/verify-room-shell-oss.mjs's own direct import surface)
   ROOM_SHELL_POLYGON_KERNEL, unitStepClassifyRing, deriveKernelRingsForTier, validateRenderTransform,
   DEFAULT_RENDER_TRANSFORM_AREA_TOLERANCE, groupInsetsForKernelTriangulation, buildParityDiagnostics,

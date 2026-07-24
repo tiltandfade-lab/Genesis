@@ -81,6 +81,15 @@ The Sprite Editor must offer an explicit retirement workflow for live sprites. R
 separate, recorded lifecycle action—not a destructive replacement or a normal save—and should
 preserve the asset identity and reason/reference needed to trace what replaced it.
 
+## Adam's ruling (2026-07-23, verbatim) — reject the goblin's contradictory weapon read
+
+> "i just realized how dumb that goblin sprite is, he's holding a sword and a bow"
+
+The current Clayroom goblin sprite does not pass canonical standee review: its simultaneously-held
+sword-and-bow loadout reads as one incoherent pose, not a deliberate equipment choice. Preserve the
+asset until the governed sprite retirement/regeneration workflow replaces it, but do not use this
+specific pose as a positive scale, silhouette, or equipment reference for future sprite generation.
+
 ## Adam's ruling (2026-07-18, verbatim) — runtime warp and DM-hand motion
 
 > "there actually is another feature. i forgot that there IS animation, just not sprite animation. we have warp animation to the sprites to suggest combat and interactive actions, plus DM hand movement of pieces. I would like a workshop to be able to edit those animations or tweak them"

@@ -1098,16 +1098,16 @@ const check = (name, cond, detail = "") =>
     const frames = (out.board.instances && out.board.instances.doorframe) || [];
     const sides = frames.filter((f) => f.doorwaySide);
     const lintels = frames.filter((f) => f.lintel);
-    check("27a. the doorway is EXACTLY three pieces of plain wall: two sides + one band over the opening",
+    check("27a. the non-shell fallback is EXACTLY three plain prisms: two sides + one band over the opening",
       frames.length === 3 && sides.length === 2 && lintels.length === 1 &&
       !frames.some((f) => f.jamb || f.header || f.archStep),
       JSON.stringify(frames));
     const wallH = out.board.wallHeightBase || 2.4;
-    check("27b. the sides run full wall height and flank a 0.61 u opening",
+    check("27b. fallback sides run full wall height and flank a 0.61 u opening",
       sides.every((f) => Math.abs(f.sy - wallH) < 1e-6) &&
       Math.abs(Math.abs(sides[0].ox || sides[0].oz || 0) - (0.61 / 2 + 0.195 / 2)) < 1e-3,
       JSON.stringify(sides));
-    check("27c. the band spans opening-top (1.35) to the wall top, opening-wide",
+    check("27c. the fallback band spans opening-top (1.35) to the wall top, opening-wide",
       lintels.length === 1 && Math.abs((lintels[0].yBase || 0) - 1.35) < 1e-6 &&
       Math.abs((lintels[0].yBase || 0) + (lintels[0].sy || 0) - wallH) < 1e-6 &&
       Math.abs((lintels[0].sx === 0.61 ? lintels[0].sx : lintels[0].sz) - 0.61) < 1e-6,
@@ -1127,6 +1127,10 @@ const check = (name, cond, detail = "") =>
   const bootSrc = read("src/ui/theater-boot.js");
   check("27f. the leaf is the 36\"×80\" prototype rectangle (0.6 u × 4/3 u)",
     /ITR_DOOR_WIDTH\s*=\s*0\.6;/.test(bootSrc) && /ITR_DOOR_HEIGHT\s*=\s*4\s*\/\s*3;/.test(bootSrc));
+  check("27g. production shell suppresses fallback prisms and derives the socket from authoritative doorAxes",
+    /doorframeFallbackSource\s*=\s*useCompiledRoomShell\s*\?\s*\[\]\s*:\s*\(inst\.doorframe\s*\|\|\s*\[\]\)/.test(bootSrc) &&
+    /shellDoorSources\s*=\s*\(data\.doorAxes\s*&&\s*data\.doorAxes\.length\)\s*\?\s*data\.doorAxes/.test(bootSrc) &&
+    /new Set\(shellDoorSources\.map/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

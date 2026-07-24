@@ -1681,11 +1681,12 @@ function interiorBuildBoard(plan, opts) {
           // AN EXTRUDED RECTANGLE... it's an extruded rectangle that sits in a doorway" · "rectangle
           // hole with rectangle door") ────────────────────────────────────────────────────────────
           // The doorway is a RECTANGLE HOLE cut to the prototype door's own size (0.61 × 1.35 u —
-          // a 36"×80" door plus clearance), shaped by three pieces of PLAIN WALL: two full-height
-          // side pieces and one band above the opening. The door is the hinged extruded rectangle
-          // (theater-boot) filling the hole. Nothing else — jambs/header/arch/reveals are deleted.
-          // All three ride the doorframe kind so the mount-offset patch sockets the whole doorway
-          // at whichever wall plane the active wall system stands.
+          // a 36"×80" door plus clearance). On the production compiled-shell path,
+          // compileRoomShellData cuts that socket into the wall volume itself and theater-boot omits
+          // every row below. These three plain prisms remain DATA only as the honest non-shell/kit
+          // fallback: two full-height side pieces and one band above the opening. The door is always
+          // the separately-hinged extruded rectangle (theater-boot) filling the hole. Nothing else —
+          // ornamental jambs/header/arch/reveal slabs remain deleted.
           const dwSceneDir = sceneDirectionFor(kit.realmId, doorRoom && doorRoom.role);
           const dwColor = itrDarkenHex(kit.wallColor, dwSceneDir.valueScript.wall);
           const openW = ITR_DOORWAY_OPENING_W * (squeeze ? ITR_SQUEEZE_WIDTH_FRAC : 1);

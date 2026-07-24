@@ -11070,11 +11070,16 @@ function setInteriorBoard(data){
   // texture at proper value, THEN apply the recess-darken (ITR_SCENE_DOORFRAME_VALUE) so it reads a
   // touch darker than the wall — a recessed textured stone arch, per the mock. Untextured (no wallTex)
   // keeps the old plain trim-value darken. rigOn-gated so the study baseline stays honest.
+  // Resolve this before the doorframe fallback is built: on the compiled-shell path the wall compiler
+  // owns the doorway socket, so the old three-prism doorway construction must not render at all. Kit
+  // shells still use the legacy/fallback instances because they do not consume compileRoomShell.
+  const useCompiledRoomShell = ITR_ROOM_SHELL && !((data.kitShellWalls && data.kitShellWalls.length) || (data.kitShellFloors && data.kitShellFloors.length));
   // door-mount map for THIS rebuild (doorAxes + live tune; writes S.doorMountReport)
   const doorMountMap = itrDoorMountMapFrom(data.doorAxes);
+  const doorframeFallbackSource = useCompiledRoomShell ? [] : (inst.doorframe || []);
   let doorList = wallTex
-    ? itrNeutralizeInstanceColors(inst.doorframe, kit.wallColor).map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) }))
-    : (rigOn ? inst.doorframe.map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) })) : inst.doorframe);
+    ? itrNeutralizeInstanceColors(doorframeFallbackSource, kit.wallColor).map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) }))
+    : (rigOn ? doorframeFallbackSource.map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) })) : doorframeFallbackSource);
   doorList = itrApplyDoorMounts(doorList, doorMountMap); // socket the frame into its wall (clone, never a mutation)
   // DOORFRAME OCCLUSION FIX (found live re-gating dev/verify-bw2-1b-occlusion.mjs --with-render, checks
   // 31/32/35): doorframes (the main frame body AND BW2-5's own arch-header prisms) were NEVER wired into
@@ -11140,13 +11145,15 @@ function setInteriorBoard(data){
   // systems at once. A board with nothing kit-claimed (KIT_SHELL_ENABLED off, or a shape/scale this
   // unit's own eligibility tests exclude) is COMPLETELY UNAFFECTED — useCompiledRoomShell reduces to
   // the bare ITR_ROOM_SHELL flag, byte-identical to pre-KS-3.
-  const useCompiledRoomShell = ITR_ROOM_SHELL && !((data.kitShellWalls && data.kitShellWalls.length) || (data.kitShellFloors && data.kitShellFloors.length));
+  // `useCompiledRoomShell` is resolved above the fallback-doorframe render path so that path can omit
+  // its applied prisms when this compiler owns the socket. Its shell/per-cell exclusivity law remains
+  // unchanged here.
 
   // ═══ ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit
   // C4) — compiles the active room's own floor cells into a CONTINUOUS shell (one triangulated floor
   // polygon per elevation tier + wall/riser quad-strips from boundary segments) instead of the per-
   // cell floorMesh/wallMesh InstancedMesh pair above, when useCompiledRoomShell is true (ITR_ROOM_SHELL
-  // on AND — KS-3 — this board has nothing kit-claimed). Built straight off `floorList`/`inst.doorframe`
+  // on AND — KS-3 — this board has nothing kit-claimed). Built straight off `floorList`/`data.doorAxes`
   // — the SAME data interiorBuildBoard already produced; this unit never re-reads plan.cells, per the
   // spec's own "keep interiorBuildBoard as the data producer, the compiler is render-only" instruction.
   // Pillars/doorframe/skirt/portals/dressing/lights/standees below are UNTOUCHED (they still read
@@ -11154,7 +11161,11 @@ function setInteriorBoard(data){
   let roomShellMeshes = [];
   S.interiorLastRoomShell = null;
   if(useCompiledRoomShell && floorList && floorList.length){
-    const doorKeySet = new Set((inst.doorframe || []).map((d) => Math.round(d.x) + "," + Math.round(d.z)));
+    // doorAxes is the authoritative one-row-per-door data seam. The old frame list has THREE rows per
+    // door and is now only a non-shell fallback, so deriving apertures from it would couple the real
+    // wall socket back to the very applied geometry this path retires.
+    const shellDoorSources = (data.doorAxes && data.doorAxes.length) ? data.doorAxes : (inst.doorframe || []);
+    const doorKeySet = new Set(shellDoorSources.map((d) => Math.round(d.x) + "," + Math.round(d.z)));
     const shellCells = floorList.map((f) => {
       const sy = (typeof f.sy === "number" && Number.isFinite(f.sy)) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
       return {

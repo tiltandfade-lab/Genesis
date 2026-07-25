@@ -527,3 +527,41 @@ M059-A passes only if:
 - masonry remains a few broad construction masses instead of dense individual brick noise;
 - no runtime fire, light, fuel, tool, fastener, or soot detail is baked into the geometry;
 - cleanup is faster than reconstructing the entire assembly natively.
+
+### Meshy intake result — accepted
+
+Front proof:
+
+![M059-A cleaned front](intake-previews/M059-A-clean-front.png)
+
+Rear proof:
+
+![M059-A cleaned rear](intake-previews/M059-A-clean-rear.png)
+
+Canonical source:
+`incoming/M059-A-compact-field-forge-smart-1200.glb`
+
+Accepted production donor:
+`processed/M059-A-compact-field-forge-clean-v1.glb`
+
+The Smart Topology download arrived as one 1,108-triangle mesh containing 668 shared source
+vertices, 60 disconnected construction islands, no material assignments, and no embedded texture
+payload. The empty fire basin, hood throat, side ledge, socket rail, thick air connection, bellows
+body, feet, and complete rear construction all survived. The simple box-led island structure is
+useful rather than noisy, so no geometry was removed or replaced.
+
+`scripts/model-foundry/clean-meshy-field-forge.py` deterministically recognizes this accepted
+donor, retains every triangle, and consolidates the 60 islands into four replaceable ownership
+groups:
+
+```text
+hearth_body_and_basin      34 islands    428 triangles
+smoke_hood_and_supports     5 islands    140 triangles
+bellows_and_air_pipe       13 islands    282 triangles
+tool_ledges_and_sockets     8 islands    258 triangles
+total                      60 islands  1,108 triangles
+```
+
+The output intentionally remains untextured. Genesis materials, fire, emission, lighting, soot,
+tools, fuel, collision, and interactive sockets remain engine-owned. M059-A passes calibration
+without a geometry repair pass.

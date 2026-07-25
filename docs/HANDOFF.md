@@ -6,7 +6,49 @@ updated: 2026-07-25
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-25, CL-R3 visual checkpoint) — REUSABLE STRUCTURE GRAMMAR CANDIDATE [Codex]
+## ⭐ Latest (2026-07-25, visual-correction Checkpoint 0+1) — AO, CLOCK-DRIVEN SUN, STANDEE LAWS [Fable]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, checkpoint commit `2cdf2ccb`
+on top of `a3dd41dd`. **Not merged or pushed. FULL CI PENDING.** Owning brief:
+`docs/FABLE-CLAYROOM-VISUAL-CORRECTION-ASSIGNMENT.md`; continuation prompt:
+`docs/FABLE-VISUAL-CORRECTION-CONTINUATION-PROMPT.md`.
+
+- Checkpoint 0 (Adam-verified): every diagnosis reproduced with receipts; root causes named with
+  file:line evidence in `dev/clay-captures/clayroom-visual-correction/00-root-cause-notes.md`.
+- Checkpoint 1 (seven Adam review rounds, each finding fixed same-session):
+  restrained GTAO through the production composer (vendored verbatim from pinned three@0.166.0,
+  hash-gated; transparent/no-depth-write quads excluded from the AO G-buffer; device-pixel
+  registration; A/B button + `?envao=0` + seams; 58–60 FPS measured); clay-studio neutral
+  (0.55 ambient + shadowless straight-down studio skylight, authored lock); **sun/moon direction,
+  colour, and intensity derive from the celestial arc per the world clock** (one owner across both
+  channels — bench previews 08:06/21:30; authored azimuth is only the no-clock fallback);
+  room-sized shadow frusta at 1024 maps with rebalanced bias (no peter-panning);
+  **STANDEE-WINS-TIES** (sprite cards pull 0.25 u camera-ward in depth only — uniform +
+  `_setStandeeDepthBiasForTest`); **surface recipe v2** (standee bases route to diagnostic clay,
+  per-mesh clone so selection glow stays scoped, sprite cast shadows/AO now read on bases).
+- Adam's standing verdicts on the ledger: AO accepted-as-passable, *not yet mathematically
+  perfect*; open-flame flicker still passable-not-final; Lighting-Lab time-of-day scrub is a
+  queued follow-up (data path in place).
+- Capture-instrument truth (the packet rigs): billboard yaw settles before forced renders; the
+  close pair captures one-state-per-call with markers; `LIGHT_LAB_SHOTS_DIR` redirects harness
+  screenshot output so the banked `dev/light-lab-shots/` bytes are never clobbered (those files
+  remain uncommitted review evidence — one accidental regeneration happened before the guard
+  existed and is disclosed in the session log).
+- Gates at checkpoint: clay-room 235/235 (new §35 AO family, incl. an executed exclusion-rule
+  truth table + vendor hashes) · light-locks 12/12 · dungeon-interior 291/291 (all seven
+  node_modules three-shim writers extended in lockstep: `cp1-env-ao`) · room-shell 53/53 ·
+  tactical-query 31/31 · theater-sprites 12/12 · sprite-registry 27/27 · manifest OK. Inherited
+  reds unchanged and named: diegetic-light 7 (LFS-pointer env), interior-camera-frustum 2,
+  occlusion-fade 3.
+- **Remaining in this lane:** correction Checkpoints 2 (warm/cool overlap + readout truth),
+  3 (lore-native sources + dark readability + responsive void), 4 (CL-F01 honest workbench);
+  then the theater-boot split (brief:
+  `../Genesis-theater-split/docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md`, own worktree); then the
+  full clean close merging every lane back to a singular master (Adam's 2026-07-25 directive:
+  autonomous, Opus-5 subagents authorized, critical self-review in place of per-checkpoint
+  verdicts).
+
+## 2026-07-25 (CL-R3 visual checkpoint) — REUSABLE STRUCTURE GRAMMAR CANDIDATE [Codex]
 
 Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`. **Not merged or pushed.
 Fable re-gates and lands. FULL CI PENDING.**

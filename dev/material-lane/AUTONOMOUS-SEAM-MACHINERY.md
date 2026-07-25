@@ -431,3 +431,37 @@ Terra may continue Batch 1 when it follows this order:
 5. Add or adapt one material family at a time.
 6. Do not send any candidate to MM before its technical receipt and join-marked board pass.
 7. Stop and report if a family needs an unproven adapter; do not improvise a visual-only waiver.
+
+## Direct-sprite fast lane — 2026-07-24 amendment
+
+The earlier “initial adapter” table is now a rescue-routing reference, not the default production
+order. For new material families, use this bounded autonomous sequence:
+
+1. Generate one complete full-field source sprite with explicit toroidal edge/phase language.
+2. Run the numerical boundary gate and truthful locked-aspect 3x3 board on untouched output.
+3. If it passes, keep the raw sprite.
+4. If the failure is construction phase or prompt-addressable composition, run one targeted prompt
+   retry and remeasure.
+5. If a continuous, non-periodic field is visually strong and misses mildly, use a declared narrow
+   toroidal edge lock and retain both the raw source and repair receipt.
+6. Use period-aware or modular component reconstruction only when the direct field remains
+   genuinely unusable. Do not spend component-assembly time merely because a heavier adapter
+   exists.
+7. After source technical acceptance, preserve that sprite as MM albedo. Derive
+   construction-aware height: broad low-frequency relief for continuous organic fields, explicit
+   course relief for layered construction, and feature-isolated guides when albedo colors must not
+   become physical elevation.
+
+The reference implementation is:
+
+- `triage-fast-lane-sources.py` — batch boundary metrics and aspect-safe 3x3 evidence;
+- `repair-fast-lane-timber.py` — continuous-field-only edge lock;
+- `prepare-b01-fast-lane-mm.py` — subject-aware height guides and sprite-preserving MM graphs;
+- `compile-b01-fast-lane-mm-v001.mjs` — two-run MM determinism proof;
+- `verify-b01-fast-lane-mm-v001.py` — albedo identity, inherited seam, depth, ORM, and
+  determinism gates.
+
+Batch B01 demonstrated the intended cost profile: two untouched ImageGen passes, one successful
+prompt retry, one narrow continuous-field repair, and zero component reconstructions across four
+materials. The selected source receipt is
+`proofs/b01-fast-lane-v001/b01-fast-lane-selected-candidates-v002.json`.

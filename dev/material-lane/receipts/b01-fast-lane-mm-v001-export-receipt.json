@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B01-fast-lane-sprite-first-MM-v001",
+  "generatedAt": "2026-07-25T00:51:55.256Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/b01-fast-lane-mm-v001/b01-roof-hide-canvas-tarp-v001.ptex": "a2788f2527f8aa4c4fdbefad0d036eb05db388ae214a8827c513a89733f7c0ea",
+    "dev/material-lane/graphs/b01-fast-lane-mm-v001/b01-roof-thatch-v001.ptex": "75435f34ae2263b7c33aeff7417e71dcb68b4e900ef91853f6f8c65467d7686a",
+    "dev/material-lane/graphs/b01-fast-lane-mm-v001/b01-roof-turf-sod-v001.ptex": "d3744913fcfe101d4b842379d8caca0fdc7193b3b44aa29158e7fdcc68910e86",
+    "dev/material-lane/graphs/b01-fast-lane-mm-v001/b01-timber-structural-grain-v001.ptex": "952f5860566199e92eb4990c3cd99cbf243de62e9a8c0235e5d7a0d8d35b52f3"
+  },
+  "outputHashes": {
+    "b01-roof-hide-canvas-tarp-v001_albedo.png": "549081e6e042e44a426a1f520ff6331b070a0f2e37ad2f3b67a0111d38a60e05",
+    "b01-roof-hide-canvas-tarp-v001_heightmap.png": "da0886cd8d104f427d20d662be813430c740582b17275f98daab674e15e199db",
+    "b01-roof-hide-canvas-tarp-v001_normal.png": "e7cc4539659cf0055fae57cfe0fc467b908146b0e67434ee3d69b46dd1e8dba1",
+    "b01-roof-hide-canvas-tarp-v001_orm.png": "a647566d75056959447f2333b06bfb98108bcea264f672a64f2b68248773f66d",
+    "b01-roof-thatch-v001_albedo.png": "c1558777aed6ded185217e2bec4ab93b0056e6df89b95bed95f6fcd7377da700",
+    "b01-roof-thatch-v001_heightmap.png": "5c4cd3412b3f4ed7dbc4784465e95e44f6beeca28795257c323ba1295eb48141",
+    "b01-roof-thatch-v001_normal.png": "cdc8c1ec34cb4aad11133d22b90c8c363a0c9d0f2771c2418c34e5ce4b2f1e29",
+    "b01-roof-thatch-v001_orm.png": "7073a608107e97a7516975f1fbf48c354a8a714cafa84aa9a074a07491ad771b",
+    "b01-roof-turf-sod-v001_albedo.png": "ffe03126d7f9d63de88e6c3109ee8e36fbf4f4434af511ec393a0c1bf5ca385f",
+    "b01-roof-turf-sod-v001_heightmap.png": "c505c47ac1f0c06b427d163b39dd0d3c1ec907d21ac72875011eea67dcd2426b",
+    "b01-roof-turf-sod-v001_normal.png": "4741002df2a88888ae98dbe2d0babfc9222d496fc6d5ed172dab714819b429bd",
+    "b01-roof-turf-sod-v001_orm.png": "037cd6a13b48736df0471d983a8801698837822eb8185ecf031a82b0af6b8b2f",
+    "b01-timber-structural-grain-v001_albedo.png": "79c41e0c9049c563c35d391de37281a2392c65d56e30f2a959a1d627200d1f43",
+    "b01-timber-structural-grain-v001_heightmap.png": "a384798112590b97aedd4ae9394a0f6cd5156678ee62630403d373613e06058b",
+    "b01-timber-structural-grain-v001_normal.png": "69535511c415ec49e5009da8e5f790b095441c8ae3a348b92c6f5f8912e69354",
+    "b01-timber-structural-grain-v001_orm.png": "380224b8b17e5ebdb130f4d6172f3a09379d03c88ef2713685e3bd3de45ac671"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 16,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b01-fast-lane-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b01-fast-lane-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

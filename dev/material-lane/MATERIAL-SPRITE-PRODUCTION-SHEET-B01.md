@@ -1,6 +1,6 @@
 ---
 type: material-source-sprite-production-sheet
-status: P1-MM-PASS
+status: B01-TECHNICAL-COMPLETE-TASTE-PENDING
 batch: B01-timber-and-roof-fields
 workflow: sprite-first-mm-second
 ---
@@ -129,3 +129,59 @@ are `graphs/b01-autonomous-slate-mm-v002/`,
 `receipts/b01-autonomous-slate-mm-v002-export-receipt.json`, and
 `receipts/b01-autonomous-slate-mm-v002-verification.json`. The replacement is
 **TECHNICAL-SOURCE-PASS / TASTE-APPROVED / MM-PASS** and supersedes the v001 slate material.
+
+## Direct-sprite fast-lane checkpoint — 2026-07-24
+
+The remaining four families were run through the lower-cost default path: generate one complete
+full-field ImageGen sprite, measure its two wrapped boundaries, inspect a truthful locked-aspect
+3x3 repeat, retry the prompt only when the failure was prompt-addressable, and reserve
+deterministic repair for a continuous field with a mild miss. Component reconstruction was not
+used.
+
+| Material | Selected source | Source route | X/Y boundary ratio |
+|---|---|---|---|
+| `timber-structural-grain` | `source-sprites/b01-fast-lane-v001/timber-structural-grain-seamlocked-v001.png` | ImageGen v001 + 48px continuous-field toroidal lock | 0.000 / 0.000 |
+| `roof-thatch` | `source-sprites/b01-fast-lane-v001/roof-thatch-source-v002.png` | targeted ImageGen retry: exactly eight courses; boundary inside equivalent inter-course phase | 0.860 / 0.713 |
+| `roof-turf-sod` | `source-sprites/b01-fast-lane-v001/roof-turf-sod-source-v001.png` | raw ImageGen pass | 0.953 / 0.827 |
+| `roof-hide-canvas-tarp` | `source-sprites/b01-fast-lane-v001/roof-hide-canvas-tarp-source-v001.png` | raw ImageGen pass | 0.337 / 0.563 |
+
+The shared full-field prompt contract was:
+
+- complete direct albedo sprite, not a component sheet;
+- square, front-on, orthographic, edge-to-edge field with no frame, perspective, scene, unique
+  center, border band, edge lighting, or vignette;
+- opposite edges explicitly continue the same construction phase;
+- flat neutral local albedo; no cast shadow, AO, bevel highlight, or directional light;
+- construction-specific broad masses remain readable at 50% zoom;
+- rich restrained color variation remains in the source sprite; MM may not redraw it.
+
+Prompt deltas were subject-specific: broad vertical grain and sparse knots for timber; maintained
+bundled straw in periodic horizontal courses for thatch; overlapping low-noise living sod masses
+for turf; and offset warm hide/canvas panels with sparse stitches and lashes for tarp. The first
+thatch failed its top/bottom phase at 2.411x internal p95; the explicit eight-course retry passed
+at 0.713x. A boundary-neutral timber retry worsened its X seam, so the richer v001 sprite was
+retained and repaired by the declared continuous-field adapter instead of burning another
+generation or invoking component reconstruction.
+
+Source proof and repair provenance:
+
+- `proofs/b01-fast-lane-v001/b01-fast-lane-source-triage-v001.{png,json}`
+- `proofs/b01-fast-lane-v001/b01-fast-lane-selected-candidates-v002.{png,json}`
+- `proofs/b01-fast-lane-v001/timber-structural-grain-seamlocked-v001.json`
+- `triage-fast-lane-sources.py`
+- `repair-fast-lane-timber.py`
+
+All four selected sources are **TECHNICAL-SOURCE-PASS / MM-PASS / TASTE-PENDING**. Their MM
+graphs use construction-aware grayscale guides: broad shallow luminance for timber and turf,
+course-scale luminance for thatch, and a dark-seam residual for hide/canvas so panel color does
+not become panel elevation. Two MM 1.3 compiles produced sixteen byte-identical output maps;
+source identity and ORM verification passed. Records and review:
+
+- `manifests/b01-fast-lane-mm-v001.source.json`
+- `graphs/b01-fast-lane-mm-v001/`
+- `receipts/b01-fast-lane-mm-v001-export-receipt.json`
+- `receipts/b01-fast-lane-mm-v001-verification.json`
+- `../material-cards/b01-fast-lane-mm-v001.html`
+
+This checkpoint does not claim user taste approval. It packages the four technical passes into one
+batch review so approval or revision can happen once.

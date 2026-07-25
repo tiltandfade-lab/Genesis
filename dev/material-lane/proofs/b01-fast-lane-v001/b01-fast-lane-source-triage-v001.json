@@ -1,0 +1,80 @@
+{
+  "schema": "genesis.material-source-fast-lane-triage.v1",
+  "policy": {
+    "source_pixels_modified": false,
+    "material_maker_applied": false,
+    "boundary_gate_ratio": 1.1,
+    "failed_route": "prompt retry or explicit seam repair; never silent promotion"
+  },
+  "board": "dev/material-lane/proofs/b01-fast-lane-v001/b01-fast-lane-source-triage-v001.png",
+  "results": [
+    {
+      "label": "Structural timber grain",
+      "source": "dev/material-lane/source-sprites/b01-fast-lane-v001/timber-structural-grain-source-v001.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "left_right_rms": 13.649,
+        "top_bottom_rms": 5.607,
+        "internal_x_jump_p95": 10.97,
+        "internal_y_jump_p95": 3.44,
+        "x_boundary_to_internal_p95": 1.244,
+        "y_boundary_to_internal_p95": 1.63,
+        "boundary_jump_gate": false
+      }
+    },
+    {
+      "label": "Roof thatch",
+      "source": "dev/material-lane/source-sprites/b01-fast-lane-v001/roof-thatch-source-v001.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "left_right_rms": 34.506,
+        "top_bottom_rms": 30.478,
+        "internal_x_jump_p95": 31.52,
+        "internal_y_jump_p95": 12.642,
+        "x_boundary_to_internal_p95": 1.095,
+        "y_boundary_to_internal_p95": 2.411,
+        "boundary_jump_gate": false
+      }
+    },
+    {
+      "label": "Roof turf / sod",
+      "source": "dev/material-lane/source-sprites/b01-fast-lane-v001/roof-turf-sod-source-v001.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "left_right_rms": 10.753,
+        "top_bottom_rms": 10.128,
+        "internal_x_jump_p95": 11.289,
+        "internal_y_jump_p95": 12.244,
+        "x_boundary_to_internal_p95": 0.953,
+        "y_boundary_to_internal_p95": 0.827,
+        "boundary_jump_gate": true
+      }
+    },
+    {
+      "label": "Roof hide / canvas",
+      "source": "dev/material-lane/source-sprites/b01-fast-lane-v001/roof-hide-canvas-tarp-source-v001.png",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "left_right_rms": 3.425,
+        "top_bottom_rms": 5.807,
+        "internal_x_jump_p95": 10.168,
+        "internal_y_jump_p95": 10.323,
+        "x_boundary_to_internal_p95": 0.337,
+        "y_boundary_to_internal_p95": 0.563,
+        "boundary_jump_gate": true
+      }
+    }
+  ]
+}

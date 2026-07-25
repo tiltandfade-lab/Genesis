@@ -1566,6 +1566,17 @@
      exists so check-manifest.py's module-tag-pairing check is satisfied, and browsers dedupe an ES
      module by URL). Placed BEFORE theater-boot.js's tag (dependency order). -->
 <script type="module" src="src/ui/theater-figure-build.js"></script>
+<!-- THEATER SPLIT B4 (2026-07-25): the post-processing suite (DoF / masked bloom / filmic grade +
+     AgX) and the environment-AO pass — same import/dedupe convention as the tags above
+     (theater-boot.js `import`s it; this second entry point exists so check-manifest.py's
+     module-tag-pairing check is satisfied, and browsers dedupe an ES module by URL). It is the
+     `three/addons/postprocessing` import site for its own passes. Placed BEFORE theater-boot.js's
+     tag (dependency order). -->
+<script type="module" src="src/ui/theater-post.js"></script>
+<!-- THEATER SPLIT B4 (2026-07-25): the three pure scene-graph disposal helpers (no THREE, no state,
+     no ctx) — same import/dedupe convention as the tags above. retire()/disposeAuxCaches stay in
+     theater-boot.js. Placed BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-dispose.js"></script>
 <script type="module" src="src/ui/theater-boot.js"></script>
 <!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
      shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same

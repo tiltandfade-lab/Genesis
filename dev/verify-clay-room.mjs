@@ -130,10 +130,17 @@ const read = (p) => readFileSync(join(ROOT, p), "utf-8");
 // below read this COMPOSITE so region-scoped checks (anchored on the travelling markers) and
 // root-wiring checks (anchored on root-only functions) both keep their exact jobs across the split;
 // the boundary comment keeps the two files' contents distinguishable in any sliced output.
+// THEATER SPLIT B4 (2026-07-25): the ENVIRONMENT AO family (checks 35c-35g below) moved the same way
+// — envAOPrepassExcludes / EnvironmentAOPass / the frozen ENV_AO_* settings and the post suite's
+// mount/teardown/resize bodies now live in src/ui/theater-post.js, while the AO's window.Theater
+// seams and the ?envao= / clayRoomEnvAOSyncButton wiring stayed in theater-boot.js. Adding that file
+// to the SAME composite keeps every one of those regexes matching the code it was written to check.
 function readTheaterSources(){
   return read("src/ui/theater-boot.js")
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-clay-room.js follows] */\n"
-    + read("src/ui/theater-clay-room.js");
+    + read("src/ui/theater-clay-room.js")
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-post.js follows] */\n"
+    + read("src/ui/theater-post.js");
 }
 
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");

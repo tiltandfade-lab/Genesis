@@ -2502,6 +2502,46 @@
       "desc": "THEATER SPLIT B3 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the ONE answer to \"given a unit, what mesh represents it?\": figureFor's full precedence chain (sprite billboard -> whole-object module -> glb -> pcRecipe -> bestiary recipe -> archetype cuboid, every branch falling through rather than throwing), the MODEL-PATH INSTRUMENTATION that records which rung answered (MODEL_PATH_STATS + _classifyWholeKey + _tallyPath — figureFor is their only writer; the counter is exported as the LIVE object window.Theater.stats.modelPaths publishes), and the legacy weaponMeshFor composer with its WEAPON_BASE_OFFSET grip constant. Extracted VERBATIM except two documented lines: the SPRITE_CHANNEL_ENABLED / WHOLE_OBJECT_ENABLED reads become figCtxSpriteChannelEnabled() / figCtxWholeObjectEnabled() calls, because those are root `let`s the window.Theater.spriteChannel / window.Theater.wholeObject setters write at runtime (an import binding is read-only; a mirror would go stale the moment a capture gate flips one). Same ctx law as its sibling leaves: never imports the root — figureBuildInit(ctx) carries the root-owned composition seams (renderPartInto, flatTints, ARCHETYPE_BUILDERS, buildFigureFromRecipe, recipeFor, orientYawForArchetype, WEAPON_PART_KEY, weaponCarryFor) and the sprite-channel seams (spriteEntryFor, buildSpriteBillboard, interiorSpriteBillboard, _spriteCensusOutcome — that last one reads FACETED_FLIP_ENABLED, a literal dev/battle-gate/capture-s5-flip-card.mjs rewrites in place, so it stays root-side). It imports ui.theater-parts / ui.theater-figures / ui.theater-whole-object directly (none of the three imports this file or the root, so the graph stays acyclic). Holds no cache, no GPU resource, no timer and no theater state; figureBuildInit runs at the root's END-OF-BODY because its ctx carries top-level consts still in TDZ at import time."
     },
     {
+      "id": "ui.theater-post",
+      "path": "src/ui/theater-post.js",
+      "type": "module",
+      "owns": [
+        "*postInit",
+        "*postSyncState",
+        "*makeGradePass",
+        "*mountPostSuite",
+        "*teardownPostSuite",
+        "*syncPostSuiteResolution",
+        "*updateDofFocus",
+        "*updatePostSuiteGrade",
+        "*envAOEnabled",
+        "*envAOPrepassExcludes",
+        "*ENV_AO_BLEND_INTENSITY",
+        "*ENV_AO_DENOISE",
+        "*ENV_AO_ENABLED_DEFAULT",
+        "*ENV_AO_PARAMS",
+        "*ENV_AO_RESOLUTION_SCALE"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B4 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the BEAUTY-WAVE-3 POST SUITE (BW3-2 tilt-shift DoF, BW3-3 emissive-masked bloom, BW3-6 filmic grade + the P3-3a AgX shoulder) and the CLAYROOM-CHECKPOINT-1 ENVIRONMENT AO pass, extracted VERBATIM from theater-boot.js: makeDofPass, makeGradePass (with AGX_TONEMAP_GLSL and its FS_NONE/FS_AGX literals byte-identical — dev/verify-agx-tonecurve.mjs diffs FS_NONE against pre-AgX master character for character), MaskedBloomPass, envAOPrepassExcludes + EnvironmentAOPass + the frozen ENV_AO_* authored settings, and the suite's whole lifecycle (buildPostSuite, updateDofFocus, updatePostSuiteGrade, syncPostSuiteResolution, mountPostSuite, teardownPostSuite). This module is the `three/addons/postprocessing` import site for its own passes (ShaderPass/UnrealBloomPass/OutputPass/GTAOPass + its own RenderPass, identical specifier spellings); theater-boot.js keeps EffectComposer and RenderPass, which still have root readers. Same ctx law as its sibling modules — it never imports the root — but unlike the B3 leaves it READS AND WRITES the live state record (S.postSuite / S.postSuiteMounted / S.dofFocus*), so postInit(ctx) at the root's end-of-body is paired with postSyncState(S) at BOTH `S = createTheaterState()` sites. Exactly two production lines are non-verbatim, both marked inline: the GRADE_TONEMAP and BLOOM_MASK_DISABLED_FOR_TEST reads became postCtxGetGradeTonemap() / postCtxBloomMaskDisabled() accessor calls, because those are mutable root `let`s the window.Theater._setGradeTonemapForTest / _setBloomMaskDisabledForTest seams reassign at runtime (both sit OUTSIDE every shader source string, so no compiled-program cache key moves). BLOOM_LAYER stays root-owned (interiorBuildFixtureGroup stamps it on true emitters and the clay room's ctx carries it) and the LIGHT_TUNABLES SEED consts (STAGE_AMBIENT_FLOOR, GRADE_EXPOSURE_FLOOR, BLOOM_THRESHOLD, BLOOM_STRENGTH, GRADE_TINT_SCALE, GRADE_TINT_MAX) stay in theater-boot.js as one coherent set per B2's own law; what moved is only what a post body reads exclusively. applyPsxShaderTweaks — the file's one onBeforeCompile funnel — deliberately did NOT move: fifteen non-post root material sites read it. The root still disposes S.postSuite in retire(), so the one true end-of-life point is unchanged, and every window.Theater post/AO seam is still assigned in theater-boot.js."
+    },
+    {
+      "id": "ui.theater-dispose",
+      "path": "src/ui/theater-dispose.js",
+      "type": "module",
+      "owns": [
+        "*clearGroup",
+        "*disposeGroupChild",
+        "*disposeMeshMaybeShared"
+      ],
+      "callTimeDeps": [],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B4 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the three pure scene-graph disposal helpers, extracted VERBATIM from theater-boot.js. disposeMeshMaybeShared carries the P1' §3-D7 rule (skip dispose() for a geometry/material tagged userData.shared, because a cached whole-object BufferGeometry is reused by every instance of the same registry key); disposeGroupChild applies it to one child, attached or already DETACHED (BEAUTY-WAVE-4 MF-2's despawn-grace onLifted path); clearGroup pops and disposes a whole group's children. Pure by census — no THREE import, no theater state S, no root symbol — so this module has NO init/ctx function and NO SyncState, which is why nothing here can go stale or be wired wrong. NOT the end-of-life authority: disposeAuxCaches and retire STAY in theater-boot.js (the root's one true end-of-life point, and dev/verify-theater-verbs.mjs text-extracts both from the root's own source). Every root call site reaches these through a plain `import`, unchanged."
+    },
+    {
       "id": "ui.theater-boot",
       "path": "src/ui/theater-boot.js",
       "type": "module",

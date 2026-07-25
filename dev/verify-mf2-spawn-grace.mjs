@@ -317,7 +317,10 @@ function makeStubGroup(scaleX, children){
     extractFn(bootSrc, "mfMountGraceFor"),
     extractFn(bootSrc, "mfDespawnGraceFor"),
     extractFn(bootSrc, "mfCascadeMount"),
-    extractFn(bootSrc, "disposeGroupChild")
+    // THEATER SPLIT B4 (2026-07-25): disposeGroupChild moved VERBATIM to src/ui/theater-dispose.js
+    // (with disposeMeshMaybeShared and clearGroup — pure helpers, no ctx, no state). The extraction's
+    // job is unchanged: it still eval's the REAL production source text, just from its true home.
+    extractFn(read("src/ui/theater-dispose.js"), "disposeGroupChild")
   ].join("\n\n");
 
   let startTweenLoopCalls = 0;

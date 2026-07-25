@@ -94,21 +94,10 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 // DoF/bloom/grade units that mount real passes onto this seam) don't each need their own vendor step.
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
-// BEAUTY-WAVE-3 BW3-3 (docs/BEAUTY-WAVE-3.md, SELECTIVE BLOOM): UnrealBloomPass, threshold-gated so
-// only the brightest EMISSIVE pixels bloom (flame apexes, the BW3-4 fake-volumetric cone apex, chrome
-// glow seams, spell FX) — a lit-but-albedo white sprite stays under threshold (the negative control).
-// Vendored the SAME way as EffectComposer/RenderPass/ShaderPass above (pinned three@0.166.0, the
-// `three/addons/` importmap); its own internal deps (Pass.js FullScreenQuad, CopyShader,
-// LuminosityHighPassShader) are vendored alongside it under the same addons tree.
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-// BEAUTY-WAVE-3 THE POST SUITE — the composer's effect passes render into LINEAR intermediate targets
-// (RenderPass writes un-encoded linear; only a direct-to-screen renderer.render applies the sRGB OETF).
-// A custom ShaderPass drawn to screen does NOT re-encode, so without this the graded/blurred frame
-// showed up crushed-dark (round-1/2 failure). OutputPass is three's canonical final pass: it applies
-// the renderer's tone mapping (NoToneMapping here) + the sRGB transfer, so the chain ends correct and
-// matches the direct-render baseline. ALWAYS the last pass in the interior chain.
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+// split B4 (2026-07-25): ShaderPass / UnrealBloomPass / OutputPass were dropped from this block —
+// their only readers (makeDofPass, makeGradePass, MaskedBloomPass, buildPostSuite) moved to
+// src/ui/theater-post.js, which imports all three with these IDENTICAL specifier spellings. This file
+// keeps EffectComposer (it constructs S.composer) and RenderPass (the BW3-0 empty-chain cost probe).
 // CLAYROOM VISUAL CORRECTION Checkpoint 1 (docs/FABLE-CLAYROOM-VISUAL-CORRECTION-ASSIGNMENT.md):
 // GTAOPass — three's maintained ground-truth ambient-occlusion pass, vendored VERBATIM from the SAME
 // pinned three@0.166.0 release as every addon above (sha256 prefixes: GTAOPass 980b0367 ·
@@ -175,6 +164,20 @@ import {
 import {
   figureBuildInit, figureFor, weaponMeshFor, MODEL_PATH_STATS
 } from "./theater-figure-build.js";
+// split B4 (2026-07-25): the post-processing suite + environment AO — same root->leaf ctx law as the
+// modules above, but this one READS AND WRITES the live state record, so postInit(ctx) at end-of-body
+// is paired with postSyncState(S) at both `S = createTheaterState()` sites. It is the `three/addons/
+// postprocessing` home for its own passes (ShaderPass/UnrealBloomPass/OutputPass/GTAOPass + its own
+// RenderPass), which is why those imports left this file's block above.
+import {
+  postInit, postSyncState, makeGradePass, mountPostSuite, teardownPostSuite,
+  syncPostSuiteResolution, updateDofFocus, updatePostSuiteGrade,
+  envAOEnabled, envAOPrepassExcludes,
+  ENV_AO_BLEND_INTENSITY, ENV_AO_DENOISE, ENV_AO_ENABLED_DEFAULT, ENV_AO_PARAMS, ENV_AO_RESOLUTION_SCALE
+} from "./theater-post.js";
+// split B4 (2026-07-25): the three pure scene-graph disposal helpers. No ctx, no init, no state —
+// see that file's header. retire()/disposeAuxCaches stay in THIS file (the one end-of-life point).
+import { clearGroup, disposeGroupChild } from "./theater-dispose.js";
 // BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
 // see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
 // as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
@@ -4558,30 +4561,12 @@ function renderTheaterFrame(){
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════════════════════════════════
-   BEAUTY-WAVE-3 — THE POST SUITE (BW3-2 TILT-SHIFT DoF · BW3-3 SELECTIVE BLOOM · BW3-6 FILMIC GRADE)
-   docs/BEAUTY-WAVE-3.md. Three effect passes that mount ONTO BW3-0's EffectComposer seam, INTERIOR
-   BOARDS ONLY (the flat tabletop stays pass-free — it dies at UW3). Chain order, each frame:
-       RenderPass  ->  DoF  ->  Bloom  ->  Grade(->screen)
-   Grade LAST so it is judged over the bloomed frame (the spec's own ordering: "grade is judged after
-   bloom"). SUBTLE is the law — every dial below is tuned so the effect is FELT (the photographed-
-   miniature cue, the emissive halo, the realm's mood) but never NAMED as an effect. The dials are the
-   TASTE-iterate surface (Opus loop): change the numbers here, re-shoot, re-read vs the mocks.
-   ══════════════════════════════════════════════════════════════════════════════════════════════ */
-
-// ── TILT-SHIFT DoF dials (BW3-2). Screen-space vertical tilt-shift: a sharp horizontal focal BAND
-// centred on the projected board-centre (the action cluster for a "beat" fit, the room centre for a
-// "room" fit — it TRACKS because S.boardCenter itself moves per fitMode), blur ramping toward the
-// near-foreground (screen bottom, nearer under the elevated camera) and far-background (screen top,
-// farther). This is the classic tilt-shift lens the miniature-photography cue is built on — near/far
-// map DIRECTLY to screen-vertical under a fixed elevation, so a vertical CoC gradient IS a depth
-// gradient here, and it needs no depth buffer (cheaper, robust across ortho AND persp interior cams).
-// UV space: v in [0,1]. FOCUS_HALF = half-height of the fully-sharp band; RAMP = UV distance over
-// which CoC climbs 0->1 past the band; MAX_BLUR = peak sample radius (capped CoC — the whisper cap).
-const DOF_FOCUS_HALF = 0.16;   // fully-sharp band spans ~32% of screen height around the focal row
-const DOF_RAMP = 0.42;         // gentle climb to full blur — no hard focus edge
-const DOF_MAX_BLUR = 0.0055;   // peak CoC radius in UV (~9px at 1600px tall) — a whisper, capped here
-const DOF_STRENGTH = 0.85;     // global master (0 = off); per-realm nudge folds in at mount
+/* ---- BEAUTY-WAVE-3 THE POST SUITE: extracted to src/ui/theater-post.js (split B4, 2026-07-25) ----
+   The suite's header, the TILT-SHIFT DoF dials (DOF_FOCUS_HALF/RAMP/MAX_BLUR/STRENGTH) and every pass
+   factory + lifecycle function moved there. What remains BELOW in this file is only the part the rest
+   of the root shares: the bloom threshold/strength + grade tint seeds LIGHT_TUNABLES is built from,
+   BLOOM_LAYER (interiorBuildFixtureGroup stamps it on true emitters), the two mutable test-seam flags
+   BLOOM_MASK_DISABLED_FOR_TEST / GRADE_TONEMAP, and GRADE_EXPOSURE_FLOOR. ---- */
 
 // ── SELECTIVE BLOOM dials (BW3-3). UnrealBloomPass is luminance-thresholded: only pixels brighter
 // than THRESHOLD contribute, so with a HIGH threshold the effect is emissive-gated in practice — the
@@ -4595,8 +4580,9 @@ const DOF_STRENGTH = 0.85;     // global master (0 = off); per-realm nudge folds
 // so a mid-high linear threshold is a clean emissive gate (the negative control holds with room).
 const BLOOM_THRESHOLD = 0.68;  // linear luminance gate — emissives clear it, lit albedo does not
 const BLOOM_STRENGTH = 1.15;   // halo intensity — soft, mock-level (the torch/neon glow, not a flare)
-const BLOOM_RADIUS = 0.5;      // spread of the halo (tighter = the wash stays ON the emissive)
-const BLOOM_RESOLUTION_SCALE = 0.5; // half-res bloom chain (fps)
+// split B4: BLOOM_RADIUS + BLOOM_RESOLUTION_SCALE moved to src/ui/theater-post.js (buildPostSuite /
+// syncPostSuiteResolution were their only readers). BLOOM_THRESHOLD/BLOOM_STRENGTH stay here because
+// LIGHT_TUNABLES seeds from them and the render path reads LIGHT_TUNABLES.bloom*, not the bare const.
 // LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — EMISSIVE-MASKED BLOOM. The threshold above was the
 // ONLY gate WALL-VOLUMES-PRACTICALS.md's E0 shipped ("No bloom mask" — its own Decisions section,
 // scoped out because a dim torch-lit crypt never pushed non-emissive albedo near 0.68). The B3 standee
@@ -4624,30 +4610,13 @@ const BLOOM_LAYER = 1;
 // this; only dev/verify-*.mjs (via window.Theater._setBloomMaskDisabledForTest) does.
 let BLOOM_MASK_DISABLED_FOR_TEST = false;
 
-// ── FILMIC GRADE dials (BW3-6). One per-realm post grade: exposure -> ACES filmic tone curve ->
-// contrast (both MONOTONIC, so the VALUE LAW ordering floor<wall<light survives in pixels, not just
-// in the material data verify-scene-direction asserts) -> saturation shape -> per-realm tint wash ->
-// vignette. The per-realm TINT + its strength come from the interior tile kit's OWN authored
-// gradeTint/gradeStrength (theater-interior.js — the SAME data the material grade and the BW2-4b
-// sprite-emissive tint already read), so flagships carry their tuned hue (chrome cool, fantasy warm,
-// gloom cold-violet) and the 9 non-flagship realms inherit whatever their kit authored (or neutral).
-// The existing whisper-fog + vignette-in-render stay UNDER this (they're in the scene; this grades the
-// composited frame on top). GRADE_TINT_SCALE maps kit.gradeStrength (a material-grade strength, ~0.1-
-// 0.3) down to a gentle post wash so the grade doesn't double-hit the already-graded materials.
-// NOTE (round 2): the frame the composer reads is ALREADY the renderer's tone-mapped, sRGB-encoded
-// LDR output — so a full ACES tone curve here (round 1) DOUBLE-tonemapped and crushed the already-dark
-// torch-lit scenes toward black, leaving only the red lantern light (the "everything went red/dark"
-// failure). The grade is now a gentle LDR colour grade: lift-preserving soft contrast + saturation +
-// a capped realm tint wash + a soft vignette. No tone curve. Every luminance stage stays monotonic so
-// the VALUE LAW ordering survives in pixels.
-const GRADE_EXPOSURE = 1.02;   // barely-there lift
-const GRADE_CONTRAST = 1.05;   // very gentle S around mid — a touch of mood, never crushing
-const GRADE_SATURATION = 1.07; // a touch richer, never garish
+// split B4: the FILMIC GRADE dials header and GRADE_EXPOSURE / GRADE_CONTRAST / GRADE_SATURATION
+// moved to src/ui/theater-post.js (makeGradePass's uniform seeds, read nowhere else). The two the
+// LIGHT LAB tunes stay HERE with the rest of the LIGHT_TUNABLES seed set:
 const GRADE_TINT_SCALE = 0.45; // kit.gradeStrength -> post-wash amount (gentle, avoids double-grade)
 const GRADE_TINT_MAX = 0.12;   // hard cap on the tint wash so no realm over-tints the frame
-const GRADE_VIGNETTE = 0.20;   // edge darkening depth (the mocks all carry a soft vignette)
-const GRADE_VIGNETTE_INNER = 0.34; // radius (from centre, UV) where the vignette starts
-const GRADE_VIGNETTE_OUTER = 0.92; // radius where it reaches full depth (corners ~0.71 in a wide frame)
+// split B4: GRADE_VIGNETTE / GRADE_VIGNETTE_INNER / GRADE_VIGNETTE_OUTER moved to
+// src/ui/theater-post.js — makeGradePass's uniform seeds were their only readers.
 
 // LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1, Stage-E ledger #12: pl-012/013/014/017/022 crush ~half
 // the frame to illegible black) — EXPOSURE FLOOR. STAGE_AMBIENT_FLOOR (below, ~L5710) already floors
@@ -4700,577 +4669,18 @@ const GRADE_EXPOSURE_FLOOR = 0.006; // linear RGB floor, pre-AgX — see the TUN
 // writes this; only the test seam does.
 let GRADE_TONEMAP = "agx"; // "none" | "agx" — Adam flipped agx ON 2026-07-14 (A/B ruled "looks awesome"); "none" = the pre-AgX look, seam-settable back via _setGradeTonemapForTest
 
-// AgX tone-mapping GLSL — VERBATIM port from three.js r166 (three@0.166.1,
-// node_modules/three/src/renderers/shaders/ShaderChunk/tonemapping_pars_fragment.glsl.js's
-// `AgXToneMapping` + `agxDefaultContrastApprox` + the rec2020<->linear-sRGB matrices), including the
-// r161 gamut-mapping fix (the final `clamp(color, 0.0, 1.0)` — pre-r161 AgX could leave saturated
-// primaries out of range post-outset-matrix; r161 added this clamp as the gamut fix). Do NOT hand-
-// approximate this curve — every constant below is copied byte-for-byte from that three.js source
-// file. `uExposure` is the same uniform already declared in makeGradePass's shader (three's own chunk
-// reads a same-purpose global `toneMappingExposure` uniform, not a function parameter — mirrored here
-// for the same reason: the exposure multiply is the curve's own entry point, not the caller's).
-const AGX_TONEMAP_GLSL = `
-  const mat3 AGX_LINEAR_SRGB_TO_LINEAR_REC2020 = mat3(
-    vec3( 0.6274, 0.0691, 0.0164 ),
-    vec3( 0.3293, 0.9195, 0.0880 ),
-    vec3( 0.0433, 0.0113, 0.8956 )
-  );
-  const mat3 AGX_LINEAR_REC2020_TO_LINEAR_SRGB = mat3(
-    vec3( 1.6605, - 0.1246, - 0.0182 ),
-    vec3( - 0.5876, 1.1329, - 0.1006 ),
-    vec3( - 0.0728, - 0.0083, 1.1187 )
-  );
-  vec3 agxDefaultContrastApprox( vec3 x ) {
-    vec3 x2 = x * x;
-    vec3 x4 = x2 * x2;
-    return + 15.5 * x4 * x2
-      - 40.14 * x4 * x
-      + 31.96 * x4
-      - 6.868 * x2 * x
-      + 0.4298 * x2
-      + 0.1191 * x
-      - 0.00232;
-  }
-  vec3 AgXToneMapping( vec3 color ) {
-    const mat3 AgXInsetMatrix = mat3(
-      vec3( 0.856627153315983, 0.137318972929847, 0.11189821299995 ),
-      vec3( 0.0951212405381588, 0.761241990602591, 0.0767994186031903 ),
-      vec3( 0.0482516061458583, 0.101439036467562, 0.811302368396859 )
-    );
-    const mat3 AgXOutsetMatrix = mat3(
-      vec3( 1.1271005818144368, - 0.1413297634984383, - 0.14132976349843826 ),
-      vec3( - 0.11060664309660323, 1.157823702216272, - 0.11060664309660294 ),
-      vec3( - 0.016493938717834573, - 0.016493938717834257, 1.2519364065950405 )
-    );
-    const float AgxMinEv = - 12.47393;  // log2( pow( 2, LOG2_MIN=-10.0 ) * MIDDLE_GRAY=0.18 )
-    const float AgxMaxEv = 4.026069;    // log2( pow( 2, LOG2_MAX=+6.5 ) * MIDDLE_GRAY=0.18 )
-    color *= uExposure;
-    color = AGX_LINEAR_SRGB_TO_LINEAR_REC2020 * color;
-    color = AgXInsetMatrix * color;
-    color = max( color, 1e-10 ); // avoid 0 or negative numbers for log2
-    color = log2( color );
-    color = ( color - AgxMinEv ) / ( AgxMaxEv - AgxMinEv );
-    color = clamp( color, 0.0, 1.0 );
-    color = agxDefaultContrastApprox( color ); // sigmoid
-    color = AgXOutsetMatrix * color;
-    color = pow( max( vec3( 0.0 ), color ), vec3( 2.2 ) ); // linearize
-    color = AGX_LINEAR_REC2020_TO_LINEAR_SRGB * color;
-    color = clamp( color, 0.0, 1.0 ); // r161 gamut-mapping fix — simple clamp
-    return color;
-  }
-`;
-
-// DoF tilt-shift: a Poisson-ish 12-tap disc scaled by a vertical-gradient CoC. Aspect-corrected so the
-// blur disc stays circular on a wide canvas. Sharp inside the focal band, ramping to MAX_BLUR at the
-// screen's near/far edges.
-function makeDofPass(){
-  const shader = {
-    uniforms: {
-      tDiffuse: { value: null },
-      uResolution: { value: new THREE.Vector2(1, 1) },
-      uFocusV: { value: 0.5 },
-      uFocusHalf: { value: DOF_FOCUS_HALF },
-      uRamp: { value: DOF_RAMP },
-      uMaxBlur: { value: DOF_MAX_BLUR },
-      uStrength: { value: DOF_STRENGTH }
-    },
-    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: `
-      varying vec2 vUv;
-      uniform sampler2D tDiffuse;
-      uniform vec2 uResolution;
-      uniform float uFocusV, uFocusHalf, uRamp, uMaxBlur, uStrength;
-      void main(){
-        vec4 base = texture2D(tDiffuse, vUv);
-        // CoC from vertical distance to the focal band (near/far == screen bottom/top under the
-        // elevated camera). Capped at 1.0 -> the whisper cap on max blur.
-        float d = abs(vUv.y - uFocusV);
-        float coc = clamp((d - uFocusHalf) / max(uRamp, 1e-4), 0.0, 1.0) * uStrength;
-        if(coc <= 0.001){ gl_FragColor = base; return; }
-        float r = coc * uMaxBlur;
-        float ar = uResolution.x / max(uResolution.y, 1.0); // aspect correct: circular disc
-        // 12-tap disc (unit-circle offsets) + centre.
-        vec2 o[12];
-        o[0]=vec2(0.94,0.0); o[1]=vec2(0.47,0.82); o[2]=vec2(-0.47,0.82); o[3]=vec2(-0.94,0.0);
-        o[4]=vec2(-0.47,-0.82); o[5]=vec2(0.47,-0.82); o[6]=vec2(0.35,0.20); o[7]=vec2(-0.35,0.20);
-        o[8]=vec2(0.0,-0.42); o[9]=vec2(0.0,0.42); o[10]=vec2(0.62,-0.36); o[11]=vec2(-0.62,-0.36);
-        vec4 sum = base;
-        for(int i=0;i<12;i++){
-          vec2 off = vec2(o[i].x / ar, o[i].y) * r;
-          sum += texture2D(tDiffuse, vUv + off);
-        }
-        gl_FragColor = sum / 13.0;
-      }
-    `
-  };
-  const pass = new ShaderPass(shader);
-  pass.__bwName = "dof";
-  return pass;
-}
-
-// Filmic grade: exposure, ACES tone (Narkowicz approx), contrast, saturation, per-realm tint wash,
-// vignette. Every luminance-affecting stage is monotonic so value ordering survives.
-// P3-3a: GRADE_TONEMAP gates AGX_TONEMAP_GLSL into the fragment shader AT COMPILE TIME (a JS-string
-// branch, not a runtime `if` — mirrors the ROOM_SHELL_POLYGON_KERNEL/ROOM_PLACE_DISTRIBUTE staging
-// discipline). When GRADE_TONEMAP is "none" every one of the isAgx-gated template slots below expands
-// to the empty string, so the compiled shader source is the SAME program that shipped before this
-// unit — "none" is not "agx with a flag check that happens to no-op," it is the original shader with
-// nothing inserted, which is what makes the byte-identical claim safe to make.
-function makeGradePass(){
-  const isAgx = GRADE_TONEMAP === "agx";
-  // TWO FULLY SEPARATE literals (not one template with inline ${isAgx?...:""} ternaries) — a ternary
-  // that resolves to "" still leaves behind the literal's own surrounding newline/indentation at that
-  // slot, so the "none" string would carry a stray blank line the pre-P3-3a source never had: close,
-  // but not the byte-identical claim this unit's spec (docs/PHASE-3-AGX-SPEC.md) and flag actually
-  // promise. FS_NONE below is a verbatim, uneditable copy of the fragment shader as it existed before
-  // this unit (verify-agx-tonecurve.mjs diffs it character-for-character against
-  // `git show <master>:src/ui/theater-boot.js`) — do not "clean up" or reformat it.
-  const FS_NONE = `
-      varying vec2 vUv;
-      uniform sampler2D tDiffuse;
-      uniform vec2 uResolution;
-      uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
-      uniform vec3 uTint;
-      void main(){
-        // The composer buffer is LINEAR. Grade in a PERCEPTUAL (sRGB-ish) space so the dials read
-        // intuitively (a 0.5 pivot really is mid-grey), then hand a linear result back to OutputPass,
-        // which applies the real sRGB OETF at the end of the chain. gamma 2.2 approximation is plenty
-        // for a grade (the display encode is OutputPass's exact job, not this one's).
-        vec3 lin = texture2D(tDiffuse, vUv).rgb;
-        vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
-        col *= uExposure;
-        col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
-        float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
-        col = mix(vec3(luma), col, uSat);
-        col *= mix(vec3(1.0), uTint, uTintAmt); // per-realm wash (multiplicative — chrome cool, etc.)
-        // soft radial vignette (edge0<edge1 so it's well-defined: 0 at centre -> uVignette at corners)
-        float dist = length(vUv - 0.5);
-        float vig = smoothstep(uVigInner, uVigOuter, dist);
-        col *= (1.0 - uVignette * vig);
-        col = pow(clamp(col, 0.0, 1.0), vec3(2.2)); // perceptual -> linear (OutputPass encodes to sRGB)
-        gl_FragColor = vec4(col, 1.0);
-      }
-    `;
-  // FS_AGX: the SAME shader body, with AGX_TONEMAP_GLSL declared once above main() and one extra line
-  // (AgXToneMapping(lin), right after the texture read) inserted before the perceptual grade math —
-  // "tonemap before grade." The old `col *= uExposure;` line is dropped here (not just commented) since
-  // AgXToneMapping already applies uExposure itself, three's own convention (see AGX_TONEMAP_GLSL's
-  // header comment) — applying it twice would double-expose.
-  const FS_AGX = `
-      varying vec2 vUv;
-      uniform sampler2D tDiffuse;
-      uniform vec2 uResolution;
-      uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
-      uniform float uExposureFloor, uTonemapStrength;
-      uniform vec3 uTint;
-      ${AGX_TONEMAP_GLSL}
-      void main(){
-        // The composer buffer is LINEAR. Grade in a PERCEPTUAL (sRGB-ish) space so the dials read
-        // intuitively (a 0.5 pivot really is mid-grey), then hand a linear result back to OutputPass,
-        // which applies the real sRGB OETF at the end of the chain. gamma 2.2 approximation is plenty
-        // for a grade (the display encode is OutputPass's exact job, not this one's).
-        vec3 lin = texture2D(tDiffuse, vUv).rgb;
-        // LL-1 EXPOSURE FLOOR (GRADE_EXPOSURE_FLOOR/LIGHT_TUNABLES.gradeExposureFloor, above) — a LIFT
-        // (max, never a cap) applied BEFORE AgXToneMapping so near-black shadow detail survives the
-        // curve's own log2 domain instead of crushing to 0 (ledger #12/13). The curve itself
-        // (AgXToneMapping/AGX_TONEMAP_GLSL, verbatim three.js port) is untouched.
-        lin = max(lin, vec3(uExposureFloor));
-        vec3 untonemapped = lin;
-        lin = AgXToneMapping(lin); // P3-3a: filmic shoulder — tonemap BEFORE the perceptual grade math
-        // Keep the authored 1.0 default on the byte-stable pre-Lab shader path. Only an intentional
-        // partial-strength preview pays for the blend.
-        if(uTonemapStrength < 0.9999) lin = mix(untonemapped, lin, uTonemapStrength);
-        vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
-        // exposure already applied inside AgXToneMapping (its own uExposure multiply, three's own convention)
-        col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
-        float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
-        col = mix(vec3(luma), col, uSat);
-        col *= mix(vec3(1.0), uTint, uTintAmt); // per-realm wash (multiplicative — chrome cool, etc.)
-        // soft radial vignette (edge0<edge1 so it's well-defined: 0 at centre -> uVignette at corners)
-        float dist = length(vUv - 0.5);
-        float vig = smoothstep(uVigInner, uVigOuter, dist);
-        col *= (1.0 - uVignette * vig);
-        col = pow(clamp(col, 0.0, 1.0), vec3(2.2)); // perceptual -> linear (OutputPass encodes to sRGB)
-        gl_FragColor = vec4(col, 1.0);
-      }
-    `;
-  const shader = {
-    uniforms: {
-      tDiffuse: { value: null },
-      uResolution: { value: new THREE.Vector2(1, 1) },
-      uExposure: { value: GRADE_EXPOSURE },
-      uContrast: { value: GRADE_CONTRAST },
-      uSat: { value: GRADE_SATURATION },
-      uTint: { value: new THREE.Color(1, 1, 1) },
-      uTintAmt: { value: 0.0 },
-      uVignette: { value: GRADE_VIGNETTE },
-      uVigInner: { value: GRADE_VIGNETTE_INNER },
-      uVigOuter: { value: GRADE_VIGNETTE_OUTER },
-      // LL-1: unused by FS_NONE (harmless — an unread uniform), read by FS_AGX only. Seeded from the
-      // bare const here (matching uExposure/uContrast/uSat/uVignette*'s own siblings just above —
-      // makeGradePass() must stay independently constructible without a live LIGHT_TUNABLES in scope,
-      // the same isolation dev/verify-agx-tonecurve.mjs's vm-sandbox extraction already depends on for
-      // every OTHER uniform here); updatePostSuiteGrade (below) pushes the LIVE LIGHT_TUNABLES.
-      // gradeExposureFloor value onto this uniform on every mount/tunable-change, same as every other
-      // grade dial — this seed is only ever the very first frame's value pre-first-push.
-      uExposureFloor: { value: GRADE_EXPOSURE_FLOOR },
-      uTonemapStrength: { value: 1.0 }
-    },
-    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: isAgx ? FS_AGX : FS_NONE
-  };
-  const pass = new ShaderPass(shader);
-  pass.__bwName = "grade";
-  return pass;
-}
-
-// LL-1 — MaskedBloomPass: a thin subclass of UnrealBloomPass (vendor/three/addons/postprocessing/
-// UnrealBloomPass.js — verbatim, unmodified there) that substitutes an EMISSIVE-ISOLATED texture for
-// the bright-pass extraction's source, while leaving every other stage (blur mip chain, composite,
-// final additive blend onto the real readBuffer) byte-identical to the parent's own render(). See
-// BLOOM_LAYER's own header comment (above) for the "why"; this class is the "how".
-class MaskedBloomPass extends UnrealBloomPass {
-  constructor(resolution, strength, radius, threshold){
-    super(resolution, strength, radius, threshold);
-    // Feeds ONLY the bright-pass extraction (itself already downsampled to half of `resolution` —
-    // renderTargetBright's own size, parent constructor above) — matching that same size is enough
-    // resolution for a threshold+blur read; no reason to isolate at full drawing-buffer res.
-    const resx = Math.max(1, Math.round(resolution.x / 2)), resy = Math.max(1, Math.round(resolution.y / 2));
-    this.emissiveIsolateTarget = new THREE.WebGLRenderTarget(resx, resy, { type: THREE.HalfFloatType });
-    this.emissiveIsolateTarget.texture.name = "MaskedBloomPass.emissiveIsolate";
-    this.emissiveIsolateTarget.texture.generateMipmaps = false;
-    this._isolateLayers = new THREE.Layers();
-    this._isolateLayers.disableAll();
-    this._isolateLayers.enable(BLOOM_LAYER);
-  }
-  // Called ONCE per frame, BEFORE composer.render() (renderTheaterFrame's own new call site, below) —
-  // Pass.render() only ever receives already-rendered buffer textures, never a live scene/camera to
-  // re-render from, so the isolate render can't happen inside render() itself. Cheap: everything NOT
-  // on BLOOM_LAYER is SKIPPED by three's own camera-layers test before draw, not drawn-then-discarded —
-  // a room with 1-2 lit fixtures draws 1-2 meshes here, not the whole scene graph.
-  updateEmissiveIsolate(renderer, scene, camera){
-    const priorMask = camera.layers.mask;
-    const priorTarget = renderer.getRenderTarget();
-    const priorClear = new THREE.Color();
-    renderer.getClearColor(priorClear);
-    const priorAlpha = renderer.getClearAlpha();
-    camera.layers.mask = this._isolateLayers.mask;
-    renderer.setRenderTarget(this.emissiveIsolateTarget);
-    renderer.setClearColor(0x000000, 1);
-    renderer.clear();
-    renderer.render(scene, camera);
-    camera.layers.mask = priorMask;
-    renderer.setRenderTarget(priorTarget);
-    renderer.setClearColor(priorClear, priorAlpha);
-  }
-  setSize(width, height){
-    super.setSize(width, height);
-    const resx = Math.max(1, Math.round(width / 2)), resy = Math.max(1, Math.round(height / 2));
-    this.emissiveIsolateTarget.setSize(resx, resy);
-  }
-  dispose(){
-    super.dispose();
-    this.emissiveIsolateTarget.dispose();
-  }
-  // Verbatim mirror of UnrealBloomPass.render() (vendor/three/addons/postprocessing/UnrealBloomPass.js)
-  // with exactly ONE substitution, called out inline below: the bright-pass extraction reads
-  // `this.emissiveIsolateTarget.texture` instead of `readBuffer.texture`. Every later stage (blur mips,
-  // composite, final additive blend) still targets the REAL readBuffer exactly as the parent does, so
-  // the full base frame is always preserved underneath — only the bloom halo's SOURCE is masked.
-  render(renderer, writeBuffer, readBuffer, deltaTime, maskActive){
-    renderer.getClearColor(this._oldClearColor);
-    this.oldClearAlpha = renderer.getClearAlpha();
-    const oldAutoClear = renderer.autoClear;
-    renderer.autoClear = false;
-    renderer.setClearColor(this.clearColor, 0);
-    if(maskActive) renderer.state.buffers.stencil.setTest(false);
-    if(this.renderToScreen){
-      this.fsQuad.material = this.basic;
-      this.basic.map = readBuffer.texture;
-      renderer.setRenderTarget(null);
-      renderer.clear();
-      this.fsQuad.render(renderer);
-    }
-    // 1. Extract Bright Areas — FROM THE EMISSIVE-ISOLATED TEXTURE (the one substitution vs. parent,
-    // which reads readBuffer.texture here instead). BLOOM_MASK_DISABLED_FOR_TEST (test-only seam, above)
-    // reverts to readBuffer.texture on demand — the exact pre-LL-1 behavior — for a live RED/GREEN A/B.
-    this.highPassUniforms["tDiffuse"].value = BLOOM_MASK_DISABLED_FOR_TEST ? readBuffer.texture : this.emissiveIsolateTarget.texture;
-    this.highPassUniforms["luminosityThreshold"].value = this.threshold;
-    this.fsQuad.material = this.materialHighPassFilter;
-    renderer.setRenderTarget(this.renderTargetBright);
-    renderer.clear();
-    this.fsQuad.render(renderer);
-    // 2. Blur all the mips progressively (verbatim parent logic).
-    let inputRenderTarget = this.renderTargetBright;
-    for(let i = 0; i < this.nMips; i++){
-      this.fsQuad.material = this.separableBlurMaterials[i];
-      this.separableBlurMaterials[i].uniforms["colorTexture"].value = inputRenderTarget.texture;
-      this.separableBlurMaterials[i].uniforms["direction"].value = UnrealBloomPass.BlurDirectionX;
-      renderer.setRenderTarget(this.renderTargetsHorizontal[i]);
-      renderer.clear();
-      this.fsQuad.render(renderer);
-      this.separableBlurMaterials[i].uniforms["colorTexture"].value = this.renderTargetsHorizontal[i].texture;
-      this.separableBlurMaterials[i].uniforms["direction"].value = UnrealBloomPass.BlurDirectionY;
-      renderer.setRenderTarget(this.renderTargetsVertical[i]);
-      renderer.clear();
-      this.fsQuad.render(renderer);
-      inputRenderTarget = this.renderTargetsVertical[i];
-    }
-    // Composite all the mips (verbatim parent logic).
-    this.fsQuad.material = this.compositeMaterial;
-    this.compositeMaterial.uniforms["bloomStrength"].value = this.strength;
-    this.compositeMaterial.uniforms["bloomRadius"].value = this.radius;
-    this.compositeMaterial.uniforms["bloomTintColors"].value = this.bloomTintColors;
-    renderer.setRenderTarget(this.renderTargetsHorizontal[0]);
-    renderer.clear();
-    this.fsQuad.render(renderer);
-    // Blend it additively over the REAL input texture (readBuffer — the full, unmasked scene).
-    this.fsQuad.material = this.blendMaterial;
-    this.copyUniforms["tDiffuse"].value = this.renderTargetsHorizontal[0].texture;
-    if(maskActive) renderer.state.buffers.stencil.setTest(true);
-    if(this.renderToScreen){
-      renderer.setRenderTarget(null);
-      this.fsQuad.render(renderer);
-    } else {
-      renderer.setRenderTarget(readBuffer);
-      this.fsQuad.render(renderer);
-    }
-    renderer.setClearColor(this._oldClearColor, this.oldClearAlpha);
-    renderer.autoClear = oldAutoClear;
-  }
-}
-
-// CLAYROOM VISUAL CORRECTION Checkpoint 1 — ENVIRONMENT AO (restrained, production path).
-// Adam's rulings this discharges: "i think it is also clear that we need some level of ambient
-// occlusion, i can't make out any of the edges that aren't in shadow" and "is there any way we can
-// get the contact shadows to actually be darker than the shadow value in the shadows? with a
-// multiply effect?" — GTAO blends MULTIPLICATIVELY onto the linear beauty buffer BEFORE bloom/
-// grade/tonemap, so creases and contacts darken inside already-shadowed regions too.
-//
-// Bounded AUTHORED settings — a diagnostic ON/OFF A/B exists (the suite's own per-pass seam +
-// the Clayroom Lights tab + ?envao=0), but there is deliberately NO free taste slider
-// (CLAYROOM-RESET-LADDER: "a saturation slider that compensates…"-class controls must not exist).
-// radius is WORLD units (1 u = 5 ft): 0.42 u ≈ a 2-ft crease reach — seams/corners/contacts, not
-// room-scale darkening. scale is the AO strength inside the shader; blendIntensity is the final
-// multiply weight. samples/rings sized for the no-cash Mac target (Iris Plus 645) — measured in
-// the checkpoint receipt, not assumed.
-const ENV_AO_ENABLED_DEFAULT = true;
-// AO G-buffer resolution as a fraction of DEVICE pixels. Full-res AO at dpr 2 costs ~17 ms/frame
-// on the no-cash Mac target (measured 33 FPS at the review viewport, 2026-07-25) — over budget.
-// An EXACT half scale with the composer's linear upsample is the standard mitigation and keeps
-// registration uniform (the crescent bug was a MISMATCHED size flip-flopping between CSS and
-// device pixels, not clean half-res). Re-measured after this change; see the checkpoint receipt.
-const ENV_AO_RESOLUTION_SCALE = 0.5;
-// Halo control (Adam, 2026-07-25: "the sphere has some kind of weird halo around it"): thickness
-// well under 1 so the thin-object heuristic cannot smear occlusion past a silhouette, and a
-// tighter denoise with much stricter depth/normal edge-stopping (higher phi = harder edge stop)
-// so blur can never bleed a contact ring across the depth discontinuity onto the floor beyond.
-const ENV_AO_PARAMS = Object.freeze({
-  radius: 0.42, distanceExponent: 1, thickness: 0.6, distanceFallOff: 1,
-  scale: 1.4, samples: 12, screenSpaceRadius: false,
-});
-// Contact-registration re-weight (Adam 2026-07-25: "at every point of planar contact you can see
-// a gap of light shining through on every shape" — measured in dev/clay-captures/ao-contact-diag/):
-// the crease's darkest AO is a 1-2-texel line, and the previous weights couldn't protect it from
-// the Poisson spatial average — lumaPhi 10 over a 0..1 AO term never gated, depthPhi 8 is a view-
-// space plane distance wider than the room, and normalPhi alone fails at creases because the
-// half-res normal buffer is averaged exactly there. The luma gate is what saves a thin dark line
-// against a bright surround: 0.25 zeroes the weight across the crease's own contrast while dither-
-// scale variance still passes (flats keep smoothing), radius 2 halves how far any residual average
-// reaches. Sweep receipts: sweep-scores.json (authored creaseLift 5.38 luma -> 1.40, 74% recovered
-// toward the raw reference; flat-region high-frequency noise stays below raw).
-const ENV_AO_DENOISE = Object.freeze({ lumaPhi: 0.25, depthPhi: 0.5, normalPhi: 16, radius: 2, radiusExponent: 1, rings: 2, samples: 8 });
-const ENV_AO_BLEND_INTENSITY = 1.0;
-// The one exclusion rule for the AO G-buffer prepass, as a PURE predicate so the harness can
-// execute it against mesh-shaped fixtures without a GL context. The AO depth/normal prepass
-// renders the scene under ONE opaque override material, which would turn every transparent or
-// non-depth-writing helper quad (sprite billboard cards + their thin side shells, contact-shadow
-// multiply pools, selection spills, socket/access overlay strips, door darkness cards, glow discs)
-// into a solid occluder RECTANGLE — exactly the floating-card lie the sprite-silhouette contract
-// forbids. Rule: a mesh participates in AO only if at least one of its materials is opaque AND
-// depth-writing — the same rule the renderer's own depth buffer already applies to these meshes.
-function envAOPrepassExcludes(mesh){
-  if(!mesh || !mesh.isMesh) return false;
-  const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-  if(!mats.length || !mats[0]) return false;
-  for(let i = 0; i < mats.length; i++){
-    const m = mats[i];
-    if(m && m.transparent !== true && m.depthWrite !== false) return false; // one opaque depth-writer -> participates
-  }
-  return true; // every material is transparent or non-depth-writing -> hide from the AO prepass
-}
-class EnvironmentAOPass extends GTAOPass {
-  overrideVisibility(){
-    super.overrideVisibility(); // caches every object's visible flag + hides points/lines
-    let excluded = 0;
-    this.scene.traverse((o) => {
-      if(o.visible && envAOPrepassExcludes(o)){ o.visible = false; excluded++; }
-    });
-    this.lastPrepassExcludedCount = excluded; // diagnostic read for the receipt/harness, no product reads
-  }
-}
-function envAOEnabled(){
-  try {
-    if(typeof window !== "undefined" && window.location && window.location.search){
-      const raw = new URLSearchParams(window.location.search).get("envao");
-      if(raw === "0") return false;
-      if(raw === "1") return true;
-    }
-  } catch(e){}
-  return ENV_AO_ENABLED_DEFAULT;
-}
-function makeEnvironmentAOPass(size){
-  // Construct at DEVICE pixels for the same registration reason syncPostSuiteResolution documents.
-  const pr = (S.renderer && S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1) * ENV_AO_RESOLUTION_SCALE;
-  const ao = new EnvironmentAOPass(S.scene, S.camera, Math.round(size.x * pr), Math.round(size.y * pr));
-  ao.__bwName = "ao";
-  ao.blendIntensity = ENV_AO_BLEND_INTENSITY;
-  ao.updateGtaoMaterial(ENV_AO_PARAMS);
-  ao.updatePdMaterial(ENV_AO_DENOISE);
-  ao.output = GTAOPass.OUTPUT.Default;
-  ao.enabled = envAOEnabled();
-  return ao;
-}
-
-// Build the three passes once (lazy — needs a live renderer + a sized canvas). Stored on S.postSuite.
-function buildPostSuite(){
-  if(S.postSuite || !S.renderer || !S.composer) return S.postSuite;
-  const size = new THREE.Vector2();
-  S.renderer.getSize(size);
-  const dof = makeDofPass();
-  const bloom = new MaskedBloomPass(
-    new THREE.Vector2(Math.max(1, Math.round(size.x * BLOOM_RESOLUTION_SCALE)),
-                      Math.max(1, Math.round(size.y * BLOOM_RESOLUTION_SCALE))),
-    LIGHT_TUNABLES.bloomStrength, BLOOM_RADIUS, LIGHT_TUNABLES.bloomThreshold
-  );
-  bloom.__bwName = "bloom";
-  const grade = makeGradePass();
-  const renderPass = new RenderPass(S.scene, S.camera);
-  renderPass.__bwName = "render";
-  const outputPass = new OutputPass();
-  outputPass.__bwName = "output";
-  const ao = makeEnvironmentAOPass(size);
-  S.postSuite = { renderPass, ao, dof, bloom, grade, outputPass };
-  return S.postSuite;
-}
-
-// Recompute the DoF focal band from the CURRENT camera fit: project S.boardCenter to NDC and centre
-// the sharp band on its screen-Y. This is what makes focus TRACK fitMode — S.boardCenter is the
-// action-cluster centre in a "beat" fit and the room centre in a "room" fit, so the sharp band lands
-// on whatever the camera framed. Also records the world focus distance (camera->boardCenter) for the
-// determinism/assert surface (window.Theater.dofFocus). Called after placeCamera at mount time.
-function updateDofFocus(){
-  if(!S.postSuite || !S.camera) return;
-  const center = S.boardCenter || new THREE.Vector3(0, 0, 0);
-  S.dofFocusDist = S.camera.position.distanceTo(center);
-  S.camera.updateMatrixWorld();
-  const ndc = center.clone().project(S.camera); // ndc.y in [-1,1]
-  const focusV = THREE.MathUtils.clamp(ndc.y * 0.5 + 0.5, 0.08, 0.92);
-  S.dofFocusNdcY = ndc.y;
-  S.postSuite.dof.uniforms.uFocusV.value = focusV;
-}
-
-// Push the per-realm FILMIC GRADE params from the interior tile kit's authored grade onto the grade
-// pass. Flagships carry their tuned gradeTint/gradeStrength; kits with no grade -> neutral (tint amt
-// 0, still filmic+vignette). rigOn=false (study-rig honest baseline) -> neutral too.
-function updatePostSuiteGrade(kit, rigOn){
-  if(!S.postSuite) return;
-  const g = S.postSuite.grade.uniforms;
-  const hasGrade = rigOn && kit && kit.gradeTint && typeof kit.gradeStrength === "number";
-  if(hasGrade){
-    const tintNum = hexStrToNum(kit.gradeTint);
-    g.uTint.value.setHex(tintNum);
-    g.uTintAmt.value = Math.min(LIGHT_TUNABLES.gradeTintMax, kit.gradeStrength * LIGHT_TUNABLES.gradeTintScale);
-  } else {
-    g.uTint.value.setRGB(1, 1, 1);
-    g.uTintAmt.value = 0.0;
-  }
-  // LL-1: every mount is a sync point for the grade/bloom LIVE tunables (this is what "drag -> re-
-  // render" reaches for these — no separate push path to keep in sync with mountPostSuite's own call
-  // site below). Untouched LIGHT_TUNABLES == the authored consts, so this is a no-op read in production.
-  g.uExposureFloor.value = LIGHT_TUNABLES.gradeExposureFloor;
-  const activeRecipe = LIGHT_TUNABLES.profiles[S.lightProfileKey || LIGHT_DEFAULT_PROFILE];
-  if(g.uTonemapStrength){
-    g.uTonemapStrength.value = activeRecipe && activeRecipe.toneMap
-      ? activeRecipe.toneMap.strength : 1;
-  }
-  if(S.postSuite.bloom){
-    S.postSuite.bloom.threshold = LIGHT_TUNABLES.bloomThreshold;
-    S.postSuite.bloom.strength = LIGHT_TUNABLES.bloomStrength;
-  }
-}
-
-// Push resolution-dependent uniforms (DoF aspect, grade resolution) after any canvas resize.
-function syncPostSuiteResolution(){
-  if(!S.postSuite || !S.renderer) return;
-  const size = new THREE.Vector2();
-  S.renderer.getSize(size);
-  S.postSuite.dof.uniforms.uResolution.value.set(size.x, size.y);
-  S.postSuite.grade.uniforms.uResolution.value.set(size.x, size.y);
-  if(S.postSuite.bloom && S.postSuite.bloom.setSize){
-    S.postSuite.bloom.setSize(size.x * BLOOM_RESOLUTION_SCALE, size.y * BLOOM_RESOLUTION_SCALE);
-  }
-  if(S.postSuite.ao && S.postSuite.ao.setSize){
-    // DEVICE pixels, not CSS pixels (Adam, 2026-07-25: "two crescent shapes that aren't quite
-    // aligned with the form of the sphere"): EffectComposer sizes every pass's buffers at
-    // size × pixelRatio, so an AO pass sized in CSS units computes occlusion on a half-resolution
-    // depth/normal buffer and upsamples it half a texel off the beauty — misregistered crescents
-    // on every curved silhouette. The AO G-buffer must match the composer's device-pixel targets.
-    const aoPixelRatio = (S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1) * ENV_AO_RESOLUTION_SCALE;
-    S.postSuite.ao.setSize(Math.round(size.x * aoPixelRatio), Math.round(size.y * aoPixelRatio));
-  }
-}
-
-// Mount the post suite onto the composer (interior boards). Idempotent — re-mounting on an interior->
-// interior board swap just refreshes uniforms/focus (the passes stay attached). Adds in chain order
-// [render, dof, bloom, grade] via the addPass seam. renderPass MUST be first so the effects have the
-// scene to read; grade last so EffectComposer flags it renderToScreen.
-function mountPostSuite(kit, rigOn){
-  if(!S.mounted || !S.composer) return;
-  buildPostSuite();
-  if(!S.postSuite) return;
-  // keep the renderPass camera in sync (setInteriorBoard may have swapped ortho<->persp cameras)
-  S.postSuite.renderPass.camera = S.camera;
-  if(S.postSuite.ao){
-    // Same camera-swap law as renderPass, plus GTAO's construction-time projection define — the
-    // shader baked PERSPECTIVE_CAMERA at build; refresh it if a mount ever swaps projections so
-    // the AO math can never silently run against the wrong projection model.
-    S.postSuite.ao.camera = S.camera;
-    const isPersp = S.camera && S.camera.isPerspectiveCamera ? 1 : 0;
-    if(S.postSuite.ao.gtaoMaterial.defines.PERSPECTIVE_CAMERA !== isPersp){
-      S.postSuite.ao.gtaoMaterial.defines.PERSPECTIVE_CAMERA = isPersp;
-      S.postSuite.ao.gtaoMaterial.needsUpdate = true;
-    }
-  }
-  syncPostSuiteResolution();
-  updatePostSuiteGrade(kit, rigOn);
-  updateDofFocus();
-  if(!S.postSuiteMounted){
-    S.composer.addPass(S.postSuite.renderPass);
-    // AO immediately after the beauty render: it multiplies the LINEAR scene color, so DoF blurs,
-    // bloom thresholds, and the grade/tonemap all see the already-grounded frame.
-    S.composer.addPass(S.postSuite.ao);
-    S.composer.addPass(S.postSuite.dof);
-    S.composer.addPass(S.postSuite.bloom);
-    S.composer.addPass(S.postSuite.grade);
-    S.composer.addPass(S.postSuite.outputPass); // ALWAYS last — applies sRGB OETF (see OutputPass import)
-    S.postSuiteMounted = true;
-  }
-}
-
-// Tear the post suite OFF the composer (flat tabletop — the tabletop stays pass-free). Removes via the
-// removePass seam; mirrors THREE's own contract (removePass never disposes a pass — the passes persist
-// on S.postSuite for the next interior board, disposed only at retire()).
-function teardownPostSuite(){
-  if(!S.composer || !S.postSuite || !S.postSuiteMounted) return;
-  S.composer.removePass(S.postSuite.outputPass);
-  S.composer.removePass(S.postSuite.grade);
-  S.composer.removePass(S.postSuite.bloom);
-  S.composer.removePass(S.postSuite.dof);
-  S.composer.removePass(S.postSuite.ao);
-  S.composer.removePass(S.postSuite.renderPass);
-  S.postSuiteMounted = false;
-}
+// ---- THE POST SUITE + ENVIRONMENT AO: extracted to src/ui/theater-post.js (split B4, 2026-07-25) ----
+// AGX_TONEMAP_GLSL, makeDofPass, makeGradePass, MaskedBloomPass, envAOPrepassExcludes,
+// EnvironmentAOPass, envAOEnabled, makeEnvironmentAOPass, the ENV_AO_* authored settings, and the
+// suite's whole lifecycle (buildPostSuite / updateDofFocus / updatePostSuiteGrade /
+// syncPostSuiteResolution / mountPostSuite / teardownPostSuite) live in that module now. This root
+// imports the surface it still calls (top import block), passes capabilities via postInit(ctx) at
+// end-of-body, and re-syncs the live S record via postSyncState(S) at both `S = createTheaterState()`
+// sites. GRADE_TONEMAP / BLOOM_MASK_DISABLED_FOR_TEST / BLOOM_LAYER and the LIGHT_TUNABLES seed
+// consts stay HERE — see theater-post.js's own header for the full ownership split. Every
+// window.Theater post/AO seam (_postSuiteForTest, _setSuitePassEnabledForTest, _environmentAOForTest,
+// _aoContactDiagForTest, _envAOPrepassExcludesForTest, _setEnvironmentAOOutputForTest,
+// _setGradeTonemapForTest) is still assigned in this file, below, calling in through those imports.
 
 /* T1.5 §3 camera fit: frame the board to fill ~80% of the canvas — fit the orthographic camera's
    half-height to the board's own half-extent (its largest tile-footprint radius) with a small margin,
@@ -5611,49 +5021,12 @@ function placeCameraTweened(preFit){
   startTweenLoop();
 }
 
-// P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §3-D7): dispose one mesh's geometry+material, UNLESS its
-// geometry is tagged shared (userData.shared, set once by wholeObjectGeometryFor at cache-insert time)
-// — a cached whole-object BufferGeometry is reused across EVERY unit/prop instance of the same
-// registry key, so disposing it when ONE figure's wrapper group gets swept would corrupt every other
-// still-live figure sharing that same cached geometry. The mesh still fully DETACHES either way
-// (clearGroup's own child-removal loop below handles that uniformly) — only the dispose() call is
-// skipped for a shared geometry. Materials are NEVER shared-tagged (wholeObjectMaterialsFor's own
-// cache is keyed by opacity only, reused the same way — dispose is skipped for those too, since a
-// disposed shared material would break every other figure using that opacity bucket); non-whole-
-// object meshes carry no `shared` tag on either geometry or material, so their dispose is unaffected —
-// byte-identical to before this unit for every cuboid-path figure/prop.
-function disposeMeshMaybeShared(mesh){
-  const sharedGeo = !!(mesh.geometry && mesh.geometry.userData && mesh.geometry.userData.shared);
-  if(mesh.geometry && !sharedGeo) mesh.geometry.dispose();
-  if(mesh.material){
-    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-    const sharedMat = mats.some(m => m && m.userData && m.userData.shared);
-    if(!sharedMat) mats.forEach(m => m && m.dispose());
-  }
-}
-// P1' WHOLE-OBJECT WIRING (§3-D7): a whole-object figure/prop is a THREE.Group wrapper (matching
-// the pre-existing cuboid-figure convention — every archetype builder ALSO returns a Group, not a
-// bare Mesh) holding ONE mesh with a cached/shared geometry+material triple. Traverse into it (one
-// level is sufficient — the wrapper's only child is that one mesh) so the shared-geometry/material
-// skip actually reaches the mesh that carries the tag; a plain cuboid figure's own nested boxes
-// (never tagged shared) still dispose exactly as before via the same traversal. Factored out of
-// clearGroup (BEAUTY-WAVE-4.md MF-2) so a single DETACHED figure — a despawn-grace tween's onLifted,
-// which pulls one child OUT of its group before clearGroup ever sees it (see setUnits' despawn diff) —
-// can dispose itself via the exact same logic, byte-identical to what clearGroup already did per child.
-function disposeGroupChild(child){
-  if(child.geometry || child.material){
-    disposeMeshMaybeShared(child);
-  } else if(child.children && child.children.length){
-    child.traverse(function(n){ if(n.geometry || n.material) disposeMeshMaybeShared(n); });
-  }
-}
-function clearGroup(group){
-  if(!group) return;
-  while(group.children.length){
-    const child = group.children.pop();
-    disposeGroupChild(child);
-  }
-}
+// ---- DISPOSAL HELPERS: extracted to src/ui/theater-dispose.js (split B4, 2026-07-25) ----
+// disposeMeshMaybeShared / disposeGroupChild / clearGroup moved VERBATIM to their own module (pure —
+// no THREE, no S, no root symbol, so no ctx and no init call). This root imports clearGroup +
+// disposeGroupChild at the top and every existing call site is unchanged. disposeAuxCaches and
+// retire STAY here: they are this file's one true end-of-life point (and dev/verify-theater-verbs.mjs
+// text-extracts both from this file's own source).
 
 /* T1.5 §2: per-env deep void background, keyed by the same env strings theater-data.js's
    THEATER_ENV_PALETTE uses (a small duplicated table — this module is a sealed ES-module scope that
@@ -7019,6 +6392,7 @@ function mount(el, opts){
   S = createTheaterState();
   clayRoomSyncState(S); // split B1: the clay module mirrors the live state record
   lightLabSyncState(S); // split B2: same law for the lab
+  postSyncState(S);     // split B4: same law for the post suite (it reads AND writes S.postSuite*)
   if(priorTextures) S.textures = priorTextures;
   // BEAUTY-WAVE-2 BW2-0: default is now CLEAN (S.psxEnabled false, createTheaterState's own default),
   // so the escape hatch is symmetric — `opts.psx === true` is the dev/nostalgia toggle that turns the
@@ -12665,6 +12039,7 @@ function retire(){
   S = createTheaterState();
   clayRoomSyncState(S); // split B1: the clay module mirrors the live state record
   lightLabSyncState(S); // split B2: same law for the lab
+  postSyncState(S);     // split B4: same law for the post suite (it reads AND writes S.postSuite*)
 }
 
 /* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 8) — ONE module-scope call, made once at import
@@ -14690,6 +14065,22 @@ window.Theater._freezeFantasyPropPilotLightForTest = function(){ stopLightFlicke
 // see that block's own comment for the boot-time glbLoadScene reason. figureBuildInit IS here: its ctx
 // carries top-level consts that are still in TDZ up there, and the first thing that can call figureFor
 // is clayRoomBootSelfMount() at the very bottom of this block.)
+/* ---- split B4: wire the post-processing module (see src/ui/theater-post.js's header) ----
+   First in this block because it is the deepest leaf here: the light lab's own ctx carries
+   mountPostSuite/updatePostSuiteGrade, and clayRoomBootSelfMount() at the bottom of the block is the
+   first thing that can mount a board. Not hoisted up to the import block (unlike B3's
+   skins/wholeObject inits): this ctx carries the live `S` record and LIGHT_TUNABLES, neither of which
+   exists yet at module-eval time, and nothing in this file's own top-level body touches a post pass. */
+postInit({
+  S,
+  postCtxGetGradeTonemap: function(){ return GRADE_TONEMAP; },
+  postCtxBloomMaskDisabled: function(){ return BLOOM_MASK_DISABLED_FOR_TEST; },
+  hexStrToNum,
+  BLOOM_LAYER,
+  GRADE_EXPOSURE_FLOOR,
+  LIGHT_DEFAULT_PROFILE,
+  LIGHT_TUNABLES,
+});
 figureBuildInit({
   figCtxSpriteChannelEnabled: function(){ return SPRITE_CHANNEL_ENABLED; },
   figCtxWholeObjectEnabled: function(){ return WHOLE_OBJECT_ENABLED; },

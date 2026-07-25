@@ -408,6 +408,54 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
         Object.freeze({ id: "round-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
       ]),
       access: Object.freeze({ shaft: "climb-dc", top: "none" })
+    }),
+    /* Checkpoint 4 (2026-07-25) — THE ASSEMBLED EXAMPLE. The same generic atoms composed into one
+       legible construction against the shell's own raised terrace (tier +1, cells x1-3 z5-6): a
+       wide stair climbs the terrace exactly one 2.5-ft quantum (rise 0.5 = the grid law), a
+       half-height blocker stands on the terrace edge as a parapet base (lift = tier height), and
+       two square posts flank the approach. Nothing bespoke: every entry reuses an existing kind,
+       socket vocabulary, and access class — this is the "same pieces form a believable whole"
+       proof, not a new geometry family. `assembly: true` marks the group for the workbench lane. */
+    Object.freeze({
+      id: "assembly-approach-stair", kind: "stair", label: "ASSEMBLY · terrace stair",
+      assembly: true,
+      at: Object.freeze({ x: 2, z: 4.05 }), width: 2, run: 1.5, rise: 0.5, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "approach-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: -1 }) }),
+        Object.freeze({ id: "approach-high", type: "top-surface", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-parapet", kind: "blocker", label: "ASSEMBLY · terrace parapet base",
+      assembly: true, lift: 0.5,
+      at: Object.freeze({ x: 2, z: 5.95 }), axis: "x", length: 2.4, height: 0.4, thickness: 0.26,
+      sockets: Object.freeze([
+        Object.freeze({ id: "parapet-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "parapet-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) }),
+        Object.freeze({ id: "parapet-seat", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "climb-cost", faces: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-post-west", kind: "support-square", label: "ASSEMBLY · approach post W",
+      assembly: true,
+      at: Object.freeze({ x: 0.95, z: 3.45 }), width: 0.45, height: 1.1,
+      sockets: Object.freeze([
+        Object.freeze({ id: "post-w-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "post-w-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-post-east", kind: "support-square", label: "ASSEMBLY · approach post E",
+      assembly: true,
+      at: Object.freeze({ x: 3.05, z: 3.45 }), width: 0.45, height: 1.1,
+      sockets: Object.freeze([
+        Object.freeze({ id: "post-e-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "post-e-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ shaft: "climb-dc", top: "none" })
     })
   ]),
   opening: Object.freeze({

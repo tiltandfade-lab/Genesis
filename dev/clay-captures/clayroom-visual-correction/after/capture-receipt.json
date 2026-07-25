@@ -55,28 +55,28 @@
       },
       "liveMountedLights": {
         "ambient": {
-          "uuid": "b36a957c-aedc-4ae3-ac19-49c56854fe79",
+          "uuid": "723bc417-13a6-4603-a50b-17aa92d25668",
           "intensity": 0.55,
           "color": 16777215
         },
         "rig": {
           "hemi": {
-            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "uuid": "1dcaac47-1dae-4f27-a14d-c7aed49d8956",
             "intensity": 0.06,
             "color": 16773596
           },
           "key": {
-            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "uuid": "53d6cbde-6397-4298-a4ee-dfdff92d15d5",
             "intensity": 0,
             "color": 16777215
           },
           "fill": {
-            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "uuid": "883499f4-09b1-43db-9867-36296ac738f3",
             "intensity": 0,
             "color": 16777215
           },
           "cameraKey": {
-            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "uuid": "4e1b9b01-0013-442d-b175-fce3768595de",
             "intensity": 0,
             "color": 16777215
           }
@@ -118,9 +118,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          33.6681,
-          33.3396,
-          33.6681
+          31.1116,
+          30.8081,
+          31.1116
         ],
         "target": [
           0,
@@ -128,7 +128,7 @@
           0
         ],
         "near": 0.1,
-        "far": 118.12576893537619,
+        "far": 113.71220768383617,
         "clayZoom": 0.72,
         "clayZoomRange": [
           0.12,
@@ -136,8 +136,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1290x1352",
-        "cssPx": "645x676",
+        "backingPx": "1396x1352",
+        "cssPx": "698x676",
         "dprEffective": 2,
         "shadowMap": true
       },
@@ -209,28 +209,28 @@
       },
       "liveMountedLights": {
         "ambient": {
-          "uuid": "abf5ae0d-d54e-45b2-936e-17eb038cc9a3",
+          "uuid": "3416f0e9-f75c-43eb-9471-b50679546ccf",
           "intensity": 0.18,
           "color": 16777215
         },
         "rig": {
           "hemi": {
-            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "uuid": "1dcaac47-1dae-4f27-a14d-c7aed49d8956",
             "intensity": 0.06,
             "color": 16773596
           },
           "key": {
-            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "uuid": "53d6cbde-6397-4298-a4ee-dfdff92d15d5",
             "intensity": 0,
             "color": 16777215
           },
           "fill": {
-            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "uuid": "883499f4-09b1-43db-9867-36296ac738f3",
             "intensity": 0,
             "color": 16777215
           },
           "cameraKey": {
-            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "uuid": "4e1b9b01-0013-442d-b175-fce3768595de",
             "intensity": 0,
             "color": 16777215
           }
@@ -305,9 +305,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          33.6681,
-          33.3396,
-          33.6681
+          32.8035,
+          32.4834,
+          32.8035
         ],
         "target": [
           0,
@@ -315,7 +315,7 @@
           0
         ],
         "near": 0.1,
-        "far": 118.12576893537619,
+        "far": 116.63311323763995,
         "clayZoom": 0.72,
         "clayZoomRange": [
           0.12,
@@ -323,8 +323,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1290x1352",
-        "cssPx": "645x676",
+        "backingPx": "1324x1352",
+        "cssPx": "662x676",
         "dprEffective": 2,
         "shadowMap": true
       },
@@ -376,28 +376,28 @@
       },
       "liveMountedLights": {
         "ambient": {
-          "uuid": "7e1027d2-c55c-45fa-9231-10e8c4e12a99",
+          "uuid": "09c823ed-41ce-4738-a0ce-2440cafcda28",
           "intensity": 0.55,
           "color": 14212320
         },
         "rig": {
           "hemi": {
-            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "uuid": "1dcaac47-1dae-4f27-a14d-c7aed49d8956",
             "intensity": 0.08,
             "color": 16773596
           },
           "key": {
-            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "uuid": "53d6cbde-6397-4298-a4ee-dfdff92d15d5",
             "intensity": 0.05,
             "color": 16777215
           },
           "fill": {
-            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "uuid": "883499f4-09b1-43db-9867-36296ac738f3",
             "intensity": 0.02,
             "color": 16777215
           },
           "cameraKey": {
-            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "uuid": "4e1b9b01-0013-442d-b175-fce3768595de",
             "intensity": 0.1,
             "color": 16777215
           }
@@ -439,9 +439,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          34.4697,
-          34.1334,
-          34.4697
+          32.8035,
+          32.4834,
+          32.8035
         ],
         "target": [
           0,
@@ -449,7 +449,7 @@
           0
         ],
         "near": 0.1,
-        "far": 119.50971581478993,
+        "far": 116.63311323763995,
         "clayZoom": 0.72,
         "clayZoomRange": [
           0.12,
@@ -457,8 +457,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1260x1352",
-        "cssPx": "630x676",
+        "backingPx": "1324x1352",
+        "cssPx": "662x676",
         "dprEffective": 2,
         "shadowMap": true
       },
@@ -510,28 +510,28 @@
       },
       "liveMountedLights": {
         "ambient": {
-          "uuid": "e64afb79-4dac-4c4e-b0e6-b64882258523",
+          "uuid": "0629330c-6a24-4563-acbd-ced43407b02d",
           "intensity": 0.36,
           "color": 9412808
         },
         "rig": {
           "hemi": {
-            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "uuid": "1dcaac47-1dae-4f27-a14d-c7aed49d8956",
             "intensity": 0.08,
             "color": 16773596
           },
           "key": {
-            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "uuid": "53d6cbde-6397-4298-a4ee-dfdff92d15d5",
             "intensity": 0.05,
             "color": 16777215
           },
           "fill": {
-            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "uuid": "883499f4-09b1-43db-9867-36296ac738f3",
             "intensity": 0.02,
             "color": 16777215
           },
           "cameraKey": {
-            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "uuid": "4e1b9b01-0013-442d-b175-fce3768595de",
             "intensity": 0.1,
             "color": 16777215
           }
@@ -573,9 +573,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          34.4697,
-          34.1334,
-          34.4697
+          32.8035,
+          32.4834,
+          32.8035
         ],
         "target": [
           0,
@@ -583,7 +583,7 @@
           0
         ],
         "near": 0.1,
-        "far": 119.50971581478993,
+        "far": 116.63311323763995,
         "clayZoom": 0.72,
         "clayZoomRange": [
           0.12,
@@ -591,8 +591,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1260x1352",
-        "cssPx": "630x676",
+        "backingPx": "1324x1352",
+        "cssPx": "662x676",
         "dprEffective": 2,
         "shadowMap": true
       },
@@ -644,28 +644,28 @@
       },
       "liveMountedLights": {
         "ambient": {
-          "uuid": "d1c37af4-d00f-4020-ad14-4a03c0b0c0fa",
+          "uuid": "0847aa10-92ee-44f6-a002-966165bef434",
           "intensity": 0.26,
           "color": 4212896
         },
         "rig": {
           "hemi": {
-            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "uuid": "1dcaac47-1dae-4f27-a14d-c7aed49d8956",
             "intensity": 0.08,
             "color": 16773596
           },
           "key": {
-            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "uuid": "53d6cbde-6397-4298-a4ee-dfdff92d15d5",
             "intensity": 0.05,
             "color": 16777215
           },
           "fill": {
-            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "uuid": "883499f4-09b1-43db-9867-36296ac738f3",
             "intensity": 0.02,
             "color": 16777215
           },
           "cameraKey": {
-            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "uuid": "4e1b9b01-0013-442d-b175-fce3768595de",
             "intensity": 0.1,
             "color": 16777215
           }
@@ -717,9 +717,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          34.4697,
-          34.1334,
-          34.4697
+          32.8035,
+          32.4834,
+          32.8035
         ],
         "target": [
           0,
@@ -727,7 +727,7 @@
           0
         ],
         "near": 0.1,
-        "far": 119.50971581478993,
+        "far": 116.63311323763995,
         "clayZoom": 0.72,
         "clayZoomRange": [
           0.12,
@@ -735,8 +735,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1260x1352",
-        "cssPx": "630x676",
+        "backingPx": "1324x1352",
+        "cssPx": "662x676",
         "dprEffective": 2,
         "shadowMap": true
       },
@@ -788,28 +788,28 @@
       },
       "liveMountedLights": {
         "ambient": {
-          "uuid": "b11165f9-b379-484a-8c6a-e5f979dd3101",
+          "uuid": "d0aa7682-5f27-4574-86e5-638952541cc5",
           "intensity": 0.21,
           "color": 4864038
         },
         "rig": {
           "hemi": {
-            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "uuid": "1dcaac47-1dae-4f27-a14d-c7aed49d8956",
             "intensity": 0.08,
             "color": 16773596
           },
           "key": {
-            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "uuid": "53d6cbde-6397-4298-a4ee-dfdff92d15d5",
             "intensity": 0.05,
             "color": 16777215
           },
           "fill": {
-            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "uuid": "883499f4-09b1-43db-9867-36296ac738f3",
             "intensity": 0.02,
             "color": 16777215
           },
           "cameraKey": {
-            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "uuid": "4e1b9b01-0013-442d-b175-fce3768595de",
             "intensity": 0.1,
             "color": 16777215
           }
@@ -817,15 +817,15 @@
         "practicals": [
           {
             "id": "torch-key",
-            "emitted": 6.226938,
+            "emitted": 5.483367,
             "distance": 24,
             "decay": 1.5,
             "castShadow": true,
             "state": "flickering",
             "pointPositionLocal": [
-              -4.497133,
-              1.183569,
-              -7.306569
+              -4.502126,
+              1.176056,
+              -7.306078
             ],
             "color": 16752714
           }
@@ -833,13 +833,13 @@
       },
       "fixtureEmitterWorldPositions": [
         {
-          "x": -4.497132776621288,
-          "y": 1.1835688990701332,
-          "z": -7.3065686009805075,
+          "x": -4.502125886061645,
+          "y": 1.1760563794460652,
+          "z": -7.306078198446841,
           "fixtureId": "sconce-torch-clay",
           "mount": "wall",
           "ownerSegIndex": 0,
-          "emissiveIntensity": 1.7030941750539004
+          "emissiveIntensity": 1.4997243515537615
         }
       ],
       "sceneLightsSummary": {
@@ -861,9 +861,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          34.4697,
-          34.1334,
-          34.4697
+          32.8035,
+          32.4834,
+          32.8035
         ],
         "target": [
           0,
@@ -871,7 +871,7 @@
           0
         ],
         "near": 0.1,
-        "far": 119.50971581478993,
+        "far": 116.63311323763995,
         "clayZoom": 0.72,
         "clayZoomRange": [
           0.12,
@@ -879,8 +879,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1260x1352",
-        "cssPx": "630x676",
+        "backingPx": "1324x1352",
+        "cssPx": "662x676",
         "dprEffective": 2,
         "shadowMap": true
       },
@@ -932,28 +932,28 @@
       },
       "liveMountedLights": {
         "ambient": {
-          "uuid": "bd9787f1-8c6f-4ebf-b4d6-c5ec5e68d1e8",
+          "uuid": "60d57c67-061f-4c0c-aed1-b9133516a484",
           "intensity": 0.2,
           "color": 3808276
         },
         "rig": {
           "hemi": {
-            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "uuid": "1dcaac47-1dae-4f27-a14d-c7aed49d8956",
             "intensity": 0.08,
             "color": 16773596
           },
           "key": {
-            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "uuid": "53d6cbde-6397-4298-a4ee-dfdff92d15d5",
             "intensity": 0.05,
             "color": 16777215
           },
           "fill": {
-            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "uuid": "883499f4-09b1-43db-9867-36296ac738f3",
             "intensity": 0.02,
             "color": 16777215
           },
           "cameraKey": {
-            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "uuid": "4e1b9b01-0013-442d-b175-fce3768595de",
             "intensity": 0.1,
             "color": 16777215
           }
@@ -1005,9 +1005,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          33.6681,
-          33.3396,
-          33.6681
+          32.8035,
+          32.4834,
+          32.8035
         ],
         "target": [
           0,
@@ -1015,7 +1015,7 @@
           0
         ],
         "near": 0.1,
-        "far": 118.12576893537619,
+        "far": 116.63311323763995,
         "clayZoom": 0.72,
         "clayZoomRange": [
           0.12,
@@ -1023,8 +1023,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1290x1352",
-        "cssPx": "645x676",
+        "backingPx": "1324x1352",
+        "cssPx": "662x676",
         "dprEffective": 2,
         "shadowMap": true
       },
@@ -1038,8 +1038,8 @@
   "structure": {
     "assembled": {
       "view": "assembled",
-      "mountedMeshes": 85,
-      "shadowCasters": 27,
+      "mountedMeshes": 232,
+      "shadowCasters": 34,
       "hostSuppressedMeshes": 5,
       "shellUppers": {
         "built": 6,
@@ -1070,47 +1070,82 @@
         "ruleId": "camera-side-wall-omission",
         "omitted": [
           {
-            "segIndex": 3,
-            "mid": {
-              "x": 18.5,
-              "z": 27
-            }
-          },
-          {
-            "segIndex": 4,
-            "mid": {
-              "x": 11,
-              "z": 34.5
-            }
-          }
-        ],
-        "built": [
-          {
             "segIndex": 0,
             "mid": {
-              "x": 6.5,
-              "z": 19.5
+              "x": 10.5,
+              "z": 25.5
             }
           },
           {
             "segIndex": 1,
             "mid": {
-              "x": 10,
-              "z": 19.5
-            }
-          },
-          {
-            "segIndex": 2,
-            "mid": {
-              "x": 14.5,
-              "z": 19.5
+              "x": 9,
+              "z": 26.5
             }
           },
           {
             "segIndex": 5,
             "mid": {
-              "x": 3.5,
-              "z": 27
+              "x": 8.5,
+              "z": 21.5
+            }
+          },
+          {
+            "segIndex": 7,
+            "mid": {
+              "x": 10.5,
+              "z": 23.5
+            }
+          },
+          {
+            "segIndex": 9,
+            "mid": {
+              "x": 6,
+              "z": 26.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 5.5,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 7,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 8,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 6,
+            "mid": {
+              "x": 9.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 8,
+            "mid": {
+              "x": 4.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 10,
+            "mid": {
+              "x": 4.5,
+              "z": 25.5
             }
           }
         ]
@@ -1130,16 +1165,20 @@
         "shallow-ramp",
         "half-height-blocker",
         "square-support",
-        "round-support"
+        "round-support",
+        "assembly-approach-stair",
+        "assembly-parapet",
+        "assembly-post-west",
+        "assembly-post-east"
       ],
       "camera": {
         "kind": "perspective",
         "fov": 20,
         "zoom": null,
         "position": [
-          34.4697,
-          34.1334,
-          34.4697
+          25.6084,
+          25.3585,
+          25.6084
         ],
         "target": [
           0,
@@ -1147,7 +1186,7 @@
           0
         ],
         "near": 0.1,
-        "far": 119.50971581478993,
+        "far": 104.21122755108213,
         "clayZoom": 0.65,
         "clayZoomRange": [
           0.12,
@@ -1155,14 +1194,14 @@
         ]
       },
       "renderer": {
-        "backingPx": "1260x1352",
-        "cssPx": "630x676"
+        "backingPx": "1696x1352",
+        "cssPx": "848x676"
       }
     },
     "sockets": {
       "view": "sockets",
-      "mountedMeshes": 85,
-      "shadowCasters": 27,
+      "mountedMeshes": 232,
+      "shadowCasters": 34,
       "hostSuppressedMeshes": 5,
       "shellUppers": {
         "built": 6,
@@ -1193,47 +1232,82 @@
         "ruleId": "camera-side-wall-omission",
         "omitted": [
           {
-            "segIndex": 3,
-            "mid": {
-              "x": 18.5,
-              "z": 27
-            }
-          },
-          {
-            "segIndex": 4,
-            "mid": {
-              "x": 11,
-              "z": 34.5
-            }
-          }
-        ],
-        "built": [
-          {
             "segIndex": 0,
             "mid": {
-              "x": 6.5,
-              "z": 19.5
+              "x": 10.5,
+              "z": 25.5
             }
           },
           {
             "segIndex": 1,
             "mid": {
-              "x": 10,
-              "z": 19.5
-            }
-          },
-          {
-            "segIndex": 2,
-            "mid": {
-              "x": 14.5,
-              "z": 19.5
+              "x": 9,
+              "z": 26.5
             }
           },
           {
             "segIndex": 5,
             "mid": {
-              "x": 3.5,
-              "z": 27
+              "x": 8.5,
+              "z": 21.5
+            }
+          },
+          {
+            "segIndex": 7,
+            "mid": {
+              "x": 10.5,
+              "z": 23.5
+            }
+          },
+          {
+            "segIndex": 9,
+            "mid": {
+              "x": 6,
+              "z": 26.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 5.5,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 7,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 8,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 6,
+            "mid": {
+              "x": 9.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 8,
+            "mid": {
+              "x": 4.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 10,
+            "mid": {
+              "x": 4.5,
+              "z": 25.5
             }
           }
         ]
@@ -1253,16 +1327,20 @@
         "shallow-ramp",
         "half-height-blocker",
         "square-support",
-        "round-support"
+        "round-support",
+        "assembly-approach-stair",
+        "assembly-parapet",
+        "assembly-post-west",
+        "assembly-post-east"
       ],
       "camera": {
         "kind": "perspective",
         "fov": 20,
         "zoom": null,
         "position": [
-          34.4697,
-          34.1334,
-          34.4697
+          31.1116,
+          30.8081,
+          31.1116
         ],
         "target": [
           0,
@@ -1270,7 +1348,7 @@
           0
         ],
         "near": 0.1,
-        "far": 119.50971581478993,
+        "far": 113.71220768383617,
         "clayZoom": 0.65,
         "clayZoomRange": [
           0.12,
@@ -1278,14 +1356,14 @@
         ]
       },
       "renderer": {
-        "backingPx": "1260x1352",
-        "cssPx": "630x676"
+        "backingPx": "1396x1352",
+        "cssPx": "698x676"
       }
     },
     "access": {
       "view": "access",
-      "mountedMeshes": 85,
-      "shadowCasters": 27,
+      "mountedMeshes": 232,
+      "shadowCasters": 34,
       "hostSuppressedMeshes": 5,
       "shellUppers": {
         "built": 6,
@@ -1316,47 +1394,82 @@
         "ruleId": "camera-side-wall-omission",
         "omitted": [
           {
-            "segIndex": 3,
-            "mid": {
-              "x": 18.5,
-              "z": 27
-            }
-          },
-          {
-            "segIndex": 4,
-            "mid": {
-              "x": 11,
-              "z": 34.5
-            }
-          }
-        ],
-        "built": [
-          {
             "segIndex": 0,
             "mid": {
-              "x": 6.5,
-              "z": 19.5
+              "x": 10.5,
+              "z": 25.5
             }
           },
           {
             "segIndex": 1,
             "mid": {
-              "x": 10,
-              "z": 19.5
-            }
-          },
-          {
-            "segIndex": 2,
-            "mid": {
-              "x": 14.5,
-              "z": 19.5
+              "x": 9,
+              "z": 26.5
             }
           },
           {
             "segIndex": 5,
             "mid": {
-              "x": 3.5,
-              "z": 27
+              "x": 8.5,
+              "z": 21.5
+            }
+          },
+          {
+            "segIndex": 7,
+            "mid": {
+              "x": 10.5,
+              "z": 23.5
+            }
+          },
+          {
+            "segIndex": 9,
+            "mid": {
+              "x": 6,
+              "z": 26.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 5.5,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 7,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 8,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 6,
+            "mid": {
+              "x": 9.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 8,
+            "mid": {
+              "x": 4.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 10,
+            "mid": {
+              "x": 4.5,
+              "z": 25.5
             }
           }
         ]
@@ -1376,16 +1489,20 @@
         "shallow-ramp",
         "half-height-blocker",
         "square-support",
-        "round-support"
+        "round-support",
+        "assembly-approach-stair",
+        "assembly-parapet",
+        "assembly-post-west",
+        "assembly-post-east"
       ],
       "camera": {
         "kind": "perspective",
         "fov": 20,
         "zoom": null,
         "position": [
-          33.6681,
-          33.3396,
-          33.6681
+          32.8035,
+          32.4834,
+          32.8035
         ],
         "target": [
           0,
@@ -1393,7 +1510,7 @@
           0
         ],
         "near": 0.1,
-        "far": 118.12576893537619,
+        "far": 116.63311323763995,
         "clayZoom": 0.65,
         "clayZoomRange": [
           0.12,
@@ -1401,14 +1518,14 @@
         ]
       },
       "renderer": {
-        "backingPx": "1290x1352",
-        "cssPx": "645x676"
+        "backingPx": "1324x1352",
+        "cssPx": "662x676"
       }
     },
     "negative": {
       "view": "negative",
-      "mountedMeshes": 85,
-      "shadowCasters": 27,
+      "mountedMeshes": 232,
+      "shadowCasters": 34,
       "hostSuppressedMeshes": 5,
       "shellUppers": {
         "built": 6,
@@ -1439,47 +1556,82 @@
         "ruleId": "camera-side-wall-omission",
         "omitted": [
           {
-            "segIndex": 3,
-            "mid": {
-              "x": 18.5,
-              "z": 27
-            }
-          },
-          {
-            "segIndex": 4,
-            "mid": {
-              "x": 11,
-              "z": 34.5
-            }
-          }
-        ],
-        "built": [
-          {
             "segIndex": 0,
             "mid": {
-              "x": 6.5,
-              "z": 19.5
+              "x": 10.5,
+              "z": 25.5
             }
           },
           {
             "segIndex": 1,
             "mid": {
-              "x": 10,
-              "z": 19.5
-            }
-          },
-          {
-            "segIndex": 2,
-            "mid": {
-              "x": 14.5,
-              "z": 19.5
+              "x": 9,
+              "z": 26.5
             }
           },
           {
             "segIndex": 5,
             "mid": {
-              "x": 3.5,
-              "z": 27
+              "x": 8.5,
+              "z": 21.5
+            }
+          },
+          {
+            "segIndex": 7,
+            "mid": {
+              "x": 10.5,
+              "z": 23.5
+            }
+          },
+          {
+            "segIndex": 9,
+            "mid": {
+              "x": 6,
+              "z": 26.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 5.5,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 7,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 8,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 6,
+            "mid": {
+              "x": 9.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 8,
+            "mid": {
+              "x": 4.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 10,
+            "mid": {
+              "x": 4.5,
+              "z": 25.5
             }
           }
         ]
@@ -1499,16 +1651,20 @@
         "shallow-ramp",
         "half-height-blocker",
         "square-support",
-        "round-support"
+        "round-support",
+        "assembly-approach-stair",
+        "assembly-parapet",
+        "assembly-post-west",
+        "assembly-post-east"
       ],
       "camera": {
         "kind": "perspective",
         "fov": 20,
         "zoom": null,
         "position": [
-          34.4697,
-          34.1334,
-          34.4697
+          31.1116,
+          30.8081,
+          31.1116
         ],
         "target": [
           0,
@@ -1516,7 +1672,7 @@
           0
         ],
         "near": 0.1,
-        "far": 119.50971581478993,
+        "far": 113.71220768383617,
         "clayZoom": 0.65,
         "clayZoomRange": [
           0.12,
@@ -1524,14 +1680,14 @@
         ]
       },
       "renderer": {
-        "backingPx": "1260x1352",
-        "cssPx": "630x676"
+        "backingPx": "1396x1352",
+        "cssPx": "698x676"
       }
     },
     "strategic": {
       "view": "strategic",
-      "mountedMeshes": 90,
-      "shadowCasters": 32,
+      "mountedMeshes": 237,
+      "shadowCasters": 39,
       "hostSuppressedMeshes": 5,
       "shellUppers": {
         "built": 11,
@@ -1558,51 +1714,85 @@
         "rawDoorStateChangesLatch": false
       },
       "cameraSideOmission": {
-        "active": true,
+        "active": false,
         "ruleId": "camera-side-wall-omission",
-        "omitted": [
-          {
-            "segIndex": 3,
-            "mid": {
-              "x": 18.5,
-              "z": 27
-            }
-          },
-          {
-            "segIndex": 4,
-            "mid": {
-              "x": 11,
-              "z": 34.5
-            }
-          }
-        ],
+        "omitted": [],
         "built": [
           {
             "segIndex": 0,
             "mid": {
-              "x": 6.5,
-              "z": 19.5
+              "x": 10.5,
+              "z": 25.5
             }
           },
           {
             "segIndex": 1,
             "mid": {
-              "x": 10,
-              "z": 19.5
+              "x": 9,
+              "z": 26.5
             }
           },
           {
             "segIndex": 2,
             "mid": {
-              "x": 14.5,
-              "z": 19.5
+              "x": 5.5,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 7,
+              "z": 20.5
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 8,
+              "z": 20.5
             }
           },
           {
             "segIndex": 5,
             "mid": {
-              "x": 3.5,
-              "z": 27
+              "x": 8.5,
+              "z": 21.5
+            }
+          },
+          {
+            "segIndex": 6,
+            "mid": {
+              "x": 9.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 7,
+            "mid": {
+              "x": 10.5,
+              "z": 23.5
+            }
+          },
+          {
+            "segIndex": 8,
+            "mid": {
+              "x": 4.5,
+              "z": 22.5
+            }
+          },
+          {
+            "segIndex": 9,
+            "mid": {
+              "x": 6,
+              "z": 26.5
+            }
+          },
+          {
+            "segIndex": 10,
+            "mid": {
+              "x": 4.5,
+              "z": 25.5
             }
           }
         ]
@@ -1622,16 +1812,20 @@
         "shallow-ramp",
         "half-height-blocker",
         "square-support",
-        "round-support"
+        "round-support",
+        "assembly-approach-stair",
+        "assembly-parapet",
+        "assembly-post-west",
+        "assembly-post-east"
       ],
       "camera": {
         "kind": "perspective",
         "fov": 20,
         "zoom": null,
         "position": [
-          30.7156,
-          30.4159,
-          30.7156
+          32.8035,
+          32.4834,
+          32.8035
         ],
         "target": [
           0,
@@ -1639,7 +1833,7 @@
           0
         ],
         "near": 0.1,
-        "far": 113.0284596369415,
+        "far": 116.63311323763995,
         "clayZoom": 0.65,
         "clayZoomRange": [
           0.12,
@@ -1647,8 +1841,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1414x1352",
-        "cssPx": "707x676"
+        "backingPx": "1324x1352",
+        "cssPx": "662x676"
       }
     },
     "latchSequence": [
@@ -1694,32 +1888,32 @@
         "h": 900
       },
       "canvasRect": {
-        "x": 170,
+        "x": 42,
         "y": 44,
-        "w": 340,
+        "w": 488,
         "h": 856
       },
       "panelRect": {
-        "x": 510,
+        "x": 530,
         "y": 44,
-        "w": 250,
+        "w": 230,
         "h": 856
       },
-      "panelFractionOfWindow": 0.313
+      "panelFractionOfWindow": 0.288
     }
   },
   "fps": {
     "daylit": {
       "frames": 121,
-      "elapsedMs": 2002.6,
+      "elapsedMs": 2002.5,
       "fps": 60.4,
       "frameMsMedian": 16.7,
-      "frameMsP95": 16.8
+      "frameMsP95": 16.7
     },
     "torchlit": {
-      "frames": 92,
-      "elapsedMs": 2004.7,
-      "fps": 45.9,
+      "frames": 98,
+      "elapsedMs": 2021.3,
+      "fps": 48.5,
       "frameMsMedian": 16.7,
       "frameMsP95": 33.4
     }

@@ -14221,7 +14221,8 @@ window.Theater._clayStructureBenchForTest = function(){
     shadowCasters,
     shadowReceivers,
     hostSuppressedMeshes,
-    cameraSideOmission: S.wallOmissionReport || null,
+    cameraSideOmission: (S.clayRoomStructureReport && S.clayRoomStructureReport.cameraSideOmission)
+      || S.wallOmissionReport || null,
     dynamicCutaway: {
       system: "itrOcclusionClassify",
       disabledForTest: !!fade.disabledForTest,
@@ -17134,8 +17135,12 @@ function clayStructureRampGeometry(width, run, rise){
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
   geometry.setIndex(indices);
-  geometry.computeVertexNormals();
-  return geometry;
+  // Checkpoint 4 (Adam's diagnosis: "the ramp ... looks inflated or pillow-like instead of
+  // planar"): indexed shared vertices average normals across the wedge's hard faces. Drop the
+  // index so computeVertexNormals produces true per-face normals — a crisp planar wedge.
+  const hardFaced = geometry.toNonIndexed();
+  hardFaced.computeVertexNormals();
+  return hardFaced;
 }
 function clayStructureStripBetween(a, b, color, view, specId, thickness){
   const dx = b.x - a.x, dz = b.z - a.z;
@@ -17154,49 +17159,106 @@ function clayStructureStripBetween(a, b, color, view, specId, thickness){
   mesh.renderOrder = 72;
   return mesh;
 }
+// Checkpoint 4 SOCKET TRUTH ("socket marks do not communicate type, facing direction, polarity/
+// ownership, or valid candidate pairing"): every socket now draws a TYPE-COLOURED ARROW along its
+// actual authored axis — shaft plus angled head, so direction and polarity read from the frame.
+// Omnidirectional sockets (floor-mount/top-surface, axis 0/0) draw a type-coloured cross at their
+// face. The colour vocabulary is fixed and matches the panel legend.
+const CLAY_SOCKET_TYPE_COLORS = {
+  "butt-join-n": 0x35d8ff, "butt-join-e": 0x35d8ff, "butt-join-s": 0x35d8ff, "butt-join-w": 0x35d8ff,
+  "walk-surface": 0x66dfa0, "top-surface": 0x6f8fff, "terrain-join": 0xc08a5a,
+  "hinge": 0xff7ad8, "catch": 0xffe066, "floor-mount": 0xb9c2cc, "wall-mount": 0xb9c2cc,
+};
 function clayStructureAddSocketOverlay(group, spec, rawFloor, origin){
   const at = spec.at;
+  const lift = spec.lift || 0;
   (spec.sockets || []).forEach(function(socket, index){
     const axis = socket.axis || { x: 0, z: 0 };
+    const color = CLAY_SOCKET_TYPE_COLORS[socket.type] != null ? CLAY_SOCKET_TYPE_COLORS[socket.type] : 0x35d8ff;
     const spread = (index - ((spec.sockets.length - 1) / 2)) * 0.13;
     const x = at.x - origin.cx + (axis.x || 0) * 0.45 + (axis.z || 0) * spread;
     const z = at.z - origin.cz + (axis.z || 0) * 0.45 - (axis.x || 0) * spread;
-    const y = rawFloor + (socket.type === "top-surface" ? (spec.height || spec.rise || 0.5) + 0.05 : 0.08);
-    const dx = (axis.x || 0) * 0.34, dz = (axis.z || 0) * 0.34;
-    const points = Math.abs(dx) + Math.abs(dz) > 0
-      ? [new THREE.Vector3(x - dx, y, z - dz), new THREE.Vector3(x + dx, y, z + dz)]
-      : [
-          new THREE.Vector3(x - 0.16, y, z), new THREE.Vector3(x + 0.16, y, z),
-          new THREE.Vector3(x, y, z - 0.16), new THREE.Vector3(x, y, z + 0.16)
-        ];
-    for(let i = 0; i < points.length; i += 2){
-      group.add(clayStructureStripBetween(points[i], points[i + 1], 0x35d8ff, "sockets", spec.id, 0.045));
+    const y = rawFloor + lift + (socket.type === "top-surface" ? (spec.height || spec.rise || 0.5) + 0.05 : 0.08);
+    const ax = axis.x || 0, az = axis.z || 0;
+    if(Math.abs(ax) + Math.abs(az) > 0){
+      // ARROW: shaft from the piece toward the joining direction, head at the tip
+      const tip = new THREE.Vector3(x + ax * 0.34, y, z + az * 0.34);
+      const tail = new THREE.Vector3(x - ax * 0.2, y, z - az * 0.2);
+      group.add(clayStructureStripBetween(tail, tip, color, "sockets", spec.id, 0.05));
+      // head: two short strips angled back from the tip (perpendicular blend)
+      const px = -az, pz = ax; // perpendicular
+      const headL = new THREE.Vector3(tip.x - ax * 0.14 + px * 0.1, y, tip.z - az * 0.14 + pz * 0.1);
+      const headR = new THREE.Vector3(tip.x - ax * 0.14 - px * 0.1, y, tip.z - az * 0.14 - pz * 0.1);
+      group.add(clayStructureStripBetween(headL, tip, color, "sockets", spec.id, 0.05));
+      group.add(clayStructureStripBetween(headR, tip, color, "sockets", spec.id, 0.05));
+    } else {
+      group.add(clayStructureStripBetween(
+        new THREE.Vector3(x - 0.16, y, z), new THREE.Vector3(x + 0.16, y, z), color, "sockets", spec.id, 0.045));
+      group.add(clayStructureStripBetween(
+        new THREE.Vector3(x, y, z - 0.16), new THREE.Vector3(x, y, z + 0.16), color, "sockets", spec.id, 0.045));
     }
   });
 }
+// Checkpoint 4 ACCESS TRUTH ("show access data per relevant face rather than assigning one summary
+// colour to an entire object"): each authored face class draws its OWN frame in its OWN class
+// colour — the top/tread class outlines the top plane, the side class frames the two camera-facing
+// vertical faces, and 'none' renders neutral grey so inaccessibility is visibly a datum, not an
+// omission. Colours are fixed vocabulary matched by the panel legend.
+const CLAY_ACCESS_CLASS_COLORS = { walk: 0x66dfa0, "climb-cost": 0xf3bd55, "climb-dc": 0xff6d68, none: 0x8a9099 };
 function clayStructureAddAccessOverlay(group, spec, rawFloor, origin){
   const at = spec.at;
+  const lift = spec.lift || 0;
   const width = spec.width || spec.length || ((spec.radius || 0.35) * 2) || 1;
   const depth = spec.run || spec.thickness || ((spec.radius || 0.35) * 2) || 0.45;
   const hw = Math.max(0.22, width / 2), hd = Math.max(0.18, depth / 2);
-  const y = rawFloor + (spec.rise || spec.height || 0.1) + 0.025;
-  const p = [
-    new THREE.Vector3(at.x - origin.cx - hw, y, at.z - origin.cz - hd),
-    new THREE.Vector3(at.x - origin.cx + hw, y, at.z - origin.cz - hd),
-    new THREE.Vector3(at.x - origin.cx + hw, y, at.z - origin.cz + hd),
-    new THREE.Vector3(at.x - origin.cx - hw, y, at.z - origin.cz + hd),
-    new THREE.Vector3(at.x - origin.cx - hw, y, at.z - origin.cz - hd)
-  ];
-  const color = Object.values(spec.access || {}).indexOf("walk") >= 0 ? 0x66dfa0
-    : (Object.values(spec.access || {}).indexOf("climb-dc") >= 0 ? 0xff6d68 : 0xf3bd55);
-  for(let i = 0; i < p.length - 1; i++){
-    group.add(clayStructureStripBetween(p[i], p[i + 1], color, "access", spec.id, 0.035));
+  const cx0 = at.x - origin.cx, cz0 = at.z - origin.cz;
+  const h = (spec.rise || spec.height || 0.1);
+  const baseY = rawFloor + lift + 0.02;
+  const topY = rawFloor + lift + h + 0.025;
+  const access = spec.access || {};
+  const topClass = access.top || access.treads || null;
+  const sideClass = access.sides || access.shaft || access.faces || null;
+  const colorFor = function(cls){ return CLAY_ACCESS_CLASS_COLORS[cls] != null ? CLAY_ACCESS_CLASS_COLORS[cls] : 0xf3bd55; };
+  const frame = function(points, cls){
+    if(!cls) return;
+    for(let i = 0; i < points.length - 1; i++){
+      group.add(clayStructureStripBetween(points[i], points[i + 1], colorFor(cls), "access", spec.id, 0.035));
+    }
+  };
+  // TOP face (walk/tread class) — for the ramp, the frame follows the actual inclined plane
+  if(spec.kind === "ramp"){
+    const lowY = rawFloor + lift + 0.03, highY = rawFloor + lift + (spec.rise || 0.5) + 0.03;
+    frame([
+      new THREE.Vector3(cx0 - hw, lowY, cz0 - hd), new THREE.Vector3(cx0 + hw, lowY, cz0 - hd),
+      new THREE.Vector3(cx0 + hw, highY, cz0 + hd), new THREE.Vector3(cx0 - hw, highY, cz0 + hd),
+      new THREE.Vector3(cx0 - hw, lowY, cz0 - hd)
+    ], topClass || access.top);
+  } else {
+    frame([
+      new THREE.Vector3(cx0 - hw, topY, cz0 - hd), new THREE.Vector3(cx0 + hw, topY, cz0 - hd),
+      new THREE.Vector3(cx0 + hw, topY, cz0 + hd), new THREE.Vector3(cx0 - hw, topY, cz0 + hd),
+      new THREE.Vector3(cx0 - hw, topY, cz0 - hd)
+    ], topClass);
+  }
+  // SIDE faces (the two camera-facing planes under the fixed production camera: +x and +z)
+  if(sideClass){
+    frame([
+      new THREE.Vector3(cx0 + hw, baseY, cz0 - hd), new THREE.Vector3(cx0 + hw, baseY, cz0 + hd),
+      new THREE.Vector3(cx0 + hw, topY, cz0 + hd), new THREE.Vector3(cx0 + hw, topY, cz0 - hd),
+      new THREE.Vector3(cx0 + hw, baseY, cz0 - hd)
+    ], sideClass);
+    frame([
+      new THREE.Vector3(cx0 - hw, baseY, cz0 + hd), new THREE.Vector3(cx0 + hw, baseY, cz0 + hd),
+      new THREE.Vector3(cx0 + hw, topY, cz0 + hd), new THREE.Vector3(cx0 - hw, topY, cz0 + hd),
+      new THREE.Vector3(cx0 - hw, baseY, cz0 + hd)
+    ], sideClass);
   }
 }
 function clayStructureBuildPart(group, spec, rawFloor, origin){
   const mat = clayStructureMaterial();
   function add(mesh, y, x, z, kind){
-    mesh.position.set(x == null ? spec.at.x - origin.cx : x, y, z == null ? spec.at.z - origin.cz : z);
+    // spec.lift: assembled pieces may stand on the shell's own tiers (world-unit vertical offset)
+    mesh.position.set(x == null ? spec.at.x - origin.cx : x, y + (spec.lift || 0), z == null ? spec.at.z - origin.cz : z);
     clayStructureTag(mesh, spec.id, kind || "furniture");
     group.add(mesh);
     return mesh;
@@ -17504,6 +17566,22 @@ function clayRoomMountStructureBench(){
       omittedUpperSegments: omittedKeys.size,
       totalUpperSegments: shell.wallUpperMeshes.length + omittedKeys.size,
       exposedSlabSides: !!shell.riserGeometry
+    },
+    // Checkpoint 4 reporting parity ("the fixture can report all uppers present while also saying
+    // camera-side omission is active"): the omission projection is derived HERE, from the exact
+    // predicate/keys THIS build ran — never from the room-truth shell's separate generic report.
+    cameraSideOmission: {
+      ruleId: fixture.wallOmission.ruleId,
+      version: fixture.wallOmission.version,
+      active: omissionActive,
+      omitted: shell.wallSegments
+        .map(function(seg, i){ return { seg: seg, segIndex: i }; })
+        .filter(function(row){ return omittedKeys.has([row.seg.a.x, row.seg.a.z, row.seg.b.x, row.seg.b.z].join(",")); })
+        .map(function(row){ return { segIndex: row.segIndex, mid: { x: (row.seg.a.x + row.seg.b.x) / 2, z: (row.seg.a.z + row.seg.b.z) / 2 } }; }),
+      built: shell.wallSegments
+        .map(function(seg, i){ return { seg: seg, segIndex: i }; })
+        .filter(function(row){ return !omittedKeys.has([row.seg.a.x, row.seg.a.z, row.seg.b.x, row.seg.b.z].join(",")); })
+        .map(function(row){ return { segIndex: row.segIndex, mid: { x: (row.seg.a.x + row.seg.b.x) / 2, z: (row.seg.a.z + row.seg.b.z) / 2 } }; })
     },
     wallOmission: {
       ruleId: fixture.wallOmission.ruleId,
@@ -18964,7 +19042,20 @@ function clayRoomApplyCamPose(){
     // fixed 72° map-reading pitch, same production bearing, pan, target, and perspective camera.
     // It is a named mode, never free orbit. Every wall is compiled in this mode (see CL-F01 mount).
     const ray = pos.sub(target);
-    const distance = ray.length() * zoom;
+    // Checkpoint 4 ("ALL WALLS is poorly fitted in the narrow viewport, crops or flattens the
+    // scene"): the map-reading distance is computed from the ROOM'S OWN BOUNDS against the live
+    // camera fov/aspect, not inherited from the production-pitch fit ray. The 72° pitch, bearing,
+    // and governed zoom are unchanged — only the fit is honest to the viewport now.
+    let distance;
+    {
+      const halfDiag = Math.sqrt(
+        Math.pow(S.boardHalfX || 8, 2) + Math.pow(S.boardHalfZ || 8, 2)
+      ) * 1.12 + 1.5; // margin: wall thickness + breathing room
+      const vFov = ((S.camera.fov || 20) * Math.PI / 180) / 2;
+      const aspect = S.camera.aspect || 1;
+      const hFov = Math.atan(Math.tan(vFov) * aspect);
+      distance = (halfDiag / Math.tan(Math.min(vFov, hFov))) * zoom;
+    }
     const ground = new THREE.Vector2(ray.x, ray.z);
     if(ground.lengthSq() < 0.0001) ground.set(1, 1);
     ground.normalize();
@@ -19299,10 +19390,19 @@ function clayRoomDoorProofState(){
 // mounts the real Theater renderer and every list entry refers to an object already supplied by the
 // production Clayroom record. Catalog buttons do not manufacture demo meshes.
 function clayRoomWorkbenchDimensions(){
-  const compact = typeof window !== "undefined" && window.innerWidth < 900;
+  // Checkpoint 4 ("the inspector consumes roughly half of a narrow browser window, leaving a
+  // portrait-shaped renderer unsuitable for visual signoff"): chrome scales DOWN before the
+  // viewport does. Below 1000px the catalog auto-collapses to its rail unless the user explicitly
+  // expanded it this session (S.clayRoomCatalogCollapsed === false is an explicit choice; null/
+  // undefined means default). The inspector clamps proportionally so the renderer always keeps
+  // the MAJORITY of the window at review sizes.
+  const w = typeof window !== "undefined" ? window.innerWidth : 1280;
+  const compact = w < 900;
+  const catalogAutoCollapsed = w < 1000 && S.clayRoomCatalogCollapsed !== false;
+  const inspector = Math.round(Math.min(390, Math.max(230, w * 0.28)));
   return {
-    catalog: S.clayRoomCatalogCollapsed ? 42 : (compact ? 170 : 260),
-    inspector: compact ? 250 : 390,
+    catalog: (S.clayRoomCatalogCollapsed || catalogAutoCollapsed) ? 42 : (compact ? 170 : 260),
+    inspector: compact ? Math.min(inspector, 250) : inspector,
   };
 }
 function clayRoomApplyWorkbenchLayout(){
@@ -20336,7 +20436,11 @@ function clayRoomMountOverlay(record, host){
   const structureIntro = document.createElement("div");
   structureIntro.innerHTML =
     "<div style='color:#9fd4ec;margin-bottom:4px'>CL-F01 · REUSABLE CONSTRUCTION GRAMMAR</div>" +
-    "<div style='color:#9ab'>Production shell + generic atoms. Blue = sockets, green/amber/red = access, red X = rejected join.</div>";
+    "<div style='color:#9ab'>Production shell + generic atoms + the ASSEMBLY terrace (same pieces composed). " +
+    "SOCKET arrows point along their join axis — <span style='color:#35d8ff'>butt-join</span> · <span style='color:#66dfa0'>walk-surface</span> · " +
+    "<span style='color:#6f8fff'>top-surface</span> · <span style='color:#c08a5a'>terrain-join</span> · <span style='color:#ff7ad8'>hinge</span> · " +
+    "<span style='color:#b9c2cc'>mount</span>. ACCESS frames are per-face — <span style='color:#66dfa0'>walk</span> · " +
+    "<span style='color:#f3bd55'>climb-cost</span> · <span style='color:#ff6d68'>climb-dc</span> · <span style='color:#8a9099'>none</span>. Red X = rejected join.</div>";
   structureBody.appendChild(structureIntro);
   const structureFixtureNav = document.createElement("div");
   structureFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:7px 0;";

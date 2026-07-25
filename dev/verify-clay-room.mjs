@@ -1664,7 +1664,8 @@ const check = (name, cond, detail = "") =>
     check("34c. generic atoms cover straight/T walls, one/wide stairs, ramp, blocker, and both supports",
       ["wall-run", "t-junction", "stair", "ramp", "blocker", "support-square", "support-round"]
         .every((kind) => kinds.has(kind))
-      && fixture.pieces.filter((row) => row.kind === "stair").map((row) => row.width).sort().join(",") === "1,2"
+      && fixture.pieces.filter((row) => row.kind === "stair" && !row.assembly).map((row) => row.width).sort().join(",") === "1,2"
+      && fixture.pieces.filter((row) => row.assembly).length >= 4 // Checkpoint 4: the composed terrace example exists
       && fixture.cutawayWitness.pieceSlug === "spr-pc-human-fighter-female"
       && fixture.cutawayWitness.occluder.profile === "square");
     const tiers = new Set(fixture.shellCells.map((row) => row.tier));
@@ -1893,6 +1894,34 @@ const check = (name, cond, detail = "") =>
   check("36f. the solo A/B seam exists and is visibility-only (nothing moves, nothing rebuilds)",
     /_claySetLightSoloForTest/.test(bootSrc)
     && /r\.pl\.visible = on/.test(bootSrc));
+}
+
+// 37. CHECKPOINT 4 — the honest construction workbench (visual-correction assignment).
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const engineSrc = read("src/engine/clay-room.js");
+  check("37a. the ramp renders hard per-face normals (non-indexed), never averaged pillow shading",
+    /const hardFaced = geometry\.toNonIndexed\(\);/.test(bootSrc)
+    && /hardFaced\.computeVertexNormals\(\);/.test(bootSrc));
+  check("37b. access overlays are PER-FACE with the fixed class-colour vocabulary",
+    /CLAY_ACCESS_CLASS_COLORS = \{ walk: 0x66dfa0, "climb-cost": 0xf3bd55, "climb-dc": 0xff6d68, none: 0x8a9099 \}/.test(bootSrc)
+    && /const topClass = access\.top \|\| access\.treads/.test(bootSrc)
+    && /const sideClass = access\.sides \|\| access\.shaft \|\| access\.faces/.test(bootSrc));
+  check("37c. socket marks are TYPE-coloured directional arrows (shaft + head along the authored axis)",
+    /CLAY_SOCKET_TYPE_COLORS/.test(bootSrc)
+    && /"walk-surface": 0x66dfa0, "top-surface": 0x6f8fff/.test(bootSrc)
+    && /const headL = /.test(bootSrc) && /const headR = /.test(bootSrc));
+  check("37d. the composed assembly stands on the shell's own tier via spec.lift, consumed by the builder",
+    /assembly-approach-stair/.test(engineSrc)
+    && /assembly-parapet/.test(engineSrc)
+    && /lift: 0\.5/.test(engineSrc)
+    && /y \+ \(spec\.lift \|\| 0\)/.test(bootSrc));
+  check("37e. omission reporting has ONE authority: the bench build's own projection, served over the generic shell report",
+    /cameraSideOmission: \{\s*\n\s*ruleId: fixture\.wallOmission\.ruleId/.test(bootSrc)
+    && /S\.clayRoomStructureReport && S\.clayRoomStructureReport\.cameraSideOmission/.test(bootSrc));
+  check("37f. the strategic camera fits from ROOM BOUNDS + live fov/aspect, and workbench chrome yields the viewport majority when narrow",
+    /halfDiag \/ Math\.tan\(Math\.min\(vFov, hFov\)\)/.test(bootSrc)
+    && /catalogAutoCollapsed = w < 1000 && S\.clayRoomCatalogCollapsed !== false/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

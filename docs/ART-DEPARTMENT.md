@@ -550,5 +550,48 @@ authorities should never require archaeology to find again.
 
 The CL-R2 candidate keeps the tactical footprint separate from the visible support, uses a shallow
 rounded strip whose Medium depth is exactly one third of a cell, preserves canonical size data, and
-offers a clearly labelled 1–20-foot diagnostic cap for visual comparison only. The cap is not an
-admission or production ruling until Adam reviews the live proof.
+offers a clearly labelled 1–30-foot diagnostic cap for visual comparison only. The cap is not an
+admission or production ruling; true scale remains authoritative, and a genuinely gigantic
+encounter requires architecture scaled to contain it.
+
+---
+
+## 12. CL-R2 follow-up: physical separation, readable sprites, and selection (verbatim, Adam, 2026-07-24)
+
+> ok, first, i should be able to zoom in further. second the drop shadows do not seem to line up
+> with the bases, third collision between bases shouldn't be allowed, i think a forced slight
+> relocation should happen, just like pieces on a board that can't ever full occupy the same space.
+> i actually like the true scale, but i am willing to compromise a bit, it looks like you limited
+> the sprite to 20ft tall, but i think a kraken should actually be a gigantic creature and if you
+> ever encounter it you need to be in a situation where the environment is scaled to actually
+> encounter it. maybe 30 ft is better. also the drop shadows are essentially invisible on the
+> pieces that it is aligned with, which kind of defeats the purpose, i would also like to see the
+> rim or outer face of the piece light up and actually cast a little glow when that piece is
+> selected. also, im not sure how you got the mock up pieces to be lit so well, but maybe just
+> relying on ambient and room lighting alone isn't quite sufficient for the sprites, they might
+> need their own light cast from the camera itself that doesn't cast shadows, that has a falloff
+> that gently lights the sprite's face, because in dark environments everything looks rusty and
+> cruddy and not great
+
+Selection clarification:
+
+> oh, for the slection light i just meant the actual vertical face of the base of the piece to like
+> up, like a glow ring, does that make sense?
+
+Implemented reading: governed zoom now reaches roughly 8.3× closer; visible support rectangles use
+deterministic oriented-box separation without changing their tactical cells; each soft contact
+shadow is linked to its standee, follows relocation/yaw, and extends visibly past the support; the
+camera-side fill affects sprite faces only and casts no shadow; and selection lights only the
+base's shallow vertical sidewall, never the character card or the base top.
+
+Environment-shadow clarification:
+
+> ok, something we don't have is like an environment material, im not sure that we need it
+> necessarily, but we do need enough ambient light that i can make out the stairs in the shadow,
+> even if it's just slightly, right now all shadow is exactly the same value, which i appreciate as
+> a photographer, but i do need to be able to make out some level of forms in the dark
+
+Implemented reading: no new environment material yet. A very low, shadowless hemisphere floor
+supplies sky/ground bounce, so upward treads, vertical risers, and wall turns retain slightly
+different dark values. Direct-light shadows remain strong; the floor only prevents every un-keyed
+face from collapsing to the same black.

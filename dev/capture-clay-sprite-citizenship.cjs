@@ -139,6 +139,23 @@ async function waitForLineup(page, mode) {
   const settled = await page.evaluate(pageProbe);
   await page.screenshot({ path: path.join(OUT, "01-true-scale-live-ui.png"), fullPage: false });
 
+  // Deep-inspection proof: drive the real wheel listener to its clamp, bank the resulting governed
+  // camera pose, then use the real double-click reset before the comparison captures continue.
+  await page.evaluate(() => {
+    const host = document.getElementById("clay-room-host");
+    for (let i = 0; i < 16; i++) {
+      host.dispatchEvent(new WheelEvent("wheel", { deltaY: -100, bubbles: true, cancelable: true }));
+    }
+  });
+  await new Promise((resolve) => setTimeout(resolve, 250));
+  const deepZoom = await page.evaluate(() => window.Theater._clayCameraPoseForTest());
+  await page.screenshot({ path: path.join(OUT, "09-deep-zoom-live-ui.png"), fullPage: false });
+  await page.evaluate(() => {
+    document.getElementById("clay-room-host")
+      .dispatchEvent(new MouseEvent("dblclick", { bubbles: true, cancelable: true }));
+  });
+  await new Promise((resolve) => setTimeout(resolve, 150));
+
   await page.evaluate(() => window.Theater._claySetSpriteScaleModeForTest("diagnostic-cap"));
   await waitForLineup(page, "diagnostic-cap");
   const capped = await page.evaluate(() => window.Theater._claySpriteCitizenshipForTest());
@@ -170,6 +187,7 @@ async function waitForLineup(page, mode) {
     const proof = await page.evaluate(() => ({
       recipe: window.Theater._clayLightingRecipeForTest(),
       lighting: window.Theater._clayLightingProofForTest(),
+      citizenship: window.Theater._claySpriteCitizenshipForTest(),
     }));
     contextReceipts.push({ recipeId, label, file, proof });
   }
@@ -183,6 +201,29 @@ async function waitForLineup(page, mode) {
   }
   if (JSON.stringify(canonical.regenRecommended) !== JSON.stringify(expectedFlags)) {
     throw new Error("unexpected width-regeneration flags: " + JSON.stringify(canonical.regenRecommended));
+  }
+  if (!canonical.collisionAudit || canonical.collisionAudit.remainingOverlaps !== 0) {
+    throw new Error("one or more visible standee supports still overlap: "
+      + JSON.stringify(canonical.collisionAudit));
+  }
+  if (!canonical.lineup.every((row) => row.contactShadow && row.contactShadow.linked)) {
+    throw new Error("one or more standee contact shadows lost its live piece link");
+  }
+  if (!canonical.cameraFill || !canonical.cameraFill.enabled || canonical.cameraFill.castShadow) {
+    throw new Error("sprite-only camera fill is missing, disabled, or casting shadows");
+  }
+  if (!canonical.environmentFormFill
+      || canonical.environmentFormFill.castShadow
+      || canonical.environmentFormFill.intensity < canonical.environmentFormFill.diagnosticFloor) {
+    throw new Error("shadow-form hemisphere floor is missing, too dim, or casting shadows");
+  }
+  if (!canonical.lineup.some((row) => row.selected && row.selectionBaseRingGlow)) {
+    throw new Error("selected standee does not expose its vertical base-ring glow in the live receipt");
+  }
+  if (!deepZoom || !deepZoom.clayZoomRange
+      || Math.abs(deepZoom.clayZoom - deepZoom.clayZoomRange[0]) > 1e-6) {
+    throw new Error("real wheel control did not reach the governed deep-zoom clamp: "
+      + JSON.stringify(deepZoom));
   }
   if (consoleErrors.length) throw new Error("browser console errors: " + consoleErrors.join(" | "));
 
@@ -203,6 +244,7 @@ async function waitForLineup(page, mode) {
     },
     canonical,
     diagnosticCap: capped,
+    deepZoom,
     lightingContexts: contextReceipts,
     assertions: {
       castCount: canonical.lineup.length,
@@ -212,6 +254,18 @@ async function waitForLineup(page, mode) {
       everySpriteHasSideShell: canonical.lineup.every((row) => row.shell),
       tacticalFootprintSeparate: canonical.tacticalFootprintSeparate,
       widthRegenerationFlags: canonical.regenRecommended,
+      noSupportOverlap: canonical.collisionAudit && canonical.collisionAudit.remainingOverlaps === 0,
+      everyContactShadowLinked: canonical.lineup.every((row) => row.contactShadow && row.contactShadow.linked),
+      selectedBaseRingGlow: canonical.lineup.some((row) => row.selected && row.selectionBaseRingGlow),
+      spriteCameraFillShadowless: canonical.cameraFill
+        && canonical.cameraFill.enabled
+        && canonical.cameraFill.castShadow === false,
+      shadowFormFloorActive: canonical.environmentFormFill
+        && canonical.environmentFormFill.castShadow === false
+        && canonical.environmentFormFill.intensity >= canonical.environmentFormFill.diagnosticFloor,
+      deepZoomReachedClamp: deepZoom
+        && deepZoom.clayZoomRange
+        && Math.abs(deepZoom.clayZoom - deepZoom.clayZoomRange[0]) < 1e-6,
     },
     consoleErrors,
     consoleWarnings,
@@ -226,7 +280,8 @@ async function waitForLineup(page, mode) {
   const cards = [
     ["00-true-scale-early-live-ui.png", "Early mount", "Capture-law frame before the five-second async-settle window."],
     ["01-true-scale-live-ui.png", "Canonical true scale", "Honest 0.25–60 ft spectrum; the kraken dominates by design."],
-    ["02-cap-spectrum-live-ui.png", "Diagnostic 1–20 ft cap", "Presentation test only; authored world heights stay untouched."],
+    ["09-deep-zoom-live-ui.png", "Deep inspection zoom", "Real wheel control at the governed 8.3× closer clamp; bearing and pitch remain fixed."],
+    ["02-cap-spectrum-live-ui.png", "Diagnostic 1–30 ft cap", "Presentation test only; authored world heights stay untouched."],
     ["03-edge-and-stair-live-ui.png", "Edge + stair proof", "Thin shell remains visible; Medium support depth equals one tread."],
     ...CONTEXTS.map((row) => [row[1], row[2], row[0]]),
   ];

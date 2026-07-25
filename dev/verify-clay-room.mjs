@@ -1124,6 +1124,9 @@ const check = (name, cond, detail = "") =>
   check("26e. grab-pan uses browser-verified same-sign camera offsets so the rendered room follows the pointer",
     /right\.x\s*\*\s*dxPx\s*\+\s*fwd\.x\s*\*\s*dyPx/.test(bootSrc) &&
     /right\.z\s*\*\s*dxPx\s*\+\s*fwd\.z\s*\*\s*dyPx/.test(bootSrc));
+  check("26f. art inspection can dolly at least 8x closer while preserving the governed pose",
+    /CLAY_CAM_ZOOM_MIN\s*=\s*0\.12/.test(bootSrc)
+    && /up to 8× closer/.test(bootSrc));
 }
 
 // ============================================================================
@@ -1522,9 +1525,9 @@ const check = (name, cond, detail = "") =>
       && fixture.cast.some((row) => row.label === "Kraken" && row.tacticalSpanCells === 4));
     check("33c. visible support depth is authored from exactly one third-cell stair tread",
       fixture.stair.steps === 3 && fixture.stair.treadDepth === 1 / 3);
-    check("33d. true-scale remains canonical while the 1–20 ft presentation cap is explicitly diagnostic",
+    check("33d. true-scale remains canonical while the 1–30 ft presentation cap is explicitly diagnostic",
       fixture.candidatePresentationCap.minFeet === 1
-      && fixture.candidatePresentationCap.maxFeet === 20
+      && fixture.candidatePresentationCap.maxFeet === 30
       && /diagnostic preview only/.test(fixture.candidatePresentationCap.label));
     check("33e. every CL-F03 cast entry has compiled normalized content bounds",
       fixture.cast.every((row) => {
@@ -1560,7 +1563,7 @@ const check = (name, cond, detail = "") =>
     && /stairFit/.test(bootSrc));
   check("33j. the inspector exposes true-scale/cap, seven cast selectors, edge view, and neutral/dark/warm/cool/daylight response",
     /TRUE SCALE/.test(bootSrc)
-    && /1–20 FT CAP PREVIEW/.test(bootSrc)
+    && /1–30 FT CAP PREVIEW/.test(bootSrc)
     && /LIVE CAST/.test(bootSrc)
     && /"edge",\s*"EDGE"/.test(bootSrc)
     && /"clay-neutral-truth",\s*"NEUTRAL"/.test(bootSrc)
@@ -1591,6 +1594,24 @@ const check = (name, cond, detail = "") =>
     && /supportDepth/.test(bootSrc)
     && /regenRecommended/.test(bootSrc)
     && /typeof\s+entry\.worldHeight[\s\S]{0,120}entry\.worldHeight\s*\/\s*5\.5[\s\S]{0,160}typeof\s+entry\.scaleTrue/.test(bootSrc));
+  check("33n. standee supports use deterministic OBB separation and linked, yaw-following contact shadows",
+    /function\s+standeeSupportPenetration/.test(bootSrc)
+    && /function\s+resolveMountedStandeeSupportCollisions/.test(bootSrc)
+    && /remainingOverlaps/.test(bootSrc)
+    && /contactBlobMesh/.test(bootSrc)
+    && /function\s+syncStandeeContactBlob/.test(bootSrc));
+  check("33o. sprite-only camera fill and selected vertical base-ring glow are masked, shadowless, and live-inspectable",
+    /const\s+SPRITE_CAMERA_FILL_LAYER\s*=\s*2/.test(bootSrc)
+    && /new\s+THREE\.SpotLight/.test(bootSrc)
+    && /fill\.castShadow\s*=\s*false/.test(bootSrc)
+    && /claySelectionBaseRingGlow/.test(bootSrc)
+    && /const\s+side\s*=\s*mats\[1\]\s*\|\|\s*mats\[0\]/.test(bootSrc)
+    && /if\(clayRoomStandeeForSelectionNode\(node\)\)[\s\S]{0,180}return;[\s\S]{0,100}new\s+THREE\.BoxHelper/.test(bootSrc));
+  check("33p. a low shadowless hemisphere floor preserves stair/riser form in diagnostic darkness",
+    /const\s+ITR_SHADOW_FORM_HEMI_FLOOR\s*=\s*0\.06/.test(bootSrc)
+    && /S\.hemiLight\.intensity\s*=\s*ITR_SHADOW_FORM_HEMI_FLOOR/.test(bootSrc)
+    && /environmentFormFill/.test(bootSrc)
+    && /tread\/riser value floor/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

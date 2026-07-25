@@ -372,8 +372,8 @@ group("10 — GREEN: interiorBuildPieces mounts every cell through the derived l
     ok(r.baseTopColor !== r.baseSideColor, `base top face color (${r.baseTopColor.toString(16)}) differs from the side wall color (${r.baseSideColor.toString(16)}) — a lit-from-above plinth read, not a flat tint`);
     ok(r.poolCount === 2, `exactly one contact pool per piece — 2 pieces, found ${r.poolCount} pools`);
     ok(Math.abs(r.poolYA - r.expectedPoolYA) < 1e-9, `pool A y=${r.poolYA} matches floor-top+offset (${r.expectedPoolYA}), not the old hardcoded -0.495`);
-    ok(Math.abs(r.poolHalfWidthA - r.baseWidth * 0.64) < 1e-6, `contact pool half-width (${r.poolHalfWidthA}) follows support width x 0.64`);
-    ok(Math.abs(r.poolHalfDepthA - r.baseDepth * 0.64) < 1e-6, `contact pool half-depth (${r.poolHalfDepthA}) follows support depth x 0.64 rather than restoring a circle`);
+    ok(Math.abs(r.poolHalfWidthA - r.baseWidth * 0.744) < 1e-6, `contact pool half-width (${r.poolHalfWidthA}) follows support width x 0.744 so its feather stays visible`);
+    ok(Math.abs(r.poolHalfDepthA - r.baseDepth * 0.744) < 1e-6, `contact pool half-depth (${r.poolHalfDepthA}) follows support depth x 0.744 rather than restoring a circle`);
     ok(r.wrapExists, `BW2-2b item 1: the figure's own inner camera-tilt wrap exists (g.userData.standeeWrap)`);
     ok(r.wrapIsChild0, `the wrap is a direct child of the figure group (children[0])`);
     ok(r.wrapHoldsShellAndMesh, `the wrap holds the alpha plane plus its thin side shell — never the support — so the support stays floor-flat`);

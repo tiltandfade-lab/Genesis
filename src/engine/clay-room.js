@@ -186,7 +186,7 @@ var CLAY_SPRITE_CITIZENSHIP_FIXTURE = Object.freeze({
   selectedSlug: "spr-pc-human-fighter-female",
   candidatePresentationCap: Object.freeze({
     minFeet: 1,
-    maxFeet: 20,
+    maxFeet: 30,
     label: "diagnostic preview only — canonical height and tactical footprint stay unchanged"
   }),
   stair: Object.freeze({

@@ -2,7 +2,7 @@
   "gate": "CL-R2",
   "fixture": "CL-F03",
   "capturedBy": "dev/capture-clay-sprite-citizenship.cjs",
-  "url": "http://127.0.0.1:4173/genesis.html?clayroom=1&clayfixture=sprite-citizenship",
+  "url": "http://127.0.0.1:4182/genesis.html?clayroom=1&clayfixture=sprite-citizenship",
   "runtimePath": "sprite registry + CL-F03 fixture -> data.pieces -> interiorSpriteBillboard -> buildSpriteBillboardMesh -> setInteriorBoard (production interior channel)",
   "viewport": {
     "width": 1280,
@@ -26,6 +26,30 @@
         "selectedView": "face",
         "supportForm": "shallow-rounded-strip",
         "tacticalFootprintSeparate": true,
+        "collisionAudit": {
+          "pieces": 7,
+          "checkedPairs": 42,
+          "relocations": 1,
+          "remainingOverlaps": 0
+        },
+        "cameraFill": {
+          "enabled": true,
+          "spriteLayer": 2,
+          "castShadow": false,
+          "intensity": 14.5787,
+          "distance": 123.0076,
+          "decay": 1
+        },
+        "environmentFormFill": {
+          "kind": "hemisphere",
+          "intensity": 0.06,
+          "diagnosticFloor": 0.06,
+          "castShadow": false
+        },
+        "presentationCapFeet": [
+          1,
+          30
+        ],
         "lineup": [
           {
             "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
@@ -49,6 +73,17 @@
               1
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 0.361584,
+              "offset": 0.045
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": false,
             "selected": false
           },
@@ -74,6 +109,17 @@
               0.977876
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 0.6608300176991149,
+              "offset": 0.0624
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": false,
             "selected": false
           },
@@ -99,6 +145,17 @@
               0.976636
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.0536708785046727,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": true,
             "regenRecommended": false,
             "selected": true
           },
@@ -124,6 +181,17 @@
               0.97807
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.22016,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": false,
             "selected": false
           },
@@ -149,6 +217,17 @@
               0.977477
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.22016,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": false,
             "selected": false
           },
@@ -174,6 +253,17 @@
               0.979592
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 3.6604799999999997,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": true,
             "selected": false
           },
@@ -199,6 +289,17 @@
               1
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": true,
+            "collisionNudge": [
+              0.2538,
+              0.2623
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 4.88064,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": true,
             "selected": false
           }
@@ -304,9 +405,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          47.4996,
-          47.0362,
-          47.4996
+          52.7774,
+          52.2624,
+          52.7774
         ],
         "target": [
           0,
@@ -314,7 +415,12 @@
           0
         ],
         "near": 0.1,
-        "far": 151.11675504932478
+        "far": 151.11675504932478,
+        "clayZoom": 0.9,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
       },
       "renderer": {
         "backingPx": "1696x1352",
@@ -363,30 +469,30 @@
       "lightingProof": {
         "snapshot": {
           "label": "test-read",
-          "at": 1784948654240,
+          "at": 1784951754932,
           "ambient": {
-            "uuid": "99f36360-8c2a-49e3-9360-d16f91284de7",
+            "uuid": "962634a3-a3fd-4afa-a3c0-119e75feca14",
             "intensity": 0.62,
             "color": 16777215
           },
           "rig": {
             "hemi": {
-              "uuid": "a952c13e-ef5d-4760-a158-654e142bd5d5",
-              "intensity": 0,
+              "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+              "intensity": 0.06,
               "color": 16773596
             },
             "key": {
-              "uuid": "411ba130-4c44-4cea-9769-9f1c3493e0c4",
+              "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
               "intensity": 0,
               "color": 16777215
             },
             "fill": {
-              "uuid": "76c74db4-bd2b-4553-8da7-f40b29104511",
+              "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
               "intensity": 0,
               "color": 16777215
             },
             "cameraKey": {
-              "uuid": "7583288b-20fc-452f-9c7a-946958316654",
+              "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
               "intensity": 0,
               "color": 16777215
             }
@@ -404,7 +510,7 @@
       "effectiveLights": {
         "profileKey": "dark",
         "ambient": 0.62,
-        "hemi": 0,
+        "hemi": 0.06,
         "key": 0,
         "fill": 0
       },
@@ -799,7 +905,7 @@
             "group": "interiorGroup",
             "pos": [
               -0.261,
-              0.248,
+              0.249,
               -0.271
             ],
             "size": [
@@ -820,7 +926,7 @@
             "group": "interiorGroup",
             "pos": [
               -0.271,
-              0.237,
+              0.238,
               -0.282
             ],
             "size": [
@@ -883,7 +989,7 @@
             "group": "interiorGroup",
             "pos": [
               1.738,
-              0.25,
+              0.251,
               -2.285
             ],
             "size": [
@@ -925,7 +1031,7 @@
             "group": "interiorGroup",
             "pos": [
               2.975,
-              1.818,
+              1.815,
               -5.071
             ],
             "size": [
@@ -946,7 +1052,7 @@
             "group": "interiorGroup",
             "pos": [
               2.965,
-              1.807,
+              1.805,
               -5.082
             ],
             "size": [
@@ -987,9 +1093,9 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              3.747,
-              4.75,
-              -8.57
+              4,
+              4.753,
+              -8.307
             ],
             "size": [
               13.178,
@@ -1008,9 +1114,9 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              3.736,
-              4.74,
-              -8.581
+              3.99,
+              4.742,
+              -8.318
             ],
             "size": [
               13.178,
@@ -1029,9 +1135,9 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              5.79,
+              6.044,
               -0.249,
-              -5.786
+              -5.524
             ],
             "size": [
               3.316,
@@ -1050,16 +1156,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              -5.983,
+              -6.015,
               -0.297,
-              6.018
+              5.986
             ],
             "size": [
-              0.311,
-              0.311,
+              0.362,
+              0.362,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.937,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -1071,16 +1177,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              -4.054,
+              -4.099,
               -0.297,
-              3.947
+              3.904
             ],
             "size": [
-              0.568,
-              0.568,
+              0.661,
+              0.661,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.949,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -1092,16 +1198,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              -2.013,
+              -2.068,
               -0.297,
-              1.988
+              1.929
             ],
             "size": [
-              0.906,
-              0.906,
+              1.054,
+              1.054,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.895,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -1113,16 +1219,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              -0.041,
+              -0.096,
               -0.297,
-              -0.04
+              -0.098
             ],
             "size": [
-              1.05,
-              1.05,
+              1.22,
+              1.22,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.903,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -1134,16 +1240,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              1.969,
+              1.915,
               -0.297,
-              -2.03
+              -2.089
             ],
             "size": [
-              1.05,
-              1.05,
+              1.22,
+              1.22,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.877,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -1155,16 +1261,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              3.963,
+              3.908,
               -0.297,
-              -4.036
+              -4.094
             ],
             "size": [
-              3.149,
-              3.149,
+              3.66,
+              3.66,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.904,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -1176,16 +1282,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              5.79,
+              5.989,
               -0.297,
-              -5.786
+              -5.581
             ],
             "size": [
-              4.198,
-              4.198,
+              4.881,
+              4.881,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.91,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -1457,11 +1563,11 @@
               "min": [
                 -8.5,
                 -0.9,
-                -15.635
+                -15.373
               ],
               "max": [
-                10.885,
-                9.744,
+                11.139,
+                9.749,
                 8.5
               ]
             }
@@ -1511,6 +1617,30 @@
         "selectedView": "face",
         "supportForm": "shallow-rounded-strip",
         "tacticalFootprintSeparate": true,
+        "collisionAudit": {
+          "pieces": 7,
+          "checkedPairs": 42,
+          "relocations": 1,
+          "remainingOverlaps": 0
+        },
+        "cameraFill": {
+          "enabled": true,
+          "spriteLayer": 2,
+          "castShadow": false,
+          "intensity": 14.5787,
+          "distance": 123.0076,
+          "decay": 1
+        },
+        "environmentFormFill": {
+          "kind": "hemisphere",
+          "intensity": 0.06,
+          "diagnosticFloor": 0.06,
+          "castShadow": false
+        },
+        "presentationCapFeet": [
+          1,
+          30
+        ],
         "lineup": [
           {
             "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
@@ -1534,6 +1664,17 @@
               1
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 0.361584,
+              "offset": 0.045
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": false,
             "selected": false
           },
@@ -1559,6 +1700,17 @@
               0.977876
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 0.6608300176991149,
+              "offset": 0.0624
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": false,
             "selected": false
           },
@@ -1584,6 +1736,17 @@
               0.976636
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.0536708785046727,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": true,
             "regenRecommended": false,
             "selected": true
           },
@@ -1609,6 +1772,17 @@
               0.97807
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.22016,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": false,
             "selected": false
           },
@@ -1634,6 +1808,17 @@
               0.977477
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.22016,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": false,
             "selected": false
           },
@@ -1659,6 +1844,17 @@
               0.979592
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 3.6604799999999997,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": true,
             "selected": false
           },
@@ -1684,6 +1880,17 @@
               1
             ],
             "alphaCutoff": 0.5,
+            "collisionRelocated": true,
+            "collisionNudge": [
+              0.2538,
+              0.2623
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 4.88064,
+              "offset": 0.07999999999999999
+            },
+            "selectionBaseRingGlow": false,
             "regenRecommended": true,
             "selected": false
           }
@@ -1789,9 +1996,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          47.4996,
-          47.0362,
-          47.4996
+          52.7774,
+          52.2624,
+          52.7774
         ],
         "target": [
           0,
@@ -1799,7 +2006,12 @@
           0
         ],
         "near": 0.1,
-        "far": 151.11675504932478
+        "far": 151.11675504932478,
+        "clayZoom": 0.9,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
       },
       "renderer": {
         "backingPx": "1696x1352",
@@ -1848,30 +2060,30 @@
       "lightingProof": {
         "snapshot": {
           "label": "test-read",
-          "at": 1784948661032,
+          "at": 1784951762763,
           "ambient": {
-            "uuid": "99f36360-8c2a-49e3-9360-d16f91284de7",
+            "uuid": "962634a3-a3fd-4afa-a3c0-119e75feca14",
             "intensity": 0.62,
             "color": 16777215
           },
           "rig": {
             "hemi": {
-              "uuid": "a952c13e-ef5d-4760-a158-654e142bd5d5",
-              "intensity": 0,
+              "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+              "intensity": 0.06,
               "color": 16773596
             },
             "key": {
-              "uuid": "411ba130-4c44-4cea-9769-9f1c3493e0c4",
+              "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
               "intensity": 0,
               "color": 16777215
             },
             "fill": {
-              "uuid": "76c74db4-bd2b-4553-8da7-f40b29104511",
+              "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
               "intensity": 0,
               "color": 16777215
             },
             "cameraKey": {
-              "uuid": "7583288b-20fc-452f-9c7a-946958316654",
+              "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
               "intensity": 0,
               "color": 16777215
             }
@@ -1889,7 +2101,7 @@
       "effectiveLights": {
         "profileKey": "dark",
         "ambient": 0.62,
-        "hemi": 0,
+        "hemi": 0.06,
         "key": 0,
         "fill": 0
       },
@@ -2472,9 +2684,9 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              3.747,
+              4,
               4.683,
-              -8.57
+              -8.307
             ],
             "size": [
               13.178,
@@ -2493,9 +2705,9 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              3.736,
+              3.99,
               4.672,
-              -8.581
+              -8.318
             ],
             "size": [
               13.178,
@@ -2514,9 +2726,9 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              5.79,
+              6.044,
               -0.249,
-              -5.786
+              -5.524
             ],
             "size": [
               3.316,
@@ -2535,16 +2747,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              -5.983,
+              -6.015,
               -0.297,
-              6.018
+              5.986
             ],
             "size": [
-              0.311,
-              0.311,
+              0.362,
+              0.362,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.937,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -2556,16 +2768,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              -4.054,
+              -4.099,
               -0.297,
-              3.947
+              3.904
             ],
             "size": [
-              0.568,
-              0.568,
+              0.661,
+              0.661,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.949,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -2577,16 +2789,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              -2.013,
+              -2.068,
               -0.297,
-              1.988
+              1.929
             ],
             "size": [
-              0.906,
-              0.906,
+              1.054,
+              1.054,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.895,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -2598,16 +2810,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              -0.041,
+              -0.096,
               -0.297,
-              -0.04
+              -0.098
             ],
             "size": [
-              1.05,
-              1.05,
+              1.22,
+              1.22,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.903,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -2619,16 +2831,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              1.969,
+              1.915,
               -0.297,
-              -2.03
+              -2.089
             ],
             "size": [
-              1.05,
-              1.05,
+              1.22,
+              1.22,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.877,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -2640,16 +2852,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              3.963,
+              3.908,
               -0.297,
-              -4.036
+              -4.094
             ],
             "size": [
-              3.149,
-              3.149,
+              3.66,
+              3.66,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.904,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -2661,16 +2873,16 @@
             "route": "passthrough",
             "group": "interiorGroup",
             "pos": [
-              5.79,
+              5.989,
               -0.297,
-              -5.786
+              -5.581
             ],
             "size": [
-              4.198,
-              4.198,
+              4.881,
+              4.881,
               0
             ],
-            "rotY": 0,
+            "rotY": 3.91,
             "builder": "unattributed",
             "instances": 1,
             "textured": true,
@@ -2942,10 +3154,10 @@
               "min": [
                 -8.5,
                 -0.9,
-                -15.635
+                -15.373
               ],
               "max": [
-                10.885,
+                11.139,
                 9.607,
                 8.5
               ]
@@ -2996,6 +3208,30 @@
     "selectedView": "face",
     "supportForm": "shallow-rounded-strip",
     "tacticalFootprintSeparate": true,
+    "collisionAudit": {
+      "pieces": 7,
+      "checkedPairs": 42,
+      "relocations": 1,
+      "remainingOverlaps": 0
+    },
+    "cameraFill": {
+      "enabled": true,
+      "spriteLayer": 2,
+      "castShadow": false,
+      "intensity": 14.5787,
+      "distance": 123.0076,
+      "decay": 1
+    },
+    "environmentFormFill": {
+      "kind": "hemisphere",
+      "intensity": 0.06,
+      "diagnosticFloor": 0.06,
+      "castShadow": false
+    },
+    "presentationCapFeet": [
+      1,
+      30
+    ],
     "lineup": [
       {
         "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
@@ -3019,6 +3255,17 @@
           1
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 0.361584,
+          "offset": 0.045
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": false,
         "selected": false
       },
@@ -3044,6 +3291,17 @@
           0.977876
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 0.6608300176991149,
+          "offset": 0.0624
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": false,
         "selected": false
       },
@@ -3069,6 +3327,17 @@
           0.976636
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.0536708785046727,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": true,
         "regenRecommended": false,
         "selected": true
       },
@@ -3094,6 +3363,17 @@
           0.97807
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.22016,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": false,
         "selected": false
       },
@@ -3119,6 +3399,17 @@
           0.977477
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.22016,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": false,
         "selected": false
       },
@@ -3144,6 +3435,17 @@
           0.979592
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 3.6604799999999997,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": true,
         "selected": false
       },
@@ -3169,6 +3471,17 @@
           1
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": true,
+        "collisionNudge": [
+          0.2538,
+          0.2623
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 4.88064,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": true,
         "selected": false
       }
@@ -3206,6 +3519,30 @@
     "selectedView": "face",
     "supportForm": "shallow-rounded-strip",
     "tacticalFootprintSeparate": true,
+    "collisionAudit": {
+      "pieces": 7,
+      "checkedPairs": 42,
+      "relocations": 1,
+      "remainingOverlaps": 0
+    },
+    "cameraFill": {
+      "enabled": true,
+      "spriteLayer": 2,
+      "castShadow": false,
+      "intensity": 9.8342,
+      "distance": 82.976,
+      "decay": 1
+    },
+    "environmentFormFill": {
+      "kind": "hemisphere",
+      "intensity": 0.06,
+      "diagnosticFloor": 0.06,
+      "castShadow": false
+    },
+    "presentationCapFeet": [
+      1,
+      30
+    ],
     "lineup": [
       {
         "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
@@ -3229,6 +3566,17 @@
           1
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 0.39045120000000005,
+          "offset": 0.045
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": false,
         "selected": false
       },
@@ -3254,6 +3602,17 @@
           0.977876
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 0.6608300176991149,
+          "offset": 0.0624
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": false,
         "selected": false
       },
@@ -3279,6 +3638,17 @@
           0.976636
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.0536708785046727,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": true,
         "regenRecommended": false,
         "selected": true
       },
@@ -3304,6 +3674,17 @@
           0.97807
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.22016,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": false,
         "selected": false
       },
@@ -3329,6 +3710,17 @@
           0.977477
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.22016,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": false,
         "selected": false
       },
@@ -3337,8 +3729,8 @@
         "label": "Treant",
         "stress": "tall Huge silhouette",
         "canonicalFeet": 26,
-        "renderedWorldHeight": 4,
-        "renderedWorldWidth": 4.163265306122449,
+        "renderedWorldHeight": 5.200000000000001,
+        "renderedWorldWidth": 5.412244897959185,
         "tacticalSpanCells": 3,
         "supportWidth": 2.46,
         "supportDepth": 0.3333333333333333,
@@ -3354,6 +3746,17 @@
           0.979592
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 3.6604799999999997,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": true,
         "selected": false
       },
@@ -3362,8 +3765,8 @@
         "label": "Kraken",
         "stress": "largest live height · width/regeneration test",
         "canonicalFeet": 60,
-        "renderedWorldHeight": 4,
-        "renderedWorldWidth": 4.392523364485982,
+        "renderedWorldHeight": 6,
+        "renderedWorldWidth": 6.588785046728972,
         "tacticalSpanCells": 4,
         "supportWidth": 3.28,
         "supportDepth": 0.3333333333333333,
@@ -3379,6 +3782,17 @@
           1
         ],
         "alphaCutoff": 0.5,
+        "collisionRelocated": true,
+        "collisionNudge": [
+          0.254,
+          0.2625
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 4.88064,
+          "offset": 0.07999999999999999
+        },
+        "selectionBaseRingGlow": false,
         "regenRecommended": true,
         "selected": false
       }
@@ -3406,6 +3820,28 @@
     "regenRecommended": [
       "spr-fantasy-treant",
       "spr-fantasy-kraken"
+    ]
+  },
+  "deepZoom": {
+    "kind": "perspective",
+    "fov": 20,
+    "zoom": null,
+    "position": [
+      6.3333,
+      6.2715,
+      6.3333
+    ],
+    "target": [
+      0,
+      0,
+      0
+    ],
+    "near": 0.1,
+    "far": 151.11675504932478,
+    "clayZoom": 0.12,
+    "clayZoomRange": [
+      0.12,
+      2.5
     ]
   },
   "lightingContexts": [
@@ -3454,30 +3890,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784948666832,
+            "at": 1784951772559,
             "ambient": {
-              "uuid": "99f36360-8c2a-49e3-9360-d16f91284de7",
+              "uuid": "962634a3-a3fd-4afa-a3c0-119e75feca14",
               "intensity": 0.62,
               "color": 16777215
             },
             "rig": {
               "hemi": {
-                "uuid": "a952c13e-ef5d-4760-a158-654e142bd5d5",
-                "intensity": 0,
+                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+                "intensity": 0.06,
                 "color": 16773596
               },
               "key": {
-                "uuid": "411ba130-4c44-4cea-9769-9f1c3493e0c4",
+                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
                 "intensity": 0,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "76c74db4-bd2b-4553-8da7-f40b29104511",
+                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
                 "intensity": 0,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "7583288b-20fc-452f-9c7a-946958316654",
+                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
                 "intensity": 0,
                 "color": 16777215
               }
@@ -3491,6 +3927,317 @@
             "duringPass": true,
             "afterPass": true
           }
+        },
+        "citizenship": {
+          "fixtureId": "cl-f03-sprite-citizenship",
+          "fixtureVersion": 1,
+          "scaleMode": "diagnostic-cap",
+          "selectedSlug": "spr-pc-human-fighter-female",
+          "selectedView": "face",
+          "supportForm": "shallow-rounded-strip",
+          "tacticalFootprintSeparate": true,
+          "collisionAudit": {
+            "pieces": 7,
+            "checkedPairs": 42,
+            "relocations": 1,
+            "remainingOverlaps": 0
+          },
+          "cameraFill": {
+            "enabled": true,
+            "spriteLayer": 2,
+            "castShadow": false,
+            "intensity": 9.8342,
+            "distance": 82.976,
+            "decay": 1
+          },
+          "environmentFormFill": {
+            "kind": "hemisphere",
+            "intensity": 0.06,
+            "diagnosticFloor": 0.06,
+            "castShadow": false
+          },
+          "presentationCapFeet": [
+            1,
+            30
+          ],
+          "lineup": [
+            {
+              "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+              "label": "Blind cave rat",
+              "stress": "smallest live height",
+              "canonicalFeet": 0.25,
+              "renderedWorldHeight": 0.2,
+              "renderedWorldWidth": 0.32000000000000006,
+              "tacticalSpanCells": 0.5,
+              "supportWidth": 0.2624,
+              "supportDepth": 0.18,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 1,
+              "contentBounds": [
+                0,
+                0.1,
+                0.9375,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.39045120000000005,
+                "offset": 0.045
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-winged-kobold-urd",
+              "label": "Winged kobold",
+              "stress": "small dark fantasy creature",
+              "canonicalFeet": 3,
+              "renderedWorldHeight": 0.6,
+              "renderedWorldWidth": 0.5415929203539822,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.4441061946902654,
+              "supportDepth": 0.26,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977876,
+              "contentBounds": [
+                0.02451,
+                0.017699,
+                0.97549,
+                0.977876
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.6608300176991149,
+                "offset": 0.0624
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-pc-human-fighter-female",
+              "label": "Human fighter",
+              "stress": "human reference · skin/cloth/metal",
+              "canonicalFeet": 5.6,
+              "renderedWorldHeight": 1.1199999999999999,
+              "renderedWorldWidth": 0.8635514018691588,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.7081121495327102,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.976636,
+              "contentBounds": [
+                0.024242,
+                0.023364,
+                0.969697,
+                0.976636
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.0536708785046727,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": true,
+              "regenRecommended": false,
+              "selected": true
+            },
+            {
+              "slug": "spr-fantasy-flaming-skeleton",
+              "label": "Flaming skeleton",
+              "stress": "pale/highlight clipping",
+              "canonicalFeet": 5.8,
+              "renderedWorldHeight": 1.16,
+              "renderedWorldWidth": 1.0226315789473683,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.97807,
+              "contentBounds": [
+                0.024876,
+                0.013158,
+                0.970149,
+                0.97807
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-wraith",
+              "label": "Wraith",
+              "stress": "dark/irregular alpha edge",
+              "canonicalFeet": 6,
+              "renderedWorldHeight": 1.2,
+              "renderedWorldWidth": 1.1513513513513514,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977477,
+              "contentBounds": [
+                0.028169,
+                0.022523,
+                0.981221,
+                0.977477
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-treant",
+              "label": "Treant",
+              "stress": "tall Huge silhouette",
+              "canonicalFeet": 26,
+              "renderedWorldHeight": 5.200000000000001,
+              "renderedWorldWidth": 5.412244897959185,
+              "tacticalSpanCells": 3,
+              "supportWidth": 2.46,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.979592,
+              "contentBounds": [
+                0.015686,
+                0.020408,
+                0.980392,
+                0.979592
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 3.6604799999999997,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-kraken",
+              "label": "Kraken",
+              "stress": "largest live height · width/regeneration test",
+              "canonicalFeet": 60,
+              "renderedWorldHeight": 6,
+              "renderedWorldWidth": 6.588785046728972,
+              "tacticalSpanCells": 4,
+              "supportWidth": 3.28,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.535398,
+              "footY": 0.997113,
+              "contentBounds": [
+                0.021277,
+                0.018692,
+                0.978723,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": true,
+              "collisionNudge": [
+                0.254,
+                0.2625
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 4.88064,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            }
+          ],
+          "stairSamples": [
+            {
+              "view": "face",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "three-quarter",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "edge",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            }
+          ],
+          "regenRecommended": [
+            "spr-fantasy-treant",
+            "spr-fantasy-kraken"
+          ]
         }
       }
     },
@@ -3590,30 +4337,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784948669022,
+            "at": 1784951775040,
             "ambient": {
-              "uuid": "1f1f72bf-3ada-4179-a133-a44c2a52684c",
+              "uuid": "f4308598-b4c0-4767-9b9d-964912b57838",
               "intensity": 0.36,
               "color": 9412808
             },
             "rig": {
               "hemi": {
-                "uuid": "a952c13e-ef5d-4760-a158-654e142bd5d5",
+                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
                 "intensity": 0.08,
                 "color": 16773596
               },
               "key": {
-                "uuid": "411ba130-4c44-4cea-9769-9f1c3493e0c4",
+                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
                 "intensity": 0.05,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "76c74db4-bd2b-4553-8da7-f40b29104511",
+                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
                 "intensity": 0.02,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "7583288b-20fc-452f-9c7a-946958316654",
+                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
                 "intensity": 0.1,
                 "color": 16777215
               }
@@ -3627,6 +4374,317 @@
             "duringPass": true,
             "afterPass": true
           }
+        },
+        "citizenship": {
+          "fixtureId": "cl-f03-sprite-citizenship",
+          "fixtureVersion": 1,
+          "scaleMode": "diagnostic-cap",
+          "selectedSlug": "spr-pc-human-fighter-female",
+          "selectedView": "face",
+          "supportForm": "shallow-rounded-strip",
+          "tacticalFootprintSeparate": true,
+          "collisionAudit": {
+            "pieces": 7,
+            "checkedPairs": 42,
+            "relocations": 1,
+            "remainingOverlaps": 0
+          },
+          "cameraFill": {
+            "enabled": true,
+            "spriteLayer": 2,
+            "castShadow": false,
+            "intensity": 9.8342,
+            "distance": 82.976,
+            "decay": 1
+          },
+          "environmentFormFill": {
+            "kind": "hemisphere",
+            "intensity": 0.08,
+            "diagnosticFloor": 0.06,
+            "castShadow": false
+          },
+          "presentationCapFeet": [
+            1,
+            30
+          ],
+          "lineup": [
+            {
+              "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+              "label": "Blind cave rat",
+              "stress": "smallest live height",
+              "canonicalFeet": 0.25,
+              "renderedWorldHeight": 0.2,
+              "renderedWorldWidth": 0.32000000000000006,
+              "tacticalSpanCells": 0.5,
+              "supportWidth": 0.2624,
+              "supportDepth": 0.18,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 1,
+              "contentBounds": [
+                0,
+                0.1,
+                0.9375,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.39045120000000005,
+                "offset": 0.045
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-winged-kobold-urd",
+              "label": "Winged kobold",
+              "stress": "small dark fantasy creature",
+              "canonicalFeet": 3,
+              "renderedWorldHeight": 0.6,
+              "renderedWorldWidth": 0.5415929203539822,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.4441061946902654,
+              "supportDepth": 0.26,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977876,
+              "contentBounds": [
+                0.02451,
+                0.017699,
+                0.97549,
+                0.977876
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.6608300176991149,
+                "offset": 0.0624
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-pc-human-fighter-female",
+              "label": "Human fighter",
+              "stress": "human reference · skin/cloth/metal",
+              "canonicalFeet": 5.6,
+              "renderedWorldHeight": 1.1199999999999999,
+              "renderedWorldWidth": 0.8635514018691588,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.7081121495327102,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.976636,
+              "contentBounds": [
+                0.024242,
+                0.023364,
+                0.969697,
+                0.976636
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.0536708785046727,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": true,
+              "regenRecommended": false,
+              "selected": true
+            },
+            {
+              "slug": "spr-fantasy-flaming-skeleton",
+              "label": "Flaming skeleton",
+              "stress": "pale/highlight clipping",
+              "canonicalFeet": 5.8,
+              "renderedWorldHeight": 1.16,
+              "renderedWorldWidth": 1.0226315789473683,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.97807,
+              "contentBounds": [
+                0.024876,
+                0.013158,
+                0.970149,
+                0.97807
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-wraith",
+              "label": "Wraith",
+              "stress": "dark/irregular alpha edge",
+              "canonicalFeet": 6,
+              "renderedWorldHeight": 1.2,
+              "renderedWorldWidth": 1.1513513513513514,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977477,
+              "contentBounds": [
+                0.028169,
+                0.022523,
+                0.981221,
+                0.977477
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-treant",
+              "label": "Treant",
+              "stress": "tall Huge silhouette",
+              "canonicalFeet": 26,
+              "renderedWorldHeight": 5.200000000000001,
+              "renderedWorldWidth": 5.412244897959185,
+              "tacticalSpanCells": 3,
+              "supportWidth": 2.46,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.979592,
+              "contentBounds": [
+                0.015686,
+                0.020408,
+                0.980392,
+                0.979592
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 3.6604799999999997,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-kraken",
+              "label": "Kraken",
+              "stress": "largest live height · width/regeneration test",
+              "canonicalFeet": 60,
+              "renderedWorldHeight": 6,
+              "renderedWorldWidth": 6.588785046728972,
+              "tacticalSpanCells": 4,
+              "supportWidth": 3.28,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.535398,
+              "footY": 0.997113,
+              "contentBounds": [
+                0.021277,
+                0.018692,
+                0.978723,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": true,
+              "collisionNudge": [
+                0.254,
+                0.2625
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 4.88064,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            }
+          ],
+          "stairSamples": [
+            {
+              "view": "face",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "three-quarter",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "edge",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            }
+          ],
+          "regenRecommended": [
+            "spr-fantasy-treant",
+            "spr-fantasy-kraken"
+          ]
         }
       }
     },
@@ -3726,30 +4784,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784948671937,
+            "at": 1784951778125,
             "ambient": {
-              "uuid": "2906e200-337d-4943-9918-6035c1834c84",
+              "uuid": "d03e2aa7-fb87-471c-8d70-16c42b6c37aa",
               "intensity": 0.21,
               "color": 4864038
             },
             "rig": {
               "hemi": {
-                "uuid": "a952c13e-ef5d-4760-a158-654e142bd5d5",
+                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
                 "intensity": 0.08,
                 "color": 16773596
               },
               "key": {
-                "uuid": "411ba130-4c44-4cea-9769-9f1c3493e0c4",
+                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
                 "intensity": 0.05,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "76c74db4-bd2b-4553-8da7-f40b29104511",
+                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
                 "intensity": 0.02,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "7583288b-20fc-452f-9c7a-946958316654",
+                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
                 "intensity": 0.1,
                 "color": 16777215
               }
@@ -3759,18 +4817,18 @@
                 "id": "torch-key",
                 "sourceRef": "torch-key",
                 "state": "flickering",
-                "sampleIndex": 7,
-                "normalizedSample": 0.980163,
-                "emitted": 5.733954,
+                "sampleIndex": 8,
+                "normalizedSample": 1.013423,
+                "emitted": 5.928523,
                 "emittedBase": 5.85,
-                "emittedNormalized": 0.980163,
-                "mesh": 1.568261,
+                "emittedNormalized": 1.013423,
+                "mesh": 1.621476,
                 "meshBase": 1.6,
-                "meshNormalized": 0.980163,
+                "meshNormalized": 1.013423,
                 "parity": true,
-                "pointUuid": "09d93553-cf10-44c7-9054-dfdc18444aef",
-                "emitterUuid": "ff6acff1-3445-4af9-a0c2-4787a07abcf0",
-                "materialUuid": "f44db5d9-ab96-40cd-a10f-cbf66c0568bf",
+                "pointUuid": "47e385a1-98e9-42ba-9951-cf846f940bf8",
+                "emitterUuid": "8431f148-66bc-465f-8241-6bd8de876fb6",
+                "materialUuid": "6c0db183-5239-4344-9911-fd92e80eeb86",
                 "color": 16752714,
                 "distance": 24,
                 "decay": 1.5,
@@ -3781,14 +4839,14 @@
                 ],
                 "shadowCameraFar": 24,
                 "pointPosition": [
-                  0.002791,
-                  0.077616,
-                  0.173545
+                  -0.013542,
+                  0.07552,
+                  0.195635
                 ],
                 "emitterPosition": [
-                  0.002791,
-                  0.077616,
-                  0.173545
+                  -0.013542,
+                  0.07552,
+                  0.195635
                 ],
                 "basePointPosition": [
                   0,
@@ -3801,17 +4859,17 @@
                   0.18
                 ],
                 "directionSample": {
-                  "x": 0.002791,
-                  "y": -0.002384,
-                  "z": -0.006455
+                  "x": -0.013542,
+                  "y": -0.00448,
+                  "z": 0.015635
                 },
                 "directionAmplitude": 0.025,
                 "directionWithinBounds": true,
                 "coLocated": true,
                 "cadenceMs": 420,
                 "intervalJitter": 0.55,
-                "lastIntervalMs": 500,
-                "nextIntervalMs": 258,
+                "lastIntervalMs": 258,
+                "nextIntervalMs": 574,
                 "materialColor": 0,
                 "materialEmissive": 16752714,
                 "materialOpacity": 1
@@ -3825,6 +4883,317 @@
             "duringPass": true,
             "afterPass": true
           }
+        },
+        "citizenship": {
+          "fixtureId": "cl-f03-sprite-citizenship",
+          "fixtureVersion": 1,
+          "scaleMode": "diagnostic-cap",
+          "selectedSlug": "spr-pc-human-fighter-female",
+          "selectedView": "face",
+          "supportForm": "shallow-rounded-strip",
+          "tacticalFootprintSeparate": true,
+          "collisionAudit": {
+            "pieces": 7,
+            "checkedPairs": 42,
+            "relocations": 1,
+            "remainingOverlaps": 0
+          },
+          "cameraFill": {
+            "enabled": true,
+            "spriteLayer": 2,
+            "castShadow": false,
+            "intensity": 9.8342,
+            "distance": 82.976,
+            "decay": 1
+          },
+          "environmentFormFill": {
+            "kind": "hemisphere",
+            "intensity": 0.08,
+            "diagnosticFloor": 0.06,
+            "castShadow": false
+          },
+          "presentationCapFeet": [
+            1,
+            30
+          ],
+          "lineup": [
+            {
+              "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+              "label": "Blind cave rat",
+              "stress": "smallest live height",
+              "canonicalFeet": 0.25,
+              "renderedWorldHeight": 0.2,
+              "renderedWorldWidth": 0.32000000000000006,
+              "tacticalSpanCells": 0.5,
+              "supportWidth": 0.2624,
+              "supportDepth": 0.18,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 1,
+              "contentBounds": [
+                0,
+                0.1,
+                0.9375,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.39045120000000005,
+                "offset": 0.045
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-winged-kobold-urd",
+              "label": "Winged kobold",
+              "stress": "small dark fantasy creature",
+              "canonicalFeet": 3,
+              "renderedWorldHeight": 0.6,
+              "renderedWorldWidth": 0.5415929203539822,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.4441061946902654,
+              "supportDepth": 0.26,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977876,
+              "contentBounds": [
+                0.02451,
+                0.017699,
+                0.97549,
+                0.977876
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.6608300176991149,
+                "offset": 0.0624
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-pc-human-fighter-female",
+              "label": "Human fighter",
+              "stress": "human reference · skin/cloth/metal",
+              "canonicalFeet": 5.6,
+              "renderedWorldHeight": 1.1199999999999999,
+              "renderedWorldWidth": 0.8635514018691588,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.7081121495327102,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.976636,
+              "contentBounds": [
+                0.024242,
+                0.023364,
+                0.969697,
+                0.976636
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.0536708785046727,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": true,
+              "regenRecommended": false,
+              "selected": true
+            },
+            {
+              "slug": "spr-fantasy-flaming-skeleton",
+              "label": "Flaming skeleton",
+              "stress": "pale/highlight clipping",
+              "canonicalFeet": 5.8,
+              "renderedWorldHeight": 1.16,
+              "renderedWorldWidth": 1.0226315789473683,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.97807,
+              "contentBounds": [
+                0.024876,
+                0.013158,
+                0.970149,
+                0.97807
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-wraith",
+              "label": "Wraith",
+              "stress": "dark/irregular alpha edge",
+              "canonicalFeet": 6,
+              "renderedWorldHeight": 1.2,
+              "renderedWorldWidth": 1.1513513513513514,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977477,
+              "contentBounds": [
+                0.028169,
+                0.022523,
+                0.981221,
+                0.977477
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-treant",
+              "label": "Treant",
+              "stress": "tall Huge silhouette",
+              "canonicalFeet": 26,
+              "renderedWorldHeight": 5.200000000000001,
+              "renderedWorldWidth": 5.412244897959185,
+              "tacticalSpanCells": 3,
+              "supportWidth": 2.46,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.979592,
+              "contentBounds": [
+                0.015686,
+                0.020408,
+                0.980392,
+                0.979592
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 3.6604799999999997,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-kraken",
+              "label": "Kraken",
+              "stress": "largest live height · width/regeneration test",
+              "canonicalFeet": 60,
+              "renderedWorldHeight": 6,
+              "renderedWorldWidth": 6.588785046728972,
+              "tacticalSpanCells": 4,
+              "supportWidth": 3.28,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.535398,
+              "footY": 0.997113,
+              "contentBounds": [
+                0.021277,
+                0.018692,
+                0.978723,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": true,
+              "collisionNudge": [
+                0.254,
+                0.2625
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 4.88064,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            }
+          ],
+          "stairSamples": [
+            {
+              "view": "face",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "three-quarter",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "edge",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            }
+          ],
+          "regenRecommended": [
+            "spr-fantasy-treant",
+            "spr-fantasy-kraken"
+          ]
         }
       }
     },
@@ -3924,30 +5293,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784948675164,
+            "at": 1784951780808,
             "ambient": {
-              "uuid": "acad6017-6b9c-4567-9563-f2297c2de2f4",
+              "uuid": "2f3b6ddf-c826-447a-94aa-c812ae74a8f5",
               "intensity": 0.26,
               "color": 4212896
             },
             "rig": {
               "hemi": {
-                "uuid": "a952c13e-ef5d-4760-a158-654e142bd5d5",
+                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
                 "intensity": 0.08,
                 "color": 16773596
               },
               "key": {
-                "uuid": "411ba130-4c44-4cea-9769-9f1c3493e0c4",
+                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
                 "intensity": 0.05,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "76c74db4-bd2b-4553-8da7-f40b29104511",
+                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
                 "intensity": 0.02,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "7583288b-20fc-452f-9c7a-946958316654",
+                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
                 "intensity": 0.1,
                 "color": 16777215
               }
@@ -3966,9 +5335,9 @@
                 "meshBase": 1.6,
                 "meshNormalized": 1,
                 "parity": true,
-                "pointUuid": "ad802012-377c-43e4-aaa1-ab2c7b295aa4",
-                "emitterUuid": "b662668a-05ad-47fd-b0b4-424dad040ad5",
-                "materialUuid": "a3d62cf6-6ce1-4ab4-888f-47138cfbecd5",
+                "pointUuid": "08321fa7-80d2-4b91-9551-bc0634627436",
+                "emitterUuid": "e856aa48-a35e-448c-80c0-e4f631d2fa3c",
+                "materialUuid": "b1ff1107-4b76-4307-83c9-4e19be89dc5b",
                 "color": 9071615,
                 "distance": 6,
                 "decay": 2,
@@ -4023,6 +5392,317 @@
             "duringPass": true,
             "afterPass": true
           }
+        },
+        "citizenship": {
+          "fixtureId": "cl-f03-sprite-citizenship",
+          "fixtureVersion": 1,
+          "scaleMode": "diagnostic-cap",
+          "selectedSlug": "spr-pc-human-fighter-female",
+          "selectedView": "face",
+          "supportForm": "shallow-rounded-strip",
+          "tacticalFootprintSeparate": true,
+          "collisionAudit": {
+            "pieces": 7,
+            "checkedPairs": 42,
+            "relocations": 1,
+            "remainingOverlaps": 0
+          },
+          "cameraFill": {
+            "enabled": true,
+            "spriteLayer": 2,
+            "castShadow": false,
+            "intensity": 9.8342,
+            "distance": 82.976,
+            "decay": 1
+          },
+          "environmentFormFill": {
+            "kind": "hemisphere",
+            "intensity": 0.08,
+            "diagnosticFloor": 0.06,
+            "castShadow": false
+          },
+          "presentationCapFeet": [
+            1,
+            30
+          ],
+          "lineup": [
+            {
+              "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+              "label": "Blind cave rat",
+              "stress": "smallest live height",
+              "canonicalFeet": 0.25,
+              "renderedWorldHeight": 0.2,
+              "renderedWorldWidth": 0.32000000000000006,
+              "tacticalSpanCells": 0.5,
+              "supportWidth": 0.2624,
+              "supportDepth": 0.18,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 1,
+              "contentBounds": [
+                0,
+                0.1,
+                0.9375,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.39045120000000005,
+                "offset": 0.045
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-winged-kobold-urd",
+              "label": "Winged kobold",
+              "stress": "small dark fantasy creature",
+              "canonicalFeet": 3,
+              "renderedWorldHeight": 0.6,
+              "renderedWorldWidth": 0.5415929203539822,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.4441061946902654,
+              "supportDepth": 0.26,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977876,
+              "contentBounds": [
+                0.02451,
+                0.017699,
+                0.97549,
+                0.977876
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.6608300176991149,
+                "offset": 0.0624
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-pc-human-fighter-female",
+              "label": "Human fighter",
+              "stress": "human reference · skin/cloth/metal",
+              "canonicalFeet": 5.6,
+              "renderedWorldHeight": 1.1199999999999999,
+              "renderedWorldWidth": 0.8635514018691588,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.7081121495327102,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.976636,
+              "contentBounds": [
+                0.024242,
+                0.023364,
+                0.969697,
+                0.976636
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.0536708785046727,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": true,
+              "regenRecommended": false,
+              "selected": true
+            },
+            {
+              "slug": "spr-fantasy-flaming-skeleton",
+              "label": "Flaming skeleton",
+              "stress": "pale/highlight clipping",
+              "canonicalFeet": 5.8,
+              "renderedWorldHeight": 1.16,
+              "renderedWorldWidth": 1.0226315789473683,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.97807,
+              "contentBounds": [
+                0.024876,
+                0.013158,
+                0.970149,
+                0.97807
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-wraith",
+              "label": "Wraith",
+              "stress": "dark/irregular alpha edge",
+              "canonicalFeet": 6,
+              "renderedWorldHeight": 1.2,
+              "renderedWorldWidth": 1.1513513513513514,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977477,
+              "contentBounds": [
+                0.028169,
+                0.022523,
+                0.981221,
+                0.977477
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-treant",
+              "label": "Treant",
+              "stress": "tall Huge silhouette",
+              "canonicalFeet": 26,
+              "renderedWorldHeight": 5.200000000000001,
+              "renderedWorldWidth": 5.412244897959185,
+              "tacticalSpanCells": 3,
+              "supportWidth": 2.46,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.979592,
+              "contentBounds": [
+                0.015686,
+                0.020408,
+                0.980392,
+                0.979592
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 3.6604799999999997,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-kraken",
+              "label": "Kraken",
+              "stress": "largest live height · width/regeneration test",
+              "canonicalFeet": 60,
+              "renderedWorldHeight": 6,
+              "renderedWorldWidth": 6.588785046728972,
+              "tacticalSpanCells": 4,
+              "supportWidth": 3.28,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.535398,
+              "footY": 0.997113,
+              "contentBounds": [
+                0.021277,
+                0.018692,
+                0.978723,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": true,
+              "collisionNudge": [
+                0.254,
+                0.2625
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 4.88064,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            }
+          ],
+          "stairSamples": [
+            {
+              "view": "face",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "three-quarter",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "edge",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            }
+          ],
+          "regenRecommended": [
+            "spr-fantasy-treant",
+            "spr-fantasy-kraken"
+          ]
         }
       }
     },
@@ -4122,30 +5802,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784948677323,
+            "at": 1784951783461,
             "ambient": {
-              "uuid": "71a6f033-3fb8-4b46-85eb-ffc835b0dd22",
+              "uuid": "4c3f3c19-1fbf-418c-93bf-d0dc0d8996e0",
               "intensity": 0.55,
               "color": 14212320
             },
             "rig": {
               "hemi": {
-                "uuid": "a952c13e-ef5d-4760-a158-654e142bd5d5",
+                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
                 "intensity": 0.08,
                 "color": 16773596
               },
               "key": {
-                "uuid": "411ba130-4c44-4cea-9769-9f1c3493e0c4",
+                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
                 "intensity": 0.05,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "76c74db4-bd2b-4553-8da7-f40b29104511",
+                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
                 "intensity": 0.02,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "7583288b-20fc-452f-9c7a-946958316654",
+                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
                 "intensity": 0.1,
                 "color": 16777215
               }
@@ -4159,6 +5839,317 @@
             "duringPass": true,
             "afterPass": true
           }
+        },
+        "citizenship": {
+          "fixtureId": "cl-f03-sprite-citizenship",
+          "fixtureVersion": 1,
+          "scaleMode": "diagnostic-cap",
+          "selectedSlug": "spr-pc-human-fighter-female",
+          "selectedView": "face",
+          "supportForm": "shallow-rounded-strip",
+          "tacticalFootprintSeparate": true,
+          "collisionAudit": {
+            "pieces": 7,
+            "checkedPairs": 42,
+            "relocations": 1,
+            "remainingOverlaps": 0
+          },
+          "cameraFill": {
+            "enabled": true,
+            "spriteLayer": 2,
+            "castShadow": false,
+            "intensity": 9.8342,
+            "distance": 82.976,
+            "decay": 1
+          },
+          "environmentFormFill": {
+            "kind": "hemisphere",
+            "intensity": 0.08,
+            "diagnosticFloor": 0.06,
+            "castShadow": false
+          },
+          "presentationCapFeet": [
+            1,
+            30
+          ],
+          "lineup": [
+            {
+              "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+              "label": "Blind cave rat",
+              "stress": "smallest live height",
+              "canonicalFeet": 0.25,
+              "renderedWorldHeight": 0.2,
+              "renderedWorldWidth": 0.32000000000000006,
+              "tacticalSpanCells": 0.5,
+              "supportWidth": 0.2624,
+              "supportDepth": 0.18,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 1,
+              "contentBounds": [
+                0,
+                0.1,
+                0.9375,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.39045120000000005,
+                "offset": 0.045
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-winged-kobold-urd",
+              "label": "Winged kobold",
+              "stress": "small dark fantasy creature",
+              "canonicalFeet": 3,
+              "renderedWorldHeight": 0.6,
+              "renderedWorldWidth": 0.5415929203539822,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.4441061946902654,
+              "supportDepth": 0.26,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977876,
+              "contentBounds": [
+                0.02451,
+                0.017699,
+                0.97549,
+                0.977876
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 0.6608300176991149,
+                "offset": 0.0624
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-pc-human-fighter-female",
+              "label": "Human fighter",
+              "stress": "human reference · skin/cloth/metal",
+              "canonicalFeet": 5.6,
+              "renderedWorldHeight": 1.1199999999999999,
+              "renderedWorldWidth": 0.8635514018691588,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.7081121495327102,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.976636,
+              "contentBounds": [
+                0.024242,
+                0.023364,
+                0.969697,
+                0.976636
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.0536708785046727,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": true,
+              "regenRecommended": false,
+              "selected": true
+            },
+            {
+              "slug": "spr-fantasy-flaming-skeleton",
+              "label": "Flaming skeleton",
+              "stress": "pale/highlight clipping",
+              "canonicalFeet": 5.8,
+              "renderedWorldHeight": 1.16,
+              "renderedWorldWidth": 1.0226315789473683,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.97807,
+              "contentBounds": [
+                0.024876,
+                0.013158,
+                0.970149,
+                0.97807
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-wraith",
+              "label": "Wraith",
+              "stress": "dark/irregular alpha edge",
+              "canonicalFeet": 6,
+              "renderedWorldHeight": 1.2,
+              "renderedWorldWidth": 1.1513513513513514,
+              "tacticalSpanCells": 1,
+              "supportWidth": 0.82,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.977477,
+              "contentBounds": [
+                0.028169,
+                0.022523,
+                0.981221,
+                0.977477
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 1.22016,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": false,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-treant",
+              "label": "Treant",
+              "stress": "tall Huge silhouette",
+              "canonicalFeet": 26,
+              "renderedWorldHeight": 5.200000000000001,
+              "renderedWorldWidth": 5.412244897959185,
+              "tacticalSpanCells": 3,
+              "supportWidth": 2.46,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.5,
+              "footY": 0.979592,
+              "contentBounds": [
+                0.015686,
+                0.020408,
+                0.980392,
+                0.979592
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": false,
+              "collisionNudge": [
+                0,
+                0
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 3.6604799999999997,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            },
+            {
+              "slug": "spr-fantasy-kraken",
+              "label": "Kraken",
+              "stress": "largest live height · width/regeneration test",
+              "canonicalFeet": 60,
+              "renderedWorldHeight": 6,
+              "renderedWorldWidth": 6.588785046728972,
+              "tacticalSpanCells": 4,
+              "supportWidth": 3.28,
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true,
+              "shell": true,
+              "footX": 0.535398,
+              "footY": 0.997113,
+              "contentBounds": [
+                0.021277,
+                0.018692,
+                0.978723,
+                1
+              ],
+              "alphaCutoff": 0.5,
+              "collisionRelocated": true,
+              "collisionNudge": [
+                0.254,
+                0.2625
+              ],
+              "contactShadow": {
+                "linked": true,
+                "poolDiameter": 4.88064,
+                "offset": 0.07999999999999999
+              },
+              "selectionBaseRingGlow": false,
+              "regenRecommended": true,
+              "selected": false
+            }
+          ],
+          "stairSamples": [
+            {
+              "view": "face",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "three-quarter",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            },
+            {
+              "view": "edge",
+              "supportDepth": 0.3333333333333333,
+              "treadDepth": 0.3333333333333333,
+              "stairFit": true
+            }
+          ],
+          "regenRecommended": [
+            "spr-fantasy-treant",
+            "spr-fantasy-kraken"
+          ]
         }
       }
     }
@@ -4173,7 +6164,13 @@
     "widthRegenerationFlags": [
       "spr-fantasy-treant",
       "spr-fantasy-kraken"
-    ]
+    ],
+    "noSupportOverlap": true,
+    "everyContactShadowLinked": true,
+    "selectedBaseRingGlow": true,
+    "spriteCameraFillShadowless": true,
+    "shadowFormFloorActive": true,
+    "deepZoomReachedClamp": true
   },
   "consoleErrors": [],
   "consoleWarnings": [

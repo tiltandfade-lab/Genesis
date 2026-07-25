@@ -454,12 +454,24 @@ Tiny and Small supports may be shallower. Face, three-quarter, and edge samples 
 production standee assembly on a real three-tread proof. A thin side shell prevents the card from
 vanishing edge-on.
 
-The scale control keeps true scale canonical and labels the 1–20-foot cap
+The scale control keeps true scale canonical and labels the 1–30-foot cap
 `PRESENTATION TEST ONLY`; it never mutates authored `worldHeight`. The honest view proves why the
 comparison is needed: the 60-foot Kraken dominates the human-scale cast. The cap makes all seven
-readable together. Neither is promoted as the final production presentation until Adam rules after
-the live A/B. Treant and Kraken are automatically flagged for taller/more-upright regeneration
-because their rendered width nearly consumes their tactical footprint.
+readable together. True scale remains authoritative; a canonical Kraken belongs in an
+encounter-scale environment that can contain it. Treant and Kraken are automatically flagged for
+taller/more-upright regeneration because their rendered width nearly consumes their tactical
+footprint.
+
+The follow-up pass makes the standees behave like physical board pieces. Governed zoom reaches
+roughly 8.3× closer for inspection. Visible support rectangles are tested as oriented boxes and the
+later piece receives the smallest deterministic relocation needed to clear an overlap; tactical
+occupancy never changes. Contact pools carry an explicit live link back to their standee, follow its
+position/yaw, and feather outside the support. A camera-side SpotLight affects only the private
+sprite-face layer, casts no shadow, and falls off gently. The selection signal is not a character
+outline: only material index 1, the base extrusion's vertical sidewall, emits as a cyan ring.
+Diagnostic modes also retain a 0.06 shadowless hemisphere floor. This is environment bounce, not a
+new material or second key: top-facing treads, vertical risers, and wall turns keep slightly
+different near-black values while the direct-light shadow stays strong.
 
 **Proof ledger.**
 
@@ -470,10 +482,16 @@ because their rendered width nearly consumes their tactical footprint.
 | Tactical footprint remains mechanical and separate | Gold/cyan footprint squares are distinct siblings of the shallow standee supports; receipt `tacticalFootprintSeparate: true`. |
 | Edge citizenship is real | Every cast member reports a side shell; selected Human Fighter is captured face/edge while the retained stair shows face/three-quarter/edge. |
 | Scale comparison is honest | `01-true-scale-live-ui.png` retains 0.25–60-foot canon; `02-cap-spectrum-live-ui.png` is labelled diagnostic and retains canonical values in its receipt. |
+| Deep inspection is real | `09-deep-zoom-live-ui.png` is driven by the mounted wheel listener and records `clayZoom: 0.12` against range `[0.12,2.5]`; bearing and pitch remain governed. |
+| Supports cannot share space | The receipt records seven support OBBs, one deterministic relocation, and `remainingOverlaps: 0`; tactical footprint data is unchanged. |
+| Shadows remain attached and visible | Every lineup row reports a linked contact shadow; its yaw/position sync follows the standee and the feather extends to 0.744× support width/depth on each half-axis. |
+| Dark-room faces stay readable without lifting the room | The camera fill reports sprite-only layer 2, decay 1, and `castShadow:false`; dark/moon, torch, and magic frames retain distinct room lighting. |
+| Selection is a base ring only | The selected Human Fighter reports `selectionBaseRingGlow:true`; only the extrusion side material emits, while sprite BoxHelper/outline is skipped. |
+| Shadow still contains form | The receipt reports `environmentFormFill` as a shadowless hemisphere at the 0.06 diagnostic floor; the inspector labels it `tread/riser value floor`. |
 | Width failures stay loud | Receipt names exactly `spr-fantasy-treant` and `spr-fantasy-kraken`; the inspector recommends taller/more-upright regeneration. |
 | Lighting response uses accepted recipes | Neutral, moon, torch, magic, and day captures call the shared production light registry; no CL-R2-only light implementation exists. |
 | Repeatable evidence exists | `dev/clay-captures/cl-r2-sprite-citizenship/`: early/settled true scale, capped and edge live frames, 5 lighting contexts, composed sheet, JSON receipt, and separate measurements; 7 cast, 3 stair views, zero console errors. |
-| Executable gate | `dev/verify-clay-room.mjs` 202/202; sprite registry 27/27; theater sprites 12/12; floor contact 51/51; dungeon interior 291/291; manifest OK. **FULL CI PENDING.** |
+| Executable gate | `dev/verify-clay-room.mjs` 206/206; sprite registry 27/27; theater sprites 12/12; floor contact 51/51; dungeon interior 291/291; manifest OK. **FULL CI PENDING.** |
 
 ### CL-R3 — basic construction grammar
 

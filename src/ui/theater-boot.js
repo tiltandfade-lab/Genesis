@@ -1488,6 +1488,13 @@ const HEMI_SKY = 0xfff1dc, HEMI_GROUND = 0x1b2430, HEMI_INTENSITY_DEFAULT = 0.22
 // (setBoard) is untouched — STAGE_AMBIENT_FLOOR still governs there. Tuned across the BW2-4 iterate loop.
 const ITR_SCENE_AMBIENT = 0.13;      // interior ambient intensity (replaces the 0.65 readability floor here) — BW2-4b: 0.16->0.12 (brightness law: dark-corner floor)
 const ITR_SCENE_HEMI = 0.08;         // interior hemisphere key (down from HEMI_INTENSITY_DEFAULT 0.22)
+// CL-R2 follow-up — SHADOW FORM FLOOR. Diagnostic recipes used to zero the hemisphere entirely,
+// leaving every un-keyed face at one identical flat ambient value: photographically deep, but stair
+// treads, risers, and wall turns disappeared into a single shape. Preserve a very low shadowless
+// sky/ground bounce so face orientation stays barely readable in darkness. Production dark rooms
+// already use ITR_SCENE_HEMI=0.08, so this is a floor for stricter diagnostics, not a brightness
+// raise or an environment-material fork.
+const ITR_SHADOW_FORM_HEMI_FLOOR = 0.06;
 const ITR_SCENE_FILL_SCALE = 0.04;   // multiply the profile's overhead (decay:0, non-attenuating) fill point(s). Tuned 0.20->0.10->0.04: the fill was the LAST flattener — it lit central walls/doorframes bright even after ambient/hemi dropped (round-4 diagnostic: killing ambient+hemi alone left them bright). Standees are UNLIT billboards, so cutting fill near-off darkens the Lambert surfaces (walls/doorframes/floor go dark except in torch pools — the mock look) WITHOUT touching character readability. A whisper stays (not 0) so an edge-on wall never reads as a pure-black hole.
 // BW2-4 item 1: the DATA intensity on data.lights (theater-interior.js's itrRoomLights, base
 // kit.lightIntensity ~1.0-1.3 x valueScript.focalLight ~1.2 = ~1.5) encodes the RELATIVE per-room value
@@ -1517,6 +1524,14 @@ const ITR_LIGHT_RENDER_GAIN = 4.5;
 const ITR_SCENE_KEY = 0.05;   // tabletop key DirectionalLight, dimmed for the interior channel (mount default 0.72)
 const ITR_SCENE_FILL = 0.02;  // tabletop fill DirectionalLight, dimmed for the interior channel (mount default 0.22)
 const ITR_SPRITE_EMISSIVE_FLOOR = 0.05; // sprite readability floor — emissiveIntensity on the lit billboard's own emissiveMap
+// CL-R2 follow-up — a neutral, camera-side fill that can affect ONLY sprite faces. The cutout remains
+// on layer 0 for all authored room lights and additionally joins this private layer; the SpotLight
+// exists only on the private layer, casts no shadow, and keeps a gentle inverse-distance falloff.
+// This is the portrait-lighting concession Adam asked for: enough clean face value to keep skin,
+// cloth, and metal from turning uniformly rusty in dark rooms, without lifting the room around them.
+const SPRITE_CAMERA_FILL_LAYER = 2;
+const SPRITE_CAMERA_FILL_AT_TARGET = 0.16;
+const SPRITE_CAMERA_FILL_COLOR = 0xfff2df;
 // BW2-4b item 1 — INTERIOR LIGHT RANGE CAP. The torch/lamp PointLights (data.lights, default range 12)
 // spilled far enough that an 8-torch room had NO dark corner — every cell sat in some pool, so a sprite
 // read ~0.7 of full-bright everywhere (the BRIGHTNESS LAW's exact failure). Capping the range tightens
@@ -3223,6 +3238,9 @@ function buildSpriteBillboardMesh(tex, w, h, entry){
   // interior.mjs's sprite-purity check asserts it's set (billboards) vs. absent+psxApplied set (walls).
   mat.userData.psxExempt = true;
   const mesh = new THREE.Mesh(geo, mat);
+  // Layer 0 keeps the complete production light response. Layer 2 adds the sprite-only camera fill;
+  // the camera itself still sees layer 0, so this is a LIGHT MASK, never a visibility fork.
+  if(mesh.layers) mesh.layers.enable(SPRITE_CAMERA_FILL_LAYER);
   // `footX`/`footY` are the ONE authored contact/rotation anchor. Move the art around local origin
   // so that exact image coordinate sits at (0,0), rather than compensating later with a second
   // `floor` offset. The legacy bottom-centre default (0.5,1) is byte-identical to x=0,y=h/2.
@@ -3857,6 +3875,131 @@ function kilterFor(seedKey){
   };
 }
 
+// CL-R2 follow-up — VISIBLE SUPPORT COLLISION. Tactical occupancy remains owned by the board/query
+// layer; this pass only prevents two rendered standee strips from occupying the same physical space.
+// Each support is an oriented rectangle (the standee yaw rotates it). A small deterministic
+// minimum-translation push moves the later-mounted piece along the shallowest separating axis,
+// exactly like nudging two board pieces apart without changing either piece's logical square.
+const STANDEE_SUPPORT_CLEARANCE = 0.035;
+function standeeSupportObb(fig){
+  if(!fig || !fig.userData) return null;
+  const width = Number(fig.userData.interiorBaseWidth);
+  const depth = Number(fig.userData.interiorBaseDepth);
+  if(!(width > 0) || !(depth > 0)) return null;
+  const yaw = fig.rotation ? fig.rotation.y || 0 : 0;
+  return {
+    fig: fig,
+    cx: fig.position.x,
+    cz: fig.position.z,
+    halfWidth: width * 0.5 + STANDEE_SUPPORT_CLEARANCE * 0.5,
+    halfDepth: depth * 0.5 + STANDEE_SUPPORT_CLEARANCE * 0.5,
+    widthAxis: { x: Math.cos(yaw), z: -Math.sin(yaw) },
+    depthAxis: { x: Math.sin(yaw), z: Math.cos(yaw) }
+  };
+}
+function standeeSupportRadiusOn(obb, axis){
+  return obb.halfWidth * Math.abs(obb.widthAxis.x * axis.x + obb.widthAxis.z * axis.z)
+    + obb.halfDepth * Math.abs(obb.depthAxis.x * axis.x + obb.depthAxis.z * axis.z);
+}
+function standeeSupportPenetration(a, b){
+  if(!a || !b) return null;
+  const dx = b.cx - a.cx, dz = b.cz - a.cz;
+  const axes = [a.widthAxis, a.depthAxis, b.widthAxis, b.depthAxis];
+  let best = null;
+  for(let i = 0; i < axes.length; i++){
+    const axis = axes[i];
+    const signedDistance = dx * axis.x + dz * axis.z;
+    const overlap = standeeSupportRadiusOn(a, axis) + standeeSupportRadiusOn(b, axis) - Math.abs(signedDistance);
+    if(overlap <= 0) return null;
+    if(!best || overlap < best.overlap){
+      best = { axis: axis, overlap: overlap, signedDistance: signedDistance };
+    }
+  }
+  return best;
+}
+function standeeCollisionSign(a, b, penetration){
+  if(Math.abs(penetration.signedDistance) > 0.000001) return penetration.signedDistance < 0 ? -1 : 1;
+  const aKey = String(a.fig.userData.sceneObjectId || a.fig.userData.unitId || a.fig.userData.spriteSlug || "");
+  const bKey = String(b.fig.userData.sceneObjectId || b.fig.userData.unitId || b.fig.userData.spriteSlug || "");
+  return (hashSeed(aKey + "->" + bKey) & 1) ? 1 : -1;
+}
+function mountedStandeeFigures(){
+  const figures = [];
+  function visit(root){
+    if(!root || typeof root.traverse !== "function") return;
+    root.traverse(function(node){
+      if(!node || !node.userData || !node.userData.sprite || node.userData.standeeCollisionExcluded) return;
+      if(node.userData.interiorBaseWidth > 0 && node.userData.interiorBaseDepth > 0) figures.push(node);
+    });
+  }
+  visit(S.interiorGroup);
+  visit(S.unitGroup);
+  return figures;
+}
+function resolveMountedStandeeSupportCollisions(){
+  const figures = mountedStandeeFigures();
+  let relocations = 0, checkedPairs = 0;
+  // Later-mounted pieces move; earlier pieces remain stable. Repeating the ordered sweep handles a
+  // piece that needs to clear two neighbors without introducing random or frame-dependent motion.
+  for(let pass = 0; pass < 12; pass++){
+    let movedThisPass = false;
+    for(let i = 1; i < figures.length; i++){
+      for(let j = 0; j < i; j++){
+        const a = standeeSupportObb(figures[j]), b = standeeSupportObb(figures[i]);
+        checkedPairs++;
+        const hit = standeeSupportPenetration(a, b);
+        if(!hit) continue;
+        const sign = standeeCollisionSign(a, b, hit);
+        const push = hit.overlap + 0.001;
+        figures[i].position.x += hit.axis.x * push * sign;
+        figures[i].position.z += hit.axis.z * push * sign;
+        figures[i].userData.standeeCollisionNudgeX =
+          (figures[i].userData.standeeCollisionNudgeX || 0) + hit.axis.x * push * sign;
+        figures[i].userData.standeeCollisionNudgeZ =
+          (figures[i].userData.standeeCollisionNudgeZ || 0) + hit.axis.z * push * sign;
+        figures[i].userData.standeeCollisionRelocated = true;
+        relocations++;
+        movedThisPass = true;
+      }
+    }
+    if(!movedThisPass) break;
+  }
+  let remainingOverlaps = 0;
+  for(let i = 1; i < figures.length; i++){
+    for(let j = 0; j < i; j++){
+      if(standeeSupportPenetration(standeeSupportObb(figures[j]), standeeSupportObb(figures[i]))){
+        remainingOverlaps++;
+      }
+    }
+  }
+  S.standeeCollisionAudit = {
+    pieces: figures.length,
+    checkedPairs: checkedPairs,
+    relocations: relocations,
+    remainingOverlaps: remainingOverlaps
+  };
+  S.standeeCollisionDirty = false;
+}
+
+// The soft pool is deliberately a little larger than the physical strip and biased slightly behind
+// it. The dense core still touches the support, while the feather remains visible instead of being
+// completely hidden by the base. Sync runs whenever billboards face the camera, so movement,
+// collision relocation, and inspection yaw can never leave the pool behind.
+function syncStandeeContactBlob(fig){
+  if(!fig || !fig.userData || !fig.userData.contactBlobMesh) return;
+  const blob = fig.userData.contactBlobMesh;
+  const yaw = fig.rotation ? fig.rotation.y || 0 : 0;
+  const depth = Number(fig.userData.interiorBaseDepth) || 0.33;
+  const offset = Math.min(0.12, Math.max(0.045, depth * 0.24));
+  blob.position.x = fig.position.x + Math.sin(yaw) * offset;
+  blob.position.z = fig.position.z + Math.cos(yaw) * offset;
+  blob.rotation.order = "YXZ";
+  blob.rotation.x = -Math.PI / 2;
+  blob.rotation.y = yaw;
+  blob.userData.contactOffset = offset;
+  blob.userData.linkedSceneObjectId = fig.userData.sceneObjectId || fig.userData.unitId || null;
+}
+
 // BW2-2 ADDENDUM (Adam, mid-flight review — "the contact shadow... really sells the illusion"): the
 // contact pool is now a SOFT RADIAL GRADIENT quad (dark center feathering to fully transparent at the
 // rim), replacing VP7's flat hard-edged disc — matches the mock's shadow hugging the acting knight's
@@ -3906,7 +4049,8 @@ let INTERIOR_POOL_MAT = null;
 function interiorPoolMaterial(){
   if(!INTERIOR_POOL_MAT){
     INTERIOR_POOL_MAT = new THREE.MeshBasicMaterial({
-      map: interiorPoolTexture(), transparent: true, depthWrite: false, side: THREE.DoubleSide
+      map: interiorPoolTexture(), transparent: true, opacity: 0.94,
+      depthWrite: false, side: THREE.DoubleSide
     });
   }
   return INTERIOR_POOL_MAT;
@@ -3921,8 +4065,8 @@ function interiorPoolMaterial(){
 const INTERIOR_POOL_Y_OFFSET = 0.003;
 function addInteriorContactBlob(group, x, z, texWidth, floorTop, texDepth){
   if(!group) return null;
-  const footprint = Math.max(0.05, (texWidth || 1) * 0.4);
-  const poolRadius = footprint * 1.6;
+  const footprint = Math.max(0.05, (texWidth || 1) * 0.48);
+  const poolRadius = footprint * 1.55;
   const mesh = new THREE.Mesh(interiorPoolGeoFor(poolRadius), interiorPoolMaterial());
   mesh.rotation.x = -Math.PI / 2;
   if(Number.isFinite(texDepth) && texDepth > 0){
@@ -3935,6 +4079,8 @@ function addInteriorContactBlob(group, x, z, texWidth, floorTop, texDepth){
   mesh.userData.contactBlob = true; // verify-dungeon-interior's per-piece blob-count check
   mesh.userData.contactWidth = texWidth;
   mesh.userData.contactDepth = Number.isFinite(texDepth) ? texDepth : texWidth;
+  mesh.userData.contactPoolDiameter = poolRadius * 2;
+  mesh.renderOrder = 2;
   group.add(mesh);
   return mesh;
 }
@@ -5258,6 +5404,9 @@ function createTheaterState(){
     interiorFlickerTargets: [], interiorLightTargets: [], interiorLightsBuilt: null,
     interiorLightingKey: null, interiorLightingPreservedThisBuild: false,
     keyLight: null, fillLight: null, interiorCameraKey: null,
+    spriteCameraFill: null, spriteCameraFillTarget: null,
+    clayRoomSelectionGlowSprite: null,
+    standeeCollisionDirty: false, standeeCollisionAudit: null,
     hemiLight: null, // GR3: the shared soft hemisphere key, added once at mount() — see mount()'s own comment
     // BEAUTY-WAVE-3 BW3-0 (docs/BEAUTY-WAVE-3.md, THE COMPOSER SEAM): the postprocessing chain, built
     // once at mount() (needs a live renderer) and disposed at retire(). Default ON, but the render
@@ -5316,6 +5465,7 @@ function markDirty(){
 // facing +Z (buildSpriteBillboard's own PlaneGeometry default); +PI turns that face to point back at
 // the camera position (which sits at angle `yaw` from the board origin, looking inward).
 function updateSpriteBillboardYaw(){
+  updateSpriteCameraFill();
   const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
   const facing = yaw + Math.PI;
   // Camera-pitch tilt (Adam 2026-07-10 evening): an upright quad under the elevated ortho camera
@@ -5384,6 +5534,8 @@ function updateSpriteBillboardYaw(){
       }
     }
   }
+  if(S.standeeCollisionDirty) resolveMountedStandeeSupportCollisions();
+  mountedStandeeFigures().forEach(syncStandeeContactBlob);
 }
 
 function scheduleRender(){
@@ -7008,6 +7160,45 @@ function mountInteriorCameraKey(cx, cz){
   dl.shadow.bias = -0.0016;
 }
 
+// CL-R2 follow-up — CAMERA-SIDE SPRITE FILL. A real spotlight follows the current camera pose and
+// targets the governed look point. Its layer mask reaches only billboard faces that explicitly join
+// SPRITE_CAMERA_FILL_LAYER; architecture, props, bases, and floor never see it. Intensity is derived
+// from the live camera distance so the target receives the same gentle fill after a board refit, while
+// decay=1 still produces a visible near-to-far falloff across a deep room. It never casts shadows.
+function mountSpriteCameraFill(){
+  if(!S.scene) return;
+  if(!S.spriteCameraFill){
+    const fill = new THREE.SpotLight(
+      SPRITE_CAMERA_FILL_COLOR,
+      1,
+      0,
+      THREE.MathUtils.degToRad(24),
+      0.82,
+      1
+    );
+    fill.castShadow = false;
+    fill.userData.spriteCameraFill = true;
+    if(fill.layers) fill.layers.set(SPRITE_CAMERA_FILL_LAYER);
+    S.scene.add(fill);
+    S.scene.add(fill.target);
+    S.spriteCameraFill = fill;
+    S.spriteCameraFillTarget = fill.target;
+  }
+  updateSpriteCameraFill();
+}
+function updateSpriteCameraFill(){
+  const fill = S.spriteCameraFill;
+  if(!fill || !S.camera) return;
+  const target = S.cameraLookTarget || new THREE.Vector3(0, 0, 0);
+  const distance = Math.max(1, S.camera.position.distanceTo(target));
+  fill.position.copy(S.camera.position);
+  fill.target.position.copy(target);
+  fill.target.updateMatrixWorld();
+  fill.distance = distance * 1.35;
+  fill.intensity = distance * SPRITE_CAMERA_FILL_AT_TARGET;
+  fill.angle = THREE.MathUtils.degToRad(Math.max(24, (S.camera.fov || 20) * 0.75));
+}
+
 /* P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B steps 1-3) — lighting-prop anchoring.
    dev/model-qa/creatures/prop-light.js's own ENGINE NOTE reserves this for P1' wiring by name: "the
    scene's point lights should SOURCE at these props." mountLightProp(data, cx, cz) is called from
@@ -7993,6 +8184,7 @@ function setBoard(data){
   if(S.keyLight) S.keyLight.intensity = 0.72;
   if(S.fillLight) S.fillLight.intensity = 0.22;
   if(S.interiorCameraKey){ S.interiorCameraKey.intensity = 0; S.interiorCameraKey.castShadow = false; }
+  if(S.spriteCameraFill) S.spriteCameraFill.intensity = 0;
   ITR_SPRITE_EMISSIVE_TINT = 0xffffff; // BW2-4b item 1: the realm-grade sprite floor tint is interior-only
   // BEAUTY-WAVE-3 THE POST SUITE (BW3-2/3/6): the flat tabletop stays pass-free — tear the DoF/bloom/
   // grade passes off the composer here (setInteriorBoard is the only place they're added; this is the
@@ -9661,6 +9853,9 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     g.userData.interiorBaseRadius = support.width * 0.5;
     g.userData.interiorBaseWidth = support.width;
     g.userData.interiorBaseDepth = support.depth;
+    g.userData.standeeCollisionNudgeX = 0;
+    g.userData.standeeCollisionNudgeZ = 0;
+    g.userData.standeeCollisionRelocated = false;
     g.userData.tacticalSpanCells = support.tacticalSpanCells;
     g.userData.stairTreadDepth = support.treadDepth;
     g.userData.stairFit = support.stairFit;
@@ -9685,7 +9880,10 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     // fall-death — the corpse keeps its ground anchor because the pool isn't parented to the
     // tilting wrapper), and existing callers walking `group.children` in piece order see no change.
     // BW2-2: seated off THIS cell's own real floor top, not the old hardcoded -0.495.
-    addInteriorContactBlob(blobGroup, g.position.x, g.position.z, support.width, floorTop, support.depth);
+    const contactBlob = addInteriorContactBlob(
+      blobGroup, g.position.x, g.position.z, support.width, floorTop, support.depth
+    );
+    g.userData.contactBlobMesh = contactBlob;
     // VP6 item 1: idle-breathe auto-plays on every living piece the instant it mounts (a fresh
     // fall-death corpse never reaches this — dead pieces are re-mounted by the NEXT setInteriorBoard
     // call with p.fid's own userData never carrying userData.corpse from a torn-down prior group, so
@@ -9699,6 +9897,7 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     resolved++;
   });
   group.add(blobGroup);
+  S.standeeCollisionDirty = true;
   mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
   return { group, resolved, requested: (pieces || []).length };
 }
@@ -11412,6 +11611,7 @@ function setInteriorBoard(data, renderOpts){
     // BW2-4b item 2 — camera-key: mount/refresh the soft fill DirectionalLight from the camera's general
     // direction (L-2: no longer a shadow source by default — see ITR_CAMERA_KEY_CASTS_SHADOW).
     mountInteriorCameraKey(cx, cz);
+    mountSpriteCameraFill();
   }
   // BW2-4b item 1 — REALM GRADE on the sprite floor: tint the emissive readability floor toward this
   // realm's grade (kit.gradeTint) at ITR_SPRITE_TINT_STRENGTH so a lit standee reads the realm (chrome
@@ -12901,6 +13101,9 @@ function setUnits(data){
       figure.userData.interiorBaseRadius = support.width * 0.5;
       figure.userData.interiorBaseWidth = support.width;
       figure.userData.interiorBaseDepth = support.depth;
+      figure.userData.standeeCollisionNudgeX = 0;
+      figure.userData.standeeCollisionNudgeZ = 0;
+      figure.userData.standeeCollisionRelocated = false;
       figure.userData.tacticalSpanCells = support.tacticalSpanCells;
       figure.userData.stairTreadDepth = support.treadDepth;
       figure.userData.stairFit = support.stairFit;
@@ -12909,7 +13112,10 @@ function setUnits(data){
       // pre-BW2-2 tabletop hostility-disc/groundingBlob pair further below is UNTOUCHED and stays
       // buried under the true floor exactly as it already was, harmless/invisible; this pool is the
       // one that actually reads under an interior standee's base).
-      addInteriorContactBlob(S.shadowGroup, x, z, support.width, floorTop, support.depth);
+      const contactBlob = addInteriorContactBlob(
+        S.shadowGroup, x, z, support.width, floorTop, support.depth
+      );
+      figure.userData.contactBlobMesh = contactBlob;
     }
     figure.position.set(x, posY, z);
     // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 6, §3-D1/D2/D8): a whole-object figure
@@ -13101,6 +13307,7 @@ function setUnits(data){
   // ENV-3 ruling 5 — SYNC-FACE ON REBUILD: same race setBoard's own matching call (above) closes,
   // for S.unitGroup's freshly (re)built standees — see that call site's own full header for the
   // mechanism. Idempotent with the next real rAF tick's own pass.
+  S.standeeCollisionDirty = true;
   updateSpriteBillboardYaw();
   markDirty();
 }
@@ -13717,6 +13924,7 @@ function clayRoomSetSelectedSpriteView(mode){
     }
   });
   S.clayRoomSelectedSpriteView = mode;
+  S.standeeCollisionDirty = true;
   markDirty();
   scheduleRender();
   if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
@@ -13761,6 +13969,18 @@ function clayRoomSpriteCitizenshipSnapshot(){
       footY: node.userData.footY,
       contentBounds: node.userData.contentBounds,
       alphaCutoff: node.userData.alphaCutoff,
+      collisionRelocated: !!node.userData.standeeCollisionRelocated,
+      collisionNudge: [
+        +(node.userData.standeeCollisionNudgeX || 0).toFixed(4),
+        +(node.userData.standeeCollisionNudgeZ || 0).toFixed(4)
+      ],
+      contactShadow: node.userData.contactBlobMesh ? {
+        linked: node.userData.contactBlobMesh.userData.linkedSceneObjectId === node.userData.sceneObjectId,
+        poolDiameter: node.userData.contactBlobMesh.userData.contactPoolDiameter,
+        offset: node.userData.contactBlobMesh.userData.contactOffset
+      } : null,
+      selectionBaseRingGlow: !!(node.userData.standeeBaseMesh
+        && node.userData.standeeBaseMesh.userData.claySelectionBaseRingGlow),
       regenRecommended: !!node.userData.spriteRegenRecommended,
       selected: spriteSlug === S.clayRoomSelectedSpriteSlug
     });
@@ -13777,6 +13997,24 @@ function clayRoomSpriteCitizenshipSnapshot(){
     selectedView: S.clayRoomSelectedSpriteView || "face",
     supportForm: "shallow-rounded-strip",
     tacticalFootprintSeparate: true,
+    collisionAudit: Object.assign({}, S.standeeCollisionAudit || {
+      pieces: 0, checkedPairs: 0, relocations: 0, remainingOverlaps: null
+    }),
+    cameraFill: S.spriteCameraFill ? {
+      enabled: S.spriteCameraFill.intensity > 0,
+      spriteLayer: SPRITE_CAMERA_FILL_LAYER,
+      castShadow: !!S.spriteCameraFill.castShadow,
+      intensity: +S.spriteCameraFill.intensity.toFixed(4),
+      distance: +S.spriteCameraFill.distance.toFixed(4),
+      decay: S.spriteCameraFill.decay
+    } : null,
+    environmentFormFill: {
+      kind: "hemisphere",
+      intensity: S.hemiLight ? +S.hemiLight.intensity.toFixed(4) : null,
+      diagnosticFloor: ITR_SHADOW_FORM_HEMI_FLOOR,
+      castShadow: false
+    },
+    presentationCapFeet: [fixture.candidatePresentationCap.minFeet, fixture.candidatePresentationCap.maxFeet],
     lineup: figures,
     stairSamples: stairs,
     regenRecommended: figures.filter(function(row){ return row.regenRecommended; }).map(function(row){ return row.slug; })
@@ -13828,6 +14066,8 @@ window.Theater._clayCameraPoseForTest = function(){
     position: [+S.camera.position.x.toFixed(4), +S.camera.position.y.toFixed(4), +S.camera.position.z.toFixed(4)],
     target: t ? [+t.x.toFixed(4), +t.y.toFixed(4), +t.z.toFixed(4)] : null,
     near: S.camera.near, far: S.camera.far,
+    clayZoom: S.clayCamZoom || 1,
+    clayZoomRange: [CLAY_CAM_ZOOM_MIN, CLAY_CAM_ZOOM_MAX],
   };
 };
 window.Theater._interiorSceneLightsForTest = function(){
@@ -15756,10 +15996,12 @@ function clayRoomApplyLightProfile(record){
     S.pointLights = [];
     startLightFlicker(0, S.interiorLightTargets || []);
   }
-  // The two diagnostic modes answer light questions without the production camera/hemi rig adding
-  // an uncredited third temperature. World-facing production modes keep that real scene rig intact.
+  // Diagnostic modes still remove uncredited camera/key lights, but retain the low hemisphere
+  // shadow-form floor: it is environment bounce, not a second subject light, and keeps tread/riser
+  // orientation barely legible.
   if(recipe.mode.indexOf("diagnostic-") === 0){
-    [S.hemiLight, S.keyLight, S.fillLight, S.interiorCameraKey].forEach(function(light){
+    if(S.hemiLight) S.hemiLight.intensity = ITR_SHADOW_FORM_HEMI_FLOOR;
+    [S.keyLight, S.fillLight, S.interiorCameraKey].forEach(function(light){
       if(light) light.intensity = 0;
     });
   }
@@ -16451,6 +16693,7 @@ function clayRoomMountSpriteBench(){
       sample.userData.standeeBaseMesh = baseMesh;
       sample.userData.interiorBaseWidth = support.width;
       sample.userData.interiorBaseDepth = support.depth;
+      sample.userData.standeeCollisionExcluded = true;
       sample.userData.stairTreadDepth = tread;
       sample.userData.stairFit = support.depth <= tread + 0.000001;
       sample.userData.interiorHeight = built.height;
@@ -16461,6 +16704,7 @@ function clayRoomMountSpriteBench(){
   group.add(stair);
   S.interiorGroup.add(group);
   S.clayRoomSpriteBenchGroup = group;
+  S.standeeCollisionDirty = true;
   return group;
 }
 
@@ -17638,7 +17882,9 @@ function clayRoomProvenanceAudit(){
    (clayRoomCaptureCamFit, called from the one lifecycle hook) and the final pose is always
    pose = fit ∘ offset ∘ zoom, recomputed from scratch. Drag = grab convention (the room follows
    the cursor). Double-click resets. */
-const CLAY_CAM_ZOOM_MIN = 0.35, CLAY_CAM_ZOOM_MAX = 2.5;
+// The fitted pose remains the reset/default. 0.12 lets the art director dolly roughly 8.3× closer
+// for feet, shell, and alpha-edge inspection without unlocking bearing or pitch.
+const CLAY_CAM_ZOOM_MIN = 0.12, CLAY_CAM_ZOOM_MAX = 2.5;
 function clayRoomCaptureCamFit(){
   if(!S.camera) return;
   const t = S.cameraLookTarget ? S.cameraLookTarget.clone() : new THREE.Vector3(0, 0, 0);
@@ -17687,13 +17933,60 @@ function clayRoomNodeForSelection(id){
   S.clayRoomSelectionProbe = probe;
   return found;
 }
+function clayRoomStandeeForSelectionNode(node){
+  let cursor = node;
+  while(cursor && cursor !== S.interiorGroup && cursor !== S.scene){
+    if(cursor.userData && cursor.userData.sprite) return cursor;
+    cursor = cursor.parent;
+  }
+  return null;
+}
+function setStandeeSelectionBaseRing(fig, glowing){
+  if(!fig || !fig.userData || !fig.userData.standeeBaseMesh) return;
+  const base = fig.userData.standeeBaseMesh;
+  const mats = Array.isArray(base.material) ? base.material : [base.material];
+  // ExtrudeGeometry's material contract is [top/bottom caps, vertical side wall]. Selection belongs
+  // ONLY on index 1: the shallow outer face becomes a luminous ring while the top remains ordinary
+  // stone and the character card receives no outline.
+  const side = mats[1] || mats[0];
+  if(side && side.emissive) side.emissive.setHex(glowing ? 0x53d5ff : 0x000000);
+  if(base.layers){
+    if(glowing) base.layers.enable(BLOOM_LAYER);
+    else base.layers.disable(BLOOM_LAYER);
+  }
+  base.userData.claySelectionBaseRingGlow = !!glowing;
+}
+function clayRoomClearSelectionGlow(){
+  if(S.clayRoomSelectionGlowSprite){
+    setStandeeSelectionBaseRing(S.clayRoomSelectionGlowSprite, false);
+  }
+  S.clayRoomSelectionGlowSprite = null;
+}
+function clayRoomMountSelectionGlow(node){
+  const fig = clayRoomStandeeForSelectionNode(node);
+  if(!fig || !S.scene) return;
+  setStandeeSelectionBaseRing(fig, true);
+  S.clayRoomSelectionGlowSprite = fig;
+}
 function clayRoomHighlightSelection(id){
   if(S.clayRoomSelectionHelper && S.clayRoomSelectionHelper.parent){
     S.clayRoomSelectionHelper.parent.remove(S.clayRoomSelectionHelper);
+    if(S.clayRoomSelectionHelper.geometry) S.clayRoomSelectionHelper.geometry.dispose();
+    if(S.clayRoomSelectionHelper.material) S.clayRoomSelectionHelper.material.dispose();
   }
   S.clayRoomSelectionHelper = null;
+  clayRoomClearSelectionGlow();
   const node = clayRoomNodeForSelection(id);
   if(!node || !S.scene) return;
+  // A standee selects through its diegetic base ring. Do not also draw the generic cyan BoxHelper
+  // around the character card—the user's clarification is specifically that only the base wall
+  // should light. Non-standee objects retain the workbench bounding-box diagnostic.
+  if(clayRoomStandeeForSelectionNode(node)){
+    clayRoomMountSelectionGlow(node);
+    markDirty();
+    scheduleRender();
+    return;
+  }
   const helper = new THREE.BoxHelper(node, 0x6fcfff);
   helper.material.depthTest = false;
   helper.material.transparent = true;
@@ -17782,7 +18075,7 @@ function clayRoomWirePanZoom(host){
   host.addEventListener("wheel", function(ev){
     ev.preventDefault();
     if(!S.clayCamFit) return;
-    const factor = ev.deltaY > 0 ? 1.1 : 0.9;
+    const factor = ev.deltaY > 0 ? 1.18 : 0.82;
     S.clayCamZoom = Math.min(CLAY_CAM_ZOOM_MAX, Math.max(CLAY_CAM_ZOOM_MIN, (S.clayCamZoom || 1) * factor));
     clayRoomApplyCamPose();
   }, { passive: false });
@@ -18341,7 +18634,7 @@ function clayRoomMountOverlay(record, host){
     " v" + CLAY_DIAGNOSTIC_SURFACE_RECIPE.version + " mode " + clayRoomSurfaceMode();
   panel.appendChild(recipeLine);
   const camHint = document.createElement("div");
-  camHint.textContent = "drag canvas to pan · wheel to zoom · double-click to reset";
+  camHint.textContent = "drag canvas to pan · wheel to zoom (up to 8× closer) · double-click to reset";
   camHint.style.cssText = "color:#7a8494;margin-bottom:6px;font:10px monospace;";
   panel.appendChild(camHint);
 
@@ -19235,7 +19528,7 @@ function clayRoomMountOverlay(record, host){
   const trueScaleBtn = document.createElement("button");
   trueScaleBtn.textContent = "TRUE SCALE";
   const capScaleBtn = document.createElement("button");
-  capScaleBtn.textContent = "1–20 FT CAP PREVIEW";
+  capScaleBtn.textContent = "1–30 FT CAP PREVIEW";
   [trueScaleBtn, capScaleBtn].forEach(function(button){
     button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
     spriteScaleActions.appendChild(button);
@@ -19350,6 +19643,8 @@ function clayRoomMountOverlay(record, host){
       "fixture " + snap.fixtureId + " v" + snap.fixtureVersion,
       "mode " + snap.scaleMode + (snap.scaleMode === "diagnostic-cap" ? " · PRESENTATION TEST ONLY" : " · CANONICAL"),
       "support " + snap.supportForm + " · tactical footprint remains separate",
+      "shadow form " + Number(snap.environmentFormFill.intensity).toFixed(3)
+        + " hemisphere · shadowless · tread/riser value floor",
       "stair proof " + (snap.stairSamples.length === 3 && snap.stairSamples.every(function(row){ return row.stairFit; })
         ? "PASS · face / 3⁄4 / edge"
         : "loading…"),

@@ -22,17 +22,28 @@ Fable re-gates and lands. FULL CI PENDING.**
   placement, 1-pixel arrows / 5-pixel Shift+arrows, alpha-derived contact reset, compiled reset,
   normalized and pixel readouts, content bounds, and alpha cutoff. Overlay values compile into the
   registry; the old `floor` field migrates at the generator boundary.
-- The inspector compares canonical true scale against a clearly labelled 1–20-foot diagnostic cap
-  without mutating `worldHeight`. True scale proves the 60-foot Kraken honestly dominates; the cap
-  makes the complete spectrum readable. Adam's production cap ruling remains pending after the
-  live A/B.
+- The inspector compares canonical true scale against a clearly labelled 1–30-foot diagnostic cap
+  without mutating `worldHeight`. True scale proves the 60-foot Kraken honestly dominates and
+  requires a matching encounter-scale environment; the cap is only a readable comparison.
+- Governed Clayroom zoom now reaches the 0.12 clamp (about 8.3× closer than fit). Visible standee
+  supports use deterministic OBB separation: the banked seven-piece lineup records one slight
+  relocation and zero remaining overlaps, while tactical cell ownership remains unchanged.
+- Every soft contact shadow is linked back to its standee and follows its final position/yaw. The
+  pool is larger and slightly biased beyond the support, so it remains visible instead of hiding
+  completely underneath the base.
+- A shadowless camera-side spotlight lives on a sprite-only light layer and uses gentle falloff,
+  improving face colour/readability without lifting the room. Selection emits only from the
+  shallow vertical sidewall of the base as a cyan glow ring; the sprite and base top stay unlit.
+- No environment material was added. Diagnostic modes now retain a 0.06 shadowless HemisphereLight
+  floor: enough sky/ground value difference to read stair treads, risers, and wall turns in shadow,
+  without weakening the direct-light shadow or inventing another visible source.
 - Treant and Kraken are automatically flagged for taller/more-upright regeneration because their
   rendered width nearly consumes the tactical footprint.
 - Neutral, moon/dark, torch/warm, magic/cool, and daylight controls reuse the shared production
   light recipes. Evidence: `dev/clay-captures/cl-r2-sprite-citizenship/` (early/settled true scale,
   cap/edge live frames, five lighting contexts, composed sheet, JSON receipt, and separate
   measurements; zero console errors).
-- Focused gates: Clayroom 202/202; sprite registry 27/27; theater sprites 12/12; floor contact
+- Focused gates: Clayroom 206/206; sprite registry 27/27; theater sprites 12/12; floor contact
   51/51; dungeon interior 291/291; manifest OK. **FULL CI PENDING.**
 
 ## ⭐ Latest (2026-07-24, CL-R1 visual checkpoint) — SHARED LIGHT RECIPES + SMOOTH LORE-NATIVE TORCH [Codex]

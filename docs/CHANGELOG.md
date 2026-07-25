@@ -22,20 +22,31 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
   placement, source-pixel keyboard nudges, alpha-contact reset, compiled reset, content bounds, and
   overlay-to-registry compilation.
 - **Reproducible CL-R2 evidence** — `dev/clay-captures/cl-r2-sprite-citizenship/` banks early/
-  settled true scale, cap/edge live UI, five lighting contexts, a composed sheet, live JSON receipt,
-  and a separate geometry/scale measurement artifact.
+  settled true scale, cap/edge/deep-zoom live UI, five lighting contexts, a composed sheet, live
+  JSON receipt, and a separate geometry/scale measurement artifact.
+- **Physical standee follow-up** — governed Clayroom zoom now reaches roughly 8.3× closer;
+  deterministic oriented-support separation prevents visible bases from overlapping; contact
+  shadows stay linked to relocation/yaw and feather visibly outside the support.
+- **Sprite-only face fill and base-ring selection** — one camera-side, shadowless spotlight affects
+  only sprite faces with gentle falloff. Selection emits from only the base's vertical sidewall,
+  with no character outline and no glowing base top.
+- **Shadow-form environment floor** — diagnostic darkness now retains a 0.06 shadowless hemisphere
+  bounce. Strong key shadows remain photographic, while treads, risers, and wall turns hold slightly
+  different dark values instead of collapsing into one flat shadow tone.
 
 ### Changed
 
 - Interior billboard origin now consumes canonical `footX`/`footY` once; legacy `floor` values
   migrate in the registry generator rather than double-offsetting the runtime.
 - Diagnostic scale overrides can temporarily cap presentation without changing canonical
-  `worldHeight`. Treant and Kraken remain loudly flagged for taller/more-upright regeneration.
+  `worldHeight`. The comparison cap is now 1–30 feet; true scale remains canonical, and Treant and
+  Kraken remain loudly flagged for taller/more-upright regeneration.
 
 ### Deferred
 
-- Adam's visual ruling on the canonical-vs-1–20-foot presentation spectrum. The cap remains
-  diagnostic only. Fable owns full re-gate/landing; **FULL CI PENDING**.
+- Final production policy for exceptional encounter scale domains. The 30-foot cap remains a
+  diagnostic comparison; a canonical 60-foot Kraken still requires an environment built to contain
+  it. Fable owns full re-gate/landing; **FULL CI PENDING**.
 
 ## 2026-07-24 (later) — CL-R1 LIGHTING BENCH ACCEPTANCE SURFACE COMPLETED [Codex]
 

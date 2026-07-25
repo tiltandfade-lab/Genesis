@@ -12,7 +12,7 @@
     ],
     "capShownFeetRange": [
       1,
-      20
+      30
     ],
     "capPreservesCanonicalData": true
   },
@@ -169,7 +169,7 @@
       "slug": "spr-fantasy-treant",
       "canonicalFeet": 26,
       "trueScaleShownFeet": 26,
-      "capShownFeet": 20,
+      "capShownFeet": 26,
       "canonicalDataPreservedInCap": true,
       "tacticalSpanCells": 3,
       "supportWidthCells": 2.46,
@@ -191,7 +191,7 @@
       "slug": "spr-fantasy-kraken",
       "canonicalFeet": 60,
       "trueScaleShownFeet": 60,
-      "capShownFeet": 20,
+      "capShownFeet": 30,
       "canonicalDataPreservedInCap": true,
       "tacticalSpanCells": 4,
       "supportWidthCells": 3.28,

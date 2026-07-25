@@ -17,7 +17,9 @@ no copy-paste round-trips:
                           merges into dev/model-qa/sprite-tags-overlay.json (atomic write).
                           Recognized keys: scale (number, per-slug billboard height multiplier
                           — the heads-line-up calibration), verdict ("pass"|"fail"), note,
-                          tags (list), redlined (bool), floor (ground-contact fraction), feet
+                          tags (list), redlined (bool), footX/footY (normalized canonical
+                          standee origin), contentBounds (normalized alpha bbox; floor remains
+                          a readable legacy migration key), feet
                           (number, 0.1-100 — Adam's expected-height override; VQ2-RESPEC.md S6,
                           folds into worldHeight/heightSource:"overlay" at regen, top source in
                           the ladder ahead of measured/band-default). An entry emptied of every
@@ -38,6 +40,7 @@ import subprocess
 import sys
 import tempfile
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import urlsplit
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REGISTRY_JS = os.path.join(ROOT, "data", "sprite-registry.js")
@@ -86,7 +89,10 @@ def save_overlay(data):
             os.remove(tmp)
 
 
-ALLOWED_KEYS = {"scale", "verdict", "note", "tags", "redlined", "reusable", "floor", "feet"}
+ALLOWED_KEYS = {
+    "scale", "verdict", "note", "tags", "redlined", "reusable",
+    "floor", "footX", "footY", "contentBounds", "feet",
+}
 
 
 def apply_patch(slug, set_keys, clear_keys):
@@ -107,7 +113,8 @@ def apply_patch(slug, set_keys, clear_keys):
         if k == "floor":
             # ground-contact line: fraction of the sprite image's height measured UP from
             # its bottom edge (0 = the bottom edge IS the floor). The theater mounts the
-            # figurine disc at this line. Kept sparse: 0/absent means "bottom edge".
+            # figurine disc at this line. LEGACY migration input only; new edits write the
+            # canonical top-down footY coordinate below.
             v = float(v)
             if not (0.0 <= v <= 0.9):
                 raise ValueError(f"floor out of range (0..0.9): {v}")
@@ -115,6 +122,18 @@ def apply_patch(slug, set_keys, clear_keys):
                 entry.pop("floor", None)
                 continue
             v = round(v, 4)
+        if k in ("footX", "footY"):
+            v = float(v)
+            if not (0.0 <= v <= 1.0):
+                raise ValueError(f"{k} out of range (0..1): {v}")
+            v = round(v, 6)
+        if k == "contentBounds":
+            if not (isinstance(v, list) and len(v) == 4
+                    and all(isinstance(n, (int, float)) for n in v)):
+                raise ValueError("contentBounds must be four normalized numbers")
+            v = [round(float(n), 6) for n in v]
+            if not all(0.0 <= n <= 1.0 for n in v) or v[0] > v[2] or v[1] > v[3]:
+                raise ValueError(f"contentBounds invalid normalized bbox: {v}")
         if k == "feet":
             # Adam's expected-height override (VQ2-RESPEC.md S6) — the TOP source in
             # build/gen-sprite-registry.py's worldHeight ladder (overlay > measured > SRD
@@ -185,16 +204,17 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            if self.path in ("/", "/index.html"):
+            request_path = urlsplit(self.path).path
+            if request_path in ("/", "/index.html"):
                 with open(UI_HTML, "rb") as f:
                     self._send(200, f.read(), "text/html; charset=utf-8")
-            elif self.path.startswith("/sprites-faceted/"):
+            elif request_path.startswith("/sprites-faceted/"):
                 self._serve_sprite("/sprites-faceted/", SPRITES_FACETED_DIR)
-            elif self.path.startswith("/sprites/"):
+            elif request_path.startswith("/sprites/"):
                 self._serve_sprite("/sprites/", SPRITES_DIR)
-            elif self.path == "/api/data":
+            elif request_path == "/api/data":
                 self._send(200, {"registry": parse_registry(), "overlay": load_overlay()})
-            elif self.path == "/rejects":
+            elif request_path == "/rejects":
                 p = os.path.join(ROOT, "dev", "sprite-manifests", "REJECTS.md")
                 body = open(p, "rb").read() if os.path.exists(p) else \
                     b"No REJECTS.md yet - hit 'regen registry' after failing something."

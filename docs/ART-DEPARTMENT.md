@@ -530,3 +530,25 @@ palette-conformed. The 10 staged realms are **not** — their palette JSONs are 
 Cross-linked from `docs/README.md`'s index and `docs/HANDOFF.md`'s graphics-authority block
 (both edited in this same change, one line each) — per Adam's ruling, this file and its style
 authorities should never require archaeology to find again.
+
+---
+
+## 11. CL-R2 standee base and scale rulings (verbatim, Adam, 2026-07-24)
+
+> yes, agreed if you could make that pass that would be so much better. also, i am not certain we
+> need circular bases anymore. as long as the character calculates as that 5x5 base (or higher or
+> smaller depending on the creature) i would rather have a natural looking standee base like the
+> ones that you rendered in the latest mock ups for the dev tool interface. think about how the
+> standee is going to fit on a staircase right. like one stair is probably going to be 1/3 of a 5x5
+> stair case, so the standee depth should probably be a match for stair depth. i think if we can
+> reconcile that match then most of our standee problems should be solved
+
+> we do need to see the biggest creature alongside the average human size creatures and then some
+> small creatures and make some decisions about the scaling spectrum. we may have to cap big and
+> small creatures, and that's ok, also some of the big creatures might just be too wide, if so we
+> can flag those for re-genning as taller more upright sprites
+
+The CL-R2 candidate keeps the tactical footprint separate from the visible support, uses a shallow
+rounded strip whose Medium depth is exactly one third of a cell, preserves canonical size data, and
+offers a clearly labelled 1–20-foot diagnostic cap for visual comparison only. The cap is not an
+admission or production ruling until Adam reviews the live proof.

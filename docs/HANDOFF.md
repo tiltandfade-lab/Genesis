@@ -6,6 +6,35 @@ updated: 2026-07-24
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-24, CL-R2 visual checkpoint) — COMPLETE SPRITE CITIZENSHIP CANDIDATE [Codex]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`. **Not merged or pushed.
+Fable re-gates and lands. FULL CI PENDING.**
+
+- `CL-F03 sprite-citizenship` is live through the production interior renderer with seven authored
+  source sprites spanning the full stress spectrum: Blind Cave Rat, Winged Kobold, Human Fighter,
+  Flaming Skeleton, Wraith, Treant, and Kraken (0.25–60 canonical feet).
+- Visible circular plinths are gone. Tactical footprints remain separate mechanics; the physical
+  stand is a shallow rounded strip. Medium depth equals exactly one stair tread (1/3 cell), while
+  Tiny and Small may be shallower. A real three-tread fixture retains face, three-quarter, and edge
+  samples, and a thin side shell keeps every card visible edge-on.
+- The existing Sprite Editor now owns independent draggable `footX`/`footY` crosshairs, click
+  placement, 1-pixel arrows / 5-pixel Shift+arrows, alpha-derived contact reset, compiled reset,
+  normalized and pixel readouts, content bounds, and alpha cutoff. Overlay values compile into the
+  registry; the old `floor` field migrates at the generator boundary.
+- The inspector compares canonical true scale against a clearly labelled 1–20-foot diagnostic cap
+  without mutating `worldHeight`. True scale proves the 60-foot Kraken honestly dominates; the cap
+  makes the complete spectrum readable. Adam's production cap ruling remains pending after the
+  live A/B.
+- Treant and Kraken are automatically flagged for taller/more-upright regeneration because their
+  rendered width nearly consumes the tactical footprint.
+- Neutral, moon/dark, torch/warm, magic/cool, and daylight controls reuse the shared production
+  light recipes. Evidence: `dev/clay-captures/cl-r2-sprite-citizenship/` (early/settled true scale,
+  cap/edge live frames, five lighting contexts, composed sheet, JSON receipt, and separate
+  measurements; zero console errors).
+- Focused gates: Clayroom 202/202; sprite registry 27/27; theater sprites 12/12; floor contact
+  51/51; dungeon interior 291/291; manifest OK. **FULL CI PENDING.**
+
 ## ⭐ Latest (2026-07-24, CL-R1 visual checkpoint) — SHARED LIGHT RECIPES + SMOOTH LORE-NATIVE TORCH [Codex]
 
 Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolidated master

@@ -166,6 +166,86 @@ function clayRoomLightingBenchFixtureFrom(record){
   return CLAY_LIGHTING_BENCH_FIXTURE;
 }
 
+/* ─── CL-R2 / CL-F03 — SPRITE CITIZENSHIP FIXTURE ──────────────────────────────────────────────
+   The lineup deliberately spans the live pixel corpus rather than repeating the room-truth goblin.
+   Coordinates are local cells inside the 15×15 C1B room. They advance along a camera-horizontal
+   diagonal so true-scale silhouettes compare in one frame without changing the fixed production
+   camera. `tacticalSpanCells` is gameplay truth; the visible support under the art is presentation
+   geometry and never becomes collision/occupancy authority.
+
+   The 60-foot Kraken is intentionally retained despite its review-fail/prototype-admitted state:
+   Adam asked to see the actual largest creature beside a human and to flag overly wide big art for
+   taller/upright regeneration. Hiding it behind the already-approved subset would defeat that test.
+   The candidate cap is DIAGNOSTIC ONLY. It creates an honest A/B for Adam; it is not a production
+   scale ruling and never mutates registry worldHeight. */
+var CLAY_SPRITE_CITIZENSHIP_FIXTURE = Object.freeze({
+  id: "cl-f03-sprite-citizenship",
+  version: 1,
+  label: "CL-F03 sprite citizenship",
+  question: "Do live pixel sprites remain physical, readable citizens across the true scale range?",
+  selectedSlug: "spr-pc-human-fighter-female",
+  candidatePresentationCap: Object.freeze({
+    minFeet: 1,
+    maxFeet: 20,
+    label: "diagnostic preview only — canonical height and tactical footprint stay unchanged"
+  }),
+  stair: Object.freeze({
+    id: "sprite-stair-fit",
+    treadDepth: 1 / 3,
+    treadWidth: 2.4,
+    riserHeight: 0.24,
+    steps: 3
+  }),
+  cast: Object.freeze([
+    Object.freeze({
+      slug: "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+      label: "Blind cave rat", stress: "smallest live height", tacticalSpanCells: 0.5,
+      lineupCell: Object.freeze({ x: 1, z: 13 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-winged-kobold-urd",
+      label: "Winged kobold", stress: "small dark fantasy creature", tacticalSpanCells: 1,
+      lineupCell: Object.freeze({ x: 3, z: 11 })
+    }),
+    Object.freeze({
+      slug: "spr-pc-human-fighter-female",
+      label: "Human fighter", stress: "human reference · skin/cloth/metal", tacticalSpanCells: 1,
+      lineupCell: Object.freeze({ x: 5, z: 9 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-flaming-skeleton",
+      label: "Flaming skeleton", stress: "pale/highlight clipping", tacticalSpanCells: 1,
+      lineupCell: Object.freeze({ x: 7, z: 7 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-wraith",
+      label: "Wraith", stress: "dark/irregular alpha edge", tacticalSpanCells: 1,
+      lineupCell: Object.freeze({ x: 9, z: 5 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-treant",
+      label: "Treant", stress: "tall Huge silhouette", tacticalSpanCells: 3,
+      lineupCell: Object.freeze({ x: 11, z: 3 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-kraken",
+      label: "Kraken", stress: "largest live height · width/regeneration test", tacticalSpanCells: 4,
+      lineupCell: Object.freeze({ x: 13, z: 1 })
+    })
+  ])
+});
+
+function clayRoomSpriteCitizenshipFixtureFrom(record){
+  if(!record || !record.dims){
+    throw new Error("clayRoomSpriteCitizenshipFixtureFrom: record with dims required");
+  }
+  if(record.dims.w < 15 || record.dims.d < 15){
+    throw new Error("clayRoomSpriteCitizenshipFixtureFrom: CL-F03 requires the 15x15 scale room — got " +
+      record.dims.w + "x" + record.dims.d);
+  }
+  return CLAY_SPRITE_CITIZENSHIP_FIXTURE;
+}
+
 /* clayDiagnosticRoleForKind(kind) -> a normalized recipe role, or null.
    Maps the renderer's OWN `userData.interiorKind` vocabulary (theater-boot.js's
    interiorBuildInstancedMesh / room-shell / kit-shell tags) onto the recipe's role names. Pure

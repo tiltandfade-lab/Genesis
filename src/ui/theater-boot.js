@@ -2965,6 +2965,15 @@ const SPRITE_JOIN_NAME_FALLBACK_WARNED = new Set();
 function spriteEntryFor(recipeSlug){
   if(!recipeSlug || typeof SPRITE_REGISTRY === "undefined" || !SPRITE_REGISTRY) return null;
 
+  // TIER 0 — an exact stable sprite id. Production encounter data usually arrives by bestiary id,
+  // but retained acceptance fixtures and authoring tools already own the canonical `spr-*` key.
+  // Letting that key round-trip directly avoids inventing a fake bestiary alias for a PC or animal.
+  const directEntry = SPRITE_REGISTRY[recipeSlug];
+  if(directEntry && directEntry.status === "cut"
+    && (directEntry.verdict !== "fail" || directEntry.prototypeAdmitted === true)){
+    return Object.assign({ slug: recipeSlug }, directEntry);
+  }
+
   // TIER 1 — the deterministic bestiary-id map, exact match, no normalization.
   if(typeof SPRITE_BY_BESTIARY_ID !== "undefined" && SPRITE_BY_BESTIARY_ID){
     const idSlug = SPRITE_BY_BESTIARY_ID[recipeSlug];
@@ -3159,7 +3168,35 @@ let SPRITE_UNLIT_DEBUG = false;
 // setBoard resets it to white. A SUBTLE blend (ITR_SPRITE_TINT_STRENGTH) — never a saturated wash.
 let ITR_SPRITE_EMISSIVE_TINT = 0xffffff;
 const ITR_SPRITE_TINT_STRENGTH = 0.5;
-function buildSpriteBillboardMesh(tex, w, h, slug){
+const STANDEE_SIDE_SHELL_THICKNESS = 0.035;
+let STANDEE_SIDE_SHELL_MATERIALS = null;
+function standeeSideShellMaterials(){
+  if(STANDEE_SIDE_SHELL_MATERIALS) return STANDEE_SIDE_SHELL_MATERIALS;
+  const side = new THREE.MeshLambertMaterial({
+    color: 0x3d342b,
+    side: THREE.DoubleSide
+  });
+  const hiddenFace = new THREE.MeshBasicMaterial({
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+    colorWrite: false,
+    side: THREE.DoubleSide
+  });
+  // THREE.BoxGeometry groups: +X, -X, +Y, -Y, +Z, -Z. Only the four thin edges render;
+  // front/back stay invisible so transparent PNG regions never reveal a rectangular backing card.
+  STANDEE_SIDE_SHELL_MATERIALS = [side, side, side, side, hiddenFace, hiddenFace];
+  return STANDEE_SIDE_SHELL_MATERIALS;
+}
+function buildSpriteBillboardMesh(tex, w, h, entry){
+  entry = entry || {};
+  const spriteSlug = entry.slug || null;
+  const alphaCutoff = (typeof entry.alphaCutoff === "number")
+    ? Math.max(0, Math.min(1, entry.alphaCutoff)) : 0.5;
+  const footX = (typeof entry.footX === "number")
+    ? Math.max(0, Math.min(1, entry.footX)) : 0.5;
+  const footY = (typeof entry.footY === "number")
+    ? Math.max(0, Math.min(1, entry.footY)) : 1;
   const geo = new THREE.PlaneGeometry(w, h);
   // BW2-4b item 1 — THE BRIGHTNESS LAW (see ITR_SCENE_KEY/ITR_SPRITE_EMISSIVE_FLOOR): the billboard is
   // now LIT — a MeshLambertMaterial that RECEIVES the interior hemisphere key + torch PointLights +
@@ -3172,10 +3209,10 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   // stays OFF (U3 ruling: a cast shadow smeared across a flat cutout reads as a bug). The debug flag
   // (SPRITE_UNLIT_DEBUG) restores the old full-bright MeshBasic for the measurement reference capture.
   const mat = SPRITE_UNLIT_DEBUG
-    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true })
+    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true })
     : new THREE.MeshLambertMaterial({
         map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
-        transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
+        transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true
       });
   // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling (Adam 2026-07-10 evening): billboards must
   // carry ZERO PS1 distortion (no dither, no vertex-snap) — a flat-cut 2D sprite reads as a sticker
@@ -3186,7 +3223,10 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   // interior.mjs's sprite-purity check asserts it's set (billboards) vs. absent+psxApplied set (walls).
   mat.userData.psxExempt = true;
   const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.y = h / 2;
+  // `footX`/`footY` are the ONE authored contact/rotation anchor. Move the art around local origin
+  // so that exact image coordinate sits at (0,0), rather than compensating later with a second
+  // `floor` offset. The legacy bottom-centre default (0.5,1) is byte-identical to x=0,y=h/2.
+  mesh.position.set((0.5 - footX) * w, (footY - 0.5) * h, STANDEE_SIDE_SHELL_THICKNESS / 2 + 0.001);
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2 (real light sources + cast shadows, interiors only):
   // a billboard CASTS a shadow (so creature silhouettes fall on the interior floor) via a dedicated
   // alpha-tested depth material (a plain opaque depth pass would cast a solid SQUARE shadow off the
@@ -3198,7 +3238,7 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   mesh.castShadow = true;
   mesh.receiveShadow = false;
   mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
-    map: tex, alphaTest: 0.5, depthPacking: THREE.RGBADepthPacking
+    map: tex, alphaTest: alphaCutoff, depthPacking: THREE.RGBADepthPacking
   });
   const g = new THREE.Group();
   // BW2-2b item 1 (FLOOR-ALIGNED BASES — "the bug"): the sprite mesh lives in its OWN inner wrapper,
@@ -3207,19 +3247,35 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   // mounts — before this fix, updateSpriteBillboardYaw stamped `fig.rotation.x = tilt` straight onto
   // `g`, and BW2-2's plinth base (added later as a plain CHILD of `g` — buildInteriorBase's own header)
   // inherited that tilt with it, reading as a coin propped up on edge instead of a flat mini base. Now
-  // only `wrap` (holding just `mesh`) gets the camera tilt (see updateSpriteBillboardYaw below); a
-  // base/ring mounted as a SIBLING of `wrap` directly on `g` (interiorBuildPieces/setUnits,
+  // only `wrap` (holding the cutout plane + its thin side shell) gets the camera tilt (see
+  // updateSpriteBillboardYaw below); a support/selection ring mounted as a SIBLING of `wrap`
+  // directly on `g` (interiorBuildPieces/setUnits,
   // setActingUnit) stays floor-flat under `g`'s own yaw-only rotation. `g.userData.standeeWrap` is the
   // SAME identity key standee-verbs.js's runKeyframeVerb reads/writes — see that file's own updated
   // COMPOSITION CONTRACT header for the other half of this split (verb-tilt, e.g. fall-death, now
   // writes `g.rotation.x` directly instead, freed by camera-tilt vacating that field).
   const wrap = new THREE.Group();
+  const shell = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, STANDEE_SIDE_SHELL_THICKNESS),
+    standeeSideShellMaterials()
+  );
+  shell.position.set((0.5 - footX) * w, (footY - 0.5) * h, 0);
+  shell.castShadow = true;
+  shell.receiveShadow = false;
+  shell.userData.standeeSideShell = true;
+  shell.userData.spriteSlug = spriteSlug;
+  wrap.add(shell);
   wrap.add(mesh);
   g.add(wrap);
   g.userData.sprite = true;
-  g.userData.spriteSlug = slug;
+  g.userData.spriteSlug = spriteSlug;
   g.userData.spriteBillboardMesh = mesh; // updateSpriteBillboardYaw's per-frame Y-facing target
   g.userData.standeeWrap = wrap;
+  g.userData.standeeSideShell = shell;
+  g.userData.footX = footX;
+  g.userData.footY = footY;
+  g.userData.alphaCutoff = alphaCutoff;
+  g.userData.contentBounds = entry.contentBounds || null;
   return g;
 }
 
@@ -3243,25 +3299,31 @@ function buildSpriteBillboard(entry){
     ? entry.scaleVsHuman
     : spriteSizeScaleFor(entry.size);
   const h = sizeMultiplier * GLB_TARGET_HEIGHT * calib;
-  return buildSpriteBillboardMesh(tex, h, h, entry.slug); // square plane; the sprite's own alpha silhouette reads the real shape
+  return buildSpriteBillboardMesh(tex, h, h, entry); // square plane; the sprite's own alpha silhouette reads the real shape
 }
 
 // BEAUTY-WAVE.md VP1 (the kaiju-scale-bug fix): interior pieces are TRUE-SCALE (cellSize: 1 world
 // unit = 5ft, DUNGEON-GRAPH.md law 1), NOT the tabletop's render-height-multiplier convention above
 // — a medium creature must stand ~1.1 world units tall in a room, not several. Height comes from
-// entry.scaleTrue (the registry fold, feet/5.5) or a caller-supplied scaleVsHuman override, falling
-// back to 1.0 (an undressed human) when neither is present. Width is derived from the loaded
+// entry.worldHeight (the authoritative feet value) or a caller-supplied scaleVsHuman override,
+// falling back to the registry's legacy rounded scaleTrue and then 1.0 when neither is present.
+// Reading worldHeight directly avoids turning a 0.25-ft rat into 0.275 ft through scaleTrue's
+// intentionally compact two-decimal generated representation. Width is derived from the loaded
 // texture's own pixel aspect ratio (a sprite crop is rarely square) rather than the tabletop's
 // baked square plane. Returns {group, height} so interiorBuildPieces can floor-offset + wall-clamp
 // without re-deriving the height.
 function interiorSpriteBillboard(entry, wallHeightCap){
   const tex = spriteTextureFor(entry); // S5: resolves through entry's own admission fields, not just the slug
   if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
-  const scaleTrue = (typeof entry.scaleTrue === "number" && entry.scaleTrue > 0)
-    ? entry.scaleTrue
-    : (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
-      ? entry.scaleVsHuman
-      : 1.0;
+  // A caller-supplied scaleVsHuman is an explicit presentation override (the CL-R2 diagnostic cap
+  // uses it without mutating authored worldHeight), so it wins over the registry's canonical value.
+  const scaleTrue = (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
+    ? entry.scaleVsHuman
+    : (typeof entry.worldHeight === "number" && entry.worldHeight > 0)
+      ? entry.worldHeight / 5.5
+      : (typeof entry.scaleTrue === "number" && entry.scaleTrue > 0)
+        ? entry.scaleTrue
+        : 1.0;
   let h = HUMAN_TRUE_HEIGHT * scaleTrue;
   let oversizeClamped = false;
   // Cap render height at the room's wall height * 0.95 (a titanic in a human room is a SCALE-DOMAIN
@@ -3274,11 +3336,17 @@ function interiorSpriteBillboard(entry, wallHeightCap){
   const img = tex.image;
   const aspect = (img && img.width && img.height) ? (img.width / img.height) : 1;
   const w = h * aspect;
-  const g = buildSpriteBillboardMesh(tex, w, h, entry.slug);
+  const g = buildSpriteBillboardMesh(tex, w, h, entry);
   if(oversizeClamped){
     console.warn("qa: oversize-clamped", entry.slug, "-> capped at wall height", wallHeightCap);
   }
-  return { group: g, height: h, width: w };
+  return {
+    group: g,
+    height: h,
+    width: w,
+    canonicalHeight: HUMAN_TRUE_HEIGHT * scaleTrue,
+    oversizeClamped: oversizeClamped
+  };
 }
 
 // BEAUTY-WAVE.md VP1b (combat-standee true scale, follow-up to VP1): `interiorMode`/`wallHeightCap`
@@ -3316,7 +3384,7 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
           // (aspect-scaled off the loaded texture), so stash it alongside interiorHeight rather than
           // re-deriving a second width formula at the setUnits call site.
           g.userData.interiorWidth = built.width;
-          g.userData.interiorFloorFrac = (typeof sEntry.floor === "number") ? sEntry.floor : 0;
+          g.userData.interiorFloorFrac = 0; // footX/footY already place the canonical anchor at local origin
           _tallyPath("sprite", sEntry.slug);
           if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", _spriteCensusOutcome(sEntry), sEntry.slug, _censusSceneKind);
           return g;
@@ -3603,27 +3671,84 @@ function interiorFloorTopAt(floorTopMap, x, z){
   return (typeof v === "number") ? v : fallback;
 }
 
-// BW2-2 — STANDEE BASES: a low plinth cylinder under every interior standee (piece + combat unit),
-// seated flush on the floor top the law above derives. Realm trim color (kit.trimColor — the SAME
-// flat trim the doorframe/pillar instances already use, GR1's palette anchor), darkened for the side
-// wall, lightened for the top face (a real "lit from above" plinth read, not a flat tinted disc — per
-// the mock, ui-sketches/mock-frames/mock-01-gloom-combat.png, whose plinths read as physical stone/wood
-// under both the acting and idle standee). Geometry cache-keyed by rounded radius (most true-scale
-// creatures share a handful of footprints); materials cache-keyed by the realm's own trim hex (one kit
-// per mounted board, so this cache never grows past a handful of entries per session).
+// CL-R2 — STANDEE SUPPORTS: the visible support is a shallow, softly rounded strip under every
+// interior standee, not a circular gameplay token. The tactical footprint remains the authoritative
+// occupied-cell span; this support is only the physical-looking foot that holds the cutout upright.
+// A Medium-or-larger support is exactly one stair tread deep (1/3 cell), while Small/Tiny supports
+// may be shallower. This lets a 5-ft citizen sit naturally on any of the three treads represented by
+// one cell without changing its 5x5 tactical ownership. Width is bounded by the tactical span, so a
+// very wide sprite exposes an art-regeneration problem instead of silently inventing a collision disc.
 const INTERIOR_BASE_HEIGHT = 0.09;                 // BW2-2b item 2: 0.04 -> ~0.09 ("a real plinth, per the mock read")
-// BW2-4b item 3 — base radius as a fraction of the standee's rendered width. Was 0.42; reduced ~15%
-// to 0.36 so adjacent bases in a tight melee huddle stop fusing into one big pale pad (the huddle-blob).
-const INTERIOR_BASE_RADIUS_FRAC = 0.36;
+const INTERIOR_BASE_TREAD_DEPTH = 1 / 3;
 const INTERIOR_BASE_Y_OFFSET = 0.006;              // clears the contact pool's own +0.003 (below) — never z-fights it
 // BW2-2b item 3 (TURN GLOW) — the accent gold every acting standee's ring already uses (ACTING_RING_MAT,
 // below); the base's own top/side materials swap TOWARD this on emissive when a standee is acting, so
 // ring + glowing plinth read "your turn" together, diegetically.
 const BASE_GLOW_EMISSIVE_HEX = 0xd4af6e;
 const INTERIOR_BASE_GEO_CACHE = {};
-function interiorBaseGeoFor(radius){
-  const key = radius.toFixed(3);
-  if(!INTERIOR_BASE_GEO_CACHE[key]) INTERIOR_BASE_GEO_CACHE[key] = new THREE.CylinderGeometry(radius, radius, INTERIOR_BASE_HEIGHT, 16);
+function interiorTacticalSpanFor(size, authoredSpan){
+  if(Number.isFinite(authoredSpan) && authoredSpan > 0) return authoredSpan;
+  const key = String(size || "Medium").toLowerCase();
+  if(key === "tiny") return 0.5;
+  if(key === "large") return 2;
+  if(key === "huge") return 3;
+  if(key === "gargantuan") return 4;
+  return 1;
+}
+function interiorStandeeSupportMetrics(renderedWidth, size, authoredSpan){
+  const tacticalSpan = interiorTacticalSpanFor(size, authoredSpan);
+  const sizeKey = String(size || (tacticalSpan <= 0.5 ? "Tiny" : "Medium")).toLowerCase();
+  const depth = sizeKey === "tiny" ? 0.18 : (sizeKey === "small" ? 0.26 : INTERIOR_BASE_TREAD_DEPTH);
+  const minimumWidth = depth * 1.35;
+  const maximumWidth = Math.max(minimumWidth, tacticalSpan * 0.82);
+  const width = Math.max(minimumWidth, Math.min(maximumWidth, Math.max(0.05, renderedWidth || 1) * 0.82));
+  return {
+    width: width,
+    depth: depth,
+    tacticalSpanCells: tacticalSpan,
+    treadDepth: INTERIOR_BASE_TREAD_DEPTH,
+    stairFit: depth <= INTERIOR_BASE_TREAD_DEPTH + 0.000001
+  };
+}
+function interiorBaseGeoFor(width, depth){
+  const safeWidth = Math.max(0.08, width || 0.45);
+  const safeDepth = Math.max(0.08, depth || INTERIOR_BASE_TREAD_DEPTH);
+  const key = safeWidth.toFixed(3) + "x" + safeDepth.toFixed(3);
+  if(!INTERIOR_BASE_GEO_CACHE[key]){
+    if(typeof THREE.Shape === "function" && typeof THREE.ExtrudeGeometry === "function"){
+      const radius = Math.min(safeDepth * 0.42, safeWidth * 0.16);
+      const x0 = -safeWidth / 2, x1 = safeWidth / 2;
+      const z0 = -safeDepth / 2, z1 = safeDepth / 2;
+      const shape = new THREE.Shape();
+      shape.moveTo(x0 + radius, z0);
+      shape.lineTo(x1 - radius, z0);
+      shape.quadraticCurveTo(x1, z0, x1, z0 + radius);
+      shape.lineTo(x1, z1 - radius);
+      shape.quadraticCurveTo(x1, z1, x1 - radius, z1);
+      shape.lineTo(x0 + radius, z1);
+      shape.quadraticCurveTo(x0, z1, x0, z1 - radius);
+      shape.lineTo(x0, z0 + radius);
+      shape.quadraticCurveTo(x0, z0, x0 + radius, z0);
+      const geo = new THREE.ExtrudeGeometry(shape, {
+        depth: INTERIOR_BASE_HEIGHT,
+        bevelEnabled: true,
+        bevelSegments: 1,
+        bevelSize: Math.min(0.018, radius * 0.18),
+        bevelThickness: 0.012,
+        curveSegments: 4
+      });
+      // Shape lies in XY and extrudes +Z. +90deg about X maps its shape-Y to world Z and the
+      // extrusion downward from local y=0, keeping the top face on the shared feet/contact origin.
+      geo.rotateX(Math.PI / 2);
+      INTERIOR_BASE_GEO_CACHE[key] = geo;
+    } else {
+      // Test harnesses may provide only the primitive geometry constructors. Preserve the same
+      // dimensions/contact law there; production Three.js always takes the rounded extrusion above.
+      const geo = new THREE.BoxGeometry(safeWidth, INTERIOR_BASE_HEIGHT, safeDepth);
+      if(typeof geo.translate === "function") geo.translate(0, -INTERIOR_BASE_HEIGHT / 2, 0);
+      INTERIOR_BASE_GEO_CACHE[key] = geo;
+    }
+  }
   return INTERIOR_BASE_GEO_CACHE[key];
 }
 const INTERIOR_BASE_MAT_CACHE = {};
@@ -3640,9 +3765,8 @@ function interiorBaseMaterialsFor(trimHex){
   const topRGB = scaleRGB(c, 0.62);
   const side = new THREE.MeshLambertMaterial({ color: rgbToHex(sideRGB.r, sideRGB.g, sideRGB.b) });
   const top = new THREE.MeshLambertMaterial({ color: rgbToHex(topRGB.r, topRGB.g, topRGB.b) });
-  // CylinderGeometry material groups: [0]=side wall, [1]=top cap, [2]=bottom cap — bottom reuses the
-  // darker side tone (flush against the floor, never actually visible from any playable camera angle).
-  const mats = [side, top, side];
+  // ExtrudeGeometry material groups: [0]=front/back caps, [1]=side wall.
+  const mats = [top, side];
   INTERIOR_BASE_MAT_CACHE[key] = mats;
   return mats;
 }
@@ -3668,8 +3792,8 @@ function interiorStandeeContactY(floorTop){
 // is always "flush under local y=0": the group's local y=0 IS the base's own top face, which is also
 // exactly where a floorFrac=0 sprite's own bottom edge sits (buildSpriteBillboardMesh's
 // mesh.position.y=h/2 convention) — one shared local reference point, no separate bookkeeping.
-function buildInteriorBase(radius, trimHex){
-  const geo = interiorBaseGeoFor(Math.max(0.05, radius || 0.3));
+function buildInteriorBase(width, depth, trimHex){
+  const geo = interiorBaseGeoFor(width, depth);
   // BW2-2b item 3 (TURN GLOW): the cache above (interiorBaseMaterialsFor) deliberately shares ONE
   // material set per realm trim color across every standee mounted from the same board — cheap, and
   // correct for a static plinth tint. Turning a SINGLE acting standee's base gold via that shared
@@ -3677,10 +3801,14 @@ function buildInteriorBase(radius, trimHex){
   // mesh here so setActingUnit's glow toggle only ever touches THIS standee's own materials.
   const mats = interiorBaseMaterialsFor(trimHex).map((m) => m.clone());
   const mesh = new THREE.Mesh(geo, mats);
-  mesh.position.set(0, -INTERIOR_BASE_HEIGHT / 2, 0);
+  mesh.position.set(0, 0, 0);
   mesh.receiveShadow = true;
   mesh.castShadow = true;
   mesh.userData.standeeBase = true; // verify-bw2-2's per-standee base-count check
+  mesh.userData.supportForm = "shallow-rounded-strip";
+  mesh.userData.supportWidth = width;
+  mesh.userData.supportDepth = depth;
+  mesh.userData.supportHeight = INTERIOR_BASE_HEIGHT;
   return mesh;
 }
 // setBaseGlow(mesh, glowing) — BW2-2b item 3: toggles the acting-standee "your turn" plinth glow by
@@ -3791,15 +3919,22 @@ function interiorPoolMaterial(){
 // THIS cell's own real floor surface (never the bare -0.5 plane), below every base's own +INTERIOR_BASE_Y_OFFSET
 // so the two never z-fight.
 const INTERIOR_POOL_Y_OFFSET = 0.003;
-function addInteriorContactBlob(group, x, z, texWidth, floorTop){
+function addInteriorContactBlob(group, x, z, texWidth, floorTop, texDepth){
   if(!group) return null;
   const footprint = Math.max(0.05, (texWidth || 1) * 0.4);
   const poolRadius = footprint * 1.6;
   const mesh = new THREE.Mesh(interiorPoolGeoFor(poolRadius), interiorPoolMaterial());
   mesh.rotation.x = -Math.PI / 2;
+  if(Number.isFinite(texDepth) && texDepth > 0){
+    // Keep the feather tied to the natural standee strip instead of restoring a circular token
+    // silhouette in shadow. Geometry remains shared; scale alone makes the pool elliptical.
+    mesh.scale.y = Math.max(0.18, texDepth / Math.max(0.001, texWidth || 1));
+  }
   const y = (typeof floorTop === "number" ? floorTop : ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK) + INTERIOR_POOL_Y_OFFSET;
   mesh.position.set(x, y, z);
   mesh.userData.contactBlob = true; // verify-dungeon-interior's per-piece blob-count check
+  mesh.userData.contactWidth = texWidth;
+  mesh.userData.contactDepth = Number.isFinite(texDepth) ? texDepth : texWidth;
   group.add(mesh);
   return mesh;
 }
@@ -5206,7 +5341,9 @@ function updateSpriteBillboardYaw(){
   function face(fig){
     fig.rotation.order = "YXZ";
     const kilterRad = ((fig.userData.kilterYawDeg || 0) * Math.PI) / 180;
-    fig.rotation.y = facing + kilterRad;
+    const viewOffset = Number.isFinite(fig.userData.claySpriteViewYawOffset)
+      ? fig.userData.claySpriteViewYawOffset : 0;
+    fig.rotation.y = facing + kilterRad + viewOffset;
     const wrap = fig.userData.standeeWrap;
     if(wrap){
       wrap.rotation.order = "YXZ";
@@ -9459,7 +9596,7 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     const entry = Object.assign({}, base, {
       scaleVsHuman: p.scaleVsHuman != null ? p.scaleVsHuman : base.scaleVsHuman
     });
-    const built = interiorSpriteBillboard(entry, wallCap);
+    const built = interiorSpriteBillboard(entry, p.allowOverheight ? null : wallCap);
     if(!built) return; // texture not loaded yet — falls through, same as every other billboard resolution
     // BEAUTY-WAVE-2.md BW2-5 item 3: "the boss standee's cell prefers the dais top". An opt-in
     // mechanism, additive/non-breaking — a piece the caller tags `preferDais:true` with NO explicit
@@ -9473,7 +9610,9 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     const g = built.group;
     g.userData.sceneObjectId = p.sourceRef || p.id || p.slug;
     g.userData.spriteSlug = p.slug;
-    const floorFrac = (typeof base.floor === "number") ? base.floor : 0;
+    // footX/footY already moved the authored contact anchor onto local origin inside the billboard.
+    // Applying the legacy `floor` fraction here as well would double-offset migrated sprites.
+    const floorFrac = 0;
     // BW2-4b item 7c — BLOCKER-CELL EXCLUSION: shift a piece off any pillar/doorframe cell it landed on
     // (the loop-05 wolf-on-a-pillar) to the nearest clear cell before any contact/kilter/clip math reads
     // it. prismLists = [wallList, pillarList, doorframe]; slice(1) drops walls (perimeter, handled by the
@@ -9505,19 +9644,32 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
       cellY - (cz || 0) + kilter.dz + clipNudge.z // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
     );
     g.userData.kilterYawDeg = kilter.yawDeg; // read every frame by updateSpriteBillboardYaw's face()
-    // BW2-2 STANDEE BASES: a plinth cylinder under this piece, radius off its own rendered world
-    // width (spec: 0.42x) — added as a CHILD of `g`, a plain SIBLING of `g`'s own inner sprite wrap
+    // CL-R2 STANDEE SUPPORT: a natural shallow strip bounded by the tactical footprint — added as a
+    // CHILD of `g`, a plain SIBLING of `g`'s own inner sprite wrap
     // (buildSpriteBillboardMesh) so BW2-2b's floor-alignment fix (updateSpriteBillboardYaw) leaves it
     // floor-flat under everyday camera tilt, while still tipping WITH the sprite when fall-death moves
     // `g`'s own rotation.x (see buildInteriorBase's own header for the full mechanism).
-    const baseMesh = buildInteriorBase(built.width * INTERIOR_BASE_RADIUS_FRAC, trimColor);
+    const support = interiorStandeeSupportMetrics(built.width, base.size, p.tacticalSpanCells);
+    const baseMesh = buildInteriorBase(support.width, support.depth, trimColor);
     g.add(baseMesh);
     g.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
     g.userData.interiorTrueScale = true;
     g.userData.interiorHeight = built.height;
     g.userData.interiorWidth = built.width;
     g.userData.interiorFloorFrac = floorFrac;
-    g.userData.interiorBaseRadius = built.width * INTERIOR_BASE_RADIUS_FRAC;
+    // Kept only as a legacy selection-ring size; the visible support is not circular.
+    g.userData.interiorBaseRadius = support.width * 0.5;
+    g.userData.interiorBaseWidth = support.width;
+    g.userData.interiorBaseDepth = support.depth;
+    g.userData.tacticalSpanCells = support.tacticalSpanCells;
+    g.userData.stairTreadDepth = support.treadDepth;
+    g.userData.stairFit = support.stairFit;
+    g.userData.canonicalHeight = built.canonicalHeight;
+    g.userData.oversizeClamped = built.oversizeClamped;
+    g.userData.spriteLabel = p.label || base.name || p.slug;
+    g.userData.spriteStressRole = p.stress || null;
+    g.userData.spriteRegenRecommended = support.tacticalSpanCells >= 2
+      && built.width > support.tacticalSpanCells * 0.95;
     // DUNGEON-GRAPH.md finale-gate finding: a caller may tag an interior piece with the combat foe's
     // own `fid` (o.foes[i].fid, combat.js's combatStart) so play(verb,{who:fid}) — the SAME production
     // standee-verb entry point combat damage already routes through (§A STANDEE VERBS WIRING, this
@@ -9533,7 +9685,7 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     // fall-death — the corpse keeps its ground anchor because the pool isn't parented to the
     // tilting wrapper), and existing callers walking `group.children` in piece order see no change.
     // BW2-2: seated off THIS cell's own real floor top, not the old hardcoded -0.495.
-    addInteriorContactBlob(blobGroup, g.position.x, g.position.z, built.width, floorTop);
+    addInteriorContactBlob(blobGroup, g.position.x, g.position.z, support.width, floorTop, support.depth);
     // VP6 item 1: idle-breathe auto-plays on every living piece the instant it mounts (a fresh
     // fall-death corpse never reaches this — dead pieces are re-mounted by the NEXT setInteriorBoard
     // call with p.fid's own userData never carrying userData.corpse from a torn-down prior group, so
@@ -10058,9 +10210,9 @@ function interiorFitMaxHeightFor(data){
   (data && data.pieces || []).forEach(function(p){
     if(!p || !p.slug) return;
     const base = (typeof spriteEntryFor === "function") ? spriteEntryFor(p.slug) : null;
-    const scaleTrue = (base && typeof base.scaleTrue === "number" && base.scaleTrue > 0)
-      ? base.scaleTrue
-      : (typeof p.scaleVsHuman === "number" && p.scaleVsHuman > 0) ? p.scaleVsHuman : null;
+    const scaleTrue = (typeof p.scaleVsHuman === "number" && p.scaleVsHuman > 0)
+      ? p.scaleVsHuman
+      : (base && typeof base.scaleTrue === "number" && base.scaleTrue > 0) ? base.scaleTrue : null;
     if(scaleTrue == null) return; // unresolved piece (texture/registry not loaded yet) — skip, don't guess
     const h = HUMAN_TRUE_HEIGHT * scaleTrue;
     if(h > tallest) tallest = h;
@@ -12735,16 +12887,29 @@ function setUnits(data){
       // own header explains why this makes fall-death's tip-as-one-group behavior free). Radius off
       // the sprite's own rendered width (figureFor's interior branch stamps interiorWidth alongside
       // interiorHeight specifically for this — see that branch's own comment).
-      const baseRadius = (figure.userData.interiorWidth || figure.userData.interiorHeight || 1) * INTERIOR_BASE_RADIUS_FRAC;
-      const baseMesh = buildInteriorBase(baseRadius, S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor);
+      const support = interiorStandeeSupportMetrics(
+        figure.userData.interiorWidth || figure.userData.interiorHeight || 1,
+        u.size,
+        u.tacticalSpanCells
+      );
+      const baseMesh = buildInteriorBase(
+        support.width,
+        support.depth,
+        S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor
+      );
       figure.add(baseMesh);
-      figure.userData.interiorBaseRadius = baseRadius;
+      figure.userData.interiorBaseRadius = support.width * 0.5;
+      figure.userData.interiorBaseWidth = support.width;
+      figure.userData.interiorBaseDepth = support.depth;
+      figure.userData.tacticalSpanCells = support.tacticalSpanCells;
+      figure.userData.stairTreadDepth = support.treadDepth;
+      figure.userData.stairFit = support.stairFit;
       figure.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
       // BW2-2: this standee's own soft contact pool (VP7's convention, extended to combat units — the
       // pre-BW2-2 tabletop hostility-disc/groundingBlob pair further below is UNTOUCHED and stays
       // buried under the true floor exactly as it already was, harmless/invisible; this pool is the
       // one that actually reads under an interior standee's base).
-      addInteriorContactBlob(S.shadowGroup, x, z, (figure.userData.interiorWidth || figure.userData.interiorHeight || 1), floorTop);
+      addInteriorContactBlob(S.shadowGroup, x, z, support.width, floorTop, support.depth);
     }
     figure.position.set(x, posY, z);
     // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 6, §3-D1/D2/D8): a whole-object figure
@@ -13523,6 +13688,111 @@ window.Theater._claySetFixtureForTest = function(id){
   return (typeof clayRoomSetFixture === "function")
     ? clayRoomSetFixture(id, "clayroom-fixture-test-seam")
     : false;
+};
+function clayRoomSpriteFigures(){
+  const rows = [];
+  if(!S.interiorGroup || typeof S.interiorGroup.traverse !== "function") return rows;
+  S.interiorGroup.traverse(function(node){
+    if(!node || !node.userData || !node.userData.sprite) return;
+    rows.push(node);
+  });
+  return rows;
+}
+function clayRoomSetSelectedSprite(slug){
+  const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+  if(!fixture.cast.some(function(row){ return row.slug === slug; })) return false;
+  S.clayRoomSelectedSpriteSlug = slug;
+  S.clayRoomSelectedId = slug;
+  if(typeof S.clayRoomWorkbenchSelect === "function") S.clayRoomWorkbenchSelect(slug, "sprite lineup");
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  return true;
+}
+function clayRoomSetSelectedSpriteView(mode){
+  const offsets = { face: 0, angled: Math.PI / 4, edge: Math.PI / 2 };
+  if(!Object.prototype.hasOwnProperty.call(offsets, mode)) return false;
+  const selected = S.clayRoomSelectedSpriteSlug;
+  clayRoomSpriteFigures().forEach(function(node){
+    if(node.userData.sceneObjectId === selected){
+      node.userData.claySpriteViewYawOffset = offsets[mode];
+    }
+  });
+  S.clayRoomSelectedSpriteView = mode;
+  markDirty();
+  scheduleRender();
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  return true;
+}
+function clayRoomSpriteCitizenshipSnapshot(){
+  if(!S.clayRoomRecord) return null;
+  const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+  const castBySlug = {};
+  fixture.cast.forEach(function(row){ castBySlug[row.slug] = row; });
+  const figures = [];
+  const stairs = [];
+  clayRoomSpriteFigures().forEach(function(node){
+    const stairSample = node.userData.claySpriteStairSample;
+    if(stairSample){
+      stairs.push({
+        view: stairSample,
+        supportDepth: node.userData.interiorBaseDepth,
+        treadDepth: node.userData.stairTreadDepth,
+        stairFit: !!node.userData.stairFit
+      });
+      return;
+    }
+    const spriteSlug = node.userData.sceneObjectId;
+    const spec = castBySlug[spriteSlug];
+    if(!spec) return;
+    const registry = spriteEntryFor(spriteSlug) || {};
+    figures.push({
+      slug: spriteSlug,
+      label: spec.label,
+      stress: spec.stress,
+      canonicalFeet: registry.worldHeight == null ? null : registry.worldHeight,
+      renderedWorldHeight: node.userData.interiorHeight,
+      renderedWorldWidth: node.userData.interiorWidth,
+      tacticalSpanCells: node.userData.tacticalSpanCells,
+      supportWidth: node.userData.interiorBaseWidth,
+      supportDepth: node.userData.interiorBaseDepth,
+      treadDepth: node.userData.stairTreadDepth,
+      stairFit: !!node.userData.stairFit,
+      shell: !!node.userData.standeeSideShell,
+      footX: node.userData.footX,
+      footY: node.userData.footY,
+      contentBounds: node.userData.contentBounds,
+      alphaCutoff: node.userData.alphaCutoff,
+      regenRecommended: !!node.userData.spriteRegenRecommended,
+      selected: spriteSlug === S.clayRoomSelectedSpriteSlug
+    });
+  });
+  figures.sort(function(a, b){
+    return fixture.cast.findIndex(function(row){ return row.slug === a.slug; })
+      - fixture.cast.findIndex(function(row){ return row.slug === b.slug; });
+  });
+  return {
+    fixtureId: S.clayRoomFixtureId,
+    fixtureVersion: fixture.version,
+    scaleMode: S.clayRoomSpriteScaleMode || "true-scale",
+    selectedSlug: S.clayRoomSelectedSpriteSlug || fixture.selectedSlug,
+    selectedView: S.clayRoomSelectedSpriteView || "face",
+    supportForm: "shallow-rounded-strip",
+    tacticalFootprintSeparate: true,
+    lineup: figures,
+    stairSamples: stairs,
+    regenRecommended: figures.filter(function(row){ return row.regenRecommended; }).map(function(row){ return row.slug; })
+  };
+}
+window.Theater._claySpriteCitizenshipForTest = function(){
+  return clayRoomSpriteCitizenshipSnapshot();
+};
+window.Theater._claySetSpriteScaleModeForTest = function(mode){
+  return clayRoomSetSpriteScaleMode(mode, "clayroom-sprite-scale-test-seam");
+};
+window.Theater._claySelectSpriteForTest = function(slug){
+  return clayRoomSetSelectedSprite(slug);
+};
+window.Theater._claySetSelectedSpriteViewForTest = function(mode){
+  return clayRoomSetSelectedSpriteView(mode);
 };
 window.Theater._clayMovementProofForTest = function(){
   const session = (typeof clayRoomMovementSession === "function") ? clayRoomMovementSession() : null;
@@ -15387,6 +15657,8 @@ function clayRoomShouldEnable(){
 
 const CLAY_ROOM_TRUTH_FIXTURE_ID = "cl-f00-room-truth";
 const CLAY_ROOM_LIGHTING_BENCH_ID = "cl-f02-lighting-bench";
+const CLAY_ROOM_SPRITE_BENCH_ID = "cl-f03-sprite-citizenship";
+const CLAY_ROOM_SPRITE_SCALE_MODES = Object.freeze(["true-scale", "diagnostic-cap"]);
 const CLAY_ROOM_LIGHT_PREVIEW_SEEDS = Object.freeze(["A", "B", "C"]);
 const CLAY_ROOM_LORE_LIGHT_PREVIEWS = Object.freeze([
   Object.freeze({ id: "daylit", label: "SUN · DAY", source: "sunlight" }),
@@ -15413,10 +15685,13 @@ function clayRoomFixtureIdFromLocation(){
     if(raw === "lights" || raw === "lighting-bench" || raw === CLAY_ROOM_LIGHTING_BENCH_ID){
       return CLAY_ROOM_LIGHTING_BENCH_ID;
     }
+    if(raw === "sprites" || raw === "sprite-citizenship" || raw === CLAY_ROOM_SPRITE_BENCH_ID){
+      return CLAY_ROOM_SPRITE_BENCH_ID;
+    }
   } catch(e){}
-  // CL-R1 checkpoint now opens on the fixture under review. The room-truth/movement fixture remains
-  // one click away and can be pinned directly with ?clayfixture=room.
-  return CLAY_ROOM_LIGHTING_BENCH_ID;
+  // The active reset-ladder checkpoint opens on the fixture under review. Earlier fixtures remain
+  // one click away and can be pinned directly with ?clayfixture=room or ?clayfixture=lights.
+  return CLAY_ROOM_SPRITE_BENCH_ID;
 }
 function clayRoomMaybeAutoMount(){
   // CL-R0 (docs/CLAYROOM-RESET-LADDER.md): this poll now does ONE thing — mount the surface if the
@@ -15536,17 +15811,21 @@ function clayRoomSetLightingRecipe(recipeId, reason){
   };
   if(typeof S.clayRoomRefreshLightCatalog === "function") S.clayRoomRefreshLightCatalog();
   if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
   return true;
 }
 
 function clayRoomSetFixture(fixtureId, reason){
-  if(fixtureId !== CLAY_ROOM_TRUTH_FIXTURE_ID && fixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID){
+  if(fixtureId !== CLAY_ROOM_TRUTH_FIXTURE_ID
+    && fixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
+    && fixtureId !== CLAY_ROOM_SPRITE_BENCH_ID){
     return false;
   }
   if(!S.clayRoomCompiled || !S.clayRoomRecord) return false;
   S.clayRoomFixtureId = fixtureId;
   S.clayCamOffset = { x: 0, z: 0 };
-  S.clayCamZoom = fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? 0.72 : 1;
+  S.clayCamZoom = fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+    ? 0.72 : (fixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9 : 1);
   S.boardKey = null;
   const session = clayRoomMovementSession();
   const board = (session && clayRoomMovementBoardFromState(session.state)) || S.clayRoomCompiled.board;
@@ -15557,13 +15836,33 @@ function clayRoomSetFixture(fixtureId, reason){
   if(typeof S.clayRoomWorkbenchSelect === "function"){
     const roomOnlySelected = S.clayRoomSelectedId === S.clayRoomRecord.portal.id
       || S.clayRoomSelectedId === S.clayRoomRecord.object.id;
-    if(fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && roomOnlySelected){
+    if((fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID || fixtureId === CLAY_ROOM_SPRITE_BENCH_ID) && roomOnlySelected){
       const recipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId];
       const light = recipe && (recipe.lights || []).find(function(row){ return row.enabled !== false; });
       if(light) S.clayRoomWorkbenchSelect(light.id, "fixture switch");
     }
+    if(fixtureId === CLAY_ROOM_SPRITE_BENCH_ID){
+      const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+      S.clayRoomSelectedSpriteSlug = S.clayRoomSelectedSpriteSlug || fixture.selectedSlug;
+      S.clayRoomWorkbenchSelect(S.clayRoomSelectedSpriteSlug, "fixture switch");
+      if(typeof S.clayRoomShowTab === "function") S.clayRoomShowTab("sprites");
+    }
   }
   if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  return true;
+}
+
+function clayRoomSetSpriteScaleMode(mode, reason){
+  if(CLAY_ROOM_SPRITE_SCALE_MODES.indexOf(mode) < 0) return false;
+  if(S.clayRoomSpriteScaleMode === mode) return true;
+  S.clayRoomSpriteScaleMode = mode;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_SPRITE_BENCH_ID) return true;
+  S.boardKey = null;
+  const session = clayRoomMovementSession();
+  const board = session && clayRoomMovementBoardFromState(session.state);
+  if(board) setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-sprite-scale-mode" });
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
   return true;
 }
 
@@ -16049,8 +16348,125 @@ function clayRoomMountLightingBench(){
   return group;
 }
 
+/* CL-F03 sprite bench — the lineup itself comes through data.pieces -> interiorBuildPieces. This
+   post-build group adds only two visual measuring aids: tactical-footprint outlines (gameplay truth,
+   explicitly separate from the visible support) and a three-tread stair carrying face/three-quarter/
+   edge-on copies built by the same production billboard/base functions. */
+function clayRoomMountSpriteBench(){
+  S.clayRoomSpriteBenchGroup = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_SPRITE_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+  const group = new THREE.Group();
+  group.name = fixture.id + "-measures";
+  group.userData.claySpriteBench = true;
+  group.userData.fixtureId = fixture.id;
+  group.userData.fixtureVersion = fixture.version;
+
+  fixture.cast.forEach(function(spec){
+    const rawX = room.x + spec.lineupCell.x;
+    const rawZ = room.y + spec.lineupCell.z;
+    const span = spec.tacticalSpanCells;
+    const y = interiorFloorTopAt(S.interiorFloorTopMap, rawX, rawZ) + 0.018;
+    const half = span / 2;
+    const points = [
+      new THREE.Vector3(rawX - origin.cx - half, y, rawZ - origin.cz - half),
+      new THREE.Vector3(rawX - origin.cx + half, y, rawZ - origin.cz - half),
+      new THREE.Vector3(rawX - origin.cx + half, y, rawZ - origin.cz + half),
+      new THREE.Vector3(rawX - origin.cx - half, y, rawZ - origin.cz + half)
+    ];
+    const outline = new THREE.LineLoop(
+      new THREE.BufferGeometry().setFromPoints(points),
+      new THREE.LineBasicMaterial({
+        color: spec.slug === fixture.selectedSlug ? 0x6fcfff : 0xd6b86c,
+        transparent: true,
+        opacity: 0.78,
+        depthTest: true,
+        depthWrite: false
+      })
+    );
+    outline.userData.clayTacticalFootprint = true;
+    outline.userData.spriteSlug = spec.slug;
+    outline.userData.tacticalSpanCells = span;
+    group.add(outline);
+  });
+
+  const stair = new THREE.Group();
+  stair.name = fixture.stair.id;
+  stair.userData.claySpriteStair = true;
+  const stairCenterRawX = room.x + 7;
+  const stairCenterRawZ = room.y + 12.25;
+  const stairFloor = interiorFloorTopAt(S.interiorFloorTopMap, stairCenterRawX, stairCenterRawZ);
+  const tread = fixture.stair.treadDepth;
+  const riser = fixture.stair.riserHeight;
+  for(let i = 0; i < fixture.stair.steps; i++){
+    const layers = fixture.stair.steps - i;
+    const depth = layers * tread;
+    const height = (i + 1) * riser;
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(fixture.stair.treadWidth + 1.2, height, depth),
+      new THREE.MeshStandardMaterial({
+        color: CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor,
+        roughness: 1,
+        metalness: 0
+      })
+    );
+    mesh.position.set(
+      stairCenterRawX - origin.cx,
+      stairFloor + height / 2,
+      stairCenterRawZ - origin.cz - i * tread / 2
+    );
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.userData.interiorKind = "riser";
+    mesh.userData.claySpriteStairLayer = i;
+    mesh.userData.treadDepth = tread;
+    stair.add(mesh);
+  }
+
+  const selectedEntry = spriteEntryFor(fixture.selectedSlug);
+  if(selectedEntry){
+    [-1, 0, 1].forEach(function(offset, index){
+      const built = interiorSpriteBillboard(selectedEntry, null);
+      if(!built) return;
+      const sample = built.group;
+      const stepTop = stairFloor + (index + 1) * riser;
+      const z = stairCenterRawZ - origin.cz + (1 - index) * tread;
+      sample.position.set(stairCenterRawX - origin.cx + offset * 1.05, interiorStandeeContactY(stepTop), z);
+      sample.userData.sceneObjectId = "stair-" + ["face", "three-quarter", "edge"][index];
+      sample.userData.claySpriteStairSample = ["face", "three-quarter", "edge"][index];
+      sample.userData.claySpriteViewYawOffset = [0, Math.PI / 4, Math.PI / 2][index];
+      sample.userData.kilterYawDeg = 0;
+      const support = interiorStandeeSupportMetrics(built.width, selectedEntry.size, 1);
+      const baseMesh = buildInteriorBase(
+        support.width,
+        support.depth,
+        S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor
+      );
+      sample.add(baseMesh);
+      sample.userData.standeeBaseMesh = baseMesh;
+      sample.userData.interiorBaseWidth = support.width;
+      sample.userData.interiorBaseDepth = support.depth;
+      sample.userData.stairTreadDepth = tread;
+      sample.userData.stairFit = support.depth <= tread + 0.000001;
+      sample.userData.interiorHeight = built.height;
+      sample.userData.interiorWidth = built.width;
+      stair.add(sample);
+    });
+  }
+  group.add(stair);
+  S.interiorGroup.add(group);
+  S.clayRoomSpriteBenchGroup = group;
+  return group;
+}
+
 function clayRoomSuppressLightingBenchNoise(){
-  if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID || !S.moteGroup) return;
+  if((S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
+    && S.clayRoomFixtureId !== CLAY_ROOM_SPRITE_BENCH_ID) || !S.moteGroup) return;
   stopMoteDrift();
   if(S.moteGroup.parent) S.moteGroup.parent.remove(S.moteGroup);
   clearGroup(S.moteGroup);
@@ -16717,6 +17133,7 @@ async function clayRoomCaptureLightingMatrix(){
 function clayRoomAfterInteriorBoardRebuild(){
   if(!S.clayRoomDiagnosticActive) return;
   clayRoomMountLightingBench();
+  clayRoomMountSpriteBench();
   clayRoomSuppressLightingBenchNoise();
   clayRoomApplyDiagnosticSurfaces();
   clayRoomApplyLightProfile(S.clayRoomRecord);
@@ -16736,6 +17153,7 @@ function clayRoomAfterInteriorBoardRebuild(){
   clayRoomCaptureCamFit();
   clayRoomApplyCamPose();
   if(S.clayRoomSelectedId) clayRoomHighlightSelection(S.clayRoomSelectedId);
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
 }
 
 function clayRoomSettleCameraPoseTween(){
@@ -16969,7 +17387,7 @@ function clayRoomRenderMovementOverlay(ranges, preview){
   scheduleRender();
 }
 function clayRoomMovementRangesRender(){
-  if(S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TRUTH_FIXTURE_ID){
     clayRoomDisposeMovementOverlay();
     return null;
   }
@@ -17040,6 +17458,45 @@ function clayRoomMovementBoardFromState(state){
       furniture: [],
       interactables: [],
       dressing: []
+    });
+  }
+  if(S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID){
+    const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+    const room = compiled.room;
+    const capMode = S.clayRoomSpriteScaleMode === "diagnostic-cap";
+    const cap = fixture.candidatePresentationCap;
+    pieces = fixture.cast.map(function(spec){
+      const registry = spriteEntryFor(spec.slug);
+      const worldHeight = registry && Number.isFinite(registry.worldHeight)
+        ? registry.worldHeight
+        : (registry && Number.isFinite(registry.feet) ? registry.feet : HUMAN_TRUE_HEIGHT * 5);
+      const presentedFeet = capMode
+        ? Math.max(cap.minFeet, Math.min(cap.maxFeet, worldHeight))
+        : worldHeight;
+      return {
+        id: "clay-citizen-" + spec.slug,
+        sourceRef: spec.slug,
+        slug: spec.slug,
+        label: spec.label,
+        stress: spec.stress,
+        tacticalSpanCells: spec.tacticalSpanCells,
+        cellX: room.x + spec.lineupCell.x,
+        cellY: room.y + spec.lineupCell.z,
+        scaleVsHuman: capMode ? presentedFeet / 5.5 : null,
+        allowOverheight: true
+      };
+    });
+    return Object.assign({}, base, {
+      pieces: pieces,
+      furniture: [],
+      interactables: [],
+      dressing: [],
+      cameraFit: {
+        maxHeight: capMode ? cap.maxFeet / 5 : Math.max.apply(null, fixture.cast.map(function(spec){
+          const registry = spriteEntryFor(spec.slug);
+          return registry && Number.isFinite(registry.worldHeight) ? registry.worldHeight / 5 : 1.1;
+        }))
+      }
     });
   }
   return Object.assign({}, base, { pieces: pieces, interactables: interactables });
@@ -17582,10 +18039,13 @@ function mountClayRoom(){
     S.clayRoomCompiled = compiled;
     S.clayRoomLightRecipeId = compiled.lightRecipeId || "clay-opposing-pair";
     S.clayRoomFixtureId = clayRoomFixtureIdFromLocation();
+    S.clayRoomSpriteScaleMode = "true-scale";
+    S.clayRoomSelectedSpriteSlug = CLAY_SPRITE_CITIZENSHIP_FIXTURE.selectedSlug;
     S.clayRoomLightOverlayModes = { position: true, range: true, shadow: false };
     S.clayRoomPreviewSeed = CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
     S.clayCamOffset = { x: 0, z: 0 };
-    S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? 0.72 : 1;
+    S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+      ? 0.72 : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9 : 1);
     S.clayRoomDiagnosticActive = true;
     setInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
     S.clayGridMesh = clayRoomBuildSeamGrid(record, compiled.room); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live; compiled.room is the spatializer's REAL room rect (CL-R0 coordinate fix)
@@ -17746,6 +18206,7 @@ function clayRoomMountOverlay(record, host){
   editorActions.style.cssText = "display:flex;gap:5px;margin-top:6px;";
   const spriteEditorBtn = document.createElement("button");
   spriteEditorBtn.textContent = "open sprite editor ↗";
+  spriteEditorBtn.title = "Run python3 dev/sprite-review.py, then open the selected sprite in the dedicated editor";
   const materialEditorBtn = document.createElement("button");
   materialEditorBtn.textContent = "material editor";
   materialEditorBtn.title = "Shared Material Editor seam; the admitted MM mapping pass is next.";
@@ -17902,11 +18363,15 @@ function clayRoomMountOverlay(record, host){
   const lightsTabBtn = document.createElement("button");
   lightsTabBtn.textContent = "Lights";
   lightsTabBtn.setAttribute("aria-label", "Clayroom lighting proof");
-  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, lightsTabBtn].forEach(function(b){
+  const spritesTabBtn = document.createElement("button");
+  spritesTabBtn.textContent = "Sprites";
+  spritesTabBtn.setAttribute("aria-label", "Clayroom sprite citizenship proof");
+  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, lightsTabBtn, spritesTabBtn].forEach(function(b){
     b.style.cssText = "flex:1 1 46px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   });
   tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn);
-  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(movementTabBtn); tabBar.appendChild(lightsTabBtn);
+  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(movementTabBtn);
+  tabBar.appendChild(lightsTabBtn); tabBar.appendChild(spritesTabBtn);
   panel.appendChild(tabBar);
 
   const factsBody = document.createElement("pre");
@@ -18366,7 +18831,8 @@ function clayRoomMountOverlay(record, host){
   const fixtureButtons = {};
   [
     [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM TRUTH"],
-    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTING BENCH"]
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTING BENCH"],
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE BENCH"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -18601,7 +19067,9 @@ function clayRoomMountOverlay(record, host){
       "fixture " + (S.clayRoomFixtureId || "—")
         + (S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
           ? " · 3 steps + matte cube/sphere + approved sprite"
-          : " · architecture/movement truth"),
+          : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID
+            ? " · 7-sprite scale spectrum + stair fit"
+            : " · architecture/movement truth")),
       "recipe " + activeRecipe.id + " · " + activeRecipe.mode,
       "source " + activeRecipe.source.label
         + (activeRecipe.source.loreNative ? " · LORE-NATIVE" : " · DIAGNOSTIC ONLY"),
@@ -18727,6 +19195,183 @@ function clayRoomMountOverlay(record, host){
   });
   S.clayRoomRefreshLights = clayLightsRender;
 
+  // CL-R2 Sprites tab — one live control surface for the production lineup, canonical-vs-cap A/B,
+  // source alpha, face/edge view, stair fit, and the accepted lighting contexts. It reads the mounted
+  // production groups through clayRoomSpriteCitizenshipSnapshot; no parallel sprite preview renderer.
+  const spritesBody = document.createElement("div");
+  spritesBody.style.cssText = "display:none;font:10px/1.4 monospace;color:#dde;";
+  const spritesIntro = document.createElement("div");
+  spritesIntro.innerHTML =
+    "<div style='color:#9fd4ec;margin-bottom:4px'>CL-F03 · PHYSICAL CITIZENS, NOT PAPER</div>" +
+    "<div style='color:#9ab'>Gold/cyan floor outlines are tactical footprints. The shallow rounded strip is only the visible standee support.</div>";
+  spritesBody.appendChild(spritesIntro);
+
+  const spriteFixtureNav = document.createElement("div");
+  spriteFixtureNav.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:7px 0;";
+  [
+    [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM"],
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
+    button.addEventListener("click", function(){
+      clayRoomSetFixture(def[0], "clayroom-sprite-fixture-nav");
+      if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
+      else if(def[0] === CLAY_ROOM_TRUTH_FIXTURE_ID) clayShowTab("movement");
+      else clayShowTab("sprites");
+    });
+    spriteFixtureNav.appendChild(button);
+  });
+  spritesBody.appendChild(spriteFixtureNav);
+
+  const spriteScaleLabel = document.createElement("div");
+  spriteScaleLabel.textContent = "SCALE SPECTRUM";
+  spriteScaleLabel.style.cssText = "color:#aeb7c4;margin-top:7px;";
+  spritesBody.appendChild(spriteScaleLabel);
+  const spriteScaleActions = document.createElement("div");
+  spriteScaleActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0 7px;";
+  const trueScaleBtn = document.createElement("button");
+  trueScaleBtn.textContent = "TRUE SCALE";
+  const capScaleBtn = document.createElement("button");
+  capScaleBtn.textContent = "1–20 FT CAP PREVIEW";
+  [trueScaleBtn, capScaleBtn].forEach(function(button){
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
+    spriteScaleActions.appendChild(button);
+  });
+  trueScaleBtn.addEventListener("click", function(){ clayRoomSetSpriteScaleMode("true-scale", "clayroom-sprite-ui"); });
+  capScaleBtn.addEventListener("click", function(){ clayRoomSetSpriteScaleMode("diagnostic-cap", "clayroom-sprite-ui"); });
+  spritesBody.appendChild(spriteScaleActions);
+
+  const spriteCastLabel = document.createElement("div");
+  spriteCastLabel.textContent = "LIVE CAST · click to inspect";
+  spriteCastLabel.style.cssText = "color:#aeb7c4;";
+  spritesBody.appendChild(spriteCastLabel);
+  const spriteCastActions = document.createElement("div");
+  spriteCastActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0 7px;";
+  const spriteCastButtons = {};
+  const spriteFixture = clayRoomSpriteCitizenshipFixtureFrom(record);
+  spriteFixture.cast.forEach(function(spec){
+    const button = document.createElement("button");
+    button.textContent = spec.label;
+    button.title = spec.stress;
+    button.style.cssText = "font:9px monospace;text-align:left;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetSelectedSprite(spec.slug); });
+    spriteCastActions.appendChild(button);
+    spriteCastButtons[spec.slug] = button;
+  });
+  spritesBody.appendChild(spriteCastActions);
+
+  const spriteViewActions = document.createElement("div");
+  spriteViewActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  const spriteViewButtons = {};
+  [["face", "FACE"], ["angled", "3/4"], ["edge", "EDGE"]].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetSelectedSpriteView(def[0]); });
+    spriteViewActions.appendChild(button);
+    spriteViewButtons[def[0]] = button;
+  });
+  spritesBody.appendChild(spriteViewActions);
+
+  const spriteLightLabel = document.createElement("div");
+  spriteLightLabel.textContent = "LIGHT RESPONSE · shared production recipes";
+  spriteLightLabel.style.cssText = "color:#aeb7c4;";
+  spritesBody.appendChild(spriteLightLabel);
+  const spriteLightActions = document.createElement("div");
+  spriteLightActions.style.cssText = "display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:4px 0 7px;";
+  const spriteLightButtons = {};
+  [
+    ["clay-neutral-truth", "NEUTRAL"],
+    ["moonlit", "DARK"],
+    ["torchlit", "WARM"],
+    ["magic-glow", "COOL"],
+    ["daylit", "DAY"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.title = def[0];
+    button.style.cssText = "font:8px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetLightingRecipe(def[0], "clayroom-sprite-light-context"); });
+    spriteLightActions.appendChild(button);
+    spriteLightButtons[def[0]] = button;
+  });
+  spritesBody.appendChild(spriteLightActions);
+
+  const spriteSourceCard = document.createElement("div");
+  spriteSourceCard.style.cssText = "display:grid;grid-template-columns:92px 1fr;gap:7px;align-items:center;border:1px solid #39404a;background:#181b20;padding:6px;margin-bottom:7px;";
+  const spriteSourceImg = document.createElement("img");
+  spriteSourceImg.alt = "Selected sprite source PNG";
+  spriteSourceImg.style.cssText = "width:88px;height:88px;object-fit:contain;image-rendering:pixelated;background:repeating-conic-gradient(#252830 0 25%,#17191e 0 50%) 0/12px 12px;";
+  const spriteSourceText = document.createElement("div");
+  spriteSourceText.style.cssText = "color:#9ab;white-space:pre-wrap;";
+  spriteSourceCard.appendChild(spriteSourceImg);
+  spriteSourceCard.appendChild(spriteSourceText);
+  spritesBody.appendChild(spriteSourceCard);
+
+  const spritesOut = document.createElement("pre");
+  spritesOut.id = "clay-room-sprite-readout";
+  spritesOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
+  spritesBody.appendChild(spritesOut);
+
+  function claySpritesRender(){
+    const snap = clayRoomSpriteCitizenshipSnapshot();
+    if(!snap){
+      spritesOut.textContent = "sprite fixture unavailable";
+      return;
+    }
+    trueScaleBtn.style.background = snap.scaleMode === "true-scale" ? "#35516a" : "#2a2a30";
+    capScaleBtn.style.background = snap.scaleMode === "diagnostic-cap" ? "#684a28" : "#2a2a30";
+    Object.keys(spriteCastButtons).forEach(function(slug){
+      spriteCastButtons[slug].style.background = slug === snap.selectedSlug ? "#35516a" : "#2a2a30";
+    });
+    Object.keys(spriteViewButtons).forEach(function(view){
+      spriteViewButtons[view].style.background = view === snap.selectedView ? "#4b3f61" : "#2a2a30";
+    });
+    Object.keys(spriteLightButtons).forEach(function(id){
+      spriteLightButtons[id].style.background = id === S.clayRoomLightRecipeId ? "#35543b" : "#2a2a30";
+    });
+    const selected = snap.lineup.find(function(row){ return row.slug === snap.selectedSlug; });
+    const selectedEntry = spriteEntryFor(snap.selectedSlug);
+    if(selectedEntry) spriteSourceImg.src = spriteAssetPathFor(selectedEntry);
+    spriteSourceText.textContent = selected
+      ? [
+          "SOURCE PNG · sRGB",
+          selected.label,
+          selected.canonicalFeet + " ft canonical",
+          "anchor " + Number(selected.footX).toFixed(3) + " / " + Number(selected.footY).toFixed(3),
+          "bounds " + (selected.contentBounds ? "compiled" : "MISSING · editor pass needed"),
+          "alpha cutoff " + selected.alphaCutoff
+        ].join("\n")
+      : "selected sprite is loading…";
+    const lines = [
+      "fixture " + snap.fixtureId + " v" + snap.fixtureVersion,
+      "mode " + snap.scaleMode + (snap.scaleMode === "diagnostic-cap" ? " · PRESENTATION TEST ONLY" : " · CANONICAL"),
+      "support " + snap.supportForm + " · tactical footprint remains separate",
+      "stair proof " + (snap.stairSamples.length === 3 && snap.stairSamples.every(function(row){ return row.stairFit; })
+        ? "PASS · face / 3⁄4 / edge"
+        : "loading…"),
+      ""
+    ];
+    snap.lineup.forEach(function(row){
+      const renderedFeet = row.renderedWorldHeight == null ? "—" : (row.renderedWorldHeight * 5).toFixed(2);
+      lines.push(
+        (row.selected ? "▶ " : "  ") + row.label + " · canonical " + row.canonicalFeet + " ft · shown " + renderedFeet + " ft"
+      );
+      lines.push(
+        "    tactical " + row.tacticalSpanCells + " cell · support "
+        + Number(row.supportWidth).toFixed(2) + "×" + Number(row.supportDepth).toFixed(3)
+        + " · tread " + Number(row.treadDepth).toFixed(3) + " · shell " + (row.shell ? "PASS" : "FAIL")
+      );
+      if(row.regenRecommended) lines.push("    ⚑ WIDTH FLAG · consider a taller/more upright regeneration");
+    });
+    lines.push("", "WIDTH FLAGS " + (snap.regenRecommended.length ? snap.regenRecommended.length : "none"));
+    spritesOut.textContent = lines.join("\n");
+  }
+  S.clayRoomRefreshSprites = claySpritesRender;
+
   panel.appendChild(factsBody);
   panel.appendChild(explainBody);
   panel.appendChild(surfacesBody);
@@ -18734,6 +19379,7 @@ function clayRoomMountOverlay(record, host){
   panel.appendChild(stateBody);
   panel.appendChild(movementBody);
   panel.appendChild(lightsBody);
+  panel.appendChild(spritesBody);
 
   function clayShowTab(which){
     factsBody.style.display = which === "facts" ? "" : "none";
@@ -18743,6 +19389,7 @@ function clayRoomMountOverlay(record, host){
     stateBody.style.display = which === "state" ? "" : "none";
     movementBody.style.display = which === "movement" ? "" : "none";
     lightsBody.style.display = which === "lights" ? "" : "none";
+    spritesBody.style.display = which === "sprites" ? "" : "none";
     factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
     explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
     surfacesTabBtn.style.background = which === "surfaces" ? "#3a3a44" : "#2a2a30";
@@ -18750,6 +19397,7 @@ function clayRoomMountOverlay(record, host){
     stateTabBtn.style.background = which === "state" ? "#3a3a44" : "#2a2a30";
     movementTabBtn.style.background = which === "movement" ? "#3a3a44" : "#2a2a30";
     lightsTabBtn.style.background = which === "lights" ? "#3a3a44" : "#2a2a30";
+    spritesTabBtn.style.background = which === "sprites" ? "#3a3a44" : "#2a2a30";
     S.clayRoomMovementPickMode = which === "movement";
     if(which === "surfaces") clayRenderSurfacesTab();
     if(which === "mount") clayMountRender();
@@ -18757,6 +19405,7 @@ function clayRoomMountOverlay(record, host){
     if(which === "movement") clayMovementRender();
     else clayRoomDisposeMovementOverlay();
     if(which === "lights") clayLightsRender();
+    if(which === "sprites") claySpritesRender();
     if(CLAY_ROOM_PANEL_POSITION){
       const panelRect = panel.getBoundingClientRect();
       clayPanelPlace(panelRect.left, panelRect.top, true);
@@ -18764,11 +19413,21 @@ function clayRoomMountOverlay(record, host){
       clayPanelDockRight();
     }
   }
+  S.clayRoomShowTab = clayShowTab;
   function claySelectionInfo(id){
     if(id === record.portal.id) return { name: "Door", type: "INTERACTABLE", ref: id, tab: "state", socket: true, sprite: false };
     if(id === record.object.id) return { name: "Crate · 3 ft", type: "PROP · FACED_BOX", ref: id, tab: "surfaces", socket: false, sprite: false };
     if(id === record.citizen.id || id === record.citizen.bestiaryId) return {
       name: "Goblin", type: "APPROVED CHARACTER SPRITE", ref: record.citizen.bestiaryId, tab: "facts", socket: false, sprite: true
+    };
+    const spriteSpec = clayRoomSpriteCitizenshipFixtureFrom(record).cast.find(function(row){ return row.slug === id; });
+    if(spriteSpec) return {
+      name: spriteSpec.label,
+      type: "SPRITE CITIZEN · " + spriteSpec.stress,
+      ref: spriteSpec.slug,
+      tab: "sprites",
+      socket: false,
+      sprite: true
     };
     const activeRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
       || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
@@ -18817,7 +19476,7 @@ function clayRoomMountOverlay(record, host){
     spriteEditorBtn.style.opacity = info.sprite ? "1" : "0.5";
     socketScopeBtn.style.opacity = info.socket ? "1" : "0.55";
     socketScopeBtn.textContent = info.socket ? "🔒 SOCKET" : "SOCKET — N/A";
-    stateScopeBtn.style.opacity = info.tab === "state" || info.tab === "lights" ? "1" : "0.7";
+    stateScopeBtn.style.opacity = info.tab === "state" || info.tab === "lights" || info.tab === "sprites" ? "1" : "0.7";
     document.querySelectorAll("[data-clay-scene-id]").forEach(function(b){
       const active = b.dataset.claySceneId === id
         || (id === record.citizen.bestiaryId && b.dataset.claySceneId === record.citizen.id);
@@ -18849,7 +19508,10 @@ function clayRoomMountOverlay(record, host){
   spriteEditorBtn.addEventListener("click", function(){
     const info = claySelectionInfo(S.clayRoomSelectedId);
     if(!info.sprite) return;
-    window.open("dev/sprite-review.html?sprite=" + encodeURIComponent(info.ref), "genesis-sprite-editor");
+    window.open(
+      "http://127.0.0.1:5179/?sprite=" + encodeURIComponent(info.ref),
+      "genesis-sprite-editor"
+    );
   });
   saveVariantBtn.addEventListener("click", function(){
     const info = claySelectionInfo(S.clayRoomSelectedId);
@@ -18862,7 +19524,9 @@ function clayRoomMountOverlay(record, host){
   stateTabBtn.addEventListener("click", function(){ clayShowTab("state"); });
   movementTabBtn.addEventListener("click", function(){ clayShowTab("movement"); });
   lightsTabBtn.addEventListener("click", function(){ clayShowTab("lights"); });
-  clayShowTab(S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? "lights" : "movement");
+  spritesTabBtn.addEventListener("click", function(){ clayShowTab("sprites"); });
+  clayShowTab(S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+    ? "lights" : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? "sprites" : "movement"));
 
   document.body.appendChild(panel);
   if(CLAY_ROOM_PANEL_POSITION){
@@ -18875,7 +19539,9 @@ function clayRoomMountOverlay(record, host){
   const activeInitialLight = (activeInitialRecipe.lights || []).find(function(light){ return light.enabled !== false; });
   const initialSelection = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && activeInitialLight
     ? activeInitialLight.id
-    : (S.clayRoomSelectedId || record.portal.id);
+    : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID
+      ? (S.clayRoomSelectedSpriteSlug || spriteFixture.selectedSlug)
+      : (S.clayRoomSelectedId || record.portal.id));
   S.clayRoomWorkbenchSelect(initialSelection, "initial");
   S.clayRoomRefreshLightCatalog();
   clayRefreshFixtureControls();

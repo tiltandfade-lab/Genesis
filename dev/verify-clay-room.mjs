@@ -1493,5 +1493,105 @@ const check = (name, cond, detail = "") =>
     && /window\.Theater\._clayCaptureLightingMatrixForTest/.test(bootSrc));
 }
 
+// ============================================================================
+// 33. CL-F03 SPRITE CITIZENSHIP (CL-R2 checkpoint).
+// The live production path must compare the real scale spectrum, preserve tactical ownership while
+// using tread-fit natural supports, expose face/edge + light-response controls, and keep anchors/bounds
+// editable in the existing Sprite Editor.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const fixture = win.clayRoomSpriteCitizenshipFixtureFrom(record);
+    check("33a. CL-F03 is frozen, versioned, and carries the seven-role live stress cast",
+      fixture.id === "cl-f03-sprite-citizenship"
+      && fixture.version === 1
+      && Object.isFrozen(fixture)
+      && Object.isFrozen(fixture.cast)
+      && fixture.cast.length === 7
+      && new Set(fixture.cast.map((row) => row.slug)).size === 7,
+      JSON.stringify(fixture));
+    check("33b. the spectrum includes smallest, Small, human, bright, dark, Huge, and largest/width cases",
+      fixture.cast.some((row) => /smallest/.test(row.stress))
+      && fixture.cast.some((row) => row.label === "Winged kobold")
+      && fixture.cast.some((row) => /human reference/.test(row.stress))
+      && fixture.cast.some((row) => /highlight/.test(row.stress))
+      && fixture.cast.some((row) => /dark\/irregular/.test(row.stress))
+      && fixture.cast.some((row) => row.label === "Treant" && row.tacticalSpanCells === 3)
+      && fixture.cast.some((row) => row.label === "Kraken" && row.tacticalSpanCells === 4));
+    check("33c. visible support depth is authored from exactly one third-cell stair tread",
+      fixture.stair.steps === 3 && fixture.stair.treadDepth === 1 / 3);
+    check("33d. true-scale remains canonical while the 1–20 ft presentation cap is explicitly diagnostic",
+      fixture.candidatePresentationCap.minFeet === 1
+      && fixture.candidatePresentationCap.maxFeet === 20
+      && /diagnostic preview only/.test(fixture.candidatePresentationCap.label));
+    check("33e. every CL-F03 cast entry has compiled normalized content bounds",
+      fixture.cast.every((row) => {
+        const entry = win.__claySpriteRegistry()[row.slug];
+        return entry && Array.isArray(entry.contentBounds) && entry.contentBounds.length === 4
+          && entry.contentBounds.every((value) => typeof value === "number" && value >= 0 && value <= 1);
+      }));
+    let undersizedRefused = false;
+    try { win.clayRoomSpriteCitizenshipFixtureFrom({ dims: { w: 9, d: 9 } }); }
+    catch(e) { undersizedRefused = /requires the 15x15 scale room/.test(String(e)); }
+    check("33f. an undersized room is refused loudly instead of clipping the true scale spectrum",
+      undersizedRefused);
+  } catch(e) {
+    check("33a-f. CL-F03 pure fixture checks execute without throw", false, e.stack || String(e));
+  }
+  const bootSrc = read("src/ui/theater-boot.js");
+  const editorSrc = read("dev/sprite-review.html");
+  const editorServerSrc = read("dev/sprite-review.py");
+  check("33g. CL-F03 projects all cast members through data.pieces -> the production interior sprite builder",
+    /fixture\.cast\.map\(function\(spec\)/.test(bootSrc)
+    && /allowOverheight:\s*true/.test(bootSrc)
+    && /const\s+built\s*=\s*interiorSpriteBillboard\(entry,\s*p\.allowOverheight\s*\?\s*null\s*:\s*wallCap\)/.test(bootSrc));
+  check("33h. tactical footprint and visible support are separate, with a shallow rounded tread-fit strip",
+    /function\s+interiorStandeeSupportMetrics/.test(bootSrc)
+    && /const\s+INTERIOR_BASE_TREAD_DEPTH\s*=\s*1\s*\/\s*3/.test(bootSrc)
+    && /new\s+THREE\.ExtrudeGeometry/.test(bootSrc)
+    && /supportForm\s*=\s*"shallow-rounded-strip"/.test(bootSrc)
+    && /clayTacticalFootprint/.test(bootSrc));
+  check("33i. the live bench proves face / three-quarter / edge views on a real three-tread stair",
+    /claySpriteViewYawOffset/.test(bootSrc)
+    && /\[0,\s*Math\.PI\s*\/\s*4,\s*Math\.PI\s*\/\s*2\]/.test(bootSrc)
+    && /claySpriteStairSample/.test(bootSrc)
+    && /stairFit/.test(bootSrc));
+  check("33j. the inspector exposes true-scale/cap, seven cast selectors, edge view, and neutral/dark/warm/cool/daylight response",
+    /TRUE SCALE/.test(bootSrc)
+    && /1–20 FT CAP PREVIEW/.test(bootSrc)
+    && /LIVE CAST/.test(bootSrc)
+    && /"edge",\s*"EDGE"/.test(bootSrc)
+    && /"clay-neutral-truth",\s*"NEUTRAL"/.test(bootSrc)
+    && /"moonlit",\s*"DARK"/.test(bootSrc)
+    && /"torchlit",\s*"WARM"/.test(bootSrc)
+    && /"magic-glow",\s*"COOL"/.test(bootSrc)
+    && /"daylit",\s*"DAY"/.test(bootSrc));
+  check("33k. the existing Sprite Editor now owns draggable footX/footY crosshairs, 1px arrow nudges, alpha reset, and compiled reset",
+    /origin-line-x/.test(editorSrc)
+    && /origin-line-y/.test(editorSrc)
+    && /origin-cross/.test(editorSrc)
+    && /function\s+nudgeAnchor/.test(editorSrc)
+    && /const\s+step\s*=\s*ev\.shiftKey\s*\?\s*5\s*:\s*1/.test(editorSrc)
+    && /resetAlphaContact/.test(editorSrc)
+    && /resetCompiledAnchor/.test(editorSrc));
+  check("33l. editor bounds/anchors round-trip through the overlay and generated registry contract",
+    /contentBounds/.test(editorSrc)
+    && /"contentBounds"/.test(editorServerSrc)
+    && /"footX"/.test(editorServerSrc)
+    && /"footY"/.test(editorServerSrc)
+    && /clear\.push\("floor"\)/.test(editorSrc)
+    && /URLSearchParams\(location\.search\)\.get\("sprite"\)/.test(editorSrc)
+    && /127\.0\.0\.1:5179\/\?sprite=/.test(bootSrc));
+  check("33m. live receipt exposes support/scale/shell/stair/regen data and true scale reads exact worldHeight before rounded scaleTrue",
+    /window\.Theater\._claySpriteCitizenshipForTest/.test(bootSrc)
+    && /renderedWorldHeight/.test(bootSrc)
+    && /supportWidth/.test(bootSrc)
+    && /supportDepth/.test(bootSrc)
+    && /regenRecommended/.test(bootSrc)
+    && /typeof\s+entry\.worldHeight[\s\S]{0,120}entry\.worldHeight\s*\/\s*5\.5[\s\S]{0,160}typeof\s+entry\.scaleTrue/.test(bootSrc));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -3,7 +3,7 @@ type: system-spec
 status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review candidate BUILT
   (2026-07-24), close torch brightness accepted and smooth decay-1.5 flame review live; dedicated
   CL-F02 bench + overlays + live pixel cards + seven-recipe capture built, visual verdict pending;
-  CL-R2…CL-R6 remain
+  CL-R2 engineering/visual-review candidate BUILT (2026-07-24), visual verdict pending; CL-R3…CL-R6 remain
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
 authority: subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids) and
@@ -84,7 +84,7 @@ primary question.
 | `CL-F00 room-truth` | Does the real production room stay honest after every rebuild? | 5×5 room, door, crate, one citizen, neutral clay, seam grid | **LIVE** (`?clayroom=1`) |
 | `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | unbuilt (CL-R3) |
 | `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | **BUILT; VISUAL VERDICT PENDING (CL-R1)**. Selectable room/bench fixtures; one-third-cell stairs, matte sphere/cube, approved sprite, mote suppression, live position/range/shadow-volume overlays |
-| `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | unbuilt (CL-R2) |
+| `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | **BUILT; VISUAL VERDICT PENDING (CL-R2)**. Seven-source stress cast, canonical/capped scale A/B, natural tread-depth support, tactical footprint, side shell, stair views, and five production-light contexts |
 | `CL-F04 material-bench` | Do material channels, scale, UVs, roles, and fallbacks work? | floor, wall, riser, trim skeleton, timber, iron, ground | unbuilt (CL-R4) |
 | `CL-F05 trim-bench` | Does the `h6-v1` sheet project without hiding geometry defects? | straight/non-multiple runs, corners, endpoint, opening, stair, curb, T-junction | unbuilt (CL-R5) |
 | `CL-F06 seed-stress` | Do bounded procedural variants remain legal and readable? | retained seed matrix plus adversarial dimensions/joins | unbuilt (CL-R6) |
@@ -423,7 +423,7 @@ colour-space tagging, texture sampling, tone mapping, light energy, material res
 compositing are tested **separately**. It is not "fixed" with an arbitrary saturation slider.
 Colour space, alpha mode, and authored sprite saturation are **invariants, not taste sliders**.
 
-### CL-R2 — complete sprite citizenship
+### CL-R2 — complete sprite citizenship — **ENGINEERING CANDIDATE BUILT 2026-07-24; VISUAL VERDICT PENDING**
 
 **Primary question:** does a sprite read as a physical citizen rather than printed paper?
 
@@ -440,6 +440,40 @@ Minimum representative matrix: small dark fantasy creature · medium PC/humanoid
 pale/bright creature vulnerable to highlight clipping · very dark creature vulnerable to black crush ·
 Large or Huge silhouette · translucent/FX-like alpha edge case if the live corpus licenses one.
 **The current goblin alone is not a citizenship gate.**
+
+**Candidate implementation.** `CL-F03 sprite-citizenship` now places seven live registry sprites
+through the production interior standee builder: Blind Cave Rat, Winged Kobold, Human Fighter,
+Flaming Skeleton, Wraith, Treant, and Kraken. The cast spans 0.25–60 canonical feet plus small,
+human, pale/bright, dark/alpha, Huge, and Gargantuan width stress. The inspector exposes source
+sRGB PNG, compiled `footX`/`footY`, content bounds, alpha cutoff, canonical and rendered height,
+support dimensions, tactical span, shell, stair fit, and regeneration flags.
+
+The visible base is no longer circular. It is a shallow rounded strip bounded by—but visually
+separate from—the tactical footprint. A Medium support is exactly one 1/3-cell stair tread deep;
+Tiny and Small supports may be shallower. Face, three-quarter, and edge samples use the same
+production standee assembly on a real three-tread proof. A thin side shell prevents the card from
+vanishing edge-on.
+
+The scale control keeps true scale canonical and labels the 1–20-foot cap
+`PRESENTATION TEST ONLY`; it never mutates authored `worldHeight`. The honest view proves why the
+comparison is needed: the 60-foot Kraken dominates the human-scale cast. The cap makes all seven
+readable together. Neither is promoted as the final production presentation until Adam rules after
+the live A/B. Treant and Kraken are automatically flagged for taller/more-upright regeneration
+because their rendered width nearly consumes their tactical footprint.
+
+**Proof ledger.**
+
+| Claim | Proof |
+|---|---|
+| One production path, not a mock renderer | Fixture emits `data.pieces`; `interiorSpriteBillboard` + `buildSpriteBillboardMesh` construct every lineup and stair standee. Harness check 33g. |
+| Natural support matches stairs | Live receipt reports `supportForm: shallow-rounded-strip`; all three stair samples pass, and Medium depth equals tread depth `0.333333`. Harness checks 33c/33h/33i. |
+| Tactical footprint remains mechanical and separate | Gold/cyan footprint squares are distinct siblings of the shallow standee supports; receipt `tacticalFootprintSeparate: true`. |
+| Edge citizenship is real | Every cast member reports a side shell; selected Human Fighter is captured face/edge while the retained stair shows face/three-quarter/edge. |
+| Scale comparison is honest | `01-true-scale-live-ui.png` retains 0.25–60-foot canon; `02-cap-spectrum-live-ui.png` is labelled diagnostic and retains canonical values in its receipt. |
+| Width failures stay loud | Receipt names exactly `spr-fantasy-treant` and `spr-fantasy-kraken`; the inspector recommends taller/more-upright regeneration. |
+| Lighting response uses accepted recipes | Neutral, moon, torch, magic, and day captures call the shared production light registry; no CL-R2-only light implementation exists. |
+| Repeatable evidence exists | `dev/clay-captures/cl-r2-sprite-citizenship/`: early/settled true scale, capped and edge live frames, 5 lighting contexts, composed sheet, JSON receipt, and separate measurements; 7 cast, 3 stair views, zero console errors. |
+| Executable gate | `dev/verify-clay-room.mjs` 202/202; sprite registry 27/27; theater sprites 12/12; floor contact 51/51; dungeon interior 291/291; manifest OK. **FULL CI PENDING.** |
 
 ### CL-R3 — basic construction grammar
 

@@ -677,7 +677,7 @@ const VP1_REGISTRY = {
   "spr-gloom-medium-thing": { realm: "gloom", kind: "monster", name: "Medium Thing", size: "Medium", status: "cut", scaleTrue: 1.0 },
   "spr-gloom-large-thing": { realm: "gloom", kind: "monster", name: "Large Thing", size: "Large", status: "cut", scaleTrue: 2.0 },
   "spr-gloom-knight": { realm: "gloom", kind: "npc", name: "Knight", size: "Medium", status: "cut" },
-  "spr-gloom-floored-thing": { realm: "gloom", kind: "monster", name: "Floored Thing", size: "Medium", status: "cut", scaleTrue: 1.0, floor: 0.1 },
+  "spr-gloom-floored-thing": { realm: "gloom", kind: "monster", name: "Floored Thing", size: "Medium", status: "cut", scaleTrue: 1.0, footX: 0.5, footY: 0.9 },
   "spr-gloom-titan-thing": { realm: "gloom", kind: "monster", name: "Titan Thing", size: "Gargantuan", status: "cut", scaleTrue: 100.0 },
   "spr-gloom-scaled-medium": { realm: "gloom", kind: "monster", name: "Scaled Medium", size: "Medium", status: "cut", scale: 1.5 },
 };
@@ -734,6 +734,7 @@ try {
   result.largeHeight = g[1] && g[1].userData.spriteBillboardMesh.geometry.parameters.height;
   result.knightHeight = g[2] && g[2].userData.spriteBillboardMesh.geometry.parameters.height;
   result.flooredHeight = g[3] && g[3].userData.spriteBillboardMesh.geometry.parameters.height;
+  result.flooredFootY = g[3] && g[3].userData.footY;
   result.flooredY = g[3] && g[3].position.y;
   result.flooredX = g[3] && g[3].position.x;
   result.flooredZ = g[3] && g[3].position.z;
@@ -751,8 +752,10 @@ try {
   // BW2-2: standee base mesh — children[1] of the piece group (children[0] is now the sprite's own
   // inner camera-tilt wrap, BW2-2b — the base is still APPENDED as a plain sibling, never inserted
   // into the wrap, so the index is unchanged).
-  result.medBaseRadius = g[0] && g[0].children[1] && g[0].children[1].geometry.parameters.radiusTop;
-  result.medBaseHeight = g[0] && g[0].children[1] && g[0].children[1].geometry.parameters.height;
+  result.medBaseForm = g[0] && g[0].userData.standeeBaseMesh && g[0].userData.standeeBaseMesh.userData.supportForm;
+  result.medBaseWidth = g[0] && g[0].userData.interiorBaseWidth;
+  result.medBaseDepth = g[0] && g[0].userData.interiorBaseDepth;
+  result.medBaseHeight = g[0] && g[0].userData.standeeBaseMesh && g[0].userData.standeeBaseMesh.userData.supportHeight;
 
   result.oversizeWarned = warnings.some((w) => w.includes("qa: oversize-clamped"));
   result.ok = true;
@@ -863,10 +866,11 @@ group("23 — FIXED: interiorBuildPieces sizes through TRUE-SCALE (HUMAN_TRUE_HE
       "the floor-contact-law constants are exposed on window.Theater._floorContactLawForTest");
     const fallbackFloorTop = law.ITR_FLOOR_BASE_Y + law.ITR_FLOOR_HEIGHT_FALLBACK;
     const contactY = fallbackFloorTop + law.INTERIOR_BASE_Y_OFFSET + law.INTERIOR_BASE_HEIGHT;
-    const expectedY = contactY - 0.1 * green.flooredHeight;
+    const expectedY = contactY;
     ok(Math.abs(green.flooredY - expectedY) < 1e-9,
-      `floored piece (entry.floor=0.1, height=${green.flooredHeight}): group.position.y=${green.flooredY} matches (floorTop=${fallbackFloorTop} + baseOffset+baseHeight) - floor*height = ${expectedY}`);
-    ok(expectedY > -0.5, `RED-FIRST proof: the new contact line (${expectedY}) sits ABOVE the pre-BW2-2 hardcoded -0.5 — the old convention buried every standee by (fallback-derivation) ${(expectedY - (-0.5 - 0.1 * green.flooredHeight)).toFixed(3)} world units`);
+      `footY-anchored piece: group.position.y=${green.flooredY} is the one canonical contact origin at floorTop+support (${expectedY}), with no second legacy-floor offset`);
+    ok(Math.abs(green.flooredFootY - 0.9) < 1e-9, `the authored footY=0.9 anchor is carried on the production standee group`);
+    ok(expectedY > -0.5, `the canonical contact line (${expectedY}) sits above the pre-BW2-2 hardcoded -0.5 floor`);
     // BW2-2b item 4 (THE KILTER): the origin-shifted cellX/cellY placement now carries a tiny seeded
     // offset on top of the raw integer cell coords — assert against the INDEPENDENTLY re-derived
     // kilter for this exact seed key, not a bare integer equality.
@@ -876,11 +880,11 @@ group("23 — FIXED: interiorBuildPieces sizes through TRUE-SCALE (HUMAN_TRUE_HE
     ok(Math.abs(green.flooredX - 2) <= 0.06 + 1e-9 && Math.abs(green.flooredZ - 3) <= 0.06 + 1e-9,
       `the kilter offset itself stays within the spec's <=6% of a cell bound (dx=${(green.flooredX-2).toFixed(4)}, dz=${(green.flooredZ-3).toFixed(4)})`);
 
-    group("25b — BW2-2b STANDEE BASES: a plinth cylinder under every piece, radius 0.36x rendered width (BW2-4b item 3: reduced ~15% from 0.42 to break the huddle-blob), height ~0.09 (bumped from BW2-2's 0.04)");
-    ok(Math.abs(green.medBaseHeight - 0.09) < 1e-9, `medium piece's base cylinder height ${green.medBaseHeight} === BW2-2b's INTERIOR_BASE_HEIGHT (~0.09)`);
-    const expectedBaseRadius = green.medWidth * 0.36; // BW2-4b item 3: 0.42 -> 0.36
-    ok(Math.abs(green.medBaseRadius - expectedBaseRadius) < 1e-9,
-      `medium piece's base cylinder radius ${green.medBaseRadius} === rendered width (${green.medWidth}) x 0.36 = ${expectedBaseRadius}`);
+    group("25b — CL-R2 STANDEE SUPPORTS: a natural shallow strip under every piece; Medium depth equals one stair tread while width stays inside tactical ownership");
+    ok(green.medBaseForm === "shallow-rounded-strip", `medium piece uses the natural shallow support (${green.medBaseForm}), not a circular token`);
+    ok(Math.abs(green.medBaseHeight - 0.09) < 1e-9, `medium support height ${green.medBaseHeight} === 0.09`);
+    ok(Math.abs(green.medBaseDepth - 1 / 3) < 1e-9, `medium support depth ${green.medBaseDepth} === one stair tread (1/3 cell)`);
+    ok(green.medBaseWidth <= 0.82 + 1e-9, `medium support width ${green.medBaseWidth} remains inside its 1-cell tactical footprint`);
 
     group("26 — oversize clamp: wallHeightBase*0.95 cap + qa:oversize-clamped console.warn");
     ok(Math.abs(green.titanHeight - 2.4 * 0.95) < 1e-9, `titan (scaleTrue=100) clamps to wallHeightBase(2.4)*0.95=${2.4 * 0.95} (got ${green.titanHeight})`);

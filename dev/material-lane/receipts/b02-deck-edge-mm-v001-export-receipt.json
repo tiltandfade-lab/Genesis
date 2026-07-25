@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B02-deck-edge-culture-candidates-MM-v001",
+  "generatedAt": "2026-07-25T01:44:46.053Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/b02-deck-edge-mm-v001/b02-institutional-dressed-ashlar-v001.ptex": "8b362232c6d85dbd7154dd26d1be9f177bf63f7f2de3c4aeb5622413f6063150",
+    "dev/material-lane/graphs/b02-deck-edge-mm-v001/b02-institutional-frontier-coursed-v001.ptex": "330cc92d3ed88822ff8f71bce65fcc7a41331bd29a15bf11b76c3ed9003e2b24",
+    "dev/material-lane/graphs/b02-deck-edge-mm-v001/b02-upland-fitted-rubble-upstand-v001.ptex": "5f75dbb769910399522c1092f9f30557c1b73fb0b63f1f1e868e1d077189fe0c",
+    "dev/material-lane/graphs/b02-deck-edge-mm-v001/b02-upland-heavy-timber-edge-v001.ptex": "b6b459f19bd4e3ec001fe01d758b6ad41eff751ab9152b9d81d98ced564be6e3",
+    "dev/material-lane/graphs/b02-deck-edge-mm-v001/b02-upland-timber-cribbed-rubble-v001.ptex": "59df8ed801d7941111dea7efa0b37bf08ebfac3a3d8610cd8e2f94d27986ee3e"
+  },
+  "outputHashes": {
+    "b02-institutional-dressed-ashlar-v001_albedo.png": "fd5dd81efe0190614f7557b102430f1c37676d6cc5293d63e0ba3617e3796d30",
+    "b02-institutional-dressed-ashlar-v001_heightmap.png": "1b8b2df072243c13eb813a065c7d3436158dc0deb1dd3d42a40581f6f021f3e7",
+    "b02-institutional-dressed-ashlar-v001_normal.png": "2c73c7b43ba5b7d3720f5e21afd28485545c91b4100d15b36f068e12cb8d3d83",
+    "b02-institutional-dressed-ashlar-v001_orm.png": "420f41043166b7a76b0cbe893b766f0628d83b2a418e800d4397b77356a0b5fd",
+    "b02-institutional-frontier-coursed-v001_albedo.png": "8e5497a1edeb45f5457cd9ca35a833224f686b84a68208258c4e3c20a3f70b56",
+    "b02-institutional-frontier-coursed-v001_heightmap.png": "e7f0ea0f9c03d09a4692768cabb482cfbae2d406d6a24a896aa26dd560c77582",
+    "b02-institutional-frontier-coursed-v001_normal.png": "10d63a7cb17e5ce498f698240eb855c10e2924edb3fdb89adb3f36515d921131",
+    "b02-institutional-frontier-coursed-v001_orm.png": "4867c3d000394ced538f802a1b3326a97e0715e20149ecfd679669128095ac74",
+    "b02-upland-fitted-rubble-upstand-v001_albedo.png": "f0419ef2c8284d7f65260c85a2dae90ef872983e3fc2d3c46cb2f58df5f3bd42",
+    "b02-upland-fitted-rubble-upstand-v001_heightmap.png": "16d3370501c9739391d061551c1b1cedffd38cefb03cb94c15a276a5ee1182f5",
+    "b02-upland-fitted-rubble-upstand-v001_normal.png": "6e4dc39e662475172370e3119a8797a79f5ed2b7d02a46e1144adb0aaa25291c",
+    "b02-upland-fitted-rubble-upstand-v001_orm.png": "6aa451d058af99d141008202e3f8a240f7b9e15ac122ecb45aeb0552c09153fa",
+    "b02-upland-heavy-timber-edge-v001_albedo.png": "7692ff15d9c2de7b47a48903c6705f74683af55afafbe7d11b0ab1e48d7148cc",
+    "b02-upland-heavy-timber-edge-v001_heightmap.png": "0acedbe693f38e4899190a5bfc6c0ed275cf2fd496f679e8ff8a2d6f1fc9ca79",
+    "b02-upland-heavy-timber-edge-v001_normal.png": "ccfcbaa0d10aba2df2d13e29bf51984aec4d908490124148f418cb04c0cef866",
+    "b02-upland-heavy-timber-edge-v001_orm.png": "bd383e8d0194f16115714043daa48068ed5bdff7256f7bb1d27d857679ac8b45",
+    "b02-upland-timber-cribbed-rubble-v001_albedo.png": "130cd2dd7956577ef0e7cbb76b51e9c8515a2ea8c1edcb3de3219b70310fd2a2",
+    "b02-upland-timber-cribbed-rubble-v001_heightmap.png": "ac63bf81dc33b9006f0cec743d4859bb03312bf995bcf161bf96288f55386f4d",
+    "b02-upland-timber-cribbed-rubble-v001_normal.png": "9eb5f40d5622e9a1f2f592d0a614a3856852291d54cc0a0e76644a4b612d652a",
+    "b02-upland-timber-cribbed-rubble-v001_orm.png": "bab4098382e0035ed7e9864092c3aa7ad3677d26b44b9abd803c7acb362de997"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 20,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b02-deck-edge-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b02-deck-edge-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

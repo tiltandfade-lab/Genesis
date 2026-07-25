@@ -1,0 +1,104 @@
+{
+  "schema": "genesis.deck-edge-source-gate.v1",
+  "coverInvariant": "all candidates bind to equal cover-class geometry; source sprites own surface construction only",
+  "materialMakerApplied": false,
+  "boundaryGateRatio": 1.1,
+  "board": "dev/material-lane/proofs/b02-deck-edge-selected-v001/b02-deck-edge-selected-source-board-v001.png",
+  "results": [
+    {
+      "culture": "Institutional",
+      "label": "Dressed ashlar",
+      "source": "dev/material-lane/source-sprites/b02-deck-edge-v001/institutional-dressed-ashlar-source-v001.png",
+      "selectionMethod": "raw ImageGen pass",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 5.797,
+        "topBottomRms": 8.138,
+        "internalXJumpP95": 7.913,
+        "internalYJumpP95": 11.026,
+        "xBoundaryToInternalP95": 0.733,
+        "yBoundaryToInternalP95": 0.738,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "culture": "Institutional",
+      "label": "Frontier coursing",
+      "source": "dev/material-lane/source-sprites/b02-deck-edge-v001/institutional-frontier-coursed-source-v003.png",
+      "selectionMethod": "ImageGen phase retry v003",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 1.987,
+        "topBottomRms": 4.827,
+        "internalXJumpP95": 10.101,
+        "internalYJumpP95": 9.165,
+        "xBoundaryToInternalP95": 0.197,
+        "yBoundaryToInternalP95": 0.527,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "culture": "Upland",
+      "label": "Fitted rubble upstand",
+      "source": "dev/material-lane/source-sprites/b02-deck-edge-v001/upland-fitted-rubble-upstand-seamlocked-v001.png",
+      "selectionMethod": "ImageGen v001 + 32px continuous-field lock",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 0.0,
+        "topBottomRms": 0.0,
+        "internalXJumpP95": 12.937,
+        "internalYJumpP95": 20.133,
+        "xBoundaryToInternalP95": 0.0,
+        "yBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "culture": "Upland",
+      "label": "Heavy timber edge",
+      "source": "dev/material-lane/source-sprites/b02-deck-edge-v001/upland-heavy-timber-edge-source-v002.png",
+      "selectionMethod": "ImageGen periodic retry v002",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 3.532,
+        "topBottomRms": 9.591,
+        "internalXJumpP95": 21.05,
+        "internalYJumpP95": 9.891,
+        "xBoundaryToInternalP95": 0.168,
+        "yBoundaryToInternalP95": 0.97,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "culture": "Upland",
+      "label": "Timber-cribbed rubble",
+      "source": "dev/material-lane/source-sprites/b02-deck-edge-v001/upland-timber-cribbed-rubble-source-v001.png",
+      "selectionMethod": "raw ImageGen pass",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 21.36,
+        "topBottomRms": 18.139,
+        "internalXJumpP95": 22.044,
+        "internalYJumpP95": 25.919,
+        "xBoundaryToInternalP95": 0.969,
+        "yBoundaryToInternalP95": 0.7,
+        "boundaryJumpGate": true
+      }
+    }
+  ]
+}

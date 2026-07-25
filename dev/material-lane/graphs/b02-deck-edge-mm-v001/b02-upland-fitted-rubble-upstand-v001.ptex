@@ -1,0 +1,177 @@
+{
+  "connections": [
+    {
+      "from": "source",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 0
+    },
+    {
+      "from": "height_source",
+      "from_port": 0,
+      "to": "height",
+      "to_port": 0
+    },
+    {
+      "from": "height",
+      "from_port": 0,
+      "to": "normal",
+      "to_port": 0
+    },
+    {
+      "from": "height",
+      "from_port": 0,
+      "to": "ao",
+      "to_port": 0
+    },
+    {
+      "from": "metal",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 1
+    },
+    {
+      "from": "rough",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 2
+    },
+    {
+      "from": "normal",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 4
+    },
+    {
+      "from": "ao",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 5
+    },
+    {
+      "from": "height",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 6
+    }
+  ],
+  "label": "B01 fast lane / Fitted rubble upstand / sprite-first MM v001",
+  "name": "upland_fitted_rubble_upstand",
+  "node_position": {
+    "x": 0,
+    "y": 0
+  },
+  "nodes": [
+    {
+      "name": "source",
+      "node_position": {
+        "x": -600,
+        "y": -120
+      },
+      "parameters": {
+        "image": "%PROJECT_PATH%/../../source-sprites/b02-deck-edge-v001/upland-fitted-rubble-upstand-seamlocked-v001.png"
+      },
+      "type": "image"
+    },
+    {
+      "name": "height_source",
+      "node_position": {
+        "x": -600,
+        "y": 170
+      },
+      "parameters": {
+        "image": "%PROJECT_PATH%/../../depth-guides/b02-deck-edge-mm-v001/upland-fitted-rubble-upstand-height-guide-v001.png"
+      },
+      "type": "image"
+    },
+    {
+      "name": "height",
+      "node_position": {
+        "x": -250,
+        "y": 170
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 2,
+        "param2": 1
+      },
+      "type": "fast_blur"
+    },
+    {
+      "name": "normal",
+      "node_position": {
+        "x": 30,
+        "y": 100
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 0.28,
+        "param2": 0,
+        "param4": 1
+      },
+      "type": "normal_map"
+    },
+    {
+      "name": "ao",
+      "node_position": {
+        "x": 30,
+        "y": 260
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 16,
+        "param2": 0.24,
+        "param3": 1
+      },
+      "type": "occlusion2"
+    },
+    {
+      "name": "metal",
+      "node_position": {
+        "x": 30,
+        "y": -220
+      },
+      "parameters": {
+        "color": 0
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "name": "rough",
+      "node_position": {
+        "x": 30,
+        "y": -100
+      },
+      "parameters": {
+        "color": 0.86
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "export_paths": {},
+      "name": "Material",
+      "node_position": {
+        "x": 390,
+        "y": 20
+      },
+      "parameters": {
+        "albedo_color": {
+          "a": 1,
+          "b": 1,
+          "g": 1,
+          "r": 1,
+          "type": "Color"
+        },
+        "ao": 1,
+        "depth_scale": 0.022,
+        "emission_energy": 1,
+        "metallic": 1,
+        "normal": 1,
+        "roughness": 1,
+        "size": 9,
+        "sss": 0
+      },
+      "type": "material"
+    }
+  ]
+}

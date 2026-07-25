@@ -465,3 +465,23 @@ Batch B01 demonstrated the intended cost profile: two untouched ImageGen passes,
 prompt retry, one narrow continuous-field repair, and zero component reconstructions across four
 materials. The selected source receipt is
 `proofs/b01-fast-lane-v001/b01-fast-lane-selected-candidates-v002.json`.
+
+## Batch B02 reusable batch tooling — 2026-07-24
+
+Batch B02 extends the fast lane from one-off scripts to versioned multi-material helpers:
+
+- `compile-versioned-mm-batch.mjs` compiles an explicitly versioned graph directory twice,
+  requires the declared material count and four output channels, refuses overwrite, and emits a
+  byte-determinism receipt.
+- `verify-versioned-mm-batch.py` resolves a batch manifest and its source-gate receipt, then checks
+  albedo identity, inherited seams, non-flat depth, valid Godot ORM packing, and run equality.
+- `triage-b02-deck-edge-sources.py` renders five culture candidates on a truthful square 3x3 board
+  and records boundary/internal ratios rather than relying on visual seam claims.
+- `repair-b02-rubble-seams.py` is a declared narrow continuous-field edge lock; it is not valid for
+  directional courses, discrete components, or geometry-owned silhouettes.
+
+B02 also records a useful negative result: component reconstruction can pass topology and still
+fail the art gate. The fitted-rubble component rescue created oversized mortar gaps and a
+display-rack cadence, so the richer direct sprite plus a 32px continuous-field lock was retained.
+Do not promote a heavier rescue merely because it is deterministic. The cheapest candidate that
+passes both topology and visual character remains the preferred source.

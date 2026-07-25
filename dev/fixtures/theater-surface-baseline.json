@@ -3,10 +3,11 @@
   "branch": "refactor/theater-boot-split",
   "note": "Contract freeze for the theater-boot split. Regenerate ONLY with an explicit, explained contract change — never to green a diff.",
   "plain": {
-    "keyCount": 218,
+    "keyCount": 219,
     "keys": [
       "__setSpriteUnlitDebug",
       "__spriteScreenRects",
+      "_aoContactDiagForTest",
       "_brokenDoorVariantForTest",
       "_censusForTest",
       "_clayCameraPoseForTest",
@@ -227,6 +228,7 @@
     "types": {
       "__setSpriteUnlitDebug": "function",
       "__spriteScreenRects": "function",
+      "_aoContactDiagForTest": "function",
       "_brokenDoorVariantForTest": "function",
       "_censusForTest": "function",
       "_clayCameraPoseForTest": "function",
@@ -446,10 +448,11 @@
     }
   },
   "clayroom": {
-    "keyCount": 218,
+    "keyCount": 219,
     "keys": [
       "__setSpriteUnlitDebug",
       "__spriteScreenRects",
+      "_aoContactDiagForTest",
       "_brokenDoorVariantForTest",
       "_censusForTest",
       "_clayCameraPoseForTest",
@@ -670,6 +673,7 @@
     "types": {
       "__setSpriteUnlitDebug": "function",
       "__spriteScreenRects": "function",
+      "_aoContactDiagForTest": "function",
       "_brokenDoorVariantForTest": "function",
       "_censusForTest": "function",
       "_clayCameraPoseForTest": "function",

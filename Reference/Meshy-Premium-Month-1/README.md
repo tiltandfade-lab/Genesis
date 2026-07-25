@@ -585,11 +585,13 @@ gaps matter more than surface detail.
 ```text
 Simple low-poly medieval-fantasy forged-iron wall flame sconce for a modern tactical-diorama
 game. Match the reference image exactly: one thick tapered vertical mounting plate with two large
-mounting bosses, one stout angular square-bar bracket arm, one broad triangular lower brace, and
-one open octagonal brazier basket. Preserve the basket as a thick continuous upper ring connected
-to a small solid lower ash cup by exactly six thick widely spaced diagonal iron ribs. Keep the
-large spaces between the ribs truly open and keep the basket center completely empty as a runtime
-flame socket.
+mounting bosses, one stout square-bar bracket arm, one broad triangular lower brace, one short
+transverse cradle centered on the arm, one centered octagonal pedestal, and one open octagonal
+brazier basket. The arm and brace must meet the midpoint of the cradle; the pedestal must rise
+from that midpoint into the exact center of the ash cup. Preserve the basket as a thick continuous
+upper ring connected to a small solid lower ash cup by exactly eight thick widely spaced diagonal
+iron ribs. Keep the large spaces between the ribs truly open and keep the basket center completely
+empty as a runtime flame socket.
 
 Use chunky mechanically connected volumes, broad planar surfaces, restrained low-poly faceting,
 and one clean wrought-iron material region. No flame, ember, coal, fuel, glow, smoke, light rays,
@@ -617,7 +619,9 @@ Adam may save the download into `incoming/` under any name. Canonical intake nam
 M068-A passes only if:
 
 - the center remains empty and the background-facing basket gaps remain actual openings;
-- the top ring, six ribs, ash cup, arm, brace, mounting plate, and bosses remain legible in orbit;
+- the top ring, eight ribs, ash cup, centered pedestal and cradle, arm, brace, mounting plate, and
+  bosses remain legible in orbit;
+- the basket, cup, pedestal, cradle, arm, and brace retain one unmistakable centered load path;
 - no rib becomes a strand too thin to survive game-scale rendering and shadowing;
 - the basket can host a runtime flame and light without removing baked flame-like geometry;
 - the fixture remains readable against both bright and dark walls at the game camera;
@@ -626,7 +630,8 @@ M068-A passes only if:
 ### ImageGen correction record
 
 The first render displaced the horizontal arm from the basket's structural centerline. A
-single-object correction moved the arm and lower brace onto one centered load path beneath the
-ash cup while preserving the camera, mounting plate, two bosses, six open ribs, empty flame
-socket, material treatment, and background. Only the corrected reference above is approved for
-Meshy input.
+single-object correction changed surface detail but repeated the same structural error and was
+rejected. The approved replacement was regenerated around an explicit centered transverse
+cradle and octagonal pedestal: the wall arm and lower brace meet the cradle midpoint, which
+supports the ash cup on one visible vertical axis. Eight evenly distributed open ribs now match
+the octagonal rings cleanly. Only the replacement reference above is approved for Meshy input.

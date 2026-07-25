@@ -15,8 +15,9 @@
    dev/verify-dungeon-interior.mjs's checks 22-32 established for this sealed ES-module file) proves the
    FIX: the derived law replaces every hardcoded -0.5/-0.4/-0.495/-0.49/-0.48 mount point (pieces, combat
    units, dressing, decals, contact pools, standee bases, the acting ring), standee bases exist with the
-   spec'd radius/height, the contact pool is a soft gradient (not a flat disc), the acting ring wraps the
-   base rim, and fall-death's corpse tip keeps the base attached to the tipping standee (one group).
+   spec'd radius/height, the contact pool is a soft multiplicative gradient (not a flat disc), the
+   acting ring wraps the base rim, and fall-death's corpse tip keeps the base attached to the tipping
+   standee (one group).
 
    RED-FIRST (checked against f03cd4ed, the master tip immediately before this unit): `grep -c
    "interiorFloorTopAt\|INTERIOR_BASE_HEIGHT" src/ui/theater-boot.js` -> 0 (neither the law nor the base
@@ -489,7 +490,10 @@ async function runRenderCheck(){
       const law = T._floorContactLawForTest;
       r.expectedY = law.interiorStandeeContactY(r.mapTopA);
       r.baseCount = fig ? fig.children.filter((c) => c.userData && c.userData.standeeBase).length : 0;
-      r.baseRadius = fig && fig.children[1] && fig.children[1].geometry.parameters.radiusTop;
+      // CL-R2 replaced the legacy circular CylinderGeometry with a shallow rounded strip. The
+      // retained `interiorBaseRadius` is now only the selection-ring half-width contract.
+      r.baseRadius = fig && fig.userData.interiorBaseRadius;
+      r.baseWidth = fig && fig.userData.interiorBaseWidth;
       r.spriteWidth = fig && fig.userData.spriteBillboardMesh.geometry.parameters.width;
 
       // BW2-2b item 1 (RED-FIRST -> GREEN, LIVE VALUES): run the REAL per-frame facing/tilt pass and
@@ -523,22 +527,27 @@ async function runRenderCheck(){
       r.baseStillSiblingImmediate = fig.children[1] === actingBase;
       // let the real tween ticker (rAF + wall-clock Date.now()) actually run fall-death's 480ms duration
       // to completion, then re-run the facing pass once more (a corpse still renders every frame).
-      await new Promise((res) => setTimeout(res, 700));
+      await new Promise((res) => setTimeout(res, 1000));
       T._updateSpriteBillboardYawForTest();
       r.postTipChildCountFinal = fig.children.length;
       r.figRotationXAfterTip = fig.rotation.x;              // expect PI/2 — the corpse tip, on the OUTER group
       r.wrapRotationXAfterTip = fig.userData.standeeWrap.rotation.x; // expect UNCHANGED — still the plain camera tilt
 
-      // BW2-2 addendum + BW2-2b item 5a: the shared contact-pool gradient texture, sampled directly off
-      // its own backing <canvas> in a REAL browser (ctx.createRadialGradient exists here, unlike
-      // jsdom) — center alpha must read denser than the rim, which must read essentially transparent.
+      // CL-R2 follow-up: sample the shared contact-pool multiplier directly off its own backing
+      // <canvas> in a REAL browser. The center must be darker than the rim, while the rim must be
+      // opaque white—the exact multiply identity—so the quad disappears without alpha compositing.
       const poolTex = T._interiorPoolTextureForTest();
+      const poolMat = T._interiorPoolMaterialForTest();
       const pctx = poolTex.image.getContext("2d");
       const size = poolTex.image.width;
-      const centerA = pctx.getImageData(size / 2, size / 2, 1, 1).data[3];
-      const edgeA = pctx.getImageData(1, size / 2, 1, 1).data[3];
-      r.poolCenterAlpha = centerA;
-      r.poolEdgeAlpha = edgeA;
+      const center = pctx.getImageData(size / 2, size / 2, 1, 1).data;
+      const edge = pctx.getImageData(1, size / 2, 1, 1).data;
+      r.poolCenterRGB = [center[0], center[1], center[2]];
+      r.poolEdgeRGB = [edge[0], edge[1], edge[2]];
+      r.poolCenterAlpha = center[3];
+      r.poolEdgeAlpha = edge[3];
+      r.poolUsesMultiplyBlending = poolMat.userData.contactBlendMode === "multiply";
+      r.poolToneMapped = poolMat.toneMapped;
       return r;
     });
 
@@ -551,7 +560,8 @@ async function runRenderCheck(){
       ok(result.figFound, "setUnits mounted a findable unit u1");
       ok(Math.abs(result.figY - result.expectedY) < 1e-9, `combat unit contact Y=${result.figY} matches the law's own derivation (${result.expectedY}) off the LIVE cached floor-top map — not the pre-BW2-2 hardcoded -0.5`);
       ok(result.baseCount === 1, `exactly one base mesh on the combat standee (found ${result.baseCount})`);
-      ok(Math.abs(result.baseRadius - result.spriteWidth * 0.36) < 1e-6, `combat standee base radius (${result.baseRadius}) === its own rendered width (${result.spriteWidth}) x 0.36`);
+      ok(Math.abs(result.baseRadius - result.baseWidth * 0.5) < 1e-6,
+        `combat standee selection-ring radius (${result.baseRadius}) === the natural support width (${result.baseWidth}) / 2`);
 
       group("21b — GREEN (live values, BW2-2b item 1): under a REAL render pass, the base's world-up stays +Y (outer group rotation.x === 0) while the sprite's inner wrap alone carries the nonzero camera-pitch tilt");
       ok(result.figRotationXBeforeTip === 0, `BEFORE any verb plays, the OUTER group's rotation.x (what the base/ring inherit as plain siblings) is exactly 0 — floor-flat — found ${result.figRotationXBeforeTip}`);
@@ -577,10 +587,14 @@ async function runRenderCheck(){
       ok(Math.abs(result.figRotationXAfterTip - Math.PI / 2) < 0.05, `the OUTER group's rotation.x reaches the floor plane (PI/2=${(Math.PI/2).toFixed(4)}) once fall-death's tween completes — found ${result.figRotationXAfterTip} — tipping \`fig\` tips the base (a plain sibling) right along with it`);
       ok(Math.abs(result.wrapRotationXAfterTip - result.wrapRotationXBeforeTip) < 1e-9, `the sprite's inner wrap's OWN rotation.x is UNCHANGED by the corpse tip (still just the plain camera-pitch tilt, ${result.wrapRotationXAfterTip}) — verb-tilt and camera-tilt never fight over the same field`);
 
-      group("24 — GREEN (live Chrome): the contact pool is a real soft gradient, INTENSIFIED per BW2-2b item 5a — center alpha > edge alpha, core reads >=0.65 alpha (spec: ~0.7, was 0.5)");
-      ok(result.poolCenterAlpha >= Math.round(0.65 * 255), `pool texture center alpha (${result.poolCenterAlpha}/255 = ${(result.poolCenterAlpha/255).toFixed(2)}) reads >= 0.65 (BW2-2b spec: core intensified to ~0.7)`);
-      ok(result.poolEdgeAlpha < 10, `pool texture edge alpha (${result.poolEdgeAlpha}/255) reads as fully feathered/transparent`);
-      ok(result.poolCenterAlpha > result.poolEdgeAlpha, `center alpha (${result.poolCenterAlpha}) > edge alpha (${result.poolEdgeAlpha}) — a real gradient, not a flat disc`);
+      group("24 — GREEN (live Chrome): the contact pool is a true multiply gradient — dark center, opaque-white identity rim, no tone-map remap");
+      ok(result.poolUsesMultiplyBlending, "pool material uses THREE.MultiplyBlending");
+      ok(result.poolToneMapped === false, "pool multiplier bypasses material tone mapping so white remains the exact identity");
+      ok(result.poolCenterRGB.every((v) => v <= 70), `pool center RGB (${result.poolCenterRGB.join(",")}) reads near the authored 64/255 multiplier`);
+      ok(result.poolEdgeRGB.every((v) => v >= 245), `pool rim RGB (${result.poolEdgeRGB.join(",")}) reads within filtered-edge tolerance of white multiply identity`);
+      ok(result.poolCenterRGB[0] < result.poolEdgeRGB[0], `center multiplier (${result.poolCenterRGB[0]}) is darker than rim (${result.poolEdgeRGB[0]}) — a real radial occlusion gradient`);
+      ok(result.poolCenterAlpha === 255 && result.poolEdgeAlpha === 255,
+        `center/rim alpha stay fully opaque (${result.poolCenterAlpha}/${result.poolEdgeAlpha}); RGB owns multiply strength`);
     }
   } catch(e){
     fail++; console.error("  FAIL: live-Chrome render check threw: " + (e && e.message));

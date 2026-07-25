@@ -1,12 +1,12 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-24
+updated: 2026-07-25
 ---
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-24, CL-R2 visual checkpoint) — COMPLETE SPRITE CITIZENSHIP CANDIDATE [Codex]
+## ⭐ Latest (2026-07-25, CL-R2 visual checkpoint) — COMPLETE SPRITE CITIZENSHIP CANDIDATE [Codex]
 
 Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`. **Not merged or pushed.
 Fable re-gates and lands. FULL CI PENDING.**
@@ -22,18 +22,26 @@ Fable re-gates and lands. FULL CI PENDING.**
   placement, 1-pixel arrows / 5-pixel Shift+arrows, alpha-derived contact reset, compiled reset,
   normalized and pixel readouts, content bounds, and alpha cutoff. Overlay values compile into the
   registry; the old `floor` field migrates at the generator boundary.
-- The inspector compares canonical true scale against a clearly labelled 1–30-foot diagnostic cap
-  without mutating `worldHeight`. True scale proves the 60-foot Kraken honestly dominates and
-  requires a matching encounter-scale environment; the cap is only a readable comparison.
+- The inspector opens in preferred 1–30-foot presentation scale without mutating `worldHeight` or
+  tactical occupancy. True scale remains one click away as the canonical size check and proves the
+  60-foot Kraken honestly requires a matching encounter-scale environment.
 - Governed Clayroom zoom now reaches the 0.12 clamp (about 8.3× closer than fit). Visible standee
   supports use deterministic OBB separation: the banked seven-piece lineup records one slight
   relocation and zero remaining overlaps, while tactical cell ownership remains unchanged.
 - Every soft contact shadow is linked back to its standee and follows its final position/yaw. The
   pool is larger and slightly biased beyond the support, so it remains visible instead of hiding
-  completely underneath the base.
+  completely underneath the base. Its opaque-white identity rim and gray radial texture now use
+  true multiply blending, so contact stays darker than an already-shadowed floor value.
 - A shadowless camera-side spotlight lives on a sprite-only light layer and uses gentle falloff,
-  improving face colour/readability without lifting the room. Selection emits only from the
-  shallow vertical sidewall of the base as a cyan glow ring; the sprite and base top stay unlit.
+  improving face colour/readability without lifting the room. Selection emits from the shallow
+  vertical sidewall of the base as a cyan glow ring; the sprite and base top stay unlit. There is no
+  hidden center PointLight: one additive spill shaped to the rounded support sits immediately beneath
+  it, so only a soft neon feather escapes around the blue material. The receipt proves selection
+  handoff hides the old spill before exactly one new base emits.
+- Standee cast shadows now use the sprite texture's alpha silhouette for directional/spot depth
+  shadows and point-light distance shadows. The full rectangular edge shell remains visible but
+  cannot cast, removing the floating-card rectangles seen in daylight and moonlight without adding
+  a shadow draw.
 - No environment material was added. Diagnostic modes now retain a 0.06 shadowless HemisphereLight
   floor: enough sky/ground value difference to read stair treads, risers, and wall turns in shadow,
   without weakening the direct-light shadow or inventing another visible source.
@@ -43,8 +51,9 @@ Fable re-gates and lands. FULL CI PENDING.**
   light recipes. Evidence: `dev/clay-captures/cl-r2-sprite-citizenship/` (early/settled true scale,
   cap/edge live frames, five lighting contexts, composed sheet, JSON receipt, and separate
   measurements; zero console errors).
-- Focused gates: Clayroom 206/206; sprite registry 27/27; theater sprites 12/12; floor contact
-  51/51; dungeon interior 291/291; manifest OK. **FULL CI PENDING.**
+- Focused gates: Clayroom 208/208; sprite registry 27/27; theater sprites 12/12; floor contact
+  79/79 including live-Chrome multiply pixels; dungeon interior 291/291; manifest OK.
+  **FULL CI PENDING.**
 
 ## ⭐ Latest (2026-07-24, CL-R1 visual checkpoint) — SHARED LIGHT RECIPES + SMOOTH LORE-NATIVE TORCH [Codex]
 

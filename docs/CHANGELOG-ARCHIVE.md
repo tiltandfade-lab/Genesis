@@ -14,6 +14,34 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-11 — BW3 + THE FULL VISUAL CAMPAIGN CLOSED: three waves in one sitting; the engine converged on the mocks
+
+**The arc.** Adam's mock frames became the reference model; three waves landed end to end:
+BW2 (10 units: crisp channel/PS1 retired game-wide, beat camera, floor contact + bases +
+kilter, occlusion + clip margin, textures + variant roll, value plunge, silhouette + furniture
++ extrusion props, gallery, UI) → BW3 (composer seam byte-identical, light shafts + mote
+coupling, seam-softening, LIT SPRITES + THE BRIGHTNESS LAW, post suite: tilt-shift DoF +
+emissive bloom + filmic grade + the OutputPass sRGB fix). BW4 MOTION & FEEL specced + queued.
+
+**Laws ruled this session (DESIGN registered):** PS1 RETIRED GAME-WIDE · FLOOR CONTACT ·
+OCCLUSION + CLIP MARGIN · PROP PERSPECTIVE (flat art on contextual-depth extrusions,
+edge-sampled sides, tier ladder box/silhouette/card) · THE KILTER · THE BRIGHTNESS LAW
+(full-bright only in full white light) · SPRITE PURITY AMENDMENT (purity = no distortion,
+lighting REQUIRED) · UV MAPPING LAWS (floor 1:1/cell — grout aligns with the combat grid) ·
+COLUMN DEMOTION (furniture is cover) · THE FEEL LAWS (BW4).
+
+**Also:** MOCK-GEN reference loop (PACKET-01 frames = the targets; PACKET-02 textures folded,
+18/18; PACKET-03 flat-props authored + style-rider v2) · grid-snap (spritefusion) proven
+destructive, reconstruction gate kept · corpus unification r2 (hue-safe; r1 reverted at the
+eyes gate) · ROOM-GRAMMAR + BEAUTY-WAVE-4 specced · 6 real pre-existing bugs fixed by
+executors in passing (mote origin-shift, preview importmap, stale shims, kaiju leak).
+
+**Verification at close:** every unit orchestrator re-gated; interior 287/0 · dressing 451/0 ·
+scene-direction 17/0 · floor-contact 48/0 · occlusion 24/0 · silhouette 87/0 · texel 116/0 ·
+shafts 44/0 · seams 146/0 · crisp 37/0 · sprites 12/0 · manifest OK · loop gate 5/5 at every
+landing · fps 124-164 with all passes. Deferred: BW2-4b's quiet camera-key shadow (taste
+call), wall-hang axis 7b (unreproduced), trim GL-wiring, gallery-pass harness side effect,
+GIT-LFS (tomorrow, Adam), audio design night.
 ## 2026-07-10 (later night) — THE BEAUTY WAVE EXECUTED: all 11 units + VP8 landed, the diorama transformed
 
 **Context.** Adam delegated the taste verdicts to Fable ("you've been outsmarting me") and said

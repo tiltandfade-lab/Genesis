@@ -18,8 +18,8 @@ if (!receiptPath || !outputPath) {
 
 const receipt = JSON.parse(fs.readFileSync(receiptPath, "utf8"));
 const canonical = receipt.canonical;
-const capped = receipt.diagnosticCap;
-if (!canonical || !capped) throw new Error("receipt is missing canonical/capped snapshots");
+const capped = receipt.preferredPresentation;
+if (!canonical || !capped) throw new Error("receipt is missing canonical/preferred-presentation snapshots");
 
 const cappedBySlug = Object.fromEntries(capped.lineup.map((row) => [row.slug, row]));
 const rows = canonical.lineup.map((row) => {

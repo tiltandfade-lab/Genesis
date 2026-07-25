@@ -176,8 +176,8 @@ function clayRoomLightingBenchFixtureFrom(record){
    The 60-foot Kraken is intentionally retained despite its review-fail/prototype-admitted state:
    Adam asked to see the actual largest creature beside a human and to flag overly wide big art for
    taller/upright regeneration. Hiding it behind the already-approved subset would defeat that test.
-   The candidate cap is DIAGNOSTIC ONLY. It creates an honest A/B for Adam; it is not a production
-   scale ruling and never mutates registry worldHeight. */
+   The 1–30-foot cap is the preferred PRESENTATION SCALE. True scale remains available as an honest
+   size-spectrum check; neither view mutates registry worldHeight or tactical occupancy. */
 var CLAY_SPRITE_CITIZENSHIP_FIXTURE = Object.freeze({
   id: "cl-f03-sprite-citizenship",
   version: 1,
@@ -187,7 +187,7 @@ var CLAY_SPRITE_CITIZENSHIP_FIXTURE = Object.freeze({
   candidatePresentationCap: Object.freeze({
     minFeet: 1,
     maxFeet: 30,
-    label: "diagnostic preview only — canonical height and tactical footprint stay unchanged"
+    label: "preferred presentation scale — canonical height and tactical footprint stay unchanged"
   }),
   stair: Object.freeze({
     id: "sprite-stair-fit",

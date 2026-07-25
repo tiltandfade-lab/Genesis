@@ -1525,10 +1525,10 @@ const check = (name, cond, detail = "") =>
       && fixture.cast.some((row) => row.label === "Kraken" && row.tacticalSpanCells === 4));
     check("33c. visible support depth is authored from exactly one third-cell stair tread",
       fixture.stair.steps === 3 && fixture.stair.treadDepth === 1 / 3);
-    check("33d. true-scale remains canonical while the 1–30 ft presentation cap is explicitly diagnostic",
+    check("33d. the preferred 1–30 ft presentation scale preserves canonical height and tactical truth",
       fixture.candidatePresentationCap.minFeet === 1
       && fixture.candidatePresentationCap.maxFeet === 30
-      && /diagnostic preview only/.test(fixture.candidatePresentationCap.label));
+      && /preferred presentation scale/.test(fixture.candidatePresentationCap.label));
     check("33e. every CL-F03 cast entry has compiled normalized content bounds",
       fixture.cast.every((row) => {
         const entry = win.__claySpriteRegistry()[row.slug];
@@ -1561,9 +1561,9 @@ const check = (name, cond, detail = "") =>
     && /\[0,\s*Math\.PI\s*\/\s*4,\s*Math\.PI\s*\/\s*2\]/.test(bootSrc)
     && /claySpriteStairSample/.test(bootSrc)
     && /stairFit/.test(bootSrc));
-  check("33j. the inspector exposes true-scale/cap, seven cast selectors, edge view, and neutral/dark/warm/cool/daylight response",
-    /TRUE SCALE/.test(bootSrc)
-    && /1–30 FT CAP PREVIEW/.test(bootSrc)
+  check("33j. the inspector exposes preferred presentation/true-scale check, seven cast selectors, edge view, and all light responses",
+    /TRUE SCALE CHECK/.test(bootSrc)
+    && /PRESENTATION · 1–30 FT/.test(bootSrc)
     && /LIVE CAST/.test(bootSrc)
     && /"edge",\s*"EDGE"/.test(bootSrc)
     && /"clay-neutral-truth",\s*"NEUTRAL"/.test(bootSrc)
@@ -1612,6 +1612,25 @@ const check = (name, cond, detail = "") =>
     && /S\.hemiLight\.intensity\s*=\s*ITR_SHADOW_FORM_HEMI_FLOOR/.test(bootSrc)
     && /environmentFormFill/.test(bootSrc)
     && /tread\/riser value floor/.test(bootSrc));
+  check("33q. contact pools multiply the floor while selected bases emit support-shaped neon spill with no center bulb",
+    /blending:\s*THREE\.MultiplyBlending/.test(bootSrc)
+    && /toneMapped:\s*false/.test(bootSrc)
+    && /contactMultiplyIdentityRim/.test(bootSrc)
+    && /const\s+CLAY_SELECTION_BASE_NEON_DEPTH_SCALE\s*=\s*1\.72/.test(bootSrc)
+    && /claySelectionBaseNeonTexture/.test(bootSrc)
+    && /blending:\s*THREE\.AdditiveBlending/.test(bootSrc)
+    && /emissionSource\s*=\s*"emissive-sidewall"/.test(bootSrc)
+    && /footprintShape\s*=\s*"support-rounded-strip"/.test(bootSrc)
+    && /centerPointLight:\s*false/.test(bootSrc)
+    && /selectionBaseNeon/.test(bootSrc));
+  check("33r. sprite art is the sole alpha-silhouette caster for depth and distance shadow lights",
+    /mesh\.customDepthMaterial\s*=\s*new\s+THREE\.MeshDepthMaterial/.test(bootSrc)
+    && /mesh\.customDistanceMaterial\s*=\s*new\s+THREE\.MeshDistanceMaterial/.test(bootSrc)
+    && /map:\s*tex,\s*alphaTest:\s*alphaCutoff,\s*side:\s*THREE\.DoubleSide/.test(bootSrc)
+    && /shell\.castShadow\s*=\s*false/.test(bootSrc)
+    && /shadowSilhouette/.test(bootSrc)
+    && /cast shadow alpha silhouette · edge shell non-casting/.test(bootSrc)
+    && /S\.clayRoomSpriteScaleMode\s*=\s*"diagnostic-cap"/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

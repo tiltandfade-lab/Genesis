@@ -3247,8 +3247,8 @@ function buildSpriteBillboardMesh(tex, w, h, entry){
   mesh.position.set((0.5 - footX) * w, (footY - 0.5) * h, STANDEE_SIDE_SHELL_THICKNESS / 2 + 0.001);
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2 (real light sources + cast shadows, interiors only):
   // a billboard CASTS a shadow (so creature silhouettes fall on the interior floor) via a dedicated
-  // alpha-tested depth material (a plain opaque depth pass would cast a solid SQUARE shadow off the
-  // plane's full quad, not the sprite's actual cutout silhouette) but never RECEIVES one (a receiving
+  // alpha-tested depth + distance material (a plain opaque shadow pass would cast a solid SQUARE
+  // shadow off the plane's full quad, not the sprite's actual cutout silhouette) but never RECEIVES one (a receiving
   // billboard would show other casters' shadows smeared across its own flat alpha-cutout face, which
   // reads as a lighting bug, not grounding). Harmless when renderer.shadowMap.enabled is false (the
   // combat/tabletop path, §2's untouched "no shadow maps" ruling) — shadowMap being globally off means
@@ -3256,7 +3256,13 @@ function buildSpriteBillboardMesh(tex, w, h, entry){
   mesh.castShadow = true;
   mesh.receiveShadow = false;
   mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
-    map: tex, alphaTest: alphaCutoff, depthPacking: THREE.RGBADepthPacking
+    map: tex, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthPacking: THREE.RGBADepthPacking
+  });
+  // Directional/spot lights use customDepthMaterial; point lights use customDistanceMaterial.
+  // Both sample the already-resident sprite alpha, so every production shadow-light type receives
+  // the same cutout silhouette without adding a second caster or another texture.
+  mesh.customDistanceMaterial = new THREE.MeshDistanceMaterial({
+    map: tex, alphaTest: alphaCutoff, side: THREE.DoubleSide
   });
   const g = new THREE.Group();
   // BW2-2b item 1 (FLOOR-ALIGNED BASES — "the bug"): the sprite mesh lives in its OWN inner wrapper,
@@ -3278,7 +3284,10 @@ function buildSpriteBillboardMesh(tex, w, h, entry){
     standeeSideShellMaterials()
   );
   shell.position.set((0.5 - footX) * w, (footY - 0.5) * h, 0);
-  shell.castShadow = true;
+  // The shell gives the standee a visible physical edge, but it is still a full rectangular box.
+  // If it enters a shadow map it projects that hidden card shape behind the alpha-cut sprite. The
+  // cutout plane above is the sole shadow caster; removing this redundant caster is also cheaper.
+  shell.castShadow = false;
   shell.receiveShadow = false;
   shell.userData.standeeSideShell = true;
   shell.userData.spriteSlug = spriteSlug;
@@ -3333,7 +3342,7 @@ function buildSpriteBillboard(entry){
 function interiorSpriteBillboard(entry, wallHeightCap){
   const tex = spriteTextureFor(entry); // S5: resolves through entry's own admission fields, not just the slug
   if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
-  // A caller-supplied scaleVsHuman is an explicit presentation override (the CL-R2 diagnostic cap
+  // A caller-supplied scaleVsHuman is an explicit presentation override (the CL-R2 preferred cap
   // uses it without mutating authored worldHeight), so it wins over the registry's canonical value.
   const scaleTrue = (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
     ? entry.scaleVsHuman
@@ -4001,13 +4010,15 @@ function syncStandeeContactBlob(fig){
 }
 
 // BW2-2 ADDENDUM (Adam, mid-flight review — "the contact shadow... really sells the illusion"): the
-// contact pool is now a SOFT RADIAL GRADIENT quad (dark center feathering to fully transparent at the
-// rim), replacing VP7's flat hard-edged disc — matches the mock's shadow hugging the acting knight's
-// base. ONE shared gradient CanvasTexture (never a per-standee canvas — the gradient SHAPE is identical
-// everywhere; only the quad's own world-space SCALE differs per standee footprint), linear-filtered
-// (SPRITE PURITY's nearest-only rule guards CHARACTER pixels — buildSpriteBillboardMesh's own header
-// comment names the exemption for exactly this kind of non-character ground shadow/blob quad — a
-// smooth gradient with visible texel edges would read as a rendering bug, not a soft shadow).
+// contact pool is a SOFT RADIAL MULTIPLY quad, replacing VP7's flat hard-edged disc. The texture is
+// opaque white at its rim (multiply identity) and falls toward dark gray at contact. THREE's
+// MultiplyBlending therefore computes `floor * pool` after the floor has already received ambient and
+// diegetic shadow: the contact patch remains darker than an already-shadowed tread instead of merely
+// painting a second flat black value over it. ONE shared gradient CanvasTexture (never a per-standee
+// canvas — the gradient SHAPE is identical everywhere; only the quad's own world-space SCALE differs
+// per standee footprint), linear-filtered (SPRITE PURITY's nearest-only rule guards CHARACTER pixels —
+// buildSpriteBillboardMesh's own header comment names the exemption for exactly this kind of
+// non-character ground shadow/blob quad).
 let INTERIOR_POOL_TEXTURE = null;
 function interiorPoolTexture(){
   if(INTERIOR_POOL_TEXTURE) return INTERIOR_POOL_TEXTURE;
@@ -4022,20 +4033,22 @@ function interiorPoolTexture(){
   // call sites never need their own null-guard.
   const ctx = canvas.getContext && canvas.getContext("2d");
   if(ctx && typeof ctx.createRadialGradient === "function"){
-  const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  // BW2-2b item 5a (CONTACT AO, INTENSIFIED): core opacity 0.5 -> ~0.7, TIGHT to the plinth rim — Adam's
-  // read: "the mock's subtle drop shadow on the figurine base reads MORE than ours." The core now stays
-  // dense out to a slightly SMALLER fraction of the pool's total radius (0.55 vs the old 0.62) so the
-  // darkest band hugs the base rim more closely before it starts feathering, matching the mock's tighter
-  // shadow silhouette rather than a broad soft wash.
-  grad.addColorStop(0, "rgba(0,0,0,0.7)");     // dense core at the base contact line (BW2-2b: 0.5 -> ~0.7)
-  grad.addColorStop(0.55, "rgba(0,0,0,0.6)");  // core stays dense out to just past the base's OWN radius (tighter than BW2-2's 0.62)
-  grad.addColorStop(1, "rgba(0,0,0,0)");       // feathers fully transparent at the rim
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, size, size);
+    // White is the multiply identity, so the square quad disappears completely outside the soft pool.
+    // Gray—not alpha—owns the occlusion strength. This keeps the result load-bearing in both lit and
+    // already-shadowed floor values; the contact core multiplies either value down proportionally.
+    ctx.fillStyle = "rgb(255,255,255)";
+    ctx.fillRect(0, 0, size, size);
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgb(64,64,64)");      // 0.25× at the hidden center beneath the standee
+    grad.addColorStop(0.46, "rgb(92,92,92)");   // dense contact band hugging the support
+    grad.addColorStop(0.72, "rgb(170,170,170)");// readable occlusion just beyond the base edge
+    grad.addColorStop(1, "rgb(255,255,255)");   // exact multiply identity at the rim
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
   }
   const tex = new THREE.CanvasTexture(canvas);
   tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; // deliberately NOT nearestify() — SPRITE PURITY's carve-out for non-character ground shadows
+  tex.userData.contactMultiplyMap = true;
   INTERIOR_POOL_TEXTURE = tex;
   return tex;
 }
@@ -4049,9 +4062,14 @@ let INTERIOR_POOL_MAT = null;
 function interiorPoolMaterial(){
   if(!INTERIOR_POOL_MAT){
     INTERIOR_POOL_MAT = new THREE.MeshBasicMaterial({
-      map: interiorPoolTexture(), transparent: true, opacity: 0.94,
-      depthWrite: false, side: THREE.DoubleSide
+      map: interiorPoolTexture(),
+      transparent: false,
+      blending: THREE.MultiplyBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      toneMapped: false
     });
+    INTERIOR_POOL_MAT.userData.contactBlendMode = "multiply";
   }
   return INTERIOR_POOL_MAT;
 }
@@ -4080,6 +4098,8 @@ function addInteriorContactBlob(group, x, z, texWidth, floorTop, texDepth){
   mesh.userData.contactWidth = texWidth;
   mesh.userData.contactDepth = Number.isFinite(texDepth) ? texDepth : texWidth;
   mesh.userData.contactPoolDiameter = poolRadius * 2;
+  mesh.userData.contactBlendMode = "multiply";
+  mesh.userData.contactMultiplyIdentityRim = true;
   mesh.renderOrder = 2;
   group.add(mesh);
   return mesh;
@@ -13969,6 +13989,16 @@ function clayRoomSpriteCitizenshipSnapshot(){
       footY: node.userData.footY,
       contentBounds: node.userData.contentBounds,
       alphaCutoff: node.userData.alphaCutoff,
+      shadowSilhouette: node.userData.spriteBillboardMesh ? {
+        planeCasts: !!node.userData.spriteBillboardMesh.castShadow,
+        alphaDepth: !!(node.userData.spriteBillboardMesh.customDepthMaterial
+          && node.userData.spriteBillboardMesh.customDepthMaterial.map
+          && node.userData.spriteBillboardMesh.customDepthMaterial.alphaTest === node.userData.alphaCutoff),
+        alphaDistance: !!(node.userData.spriteBillboardMesh.customDistanceMaterial
+          && node.userData.spriteBillboardMesh.customDistanceMaterial.map
+          && node.userData.spriteBillboardMesh.customDistanceMaterial.alphaTest === node.userData.alphaCutoff),
+        shellCasts: !!(node.userData.standeeSideShell && node.userData.standeeSideShell.castShadow)
+      } : null,
       collisionRelocated: !!node.userData.standeeCollisionRelocated,
       collisionNudge: [
         +(node.userData.standeeCollisionNudgeX || 0).toFixed(4),
@@ -13977,10 +14007,24 @@ function clayRoomSpriteCitizenshipSnapshot(){
       contactShadow: node.userData.contactBlobMesh ? {
         linked: node.userData.contactBlobMesh.userData.linkedSceneObjectId === node.userData.sceneObjectId,
         poolDiameter: node.userData.contactBlobMesh.userData.contactPoolDiameter,
-        offset: node.userData.contactBlobMesh.userData.contactOffset
+        offset: node.userData.contactBlobMesh.userData.contactOffset,
+        blendMode: node.userData.contactBlobMesh.userData.contactBlendMode,
+        multiplyIdentityRim: !!node.userData.contactBlobMesh.userData.contactMultiplyIdentityRim
       } : null,
       selectionBaseRingGlow: !!(node.userData.standeeBaseMesh
         && node.userData.standeeBaseMesh.userData.claySelectionBaseRingGlow),
+      selectionBaseNeon: node.userData.claySelectionBaseNeon ? {
+        linked: node.userData.claySelectionBaseNeon.userData.linkedSceneObjectId === node.userData.sceneObjectId,
+        visible: !!node.userData.claySelectionBaseNeon.visible,
+        source: node.userData.claySelectionBaseNeon.userData.emissionSource,
+        footprintShape: node.userData.claySelectionBaseNeon.userData.footprintShape,
+        width: node.userData.claySelectionBaseNeon.userData.spillWidth,
+        depth: node.userData.claySelectionBaseNeon.userData.spillDepth,
+        additive: node.userData.claySelectionBaseNeon.material
+          && node.userData.claySelectionBaseNeon.material.blending === THREE.AdditiveBlending,
+        centerPointLight: false,
+        castShadow: !!node.userData.claySelectionBaseNeon.castShadow
+      } : null,
       regenRecommended: !!node.userData.spriteRegenRecommended,
       selected: spriteSlug === S.clayRoomSelectedSpriteSlug
     });
@@ -13992,7 +14036,7 @@ function clayRoomSpriteCitizenshipSnapshot(){
   return {
     fixtureId: S.clayRoomFixtureId,
     fixtureVersion: fixture.version,
-    scaleMode: S.clayRoomSpriteScaleMode || "true-scale",
+    scaleMode: S.clayRoomSpriteScaleMode || "diagnostic-cap",
     selectedSlug: S.clayRoomSelectedSpriteSlug || fixture.selectedSlug,
     selectedView: S.clayRoomSelectedSpriteView || "face",
     supportForm: "shallow-rounded-strip",
@@ -14849,6 +14893,7 @@ window.Theater._floorContactLawForTest = {
 // shadow) so a harness can sample its pixels and assert center-alpha > edge-alpha without a live
 // WebGLRenderer.
 window.Theater._interiorPoolTextureForTest = function(){ return interiorPoolTexture(); };
+window.Theater._interiorPoolMaterialForTest = function(){ return interiorPoolMaterial(); };
 // BW2-2 — TEST-ONLY SEAM: exposes findUnit directly so a harness can inspect a MOUNTED combat unit's
 // live THREE.Group (position/userData/children) after a real setInteriorBoard+setUnits sequence,
 // without a public getter existing anywhere in product code (nothing outside this file's own verb
@@ -17941,6 +17986,100 @@ function clayRoomStandeeForSelectionNode(node){
   }
   return null;
 }
+// CL-R2 selection follow-up — selected support illumination must read as NEON emitted by the blue
+// vertical sidewall itself, never as a point bulb hidden at the base center. Standard real-time
+// emissive materials do not illuminate nearby pixels, so the visible emission is paired with ONE
+// very cheap, additive floor-spill quad shaped to the support's rounded-strip footprint. The opaque
+// support hides its bright center; only the cyan feather immediately outside the physical sidewall
+// remains visible. It adds no scene light, no extra shadow caster, and follows base relocation/yaw as
+// a child of that same base.
+const CLAY_SELECTION_BASE_NEON_COLOR = 0x53d5ff;
+const CLAY_SELECTION_BASE_NEON_WIDTH_SCALE = 1.24;
+const CLAY_SELECTION_BASE_NEON_DEPTH_SCALE = 1.72;
+let CLAY_SELECTION_BASE_NEON_TEXTURE = null;
+let CLAY_SELECTION_BASE_NEON_MATERIAL = null;
+let CLAY_SELECTION_BASE_NEON_GEOMETRY = null;
+function claySelectionBaseNeonTexture(){
+  if(CLAY_SELECTION_BASE_NEON_TEXTURE) return CLAY_SELECTION_BASE_NEON_TEXTURE;
+  const size = 128;
+  const canvas = document.createElement("canvas");
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext && canvas.getContext("2d");
+  if(ctx && typeof ctx.createRadialGradient === "function"){
+    ctx.clearRect(0, 0, size, size);
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgba(255,255,255,0.72)");
+    grad.addColorStop(0.46, "rgba(255,255,255,0.50)");
+    grad.addColorStop(0.74, "rgba(255,255,255,0.20)");
+    grad.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.userData.claySelectionBaseNeonTexture = true;
+  CLAY_SELECTION_BASE_NEON_TEXTURE = tex;
+  return tex;
+}
+function claySelectionBaseNeonMaterial(){
+  if(CLAY_SELECTION_BASE_NEON_MATERIAL) return CLAY_SELECTION_BASE_NEON_MATERIAL;
+  const mat = new THREE.MeshBasicMaterial({
+    map: claySelectionBaseNeonTexture(),
+    color: CLAY_SELECTION_BASE_NEON_COLOR,
+    transparent: true,
+    opacity: 0.72,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    toneMapped: false
+  });
+  mat.userData.shared = true;
+  mat.userData.claySelectionBaseNeonMaterial = true;
+  CLAY_SELECTION_BASE_NEON_MATERIAL = mat;
+  return mat;
+}
+function claySelectionBaseNeonGeometry(){
+  if(CLAY_SELECTION_BASE_NEON_GEOMETRY) return CLAY_SELECTION_BASE_NEON_GEOMETRY;
+  const geo = new THREE.PlaneGeometry(1, 1);
+  geo.userData.shared = true;
+  CLAY_SELECTION_BASE_NEON_GEOMETRY = geo;
+  return geo;
+}
+function setStandeeSelectionBaseNeon(fig, glowing){
+  if(!fig || !fig.userData || !fig.userData.standeeBaseMesh) return;
+  const base = fig.userData.standeeBaseMesh;
+  let spill = fig.userData.claySelectionBaseNeon || null;
+  if(glowing){
+    if(!spill){
+      spill = new THREE.Mesh(claySelectionBaseNeonGeometry(), claySelectionBaseNeonMaterial());
+      spill.rotation.x = -Math.PI / 2;
+      spill.position.set(0, -INTERIOR_BASE_HEIGHT - 0.002, 0);
+      spill.scale.set(
+        (base.userData.supportWidth || 0.45) * CLAY_SELECTION_BASE_NEON_WIDTH_SCALE,
+        (base.userData.supportDepth || INTERIOR_BASE_TREAD_DEPTH) * CLAY_SELECTION_BASE_NEON_DEPTH_SCALE,
+        1
+      );
+      spill.castShadow = false;
+      spill.receiveShadow = false;
+      spill.renderOrder = 3;
+      spill.userData.claySelectionBaseNeon = true;
+      spill.userData.emissionSource = "emissive-sidewall";
+      spill.userData.footprintShape = "support-rounded-strip";
+      spill.userData.spillWidth = spill.scale.x;
+      spill.userData.spillDepth = spill.scale.y;
+      fig.userData.claySelectionBaseNeon = spill;
+    }
+    if(spill.parent !== base){
+      if(spill.parent) spill.parent.remove(spill);
+      base.add(spill);
+    }
+    spill.visible = true;
+    spill.userData.linkedSceneObjectId = fig.userData.sceneObjectId || fig.userData.unitId || null;
+  } else if(spill){
+    spill.visible = false;
+  }
+}
 function setStandeeSelectionBaseRing(fig, glowing){
   if(!fig || !fig.userData || !fig.userData.standeeBaseMesh) return;
   const base = fig.userData.standeeBaseMesh;
@@ -17955,6 +18094,7 @@ function setStandeeSelectionBaseRing(fig, glowing){
     else base.layers.disable(BLOOM_LAYER);
   }
   base.userData.claySelectionBaseRingGlow = !!glowing;
+  setStandeeSelectionBaseNeon(fig, glowing);
 }
 function clayRoomClearSelectionGlow(){
   if(S.clayRoomSelectionGlowSprite){
@@ -18332,7 +18472,9 @@ function mountClayRoom(){
     S.clayRoomCompiled = compiled;
     S.clayRoomLightRecipeId = compiled.lightRecipeId || "clay-opposing-pair";
     S.clayRoomFixtureId = clayRoomFixtureIdFromLocation();
-    S.clayRoomSpriteScaleMode = "true-scale";
+    // CL-R2 ruling: presentation scale is the working default. True scale stays one click away as
+    // an honest size-spectrum check; neither view mutates registry worldHeight or tactical span.
+    S.clayRoomSpriteScaleMode = "diagnostic-cap";
     S.clayRoomSelectedSpriteSlug = CLAY_SPRITE_CITIZENSHIP_FIXTURE.selectedSlug;
     S.clayRoomLightOverlayModes = { position: true, range: true, shadow: false };
     S.clayRoomPreviewSeed = CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
@@ -19526,9 +19668,9 @@ function clayRoomMountOverlay(record, host){
   const spriteScaleActions = document.createElement("div");
   spriteScaleActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0 7px;";
   const trueScaleBtn = document.createElement("button");
-  trueScaleBtn.textContent = "TRUE SCALE";
+  trueScaleBtn.textContent = "TRUE SCALE CHECK";
   const capScaleBtn = document.createElement("button");
-  capScaleBtn.textContent = "1–30 FT CAP PREVIEW";
+  capScaleBtn.textContent = "PRESENTATION · 1–30 FT";
   [trueScaleBtn, capScaleBtn].forEach(function(button){
     button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
     spriteScaleActions.appendChild(button);
@@ -19641,10 +19783,17 @@ function clayRoomMountOverlay(record, host){
       : "selected sprite is loading…";
     const lines = [
       "fixture " + snap.fixtureId + " v" + snap.fixtureVersion,
-      "mode " + snap.scaleMode + (snap.scaleMode === "diagnostic-cap" ? " · PRESENTATION TEST ONLY" : " · CANONICAL"),
+      "mode " + snap.scaleMode + (snap.scaleMode === "diagnostic-cap" ? " · PREFERRED PRESENTATION" : " · CANONICAL SIZE CHECK"),
       "support " + snap.supportForm + " · tactical footprint remains separate",
+      "contact pool multiply · darkens lit and already-shadowed floor values",
+      "cast shadow alpha silhouette · edge shell non-casting",
       "shadow form " + Number(snap.environmentFormFill.intensity).toFixed(3)
         + " hemisphere · shadowless · tread/riser value floor",
+      selected && selected.selectionBaseNeon
+        ? "selected base neon · " + selected.selectionBaseNeon.source
+          + " · " + selected.selectionBaseNeon.footprintShape
+          + " · additive spill · no center bulb"
+        : "selected base neon loading…",
       "stair proof " + (snap.stairSamples.length === 3 && snap.stairSamples.every(function(row){ return row.stairFit; })
         ? "PASS · face / 3⁄4 / edge"
         : "loading…"),

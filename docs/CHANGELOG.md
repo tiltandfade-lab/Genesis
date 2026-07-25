@@ -8,6 +8,31 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-25 — CL-R2 MULTIPLY CONTACT + SILHOUETTE SHADOWS + BASE NEON [Codex]
+
+### Changed
+
+- Soft standee contact pools now use a true multiply texture: opaque white at the identity rim,
+  dark gray at contact, and `toneMapped:false`. They proportionally darken both lit floor and
+  already-shadowed floor values instead of alpha-painting a replacement black value.
+- The 1–30-foot presentation view is now the working default; true scale remains a canonical size
+  check. Neither mode mutates registry `worldHeight` or tactical occupancy.
+- The selected cyan sidewall now reads as neon through one support-shaped additive spill seated
+  beneath the base. The center PointLight was removed; selection handoff hides the prior spill before
+  exactly one new base emits.
+- Sprite planes now cast their alpha-tested artwork silhouette in both depth and distance shadow
+  passes. The visible rectangular edge shell no longer casts, removing floating card shadows in
+  daylight and moonlight with one fewer caster.
+- The CL-R2 receipt and sheet were regenerated. New assertions prove all seven contact pools use
+  the multiply contract, every cast shadow uses the alpha silhouette, presentation is the default,
+  and the base neon is linked, exclusive, support-shaped, center-bulb-free, and shadowless.
+
+### Fixed
+
+- Updated the optional real-Chrome floor-contact harness for CL-R2's natural rounded-strip support
+  rather than its retired circular-base geometry. The live map/material check now passes 79/79;
+  Clayroom passes 208/208 and the manifest remains OK. **FULL CI PENDING.**
+
 ## 2026-07-24 (latest) — CL-R2 COMPLETE SPRITE CITIZENSHIP CANDIDATE [Codex]
 
 ### Added
@@ -899,32 +924,3 @@ MF-2/3/4 in parallel off its tip.
 verify-mf1 24/0, verify-mf4 36/0, verify-mf3 47/0, verify-mf2 61/0; the integration gate on the
 merged tree (all four MF harnesses + standee 71/0, theater-verbs 100/0, dungeon-interior 287/0);
 loop gate 5/5 clean, fps 72–253.
-
-## 2026-07-11 — BW3 + THE FULL VISUAL CAMPAIGN CLOSED: three waves in one sitting; the engine converged on the mocks
-
-**The arc.** Adam's mock frames became the reference model; three waves landed end to end:
-BW2 (10 units: crisp channel/PS1 retired game-wide, beat camera, floor contact + bases +
-kilter, occlusion + clip margin, textures + variant roll, value plunge, silhouette + furniture
-+ extrusion props, gallery, UI) → BW3 (composer seam byte-identical, light shafts + mote
-coupling, seam-softening, LIT SPRITES + THE BRIGHTNESS LAW, post suite: tilt-shift DoF +
-emissive bloom + filmic grade + the OutputPass sRGB fix). BW4 MOTION & FEEL specced + queued.
-
-**Laws ruled this session (DESIGN registered):** PS1 RETIRED GAME-WIDE · FLOOR CONTACT ·
-OCCLUSION + CLIP MARGIN · PROP PERSPECTIVE (flat art on contextual-depth extrusions,
-edge-sampled sides, tier ladder box/silhouette/card) · THE KILTER · THE BRIGHTNESS LAW
-(full-bright only in full white light) · SPRITE PURITY AMENDMENT (purity = no distortion,
-lighting REQUIRED) · UV MAPPING LAWS (floor 1:1/cell — grout aligns with the combat grid) ·
-COLUMN DEMOTION (furniture is cover) · THE FEEL LAWS (BW4).
-
-**Also:** MOCK-GEN reference loop (PACKET-01 frames = the targets; PACKET-02 textures folded,
-18/18; PACKET-03 flat-props authored + style-rider v2) · grid-snap (spritefusion) proven
-destructive, reconstruction gate kept · corpus unification r2 (hue-safe; r1 reverted at the
-eyes gate) · ROOM-GRAMMAR + BEAUTY-WAVE-4 specced · 6 real pre-existing bugs fixed by
-executors in passing (mote origin-shift, preview importmap, stale shims, kaiju leak).
-
-**Verification at close:** every unit orchestrator re-gated; interior 287/0 · dressing 451/0 ·
-scene-direction 17/0 · floor-contact 48/0 · occlusion 24/0 · silhouette 87/0 · texel 116/0 ·
-shafts 44/0 · seams 146/0 · crisp 37/0 · sprites 12/0 · manifest OK · loop gate 5/5 at every
-landing · fps 124-164 with all passes. Deferred: BW2-4b's quiet camera-key shadow (taste
-call), wall-hang axis 7b (unreproduced), trim GL-wiring, gallery-pass harness side effect,
-GIT-LFS (tomorrow, Adam), audio design night.

@@ -549,10 +549,10 @@ authorities should never require archaeology to find again.
 > can flag those for re-genning as taller more upright sprites
 
 The CL-R2 candidate keeps the tactical footprint separate from the visible support, uses a shallow
-rounded strip whose Medium depth is exactly one third of a cell, preserves canonical size data, and
-offers a clearly labelled 1–30-foot diagnostic cap for visual comparison only. The cap is not an
-admission or production ruling; true scale remains authoritative, and a genuinely gigantic
-encounter requires architecture scaled to contain it.
+rounded strip whose Medium depth is exactly one third of a cell, and preserves canonical size data.
+The 1–30-foot presentation scale is now the working default; true scale remains one click away as an
+honest size-spectrum check, and a genuinely gigantic encounter still requires architecture scaled
+to contain it.
 
 ---
 
@@ -595,3 +595,42 @@ Implemented reading: no new environment material yet. A very low, shadowless hem
 supplies sky/ground bounce, so upward treads, vertical risers, and wall turns retain slightly
 different dark values. Direct-light shadows remain strong; the floor only prevents every un-keyed
 face from collapsing to the same black.
+
+---
+
+## 13. CL-R2 grounding and selected-base emission follow-up (verbatim, Adam, 2026-07-25)
+
+> that's great, is there any way we can get the contact shadows to actually be darker than the
+> shadow value in the shadows? with a multiply effect? is there any way i can get the selected base
+> piece to emit a tiny amount of light?
+
+Implemented candidate reading: the soft contact texture now uses an opaque-white identity rim and
+gray radial multiplier through true multiply blending. It darkens the floor after ambient,
+diegetic light, and cast-shadow value have resolved, so contact remains visibly below an
+already-shadowed surface rather than introducing one replacement black value.
+
+Presentation-scale and cast-shadow correction:
+
+> hmm, maybe the presentation scale is the way to go since that's as big as the bases ever really
+> get, also i just realized the cast shadows are just rectangles? wack, how much extra does it cost
+> to cast the silhouette of the actual sprite? the daylight and moon cast shadows just look wrong,
+> just some odd floating rectangle behind the sprite? what is that, not even close
+
+Implemented reading: 1–30 feet is the default presentation view; true scale remains the canonical
+size check. The rectangle came from the standee's full backing shell entering the shadow map. The
+shell remains visible edge-on but is now non-casting. The sprite plane is the sole caster, with the
+same alpha-tested texture used by both depth shadows (directional/spot) and distance shadows
+(point). This removes one redundant caster, so silhouette shadows cost the same or slightly less
+than the rejected rectangle.
+
+Selected-base emission clarification:
+
+> so with the base face halo light, the light is still coming from a light source at the center of
+> the base, but i want the light to be coming from the blue material itself, like a little neon glow
+> under the selected piece does that make sense?
+
+Implemented reading: there is no center PointLight. The vertical sidewall is the visible emissive
+source, paired with one shadowless additive spill shaped to the support's own rounded-strip
+footprint and seated immediately beneath it. The opaque base hides the spill's center, leaving only
+a soft cyan feather outside the blue material; selection handoff hides the previous spill before the
+new base emits.

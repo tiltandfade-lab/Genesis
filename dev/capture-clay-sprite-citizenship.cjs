@@ -1,6 +1,6 @@
 /* CL-R2 / CL-F03 complete sprite-citizenship comparison capture.
 
-   Captures the real Clayroom production lineup at canonical and diagnostic-capped scale, proves
+   Captures the real Clayroom production lineup at preferred presentation and canonical-check scale, proves
    the selected standee face/edge shell and one-tread support on the production staircase, walks
    the five accepted lighting contexts, and banks a machine-readable receipt plus contact sheet.
 
@@ -122,6 +122,10 @@ async function waitForLineup(page, mode) {
   const expanded = await page.$eval("#clay-room-workbench-catalog", (rail) => rail.getAttribute("aria-expanded") !== "false");
   if (expanded) await page.click('[aria-label="Collapse or expand Clayroom catalog"]');
 
+  // The working surface must open in preferred presentation scale without a test seam changing it.
+  await waitForLineup(page, "diagnostic-cap");
+  const defaultPresentation = await page.evaluate(() => window.Theater._claySpriteCitizenshipForTest());
+
   await page.evaluate(() => {
     window.Theater._claySetLightingRecipeForTest("clay-neutral-truth");
     window.Theater._claySetSpriteScaleModeForTest("true-scale");
@@ -138,6 +142,15 @@ async function waitForLineup(page, mode) {
   const canonical = await page.evaluate(() => window.Theater._claySpriteCitizenshipForTest());
   const settled = await page.evaluate(pageProbe);
   await page.screenshot({ path: path.join(OUT, "01-true-scale-live-ui.png"), fullPage: false });
+
+  // Selection-neon negative control: move selection once, prove the previous base spill is hidden
+  // while exactly one support-shaped neon spill follows the newly selected physical base, then
+  // restore the canonical Human Fighter selection before the visual sequence continues.
+  await page.evaluate(() => window.Theater._claySelectSpriteForTest("spr-fantasy-flaming-skeleton"));
+  await new Promise((resolve) => setTimeout(resolve, 120));
+  const selectionHandoff = await page.evaluate(() => window.Theater._claySpriteCitizenshipForTest());
+  await page.evaluate(() => window.Theater._claySelectSpriteForTest("spr-pc-human-fighter-female"));
+  await new Promise((resolve) => setTimeout(resolve, 120));
 
   // Deep-inspection proof: drive the real wheel listener to its clamp, bank the resulting governed
   // camera pose, then use the real double-click reset before the comparison captures continue.
@@ -209,6 +222,19 @@ async function waitForLineup(page, mode) {
   if (!canonical.lineup.every((row) => row.contactShadow && row.contactShadow.linked)) {
     throw new Error("one or more standee contact shadows lost its live piece link");
   }
+  if (!canonical.lineup.every((row) => row.contactShadow
+      && row.contactShadow.blendMode === "multiply"
+      && row.contactShadow.multiplyIdentityRim)) {
+    throw new Error("one or more contact shadows is not using the white-rim multiply contract");
+  }
+  if (!canonical.lineup.every((row) => row.shadowSilhouette
+      && row.shadowSilhouette.planeCasts
+      && row.shadowSilhouette.alphaDepth
+      && row.shadowSilhouette.alphaDistance
+      && !row.shadowSilhouette.shellCasts)) {
+    throw new Error("one or more standees can still cast a rectangular card instead of its alpha silhouette: "
+      + JSON.stringify(canonical.lineup.map((row) => ({ slug: row.slug, shadow: row.shadowSilhouette }))));
+  }
   if (!canonical.cameraFill || !canonical.cameraFill.enabled || canonical.cameraFill.castShadow) {
     throw new Error("sprite-only camera fill is missing, disabled, or casting shadows");
   }
@@ -219,6 +245,33 @@ async function waitForLineup(page, mode) {
   }
   if (!canonical.lineup.some((row) => row.selected && row.selectionBaseRingGlow)) {
     throw new Error("selected standee does not expose its vertical base-ring glow in the live receipt");
+  }
+  const selectedRow = canonical.lineup.find((row) => row.selected);
+  if (!selectedRow || !selectedRow.selectionBaseNeon
+      || !selectedRow.selectionBaseNeon.linked
+      || !selectedRow.selectionBaseNeon.visible
+      || selectedRow.selectionBaseNeon.source !== "emissive-sidewall"
+      || selectedRow.selectionBaseNeon.footprintShape !== "support-rounded-strip"
+      || !selectedRow.selectionBaseNeon.additive
+      || selectedRow.selectionBaseNeon.centerPointLight
+      || selectedRow.selectionBaseNeon.castShadow) {
+    throw new Error("selected base neon is missing, unlinked, center-lit, or casting shadows: "
+      + JSON.stringify(selectedRow && selectedRow.selectionBaseNeon));
+  }
+  const visibleSelectionNeonsAfterHandoff = selectionHandoff.lineup.filter((row) => (
+    row.selectionBaseNeon && row.selectionBaseNeon.visible
+  ));
+  const clearedHumanNeon = selectionHandoff.lineup.find((row) => row.slug === "spr-pc-human-fighter-female");
+  if (visibleSelectionNeonsAfterHandoff.length !== 1
+      || visibleSelectionNeonsAfterHandoff[0].slug !== "spr-fantasy-flaming-skeleton"
+      || !clearedHumanNeon
+      || !clearedHumanNeon.selectionBaseNeon
+      || clearedHumanNeon.selectionBaseNeon.visible) {
+    throw new Error("selection handoff did not hide the old base spill and move exactly one neon spill: "
+      + JSON.stringify(selectionHandoff.lineup.map((row) => ({
+        slug: row.slug,
+        neon: row.selectionBaseNeon
+      }))));
   }
   if (!deepZoom || !deepZoom.clayZoomRange
       || Math.abs(deepZoom.clayZoom - deepZoom.clayZoomRange[0]) > 1e-6) {
@@ -243,8 +296,10 @@ async function waitForLineup(page, mode) {
       surfaceCensusChanged: JSON.stringify(early.surfaceCensus) !== JSON.stringify(settled.surfaceCensus),
     },
     canonical,
-    diagnosticCap: capped,
+    preferredPresentation: capped,
+    defaultPresentation,
     deepZoom,
+    selectionNeonNegativeControl: selectionHandoff,
     lightingContexts: contextReceipts,
     assertions: {
       castCount: canonical.lineup.length,
@@ -256,7 +311,30 @@ async function waitForLineup(page, mode) {
       widthRegenerationFlags: canonical.regenRecommended,
       noSupportOverlap: canonical.collisionAudit && canonical.collisionAudit.remainingOverlaps === 0,
       everyContactShadowLinked: canonical.lineup.every((row) => row.contactShadow && row.contactShadow.linked),
+      everyContactShadowMultiplies: canonical.lineup.every((row) => row.contactShadow
+        && row.contactShadow.blendMode === "multiply"
+        && row.contactShadow.multiplyIdentityRim),
+      defaultScaleIsPreferredPresentation: defaultPresentation.scaleMode === "diagnostic-cap",
+      everyCastShadowUsesSpriteSilhouette: canonical.lineup.every((row) => row.shadowSilhouette
+        && row.shadowSilhouette.planeCasts
+        && row.shadowSilhouette.alphaDepth
+        && row.shadowSilhouette.alphaDistance
+        && row.shadowSilhouette.shellCasts === false),
       selectedBaseRingGlow: canonical.lineup.some((row) => row.selected && row.selectionBaseRingGlow),
+      selectedBaseNeonEmitsFromSidewall: selectedRow
+        && selectedRow.selectionBaseNeon
+        && selectedRow.selectionBaseNeon.linked
+        && selectedRow.selectionBaseNeon.visible
+        && selectedRow.selectionBaseNeon.source === "emissive-sidewall"
+        && selectedRow.selectionBaseNeon.footprintShape === "support-rounded-strip"
+        && selectedRow.selectionBaseNeon.additive
+        && selectedRow.selectionBaseNeon.centerPointLight === false
+        && selectedRow.selectionBaseNeon.castShadow === false,
+      selectionNeonHandoffExclusive: visibleSelectionNeonsAfterHandoff.length === 1
+        && visibleSelectionNeonsAfterHandoff[0].slug === "spr-fantasy-flaming-skeleton"
+        && clearedHumanNeon
+        && clearedHumanNeon.selectionBaseNeon
+        && clearedHumanNeon.selectionBaseNeon.visible === false,
       spriteCameraFillShadowless: canonical.cameraFill
         && canonical.cameraFill.enabled
         && canonical.cameraFill.castShadow === false,
@@ -281,7 +359,7 @@ async function waitForLineup(page, mode) {
     ["00-true-scale-early-live-ui.png", "Early mount", "Capture-law frame before the five-second async-settle window."],
     ["01-true-scale-live-ui.png", "Canonical true scale", "Honest 0.25–60 ft spectrum; the kraken dominates by design."],
     ["09-deep-zoom-live-ui.png", "Deep inspection zoom", "Real wheel control at the governed 8.3× closer clamp; bearing and pitch remain fixed."],
-    ["02-cap-spectrum-live-ui.png", "Diagnostic 1–30 ft cap", "Presentation test only; authored world heights stay untouched."],
+    ["02-cap-spectrum-live-ui.png", "Preferred 1–30 ft presentation", "Working scale; authored world heights and tactical footprints stay untouched."],
     ["03-edge-and-stair-live-ui.png", "Edge + stair proof", "Thin shell remains visible; Medium support depth equals one tread."],
     ...CONTEXTS.map((row) => [row[1], row[2], row[0]]),
   ];
@@ -299,7 +377,7 @@ async function waitForLineup(page, mode) {
       + "img{display:block;width:100%;height:auto;background:#090c10;border:1px solid #2c3742}"
       + "article:nth-child(n+4) img{aspect-ratio:1.7;object-fit:cover}footer{margin-top:20px;color:#94a3b2;font-size:13px}"
       + "</style><header><h1>CL-R2 · Sprite citizenship</h1>"
-      + "<p>One production renderer · seven authored sprites · canonical vs cap · shell / stair / light response</p></header>"
+      + "<p>One production renderer · seven authored sprites · alpha-silhouette cast shadows · preferred presentation scale</p></header>"
       + "<main>" + htmlCards + "</main><footer>WIDTH FLAGS · Treant + Kraken → regenerate taller / more upright before final admission</footer>",
     { waitUntil: "load" }
   );

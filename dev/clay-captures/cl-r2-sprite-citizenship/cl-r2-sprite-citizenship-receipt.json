@@ -36,8 +36,8 @@
           "enabled": true,
           "spriteLayer": 2,
           "castShadow": false,
-          "intensity": 14.5787,
-          "distance": 123.0076,
+          "intensity": 13.1208,
+          "distance": 110.7069,
           "decay": 1
         },
         "environmentFormFill": {
@@ -73,6 +73,12 @@
               1
             ],
             "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
             "collisionRelocated": false,
             "collisionNudge": [
               0,
@@ -81,9 +87,12 @@
             "contactShadow": {
               "linked": true,
               "poolDiameter": 0.361584,
-              "offset": 0.045
+              "offset": 0.045,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
             },
             "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
             "regenRecommended": false,
             "selected": false
           },
@@ -109,6 +118,12 @@
               0.977876
             ],
             "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
             "collisionRelocated": false,
             "collisionNudge": [
               0,
@@ -117,9 +132,12 @@
             "contactShadow": {
               "linked": true,
               "poolDiameter": 0.6608300176991149,
-              "offset": 0.0624
+              "offset": 0.0624,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
             },
             "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
             "regenRecommended": false,
             "selected": false
           },
@@ -145,6 +163,12 @@
               0.976636
             ],
             "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
             "collisionRelocated": false,
             "collisionNudge": [
               0,
@@ -153,9 +177,22 @@
             "contactShadow": {
               "linked": true,
               "poolDiameter": 1.0536708785046727,
-              "offset": 0.07999999999999999
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
             },
             "selectionBaseRingGlow": true,
+            "selectionBaseNeon": {
+              "linked": true,
+              "visible": true,
+              "source": "emissive-sidewall",
+              "footprintShape": "support-rounded-strip",
+              "width": 0.8780590654205607,
+              "depth": 0.5733333333333333,
+              "additive": true,
+              "centerPointLight": false,
+              "castShadow": false
+            },
             "regenRecommended": false,
             "selected": true
           },
@@ -181,6 +218,12 @@
               0.97807
             ],
             "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
             "collisionRelocated": false,
             "collisionNudge": [
               0,
@@ -189,9 +232,12 @@
             "contactShadow": {
               "linked": true,
               "poolDiameter": 1.22016,
-              "offset": 0.07999999999999999
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
             },
             "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
             "regenRecommended": false,
             "selected": false
           },
@@ -217,6 +263,12 @@
               0.977477
             ],
             "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
             "collisionRelocated": false,
             "collisionNudge": [
               0,
@@ -225,9 +277,12 @@
             "contactShadow": {
               "linked": true,
               "poolDiameter": 1.22016,
-              "offset": 0.07999999999999999
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
             },
             "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
             "regenRecommended": false,
             "selected": false
           },
@@ -253,6 +308,12 @@
               0.979592
             ],
             "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
             "collisionRelocated": false,
             "collisionNudge": [
               0,
@@ -261,9 +322,12 @@
             "contactShadow": {
               "linked": true,
               "poolDiameter": 3.6604799999999997,
-              "offset": 0.07999999999999999
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
             },
             "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
             "regenRecommended": true,
             "selected": false
           },
@@ -289,6 +353,12 @@
               1
             ],
             "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
             "collisionRelocated": true,
             "collisionNudge": [
               0.2538,
@@ -297,9 +367,12 @@
             "contactShadow": {
               "linked": true,
               "poolDiameter": 4.88064,
-              "offset": 0.07999999999999999
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
             },
             "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
             "regenRecommended": true,
             "selected": false
           }
@@ -405,9 +478,9 @@
         "fov": 20,
         "zoom": null,
         "position": [
-          52.7774,
-          52.2624,
-          52.7774
+          47.4996,
+          47.0362,
+          47.4996
         ],
         "target": [
           0,
@@ -423,8 +496,8 @@
         ]
       },
       "renderer": {
-        "backingPx": "1696x1352",
-        "cssPx": "848x676",
+        "backingPx": "1260x1352",
+        "cssPx": "630x676",
         "canvasCount": 3,
         "shadowMap": true,
         "cameraIsPerspective": true
@@ -469,30 +542,30 @@
       "lightingProof": {
         "snapshot": {
           "label": "test-read",
-          "at": 1784951754932,
+          "at": 1784953990611,
           "ambient": {
-            "uuid": "962634a3-a3fd-4afa-a3c0-119e75feca14",
+            "uuid": "bc86a1a0-ba2e-4bd3-8fcf-f3acc75e6b1f",
             "intensity": 0.62,
             "color": 16777215
           },
           "rig": {
             "hemi": {
-              "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+              "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
               "intensity": 0.06,
               "color": 16773596
             },
             "key": {
-              "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
+              "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
               "intensity": 0,
               "color": 16777215
             },
             "fill": {
-              "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
+              "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
               "intensity": 0,
               "color": 16777215
             },
             "cameraKey": {
-              "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
+              "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
               "intensity": 0,
               "color": 16777215
             }
@@ -500,1602 +573,75 @@
           "lights": []
         },
         "probe": {
-          "label": "recipe switch → clay-neutral-truth",
-          "expectedReplacement": true,
-          "preserved": false,
+          "label": "door/camera/fade/board rebuild",
+          "preserved": true,
+          "before": {
+            "label": "before-rebuild",
+            "at": 1784953989716,
+            "ambient": {
+              "uuid": "bc86a1a0-ba2e-4bd3-8fcf-f3acc75e6b1f",
+              "intensity": 0.62,
+              "color": 16777215
+            },
+            "rig": {
+              "hemi": {
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
+                "intensity": 0.06,
+                "color": 16773596
+              },
+              "key": {
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "fill": {
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "cameraKey": {
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
+                "intensity": 0,
+                "color": 16777215
+              }
+            },
+            "lights": []
+          },
+          "during": {
+            "label": "during-animation",
+            "at": 1784953989747,
+            "ambient": {
+              "uuid": "bc86a1a0-ba2e-4bd3-8fcf-f3acc75e6b1f",
+              "intensity": 0.62,
+              "color": 16777215
+            },
+            "rig": {
+              "hemi": {
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
+                "intensity": 0.06,
+                "color": 16773596
+              },
+              "key": {
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "fill": {
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "cameraKey": {
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
+                "intensity": 0,
+                "color": 16777215
+              }
+            },
+            "lights": []
+          },
+          "after": null,
           "duringPass": true,
-          "afterPass": true
-        }
-      },
-      "effectiveLights": {
-        "profileKey": "dark",
-        "ambient": 0.62,
-        "hemi": 0.06,
-        "key": 0,
-        "fill": 0
-      },
-      "surfaceCensus": {
-        "recipe": {
-          "id": "clay-diagnostic-surface",
-          "version": 1,
-          "mode": "clay"
-        },
-        "surfaces": [
-          {
-            "role": "floor",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              -0.315,
-              0
-            ],
-            "size": [
-              15,
-              0.03,
-              15
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/room-shell-floor",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "wall",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              -0.19,
-              0
-            ],
-            "size": [
-              15.56,
-              0.4,
-              15.56
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/room-shell-wall-stem",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "wall",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              -4.627,
-              0.84,
-              -7.61
-            ],
-            "size": [
-              6.255,
-              1.78,
-              0.29
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "wall",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              -1,
-              0.84,
-              -7.61
-            ],
-            "size": [
-              1,
-              1.78,
-              0.29
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "wall",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              3.627,
-              0.84,
-              -7.61
-            ],
-            "size": [
-              8.255,
-              1.78,
-              0.29
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "wall",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              -7.61,
-              0.84,
-              0
-            ],
-            "size": [
-              0.29,
-              1.78,
-              15.51
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "trim",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              -0.177,
-              0
-            ],
-            "size": [
-              15.475,
-              0.305,
-              15.475
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/room-shell-wall-trim",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "skirt",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              0,
-              0
-            ],
-            "size": [
-              1,
-              1,
-              1
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/skirt",
-            "instances": 64,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": true
-          },
-          {
-            "role": "portal",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              0,
-              0
-            ],
-            "size": [
-              1,
-              1,
-              1
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/portal",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": true
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -5.993,
-              -0.184,
-              6.008
-            ],
-            "size": [
-              0.08,
-              0.05,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -6.004,
-              -0.194,
-              5.997
-            ],
-            "size": [
-              0.08,
-              0.05,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -5.983,
-              -0.249,
-              6.018
-            ],
-            "size": [
-              0.257,
-              0.114,
-              0.194
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -4.173,
-              0.027,
-              3.833
-            ],
-            "size": [
-              0.542,
-              0.6,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -4.184,
-              0.017,
-              3.823
-            ],
-            "size": [
-              0.542,
-              0.6,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -4.054,
-              -0.249,
-              3.947
-            ],
-            "size": [
-              0.47,
-              0.114,
-              0.286
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -2.223,
-              0.233,
-              1.764
-            ],
-            "size": [
-              0.864,
-              1.12,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -2.233,
-              0.223,
-              1.753
-            ],
-            "size": [
-              0.864,
-              1.12,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -2.013,
-              -0.249,
-              1.988
-            ],
-            "size": [
-              0.744,
-              0.114,
-              0.369
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -0.261,
-              0.249,
-              -0.271
-            ],
-            "size": [
-              1.023,
-              1.16,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -0.271,
-              0.238,
-              -0.282
-            ],
-            "size": [
-              1.023,
-              1.16,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -0.041,
-              -0.249,
-              -0.04
-            ],
-            "size": [
-              0.856,
-              0.114,
-              0.369
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              1.748,
-              0.261,
-              -2.274
-            ],
-            "size": [
-              1.151,
-              1.2,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              1.738,
-              0.251,
-              -2.285
-            ],
-            "size": [
-              1.151,
-              1.2,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              1.969,
-              -0.249,
-              -2.03
-            ],
-            "size": [
-              0.856,
-              0.114,
-              0.369
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              2.975,
-              1.815,
-              -5.071
-            ],
-            "size": [
-              5.412,
-              5.2,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              2.965,
-              1.805,
-              -5.082
-            ],
-            "size": [
-              5.412,
-              5.2,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              3.963,
-              -0.249,
-              -4.036
-            ],
-            "size": [
-              2.496,
-              0.114,
-              0.369
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              4,
-              4.753,
-              -8.307
-            ],
-            "size": [
-              13.178,
-              12,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              3.99,
-              4.742,
-              -8.318
-            ],
-            "size": [
-              13.178,
-              12,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              6.044,
-              -0.249,
-              -5.524
-            ],
-            "size": [
-              3.316,
-              0.114,
-              0.369
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "contact-shadow",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -6.015,
-              -0.297,
-              5.986
-            ],
-            "size": [
-              0.362,
-              0.362,
-              0
-            ],
-            "rotY": 3.937,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "contact-shadow",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -4.099,
-              -0.297,
-              3.904
-            ],
-            "size": [
-              0.661,
-              0.661,
-              0
-            ],
-            "rotY": 3.949,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "contact-shadow",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -2.068,
-              -0.297,
-              1.929
-            ],
-            "size": [
-              1.054,
-              1.054,
-              0
-            ],
-            "rotY": 3.895,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "contact-shadow",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -0.096,
-              -0.297,
-              -0.098
-            ],
-            "size": [
-              1.22,
-              1.22,
-              0
-            ],
-            "rotY": 3.903,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "contact-shadow",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              1.915,
-              -0.297,
-              -2.089
-            ],
-            "size": [
-              1.22,
-              1.22,
-              0
-            ],
-            "rotY": 3.877,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "contact-shadow",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              3.908,
-              -0.297,
-              -4.094
-            ],
-            "size": [
-              3.66,
-              3.66,
-              0
-            ],
-            "rotY": 3.904,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "contact-shadow",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              5.989,
-              -0.297,
-              -5.581
-            ],
-            "size": [
-              4.881,
-              4.881,
-              0
-            ],
-            "rotY": 3.91,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "riser",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              -0.18,
-              5.25
-            ],
-            "size": [
-              3.6,
-              0.24,
-              1
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/riser",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "riser",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              -0.06,
-              5.083
-            ],
-            "size": [
-              3.6,
-              0.48,
-              0.667
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/riser",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "riser",
-            "route": "diagnostic-clay",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              0.06,
-              4.917
-            ],
-            "size": [
-              3.6,
-              0.72,
-              0.333
-            ],
-            "rotY": 0,
-            "builder": "interiorBuildInstancedMesh/riser",
-            "instances": 1,
-            "textured": false,
-            "colorHex": "#8a8a8a",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -1.05,
-              0.57,
-              5.583
-            ],
-            "size": [
-              0.864,
-              1.12,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -1.05,
-              0.57,
-              5.602
-            ],
-            "size": [
-              0.864,
-              1.12,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              -1.05,
-              -0.009,
-              5.583
-            ],
-            "size": [
-              0.744,
-              0.114,
-              0.369
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              0.81,
-              5.25
-            ],
-            "size": [
-              0.864,
-              1.12,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              0.81,
-              5.269
-            ],
-            "size": [
-              0.864,
-              1.12,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              0,
-              0.231,
-              5.25
-            ],
-            "size": [
-              0.744,
-              0.114,
-              0.369
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              1.05,
-              1.05,
-              4.917
-            ],
-            "size": [
-              0.864,
-              1.12,
-              0.035
-            ],
-            "rotY": 0,
-            "builder": "buildSpriteBillboard",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              1.05,
-              1.05,
-              4.935
-            ],
-            "size": [
-              0.864,
-              1.12,
-              0
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": true,
-            "colorHex": "#ffffff",
-            "instanceColorNeutralized": false
-          },
-          {
-            "role": "sprite",
-            "route": "passthrough",
-            "group": "interiorGroup",
-            "pos": [
-              1.05,
-              0.471,
-              4.917
-            ],
-            "size": [
-              0.744,
-              0.114,
-              0.369
-            ],
-            "rotY": 0,
-            "builder": "unattributed",
-            "instances": 1,
-            "textured": false,
-            "colorHex": null,
-            "instanceColorNeutralized": false
-          }
-        ],
-        "unclaimed": [],
-        "texturedClayCount": 0
-      },
-      "provenanceAudit": {
-        "tagged": [
-          {
-            "type": "Group",
-            "builder": "setInteriorBoard",
-            "bbox": {
-              "min": [
-                -8.5,
-                -0.9,
-                -15.373
-              ],
-              "max": [
-                11.139,
-                9.749,
-                8.5
-              ]
-            }
-          },
-          {
-            "type": "LineSegments",
-            "builder": "clayRoomBuildSeamGrid",
-            "bbox": {
-              "min": [
-                -7.5,
-                -0.29,
-                -7.5
-              ],
-              "max": [
-                7.5,
-                -0.29,
-                7.5
-              ]
-            }
-          },
-          {
-            "type": "AmbientLight",
-            "builder": "clayRoomApplyLightProfile",
-            "bbox": null
-          }
-        ],
-        "orphans": []
-      },
-      "stats": {
-        "boardBuilds": 10,
-        "boardSkips": 0
-      }
-    },
-    "settled": {
-      "fixture": {
-        "id": "cl-f03-sprite-citizenship",
-        "version": 1,
-        "seed": 113311726,
-        "seedHex": "0x6c0ffee",
-        "roomRecordId": "clay-c1a"
-      },
-      "citizenship": {
-        "fixtureId": "cl-f03-sprite-citizenship",
-        "fixtureVersion": 1,
-        "scaleMode": "true-scale",
-        "selectedSlug": "spr-pc-human-fighter-female",
-        "selectedView": "face",
-        "supportForm": "shallow-rounded-strip",
-        "tacticalFootprintSeparate": true,
-        "collisionAudit": {
-          "pieces": 7,
-          "checkedPairs": 42,
-          "relocations": 1,
-          "remainingOverlaps": 0
-        },
-        "cameraFill": {
-          "enabled": true,
-          "spriteLayer": 2,
-          "castShadow": false,
-          "intensity": 14.5787,
-          "distance": 123.0076,
-          "decay": 1
-        },
-        "environmentFormFill": {
-          "kind": "hemisphere",
-          "intensity": 0.06,
-          "diagnosticFloor": 0.06,
-          "castShadow": false
-        },
-        "presentationCapFeet": [
-          1,
-          30
-        ],
-        "lineup": [
-          {
-            "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
-            "label": "Blind cave rat",
-            "stress": "smallest live height",
-            "canonicalFeet": 0.25,
-            "renderedWorldHeight": 0.05,
-            "renderedWorldWidth": 0.08000000000000002,
-            "tacticalSpanCells": 0.5,
-            "supportWidth": 0.243,
-            "supportDepth": 0.18,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true,
-            "shell": true,
-            "footX": 0.5,
-            "footY": 1,
-            "contentBounds": [
-              0,
-              0.1,
-              0.9375,
-              1
-            ],
-            "alphaCutoff": 0.5,
-            "collisionRelocated": false,
-            "collisionNudge": [
-              0,
-              0
-            ],
-            "contactShadow": {
-              "linked": true,
-              "poolDiameter": 0.361584,
-              "offset": 0.045
-            },
-            "selectionBaseRingGlow": false,
-            "regenRecommended": false,
-            "selected": false
-          },
-          {
-            "slug": "spr-fantasy-winged-kobold-urd",
-            "label": "Winged kobold",
-            "stress": "small dark fantasy creature",
-            "canonicalFeet": 3,
-            "renderedWorldHeight": 0.6,
-            "renderedWorldWidth": 0.5415929203539822,
-            "tacticalSpanCells": 1,
-            "supportWidth": 0.4441061946902654,
-            "supportDepth": 0.26,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true,
-            "shell": true,
-            "footX": 0.5,
-            "footY": 0.977876,
-            "contentBounds": [
-              0.02451,
-              0.017699,
-              0.97549,
-              0.977876
-            ],
-            "alphaCutoff": 0.5,
-            "collisionRelocated": false,
-            "collisionNudge": [
-              0,
-              0
-            ],
-            "contactShadow": {
-              "linked": true,
-              "poolDiameter": 0.6608300176991149,
-              "offset": 0.0624
-            },
-            "selectionBaseRingGlow": false,
-            "regenRecommended": false,
-            "selected": false
-          },
-          {
-            "slug": "spr-pc-human-fighter-female",
-            "label": "Human fighter",
-            "stress": "human reference · skin/cloth/metal",
-            "canonicalFeet": 5.6,
-            "renderedWorldHeight": 1.1199999999999999,
-            "renderedWorldWidth": 0.8635514018691588,
-            "tacticalSpanCells": 1,
-            "supportWidth": 0.7081121495327102,
-            "supportDepth": 0.3333333333333333,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true,
-            "shell": true,
-            "footX": 0.5,
-            "footY": 0.976636,
-            "contentBounds": [
-              0.024242,
-              0.023364,
-              0.969697,
-              0.976636
-            ],
-            "alphaCutoff": 0.5,
-            "collisionRelocated": false,
-            "collisionNudge": [
-              0,
-              0
-            ],
-            "contactShadow": {
-              "linked": true,
-              "poolDiameter": 1.0536708785046727,
-              "offset": 0.07999999999999999
-            },
-            "selectionBaseRingGlow": true,
-            "regenRecommended": false,
-            "selected": true
-          },
-          {
-            "slug": "spr-fantasy-flaming-skeleton",
-            "label": "Flaming skeleton",
-            "stress": "pale/highlight clipping",
-            "canonicalFeet": 5.8,
-            "renderedWorldHeight": 1.16,
-            "renderedWorldWidth": 1.0226315789473683,
-            "tacticalSpanCells": 1,
-            "supportWidth": 0.82,
-            "supportDepth": 0.3333333333333333,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true,
-            "shell": true,
-            "footX": 0.5,
-            "footY": 0.97807,
-            "contentBounds": [
-              0.024876,
-              0.013158,
-              0.970149,
-              0.97807
-            ],
-            "alphaCutoff": 0.5,
-            "collisionRelocated": false,
-            "collisionNudge": [
-              0,
-              0
-            ],
-            "contactShadow": {
-              "linked": true,
-              "poolDiameter": 1.22016,
-              "offset": 0.07999999999999999
-            },
-            "selectionBaseRingGlow": false,
-            "regenRecommended": false,
-            "selected": false
-          },
-          {
-            "slug": "spr-fantasy-wraith",
-            "label": "Wraith",
-            "stress": "dark/irregular alpha edge",
-            "canonicalFeet": 6,
-            "renderedWorldHeight": 1.2,
-            "renderedWorldWidth": 1.1513513513513514,
-            "tacticalSpanCells": 1,
-            "supportWidth": 0.82,
-            "supportDepth": 0.3333333333333333,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true,
-            "shell": true,
-            "footX": 0.5,
-            "footY": 0.977477,
-            "contentBounds": [
-              0.028169,
-              0.022523,
-              0.981221,
-              0.977477
-            ],
-            "alphaCutoff": 0.5,
-            "collisionRelocated": false,
-            "collisionNudge": [
-              0,
-              0
-            ],
-            "contactShadow": {
-              "linked": true,
-              "poolDiameter": 1.22016,
-              "offset": 0.07999999999999999
-            },
-            "selectionBaseRingGlow": false,
-            "regenRecommended": false,
-            "selected": false
-          },
-          {
-            "slug": "spr-fantasy-treant",
-            "label": "Treant",
-            "stress": "tall Huge silhouette",
-            "canonicalFeet": 26,
-            "renderedWorldHeight": 5.200000000000001,
-            "renderedWorldWidth": 5.412244897959185,
-            "tacticalSpanCells": 3,
-            "supportWidth": 2.46,
-            "supportDepth": 0.3333333333333333,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true,
-            "shell": true,
-            "footX": 0.5,
-            "footY": 0.979592,
-            "contentBounds": [
-              0.015686,
-              0.020408,
-              0.980392,
-              0.979592
-            ],
-            "alphaCutoff": 0.5,
-            "collisionRelocated": false,
-            "collisionNudge": [
-              0,
-              0
-            ],
-            "contactShadow": {
-              "linked": true,
-              "poolDiameter": 3.6604799999999997,
-              "offset": 0.07999999999999999
-            },
-            "selectionBaseRingGlow": false,
-            "regenRecommended": true,
-            "selected": false
-          },
-          {
-            "slug": "spr-fantasy-kraken",
-            "label": "Kraken",
-            "stress": "largest live height · width/regeneration test",
-            "canonicalFeet": 60,
-            "renderedWorldHeight": 12,
-            "renderedWorldWidth": 13.177570093457945,
-            "tacticalSpanCells": 4,
-            "supportWidth": 3.28,
-            "supportDepth": 0.3333333333333333,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true,
-            "shell": true,
-            "footX": 0.535398,
-            "footY": 0.997113,
-            "contentBounds": [
-              0.021277,
-              0.018692,
-              0.978723,
-              1
-            ],
-            "alphaCutoff": 0.5,
-            "collisionRelocated": true,
-            "collisionNudge": [
-              0.2538,
-              0.2623
-            ],
-            "contactShadow": {
-              "linked": true,
-              "poolDiameter": 4.88064,
-              "offset": 0.07999999999999999
-            },
-            "selectionBaseRingGlow": false,
-            "regenRecommended": true,
-            "selected": false
-          }
-        ],
-        "stairSamples": [
-          {
-            "view": "face",
-            "supportDepth": 0.3333333333333333,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true
-          },
-          {
-            "view": "three-quarter",
-            "supportDepth": 0.3333333333333333,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true
-          },
-          {
-            "view": "edge",
-            "supportDepth": 0.3333333333333333,
-            "treadDepth": 0.3333333333333333,
-            "stairFit": true
-          }
-        ],
-        "regenRecommended": [
-          "spr-fantasy-treant",
-          "spr-fantasy-kraken"
-        ]
-      },
-      "surfaceRecipe": {
-        "id": "clay-diagnostic-surface",
-        "version": 1,
-        "modes": [
-          "clay",
-          "role-id"
-        ],
-        "defaultMode": "clay",
-        "clayColor": "#8a8a8a",
-        "unclaimedColor": "#ff00ff",
-        "gridColor": "#141414",
-        "gridOpacity": 0.3,
-        "roles": {
-          "floor": {
-            "route": "diagnostic-clay",
-            "roleColor": "#5f8fbf"
-          },
-          "wall": {
-            "route": "diagnostic-clay",
-            "roleColor": "#bf6f6f"
-          },
-          "riser": {
-            "route": "diagnostic-clay",
-            "roleColor": "#bf8f4f"
-          },
-          "trim": {
-            "route": "diagnostic-clay",
-            "roleColor": "#8fbf5f"
-          },
-          "doorframe": {
-            "route": "diagnostic-clay",
-            "roleColor": "#bfbf5f"
-          },
-          "portal": {
-            "route": "diagnostic-clay",
-            "roleColor": "#5fbf9f"
-          },
-          "pillar": {
-            "route": "diagnostic-clay",
-            "roleColor": "#9f6fbf"
-          },
-          "skirt": {
-            "route": "diagnostic-clay",
-            "roleColor": "#4f5f6f"
-          },
-          "furniture": {
-            "route": "diagnostic-clay",
-            "roleColor": "#bf9f6f"
-          },
-          "emitter": {
-            "route": "passthrough",
-            "roleColor": "#ffd88a"
-          },
-          "sprite": {
-            "route": "passthrough",
-            "roleColor": "#ff5fbf"
-          },
-          "door": {
-            "route": "passthrough",
-            "roleColor": "#ffffff"
-          },
-          "contact-shadow": {
-            "route": "passthrough",
-            "roleColor": "#5fbfbf"
-          },
-          "mote": {
-            "route": "passthrough",
-            "roleColor": "#bf5f5f"
-          }
-        }
-      },
-      "camera": {
-        "kind": "perspective",
-        "fov": 20,
-        "zoom": null,
-        "position": [
-          52.7774,
-          52.2624,
-          52.7774
-        ],
-        "target": [
-          0,
-          0,
-          0
-        ],
-        "near": 0.1,
-        "far": 151.11675504932478,
-        "clayZoom": 0.9,
-        "clayZoomRange": [
-          0.12,
-          2.5
-        ]
-      },
-      "renderer": {
-        "backingPx": "1696x1352",
-        "cssPx": "848x676",
-        "canvasCount": 3,
-        "shadowMap": true,
-        "cameraIsPerspective": true
-      },
-      "lightRecipe": {
-        "exposureFloor": 0.006,
-        "toneMap": {
-          "profile": "agx",
-          "strength": 1
-        },
-        "bloom": {
-          "threshold": 0.68,
-          "strength": 1.15
-        },
-        "atmosphereFact": null,
-        "spriteResponse": {
-          "emissiveFloor": 0.05,
-          "materialRecipe": "lit-standee-v1",
-          "invariants": {
-            "colorSpace": "srgb",
-            "magnificationFilter": "nearest",
-            "minificationFilter": "linear",
-            "alphaMode": "registry-cutoff"
-          }
-        },
-        "id": "clay-neutral-truth",
-        "label": "Clayroom neutral truth",
-        "rolled": false,
-        "mode": "diagnostic-neutral",
-        "source": {
-          "class": "diagnostic",
-          "label": "neutral measurement fill",
-          "loreNative": false,
-          "visibleEmitterRequired": false
-        },
-        "ambient": {
-          "color": 16777215,
-          "intensity": 0.62
-        },
-        "lights": []
-      },
-      "lightingProof": {
-        "snapshot": {
-          "label": "test-read",
-          "at": 1784951762763,
-          "ambient": {
-            "uuid": "962634a3-a3fd-4afa-a3c0-119e75feca14",
-            "intensity": 0.62,
-            "color": 16777215
-          },
-          "rig": {
-            "hemi": {
-              "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
-              "intensity": 0.06,
-              "color": 16773596
-            },
-            "key": {
-              "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
-              "intensity": 0,
-              "color": 16777215
-            },
-            "fill": {
-              "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
-              "intensity": 0,
-              "color": 16777215
-            },
-            "cameraKey": {
-              "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
-              "intensity": 0,
-              "color": 16777215
-            }
-          },
-          "lights": []
-        },
-        "probe": {
-          "label": "recipe switch → clay-neutral-truth",
-          "expectedReplacement": true,
-          "preserved": false,
-          "duringPass": true,
-          "afterPass": true
+          "afterPass": null
         }
       },
       "effectiveLights": {
@@ -2488,6 +1034,27 @@
             "instances": 1,
             "textured": false,
             "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -2.013,
+              -0.296,
+              1.988
+            ],
+            "size": [
+              1,
+              1,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#53d5ff",
             "instanceColorNeutralized": false
           },
           {
@@ -3188,7 +1755,1787 @@
         "orphans": []
       },
       "stats": {
-        "boardBuilds": 10,
+        "boardBuilds": 11,
+        "boardSkips": 0
+      }
+    },
+    "settled": {
+      "fixture": {
+        "id": "cl-f03-sprite-citizenship",
+        "version": 1,
+        "seed": 113311726,
+        "seedHex": "0x6c0ffee",
+        "roomRecordId": "clay-c1a"
+      },
+      "citizenship": {
+        "fixtureId": "cl-f03-sprite-citizenship",
+        "fixtureVersion": 1,
+        "scaleMode": "true-scale",
+        "selectedSlug": "spr-pc-human-fighter-female",
+        "selectedView": "face",
+        "supportForm": "shallow-rounded-strip",
+        "tacticalFootprintSeparate": true,
+        "collisionAudit": {
+          "pieces": 7,
+          "checkedPairs": 42,
+          "relocations": 1,
+          "remainingOverlaps": 0
+        },
+        "cameraFill": {
+          "enabled": true,
+          "spriteLayer": 2,
+          "castShadow": false,
+          "intensity": 13.1208,
+          "distance": 110.7069,
+          "decay": 1
+        },
+        "environmentFormFill": {
+          "kind": "hemisphere",
+          "intensity": 0.06,
+          "diagnosticFloor": 0.06,
+          "castShadow": false
+        },
+        "presentationCapFeet": [
+          1,
+          30
+        ],
+        "lineup": [
+          {
+            "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+            "label": "Blind cave rat",
+            "stress": "smallest live height",
+            "canonicalFeet": 0.25,
+            "renderedWorldHeight": 0.05,
+            "renderedWorldWidth": 0.08000000000000002,
+            "tacticalSpanCells": 0.5,
+            "supportWidth": 0.243,
+            "supportDepth": 0.18,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true,
+            "shell": true,
+            "footX": 0.5,
+            "footY": 1,
+            "contentBounds": [
+              0,
+              0.1,
+              0.9375,
+              1
+            ],
+            "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 0.361584,
+              "offset": 0.045,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
+            },
+            "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
+            "regenRecommended": false,
+            "selected": false
+          },
+          {
+            "slug": "spr-fantasy-winged-kobold-urd",
+            "label": "Winged kobold",
+            "stress": "small dark fantasy creature",
+            "canonicalFeet": 3,
+            "renderedWorldHeight": 0.6,
+            "renderedWorldWidth": 0.5415929203539822,
+            "tacticalSpanCells": 1,
+            "supportWidth": 0.4441061946902654,
+            "supportDepth": 0.26,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true,
+            "shell": true,
+            "footX": 0.5,
+            "footY": 0.977876,
+            "contentBounds": [
+              0.02451,
+              0.017699,
+              0.97549,
+              0.977876
+            ],
+            "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 0.6608300176991149,
+              "offset": 0.0624,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
+            },
+            "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
+            "regenRecommended": false,
+            "selected": false
+          },
+          {
+            "slug": "spr-pc-human-fighter-female",
+            "label": "Human fighter",
+            "stress": "human reference · skin/cloth/metal",
+            "canonicalFeet": 5.6,
+            "renderedWorldHeight": 1.1199999999999999,
+            "renderedWorldWidth": 0.8635514018691588,
+            "tacticalSpanCells": 1,
+            "supportWidth": 0.7081121495327102,
+            "supportDepth": 0.3333333333333333,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true,
+            "shell": true,
+            "footX": 0.5,
+            "footY": 0.976636,
+            "contentBounds": [
+              0.024242,
+              0.023364,
+              0.969697,
+              0.976636
+            ],
+            "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.0536708785046727,
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
+            },
+            "selectionBaseRingGlow": true,
+            "selectionBaseNeon": {
+              "linked": true,
+              "visible": true,
+              "source": "emissive-sidewall",
+              "footprintShape": "support-rounded-strip",
+              "width": 0.8780590654205607,
+              "depth": 0.5733333333333333,
+              "additive": true,
+              "centerPointLight": false,
+              "castShadow": false
+            },
+            "regenRecommended": false,
+            "selected": true
+          },
+          {
+            "slug": "spr-fantasy-flaming-skeleton",
+            "label": "Flaming skeleton",
+            "stress": "pale/highlight clipping",
+            "canonicalFeet": 5.8,
+            "renderedWorldHeight": 1.16,
+            "renderedWorldWidth": 1.0226315789473683,
+            "tacticalSpanCells": 1,
+            "supportWidth": 0.82,
+            "supportDepth": 0.3333333333333333,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true,
+            "shell": true,
+            "footX": 0.5,
+            "footY": 0.97807,
+            "contentBounds": [
+              0.024876,
+              0.013158,
+              0.970149,
+              0.97807
+            ],
+            "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.22016,
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
+            },
+            "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
+            "regenRecommended": false,
+            "selected": false
+          },
+          {
+            "slug": "spr-fantasy-wraith",
+            "label": "Wraith",
+            "stress": "dark/irregular alpha edge",
+            "canonicalFeet": 6,
+            "renderedWorldHeight": 1.2,
+            "renderedWorldWidth": 1.1513513513513514,
+            "tacticalSpanCells": 1,
+            "supportWidth": 0.82,
+            "supportDepth": 0.3333333333333333,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true,
+            "shell": true,
+            "footX": 0.5,
+            "footY": 0.977477,
+            "contentBounds": [
+              0.028169,
+              0.022523,
+              0.981221,
+              0.977477
+            ],
+            "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 1.22016,
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
+            },
+            "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
+            "regenRecommended": false,
+            "selected": false
+          },
+          {
+            "slug": "spr-fantasy-treant",
+            "label": "Treant",
+            "stress": "tall Huge silhouette",
+            "canonicalFeet": 26,
+            "renderedWorldHeight": 5.200000000000001,
+            "renderedWorldWidth": 5.412244897959185,
+            "tacticalSpanCells": 3,
+            "supportWidth": 2.46,
+            "supportDepth": 0.3333333333333333,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true,
+            "shell": true,
+            "footX": 0.5,
+            "footY": 0.979592,
+            "contentBounds": [
+              0.015686,
+              0.020408,
+              0.980392,
+              0.979592
+            ],
+            "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
+            "collisionRelocated": false,
+            "collisionNudge": [
+              0,
+              0
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 3.6604799999999997,
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
+            },
+            "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
+            "regenRecommended": true,
+            "selected": false
+          },
+          {
+            "slug": "spr-fantasy-kraken",
+            "label": "Kraken",
+            "stress": "largest live height · width/regeneration test",
+            "canonicalFeet": 60,
+            "renderedWorldHeight": 12,
+            "renderedWorldWidth": 13.177570093457945,
+            "tacticalSpanCells": 4,
+            "supportWidth": 3.28,
+            "supportDepth": 0.3333333333333333,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true,
+            "shell": true,
+            "footX": 0.535398,
+            "footY": 0.997113,
+            "contentBounds": [
+              0.021277,
+              0.018692,
+              0.978723,
+              1
+            ],
+            "alphaCutoff": 0.5,
+            "shadowSilhouette": {
+              "planeCasts": true,
+              "alphaDepth": true,
+              "alphaDistance": true,
+              "shellCasts": false
+            },
+            "collisionRelocated": true,
+            "collisionNudge": [
+              0.2538,
+              0.2623
+            ],
+            "contactShadow": {
+              "linked": true,
+              "poolDiameter": 4.88064,
+              "offset": 0.07999999999999999,
+              "blendMode": "multiply",
+              "multiplyIdentityRim": true
+            },
+            "selectionBaseRingGlow": false,
+            "selectionBaseNeon": null,
+            "regenRecommended": true,
+            "selected": false
+          }
+        ],
+        "stairSamples": [
+          {
+            "view": "face",
+            "supportDepth": 0.3333333333333333,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true
+          },
+          {
+            "view": "three-quarter",
+            "supportDepth": 0.3333333333333333,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true
+          },
+          {
+            "view": "edge",
+            "supportDepth": 0.3333333333333333,
+            "treadDepth": 0.3333333333333333,
+            "stairFit": true
+          }
+        ],
+        "regenRecommended": [
+          "spr-fantasy-treant",
+          "spr-fantasy-kraken"
+        ]
+      },
+      "surfaceRecipe": {
+        "id": "clay-diagnostic-surface",
+        "version": 1,
+        "modes": [
+          "clay",
+          "role-id"
+        ],
+        "defaultMode": "clay",
+        "clayColor": "#8a8a8a",
+        "unclaimedColor": "#ff00ff",
+        "gridColor": "#141414",
+        "gridOpacity": 0.3,
+        "roles": {
+          "floor": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5f8fbf"
+          },
+          "wall": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf6f6f"
+          },
+          "riser": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf8f4f"
+          },
+          "trim": {
+            "route": "diagnostic-clay",
+            "roleColor": "#8fbf5f"
+          },
+          "doorframe": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bfbf5f"
+          },
+          "portal": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5fbf9f"
+          },
+          "pillar": {
+            "route": "diagnostic-clay",
+            "roleColor": "#9f6fbf"
+          },
+          "skirt": {
+            "route": "diagnostic-clay",
+            "roleColor": "#4f5f6f"
+          },
+          "furniture": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf9f6f"
+          },
+          "emitter": {
+            "route": "passthrough",
+            "roleColor": "#ffd88a"
+          },
+          "sprite": {
+            "route": "passthrough",
+            "roleColor": "#ff5fbf"
+          },
+          "door": {
+            "route": "passthrough",
+            "roleColor": "#ffffff"
+          },
+          "contact-shadow": {
+            "route": "passthrough",
+            "roleColor": "#5fbfbf"
+          },
+          "mote": {
+            "route": "passthrough",
+            "roleColor": "#bf5f5f"
+          }
+        }
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          47.4996,
+          47.0362,
+          47.4996
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 151.11675504932478,
+        "clayZoom": 0.9,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676",
+        "canvasCount": 3,
+        "shadowMap": true,
+        "cameraIsPerspective": true
+      },
+      "lightRecipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-neutral-truth",
+        "label": "Clayroom neutral truth",
+        "rolled": false,
+        "mode": "diagnostic-neutral",
+        "source": {
+          "class": "diagnostic",
+          "label": "neutral measurement fill",
+          "loreNative": false,
+          "visibleEmitterRequired": false
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.62
+        },
+        "lights": []
+      },
+      "lightingProof": {
+        "snapshot": {
+          "label": "test-read",
+          "at": 1784953998167,
+          "ambient": {
+            "uuid": "bc86a1a0-ba2e-4bd3-8fcf-f3acc75e6b1f",
+            "intensity": 0.62,
+            "color": 16777215
+          },
+          "rig": {
+            "hemi": {
+              "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
+              "intensity": 0.06,
+              "color": 16773596
+            },
+            "key": {
+              "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
+              "intensity": 0,
+              "color": 16777215
+            },
+            "fill": {
+              "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
+              "intensity": 0,
+              "color": 16777215
+            },
+            "cameraKey": {
+              "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
+              "intensity": 0,
+              "color": 16777215
+            }
+          },
+          "lights": []
+        },
+        "probe": {
+          "label": "door/camera/fade/board rebuild",
+          "preserved": true,
+          "before": {
+            "label": "before-rebuild",
+            "at": 1784953989716,
+            "ambient": {
+              "uuid": "bc86a1a0-ba2e-4bd3-8fcf-f3acc75e6b1f",
+              "intensity": 0.62,
+              "color": 16777215
+            },
+            "rig": {
+              "hemi": {
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
+                "intensity": 0.06,
+                "color": 16773596
+              },
+              "key": {
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "fill": {
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "cameraKey": {
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
+                "intensity": 0,
+                "color": 16777215
+              }
+            },
+            "lights": []
+          },
+          "during": {
+            "label": "during-animation",
+            "at": 1784953989747,
+            "ambient": {
+              "uuid": "bc86a1a0-ba2e-4bd3-8fcf-f3acc75e6b1f",
+              "intensity": 0.62,
+              "color": 16777215
+            },
+            "rig": {
+              "hemi": {
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
+                "intensity": 0.06,
+                "color": 16773596
+              },
+              "key": {
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "fill": {
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "cameraKey": {
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
+                "intensity": 0,
+                "color": 16777215
+              }
+            },
+            "lights": []
+          },
+          "after": {
+            "label": "after-animation",
+            "at": 1784953990652,
+            "ambient": {
+              "uuid": "bc86a1a0-ba2e-4bd3-8fcf-f3acc75e6b1f",
+              "intensity": 0.62,
+              "color": 16777215
+            },
+            "rig": {
+              "hemi": {
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
+                "intensity": 0.06,
+                "color": 16773596
+              },
+              "key": {
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "fill": {
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
+                "intensity": 0,
+                "color": 16777215
+              },
+              "cameraKey": {
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
+                "intensity": 0,
+                "color": 16777215
+              }
+            },
+            "lights": []
+          },
+          "duringPass": true,
+          "afterPass": true
+        }
+      },
+      "effectiveLights": {
+        "profileKey": "dark",
+        "ambient": 0.62,
+        "hemi": 0.06,
+        "key": 0,
+        "fill": 0
+      },
+      "surfaceCensus": {
+        "recipe": {
+          "id": "clay-diagnostic-surface",
+          "version": 1,
+          "mode": "clay"
+        },
+        "surfaces": [
+          {
+            "role": "floor",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.315,
+              0
+            ],
+            "size": [
+              15,
+              0.03,
+              15
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-floor",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.19,
+              0
+            ],
+            "size": [
+              15.56,
+              0.4,
+              15.56
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-stem",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -4.627,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              6.255,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              1,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              3.627,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              8.255,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -7.61,
+              0.84,
+              0
+            ],
+            "size": [
+              0.29,
+              1.78,
+              15.51
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "trim",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.177,
+              0
+            ],
+            "size": [
+              15.475,
+              0.305,
+              15.475
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-trim",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "skirt",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              1,
+              1,
+              1
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/skirt",
+            "instances": 64,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "portal",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              1,
+              1,
+              1
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/portal",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -5.993,
+              -0.184,
+              6.008
+            ],
+            "size": [
+              0.08,
+              0.05,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -6.004,
+              -0.194,
+              5.997
+            ],
+            "size": [
+              0.08,
+              0.05,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -5.983,
+              -0.249,
+              6.018
+            ],
+            "size": [
+              0.257,
+              0.114,
+              0.194
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -4.173,
+              0.031,
+              3.833
+            ],
+            "size": [
+              0.542,
+              0.6,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -4.184,
+              0.02,
+              3.823
+            ],
+            "size": [
+              0.542,
+              0.6,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -4.054,
+              -0.249,
+              3.947
+            ],
+            "size": [
+              0.47,
+              0.114,
+              0.286
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -2.223,
+              0.233,
+              1.764
+            ],
+            "size": [
+              0.864,
+              1.12,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -2.233,
+              0.223,
+              1.753
+            ],
+            "size": [
+              0.864,
+              1.12,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -2.013,
+              -0.249,
+              1.988
+            ],
+            "size": [
+              0.744,
+              0.114,
+              0.369
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -2.013,
+              -0.296,
+              1.988
+            ],
+            "size": [
+              1,
+              1,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#53d5ff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -0.261,
+              0.25,
+              -0.271
+            ],
+            "size": [
+              1.023,
+              1.16,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -0.271,
+              0.24,
+              -0.282
+            ],
+            "size": [
+              1.023,
+              1.16,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -0.041,
+              -0.249,
+              -0.04
+            ],
+            "size": [
+              0.856,
+              0.114,
+              0.369
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              1.748,
+              0.265,
+              -2.274
+            ],
+            "size": [
+              1.151,
+              1.2,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              1.738,
+              0.255,
+              -2.285
+            ],
+            "size": [
+              1.151,
+              1.2,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              1.969,
+              -0.249,
+              -2.03
+            ],
+            "size": [
+              0.856,
+              0.114,
+              0.369
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              2.975,
+              1.839,
+              -5.071
+            ],
+            "size": [
+              5.412,
+              5.2,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              2.965,
+              1.828,
+              -5.082
+            ],
+            "size": [
+              5.412,
+              5.2,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.963,
+              -0.249,
+              -4.036
+            ],
+            "size": [
+              2.496,
+              0.114,
+              0.369
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              4,
+              4.683,
+              -8.307
+            ],
+            "size": [
+              13.178,
+              12,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.99,
+              4.672,
+              -8.318
+            ],
+            "size": [
+              13.178,
+              12,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              6.044,
+              -0.249,
+              -5.524
+            ],
+            "size": [
+              3.316,
+              0.114,
+              0.369
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -6.015,
+              -0.297,
+              5.986
+            ],
+            "size": [
+              0.362,
+              0.362,
+              0
+            ],
+            "rotY": 3.937,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -4.099,
+              -0.297,
+              3.904
+            ],
+            "size": [
+              0.661,
+              0.661,
+              0
+            ],
+            "rotY": 3.949,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -2.068,
+              -0.297,
+              1.929
+            ],
+            "size": [
+              1.054,
+              1.054,
+              0
+            ],
+            "rotY": 3.895,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -0.096,
+              -0.297,
+              -0.098
+            ],
+            "size": [
+              1.22,
+              1.22,
+              0
+            ],
+            "rotY": 3.903,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              1.915,
+              -0.297,
+              -2.089
+            ],
+            "size": [
+              1.22,
+              1.22,
+              0
+            ],
+            "rotY": 3.877,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.908,
+              -0.297,
+              -4.094
+            ],
+            "size": [
+              3.66,
+              3.66,
+              0
+            ],
+            "rotY": 3.904,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              5.989,
+              -0.297,
+              -5.581
+            ],
+            "size": [
+              4.881,
+              4.881,
+              0
+            ],
+            "rotY": 3.91,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.18,
+              5.25
+            ],
+            "size": [
+              3.6,
+              0.24,
+              1
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.06,
+              5.083
+            ],
+            "size": [
+              3.6,
+              0.48,
+              0.667
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0.06,
+              4.917
+            ],
+            "size": [
+              3.6,
+              0.72,
+              0.333
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -1.05,
+              0.57,
+              5.583
+            ],
+            "size": [
+              0.864,
+              1.12,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -1.05,
+              0.57,
+              5.602
+            ],
+            "size": [
+              0.864,
+              1.12,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -1.05,
+              -0.009,
+              5.583
+            ],
+            "size": [
+              0.744,
+              0.114,
+              0.369
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0.81,
+              5.25
+            ],
+            "size": [
+              0.864,
+              1.12,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0.81,
+              5.269
+            ],
+            "size": [
+              0.864,
+              1.12,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0.231,
+              5.25
+            ],
+            "size": [
+              0.744,
+              0.114,
+              0.369
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              1.05,
+              1.05,
+              4.917
+            ],
+            "size": [
+              0.864,
+              1.12,
+              0.035
+            ],
+            "rotY": 0,
+            "builder": "buildSpriteBillboard",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              1.05,
+              1.05,
+              4.935
+            ],
+            "size": [
+              0.864,
+              1.12,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              1.05,
+              0.471,
+              4.917
+            ],
+            "size": [
+              0.744,
+              0.114,
+              0.369
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          }
+        ],
+        "unclaimed": [],
+        "texturedClayCount": 0
+      },
+      "provenanceAudit": {
+        "tagged": [
+          {
+            "type": "Group",
+            "builder": "setInteriorBoard",
+            "bbox": {
+              "min": [
+                -8.5,
+                -0.9,
+                -15.373
+              ],
+              "max": [
+                11.139,
+                9.607,
+                8.5
+              ]
+            }
+          },
+          {
+            "type": "LineSegments",
+            "builder": "clayRoomBuildSeamGrid",
+            "bbox": {
+              "min": [
+                -7.5,
+                -0.29,
+                -7.5
+              ],
+              "max": [
+                7.5,
+                -0.29,
+                7.5
+              ]
+            }
+          },
+          {
+            "type": "AmbientLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          }
+        ],
+        "orphans": []
+      },
+      "stats": {
+        "boardBuilds": 11,
         "boardSkips": 0
       }
     }
@@ -3196,9 +3543,9 @@
   "settleDelta": {
     "earlyLineupCount": 7,
     "settledLineupCount": 7,
-    "boardBuildsEarly": 10,
-    "boardBuildsSettled": 10,
-    "surfaceCensusChanged": true
+    "boardBuildsEarly": 11,
+    "boardBuildsSettled": 11,
+    "surfaceCensusChanged": false
   },
   "canonical": {
     "fixtureId": "cl-f03-sprite-citizenship",
@@ -3218,8 +3565,8 @@
       "enabled": true,
       "spriteLayer": 2,
       "castShadow": false,
-      "intensity": 14.5787,
-      "distance": 123.0076,
+      "intensity": 13.1208,
+      "distance": 110.7069,
       "decay": 1
     },
     "environmentFormFill": {
@@ -3255,6 +3602,12 @@
           1
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3263,9 +3616,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 0.361584,
-          "offset": 0.045
+          "offset": 0.045,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": false,
         "selected": false
       },
@@ -3291,6 +3647,12 @@
           0.977876
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3299,9 +3661,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 0.6608300176991149,
-          "offset": 0.0624
+          "offset": 0.0624,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": false,
         "selected": false
       },
@@ -3327,6 +3692,12 @@
           0.976636
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3335,9 +3706,22 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 1.0536708785046727,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": true,
+        "selectionBaseNeon": {
+          "linked": true,
+          "visible": true,
+          "source": "emissive-sidewall",
+          "footprintShape": "support-rounded-strip",
+          "width": 0.8780590654205607,
+          "depth": 0.5733333333333333,
+          "additive": true,
+          "centerPointLight": false,
+          "castShadow": false
+        },
         "regenRecommended": false,
         "selected": true
       },
@@ -3363,6 +3747,12 @@
           0.97807
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3371,9 +3761,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 1.22016,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": false,
         "selected": false
       },
@@ -3399,6 +3792,12 @@
           0.977477
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3407,9 +3806,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 1.22016,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": false,
         "selected": false
       },
@@ -3435,6 +3837,12 @@
           0.979592
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3443,9 +3851,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 3.6604799999999997,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": true,
         "selected": false
       },
@@ -3471,6 +3882,12 @@
           1
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": true,
         "collisionNudge": [
           0.2538,
@@ -3479,9 +3896,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 4.88064,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": true,
         "selected": false
       }
@@ -3511,7 +3931,7 @@
       "spr-fantasy-kraken"
     ]
   },
-  "diagnosticCap": {
+  "preferredPresentation": {
     "fixtureId": "cl-f03-sprite-citizenship",
     "fixtureVersion": 1,
     "scaleMode": "diagnostic-cap",
@@ -3566,6 +3986,12 @@
           1
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3574,9 +4000,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 0.39045120000000005,
-          "offset": 0.045
+          "offset": 0.045,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": false,
         "selected": false
       },
@@ -3602,6 +4031,12 @@
           0.977876
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3610,9 +4045,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 0.6608300176991149,
-          "offset": 0.0624
+          "offset": 0.0624,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": false,
         "selected": false
       },
@@ -3638,6 +4076,12 @@
           0.976636
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3646,9 +4090,22 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 1.0536708785046727,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": true,
+        "selectionBaseNeon": {
+          "linked": true,
+          "visible": true,
+          "source": "emissive-sidewall",
+          "footprintShape": "support-rounded-strip",
+          "width": 0.8780590654205607,
+          "depth": 0.5733333333333333,
+          "additive": true,
+          "centerPointLight": false,
+          "castShadow": false
+        },
         "regenRecommended": false,
         "selected": true
       },
@@ -3674,6 +4131,12 @@
           0.97807
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3682,9 +4145,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 1.22016,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": false,
         "selected": false
       },
@@ -3710,6 +4176,12 @@
           0.977477
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3718,9 +4190,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 1.22016,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": false,
         "selected": false
       },
@@ -3746,6 +4221,12 @@
           0.979592
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": false,
         "collisionNudge": [
           0,
@@ -3754,9 +4235,12 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 3.6604799999999997,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": true,
         "selected": false
       },
@@ -3782,6 +4266,12 @@
           1
         ],
         "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
         "collisionRelocated": true,
         "collisionNudge": [
           0.254,
@@ -3790,9 +4280,396 @@
         "contactShadow": {
           "linked": true,
           "poolDiameter": 4.88064,
-          "offset": 0.07999999999999999
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
         },
         "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": true,
+        "selected": false
+      }
+    ],
+    "stairSamples": [
+      {
+        "view": "face",
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true
+      },
+      {
+        "view": "three-quarter",
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true
+      },
+      {
+        "view": "edge",
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true
+      }
+    ],
+    "regenRecommended": [
+      "spr-fantasy-treant",
+      "spr-fantasy-kraken"
+    ]
+  },
+  "defaultPresentation": {
+    "fixtureId": "cl-f03-sprite-citizenship",
+    "fixtureVersion": 1,
+    "scaleMode": "diagnostic-cap",
+    "selectedSlug": "spr-pc-human-fighter-female",
+    "selectedView": "face",
+    "supportForm": "shallow-rounded-strip",
+    "tacticalFootprintSeparate": true,
+    "collisionAudit": {
+      "pieces": 7,
+      "checkedPairs": 42,
+      "relocations": 1,
+      "remainingOverlaps": 0
+    },
+    "cameraFill": {
+      "enabled": true,
+      "spriteLayer": 2,
+      "castShadow": false,
+      "intensity": 9.8342,
+      "distance": 82.976,
+      "decay": 1
+    },
+    "environmentFormFill": {
+      "kind": "hemisphere",
+      "intensity": 0.06,
+      "diagnosticFloor": 0.06,
+      "castShadow": false
+    },
+    "presentationCapFeet": [
+      1,
+      30
+    ],
+    "lineup": [
+      {
+        "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+        "label": "Blind cave rat",
+        "stress": "smallest live height",
+        "canonicalFeet": 0.25,
+        "renderedWorldHeight": 0.2,
+        "renderedWorldWidth": 0.32000000000000006,
+        "tacticalSpanCells": 0.5,
+        "supportWidth": 0.2624,
+        "supportDepth": 0.18,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 1,
+        "contentBounds": [
+          0,
+          0.1,
+          0.9375,
+          1
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 0.39045120000000005,
+          "offset": 0.045,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": false,
+        "selected": false
+      },
+      {
+        "slug": "spr-fantasy-winged-kobold-urd",
+        "label": "Winged kobold",
+        "stress": "small dark fantasy creature",
+        "canonicalFeet": 3,
+        "renderedWorldHeight": 0.6,
+        "renderedWorldWidth": 0.5415929203539822,
+        "tacticalSpanCells": 1,
+        "supportWidth": 0.4441061946902654,
+        "supportDepth": 0.26,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.977876,
+        "contentBounds": [
+          0.02451,
+          0.017699,
+          0.97549,
+          0.977876
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 0.6608300176991149,
+          "offset": 0.0624,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": false,
+        "selected": false
+      },
+      {
+        "slug": "spr-pc-human-fighter-female",
+        "label": "Human fighter",
+        "stress": "human reference · skin/cloth/metal",
+        "canonicalFeet": 5.6,
+        "renderedWorldHeight": 1.1199999999999999,
+        "renderedWorldWidth": 0.8635514018691588,
+        "tacticalSpanCells": 1,
+        "supportWidth": 0.7081121495327102,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.976636,
+        "contentBounds": [
+          0.024242,
+          0.023364,
+          0.969697,
+          0.976636
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.0536708785046727,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": true,
+        "selectionBaseNeon": {
+          "linked": true,
+          "visible": true,
+          "source": "emissive-sidewall",
+          "footprintShape": "support-rounded-strip",
+          "width": 0.8780590654205607,
+          "depth": 0.5733333333333333,
+          "additive": true,
+          "centerPointLight": false,
+          "castShadow": false
+        },
+        "regenRecommended": false,
+        "selected": true
+      },
+      {
+        "slug": "spr-fantasy-flaming-skeleton",
+        "label": "Flaming skeleton",
+        "stress": "pale/highlight clipping",
+        "canonicalFeet": 5.8,
+        "renderedWorldHeight": 1.16,
+        "renderedWorldWidth": 1.0226315789473683,
+        "tacticalSpanCells": 1,
+        "supportWidth": 0.82,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.97807,
+        "contentBounds": [
+          0.024876,
+          0.013158,
+          0.970149,
+          0.97807
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.22016,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": false,
+        "selected": false
+      },
+      {
+        "slug": "spr-fantasy-wraith",
+        "label": "Wraith",
+        "stress": "dark/irregular alpha edge",
+        "canonicalFeet": 6,
+        "renderedWorldHeight": 1.2,
+        "renderedWorldWidth": 1.1513513513513514,
+        "tacticalSpanCells": 1,
+        "supportWidth": 0.82,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.977477,
+        "contentBounds": [
+          0.028169,
+          0.022523,
+          0.981221,
+          0.977477
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.22016,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": false,
+        "selected": false
+      },
+      {
+        "slug": "spr-fantasy-treant",
+        "label": "Treant",
+        "stress": "tall Huge silhouette",
+        "canonicalFeet": 26,
+        "renderedWorldHeight": 5.200000000000001,
+        "renderedWorldWidth": 5.412244897959185,
+        "tacticalSpanCells": 3,
+        "supportWidth": 2.46,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.979592,
+        "contentBounds": [
+          0.015686,
+          0.020408,
+          0.980392,
+          0.979592
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 3.6604799999999997,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": true,
+        "selected": false
+      },
+      {
+        "slug": "spr-fantasy-kraken",
+        "label": "Kraken",
+        "stress": "largest live height · width/regeneration test",
+        "canonicalFeet": 60,
+        "renderedWorldHeight": 6,
+        "renderedWorldWidth": 6.588785046728972,
+        "tacticalSpanCells": 4,
+        "supportWidth": 3.28,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.535398,
+        "footY": 0.997113,
+        "contentBounds": [
+          0.021277,
+          0.018692,
+          0.978723,
+          1
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": true,
+        "collisionNudge": [
+          0.254,
+          0.2625
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 4.88064,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
         "regenRecommended": true,
         "selected": false
       }
@@ -3844,6 +4721,400 @@
       2.5
     ]
   },
+  "selectionNeonNegativeControl": {
+    "fixtureId": "cl-f03-sprite-citizenship",
+    "fixtureVersion": 1,
+    "scaleMode": "true-scale",
+    "selectedSlug": "spr-fantasy-flaming-skeleton",
+    "selectedView": "face",
+    "supportForm": "shallow-rounded-strip",
+    "tacticalFootprintSeparate": true,
+    "collisionAudit": {
+      "pieces": 7,
+      "checkedPairs": 42,
+      "relocations": 1,
+      "remainingOverlaps": 0
+    },
+    "cameraFill": {
+      "enabled": true,
+      "spriteLayer": 2,
+      "castShadow": false,
+      "intensity": 13.1208,
+      "distance": 110.7069,
+      "decay": 1
+    },
+    "environmentFormFill": {
+      "kind": "hemisphere",
+      "intensity": 0.06,
+      "diagnosticFloor": 0.06,
+      "castShadow": false
+    },
+    "presentationCapFeet": [
+      1,
+      30
+    ],
+    "lineup": [
+      {
+        "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+        "label": "Blind cave rat",
+        "stress": "smallest live height",
+        "canonicalFeet": 0.25,
+        "renderedWorldHeight": 0.05,
+        "renderedWorldWidth": 0.08000000000000002,
+        "tacticalSpanCells": 0.5,
+        "supportWidth": 0.243,
+        "supportDepth": 0.18,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 1,
+        "contentBounds": [
+          0,
+          0.1,
+          0.9375,
+          1
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 0.361584,
+          "offset": 0.045,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": false,
+        "selected": false
+      },
+      {
+        "slug": "spr-fantasy-winged-kobold-urd",
+        "label": "Winged kobold",
+        "stress": "small dark fantasy creature",
+        "canonicalFeet": 3,
+        "renderedWorldHeight": 0.6,
+        "renderedWorldWidth": 0.5415929203539822,
+        "tacticalSpanCells": 1,
+        "supportWidth": 0.4441061946902654,
+        "supportDepth": 0.26,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.977876,
+        "contentBounds": [
+          0.02451,
+          0.017699,
+          0.97549,
+          0.977876
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 0.6608300176991149,
+          "offset": 0.0624,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": false,
+        "selected": false
+      },
+      {
+        "slug": "spr-pc-human-fighter-female",
+        "label": "Human fighter",
+        "stress": "human reference · skin/cloth/metal",
+        "canonicalFeet": 5.6,
+        "renderedWorldHeight": 1.1199999999999999,
+        "renderedWorldWidth": 0.8635514018691588,
+        "tacticalSpanCells": 1,
+        "supportWidth": 0.7081121495327102,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.976636,
+        "contentBounds": [
+          0.024242,
+          0.023364,
+          0.969697,
+          0.976636
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.0536708785046727,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": {
+          "linked": true,
+          "visible": false,
+          "source": "emissive-sidewall",
+          "footprintShape": "support-rounded-strip",
+          "width": 0.8780590654205607,
+          "depth": 0.5733333333333333,
+          "additive": true,
+          "centerPointLight": false,
+          "castShadow": false
+        },
+        "regenRecommended": false,
+        "selected": false
+      },
+      {
+        "slug": "spr-fantasy-flaming-skeleton",
+        "label": "Flaming skeleton",
+        "stress": "pale/highlight clipping",
+        "canonicalFeet": 5.8,
+        "renderedWorldHeight": 1.16,
+        "renderedWorldWidth": 1.0226315789473683,
+        "tacticalSpanCells": 1,
+        "supportWidth": 0.82,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.97807,
+        "contentBounds": [
+          0.024876,
+          0.013158,
+          0.970149,
+          0.97807
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.22016,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": true,
+        "selectionBaseNeon": {
+          "linked": true,
+          "visible": true,
+          "source": "emissive-sidewall",
+          "footprintShape": "support-rounded-strip",
+          "width": 1.0168,
+          "depth": 0.5733333333333333,
+          "additive": true,
+          "centerPointLight": false,
+          "castShadow": false
+        },
+        "regenRecommended": false,
+        "selected": true
+      },
+      {
+        "slug": "spr-fantasy-wraith",
+        "label": "Wraith",
+        "stress": "dark/irregular alpha edge",
+        "canonicalFeet": 6,
+        "renderedWorldHeight": 1.2,
+        "renderedWorldWidth": 1.1513513513513514,
+        "tacticalSpanCells": 1,
+        "supportWidth": 0.82,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.977477,
+        "contentBounds": [
+          0.028169,
+          0.022523,
+          0.981221,
+          0.977477
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 1.22016,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": false,
+        "selected": false
+      },
+      {
+        "slug": "spr-fantasy-treant",
+        "label": "Treant",
+        "stress": "tall Huge silhouette",
+        "canonicalFeet": 26,
+        "renderedWorldHeight": 5.200000000000001,
+        "renderedWorldWidth": 5.412244897959185,
+        "tacticalSpanCells": 3,
+        "supportWidth": 2.46,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.5,
+        "footY": 0.979592,
+        "contentBounds": [
+          0.015686,
+          0.020408,
+          0.980392,
+          0.979592
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": false,
+        "collisionNudge": [
+          0,
+          0
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 3.6604799999999997,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": true,
+        "selected": false
+      },
+      {
+        "slug": "spr-fantasy-kraken",
+        "label": "Kraken",
+        "stress": "largest live height · width/regeneration test",
+        "canonicalFeet": 60,
+        "renderedWorldHeight": 12,
+        "renderedWorldWidth": 13.177570093457945,
+        "tacticalSpanCells": 4,
+        "supportWidth": 3.28,
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true,
+        "shell": true,
+        "footX": 0.535398,
+        "footY": 0.997113,
+        "contentBounds": [
+          0.021277,
+          0.018692,
+          0.978723,
+          1
+        ],
+        "alphaCutoff": 0.5,
+        "shadowSilhouette": {
+          "planeCasts": true,
+          "alphaDepth": true,
+          "alphaDistance": true,
+          "shellCasts": false
+        },
+        "collisionRelocated": true,
+        "collisionNudge": [
+          0.2538,
+          0.2623
+        ],
+        "contactShadow": {
+          "linked": true,
+          "poolDiameter": 4.88064,
+          "offset": 0.07999999999999999,
+          "blendMode": "multiply",
+          "multiplyIdentityRim": true
+        },
+        "selectionBaseRingGlow": false,
+        "selectionBaseNeon": null,
+        "regenRecommended": true,
+        "selected": false
+      }
+    ],
+    "stairSamples": [
+      {
+        "view": "face",
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true
+      },
+      {
+        "view": "three-quarter",
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true
+      },
+      {
+        "view": "edge",
+        "supportDepth": 0.3333333333333333,
+        "treadDepth": 0.3333333333333333,
+        "stairFit": true
+      }
+    ],
+    "regenRecommended": [
+      "spr-fantasy-treant",
+      "spr-fantasy-kraken"
+    ]
+  },
   "lightingContexts": [
     {
       "recipeId": "clay-neutral-truth",
@@ -3890,30 +5161,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784951772559,
+            "at": 1784954008153,
             "ambient": {
-              "uuid": "962634a3-a3fd-4afa-a3c0-119e75feca14",
+              "uuid": "bc86a1a0-ba2e-4bd3-8fcf-f3acc75e6b1f",
               "intensity": 0.62,
               "color": 16777215
             },
             "rig": {
               "hemi": {
-                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
                 "intensity": 0.06,
                 "color": 16773596
               },
               "key": {
-                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
                 "intensity": 0,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
                 "intensity": 0,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
                 "intensity": 0,
                 "color": 16777215
               }
@@ -3983,6 +5254,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -3991,9 +5268,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.39045120000000005,
-                "offset": 0.045
+                "offset": 0.045,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4019,6 +5299,12 @@
                 0.977876
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4027,9 +5313,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.6608300176991149,
-                "offset": 0.0624
+                "offset": 0.0624,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4055,6 +5344,12 @@
                 0.976636
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4063,9 +5358,22 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.0536708785046727,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": true,
+              "selectionBaseNeon": {
+                "linked": true,
+                "visible": true,
+                "source": "emissive-sidewall",
+                "footprintShape": "support-rounded-strip",
+                "width": 0.8780590654205607,
+                "depth": 0.5733333333333333,
+                "additive": true,
+                "centerPointLight": false,
+                "castShadow": false
+              },
               "regenRecommended": false,
               "selected": true
             },
@@ -4091,6 +5399,12 @@
                 0.97807
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4099,9 +5413,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4127,6 +5444,12 @@
                 0.977477
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4135,9 +5458,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4163,6 +5489,12 @@
                 0.979592
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4171,9 +5503,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 3.6604799999999997,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             },
@@ -4199,6 +5534,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": true,
               "collisionNudge": [
                 0.254,
@@ -4207,9 +5548,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 4.88064,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             }
@@ -4337,30 +5681,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784951775040,
+            "at": 1784954017282,
             "ambient": {
-              "uuid": "f4308598-b4c0-4767-9b9d-964912b57838",
+              "uuid": "e94ee197-a673-4f33-8249-fe2edc40dcc7",
               "intensity": 0.36,
               "color": 9412808
             },
             "rig": {
               "hemi": {
-                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
                 "intensity": 0.08,
                 "color": 16773596
               },
               "key": {
-                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
                 "intensity": 0.05,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
                 "intensity": 0.02,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
                 "intensity": 0.1,
                 "color": 16777215
               }
@@ -4430,6 +5774,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4438,9 +5788,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.39045120000000005,
-                "offset": 0.045
+                "offset": 0.045,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4466,6 +5819,12 @@
                 0.977876
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4474,9 +5833,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.6608300176991149,
-                "offset": 0.0624
+                "offset": 0.0624,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4502,6 +5864,12 @@
                 0.976636
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4510,9 +5878,22 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.0536708785046727,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": true,
+              "selectionBaseNeon": {
+                "linked": true,
+                "visible": true,
+                "source": "emissive-sidewall",
+                "footprintShape": "support-rounded-strip",
+                "width": 0.8780590654205607,
+                "depth": 0.5733333333333333,
+                "additive": true,
+                "centerPointLight": false,
+                "castShadow": false
+              },
               "regenRecommended": false,
               "selected": true
             },
@@ -4538,6 +5919,12 @@
                 0.97807
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4546,9 +5933,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4574,6 +5964,12 @@
                 0.977477
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4582,9 +5978,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4610,6 +6009,12 @@
                 0.979592
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4618,9 +6023,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 3.6604799999999997,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             },
@@ -4646,6 +6054,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": true,
               "collisionNudge": [
                 0.254,
@@ -4654,9 +6068,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 4.88064,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             }
@@ -4784,30 +6201,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784951778125,
+            "at": 1784954020855,
             "ambient": {
-              "uuid": "d03e2aa7-fb87-471c-8d70-16c42b6c37aa",
+              "uuid": "27074a10-687a-4d99-b13b-18fe41399a2f",
               "intensity": 0.21,
               "color": 4864038
             },
             "rig": {
               "hemi": {
-                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
                 "intensity": 0.08,
                 "color": 16773596
               },
               "key": {
-                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
                 "intensity": 0.05,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
                 "intensity": 0.02,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
                 "intensity": 0.1,
                 "color": 16777215
               }
@@ -4818,17 +6235,17 @@
                 "sourceRef": "torch-key",
                 "state": "flickering",
                 "sampleIndex": 8,
-                "normalizedSample": 1.013423,
-                "emitted": 5.928523,
+                "normalizedSample": 1.029738,
+                "emitted": 6.023967,
                 "emittedBase": 5.85,
-                "emittedNormalized": 1.013423,
-                "mesh": 1.621476,
+                "emittedNormalized": 1.029738,
+                "mesh": 1.647581,
                 "meshBase": 1.6,
-                "meshNormalized": 1.013423,
+                "meshNormalized": 1.029738,
                 "parity": true,
-                "pointUuid": "47e385a1-98e9-42ba-9951-cf846f940bf8",
-                "emitterUuid": "8431f148-66bc-465f-8241-6bd8de876fb6",
-                "materialUuid": "6c0db183-5239-4344-9911-fd92e80eeb86",
+                "pointUuid": "78331ff1-ef50-4b5e-be0e-20b04bad42ba",
+                "emitterUuid": "d3c2262b-764d-408b-a986-770ec6ed78c6",
+                "materialUuid": "9955cd5e-2620-49e2-b209-15d5ce9aca06",
                 "color": 16752714,
                 "distance": 24,
                 "decay": 1.5,
@@ -4839,14 +6256,14 @@
                 ],
                 "shadowCameraFar": 24,
                 "pointPosition": [
-                  -0.013542,
-                  0.07552,
-                  0.195635
+                  -0.008669,
+                  0.077871,
+                  0.194911
                 ],
                 "emitterPosition": [
-                  -0.013542,
-                  0.07552,
-                  0.195635
+                  -0.008669,
+                  0.077871,
+                  0.194911
                 ],
                 "basePointPosition": [
                   0,
@@ -4859,9 +6276,9 @@
                   0.18
                 ],
                 "directionSample": {
-                  "x": -0.013542,
-                  "y": -0.00448,
-                  "z": 0.015635
+                  "x": -0.008669,
+                  "y": -0.002129,
+                  "z": 0.014911
                 },
                 "directionAmplitude": 0.025,
                 "directionWithinBounds": true,
@@ -4939,6 +6356,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4947,9 +6370,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.39045120000000005,
-                "offset": 0.045
+                "offset": 0.045,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -4975,6 +6401,12 @@
                 0.977876
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -4983,9 +6415,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.6608300176991149,
-                "offset": 0.0624
+                "offset": 0.0624,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5011,6 +6446,12 @@
                 0.976636
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5019,9 +6460,22 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.0536708785046727,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": true,
+              "selectionBaseNeon": {
+                "linked": true,
+                "visible": true,
+                "source": "emissive-sidewall",
+                "footprintShape": "support-rounded-strip",
+                "width": 0.8780590654205607,
+                "depth": 0.5733333333333333,
+                "additive": true,
+                "centerPointLight": false,
+                "castShadow": false
+              },
               "regenRecommended": false,
               "selected": true
             },
@@ -5047,6 +6501,12 @@
                 0.97807
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5055,9 +6515,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5083,6 +6546,12 @@
                 0.977477
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5091,9 +6560,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5119,6 +6591,12 @@
                 0.979592
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5127,9 +6605,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 3.6604799999999997,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             },
@@ -5155,6 +6636,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": true,
               "collisionNudge": [
                 0.254,
@@ -5163,9 +6650,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 4.88064,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             }
@@ -5293,30 +6783,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784951780808,
+            "at": 1784954023526,
             "ambient": {
-              "uuid": "2f3b6ddf-c826-447a-94aa-c812ae74a8f5",
+              "uuid": "b933e00e-9973-40ab-95a8-3b78bf28bb1d",
               "intensity": 0.26,
               "color": 4212896
             },
             "rig": {
               "hemi": {
-                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
                 "intensity": 0.08,
                 "color": 16773596
               },
               "key": {
-                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
                 "intensity": 0.05,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
                 "intensity": 0.02,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
                 "intensity": 0.1,
                 "color": 16777215
               }
@@ -5335,9 +6825,9 @@
                 "meshBase": 1.6,
                 "meshNormalized": 1,
                 "parity": true,
-                "pointUuid": "08321fa7-80d2-4b91-9551-bc0634627436",
-                "emitterUuid": "e856aa48-a35e-448c-80c0-e4f631d2fa3c",
-                "materialUuid": "b1ff1107-4b76-4307-83c9-4e19be89dc5b",
+                "pointUuid": "ab0bd459-f872-4433-80ce-4bc3ffb7da1b",
+                "emitterUuid": "83bdb123-8539-43be-bc4e-804c7bb9fbe4",
+                "materialUuid": "870a1c3b-e8fd-4765-85f2-54f059c59d77",
                 "color": 9071615,
                 "distance": 6,
                 "decay": 2,
@@ -5448,6 +6938,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5456,9 +6952,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.39045120000000005,
-                "offset": 0.045
+                "offset": 0.045,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5484,6 +6983,12 @@
                 0.977876
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5492,9 +6997,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.6608300176991149,
-                "offset": 0.0624
+                "offset": 0.0624,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5520,6 +7028,12 @@
                 0.976636
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5528,9 +7042,22 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.0536708785046727,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": true,
+              "selectionBaseNeon": {
+                "linked": true,
+                "visible": true,
+                "source": "emissive-sidewall",
+                "footprintShape": "support-rounded-strip",
+                "width": 0.8780590654205607,
+                "depth": 0.5733333333333333,
+                "additive": true,
+                "centerPointLight": false,
+                "castShadow": false
+              },
               "regenRecommended": false,
               "selected": true
             },
@@ -5556,6 +7083,12 @@
                 0.97807
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5564,9 +7097,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5592,6 +7128,12 @@
                 0.977477
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5600,9 +7142,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5628,6 +7173,12 @@
                 0.979592
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5636,9 +7187,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 3.6604799999999997,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             },
@@ -5664,6 +7218,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": true,
               "collisionNudge": [
                 0.254,
@@ -5672,9 +7232,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 4.88064,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             }
@@ -5802,30 +7365,30 @@
         "lighting": {
           "snapshot": {
             "label": "test-read",
-            "at": 1784951783461,
+            "at": 1784954026041,
             "ambient": {
-              "uuid": "4c3f3c19-1fbf-418c-93bf-d0dc0d8996e0",
+              "uuid": "39b264b7-f8fe-4227-8680-2e950f3b4de9",
               "intensity": 0.55,
               "color": 14212320
             },
             "rig": {
               "hemi": {
-                "uuid": "b5a5725f-5814-44cb-be2a-b9784883227e",
+                "uuid": "665cd4de-3cb4-4ddf-a5be-280e6f81204c",
                 "intensity": 0.08,
                 "color": 16773596
               },
               "key": {
-                "uuid": "068aacfe-3d68-4fec-9c24-1ff2f9c154e6",
+                "uuid": "2046249d-be58-4787-9d51-3cdbf1dd0534",
                 "intensity": 0.05,
                 "color": 16777215
               },
               "fill": {
-                "uuid": "19ca494b-8ff4-4070-a969-60122019d909",
+                "uuid": "d552bd38-0724-47a7-a5bf-875515b29eb2",
                 "intensity": 0.02,
                 "color": 16777215
               },
               "cameraKey": {
-                "uuid": "24544631-adf3-4404-9ceb-3da5573d217a",
+                "uuid": "98b3fb95-2fec-49aa-b448-6f5f0f005fdd",
                 "intensity": 0.1,
                 "color": 16777215
               }
@@ -5895,6 +7458,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5903,9 +7472,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.39045120000000005,
-                "offset": 0.045
+                "offset": 0.045,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5931,6 +7503,12 @@
                 0.977876
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5939,9 +7517,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 0.6608300176991149,
-                "offset": 0.0624
+                "offset": 0.0624,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -5967,6 +7548,12 @@
                 0.976636
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -5975,9 +7562,22 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.0536708785046727,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": true,
+              "selectionBaseNeon": {
+                "linked": true,
+                "visible": true,
+                "source": "emissive-sidewall",
+                "footprintShape": "support-rounded-strip",
+                "width": 0.8780590654205607,
+                "depth": 0.5733333333333333,
+                "additive": true,
+                "centerPointLight": false,
+                "castShadow": false
+              },
               "regenRecommended": false,
               "selected": true
             },
@@ -6003,6 +7603,12 @@
                 0.97807
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -6011,9 +7617,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -6039,6 +7648,12 @@
                 0.977477
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -6047,9 +7662,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 1.22016,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": false,
               "selected": false
             },
@@ -6075,6 +7693,12 @@
                 0.979592
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": false,
               "collisionNudge": [
                 0,
@@ -6083,9 +7707,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 3.6604799999999997,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             },
@@ -6111,6 +7738,12 @@
                 1
               ],
               "alphaCutoff": 0.5,
+              "shadowSilhouette": {
+                "planeCasts": true,
+                "alphaDepth": true,
+                "alphaDistance": true,
+                "shellCasts": false
+              },
               "collisionRelocated": true,
               "collisionNudge": [
                 0.254,
@@ -6119,9 +7752,12 @@
               "contactShadow": {
                 "linked": true,
                 "poolDiameter": 4.88064,
-                "offset": 0.07999999999999999
+                "offset": 0.07999999999999999,
+                "blendMode": "multiply",
+                "multiplyIdentityRim": true
               },
               "selectionBaseRingGlow": false,
+              "selectionBaseNeon": null,
               "regenRecommended": true,
               "selected": false
             }
@@ -6167,13 +7803,19 @@
     ],
     "noSupportOverlap": true,
     "everyContactShadowLinked": true,
+    "everyContactShadowMultiplies": true,
+    "defaultScaleIsPreferredPresentation": true,
+    "everyCastShadowUsesSpriteSilhouette": true,
     "selectedBaseRingGlow": true,
+    "selectedBaseNeonEmitsFromSidewall": true,
+    "selectionNeonHandoffExclusive": true,
     "spriteCameraFillShadowless": true,
     "shadowFormFloorActive": true,
     "deepZoomReachedClamp": true
   },
   "consoleErrors": [],
   "consoleWarnings": [
+    "qa: sprite-oversize [object Object]",
     "qa: sprite-oversize [object Object]",
     "qa: sprite-oversize [object Object]",
     "qa: sprite-oversize [object Object]",

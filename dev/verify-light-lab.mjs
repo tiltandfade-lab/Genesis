@@ -406,7 +406,13 @@ async function main() {
     {
       // 1a. structural: every seeded tunable equals the CURRENT authored const, extracted straight off
       // the real source text (never a hardcoded duplicate list that could silently drift).
-      const src = fs.readFileSync(path.join(ROOT, "src/ui/theater-boot.js"), "utf-8");
+      // THEATER SPLIT B2 (2026-07-25): the lab's own functions (mountLightLab etc.) live in
+      // src/ui/theater-light-lab.js now; the lighting consts this block ALSO scrapes
+      // (STAGE_AMBIENT_FLOOR, BLOOM_*, GRADE_*, ITR_*) stayed in theater-boot.js. Reading the
+      // composite keeps every extraction working with each symbol in its true home.
+      const src = fs.readFileSync(path.join(ROOT, "src/ui/theater-boot.js"), "utf-8")
+        + "\n/* [verify-light-lab composite boundary — src/ui/theater-light-lab.js follows] */\n"
+        + fs.readFileSync(path.join(ROOT, "src/ui/theater-light-lab.js"), "utf-8");
       const numConst = (name) => { const m = src.match(new RegExp("const " + name + " = ([0-9.]+);")); return m ? parseFloat(m[1]) : null; };
       const objField = (name) => { const m = src.match(new RegExp(name + ":\\s*([0-9.]+)")); return m ? parseFloat(m[1]) : null; };
       const tunables = await page.evaluate(() => window.Theater._lightTunablesForTest());

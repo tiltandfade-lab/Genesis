@@ -1548,6 +1548,9 @@
      harmless no-op second entry point, same convention every sibling module tag documents. Placed
      BEFORE theater-boot.js's tag (dependency order). -->
 <script type="module" src="src/ui/theater-clay-room.js"></script>
+<!-- THEATER SPLIT B2 (2026-07-25): the Light Lab (LL-1) module — same import/dedupe convention as
+     the clay-room tag above; the lighting consts the lab tunes stay in theater-boot.js. -->
+<script type="module" src="src/ui/theater-light-lab.js"></script>
 <script type="module" src="src/ui/theater-boot.js"></script>
 <!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
      shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same

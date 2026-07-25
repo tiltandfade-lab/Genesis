@@ -2382,6 +2382,33 @@
       "desc": "THEATER SPLIT B1 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the ?clayroom=1 dev workbench, extracted VERBATIM from theater-boot.js (the CLAY-ROOM ADDITIONS region, ~5.1k lines, markers preserved for dev/verify-clay-room.mjs's grep gates). Never imports theater-boot: the root passes capabilities once via clayRoomInit(ctx) into module-local mirrors (bodies stay byte-identical) and re-syncs the live S record via clayRoomSyncState at both S-reassignment sites; ITR_ROOM_SHELL stays root-owned behind clayCtxGet/SetRoomShell accessors. The root's renderTheaterFrame polls clayRoomMaybeAutoMount; setInteriorBoard's tail fires clayRoomAfterInteriorBoardRebuild; the root's end-of-body calls clayRoomBootSelfMount (original end-of-file timing). Zero cost with the flag off: one memoized boolean read per frame, exactly as before the split."
     },
     {
+      "id": "ui.theater-light-lab",
+      "path": "src/ui/theater-light-lab.js",
+      "type": "module",
+      "owns": [
+        "*mountLightLab",
+        "*unmountLightLab",
+        "*lightLabMaybeAutoMount",
+        "*lightLabShouldEnable",
+        "*lightLabApplyTunables",
+        "*lightLabUndo",
+        "*lightLabRedo",
+        "*lightLabInit",
+        "*lightLabSyncState",
+        "*lightLabPublishSeams",
+        "*LIGHT_TUNABLE_SCHEMA",
+        "*setLightTunable",
+        "*getLightTunable",
+        "*lightLabExportJSON"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-clay-room"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B2 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — LL-1, Adam's dev-only live lighting tool, extracted VERBATIM from theater-boot.js. Same ctx law as ui.theater-clay-room: never imports the root; lightLabInit(ctx) wires module-local mirrors once, lightLabSyncState(S) tracks the live state record, GRADE_TONEMAP stays root-owned behind an accessor, and the region's top-level window.Theater seam assignments now live in lightLabPublishSeams() (called from the root's end-of-body — module eval precedes facade creation). The lighting consts the lab tunes (STAGE_AMBIENT_FLOOR, BLOOM_*, GRADE_*, ITR_* — verify-light-lab's scrape set) STAY in theater-boot.js: the lab is the UI over LIGHT_TUNABLES, not the owner of render-path values. Zero cost with the lab off: one memoized boolean read per frame in the root's poll, exactly as pre-split."
+    },
+    {
       "id": "ui.theater-boot",
       "path": "src/ui/theater-boot.js",
       "type": "module",

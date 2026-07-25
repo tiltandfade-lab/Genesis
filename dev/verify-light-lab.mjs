@@ -33,7 +33,12 @@ const puppeteer = require(path.join(process.env.HOME, ".genesis-jsdom", "node_mo
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const outDir = path.join(__dirname, "light-lab-shots");
+// LIGHT_LAB_SHOTS_DIR (2026-07-25, visual-correction assignment): the default shots directory is
+// also review evidence another lane may be holding uncommitted — a verification-only run must not
+// clobber it. Same override convention as BG_PORT below; every assertion is unchanged either way.
+const outDir = process.env.LIGHT_LAB_SHOTS_DIR
+  ? path.resolve(process.env.LIGHT_LAB_SHOTS_DIR)
+  : path.join(__dirname, "light-lab-shots");
 fs.mkdirSync(outDir, { recursive: true });
 
 // DEDICATED PORT RANGE 5341-5345 — checked against every PORT_CANDIDATES literal in dev/*.mjs +

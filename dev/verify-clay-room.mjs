@@ -114,7 +114,7 @@
         pair in dev/clay-captures/cl-r0/after-receipt.json, banked at gameplay scale.
 
    Run:  node dev/verify-clay-room.mjs   (jsdom in ~/.genesis-jsdom — see CLAUDE.md) */
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
@@ -1786,6 +1786,73 @@ const check = (name, cond, detail = "") =>
     && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
     && /_claySetStructureStagedForTest/.test(bootSrc)
     && /_claySetStructureDoorStateForTest/.test(bootSrc));
+}
+
+// 35. ENVIRONMENT AO (visual-correction Checkpoint 1 — docs/FABLE-CLAYROOM-VISUAL-CORRECTION-
+// ASSIGNMENT.md). Restrained GTAO through the production composer: bounded authored settings, an
+// A/B diagnostic (never a taste slider), and a prepass exclusion rule that keeps sprite cards and
+// screen-space helper quads from writing occluder rectangles into the AO G-buffer.
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("35a. GTAOPass is vendored from the pinned three release and imported through the addons importmap",
+    /import \{ GTAOPass \} from "three\/addons\/postprocessing\/GTAOPass\.js"/.test(bootSrc)
+    && existsSync(join(ROOT, "vendor/three/addons/postprocessing/GTAOPass.js"))
+    && existsSync(join(ROOT, "vendor/three/addons/shaders/GTAOShader.js"))
+    && existsSync(join(ROOT, "vendor/three/addons/shaders/PoissonDenoiseShader.js"))
+    && existsSync(join(ROOT, "vendor/three/addons/math/SimplexNoise.js")));
+  try {
+    const { createHash } = await import("node:crypto");
+    const sha = (p) => createHash("sha256").update(readFileSync(join(ROOT, p))).digest("hex");
+    check("35b. the vendored AO files are byte-identical to the recorded pinned-release hashes",
+      sha("vendor/three/addons/postprocessing/GTAOPass.js").startsWith("980b0367")
+      && sha("vendor/three/addons/shaders/GTAOShader.js").startsWith("94edb104")
+      && sha("vendor/three/addons/shaders/PoissonDenoiseShader.js").startsWith("3dab419b")
+      && sha("vendor/three/addons/math/SimplexNoise.js").startsWith("9b8d541b"));
+  } catch(e) {
+    check("35b. the vendored AO files are byte-identical to the recorded pinned-release hashes", false, String(e));
+  }
+  const paramsMatch = bootSrc.match(/const ENV_AO_PARAMS = Object\.freeze\((\{[\s\S]*?\})\);/);
+  let params = null;
+  try { params = paramsMatch ? new Function("return (" + paramsMatch[1] + ");")() : null; } catch(e) { params = null; }
+  check("35c. the AO settings are frozen authored constants inside the restrained bounds (short radius, bounded strength, no slider)",
+    !!params
+    && params.radius > 0 && params.radius <= 0.6
+    && params.scale > 0 && params.scale <= 2
+    && params.samples >= 4 && params.samples <= 16
+    && /const ENV_AO_BLEND_INTENSITY = 1(\.0)?;/.test(bootSrc));
+  const fnMatch = bootSrc.match(/function envAOPrepassExcludes\(mesh\)\{[\s\S]*?\n\}/);
+  let predicate = null;
+  try { predicate = fnMatch ? new Function(fnMatch[0] + "; return envAOPrepassExcludes;")() : null; } catch(e) { predicate = null; }
+  if (predicate) {
+    const mesh = (mats) => ({ isMesh: true, material: mats });
+    check("35d. EXECUTED: the prepass exclusion rule hides transparent/non-depth-writing helper quads and keeps opaque geometry",
+      predicate(mesh({ transparent: true, depthWrite: true })) === true            // sprite billboard card
+      && predicate(mesh({ transparent: false, depthWrite: false })) === true       // overlay strip / contact pool
+      && predicate(mesh({ transparent: false, depthWrite: true })) === false       // wall/floor/stair/support
+      && predicate(mesh([{ transparent: true }, { transparent: false, depthWrite: true }])) === false // mixed: one opaque face keeps it
+      && predicate({ isMesh: false }) === false                                    // groups/lights untouched
+      && predicate(mesh(null)) === false);                                         // defensive: no material
+  } else {
+    check("35d. EXECUTED: the prepass exclusion rule hides transparent/non-depth-writing helper quads and keeps opaque geometry",
+      false, "could not extract envAOPrepassExcludes from source");
+  }
+  check("35e. the AO pass subclasses the vendored pass (file untouched) and counts its exclusions for the receipt",
+    /class EnvironmentAOPass extends GTAOPass\s*\{/.test(bootSrc)
+    && /super\.overrideVisibility\(\)/.test(bootSrc)
+    && /lastPrepassExcludedCount/.test(bootSrc));
+  check("35f. the pass mounts between render and dof, tears down with the suite, resizes with the canvas, and resyncs camera + projection define per mount",
+    /S\.composer\.addPass\(S\.postSuite\.renderPass\);[\s\S]{0,400}addPass\(S\.postSuite\.ao\);[\s\S]{0,200}addPass\(S\.postSuite\.dof\)/.test(bootSrc)
+    && /S\.composer\.removePass\(S\.postSuite\.ao\)/.test(bootSrc)
+    && /S\.postSuite\.ao\.setSize\(Math\.round\(size\.x \* aoPixelRatio\), Math\.round\(size\.y \* aoPixelRatio\)\)/.test(bootSrc)
+    && /S\.postSuite\.ao\.camera = S\.camera/.test(bootSrc)
+    && /defines\.PERSPECTIVE_CAMERA/.test(bootSrc));
+  check("35g. AO state survives recipe switches by construction (recipe application never touches the suite) and the A/B is bounded",
+    !/clayRoomApplyLightProfile[\s\S]{0,2000}postSuite\.ao/.test(bootSrc)
+    && /window\.Theater\._environmentAOForTest/.test(bootSrc)
+    && /_envAOPrepassExcludesForTest/.test(bootSrc)
+    && /ENV AO /.test(bootSrc)
+    && /clayRoomEnvAOSyncButton/.test(bootSrc)
+    && /get\("envao"\)/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

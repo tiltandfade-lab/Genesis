@@ -645,9 +645,9 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           },
           "shadow": {
             "cast": true,
-            "bias": -0.002,
-            "normalBias": 0,
-            "mapSize": 512,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": 1024,
             "budgetPriority": 1
           },
           "fixtureId": "",
@@ -730,9 +730,9 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           },
           "shadow": {
             "cast": true,
-            "bias": -0.002,
-            "normalBias": 0,
-            "mapSize": 512,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": 1024,
             "budgetPriority": 1
           },
           "fixtureId": "",
@@ -919,9 +919,57 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       },
       "ambient": {
         "color": "0xffffff",
-        "intensity": 0.62
+        "intensity": 0.55
       },
-      "lights": []
+      "lights": [
+        {
+          "type": "directional",
+          "temperatureK": 6500,
+          "colorOverride": true,
+          "intensityUnit": "tabletop-profile-unit",
+          "physicalIntensityUnit": "renderer-intensity",
+          "positionStrategy": "board-relative",
+          "azimuthDeg": 0,
+          "elevationDeg": 90,
+          "spot": {
+            "coneDeg": 45,
+            "penumbra": 0
+          },
+          "shadow": {
+            "cast": false,
+            "bias": -0.002,
+            "normalBias": 0,
+            "mapSize": 512,
+            "budgetPriority": 1
+          },
+          "fixtureId": "",
+          "mount": "none",
+          "emitterLocal": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "flicker": {
+            "recipeId": "steady",
+            "amplitude": 0,
+            "cadenceMs": 480
+          },
+          "id": "studio-sky",
+          "label": "studio skylight (shadowless, straight down - models tops vs sides without azimuth mood)",
+          "enabled": true,
+          "color": "0xffffff",
+          "intensity": 6,
+          "physicalIntensity": 0.73,
+          "pos": {
+            "x": 0,
+            "y": 4,
+            "z": 0
+          },
+          "heightM": 6.096,
+          "rangeM": 30.48,
+          "falloff": 0
+        }
+      ]
     },
     "clay-opposing-pair": {
       "exposureFloor": 0.006,

@@ -62,7 +62,13 @@
    family (CL-F01..CL-F06), not for one room. */
 var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
   id: "clay-diagnostic-surface",
-  version: 1,
+  // v2 (2026-07-25, visual-correction checkpoint 1 — Adam: "there's no sprite shadow cast on the
+  // standee base itself"): the standee BASE previously inherited the sprite family's passthrough
+  // and kept its near-black production trim, which swallowed the card's real cast shadow
+  // (measured: the shadow lands; the albedo hides it). In a diagnostic clay studio the base is a
+  // physical surface under test like any other — it now routes to clay so cast shadows and AO
+  // read on it. The sprite ART stays passthrough, untouched.
+  version: 2,
   modes: Object.freeze(["clay", "role-id"]),
   defaultMode: "clay",
   clayColor: "#8a8a8a",       // D7's own flat clay-grey, unchanged
@@ -86,6 +92,9 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
     furniture: Object.freeze({ route: "diagnostic-clay", roleColor: "#bf9f6f" }),
     emitter:   Object.freeze({ route: "passthrough",     roleColor: "#ffd88a" }),
     sprite:    Object.freeze({ route: "passthrough",     roleColor: "#ff5fbf" }),
+    // v2: the standee's physical support strip — clay like every other surface under test, so the
+    // sprite's own cast shadow and the contact AO are readable on it (the sprite ART stays above).
+    "standee-base": Object.freeze({ route: "diagnostic-clay", roleColor: "#6fbfbf" }),
     door:      Object.freeze({ route: "passthrough",     roleColor: "#ffffff" }),
     // Found by the CL-R0 census itself: the first routed capture reported nine UNCLAIMED surfaces —
     // the citizen's own soft contact pool (addInteriorContactBlob, userData.contactBlob) and eight
@@ -100,6 +109,17 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
     // intentionally coloured truth aids, not architecture. They bypass the neutral-clay swap.
     "diagnostic-overlay": Object.freeze({ route: "passthrough", roleColor: "#6fcfff" })
   })
+});
+
+/* ─── Bench preview clock for celestial recipes (Adam's 2026-07-25 ruling: shadows fall from the
+   clock-mapped sun) — the clay fixtures carry no live walk clock, so each celestial recipe previews
+   at one FIXED, named bench time. The renderer derives direction from the shared celestial arc
+   (clock -> direction, the one owner); these numbers only choose WHICH moment the bench shows.
+   486 = 08:06 morning sun (oblique, warm, off the camera axis) · 1290 = 21:30 early-night moon. */
+var CLAY_CELESTIAL_PREVIEW_CLOCK = Object.freeze({
+  daylit: 486,
+  overcast: 486,
+  moonlit: 1290
 });
 
 /* ─── CL-R1 / CL-F02 — LIGHTING BENCH FIXTURE ──────────────────────────────────────────────────
@@ -932,6 +952,17 @@ function clayRoomBoardFrom(record, opts){
     var fixtureId = p.fixtureId || fixtureTemplate.fixtureId;
     var kind = fixtureId && fixtureId.indexOf("torch") >= 0 ? "torch" : "lamp";
     return Object.assign({}, fixtureTemplate, {
+      recipeId: lightRecipe.id,
+      // Adam's ruling (2026-07-25): "the shadows should fall relative to the actual position of
+      // the sun since its position is mapped to the actual clock." The celestial arc
+      // (clock -> sun/moon direction) is the ONE owner of celestial light direction; a celestial
+      // light therefore carries its world clock so the renderer derives direction from the arc
+      // instead of a second authored-azimuth authority. The clay fixtures have no live walk clock,
+      // so each celestial recipe previews at a fixed bench time (morning sun, late-evening moon —
+      // oblique angles that keep cast shadows readable under the fixed production camera).
+      clockMin: (lightRecipe.source && lightRecipe.source.class === "celestial"
+        && CLAY_CELESTIAL_PREVIEW_CLOCK[lightRecipe.id] != null)
+        ? CLAY_CELESTIAL_PREVIEW_CLOCK[lightRecipe.id] : null,
       id: p.id,
       sourceRef: p.id,
       recipeMode: lightRecipe.mode,

@@ -109,6 +109,17 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 // the renderer's tone mapping (NoToneMapping here) + the sRGB transfer, so the chain ends correct and
 // matches the direct-render baseline. ALWAYS the last pass in the interior chain.
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+// CLAYROOM VISUAL CORRECTION Checkpoint 1 (docs/FABLE-CLAYROOM-VISUAL-CORRECTION-ASSIGNMENT.md):
+// GTAOPass — three's maintained ground-truth ambient-occlusion pass, vendored VERBATIM from the SAME
+// pinned three@0.166.0 release as every addon above (sha256 prefixes: GTAOPass 980b0367 ·
+// GTAOShader 94edb104 · PoissonDenoiseShader 3dab419b · SimplexNoise 9b8d541b). Not a new
+// dependency — the composer seam was built expecting later passes to vendor exactly this way (see
+// the EffectComposer import note). Wrapped below (EnvironmentAOPass) so the vendored file stays
+// byte-identical to upstream while the G-buffer prepass learns this codebase's one non-negotiable
+// exclusion rule: transparent / non-depth-writing meshes (sprite billboard cards, contact-shadow
+// pools, selection spills, overlay strips, glow discs) must never write occluder rectangles into
+// the AO depth/normal buffer.
+import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger, standeeVerbForHurt, recoilDirFromPositions } from "./theater-verbs.js";
 // GRAPHICS-ENGINE Part II §A: the sibling billboard-standee verb library — see that file's header for
 // why it's a separate module from theater-verbs.js (rotation-ownership conflict with
@@ -3176,6 +3187,12 @@ function spriteTextureFor(entry){
 // every lit sprite as a ratio of) from the identical scene. No product caller sets it — toggled only
 // by window.Theater.__setSpriteUnlitDebug (below), and a re-mount rebuilds sprites under the new flag.
 let SPRITE_UNLIT_DEBUG = false;
+// STANDEE-WINS-TIES bias (2026-07-25): view-space camera-ward depth pull applied in the sprite
+// card's vertex stage (depth test+write only — pixels, anchors, and cast shadows untouched). A
+// LIVE-tunable uniform so the diagnostic A/B can prove the bias in one call; the authored default
+// is the reviewed production value, not a taste slider.
+let SPRITE_DEPTH_BIAS_UNITS = 0.25;
+const SPRITE_DEPTH_BIAS_MATERIALS = [];
 // BW2-4b item 1 — REALM GRADE on the sprite floor: the emissive readability floor is tinted toward the
 // current interior realm's grade (chrome cool, fantasy warm, gloom cold-violet) so a lit standee reads
 // the realm even where no nearby torch reaches it (the mock's cool soldiers / warm knights). White (no
@@ -3229,6 +3246,31 @@ function buildSpriteBillboardMesh(tex, w, h, entry){
         map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
         transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true
       });
+  SPRITE_DEPTH_BIAS_MATERIALS.push(mat);
+  // (SPRITE_DEPTH_BIAS_UNITS + the registry are module-scope, declared beside SPRITE_UNLIT_DEBUG.)
+  // STANDEE-WINS-TIES depth law (Adam, 2026-07-25: "the sprite should be in front of the sphere"):
+  // a flat card beside a bulging prop (the bench sphere's near limb) loses the per-pixel depth
+  // fight along its card edges even when the standee's cell is nearer — physically true for the
+  // geometry, wrong for the tabletop fiction, where an upright standee occludes props behind its
+  // cell. The card's DEPTH (test + write) is pulled a quarter-unit camera-ward in view space at
+  // the vertex stage; screen pixels, foot anchor, selection, and the alpha-silhouette CAST SHADOW
+  // (customDepthMaterial, untouched) all stay exactly where they were. A real occluder — a pillar
+  // or wall half a cell nearer — still covers the card; only near-ties flip to the standee.
+  mat.onBeforeCompile = function(shader){
+    shader.uniforms.uStandeeDepthBias = { value: SPRITE_DEPTH_BIAS_UNITS };
+    mat.userData.standeeDepthBiasUniform = shader.uniforms.uStandeeDepthBias;
+    shader.vertexShader = "uniform float uStandeeDepthBias;\n" + shader.vertexShader.replace(
+      "#include <project_vertex>",
+      [
+        "vec4 mvPosition = vec4( transformed, 1.0 );",
+        "mvPosition = modelViewMatrix * mvPosition;",
+        "mvPosition.z += uStandeeDepthBias; // STANDEE-WINS-TIES: camera-ward depth bias (view units)",
+        "gl_Position = projectionMatrix * mvPosition;"
+      ].join("\n")
+    );
+  };
+  // shared program across sprite materials must key on the injected chunk, not collide with stock Lambert
+  mat.customProgramCacheKey = function(){ return "standee-depth-bias-v1"; };
   // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling (Adam 2026-07-10 evening): billboards must
   // carry ZERO PS1 distortion (no dither, no vertex-snap) — a flat-cut 2D sprite reads as a sticker
   // the moment its texel grid wobbles or dithers, unlike a real low-poly mesh where those tricks read
@@ -6084,6 +6126,82 @@ class MaskedBloomPass extends UnrealBloomPass {
   }
 }
 
+// CLAYROOM VISUAL CORRECTION Checkpoint 1 — ENVIRONMENT AO (restrained, production path).
+// Adam's rulings this discharges: "i think it is also clear that we need some level of ambient
+// occlusion, i can't make out any of the edges that aren't in shadow" and "is there any way we can
+// get the contact shadows to actually be darker than the shadow value in the shadows? with a
+// multiply effect?" — GTAO blends MULTIPLICATIVELY onto the linear beauty buffer BEFORE bloom/
+// grade/tonemap, so creases and contacts darken inside already-shadowed regions too.
+//
+// Bounded AUTHORED settings — a diagnostic ON/OFF A/B exists (the suite's own per-pass seam +
+// the Clayroom Lights tab + ?envao=0), but there is deliberately NO free taste slider
+// (CLAYROOM-RESET-LADDER: "a saturation slider that compensates…"-class controls must not exist).
+// radius is WORLD units (1 u = 5 ft): 0.42 u ≈ a 2-ft crease reach — seams/corners/contacts, not
+// room-scale darkening. scale is the AO strength inside the shader; blendIntensity is the final
+// multiply weight. samples/rings sized for the no-cash Mac target (Iris Plus 645) — measured in
+// the checkpoint receipt, not assumed.
+const ENV_AO_ENABLED_DEFAULT = true;
+// Halo control (Adam, 2026-07-25: "the sphere has some kind of weird halo around it"): thickness
+// well under 1 so the thin-object heuristic cannot smear occlusion past a silhouette, and a
+// tighter denoise with much stricter depth/normal edge-stopping (higher phi = harder edge stop)
+// so blur can never bleed a contact ring across the depth discontinuity onto the floor beyond.
+const ENV_AO_PARAMS = Object.freeze({
+  radius: 0.42, distanceExponent: 1, thickness: 0.6, distanceFallOff: 1,
+  scale: 1.4, samples: 12, screenSpaceRadius: false,
+});
+const ENV_AO_DENOISE = Object.freeze({ lumaPhi: 10, depthPhi: 8, normalPhi: 8, radius: 4, radiusExponent: 1, rings: 2, samples: 8 });
+const ENV_AO_BLEND_INTENSITY = 1.0;
+// The one exclusion rule for the AO G-buffer prepass, as a PURE predicate so the harness can
+// execute it against mesh-shaped fixtures without a GL context. The AO depth/normal prepass
+// renders the scene under ONE opaque override material, which would turn every transparent or
+// non-depth-writing helper quad (sprite billboard cards + their thin side shells, contact-shadow
+// multiply pools, selection spills, socket/access overlay strips, door darkness cards, glow discs)
+// into a solid occluder RECTANGLE — exactly the floating-card lie the sprite-silhouette contract
+// forbids. Rule: a mesh participates in AO only if at least one of its materials is opaque AND
+// depth-writing — the same rule the renderer's own depth buffer already applies to these meshes.
+function envAOPrepassExcludes(mesh){
+  if(!mesh || !mesh.isMesh) return false;
+  const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+  if(!mats.length || !mats[0]) return false;
+  for(let i = 0; i < mats.length; i++){
+    const m = mats[i];
+    if(m && m.transparent !== true && m.depthWrite !== false) return false; // one opaque depth-writer -> participates
+  }
+  return true; // every material is transparent or non-depth-writing -> hide from the AO prepass
+}
+class EnvironmentAOPass extends GTAOPass {
+  overrideVisibility(){
+    super.overrideVisibility(); // caches every object's visible flag + hides points/lines
+    let excluded = 0;
+    this.scene.traverse((o) => {
+      if(o.visible && envAOPrepassExcludes(o)){ o.visible = false; excluded++; }
+    });
+    this.lastPrepassExcludedCount = excluded; // diagnostic read for the receipt/harness, no product reads
+  }
+}
+function envAOEnabled(){
+  try {
+    if(typeof window !== "undefined" && window.location && window.location.search){
+      const raw = new URLSearchParams(window.location.search).get("envao");
+      if(raw === "0") return false;
+      if(raw === "1") return true;
+    }
+  } catch(e){}
+  return ENV_AO_ENABLED_DEFAULT;
+}
+function makeEnvironmentAOPass(size){
+  // Construct at DEVICE pixels for the same registration reason syncPostSuiteResolution documents.
+  const pr = S.renderer && S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1;
+  const ao = new EnvironmentAOPass(S.scene, S.camera, Math.round(size.x * pr), Math.round(size.y * pr));
+  ao.__bwName = "ao";
+  ao.blendIntensity = ENV_AO_BLEND_INTENSITY;
+  ao.updateGtaoMaterial(ENV_AO_PARAMS);
+  ao.updatePdMaterial(ENV_AO_DENOISE);
+  ao.output = GTAOPass.OUTPUT.Default;
+  ao.enabled = envAOEnabled();
+  return ao;
+}
+
 // Build the three passes once (lazy — needs a live renderer + a sized canvas). Stored on S.postSuite.
 function buildPostSuite(){
   if(S.postSuite || !S.renderer || !S.composer) return S.postSuite;
@@ -6101,7 +6219,8 @@ function buildPostSuite(){
   renderPass.__bwName = "render";
   const outputPass = new OutputPass();
   outputPass.__bwName = "output";
-  S.postSuite = { renderPass, dof, bloom, grade, outputPass };
+  const ao = makeEnvironmentAOPass(size);
+  S.postSuite = { renderPass, ao, dof, bloom, grade, outputPass };
   return S.postSuite;
 }
 
@@ -6161,6 +6280,15 @@ function syncPostSuiteResolution(){
   if(S.postSuite.bloom && S.postSuite.bloom.setSize){
     S.postSuite.bloom.setSize(size.x * BLOOM_RESOLUTION_SCALE, size.y * BLOOM_RESOLUTION_SCALE);
   }
+  if(S.postSuite.ao && S.postSuite.ao.setSize){
+    // DEVICE pixels, not CSS pixels (Adam, 2026-07-25: "two crescent shapes that aren't quite
+    // aligned with the form of the sphere"): EffectComposer sizes every pass's buffers at
+    // size × pixelRatio, so an AO pass sized in CSS units computes occlusion on a half-resolution
+    // depth/normal buffer and upsamples it half a texel off the beauty — misregistered crescents
+    // on every curved silhouette. The AO G-buffer must match the composer's device-pixel targets.
+    const aoPixelRatio = S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1;
+    S.postSuite.ao.setSize(Math.round(size.x * aoPixelRatio), Math.round(size.y * aoPixelRatio));
+  }
 }
 
 // Mount the post suite onto the composer (interior boards). Idempotent — re-mounting on an interior->
@@ -6173,11 +6301,25 @@ function mountPostSuite(kit, rigOn){
   if(!S.postSuite) return;
   // keep the renderPass camera in sync (setInteriorBoard may have swapped ortho<->persp cameras)
   S.postSuite.renderPass.camera = S.camera;
+  if(S.postSuite.ao){
+    // Same camera-swap law as renderPass, plus GTAO's construction-time projection define — the
+    // shader baked PERSPECTIVE_CAMERA at build; refresh it if a mount ever swaps projections so
+    // the AO math can never silently run against the wrong projection model.
+    S.postSuite.ao.camera = S.camera;
+    const isPersp = S.camera && S.camera.isPerspectiveCamera ? 1 : 0;
+    if(S.postSuite.ao.gtaoMaterial.defines.PERSPECTIVE_CAMERA !== isPersp){
+      S.postSuite.ao.gtaoMaterial.defines.PERSPECTIVE_CAMERA = isPersp;
+      S.postSuite.ao.gtaoMaterial.needsUpdate = true;
+    }
+  }
   syncPostSuiteResolution();
   updatePostSuiteGrade(kit, rigOn);
   updateDofFocus();
   if(!S.postSuiteMounted){
     S.composer.addPass(S.postSuite.renderPass);
+    // AO immediately after the beauty render: it multiplies the LINEAR scene color, so DoF blurs,
+    // bloom thresholds, and the grade/tonemap all see the already-grounded frame.
+    S.composer.addPass(S.postSuite.ao);
     S.composer.addPass(S.postSuite.dof);
     S.composer.addPass(S.postSuite.bloom);
     S.composer.addPass(S.postSuite.grade);
@@ -6195,6 +6337,7 @@ function teardownPostSuite(){
   S.composer.removePass(S.postSuite.grade);
   S.composer.removePass(S.postSuite.bloom);
   S.composer.removePass(S.postSuite.dof);
+  S.composer.removePass(S.postSuite.ao);
   S.composer.removePass(S.postSuite.renderPass);
   S.postSuiteMounted = false;
 }
@@ -9251,6 +9394,28 @@ function interiorBuildFixtureGroup(light){
 // per WALL-VOLUMES-PRACTICALS.md §E0. `wallMountData` is {mountSlots, wallSegments}; absent/empty
 // (ITR_ROOM_SHELL off, or a room with zero wall segments) returns null — the caller's own defensive
 // degrade-to-floor path.
+// The board's local half-extent as seen from the light group's recentred frame — derived from the
+// shell's OWN wall data (segment mids + mount-slot world positions are raw plan coordinates, the
+// same frame `cx`/`cz` recenter). Fallback when a fixture has no wall data: a generous constant
+// that covers the largest current fixture. Consumed by the environmental directional branch above
+// to size the sun/moon shadow frustum; margin covers wall thickness + segment half-lengths.
+function interiorEnvLightHalfExtent(wallMountData, cx, cz){
+  let maxAbs = 0, found = false;
+  const consider = (x, z) => {
+    if(typeof x !== "number" || typeof z !== "number") return;
+    maxAbs = Math.max(maxAbs, Math.abs(x - cx), Math.abs(z - cz));
+    found = true;
+  };
+  ((wallMountData && wallMountData.wallSegments) || []).forEach((seg) => {
+    if(seg && seg.mid) consider(seg.mid.x, seg.mid.z);
+    if(seg && seg.a) consider(seg.a.x, seg.a.z);
+    if(seg && seg.b) consider(seg.b.x, seg.b.z);
+  });
+  ((wallMountData && wallMountData.mountSlots) || []).forEach((s) => {
+    if(s && s.worldPos) consider(s.worldPos.x, s.worldPos.z);
+  });
+  return found ? maxAbs + 3 : 12;
+}
 function interiorNearestWallMountSlot(wallMountData, x, z){
   const slots = wallMountData && wallMountData.mountSlots;
   if(!slots || !slots.length) return null;
@@ -9351,15 +9516,55 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
         environmentalLight.position.set(localX, localY, localZ);
       } else if(light.lightType === "directional"){
         environmentalLight = new THREE.DirectionalLight(light.color || "#ffffff", resolvedIntensity);
-        const azimuth = THREE.MathUtils.degToRad(light.azimuthDeg != null ? light.azimuthDeg : 0);
-        const elevation = THREE.MathUtils.degToRad(light.elevationDeg != null ? light.elevationDeg : 45);
-        environmentalLight.position.set(
-          Math.cos(elevation) * Math.cos(azimuth) * 10,
-          Math.sin(elevation) * 10,
-          Math.cos(elevation) * Math.sin(azimuth) * 10
-        );
+        // Visual-correction fix (Adam, 2026-07-25: "there's just one chunk of a rectangle showing
+        // on the stairs but none of the proper cast shadows"): THREE's default directional shadow
+        // camera is a 10x10-unit ortho box, so in a 15x15-cell room the sun/moon shadow map covered
+        // only a corner and every cast shadow clipped to that chunk. Derive the room's local
+        // half-extent from the shell's own wall data and size BOTH the light distance and the
+        // shadow frustum from it, so everything the room contains casts a complete shadow.
+        const envHalfExtent = interiorEnvLightHalfExtent(wallMountData, cx, cz);
+        const envLightDistance = Math.max(10, envHalfExtent * 2.5);
+        // Adam's ruling (2026-07-25): "the shadows should fall relative to the actual position of
+        // the sun since its position is mapped to the actual clock." When a celestial light record
+        // carries its world clock, the shared celestial arc (celestialArcFor — the ONE clock->sun/
+        // moon direction owner, already driving the tabletop channel) supplies direction, arc
+        // colour, and the elevation intensity curve. The authored azimuth/elevation are only the
+        // no-clock fallback (a fixture or harness snapshot with no time threaded).
+        const celestialClock = (light.clockMin != null && light.recipeId
+          && CELESTIAL_PROFILE_SET[light.recipeId]) ? light.clockMin : null;
+        if(celestialClock != null){
+          const arc = celestialArcFor(light.recipeId, celestialClock);
+          environmentalLight.position.set(
+            arc.dir.x * envLightDistance,
+            Math.max(CELESTIAL_MIN_KEY_HEIGHT, arc.dir.y * envLightDistance),
+            arc.dir.z * envLightDistance
+          );
+          environmentalLight.color.setHex(arc.color); // under the clock, the arc owns colour too (dawn->zenith lerp)
+          environmentalLight.intensity = resolvedIntensity * arc.intensityScale;
+          environmentalLight.userData.celestial = {
+            clockMin: celestialClock,
+            derivedDir: { x: +arc.dir.x.toFixed(4), y: +arc.dir.y.toFixed(4), z: +arc.dir.z.toFixed(4) },
+            intensityScale: +arc.intensityScale.toFixed(4)
+          };
+        } else {
+          const azimuth = THREE.MathUtils.degToRad(light.azimuthDeg != null ? light.azimuthDeg : 0);
+          const elevation = THREE.MathUtils.degToRad(light.elevationDeg != null ? light.elevationDeg : 45);
+          environmentalLight.position.set(
+            Math.cos(elevation) * Math.cos(azimuth) * envLightDistance,
+            Math.sin(elevation) * envLightDistance,
+            Math.cos(elevation) * Math.sin(azimuth) * envLightDistance
+          );
+        }
         environmentalLight.target.position.set(0, 0, 0);
         group.add(environmentalLight.target);
+        if(environmentalLight.shadow && environmentalLight.shadow.camera){
+          const sc = environmentalLight.shadow.camera;
+          const frustumHalf = envHalfExtent * 1.15 + 1;
+          sc.left = -frustumHalf; sc.right = frustumHalf;
+          sc.top = frustumHalf; sc.bottom = -frustumHalf;
+          sc.near = 0.5; sc.far = envLightDistance + envHalfExtent * 3;
+          sc.updateProjectionMatrix();
+        }
       } else {
         environmentalLight = new THREE.PointLight(
           light.color || "#ffffff",
@@ -14257,6 +14462,16 @@ window.Theater.interiorPsxAudit = function(){
 // __spriteScreenRects projects every mounted sprite billboard's own world box to canvas-pixel space so
 // the harness knows WHERE to sample. Both exist only for dev/battle-gate/capture-lit-sprites.mjs.
 window.Theater.__setSpriteUnlitDebug = function(on){ SPRITE_UNLIT_DEBUG = !!on; };
+// bounded A/B for the standee depth bias — sets the live uniform on every registered sprite
+// material (no recompile; the uniform is injected at first compile). Diagnosis + capture only.
+window.Theater._setStandeeDepthBiasForTest = function(units){
+  SPRITE_DEPTH_BIAS_UNITS = (typeof units === "number") ? units : 0.25;
+  SPRITE_DEPTH_BIAS_MATERIALS.forEach(function(m){
+    if(m.userData && m.userData.standeeDepthBiasUniform) m.userData.standeeDepthBiasUniform.value = SPRITE_DEPTH_BIAS_UNITS;
+  });
+  markDirty();
+  return SPRITE_DEPTH_BIAS_UNITS;
+};
 window.Theater._setSpriteSamplingForTest = function(mode){
   const linearMutation = mode === "linear";
   let changed = 0;
@@ -14387,7 +14602,7 @@ window.Theater._postSuiteForTest = function(){
     built: true,
     mounted: !!S.postSuiteMounted,
     passNames: (S.composer && S.composer.passes) ? S.composer.passes.map((p) => p.__bwName || "?") : [],
-    passEnabled: { dof: !!ps.dof.enabled, bloom: !!ps.bloom.enabled, grade: !!ps.grade.enabled },
+    passEnabled: { ao: !!(ps.ao && ps.ao.enabled), dof: !!ps.dof.enabled, bloom: !!ps.bloom.enabled, grade: !!ps.grade.enabled },
     dof: {
       focusV: ps.dof.uniforms.uFocusV.value,
       focusDist: S.dofFocusDist,
@@ -14412,8 +14627,134 @@ window.Theater._setSuitePassEnabledForTest = function(name, enabled){
   const p = S.postSuite[name];
   if(!p) return null;
   p.enabled = !!enabled;
+  // keep the Clayroom's ENV AO A/B button truthful when the toggle arrives through this seam —
+  // a UI label that disagrees with the live pass state is a readout lie, however small
+  if(name === "ao" && typeof S.clayRoomEnvAOSyncButton === "function") S.clayRoomEnvAOSyncButton();
   markDirty();
   return !!p.enabled;
+};
+// CLAYROOM VISUAL CORRECTION Checkpoint 1 — ENVIRONMENT AO seams (read-only + the same bounded
+// A/B the other suite passes get through _setSuitePassEnabledForTest("ao", …)). No product code
+// reads these. The receipt/harness surface: authored params (proving they are the frozen bounded
+// set, not a drifted taste dial), the live pass state, and the prepass exclusion count from the
+// last AO G-buffer render (proving sprite cards/overlay quads stayed out).
+window.Theater._environmentAOForTest = function(){
+  const ao = S.postSuite && S.postSuite.ao;
+  return {
+    built: !!ao,
+    enabled: !!(ao && ao.enabled),
+    enabledDefault: ENV_AO_ENABLED_DEFAULT,
+    urlResolvedEnabled: envAOEnabled(),
+    mounted: !!S.postSuiteMounted,
+    params: Object.assign({}, ENV_AO_PARAMS),
+    denoise: Object.assign({}, ENV_AO_DENOISE),
+    blendIntensity: ao ? ao.blendIntensity : ENV_AO_BLEND_INTENSITY,
+    output: ao ? ao.output : null,
+    perspectiveDefine: ao ? ao.gtaoMaterial.defines.PERSPECTIVE_CAMERA : null,
+    targetSize: ao ? { w: ao.width, h: ao.height } : null,
+    lastPrepassExcludedCount: ao && ao.lastPrepassExcludedCount != null ? ao.lastPrepassExcludedCount : null,
+  };
+};
+// The pure prepass-exclusion predicate, exposed so the node harness can execute the actual rule
+// against mesh-shaped fixtures (transparent sprite card -> excluded; opaque wall -> included)
+// instead of grepping for it.
+window.Theater._envAOPrepassExcludesForTest = function(meshLike){
+  return envAOPrepassExcludes(meshLike);
+};
+// Read-only sprite shadow-caster census: every mounted sprite-card mesh's shadow contract state
+// (castShadow, custom depth/distance materials, visibility, world position) so "why does this
+// standee not cast" is answered by data instead of eyeballs.
+window.Theater._spriteShadowStateForTest = function(){
+  const rows = [];
+  if(!S.interiorGroup) return rows;
+  S.interiorGroup.traverse(function(node){
+    if(!node || !node.userData || !node.userData.sprite) return;
+    // the sprite tag sits on the standee GROUP; census every mesh beneath it
+    node.traverse(function(child){
+      if(!child || !child.isMesh) return;
+      const p = new THREE.Vector3();
+      child.getWorldPosition(p);
+      const chain = [];
+      for(let a = child; a; a = a.parent){ chain.push((a.name || a.type) + (a.visible ? "" : "!HIDDEN")); if(chain.length > 8) break; }
+      rows.push({
+        sprite: (node.userData.sprite && (node.userData.sprite.slug || node.userData.sprite.id)) || true,
+        meshName: child.name || null,
+        castShadow: !!child.castShadow,
+        hasCustomDepth: !!child.customDepthMaterial,
+        hasCustomDistance: !!child.customDistanceMaterial,
+        visible: !!child.visible,
+        layersMask: child.layers ? child.layers.mask : null,
+        frustumCulled: !!child.frustumCulled,
+        materialTransparent: !!(child.material && child.material.transparent),
+        depthMaterialHasMap: !!(child.customDepthMaterial && child.customDepthMaterial.map),
+        depthMaterialAlphaTest: child.customDepthMaterial ? child.customDepthMaterial.alphaTest : null,
+        depthMaterialVisible: child.customDepthMaterial ? child.customDepthMaterial.visible !== false : null,
+        geometryType: child.geometry ? child.geometry.type : null,
+        worldScale: (function(){ const s = new THREE.Vector3(); child.getWorldScale(s); return { x: +s.x.toFixed(3), y: +s.y.toFixed(3), z: +s.z.toFixed(3) }; })(),
+        parentChain: chain.join(" > "),
+        worldPos: { x: +p.x.toFixed(2), y: +p.y.toFixed(2), z: +p.z.toFixed(2) },
+      });
+    });
+  });
+  return rows;
+};
+// One-shot shadow-pass entry probe: counts onBeforeShadow invocations on the sprite card versus a
+// reference opaque bench mesh across one forced render, proving whether the card enters the
+// renderer's shadow pass at all (THREE calls onBeforeShadow per shadow draw).
+window.Theater._spriteShadowProbeForTest = function(){
+  const counts = { card: 0, reference: 0 };
+  let card = null, reference = null;
+  if(!S.interiorGroup) return counts;
+  S.interiorGroup.traverse(function(node){
+    if(!card && node.isMesh && node.customDepthMaterial) card = node;
+    if(!reference && node.isMesh && node.userData && node.userData.clayBenchPrimitive) reference = node;
+  });
+  const describe = function(shadowCamera){
+    const p = new THREE.Vector3();
+    shadowCamera.getWorldPosition(p);
+    return shadowCamera.type + "@" + p.x.toFixed(1) + "," + p.y.toFixed(1) + "," + p.z.toFixed(1)
+      + " box±" + (shadowCamera.right != null ? shadowCamera.right.toFixed(1) : "?");
+  };
+  counts.cardLights = []; counts.referenceLights = [];
+  if(card) card.onBeforeShadow = function(r, o, cam, shadowCamera){ counts.card++; counts.cardLights.push(describe(shadowCamera)); };
+  if(reference) reference.onBeforeShadow = function(r, o, cam, shadowCamera){ counts.reference++; counts.referenceLights.push(describe(shadowCamera)); };
+  renderTheaterFrame();
+  if(card) card.onBeforeShadow = function(){};
+  if(reference) reference.onBeforeShadow = function(){};
+  counts.foundCard = !!card;
+  counts.foundReference = !!reference;
+  return counts;
+};
+// Bounded A/B toggle for the sprite-card shadow caster (diagnosis only — the production contract
+// keeps it ON): flips castShadow on every mounted sprite-card mesh that carries the alpha depth
+// materials, so a capture pair can prove whether a missing standee shadow was never rendered or
+// merely hidden from the fixed camera by the caster itself.
+window.Theater._setSpriteCastShadowForTest = function(on){
+  let flipped = 0;
+  if(!S.interiorGroup) return flipped;
+  S.interiorGroup.traverse(function(node){
+    if(!node || !node.userData || !node.userData.sprite) return;
+    node.traverse(function(child){
+      if(child && child.isMesh && child.customDepthMaterial){ child.castShadow = !!on; flipped++; }
+    });
+  });
+  markDirty();
+  return flipped;
+};
+// Diagnostic OUTPUT switch for the AO pass — GTAO's own debug views (raw AO, denoised AO, depth,
+// normals) as a bounded named-mode seam, for technical captures that separate "the AO math is
+// wrong" from "the denoiser smeared it" without touching the authored settings. Never a taste
+// control: modes are the pass's enum, default restored by passing "default".
+window.Theater._setEnvironmentAOOutputForTest = function(mode){
+  const ao = S.postSuite && S.postSuite.ao;
+  if(!ao) return null;
+  const map = { "default": GTAOPass.OUTPUT.Default, "ao": GTAOPass.OUTPUT.AO,
+    "denoise": GTAOPass.OUTPUT.Denoise, "depth": GTAOPass.OUTPUT.Depth,
+    "normal": GTAOPass.OUTPUT.Normal, "off": GTAOPass.OUTPUT.Off };
+  if(!(mode in map)) return null;
+  ao.output = map[mode];
+  markDirty();
+  return mode;
 };
 // P3-3a TEST/HARNESS SEAM — mirrors the _setRoomShellPolygonKernel convention: flips the
 // GRADE_TONEMAP module `let` live, in-process, so dev/battle-gate/agx/capture-agx-ab.mjs can shoot
@@ -16473,6 +16814,9 @@ function clayRoomSurfaceRoleFor(node, ancestorRole){
   const ud = node.userData || {};
   const byKind = clayDiagnosticRoleForKind(ud.interiorKind);           // interiorBuildInstancedMesh / room-shell / kit-shell
   if(byKind) return byKind;
+  // recipe v2: the standee support strip is its OWN surface under test (clay-routed so cast
+  // shadows/AO read on it) — resolved BEFORE the sprite ancestor role can sweep it into passthrough
+  if(ud.standeeBase) return "standee-base";                            // buildInteriorBase (~3852)
   if(ud.furnitureKind) return "furniture";                             // buildFurnitureAssembly (~9278)
   if(ud.spriteSlug) return "sprite";                                   // buildSpriteBillboard (~3180)
   if(ud.isDoorLeaf || ud.isDoorShard) return "door";                   // hinged leaf / broken shard
@@ -16556,6 +16900,15 @@ function clayRoomApplyDiagnosticSurfaces(){
       clayMat.opacity = (typeof fadeEntry.opacity === "number") ? fadeEntry.opacity : 1;
       mesh.material = clayMat;
       fadeEntry.materials = fadeEntry.materials.map(function(m){ return m === priorMat ? clayMat : m; });
+    } else if(mesh.userData && mesh.userData.standeeBase){
+      // recipe v2: the standee base swaps to clay like any surface under test, but as a PER-MESH
+      // CLONE — setBaseGlow/selection write emissive straight onto this mesh's material, and a
+      // shared clay material would light every clay surface in the room when one base glows.
+      // The base geometry uses material GROUPS (top/side/bevel), so mirror its array shape.
+      const baseClay = clayDiagnosticMaterialFor(decision.color);
+      mesh.material = Array.isArray(mesh.material)
+        ? mesh.material.map(function(){ return baseClay.clone(); })
+        : baseClay.clone();
     } else {
       mesh.material = clayDiagnosticMaterialFor(decision.color);
     }
@@ -20114,6 +20467,31 @@ function clayRoomMountOverlay(record, host){
     overlayButtons[def[0]] = button;
   });
   lightsBody.appendChild(overlayActions);
+  // Checkpoint 1 — the bounded ENVIRONMENT AO diagnostic A/B. One ON/OFF comparison control
+  // (the same pass-enabled seam the harness uses), deliberately not a strength/radius slider:
+  // the AO settings are authored constants, reviewed like any other visual law.
+  const envAOActions = document.createElement("div");
+  envAOActions.style.cssText = "display:grid;grid-template-columns:1fr;gap:4px;margin-bottom:7px;";
+  const envAOButton = document.createElement("button");
+  envAOButton.setAttribute("aria-label", "Toggle environment ambient occlusion A/B");
+  envAOButton.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+  const envAOSync = function(){
+    const ao = S.postSuite && S.postSuite.ao;
+    const on = !!(ao && ao.enabled);
+    envAOButton.textContent = "ENV AO " + (on ? "ON" : "OFF") + " · A/B";
+    envAOButton.style.background = on ? "#35516a" : "#2a2a30";
+  };
+  envAOButton.addEventListener("click", function(){
+    const ao = S.postSuite && S.postSuite.ao;
+    if(!ao) return;
+    ao.enabled = !ao.enabled;
+    envAOSync();
+    markDirty();
+  });
+  envAOActions.appendChild(envAOButton);
+  envAOSync();
+  S.clayRoomEnvAOSyncButton = envAOSync;
+  lightsBody.appendChild(envAOActions);
   const lightsActions = document.createElement("div");
   lightsActions.style.cssText = "display:flex;gap:5px;margin-bottom:7px;";
   const restoreLightsBtn = document.createElement("button");

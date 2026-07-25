@@ -1,0 +1,152 @@
+{
+  "capturedBy": "dev/capture-clayroom-ao-ab.cjs",
+  "recipes": {
+    "clay-neutral-truth": {
+      "aoOnState": {
+        "built": true,
+        "enabled": true,
+        "enabledDefault": true,
+        "urlResolvedEnabled": true,
+        "mounted": true,
+        "params": {
+          "radius": 0.42,
+          "distanceExponent": 1,
+          "thickness": 0.6,
+          "distanceFallOff": 1,
+          "scale": 1.4,
+          "samples": 12,
+          "screenSpaceRadius": false
+        },
+        "denoise": {
+          "lumaPhi": 10,
+          "depthPhi": 8,
+          "normalPhi": 8,
+          "radius": 4,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        },
+        "blendIntensity": 1,
+        "output": 0,
+        "perspectiveDefine": 1,
+        "targetSize": {
+          "w": 1260,
+          "h": 1352
+        },
+        "lastPrepassExcludedCount": 7
+      }
+    },
+    "daylit": {
+      "aoOnState": {
+        "built": true,
+        "enabled": true,
+        "enabledDefault": true,
+        "urlResolvedEnabled": true,
+        "mounted": true,
+        "params": {
+          "radius": 0.42,
+          "distanceExponent": 1,
+          "thickness": 0.6,
+          "distanceFallOff": 1,
+          "scale": 1.4,
+          "samples": 12,
+          "screenSpaceRadius": false
+        },
+        "denoise": {
+          "lumaPhi": 10,
+          "depthPhi": 8,
+          "normalPhi": 8,
+          "radius": 4,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        },
+        "blendIntensity": 1,
+        "output": 0,
+        "perspectiveDefine": 1,
+        "targetSize": {
+          "w": 1260,
+          "h": 1352
+        },
+        "lastPrepassExcludedCount": 7
+      }
+    },
+    "moonlit": {
+      "aoOnState": {
+        "built": true,
+        "enabled": true,
+        "enabledDefault": true,
+        "urlResolvedEnabled": true,
+        "mounted": true,
+        "params": {
+          "radius": 0.42,
+          "distanceExponent": 1,
+          "thickness": 0.6,
+          "distanceFallOff": 1,
+          "scale": 1.4,
+          "samples": 12,
+          "screenSpaceRadius": false
+        },
+        "denoise": {
+          "lumaPhi": 10,
+          "depthPhi": 8,
+          "normalPhi": 8,
+          "radius": 4,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        },
+        "blendIntensity": 1,
+        "output": 0,
+        "perspectiveDefine": 1,
+        "targetSize": {
+          "w": 1260,
+          "h": 1352
+        },
+        "lastPrepassExcludedCount": 7
+      }
+    }
+  },
+  "fps": {
+    "review": {
+      "aoOn": {
+        "frames": 147,
+        "elapsedMs": 2509.9,
+        "fps": 58.6,
+        "frameMsMedian": 16.7,
+        "frameMsP95": 16.8
+      },
+      "aoOff": {
+        "frames": 150,
+        "elapsedMs": 2505.1,
+        "fps": 59.9,
+        "frameMsMedian": 16.7,
+        "frameMsP95": 16.8
+      }
+    },
+    "production": {
+      "aoOn": {
+        "frames": 151,
+        "elapsedMs": 2500.6,
+        "fps": 60.4,
+        "frameMsMedian": 16.7,
+        "frameMsP95": 16.8
+      },
+      "aoOff": {
+        "frames": 151,
+        "elapsedMs": 2507.1,
+        "fps": 60.2,
+        "frameMsMedian": 16.7,
+        "frameMsP95": 16.7
+      },
+      "recipe": "torchlit (flame animating)",
+      "renderer": {
+        "backingPx": "620x992",
+        "cssPx": "310x496"
+      }
+    }
+  },
+  "close": {},
+  "consoleErrors": [],
+  "consoleWarnings": []
+}

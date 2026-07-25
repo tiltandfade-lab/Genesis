@@ -118,27 +118,51 @@
     if (!points.length) return;
     const scale = Math.min(width, height) * .76 * zoom;
     const transformed = points.map(rotate);
+    const projected = transformed.map(point => ({
+      x:width/2 + point[0]*scale,
+      y:height/2 - point[1]*scale,
+      z:point[2]
+    }));
+    const image = ctx.createImageData(width, height);
+    const pixels = image.data;
+    const depth = new Float32Array(width * height);
+    depth.fill(-Infinity);
+    for (let pixel=0; pixel<width*height; pixel++) {
+      const offset = pixel*4;
+      pixels[offset]=23; pixels[offset+1]=25; pixels[offset+2]=29; pixels[offset+3]=255;
+    }
+    const edge = (a,b,x,y) => (x-a.x)*(b.y-a.y) - (y-a.y)*(b.x-a.x);
     const faces = triangles.map(ids => {
       const a = transformed[ids[0]], b = transformed[ids[1]], c = transformed[ids[2]];
       const n = normal(a,b,c);
       const light = Math.max(0, n[0] * -.32 + n[1] * .78 + n[2] * .54);
-      return {ids, depth:(a[2]+b[2]+c[2])/3, light};
-    }).sort((a,b) => a.depth - b.depth);
-    ctx.lineJoin = "round";
+      return {ids, light};
+    });
     for (const face of faces) {
+      const a=projected[face.ids[0]], b=projected[face.ids[1]], c=projected[face.ids[2]];
+      const area = edge(a,b,c.x,c.y);
+      if (Math.abs(area) < .0001) continue;
+      const minX=Math.max(0,Math.floor(Math.min(a.x,b.x,c.x)));
+      const maxX=Math.min(width-1,Math.ceil(Math.max(a.x,b.x,c.x)));
+      const minY=Math.max(0,Math.floor(Math.min(a.y,b.y,c.y)));
+      const maxY=Math.min(height-1,Math.ceil(Math.max(a.y,b.y,c.y)));
       const shade = Math.round(76 + face.light * 122);
-      ctx.beginPath();
-      face.ids.forEach((id, index) => {
-        const p = transformed[id], x = width/2 + p[0]*scale, y = height/2 - p[1]*scale;
-        index ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
-      });
-      ctx.closePath();
-      ctx.fillStyle = `rgb(${shade + 18} ${shade + 7} ${Math.max(0, shade - 10)})`;
-      ctx.fill();
-      ctx.strokeStyle = "rgb(34 30 27 / .34)";
-      ctx.lineWidth = Math.max(1, devicePixelRatio || 1);
-      ctx.stroke();
+      for(let y=minY;y<=maxY;y++) for(let x=minX;x<=maxX;x++) {
+        const px=x+.5, py=y+.5;
+        const w0=edge(b,c,px,py)/area, w1=edge(c,a,px,py)/area, w2=1-w0-w1;
+        if(w0 < 0 || w1 < 0 || w2 < 0) continue;
+        const z=w0*a.z+w1*b.z+w2*c.z, pixel=y*width+x;
+        if(z <= depth[pixel]) continue;
+        depth[pixel]=z;
+        const outline=Math.min(w0,w1,w2)<.018 ? 18 : 0;
+        const offset=pixel*4;
+        pixels[offset]=Math.max(0,shade+18-outline);
+        pixels[offset+1]=Math.max(0,shade+7-outline);
+        pixels[offset+2]=Math.max(0,shade-10-outline);
+        pixels[offset+3]=255;
+      }
     }
+    ctx.putImageData(image,0,0);
   }
 
   canvas.addEventListener("pointerdown", event => {

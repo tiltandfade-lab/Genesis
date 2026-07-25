@@ -18,6 +18,104 @@ generated model has passed Genesis admission.
 - separable parts made visually explicit;
 - no direct reproduction of an existing commercial game asset.
 
+## M001-A — low-cover boulder cluster
+
+![M001-A](reference-images/M001-A-low-cover-boulder-cluster-v1.png)
+
+### Intended use
+
+A compact `cover-anchor` rock mass for:
+
+- half cover at a route edge, outside bend, terrace, or boundary cap;
+- one local geological landmark without destroying quiet ground;
+- recolored sedimentary families across guard-post, camp, lair, mine, and abandoned-site schemas;
+- extracting one primary and two subordinate rock donors if Meshy preserves useful islands.
+
+Implied production dimensions are approximately 5 feet wide, 3.5 feet deep, and 3 feet tall.
+The cluster must not become a climbable stair, a rubble field, or a substitute for terrain-owned
+elevation.
+
+### ImageGen production prompt
+
+```text
+Use case: stylized-concept
+Asset type: Genesis Fantasy volumetric donor-model reference for Meshy Image-to-3D
+
+Create one isolated compact low-cover boulder cluster for a mature low-poly tactical fantasy
+game. It must fit approximately within one 5-foot tactical cell and read as waist-high half
+cover: about 5 feet wide, 3.5 feet deep, and 3 feet tall in implied human scale. Compose
+exactly three substantial interlocking stones: one broad primary rounded layered boulder and
+two smaller subordinate stones tucked tightly against its base. Form one stable compact cover
+mass without spreading into a field or creating a climbable staircase. Give the cluster a
+broad flat, contact-aware underside suitable for procedural terrain.
+
+Use extremely simple deliberate geometry with large construction-aligned polygonal planes.
+Each stone reads as a one- or two-ring irregular polyhedron with a controlled rounded
+silhouette, not smooth subdivision. Broad facets follow geological layers, pressure breaks,
+buried edges, and silhouette changes. Use a few meaningful planes rather than dense
+triangulation. Preserve three understandable stone masses while making their contacts feel
+naturally embedded and structurally stable.
+
+Mature, restrained polygonal fantasy asset reference; modern tactical-diorama readability;
+geology first. Muted weathered gray-brown sedimentary stone with two or three broad slightly
+warmer strata. No photoreal texture and no toy appearance.
+
+Exactly one object and one view. Controlled orthographic front-three-quarter projection from
+approximately 45-degree yaw and 25-degree elevation. No lens distortion, perspective
+convergence, dramatic foreshortening, model sheet, turnaround, inset, duplicate, or underside
+view. Center and enlarge the complete cluster to use approximately 75 percent of the canvas
+with generous clean padding.
+
+Perfectly flat solid warm light-gray #E8E3DB backdrop. No floor, horizon, gradient, texture,
+vignette, reflection, contact shadow, cast shadow, or lighting variation. Neutral diffuse
+form description only: no directional key, rim light, dramatic highlight, painted ambient
+occlusion, or baked shadow.
+
+Avoid loose pebbles, gravel, scree, rubble field, tiny stones, moss, grass, roots, snow,
+crystals, ore, plants, scenery, ground base, path, wall, characters, cracks drawn as black
+lines, random triangle noise, cracked-glass faceting, micro-triangulation, smooth blob, voxel
+art, pixel art, miniature base, climbable steps, tall full-cover outcrop, cave entrance, text,
+watermark, or direct imitation of a commercial game asset.
+```
+
+### Meshy input settings
+
+```text
+mode: Image to 3D
+topology: Smart Topology
+target: 400 polygons
+texture: off
+image enhancement: off
+```
+
+Save the untouched download as:
+`incoming/M001-A-low-cover-boulder-cluster-original.glb`
+
+Do not buy or preserve generated micro-cracks, pebbles, or surface grain. Genesis materials own
+geological color and restrained layer variation. Geometry owns only the three large silhouettes,
+their broad facets, their stable contact, and any genuinely useful separation between the stones.
+
+### Admission test
+
+M001-A passes only if:
+
+- it remains one compact half-cover footprint;
+- it reads cleanly at the fixed game camera without a generated texture;
+- no stone becomes an accidental stair or movement surface;
+- the accepted cluster lands within roughly 150–600 triangles after cleanup;
+- cleanup is faster than producing three `GP-LP-T09` procedural rocks;
+- the silhouette or geological plane logic is materially better than the procedural recipe.
+
+If it fails the final condition, remove ordinary boulder clusters from paid production and keep
+Meshy only for exceptional rock mouths, transitions, roots, and strange formations.
+
+### ImageGen correction record
+
+The first call produced a visually useful five-view model sheet. It was rejected because a
+multi-object sheet violates the single-subject Meshy contract. The accepted image is a second
+ImageGen pass preserving only the first pass's upper-left cluster as one enlarged orthographic
+view. This presentation correction did not change the family design.
+
 ## M019-A — universal four-wheel wagon chassis
 
 ![M019-A](reference-images/M019-A-universal-four-wheel-wagon-chassis-v2.png)

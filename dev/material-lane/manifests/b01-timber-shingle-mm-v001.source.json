@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-TIMBER-SHINGLE-MM-V001",
+  "sourceGateManifest": "dev/material-lane/manifests/b01-timber-shingle-v001.source.json",
+  "source": "dev/material-lane/proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle.png",
+  "sourceSha256": "40a549ed758a7996f100cfa35b318b5a3d94e6540578d7354bcf5c6e3bb21033",
+  "graph": "dev/material-lane/graphs/b01-timber-shingle-mm-v001/b01-roof-timber-shingle-v001.ptex",
+  "graphSha256": "32c2372aac2d30d17452ac888b6290acf9b6595248e986b573fe8f047195fef6",
+  "materialTreatment": {
+    "albedo": "approved source unchanged",
+    "height": "0.82 contrast, 16 steps, broad blur radius 4",
+    "normalStrength": 0.28,
+    "ambientOcclusionStrength": 0.2,
+    "roughness": 0.72,
+    "metallic": 0,
+    "depthScale": 0.018,
+    "intent": "course separation only; do not emboss wood grain or dither"
+  }
+}

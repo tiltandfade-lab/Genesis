@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-TIMBER-SHINGLE-MM-V001",
+  "result": "PASS",
+  "sourceIdentity": {
+    "meanAbsoluteError": 0.0,
+    "pixelCorrelation": 1.0,
+    "preserved": true
+  },
+  "inheritedSourceSeamGate": {
+    "passed": true
+  },
+  "depth": {
+    "heightStdDev": 26.1514,
+    "normalStdDevRgb": [
+      23.5077,
+      19.9233,
+      7.2198
+    ],
+    "broadSignalPresent": true
+  },
+  "orm": {
+    "expectedRoughnessByte": 184,
+    "metallicMaxByte": 0,
+    "valid": true
+  }
+}

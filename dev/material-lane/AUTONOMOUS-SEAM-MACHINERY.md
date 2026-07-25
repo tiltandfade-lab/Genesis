@@ -176,6 +176,12 @@ The full 6 x 8 variant grid is the repeat period. Its deterministic seeded assig
 to within two uses per component and rejects identical orthogonal neighbours on the torus. This
 produces natural-looking variation without sacrificing exact repeat closure.
 
+The generalized executable `build-modular-course-proof.py` applies the same contract to other
+directional roof units. Each material declares its own component sheet, substrate color, course
+steps, and seed. Timber shingles prove a 12-column x 8-row fixture at 48px horizontal and 72px
+vertical steps; this tighter pitch prevents implausible under-roof gaps while retaining the same
+orientation, balance, repeat, delivery-size, and proof-board gates.
+
 ### Modular acceptance
 
 - Both grid dimensions divide the canvas exactly.

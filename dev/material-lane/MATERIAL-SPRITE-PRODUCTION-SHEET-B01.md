@@ -87,6 +87,20 @@ MM 1.3 graphs, deterministic two-run export receipt, and verification report are
 MM derives broad height, normal, AO, roughness, and zero metallic only. The other Batch 1 families
 remain pending their adapter/source pass.
 
+## Timber-shingle checkpoint — 2026-07-24
+
+`roof-timber-shingle` is **TECHNICAL-SOURCE-PASS / TASTE-APPROVED / MM-PASS**. Sixteen upright
+ImageGen components are assembled by the directional modular-course adapter on a seeded 12 x 8
+toroidal field. Identical variants never touch orthogonally; every exposed split edge faces down;
+the delivered source is 512px. Source and assembly records are
+`manifests/b01-timber-shingle-v001.source.json` and
+`proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle-receipt.json`.
+
+The conservative MM graph is `graphs/b01-timber-shingle-mm-v001/`; deterministic export and
+verification receipts are `receipts/b01-timber-shingle-mm-v001-export-receipt.json` and
+`receipts/b01-timber-shingle-mm-v001-verification.json`. The approved sprite is unchanged as
+albedo; MM adds broad course relief, roughness 0.72, and zero metallic.
+
 ## Slate replacement checkpoint — 2026-07-24
 
 The original six-component slate was rejected after review because its course read could appear

@@ -50,6 +50,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Golden Site concepting sessions | `docs/GOLDEN-SITE-CONCEPTING-GUIDELINES.md` | generator-first, visual, plain-English session method |
 | Golden Site founder choices | `docs/GOLDEN-SITES-FOUNDER-QUEUE.md` | only unresolved taste/build-order proposals |
 | Golden Site evidence and rendered-proof execution | `docs/GOLDEN-SITES-PROOF-QUEUE.md` | targeted source gaps + countable common/site capture contracts |
+| Meshy volumetric donor-model month | `docs/MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md` | 75 families × four variants; references under `Reference/Meshy-Premium-Month-1/`; subordinate to art canon and construction routing |
 | Site 1 Guard Post working build spec | `docs/SITE-1-GUARD-POST-SPEC.md` | consolidated road/threshold/deck/culture generator and receipt contract |
 | Site 2 Camp/Service working build spec | `docs/SITE-2-CAMP-SERVICE-SPEC.md` | center/shelter/terrain routes, life-support circuits, host-safe generation |
 | Site 3 Dormant/Abandoned retained foundation | `docs/SITE-3-DORMANT-CONCEPT.md` | accepted host-transformation concept; full site deliberately sequenced late/last |
@@ -205,6 +206,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/LOOT-REMAP.md — current-canon — loot-overhaul-spec(2026-06-18) — L4/L3b deferred per TIER-SCOPE
 - docs/LOST-WORLD-REKEY.md — proposed — design-note/DRAFT(2026-07-08) — ⚠ in-doc RESOLVED section vs header
 - docs/MATERIAL-IDENTITY.md — proposed — system-spec/SPECCED-WITH-SPIKE(2026-07-11) — clean 07-20 not-implemented clarification (Wave 10 evidence)
+- docs/MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md — operations — production-slate/MONTH-1-DEFINITIVE-LIST(2026-07-25) — 300-slot volumetric donor-model queue; ART-DIRECTION-CANON + MODEL_RECIPE remain authority
 - docs/MICRO-PROPS.md — superseded — system-spec(2026-07-04) — partially superseded by BEAUTY-WAVE-5 (self-noted)
 - docs/MODEL-BLITZ-24H.md — operations — runbook/LOCKED(2026-07-08)
 - docs/MODEL-FOUNDRY.md — current-canon — system-spec/RE-SCOPED(2026-07-09) — ⚠ title says "every bestiary model"; scope now trays/props/architecture (creatures → sprites)

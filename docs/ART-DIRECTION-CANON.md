@@ -1625,3 +1625,37 @@ The primary Move region is a filled highlight. The Dash-only extension is a holl
 locked-secondary meaning remains legible without color. Both regions, the selected route, movement cost, portal
 state, and final position must project engine query/receipt answers; the Clayroom renderer may not calculate a
 second path or movement rule.
+
+## MESHY DONOR-MODEL REFERENCE LANE (Adam, 2026-07-25 — additive; verbatim)
+
+> "ok, so your role in this would be to generate the reference images for meshy in the FFT low poly style we are looking for. I'll go for the premium promo package which means we get up to 300 models this month. go ahead and give me a definitive list, with descriptions and a reference image"
+
+Binding consequences:
+
+- Codex owns generation of the reference images supplied to Meshy for this lane. Meshy does not
+  independently establish Genesis style, object identity, scale, construction, materials, or
+  production acceptance.
+- This is a **volumetric donor-model reference lane** under `MODEL_RECIPE`, not a replacement for
+  `EXTRUDE`, `LAYERED_EXTRUDE`, `FACED_BOX`, `LATHE`, `SWEEP`, `DECAL`, or `FX`, and not permission
+  to send an entire site, room, building, wall kit, roof kit, stair, floor, or terrain plan to Meshy.
+- Meshy reference art and Meshy output are both source evidence. Runtime citizenship still requires
+  deterministic scale, origin, collision, cover, sockets, materials, states, LODs, provenance,
+  fixed-camera proof, and an engine-owned assembly recipe.
+- The `§7 Master prop generation prompt` remains the unchanged law for sprite/component sheets.
+  Meshy input is a distinct source class because volumetric reconstruction needs visible form. Its
+  reference may therefore use a controlled orthographic front-three-quarter view or a named
+  front/side/back/front-three-quarter multiview set. It still forbids perspective distortion,
+  scenery, floor plane, cast shadow, contact shadow, atmosphere, labels, unrelated props, and baked
+  directional light.
+- Every Meshy reference prompt must quote the `§7` **Visual language**, **Geometry ownership**, and
+  **Avoid** blocks verbatim. The source-description, component/separation intent, projection,
+  backdrop, and composition fields may be filled for the volumetric donor. Do not paraphrase the
+  quoted style language.
+- Generated references should favor incredibly simple geometry, large deliberate planes, strong
+  silhouettes, mechanically legible separable parts, and broad material regions. Additional
+  geometry must earn itself through silhouette, articulation, shadow, collision, walkability,
+  light-fixture ownership, or important multi-angle recognition.
+- The first Premium month is budgeted as 75 high-reuse donor families with four intentional
+  geometry/state variants each, totaling the available 300 model slots. The definitive list and
+  production order live in `MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md`; its exclusions preserve the
+  cheaper procedural, extrusion, faced-box, sprite, shader, and narrative lanes.

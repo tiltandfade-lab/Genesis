@@ -83,6 +83,11 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 - `TABLETOP-UNITS.md` — the SPEC-LOCKED build queue for TABLETOP-VISION's pre-alpha cut: U1–U7 per-unit (exact seams file:line, locked payloads, §9-mapped acceptance + mutation checks, effort tiers). Key finding: combat stage-mode already IS the end-state layout — the build un-gates it. Soak-gated. (2026-07-07)
 - `TABLETOP-VISION.md` — the visual end-state: the game as a tabletop of miniatures — the three laws (table renders only the dice / miniature ontology / the invisible hand is the DM), 9-class piece taxonomy + registry schema, tray grammar, centerpiece law off existing walk rolls, two-lane overlays, the V1–V6 layer map + 3-column shell, pre-alpha cut, acceptance gates. SPECCED 2026-07-07 (Fable final window; Adam-exempted from the §3.4 moratorium — spec only, build stays post-soak). Census appendix: `reference/TERRAIN-CENSUS-2026-07-07.md`.
 - `ASSET-PROMPTS.md` — *(working-doc)* the T1 image-generation shopping list for Adam's image-gen sessions: style-lock prompt + per-asset specs (title wordmark, scene plaque, medallions, seamless textures, icon gaps, battle-theater advance-buys). (2026-07-01)
+- `MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md` (`type: production-slate`) — the definitive
+  300-model Meshy month: 75 high-reuse donor families × four geometry/state variants, exact
+  exclusions protecting procedural/extrusion/faced-box/sprite lanes, an eight-family calibration
+  gate, production order, admission contract, and the first M019 wagon-chassis reference. Reference
+  inputs and prompt records live in `Reference/Meshy-Premium-Month-1/`. (2026-07-25)
 - `ADVANCEMENT-RETUNE.md` — the advancement spec's structure-locked, numbers-provisional retune (2026-07-01); framework now, telemetry-tuned numbers from play.
 - `AUTOMATED-PLAYTEST.md` — the Layer-1 automated-playtest loop (AI player × real DM stack); run parameters locked 2026-07-03.
 - `BATTLE-THEATER.md` — the FFT-grammar three.js battle stage — low-poly 3D, PSX grit, T1 build-ready, T2 gated on pack download (2026-07-03).

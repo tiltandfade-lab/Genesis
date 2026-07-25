@@ -565,3 +565,60 @@ total                      60 islands  1,108 triangles
 The output intentionally remains untextured. Genesis materials, fire, emission, lighting, soot,
 tools, fuel, collision, and interactive sockets remain engine-owned. M059-A passes calibration
 without a geometry repair pass.
+
+## M068-A — wall flame sconce
+
+![M068-A](reference-images/M068-A-wall-flame-sconce-v1.png)
+
+### Intended use
+
+A universal lore-native wall fire fixture for grounded dungeons, fortifications, mines, inns,
+workshops, and settlement exteriors. This donor supplies only the forged structure and empty
+runtime flame socket. Genesis owns the flame, flicker, emission, illumination, smoke, fuel state,
+wall attachment, culture treatment, and damage.
+
+The deliberately open basket is the focused recipe's final thin/open-frame test. Its large empty
+gaps matter more than surface detail.
+
+### Paste-ready Meshy prompt
+
+```text
+Simple low-poly medieval-fantasy forged-iron wall flame sconce for a modern tactical-diorama
+game. Match the reference image exactly: one thick tapered vertical mounting plate with two large
+mounting bosses, one stout angular square-bar bracket arm, one broad triangular lower brace, and
+one open octagonal brazier basket. Preserve the basket as a thick continuous upper ring connected
+to a small solid lower ash cup by exactly six thick widely spaced diagonal iron ribs. Keep the
+large spaces between the ribs truly open and keep the basket center completely empty as a runtime
+flame socket.
+
+Use chunky mechanically connected volumes, broad planar surfaces, restrained low-poly faceting,
+and one clean wrought-iron material region. No flame, ember, coal, fuel, glow, smoke, light rays,
+glass, crystal, candle, torch, chain, hanging part, wood, wall section, stone block, scenery,
+screws, tiny rivets, thin wire, hair-thin bars, spikes, skulls, filigree, heraldry, magical
+ornament, floating pieces, floor base, text, or added decoration. Exactly one coherent connected
+fixture matching the reference proportions and silhouette.
+```
+
+### Meshy input settings
+
+```text
+mode: Image to 3D
+topology: Smart Topology
+target: 600 polygons
+texture: off
+image enhancement: off
+```
+
+Adam may save the download into `incoming/` under any name. Canonical intake name after inspection:
+`M068-A-wall-flame-sconce-smart-600.glb`
+
+### Admission test
+
+M068-A passes only if:
+
+- the center remains empty and the background-facing basket gaps remain actual openings;
+- the top ring, six ribs, ash cup, arm, brace, mounting plate, and bosses remain legible in orbit;
+- no rib becomes a strand too thin to survive game-scale rendering and shadowing;
+- the basket can host a runtime flame and light without removing baked flame-like geometry;
+- the fixture remains readable against both bright and dark walls at the game camera;
+- cleanup is faster than reconstructing the entire fixture natively.

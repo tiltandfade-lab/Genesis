@@ -476,3 +476,54 @@ total                   752 triangles
 The result has one open front, one closed back, no floor, broad texture-independent cloth planes,
 independently replaceable front treatment and timber, and sealed rear corners from both oblique
 directions. M035-A passes calibration.
+
+## M059-A — compact field forge
+
+![M059-A](reference-images/M059-A-compact-field-forge-v1.png)
+
+### Intended use
+
+A high-reuse working forge assembly for camps, mines, guard-post service areas, construction
+sites, urban workshops, and reoccupied ruins. The donor should preserve a readable masonry mass,
+empty iron fire basin, hood, bellows, air connection, tool ledge, and empty tool sockets without
+buying dense brickwork, loose coal, fasteners, or workshop clutter.
+
+### Paste-ready Meshy prompt
+
+```text
+Compact low-poly medieval-fantasy field forge assembly for a modern tactical-diorama game.
+Preserve the reference image's squat masonry hearth, broad empty recessed iron fire basin,
+angular iron smoke hood on two thick rear uprights, large side-mounted wooden-and-leather
+bellows, thick iron air pipe, opposite tool ledge, and three large empty front tool sockets.
+Keep every major component as a clean, readable, physically plausible volume suitable for later
+separation into masonry body, iron basin and hood, bellows, and fittings. Use broad planar forms,
+chunky supports, restrained faceting, and large material regions. No flame, glow, smoke, fuel,
+coal chunks, loose tools, characters, floor base, scenery, tiny bricks, rivets, fasteners,
+engraving, dense wear, hair-thin parts, floating parts, photoreal detail, or added ornament.
+Exactly one coherent forge assembly matching the reference proportions and silhouette.
+```
+
+### Meshy input settings
+
+```text
+mode: Image to 3D
+topology: Smart Topology
+target: 1200 polygons
+texture: off
+image enhancement: off
+```
+
+Adam may save the download into `incoming/` under any name. Canonical intake name after inspection:
+`M059-A-compact-field-forge-smart-1200.glb`
+
+### Admission test
+
+M059-A passes only if:
+
+- the empty fire basin remains an actual open recess rather than a filled or painted surface;
+- the hood, basin, masonry body, bellows, air pipe, ledge, and sockets remain legible in orbit;
+- the bellows and rigid forge body can be separated deterministically without destructive cuts;
+- the air pipe and hood supports survive as thick usable forms rather than warped strands;
+- masonry remains a few broad construction masses instead of dense individual brick noise;
+- no runtime fire, light, fuel, tool, fastener, or soot detail is baked into the geometry;
+- cleanup is faster than reconstructing the entire assembly natively.

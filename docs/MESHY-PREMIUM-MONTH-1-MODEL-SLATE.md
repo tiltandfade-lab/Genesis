@@ -272,7 +272,7 @@ full production handoff, test this smaller material-diverse set:
 | complete | `M019-A` wagon chassis | structural timber + iron + repeated mechanism | Can the valuable chassis survive while dirty wheels are replaced procedurally? **Passed.** |
 | complete | `M001-A` low-cover boulder cluster | broad geological stone planes | Can a composed cover-anchor silhouette survive low remesh and beat routine procedural placement? **Passed at 236 cleaned triangles after deterministic duplicate-shell removal.** |
 | complete | `M035-A` ridge tent | thin cloth over a timber frame | Can broad cloth, an open threshold, and separable supports survive low remesh? **Passed at 752 cleaned triangles after mirrored rear flaps were replaced with a deterministic back cap whose deep returns and bound seams seal both rear corners.** |
-| 3 | `M059-A` forge hearth | masonry mass + iron fittings + empty sockets | Can mixed rigid materials remain legible without buying dense brick, coal, tool, or fastener noise? |
+| ready | `M059-A` forge hearth | masonry mass + iron fittings + empty sockets | Can mixed rigid materials remain legible without buying dense brick, coal, tool, or fastener noise? **Reference, prompt, Smart Topology 1200 target, and intake name are prepared.** |
 | 4 | `M068-A` wall flame sconce | thin forged metal + runtime-owned flame/light | Can a small open metal fixture survive at game scale while flame, emission, and illumination remain engine-owned? |
 
 This focused set replaces the requirement to finish all eight original calibration references

@@ -129,7 +129,9 @@ seams, depth presence, ORM packing, and determinism all pass.
 
 The card must show 20 comparison renders: sprite-only, sprite-plus-MM, gameplay goblin scale, and
 neutral clay control for each candidate. All repeat panels use a truthful locked square ratio and
-an unstretched 3x3 background repeat.
+an unstretched 3x3 background repeat. The wide cover fixture must also preserve square texel
+density: its 5.2-by-1.65 wall face uses a 3.15-by-1 UV repeat, never one square texture stretched
+once across the entire rectangular face.
 
 ## Taste questions
 

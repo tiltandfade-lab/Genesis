@@ -485,3 +485,8 @@ fail the art gate. The fitted-rubble component rescue created oversized mortar g
 display-rack cadence, so the richer direct sprite plus a 32px continuous-field lock was retained.
 Do not promote a heavier rescue merely because it is deterministic. The cheapest candidate that
 passes both topology and visual character remains the preferred source.
+
+Review fixtures must preserve texel aspect as well as image-frame aspect. A square source mapped
+to a rectangular wall or deck face repeats by the face's width-to-height ratio; it is never
+stretched once across that face. Sprite-only, MM-depth, and gameplay-scale comparisons must use
+the same UV density so the review cannot conceal or introduce squashing.

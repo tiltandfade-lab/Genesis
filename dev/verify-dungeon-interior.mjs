@@ -541,8 +541,12 @@ group("18 — GR4/GR3 wiring: skirt InstancedMesh + kit-graded void/fog backdrop
 {
   ok(/interiorBuildInstancedMesh\(data\.skirt, cx, cz, null, variant, "skirt"\)/.test(bootSrc),
     "setInteriorBoard builds a skirt InstancedMesh off data.skirt");
-  ok(/gradeColorLocal\(\s*\n?\s*\(data\.fog && data\.fog\.color\) \? hexStrToNum\(data\.fog\.color\) : voidTintFor\(env\),/.test(bootSrc),
-    "setInteriorBoard grades its void/fog backdrop color through gradeColorLocal (routes voidTintFor through the kit grade)");
+  // visual-correction Checkpoint 3 (2026-07-25): the backdrop is now RECIPE-AWARE first (a board
+  // carrying a light-recipe lock derives its void from the recipe/celestial arc), with the same
+  // kit-fog and env-keyed fallbacks INSIDE the same gradeColorLocal routing this check has always
+  // protected — the property (graded, kit-routed backdrop) is unchanged, only the source chain grew.
+  ok(/gradeColorLocal\(\s*\n?\s*recipeVoidNum != null \? recipeVoidNum\s*\n?\s*: \(\(data\.fog && data\.fog\.color\) \? hexStrToNum\(data\.fog\.color\) : voidTintFor\(env\)\),/.test(bootSrc),
+    "setInteriorBoard grades its (recipe-aware) void/fog backdrop color through gradeColorLocal (kit-grade routing preserved)");
   ok(/const fogWhisper = \(typeof kit\.fogWhisper === "number"/.test(bootSrc),
     "setInteriorBoard's fog-density default reads kit.fogWhisper (not the old ad-hoc 0.05 literal)");
   ok(!/\(data\.fog && data\.fog\.density\) \|\| 0\.05/.test(bootSrc),
@@ -628,7 +632,7 @@ function ensureThreeShim(){
   // marker file forces a re-write when the shim's own contents are stale, instead of trusting
   // package.json's mere existence as "already complete."
   const postDir = join(base, "addons", "postprocessing");
-  const shimVersion = "bw3-post-suite"; // BW3-2/3/6 THE POST SUITE: +UnrealBloomPass +OutputPass (kept in lockstep with dev/verify-theater-sprites.mjs — all shim writers share node_modules/three)
+  const shimVersion = "cp1-env-ao"; // visual-correction Checkpoint 1: +GTAOPass/+GTAOShader/+PoissonDenoiseShader/+SimplexNoise (lockstep across all shim writers sharing node_modules/three)
   const versionFile = join(base, ".shim-version");
   if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
@@ -642,6 +646,14 @@ function ensureThreeShim(){
   writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
   writeFileSync(join(postDir, "UnrealBloomPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/UnrealBloomPass.js";\n`);
   writeFileSync(join(postDir, "OutputPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/OutputPass.js";\n`);
+  writeFileSync(join(postDir, "GTAOPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/GTAOPass.js";\n`);
+  const shaderDir = join(base, "addons", "shaders");
+  const mathDir = join(base, "addons", "math");
+  mkdirSync(shaderDir, { recursive: true });
+  mkdirSync(mathDir, { recursive: true });
+  writeFileSync(join(shaderDir, "GTAOShader.js"), `export * from "../../../../vendor/three/addons/shaders/GTAOShader.js";\n`);
+  writeFileSync(join(shaderDir, "PoissonDenoiseShader.js"), `export * from "../../../../vendor/three/addons/shaders/PoissonDenoiseShader.js";\n`);
+  writeFileSync(join(mathDir, "SimplexNoise.js"), `export * from "../../../../vendor/three/addons/math/SimplexNoise.js";\n`);
   writeFileSync(versionFile, shimVersion + "\n");
 }
 
@@ -677,7 +689,7 @@ const VP1_REGISTRY = {
   "spr-gloom-medium-thing": { realm: "gloom", kind: "monster", name: "Medium Thing", size: "Medium", status: "cut", scaleTrue: 1.0 },
   "spr-gloom-large-thing": { realm: "gloom", kind: "monster", name: "Large Thing", size: "Large", status: "cut", scaleTrue: 2.0 },
   "spr-gloom-knight": { realm: "gloom", kind: "npc", name: "Knight", size: "Medium", status: "cut" },
-  "spr-gloom-floored-thing": { realm: "gloom", kind: "monster", name: "Floored Thing", size: "Medium", status: "cut", scaleTrue: 1.0, floor: 0.1 },
+  "spr-gloom-floored-thing": { realm: "gloom", kind: "monster", name: "Floored Thing", size: "Medium", status: "cut", scaleTrue: 1.0, footX: 0.5, footY: 0.9 },
   "spr-gloom-titan-thing": { realm: "gloom", kind: "monster", name: "Titan Thing", size: "Gargantuan", status: "cut", scaleTrue: 100.0 },
   "spr-gloom-scaled-medium": { realm: "gloom", kind: "monster", name: "Scaled Medium", size: "Medium", status: "cut", scale: 1.5 },
 };
@@ -698,6 +710,11 @@ global.window = dom.window;
 global.document = dom.window.document;
 global.SPRITE_REGISTRY = registry;
 global.window.SPRITE_REGISTRY = registry;
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 
 function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, image: { width: 100, height: 200 } }; }
 
@@ -729,6 +746,7 @@ try {
   result.largeHeight = g[1] && g[1].userData.spriteBillboardMesh.geometry.parameters.height;
   result.knightHeight = g[2] && g[2].userData.spriteBillboardMesh.geometry.parameters.height;
   result.flooredHeight = g[3] && g[3].userData.spriteBillboardMesh.geometry.parameters.height;
+  result.flooredFootY = g[3] && g[3].userData.footY;
   result.flooredY = g[3] && g[3].position.y;
   result.flooredX = g[3] && g[3].position.x;
   result.flooredZ = g[3] && g[3].position.z;
@@ -746,8 +764,10 @@ try {
   // BW2-2: standee base mesh — children[1] of the piece group (children[0] is now the sprite's own
   // inner camera-tilt wrap, BW2-2b — the base is still APPENDED as a plain sibling, never inserted
   // into the wrap, so the index is unchanged).
-  result.medBaseRadius = g[0] && g[0].children[1] && g[0].children[1].geometry.parameters.radiusTop;
-  result.medBaseHeight = g[0] && g[0].children[1] && g[0].children[1].geometry.parameters.height;
+  result.medBaseForm = g[0] && g[0].userData.standeeBaseMesh && g[0].userData.standeeBaseMesh.userData.supportForm;
+  result.medBaseWidth = g[0] && g[0].userData.interiorBaseWidth;
+  result.medBaseDepth = g[0] && g[0].userData.interiorBaseDepth;
+  result.medBaseHeight = g[0] && g[0].userData.standeeBaseMesh && g[0].userData.standeeBaseMesh.userData.supportHeight;
 
   result.oversizeWarned = warnings.some((w) => w.includes("qa: oversize-clamped"));
   result.ok = true;
@@ -773,6 +793,11 @@ global.window = dom.window;
 global.document = dom.window.document;
 global.SPRITE_REGISTRY = registry;
 global.window.SPRITE_REGISTRY = registry;
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 
 function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true }; }
 
@@ -853,10 +878,11 @@ group("23 — FIXED: interiorBuildPieces sizes through TRUE-SCALE (HUMAN_TRUE_HE
       "the floor-contact-law constants are exposed on window.Theater._floorContactLawForTest");
     const fallbackFloorTop = law.ITR_FLOOR_BASE_Y + law.ITR_FLOOR_HEIGHT_FALLBACK;
     const contactY = fallbackFloorTop + law.INTERIOR_BASE_Y_OFFSET + law.INTERIOR_BASE_HEIGHT;
-    const expectedY = contactY - 0.1 * green.flooredHeight;
+    const expectedY = contactY;
     ok(Math.abs(green.flooredY - expectedY) < 1e-9,
-      `floored piece (entry.floor=0.1, height=${green.flooredHeight}): group.position.y=${green.flooredY} matches (floorTop=${fallbackFloorTop} + baseOffset+baseHeight) - floor*height = ${expectedY}`);
-    ok(expectedY > -0.5, `RED-FIRST proof: the new contact line (${expectedY}) sits ABOVE the pre-BW2-2 hardcoded -0.5 — the old convention buried every standee by (fallback-derivation) ${(expectedY - (-0.5 - 0.1 * green.flooredHeight)).toFixed(3)} world units`);
+      `footY-anchored piece: group.position.y=${green.flooredY} is the one canonical contact origin at floorTop+support (${expectedY}), with no second legacy-floor offset`);
+    ok(Math.abs(green.flooredFootY - 0.9) < 1e-9, `the authored footY=0.9 anchor is carried on the production standee group`);
+    ok(expectedY > -0.5, `the canonical contact line (${expectedY}) sits above the pre-BW2-2 hardcoded -0.5 floor`);
     // BW2-2b item 4 (THE KILTER): the origin-shifted cellX/cellY placement now carries a tiny seeded
     // offset on top of the raw integer cell coords — assert against the INDEPENDENTLY re-derived
     // kilter for this exact seed key, not a bare integer equality.
@@ -866,11 +892,11 @@ group("23 — FIXED: interiorBuildPieces sizes through TRUE-SCALE (HUMAN_TRUE_HE
     ok(Math.abs(green.flooredX - 2) <= 0.06 + 1e-9 && Math.abs(green.flooredZ - 3) <= 0.06 + 1e-9,
       `the kilter offset itself stays within the spec's <=6% of a cell bound (dx=${(green.flooredX-2).toFixed(4)}, dz=${(green.flooredZ-3).toFixed(4)})`);
 
-    group("25b — BW2-2b STANDEE BASES: a plinth cylinder under every piece, radius 0.36x rendered width (BW2-4b item 3: reduced ~15% from 0.42 to break the huddle-blob), height ~0.09 (bumped from BW2-2's 0.04)");
-    ok(Math.abs(green.medBaseHeight - 0.09) < 1e-9, `medium piece's base cylinder height ${green.medBaseHeight} === BW2-2b's INTERIOR_BASE_HEIGHT (~0.09)`);
-    const expectedBaseRadius = green.medWidth * 0.36; // BW2-4b item 3: 0.42 -> 0.36
-    ok(Math.abs(green.medBaseRadius - expectedBaseRadius) < 1e-9,
-      `medium piece's base cylinder radius ${green.medBaseRadius} === rendered width (${green.medWidth}) x 0.36 = ${expectedBaseRadius}`);
+    group("25b — CL-R2 STANDEE SUPPORTS: a natural shallow strip under every piece; Medium depth equals one stair tread while width stays inside tactical ownership");
+    ok(green.medBaseForm === "shallow-rounded-strip", `medium piece uses the natural shallow support (${green.medBaseForm}), not a circular token`);
+    ok(Math.abs(green.medBaseHeight - 0.09) < 1e-9, `medium support height ${green.medBaseHeight} === 0.09`);
+    ok(Math.abs(green.medBaseDepth - 1 / 3) < 1e-9, `medium support depth ${green.medBaseDepth} === one stair tread (1/3 cell)`);
+    ok(green.medBaseWidth <= 0.82 + 1e-9, `medium support width ${green.medBaseWidth} remains inside its 1-cell tactical footprint`);
 
     group("26 — oversize clamp: wallHeightBase*0.95 cap + qa:oversize-clamped console.warn");
     ok(Math.abs(green.titanHeight - 2.4 * 0.95) < 1e-9, `titan (scaleTrue=100) clamps to wallHeightBase(2.4)*0.95=${2.4 * 0.95} (got ${green.titanHeight})`);
@@ -958,6 +984,11 @@ global.window = dom.window;
 global.document = dom.window.document;
 global.SPRITE_REGISTRY = registry;
 global.window.SPRITE_REGISTRY = registry;
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 
 function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, image: { width: 100, height: 200 } }; }
 
@@ -1077,6 +1108,11 @@ global.window = dom.window;
 global.document = dom.window.document;
 global.SPRITE_REGISTRY = registry;
 global.window.SPRITE_REGISTRY = registry;
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 
 // jsdom ships no canvas 2D backend (no "canvas" npm package installed) — buildDressingCard's
 // placeholder texture (dressingPlaceholderTexture) draws to a real 2d context, which this harness

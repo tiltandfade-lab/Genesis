@@ -786,6 +786,7 @@
     "verdict": "pass"
   },
   "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through": {
+    "contentBounds": [0.0, 0.1, 0.9375, 1.0],
     "note": "⚠ auto-scale (scale clamped): est 0.25′",
     "scale": 0.1,
     "verdict": "pass"
@@ -1038,6 +1039,8 @@
     "note": "regen: questionable-res redo (Adam 2026-07-16)"
   },
   "spr-fantasy-flaming-skeleton": {
+    "contentBounds": [0.024876, 0.013158, 0.970149, 0.97807],
+    "footY": 0.97807,
     "note": "⚠ auto-scale (art likely extends above head): est 5.8′",
     "scale": 1.21,
     "verdict": "pass"
@@ -1684,6 +1687,7 @@
     "scale": 0.417
   },
   "spr-fantasy-kraken": {
+    "contentBounds": [0.021277, 0.018692, 0.978723, 1.0],
     "note": "⚠ auto-scale (height uncertain; art likely extends above head): est 50′",
     "scale": 2.083,
     "verdict": "fail"
@@ -2518,6 +2522,8 @@
     "scale": 0.583
   },
   "spr-fantasy-treant": {
+    "contentBounds": [0.015686, 0.020408, 0.980392, 0.979592],
+    "footY": 0.979592,
     "note": "⚠ auto-scale (art likely extends above head): est 26′",
     "scale": 1.31,
     "verdict": "pass"
@@ -2788,6 +2794,8 @@
     "verdict": "pass"
   },
   "spr-fantasy-winged-kobold-urd": {
+    "contentBounds": [0.02451, 0.017699, 0.97549, 0.977876],
+    "footY": 0.977876,
     "note": "⚠ auto-scale (art likely extends above head): est 3′",
     "scale": 1.01,
     "verdict": "pass"
@@ -2803,6 +2811,8 @@
     "scale": 0.375
   },
   "spr-fantasy-wraith": {
+    "contentBounds": [0.028169, 0.022523, 0.981221, 0.977477],
+    "footY": 0.977477,
     "note": "⚠ auto-scale (height uncertain): est 6′",
     "scale": 1.07,
     "verdict": "pass"
@@ -3287,6 +3297,8 @@
     "scale": 0.967
   },
   "spr-pc-human-fighter-female": {
+    "contentBounds": [0.024242, 0.023364, 0.969697, 0.976636],
+    "footY": 0.976636,
     "scale": 0.967
   },
   "spr-pc-human-fighter-male": {

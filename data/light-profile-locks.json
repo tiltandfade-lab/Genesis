@@ -1,0 +1,631 @@
+{
+  "kind": "light-profile-lock-set",
+  "schemaVersion": 2,
+  "id": "genesis-light-profiles",
+  "version": 1,
+  "settings": {
+    "stageAmbientFloor": 0.42,
+    "gradeExposureFloor": 0.006,
+    "bloomThreshold": 0.68,
+    "bloomStrength": 1.15,
+    "gradeTintScale": 0.45,
+    "gradeTintMax": 0.12,
+    "celestialArc": {
+      "SUNRISE_MIN": 360,
+      "SUNSET_MIN": 1200,
+      "MIN_ELEV_ANGLE": 0.2094,
+      "OVERCAST_DESAT": 0.4,
+      "OVERCAST_SHADOW_DAMP": 0.55
+    },
+    "spriteEmissiveFloor": 0.05,
+    "sceneAmbient": 0.13,
+    "lightRenderGain": 4.5
+  },
+  "defaults": {
+    "profile": {
+      "exposureFloor": 0.006,
+      "toneMap": {
+        "profile": "agx",
+        "strength": 1
+      },
+      "bloom": {
+        "threshold": 0.68,
+        "strength": 1.15
+      },
+      "atmosphereFact": null,
+      "spriteResponse": {
+        "emissiveFloor": 0.05,
+        "materialRecipe": "lit-standee-v1",
+        "invariants": {
+          "colorSpace": "srgb",
+          "magnificationFilter": "nearest",
+          "minificationFilter": "linear",
+          "alphaMode": "registry-cutoff"
+        }
+      }
+    },
+    "light": {
+      "type": "point",
+      "temperatureK": 6500,
+      "colorOverride": true,
+      "intensityUnit": "tabletop-profile-unit",
+      "physicalIntensityUnit": "renderer-intensity",
+      "positionStrategy": "board-relative",
+      "azimuthDeg": 0,
+      "elevationDeg": 45,
+      "spot": {
+        "coneDeg": 45,
+        "penumbra": 0
+      },
+      "shadow": {
+        "cast": true,
+        "bias": -0.002,
+        "normalBias": 0,
+        "mapSize": 512,
+        "budgetPriority": 1
+      },
+      "fixtureId": "",
+      "mount": "none",
+      "emitterLocal": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "flicker": {
+        "recipeId": "steady",
+        "amplitude": 0,
+        "cadenceMs": 480
+      }
+    }
+  },
+  "profiles": {
+    "dark": {
+      "id": "dark",
+      "label": "Dark interior",
+      "rolled": true,
+      "mode": "production-environment",
+      "source": {
+        "class": "environmental",
+        "label": "dim overhead bounce",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0x8fa8c8",
+        "intensity": 0.25
+      },
+      "lights": [
+        {
+          "id": "dark-shaping",
+          "label": "dim shaping light",
+          "enabled": true,
+          "type": "environment",
+          "temperatureK": 8000,
+          "color": "0x9fb4d8",
+          "intensity": 7,
+          "physicalIntensity": 1,
+          "pos": {
+            "x": 0,
+            "y": 3,
+            "z": 0
+          },
+          "heightM": 4.572,
+          "rangeM": 9.144,
+          "falloff": 2,
+          "flicker": {
+            "amplitude": 0,
+            "cadenceMs": 480
+          }
+        }
+      ]
+    },
+    "torchlit": {
+      "id": "torchlit",
+      "label": "Torchlit dungeon",
+      "rolled": true,
+      "mode": "production-practical",
+      "source": {
+        "class": "physical-practical",
+        "label": "open flame torch or wall sconce",
+        "loreNative": true,
+        "visibleEmitterRequired": true
+      },
+      "ambient": {
+        "color": "0x4a3826",
+        "intensity": 0.21
+      },
+      "lights": [
+        {
+          "id": "torch-key",
+          "label": "torch flame",
+          "enabled": true,
+          "temperatureK": 1900,
+          "positionStrategy": "socket-relative",
+          "color": "0xffa04a",
+          "intensity": 18,
+          "physicalIntensity": 1.3,
+          "pos": {
+            "x": -0.15,
+            "y": 2.2,
+            "z": -0.35
+          },
+          "heightM": 3.3528,
+          "rangeM": 36.576,
+          "falloff": 1.5,
+          "state": "flickering",
+          "fixtureId": "sconce-torch-clay",
+          "mount": "wall",
+          "emitterLocal": {
+            "x": 0,
+            "y": 0.08,
+            "z": 0.18
+          },
+          "flicker": {
+            "recipeId": "open-flame-dance-v1",
+            "amplitude": 0.1,
+            "cadenceMs": 420,
+            "intervalJitter": 0.55,
+            "directionAmplitude": 0.025
+          }
+        }
+      ]
+    },
+    "lavalit": {
+      "id": "lavalit",
+      "label": "Lava glow",
+      "rolled": true,
+      "mode": "production-practical",
+      "source": {
+        "class": "physical-practical",
+        "label": "molten fissure breaking the floor",
+        "loreNative": true,
+        "visibleEmitterRequired": true
+      },
+      "ambient": {
+        "color": "0x3a1c14",
+        "intensity": 0.2
+      },
+      "lights": [
+        {
+          "id": "lava-edge",
+          "label": "lava edge glow",
+          "enabled": true,
+          "temperatureK": 1400,
+          "color": "0xff5522",
+          "intensity": 22,
+          "physicalIntensity": 1.5,
+          "pos": {
+            "x": 0.28,
+            "y": 0.35,
+            "z": 0.22
+          },
+          "heightM": 0.229,
+          "rangeM": 10.668,
+          "falloff": 2,
+          "flicker": {
+            "amplitude": 0.18,
+            "cadenceMs": 520
+          },
+          "fixtureId": "lava-fissure",
+          "mount": "floor",
+          "positionStrategy": "socket-relative",
+          "emitterLocal": {
+            "x": 0,
+            "y": 0.05,
+            "z": 0
+          }
+        }
+      ]
+    },
+    "fungal-glow": {
+      "id": "fungal-glow",
+      "label": "Fungal glow",
+      "rolled": true,
+      "mode": "production-environment",
+      "source": {
+        "class": "environmental",
+        "label": "visible bioluminescent fungus",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0x3a5a3a",
+        "intensity": 0.27
+      },
+      "lights": [
+        {
+          "id": "fungal-cluster",
+          "label": "fungal cluster",
+          "enabled": true,
+          "temperatureK": 7000,
+          "color": "0x7fdc6a",
+          "intensity": 9,
+          "physicalIntensity": 1,
+          "pos": {
+            "x": 0.4,
+            "y": 1,
+            "z": 0.4
+          },
+          "heightM": 1.524,
+          "rangeM": 7.62,
+          "falloff": 2,
+          "flicker": {
+            "amplitude": 0.05,
+            "cadenceMs": 620
+          }
+        }
+      ]
+    },
+    "magic-glow": {
+      "id": "magic-glow",
+      "label": "Arcane crystal",
+      "rolled": true,
+      "mode": "production-practical",
+      "source": {
+        "class": "physical-practical",
+        "label": "glowing crystal or spell focus",
+        "loreNative": true,
+        "visibleEmitterRequired": true
+      },
+      "ambient": {
+        "color": "0x4048a0",
+        "intensity": 0.26
+      },
+      "lights": [
+        {
+          "id": "arcane-crystal",
+          "label": "arcane crystal",
+          "enabled": true,
+          "temperatureK": 9000,
+          "positionStrategy": "socket-relative",
+          "color": "0x8a6bff",
+          "intensity": 14,
+          "physicalIntensity": 1.2,
+          "pos": {
+            "x": -0.3,
+            "y": 1.6,
+            "z": 0.2
+          },
+          "heightM": 2.438,
+          "rangeM": 9.144,
+          "falloff": 2,
+          "fixtureId": "crystal-faceted",
+          "mount": "floor",
+          "emitterLocal": {
+            "x": 0,
+            "y": 0.3,
+            "z": 0
+          },
+          "flicker": {
+            "amplitude": 0.06,
+            "cadenceMs": 600
+          }
+        }
+      ]
+    },
+    "lamplit": {
+      "id": "lamplit",
+      "label": "Lantern light",
+      "rolled": true,
+      "mode": "production-practical",
+      "source": {
+        "class": "physical-practical",
+        "label": "hooded lantern or candle lantern",
+        "loreNative": true,
+        "visibleEmitterRequired": true
+      },
+      "ambient": {
+        "color": "0x40382a",
+        "intensity": 0.22
+      },
+      "lights": [
+        {
+          "id": "lantern-key",
+          "label": "lantern flame",
+          "enabled": true,
+          "temperatureK": 2200,
+          "positionStrategy": "socket-relative",
+          "color": "0xffcf8a",
+          "intensity": 16,
+          "physicalIntensity": 1.2,
+          "pos": {
+            "x": 0,
+            "y": 2.4,
+            "z": -0.5
+          },
+          "heightM": 3.658,
+          "rangeM": 9.906,
+          "falloff": 2,
+          "fixtureId": "lantern-handled",
+          "mount": "floor",
+          "emitterLocal": {
+            "x": 0,
+            "y": 0.3,
+            "z": 0
+          },
+          "flicker": {
+            "amplitude": 0.1,
+            "cadenceMs": 520
+          }
+        }
+      ]
+    },
+    "moonlit": {
+      "id": "moonlit",
+      "label": "Moonlight",
+      "rolled": true,
+      "mode": "production-environment",
+      "source": {
+        "class": "celestial",
+        "label": "moonlight through an opening",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0x8fa0c8",
+        "intensity": 0.36
+      },
+      "lights": [
+        {
+          "id": "moon-key",
+          "label": "moon key",
+          "enabled": true,
+          "type": "directional",
+          "temperatureK": 9000,
+          "color": "0xaebfe8",
+          "intensity": 8,
+          "physicalIntensity": 1,
+          "pos": {
+            "x": 0.5,
+            "y": 3,
+            "z": -0.5
+          },
+          "heightM": 4.572,
+          "rangeM": 12.192,
+          "falloff": 1,
+          "flicker": {
+            "amplitude": 0,
+            "cadenceMs": 480
+          },
+          "shadow": {
+            "cast": true,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": 1024,
+            "budgetPriority": 1
+          },
+          "azimuthDeg": 0
+        }
+      ]
+    },
+    "daylit": {
+      "id": "daylit",
+      "label": "Daylight",
+      "rolled": true,
+      "mode": "production-environment",
+      "source": {
+        "class": "celestial",
+        "label": "sunlight and skylight through an opening",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0xd8dce0",
+        "intensity": 0.55
+      },
+      "lights": [
+        {
+          "id": "sun-key",
+          "label": "sun key",
+          "enabled": true,
+          "type": "directional",
+          "temperatureK": 5500,
+          "color": "0xfff2d8",
+          "intensity": 9,
+          "physicalIntensity": 1.1,
+          "pos": {
+            "x": 0.4,
+            "y": 3,
+            "z": -0.4
+          },
+          "heightM": 4.572,
+          "rangeM": 15.24,
+          "falloff": 1,
+          "flicker": {
+            "amplitude": 0,
+            "cadenceMs": 480
+          },
+          "shadow": {
+            "cast": true,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": 1024,
+            "budgetPriority": 1
+          },
+          "azimuthDeg": 0
+        }
+      ]
+    },
+    "overcast": {
+      "id": "overcast",
+      "label": "Overcast daylight",
+      "rolled": true,
+      "mode": "production-environment",
+      "source": {
+        "class": "celestial",
+        "label": "diffuse daylight through an opening",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0xa8adb5",
+        "intensity": 0.39
+      },
+      "lights": []
+    },
+    "voidlit": {
+      "id": "voidlit",
+      "label": "Void glow",
+      "rolled": true,
+      "mode": "production-environment",
+      "source": {
+        "class": "environmental",
+        "label": "visible planar or rift glow",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0x5a3a6e",
+        "intensity": 0.2
+      },
+      "lights": [
+        {
+          "id": "void-source",
+          "label": "rift glow",
+          "enabled": true,
+          "temperatureK": 11000,
+          "color": "0x9a5ad0",
+          "intensity": 11,
+          "physicalIntensity": 1.1,
+          "pos": {
+            "x": 0,
+            "y": 1.2,
+            "z": 0
+          },
+          "heightM": 1.829,
+          "rangeM": 9.144,
+          "falloff": 2,
+          "flicker": {
+            "amplitude": 0.08,
+            "cadenceMs": 560
+          }
+        }
+      ]
+    },
+    "clay-neutral-truth": {
+      "id": "clay-neutral-truth",
+      "label": "Clayroom neutral truth",
+      "rolled": false,
+      "mode": "diagnostic-neutral",
+      "source": {
+        "class": "diagnostic",
+        "label": "neutral measurement fill",
+        "loreNative": false,
+        "visibleEmitterRequired": false
+      },
+      "ambient": {
+        "color": "0xffffff",
+        "intensity": 0.55
+      },
+      "lights": [
+        {
+          "id": "studio-sky",
+          "label": "studio skylight (shadowless, straight down - models tops vs sides without azimuth mood)",
+          "enabled": true,
+          "type": "directional",
+          "temperatureK": 6500,
+          "color": "0xffffff",
+          "intensity": 6,
+          "physicalIntensity": 0.73,
+          "azimuthDeg": 0,
+          "elevationDeg": 90,
+          "pos": {
+            "x": 0,
+            "y": 4,
+            "z": 0
+          },
+          "heightM": 6.096,
+          "rangeM": 30.48,
+          "falloff": 0,
+          "shadow": {
+            "cast": false
+          },
+          "flicker": {
+            "amplitude": 0,
+            "cadenceMs": 480
+          }
+        }
+      ]
+    },
+    "clay-opposing-pair": {
+      "id": "clay-opposing-pair",
+      "label": "Clayroom warm/cool diagnostic",
+      "rolled": false,
+      "mode": "diagnostic-studio",
+      "source": {
+        "class": "diagnostic",
+        "label": "two visible calibration bulbs",
+        "loreNative": false,
+        "visibleEmitterRequired": true
+      },
+      "ambient": {
+        "color": "0xffffff",
+        "intensity": 0.18
+      },
+      "lights": [
+        {
+          "id": "clay-west-warm",
+          "label": "warm calibration bulb",
+          "enabled": true,
+          "temperatureK": 2800,
+          "positionStrategy": "board-relative",
+          "color": "0xffa04a",
+          "intensity": 16,
+          "physicalIntensity": 16,
+          "pos": {
+            "x": -0.53,
+            "y": 1.7,
+            "z": 0
+          },
+          "heightM": 2.591,
+          "rangeM": 18.288,
+          "falloff": 1,
+          "fixtureId": "bracket-generic",
+          "mount": "none",
+          "emitterLocal": {
+            "x": 0,
+            "y": 0.03,
+            "z": 0.12
+          },
+          "state": "steady",
+          "flicker": {
+            "seed": "clay-c1a:west-warm",
+            "amplitude": 0.12,
+            "cadenceMs": 480
+          }
+        },
+        {
+          "id": "clay-east-cool",
+          "label": "cool calibration bulb",
+          "enabled": true,
+          "temperatureK": 9000,
+          "positionStrategy": "board-relative",
+          "color": "0xaebfe8",
+          "intensity": 9,
+          "physicalIntensity": 9,
+          "pos": {
+            "x": 0.53,
+            "y": 1.7,
+            "z": 0
+          },
+          "heightM": 2.591,
+          "rangeM": 18.288,
+          "falloff": 1,
+          "fixtureId": "bracket-generic",
+          "mount": "none",
+          "emitterLocal": {
+            "x": 0,
+            "y": 0.03,
+            "z": 0.12
+          },
+          "state": "steady",
+          "flicker": {
+            "seed": "clay-c1a:east-cool",
+            "amplitude": 0.12,
+            "cadenceMs": 480
+          }
+        }
+      ]
+    }
+  }
+}

@@ -33,11 +33,16 @@
             padding:0 40px; }
   .fig { display:flex; flex-direction:column; align-items:center; position:relative; }
   .fig img { image-rendering:pixelated; display:block; }
-  .floorline { position:absolute; left:-10px; right:-10px; height:0;
-    border-top:2px dashed #ff5577; pointer-events:none; z-index:5; }
-  .floorline.faint { border-top-color:rgba(255,85,119,.45); }
-  .floorline span { position:absolute; right:-4px; top:-16px; font-size:10px; color:#ff5577;
-    background:rgba(0,0,0,.55); padding:0 4px; border-radius:3px; white-space:nowrap; }
+  .origin-line { position:absolute; z-index:5; touch-action:none; }
+  .origin-line-x { top:-8px; bottom:-8px; width:0; border-left:2px dashed #ffb14a; cursor:ew-resize; }
+  .origin-line-y { left:-10px; right:-10px; height:0; border-top:2px dashed #ff5577; cursor:ns-resize; }
+  .origin-cross { position:absolute; z-index:6; width:15px; height:15px; margin:-7px 0 0 -7px;
+    padding:0; border:2px solid #fff1c6; border-radius:50%; background:#b94844; cursor:move;
+    box-shadow:0 0 0 2px rgba(0,0,0,.55); touch-action:none; }
+  .origin-cross:focus { outline:2px solid var(--accent); outline-offset:3px; }
+  .fig.pinned .origin-line, .fig.pinned .origin-cross { opacity:.42; pointer-events:none; }
+  .origin-caption { position:absolute; right:-4px; top:-17px; font-size:10px; color:#ff5577;
+    background:rgba(0,0,0,.68); padding:0 4px; border-radius:3px; white-space:nowrap; }
   .fig .cap { position:absolute; top:100%; font-size:10px; color:var(--dim); white-space:nowrap; padding-top:3px; }
   .fig.current { outline:2px solid var(--accent); outline-offset:6px; border-radius:4px; }
   .fig.pinned img { opacity:.85; }
@@ -110,12 +115,14 @@
       <label>scale <input id="scale" type="range" min="0.1" max="8" step="0.01" value="1"></label>
       <input id="scaleVal" type="text" value="1.00">
       <button id="reset1" title="reset to 1.0">1.0</button>
+      <button id="resetContact" title="scan the current PNG alpha and place the origin on its lowest opaque contact row">alpha contact</button>
+      <button id="resetCompiled" title="restore the currently compiled registry footX/footY">compiled origin</button>
       <button id="pin">pin ⇩</button>
       <button id="saveBtn" title="write scale + tags + note + feet to the overlay">SAVE (s)</button>
       <button id="passBtn" class="pass">PASS (p)</button>
       <button id="failBtn" class="fail">FAIL (f)</button>
       <button id="clearBtn" title="clear verdict">clear</button>
-      <span class="kbd">← → navigate · [ ] scale · s save · p/f verdict · 0 reset · click sprite = set floor · shift-click = clear floor</span>
+      <span class="kbd">← → navigate · [ ] scale · drag orange/red arms or center · focus center + arrows = 1 px (Shift = 5) · s save</span>
     </div>
   </div>
   <aside id="info"></aside>
@@ -172,22 +179,37 @@ const guideFor = e => GUIDES.find(g => g.key === (SRD_TO_GUIDE[sizeOf(e)] || "me
 
 let REG = {}, OVERLAY = {}, list = [], idx = 0, medPx = 150;
 let pins = JSON.parse(localStorage.getItem("spritePins") || "[]");
-const PENDING = {}; // slug -> {scale, floor} — unsaved edits; NOTHING writes to disk until Save/Pass/Fail
+const PENDING = {}; // slug -> {scale, footX, footY, contentBounds} — unsaved; nothing writes until Save/Pass/Fail
+const IMG_DIMS = {}; // slug -> {w,h}; display-only pixel-coordinate readout
+const REQUESTED_SLUG = new URLSearchParams(location.search).get("sprite");
 const $ = id => document.getElementById(id);
 const cur = () => list[idx];
 const ovr = slug => OVERLAY[slug] || {};
 const savedScale = slug => (typeof ovr(slug).scale === "number" ? ovr(slug).scale : 1);
 const scaleFor = slug => (PENDING[slug] && typeof PENDING[slug].scale === "number")
   ? PENDING[slug].scale : savedScale(slug);
-/* floor = ground-contact line, fraction of image height UP from the bottom edge (0 = bottom
-   edge IS the floor). The theater mounts the figurine disc at this line. Set by clicking the
-   current sprite; shift-click clears. */
-const savedFloor = slug => (typeof ovr(slug).floor === "number" ? ovr(slug).floor : 0);
-const floorFor = slug => (PENDING[slug] && typeof PENDING[slug].floor === "number")
-  ? PENDING[slug].floor : savedFloor(slug);
+const compiledFootX = slug => REG[slug] && typeof REG[slug].footX === "number" ? REG[slug].footX : 0.5;
+const compiledFootY = slug => REG[slug] && typeof REG[slug].footY === "number" ? REG[slug].footY : 1;
+const savedFootX = slug => typeof ovr(slug).footX === "number"
+  ? ovr(slug).footX : compiledFootX(slug);
+const savedFootY = slug => typeof ovr(slug).footY === "number"
+  ? ovr(slug).footY
+  : (typeof ovr(slug).floor === "number" ? 1 - ovr(slug).floor : compiledFootY(slug));
+const footXFor = slug => PENDING[slug] && typeof PENDING[slug].footX === "number"
+  ? PENDING[slug].footX : savedFootX(slug);
+const footYFor = slug => PENDING[slug] && typeof PENDING[slug].footY === "number"
+  ? PENDING[slug].footY : savedFootY(slug);
+const compiledBounds = slug => REG[slug] && Array.isArray(REG[slug].contentBounds)
+  ? REG[slug].contentBounds : null;
+const savedBounds = slug => Array.isArray(ovr(slug).contentBounds)
+  ? ovr(slug).contentBounds : compiledBounds(slug);
+const boundsFor = slug => PENDING[slug] && Object.prototype.hasOwnProperty.call(PENDING[slug], "contentBounds")
+  ? PENDING[slug].contentBounds : savedBounds(slug);
 const isDirty = slug => !!PENDING[slug] &&
   (Math.abs(scaleFor(slug) - savedScale(slug)) > 1e-9 ||
-   Math.abs(floorFor(slug) - savedFloor(slug)) > 1e-9);
+   Math.abs(footXFor(slug) - savedFootX(slug)) > 1e-9 ||
+   Math.abs(footYFor(slug) - savedFootY(slug)) > 1e-9 ||
+   JSON.stringify(boundsFor(slug)) !== JSON.stringify(savedBounds(slug)));
 
 /* VQ2-RESPEC.md S6 — the review pool is "legacy-cut OR has a faceted candidate", not just
    status:"cut" as before: candidate-only slugs (no legacy art yet, S4's orphans included) need
@@ -204,6 +226,8 @@ async function load(){
   fillFilter("fKind", "kind", poolEntries.map(([,e]) => e.kind));
   fillFilter("fSize", "size", poolEntries.map(([,e]) => sizeOf(e)));
   applyFilters();
+  const requestedIndex = REQUESTED_SLUG ? list.findIndex(e => e.slug === REQUESTED_SLUG) : -1;
+  if(requestedIndex >= 0){ idx = requestedIndex; render(); }
 }
 function fillFilter(id, label, vals){
   const sel = $(id), keep = sel.value;
@@ -239,27 +263,69 @@ const stageSrc = e => e.legacyAsset ? `/sprites/${e.slug}.png` : (e.candidateAss
 
 function figHtml(e, cls){
   const h = Math.round(sizeScale(e) * medPx * scaleFor(e.slug));
-  const fl = floorFor(e.slug);
-  // the floor line rides inside a relative wrap around the img so bottom:px is image-space;
-  // clicking the CURRENT sprite sets it (wired in render(), not inline — needs event coords)
-  const line = cls === "current" || fl > 0
-    ? `<div class="floorline${cls === "current" ? "" : " faint"}" style="bottom:${Math.round(fl * h)}px"><span>floor${fl > 0 ? " " + (fl * 100).toFixed(1) + "%" : ""}</span></div>` : "";
+  const footX = footXFor(e.slug), footY = footYFor(e.slug);
+  const origin = `<div class="origin-line origin-line-x" style="left:${(footX * 100).toFixed(4)}%"></div>
+      <div class="origin-line origin-line-y" style="top:${(footY * 100).toFixed(4)}%">
+        <span class="origin-caption">foot ${footX.toFixed(3)}, ${footY.toFixed(3)}</span>
+      </div>
+      <button class="origin-cross" aria-label="Standee origin for ${e.name}"
+        style="left:${(footX * 100).toFixed(4)}%;top:${(footY * 100).toFixed(4)}%"></button>`;
   return `<div class="fig ${cls}" data-slug="${e.slug}">
       ${cls === "pinned" ? `<button class="unpin" onclick="unpin('${e.slug}')">unpin ✕</button>` : ""}
-      <div class="imgwrap" style="position:relative">
+      <div class="imgwrap" style="position:relative;display:inline-block">
         <img src="${stageSrc(e)}" style="height:${h}px" draggable="false">
-        ${line}
+        ${origin}
       </div>
       <span class="cap">${e.name} · ${sizeOf(e)} → ${guideFor(e).key}${scaleFor(e.slug) !== 1 ? " · ×" + scaleFor(e.slug).toFixed(2) : ""}</span>
     </div>`;
 }
-function setFloorFromClick(ev){
+function setAnchorFromPointer(ev, axis, imgOrRect){
   const e = cur(); if(!e) return;
-  const img = ev.currentTarget;
-  const r = img.getBoundingClientRect();
-  const fl = ev.shiftKey ? 0 : Math.min(0.9, Math.max(0, (r.bottom - ev.clientY) / r.height));
-  PENDING[e.slug] = Object.assign({}, PENDING[e.slug], { scale: scaleFor(e.slug), floor: Math.round(fl * 1e4) / 1e4 });
+  const r = typeof imgOrRect.getBoundingClientRect === "function"
+    ? imgOrRect.getBoundingClientRect() : imgOrRect;
+  const next = Object.assign({}, PENDING[e.slug], {
+    scale: scaleFor(e.slug),
+    footX: footXFor(e.slug),
+    footY: footYFor(e.slug)
+  });
+  if(axis === "x" || axis === "both"){
+    next.footX = Math.round(Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width)) * 1e6) / 1e6;
+  }
+  if(axis === "y" || axis === "both"){
+    next.footY = Math.round(Math.min(1, Math.max(0, (ev.clientY - r.top) / r.height)) * 1e6) / 1e6;
+  }
+  PENDING[e.slug] = next;
   render();
+}
+let ANCHOR_DRAG = null;
+function beginAnchorDrag(ev, axis, img){
+  ev.preventDefault(); ev.stopPropagation();
+  ANCHOR_DRAG = { axis, rect: img.getBoundingClientRect() };
+  setAnchorFromPointer(ev, axis, ANCHOR_DRAG.rect);
+}
+document.addEventListener("pointermove", ev => {
+  if(ANCHOR_DRAG) setAnchorFromPointer(ev, ANCHOR_DRAG.axis, ANCHOR_DRAG.rect);
+});
+document.addEventListener("pointerup", () => { ANCHOR_DRAG = null; });
+function nudgeAnchor(ev, img){
+  const e = cur(); if(!e || !/^Arrow/.test(ev.key)) return;
+  const dims = IMG_DIMS[e.slug] || { w: img.naturalWidth || 1, h: img.naturalHeight || 1 };
+  const step = ev.shiftKey ? 5 : 1;
+  let x = footXFor(e.slug), y = footYFor(e.slug);
+  if(ev.key === "ArrowLeft") x -= step / Math.max(1, dims.w);
+  if(ev.key === "ArrowRight") x += step / Math.max(1, dims.w);
+  if(ev.key === "ArrowUp") y -= step / Math.max(1, dims.h);
+  if(ev.key === "ArrowDown") y += step / Math.max(1, dims.h);
+  PENDING[e.slug] = Object.assign({}, PENDING[e.slug], {
+    scale: scaleFor(e.slug),
+    footX: Math.min(1, Math.max(0, x)),
+    footY: Math.min(1, Math.max(0, y))
+  });
+  ev.preventDefault(); ev.stopPropagation(); render();
+  requestAnimationFrame(() => {
+    const cross = $("lineup").querySelector(".fig.current .origin-cross");
+    if(cross) cross.focus();
+  });
 }
 function render(){
   const stage = $("stage"), lineup = $("lineup"), e = cur();
@@ -284,9 +350,22 @@ function render(){
   const pinned = pins.map(s => REG[s] && Object.assign({ slug: s }, REG[s])).filter(Boolean);
   lineup.innerHTML = refHtml + pinned.map(p => figHtml(p, "pinned")).join("") + (e ? figHtml(e, "current") : "");
   lineup.querySelectorAll(".fig").forEach(n => { n.style.transform = "translateY(0)"; });
-  // click the current sprite = set its floor line at the click; shift-click = clear (bottom edge)
-  const curImg = lineup.querySelector(".fig.current .imgwrap img");
-  if(curImg){ curImg.style.cursor = "crosshair"; curImg.addEventListener("click", setFloorFromClick); }
+  const curWrap = lineup.querySelector(".fig.current .imgwrap");
+  const curImg = curWrap && curWrap.querySelector("img");
+  if(curImg){
+    const rememberDims = () => {
+      IMG_DIMS[e.slug] = { w: curImg.naturalWidth || 1, h: curImg.naturalHeight || 1 };
+      if(infoSlug === e.slug) renderInfo();
+    };
+    if(curImg.complete) rememberDims(); else curImg.addEventListener("load", rememberDims, { once:true });
+    curImg.style.cursor = "crosshair";
+    curImg.addEventListener("click", ev => setAnchorFromPointer(ev, "both", curImg));
+    curWrap.querySelector(".origin-line-x").addEventListener("pointerdown", ev => beginAnchorDrag(ev, "x", curImg));
+    curWrap.querySelector(".origin-line-y").addEventListener("pointerdown", ev => beginAnchorDrag(ev, "y", curImg));
+    const cross = curWrap.querySelector(".origin-cross");
+    cross.addEventListener("pointerdown", ev => beginAnchorDrag(ev, "both", curImg));
+    cross.addEventListener("keydown", ev => nudgeAnchor(ev, curImg));
+  }
 
   if(e){
     $("scale").value = scaleFor(e.slug);
@@ -315,6 +394,11 @@ function renderInfo(){
   infoSlug = e.slug;
   const heightSource = e.heightSource || "missing";
   const heightColor = HEIGHT_BADGE_COLOR[heightSource] || "#2c2836";
+  const dims = IMG_DIMS[e.slug];
+  const footX = footXFor(e.slug), footY = footYFor(e.slug);
+  const footPixels = dims
+    ? `${Math.round(footX * dims.w)} px, ${Math.round(footY * dims.h)} px`
+    : "loading pixel dimensions…";
   const artBlock = e.candidateAsset ? `
     <div style="color:var(--dim);font-size:12px;margin-top:10px">art — legacy vs faceted candidate (VQ2-RESPEC.md S6)</div>
     <div style="display:flex;gap:10px;margin-top:4px;align-items:flex-end">
@@ -326,7 +410,7 @@ function renderInfo(){
     <div style="font-size:11px;color:var(--dim);margin-top:3px">qaStatus: ${e.qaStatus ?? "—"}</div>` : "";
   $("info").innerHTML = `
     <h2>${e.name}</h2><div class="slug">${e.slug}</div>
-    <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}${floorFor(e.slug) > 0 ? ` · floor ${(floorFor(e.slug) * 100).toFixed(1)}%` : ""}</p>
+    <p class="verdict ${st}">${st.toUpperCase()}${o.scale ? ` · scale ×${o.scale}` : ""}</p>
     <p style="font-size:12px;background:#2c2836;border:1px solid var(--line);border-radius:4px;padding:6px 8px">
       target: <b style="color:var(--accent)">${guideFor(e).key}</b> head line
       (${feetLabel(guideFor(e).mult)} · ${guideFor(e).mult}×${guideFor(e).srd ? " · SRD " + guideFor(e).srd : ""})<br>
@@ -338,6 +422,10 @@ function renderInfo(){
       <dt>role</dt><dd>${e.role ?? "—"}</dd><dt>CR</dt><dd>${e.cr ?? "—"}</dd>
       <dt>type</dt><dd>${e.type ?? "—"}</dd><dt>frame</dt><dd>${e.frame ?? "—"}</dd>
       <dt>sheet</dt><dd>${e.sheet} · cell ${e.cell}</dd>
+      <dt>footX / footY</dt><dd>${footX.toFixed(6)} / ${footY.toFixed(6)}</dd>
+      <dt>origin pixels</dt><dd>${footPixels}</dd>
+      <dt>content bounds</dt><dd>${boundsFor(e.slug) ? boundsFor(e.slug).join(", ") : "MISSING — loud"}</dd>
+      <dt>alpha cutoff</dt><dd>${e.alphaCutoff ?? "—"}</dd>
     </dl>
     <div style="color:var(--dim);font-size:12px">tags (registry)</div>
     <div class="chips">${(e.tags || []).map(t => `<span class="chip">${t}</span>`).join("")}</div>
@@ -394,8 +482,61 @@ function toast(msg){
 function setScale(v){
   const e = cur(); if(!e) return;
   v = Math.min(8, Math.max(0.1, v)); // wide on purpose — calibrate true titan/speck sizes here; the game can cap at render time
-  PENDING[e.slug] = { scale: v }; // local only — Save/Pass/Fail commit it
+  PENDING[e.slug] = Object.assign({}, PENDING[e.slug], {
+    scale: v, footX: footXFor(e.slug), footY: footYFor(e.slug)
+  }); // local only — Save/Pass/Fail commit it
   render();
+}
+function resetCompiledAnchor(){
+  const e = cur(); if(!e) return;
+  PENDING[e.slug] = Object.assign({}, PENDING[e.slug], {
+    scale: scaleFor(e.slug),
+    footX: compiledFootX(e.slug),
+    footY: compiledFootY(e.slug),
+    contentBounds: compiledBounds(e.slug)
+  });
+  render();
+}
+function resetAlphaContact(){
+  const e = cur(); if(!e) return;
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth || 1; canvas.height = img.naturalHeight || 1;
+    const ctx = canvas.getContext("2d", { willReadFrequently:true });
+    ctx.drawImage(img, 0, 0);
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    let bottom = -1, xs = [], minX = canvas.width, minY = canvas.height, maxX = -1, maxY = -1;
+    for(let y = 0; y < canvas.height; y++){
+      const row = [];
+      for(let x = 0; x < canvas.width; x++){
+        if(data[(y * canvas.width + x) * 4 + 3] >= 128){
+          row.push(x);
+          minX = Math.min(minX, x); minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
+        }
+      }
+      if(row.length){ bottom = y; xs = row; }
+    }
+    if(bottom < 0){ toast("alpha contact: no opaque pixels"); return; }
+    const x = xs.reduce((sum, value) => sum + value, 0) / xs.length;
+    PENDING[e.slug] = Object.assign({}, PENDING[e.slug], {
+      scale: scaleFor(e.slug),
+      footX: (x + 0.5) / canvas.width,
+      footY: (bottom + 0.5) / canvas.height,
+      contentBounds: [
+        minX / canvas.width,
+        minY / canvas.height,
+        (maxX + 1) / canvas.width,
+        (maxY + 1) / canvas.height
+      ].map(value => Math.round(value * 1e6) / 1e6)
+    });
+    IMG_DIMS[e.slug] = { w: canvas.width, h: canvas.height };
+    toast("alpha contact candidate");
+    render();
+  };
+  img.onerror = () => toast("alpha contact: source failed to load");
+  img.src = stageSrc(e);
 }
 function metaEdits(){
   // tags/note/feet straight from the inputs — committed by Save/Pass/Fail alongside the scale
@@ -427,8 +568,10 @@ async function saveChanges(){
   const e = cur(); if(!e) return;
   const { set, clear } = metaEdits();
   set.scale = scaleFor(e.slug);
-  const fl = floorFor(e.slug);
-  if(fl > 0) set.floor = fl; else clear.push("floor");
+  set.footX = footXFor(e.slug);
+  set.footY = footYFor(e.slug);
+  if(boundsFor(e.slug)) set.contentBounds = boundsFor(e.slug);
+  clear.push("floor"); // migrate the legacy one-axis input when this sprite is next saved
   await patch(e.slug, set, clear);
   delete PENDING[e.slug];
   toast("saved: " + e.name);
@@ -439,8 +582,10 @@ async function verdict(v){
   const { set, clear } = metaEdits();
   set.verdict = v;
   set.scale = scaleFor(e.slug); // fold any unsaved slider position into the ruling
-  const fl = floorFor(e.slug);
-  if(fl > 0) set.floor = fl; else clear.push("floor"); // fold unsaved floor line too
+  set.footX = footXFor(e.slug);
+  set.footY = footYFor(e.slug);
+  if(boundsFor(e.slug)) set.contentBounds = boundsFor(e.slug);
+  clear.push("floor");
   await patch(e.slug, set, clear);
   delete PENDING[e.slug];
   toast(v.toUpperCase() + ": " + e.name);
@@ -458,6 +603,8 @@ $("prev").onclick = () => go(idx - 1); $("next").onclick = () => go(idx + 1);
 $("scale").oninput = e => setScale(parseFloat(e.target.value));
 $("scaleVal").onchange = e => setScale(parseFloat(e.target.value) || 1);
 $("reset1").onclick = () => setScale(1);
+$("resetContact").onclick = resetAlphaContact;
+$("resetCompiled").onclick = resetCompiledAnchor;
 $("pin").onclick = pinCur;
 $("saveBtn").onclick = saveChanges;
 $("passBtn").onclick = () => verdict("pass");

@@ -369,6 +369,8 @@ async function renderGradeCurve(newSrc) {
         setUniform1f("uVignette", consts.GRADE_VIGNETTE);
         setUniform1f("uVigInner", consts.GRADE_VIGNETTE_INNER);
         setUniform1f("uVigOuter", consts.GRADE_VIGNETTE_OUTER);
+        setUniform1f("uExposureFloor", consts.GRADE_EXPOSURE_FLOOR);
+        setUniform1f("uTonemapStrength", 1.0);
         const tintLoc = gl.getUniformLocation(prog, "uTint");
         if (tintLoc) gl.uniform3f(tintLoc, 1.0, 1.0, 1.0);
         const resLoc = gl.getUniformLocation(prog, "uResolution");

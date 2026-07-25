@@ -1,0 +1,349 @@
+{
+  "id": "cl-r1-lighting-comparison",
+  "version": 1,
+  "rendererPath": "authored light lock -> clayRoomBoardFrom -> production Theater -> display-space framebuffer",
+  "fixtureId": "cl-f02-lighting-bench",
+  "fixtureVersion": 1,
+  "fixtureSeed": 113311726,
+  "previewSeed": "A",
+  "dynamicSampleIndex": 2,
+  "lightLock": {
+    "id": "genesis-light-profiles",
+    "version": 1,
+    "schemaVersion": 2
+  },
+  "sourceSprite": {
+    "path": "assets/sprites/spr-fantasy-goblin-warrior.png",
+    "metrics": {
+      "pixelsSampled": 17037,
+      "sampleStep": 1,
+      "meanLuma": 57.98,
+      "medianLuma": 50,
+      "p05Luma": 3,
+      "p95Luma": 144,
+      "clippedHighlightPct": 0,
+      "crushedShadowPct": 11.833,
+      "meanSaturation": 145.67,
+      "meanChromaSpread": 44.74,
+      "neutralPct": 14.26
+    }
+  },
+  "cards": [
+    {
+      "recipeId": "clay-neutral-truth",
+      "label": "Clayroom neutral truth",
+      "mode": "diagnostic-neutral",
+      "source": {
+        "class": "diagnostic",
+        "label": "neutral measurement fill",
+        "loreNative": false,
+        "visibleEmitterRequired": false
+      },
+      "metrics": {
+        "pixelsSampled": 425880,
+        "sampleStep": 2,
+        "meanLuma": 54.28,
+        "medianLuma": 65,
+        "p05Luma": 20,
+        "p95Luma": 66,
+        "clippedHighlightPct": 0,
+        "crushedShadowPct": 0.042,
+        "meanSaturation": 62.76,
+        "meanChromaSpread": 11.46,
+        "neutralPct": 75.99
+      },
+      "lights": []
+    },
+    {
+      "recipeId": "clay-opposing-pair",
+      "label": "Clayroom warm/cool diagnostic",
+      "mode": "diagnostic-studio",
+      "source": {
+        "class": "diagnostic",
+        "label": "two visible calibration bulbs",
+        "loreNative": false,
+        "visibleEmitterRequired": true
+      },
+      "metrics": {
+        "pixelsSampled": 425880,
+        "sampleStep": 2,
+        "meanLuma": 41.53,
+        "medianLuma": 21,
+        "p05Luma": 20,
+        "p95Luma": 131,
+        "clippedHighlightPct": 0,
+        "crushedShadowPct": 0.134,
+        "meanSaturation": 97.47,
+        "meanChromaSpread": 26.31,
+        "neutralPct": 44.98
+      },
+      "lights": [
+        {
+          "id": "clay-west-warm",
+          "type": "point",
+          "state": "steady",
+          "color": 16752714,
+          "intensity": 16,
+          "range": 7,
+          "decay": 0,
+          "castShadow": true,
+          "worldPosition": {
+            "x": -7.38,
+            "y": 1.130073,
+            "z": 0
+          },
+          "sampleIndex": 0,
+          "normalizedSample": 1
+        },
+        {
+          "id": "clay-east-cool",
+          "type": "point",
+          "state": "steady",
+          "color": 11452392,
+          "intensity": 9,
+          "range": 7,
+          "decay": 0,
+          "castShadow": true,
+          "worldPosition": {
+            "x": 3.5,
+            "y": 1.130073,
+            "z": -7.38
+          },
+          "sampleIndex": 0,
+          "normalizedSample": 1
+        }
+      ]
+    },
+    {
+      "recipeId": "daylit",
+      "label": "Daylight",
+      "mode": "production-environment",
+      "source": {
+        "class": "celestial",
+        "label": "sunlight and skylight through an opening",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "metrics": {
+        "pixelsSampled": 425880,
+        "sampleStep": 2,
+        "meanLuma": 110.28,
+        "medianLuma": 146,
+        "p05Luma": 20,
+        "p95Luma": 149,
+        "clippedHighlightPct": 0,
+        "crushedShadowPct": 0.008,
+        "meanSaturation": 78.43,
+        "meanChromaSpread": 24.2,
+        "neutralPct": 6.81
+      },
+      "lights": [
+        {
+          "id": "sun-key",
+          "type": "directional",
+          "state": "steady",
+          "color": 16773848,
+          "intensity": 4.95,
+          "range": null,
+          "decay": null,
+          "castShadow": true,
+          "worldPosition": {
+            "x": 7.071068,
+            "y": 7.071068,
+            "z": 0
+          },
+          "sampleIndex": 0,
+          "normalizedSample": 1
+        }
+      ]
+    },
+    {
+      "recipeId": "moonlit",
+      "label": "Moonlight",
+      "mode": "production-environment",
+      "source": {
+        "class": "celestial",
+        "label": "moonlight through an opening",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "metrics": {
+        "pixelsSampled": 425880,
+        "sampleStep": 2,
+        "meanLuma": 88.65,
+        "medianLuma": 118,
+        "p05Luma": 20,
+        "p95Luma": 120,
+        "clippedHighlightPct": 0,
+        "crushedShadowPct": 0.015,
+        "meanSaturation": 90.4,
+        "meanChromaSpread": 26.53,
+        "neutralPct": 0.05
+      },
+      "lights": [
+        {
+          "id": "moon-key",
+          "type": "directional",
+          "state": "steady",
+          "color": 11452392,
+          "intensity": 4.5,
+          "range": null,
+          "decay": null,
+          "castShadow": true,
+          "worldPosition": {
+            "x": 7.071068,
+            "y": 7.071068,
+            "z": 0
+          },
+          "sampleIndex": 0,
+          "normalizedSample": 1
+        }
+      ]
+    },
+    {
+      "recipeId": "magic-glow",
+      "label": "Arcane crystal",
+      "mode": "production-practical",
+      "source": {
+        "class": "physical-practical",
+        "label": "glowing crystal or spell focus",
+        "loreNative": true,
+        "visibleEmitterRequired": true
+      },
+      "metrics": {
+        "pixelsSampled": 425880,
+        "sampleStep": 2,
+        "meanLuma": 25.33,
+        "medianLuma": 28,
+        "p05Luma": 11,
+        "p95Luma": 32,
+        "clippedHighlightPct": 0,
+        "crushedShadowPct": 0.133,
+        "meanSaturation": 110.61,
+        "meanChromaSpread": 16.98,
+        "neutralPct": 0.92
+      },
+      "lights": [
+        {
+          "id": "arcane-crystal",
+          "type": "point",
+          "state": "steady",
+          "color": 9071615,
+          "intensity": 5.4,
+          "range": 6,
+          "decay": 2,
+          "castShadow": true,
+          "worldPosition": {
+            "x": -2.4,
+            "y": 0,
+            "z": 1.6
+          },
+          "sampleIndex": 0,
+          "normalizedSample": 1
+        }
+      ]
+    },
+    {
+      "recipeId": "torchlit",
+      "label": "Torchlit dungeon",
+      "mode": "production-practical",
+      "source": {
+        "class": "physical-practical",
+        "label": "open flame torch or wall sconce",
+        "loreNative": true,
+        "visibleEmitterRequired": true
+      },
+      "metrics": {
+        "pixelsSampled": 425880,
+        "sampleStep": 2,
+        "meanLuma": 27.14,
+        "medianLuma": 27,
+        "p05Luma": 10,
+        "p95Luma": 45,
+        "clippedHighlightPct": 0,
+        "crushedShadowPct": 0.202,
+        "meanSaturation": 133.03,
+        "meanChromaSpread": 22.07,
+        "neutralPct": 5.38
+      },
+      "lights": [
+        {
+          "id": "torch-key",
+          "type": "point",
+          "state": "flickering",
+          "color": 16752714,
+          "intensity": 6.086876,
+          "range": 24,
+          "decay": 1.5,
+          "castShadow": true,
+          "worldPosition": {
+            "x": -7.33292,
+            "y": 1.182792,
+            "z": 0.002961
+          },
+          "sampleIndex": 2,
+          "normalizedSample": 1.040492
+        }
+      ]
+    },
+    {
+      "recipeId": "lavalit",
+      "label": "Lava glow",
+      "mode": "production-environment",
+      "source": {
+        "class": "environmental",
+        "label": "visible lava or molten fissure",
+        "loreNative": true,
+        "visibleEmitterRequired": false
+      },
+      "metrics": {
+        "pixelsSampled": 425880,
+        "sampleStep": 2,
+        "meanLuma": 21.67,
+        "medianLuma": 25,
+        "p05Luma": 6,
+        "p95Luma": 26,
+        "clippedHighlightPct": 0,
+        "crushedShadowPct": 0.217,
+        "meanSaturation": 106.05,
+        "meanChromaSpread": 14.07,
+        "neutralPct": 67.61
+      },
+      "lights": [
+        {
+          "id": "lava-edge",
+          "type": "point",
+          "state": "steady",
+          "color": 16733474,
+          "intensity": 6.75,
+          "range": 7,
+          "decay": 2,
+          "castShadow": true,
+          "worldPosition": {
+            "x": 0,
+            "y": 0.15,
+            "z": 0
+          },
+          "sampleIndex": 0,
+          "normalizedSample": 1
+        }
+      ]
+    }
+  ],
+  "capture": {
+    "capturedBy": "dev/capture-clay-lighting-matrix.cjs",
+    "url": "http://127.0.0.1:4173/genesis.html?clayroom=1&clayfixture=lighting-bench",
+    "viewport": {
+      "width": 1280,
+      "height": 720,
+      "deviceScaleFactor": 2
+    },
+    "composedSize": {
+      "width": 1520,
+      "height": 824
+    },
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "warningVerdict": "PASS"
+  }
+}

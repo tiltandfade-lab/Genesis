@@ -1,0 +1,44 @@
+{
+  "gate": "CL-R3",
+  "fixture": "CL-F01",
+  "sourceReceipt": "cl-r3-structure-bench-receipt.json",
+  "measuredAt": "2026-07-25T05:20:33.877Z",
+  "values": {
+    "floorCells": 32,
+    "tiers": [
+      -1,
+      0,
+      1
+    ],
+    "wallSegments": 11,
+    "riserSegments": 3,
+    "apertures": 1,
+    "omittedUpperSegments": 5,
+    "strategicBuiltUpperSegments": 11,
+    "rampDegrees": 26.565,
+    "mountedMeshes": 85,
+    "shadowCasters": 27,
+    "shadowReceivers": 28,
+    "dynamicCutawayCandidates": 68
+  },
+  "checks": {
+    "fixture": true,
+    "cells": true,
+    "elevations": true,
+    "construction": true,
+    "slope": true,
+    "joinFailure": true,
+    "shadows": true,
+    "ownership": true,
+    "provenance": true,
+    "dynamicCutaway": true,
+    "stagedLatch": true,
+    "rawDoorDoesNotStage": true,
+    "explicitRestaging": true,
+    "strategicAllWalls": true,
+    "omissionCarveouts": true,
+    "noClimbMechanicsClaim": true,
+    "console": true
+  },
+  "failed": []
+}

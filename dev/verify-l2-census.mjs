@@ -80,7 +80,7 @@ function ensureThreeShim(){
   const base = join(ROOT, "node_modules", "three");
   const loaderDir = join(base, "addons", "loaders");
   const postDir = join(base, "addons", "postprocessing");
-  const shimVersion = "bw3-post-suite";
+  const shimVersion = "cp1-env-ao"; // visual-correction Checkpoint 1: +GTAOPass (+GTAOShader/PoissonDenoiseShader/SimplexNoise re-exports; lockstep across all shim writers sharing node_modules/three)
   const versionFile = join(base, ".shim-version");
   if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
@@ -94,6 +94,14 @@ function ensureThreeShim(){
   writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
   writeFileSync(join(postDir, "UnrealBloomPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/UnrealBloomPass.js";\n`);
   writeFileSync(join(postDir, "OutputPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/OutputPass.js";\n`);
+  writeFileSync(join(postDir, "GTAOPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/GTAOPass.js";\n`);
+  const shaderDir = join(base, "addons", "shaders");
+  const mathDir = join(base, "addons", "math");
+  mkdirSync(shaderDir, { recursive: true });
+  mkdirSync(mathDir, { recursive: true });
+  writeFileSync(join(shaderDir, "GTAOShader.js"), `export * from "../../../../vendor/three/addons/shaders/GTAOShader.js";\n`);
+  writeFileSync(join(shaderDir, "PoissonDenoiseShader.js"), `export * from "../../../../vendor/three/addons/shaders/PoissonDenoiseShader.js";\n`);
+  writeFileSync(join(mathDir, "SimplexNoise.js"), `export * from "../../../../vendor/three/addons/math/SimplexNoise.js";\n`);
   writeFileSync(versionFile, shimVersion + "\n");
   console.log("(bootstrap) wrote node_modules/three vendor shim (" + shimVersion + ")");
 }

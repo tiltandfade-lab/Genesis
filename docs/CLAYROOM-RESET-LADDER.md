@@ -1,7 +1,10 @@
 ---
 type: system-spec
-status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 lifecycle/local-state slice BUILT (2026-07-24);
-  remaining CL-R1 Lab 2.0 authoring + CL-R2…CL-R6 specced, unbuilt
+status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review candidate BUILT
+  (2026-07-24), close torch brightness accepted and smooth decay-1.5 flame review live; dedicated
+  CL-F02 bench + overlays + live pixel cards + seven-recipe capture built, visual verdict pending;
+  CL-R2 engineering/visual-review candidate BUILT (2026-07-24), visual verdict pending; CL-R3
+  engineering/visual-review candidate BUILT (2026-07-25), visual verdict pending; CL-R4…CL-R6 remain
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
 authority: subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids) and
@@ -80,9 +83,9 @@ primary question.
 | Fixture | Primary question | Content | Status |
 |---|---|---|---|
 | `CL-F00 room-truth` | Does the real production room stay honest after every rebuild? | 5×5 room, door, crate, one citizen, neutral clay, seam grid | **LIVE** (`?clayroom=1`) |
-| `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | unbuilt (CL-R3) |
-| `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | partial: local-state/lifecycle proof built; full Lab 2.0 bench unbuilt (CL-R1) |
-| `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | unbuilt (CL-R2) |
+| `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | **BUILT; VISUAL VERDICT PENDING (CL-R3)**. Production shell/compiler, generic atoms, typed sockets/access, wrong-axis rejection, staged wall omission, all-walls strategic view |
+| `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | **BUILT; VISUAL VERDICT PENDING (CL-R1)**. Selectable room/bench fixtures; one-third-cell stairs, matte sphere/cube, approved sprite, mote suppression, live position/range/shadow-volume overlays |
+| `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | **BUILT; VISUAL VERDICT PENDING (CL-R2)**. Seven-source stress cast, canonical/capped scale A/B, natural tread-depth support, tactical footprint, side shell, stair views, and five production-light contexts |
 | `CL-F04 material-bench` | Do material channels, scale, UVs, roles, and fallbacks work? | floor, wall, riser, trim skeleton, timber, iron, ground | unbuilt (CL-R4) |
 | `CL-F05 trim-bench` | Does the `h6-v1` sheet project without hiding geometry defects? | straight/non-multiple runs, corners, endpoint, opening, stair, curb, T-junction | unbuilt (CL-R5) |
 | `CL-F06 seed-stress` | Do bounded procedural variants remain legal and readable? | retained seed matrix plus adversarial dimensions/joins | unbuilt (CL-R6) |
@@ -318,24 +321,93 @@ Three separately labelled modes, never conflated in UI or in a capture receipt:
 Required work:
 
 - Route the existing opposing warm/cool two-temperature rig through the generalized Lighting Lab
-  recipe system. **Do not leave it as Clayroom-only hardcoded state** — today
-  `clayRoomApplyLightProfile()` no longer constructs the point pair: the 2026-07-24 lifecycle slice
-  compiles two named records into `board.lights` and builds them through `interiorBuildLights()`.
-  Folding those named records into Lab 2.0's persistent structured-lock registry remains open.
+  recipe system. **BUILT in the 2026-07-24 candidate:** the pair is
+  `clay-opposing-pair` in the same persistent lock registry as every rolled recipe; the Clayroom
+  compiles it into `board.lights` and builds it through `interiorBuildLights()`.
 - Generalize the tunable recipe from a single key point to a bounded `lights[]` array, and admit the
-  Clayroom diagnostic pair as a **named test recipe**. Do not add more Clayroom-only light objects.
+  Clayroom diagnostic pair as a **named test recipe**. **BUILT:** zero-to-four validated entries;
+  no Clayroom-only light values remain.
 - Every gameplay light family's default recipe becomes editable through **structured, validated lock
-  data**. Temporary UI state must not be the only authority.
+  data**. Temporary UI state must not be the only authority. **BUILT:** authored JSON →
+  deterministic compiled classic-script registry → shared engine/renderer/Lab consumers.
 
-**CL-R1 lifecycle/local-state slice — BUILT 2026-07-24.** Every generated production practical now
+**CL-R1 engineering candidate — BUILT 2026-07-24; close torch brightness accepted, decay-1.5
+falloff and smooth open-flame motion available for live visual review.**
+
+- `data/light-profile-locks.json` is the one authored recipe authority: ten rolled world recipes plus
+  two unrolled diagnostic recipes. `build/compile-light-locks.py` expands defaults, validates the
+  complete schema, rejects a fifth light, rejects an unmounted practical, rejects a non-lore world
+  practical, and rejects physical intensity above the declared Lab bound of 30.
+- The Lighting Lab edits the complete structured recipe in place: ambient, exposure, tone response,
+  bloom, sprite-readability floor, every bounded light's type/temperature/exact colour/intensity and
+  units/position/range/falloff/direction/spot/shadow/flicker/fixture/mount/emitter. Undo, redo,
+  authored reset, deterministic export, and compile/fold use that same shape.
+- The Clayroom exposes three honest buttons and receipts: neutral measurement, explicitly
+  non-diegetic warm/cool calibration bulbs, and a lore-native wall torch. The bulbs say `TEST ONLY`;
+  the torch says `LORE-NATIVE LIGHT`, owns a wall socket and visible flame/haft/cup, and does not
+  reuse the bulb body. Sun/moon/magic/environment sources remain fixtureless only when their recipe
+  explicitly says they are environmental.
+- Adam accepted the torch room's close brightness and ruled that its reach should expand so grounded
+  fantasy rooms do not require torches everywhere. After the first 30 → 60-foot capture still read
+  too restrained, he doubled it again: the current authored maximum is 120 feet (`rangeM` 36.576;
+  renderer distance 24). The 120-foot result still concentrated too much energy near the flame, so
+  he broadened the falloff from decay 2.0 to 1.75, then asked for the same 0.25 outward step again.
+  The current decay is 1.50; source brightness and shadow casting remain unchanged. The exception is
+  torch-specific. The Lighting Lab range control reaches 60 metres so this value remains directly
+  editable. Original, 2×, 4×, and both expanded-falloff captures plus measured comparisons live in
+  the CL-R1 lighting evidence directory.
+- The reviewed torch is now an authored open flame rather than a steady bulb. It chooses seeded
+  irregular targets around a 420 ms cadence (55% interval variation), modulates intensity by at
+  most ±10%, and moves the real light origin and visible flame together within a 0.025-local-unit
+  bound. The target sequence remains deterministic for proof, but the renderer glides between
+  targets on every display frame (normally 60 FPS), so light, flame, highlights, and cast shadows
+  dance continuously rather than jumping a few times per second.
+- The washed-out sprite diagnosis is now a production-renderer causal matrix, not a taste guess:
+  colour space, material response, sampling, tone mapping, compositing, and light energy change one
+  at a time. The known-bad untagged-sRGB and intensity-31 mutations fail. There is still **no
+  saturation slider**.
+- Final gameplay-scale frames, receipts, and measurements are in
+  `dev/clay-captures/cl-r1-lighting/`; the 13-card source-plus-six-pair comparison is
+  `dev/clay-captures/cl-r1-causality/causality-contact-sheet.png`.
+
+**CL-F02 dedicated bench — BUILT 2026-07-24; Adam's visual verdict pending.** The fixture selector
+now defaults to `cl-f02-lighting-bench` while retaining one-click `cl-f00-room-truth`. CL-F02 removes
+the room-truth crate/door clutter, suppresses atmosphere motes, keeps one approved sprite on the
+production `board.pieces` path, and mounts three rising one-third-cell-depth steps plus a matched matte
+cube and sphere inside the existing production Theater. Position crosshairs/floor drops, exact
+25/50/100-percent physical-range rings, and point-shadow-volume/spot-frustum wire overlays read the
+live THREE lights; they do not author a second light answer.
+
+The remaining literal presentation affordances are now built on that same renderer path. The Lights
+tab shows the admitted authored goblin PNG beside a crop of its live rendered screen box; reads final
+display pixels for median/p95 luma, white/black clipping, chroma spread, and simple sprite-vs-local-
+surround readability deltas; offers disposable deterministic animation seeds A/B/C; and previews the
+existing authored sunlight, moonlight, arcane-crystal, torch-flame, and lava recipes. None of these
+controls mutates `LIGHT_TUNABLES` or the authored lock. The always-visible measurement card reads a
+small same-frame copy on recipe/seed/camera changes or explicit `refresh pixels`, never on a timer,
+so the flame animation does not pay a recurring GPU stall; the explicit capture action reads the
+full display framebuffer.
+
+`BUILD COMPLETE 7-LIGHT SHEET` captures neutral, warm/cool, day, moon, magic, torch, and lava in one
+sheet. Animated sources are pinned to deterministic target sample 2 for the still, the previously
+active live recipe is restored afterward, and the downloadable receipt records the compiled lock,
+fixture seed, source-sprite metrics, final frame measurements, and every mounted renderer light.
+Two fresh capture runs produced byte-identical PNG and receipt hashes. Evidence:
+`dev/clay-captures/cl-r1-lighting-matrix/`. The pure fixture and renderer wiring are gated in
+`dev/verify-clay-room.mjs` checks 32a–32m; the capture harness additionally refuses any lore-native
+card without a live renderer light.
+
+**CL-R1 lifecycle/local-state slice — BUILT 2026-07-24.** Every generated production practical still
 declares local state `steady` by default and owns deterministic flicker seed/amplitude data.
-`flickering` is a per-light opt-in. One normalized sample drives the real `PointLight`, emitter
-emissive intensity, and optional cone; steady siblings are untouched, and disabling returns the
-authored baseline exactly. Clayroom preserves the actual ambient/rig/fixture/material identities
+`flickering` is a per-light opt-in; the reviewed open-flame torch is one such explicit opt-in.
+One continuously interpolated normalized sample drives the real `PointLight`, emitter emissive
+intensity, optional cone, and the co-located flame/light-origin movement; steady siblings are
+untouched, and disabling returns the authored baseline exactly. Clayroom preserves the actual
+ambient/rig/fixture/material identities
 across unchanged-lighting door/camera/fade/board rebuilds and records before/during/after proof.
 The stale scheduler root cause and movable/clamped/resettable diagnostic panel are specified in
-`C1A-CLAY-ROOM.md` D25. This does **not** promote the remaining persistent Lab 2.0 authoring work
-above to built.
+`C1A-CLAY-ROOM.md` D25. This lifecycle slice is now consumed by the shared persistent authoring
+system above.
 
 Required measurements (see §"Capture and receipt law"):
 
@@ -352,7 +424,7 @@ colour-space tagging, texture sampling, tone mapping, light energy, material res
 compositing are tested **separately**. It is not "fixed" with an arbitrary saturation slider.
 Colour space, alpha mode, and authored sprite saturation are **invariants, not taste sliders**.
 
-### CL-R2 — complete sprite citizenship
+### CL-R2 — complete sprite citizenship — **ENGINEERING CANDIDATE BUILT 2026-07-24; VISUAL VERDICT PENDING**
 
 **Primary question:** does a sprite read as a physical citizen rather than printed paper?
 
@@ -370,7 +442,64 @@ pale/bright creature vulnerable to highlight clipping · very dark creature vuln
 Large or Huge silhouette · translucent/FX-like alpha edge case if the live corpus licenses one.
 **The current goblin alone is not a citizenship gate.**
 
-### CL-R3 — basic construction grammar
+**Candidate implementation.** `CL-F03 sprite-citizenship` now places seven live registry sprites
+through the production interior standee builder: Blind Cave Rat, Winged Kobold, Human Fighter,
+Flaming Skeleton, Wraith, Treant, and Kraken. The cast spans 0.25–60 canonical feet plus small,
+human, pale/bright, dark/alpha, Huge, and Gargantuan width stress. The inspector exposes source
+sRGB PNG, compiled `footX`/`footY`, content bounds, alpha cutoff, canonical and rendered height,
+support dimensions, tactical span, shell, stair fit, and regeneration flags.
+
+The visible base is no longer circular. It is a shallow rounded strip bounded by—but visually
+separate from—the tactical footprint. A Medium support is exactly one 1/3-cell stair tread deep;
+Tiny and Small supports may be shallower. Face, three-quarter, and edge samples use the same
+production standee assembly on a real three-tread proof. A thin side shell prevents the card from
+vanishing edge-on.
+
+The scale control opens in the preferred 1–30-foot presentation view without mutating authored
+`worldHeight` or tactical occupancy. True scale remains one click away as the canonical size check:
+the 60-foot Kraken honestly dominates the human-scale cast and belongs in an encounter-scale
+environment that can contain it. Treant and Kraken are automatically flagged for taller/more-upright
+regeneration because their rendered width nearly consumes their tactical footprint.
+
+The follow-up pass makes the standees behave like physical board pieces. Governed zoom reaches
+roughly 8.3× closer for inspection. Visible support rectangles are tested as oriented boxes and the
+later piece receives the smallest deterministic relocation needed to clear an overlap; tactical
+occupancy never changes. Contact pools carry an explicit live link back to their standee, follow its
+position/yaw, feather outside the support, and multiply the already-resolved floor value so contact
+stays darker inside cast shadow. A camera-side SpotLight affects only the private
+sprite-face layer, casts no shadow, and falls off gently. The selection signal is not a character
+outline: only material index 1, the base extrusion's vertical sidewall, emits as a cyan ring. That
+sidewall is paired with one support-shaped additive spill immediately beneath the physical base—no
+center PointLight or second shadow direction. The opaque support hides the spill center, so only a
+soft cyan neon feather escapes around the blue material; selection handoff hides the previous spill.
+The sprite plane alone casts alpha-tested silhouette shadows for directional, spot, and point
+lights. The full rectangular edge shell remains visible but never enters a shadow map.
+Diagnostic modes also retain a 0.06 shadowless hemisphere floor. This is environment bounce, not a
+new material or second key: top-facing treads, vertical risers, and wall turns keep slightly
+different near-black values while the direct-light shadow stays strong.
+
+**Proof ledger.**
+
+| Claim | Proof |
+|---|---|
+| One production path, not a mock renderer | Fixture emits `data.pieces`; `interiorSpriteBillboard` + `buildSpriteBillboardMesh` construct every lineup and stair standee. Harness check 33g. |
+| Natural support matches stairs | Live receipt reports `supportForm: shallow-rounded-strip`; all three stair samples pass, and Medium depth equals tread depth `0.333333`. Harness checks 33c/33h/33i. |
+| Tactical footprint remains mechanical and separate | Gold/cyan footprint squares are distinct siblings of the shallow standee supports; receipt `tacticalFootprintSeparate: true`. |
+| Edge citizenship is real | Every cast member reports a side shell; selected Human Fighter is captured face/edge while the retained stair shows face/three-quarter/edge. |
+| Scale comparison is honest | The live surface defaults to preferred 1–30-foot presentation; `01-true-scale-live-ui.png` retains the 0.25–60-foot canonical check, and both views retain authored values in the receipt. |
+| Deep inspection is real | `09-deep-zoom-live-ui.png` is driven by the mounted wheel listener and records `clayZoom: 0.12` against range `[0.12,2.5]`; bearing and pitch remain governed. |
+| Supports cannot share space | The receipt records seven support OBBs, one deterministic relocation, and `remainingOverlaps: 0`; tactical footprint data is unchanged. |
+| Shadows remain attached and darker than local shadow value | Every lineup row reports a linked contact shadow with `blendMode:"multiply"` and a white identity rim; its yaw/position sync follows the standee and the feather extends to 0.744× support width/depth on each half-axis. |
+| Dark-room faces stay readable without lifting the room | The camera fill reports sprite-only layer 2, decay 1, and `castShadow:false`; dark/moon, torch, and magic frames retain distinct room lighting. |
+| Selection stays base-led and reads as neon | The selected Human Fighter reports `selectionBaseRingGlow:true` plus a linked `selectionBaseNeon` from `emissive-sidewall`, shaped as `support-rounded-strip`, additive, shadowless, and explicitly `centerPointLight:false`; handoff proves exactly one spill remains visible. The sprite BoxHelper/outline stays skipped. |
+| Cast shadows follow the artwork, never the hidden card | Every lineup row reports `planeCasts:true`, alpha depth and distance materials, and `shellCasts:false`; daylight and moon frames show cutout silhouettes instead of floating rectangles. Removing the redundant shell caster makes the path cost-neutral/slightly cheaper. |
+| Shadow still contains form | The receipt reports `environmentFormFill` as a shadowless hemisphere at the 0.06 diagnostic floor; the inspector labels it `tread/riser value floor`. |
+| Width failures stay loud | Receipt names exactly `spr-fantasy-treant` and `spr-fantasy-kraken`; the inspector recommends taller/more-upright regeneration. |
+| Lighting response uses accepted recipes | Neutral, moon, torch, magic, and day captures call the shared production light registry; no CL-R2-only light implementation exists. |
+| Repeatable evidence exists | `dev/clay-captures/cl-r2-sprite-citizenship/`: early/settled true scale, capped and edge live frames, 5 lighting contexts, composed sheet, JSON receipt, and separate measurements; 7 cast, 3 stair views, zero console errors. |
+| Executable gate | `dev/verify-clay-room.mjs` 208/208; sprite registry 27/27; theater sprites 12/12; floor contact 79/79 including live-Chrome multiply pixels; dungeon interior 291/291; manifest OK. **FULL CI PENDING.** |
+
+### CL-R3 — basic construction grammar — **ENGINEERING / VISUAL-REVIEW CANDIDATE BUILT 2026-07-25**
 
 **Primary question:** can the Guard Post inherit trustworthy geometric atoms?
 
@@ -383,6 +512,41 @@ landings · shallow ramp · half-height blocker/parapet base · square and round
 staged+latched trigger; structural-mass/aperture/strategic-view carve-outs — ART-DIRECTION-CANON is
 the verbatim authority) · deterministic cutaway/ghosting for what remains (dynamic piece-occlusion
 only) · mount/join sockets and provenance.
+
+**Candidate implementation.** `CL-F01 structure-bench` is now the active ladder fixture. A frozen
+catalog record carries the 5-ft cell / 2.5-ft `h` / 10-ft storey / ≤30° slope laws, the complete
+base-plus-extension socket vocabulary, typed access faces, and source provenance. Its 32-cell
+notched shell goes through production `compileRoomShell`, with broad raised and sunken regions,
+exposed slab/riser faces, convex and concave turns, a retained opening and hinged leaf, and
+compile-time camera-side omission. Generic assemblers supply a thickness-honest straight wall,
+flush single-owner T, one-cell and wide stairs with landings, a 26.565° ramp, half-height blocker,
+and square/round supports. A wrong-axis pair remains physically separated and names
+`socket-axis-mismatch`.
+
+The omission proof now closes the remaining CL-R3a fixture obligations. Scene staging is a
+latched state separate from the C1B door angle: an open door alone does not stage the room; entering
+play omits camera-side uppers; a later shut-door commit does not re-conceal actors; leaving play
+releases the latch and recompiles every upper. Aperture uppers and structural risers never enter
+the omission predicate. The governed `ALL WALLS` mode uses the production perspective camera at a
+fixed 72° map-reading pitch and recompiles every upper instead of revealing hidden meshes.
+Dynamic figure obstruction remains on the existing production
+`itrPillarCutawayMask → itrOcclusionClassify` path; a Human Fighter behind a production pillar
+proves one blocking and one faded witness.
+
+**CL-R3 proof ledger.**
+
+| Claim | Proof |
+|---|---|
+| Production geometry path | The fixture input feeds `compileRoomShell`; mounted receipt reports 32 floor cells, three tiers, wall/riser runs, one aperture, exposed slab sides, real shadows, and zero ownerless/textured-clay surfaces. |
+| Generic reusable atoms | Live receipt enumerates wall-run, T-junction, two stair widths, ramp, blocker, square support, and round support, each with sockets, typed access, and catalog provenance. |
+| Bad joins fail visibly | `BAD JOIN` capture keeps a physical gap and red X; receipt reason is exactly `socket-axis-mismatch`. |
+| Staged/latch behavior is executable | The capture drives the existing C1B `tqConnectionStateCommit`: door open while staged keeps omission; door shut after staging keeps the latch; release builds all uppers; door open while sealed does not stage; explicit re-entry restores omission. |
+| Carve-outs are real | Aperture segments return before the omission predicate; retaining/riser geometry is a separate always-built compiler output; strategic mode reports zero omitted and built uppers equal total uppers. |
+| Strategic mode is governed | `ALL WALLS` is a named fixed 72° camera mode, not orbit; crossing into/out of it rebuilds the production board and shell. |
+| Dynamic cutaway stays production-native | Receipt reports production Human witness + pillar, classifier candidates, one blocking/one faded result, and a mounted pillar ghost. |
+| Dark-form and ownership checks survive | Production moonlight and role-ID frames reuse the same geometry; census reports zero unclaimed surfaces and zero texture-bound diagnostic clay. |
+| Repeatable evidence | `dev/clay-captures/cl-r3/`: early/live UI, assembled, sockets, access, wrong-axis, role-ID, moonlight, strategic, staging-latch frames, composed sheet, JSON receipt, and independent measurement. Live capture 23/23; measurement 17/17; zero browser errors/warnings. |
+| Executable gate | `dev/verify-clay-room.mjs` 228/228; focused companion gates and manifest recorded in HANDOFF. **FULL CI PENDING.** |
 
 **CL-R3a — BUILT 2026-07-23.** The wall-omission ruling tested in `CL-F00`, all through the
 production shell compiler (now the clay default; `?clayshell=0` restores the instanced A/B):
@@ -417,9 +581,9 @@ everything you do" — every claim above, with its evidence):**
 | **CORRECTION — the shadow argument was overstated.** | The PROPERTY is proven (uppers set `castShadow = true`, theater-boot.js:11389, and exist at 0.08 opacity in fade mode; THREE's shadow pass ignores opacity), but in THIS fixture the interior light throws wall shadows outward, so the visible difference is nil (the pixel diff above bounds it). In this scene, omission's real advantages over fade are **determinism** (receipt data, not render state) and **cost** (no mesh/material/tween). The shadow benefit becomes visible only in fixtures where a faded wall sits between a light and staged floor — untested, and claimed as nothing more. |
 | Region measurements banked | `dev/clay-captures/cl-r3a/measure.json` (omit / fade-only / instanced, declared regions). |
 
-Still open in CL-R3a's scope: the staged+latched trigger's executable test (rides C1B's door state
-machine) · aperture carve-out (CL-F01 bench) · strategic-view all-walls (the toggle does not exist
-yet) · promotion of the omission to production (Adam's call, after he eyeballs the capture).
+CL-R3 closes the staged+latched executable test, aperture/structural-mass carve-outs, and governed
+strategic all-walls view. Still outside this fixture checkpoint: promotion of the omission to
+production gameplay (Adam's call after the production-scene packet named in ART-DIRECTION-CANON).
 
 Crenellations, arrow slits, roof silhouette, signalling devices, and guard-specific defences stay
 **out** of this gate unless a generic construction need independently licenses them.
@@ -686,11 +850,12 @@ evidence in `dev/clay-captures/cl-r0/`.
   @9, white ambient 0.18) but `clayRoomApplyLightProfile()` constructs the lights directly, bypassing
   `applyLightProfile()`/`LIGHT_TUNABLES` to escape `STAGE_AMBIENT_FLOOR`. `LIGHT_TUNABLES.profiles`
   exposes exactly one key point per profile, so the pair cannot be edited **as a pair** anywhere.
-  **Disposition: MECHANISM EXISTS; AUTHORING CONNECTION MISSING — CL-R1.**
+  **Disposition: FIXED IN CL-R1 CANDIDATE — one named diagnostic recipe in the shared registry.**
 - **CR-3 — physical emitter truth is unclear.** `MEASURED (console).` The live mount logs
   `[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor:
   bracket-generic 1`, and the private opposing pair is not linked to visible fixture geometry.
-  **Disposition: MODE SEPARATION REQUIRED — CL-R1.**
+  **Disposition: FIXED IN CL-R1 CANDIDATE — diagnostic bulbs and lore-native world practicals are
+  separately labelled, validated, rendered, and receipted.**
 - **CR-4 — sprite citizenship is incomplete.** `PARTLY MEASURED.` `spriteTextureFor()` sets filtering
   but does **not** set `THREE.SRGBColorSpace` on the loaded PNG, while other authored colour textures
   in the same renderer explicitly do (`theater-boot.js` lines 891, 944, 13893) — a strong,
@@ -699,7 +864,8 @@ evidence in `dev/clay-captures/cl-r0/`.
   live interior sprite branch still stores `interiorFloorFrac` from the older optional `entry.floor`
   field, so the registry's two-axis `footX`/`footY` contract is not the live anchoring authority.
   `buildSpriteBillboardMesh()` still builds one `PlaneGeometry`; the specified thin side shell is
-  absent. **Disposition: PARTIAL CITIZENSHIP; VISUAL ACCEPTANCE WITHDRAWN — CL-R1 then CL-R2.**
+  absent. **Disposition: colour-space cause fixed and light energy bounded in CL-R1; complete
+  standee form/scale/footprint citizenship remains CL-R2 and still requires Adam's visual ruling.**
 - **CR-5 — the fixture gate proved truth, not beauty.** `MEASURED.` The C1A harness is strong on
   deterministic records, ids, provenance, production wiring, and light-profile shape; it did not
   establish a durable accepted visual baseline or a mutation-sensitive visual gate. **This is why the

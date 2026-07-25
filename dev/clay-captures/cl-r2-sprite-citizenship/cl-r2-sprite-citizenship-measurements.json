@@ -1,0 +1,213 @@
+{
+  "gate": "CL-R2",
+  "fixture": "CL-F03",
+  "sourceReceipt": "cl-r2-sprite-citizenship-receipt.json",
+  "castCount": 7,
+  "scaleModes": {
+    "canonical": "true-scale",
+    "comparison": "diagnostic-cap",
+    "canonicalFeetRange": [
+      0.25,
+      60
+    ],
+    "capShownFeetRange": [
+      1,
+      30
+    ],
+    "capPreservesCanonicalData": true
+  },
+  "support": {
+    "form": "shallow-rounded-strip",
+    "tacticalFootprintSeparate": true,
+    "everySupportFitsTread": true,
+    "mediumSupportEqualsOneTread": true,
+    "stairViews": [
+      {
+        "view": "face",
+        "supportToTreadRatio": 1,
+        "pass": true
+      },
+      {
+        "view": "three-quarter",
+        "supportToTreadRatio": 1,
+        "pass": true
+      },
+      {
+        "view": "edge",
+        "supportToTreadRatio": 1,
+        "pass": true
+      }
+    ]
+  },
+  "citizenship": {
+    "everySpriteHasContentBounds": true,
+    "everySpriteHasSideShell": true,
+    "widthRegenerationFlags": [
+      "spr-fantasy-treant",
+      "spr-fantasy-kraken"
+    ]
+  },
+  "lightingContextIds": [
+    "clay-neutral-truth",
+    "moonlit",
+    "torchlit",
+    "magic-glow",
+    "daylit"
+  ],
+  "rows": [
+    {
+      "slug": "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+      "canonicalFeet": 0.25,
+      "trueScaleShownFeet": 0.25,
+      "capShownFeet": 1,
+      "canonicalDataPreservedInCap": true,
+      "tacticalSpanCells": 0.5,
+      "supportWidthCells": 0.243,
+      "supportDepthCells": 0.18,
+      "stairTreadDepthCells": 0.333333,
+      "supportToTreadRatio": 0.54,
+      "supportFitsTread": true,
+      "renderedWidthToTacticalSpan": 0.16,
+      "sideShell": true,
+      "contentBounds": [
+        0,
+        0.1,
+        0.9375,
+        1
+      ],
+      "regenRecommended": false
+    },
+    {
+      "slug": "spr-fantasy-winged-kobold-urd",
+      "canonicalFeet": 3,
+      "trueScaleShownFeet": 3,
+      "capShownFeet": 3,
+      "canonicalDataPreservedInCap": true,
+      "tacticalSpanCells": 1,
+      "supportWidthCells": 0.444106,
+      "supportDepthCells": 0.26,
+      "stairTreadDepthCells": 0.333333,
+      "supportToTreadRatio": 0.78,
+      "supportFitsTread": true,
+      "renderedWidthToTacticalSpan": 0.541593,
+      "sideShell": true,
+      "contentBounds": [
+        0.02451,
+        0.017699,
+        0.97549,
+        0.977876
+      ],
+      "regenRecommended": false
+    },
+    {
+      "slug": "spr-pc-human-fighter-female",
+      "canonicalFeet": 5.6,
+      "trueScaleShownFeet": 5.6,
+      "capShownFeet": 5.6,
+      "canonicalDataPreservedInCap": true,
+      "tacticalSpanCells": 1,
+      "supportWidthCells": 0.708112,
+      "supportDepthCells": 0.333333,
+      "stairTreadDepthCells": 0.333333,
+      "supportToTreadRatio": 1,
+      "supportFitsTread": true,
+      "renderedWidthToTacticalSpan": 0.863551,
+      "sideShell": true,
+      "contentBounds": [
+        0.024242,
+        0.023364,
+        0.969697,
+        0.976636
+      ],
+      "regenRecommended": false
+    },
+    {
+      "slug": "spr-fantasy-flaming-skeleton",
+      "canonicalFeet": 5.8,
+      "trueScaleShownFeet": 5.8,
+      "capShownFeet": 5.8,
+      "canonicalDataPreservedInCap": true,
+      "tacticalSpanCells": 1,
+      "supportWidthCells": 0.82,
+      "supportDepthCells": 0.333333,
+      "stairTreadDepthCells": 0.333333,
+      "supportToTreadRatio": 1,
+      "supportFitsTread": true,
+      "renderedWidthToTacticalSpan": 1.022632,
+      "sideShell": true,
+      "contentBounds": [
+        0.024876,
+        0.013158,
+        0.970149,
+        0.97807
+      ],
+      "regenRecommended": false
+    },
+    {
+      "slug": "spr-fantasy-wraith",
+      "canonicalFeet": 6,
+      "trueScaleShownFeet": 6,
+      "capShownFeet": 6,
+      "canonicalDataPreservedInCap": true,
+      "tacticalSpanCells": 1,
+      "supportWidthCells": 0.82,
+      "supportDepthCells": 0.333333,
+      "stairTreadDepthCells": 0.333333,
+      "supportToTreadRatio": 1,
+      "supportFitsTread": true,
+      "renderedWidthToTacticalSpan": 1.151351,
+      "sideShell": true,
+      "contentBounds": [
+        0.028169,
+        0.022523,
+        0.981221,
+        0.977477
+      ],
+      "regenRecommended": false
+    },
+    {
+      "slug": "spr-fantasy-treant",
+      "canonicalFeet": 26,
+      "trueScaleShownFeet": 26,
+      "capShownFeet": 26,
+      "canonicalDataPreservedInCap": true,
+      "tacticalSpanCells": 3,
+      "supportWidthCells": 2.46,
+      "supportDepthCells": 0.333333,
+      "stairTreadDepthCells": 0.333333,
+      "supportToTreadRatio": 1,
+      "supportFitsTread": true,
+      "renderedWidthToTacticalSpan": 1.804082,
+      "sideShell": true,
+      "contentBounds": [
+        0.015686,
+        0.020408,
+        0.980392,
+        0.979592
+      ],
+      "regenRecommended": true
+    },
+    {
+      "slug": "spr-fantasy-kraken",
+      "canonicalFeet": 60,
+      "trueScaleShownFeet": 60,
+      "capShownFeet": 30,
+      "canonicalDataPreservedInCap": true,
+      "tacticalSpanCells": 4,
+      "supportWidthCells": 3.28,
+      "supportDepthCells": 0.333333,
+      "stairTreadDepthCells": 0.333333,
+      "supportToTreadRatio": 1,
+      "supportFitsTread": true,
+      "renderedWidthToTacticalSpan": 3.294393,
+      "sideShell": true,
+      "contentBounds": [
+        0.021277,
+        0.018692,
+        0.978723,
+        1
+      ],
+      "regenRecommended": true
+    }
+  ]
+}

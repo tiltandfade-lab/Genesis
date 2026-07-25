@@ -114,7 +114,7 @@
         pair in dev/clay-captures/cl-r0/after-receipt.json, banked at gameplay scale.
 
    Run:  node dev/verify-clay-room.mjs   (jsdom in ~/.genesis-jsdom — see CLAUDE.md) */
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
@@ -740,6 +740,20 @@ const check = (name, cond, detail = "") =>
       && compiled.board.lights[1].renderIntensity === 9
       && compiled.board.lights[0].flicker.seed !== compiled.board.lights[1].flicker.seed,
       JSON.stringify(compiled.board.lights));
+    const torchCompiled = win.clayRoomBoardFrom(record, { lightRecipeId: "torchlit" });
+    const torchLight = torchCompiled.board.lights[0];
+    check("15o. accepted torch brightness keeps shadows while reviewed reach extends to 24 and falloff broadens",
+      torchCompiled.board.lights.length === 1
+      && torchLight.distance === 24
+      && torchLight.authoredRange === true
+      && torchLight.decay === 1.5
+      && torchLight.castShadow === true
+      && torchLight.state === "flickering"
+      && torchLight.flicker.amplitude === 0.1
+      && torchLight.flicker.cadenceMs === 420
+      && torchLight.flicker.intervalJitter === 0.55
+      && torchLight.flicker.directionAmplitude === 0.025,
+      JSON.stringify(torchCompiled.board.lights));
   } catch(e) { check("15. jsdom compile check (module present, no throw)", false, e.stack || String(e)); }
 }
 
@@ -1110,6 +1124,9 @@ const check = (name, cond, detail = "") =>
   check("26e. grab-pan uses browser-verified same-sign camera offsets so the rendered room follows the pointer",
     /right\.x\s*\*\s*dxPx\s*\+\s*fwd\.x\s*\*\s*dyPx/.test(bootSrc) &&
     /right\.z\s*\*\s*dxPx\s*\+\s*fwd\.z\s*\*\s*dyPx/.test(bootSrc));
+  check("26f. art inspection can dolly at least 8x closer while preserving the governed pose",
+    /CLAY_CAM_ZOOM_MIN\s*=\s*0\.12/.test(bootSrc)
+    && /up to 8× closer/.test(bootSrc));
 }
 
 // ============================================================================
@@ -1222,9 +1239,10 @@ const check = (name, cond, detail = "") =>
     /clayRoomRecordLightingProbe/.test(bootSrc)
     && /before-rebuild/.test(bootSrc) && /during-animation/.test(bootSrc) && /after-animation/.test(bootSrc)
     && /duringPass:\s*!!preserved/.test(bootSrc));
-  check("29h. authored-baseline control disables every flicker and restores sample 1 exactly once",
+  check("29h. authored-baseline control restores each recipe's authored local state and sample 1",
     /Restore authored lighting baseline/.test(bootSrc)
     && /function\s+clayRoomRestoreAuthoredLightBaseline/.test(bootSrc)
+    && /authoredLight\s*&&\s*authoredLight\.state\s*===\s*"flickering"/.test(bootSrc)
     && /lightFlickerApplySample\(t,\s*1\)/.test(bootSrc));
 }
 
@@ -1381,6 +1399,529 @@ const check = (name, cond, detail = "") =>
     /window\.Theater\._clayMovementProofForTest/.test(bootSrc)
     && /stateRevision/.test(bootSrc) && /lastReceipt/.test(bootSrc)
     && /clayRoomMovementOverlaySummary/.test(bootSrc));
+}
+
+// ============================================================================
+// 32. CL-F02 LIGHTING BENCH (CL-R1 checkpoint).
+// A deterministic neutral staircase/sphere/cube input must run inside the existing production
+// Theater, keep one approved sprite, suppress measurement noise, and expose honest light overlays.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const fixture = win.clayRoomLightingBenchFixtureFrom(record);
+    check("32a. CL-F02 is frozen deterministic fixture data with a versioned identity and five primitives",
+      fixture.id === "cl-f02-lighting-bench"
+      && fixture.version === 1
+      && Object.isFrozen(fixture)
+      && Object.isFrozen(fixture.primitives)
+      && fixture.primitives.length === 5,
+      JSON.stringify(fixture));
+    const steps = fixture.primitives.filter((row) => row.id.indexOf("bench-step-") === 0);
+    check("32b. the bench carries three rising matte steps whose tread depth is exactly one third of a cell",
+      steps.length === 3
+      && steps.every((row) => row.primitive === "box" && row.role === "riser" && row.size.z === 1 / 3)
+      && steps[0].size.y < steps[1].size.y && steps[1].size.y < steps[2].size.y,
+      JSON.stringify(steps));
+    check("32c. matched neutral comparison forms include one cube, one sphere, and an approved-sprite cell",
+      fixture.primitives.some((row) => row.id === "bench-matte-cube" && row.primitive === "box")
+      && fixture.primitives.some((row) => row.id === "bench-matte-sphere" && row.primitive === "sphere")
+      && Number.isInteger(fixture.spriteCell.x) && Number.isInteger(fixture.spriteCell.z),
+      JSON.stringify(fixture));
+    let undersizedRefused = false;
+    try { win.clayRoomLightingBenchFixtureFrom({ dims: { w: 5, d: 5 } }); }
+    catch(e) { undersizedRefused = /requires at least a 9x9 room/.test(String(e)); }
+    check("32d. an undersized room is refused loudly instead of clipping the diagnostic",
+      undersizedRefused);
+  } catch(e) {
+    check("32a-d. CL-F02 pure fixture checks execute without throw", false, e.stack || String(e));
+  }
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("32e. the bench mounts shadow-receiving primitives into the existing production interiorGroup",
+    /function\s+clayRoomMountLightingBench/.test(bootSrc)
+    && /S\.interiorGroup\.add\(group\)/.test(bootSrc)
+    && /mesh\.castShadow\s*=\s*true/.test(bootSrc)
+    && /mesh\.receiveShadow\s*=\s*true/.test(bootSrc));
+  check("32f. CL-F02 keeps the production sprite path while removing room-truth crate/door clutter",
+    /clayRoomLightingBenchFixtureFrom\(S\.clayRoomRecord\)/.test(bootSrc)
+    && /cellX:\s*room\.x\s*\+\s*fixture\.spriteCell\.x/.test(bootSrc)
+    && /furniture:\s*\[\]/.test(bootSrc)
+    && /interactables:\s*\[\]/.test(bootSrc));
+  check("32g. position/range/shadow overlays read the live THREE light and preserve exact physical range",
+    /light\.getWorldPosition\(p\)/.test(bootSrc)
+    && /\[0\.25,\s*0\.5,\s*1\]/.test(bootSrc)
+    && /const\s+radius\s*=\s*light\.distance\s*\*\s*frac/.test(bootSrc)
+    && /new\s+THREE\.WireframeGeometry/.test(bootSrc));
+  check("32h. the live proof reports fixture, forms, overlays, shadow flags, and mote suppression",
+    /window\.Theater\._clayLightingBenchForTest/.test(bootSrc)
+    && /benchMounted/.test(bootSrc)
+    && /overlayModes/.test(bootSrc)
+    && /motesSuppressed/.test(bootSrc));
+  check("32i. the workbench never labels room-only crate/door objects mounted on the lighting bench",
+    /data-clay-room-truth-only/.test(bootSrc)
+    && /status\.textContent\s*=\s*roomTruth\s*\?\s*"MOUNTED"\s*:\s*"ROOM ONLY"/.test(bootSrc)
+    && /button\.disabled\s*=\s*!roomTruth/.test(bootSrc));
+  check("32j. live luma/chroma/clipping diagnostics measure final pixels and compare the sprite with its local surround",
+    /function\s+clayRoomLightingPixelMetrics/.test(bootSrc)
+    && /gl\.readPixels\(0,\s*0,\s*width,\s*height,\s*gl\.RGBA,\s*gl\.UNSIGNED_BYTE,\s*pixels\)/.test(bootSrc)
+    && /clippedHighlightPct/.test(bootSrc)
+    && /meanChromaSpread/.test(bootSrc)
+    && /excludeRect:\s*spriteRect/.test(bootSrc)
+    && /if\(!force\s*&&\s*cached\s*&&\s*cached\.cacheKey\s*===\s*cacheKey\)\s*return cached\.value/.test(bootSrc)
+    && /refreshPixelsBtn/.test(bootSrc)
+    && /window\.Theater\._clayLightingPixelMetricsForTest/.test(bootSrc));
+  check("32k. source-vs-render cards use the admitted authored sprite path and a crop of the live framebuffer",
+    /function\s+clayRoomMountSourceSpriteCard/.test(bootSrc)
+    && /spriteAssetPathFor\(entry\)/.test(bootSrc)
+    && /AUTHORED PNG/.test(bootSrc)
+    && /FINAL PIXELS/.test(bootSrc)
+    && /clayRoomCanvasFromReadback\(readback,\s*spriteRect/.test(bootSrc));
+  check("32l. lore previews reuse the five authored sun/moon/magic/fire/lava recipes and seed only disposable recipe clones",
+    /CLAY_ROOM_LORE_LIGHT_PREVIEWS/.test(bootSrc)
+    && /id:\s*"daylit"/.test(bootSrc)
+    && /id:\s*"moonlit"/.test(bootSrc)
+    && /id:\s*"magic-glow"/.test(bootSrc)
+    && /id:\s*"torchlit"/.test(bootSrc)
+    && /id:\s*"lavalit"/.test(bootSrc)
+    && /const\s+recipe\s*=\s*lightRecipeDeepClone\(LIGHT_TUNABLES\.profiles\[recipeId\]\)/.test(bootSrc)
+    && /light\.flicker\.seed\s*=\s*authoredSeed\s*\+\s*":clay-preview-"/.test(bootSrc));
+  check("32m. one action builds the seven-recipe sheet, pins animated stills to seeded sample 2, and exports PNG plus receipt",
+    /CLAY_ROOM_LIGHTING_MATRIX_RECIPES/.test(bootSrc)
+    && /"clay-neutral-truth"[\s\S]*"clay-opposing-pair"[\s\S]*"daylit"[\s\S]*"moonlit"[\s\S]*"magic-glow"[\s\S]*"torchlit"[\s\S]*"lavalit"/.test(bootSrc)
+    && /async function\s+clayRoomCaptureLightingMatrix/.test(bootSrc)
+    && /lightFlickerStep\(\[\],\s*\[\],\s*S\.interiorLightTargets\s*\|\|\s*\[\],\s*0,\s*2\)/.test(bootSrc)
+    && /DOWNLOAD PNG/.test(bootSrc)
+    && /DOWNLOAD RECEIPT/.test(bootSrc)
+    && /window\.Theater\._clayCaptureLightingMatrixForTest/.test(bootSrc));
+}
+
+// ============================================================================
+// 33. CL-F03 SPRITE CITIZENSHIP (CL-R2 checkpoint).
+// The live production path must compare the real scale spectrum, preserve tactical ownership while
+// using tread-fit natural supports, expose face/edge + light-response controls, and keep anchors/bounds
+// editable in the existing Sprite Editor.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const fixture = win.clayRoomSpriteCitizenshipFixtureFrom(record);
+    check("33a. CL-F03 is frozen, versioned, and carries the seven-role live stress cast",
+      fixture.id === "cl-f03-sprite-citizenship"
+      && fixture.version === 1
+      && Object.isFrozen(fixture)
+      && Object.isFrozen(fixture.cast)
+      && fixture.cast.length === 7
+      && new Set(fixture.cast.map((row) => row.slug)).size === 7,
+      JSON.stringify(fixture));
+    check("33b. the spectrum includes smallest, Small, human, bright, dark, Huge, and largest/width cases",
+      fixture.cast.some((row) => /smallest/.test(row.stress))
+      && fixture.cast.some((row) => row.label === "Winged kobold")
+      && fixture.cast.some((row) => /human reference/.test(row.stress))
+      && fixture.cast.some((row) => /highlight/.test(row.stress))
+      && fixture.cast.some((row) => /dark\/irregular/.test(row.stress))
+      && fixture.cast.some((row) => row.label === "Treant" && row.tacticalSpanCells === 3)
+      && fixture.cast.some((row) => row.label === "Kraken" && row.tacticalSpanCells === 4));
+    check("33c. visible support depth is authored from exactly one third-cell stair tread",
+      fixture.stair.steps === 3 && fixture.stair.treadDepth === 1 / 3);
+    check("33d. the preferred 1–30 ft presentation scale preserves canonical height and tactical truth",
+      fixture.candidatePresentationCap.minFeet === 1
+      && fixture.candidatePresentationCap.maxFeet === 30
+      && /preferred presentation scale/.test(fixture.candidatePresentationCap.label));
+    check("33e. every CL-F03 cast entry has compiled normalized content bounds",
+      fixture.cast.every((row) => {
+        const entry = win.__claySpriteRegistry()[row.slug];
+        return entry && Array.isArray(entry.contentBounds) && entry.contentBounds.length === 4
+          && entry.contentBounds.every((value) => typeof value === "number" && value >= 0 && value <= 1);
+      }));
+    let undersizedRefused = false;
+    try { win.clayRoomSpriteCitizenshipFixtureFrom({ dims: { w: 9, d: 9 } }); }
+    catch(e) { undersizedRefused = /requires the 15x15 scale room/.test(String(e)); }
+    check("33f. an undersized room is refused loudly instead of clipping the true scale spectrum",
+      undersizedRefused);
+  } catch(e) {
+    check("33a-f. CL-F03 pure fixture checks execute without throw", false, e.stack || String(e));
+  }
+  const bootSrc = read("src/ui/theater-boot.js");
+  const editorSrc = read("dev/sprite-review.html");
+  const editorServerSrc = read("dev/sprite-review.py");
+  check("33g. CL-F03 projects all cast members through data.pieces -> the production interior sprite builder",
+    /fixture\.cast\.map\(function\(spec\)/.test(bootSrc)
+    && /allowOverheight:\s*true/.test(bootSrc)
+    && /const\s+built\s*=\s*interiorSpriteBillboard\(entry,\s*p\.allowOverheight\s*\?\s*null\s*:\s*wallCap\)/.test(bootSrc));
+  check("33h. tactical footprint and visible support are separate, with a shallow rounded tread-fit strip",
+    /function\s+interiorStandeeSupportMetrics/.test(bootSrc)
+    && /const\s+INTERIOR_BASE_TREAD_DEPTH\s*=\s*1\s*\/\s*3/.test(bootSrc)
+    && /new\s+THREE\.ExtrudeGeometry/.test(bootSrc)
+    && /supportForm\s*=\s*"shallow-rounded-strip"/.test(bootSrc)
+    && /clayTacticalFootprint/.test(bootSrc));
+  check("33i. the live bench proves face / three-quarter / edge views on a real three-tread stair",
+    /claySpriteViewYawOffset/.test(bootSrc)
+    && /\[0,\s*Math\.PI\s*\/\s*4,\s*Math\.PI\s*\/\s*2\]/.test(bootSrc)
+    && /claySpriteStairSample/.test(bootSrc)
+    && /stairFit/.test(bootSrc));
+  check("33j. the inspector exposes preferred presentation/true-scale check, seven cast selectors, edge view, and all light responses",
+    /TRUE SCALE CHECK/.test(bootSrc)
+    && /PRESENTATION · 1–30 FT/.test(bootSrc)
+    && /LIVE CAST/.test(bootSrc)
+    && /"edge",\s*"EDGE"/.test(bootSrc)
+    && /"clay-neutral-truth",\s*"NEUTRAL"/.test(bootSrc)
+    && /"moonlit",\s*"DARK"/.test(bootSrc)
+    && /"torchlit",\s*"WARM"/.test(bootSrc)
+    && /"magic-glow",\s*"COOL"/.test(bootSrc)
+    && /"daylit",\s*"DAY"/.test(bootSrc));
+  check("33k. the existing Sprite Editor now owns draggable footX/footY crosshairs, 1px arrow nudges, alpha reset, and compiled reset",
+    /origin-line-x/.test(editorSrc)
+    && /origin-line-y/.test(editorSrc)
+    && /origin-cross/.test(editorSrc)
+    && /function\s+nudgeAnchor/.test(editorSrc)
+    && /const\s+step\s*=\s*ev\.shiftKey\s*\?\s*5\s*:\s*1/.test(editorSrc)
+    && /resetAlphaContact/.test(editorSrc)
+    && /resetCompiledAnchor/.test(editorSrc));
+  check("33l. editor bounds/anchors round-trip through the overlay and generated registry contract",
+    /contentBounds/.test(editorSrc)
+    && /"contentBounds"/.test(editorServerSrc)
+    && /"footX"/.test(editorServerSrc)
+    && /"footY"/.test(editorServerSrc)
+    && /clear\.push\("floor"\)/.test(editorSrc)
+    && /URLSearchParams\(location\.search\)\.get\("sprite"\)/.test(editorSrc)
+    && /127\.0\.0\.1:5179\/\?sprite=/.test(bootSrc));
+  check("33m. live receipt exposes support/scale/shell/stair/regen data and true scale reads exact worldHeight before rounded scaleTrue",
+    /window\.Theater\._claySpriteCitizenshipForTest/.test(bootSrc)
+    && /renderedWorldHeight/.test(bootSrc)
+    && /supportWidth/.test(bootSrc)
+    && /supportDepth/.test(bootSrc)
+    && /regenRecommended/.test(bootSrc)
+    && /typeof\s+entry\.worldHeight[\s\S]{0,120}entry\.worldHeight\s*\/\s*5\.5[\s\S]{0,160}typeof\s+entry\.scaleTrue/.test(bootSrc));
+  check("33n. standee supports use deterministic OBB separation and linked, yaw-following contact shadows",
+    /function\s+standeeSupportPenetration/.test(bootSrc)
+    && /function\s+resolveMountedStandeeSupportCollisions/.test(bootSrc)
+    && /remainingOverlaps/.test(bootSrc)
+    && /contactBlobMesh/.test(bootSrc)
+    && /function\s+syncStandeeContactBlob/.test(bootSrc));
+  check("33o. sprite-only camera fill and selected vertical base-ring glow are masked, shadowless, and live-inspectable",
+    /const\s+SPRITE_CAMERA_FILL_LAYER\s*=\s*2/.test(bootSrc)
+    && /new\s+THREE\.SpotLight/.test(bootSrc)
+    && /fill\.castShadow\s*=\s*false/.test(bootSrc)
+    && /claySelectionBaseRingGlow/.test(bootSrc)
+    && /const\s+side\s*=\s*mats\[1\]\s*\|\|\s*mats\[0\]/.test(bootSrc)
+    && /if\(clayRoomStandeeForSelectionNode\(node\)\)[\s\S]{0,180}return;[\s\S]{0,100}new\s+THREE\.BoxHelper/.test(bootSrc));
+  check("33p. a low shadowless hemisphere floor preserves stair/riser form in diagnostic darkness",
+    /const\s+ITR_SHADOW_FORM_HEMI_FLOOR\s*=\s*0\.06/.test(bootSrc)
+    && /S\.hemiLight\.intensity\s*=\s*ITR_SHADOW_FORM_HEMI_FLOOR/.test(bootSrc)
+    && /environmentFormFill/.test(bootSrc)
+    && /tread\/riser value floor/.test(bootSrc));
+  check("33q. contact pools multiply the floor while selected bases emit support-shaped neon spill with no center bulb",
+    /blending:\s*THREE\.MultiplyBlending/.test(bootSrc)
+    && /toneMapped:\s*false/.test(bootSrc)
+    && /contactMultiplyIdentityRim/.test(bootSrc)
+    && /const\s+CLAY_SELECTION_BASE_NEON_DEPTH_SCALE\s*=\s*1\.72/.test(bootSrc)
+    && /claySelectionBaseNeonTexture/.test(bootSrc)
+    && /blending:\s*THREE\.AdditiveBlending/.test(bootSrc)
+    && /emissionSource\s*=\s*"emissive-sidewall"/.test(bootSrc)
+    && /footprintShape\s*=\s*"support-rounded-strip"/.test(bootSrc)
+    && /centerPointLight:\s*false/.test(bootSrc)
+    && /selectionBaseNeon/.test(bootSrc));
+  check("33r. sprite art is the sole alpha-silhouette caster for depth and distance shadow lights",
+    /mesh\.customDepthMaterial\s*=\s*new\s+THREE\.MeshDepthMaterial/.test(bootSrc)
+    && /mesh\.customDistanceMaterial\s*=\s*new\s+THREE\.MeshDistanceMaterial/.test(bootSrc)
+    && /map:\s*tex,\s*alphaTest:\s*alphaCutoff,\s*side:\s*THREE\.DoubleSide/.test(bootSrc)
+    && /shell\.castShadow\s*=\s*false/.test(bootSrc)
+    && /shadowSilhouette/.test(bootSrc)
+    && /cast shadow alpha silhouette · edge shell non-casting/.test(bootSrc)
+    && /S\.clayRoomSpriteScaleMode\s*=\s*"diagnostic-cap"/.test(bootSrc));
+}
+
+// ============================================================================
+// 34. CL-F01 STRUCTURE BENCH (CL-R3 checkpoint).
+// Generic catalog data must drive the production shell + reusable construction atoms, expose the
+// complete socket/access grammar, and visibly reject an incompatible join.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const fixture = win.clayRoomStructureBenchFixtureFrom(record);
+    const catalog = win.CLAY_STRUCTURE_KIT_CATALOG;
+    check("34a. CL-F01 and its structure catalog are frozen, versioned fixture data",
+      fixture.id === "cl-f01-structure-bench"
+      && fixture.version === 1
+      && fixture.catalogId === catalog.id
+      && Object.isFrozen(fixture)
+      && Object.isFrozen(catalog)
+      && Object.isFrozen(fixture.pieces),
+      JSON.stringify({ fixture: fixture.id, catalog: catalog.id }));
+    check("34b. grid law is 5-ft cells, 2.5-ft h, 10-ft storey, and a 30-degree walkable ceiling",
+      catalog.gridLaw.cellFeet === 5
+      && catalog.gridLaw.cellWorldUnits === 1
+      && catalog.gridLaw.verticalQuantumFeet === 2.5
+      && catalog.gridLaw.verticalQuantumWorldUnits === 0.5
+      && catalog.gridLaw.storeyQuanta === 4
+      && catalog.gridLaw.storeyWorldUnits === 2
+      && catalog.gridLaw.maxWalkableSlopeDeg === 30);
+    const kinds = new Set(fixture.pieces.map((row) => row.kind));
+    check("34c. generic atoms cover straight/T walls, one/wide stairs, ramp, blocker, and both supports",
+      ["wall-run", "t-junction", "stair", "ramp", "blocker", "support-square", "support-round"]
+        .every((kind) => kinds.has(kind))
+      && fixture.pieces.filter((row) => row.kind === "stair" && !row.assembly).map((row) => row.width).sort().join(",") === "1,2"
+      && fixture.pieces.filter((row) => row.assembly).length >= 4 // Checkpoint 4: the composed terrace example exists
+      && fixture.cutawayWitness.pieceSlug === "spr-pc-human-fighter-female"
+      && fixture.cutawayWitness.occluder.profile === "square");
+    const tiers = new Set(fixture.shellCells.map((row) => row.tier));
+    check("34d. compiled-shell input includes concavity, an aperture cell, and broad raised/sunken tiers",
+      fixture.shellCells.length === 32
+      && tiers.has(-1) && tiers.has(0) && tiers.has(1)
+      && fixture.shellCells.some((row) => row.isDoor)
+      && !fixture.shellCells.some((row) => row.x === 5 && row.z === 1)
+      && fixture.shellCells.filter((row) => row.tier === 1).length >= 6
+      && fixture.shellCells.filter((row) => row.tier === -1).length >= 6);
+    const requiredSockets = [
+      "floor-mount", "wall-mount", "top-surface", "hinge",
+      "butt-join-n", "butt-join-e", "butt-join-s", "butt-join-w",
+      "walk-surface", "catch", "terrain-join", "roof-pitch-join", "open"
+    ];
+    check("34e. catalog declares every base and extension socket family",
+      requiredSockets.every((id) => catalog.socketTypes.includes(id))
+      && new Set(catalog.socketTypes).size === catalog.socketTypes.length);
+    check("34f. every specimen carries sockets, typed face access, and catalog provenance",
+      fixture.pieces.every((row) => row.sockets.length >= 2
+        && Object.keys(row.access).length >= 2
+        && Object.values(row.access).every((kind) => catalog.accessKinds.includes(kind)))
+      && catalog.provenance.source === "docs/STRUCTURE-KIT-CATALOG.md");
+    const bad = fixture.negativeControl;
+    const rejection = win.clayStructureSocketJoinAssessment(bad.source, bad.candidate);
+    check("34g. the wrong-axis negative control rejects by a typed reason",
+      !rejection.accepted
+      && rejection.reason === "socket-axis-mismatch"
+      && rejection.reason === bad.expectedReason);
+    check("34h. climb access is labelled without claiming climb mechanics",
+      catalog.accessKinds.includes("climb-cost")
+      && catalog.accessKinds.includes("climb-dc")
+      && catalog.climbMechanicsImplemented === false);
+    const ramp = fixture.pieces.find((row) => row.kind === "ramp");
+    check("34i. the authored ramp stays within the catalog slope law",
+      Math.atan2(ramp.rise, ramp.run) * 180 / Math.PI <= catalog.gridLaw.maxWalkableSlopeDeg);
+    let undersizedRefused = false;
+    try { win.clayRoomStructureBenchFixtureFrom({ dims: { w: 9, d: 9 } }); }
+    catch(e) { undersizedRefused = /requires the 15x15 construction room/.test(String(e)); }
+    check("34j. an undersized room is loudly refused",
+      undersizedRefused);
+  } catch(e) {
+    check("34a-j. CL-F01 pure fixture checks execute without throw", false, e.stack || String(e));
+  }
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("34k. the bench consumes compileRoomShell in the production Theater scene",
+    /function\s+clayRoomMountStructureBench/.test(bootSrc)
+    && /const\s+shell\s*=\s*compileRoomShell\(cells/.test(bootSrc)
+    && /S\.interiorGroup\.add\(group\)/.test(bootSrc));
+  check("34l. shell output mounts floor, stem, independent uppers, trim, risers, and a hinged shadow-casting leaf",
+    /shell\.floorGeometry/.test(bootSrc)
+    && /shell\.wallStemGeometry/.test(bootSrc)
+    && /shell\.wallUpperMeshes/.test(bootSrc)
+    && /shell\.wallTrimGeometry/.test(bootSrc)
+    && /shell\.riserGeometry/.test(bootSrc)
+    && /clayStructureBuildOpening/.test(bootSrc)
+    && /leaf\.userData\.isDoorLeaf\s*=\s*true/.test(bootSrc));
+  check("34m. generic assemblers build volume walls, flush T ownership, stairs/landings, ramp, blocker, and supports",
+    /function\s+clayStructureBuildPart/.test(bootSrc)
+    && /Branch ends flush on the main run's outer face/.test(bootSrc)
+    && /spec\.kind\s*===\s*"stair"/.test(bootSrc)
+    && /clayStructureRampGeometry/.test(bootSrc)
+    && /spec\.kind\s*===\s*"blocker"/.test(bootSrc)
+    && /spec\.kind\s*===\s*"support-square"/.test(bootSrc)
+    && /spec\.kind\s*===\s*"support-round"/.test(bootSrc));
+  check("34n. socket/access/negative overlays are explicit selectable views and the bad join keeps a physical gap",
+    /CLAY_STRUCTURE_BENCH_FIXTURE\.views/.test(bootSrc)
+    && /"assembled",\s*"ASSEMBLED"/.test(bootSrc)
+    && /"sockets",\s*"SOCKETS"/.test(bootSrc)
+    && /"access",\s*"ACCESS"/.test(bootSrc)
+    && /"negative",\s*"BAD JOIN"/.test(bootSrc)
+    && /"strategic",\s*"ALL WALLS"/.test(bootSrc)
+    && /clayStructureStripBetween/.test(bootSrc)
+    && /visibleGap:\s*true/.test(bootSrc));
+  check("34o. the live receipt exposes geometry, slope, sockets, access, omission, dynamic cutaway, shadows, and provenance",
+    /window\.Theater\._clayStructureBenchForTest/.test(bootSrc)
+    && /mountedMeshes/.test(bootSrc)
+    && /shadowCasters/.test(bootSrc)
+    && /cameraSideOmission/.test(bootSrc)
+    && /dynamicCutaway/.test(bootSrc)
+    && /itrPillarCutawayMask/.test(bootSrc)
+    && /negativeControl/.test(bootSrc)
+    && /provenance/.test(bootSrc));
+  check("34p. CL-F01 opens as the active ladder fixture under the daylight hero and suppresses only host upper clutter",
+    /return\s+CLAY_ROOM_STRUCTURE_BENCH_ID/.test(bootSrc)
+    && /initialFixtureId\s*===\s*CLAY_ROOM_STRUCTURE_BENCH_ID[\s\S]{0,80}\?\s*"daylit"/.test(bootSrc)
+    && /kind\s*===\s*"room-shell-wall-upper"\s*\|\|\s*kind\s*===\s*"room-shell-wall-trim"/.test(bootSrc)
+    && /clayStructureHostSuppressed/.test(bootSrc));
+  check("34q. fixture lifecycle, workbench selection, and diagnostic surface ownership all include structure",
+    /clayRoomMountStructureBench\(\);/.test(bootSrc)
+    && /clayRoomShowTab\("structure"\)/.test(bootSrc)
+    && /structureSpecId/.test(bootSrc)
+    && /"clay-diagnostic-overlay"/.test(bootSrc)
+    && /diagnostic-overlay/.test(read("src/engine/clay-room.js")));
+  try {
+    const fixture = win.CLAY_STRUCTURE_BENCH_FIXTURE;
+    let latch = win.clayStructureStagingLatchTransition(null, { type: "door-state", state: "open" });
+    const openDidNotStage = !latch.staged && !latch.latched && latch.doorState === "open";
+    latch = win.clayStructureStagingLatchTransition(latch, { type: fixture.wallOmission.stagedEvent });
+    latch = win.clayStructureStagingLatchTransition(latch, { type: "door-state", state: "shut" });
+    const shutDidNotReconceil = latch.staged && latch.latched && latch.doorState === "shut";
+    latch = win.clayStructureStagingLatchTransition(latch, { type: fixture.wallOmission.releaseEvent });
+    check("34r. the staging latch ignores raw door motion, survives a shut door, and releases only when play leaves",
+      openDidNotStage && shutDidNotReconceil && !latch.staged && !latch.latched);
+  } catch(e) {
+    check("34r. the staging latch sequence executes without throw", false, e.stack || String(e));
+  }
+  check("34s. CL-F01's actual compiler predicate requires staged+latched and carves out apertures, risers, and strategic view",
+    /const\s+omissionActive\s*=\s*staging\.staged\s*&&\s*staging\.latched\s*&&\s*!strategicView/.test(bootSrc)
+    && /if\(seg\.kind\s*===\s*"door"\)\s*return\s+true/.test(bootSrc)
+    && /structuralMassBuilt:\s*shell\.riserSegments\.length\s*>\s*0/.test(bootSrc)
+    && /cameraMode:\s*strategicView\s*\?\s*"top-down-strategic"/.test(bootSrc)
+    && /wallUpperMeshes\.length\s*\+\s*omittedKeys\.size/.test(bootSrc));
+  check("34t. staging and door proof controls rebuild through the production board and use C1B's canonical connection commit",
+    /function\s+clayRoomSetStructureStaged/.test(bootSrc)
+    && /function\s+clayRoomSetStructureDoorState/.test(bootSrc)
+    && /tqConnectionStateCommit\(session\.fixture\.space,\s*session\.state/.test(bootSrc)
+    && /clayRoomRebuildStructureBench/.test(bootSrc)
+    && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
+    && /_claySetStructureStagedForTest/.test(bootSrc)
+    && /_claySetStructureDoorStateForTest/.test(bootSrc));
+}
+
+// 35. ENVIRONMENT AO (visual-correction Checkpoint 1 — docs/FABLE-CLAYROOM-VISUAL-CORRECTION-
+// ASSIGNMENT.md). Restrained GTAO through the production composer: bounded authored settings, an
+// A/B diagnostic (never a taste slider), and a prepass exclusion rule that keeps sprite cards and
+// screen-space helper quads from writing occluder rectangles into the AO G-buffer.
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("35a. GTAOPass is vendored from the pinned three release and imported through the addons importmap",
+    /import \{ GTAOPass \} from "three\/addons\/postprocessing\/GTAOPass\.js"/.test(bootSrc)
+    && existsSync(join(ROOT, "vendor/three/addons/postprocessing/GTAOPass.js"))
+    && existsSync(join(ROOT, "vendor/three/addons/shaders/GTAOShader.js"))
+    && existsSync(join(ROOT, "vendor/three/addons/shaders/PoissonDenoiseShader.js"))
+    && existsSync(join(ROOT, "vendor/three/addons/math/SimplexNoise.js")));
+  try {
+    const { createHash } = await import("node:crypto");
+    const sha = (p) => createHash("sha256").update(readFileSync(join(ROOT, p))).digest("hex");
+    check("35b. the vendored AO files are byte-identical to the recorded pinned-release hashes",
+      sha("vendor/three/addons/postprocessing/GTAOPass.js").startsWith("980b0367")
+      && sha("vendor/three/addons/shaders/GTAOShader.js").startsWith("94edb104")
+      && sha("vendor/three/addons/shaders/PoissonDenoiseShader.js").startsWith("3dab419b")
+      && sha("vendor/three/addons/math/SimplexNoise.js").startsWith("9b8d541b"));
+  } catch(e) {
+    check("35b. the vendored AO files are byte-identical to the recorded pinned-release hashes", false, String(e));
+  }
+  const paramsMatch = bootSrc.match(/const ENV_AO_PARAMS = Object\.freeze\((\{[\s\S]*?\})\);/);
+  let params = null;
+  try { params = paramsMatch ? new Function("return (" + paramsMatch[1] + ");")() : null; } catch(e) { params = null; }
+  check("35c. the AO settings are frozen authored constants inside the restrained bounds (short radius, bounded strength, no slider)",
+    !!params
+    && params.radius > 0 && params.radius <= 0.6
+    && params.scale > 0 && params.scale <= 2
+    && params.samples >= 4 && params.samples <= 16
+    && /const ENV_AO_BLEND_INTENSITY = 1(\.0)?;/.test(bootSrc));
+  const fnMatch = bootSrc.match(/function envAOPrepassExcludes\(mesh\)\{[\s\S]*?\n\}/);
+  let predicate = null;
+  try { predicate = fnMatch ? new Function(fnMatch[0] + "; return envAOPrepassExcludes;")() : null; } catch(e) { predicate = null; }
+  if (predicate) {
+    const mesh = (mats) => ({ isMesh: true, material: mats });
+    check("35d. EXECUTED: the prepass exclusion rule hides transparent/non-depth-writing helper quads and keeps opaque geometry",
+      predicate(mesh({ transparent: true, depthWrite: true })) === true            // sprite billboard card
+      && predicate(mesh({ transparent: false, depthWrite: false })) === true       // overlay strip / contact pool
+      && predicate(mesh({ transparent: false, depthWrite: true })) === false       // wall/floor/stair/support
+      && predicate(mesh([{ transparent: true }, { transparent: false, depthWrite: true }])) === false // mixed: one opaque face keeps it
+      && predicate({ isMesh: false }) === false                                    // groups/lights untouched
+      && predicate(mesh(null)) === false);                                         // defensive: no material
+  } else {
+    check("35d. EXECUTED: the prepass exclusion rule hides transparent/non-depth-writing helper quads and keeps opaque geometry",
+      false, "could not extract envAOPrepassExcludes from source");
+  }
+  check("35e. the AO pass subclasses the vendored pass (file untouched) and counts its exclusions for the receipt",
+    /class EnvironmentAOPass extends GTAOPass\s*\{/.test(bootSrc)
+    && /super\.overrideVisibility\(\)/.test(bootSrc)
+    && /lastPrepassExcludedCount/.test(bootSrc));
+  check("35f. the pass mounts between render and dof, tears down with the suite, resizes with the canvas, and resyncs camera + projection define per mount",
+    /S\.composer\.addPass\(S\.postSuite\.renderPass\);[\s\S]{0,400}addPass\(S\.postSuite\.ao\);[\s\S]{0,200}addPass\(S\.postSuite\.dof\)/.test(bootSrc)
+    && /S\.composer\.removePass\(S\.postSuite\.ao\)/.test(bootSrc)
+    && /S\.postSuite\.ao\.setSize\(Math\.round\(size\.x \* aoPixelRatio\), Math\.round\(size\.y \* aoPixelRatio\)\)/.test(bootSrc)
+    && /const ENV_AO_RESOLUTION_SCALE = 0\.5;/.test(bootSrc)
+    && /getPixelRatio\(\) : 1\) \* ENV_AO_RESOLUTION_SCALE/.test(bootSrc)
+    && /S\.postSuite\.ao\.camera = S\.camera/.test(bootSrc)
+    && /defines\.PERSPECTIVE_CAMERA/.test(bootSrc));
+  check("35g. AO state survives recipe switches by construction (recipe application never touches the suite) and the A/B is bounded",
+    !/clayRoomApplyLightProfile[\s\S]{0,2000}postSuite\.ao/.test(bootSrc)
+    && /window\.Theater\._environmentAOForTest/.test(bootSrc)
+    && /_envAOPrepassExcludesForTest/.test(bootSrc)
+    && /ENV AO /.test(bootSrc)
+    && /clayRoomEnvAOSyncButton/.test(bootSrc)
+    && /get\("envao"\)/.test(bootSrc));
+}
+
+// 36. CHECKPOINT 2 — warm/cool overlap + readout truth (visual-correction assignment).
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const engineSrc = read("src/engine/clay-room.js");
+  const recipesSrc = read("src/engine/light-recipes.js");
+  const compilerSrc = read("build/compile-light-locks.py");
+  const lock = JSON.parse(read("data/light-profile-locks.json"));
+  check("36a. every recipe light carries its authored reach (the generated-light cap no longer bites reviewed lock data)",
+    /authoredRange: true,/.test(engineSrc)
+    && !/authoredRange: lightRecipe\.id === "torchlit"/.test(engineSrc));
+  const pair = lock.profiles["clay-opposing-pair"].lights;
+  check("36b. EXECUTED: the diagnostic pair floats at symmetric authored studio positions over the subjects",
+    pair.length === 2
+    && pair[0].mount === "none" && pair[1].mount === "none"
+    && pair[0].pos.x === -pair[1].pos.x
+    && pair[0].pos.y === pair[1].pos.y && pair[0].pos.z === pair[1].pos.z
+    && Math.abs(pair[0].pos.x) > 0.3 && Math.abs(pair[0].pos.x) < 0.8
+    && pair[0].falloff > 0 && pair[1].falloff > 0);
+  check("36c. the diagnostic-studio float exception is scoped identically in BOTH validators (never a silent bypass)",
+    /diagnostic-studio/.test(compilerSrc)
+    && /visible-emitter sources require a physical mount/.test(compilerSrc)
+    && /profile\.mode !== "diagnostic-studio"/.test(recipesSrc)
+    && /must be socket-relative/.test(recipesSrc)
+    && /if\(light\.mount === "none"\)/.test(bootSrc));
+  check("36d. position/range/shadow overlays default OFF for ordinary review",
+    !/\{ position: true, range: true, shadow: false \}/.test(bootSrc)
+    && /\{ position: false, range: false, shadow: false \}/.test(bootSrc));
+  check("36e. environmental lights register in the live registry and the readout prints mounted truth (markerless-safe)",
+    /environmental sources register in the SAME/i.test(bootSrc)
+    && /pl: environmentalLight, marker: null/.test(bootSrc)
+    && /directional \(no falloff\)/.test(bootSrc)
+    && /mounted pos /.test(bootSrc)
+    && /celestial: t\.pl && t\.pl\.userData && t\.pl\.userData\.celestial/.test(bootSrc));
+  check("36f. the solo A/B seam exists and is visibility-only (nothing moves, nothing rebuilds)",
+    /_claySetLightSoloForTest/.test(bootSrc)
+    && /r\.pl\.visible = on/.test(bootSrc));
+}
+
+// 37. CHECKPOINT 4 — the honest construction workbench (visual-correction assignment).
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const engineSrc = read("src/engine/clay-room.js");
+  check("37a. the ramp renders hard per-face normals (non-indexed), never averaged pillow shading",
+    /const hardFaced = geometry\.toNonIndexed\(\);/.test(bootSrc)
+    && /hardFaced\.computeVertexNormals\(\);/.test(bootSrc));
+  check("37b. access overlays are PER-FACE with the fixed class-colour vocabulary",
+    /CLAY_ACCESS_CLASS_COLORS = \{ walk: 0x66dfa0, "climb-cost": 0xf3bd55, "climb-dc": 0xff6d68, none: 0x8a9099 \}/.test(bootSrc)
+    && /const topClass = access\.top \|\| access\.treads/.test(bootSrc)
+    && /const sideClass = access\.sides \|\| access\.shaft \|\| access\.faces/.test(bootSrc));
+  check("37c. socket marks are TYPE-coloured directional arrows (shaft + head along the authored axis)",
+    /CLAY_SOCKET_TYPE_COLORS/.test(bootSrc)
+    && /"walk-surface": 0x66dfa0, "top-surface": 0x6f8fff/.test(bootSrc)
+    && /const headL = /.test(bootSrc) && /const headR = /.test(bootSrc));
+  check("37d. the composed assembly stands on the shell's own tier via spec.lift, consumed by the builder",
+    /assembly-approach-stair/.test(engineSrc)
+    && /assembly-parapet/.test(engineSrc)
+    && /lift: 0\.5/.test(engineSrc)
+    && /y \+ \(spec\.lift \|\| 0\)/.test(bootSrc));
+  check("37e. omission reporting has ONE authority: the bench build's own projection, served over the generic shell report",
+    /cameraSideOmission: \{\s*\n\s*ruleId: fixture\.wallOmission\.ruleId/.test(bootSrc)
+    && /S\.clayRoomStructureReport && S\.clayRoomStructureReport\.cameraSideOmission/.test(bootSrc));
+  check("37f. the strategic camera fits from ROOM BOUNDS + live fov/aspect, and workbench chrome yields the viewport majority when narrow",
+    /halfDiag \/ Math\.tan\(Math\.min\(vFov, hFov\)\)/.test(bootSrc)
+    && /catalogAutoCollapsed = w < 1000 && S\.clayRoomCatalogCollapsed !== false/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

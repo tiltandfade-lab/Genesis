@@ -109,11 +109,28 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 // the renderer's tone mapping (NoToneMapping here) + the sRGB transfer, so the chain ends correct and
 // matches the direct-render baseline. ALWAYS the last pass in the interior chain.
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+// CLAYROOM VISUAL CORRECTION Checkpoint 1 (docs/FABLE-CLAYROOM-VISUAL-CORRECTION-ASSIGNMENT.md):
+// GTAOPass — three's maintained ground-truth ambient-occlusion pass, vendored VERBATIM from the SAME
+// pinned three@0.166.0 release as every addon above (sha256 prefixes: GTAOPass 980b0367 ·
+// GTAOShader 94edb104 · PoissonDenoiseShader 3dab419b · SimplexNoise 9b8d541b). Not a new
+// dependency — the composer seam was built expecting later passes to vendor exactly this way (see
+// the EffectComposer import note). Wrapped below (EnvironmentAOPass) so the vendored file stays
+// byte-identical to upstream while the G-buffer prepass learns this codebase's one non-negotiable
+// exclusion rule: transparent / non-depth-writing meshes (sprite billboard cards, contact-shadow
+// pools, selection spills, overlay strips, glow discs) must never write occluder rectangles into
+// the AO depth/normal buffer.
+import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger, standeeVerbForHurt, recoilDirFromPositions } from "./theater-verbs.js";
 // GRAPHICS-ENGINE Part II §A: the sibling billboard-standee verb library — see that file's header for
 // why it's a separate module from theater-verbs.js (rotation-ownership conflict with
 // updateSpriteBillboardYaw, below) and for the ctx-binding contract bindStandeeCtx/playStandeeVerb use.
-import { playStandeeVerb, bindStandeeCtx, STANDEE_VERBS, startIdleBreathe } from "./standee-verbs.js";
+import {
+  playStandeeVerb,
+  bindStandeeCtx,
+  STANDEE_VERBS,
+  startIdleBreathe,
+  stopIdleBreathe
+} from "./standee-verbs.js";
 // BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
 // see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
 // as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
@@ -1482,6 +1499,13 @@ const HEMI_SKY = 0xfff1dc, HEMI_GROUND = 0x1b2430, HEMI_INTENSITY_DEFAULT = 0.22
 // (setBoard) is untouched — STAGE_AMBIENT_FLOOR still governs there. Tuned across the BW2-4 iterate loop.
 const ITR_SCENE_AMBIENT = 0.13;      // interior ambient intensity (replaces the 0.65 readability floor here) — BW2-4b: 0.16->0.12 (brightness law: dark-corner floor)
 const ITR_SCENE_HEMI = 0.08;         // interior hemisphere key (down from HEMI_INTENSITY_DEFAULT 0.22)
+// CL-R2 follow-up — SHADOW FORM FLOOR. Diagnostic recipes used to zero the hemisphere entirely,
+// leaving every un-keyed face at one identical flat ambient value: photographically deep, but stair
+// treads, risers, and wall turns disappeared into a single shape. Preserve a very low shadowless
+// sky/ground bounce so face orientation stays barely readable in darkness. Production dark rooms
+// already use ITR_SCENE_HEMI=0.08, so this is a floor for stricter diagnostics, not a brightness
+// raise or an environment-material fork.
+const ITR_SHADOW_FORM_HEMI_FLOOR = 0.06;
 const ITR_SCENE_FILL_SCALE = 0.04;   // multiply the profile's overhead (decay:0, non-attenuating) fill point(s). Tuned 0.20->0.10->0.04: the fill was the LAST flattener — it lit central walls/doorframes bright even after ambient/hemi dropped (round-4 diagnostic: killing ambient+hemi alone left them bright). Standees are UNLIT billboards, so cutting fill near-off darkens the Lambert surfaces (walls/doorframes/floor go dark except in torch pools — the mock look) WITHOUT touching character readability. A whisper stays (not 0) so an edge-on wall never reads as a pure-black hole.
 // BW2-4 item 1: the DATA intensity on data.lights (theater-interior.js's itrRoomLights, base
 // kit.lightIntensity ~1.0-1.3 x valueScript.focalLight ~1.2 = ~1.5) encodes the RELATIVE per-room value
@@ -1511,6 +1535,14 @@ const ITR_LIGHT_RENDER_GAIN = 4.5;
 const ITR_SCENE_KEY = 0.05;   // tabletop key DirectionalLight, dimmed for the interior channel (mount default 0.72)
 const ITR_SCENE_FILL = 0.02;  // tabletop fill DirectionalLight, dimmed for the interior channel (mount default 0.22)
 const ITR_SPRITE_EMISSIVE_FLOOR = 0.05; // sprite readability floor — emissiveIntensity on the lit billboard's own emissiveMap
+// CL-R2 follow-up — a neutral, camera-side fill that can affect ONLY sprite faces. The cutout remains
+// on layer 0 for all authored room lights and additionally joins this private layer; the SpotLight
+// exists only on the private layer, casts no shadow, and keeps a gentle inverse-distance falloff.
+// This is the portrait-lighting concession Adam asked for: enough clean face value to keep skin,
+// cloth, and metal from turning uniformly rusty in dark rooms, without lifting the room around them.
+const SPRITE_CAMERA_FILL_LAYER = 2;
+const SPRITE_CAMERA_FILL_AT_TARGET = 0.16;
+const SPRITE_CAMERA_FILL_COLOR = 0xfff2df;
 // BW2-4b item 1 — INTERIOR LIGHT RANGE CAP. The torch/lamp PointLights (data.lights, default range 12)
 // spilled far enough that an 8-torch room had NO dark corner — every cell sat in some pool, so a sprite
 // read ~0.7 of full-bright everywhere (the BRIGHTNESS LAW's exact failure). Capping the range tightens
@@ -2959,6 +2991,15 @@ const SPRITE_JOIN_NAME_FALLBACK_WARNED = new Set();
 function spriteEntryFor(recipeSlug){
   if(!recipeSlug || typeof SPRITE_REGISTRY === "undefined" || !SPRITE_REGISTRY) return null;
 
+  // TIER 0 — an exact stable sprite id. Production encounter data usually arrives by bestiary id,
+  // but retained acceptance fixtures and authoring tools already own the canonical `spr-*` key.
+  // Letting that key round-trip directly avoids inventing a fake bestiary alias for a PC or animal.
+  const directEntry = SPRITE_REGISTRY[recipeSlug];
+  if(directEntry && directEntry.status === "cut"
+    && (directEntry.verdict !== "fail" || directEntry.prototypeAdmitted === true)){
+    return Object.assign({ slug: recipeSlug }, directEntry);
+  }
+
   // TIER 1 — the deterministic bestiary-id map, exact match, no normalization.
   if(typeof SPRITE_BY_BESTIARY_ID !== "undefined" && SPRITE_BY_BESTIARY_ID){
     const idSlug = SPRITE_BY_BESTIARY_ID[recipeSlug];
@@ -3146,6 +3187,12 @@ function spriteTextureFor(entry){
 // every lit sprite as a ratio of) from the identical scene. No product caller sets it — toggled only
 // by window.Theater.__setSpriteUnlitDebug (below), and a re-mount rebuilds sprites under the new flag.
 let SPRITE_UNLIT_DEBUG = false;
+// STANDEE-WINS-TIES bias (2026-07-25): view-space camera-ward depth pull applied in the sprite
+// card's vertex stage (depth test+write only — pixels, anchors, and cast shadows untouched). A
+// LIVE-tunable uniform so the diagnostic A/B can prove the bias in one call; the authored default
+// is the reviewed production value, not a taste slider.
+let SPRITE_DEPTH_BIAS_UNITS = 0.25;
+const SPRITE_DEPTH_BIAS_MATERIALS = [];
 // BW2-4b item 1 — REALM GRADE on the sprite floor: the emissive readability floor is tinted toward the
 // current interior realm's grade (chrome cool, fantasy warm, gloom cold-violet) so a lit standee reads
 // the realm even where no nearby torch reaches it (the mock's cool soldiers / warm knights). White (no
@@ -3153,7 +3200,35 @@ let SPRITE_UNLIT_DEBUG = false;
 // setBoard resets it to white. A SUBTLE blend (ITR_SPRITE_TINT_STRENGTH) — never a saturated wash.
 let ITR_SPRITE_EMISSIVE_TINT = 0xffffff;
 const ITR_SPRITE_TINT_STRENGTH = 0.5;
-function buildSpriteBillboardMesh(tex, w, h, slug){
+const STANDEE_SIDE_SHELL_THICKNESS = 0.035;
+let STANDEE_SIDE_SHELL_MATERIALS = null;
+function standeeSideShellMaterials(){
+  if(STANDEE_SIDE_SHELL_MATERIALS) return STANDEE_SIDE_SHELL_MATERIALS;
+  const side = new THREE.MeshLambertMaterial({
+    color: 0x3d342b,
+    side: THREE.DoubleSide
+  });
+  const hiddenFace = new THREE.MeshBasicMaterial({
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+    colorWrite: false,
+    side: THREE.DoubleSide
+  });
+  // THREE.BoxGeometry groups: +X, -X, +Y, -Y, +Z, -Z. Only the four thin edges render;
+  // front/back stay invisible so transparent PNG regions never reveal a rectangular backing card.
+  STANDEE_SIDE_SHELL_MATERIALS = [side, side, side, side, hiddenFace, hiddenFace];
+  return STANDEE_SIDE_SHELL_MATERIALS;
+}
+function buildSpriteBillboardMesh(tex, w, h, entry){
+  entry = entry || {};
+  const spriteSlug = entry.slug || null;
+  const alphaCutoff = (typeof entry.alphaCutoff === "number")
+    ? Math.max(0, Math.min(1, entry.alphaCutoff)) : 0.5;
+  const footX = (typeof entry.footX === "number")
+    ? Math.max(0, Math.min(1, entry.footX)) : 0.5;
+  const footY = (typeof entry.footY === "number")
+    ? Math.max(0, Math.min(1, entry.footY)) : 1;
   const geo = new THREE.PlaneGeometry(w, h);
   // BW2-4b item 1 — THE BRIGHTNESS LAW (see ITR_SCENE_KEY/ITR_SPRITE_EMISSIVE_FLOOR): the billboard is
   // now LIT — a MeshLambertMaterial that RECEIVES the interior hemisphere key + torch PointLights +
@@ -3166,11 +3241,36 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   // stays OFF (U3 ruling: a cast shadow smeared across a flat cutout reads as a bug). The debug flag
   // (SPRITE_UNLIT_DEBUG) restores the old full-bright MeshBasic for the measurement reference capture.
   const mat = SPRITE_UNLIT_DEBUG
-    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true })
+    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true })
     : new THREE.MeshLambertMaterial({
         map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
-        transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
+        transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true
       });
+  SPRITE_DEPTH_BIAS_MATERIALS.push(mat);
+  // (SPRITE_DEPTH_BIAS_UNITS + the registry are module-scope, declared beside SPRITE_UNLIT_DEBUG.)
+  // STANDEE-WINS-TIES depth law (Adam, 2026-07-25: "the sprite should be in front of the sphere"):
+  // a flat card beside a bulging prop (the bench sphere's near limb) loses the per-pixel depth
+  // fight along its card edges even when the standee's cell is nearer — physically true for the
+  // geometry, wrong for the tabletop fiction, where an upright standee occludes props behind its
+  // cell. The card's DEPTH (test + write) is pulled a quarter-unit camera-ward in view space at
+  // the vertex stage; screen pixels, foot anchor, selection, and the alpha-silhouette CAST SHADOW
+  // (customDepthMaterial, untouched) all stay exactly where they were. A real occluder — a pillar
+  // or wall half a cell nearer — still covers the card; only near-ties flip to the standee.
+  mat.onBeforeCompile = function(shader){
+    shader.uniforms.uStandeeDepthBias = { value: SPRITE_DEPTH_BIAS_UNITS };
+    mat.userData.standeeDepthBiasUniform = shader.uniforms.uStandeeDepthBias;
+    shader.vertexShader = "uniform float uStandeeDepthBias;\n" + shader.vertexShader.replace(
+      "#include <project_vertex>",
+      [
+        "vec4 mvPosition = vec4( transformed, 1.0 );",
+        "mvPosition = modelViewMatrix * mvPosition;",
+        "mvPosition.z += uStandeeDepthBias; // STANDEE-WINS-TIES: camera-ward depth bias (view units)",
+        "gl_Position = projectionMatrix * mvPosition;"
+      ].join("\n")
+    );
+  };
+  // shared program across sprite materials must key on the injected chunk, not collide with stock Lambert
+  mat.customProgramCacheKey = function(){ return "standee-depth-bias-v1"; };
   // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling (Adam 2026-07-10 evening): billboards must
   // carry ZERO PS1 distortion (no dither, no vertex-snap) — a flat-cut 2D sprite reads as a sticker
   // the moment its texel grid wobbles or dithers, unlike a real low-poly mesh where those tricks read
@@ -3180,11 +3280,17 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   // interior.mjs's sprite-purity check asserts it's set (billboards) vs. absent+psxApplied set (walls).
   mat.userData.psxExempt = true;
   const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.y = h / 2;
+  // Layer 0 keeps the complete production light response. Layer 2 adds the sprite-only camera fill;
+  // the camera itself still sees layer 0, so this is a LIGHT MASK, never a visibility fork.
+  if(mesh.layers) mesh.layers.enable(SPRITE_CAMERA_FILL_LAYER);
+  // `footX`/`footY` are the ONE authored contact/rotation anchor. Move the art around local origin
+  // so that exact image coordinate sits at (0,0), rather than compensating later with a second
+  // `floor` offset. The legacy bottom-centre default (0.5,1) is byte-identical to x=0,y=h/2.
+  mesh.position.set((0.5 - footX) * w, (footY - 0.5) * h, STANDEE_SIDE_SHELL_THICKNESS / 2 + 0.001);
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 2 (real light sources + cast shadows, interiors only):
   // a billboard CASTS a shadow (so creature silhouettes fall on the interior floor) via a dedicated
-  // alpha-tested depth material (a plain opaque depth pass would cast a solid SQUARE shadow off the
-  // plane's full quad, not the sprite's actual cutout silhouette) but never RECEIVES one (a receiving
+  // alpha-tested depth + distance material (a plain opaque shadow pass would cast a solid SQUARE
+  // shadow off the plane's full quad, not the sprite's actual cutout silhouette) but never RECEIVES one (a receiving
   // billboard would show other casters' shadows smeared across its own flat alpha-cutout face, which
   // reads as a lighting bug, not grounding). Harmless when renderer.shadowMap.enabled is false (the
   // combat/tabletop path, §2's untouched "no shadow maps" ruling) — shadowMap being globally off means
@@ -3192,7 +3298,13 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   mesh.castShadow = true;
   mesh.receiveShadow = false;
   mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
-    map: tex, alphaTest: 0.5, depthPacking: THREE.RGBADepthPacking
+    map: tex, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthPacking: THREE.RGBADepthPacking
+  });
+  // Directional/spot lights use customDepthMaterial; point lights use customDistanceMaterial.
+  // Both sample the already-resident sprite alpha, so every production shadow-light type receives
+  // the same cutout silhouette without adding a second caster or another texture.
+  mesh.customDistanceMaterial = new THREE.MeshDistanceMaterial({
+    map: tex, alphaTest: alphaCutoff, side: THREE.DoubleSide
   });
   const g = new THREE.Group();
   // BW2-2b item 1 (FLOOR-ALIGNED BASES — "the bug"): the sprite mesh lives in its OWN inner wrapper,
@@ -3201,19 +3313,38 @@ function buildSpriteBillboardMesh(tex, w, h, slug){
   // mounts — before this fix, updateSpriteBillboardYaw stamped `fig.rotation.x = tilt` straight onto
   // `g`, and BW2-2's plinth base (added later as a plain CHILD of `g` — buildInteriorBase's own header)
   // inherited that tilt with it, reading as a coin propped up on edge instead of a flat mini base. Now
-  // only `wrap` (holding just `mesh`) gets the camera tilt (see updateSpriteBillboardYaw below); a
-  // base/ring mounted as a SIBLING of `wrap` directly on `g` (interiorBuildPieces/setUnits,
+  // only `wrap` (holding the cutout plane + its thin side shell) gets the camera tilt (see
+  // updateSpriteBillboardYaw below); a support/selection ring mounted as a SIBLING of `wrap`
+  // directly on `g` (interiorBuildPieces/setUnits,
   // setActingUnit) stays floor-flat under `g`'s own yaw-only rotation. `g.userData.standeeWrap` is the
   // SAME identity key standee-verbs.js's runKeyframeVerb reads/writes — see that file's own updated
   // COMPOSITION CONTRACT header for the other half of this split (verb-tilt, e.g. fall-death, now
   // writes `g.rotation.x` directly instead, freed by camera-tilt vacating that field).
   const wrap = new THREE.Group();
+  const shell = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, STANDEE_SIDE_SHELL_THICKNESS),
+    standeeSideShellMaterials()
+  );
+  shell.position.set((0.5 - footX) * w, (footY - 0.5) * h, 0);
+  // The shell gives the standee a visible physical edge, but it is still a full rectangular box.
+  // If it enters a shadow map it projects that hidden card shape behind the alpha-cut sprite. The
+  // cutout plane above is the sole shadow caster; removing this redundant caster is also cheaper.
+  shell.castShadow = false;
+  shell.receiveShadow = false;
+  shell.userData.standeeSideShell = true;
+  shell.userData.spriteSlug = spriteSlug;
+  wrap.add(shell);
   wrap.add(mesh);
   g.add(wrap);
   g.userData.sprite = true;
-  g.userData.spriteSlug = slug;
+  g.userData.spriteSlug = spriteSlug;
   g.userData.spriteBillboardMesh = mesh; // updateSpriteBillboardYaw's per-frame Y-facing target
   g.userData.standeeWrap = wrap;
+  g.userData.standeeSideShell = shell;
+  g.userData.footX = footX;
+  g.userData.footY = footY;
+  g.userData.alphaCutoff = alphaCutoff;
+  g.userData.contentBounds = entry.contentBounds || null;
   return g;
 }
 
@@ -3237,25 +3368,31 @@ function buildSpriteBillboard(entry){
     ? entry.scaleVsHuman
     : spriteSizeScaleFor(entry.size);
   const h = sizeMultiplier * GLB_TARGET_HEIGHT * calib;
-  return buildSpriteBillboardMesh(tex, h, h, entry.slug); // square plane; the sprite's own alpha silhouette reads the real shape
+  return buildSpriteBillboardMesh(tex, h, h, entry); // square plane; the sprite's own alpha silhouette reads the real shape
 }
 
 // BEAUTY-WAVE.md VP1 (the kaiju-scale-bug fix): interior pieces are TRUE-SCALE (cellSize: 1 world
 // unit = 5ft, DUNGEON-GRAPH.md law 1), NOT the tabletop's render-height-multiplier convention above
 // — a medium creature must stand ~1.1 world units tall in a room, not several. Height comes from
-// entry.scaleTrue (the registry fold, feet/5.5) or a caller-supplied scaleVsHuman override, falling
-// back to 1.0 (an undressed human) when neither is present. Width is derived from the loaded
+// entry.worldHeight (the authoritative feet value) or a caller-supplied scaleVsHuman override,
+// falling back to the registry's legacy rounded scaleTrue and then 1.0 when neither is present.
+// Reading worldHeight directly avoids turning a 0.25-ft rat into 0.275 ft through scaleTrue's
+// intentionally compact two-decimal generated representation. Width is derived from the loaded
 // texture's own pixel aspect ratio (a sprite crop is rarely square) rather than the tabletop's
 // baked square plane. Returns {group, height} so interiorBuildPieces can floor-offset + wall-clamp
 // without re-deriving the height.
 function interiorSpriteBillboard(entry, wallHeightCap){
   const tex = spriteTextureFor(entry); // S5: resolves through entry's own admission fields, not just the slug
   if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
-  const scaleTrue = (typeof entry.scaleTrue === "number" && entry.scaleTrue > 0)
-    ? entry.scaleTrue
-    : (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
-      ? entry.scaleVsHuman
-      : 1.0;
+  // A caller-supplied scaleVsHuman is an explicit presentation override (the CL-R2 preferred cap
+  // uses it without mutating authored worldHeight), so it wins over the registry's canonical value.
+  const scaleTrue = (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
+    ? entry.scaleVsHuman
+    : (typeof entry.worldHeight === "number" && entry.worldHeight > 0)
+      ? entry.worldHeight / 5.5
+      : (typeof entry.scaleTrue === "number" && entry.scaleTrue > 0)
+        ? entry.scaleTrue
+        : 1.0;
   let h = HUMAN_TRUE_HEIGHT * scaleTrue;
   let oversizeClamped = false;
   // Cap render height at the room's wall height * 0.95 (a titanic in a human room is a SCALE-DOMAIN
@@ -3268,11 +3405,17 @@ function interiorSpriteBillboard(entry, wallHeightCap){
   const img = tex.image;
   const aspect = (img && img.width && img.height) ? (img.width / img.height) : 1;
   const w = h * aspect;
-  const g = buildSpriteBillboardMesh(tex, w, h, entry.slug);
+  const g = buildSpriteBillboardMesh(tex, w, h, entry);
   if(oversizeClamped){
     console.warn("qa: oversize-clamped", entry.slug, "-> capped at wall height", wallHeightCap);
   }
-  return { group: g, height: h, width: w };
+  return {
+    group: g,
+    height: h,
+    width: w,
+    canonicalHeight: HUMAN_TRUE_HEIGHT * scaleTrue,
+    oversizeClamped: oversizeClamped
+  };
 }
 
 // BEAUTY-WAVE.md VP1b (combat-standee true scale, follow-up to VP1): `interiorMode`/`wallHeightCap`
@@ -3310,7 +3453,7 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
           // (aspect-scaled off the loaded texture), so stash it alongside interiorHeight rather than
           // re-deriving a second width formula at the setUnits call site.
           g.userData.interiorWidth = built.width;
-          g.userData.interiorFloorFrac = (typeof sEntry.floor === "number") ? sEntry.floor : 0;
+          g.userData.interiorFloorFrac = 0; // footX/footY already place the canonical anchor at local origin
           _tallyPath("sprite", sEntry.slug);
           if(typeof theaterCensusRecord === "function") theaterCensusRecord("figure", _spriteCensusOutcome(sEntry), sEntry.slug, _censusSceneKind);
           return g;
@@ -3597,27 +3740,84 @@ function interiorFloorTopAt(floorTopMap, x, z){
   return (typeof v === "number") ? v : fallback;
 }
 
-// BW2-2 — STANDEE BASES: a low plinth cylinder under every interior standee (piece + combat unit),
-// seated flush on the floor top the law above derives. Realm trim color (kit.trimColor — the SAME
-// flat trim the doorframe/pillar instances already use, GR1's palette anchor), darkened for the side
-// wall, lightened for the top face (a real "lit from above" plinth read, not a flat tinted disc — per
-// the mock, ui-sketches/mock-frames/mock-01-gloom-combat.png, whose plinths read as physical stone/wood
-// under both the acting and idle standee). Geometry cache-keyed by rounded radius (most true-scale
-// creatures share a handful of footprints); materials cache-keyed by the realm's own trim hex (one kit
-// per mounted board, so this cache never grows past a handful of entries per session).
+// CL-R2 — STANDEE SUPPORTS: the visible support is a shallow, softly rounded strip under every
+// interior standee, not a circular gameplay token. The tactical footprint remains the authoritative
+// occupied-cell span; this support is only the physical-looking foot that holds the cutout upright.
+// A Medium-or-larger support is exactly one stair tread deep (1/3 cell), while Small/Tiny supports
+// may be shallower. This lets a 5-ft citizen sit naturally on any of the three treads represented by
+// one cell without changing its 5x5 tactical ownership. Width is bounded by the tactical span, so a
+// very wide sprite exposes an art-regeneration problem instead of silently inventing a collision disc.
 const INTERIOR_BASE_HEIGHT = 0.09;                 // BW2-2b item 2: 0.04 -> ~0.09 ("a real plinth, per the mock read")
-// BW2-4b item 3 — base radius as a fraction of the standee's rendered width. Was 0.42; reduced ~15%
-// to 0.36 so adjacent bases in a tight melee huddle stop fusing into one big pale pad (the huddle-blob).
-const INTERIOR_BASE_RADIUS_FRAC = 0.36;
+const INTERIOR_BASE_TREAD_DEPTH = 1 / 3;
 const INTERIOR_BASE_Y_OFFSET = 0.006;              // clears the contact pool's own +0.003 (below) — never z-fights it
 // BW2-2b item 3 (TURN GLOW) — the accent gold every acting standee's ring already uses (ACTING_RING_MAT,
 // below); the base's own top/side materials swap TOWARD this on emissive when a standee is acting, so
 // ring + glowing plinth read "your turn" together, diegetically.
 const BASE_GLOW_EMISSIVE_HEX = 0xd4af6e;
 const INTERIOR_BASE_GEO_CACHE = {};
-function interiorBaseGeoFor(radius){
-  const key = radius.toFixed(3);
-  if(!INTERIOR_BASE_GEO_CACHE[key]) INTERIOR_BASE_GEO_CACHE[key] = new THREE.CylinderGeometry(radius, radius, INTERIOR_BASE_HEIGHT, 16);
+function interiorTacticalSpanFor(size, authoredSpan){
+  if(Number.isFinite(authoredSpan) && authoredSpan > 0) return authoredSpan;
+  const key = String(size || "Medium").toLowerCase();
+  if(key === "tiny") return 0.5;
+  if(key === "large") return 2;
+  if(key === "huge") return 3;
+  if(key === "gargantuan") return 4;
+  return 1;
+}
+function interiorStandeeSupportMetrics(renderedWidth, size, authoredSpan){
+  const tacticalSpan = interiorTacticalSpanFor(size, authoredSpan);
+  const sizeKey = String(size || (tacticalSpan <= 0.5 ? "Tiny" : "Medium")).toLowerCase();
+  const depth = sizeKey === "tiny" ? 0.18 : (sizeKey === "small" ? 0.26 : INTERIOR_BASE_TREAD_DEPTH);
+  const minimumWidth = depth * 1.35;
+  const maximumWidth = Math.max(minimumWidth, tacticalSpan * 0.82);
+  const width = Math.max(minimumWidth, Math.min(maximumWidth, Math.max(0.05, renderedWidth || 1) * 0.82));
+  return {
+    width: width,
+    depth: depth,
+    tacticalSpanCells: tacticalSpan,
+    treadDepth: INTERIOR_BASE_TREAD_DEPTH,
+    stairFit: depth <= INTERIOR_BASE_TREAD_DEPTH + 0.000001
+  };
+}
+function interiorBaseGeoFor(width, depth){
+  const safeWidth = Math.max(0.08, width || 0.45);
+  const safeDepth = Math.max(0.08, depth || INTERIOR_BASE_TREAD_DEPTH);
+  const key = safeWidth.toFixed(3) + "x" + safeDepth.toFixed(3);
+  if(!INTERIOR_BASE_GEO_CACHE[key]){
+    if(typeof THREE.Shape === "function" && typeof THREE.ExtrudeGeometry === "function"){
+      const radius = Math.min(safeDepth * 0.42, safeWidth * 0.16);
+      const x0 = -safeWidth / 2, x1 = safeWidth / 2;
+      const z0 = -safeDepth / 2, z1 = safeDepth / 2;
+      const shape = new THREE.Shape();
+      shape.moveTo(x0 + radius, z0);
+      shape.lineTo(x1 - radius, z0);
+      shape.quadraticCurveTo(x1, z0, x1, z0 + radius);
+      shape.lineTo(x1, z1 - radius);
+      shape.quadraticCurveTo(x1, z1, x1 - radius, z1);
+      shape.lineTo(x0 + radius, z1);
+      shape.quadraticCurveTo(x0, z1, x0, z1 - radius);
+      shape.lineTo(x0, z0 + radius);
+      shape.quadraticCurveTo(x0, z0, x0 + radius, z0);
+      const geo = new THREE.ExtrudeGeometry(shape, {
+        depth: INTERIOR_BASE_HEIGHT,
+        bevelEnabled: true,
+        bevelSegments: 1,
+        bevelSize: Math.min(0.018, radius * 0.18),
+        bevelThickness: 0.012,
+        curveSegments: 4
+      });
+      // Shape lies in XY and extrudes +Z. +90deg about X maps its shape-Y to world Z and the
+      // extrusion downward from local y=0, keeping the top face on the shared feet/contact origin.
+      geo.rotateX(Math.PI / 2);
+      INTERIOR_BASE_GEO_CACHE[key] = geo;
+    } else {
+      // Test harnesses may provide only the primitive geometry constructors. Preserve the same
+      // dimensions/contact law there; production Three.js always takes the rounded extrusion above.
+      const geo = new THREE.BoxGeometry(safeWidth, INTERIOR_BASE_HEIGHT, safeDepth);
+      if(typeof geo.translate === "function") geo.translate(0, -INTERIOR_BASE_HEIGHT / 2, 0);
+      INTERIOR_BASE_GEO_CACHE[key] = geo;
+    }
+  }
   return INTERIOR_BASE_GEO_CACHE[key];
 }
 const INTERIOR_BASE_MAT_CACHE = {};
@@ -3634,9 +3834,8 @@ function interiorBaseMaterialsFor(trimHex){
   const topRGB = scaleRGB(c, 0.62);
   const side = new THREE.MeshLambertMaterial({ color: rgbToHex(sideRGB.r, sideRGB.g, sideRGB.b) });
   const top = new THREE.MeshLambertMaterial({ color: rgbToHex(topRGB.r, topRGB.g, topRGB.b) });
-  // CylinderGeometry material groups: [0]=side wall, [1]=top cap, [2]=bottom cap — bottom reuses the
-  // darker side tone (flush against the floor, never actually visible from any playable camera angle).
-  const mats = [side, top, side];
+  // ExtrudeGeometry material groups: [0]=front/back caps, [1]=side wall.
+  const mats = [top, side];
   INTERIOR_BASE_MAT_CACHE[key] = mats;
   return mats;
 }
@@ -3662,8 +3861,8 @@ function interiorStandeeContactY(floorTop){
 // is always "flush under local y=0": the group's local y=0 IS the base's own top face, which is also
 // exactly where a floorFrac=0 sprite's own bottom edge sits (buildSpriteBillboardMesh's
 // mesh.position.y=h/2 convention) — one shared local reference point, no separate bookkeeping.
-function buildInteriorBase(radius, trimHex){
-  const geo = interiorBaseGeoFor(Math.max(0.05, radius || 0.3));
+function buildInteriorBase(width, depth, trimHex){
+  const geo = interiorBaseGeoFor(width, depth);
   // BW2-2b item 3 (TURN GLOW): the cache above (interiorBaseMaterialsFor) deliberately shares ONE
   // material set per realm trim color across every standee mounted from the same board — cheap, and
   // correct for a static plinth tint. Turning a SINGLE acting standee's base gold via that shared
@@ -3671,10 +3870,14 @@ function buildInteriorBase(radius, trimHex){
   // mesh here so setActingUnit's glow toggle only ever touches THIS standee's own materials.
   const mats = interiorBaseMaterialsFor(trimHex).map((m) => m.clone());
   const mesh = new THREE.Mesh(geo, mats);
-  mesh.position.set(0, -INTERIOR_BASE_HEIGHT / 2, 0);
+  mesh.position.set(0, 0, 0);
   mesh.receiveShadow = true;
   mesh.castShadow = true;
   mesh.userData.standeeBase = true; // verify-bw2-2's per-standee base-count check
+  mesh.userData.supportForm = "shallow-rounded-strip";
+  mesh.userData.supportWidth = width;
+  mesh.userData.supportDepth = depth;
+  mesh.userData.supportHeight = INTERIOR_BASE_HEIGHT;
   return mesh;
 }
 // setBaseGlow(mesh, glowing) — BW2-2b item 3: toggles the acting-standee "your turn" plinth glow by
@@ -3723,14 +3926,141 @@ function kilterFor(seedKey){
   };
 }
 
+// CL-R2 follow-up — VISIBLE SUPPORT COLLISION. Tactical occupancy remains owned by the board/query
+// layer; this pass only prevents two rendered standee strips from occupying the same physical space.
+// Each support is an oriented rectangle (the standee yaw rotates it). A small deterministic
+// minimum-translation push moves the later-mounted piece along the shallowest separating axis,
+// exactly like nudging two board pieces apart without changing either piece's logical square.
+const STANDEE_SUPPORT_CLEARANCE = 0.035;
+function standeeSupportObb(fig){
+  if(!fig || !fig.userData) return null;
+  const width = Number(fig.userData.interiorBaseWidth);
+  const depth = Number(fig.userData.interiorBaseDepth);
+  if(!(width > 0) || !(depth > 0)) return null;
+  const yaw = fig.rotation ? fig.rotation.y || 0 : 0;
+  return {
+    fig: fig,
+    cx: fig.position.x,
+    cz: fig.position.z,
+    halfWidth: width * 0.5 + STANDEE_SUPPORT_CLEARANCE * 0.5,
+    halfDepth: depth * 0.5 + STANDEE_SUPPORT_CLEARANCE * 0.5,
+    widthAxis: { x: Math.cos(yaw), z: -Math.sin(yaw) },
+    depthAxis: { x: Math.sin(yaw), z: Math.cos(yaw) }
+  };
+}
+function standeeSupportRadiusOn(obb, axis){
+  return obb.halfWidth * Math.abs(obb.widthAxis.x * axis.x + obb.widthAxis.z * axis.z)
+    + obb.halfDepth * Math.abs(obb.depthAxis.x * axis.x + obb.depthAxis.z * axis.z);
+}
+function standeeSupportPenetration(a, b){
+  if(!a || !b) return null;
+  const dx = b.cx - a.cx, dz = b.cz - a.cz;
+  const axes = [a.widthAxis, a.depthAxis, b.widthAxis, b.depthAxis];
+  let best = null;
+  for(let i = 0; i < axes.length; i++){
+    const axis = axes[i];
+    const signedDistance = dx * axis.x + dz * axis.z;
+    const overlap = standeeSupportRadiusOn(a, axis) + standeeSupportRadiusOn(b, axis) - Math.abs(signedDistance);
+    if(overlap <= 0) return null;
+    if(!best || overlap < best.overlap){
+      best = { axis: axis, overlap: overlap, signedDistance: signedDistance };
+    }
+  }
+  return best;
+}
+function standeeCollisionSign(a, b, penetration){
+  if(Math.abs(penetration.signedDistance) > 0.000001) return penetration.signedDistance < 0 ? -1 : 1;
+  const aKey = String(a.fig.userData.sceneObjectId || a.fig.userData.unitId || a.fig.userData.spriteSlug || "");
+  const bKey = String(b.fig.userData.sceneObjectId || b.fig.userData.unitId || b.fig.userData.spriteSlug || "");
+  return (hashSeed(aKey + "->" + bKey) & 1) ? 1 : -1;
+}
+function mountedStandeeFigures(){
+  const figures = [];
+  function visit(root){
+    if(!root || typeof root.traverse !== "function") return;
+    root.traverse(function(node){
+      if(!node || !node.userData || !node.userData.sprite || node.userData.standeeCollisionExcluded) return;
+      if(node.userData.interiorBaseWidth > 0 && node.userData.interiorBaseDepth > 0) figures.push(node);
+    });
+  }
+  visit(S.interiorGroup);
+  visit(S.unitGroup);
+  return figures;
+}
+function resolveMountedStandeeSupportCollisions(){
+  const figures = mountedStandeeFigures();
+  let relocations = 0, checkedPairs = 0;
+  // Later-mounted pieces move; earlier pieces remain stable. Repeating the ordered sweep handles a
+  // piece that needs to clear two neighbors without introducing random or frame-dependent motion.
+  for(let pass = 0; pass < 12; pass++){
+    let movedThisPass = false;
+    for(let i = 1; i < figures.length; i++){
+      for(let j = 0; j < i; j++){
+        const a = standeeSupportObb(figures[j]), b = standeeSupportObb(figures[i]);
+        checkedPairs++;
+        const hit = standeeSupportPenetration(a, b);
+        if(!hit) continue;
+        const sign = standeeCollisionSign(a, b, hit);
+        const push = hit.overlap + 0.001;
+        figures[i].position.x += hit.axis.x * push * sign;
+        figures[i].position.z += hit.axis.z * push * sign;
+        figures[i].userData.standeeCollisionNudgeX =
+          (figures[i].userData.standeeCollisionNudgeX || 0) + hit.axis.x * push * sign;
+        figures[i].userData.standeeCollisionNudgeZ =
+          (figures[i].userData.standeeCollisionNudgeZ || 0) + hit.axis.z * push * sign;
+        figures[i].userData.standeeCollisionRelocated = true;
+        relocations++;
+        movedThisPass = true;
+      }
+    }
+    if(!movedThisPass) break;
+  }
+  let remainingOverlaps = 0;
+  for(let i = 1; i < figures.length; i++){
+    for(let j = 0; j < i; j++){
+      if(standeeSupportPenetration(standeeSupportObb(figures[j]), standeeSupportObb(figures[i]))){
+        remainingOverlaps++;
+      }
+    }
+  }
+  S.standeeCollisionAudit = {
+    pieces: figures.length,
+    checkedPairs: checkedPairs,
+    relocations: relocations,
+    remainingOverlaps: remainingOverlaps
+  };
+  S.standeeCollisionDirty = false;
+}
+
+// The soft pool is deliberately a little larger than the physical strip and biased slightly behind
+// it. The dense core still touches the support, while the feather remains visible instead of being
+// completely hidden by the base. Sync runs whenever billboards face the camera, so movement,
+// collision relocation, and inspection yaw can never leave the pool behind.
+function syncStandeeContactBlob(fig){
+  if(!fig || !fig.userData || !fig.userData.contactBlobMesh) return;
+  const blob = fig.userData.contactBlobMesh;
+  const yaw = fig.rotation ? fig.rotation.y || 0 : 0;
+  const depth = Number(fig.userData.interiorBaseDepth) || 0.33;
+  const offset = Math.min(0.12, Math.max(0.045, depth * 0.24));
+  blob.position.x = fig.position.x + Math.sin(yaw) * offset;
+  blob.position.z = fig.position.z + Math.cos(yaw) * offset;
+  blob.rotation.order = "YXZ";
+  blob.rotation.x = -Math.PI / 2;
+  blob.rotation.y = yaw;
+  blob.userData.contactOffset = offset;
+  blob.userData.linkedSceneObjectId = fig.userData.sceneObjectId || fig.userData.unitId || null;
+}
+
 // BW2-2 ADDENDUM (Adam, mid-flight review — "the contact shadow... really sells the illusion"): the
-// contact pool is now a SOFT RADIAL GRADIENT quad (dark center feathering to fully transparent at the
-// rim), replacing VP7's flat hard-edged disc — matches the mock's shadow hugging the acting knight's
-// base. ONE shared gradient CanvasTexture (never a per-standee canvas — the gradient SHAPE is identical
-// everywhere; only the quad's own world-space SCALE differs per standee footprint), linear-filtered
-// (SPRITE PURITY's nearest-only rule guards CHARACTER pixels — buildSpriteBillboardMesh's own header
-// comment names the exemption for exactly this kind of non-character ground shadow/blob quad — a
-// smooth gradient with visible texel edges would read as a rendering bug, not a soft shadow).
+// contact pool is a SOFT RADIAL MULTIPLY quad, replacing VP7's flat hard-edged disc. The texture is
+// opaque white at its rim (multiply identity) and falls toward dark gray at contact. THREE's
+// MultiplyBlending therefore computes `floor * pool` after the floor has already received ambient and
+// diegetic shadow: the contact patch remains darker than an already-shadowed tread instead of merely
+// painting a second flat black value over it. ONE shared gradient CanvasTexture (never a per-standee
+// canvas — the gradient SHAPE is identical everywhere; only the quad's own world-space SCALE differs
+// per standee footprint), linear-filtered (SPRITE PURITY's nearest-only rule guards CHARACTER pixels —
+// buildSpriteBillboardMesh's own header comment names the exemption for exactly this kind of
+// non-character ground shadow/blob quad).
 let INTERIOR_POOL_TEXTURE = null;
 function interiorPoolTexture(){
   if(INTERIOR_POOL_TEXTURE) return INTERIOR_POOL_TEXTURE;
@@ -3745,20 +4075,22 @@ function interiorPoolTexture(){
   // call sites never need their own null-guard.
   const ctx = canvas.getContext && canvas.getContext("2d");
   if(ctx && typeof ctx.createRadialGradient === "function"){
-  const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  // BW2-2b item 5a (CONTACT AO, INTENSIFIED): core opacity 0.5 -> ~0.7, TIGHT to the plinth rim — Adam's
-  // read: "the mock's subtle drop shadow on the figurine base reads MORE than ours." The core now stays
-  // dense out to a slightly SMALLER fraction of the pool's total radius (0.55 vs the old 0.62) so the
-  // darkest band hugs the base rim more closely before it starts feathering, matching the mock's tighter
-  // shadow silhouette rather than a broad soft wash.
-  grad.addColorStop(0, "rgba(0,0,0,0.7)");     // dense core at the base contact line (BW2-2b: 0.5 -> ~0.7)
-  grad.addColorStop(0.55, "rgba(0,0,0,0.6)");  // core stays dense out to just past the base's OWN radius (tighter than BW2-2's 0.62)
-  grad.addColorStop(1, "rgba(0,0,0,0)");       // feathers fully transparent at the rim
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, size, size);
+    // White is the multiply identity, so the square quad disappears completely outside the soft pool.
+    // Gray—not alpha—owns the occlusion strength. This keeps the result load-bearing in both lit and
+    // already-shadowed floor values; the contact core multiplies either value down proportionally.
+    ctx.fillStyle = "rgb(255,255,255)";
+    ctx.fillRect(0, 0, size, size);
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgb(64,64,64)");      // 0.25× at the hidden center beneath the standee
+    grad.addColorStop(0.46, "rgb(92,92,92)");   // dense contact band hugging the support
+    grad.addColorStop(0.72, "rgb(170,170,170)");// readable occlusion just beyond the base edge
+    grad.addColorStop(1, "rgb(255,255,255)");   // exact multiply identity at the rim
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
   }
   const tex = new THREE.CanvasTexture(canvas);
   tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; // deliberately NOT nearestify() — SPRITE PURITY's carve-out for non-character ground shadows
+  tex.userData.contactMultiplyMap = true;
   INTERIOR_POOL_TEXTURE = tex;
   return tex;
 }
@@ -3772,8 +4104,14 @@ let INTERIOR_POOL_MAT = null;
 function interiorPoolMaterial(){
   if(!INTERIOR_POOL_MAT){
     INTERIOR_POOL_MAT = new THREE.MeshBasicMaterial({
-      map: interiorPoolTexture(), transparent: true, depthWrite: false, side: THREE.DoubleSide
+      map: interiorPoolTexture(),
+      transparent: false,
+      blending: THREE.MultiplyBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      toneMapped: false
     });
+    INTERIOR_POOL_MAT.userData.contactBlendMode = "multiply";
   }
   return INTERIOR_POOL_MAT;
 }
@@ -3785,15 +4123,26 @@ function interiorPoolMaterial(){
 // THIS cell's own real floor surface (never the bare -0.5 plane), below every base's own +INTERIOR_BASE_Y_OFFSET
 // so the two never z-fight.
 const INTERIOR_POOL_Y_OFFSET = 0.003;
-function addInteriorContactBlob(group, x, z, texWidth, floorTop){
+function addInteriorContactBlob(group, x, z, texWidth, floorTop, texDepth){
   if(!group) return null;
-  const footprint = Math.max(0.05, (texWidth || 1) * 0.4);
-  const poolRadius = footprint * 1.6;
+  const footprint = Math.max(0.05, (texWidth || 1) * 0.48);
+  const poolRadius = footprint * 1.55;
   const mesh = new THREE.Mesh(interiorPoolGeoFor(poolRadius), interiorPoolMaterial());
   mesh.rotation.x = -Math.PI / 2;
+  if(Number.isFinite(texDepth) && texDepth > 0){
+    // Keep the feather tied to the natural standee strip instead of restoring a circular token
+    // silhouette in shadow. Geometry remains shared; scale alone makes the pool elliptical.
+    mesh.scale.y = Math.max(0.18, texDepth / Math.max(0.001, texWidth || 1));
+  }
   const y = (typeof floorTop === "number" ? floorTop : ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK) + INTERIOR_POOL_Y_OFFSET;
   mesh.position.set(x, y, z);
   mesh.userData.contactBlob = true; // verify-dungeon-interior's per-piece blob-count check
+  mesh.userData.contactWidth = texWidth;
+  mesh.userData.contactDepth = Number.isFinite(texDepth) ? texDepth : texWidth;
+  mesh.userData.contactPoolDiameter = poolRadius * 2;
+  mesh.userData.contactBlendMode = "multiply";
+  mesh.userData.contactMultiplyIdentityRim = true;
+  mesh.renderOrder = 2;
   group.add(mesh);
   return mesh;
 }
@@ -5110,13 +5459,16 @@ function createTheaterState(){
     // groups are swept by clearGroup on every setBoard; lights are their own small set, added directly
     // to S.scene, disposed+removed explicitly by applyLightProfile's own teardown each call rather than
     // routed through clearGroup, since THREE.Light has no geometry/material to dispose). lightProfileKey
-    // + flickerRaf/flickerRunning drive the flicker tick (tickLightFlicker) — a SEPARATE, cheap-by-design
-    // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
-    // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
+    // + flickerRaf drives the smooth flame animation loop. Seeded targets still arrive at irregular,
+    // low-frequency intervals, but the real light and visible flame now glide between them on each
+    // display frame instead of visibly stepping from one target to the next.
     ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, flickerTick: 0,
     interiorFlickerTargets: [], interiorLightTargets: [], interiorLightsBuilt: null,
     interiorLightingKey: null, interiorLightingPreservedThisBuild: false,
     keyLight: null, fillLight: null, interiorCameraKey: null,
+    spriteCameraFill: null, spriteCameraFillTarget: null,
+    clayRoomSelectionGlowSprite: null,
+    standeeCollisionDirty: false, standeeCollisionAudit: null,
     hemiLight: null, // GR3: the shared soft hemisphere key, added once at mount() — see mount()'s own comment
     // BEAUTY-WAVE-3 BW3-0 (docs/BEAUTY-WAVE-3.md, THE COMPOSER SEAM): the postprocessing chain, built
     // once at mount() (needs a live renderer) and disposed at retire(). Default ON, but the render
@@ -5143,7 +5495,9 @@ function createTheaterState(){
     // lightLabReadoutTimer are this session's DOM-panel bookkeeping (torn down by unmountLightLab, or
     // at retire() below); lightLabProfileKey is which LIGHT_PROFILES entry the lab's dropdown currently
     // has selected for editing (independent of S.lightProfileKey, the profile actually RENDERED).
-    lightLabMounted: false, lightLabEls: null, lightLabReadoutTimer: null, lightLabProfileKey: null
+    lightLabMounted: false, lightLabEls: null, lightLabReadoutTimer: null,
+    lightLabProfileKey: null, lightLabLightIndex: 0,
+    lightLabUndo: [], lightLabRedo: [], lightLabDirty: false
   };
 }
 
@@ -5173,6 +5527,7 @@ function markDirty(){
 // facing +Z (buildSpriteBillboard's own PlaneGeometry default); +PI turns that face to point back at
 // the camera position (which sits at angle `yaw` from the board origin, looking inward).
 function updateSpriteBillboardYaw(){
+  updateSpriteCameraFill();
   const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
   const facing = yaw + Math.PI;
   // Camera-pitch tilt (Adam 2026-07-10 evening): an upright quad under the elevated ortho camera
@@ -5198,7 +5553,9 @@ function updateSpriteBillboardYaw(){
   function face(fig){
     fig.rotation.order = "YXZ";
     const kilterRad = ((fig.userData.kilterYawDeg || 0) * Math.PI) / 180;
-    fig.rotation.y = facing + kilterRad;
+    const viewOffset = Number.isFinite(fig.userData.claySpriteViewYawOffset)
+      ? fig.userData.claySpriteViewYawOffset : 0;
+    fig.rotation.y = facing + kilterRad + viewOffset;
     const wrap = fig.userData.standeeWrap;
     if(wrap){
       wrap.rotation.order = "YXZ";
@@ -5239,6 +5596,8 @@ function updateSpriteBillboardYaw(){
       }
     }
   }
+  if(S.standeeCollisionDirty) resolveMountedStandeeSupportCollisions();
+  mountedStandeeFigures().forEach(syncStandeeContactBlob);
 }
 
 function scheduleRender(){
@@ -5588,7 +5947,7 @@ function makeGradePass(){
       uniform sampler2D tDiffuse;
       uniform vec2 uResolution;
       uniform float uExposure, uContrast, uSat, uTintAmt, uVignette, uVigInner, uVigOuter;
-      uniform float uExposureFloor;
+      uniform float uExposureFloor, uTonemapStrength;
       uniform vec3 uTint;
       ${AGX_TONEMAP_GLSL}
       void main(){
@@ -5602,7 +5961,11 @@ function makeGradePass(){
         // curve's own log2 domain instead of crushing to 0 (ledger #12/13). The curve itself
         // (AgXToneMapping/AGX_TONEMAP_GLSL, verbatim three.js port) is untouched.
         lin = max(lin, vec3(uExposureFloor));
+        vec3 untonemapped = lin;
         lin = AgXToneMapping(lin); // P3-3a: filmic shoulder — tonemap BEFORE the perceptual grade math
+        // Keep the authored 1.0 default on the byte-stable pre-Lab shader path. Only an intentional
+        // partial-strength preview pays for the blend.
+        if(uTonemapStrength < 0.9999) lin = mix(untonemapped, lin, uTonemapStrength);
         vec3 col = pow(max(lin, 0.0), vec3(1.0 / 2.2)); // linear -> perceptual
         // exposure already applied inside AgXToneMapping (its own uExposure multiply, three's own convention)
         col = clamp((col - 0.5) * uContrast + 0.5, 0.0, 1.0); // gentle S around mid (monotonic)
@@ -5636,7 +5999,8 @@ function makeGradePass(){
       // every OTHER uniform here); updatePostSuiteGrade (below) pushes the LIVE LIGHT_TUNABLES.
       // gradeExposureFloor value onto this uniform on every mount/tunable-change, same as every other
       // grade dial — this seed is only ever the very first frame's value pre-first-push.
-      uExposureFloor: { value: GRADE_EXPOSURE_FLOOR }
+      uExposureFloor: { value: GRADE_EXPOSURE_FLOOR },
+      uTonemapStrength: { value: 1.0 }
     },
     vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
     fragmentShader: isAgx ? FS_AGX : FS_NONE
@@ -5762,6 +6126,88 @@ class MaskedBloomPass extends UnrealBloomPass {
   }
 }
 
+// CLAYROOM VISUAL CORRECTION Checkpoint 1 — ENVIRONMENT AO (restrained, production path).
+// Adam's rulings this discharges: "i think it is also clear that we need some level of ambient
+// occlusion, i can't make out any of the edges that aren't in shadow" and "is there any way we can
+// get the contact shadows to actually be darker than the shadow value in the shadows? with a
+// multiply effect?" — GTAO blends MULTIPLICATIVELY onto the linear beauty buffer BEFORE bloom/
+// grade/tonemap, so creases and contacts darken inside already-shadowed regions too.
+//
+// Bounded AUTHORED settings — a diagnostic ON/OFF A/B exists (the suite's own per-pass seam +
+// the Clayroom Lights tab + ?envao=0), but there is deliberately NO free taste slider
+// (CLAYROOM-RESET-LADDER: "a saturation slider that compensates…"-class controls must not exist).
+// radius is WORLD units (1 u = 5 ft): 0.42 u ≈ a 2-ft crease reach — seams/corners/contacts, not
+// room-scale darkening. scale is the AO strength inside the shader; blendIntensity is the final
+// multiply weight. samples/rings sized for the no-cash Mac target (Iris Plus 645) — measured in
+// the checkpoint receipt, not assumed.
+const ENV_AO_ENABLED_DEFAULT = true;
+// AO G-buffer resolution as a fraction of DEVICE pixels. Full-res AO at dpr 2 costs ~17 ms/frame
+// on the no-cash Mac target (measured 33 FPS at the review viewport, 2026-07-25) — over budget.
+// An EXACT half scale with the composer's linear upsample is the standard mitigation and keeps
+// registration uniform (the crescent bug was a MISMATCHED size flip-flopping between CSS and
+// device pixels, not clean half-res). Re-measured after this change; see the checkpoint receipt.
+const ENV_AO_RESOLUTION_SCALE = 0.5;
+// Halo control (Adam, 2026-07-25: "the sphere has some kind of weird halo around it"): thickness
+// well under 1 so the thin-object heuristic cannot smear occlusion past a silhouette, and a
+// tighter denoise with much stricter depth/normal edge-stopping (higher phi = harder edge stop)
+// so blur can never bleed a contact ring across the depth discontinuity onto the floor beyond.
+const ENV_AO_PARAMS = Object.freeze({
+  radius: 0.42, distanceExponent: 1, thickness: 0.6, distanceFallOff: 1,
+  scale: 1.4, samples: 12, screenSpaceRadius: false,
+});
+const ENV_AO_DENOISE = Object.freeze({ lumaPhi: 10, depthPhi: 8, normalPhi: 8, radius: 4, radiusExponent: 1, rings: 2, samples: 8 });
+const ENV_AO_BLEND_INTENSITY = 1.0;
+// The one exclusion rule for the AO G-buffer prepass, as a PURE predicate so the harness can
+// execute it against mesh-shaped fixtures without a GL context. The AO depth/normal prepass
+// renders the scene under ONE opaque override material, which would turn every transparent or
+// non-depth-writing helper quad (sprite billboard cards + their thin side shells, contact-shadow
+// multiply pools, selection spills, socket/access overlay strips, door darkness cards, glow discs)
+// into a solid occluder RECTANGLE — exactly the floating-card lie the sprite-silhouette contract
+// forbids. Rule: a mesh participates in AO only if at least one of its materials is opaque AND
+// depth-writing — the same rule the renderer's own depth buffer already applies to these meshes.
+function envAOPrepassExcludes(mesh){
+  if(!mesh || !mesh.isMesh) return false;
+  const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+  if(!mats.length || !mats[0]) return false;
+  for(let i = 0; i < mats.length; i++){
+    const m = mats[i];
+    if(m && m.transparent !== true && m.depthWrite !== false) return false; // one opaque depth-writer -> participates
+  }
+  return true; // every material is transparent or non-depth-writing -> hide from the AO prepass
+}
+class EnvironmentAOPass extends GTAOPass {
+  overrideVisibility(){
+    super.overrideVisibility(); // caches every object's visible flag + hides points/lines
+    let excluded = 0;
+    this.scene.traverse((o) => {
+      if(o.visible && envAOPrepassExcludes(o)){ o.visible = false; excluded++; }
+    });
+    this.lastPrepassExcludedCount = excluded; // diagnostic read for the receipt/harness, no product reads
+  }
+}
+function envAOEnabled(){
+  try {
+    if(typeof window !== "undefined" && window.location && window.location.search){
+      const raw = new URLSearchParams(window.location.search).get("envao");
+      if(raw === "0") return false;
+      if(raw === "1") return true;
+    }
+  } catch(e){}
+  return ENV_AO_ENABLED_DEFAULT;
+}
+function makeEnvironmentAOPass(size){
+  // Construct at DEVICE pixels for the same registration reason syncPostSuiteResolution documents.
+  const pr = (S.renderer && S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1) * ENV_AO_RESOLUTION_SCALE;
+  const ao = new EnvironmentAOPass(S.scene, S.camera, Math.round(size.x * pr), Math.round(size.y * pr));
+  ao.__bwName = "ao";
+  ao.blendIntensity = ENV_AO_BLEND_INTENSITY;
+  ao.updateGtaoMaterial(ENV_AO_PARAMS);
+  ao.updatePdMaterial(ENV_AO_DENOISE);
+  ao.output = GTAOPass.OUTPUT.Default;
+  ao.enabled = envAOEnabled();
+  return ao;
+}
+
 // Build the three passes once (lazy — needs a live renderer + a sized canvas). Stored on S.postSuite.
 function buildPostSuite(){
   if(S.postSuite || !S.renderer || !S.composer) return S.postSuite;
@@ -5779,7 +6225,8 @@ function buildPostSuite(){
   renderPass.__bwName = "render";
   const outputPass = new OutputPass();
   outputPass.__bwName = "output";
-  S.postSuite = { renderPass, dof, bloom, grade, outputPass };
+  const ao = makeEnvironmentAOPass(size);
+  S.postSuite = { renderPass, ao, dof, bloom, grade, outputPass };
   return S.postSuite;
 }
 
@@ -5818,6 +6265,11 @@ function updatePostSuiteGrade(kit, rigOn){
   // render" reaches for these — no separate push path to keep in sync with mountPostSuite's own call
   // site below). Untouched LIGHT_TUNABLES == the authored consts, so this is a no-op read in production.
   g.uExposureFloor.value = LIGHT_TUNABLES.gradeExposureFloor;
+  const activeRecipe = LIGHT_TUNABLES.profiles[S.lightProfileKey || LIGHT_DEFAULT_PROFILE];
+  if(g.uTonemapStrength){
+    g.uTonemapStrength.value = activeRecipe && activeRecipe.toneMap
+      ? activeRecipe.toneMap.strength : 1;
+  }
   if(S.postSuite.bloom){
     S.postSuite.bloom.threshold = LIGHT_TUNABLES.bloomThreshold;
     S.postSuite.bloom.strength = LIGHT_TUNABLES.bloomStrength;
@@ -5834,6 +6286,15 @@ function syncPostSuiteResolution(){
   if(S.postSuite.bloom && S.postSuite.bloom.setSize){
     S.postSuite.bloom.setSize(size.x * BLOOM_RESOLUTION_SCALE, size.y * BLOOM_RESOLUTION_SCALE);
   }
+  if(S.postSuite.ao && S.postSuite.ao.setSize){
+    // DEVICE pixels, not CSS pixels (Adam, 2026-07-25: "two crescent shapes that aren't quite
+    // aligned with the form of the sphere"): EffectComposer sizes every pass's buffers at
+    // size × pixelRatio, so an AO pass sized in CSS units computes occlusion on a half-resolution
+    // depth/normal buffer and upsamples it half a texel off the beauty — misregistered crescents
+    // on every curved silhouette. The AO G-buffer must match the composer's device-pixel targets.
+    const aoPixelRatio = (S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1) * ENV_AO_RESOLUTION_SCALE;
+    S.postSuite.ao.setSize(Math.round(size.x * aoPixelRatio), Math.round(size.y * aoPixelRatio));
+  }
 }
 
 // Mount the post suite onto the composer (interior boards). Idempotent — re-mounting on an interior->
@@ -5846,11 +6307,25 @@ function mountPostSuite(kit, rigOn){
   if(!S.postSuite) return;
   // keep the renderPass camera in sync (setInteriorBoard may have swapped ortho<->persp cameras)
   S.postSuite.renderPass.camera = S.camera;
+  if(S.postSuite.ao){
+    // Same camera-swap law as renderPass, plus GTAO's construction-time projection define — the
+    // shader baked PERSPECTIVE_CAMERA at build; refresh it if a mount ever swaps projections so
+    // the AO math can never silently run against the wrong projection model.
+    S.postSuite.ao.camera = S.camera;
+    const isPersp = S.camera && S.camera.isPerspectiveCamera ? 1 : 0;
+    if(S.postSuite.ao.gtaoMaterial.defines.PERSPECTIVE_CAMERA !== isPersp){
+      S.postSuite.ao.gtaoMaterial.defines.PERSPECTIVE_CAMERA = isPersp;
+      S.postSuite.ao.gtaoMaterial.needsUpdate = true;
+    }
+  }
   syncPostSuiteResolution();
   updatePostSuiteGrade(kit, rigOn);
   updateDofFocus();
   if(!S.postSuiteMounted){
     S.composer.addPass(S.postSuite.renderPass);
+    // AO immediately after the beauty render: it multiplies the LINEAR scene color, so DoF blurs,
+    // bloom thresholds, and the grade/tonemap all see the already-grounded frame.
+    S.composer.addPass(S.postSuite.ao);
     S.composer.addPass(S.postSuite.dof);
     S.composer.addPass(S.postSuite.bloom);
     S.composer.addPass(S.postSuite.grade);
@@ -5868,6 +6343,7 @@ function teardownPostSuite(){
   S.composer.removePass(S.postSuite.grade);
   S.composer.removePass(S.postSuite.bloom);
   S.composer.removePass(S.postSuite.dof);
+  S.composer.removePass(S.postSuite.ao);
   S.composer.removePass(S.postSuite.renderPass);
   S.postSuiteMounted = false;
 }
@@ -6361,71 +6837,18 @@ function gradeColorLocal(hex, profile){
 // source's reach it's dark, and darkness is a gameplay element." The diegetic point(s) below are now
 // the read, not the ambient wash. Values are reversible for the re-shoot: each intensity is commented
 // with its pre-DIEGETIC-LIGHT number so Adam can dial any one back individually.
-const LIGHT_PROFILES = {
-  dark: {
-    ambient: { color: 0x8fa8c8, intensity: 0.25 }, // was 0.38
-    // ARENA round 3 (2026-07-04): dark was the only ambient-only profile left after the readability
-    // floor landed, and it still read as a flat near-black sheet — ambient alone gives Lambert
-    // materials zero directionality, so tile/figure facets all shade identically. ONE dim point
-    // (overhead-center, the table's own pattern) adds facet depth without changing the mood: its
-    // color is dark's own ambient hue lightened a touch (0x8fa8c8 family), and intensity 7 is the
-    // LOWEST point intensity in this table (moonlit 8, fungal-glow 9) — dark stays the dimmest of
-    // the point-lit profiles by construction.
-    points: [ { color: 0x9fb4d8, intensity: 7, pos: { x: 0, y: 3, z: 0 } } ],
-    flicker: 0
-  },
-  torchlit: {
-    ambient: { color: 0x4a3826, intensity: 0.21 }, // was 0.32
-    points: [ { color: 0xffa04a, intensity: 18, pos: { x: 0, y: 2.2, z: 0.6 } } ],
-    flicker: 0.14
-  },
-  lavalit: {
-    // "from below/edge tiles" (§2's own brief) — a literal below-floor Y is fully occluded by the tile
-    // column geometry from the fixed top-down-ish camera (tiles sit roughly y:[-0.5, +0.5+height]), so
-    // this reads as a low glow seeping up AT floor level rather than truly under it: still visibly the
-    // lowest/reddest point of any profile, but actually contributes light to the scene.
-    ambient: { color: 0x3a1c14, intensity: 0.2 }, // was 0.3
-    points: [ { color: 0xff5522, intensity: 22, pos: { x: 0, y: 0.15, z: 0 } } ],
-    flicker: 0.18
-  },
-  "fungal-glow": {
-    ambient: { color: 0x3a5a3a, intensity: 0.27 }, // was 0.42
-    points: [ { color: 0x7fdc6a, intensity: 9, pos: { x: 0.4, y: 1.0, z: 0.4 } } ],
-    flicker: 0.05
-  },
-  "magic-glow": {
-    ambient: { color: 0x4048a0, intensity: 0.26 }, // was 0.4
-    points: [ { color: 0x8a6bff, intensity: 14, pos: { x: -0.3, y: 1.6, z: 0.2 } } ],
-    flicker: 0.06
-  },
-  lamplit: {
-    ambient: { color: 0x40382a, intensity: 0.22 }, // was 0.34
-    points: [ { color: 0xffcf8a, intensity: 16, pos: { x: 0, y: 2.4, z: -0.5 } } ],
-    flicker: 0.1
-  },
-  moonlit: {
-    ambient: { color: 0x8fa0c8, intensity: 0.36 }, // was 0.55
-    points: [ { color: 0xaebfe8, intensity: 8, pos: { x: 0.5, y: 3, z: -0.5 } } ],
-    flicker: 0
-  },
-  daylit: {
-    // L-4: daylit/overcast/moonlit additionally get a brighter hemisphere override on interior boards
-    // (ITR_BRIGHT_PROFILES, applied in setInteriorBoard) — the sun/moon/sky IS their diegetic source.
-    ambient: { color: 0xd8dce0, intensity: 0.55 }, // was 0.85
-    points: [ { color: 0xfff2d8, intensity: 9, pos: { x: 0.4, y: 3, z: -0.4 } } ],
-    flicker: 0
-  },
-  overcast: {
-    ambient: { color: 0xa8adb5, intensity: 0.39 }, // was 0.6
-    points: [],
-    flicker: 0
-  },
-  voidlit: {
-    ambient: { color: 0x5a3a6e, intensity: 0.2 }, // was 0.3
-    points: [ { color: 0x9a5ad0, intensity: 11, pos: { x: 0, y: 1.2, z: 0 } } ],
-    flicker: 0.08
-  }
-};
+// CL-R1: LIGHT_PROFILES is now a compatibility projection of the persistent, validated lock
+// registry. The ten rolled profiles retain their exact authored numbers; the two unrolled Clayroom
+// recipes add clearly-labelled neutral and warm/cool diagnostic modes without entering gameplay
+// rolls. The registry is shared with src/engine/clay-room.js, so the workbench no longer owns a
+// private copy of its opposing pair.
+const LIGHT_PROFILES = Object.freeze((() => {
+  const out = {};
+  Object.keys(LIGHT_RECIPE_REGISTRY).forEach((key) => {
+    out[key] = lightRecipeLegacyProfile(LIGHT_RECIPE_REGISTRY[key]);
+  });
+  return out;
+})());
 const LIGHT_DEFAULT_PROFILE = "dark";
 // STAGE ARENA polish (Adam's G2 mandate, 2026-07-04) — readability floor: the board must never render
 // unreadably dark whatever the rolled room light. `dark` profile's own ambient (0.38) is the worst
@@ -6471,13 +6894,15 @@ function applyLightProfile(key){
   // moonlit sit just under) gets lifted. Color is read straight off the tunable either way — the floor
   // governs intensity alone, so the profile still owns the mood/hue, and points still carry each
   // profile's relative brightness identity.
-  const ambientIntensity = Math.max(tune.ambientIntensity, LIGHT_TUNABLES.stageAmbientFloor);
+  const ambientIntensity = tune.mode && tune.mode.indexOf("diagnostic-") === 0
+    ? tune.ambient.intensity
+    : Math.max(tune.ambient.intensity, LIGHT_TUNABLES.stageAmbientFloor);
   // REALM-RENDER-STYLE.md §3: grade the profile's authored color through the current board's render
   // profile (S.realmProfile, set by setBoard just before this call — see that function's own comment;
   // null pre-mount/pre-setBoard, which gradeColorLocal treats as a no-op) — same "colors are already
   // resolved" seam the tile tints and figure materials share. Intensity is untouched (the readability
   // floor's own "color stays authored, only intensity is floored" discipline extends here).
-  const ambientColor = gradeColorLocal(tune.ambientColor, S.realmProfile);
+  const ambientColor = gradeColorLocal(tune.ambient.color, S.realmProfile);
   const ambient = new THREE.AmbientLight(ambientColor, ambientIntensity);
   S.scene.add(ambient);
   S.ambientLight = ambient;
@@ -6491,25 +6916,33 @@ function applyLightProfile(key){
   // author exactly one point, per prop-light.js's ENGINE NOTE reserving ONE light per prop), and only
   // when an anchor actually resolved this call (S.lightPropAnchor null -> byte-identical position math
   // to before this unit, the guard's own "light behavior byte-identical" contract, §4 step 3).
-  profile.points.forEach((p, i) => {
+  const enabledLights = (tune.lights || []).filter((p) => p.enabled !== false);
+  enabledLights.forEach((p, i) => {
     // decay:0, distance:0 — a flat non-attenuating point light (see LIGHT_PROFILES' own header on why:
     // predictable per-profile intensity numbers regardless of board size, no physically-correct falloff
     // tuning needed per profile). LL-1: index 0 (every LIGHT_PROFILES entry authors at most one point)
     // reads the lab's own tunable color/intensity; any further point (none exist today) keeps its
     // authored value untouched — tune only ever overrides the ONE point this profile vocabulary has.
-    const pColor = (i === 0 && tune.pointColor != null) ? tune.pointColor : p.color;
-    const pIntensity = (i === 0 && tune.pointIntensity != null) ? tune.pointIntensity : p.intensity;
+    const pColor = p.color;
+    const pIntensity = p.intensity;
     const light = new THREE.PointLight(gradeColorLocal(pColor, S.realmProfile), pIntensity, 0, 0);
     if(i === 0 && S.lightPropAnchor){
       light.position.set(S.lightPropAnchor.x, S.lightPropAnchor.y, S.lightPropAnchor.z);
     } else {
-      light.position.set((p.pos.x || 0) * hx, p.pos.y != null ? p.pos.y : 1.5, (p.pos.z || 0) * hz);
+      light.position.set(
+        (p.pos.x || 0) * hx,
+        p.heightM != null ? p.heightM / 1.524 : (p.pos.y != null ? p.pos.y : 1.5),
+        (p.pos.z || 0) * hz
+      );
     }
     S.scene.add(light);
     S.pointLights.push(light);
   });
 
-  if(profile.flicker > 0) startLightFlicker(profile.flicker);
+  const flickerAmplitude = enabledLights.reduce((max, p) => {
+    return Math.max(max, p.flicker ? p.flicker.amplitude || 0 : 0);
+  }, 0);
+  if(flickerAmplitude > 0) startLightFlicker(flickerAmplitude);
 }
 
 /* ============================================================================================
@@ -6686,42 +7119,30 @@ const CELESTIAL_PROFILE_SET = { daylit: true, overcast: true, moonlit: true };
 // "how sprites react to light" consts (readability floor / dark-corner cap / torch-pool band) — not
 // every tunable-shaped number in this file.
 const LIGHT_TUNABLES = {
-  // per LIGHT_PROFILES key: {ambientColor, ambientIntensity} = the profile's "fill" (ambient wash);
-  // {pointColor, pointIntensity} = its "key" (the one authored point — see LIGHT_PROFILES' own header:
-  // every entry authors at most one). Deep-seeded (primitive values only, never a shared reference back
-  // into LIGHT_PROFILES) so mutating a tunable can never touch the authored table itself.
+  // Per profile, the full bounded recipe is mutable in preview: ambient plus zero-to-four named
+  // lights. It is deep-seeded from compiled locks, never a shared reference back into the frozen
+  // registry. This replaces LL-1's one-key-only {pointColor,pointIntensity} shortcut.
   profiles: (() => {
     const out = {};
-    for(const key in LIGHT_PROFILES){
-      const p = LIGHT_PROFILES[key];
-      out[key] = {
-        ambientColor: p.ambient.color,
-        ambientIntensity: p.ambient.intensity,
-        pointColor: p.points[0] ? p.points[0].color : null,
-        pointIntensity: p.points[0] ? p.points[0].intensity : null,
-      };
+    for(const key in LIGHT_RECIPE_REGISTRY){
+      out[key] = lightRecipeDeepClone(LIGHT_RECIPE_REGISTRY[key]);
     }
     return out;
   })(),
-  stageAmbientFloor: STAGE_AMBIENT_FLOOR,
-  gradeExposureFloor: GRADE_EXPOSURE_FLOOR,
-  bloomThreshold: BLOOM_THRESHOLD,
-  bloomStrength: BLOOM_STRENGTH,
-  gradeTintScale: GRADE_TINT_SCALE,
-  gradeTintMax: GRADE_TINT_MAX,
-  celestialArc: {
-    SUNRISE_MIN: CELESTIAL_ARC.SUNRISE_MIN,
-    SUNSET_MIN: CELESTIAL_ARC.SUNSET_MIN,
-    MIN_ELEV_ANGLE: CELESTIAL_ARC.MIN_ELEV_ANGLE,
-    OVERCAST_DESAT: CELESTIAL_ARC.OVERCAST_DESAT,
-    OVERCAST_SHADOW_DAMP: CELESTIAL_ARC.OVERCAST_SHADOW_DAMP,
-  },
+  stageAmbientFloor: LIGHT_LAB_COMPILED_SETTINGS.stageAmbientFloor,
+  gradeExposureFloor: LIGHT_LAB_COMPILED_SETTINGS.gradeExposureFloor,
+  bloomThreshold: LIGHT_LAB_COMPILED_SETTINGS.bloomThreshold,
+  bloomStrength: LIGHT_LAB_COMPILED_SETTINGS.bloomStrength,
+  gradeTintScale: LIGHT_LAB_COMPILED_SETTINGS.gradeTintScale,
+  gradeTintMax: LIGHT_LAB_COMPILED_SETTINGS.gradeTintMax,
+  celestialArc: lightRecipeDeepClone(LIGHT_LAB_COMPILED_SETTINGS.celestialArc),
   // BW2-4b "how sprites react to light" — see ITR_SPRITE_EMISSIVE_FLOOR/ITR_SCENE_AMBIENT/
   // ITR_LIGHT_RENDER_GAIN's own declarations (above) for the full brightness-law derivation.
-  spriteEmissiveFloor: ITR_SPRITE_EMISSIVE_FLOOR, // readability floor
-  sceneAmbient: ITR_SCENE_AMBIENT,                 // dark-corner cap (the BW2-4b "dark-corner floor")
-  lightRenderGain: ITR_LIGHT_RENDER_GAIN,           // torch-pool band (pool brightness/tightness)
+  spriteEmissiveFloor: LIGHT_LAB_COMPILED_SETTINGS.spriteEmissiveFloor,
+  sceneAmbient: LIGHT_LAB_COMPILED_SETTINGS.sceneAmbient,
+  lightRenderGain: LIGHT_LAB_COMPILED_SETTINGS.lightRenderGain,
 };
+const LIGHT_LAB_AUTHORED_BASELINE = lightRecipeDeepFreeze(lightRecipeDeepClone(LIGHT_TUNABLES));
 
 // min-of-day -> {x,y,z (unit direction), elevation (0..1), t (0..1, sunrise->sunset)}. Pure, total:
 // clamps `min` into [SUNRISE_MIN,SUNSET_MIN] first, so a daylit/overcast profile rolled outside that
@@ -6908,6 +7329,45 @@ function mountInteriorCameraKey(cx, cz){
   dl.shadow.bias = -0.0016;
 }
 
+// CL-R2 follow-up — CAMERA-SIDE SPRITE FILL. A real spotlight follows the current camera pose and
+// targets the governed look point. Its layer mask reaches only billboard faces that explicitly join
+// SPRITE_CAMERA_FILL_LAYER; architecture, props, bases, and floor never see it. Intensity is derived
+// from the live camera distance so the target receives the same gentle fill after a board refit, while
+// decay=1 still produces a visible near-to-far falloff across a deep room. It never casts shadows.
+function mountSpriteCameraFill(){
+  if(!S.scene) return;
+  if(!S.spriteCameraFill){
+    const fill = new THREE.SpotLight(
+      SPRITE_CAMERA_FILL_COLOR,
+      1,
+      0,
+      THREE.MathUtils.degToRad(24),
+      0.82,
+      1
+    );
+    fill.castShadow = false;
+    fill.userData.spriteCameraFill = true;
+    if(fill.layers) fill.layers.set(SPRITE_CAMERA_FILL_LAYER);
+    S.scene.add(fill);
+    S.scene.add(fill.target);
+    S.spriteCameraFill = fill;
+    S.spriteCameraFillTarget = fill.target;
+  }
+  updateSpriteCameraFill();
+}
+function updateSpriteCameraFill(){
+  const fill = S.spriteCameraFill;
+  if(!fill || !S.camera) return;
+  const target = S.cameraLookTarget || new THREE.Vector3(0, 0, 0);
+  const distance = Math.max(1, S.camera.position.distanceTo(target));
+  fill.position.copy(S.camera.position);
+  fill.target.position.copy(target);
+  fill.target.updateMatrixWorld();
+  fill.distance = distance * 1.35;
+  fill.intensity = distance * SPRITE_CAMERA_FILL_AT_TARGET;
+  fill.angle = THREE.MathUtils.degToRad(Math.max(24, (S.camera.fov || 20) * 0.75));
+}
+
 /* P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B steps 1-3) — lighting-prop anchoring.
    dev/model-qa/creatures/prop-light.js's own ENGINE NOTE reserves this for P1' wiring by name: "the
    scene's point lights should SOURCE at these props." mountLightProp(data, cx, cz) is called from
@@ -6987,18 +7447,17 @@ function mountLightProp(data, cx, cz){
   S.lightPropAnchor = { x: snapped.x, y: flameY, z: snapped.z };
 }
 
-/* FLICKER (§2's own "optional flicker for torch/lava... a low-frequency setInterval that marks dirty
-   ~2x/sec ONLY for flicker profiles; keep it cheap"). Deliberately NOT the tween rAF chain (theater-
-   verbs.js's tickTweens runs every frame while >=1 verb tween is live — a torch flicker isn't a verb,
-   it's ambient scene mood that should keep going for the ENTIRE time a flicker profile is mounted, verb
-   tweens or no) and NOT a plain rAF loop either (60fps for a low-frequency practical pulse is wasted
-   work the render-on-demand discipline this file otherwise holds to would flag). A setInterval at
-   ~2Hz is the cheapest mechanism that still reads as a living flame. CL-R1 makes the sample seeded
-   and local: only targets whose own state is `flickering` update; steady targets are never written.
-   Self-stopping: stopLightFlicker (called at profile ownership changes and from retire()) clears the
-   interval, so a flicker never survives past its owner or past retire(). */
+/* FLICKER (§2's own "optional flicker for torch/lava"). Each source chooses seeded, irregular
+   intensity and direction targets at its authored cadence, then glides between those targets on the
+   display's requestAnimationFrame clock. The randomness therefore remains low-frequency and legible,
+   while the visible flame, emitted light, highlights, and shadows move continuously instead of
+   stepping every few hundred milliseconds. This is its own ambient animation loop rather than the
+   verb tween chain. CL-R1 keeps samples seeded and local: only targets whose own state is
+   `flickering` update; steady targets are never written. Self-stopping: stopLightFlicker (called at
+   profile ownership changes and from retire()) cancels the frame, so a flame never survives past its
+   owner or past retire(). */
 // BEAUTY-WAVE.md VP6 item 2 (THE LIFE PASS — torch flicker): opted-in interior sources share this
-// scheduler rather than growing one interval per fixture. Each target owns {state,seed,amplitude,
+// loop rather than growing one animation chain per fixture. Each target owns {state,seed,amplitude,
 // pl,marker,bases}; the same normalized seeded sample scales the actual PointLight and its visible
 // emitter material. The default amplitude remains below the tabletop torchlit profile's 0.14.
 const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
@@ -7006,7 +7465,7 @@ const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
 // reads) — same "pure step, thin scheduler wraps it" split VP6's own mote drift already keeps
 // (startMoteDrift's rAF loop vs the per-mote math it runs). Lets a deterministic fake-clock harness
 // drive one tick directly (dev/verify-bw3-4-light-shafts.mjs) without needing S.mounted/a live
-// setInterval, and lets the light-CONE card (this unit) ride the identical delta the marker already
+// scheduler, and lets the light-CONE card (this unit) ride the identical delta the marker already
 // does — never a second independently-randomized swing (that would desync the shaft from its own
 // marker/light, the exact "flicker sync" this unit's spec calls for).
 function lightFlickerHash32(value){
@@ -7025,13 +7484,63 @@ function lightFlickerNormalizedSample(seed, sampleIndex, amplitude){
   const a = Math.max(0, Math.min(0.45, Number(amplitude) || 0));
   return 1 + (unit * 2 - 1) * a;
 }
-function lightFlickerApplySample(target, sample){
+function lightFlickerIntervalMs(seed, sampleIndex, cadenceMs, intervalJitter){
+  const base = Math.max(120, Math.min(5000, Number(cadenceMs) || 480));
+  const jitter = Math.max(0, Math.min(0.9, Number(intervalJitter) || 0));
+  const h = lightFlickerHash32(String(seed || "light") + ":interval:" + String(sampleIndex || 0));
+  const unit = h / 4294967295;
+  return Math.max(120, Math.round(base * (1 - jitter + unit * jitter * 2)));
+}
+function lightFlickerDirectionSample(seed, sampleIndex, directionAmplitude){
+  const amplitude = Math.max(0, Math.min(0.08, Number(directionAmplitude) || 0));
+  if(!amplitude) return { x: 0, y: 0, z: 0 };
+  const prefix = String(seed || "light") + ":direction:" + String(sampleIndex || 0);
+  const angle = (lightFlickerHash32(prefix + ":angle") / 4294967295) * Math.PI * 2;
+  const radiusUnit = lightFlickerHash32(prefix + ":radius") / 4294967295;
+  const verticalUnit = lightFlickerHash32(prefix + ":vertical") / 4294967295;
+  const radius = amplitude * (0.45 + radiusUnit * 0.55);
+  return {
+    x: Math.cos(angle) * radius,
+    y: (verticalUnit * 2 - 1) * amplitude * 0.22,
+    z: Math.sin(angle) * radius
+  };
+}
+function lightFlickerSmoothProgress(progress){
+  const t = Math.max(0, Math.min(1, Number(progress) || 0));
+  return t * t * (3 - 2 * t);
+}
+function lightFlickerInterpolatedState(fromSample, toSample, fromDirection, toDirection, progress){
+  const t = lightFlickerSmoothProgress(progress);
+  const from = fromDirection || { x: 0, y: 0, z: 0 };
+  const to = toDirection || { x: 0, y: 0, z: 0 };
+  return {
+    sample: fromSample + (toSample - fromSample) * t,
+    direction: {
+      x: from.x + (to.x - from.x) * t,
+      y: from.y + (to.y - from.y) * t,
+      z: from.z + (to.z - from.z) * t
+    }
+  };
+}
+function lightFlickerApplySample(target, sample, direction){
   if(!target) return;
   const normalized = Number.isFinite(sample) ? sample : 1;
+  const directional = direction && Number.isFinite(direction.x)
+    ? direction : { x: 0, y: 0, z: 0 };
   if(target.pl){
     target.pl.intensity = Math.max(0, target.baseIntensity * normalized);
+    if(target.basePointPosition && target.pl.position && typeof target.pl.position.set === "function"){
+      target.pl.position.set(
+        target.basePointPosition.x + directional.x,
+        target.basePointPosition.y + directional.y,
+        target.basePointPosition.z + directional.z
+      );
+    }
     target.pl.userData = target.pl.userData || {};
     target.pl.userData.flickerSample = normalized;
+    target.pl.userData.directionSample = {
+      x: directional.x, y: directional.y, z: directional.z
+    };
     target.pl.userData.lightState = target.state;
   }
   if(target.marker && target.marker.material){
@@ -7040,14 +7549,33 @@ function lightFlickerApplySample(target, sample){
     } else {
       target.marker.material.opacity = Math.max(0, Math.min(1, target.baseOpacity * normalized));
     }
+    if(target.baseMarkerPosition && target.marker.position && typeof target.marker.position.set === "function"){
+      target.marker.position.set(
+        target.baseMarkerPosition.x + directional.x,
+        target.baseMarkerPosition.y + directional.y,
+        target.baseMarkerPosition.z + directional.z
+      );
+    }
+    if(target.marker.rotation && target.baseMarkerRotation){
+      const amplitude = Math.max(0.000001, Number(target.directionAmplitude) || 0);
+      target.marker.rotation.x = target.baseMarkerRotation.x + (directional.z / amplitude) * 0.12;
+      target.marker.rotation.y = target.baseMarkerRotation.y;
+      target.marker.rotation.z = target.baseMarkerRotation.z - (directional.x / amplitude) * 0.12;
+    }
     target.marker.userData = target.marker.userData || {};
     target.marker.userData.flickerSample = normalized;
+    target.marker.userData.directionSample = {
+      x: directional.x, y: directional.y, z: directional.z
+    };
     target.marker.userData.lightState = target.state;
   }
   if(target.cone && target.cone.material){
     target.cone.material.opacity = Math.max(0, Math.min(1, target.baseConeOpacity * normalized));
   }
   target.normalizedSample = normalized;
+  target.directionSample = {
+    x: directional.x, y: directional.y, z: directional.z
+  };
 }
 function lightFlickerStep(pointLights, bases, interiorTargets, amplitude, tickIndex){
   (pointLights || []).forEach((l, i) => {
@@ -7060,9 +7588,15 @@ function lightFlickerStep(pointLights, bases, interiorTargets, amplitude, tickIn
     const index = tickIndex != null ? tickIndex : ((t.sampleIndex || 0) + 1);
     t.sampleIndex = index;
     const sample = lightFlickerNormalizedSample(t.seed || t.id, index, t.amplitude);
+    const direction = lightFlickerDirectionSample(
+      t.seed || t.id,
+      index,
+      t.directionAmplitude
+    );
     // CL-R1: one normalized deterministic sample drives the physical PointLight, the visible
-    // emitter material, and the optional shaft on this exact tick. A steady sibling is never visited.
-    lightFlickerApplySample(t, sample);
+    // emitter material, optional shaft, and co-located flame/light dance on this exact tick. A steady
+    // sibling is never visited.
+    lightFlickerApplySample(t, sample, direction);
   });
 }
 function startLightFlicker(amplitude, interiorTargets){
@@ -7073,25 +7607,136 @@ function startLightFlicker(amplitude, interiorTargets){
   const hasProfileFlicker = amplitude > 0 && S.pointLights.length > 0;
   const hasLocalFlicker = S.interiorFlickerTargets.some(t => t && t.state === "flickering");
   if(!hasProfileFlicker && !hasLocalFlicker) return;
-  S.flickerRaf = setInterval(() => {
+  const startTime = typeof performance !== "undefined" && performance.now
+    ? performance.now() : Date.now();
+  const profileTracks = bases.map((base, index) => ({
+    base: base,
+    index: 1,
+    fromSample: 1,
+    toSample: lightFlickerNormalizedSample("profile:" + index, 1, amplitude),
+    startedAt: startTime,
+    intervalMs: 480
+  }));
+  S.interiorFlickerTargets.forEach((target) => {
+    if(!target || target.state !== "flickering") return;
+    target.flickerEventIndex = 0;
+    target.lastIntervalMs = null;
+    target.nextIntervalMs = lightFlickerIntervalMs(
+      target.seed,
+      1,
+      target.cadenceMs,
+      target.intervalJitter
+    );
+    target.flickerFromSample = Number.isFinite(target.normalizedSample)
+      ? target.normalizedSample : 1;
+    target.flickerToSample = lightFlickerNormalizedSample(
+      target.seed || target.id,
+      1,
+      target.amplitude
+    );
+    target.flickerFromDirection = Object.assign(
+      { x: 0, y: 0, z: 0 },
+      target.directionSample || {}
+    );
+    target.flickerToDirection = lightFlickerDirectionSample(
+      target.seed || target.id,
+      1,
+      target.directionAmplitude
+    );
+    target.flickerStartedAt = startTime;
+    target.sampleIndex = 1;
+  });
+  function frame(now){
+    S.flickerRaf = null;
     if(!S.mounted){ stopLightFlicker(); return; }
     S.flickerTick++;
-    lightFlickerStep(
-      hasProfileFlicker ? S.pointLights : [],
-      bases,
-      S.interiorFlickerTargets,
-      amplitude,
-      S.flickerTick
-    );
+    if(hasProfileFlicker){
+      profileTracks.forEach((track, index) => {
+        let catchUpGuard = 0;
+        while(now >= track.startedAt + track.intervalMs){
+          track.startedAt += track.intervalMs;
+          track.index++;
+          track.fromSample = track.toSample;
+          track.toSample = lightFlickerNormalizedSample(
+            "profile:" + index,
+            track.index,
+            amplitude
+          );
+          // A backgrounded tab can resume after thousands of target intervals. Preserve continuity
+          // for ordinary gaps without making the first visible frame pay an unbounded catch-up loop.
+          if(++catchUpGuard >= 64){
+            track.startedAt = now;
+            break;
+          }
+        }
+        const state = lightFlickerInterpolatedState(
+          track.fromSample,
+          track.toSample,
+          null,
+          null,
+          (now - track.startedAt) / track.intervalMs
+        );
+        if(S.pointLights[index]){
+          S.pointLights[index].intensity = Math.max(0.05, track.base * state.sample);
+        }
+      });
+    }
+    S.interiorFlickerTargets.forEach((target) => {
+      if(!target || target.state !== "flickering") return;
+      let catchUpGuard = 0;
+      while(now >= target.flickerStartedAt + target.nextIntervalMs){
+        target.flickerStartedAt += target.nextIntervalMs;
+        target.lastIntervalMs = target.nextIntervalMs;
+        target.flickerEventIndex = (target.flickerEventIndex || 0) + 1;
+        target.flickerFromSample = target.flickerToSample;
+        target.flickerFromDirection = target.flickerToDirection;
+        target.sampleIndex = target.flickerEventIndex + 1;
+        target.flickerToSample = lightFlickerNormalizedSample(
+          target.seed || target.id,
+          target.sampleIndex,
+          target.amplitude
+        );
+        target.flickerToDirection = lightFlickerDirectionSample(
+          target.seed || target.id,
+          target.sampleIndex,
+          target.directionAmplitude
+        );
+        target.nextIntervalMs = lightFlickerIntervalMs(
+          target.seed,
+          target.sampleIndex,
+          target.cadenceMs,
+          target.intervalJitter
+        );
+        if(++catchUpGuard >= 64){
+          target.flickerStartedAt = now;
+          break;
+        }
+      }
+      const state = lightFlickerInterpolatedState(
+        target.flickerFromSample,
+        target.flickerToSample,
+        target.flickerFromDirection,
+        target.flickerToDirection,
+        (now - target.flickerStartedAt) / target.nextIntervalMs
+      );
+      lightFlickerApplySample(target, state.sample, state.direction);
+    });
     if(!hasProfileFlicker && !S.interiorFlickerTargets.some(t => t && t.state === "flickering")){
       stopLightFlicker();
       return;
     }
+    // The scene stays display-rate smooth; the text telemetry is deliberately cheaper so rebuilding
+    // its DOM cannot steal time from the flame/shadow animation the panel is describing.
+    if(S.flickerTick % 6 === 0 && typeof S.clayRoomRefreshLights === "function"){
+      S.clayRoomRefreshLights();
+    }
     markDirty();
-  }, 480); // ~2x/sec per §2's own cadence note
+    S.flickerRaf = requestAnimationFrame(frame);
+  }
+  S.flickerRaf = requestAnimationFrame(frame);
 }
 function stopLightFlicker(){
-  if(S.flickerRaf != null){ clearInterval(S.flickerRaf); S.flickerRaf = null; }
+  if(S.flickerRaf != null){ cancelAnimationFrame(S.flickerRaf); S.flickerRaf = null; }
   S.interiorFlickerTargets = [];
   S.flickerTick = 0;
 }
@@ -7708,6 +8353,7 @@ function setBoard(data){
   if(S.keyLight) S.keyLight.intensity = 0.72;
   if(S.fillLight) S.fillLight.intensity = 0.22;
   if(S.interiorCameraKey){ S.interiorCameraKey.intensity = 0; S.interiorCameraKey.castShadow = false; }
+  if(S.spriteCameraFill) S.spriteCameraFill.intensity = 0;
   ITR_SPRITE_EMISSIVE_TINT = 0xffffff; // BW2-4b item 1: the realm-grade sprite floor tint is interior-only
   // BEAUTY-WAVE-3 THE POST SUITE (BW3-2/3/6): the flat tabletop stays pass-free — tear the DoF/bloom/
   // grade passes off the composer here (setInteriorBoard is the only place they're added; this is the
@@ -8399,9 +9045,11 @@ const INTERIOR_SHADOW_MAP_SIZE = 512; // small per-light map — 4 lights x 512^
 // paying the shadow-map cost for.
 function interiorAssignShadowCasters(lights, cx, cz){
   const withDist = (lights || []).map((l, i) => ({
-    l, i, d: Math.hypot((l.x || 0) - cx, (l.z || 0) - cz)
-  }));
-  withDist.sort((a, b) => a.d - b.d);
+    l, i,
+    priority: Number.isFinite(l.shadowBudgetPriority) ? l.shadowBudgetPriority : 1,
+    d: Math.hypot((l.x || 0) - cx, (l.z || 0) - cz)
+  })).filter((row) => row.l.castShadow !== false);
+  withDist.sort((a, b) => b.priority - a.priority || a.d - b.d || a.i - b.i);
   const casterIdx = new Set(withDist.slice(0, INTERIOR_SHADOW_CASTER_CAP).map((w) => w.i));
   return (lights || []).map((l, i) => Object.assign({}, l, { castShadow: casterIdx.has(i) }));
 }
@@ -8615,6 +9263,12 @@ const ITR_FIXTURE_BODY_PARTS = {
     { geo: () => new THREE.BoxGeometry(0.055, 0.055, Math.max(0.06, el.z * 0.85)), pos: [0, el.y * 0.35, el.z * 0.42] },
     { geo: () => new THREE.CylinderGeometry(0.055, 0.08, 0.06, 8), pos: [0, el.y * 0.85, el.z] },
   ],
+  "sconce-torch-clay": (el) => [
+    // A legible, upright wooden haft and iron cup—not the short bracket + glowing orb used by the
+    // calibration bulb. Keeping the flame at `emitterLocal` preserves point/emitter co-location.
+    { geo: () => new THREE.CylinderGeometry(0.035, 0.045, 0.34, 7), pos: [0, el.y - 0.18, el.z] },
+    { geo: () => new THREE.CylinderGeometry(0.065, 0.09, 0.07, 8), pos: [0, el.y - 0.035, el.z] },
+  ],
   "bracket-generic": (el) => [
     { geo: () => new THREE.BoxGeometry(0.045, 0.045, Math.max(0.05, el.z * 0.85)), pos: [0, el.y * 0.4, el.z * 0.42] },
     { geo: () => new THREE.SphereGeometry(0.045, 6, 5), pos: [0, el.y * 0.9, el.z] },
@@ -8634,8 +9288,22 @@ const ITR_FIXTURE_BODY_PARTS = {
     { geo: () => new THREE.CylinderGeometry(0.09, 0.09, Math.max(0.12, el.y * 0.9), 8), pos: [0, el.y * 0.5, 0] },
     { geo: () => new THREE.TorusGeometry(0.08, 0.012, 6, 12), pos: [0, el.y * 0.98, 0], rotX: Math.PI / 2 },
   ],
+  // Checkpoint 3 (2026-07-25, "magic reads as a small violet bulb"): a believable arcane source —
+  // a rock base with a CLUSTER of faceted shards in the canon's triangulated language. The main
+  // shard is the emitter (below); these are its dark companions, so the glow reads as crystal
+  // growing from stone, not a lamp.
   "crystal-faceted": (el) => [
-    { geo: () => new THREE.CylinderGeometry(0.08, 0.11, Math.max(0.05, el.y * 0.4), 6), pos: [0, el.y * 0.2, 0] },
+    { geo: () => new THREE.CylinderGeometry(0.16, 0.22, Math.max(0.07, el.y * 0.3), 7), pos: [0, el.y * 0.12, 0] },
+    { geo: () => new THREE.OctahedronGeometry(0.13), pos: [0.14, el.y * 0.3, 0.05], rotX: 0.35 },
+    { geo: () => new THREE.OctahedronGeometry(0.09), pos: [-0.12, el.y * 0.26, -0.08], rotX: -0.5 },
+  ],
+  // Checkpoint 3 ("lava reads as a red point on the floor"): a molten fissure — low dark rock rim
+  // around a flat emissive melt surface (the emitter, below). Floor-standing, deterministic.
+  "lava-fissure": (el) => [
+    { geo: () => new THREE.BoxGeometry(0.5, 0.08, 0.14), pos: [0, 0.04, 0.3], rotX: 0 },
+    { geo: () => new THREE.BoxGeometry(0.44, 0.09, 0.13), pos: [0.06, 0.045, -0.3] },
+    { geo: () => new THREE.BoxGeometry(0.14, 0.08, 0.42), pos: [0.32, 0.04, 0] },
+    { geo: () => new THREE.BoxGeometry(0.13, 0.07, 0.4), pos: [-0.3, 0.035, 0.04] },
   ],
   "lamp-post": (el) => [
     { geo: () => new THREE.CylinderGeometry(0.03, 0.045, Math.max(0.2, el.y * 0.92), 8), pos: [0, el.y * 0.46, 0] },
@@ -8644,11 +9312,13 @@ const ITR_FIXTURE_BODY_PARTS = {
 const ITR_FIXTURE_EMITTER_GEO = {
   "sconce-iron": () => new THREE.ConeGeometry(0.04, 0.11, 6),
   "sconce-torch": () => new THREE.ConeGeometry(0.045, 0.13, 6),
+  "sconce-torch-clay": () => new THREE.ConeGeometry(0.08, 0.22, 7),
   "bracket-generic": () => new THREE.SphereGeometry(0.05, 6, 5),
   "brazier-low": () => new THREE.ConeGeometry(0.09, 0.22, 7),
   "candle-cluster": () => new THREE.ConeGeometry(0.03, 0.09, 6),
   "lantern-handled": () => new THREE.SphereGeometry(0.06, 7, 6),
-  "crystal-faceted": () => new THREE.OctahedronGeometry(0.16),
+  "crystal-faceted": () => new THREE.OctahedronGeometry(0.3),
+  "lava-fissure": () => new THREE.CylinderGeometry(0.34, 0.38, 0.05, 9),
   "lamp-post": () => new THREE.SphereGeometry(0.09, 8, 6),
 };
 // MeshStandard/PBR materials are out of E0's scope (WALL-VOLUMES-PRACTICALS.md Decisions: "No bloom
@@ -8745,6 +9415,28 @@ function interiorBuildFixtureGroup(light){
 // per WALL-VOLUMES-PRACTICALS.md §E0. `wallMountData` is {mountSlots, wallSegments}; absent/empty
 // (ITR_ROOM_SHELL off, or a room with zero wall segments) returns null — the caller's own defensive
 // degrade-to-floor path.
+// The board's local half-extent as seen from the light group's recentred frame — derived from the
+// shell's OWN wall data (segment mids + mount-slot world positions are raw plan coordinates, the
+// same frame `cx`/`cz` recenter). Fallback when a fixture has no wall data: a generous constant
+// that covers the largest current fixture. Consumed by the environmental directional branch above
+// to size the sun/moon shadow frustum; margin covers wall thickness + segment half-lengths.
+function interiorEnvLightHalfExtent(wallMountData, cx, cz){
+  let maxAbs = 0, found = false;
+  const consider = (x, z) => {
+    if(typeof x !== "number" || typeof z !== "number") return;
+    maxAbs = Math.max(maxAbs, Math.abs(x - cx), Math.abs(z - cz));
+    found = true;
+  };
+  ((wallMountData && wallMountData.wallSegments) || []).forEach((seg) => {
+    if(seg && seg.mid) consider(seg.mid.x, seg.mid.z);
+    if(seg && seg.a) consider(seg.a.x, seg.a.z);
+    if(seg && seg.b) consider(seg.b.x, seg.b.z);
+  });
+  ((wallMountData && wallMountData.mountSlots) || []).forEach((s) => {
+    if(s && s.worldPos) consider(s.worldPos.x, s.worldPos.z);
+  });
+  return found ? maxAbs + 3 : 12;
+}
 function interiorNearestWallMountSlot(wallMountData, x, z){
   const slots = wallMountData && wallMountData.mountSlots;
   if(!slots || !slots.length) return null;
@@ -8762,6 +9454,19 @@ function interiorNearestWallMountSlot(wallMountData, x, z){
 // data DEGRADES to a floor mount at the light's own (x,z), logged once (WALL-VOLUMES-PRACTICALS.md
 // §E0's own defensive contract — "floor fixtures work even if C4.1a mount data is absent").
 function interiorResolveFixturePlacement(light, cx, cz, floorTopMap, wallMountData){
+  // Checkpoint 2 (2026-07-25) — DIAGNOSTIC STUDIO FLOAT: mount "none" places the fixture at its
+  // EXACT authored position (board-relative, y in world units). The physical-emitter honesty law
+  // (CR-3) already distinguishes explicitly-labelled non-diegetic studio hardware from rolled
+  // practicals; a calibration bulb that silently snaps to whatever wall slot happens to exist is
+  // how the "opposing" pair ended up on ADJACENT walls with the readout still claiming opposition
+  // (root-cause notes §2). Production rolled practicals keep the wall/floor mount contract.
+  if(light.mount === "none"){
+    return {
+      mount: "none", ownerSegIndex: null,
+      pos: { x: (light.x || 0) - cx, y: light.y != null ? light.y : 1.7, z: (light.z || 0) - cz },
+      normal: null,
+    };
+  }
   if(light.mount === "wall"){
     const slot = interiorNearestWallMountSlot(wallMountData, light.x || 0, light.z || 0);
     if(slot){
@@ -8816,6 +9521,135 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
     // genuinely diegetic OUTDOOR local source (a campfire) even under a bright profile; no light sets
     // it today, so every bright-profile light suppresses uniformly.
     const suppressPractical = !!isBrightRealm && ITR_BRIGHT_SUPPRESS_PRACTICALS && !light.forceVisiblePractical;
+    const resolvedIntensity = (light.renderIntensity != null
+      ? light.renderIntensity
+      : (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain
+    ) * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1);
+    // CL-R1: a shared light recipe is an intentional, reviewed physical range. Generic/generated
+    // interior lights still receive the small-pool safety cap, while recipe lights can opt into
+    // their declared reach without changing the intensity or inverse-square falloff at the source.
+    const declaredDistance = light.distance != null ? light.distance : 12;
+    const resolvedDistance = light.authoredRange
+      ? declaredDistance
+      : Math.min(declaredDistance, ITR_LIGHT_DISTANCE_CAP);
+
+    // CL-R1 mode separation: environmental/celestial sources do not acquire a fake lamp housing
+    // merely because the production board carries a light record. Only a source whose recipe says a
+    // visible emitter is required goes through the fixture branch below. The direct branch still
+    // uses real THREE lights in this same production group; it simply has no counterfeit prop.
+    if(light.visibleEmitterRequired === false){
+      const localX = (light.x || 0) - cx;
+      const localY = light.y != null ? light.y : 3;
+      const localZ = (light.z || 0) - cz;
+      let environmentalLight;
+      if(light.lightType === "environment"){
+        // The scene already owns one shared HemisphereLight. A recipe-level environment source
+        // contributes colour/intensity without constructing a second hemisphere rig that could
+        // drift between tabletop and interior channels.
+        environmentalLight = new THREE.AmbientLight(light.color || "#ffffff", resolvedIntensity);
+        environmentalLight.position.set(localX, localY, localZ);
+      } else if(light.lightType === "directional"){
+        environmentalLight = new THREE.DirectionalLight(light.color || "#ffffff", resolvedIntensity);
+        // Visual-correction fix (Adam, 2026-07-25: "there's just one chunk of a rectangle showing
+        // on the stairs but none of the proper cast shadows"): THREE's default directional shadow
+        // camera is a 10x10-unit ortho box, so in a 15x15-cell room the sun/moon shadow map covered
+        // only a corner and every cast shadow clipped to that chunk. Derive the room's local
+        // half-extent from the shell's own wall data and size BOTH the light distance and the
+        // shadow frustum from it, so everything the room contains casts a complete shadow.
+        const envHalfExtent = interiorEnvLightHalfExtent(wallMountData, cx, cz);
+        const envLightDistance = Math.max(10, envHalfExtent * 2.5);
+        // Adam's ruling (2026-07-25): "the shadows should fall relative to the actual position of
+        // the sun since its position is mapped to the actual clock." When a celestial light record
+        // carries its world clock, the shared celestial arc (celestialArcFor — the ONE clock->sun/
+        // moon direction owner, already driving the tabletop channel) supplies direction, arc
+        // colour, and the elevation intensity curve. The authored azimuth/elevation are only the
+        // no-clock fallback (a fixture or harness snapshot with no time threaded).
+        const celestialClock = (light.clockMin != null && light.recipeId
+          && CELESTIAL_PROFILE_SET[light.recipeId]) ? light.clockMin : null;
+        if(celestialClock != null){
+          const arc = celestialArcFor(light.recipeId, celestialClock);
+          environmentalLight.position.set(
+            arc.dir.x * envLightDistance,
+            Math.max(CELESTIAL_MIN_KEY_HEIGHT, arc.dir.y * envLightDistance),
+            arc.dir.z * envLightDistance
+          );
+          environmentalLight.color.setHex(arc.color); // under the clock, the arc owns colour too (dawn->zenith lerp)
+          environmentalLight.intensity = resolvedIntensity * arc.intensityScale;
+          environmentalLight.userData.celestial = {
+            clockMin: celestialClock,
+            derivedDir: { x: +arc.dir.x.toFixed(4), y: +arc.dir.y.toFixed(4), z: +arc.dir.z.toFixed(4) },
+            intensityScale: +arc.intensityScale.toFixed(4)
+          };
+        } else {
+          const azimuth = THREE.MathUtils.degToRad(light.azimuthDeg != null ? light.azimuthDeg : 0);
+          const elevation = THREE.MathUtils.degToRad(light.elevationDeg != null ? light.elevationDeg : 45);
+          environmentalLight.position.set(
+            Math.cos(elevation) * Math.cos(azimuth) * envLightDistance,
+            Math.sin(elevation) * envLightDistance,
+            Math.cos(elevation) * Math.sin(azimuth) * envLightDistance
+          );
+        }
+        environmentalLight.target.position.set(0, 0, 0);
+        group.add(environmentalLight.target);
+        if(environmentalLight.shadow && environmentalLight.shadow.camera){
+          const sc = environmentalLight.shadow.camera;
+          const frustumHalf = envHalfExtent * 1.15 + 1;
+          sc.left = -frustumHalf; sc.right = frustumHalf;
+          sc.top = frustumHalf; sc.bottom = -frustumHalf;
+          sc.near = 0.5; sc.far = envLightDistance + envHalfExtent * 3;
+          sc.updateProjectionMatrix();
+        }
+      } else {
+        environmentalLight = new THREE.PointLight(
+          light.color || "#ffffff",
+          resolvedIntensity,
+          resolvedDistance,
+          light.decay != null ? light.decay : 2
+        );
+        environmentalLight.position.set(localX, localY, localZ);
+      }
+      if(light.castShadow && environmentalLight.shadow){
+        environmentalLight.castShadow = true;
+        const environmentalMapSize = [256, 512, 1024, 2048].indexOf(light.shadowMapSize) >= 0
+          ? light.shadowMapSize : INTERIOR_SHADOW_MAP_SIZE;
+        environmentalLight.shadow.mapSize.set(environmentalMapSize, environmentalMapSize);
+        environmentalLight.shadow.bias = light.shadowBias != null ? light.shadowBias : -0.002;
+        environmentalLight.shadow.normalBias = light.shadowNormalBias != null ? light.shadowNormalBias : 0;
+        casters++;
+      }
+      environmentalLight.userData = environmentalLight.userData || {};
+      environmentalLight.userData.lightId = String(light.id || light.sourceRef || "environment-light");
+      environmentalLight.userData.recipeMode = light.recipeMode || "production-environment";
+      group.add(environmentalLight);
+      // Checkpoint 2 (2026-07-25) — READOUT TRUTH: environmental sources register in the SAME
+      // live-light registry the practicals use, so the Lights readout and the lighting proof can
+      // describe the sun/moon/ambient-shaping lights that actually reach the renderer. Before
+      // this, the registry printed `lights: []` under full daylight (root-cause notes §3) — the
+      // panel was structurally unable to tell the truth about five of seven recipes. Steady,
+      // markerless rows; the snapshot reader is already null-tolerant on marker fields.
+      flickerTargets.push({
+        id: String(light.id || light.sourceRef || ("environment-light-" + flickerTargets.length)),
+        sourceRef: light.sourceRef || String(light.id || "environment-light"),
+        state: "steady",
+        seed: String(light.id || "environment-light"),
+        cadenceMs: 480, intervalJitter: 0, directionAmplitude: 0,
+        sampleIndex: 0, normalizedSample: 1,
+        directionSample: { x: 0, y: 0, z: 0 },
+        pl: environmentalLight, marker: null, cone: null,
+        emissiveFlicker: false,
+        baseIntensity: environmentalLight.intensity,
+        baseEmissiveIntensity: 0,
+        baseOpacity: 1,
+        basePointPosition: {
+          x: environmentalLight.position.x,
+          y: environmentalLight.position.y,
+          z: environmentalLight.position.z
+        },
+        baseMarkerPosition: null, baseMarkerRotation: null,
+        amplitude: 0
+      });
+      return;
+    }
 
     // E0 — resolve WHERE the fixture physically stands: a wall mount snaps to its nearest C4.1a mount
     // slot (world position + inward normal, so it can never disagree with the wall itself); a floor
@@ -8852,28 +9686,41 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
     // position = group transform × emitterLocal (WALL-VOLUMES-PRACTICALS.md §E0), so it can never sit
     // anywhere but exactly where the fixture's own visible emitter submesh is.
     const el = light.emitterLocal || { x: 0, y: 0, z: 0 };
-    const pl = new THREE.PointLight(
+    const pl = light.lightType === "spot"
+      ? new THREE.SpotLight(
+        light.color || "#ffbb66",
+        resolvedIntensity,
+        resolvedDistance,
+        THREE.MathUtils.degToRad(light.spot && light.spot.coneDeg != null ? light.spot.coneDeg : 45),
+        light.spot && light.spot.penumbra != null ? light.spot.penumbra : 0,
+        light.decay != null ? light.decay : 2
+      )
+      : new THREE.PointLight(
       light.color || "#ffbb66",
       // BW2-4 item 1: render-side gain (see ITR_LIGHT_RENDER_GAIN) — the DATA intensity is the relative
       // value; this is the absolute decay-2 pool brightness. Preserves the fill<=60%-of-key ratio (both
       // key and fill are gained equally). LIGHT-CLOSE: a suppressed practical scales toward
       // ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (0 by default) — the sky fill carries the room instead.
-      (light.renderIntensity != null
-        ? light.renderIntensity
-        : (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain
-      ) * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1),
-      // BW2-4b item 1 — LIGHT RANGE CAP: tighten each pool to a small hot circle (the mock read) so the
-      // gaps between torches go genuinely dark (the BRIGHTNESS LAW's dark-corner requirement).
-      Math.min(light.distance != null ? light.distance : 12, ITR_LIGHT_DISTANCE_CAP),
+      resolvedIntensity,
+      // BW2-4b item 1 — generic lights retain the small-pool cap. A reviewed recipe may opt into its
+      // authored physical reach through resolvedDistance (the torch does; other profiles do not).
+      resolvedDistance,
       light.decay != null ? light.decay : 2
     );
     pl.position.set(el.x || 0, el.y || 0, el.z || 0);
+    if(pl.isSpotLight){
+      pl.target.position.set(el.x || 0, (el.y || 0) - 1, el.z || 0);
+      fixture.group.add(pl.target);
+    }
     if(light.castShadow && !suppressPractical){
       pl.castShadow = true;
-      pl.shadow.mapSize.set(INTERIOR_SHADOW_MAP_SIZE, INTERIOR_SHADOW_MAP_SIZE);
+      const authoredMapSize = [256, 512, 1024, 2048].indexOf(light.shadowMapSize) >= 0
+        ? light.shadowMapSize : INTERIOR_SHADOW_MAP_SIZE;
+      pl.shadow.mapSize.set(authoredMapSize, authoredMapSize);
       pl.shadow.camera.near = 0.1;
       pl.shadow.camera.far = light.distance != null ? light.distance : 12;
-      pl.shadow.bias = -0.002;
+      pl.shadow.bias = light.shadowBias != null ? light.shadowBias : -0.002;
+      pl.shadow.normalBias = light.shadowNormalBias != null ? light.shadowNormalBias : 0;
       casters++;
     }
     fixture.group.add(pl);
@@ -8934,14 +9781,32 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
         state: localState,
         seed: String(localFlicker.seed || light.sourceRef || lightId),
         cadenceMs: Math.max(120, Number(localFlicker.cadenceMs) || 480),
+        intervalJitter: Math.max(0, Math.min(0.9,
+          Number(localFlicker.intervalJitter) || 0
+        )),
+        directionAmplitude: Math.max(0, Math.min(0.08,
+          Number(localFlicker.directionAmplitude) || 0
+        )),
         sampleIndex: 0,
         normalizedSample: 1,
+        directionSample: { x: 0, y: 0, z: 0 },
         pl, marker: fixture.emitter, cone: cone ? cone.mesh : null,
         emissiveFlicker: true, // E0 — pulse the emitter's OWN emissiveIntensity, not a disc's opacity (see lightFlickerStep)
         baseIntensity: pl.intensity,
         baseEmissiveIntensity: ITR_FIXTURE_EMISSIVE_INTENSITY,
         baseOpacity: fixture.emitter.material.opacity != null ? fixture.emitter.material.opacity : 1,
         baseConeOpacity: (cone && cone.mesh.material) ? cone.mesh.material.opacity : fallbackConeOpacity,
+        basePointPosition: { x: pl.position.x, y: pl.position.y, z: pl.position.z },
+        baseMarkerPosition: {
+          x: fixture.emitter.position.x,
+          y: fixture.emitter.position.y,
+          z: fixture.emitter.position.z
+        },
+        baseMarkerRotation: {
+          x: fixture.emitter.rotation.x,
+          y: fixture.emitter.rotation.y,
+          z: fixture.emitter.rotation.z
+        },
         amplitude: Math.max(0, Math.min(0.45,
           localFlicker.amplitude != null ? Number(localFlicker.amplitude) : INTERIOR_LIGHT_FLICKER_AMPLITUDE
         ))
@@ -9209,7 +10074,7 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     const entry = Object.assign({}, base, {
       scaleVsHuman: p.scaleVsHuman != null ? p.scaleVsHuman : base.scaleVsHuman
     });
-    const built = interiorSpriteBillboard(entry, wallCap);
+    const built = interiorSpriteBillboard(entry, p.allowOverheight ? null : wallCap);
     if(!built) return; // texture not loaded yet — falls through, same as every other billboard resolution
     // BEAUTY-WAVE-2.md BW2-5 item 3: "the boss standee's cell prefers the dais top". An opt-in
     // mechanism, additive/non-breaking — a piece the caller tags `preferDais:true` with NO explicit
@@ -9223,7 +10088,9 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     const g = built.group;
     g.userData.sceneObjectId = p.sourceRef || p.id || p.slug;
     g.userData.spriteSlug = p.slug;
-    const floorFrac = (typeof base.floor === "number") ? base.floor : 0;
+    // footX/footY already moved the authored contact anchor onto local origin inside the billboard.
+    // Applying the legacy `floor` fraction here as well would double-offset migrated sprites.
+    const floorFrac = 0;
     // BW2-4b item 7c — BLOCKER-CELL EXCLUSION: shift a piece off any pillar/doorframe cell it landed on
     // (the loop-05 wolf-on-a-pillar) to the nearest clear cell before any contact/kilter/clip math reads
     // it. prismLists = [wallList, pillarList, doorframe]; slice(1) drops walls (perimeter, handled by the
@@ -9255,19 +10122,35 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
       cellY - (cz || 0) + kilter.dz + clipNudge.z // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
     );
     g.userData.kilterYawDeg = kilter.yawDeg; // read every frame by updateSpriteBillboardYaw's face()
-    // BW2-2 STANDEE BASES: a plinth cylinder under this piece, radius off its own rendered world
-    // width (spec: 0.42x) — added as a CHILD of `g`, a plain SIBLING of `g`'s own inner sprite wrap
+    // CL-R2 STANDEE SUPPORT: a natural shallow strip bounded by the tactical footprint — added as a
+    // CHILD of `g`, a plain SIBLING of `g`'s own inner sprite wrap
     // (buildSpriteBillboardMesh) so BW2-2b's floor-alignment fix (updateSpriteBillboardYaw) leaves it
     // floor-flat under everyday camera tilt, while still tipping WITH the sprite when fall-death moves
     // `g`'s own rotation.x (see buildInteriorBase's own header for the full mechanism).
-    const baseMesh = buildInteriorBase(built.width * INTERIOR_BASE_RADIUS_FRAC, trimColor);
+    const support = interiorStandeeSupportMetrics(built.width, base.size, p.tacticalSpanCells);
+    const baseMesh = buildInteriorBase(support.width, support.depth, trimColor);
     g.add(baseMesh);
     g.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
     g.userData.interiorTrueScale = true;
     g.userData.interiorHeight = built.height;
     g.userData.interiorWidth = built.width;
     g.userData.interiorFloorFrac = floorFrac;
-    g.userData.interiorBaseRadius = built.width * INTERIOR_BASE_RADIUS_FRAC;
+    // Kept only as a legacy selection-ring size; the visible support is not circular.
+    g.userData.interiorBaseRadius = support.width * 0.5;
+    g.userData.interiorBaseWidth = support.width;
+    g.userData.interiorBaseDepth = support.depth;
+    g.userData.standeeCollisionNudgeX = 0;
+    g.userData.standeeCollisionNudgeZ = 0;
+    g.userData.standeeCollisionRelocated = false;
+    g.userData.tacticalSpanCells = support.tacticalSpanCells;
+    g.userData.stairTreadDepth = support.treadDepth;
+    g.userData.stairFit = support.stairFit;
+    g.userData.canonicalHeight = built.canonicalHeight;
+    g.userData.oversizeClamped = built.oversizeClamped;
+    g.userData.spriteLabel = p.label || base.name || p.slug;
+    g.userData.spriteStressRole = p.stress || null;
+    g.userData.spriteRegenRecommended = support.tacticalSpanCells >= 2
+      && built.width > support.tacticalSpanCells * 0.95;
     // DUNGEON-GRAPH.md finale-gate finding: a caller may tag an interior piece with the combat foe's
     // own `fid` (o.foes[i].fid, combat.js's combatStart) so play(verb,{who:fid}) — the SAME production
     // standee-verb entry point combat damage already routes through (§A STANDEE VERBS WIRING, this
@@ -9283,7 +10166,10 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     // fall-death — the corpse keeps its ground anchor because the pool isn't parented to the
     // tilting wrapper), and existing callers walking `group.children` in piece order see no change.
     // BW2-2: seated off THIS cell's own real floor top, not the old hardcoded -0.495.
-    addInteriorContactBlob(blobGroup, g.position.x, g.position.z, built.width, floorTop);
+    const contactBlob = addInteriorContactBlob(
+      blobGroup, g.position.x, g.position.z, support.width, floorTop, support.depth
+    );
+    g.userData.contactBlobMesh = contactBlob;
     // VP6 item 1: idle-breathe auto-plays on every living piece the instant it mounts (a fresh
     // fall-death corpse never reaches this — dead pieces are re-mounted by the NEXT setInteriorBoard
     // call with p.fid's own userData never carrying userData.corpse from a torn-down prior group, so
@@ -9297,6 +10183,7 @@ function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimCo
     resolved++;
   });
   group.add(blobGroup);
+  S.standeeCollisionDirty = true;
   mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
   return { group, resolved, requested: (pieces || []).length };
 }
@@ -9808,9 +10695,9 @@ function interiorFitMaxHeightFor(data){
   (data && data.pieces || []).forEach(function(p){
     if(!p || !p.slug) return;
     const base = (typeof spriteEntryFor === "function") ? spriteEntryFor(p.slug) : null;
-    const scaleTrue = (base && typeof base.scaleTrue === "number" && base.scaleTrue > 0)
-      ? base.scaleTrue
-      : (typeof p.scaleVsHuman === "number" && p.scaleVsHuman > 0) ? p.scaleVsHuman : null;
+    const scaleTrue = (typeof p.scaleVsHuman === "number" && p.scaleVsHuman > 0)
+      ? p.scaleVsHuman
+      : (base && typeof base.scaleTrue === "number" && base.scaleTrue > 0) ? base.scaleTrue : null;
     if(scaleTrue == null) return; // unresolved piece (texture/registry not loaded yet) — skip, don't guess
     const h = HUMAN_TRUE_HEIGHT * scaleTrue;
     if(h > tallest) tallest = h;
@@ -10930,8 +11817,27 @@ function setInteriorBoard(data, renderOpts){
   // voidTintFor through the kit grade" — the fallback branch (a kit with no authored fog.color) now
   // grades voidTintFor(env) instead of using it raw; a kit-authored fog.color is graded too (the SAME
   // profile, so the two branches never diverge in how "final" a color reads).
+  // Checkpoint 3 (2026-07-25, "the same dark-brown void persists through very different recipes"):
+  // when the board carries a light-recipe lock, the void/fog answers to the RECIPE, not only the
+  // realm env key. One derivation, two honest sources: a celestial recipe with a clock takes the
+  // celestial arc's own authored void keyframe (the same voidTint the tabletop channel uses); any
+  // other recipe derives a deep backdrop from its authored ambient colour (the recipe's mood is its
+  // ambient), darkened well below surface values so the void stays a void. Boards without a recipe
+  // lock keep the env-keyed tint unchanged.
+  let recipeVoidNum = null;
+  if(data.lightRecipeLock && data.lightRecipeLock.id){
+    const lockRecipe = LIGHT_TUNABLES.profiles[data.lightRecipeLock.id];
+    const celestialLight = (data.lights || []).find(function(l){ return l && l.clockMin != null && CELESTIAL_PROFILE_SET[l.recipeId]; });
+    if(celestialLight){
+      recipeVoidNum = celestialArcFor(celestialLight.recipeId, celestialLight.clockMin).voidTint;
+    } else if(lockRecipe && lockRecipe.ambient){
+      const ambientColor = new THREE.Color(lightRecipeColorNumber(lockRecipe.ambient.color));
+      recipeVoidNum = ambientColor.multiplyScalar(0.16).getHex();
+    }
+  }
   const fogColorNum = gradeColorLocal(
-    (data.fog && data.fog.color) ? hexStrToNum(data.fog.color) : voidTintFor(env),
+    recipeVoidNum != null ? recipeVoidNum
+      : ((data.fog && data.fog.color) ? hexStrToNum(data.fog.color) : voidTintFor(env)),
     gradeProfile
   );
   const fogColorObj = new THREE.Color(fogColorNum);
@@ -11010,6 +11916,7 @@ function setInteriorBoard(data, renderOpts){
     // BW2-4b item 2 — camera-key: mount/refresh the soft fill DirectionalLight from the camera's general
     // direction (L-2: no longer a shadow source by default — see ITR_CAMERA_KEY_CASTS_SHADOW).
     mountInteriorCameraKey(cx, cz);
+    mountSpriteCameraFill();
   }
   // BW2-4b item 1 — REALM GRADE on the sprite floor: tint the emissive readability floor toward this
   // realm's grade (kit.gradeTint) at ITR_SPRITE_TINT_STRENGTH so a lit standee reads the realm (chrome
@@ -12485,16 +13392,35 @@ function setUnits(data){
       // own header explains why this makes fall-death's tip-as-one-group behavior free). Radius off
       // the sprite's own rendered width (figureFor's interior branch stamps interiorWidth alongside
       // interiorHeight specifically for this — see that branch's own comment).
-      const baseRadius = (figure.userData.interiorWidth || figure.userData.interiorHeight || 1) * INTERIOR_BASE_RADIUS_FRAC;
-      const baseMesh = buildInteriorBase(baseRadius, S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor);
+      const support = interiorStandeeSupportMetrics(
+        figure.userData.interiorWidth || figure.userData.interiorHeight || 1,
+        u.size,
+        u.tacticalSpanCells
+      );
+      const baseMesh = buildInteriorBase(
+        support.width,
+        support.depth,
+        S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor
+      );
       figure.add(baseMesh);
-      figure.userData.interiorBaseRadius = baseRadius;
+      figure.userData.interiorBaseRadius = support.width * 0.5;
+      figure.userData.interiorBaseWidth = support.width;
+      figure.userData.interiorBaseDepth = support.depth;
+      figure.userData.standeeCollisionNudgeX = 0;
+      figure.userData.standeeCollisionNudgeZ = 0;
+      figure.userData.standeeCollisionRelocated = false;
+      figure.userData.tacticalSpanCells = support.tacticalSpanCells;
+      figure.userData.stairTreadDepth = support.treadDepth;
+      figure.userData.stairFit = support.stairFit;
       figure.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
       // BW2-2: this standee's own soft contact pool (VP7's convention, extended to combat units — the
       // pre-BW2-2 tabletop hostility-disc/groundingBlob pair further below is UNTOUCHED and stays
       // buried under the true floor exactly as it already was, harmless/invisible; this pool is the
       // one that actually reads under an interior standee's base).
-      addInteriorContactBlob(S.shadowGroup, x, z, (figure.userData.interiorWidth || figure.userData.interiorHeight || 1), floorTop);
+      const contactBlob = addInteriorContactBlob(
+        S.shadowGroup, x, z, support.width, floorTop, support.depth
+      );
+      figure.userData.contactBlobMesh = contactBlob;
     }
     figure.position.set(x, posY, z);
     // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 6, §3-D1/D2/D8): a whole-object figure
@@ -12686,6 +13612,7 @@ function setUnits(data){
   // ENV-3 ruling 5 — SYNC-FACE ON REBUILD: same race setBoard's own matching call (above) closes,
   // for S.unitGroup's freshly (re)built standees — see that call site's own full header for the
   // mechanism. Idempotent with the next real rAF tick's own pass.
+  S.standeeCollisionDirty = true;
   updateSpriteBillboardYaw();
   markDirty();
 }
@@ -12791,7 +13718,7 @@ function retire(){
   if(S.resizeHandler) window.removeEventListener("resize", S.resizeHandler);
   if(S.raf) cancelAnimationFrame(S.raf);
   if(S.tweenRaf) cancelAnimationFrame(S.tweenRaf); // T3: stop the verb tween loop too, not just render-on-demand's raf
-  stopLightFlicker(); // BOARD LIGHTING: the ~2Hz setInterval flicker tick outlives raf/tweenRaf otherwise
+  stopLightFlicker(); // BOARD LIGHTING: the smooth ambient flame rAF outlives raf/tweenRaf otherwise
   stopMoteDrift(); // VP6 item 3: the mote drift rAF chain is its own loop, outlives raf/tweenRaf otherwise
   drainTweens(S); // A2: run every abandoned tween's onDone (restores shared materials etc.) BEFORE any dispose below
   clearGroup(S.tileGroup);
@@ -13210,6 +14137,275 @@ window.Theater._clayLightingProofForTest = function(){
     ? { snapshot: clayRoomLightingSnapshot("test-read"), probe: S.clayRoomLightingProbe || null }
     : null;
 };
+window.Theater._clayLightingRecipeForTest = function(){
+  const id = S.clayRoomLightRecipeId || null;
+  const recipe = id && LIGHT_TUNABLES.profiles[id] ? LIGHT_TUNABLES.profiles[id] : null;
+  return recipe ? lightRecipeDeepClone(recipe) : null;
+};
+window.Theater._claySetLightingRecipeForTest = function(id){
+  return (typeof clayRoomSetLightingRecipe === "function")
+    ? clayRoomSetLightingRecipe(id, "clayroom-test-seam")
+    : false;
+};
+window.Theater._clayLightingPixelMetricsForTest = function(){
+  return (typeof clayRoomLightingPixelMetrics === "function")
+    ? clayRoomLightingPixelMetrics(true)
+    : null;
+};
+window.Theater._claySetLightingPreviewSeedForTest = function(seed){
+  if(CLAY_ROOM_LIGHT_PREVIEW_SEEDS.indexOf(seed) < 0) return false;
+  S.clayRoomPreviewSeed = seed;
+  S.clayRoomPixelMetricsCache = null;
+  return clayRoomSetLightingRecipe(S.clayRoomLightRecipeId || "torchlit", "clayroom-seed-test-seam");
+};
+window.Theater._clayCaptureLightingMatrixForTest = function(){
+  return (typeof clayRoomCaptureLightingMatrix === "function")
+    ? clayRoomCaptureLightingMatrix()
+    : Promise.resolve(null);
+};
+window.Theater._clayLightingMatrixArtifactForTest = function(){
+  return S.clayRoomLightingMatrixArtifact || null;
+};
+window.Theater._clayLightingBenchForTest = function(){
+  const bench = S.clayRoomLightingBenchGroup;
+  const overlays = S.clayRoomLightOverlayGroup;
+  return {
+    fixtureId: S.clayRoomFixtureId || null,
+    benchMounted: !!(bench && bench.parent),
+    primitives: bench ? bench.children.map(function(mesh){
+      return {
+        id: mesh.userData.clayBenchPrimitive,
+        primitive: mesh.userData.clayBenchPrimitiveType,
+        role: mesh.userData.interiorKind,
+        castShadow: !!mesh.castShadow,
+        receiveShadow: !!mesh.receiveShadow
+      };
+    }) : [],
+    overlayModes: Object.assign({}, S.clayRoomLightOverlayModes || {}),
+    overlays: overlays ? overlays.children.map(function(line){
+      return {
+        kind: line.userData.clayLightOverlayKind,
+        lightId: line.userData.lightId,
+        rangeFraction: line.userData.rangeFraction == null ? null : line.userData.rangeFraction,
+        range: line.userData.range == null ? null : line.userData.range
+      };
+    }) : [],
+    motesSuppressed: S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && !S.moteGroup,
+    previewSeed: S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0],
+    lorePreviewRecipes: CLAY_ROOM_LORE_LIGHT_PREVIEWS.map(function(row){ return row.id; }),
+    matrixRecipes: CLAY_ROOM_LIGHTING_MATRIX_RECIPES.slice()
+  };
+};
+window.Theater._clayStructureBenchForTest = function(){
+  if(!S.clayRoomStructureReport) return null;
+  const group = S.clayRoomStructureBenchGroup;
+  let mountedMeshes = 0, shadowCasters = 0, shadowReceivers = 0, hostSuppressedMeshes = 0;
+  if(S.interiorGroup){
+    S.interiorGroup.traverse(function(node){
+      if(node.userData && node.userData.clayStructureHostSuppressed) hostSuppressedMeshes++;
+    });
+  }
+  if(group){
+    group.traverse(function(node){
+      if(!node.isMesh) return;
+      mountedMeshes++;
+      if(node.castShadow) shadowCasters++;
+      if(node.receiveShadow) shadowReceivers++;
+    });
+  }
+  const fade = window.Theater._occlusionFadeSummaryForTest();
+  return Object.assign({}, S.clayRoomStructureReport, {
+    view: S.clayRoomStructureView || CLAY_STRUCTURE_BENCH_FIXTURE.defaultView,
+    mounted: !!(group && group.parent),
+    mountedMeshes,
+    shadowCasters,
+    shadowReceivers,
+    hostSuppressedMeshes,
+    cameraSideOmission: (S.clayRoomStructureReport && S.clayRoomStructureReport.cameraSideOmission)
+      || S.wallOmissionReport || null,
+    dynamicCutaway: {
+      system: "itrOcclusionClassify",
+      disabledForTest: !!fade.disabledForTest,
+      candidates: fade.total,
+      blocking: fade.blocking,
+      faded: fade.faded
+    }
+  });
+};
+window.Theater._claySetStructureViewForTest = function(view){
+  return clayRoomSetStructureView(view);
+};
+window.Theater._claySetStructureStagedForTest = function(staged){
+  return clayRoomSetStructureStaged(!!staged);
+};
+window.Theater._claySetStructureDoorStateForTest = function(state){
+  return clayRoomSetStructureDoorState(state);
+};
+window.Theater._claySetFixtureForTest = function(id){
+  return (typeof clayRoomSetFixture === "function")
+    ? clayRoomSetFixture(id, "clayroom-fixture-test-seam")
+    : false;
+};
+function clayRoomSpriteFigures(){
+  const rows = [];
+  if(!S.interiorGroup || typeof S.interiorGroup.traverse !== "function") return rows;
+  S.interiorGroup.traverse(function(node){
+    if(!node || !node.userData || !node.userData.sprite) return;
+    rows.push(node);
+  });
+  return rows;
+}
+function clayRoomSetSelectedSprite(slug){
+  const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+  if(!fixture.cast.some(function(row){ return row.slug === slug; })) return false;
+  S.clayRoomSelectedSpriteSlug = slug;
+  S.clayRoomSelectedId = slug;
+  if(typeof S.clayRoomWorkbenchSelect === "function") S.clayRoomWorkbenchSelect(slug, "sprite lineup");
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  return true;
+}
+function clayRoomSetSelectedSpriteView(mode){
+  const offsets = { face: 0, angled: Math.PI / 4, edge: Math.PI / 2 };
+  if(!Object.prototype.hasOwnProperty.call(offsets, mode)) return false;
+  const selected = S.clayRoomSelectedSpriteSlug;
+  clayRoomSpriteFigures().forEach(function(node){
+    if(node.userData.sceneObjectId === selected){
+      node.userData.claySpriteViewYawOffset = offsets[mode];
+    }
+  });
+  S.clayRoomSelectedSpriteView = mode;
+  S.standeeCollisionDirty = true;
+  markDirty();
+  scheduleRender();
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  return true;
+}
+function clayRoomSpriteCitizenshipSnapshot(){
+  if(!S.clayRoomRecord) return null;
+  const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+  const castBySlug = {};
+  fixture.cast.forEach(function(row){ castBySlug[row.slug] = row; });
+  const figures = [];
+  const stairs = [];
+  clayRoomSpriteFigures().forEach(function(node){
+    const stairSample = node.userData.claySpriteStairSample;
+    if(stairSample){
+      stairs.push({
+        view: stairSample,
+        supportDepth: node.userData.interiorBaseDepth,
+        treadDepth: node.userData.stairTreadDepth,
+        stairFit: !!node.userData.stairFit
+      });
+      return;
+    }
+    const spriteSlug = node.userData.sceneObjectId;
+    const spec = castBySlug[spriteSlug];
+    if(!spec) return;
+    const registry = spriteEntryFor(spriteSlug) || {};
+    figures.push({
+      slug: spriteSlug,
+      label: spec.label,
+      stress: spec.stress,
+      canonicalFeet: registry.worldHeight == null ? null : registry.worldHeight,
+      renderedWorldHeight: node.userData.interiorHeight,
+      renderedWorldWidth: node.userData.interiorWidth,
+      tacticalSpanCells: node.userData.tacticalSpanCells,
+      supportWidth: node.userData.interiorBaseWidth,
+      supportDepth: node.userData.interiorBaseDepth,
+      treadDepth: node.userData.stairTreadDepth,
+      stairFit: !!node.userData.stairFit,
+      shell: !!node.userData.standeeSideShell,
+      footX: node.userData.footX,
+      footY: node.userData.footY,
+      contentBounds: node.userData.contentBounds,
+      alphaCutoff: node.userData.alphaCutoff,
+      shadowSilhouette: node.userData.spriteBillboardMesh ? {
+        planeCasts: !!node.userData.spriteBillboardMesh.castShadow,
+        alphaDepth: !!(node.userData.spriteBillboardMesh.customDepthMaterial
+          && node.userData.spriteBillboardMesh.customDepthMaterial.map
+          && node.userData.spriteBillboardMesh.customDepthMaterial.alphaTest === node.userData.alphaCutoff),
+        alphaDistance: !!(node.userData.spriteBillboardMesh.customDistanceMaterial
+          && node.userData.spriteBillboardMesh.customDistanceMaterial.map
+          && node.userData.spriteBillboardMesh.customDistanceMaterial.alphaTest === node.userData.alphaCutoff),
+        shellCasts: !!(node.userData.standeeSideShell && node.userData.standeeSideShell.castShadow)
+      } : null,
+      collisionRelocated: !!node.userData.standeeCollisionRelocated,
+      collisionNudge: [
+        +(node.userData.standeeCollisionNudgeX || 0).toFixed(4),
+        +(node.userData.standeeCollisionNudgeZ || 0).toFixed(4)
+      ],
+      contactShadow: node.userData.contactBlobMesh ? {
+        linked: node.userData.contactBlobMesh.userData.linkedSceneObjectId === node.userData.sceneObjectId,
+        poolDiameter: node.userData.contactBlobMesh.userData.contactPoolDiameter,
+        offset: node.userData.contactBlobMesh.userData.contactOffset,
+        blendMode: node.userData.contactBlobMesh.userData.contactBlendMode,
+        multiplyIdentityRim: !!node.userData.contactBlobMesh.userData.contactMultiplyIdentityRim
+      } : null,
+      selectionBaseRingGlow: !!(node.userData.standeeBaseMesh
+        && node.userData.standeeBaseMesh.userData.claySelectionBaseRingGlow),
+      selectionBaseNeon: node.userData.claySelectionBaseNeon ? {
+        linked: node.userData.claySelectionBaseNeon.userData.linkedSceneObjectId === node.userData.sceneObjectId,
+        visible: !!node.userData.claySelectionBaseNeon.visible,
+        source: node.userData.claySelectionBaseNeon.userData.emissionSource,
+        footprintShape: node.userData.claySelectionBaseNeon.userData.footprintShape,
+        width: node.userData.claySelectionBaseNeon.userData.spillWidth,
+        depth: node.userData.claySelectionBaseNeon.userData.spillDepth,
+        additive: node.userData.claySelectionBaseNeon.material
+          && node.userData.claySelectionBaseNeon.material.blending === THREE.AdditiveBlending,
+        centerPointLight: false,
+        castShadow: !!node.userData.claySelectionBaseNeon.castShadow
+      } : null,
+      regenRecommended: !!node.userData.spriteRegenRecommended,
+      selected: spriteSlug === S.clayRoomSelectedSpriteSlug
+    });
+  });
+  figures.sort(function(a, b){
+    return fixture.cast.findIndex(function(row){ return row.slug === a.slug; })
+      - fixture.cast.findIndex(function(row){ return row.slug === b.slug; });
+  });
+  return {
+    fixtureId: S.clayRoomFixtureId,
+    fixtureVersion: fixture.version,
+    scaleMode: S.clayRoomSpriteScaleMode || "diagnostic-cap",
+    selectedSlug: S.clayRoomSelectedSpriteSlug || fixture.selectedSlug,
+    selectedView: S.clayRoomSelectedSpriteView || "face",
+    supportForm: "shallow-rounded-strip",
+    tacticalFootprintSeparate: true,
+    collisionAudit: Object.assign({}, S.standeeCollisionAudit || {
+      pieces: 0, checkedPairs: 0, relocations: 0, remainingOverlaps: null
+    }),
+    cameraFill: S.spriteCameraFill ? {
+      enabled: S.spriteCameraFill.intensity > 0,
+      spriteLayer: SPRITE_CAMERA_FILL_LAYER,
+      castShadow: !!S.spriteCameraFill.castShadow,
+      intensity: +S.spriteCameraFill.intensity.toFixed(4),
+      distance: +S.spriteCameraFill.distance.toFixed(4),
+      decay: S.spriteCameraFill.decay
+    } : null,
+    environmentFormFill: {
+      kind: "hemisphere",
+      intensity: S.hemiLight ? +S.hemiLight.intensity.toFixed(4) : null,
+      diagnosticFloor: ITR_SHADOW_FORM_HEMI_FLOOR,
+      castShadow: false
+    },
+    presentationCapFeet: [fixture.candidatePresentationCap.minFeet, fixture.candidatePresentationCap.maxFeet],
+    lineup: figures,
+    stairSamples: stairs,
+    regenRecommended: figures.filter(function(row){ return row.regenRecommended; }).map(function(row){ return row.slug; })
+  };
+}
+window.Theater._claySpriteCitizenshipForTest = function(){
+  return clayRoomSpriteCitizenshipSnapshot();
+};
+window.Theater._claySetSpriteScaleModeForTest = function(mode){
+  return clayRoomSetSpriteScaleMode(mode, "clayroom-sprite-scale-test-seam");
+};
+window.Theater._claySelectSpriteForTest = function(slug){
+  return clayRoomSetSelectedSprite(slug);
+};
+window.Theater._claySetSelectedSpriteViewForTest = function(mode){
+  return clayRoomSetSelectedSpriteView(mode);
+};
 window.Theater._clayMovementProofForTest = function(){
   const session = (typeof clayRoomMovementSession === "function") ? clayRoomMovementSession() : null;
   if(!session || typeof tqMovementRanges !== "function") return null;
@@ -13244,6 +14440,8 @@ window.Theater._clayCameraPoseForTest = function(){
     position: [+S.camera.position.x.toFixed(4), +S.camera.position.y.toFixed(4), +S.camera.position.z.toFixed(4)],
     target: t ? [+t.x.toFixed(4), +t.y.toFixed(4), +t.z.toFixed(4)] : null,
     near: S.camera.near, far: S.camera.far,
+    clayZoom: S.clayCamZoom || 1,
+    clayZoomRange: [CLAY_CAM_ZOOM_MIN, CLAY_CAM_ZOOM_MAX],
   };
 };
 window.Theater._interiorSceneLightsForTest = function(){
@@ -13345,6 +14543,35 @@ window.Theater.interiorPsxAudit = function(){
 // __spriteScreenRects projects every mounted sprite billboard's own world box to canvas-pixel space so
 // the harness knows WHERE to sample. Both exist only for dev/battle-gate/capture-lit-sprites.mjs.
 window.Theater.__setSpriteUnlitDebug = function(on){ SPRITE_UNLIT_DEBUG = !!on; };
+// bounded A/B for the standee depth bias — sets the live uniform on every registered sprite
+// material (no recompile; the uniform is injected at first compile). Diagnosis + capture only.
+window.Theater._setStandeeDepthBiasForTest = function(units){
+  SPRITE_DEPTH_BIAS_UNITS = (typeof units === "number") ? units : 0.25;
+  // prune disposed materials while walking (board rebuilds retire cards; the registry must not
+  // accumulate dead references across a long session)
+  for(let i = SPRITE_DEPTH_BIAS_MATERIALS.length - 1; i >= 0; i--){
+    const m = SPRITE_DEPTH_BIAS_MATERIALS[i];
+    if(!m || m.disposed || (m.userData && m.userData.retired)){ SPRITE_DEPTH_BIAS_MATERIALS.splice(i, 1); continue; }
+    if(m.userData && m.userData.standeeDepthBiasUniform) m.userData.standeeDepthBiasUniform.value = SPRITE_DEPTH_BIAS_UNITS;
+  }
+  markDirty();
+  return SPRITE_DEPTH_BIAS_UNITS;
+};
+window.Theater._setSpriteSamplingForTest = function(mode){
+  const linearMutation = mode === "linear";
+  let changed = 0;
+  Object.keys(SPRITE_TEXTURE_CACHE).forEach((key) => {
+    const tex = SPRITE_TEXTURE_CACHE[key];
+    if(!tex || tex === "pending" || tex === "failed") return;
+    tex.magFilter = linearMutation ? THREE.LinearFilter : THREE.NearestFilter;
+    tex.minFilter = THREE.LinearFilter;
+    tex.generateMipmaps = false;
+    tex.needsUpdate = true;
+    changed++;
+  });
+  markDirty();
+  return { mode: linearMutation ? "linear-mutation" : "production-nearest-mag-linear-min", changed };
+};
 window.Theater.__spriteScreenRects = function(){
   const out = [];
   if(!S.interiorGroup || !S.camera || !S.renderer) return out;
@@ -13460,7 +14687,7 @@ window.Theater._postSuiteForTest = function(){
     built: true,
     mounted: !!S.postSuiteMounted,
     passNames: (S.composer && S.composer.passes) ? S.composer.passes.map((p) => p.__bwName || "?") : [],
-    passEnabled: { dof: !!ps.dof.enabled, bloom: !!ps.bloom.enabled, grade: !!ps.grade.enabled },
+    passEnabled: { ao: !!(ps.ao && ps.ao.enabled), dof: !!ps.dof.enabled, bloom: !!ps.bloom.enabled, grade: !!ps.grade.enabled },
     dof: {
       focusV: ps.dof.uniforms.uFocusV.value,
       focusDist: S.dofFocusDist,
@@ -13485,8 +14712,150 @@ window.Theater._setSuitePassEnabledForTest = function(name, enabled){
   const p = S.postSuite[name];
   if(!p) return null;
   p.enabled = !!enabled;
+  // keep the Clayroom's ENV AO A/B button truthful when the toggle arrives through this seam —
+  // a UI label that disagrees with the live pass state is a readout lie, however small
+  if(name === "ao" && typeof S.clayRoomEnvAOSyncButton === "function") S.clayRoomEnvAOSyncButton();
   markDirty();
   return !!p.enabled;
+};
+// CLAYROOM VISUAL CORRECTION Checkpoint 1 — ENVIRONMENT AO seams (read-only + the same bounded
+// A/B the other suite passes get through _setSuitePassEnabledForTest("ao", …)). No product code
+// reads these. The receipt/harness surface: authored params (proving they are the frozen bounded
+// set, not a drifted taste dial), the live pass state, and the prepass exclusion count from the
+// last AO G-buffer render (proving sprite cards/overlay quads stayed out).
+window.Theater._environmentAOForTest = function(){
+  const ao = S.postSuite && S.postSuite.ao;
+  return {
+    built: !!ao,
+    enabled: !!(ao && ao.enabled),
+    enabledDefault: ENV_AO_ENABLED_DEFAULT,
+    urlResolvedEnabled: envAOEnabled(),
+    mounted: !!S.postSuiteMounted,
+    params: Object.assign({}, ENV_AO_PARAMS),
+    denoise: Object.assign({}, ENV_AO_DENOISE),
+    blendIntensity: ao ? ao.blendIntensity : ENV_AO_BLEND_INTENSITY,
+    output: ao ? ao.output : null,
+    perspectiveDefine: ao ? ao.gtaoMaterial.defines.PERSPECTIVE_CAMERA : null,
+    targetSize: ao ? { w: ao.width, h: ao.height } : null,
+    lastPrepassExcludedCount: ao && ao.lastPrepassExcludedCount != null ? ao.lastPrepassExcludedCount : null,
+  };
+};
+// The pure prepass-exclusion predicate, exposed so the node harness can execute the actual rule
+// against mesh-shaped fixtures (transparent sprite card -> excluded; opaque wall -> included)
+// instead of grepping for it.
+window.Theater._envAOPrepassExcludesForTest = function(meshLike){
+  return envAOPrepassExcludes(meshLike);
+};
+// Read-only sprite shadow-caster census: every mounted sprite-card mesh's shadow contract state
+// (castShadow, custom depth/distance materials, visibility, world position) so "why does this
+// standee not cast" is answered by data instead of eyeballs.
+window.Theater._spriteShadowStateForTest = function(){
+  const rows = [];
+  if(!S.interiorGroup) return rows;
+  S.interiorGroup.traverse(function(node){
+    if(!node || !node.userData || !node.userData.sprite) return;
+    // the sprite tag sits on the standee GROUP; census every mesh beneath it
+    node.traverse(function(child){
+      if(!child || !child.isMesh) return;
+      const p = new THREE.Vector3();
+      child.getWorldPosition(p);
+      const chain = [];
+      for(let a = child; a; a = a.parent){ chain.push((a.name || a.type) + (a.visible ? "" : "!HIDDEN")); if(chain.length > 8) break; }
+      rows.push({
+        sprite: (node.userData.sprite && (node.userData.sprite.slug || node.userData.sprite.id)) || true,
+        meshName: child.name || null,
+        castShadow: !!child.castShadow,
+        hasCustomDepth: !!child.customDepthMaterial,
+        hasCustomDistance: !!child.customDistanceMaterial,
+        visible: !!child.visible,
+        layersMask: child.layers ? child.layers.mask : null,
+        frustumCulled: !!child.frustumCulled,
+        materialTransparent: !!(child.material && child.material.transparent),
+        depthMaterialHasMap: !!(child.customDepthMaterial && child.customDepthMaterial.map),
+        depthMaterialAlphaTest: child.customDepthMaterial ? child.customDepthMaterial.alphaTest : null,
+        depthMaterialVisible: child.customDepthMaterial ? child.customDepthMaterial.visible !== false : null,
+        geometryType: child.geometry ? child.geometry.type : null,
+        worldScale: (function(){ const s = new THREE.Vector3(); child.getWorldScale(s); return { x: +s.x.toFixed(3), y: +s.y.toFixed(3), z: +s.z.toFixed(3) }; })(),
+        parentChain: chain.join(" > "),
+        worldPos: { x: +p.x.toFixed(2), y: +p.y.toFixed(2), z: +p.z.toFixed(2) },
+      });
+    });
+  });
+  return rows;
+};
+// Checkpoint 2 solo A/B (diagnosis only): shows warm-only / cool-only / both for the SAME mounted
+// scene by toggling light+emitter visibility — nothing moves, nothing rebuilds, instantly
+// reversible. Pass a light id to solo it, null to restore all.
+window.Theater._claySetLightSoloForTest = function(soloId){
+  const rows = S.interiorLightTargets || [];
+  let touched = 0;
+  rows.forEach(function(r){
+    if(!r || !r.pl) return;
+    const on = soloId == null || r.id === soloId;
+    r.pl.visible = on;
+    if(r.marker) r.marker.visible = on;
+    touched++;
+  });
+  markDirty();
+  return { touched, soloId: soloId == null ? null : String(soloId) };
+};
+// One-shot shadow-pass entry probe: counts onBeforeShadow invocations on the sprite card versus a
+// reference opaque bench mesh across one forced render, proving whether the card enters the
+// renderer's shadow pass at all (THREE calls onBeforeShadow per shadow draw).
+window.Theater._spriteShadowProbeForTest = function(){
+  const counts = { card: 0, reference: 0 };
+  let card = null, reference = null;
+  if(!S.interiorGroup) return counts;
+  S.interiorGroup.traverse(function(node){
+    if(!card && node.isMesh && node.customDepthMaterial) card = node;
+    if(!reference && node.isMesh && node.userData && node.userData.clayBenchPrimitive) reference = node;
+  });
+  const describe = function(shadowCamera){
+    const p = new THREE.Vector3();
+    shadowCamera.getWorldPosition(p);
+    return shadowCamera.type + "@" + p.x.toFixed(1) + "," + p.y.toFixed(1) + "," + p.z.toFixed(1)
+      + " box±" + (shadowCamera.right != null ? shadowCamera.right.toFixed(1) : "?");
+  };
+  counts.cardLights = []; counts.referenceLights = [];
+  if(card) card.onBeforeShadow = function(r, o, cam, shadowCamera){ counts.card++; counts.cardLights.push(describe(shadowCamera)); };
+  if(reference) reference.onBeforeShadow = function(r, o, cam, shadowCamera){ counts.reference++; counts.referenceLights.push(describe(shadowCamera)); };
+  renderTheaterFrame();
+  if(card) card.onBeforeShadow = function(){};
+  if(reference) reference.onBeforeShadow = function(){};
+  counts.foundCard = !!card;
+  counts.foundReference = !!reference;
+  return counts;
+};
+// Bounded A/B toggle for the sprite-card shadow caster (diagnosis only — the production contract
+// keeps it ON): flips castShadow on every mounted sprite-card mesh that carries the alpha depth
+// materials, so a capture pair can prove whether a missing standee shadow was never rendered or
+// merely hidden from the fixed camera by the caster itself.
+window.Theater._setSpriteCastShadowForTest = function(on){
+  let flipped = 0;
+  if(!S.interiorGroup) return flipped;
+  S.interiorGroup.traverse(function(node){
+    if(!node || !node.userData || !node.userData.sprite) return;
+    node.traverse(function(child){
+      if(child && child.isMesh && child.customDepthMaterial){ child.castShadow = !!on; flipped++; }
+    });
+  });
+  markDirty();
+  return flipped;
+};
+// Diagnostic OUTPUT switch for the AO pass — GTAO's own debug views (raw AO, denoised AO, depth,
+// normals) as a bounded named-mode seam, for technical captures that separate "the AO math is
+// wrong" from "the denoiser smeared it" without touching the authored settings. Never a taste
+// control: modes are the pass's enum, default restored by passing "default".
+window.Theater._setEnvironmentAOOutputForTest = function(mode){
+  const ao = S.postSuite && S.postSuite.ao;
+  if(!ao) return null;
+  const map = { "default": GTAOPass.OUTPUT.Default, "ao": GTAOPass.OUTPUT.AO,
+    "denoise": GTAOPass.OUTPUT.Denoise, "depth": GTAOPass.OUTPUT.Depth,
+    "normal": GTAOPass.OUTPUT.Normal, "off": GTAOPass.OUTPUT.Off };
+  if(!(mode in map)) return null;
+  ao.output = map[mode];
+  markDirty();
+  return mode;
 };
 // P3-3a TEST/HARNESS SEAM — mirrors the _setRoomShellPolygonKernel convention: flips the
 // GRADE_TONEMAP module `let` live, in-process, so dev/battle-gate/agx/capture-agx-ab.mjs can shoot
@@ -14010,6 +15379,7 @@ window.Theater._floorContactLawForTest = {
 // shadow) so a harness can sample its pixels and assert center-alpha > edge-alpha without a live
 // WebGLRenderer.
 window.Theater._interiorPoolTextureForTest = function(){ return interiorPoolTexture(); };
+window.Theater._interiorPoolMaterialForTest = function(){ return interiorPoolMaterial(); };
 // BW2-2 — TEST-ONLY SEAM: exposes findUnit directly so a harness can inspect a MOUNTED combat unit's
 // live THREE.Group (position/userData/children) after a real setInteriorBoard+setUnits sequence,
 // without a public getter existing anywhere in product code (nothing outside this file's own verb
@@ -14200,7 +15570,7 @@ window.Theater._interiorBuildMotesForTest = function(seedStr, bounds, kind, ligh
 window.Theater._interiorBuildLightConeForTest = function(light, height){ return interiorBuildLightCone(light, height); };
 // runs ONE flicker tick synchronously against caller-supplied stand-ins (never S.pointLights/
 // S.interiorFlickerTargets) — a deterministic fake-clock harness drives Math.random itself and reads
-// the result back, rather than racing startLightFlicker's real 480ms setInterval.
+// the result back, rather than racing startLightFlicker's live requestAnimationFrame interpolation.
 window.Theater._lightFlickerStepForTest = function(pointLights, bases, interiorTargets, amplitude){
   return lightFlickerStep(pointLights, bases, interiorTargets, amplitude);
 };
@@ -14377,16 +15747,40 @@ window.Theater._freezeFantasyPropPilotLightForTest = function(){ stopLightFlicke
 // against LIGHT_TUNABLES.profiles[<the profile currently selected in the lab>] (defaults to whatever's
 // actually live, S.lightProfileKey) rather than a fixed key — the lab edits "the profile you're
 // looking at," and the dropdown (buildLightLabDom, below) is what changes which one that is.
+function lightLabNestedTarget(root, relative, meta){
+  const parts = relative.split(".");
+  let obj = root;
+  for(let i = 0; i < parts.length - 1; i++){
+    if(!obj || typeof obj !== "object"){
+      return Object.assign({ obj: null, field: parts[parts.length - 1] }, meta || {});
+    }
+    obj = obj[parts[i]];
+  }
+  return Object.assign({ obj, field: parts[parts.length - 1] }, meta || {});
+}
 function lightLabResolveTarget(path){
   if(path.indexOf("profile.") === 0){
     const key = (S.lightLabProfileKey && LIGHT_TUNABLES.profiles[S.lightLabProfileKey]) ? S.lightLabProfileKey
       : (S.lightProfileKey || LIGHT_DEFAULT_PROFILE);
-    return { obj: LIGHT_TUNABLES.profiles[key], field: path.slice("profile.".length), profileKey: key };
+    const profile = LIGHT_TUNABLES.profiles[key];
+    const relative = path.slice("profile.".length);
+    if(relative.indexOf("light.") === 0){
+      const index = Math.max(0, Math.min(
+        Number.isInteger(S.lightLabLightIndex) ? S.lightLabLightIndex : 0,
+        Math.max(0, (profile.lights || []).length - 1)
+      ));
+      return lightLabNestedTarget(
+        (profile.lights || [])[index],
+        relative.slice("light.".length),
+        { profileKey: key, lightIndex: index }
+      );
+    }
+    return lightLabNestedTarget(profile, relative, { profileKey: key });
   }
   if(path.indexOf("celestialArc.") === 0){
-    return { obj: LIGHT_TUNABLES.celestialArc, field: path.slice("celestialArc.".length) };
+    return lightLabNestedTarget(LIGHT_TUNABLES.celestialArc, path.slice("celestialArc.".length));
   }
-  return { obj: LIGHT_TUNABLES, field: path };
+  return lightLabNestedTarget(LIGHT_TUNABLES, path);
 }
 function getLightTunable(path){
   const t = lightLabResolveTarget(path);
@@ -14401,17 +15795,32 @@ function getLightTunable(path){
 // on the interior path — this covers the tabletop path, where postSuite may be stale/unmounted).
 function lightLabApplyTunables(){
   if(!S.mounted) return;
-  if(S.lastBoard){
+  if(S.clayRoomMounted && S.clayRoomLightRecipeId){
+    clayRoomSetLightingRecipe(S.clayRoomLightRecipeId, "light-lab-tunable");
+  } else if(S.lastBoard){
     if(S.isInteriorBoard) setInteriorBoard(S.lastBoard);
     else setBoard(S.lastBoard);
   } else if(S.lightProfileKey){
     applyLightProfile(S.lightProfileKey); // pre-setBoard/mount-time baseline (no board yet)
   }
+  const activeRecipe = LIGHT_TUNABLES.profiles[
+    (S.clayRoomMounted && S.clayRoomLightRecipeId) || S.lightLabProfileKey || S.lightProfileKey
+  ];
+  if(activeRecipe && activeRecipe.toneMap && activeRecipe.toneMap.profile !== GRADE_TONEMAP){
+    window.Theater._setGradeTonemapForTest(activeRecipe.toneMap.profile);
+  }
   if(S.postSuite){
-    S.postSuite.grade.uniforms.uExposureFloor.value = LIGHT_TUNABLES.gradeExposureFloor;
+    S.postSuite.grade.uniforms.uExposureFloor.value = activeRecipe
+      ? activeRecipe.exposureFloor : LIGHT_TUNABLES.gradeExposureFloor;
+    if(S.postSuite.grade.uniforms.uTonemapStrength){
+      S.postSuite.grade.uniforms.uTonemapStrength.value = activeRecipe
+        ? activeRecipe.toneMap.strength : 1;
+    }
     if(S.postSuite.bloom){
-      S.postSuite.bloom.threshold = LIGHT_TUNABLES.bloomThreshold;
-      S.postSuite.bloom.strength = LIGHT_TUNABLES.bloomStrength;
+      S.postSuite.bloom.threshold = activeRecipe
+        ? activeRecipe.bloom.threshold : LIGHT_TUNABLES.bloomThreshold;
+      S.postSuite.bloom.strength = activeRecipe
+        ? activeRecipe.bloom.strength : LIGHT_TUNABLES.bloomStrength;
     }
   }
   markDirty();
@@ -14420,7 +15829,70 @@ function lightLabApplyTunables(){
 function setLightTunable(path, value){
   const t = lightLabResolveTarget(path);
   if(!t.obj || !(t.field in t.obj)) return false;
+  S.lightLabUndo.push(lightRecipeDeepClone(LIGHT_TUNABLES));
+  if(S.lightLabUndo.length > 60) S.lightLabUndo.shift();
+  S.lightLabRedo = [];
   t.obj[t.field] = value;
+  if(t.profileKey && t.lightIndex != null){
+    const light = LIGHT_TUNABLES.profiles[t.profileKey].lights[t.lightIndex];
+    if(path === "profile.light.color") light.colorOverride = true;
+    if((path === "profile.light.temperatureK" || path === "profile.light.colorOverride")
+      && light.colorOverride === false){
+      light.color = lightRecipeKelvinColor(light.temperatureK);
+    }
+  }
+  const selectedProfileKey = (S.lightLabProfileKey && LIGHT_TUNABLES.profiles[S.lightLabProfileKey])
+    ? S.lightLabProfileKey : (S.lightProfileKey || LIGHT_DEFAULT_PROFILE);
+  const selectedProfile = LIGHT_TUNABLES.profiles[selectedProfileKey];
+  if(path === "profile.exposureFloor") LIGHT_TUNABLES.gradeExposureFloor = value;
+  if(path === "profile.bloom.threshold") LIGHT_TUNABLES.bloomThreshold = value;
+  if(path === "profile.bloom.strength") LIGHT_TUNABLES.bloomStrength = value;
+  if(path === "profile.spriteResponse.emissiveFloor") LIGHT_TUNABLES.spriteEmissiveFloor = value;
+  if(path === "gradeExposureFloor" && selectedProfile) selectedProfile.exposureFloor = value;
+  if(path === "bloomThreshold" && selectedProfile) selectedProfile.bloom.threshold = value;
+  if(path === "bloomStrength" && selectedProfile) selectedProfile.bloom.strength = value;
+  if(path === "spriteEmissiveFloor" && selectedProfile) selectedProfile.spriteResponse.emissiveFloor = value;
+  const profile = t.profileKey ? LIGHT_TUNABLES.profiles[t.profileKey] : null;
+  if(profile){
+    const report = lightRecipeValidate(profile);
+    if(!report.ok){
+      const prior = S.lightLabUndo.pop();
+      lightLabReplaceTunables(prior);
+      return false;
+    }
+  }
+  S.lightLabDirty = true;
+  lightLabApplyTunables();
+  return true;
+}
+function lightLabReplaceTunables(snapshot){
+  if(!snapshot || typeof snapshot !== "object") return false;
+  Object.keys(LIGHT_TUNABLES).forEach((key) => { delete LIGHT_TUNABLES[key]; });
+  Object.assign(LIGHT_TUNABLES, lightRecipeDeepClone(snapshot));
+  return true;
+}
+function lightLabResetAuthored(){
+  S.lightLabUndo.push(lightRecipeDeepClone(LIGHT_TUNABLES));
+  if(S.lightLabUndo.length > 60) S.lightLabUndo.shift();
+  S.lightLabRedo = [];
+  lightLabReplaceTunables(LIGHT_LAB_AUTHORED_BASELINE);
+  S.lightLabDirty = false;
+  lightLabApplyTunables();
+  return true;
+}
+function lightLabUndo(){
+  if(!S.lightLabUndo.length) return false;
+  S.lightLabRedo.push(lightRecipeDeepClone(LIGHT_TUNABLES));
+  lightLabReplaceTunables(S.lightLabUndo.pop());
+  S.lightLabDirty = JSON.stringify(LIGHT_TUNABLES) !== JSON.stringify(LIGHT_LAB_AUTHORED_BASELINE);
+  lightLabApplyTunables();
+  return true;
+}
+function lightLabRedo(){
+  if(!S.lightLabRedo.length) return false;
+  S.lightLabUndo.push(lightRecipeDeepClone(LIGHT_TUNABLES));
+  lightLabReplaceTunables(S.lightLabRedo.pop());
+  S.lightLabDirty = JSON.stringify(LIGHT_TUNABLES) !== JSON.stringify(LIGHT_LAB_AUTHORED_BASELINE);
   lightLabApplyTunables();
   return true;
 }
@@ -14432,15 +15904,64 @@ window.Theater._lightLabSetTunable = function(path, value){ return setLightTunab
 window.Theater._lightLabGetTunable = function(path){ return getLightTunable(path); };
 window.Theater._lightLabSchema = function(){ return LIGHT_TUNABLE_SCHEMA.map((e) => Object.assign({}, e)); };
 window.Theater._lightLabExport = function(){ return lightLabExportJSON(); };
+window.Theater._lightLabResetAuthored = function(){ return lightLabResetAuthored(); };
+window.Theater._lightLabUndo = function(){ return lightLabUndo(); };
+window.Theater._lightLabRedo = function(){ return lightLabRedo(); };
+window.Theater._lightLabHistory = function(){
+  return { undo: S.lightLabUndo.length, redo: S.lightLabRedo.length, dirty: !!S.lightLabDirty };
+};
+window.Theater._lightLabSelectForTest = function(profileKey, lightIndex){
+  if(!LIGHT_TUNABLES.profiles[profileKey]) return false;
+  S.lightLabProfileKey = profileKey;
+  S.lightLabLightIndex = Math.max(0, Number(lightIndex) || 0);
+  return true;
+};
 
 // The flat probe/UI manifest — one entry per bindable tunable. `group:"profile"` entries are relative
 // to whichever profile the lab's dropdown currently has selected (lightLabResolveTarget's own "profile."
 // prefix); every other entry is a direct LIGHT_TUNABLES (or LIGHT_TUNABLES.celestialArc) property.
 const LIGHT_TUNABLE_SCHEMA = [
-  { path: "profile.ambientIntensity", label: "Ambient intensity (fill)", type: "range", min: 0, max: 1.5, step: 0.01, group: "profile" },
-  { path: "profile.ambientColor", label: "Ambient color (fill)", type: "color", group: "profile" },
-  { path: "profile.pointIntensity", label: "Key intensity", type: "range", min: 0, max: 30, step: 0.5, group: "profile" },
-  { path: "profile.pointColor", label: "Key color", type: "color", group: "profile" },
+  { path: "profile.ambient.intensity", label: "Ambient intensity (fill)", type: "range", min: 0, max: 1.5, step: 0.01, group: "profile" },
+  { path: "profile.ambient.color", label: "Ambient color (fill)", type: "color", group: "profile" },
+  { path: "profile.exposureFloor", label: "Recipe exposure floor", type: "range", min: 0, max: 0.3, step: 0.005, group: "profile" },
+  { path: "profile.toneMap.profile", label: "Tone-map profile", type: "select", options: ["agx", "none"], group: "profile" },
+  { path: "profile.toneMap.strength", label: "Tone-map strength", type: "range", min: 0, max: 1, step: 0.01, group: "profile" },
+  { path: "profile.bloom.threshold", label: "Recipe bloom threshold", type: "range", min: 0, max: 2, step: 0.01, group: "profile" },
+  { path: "profile.bloom.strength", label: "Recipe bloom strength", type: "range", min: 0, max: 3, step: 0.05, group: "profile" },
+  { path: "profile.spriteResponse.emissiveFloor", label: "Recipe sprite readability", type: "range", min: 0, max: 0.3, step: 0.005, group: "profile" },
+  { path: "profile.light.enabled", label: "Fixture enabled", type: "checkbox", group: "light" },
+  { path: "profile.light.state", label: "Local light state", type: "select", options: ["steady", "flickering"], group: "light" },
+  { path: "profile.light.type", label: "Light type", type: "select", options: ["point", "spot", "directional", "environment"], group: "light" },
+  { path: "profile.light.temperatureK", label: "Temperature (Kelvin)", type: "range", min: 1000, max: 20000, step: 100, group: "light" },
+  { path: "profile.light.colorOverride", label: "Exact color override", type: "checkbox", group: "light" },
+  { path: "profile.light.intensity", label: "Tabletop intensity", type: "range", min: 0, max: 30, step: 0.5, group: "light" },
+  { path: "profile.light.physicalIntensity", label: "Physical fixture intensity", type: "range", min: 0, max: 30, step: 0.25, group: "light" },
+  { path: "profile.light.color", label: "Light color", type: "color", group: "light" },
+  { path: "profile.light.positionStrategy", label: "Position strategy", type: "select", options: ["board-relative", "socket-relative"], group: "light" },
+  { path: "profile.light.pos.x", label: "Board position X", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
+  { path: "profile.light.pos.y", label: "Board position Y", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
+  { path: "profile.light.pos.z", label: "Board position Z", type: "range", min: -4, max: 8, step: 0.05, group: "light" },
+  { path: "profile.light.rangeM", label: "Range (metres)", type: "range", min: 0, max: 60, step: 0.25, group: "light" },
+  { path: "profile.light.heightM", label: "Source height (metres)", type: "range", min: 0, max: 8, step: 0.05, group: "light" },
+  { path: "profile.light.falloff", label: "Physical falloff", type: "range", min: 0, max: 2, step: 0.05, group: "light" },
+  { path: "profile.light.azimuthDeg", label: "Azimuth (degrees)", type: "range", min: -360, max: 360, step: 1, group: "light" },
+  { path: "profile.light.elevationDeg", label: "Elevation (degrees)", type: "range", min: -90, max: 90, step: 1, group: "light" },
+  { path: "profile.light.spot.coneDeg", label: "Spot cone (degrees)", type: "range", min: 1, max: 179, step: 1, group: "light" },
+  { path: "profile.light.spot.penumbra", label: "Spot penumbra", type: "range", min: 0, max: 1, step: 0.01, group: "light" },
+  { path: "profile.light.shadow.cast", label: "Cast shadow", type: "checkbox", group: "light" },
+  { path: "profile.light.shadow.bias", label: "Shadow bias", type: "range", min: -0.1, max: 0.1, step: 0.0005, group: "light" },
+  { path: "profile.light.shadow.normalBias", label: "Shadow normal bias", type: "range", min: 0, max: 1, step: 0.005, group: "light" },
+  { path: "profile.light.shadow.mapSize", label: "Shadow map size", type: "select-number", options: [256, 512, 1024, 2048], group: "light" },
+  { path: "profile.light.shadow.budgetPriority", label: "Shadow budget priority", type: "range", min: 0, max: 3, step: 1, group: "light" },
+  { path: "profile.light.flicker.amplitude", label: "Flicker amplitude", type: "range", min: 0, max: 0.5, step: 0.01, group: "light" },
+  { path: "profile.light.flicker.cadenceMs", label: "Flicker cadence (ms)", type: "range", min: 100, max: 5000, step: 20, group: "light" },
+  { path: "profile.light.flicker.intervalJitter", label: "Flicker interval variation", type: "range", min: 0, max: 0.9, step: 0.01, group: "light" },
+  { path: "profile.light.flicker.directionAmplitude", label: "Flame direction dance", type: "range", min: 0, max: 0.08, step: 0.001, group: "light" },
+  { path: "profile.light.fixtureId", label: "Physical fixture id", type: "text", group: "light" },
+  { path: "profile.light.mount", label: "Mount socket", type: "select", options: ["none", "floor", "wall", "ceiling"], group: "light" },
+  { path: "profile.light.emitterLocal.x", label: "Emitter local X", type: "range", min: -4, max: 4, step: 0.01, group: "light" },
+  { path: "profile.light.emitterLocal.y", label: "Emitter local Y", type: "range", min: -4, max: 4, step: 0.01, group: "light" },
+  { path: "profile.light.emitterLocal.z", label: "Emitter local Z", type: "range", min: -4, max: 4, step: 0.01, group: "light" },
   { path: "stageAmbientFloor", label: "Stage ambient floor (STAGE_AMBIENT_FLOOR)", type: "range", min: 0, max: 1, step: 0.01, group: "global" },
   { path: "gradeExposureFloor", label: "Exposure floor, pre-AgX (ledger #12/13)", type: "range", min: 0, max: 0.3, step: 0.005, group: "global" },
   { path: "bloomThreshold", label: "Bloom threshold (linear)", type: "range", min: 0, max: 2, step: 0.01, group: "global" },
@@ -14474,24 +15995,30 @@ function lightLabExportJSON(){
   const profiles = {};
   for(const key in LIGHT_TUNABLES.profiles){
     const p = LIGHT_TUNABLES.profiles[key];
-    profiles[key] = {
-      ambientColor: hex(p.ambientColor), ambientIntensity: p.ambientIntensity,
-      pointColor: p.pointColor != null ? hex(p.pointColor) : null, pointIntensity: p.pointIntensity,
-    };
+    profiles[key] = lightRecipeDeepClone(p);
+    profiles[key].ambient.color = hex(p.ambient.color);
+    profiles[key].lights.forEach((light, index) => {
+      light.color = hex(p.lights[index].color);
+    });
   }
   return {
-    _unit: "LL-1", _generatedAt: new Date().toISOString(),
+    kind: "light-profile-lock-set",
+    schemaVersion: LIGHT_RECIPE_LOCK_SCHEMA_VERSION,
+    id: LIGHT_PROFILE_LOCKS_COMPILED.id,
+    version: LIGHT_PROFILE_LOCKS_COMPILED.version,
+    settings: {
+      stageAmbientFloor: LIGHT_TUNABLES.stageAmbientFloor,
+      gradeExposureFloor: LIGHT_TUNABLES.gradeExposureFloor,
+      bloomThreshold: LIGHT_TUNABLES.bloomThreshold,
+      bloomStrength: LIGHT_TUNABLES.bloomStrength,
+      gradeTintScale: LIGHT_TUNABLES.gradeTintScale,
+      gradeTintMax: LIGHT_TUNABLES.gradeTintMax,
+      celestialArc: Object.assign({}, LIGHT_TUNABLES.celestialArc),
+      spriteEmissiveFloor: LIGHT_TUNABLES.spriteEmissiveFloor,
+      sceneAmbient: LIGHT_TUNABLES.sceneAmbient,
+      lightRenderGain: LIGHT_TUNABLES.lightRenderGain,
+    },
     profiles,
-    stageAmbientFloor: LIGHT_TUNABLES.stageAmbientFloor,
-    gradeExposureFloor: LIGHT_TUNABLES.gradeExposureFloor,
-    bloomThreshold: LIGHT_TUNABLES.bloomThreshold,
-    bloomStrength: LIGHT_TUNABLES.bloomStrength,
-    gradeTintScale: LIGHT_TUNABLES.gradeTintScale,
-    gradeTintMax: LIGHT_TUNABLES.gradeTintMax,
-    celestialArc: Object.assign({}, LIGHT_TUNABLES.celestialArc),
-    spriteEmissiveFloor: LIGHT_TUNABLES.spriteEmissiveFloor,
-    sceneAmbient: LIGHT_TUNABLES.sceneAmbient,
-    lightRenderGain: LIGHT_TUNABLES.lightRenderGain,
   };
 }
 
@@ -14542,7 +16069,18 @@ function lightLabField(entry){
   const valOut = document.createElement("span");
   valOut.style.cssText = "flex:0 0 48px;text-align:right;color:#9c9;";
   let input;
-  if(entry.type === "color"){
+  if(entry.type === "checkbox"){
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = getLightTunable(entry.path) !== false;
+    input.style.cssText = "flex:0 0 28px;height:16px;";
+    valOut.textContent = input.checked ? "ON" : "OFF";
+    input.addEventListener("change", () => {
+      setLightTunable(entry.path, !!input.checked);
+      valOut.textContent = input.checked ? "ON" : "OFF";
+      lightLabRefreshReadouts();
+    });
+  } else if(entry.type === "color"){
     input = document.createElement("input");
     input.type = "color";
     input.style.cssText = "flex:0 0 28px;height:16px;border:none;padding:0;background:none;";
@@ -14553,6 +16091,35 @@ function lightLabField(entry){
       const v = lightLabHexStrToNum(input.value);
       setLightTunable(entry.path, v);
       valOut.textContent = input.value;
+      lightLabRefreshReadouts();
+    });
+  } else if(entry.type === "select" || entry.type === "select-number"){
+    input = document.createElement("select");
+    input.style.cssText = "flex:1 1 96px;min-width:0;background:#222;color:#eee;border:1px solid #444;";
+    (entry.options || []).forEach((optionValue) => {
+      const option = document.createElement("option");
+      option.value = String(optionValue);
+      option.textContent = String(optionValue);
+      input.appendChild(option);
+    });
+    input.value = String(getLightTunable(entry.path));
+    valOut.textContent = input.value;
+    input.addEventListener("change", () => {
+      const value = entry.type === "select-number" ? Number(input.value) : input.value;
+      setLightTunable(entry.path, value);
+      valOut.textContent = input.value;
+      lightLabRefreshReadouts();
+    });
+  } else if(entry.type === "text"){
+    input = document.createElement("input");
+    input.type = "text";
+    input.value = String(getLightTunable(entry.path) || "");
+    input.style.cssText = "flex:1 1 96px;min-width:0;background:#222;color:#eee;border:1px solid #444;";
+    valOut.textContent = "";
+    input.addEventListener("change", () => {
+      if(!setLightTunable(entry.path, input.value)){
+        input.value = String(getLightTunable(entry.path) || "");
+      }
       lightLabRefreshReadouts();
     });
   } else {
@@ -14584,15 +16151,37 @@ function lightLabRebuildProfileFields(container){
     container.appendChild(lightLabField(entry).row);
   });
 }
+function lightLabRebuildLightFields(container){
+  container.innerHTML = "";
+  const profile = LIGHT_TUNABLES.profiles[S.lightLabProfileKey];
+  if(!profile || !profile.lights || !profile.lights.length){
+    const empty = document.createElement("div");
+    empty.textContent = "No local light in this recipe; ambient/environment is the source.";
+    empty.style.cssText = "color:#7a8494;margin:3px 0 6px;";
+    container.appendChild(empty);
+    return;
+  }
+  LIGHT_TUNABLE_SCHEMA.filter((e) => e.group === "light").forEach((entry) => {
+    container.appendChild(lightLabField(entry).row);
+  });
+}
 
 function lightLabRefreshReadouts(){
   if(!S.lightLabMounted || !S.lightLabEls || !S.lightLabEls.readout) return;
   const gates = (window.Theater._lumaGatesForTest && S.mounted) ? window.Theater._lumaGatesForTest() : null;
   const el = S.lightLabEls.readout;
-  if(!gates){ el.textContent = "P-A readouts: no live board mounted."; return; }
+  const recipe = LIGHT_TUNABLES.profiles[S.lightLabProfileKey] || LIGHT_TUNABLES.profiles[LIGHT_DEFAULT_PROFILE];
+  const historyLine = "preview " + (S.lightLabDirty ? "DIRTY" : "AUTHORED")
+    + " · undo " + S.lightLabUndo.length + " · redo " + S.lightLabRedo.length;
+  if(!gates){
+    el.textContent = recipe.id + " · " + recipe.mode + "\n" + historyLine
+      + "\nP-A readouts: no live board mounted.";
+    return;
+  }
   const pct = (v) => (v == null ? "—" : (v * 100).toFixed(1) + "%");
   el.textContent =
-    "P-A readouts (docs/VQ2-RESPEC.md §1) — profile: " + (gates.lightProfile || "—") +
+    recipe.id + " · " + recipe.mode + "\n" + historyLine +
+    "\nP-A readouts (docs/VQ2-RESPEC.md §1) — live profile: " + (gates.lightProfile || "—") +
     "\n  tray-edge luma: " + pct(gates.trayEdgeLuma) + "  (gate: <=12%)" +
     "\n  PC-face luma:   " + pct(gates.pcFaceLuma) + (gates.pcUnitFound ? "" : "  (no PC unit on this board)") + "  (gate: >=18%)" +
     "\n  frame median:   " + pct(gates.frameMedianLuma) + "  (compare across profiles for the >=6% separation gate)";
@@ -14633,30 +16222,82 @@ function mountLightLab(){
   select.style.cssText = "width:100%;margin-bottom:4px;background:#222;color:#eee;border:1px solid #444;";
   Object.keys(LIGHT_TUNABLES.profiles).forEach((key) => {
     const opt = document.createElement("option");
-    opt.value = key; opt.textContent = key;
+    const recipe = LIGHT_TUNABLES.profiles[key];
+    opt.value = key;
+    opt.textContent = (recipe.rolled ? "WORLD · " : "TEST · ") + recipe.label;
     select.appendChild(opt);
   });
   select.value = S.lightLabProfileKey || S.lightProfileKey || LIGHT_DEFAULT_PROFILE;
   S.lightLabProfileKey = select.value;
+  const recipeInfo = document.createElement("div");
+  recipeInfo.style.cssText = "color:#9ab;margin:2px 0 5px;font:10px/1.35 monospace;";
   const profFields = document.createElement("div");
+  const lightHeader = document.createElement("div");
+  lightHeader.textContent = "Named light / fixture";
+  lightHeader.style.cssText = "color:#9ab;border-top:1px solid #333;padding-top:5px;margin-top:5px;";
+  const lightSelect = document.createElement("select");
+  lightSelect.style.cssText = "width:100%;margin:3px 0 4px;background:#222;color:#eee;border:1px solid #444;";
+  const lightFields = document.createElement("div");
+  function refreshRecipeEditor(){
+    const profile = LIGHT_TUNABLES.profiles[S.lightLabProfileKey];
+    lightLabRebuildProfileFields(profFields);
+    lightSelect.innerHTML = "";
+    (profile && profile.lights ? profile.lights : []).forEach((light, index) => {
+      const opt = document.createElement("option");
+      opt.value = String(index);
+      opt.textContent = light.label + " · " + light.id;
+      lightSelect.appendChild(opt);
+    });
+    const count = profile && profile.lights ? profile.lights.length : 0;
+    S.lightLabLightIndex = Math.max(0, Math.min(S.lightLabLightIndex || 0, Math.max(0, count - 1)));
+    lightSelect.value = String(S.lightLabLightIndex);
+    lightSelect.disabled = count === 0;
+    if(profile){
+      const invariants = profile.spriteResponse.invariants;
+      const selectedLight = count ? profile.lights[S.lightLabLightIndex] : null;
+      recipeInfo.textContent =
+        profile.mode + " · source: " + profile.source.label
+        + (profile.source.loreNative ? " · lore-native" : " · diagnostic only")
+        + "\nsprite invariants (read-only): " + invariants.colorSpace + " · "
+        + invariants.magnificationFilter + " mag / " + invariants.minificationFilter
+        + " min · " + invariants.alphaMode
+        + (selectedLight
+          ? "\nunits: " + selectedLight.intensityUnit + " / " + selectedLight.physicalIntensityUnit
+            + " · " + selectedLight.positionStrategy
+          : "\nno local light; ambient/environment only");
+    } else {
+      recipeInfo.textContent = "recipe unavailable";
+    }
+    lightLabRebuildLightFields(lightFields);
+  }
   select.addEventListener("change", () => {
     S.lightLabProfileKey = select.value;
-    lightLabRebuildProfileFields(profFields);
+    S.lightLabLightIndex = 0;
+    refreshRecipeEditor();
+  });
+  lightSelect.addEventListener("change", () => {
+    S.lightLabLightIndex = Number(lightSelect.value) || 0;
+    refreshRecipeEditor();
   });
   const previewBtn = document.createElement("button");
   previewBtn.textContent = "Preview this profile on the live board";
   previewBtn.style.cssText = "width:100%;margin:2px 0 6px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;";
   previewBtn.addEventListener("click", () => {
     if(!S.mounted) return;
-    applyLightProfile(select.value);
+    if(S.clayRoomMounted) clayRoomSetLightingRecipe(select.value, "light-lab-preview");
+    else applyLightProfile(select.value);
     markDirty(); scheduleRender();
     lightLabRefreshReadouts();
   });
   profSection.appendChild(select);
+  profSection.appendChild(recipeInfo);
   profSection.appendChild(previewBtn);
   profSection.appendChild(profFields);
+  profSection.appendChild(lightHeader);
+  profSection.appendChild(lightSelect);
+  profSection.appendChild(lightFields);
   panel.appendChild(profSection);
-  lightLabRebuildProfileFields(profFields);
+  refreshRecipeEditor();
 
   ["global", "celestial", "sprite"].forEach((group) => {
     const section = document.createElement("div");
@@ -14680,16 +16321,35 @@ function mountLightLab(){
   readoutSection.appendChild(readout);
   panel.appendChild(readoutSection);
 
+  const historyActions = document.createElement("div");
+  historyActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:6px;";
+  [
+    ["UNDO", () => lightLabUndo()],
+    ["REDO", () => lightLabRedo()],
+    ["RESET", () => lightLabResetAuthored()]
+  ].forEach((def) => {
+    const button = document.createElement("button");
+    button.textContent = def[0];
+    button.style.cssText = "font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+    button.addEventListener("click", () => {
+      def[1]();
+      refreshRecipeEditor();
+      lightLabRefreshReadouts();
+    });
+    historyActions.appendChild(button);
+  });
+  panel.appendChild(historyActions);
+
   // export
   const exportBtn = document.createElement("button");
-  exportBtn.textContent = "EXPORT current values (JSON)";
+  exportBtn.textContent = "SAVE AUTHORED LOCK (JSON)";
   exportBtn.style.cssText = "width:100%;margin-top:6px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   exportBtn.addEventListener("click", () => {
     const json = JSON.stringify(lightLabExportJSON(), null, 2);
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = "light-lab-export.json";
+    a.href = url; a.download = "light-profile-locks.json";
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
@@ -14765,6 +16425,49 @@ function clayRoomShouldEnable(){
   } catch(e){}
   return false;
 }
+
+const CLAY_ROOM_TRUTH_FIXTURE_ID = "cl-f00-room-truth";
+const CLAY_ROOM_STRUCTURE_BENCH_ID = "cl-f01-structure-bench";
+const CLAY_ROOM_LIGHTING_BENCH_ID = "cl-f02-lighting-bench";
+const CLAY_ROOM_SPRITE_BENCH_ID = "cl-f03-sprite-citizenship";
+const CLAY_ROOM_SPRITE_SCALE_MODES = Object.freeze(["true-scale", "diagnostic-cap"]);
+const CLAY_ROOM_LIGHT_PREVIEW_SEEDS = Object.freeze(["A", "B", "C"]);
+const CLAY_ROOM_LORE_LIGHT_PREVIEWS = Object.freeze([
+  Object.freeze({ id: "daylit", label: "SUN · DAY", source: "sunlight" }),
+  Object.freeze({ id: "moonlit", label: "MOON · NIGHT", source: "moonlight" }),
+  Object.freeze({ id: "magic-glow", label: "MAGIC", source: "arcane crystal" }),
+  Object.freeze({ id: "torchlit", label: "FIRE", source: "torch flame" }),
+  Object.freeze({ id: "lavalit", label: "LAVA", source: "molten fissure" })
+]);
+const CLAY_ROOM_LIGHTING_MATRIX_RECIPES = Object.freeze([
+  "clay-neutral-truth",
+  "clay-opposing-pair",
+  "daylit",
+  "moonlit",
+  "magic-glow",
+  "torchlit",
+  "lavalit"
+]);
+function clayRoomFixtureIdFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("clayfixture")
+      : null;
+    if(raw === "room" || raw === CLAY_ROOM_TRUTH_FIXTURE_ID) return CLAY_ROOM_TRUTH_FIXTURE_ID;
+    if(raw === "structure" || raw === "structure-bench" || raw === CLAY_ROOM_STRUCTURE_BENCH_ID){
+      return CLAY_ROOM_STRUCTURE_BENCH_ID;
+    }
+    if(raw === "lights" || raw === "lighting-bench" || raw === CLAY_ROOM_LIGHTING_BENCH_ID){
+      return CLAY_ROOM_LIGHTING_BENCH_ID;
+    }
+    if(raw === "sprites" || raw === "sprite-citizenship" || raw === CLAY_ROOM_SPRITE_BENCH_ID){
+      return CLAY_ROOM_SPRITE_BENCH_ID;
+    }
+  } catch(e){}
+  // The active reset-ladder checkpoint opens on the fixture under review. Earlier fixtures remain
+  // one click away and can be pinned directly with ?clayfixture=room or ?clayfixture=lights.
+  return CLAY_ROOM_STRUCTURE_BENCH_ID;
+}
 function clayRoomMaybeAutoMount(){
   // CL-R0 (docs/CLAYROOM-RESET-LADDER.md): this poll now does ONE thing — mount the surface if the
   // flag is on and it isn't up yet. It used to ALSO reassert the light profile every frame, because
@@ -14800,7 +16503,11 @@ function clayRoomMaybeAutoMount(){
 // identity returns without replacing a light object, material, or scheduler.
 function clayRoomApplyLightProfile(record){
   if(!S.scene) return;
-  const profile = CLAY_C1A_LIGHT_PROFILE;
+  const recipeId = S.clayRoomLightRecipeId
+    || (S.clayRoomCompiled && S.clayRoomCompiled.lightRecipeId)
+    || "clay-opposing-pair";
+  const recipe = LIGHT_TUNABLES.profiles[recipeId] || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+  const profile = lightRecipeLegacyProfile(recipe);
   const ambientIsAuthored = !!(S.ambientLight && S.ambientLight.userData
     && S.ambientLight.userData.clayLightId === "clay-ambient");
   const hasForeignProfilePoints = !!(S.pointLights && S.pointLights.length);
@@ -14808,8 +16515,13 @@ function clayRoomApplyLightProfile(record){
     if(S.ambientLight) S.scene.remove(S.ambientLight);
     const ambient = new THREE.AmbientLight(profile.ambient.color, profile.ambient.intensity);
     ambient.userData.clayLightId = "clay-ambient";
+    ambient.userData.clayLightRecipeId = recipe.id;
     S.scene.add(ambient);
     S.ambientLight = ambient;
+  } else {
+    S.ambientLight.color.setHex(profile.ambient.color);
+    S.ambientLight.intensity = profile.ambient.intensity;
+    S.ambientLight.userData.clayLightRecipeId = recipe.id;
   }
   if(hasForeignProfilePoints){
     // The old scheduler captured these exact profile point objects/bases. Stop it at the ownership
@@ -14819,9 +16531,126 @@ function clayRoomApplyLightProfile(record){
     S.pointLights = [];
     startLightFlicker(0, S.interiorLightTargets || []);
   }
+  // Diagnostic modes still remove uncredited camera/key lights, but retain the low hemisphere
+  // shadow-form floor: it is environment bounce, not a second subject light, and keeps tread/riser
+  // orientation barely legible.
+  if(recipe.mode.indexOf("diagnostic-") === 0){
+    if(S.hemiLight) S.hemiLight.intensity = ITR_SHADOW_FORM_HEMI_FLOOR;
+    [S.keyLight, S.fillLight, S.interiorCameraKey].forEach(function(light){
+      if(light) light.intensity = 0;
+    });
+  }
   if(!S.clayRoomLightingBaseline && (S.interiorLightTargets || []).length){
     S.clayRoomLightingBaseline = clayRoomLightingSnapshot("authored-baseline");
   }
+}
+
+function clayRoomSetLightingRecipe(recipeId, reason){
+  if(!S.clayRoomRecord || !LIGHT_TUNABLES.profiles[recipeId]) return false;
+  S.clayRoomPixelMetricsCache = null;
+  const recipe = lightRecipeDeepClone(LIGHT_TUNABLES.profiles[recipeId]);
+  // Seed preview is a disposable clone-time input, never a mutation of LIGHT_TUNABLES or the
+  // authored lock. Static sun/moon recipes are unchanged; licensed flicker recipes replay a
+  // different deterministic target sequence while preserving every physical value.
+  const previewSeed = S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
+  (recipe.lights || []).forEach(function(light){
+    if(!light.flicker || !(Number(light.flicker.amplitude) > 0)) return;
+    const authoredSeed = light.flicker.seed || (recipe.id + ":" + light.id);
+    light.flicker.seed = authoredSeed + ":clay-preview-" + previewSeed;
+  });
+  const validation = lightRecipeValidate(recipe);
+  if(!validation.ok){
+    try { console.warn("qa: rejected invalid Clayroom lighting recipe", recipeId, validation.errors); } catch(e){}
+    return false;
+  }
+  const compiled = clayRoomBoardFrom(S.clayRoomRecord, {
+    lightRecipeId: recipeId,
+    lightRecipe: recipe
+  });
+  S.clayRoomCompiled = compiled;
+  S.clayRoomLightRecipeId = recipeId;
+  S.clayRoomLightingBaseline = null;
+  S.boardKey = null;
+  const session = clayRoomMovementSession();
+  setInteriorBoard(
+    (session && clayRoomMovementBoardFromState(session.state)) || compiled.board,
+    { roomTransition: false, reason: reason || "clayroom-light-recipe" }
+  );
+  // A recipe change is the one rebuild that SHOULD replace lighting identity. Do not present that
+  // expected replacement as a lifecycle failure in the same readout used for geometry-only replays.
+  S.clayRoomLightingProbeToken = (S.clayRoomLightingProbeToken || 0) + 1;
+  S.clayRoomLightingProbe = {
+    label: "recipe switch → " + recipeId,
+    expectedReplacement: true,
+    preserved: false,
+    duringPass: true,
+    afterPass: true
+  };
+  if(typeof S.clayRoomRefreshLightCatalog === "function") S.clayRoomRefreshLightCatalog();
+  if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  return true;
+}
+
+function clayRoomSetFixture(fixtureId, reason){
+  if(fixtureId !== CLAY_ROOM_TRUTH_FIXTURE_ID
+    && fixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID
+    && fixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
+    && fixtureId !== CLAY_ROOM_SPRITE_BENCH_ID){
+    return false;
+  }
+  if(!S.clayRoomCompiled || !S.clayRoomRecord) return false;
+  S.clayRoomFixtureId = fixtureId;
+  S.clayCamOffset = { x: 0, z: 0 };
+  S.clayCamZoom = fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+    ? 0.72 : (fixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
+      : (fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65 : 1));
+  S.boardKey = null;
+  const session = clayRoomMovementSession();
+  const board = (session && clayRoomMovementBoardFromState(session.state)) || S.clayRoomCompiled.board;
+  setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-fixture-switch" });
+  if(fixtureId === CLAY_ROOM_TRUTH_FIXTURE_ID) clayRoomMovementRangesRender();
+  else clayRoomDisposeMovementOverlay();
+  if(typeof S.clayRoomRefreshFixtureControls === "function") S.clayRoomRefreshFixtureControls();
+  if(typeof S.clayRoomWorkbenchSelect === "function"){
+    const roomOnlySelected = S.clayRoomSelectedId === S.clayRoomRecord.portal.id
+      || S.clayRoomSelectedId === S.clayRoomRecord.object.id;
+    if((fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+      || fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+      || fixtureId === CLAY_ROOM_SPRITE_BENCH_ID) && roomOnlySelected){
+      const recipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId];
+      const light = recipe && (recipe.lights || []).find(function(row){ return row.enabled !== false; });
+      if(light) S.clayRoomWorkbenchSelect(light.id, "fixture switch");
+    }
+    if(fixtureId === CLAY_ROOM_SPRITE_BENCH_ID){
+      const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+      S.clayRoomSelectedSpriteSlug = S.clayRoomSelectedSpriteSlug || fixture.selectedSlug;
+      S.clayRoomWorkbenchSelect(S.clayRoomSelectedSpriteSlug, "fixture switch");
+      if(typeof S.clayRoomShowTab === "function") S.clayRoomShowTab("sprites");
+    }
+    if(fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID){
+      S.clayRoomSelectedId = "compiled-shell";
+      S.clayRoomWorkbenchSelect("compiled-shell", "fixture switch");
+      if(typeof S.clayRoomShowTab === "function") S.clayRoomShowTab("structure");
+    }
+  }
+  if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+  return true;
+}
+
+function clayRoomSetSpriteScaleMode(mode, reason){
+  if(CLAY_ROOM_SPRITE_SCALE_MODES.indexOf(mode) < 0) return false;
+  if(S.clayRoomSpriteScaleMode === mode) return true;
+  S.clayRoomSpriteScaleMode = mode;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_SPRITE_BENCH_ID) return true;
+  S.boardKey = null;
+  const session = clayRoomMovementSession();
+  const board = session && clayRoomMovementBoardFromState(session.state);
+  if(board) setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-sprite-scale-mode" });
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  return true;
 }
 
 function clayRoomLightingSnapshot(label){
@@ -14840,6 +16669,22 @@ function clayRoomLightingSnapshot(label){
     const baseMesh = t.emissiveFlicker ? t.baseEmissiveIntensity : t.baseOpacity;
     const emittedNormalized = t.baseIntensity ? emitted / t.baseIntensity : null;
     const meshNormalized = baseMesh ? mesh / baseMesh : null;
+    // WORLD position — the readout's mounted-truth line must name where the light actually sits
+    // in the room, not its local offset inside a fixture group (Checkpoint 2 readout truth).
+    const pointPosition = (function(){
+      if(!t.pl || !t.pl.getWorldPosition) return null;
+      const wp = new THREE.Vector3();
+      t.pl.getWorldPosition(wp);
+      return [n(wp.x), n(wp.y), n(wp.z)];
+    })();
+    const emitterPosition = t.marker && t.marker.position
+      ? [n(t.marker.position.x), n(t.marker.position.y), n(t.marker.position.z)]
+      : null;
+    const direction = t.directionSample || { x: 0, y: 0, z: 0 };
+    const directionRadius = Math.sqrt(
+      direction.x * direction.x + direction.y * direction.y + direction.z * direction.z
+    );
+    const directionAmplitude = Number(t.directionAmplitude) || 0;
     return {
       id: t.id,
       sourceRef: t.sourceRef,
@@ -14861,9 +16706,35 @@ function clayRoomLightingSnapshot(label){
       color: colorOf(t.pl),
       distance: t.pl ? n(t.pl.distance) : null,
       decay: t.pl ? n(t.pl.decay) : null,
-      pointPosition: t.pl && t.pl.position
-        ? [n(t.pl.position.x), n(t.pl.position.y), n(t.pl.position.z)]
+      castShadow: t.pl ? !!t.pl.castShadow : null,
+      shadowMapSize: t.pl && t.pl.shadow && t.pl.shadow.mapSize
+        ? [n(t.pl.shadow.mapSize.x), n(t.pl.shadow.mapSize.y)]
         : null,
+      shadowCameraFar: t.pl && t.pl.shadow && t.pl.shadow.camera
+        ? n(t.pl.shadow.camera.far)
+        : null,
+      pointPosition: pointPosition,
+      emitterPosition: emitterPosition,
+      celestial: t.pl && t.pl.userData && t.pl.userData.celestial ? t.pl.userData.celestial : null,
+      basePointPosition: t.basePointPosition
+        ? [n(t.basePointPosition.x), n(t.basePointPosition.y), n(t.basePointPosition.z)]
+        : null,
+      baseEmitterPosition: t.baseMarkerPosition
+        ? [n(t.baseMarkerPosition.x), n(t.baseMarkerPosition.y), n(t.baseMarkerPosition.z)]
+        : null,
+      directionSample: { x: n(direction.x), y: n(direction.y), z: n(direction.z) },
+      directionAmplitude: n(directionAmplitude),
+      directionWithinBounds: directionAmplitude === 0
+        ? directionRadius < 0.000001
+        : directionRadius <= directionAmplitude * 1.05,
+      coLocated: !!pointPosition && !!emitterPosition
+        && pointPosition.every(function(value, index){
+          return Math.abs(value - emitterPosition[index]) < 0.000001;
+        }),
+      cadenceMs: t.cadenceMs,
+      intervalJitter: n(t.intervalJitter),
+      lastIntervalMs: t.lastIntervalMs == null ? null : n(t.lastIntervalMs),
+      nextIntervalMs: t.nextIntervalMs == null ? null : n(t.nextIntervalMs),
       materialColor: t.marker && t.marker.material && t.marker.material.color
         ? t.marker.material.color.getHex()
         : null,
@@ -14903,13 +16774,21 @@ function clayRoomLightingSnapshotsMatch(before, after){
     if(!a || a.pointUuid !== b.pointUuid || a.emitterUuid !== b.emitterUuid
       || a.materialUuid !== b.materialUuid || a.color !== b.color || a.state !== b.state
       || a.distance !== b.distance || a.decay !== b.decay
-      || JSON.stringify(a.pointPosition) !== JSON.stringify(b.pointPosition)
+      || a.castShadow !== b.castShadow || a.shadowCameraFar !== b.shadowCameraFar
+      || JSON.stringify(a.shadowMapSize) !== JSON.stringify(b.shadowMapSize)
+      || JSON.stringify(a.basePointPosition) !== JSON.stringify(b.basePointPosition)
+      || JSON.stringify(a.baseEmitterPosition) !== JSON.stringify(b.baseEmitterPosition)
+      || a.directionAmplitude !== b.directionAmplitude
+      || a.cadenceMs !== b.cadenceMs || a.intervalJitter !== b.intervalJitter
       || a.materialColor !== b.materialColor || a.materialEmissive !== b.materialEmissive
-      || a.materialOpacity !== b.materialOpacity || !a.parity) return false;
+      || a.materialOpacity !== b.materialOpacity || !a.parity
+      || !a.coLocated || !a.directionWithinBounds) return false;
     // Flickering is allowed to move by definition; steady means byte-stable photometric + visible.
     if(a.state === "steady"){
       return a.emitted === b.emitted && a.mesh === b.mesh
-        && a.emittedNormalized === 1 && a.meshNormalized === 1;
+        && a.emittedNormalized === 1 && a.meshNormalized === 1
+        && JSON.stringify(a.pointPosition) === JSON.stringify(b.pointPosition)
+        && JSON.stringify(a.emitterPosition) === JSON.stringify(b.emitterPosition);
     }
     return true;
   });
@@ -14954,8 +16833,19 @@ function clayRoomSetLightState(lightId, nextState){
 }
 
 function clayRoomRestoreAuthoredLightBaseline(){
+  const recipeId = S.clayRoomLightRecipeId || "clay-opposing-pair";
+  const authoredRecipe = LIGHT_LAB_AUTHORED_BASELINE.profiles[recipeId] || null;
+  if(LIGHT_LAB_AUTHORED_BASELINE.profiles[recipeId]){
+    LIGHT_TUNABLES.profiles[recipeId] = lightRecipeDeepClone(
+      LIGHT_LAB_AUTHORED_BASELINE.profiles[recipeId]
+    );
+    clayRoomSetLightingRecipe(recipeId, "clayroom-authored-baseline");
+  }
   (S.interiorLightTargets || []).forEach(function(t){
-    t.state = "steady";
+    const authoredLight = authoredRecipe && (authoredRecipe.lights || []).find(function(light){
+      return light.id === t.id;
+    });
+    t.state = authoredLight && authoredLight.state === "flickering" ? "flickering" : "steady";
     t.sampleIndex = 0;
     lightFlickerApplySample(t, 1);
   });
@@ -15031,6 +16921,9 @@ function clayRoomSurfaceRoleFor(node, ancestorRole){
   const ud = node.userData || {};
   const byKind = clayDiagnosticRoleForKind(ud.interiorKind);           // interiorBuildInstancedMesh / room-shell / kit-shell
   if(byKind) return byKind;
+  // recipe v2: the standee support strip is its OWN surface under test (clay-routed so cast
+  // shadows/AO read on it) — resolved BEFORE the sprite ancestor role can sweep it into passthrough
+  if(ud.standeeBase) return "standee-base";                            // buildInteriorBase (~3852)
   if(ud.furnitureKind) return "furniture";                             // buildFurnitureAssembly (~9278)
   if(ud.spriteSlug) return "sprite";                                   // buildSpriteBillboard (~3180)
   if(ud.isDoorLeaf || ud.isDoorShard) return "door";                   // hinged leaf / broken shard
@@ -15114,6 +17007,15 @@ function clayRoomApplyDiagnosticSurfaces(){
       clayMat.opacity = (typeof fadeEntry.opacity === "number") ? fadeEntry.opacity : 1;
       mesh.material = clayMat;
       fadeEntry.materials = fadeEntry.materials.map(function(m){ return m === priorMat ? clayMat : m; });
+    } else if(mesh.userData && mesh.userData.standeeBase){
+      // recipe v2: the standee base swaps to clay like any surface under test, but as a PER-MESH
+      // CLONE — setBaseGlow/selection write emissive straight onto this mesh's material, and a
+      // shared clay material would light every clay surface in the room when one base glows.
+      // The base geometry uses material GROUPS (top/side/bevel), so mirror its array shape.
+      const baseClay = clayDiagnosticMaterialFor(decision.color);
+      mesh.material = Array.isArray(mesh.material)
+        ? mesh.material.map(function(){ return baseClay.clone(); })
+        : baseClay.clone();
     } else {
       mesh.material = clayDiagnosticMaterialFor(decision.color);
     }
@@ -15200,6 +17102,1373 @@ function clayRoomSurfaceCensus(){
   };
 }
 
+/* CL-F01 structure bench — the production room-shell compiler owns the continuous floor, exposed
+   slab sides, wall volumes/caps, corners, aperture, threshold, and retaining/riser runs. Generic
+   structure-part assemblers own the remaining catalog atoms. All meshes remain in the same scene,
+   camera, lights, shadows, tone map, and diagnostic-surface router as gameplay. */
+function clayStructureMaterial(color){
+  return new THREE.MeshStandardMaterial({
+    color: color || CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor,
+    roughness: 0.96,
+    metalness: 0
+  });
+}
+function clayStructureTag(mesh, specId, kind){
+  mesh.castShadow = kind !== "floor";
+  mesh.receiveShadow = true;
+  mesh.userData.interiorKind = kind;
+  mesh.userData.structureCatalogId = CLAY_STRUCTURE_KIT_CATALOG.id;
+  mesh.userData.structureCatalogVersion = CLAY_STRUCTURE_KIT_CATALOG.version;
+  mesh.userData.structureSpecId = specId;
+  mesh.userData.structureProvenance = CLAY_STRUCTURE_KIT_CATALOG.provenance;
+  return mesh;
+}
+function clayStructureRampGeometry(width, run, rise){
+  const hw = width / 2, hr = run / 2;
+  const vertices = new Float32Array([
+    -hw, 0, -hr,   hw, 0, -hr,   -hw, rise, hr,   hw, rise, hr,
+    -hw, 0, hr,    hw, 0, hr
+  ]);
+  const indices = [
+    0, 1, 3, 0, 3, 2,       // walk surface
+    0, 4, 5, 0, 5, 1,       // underside
+    4, 2, 3, 4, 3, 5,       // high face
+    0, 2, 4,                 // left
+    1, 5, 3                  // right
+  ];
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+  geometry.setIndex(indices);
+  // Checkpoint 4 (Adam's diagnosis: "the ramp ... looks inflated or pillow-like instead of
+  // planar"): indexed shared vertices average normals across the wedge's hard faces. Drop the
+  // index so computeVertexNormals produces true per-face normals — a crisp planar wedge.
+  const hardFaced = geometry.toNonIndexed();
+  hardFaced.computeVertexNormals();
+  return hardFaced;
+}
+function clayStructureStripBetween(a, b, color, view, specId, thickness){
+  const dx = b.x - a.x, dz = b.z - a.z;
+  const len = Math.max(0.001, Math.hypot(dx, dz));
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(len, thickness || 0.035, (thickness || 0.035) * 1.45),
+    new THREE.MeshBasicMaterial({ color, depthTest: false, depthWrite: false, toneMapped: false })
+  );
+  mesh.position.set((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+  mesh.rotation.y = -Math.atan2(dz, dx);
+  mesh.castShadow = false;
+  mesh.receiveShadow = false;
+  mesh.userData.interiorKind = "clay-diagnostic-overlay";
+  mesh.userData.structureOverlayView = view;
+  mesh.userData.structureSpecId = specId;
+  mesh.renderOrder = 72;
+  return mesh;
+}
+// Checkpoint 4 SOCKET TRUTH ("socket marks do not communicate type, facing direction, polarity/
+// ownership, or valid candidate pairing"): every socket now draws a TYPE-COLOURED ARROW along its
+// actual authored axis — shaft plus angled head, so direction and polarity read from the frame.
+// Omnidirectional sockets (floor-mount/top-surface, axis 0/0) draw a type-coloured cross at their
+// face. The colour vocabulary is fixed and matches the panel legend.
+const CLAY_SOCKET_TYPE_COLORS = {
+  "butt-join-n": 0x35d8ff, "butt-join-e": 0x35d8ff, "butt-join-s": 0x35d8ff, "butt-join-w": 0x35d8ff,
+  "walk-surface": 0x66dfa0, "top-surface": 0x6f8fff, "terrain-join": 0xc08a5a,
+  "hinge": 0xff7ad8, "catch": 0xffe066, "floor-mount": 0xb9c2cc, "wall-mount": 0xb9c2cc,
+};
+function clayStructureAddSocketOverlay(group, spec, rawFloor, origin){
+  const at = spec.at;
+  const lift = spec.lift || 0;
+  (spec.sockets || []).forEach(function(socket, index){
+    const axis = socket.axis || { x: 0, z: 0 };
+    const color = CLAY_SOCKET_TYPE_COLORS[socket.type] != null ? CLAY_SOCKET_TYPE_COLORS[socket.type] : 0x35d8ff;
+    const spread = (index - ((spec.sockets.length - 1) / 2)) * 0.13;
+    const x = at.x - origin.cx + (axis.x || 0) * 0.45 + (axis.z || 0) * spread;
+    const z = at.z - origin.cz + (axis.z || 0) * 0.45 - (axis.x || 0) * spread;
+    const y = rawFloor + lift + (socket.type === "top-surface" ? (spec.height || spec.rise || 0.5) + 0.05 : 0.08);
+    const ax = axis.x || 0, az = axis.z || 0;
+    if(Math.abs(ax) + Math.abs(az) > 0){
+      // ARROW: shaft from the piece toward the joining direction, head at the tip
+      const tip = new THREE.Vector3(x + ax * 0.34, y, z + az * 0.34);
+      const tail = new THREE.Vector3(x - ax * 0.2, y, z - az * 0.2);
+      group.add(clayStructureStripBetween(tail, tip, color, "sockets", spec.id, 0.05));
+      // head: two short strips angled back from the tip (perpendicular blend)
+      const px = -az, pz = ax; // perpendicular
+      const headL = new THREE.Vector3(tip.x - ax * 0.14 + px * 0.1, y, tip.z - az * 0.14 + pz * 0.1);
+      const headR = new THREE.Vector3(tip.x - ax * 0.14 - px * 0.1, y, tip.z - az * 0.14 - pz * 0.1);
+      group.add(clayStructureStripBetween(headL, tip, color, "sockets", spec.id, 0.05));
+      group.add(clayStructureStripBetween(headR, tip, color, "sockets", spec.id, 0.05));
+    } else {
+      group.add(clayStructureStripBetween(
+        new THREE.Vector3(x - 0.16, y, z), new THREE.Vector3(x + 0.16, y, z), color, "sockets", spec.id, 0.045));
+      group.add(clayStructureStripBetween(
+        new THREE.Vector3(x, y, z - 0.16), new THREE.Vector3(x, y, z + 0.16), color, "sockets", spec.id, 0.045));
+    }
+  });
+}
+// Checkpoint 4 ACCESS TRUTH ("show access data per relevant face rather than assigning one summary
+// colour to an entire object"): each authored face class draws its OWN frame in its OWN class
+// colour — the top/tread class outlines the top plane, the side class frames the two camera-facing
+// vertical faces, and 'none' renders neutral grey so inaccessibility is visibly a datum, not an
+// omission. Colours are fixed vocabulary matched by the panel legend.
+const CLAY_ACCESS_CLASS_COLORS = { walk: 0x66dfa0, "climb-cost": 0xf3bd55, "climb-dc": 0xff6d68, none: 0x8a9099 };
+function clayStructureAddAccessOverlay(group, spec, rawFloor, origin){
+  const at = spec.at;
+  const lift = spec.lift || 0;
+  const width = spec.width || spec.length || ((spec.radius || 0.35) * 2) || 1;
+  const depth = spec.run || spec.thickness || ((spec.radius || 0.35) * 2) || 0.45;
+  const hw = Math.max(0.22, width / 2), hd = Math.max(0.18, depth / 2);
+  const cx0 = at.x - origin.cx, cz0 = at.z - origin.cz;
+  const h = (spec.rise || spec.height || 0.1);
+  const baseY = rawFloor + lift + 0.02;
+  const topY = rawFloor + lift + h + 0.025;
+  const access = spec.access || {};
+  const topClass = access.top || access.treads || null;
+  const sideClass = access.sides || access.shaft || access.faces || null;
+  const colorFor = function(cls){ return CLAY_ACCESS_CLASS_COLORS[cls] != null ? CLAY_ACCESS_CLASS_COLORS[cls] : 0xf3bd55; };
+  const frame = function(points, cls){
+    if(!cls) return;
+    for(let i = 0; i < points.length - 1; i++){
+      group.add(clayStructureStripBetween(points[i], points[i + 1], colorFor(cls), "access", spec.id, 0.035));
+    }
+  };
+  // TOP face (walk/tread class) — for the ramp, the frame follows the actual inclined plane
+  if(spec.kind === "ramp"){
+    const lowY = rawFloor + lift + 0.03, highY = rawFloor + lift + (spec.rise || 0.5) + 0.03;
+    frame([
+      new THREE.Vector3(cx0 - hw, lowY, cz0 - hd), new THREE.Vector3(cx0 + hw, lowY, cz0 - hd),
+      new THREE.Vector3(cx0 + hw, highY, cz0 + hd), new THREE.Vector3(cx0 - hw, highY, cz0 + hd),
+      new THREE.Vector3(cx0 - hw, lowY, cz0 - hd)
+    ], topClass || access.top);
+  } else {
+    frame([
+      new THREE.Vector3(cx0 - hw, topY, cz0 - hd), new THREE.Vector3(cx0 + hw, topY, cz0 - hd),
+      new THREE.Vector3(cx0 + hw, topY, cz0 + hd), new THREE.Vector3(cx0 - hw, topY, cz0 + hd),
+      new THREE.Vector3(cx0 - hw, topY, cz0 - hd)
+    ], topClass);
+  }
+  // SIDE faces (the two camera-facing planes under the fixed production camera: +x and +z)
+  if(sideClass){
+    frame([
+      new THREE.Vector3(cx0 + hw, baseY, cz0 - hd), new THREE.Vector3(cx0 + hw, baseY, cz0 + hd),
+      new THREE.Vector3(cx0 + hw, topY, cz0 + hd), new THREE.Vector3(cx0 + hw, topY, cz0 - hd),
+      new THREE.Vector3(cx0 + hw, baseY, cz0 - hd)
+    ], sideClass);
+    frame([
+      new THREE.Vector3(cx0 - hw, baseY, cz0 + hd), new THREE.Vector3(cx0 + hw, baseY, cz0 + hd),
+      new THREE.Vector3(cx0 + hw, topY, cz0 + hd), new THREE.Vector3(cx0 - hw, topY, cz0 + hd),
+      new THREE.Vector3(cx0 - hw, baseY, cz0 + hd)
+    ], sideClass);
+  }
+}
+function clayStructureBuildPart(group, spec, rawFloor, origin){
+  const mat = clayStructureMaterial();
+  function add(mesh, y, x, z, kind){
+    // spec.lift: assembled pieces may stand on the shell's own tiers (world-unit vertical offset)
+    mesh.position.set(x == null ? spec.at.x - origin.cx : x, y + (spec.lift || 0), z == null ? spec.at.z - origin.cz : z);
+    clayStructureTag(mesh, spec.id, kind || "furniture");
+    group.add(mesh);
+    return mesh;
+  }
+  if(spec.kind === "wall-run"){
+    const dims = spec.axis === "z"
+      ? [spec.thickness, spec.height, spec.length]
+      : [spec.length, spec.height, spec.thickness];
+    add(new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), mat),
+      rawFloor + spec.height / 2, null, null, "wall");
+  } else if(spec.kind === "t-junction"){
+    add(new THREE.Mesh(new THREE.BoxGeometry(spec.length, spec.height, spec.thickness), mat),
+      rawFloor + spec.height / 2, null, null, "wall");
+    // Branch ends flush on the main run's outer face: no overlapping internal end volume.
+    const branchZ = spec.at.z - origin.cz + spec.thickness / 2 + spec.branchLength / 2;
+    add(new THREE.Mesh(new THREE.BoxGeometry(spec.thickness, spec.height, spec.branchLength), mat.clone()),
+      rawFloor + spec.height / 2, spec.at.x - origin.cx, branchZ, "wall");
+  } else if(spec.kind === "stair"){
+    const tread = spec.run / spec.steps;
+    for(let i = 0; i < spec.steps; i++){
+      const height = spec.rise * (i + 1) / spec.steps;
+      const z = spec.at.z - origin.cz - spec.run / 2 + tread * (i + 0.5);
+      add(new THREE.Mesh(new THREE.BoxGeometry(spec.width, height, tread), mat.clone()),
+        rawFloor + height / 2, spec.at.x - origin.cx, z, "riser");
+    }
+    const landing = new THREE.Mesh(new THREE.BoxGeometry(spec.width, spec.rise, 0.42), mat.clone());
+    add(landing, rawFloor + spec.rise / 2, spec.at.x - origin.cx, spec.at.z - origin.cz + spec.run / 2 + 0.21, "riser");
+  } else if(spec.kind === "ramp"){
+    add(new THREE.Mesh(clayStructureRampGeometry(spec.width, spec.run, spec.rise), mat),
+      rawFloor, null, null, "riser");
+  } else if(spec.kind === "blocker"){
+    add(new THREE.Mesh(new THREE.BoxGeometry(spec.length, spec.height, spec.thickness), mat),
+      rawFloor + spec.height / 2, null, null, "wall");
+  } else if(spec.kind === "support-square"){
+    add(new THREE.Mesh(new THREE.BoxGeometry(spec.width, spec.height, spec.width), mat),
+      rawFloor + spec.height / 2, null, null, "pillar");
+  } else if(spec.kind === "support-round"){
+    add(new THREE.Mesh(new THREE.CylinderGeometry(spec.radius, spec.radius * 1.04, spec.height, 20), mat),
+      rawFloor + spec.height / 2, null, null, "pillar");
+  }
+  clayStructureAddSocketOverlay(group, spec, rawFloor, origin);
+  clayStructureAddAccessOverlay(group, spec, rawFloor, origin);
+}
+function clayStructureBuildOpening(group, shell, fixture, tierHeights, origin){
+  const aperture = shell.apertures && shell.apertures[0];
+  if(!aperture) return null;
+  const a = aperture.a, b = aperture.b;
+  const dx = b.x - a.x, dz = b.z - a.z;
+  const len = Math.max(0.0001, Math.hypot(dx, dz));
+  const tx = dx / len, tz = dz / len;
+  const width = Math.min(fixture.opening.width, len * 0.82);
+  const floorY = tierHeights[aperture.tier] == null ? tierHeights[0] : tierHeights[aperture.tier];
+  const midX = (a.x + b.x) / 2, midZ = (a.z + b.z) / 2;
+  const hinge = new THREE.Group();
+  hinge.name = fixture.opening.id;
+  hinge.position.set(midX - tx * width / 2 - origin.cx, floorY, midZ - tz * width / 2 - origin.cz);
+  hinge.rotation.y = -Math.atan2(tz, tx);
+  hinge.userData.structureSpecId = fixture.opening.id;
+  hinge.userData.structureSocket = fixture.opening.socket;
+  hinge.userData.structureSwingClearanceDeg = fixture.opening.swingClearanceDeg;
+  const geo = new THREE.BoxGeometry(width, fixture.opening.height, 0.075);
+  geo.translate(width / 2, fixture.opening.height / 2, 0);
+  const leaf = new THREE.Mesh(geo, clayStructureMaterial("#6f6f73"));
+  const doorState = S.clayRoomStructureStageLatch
+    ? S.clayRoomStructureStageLatch.doorState
+    : fixture.opening.state;
+  leaf.rotation.y = doorState === "open" ? Math.PI / 2 : (doorState === "ajar" ? Math.PI / 6 : 0);
+  clayStructureTag(leaf, fixture.opening.id, "door");
+  leaf.userData.isDoorLeaf = true;
+  leaf.userData.structureDoorState = doorState;
+  hinge.add(leaf);
+  const arc = [];
+  for(let i = 0; i <= 18; i++){
+    const angle = (i / 18) * Math.PI / 2;
+    arc.push(new THREE.Vector3(Math.cos(angle) * width, 0.035, -Math.sin(angle) * width));
+  }
+  const swing = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(arc),
+    new THREE.LineDashedMaterial({ color: 0x6fcfff, dashSize: 0.08, gapSize: 0.05, transparent: true, opacity: 0.78 })
+  );
+  swing.computeLineDistances();
+  swing.userData.interiorKind = "clay-diagnostic-overlay";
+  swing.userData.structureOverlayView = "sockets";
+  swing.userData.structureSpecId = fixture.opening.id;
+  swing.renderOrder = 70;
+  hinge.add(swing);
+  group.add(hinge);
+  return { aperture, hinge, leaf, swing };
+}
+function clayRoomApplyStructureViewVisibility(view){
+  const group = S.clayRoomStructureBenchGroup;
+  if(group){
+    group.traverse(function(node){
+      const ownView = node.userData && node.userData.structureOverlayView;
+      if(ownView) node.visible = ownView === view;
+    });
+  }
+  clayRoomApplyCamPose();
+  if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+  markDirty();
+  scheduleRender();
+}
+function clayRoomRebuildStructureBench(reason){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID) return false;
+  const session = clayRoomMovementSession();
+  const board = session && clayRoomMovementBoardFromState(session.state);
+  if(!board) return false;
+  S.boardKey = null;
+  setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-structure-rebuild" });
+  return true;
+}
+function clayRoomSetStructureView(view){
+  if(CLAY_STRUCTURE_BENCH_FIXTURE.views.indexOf(view) < 0) return false;
+  const wasStrategic = S.clayRoomStructureView === "strategic";
+  S.clayRoomStructureView = view;
+  const isStrategic = view === "strategic";
+  // Strategic mode changes the compiler input: every upper is built. Crossing that boundary
+  // therefore rebuilds the production shell; merely hiding a pre-existing upper would lie about
+  // the compile-time omission contract.
+  if(S.clayRoomStructureBenchGroup && wasStrategic !== isStrategic){
+    return clayRoomRebuildStructureBench("clayroom-structure-camera-mode");
+  }
+  clayRoomApplyStructureViewVisibility(view);
+  return true;
+}
+function clayRoomSetStructureStaged(staged){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID) return false;
+  S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
+    S.clayRoomStructureStageLatch,
+    { type: staged ? CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.stagedEvent
+      : CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.releaseEvent }
+  );
+  return clayRoomRebuildStructureBench(staged
+    ? "clayroom-structure-space-entered"
+    : "clayroom-structure-space-left-play");
+}
+function clayRoomSetStructureDoorState(state){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID) return false;
+  const session = clayRoomMovementSession();
+  if(!session || session.busy) return false;
+  const committed = tqConnectionStateCommit(session.fixture.space, session.state, {
+    connectionId: session.fixture.connectionId,
+    state: state
+  });
+  if(!committed.ok) return false;
+  session.state = committed.state;
+  session.lastReceipt = committed.receipt;
+  session.preview = null;
+  S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
+    S.clayRoomStructureStageLatch,
+    { type: "door-state", state: state }
+  );
+  return clayRoomRebuildStructureBench("clayroom-structure-door-" + state);
+}
+function clayRoomMountStructureBench(){
+  S.clayRoomStructureBenchGroup = null;
+  S.clayRoomStructureReport = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  const fixture = clayRoomStructureBenchFixtureFrom(S.clayRoomRecord);
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+  const group = new THREE.Group();
+  group.name = fixture.id;
+  group.userData.clayStructureBench = true;
+  group.userData.fixtureId = fixture.id;
+  group.userData.fixtureVersion = fixture.version;
+  group.userData.structureCatalogId = fixture.catalogId;
+
+  // The 15×15 host supplies the calibrated floor, grid, camera, light, and shadow receiver. Its
+  // tall perimeter uppers are not specimens and would turn the construction bench into a second
+  // enclosed room, so CL-F01 leaves the mechanics stem and suppresses only that host upper/trim.
+  // The fixture's own compiled shell below is the visible full-height wall-volume proof.
+  S.interiorGroup.traverse(function(node){
+    const kind = node.userData && node.userData.interiorKind;
+    if(kind === "room-shell-wall-upper" || kind === "room-shell-wall-trim"){
+      node.visible = false;
+      node.userData.clayStructureHostSuppressed = true;
+    }
+  });
+
+  const baseFloor = interiorFloorTopAt(S.interiorFloorTopMap, room.x + 7, room.y + 7);
+  const h = CLAY_STRUCTURE_KIT_CATALOG.gridLaw.verticalQuantumWorldUnits;
+  const tierHeights = { "-1": baseFloor + 0.025, "0": baseFloor + h + 0.025, "1": baseFloor + h * 2 + 0.025 };
+  const cells = fixture.shellCells.map(function(cell){
+    return {
+      x: room.x + cell.x,
+      z: room.y + cell.z,
+      tier: cell.tier,
+      isDoor: cell.isDoor,
+      sourceRef: cell.sourceRef
+    };
+  });
+  const omittedKeys = new Set();
+  const staging = S.clayRoomStructureStageLatch || Object.freeze({
+    staged: !!fixture.wallOmission.initialState.staged,
+    latched: !!fixture.wallOmission.initialState.latched,
+    lastEvent: "fixture-default",
+    doorState: fixture.opening.state
+  });
+  const strategicView = S.clayRoomStructureView === "strategic";
+  const omissionActive = staging.staged && staging.latched && !strategicView;
+  const cameraRaw = S.camera
+    ? { x: S.camera.position.x + origin.cx, z: S.camera.position.z + origin.cz }
+    : { x: room.x + room.w, z: room.y + room.d };
+  function upperVisibleForSegment(seg){
+    // Apertures always retain their upper/frame volume; tier risers are separate compiler output
+    // and therefore cannot enter this omission predicate at all.
+    if(seg.kind === "door") return true;
+    if(!omissionActive) return true;
+    const normal = segmentNormal(seg);
+    const mx = (seg.a.x + seg.b.x) / 2, mz = (seg.a.z + seg.b.z) / 2;
+    const outwardX = -normal.x, outwardZ = -normal.z;
+    const cameraOutside = (cameraRaw.x - mx) * outwardX + (cameraRaw.z - mz) * outwardZ > 0.15;
+    if(cameraOutside) omittedKeys.add([seg.a.x, seg.a.z, seg.b.x, seg.b.z].join(","));
+    return !cameraOutside;
+  }
+  const shell = compileRoomShell(cells, {
+    tierHeights,
+    wallHeight: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.storeyWorldUnits,
+    wallThickness: 0.22,
+    wallStemHeight: 0.28,
+    wallCapHeight: 0.06,
+    wallCapOverhang: 0.035,
+    upperVisibleForSegment
+  });
+  const shellGroup = new THREE.Group();
+  shellGroup.name = "compiled-shell";
+  shellGroup.userData.structureSpecId = "compiled-shell";
+  function addShell(geometry, kind, specId, cast){
+    if(!geometry) return null;
+    const mesh = new THREE.Mesh(geometry, clayStructureMaterial());
+    mesh.position.set(-origin.cx, 0, -origin.cz);
+    clayStructureTag(mesh, specId || "compiled-shell", kind);
+    mesh.castShadow = cast !== false;
+    shellGroup.add(mesh);
+    return mesh;
+  }
+  addShell(shell.floorGeometry, "floor", "compiled-shell", false);
+  addShell(shell.wallStemGeometry, "wall", "compiled-shell", true);
+  (shell.wallUpperMeshes || []).forEach(function(entry){
+    const mesh = addShell(entry.geometry, "wall", "compiled-shell", true);
+    if(mesh) mesh.userData.ownerSegIndex = entry.ownerSegIndex;
+  });
+  addShell(shell.wallTrimGeometry, "trim", "compiled-shell", true);
+  addShell(shell.riserGeometry, "riser", "compiled-shell", true);
+  group.add(shellGroup);
+
+  const openingBuilt = clayStructureBuildOpening(group, shell, fixture, tierHeights, origin);
+  fixture.pieces.forEach(function(spec){
+    const worldSpec = Object.assign({}, spec, {
+      at: { x: room.x + spec.at.x, z: room.y + spec.at.z }
+    });
+    clayStructureBuildPart(group, worldSpec, baseFloor + 0.025, origin);
+  });
+
+  // Negative control: two otherwise-valid wall prisms stay visibly separated. The red X is only
+  // shown in NEGATIVE view; the physical gap remains in every view so rejection never masquerades
+  // as a successful join.
+  const bad = fixture.negativeControl;
+  const badMat = clayStructureMaterial();
+  const badX = room.x + bad.at.x - origin.cx, badZ = room.y + bad.at.z - origin.cz;
+  const badA = clayStructureTag(new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.72, 0.22), badMat), bad.id, "wall");
+  badA.position.set(badX - 0.55, baseFloor + 0.385, badZ);
+  const badB = clayStructureTag(new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.72, 0.8), badMat.clone()), bad.id, "wall");
+  badB.position.set(badX + 0.32, baseFloor + 0.385, badZ + 0.42);
+  group.add(badA, badB);
+  const xY = baseFloor + 0.82;
+  group.add(
+    clayStructureStripBetween(
+      new THREE.Vector3(badX - 0.38, xY, badZ - 0.38),
+      new THREE.Vector3(badX + 0.38, xY, badZ + 0.38),
+      0xff3030, "negative", bad.id, 0.075
+    ),
+    clayStructureStripBetween(
+      new THREE.Vector3(badX - 0.38, xY, badZ + 0.38),
+      new THREE.Vector3(badX + 0.38, xY, badZ - 0.38),
+      0xff3030, "negative", bad.id, 0.075
+    )
+  );
+
+  S.interiorGroup.add(group);
+  S.clayRoomStructureBenchGroup = group;
+  const assessment = clayStructureSocketJoinAssessment(bad.source, bad.candidate);
+  const slopeDeg = Math.atan2(
+    fixture.pieces.find(function(p){ return p.id === "shallow-ramp"; }).rise,
+    fixture.pieces.find(function(p){ return p.id === "shallow-ramp"; }).run
+  ) * 180 / Math.PI;
+  S.clayRoomStructureReport = {
+    fixtureId: fixture.id,
+    fixtureVersion: fixture.version,
+    catalogId: CLAY_STRUCTURE_KIT_CATALOG.id,
+    catalogVersion: CLAY_STRUCTURE_KIT_CATALOG.version,
+    gridLaw: CLAY_STRUCTURE_KIT_CATALOG.gridLaw,
+    shell: {
+      meta: shell.meta,
+      apertures: shell.apertures.length,
+      tiers: Object.keys(tierHeights).map(Number).sort(),
+      riserSegments: shell.riserSegments.length,
+      wallSegments: shell.wallSegments.length,
+      mountSlots: shell.mountSlots.length,
+      builtUpperSegments: shell.wallUpperMeshes.length,
+      omittedUpperSegments: omittedKeys.size,
+      totalUpperSegments: shell.wallUpperMeshes.length + omittedKeys.size,
+      exposedSlabSides: !!shell.riserGeometry
+    },
+    // Checkpoint 4 reporting parity ("the fixture can report all uppers present while also saying
+    // camera-side omission is active"): the omission projection is derived HERE, from the exact
+    // predicate/keys THIS build ran — never from the room-truth shell's separate generic report.
+    cameraSideOmission: {
+      ruleId: fixture.wallOmission.ruleId,
+      version: fixture.wallOmission.version,
+      active: omissionActive,
+      omitted: shell.wallSegments
+        .map(function(seg, i){ return { seg: seg, segIndex: i }; })
+        .filter(function(row){ return omittedKeys.has([row.seg.a.x, row.seg.a.z, row.seg.b.x, row.seg.b.z].join(",")); })
+        .map(function(row){ return { segIndex: row.segIndex, mid: { x: (row.seg.a.x + row.seg.b.x) / 2, z: (row.seg.a.z + row.seg.b.z) / 2 } }; }),
+      built: shell.wallSegments
+        .map(function(seg, i){ return { seg: seg, segIndex: i }; })
+        .filter(function(row){ return !omittedKeys.has([row.seg.a.x, row.seg.a.z, row.seg.b.x, row.seg.b.z].join(",")); })
+        .map(function(row){ return { segIndex: row.segIndex, mid: { x: (row.seg.a.x + row.seg.b.x) / 2, z: (row.seg.a.z + row.seg.b.z) / 2 } }; })
+    },
+    wallOmission: {
+      ruleId: fixture.wallOmission.ruleId,
+      version: fixture.wallOmission.version,
+      staged: staging.staged,
+      latched: staging.latched,
+      lastEvent: staging.lastEvent,
+      doorState: staging.doorState,
+      strategicView: strategicView,
+      cameraMode: strategicView ? "top-down-strategic" : "fixed-production",
+      active: omissionActive,
+      carveouts: fixture.wallOmission.carveouts,
+      apertureUpperBuilt: !!openingBuilt,
+      structuralMassBuilt: shell.riserSegments.length > 0,
+      rawDoorStateChangesLatch: false
+    },
+    opening: {
+      mounted: !!openingBuilt,
+      threshold: fixture.opening.threshold,
+      hingeSocket: fixture.opening.socket.type,
+      doorState: staging.doorState,
+      hingeAngleDeg: openingBuilt ? +(openingBuilt.leaf.rotation.y * 180 / Math.PI).toFixed(1) : null,
+      swingClearanceDeg: fixture.opening.swingClearanceDeg,
+      leafCastsShadow: !!(openingBuilt && openingBuilt.leaf.castShadow)
+    },
+    specimens: fixture.pieces.map(function(spec){
+      return {
+        id: spec.id, kind: spec.kind, sockets: spec.sockets, access: spec.access,
+        provenance: CLAY_STRUCTURE_KIT_CATALOG.provenance
+      };
+    }),
+    slope: {
+      degrees: +slopeDeg.toFixed(3),
+      maxDegrees: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.maxWalkableSlopeDeg,
+      walkable: slopeDeg <= CLAY_STRUCTURE_KIT_CATALOG.gridLaw.maxWalkableSlopeDeg
+    },
+    negativeControl: {
+      id: bad.id,
+      accepted: assessment.accepted,
+      reason: assessment.reason,
+      expectedReason: bad.expectedReason,
+      visibleGap: true
+    },
+    cutawayWitness: {
+      id: fixture.cutawayWitness.id,
+      pieceSlug: fixture.cutawayWitness.pieceSlug,
+      occluderId: fixture.cutawayWitness.occluder.id,
+      rendererPath: "data.pieces + data.instances.pillar -> itrPillarCutawayMask -> itrOcclusionClassify"
+    },
+    climbMechanicsImplemented: CLAY_STRUCTURE_KIT_CATALOG.climbMechanicsImplemented,
+    provenance: CLAY_STRUCTURE_KIT_CATALOG.provenance
+  };
+  clayRoomApplyStructureViewVisibility(S.clayRoomStructureView || fixture.defaultView);
+  return group;
+}
+
+/* CL-F02 lighting bench — deterministic test INPUT mounted inside the same production Theater scene.
+   These are neutral comparison forms, not a second renderer: the same camera, diagnostic surface
+   route, real sprite builder, PointLights, shadows, tone map, and post chain remain in charge. */
+function clayRoomMountLightingBench(){
+  S.clayRoomLightingBenchGroup = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  const fixture = clayRoomLightingBenchFixtureFrom(S.clayRoomRecord);
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+  const rawX = room.x + (room.w - 1) / 2;
+  const rawZ = room.y + (room.d - 1) / 2;
+  const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, rawX, rawZ);
+  const centerX = rawX - origin.cx;
+  const centerZ = rawZ - origin.cz;
+  const group = new THREE.Group();
+  group.name = fixture.id;
+  group.userData.clayLightingBench = true;
+  group.userData.fixtureId = fixture.id;
+  group.userData.fixtureVersion = fixture.version;
+  fixture.primitives.forEach(function(spec){
+    let geometry, height;
+    if(spec.primitive === "sphere"){
+      geometry = new THREE.SphereGeometry(spec.radius, 32, 20);
+      height = spec.radius * 2;
+    } else {
+      geometry = new THREE.BoxGeometry(spec.size.x, spec.size.y, spec.size.z);
+      height = spec.size.y;
+    }
+    const material = new THREE.MeshStandardMaterial({
+      color: CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor,
+      roughness: 1,
+      metalness: 0
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = spec.id;
+    mesh.position.set(centerX + spec.offset.x, floorTop + height / 2, centerZ + spec.offset.z);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.userData.interiorKind = spec.role;
+    mesh.userData.clayBenchPrimitive = spec.id;
+    mesh.userData.clayBenchPrimitiveType = spec.primitive;
+    group.add(mesh);
+  });
+  S.interiorGroup.add(group);
+  S.clayRoomLightingBenchGroup = group;
+  return group;
+}
+
+/* CL-F03 sprite bench — the lineup itself comes through data.pieces -> interiorBuildPieces. This
+   post-build group adds only two visual measuring aids: tactical-footprint outlines (gameplay truth,
+   explicitly separate from the visible support) and a three-tread stair carrying face/three-quarter/
+   edge-on copies built by the same production billboard/base functions. */
+function clayRoomMountSpriteBench(){
+  S.clayRoomSpriteBenchGroup = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_SPRITE_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+  const group = new THREE.Group();
+  group.name = fixture.id + "-measures";
+  group.userData.claySpriteBench = true;
+  group.userData.fixtureId = fixture.id;
+  group.userData.fixtureVersion = fixture.version;
+
+  fixture.cast.forEach(function(spec){
+    const rawX = room.x + spec.lineupCell.x;
+    const rawZ = room.y + spec.lineupCell.z;
+    const span = spec.tacticalSpanCells;
+    const y = interiorFloorTopAt(S.interiorFloorTopMap, rawX, rawZ) + 0.018;
+    const half = span / 2;
+    const points = [
+      new THREE.Vector3(rawX - origin.cx - half, y, rawZ - origin.cz - half),
+      new THREE.Vector3(rawX - origin.cx + half, y, rawZ - origin.cz - half),
+      new THREE.Vector3(rawX - origin.cx + half, y, rawZ - origin.cz + half),
+      new THREE.Vector3(rawX - origin.cx - half, y, rawZ - origin.cz + half)
+    ];
+    const outline = new THREE.LineLoop(
+      new THREE.BufferGeometry().setFromPoints(points),
+      new THREE.LineBasicMaterial({
+        color: spec.slug === fixture.selectedSlug ? 0x6fcfff : 0xd6b86c,
+        transparent: true,
+        opacity: 0.78,
+        depthTest: true,
+        depthWrite: false
+      })
+    );
+    outline.userData.clayTacticalFootprint = true;
+    outline.userData.spriteSlug = spec.slug;
+    outline.userData.tacticalSpanCells = span;
+    group.add(outline);
+  });
+
+  const stair = new THREE.Group();
+  stair.name = fixture.stair.id;
+  stair.userData.claySpriteStair = true;
+  const stairCenterRawX = room.x + 7;
+  const stairCenterRawZ = room.y + 12.25;
+  const stairFloor = interiorFloorTopAt(S.interiorFloorTopMap, stairCenterRawX, stairCenterRawZ);
+  const tread = fixture.stair.treadDepth;
+  const riser = fixture.stair.riserHeight;
+  for(let i = 0; i < fixture.stair.steps; i++){
+    const layers = fixture.stair.steps - i;
+    const depth = layers * tread;
+    const height = (i + 1) * riser;
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(fixture.stair.treadWidth + 1.2, height, depth),
+      new THREE.MeshStandardMaterial({
+        color: CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor,
+        roughness: 1,
+        metalness: 0
+      })
+    );
+    mesh.position.set(
+      stairCenterRawX - origin.cx,
+      stairFloor + height / 2,
+      stairCenterRawZ - origin.cz - i * tread / 2
+    );
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.userData.interiorKind = "riser";
+    mesh.userData.claySpriteStairLayer = i;
+    mesh.userData.treadDepth = tread;
+    stair.add(mesh);
+  }
+
+  const selectedEntry = spriteEntryFor(fixture.selectedSlug);
+  if(selectedEntry){
+    [-1, 0, 1].forEach(function(offset, index){
+      const built = interiorSpriteBillboard(selectedEntry, null);
+      if(!built) return;
+      const sample = built.group;
+      const stepTop = stairFloor + (index + 1) * riser;
+      const z = stairCenterRawZ - origin.cz + (1 - index) * tread;
+      sample.position.set(stairCenterRawX - origin.cx + offset * 1.05, interiorStandeeContactY(stepTop), z);
+      sample.userData.sceneObjectId = "stair-" + ["face", "three-quarter", "edge"][index];
+      sample.userData.claySpriteStairSample = ["face", "three-quarter", "edge"][index];
+      sample.userData.claySpriteViewYawOffset = [0, Math.PI / 4, Math.PI / 2][index];
+      sample.userData.kilterYawDeg = 0;
+      const support = interiorStandeeSupportMetrics(built.width, selectedEntry.size, 1);
+      const baseMesh = buildInteriorBase(
+        support.width,
+        support.depth,
+        S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor
+      );
+      sample.add(baseMesh);
+      sample.userData.standeeBaseMesh = baseMesh;
+      sample.userData.interiorBaseWidth = support.width;
+      sample.userData.interiorBaseDepth = support.depth;
+      sample.userData.standeeCollisionExcluded = true;
+      sample.userData.stairTreadDepth = tread;
+      sample.userData.stairFit = support.depth <= tread + 0.000001;
+      sample.userData.interiorHeight = built.height;
+      sample.userData.interiorWidth = built.width;
+      stair.add(sample);
+    });
+  }
+  group.add(stair);
+  S.interiorGroup.add(group);
+  S.clayRoomSpriteBenchGroup = group;
+  S.standeeCollisionDirty = true;
+  return group;
+}
+
+function clayRoomSuppressLightingBenchNoise(){
+  if((S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID
+    && S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
+    && S.clayRoomFixtureId !== CLAY_ROOM_SPRITE_BENCH_ID) || !S.moteGroup) return;
+  stopMoteDrift();
+  if(S.moteGroup.parent) S.moteGroup.parent.remove(S.moteGroup);
+  clearGroup(S.moteGroup);
+  S.moteGroup = null;
+}
+
+function clayRoomDisposeLightOverlays(){
+  const group = S.clayRoomLightOverlayGroup;
+  if(!group) return;
+  if(group.parent) group.parent.remove(group);
+  clearGroup(group);
+  S.clayRoomLightOverlayGroup = null;
+}
+
+function clayRoomBuildLightOverlays(){
+  clayRoomDisposeLightOverlays();
+  if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID || !S.scene) return null;
+  const modes = S.clayRoomLightOverlayModes || { position: false, range: false, shadow: false };
+  S.clayRoomLightOverlayModes = modes;
+  const group = new THREE.Group();
+  group.name = "cl-f02-light-overlays";
+  group.userData.clayLightingOverlay = true;
+  (S.interiorLightTargets || []).forEach(function(target){
+    if(!target || !target.pl) return;
+    const light = target.pl;
+    const p = new THREE.Vector3();
+    light.getWorldPosition(p);
+    const rawX = p.x + ((S.boardOrigin && S.boardOrigin.cx) || 0);
+    const rawZ = p.z + ((S.boardOrigin && S.boardOrigin.cz) || 0);
+    const floorY = interiorFloorTopAt(S.interiorFloorTopMap, rawX, rawZ) + 0.018;
+    const color = light.color && typeof light.color.getHex === "function" ? light.color.getHex() : 0xffffff;
+    if(modes.position){
+      const r = 0.22;
+      const points = [
+        p.x - r, p.y, p.z, p.x + r, p.y, p.z,
+        p.x, p.y - r, p.z, p.x, p.y + r, p.z,
+        p.x, p.y, p.z - r, p.x, p.y, p.z + r,
+        p.x, floorY, p.z, p.x, p.y, p.z
+      ];
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
+      const line = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({
+        color, transparent: true, opacity: 0.95, depthTest: false, depthWrite: false
+      }));
+      line.userData.clayLightOverlayKind = "position";
+      line.userData.lightId = target.id;
+      line.renderOrder = 60;
+      group.add(line);
+    }
+    if(modes.range && light.distance > 0){
+      [0.25, 0.5, 1].forEach(function(frac){
+        const radius = light.distance * frac;
+        const points = [];
+        for(let i = 0; i < 64; i++){
+          const a = (i / 64) * Math.PI * 2;
+          points.push(new THREE.Vector3(p.x + Math.cos(a) * radius, floorY, p.z + Math.sin(a) * radius));
+        }
+        const line = new THREE.LineLoop(
+          new THREE.BufferGeometry().setFromPoints(points),
+          new THREE.LineBasicMaterial({
+            color, transparent: true, opacity: frac === 1 ? 0.78 : 0.34,
+            depthTest: false, depthWrite: false
+          })
+        );
+        line.userData.clayLightOverlayKind = "range";
+        line.userData.lightId = target.id;
+        line.userData.rangeFraction = frac;
+        line.userData.range = light.distance;
+        line.renderOrder = 59;
+        group.add(line);
+      });
+    }
+    if(modes.shadow && light.castShadow && light.distance > 0){
+      let sourceGeometry;
+      if(light.isSpotLight){
+        const coneRadius = Math.tan(light.angle || Math.PI / 4) * light.distance;
+        sourceGeometry = new THREE.ConeGeometry(coneRadius, light.distance, 16, 1, true);
+      } else {
+        sourceGeometry = new THREE.SphereGeometry(light.distance, 12, 8);
+      }
+      const wireGeometry = new THREE.WireframeGeometry(sourceGeometry);
+      sourceGeometry.dispose();
+      const wire = new THREE.LineSegments(wireGeometry, new THREE.LineBasicMaterial({
+        color, transparent: true, opacity: 0.16, depthTest: false, depthWrite: false
+      }));
+      wire.position.copy(p);
+      if(light.isSpotLight){
+        wire.position.y -= light.distance / 2;
+      }
+      wire.userData.clayLightOverlayKind = light.isSpotLight ? "shadow-frustum" : "shadow-volume";
+      wire.userData.lightId = target.id;
+      wire.renderOrder = 58;
+      group.add(wire);
+    }
+  });
+  S.scene.add(group);
+  S.clayRoomLightOverlayGroup = group;
+  return group;
+}
+
+/* CL-R1 live pixel diagnostics. These measurements read the final display-space framebuffer after
+   the production post chain. They intentionally do not inspect authored light values and call them
+   "brightness": a clipped pixel, a crushed pixel, and a desaturated sprite are counted from what
+   the user can actually see. The sprite crop comes from __spriteScreenRects(), which projects the
+   live mounted billboard. Its local surround ring is the comparison field for the simple
+   readability deltas; no subjective pass/fail threshold is invented here. */
+function clayRoomMetricsForRgba(pixels, width, height, rect, opts){
+  opts = opts || {};
+  if(!pixels || !width || !height) return null;
+  const box = rect || { x: 0, y: 0, w: width, h: height };
+  const x0 = Math.max(0, Math.min(width, Math.floor(box.x)));
+  const y0 = Math.max(0, Math.min(height, Math.floor(box.y)));
+  const x1 = Math.max(x0, Math.min(width, Math.ceil(box.x + box.w)));
+  const y1 = Math.max(y0, Math.min(height, Math.ceil(box.y + box.h)));
+  const exclude = opts.excludeRect || null;
+  const sampleStep = Math.max(1, Number(opts.sampleStep) || 1);
+  const alphaMin = opts.alphaMin == null ? 0 : Number(opts.alphaMin);
+  const flipY = opts.flipY !== false;
+  const histogram = new Uint32Array(256);
+  let count = 0, lumaSum = 0, saturationSum = 0, spreadSum = 0;
+  let clipped = 0, crushed = 0, neutral = 0;
+  for(let sy = y0; sy < y1; sy += sampleStep){
+    for(let sx = x0; sx < x1; sx += sampleStep){
+      if(exclude
+        && sx >= exclude.x && sx < exclude.x + exclude.w
+        && sy >= exclude.y && sy < exclude.y + exclude.h) continue;
+      const sourceY = flipY ? (height - 1 - sy) : sy;
+      const i = (sourceY * width + sx) * 4;
+      if(pixels[i + 3] < alphaMin) continue;
+      const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2];
+      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      const lumaBin = Math.max(0, Math.min(255, Math.round(luma)));
+      const maxChannel = Math.max(r, g, b);
+      const minChannel = Math.min(r, g, b);
+      const spread = maxChannel - minChannel;
+      histogram[lumaBin]++;
+      count++;
+      lumaSum += luma;
+      spreadSum += spread;
+      saturationSum += maxChannel === 0 ? 0 : 255 * spread / maxChannel;
+      if(r >= 250 && g >= 250 && b >= 250) clipped++;
+      if(r <= 5 && g <= 5 && b <= 5) crushed++;
+      if(spread <= 6) neutral++;
+    }
+  }
+  if(!count) return null;
+  function percentile(fraction){
+    const target = Math.max(0, Math.min(count - 1, Math.floor(count * fraction)));
+    let seen = 0;
+    for(let value = 0; value < histogram.length; value++){
+      seen += histogram[value];
+      if(seen > target) return value;
+    }
+    return 255;
+  }
+  function rounded(value, places){
+    const factor = Math.pow(10, places == null ? 2 : places);
+    return Math.round(value * factor) / factor;
+  }
+  return {
+    pixelsSampled: count,
+    sampleStep: sampleStep,
+    meanLuma: rounded(lumaSum / count),
+    medianLuma: percentile(0.5),
+    p05Luma: percentile(0.05),
+    p95Luma: percentile(0.95),
+    clippedHighlightPct: rounded(100 * clipped / count, 3),
+    crushedShadowPct: rounded(100 * crushed / count, 3),
+    meanSaturation: rounded(saturationSum / count),
+    meanChromaSpread: rounded(spreadSum / count),
+    neutralPct: rounded(100 * neutral / count)
+  };
+}
+
+function clayRoomReadback(fullResolution){
+  if(!S.mounted || !S.renderer || !S.camera) return null;
+  renderTheaterFrame();
+  // The always-visible readout uses a small same-task 2D copy of the just-rendered WebGL canvas.
+  // It keeps the flame's 60fps animation from paying a full-resolution GPU readback every refresh.
+  // The explicit comparison-sheet capture below requests the full framebuffer instead.
+  if(!fullResolution && typeof document !== "undefined"){
+    const source = S.renderer.domElement;
+    const width = Math.min(480, source.width);
+    const height = Math.max(1, Math.round(source.height * (width / source.width)));
+    const sample = document.createElement("canvas");
+    sample.width = width;
+    sample.height = height;
+    const ctx = sample.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(source, 0, 0, width, height);
+    const image = ctx.getImageData(0, 0, width, height);
+    return {
+      pixels: new Uint8Array(image.data.buffer.slice(0)),
+      width: width,
+      height: height,
+      flipY: false,
+      sourceWidth: source.width,
+      sourceHeight: source.height
+    };
+  }
+  const gl = S.renderer.getContext();
+  if(!gl) return null;
+  const width = gl.drawingBufferWidth, height = gl.drawingBufferHeight;
+  if(!width || !height) return null;
+  const pixels = new Uint8Array(width * height * 4);
+  gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+  return {
+    pixels: pixels,
+    width: width,
+    height: height,
+    flipY: true,
+    sourceWidth: width,
+    sourceHeight: height
+  };
+}
+
+function clayRoomCitizenScreenRect(readback){
+  if(!readback || !window.Theater || typeof window.Theater.__spriteScreenRects !== "function"){
+    return null;
+  }
+  const expected = S.clayRoomRecord && S.clayRoomRecord.citizen
+    ? S.clayRoomRecord.citizen.bestiaryId : null;
+  const rects = window.Theater.__spriteScreenRects();
+  const found = rects.find(function(rect){ return rect.slug === expected; }) || rects[0];
+  if(!found || !(found.w > 1) || !(found.h > 1)) return null;
+  const scaleX = readback.width / (readback.sourceWidth || readback.width);
+  const scaleY = readback.height / (readback.sourceHeight || readback.height);
+  const foundX = found.cx * scaleX, foundY = found.cy * scaleY;
+  const foundW = found.w * scaleX, foundH = found.h * scaleY;
+  const pad = Math.max(3, Math.min(foundW, foundH) * 0.06);
+  return {
+    slug: found.slug,
+    x: Math.max(0, foundX - foundW / 2 - pad),
+    y: Math.max(0, foundY - foundH / 2 - pad),
+    w: Math.min(readback.width, foundW + pad * 2),
+    h: Math.min(readback.height, foundH + pad * 2)
+  };
+}
+
+function clayRoomCanvasFromReadback(readback, rect, targetCanvas){
+  if(!readback || typeof document === "undefined") return null;
+  const sourceRect = rect || { x: 0, y: 0, w: readback.width, h: readback.height };
+  const x0 = Math.max(0, Math.floor(sourceRect.x));
+  const y0 = Math.max(0, Math.floor(sourceRect.y));
+  const width = Math.max(1, Math.min(readback.width - x0, Math.ceil(sourceRect.w)));
+  const height = Math.max(1, Math.min(readback.height - y0, Math.ceil(sourceRect.h)));
+  const scratch = document.createElement("canvas");
+  scratch.width = width;
+  scratch.height = height;
+  const scratchCtx = scratch.getContext("2d");
+  const imageData = scratchCtx.createImageData(width, height);
+  for(let y = 0; y < height; y++){
+    const sourceY = readback.flipY === false ? (y0 + y) : (readback.height - 1 - (y0 + y));
+    const start = (sourceY * readback.width + x0) * 4;
+    imageData.data.set(readback.pixels.subarray(start, start + width * 4), y * width * 4);
+  }
+  scratchCtx.putImageData(imageData, 0, 0);
+  if(!targetCanvas) return scratch;
+  const outCtx = targetCanvas.getContext("2d");
+  outCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+  outCtx.fillStyle = "#090a0d";
+  outCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+  const scale = Math.min(targetCanvas.width / width, targetCanvas.height / height);
+  const drawW = width * scale, drawH = height * scale;
+  outCtx.imageSmoothingEnabled = false;
+  outCtx.drawImage(
+    scratch,
+    (targetCanvas.width - drawW) / 2,
+    (targetCanvas.height - drawH) / 2,
+    drawW,
+    drawH
+  );
+  return targetCanvas;
+}
+
+function clayRoomMountSourceSpriteCard(canvas, statusEl){
+  if(!canvas || !S.clayRoomRecord) return null;
+  const entry = spriteEntryFor(S.clayRoomRecord.citizen.bestiaryId);
+  const path = entry ? spriteAssetPathFor(entry) : null;
+  const state = { path: path, metrics: null, loaded: false };
+  S.clayRoomSourceSprite = state;
+  if(!path){
+    if(statusEl) statusEl.textContent = "source sprite unavailable";
+    return state;
+  }
+  const img = new Image();
+  img.addEventListener("load", function(){
+    const scratch = document.createElement("canvas");
+    scratch.width = img.naturalWidth || 1;
+    scratch.height = img.naturalHeight || 1;
+    const scratchCtx = scratch.getContext("2d");
+    scratchCtx.drawImage(img, 0, 0);
+    const sourcePixels = scratchCtx.getImageData(0, 0, scratch.width, scratch.height);
+    state.metrics = clayRoomMetricsForRgba(
+      sourcePixels.data,
+      scratch.width,
+      scratch.height,
+      null,
+      { flipY: false, alphaMin: 8, sampleStep: 1 }
+    );
+    state.loaded = true;
+    S.clayRoomPixelMetricsCache = null;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#090a0d";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const scale = Math.min(canvas.width / scratch.width, canvas.height / scratch.height);
+    const drawW = scratch.width * scale, drawH = scratch.height * scale;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(scratch, (canvas.width - drawW) / 2, (canvas.height - drawH) / 2, drawW, drawH);
+    if(statusEl){
+      statusEl.textContent = "authored PNG · opaque pixels · " + path.replace(/^assets\/sprites\//, "");
+    }
+  });
+  img.addEventListener("error", function(){
+    if(statusEl) statusEl.textContent = "source sprite failed to load · " + path;
+  });
+  img.src = path;
+  return state;
+}
+
+function clayRoomLightingPixelMetrics(force){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID) return null;
+  const now = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+  const cacheKey = (S.clayRoomLightRecipeId || "") + ":" + (S.clayRoomPreviewSeed || "A");
+  const cached = S.clayRoomPixelMetricsCache;
+  // Measuring is intentionally event-driven (recipe/seed/camera changes or the explicit refresh
+  // button), never a recurring GPU sync while a flame is animating. "Live" means pixels from the
+  // current mounted frame, not a background profiler that periodically steals an animation frame.
+  if(!force && cached && cached.cacheKey === cacheKey) return cached.value;
+  if(!force && S.clayRoomMatrixCaptureInProgress) return cached ? cached.value : null;
+  const readback = clayRoomReadback(false);
+  if(!readback) return null;
+  const spriteRect = clayRoomCitizenScreenRect(readback);
+  const frame = clayRoomMetricsForRgba(
+    readback.pixels,
+    readback.width,
+    readback.height,
+    null,
+    { sampleStep: 1, flipY: readback.flipY }
+  );
+  const sprite = spriteRect ? clayRoomMetricsForRgba(
+    readback.pixels,
+    readback.width,
+    readback.height,
+    spriteRect,
+    { sampleStep: 1, flipY: readback.flipY }
+  ) : null;
+  let surround = null;
+  if(spriteRect){
+    const growX = Math.max(8, spriteRect.w * 0.45);
+    const growY = Math.max(8, spriteRect.h * 0.25);
+    surround = clayRoomMetricsForRgba(
+      readback.pixels,
+      readback.width,
+      readback.height,
+      {
+        x: spriteRect.x - growX,
+        y: spriteRect.y - growY,
+        w: spriteRect.w + growX * 2,
+        h: spriteRect.h + growY * 2
+      },
+      { sampleStep: 1, excludeRect: spriteRect, flipY: readback.flipY }
+    );
+  }
+  const readability = sprite && surround ? {
+    lumaDelta: Math.round(Math.abs(sprite.medianLuma - surround.medianLuma) * 100) / 100,
+    chromaDelta: Math.round(Math.abs(sprite.meanChromaSpread - surround.meanChromaSpread) * 100) / 100,
+    definition: "absolute sprite-screen-box vs local-surround deltas; measurement only"
+  } : null;
+  if(S.clayRoomRenderedSpriteCanvas && spriteRect){
+    clayRoomCanvasFromReadback(readback, spriteRect, S.clayRoomRenderedSpriteCanvas);
+  }
+  const value = {
+    recipeId: S.clayRoomLightRecipeId || null,
+    previewSeed: S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0],
+    drawingBuffer: { w: readback.width, h: readback.height },
+    frame: frame,
+    sprite: sprite,
+    localSurround: surround,
+    readability: readability,
+    sourceSprite: S.clayRoomSourceSprite ? {
+      path: S.clayRoomSourceSprite.path,
+      loaded: S.clayRoomSourceSprite.loaded,
+      metrics: S.clayRoomSourceSprite.metrics
+    } : null
+  };
+  S.clayRoomPixelMetricsCache = { cacheKey: cacheKey, measuredAt: now, value: value };
+  return value;
+}
+
+function clayRoomWaitForCaptureSettle(ms){
+  return new Promise(function(resolve){
+    const afterFrames = function(){
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ setTimeout(resolve, ms || 0); });
+      });
+    };
+    if(typeof requestAnimationFrame === "function") afterFrames();
+    else setTimeout(resolve, ms || 0);
+  });
+}
+
+function clayRoomDownloadBlob(filename, type, content){
+  const blob = content instanceof Blob ? content : new Blob([content], { type: type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 0);
+}
+
+function clayRoomShowLightingMatrix(sheetCanvas, receipt){
+  const stale = document.getElementById("clay-lighting-matrix-sheet");
+  if(stale && stale.parentNode) stale.parentNode.removeChild(stale);
+  const overlay = document.createElement("div");
+  overlay.id = "clay-lighting-matrix-sheet";
+  overlay.style.cssText = "position:fixed;inset:54px 22px 18px;z-index:10020;background:rgba(10,11,14,.97);border:1px solid #56606d;border-radius:6px;padding:12px;box-sizing:border-box;overflow:auto;color:#e7edf4;font:11px/1.4 monospace;";
+  const toolbar = document.createElement("div");
+  toolbar.style.cssText = "position:sticky;top:0;z-index:2;display:flex;gap:6px;align-items:center;background:#111318;padding:0 0 9px;";
+  const title = document.createElement("strong");
+  title.textContent = "CL-R1 · COMPLETE LIGHTING COMPARISON · 7 REAL RECIPES";
+  title.style.cssText = "margin-right:auto;font:600 12px -apple-system,sans-serif;";
+  toolbar.appendChild(title);
+  [
+    ["DOWNLOAD PNG", function(){
+      sheetCanvas.toBlob(function(blob){
+        if(blob) clayRoomDownloadBlob("cl-r1-lighting-comparison.png", "image/png", blob);
+      }, "image/png");
+    }],
+    ["DOWNLOAD RECEIPT", function(){
+      clayRoomDownloadBlob(
+        "cl-r1-lighting-comparison-receipt.json",
+        "application/json",
+        JSON.stringify(receipt, null, 2)
+      );
+    }],
+    ["CLOSE", function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); }]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[0];
+    button.style.cssText = "font:10px monospace;background:#252b33;color:#e3e8ee;border:1px solid #4b5562;border-radius:3px;padding:5px 8px;cursor:pointer;";
+    button.addEventListener("click", def[1]);
+    toolbar.appendChild(button);
+  });
+  overlay.appendChild(toolbar);
+  sheetCanvas.style.cssText = "display:block;width:min(100%,1600px);height:auto;margin:0 auto;border:1px solid #333;background:#0b0d11;";
+  overlay.appendChild(sheetCanvas);
+  document.body.appendChild(overlay);
+  S.clayRoomLightingMatrixOverlay = overlay;
+}
+
+async function clayRoomCaptureLightingMatrix(){
+  if(S.clayRoomMatrixCaptureInProgress || S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID){
+    return null;
+  }
+  S.clayRoomMatrixCaptureInProgress = true;
+  if(S.clayRoomMatrixStatusEl) S.clayRoomMatrixStatusEl.textContent = "capturing 1 / 7…";
+  const originalRecipeId = S.clayRoomLightRecipeId || "clay-opposing-pair";
+  const originalOverlayModes = Object.assign(
+    { position: false, range: false, shadow: false },
+    S.clayRoomLightOverlayModes || {}
+  );
+  const previewSeed = S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
+  const cards = [];
+  try {
+    S.clayRoomLightOverlayModes = { position: false, range: false, shadow: false };
+    clayRoomBuildLightOverlays();
+    for(let index = 0; index < CLAY_ROOM_LIGHTING_MATRIX_RECIPES.length; index++){
+      const recipeId = CLAY_ROOM_LIGHTING_MATRIX_RECIPES[index];
+      if(S.clayRoomMatrixStatusEl){
+        S.clayRoomMatrixStatusEl.textContent = "capturing " + (index + 1) + " / "
+          + CLAY_ROOM_LIGHTING_MATRIX_RECIPES.length + " · " + recipeId;
+      }
+      if(!clayRoomSetLightingRecipe(recipeId, "clayroom-matrix-capture")){
+        throw new Error("could not mount lighting matrix recipe " + recipeId);
+      }
+      await clayRoomWaitForCaptureSettle(180);
+      // Animated recipes become deterministic stills at their second seeded target. This changes
+      // no authored state; the restored live recipe restarts its ordinary smooth animation below.
+      // Settle the standee's seeded mount/breathe tweens too, otherwise identical runs can catch a
+      // different sub-frame of the goblin and move a handful of shadow pixels.
+      if(S.interiorGroup){
+        S.interiorGroup.traverse(function(object){
+          if(object && object.userData && object.userData.sprite) stopIdleBreathe(object, false);
+        });
+      }
+      drainTweens(S);
+      stopLightFlicker();
+      lightFlickerStep([], [], S.interiorLightTargets || [], 0, 2);
+      const readback = clayRoomReadback(true);
+      if(!readback) throw new Error("could not read rendered pixels for " + recipeId);
+      const recipe = LIGHT_TUNABLES.profiles[recipeId];
+      const targetById = {};
+      (S.interiorLightTargets || []).forEach(function(target){ targetById[target.id] = target; });
+      const liveLights = [];
+      if(S.interiorGroup){
+        S.interiorGroup.traverse(function(light){
+          if(!light || !light.isLight || !light.userData || !light.userData.lightId) return;
+          const worldPosition = new THREE.Vector3();
+          light.getWorldPosition(worldPosition);
+          const target = targetById[light.userData.lightId];
+          liveLights.push({
+            id: light.userData.lightId,
+            type: light.isDirectionalLight ? "directional"
+              : light.isAmbientLight ? "environment"
+              : light.isSpotLight ? "spot" : "point",
+            state: light.userData.lightState || (target && target.state) || "steady",
+            color: light.color && typeof light.color.getHex === "function" ? light.color.getHex() : null,
+            intensity: Number.isFinite(light.intensity) ? +light.intensity.toFixed(6) : null,
+            range: Number.isFinite(light.distance) ? +light.distance.toFixed(6) : null,
+            decay: Number.isFinite(light.decay) ? +light.decay.toFixed(6) : null,
+            castShadow: !!light.castShadow,
+            worldPosition: {
+              x: +worldPosition.x.toFixed(6),
+              y: +worldPosition.y.toFixed(6),
+              z: +worldPosition.z.toFixed(6)
+            },
+            sampleIndex: target ? target.sampleIndex : 0,
+            normalizedSample: target && Number.isFinite(target.normalizedSample)
+              ? +target.normalizedSample.toFixed(6) : 1
+          });
+        });
+      }
+      cards.push({
+        recipeId: recipeId,
+        label: recipe.label,
+        mode: recipe.mode,
+        source: lightRecipeDeepClone(recipe.source),
+        canvas: clayRoomCanvasFromReadback(readback),
+        metrics: clayRoomMetricsForRgba(
+          readback.pixels,
+          readback.width,
+          readback.height,
+          null,
+          { sampleStep: 2, flipY: readback.flipY }
+        ),
+        lights: liveLights
+      });
+    }
+
+    const cardWidth = 380, cardHeight = 360, columns = 4;
+    const rows = Math.ceil(cards.length / columns);
+    const sheet = document.createElement("canvas");
+    sheet.width = columns * cardWidth;
+    sheet.height = 104 + rows * cardHeight;
+    const ctx = sheet.getContext("2d");
+    ctx.fillStyle = "#0b0d11";
+    ctx.fillRect(0, 0, sheet.width, sheet.height);
+    ctx.fillStyle = "#eef3f8";
+    ctx.font = "600 28px -apple-system, sans-serif";
+    ctx.fillText("CL-R1 · LIGHTING COMPARISON", 24, 38);
+    ctx.fillStyle = "#9aa8b8";
+    ctx.font = "16px monospace";
+    ctx.fillText(
+      "production renderer · fixture " + CLAY_ROOM_LIGHTING_BENCH_ID
+        + " · preview seed " + previewSeed + " · dynamic sample 2",
+      24,
+      70
+    );
+    ctx.fillText("brightness, clipping, and colour are measured from final display pixels", 24, 94);
+    cards.forEach(function(card, index){
+      const col = index % columns, row = Math.floor(index / columns);
+      const x = col * cardWidth, y = 104 + row * cardHeight;
+      ctx.fillStyle = index % 2 ? "#11151b" : "#0f1318";
+      ctx.fillRect(x + 6, y + 6, cardWidth - 12, cardHeight - 12);
+      ctx.strokeStyle = card.source.loreNative ? "#476a58" : "#665b3d";
+      ctx.strokeRect(x + 6.5, y + 6.5, cardWidth - 13, cardHeight - 13);
+      ctx.fillStyle = "#edf2f7";
+      ctx.font = "600 18px -apple-system, sans-serif";
+      ctx.fillText(card.label, x + 18, y + 33);
+      ctx.fillStyle = card.source.loreNative ? "#7fd6a4" : "#d8bd72";
+      ctx.font = "12px monospace";
+      ctx.fillText(card.source.loreNative ? "LORE-NATIVE" : "DIAGNOSTIC ONLY", x + 18, y + 52);
+      const imageX = x + 18, imageY = y + 64, imageW = cardWidth - 36, imageH = 220;
+      ctx.fillStyle = "#050608";
+      ctx.fillRect(imageX, imageY, imageW, imageH);
+      const imageScale = Math.min(imageW / card.canvas.width, imageH / card.canvas.height);
+      const drawW = card.canvas.width * imageScale, drawH = card.canvas.height * imageScale;
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(
+        card.canvas,
+        imageX + (imageW - drawW) / 2,
+        imageY + (imageH - drawH) / 2,
+        drawW,
+        drawH
+      );
+      const m = card.metrics;
+      ctx.fillStyle = "#b9c6d3";
+      ctx.font = "12px monospace";
+      ctx.fillText("median " + m.medianLuma + "/255 · p95 " + m.p95Luma + "/255", x + 18, y + 306);
+      ctx.fillText(
+        "clipped " + m.clippedHighlightPct.toFixed(3) + "% · crushed "
+          + m.crushedShadowPct.toFixed(3) + "%",
+        x + 18,
+        y + 325
+      );
+      ctx.fillText("colour spread " + m.meanChromaSpread.toFixed(2) + "/255", x + 18, y + 344);
+    });
+
+    const receipt = {
+      id: "cl-r1-lighting-comparison",
+      version: 1,
+      rendererPath: "authored light lock -> clayRoomBoardFrom -> production Theater -> display-space framebuffer",
+      fixtureId: CLAY_ROOM_LIGHTING_BENCH_ID,
+      fixtureVersion: CLAY_LIGHTING_BENCH_FIXTURE.version,
+      fixtureSeed: S.clayRoomRecord ? S.clayRoomRecord.seed : null,
+      previewSeed: previewSeed,
+      dynamicSampleIndex: 2,
+      lightLock: {
+        id: LIGHT_PROFILE_LOCKS_COMPILED.id,
+        version: LIGHT_PROFILE_LOCKS_COMPILED.version,
+        schemaVersion: LIGHT_PROFILE_LOCKS_COMPILED.schemaVersion
+      },
+      sourceSprite: S.clayRoomSourceSprite ? {
+        path: S.clayRoomSourceSprite.path,
+        metrics: S.clayRoomSourceSprite.metrics
+      } : null,
+      cards: cards.map(function(card){
+        return {
+          recipeId: card.recipeId,
+          label: card.label,
+          mode: card.mode,
+          source: card.source,
+          metrics: card.metrics,
+          lights: card.lights
+        };
+      })
+    };
+    const dataUrl = sheet.toDataURL("image/png");
+    S.clayRoomLightingMatrixArtifact = {
+      receipt: receipt,
+      dataUrl: dataUrl,
+      width: sheet.width,
+      height: sheet.height
+    };
+    clayRoomShowLightingMatrix(sheet, receipt);
+    if(S.clayRoomMatrixStatusEl){
+      S.clayRoomMatrixStatusEl.textContent = "ready · 7 recipes · PNG + receipt";
+    }
+    return S.clayRoomLightingMatrixArtifact;
+  } catch(error) {
+    if(S.clayRoomMatrixStatusEl) S.clayRoomMatrixStatusEl.textContent = "capture failed · " + error.message;
+    throw error;
+  } finally {
+    S.clayRoomLightOverlayModes = originalOverlayModes;
+    clayRoomSetLightingRecipe(originalRecipeId, "clayroom-matrix-restore");
+    clayRoomBuildLightOverlays();
+    S.clayRoomMatrixCaptureInProgress = false;
+  }
+}
+
 /* clayRoomAfterInteriorBoardRebuild() — THE ONE LIFECYCLE HOOK. Called from setInteriorBoard's own
    tail (its single exit point), so it fires on the mount's first build AND on every asynchronous
    replay, without the clay surface having to know that those replay sites exist. A no-op unless the
@@ -15211,8 +18480,13 @@ function clayRoomSurfaceCensus(){
    then provenance re-tagging (the rebuild replaced the children the previous tags pointed at). */
 function clayRoomAfterInteriorBoardRebuild(){
   if(!S.clayRoomDiagnosticActive) return;
+  clayRoomMountStructureBench();
+  clayRoomMountLightingBench();
+  clayRoomMountSpriteBench();
+  clayRoomSuppressLightingBenchNoise();
   clayRoomApplyDiagnosticSurfaces();
   clayRoomApplyLightProfile(S.clayRoomRecord);
+  clayRoomBuildLightOverlays();
   clayRoomTagAllProvenance();
   // pan/zoom survives rebuilds without compounding: capture THIS rebuild's fresh camera fit, then
   // re-derive the pose from fit ∘ offset ∘ zoom (see the CLAY CAMERA PAN/ZOOM block).
@@ -15228,6 +18502,7 @@ function clayRoomAfterInteriorBoardRebuild(){
   clayRoomCaptureCamFit();
   clayRoomApplyCamPose();
   if(S.clayRoomSelectedId) clayRoomHighlightSelection(S.clayRoomSelectedId);
+  if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
 }
 
 function clayRoomSettleCameraPoseTween(){
@@ -15461,6 +18736,10 @@ function clayRoomRenderMovementOverlay(ranges, preview){
   scheduleRender();
 }
 function clayRoomMovementRangesRender(){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TRUTH_FIXTURE_ID){
+    clayRoomDisposeMovementOverlay();
+    return null;
+  }
   const session = clayRoomMovementSession();
   if(!session) return null;
   const ranges = tqMovementRanges(session.fixture.space, session.state, session.fixture.actorId);
@@ -15512,6 +18791,100 @@ function clayRoomMovementBoardFromState(state){
       ? Object.assign({}, entry, { state: connection ? connection.state : "shut" })
       : entry;
   });
+  if(S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID){
+    const fixture = clayRoomLightingBenchFixtureFrom(S.clayRoomRecord);
+    const room = compiled.room;
+    pieces = pieces.map(function(piece){
+      return Object.assign({}, piece, {
+        cellX: room.x + fixture.spriteCell.x,
+        cellY: room.y + fixture.spriteCell.z
+      });
+    });
+    // CL-F02 is a measurement fixture. The approved sprite remains, but the room-truth crate and
+    // door are removed from this projection so their extra faces do not muddle the comparison.
+    return Object.assign({}, base, {
+      pieces: pieces,
+      furniture: [],
+      interactables: [],
+      dressing: []
+    });
+  }
+  if(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID){
+    // CL-F01 isolates architecture. The outer production room remains the calibrated floor/light/
+    // camera host; its crate, citizen, dressing, and authored door cannot be mistaken for bench
+    // specimens. The structure fixture itself mounts in the post-build lifecycle hook below.
+    const fixture = clayRoomStructureBenchFixtureFrom(S.clayRoomRecord);
+    const room = compiled.room;
+    const witness = fixture.cutawayWitness;
+    const witnessPiece = {
+      id: witness.id,
+      sourceRef: witness.pieceSlug,
+      slug: witness.pieceSlug,
+      label: "Human scale / cutaway witness",
+      cellX: room.x + witness.pieceCell.x,
+      cellY: room.y + witness.pieceCell.z,
+      allowOverheight: true
+    };
+    const witnessPillar = {
+      x: room.x + witness.occluder.at.x,
+      z: room.y + witness.occluder.at.z,
+      sx: witness.occluder.sx,
+      sy: witness.occluder.sy,
+      sz: witness.occluder.sz,
+      color: "#888888",
+      profile: witness.occluder.profile,
+      sourceRef: witness.occluder.id
+    };
+    return Object.assign({}, base, {
+      instances: Object.assign({}, base.instances, {
+        pillar: (base.instances.pillar || []).concat([witnessPillar])
+      }),
+      pieces: [witnessPiece],
+      furniture: [],
+      interactables: [],
+      dressing: [],
+      wallProps: []
+    });
+  }
+  if(S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID){
+    const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
+    const room = compiled.room;
+    const capMode = S.clayRoomSpriteScaleMode === "diagnostic-cap";
+    const cap = fixture.candidatePresentationCap;
+    pieces = fixture.cast.map(function(spec){
+      const registry = spriteEntryFor(spec.slug);
+      const worldHeight = registry && Number.isFinite(registry.worldHeight)
+        ? registry.worldHeight
+        : (registry && Number.isFinite(registry.feet) ? registry.feet : HUMAN_TRUE_HEIGHT * 5);
+      const presentedFeet = capMode
+        ? Math.max(cap.minFeet, Math.min(cap.maxFeet, worldHeight))
+        : worldHeight;
+      return {
+        id: "clay-citizen-" + spec.slug,
+        sourceRef: spec.slug,
+        slug: spec.slug,
+        label: spec.label,
+        stress: spec.stress,
+        tacticalSpanCells: spec.tacticalSpanCells,
+        cellX: room.x + spec.lineupCell.x,
+        cellY: room.y + spec.lineupCell.z,
+        scaleVsHuman: capMode ? presentedFeet / 5.5 : null,
+        allowOverheight: true
+      };
+    });
+    return Object.assign({}, base, {
+      pieces: pieces,
+      furniture: [],
+      interactables: [],
+      dressing: [],
+      cameraFit: {
+        maxHeight: capMode ? cap.maxFeet / 5 : Math.max.apply(null, fixture.cast.map(function(spec){
+          const registry = spriteEntryFor(spec.slug);
+          return registry && Number.isFinite(registry.worldHeight) ? registry.worldHeight / 5 : 1.1;
+        }))
+      }
+    });
+  }
   return Object.assign({}, base, { pieces: pieces, interactables: interactables });
 }
 function clayRoomApplyMovementBoard(state, reason){
@@ -15605,6 +18978,7 @@ function clayRoomTagAllProvenance(){
   S.clayRoomProvenanceRoots = [];
   if(S.interiorGroup) clayRoomTagProvenance(S.interiorGroup, "setInteriorBoard"); // board/figure/lights/furniture — nested
   if(S.clayGridMesh) clayRoomTagProvenance(S.clayGridMesh, "clayRoomBuildSeamGrid"); // grid
+  if(S.clayRoomLightOverlayGroup) clayRoomTagProvenance(S.clayRoomLightOverlayGroup, "clayRoomBuildLightOverlays");
   if(S.ambientLight) clayRoomTagProvenance(S.ambientLight, "clayRoomApplyLightProfile"); // lights
   (S.pointLights || []).forEach(function(l){ clayRoomTagProvenance(l, "clayRoomApplyLightProfile"); }); // lights
 }
@@ -15650,7 +19024,9 @@ function clayRoomProvenanceAudit(){
    (clayRoomCaptureCamFit, called from the one lifecycle hook) and the final pose is always
    pose = fit ∘ offset ∘ zoom, recomputed from scratch. Drag = grab convention (the room follows
    the cursor). Double-click resets. */
-const CLAY_CAM_ZOOM_MIN = 0.35, CLAY_CAM_ZOOM_MAX = 2.5;
+// The fitted pose remains the reset/default. 0.12 lets the art director dolly roughly 8.3× closer
+// for feet, shell, and alpha-edge inspection without unlocking bearing or pitch.
+const CLAY_CAM_ZOOM_MIN = 0.12, CLAY_CAM_ZOOM_MAX = 2.5;
 function clayRoomCaptureCamFit(){
   if(!S.camera) return;
   const t = S.cameraLookTarget ? S.cameraLookTarget.clone() : new THREE.Vector3(0, 0, 0);
@@ -15664,11 +19040,43 @@ function clayRoomApplyCamPose(){
   const zoom = S.clayCamZoom || 1;
   const target = S.clayCamFit.target.clone(); target.x += off.x; target.z += off.z;
   const pos = S.clayCamFit.pos.clone(); pos.x += off.x; pos.z += off.z;
-  // dolly along the existing ray — direction (and therefore bearing+pitch) preserved exactly
-  pos.sub(target).multiplyScalar(zoom).add(target);
+  if(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    && S.clayRoomStructureView === "strategic"){
+    // The strategic camera is the one governed pitch exception named by the wall-omission ruling:
+    // fixed 72° map-reading pitch, same production bearing, pan, target, and perspective camera.
+    // It is a named mode, never free orbit. Every wall is compiled in this mode (see CL-F01 mount).
+    const ray = pos.sub(target);
+    // Checkpoint 4 ("ALL WALLS is poorly fitted in the narrow viewport, crops or flattens the
+    // scene"): the map-reading distance is computed from the ROOM'S OWN BOUNDS against the live
+    // camera fov/aspect, not inherited from the production-pitch fit ray. The 72° pitch, bearing,
+    // and governed zoom are unchanged — only the fit is honest to the viewport now.
+    let distance;
+    {
+      const halfDiag = Math.sqrt(
+        Math.pow(S.boardHalfX || 8, 2) + Math.pow(S.boardHalfZ || 8, 2)
+      ) * 1.12 + 1.5; // margin: wall thickness + breathing room
+      const vFov = ((S.camera.fov || 20) * Math.PI / 180) / 2;
+      const aspect = S.camera.aspect || 1;
+      const hFov = Math.atan(Math.tan(vFov) * aspect);
+      distance = (halfDiag / Math.tan(Math.min(vFov, hFov))) * zoom;
+    }
+    const ground = new THREE.Vector2(ray.x, ray.z);
+    if(ground.lengthSq() < 0.0001) ground.set(1, 1);
+    ground.normalize();
+    const pitch = 72 * Math.PI / 180;
+    pos.set(
+      target.x + ground.x * Math.cos(pitch) * distance,
+      target.y + Math.sin(pitch) * distance,
+      target.z + ground.y * Math.cos(pitch) * distance
+    );
+  } else {
+    // dolly along the existing ray — direction (and therefore bearing+pitch) preserved exactly
+    pos.sub(target).multiplyScalar(zoom).add(target);
+  }
   S.camera.position.copy(pos);
   if(S.cameraLookTarget) S.cameraLookTarget.copy(target);
   S.camera.lookAt(target);
+  S.clayRoomPixelMetricsCache = null;
   markDirty();
   scheduleRender();
 }
@@ -15680,9 +19088,10 @@ function clayRoomNodeForSelection(id){
     if(found || !node) return;
     probe.visited++;
     const ud = node.userData || {};
-    const candidate = ud.unitId || ud.sceneObjectId || ud.lightId || ud.dressingSlug;
+    const candidate = ud.structureSpecId || ud.unitId || ud.sceneObjectId || ud.lightId || ud.dressingSlug;
     if(candidate != null && probe.candidates.length < 12) probe.candidates.push(String(candidate));
-    if(String(ud.sceneObjectId || "") === String(id)
+    if(String(ud.structureSpecId || "") === String(id)
+      || String(ud.sceneObjectId || "") === String(id)
       || String(ud.unitId || "") === String(id)
       || String(ud.lightId || "") === String(id)
       || String(ud.dressingSlug || "") === String(id)){
@@ -15698,13 +19107,162 @@ function clayRoomNodeForSelection(id){
   S.clayRoomSelectionProbe = probe;
   return found;
 }
+function clayRoomStandeeForSelectionNode(node){
+  let cursor = node;
+  while(cursor && cursor !== S.interiorGroup && cursor !== S.scene){
+    if(cursor.userData && cursor.userData.sprite) return cursor;
+    cursor = cursor.parent;
+  }
+  return null;
+}
+// CL-R2 selection follow-up — selected support illumination must read as NEON emitted by the blue
+// vertical sidewall itself, never as a point bulb hidden at the base center. Standard real-time
+// emissive materials do not illuminate nearby pixels, so the visible emission is paired with ONE
+// very cheap, additive floor-spill quad shaped to the support's rounded-strip footprint. The opaque
+// support hides its bright center; only the cyan feather immediately outside the physical sidewall
+// remains visible. It adds no scene light, no extra shadow caster, and follows base relocation/yaw as
+// a child of that same base.
+const CLAY_SELECTION_BASE_NEON_COLOR = 0x53d5ff;
+const CLAY_SELECTION_BASE_NEON_WIDTH_SCALE = 1.24;
+const CLAY_SELECTION_BASE_NEON_DEPTH_SCALE = 1.72;
+let CLAY_SELECTION_BASE_NEON_TEXTURE = null;
+let CLAY_SELECTION_BASE_NEON_MATERIAL = null;
+let CLAY_SELECTION_BASE_NEON_GEOMETRY = null;
+function claySelectionBaseNeonTexture(){
+  if(CLAY_SELECTION_BASE_NEON_TEXTURE) return CLAY_SELECTION_BASE_NEON_TEXTURE;
+  const size = 128;
+  const canvas = document.createElement("canvas");
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext && canvas.getContext("2d");
+  if(ctx && typeof ctx.createRadialGradient === "function"){
+    ctx.clearRect(0, 0, size, size);
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgba(255,255,255,0.72)");
+    grad.addColorStop(0.46, "rgba(255,255,255,0.50)");
+    grad.addColorStop(0.74, "rgba(255,255,255,0.20)");
+    grad.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.minFilter = THREE.LinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.userData.claySelectionBaseNeonTexture = true;
+  CLAY_SELECTION_BASE_NEON_TEXTURE = tex;
+  return tex;
+}
+function claySelectionBaseNeonMaterial(){
+  if(CLAY_SELECTION_BASE_NEON_MATERIAL) return CLAY_SELECTION_BASE_NEON_MATERIAL;
+  const mat = new THREE.MeshBasicMaterial({
+    map: claySelectionBaseNeonTexture(),
+    color: CLAY_SELECTION_BASE_NEON_COLOR,
+    transparent: true,
+    opacity: 0.72,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    toneMapped: false
+  });
+  mat.userData.shared = true;
+  mat.userData.claySelectionBaseNeonMaterial = true;
+  CLAY_SELECTION_BASE_NEON_MATERIAL = mat;
+  return mat;
+}
+function claySelectionBaseNeonGeometry(){
+  if(CLAY_SELECTION_BASE_NEON_GEOMETRY) return CLAY_SELECTION_BASE_NEON_GEOMETRY;
+  const geo = new THREE.PlaneGeometry(1, 1);
+  geo.userData.shared = true;
+  CLAY_SELECTION_BASE_NEON_GEOMETRY = geo;
+  return geo;
+}
+function setStandeeSelectionBaseNeon(fig, glowing){
+  if(!fig || !fig.userData || !fig.userData.standeeBaseMesh) return;
+  const base = fig.userData.standeeBaseMesh;
+  let spill = fig.userData.claySelectionBaseNeon || null;
+  if(glowing){
+    if(!spill){
+      spill = new THREE.Mesh(claySelectionBaseNeonGeometry(), claySelectionBaseNeonMaterial());
+      spill.rotation.x = -Math.PI / 2;
+      spill.position.set(0, -INTERIOR_BASE_HEIGHT - 0.002, 0);
+      spill.scale.set(
+        (base.userData.supportWidth || 0.45) * CLAY_SELECTION_BASE_NEON_WIDTH_SCALE,
+        (base.userData.supportDepth || INTERIOR_BASE_TREAD_DEPTH) * CLAY_SELECTION_BASE_NEON_DEPTH_SCALE,
+        1
+      );
+      spill.castShadow = false;
+      spill.receiveShadow = false;
+      spill.renderOrder = 3;
+      spill.userData.claySelectionBaseNeon = true;
+      spill.userData.emissionSource = "emissive-sidewall";
+      spill.userData.footprintShape = "support-rounded-strip";
+      spill.userData.spillWidth = spill.scale.x;
+      spill.userData.spillDepth = spill.scale.y;
+      fig.userData.claySelectionBaseNeon = spill;
+    }
+    if(spill.parent !== base){
+      if(spill.parent) spill.parent.remove(spill);
+      base.add(spill);
+    }
+    spill.visible = true;
+    spill.userData.linkedSceneObjectId = fig.userData.sceneObjectId || fig.userData.unitId || null;
+  } else if(spill){
+    spill.visible = false;
+  }
+}
+function setStandeeSelectionBaseRing(fig, glowing){
+  if(!fig || !fig.userData || !fig.userData.standeeBaseMesh) return;
+  const base = fig.userData.standeeBaseMesh;
+  const mats = Array.isArray(base.material) ? base.material : [base.material];
+  // ExtrudeGeometry's material contract is [top/bottom caps, vertical side wall]. Selection belongs
+  // ONLY on index 1: the shallow outer face becomes a luminous ring while the top remains ordinary
+  // stone and the character card receives no outline.
+  const side = mats[1] || mats[0];
+  if(side && side.emissive) side.emissive.setHex(glowing ? 0x53d5ff : 0x000000);
+  if(base.layers){
+    if(glowing) base.layers.enable(BLOOM_LAYER);
+    else base.layers.disable(BLOOM_LAYER);
+  }
+  base.userData.claySelectionBaseRingGlow = !!glowing;
+  setStandeeSelectionBaseNeon(fig, glowing);
+}
+function clayRoomClearSelectionGlow(){
+  if(S.clayRoomSelectionGlowSprite){
+    setStandeeSelectionBaseRing(S.clayRoomSelectionGlowSprite, false);
+  }
+  S.clayRoomSelectionGlowSprite = null;
+}
+function clayRoomMountSelectionGlow(node){
+  const fig = clayRoomStandeeForSelectionNode(node);
+  if(!fig || !S.scene) return;
+  setStandeeSelectionBaseRing(fig, true);
+  S.clayRoomSelectionGlowSprite = fig;
+}
 function clayRoomHighlightSelection(id){
   if(S.clayRoomSelectionHelper && S.clayRoomSelectionHelper.parent){
     S.clayRoomSelectionHelper.parent.remove(S.clayRoomSelectionHelper);
+    if(S.clayRoomSelectionHelper.geometry) S.clayRoomSelectionHelper.geometry.dispose();
+    if(S.clayRoomSelectionHelper.material) S.clayRoomSelectionHelper.material.dispose();
   }
   S.clayRoomSelectionHelper = null;
+  clayRoomClearSelectionGlow();
   const node = clayRoomNodeForSelection(id);
   if(!node || !S.scene) return;
+  // The compiled shell is the whole architectural composition, not one editable part. Boxing the
+  // entire specimen field makes the assembled review read like a selection cage.
+  if(id === "compiled-shell"){
+    markDirty();
+    scheduleRender();
+    return;
+  }
+  // A standee selects through its diegetic base ring. Do not also draw the generic cyan BoxHelper
+  // around the character card—the user's clarification is specifically that only the base wall
+  // should light. Non-standee objects retain the workbench bounding-box diagnostic.
+  if(clayRoomStandeeForSelectionNode(node)){
+    clayRoomMountSelectionGlow(node);
+    markDirty();
+    scheduleRender();
+    return;
+  }
   const helper = new THREE.BoxHelper(node, 0x6fcfff);
   helper.material.depthTest = false;
   helper.material.transparent = true;
@@ -15731,7 +19289,7 @@ function clayRoomPickAt(ev, host){
     let node = hits[i].object;
     while(node && node !== S.interiorGroup){
       const ud = node.userData || {};
-      const id = ud.sceneObjectId || ud.lightId || ud.dressingSlug;
+      const id = ud.structureSpecId || ud.sceneObjectId || ud.lightId || ud.dressingSlug;
       if(id){
         S.clayRoomSelectedId = id;
         if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(id, "viewport");
@@ -15793,7 +19351,7 @@ function clayRoomWirePanZoom(host){
   host.addEventListener("wheel", function(ev){
     ev.preventDefault();
     if(!S.clayCamFit) return;
-    const factor = ev.deltaY > 0 ? 1.1 : 0.9;
+    const factor = ev.deltaY > 0 ? 1.18 : 0.82;
     S.clayCamZoom = Math.min(CLAY_CAM_ZOOM_MAX, Math.max(CLAY_CAM_ZOOM_MIN, (S.clayCamZoom || 1) * factor));
     clayRoomApplyCamPose();
   }, { passive: false });
@@ -15836,10 +19394,19 @@ function clayRoomDoorProofState(){
 // mounts the real Theater renderer and every list entry refers to an object already supplied by the
 // production Clayroom record. Catalog buttons do not manufacture demo meshes.
 function clayRoomWorkbenchDimensions(){
-  const compact = typeof window !== "undefined" && window.innerWidth < 900;
+  // Checkpoint 4 ("the inspector consumes roughly half of a narrow browser window, leaving a
+  // portrait-shaped renderer unsuitable for visual signoff"): chrome scales DOWN before the
+  // viewport does. Below 1000px the catalog auto-collapses to its rail unless the user explicitly
+  // expanded it this session (S.clayRoomCatalogCollapsed === false is an explicit choice; null/
+  // undefined means default). The inspector clamps proportionally so the renderer always keeps
+  // the MAJORITY of the window at review sizes.
+  const w = typeof window !== "undefined" ? window.innerWidth : 1280;
+  const compact = w < 900;
+  const catalogAutoCollapsed = w < 1000 && S.clayRoomCatalogCollapsed !== false;
+  const inspector = Math.round(Math.min(390, Math.max(230, w * 0.28)));
   return {
-    catalog: S.clayRoomCatalogCollapsed ? 42 : (compact ? 170 : 260),
-    inspector: compact ? 250 : 390,
+    catalog: (S.clayRoomCatalogCollapsed || catalogAutoCollapsed) ? 42 : (compact ? 170 : 260),
+    inspector: compact ? Math.min(inspector, 250) : inspector,
   };
 }
 function clayRoomApplyWorkbenchLayout(){
@@ -15886,25 +19453,33 @@ function clayRoomBuildWorkbenchChrome(record){
     h.style.cssText = "margin:2px 0 7px;color:#8e9baa;font:600 10px monospace;letter-spacing:.12em;";
     return h;
   }
-  rail.appendChild(railHeading("CATALOG · APPROVED PRODUCTION"));
+  rail.appendChild(railHeading("CATALOG · LIVE FIXTURE SLICE"));
   const catalog = [
     ["STRUCTURE", "10 ft wall", "room-shell"],
+    ["STRUCTURE KIT", "Construction bench", "compiled-shell"],
+    ["SCALE / CUTAWAY", "Human witness", "structure-cutaway-witness"],
     ["PROP", "Crate · 3 ft", record.object.id],
     ["INTERACTABLE", "Door · 36 × 80 in", record.portal.id],
-    ["LIGHT", "Warm west practical", "clay-west-warm"],
-    ["LIGHT", "Cool east practical", "clay-east-cool"],
+    ["DIAGNOSTIC LIGHT", "Warm calibration bulb", "clay-west-warm"],
+    ["DIAGNOSTIC LIGHT", "Cool calibration bulb", "clay-east-cool"],
     ["SPRITE", "Goblin", record.citizen.bestiaryId],
   ];
   catalog.forEach(function(row){
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.claySelect = row[2];
+    if(row[2] === "compiled-shell" || row[2] === "structure-cutaway-witness") b.dataset.clayStructureOnly = "1";
+    if(row[2] === record.citizen.bestiaryId) b.dataset.claySpriteCatalog = "1";
+    if(row[2] === record.object.id || row[2] === record.portal.id) b.dataset.clayRoomTruthOnly = "1";
+    if(row[2] === "clay-west-warm") b.dataset.clayLightCatalogSlot = "0";
+    if(row[2] === "clay-east-cool") b.dataset.clayLightCatalogSlot = "1";
     b.style.cssText = "width:100%;text-align:left;background:#20242b;color:#e0e5ea;border:1px solid #333a44;border-radius:4px;padding:7px 8px;margin:0 0 5px;cursor:pointer;";
-    b.innerHTML = "<small style='display:block;color:#8290a1;font:9px monospace'>" + row[0] + "</small>" + row[1] +
-      "<small style='float:right;color:#6fcf91;font:9px monospace'>MOUNTED</small>";
+    b.innerHTML = "<small data-clay-light-kind style='display:block;color:#8290a1;font:9px monospace'>" + row[0] + "</small>" +
+      "<span data-clay-light-label>" + row[1] + "</span>" +
+      "<small data-clay-light-status style='float:right;color:#6fcf91;font:9px monospace'>MOUNTED</small>";
     b.addEventListener("click", function(){
-      S.clayRoomSelectedId = row[2];
-      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(row[2], "catalog");
+      S.clayRoomSelectedId = b.dataset.claySelect;
+      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(b.dataset.claySelect, "catalog");
     });
     rail.appendChild(b);
   });
@@ -15915,27 +19490,34 @@ function clayRoomBuildWorkbenchChrome(record){
   scene.appendChild(railHeading("SCENE · LIVE PRODUCTION OBJECTS"));
   [
     ["Room shell", "room-shell"],
+    ["Construction bench", "compiled-shell"],
+    ["Human cutaway witness", "structure-cutaway-witness"],
     ["Door", record.portal.id],
     ["Crate", record.object.id],
     ["Goblin", record.citizen.bestiaryId],
-    ["Warm light", "clay-west-warm"],
-    ["Cool light", "clay-east-cool"],
+    ["Warm calibration bulb", "clay-west-warm"],
+    ["Cool calibration bulb", "clay-east-cool"],
   ].forEach(function(row){
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.claySceneId = row[1];
+    if(row[1] === "compiled-shell" || row[1] === "structure-cutaway-witness") b.dataset.clayStructureOnly = "1";
+    if(row[1] === record.citizen.bestiaryId) b.dataset.claySpriteCatalog = "1";
+    if(row[1] === record.object.id || row[1] === record.portal.id) b.dataset.clayRoomTruthOnly = "1";
+    if(row[1] === "clay-west-warm") b.dataset.clayLightSceneSlot = "0";
+    if(row[1] === "clay-east-cool") b.dataset.clayLightSceneSlot = "1";
     b.textContent = "◇  " + row[0];
     b.style.cssText = "display:block;width:100%;text-align:left;background:transparent;color:#cbd3dc;border:0;border-left:2px solid transparent;padding:5px 7px;cursor:pointer;font:11px monospace;";
     b.addEventListener("click", function(){
-      S.clayRoomSelectedId = row[1];
-      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(row[1], "scene");
+      S.clayRoomSelectedId = b.dataset.claySceneId;
+      if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(b.dataset.claySceneId, "scene");
     });
     scene.appendChild(b);
   });
   rail.appendChild(scene);
   const safety = document.createElement("div");
   safety.style.cssText = "margin-top:14px;padding:8px;border:1px solid #4d4431;background:#242117;color:#d7c58c;font:10px/1.4 monospace;";
-  safety.textContent = "Catalog is an admitted fixture slice. Placement edits are session-only; sockets and defaults remain locked.";
+  safety.textContent = "The light rows mirror the current recipe. Diagnostic bulbs never masquerade as world fixtures; placement edits remain session-only.";
   rail.appendChild(safety);
 
   const viewport = document.createElement("div");
@@ -16012,7 +19594,14 @@ function mountClayRoom(){
     // question, not a CL-R0 one.
     ITR_ROOM_SHELL = clayRoomShellOverrideOn(); // restored in clayRoomUnmount — see this function's own header note above
 
-    const compiled = clayRoomBoardFrom(record); // D15 — real spatializer + interiorBuildBoard (src/engine/clay-room.js)
+    const initialFixtureId = clayRoomFixtureIdFromLocation();
+    // CL-R3's canonical review is the daylight hero: neutral clay still carries no authored site
+    // material, while the shared production sun makes wall thickness, caps, stairs, and slab faces
+    // readable without diagnostic bulbs. Other fixtures retain their existing opposing-pair start.
+    const initialLightRecipeId = initialFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+      ? "daylit"
+      : "clay-opposing-pair";
+    const compiled = clayRoomBoardFrom(record, { lightRecipeId: initialLightRecipeId }); // D15 — real spatializer + interiorBuildBoard (src/engine/clay-room.js)
     const movementFixture = clayRoomMovementFixtureFrom(record, compiled);
     // C1B mechanical session truth lives in GS, not in the renderer state. Rebuilds and animations
     // may replace THREE objects, but they keep this exact revisioned query state. Closing/reopening
@@ -16041,6 +19630,30 @@ function mountClayRoom(){
     // precisely what later replays could not reproduce.
     S.clayRoomRecord = record;
     S.clayRoomCompiled = compiled;
+    S.clayRoomLightRecipeId = compiled.lightRecipeId || "clay-opposing-pair";
+    S.clayRoomFixtureId = initialFixtureId;
+    // CL-R2 ruling: presentation scale is the working default. True scale stays one click away as
+    // an honest size-spectrum check; neither view mutates registry worldHeight or tactical span.
+    S.clayRoomSpriteScaleMode = "diagnostic-cap";
+    S.clayRoomSelectedSpriteSlug = CLAY_SPRITE_CITIZENSHIP_FIXTURE.selectedSlug;
+    S.clayRoomLightOverlayModes = { position: false, range: false, shadow: false };
+    S.clayRoomPreviewSeed = CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
+    S.clayCamOffset = { x: 0, z: 0 };
+    S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+      ? 0.72 : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
+        : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65 : 1));
+    S.clayRoomStructureView = CLAY_STRUCTURE_BENCH_FIXTURE.defaultView;
+    S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
+      null,
+      { type: CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.stagedEvent }
+    );
+    const initialStructureConnection = GS.clayRoomMovementSession.state.connections.find(function(row){
+      return row.id === GS.clayRoomMovementSession.fixture.connectionId;
+    });
+    S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
+      S.clayRoomStructureStageLatch,
+      { type: "door-state", state: initialStructureConnection ? initialStructureConnection.state : "shut" }
+    );
     S.clayRoomDiagnosticActive = true;
     setInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
     S.clayGridMesh = clayRoomBuildSeamGrid(record, compiled.room); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live; compiled.room is the spatializer's REAL room rect (CL-R0 coordinate fix)
@@ -16201,6 +19814,7 @@ function clayRoomMountOverlay(record, host){
   editorActions.style.cssText = "display:flex;gap:5px;margin-top:6px;";
   const spriteEditorBtn = document.createElement("button");
   spriteEditorBtn.textContent = "open sprite editor ↗";
+  spriteEditorBtn.title = "Run python3 dev/sprite-review.py, then open the selected sprite in the dedicated editor";
   const materialEditorBtn = document.createElement("button");
   materialEditorBtn.textContent = "material editor";
   materialEditorBtn.title = "Shared Material Editor seam; the admitted MM mapping pass is next.";
@@ -16335,7 +19949,7 @@ function clayRoomMountOverlay(record, host){
     " v" + CLAY_DIAGNOSTIC_SURFACE_RECIPE.version + " mode " + clayRoomSurfaceMode();
   panel.appendChild(recipeLine);
   const camHint = document.createElement("div");
-  camHint.textContent = "drag canvas to pan · wheel to zoom · double-click to reset";
+  camHint.textContent = "drag canvas to pan · wheel to zoom (up to 8× closer) · double-click to reset";
   camHint.style.cssText = "color:#7a8494;margin-bottom:6px;font:10px monospace;";
   panel.appendChild(camHint);
 
@@ -16354,14 +19968,21 @@ function clayRoomMountOverlay(record, host){
   const movementTabBtn = document.createElement("button");
   movementTabBtn.textContent = "Move";
   movementTabBtn.setAttribute("aria-label", "Clayroom production movement proof");
+  const structureTabBtn = document.createElement("button");
+  structureTabBtn.textContent = "Structure";
+  structureTabBtn.setAttribute("aria-label", "Clayroom reusable structure grammar proof");
   const lightsTabBtn = document.createElement("button");
   lightsTabBtn.textContent = "Lights";
   lightsTabBtn.setAttribute("aria-label", "Clayroom lighting proof");
-  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, lightsTabBtn].forEach(function(b){
+  const spritesTabBtn = document.createElement("button");
+  spritesTabBtn.textContent = "Sprites";
+  spritesTabBtn.setAttribute("aria-label", "Clayroom sprite citizenship proof");
+  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, structureTabBtn, lightsTabBtn, spritesTabBtn].forEach(function(b){
     b.style.cssText = "flex:1 1 46px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   });
   tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn);
-  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(movementTabBtn); tabBar.appendChild(lightsTabBtn);
+  tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(movementTabBtn);
+  tabBar.appendChild(structureTabBtn); tabBar.appendChild(lightsTabBtn); tabBar.appendChild(spritesTabBtn);
   panel.appendChild(tabBar);
 
   const factsBody = document.createElement("pre");
@@ -16812,14 +20433,275 @@ function clayRoomMountOverlay(record, host){
   stateBody.appendChild(stateButtons);
   stateBody.appendChild(stateOut);
 
+  // CL-R3 Structure tab — inspection and A/B views over the mounted production structure bench.
+  // The controls reveal authored facts; they do not mutate dimensions or invent a second builder.
+  const structureBody = document.createElement("div");
+  structureBody.style.cssText = "display:none;font:10px/1.42 monospace;color:#dde;";
+  const structureIntro = document.createElement("div");
+  structureIntro.innerHTML =
+    "<div style='color:#9fd4ec;margin-bottom:4px'>CL-F01 · REUSABLE CONSTRUCTION GRAMMAR</div>" +
+    "<div style='color:#9ab'>Production shell + generic atoms + the ASSEMBLY terrace (same pieces composed). " +
+    "SOCKET arrows point along their join axis — <span style='color:#35d8ff'>butt-join</span> · <span style='color:#66dfa0'>walk-surface</span> · " +
+    "<span style='color:#6f8fff'>top-surface</span> · <span style='color:#c08a5a'>terrain-join</span> · <span style='color:#ff7ad8'>hinge</span> · " +
+    "<span style='color:#b9c2cc'>mount</span>. ACCESS frames are per-face — <span style='color:#66dfa0'>walk</span> · " +
+    "<span style='color:#f3bd55'>climb-cost</span> · <span style='color:#ff6d68'>climb-dc</span> · <span style='color:#8a9099'>none</span>. Red X = rejected join.</div>";
+  structureBody.appendChild(structureIntro);
+  const structureFixtureNav = document.createElement("div");
+  structureFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:7px 0;";
+  [
+    [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM"],
+    [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE"],
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.style.cssText = "font:8px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", function(){
+      clayRoomSetFixture(def[0], "clayroom-structure-fixture-nav");
+      if(def[0] === CLAY_ROOM_STRUCTURE_BENCH_ID) clayShowTab("structure");
+      else if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
+      else if(def[0] === CLAY_ROOM_SPRITE_BENCH_ID) clayShowTab("sprites");
+      else clayShowTab("movement");
+    });
+    structureFixtureNav.appendChild(button);
+  });
+  structureBody.appendChild(structureFixtureNav);
+  const structureViewActions = document.createElement("div");
+  structureViewActions.style.cssText = "display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:7px;";
+  const structureViewButtons = {};
+  [
+    ["assembled", "ASSEMBLED"],
+    ["sockets", "SOCKETS"],
+    ["access", "ACCESS"],
+    ["negative", "BAD JOIN"],
+    ["strategic", "ALL WALLS"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Show Clayroom structure " + def[0] + " view");
+    button.style.cssText = "font:8px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetStructureView(def[0]); });
+    structureViewActions.appendChild(button);
+    structureViewButtons[def[0]] = button;
+  });
+  structureBody.appendChild(structureViewActions);
+  const structureStageActions = document.createElement("div");
+  structureStageActions.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:7px;";
+  const structureStageButtons = {};
+  [
+    ["sealed", "LEAVE PLAY", function(){ clayRoomSetStructureStaged(false); }],
+    ["staged", "STAGE SPACE", function(){ clayRoomSetStructureStaged(true); }],
+    ["shut", "SHUT DOOR", function(){ clayRoomSetStructureDoorState("shut"); }],
+    ["open", "OPEN DOOR", function(){ clayRoomSetStructureDoorState("open"); }]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Clayroom structure " + def[0]);
+    button.style.cssText = "font:7px monospace;background:#252a32;color:#cfd8e3;border:1px solid #414955;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", def[2]);
+    structureStageActions.appendChild(button);
+    structureStageButtons[def[0]] = button;
+  });
+  structureBody.appendChild(structureStageActions);
+  const structureParts = document.createElement("div");
+  structureParts.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:7px;";
+  const structureFixture = clayRoomStructureBenchFixtureFrom(record);
+  structureFixture.pieces.forEach(function(spec){
+    const button = document.createElement("button");
+    button.textContent = spec.label;
+    button.title = spec.kind + " · " + spec.sockets.map(function(s){ return s.type; }).join(", ");
+    button.style.cssText = "font:8px/1.25 monospace;text-align:left;background:#252a32;color:#ccd5df;border:1px solid #414955;border-radius:3px;padding:4px;cursor:pointer;";
+    button.addEventListener("click", function(){
+      S.clayRoomSelectedId = spec.id;
+      S.clayRoomWorkbenchSelect(spec.id, "structure catalog");
+    });
+    structureParts.appendChild(button);
+  });
+  structureBody.appendChild(structureParts);
+  const structureOut = document.createElement("pre");
+  structureOut.id = "clay-room-structure-readout";
+  structureOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
+  structureBody.appendChild(structureOut);
+  function clayStructureRender(){
+    const snap = window.Theater._clayStructureBenchForTest();
+    Object.keys(structureViewButtons).forEach(function(view){
+      structureViewButtons[view].style.background = snap && snap.view === view ? "#35516a" : "#2a2a30";
+    });
+    if(!snap){
+      structureOut.textContent = "Switch to the Structure fixture to mount CL-F01.";
+      return;
+    }
+    structureStageButtons.staged.style.background = snap.wallOmission.staged ? "#35543b" : "#252a32";
+    structureStageButtons.sealed.style.background = snap.wallOmission.staged ? "#252a32" : "#684a28";
+    structureStageButtons.shut.style.background = snap.wallOmission.doorState === "shut" ? "#35516a" : "#252a32";
+    structureStageButtons.open.style.background = snap.wallOmission.doorState === "open" ? "#35516a" : "#252a32";
+    const lines = [
+      "fixture " + snap.fixtureId + " v" + snap.fixtureVersion + " · catalog " + snap.catalogId + " v" + snap.catalogVersion,
+      "GRID 1 cell = " + snap.gridLaw.cellFeet + " ft · h = " + snap.gridLaw.verticalQuantumFeet
+        + " ft · storey = " + snap.gridLaw.storeyFeet + " ft",
+      "SHELL " + snap.shell.meta.floorCellCount + " cells · " + snap.shell.wallSegments + " wall runs · "
+        + snap.shell.riserSegments + " retaining/riser runs",
+      "      tiers " + snap.shell.tiers.join("/") + " · slab sides " + (snap.shell.exposedSlabSides ? "PASS" : "FAIL")
+        + " · omitted near uppers " + snap.shell.omittedUpperSegments,
+      "OMISSION " + (snap.wallOmission.active ? "STEM ONLY" : "ALL UPPERS") + " · staged "
+        + (snap.wallOmission.staged ? "YES" : "NO") + " · latched "
+        + (snap.wallOmission.latched ? "YES" : "NO") + " · door " + snap.wallOmission.doorState,
+      "         camera " + snap.wallOmission.cameraMode + " · aperture "
+        + (snap.wallOmission.apertureUpperBuilt ? "KEPT" : "FAIL") + " · riser mass "
+        + (snap.wallOmission.structuralMassBuilt ? "KEPT" : "FAIL"),
+      "OPENING aperture " + snap.shell.apertures + " · frame/threshold/hinge leaf · "
+        + snap.opening.swingClearanceDeg + "° clearance",
+      "RAMP " + snap.slope.degrees + "° ≤ " + snap.slope.maxDegrees + "° · " + (snap.slope.walkable ? "WALK" : "FAIL"),
+      "SOCKETS " + CLAY_STRUCTURE_KIT_CATALOG.socketTypes.length + " named families · "
+        + snap.specimens.reduce(function(n, row){ return n + row.sockets.length; }, 0) + " mounted specimen sockets",
+      "ACCESS walk / climb-cost / climb-dc / none · mechanics "
+        + (snap.climbMechanicsImplemented ? "IMPLEMENTED" : "NOT CLAIMED"),
+      "BAD JOIN " + (snap.negativeControl.accepted ? "WRONG PASS" : "REJECTED") + " · "
+        + snap.negativeControl.reason + " · visible gap " + (snap.negativeControl.visibleGap ? "YES" : "NO"),
+      "CUTAWAY camera-side omission " + (snap.cameraSideOmission && snap.cameraSideOmission.active ? "ACTIVE" : "OFF")
+        + " · dynamic classifier " + snap.dynamicCutaway.candidates + " candidates / "
+        + snap.dynamicCutaway.blocking + " blocking / " + snap.dynamicCutaway.faded + " faded",
+      "MESHES " + snap.mountedMeshes + " · shadow casters " + snap.shadowCasters + " · receivers " + snap.shadowReceivers,
+      "PROVENANCE " + snap.provenance.author + " · " + snap.provenance.source
+    ];
+    structureOut.textContent = lines.join("\n");
+  }
+  S.clayRoomRefreshStructure = clayStructureRender;
+
   // CL-R1 Lights tab — reads and controls the real production fixture targets. No demonstration
   // meshes/lights are mounted here; every value comes from the live PointLight + emitter material.
   const lightsBody = document.createElement("div");
   lightsBody.style.cssText = "display:none;font:10px/1.45 monospace;color:#dde;";
+  const fixtureActions = document.createElement("div");
+  fixtureActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:7px;";
+  const fixtureButtons = {};
+  [
+    [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM TRUTH"],
+    [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE BENCH"],
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTING BENCH"],
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE BENCH"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Use " + def[0] + " Clayroom fixture");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){ clayRoomSetFixture(def[0], "clayroom-fixture-button"); });
+    fixtureActions.appendChild(button);
+    fixtureButtons[def[0]] = button;
+  });
+  lightsBody.appendChild(fixtureActions);
   const lightsIntro = document.createElement("div");
-  lightsIntro.textContent = "production practicals · deterministic local state · one sample drives mesh + emitted light";
+  lightsIntro.textContent = "CL-F02: neutral stairs + matte sphere/cube + real sprite, through the production renderer";
   lightsIntro.style.cssText = "color:#9ab;margin-bottom:6px;";
   lightsBody.appendChild(lightsIntro);
+  const lightingModeActions = document.createElement("div");
+  lightingModeActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  const lightingModeButtons = {};
+  [
+    ["clay-neutral-truth", "NEUTRAL"],
+    ["clay-opposing-pair", "WARM / COOL"],
+    ["torchlit", "FANTASY TORCH"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Use " + def[0] + " lighting recipe");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){ clayRoomSetLightingRecipe(def[0], "clayroom-mode-button"); });
+    lightingModeActions.appendChild(button);
+    lightingModeButtons[def[0]] = button;
+  });
+  lightsBody.appendChild(lightingModeActions);
+  const lorePreviewLabel = document.createElement("div");
+  lorePreviewLabel.textContent = "LORE-NATIVE PREVIEWS · existing renderer recipes";
+  lorePreviewLabel.style.cssText = "color:#8fb7a1;margin:8px 0 4px;";
+  lightsBody.appendChild(lorePreviewLabel);
+  const lorePreviewActions = document.createElement("div");
+  lorePreviewActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  CLAY_ROOM_LORE_LIGHT_PREVIEWS.forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def.label;
+    button.title = def.source + " · shared authored recipe " + def.id;
+    button.setAttribute("aria-label", "Preview lore-native " + def.source + " recipe");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #44534b;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){
+      clayRoomSetLightingRecipe(def.id, "clayroom-lore-preview");
+    });
+    lorePreviewActions.appendChild(button);
+    lightingModeButtons[def.id] = button;
+  });
+  lightsBody.appendChild(lorePreviewActions);
+
+  const seedLabel = document.createElement("div");
+  seedLabel.textContent = "ANIMATION SEED PREVIEW · physical values stay locked";
+  seedLabel.style.cssText = "color:#9ab;margin:5px 0 4px;";
+  lightsBody.appendChild(seedLabel);
+  const seedActions = document.createElement("div");
+  seedActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  const seedButtons = {};
+  CLAY_ROOM_LIGHT_PREVIEW_SEEDS.forEach(function(seed){
+    const button = document.createElement("button");
+    button.textContent = "SEED " + seed;
+    button.setAttribute("aria-label", "Use Clayroom animation preview seed " + seed);
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+    button.addEventListener("click", function(){
+      S.clayRoomPreviewSeed = seed;
+      S.clayRoomPixelMetricsCache = null;
+      clayRoomSetLightingRecipe(S.clayRoomLightRecipeId || "torchlit", "clayroom-seed-preview");
+    });
+    seedActions.appendChild(button);
+    seedButtons[seed] = button;
+  });
+  lightsBody.appendChild(seedActions);
+
+  const overlayActions = document.createElement("div");
+  overlayActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  const overlayButtons = {};
+  [
+    ["position", "POSITION"],
+    ["range", "RANGE"],
+    ["shadow", "SHADOW VOLUME"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Toggle " + def[0] + " light overlay");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){
+      S.clayRoomLightOverlayModes = S.clayRoomLightOverlayModes || { position: false, range: false, shadow: false };
+      S.clayRoomLightOverlayModes[def[0]] = !S.clayRoomLightOverlayModes[def[0]];
+      clayRoomBuildLightOverlays();
+      if(S.clayRoomRefreshFixtureControls) S.clayRoomRefreshFixtureControls();
+      markDirty();
+    });
+    overlayActions.appendChild(button);
+    overlayButtons[def[0]] = button;
+  });
+  lightsBody.appendChild(overlayActions);
+  // Checkpoint 1 — the bounded ENVIRONMENT AO diagnostic A/B. One ON/OFF comparison control
+  // (the same pass-enabled seam the harness uses), deliberately not a strength/radius slider:
+  // the AO settings are authored constants, reviewed like any other visual law.
+  const envAOActions = document.createElement("div");
+  envAOActions.style.cssText = "display:grid;grid-template-columns:1fr;gap:4px;margin-bottom:7px;";
+  const envAOButton = document.createElement("button");
+  envAOButton.setAttribute("aria-label", "Toggle environment ambient occlusion A/B");
+  envAOButton.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+  const envAOSync = function(){
+    const ao = S.postSuite && S.postSuite.ao;
+    const on = !!(ao && ao.enabled);
+    envAOButton.textContent = "ENV AO " + (on ? "ON" : "OFF") + " · A/B";
+    envAOButton.style.background = on ? "#35516a" : "#2a2a30";
+  };
+  envAOButton.addEventListener("click", function(){
+    const ao = S.postSuite && S.postSuite.ao;
+    if(!ao) return;
+    ao.enabled = !ao.enabled;
+    envAOSync();
+    markDirty();
+  });
+  envAOActions.appendChild(envAOButton);
+  envAOSync();
+  S.clayRoomEnvAOSyncButton = envAOSync;
+  lightsBody.appendChild(envAOActions);
   const lightsActions = document.createElement("div");
   lightsActions.style.cssText = "display:flex;gap:5px;margin-bottom:7px;";
   const restoreLightsBtn = document.createElement("button");
@@ -16828,13 +20710,84 @@ function clayRoomMountOverlay(record, host){
   const rebuildLightsBtn = document.createElement("button");
   rebuildLightsBtn.textContent = "rebuild/fade proof";
   rebuildLightsBtn.setAttribute("aria-label", "Run Clayroom board rebuild lighting proof");
-  [restoreLightsBtn, rebuildLightsBtn].forEach(function(b){
+  const refreshPixelsBtn = document.createElement("button");
+  refreshPixelsBtn.textContent = "refresh pixels";
+  refreshPixelsBtn.setAttribute("aria-label", "Refresh Clayroom final pixel measurements");
+  [restoreLightsBtn, rebuildLightsBtn, refreshPixelsBtn].forEach(function(b){
     b.style.cssText = "flex:1;font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
     lightsActions.appendChild(b);
   });
   lightsBody.appendChild(lightsActions);
+
+  const comparisonLabel = document.createElement("div");
+  comparisonLabel.textContent = "SOURCE ART ↔ LIVE RENDER";
+  comparisonLabel.style.cssText = "color:#9ab;border-top:1px solid #333;padding-top:7px;margin-top:7px;";
+  lightsBody.appendChild(comparisonLabel);
+  const comparisonCards = document.createElement("div");
+  comparisonCards.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:5px 0 3px;";
+  function comparisonCard(label){
+    const card = document.createElement("div");
+    card.style.cssText = "border:1px solid #303740;background:#111419;padding:4px;";
+    const heading = document.createElement("div");
+    heading.textContent = label;
+    heading.style.cssText = "color:#aeb9c5;margin-bottom:3px;";
+    const canvas = document.createElement("canvas");
+    canvas.width = 240;
+    canvas.height = 170;
+    canvas.style.cssText = "display:block;width:100%;height:100px;background:#090a0d;image-rendering:pixelated;";
+    card.appendChild(heading);
+    card.appendChild(canvas);
+    comparisonCards.appendChild(card);
+    return canvas;
+  }
+  const sourceSpriteCanvas = comparisonCard("AUTHORED PNG");
+  const renderedSpriteCanvas = comparisonCard("FINAL PIXELS");
+  lightsBody.appendChild(comparisonCards);
+  const sourceSpriteStatus = document.createElement("div");
+  sourceSpriteStatus.style.cssText = "color:#768697;font:9px/1.35 monospace;margin-bottom:6px;overflow-wrap:anywhere;";
+  sourceSpriteStatus.textContent = "loading authored source…";
+  lightsBody.appendChild(sourceSpriteStatus);
+  S.clayRoomRenderedSpriteCanvas = renderedSpriteCanvas;
+  clayRoomMountSourceSpriteCard(sourceSpriteCanvas, sourceSpriteStatus);
+
+  const pixelReadout = document.createElement("pre");
+  pixelReadout.id = "clay-room-pixel-readout";
+  pixelReadout.style.cssText = "white-space:pre-wrap;color:#bfd0df;border:1px solid #303740;background:#111419;padding:6px;margin:5px 0 7px;";
+  pixelReadout.textContent = "reading final display pixels…";
+  lightsBody.appendChild(pixelReadout);
+
+  const matrixButton = document.createElement("button");
+  matrixButton.textContent = "BUILD COMPLETE 7-LIGHT SHEET";
+  matrixButton.setAttribute("aria-label", "Capture the complete Clayroom lighting comparison sheet");
+  matrixButton.style.cssText = "width:100%;font:10px monospace;background:#283a34;color:#def4e7;border:1px solid #4b6d5d;border-radius:3px;cursor:pointer;padding:6px;";
+  matrixButton.addEventListener("click", async function(){
+    matrixButton.disabled = true;
+    try {
+      await clayRoomCaptureLightingMatrix();
+    } catch(error) {
+      try { console.warn("qa: Clayroom lighting matrix capture failed", error); } catch(e){}
+    } finally {
+      matrixButton.disabled = false;
+    }
+  });
+  lightsBody.appendChild(matrixButton);
+  const matrixStatus = document.createElement("div");
+  matrixStatus.style.cssText = "color:#7f9488;margin:3px 0 7px;";
+  matrixStatus.textContent = "one click · neutral + diagnostic + sun/moon/magic/fire/lava";
+  lightsBody.appendChild(matrixStatus);
+  S.clayRoomMatrixStatusEl = matrixStatus;
+
   const lightStateButtons = {};
-  (S.interiorLightTargets || []).forEach(function(target){
+  const lightRows = document.createElement("div");
+  lightsBody.appendChild(lightRows);
+  let lightRowsKey = "";
+  function clayLightsBuildRows(){
+    const nextKey = (S.interiorLightTargets || []).map(function(target){ return target.id; }).join("|");
+    if(nextKey === lightRowsKey) return;
+    lightRowsKey = nextKey;
+    lightRows.innerHTML = "";
+    Object.keys(lightStateButtons).forEach(function(key){ delete lightStateButtons[key]; });
+    (S.interiorLightTargets || []).forEach(function(target){
     const row = document.createElement("div");
     row.style.cssText = "display:grid;grid-template-columns:1fr auto auto;gap:5px;align-items:center;margin:4px 0;";
     const label = document.createElement("span");
@@ -16852,27 +20805,48 @@ function clayRoomMountOverlay(record, host){
     steady.addEventListener("click", function(){ clayRoomSetLightState(target.id, "steady"); clayLightsRender(); });
     flicker.addEventListener("click", function(){ clayRoomSetLightState(target.id, "flickering"); clayLightsRender(); });
     row.appendChild(label); row.appendChild(steady); row.appendChild(flicker);
-    lightsBody.appendChild(row);
+    lightRows.appendChild(row);
     lightStateButtons[target.id] = { steady: steady, flicker: flicker };
-  });
+    });
+  }
   const lightsOut = document.createElement("pre");
   lightsOut.id = "clay-room-lighting-readout";
   lightsOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
   lightsBody.appendChild(lightsOut);
   function clayLightsRender(){
+    clayLightsBuildRows();
     const snap = clayRoomLightingSnapshot("panel");
+    const activeRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
+      || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+    const authoredRecipe = LIGHT_LAB_AUTHORED_BASELINE.profiles[activeRecipe.id] || activeRecipe;
+    const activeProfile = lightRecipeLegacyProfile(authoredRecipe);
+    const recipeIsAuthored = JSON.stringify(activeRecipe) === JSON.stringify(authoredRecipe);
     const baselineActive = !!(snap.ambient
-      && snap.ambient.intensity === CLAY_C1A_LIGHT_PROFILE.ambient.intensity
-      && snap.ambient.color === CLAY_C1A_LIGHT_PROFILE.ambient.color
-      && snap.lights.length === CLAY_C1A_LIGHT_PROFILE.points.length
+      && recipeIsAuthored
+      && snap.ambient.intensity === activeProfile.ambient.intensity
+      && snap.ambient.color === activeProfile.ambient.color
+      && snap.lights.length === activeProfile.points.length
       && snap.lights.every(function(l){
-        return l.state === "steady" && l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity;
+        const authoredLight = activeProfile.points.find(function(point){ return point.id === l.id; });
+        if(!authoredLight || l.state !== authoredLight.state) return false;
+        // markerless environmental rows have no emitter mesh to hold parity against
+        const meshOk = l.emitterUuid ? (l.parity && l.meshNormalized === 1) : true;
+        return l.state === "flickering" || (l.emittedNormalized === 1 && meshOk);
       }));
     const flickering = snap.lights.filter(function(l){ return l.state === "flickering"; });
     const steady = snap.lights.filter(function(l){ return l.state === "steady"; });
-    const isolationPass = flickering.length === 1 && steady.length >= 1
+    const isolationPass = flickering.length === 1
       && steady.every(function(l){ return l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity; });
     const lines = [
+      "fixture " + (S.clayRoomFixtureId || "—")
+        + (S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+          ? " · 3 steps + matte cube/sphere + approved sprite"
+          : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID
+            ? " · 7-sprite scale spectrum + stair fit"
+            : " · architecture/movement truth")),
+      "recipe " + activeRecipe.id + " · " + activeRecipe.mode,
+      "source " + activeRecipe.source.label
+        + (activeRecipe.source.loreNative ? " · LORE-NATIVE" : " · DIAGNOSTIC ONLY"),
       "authored baseline " + (baselineActive ? "PASS" : "inactive (restore available)"),
       "one-light isolation " + (flickering.length === 1 ? (isolationPass ? "PASS" : "FAIL") : "arm exactly one flicker"),
       "ambient " + (snap.ambient ? snap.ambient.intensity.toFixed(2) : "—")
@@ -16883,12 +20857,41 @@ function clayRoomMountOverlay(record, host){
       ""
     ];
     snap.lights.forEach(function(l){
+      // Checkpoint 2 READOUT TRUTH: every line below is the LIVE mounted object, never the
+      // authored recipe — environmental rows (sun/moon; markerless, no distance) print their own
+      // shape instead of crashing the practical-shaped formatter.
       const sample = l.normalizedSample == null ? "—" : l.normalizedSample.toFixed(6);
       lines.push(l.id + " [" + l.state + "] sample " + sample);
-      lines.push("  emitted " + l.emitted.toFixed(6) + "/" + l.emittedBase.toFixed(6)
-        + " = " + l.emittedNormalized.toFixed(6));
-      lines.push("  mesh    " + l.mesh.toFixed(6) + "/" + l.meshBase.toFixed(6)
-        + " = " + l.meshNormalized.toFixed(6) + " · parity " + (l.parity ? "PASS" : "FAIL"));
+      lines.push("  emitted " + (l.emitted == null ? "—" : l.emitted.toFixed(6))
+        + "/" + (l.emittedBase == null ? "—" : l.emittedBase.toFixed(6))
+        + (l.emittedNormalized == null ? "" : " = " + l.emittedNormalized.toFixed(6)));
+      if(l.mesh != null){
+        lines.push("  mesh    " + l.mesh.toFixed(6) + "/" + l.meshBase.toFixed(6)
+          + " = " + l.meshNormalized.toFixed(6) + " · parity " + (l.parity ? "PASS" : "FAIL"));
+      }
+      lines.push("  " + (l.distance != null
+          ? "range " + l.distance.toFixed(2) + " · decay " + (l.decay == null ? "—" : l.decay.toFixed(2))
+          : "directional (no falloff)")
+        + " · shadows " + (l.castShadow ? "ON" : "OFF"));
+      if(l.pointPosition){
+        lines.push("  mounted pos " + l.pointPosition.map(function(v){ return v.toFixed(2); }).join("/"));
+      }
+      if(l.celestial){
+        const hh = Math.floor(l.celestial.clockMin / 60), mm = Math.round(l.celestial.clockMin % 60);
+        lines.push("  clock " + (hh < 10 ? "0" : "") + hh + ":" + (mm < 10 ? "0" : "") + mm
+          + " · arc dir " + [l.celestial.derivedDir.x, l.celestial.derivedDir.y, l.celestial.derivedDir.z]
+            .map(function(v){ return v.toFixed(2); }).join("/")
+          + " · arc ×" + l.celestial.intensityScale.toFixed(3));
+      }
+      if(l.emitterUuid){
+        lines.push("  dance Δ "
+          + [l.directionSample.x, l.directionSample.y, l.directionSample.z]
+            .map(function(value){ return value.toFixed(3); }).join("/")
+          + " · co-located " + (l.coLocated && l.directionWithinBounds ? "PASS" : "FAIL"));
+        lines.push("  interval last/next "
+          + (l.lastIntervalMs == null ? "—" : l.lastIntervalMs.toFixed(0))
+          + "/" + (l.nextIntervalMs == null ? "—" : l.nextIntervalMs.toFixed(0)) + " ms");
+      }
       lines.push("  ids point " + String(l.pointUuid).slice(0, 8)
         + " · material " + String(l.materialUuid).slice(0, 8));
       const buttons = lightStateButtons[l.id];
@@ -16901,14 +20904,87 @@ function clayRoomMountOverlay(record, host){
     lines.push("");
     if(!probe){
       lines.push("animation guard: not run");
+    } else if(probe.expectedReplacement){
+      lines.push("animation guard: " + probe.label);
+      lines.push("  lighting identity replacement EXPECTED · next geometry-only rebuild must preserve it");
     } else {
       lines.push("animation guard: " + probe.label);
       lines.push("  object/material preservation " + (probe.preserved ? "PASS" : "FAIL"));
       lines.push("  before → during " + (probe.duringPass ? "PASS" : "FAIL"));
       lines.push("  before → after " + (probe.afterPass == null ? "pending…" : (probe.afterPass ? "PASS" : "FAIL")));
     }
+    Object.keys(lightingModeButtons).forEach(function(id){
+      lightingModeButtons[id].style.background = id === activeRecipe.id ? "#35516a" : "#2a2a30";
+    });
+    Object.keys(seedButtons).forEach(function(seed){
+      seedButtons[seed].style.background = seed === (S.clayRoomPreviewSeed || "A") ? "#4b3f61" : "#2a2a30";
+    });
+    const pixel = clayRoomLightingPixelMetrics(false);
+    if(!pixel){
+      pixelReadout.textContent = "FINAL PIXEL MEASUREMENTS\nlighting bench required";
+    } else {
+      const fmt = function(value){ return value == null ? "—" : Number(value).toFixed(2); };
+      const frame = pixel.frame || {};
+      const sprite = pixel.sprite || {};
+      const source = pixel.sourceSprite && pixel.sourceSprite.metrics
+        ? pixel.sourceSprite.metrics : null;
+      pixelReadout.textContent = [
+        "FINAL PIXEL MEASUREMENTS · no recipe-value guesses",
+        "frame brightness  median " + fmt(frame.medianLuma) + "/255 · p95 " + fmt(frame.p95Luma) + "/255",
+        "frame clipping    white " + fmt(frame.clippedHighlightPct) + "% · black " + fmt(frame.crushedShadowPct) + "%",
+        "frame colour      chroma spread " + fmt(frame.meanChromaSpread) + "/255",
+        "",
+        "goblin screen box median " + fmt(sprite.medianLuma) + "/255 · p95 " + fmt(sprite.p95Luma) + "/255",
+        "goblin clipping   white " + fmt(sprite.clippedHighlightPct) + "% · black " + fmt(sprite.crushedShadowPct) + "%",
+        "goblin colour     chroma spread " + fmt(sprite.meanChromaSpread) + "/255",
+        "readability       luma Δ " + fmt(pixel.readability && pixel.readability.lumaDelta)
+          + " · colour Δ " + fmt(pixel.readability && pixel.readability.chromaDelta)
+          + " vs nearby background",
+        "",
+        source
+          ? "authored PNG      median " + fmt(source.medianLuma) + "/255 · colour " + fmt(source.meanChromaSpread) + "/255 · clipped " + fmt(source.clippedHighlightPct) + "%"
+          : "authored PNG      measuring opaque source pixels…",
+        "measurement only · no taste threshold silently applied"
+      ].join("\n");
+    }
     lightsOut.textContent = lines.join("\n");
   }
+  function clayRefreshFixtureControls(){
+    Object.keys(fixtureButtons).forEach(function(id){
+      fixtureButtons[id].style.background = id === S.clayRoomFixtureId ? "#35516a" : "#2a2a30";
+    });
+    const modes = S.clayRoomLightOverlayModes || {};
+    Object.keys(overlayButtons).forEach(function(id){
+      overlayButtons[id].style.background = modes[id] ? "#5b4728" : "#2a2a30";
+      overlayButtons[id].style.opacity = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? "1" : "0.45";
+      overlayButtons[id].disabled = S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID;
+    });
+    const roomTruth = S.clayRoomFixtureId === CLAY_ROOM_TRUTH_FIXTURE_ID;
+    const structureBench = S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID;
+    document.querySelectorAll("[data-clay-room-truth-only]").forEach(function(button){
+      const status = button.querySelector("[data-clay-light-status]");
+      if(status){
+        status.textContent = roomTruth ? "MOUNTED" : "ROOM ONLY";
+        button.disabled = !roomTruth;
+        button.style.opacity = roomTruth ? "1" : "0.48";
+      } else {
+        button.style.display = roomTruth ? "block" : "none";
+      }
+    });
+    document.querySelectorAll("[data-clay-structure-only]").forEach(function(button){
+      button.style.display = structureBench ? "block" : "none";
+      button.disabled = !structureBench;
+    });
+    document.querySelectorAll("[data-clay-sprite-catalog]").forEach(function(button){
+      const mounted = roomTruth || S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID;
+      const status = button.querySelector("[data-clay-light-status]");
+      if(status) status.textContent = mounted ? "MOUNTED" : "NOT IN FIXTURE";
+      button.disabled = !mounted;
+      button.style.opacity = mounted ? "1" : "0.42";
+      if(!status) button.style.display = mounted ? "block" : "none";
+    });
+  }
+  S.clayRoomRefreshFixtureControls = clayRefreshFixtureControls;
   restoreLightsBtn.addEventListener("click", function(){
     clayRoomRestoreAuthoredLightBaseline();
     clayLightsRender();
@@ -16919,6 +20995,200 @@ function clayRoomMountOverlay(record, host){
     setInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-lighting-proof" });
     clayLightsRender();
   });
+  refreshPixelsBtn.addEventListener("click", function(){
+    S.clayRoomPixelMetricsCache = null;
+    clayRoomLightingPixelMetrics(true);
+    clayLightsRender();
+  });
+  S.clayRoomRefreshLights = clayLightsRender;
+
+  // CL-R2 Sprites tab — one live control surface for the production lineup, canonical-vs-cap A/B,
+  // source alpha, face/edge view, stair fit, and the accepted lighting contexts. It reads the mounted
+  // production groups through clayRoomSpriteCitizenshipSnapshot; no parallel sprite preview renderer.
+  const spritesBody = document.createElement("div");
+  spritesBody.style.cssText = "display:none;font:10px/1.4 monospace;color:#dde;";
+  const spritesIntro = document.createElement("div");
+  spritesIntro.innerHTML =
+    "<div style='color:#9fd4ec;margin-bottom:4px'>CL-F03 · PHYSICAL CITIZENS, NOT PAPER</div>" +
+    "<div style='color:#9ab'>Gold/cyan floor outlines are tactical footprints. The shallow rounded strip is only the visible standee support.</div>";
+  spritesBody.appendChild(spritesIntro);
+
+  const spriteFixtureNav = document.createElement("div");
+  spriteFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:7px 0;";
+  [
+    [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM"],
+    [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE"],
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
+    button.addEventListener("click", function(){
+      clayRoomSetFixture(def[0], "clayroom-sprite-fixture-nav");
+      if(def[0] === CLAY_ROOM_STRUCTURE_BENCH_ID) clayShowTab("structure");
+      else if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
+      else if(def[0] === CLAY_ROOM_TRUTH_FIXTURE_ID) clayShowTab("movement");
+      else clayShowTab("sprites");
+    });
+    spriteFixtureNav.appendChild(button);
+  });
+  spritesBody.appendChild(spriteFixtureNav);
+
+  const spriteScaleLabel = document.createElement("div");
+  spriteScaleLabel.textContent = "SCALE SPECTRUM";
+  spriteScaleLabel.style.cssText = "color:#aeb7c4;margin-top:7px;";
+  spritesBody.appendChild(spriteScaleLabel);
+  const spriteScaleActions = document.createElement("div");
+  spriteScaleActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0 7px;";
+  const trueScaleBtn = document.createElement("button");
+  trueScaleBtn.textContent = "TRUE SCALE CHECK";
+  const capScaleBtn = document.createElement("button");
+  capScaleBtn.textContent = "PRESENTATION · 1–30 FT";
+  [trueScaleBtn, capScaleBtn].forEach(function(button){
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
+    spriteScaleActions.appendChild(button);
+  });
+  trueScaleBtn.addEventListener("click", function(){ clayRoomSetSpriteScaleMode("true-scale", "clayroom-sprite-ui"); });
+  capScaleBtn.addEventListener("click", function(){ clayRoomSetSpriteScaleMode("diagnostic-cap", "clayroom-sprite-ui"); });
+  spritesBody.appendChild(spriteScaleActions);
+
+  const spriteCastLabel = document.createElement("div");
+  spriteCastLabel.textContent = "LIVE CAST · click to inspect";
+  spriteCastLabel.style.cssText = "color:#aeb7c4;";
+  spritesBody.appendChild(spriteCastLabel);
+  const spriteCastActions = document.createElement("div");
+  spriteCastActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0 7px;";
+  const spriteCastButtons = {};
+  const spriteFixture = clayRoomSpriteCitizenshipFixtureFrom(record);
+  spriteFixture.cast.forEach(function(spec){
+    const button = document.createElement("button");
+    button.textContent = spec.label;
+    button.title = spec.stress;
+    button.style.cssText = "font:9px monospace;text-align:left;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetSelectedSprite(spec.slug); });
+    spriteCastActions.appendChild(button);
+    spriteCastButtons[spec.slug] = button;
+  });
+  spritesBody.appendChild(spriteCastActions);
+
+  const spriteViewActions = document.createElement("div");
+  spriteViewActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  const spriteViewButtons = {};
+  [["face", "FACE"], ["angled", "3/4"], ["edge", "EDGE"]].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetSelectedSpriteView(def[0]); });
+    spriteViewActions.appendChild(button);
+    spriteViewButtons[def[0]] = button;
+  });
+  spritesBody.appendChild(spriteViewActions);
+
+  const spriteLightLabel = document.createElement("div");
+  spriteLightLabel.textContent = "LIGHT RESPONSE · shared production recipes";
+  spriteLightLabel.style.cssText = "color:#aeb7c4;";
+  spritesBody.appendChild(spriteLightLabel);
+  const spriteLightActions = document.createElement("div");
+  spriteLightActions.style.cssText = "display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:4px 0 7px;";
+  const spriteLightButtons = {};
+  [
+    ["clay-neutral-truth", "NEUTRAL"],
+    ["moonlit", "DARK"],
+    ["torchlit", "WARM"],
+    ["magic-glow", "COOL"],
+    ["daylit", "DAY"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.title = def[0];
+    button.style.cssText = "font:8px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetLightingRecipe(def[0], "clayroom-sprite-light-context"); });
+    spriteLightActions.appendChild(button);
+    spriteLightButtons[def[0]] = button;
+  });
+  spritesBody.appendChild(spriteLightActions);
+
+  const spriteSourceCard = document.createElement("div");
+  spriteSourceCard.style.cssText = "display:grid;grid-template-columns:92px 1fr;gap:7px;align-items:center;border:1px solid #39404a;background:#181b20;padding:6px;margin-bottom:7px;";
+  const spriteSourceImg = document.createElement("img");
+  spriteSourceImg.alt = "Selected sprite source PNG";
+  spriteSourceImg.style.cssText = "width:88px;height:88px;object-fit:contain;image-rendering:pixelated;background:repeating-conic-gradient(#252830 0 25%,#17191e 0 50%) 0/12px 12px;";
+  const spriteSourceText = document.createElement("div");
+  spriteSourceText.style.cssText = "color:#9ab;white-space:pre-wrap;";
+  spriteSourceCard.appendChild(spriteSourceImg);
+  spriteSourceCard.appendChild(spriteSourceText);
+  spritesBody.appendChild(spriteSourceCard);
+
+  const spritesOut = document.createElement("pre");
+  spritesOut.id = "clay-room-sprite-readout";
+  spritesOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
+  spritesBody.appendChild(spritesOut);
+
+  function claySpritesRender(){
+    const snap = clayRoomSpriteCitizenshipSnapshot();
+    if(!snap){
+      spritesOut.textContent = "sprite fixture unavailable";
+      return;
+    }
+    trueScaleBtn.style.background = snap.scaleMode === "true-scale" ? "#35516a" : "#2a2a30";
+    capScaleBtn.style.background = snap.scaleMode === "diagnostic-cap" ? "#684a28" : "#2a2a30";
+    Object.keys(spriteCastButtons).forEach(function(slug){
+      spriteCastButtons[slug].style.background = slug === snap.selectedSlug ? "#35516a" : "#2a2a30";
+    });
+    Object.keys(spriteViewButtons).forEach(function(view){
+      spriteViewButtons[view].style.background = view === snap.selectedView ? "#4b3f61" : "#2a2a30";
+    });
+    Object.keys(spriteLightButtons).forEach(function(id){
+      spriteLightButtons[id].style.background = id === S.clayRoomLightRecipeId ? "#35543b" : "#2a2a30";
+    });
+    const selected = snap.lineup.find(function(row){ return row.slug === snap.selectedSlug; });
+    const selectedEntry = spriteEntryFor(snap.selectedSlug);
+    if(selectedEntry) spriteSourceImg.src = spriteAssetPathFor(selectedEntry);
+    spriteSourceText.textContent = selected
+      ? [
+          "SOURCE PNG · sRGB",
+          selected.label,
+          selected.canonicalFeet + " ft canonical",
+          "anchor " + Number(selected.footX).toFixed(3) + " / " + Number(selected.footY).toFixed(3),
+          "bounds " + (selected.contentBounds ? "compiled" : "MISSING · editor pass needed"),
+          "alpha cutoff " + selected.alphaCutoff
+        ].join("\n")
+      : "selected sprite is loading…";
+    const lines = [
+      "fixture " + snap.fixtureId + " v" + snap.fixtureVersion,
+      "mode " + snap.scaleMode + (snap.scaleMode === "diagnostic-cap" ? " · PREFERRED PRESENTATION" : " · CANONICAL SIZE CHECK"),
+      "support " + snap.supportForm + " · tactical footprint remains separate",
+      "contact pool multiply · darkens lit and already-shadowed floor values",
+      "cast shadow alpha silhouette · edge shell non-casting",
+      "shadow form " + Number(snap.environmentFormFill.intensity).toFixed(3)
+        + " hemisphere · shadowless · tread/riser value floor",
+      selected && selected.selectionBaseNeon
+        ? "selected base neon · " + selected.selectionBaseNeon.source
+          + " · " + selected.selectionBaseNeon.footprintShape
+          + " · additive spill · no center bulb"
+        : "selected base neon loading…",
+      "stair proof " + (snap.stairSamples.length === 3 && snap.stairSamples.every(function(row){ return row.stairFit; })
+        ? "PASS · face / 3⁄4 / edge"
+        : "loading…"),
+      ""
+    ];
+    snap.lineup.forEach(function(row){
+      const renderedFeet = row.renderedWorldHeight == null ? "—" : (row.renderedWorldHeight * 5).toFixed(2);
+      lines.push(
+        (row.selected ? "▶ " : "  ") + row.label + " · canonical " + row.canonicalFeet + " ft · shown " + renderedFeet + " ft"
+      );
+      lines.push(
+        "    tactical " + row.tacticalSpanCells + " cell · support "
+        + Number(row.supportWidth).toFixed(2) + "×" + Number(row.supportDepth).toFixed(3)
+        + " · tread " + Number(row.treadDepth).toFixed(3) + " · shell " + (row.shell ? "PASS" : "FAIL")
+      );
+      if(row.regenRecommended) lines.push("    ⚑ WIDTH FLAG · consider a taller/more upright regeneration");
+    });
+    lines.push("", "WIDTH FLAGS " + (snap.regenRecommended.length ? snap.regenRecommended.length : "none"));
+    spritesOut.textContent = lines.join("\n");
+  }
+  S.clayRoomRefreshSprites = claySpritesRender;
 
   panel.appendChild(factsBody);
   panel.appendChild(explainBody);
@@ -16926,7 +21196,9 @@ function clayRoomMountOverlay(record, host){
   panel.appendChild(mountBody);
   panel.appendChild(stateBody);
   panel.appendChild(movementBody);
+  panel.appendChild(structureBody);
   panel.appendChild(lightsBody);
+  panel.appendChild(spritesBody);
 
   function clayShowTab(which){
     factsBody.style.display = which === "facts" ? "" : "none";
@@ -16935,20 +21207,27 @@ function clayRoomMountOverlay(record, host){
     mountBody.style.display = which === "mount" ? "" : "none";
     stateBody.style.display = which === "state" ? "" : "none";
     movementBody.style.display = which === "movement" ? "" : "none";
+    structureBody.style.display = which === "structure" ? "" : "none";
     lightsBody.style.display = which === "lights" ? "" : "none";
+    spritesBody.style.display = which === "sprites" ? "" : "none";
     factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
     explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
     surfacesTabBtn.style.background = which === "surfaces" ? "#3a3a44" : "#2a2a30";
     mountTabBtn.style.background = which === "mount" ? "#3a3a44" : "#2a2a30";
     stateTabBtn.style.background = which === "state" ? "#3a3a44" : "#2a2a30";
     movementTabBtn.style.background = which === "movement" ? "#3a3a44" : "#2a2a30";
+    structureTabBtn.style.background = which === "structure" ? "#3a3a44" : "#2a2a30";
     lightsTabBtn.style.background = which === "lights" ? "#3a3a44" : "#2a2a30";
+    spritesTabBtn.style.background = which === "sprites" ? "#3a3a44" : "#2a2a30";
     S.clayRoomMovementPickMode = which === "movement";
     if(which === "surfaces") clayRenderSurfacesTab();
     if(which === "mount") clayMountRender();
     if(which === "state") clayDoorStateRender();
     if(which === "movement") clayMovementRender();
+    else clayRoomDisposeMovementOverlay();
+    if(which === "structure") clayStructureRender();
     if(which === "lights") clayLightsRender();
+    if(which === "sprites") claySpritesRender();
     if(CLAY_ROOM_PANEL_POSITION){
       const panelRect = panel.getBoundingClientRect();
       clayPanelPlace(panelRect.left, panelRect.top, true);
@@ -16956,26 +21235,90 @@ function clayRoomMountOverlay(record, host){
       clayPanelDockRight();
     }
   }
+  S.clayRoomShowTab = clayShowTab;
   function claySelectionInfo(id){
     if(id === record.portal.id) return { name: "Door", type: "INTERACTABLE", ref: id, tab: "state", socket: true, sprite: false };
     if(id === record.object.id) return { name: "Crate · 3 ft", type: "PROP · FACED_BOX", ref: id, tab: "surfaces", socket: false, sprite: false };
     if(id === record.citizen.id || id === record.citizen.bestiaryId) return {
       name: "Goblin", type: "APPROVED CHARACTER SPRITE", ref: record.citizen.bestiaryId, tab: "facts", socket: false, sprite: true
     };
-    if(id === "clay-west-warm") return { name: "Warm west practical", type: "LIGHT · STEADY DEFAULT", ref: id, tab: "lights", socket: false, sprite: false };
-    if(id === "clay-east-cool") return { name: "Cool east practical", type: "LIGHT · STEADY DEFAULT", ref: id, tab: "lights", socket: false, sprite: false };
+    const structureSpec = id === "compiled-shell"
+      ? { id: "compiled-shell", label: "Compiled shell" }
+      : clayRoomStructureBenchFixtureFrom(record).pieces.find(function(row){ return row.id === id; });
+    if(structureSpec) return {
+      name: structureSpec.label,
+      type: id === "compiled-shell" ? "PRODUCTION COMPILED STRUCTURE" : "STRUCTURE KIT SPECIMEN",
+      ref: structureSpec.id,
+      tab: "structure",
+      socket: id !== "compiled-shell",
+      sprite: false
+    };
+    if(id === clayRoomStructureBenchFixtureFrom(record).cutawayWitness.id) return {
+      name: "Human cutaway witness",
+      type: "PRODUCTION STANDEE · DYNAMIC OCCLUSION TARGET",
+      ref: clayRoomStructureBenchFixtureFrom(record).cutawayWitness.pieceSlug,
+      tab: "structure",
+      socket: false,
+      sprite: true
+    };
+    const spriteSpec = clayRoomSpriteCitizenshipFixtureFrom(record).cast.find(function(row){ return row.slug === id; });
+    if(spriteSpec) return {
+      name: spriteSpec.label,
+      type: "SPRITE CITIZEN · " + spriteSpec.stress,
+      ref: spriteSpec.slug,
+      tab: "sprites",
+      socket: false,
+      sprite: true
+    };
+    const activeRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
+      || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+    const activeLight = (activeRecipe.lights || []).find(function(light){ return light.id === id; });
+    if(activeLight) return {
+      name: activeLight.label,
+      type: activeRecipe.mode.indexOf("diagnostic-") === 0 ? "DIAGNOSTIC LIGHT" : "LORE-NATIVE LIGHT",
+      ref: id,
+      tab: "lights",
+      socket: false,
+      sprite: false
+    };
     return { name: "Room shell · 10 ft", type: "STRUCTURE", ref: "clay-c1a", tab: "surfaces", socket: false, sprite: false };
   }
+  S.clayRoomRefreshLightCatalog = function(){
+    const activeRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
+      || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+    const lights = (activeRecipe.lights || []).filter(function(light){ return light.enabled !== false; });
+    const diagnostic = activeRecipe.mode.indexOf("diagnostic-") === 0;
+    document.querySelectorAll("[data-clay-light-catalog-slot]").forEach(function(button){
+      const light = lights[Number(button.dataset.clayLightCatalogSlot)];
+      button.style.display = light ? "" : "none";
+      if(!light) return;
+      button.dataset.claySelect = light.id;
+      const kind = button.querySelector("[data-clay-light-kind]");
+      const label = button.querySelector("[data-clay-light-label]");
+      const status = button.querySelector("[data-clay-light-status]");
+      if(kind) kind.textContent = diagnostic ? "DIAGNOSTIC LIGHT" : "LORE-NATIVE LIGHT";
+      if(label) label.textContent = light.label;
+      if(status) status.textContent = diagnostic ? "TEST ONLY" : "MOUNTED";
+    });
+    document.querySelectorAll("[data-clay-light-scene-slot]").forEach(function(button){
+      const light = lights[Number(button.dataset.clayLightSceneSlot)];
+      button.style.display = light ? "" : "none";
+      if(!light) return;
+      button.dataset.claySceneId = light.id;
+      button.textContent = "◇  " + light.label;
+    });
+  };
   S.clayRoomWorkbenchSelect = function(id, source){
-    const info = claySelectionInfo(id);
     S.clayRoomSelectedId = id;
+    const info = claySelectionInfo(id);
     selectionName.textContent = info.name;
     selectionMeta.textContent = info.type + " · " + info.ref + " · selected from " + (source || "workbench");
     spriteEditorBtn.disabled = !info.sprite;
     spriteEditorBtn.style.opacity = info.sprite ? "1" : "0.5";
     socketScopeBtn.style.opacity = info.socket ? "1" : "0.55";
     socketScopeBtn.textContent = info.socket ? "🔒 SOCKET" : "SOCKET — N/A";
-    stateScopeBtn.style.opacity = info.tab === "state" || info.tab === "lights" ? "1" : "0.7";
+    stateScopeBtn.style.opacity = info.tab === "state" || info.tab === "structure"
+      || info.tab === "lights" || info.tab === "sprites" ? "1" : "0.7";
     document.querySelectorAll("[data-clay-scene-id]").forEach(function(b){
       const active = b.dataset.claySceneId === id
         || (id === record.citizen.bestiaryId && b.dataset.claySceneId === record.citizen.id);
@@ -16995,8 +21338,14 @@ function clayRoomMountOverlay(record, host){
   socketScopeBtn.addEventListener("click", function(){
     const info = claySelectionInfo(S.clayRoomSelectedId);
     if(info.socket){
-      sessionLaw.textContent = "SOCKET PROTECTED · Mount tab edits a session tune and exports an object-mount lock.";
-      clayShowTab("mount");
+      if(info.tab === "structure"){
+        sessionLaw.textContent = "SOCKET PROTECTED · showing authored axis/type; incompatible axes reject without relocation.";
+        clayRoomSetStructureView("sockets");
+        clayShowTab("structure");
+      } else {
+        sessionLaw.textContent = "SOCKET PROTECTED · Mount tab edits a session tune and exports an object-mount lock.";
+        clayShowTab("mount");
+      }
     } else {
       sessionLaw.textContent = "No socket on this selection. Clayroom movement stays instance-local.";
     }
@@ -17007,7 +21356,10 @@ function clayRoomMountOverlay(record, host){
   spriteEditorBtn.addEventListener("click", function(){
     const info = claySelectionInfo(S.clayRoomSelectedId);
     if(!info.sprite) return;
-    window.open("dev/sprite-review.html?sprite=" + encodeURIComponent(info.ref), "genesis-sprite-editor");
+    window.open(
+      "http://127.0.0.1:5179/?sprite=" + encodeURIComponent(info.ref),
+      "genesis-sprite-editor"
+    );
   });
   saveVariantBtn.addEventListener("click", function(){
     const info = claySelectionInfo(S.clayRoomSelectedId);
@@ -17019,8 +21371,12 @@ function clayRoomMountOverlay(record, host){
   mountTabBtn.addEventListener("click", function(){ clayShowTab("mount"); });
   stateTabBtn.addEventListener("click", function(){ clayShowTab("state"); });
   movementTabBtn.addEventListener("click", function(){ clayShowTab("movement"); });
+  structureTabBtn.addEventListener("click", function(){ clayShowTab("structure"); });
   lightsTabBtn.addEventListener("click", function(){ clayShowTab("lights"); });
-  clayShowTab("movement");
+  spritesTabBtn.addEventListener("click", function(){ clayShowTab("sprites"); });
+  clayShowTab(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    ? "structure" : (S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+      ? "lights" : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? "sprites" : "movement")));
 
   document.body.appendChild(panel);
   if(CLAY_ROOM_PANEL_POSITION){
@@ -17028,7 +21384,19 @@ function clayRoomMountOverlay(record, host){
   } else {
     clayPanelDockRight();
   }
-  S.clayRoomWorkbenchSelect(S.clayRoomSelectedId || record.portal.id, "initial");
+  const activeInitialRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
+    || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+  const activeInitialLight = (activeInitialRecipe.lights || []).find(function(light){ return light.enabled !== false; });
+  const initialSelection = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && activeInitialLight
+    ? activeInitialLight.id
+    : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+      ? "compiled-shell"
+      : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID
+      ? (S.clayRoomSelectedSpriteSlug || spriteFixture.selectedSlug)
+      : (S.clayRoomSelectedId || record.portal.id)));
+  S.clayRoomWorkbenchSelect(initialSelection, "initial");
+  S.clayRoomRefreshLightCatalog();
+  clayRefreshFixtureControls();
   S.clayRoomLightReadoutTimer = setInterval(function(){
     if(S.clayRoomMounted && lightsBody.style.display !== "none") clayLightsRender();
   }, 120);
@@ -17049,10 +21417,12 @@ function clayRoomUnmount(){
   const panelResizeHandler = S.clayRoomPanelResizeHandler;
   const panelDragCleanup = S.clayRoomPanelDragCleanup;
   const lightReadoutTimer = S.clayRoomLightReadoutTimer;
+  const lightingMatrixOverlay = S.clayRoomLightingMatrixOverlay;
   // CL-R0: stand the lifecycle hook down BEFORE retire(). retire() swaps in a fresh
   // createTheaterState() (so the flag would clear anyway), but any setInteriorBoard that fires
   // during teardown must not try to re-route a tree that is being disposed.
   S.clayRoomDiagnosticActive = false;
+  clayRoomDisposeLightOverlays();
   if(panelDragCleanup) panelDragCleanup();
   if(panelResizeHandler) window.removeEventListener("resize", panelResizeHandler);
   if(lightReadoutTimer != null) clearInterval(lightReadoutTimer);
@@ -17060,6 +21430,9 @@ function clayRoomUnmount(){
   ITR_ROOM_SHELL = CLAY_ROOM_PRIOR_ROOM_SHELL; // restore mountClayRoom's own ITR_ROOM_SHELL override — see that function's header note
   if(overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);
   if(hostEl && hostEl.parentNode) hostEl.parentNode.removeChild(hostEl);
+  if(lightingMatrixOverlay && lightingMatrixOverlay.parentNode){
+    lightingMatrixOverlay.parentNode.removeChild(lightingMatrixOverlay);
+  }
   workbenchChrome.forEach(function(el){ if(el && el.parentNode) el.parentNode.removeChild(el); });
 }
 

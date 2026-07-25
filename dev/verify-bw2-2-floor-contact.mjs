@@ -15,8 +15,9 @@
    dev/verify-dungeon-interior.mjs's checks 22-32 established for this sealed ES-module file) proves the
    FIX: the derived law replaces every hardcoded -0.5/-0.4/-0.495/-0.49/-0.48 mount point (pieces, combat
    units, dressing, decals, contact pools, standee bases, the acting ring), standee bases exist with the
-   spec'd radius/height, the contact pool is a soft gradient (not a flat disc), the acting ring wraps the
-   base rim, and fall-death's corpse tip keeps the base attached to the tipping standee (one group).
+   spec'd radius/height, the contact pool is a soft multiplicative gradient (not a flat disc), the
+   acting ring wraps the base rim, and fall-death's corpse tip keeps the base attached to the tipping
+   standee (one group).
 
    RED-FIRST (checked against f03cd4ed, the master tip immediately before this unit): `grep -c
    "interiorFloorTopAt\|INTERIOR_BASE_HEIGHT" src/ui/theater-boot.js` -> 0 (neither the law nor the base
@@ -196,7 +197,7 @@ function ensureThreeShim(){
   // marker file forces a re-write when the shim's own contents are stale, instead of trusting
   // package.json's mere existence as "already complete."
   const postDir = join(base, "addons", "postprocessing");
-  const shimVersion = "bw3-post-suite"; // BW3-2/3/6 THE POST SUITE: +UnrealBloomPass +OutputPass (kept in lockstep with dev/verify-theater-sprites.mjs — all shim writers share node_modules/three)
+  const shimVersion = "cp1-env-ao"; // visual-correction Checkpoint 1: +GTAOPass/+GTAOShader/+PoissonDenoiseShader/+SimplexNoise (lockstep across all shim writers sharing node_modules/three)
   const versionFile = join(base, ".shim-version");
   if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
@@ -210,6 +211,14 @@ function ensureThreeShim(){
   writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
   writeFileSync(join(postDir, "UnrealBloomPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/UnrealBloomPass.js";\n`);
   writeFileSync(join(postDir, "OutputPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/OutputPass.js";\n`);
+  writeFileSync(join(postDir, "GTAOPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/GTAOPass.js";\n`);
+  const shaderDir = join(base, "addons", "shaders");
+  const mathDir = join(base, "addons", "math");
+  mkdirSync(shaderDir, { recursive: true });
+  mkdirSync(mathDir, { recursive: true });
+  writeFileSync(join(shaderDir, "GTAOShader.js"), `export * from "../../../../vendor/three/addons/shaders/GTAOShader.js";\n`);
+  writeFileSync(join(shaderDir, "PoissonDenoiseShader.js"), `export * from "../../../../vendor/three/addons/shaders/PoissonDenoiseShader.js";\n`);
+  writeFileSync(join(mathDir, "SimplexNoise.js"), `export * from "../../../../vendor/three/addons/math/SimplexNoise.js";\n`);
   writeFileSync(versionFile, shimVersion + "\n");
 }
 function ensureJsdomShim(){
@@ -260,6 +269,11 @@ const registry = JSON.parse(process.argv[3]);
 const dom = new JSDOM(\`<!doctype html><html><body><div id="stage" style="width:400px;height:300px"></div></body></html>\`, { runScripts: "dangerously", url: "http://localhost/" });
 global.window = dom.window; global.document = dom.window.document;
 global.SPRITE_REGISTRY = registry; global.window.SPRITE_REGISTRY = registry;
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, image: { width: 100, height: 200 } }; }
 const result = { ok: false, error: null };
 try {
@@ -281,24 +295,27 @@ try {
   result.contactB = g[1].position.y;
   result.expectedContactA = law.interiorStandeeContactY(expectedTopA);
   result.expectedContactB = law.interiorStandeeContactY(expectedTopB);
-  // BW2-2b: children[0]=the sprite's own inner camera-tilt wrap (holds JUST the mesh — see
-  // buildSpriteBillboardMesh's own header), children[1]=plinth base (a plain SIBLING of the wrap, not
+  // CL-R2: children[0]=the sprite's own inner camera-tilt wrap (thin side shell + alpha plane),
+  // children[1]=natural support (a plain SIBLING of the wrap, not
   // inside it — the whole point of the BW2-2b split). Use the stable userData handle for the mesh
   // itself rather than assuming a fixed children[] depth.
   result.baseCount = g[0].children.filter((c) => c.userData && c.userData.standeeBase).length;
-  const base = g[0].children[1];
-  result.baseRadius = base.geometry.parameters.radiusTop;
-  result.baseHeight = base.geometry.parameters.height;
+  const base = g[0].userData.standeeBaseMesh;
+  result.baseForm = base.userData.supportForm;
+  result.baseWidth = base.userData.supportWidth;
+  result.baseDepth = base.userData.supportDepth;
+  result.baseHeight = base.userData.supportHeight;
   result.baseMatCount = Array.isArray(base.material) ? base.material.length : 0;
-  result.baseSideColor = base.material[0].color.getHex();
-  result.baseTopColor = base.material[1].color.getHex();
+  result.baseTopColor = base.material[0].color.getHex();
+  result.baseSideColor = base.material[1].color.getHex();
   result.spriteWidth = g[0].userData.spriteBillboardMesh.geometry.parameters.width;
   // BW2-2b item 1 (FLOOR-ALIGNED BASES): the wrap exists, is a DIRECT child of the figure (not nested
   // inside the base, nor vice versa), and holds ONLY the sprite mesh — the base is never inside it.
   result.wrapExists = !!g[0].userData.standeeWrap;
   result.wrapIsChild0 = g[0].children[0] === g[0].userData.standeeWrap;
-  result.wrapHoldsOnlyMesh = g[0].userData.standeeWrap.children.length === 1
-    && g[0].userData.standeeWrap.children[0] === g[0].userData.spriteBillboardMesh;
+  result.wrapHoldsShellAndMesh = g[0].userData.standeeWrap.children.length === 2
+    && g[0].userData.standeeWrap.children.includes(g[0].userData.spriteBillboardMesh)
+    && g[0].userData.standeeWrap.children.includes(g[0].userData.standeeSideShell);
   result.baseIsSiblingOfWrap = base !== g[0].userData.standeeWrap && base.parent === g[0];
   // blob/pool group is the LAST child of built.group, one pool per piece.
   const blobGroup = built.group.children[built.group.children.length - 1];
@@ -306,8 +323,8 @@ try {
   result.poolCount = pools.length;
   result.poolYA = pools[0].position.y;
   result.expectedPoolYA = expectedTopA + law.INTERIOR_POOL_Y_OFFSET;
-  result.poolRadiusA = pools[0].geometry.parameters.width / 2;
-  result.footprintA = result.spriteWidth * 0.4;
+  result.poolHalfWidthA = pools[0].geometry.parameters.width * pools[0].scale.x / 2;
+  result.poolHalfDepthA = pools[0].geometry.parameters.height * pools[0].scale.y / 2;
 
   // BW2-2b item 4 (THE KILTER): deterministic + bounded, and actually reaches the mounted piece's own
   // position/yaw — re-derive the SAME seed key interiorBuildPieces uses (slug+cell) and confirm g[0]'s
@@ -331,14 +348,14 @@ try {
   // (both pieces above used "#7a6a55") each get their OWN cloned base materials (buildInteriorBase's own
   // header) — glowing piece A's base must NOT bleed onto piece B's base even though both were built from
   // the identical cached template.
-  const baseA = g[0].children[1], baseB = g[1].children[1];
-  result.baseAEmissiveBefore = baseA.material[1].emissive.getHex();
-  result.baseBEmissiveBefore = baseB.material[1].emissive.getHex();
+  const baseA = g[0].userData.standeeBaseMesh, baseB = g[1].userData.standeeBaseMesh;
+  result.baseAEmissiveBefore = baseA.material[0].emissive.getHex();
+  result.baseBEmissiveBefore = baseB.material[0].emissive.getHex();
   T._setBaseGlowForTest(baseA, true);
-  result.baseAEmissiveGlowing = baseA.material[1].emissive.getHex();
-  result.baseBEmissiveStillOff = baseB.material[1].emissive.getHex();
+  result.baseAEmissiveGlowing = baseA.material[0].emissive.getHex();
+  result.baseBEmissiveStillOff = baseB.material[0].emissive.getHex();
   T._setBaseGlowForTest(baseA, false);
-  result.baseAEmissiveReverted = baseA.material[1].emissive.getHex();
+  result.baseAEmissiveReverted = baseA.material[0].emissive.getHex();
 
   result.ok = true;
 } catch(e){ result.error = String((e && e.stack) || e); }
@@ -346,7 +363,7 @@ process.stdout.write(JSON.stringify(result));
 process.exit(0);
 `;
 
-group("10 — GREEN: interiorBuildPieces mounts EVERY cell through the derived law (not the old hardcoded -0.5), one base per piece, base radius/height match spec");
+group("10 — GREEN: interiorBuildPieces mounts every cell through the derived law with one tread-fit natural support per piece");
 {
   const r = runScenario(PIECES_RUNNER, []);
   if(!r.ok){ fail++; console.error("  FAIL: pieces scenario threw: " + r.error); }
@@ -356,16 +373,19 @@ group("10 — GREEN: interiorBuildPieces mounts EVERY cell through the derived l
     ok(Math.abs(r.contactB - r.contactA - 0.08) < 1e-9, `raised cell B sits exactly 0.08 world units ABOVE nominal cell A (the VP3 step delta reaching the standee mount, not just the floor mesh)`);
     ok(r.contactA > -0.5 && r.contactB > -0.5, `both contact lines sit ABOVE the pre-BW2-2 hardcoded -0.5 (proving the fix, not just a different wrong number)`);
     ok(r.baseCount === 1, `exactly one base mesh per piece (found ${r.baseCount})`);
-    ok(Math.abs(r.baseHeight - 0.09) < 1e-9, `base cylinder height ${r.baseHeight} === BW2-2b spec's ~0.09 (bumped from BW2-2's 0.04)`);
-    ok(Math.abs(r.baseRadius - r.spriteWidth * 0.36) < 1e-9, `base radius ${r.baseRadius} === sprite width (${r.spriteWidth}) x 0.36 (BW2-4b item 3: 0.42 -> 0.36, huddle-blob fix)`);
-    ok(r.baseMatCount === 3, `base carries 3 materials (CylinderGeometry side/top/bottom groups), found ${r.baseMatCount}`);
+    ok(r.baseForm === "shallow-rounded-strip", `visible support is the CL-R2 shallow rounded strip (${r.baseForm}), not a circular token`);
+    ok(Math.abs(r.baseHeight - 0.09) < 1e-9, `support height ${r.baseHeight} === the physical-plinth height 0.09`);
+    ok(Math.abs(r.baseDepth - 1 / 3) < 1e-9, `Medium support depth ${r.baseDepth} exactly matches one stair tread (1/3 cell)`);
+    ok(r.baseWidth <= 0.82 + 1e-9, `Medium support width ${r.baseWidth} stays inside its 1-cell tactical footprint`);
+    ok(r.baseMatCount === 2, `support carries distinct top/side materials, found ${r.baseMatCount}`);
     ok(r.baseTopColor !== r.baseSideColor, `base top face color (${r.baseTopColor.toString(16)}) differs from the side wall color (${r.baseSideColor.toString(16)}) — a lit-from-above plinth read, not a flat tint`);
     ok(r.poolCount === 2, `exactly one contact pool per piece — 2 pieces, found ${r.poolCount} pools`);
     ok(Math.abs(r.poolYA - r.expectedPoolYA) < 1e-9, `pool A y=${r.poolYA} matches floor-top+offset (${r.expectedPoolYA}), not the old hardcoded -0.495`);
-    ok(Math.abs(r.poolRadiusA - r.footprintA * 1.6) < 1e-6, `pool radius (${r.poolRadiusA}) === footprint (width*0.4=${r.footprintA}) x 1.6 (the addendum's feather-extent spec)`);
+    ok(Math.abs(r.poolHalfWidthA - r.baseWidth * 0.744) < 1e-6, `contact pool half-width (${r.poolHalfWidthA}) follows support width x 0.744 so its feather stays visible`);
+    ok(Math.abs(r.poolHalfDepthA - r.baseDepth * 0.744) < 1e-6, `contact pool half-depth (${r.poolHalfDepthA}) follows support depth x 0.744 rather than restoring a circle`);
     ok(r.wrapExists, `BW2-2b item 1: the figure's own inner camera-tilt wrap exists (g.userData.standeeWrap)`);
     ok(r.wrapIsChild0, `the wrap is a direct child of the figure group (children[0])`);
-    ok(r.wrapHoldsOnlyMesh, `the wrap holds ONLY the sprite mesh — never the base — so a base mounted as a sibling stays floor-flat when the wrap alone tilts for the camera`);
+    ok(r.wrapHoldsShellAndMesh, `the wrap holds the alpha plane plus its thin side shell — never the support — so the support stays floor-flat`);
     ok(r.baseIsSiblingOfWrap, `the base is a plain SIBLING of the wrap on the figure group, never nested inside it`);
 
     ok(Math.abs(r.gYawDegA - r.kilterAyawDeg) < 1e-9, `BW2-2b item 4: the mounted piece's own kilterYawDeg (${r.gYawDegA}) matches kilterFor's independently-recomputed value (${r.kilterAyawDeg}) for the SAME seed key`);
@@ -478,7 +498,10 @@ async function runRenderCheck(){
       const law = T._floorContactLawForTest;
       r.expectedY = law.interiorStandeeContactY(r.mapTopA);
       r.baseCount = fig ? fig.children.filter((c) => c.userData && c.userData.standeeBase).length : 0;
-      r.baseRadius = fig && fig.children[1] && fig.children[1].geometry.parameters.radiusTop;
+      // CL-R2 replaced the legacy circular CylinderGeometry with a shallow rounded strip. The
+      // retained `interiorBaseRadius` is now only the selection-ring half-width contract.
+      r.baseRadius = fig && fig.userData.interiorBaseRadius;
+      r.baseWidth = fig && fig.userData.interiorBaseWidth;
       r.spriteWidth = fig && fig.userData.spriteBillboardMesh.geometry.parameters.width;
 
       // BW2-2b item 1 (RED-FIRST -> GREEN, LIVE VALUES): run the REAL per-frame facing/tilt pass and
@@ -512,22 +535,27 @@ async function runRenderCheck(){
       r.baseStillSiblingImmediate = fig.children[1] === actingBase;
       // let the real tween ticker (rAF + wall-clock Date.now()) actually run fall-death's 480ms duration
       // to completion, then re-run the facing pass once more (a corpse still renders every frame).
-      await new Promise((res) => setTimeout(res, 700));
+      await new Promise((res) => setTimeout(res, 1000));
       T._updateSpriteBillboardYawForTest();
       r.postTipChildCountFinal = fig.children.length;
       r.figRotationXAfterTip = fig.rotation.x;              // expect PI/2 — the corpse tip, on the OUTER group
       r.wrapRotationXAfterTip = fig.userData.standeeWrap.rotation.x; // expect UNCHANGED — still the plain camera tilt
 
-      // BW2-2 addendum + BW2-2b item 5a: the shared contact-pool gradient texture, sampled directly off
-      // its own backing <canvas> in a REAL browser (ctx.createRadialGradient exists here, unlike
-      // jsdom) — center alpha must read denser than the rim, which must read essentially transparent.
+      // CL-R2 follow-up: sample the shared contact-pool multiplier directly off its own backing
+      // <canvas> in a REAL browser. The center must be darker than the rim, while the rim must be
+      // opaque white—the exact multiply identity—so the quad disappears without alpha compositing.
       const poolTex = T._interiorPoolTextureForTest();
+      const poolMat = T._interiorPoolMaterialForTest();
       const pctx = poolTex.image.getContext("2d");
       const size = poolTex.image.width;
-      const centerA = pctx.getImageData(size / 2, size / 2, 1, 1).data[3];
-      const edgeA = pctx.getImageData(1, size / 2, 1, 1).data[3];
-      r.poolCenterAlpha = centerA;
-      r.poolEdgeAlpha = edgeA;
+      const center = pctx.getImageData(size / 2, size / 2, 1, 1).data;
+      const edge = pctx.getImageData(1, size / 2, 1, 1).data;
+      r.poolCenterRGB = [center[0], center[1], center[2]];
+      r.poolEdgeRGB = [edge[0], edge[1], edge[2]];
+      r.poolCenterAlpha = center[3];
+      r.poolEdgeAlpha = edge[3];
+      r.poolUsesMultiplyBlending = poolMat.userData.contactBlendMode === "multiply";
+      r.poolToneMapped = poolMat.toneMapped;
       return r;
     });
 
@@ -540,7 +568,8 @@ async function runRenderCheck(){
       ok(result.figFound, "setUnits mounted a findable unit u1");
       ok(Math.abs(result.figY - result.expectedY) < 1e-9, `combat unit contact Y=${result.figY} matches the law's own derivation (${result.expectedY}) off the LIVE cached floor-top map — not the pre-BW2-2 hardcoded -0.5`);
       ok(result.baseCount === 1, `exactly one base mesh on the combat standee (found ${result.baseCount})`);
-      ok(Math.abs(result.baseRadius - result.spriteWidth * 0.36) < 1e-6, `combat standee base radius (${result.baseRadius}) === its own rendered width (${result.spriteWidth}) x 0.36`);
+      ok(Math.abs(result.baseRadius - result.baseWidth * 0.5) < 1e-6,
+        `combat standee selection-ring radius (${result.baseRadius}) === the natural support width (${result.baseWidth}) / 2`);
 
       group("21b — GREEN (live values, BW2-2b item 1): under a REAL render pass, the base's world-up stays +Y (outer group rotation.x === 0) while the sprite's inner wrap alone carries the nonzero camera-pitch tilt");
       ok(result.figRotationXBeforeTip === 0, `BEFORE any verb plays, the OUTER group's rotation.x (what the base/ring inherit as plain siblings) is exactly 0 — floor-flat — found ${result.figRotationXBeforeTip}`);
@@ -566,10 +595,14 @@ async function runRenderCheck(){
       ok(Math.abs(result.figRotationXAfterTip - Math.PI / 2) < 0.05, `the OUTER group's rotation.x reaches the floor plane (PI/2=${(Math.PI/2).toFixed(4)}) once fall-death's tween completes — found ${result.figRotationXAfterTip} — tipping \`fig\` tips the base (a plain sibling) right along with it`);
       ok(Math.abs(result.wrapRotationXAfterTip - result.wrapRotationXBeforeTip) < 1e-9, `the sprite's inner wrap's OWN rotation.x is UNCHANGED by the corpse tip (still just the plain camera-pitch tilt, ${result.wrapRotationXAfterTip}) — verb-tilt and camera-tilt never fight over the same field`);
 
-      group("24 — GREEN (live Chrome): the contact pool is a real soft gradient, INTENSIFIED per BW2-2b item 5a — center alpha > edge alpha, core reads >=0.65 alpha (spec: ~0.7, was 0.5)");
-      ok(result.poolCenterAlpha >= Math.round(0.65 * 255), `pool texture center alpha (${result.poolCenterAlpha}/255 = ${(result.poolCenterAlpha/255).toFixed(2)}) reads >= 0.65 (BW2-2b spec: core intensified to ~0.7)`);
-      ok(result.poolEdgeAlpha < 10, `pool texture edge alpha (${result.poolEdgeAlpha}/255) reads as fully feathered/transparent`);
-      ok(result.poolCenterAlpha > result.poolEdgeAlpha, `center alpha (${result.poolCenterAlpha}) > edge alpha (${result.poolEdgeAlpha}) — a real gradient, not a flat disc`);
+      group("24 — GREEN (live Chrome): the contact pool is a true multiply gradient — dark center, opaque-white identity rim, no tone-map remap");
+      ok(result.poolUsesMultiplyBlending, "pool material uses THREE.MultiplyBlending");
+      ok(result.poolToneMapped === false, "pool multiplier bypasses material tone mapping so white remains the exact identity");
+      ok(result.poolCenterRGB.every((v) => v <= 70), `pool center RGB (${result.poolCenterRGB.join(",")}) reads near the authored 64/255 multiplier`);
+      ok(result.poolEdgeRGB.every((v) => v >= 245), `pool rim RGB (${result.poolEdgeRGB.join(",")}) reads within filtered-edge tolerance of white multiply identity`);
+      ok(result.poolCenterRGB[0] < result.poolEdgeRGB[0], `center multiplier (${result.poolCenterRGB[0]}) is darker than rim (${result.poolEdgeRGB[0]}) — a real radial occlusion gradient`);
+      ok(result.poolCenterAlpha === 255 && result.poolEdgeAlpha === 255,
+        `center/rim alpha stay fully opaque (${result.poolCenterAlpha}/${result.poolEdgeAlpha}); RGB owns multiply strength`);
     }
   } catch(e){
     fail++; console.error("  FAIL: live-Chrome render check threw: " + (e && e.message));
@@ -587,6 +620,11 @@ const registry = JSON.parse(process.argv[3]);
 const dom = new JSDOM(\`<!doctype html><html><body><div id="stage" style="width:400px;height:300px"></div></body></html>\`, { runScripts: "dangerously", url: "http://localhost/" });
 global.window = dom.window; global.document = dom.window.document;
 global.SPRITE_REGISTRY = registry; global.window.SPRITE_REGISTRY = registry;
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 const FAKE_2D_CTX = { fillRect(){}, strokeRect(){}, fillText(){}, measureText(){ return { width: 0 }; }, fillStyle: "", strokeStyle: "", lineWidth: 0, font: "", textAlign: "", textBaseline: "" };
 global.window.HTMLCanvasElement.prototype.getContext = function(){ return FAKE_2D_CTX; };
 const result = { ok: false, error: null };

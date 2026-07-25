@@ -6194,7 +6194,17 @@ const ENV_AO_PARAMS = Object.freeze({
   radius: 0.42, distanceExponent: 1, thickness: 0.6, distanceFallOff: 1,
   scale: 1.4, samples: 12, screenSpaceRadius: false,
 });
-const ENV_AO_DENOISE = Object.freeze({ lumaPhi: 10, depthPhi: 8, normalPhi: 8, radius: 4, radiusExponent: 1, rings: 2, samples: 8 });
+// Contact-registration re-weight (Adam 2026-07-25: "at every point of planar contact you can see
+// a gap of light shining through on every shape" — measured in dev/clay-captures/ao-contact-diag/):
+// the crease's darkest AO is a 1-2-texel line, and the previous weights couldn't protect it from
+// the Poisson spatial average — lumaPhi 10 over a 0..1 AO term never gated, depthPhi 8 is a view-
+// space plane distance wider than the room, and normalPhi alone fails at creases because the
+// half-res normal buffer is averaged exactly there. The luma gate is what saves a thin dark line
+// against a bright surround: 0.25 zeroes the weight across the crease's own contrast while dither-
+// scale variance still passes (flats keep smoothing), radius 2 halves how far any residual average
+// reaches. Sweep receipts: sweep-scores.json (authored creaseLift 5.38 luma -> 1.40, 74% recovered
+// toward the raw reference; flat-region high-frequency noise stays below raw).
+const ENV_AO_DENOISE = Object.freeze({ lumaPhi: 0.25, depthPhi: 0.5, normalPhi: 16, radius: 2, radiusExponent: 1, rings: 2, samples: 8 });
 const ENV_AO_BLEND_INTENSITY = 1.0;
 // The one exclusion rule for the AO G-buffer prepass, as a PURE predicate so the harness can
 // execute it against mesh-shaped fixtures without a GL context. The AO depth/normal prepass
@@ -14778,6 +14788,37 @@ window.Theater._environmentAOForTest = function(){
     targetSize: ao ? { w: ao.width, h: ao.height } : null,
     lastPrepassExcludedCount: ao && ao.lastPrepassExcludedCount != null ? ao.lastPrepassExcludedCount : null,
   };
+};
+// AO contact-registration diagnostic seam (Adam 2026-07-25: "at every point of planar contact you
+// can see a gap of light shining through"). Lets the capture rig A/B the two leading hypotheses
+// LIVE without touching authored settings: "fullres" re-sizes the AO G-buffer to full device
+// pixels (tests the half-res upsample-misregistration theory), "raw" zeroes the Poisson-denoise
+// spatial radius (tests the denoise-bleed theory), "fullres-raw" combines, "on" restores the
+// authored state. Diagnostic-only: nothing in production calls this.
+window.Theater._aoContactDiagForTest = function(mode){
+  const ao = S.postSuite && S.postSuite.ao;
+  if(!ao || !S.renderer) return { mode: mode, applied: false };
+  const size = new THREE.Vector2();
+  S.renderer.getSize(size);
+  const pr = S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1;
+  // object mode: an explicit {resolutionScale?, ...denoise-params} sweep candidate
+  if(mode && typeof mode === "object"){
+    const scale = (typeof mode.resolutionScale === "number") ? mode.resolutionScale : ENV_AO_RESOLUTION_SCALE;
+    ao.setSize(Math.round(size.x * pr * scale), Math.round(size.y * pr * scale));
+    const dn = Object.assign({}, ENV_AO_DENOISE, mode);
+    delete dn.resolutionScale;
+    ao.updatePdMaterial(dn);
+    markDirty();
+    return { mode: "custom", applied: true, targetSize: { w: ao.width, h: ao.height }, denoise: dn };
+  }
+  const fullRes = mode === "fullres" || mode === "fullres-raw";
+  const raw = mode === "raw" || mode === "fullres-raw";
+  const scale = fullRes ? 1 : ENV_AO_RESOLUTION_SCALE;
+  ao.setSize(Math.round(size.x * pr * scale), Math.round(size.y * pr * scale));
+  const dn = raw ? Object.assign({}, ENV_AO_DENOISE, { radius: 0 }) : ENV_AO_DENOISE;
+  ao.updatePdMaterial(dn);
+  markDirty();
+  return { mode: mode, applied: true, targetSize: { w: ao.width, h: ao.height }, denoiseRadius: dn.radius };
 };
 // The pure prepass-exclusion predicate, exposed so the node harness can execute the actual rule
 // against mesh-shaped fixtures (transparent sprite card -> excluded; opaque wall -> included)

@@ -243,9 +243,9 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           "intensity": 18,
           "physicalIntensity": 1.3,
           "pos": {
-            "x": 0,
+            "x": -0.15,
             "y": 2.2,
-            "z": 0.6
+            "z": -0.35
           },
           "heightM": 3.3528,
           "rangeM": 36.576,
@@ -278,12 +278,12 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
       "id": "lavalit",
       "label": "Lava glow",
       "rolled": true,
-      "mode": "production-environment",
+      "mode": "production-practical",
       "source": {
-        "class": "environmental",
-        "label": "visible lava or molten fissure",
+        "class": "physical-practical",
+        "label": "molten fissure breaking the floor",
         "loreNative": true,
-        "visibleEmitterRequired": false
+        "visibleEmitterRequired": true
       },
       "ambient": {
         "color": "0x3a1c14",
@@ -296,7 +296,7 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           "colorOverride": true,
           "intensityUnit": "tabletop-profile-unit",
           "physicalIntensityUnit": "renderer-intensity",
-          "positionStrategy": "board-relative",
+          "positionStrategy": "socket-relative",
           "azimuthDeg": 0,
           "elevationDeg": 45,
           "spot": {
@@ -310,11 +310,11 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
             "mapSize": 512,
             "budgetPriority": 1
           },
-          "fixtureId": "",
-          "mount": "none",
+          "fixtureId": "lava-fissure",
+          "mount": "floor",
           "emitterLocal": {
             "x": 0,
-            "y": 0,
+            "y": 0.05,
             "z": 0
           },
           "flicker": {
@@ -329,9 +329,9 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           "intensity": 22,
           "physicalIntensity": 1.5,
           "pos": {
-            "x": 0,
-            "y": 0.15,
-            "z": 0
+            "x": 0.28,
+            "y": 0.35,
+            "z": 0.22
           },
           "heightM": 0.229,
           "rangeM": 10.668,

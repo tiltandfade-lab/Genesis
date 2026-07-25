@@ -30,8 +30,8 @@
         "output": 0,
         "perspectiveDefine": 1,
         "targetSize": {
-          "w": 1260,
-          "h": 1352
+          "w": 630,
+          "h": 676
         },
         "lastPrepassExcludedCount": 7
       }
@@ -65,8 +65,8 @@
         "output": 0,
         "perspectiveDefine": 1,
         "targetSize": {
-          "w": 1260,
-          "h": 1352
+          "w": 630,
+          "h": 676
         },
         "lastPrepassExcludedCount": 7
       }
@@ -100,8 +100,8 @@
         "output": 0,
         "perspectiveDefine": 1,
         "targetSize": {
-          "w": 1260,
-          "h": 1352
+          "w": 645,
+          "h": 676
         },
         "lastPrepassExcludedCount": 7
       }
@@ -110,34 +110,34 @@
   "fps": {
     "review": {
       "aoOn": {
-        "frames": 147,
-        "elapsedMs": 2509.9,
-        "fps": 58.6,
+        "frames": 151,
+        "elapsedMs": 2504.4,
+        "fps": 60.3,
         "frameMsMedian": 16.7,
         "frameMsP95": 16.8
       },
       "aoOff": {
-        "frames": 150,
-        "elapsedMs": 2505.1,
-        "fps": 59.9,
+        "frames": 151,
+        "elapsedMs": 2503.7,
+        "fps": 60.3,
         "frameMsMedian": 16.7,
-        "frameMsP95": 16.8
+        "frameMsP95": 16.7
       }
     },
     "production": {
       "aoOn": {
-        "frames": 151,
-        "elapsedMs": 2500.6,
-        "fps": 60.4,
+        "frames": 135,
+        "elapsedMs": 2501,
+        "fps": 54,
         "frameMsMedian": 16.7,
-        "frameMsP95": 16.8
+        "frameMsP95": 33.3
       },
       "aoOff": {
-        "frames": 151,
-        "elapsedMs": 2507.1,
-        "fps": 60.2,
+        "frames": 125,
+        "elapsedMs": 2509.7,
+        "fps": 49.8,
         "frameMsMedian": 16.7,
-        "frameMsP95": 16.7
+        "frameMsP95": 33.4
       },
       "recipe": "torchlit (flame animating)",
       "renderer": {

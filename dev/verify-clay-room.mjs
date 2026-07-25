@@ -1844,6 +1844,8 @@ const check = (name, cond, detail = "") =>
     /S\.composer\.addPass\(S\.postSuite\.renderPass\);[\s\S]{0,400}addPass\(S\.postSuite\.ao\);[\s\S]{0,200}addPass\(S\.postSuite\.dof\)/.test(bootSrc)
     && /S\.composer\.removePass\(S\.postSuite\.ao\)/.test(bootSrc)
     && /S\.postSuite\.ao\.setSize\(Math\.round\(size\.x \* aoPixelRatio\), Math\.round\(size\.y \* aoPixelRatio\)\)/.test(bootSrc)
+    && /const ENV_AO_RESOLUTION_SCALE = 0\.5;/.test(bootSrc)
+    && /getPixelRatio\(\) : 1\) \* ENV_AO_RESOLUTION_SCALE/.test(bootSrc)
     && /S\.postSuite\.ao\.camera = S\.camera/.test(bootSrc)
     && /defines\.PERSPECTIVE_CAMERA/.test(bootSrc));
   check("35g. AO state survives recipe switches by construction (recipe application never touches the suite) and the A/B is bounded",

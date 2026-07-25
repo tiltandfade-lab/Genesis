@@ -1,0 +1,1729 @@
+{
+  "capturedBy": "dev/capture-clayroom-visual-correction.cjs",
+  "assignment": "docs/FABLE-CLAYROOM-VISUAL-CORRECTION-ASSIGNMENT.md",
+  "runtimePath": "authored JSON lock -> compiled light registry -> clayRoomBoardFrom() -> spatializePlan -> interiorBuildBoard -> setInteriorBoard (production interior channel)",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "deviceScaleFactor": 2
+  },
+  "narrowViewport": {
+    "width": 760,
+    "height": 900,
+    "deviceScaleFactor": 2
+  },
+  "lighting": {
+    "clay-neutral-truth": {
+      "authoredRecipe": {
+        "id": "clay-neutral-truth",
+        "mode": "diagnostic-neutral",
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.55
+        },
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "exposureFloor": 0.006,
+        "lights": [
+          {
+            "id": "studio-sky",
+            "type": "directional",
+            "pos": {
+              "x": 0,
+              "y": 4,
+              "z": 0
+            },
+            "heightM": 6.096,
+            "rangeM": 30.48,
+            "falloff": 0,
+            "physicalIntensity": 0.73,
+            "temperatureK": 6500,
+            "mount": "none",
+            "fixtureId": "",
+            "azimuthDeg": 0,
+            "elevationDeg": 90,
+            "shadowCast": false,
+            "state": "steady"
+          }
+        ]
+      },
+      "liveMountedLights": {
+        "ambient": {
+          "uuid": "b36a957c-aedc-4ae3-ac19-49c56854fe79",
+          "intensity": 0.55,
+          "color": 16777215
+        },
+        "rig": {
+          "hemi": {
+            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "intensity": 0.06,
+            "color": 16773596
+          },
+          "key": {
+            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "intensity": 0,
+            "color": 16777215
+          },
+          "fill": {
+            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "intensity": 0,
+            "color": 16777215
+          },
+          "cameraKey": {
+            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "intensity": 0,
+            "color": 16777215
+          }
+        },
+        "practicals": [
+          {
+            "id": "studio-sky",
+            "emitted": 3.285,
+            "distance": null,
+            "decay": null,
+            "castShadow": false,
+            "state": "steady",
+            "pointPositionLocal": [
+              0,
+              26.25,
+              0
+            ],
+            "color": 16777215
+          }
+        ]
+      },
+      "fixtureEmitterWorldPositions": [],
+      "sceneLightsSummary": {
+        "profileKey": "dark",
+        "ambient": 0.55,
+        "hemi": 0.06,
+        "key": 0,
+        "fill": 0
+      },
+      "sceneBackgroundHex": 8220264,
+      "gradeTonemap": "agx",
+      "overlayModes": {
+        "position": false,
+        "range": false,
+        "shadow": false
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          33.6681,
+          33.3396,
+          33.6681
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 118.12576893537619,
+        "clayZoom": 0.72,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1290x1352",
+        "cssPx": "645x676",
+        "dprEffective": 2,
+        "shadowMap": true
+      },
+      "postChain": {
+        "enabled": true,
+        "passCount": 6,
+        "hasComposer": true
+      }
+    },
+    "clay-opposing-pair": {
+      "authoredRecipe": {
+        "id": "clay-opposing-pair",
+        "mode": "diagnostic-studio",
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.18
+        },
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "exposureFloor": 0.006,
+        "lights": [
+          {
+            "id": "clay-west-warm",
+            "type": "point",
+            "pos": {
+              "x": -0.53,
+              "y": 1.7,
+              "z": 0
+            },
+            "heightM": 2.591,
+            "rangeM": 18.288,
+            "falloff": 1,
+            "physicalIntensity": 16,
+            "temperatureK": 2800,
+            "mount": "none",
+            "fixtureId": "bracket-generic",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "shadowCast": true,
+            "state": "steady"
+          },
+          {
+            "id": "clay-east-cool",
+            "type": "point",
+            "pos": {
+              "x": 0.53,
+              "y": 1.7,
+              "z": 0
+            },
+            "heightM": 2.591,
+            "rangeM": 18.288,
+            "falloff": 1,
+            "physicalIntensity": 9,
+            "temperatureK": 9000,
+            "mount": "none",
+            "fixtureId": "bracket-generic",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "shadowCast": true,
+            "state": "steady"
+          }
+        ]
+      },
+      "liveMountedLights": {
+        "ambient": {
+          "uuid": "abf5ae0d-d54e-45b2-936e-17eb038cc9a3",
+          "intensity": 0.18,
+          "color": 16777215
+        },
+        "rig": {
+          "hemi": {
+            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "intensity": 0.06,
+            "color": 16773596
+          },
+          "key": {
+            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "intensity": 0,
+            "color": 16777215
+          },
+          "fill": {
+            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "intensity": 0,
+            "color": 16777215
+          },
+          "cameraKey": {
+            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "intensity": 0,
+            "color": 16777215
+          }
+        },
+        "practicals": [
+          {
+            "id": "clay-west-warm",
+            "emitted": 16,
+            "distance": 12,
+            "decay": 1,
+            "castShadow": true,
+            "state": "steady",
+            "pointPositionLocal": [
+              -4.24,
+              1.73,
+              0.12
+            ],
+            "color": 16752714
+          },
+          {
+            "id": "clay-east-cool",
+            "emitted": 9,
+            "distance": 12,
+            "decay": 1,
+            "castShadow": true,
+            "state": "steady",
+            "pointPositionLocal": [
+              4.24,
+              1.73,
+              0.12
+            ],
+            "color": 11452392
+          }
+        ]
+      },
+      "fixtureEmitterWorldPositions": [
+        {
+          "x": -4.24,
+          "y": 1.73,
+          "z": 0.12,
+          "fixtureId": "bracket-generic",
+          "mount": "none",
+          "ownerSegIndex": null,
+          "emissiveIntensity": 1.6
+        },
+        {
+          "x": 4.24,
+          "y": 1.73,
+          "z": 0.12,
+          "fixtureId": "bracket-generic",
+          "mount": "none",
+          "ownerSegIndex": null,
+          "emissiveIntensity": 1.6
+        }
+      ],
+      "sceneLightsSummary": {
+        "profileKey": "dark",
+        "ambient": 0.18,
+        "hemi": 0.06,
+        "key": 0,
+        "fill": 0
+      },
+      "sceneBackgroundHex": 8220264,
+      "gradeTonemap": "agx",
+      "overlayModes": {
+        "position": false,
+        "range": false,
+        "shadow": false
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          33.6681,
+          33.3396,
+          33.6681
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 118.12576893537619,
+        "clayZoom": 0.72,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1290x1352",
+        "cssPx": "645x676",
+        "dprEffective": 2,
+        "shadowMap": true
+      },
+      "postChain": {
+        "enabled": true,
+        "passCount": 6,
+        "hasComposer": true
+      }
+    },
+    "daylit": {
+      "authoredRecipe": {
+        "id": "daylit",
+        "mode": "production-environment",
+        "ambient": {
+          "color": 14212320,
+          "intensity": 0.55
+        },
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "exposureFloor": 0.006,
+        "lights": [
+          {
+            "id": "sun-key",
+            "type": "directional",
+            "pos": {
+              "x": 0.4,
+              "y": 3,
+              "z": -0.4
+            },
+            "heightM": 4.572,
+            "rangeM": 15.24,
+            "falloff": 1,
+            "physicalIntensity": 1.1,
+            "temperatureK": 5500,
+            "mount": "none",
+            "fixtureId": "",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "shadowCast": true,
+            "state": "steady"
+          }
+        ]
+      },
+      "liveMountedLights": {
+        "ambient": {
+          "uuid": "7e1027d2-c55c-45fa-9231-10e8c4e12a99",
+          "intensity": 0.55,
+          "color": 14212320
+        },
+        "rig": {
+          "hemi": {
+            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "intensity": 0.08,
+            "color": 16773596
+          },
+          "key": {
+            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "intensity": 0.05,
+            "color": 16777215
+          },
+          "fill": {
+            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "intensity": 0.02,
+            "color": 16777215
+          },
+          "cameraKey": {
+            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "intensity": 0.1,
+            "color": 16777215
+          }
+        },
+        "practicals": [
+          {
+            "id": "sun-key",
+            "emitted": 3.193214,
+            "distance": null,
+            "decay": null,
+            "castShadow": true,
+            "state": "steady",
+            "pointPositionLocal": [
+              8.064966,
+              19.325656,
+              -15.828387
+            ],
+            "color": 16767683
+          }
+        ]
+      },
+      "fixtureEmitterWorldPositions": [],
+      "sceneLightsSummary": {
+        "profileKey": "dark",
+        "ambient": 0.55,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "sceneBackgroundHex": 14205886,
+      "gradeTonemap": "agx",
+      "overlayModes": {
+        "position": false,
+        "range": false,
+        "shadow": false
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          34.4697,
+          34.1334,
+          34.4697
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993,
+        "clayZoom": 0.72,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676",
+        "dprEffective": 2,
+        "shadowMap": true
+      },
+      "postChain": {
+        "enabled": true,
+        "passCount": 6,
+        "hasComposer": true
+      }
+    },
+    "moonlit": {
+      "authoredRecipe": {
+        "id": "moonlit",
+        "mode": "production-environment",
+        "ambient": {
+          "color": 9412808,
+          "intensity": 0.36
+        },
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "exposureFloor": 0.006,
+        "lights": [
+          {
+            "id": "moon-key",
+            "type": "directional",
+            "pos": {
+              "x": 0.5,
+              "y": 3,
+              "z": -0.5
+            },
+            "heightM": 4.572,
+            "rangeM": 12.192,
+            "falloff": 1,
+            "physicalIntensity": 1,
+            "temperatureK": 9000,
+            "mount": "none",
+            "fixtureId": "",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "shadowCast": true,
+            "state": "steady"
+          }
+        ]
+      },
+      "liveMountedLights": {
+        "ambient": {
+          "uuid": "e64afb79-4dac-4c4e-b0e6-b64882258523",
+          "intensity": 0.36,
+          "color": 9412808
+        },
+        "rig": {
+          "hemi": {
+            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "intensity": 0.08,
+            "color": 16773596
+          },
+          "key": {
+            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "intensity": 0.05,
+            "color": 16777215
+          },
+          "fill": {
+            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "intensity": 0.02,
+            "color": 16777215
+          },
+          "cameraKey": {
+            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "intensity": 0.1,
+            "color": 16777215
+          }
+        },
+        "practicals": [
+          {
+            "id": "moon-key",
+            "emitted": 3.025774,
+            "distance": null,
+            "decay": null,
+            "castShadow": true,
+            "state": "steady",
+            "pointPositionLocal": [
+              8.064966,
+              19.325656,
+              -15.828387
+            ],
+            "color": 11452392
+          }
+        ]
+      },
+      "fixtureEmitterWorldPositions": [],
+      "sceneLightsSummary": {
+        "profileKey": "dark",
+        "ambient": 0.36,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "sceneBackgroundHex": 2827055,
+      "gradeTonemap": "agx",
+      "overlayModes": {
+        "position": false,
+        "range": false,
+        "shadow": false
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          34.4697,
+          34.1334,
+          34.4697
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993,
+        "clayZoom": 0.72,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676",
+        "dprEffective": 2,
+        "shadowMap": true
+      },
+      "postChain": {
+        "enabled": true,
+        "passCount": 6,
+        "hasComposer": true
+      }
+    },
+    "magic-glow": {
+      "authoredRecipe": {
+        "id": "magic-glow",
+        "mode": "production-practical",
+        "ambient": {
+          "color": 4212896,
+          "intensity": 0.26
+        },
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "exposureFloor": 0.006,
+        "lights": [
+          {
+            "id": "arcane-crystal",
+            "type": "point",
+            "pos": {
+              "x": -0.3,
+              "y": 1.6,
+              "z": 0.2
+            },
+            "heightM": 2.438,
+            "rangeM": 9.144,
+            "falloff": 2,
+            "physicalIntensity": 1.2,
+            "temperatureK": 9000,
+            "mount": "floor",
+            "fixtureId": "crystal-faceted",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "shadowCast": true,
+            "state": "steady"
+          }
+        ]
+      },
+      "liveMountedLights": {
+        "ambient": {
+          "uuid": "d1c37af4-d00f-4020-ad14-4a03c0b0c0fa",
+          "intensity": 0.26,
+          "color": 4212896
+        },
+        "rig": {
+          "hemi": {
+            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "intensity": 0.08,
+            "color": 16773596
+          },
+          "key": {
+            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "intensity": 0.05,
+            "color": 16777215
+          },
+          "fill": {
+            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "intensity": 0.02,
+            "color": 16777215
+          },
+          "cameraKey": {
+            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "intensity": 0.1,
+            "color": 16777215
+          }
+        },
+        "practicals": [
+          {
+            "id": "arcane-crystal",
+            "emitted": 5.4,
+            "distance": 6,
+            "decay": 2,
+            "castShadow": true,
+            "state": "steady",
+            "pointPositionLocal": [
+              -2.4,
+              0,
+              1.6
+            ],
+            "color": 9071615
+          }
+        ]
+      },
+      "fixtureEmitterWorldPositions": [
+        {
+          "x": -2.4000000000000004,
+          "y": 0,
+          "z": 1.6000000000000014,
+          "fixtureId": "crystal-faceted",
+          "mount": "floor",
+          "ownerSegIndex": null,
+          "emissiveIntensity": 1.6
+        }
+      ],
+      "sceneLightsSummary": {
+        "profileKey": "dark",
+        "ambient": 0.26,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "sceneBackgroundHex": 2957888,
+      "gradeTonemap": "agx",
+      "overlayModes": {
+        "position": false,
+        "range": false,
+        "shadow": false
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          34.4697,
+          34.1334,
+          34.4697
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993,
+        "clayZoom": 0.72,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676",
+        "dprEffective": 2,
+        "shadowMap": true
+      },
+      "postChain": {
+        "enabled": true,
+        "passCount": 6,
+        "hasComposer": true
+      }
+    },
+    "torchlit": {
+      "authoredRecipe": {
+        "id": "torchlit",
+        "mode": "production-practical",
+        "ambient": {
+          "color": 4864038,
+          "intensity": 0.21
+        },
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "exposureFloor": 0.006,
+        "lights": [
+          {
+            "id": "torch-key",
+            "type": "point",
+            "pos": {
+              "x": -0.15,
+              "y": 2.2,
+              "z": -0.35
+            },
+            "heightM": 3.3528,
+            "rangeM": 36.576,
+            "falloff": 1.5,
+            "physicalIntensity": 1.3,
+            "temperatureK": 1900,
+            "mount": "wall",
+            "fixtureId": "sconce-torch-clay",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "shadowCast": true,
+            "state": "flickering"
+          }
+        ]
+      },
+      "liveMountedLights": {
+        "ambient": {
+          "uuid": "b11165f9-b379-484a-8c6a-e5f979dd3101",
+          "intensity": 0.21,
+          "color": 4864038
+        },
+        "rig": {
+          "hemi": {
+            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "intensity": 0.08,
+            "color": 16773596
+          },
+          "key": {
+            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "intensity": 0.05,
+            "color": 16777215
+          },
+          "fill": {
+            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "intensity": 0.02,
+            "color": 16777215
+          },
+          "cameraKey": {
+            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "intensity": 0.1,
+            "color": 16777215
+          }
+        },
+        "practicals": [
+          {
+            "id": "torch-key",
+            "emitted": 6.226938,
+            "distance": 24,
+            "decay": 1.5,
+            "castShadow": true,
+            "state": "flickering",
+            "pointPositionLocal": [
+              -4.497133,
+              1.183569,
+              -7.306569
+            ],
+            "color": 16752714
+          }
+        ]
+      },
+      "fixtureEmitterWorldPositions": [
+        {
+          "x": -4.497132776621288,
+          "y": 1.1835688990701332,
+          "z": -7.3065686009805075,
+          "fixtureId": "sconce-torch-clay",
+          "mount": "wall",
+          "ownerSegIndex": 0,
+          "emissiveIntensity": 1.7030941750539004
+        }
+      ],
+      "sceneLightsSummary": {
+        "profileKey": "dark",
+        "ambient": 0.21,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "sceneBackgroundHex": 3218189,
+      "gradeTonemap": "agx",
+      "overlayModes": {
+        "position": false,
+        "range": false,
+        "shadow": false
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          34.4697,
+          34.1334,
+          34.4697
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993,
+        "clayZoom": 0.72,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676",
+        "dprEffective": 2,
+        "shadowMap": true
+      },
+      "postChain": {
+        "enabled": true,
+        "passCount": 6,
+        "hasComposer": true
+      }
+    },
+    "lavalit": {
+      "authoredRecipe": {
+        "id": "lavalit",
+        "mode": "production-practical",
+        "ambient": {
+          "color": 3808276,
+          "intensity": 0.2
+        },
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "exposureFloor": 0.006,
+        "lights": [
+          {
+            "id": "lava-edge",
+            "type": "point",
+            "pos": {
+              "x": 0.28,
+              "y": 0.35,
+              "z": 0.22
+            },
+            "heightM": 0.229,
+            "rangeM": 10.668,
+            "falloff": 2,
+            "physicalIntensity": 1.5,
+            "temperatureK": 1400,
+            "mount": "floor",
+            "fixtureId": "lava-fissure",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "shadowCast": true,
+            "state": "steady"
+          }
+        ]
+      },
+      "liveMountedLights": {
+        "ambient": {
+          "uuid": "bd9787f1-8c6f-4ebf-b4d6-c5ec5e68d1e8",
+          "intensity": 0.2,
+          "color": 3808276
+        },
+        "rig": {
+          "hemi": {
+            "uuid": "1679a86a-bd86-49cc-835a-44ef8725e5c1",
+            "intensity": 0.08,
+            "color": 16773596
+          },
+          "key": {
+            "uuid": "873ab572-7c07-4435-a8c5-78069cf3171f",
+            "intensity": 0.05,
+            "color": 16777215
+          },
+          "fill": {
+            "uuid": "169a7ae5-12a5-4357-874a-0597eccabfe9",
+            "intensity": 0.02,
+            "color": 16777215
+          },
+          "cameraKey": {
+            "uuid": "78895cfe-8430-423d-81b2-8cfe49524f7a",
+            "intensity": 0.1,
+            "color": 16777215
+          }
+        },
+        "practicals": [
+          {
+            "id": "lava-edge",
+            "emitted": 6.75,
+            "distance": 7,
+            "decay": 2,
+            "castShadow": true,
+            "state": "steady",
+            "pointPositionLocal": [
+              2.24,
+              -0.25,
+              1.76
+            ],
+            "color": 16733474
+          }
+        ]
+      },
+      "fixtureEmitterWorldPositions": [
+        {
+          "x": 2.24,
+          "y": -0.25,
+          "z": 1.7600000000000016,
+          "fixtureId": "lava-fissure",
+          "mount": "floor",
+          "ownerSegIndex": null,
+          "emissiveIntensity": 1.6
+        }
+      ],
+      "sceneLightsSummary": {
+        "profileKey": "dark",
+        "ambient": 0.2,
+        "hemi": 0.08,
+        "key": 0.05,
+        "fill": 0.02
+      },
+      "sceneBackgroundHex": 2822152,
+      "gradeTonemap": "agx",
+      "overlayModes": {
+        "position": false,
+        "range": false,
+        "shadow": false
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          33.6681,
+          33.3396,
+          33.6681
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 118.12576893537619,
+        "clayZoom": 0.72,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1290x1352",
+        "cssPx": "645x676",
+        "dprEffective": 2,
+        "shadowMap": true
+      },
+      "postChain": {
+        "enabled": true,
+        "passCount": 6,
+        "hasComposer": true
+      }
+    }
+  },
+  "structure": {
+    "assembled": {
+      "view": "assembled",
+      "mountedMeshes": 85,
+      "shadowCasters": 27,
+      "hostSuppressedMeshes": 5,
+      "shellUppers": {
+        "built": 6,
+        "omitted": 5,
+        "total": 11
+      },
+      "wallOmission": {
+        "ruleId": "camera-side-wall-omission",
+        "version": 1,
+        "staged": true,
+        "latched": true,
+        "lastEvent": "door-state",
+        "doorState": "shut",
+        "strategicView": false,
+        "cameraMode": "fixed-production",
+        "active": true,
+        "carveouts": {
+          "aperture": true,
+          "structuralMass": true,
+          "strategicView": true
+        },
+        "apertureUpperBuilt": true,
+        "structuralMassBuilt": true,
+        "rawDoorStateChangesLatch": false
+      },
+      "cameraSideOmission": {
+        "active": true,
+        "ruleId": "camera-side-wall-omission",
+        "omitted": [
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 18.5,
+              "z": 27
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 11,
+              "z": 34.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 0,
+            "mid": {
+              "x": 6.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 1,
+            "mid": {
+              "x": 10,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 14.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 5,
+            "mid": {
+              "x": 3.5,
+              "z": 27
+            }
+          }
+        ]
+      },
+      "negativeControl": {
+        "id": "wrong-axis-join",
+        "accepted": false,
+        "reason": "socket-axis-mismatch",
+        "expectedReason": "socket-axis-mismatch",
+        "visibleGap": true
+      },
+      "specimens": [
+        "straight-wall",
+        "t-junction",
+        "one-cell-stair",
+        "wide-stair",
+        "shallow-ramp",
+        "half-height-blocker",
+        "square-support",
+        "round-support"
+      ],
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          34.4697,
+          34.1334,
+          34.4697
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993,
+        "clayZoom": 0.65,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676"
+      }
+    },
+    "sockets": {
+      "view": "sockets",
+      "mountedMeshes": 85,
+      "shadowCasters": 27,
+      "hostSuppressedMeshes": 5,
+      "shellUppers": {
+        "built": 6,
+        "omitted": 5,
+        "total": 11
+      },
+      "wallOmission": {
+        "ruleId": "camera-side-wall-omission",
+        "version": 1,
+        "staged": true,
+        "latched": true,
+        "lastEvent": "door-state",
+        "doorState": "shut",
+        "strategicView": false,
+        "cameraMode": "fixed-production",
+        "active": true,
+        "carveouts": {
+          "aperture": true,
+          "structuralMass": true,
+          "strategicView": true
+        },
+        "apertureUpperBuilt": true,
+        "structuralMassBuilt": true,
+        "rawDoorStateChangesLatch": false
+      },
+      "cameraSideOmission": {
+        "active": true,
+        "ruleId": "camera-side-wall-omission",
+        "omitted": [
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 18.5,
+              "z": 27
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 11,
+              "z": 34.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 0,
+            "mid": {
+              "x": 6.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 1,
+            "mid": {
+              "x": 10,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 14.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 5,
+            "mid": {
+              "x": 3.5,
+              "z": 27
+            }
+          }
+        ]
+      },
+      "negativeControl": {
+        "id": "wrong-axis-join",
+        "accepted": false,
+        "reason": "socket-axis-mismatch",
+        "expectedReason": "socket-axis-mismatch",
+        "visibleGap": true
+      },
+      "specimens": [
+        "straight-wall",
+        "t-junction",
+        "one-cell-stair",
+        "wide-stair",
+        "shallow-ramp",
+        "half-height-blocker",
+        "square-support",
+        "round-support"
+      ],
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          34.4697,
+          34.1334,
+          34.4697
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993,
+        "clayZoom": 0.65,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676"
+      }
+    },
+    "access": {
+      "view": "access",
+      "mountedMeshes": 85,
+      "shadowCasters": 27,
+      "hostSuppressedMeshes": 5,
+      "shellUppers": {
+        "built": 6,
+        "omitted": 5,
+        "total": 11
+      },
+      "wallOmission": {
+        "ruleId": "camera-side-wall-omission",
+        "version": 1,
+        "staged": true,
+        "latched": true,
+        "lastEvent": "door-state",
+        "doorState": "shut",
+        "strategicView": false,
+        "cameraMode": "fixed-production",
+        "active": true,
+        "carveouts": {
+          "aperture": true,
+          "structuralMass": true,
+          "strategicView": true
+        },
+        "apertureUpperBuilt": true,
+        "structuralMassBuilt": true,
+        "rawDoorStateChangesLatch": false
+      },
+      "cameraSideOmission": {
+        "active": true,
+        "ruleId": "camera-side-wall-omission",
+        "omitted": [
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 18.5,
+              "z": 27
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 11,
+              "z": 34.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 0,
+            "mid": {
+              "x": 6.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 1,
+            "mid": {
+              "x": 10,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 14.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 5,
+            "mid": {
+              "x": 3.5,
+              "z": 27
+            }
+          }
+        ]
+      },
+      "negativeControl": {
+        "id": "wrong-axis-join",
+        "accepted": false,
+        "reason": "socket-axis-mismatch",
+        "expectedReason": "socket-axis-mismatch",
+        "visibleGap": true
+      },
+      "specimens": [
+        "straight-wall",
+        "t-junction",
+        "one-cell-stair",
+        "wide-stair",
+        "shallow-ramp",
+        "half-height-blocker",
+        "square-support",
+        "round-support"
+      ],
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          33.6681,
+          33.3396,
+          33.6681
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 118.12576893537619,
+        "clayZoom": 0.65,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1290x1352",
+        "cssPx": "645x676"
+      }
+    },
+    "negative": {
+      "view": "negative",
+      "mountedMeshes": 85,
+      "shadowCasters": 27,
+      "hostSuppressedMeshes": 5,
+      "shellUppers": {
+        "built": 6,
+        "omitted": 5,
+        "total": 11
+      },
+      "wallOmission": {
+        "ruleId": "camera-side-wall-omission",
+        "version": 1,
+        "staged": true,
+        "latched": true,
+        "lastEvent": "door-state",
+        "doorState": "shut",
+        "strategicView": false,
+        "cameraMode": "fixed-production",
+        "active": true,
+        "carveouts": {
+          "aperture": true,
+          "structuralMass": true,
+          "strategicView": true
+        },
+        "apertureUpperBuilt": true,
+        "structuralMassBuilt": true,
+        "rawDoorStateChangesLatch": false
+      },
+      "cameraSideOmission": {
+        "active": true,
+        "ruleId": "camera-side-wall-omission",
+        "omitted": [
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 18.5,
+              "z": 27
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 11,
+              "z": 34.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 0,
+            "mid": {
+              "x": 6.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 1,
+            "mid": {
+              "x": 10,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 14.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 5,
+            "mid": {
+              "x": 3.5,
+              "z": 27
+            }
+          }
+        ]
+      },
+      "negativeControl": {
+        "id": "wrong-axis-join",
+        "accepted": false,
+        "reason": "socket-axis-mismatch",
+        "expectedReason": "socket-axis-mismatch",
+        "visibleGap": true
+      },
+      "specimens": [
+        "straight-wall",
+        "t-junction",
+        "one-cell-stair",
+        "wide-stair",
+        "shallow-ramp",
+        "half-height-blocker",
+        "square-support",
+        "round-support"
+      ],
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          34.4697,
+          34.1334,
+          34.4697
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993,
+        "clayZoom": 0.65,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676"
+      }
+    },
+    "strategic": {
+      "view": "strategic",
+      "mountedMeshes": 90,
+      "shadowCasters": 32,
+      "hostSuppressedMeshes": 5,
+      "shellUppers": {
+        "built": 11,
+        "omitted": 0,
+        "total": 11
+      },
+      "wallOmission": {
+        "ruleId": "camera-side-wall-omission",
+        "version": 1,
+        "staged": true,
+        "latched": true,
+        "lastEvent": "door-state",
+        "doorState": "shut",
+        "strategicView": true,
+        "cameraMode": "top-down-strategic",
+        "active": false,
+        "carveouts": {
+          "aperture": true,
+          "structuralMass": true,
+          "strategicView": true
+        },
+        "apertureUpperBuilt": true,
+        "structuralMassBuilt": true,
+        "rawDoorStateChangesLatch": false
+      },
+      "cameraSideOmission": {
+        "active": true,
+        "ruleId": "camera-side-wall-omission",
+        "omitted": [
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 18.5,
+              "z": 27
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 11,
+              "z": 34.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 0,
+            "mid": {
+              "x": 6.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 1,
+            "mid": {
+              "x": 10,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 14.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 5,
+            "mid": {
+              "x": 3.5,
+              "z": 27
+            }
+          }
+        ]
+      },
+      "negativeControl": {
+        "id": "wrong-axis-join",
+        "accepted": false,
+        "reason": "socket-axis-mismatch",
+        "expectedReason": "socket-axis-mismatch",
+        "visibleGap": true
+      },
+      "specimens": [
+        "straight-wall",
+        "t-junction",
+        "one-cell-stair",
+        "wide-stair",
+        "shallow-ramp",
+        "half-height-blocker",
+        "square-support",
+        "round-support"
+      ],
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          30.7156,
+          30.4159,
+          30.7156
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 113.0284596369415,
+        "clayZoom": 0.65,
+        "clayZoomRange": [
+          0.12,
+          2.5
+        ]
+      },
+      "renderer": {
+        "backingPx": "1414x1352",
+        "cssPx": "707x676"
+      }
+    },
+    "latchSequence": [
+      {
+        "step": "leave-play",
+        "staged": false,
+        "latched": false,
+        "omittedUppers": 0,
+        "builtUppers": 11
+      },
+      {
+        "step": "door-open-while-sealed",
+        "staged": false,
+        "latched": false,
+        "omittedUppers": 0,
+        "builtUppers": 11
+      },
+      {
+        "step": "stage-space",
+        "staged": true,
+        "latched": true,
+        "omittedUppers": 5,
+        "builtUppers": 6
+      },
+      {
+        "step": "door-shut-after-staged",
+        "staged": true,
+        "latched": true,
+        "omittedUppers": 5,
+        "builtUppers": 6
+      },
+      {
+        "step": "door-reopen-staged",
+        "staged": true,
+        "latched": true,
+        "omittedUppers": 5,
+        "builtUppers": 6
+      }
+    ],
+    "narrowLayout": {
+      "window": {
+        "w": 760,
+        "h": 900
+      },
+      "canvasRect": {
+        "x": 170,
+        "y": 44,
+        "w": 340,
+        "h": 856
+      },
+      "panelRect": {
+        "x": 510,
+        "y": 44,
+        "w": 250,
+        "h": 856
+      },
+      "panelFractionOfWindow": 0.313
+    }
+  },
+  "fps": {
+    "daylit": {
+      "frames": 121,
+      "elapsedMs": 2002.6,
+      "fps": 60.4,
+      "frameMsMedian": 16.7,
+      "frameMsP95": 16.8
+    },
+    "torchlit": {
+      "frames": 92,
+      "elapsedMs": 2004.7,
+      "fps": 45.9,
+      "frameMsMedian": 16.7,
+      "frameMsP95": 33.4
+    }
+  },
+  "consoleErrors": [],
+  "consoleWarnings": []
+}

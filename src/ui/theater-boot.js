@@ -6141,6 +6141,12 @@ class MaskedBloomPass extends UnrealBloomPass {
 // multiply weight. samples/rings sized for the no-cash Mac target (Iris Plus 645) — measured in
 // the checkpoint receipt, not assumed.
 const ENV_AO_ENABLED_DEFAULT = true;
+// AO G-buffer resolution as a fraction of DEVICE pixels. Full-res AO at dpr 2 costs ~17 ms/frame
+// on the no-cash Mac target (measured 33 FPS at the review viewport, 2026-07-25) — over budget.
+// An EXACT half scale with the composer's linear upsample is the standard mitigation and keeps
+// registration uniform (the crescent bug was a MISMATCHED size flip-flopping between CSS and
+// device pixels, not clean half-res). Re-measured after this change; see the checkpoint receipt.
+const ENV_AO_RESOLUTION_SCALE = 0.5;
 // Halo control (Adam, 2026-07-25: "the sphere has some kind of weird halo around it"): thickness
 // well under 1 so the thin-object heuristic cannot smear occlusion past a silhouette, and a
 // tighter denoise with much stricter depth/normal edge-stopping (higher phi = harder edge stop)
@@ -6191,7 +6197,7 @@ function envAOEnabled(){
 }
 function makeEnvironmentAOPass(size){
   // Construct at DEVICE pixels for the same registration reason syncPostSuiteResolution documents.
-  const pr = S.renderer && S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1;
+  const pr = (S.renderer && S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1) * ENV_AO_RESOLUTION_SCALE;
   const ao = new EnvironmentAOPass(S.scene, S.camera, Math.round(size.x * pr), Math.round(size.y * pr));
   ao.__bwName = "ao";
   ao.blendIntensity = ENV_AO_BLEND_INTENSITY;
@@ -6286,7 +6292,7 @@ function syncPostSuiteResolution(){
     // size × pixelRatio, so an AO pass sized in CSS units computes occlusion on a half-resolution
     // depth/normal buffer and upsamples it half a texel off the beauty — misregistered crescents
     // on every curved silhouette. The AO G-buffer must match the composer's device-pixel targets.
-    const aoPixelRatio = S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1;
+    const aoPixelRatio = (S.renderer.getPixelRatio ? S.renderer.getPixelRatio() : 1) * ENV_AO_RESOLUTION_SCALE;
     S.postSuite.ao.setSize(Math.round(size.x * aoPixelRatio), Math.round(size.y * aoPixelRatio));
   }
 }
@@ -9282,8 +9288,22 @@ const ITR_FIXTURE_BODY_PARTS = {
     { geo: () => new THREE.CylinderGeometry(0.09, 0.09, Math.max(0.12, el.y * 0.9), 8), pos: [0, el.y * 0.5, 0] },
     { geo: () => new THREE.TorusGeometry(0.08, 0.012, 6, 12), pos: [0, el.y * 0.98, 0], rotX: Math.PI / 2 },
   ],
+  // Checkpoint 3 (2026-07-25, "magic reads as a small violet bulb"): a believable arcane source —
+  // a rock base with a CLUSTER of faceted shards in the canon's triangulated language. The main
+  // shard is the emitter (below); these are its dark companions, so the glow reads as crystal
+  // growing from stone, not a lamp.
   "crystal-faceted": (el) => [
-    { geo: () => new THREE.CylinderGeometry(0.08, 0.11, Math.max(0.05, el.y * 0.4), 6), pos: [0, el.y * 0.2, 0] },
+    { geo: () => new THREE.CylinderGeometry(0.16, 0.22, Math.max(0.07, el.y * 0.3), 7), pos: [0, el.y * 0.12, 0] },
+    { geo: () => new THREE.OctahedronGeometry(0.13), pos: [0.14, el.y * 0.3, 0.05], rotX: 0.35 },
+    { geo: () => new THREE.OctahedronGeometry(0.09), pos: [-0.12, el.y * 0.26, -0.08], rotX: -0.5 },
+  ],
+  // Checkpoint 3 ("lava reads as a red point on the floor"): a molten fissure — low dark rock rim
+  // around a flat emissive melt surface (the emitter, below). Floor-standing, deterministic.
+  "lava-fissure": (el) => [
+    { geo: () => new THREE.BoxGeometry(0.5, 0.08, 0.14), pos: [0, 0.04, 0.3], rotX: 0 },
+    { geo: () => new THREE.BoxGeometry(0.44, 0.09, 0.13), pos: [0.06, 0.045, -0.3] },
+    { geo: () => new THREE.BoxGeometry(0.14, 0.08, 0.42), pos: [0.32, 0.04, 0] },
+    { geo: () => new THREE.BoxGeometry(0.13, 0.07, 0.4), pos: [-0.3, 0.035, 0.04] },
   ],
   "lamp-post": (el) => [
     { geo: () => new THREE.CylinderGeometry(0.03, 0.045, Math.max(0.2, el.y * 0.92), 8), pos: [0, el.y * 0.46, 0] },
@@ -9297,7 +9317,8 @@ const ITR_FIXTURE_EMITTER_GEO = {
   "brazier-low": () => new THREE.ConeGeometry(0.09, 0.22, 7),
   "candle-cluster": () => new THREE.ConeGeometry(0.03, 0.09, 6),
   "lantern-handled": () => new THREE.SphereGeometry(0.06, 7, 6),
-  "crystal-faceted": () => new THREE.OctahedronGeometry(0.16),
+  "crystal-faceted": () => new THREE.OctahedronGeometry(0.3),
+  "lava-fissure": () => new THREE.CylinderGeometry(0.34, 0.38, 0.05, 9),
   "lamp-post": () => new THREE.SphereGeometry(0.09, 8, 6),
 };
 // MeshStandard/PBR materials are out of E0's scope (WALL-VOLUMES-PRACTICALS.md Decisions: "No bloom
@@ -11796,8 +11817,27 @@ function setInteriorBoard(data, renderOpts){
   // voidTintFor through the kit grade" — the fallback branch (a kit with no authored fog.color) now
   // grades voidTintFor(env) instead of using it raw; a kit-authored fog.color is graded too (the SAME
   // profile, so the two branches never diverge in how "final" a color reads).
+  // Checkpoint 3 (2026-07-25, "the same dark-brown void persists through very different recipes"):
+  // when the board carries a light-recipe lock, the void/fog answers to the RECIPE, not only the
+  // realm env key. One derivation, two honest sources: a celestial recipe with a clock takes the
+  // celestial arc's own authored void keyframe (the same voidTint the tabletop channel uses); any
+  // other recipe derives a deep backdrop from its authored ambient colour (the recipe's mood is its
+  // ambient), darkened well below surface values so the void stays a void. Boards without a recipe
+  // lock keep the env-keyed tint unchanged.
+  let recipeVoidNum = null;
+  if(data.lightRecipeLock && data.lightRecipeLock.id){
+    const lockRecipe = LIGHT_TUNABLES.profiles[data.lightRecipeLock.id];
+    const celestialLight = (data.lights || []).find(function(l){ return l && l.clockMin != null && CELESTIAL_PROFILE_SET[l.recipeId]; });
+    if(celestialLight){
+      recipeVoidNum = celestialArcFor(celestialLight.recipeId, celestialLight.clockMin).voidTint;
+    } else if(lockRecipe && lockRecipe.ambient){
+      const ambientColor = new THREE.Color(lightRecipeColorNumber(lockRecipe.ambient.color));
+      recipeVoidNum = ambientColor.multiplyScalar(0.16).getHex();
+    }
+  }
   const fogColorNum = gradeColorLocal(
-    (data.fog && data.fog.color) ? hexStrToNum(data.fog.color) : voidTintFor(env),
+    recipeVoidNum != null ? recipeVoidNum
+      : ((data.fog && data.fog.color) ? hexStrToNum(data.fog.color) : voidTintFor(env)),
     gradeProfile
   );
   const fogColorObj = new THREE.Color(fogColorNum);

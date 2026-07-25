@@ -261,6 +261,90 @@ Continue only when:
 - the fixed camera reads the result without generated texture detail;
 - the polygon count and shadow cost fit the browser target.
 
+#### Focused cross-material calibration amendment
+
+The wagon round trip established that a valuable fused Meshy donor can still be salvaged by
+connected-island analysis, with simple standardized parts replaced locally. Before preparing the
+full production handoff, test this smaller material-diverse set:
+
+| Order | Model | Primary material/process risk | Question |
+|---:|---|---|---|
+| complete | `M019-A` wagon chassis | structural timber + iron + repeated mechanism | Can the valuable chassis survive while dirty wheels are replaced procedurally? **Passed.** |
+| 1 | `M001-A` low-cover boulder cluster | broad geological stone planes | Does Meshy produce rock silhouettes materially better and faster than `GP-LP-T09/T10` procedural rocks? |
+| 2 | `M035-A` ridge tent | thin cloth over a timber frame | Can cloth thickness, ridge silhouette, open entrance, and pole separation survive without becoming a smooth blob? |
+| 3 | `M059-A` forge hearth | masonry mass + iron fittings + empty sockets | Can mixed rigid materials remain legible without buying dense brick, coal, tool, or fastener noise? |
+| 4 | `M068-A` wall flame sconce | thin forged metal + runtime-owned flame/light | Can a small open metal fixture survive at game scale while flame, emission, and illumination remain engine-owned? |
+
+This focused set replaces the requirement to finish all eight original calibration references
+before writing the production handoff. `M005-A`, `M025-A`, and `M047-A` remain high-priority early
+production models, but they no longer block documentation if the five objects above establish a
+trustworthy recipe.
+
+The focused recipe passes when:
+
+- at least four of the five objects are accepted, including `M019-A`;
+- at least one natural mass and one thin/open-frame object pass;
+- every failure produces a family-specific routing decision rather than an improvised rerender loop;
+- cleanup is faster than native reconstruction for every accepted donor;
+- no accepted result depends on generated texture detail;
+- repeated or standardized parts are identified for procedural geometry, extrusion, or instancing;
+- the reference-image prompt reliably produces one isolated object in one view rather than a
+  model sheet, turnaround, scene, or part catalog.
+
+Stop paid generation for a family when two attempts fail for the same structural reason. Return
+its remaining slots to the highest-value successful families or to native construction.
+
+#### Required production-handoff document after calibration
+
+Once the focused recipe passes, produce one joint handoff with two explicit lanes.
+
+**Adam / Meshy lane**
+
+Every production row must provide:
+
+```text
+model ID and variant
+plain-English asset name
+reference-image path
+exact Meshy prompt, when the selected mode accepts one
+Meshy mode
+topology mode and target polygon count
+texture and image-enhancement settings
+exact untouched-download filename
+expected procedural replacements
+intake and acceptance checks
+```
+
+**Terra / reference-image lane**
+
+Every production row must provide:
+
+```text
+model ID and variant
+definitive subject to generate
+what geometry the donor must own
+what the engine or local tools own instead
+canonical style block
+composition and scale contract
+material-language block
+single-isolated-render constraints
+avoid list
+exact reference-image filename
+```
+
+The Terra lane must quote one canonical style block and one canonical single-render block
+verbatim. The single-render block must explicitly require:
+
+```text
+exactly one isolated object or intentionally fused cluster
+exactly one orthographic front-three-quarter view
+no model sheet, turnaround, alternate angle, inset, underside, duplicate, exploded layout,
+part catalog, neighboring prop, floor, horizon, label, dimension, arrow, border, or watermark
+```
+
+One row creates one reference image. Variants never share a canvas. A corrective render changes
+one identified failure only; it does not silently redesign the family.
+
 ### Gate 3 — complete A models
 
 Generate the canonical A model for all 75 families. This creates broad usable coverage before

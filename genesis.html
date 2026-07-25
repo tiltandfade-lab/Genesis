@@ -1541,6 +1541,13 @@
      classic-script world below. Panel mount (wiring this into the combat panel) is a later integration
      pass, not this unit — T1 shipped the module + a standalone preview page (dev/theater-preview.html)
      as its visual gate; T3 extends that same preview page with a verb demo row. -->
+<!-- THEATER SPLIT B1 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): the Clay Room
+     workbench (?clayroom=1), extracted from theater-boot.js — imported by theater-boot.js via a
+     plain ES `import`, and ALSO given its own <script type="module"> tag here so check-manifest.py's
+     module-tag-pairing check is satisfied; browsers dedupe an ES module by URL, so this is a
+     harmless no-op second entry point, same convention every sibling module tag documents. Placed
+     BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-clay-room.js"></script>
 <script type="module" src="src/ui/theater-boot.js"></script>
 <!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
      shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same

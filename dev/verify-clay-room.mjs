@@ -123,6 +123,19 @@ import { spawnSync } from "node:child_process";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(ROOT, p), "utf-8");
 
+// THEATER SPLIT B1 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): the CLAY-ROOM ADDITIONS
+// region moved VERBATIM — markers included — from src/ui/theater-boot.js into
+// src/ui/theater-clay-room.js (root wiring stays in theater-boot.js: the renderTheaterFrame poll,
+// the setInteriorBoard tail hook, the end-of-body boot call, the facade seams). Source-shape checks
+// below read this COMPOSITE so region-scoped checks (anchored on the travelling markers) and
+// root-wiring checks (anchored on root-only functions) both keep their exact jobs across the split;
+// the boundary comment keeps the two files' contents distinguishable in any sliced output.
+function readTheaterSources(){
+  return read("src/ui/theater-boot.js")
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-clay-room.js follows] */\n"
+    + read("src/ui/theater-clay-room.js");
+}
+
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");
 const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 
@@ -319,7 +332,7 @@ const check = (name, cond, detail = "") =>
 // 7. renderer-owns-zero-mechanics grep-gate (theater-boot.js additions region)
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
   const endMark = "CLAY-ROOM ADDITIONS END */";
   const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
@@ -345,7 +358,7 @@ const check = (name, cond, detail = "") =>
   check("8a. src/engine/clay-room.js contains no fetch(/XMLHttpRequest/WebSocket",
     !telemetryRe.test(clayRoomSrc));
 
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
   const endMark = "CLAY-ROOM ADDITIONS END */";
   const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
@@ -376,7 +389,7 @@ const check = (name, cond, detail = "") =>
 //     — the live cold-load (genesis.html?clayroom=1, no game session) is the actual browser gate.
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
   const endMark = "CLAY-ROOM ADDITIONS END */";
   const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
@@ -401,8 +414,13 @@ const check = (name, cond, detail = "") =>
     // buried back inside some other function (e.g. clayRoomMaybeAutoMount, which only ever runs from
     // renderTheaterFrame's per-frame poll and would silently reproduce the cold-boot defect this
     // addendum exists to fix).
-    check("10c. clayRoomBootSelfMount() is invoked as a bare column-0 statement (module top-level, not only from renderTheaterFrame's poll)",
-      /^clayRoomBootSelfMount\(\);\s*$/m.test(region));
+    // THEATER SPLIT B1: the CALL moved to theater-boot.js's own end-of-body — the clay module
+    // evaluates BEFORE the root wires ctx/S (a top-level call in the module would null-deref), and
+    // the root's end-of-body is the same "after everything is declared" timing the region's old
+    // end-of-file position provided. The invariant is unchanged: a bare column-0 boot-time call,
+    // not a call buried in renderTheaterFrame's poll — now asserted against the ROOT source.
+    check("10c. clayRoomBootSelfMount() is invoked as a bare column-0 statement (root end-of-body, not only from renderTheaterFrame's poll)",
+      /^clayRoomBootSelfMount\(\);\s*$/m.test(read("src/ui/theater-boot.js")));
   }
 }
 
@@ -434,7 +452,7 @@ const check = (name, cond, detail = "") =>
 // 13. ⊗ D12a seam-grid grep-gate (theater-boot.js additions region) — source-text only
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
   const endMark = "CLAY-ROOM ADDITIONS END */";
   const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
@@ -507,7 +525,7 @@ const check = (name, cond, detail = "") =>
 //     note for the red-first proof this rewrite is grounded in, not just asserted).
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
   const endMark = "CLAY-ROOM ADDITIONS END */";
   const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
@@ -619,7 +637,7 @@ const check = (name, cond, detail = "") =>
     badKinds.length === 0, "unmapped: " + JSON.stringify(badKinds.map((k) => [k, win.clayDiagnosticRoleForKind(k)])));
 
   {
-    const bootSrc = read("src/ui/theater-boot.js");
+    const bootSrc = readTheaterSources();
     const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
     const endMark = "CLAY-ROOM ADDITIONS END */";
     const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
@@ -763,7 +781,7 @@ const check = (name, cond, detail = "") =>
 //     not this harness (this file's own header note, checks 7/8/13's own precedent for that split).
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
   const endMark = "CLAY-ROOM ADDITIONS END */";
   const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
@@ -809,7 +827,7 @@ const check = (name, cond, detail = "") =>
 //     OUTSIDE mountClayRoom and reads ITR_ROOM_SHELL fresh each time.
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const beginMark = "/* CLAY-ROOM ADDITIONS BEGIN";
   const endMark = "CLAY-ROOM ADDITIONS END */";
   const bi = bootSrc.indexOf(beginMark), ei = bootSrc.indexOf(endMark);
@@ -821,15 +839,19 @@ const check = (name, cond, detail = "") =>
 
     const mountMatch = region.match(/function\s+mountClayRoom\s*\(\)\s*\{([\s\S]*?)\n\}/);
     const mountBody = mountMatch ? mountMatch[1] : "";
+    // THEATER SPLIT B1: ITR_ROOM_SHELL stays a ROOT-owned live flag; the clay module reads/writes
+    // it through the clayCtxGet/SetRoomShell accessors (an ES import binding would be read-only and
+    // a mirror would go stale under the facade's setRoomShell). Save/override/restore discipline
+    // unchanged — the pins below follow the accessor spelling.
     check("17a. mountClayRoom() saves the prior ITR_ROOM_SHELL value before overriding it",
-      /CLAY_ROOM_PRIOR_ROOM_SHELL\s*=\s*ITR_ROOM_SHELL/.test(mountBody), mountBody);
+      /CLAY_ROOM_PRIOR_ROOM_SHELL\s*=\s*clayCtxGetRoomShell\(\)/.test(mountBody), mountBody);
     // REWRITTEN for CL-R0: the literal `ITR_ROOM_SHELL = false` became a flag read
     // (clayRoomShellOverrideOn()) so the "does the fixture still read as clay through the PRODUCTION
     // room-shell construction path?" A/B is a reproducible ?clayshell=1 capture instead of a source
     // edit. The invariant this check protects is unchanged and is now asserted in TWO parts: the
     // override is still applied before the first setInteriorBoard projection.
     check("17b. mountClayRoom() sets ITR_ROOM_SHELL from the flag reader before setInteriorBoard runs",
-      /ITR_ROOM_SHELL\s*=\s*clayRoomShellOverrideOn\(\);[\s\S]*setInteriorBoard\s*\(\s*clayRoomMovementBoardFromState/.test(mountBody), mountBody);
+      /clayCtxSetRoomShell\(clayRoomShellOverrideOn\(\)\);[\s\S]*setInteriorBoard\s*\(\s*clayRoomMovementBoardFromState/.test(mountBody), mountBody);
     const shellFnBody = (region.match(/function\s+clayRoomShellOverrideOn\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
     // 17b2 REWRITTEN for CL-R3a (red-first: the default flip turned the old assertion red before this
     // check changed). Under the 2026-07-23 wall-omission ruling the clay fixture adopts the PRODUCTION
@@ -844,9 +866,9 @@ const check = (name, cond, detail = "") =>
     const unmountMatch = region.match(/function\s+clayRoomUnmount\s*\(\)\s*\{([\s\S]*?)\n\}/);
     const unmountBody = unmountMatch ? unmountMatch[1] : "";
     check("17c. clayRoomUnmount() restores ITR_ROOM_SHELL from the saved prior value (never immediately after setInteriorBoard)",
-      /ITR_ROOM_SHELL\s*=\s*CLAY_ROOM_PRIOR_ROOM_SHELL/.test(unmountBody), unmountBody);
+      /clayCtxSetRoomShell\(CLAY_ROOM_PRIOR_ROOM_SHELL\)/.test(unmountBody), unmountBody);
     check("17d. the restore is NOT present inside mountClayRoom itself (would race the async texture-settle replay)",
-      !/ITR_ROOM_SHELL\s*=\s*CLAY_ROOM_PRIOR_ROOM_SHELL/.test(mountBody), mountBody);
+      !/clayCtxSetRoomShell\(CLAY_ROOM_PRIOR_ROOM_SHELL\)/.test(mountBody), mountBody);
   }
 }
 
@@ -865,7 +887,7 @@ const check = (name, cond, detail = "") =>
 // dev/clay-captures/cl-r1-sprite-ab/. Teeth: delete the tagging line and 19a goes red.
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const fn = (bootSrc.match(/function\s+spriteTextureFor\s*\(entry\)\s*\{[\s\S]*?\n\}/) || [""])[0];
   check("19a. spriteTextureFor() tags the loaded PNG with THREE.SRGBColorSpace",
     /tex\.colorSpace\s*=\s*THREE\.SRGBColorSpace/.test(fn),
@@ -894,7 +916,7 @@ const check = (name, cond, detail = "") =>
 // THREE/DOM-free); the visual proof is dev/clay-captures/cl-r0/shell-ab-04-clean-no-overlay.png.
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const fn = (bootSrc.match(/function\s+clayRoomApplyDiagnosticSurfaces\s*\(\)\s*\{[\s\S]*?\n\}/) || [""])[0];
   check("20a. the diagnostic route checks S.occlusionFadeState for a fade entry referencing the old material",
     /S\.occlusionFadeState/.test(fn) && /e\.materials\.indexOf\(priorMat\)/.test(fn), fn.slice(0,0));
@@ -915,7 +937,7 @@ const check = (name, cond, detail = "") =>
 // capture receipt's own wallOmission block (dev/clay-captures/cl-r3a/).
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
 
   // The decision derives from the SAME static geometry test the fade used (no second authority).
   check("21a. the omission decision reads wallUpperCameraSideBlockingSet's output (one geometry authority)",
@@ -1069,7 +1091,7 @@ const check = (name, cond, detail = "") =>
     check("25a. doorAxes edge signs (chain executed)", false, e.stack || String(e));
   }
 
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   check("25b. itrDoorMountFor computes the offset from edge signs + shell mode + GS.doorMountTune",
     /function\s+itrDoorMountFor\s*\(axisInfo\)/.test(bootSrc) &&
     /ITR_DOOR_MOUNT_ALONG_SHELL/.test(bootSrc) &&
@@ -1103,7 +1125,7 @@ const check = (name, cond, detail = "") =>
 // pitch −35.000 held throughout, pan surviving the rebuild, reset exact).
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const applyFn = (bootSrc.match(/function\s+clayRoomApplyCamPose\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
   // bearing/pitch preservation BY CONSTRUCTION: position and target take the SAME ground offset, and
   // zoom is a scalar along the existing ray — no rotation verb exists anywhere in the pose math.
@@ -1171,7 +1193,7 @@ const check = (name, cond, detail = "") =>
   } catch(e) {
     check("27. kindergarten-door checks (chain executed)", false, e.stack || String(e));
   }
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   check("27f. the leaf is the 36\"×80\" prototype rectangle (0.6 u × 4/3 u)",
     /ITR_DOOR_WIDTH\s*=\s*0\.6;/.test(bootSrc) && /ITR_DOOR_HEIGHT\s*=\s*4\s*\/\s*3;/.test(bootSrc));
   check("27g. production shell suppresses fallback prisms and derives the socket from authoritative doorAxes",
@@ -1186,7 +1208,7 @@ const check = (name, cond, detail = "") =>
 // alive after the camera fit is stabilized. Browser proof supplies the visual/angle evidence.
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const settleFn = (bootSrc.match(/function\s+clayRoomSettleCameraPoseTween\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
   check("28a. camera settling filters by isCameraPoseTween and retains every non-camera tween",
     /isCameraPoseTween/.test(settleFn) && /else\s+keep\.push\(tw\)/.test(settleFn) &&
@@ -1210,7 +1232,7 @@ const check = (name, cond, detail = "") =>
 // 29. CL-R1 PANEL + LIGHTING LIFECYCLE REGRESSIONS (2026-07-24).
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   check("29a. panel header is an explicit drag handle and button targets are excluded from drag start",
     /clay-room-panel-drag-handle/.test(bootSrc)
     && /pointerdown/.test(bootSrc)
@@ -1254,7 +1276,7 @@ const check = (name, cond, detail = "") =>
 // crate is one human-scale six-sided box with explicit side/top face mapping.
 // ============================================================================
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const interiorSrc = read("src/ui/theater-interior.js");
   const shellSrc = read("src/ui/theater-room-mesh.js");
   check("30a. authored/default wall height is 10 ft (2 world units) across compiler + shell + renderer fallbacks",
@@ -1375,7 +1397,7 @@ const check = (name, cond, detail = "") =>
     check("31a-f. C1B production movement chain executes without throw", false, e.stack || String(e));
   }
 
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   check("31g. renderer projects kernel range bands with distinct fill and hollow-diamond shapes",
     /ranges\.moveCellIds/.test(bootSrc)
     && /new\s+THREE\.BoxGeometry\(0\.86/.test(bootSrc)
@@ -1437,7 +1459,7 @@ const check = (name, cond, detail = "") =>
   } catch(e) {
     check("32a-d. CL-F02 pure fixture checks execute without throw", false, e.stack || String(e));
   }
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   check("32e. the bench mounts shadow-receiving primitives into the existing production interiorGroup",
     /function\s+clayRoomMountLightingBench/.test(bootSrc)
     && /S\.interiorGroup\.add\(group\)/.test(bootSrc)
@@ -1543,7 +1565,7 @@ const check = (name, cond, detail = "") =>
   } catch(e) {
     check("33a-f. CL-F03 pure fixture checks execute without throw", false, e.stack || String(e));
   }
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const editorSrc = read("dev/sprite-review.html");
   const editorServerSrc = read("dev/sprite-review.py");
   check("33g. CL-F03 projects all cast members through data.pieces -> the production interior sprite builder",
@@ -1710,7 +1732,7 @@ const check = (name, cond, detail = "") =>
   } catch(e) {
     check("34a-j. CL-F01 pure fixture checks execute without throw", false, e.stack || String(e));
   }
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   check("34k. the bench consumes compileRoomShell in the production Theater scene",
     /function\s+clayRoomMountStructureBench/.test(bootSrc)
     && /const\s+shell\s*=\s*compileRoomShell\(cells/.test(bootSrc)
@@ -1794,7 +1816,7 @@ const check = (name, cond, detail = "") =>
 // A/B diagnostic (never a taste slider), and a prepass exclusion rule that keeps sprite cards and
 // screen-space helper quads from writing occluder rectangles into the AO G-buffer.
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   check("35a. GTAOPass is vendored from the pinned three release and imported through the addons importmap",
     /import \{ GTAOPass \} from "three\/addons\/postprocessing\/GTAOPass\.js"/.test(bootSrc)
     && existsSync(join(ROOT, "vendor/three/addons/postprocessing/GTAOPass.js"))
@@ -1860,7 +1882,7 @@ const check = (name, cond, detail = "") =>
 
 // 36. CHECKPOINT 2 — warm/cool overlap + readout truth (visual-correction assignment).
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const engineSrc = read("src/engine/clay-room.js");
   const recipesSrc = read("src/engine/light-recipes.js");
   const compilerSrc = read("build/compile-light-locks.py");
@@ -1898,7 +1920,7 @@ const check = (name, cond, detail = "") =>
 
 // 37. CHECKPOINT 4 — the honest construction workbench (visual-correction assignment).
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  const bootSrc = readTheaterSources();
   const engineSrc = read("src/engine/clay-room.js");
   check("37a. the ramp renders hard per-face normals (non-indexed), never averaged pillow shading",
     /const hardFaced = geometry\.toNonIndexed\(\);/.test(bootSrc)

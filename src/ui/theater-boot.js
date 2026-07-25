@@ -5497,7 +5497,46 @@ function createTheaterState(){
     // has selected for editing (independent of S.lightProfileKey, the profile actually RENDERED).
     lightLabMounted: false, lightLabEls: null, lightLabReadoutTimer: null,
     lightLabProfileKey: null, lightLabLightIndex: 0,
-    lightLabUndo: [], lightLabRedo: [], lightLabDirty: false
+    lightLabUndo: [], lightLabRedo: [], lightLabDirty: false,
+    // ---- split step 0 (2026-07-25): every S field the file assigns is DECLARED here so the
+    // state container reads as a contract. All were previously created by first assignment;
+    // null is behavior-identical to undefined for every reader in this file (no strict-null/
+    // hasOwnProperty/enumeration reads — audited). Grouped by owning subsystem for the split.
+    // split step 0 — cameras / view / camera-facing shot state
+    cameraLookTarget: null, clayCamFit: null, clayCamOffset: null, clayCamZoom: null,
+    f1PreCombatCamFit: null, lastComposedShot: null, lastComposedShotAttempt: null, lastComposedShotError: null,
+    lastShotPlan: null, orthoCamera: null, perspCamera: null, viewSize: null,
+    // split step 0 — occlusion / fade
+    __occlusionFadeBoardRef: null, occlusionClassifyBearingDeg: null, occlusionFadeState: null,
+    // split step 0 — units / acting / tween-adjacent groups
+    actingGlowBaseMeshes: null, actingIds: null, actingRingMeshes: null, despawnGroup: null,
+    effectTexCache: null, floaterEl: null, knownUnitIds: null, transitionEl: null,
+    // split step 0 — lighting / atmosphere extras
+    celestialVoidTint: null, moteGroup: null, moteRaf: null,
+    // split step 0 — interior build reports / counts / lists
+    doorMountReport: null, interiorDecalCount: null, interiorDoorStateBySourceRef: null, interiorDressingCount: null,
+    interiorDressingWorldPositions: null, interiorFloorTopMap: null, interiorFurnitureCount: null, interiorGroup: null,
+    interiorInteractablesCount: null, interiorInteractablesWorldPositions: null, interiorLastDoorGhostList: null, interiorLastDoorList: null,
+    interiorLastFloorList: null, interiorLastKitShellFloors: null, interiorLastKitShellWalls: null, interiorLastPillarGhostList: null,
+    interiorLastPillarList: null, interiorLastPortalList: null, interiorLastRoomShell: null, interiorLastWallGhostList: null,
+    interiorLastWallList: null, interiorLightConeCount: null, interiorLightCount: null, interiorLightGlowCount: null,
+    interiorMeshCount: null, interiorPiecesRequested: null, interiorPiecesResolved: null, interiorPiecesWorldPositions: null,
+    interiorShadowCasterCount: null, interiorVariant: null, interiorWallPropsCount: null, interiorWallPropsWorldPositions: null,
+    wallOmissionReport: null,
+    // split step 0 — clay room (the private clayRoom*/clay* namespace)
+    clayGridMesh: null, clayRoomCatalogCollapsed: null, clayRoomCompiled: null, clayRoomDiagnosticActive: null,
+    clayRoomEnvAOSyncButton: null, clayRoomFixtureId: null, clayRoomHost: null, clayRoomLightOverlayGroup: null,
+    clayRoomLightOverlayModes: null, clayRoomLightReadoutTimer: null, clayRoomLightRecipeId: null, clayRoomLightingBaseline: null,
+    clayRoomLightingBenchGroup: null, clayRoomLightingMatrixArtifact: null, clayRoomLightingMatrixOverlay: null, clayRoomLightingProbe: null,
+    clayRoomLightingProbeToken: null, clayRoomMatrixCaptureInProgress: null, clayRoomMatrixStatusEl: null, clayRoomMounted: null,
+    clayRoomMovementOverlayGroup: null, clayRoomMovementOverlaySummary: null, clayRoomMovementPickMode: null, clayRoomMovementPreviewCell: null,
+    clayRoomOverlayEl: null, clayRoomPanelDragCleanup: null, clayRoomPanelResizeHandler: null, clayRoomPixelMetricsCache: null,
+    clayRoomPreviewSeed: null, clayRoomProvenanceRoots: null, clayRoomRecord: null, clayRoomRefreshFixtureControls: null,
+    clayRoomRefreshLightCatalog: null, clayRoomRefreshLights: null, clayRoomRefreshSprites: null, clayRoomRefreshStructure: null,
+    clayRoomRenderedSpriteCanvas: null, clayRoomSelectedId: null, clayRoomSelectedSpriteSlug: null, clayRoomSelectedSpriteView: null,
+    clayRoomSelectionHelper: null, clayRoomSelectionProbe: null, clayRoomShowTab: null, clayRoomSourceSprite: null,
+    clayRoomSpriteBenchGroup: null, clayRoomSpriteScaleMode: null, clayRoomStructureBenchGroup: null, clayRoomStructureReport: null,
+    clayRoomStructureStageLatch: null, clayRoomStructureView: null, clayRoomWorkbenchChrome: null, clayRoomWorkbenchSelect: null,
   };
 }
 

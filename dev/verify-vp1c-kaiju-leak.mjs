@@ -223,7 +223,9 @@ async function runRenderCheck() {
 async function runMutationCheck() {
   group("4 — mutation: stubbing the two new clearGroup calls off reds check 1 again");
   const src = read("src/ui/theater-boot.js");
-  if (!/function setInteriorBoard\(data\)\{[\s\S]*?clearGroup\(S\.unitGroup\);[\s\S]*?clearGroup\(S\.shadowGroup\);/.test(src)) {
+  // signature updated 2026-07-25 (theater-split B0): the clay lane grew setInteriorBoard a second
+  // renderOpts param; the check's job — BOTH clearGroup calls live inside the function — is unchanged.
+  if (!/function setInteriorBoard\(data(?:, renderOpts)?\)\{[\s\S]*?clearGroup\(S\.unitGroup\);[\s\S]*?clearGroup\(S\.shadowGroup\);/.test(src)) {
     fail++;
     console.error("  FAIL: setInteriorBoard's source no longer contains the two clearGroup(S.unitGroup)/clearGroup(S.shadowGroup) lines this fix adds — mutation check can't run against a source that's already missing the fix");
     return;

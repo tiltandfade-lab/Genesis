@@ -56,7 +56,16 @@ import { execSync } from "node:child_process";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(ROOT, p), "utf-8");
-const bootSrc = read("src/ui/theater-boot.js");
+// THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): interiorBuildLights and its
+// whole E0 fixture family (including the wallFixtureFadeTargets append block this file is about) moved
+// VERBATIM into src/ui/theater-practicals.js; the setInteriorBoard consumer of those fade targets and
+// the four mutable practical gates stayed in src/ui/theater-boot.js. Reading the COMPOSITE keeps every
+// extraction below pulling the REAL source of its own symbol — same extractions, same jobs, none relaxed.
+const bootSrc = read("src/ui/theater-boot.js")
+  + "\n/* [verify-e0-1 composite boundary — src/ui/theater-lighting.js follows] */\n"
+  + read("src/ui/theater-lighting.js")
+  + "\n/* [verify-e0-1 composite boundary — src/ui/theater-practicals.js follows] */\n"
+  + read("src/ui/theater-practicals.js");
 const BASE_COMMIT = "d316abf8";
 
 let pass = 0, fail = 0;
@@ -248,6 +257,15 @@ if (fnsOk && constsOk && coneEnabledLine && brightSuppressLine && glowDiagLine &
   const src = "const THREE = arguments[0]; const document = arguments[1];\n"
     + "let INTERIOR_CONE_TEXTURE = null; let INTERIOR_GLOW_TEXTURE = null; let ITR_FIXTURE_BODY_MATERIAL_CACHE = null;\n"
     + coneEnabledLine + "\n" + brightSuppressLine + "\n" + glowDiagLine + "\n"
+    // THEATER SPLIT B5 (2026-07-25): interiorBuildLights now lives in src/ui/theater-practicals.js and
+    // reads the three root-owned gate `let`s through ctx accessors (an import binding is read-only; a
+    // copied mirror would go stale the moment a window.Theater seam flips one). Defining those accessors
+    // over THIS sandbox's own pinned `let`s — the exact three lines extracted from theater-boot.js just
+    // above — reproduces precisely what theater-boot.js supplies at runtime, so setConeEnabled below
+    // still drives the real function. Same shim as B4's dev/verify-agx-tonecurve.mjs.
+    + "function practicalsCtxLightConeEnabled(){ return ITR_LIGHT_CONE_ENABLED; }\n"
+    + "function practicalsCtxBrightSuppressPracticals(){ return ITR_BRIGHT_SUPPRESS_PRACTICALS; }\n"
+    + "function practicalsCtxGlowDiscDiagnostic(){ return ITR_GLOW_DISC_DIAGNOSTIC; }\n"
     + constLines.join("\n") + "\n" + partsBlock + "\n" + emitterGeoBlock + "\n"
     // LL-1: interiorBuildLights reads LIGHT_TUNABLES.lightRenderGain; ITR_LIGHT_RENDER_GAIN is already in
     // constLines above, so skip it here (the prelude reuses that same declaration — no double-declare).

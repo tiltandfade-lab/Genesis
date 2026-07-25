@@ -38,7 +38,14 @@ const check = (name, cond, detail = "") =>
 
 const Figures = await import(FIGURES_URL);
 const { WHOLE_OBJECT_REGISTRY, loadWholeObjectBuilders } = Figures;
-const bootSrc = read("src/ui/theater-boot.js");
+// THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): LIGHT_PROFILES and
+// applyLightProfile moved VERBATIM into src/ui/theater-lighting.js, while mountLightProp (the Unit B
+// anchor — it reads the whole-object registry and the WHOLE_OBJECT_ENABLED gate) and its setBoard call
+// site stayed in src/ui/theater-boot.js. Reading the COMPOSITE keeps every source-shape check below
+// anchored on the REAL source of its own symbol — same regexes, same jobs, none relaxed, none dropped.
+const bootSrc = read("src/ui/theater-boot.js")
+  + "\n/* [verify-theater-light-props composite boundary — src/ui/theater-lighting.js follows] */\n"
+  + read("src/ui/theater-lighting.js");
 const lightLock = JSON.parse(read("data/light-profile-locks.json"));
 
 // ============================================================================

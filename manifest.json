@@ -2542,6 +2542,87 @@
       "desc": "THEATER SPLIT B4 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the three pure scene-graph disposal helpers, extracted VERBATIM from theater-boot.js. disposeMeshMaybeShared carries the P1' §3-D7 rule (skip dispose() for a geometry/material tagged userData.shared, because a cached whole-object BufferGeometry is reused by every instance of the same registry key); disposeGroupChild applies it to one child, attached or already DETACHED (BEAUTY-WAVE-4 MF-2's despawn-grace onLifted path); clearGroup pops and disposes a whole group's children. Pure by census — no THREE import, no theater state S, no root symbol — so this module has NO init/ctx function and NO SyncState, which is why nothing here can go stale or be wired wrong. NOT the end-of-life authority: disposeAuxCaches and retire STAY in theater-boot.js (the root's one true end-of-life point, and dev/verify-theater-verbs.mjs text-extracts both from the root's own source). Every root call site reaches these through a plain `import`, unchanged."
     },
     {
+      "id": "ui.theater-lighting",
+      "path": "src/ui/theater-lighting.js",
+      "type": "module",
+      "owns": [
+        "*lightingInit",
+        "*lightingSyncState",
+        "*voidTintFor",
+        "*LIGHT_PROFILES",
+        "*LIGHT_DEFAULT_PROFILE",
+        "*lightProfileFor",
+        "*applyLightProfile",
+        "*TABLETOP_EXTERIOR_LOOK",
+        "*voidTintForTabletop",
+        "*applyTabletopExteriorLook",
+        "*CELESTIAL_ARC",
+        "*CELESTIAL_PROFILE_SET",
+        "*CELESTIAL_MIN_KEY_HEIGHT",
+        "*celestialArcFor",
+        "*applyCelestialArc",
+        "*applyTabletopShadowCasters",
+        "*mountInteriorCameraKey",
+        "*mountSpriteCameraFill",
+        "*updateSpriteCameraFill",
+        "*INTERIOR_LIGHT_FLICKER_AMPLITUDE",
+        "*lightFlickerApplySample",
+        "*lightFlickerStep",
+        "*startLightFlicker",
+        "*stopLightFlicker"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B5 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the BOARD LIGHTING family, extracted VERBATIM from theater-boot.js: LIGHT_PROFILES (the compiled-lock projection) + LIGHT_DEFAULT_PROFILE + lightProfileFor + applyLightProfile (the one shared ambient/point rebuild both the tabletop and interior channels funnel through); the tabletop-only post-passes that refine what it just built (ENV-1's TABLETOP_EXTERIOR_LOOK/voidTintForTabletop/applyTabletopExteriorLook, ENV-1c's CELESTIAL_ARC + the whole celestial* family, ENV-1B's applyTabletopShadowCasters); the env void tint (ENV_VOID_TINT/voidTintFor); the two interior camera-side lights (BW2-4b's mountInteriorCameraKey, CL-R2's mountSpriteCameraFill/updateSpriteCameraFill); and the PRACTICAL FLICKER SCHEDULER — the lightFlicker* pure math plus startLightFlicker's own requestAnimationFrame loop and stopLightFlicker's cancel. That loop moved WHOLE AND ALONE: it is still a SEPARATE scheduler from the dirty-frame loop, the verb tween loop and ui.theater-motes' drift loop (the brief's protected scheduler-separation contract — nothing was unified). Root->leaf ctx law: never imports theater-boot.js; capabilities arrive via lightingInit(ctx) at the root's end-of-body, and the live state record is re-synced via lightingSyncState(S) at both `S = createTheaterState()` sites. ITR_CAMERA_KEY_CASTS_SHADOW (a mutable root `let` its window.Theater seam flips live) stays in theater-boot.js behind a ctx accessor — the file's ONE non-verbatim production line. LIGHT_TUNABLES and its whole seed set (STAGE_AMBIENT_FLOOR, GRADE_*, BLOOM_*, ITR_*) also stay in the root per B2's law and dev/verify-light-lab.mjs's text scrape."
+    },
+    {
+      "id": "ui.theater-practicals",
+      "path": "src/ui/theater-practicals.js",
+      "type": "module",
+      "owns": [
+        "*practicalsInit",
+        "*interiorBuildLights",
+        "*interiorBuildFixtureGroup",
+        "*interiorBuildGlowDisc",
+        "*interiorBuildLightCard",
+        "*interiorBuildLightEmitterNub",
+        "*interiorBuildLightCone",
+        "*interiorAssignShadowCasters",
+        "*ITR_LIGHT_DISTANCE_CAP",
+        "*INTERIOR_SHADOW_CASTER_CAP",
+        "*INTERIOR_SHADOW_MAP_SIZE"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-lighting"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B5 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the INTERIOR PRACTICAL-FIXTURE family, extracted VERBATIM from theater-boot.js: interiorBuildLights (the one funnel that turns theater-interior.js's plain data.lights entries into real THREE objects), the U3 shadow-caster budget (INTERIOR_SHADOW_CASTER_CAP/INTERIOR_SHADOW_MAP_SIZE/interiorAssignShadowCasters), the E0 physical-fixture builders (ITR_FIXTURE_* + interiorFixtureBodyMaterial/interiorFixtureEmitterMaterial/interiorBuildFixtureGroup), the placement resolvers (interiorEnvLightHalfExtent/interiorNearestWallMountSlot/interiorResolveFixturePlacement) and the four optional visible-source builders (glow disc, light card, P-1 emitter nub, BW3-4 light cone) with their own authored consts — ITR_LIGHT_DISTANCE_CAP travelled with them. Censused to never touch the theater state record S, so it has practicalsInit(ctx) but NO SyncState, and it owns no scheduler: the flicker TARGETS it collects are returned as plain data to the loop in ui.theater-lighting. Root->leaf ctx law (never imports theater-boot.js) PLUS a one-way leaf->leaf import of celestialArcFor/CELESTIAL_PROFILE_SET/CELESTIAL_MIN_KEY_HEIGHT/INTERIOR_LIGHT_FLICKER_AMPLITUDE from ui.theater-lighting (censused acyclic — that module reads nothing here), which is why its <script type=\"module\"> tag must follow theater-lighting.js's. The four mutable practical gates (ITR_BRIGHT_SUPPRESS_PRACTICALS, ITR_GLOW_DISC_DIAGNOSTIC, ITR_LIGHT_CONE_ENABLED, ITR_LIGHT_EMITTER_NUB_ENABLED) stay root-owned behind their window.Theater seams; three arrive through ctx accessors (this file's only three non-verbatim production lines) and the fourth has no body reader at all.",
+      "mustFollow": [
+        "src/ui/theater-lighting.js"
+      ]
+    },
+    {
+      "id": "ui.theater-motes",
+      "path": "src/ui/theater-motes.js",
+      "type": "module",
+      "owns": [
+        "*motesInit",
+        "*motesSyncState",
+        "*interiorBuildMotes",
+        "*interiorMoteKindFor",
+        "*startMoteDrift",
+        "*stopMoteDrift"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B5 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — BEAUTY-WAVE.md VP6 item 3's AMBIENT MOTE FIELD and its OWN drift scheduler, extracted VERBATIM from theater-boot.js: the seeded hash/RNG (moteHash32/moteRng), the kit-driven ember-vs-dust classifier (interiorMoteKindFor/MOTE_TINT), the soft additive speck texture (moteSoftTexture), the per-room field builder (interiorBuildMotes) and the drift loop (startMoteDrift's requestAnimationFrame chain + stopMoteDrift's cancel). The rAF ownership is INTACT AND UNSHARED — still guarded on S.moteRaf, still self-stopping the instant S.mounted is false or the group is gone, still a SEPARATE scheduler from ui.theater-lighting's flicker loop and from theater-boot.js's dirty-frame/tween loops (the brief's protected scheduler-separation contract; nothing was unified). Root->leaf ctx law: never imports theater-boot.js; motesInit(ctx) at the root's end-of-body, motesSyncState(S) at both `S = createTheaterState()` sites. The mote GROUP's end-of-life (S.moteGroup disposal in retire()/clearGroup) stays in the root, so there is still ONE true dispose point. There is not a single accessor swap in this file — every moved line is byte-identical to the monolith."
+    },
+    {
       "id": "ui.theater-boot",
       "path": "src/ui/theater-boot.js",
       "type": "module",

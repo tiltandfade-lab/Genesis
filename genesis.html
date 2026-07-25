@@ -1577,6 +1577,22 @@
      no ctx) — same import/dedupe convention as the tags above. retire()/disposeAuxCaches stay in
      theater-boot.js. Placed BEFORE theater-boot.js's tag (dependency order). -->
 <script type="module" src="src/ui/theater-dispose.js"></script>
+<!-- THEATER SPLIT B5 (2026-07-25): the BOARD LIGHTING family — LIGHT_PROFILES/applyLightProfile, the
+     ENV-1/ENV-1B/ENV-1c tabletop exterior + celestial-arc passes, the two interior camera-side lights,
+     and the PRACTICAL FLICKER SCHEDULER (its own rAF loop, still separate from the mote loop below).
+     Same import/dedupe convention as the tags above (theater-boot.js `import`s it; this second entry
+     point exists so check-manifest.py's module-tag-pairing check is satisfied, and browsers dedupe an
+     ES module by URL). Placed BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-lighting.js"></script>
+<!-- THEATER SPLIT B5 (2026-07-25): the interior PRACTICAL-FIXTURE family (E0 visible practicals, the U3
+     shadow-caster budget, the glow disc / light card / emitter nub / light-shaft cone builders,
+     interiorBuildLights). Imports four symbols straight from theater-lighting.js above (a one-way
+     leaf->leaf edge), so it is tagged AFTER it and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-practicals.js"></script>
+<!-- THEATER SPLIT B5 (2026-07-25): VP6's ambient mote field and its OWN drift scheduler — a SEPARATE
+     rAF loop from the flicker scheduler in theater-lighting.js (the brief's protected scheduler
+     separation; nothing was unified). Same import/dedupe convention as the tags above. -->
+<script type="module" src="src/ui/theater-motes.js"></script>
 <script type="module" src="src/ui/theater-boot.js"></script>
 <!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
      shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same

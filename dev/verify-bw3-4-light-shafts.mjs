@@ -20,7 +20,19 @@ import { execSync } from "node:child_process";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(ROOT, p), "utf-8");
-const bootSrc = read("src/ui/theater-boot.js");
+// THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): this file's three subjects now
+// live in three homes — interiorConeTexture/interiorBuildLightCone/interiorBuildLights (+ the
+// ITR_LIGHT_CONE_* consts) in src/ui/theater-practicals.js, the lightFlicker* family and
+// startLightFlicker's rAF loop in src/ui/theater-lighting.js, and the mote family in
+// src/ui/theater-motes.js. Reading the COMPOSITE keeps every extraction and every source guard below
+// pulling the REAL source of its own symbol — no check relaxed, none dropped.
+const bootSrc = read("src/ui/theater-boot.js")
+  + "\n/* [verify-bw3-4 composite boundary \u2014 src/ui/theater-lighting.js follows] */\n"
+  + read("src/ui/theater-lighting.js")
+  + "\n/* [verify-bw3-4 composite boundary \u2014 src/ui/theater-practicals.js follows] */\n"
+  + read("src/ui/theater-practicals.js")
+  + "\n/* [verify-bw3-4 composite boundary \u2014 src/ui/theater-motes.js follows] */\n"
+  + read("src/ui/theater-motes.js");
 
 let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>
@@ -296,6 +308,16 @@ console.log("\n=== ITEM 2 — interiorBuildLights wiring, E0 fixtures + gated co
       + coneEnabledLine + "\n"
       + brightSuppressLine + "\n"
       + glowDiagLine + "\n"
+      // THEATER SPLIT B5 (2026-07-25): interiorBuildLights now lives in src/ui/theater-practicals.js and
+      // reads these three root-owned gate `let`s through ctx accessors (an import binding is read-only;
+      // a copied mirror would go stale the moment a window.Theater seam flips one). Defining the
+      // accessors over THIS sandbox's own pinned `let`s — the exact three lines extracted from
+      // theater-boot.js just above — reproduces precisely what theater-boot.js supplies at runtime, so
+      // the setConeEnabled/setBrightSuppressPracticals/setGlowDiagnostic flips below still drive the
+      // real function. Same shim as B4's dev/verify-agx-tonecurve.mjs.
+      + "function practicalsCtxLightConeEnabled(){ return ITR_LIGHT_CONE_ENABLED; }\n"
+      + "function practicalsCtxBrightSuppressPracticals(){ return ITR_BRIGHT_SUPPRESS_PRACTICALS; }\n"
+      + "function practicalsCtxGlowDiscDiagnostic(){ return ITR_GLOW_DISC_DIAGNOSTIC; }\n"
       + constLines.join("\n") + "\n" + partsBlock + "\n" + emitterGeoBlock + "\n"
       // LL-1: interiorBuildLights now reads LIGHT_TUNABLES.lightRenderGain (was the bare ITR_LIGHT_RENDER_GAIN,
       // already in constLines above — so skip it here to avoid a double-declare; the prelude reuses it).

@@ -410,9 +410,16 @@ async function main() {
       // src/ui/theater-light-lab.js now; the lighting consts this block ALSO scrapes
       // (STAGE_AMBIENT_FLOOR, BLOOM_*, GRADE_*, ITR_*) stayed in theater-boot.js. Reading the
       // composite keeps every extraction working with each symbol in its true home.
+      // THEATER SPLIT B5 (2026-07-25): CELESTIAL_ARC (check 1f's own scrape target) moved VERBATIM into
+      // src/ui/theater-lighting.js with the rest of the lighting family. Every OTHER const this block
+      // scrapes — STAGE_AMBIENT_FLOOR, GRADE_EXPOSURE_FLOOR, BLOOM_*, GRADE_TINT_*, ITR_* — is a
+      // LIGHT_TUNABLES SEED and deliberately stayed in theater-boot.js (B2's law), so the composite is
+      // what keeps each extraction reading its symbol's true home. No check relaxed, none dropped.
       const src = fs.readFileSync(path.join(ROOT, "src/ui/theater-boot.js"), "utf-8")
         + "\n/* [verify-light-lab composite boundary — src/ui/theater-light-lab.js follows] */\n"
-        + fs.readFileSync(path.join(ROOT, "src/ui/theater-light-lab.js"), "utf-8");
+        + fs.readFileSync(path.join(ROOT, "src/ui/theater-light-lab.js"), "utf-8")
+        + "\n/* [verify-light-lab composite boundary — src/ui/theater-lighting.js follows] */\n"
+        + fs.readFileSync(path.join(ROOT, "src/ui/theater-lighting.js"), "utf-8");
       const numConst = (name) => { const m = src.match(new RegExp("const " + name + " = ([0-9.]+);")); return m ? parseFloat(m[1]) : null; };
       const objField = (name) => { const m = src.match(new RegExp(name + ":\\s*([0-9.]+)")); return m ? parseFloat(m[1]) : null; };
       const tunables = await page.evaluate(() => window.Theater._lightTunablesForTest());

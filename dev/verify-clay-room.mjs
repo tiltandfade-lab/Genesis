@@ -140,7 +140,17 @@ function readTheaterSources(){
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-clay-room.js follows] */\n"
     + read("src/ui/theater-clay-room.js")
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-post.js follows] */\n"
-    + read("src/ui/theater-post.js");
+    + read("src/ui/theater-post.js")
+    // THEATER SPLIT B5 (2026-07-25): the lighting family (applyLightProfile, the celestial/tabletop
+    // exterior passes, the interior camera-key + sprite camera fill, the flicker scheduler) and the
+    // interior practical-fixture family (interiorBuildLights + the fixture/glow/cone builders) moved
+    // the same way; the clay room's own bench wiring, its window.Theater seams and the four mutable
+    // practical gates stayed in theater-boot.js. Adding both files to the SAME composite keeps every
+    // regex here matching the code it was written to check — no check relaxed, none dropped.
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-lighting.js follows] */\n"
+    + read("src/ui/theater-lighting.js")
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-practicals.js follows] */\n"
+    + read("src/ui/theater-practicals.js");
 }
 
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");

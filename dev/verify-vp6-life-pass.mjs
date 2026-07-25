@@ -174,7 +174,17 @@ console.log("\n=== ITEM 1 — idle-breathe (src/ui/standee-verbs.js, real import
 // ============================================================================
 console.log("\n=== ITEM 2 — torch flicker (theater-boot.js source extraction) ===");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md):
+  // INTERIOR_LIGHT_FLICKER_AMPLITUDE and startLightFlicker moved VERBATIM into
+  // src/ui/theater-lighting.js, interiorBuildLights (which collects the flickerTargets) into
+  // src/ui/theater-practicals.js, while setInteriorBoard's own startLightFlicker call site (check 2e)
+  // stayed in src/ui/theater-boot.js. Reading the COMPOSITE keeps every check anchored on the REAL
+  // source of its own symbol \u2014 same regexes, same jobs, none relaxed.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-lighting.js follows] */\n"
+    + read("src/ui/theater-lighting.js")
+    + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-practicals.js follows] */\n"
+    + read("src/ui/theater-practicals.js");
   const ampLine = extractConstLine(bootSrc, "INTERIOR_LIGHT_FLICKER_AMPLITUDE");
   check("2a-setup. INTERIOR_LIGHT_FLICKER_AMPLITUDE const is present", !!ampLine, ampLine);
   const ampVal = ampLine ? Number(ampLine.match(/=\s*([\d.]+)/)[1]) : null;
@@ -194,7 +204,13 @@ console.log("\n=== ITEM 2 — torch flicker (theater-boot.js source extraction) 
 // ============================================================================
 console.log("\n=== ITEM 3 — ambient motes (theater-boot.js source-extraction sandbox) ===");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B5 (2026-07-25): the whole mote family (moteHash32/moteRng/interiorMoteKindFor/
+  // moteSoftTexture/interiorBuildMotes + MOTE_* consts + the drift loop) moved VERBATIM into
+  // src/ui/theater-motes.js; setInteriorBoard's own call site stayed in theater-boot.js. Composite read
+  // keeps this extraction sandbox running the REAL functions \u2014 job unchanged.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-motes.js follows] */\n"
+    + read("src/ui/theater-motes.js");
   // moteSoftTexture + its MOTE_SOFT_TEX cache are the soft-dot-mote helper interiorBuildMotes now
   // calls (the "floating rhomboid" fix). Extract it too and seed the cache var — headless it hits
   // the `typeof document === "undefined"` guard and returns null, so the count/bounds asserts hold.

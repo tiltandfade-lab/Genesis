@@ -178,6 +178,50 @@ import {
 // split B4 (2026-07-25): the three pure scene-graph disposal helpers. No ctx, no init, no state —
 // see that file's header. retire()/disposeAuxCaches stay in THIS file (the one end-of-life point).
 import { clearGroup, disposeGroupChild } from "./theater-dispose.js";
+// split B5 (2026-07-25): the BOARD LIGHTING family + the ENV-1/1B/1c tabletop passes + the two interior
+// camera-side lights + the PRACTICAL FLICKER SCHEDULER — same root->leaf ctx law as the modules above.
+// It reads AND writes the live state record, so lightingInit(ctx) at end-of-body is paired with
+// lightingSyncState(S) at both `S = createTheaterState()` sites. The lighting CONSTS this root still
+// owns (STAGE_AMBIENT_FLOOR + the rest of the LIGHT_TUNABLES seed set, ITR_CAMERA_KEY_*,
+// SPRITE_CAMERA_FILL_*, gradeColorLocal) stay here and reach that module through its ctx.
+// Censused: this list is exactly the lighting surface THIS file still has a live (non-comment) call
+// site for. theater-lighting.js also exports TABLETOP_EXTERIOR_LOOK and CELESTIAL_MIN_KEY_HEIGHT —
+// both read only inside that module and by theater-practicals.js's own leaf->leaf import — so they
+// are deliberately NOT imported here rather than carried as dead bindings.
+import {
+  voidTintFor, LIGHT_PROFILES, LIGHT_DEFAULT_PROFILE, lightProfileFor, applyLightProfile,
+  voidTintForTabletop, applyTabletopExteriorLook,
+  CELESTIAL_ARC, CELESTIAL_PROFILE_SET, celestialArcFor, applyCelestialArc,
+  applyTabletopShadowCasters, mountInteriorCameraKey, mountSpriteCameraFill, updateSpriteCameraFill,
+  INTERIOR_LIGHT_FLICKER_AMPLITUDE, lightFlickerApplySample, lightFlickerStep,
+  startLightFlicker, stopLightFlicker,
+  lightingInit, lightingSyncState
+} from "./theater-lighting.js";
+// split B5 (2026-07-25): the interior PRACTICAL-FIXTURE family (E0 visible practicals, the U3
+// shadow-caster budget, the glow disc / light card / emitter nub / light-shaft cone builders and
+// interiorBuildLights itself). Same root->leaf ctx law; censused to never read S, so no SyncState. It
+// imports four symbols straight from theater-lighting.js (a one-way leaf->leaf edge — see its header).
+// The four mutable practical gates stay HERE (three reach it through ctx accessors, the fourth has no
+// body reader at all) — see the "INTERIOR PRACTICALS: extracted" note further down.
+// Censused: only these two have a live (non-comment) call site left in THIS file —
+// interiorBuildLights (setInteriorBoard + two window.Theater seams) and interiorBuildLightCone
+// (window.Theater._interiorBuildLightConeForTest). The module's other exports
+// (interiorBuildFixtureGroup / interiorBuildGlowDisc / interiorBuildLightCard /
+// interiorBuildLightEmitterNub / interiorAssignShadowCasters / ITR_LIGHT_DISTANCE_CAP /
+// INTERIOR_SHADOW_CASTER_CAP / INTERIOR_SHADOW_MAP_SIZE) are read only inside that module — the
+// root's own mentions of them are prose in comments — so they are deliberately NOT imported here.
+import {
+  interiorBuildLights, interiorBuildLightCone,
+  practicalsInit
+} from "./theater-practicals.js";
+// split B5 (2026-07-25): VP6's ambient mote field and its OWN drift scheduler — a separate rAF loop
+// from the flicker scheduler above and from this file's dirty-frame/tween loops (nothing was unified).
+// Same root->leaf ctx law; it reads S, so motesInit(ctx) at end-of-body is paired with motesSyncState(S)
+// at both `S = createTheaterState()` sites.
+import {
+  interiorBuildMotes, interiorMoteKindFor, startMoteDrift, stopMoteDrift,
+  motesInit, motesSyncState
+} from "./theater-motes.js";
 // BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
 // see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
 // as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
@@ -643,12 +687,10 @@ const ITR_SPRITE_EMISSIVE_FLOOR = 0.05; // sprite readability floor — emissive
 const SPRITE_CAMERA_FILL_LAYER = 2;
 const SPRITE_CAMERA_FILL_AT_TARGET = 0.16;
 const SPRITE_CAMERA_FILL_COLOR = 0xfff2df;
-// BW2-4b item 1 — INTERIOR LIGHT RANGE CAP. The torch/lamp PointLights (data.lights, default range 12)
-// spilled far enough that an 8-torch room had NO dark corner — every cell sat in some pool, so a sprite
-// read ~0.7 of full-bright everywhere (the BRIGHTNESS LAW's exact failure). Capping the range tightens
-// each pool to the mock's small hot circle, so the gaps between pools go genuinely dark and a standee
-// standing there reads dim. Pool brightness (near the flame) is untouched — only the far spill is cut.
-const ITR_LIGHT_DISTANCE_CAP = 7;
+// split B5 (2026-07-25): ITR_LIGHT_DISTANCE_CAP (BW2-4b item 1's interior light-range cap) moved to
+// src/ui/theater-practicals.js with interiorBuildLights, its only reader. Its neighbours in this block
+// (ITR_CAMERA_KEY_*, ITR_SCENE_*, ITR_BRIGHT_*, ITR_EMISSIVE_*, SPRITE_CAMERA_FILL_*) all have
+// non-practical readers here and stay.
 // BW2-4b item 2 — THE CAMERA-KEY SHADOW: one soft shadow-casting DirectionalLight from the camera's
 // general direction (interior only). The value-plunge diagnosis proved billboards can't cast a
 // readable shadow off the interior torch POINT lights (edge-on sliver); a broad directional finally
@@ -5028,17 +5070,16 @@ function placeCameraTweened(preFit){
 // retire STAY here: they are this file's one true end-of-life point (and dev/verify-theater-verbs.mjs
 // text-extracts both from this file's own source).
 
-/* T1.5 §2: per-env deep void background, keyed by the same env strings theater-data.js's
-   THEATER_ENV_PALETTE uses (a small duplicated table — this module is a sealed ES-module scope that
-   can't read that classic-script const, §2's "module scope stays sealed" boundary; kept in sync with
-   theater-data.js's voidTint values by convention/comment, not import). Falls back to the module's
-   own VOID_BG default for any env this table doesn't recognize. */
-const ENV_VOID_TINT = {
-  dungeon: 0x0a0807, urban: 0x09090a, wilderness: 0x07090a, breach: 0x0a0610
-};
-function voidTintFor(env){
-  return (env && ENV_VOID_TINT[env] !== undefined) ? ENV_VOID_TINT[env] : VOID_BG;
-}
+// ---- BOARD LIGHTING + ATMOSPHERE: extracted to src/ui/theater-lighting.js (split B5, 2026-07-25) ----
+// ENV_VOID_TINT/voidTintFor moved there with the rest of the lighting family: LIGHT_PROFILES /
+// LIGHT_DEFAULT_PROFILE / lightProfileFor / applyLightProfile, the ENV-1 + ENV-1B + ENV-1c tabletop
+// post-passes (TABLETOP_EXTERIOR_LOOK, applyTabletopExteriorLook, voidTintForTabletop, CELESTIAL_ARC +
+// the celestial* family, applyTabletopShadowCasters), the two interior camera-side lights
+// (mountInteriorCameraKey / mountSpriteCameraFill / updateSpriteCameraFill) and the PRACTICAL FLICKER
+// SCHEDULER (lightFlicker* + startLightFlicker's own rAF loop + stopLightFlicker). This root imports
+// that surface (top import block), passes capabilities via lightingInit(ctx) at end-of-body, and
+// re-syncs the live S record via lightingSyncState(S) at both `S = createTheaterState()` sites.
+// ENV_SCORCH_TINT/scorchTintFor just below are a DEAD-STATE marker tint, not a light — they stay here.
 
 /* DEAD-STATE (2026-07-03): the obliteration tile marker reuses theater-data.js's own per-env `scorch`
    tint (the SAME color a hazard tile already uses for a "burn/scorch-mark" read, theater-data.js's own
@@ -5103,50 +5144,9 @@ function gradeColorLocal(hex, profile){
   return rgbToHex(r, g, b);
 }
 
-/* ============================================================================
-   BOARD LIGHTING (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03) — §2: "light profiles in the
-   theater." Each profile is {ambient:{color,intensity}, points:[{color,intensity,pos}]}, applied on
-   setBoard from `data.light.profile` (the string key theaterBoardFrom/theater-data.js stamps — see
-   that file's THEATER_LIGHT_TABLE, kept in sync with these keys by convention/comment, same one-way
-   classic/ES-module boundary discipline as ENV_VOID_TINT above). PSX-clean per the spec: 1-2 point
-   lights max, no shadow-mapping (renderer.shadowMap stays disabled — grounding is the blob-quad work
-   below, never a real shadow map), Lambert-friendly (MeshLambertMaterial already reacts correctly to
-   THREE.PointLight/AmbientLight with zero material changes needed).
-   `points[].pos` is a FRACTION of the board's own half-extents (not a fixed world position) — applied
-   in applyLightProfile below by multiplying against S.boardHalfX/boardHalfZ, so a point sits at a
-   sane spot (center-ish, or biased toward an edge) regardless of the current board's actual size.
-   `flicker` (optional): a per-profile amplitude (0 = none) for the slow subtle intensity tween — see
-   tickLightFlicker below for the "only when a flicker profile is live" cadence discipline.
-
-   POINT-LIGHT INTENSITY SCALE (found live in the browser-check pass, worth flagging): three.js r166
-   uses PHYSICALLY CORRECT photometric units for THREE.PointLight/THREE.SpotLight — intensity is
-   candela (lm/sr), which falls off with the inverse square of distance, so a value calibrated for the
-   OLD pre-r155 "watts-ish" scale (0.4-1.5, what a first pass here used) reads as functionally zero at
-   even a few world units away — every profile's point light was invisible, all nine profiles looked
-   identical to `dark`. THREE.AmbientLight is UNAFFECTED (it isn't distance-attenuated, so its intensity
-   scale didn't change across that three.js version bump) — only the point-light intensities below are
-   the "large" numbers; ambient stays in the original small 0.3-0.85 range. Point lights use decay:0
-   (applyLightProfile) — a flat, non-attenuating light rather than physically-correct falloff, since
-   the board is small/fixed-size and a decaying point light would need per-profile distance tuning to
-   read consistently; decay:0 makes the intensity number alone predictable board-to-board. */
-// docs/DIEGETIC-LIGHT.md L-3 / FORK F2 (Adam's ruling 2026-07-11): every profile's authored ambient
-// dropped ~35% (the F2 band's midpoint) — "ambient is only enough to make out figures; beyond a
-// source's reach it's dark, and darkness is a gameplay element." The diegetic point(s) below are now
-// the read, not the ambient wash. Values are reversible for the re-shoot: each intensity is commented
-// with its pre-DIEGETIC-LIGHT number so Adam can dial any one back individually.
-// CL-R1: LIGHT_PROFILES is now a compatibility projection of the persistent, validated lock
-// registry. The ten rolled profiles retain their exact authored numbers; the two unrolled Clayroom
-// recipes add clearly-labelled neutral and warm/cool diagnostic modes without entering gameplay
-// rolls. The registry is shared with src/engine/clay-room.js, so the workbench no longer owns a
-// private copy of its opposing pair.
-const LIGHT_PROFILES = Object.freeze((() => {
-  const out = {};
-  Object.keys(LIGHT_RECIPE_REGISTRY).forEach((key) => {
-    out[key] = lightRecipeLegacyProfile(LIGHT_RECIPE_REGISTRY[key]);
-  });
-  return out;
-})());
-const LIGHT_DEFAULT_PROFILE = "dark";
+// split B5: the BOARD LIGHTING header, LIGHT_PROFILES and LIGHT_DEFAULT_PROFILE moved to
+// src/ui/theater-lighting.js. STAGE_AMBIENT_FLOOR stays HERE (below) — it is a LIGHT_TUNABLES seed, and
+// B2's law plus dev/verify-light-lab.mjs's scrape set both read that seed set out of THIS file's text.
 // STAGE ARENA polish (Adam's G2 mandate, 2026-07-04) — readability floor: the board must never render
 // unreadably dark whatever the rolled room light. `dark` profile's own ambient (0.38) is the worst
 // case; clamped up to this floor in applyLightProfile below. Profile COLOR and point lights stay
@@ -5158,246 +5158,12 @@ const LIGHT_DEFAULT_PROFILE = "dark";
 // docs/DIEGETIC-LIGHT.md L-3 (2026-07-11): dropped ~35% alongside the profile values above, same F2
 // ruling — "ambient is only enough to make out figures", not a guaranteed-bright floor. 0.65 -> 0.42.
 const STAGE_AMBIENT_FLOOR = 0.42; // was 0.65
-function lightProfileFor(key){
-  return LIGHT_PROFILES[key] || LIGHT_PROFILES[LIGHT_DEFAULT_PROFILE];
-}
 
-/* rebuild S.ambientLight/S.pointLights from a profile key. Idempotent + safe pre-mount (no-op if
-   S.scene is absent). Tears down the PRIOR lights first (THREE.Light isn't pooled by clearGroup — it
-   has no geometry/material to dispose, just remove-from-scene) so repeated setBoard calls on the SAME
-   profile don't accumulate duplicate lights; `points` positions are board-relative FRACTIONS
-   (LIGHT_PROFILES' own header comment) resolved against S.boardHalfX/boardHalfZ so a point sits at a
-   sane spot regardless of the current board's size — falls back to a flat 4-unit default pre-setBoard
-   (mount-time call, no board fitted yet). */
-function applyLightProfile(key){
-  if(!S.scene) return;
-  if(S.ambientLight){ S.scene.remove(S.ambientLight); S.ambientLight = null; }
-  (S.pointLights || []).forEach(l => S.scene.remove(l));
-  S.pointLights = [];
-  stopLightFlicker();
-
-  const profile = lightProfileFor(key);
-  S.lightProfileKey = key;
-  // LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — the light-lab's own per-profile override, defaulting
-  // to THIS profile's own authored ambient/key numbers (LIGHT_TUNABLES.profiles is seeded straight off
-  // LIGHT_PROFILES at declaration — see LIGHT_TUNABLES' own header). An untouched lab means `tune.*`
-  // below reads byte-identical to `profile.ambient.*`/`profile.points[0].*`, so this indirection is a
-  // pure no-op in production.
-  const tune = LIGHT_TUNABLES.profiles[key] || LIGHT_TUNABLES.profiles[LIGHT_DEFAULT_PROFILE];
-
-  // readability floor (LIGHT_TUNABLES.stageAmbientFloor, seeded from STAGE_AMBIENT_FLOOR above) —
-  // clamp UP only, never down: a profile authored brighter than the floor (at 0.65 that's daylit 0.85
-  // alone) keeps its own value untouched; every sub-floor profile (dark 0.38 the worst case; overcast/
-  // moonlit sit just under) gets lifted. Color is read straight off the tunable either way — the floor
-  // governs intensity alone, so the profile still owns the mood/hue, and points still carry each
-  // profile's relative brightness identity.
-  const ambientIntensity = tune.mode && tune.mode.indexOf("diagnostic-") === 0
-    ? tune.ambient.intensity
-    : Math.max(tune.ambient.intensity, LIGHT_TUNABLES.stageAmbientFloor);
-  // REALM-RENDER-STYLE.md §3: grade the profile's authored color through the current board's render
-  // profile (S.realmProfile, set by setBoard just before this call — see that function's own comment;
-  // null pre-mount/pre-setBoard, which gradeColorLocal treats as a no-op) — same "colors are already
-  // resolved" seam the tile tints and figure materials share. Intensity is untouched (the readability
-  // floor's own "color stays authored, only intensity is floored" discipline extends here).
-  const ambientColor = gradeColorLocal(tune.ambient.color, S.realmProfile);
-  const ambient = new THREE.AmbientLight(ambientColor, ambientIntensity);
-  S.scene.add(ambient);
-  S.ambientLight = ambient;
-
-  const hx = S.boardHalfX || 4, hz = S.boardHalfZ || 4;
-  // P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B step 2): a light-prop anchor computed
-  // by setBoard's own mountLightProp call (below, AFTER this function returns — S.lightPropAnchor is
-  // set by setBoard on every call, cleared to null when this profile has no registry mapping) sources
-  // the FIRST point light's position at the prop's own flame/glow head instead of the profile's plain
-  // fractional pos. Guarded per-point (index 0 only — LIGHT_PROFILES entries with a real prop mapping
-  // author exactly one point, per prop-light.js's ENGINE NOTE reserving ONE light per prop), and only
-  // when an anchor actually resolved this call (S.lightPropAnchor null -> byte-identical position math
-  // to before this unit, the guard's own "light behavior byte-identical" contract, §4 step 3).
-  const enabledLights = (tune.lights || []).filter((p) => p.enabled !== false);
-  enabledLights.forEach((p, i) => {
-    // decay:0, distance:0 — a flat non-attenuating point light (see LIGHT_PROFILES' own header on why:
-    // predictable per-profile intensity numbers regardless of board size, no physically-correct falloff
-    // tuning needed per profile). LL-1: index 0 (every LIGHT_PROFILES entry authors at most one point)
-    // reads the lab's own tunable color/intensity; any further point (none exist today) keeps its
-    // authored value untouched — tune only ever overrides the ONE point this profile vocabulary has.
-    const pColor = p.color;
-    const pIntensity = p.intensity;
-    const light = new THREE.PointLight(gradeColorLocal(pColor, S.realmProfile), pIntensity, 0, 0);
-    if(i === 0 && S.lightPropAnchor){
-      light.position.set(S.lightPropAnchor.x, S.lightPropAnchor.y, S.lightPropAnchor.z);
-    } else {
-      light.position.set(
-        (p.pos.x || 0) * hx,
-        p.heightM != null ? p.heightM / 1.524 : (p.pos.y != null ? p.pos.y : 1.5),
-        (p.pos.z || 0) * hz
-      );
-    }
-    S.scene.add(light);
-    S.pointLights.push(light);
-  });
-
-  const flickerAmplitude = enabledLights.reduce((max, p) => {
-    return Math.max(max, p.flicker ? p.flicker.amplitude || 0 : 0);
-  }, 0);
-  if(flickerAmplitude > 0) startLightFlicker(flickerAmplitude);
-}
-
-/* ============================================================================================
-   ENV-1 (docs/ENV-EXTERIOR-WAVE.md) — "light profiles differentiate everywhere". ROOT CAUSE
-   (measured live against pl-004..009, dev/play-lens/ledger.md #8): applyLightProfile ALREADY runs
-   on the flat tabletop channel — setBoard called it before this unit too, so every node/travel/
-   settlement/combat/idle tray was already "consuming the active profile" in that narrow sense. Two
-   things nonetheless made daylit/overcast/moonlit render pixel-identical to each other (and to a
-   plain dark room) on that channel:
-     1. the void/background tint (ENV_VOID_TINT/voidTintFor, above) is keyed ONLY by `env`
-        (dungeon/urban/wilderness/breach) — the SAME wilderness travel leg shows the identical
-        near-black void whether the walk rolled daylit, moonlit, or overcast. This is the single
-        biggest visible defect (the void dominates a large fraction of every travel/node frame —
-        see pl-004..009): "the black void reads as night ONLY when it should," per this unit's spec.
-     2. STAGE_AMBIENT_FLOOR (0.42, above) clamps UP any profile authored below it — overcast (0.39)
-        and moonlit (0.36) both clamp to the IDENTICAL 0.42 ambient on this channel, erasing the
-        mood table's own (already-small, 0.03) intended gap between them, since nothing downstream
-        of applyLightProfile touches S.ambientLight again on the tabletop path (unlike the interior
-        channel below).
-   FIX SCOPE — tabletop channel ONLY (setBoard calls the two helpers below; setInteriorBoard never
-   does). LIGHT_PROFILES/applyLightProfile/STAGE_AMBIENT_FLOOR themselves stay byte-UNTOUCHED: they
-   are shared with the interior channel, which OVERWRITES ambient/hemi/key/fill from its OWN
-   ITR_BRIGHT_REALM_FILL/ITR_SCENE_* tables the instant setInteriorBoard's rigOn block runs, and
-   separately multiplies every S.pointLights[].intensity by its own fillScale — so editing
-   LIGHT_PROFILES' authored point numbers here would ride straight through to interior renders and
-   break the "interiors byte-stable" requirement. Everything below is NEW code, called only from
-   setBoard, mutating the LIVE THREE objects applyLightProfile just built for THIS render — never
-   the shared authored table.
-   dark/torchlit/lavalit/fungal-glow/magic-glow/lamplit/voidlit are the PROTECTION SET: absent from
-   both tables below, so a tabletop tray rolling any of those profiles is BYTE-IDENTICAL to before
-   this unit (no lookup hit -> both helpers fall through to the pre-existing voidTintFor(env)/plain-
-   applyLightProfile behavior — the WORKING interior/dungeon-tabletop look, unchanged). Only the 3
-   exterior moods get a differentiated look — the same "which profiles are the sun/moon/sky's own
-   diegetic reach" set the interior channel already classifies as ITR_BRIGHT_PROFILES, reused here
-   for the identical classification on this channel.
-   Grouped per profile — one re-tune surface, DRAFT VALUES, Adam re-tunes here:
-     daylit   — bright warm key + sky-blue ambient wash, ambient boosted well above the floor, a
-                light sky-tone background (never a black void in daylight).
-     overcast — flat grey-cool diffuse, muted background, ambient between daylit and moonlit.
-     moonlit  — dim cool blue, near-dark background — the darkest of the 3 exterior looks, but
-                ALWAYS >= dark's own floored ambient/void (an unlit room must never read brighter
-                than moonlight).
-   pointScale tunes each profile's existing LIGHT_PROFILES point-light contribution for THIS channel
-   only — moonlit's authored point (intensity 8, decay:0 = non-attenuating, so it reaches the whole
-   board at full strength regardless of distance) would otherwise out-shine overcast's flat ambient-
-   only wash on the tile surface itself (a candela-scale point intensity and a 0-1 ambient multiplier
-   are not directly comparable units), inverting the required daylit > overcast > moonlit luma
-   ordering. Scaling it down here (mutating the live light instance, never LIGHT_PROFILES) keeps that
-   ordering honest without touching the shared profile table the interior channel also reads.
-   ============================================================================================ */
-// ambientColor: a tabletop-only ambient HUE override (the spec's "sky-blue ambient" for daylit —
-// LIGHT_PROFILES' authored daylit ambient color is a neutral 0xd8dce0, shared with the interior
-// channel, so the sky-blue read lands here instead). The warm KEY stays the profile's own authored
-// point color (daylit 0xfff2d8 — already warm), scaled by pointScale. overcast/moonlit keep their
-// authored ambient hues (already grey-cool/cool-blue) — listed explicitly anyway so the whole look
-// is re-tunable from this one table.
-const TABLETOP_EXTERIOR_LOOK = {
-  daylit:   { ambient: 0.80, ambientColor: 0xbdd7f0, pointScale: 1.2,  void: 0xaed4f2 }, // sky-blue ambient + warm key + bright sky wash
-  overcast: { ambient: 0.55, ambientColor: 0xa8adb5, pointScale: 1.0,  void: 0x8c94a0 }, // flat muted grey-cool (authored hue kept)
-  moonlit:  { ambient: 0.44, ambientColor: 0x8fa0c8, pointScale: 0.35, void: 0x141c30 }  // dim cool blue, near-dark (authored hue kept)
-};
-// void/background tint for the TABLETOP channel only — profile wins for the 3 exterior moods (the
-// protection set has no entry here, so it falls through to the pre-existing env-keyed voidTintFor,
-// byte-identical to before this unit).
-// ENV-1c (docs/ENV-EXTERIOR-WAVE.md): `clockMin` is an ADDITIVE 3rd param — omitted (or S.celestialVoidTint
-// unset, applyCelestialArc's own no-op guard below) falls straight through to ENV-1's static per-profile
-// void, byte-identical to pre-ENV-1c. When a clock IS threaded and the profile is one of the 3 exterior
-// moods, S.celestialVoidTint (stamped by applyCelestialArc, called earlier in setBoard — see that
-// function's own header) wins: the sky/void reads the SAME dawn/noon/dusk/moonlit keyframe the key
-// light's color just used, not a flat per-profile constant.
-function voidTintForTabletop(env, profileKey, clockMin){
-  if(clockMin != null && CELESTIAL_PROFILE_SET[profileKey] && S.celestialVoidTint != null){
-    return S.celestialVoidTint;
-  }
-  const look = profileKey && TABLETOP_EXTERIOR_LOOK[profileKey];
-  return look ? look.void : voidTintFor(env);
-}
-// mutates the LIVE S.ambientLight/S.pointLights objects applyLightProfile just (re)built for THIS
-// render — never LIGHT_PROFILES itself. No-op (byte-identical to pre-unit setBoard) for any profile
-// not in TABLETOP_EXTERIOR_LOOK (the protection set).
-function applyTabletopExteriorLook(profileKey){
-  const look = profileKey && TABLETOP_EXTERIOR_LOOK[profileKey];
-  if(!look) return;
-  if(S.ambientLight){
-    S.ambientLight.intensity = look.ambient;
-    // graded through the SAME realm profile applyLightProfile just used for the authored ambient
-    // color — the tabletop hue override obeys the identical realm-grade seam, never bypasses it.
-    if(look.ambientColor != null) S.ambientLight.color.setHex(gradeColorLocal(look.ambientColor, S.realmProfile));
-  }
-  (S.pointLights || []).forEach(l => { l.intensity *= look.pointScale; });
-}
-
-/* ============================================================================================
-   ENV-1c (docs/ENV-EXTERIOR-WAVE.md) — "the sun and moon are diegetic sources and their position in
-   the time of day should affect overall lighting when outdoors" (Adam's verbatim ruling, 2026-07-14).
-   Outdoor light is not a static per-profile mood (ENV-1's own TABLETOP_EXTERIOR_LOOK, just above) —
-   it is WHERE THE SUN/MOON IS. This is a SECOND tabletop-only post-pass, same discipline as
-   applyTabletopExteriorLook/applyTabletopShadowCasters above: mutates the LIVE S.ambientLight/
-   S.pointLights instances those two already (re)built for THIS render, never LIGHT_PROFILES itself.
-   Called ONLY from setBoard (never setInteriorBoard — "dark and ALL interior profiles untouched,
-   the arc is outdoors-only" per Adam's own scope note), AFTER applyTabletopExteriorLook (so it
-   further refines the SAME already-profile-scaled light) and BEFORE applyTabletopShadowCasters (so
-   the shadow-caster pass configures shadow camera/bias against the key's FINAL, arc-repositioned
-   transform, not its pre-arc fractional position).
-
-   THE ARC — a low-parameter continuous function of minute-of-day, NOT an astronomy library
-   (explicitly out of scope, per the spec's own closing note): SUNRISE_MIN/SUNSET_MIN bound the sun's
-   daytime pass; elevation follows a single sine hump (0 at sunrise/sunset, 1 at solar noon) so
-   dawn/dusk naturally read low + raking and noon naturally reads high + tight — ENV-1B's shadow-caster
-   pass gets that "for free" purely from the light's REPOSITIONED transform, no shadow-specific code
-   needed here. Azimuth sweeps east->west (sunrise -90 degrees -> sunset +90 degrees) linearly with the
-   same t, so the key's horizontal (x/z) position — and therefore any cast shadow's direction — flips
-   sign between morning and evening. The moon gets its OWN slower arc across the night span (sunset ->
-   next sunrise, wrapped), one shared shape function (celestialMoonDirFor mirrors celestialSunDirFor
-   exactly) — "night = the moon takes the key" per the ruling.
-
-   PROFILE COMPOSITION (the ruling's own "modulates the arc, never replaces it"): daylit renders the
-   clear-sky sun arc as-authored; moonlit renders the moon arc as-authored; overcast renders the SAME
-   sun arc (sun position retained) but desaturated toward grey (OVERCAST_DESAT) with its key
-   intensity contribution further damped (OVERCAST_SHADOW_DAMP) — overcast today authors ZERO points
-   in LIGHT_PROFILES (see that table's own "overcast: points: []" entry), so this function's point-
-   light branch is already a no-op there by construction: overcast casts no shadow at all, which IS
-   "shadow contrast drops" taken to its floor, consistent with pre-ENV-1c behavior. The void/color
-   desaturation still applies (a subtle grey-flattened sky drift across the day), matching the
-   ruling's "void/sky tint follows the same keyframes" for every exterior profile, not just daylit.
-
-   ONE RE-TUNE SURFACE: CELESTIAL_ARC — every color/intensity/timing number Adam red-pens lives here,
-   nothing below it does per-profile branching beyond the OVERCAST_* modulation the ruling itself
-   calls out by name. */
-const CELESTIAL_ARC = {
-  SUNRISE_MIN: 360,   // 06:00 — sun elevation crosses 0 going up (a fantasy day, not real-world solar timing)
-  SUNSET_MIN: 1200,   // 20:00 — sun elevation crosses 0 going down
-  MIN_ELEV_ANGLE: 0.2094, // ~12 degrees — a floor so the key never grazes dead-flat at literal sunrise/sunset (keeps the raking shadow readable instead of a degenerate zero-length ray)
-  sun: {
-    dawnColor:   0xffc2a8, // low warm-pink (dawn side of the arc, t < 0.5)
-    duskColor:   0xff7a42, // low orange-red (dusk side of the arc, t >= 0.5) — deliberately a DIFFERENT hue than dawn
-    zenithColor: 0xfff6e4, // high near-white (solar noon, either side)
-    dawnVoid:    0xf3c7b0,
-    duskVoid:    0xe89a68,
-    zenithVoid:  0xaed4f2, // matches TABLETOP_EXTERIOR_LOOK.daylit.void at full elevation — noon converges on ENV-1's own authored sky
-    intensityHorizon: 0.35, // fraction of ENV-1's already-profile-scaled key intensity, at elevation 0 (sunrise/sunset)
-    intensityZenith:  1.0   // 1.0 = ENV-1's own authored intensity, unmodified, at solar noon
-  },
-  moon: {
-    color: 0xaebfe8, // cool blue-silver — moonlit's own authored point hue (LIGHT_PROFILES.moonlit), kept identical
-    void:  0x141c30, // matches TABLETOP_EXTERIOR_LOOK.moonlit.void at full elevation
-    intensityHorizon: 0.4,
-    intensityZenith:  1.0
-  },
-  OVERCAST_DESAT: 0.4,        // 0 = no change, 1 = full grey — overcast's own "colors flatten" law
-  OVERCAST_SHADOW_DAMP: 0.55  // overcast's key contribution shrinks further (on TOP of ENV-1's own pointScale) -> softer lit/shadow luma delta than daylit at the same minute
-};
-const CELESTIAL_KEY_REACH_FACTOR = 2.2; // key distance = max(boardHalfX,boardHalfZ) * this — stays inside applyTabletopShadowCasters' own far-plane budget (2.5x half-extent, that function's own const)
-const CELESTIAL_MIN_KEY_HEIGHT = 1.5;   // never lets the key's Y drop to/through the tile plane even at the MIN_ELEV_ANGLE floor
-const CELESTIAL_AMBIENT_FLOOR_SCALE = 0.6; // ambient intensity never drops below 60% of ENV-1's own authored value — the readability floor's own "never unreadably dark" law, extended to the arc
-// the exact 3-profile exterior set TABLETOP_EXTERIOR_LOOK already carves out — reused here so the
-// celestial layer's own protection-set discipline never drifts from ENV-1's.
-const CELESTIAL_PROFILE_SET = { daylit: true, overcast: true, moonlit: true };
+// split B5: lightProfileFor + applyLightProfile + the whole ENV-1 (TABLETOP_EXTERIOR_LOOK /
+// voidTintForTabletop / applyTabletopExteriorLook) and ENV-1c (CELESTIAL_ARC + its consts) block sat
+// here in the monolith and moved to src/ui/theater-lighting.js. LIGHT_TUNABLES + LIGHT_LAB_AUTHORED_BASELINE
+// (below) stay HERE and reach that module through its ctx, so every LIGHT_TUNABLES.* read over there is
+// the same property on the same object the Light Lab writes through.
 
 // ════════════════════════════════════════════════════════════════════════════════════════════════
 // LL-1 (docs/KENNEY-SOCKET-WAVE.md unit LL-1) — LIGHT_TUNABLES: the ONE mutable indirection seam the
@@ -5441,229 +5207,12 @@ const LIGHT_TUNABLES = {
 };
 const LIGHT_LAB_AUTHORED_BASELINE = lightRecipeDeepFreeze(lightRecipeDeepClone(LIGHT_TUNABLES));
 
-// min-of-day -> {x,y,z (unit direction), elevation (0..1), t (0..1, sunrise->sunset)}. Pure, total:
-// clamps `min` into [SUNRISE_MIN,SUNSET_MIN] first, so a daylit/overcast profile rolled outside that
-// window (a keyword override, an edge-case snapshot) still returns a sane (if degenerate) direction
-// rather than NaN/negative-elevation garbage.
-function celestialSunDirFor(min){
-  const rise = LIGHT_TUNABLES.celestialArc.SUNRISE_MIN, set = LIGHT_TUNABLES.celestialArc.SUNSET_MIN;
-  const clamped = Math.min(Math.max(min, rise), set);
-  const t = (set > rise) ? (clamped - rise) / (set - rise) : 0.5;
-  const elevation = Math.sin(t * Math.PI); // 0 at rise/set, 1 at solar noon
-  const elevAngle = LIGHT_TUNABLES.celestialArc.MIN_ELEV_ANGLE + elevation * (Math.PI / 2 - LIGHT_TUNABLES.celestialArc.MIN_ELEV_ANGLE);
-  const azimuth = -Math.PI / 2 + t * Math.PI; // east (-90deg) at sunrise -> west (+90deg) at sunset
-  return {
-    x: Math.cos(elevAngle) * Math.cos(azimuth),
-    y: Math.sin(elevAngle),
-    z: Math.cos(elevAngle) * Math.sin(azimuth),
-    elevation: elevation, t: t
-  };
-}
-// mirrors celestialSunDirFor exactly, over the NIGHT span instead (sunset -> next sunrise, wrapped
-// across midnight) — "its own slower arc" per the ruling: a longer or shorter span than the sun's own
-// (whatever SUNRISE_MIN/SUNSET_MIN currently bound) naturally paces differently, with zero extra code.
-function celestialMoonDirFor(min){
-  const rise = LIGHT_TUNABLES.celestialArc.SUNRISE_MIN, set = LIGHT_TUNABLES.celestialArc.SUNSET_MIN;
-  const nightLen = (1440 - set) + rise;
-  let elapsed = min - set;
-  if(elapsed < 0) elapsed += 1440;
-  const t = (nightLen > 0) ? Math.min(Math.max(elapsed / nightLen, 0), 1) : 0.5;
-  const elevation = Math.sin(t * Math.PI);
-  const elevAngle = LIGHT_TUNABLES.celestialArc.MIN_ELEV_ANGLE + elevation * (Math.PI / 2 - LIGHT_TUNABLES.celestialArc.MIN_ELEV_ANGLE);
-  const azimuth = -Math.PI / 2 + t * Math.PI;
-  return {
-    x: Math.cos(elevAngle) * Math.cos(azimuth),
-    y: Math.sin(elevAngle),
-    z: Math.cos(elevAngle) * Math.sin(azimuth),
-    elevation: elevation, t: t
-  };
-}
-// two 0xrrggbb ints -> a linearly-interpolated 0xrrggbb int at fraction f (clamped 0..1).
-function celestialLerpColor(a, b, f){
-  f = Math.max(0, Math.min(1, f));
-  const ar=(a>>16)&255, ag=(a>>8)&255, ab=a&255, br=(b>>16)&255, bg=(b>>8)&255, bb=b&255;
-  const r = Math.round(ar + (br-ar)*f), g = Math.round(ag + (bg-ag)*f), bl = Math.round(ab + (bb-ab)*f);
-  return (r<<16)|(g<<8)|bl;
-}
-// a 0xrrggbb int, pulled toward its own luma-grey by fraction amt (0..1) — overcast's "colors flatten
-// grey" law, reused for both the key color and the void tint.
-function celestialDesaturate(hex, amt){
-  const r=(hex>>16)&255, g=(hex>>8)&255, b=hex&255;
-  const grey = Math.round(r*0.299 + g*0.587 + b*0.114);
-  const nr = Math.round(r + (grey-r)*amt), ng = Math.round(g + (grey-g)*amt), nb = Math.round(b + (grey-b)*amt);
-  return (nr<<16)|(ng<<8)|nb;
-}
-// the public per-profile arc read: (profileKey in CELESTIAL_PROFILE_SET, clockMin) -> {dir, elevation,
-// color, voidTint, intensityScale}. Pure, total — no RNG, no S/GS/w touch — so the SAME (profileKey,
-// clockMin) always yields a byte-identical rig (the determinism requirement this unit's own
-// verification names explicitly).
-function celestialArcFor(profileKey, clockMin){
-  const isMoon = profileKey === "moonlit";
-  const dirInfo = isMoon ? celestialMoonDirFor(clockMin) : celestialSunDirFor(clockMin);
-  const body = isMoon ? CELESTIAL_ARC.moon : CELESTIAL_ARC.sun;
-  const e = dirInfo.elevation;
-  let color, voidTint;
-  if(isMoon){
-    color = body.color; voidTint = body.void; // one hue family, no dawn/dusk side split for the moon
-  } else {
-    const horizonColor = dirInfo.t < 0.5 ? body.dawnColor : body.duskColor;
-    const horizonVoid  = dirInfo.t < 0.5 ? body.dawnVoid  : body.duskVoid;
-    color = celestialLerpColor(horizonColor, body.zenithColor, e);
-    voidTint = celestialLerpColor(horizonVoid, body.zenithVoid, e);
-  }
-  let intensityScale = body.intensityHorizon + (body.intensityZenith - body.intensityHorizon) * e;
-  if(profileKey === "overcast"){
-    color = celestialDesaturate(color, LIGHT_TUNABLES.celestialArc.OVERCAST_DESAT);
-    voidTint = celestialDesaturate(voidTint, LIGHT_TUNABLES.celestialArc.OVERCAST_DESAT);
-    intensityScale *= LIGHT_TUNABLES.celestialArc.OVERCAST_SHADOW_DAMP;
-  }
-  return { dir: { x: dirInfo.x, y: dirInfo.y, z: dirInfo.z }, elevation: e, color: color, voidTint: voidTint, intensityScale: intensityScale, isMoon: isMoon };
-}
-// the mutator: repositions/re-colors/re-scales the profile's own key point (S.pointLights[0] — every
-// LIGHT_PROFILES entry authors at most one, applyTabletopShadowCasters' own header note) and damps
-// ambient intensity by the same curve (floored at CELESTIAL_AMBIENT_FLOOR_SCALE — never below ENV-1's
-// own readability floor). ALWAYS resets S.celestialVoidTint first (even on every early-return path) —
-// S persists across renders, so a stale value from a PRIOR daylit/moonlit board must never leak into
-// THIS render's void tint (voidTintForTabletop, above, reads it after this function returns).
-// No-op (byte-identical to pre-ENV-1c setBoard) whenever clockMin is null (no clock threaded — a
-// combat-less/walk-less snapshot, a narrow harness) or profileKey isn't one of the 3 exterior moods —
-// the SAME protection-set discipline ENV-1/ENV-1B already established for this rig region.
-function applyCelestialArc(profileKey, clockMin){
-  S.celestialVoidTint = null;
-  if(clockMin == null || !CELESTIAL_PROFILE_SET[profileKey]) return;
-  const arc = celestialArcFor(profileKey, clockMin);
-  S.celestialVoidTint = arc.voidTint;
-  if(S.pointLights && S.pointLights.length){
-    const hx = S.boardHalfX || 4, hz = S.boardHalfZ || 4;
-    const reach = Math.max(hx, hz) * CELESTIAL_KEY_REACH_FACTOR;
-    const key = S.pointLights[0];
-    key.position.set(arc.dir.x * reach, Math.max(CELESTIAL_MIN_KEY_HEIGHT, arc.dir.y * reach), arc.dir.z * reach);
-    key.color.setHex(gradeColorLocal(arc.color, S.realmProfile));
-    key.intensity *= arc.intensityScale;
-  }
-  if(S.ambientLight){
-    S.ambientLight.intensity *= Math.max(CELESTIAL_AMBIENT_FLOOR_SCALE, arc.intensityScale);
-  }
-}
-
-// ENV-1B (docs/GRAPHICS-CONVERGENCE-CHARTER.md §3.3; Adam's DESIGN.md 2026-07-10 ruling — "soft real
-// lighting + cast shadows", AO off BECAUSE "real shadows carry contact darkness") — THE TABLETOP
-// SHADOW-CASTER PASS. Same discipline as applyTabletopExteriorLook just above: mutates the LIVE
-// S.pointLights instances applyLightProfile just (re)built for THIS render, never LIGHT_PROFILES or
-// applyLightProfile itself (which is SHARED with setInteriorBoard — see that function's own header —
-// so giving castShadow to a light INSIDE applyLightProfile would silently turn the interior channel's
-// own profile-mood point into a second shadow source alongside its diegetic torch practicals,
-// breaking interior byte-stability for no reason). Called ONLY from setBoard, mirroring
-// applyTabletopExteriorLook's own "new code, tabletop-only" scope note.
-//   daylit's own point is the profile table's "warm key" (applyTabletopExteriorLook's own header
-//   names it that — the profile's authored point color, boosted by TABLETOP_EXTERIOR_LOOK's
-//   pointScale) — it stands in for the sun on this channel, so it casts. Every OTHER profile's single
-//   authored point (torchlit/lamplit/lavalit/fungal-glow/magic-glow/voidlit/dark/moonlit) casts too,
-//   the SAME "torch/practical points cast" convention interiorBuildLights already applies to its own
-//   diegetic PointLight practicals (pl.castShadow=true there, this file's own established pattern).
-//   No per-profile branching needed: every LIGHT_PROFILES entry authors at most ONE point (overcast
-//   authors zero — a flat ambient-only wash with nothing to mark), so there is no interior-style
-//   INTERIOR_SHADOW_CASTER_CAP to reproduce here.
-const TABLETOP_SHADOW_MAP_SIZE = 512; // ENV-1B: starts at INTERIOR_SHADOW_MAP_SIZE's own value (line ~7015) — same small per-light budget, a SEPARATE named const so the two channels can be retuned independently.
-const TABLETOP_SHADOW_BIAS = -0.002;  // mirrors interiorBuildLights' own PointLight practical bias (line ~7488)
-function applyTabletopShadowCasters(){
-  if(!S.pointLights || !S.pointLights.length) return;
-  // far plane keyed off THIS board's own half-extent (set earlier in setBoard, before applyLightProfile
-  // runs) rather than interior's fixed room-scale fallback — a tabletop board can span far more world
-  // units than an interior room, and a too-small far plane would clip the shadow before it reaches the
-  // floor at the board's edge. Falls back to interior's own 4-unit pre-fit default pre-mount/pre-board
-  // (mountInteriorCameraKey's own "S.boardHalfExtent || 4" convention, reused here).
-  const far = Math.max(10, (S.boardHalfExtent || 4) * 2.5);
-  S.pointLights.forEach(light => {
-    light.castShadow = true;
-    light.shadow.mapSize.set(TABLETOP_SHADOW_MAP_SIZE, TABLETOP_SHADOW_MAP_SIZE);
-    light.shadow.camera.near = 0.1;
-    light.shadow.camera.far = far;
-    light.shadow.bias = TABLETOP_SHADOW_BIAS;
-  });
-}
-
-// BW2-4b item 2 — THE CAMERA-KEY SHADOW. One soft shadow-casting DirectionalLight aimed at the interior
-// board center from the CAMERA's general direction (up + toward the camera), created lazily and reused
-// across setInteriorBoard calls (positions/target refreshed each mount, disabled by setBoard on the flat
-// tabletop path). Directional (parallel rays) is the ONLY light geometry that casts a readable billboard
-// shadow — the interior torch PointLights throw an edge-on sliver off a flat cutout (the value-plunge
-// diagnosis). Intensity a whisper (ITR_CAMERA_KEY_INTENSITY) so it never re-flattens the plunge or
-// doubles scene brightness. The billboard's own alpha-tested customDepthMaterial makes the cast shadow
-// take the sprite's real silhouette; the floor/base receiveShadow already. Shadow ortho bounds track the
-// board's fitted half-extent so the map covers the whole framed room at a small fixed cost.
-function mountInteriorCameraKey(cx, cz){
-  if(!S.scene) return;
-  if(!S.interiorCameraKey){
-    const dl = new THREE.DirectionalLight(0xffffff, ITR_CAMERA_KEY_INTENSITY);
-    dl.userData.interiorCameraKey = true;
-    S.scene.add(dl);
-    S.scene.add(dl.target);
-    S.interiorCameraKey = dl;
-  }
-  const dl = S.interiorCameraKey;
-  dl.intensity = ITR_CAMERA_KEY_INTENSITY;
-  // the board geometry is origin-shifted by (cx,cz) at mount, so the framed room center sits at world
-  // ~(0,0,0); aim the target there. Source the light from the camera's own horizontal bearing (so the
-  // cast shadow falls AWAY from the camera, readable behind each standee) lifted high overhead.
-  const camPos = S.camera ? S.camera.position : { x: 6, y: 9, z: 6 };
-  const bearing = Math.hypot(camPos.x, camPos.z) || 1;
-  const ux = camPos.x / bearing, uz = camPos.z / bearing;
-  const reach = Math.max(6, (S.boardHalfExtent || 4) * 2.2);
-  dl.position.set(ux * reach * 0.55, reach, uz * reach * 0.55);
-  dl.target.position.set(0, 0, 0);
-  dl.target.updateMatrixWorld();
-  // L-2 (DIEGETIC-LIGHT.md): the camera-key no longer contributes a shadow by default — the room's own
-  // diegetic point light(s) are the shadow source (interiorBuildLights' castShadow assignment, below).
-  // See ITR_CAMERA_KEY_CASTS_SHADOW's own header comment for the reversible toggle.
-  dl.castShadow = ITR_CAMERA_KEY_CASTS_SHADOW;
-  const half = Math.max(2, (S.boardHalfExtent || 4) + 1.5);
-  const cam = dl.shadow.camera;
-  cam.left = -half; cam.right = half; cam.top = half; cam.bottom = -half;
-  cam.near = 0.5; cam.far = reach * 2.2;
-  cam.updateProjectionMatrix();
-  dl.shadow.mapSize.set(1024, 1024);
-  dl.shadow.bias = -0.0016;
-}
-
-// CL-R2 follow-up — CAMERA-SIDE SPRITE FILL. A real spotlight follows the current camera pose and
-// targets the governed look point. Its layer mask reaches only billboard faces that explicitly join
-// SPRITE_CAMERA_FILL_LAYER; architecture, props, bases, and floor never see it. Intensity is derived
-// from the live camera distance so the target receives the same gentle fill after a board refit, while
-// decay=1 still produces a visible near-to-far falloff across a deep room. It never casts shadows.
-function mountSpriteCameraFill(){
-  if(!S.scene) return;
-  if(!S.spriteCameraFill){
-    const fill = new THREE.SpotLight(
-      SPRITE_CAMERA_FILL_COLOR,
-      1,
-      0,
-      THREE.MathUtils.degToRad(24),
-      0.82,
-      1
-    );
-    fill.castShadow = false;
-    fill.userData.spriteCameraFill = true;
-    if(fill.layers) fill.layers.set(SPRITE_CAMERA_FILL_LAYER);
-    S.scene.add(fill);
-    S.scene.add(fill.target);
-    S.spriteCameraFill = fill;
-    S.spriteCameraFillTarget = fill.target;
-  }
-  updateSpriteCameraFill();
-}
-function updateSpriteCameraFill(){
-  const fill = S.spriteCameraFill;
-  if(!fill || !S.camera) return;
-  const target = S.cameraLookTarget || new THREE.Vector3(0, 0, 0);
-  const distance = Math.max(1, S.camera.position.distanceTo(target));
-  fill.position.copy(S.camera.position);
-  fill.target.position.copy(target);
-  fill.target.updateMatrixWorld();
-  fill.distance = distance * 1.35;
-  fill.intensity = distance * SPRITE_CAMERA_FILL_AT_TARGET;
-  fill.angle = THREE.MathUtils.degToRad(Math.max(24, (S.camera.fov || 20) * 0.75));
-}
+// split B5: the celestial helpers (celestialSunDirFor / celestialMoonDirFor / celestialLerpColor /
+// celestialDesaturate / celestialArcFor / applyCelestialArc), the ENV-1B tabletop shadow-caster pass,
+// the BW2-4b interior camera-key light and the CL-R2 sprite camera fill all moved to
+// src/ui/theater-lighting.js. mountLightProp (below) stayed: it reads the whole-object registry, the
+// mutable WHOLE_OBJECT_ENABLED gate and addGroundingBlob — heavy non-lighting readers — and calls
+// lightProfileFor through the import block up top.
 
 /* P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B steps 1-3) — lighting-prop anchoring.
    dev/model-qa/creatures/prop-light.js's own ENGINE NOTE reserves this for P1' wiring by name: "the
@@ -5744,299 +5293,12 @@ function mountLightProp(data, cx, cz){
   S.lightPropAnchor = { x: snapped.x, y: flameY, z: snapped.z };
 }
 
-/* FLICKER (§2's own "optional flicker for torch/lava"). Each source chooses seeded, irregular
-   intensity and direction targets at its authored cadence, then glides between those targets on the
-   display's requestAnimationFrame clock. The randomness therefore remains low-frequency and legible,
-   while the visible flame, emitted light, highlights, and shadows move continuously instead of
-   stepping every few hundred milliseconds. This is its own ambient animation loop rather than the
-   verb tween chain. CL-R1 keeps samples seeded and local: only targets whose own state is
-   `flickering` update; steady targets are never written. Self-stopping: stopLightFlicker (called at
-   profile ownership changes and from retire()) cancels the frame, so a flame never survives past its
-   owner or past retire(). */
-// BEAUTY-WAVE.md VP6 item 2 (THE LIFE PASS — torch flicker): opted-in interior sources share this
-// loop rather than growing one animation chain per fixture. Each target owns {state,seed,amplitude,
-// pl,marker,bases}; the same normalized seeded sample scales the actual PointLight and its visible
-// emitter material. The default amplitude remains below the tabletop torchlit profile's 0.14.
-const INTERIOR_LIGHT_FLICKER_AMPLITUDE = 0.06;
-// BW3-4 addendum: the per-tick nudge math pulled out to a PURE function (explicit args, no S/closure
-// reads) — same "pure step, thin scheduler wraps it" split VP6's own mote drift already keeps
-// (startMoteDrift's rAF loop vs the per-mote math it runs). Lets a deterministic fake-clock harness
-// drive one tick directly (dev/verify-bw3-4-light-shafts.mjs) without needing S.mounted/a live
-// scheduler, and lets the light-CONE card (this unit) ride the identical delta the marker already
-// does — never a second independently-randomized swing (that would desync the shaft from its own
-// marker/light, the exact "flicker sync" this unit's spec calls for).
-function lightFlickerHash32(value){
-  let h = 2166136261 >>> 0;
-  const s = String(value || "");
-  for(let i = 0; i < s.length; i++){
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  h += h << 13; h ^= h >>> 7; h += h << 3; h ^= h >>> 17; h += h << 5;
-  return h >>> 0;
-}
-function lightFlickerNormalizedSample(seed, sampleIndex, amplitude){
-  const h = lightFlickerHash32(String(seed || "light") + ":" + String(sampleIndex || 0));
-  const unit = h / 4294967295;
-  const a = Math.max(0, Math.min(0.45, Number(amplitude) || 0));
-  return 1 + (unit * 2 - 1) * a;
-}
-function lightFlickerIntervalMs(seed, sampleIndex, cadenceMs, intervalJitter){
-  const base = Math.max(120, Math.min(5000, Number(cadenceMs) || 480));
-  const jitter = Math.max(0, Math.min(0.9, Number(intervalJitter) || 0));
-  const h = lightFlickerHash32(String(seed || "light") + ":interval:" + String(sampleIndex || 0));
-  const unit = h / 4294967295;
-  return Math.max(120, Math.round(base * (1 - jitter + unit * jitter * 2)));
-}
-function lightFlickerDirectionSample(seed, sampleIndex, directionAmplitude){
-  const amplitude = Math.max(0, Math.min(0.08, Number(directionAmplitude) || 0));
-  if(!amplitude) return { x: 0, y: 0, z: 0 };
-  const prefix = String(seed || "light") + ":direction:" + String(sampleIndex || 0);
-  const angle = (lightFlickerHash32(prefix + ":angle") / 4294967295) * Math.PI * 2;
-  const radiusUnit = lightFlickerHash32(prefix + ":radius") / 4294967295;
-  const verticalUnit = lightFlickerHash32(prefix + ":vertical") / 4294967295;
-  const radius = amplitude * (0.45 + radiusUnit * 0.55);
-  return {
-    x: Math.cos(angle) * radius,
-    y: (verticalUnit * 2 - 1) * amplitude * 0.22,
-    z: Math.sin(angle) * radius
-  };
-}
-function lightFlickerSmoothProgress(progress){
-  const t = Math.max(0, Math.min(1, Number(progress) || 0));
-  return t * t * (3 - 2 * t);
-}
-function lightFlickerInterpolatedState(fromSample, toSample, fromDirection, toDirection, progress){
-  const t = lightFlickerSmoothProgress(progress);
-  const from = fromDirection || { x: 0, y: 0, z: 0 };
-  const to = toDirection || { x: 0, y: 0, z: 0 };
-  return {
-    sample: fromSample + (toSample - fromSample) * t,
-    direction: {
-      x: from.x + (to.x - from.x) * t,
-      y: from.y + (to.y - from.y) * t,
-      z: from.z + (to.z - from.z) * t
-    }
-  };
-}
-function lightFlickerApplySample(target, sample, direction){
-  if(!target) return;
-  const normalized = Number.isFinite(sample) ? sample : 1;
-  const directional = direction && Number.isFinite(direction.x)
-    ? direction : { x: 0, y: 0, z: 0 };
-  if(target.pl){
-    target.pl.intensity = Math.max(0, target.baseIntensity * normalized);
-    if(target.basePointPosition && target.pl.position && typeof target.pl.position.set === "function"){
-      target.pl.position.set(
-        target.basePointPosition.x + directional.x,
-        target.basePointPosition.y + directional.y,
-        target.basePointPosition.z + directional.z
-      );
-    }
-    target.pl.userData = target.pl.userData || {};
-    target.pl.userData.flickerSample = normalized;
-    target.pl.userData.directionSample = {
-      x: directional.x, y: directional.y, z: directional.z
-    };
-    target.pl.userData.lightState = target.state;
-  }
-  if(target.marker && target.marker.material){
-    if(target.emissiveFlicker){
-      target.marker.material.emissiveIntensity = Math.max(0, target.baseEmissiveIntensity * normalized);
-    } else {
-      target.marker.material.opacity = Math.max(0, Math.min(1, target.baseOpacity * normalized));
-    }
-    if(target.baseMarkerPosition && target.marker.position && typeof target.marker.position.set === "function"){
-      target.marker.position.set(
-        target.baseMarkerPosition.x + directional.x,
-        target.baseMarkerPosition.y + directional.y,
-        target.baseMarkerPosition.z + directional.z
-      );
-    }
-    if(target.marker.rotation && target.baseMarkerRotation){
-      const amplitude = Math.max(0.000001, Number(target.directionAmplitude) || 0);
-      target.marker.rotation.x = target.baseMarkerRotation.x + (directional.z / amplitude) * 0.12;
-      target.marker.rotation.y = target.baseMarkerRotation.y;
-      target.marker.rotation.z = target.baseMarkerRotation.z - (directional.x / amplitude) * 0.12;
-    }
-    target.marker.userData = target.marker.userData || {};
-    target.marker.userData.flickerSample = normalized;
-    target.marker.userData.directionSample = {
-      x: directional.x, y: directional.y, z: directional.z
-    };
-    target.marker.userData.lightState = target.state;
-  }
-  if(target.cone && target.cone.material){
-    target.cone.material.opacity = Math.max(0, Math.min(1, target.baseConeOpacity * normalized));
-  }
-  target.normalizedSample = normalized;
-  target.directionSample = {
-    x: directional.x, y: directional.y, z: directional.z
-  };
-}
-function lightFlickerStep(pointLights, bases, interiorTargets, amplitude, tickIndex){
-  (pointLights || []).forEach((l, i) => {
-    const base = bases[i] != null ? bases[i] : l.intensity;
-    const sample = lightFlickerNormalizedSample("profile:" + i, tickIndex || 0, amplitude);
-    l.intensity = Math.max(0.05, base * sample);
-  });
-  (interiorTargets || []).forEach((t) => {
-    if(t.state !== "flickering") return;
-    const index = tickIndex != null ? tickIndex : ((t.sampleIndex || 0) + 1);
-    t.sampleIndex = index;
-    const sample = lightFlickerNormalizedSample(t.seed || t.id, index, t.amplitude);
-    const direction = lightFlickerDirectionSample(
-      t.seed || t.id,
-      index,
-      t.directionAmplitude
-    );
-    // CL-R1: one normalized deterministic sample drives the physical PointLight, the visible
-    // emitter material, optional shaft, and co-located flame/light dance on this exact tick. A steady
-    // sibling is never visited.
-    lightFlickerApplySample(t, sample, direction);
-  });
-}
-function startLightFlicker(amplitude, interiorTargets){
-  stopLightFlicker();
-  const bases = S.pointLights.map(l => l.intensity);
-  S.interiorFlickerTargets = interiorTargets || [];
-  S.flickerTick = 0;
-  const hasProfileFlicker = amplitude > 0 && S.pointLights.length > 0;
-  const hasLocalFlicker = S.interiorFlickerTargets.some(t => t && t.state === "flickering");
-  if(!hasProfileFlicker && !hasLocalFlicker) return;
-  const startTime = typeof performance !== "undefined" && performance.now
-    ? performance.now() : Date.now();
-  const profileTracks = bases.map((base, index) => ({
-    base: base,
-    index: 1,
-    fromSample: 1,
-    toSample: lightFlickerNormalizedSample("profile:" + index, 1, amplitude),
-    startedAt: startTime,
-    intervalMs: 480
-  }));
-  S.interiorFlickerTargets.forEach((target) => {
-    if(!target || target.state !== "flickering") return;
-    target.flickerEventIndex = 0;
-    target.lastIntervalMs = null;
-    target.nextIntervalMs = lightFlickerIntervalMs(
-      target.seed,
-      1,
-      target.cadenceMs,
-      target.intervalJitter
-    );
-    target.flickerFromSample = Number.isFinite(target.normalizedSample)
-      ? target.normalizedSample : 1;
-    target.flickerToSample = lightFlickerNormalizedSample(
-      target.seed || target.id,
-      1,
-      target.amplitude
-    );
-    target.flickerFromDirection = Object.assign(
-      { x: 0, y: 0, z: 0 },
-      target.directionSample || {}
-    );
-    target.flickerToDirection = lightFlickerDirectionSample(
-      target.seed || target.id,
-      1,
-      target.directionAmplitude
-    );
-    target.flickerStartedAt = startTime;
-    target.sampleIndex = 1;
-  });
-  function frame(now){
-    S.flickerRaf = null;
-    if(!S.mounted){ stopLightFlicker(); return; }
-    S.flickerTick++;
-    if(hasProfileFlicker){
-      profileTracks.forEach((track, index) => {
-        let catchUpGuard = 0;
-        while(now >= track.startedAt + track.intervalMs){
-          track.startedAt += track.intervalMs;
-          track.index++;
-          track.fromSample = track.toSample;
-          track.toSample = lightFlickerNormalizedSample(
-            "profile:" + index,
-            track.index,
-            amplitude
-          );
-          // A backgrounded tab can resume after thousands of target intervals. Preserve continuity
-          // for ordinary gaps without making the first visible frame pay an unbounded catch-up loop.
-          if(++catchUpGuard >= 64){
-            track.startedAt = now;
-            break;
-          }
-        }
-        const state = lightFlickerInterpolatedState(
-          track.fromSample,
-          track.toSample,
-          null,
-          null,
-          (now - track.startedAt) / track.intervalMs
-        );
-        if(S.pointLights[index]){
-          S.pointLights[index].intensity = Math.max(0.05, track.base * state.sample);
-        }
-      });
-    }
-    S.interiorFlickerTargets.forEach((target) => {
-      if(!target || target.state !== "flickering") return;
-      let catchUpGuard = 0;
-      while(now >= target.flickerStartedAt + target.nextIntervalMs){
-        target.flickerStartedAt += target.nextIntervalMs;
-        target.lastIntervalMs = target.nextIntervalMs;
-        target.flickerEventIndex = (target.flickerEventIndex || 0) + 1;
-        target.flickerFromSample = target.flickerToSample;
-        target.flickerFromDirection = target.flickerToDirection;
-        target.sampleIndex = target.flickerEventIndex + 1;
-        target.flickerToSample = lightFlickerNormalizedSample(
-          target.seed || target.id,
-          target.sampleIndex,
-          target.amplitude
-        );
-        target.flickerToDirection = lightFlickerDirectionSample(
-          target.seed || target.id,
-          target.sampleIndex,
-          target.directionAmplitude
-        );
-        target.nextIntervalMs = lightFlickerIntervalMs(
-          target.seed,
-          target.sampleIndex,
-          target.cadenceMs,
-          target.intervalJitter
-        );
-        if(++catchUpGuard >= 64){
-          target.flickerStartedAt = now;
-          break;
-        }
-      }
-      const state = lightFlickerInterpolatedState(
-        target.flickerFromSample,
-        target.flickerToSample,
-        target.flickerFromDirection,
-        target.flickerToDirection,
-        (now - target.flickerStartedAt) / target.nextIntervalMs
-      );
-      lightFlickerApplySample(target, state.sample, state.direction);
-    });
-    if(!hasProfileFlicker && !S.interiorFlickerTargets.some(t => t && t.state === "flickering")){
-      stopLightFlicker();
-      return;
-    }
-    // The scene stays display-rate smooth; the text telemetry is deliberately cheaper so rebuilding
-    // its DOM cannot steal time from the flame/shadow animation the panel is describing.
-    if(S.flickerTick % 6 === 0 && typeof S.clayRoomRefreshLights === "function"){
-      S.clayRoomRefreshLights();
-    }
-    markDirty();
-    S.flickerRaf = requestAnimationFrame(frame);
-  }
-  S.flickerRaf = requestAnimationFrame(frame);
-}
-function stopLightFlicker(){
-  if(S.flickerRaf != null){ cancelAnimationFrame(S.flickerRaf); S.flickerRaf = null; }
-  S.interiorFlickerTargets = [];
-  S.flickerTick = 0;
-}
+// split B5: the FLICKER scheduler (the §2 flicker header, INTERIOR_LIGHT_FLICKER_AMPLITUDE, the
+// lightFlicker* pure math, startLightFlicker's own requestAnimationFrame loop and stopLightFlicker)
+// moved WHOLE and ALONE to src/ui/theater-lighting.js. It is still its own scheduler — separate from
+// the dirty-frame loop, the verb tween loop and the mote loop, exactly as the brief's protected
+// contracts require. Nothing was unified. retire() below still calls stopLightFlicker through the
+// import block, so there is still ONE true teardown point.
 
 /* §4 texture hooks. TextureLoader is async by nature; loaded textures land in S.textures keyed by
    semantic name and get nearest-filtered the moment they resolve. A failed/missing manifest fetch or
@@ -6393,6 +5655,8 @@ function mount(el, opts){
   clayRoomSyncState(S); // split B1: the clay module mirrors the live state record
   lightLabSyncState(S); // split B2: same law for the lab
   postSyncState(S);     // split B4: same law for the post suite (it reads AND writes S.postSuite*)
+  lightingSyncState(S); // split B5: same law for the lighting family + the flicker scheduler
+  motesSyncState(S);    // split B5: same law for the mote field + its own drift scheduler
   if(priorTextures) S.textures = priorTextures;
   // BEAUTY-WAVE-2 BW2-0: default is now CLEAN (S.psxEnabled false, createTheaterState's own default),
   // so the escape hatch is symmetric — `opts.psx === true` is the dev/nostalgia toggle that turns the
@@ -7330,76 +6594,21 @@ function itrBuildOcclusionGhostPillarMeshes(entries, cx, cz, variant, pillarTex)
    conventions (dirty-key skip, clearGroup, placeCamera, applyLightProfile) wherever the shape lines up.
    Clears S.tileGroup/S.propGroup too (and setBoard, above, clears S.interiorGroup) so switching between
    a combat board and a standing-table interior tray never leaves the OTHER render's meshes on stage. */
-// DUNGEON-GRAPH.md U3 iteration-2, ruling 2: cap total shadow-CASTING lights per interior board —
-// each shadow-casting PointLight is its own shadow-map render pass, so an unbounded count on an
-// 80-room whole-plan render would tank frame time. Non-casting lights still LIGHT the scene (real
-// PointLight, real falloff, real color) — they just skip the shadow-map cost. Nearest-to-focus wins
-// (see interiorAssignShadowCasters below); this is a render-BUDGET cap, not a data-shape cap — U3's
-// own instance/draw-call budget is untouched.
-const INTERIOR_SHADOW_CASTER_CAP = 4;
-const INTERIOR_SHADOW_MAP_SIZE = 512; // small per-light map — 4 lights x 512^2 stays cheap on the dev machine
 
-// deterministic distance-sort + cap: the CENTER (cx,cz) is the focus-room-or-whole-plan centroid
-// setInteriorBoard already computes (the SAME point placeCamera aims at) — lights nearest that point
-// are the ones actually inside/adjacent the room the camera is looking at, so they're the ones worth
-// paying the shadow-map cost for.
-function interiorAssignShadowCasters(lights, cx, cz){
-  const withDist = (lights || []).map((l, i) => ({
-    l, i,
-    priority: Number.isFinite(l.shadowBudgetPriority) ? l.shadowBudgetPriority : 1,
-    d: Math.hypot((l.x || 0) - cx, (l.z || 0) - cz)
-  })).filter((row) => row.l.castShadow !== false);
-  withDist.sort((a, b) => b.priority - a.priority || a.d - b.d || a.i - b.i);
-  const casterIdx = new Set(withDist.slice(0, INTERIOR_SHADOW_CASTER_CAP).map((w) => w.i));
-  return (lights || []).map((l, i) => Object.assign({}, l, { castShadow: casterIdx.has(i) }));
-}
-
-// BW2-4 addendum (Adam, mid-flight: "I don't think I have seen any... in-world light sources") — THE
-// LIGHT-MARKER SWAP. Adam's ruling 2 asked the source to "read as an object, not magic"; U3's first cut
-// was a bare flame-colored RECTANGLE quad, which reads at board distance as a floating orange rectangle
-// (Adam's complaint). Two replacements, both deterministic (same seeds, no RNG):
-//  (a) EVERY light gets a soft additive GLOW DISC (radial-gradient, not a hard-edged rectangle) at the
-//      flame point — the universal "this point emits" read, and the flicker channel's opacity target.
-//  (b) Realms with a light-primary dressing card (INTERIOR_LIGHT_CARD) additionally get that card
-//      standing self-lit on the floor at the light seed — a lantern/candle OBJECT (mock-01-finale.png
-//      stands floor lanterns exactly this way). Where no card exists, the glow disc alone stands in.
-// A realmId -> floor-standing light-card slug map. Grepped from assets/dressing: gloom/fantasy carry
-// lantern/candle cards today; realms without one fall through to the glow-disc-only path (never a bare
-// rectangle again). The emitter card never casts a shadow (it sits AT the light — a self-shadow on its
-// own pool is degenerate) and is self-lit (MeshBasicMaterial), so it reads at the plunged ambient.
-const INTERIOR_LIGHT_CARD = {
-  gloom: "gloom-clutter-lanternrust",
-  fantasy: "fantasy-clutter-lanternhook",
-  chrome: "chrome-flora-lightpod", // BW2-4b item 5: chrome's folded light-pod card so its cones stand on a real fixture too
-};
-const INTERIOR_LIGHT_CARD_HEIGHT = 1.1; // world units — a small floor lantern, well under standee height
-let INTERIOR_GLOW_TEXTURE = null;
-function interiorGlowTexture(){
-  if(INTERIOR_GLOW_TEXTURE) return INTERIOR_GLOW_TEXTURE;
-  const size = 64;
-  const cv = document.createElement("canvas"); cv.width = cv.height = size;
-  const ctx = cv.getContext("2d");
-  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-  g.addColorStop(0, "rgba(255,255,255,1)");
-  g.addColorStop(0.4, "rgba(255,255,255,0.5)");
-  g.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = g; ctx.fillRect(0, 0, size, size);
-  const tex = new THREE.CanvasTexture(cv);
-  tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; // a soft glow — never nearest
-  INTERIOR_GLOW_TEXTURE = tex;
-  return tex;
-}
-// the soft additive glow disc — a camera-facing group (userData.sprite) so updateSpriteBillboardYaw
-// turns it to face the camera; returns {group, mesh} so the flicker channel can pulse mesh.opacity.
-// GLOW DISC SIZE/OPACITY (2026-07-12, Adam "I'm looking right at orbs"): the disc was sized UP
-// (0.5/0.6 -> 0.85/1.0) + opacity 0.95 by BW2-4b so it read as the apex fixture of a light CONE. The
-// cone was KILLED in DIEGETIC-LIGHT (ITR_LIGHT_CONE_ENABLED=false) — so an oversized near-opaque
-// additive plane was left floating with no cone, reading as a big glowing ORB. Shrunk back to a tight
-// flame-glow: the emitter NUB (interiorBuildLightEmitterNub, P-1) is the visible physical source now;
-// this disc is just the flame's hot halo, not the source itself. Named + dial-able.
-const ITR_GLOW_DISC_SIZE = 0.42;         // torch/fire; a tight flame glow, not a cell-wide orb
-const ITR_GLOW_DISC_SIZE_LAMP = 0.36;    // lamps read a hair smaller/cooler
-const ITR_GLOW_DISC_OPACITY = 0.6;       // softer than the old cone-apex 0.95
+// ---- INTERIOR PRACTICALS: extracted to src/ui/theater-practicals.js (split B5, 2026-07-25) ----
+// The E0 visible-practical rig moved there whole: INTERIOR_SHADOW_CASTER_CAP / INTERIOR_SHADOW_MAP_SIZE /
+// interiorAssignShadowCasters, the light-card + glow-disc + emitter-nub + light-cone builders and their
+// authored consts, the ITR_FIXTURE_* fixture family, interiorEnvLightHalfExtent /
+// interiorNearestWallMountSlot / interiorResolveFixturePlacement, and interiorBuildLights itself. This
+// root imports that surface (top import block) and passes capabilities via practicalsInit(ctx) at
+// end-of-body; that module never reads S, so it takes no SyncState.
+// WHAT STAYS HERE, and why: the practical GATES — the three mutable `let`s immediately below, plus
+// ITR_BRIGHT_SUPPRESS_PRACTICALS, which keeps its place further up in the LIGHT-CLOSE block. Each is
+// reassigned at runtime by its own window.Theater seam (setGlowDiscDiagnosticForTest /
+// setLightEmitterNubEnabled / setLightConeEnabled / setBrightPracticalsSuppressed), so an import
+// binding (read-only) or a copied mirror (goes stale the instant a harness flips one) would both be
+// wrong. Three of the four are read LIVE by moved bodies through ctx accessors;
+// ITR_LIGHT_EMITTER_NUB_ENABLED is read only by its own getter/setter pair and needs no accessor.
 // E0 — VISIBLE PRACTICALS (docs/WALL-VOLUMES-PRACTICALS.md): every light now resolves a real physical
 // FIXTURE (interiorBuildFixtureGroup, below) whose own emitter submesh is the visible source — the
 // floating additive disc this function builds is retired from the production path. Kept ONLY for a
@@ -7407,43 +6616,6 @@ const ITR_GLOW_DISC_OPACITY = 0.6;       // softer than the old cone-apex 0.95
 // window.Theater.setGlowDiscDiagnosticForTest, same convention as ITR_LIGHT_CONE_ENABLED). glowCount
 // stays 0 in production either way (interiorBuildLights below never increments it when this is false).
 let ITR_GLOW_DISC_DIAGNOSTIC = false;
-function interiorBuildGlowDisc(light){
-  const size = (light.kind === "lamp" ? ITR_GLOW_DISC_SIZE_LAMP : ITR_GLOW_DISC_SIZE);
-  const geo = new THREE.PlaneGeometry(size, size);
-  const mat = new THREE.MeshBasicMaterial({
-    map: interiorGlowTexture(), color: light.color || "#ffbb66",
-    transparent: true, opacity: ITR_GLOW_DISC_OPACITY, blending: THREE.AdditiveBlending,
-    depthWrite: false, side: THREE.DoubleSide
-  });
-  mat.userData.psxExempt = true;
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.castShadow = false; mesh.receiveShadow = false; // a light's own glow never shadows itself
-  const group = new THREE.Group();
-  group.add(mesh);
-  group.userData.sprite = true;
-  return { group, mesh };
-}
-// the floor-standing emitter card (self-lit lantern/candle) — mirrors buildDressingCard's construction
-// (dressingTextureFor's always-available placeholder-or-real join, alpha-cutout, psxExempt) but never
-// casts a shadow (it sits AT its own light) and stands at a fixed small lantern height.
-function interiorBuildLightCard(slug){
-  const tex = dressingTextureFor(slug);
-  const h = INTERIOR_LIGHT_CARD_HEIGHT;
-  const geo = new THREE.PlaneGeometry(h, h);
-  const mat = new THREE.MeshBasicMaterial({
-    map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
-  });
-  mat.userData.psxExempt = true;
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.y = h / 2;
-  mesh.castShadow = false; mesh.receiveShadow = false;
-  const g = new THREE.Group();
-  g.add(mesh);
-  g.userData.sprite = true;
-  g.userData.dressingSlug = slug;
-  g.userData.lightEmitterMarker = "card"; // P-1 problem 3 test-facing tag — see _interiorLightEmittersForTest
-  return g;
-}
 
 // docs/LIGHT-SIGHT-POLISH.md P-1 problem 3 (Adam's re-shoot: "the glow disc floats with no source" —
 // the cone is gone (ITR_LIGHT_CONE_ENABLED default false) and only chrome/gloom/fantasy carry a real
@@ -7455,32 +6627,7 @@ function interiorBuildLightCard(slug){
 // automatically, present or future. Reversible: flip ITR_LIGHT_EMITTER_NUB_ENABLED (mirrors the L-1 cone
 // gate's own convention) or call window.Theater.setLightEmitterNubEnabled(v) at runtime.
 let ITR_LIGHT_EMITTER_NUB_ENABLED = true;
-const ITR_LIGHT_EMITTER_NUB_RADIUS = 0.16; // world units — a small stub, well under a standee's own scale
-const ITR_LIGHT_EMITTER_NUB_HEIGHT = 0.3;
-function interiorBuildLightEmitterNub(light){
-  const geo = new THREE.CylinderGeometry(ITR_LIGHT_EMITTER_NUB_RADIUS * 0.7, ITR_LIGHT_EMITTER_NUB_RADIUS, ITR_LIGHT_EMITTER_NUB_HEIGHT, 8);
-  const mat = new THREE.MeshBasicMaterial({ color: light.color || "#ffbb66" });
-  mat.userData.psxExempt = true;
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.y = ITR_LIGHT_EMITTER_NUB_HEIGHT / 2;
-  mesh.castShadow = false; mesh.receiveShadow = false; // a light's own tiny fixture never shadows itself (same discipline as the glow disc/card)
-  const g = new THREE.Group();
-  g.add(mesh);
-  g.userData.lightEmitterMarker = "nub"; // test-facing tag — see _interiorLightEmittersForTest
-  return g;
-}
 
-// BEAUTY-WAVE-3.md BW3-4 — LIGHT SHAFTS: the classic cheap fake-volumetric "god ray" — a single
-// camera-yaw-facing gradient-cone billboard per light, apex at the flame/lamp point, widening
-// DOWNWARD to the room's own floor (interiorFloorTopAt — the derived law, never a bare -0.5 plane),
-// bridging the glow-disc marker to the floor pool the mock (mock-01-fantasy-explore.png) reads as one
-// warm shaft. Cheap quads only: one PlaneGeometry + one CanvasTexture, additive+depthWrite:false (never
-// occludes — the same "additive glow" family the glow disc/light card already are), no ray-marching,
-// no post pass (BW3-0's composer seam is a sibling unit — this stays independent of it, same MeshBasic
-// family as everything else in this render).
-const ITR_LIGHT_CONE_WIDTH_RATIO = 0.55; // base (floor) width as a fraction of the apex->floor height
-const ITR_LIGHT_CONE_MIN_HEIGHT = 0.6;   // guards a degenerate sliver when a light sits almost on the floor
-const ITR_LIGHT_CONE_OPACITY = { lamp: 0.22, torch: 0.3 }; // a whisper — this is atmosphere, not a second light source
 // docs/DIEGETIC-LIGHT.md L-1 — CONE GATE (Adam's ruling 2026-07-11, fork F1): the volumetric god-ray
 // cone reads as a magic beam, not a diegetic point light's real falloff — "remove the cone behind a
 // reversible flag... keep only the emissive flame/glow marker + the point light's real falloff."
@@ -7489,780 +6636,15 @@ const ITR_LIGHT_CONE_OPACITY = { lamp: 0.22, torch: 0.3 }; // a whisper — this
 // (below) is gated. Reversible in one line for the re-shoot: flip this literal, or call
 // window.Theater.setLightConeEnabled(true) at runtime.
 let ITR_LIGHT_CONE_ENABLED = false;
-let INTERIOR_CONE_TEXTURE = null;
-// a triangular alpha gradient painted onto a plain rectangle (the fake-cone trick: the QUAD stays a
-// simple billboard, the CONE SHAPE lives entirely in the texture's alpha) — apex at canvas top (y=0,
-// centered), base spanning most of the canvas width at the bottom; a vertical gradient additionally
-// fades the whole shape toward transparent by the floor so the shaft reads as dissipating light, not a
-// hard-edged wedge.
-function interiorConeTexture(){
-  if(INTERIOR_CONE_TEXTURE) return INTERIOR_CONE_TEXTURE;
-  const w = 128, h = 256;
-  const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
-  const ctx = cv.getContext("2d");
-  ctx.clearRect(0, 0, w, h);
-  ctx.beginPath();
-  ctx.moveTo(w / 2, 0);    // apex — the flame/lamp point
-  ctx.lineTo(w * 0.14, h); // floor-pool left edge
-  ctx.lineTo(w * 0.86, h); // floor-pool right edge
-  ctx.closePath();
-  const g = ctx.createLinearGradient(0, 0, 0, h);
-  g.addColorStop(0, "rgba(255,255,255,0.95)");
-  g.addColorStop(0.5, "rgba(255,255,255,0.4)");
-  g.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = g;
-  ctx.fill();
-  const tex = new THREE.CanvasTexture(cv);
-  tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; // a soft gradient — never nearest
-  INTERIOR_CONE_TEXTURE = tex;
-  return tex;
-}
-// `height` is the apex->floor world-unit span (interiorBuildLights computes this off the light's own
-// y and interiorFloorTopAt, below) — returns {group, mesh} so the flicker channel can pulse
-// mesh.material.opacity in sync with its light, same contract as interiorBuildGlowDisc.
-function interiorBuildLightCone(light, height){
-  const h = Math.max(ITR_LIGHT_CONE_MIN_HEIGHT, height);
-  const w = h * ITR_LIGHT_CONE_WIDTH_RATIO;
-  const geo = new THREE.PlaneGeometry(w, h);
-  const baseOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
-  const mat = new THREE.MeshBasicMaterial({
-    map: interiorConeTexture(), color: light.color || "#ffbb66",
-    transparent: true, opacity: baseOpacity, blending: THREE.AdditiveBlending,
-    depthWrite: false, side: THREE.DoubleSide
-  });
-  mat.userData.psxExempt = true;
-  const mesh = new THREE.Mesh(geo, mat);
-  // the texture's apex (canvas y=0) maps to the plane's own top edge — shifting the mesh DOWN by
-  // half its height puts that top edge at the group's local origin (where the group gets positioned
-  // to the light's own apex point, below), so the cone's wide base descends from there toward the
-  // floor, never the reverse.
-  mesh.position.y = -h / 2;
-  mesh.castShadow = false; mesh.receiveShadow = false; // a light's own volumetric shaft never shadows itself
-  const group = new THREE.Group();
-  group.add(mesh);
-  group.userData.sprite = true; // camera-yaw-facing billboard, same convention as the glow disc/light card
-  return { group, mesh };
-}
 
-// ════════════════════════════════════════════════════════════════════════════════════════════════
-// E0 — VISIBLE PRACTICALS (docs/WALL-VOLUMES-PRACTICALS.md): a small deterministic recipe grammar —
-// cylinders/cups/handles/brackets/wax columns/faceted crystals — one entry per fixtureId
-// (src/ui/theater-interior.js's own ITR_FIXTURE_RECIPES names, kept in sync by convention, same
-// one-way classic/ES-module boundary discipline the light-profile vocabulary already uses). Every
-// recipe returns BODY parts (plain primitives, MeshLambertMaterial, NEVER emissive/bloom) plus the ONE
-// emissive EMITTER submesh — built and POSITIONED at the light record's own `emitterLocal` (never a
-// second, independently-guessed height), so the PointLight (also mounted at `emitterLocal`, below) and
-// the emitter submesh's bounds agree BY CONSTRUCTION, not by two authors' numbers happening to match.
-// ════════════════════════════════════════════════════════════════════════════════════════════════
-const ITR_FIXTURE_BODY_PARTS = {
-  "sconce-iron": (el) => [
-    { geo: () => new THREE.BoxGeometry(0.05, 0.05, Math.max(0.05, el.z * 0.85)), pos: [0, el.y * 0.4, el.z * 0.42] },
-    { geo: () => new THREE.CylinderGeometry(0.05, 0.07, 0.05, 8), pos: [0, el.y * 0.9 + 0.02, el.z] },
-  ],
-  "sconce-torch": (el) => [
-    { geo: () => new THREE.BoxGeometry(0.055, 0.055, Math.max(0.06, el.z * 0.85)), pos: [0, el.y * 0.35, el.z * 0.42] },
-    { geo: () => new THREE.CylinderGeometry(0.055, 0.08, 0.06, 8), pos: [0, el.y * 0.85, el.z] },
-  ],
-  "sconce-torch-clay": (el) => [
-    // A legible, upright wooden haft and iron cup—not the short bracket + glowing orb used by the
-    // calibration bulb. Keeping the flame at `emitterLocal` preserves point/emitter co-location.
-    { geo: () => new THREE.CylinderGeometry(0.035, 0.045, 0.34, 7), pos: [0, el.y - 0.18, el.z] },
-    { geo: () => new THREE.CylinderGeometry(0.065, 0.09, 0.07, 8), pos: [0, el.y - 0.035, el.z] },
-  ],
-  "bracket-generic": (el) => [
-    { geo: () => new THREE.BoxGeometry(0.045, 0.045, Math.max(0.05, el.z * 0.85)), pos: [0, el.y * 0.4, el.z * 0.42] },
-    { geo: () => new THREE.SphereGeometry(0.045, 6, 5), pos: [0, el.y * 0.9, el.z] },
-  ],
-  "brazier-low": (el) => [
-    { geo: () => new THREE.CylinderGeometry(0.22, 0.13, 0.12, 10), pos: [0, el.y * 0.55, 0] },
-    { geo: () => new THREE.CylinderGeometry(0.02, 0.02, Math.max(0.08, el.y * 0.5), 5), pos: [0.13, el.y * 0.22, 0.08] },
-    { geo: () => new THREE.CylinderGeometry(0.02, 0.02, Math.max(0.08, el.y * 0.5), 5), pos: [-0.13, el.y * 0.22, 0.08] },
-    { geo: () => new THREE.CylinderGeometry(0.02, 0.02, Math.max(0.08, el.y * 0.5), 5), pos: [0, el.y * 0.22, -0.15] },
-  ],
-  "candle-cluster": (el) => [
-    { geo: () => new THREE.CylinderGeometry(0.032, 0.036, Math.max(0.1, el.y * 0.85), 7), pos: [0, el.y * 0.42, 0] },
-    { geo: () => new THREE.CylinderGeometry(0.028, 0.032, Math.max(0.08, el.y * 0.62), 7), pos: [0.06, el.y * 0.30, 0.03] },
-    { geo: () => new THREE.CylinderGeometry(0.028, 0.032, Math.max(0.09, el.y * 0.70), 7), pos: [-0.05, el.y * 0.34, -0.04] },
-  ],
-  "lantern-handled": (el) => [
-    { geo: () => new THREE.CylinderGeometry(0.09, 0.09, Math.max(0.12, el.y * 0.9), 8), pos: [0, el.y * 0.5, 0] },
-    { geo: () => new THREE.TorusGeometry(0.08, 0.012, 6, 12), pos: [0, el.y * 0.98, 0], rotX: Math.PI / 2 },
-  ],
-  // Checkpoint 3 (2026-07-25, "magic reads as a small violet bulb"): a believable arcane source —
-  // a rock base with a CLUSTER of faceted shards in the canon's triangulated language. The main
-  // shard is the emitter (below); these are its dark companions, so the glow reads as crystal
-  // growing from stone, not a lamp.
-  "crystal-faceted": (el) => [
-    { geo: () => new THREE.CylinderGeometry(0.16, 0.22, Math.max(0.07, el.y * 0.3), 7), pos: [0, el.y * 0.12, 0] },
-    { geo: () => new THREE.OctahedronGeometry(0.13), pos: [0.14, el.y * 0.3, 0.05], rotX: 0.35 },
-    { geo: () => new THREE.OctahedronGeometry(0.09), pos: [-0.12, el.y * 0.26, -0.08], rotX: -0.5 },
-  ],
-  // Checkpoint 3 ("lava reads as a red point on the floor"): a molten fissure — low dark rock rim
-  // around a flat emissive melt surface (the emitter, below). Floor-standing, deterministic.
-  "lava-fissure": (el) => [
-    { geo: () => new THREE.BoxGeometry(0.5, 0.08, 0.14), pos: [0, 0.04, 0.3], rotX: 0 },
-    { geo: () => new THREE.BoxGeometry(0.44, 0.09, 0.13), pos: [0.06, 0.045, -0.3] },
-    { geo: () => new THREE.BoxGeometry(0.14, 0.08, 0.42), pos: [0.32, 0.04, 0] },
-    { geo: () => new THREE.BoxGeometry(0.13, 0.07, 0.4), pos: [-0.3, 0.035, 0.04] },
-  ],
-  "lamp-post": (el) => [
-    { geo: () => new THREE.CylinderGeometry(0.03, 0.045, Math.max(0.2, el.y * 0.92), 8), pos: [0, el.y * 0.46, 0] },
-  ],
-};
-const ITR_FIXTURE_EMITTER_GEO = {
-  "sconce-iron": () => new THREE.ConeGeometry(0.04, 0.11, 6),
-  "sconce-torch": () => new THREE.ConeGeometry(0.045, 0.13, 6),
-  "sconce-torch-clay": () => new THREE.ConeGeometry(0.08, 0.22, 7),
-  "bracket-generic": () => new THREE.SphereGeometry(0.05, 6, 5),
-  "brazier-low": () => new THREE.ConeGeometry(0.09, 0.22, 7),
-  "candle-cluster": () => new THREE.ConeGeometry(0.03, 0.09, 6),
-  "lantern-handled": () => new THREE.SphereGeometry(0.06, 7, 6),
-  "crystal-faceted": () => new THREE.OctahedronGeometry(0.3),
-  "lava-fissure": () => new THREE.CylinderGeometry(0.34, 0.38, 0.05, 9),
-  "lamp-post": () => new THREE.SphereGeometry(0.09, 8, 6),
-};
-// MeshStandard/PBR materials are out of E0's scope (WALL-VOLUMES-PRACTICALS.md Decisions: "No bloom
-// mask... No MeshStandard/PBR materials"). MeshLambertMaterial is NOT a PBR material but DOES support
-// `.emissive`/`.emissiveIntensity` (three.js's classic, non-physically-based emissive term) — that's
-// the material this file already uses for every other body surface (walls/floor/props), so the emitter
-// submesh stays in the SAME material family as its own fixture body, just with emissive lit on.
-// tuned so the emitter's own pixel clears UnrealBloomPass's 0.68 linear threshold (bright.png/frame 03's
-// "only the emitter glows" read) regardless of ambient darkness. Round 1 shipped at 2.4 — a live capture
-// (dev/battle-gate/capture-practicals.mjs) showed the halo swallowing the smaller fixture bodies (candle/
-// crystal) into a soft orb rather than a legible object with a tight hot core; dropped to 1.6 (still >=2x
-// the 0.68 gate with real headroom) without touching the bloom pass itself (strength/radius/threshold stay
-// out of scope, per the spec's own "no bloom mask" decision).
-const ITR_FIXTURE_EMISSIVE_INTENSITY = 1.6;
-let ITR_FIXTURE_BODY_MATERIAL_CACHE = null;
-// E0-1 (docs/PHASE-3-WAVE-1-SPECS.md): `wantWall` (true for a fixture whose OWN light.mount ===
-// "wall", regardless of whether placement later degrades to floor for lack of C4.1a slot data —
-// see interiorResolveFixturePlacement) gets a CLONED, non-shared body material so its opacity can
-// be tweened independently, joining its owning wall segment's occlusion-fade `fadeEntry.materials`
-// (wired at the interiorBuildLights call site in setInteriorBoard, below). Every non-wall fixture
-// keeps returning the ONE shared cached material — no perf regression for the common (floor-mount)
-// case, which never needs independent per-fixture fading. `transparent = true` on the clone so the
-// live occlusion tween (itrOcclusionClassify) can actually show fractional opacity the instant a
-// fade starts, same discipline the wall-upper mesh materials already follow (see wallUpperMeshList's
-// own `upperMat.transparent = true`, further below).
-function interiorFixtureBodyMaterial(wantWall){
-  if(!ITR_FIXTURE_BODY_MATERIAL_CACHE){
-    ITR_FIXTURE_BODY_MATERIAL_CACHE = new THREE.MeshLambertMaterial({ color: "#33302a" });
-  }
-  if(wantWall){
-    const clone = ITR_FIXTURE_BODY_MATERIAL_CACHE.clone();
-    clone.transparent = true;
-    return clone;
-  }
-  return ITR_FIXTURE_BODY_MATERIAL_CACHE;
-}
-function interiorFixtureEmitterMaterial(color, wantWall){
-  const mat = new THREE.MeshLambertMaterial({ color: "#000000" });
-  mat.emissive = new THREE.Color(color || "#ffbb66");
-  mat.emissiveIntensity = ITR_FIXTURE_EMISSIVE_INTENSITY;
-  mat.userData.psxExempt = true; // never PSX-shader-tweaked (dither/vertex-snap) — same exemption every self-lit marker in this file already carries
-  // E0-1: a wall-mount fixture's emitter joins its owning wall segment's occlusion-fade
-  // `fadeEntry.materials` (interiorBuildLights, below) — `transparent` must already be true so the
-  // live tween can show fractional opacity the instant a fade starts, same reasoning
-  // interiorFixtureBodyMaterial's own wall-clone branch documents. A non-wall fixture's emitter is
-  // never appended to any fadeEntry, so it stays opaque (unchanged behavior).
-  if(wantWall) mat.transparent = true;
-  return mat;
-}
-// light -> {group, emitter}. `group` sits in MOUNT-LOCAL space (its own local origin IS the mount
-// anchor — floor-top point or wall-slot point, positioned by the caller); `emitter` is the ONE named
-// emissive submesh, positioned at exactly `light.emitterLocal` within that local frame. An unknown/
-// missing fixtureId (a bare test literal, a future data gap) never throws — falls back to the
-// default-bucket family for the requested mount, same defensive posture as the rest of this renderer.
-function interiorBuildFixtureGroup(light){
-  const wantWall = light.mount === "wall";
-  const fixtureId = (light.fixtureId && ITR_FIXTURE_BODY_PARTS[light.fixtureId]) ? light.fixtureId
-    : (wantWall ? "bracket-generic" : "lamp-post");
-  const el = light.emitterLocal || (wantWall ? { x: 0, y: 0.05, z: 0.14 } : { x: 0, y: 0.5, z: 0 });
-  const group = new THREE.Group();
-  const bodyMat = interiorFixtureBodyMaterial(wantWall);
-  const parts = ITR_FIXTURE_BODY_PARTS[fixtureId](el) || [];
-  parts.forEach((part) => {
-    const mesh = new THREE.Mesh(part.geo(), bodyMat);
-    mesh.position.set(part.pos[0], part.pos[1], part.pos[2]);
-    if(part.rotX) mesh.rotation.x = part.rotX;
-    mesh.castShadow = true; mesh.receiveShadow = true;
-    group.add(mesh);
-  });
-  const emitterGeoFn = ITR_FIXTURE_EMITTER_GEO[fixtureId] || ITR_FIXTURE_EMITTER_GEO["lamp-post"];
-  const emitter = new THREE.Mesh(emitterGeoFn(), interiorFixtureEmitterMaterial(light.color, wantWall));
-  emitter.name = "emitter";
-  emitter.userData.fixtureEmitter = true;
-  // LL-1 EMISSIVE-MASKED BLOOM (BLOOM_LAYER's own header comment, above): a true emitter joins
-  // BLOOM_LAYER IN ADDITION TO layer 0 (three's default, left untouched — this is additive, never a
-  // visibility change) so MaskedBloomPass's isolated bright-pass extraction can see it.
-  // Guarded because the vm-extraction verify harnesses (verify-theater-light-props / -visible-practicals /
-  // -bw3-4-light-shafts / -e0-1-fixture-fade, the whole fixture cluster) run this code against a stubbed
-  // THREE whose Mesh has no `.layers` — a real THREE.Mesh always does, so this is a pure no-op in production.
-  if(emitter.layers) emitter.layers.enable(BLOOM_LAYER);
-  emitter.position.set(el.x || 0, el.y || 0, el.z || 0);
-  emitter.castShadow = false; emitter.receiveShadow = false; // a fixture's own flame/bulb never shadows itself, same discipline the old glow disc/nub kept
-  group.add(emitter);
-  group.userData.interiorFixture = true;
-  group.userData.fixtureId = fixtureId;
-  group.userData.emitterMesh = emitter; // direct-access seam (no traversal needed) — also findable via child.name === "emitter"
-  // E0-1: `bodyMat` (a per-fixture clone when `wantWall`, else the shared cache — see
-  // interiorFixtureBodyMaterial above) + `wantWall` ride along on the return so interiorBuildLights
-  // (the only caller) can register this fixture's materials against its owning wall segment's
-  // occlusion-fade entry without re-deriving anything or traversing the group.
-  return { group, emitter, bodyMat, wantWall };
-}
-// nearest C4.1a mount slot (by XZ distance) to (x,z) — "the segment closest to the light's own (x,z)"
-// per WALL-VOLUMES-PRACTICALS.md §E0. `wallMountData` is {mountSlots, wallSegments}; absent/empty
-// (ITR_ROOM_SHELL off, or a room with zero wall segments) returns null — the caller's own defensive
-// degrade-to-floor path.
-// The board's local half-extent as seen from the light group's recentred frame — derived from the
-// shell's OWN wall data (segment mids + mount-slot world positions are raw plan coordinates, the
-// same frame `cx`/`cz` recenter). Fallback when a fixture has no wall data: a generous constant
-// that covers the largest current fixture. Consumed by the environmental directional branch above
-// to size the sun/moon shadow frustum; margin covers wall thickness + segment half-lengths.
-function interiorEnvLightHalfExtent(wallMountData, cx, cz){
-  let maxAbs = 0, found = false;
-  const consider = (x, z) => {
-    if(typeof x !== "number" || typeof z !== "number") return;
-    maxAbs = Math.max(maxAbs, Math.abs(x - cx), Math.abs(z - cz));
-    found = true;
-  };
-  ((wallMountData && wallMountData.wallSegments) || []).forEach((seg) => {
-    if(seg && seg.mid) consider(seg.mid.x, seg.mid.z);
-    if(seg && seg.a) consider(seg.a.x, seg.a.z);
-    if(seg && seg.b) consider(seg.b.x, seg.b.z);
-  });
-  ((wallMountData && wallMountData.mountSlots) || []).forEach((s) => {
-    if(s && s.worldPos) consider(s.worldPos.x, s.worldPos.z);
-  });
-  return found ? maxAbs + 3 : 12;
-}
-function interiorNearestWallMountSlot(wallMountData, x, z){
-  const slots = wallMountData && wallMountData.mountSlots;
-  if(!slots || !slots.length) return null;
-  let best = null, bestD2 = Infinity;
-  for(let i = 0; i < slots.length; i++){
-    const s = slots[i];
-    const dx = s.worldPos.x - x, dz = s.worldPos.z - z;
-    const d2 = dx * dx + dz * dz;
-    if(d2 < bestD2){ bestD2 = d2; best = s; }
-  }
-  return best;
-}
-// resolves a light's own fixture placement: wall-mount snaps to its nearest C4.1a slot (world position
-// + inward normal, so orientation can never disagree with the wall itself); a wall-mount with no slot
-// data DEGRADES to a floor mount at the light's own (x,z), logged once (WALL-VOLUMES-PRACTICALS.md
-// §E0's own defensive contract — "floor fixtures work even if C4.1a mount data is absent").
-function interiorResolveFixturePlacement(light, cx, cz, floorTopMap, wallMountData){
-  // Checkpoint 2 (2026-07-25) — DIAGNOSTIC STUDIO FLOAT: mount "none" places the fixture at its
-  // EXACT authored position (board-relative, y in world units). The physical-emitter honesty law
-  // (CR-3) already distinguishes explicitly-labelled non-diegetic studio hardware from rolled
-  // practicals; a calibration bulb that silently snaps to whatever wall slot happens to exist is
-  // how the "opposing" pair ended up on ADJACENT walls with the readout still claiming opposition
-  // (root-cause notes §2). Production rolled practicals keep the wall/floor mount contract.
-  if(light.mount === "none"){
-    return {
-      mount: "none", ownerSegIndex: null,
-      pos: { x: (light.x || 0) - cx, y: light.y != null ? light.y : 1.7, z: (light.z || 0) - cz },
-      normal: null,
-    };
-  }
-  if(light.mount === "wall"){
-    const slot = interiorNearestWallMountSlot(wallMountData, light.x || 0, light.z || 0);
-    if(slot){
-      return {
-        mount: "wall", ownerSegIndex: slot.ownerSegIndex,
-        pos: { x: slot.worldPos.x - cx, y: slot.worldPos.y, z: slot.worldPos.z - cz },
-        normal: slot.normal,
-      };
-    }
-    if(typeof console !== "undefined" && console.warn){
-      console.warn("[interiorBuildLights] wall-mount fixture had no mount slot data — degrading to floor:", light.fixtureId, light.roomSegNum);
-    }
-  }
-  const floorTop = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
-  return { mount: "floor", ownerSegIndex: null, pos: { x: (light.x || 0) - cx, y: floorTop, z: (light.z || 0) - cz }, normal: null };
-}
-
-// data.lights -> {group, casters} — builds one THREE.PointLight + one physical FIXTURE (E0, above) per
-// light entry (src/ui/theater-interior.js's interiorBuildBoard emits the plain {x,z,y,color,intensity,
-// kind,roomSegNum,fixtureId,mount,emitterLocal,...} data; this is the ONE place that becomes real THREE
-// objects, same "data in theater-interior.js, GL in theater-boot.js" split the rest of this render
-// already keeps). Shadow-casting lights get a small shadow-map budget (INTERIOR_SHADOW_MAP_SIZE) + a
-// near/far tuned to interior room scale (never the board-wide combat camera's frustum). `wallMountData`
-// ({mountSlots, wallSegments}, C4.1a's own S.interiorLastRoomShell output) is OPTIONAL — a wall-mount
-// fixture with no slot data degrades to floor (interiorResolveFixturePlacement, above), so floor
-// practicals work even on a pre-C4.1a call site or a shell-less board.
-function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBrightRealm, wallMountData){
-  const group = new THREE.Group();
-  const assigned = interiorAssignShadowCasters(lights, cx, cz);
-  let casters = 0;
-  let glowCount = 0;
-  // VP6/CL-R1: every nonsuppressed source exposes a local-state target to the shared scheduler, but
-  // only a target explicitly authored `state:"flickering"` is updated. Steady is the default.
-  const flickerTargets = [];
-  // E0-1 (docs/PHASE-3-WAVE-1-SPECS.md): one entry per fixture that actually LANDED on a real wall
-  // segment ({ownerSegIndex, materials: [bodyClone, emitterMat]}) — collected here (pure, no S.*
-  // access — interiorBuildLights stays a function of its own arguments, same discipline flickerTargets
-  // above already keeps) so the interiorBuildLights call site in setInteriorBoard (the one place that
-  // ALSO has wallUpperMeshList/fadeEntry in scope) can append them into the SAME segment's occlusion-
-  // fade entry. A fixture whose wall-mount request degraded to floor (no C4.1a slot data) never gets an
-  // ownerSegIndex here, so it's simply never registered — the resolver's own defensive floor-degrade
-  // stays untouched.
-  const wallFixtureFadeTargets = [];
-  assigned.forEach((light) => {
-    // LIGHT-CLOSE unit (docs/GRAPHICS-NORTH-STAR.md task #16 / directive §4.7 "never leave a floating
-    // glow disc as the source"): daylit/overcast/moonlit are the SKY's own diegetic reach (P-1's
-    // ITR_BRIGHT_REALM_FILL hemisphere/fill, applied by setInteriorBoard) — a torch/lamp practical in
-    // THAT room reads as a second, uncredited light source (and blows out — Adam's "nuclear bomb").
-    // `isBrightRealm` is the CALLER's own classification (setInteriorBoard, off ITR_BRIGHT_PROFILES) —
-    // interiorBuildLights stays a pure function of its arguments, same discipline as `realmId`/`pieces`.
-    // `light.forceVisiblePractical` is a per-light escape hatch for a future realm declaring a
-    // genuinely diegetic OUTDOOR local source (a campfire) even under a bright profile; no light sets
-    // it today, so every bright-profile light suppresses uniformly.
-    const suppressPractical = !!isBrightRealm && ITR_BRIGHT_SUPPRESS_PRACTICALS && !light.forceVisiblePractical;
-    const resolvedIntensity = (light.renderIntensity != null
-      ? light.renderIntensity
-      : (light.intensity != null ? light.intensity : 1.2) * LIGHT_TUNABLES.lightRenderGain
-    ) * (suppressPractical ? ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE : 1);
-    // CL-R1: a shared light recipe is an intentional, reviewed physical range. Generic/generated
-    // interior lights still receive the small-pool safety cap, while recipe lights can opt into
-    // their declared reach without changing the intensity or inverse-square falloff at the source.
-    const declaredDistance = light.distance != null ? light.distance : 12;
-    const resolvedDistance = light.authoredRange
-      ? declaredDistance
-      : Math.min(declaredDistance, ITR_LIGHT_DISTANCE_CAP);
-
-    // CL-R1 mode separation: environmental/celestial sources do not acquire a fake lamp housing
-    // merely because the production board carries a light record. Only a source whose recipe says a
-    // visible emitter is required goes through the fixture branch below. The direct branch still
-    // uses real THREE lights in this same production group; it simply has no counterfeit prop.
-    if(light.visibleEmitterRequired === false){
-      const localX = (light.x || 0) - cx;
-      const localY = light.y != null ? light.y : 3;
-      const localZ = (light.z || 0) - cz;
-      let environmentalLight;
-      if(light.lightType === "environment"){
-        // The scene already owns one shared HemisphereLight. A recipe-level environment source
-        // contributes colour/intensity without constructing a second hemisphere rig that could
-        // drift between tabletop and interior channels.
-        environmentalLight = new THREE.AmbientLight(light.color || "#ffffff", resolvedIntensity);
-        environmentalLight.position.set(localX, localY, localZ);
-      } else if(light.lightType === "directional"){
-        environmentalLight = new THREE.DirectionalLight(light.color || "#ffffff", resolvedIntensity);
-        // Visual-correction fix (Adam, 2026-07-25: "there's just one chunk of a rectangle showing
-        // on the stairs but none of the proper cast shadows"): THREE's default directional shadow
-        // camera is a 10x10-unit ortho box, so in a 15x15-cell room the sun/moon shadow map covered
-        // only a corner and every cast shadow clipped to that chunk. Derive the room's local
-        // half-extent from the shell's own wall data and size BOTH the light distance and the
-        // shadow frustum from it, so everything the room contains casts a complete shadow.
-        const envHalfExtent = interiorEnvLightHalfExtent(wallMountData, cx, cz);
-        const envLightDistance = Math.max(10, envHalfExtent * 2.5);
-        // Adam's ruling (2026-07-25): "the shadows should fall relative to the actual position of
-        // the sun since its position is mapped to the actual clock." When a celestial light record
-        // carries its world clock, the shared celestial arc (celestialArcFor — the ONE clock->sun/
-        // moon direction owner, already driving the tabletop channel) supplies direction, arc
-        // colour, and the elevation intensity curve. The authored azimuth/elevation are only the
-        // no-clock fallback (a fixture or harness snapshot with no time threaded).
-        const celestialClock = (light.clockMin != null && light.recipeId
-          && CELESTIAL_PROFILE_SET[light.recipeId]) ? light.clockMin : null;
-        if(celestialClock != null){
-          const arc = celestialArcFor(light.recipeId, celestialClock);
-          environmentalLight.position.set(
-            arc.dir.x * envLightDistance,
-            Math.max(CELESTIAL_MIN_KEY_HEIGHT, arc.dir.y * envLightDistance),
-            arc.dir.z * envLightDistance
-          );
-          environmentalLight.color.setHex(arc.color); // under the clock, the arc owns colour too (dawn->zenith lerp)
-          environmentalLight.intensity = resolvedIntensity * arc.intensityScale;
-          environmentalLight.userData.celestial = {
-            clockMin: celestialClock,
-            derivedDir: { x: +arc.dir.x.toFixed(4), y: +arc.dir.y.toFixed(4), z: +arc.dir.z.toFixed(4) },
-            intensityScale: +arc.intensityScale.toFixed(4)
-          };
-        } else {
-          const azimuth = THREE.MathUtils.degToRad(light.azimuthDeg != null ? light.azimuthDeg : 0);
-          const elevation = THREE.MathUtils.degToRad(light.elevationDeg != null ? light.elevationDeg : 45);
-          environmentalLight.position.set(
-            Math.cos(elevation) * Math.cos(azimuth) * envLightDistance,
-            Math.sin(elevation) * envLightDistance,
-            Math.cos(elevation) * Math.sin(azimuth) * envLightDistance
-          );
-        }
-        environmentalLight.target.position.set(0, 0, 0);
-        group.add(environmentalLight.target);
-        if(environmentalLight.shadow && environmentalLight.shadow.camera){
-          const sc = environmentalLight.shadow.camera;
-          const frustumHalf = envHalfExtent * 1.15 + 1;
-          sc.left = -frustumHalf; sc.right = frustumHalf;
-          sc.top = frustumHalf; sc.bottom = -frustumHalf;
-          sc.near = 0.5; sc.far = envLightDistance + envHalfExtent * 3;
-          sc.updateProjectionMatrix();
-        }
-      } else {
-        environmentalLight = new THREE.PointLight(
-          light.color || "#ffffff",
-          resolvedIntensity,
-          resolvedDistance,
-          light.decay != null ? light.decay : 2
-        );
-        environmentalLight.position.set(localX, localY, localZ);
-      }
-      if(light.castShadow && environmentalLight.shadow){
-        environmentalLight.castShadow = true;
-        const environmentalMapSize = [256, 512, 1024, 2048].indexOf(light.shadowMapSize) >= 0
-          ? light.shadowMapSize : INTERIOR_SHADOW_MAP_SIZE;
-        environmentalLight.shadow.mapSize.set(environmentalMapSize, environmentalMapSize);
-        environmentalLight.shadow.bias = light.shadowBias != null ? light.shadowBias : -0.002;
-        environmentalLight.shadow.normalBias = light.shadowNormalBias != null ? light.shadowNormalBias : 0;
-        casters++;
-      }
-      environmentalLight.userData = environmentalLight.userData || {};
-      environmentalLight.userData.lightId = String(light.id || light.sourceRef || "environment-light");
-      environmentalLight.userData.recipeMode = light.recipeMode || "production-environment";
-      group.add(environmentalLight);
-      // Checkpoint 2 (2026-07-25) — READOUT TRUTH: environmental sources register in the SAME
-      // live-light registry the practicals use, so the Lights readout and the lighting proof can
-      // describe the sun/moon/ambient-shaping lights that actually reach the renderer. Before
-      // this, the registry printed `lights: []` under full daylight (root-cause notes §3) — the
-      // panel was structurally unable to tell the truth about five of seven recipes. Steady,
-      // markerless rows; the snapshot reader is already null-tolerant on marker fields.
-      flickerTargets.push({
-        id: String(light.id || light.sourceRef || ("environment-light-" + flickerTargets.length)),
-        sourceRef: light.sourceRef || String(light.id || "environment-light"),
-        state: "steady",
-        seed: String(light.id || "environment-light"),
-        cadenceMs: 480, intervalJitter: 0, directionAmplitude: 0,
-        sampleIndex: 0, normalizedSample: 1,
-        directionSample: { x: 0, y: 0, z: 0 },
-        pl: environmentalLight, marker: null, cone: null,
-        emissiveFlicker: false,
-        baseIntensity: environmentalLight.intensity,
-        baseEmissiveIntensity: 0,
-        baseOpacity: 1,
-        basePointPosition: {
-          x: environmentalLight.position.x,
-          y: environmentalLight.position.y,
-          z: environmentalLight.position.z
-        },
-        baseMarkerPosition: null, baseMarkerRotation: null,
-        amplitude: 0
-      });
-      return;
-    }
-
-    // E0 — resolve WHERE the fixture physically stands: a wall mount snaps to its nearest C4.1a mount
-    // slot (world position + inward normal, so it can never disagree with the wall itself); a floor
-    // mount stands on the floor-top at the light's own (x,z). A wall request with no slot data
-    // degrades to floor (logged once inside the resolver).
-    const placement = interiorResolveFixturePlacement(light, cx, cz, floorTopMap, wallMountData);
-    const fixture = interiorBuildFixtureGroup(light);
-    fixture.group.position.set(placement.pos.x, placement.pos.y, placement.pos.z);
-    if(placement.mount === "wall" && placement.normal){
-      fixture.group.rotation.y = Math.atan2(placement.normal.x, placement.normal.z);
-    }
-    fixture.group.userData.mount = placement.mount;
-    fixture.group.userData.ownerSegIndex = placement.ownerSegIndex;
-    // render-time resolution written back onto the render layer's OWN light copy (interiorAssignShadow
-    // Casters already returns a shallow per-light copy, never the original theater-interior.js record —
-    // itrRoomLights' own `ownerSegIndex: null` doc comment names this exact seam) — a harness can read
-    // either this field or fixture.group.userData.ownerSegIndex.
-    light.ownerSegIndex = placement.ownerSegIndex;
-
-    // E0-1: a fixture that actually LANDED on a real wall segment (placement.mount === "wall" AND a
-    // real ownerSegIndex — the degrade-to-floor path above sets ownerSegIndex null, which this guard
-    // excludes) registers its own [bodyClone, emitterMat] pair for the call site to append into that
-    // segment's occlusion-fade `fadeEntry.materials`. `fixture.bodyMat` is already the per-fixture
-    // clone (not the shared cache) whenever `fixture.wantWall` is true, which it always is here since
-    // wantWall only ever reads light.mount — the same field that just resolved to a real wall segment.
-    if(placement.mount === "wall" && placement.ownerSegIndex != null){
-      wallFixtureFadeTargets.push({
-        ownerSegIndex: placement.ownerSegIndex,
-        materials: [fixture.bodyMat, fixture.emitter.material]
-      });
-    }
-
-    // the PointLight mounts as a CHILD of the fixture group at the group-LOCAL emitterLocal — world
-    // position = group transform × emitterLocal (WALL-VOLUMES-PRACTICALS.md §E0), so it can never sit
-    // anywhere but exactly where the fixture's own visible emitter submesh is.
-    const el = light.emitterLocal || { x: 0, y: 0, z: 0 };
-    const pl = light.lightType === "spot"
-      ? new THREE.SpotLight(
-        light.color || "#ffbb66",
-        resolvedIntensity,
-        resolvedDistance,
-        THREE.MathUtils.degToRad(light.spot && light.spot.coneDeg != null ? light.spot.coneDeg : 45),
-        light.spot && light.spot.penumbra != null ? light.spot.penumbra : 0,
-        light.decay != null ? light.decay : 2
-      )
-      : new THREE.PointLight(
-      light.color || "#ffbb66",
-      // BW2-4 item 1: render-side gain (see ITR_LIGHT_RENDER_GAIN) — the DATA intensity is the relative
-      // value; this is the absolute decay-2 pool brightness. Preserves the fill<=60%-of-key ratio (both
-      // key and fill are gained equally). LIGHT-CLOSE: a suppressed practical scales toward
-      // ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE (0 by default) — the sky fill carries the room instead.
-      resolvedIntensity,
-      // BW2-4b item 1 — generic lights retain the small-pool cap. A reviewed recipe may opt into its
-      // authored physical reach through resolvedDistance (the torch does; other profiles do not).
-      resolvedDistance,
-      light.decay != null ? light.decay : 2
-    );
-    pl.position.set(el.x || 0, el.y || 0, el.z || 0);
-    if(pl.isSpotLight){
-      pl.target.position.set(el.x || 0, (el.y || 0) - 1, el.z || 0);
-      fixture.group.add(pl.target);
-    }
-    if(light.castShadow && !suppressPractical){
-      pl.castShadow = true;
-      const authoredMapSize = [256, 512, 1024, 2048].indexOf(light.shadowMapSize) >= 0
-        ? light.shadowMapSize : INTERIOR_SHADOW_MAP_SIZE;
-      pl.shadow.mapSize.set(authoredMapSize, authoredMapSize);
-      pl.shadow.camera.near = 0.1;
-      pl.shadow.camera.far = light.distance != null ? light.distance : 12;
-      pl.shadow.bias = light.shadowBias != null ? light.shadowBias : -0.002;
-      pl.shadow.normalBias = light.shadowNormalBias != null ? light.shadowNormalBias : 0;
-      casters++;
-    }
-    fixture.group.add(pl);
-
-    // §E0 Decisions — "keep the fixture in bright realms, drop only the glow": the fixture BODY always
-    // mounts (a suppressed practical still reads as a real, unlit object); only the emitter's own
-    // emissive brightness suppresses.
-    fixture.emitter.material.emissiveIntensity = suppressPractical ? 0 : ITR_FIXTURE_EMISSIVE_INTENSITY;
-    group.add(fixture.group);
-
-    // DIAGNOSTIC-ONLY glow disc (ITR_GLOW_DISC_DIAGNOSTIC, default false — see that flag's own header
-    // note) — the production path never mounts it; glowCount stays 0. Rides the SAME fixture-group
-    // transform (added as its child at the emitter-local point) so it never needs a second world-space
-    // position derivation.
-    if(ITR_GLOW_DISC_DIAGNOSTIC && !suppressPractical){
-      const glow = interiorBuildGlowDisc(light);
-      glow.group.position.set(el.x || 0, el.y || 0, el.z || 0);
-      fixture.group.add(glow.group);
-      glowCount++;
-    }
-
-    // BW3-4 — LIGHT SHAFTS (unrelated to E0, left wired but still gated OFF by default —
-    // ITR_LIGHT_CONE_ENABLED): bridges from the SAME apex the fixture's own emitter now sits at (world
-    // position, since the cone is added to the top-level `group`, not the fixture group) down to the
-    // room's floor top — never a second/parallel floor formula.
-    const emitterWorldPos = { x: placement.pos.x + (el.x || 0), y: placement.pos.y + (el.y || 0), z: placement.pos.z + (el.z || 0) };
-    const floorTopAtLight = interiorFloorTopAt(floorTopMap, light.x || 0, light.z || 0);
-    const coneHeight = emitterWorldPos.y - floorTopAtLight;
-    const cone = (ITR_LIGHT_CONE_ENABLED && !suppressPractical) ? interiorBuildLightCone(light, coneHeight) : null;
-    if(cone){
-      cone.group.position.set(emitterWorldPos.x, emitterWorldPos.y, emitterWorldPos.z);
-      group.add(cone.group);
-    }
-
-    // LIGHT-CLOSE: a suppressed practical never joins the flicker channel (nothing to flicker — the
-    // emitter's gone dark and lightFlickerStep's own floor would otherwise re-introduce a
-    // faint-but-nonzero torch flutter on a light that's supposed to read as OFF).
-    if(!suppressPractical){
-      const fallbackConeOpacity = ITR_LIGHT_CONE_OPACITY[light.kind] != null ? ITR_LIGHT_CONE_OPACITY[light.kind] : ITR_LIGHT_CONE_OPACITY.torch;
-      const localState = light.state === "flickering" ? "flickering" : "steady";
-      const localFlicker = light.flicker || {};
-      const lightId = String(light.id || light.sourceRef || ("interior-light-" + flickerTargets.length));
-      fixture.group.userData = fixture.group.userData || {};
-      pl.userData = pl.userData || {};
-      fixture.emitter.userData = fixture.emitter.userData || {};
-      fixture.group.userData.lightId = lightId;
-      fixture.group.userData.sceneObjectId = lightId;
-      fixture.group.userData.lightState = localState;
-      pl.userData.lightId = lightId;
-      pl.userData.lightState = localState;
-      pl.userData.flickerSample = 1;
-      fixture.emitter.userData.lightId = lightId;
-      fixture.emitter.userData.lightState = localState;
-      fixture.emitter.userData.flickerSample = 1;
-      flickerTargets.push({
-        id: lightId,
-        sourceRef: light.sourceRef || lightId,
-        state: localState,
-        seed: String(localFlicker.seed || light.sourceRef || lightId),
-        cadenceMs: Math.max(120, Number(localFlicker.cadenceMs) || 480),
-        intervalJitter: Math.max(0, Math.min(0.9,
-          Number(localFlicker.intervalJitter) || 0
-        )),
-        directionAmplitude: Math.max(0, Math.min(0.08,
-          Number(localFlicker.directionAmplitude) || 0
-        )),
-        sampleIndex: 0,
-        normalizedSample: 1,
-        directionSample: { x: 0, y: 0, z: 0 },
-        pl, marker: fixture.emitter, cone: cone ? cone.mesh : null,
-        emissiveFlicker: true, // E0 — pulse the emitter's OWN emissiveIntensity, not a disc's opacity (see lightFlickerStep)
-        baseIntensity: pl.intensity,
-        baseEmissiveIntensity: ITR_FIXTURE_EMISSIVE_INTENSITY,
-        baseOpacity: fixture.emitter.material.opacity != null ? fixture.emitter.material.opacity : 1,
-        baseConeOpacity: (cone && cone.mesh.material) ? cone.mesh.material.opacity : fallbackConeOpacity,
-        basePointPosition: { x: pl.position.x, y: pl.position.y, z: pl.position.z },
-        baseMarkerPosition: {
-          x: fixture.emitter.position.x,
-          y: fixture.emitter.position.y,
-          z: fixture.emitter.position.z
-        },
-        baseMarkerRotation: {
-          x: fixture.emitter.rotation.x,
-          y: fixture.emitter.rotation.y,
-          z: fixture.emitter.rotation.z
-        },
-        amplitude: Math.max(0, Math.min(0.45,
-          localFlicker.amplitude != null ? Number(localFlicker.amplitude) : INTERIOR_LIGHT_FLICKER_AMPLITUDE
-        ))
-      });
-    }
-  });
-  return { group, casters, flickerTargets, glowCount, wallFixtureFadeTargets };
-}
-
-// BEAUTY-WAVE.md VP6 item 3 — AMBIENT MOTES: 4-8 seeded drifting particle cards per room, ember-tinted
-// for torch-lit realms / dust-tinted for lamp-lit ones (kit-driven, no new per-realm authoring table —
-// reused off the SAME `light.kind` field interiorBuildLights already reads), slow vertical drift with
-// wrap-around, additive blending (same "reads bright regardless of ambient" idiom as the light markers
-// just above), tiny (0.05-0.12 world units — a speck, never a readable sprite). Seeded (mulberry32-style
-// hash off a per-room string) so a room's mote field is stable across re-renders of the SAME board data,
-// not re-rolled every frame/rebuild.
-const MOTE_COUNT_MIN = 4, MOTE_COUNT_MAX = 8;
-const MOTE_SIZE_MIN = 0.05, MOTE_SIZE_MAX = 0.12;
-function moteHash32(str){
-  let h = 2166136261 >>> 0;
-  const s = String(str || "");
-  for(let i = 0; i < s.length; i++){ h = Math.imul(h ^ s.charCodeAt(i), 16777619) >>> 0; }
-  return h >>> 0;
-}
-// a tiny deterministic PRNG seeded from moteHash32 — mulberry32, the same shape every other seeded-RNG
-// spot in this codebase already uses (dspHashStr-adjacent convention in theater-interior.js), reimplemented
-// locally rather than imported since this ES module can't reach that classic-script helper.
-function moteRng(seed){
-  let a = seed >>> 0;
-  return function(){
-    a |= 0; a = (a + 0x6D2B79F5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-// ember (torch/lava-flavored) is the default; a room whose lights are ALL "lamp" kind reads dust instead
-// (dry/dusty interiors — lamplit halls, not open flame) — mirrors interiorBuildLightMarker's own
-// isLamp branch rather than inventing a second per-realm classification.
-function interiorMoteKindFor(lights){
-  const list = lights || [];
-  if(list.length && list.every((l) => l.kind === "lamp")) return "dust";
-  return "ember";
-}
-const MOTE_TINT = { ember: 0xffb066, dust: 0xcfc9a8 };
-// BW3-4 — MOTE COUPLING: a room's dust biases toward its own light pools (the mock's warm shaft reads
-// as dust visible IN the light, not scattered evenly through a dark room) — MOTE_POOL_BIAS_FRACTION of
-// spawns land within MOTE_POOL_RADIUS of a (seed-picked, deterministic) light center; the rest spawn
-// uniformly across the room exactly like pre-unit VP6 did. A lightless room (no `lights` arg, or an
-// empty one) degrades to that pre-unit uniform behavior byte-for-byte — see the pools.length guard
-// below, and dev/verify-bw3-4-light-shafts.mjs's own regression check against the pre-unit call shape.
-const MOTE_POOL_BIAS_FRACTION = 0.65;
-const MOTE_POOL_RADIUS = 1.8;
-// SOFT-MOTE TEXTURE (2026-07-11, Adam's "little floating tiny rhomboids" report): a mote was a bare
-// PlaneGeometry with a FLAT MeshBasicMaterial — a hard-edged square that foreshortens into a diamond
-// at the ~20° camera, reading as a floating rhomboid rather than a soft dust speck. A radial-gradient
-// alpha (bright center → transparent edge) makes each mote a soft glowing dot whose foreshortening is
-// imperceptible (a soft blob is a soft blob at any angle). Built once + cached (like every other
-// generated texture in this file); additive blending keeps it a warm glow, not an opaque disc.
-let MOTE_SOFT_TEX = null;
-function moteSoftTexture(){
-  if(MOTE_SOFT_TEX) return MOTE_SOFT_TEX;
-  if(typeof document === "undefined" || !document.createElement) return null; // headless: no canvas, motes stay flat (never rendered there)
-  const S = 64, canvas = document.createElement("canvas");
-  canvas.width = S; canvas.height = S;
-  const ctx = canvas.getContext("2d");
-  const g = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, S/2);
-  g.addColorStop(0.0, "rgba(255,255,255,1)");
-  g.addColorStop(0.4, "rgba(255,255,255,0.55)");
-  g.addColorStop(1.0, "rgba(255,255,255,0)");
-  ctx.fillStyle = g; ctx.fillRect(0, 0, S, S);
-  MOTE_SOFT_TEX = new THREE.CanvasTexture(canvas);
-  return MOTE_SOFT_TEX;
-}
-function interiorBuildMotes(seedStr, bounds, kind, lights, cx, cz){
-  const group = new THREE.Group();
-  const b = bounds || { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
-  // BW3-4 COORDINATE FIX: `bounds` (data.bounds) is the board's RAW, pre-origin-shift footprint —
-  // every OTHER piece of interior geometry (floor/wall/light/piece meshes, setInteriorBoard's own
-  // convention throughout this file) mounts at (rawX - cx, rawZ - cz), cx/cz being the camera-fit
-  // rect's own center. The pre-BW3-4 call site here passed raw bounds straight through with NO shift
-  // at all, so the mote field silently floated at a (+cx,+cz) offset from the room it was meant to
-  // dust whenever cx/cz != 0 (any room not centered on the whole-board origin — i.e. almost always on
-  // a real multi-room plan) — invisible or drifting over the WRONG room entirely. Fixed here (this
-  // unit's own pool-bias math needs the SAME coordinate space as `lights` to mean anything: a "bias
-  // toward the pool" that's itself rendered in the wrong place doesn't read as coupling at all).
-  // cx/cz default to 0 so a caller that still omits them (the pre-unit 3-arg call shape) is a clean
-  // no-op shift, byte-identical to the old behavior.
-  const shiftX = cx || 0, shiftZ = cz || 0;
-  const minX = b.minX - shiftX, maxX = b.maxX - shiftX, minZ = b.minZ - shiftZ, maxZ = b.maxZ - shiftZ;
-  const rng = moteRng(moteHash32(seedStr));
-  const count = MOTE_COUNT_MIN + Math.floor(rng() * (MOTE_COUNT_MAX - MOTE_COUNT_MIN + 1));
-  const color = MOTE_TINT[kind] || MOTE_TINT.ember;
-  const yBottom = -0.2, yTop = 2.2; // a modest drift band above the floor, well under wall-height ceilings
-  // shifted pool centers — same coordinate space as minX/maxX/minZ/maxZ above (raw light x/z, same
-  // shift applied). An absent/empty `lights` list yields an empty pools array, which the per-mote loop
-  // below treats identically to "no coupling" (the pre-unit uniform spawn).
-  const pools = (lights || []).map((l) => ({ x: (l.x || 0) - shiftX, z: (l.z || 0) - shiftZ }))
-    .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.z));
-  for(let i = 0; i < count; i++){
-    const size = MOTE_SIZE_MIN + rng() * (MOTE_SIZE_MAX - MOTE_SIZE_MIN);
-    const geo = new THREE.PlaneGeometry(size, size);
-    const mat = new THREE.MeshBasicMaterial({
-      color, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending,
-      depthWrite: false, side: THREE.DoubleSide,
-      map: moteSoftTexture() // soft radial dot, not a hard square (the "floating rhomboid" fix)
-    });
-    const mesh = new THREE.Mesh(geo, mat);
-    let x, z;
-    // MOTE COUPLING: pools.length is the ONLY gate — a lightless room never draws the extra rng() call
-    // below, so its rng SEQUENCE (and therefore every downstream x/z/y/size/speed draw) stays exactly
-    // what pre-unit interiorBuildMotes produced for the same seed (short-circuit && never evaluates
-    // the right side when pools.length is 0).
-    if(pools.length && rng() < MOTE_POOL_BIAS_FRACTION){
-      const pool = pools[Math.floor(rng() * pools.length)];
-      const angle = rng() * Math.PI * 2;
-      const r = rng() * MOTE_POOL_RADIUS;
-      x = Math.min(maxX, Math.max(minX, pool.x + Math.cos(angle) * r));
-      z = Math.min(maxZ, Math.max(minZ, pool.z + Math.sin(angle) * r));
-    } else {
-      x = minX + rng() * Math.max(0.01, maxX - minX);
-      z = minZ + rng() * Math.max(0.01, maxZ - minZ);
-    }
-    const y = yBottom + rng() * (yTop - yBottom);
-    mesh.position.set(x, y, z);
-    mesh.userData.motePiece = true;
-    mesh.userData.driftSpeed = 0.04 + rng() * 0.05; // world units/sec, slow
-    mesh.userData.wrapBottom = yBottom;
-    mesh.userData.wrapTop = yTop;
-    group.add(mesh);
-  }
-  return group;
-}
-// self-stopping rAF drift loop — same dedicated-loop discipline as startLightFlicker's setInterval
-// (a continuous ambient effect, not a one-shot tween), self-stops the instant the mote group is gone
-// (board swap/retire) rather than depending on an external caller to remember to cancel it.
-function startMoteDrift(){
-  if(S.moteRaf) return;
-  let last = (typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now();
-  const step = (now) => {
-    now = now || ((typeof performance !== "undefined" && performance.now) ? performance.now() : Date.now());
-    if(!S.mounted || !S.moteGroup || !S.moteGroup.children.length){ S.moteRaf = null; return; }
-    const dt = Math.min(0.05, (now - last) / 1000);
-    last = now;
-    S.moteGroup.children.forEach((m) => {
-      m.position.y += m.userData.driftSpeed * dt;
-      if(m.position.y > m.userData.wrapTop) m.position.y = m.userData.wrapBottom;
-    });
-    markDirty();
-    S.moteRaf = requestAnimationFrame(step);
-  };
-  S.moteRaf = requestAnimationFrame(step);
-}
-function stopMoteDrift(){
-  if(S.moteRaf != null){ cancelAnimationFrame(S.moteRaf); S.moteRaf = null; }
-}
+// ---- AMBIENT MOTES: extracted to src/ui/theater-motes.js (split B5, 2026-07-25) ----
+// VP6 item 3's whole mote family — moteHash32/moteRng, interiorMoteKindFor, MOTE_TINT, moteSoftTexture,
+// interiorBuildMotes — and its OWN drift scheduler (startMoteDrift's requestAnimationFrame chain +
+// stopMoteDrift's cancel) moved there intact. It stays a SEPARATE scheduler from the flicker loop (now
+// in src/ui/theater-lighting.js) and from this file's dirty-frame/tween loops; nothing was unified.
+// This root imports that surface (top import block), passes capabilities via motesInit(ctx) at
+// end-of-body, and re-syncs the live S record via motesSyncState(S) at both `S = createTheaterState()`
+// sites. retire() below still calls stopMoteDrift through the import block.
 
 /* ============================================================================
    BEAUTY-WAVE-4.md MF-2 — SPAWN/DESPAWN GRACE, the production wiring half. The actual tween MATH lives
@@ -12040,6 +10422,8 @@ function retire(){
   clayRoomSyncState(S); // split B1: the clay module mirrors the live state record
   lightLabSyncState(S); // split B2: same law for the lab
   postSyncState(S);     // split B4: same law for the post suite (it reads AND writes S.postSuite*)
+  lightingSyncState(S); // split B5: same law for the lighting family + the flicker scheduler
+  motesSyncState(S);    // split B5: same law for the mote field + its own drift scheduler
 }
 
 /* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 8) — ONE module-scope call, made once at import
@@ -14080,6 +12464,39 @@ postInit({
   GRADE_EXPOSURE_FLOOR,
   LIGHT_DEFAULT_PROFILE,
   LIGHT_TUNABLES,
+});
+/* ---- split B5: wire the lighting / practicals / motes modules (see each file's own header) ----
+   All three sit in this end-of-body block rather than up with B3's skins/wholeObject inits: their ctx
+   carries the live `S` record and LIGHT_TUNABLES (a TDZ const at import time), and nothing in this
+   file's own top-level body reaches a light, a practical or a mote — the first thing that can is
+   clayRoomBootSelfMount() at the bottom of this block. lightingInit runs FIRST of the three:
+   theater-practicals.js imports celestialArcFor/CELESTIAL_* straight from theater-lighting.js
+   (leaf->leaf), so the lighting mirrors must be live before any practical body can run. */
+lightingInit({
+  S,
+  lightingCtxCameraKeyCastsShadow: function(){ return ITR_CAMERA_KEY_CASTS_SHADOW; },
+  gradeColorLocal,
+  markDirty,
+  ITR_CAMERA_KEY_INTENSITY,
+  LIGHT_TUNABLES,
+  SPRITE_CAMERA_FILL_AT_TARGET,
+  SPRITE_CAMERA_FILL_COLOR,
+  SPRITE_CAMERA_FILL_LAYER,
+  VOID_BG,
+});
+practicalsInit({
+  practicalsCtxBrightSuppressPracticals: function(){ return ITR_BRIGHT_SUPPRESS_PRACTICALS; },
+  practicalsCtxGlowDiscDiagnostic: function(){ return ITR_GLOW_DISC_DIAGNOSTIC; },
+  practicalsCtxLightConeEnabled: function(){ return ITR_LIGHT_CONE_ENABLED; },
+  BLOOM_LAYER,
+  ITR_BRIGHT_PRACTICAL_INTENSITY_SCALE,
+  LIGHT_TUNABLES,
+  dressingTextureFor,
+  interiorFloorTopAt,
+});
+motesInit({
+  S,
+  markDirty,
 });
 figureBuildInit({
   figCtxSpriteChannelEnabled: function(){ return SPRITE_CHANNEL_ENABLED; },

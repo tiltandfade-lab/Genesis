@@ -499,7 +499,18 @@ group("15 — an unknown/typo'd material name degrades to the mottle painter rat
 //   21. determinism: same (plan,opts) twice -> skirt array byte-identical (JSON-equal), same law as
 //       check 7 (instances) / check 10 (lights), extended to the skirt channel.
 // ============================================================================
-const bootSrc = read("src/ui/theater-boot.js");
+// THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): the lighting family
+// (applyTabletopShadowCasters, applyLightProfile, the celestial passes, the interior camera-key +
+// sprite camera fill, the flicker scheduler) moved VERBATIM into src/ui/theater-lighting.js and the
+// interior practical-fixture family into src/ui/theater-practicals.js; mount()/setBoard()/
+// setInteriorBoard and every shadowMap.enabled line stayed in src/ui/theater-boot.js. Reading the
+// COMPOSITE keeps every source-text check below anchored on the REAL source of its own symbol — same
+// regexes, same jobs, none relaxed and none dropped.
+const bootSrc = read("src/ui/theater-boot.js")
+  + "\n/* [verify-dungeon-interior composite boundary — src/ui/theater-lighting.js follows] */\n"
+  + read("src/ui/theater-lighting.js")
+  + "\n/* [verify-dungeon-interior composite boundary — src/ui/theater-practicals.js follows] */\n"
+  + read("src/ui/theater-practicals.js");
 
 group("16 — GR3: a shared HemisphereLight is built once in mount() (table+interior parity by construction)");
 {

@@ -1,0 +1,21 @@
+{
+  "schema": "genesis.material-source-seam-repair.v1",
+  "materialId": "wall-rough-hewn-block",
+  "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-rough-hewn-block-source-v002.png",
+  "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-rough-hewn-block-seamlocked-v001.png",
+  "repeat": "dev/material-lane/proofs/b04-masonry-interior-v001/wall-rough-hewn-block-seamlocked-v001-repeat-3x3.png",
+  "method": "X-only opposite-edge color average with inward cosine feather",
+  "repairBandPixels": 32,
+  "repairBandFractionPerEdge": 0.0255,
+  "declaredScope": "period-aligned masonry retry; color continuity only, joints preserved",
+  "before": {
+    "xBoundaryToInternalP95": 2.028,
+    "yBoundaryToInternalP95": 0.593,
+    "boundaryJumpGate": false
+  },
+  "after": {
+    "xBoundaryToInternalP95": 0.0,
+    "yBoundaryToInternalP95": 0.576,
+    "boundaryJumpGate": true
+  }
+}

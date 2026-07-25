@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B04-masonry-interior-sprite-first-MM-v001",
+  "generatedAt": "2026-07-25T03:22:26.386Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-floor-cobble-v001.ptex": "169527800918a481950a45489c033594020b9e7099d6c448726d1cfcd47eb786",
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-floor-flagstone-v001.ptex": "605efc20abd8f70186c90180ad7ce1525e912e216b1bcba15a76a1b16a22349c",
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-floor-packed-earth-v001.ptex": "7614496399b3f42ff3f8287c61a75a13db3d2d5383b4677f19be04fba2aeba9b",
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-floor-plank-v001.ptex": "3f42f6da00941e8deaaf6bf42247fb1412af69233d645612c8d8f08510326fef",
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-wall-ashlar-dressed-v001.ptex": "dd4413ee0f6565d9d9caf77f35d4a3ba0bd3425ab8a3436e5217cac969613dad",
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-wall-brick-v001.ptex": "16984439a8302e90a32b241ce5c5c1ba288696c4927b953547adf0be19ba3498",
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-wall-dry-stack-fieldstone-v001.ptex": "3ad0edf402519aaf10c79e3eb83b6cb5d55dab06584e7508ce9b4a4f0e71de58",
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-wall-plastered-rubble-v001.ptex": "db59ea57f68c0e2d7a809498505eeff582defb20da07abe063073e17830a8052",
+    "dev/material-lane/graphs/b04-masonry-interior-mm-v001/b04-wall-rough-hewn-block-v001.ptex": "b02e29d9b8d7cb92a5d2fa5e33e8d8c361bdf4c659e500246ce507302cb0935d"
+  },
+  "outputHashes": {
+    "b04-floor-cobble-v001_albedo.png": "87e5f8c44b8adaa4e3664d53811acb7ef4d303f153696625353da241c9b280f9",
+    "b04-floor-cobble-v001_heightmap.png": "6e8470a026983a362533ad9d0a879e5e3261f1384c33773b53cc74408c52ff24",
+    "b04-floor-cobble-v001_normal.png": "f2457baf9a65fff480ca393d12b5945678a293927b5fcc023a29ba683658549c",
+    "b04-floor-cobble-v001_orm.png": "65ac14b77dd67e0a724f0caf4a3958652fc31091c9497dbbd1f499a50c1983c1",
+    "b04-floor-flagstone-v001_albedo.png": "c6d74ee54b9809e4d1a0f910ec68239de38803927fcbc6b178c2c0deda9a6606",
+    "b04-floor-flagstone-v001_heightmap.png": "0584700cd0c17661398a6a716f0a45713b5c488df6f432f5f604c716845a24e4",
+    "b04-floor-flagstone-v001_normal.png": "a40eaab19b3f171282f5b758edb229c4bbf365b3beb3182e87ae8f9380325afb",
+    "b04-floor-flagstone-v001_orm.png": "ef2228ca044d253414ee5a052b477482296de485bbf7a32585ab21b5d0a78fb0",
+    "b04-floor-packed-earth-v001_albedo.png": "4503d734c9807ff24e2a755e6a91cbf764b9cffb49d50599c76e744349606c86",
+    "b04-floor-packed-earth-v001_heightmap.png": "72bf6d15710308fc626ac06d928833b6050af7b92fc51d6eb31d01d0ffdb8020",
+    "b04-floor-packed-earth-v001_normal.png": "bdb5c32371b756f436943f5863839c5f75140066ef06c79b04c59e5f44cbcb6e",
+    "b04-floor-packed-earth-v001_orm.png": "96457c859863b69f6877818383a31284355cd9fbefcbe55f0a0e35c6588faf46",
+    "b04-floor-plank-v001_albedo.png": "cffe3a6bdccbe851553f36f21cb6a1dd9f2e305550cbd0dde45014791f33e817",
+    "b04-floor-plank-v001_heightmap.png": "5a5db33e6fc63f8e2b479058ddd0ff1b0fc827caef61685f2c0d0409d58826e7",
+    "b04-floor-plank-v001_normal.png": "f60f9e73af9676f953b314c11a41af3ae4c450774a157b618b9d127915d178e0",
+    "b04-floor-plank-v001_orm.png": "4dc975433bb74afab68d3dbdd939b703de7e3a8e6f1182bf63d1a123403546d8",
+    "b04-wall-ashlar-dressed-v001_albedo.png": "362948a3d1e97fa9b3bc600a4aa1371e11edac15cbe5a78492afeed382b15ff8",
+    "b04-wall-ashlar-dressed-v001_heightmap.png": "152fb60babe6dd22683f20d863a6af4035a186ce093874128277b30a993978b2",
+    "b04-wall-ashlar-dressed-v001_normal.png": "6276d07a557e0c31d4b27aa230a2ba73d8986cb42b6923bdb1414d945a8d08d3",
+    "b04-wall-ashlar-dressed-v001_orm.png": "de2893203d364f0b5c0748a61a7b79a4e934b74a0b3e1774cae078e409c76c2b",
+    "b04-wall-brick-v001_albedo.png": "61cfe0ca101177fc62522ba51cd7fb76feee33c6423eee632b7e53462327533f",
+    "b04-wall-brick-v001_heightmap.png": "62c4fc08fe2af8b179ffb57388163ea5857991e6d8fb3c93b81e280e8c2a0f70",
+    "b04-wall-brick-v001_normal.png": "057107e6e720be3610df4e098e8018bc46c9c86b60db0a718674fc4e69e70d63",
+    "b04-wall-brick-v001_orm.png": "b0f6705f1e2592f827607be44f7397fa1f175fb9f8b356a13a51e4a4035c5eca",
+    "b04-wall-dry-stack-fieldstone-v001_albedo.png": "fc9b4606a9999557571e215816771044ed3abc0813bdcd973ae23b96bbf6e2bb",
+    "b04-wall-dry-stack-fieldstone-v001_heightmap.png": "92b80cf0154b8d6a342406ed1c684f17158f025337b7fa9fa95958a799fd1d32",
+    "b04-wall-dry-stack-fieldstone-v001_normal.png": "aca2bc72511411fe701ff6ef130bf32c218ce975391e69d8682015234b7a3da9",
+    "b04-wall-dry-stack-fieldstone-v001_orm.png": "f5da2ebc28d1d563fe7d22b2e070ed09b77fdea7ad763671232d3bc474e4d80b",
+    "b04-wall-plastered-rubble-v001_albedo.png": "f0e593cf8a9e8fefe98889944f0a98195b61d1668a38b2a44989b7630aea7c1d",
+    "b04-wall-plastered-rubble-v001_heightmap.png": "9f908ecdccc90b265ca357c6f0f0ea04deef53a79d26bfd1083242d1cb67a024",
+    "b04-wall-plastered-rubble-v001_normal.png": "e9f67cf55d8a9ecf965bcd82d67a1d4dab84bb9aa94b8261336d70f54228b3bb",
+    "b04-wall-plastered-rubble-v001_orm.png": "b560a2e714ef4f26f9af2e4be3ce2d584eee68867341341761cbec9db92a8d77",
+    "b04-wall-rough-hewn-block-v001_albedo.png": "6f2af30d9bfb911d4d3b6b55b820a198902421d2360da99a57ef9b6c4d8807fe",
+    "b04-wall-rough-hewn-block-v001_heightmap.png": "0cc0f44ccae89973ac63b13374d60e8252870bacd5db89d8c4702e62552e7ade",
+    "b04-wall-rough-hewn-block-v001_normal.png": "e07640ed75b83b9b00070020976455641dd62ce2e071c8eaf5d0054feeb03d69",
+    "b04-wall-rough-hewn-block-v001_orm.png": "a92f9b0da981ae9e516e97976259721fb5e1f10bba5e43d2e8dfca4ef1292460"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 36,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b04-masonry-interior-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b04-masonry-interior-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

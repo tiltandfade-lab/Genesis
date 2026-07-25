@@ -1,0 +1,144 @@
+{
+  "schema": "genesis.material-source-normalization.v1",
+  "targetDimensions": [
+    512,
+    512
+  ],
+  "records": [
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-ashlar-dressed-parent-v001.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "8f364f140d4e83a0c488e9323aed0a8f13ea5977054f69e34f07578aa4042878",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-ashlar-dressed-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "580d9512e87b66a837d54dfdebf1369dc6636384e7d26c64d1030d57bee60cd9",
+      "filter": "Pillow HAMMING"
+    },
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-rough-hewn-block-seamlocked-v001.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "c7bc6f3119458243f51cabd26bc770d6b3e5d788f67bd4bc6e8fe3dc20a4263b",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-rough-hewn-block-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "76762f482195e591edc5cd261b9925174c08687ca5d49bdf9f66490cafc89b01",
+      "filter": "Pillow HAMMING"
+    },
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-dry-stack-fieldstone-source-v001.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "c68ca28f3f9349d8e39bf8a22064c74052306e25ae812517c3c63b938ae3e82c",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-dry-stack-fieldstone-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "6ab4d565ba31e756d454228164038cc39737eb2273f817d4168f327533dc8418",
+      "filter": "Pillow HAMMING"
+    },
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-brick-source-v002.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "3f032f141780a3cb49836e948a214f3f8dd7a4b5ffa5f1636df33a862846ac0d",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-brick-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "134c6475cae708af22373d39f8aca5ccee359cc2a5b27f1aef8e5285cfbea422",
+      "filter": "Pillow HAMMING"
+    },
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-plastered-rubble-source-v001.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "63e0a2959b90abc3259e860f178ed24d6338319dcbec42946be1b1928654bb74",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-plastered-rubble-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "f1d3cdb055f1c74fc455dac6973f00b338239c69759d5025625cdcc629c99853",
+      "filter": "Pillow HAMMING"
+    },
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-flagstone-source-v001.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "43a4f32db53981ce8e48159ed772b7558387fc90b8865ccb55d35639375b7b40",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-flagstone-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "bd1bdc2d90862335443f5f7624eb8e1d0a9413022dcad9b69d0f3a96f0aed9df",
+      "filter": "Pillow HAMMING"
+    },
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-plank-source-v001.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "353472594ab3c50d85aa63f7f2fe4d882cc1e3cafc7e4aae3312edac0017599c",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-plank-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "c3946510e4943fe3243246b7ed2617a7979798afda35b56aa562ea4186b2c661",
+      "filter": "Pillow HAMMING"
+    },
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-packed-earth-seamlocked-v001.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "4fc9d9aef076d822ae7c7f247a5841a94bd9ddca0edb917de34e7422fb4b3c53",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-packed-earth-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "96cf1fb9547bffb0ca9f70dc80623debbd6ad19dc2c02bb0c6a295dcf5847ef4",
+      "filter": "Pillow HAMMING"
+    },
+    {
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-cobble-source-v001.png",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "sourceSha256": "8525eb8198374c30923ea698c689f897c882a9df2ca7a438993ba29b3f2976b5",
+      "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-cobble-selected-v001.png",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "outputSha256": "ea416e9da4eaf6c5880d3f0ce13752e29ec971c5e284d8d28bbdcfe32a09fc6b",
+      "filter": "Pillow HAMMING"
+    }
+  ]
+}

@@ -8,6 +8,28 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-24 (later) — CL-R1 LIGHTING BENCH ACCEPTANCE SURFACE COMPLETED [Codex]
+
+### Added
+- **Live final-pixel diagnostics on CL-F02** — the Clayroom now places the admitted authored goblin
+  PNG beside its rendered screen crop and reports median/p95 brightness, white/black clipping,
+  chroma spread, and sprite-vs-local-surround readability deltas. The recurring readout samples a
+  small same-frame canvas copy only when the view changes or the user refreshes it; full-resolution
+  readback is reserved for explicit capture, so measurement adds no recurring animation hitch.
+- **Lore-native preview strip + deterministic seed preview** — sun/day, moon/night, arcane crystal,
+  torch flame, and lava reuse the existing compiled renderer recipes; A/B/C seeds affect only a
+  disposable cloned flicker sequence and never mutate the authored light lock.
+- **One-click seven-recipe comparison sheet** — neutral, diagnostic warm/cool, day, moon, magic,
+  torch, and lava are composed into one downloadable PNG with a JSON receipt. Animated stills use
+  deterministic sample 2, the prior live recipe is restored, and the capture rejects a lore-native
+  card with no real mounted renderer light. Evidence is in
+  `dev/clay-captures/cl-r1-lighting-matrix/`; the capture recorded zero console errors/warnings.
+
+### Changed
+- `dev/verify-clay-room.mjs` now carries CL-F02 checks 32j–32m (189/189 total), covering real pixel
+  measurement, source/render comparison, the shared lore recipe set, disposable seed clones, and
+  deterministic PNG/receipt capture.
+
 ## 2026-07-24 (latest) — THE CONSOLIDATION CLOSE — five lanes merged to a singular canonical master [Claude Fable 5]
 
 ### Added
@@ -939,4 +961,3 @@ to the prior tree = the server was serving stale code; kill-before-capture is no
 **Added (art)**
 - 25 DRESSING-GEN codex sheets landed + backed up UNGATED (flagships flora/clutter/objects +
   effects core + all accents + ash). VP2 gate/slice/fold is next session's first move.
-

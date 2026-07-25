@@ -38,23 +38,36 @@ Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolida
   one-third-cell-depth steps, a matte cube and sphere, one approved production sprite, no crate/door
   clutter, and no drifting motes. It defaults open in the Lights tab beside the retained Room Truth
   fixture. Position, exact 25/50/100-percent physical-range, and point-shadow-volume/spot-frustum
-  overlays read the mounted lights directly.
+  overlays read the mounted lights directly. Its last presentation pass is also built: source PNG
+  beside live rendered sprite pixels; final-frame brightness, clipping, chroma, and local-readability
+  measurements; deterministic A/B/C animation-seed previews; and one-click access to the existing
+  sun, moon, magic, fire, and lava recipes.
+- `BUILD COMPLETE 7-LIGHT SHEET` captures neutral, warm/cool, day, moon, magic, torch, and lava from
+  the production framebuffer, pins animated stills to seeded sample 2, restores the live recipe, and
+  exposes PNG/JSON downloads. The receipt records one real mounted renderer light for every
+  lore-native card. The live readout uses a small same-frame copy so continuous flame animation does
+  not inherit a recurring full-resolution GPU readback hitch; measurement is event-driven, while the
+  already-reviewed flame remains on its per-display-frame interpolation loop.
 - The washed-out goblin was tested one cause at a time through the production renderer. The causal
   sheet separates colour-space tagging, lit/unlit material response, sampling, tone mapping,
   compositing, and light energy. Wrong sRGB interpretation and intensity above 30 are executable
   negative controls; no saturation slider was added.
 - Final evidence: `dev/clay-captures/cl-r1-lighting/` (three modes, early/settled/explain/clean
   frames, receipts, measurements) and `dev/clay-captures/cl-r1-causality/` (13-card contact sheet,
-  receipt, measurements). All final captures recorded zero console errors/warnings.
-- Focused gates: light locks 12/12; Light Lab 42/42; Clayroom 185/185; local lighting 69/69;
-  practical fixtures 98/98; dungeon interior 288/288. **FULL CI PENDING.** One broad
+  receipt, measurements), plus `dev/clay-captures/cl-r1-lighting-matrix/` (seven-card PNG, live UI,
+  full receipt). Two fresh matrix runs produced byte-identical PNG and receipt hashes. All final
+  captures recorded zero console errors/warnings.
+- Focused gates: light locks 12/12; Light Lab 42/42; Clayroom 189/189; theater lighting 21/21;
+  light props 10/10; local lighting 69/69; fixture fade 32/32; practical fixtures 98/98;
+  manifest OK. **FULL CI PENDING.** One broad
   visual-protection harness still reports
   the torchlit old/new interior mean pixel delta `0.0177 > 0.01`; daylit and tabletop dark remain
   inside the threshold. This remains visible for Fable's re-gate rather than being weakened.
 - The live stop gate now includes the smooth decay-1.5 torch flame, warm-vs-cool balance, immediate
   torch readability, the intentionally flat neutral reference, and the dedicated CL-F02 stepped
-  sphere/cube display with core overlays. Adam's CL-F02 visual verdict is pending. Standee
-  base/footprint and the small→human→largest scaling spectrum belong to CL-R2 after that ruling.
+  sphere/cube display with overlays, pixel cards, lore-native preview strip, and complete comparison
+  sheet. Adam's CL-F02 visual verdict is pending. Standee base/footprint and the
+  small→human→largest scaling spectrum belong to CL-R2 after that ruling.
 
 ## ⭐ Latest (2026-07-24, evening) — THE CONSOLIDATION CLOSE: singular canonical master [Claude Fable 5]
 

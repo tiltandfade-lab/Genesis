@@ -113,7 +113,13 @@ import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger, standeeVerbFo
 // GRAPHICS-ENGINE Part II §A: the sibling billboard-standee verb library — see that file's header for
 // why it's a separate module from theater-verbs.js (rotation-ownership conflict with
 // updateSpriteBillboardYaw, below) and for the ctx-binding contract bindStandeeCtx/playStandeeVerb use.
-import { playStandeeVerb, bindStandeeCtx, STANDEE_VERBS, startIdleBreathe } from "./standee-verbs.js";
+import {
+  playStandeeVerb,
+  bindStandeeCtx,
+  STANDEE_VERBS,
+  startIdleBreathe,
+  stopIdleBreathe
+} from "./standee-verbs.js";
 // BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
 // see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
 // as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
@@ -13464,6 +13470,25 @@ window.Theater._claySetLightingRecipeForTest = function(id){
     ? clayRoomSetLightingRecipe(id, "clayroom-test-seam")
     : false;
 };
+window.Theater._clayLightingPixelMetricsForTest = function(){
+  return (typeof clayRoomLightingPixelMetrics === "function")
+    ? clayRoomLightingPixelMetrics(true)
+    : null;
+};
+window.Theater._claySetLightingPreviewSeedForTest = function(seed){
+  if(CLAY_ROOM_LIGHT_PREVIEW_SEEDS.indexOf(seed) < 0) return false;
+  S.clayRoomPreviewSeed = seed;
+  S.clayRoomPixelMetricsCache = null;
+  return clayRoomSetLightingRecipe(S.clayRoomLightRecipeId || "torchlit", "clayroom-seed-test-seam");
+};
+window.Theater._clayCaptureLightingMatrixForTest = function(){
+  return (typeof clayRoomCaptureLightingMatrix === "function")
+    ? clayRoomCaptureLightingMatrix()
+    : Promise.resolve(null);
+};
+window.Theater._clayLightingMatrixArtifactForTest = function(){
+  return S.clayRoomLightingMatrixArtifact || null;
+};
 window.Theater._clayLightingBenchForTest = function(){
   const bench = S.clayRoomLightingBenchGroup;
   const overlays = S.clayRoomLightOverlayGroup;
@@ -13488,7 +13513,10 @@ window.Theater._clayLightingBenchForTest = function(){
         range: line.userData.range == null ? null : line.userData.range
       };
     }) : [],
-    motesSuppressed: S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && !S.moteGroup
+    motesSuppressed: S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && !S.moteGroup,
+    previewSeed: S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0],
+    lorePreviewRecipes: CLAY_ROOM_LORE_LIGHT_PREVIEWS.map(function(row){ return row.id; }),
+    matrixRecipes: CLAY_ROOM_LIGHTING_MATRIX_RECIPES.slice()
   };
 };
 window.Theater._claySetFixtureForTest = function(id){
@@ -15359,6 +15387,23 @@ function clayRoomShouldEnable(){
 
 const CLAY_ROOM_TRUTH_FIXTURE_ID = "cl-f00-room-truth";
 const CLAY_ROOM_LIGHTING_BENCH_ID = "cl-f02-lighting-bench";
+const CLAY_ROOM_LIGHT_PREVIEW_SEEDS = Object.freeze(["A", "B", "C"]);
+const CLAY_ROOM_LORE_LIGHT_PREVIEWS = Object.freeze([
+  Object.freeze({ id: "daylit", label: "SUN · DAY", source: "sunlight" }),
+  Object.freeze({ id: "moonlit", label: "MOON · NIGHT", source: "moonlight" }),
+  Object.freeze({ id: "magic-glow", label: "MAGIC", source: "arcane crystal" }),
+  Object.freeze({ id: "torchlit", label: "FIRE", source: "torch flame" }),
+  Object.freeze({ id: "lavalit", label: "LAVA", source: "molten fissure" })
+]);
+const CLAY_ROOM_LIGHTING_MATRIX_RECIPES = Object.freeze([
+  "clay-neutral-truth",
+  "clay-opposing-pair",
+  "daylit",
+  "moonlit",
+  "magic-glow",
+  "torchlit",
+  "lavalit"
+]);
 function clayRoomFixtureIdFromLocation(){
   try {
     const raw = window.location && window.location.search
@@ -15450,7 +15495,17 @@ function clayRoomApplyLightProfile(record){
 
 function clayRoomSetLightingRecipe(recipeId, reason){
   if(!S.clayRoomRecord || !LIGHT_TUNABLES.profiles[recipeId]) return false;
+  S.clayRoomPixelMetricsCache = null;
   const recipe = lightRecipeDeepClone(LIGHT_TUNABLES.profiles[recipeId]);
+  // Seed preview is a disposable clone-time input, never a mutation of LIGHT_TUNABLES or the
+  // authored lock. Static sun/moon recipes are unchanged; licensed flicker recipes replay a
+  // different deterministic target sequence while preserving every physical value.
+  const previewSeed = S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
+  (recipe.lights || []).forEach(function(light){
+    if(!light.flicker || !(Number(light.flicker.amplitude) > 0)) return;
+    const authoredSeed = light.flicker.seed || (recipe.id + ":" + light.id);
+    light.flicker.seed = authoredSeed + ":clay-preview-" + previewSeed;
+  });
   const validation = lightRecipeValidate(recipe);
   if(!validation.ok){
     try { console.warn("qa: rejected invalid Clayroom lighting recipe", recipeId, validation.errors); } catch(e){}
@@ -16096,6 +16151,560 @@ function clayRoomBuildLightOverlays(){
   return group;
 }
 
+/* CL-R1 live pixel diagnostics. These measurements read the final display-space framebuffer after
+   the production post chain. They intentionally do not inspect authored light values and call them
+   "brightness": a clipped pixel, a crushed pixel, and a desaturated sprite are counted from what
+   the user can actually see. The sprite crop comes from __spriteScreenRects(), which projects the
+   live mounted billboard. Its local surround ring is the comparison field for the simple
+   readability deltas; no subjective pass/fail threshold is invented here. */
+function clayRoomMetricsForRgba(pixels, width, height, rect, opts){
+  opts = opts || {};
+  if(!pixels || !width || !height) return null;
+  const box = rect || { x: 0, y: 0, w: width, h: height };
+  const x0 = Math.max(0, Math.min(width, Math.floor(box.x)));
+  const y0 = Math.max(0, Math.min(height, Math.floor(box.y)));
+  const x1 = Math.max(x0, Math.min(width, Math.ceil(box.x + box.w)));
+  const y1 = Math.max(y0, Math.min(height, Math.ceil(box.y + box.h)));
+  const exclude = opts.excludeRect || null;
+  const sampleStep = Math.max(1, Number(opts.sampleStep) || 1);
+  const alphaMin = opts.alphaMin == null ? 0 : Number(opts.alphaMin);
+  const flipY = opts.flipY !== false;
+  const histogram = new Uint32Array(256);
+  let count = 0, lumaSum = 0, saturationSum = 0, spreadSum = 0;
+  let clipped = 0, crushed = 0, neutral = 0;
+  for(let sy = y0; sy < y1; sy += sampleStep){
+    for(let sx = x0; sx < x1; sx += sampleStep){
+      if(exclude
+        && sx >= exclude.x && sx < exclude.x + exclude.w
+        && sy >= exclude.y && sy < exclude.y + exclude.h) continue;
+      const sourceY = flipY ? (height - 1 - sy) : sy;
+      const i = (sourceY * width + sx) * 4;
+      if(pixels[i + 3] < alphaMin) continue;
+      const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2];
+      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      const lumaBin = Math.max(0, Math.min(255, Math.round(luma)));
+      const maxChannel = Math.max(r, g, b);
+      const minChannel = Math.min(r, g, b);
+      const spread = maxChannel - minChannel;
+      histogram[lumaBin]++;
+      count++;
+      lumaSum += luma;
+      spreadSum += spread;
+      saturationSum += maxChannel === 0 ? 0 : 255 * spread / maxChannel;
+      if(r >= 250 && g >= 250 && b >= 250) clipped++;
+      if(r <= 5 && g <= 5 && b <= 5) crushed++;
+      if(spread <= 6) neutral++;
+    }
+  }
+  if(!count) return null;
+  function percentile(fraction){
+    const target = Math.max(0, Math.min(count - 1, Math.floor(count * fraction)));
+    let seen = 0;
+    for(let value = 0; value < histogram.length; value++){
+      seen += histogram[value];
+      if(seen > target) return value;
+    }
+    return 255;
+  }
+  function rounded(value, places){
+    const factor = Math.pow(10, places == null ? 2 : places);
+    return Math.round(value * factor) / factor;
+  }
+  return {
+    pixelsSampled: count,
+    sampleStep: sampleStep,
+    meanLuma: rounded(lumaSum / count),
+    medianLuma: percentile(0.5),
+    p05Luma: percentile(0.05),
+    p95Luma: percentile(0.95),
+    clippedHighlightPct: rounded(100 * clipped / count, 3),
+    crushedShadowPct: rounded(100 * crushed / count, 3),
+    meanSaturation: rounded(saturationSum / count),
+    meanChromaSpread: rounded(spreadSum / count),
+    neutralPct: rounded(100 * neutral / count)
+  };
+}
+
+function clayRoomReadback(fullResolution){
+  if(!S.mounted || !S.renderer || !S.camera) return null;
+  renderTheaterFrame();
+  // The always-visible readout uses a small same-task 2D copy of the just-rendered WebGL canvas.
+  // It keeps the flame's 60fps animation from paying a full-resolution GPU readback every refresh.
+  // The explicit comparison-sheet capture below requests the full framebuffer instead.
+  if(!fullResolution && typeof document !== "undefined"){
+    const source = S.renderer.domElement;
+    const width = Math.min(480, source.width);
+    const height = Math.max(1, Math.round(source.height * (width / source.width)));
+    const sample = document.createElement("canvas");
+    sample.width = width;
+    sample.height = height;
+    const ctx = sample.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(source, 0, 0, width, height);
+    const image = ctx.getImageData(0, 0, width, height);
+    return {
+      pixels: new Uint8Array(image.data.buffer.slice(0)),
+      width: width,
+      height: height,
+      flipY: false,
+      sourceWidth: source.width,
+      sourceHeight: source.height
+    };
+  }
+  const gl = S.renderer.getContext();
+  if(!gl) return null;
+  const width = gl.drawingBufferWidth, height = gl.drawingBufferHeight;
+  if(!width || !height) return null;
+  const pixels = new Uint8Array(width * height * 4);
+  gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+  return {
+    pixels: pixels,
+    width: width,
+    height: height,
+    flipY: true,
+    sourceWidth: width,
+    sourceHeight: height
+  };
+}
+
+function clayRoomCitizenScreenRect(readback){
+  if(!readback || !window.Theater || typeof window.Theater.__spriteScreenRects !== "function"){
+    return null;
+  }
+  const expected = S.clayRoomRecord && S.clayRoomRecord.citizen
+    ? S.clayRoomRecord.citizen.bestiaryId : null;
+  const rects = window.Theater.__spriteScreenRects();
+  const found = rects.find(function(rect){ return rect.slug === expected; }) || rects[0];
+  if(!found || !(found.w > 1) || !(found.h > 1)) return null;
+  const scaleX = readback.width / (readback.sourceWidth || readback.width);
+  const scaleY = readback.height / (readback.sourceHeight || readback.height);
+  const foundX = found.cx * scaleX, foundY = found.cy * scaleY;
+  const foundW = found.w * scaleX, foundH = found.h * scaleY;
+  const pad = Math.max(3, Math.min(foundW, foundH) * 0.06);
+  return {
+    slug: found.slug,
+    x: Math.max(0, foundX - foundW / 2 - pad),
+    y: Math.max(0, foundY - foundH / 2 - pad),
+    w: Math.min(readback.width, foundW + pad * 2),
+    h: Math.min(readback.height, foundH + pad * 2)
+  };
+}
+
+function clayRoomCanvasFromReadback(readback, rect, targetCanvas){
+  if(!readback || typeof document === "undefined") return null;
+  const sourceRect = rect || { x: 0, y: 0, w: readback.width, h: readback.height };
+  const x0 = Math.max(0, Math.floor(sourceRect.x));
+  const y0 = Math.max(0, Math.floor(sourceRect.y));
+  const width = Math.max(1, Math.min(readback.width - x0, Math.ceil(sourceRect.w)));
+  const height = Math.max(1, Math.min(readback.height - y0, Math.ceil(sourceRect.h)));
+  const scratch = document.createElement("canvas");
+  scratch.width = width;
+  scratch.height = height;
+  const scratchCtx = scratch.getContext("2d");
+  const imageData = scratchCtx.createImageData(width, height);
+  for(let y = 0; y < height; y++){
+    const sourceY = readback.flipY === false ? (y0 + y) : (readback.height - 1 - (y0 + y));
+    const start = (sourceY * readback.width + x0) * 4;
+    imageData.data.set(readback.pixels.subarray(start, start + width * 4), y * width * 4);
+  }
+  scratchCtx.putImageData(imageData, 0, 0);
+  if(!targetCanvas) return scratch;
+  const outCtx = targetCanvas.getContext("2d");
+  outCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+  outCtx.fillStyle = "#090a0d";
+  outCtx.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
+  const scale = Math.min(targetCanvas.width / width, targetCanvas.height / height);
+  const drawW = width * scale, drawH = height * scale;
+  outCtx.imageSmoothingEnabled = false;
+  outCtx.drawImage(
+    scratch,
+    (targetCanvas.width - drawW) / 2,
+    (targetCanvas.height - drawH) / 2,
+    drawW,
+    drawH
+  );
+  return targetCanvas;
+}
+
+function clayRoomMountSourceSpriteCard(canvas, statusEl){
+  if(!canvas || !S.clayRoomRecord) return null;
+  const entry = spriteEntryFor(S.clayRoomRecord.citizen.bestiaryId);
+  const path = entry ? spriteAssetPathFor(entry) : null;
+  const state = { path: path, metrics: null, loaded: false };
+  S.clayRoomSourceSprite = state;
+  if(!path){
+    if(statusEl) statusEl.textContent = "source sprite unavailable";
+    return state;
+  }
+  const img = new Image();
+  img.addEventListener("load", function(){
+    const scratch = document.createElement("canvas");
+    scratch.width = img.naturalWidth || 1;
+    scratch.height = img.naturalHeight || 1;
+    const scratchCtx = scratch.getContext("2d");
+    scratchCtx.drawImage(img, 0, 0);
+    const sourcePixels = scratchCtx.getImageData(0, 0, scratch.width, scratch.height);
+    state.metrics = clayRoomMetricsForRgba(
+      sourcePixels.data,
+      scratch.width,
+      scratch.height,
+      null,
+      { flipY: false, alphaMin: 8, sampleStep: 1 }
+    );
+    state.loaded = true;
+    S.clayRoomPixelMetricsCache = null;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#090a0d";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const scale = Math.min(canvas.width / scratch.width, canvas.height / scratch.height);
+    const drawW = scratch.width * scale, drawH = scratch.height * scale;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(scratch, (canvas.width - drawW) / 2, (canvas.height - drawH) / 2, drawW, drawH);
+    if(statusEl){
+      statusEl.textContent = "authored PNG · opaque pixels · " + path.replace(/^assets\/sprites\//, "");
+    }
+  });
+  img.addEventListener("error", function(){
+    if(statusEl) statusEl.textContent = "source sprite failed to load · " + path;
+  });
+  img.src = path;
+  return state;
+}
+
+function clayRoomLightingPixelMetrics(force){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID) return null;
+  const now = typeof performance !== "undefined" && performance.now ? performance.now() : Date.now();
+  const cacheKey = (S.clayRoomLightRecipeId || "") + ":" + (S.clayRoomPreviewSeed || "A");
+  const cached = S.clayRoomPixelMetricsCache;
+  // Measuring is intentionally event-driven (recipe/seed/camera changes or the explicit refresh
+  // button), never a recurring GPU sync while a flame is animating. "Live" means pixels from the
+  // current mounted frame, not a background profiler that periodically steals an animation frame.
+  if(!force && cached && cached.cacheKey === cacheKey) return cached.value;
+  if(!force && S.clayRoomMatrixCaptureInProgress) return cached ? cached.value : null;
+  const readback = clayRoomReadback(false);
+  if(!readback) return null;
+  const spriteRect = clayRoomCitizenScreenRect(readback);
+  const frame = clayRoomMetricsForRgba(
+    readback.pixels,
+    readback.width,
+    readback.height,
+    null,
+    { sampleStep: 1, flipY: readback.flipY }
+  );
+  const sprite = spriteRect ? clayRoomMetricsForRgba(
+    readback.pixels,
+    readback.width,
+    readback.height,
+    spriteRect,
+    { sampleStep: 1, flipY: readback.flipY }
+  ) : null;
+  let surround = null;
+  if(spriteRect){
+    const growX = Math.max(8, spriteRect.w * 0.45);
+    const growY = Math.max(8, spriteRect.h * 0.25);
+    surround = clayRoomMetricsForRgba(
+      readback.pixels,
+      readback.width,
+      readback.height,
+      {
+        x: spriteRect.x - growX,
+        y: spriteRect.y - growY,
+        w: spriteRect.w + growX * 2,
+        h: spriteRect.h + growY * 2
+      },
+      { sampleStep: 1, excludeRect: spriteRect, flipY: readback.flipY }
+    );
+  }
+  const readability = sprite && surround ? {
+    lumaDelta: Math.round(Math.abs(sprite.medianLuma - surround.medianLuma) * 100) / 100,
+    chromaDelta: Math.round(Math.abs(sprite.meanChromaSpread - surround.meanChromaSpread) * 100) / 100,
+    definition: "absolute sprite-screen-box vs local-surround deltas; measurement only"
+  } : null;
+  if(S.clayRoomRenderedSpriteCanvas && spriteRect){
+    clayRoomCanvasFromReadback(readback, spriteRect, S.clayRoomRenderedSpriteCanvas);
+  }
+  const value = {
+    recipeId: S.clayRoomLightRecipeId || null,
+    previewSeed: S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0],
+    drawingBuffer: { w: readback.width, h: readback.height },
+    frame: frame,
+    sprite: sprite,
+    localSurround: surround,
+    readability: readability,
+    sourceSprite: S.clayRoomSourceSprite ? {
+      path: S.clayRoomSourceSprite.path,
+      loaded: S.clayRoomSourceSprite.loaded,
+      metrics: S.clayRoomSourceSprite.metrics
+    } : null
+  };
+  S.clayRoomPixelMetricsCache = { cacheKey: cacheKey, measuredAt: now, value: value };
+  return value;
+}
+
+function clayRoomWaitForCaptureSettle(ms){
+  return new Promise(function(resolve){
+    const afterFrames = function(){
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ setTimeout(resolve, ms || 0); });
+      });
+    };
+    if(typeof requestAnimationFrame === "function") afterFrames();
+    else setTimeout(resolve, ms || 0);
+  });
+}
+
+function clayRoomDownloadBlob(filename, type, content){
+  const blob = content instanceof Blob ? content : new Blob([content], { type: type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 0);
+}
+
+function clayRoomShowLightingMatrix(sheetCanvas, receipt){
+  const stale = document.getElementById("clay-lighting-matrix-sheet");
+  if(stale && stale.parentNode) stale.parentNode.removeChild(stale);
+  const overlay = document.createElement("div");
+  overlay.id = "clay-lighting-matrix-sheet";
+  overlay.style.cssText = "position:fixed;inset:54px 22px 18px;z-index:10020;background:rgba(10,11,14,.97);border:1px solid #56606d;border-radius:6px;padding:12px;box-sizing:border-box;overflow:auto;color:#e7edf4;font:11px/1.4 monospace;";
+  const toolbar = document.createElement("div");
+  toolbar.style.cssText = "position:sticky;top:0;z-index:2;display:flex;gap:6px;align-items:center;background:#111318;padding:0 0 9px;";
+  const title = document.createElement("strong");
+  title.textContent = "CL-R1 · COMPLETE LIGHTING COMPARISON · 7 REAL RECIPES";
+  title.style.cssText = "margin-right:auto;font:600 12px -apple-system,sans-serif;";
+  toolbar.appendChild(title);
+  [
+    ["DOWNLOAD PNG", function(){
+      sheetCanvas.toBlob(function(blob){
+        if(blob) clayRoomDownloadBlob("cl-r1-lighting-comparison.png", "image/png", blob);
+      }, "image/png");
+    }],
+    ["DOWNLOAD RECEIPT", function(){
+      clayRoomDownloadBlob(
+        "cl-r1-lighting-comparison-receipt.json",
+        "application/json",
+        JSON.stringify(receipt, null, 2)
+      );
+    }],
+    ["CLOSE", function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); }]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[0];
+    button.style.cssText = "font:10px monospace;background:#252b33;color:#e3e8ee;border:1px solid #4b5562;border-radius:3px;padding:5px 8px;cursor:pointer;";
+    button.addEventListener("click", def[1]);
+    toolbar.appendChild(button);
+  });
+  overlay.appendChild(toolbar);
+  sheetCanvas.style.cssText = "display:block;width:min(100%,1600px);height:auto;margin:0 auto;border:1px solid #333;background:#0b0d11;";
+  overlay.appendChild(sheetCanvas);
+  document.body.appendChild(overlay);
+  S.clayRoomLightingMatrixOverlay = overlay;
+}
+
+async function clayRoomCaptureLightingMatrix(){
+  if(S.clayRoomMatrixCaptureInProgress || S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID){
+    return null;
+  }
+  S.clayRoomMatrixCaptureInProgress = true;
+  if(S.clayRoomMatrixStatusEl) S.clayRoomMatrixStatusEl.textContent = "capturing 1 / 7…";
+  const originalRecipeId = S.clayRoomLightRecipeId || "clay-opposing-pair";
+  const originalOverlayModes = Object.assign(
+    { position: true, range: true, shadow: false },
+    S.clayRoomLightOverlayModes || {}
+  );
+  const previewSeed = S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
+  const cards = [];
+  try {
+    S.clayRoomLightOverlayModes = { position: false, range: false, shadow: false };
+    clayRoomBuildLightOverlays();
+    for(let index = 0; index < CLAY_ROOM_LIGHTING_MATRIX_RECIPES.length; index++){
+      const recipeId = CLAY_ROOM_LIGHTING_MATRIX_RECIPES[index];
+      if(S.clayRoomMatrixStatusEl){
+        S.clayRoomMatrixStatusEl.textContent = "capturing " + (index + 1) + " / "
+          + CLAY_ROOM_LIGHTING_MATRIX_RECIPES.length + " · " + recipeId;
+      }
+      if(!clayRoomSetLightingRecipe(recipeId, "clayroom-matrix-capture")){
+        throw new Error("could not mount lighting matrix recipe " + recipeId);
+      }
+      await clayRoomWaitForCaptureSettle(180);
+      // Animated recipes become deterministic stills at their second seeded target. This changes
+      // no authored state; the restored live recipe restarts its ordinary smooth animation below.
+      // Settle the standee's seeded mount/breathe tweens too, otherwise identical runs can catch a
+      // different sub-frame of the goblin and move a handful of shadow pixels.
+      if(S.interiorGroup){
+        S.interiorGroup.traverse(function(object){
+          if(object && object.userData && object.userData.sprite) stopIdleBreathe(object, false);
+        });
+      }
+      drainTweens(S);
+      stopLightFlicker();
+      lightFlickerStep([], [], S.interiorLightTargets || [], 0, 2);
+      const readback = clayRoomReadback(true);
+      if(!readback) throw new Error("could not read rendered pixels for " + recipeId);
+      const recipe = LIGHT_TUNABLES.profiles[recipeId];
+      const targetById = {};
+      (S.interiorLightTargets || []).forEach(function(target){ targetById[target.id] = target; });
+      const liveLights = [];
+      if(S.interiorGroup){
+        S.interiorGroup.traverse(function(light){
+          if(!light || !light.isLight || !light.userData || !light.userData.lightId) return;
+          const worldPosition = new THREE.Vector3();
+          light.getWorldPosition(worldPosition);
+          const target = targetById[light.userData.lightId];
+          liveLights.push({
+            id: light.userData.lightId,
+            type: light.isDirectionalLight ? "directional"
+              : light.isAmbientLight ? "environment"
+              : light.isSpotLight ? "spot" : "point",
+            state: light.userData.lightState || (target && target.state) || "steady",
+            color: light.color && typeof light.color.getHex === "function" ? light.color.getHex() : null,
+            intensity: Number.isFinite(light.intensity) ? +light.intensity.toFixed(6) : null,
+            range: Number.isFinite(light.distance) ? +light.distance.toFixed(6) : null,
+            decay: Number.isFinite(light.decay) ? +light.decay.toFixed(6) : null,
+            castShadow: !!light.castShadow,
+            worldPosition: {
+              x: +worldPosition.x.toFixed(6),
+              y: +worldPosition.y.toFixed(6),
+              z: +worldPosition.z.toFixed(6)
+            },
+            sampleIndex: target ? target.sampleIndex : 0,
+            normalizedSample: target && Number.isFinite(target.normalizedSample)
+              ? +target.normalizedSample.toFixed(6) : 1
+          });
+        });
+      }
+      cards.push({
+        recipeId: recipeId,
+        label: recipe.label,
+        mode: recipe.mode,
+        source: lightRecipeDeepClone(recipe.source),
+        canvas: clayRoomCanvasFromReadback(readback),
+        metrics: clayRoomMetricsForRgba(
+          readback.pixels,
+          readback.width,
+          readback.height,
+          null,
+          { sampleStep: 2, flipY: readback.flipY }
+        ),
+        lights: liveLights
+      });
+    }
+
+    const cardWidth = 380, cardHeight = 360, columns = 4;
+    const rows = Math.ceil(cards.length / columns);
+    const sheet = document.createElement("canvas");
+    sheet.width = columns * cardWidth;
+    sheet.height = 104 + rows * cardHeight;
+    const ctx = sheet.getContext("2d");
+    ctx.fillStyle = "#0b0d11";
+    ctx.fillRect(0, 0, sheet.width, sheet.height);
+    ctx.fillStyle = "#eef3f8";
+    ctx.font = "600 28px -apple-system, sans-serif";
+    ctx.fillText("CL-R1 · LIGHTING COMPARISON", 24, 38);
+    ctx.fillStyle = "#9aa8b8";
+    ctx.font = "16px monospace";
+    ctx.fillText(
+      "production renderer · fixture " + CLAY_ROOM_LIGHTING_BENCH_ID
+        + " · preview seed " + previewSeed + " · dynamic sample 2",
+      24,
+      70
+    );
+    ctx.fillText("brightness, clipping, and colour are measured from final display pixels", 24, 94);
+    cards.forEach(function(card, index){
+      const col = index % columns, row = Math.floor(index / columns);
+      const x = col * cardWidth, y = 104 + row * cardHeight;
+      ctx.fillStyle = index % 2 ? "#11151b" : "#0f1318";
+      ctx.fillRect(x + 6, y + 6, cardWidth - 12, cardHeight - 12);
+      ctx.strokeStyle = card.source.loreNative ? "#476a58" : "#665b3d";
+      ctx.strokeRect(x + 6.5, y + 6.5, cardWidth - 13, cardHeight - 13);
+      ctx.fillStyle = "#edf2f7";
+      ctx.font = "600 18px -apple-system, sans-serif";
+      ctx.fillText(card.label, x + 18, y + 33);
+      ctx.fillStyle = card.source.loreNative ? "#7fd6a4" : "#d8bd72";
+      ctx.font = "12px monospace";
+      ctx.fillText(card.source.loreNative ? "LORE-NATIVE" : "DIAGNOSTIC ONLY", x + 18, y + 52);
+      const imageX = x + 18, imageY = y + 64, imageW = cardWidth - 36, imageH = 220;
+      ctx.fillStyle = "#050608";
+      ctx.fillRect(imageX, imageY, imageW, imageH);
+      const imageScale = Math.min(imageW / card.canvas.width, imageH / card.canvas.height);
+      const drawW = card.canvas.width * imageScale, drawH = card.canvas.height * imageScale;
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(
+        card.canvas,
+        imageX + (imageW - drawW) / 2,
+        imageY + (imageH - drawH) / 2,
+        drawW,
+        drawH
+      );
+      const m = card.metrics;
+      ctx.fillStyle = "#b9c6d3";
+      ctx.font = "12px monospace";
+      ctx.fillText("median " + m.medianLuma + "/255 · p95 " + m.p95Luma + "/255", x + 18, y + 306);
+      ctx.fillText(
+        "clipped " + m.clippedHighlightPct.toFixed(3) + "% · crushed "
+          + m.crushedShadowPct.toFixed(3) + "%",
+        x + 18,
+        y + 325
+      );
+      ctx.fillText("colour spread " + m.meanChromaSpread.toFixed(2) + "/255", x + 18, y + 344);
+    });
+
+    const receipt = {
+      id: "cl-r1-lighting-comparison",
+      version: 1,
+      rendererPath: "authored light lock -> clayRoomBoardFrom -> production Theater -> display-space framebuffer",
+      fixtureId: CLAY_ROOM_LIGHTING_BENCH_ID,
+      fixtureVersion: CLAY_LIGHTING_BENCH_FIXTURE.version,
+      fixtureSeed: S.clayRoomRecord ? S.clayRoomRecord.seed : null,
+      previewSeed: previewSeed,
+      dynamicSampleIndex: 2,
+      lightLock: {
+        id: LIGHT_PROFILE_LOCKS_COMPILED.id,
+        version: LIGHT_PROFILE_LOCKS_COMPILED.version,
+        schemaVersion: LIGHT_PROFILE_LOCKS_COMPILED.schemaVersion
+      },
+      sourceSprite: S.clayRoomSourceSprite ? {
+        path: S.clayRoomSourceSprite.path,
+        metrics: S.clayRoomSourceSprite.metrics
+      } : null,
+      cards: cards.map(function(card){
+        return {
+          recipeId: card.recipeId,
+          label: card.label,
+          mode: card.mode,
+          source: card.source,
+          metrics: card.metrics,
+          lights: card.lights
+        };
+      })
+    };
+    const dataUrl = sheet.toDataURL("image/png");
+    S.clayRoomLightingMatrixArtifact = {
+      receipt: receipt,
+      dataUrl: dataUrl,
+      width: sheet.width,
+      height: sheet.height
+    };
+    clayRoomShowLightingMatrix(sheet, receipt);
+    if(S.clayRoomMatrixStatusEl){
+      S.clayRoomMatrixStatusEl.textContent = "ready · 7 recipes · PNG + receipt";
+    }
+    return S.clayRoomLightingMatrixArtifact;
+  } catch(error) {
+    if(S.clayRoomMatrixStatusEl) S.clayRoomMatrixStatusEl.textContent = "capture failed · " + error.message;
+    throw error;
+  } finally {
+    S.clayRoomLightOverlayModes = originalOverlayModes;
+    clayRoomSetLightingRecipe(originalRecipeId, "clayroom-matrix-restore");
+    clayRoomBuildLightOverlays();
+    S.clayRoomMatrixCaptureInProgress = false;
+  }
+}
+
 /* clayRoomAfterInteriorBoardRebuild() — THE ONE LIFECYCLE HOOK. Called from setInteriorBoard's own
    tail (its single exit point), so it fires on the mount's first build AND on every asynchronous
    replay, without the clay surface having to know that those replay sites exist. A no-op unless the
@@ -16591,6 +17200,7 @@ function clayRoomApplyCamPose(){
   S.camera.position.copy(pos);
   if(S.cameraLookTarget) S.cameraLookTarget.copy(target);
   S.camera.lookAt(target);
+  S.clayRoomPixelMetricsCache = null;
   markDirty();
   scheduleRender();
 }
@@ -16973,6 +17583,7 @@ function mountClayRoom(){
     S.clayRoomLightRecipeId = compiled.lightRecipeId || "clay-opposing-pair";
     S.clayRoomFixtureId = clayRoomFixtureIdFromLocation();
     S.clayRoomLightOverlayModes = { position: true, range: true, shadow: false };
+    S.clayRoomPreviewSeed = CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
     S.clayCamOffset = { x: 0, z: 0 };
     S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? 0.72 : 1;
     S.clayRoomDiagnosticActive = true;
@@ -17787,6 +18398,48 @@ function clayRoomMountOverlay(record, host){
     lightingModeButtons[def[0]] = button;
   });
   lightsBody.appendChild(lightingModeActions);
+  const lorePreviewLabel = document.createElement("div");
+  lorePreviewLabel.textContent = "LORE-NATIVE PREVIEWS · existing renderer recipes";
+  lorePreviewLabel.style.cssText = "color:#8fb7a1;margin:8px 0 4px;";
+  lightsBody.appendChild(lorePreviewLabel);
+  const lorePreviewActions = document.createElement("div");
+  lorePreviewActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  CLAY_ROOM_LORE_LIGHT_PREVIEWS.forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def.label;
+    button.title = def.source + " · shared authored recipe " + def.id;
+    button.setAttribute("aria-label", "Preview lore-native " + def.source + " recipe");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #44534b;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){
+      clayRoomSetLightingRecipe(def.id, "clayroom-lore-preview");
+    });
+    lorePreviewActions.appendChild(button);
+    lightingModeButtons[def.id] = button;
+  });
+  lightsBody.appendChild(lorePreviewActions);
+
+  const seedLabel = document.createElement("div");
+  seedLabel.textContent = "ANIMATION SEED PREVIEW · physical values stay locked";
+  seedLabel.style.cssText = "color:#9ab;margin:5px 0 4px;";
+  lightsBody.appendChild(seedLabel);
+  const seedActions = document.createElement("div");
+  seedActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  const seedButtons = {};
+  CLAY_ROOM_LIGHT_PREVIEW_SEEDS.forEach(function(seed){
+    const button = document.createElement("button");
+    button.textContent = "SEED " + seed;
+    button.setAttribute("aria-label", "Use Clayroom animation preview seed " + seed);
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
+    button.addEventListener("click", function(){
+      S.clayRoomPreviewSeed = seed;
+      S.clayRoomPixelMetricsCache = null;
+      clayRoomSetLightingRecipe(S.clayRoomLightRecipeId || "torchlit", "clayroom-seed-preview");
+    });
+    seedActions.appendChild(button);
+    seedButtons[seed] = button;
+  });
+  lightsBody.appendChild(seedActions);
+
   const overlayActions = document.createElement("div");
   overlayActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
   const overlayButtons = {};
@@ -17818,11 +18471,73 @@ function clayRoomMountOverlay(record, host){
   const rebuildLightsBtn = document.createElement("button");
   rebuildLightsBtn.textContent = "rebuild/fade proof";
   rebuildLightsBtn.setAttribute("aria-label", "Run Clayroom board rebuild lighting proof");
-  [restoreLightsBtn, rebuildLightsBtn].forEach(function(b){
+  const refreshPixelsBtn = document.createElement("button");
+  refreshPixelsBtn.textContent = "refresh pixels";
+  refreshPixelsBtn.setAttribute("aria-label", "Refresh Clayroom final pixel measurements");
+  [restoreLightsBtn, rebuildLightsBtn, refreshPixelsBtn].forEach(function(b){
     b.style.cssText = "flex:1;font:10px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
     lightsActions.appendChild(b);
   });
   lightsBody.appendChild(lightsActions);
+
+  const comparisonLabel = document.createElement("div");
+  comparisonLabel.textContent = "SOURCE ART ↔ LIVE RENDER";
+  comparisonLabel.style.cssText = "color:#9ab;border-top:1px solid #333;padding-top:7px;margin-top:7px;";
+  lightsBody.appendChild(comparisonLabel);
+  const comparisonCards = document.createElement("div");
+  comparisonCards.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:5px 0 3px;";
+  function comparisonCard(label){
+    const card = document.createElement("div");
+    card.style.cssText = "border:1px solid #303740;background:#111419;padding:4px;";
+    const heading = document.createElement("div");
+    heading.textContent = label;
+    heading.style.cssText = "color:#aeb9c5;margin-bottom:3px;";
+    const canvas = document.createElement("canvas");
+    canvas.width = 240;
+    canvas.height = 170;
+    canvas.style.cssText = "display:block;width:100%;height:100px;background:#090a0d;image-rendering:pixelated;";
+    card.appendChild(heading);
+    card.appendChild(canvas);
+    comparisonCards.appendChild(card);
+    return canvas;
+  }
+  const sourceSpriteCanvas = comparisonCard("AUTHORED PNG");
+  const renderedSpriteCanvas = comparisonCard("FINAL PIXELS");
+  lightsBody.appendChild(comparisonCards);
+  const sourceSpriteStatus = document.createElement("div");
+  sourceSpriteStatus.style.cssText = "color:#768697;font:9px/1.35 monospace;margin-bottom:6px;overflow-wrap:anywhere;";
+  sourceSpriteStatus.textContent = "loading authored source…";
+  lightsBody.appendChild(sourceSpriteStatus);
+  S.clayRoomRenderedSpriteCanvas = renderedSpriteCanvas;
+  clayRoomMountSourceSpriteCard(sourceSpriteCanvas, sourceSpriteStatus);
+
+  const pixelReadout = document.createElement("pre");
+  pixelReadout.id = "clay-room-pixel-readout";
+  pixelReadout.style.cssText = "white-space:pre-wrap;color:#bfd0df;border:1px solid #303740;background:#111419;padding:6px;margin:5px 0 7px;";
+  pixelReadout.textContent = "reading final display pixels…";
+  lightsBody.appendChild(pixelReadout);
+
+  const matrixButton = document.createElement("button");
+  matrixButton.textContent = "BUILD COMPLETE 7-LIGHT SHEET";
+  matrixButton.setAttribute("aria-label", "Capture the complete Clayroom lighting comparison sheet");
+  matrixButton.style.cssText = "width:100%;font:10px monospace;background:#283a34;color:#def4e7;border:1px solid #4b6d5d;border-radius:3px;cursor:pointer;padding:6px;";
+  matrixButton.addEventListener("click", async function(){
+    matrixButton.disabled = true;
+    try {
+      await clayRoomCaptureLightingMatrix();
+    } catch(error) {
+      try { console.warn("qa: Clayroom lighting matrix capture failed", error); } catch(e){}
+    } finally {
+      matrixButton.disabled = false;
+    }
+  });
+  lightsBody.appendChild(matrixButton);
+  const matrixStatus = document.createElement("div");
+  matrixStatus.style.cssText = "color:#7f9488;margin:3px 0 7px;";
+  matrixStatus.textContent = "one click · neutral + diagnostic + sun/moon/magic/fire/lava";
+  lightsBody.appendChild(matrixStatus);
+  S.clayRoomMatrixStatusEl = matrixStatus;
+
   const lightStateButtons = {};
   const lightRows = document.createElement("div");
   lightsBody.appendChild(lightRows);
@@ -17939,6 +18654,37 @@ function clayRoomMountOverlay(record, host){
     Object.keys(lightingModeButtons).forEach(function(id){
       lightingModeButtons[id].style.background = id === activeRecipe.id ? "#35516a" : "#2a2a30";
     });
+    Object.keys(seedButtons).forEach(function(seed){
+      seedButtons[seed].style.background = seed === (S.clayRoomPreviewSeed || "A") ? "#4b3f61" : "#2a2a30";
+    });
+    const pixel = clayRoomLightingPixelMetrics(false);
+    if(!pixel){
+      pixelReadout.textContent = "FINAL PIXEL MEASUREMENTS\nlighting bench required";
+    } else {
+      const fmt = function(value){ return value == null ? "—" : Number(value).toFixed(2); };
+      const frame = pixel.frame || {};
+      const sprite = pixel.sprite || {};
+      const source = pixel.sourceSprite && pixel.sourceSprite.metrics
+        ? pixel.sourceSprite.metrics : null;
+      pixelReadout.textContent = [
+        "FINAL PIXEL MEASUREMENTS · no recipe-value guesses",
+        "frame brightness  median " + fmt(frame.medianLuma) + "/255 · p95 " + fmt(frame.p95Luma) + "/255",
+        "frame clipping    white " + fmt(frame.clippedHighlightPct) + "% · black " + fmt(frame.crushedShadowPct) + "%",
+        "frame colour      chroma spread " + fmt(frame.meanChromaSpread) + "/255",
+        "",
+        "goblin screen box median " + fmt(sprite.medianLuma) + "/255 · p95 " + fmt(sprite.p95Luma) + "/255",
+        "goblin clipping   white " + fmt(sprite.clippedHighlightPct) + "% · black " + fmt(sprite.crushedShadowPct) + "%",
+        "goblin colour     chroma spread " + fmt(sprite.meanChromaSpread) + "/255",
+        "readability       luma Δ " + fmt(pixel.readability && pixel.readability.lumaDelta)
+          + " · colour Δ " + fmt(pixel.readability && pixel.readability.chromaDelta)
+          + " vs nearby background",
+        "",
+        source
+          ? "authored PNG      median " + fmt(source.medianLuma) + "/255 · colour " + fmt(source.meanChromaSpread) + "/255 · clipped " + fmt(source.clippedHighlightPct) + "%"
+          : "authored PNG      measuring opaque source pixels…",
+        "measurement only · no taste threshold silently applied"
+      ].join("\n");
+    }
     lightsOut.textContent = lines.join("\n");
   }
   function clayRefreshFixtureControls(){
@@ -17972,6 +18718,11 @@ function clayRoomMountOverlay(record, host){
     if(!S.lastBoard || S.lastBoard.kind !== "interior3d") return;
     S.boardKey = null;
     setInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-lighting-proof" });
+    clayLightsRender();
+  });
+  refreshPixelsBtn.addEventListener("click", function(){
+    S.clayRoomPixelMetricsCache = null;
+    clayRoomLightingPixelMetrics(true);
     clayLightsRender();
   });
   S.clayRoomRefreshLights = clayLightsRender;
@@ -18148,6 +18899,7 @@ function clayRoomUnmount(){
   const panelResizeHandler = S.clayRoomPanelResizeHandler;
   const panelDragCleanup = S.clayRoomPanelDragCleanup;
   const lightReadoutTimer = S.clayRoomLightReadoutTimer;
+  const lightingMatrixOverlay = S.clayRoomLightingMatrixOverlay;
   // CL-R0: stand the lifecycle hook down BEFORE retire(). retire() swaps in a fresh
   // createTheaterState() (so the flag would clear anyway), but any setInteriorBoard that fires
   // during teardown must not try to re-route a tree that is being disposed.
@@ -18160,6 +18912,9 @@ function clayRoomUnmount(){
   ITR_ROOM_SHELL = CLAY_ROOM_PRIOR_ROOM_SHELL; // restore mountClayRoom's own ITR_ROOM_SHELL override — see that function's header note
   if(overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);
   if(hostEl && hostEl.parentNode) hostEl.parentNode.removeChild(hostEl);
+  if(lightingMatrixOverlay && lightingMatrixOverlay.parentNode){
+    lightingMatrixOverlay.parentNode.removeChild(lightingMatrixOverlay);
+  }
   workbenchChrome.forEach(function(el){ if(el && el.parentNode) el.parentNode.removeChild(el); });
 }
 

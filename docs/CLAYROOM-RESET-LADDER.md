@@ -2,7 +2,8 @@
 type: system-spec
 status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review candidate BUILT
   (2026-07-24), close torch brightness accepted and smooth decay-1.5 flame review live; dedicated
-  CL-F02 bench + core light overlays built, visual verdict pending; CL-R2…CL-R6 remain
+  CL-F02 bench + overlays + live pixel cards + seven-recipe capture built, visual verdict pending;
+  CL-R2…CL-R6 remain
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
 authority: subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids) and
@@ -374,12 +375,26 @@ the room-truth crate/door clutter, suppresses atmosphere motes, keeps one approv
 production `board.pieces` path, and mounts three rising one-third-cell-depth steps plus a matched matte
 cube and sphere inside the existing production Theater. Position crosshairs/floor drops, exact
 25/50/100-percent physical-range rings, and point-shadow-volume/spot-frustum wire overlays read the
-live THREE lights; they do not author a second light answer. The pure fixture and renderer wiring are
-gated in `dev/verify-clay-room.mjs` checks 32a–32i.
+live THREE lights; they do not author a second light answer.
 
-This is still not a claim that every literal CL-F02 presentation affordance is finished. Seed/time-
-of-day preview, live pixel luma/chroma/clipping cards, and one-click whole-matrix capture remain open.
-They do not create a second recipe or renderer authority when added.
+The remaining literal presentation affordances are now built on that same renderer path. The Lights
+tab shows the admitted authored goblin PNG beside a crop of its live rendered screen box; reads final
+display pixels for median/p95 luma, white/black clipping, chroma spread, and simple sprite-vs-local-
+surround readability deltas; offers disposable deterministic animation seeds A/B/C; and previews the
+existing authored sunlight, moonlight, arcane-crystal, torch-flame, and lava recipes. None of these
+controls mutates `LIGHT_TUNABLES` or the authored lock. The always-visible measurement card reads a
+small same-frame copy on recipe/seed/camera changes or explicit `refresh pixels`, never on a timer,
+so the flame animation does not pay a recurring GPU stall; the explicit capture action reads the
+full display framebuffer.
+
+`BUILD COMPLETE 7-LIGHT SHEET` captures neutral, warm/cool, day, moon, magic, torch, and lava in one
+sheet. Animated sources are pinned to deterministic target sample 2 for the still, the previously
+active live recipe is restored afterward, and the downloadable receipt records the compiled lock,
+fixture seed, source-sprite metrics, final frame measurements, and every mounted renderer light.
+Two fresh capture runs produced byte-identical PNG and receipt hashes. Evidence:
+`dev/clay-captures/cl-r1-lighting-matrix/`. The pure fixture and renderer wiring are gated in
+`dev/verify-clay-room.mjs` checks 32a–32m; the capture harness additionally refuses any lore-native
+card without a live renderer light.
 
 **CL-R1 lifecycle/local-state slice — BUILT 2026-07-24.** Every generated production practical still
 declares local state `steady` by default and owns deterministic flicker seed/amplitude data.

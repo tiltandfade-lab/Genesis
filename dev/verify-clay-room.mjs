@@ -1459,6 +1459,38 @@ const check = (name, cond, detail = "") =>
     /data-clay-room-truth-only/.test(bootSrc)
     && /status\.textContent\s*=\s*roomTruth\s*\?\s*"MOUNTED"\s*:\s*"ROOM ONLY"/.test(bootSrc)
     && /button\.disabled\s*=\s*!roomTruth/.test(bootSrc));
+  check("32j. live luma/chroma/clipping diagnostics measure final pixels and compare the sprite with its local surround",
+    /function\s+clayRoomLightingPixelMetrics/.test(bootSrc)
+    && /gl\.readPixels\(0,\s*0,\s*width,\s*height,\s*gl\.RGBA,\s*gl\.UNSIGNED_BYTE,\s*pixels\)/.test(bootSrc)
+    && /clippedHighlightPct/.test(bootSrc)
+    && /meanChromaSpread/.test(bootSrc)
+    && /excludeRect:\s*spriteRect/.test(bootSrc)
+    && /if\(!force\s*&&\s*cached\s*&&\s*cached\.cacheKey\s*===\s*cacheKey\)\s*return cached\.value/.test(bootSrc)
+    && /refreshPixelsBtn/.test(bootSrc)
+    && /window\.Theater\._clayLightingPixelMetricsForTest/.test(bootSrc));
+  check("32k. source-vs-render cards use the admitted authored sprite path and a crop of the live framebuffer",
+    /function\s+clayRoomMountSourceSpriteCard/.test(bootSrc)
+    && /spriteAssetPathFor\(entry\)/.test(bootSrc)
+    && /AUTHORED PNG/.test(bootSrc)
+    && /FINAL PIXELS/.test(bootSrc)
+    && /clayRoomCanvasFromReadback\(readback,\s*spriteRect/.test(bootSrc));
+  check("32l. lore previews reuse the five authored sun/moon/magic/fire/lava recipes and seed only disposable recipe clones",
+    /CLAY_ROOM_LORE_LIGHT_PREVIEWS/.test(bootSrc)
+    && /id:\s*"daylit"/.test(bootSrc)
+    && /id:\s*"moonlit"/.test(bootSrc)
+    && /id:\s*"magic-glow"/.test(bootSrc)
+    && /id:\s*"torchlit"/.test(bootSrc)
+    && /id:\s*"lavalit"/.test(bootSrc)
+    && /const\s+recipe\s*=\s*lightRecipeDeepClone\(LIGHT_TUNABLES\.profiles\[recipeId\]\)/.test(bootSrc)
+    && /light\.flicker\.seed\s*=\s*authoredSeed\s*\+\s*":clay-preview-"/.test(bootSrc));
+  check("32m. one action builds the seven-recipe sheet, pins animated stills to seeded sample 2, and exports PNG plus receipt",
+    /CLAY_ROOM_LIGHTING_MATRIX_RECIPES/.test(bootSrc)
+    && /"clay-neutral-truth"[\s\S]*"clay-opposing-pair"[\s\S]*"daylit"[\s\S]*"moonlit"[\s\S]*"magic-glow"[\s\S]*"torchlit"[\s\S]*"lavalit"/.test(bootSrc)
+    && /async function\s+clayRoomCaptureLightingMatrix/.test(bootSrc)
+    && /lightFlickerStep\(\[\],\s*\[\],\s*S\.interiorLightTargets\s*\|\|\s*\[\],\s*0,\s*2\)/.test(bootSrc)
+    && /DOWNLOAD PNG/.test(bootSrc)
+    && /DOWNLOAD RECEIPT/.test(bootSrc)
+    && /window\.Theater\._clayCaptureLightingMatrixForTest/.test(bootSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-CLAY-TILE-MM-V001",
+  "result": "PASS",
+  "sourceIdentity": {
+    "meanAbsoluteError": 0.0,
+    "pixelCorrelation": 1.0
+  },
+  "depth": {
+    "heightStdDev": 21.6318,
+    "normalStdDevRgb": [
+      22.564,
+      24.7277,
+      8.6372
+    ]
+  },
+  "orm": {
+    "expectedRoughnessByte": 173,
+    "metallicMaxByte": 0
+  }
+}

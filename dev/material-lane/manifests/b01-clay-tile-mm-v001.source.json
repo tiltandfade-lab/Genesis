@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-CLAY-TILE-MM-V001",
+  "sourceGateManifest": "dev/material-lane/manifests/b01-clay-tile-v001.source.json",
+  "source": "dev/material-lane/proofs/b01-autonomous-p3-v001/b01-autonomous-p3-v001-clay-tile.png",
+  "sourceSha256": "27ed56f33cf25418cf632213aed8f509bf0b24f689ae6aa4a4d46eb48bea9fe5",
+  "graph": "dev/material-lane/graphs/b01-clay-tile-mm-v001/b01-roof-clay-tile-v001.ptex",
+  "graphSha256": "f9f4097ba740cbe2536a9563fdff200ed10333fa44d3c55fefb5453f5ef79028",
+  "materialTreatment": {
+    "albedo": "technical source unchanged",
+    "height": "0.90 contrast, 20 steps, blur radius 3",
+    "normalStrength": 0.4,
+    "ambientOcclusionStrength": 0.36,
+    "roughness": 0.68,
+    "metallic": 0,
+    "depthScale": 0.028,
+    "intent": "restore broad curvature and under-lip separation; do not emboss pixel dither"
+  }
+}

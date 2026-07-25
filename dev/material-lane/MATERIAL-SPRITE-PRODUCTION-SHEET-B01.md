@@ -101,6 +101,19 @@ verification receipts are `receipts/b01-timber-shingle-mm-v001-export-receipt.js
 `receipts/b01-timber-shingle-mm-v001-verification.json`. The approved sprite is unchanged as
 albedo; MM adds broad course relief, roughness 0.72, and zero metallic.
 
+## Clay-tile checkpoint — 2026-07-24
+
+`roof-clay-tile` is **TECHNICAL-SOURCE-PASS / TASTE-APPROVED / MM-PASS**. Sixteen upright fired-
+clay pantile components form a balanced 12 x 8 toroidal course field. The albedo remains free of
+directional cast shadow; MM derives clay-specific curvature and under-lip separation with normal
+strength 0.40, AO 0.36, roughness 0.68, and zero metallic. Records and review:
+
+- `manifests/b01-clay-tile-v001.source.json`
+- `graphs/b01-clay-tile-mm-v001/`
+- `receipts/b01-clay-tile-mm-v001-export-receipt.json`
+- `receipts/b01-clay-tile-mm-v001-verification.json`
+- `../material-cards/b01-clay-tile-mm-v001.html`
+
 ## Slate replacement checkpoint — 2026-07-24
 
 The original six-component slate was rejected after review because its course read could appear

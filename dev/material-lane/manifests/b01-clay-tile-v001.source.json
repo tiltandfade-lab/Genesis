@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-CLAY-TILE-V001",
+  "status": "TECHNICAL-SOURCE-PASS / TASTE-APPROVED / MM-PASS",
+  "workflow": "ImageGen components -> modular source gate -> MM shadow/depth review",
+  "generation": {"mode": "built-in ImageGen", "prompt": "Create exactly sixteen isolated upright fired-clay barrel/pantile roof sprites in a 4x4 sheet on flat #00ff00 chroma. Each has a squared attachment edge at top and rounded curved exposed lip at bottom; no rotation, flipping, perspective, shadows, AO, damage, moss, labels, or roof field. Match the supplied pixel-art terracotta references with narrow organic kiln variation across burnt orange, ochre, and warm brick."},
+  "components": {
+    "chroma": {"path": "dev/material-lane/source-sprites/b01-autonomous-p3-v001/roof-clay-tile-components-chroma-v001.png", "sha256": "459a7de24540ad78890629c662d4787efb75f5de6eaf11f2306669c201adea3c"},
+    "alpha": {"path": "dev/material-lane/source-sprites/b01-autonomous-p3-v001/roof-clay-tile-components-alpha-v001.png", "sha256": "0e8ae95a37605de19936cb2e3a2eede1652ac4f4d56333acf526dc32b6d65f1c", "validation": "RGBA 1254x1254; transparent corners; opaque coverage 0.3512"}
+  },
+  "assembly": {"script": "dev/material-lane/build-modular-course-proof.py", "receipt": "dev/material-lane/proofs/b01-autonomous-p3-v001/b01-autonomous-p3-v001-clay-tile-receipt.json", "workingSize": [576,576], "deliverySize": [512,512], "xStep": 48, "yStep": 72, "variantSeed": 56231},
+  "acceptedTechnicalSource": {"path": "dev/material-lane/proofs/b01-autonomous-p3-v001/b01-autonomous-p3-v001-clay-tile.png", "sha256": "27ed56f33cf25418cf632213aed8f509bf0b24f689ae6aa4a4d46eb48bea9fe5", "repeatProof": "dev/material-lane/proofs/b01-autonomous-p3-v001/b01-autonomous-p3-v001-clay-tile-repeat-3x3.png", "repeatProofSha256": "8379a224f851f100cd73ab3f95e32bdb87e93c726deed26b8a195e286ad44407", "technicalGate": "PASS", "tasteIssue": "Confirm MM-derived under-lip shadow restores the depth present in the original generated roof field without baking directional shadow into albedo."}
+}

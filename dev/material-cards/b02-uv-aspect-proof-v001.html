@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><link rel="icon" href="data:,">
+<title>Genesis — B02 UV aspect proof</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0c0b;--panel:#171713;--line:#494236;--ink:#eee7d8;--muted:#a69d8d;--gold:#d0a550;--bad:#d16f62;--good:#90aa83}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}main{width:1500px;margin:auto;padding:38px}.eyebrow{color:var(--gold);font:800 12px ui-monospace,monospace;letter-spacing:.14em}h1{font:500 42px Georgia,serif;margin:6px 0 10px}.intro{color:var(--muted);font:16px/1.5 Georgia,serif;margin:0 0 22px}.equation{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}.eq{background:#15140f;border:1px solid var(--line);padding:15px 18px;font:14px/1.55 ui-monospace,monospace}.eq.bad{border-left:5px solid var(--bad)}.eq.good{border-left:5px solid var(--good)}.eq strong{display:block;font-size:12px;letter-spacing:.09em;margin-bottom:5px}.bad strong{color:var(--bad)}.good strong{color:var(--good)}.grid{display:grid;grid-template-columns:320px 1fr 1fr;gap:15px}.panel{background:var(--panel);border:1px solid var(--line);padding:14px}.panel h2{font:500 25px Georgia,serif;margin:0 0 10px}.panel img{width:100%;display:block}.source img{aspect-ratio:1;object-fit:cover;image-rendering:pixelated}.render{aspect-ratio:16/10;background:#101316;overflow:hidden}.render img{height:100%;object-fit:cover}.tag{display:flex;justify-content:space-between;margin-top:8px;color:var(--muted);font:11px ui-monospace,monospace}.verdict{margin-top:18px;background:#111510;border:1px solid #42503c;padding:17px 20px;color:#cbd8c5;font:17px/1.5 Georgia,serif}.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.check{border-top:1px solid var(--line);padding-top:9px;color:var(--muted);font:11px/1.45 ui-monospace,monospace}.check b{display:block;color:var(--good)}
+</style></head><body><main>
+<div class="eyebrow">Genesis · B02 corrective evidence</div>
+<h1>Wall UV Aspect Proof</h1>
+<p class="intro">The same square dressed-ashlar albedo is applied to the same 5.2 × 1.65 wall.
+Only the horizontal UV repeat changes. No source art or geometry changes between renders.</p>
+<section class="equation">
+  <div class="eq bad"><strong>REJECTED CONTROL · 1 × 1 UV</strong>
+    X coverage = 5.2 world units per texture<br>Y coverage = 1.65 world units per texture<br>
+    X/Y texel scale = 5.2 ÷ 1.65 = <b>3.1515</b> → stretched
+  </div>
+  <div class="eq good"><strong>CORRECTED · 3.1515 × 1 UV</strong>
+    X coverage = 5.2 ÷ 3.1515 = 1.65 world units<br>Y coverage = 1.65 ÷ 1 = 1.65 world units<br>
+    X/Y texel scale = 1.65 ÷ 1.65 = <b>1.0000</b> → square
+  </div>
+</section>
+<section class="grid">
+  <article class="panel source"><h2>Square authority</h2>
+    <img src="../material-lane/exports/b02-deck-edge-mm-v001/run-a/b02-institutional-dressed-ashlar-v001_albedo.png">
+    <div class="tag"><span>512 × 512 albedo</span><span>unchanged</span></div>
+  </article>
+  <article class="panel"><h2>Before: stretched</h2><div class="render" id="old"></div>
+    <div class="tag"><span>1 × 1 UV</span><span>rejected control</span></div>
+  </article>
+  <article class="panel"><h2>After: native density</h2><div class="render" id="fixed"></div>
+    <div class="tag"><span>3.1515 × 1 UV</span><span>production fixture</span></div>
+  </article>
+</section>
+<div class="checks">
+  <div class="check"><b>SAME INPUT</b>identical albedo SHA and texture pixels</div>
+  <div class="check"><b>SAME FIXTURE</b>identical 5.2 × 1.65 × 0.42 wall mesh</div>
+  <div class="check"><b>ONE CONTROLLED CHANGE</b>horizontal repeat 1.0000 → 3.1515</div>
+</div>
+<p class="verdict"><strong>Proof:</strong> the corrected fixture gives one square texture exactly
+1.65 world units of width and 1.65 world units of height. Its texels are square on the wall;
+the old control is retained beside it so the distortion remains visible and falsifiable.</p>
+</main>
+<script type="module">
+import * as THREE from "../../vendor/three/three.module.js";
+const WIDTH=5.2,HEIGHT=1.65,REPEAT=WIDTH/HEIGHT;
+const url="../material-lane/exports/b02-deck-edge-mm-v001/run-a/b02-institutional-dressed-ashlar-v001_albedo.png";
+const loader=new THREE.TextureLoader(),load=()=>new Promise((ok,no)=>loader.load(url,ok,undefined,no));
+function draw(host,texture,repeat){
+  texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=texture.wrapT=THREE.RepeatWrapping;
+  texture.repeat.set(repeat,1);
+  const w=host.clientWidth|0,h=host.clientHeight|0,r=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+  r.setPixelRatio(1);r.setSize(w,h,false);r.outputColorSpace=THREE.SRGBColorSpace;r.toneMapping=THREE.AgXToneMapping;
+  const s=new THREE.Scene();s.background=new THREE.Color(0x111519);s.add(new THREE.HemisphereLight(0xd8d3c5,0x1a1d22,.65));
+  const d=new THREE.DirectionalLight(0xffd7a3,3.2);d.position.set(-5.8,3.9,2.2);s.add(d);
+  const wall=new THREE.Mesh(new THREE.BoxGeometry(WIDTH,HEIGHT,.42),new THREE.MeshStandardMaterial({map:texture,roughness:.76}));
+  wall.position.y=.9;wall.rotation.y=THREE.MathUtils.degToRad(-7);s.add(wall);
+  const cap=new THREE.Mesh(new THREE.BoxGeometry(5.32,.14,.54),new THREE.MeshStandardMaterial({color:0x68645b,roughness:.9}));
+  cap.position.set(0,1.78,0);cap.rotation.y=wall.rotation.y;s.add(cap);
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(18,18),new THREE.MeshStandardMaterial({color:0x2c2d2b,roughness:.95}));
+  floor.rotation.x=-Math.PI/2;s.add(floor);
+  const c=new THREE.PerspectiveCamera(27,w/h,.1,100);c.position.set(4.5,2.8,7.6);c.lookAt(0,1.05,0);
+  r.render(s,c);const image=new Image();image.src=r.domElement.toDataURL("image/png");host.append(image);r.dispose();r.forceContextLoss();
+}
+try{
+  const [oldTexture,fixedTexture]=await Promise.all([load(),load()]);
+  draw(document.querySelector("#old"),oldTexture,1);draw(document.querySelector("#fixed"),fixedTexture,REPEAT);
+  document.body.dataset.stage="ready";
+}catch(error){document.body.dataset.stage="error";document.body.insertAdjacentHTML("afterbegin",`<pre>${error}</pre>`)}
+</script></body></html>

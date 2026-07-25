@@ -1,0 +1,21 @@
+{
+  "schema": "genesis.material-source-seam-repair.v1",
+  "materialId": "marsh-bog",
+  "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/marsh-bog-source-v001.png",
+  "output": "dev/material-lane/source-sprites/b03-exterior-ground-v001/marsh-bog-seamlocked-v001.png",
+  "repeat": "dev/material-lane/proofs/b03-exterior-ground-v001/marsh-bog-seamlocked-v001-repeat-3x3.png",
+  "method": "opposite-edge pair average with inward cosine feather",
+  "repairBandPixels": 40,
+  "repairBandFractionPerEdge": 0.0319,
+  "declaredScope": "continuous non-periodic top-down ground field; visual field-integrity review required",
+  "before": {
+    "xBoundaryToInternalP95": 1.137,
+    "yBoundaryToInternalP95": 1.19,
+    "boundaryJumpGate": false
+  },
+  "after": {
+    "xBoundaryToInternalP95": 0.0,
+    "yBoundaryToInternalP95": 0.0,
+    "boundaryJumpGate": true
+  }
+}

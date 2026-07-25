@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B03-exterior-ground-sprite-first-MM-v001",
+  "generatedAt": "2026-07-25T02:44:34.008Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/b03-exterior-ground-mm-v001/b03-grass-meadow-v001.ptex": "c4079140a3e2b00943969052d16b26e0492eb650a98cd0e4e12f6b5239d37f50",
+    "dev/material-lane/graphs/b03-exterior-ground-mm-v001/b03-gravel-scree-v001.ptex": "69a1110b889709019ead5d418bee2b6d504c941f22b0dfb5bbf924e18b79c8fa",
+    "dev/material-lane/graphs/b03-exterior-ground-mm-v001/b03-marsh-bog-v001.ptex": "7214a25f4d288934262011d52c370659b55da57c1e20ff311e89e86a024b597c",
+    "dev/material-lane/graphs/b03-exterior-ground-mm-v001/b03-mud-v001.ptex": "ee3ee52052d200914b688eaa1e3f6347746345c2d0798626c7704775fcae8ca2",
+    "dev/material-lane/graphs/b03-exterior-ground-mm-v001/b03-worn-path-v001.ptex": "140df25d882a002472cded9cf5dd9448d49d0c919c8eec58ce47fbec9fd957a9"
+  },
+  "outputHashes": {
+    "b03-grass-meadow-v001_albedo.png": "da52e61e4e0f278b22b358736e0734fff86c51a177357edc48bf4e343b418af6",
+    "b03-grass-meadow-v001_heightmap.png": "a3c7b6a87a5423bfe272d447123936bf1414687cb4c6c461fdea8607b992da01",
+    "b03-grass-meadow-v001_normal.png": "0ee0ddfb1af66373cb7c5932384f6e54fa9a266fc7d505910c5f8575db4b04ed",
+    "b03-grass-meadow-v001_orm.png": "1e811174a35fbae0fb4d4350f08f42b2063a6926ffb31e29aaee6293054e5582",
+    "b03-gravel-scree-v001_albedo.png": "0f9ed087eee5318f1cf4259ab3dae01405fc56e4d38342a69cdf1e33f57418ac",
+    "b03-gravel-scree-v001_heightmap.png": "4e26b6e1399f6449005afe22bafc3885c663aae308654395a2dcaabe409db779",
+    "b03-gravel-scree-v001_normal.png": "284a1b2ed8df7b7c54fbdae6adf3b6ab837195c5f39efab220bdeb0ff7db1b8d",
+    "b03-gravel-scree-v001_orm.png": "dcbe53ab5b6d8f6f522087011d586e325b570945d6dfbd8d436a5ca4344e7987",
+    "b03-marsh-bog-v001_albedo.png": "c63b2e8eb16b5b1af340e0301b6c8983793943075144a496772bba1d44651ffe",
+    "b03-marsh-bog-v001_heightmap.png": "9e4f2c19bc6953cdcfee5c68cb39033fb74e91702360afe61c803f576f8acca8",
+    "b03-marsh-bog-v001_normal.png": "b6de1058e2b5e5d6b766748387a2fe82666b8135693b319e8f740107ded3c2dd",
+    "b03-marsh-bog-v001_orm.png": "abe022db81523470ebf56b71308e949626d96a90fe5124637ec129c8a4e40d0f",
+    "b03-mud-v001_albedo.png": "b35321532802c3b18f312b9e40f76d704276fb33e82c6acf418ba78a9c75242b",
+    "b03-mud-v001_heightmap.png": "5c49121358bcb67f7e5d35e606da20281f5ca05af7fac56200a718d18bc36674",
+    "b03-mud-v001_normal.png": "ef0495d989f674a4ec4447d01328bd62cd137b644ef8cb43fc78a02df8f888ea",
+    "b03-mud-v001_orm.png": "9cc4a8558693389e990cd497ddb83a6b8178cdedbb72be0c9ca138ea7b7b6c7f",
+    "b03-worn-path-v001_albedo.png": "fe1d99cdf97a2e0ed58b5807fdd47bddcf32ce99f4bbebea8c7c943c2fa33e93",
+    "b03-worn-path-v001_heightmap.png": "71a6c695ee0b5dbdcc3891e0dbd84033ee582ec3d625b9e37b84b5e6e9068bd8",
+    "b03-worn-path-v001_normal.png": "00e375664b171993c85b0cac5249f0d8d7ca19176550c39699d06fd0a3048d76",
+    "b03-worn-path-v001_orm.png": "28feccf5aa89d344a8a2fab076f26394b842c6f539da9df7c53c08f73949d12d"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 20,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b03-exterior-ground-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b03-exterior-ground-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

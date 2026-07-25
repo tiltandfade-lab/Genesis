@@ -126,12 +126,15 @@ seams, depth presence, ORM packing, and determinism all pass.
 - Two-run export receipt: `receipts/b02-deck-edge-mm-v001-export-receipt.json`
 - Verification receipt: `receipts/b02-deck-edge-mm-v001-verification.json`
 - Review card: `../material-cards/b02-deck-edge-culture-mm-v001.html`
+- UV correction proof: `../material-cards/b02-uv-aspect-proof-v001.html`
 
 The card must show 20 comparison renders: sprite-only, sprite-plus-MM, gameplay goblin scale, and
 neutral clay control for each candidate. All repeat panels use a truthful locked square ratio and
 an unstretched 3x3 background repeat. The wide cover fixture must also preserve square texel
 density: its 5.2-by-1.65 wall face uses a 3.15-by-1 UV repeat, never one square texture stretched
-once across the entire rectangular face.
+once across the entire rectangular face. The dedicated UV proof retains the rejected 1-by-1
+control beside the corrected render and shows the world-unit calculation: old X/Y texel scale
+3.1515, corrected scale 1.0000.
 
 ## Taste questions
 

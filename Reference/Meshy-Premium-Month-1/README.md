@@ -442,6 +442,10 @@ Rear proof:
 
 ![M035-A cleaned rear](intake-previews/M035-A-clean-rear.png)
 
+Opposite rear proof:
+
+![M035-A cleaned rear from opposite side](intake-previews/M035-A-clean-rear-opposite.png)
+
 Canonical source:
 `incoming/M035-A-short-household-ridge-tent-smart-800.glb`
 
@@ -456,16 +460,19 @@ did mirror the tied-open entrance treatment onto both gable ends, leaving no clo
 
 - separates the 23 loose source islands;
 - removes only the two rear flap bundles and their two ties;
-- adds one eight-triangle floorless back panel;
+- adds a floorless back cap with deep sloped returns beneath Meshy's uneven roof termination;
+- binds both rear corners with simple six-sided cloth seam rolls so oblique views cannot expose a
+  light leak;
 - groups the accepted geometry into four named material/state objects.
 
 ```text
-cloth_shell             402 triangles
+cloth_shell             442 triangles
 cloth_front_treatment   120 triangles
 timber_frame            118 triangles
 ridge_lashings           72 triangles
-total                   712 triangles
+total                   752 triangles
 ```
 
 The result has one open front, one closed back, no floor, broad texture-independent cloth planes,
-and independently replaceable front treatment and timber. M035-A passes calibration.
+independently replaceable front treatment and timber, and sealed rear corners from both oblique
+directions. M035-A passes calibration.

@@ -56,6 +56,22 @@ def make_back_panel(name, x_min, x_max, rear_y, z_min, z_apex, thickness):
     return obj
 
 
+def make_seam_roll(name, start, end, radius):
+    direction = end - start
+    bpy.ops.mesh.primitive_cylinder_add(
+        vertices=6,
+        radius=radius,
+        depth=direction.length,
+        end_fill_type="NGON",
+        location=(start + end) * 0.5,
+    )
+    obj = bpy.context.object
+    obj.name = name
+    obj.data.name = name
+    obj.rotation_euler = direction.to_track_quat("Z", "Y").to_euler()
+    return obj
+
+
 source, output = arguments()
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
@@ -83,6 +99,7 @@ if [record["faces"] for record in roof_records] != [157, 157]:
 
 roof_minimum = Vector(tuple(min(record["minimum"][axis] for record in roof_records) for axis in range(3)))
 roof_maximum = Vector(tuple(max(record["maximum"][axis] for record in roof_records) for axis in range(3)))
+roof_size = roof_maximum - roof_minimum
 scene_center_y = (roof_minimum.y + roof_maximum.y) * 0.5
 rear_records = [
     record
@@ -100,19 +117,44 @@ if sorted(record["faces"] for record in rear_records) != [24, 24, 36, 36]:
 for record in rear_records:
     bpy.data.objects.remove(record["object"], do_unlink=True)
 
+back_x_min = roof_minimum.x - roof_size.x * 0.006
+back_x_max = roof_maximum.x + roof_size.x * 0.006
+back_z_min = roof_minimum.z - roof_size.z * 0.004
+back_z_apex = roof_maximum.z + roof_size.z * 0.006
+# The cap reaches beneath Meshy's uneven roof termination. Its sloped return
+# faces close the corner from oblique views instead of leaving a dark wedge.
+back_thickness = max(0.008, roof_size.y * 0.055)
+back_outer_y = roof_maximum.y + roof_size.y * 0.005
+back_y = back_outer_y - back_thickness * 0.5
 back_panel = make_back_panel(
     "cloth_back_panel",
-    roof_minimum.x,
-    roof_maximum.x,
-    roof_maximum.y,
-    roof_minimum.z,
-    roof_maximum.z,
-    max(0.008, (roof_maximum.y - roof_minimum.y) * 0.01),
+    back_x_min,
+    back_x_max,
+    back_y,
+    back_z_min,
+    back_z_apex,
+    back_thickness,
 )
+seam_y = back_outer_y
+seam_radius = roof_size.x * 0.012
+back_seams = [
+    make_seam_roll(
+        "cloth_back_left_bound_seam",
+        Vector((back_x_min, seam_y, back_z_min)),
+        Vector((0.0, seam_y, back_z_apex)),
+        seam_radius,
+    ),
+    make_seam_roll(
+        "cloth_back_right_bound_seam",
+        Vector((0.0, seam_y, back_z_apex)),
+        Vector((back_x_max, seam_y, back_z_min)),
+        seam_radius,
+    ),
+]
 
 remaining_records = [record for record in records if record not in rear_records]
 groups = {
-    "cloth_shell": [back_panel],
+    "cloth_shell": [back_panel, *back_seams],
     "cloth_front_treatment": [],
     "timber_frame": [],
     "ridge_lashings": [],

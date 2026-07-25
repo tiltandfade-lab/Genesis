@@ -4,7 +4,7 @@
 REALM-SURFACES-WIRING.md §1: 88 realm floor surfaces (docs/REALM-SURFACES-DRAFT.md's authored
 table), one 8-entry list per realm keyed data/realms.js's REALM_IDS. Each entry:
   {name, base, tint, baseTint, where, summary}
-`base` MUST be a key that exists in src/ui/theater-boot.js's FLOOR_MATERIAL_RECIPES (validated
+`base` MUST be a key that exists in src/ui/theater-skins.js's FLOOR_MATERIAL_RECIPES (validated
 below by parsing the real source, never hand-copied) — a realm surface picking an unbuilt base
 would render flat, so this is a hard build-time gate, not a lint warning.
 `where` is normalized to interior|exterior|any.
@@ -29,7 +29,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "dev", "model-qa", "realm-surfaces.json")
 OUT = os.path.join(ROOT, "data", "realm-surfaces.js")
 REALMS_SRC = os.path.join(ROOT, "data", "realms.js")
-THEATER_BOOT = os.path.join(ROOT, "src", "ui", "theater-boot.js")
+# THEATER SPLIT B3 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): FLOOR_MATERIAL_RECIPES moved
+# VERBATIM out of src/ui/theater-boot.js into src/ui/theater-skins.js. Same parse, same load-bearing
+# object, new home — this constant follows it so the gate keeps validating against the REAL recipe set.
+# (The generated file's own header text still names theater-boot.js; it is left byte-for-byte alone so
+# this split stays a move-only change to data/realm-surfaces.js — see that file's regeneration proof.)
+THEATER_SKINS = os.path.join(ROOT, "src", "ui", "theater-skins.js")
 
 VALID_WHERE = {"interior", "exterior", "any"}
 
@@ -49,13 +54,13 @@ def real_realm_ids():
 
 
 def real_recipe_keys():
-    """Parse src/ui/theater-boot.js's FLOOR_MATERIAL_RECIPES object for its top-level keys — the
-    real, load-bearing set (never hand-copied elsewhere, so this stays in sync with theater-boot.js
+    """Parse src/ui/theater-skins.js's FLOOR_MATERIAL_RECIPES object for its top-level keys — the
+    real, load-bearing set (never hand-copied elsewhere, so this stays in sync with theater-skins.js
     by construction). Keys appear either bare (`flagstone(c){`) or quoted (`"cave-rock"(c){`)."""
-    txt = open(THEATER_BOOT, encoding="utf-8").read()
+    txt = open(THEATER_SKINS, encoding="utf-8").read()
     m = re.search(r"const FLOOR_MATERIAL_RECIPES\s*=\s*\{", txt)
     if not m:
-        print("FATAL: could not find `const FLOOR_MATERIAL_RECIPES = {` in src/ui/theater-boot.js", file=sys.stderr)
+        print("FATAL: could not find `const FLOOR_MATERIAL_RECIPES = {` in src/ui/theater-skins.js", file=sys.stderr)
         sys.exit(1)
     # walk forward from the opening brace to its matching close, tracking depth, so we only scan
     # THIS object's body (never spill into a later unrelated object in the same file).

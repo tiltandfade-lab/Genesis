@@ -2409,6 +2409,99 @@
       "desc": "THEATER SPLIT B2 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — LL-1, Adam's dev-only live lighting tool, extracted VERBATIM from theater-boot.js. Same ctx law as ui.theater-clay-room: never imports the root; lightLabInit(ctx) wires module-local mirrors once, lightLabSyncState(S) tracks the live state record, GRADE_TONEMAP stays root-owned behind an accessor, and the region's top-level window.Theater seam assignments now live in lightLabPublishSeams() (called from the root's end-of-body — module eval precedes facade creation). The lighting consts the lab tunes (STAGE_AMBIENT_FLOOR, BLOOM_*, GRADE_*, ITR_* — verify-light-lab's scrape set) STAY in theater-boot.js: the lab is the UI over LIGHT_TUNABLES, not the owner of render-path values. Zero cost with the lab off: one memoized boolean read per frame in the root's poll, exactly as pre-split."
     },
     {
+      "id": "ui.theater-skins",
+      "path": "src/ui/theater-skins.js",
+      "type": "module",
+      "owns": [
+        "*skinsInit",
+        "*albedoFloor",
+        "*pixelSkinCapable",
+        "*pixelSkinTextureFor",
+        "*disposePixelSkinCache",
+        "*buildFloorCanvasTexture",
+        "*FLOOR_TEXTURE_CACHE",
+        "*buildPixelSkinCanvas",
+        "*materialProgramFor",
+        "*eyeSpecFor",
+        "*pixelSkinHash",
+        "*mulberry32",
+        "*swarmHashLocal",
+        "*buildFloorMaterialCanvas",
+        "*FLOOR_MATERIAL_RECIPES",
+        "*FLOOR_MATERIAL_BASE",
+        "*PIXEL_SKIN_CACHE",
+        "*PIXEL_SKIN_CACHE_CAP",
+        "*PIXEL_SKIN_BAYER4",
+        "*PIXEL_SKIN_TEX_SIZE",
+        "*PIXEL_SKIN_HERO_TEX_SIZE",
+        "*ALBEDO_FLOOR_LUM",
+        "*ALBEDO_CEIL_LUM"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B3 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the procedural PIXEL-SKIN family (canvas-2D capability probe, the deterministic pixelSkinHash + mulberry32 PRNG, the albedo floor, the L18 material programs / L19 eye dots, buildPixelSkinCanvas, and the bounded-LRU PIXEL_SKIN_CACHE) plus the FLOOR-TEXTURES.md floor-material family (FLOOR_MATERIAL_BASE / FLOOR_MATERIAL_RECIPES / buildFloorMaterialCanvas behind the FLOOR_TEXTURE_CACHE memo), extracted VERBATIM from theater-boot.js — bodies byte-identical, because texture determinism and three.js's onBeforeCompile program-cache key are both source-text contracts. Same ctx law as ui.theater-clay-room / ui.theater-light-lab: it never imports the root; skinsInit(ctx) wires the six root-owned symbols it borrows (clamp255/hexToRGB/rgbToHex/scaleRGB/lumaOf — gradeColorLocal and the interior base materials read them too — plus the shared nearestify texture funnel). No S mirror (nothing here reads theater state) and no facade seams of its own; PIXEL_SKIN_ENABLED stays root-owned behind the window.Theater.pixelSkin setter. Both caches keep their existing end-of-life authority in the root's retire() (disposePixelSkinCache; disposeAuxCaches over the exported live FLOOR_TEXTURE_CACHE object). build/gen-realm-surfaces.py parses FLOOR_MATERIAL_RECIPES out of THIS file now."
+    },
+    {
+      "id": "ui.theater-whole-object",
+      "path": "src/ui/theater-whole-object.js",
+      "type": "module",
+      "owns": [
+        "*wholeObjectInit",
+        "*wholeObjectGeometryFor",
+        "*wholeObjectGeometryForGlb",
+        "*wholeObjectMaterialsFor",
+        "*wholeObjectRetintColorBuffer",
+        "*wholeObjectDesaturateColorBuffer",
+        "*wholeObjectKeyFor",
+        "*wholeObjectGrainTexture",
+        "*wholeObjectQuadUVs",
+        "*wholeObjectBucketFor",
+        "*wholeObjectClassifyBucket",
+        "*disposeWholeObjectCaches",
+        "*glbLoadScene",
+        "*WHOLE_OBJECT_SCALE",
+        "*WHOLE_OBJECT_YAW",
+        "*WHOLE_GEOMETRY_CACHE",
+        "*WHOLE_MATERIALS_CACHE",
+        "*WHOLE_GRAIN_TEX",
+        "*WHOLE_CHANNEL_KEYS",
+        "*WHOLE_CHANNEL_BUCKET",
+        "*GLB_TARGET_HEIGHT",
+        "*GLB_NEUTRAL_COLOR",
+        "*GLB_DESAT_MIX"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-figures"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B3 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the P1' WHOLE-OBJECT geometry factory + material funnel and the BATTLE-THEATER T2 GLB seam, extracted VERBATIM from theater-boot.js: the §2.2 channel vocabulary and bucket classifier, the procedural grain atlas, the quad-UV builder, the desaturate/retint colour-buffer math, WHOLE_GEOMETRY_CACHE / WHOLE_MATERIALS_CACHE / WHOLE_GRAIN_TEX with their disposeWholeObjectCaches end-of-life (still called from the root's retire(), so the one true end-of-life point is unchanged), plus the family's placement laws WHOLE_OBJECT_SCALE (§3-D1) / WHOLE_OBJECT_YAW (§3-D3) and the §2.4 key resolver wholeObjectKeyFor. Same ctx law as ui.theater-clay-room / ui.theater-light-lab / ui.theater-skins: it never imports the root; wholeObjectInit(ctx) wires applyPsxShaderTweaks (the ONE PSX material funnel — bodies stay byte-identical because three.js keys shader programs on onBeforeCompile's source text), nearestify, the GLTFLoader class (theater-boot.js stays the single `three/addons/` import site) and probe-lib's resetGeom/getBuffers as the SAME function objects, so the shared POS/COL/CHAN buffers are one set, not two. No S mirror and no facade seams of its own; WHOLE_OBJECT_ENABLED stays root-owned behind the window.Theater.wholeObject setter, and HUMAN_TRUE_HEIGHT stays in the root as the interior channel's true-scale reference. Imports resolveWholeObject from ui.theater-figures directly (that module is THREE-free and imports neither this nor the root — the graph stays acyclic)."
+    },
+    {
+      "id": "ui.theater-figure-build",
+      "path": "src/ui/theater-figure-build.js",
+      "type": "module",
+      "owns": [
+        "*figureBuildInit",
+        "*figureFor",
+        "*weaponMeshFor",
+        "*MODEL_PATH_STATS",
+        "*_classifyWholeKey",
+        "*_tallyPath",
+        "*WEAPON_BASE_OFFSET"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-parts",
+        "ui.theater-figures",
+        "ui.theater-whole-object"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B3 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the ONE answer to \"given a unit, what mesh represents it?\": figureFor's full precedence chain (sprite billboard -> whole-object module -> glb -> pcRecipe -> bestiary recipe -> archetype cuboid, every branch falling through rather than throwing), the MODEL-PATH INSTRUMENTATION that records which rung answered (MODEL_PATH_STATS + _classifyWholeKey + _tallyPath — figureFor is their only writer; the counter is exported as the LIVE object window.Theater.stats.modelPaths publishes), and the legacy weaponMeshFor composer with its WEAPON_BASE_OFFSET grip constant. Extracted VERBATIM except two documented lines: the SPRITE_CHANNEL_ENABLED / WHOLE_OBJECT_ENABLED reads become figCtxSpriteChannelEnabled() / figCtxWholeObjectEnabled() calls, because those are root `let`s the window.Theater.spriteChannel / window.Theater.wholeObject setters write at runtime (an import binding is read-only; a mirror would go stale the moment a capture gate flips one). Same ctx law as its sibling leaves: never imports the root — figureBuildInit(ctx) carries the root-owned composition seams (renderPartInto, flatTints, ARCHETYPE_BUILDERS, buildFigureFromRecipe, recipeFor, orientYawForArchetype, WEAPON_PART_KEY, weaponCarryFor) and the sprite-channel seams (spriteEntryFor, buildSpriteBillboard, interiorSpriteBillboard, _spriteCensusOutcome — that last one reads FACETED_FLIP_ENABLED, a literal dev/battle-gate/capture-s5-flip-card.mjs rewrites in place, so it stays root-side). It imports ui.theater-parts / ui.theater-figures / ui.theater-whole-object directly (none of the three imports this file or the root, so the graph stays acyclic). Holds no cache, no GPU resource, no timer and no theater state; figureBuildInit runs at the root's END-OF-BODY because its ctx carries top-level consts still in TDZ at import time."
+    },
+    {
       "id": "ui.theater-boot",
       "path": "src/ui/theater-boot.js",
       "type": "module",

@@ -263,7 +263,7 @@ SCENE_BUCKET_DEFAULT = "shop"
 #
 # `surface` is an ABSTRACT TAG (not a REALM_SURFACES row name) resolved per-realm at call time via
 # SURFACE_TAG_BASES below, against the REAL `base` material vocabulary data/realm-surfaces.js
-# already carries (src/ui/theater-boot.js's FLOOR_MATERIAL_RECIPES keys — plank/cobble/flagstone/
+# already carries (src/ui/theater-skins.js's FLOOR_MATERIAL_RECIPES keys — plank/cobble/flagstone/
 # grating/cracked-earth/mud/grass/sand/scree/etc). This mirrors placeForRealm's own realm-fallback
 # discipline: an abstract tag lets one map cover every realm's differently-named surfaces.
 #
@@ -337,7 +337,7 @@ SCENE_DRESSING_BY_ARCHETYPE = {
 SCENE_DRESSING_DEFAULT = {"propNames": [], "surface": "interior-wood", "light": "dark"}
 
 # SURFACE_TAG_BASES: abstract surface tag -> the REAL data/realm-surfaces.js `base` material
-# vocabulary (src/ui/theater-boot.js FLOOR_MATERIAL_RECIPES keys) it may resolve to, ordered by
+# vocabulary (src/ui/theater-skins.js FLOOR_MATERIAL_RECIPES keys) it may resolve to, ordered by
 # preference. sceneDressingForPlace walks a realm's REALM_SURFACES list and returns the first
 # entry whose `base` is in the tag's list; falls back to the realm's first surface entry (never
 # undefined) when nothing matches — same never-a-hole discipline as placeForRealm/realmPropsFor.

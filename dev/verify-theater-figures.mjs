@@ -219,7 +219,14 @@ console.log("\n=== 3. [RED-FIRST] resolution chain (exact -> NEAREST_SUB -> null
 // ============================================================================
 console.log("\n=== 4. PSX parity (byte-level, text-scan) ===");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B3 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): the PSX tunables
+  // (PSX_DITHER_AMPLITUDE / PSX_VERTEX_SNAP_GRID / PSX_RES_SCALE) stayed in theater-boot.js, but
+  // wholeObjectMaterialsFor — whose Phong pairs the last check pins against ps1-sheet's figureScene —
+  // moved VERBATIM into src/ui/theater-whole-object.js. Reading the COMPOSITE keeps all four parity
+  // pins doing their exact pre-split job, each against the real source of its own symbol.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-theater-figures composite boundary — src/ui/theater-whole-object.js follows] */\n"
+    + read("src/ui/theater-whole-object.js");
   const sheetSrc = read("dev/model-qa/ps1-sheet.html");
   const bootDither = bootSrc.match(/PSX_DITHER_AMPLITUDE\s*=\s*([\d.]+)/);
   const sheetDither = sheetSrc.match(/PSX_DITHER_AMPLITUDE\s*=\s*([\d.]+)/);

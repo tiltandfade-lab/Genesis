@@ -148,6 +148,16 @@ global.window = dom.window;
 global.document = dom.window.document;
 global.SPRITE_REGISTRY = {};
 global.window.SPRITE_REGISTRY = {};
+// Light-recipe classic globals (2026-07-25, split B3 re-gate): theater-boot's eval now builds
+// LIGHT_PROFILES/LIGHT_TUNABLES from the shared src/engine/light-recipes.js registry (the CL-R1
+// merge a979c22d) — the production page loads it as a classic script BEFORE the module. Same
+// stubs verify-bw2-2 and (since B0) verify-bw2-1b carry; the direct-import runners must model
+// the same production global contract.
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 
 function fakeTexture(tag){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, _tag: tag }; }
 

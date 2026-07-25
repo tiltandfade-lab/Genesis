@@ -33,7 +33,16 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const bootSrc = readFileSync(join(ROOT, "src/ui/theater-boot.js"), "utf-8");
+// THEATER SPLIT B3 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): the pixel-skin family moved
+// VERBATIM into src/ui/theater-skins.js — pixelSkinCapable/pixelSkinHash/mulberry32/albedoFloor/
+// buildPixelSkinCanvas/pixelSkinTextureFor/PIXEL_SKIN_* all live there now, while the generic color
+// helpers this sandbox also evals (clamp255/hexToRGB/rgbToHex/scaleRGB/lumaOf) and the consumers this
+// file text-guards (figureMaterialFor's usePixel gate, renderPartInto's skinKey shape) stayed in
+// theater-boot.js. Reading the COMPOSITE keeps every extraction and every source guard doing its exact
+// pre-split job with each symbol in its true home — no check is relaxed, none is dropped.
+const bootSrc = readFileSync(join(ROOT, "src/ui/theater-boot.js"), "utf-8")
+  + "\n/* [verify-pixel-skin composite boundary — src/ui/theater-skins.js follows] */\n"
+  + readFileSync(join(ROOT, "src/ui/theater-skins.js"), "utf-8");
 
 let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>

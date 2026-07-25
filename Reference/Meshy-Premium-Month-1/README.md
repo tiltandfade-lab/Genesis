@@ -316,3 +316,118 @@ Inspect either GLB with:
 evidence. It is not the current Meshy input. The second pass quoted the governing art-language
 blocks verbatim, removed unnecessary iron fasteners, simplified the axle assembly, and produced
 a cleaner donor silhouette.
+
+## M035-A — short household ridge tent
+
+![M035-A](reference-images/M035-A-short-household-ridge-tent-v1.png)
+
+### Intended use
+
+A culture-weighted ordinary household or expedition shelter for:
+
+- mobile family and traveling-service camps;
+- ordinary expedition housing outside military rows;
+- a broad cloth concealment/cover mass with a readable open threshold;
+- later front-treatment, condition, material, and cultural variants without changing the basic
+  span grammar.
+
+This is not `M036`'s compact military wedge and not a command pavilion. Implied production
+dimensions are approximately 10 feet wide, 15 feet long, and 7.5 feet high: a 2-by-3-cell
+footprint with a 3h ridge.
+
+### ImageGen production prompt
+
+```text
+Use case: stylized-concept
+Asset type: Genesis Fantasy volumetric donor-model reference for Meshy Image-to-3D
+
+Create one isolated short household ridge tent for a mature low-poly tactical fantasy game.
+This is an ordinary mobile family or expedition shelter, not a military wedge and not a command
+pavilion. Implied dimensions: approximately 10 feet wide by 15 feet long, occupying a 2-by-3-cell
+tactical footprint, with a 7.5-foot ridge height.
+
+Build it as a simple pitched cloth span over one straight timber ridge pole supported by one
+upright at each gable end. The long cloth roof slopes reach nearly to the ground with a short
+practical hem. The front gable is a real open entrance with two substantial triangular cloth
+flaps tied back to either side; the removable front treatment reads as separate cloth parts.
+The tent is floorless. Show an empty shallow interior and a plain cloth back wall, with the flat
+background continuing under the shelter. No furniture, bedrolls, cargo, fire, person, floor,
+platform, or painted black void. Let the front upright and short projecting ridge-pole end remain
+visibly understandable. The rear upright may be mostly concealed but remains structurally
+plausible.
+
+Meshy owns the main pitched cloth shell, modest visible cloth thickness at the entrance and hem,
+two tied-back front flaps, straight ridge silhouette, front and rear uprights, ridge pole, and
+simple reinforced cloth corners. The engine owns stakes, guy-line decals, collision, attachments,
+materials, weathering, cultural markings, damage, and lighting. Do not model ropes or loose
+stakes. Simple poles may be replaced procedurally if generated poorly.
+
+Use extremely simple deliberate low-poly construction with large tension-aligned planes. The roof
+is broad planar cloth with only two or three shallow structural sags and a few broad tension folds
+radiating from ridge ends and tied flaps. No dense wrinkles. Timber poles are simple six- or
+eight-sided members with blunt ends. The opening has honest thickness and a readable threshold.
+Keep major donor parts visually separable without exploding or floating the assembly.
+
+Mature, restrained polygonal fantasy asset reference; modern tactical-diorama readability;
+grounded practical construction. Muted undyed ochre-gray heavy cloth with dark desaturated
+weathered timber supports. Large clean material regions. No heraldry, ornament, painted symbols,
+photoreal weave, or toy-like camping aesthetic.
+
+Exactly one isolated tent in exactly one controlled orthographic front-three-quarter view,
+approximately 45-degree yaw and 25-degree elevation, with the open front gable facing toward the
+camera-left-front. Show the complete roof ridge, both long slopes, front opening, one long side,
+and enough rear gable to reconstruct depth. Center and enlarge it to about 75 percent of the
+canvas with generous padding. No lens distortion or perspective convergence.
+
+Perfectly flat solid warm light-gray #E8E3DB backdrop, uniform edge to edge and visible through
+the floorless entrance. No floor, horizon, gradient, texture, vignette, reflection, contact
+shadow, cast shadow, or lighting variation. Neutral diffuse form description only: no directional
+key light, rim light, dramatic highlight, painted ambient occlusion, deep black interior, or
+baked shadow.
+
+Single-render hard constraint: exactly one isolated object or intentionally fused cluster;
+exactly one orthographic front-three-quarter view; no model sheet, turnaround, alternate angle,
+inset, underside, duplicate, exploded layout, part catalog, neighboring prop, floor, horizon,
+label, dimension, arrow, border, or watermark.
+
+Avoid military formation, Roman papilio styling, wedge bivouac, marquee, pavilion, yurt, tipi,
+bell tent, modern nylon camping tent, plastic, zipper, metal tube frame, windows, chimney,
+banner, pennant, awning, porch, platform, ground base, scenery, grass, rocks, baggage, furniture,
+characters, animals, fire, lantern, ropes, guy lines, loose pegs, many seams, dense wrinkles,
+fluttering or torn fabric, patches, mud, photoreal texture, micro-triangulation, smooth inflated
+blob, cute styling, miniature base, text, watermark, or commercial-game imitation.
+```
+
+### Meshy input settings
+
+```text
+mode: Image to 3D
+topology: Smart Topology
+target: 800 polygons
+texture: off
+image enhancement: off
+```
+
+Adam may save the download into `incoming/` under any name. Canonical intake name after inspection:
+`M035-A-short-household-ridge-tent-smart-800.glb`
+
+### Admission test
+
+M035-A passes only if:
+
+- the straight ridge and 2-by-3-cell span remain legible at the game camera;
+- the open front remains an actual opening rather than a filled or black-painted panel;
+- the tent remains floorless and does not acquire a platform or thick solid base;
+- broad cloth planes survive without dense wrinkles, inflated smoothing, or texture dependence;
+- front flaps remain removable or at least separable by deterministic island cleanup;
+- dirty poles can be removed and replaced procedurally without damaging the cloth shell;
+- no rope, guy-line, stake, or micro-hardware geometry is required;
+- the cleaned donor lands roughly within 300–900 triangles and is faster than building the cloth
+  shell natively.
+
+### ImageGen correction record
+
+The first single-view render passed the tent silhouette and part-ownership contract but added a
+fitted cloth floor panel. One precise-object edit removed only that groundsheet. The accepted
+reference preserves the original tent, camera, cloth shell, supports, and tied flaps while letting
+the flat background continue beneath the floorless shelter.

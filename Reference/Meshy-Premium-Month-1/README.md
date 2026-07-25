@@ -18,6 +18,33 @@ generated model has passed Genesis admission.
 - separable parts made visually explicit;
 - no direct reproduction of an existing commercial game asset.
 
+## Fast incoming-file workflow
+
+Adam does not need to rename Meshy downloads.
+
+1. Save or drag the download into `incoming/` with whatever filename Meshy supplies.
+2. Say that the file is in and identify the model ID only if more than one test is active.
+3. Codex inspects the GLB, confirms which stage was downloaded, and renames it canonically.
+4. Codex never admits or commits the file until its contents match the canonical name.
+
+Canonical pattern:
+
+```text
+M###-V-short-family-name-stage.glb
+```
+
+Examples:
+
+```text
+M019-A-universal-four-wheel-wagon-chassis-original.glb
+M001-A-low-cover-boulder-cluster-remesh-400.glb
+M001-A-low-cover-boulder-cluster-clean-v1.glb
+```
+
+`original`, `remesh-N`, and `clean-vN` describe actual file state. They are not interchangeable.
+Avoid overwriting an earlier download when convenient because the comparison can help diagnose a
+failure, but an overwrite is acceptable when the prior stage is knowingly disposable.
+
 ## M001-A — low-cover boulder cluster
 
 ![M001-A](reference-images/M001-A-low-cover-boulder-cluster-v1.png)
@@ -88,8 +115,8 @@ texture: off
 image enhancement: off
 ```
 
-Save the untouched download as:
-`incoming/M001-A-low-cover-boulder-cluster-original.glb`
+Canonical admitted-download name:
+`incoming/M001-A-low-cover-boulder-cluster-remesh-400.glb`
 
 Do not buy or preserve generated micro-cracks, pebbles, or surface grain. Genesis materials own
 geological color and restrained layer variation. Geometry owns only the three large silhouettes,
@@ -113,9 +140,9 @@ Meshy only for exceptional rock mouths, transitions, roots, and strange formatio
 
 ![M001-A high-poly diagnostic](intake-previews/M001-A-highpoly-settings-mismatch.png)
 
-The first downloaded file was `incoming/M001-A-bouldet-cluster-original.glb .glb`. It is retained
-locally as user-provided intake but is not admitted or committed as the production source. It
-contains:
+The first downloaded file overwrote the same temporary download name later used for the remesh.
+Its neutral diagnostic preview is retained, but the 23 MB settings-mismatch GLB itself is not.
+It contained:
 
 - 139,328 triangles and 72,220 vertices;
 - four embedded texture images;
@@ -128,6 +155,30 @@ stripped locally after download.
 
 Save that result as:
 `incoming/M001-A-low-cover-boulder-cluster-remesh-400.glb`
+
+### Second intake — accepted
+
+![M001-A cleaned clay proof](intake-previews/M001-A-clean-v1.png)
+
+The remesh arrived with 420 triangles, 222 vertices, no materials, and no embedded textures.
+Meshy represented each intended rock as two near-identical overlapping shells: six disconnected
+islands rather than three. `scripts/model-foundry/clean-meshy-rock-cluster.py` paired the shells by
+matching bounds, kept the larger outer shell in each pair, and exported three named rock objects:
+
+```text
+rock_primary
+rock_left_subordinate
+rock_right_subordinate
+```
+
+Accepted production donor:
+`processed/M001-A-low-cover-boulder-cluster-clean-v1.glb`
+
+The accepted cluster is 236 triangles. It preserves the compact half-cover silhouette, has no
+accidental stair, reads without textures, and required deterministic cleanup rather than manual
+sculpting. M001-A passes calibration. Ordinary rocks remain candidates for procedural generation,
+but Meshy is admitted for authored cover-anchor clusters when this stronger composed silhouette is
+worth the generation.
 
 ### ImageGen correction record
 
@@ -235,14 +286,14 @@ Watch in Meshy:
 ### Meshy intake result
 
 Source:
-`incoming/M019-A-wagon-chassis-original.glb .glb`
+`incoming/M019-A-universal-four-wheel-wagon-chassis-original.glb`
 
 Processed donor:
 `processed/M019-A-wagon-chassis-clean-v1.glb`
 
-The literal doubled `.glb .glb` source filename came from the download and remains untouched
-as intake provenance. Meshy delivered one unnamed mesh with 1,898 triangles and 59 disconnected
-geometric islands. The chassis, shafts, bed, braces, axles, and corner sockets were useful.
+Meshy's original doubled extension was normalized after the intake convention was approved.
+Meshy delivered one unnamed mesh with 1,898 triangles and 59 disconnected geometric islands.
+The chassis, shafts, bed, braces, axles, and corner sockets were useful.
 The four wheels were the only conspicuously dirty forms: they consumed 20 islands and 935
 triangles, with lumpy rims and radial fan triangulation.
 

@@ -270,7 +270,7 @@ full production handoff, test this smaller material-diverse set:
 | Order | Model | Primary material/process risk | Question |
 |---:|---|---|---|
 | complete | `M019-A` wagon chassis | structural timber + iron + repeated mechanism | Can the valuable chassis survive while dirty wheels are replaced procedurally? **Passed.** |
-| 1 | `M001-A` low-cover boulder cluster | broad geological stone planes | Does Meshy produce rock silhouettes materially better and faster than `GP-LP-T09/T10` procedural rocks? |
+| complete | `M001-A` low-cover boulder cluster | broad geological stone planes | Can a composed cover-anchor silhouette survive low remesh and beat routine procedural placement? **Passed at 236 cleaned triangles after deterministic duplicate-shell removal.** |
 | 2 | `M035-A` ridge tent | thin cloth over a timber frame | Can cloth thickness, ridge silhouette, open entrance, and pole separation survive without becoming a smooth blob? |
 | 3 | `M059-A` forge hearth | masonry mass + iron fittings + empty sockets | Can mixed rigid materials remain legible without buying dense brick, coal, tool, or fastener noise? |
 | 4 | `M068-A` wall flame sconce | thin forged metal + runtime-owned flame/light | Can a small open metal fixture survive at game scale while flame, emission, and illumination remain engine-owned? |

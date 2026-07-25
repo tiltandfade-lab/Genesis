@@ -1696,3 +1696,11 @@ Binding consequences:
 - Target changes must be interpolated continuously on `requestAnimationFrame` at the display refresh
   rate (normally 60 FPS), never presented as one-to-four hard jumps per second. Seeded target choice
   remains reproducible; the path between targets is smooth.
+
+## CLAYROOM OPEN-FLAME CHECKPOINT (Adam, 2026-07-24 — additive; verbatim)
+
+> "let's work on it, i think the sconce is looking good the flicker still needs work but its passable for now"
+
+The current sconce and smooth flicker are accepted as passable for this CL-R1 checkpoint. Flicker
+polish remains open; this is not permission to remove its deterministic proof or silently promote
+the current motion as the final open-flame treatment.

@@ -1398,5 +1398,68 @@ const check = (name, cond, detail = "") =>
     && /clayRoomMovementOverlaySummary/.test(bootSrc));
 }
 
+// ============================================================================
+// 32. CL-F02 LIGHTING BENCH (CL-R1 checkpoint).
+// A deterministic neutral staircase/sphere/cube input must run inside the existing production
+// Theater, keep one approved sprite, suppress measurement noise, and expose honest light overlays.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const fixture = win.clayRoomLightingBenchFixtureFrom(record);
+    check("32a. CL-F02 is frozen deterministic fixture data with a versioned identity and five primitives",
+      fixture.id === "cl-f02-lighting-bench"
+      && fixture.version === 1
+      && Object.isFrozen(fixture)
+      && Object.isFrozen(fixture.primitives)
+      && fixture.primitives.length === 5,
+      JSON.stringify(fixture));
+    const steps = fixture.primitives.filter((row) => row.id.indexOf("bench-step-") === 0);
+    check("32b. the bench carries three rising matte steps whose tread depth is exactly one third of a cell",
+      steps.length === 3
+      && steps.every((row) => row.primitive === "box" && row.role === "riser" && row.size.z === 1 / 3)
+      && steps[0].size.y < steps[1].size.y && steps[1].size.y < steps[2].size.y,
+      JSON.stringify(steps));
+    check("32c. matched neutral comparison forms include one cube, one sphere, and an approved-sprite cell",
+      fixture.primitives.some((row) => row.id === "bench-matte-cube" && row.primitive === "box")
+      && fixture.primitives.some((row) => row.id === "bench-matte-sphere" && row.primitive === "sphere")
+      && Number.isInteger(fixture.spriteCell.x) && Number.isInteger(fixture.spriteCell.z),
+      JSON.stringify(fixture));
+    let undersizedRefused = false;
+    try { win.clayRoomLightingBenchFixtureFrom({ dims: { w: 5, d: 5 } }); }
+    catch(e) { undersizedRefused = /requires at least a 9x9 room/.test(String(e)); }
+    check("32d. an undersized room is refused loudly instead of clipping the diagnostic",
+      undersizedRefused);
+  } catch(e) {
+    check("32a-d. CL-F02 pure fixture checks execute without throw", false, e.stack || String(e));
+  }
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("32e. the bench mounts shadow-receiving primitives into the existing production interiorGroup",
+    /function\s+clayRoomMountLightingBench/.test(bootSrc)
+    && /S\.interiorGroup\.add\(group\)/.test(bootSrc)
+    && /mesh\.castShadow\s*=\s*true/.test(bootSrc)
+    && /mesh\.receiveShadow\s*=\s*true/.test(bootSrc));
+  check("32f. CL-F02 keeps the production sprite path while removing room-truth crate/door clutter",
+    /clayRoomLightingBenchFixtureFrom\(S\.clayRoomRecord\)/.test(bootSrc)
+    && /cellX:\s*room\.x\s*\+\s*fixture\.spriteCell\.x/.test(bootSrc)
+    && /furniture:\s*\[\]/.test(bootSrc)
+    && /interactables:\s*\[\]/.test(bootSrc));
+  check("32g. position/range/shadow overlays read the live THREE light and preserve exact physical range",
+    /light\.getWorldPosition\(p\)/.test(bootSrc)
+    && /\[0\.25,\s*0\.5,\s*1\]/.test(bootSrc)
+    && /const\s+radius\s*=\s*light\.distance\s*\*\s*frac/.test(bootSrc)
+    && /new\s+THREE\.WireframeGeometry/.test(bootSrc));
+  check("32h. the live proof reports fixture, forms, overlays, shadow flags, and mote suppression",
+    /window\.Theater\._clayLightingBenchForTest/.test(bootSrc)
+    && /benchMounted/.test(bootSrc)
+    && /overlayModes/.test(bootSrc)
+    && /motesSuppressed/.test(bootSrc));
+  check("32i. the workbench never labels room-only crate/door objects mounted on the lighting bench",
+    /data-clay-room-truth-only/.test(bootSrc)
+    && /status\.textContent\s*=\s*roomTruth\s*\?\s*"MOUNTED"\s*:\s*"ROOM ONLY"/.test(bootSrc)
+    && /button\.disabled\s*=\s*!roomTruth/.test(bootSrc));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

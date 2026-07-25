@@ -61,6 +61,7 @@ function pageProbe() {
       provenance: rec.provenance ? { pass: rec.provenance.pass, derivation: rec.provenance.derivation, created: rec.provenance.created } : null,
     } : null,
     lightRecipe: T._clayLightingRecipeForTest ? T._clayLightingRecipeForTest() : null,
+    lightingBench: T._clayLightingBenchForTest ? T._clayLightingBenchForTest() : null,
     lightLock: (typeof LIGHT_PROFILE_LOCKS_COMPILED !== "undefined")
       ? { id: LIGHT_PROFILE_LOCKS_COMPILED.id, version: LIGHT_PROFILE_LOCKS_COMPILED.version,
           schemaVersion: LIGHT_PROFILE_LOCKS_COMPILED.schemaVersion }

@@ -13464,6 +13464,38 @@ window.Theater._claySetLightingRecipeForTest = function(id){
     ? clayRoomSetLightingRecipe(id, "clayroom-test-seam")
     : false;
 };
+window.Theater._clayLightingBenchForTest = function(){
+  const bench = S.clayRoomLightingBenchGroup;
+  const overlays = S.clayRoomLightOverlayGroup;
+  return {
+    fixtureId: S.clayRoomFixtureId || null,
+    benchMounted: !!(bench && bench.parent),
+    primitives: bench ? bench.children.map(function(mesh){
+      return {
+        id: mesh.userData.clayBenchPrimitive,
+        primitive: mesh.userData.clayBenchPrimitiveType,
+        role: mesh.userData.interiorKind,
+        castShadow: !!mesh.castShadow,
+        receiveShadow: !!mesh.receiveShadow
+      };
+    }) : [],
+    overlayModes: Object.assign({}, S.clayRoomLightOverlayModes || {}),
+    overlays: overlays ? overlays.children.map(function(line){
+      return {
+        kind: line.userData.clayLightOverlayKind,
+        lightId: line.userData.lightId,
+        rangeFraction: line.userData.rangeFraction == null ? null : line.userData.rangeFraction,
+        range: line.userData.range == null ? null : line.userData.range
+      };
+    }) : [],
+    motesSuppressed: S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && !S.moteGroup
+  };
+};
+window.Theater._claySetFixtureForTest = function(id){
+  return (typeof clayRoomSetFixture === "function")
+    ? clayRoomSetFixture(id, "clayroom-fixture-test-seam")
+    : false;
+};
 window.Theater._clayMovementProofForTest = function(){
   const session = (typeof clayRoomMovementSession === "function") ? clayRoomMovementSession() : null;
   if(!session || typeof tqMovementRanges !== "function") return null;
@@ -15324,6 +15356,23 @@ function clayRoomShouldEnable(){
   } catch(e){}
   return false;
 }
+
+const CLAY_ROOM_TRUTH_FIXTURE_ID = "cl-f00-room-truth";
+const CLAY_ROOM_LIGHTING_BENCH_ID = "cl-f02-lighting-bench";
+function clayRoomFixtureIdFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("clayfixture")
+      : null;
+    if(raw === "room" || raw === CLAY_ROOM_TRUTH_FIXTURE_ID) return CLAY_ROOM_TRUTH_FIXTURE_ID;
+    if(raw === "lights" || raw === "lighting-bench" || raw === CLAY_ROOM_LIGHTING_BENCH_ID){
+      return CLAY_ROOM_LIGHTING_BENCH_ID;
+    }
+  } catch(e){}
+  // CL-R1 checkpoint now opens on the fixture under review. The room-truth/movement fixture remains
+  // one click away and can be pinned directly with ?clayfixture=room.
+  return CLAY_ROOM_LIGHTING_BENCH_ID;
+}
 function clayRoomMaybeAutoMount(){
   // CL-R0 (docs/CLAYROOM-RESET-LADDER.md): this poll now does ONE thing — mount the surface if the
   // flag is on and it isn't up yet. It used to ALSO reassert the light profile every frame, because
@@ -15431,6 +15480,34 @@ function clayRoomSetLightingRecipe(recipeId, reason){
     afterPass: true
   };
   if(typeof S.clayRoomRefreshLightCatalog === "function") S.clayRoomRefreshLightCatalog();
+  if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
+  return true;
+}
+
+function clayRoomSetFixture(fixtureId, reason){
+  if(fixtureId !== CLAY_ROOM_TRUTH_FIXTURE_ID && fixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID){
+    return false;
+  }
+  if(!S.clayRoomCompiled || !S.clayRoomRecord) return false;
+  S.clayRoomFixtureId = fixtureId;
+  S.clayCamOffset = { x: 0, z: 0 };
+  S.clayCamZoom = fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? 0.72 : 1;
+  S.boardKey = null;
+  const session = clayRoomMovementSession();
+  const board = (session && clayRoomMovementBoardFromState(session.state)) || S.clayRoomCompiled.board;
+  setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-fixture-switch" });
+  if(fixtureId === CLAY_ROOM_TRUTH_FIXTURE_ID) clayRoomMovementRangesRender();
+  else clayRoomDisposeMovementOverlay();
+  if(typeof S.clayRoomRefreshFixtureControls === "function") S.clayRoomRefreshFixtureControls();
+  if(typeof S.clayRoomWorkbenchSelect === "function"){
+    const roomOnlySelected = S.clayRoomSelectedId === S.clayRoomRecord.portal.id
+      || S.clayRoomSelectedId === S.clayRoomRecord.object.id;
+    if(fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && roomOnlySelected){
+      const recipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId];
+      const light = recipe && (recipe.lights || []).find(function(row){ return row.enabled !== false; });
+      if(light) S.clayRoomWorkbenchSelect(light.id, "fixture switch");
+    }
+  }
   if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
   return true;
 }
@@ -15866,6 +15943,159 @@ function clayRoomSurfaceCensus(){
   };
 }
 
+/* CL-F02 lighting bench — deterministic test INPUT mounted inside the same production Theater scene.
+   These are neutral comparison forms, not a second renderer: the same camera, diagnostic surface
+   route, real sprite builder, PointLights, shadows, tone map, and post chain remain in charge. */
+function clayRoomMountLightingBench(){
+  S.clayRoomLightingBenchGroup = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  const fixture = clayRoomLightingBenchFixtureFrom(S.clayRoomRecord);
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+  const rawX = room.x + (room.w - 1) / 2;
+  const rawZ = room.y + (room.d - 1) / 2;
+  const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, rawX, rawZ);
+  const centerX = rawX - origin.cx;
+  const centerZ = rawZ - origin.cz;
+  const group = new THREE.Group();
+  group.name = fixture.id;
+  group.userData.clayLightingBench = true;
+  group.userData.fixtureId = fixture.id;
+  group.userData.fixtureVersion = fixture.version;
+  fixture.primitives.forEach(function(spec){
+    let geometry, height;
+    if(spec.primitive === "sphere"){
+      geometry = new THREE.SphereGeometry(spec.radius, 32, 20);
+      height = spec.radius * 2;
+    } else {
+      geometry = new THREE.BoxGeometry(spec.size.x, spec.size.y, spec.size.z);
+      height = spec.size.y;
+    }
+    const material = new THREE.MeshStandardMaterial({
+      color: CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor,
+      roughness: 1,
+      metalness: 0
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = spec.id;
+    mesh.position.set(centerX + spec.offset.x, floorTop + height / 2, centerZ + spec.offset.z);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    mesh.userData.interiorKind = spec.role;
+    mesh.userData.clayBenchPrimitive = spec.id;
+    mesh.userData.clayBenchPrimitiveType = spec.primitive;
+    group.add(mesh);
+  });
+  S.interiorGroup.add(group);
+  S.clayRoomLightingBenchGroup = group;
+  return group;
+}
+
+function clayRoomSuppressLightingBenchNoise(){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID || !S.moteGroup) return;
+  stopMoteDrift();
+  if(S.moteGroup.parent) S.moteGroup.parent.remove(S.moteGroup);
+  clearGroup(S.moteGroup);
+  S.moteGroup = null;
+}
+
+function clayRoomDisposeLightOverlays(){
+  const group = S.clayRoomLightOverlayGroup;
+  if(!group) return;
+  if(group.parent) group.parent.remove(group);
+  clearGroup(group);
+  S.clayRoomLightOverlayGroup = null;
+}
+
+function clayRoomBuildLightOverlays(){
+  clayRoomDisposeLightOverlays();
+  if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID || !S.scene) return null;
+  const modes = S.clayRoomLightOverlayModes || { position: true, range: true, shadow: false };
+  S.clayRoomLightOverlayModes = modes;
+  const group = new THREE.Group();
+  group.name = "cl-f02-light-overlays";
+  group.userData.clayLightingOverlay = true;
+  (S.interiorLightTargets || []).forEach(function(target){
+    if(!target || !target.pl) return;
+    const light = target.pl;
+    const p = new THREE.Vector3();
+    light.getWorldPosition(p);
+    const rawX = p.x + ((S.boardOrigin && S.boardOrigin.cx) || 0);
+    const rawZ = p.z + ((S.boardOrigin && S.boardOrigin.cz) || 0);
+    const floorY = interiorFloorTopAt(S.interiorFloorTopMap, rawX, rawZ) + 0.018;
+    const color = light.color && typeof light.color.getHex === "function" ? light.color.getHex() : 0xffffff;
+    if(modes.position){
+      const r = 0.22;
+      const points = [
+        p.x - r, p.y, p.z, p.x + r, p.y, p.z,
+        p.x, p.y - r, p.z, p.x, p.y + r, p.z,
+        p.x, p.y, p.z - r, p.x, p.y, p.z + r,
+        p.x, floorY, p.z, p.x, p.y, p.z
+      ];
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
+      const line = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({
+        color, transparent: true, opacity: 0.95, depthTest: false, depthWrite: false
+      }));
+      line.userData.clayLightOverlayKind = "position";
+      line.userData.lightId = target.id;
+      line.renderOrder = 60;
+      group.add(line);
+    }
+    if(modes.range && light.distance > 0){
+      [0.25, 0.5, 1].forEach(function(frac){
+        const radius = light.distance * frac;
+        const points = [];
+        for(let i = 0; i < 64; i++){
+          const a = (i / 64) * Math.PI * 2;
+          points.push(new THREE.Vector3(p.x + Math.cos(a) * radius, floorY, p.z + Math.sin(a) * radius));
+        }
+        const line = new THREE.LineLoop(
+          new THREE.BufferGeometry().setFromPoints(points),
+          new THREE.LineBasicMaterial({
+            color, transparent: true, opacity: frac === 1 ? 0.78 : 0.34,
+            depthTest: false, depthWrite: false
+          })
+        );
+        line.userData.clayLightOverlayKind = "range";
+        line.userData.lightId = target.id;
+        line.userData.rangeFraction = frac;
+        line.userData.range = light.distance;
+        line.renderOrder = 59;
+        group.add(line);
+      });
+    }
+    if(modes.shadow && light.castShadow && light.distance > 0){
+      let sourceGeometry;
+      if(light.isSpotLight){
+        const coneRadius = Math.tan(light.angle || Math.PI / 4) * light.distance;
+        sourceGeometry = new THREE.ConeGeometry(coneRadius, light.distance, 16, 1, true);
+      } else {
+        sourceGeometry = new THREE.SphereGeometry(light.distance, 12, 8);
+      }
+      const wireGeometry = new THREE.WireframeGeometry(sourceGeometry);
+      sourceGeometry.dispose();
+      const wire = new THREE.LineSegments(wireGeometry, new THREE.LineBasicMaterial({
+        color, transparent: true, opacity: 0.16, depthTest: false, depthWrite: false
+      }));
+      wire.position.copy(p);
+      if(light.isSpotLight){
+        wire.position.y -= light.distance / 2;
+      }
+      wire.userData.clayLightOverlayKind = light.isSpotLight ? "shadow-frustum" : "shadow-volume";
+      wire.userData.lightId = target.id;
+      wire.renderOrder = 58;
+      group.add(wire);
+    }
+  });
+  S.scene.add(group);
+  S.clayRoomLightOverlayGroup = group;
+  return group;
+}
+
 /* clayRoomAfterInteriorBoardRebuild() — THE ONE LIFECYCLE HOOK. Called from setInteriorBoard's own
    tail (its single exit point), so it fires on the mount's first build AND on every asynchronous
    replay, without the clay surface having to know that those replay sites exist. A no-op unless the
@@ -15877,8 +16107,11 @@ function clayRoomSurfaceCensus(){
    then provenance re-tagging (the rebuild replaced the children the previous tags pointed at). */
 function clayRoomAfterInteriorBoardRebuild(){
   if(!S.clayRoomDiagnosticActive) return;
+  clayRoomMountLightingBench();
+  clayRoomSuppressLightingBenchNoise();
   clayRoomApplyDiagnosticSurfaces();
   clayRoomApplyLightProfile(S.clayRoomRecord);
+  clayRoomBuildLightOverlays();
   clayRoomTagAllProvenance();
   // pan/zoom survives rebuilds without compounding: capture THIS rebuild's fresh camera fit, then
   // re-derive the pose from fit ∘ offset ∘ zoom (see the CLAY CAMERA PAN/ZOOM block).
@@ -16127,6 +16360,10 @@ function clayRoomRenderMovementOverlay(ranges, preview){
   scheduleRender();
 }
 function clayRoomMovementRangesRender(){
+  if(S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID){
+    clayRoomDisposeMovementOverlay();
+    return null;
+  }
   const session = clayRoomMovementSession();
   if(!session) return null;
   const ranges = tqMovementRanges(session.fixture.space, session.state, session.fixture.actorId);
@@ -16178,6 +16415,24 @@ function clayRoomMovementBoardFromState(state){
       ? Object.assign({}, entry, { state: connection ? connection.state : "shut" })
       : entry;
   });
+  if(S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID){
+    const fixture = clayRoomLightingBenchFixtureFrom(S.clayRoomRecord);
+    const room = compiled.room;
+    pieces = pieces.map(function(piece){
+      return Object.assign({}, piece, {
+        cellX: room.x + fixture.spriteCell.x,
+        cellY: room.y + fixture.spriteCell.z
+      });
+    });
+    // CL-F02 is a measurement fixture. The approved sprite remains, but the room-truth crate and
+    // door are removed from this projection so their extra faces do not muddle the comparison.
+    return Object.assign({}, base, {
+      pieces: pieces,
+      furniture: [],
+      interactables: [],
+      dressing: []
+    });
+  }
   return Object.assign({}, base, { pieces: pieces, interactables: interactables });
 }
 function clayRoomApplyMovementBoard(state, reason){
@@ -16271,6 +16526,7 @@ function clayRoomTagAllProvenance(){
   S.clayRoomProvenanceRoots = [];
   if(S.interiorGroup) clayRoomTagProvenance(S.interiorGroup, "setInteriorBoard"); // board/figure/lights/furniture — nested
   if(S.clayGridMesh) clayRoomTagProvenance(S.clayGridMesh, "clayRoomBuildSeamGrid"); // grid
+  if(S.clayRoomLightOverlayGroup) clayRoomTagProvenance(S.clayRoomLightOverlayGroup, "clayRoomBuildLightOverlays");
   if(S.ambientLight) clayRoomTagProvenance(S.ambientLight, "clayRoomApplyLightProfile"); // lights
   (S.pointLights || []).forEach(function(l){ clayRoomTagProvenance(l, "clayRoomApplyLightProfile"); }); // lights
 }
@@ -16565,6 +16821,7 @@ function clayRoomBuildWorkbenchChrome(record){
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.claySelect = row[2];
+    if(row[2] === record.object.id || row[2] === record.portal.id) b.dataset.clayRoomTruthOnly = "1";
     if(row[2] === "clay-west-warm") b.dataset.clayLightCatalogSlot = "0";
     if(row[2] === "clay-east-cool") b.dataset.clayLightCatalogSlot = "1";
     b.style.cssText = "width:100%;text-align:left;background:#20242b;color:#e0e5ea;border:1px solid #333a44;border-radius:4px;padding:7px 8px;margin:0 0 5px;cursor:pointer;";
@@ -16593,6 +16850,7 @@ function clayRoomBuildWorkbenchChrome(record){
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.claySceneId = row[1];
+    if(row[1] === record.object.id || row[1] === record.portal.id) b.dataset.clayRoomTruthOnly = "1";
     if(row[1] === "clay-west-warm") b.dataset.clayLightSceneSlot = "0";
     if(row[1] === "clay-east-cool") b.dataset.clayLightSceneSlot = "1";
     b.textContent = "◇  " + row[0];
@@ -16713,6 +16971,10 @@ function mountClayRoom(){
     S.clayRoomRecord = record;
     S.clayRoomCompiled = compiled;
     S.clayRoomLightRecipeId = compiled.lightRecipeId || "clay-opposing-pair";
+    S.clayRoomFixtureId = clayRoomFixtureIdFromLocation();
+    S.clayRoomLightOverlayModes = { position: true, range: true, shadow: false };
+    S.clayCamOffset = { x: 0, z: 0 };
+    S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? 0.72 : 1;
     S.clayRoomDiagnosticActive = true;
     setInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
     S.clayGridMesh = clayRoomBuildSeamGrid(record, compiled.room); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live; compiled.room is the spatializer's REAL room rect (CL-R0 coordinate fix)
@@ -17488,8 +17750,24 @@ function clayRoomMountOverlay(record, host){
   // meshes/lights are mounted here; every value comes from the live PointLight + emitter material.
   const lightsBody = document.createElement("div");
   lightsBody.style.cssText = "display:none;font:10px/1.45 monospace;color:#dde;";
+  const fixtureActions = document.createElement("div");
+  fixtureActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:7px;";
+  const fixtureButtons = {};
+  [
+    [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM TRUTH"],
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTING BENCH"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Use " + def[0] + " Clayroom fixture");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){ clayRoomSetFixture(def[0], "clayroom-fixture-button"); });
+    fixtureActions.appendChild(button);
+    fixtureButtons[def[0]] = button;
+  });
+  lightsBody.appendChild(fixtureActions);
   const lightsIntro = document.createElement("div");
-  lightsIntro.textContent = "Three honest modes: neutral measurement · warm/cool test bulbs · lore-native world practical";
+  lightsIntro.textContent = "CL-F02: neutral stairs + matte sphere/cube + real sprite, through the production renderer";
   lightsIntro.style.cssText = "color:#9ab;margin-bottom:6px;";
   lightsBody.appendChild(lightsIntro);
   const lightingModeActions = document.createElement("div");
@@ -17509,6 +17787,29 @@ function clayRoomMountOverlay(record, host){
     lightingModeButtons[def[0]] = button;
   });
   lightsBody.appendChild(lightingModeActions);
+  const overlayActions = document.createElement("div");
+  overlayActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px;";
+  const overlayButtons = {};
+  [
+    ["position", "POSITION"],
+    ["range", "RANGE"],
+    ["shadow", "SHADOW VOLUME"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Toggle " + def[0] + " light overlay");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){
+      S.clayRoomLightOverlayModes = S.clayRoomLightOverlayModes || { position: true, range: true, shadow: false };
+      S.clayRoomLightOverlayModes[def[0]] = !S.clayRoomLightOverlayModes[def[0]];
+      clayRoomBuildLightOverlays();
+      if(S.clayRoomRefreshFixtureControls) S.clayRoomRefreshFixtureControls();
+      markDirty();
+    });
+    overlayActions.appendChild(button);
+    overlayButtons[def[0]] = button;
+  });
+  lightsBody.appendChild(overlayActions);
   const lightsActions = document.createElement("div");
   lightsActions.style.cssText = "display:flex;gap:5px;margin-bottom:7px;";
   const restoreLightsBtn = document.createElement("button");
@@ -17579,9 +17880,13 @@ function clayRoomMountOverlay(record, host){
       }));
     const flickering = snap.lights.filter(function(l){ return l.state === "flickering"; });
     const steady = snap.lights.filter(function(l){ return l.state === "steady"; });
-    const isolationPass = flickering.length === 1 && steady.length >= 1
+    const isolationPass = flickering.length === 1
       && steady.every(function(l){ return l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity; });
     const lines = [
+      "fixture " + (S.clayRoomFixtureId || "—")
+        + (S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+          ? " · 3 steps + matte cube/sphere + approved sprite"
+          : " · architecture/movement truth"),
       "recipe " + activeRecipe.id + " · " + activeRecipe.mode,
       "source " + activeRecipe.source.label
         + (activeRecipe.source.loreNative ? " · LORE-NATIVE" : " · DIAGNOSTIC ONLY"),
@@ -17636,6 +17941,29 @@ function clayRoomMountOverlay(record, host){
     });
     lightsOut.textContent = lines.join("\n");
   }
+  function clayRefreshFixtureControls(){
+    Object.keys(fixtureButtons).forEach(function(id){
+      fixtureButtons[id].style.background = id === S.clayRoomFixtureId ? "#35516a" : "#2a2a30";
+    });
+    const modes = S.clayRoomLightOverlayModes || {};
+    Object.keys(overlayButtons).forEach(function(id){
+      overlayButtons[id].style.background = modes[id] ? "#5b4728" : "#2a2a30";
+      overlayButtons[id].style.opacity = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? "1" : "0.45";
+      overlayButtons[id].disabled = S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID;
+    });
+    const roomTruth = S.clayRoomFixtureId === CLAY_ROOM_TRUTH_FIXTURE_ID;
+    document.querySelectorAll("[data-clay-room-truth-only]").forEach(function(button){
+      const status = button.querySelector("[data-clay-light-status]");
+      if(status){
+        status.textContent = roomTruth ? "MOUNTED" : "ROOM ONLY";
+        button.disabled = !roomTruth;
+        button.style.opacity = roomTruth ? "1" : "0.48";
+      } else {
+        button.style.display = roomTruth ? "block" : "none";
+      }
+    });
+  }
+  S.clayRoomRefreshFixtureControls = clayRefreshFixtureControls;
   restoreLightsBtn.addEventListener("click", function(){
     clayRoomRestoreAuthoredLightBaseline();
     clayLightsRender();
@@ -17730,8 +18058,8 @@ function clayRoomMountOverlay(record, host){
     });
   };
   S.clayRoomWorkbenchSelect = function(id, source){
-    const info = claySelectionInfo(id);
     S.clayRoomSelectedId = id;
+    const info = claySelectionInfo(id);
     selectionName.textContent = info.name;
     selectionMeta.textContent = info.type + " · " + info.ref + " · selected from " + (source || "workbench");
     spriteEditorBtn.disabled = !info.sprite;
@@ -17783,7 +18111,7 @@ function clayRoomMountOverlay(record, host){
   stateTabBtn.addEventListener("click", function(){ clayShowTab("state"); });
   movementTabBtn.addEventListener("click", function(){ clayShowTab("movement"); });
   lightsTabBtn.addEventListener("click", function(){ clayShowTab("lights"); });
-  clayShowTab("movement");
+  clayShowTab(S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID ? "lights" : "movement");
 
   document.body.appendChild(panel);
   if(CLAY_ROOM_PANEL_POSITION){
@@ -17791,8 +18119,15 @@ function clayRoomMountOverlay(record, host){
   } else {
     clayPanelDockRight();
   }
-  S.clayRoomWorkbenchSelect(S.clayRoomSelectedId || record.portal.id, "initial");
+  const activeInitialRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
+    || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
+  const activeInitialLight = (activeInitialRecipe.lights || []).find(function(light){ return light.enabled !== false; });
+  const initialSelection = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && activeInitialLight
+    ? activeInitialLight.id
+    : (S.clayRoomSelectedId || record.portal.id);
+  S.clayRoomWorkbenchSelect(initialSelection, "initial");
   S.clayRoomRefreshLightCatalog();
+  clayRefreshFixtureControls();
   S.clayRoomLightReadoutTimer = setInterval(function(){
     if(S.clayRoomMounted && lightsBody.style.display !== "none") clayLightsRender();
   }, 120);
@@ -17817,6 +18152,7 @@ function clayRoomUnmount(){
   // createTheaterState() (so the flag would clear anyway), but any setInteriorBoard that fires
   // during teardown must not try to re-route a tree that is being disposed.
   S.clayRoomDiagnosticActive = false;
+  clayRoomDisposeLightOverlays();
   if(panelDragCleanup) panelDragCleanup();
   if(panelResizeHandler) window.removeEventListener("resize", panelResizeHandler);
   if(lightReadoutTimer != null) clearInterval(lightReadoutTimer);

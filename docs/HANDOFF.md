@@ -34,6 +34,11 @@ Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolida
 - Lighting Lab now edits the full structured recipe, not a one-point shortcut, with bounded
   validation, undo/redo, authored reset, export, and deterministic compile/fold back to the same
   lock shape.
+- The retained `CL-F02 lighting-bench` is now live in the same production renderer: three neutral
+  one-third-cell-depth steps, a matte cube and sphere, one approved production sprite, no crate/door
+  clutter, and no drifting motes. It defaults open in the Lights tab beside the retained Room Truth
+  fixture. Position, exact 25/50/100-percent physical-range, and point-shadow-volume/spot-frustum
+  overlays read the mounted lights directly.
 - The washed-out goblin was tested one cause at a time through the production renderer. The causal
   sheet separates colour-space tagging, lit/unlit material response, sampling, tone mapping,
   compositing, and light energy. Wrong sRGB interpretation and intensity above 30 are executable
@@ -41,15 +46,15 @@ Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolida
 - Final evidence: `dev/clay-captures/cl-r1-lighting/` (three modes, early/settled/explain/clean
   frames, receipts, measurements) and `dev/clay-captures/cl-r1-causality/` (13-card contact sheet,
   receipt, measurements). All final captures recorded zero console errors/warnings.
-- Focused gates: light locks 12/12; Light Lab 42/42; Clayroom 176/176; local lighting 69/69;
+- Focused gates: light locks 12/12; Light Lab 42/42; Clayroom 185/185; local lighting 69/69;
   practical fixtures 98/98; dungeon interior 288/288. **FULL CI PENDING.** One broad
   visual-protection harness still reports
   the torchlit old/new interior mean pixel delta `0.0177 > 0.01`; daylit and tabletop dark remain
   inside the threshold. This remains visible for Fable's re-gate rather than being weakened.
 - The live stop gate now includes the smooth decay-1.5 torch flame, warm-vs-cool balance, immediate
-  torch readability, and the intentionally flat neutral reference. The dedicated CL-F02 stepped
-  sphere/cube display and advanced overlays remain open. Standee base/footprint and the
-  small→human→largest scaling spectrum belong to CL-R2 after that ruling.
+  torch readability, the intentionally flat neutral reference, and the dedicated CL-F02 stepped
+  sphere/cube display with core overlays. Adam's CL-F02 visual verdict is pending. Standee
+  base/footprint and the small→human→largest scaling spectrum belong to CL-R2 after that ruling.
 
 ## ⭐ Latest (2026-07-24, evening) — THE CONSOLIDATION CLOSE: singular canonical master [Claude Fable 5]
 

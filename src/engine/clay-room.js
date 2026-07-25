@@ -99,6 +99,73 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
   })
 });
 
+/* ─── CL-R1 / CL-F02 — LIGHTING BENCH FIXTURE ──────────────────────────────────────────────────
+   The room-truth fixture answers architecture/movement questions. This second fixture answers one
+   narrower question: what does a named light recipe do to neutral form as distance, face direction,
+   and elevation change? It is fixture DATA only. theater-boot.js projects these descriptors through
+   the already-mounted production Theater scene; no light, camera, exposure rule, or second renderer
+   lives here.
+
+   Coordinates are offsets from the spatialized room centre in tabletop world units (1 u = 5 ft).
+   The three boxes form one continuous staircase in Z, so each tread is exactly one cell-depth third
+   (1/3 u) deep: the same depth target Adam set for eventual natural standee supports on stairs.
+   Sphere/cube are deliberately matte and similarly sized so highlight shape and face transitions can
+   be compared without material noise. The retained approved goblin is moved beside them through the
+   ordinary board.pieces path so sprite response stays in the same frame. */
+var CLAY_LIGHTING_BENCH_FIXTURE = Object.freeze({
+  id: "cl-f02-lighting-bench",
+  version: 1,
+  label: "CL-F02 lighting bench",
+  question: "Do diagnostic and rolled light recipes produce controlled, motivated light?",
+  spriteCell: Object.freeze({ x: 10, z: 7 }),
+  primitives: Object.freeze([
+    Object.freeze({
+      id: "bench-step-low", primitive: "box", role: "riser",
+      size: Object.freeze({ x: 2.4, y: 0.24, z: 1 / 3 }),
+      offset: Object.freeze({ x: -1.5, z: 1 / 3 })
+    }),
+    Object.freeze({
+      id: "bench-step-mid", primitive: "box", role: "riser",
+      size: Object.freeze({ x: 2.4, y: 0.48, z: 1 / 3 }),
+      offset: Object.freeze({ x: -1.5, z: 0 })
+    }),
+    Object.freeze({
+      id: "bench-step-high", primitive: "box", role: "riser",
+      size: Object.freeze({ x: 2.4, y: 0.72, z: 1 / 3 }),
+      offset: Object.freeze({ x: -1.5, z: -1 / 3 })
+    }),
+    Object.freeze({
+      id: "bench-matte-cube", primitive: "box", role: "furniture",
+      size: Object.freeze({ x: 1.15, y: 1.15, z: 1.15 }),
+      offset: Object.freeze({ x: 0.45, z: 0 })
+    }),
+    Object.freeze({
+      id: "bench-matte-sphere", primitive: "sphere", role: "furniture",
+      radius: 0.66,
+      offset: Object.freeze({ x: 2.05, z: 0 })
+    })
+  ]),
+  overlays: Object.freeze({
+    position: "emitter crosshair + floor drop",
+    range: "25/50/100 percent physical-range rings",
+    shadow: "wire shadow volume (point) or frustum (spot)"
+  })
+});
+
+// clayRoomLightingBenchFixtureFrom(record) -> the immutable CL-F02 input. The minimum-size guard is
+// loud because silently clipping the comparison forms against a smaller room would make the bench
+// appear valid while changing the question it answers.
+function clayRoomLightingBenchFixtureFrom(record){
+  if(!record || !record.dims){
+    throw new Error("clayRoomLightingBenchFixtureFrom: record with dims required");
+  }
+  if(record.dims.w < 9 || record.dims.d < 9){
+    throw new Error("clayRoomLightingBenchFixtureFrom: CL-F02 requires at least a 9x9 room — got " +
+      record.dims.w + "x" + record.dims.d);
+  }
+  return CLAY_LIGHTING_BENCH_FIXTURE;
+}
+
 /* clayDiagnosticRoleForKind(kind) -> a normalized recipe role, or null.
    Maps the renderer's OWN `userData.interiorKind` vocabulary (theater-boot.js's
    interiorBuildInstancedMesh / room-shell / kit-shell tags) onto the recipe's role names. Pure

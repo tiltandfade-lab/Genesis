@@ -1600,6 +1600,8 @@
         "clayRoomDoorEdgeFor",
         "clayRoomBoardFrom",
         "clayRoomMovementFixtureFrom",
+        "clayRoomLightingBenchFixtureFrom",
+        "CLAY_LIGHTING_BENCH_FIXTURE",
         "CLAY_DIAGNOSTIC_SURFACE_RECIPE",
         "clayDiagnosticRoleForKind",
         "clayDiagnosticRouteFor",
@@ -1617,7 +1619,7 @@
         "tqStateFrom",
         "lightRecipeFor"
       ],
-      "desc": "docs/C1A-CLAY-ROOM.md (Clay Pass 1 plus retained C1B movement proof) \u2014 the canonical 15x15 clay movement-lab record: 225 cells, 10-ft human-room walls, one canonical Connection/portal, a real crate blocker, one difficult-terrain shoulder, and an approved goblin citizen through the SAME owners the game uses (SPRITE_BY_BESTIARY_ID -> SPRITE_REGISTRY for BodyForm v1, spatializePlan -> interiorBuildBoard, GRID LAW 1 cell = 5 ft). The founder-expanded fixture is large enough to distinguish a filled 30-ft Move band from a non-color-only hollow Dash extension. clayRoomRecordFrom(seed) is frozen and deterministic (no RNG/DOM/THREE/world reads); clayRoomMovementFixtureFrom(record,compiled) adapts that real SpatialPlan to engine.tactical-query without creating renderer mechanics. clayRoomProse(record) is the GEN-LAW-3/TEXT-FIRST prose twin; clayRoomExplain(record) is the workbench explain string; clayRoomEditRefusal(field) returns the typed generated-source refusal. The shared engine.light-recipes registry supplies neutral, diagnostic-pair, and rolled world lighting while CLAY_DIAGNOSTIC_SURFACE_RECIPE retains the diagnostic surface routes across every production board replay. Consumed by src/ui/theater-boot.js's ?clayroom=1 workbench. Added 2026-07-23; expanded for C1B and CL-R1 on 2026-07-24."
+      "desc": "docs/C1A-CLAY-ROOM.md (Clay Pass 1 plus retained C1B movement proof and CL-F02 lighting bench) \u2014 the canonical 15x15 clay movement-lab record: 225 cells, 10-ft human-room walls, one canonical Connection/portal, a real crate blocker, one difficult-terrain shoulder, and an approved goblin citizen through the SAME owners the game uses (SPRITE_BY_BESTIARY_ID -> SPRITE_REGISTRY for BodyForm v1, spatializePlan -> interiorBuildBoard, GRID LAW 1 cell = 5 ft). The founder-expanded fixture is large enough to distinguish a filled 30-ft Move band from a non-color-only hollow Dash extension. clayRoomRecordFrom(seed) is frozen and deterministic (no RNG/DOM/THREE/world reads); clayRoomMovementFixtureFrom(record,compiled) adapts that real SpatialPlan to engine.tactical-query without creating renderer mechanics. CLAY_LIGHTING_BENCH_FIXTURE is the immutable CL-F02 stepped matte sphere/cube comparison input projected by the same production Theater. clayRoomProse(record) is the GEN-LAW-3/TEXT-FIRST prose twin; clayRoomExplain(record) is the workbench explain string; clayRoomEditRefusal(field) returns the typed generated-source refusal. The shared engine.light-recipes registry supplies neutral, diagnostic-pair, and rolled world lighting while CLAY_DIAGNOSTIC_SURFACE_RECIPE retains the diagnostic surface routes across every production board replay. Consumed by src/ui/theater-boot.js's ?clayroom=1 workbench. Added 2026-07-23; expanded for C1B and CL-R1 on 2026-07-24."
     },
     {
       "id": "engine.place-dressing",

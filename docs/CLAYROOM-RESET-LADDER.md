@@ -1,8 +1,8 @@
 ---
 type: system-spec
 status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review candidate BUILT
-  (2026-07-24), close torch brightness accepted and smooth decay-1.5 flame review live; dedicated CL-F02
-  display affordances + CL-R2…CL-R6 remain
+  (2026-07-24), close torch brightness accepted and smooth decay-1.5 flame review live; dedicated
+  CL-F02 bench + core light overlays built, visual verdict pending; CL-R2…CL-R6 remain
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
 authority: subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids) and
@@ -82,7 +82,7 @@ primary question.
 |---|---|---|---|
 | `CL-F00 room-truth` | Does the real production room stay honest after every rebuild? | 5×5 room, door, crate, one citizen, neutral clay, seam grid | **LIVE** (`?clayroom=1`) |
 | `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | unbuilt (CL-R3) |
-| `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | **core authoring/recipe system built; visual verdict pending**. Dedicated stepped bench + overlays remain (CL-R1) |
+| `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | **BUILT; VISUAL VERDICT PENDING (CL-R1)**. Selectable room/bench fixtures; one-third-cell stairs, matte sphere/cube, approved sprite, mote suppression, live position/range/shadow-volume overlays |
 | `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | unbuilt (CL-R2) |
 | `CL-F04 material-bench` | Do material channels, scale, UVs, roles, and fallbacks work? | floor, wall, riser, trim skeleton, timber, iron, ground | unbuilt (CL-R4) |
 | `CL-F05 trim-bench` | Does the `h6-v1` sheet project without hiding geometry defects? | straight/non-multiple runs, corners, endpoint, opening, stair, curb, T-junction | unbuilt (CL-R5) |
@@ -368,10 +368,18 @@ falloff and smooth open-flame motion available for live visual review.**
   `dev/clay-captures/cl-r1-lighting/`; the 13-card source-plus-six-pair comparison is
   `dev/clay-captures/cl-r1-causality/causality-contact-sheet.png`.
 
-This is not a claim that every literal CL-F02 presentation affordance is finished. The dedicated
-stepped sphere/cube bench, seed/time-of-day preview, position/range/cone/shadow overlays, and
-one-click whole-matrix capture remain open. They do not create a second recipe or renderer
-authority when added.
+**CL-F02 dedicated bench — BUILT 2026-07-24; Adam's visual verdict pending.** The fixture selector
+now defaults to `cl-f02-lighting-bench` while retaining one-click `cl-f00-room-truth`. CL-F02 removes
+the room-truth crate/door clutter, suppresses atmosphere motes, keeps one approved sprite on the
+production `board.pieces` path, and mounts three rising one-third-cell-depth steps plus a matched matte
+cube and sphere inside the existing production Theater. Position crosshairs/floor drops, exact
+25/50/100-percent physical-range rings, and point-shadow-volume/spot-frustum wire overlays read the
+live THREE lights; they do not author a second light answer. The pure fixture and renderer wiring are
+gated in `dev/verify-clay-room.mjs` checks 32a–32i.
+
+This is still not a claim that every literal CL-F02 presentation affordance is finished. Seed/time-
+of-day preview, live pixel luma/chroma/clipping cards, and one-click whole-matrix capture remain open.
+They do not create a second recipe or renderer authority when added.
 
 **CL-R1 lifecycle/local-state slice — BUILT 2026-07-24.** Every generated production practical still
 declares local state `steady` by default and owns deterministic flicker seed/amplitude data.

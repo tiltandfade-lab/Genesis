@@ -95,7 +95,10 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
     // grey stand-in. OPEN for CL-R1: whether the diagnostic modes should suppress atmosphere entirely
     // (motes are additive ember quads — honest production output, but noise in a measurement rig).
     "contact-shadow": Object.freeze({ route: "passthrough", roleColor: "#5fbfbf" }),
-    mote:             Object.freeze({ route: "passthrough", roleColor: "#bf5f5f" })
+    mote:             Object.freeze({ route: "passthrough", roleColor: "#bf5f5f" }),
+    // CL-R3 diagnostic overlays (socket axes, access faces, negative-control rejection) are
+    // intentionally coloured truth aids, not architecture. They bypass the neutral-clay swap.
+    "diagnostic-overlay": Object.freeze({ route: "passthrough", roleColor: "#6fcfff" })
   })
 });
 
@@ -246,6 +249,235 @@ function clayRoomSpriteCitizenshipFixtureFrom(record){
   return CLAY_SPRITE_CITIZENSHIP_FIXTURE;
 }
 
+/* ─── CL-R3 / CL-F01 — STRUCTURE BENCH FIXTURE ─────────────────────────────────────────────────
+   The construction grammar is data. theater-boot.js projects these dimensions and sockets through
+   the production room-shell compiler and generic part assemblers; this engine file owns no THREE,
+   camera, or Guard Post special case. */
+var CLAY_STRUCTURE_KIT_CATALOG = Object.freeze({
+  id: "genesis-structure-kit",
+  version: 1,
+  gridLaw: Object.freeze({
+    cellFeet: 5, cellWorldUnits: 1,
+    verticalQuantumFeet: 2.5, verticalQuantumWorldUnits: 0.5,
+    storeyQuanta: 4, storeyFeet: 10, storeyWorldUnits: 2,
+    maxWalkableSlopeDeg: 30
+  }),
+  socketTypes: Object.freeze([
+    "floor-mount", "wall-mount", "top-surface", "hinge",
+    "butt-join-n", "butt-join-e", "butt-join-s", "butt-join-w",
+    "walk-surface", "catch", "terrain-join", "roof-pitch-join", "open"
+  ]),
+  accessKinds: Object.freeze(["walk", "climb-cost", "climb-dc", "none"]),
+  climbMechanicsImplemented: false,
+  provenance: Object.freeze({
+    author: "Genesis procedural structure grammar",
+    source: "docs/STRUCTURE-KIT-CATALOG.md",
+    license: "project-native",
+    donorFile: null
+  })
+});
+
+var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
+  id: "cl-f01-structure-bench",
+  version: 1,
+  label: "CL-F01 structure bench",
+  question: "Can generic construction atoms make believable, mechanically legible architecture?",
+  catalogId: CLAY_STRUCTURE_KIT_CATALOG.id,
+  defaultView: "assembled",
+  views: Object.freeze(["assembled", "sockets", "access", "negative", "strategic"]),
+  wallOmission: Object.freeze({
+    ruleId: "camera-side-wall-omission",
+    version: 1,
+    initialState: Object.freeze({ staged: true, latched: true }),
+    stagedEvent: "space-entered",
+    releaseEvent: "space-left-play",
+    doorEventsDoNotRestage: true,
+    carveouts: Object.freeze({
+      aperture: true,
+      structuralMass: true,
+      strategicView: true
+    })
+  }),
+  // Notched shell: convex + concave corners. Its north strip holds broad +h and -h slabs.
+  shellCells: Object.freeze((function(){
+    var rows = [];
+    for(var z = 1; z <= 6; z++){
+      for(var x = 1; x <= 6; x++){
+        if(x >= 5 && z <= 2) continue;
+        var tier = (z >= 5 && x <= 3) ? 1 : ((z >= 5 && x >= 4) ? -1 : 0);
+        rows.push(Object.freeze({
+          x: x, z: z, tier: tier,
+          isDoor: z === 1 && x === 3,
+          sourceRef: "cl-f01:shell:" + x + "," + z
+        }));
+      }
+    }
+    return rows;
+  })()),
+  pieces: Object.freeze([
+    Object.freeze({
+      id: "straight-wall", kind: "wall-run", label: "straight wall · endpoint + cap",
+      at: Object.freeze({ x: 9.5, z: 2 }), axis: "x", length: 3.5, height: 2, thickness: 0.22,
+      sockets: Object.freeze([
+        Object.freeze({ id: "straight-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "straight-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "none", inner: "none", outer: "none" })
+    }),
+    Object.freeze({
+      id: "t-junction", kind: "t-junction", label: "T-junction · single owner",
+      at: Object.freeze({ x: 10.5, z: 5 }), axis: "x", length: 3, branchLength: 1.45,
+      height: 2, thickness: 0.22,
+      sockets: Object.freeze([
+        Object.freeze({ id: "t-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "t-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) }),
+        Object.freeze({ id: "t-branch", type: "butt-join-s", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      access: Object.freeze({ top: "none", mainInner: "none", branchInner: "none" })
+    }),
+    Object.freeze({
+      id: "one-cell-stair", kind: "stair", label: "one-cell stair + landing",
+      at: Object.freeze({ x: 8.5, z: 8.6 }), width: 1, run: 1.5, rise: 0.5, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "stair-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "stair-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "wide-stair", kind: "stair", label: "wide stair + landing",
+      at: Object.freeze({ x: 10.5, z: 8.6 }), width: 2, run: 1.5, rise: 0.5, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "wide-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "wide-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "shallow-ramp", kind: "ramp", label: "shallow ramp · 26.565°",
+      at: Object.freeze({ x: 13, z: 8.6 }), width: 1.2, run: 1, rise: 0.5,
+      sockets: Object.freeze([
+        Object.freeze({ id: "ramp-low", type: "terrain-join", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "ramp-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ top: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "half-height-blocker", kind: "blocker", label: "half-height blocker / parapet base",
+      at: Object.freeze({ x: 8.75, z: 11.8 }), axis: "x", length: 2.5, height: 0.5, thickness: 0.34,
+      sockets: Object.freeze([
+        Object.freeze({ id: "blocker-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "blocker-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-cost" })
+    }),
+    Object.freeze({
+      id: "square-support", kind: "support-square", label: "square support",
+      at: Object.freeze({ x: 11.5, z: 11.8 }), width: 0.55, height: 2,
+      sockets: Object.freeze([
+        Object.freeze({ id: "square-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "square-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+    }),
+    Object.freeze({
+      id: "round-support", kind: "support-round", label: "round support",
+      at: Object.freeze({ x: 13, z: 11.8 }), radius: 0.31, height: 2,
+      sockets: Object.freeze([
+        Object.freeze({ id: "round-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "round-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+    })
+  ]),
+  opening: Object.freeze({
+    id: "hinged-opening", state: "ajar", width: 0.72, height: 1.6, threshold: true,
+    socket: Object.freeze({ id: "opening-hinge", type: "hinge", axis: Object.freeze({ x: 1, z: 0 }) }),
+    access: Object.freeze({ threshold: "walk", leaf: "none", frame: "none" }),
+    swingClearanceDeg: 90
+  }),
+  // One production standee behind one production pillar forces the existing sightline classifier
+  // to demonstrate the remaining dynamic cutaway/ghost path. It is a scale/cutaway witness, not a
+  // new structure atom and not a second occlusion algorithm.
+  cutawayWitness: Object.freeze({
+    id: "structure-cutaway-witness",
+    pieceSlug: "spr-pc-human-fighter-female",
+    pieceCell: Object.freeze({ x: 6.7, z: 8.8 }),
+    occluder: Object.freeze({
+      id: "structure-cutaway-pillar",
+      at: Object.freeze({ x: 7.6, z: 9.7 }),
+      sx: 0.7, sy: 2, sz: 0.7, profile: "square"
+    })
+  }),
+  negativeControl: Object.freeze({
+    id: "wrong-axis-join", label: "wrong-axis socket · must reject",
+    at: Object.freeze({ x: 12.2, z: 5.6 }),
+    source: Object.freeze({ id: "bad-source-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) }),
+    candidate: Object.freeze({ id: "bad-candidate-north", type: "butt-join-n", axis: Object.freeze({ x: 0, z: -1 }) }),
+    expectedReason: "socket-axis-mismatch"
+  })
+});
+
+/* The wall-omission latch is scene truth, not door-angle truth. The C1B connection state machine
+   supplies door-state events, but those events deliberately preserve this latch: opening a door
+   does not reveal an entire room, and closing it does not erase actors who have already entered.
+   Only explicit staging/release events change the room's participation in play. */
+function clayStructureStagingLatchTransition(state, event){
+  var prior = state && typeof state === "object" ? state : { staged: false, latched: false };
+  var next = {
+    staged: !!prior.staged,
+    latched: !!prior.latched,
+    lastEvent: prior.lastEvent || "initial-sealed",
+    doorState: prior.doorState || "shut"
+  };
+  var type = event && event.type;
+  if(type === CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.stagedEvent){
+    next.staged = true;
+    next.latched = true;
+  } else if(type === CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.releaseEvent){
+    next.staged = false;
+    next.latched = false;
+  } else if(type === "door-state"){
+    var doorState = String(event.state || "");
+    if(["shut", "ajar", "open"].indexOf(doorState) < 0){
+      throw new Error("clayStructureStagingLatchTransition: unknown door state " + doorState);
+    }
+    next.doorState = doorState;
+  } else {
+    throw new Error("clayStructureStagingLatchTransition: unknown event " + String(type));
+  }
+  next.lastEvent = type;
+  return Object.freeze(next);
+}
+
+function clayStructureSocketJoinAssessment(source, candidate){
+  if(!source || !candidate) return Object.freeze({ accepted: false, reason: "socket-missing" });
+  var a = source.axis || {}, b = candidate.axis || {};
+  var opposing = Number(a.x || 0) + Number(b.x || 0) === 0
+    && Number(a.z || 0) + Number(b.z || 0) === 0;
+  if(!opposing) return Object.freeze({ accepted: false, reason: "socket-axis-mismatch" });
+  var sourceButt = String(source.type || "").indexOf("butt-join-") === 0;
+  var candidateButt = String(candidate.type || "").indexOf("butt-join-") === 0;
+  if(sourceButt !== candidateButt) return Object.freeze({ accepted: false, reason: "socket-type-mismatch" });
+  return Object.freeze({ accepted: true, reason: "compatible" });
+}
+
+function clayRoomStructureBenchFixtureFrom(record){
+  if(!record || !record.dims){
+    throw new Error("clayRoomStructureBenchFixtureFrom: record with dims required");
+  }
+  if(record.dims.w < 15 || record.dims.d < 15){
+    throw new Error("clayRoomStructureBenchFixtureFrom: CL-F01 requires the 15x15 construction room — got " +
+      record.dims.w + "x" + record.dims.d);
+  }
+  var bad = CLAY_STRUCTURE_BENCH_FIXTURE.negativeControl;
+  var assessment = clayStructureSocketJoinAssessment(bad.source, bad.candidate);
+  if(assessment.accepted || assessment.reason !== bad.expectedReason){
+    throw new Error("clayRoomStructureBenchFixtureFrom: negative control did not reject by " + bad.expectedReason);
+  }
+  return CLAY_STRUCTURE_BENCH_FIXTURE;
+}
+
 /* clayDiagnosticRoleForKind(kind) -> a normalized recipe role, or null.
    Maps the renderer's OWN `userData.interiorKind` vocabulary (theater-boot.js's
    interiorBuildInstancedMesh / room-shell / kit-shell tags) onto the recipe's role names. Pure
@@ -259,6 +491,7 @@ function clayDiagnosticRoleForKind(kind){
   if(k === "room-shell-wall-stem" || k === "room-shell-wall-upper" || k === "kit-shell-wall") return "wall";
   if(k === "room-shell-wall-trim") return "trim";
   if(k === "room-shell-riser") return "riser";
+  if(k === "clay-diagnostic-overlay") return "diagnostic-overlay";
   if(CLAY_DIAGNOSTIC_SURFACE_RECIPE.roles[k]) return k;
   return null;
 }

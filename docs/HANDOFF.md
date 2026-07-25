@@ -6,6 +6,44 @@ updated: 2026-07-25
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-25, CL-R3 visual checkpoint) — REUSABLE STRUCTURE GRAMMAR CANDIDATE [Codex]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`. **Not merged or pushed.
+Fable re-gates and lands. FULL CI PENDING.**
+
+- `CL-F01 structure-bench` is live through the production interior renderer and production
+  `compileRoomShell` path. Its frozen catalog carries the 5-ft cell, 2.5-ft vertical quantum,
+  10-ft storey, and ≤30° walkable-slope laws; all base and extension socket families; typed
+  `walk` / `climb-cost` / `climb-dc` / `none` face data; and source provenance. It does not claim
+  climb mechanics.
+- The 32-cell notched shell proves three elevation tiers, exposed slab/riser faces, convex and
+  concave turns, wall thickness/caps, one retained aperture, threshold, hinged shadow-casting leaf,
+  and broad raised/sunken regions. Generic assemblers add a straight wall, flush single-owner T,
+  one-cell and wide stairs with landings, a 26.565° ramp, half-height blocker, and square/round
+  supports.
+- The wrong-axis negative control remains physically separated and reports
+  `socket-axis-mismatch`; selectable socket and access overlays expose the authored data directly.
+- The remaining CL-R3a wall-omission obligations are now executable. The staging latch is separate
+  from the existing C1B Connection's door angle: door open while sealed does not stage the room;
+  explicit entry into play omits camera-side uppers; shutting the door afterward does not
+  re-conceal actors; leaving play releases the latch and recompiles every upper. Aperture uppers
+  and structural risers remain built.
+- `ALL WALLS` is a governed map-reading mode: fixed 72° pitch, production perspective camera, and
+  a real board/shell rebuild with zero omitted uppers. It is not a hidden-mesh reveal or free orbit.
+- Dynamic figure obstruction remains on the production
+  `itrPillarCutawayMask → itrOcclusionClassify` path. A Human Fighter behind a production pillar
+  produces one blocking and one faded witness plus a pillar ghost.
+- Evidence: `dev/clay-captures/cl-r3/` contains early/live UI, assembled daylight, sockets, access,
+  wrong-axis, role-ID, moonlight, strategic all-walls, and staging-latch frames; composed sheet;
+  JSON receipt; and independent measurement. Live capture 23/23, measurement 17/17, zero browser
+  errors/warnings.
+- Focused greens: Clayroom 228/228; room-shell compiler 53/53; dungeon interior 291/291;
+  tactical query 31/31; manifest OK; syntax and diff checks OK. Three pre-existing broad harness
+  reds already named in the ladder's CL-R0 sweep remain visible: room-shell-render (shell-on pass
+  does not mount), occlusion-fade (pixel A/B is identical although raycast/geometry proof passes),
+  and interior-camera-frustum (orthographic red-first mutation no longer breaks fit). No threshold
+  was weakened. **FULL CI PENDING.**
+
 ## ⭐ Latest (2026-07-25, CL-R2 visual checkpoint) — COMPLETE SPRITE CITIZENSHIP CANDIDATE [Codex]
 
 Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`. **Not merged or pushed.

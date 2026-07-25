@@ -3,7 +3,8 @@ type: system-spec
 status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review candidate BUILT
   (2026-07-24), close torch brightness accepted and smooth decay-1.5 flame review live; dedicated
   CL-F02 bench + overlays + live pixel cards + seven-recipe capture built, visual verdict pending;
-  CL-R2 engineering/visual-review candidate BUILT (2026-07-24), visual verdict pending; CL-R3…CL-R6 remain
+  CL-R2 engineering/visual-review candidate BUILT (2026-07-24), visual verdict pending; CL-R3
+  engineering/visual-review candidate BUILT (2026-07-25), visual verdict pending; CL-R4…CL-R6 remain
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
 authority: subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids) and
@@ -82,7 +83,7 @@ primary question.
 | Fixture | Primary question | Content | Status |
 |---|---|---|---|
 | `CL-F00 room-truth` | Does the real production room stay honest after every rebuild? | 5×5 room, door, crate, one citizen, neutral clay, seam grid | **LIVE** (`?clayroom=1`) |
-| `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | unbuilt (CL-R3) |
+| `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | **BUILT; VISUAL VERDICT PENDING (CL-R3)**. Production shell/compiler, generic atoms, typed sockets/access, wrong-axis rejection, staged wall omission, all-walls strategic view |
 | `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | **BUILT; VISUAL VERDICT PENDING (CL-R1)**. Selectable room/bench fixtures; one-third-cell stairs, matte sphere/cube, approved sprite, mote suppression, live position/range/shadow-volume overlays |
 | `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | **BUILT; VISUAL VERDICT PENDING (CL-R2)**. Seven-source stress cast, canonical/capped scale A/B, natural tread-depth support, tactical footprint, side shell, stair views, and five production-light contexts |
 | `CL-F04 material-bench` | Do material channels, scale, UVs, roles, and fallbacks work? | floor, wall, riser, trim skeleton, timber, iron, ground | unbuilt (CL-R4) |
@@ -498,7 +499,7 @@ different near-black values while the direct-light shadow stays strong.
 | Repeatable evidence exists | `dev/clay-captures/cl-r2-sprite-citizenship/`: early/settled true scale, capped and edge live frames, 5 lighting contexts, composed sheet, JSON receipt, and separate measurements; 7 cast, 3 stair views, zero console errors. |
 | Executable gate | `dev/verify-clay-room.mjs` 208/208; sprite registry 27/27; theater sprites 12/12; floor contact 79/79 including live-Chrome multiply pixels; dungeon interior 291/291; manifest OK. **FULL CI PENDING.** |
 
-### CL-R3 — basic construction grammar
+### CL-R3 — basic construction grammar — **ENGINEERING / VISUAL-REVIEW CANDIDATE BUILT 2026-07-25**
 
 **Primary question:** can the Guard Post inherit trustworthy geometric atoms?
 
@@ -511,6 +512,41 @@ landings · shallow ramp · half-height blocker/parapet base · square and round
 staged+latched trigger; structural-mass/aperture/strategic-view carve-outs — ART-DIRECTION-CANON is
 the verbatim authority) · deterministic cutaway/ghosting for what remains (dynamic piece-occlusion
 only) · mount/join sockets and provenance.
+
+**Candidate implementation.** `CL-F01 structure-bench` is now the active ladder fixture. A frozen
+catalog record carries the 5-ft cell / 2.5-ft `h` / 10-ft storey / ≤30° slope laws, the complete
+base-plus-extension socket vocabulary, typed access faces, and source provenance. Its 32-cell
+notched shell goes through production `compileRoomShell`, with broad raised and sunken regions,
+exposed slab/riser faces, convex and concave turns, a retained opening and hinged leaf, and
+compile-time camera-side omission. Generic assemblers supply a thickness-honest straight wall,
+flush single-owner T, one-cell and wide stairs with landings, a 26.565° ramp, half-height blocker,
+and square/round supports. A wrong-axis pair remains physically separated and names
+`socket-axis-mismatch`.
+
+The omission proof now closes the remaining CL-R3a fixture obligations. Scene staging is a
+latched state separate from the C1B door angle: an open door alone does not stage the room; entering
+play omits camera-side uppers; a later shut-door commit does not re-conceal actors; leaving play
+releases the latch and recompiles every upper. Aperture uppers and structural risers never enter
+the omission predicate. The governed `ALL WALLS` mode uses the production perspective camera at a
+fixed 72° map-reading pitch and recompiles every upper instead of revealing hidden meshes.
+Dynamic figure obstruction remains on the existing production
+`itrPillarCutawayMask → itrOcclusionClassify` path; a Human Fighter behind a production pillar
+proves one blocking and one faded witness.
+
+**CL-R3 proof ledger.**
+
+| Claim | Proof |
+|---|---|
+| Production geometry path | The fixture input feeds `compileRoomShell`; mounted receipt reports 32 floor cells, three tiers, wall/riser runs, one aperture, exposed slab sides, real shadows, and zero ownerless/textured-clay surfaces. |
+| Generic reusable atoms | Live receipt enumerates wall-run, T-junction, two stair widths, ramp, blocker, square support, and round support, each with sockets, typed access, and catalog provenance. |
+| Bad joins fail visibly | `BAD JOIN` capture keeps a physical gap and red X; receipt reason is exactly `socket-axis-mismatch`. |
+| Staged/latch behavior is executable | The capture drives the existing C1B `tqConnectionStateCommit`: door open while staged keeps omission; door shut after staging keeps the latch; release builds all uppers; door open while sealed does not stage; explicit re-entry restores omission. |
+| Carve-outs are real | Aperture segments return before the omission predicate; retaining/riser geometry is a separate always-built compiler output; strategic mode reports zero omitted and built uppers equal total uppers. |
+| Strategic mode is governed | `ALL WALLS` is a named fixed 72° camera mode, not orbit; crossing into/out of it rebuilds the production board and shell. |
+| Dynamic cutaway stays production-native | Receipt reports production Human witness + pillar, classifier candidates, one blocking/one faded result, and a mounted pillar ghost. |
+| Dark-form and ownership checks survive | Production moonlight and role-ID frames reuse the same geometry; census reports zero unclaimed surfaces and zero texture-bound diagnostic clay. |
+| Repeatable evidence | `dev/clay-captures/cl-r3/`: early/live UI, assembled, sockets, access, wrong-axis, role-ID, moonlight, strategic, staging-latch frames, composed sheet, JSON receipt, and independent measurement. Live capture 23/23; measurement 17/17; zero browser errors/warnings. |
+| Executable gate | `dev/verify-clay-room.mjs` 228/228; focused companion gates and manifest recorded in HANDOFF. **FULL CI PENDING.** |
 
 **CL-R3a — BUILT 2026-07-23.** The wall-omission ruling tested in `CL-F00`, all through the
 production shell compiler (now the clay default; `?clayshell=0` restores the instanced A/B):
@@ -545,9 +581,9 @@ everything you do" — every claim above, with its evidence):**
 | **CORRECTION — the shadow argument was overstated.** | The PROPERTY is proven (uppers set `castShadow = true`, theater-boot.js:11389, and exist at 0.08 opacity in fade mode; THREE's shadow pass ignores opacity), but in THIS fixture the interior light throws wall shadows outward, so the visible difference is nil (the pixel diff above bounds it). In this scene, omission's real advantages over fade are **determinism** (receipt data, not render state) and **cost** (no mesh/material/tween). The shadow benefit becomes visible only in fixtures where a faded wall sits between a light and staged floor — untested, and claimed as nothing more. |
 | Region measurements banked | `dev/clay-captures/cl-r3a/measure.json` (omit / fade-only / instanced, declared regions). |
 
-Still open in CL-R3a's scope: the staged+latched trigger's executable test (rides C1B's door state
-machine) · aperture carve-out (CL-F01 bench) · strategic-view all-walls (the toggle does not exist
-yet) · promotion of the omission to production (Adam's call, after he eyeballs the capture).
+CL-R3 closes the staged+latched executable test, aperture/structural-mass carve-outs, and governed
+strategic all-walls view. Still outside this fixture checkpoint: promotion of the omission to
+production gameplay (Adam's call after the production-scene packet named in ART-DIRECTION-CANON).
 
 Crenellations, arrow slits, roof silhouette, signalling devices, and guard-specific defences stay
 **out** of this gate unless a generic construction need independently licenses them.

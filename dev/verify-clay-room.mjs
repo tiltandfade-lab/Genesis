@@ -1633,5 +1633,160 @@ const check = (name, cond, detail = "") =>
     && /S\.clayRoomSpriteScaleMode\s*=\s*"diagnostic-cap"/.test(bootSrc));
 }
 
+// ============================================================================
+// 34. CL-F01 STRUCTURE BENCH (CL-R3 checkpoint).
+// Generic catalog data must drive the production shell + reusable construction atoms, expose the
+// complete socket/access grammar, and visibly reject an incompatible join.
+// ============================================================================
+{
+  const win = freshWin();
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const fixture = win.clayRoomStructureBenchFixtureFrom(record);
+    const catalog = win.CLAY_STRUCTURE_KIT_CATALOG;
+    check("34a. CL-F01 and its structure catalog are frozen, versioned fixture data",
+      fixture.id === "cl-f01-structure-bench"
+      && fixture.version === 1
+      && fixture.catalogId === catalog.id
+      && Object.isFrozen(fixture)
+      && Object.isFrozen(catalog)
+      && Object.isFrozen(fixture.pieces),
+      JSON.stringify({ fixture: fixture.id, catalog: catalog.id }));
+    check("34b. grid law is 5-ft cells, 2.5-ft h, 10-ft storey, and a 30-degree walkable ceiling",
+      catalog.gridLaw.cellFeet === 5
+      && catalog.gridLaw.cellWorldUnits === 1
+      && catalog.gridLaw.verticalQuantumFeet === 2.5
+      && catalog.gridLaw.verticalQuantumWorldUnits === 0.5
+      && catalog.gridLaw.storeyQuanta === 4
+      && catalog.gridLaw.storeyWorldUnits === 2
+      && catalog.gridLaw.maxWalkableSlopeDeg === 30);
+    const kinds = new Set(fixture.pieces.map((row) => row.kind));
+    check("34c. generic atoms cover straight/T walls, one/wide stairs, ramp, blocker, and both supports",
+      ["wall-run", "t-junction", "stair", "ramp", "blocker", "support-square", "support-round"]
+        .every((kind) => kinds.has(kind))
+      && fixture.pieces.filter((row) => row.kind === "stair").map((row) => row.width).sort().join(",") === "1,2"
+      && fixture.cutawayWitness.pieceSlug === "spr-pc-human-fighter-female"
+      && fixture.cutawayWitness.occluder.profile === "square");
+    const tiers = new Set(fixture.shellCells.map((row) => row.tier));
+    check("34d. compiled-shell input includes concavity, an aperture cell, and broad raised/sunken tiers",
+      fixture.shellCells.length === 32
+      && tiers.has(-1) && tiers.has(0) && tiers.has(1)
+      && fixture.shellCells.some((row) => row.isDoor)
+      && !fixture.shellCells.some((row) => row.x === 5 && row.z === 1)
+      && fixture.shellCells.filter((row) => row.tier === 1).length >= 6
+      && fixture.shellCells.filter((row) => row.tier === -1).length >= 6);
+    const requiredSockets = [
+      "floor-mount", "wall-mount", "top-surface", "hinge",
+      "butt-join-n", "butt-join-e", "butt-join-s", "butt-join-w",
+      "walk-surface", "catch", "terrain-join", "roof-pitch-join", "open"
+    ];
+    check("34e. catalog declares every base and extension socket family",
+      requiredSockets.every((id) => catalog.socketTypes.includes(id))
+      && new Set(catalog.socketTypes).size === catalog.socketTypes.length);
+    check("34f. every specimen carries sockets, typed face access, and catalog provenance",
+      fixture.pieces.every((row) => row.sockets.length >= 2
+        && Object.keys(row.access).length >= 2
+        && Object.values(row.access).every((kind) => catalog.accessKinds.includes(kind)))
+      && catalog.provenance.source === "docs/STRUCTURE-KIT-CATALOG.md");
+    const bad = fixture.negativeControl;
+    const rejection = win.clayStructureSocketJoinAssessment(bad.source, bad.candidate);
+    check("34g. the wrong-axis negative control rejects by a typed reason",
+      !rejection.accepted
+      && rejection.reason === "socket-axis-mismatch"
+      && rejection.reason === bad.expectedReason);
+    check("34h. climb access is labelled without claiming climb mechanics",
+      catalog.accessKinds.includes("climb-cost")
+      && catalog.accessKinds.includes("climb-dc")
+      && catalog.climbMechanicsImplemented === false);
+    const ramp = fixture.pieces.find((row) => row.kind === "ramp");
+    check("34i. the authored ramp stays within the catalog slope law",
+      Math.atan2(ramp.rise, ramp.run) * 180 / Math.PI <= catalog.gridLaw.maxWalkableSlopeDeg);
+    let undersizedRefused = false;
+    try { win.clayRoomStructureBenchFixtureFrom({ dims: { w: 9, d: 9 } }); }
+    catch(e) { undersizedRefused = /requires the 15x15 construction room/.test(String(e)); }
+    check("34j. an undersized room is loudly refused",
+      undersizedRefused);
+  } catch(e) {
+    check("34a-j. CL-F01 pure fixture checks execute without throw", false, e.stack || String(e));
+  }
+  const bootSrc = read("src/ui/theater-boot.js");
+  check("34k. the bench consumes compileRoomShell in the production Theater scene",
+    /function\s+clayRoomMountStructureBench/.test(bootSrc)
+    && /const\s+shell\s*=\s*compileRoomShell\(cells/.test(bootSrc)
+    && /S\.interiorGroup\.add\(group\)/.test(bootSrc));
+  check("34l. shell output mounts floor, stem, independent uppers, trim, risers, and a hinged shadow-casting leaf",
+    /shell\.floorGeometry/.test(bootSrc)
+    && /shell\.wallStemGeometry/.test(bootSrc)
+    && /shell\.wallUpperMeshes/.test(bootSrc)
+    && /shell\.wallTrimGeometry/.test(bootSrc)
+    && /shell\.riserGeometry/.test(bootSrc)
+    && /clayStructureBuildOpening/.test(bootSrc)
+    && /leaf\.userData\.isDoorLeaf\s*=\s*true/.test(bootSrc));
+  check("34m. generic assemblers build volume walls, flush T ownership, stairs/landings, ramp, blocker, and supports",
+    /function\s+clayStructureBuildPart/.test(bootSrc)
+    && /Branch ends flush on the main run's outer face/.test(bootSrc)
+    && /spec\.kind\s*===\s*"stair"/.test(bootSrc)
+    && /clayStructureRampGeometry/.test(bootSrc)
+    && /spec\.kind\s*===\s*"blocker"/.test(bootSrc)
+    && /spec\.kind\s*===\s*"support-square"/.test(bootSrc)
+    && /spec\.kind\s*===\s*"support-round"/.test(bootSrc));
+  check("34n. socket/access/negative overlays are explicit selectable views and the bad join keeps a physical gap",
+    /CLAY_STRUCTURE_BENCH_FIXTURE\.views/.test(bootSrc)
+    && /"assembled",\s*"ASSEMBLED"/.test(bootSrc)
+    && /"sockets",\s*"SOCKETS"/.test(bootSrc)
+    && /"access",\s*"ACCESS"/.test(bootSrc)
+    && /"negative",\s*"BAD JOIN"/.test(bootSrc)
+    && /"strategic",\s*"ALL WALLS"/.test(bootSrc)
+    && /clayStructureStripBetween/.test(bootSrc)
+    && /visibleGap:\s*true/.test(bootSrc));
+  check("34o. the live receipt exposes geometry, slope, sockets, access, omission, dynamic cutaway, shadows, and provenance",
+    /window\.Theater\._clayStructureBenchForTest/.test(bootSrc)
+    && /mountedMeshes/.test(bootSrc)
+    && /shadowCasters/.test(bootSrc)
+    && /cameraSideOmission/.test(bootSrc)
+    && /dynamicCutaway/.test(bootSrc)
+    && /itrPillarCutawayMask/.test(bootSrc)
+    && /negativeControl/.test(bootSrc)
+    && /provenance/.test(bootSrc));
+  check("34p. CL-F01 opens as the active ladder fixture under the daylight hero and suppresses only host upper clutter",
+    /return\s+CLAY_ROOM_STRUCTURE_BENCH_ID/.test(bootSrc)
+    && /initialFixtureId\s*===\s*CLAY_ROOM_STRUCTURE_BENCH_ID[\s\S]{0,80}\?\s*"daylit"/.test(bootSrc)
+    && /kind\s*===\s*"room-shell-wall-upper"\s*\|\|\s*kind\s*===\s*"room-shell-wall-trim"/.test(bootSrc)
+    && /clayStructureHostSuppressed/.test(bootSrc));
+  check("34q. fixture lifecycle, workbench selection, and diagnostic surface ownership all include structure",
+    /clayRoomMountStructureBench\(\);/.test(bootSrc)
+    && /clayRoomShowTab\("structure"\)/.test(bootSrc)
+    && /structureSpecId/.test(bootSrc)
+    && /"clay-diagnostic-overlay"/.test(bootSrc)
+    && /diagnostic-overlay/.test(read("src/engine/clay-room.js")));
+  try {
+    const fixture = win.CLAY_STRUCTURE_BENCH_FIXTURE;
+    let latch = win.clayStructureStagingLatchTransition(null, { type: "door-state", state: "open" });
+    const openDidNotStage = !latch.staged && !latch.latched && latch.doorState === "open";
+    latch = win.clayStructureStagingLatchTransition(latch, { type: fixture.wallOmission.stagedEvent });
+    latch = win.clayStructureStagingLatchTransition(latch, { type: "door-state", state: "shut" });
+    const shutDidNotReconceil = latch.staged && latch.latched && latch.doorState === "shut";
+    latch = win.clayStructureStagingLatchTransition(latch, { type: fixture.wallOmission.releaseEvent });
+    check("34r. the staging latch ignores raw door motion, survives a shut door, and releases only when play leaves",
+      openDidNotStage && shutDidNotReconceil && !latch.staged && !latch.latched);
+  } catch(e) {
+    check("34r. the staging latch sequence executes without throw", false, e.stack || String(e));
+  }
+  check("34s. CL-F01's actual compiler predicate requires staged+latched and carves out apertures, risers, and strategic view",
+    /const\s+omissionActive\s*=\s*staging\.staged\s*&&\s*staging\.latched\s*&&\s*!strategicView/.test(bootSrc)
+    && /if\(seg\.kind\s*===\s*"door"\)\s*return\s+true/.test(bootSrc)
+    && /structuralMassBuilt:\s*shell\.riserSegments\.length\s*>\s*0/.test(bootSrc)
+    && /cameraMode:\s*strategicView\s*\?\s*"top-down-strategic"/.test(bootSrc)
+    && /wallUpperMeshes\.length\s*\+\s*omittedKeys\.size/.test(bootSrc));
+  check("34t. staging and door proof controls rebuild through the production board and use C1B's canonical connection commit",
+    /function\s+clayRoomSetStructureStaged/.test(bootSrc)
+    && /function\s+clayRoomSetStructureDoorState/.test(bootSrc)
+    && /tqConnectionStateCommit\(session\.fixture\.space,\s*session\.state/.test(bootSrc)
+    && /clayRoomRebuildStructureBench/.test(bootSrc)
+    && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
+    && /_claySetStructureStagedForTest/.test(bootSrc)
+    && /_claySetStructureDoorStateForTest/.test(bootSrc));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

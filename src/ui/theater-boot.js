@@ -13911,6 +13911,50 @@ window.Theater._clayLightingBenchForTest = function(){
     matrixRecipes: CLAY_ROOM_LIGHTING_MATRIX_RECIPES.slice()
   };
 };
+window.Theater._clayStructureBenchForTest = function(){
+  if(!S.clayRoomStructureReport) return null;
+  const group = S.clayRoomStructureBenchGroup;
+  let mountedMeshes = 0, shadowCasters = 0, shadowReceivers = 0, hostSuppressedMeshes = 0;
+  if(S.interiorGroup){
+    S.interiorGroup.traverse(function(node){
+      if(node.userData && node.userData.clayStructureHostSuppressed) hostSuppressedMeshes++;
+    });
+  }
+  if(group){
+    group.traverse(function(node){
+      if(!node.isMesh) return;
+      mountedMeshes++;
+      if(node.castShadow) shadowCasters++;
+      if(node.receiveShadow) shadowReceivers++;
+    });
+  }
+  const fade = window.Theater._occlusionFadeSummaryForTest();
+  return Object.assign({}, S.clayRoomStructureReport, {
+    view: S.clayRoomStructureView || CLAY_STRUCTURE_BENCH_FIXTURE.defaultView,
+    mounted: !!(group && group.parent),
+    mountedMeshes,
+    shadowCasters,
+    shadowReceivers,
+    hostSuppressedMeshes,
+    cameraSideOmission: S.wallOmissionReport || null,
+    dynamicCutaway: {
+      system: "itrOcclusionClassify",
+      disabledForTest: !!fade.disabledForTest,
+      candidates: fade.total,
+      blocking: fade.blocking,
+      faded: fade.faded
+    }
+  });
+};
+window.Theater._claySetStructureViewForTest = function(view){
+  return clayRoomSetStructureView(view);
+};
+window.Theater._claySetStructureStagedForTest = function(staged){
+  return clayRoomSetStructureStaged(!!staged);
+};
+window.Theater._claySetStructureDoorStateForTest = function(state){
+  return clayRoomSetStructureDoorState(state);
+};
 window.Theater._claySetFixtureForTest = function(id){
   return (typeof clayRoomSetFixture === "function")
     ? clayRoomSetFixture(id, "clayroom-fixture-test-seam")
@@ -15941,6 +15985,7 @@ function clayRoomShouldEnable(){
 }
 
 const CLAY_ROOM_TRUTH_FIXTURE_ID = "cl-f00-room-truth";
+const CLAY_ROOM_STRUCTURE_BENCH_ID = "cl-f01-structure-bench";
 const CLAY_ROOM_LIGHTING_BENCH_ID = "cl-f02-lighting-bench";
 const CLAY_ROOM_SPRITE_BENCH_ID = "cl-f03-sprite-citizenship";
 const CLAY_ROOM_SPRITE_SCALE_MODES = Object.freeze(["true-scale", "diagnostic-cap"]);
@@ -15967,6 +16012,9 @@ function clayRoomFixtureIdFromLocation(){
       ? new URLSearchParams(window.location.search).get("clayfixture")
       : null;
     if(raw === "room" || raw === CLAY_ROOM_TRUTH_FIXTURE_ID) return CLAY_ROOM_TRUTH_FIXTURE_ID;
+    if(raw === "structure" || raw === "structure-bench" || raw === CLAY_ROOM_STRUCTURE_BENCH_ID){
+      return CLAY_ROOM_STRUCTURE_BENCH_ID;
+    }
     if(raw === "lights" || raw === "lighting-bench" || raw === CLAY_ROOM_LIGHTING_BENCH_ID){
       return CLAY_ROOM_LIGHTING_BENCH_ID;
     }
@@ -15976,7 +16024,7 @@ function clayRoomFixtureIdFromLocation(){
   } catch(e){}
   // The active reset-ladder checkpoint opens on the fixture under review. Earlier fixtures remain
   // one click away and can be pinned directly with ?clayfixture=room or ?clayfixture=lights.
-  return CLAY_ROOM_SPRITE_BENCH_ID;
+  return CLAY_ROOM_STRUCTURE_BENCH_ID;
 }
 function clayRoomMaybeAutoMount(){
   // CL-R0 (docs/CLAYROOM-RESET-LADDER.md): this poll now does ONE thing — mount the surface if the
@@ -16104,6 +16152,7 @@ function clayRoomSetLightingRecipe(recipeId, reason){
 
 function clayRoomSetFixture(fixtureId, reason){
   if(fixtureId !== CLAY_ROOM_TRUTH_FIXTURE_ID
+    && fixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID
     && fixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
     && fixtureId !== CLAY_ROOM_SPRITE_BENCH_ID){
     return false;
@@ -16112,7 +16161,8 @@ function clayRoomSetFixture(fixtureId, reason){
   S.clayRoomFixtureId = fixtureId;
   S.clayCamOffset = { x: 0, z: 0 };
   S.clayCamZoom = fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
-    ? 0.72 : (fixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9 : 1);
+    ? 0.72 : (fixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
+      : (fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65 : 1));
   S.boardKey = null;
   const session = clayRoomMovementSession();
   const board = (session && clayRoomMovementBoardFromState(session.state)) || S.clayRoomCompiled.board;
@@ -16123,7 +16173,9 @@ function clayRoomSetFixture(fixtureId, reason){
   if(typeof S.clayRoomWorkbenchSelect === "function"){
     const roomOnlySelected = S.clayRoomSelectedId === S.clayRoomRecord.portal.id
       || S.clayRoomSelectedId === S.clayRoomRecord.object.id;
-    if((fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID || fixtureId === CLAY_ROOM_SPRITE_BENCH_ID) && roomOnlySelected){
+    if((fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+      || fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+      || fixtureId === CLAY_ROOM_SPRITE_BENCH_ID) && roomOnlySelected){
       const recipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId];
       const light = recipe && (recipe.lights || []).find(function(row){ return row.enabled !== false; });
       if(light) S.clayRoomWorkbenchSelect(light.id, "fixture switch");
@@ -16134,9 +16186,15 @@ function clayRoomSetFixture(fixtureId, reason){
       S.clayRoomWorkbenchSelect(S.clayRoomSelectedSpriteSlug, "fixture switch");
       if(typeof S.clayRoomShowTab === "function") S.clayRoomShowTab("sprites");
     }
+    if(fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID){
+      S.clayRoomSelectedId = "compiled-shell";
+      S.clayRoomWorkbenchSelect("compiled-shell", "fixture switch");
+      if(typeof S.clayRoomShowTab === "function") S.clayRoomShowTab("structure");
+    }
   }
   if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
   if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
+  if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
   return true;
 }
 
@@ -16584,6 +16642,469 @@ function clayRoomSurfaceCensus(){
   };
 }
 
+/* CL-F01 structure bench — the production room-shell compiler owns the continuous floor, exposed
+   slab sides, wall volumes/caps, corners, aperture, threshold, and retaining/riser runs. Generic
+   structure-part assemblers own the remaining catalog atoms. All meshes remain in the same scene,
+   camera, lights, shadows, tone map, and diagnostic-surface router as gameplay. */
+function clayStructureMaterial(color){
+  return new THREE.MeshStandardMaterial({
+    color: color || CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor,
+    roughness: 0.96,
+    metalness: 0
+  });
+}
+function clayStructureTag(mesh, specId, kind){
+  mesh.castShadow = kind !== "floor";
+  mesh.receiveShadow = true;
+  mesh.userData.interiorKind = kind;
+  mesh.userData.structureCatalogId = CLAY_STRUCTURE_KIT_CATALOG.id;
+  mesh.userData.structureCatalogVersion = CLAY_STRUCTURE_KIT_CATALOG.version;
+  mesh.userData.structureSpecId = specId;
+  mesh.userData.structureProvenance = CLAY_STRUCTURE_KIT_CATALOG.provenance;
+  return mesh;
+}
+function clayStructureRampGeometry(width, run, rise){
+  const hw = width / 2, hr = run / 2;
+  const vertices = new Float32Array([
+    -hw, 0, -hr,   hw, 0, -hr,   -hw, rise, hr,   hw, rise, hr,
+    -hw, 0, hr,    hw, 0, hr
+  ]);
+  const indices = [
+    0, 1, 3, 0, 3, 2,       // walk surface
+    0, 4, 5, 0, 5, 1,       // underside
+    4, 2, 3, 4, 3, 5,       // high face
+    0, 2, 4,                 // left
+    1, 5, 3                  // right
+  ];
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+function clayStructureStripBetween(a, b, color, view, specId, thickness){
+  const dx = b.x - a.x, dz = b.z - a.z;
+  const len = Math.max(0.001, Math.hypot(dx, dz));
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(len, thickness || 0.035, (thickness || 0.035) * 1.45),
+    new THREE.MeshBasicMaterial({ color, depthTest: false, depthWrite: false, toneMapped: false })
+  );
+  mesh.position.set((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+  mesh.rotation.y = -Math.atan2(dz, dx);
+  mesh.castShadow = false;
+  mesh.receiveShadow = false;
+  mesh.userData.interiorKind = "clay-diagnostic-overlay";
+  mesh.userData.structureOverlayView = view;
+  mesh.userData.structureSpecId = specId;
+  mesh.renderOrder = 72;
+  return mesh;
+}
+function clayStructureAddSocketOverlay(group, spec, rawFloor, origin){
+  const at = spec.at;
+  (spec.sockets || []).forEach(function(socket, index){
+    const axis = socket.axis || { x: 0, z: 0 };
+    const spread = (index - ((spec.sockets.length - 1) / 2)) * 0.13;
+    const x = at.x - origin.cx + (axis.x || 0) * 0.45 + (axis.z || 0) * spread;
+    const z = at.z - origin.cz + (axis.z || 0) * 0.45 - (axis.x || 0) * spread;
+    const y = rawFloor + (socket.type === "top-surface" ? (spec.height || spec.rise || 0.5) + 0.05 : 0.08);
+    const dx = (axis.x || 0) * 0.34, dz = (axis.z || 0) * 0.34;
+    const points = Math.abs(dx) + Math.abs(dz) > 0
+      ? [new THREE.Vector3(x - dx, y, z - dz), new THREE.Vector3(x + dx, y, z + dz)]
+      : [
+          new THREE.Vector3(x - 0.16, y, z), new THREE.Vector3(x + 0.16, y, z),
+          new THREE.Vector3(x, y, z - 0.16), new THREE.Vector3(x, y, z + 0.16)
+        ];
+    for(let i = 0; i < points.length; i += 2){
+      group.add(clayStructureStripBetween(points[i], points[i + 1], 0x35d8ff, "sockets", spec.id, 0.045));
+    }
+  });
+}
+function clayStructureAddAccessOverlay(group, spec, rawFloor, origin){
+  const at = spec.at;
+  const width = spec.width || spec.length || ((spec.radius || 0.35) * 2) || 1;
+  const depth = spec.run || spec.thickness || ((spec.radius || 0.35) * 2) || 0.45;
+  const hw = Math.max(0.22, width / 2), hd = Math.max(0.18, depth / 2);
+  const y = rawFloor + (spec.rise || spec.height || 0.1) + 0.025;
+  const p = [
+    new THREE.Vector3(at.x - origin.cx - hw, y, at.z - origin.cz - hd),
+    new THREE.Vector3(at.x - origin.cx + hw, y, at.z - origin.cz - hd),
+    new THREE.Vector3(at.x - origin.cx + hw, y, at.z - origin.cz + hd),
+    new THREE.Vector3(at.x - origin.cx - hw, y, at.z - origin.cz + hd),
+    new THREE.Vector3(at.x - origin.cx - hw, y, at.z - origin.cz - hd)
+  ];
+  const color = Object.values(spec.access || {}).indexOf("walk") >= 0 ? 0x66dfa0
+    : (Object.values(spec.access || {}).indexOf("climb-dc") >= 0 ? 0xff6d68 : 0xf3bd55);
+  for(let i = 0; i < p.length - 1; i++){
+    group.add(clayStructureStripBetween(p[i], p[i + 1], color, "access", spec.id, 0.035));
+  }
+}
+function clayStructureBuildPart(group, spec, rawFloor, origin){
+  const mat = clayStructureMaterial();
+  function add(mesh, y, x, z, kind){
+    mesh.position.set(x == null ? spec.at.x - origin.cx : x, y, z == null ? spec.at.z - origin.cz : z);
+    clayStructureTag(mesh, spec.id, kind || "furniture");
+    group.add(mesh);
+    return mesh;
+  }
+  if(spec.kind === "wall-run"){
+    const dims = spec.axis === "z"
+      ? [spec.thickness, spec.height, spec.length]
+      : [spec.length, spec.height, spec.thickness];
+    add(new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), mat),
+      rawFloor + spec.height / 2, null, null, "wall");
+  } else if(spec.kind === "t-junction"){
+    add(new THREE.Mesh(new THREE.BoxGeometry(spec.length, spec.height, spec.thickness), mat),
+      rawFloor + spec.height / 2, null, null, "wall");
+    // Branch ends flush on the main run's outer face: no overlapping internal end volume.
+    const branchZ = spec.at.z - origin.cz + spec.thickness / 2 + spec.branchLength / 2;
+    add(new THREE.Mesh(new THREE.BoxGeometry(spec.thickness, spec.height, spec.branchLength), mat.clone()),
+      rawFloor + spec.height / 2, spec.at.x - origin.cx, branchZ, "wall");
+  } else if(spec.kind === "stair"){
+    const tread = spec.run / spec.steps;
+    for(let i = 0; i < spec.steps; i++){
+      const height = spec.rise * (i + 1) / spec.steps;
+      const z = spec.at.z - origin.cz - spec.run / 2 + tread * (i + 0.5);
+      add(new THREE.Mesh(new THREE.BoxGeometry(spec.width, height, tread), mat.clone()),
+        rawFloor + height / 2, spec.at.x - origin.cx, z, "riser");
+    }
+    const landing = new THREE.Mesh(new THREE.BoxGeometry(spec.width, spec.rise, 0.42), mat.clone());
+    add(landing, rawFloor + spec.rise / 2, spec.at.x - origin.cx, spec.at.z - origin.cz + spec.run / 2 + 0.21, "riser");
+  } else if(spec.kind === "ramp"){
+    add(new THREE.Mesh(clayStructureRampGeometry(spec.width, spec.run, spec.rise), mat),
+      rawFloor, null, null, "riser");
+  } else if(spec.kind === "blocker"){
+    add(new THREE.Mesh(new THREE.BoxGeometry(spec.length, spec.height, spec.thickness), mat),
+      rawFloor + spec.height / 2, null, null, "wall");
+  } else if(spec.kind === "support-square"){
+    add(new THREE.Mesh(new THREE.BoxGeometry(spec.width, spec.height, spec.width), mat),
+      rawFloor + spec.height / 2, null, null, "pillar");
+  } else if(spec.kind === "support-round"){
+    add(new THREE.Mesh(new THREE.CylinderGeometry(spec.radius, spec.radius * 1.04, spec.height, 20), mat),
+      rawFloor + spec.height / 2, null, null, "pillar");
+  }
+  clayStructureAddSocketOverlay(group, spec, rawFloor, origin);
+  clayStructureAddAccessOverlay(group, spec, rawFloor, origin);
+}
+function clayStructureBuildOpening(group, shell, fixture, tierHeights, origin){
+  const aperture = shell.apertures && shell.apertures[0];
+  if(!aperture) return null;
+  const a = aperture.a, b = aperture.b;
+  const dx = b.x - a.x, dz = b.z - a.z;
+  const len = Math.max(0.0001, Math.hypot(dx, dz));
+  const tx = dx / len, tz = dz / len;
+  const width = Math.min(fixture.opening.width, len * 0.82);
+  const floorY = tierHeights[aperture.tier] == null ? tierHeights[0] : tierHeights[aperture.tier];
+  const midX = (a.x + b.x) / 2, midZ = (a.z + b.z) / 2;
+  const hinge = new THREE.Group();
+  hinge.name = fixture.opening.id;
+  hinge.position.set(midX - tx * width / 2 - origin.cx, floorY, midZ - tz * width / 2 - origin.cz);
+  hinge.rotation.y = -Math.atan2(tz, tx);
+  hinge.userData.structureSpecId = fixture.opening.id;
+  hinge.userData.structureSocket = fixture.opening.socket;
+  hinge.userData.structureSwingClearanceDeg = fixture.opening.swingClearanceDeg;
+  const geo = new THREE.BoxGeometry(width, fixture.opening.height, 0.075);
+  geo.translate(width / 2, fixture.opening.height / 2, 0);
+  const leaf = new THREE.Mesh(geo, clayStructureMaterial("#6f6f73"));
+  const doorState = S.clayRoomStructureStageLatch
+    ? S.clayRoomStructureStageLatch.doorState
+    : fixture.opening.state;
+  leaf.rotation.y = doorState === "open" ? Math.PI / 2 : (doorState === "ajar" ? Math.PI / 6 : 0);
+  clayStructureTag(leaf, fixture.opening.id, "door");
+  leaf.userData.isDoorLeaf = true;
+  leaf.userData.structureDoorState = doorState;
+  hinge.add(leaf);
+  const arc = [];
+  for(let i = 0; i <= 18; i++){
+    const angle = (i / 18) * Math.PI / 2;
+    arc.push(new THREE.Vector3(Math.cos(angle) * width, 0.035, -Math.sin(angle) * width));
+  }
+  const swing = new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints(arc),
+    new THREE.LineDashedMaterial({ color: 0x6fcfff, dashSize: 0.08, gapSize: 0.05, transparent: true, opacity: 0.78 })
+  );
+  swing.computeLineDistances();
+  swing.userData.interiorKind = "clay-diagnostic-overlay";
+  swing.userData.structureOverlayView = "sockets";
+  swing.userData.structureSpecId = fixture.opening.id;
+  swing.renderOrder = 70;
+  hinge.add(swing);
+  group.add(hinge);
+  return { aperture, hinge, leaf, swing };
+}
+function clayRoomApplyStructureViewVisibility(view){
+  const group = S.clayRoomStructureBenchGroup;
+  if(group){
+    group.traverse(function(node){
+      const ownView = node.userData && node.userData.structureOverlayView;
+      if(ownView) node.visible = ownView === view;
+    });
+  }
+  clayRoomApplyCamPose();
+  if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+  markDirty();
+  scheduleRender();
+}
+function clayRoomRebuildStructureBench(reason){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID) return false;
+  const session = clayRoomMovementSession();
+  const board = session && clayRoomMovementBoardFromState(session.state);
+  if(!board) return false;
+  S.boardKey = null;
+  setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-structure-rebuild" });
+  return true;
+}
+function clayRoomSetStructureView(view){
+  if(CLAY_STRUCTURE_BENCH_FIXTURE.views.indexOf(view) < 0) return false;
+  const wasStrategic = S.clayRoomStructureView === "strategic";
+  S.clayRoomStructureView = view;
+  const isStrategic = view === "strategic";
+  // Strategic mode changes the compiler input: every upper is built. Crossing that boundary
+  // therefore rebuilds the production shell; merely hiding a pre-existing upper would lie about
+  // the compile-time omission contract.
+  if(S.clayRoomStructureBenchGroup && wasStrategic !== isStrategic){
+    return clayRoomRebuildStructureBench("clayroom-structure-camera-mode");
+  }
+  clayRoomApplyStructureViewVisibility(view);
+  return true;
+}
+function clayRoomSetStructureStaged(staged){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID) return false;
+  S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
+    S.clayRoomStructureStageLatch,
+    { type: staged ? CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.stagedEvent
+      : CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.releaseEvent }
+  );
+  return clayRoomRebuildStructureBench(staged
+    ? "clayroom-structure-space-entered"
+    : "clayroom-structure-space-left-play");
+}
+function clayRoomSetStructureDoorState(state){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID) return false;
+  const session = clayRoomMovementSession();
+  if(!session || session.busy) return false;
+  const committed = tqConnectionStateCommit(session.fixture.space, session.state, {
+    connectionId: session.fixture.connectionId,
+    state: state
+  });
+  if(!committed.ok) return false;
+  session.state = committed.state;
+  session.lastReceipt = committed.receipt;
+  session.preview = null;
+  S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
+    S.clayRoomStructureStageLatch,
+    { type: "door-state", state: state }
+  );
+  return clayRoomRebuildStructureBench("clayroom-structure-door-" + state);
+}
+function clayRoomMountStructureBench(){
+  S.clayRoomStructureBenchGroup = null;
+  S.clayRoomStructureReport = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  const fixture = clayRoomStructureBenchFixtureFrom(S.clayRoomRecord);
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+  const group = new THREE.Group();
+  group.name = fixture.id;
+  group.userData.clayStructureBench = true;
+  group.userData.fixtureId = fixture.id;
+  group.userData.fixtureVersion = fixture.version;
+  group.userData.structureCatalogId = fixture.catalogId;
+
+  // The 15×15 host supplies the calibrated floor, grid, camera, light, and shadow receiver. Its
+  // tall perimeter uppers are not specimens and would turn the construction bench into a second
+  // enclosed room, so CL-F01 leaves the mechanics stem and suppresses only that host upper/trim.
+  // The fixture's own compiled shell below is the visible full-height wall-volume proof.
+  S.interiorGroup.traverse(function(node){
+    const kind = node.userData && node.userData.interiorKind;
+    if(kind === "room-shell-wall-upper" || kind === "room-shell-wall-trim"){
+      node.visible = false;
+      node.userData.clayStructureHostSuppressed = true;
+    }
+  });
+
+  const baseFloor = interiorFloorTopAt(S.interiorFloorTopMap, room.x + 7, room.y + 7);
+  const h = CLAY_STRUCTURE_KIT_CATALOG.gridLaw.verticalQuantumWorldUnits;
+  const tierHeights = { "-1": baseFloor + 0.025, "0": baseFloor + h + 0.025, "1": baseFloor + h * 2 + 0.025 };
+  const cells = fixture.shellCells.map(function(cell){
+    return {
+      x: room.x + cell.x,
+      z: room.y + cell.z,
+      tier: cell.tier,
+      isDoor: cell.isDoor,
+      sourceRef: cell.sourceRef
+    };
+  });
+  const omittedKeys = new Set();
+  const staging = S.clayRoomStructureStageLatch || Object.freeze({
+    staged: !!fixture.wallOmission.initialState.staged,
+    latched: !!fixture.wallOmission.initialState.latched,
+    lastEvent: "fixture-default",
+    doorState: fixture.opening.state
+  });
+  const strategicView = S.clayRoomStructureView === "strategic";
+  const omissionActive = staging.staged && staging.latched && !strategicView;
+  const cameraRaw = S.camera
+    ? { x: S.camera.position.x + origin.cx, z: S.camera.position.z + origin.cz }
+    : { x: room.x + room.w, z: room.y + room.d };
+  function upperVisibleForSegment(seg){
+    // Apertures always retain their upper/frame volume; tier risers are separate compiler output
+    // and therefore cannot enter this omission predicate at all.
+    if(seg.kind === "door") return true;
+    if(!omissionActive) return true;
+    const normal = segmentNormal(seg);
+    const mx = (seg.a.x + seg.b.x) / 2, mz = (seg.a.z + seg.b.z) / 2;
+    const outwardX = -normal.x, outwardZ = -normal.z;
+    const cameraOutside = (cameraRaw.x - mx) * outwardX + (cameraRaw.z - mz) * outwardZ > 0.15;
+    if(cameraOutside) omittedKeys.add([seg.a.x, seg.a.z, seg.b.x, seg.b.z].join(","));
+    return !cameraOutside;
+  }
+  const shell = compileRoomShell(cells, {
+    tierHeights,
+    wallHeight: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.storeyWorldUnits,
+    wallThickness: 0.22,
+    wallStemHeight: 0.28,
+    wallCapHeight: 0.06,
+    wallCapOverhang: 0.035,
+    upperVisibleForSegment
+  });
+  const shellGroup = new THREE.Group();
+  shellGroup.name = "compiled-shell";
+  shellGroup.userData.structureSpecId = "compiled-shell";
+  function addShell(geometry, kind, specId, cast){
+    if(!geometry) return null;
+    const mesh = new THREE.Mesh(geometry, clayStructureMaterial());
+    mesh.position.set(-origin.cx, 0, -origin.cz);
+    clayStructureTag(mesh, specId || "compiled-shell", kind);
+    mesh.castShadow = cast !== false;
+    shellGroup.add(mesh);
+    return mesh;
+  }
+  addShell(shell.floorGeometry, "floor", "compiled-shell", false);
+  addShell(shell.wallStemGeometry, "wall", "compiled-shell", true);
+  (shell.wallUpperMeshes || []).forEach(function(entry){
+    const mesh = addShell(entry.geometry, "wall", "compiled-shell", true);
+    if(mesh) mesh.userData.ownerSegIndex = entry.ownerSegIndex;
+  });
+  addShell(shell.wallTrimGeometry, "trim", "compiled-shell", true);
+  addShell(shell.riserGeometry, "riser", "compiled-shell", true);
+  group.add(shellGroup);
+
+  const openingBuilt = clayStructureBuildOpening(group, shell, fixture, tierHeights, origin);
+  fixture.pieces.forEach(function(spec){
+    const worldSpec = Object.assign({}, spec, {
+      at: { x: room.x + spec.at.x, z: room.y + spec.at.z }
+    });
+    clayStructureBuildPart(group, worldSpec, baseFloor + 0.025, origin);
+  });
+
+  // Negative control: two otherwise-valid wall prisms stay visibly separated. The red X is only
+  // shown in NEGATIVE view; the physical gap remains in every view so rejection never masquerades
+  // as a successful join.
+  const bad = fixture.negativeControl;
+  const badMat = clayStructureMaterial();
+  const badX = room.x + bad.at.x - origin.cx, badZ = room.y + bad.at.z - origin.cz;
+  const badA = clayStructureTag(new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.72, 0.22), badMat), bad.id, "wall");
+  badA.position.set(badX - 0.55, baseFloor + 0.385, badZ);
+  const badB = clayStructureTag(new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.72, 0.8), badMat.clone()), bad.id, "wall");
+  badB.position.set(badX + 0.32, baseFloor + 0.385, badZ + 0.42);
+  group.add(badA, badB);
+  const xY = baseFloor + 0.82;
+  group.add(
+    clayStructureStripBetween(
+      new THREE.Vector3(badX - 0.38, xY, badZ - 0.38),
+      new THREE.Vector3(badX + 0.38, xY, badZ + 0.38),
+      0xff3030, "negative", bad.id, 0.075
+    ),
+    clayStructureStripBetween(
+      new THREE.Vector3(badX - 0.38, xY, badZ + 0.38),
+      new THREE.Vector3(badX + 0.38, xY, badZ - 0.38),
+      0xff3030, "negative", bad.id, 0.075
+    )
+  );
+
+  S.interiorGroup.add(group);
+  S.clayRoomStructureBenchGroup = group;
+  const assessment = clayStructureSocketJoinAssessment(bad.source, bad.candidate);
+  const slopeDeg = Math.atan2(
+    fixture.pieces.find(function(p){ return p.id === "shallow-ramp"; }).rise,
+    fixture.pieces.find(function(p){ return p.id === "shallow-ramp"; }).run
+  ) * 180 / Math.PI;
+  S.clayRoomStructureReport = {
+    fixtureId: fixture.id,
+    fixtureVersion: fixture.version,
+    catalogId: CLAY_STRUCTURE_KIT_CATALOG.id,
+    catalogVersion: CLAY_STRUCTURE_KIT_CATALOG.version,
+    gridLaw: CLAY_STRUCTURE_KIT_CATALOG.gridLaw,
+    shell: {
+      meta: shell.meta,
+      apertures: shell.apertures.length,
+      tiers: Object.keys(tierHeights).map(Number).sort(),
+      riserSegments: shell.riserSegments.length,
+      wallSegments: shell.wallSegments.length,
+      mountSlots: shell.mountSlots.length,
+      builtUpperSegments: shell.wallUpperMeshes.length,
+      omittedUpperSegments: omittedKeys.size,
+      totalUpperSegments: shell.wallUpperMeshes.length + omittedKeys.size,
+      exposedSlabSides: !!shell.riserGeometry
+    },
+    wallOmission: {
+      ruleId: fixture.wallOmission.ruleId,
+      version: fixture.wallOmission.version,
+      staged: staging.staged,
+      latched: staging.latched,
+      lastEvent: staging.lastEvent,
+      doorState: staging.doorState,
+      strategicView: strategicView,
+      cameraMode: strategicView ? "top-down-strategic" : "fixed-production",
+      active: omissionActive,
+      carveouts: fixture.wallOmission.carveouts,
+      apertureUpperBuilt: !!openingBuilt,
+      structuralMassBuilt: shell.riserSegments.length > 0,
+      rawDoorStateChangesLatch: false
+    },
+    opening: {
+      mounted: !!openingBuilt,
+      threshold: fixture.opening.threshold,
+      hingeSocket: fixture.opening.socket.type,
+      doorState: staging.doorState,
+      hingeAngleDeg: openingBuilt ? +(openingBuilt.leaf.rotation.y * 180 / Math.PI).toFixed(1) : null,
+      swingClearanceDeg: fixture.opening.swingClearanceDeg,
+      leafCastsShadow: !!(openingBuilt && openingBuilt.leaf.castShadow)
+    },
+    specimens: fixture.pieces.map(function(spec){
+      return {
+        id: spec.id, kind: spec.kind, sockets: spec.sockets, access: spec.access,
+        provenance: CLAY_STRUCTURE_KIT_CATALOG.provenance
+      };
+    }),
+    slope: {
+      degrees: +slopeDeg.toFixed(3),
+      maxDegrees: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.maxWalkableSlopeDeg,
+      walkable: slopeDeg <= CLAY_STRUCTURE_KIT_CATALOG.gridLaw.maxWalkableSlopeDeg
+    },
+    negativeControl: {
+      id: bad.id,
+      accepted: assessment.accepted,
+      reason: assessment.reason,
+      expectedReason: bad.expectedReason,
+      visibleGap: true
+    },
+    cutawayWitness: {
+      id: fixture.cutawayWitness.id,
+      pieceSlug: fixture.cutawayWitness.pieceSlug,
+      occluderId: fixture.cutawayWitness.occluder.id,
+      rendererPath: "data.pieces + data.instances.pillar -> itrPillarCutawayMask -> itrOcclusionClassify"
+    },
+    climbMechanicsImplemented: CLAY_STRUCTURE_KIT_CATALOG.climbMechanicsImplemented,
+    provenance: CLAY_STRUCTURE_KIT_CATALOG.provenance
+  };
+  clayRoomApplyStructureViewVisibility(S.clayRoomStructureView || fixture.defaultView);
+  return group;
+}
+
 /* CL-F02 lighting bench — deterministic test INPUT mounted inside the same production Theater scene.
    These are neutral comparison forms, not a second renderer: the same camera, diagnostic surface
    route, real sprite builder, PointLights, shadows, tone map, and post chain remain in charge. */
@@ -16754,7 +17275,8 @@ function clayRoomMountSpriteBench(){
 }
 
 function clayRoomSuppressLightingBenchNoise(){
-  if((S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
+  if((S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID
+    && S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
     && S.clayRoomFixtureId !== CLAY_ROOM_SPRITE_BENCH_ID) || !S.moteGroup) return;
   stopMoteDrift();
   if(S.moteGroup.parent) S.moteGroup.parent.remove(S.moteGroup);
@@ -17421,6 +17943,7 @@ async function clayRoomCaptureLightingMatrix(){
    then provenance re-tagging (the rebuild replaced the children the previous tags pointed at). */
 function clayRoomAfterInteriorBoardRebuild(){
   if(!S.clayRoomDiagnosticActive) return;
+  clayRoomMountStructureBench();
   clayRoomMountLightingBench();
   clayRoomMountSpriteBench();
   clayRoomSuppressLightingBenchNoise();
@@ -17749,6 +18272,43 @@ function clayRoomMovementBoardFromState(state){
       dressing: []
     });
   }
+  if(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID){
+    // CL-F01 isolates architecture. The outer production room remains the calibrated floor/light/
+    // camera host; its crate, citizen, dressing, and authored door cannot be mistaken for bench
+    // specimens. The structure fixture itself mounts in the post-build lifecycle hook below.
+    const fixture = clayRoomStructureBenchFixtureFrom(S.clayRoomRecord);
+    const room = compiled.room;
+    const witness = fixture.cutawayWitness;
+    const witnessPiece = {
+      id: witness.id,
+      sourceRef: witness.pieceSlug,
+      slug: witness.pieceSlug,
+      label: "Human scale / cutaway witness",
+      cellX: room.x + witness.pieceCell.x,
+      cellY: room.y + witness.pieceCell.z,
+      allowOverheight: true
+    };
+    const witnessPillar = {
+      x: room.x + witness.occluder.at.x,
+      z: room.y + witness.occluder.at.z,
+      sx: witness.occluder.sx,
+      sy: witness.occluder.sy,
+      sz: witness.occluder.sz,
+      color: "#888888",
+      profile: witness.occluder.profile,
+      sourceRef: witness.occluder.id
+    };
+    return Object.assign({}, base, {
+      instances: Object.assign({}, base.instances, {
+        pillar: (base.instances.pillar || []).concat([witnessPillar])
+      }),
+      pieces: [witnessPiece],
+      furniture: [],
+      interactables: [],
+      dressing: [],
+      wallProps: []
+    });
+  }
   if(S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID){
     const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
     const room = compiled.room;
@@ -17943,8 +18503,26 @@ function clayRoomApplyCamPose(){
   const zoom = S.clayCamZoom || 1;
   const target = S.clayCamFit.target.clone(); target.x += off.x; target.z += off.z;
   const pos = S.clayCamFit.pos.clone(); pos.x += off.x; pos.z += off.z;
-  // dolly along the existing ray — direction (and therefore bearing+pitch) preserved exactly
-  pos.sub(target).multiplyScalar(zoom).add(target);
+  if(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    && S.clayRoomStructureView === "strategic"){
+    // The strategic camera is the one governed pitch exception named by the wall-omission ruling:
+    // fixed 72° map-reading pitch, same production bearing, pan, target, and perspective camera.
+    // It is a named mode, never free orbit. Every wall is compiled in this mode (see CL-F01 mount).
+    const ray = pos.sub(target);
+    const distance = ray.length() * zoom;
+    const ground = new THREE.Vector2(ray.x, ray.z);
+    if(ground.lengthSq() < 0.0001) ground.set(1, 1);
+    ground.normalize();
+    const pitch = 72 * Math.PI / 180;
+    pos.set(
+      target.x + ground.x * Math.cos(pitch) * distance,
+      target.y + Math.sin(pitch) * distance,
+      target.z + ground.y * Math.cos(pitch) * distance
+    );
+  } else {
+    // dolly along the existing ray — direction (and therefore bearing+pitch) preserved exactly
+    pos.sub(target).multiplyScalar(zoom).add(target);
+  }
   S.camera.position.copy(pos);
   if(S.cameraLookTarget) S.cameraLookTarget.copy(target);
   S.camera.lookAt(target);
@@ -17960,9 +18538,10 @@ function clayRoomNodeForSelection(id){
     if(found || !node) return;
     probe.visited++;
     const ud = node.userData || {};
-    const candidate = ud.unitId || ud.sceneObjectId || ud.lightId || ud.dressingSlug;
+    const candidate = ud.structureSpecId || ud.unitId || ud.sceneObjectId || ud.lightId || ud.dressingSlug;
     if(candidate != null && probe.candidates.length < 12) probe.candidates.push(String(candidate));
-    if(String(ud.sceneObjectId || "") === String(id)
+    if(String(ud.structureSpecId || "") === String(id)
+      || String(ud.sceneObjectId || "") === String(id)
       || String(ud.unitId || "") === String(id)
       || String(ud.lightId || "") === String(id)
       || String(ud.dressingSlug || "") === String(id)){
@@ -18118,6 +18697,13 @@ function clayRoomHighlightSelection(id){
   clayRoomClearSelectionGlow();
   const node = clayRoomNodeForSelection(id);
   if(!node || !S.scene) return;
+  // The compiled shell is the whole architectural composition, not one editable part. Boxing the
+  // entire specimen field makes the assembled review read like a selection cage.
+  if(id === "compiled-shell"){
+    markDirty();
+    scheduleRender();
+    return;
+  }
   // A standee selects through its diegetic base ring. Do not also draw the generic cyan BoxHelper
   // around the character card—the user's clarification is specifically that only the base wall
   // should light. Non-standee objects retain the workbench bounding-box diagnostic.
@@ -18153,7 +18739,7 @@ function clayRoomPickAt(ev, host){
     let node = hits[i].object;
     while(node && node !== S.interiorGroup){
       const ud = node.userData || {};
-      const id = ud.sceneObjectId || ud.lightId || ud.dressingSlug;
+      const id = ud.structureSpecId || ud.sceneObjectId || ud.lightId || ud.dressingSlug;
       if(id){
         S.clayRoomSelectedId = id;
         if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(id, "viewport");
@@ -18311,6 +18897,8 @@ function clayRoomBuildWorkbenchChrome(record){
   rail.appendChild(railHeading("CATALOG · LIVE FIXTURE SLICE"));
   const catalog = [
     ["STRUCTURE", "10 ft wall", "room-shell"],
+    ["STRUCTURE KIT", "Construction bench", "compiled-shell"],
+    ["SCALE / CUTAWAY", "Human witness", "structure-cutaway-witness"],
     ["PROP", "Crate · 3 ft", record.object.id],
     ["INTERACTABLE", "Door · 36 × 80 in", record.portal.id],
     ["DIAGNOSTIC LIGHT", "Warm calibration bulb", "clay-west-warm"],
@@ -18321,6 +18909,8 @@ function clayRoomBuildWorkbenchChrome(record){
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.claySelect = row[2];
+    if(row[2] === "compiled-shell" || row[2] === "structure-cutaway-witness") b.dataset.clayStructureOnly = "1";
+    if(row[2] === record.citizen.bestiaryId) b.dataset.claySpriteCatalog = "1";
     if(row[2] === record.object.id || row[2] === record.portal.id) b.dataset.clayRoomTruthOnly = "1";
     if(row[2] === "clay-west-warm") b.dataset.clayLightCatalogSlot = "0";
     if(row[2] === "clay-east-cool") b.dataset.clayLightCatalogSlot = "1";
@@ -18341,6 +18931,8 @@ function clayRoomBuildWorkbenchChrome(record){
   scene.appendChild(railHeading("SCENE · LIVE PRODUCTION OBJECTS"));
   [
     ["Room shell", "room-shell"],
+    ["Construction bench", "compiled-shell"],
+    ["Human cutaway witness", "structure-cutaway-witness"],
     ["Door", record.portal.id],
     ["Crate", record.object.id],
     ["Goblin", record.citizen.bestiaryId],
@@ -18350,6 +18942,8 @@ function clayRoomBuildWorkbenchChrome(record){
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.claySceneId = row[1];
+    if(row[1] === "compiled-shell" || row[1] === "structure-cutaway-witness") b.dataset.clayStructureOnly = "1";
+    if(row[1] === record.citizen.bestiaryId) b.dataset.claySpriteCatalog = "1";
     if(row[1] === record.object.id || row[1] === record.portal.id) b.dataset.clayRoomTruthOnly = "1";
     if(row[1] === "clay-west-warm") b.dataset.clayLightSceneSlot = "0";
     if(row[1] === "clay-east-cool") b.dataset.clayLightSceneSlot = "1";
@@ -18441,7 +19035,14 @@ function mountClayRoom(){
     // question, not a CL-R0 one.
     ITR_ROOM_SHELL = clayRoomShellOverrideOn(); // restored in clayRoomUnmount — see this function's own header note above
 
-    const compiled = clayRoomBoardFrom(record); // D15 — real spatializer + interiorBuildBoard (src/engine/clay-room.js)
+    const initialFixtureId = clayRoomFixtureIdFromLocation();
+    // CL-R3's canonical review is the daylight hero: neutral clay still carries no authored site
+    // material, while the shared production sun makes wall thickness, caps, stairs, and slab faces
+    // readable without diagnostic bulbs. Other fixtures retain their existing opposing-pair start.
+    const initialLightRecipeId = initialFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+      ? "daylit"
+      : "clay-opposing-pair";
+    const compiled = clayRoomBoardFrom(record, { lightRecipeId: initialLightRecipeId }); // D15 — real spatializer + interiorBuildBoard (src/engine/clay-room.js)
     const movementFixture = clayRoomMovementFixtureFrom(record, compiled);
     // C1B mechanical session truth lives in GS, not in the renderer state. Rebuilds and animations
     // may replace THREE objects, but they keep this exact revisioned query state. Closing/reopening
@@ -18471,7 +19072,7 @@ function mountClayRoom(){
     S.clayRoomRecord = record;
     S.clayRoomCompiled = compiled;
     S.clayRoomLightRecipeId = compiled.lightRecipeId || "clay-opposing-pair";
-    S.clayRoomFixtureId = clayRoomFixtureIdFromLocation();
+    S.clayRoomFixtureId = initialFixtureId;
     // CL-R2 ruling: presentation scale is the working default. True scale stays one click away as
     // an honest size-spectrum check; neither view mutates registry worldHeight or tactical span.
     S.clayRoomSpriteScaleMode = "diagnostic-cap";
@@ -18480,7 +19081,20 @@ function mountClayRoom(){
     S.clayRoomPreviewSeed = CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
     S.clayCamOffset = { x: 0, z: 0 };
     S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
-      ? 0.72 : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9 : 1);
+      ? 0.72 : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
+        : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65 : 1));
+    S.clayRoomStructureView = CLAY_STRUCTURE_BENCH_FIXTURE.defaultView;
+    S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
+      null,
+      { type: CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.stagedEvent }
+    );
+    const initialStructureConnection = GS.clayRoomMovementSession.state.connections.find(function(row){
+      return row.id === GS.clayRoomMovementSession.fixture.connectionId;
+    });
+    S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
+      S.clayRoomStructureStageLatch,
+      { type: "door-state", state: initialStructureConnection ? initialStructureConnection.state : "shut" }
+    );
     S.clayRoomDiagnosticActive = true;
     setInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
     S.clayGridMesh = clayRoomBuildSeamGrid(record, compiled.room); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live; compiled.room is the spatializer's REAL room rect (CL-R0 coordinate fix)
@@ -18795,18 +19409,21 @@ function clayRoomMountOverlay(record, host){
   const movementTabBtn = document.createElement("button");
   movementTabBtn.textContent = "Move";
   movementTabBtn.setAttribute("aria-label", "Clayroom production movement proof");
+  const structureTabBtn = document.createElement("button");
+  structureTabBtn.textContent = "Structure";
+  structureTabBtn.setAttribute("aria-label", "Clayroom reusable structure grammar proof");
   const lightsTabBtn = document.createElement("button");
   lightsTabBtn.textContent = "Lights";
   lightsTabBtn.setAttribute("aria-label", "Clayroom lighting proof");
   const spritesTabBtn = document.createElement("button");
   spritesTabBtn.textContent = "Sprites";
   spritesTabBtn.setAttribute("aria-label", "Clayroom sprite citizenship proof");
-  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, lightsTabBtn, spritesTabBtn].forEach(function(b){
+  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, structureTabBtn, lightsTabBtn, spritesTabBtn].forEach(function(b){
     b.style.cssText = "flex:1 1 46px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   });
   tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn);
   tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(movementTabBtn);
-  tabBar.appendChild(lightsTabBtn); tabBar.appendChild(spritesTabBtn);
+  tabBar.appendChild(structureTabBtn); tabBar.appendChild(lightsTabBtn); tabBar.appendChild(spritesTabBtn);
   panel.appendChild(tabBar);
 
   const factsBody = document.createElement("pre");
@@ -19257,6 +19874,138 @@ function clayRoomMountOverlay(record, host){
   stateBody.appendChild(stateButtons);
   stateBody.appendChild(stateOut);
 
+  // CL-R3 Structure tab — inspection and A/B views over the mounted production structure bench.
+  // The controls reveal authored facts; they do not mutate dimensions or invent a second builder.
+  const structureBody = document.createElement("div");
+  structureBody.style.cssText = "display:none;font:10px/1.42 monospace;color:#dde;";
+  const structureIntro = document.createElement("div");
+  structureIntro.innerHTML =
+    "<div style='color:#9fd4ec;margin-bottom:4px'>CL-F01 · REUSABLE CONSTRUCTION GRAMMAR</div>" +
+    "<div style='color:#9ab'>Production shell + generic atoms. Blue = sockets, green/amber/red = access, red X = rejected join.</div>";
+  structureBody.appendChild(structureIntro);
+  const structureFixtureNav = document.createElement("div");
+  structureFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:7px 0;";
+  [
+    [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM"],
+    [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE"],
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.style.cssText = "font:8px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", function(){
+      clayRoomSetFixture(def[0], "clayroom-structure-fixture-nav");
+      if(def[0] === CLAY_ROOM_STRUCTURE_BENCH_ID) clayShowTab("structure");
+      else if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
+      else if(def[0] === CLAY_ROOM_SPRITE_BENCH_ID) clayShowTab("sprites");
+      else clayShowTab("movement");
+    });
+    structureFixtureNav.appendChild(button);
+  });
+  structureBody.appendChild(structureFixtureNav);
+  const structureViewActions = document.createElement("div");
+  structureViewActions.style.cssText = "display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:7px;";
+  const structureViewButtons = {};
+  [
+    ["assembled", "ASSEMBLED"],
+    ["sockets", "SOCKETS"],
+    ["access", "ACCESS"],
+    ["negative", "BAD JOIN"],
+    ["strategic", "ALL WALLS"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Show Clayroom structure " + def[0] + " view");
+    button.style.cssText = "font:8px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetStructureView(def[0]); });
+    structureViewActions.appendChild(button);
+    structureViewButtons[def[0]] = button;
+  });
+  structureBody.appendChild(structureViewActions);
+  const structureStageActions = document.createElement("div");
+  structureStageActions.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:7px;";
+  const structureStageButtons = {};
+  [
+    ["sealed", "LEAVE PLAY", function(){ clayRoomSetStructureStaged(false); }],
+    ["staged", "STAGE SPACE", function(){ clayRoomSetStructureStaged(true); }],
+    ["shut", "SHUT DOOR", function(){ clayRoomSetStructureDoorState("shut"); }],
+    ["open", "OPEN DOOR", function(){ clayRoomSetStructureDoorState("open"); }]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.setAttribute("aria-label", "Clayroom structure " + def[0]);
+    button.style.cssText = "font:7px monospace;background:#252a32;color:#cfd8e3;border:1px solid #414955;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", def[2]);
+    structureStageActions.appendChild(button);
+    structureStageButtons[def[0]] = button;
+  });
+  structureBody.appendChild(structureStageActions);
+  const structureParts = document.createElement("div");
+  structureParts.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:7px;";
+  const structureFixture = clayRoomStructureBenchFixtureFrom(record);
+  structureFixture.pieces.forEach(function(spec){
+    const button = document.createElement("button");
+    button.textContent = spec.label;
+    button.title = spec.kind + " · " + spec.sockets.map(function(s){ return s.type; }).join(", ");
+    button.style.cssText = "font:8px/1.25 monospace;text-align:left;background:#252a32;color:#ccd5df;border:1px solid #414955;border-radius:3px;padding:4px;cursor:pointer;";
+    button.addEventListener("click", function(){
+      S.clayRoomSelectedId = spec.id;
+      S.clayRoomWorkbenchSelect(spec.id, "structure catalog");
+    });
+    structureParts.appendChild(button);
+  });
+  structureBody.appendChild(structureParts);
+  const structureOut = document.createElement("pre");
+  structureOut.id = "clay-room-structure-readout";
+  structureOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
+  structureBody.appendChild(structureOut);
+  function clayStructureRender(){
+    const snap = window.Theater._clayStructureBenchForTest();
+    Object.keys(structureViewButtons).forEach(function(view){
+      structureViewButtons[view].style.background = snap && snap.view === view ? "#35516a" : "#2a2a30";
+    });
+    if(!snap){
+      structureOut.textContent = "Switch to the Structure fixture to mount CL-F01.";
+      return;
+    }
+    structureStageButtons.staged.style.background = snap.wallOmission.staged ? "#35543b" : "#252a32";
+    structureStageButtons.sealed.style.background = snap.wallOmission.staged ? "#252a32" : "#684a28";
+    structureStageButtons.shut.style.background = snap.wallOmission.doorState === "shut" ? "#35516a" : "#252a32";
+    structureStageButtons.open.style.background = snap.wallOmission.doorState === "open" ? "#35516a" : "#252a32";
+    const lines = [
+      "fixture " + snap.fixtureId + " v" + snap.fixtureVersion + " · catalog " + snap.catalogId + " v" + snap.catalogVersion,
+      "GRID 1 cell = " + snap.gridLaw.cellFeet + " ft · h = " + snap.gridLaw.verticalQuantumFeet
+        + " ft · storey = " + snap.gridLaw.storeyFeet + " ft",
+      "SHELL " + snap.shell.meta.floorCellCount + " cells · " + snap.shell.wallSegments + " wall runs · "
+        + snap.shell.riserSegments + " retaining/riser runs",
+      "      tiers " + snap.shell.tiers.join("/") + " · slab sides " + (snap.shell.exposedSlabSides ? "PASS" : "FAIL")
+        + " · omitted near uppers " + snap.shell.omittedUpperSegments,
+      "OMISSION " + (snap.wallOmission.active ? "STEM ONLY" : "ALL UPPERS") + " · staged "
+        + (snap.wallOmission.staged ? "YES" : "NO") + " · latched "
+        + (snap.wallOmission.latched ? "YES" : "NO") + " · door " + snap.wallOmission.doorState,
+      "         camera " + snap.wallOmission.cameraMode + " · aperture "
+        + (snap.wallOmission.apertureUpperBuilt ? "KEPT" : "FAIL") + " · riser mass "
+        + (snap.wallOmission.structuralMassBuilt ? "KEPT" : "FAIL"),
+      "OPENING aperture " + snap.shell.apertures + " · frame/threshold/hinge leaf · "
+        + snap.opening.swingClearanceDeg + "° clearance",
+      "RAMP " + snap.slope.degrees + "° ≤ " + snap.slope.maxDegrees + "° · " + (snap.slope.walkable ? "WALK" : "FAIL"),
+      "SOCKETS " + CLAY_STRUCTURE_KIT_CATALOG.socketTypes.length + " named families · "
+        + snap.specimens.reduce(function(n, row){ return n + row.sockets.length; }, 0) + " mounted specimen sockets",
+      "ACCESS walk / climb-cost / climb-dc / none · mechanics "
+        + (snap.climbMechanicsImplemented ? "IMPLEMENTED" : "NOT CLAIMED"),
+      "BAD JOIN " + (snap.negativeControl.accepted ? "WRONG PASS" : "REJECTED") + " · "
+        + snap.negativeControl.reason + " · visible gap " + (snap.negativeControl.visibleGap ? "YES" : "NO"),
+      "CUTAWAY camera-side omission " + (snap.cameraSideOmission && snap.cameraSideOmission.active ? "ACTIVE" : "OFF")
+        + " · dynamic classifier " + snap.dynamicCutaway.candidates + " candidates / "
+        + snap.dynamicCutaway.blocking + " blocking / " + snap.dynamicCutaway.faded + " faded",
+      "MESHES " + snap.mountedMeshes + " · shadow casters " + snap.shadowCasters + " · receivers " + snap.shadowReceivers,
+      "PROVENANCE " + snap.provenance.author + " · " + snap.provenance.source
+    ];
+    structureOut.textContent = lines.join("\n");
+  }
+  S.clayRoomRefreshStructure = clayStructureRender;
+
   // CL-R1 Lights tab — reads and controls the real production fixture targets. No demonstration
   // meshes/lights are mounted here; every value comes from the live PointLight + emitter material.
   const lightsBody = document.createElement("div");
@@ -19266,6 +20015,7 @@ function clayRoomMountOverlay(record, host){
   const fixtureButtons = {};
   [
     [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM TRUTH"],
+    [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE BENCH"],
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTING BENCH"],
     [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE BENCH"]
   ].forEach(function(def){
@@ -19601,6 +20351,7 @@ function clayRoomMountOverlay(record, host){
       overlayButtons[id].disabled = S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID;
     });
     const roomTruth = S.clayRoomFixtureId === CLAY_ROOM_TRUTH_FIXTURE_ID;
+    const structureBench = S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID;
     document.querySelectorAll("[data-clay-room-truth-only]").forEach(function(button){
       const status = button.querySelector("[data-clay-light-status]");
       if(status){
@@ -19610,6 +20361,18 @@ function clayRoomMountOverlay(record, host){
       } else {
         button.style.display = roomTruth ? "block" : "none";
       }
+    });
+    document.querySelectorAll("[data-clay-structure-only]").forEach(function(button){
+      button.style.display = structureBench ? "block" : "none";
+      button.disabled = !structureBench;
+    });
+    document.querySelectorAll("[data-clay-sprite-catalog]").forEach(function(button){
+      const mounted = roomTruth || S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID;
+      const status = button.querySelector("[data-clay-light-status]");
+      if(status) status.textContent = mounted ? "MOUNTED" : "NOT IN FIXTURE";
+      button.disabled = !mounted;
+      button.style.opacity = mounted ? "1" : "0.42";
+      if(!status) button.style.display = mounted ? "block" : "none";
     });
   }
   S.clayRoomRefreshFixtureControls = clayRefreshFixtureControls;
@@ -19642,9 +20405,10 @@ function clayRoomMountOverlay(record, host){
   spritesBody.appendChild(spritesIntro);
 
   const spriteFixtureNav = document.createElement("div");
-  spriteFixtureNav.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:7px 0;";
+  spriteFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:7px 0;";
   [
     [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM"],
+    [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE"],
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
     [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"]
   ].forEach(function(def){
@@ -19653,7 +20417,8 @@ function clayRoomMountOverlay(record, host){
     button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px;cursor:pointer;";
     button.addEventListener("click", function(){
       clayRoomSetFixture(def[0], "clayroom-sprite-fixture-nav");
-      if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
+      if(def[0] === CLAY_ROOM_STRUCTURE_BENCH_ID) clayShowTab("structure");
+      else if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
       else if(def[0] === CLAY_ROOM_TRUTH_FIXTURE_ID) clayShowTab("movement");
       else clayShowTab("sprites");
     });
@@ -19822,6 +20587,7 @@ function clayRoomMountOverlay(record, host){
   panel.appendChild(mountBody);
   panel.appendChild(stateBody);
   panel.appendChild(movementBody);
+  panel.appendChild(structureBody);
   panel.appendChild(lightsBody);
   panel.appendChild(spritesBody);
 
@@ -19832,6 +20598,7 @@ function clayRoomMountOverlay(record, host){
     mountBody.style.display = which === "mount" ? "" : "none";
     stateBody.style.display = which === "state" ? "" : "none";
     movementBody.style.display = which === "movement" ? "" : "none";
+    structureBody.style.display = which === "structure" ? "" : "none";
     lightsBody.style.display = which === "lights" ? "" : "none";
     spritesBody.style.display = which === "sprites" ? "" : "none";
     factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
@@ -19840,6 +20607,7 @@ function clayRoomMountOverlay(record, host){
     mountTabBtn.style.background = which === "mount" ? "#3a3a44" : "#2a2a30";
     stateTabBtn.style.background = which === "state" ? "#3a3a44" : "#2a2a30";
     movementTabBtn.style.background = which === "movement" ? "#3a3a44" : "#2a2a30";
+    structureTabBtn.style.background = which === "structure" ? "#3a3a44" : "#2a2a30";
     lightsTabBtn.style.background = which === "lights" ? "#3a3a44" : "#2a2a30";
     spritesTabBtn.style.background = which === "sprites" ? "#3a3a44" : "#2a2a30";
     S.clayRoomMovementPickMode = which === "movement";
@@ -19848,6 +20616,7 @@ function clayRoomMountOverlay(record, host){
     if(which === "state") clayDoorStateRender();
     if(which === "movement") clayMovementRender();
     else clayRoomDisposeMovementOverlay();
+    if(which === "structure") clayStructureRender();
     if(which === "lights") clayLightsRender();
     if(which === "sprites") claySpritesRender();
     if(CLAY_ROOM_PANEL_POSITION){
@@ -19863,6 +20632,25 @@ function clayRoomMountOverlay(record, host){
     if(id === record.object.id) return { name: "Crate · 3 ft", type: "PROP · FACED_BOX", ref: id, tab: "surfaces", socket: false, sprite: false };
     if(id === record.citizen.id || id === record.citizen.bestiaryId) return {
       name: "Goblin", type: "APPROVED CHARACTER SPRITE", ref: record.citizen.bestiaryId, tab: "facts", socket: false, sprite: true
+    };
+    const structureSpec = id === "compiled-shell"
+      ? { id: "compiled-shell", label: "Compiled shell" }
+      : clayRoomStructureBenchFixtureFrom(record).pieces.find(function(row){ return row.id === id; });
+    if(structureSpec) return {
+      name: structureSpec.label,
+      type: id === "compiled-shell" ? "PRODUCTION COMPILED STRUCTURE" : "STRUCTURE KIT SPECIMEN",
+      ref: structureSpec.id,
+      tab: "structure",
+      socket: id !== "compiled-shell",
+      sprite: false
+    };
+    if(id === clayRoomStructureBenchFixtureFrom(record).cutawayWitness.id) return {
+      name: "Human cutaway witness",
+      type: "PRODUCTION STANDEE · DYNAMIC OCCLUSION TARGET",
+      ref: clayRoomStructureBenchFixtureFrom(record).cutawayWitness.pieceSlug,
+      tab: "structure",
+      socket: false,
+      sprite: true
     };
     const spriteSpec = clayRoomSpriteCitizenshipFixtureFrom(record).cast.find(function(row){ return row.slug === id; });
     if(spriteSpec) return {
@@ -19920,7 +20708,8 @@ function clayRoomMountOverlay(record, host){
     spriteEditorBtn.style.opacity = info.sprite ? "1" : "0.5";
     socketScopeBtn.style.opacity = info.socket ? "1" : "0.55";
     socketScopeBtn.textContent = info.socket ? "🔒 SOCKET" : "SOCKET — N/A";
-    stateScopeBtn.style.opacity = info.tab === "state" || info.tab === "lights" || info.tab === "sprites" ? "1" : "0.7";
+    stateScopeBtn.style.opacity = info.tab === "state" || info.tab === "structure"
+      || info.tab === "lights" || info.tab === "sprites" ? "1" : "0.7";
     document.querySelectorAll("[data-clay-scene-id]").forEach(function(b){
       const active = b.dataset.claySceneId === id
         || (id === record.citizen.bestiaryId && b.dataset.claySceneId === record.citizen.id);
@@ -19940,8 +20729,14 @@ function clayRoomMountOverlay(record, host){
   socketScopeBtn.addEventListener("click", function(){
     const info = claySelectionInfo(S.clayRoomSelectedId);
     if(info.socket){
-      sessionLaw.textContent = "SOCKET PROTECTED · Mount tab edits a session tune and exports an object-mount lock.";
-      clayShowTab("mount");
+      if(info.tab === "structure"){
+        sessionLaw.textContent = "SOCKET PROTECTED · showing authored axis/type; incompatible axes reject without relocation.";
+        clayRoomSetStructureView("sockets");
+        clayShowTab("structure");
+      } else {
+        sessionLaw.textContent = "SOCKET PROTECTED · Mount tab edits a session tune and exports an object-mount lock.";
+        clayShowTab("mount");
+      }
     } else {
       sessionLaw.textContent = "No socket on this selection. Clayroom movement stays instance-local.";
     }
@@ -19967,10 +20762,12 @@ function clayRoomMountOverlay(record, host){
   mountTabBtn.addEventListener("click", function(){ clayShowTab("mount"); });
   stateTabBtn.addEventListener("click", function(){ clayShowTab("state"); });
   movementTabBtn.addEventListener("click", function(){ clayShowTab("movement"); });
+  structureTabBtn.addEventListener("click", function(){ clayShowTab("structure"); });
   lightsTabBtn.addEventListener("click", function(){ clayShowTab("lights"); });
   spritesTabBtn.addEventListener("click", function(){ clayShowTab("sprites"); });
-  clayShowTab(S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
-    ? "lights" : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? "sprites" : "movement"));
+  clayShowTab(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    ? "structure" : (S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
+      ? "lights" : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? "sprites" : "movement")));
 
   document.body.appendChild(panel);
   if(CLAY_ROOM_PANEL_POSITION){
@@ -19983,9 +20780,11 @@ function clayRoomMountOverlay(record, host){
   const activeInitialLight = (activeInitialRecipe.lights || []).find(function(light){ return light.enabled !== false; });
   const initialSelection = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID && activeInitialLight
     ? activeInitialLight.id
-    : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID
+    : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+      ? "compiled-shell"
+      : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID
       ? (S.clayRoomSelectedSpriteSlug || spriteFixture.selectedSlug)
-      : (S.clayRoomSelectedId || record.portal.id));
+      : (S.clayRoomSelectedId || record.portal.id)));
   S.clayRoomWorkbenchSelect(initialSelection, "initial");
   S.clayRoomRefreshLightCatalog();
   clayRefreshFixtureControls();

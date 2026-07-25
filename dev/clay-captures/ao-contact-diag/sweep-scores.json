@@ -1,0 +1,38 @@
+{
+ "sweep-A-normal16-tight.png": {
+  "creaseLiftMean": 4.460731506347656,
+  "creaseLiftP95": 6.927800178527832,
+  "flatHF": 0.530923068523407,
+  "rawHF": 0.6247476935386658
+ },
+ "sweep-B-normal24-r3.png": {
+  "creaseLiftMean": 4.4925618171691895,
+  "creaseLiftP95": 6.67215633392334,
+  "flatHF": 0.5201908946037292,
+  "rawHF": 0.6247476935386658
+ },
+ "sweep-C-lumadepth-only.png": {
+  "creaseLiftMean": 4.463258743286133,
+  "creaseLiftP95": 6.927800178527832,
+  "flatHF": 0.5306035280227661,
+  "rawHF": 0.6247476935386658
+ },
+ "sweep-D-normal-only.png": {
+  "creaseLiftMean": 5.01724100112915,
+  "creaseLiftP95": 7.715200424194336,
+  "flatHF": 0.5272120833396912,
+  "rawHF": 0.6247476935386658
+ },
+ "sweep-E-fullres-A.png": {
+  "creaseLiftMean": 5.188132286071777,
+  "creaseLiftP95": 11.927801132202148,
+  "flatHF": 0.8399688005447388,
+  "rawHF": 0.6247476935386658
+ },
+ "sweep-authored.png": {
+  "creaseLiftMean": 5.01799201965332,
+  "creaseLiftP95": 7.715200424194336,
+  "flatHF": 0.5270028114318848,
+  "rawHF": 0.6247476935386658
+ }
+}

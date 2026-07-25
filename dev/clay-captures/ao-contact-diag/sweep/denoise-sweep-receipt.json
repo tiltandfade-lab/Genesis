@@ -1,0 +1,522 @@
+{
+  "pose": {
+    "pos": {
+      "x": -2.6,
+      "y": 1.6,
+      "z": 3.4
+    },
+    "lookAt": {
+      "x": -0.4,
+      "y": 0.25,
+      "z": -0.2
+    }
+  },
+  "patches": {
+    "CREASE": {
+      "x0": 0.665,
+      "x1": 0.7,
+      "y0": 0.6,
+      "y1": 0.72
+    },
+    "FLAT": {
+      "x0": 0.1,
+      "x1": 0.3,
+      "y0": 0.15,
+      "y1": 0.3
+    }
+  },
+  "results": {
+    "raw-ref": {
+      "params": {
+        "radius": 0
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 10,
+          "depthPhi": 8,
+          "normalPhi": 8,
+          "radius": 0,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.12,
+        "sd": 24.56
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      }
+    },
+    "authored": {
+      "params": {},
+      "applied": {
+        "mode": "on",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoiseRadius": 4
+      },
+      "crease": {
+        "mean": 41.13,
+        "sd": 24.53
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.151,
+        "top1pctMean": 3.17
+      }
+    },
+    "A-normal16-tight": {
+      "params": {
+        "lumaPhi": 0.8,
+        "depthPhi": 0.5,
+        "normalPhi": 16
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 0.8,
+          "depthPhi": 0.5,
+          "normalPhi": 16,
+          "radius": 4,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.13,
+        "sd": 24.55
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.142,
+        "top1pctMean": 2.9
+      }
+    },
+    "B-normal24-r3": {
+      "params": {
+        "radius": 3,
+        "lumaPhi": 0.8,
+        "depthPhi": 0.5,
+        "normalPhi": 24
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 0.8,
+          "depthPhi": 0.5,
+          "normalPhi": 24,
+          "radius": 3,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.13,
+        "sd": 24.56
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.134,
+        "top1pctMean": 2.84
+      }
+    },
+    "C-lumadepth-only": {
+      "params": {
+        "lumaPhi": 0.8,
+        "depthPhi": 0.5
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 0.8,
+          "depthPhi": 0.5,
+          "normalPhi": 8,
+          "radius": 4,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.13,
+        "sd": 24.55
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.142,
+        "top1pctMean": 2.91
+      }
+    },
+    "D-normal-only": {
+      "params": {
+        "normalPhi": 16
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 10,
+          "depthPhi": 8,
+          "normalPhi": 16,
+          "radius": 4,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.13,
+        "sd": 24.53
+      },
+      "flat": {
+        "mean": 149.06,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.151,
+        "top1pctMean": 3.16
+      }
+    },
+    "E-fullres-A": {
+      "params": {
+        "resolutionScale": 1,
+        "lumaPhi": 0.8,
+        "depthPhi": 0.5,
+        "normalPhi": 16
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 1324,
+          "h": 1352
+        },
+        "denoise": {
+          "lumaPhi": 0.8,
+          "depthPhi": 0.5,
+          "normalPhi": 16,
+          "radius": 4,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 40.95,
+        "sd": 25.01
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 1324,
+        "h": 1352
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.21,
+        "top1pctMean": 6.16
+      }
+    },
+    "F-r2-luma04": {
+      "params": {
+        "radius": 2,
+        "lumaPhi": 0.4,
+        "depthPhi": 0.5,
+        "normalPhi": 16
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 0.4,
+          "depthPhi": 0.5,
+          "normalPhi": 16,
+          "radius": 2,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.11,
+        "sd": 24.58
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.105,
+        "top1pctMean": 2.26
+      }
+    },
+    "G-r2-luma025": {
+      "params": {
+        "radius": 2,
+        "lumaPhi": 0.25,
+        "depthPhi": 0.5,
+        "normalPhi": 16
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 0.25,
+          "depthPhi": 0.5,
+          "normalPhi": 16,
+          "radius": 2,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.13,
+        "sd": 24.6
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.096,
+        "top1pctMean": 2
+      }
+    },
+    "H-r1-luma04": {
+      "params": {
+        "radius": 1,
+        "lumaPhi": 0.4,
+        "depthPhi": 0.5,
+        "normalPhi": 16
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 0.4,
+          "depthPhi": 0.5,
+          "normalPhi": 16,
+          "radius": 1,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.12,
+        "sd": 24.62
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.097,
+        "top1pctMean": 2.02
+      }
+    },
+    "I-r3-luma03": {
+      "params": {
+        "radius": 3,
+        "lumaPhi": 0.3,
+        "depthPhi": 0.5,
+        "normalPhi": 16
+      },
+      "applied": {
+        "mode": "custom",
+        "applied": true,
+        "targetSize": {
+          "w": 662,
+          "h": 676
+        },
+        "denoise": {
+          "lumaPhi": 0.3,
+          "depthPhi": 0.5,
+          "normalPhi": 16,
+          "radius": 3,
+          "radiusExponent": 1,
+          "rings": 2,
+          "samples": 8
+        }
+      },
+      "crease": {
+        "mean": 41.14,
+        "sd": 24.59
+      },
+      "flat": {
+        "mean": 149.07,
+        "sd": 2.01
+      },
+      "targetSize": {
+        "w": 662,
+        "h": 676
+      },
+      "cam": {
+        "x": -2.6,
+        "y": 1.6,
+        "z": 3.4,
+        "zoom": 1
+      },
+      "vsRaw": {
+        "meanAbs": 0.115,
+        "top1pctMean": 2.34
+      }
+    }
+  },
+  "pageErrors": []
+}

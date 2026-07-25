@@ -1,7 +1,7 @@
 """Render a neutral diagnostic preview of a GLB with Blender.
 
 Usage:
-  Blender --background --python blender-intake-preview.py -- input.glb output.png
+  Blender --background --python blender-intake-preview.py -- input.glb output.png [yaw] [elevation]
 """
 import json
 import math
@@ -14,16 +14,18 @@ from mathutils import Vector
 
 def arguments():
     args = sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else []
-    if len(args) != 2:
-        raise SystemExit("Expected: input.glb output.png")
-    return Path(args[0]).resolve(), Path(args[1]).resolve()
+    if len(args) not in (2, 3, 4):
+        raise SystemExit("Expected: input.glb output.png [yaw] [elevation]")
+    yaw = math.radians(float(args[2])) if len(args) >= 3 else math.radians(-51.2)
+    elevation = math.radians(float(args[3])) if len(args) >= 4 else math.radians(26.5)
+    return Path(args[0]).resolve(), Path(args[1]).resolve(), yaw, elevation
 
 
 def point_camera(camera, target):
     camera.rotation_euler = (target - camera.location).to_track_quat("-Z", "Y").to_euler()
 
 
-source, output = arguments()
+source, output, yaw, elevation = arguments()
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
 bpy.ops.import_scene.gltf(filepath=str(source))
@@ -49,7 +51,12 @@ reach = max(size)
 camera_data = bpy.data.cameras.new("Intake camera")
 camera = bpy.data.objects.new("Intake camera", camera_data)
 bpy.context.scene.collection.objects.link(camera)
-camera.location = center + Vector((1.45, -1.8, 1.15)).normalized() * reach * 2.8
+camera_direction = Vector((
+    math.cos(yaw) * math.cos(elevation),
+    math.sin(yaw) * math.cos(elevation),
+    math.sin(elevation),
+))
+camera.location = center + camera_direction * reach * 2.8
 camera.data.type = "ORTHO"
 camera.data.ortho_scale = reach * 1.48
 point_camera(camera, center)

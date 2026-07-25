@@ -431,3 +431,41 @@ The first single-view render passed the tent silhouette and part-ownership contr
 fitted cloth floor panel. One precise-object edit removed only that groundsheet. The accepted
 reference preserves the original tent, camera, cloth shell, supports, and tied flaps while letting
 the flat background continue beneath the floorless shelter.
+
+### Meshy intake result — accepted
+
+Front proof:
+
+![M035-A cleaned front](intake-previews/M035-A-clean-front.png)
+
+Rear proof:
+
+![M035-A cleaned rear](intake-previews/M035-A-clean-rear.png)
+
+Canonical source:
+`incoming/M035-A-short-household-ridge-tent-smart-800.glb`
+
+Accepted production donor:
+`processed/M035-A-short-household-ridge-tent-clean-v1.glb`
+
+The Smart Topology download arrived with 824 triangles, 471 vertices, no materials, and no embedded
+textures. The two large cloth slopes were useful and there was no duplicate-shell failure. Meshy
+did mirror the tied-open entrance treatment onto both gable ends, leaving no closed back.
+
+`scripts/model-foundry/clean-meshy-ridge-tent.py` deterministically:
+
+- separates the 23 loose source islands;
+- removes only the two rear flap bundles and their two ties;
+- adds one eight-triangle floorless back panel;
+- groups the accepted geometry into four named material/state objects.
+
+```text
+cloth_shell             402 triangles
+cloth_front_treatment   120 triangles
+timber_frame            118 triangles
+ridge_lashings           72 triangles
+total                   712 triangles
+```
+
+The result has one open front, one closed back, no floor, broad texture-independent cloth planes,
+and independently replaceable front treatment and timber. M035-A passes calibration.

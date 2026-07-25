@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B05-makeshift-sprite-first-MM-v001",
+  "result": "PASS",
+  "thresholds": {
+    "albedoMaeMax": 3,
+    "albedoCorrelationMin": 0.99,
+    "heightStdDevMin": 1,
+    "normalXYStdDevMin": 0.35,
+    "roughnessByteTolerance": 1
+  },
+  "materials": [
+    {
+      "id": "makeshift-mud-daub",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b05-makeshift-v001/b05-makeshift-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 2.3535,
+        "normalStdDevRgb": [
+          0.4569,
+          0.4545,
+          0.4809
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.5443,
+          229.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 230,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "makeshift-wattle",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b05-makeshift-v001/b05-makeshift-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 51.0134,
+        "normalStdDevRgb": [
+          21.3491,
+          47.5835,
+          11.0722
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          252.1581,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "makeshift-stretched-hide",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b05-makeshift-v001/b05-makeshift-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 17.6058,
+        "normalStdDevRgb": [
+          10.5264,
+          10.0855,
+          2.3354
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.4173,
+          193.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 194,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "makeshift-bone-tusk-stakes",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b05-makeshift-v001/b05-makeshift-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 69.3915,
+        "normalStdDevRgb": [
+          45.6833,
+          14.5309,
+          14.3119
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          252.6045,
+          198.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 199,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "makeshift-scavenged-plank",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b05-makeshift-v001/b05-makeshift-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 27.1627,
+        "normalStdDevRgb": [
+          17.5077,
+          16.4694,
+          4.6307
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.9768,
+          193.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 194,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "makeshift-swamp-moss-thatch",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b05-makeshift-v001/b05-makeshift-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 20.1203,
+        "normalStdDevRgb": [
+          21.5999,
+          19.0267,
+          3.501
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.6724,
+          224.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 224,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

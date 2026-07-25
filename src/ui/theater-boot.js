@@ -14547,9 +14547,13 @@ window.Theater.__setSpriteUnlitDebug = function(on){ SPRITE_UNLIT_DEBUG = !!on; 
 // material (no recompile; the uniform is injected at first compile). Diagnosis + capture only.
 window.Theater._setStandeeDepthBiasForTest = function(units){
   SPRITE_DEPTH_BIAS_UNITS = (typeof units === "number") ? units : 0.25;
-  SPRITE_DEPTH_BIAS_MATERIALS.forEach(function(m){
+  // prune disposed materials while walking (board rebuilds retire cards; the registry must not
+  // accumulate dead references across a long session)
+  for(let i = SPRITE_DEPTH_BIAS_MATERIALS.length - 1; i >= 0; i--){
+    const m = SPRITE_DEPTH_BIAS_MATERIALS[i];
+    if(!m || m.disposed || (m.userData && m.userData.retired)){ SPRITE_DEPTH_BIAS_MATERIALS.splice(i, 1); continue; }
     if(m.userData && m.userData.standeeDepthBiasUniform) m.userData.standeeDepthBiasUniform.value = SPRITE_DEPTH_BIAS_UNITS;
-  });
+  }
   markDirty();
   return SPRITE_DEPTH_BIAS_UNITS;
 };

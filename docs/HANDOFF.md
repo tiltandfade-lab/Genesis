@@ -6,7 +6,54 @@ updated: 2026-07-25
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-25, visual-correction Checkpoint 0+1) — AO, CLOCK-DRIVEN SUN, STANDEE LAWS [Fable]
+## ⭐ Latest (2026-07-25, visual-correction COMPLETE C0–C4) — ALL FIVE CHECKPOINTS DONE [Fable]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, head after the self-review
+commit (parents: `2cdf2ccb` C1 → `81314bae` C2 → `0bec7624` C3 → `d71b568d` C4). **Not merged
+or pushed. FULL CI PENDING.** Every checkpoint below carries `VISUAL VERDICT: PENDING ADAM` —
+the critical self-review stood in for per-checkpoint verdicts per Adam's 2026-07-25 directive.
+
+- **Checkpoint 2 — warm/cool overlap + readout truth.** The opposing pair floats at authored
+  positions via the diagnostic-studio `mount: "none"` exception (scoped in BOTH validators in
+  lockstep — compile-light-locks.py + light-recipes.js); `authoredRange: true` on every
+  lock-registry light so `ITR_LIGHT_DISTANCE_CAP=7` only bites generated lights; both pools
+  overlap the central subjects with no dark seam; the panel readout prints MOUNTED world
+  positions, live ranges/intensities, and celestial clock lines; overlays default OFF at all
+  four entry sites. Evidence: `03-warm-only` / `04-cool-only` / `05-warm-cool-overlap` +
+  `05-warm-cool-sheet.png` (warm-pixel counts in the packet receipts).
+- **Checkpoint 3 — lore-native sources + dark readability + responsive void.** Magic-glow got a
+  crystal emitter fixture and lavalit an emissive molten-fissure fixture (both through the
+  production fixture-group path, staged to light the subjects); torchlit keeps its accepted
+  flame; **the interior void/fog now responds to the recipe** — `data.lightRecipeLock` derives
+  the backdrop from the celestial arc's voidTint (celestial recipes) or ambient×0.16, still
+  routed through `gradeColorLocal` (the dungeon-interior §18 check was updated to the new source
+  chain — same protected property, recipe-aware first). Sprite silhouette shadows + camera fill
+  intact. Evidence: `06-lore-lighting-sheet.png`. Magic/fire/lava darkness depth remains Adam's
+  taste call on the open ledger.
+- **Checkpoint 4 — CL-F01 honest workbench.** Ordered specimen lane + a coherent assembled
+  example (approach stair, lifted parapet, twin posts — all with real sockets + access classes);
+  typed socket arrows + per-face access frames (walk/climb-cost/climb-dc/none color law); ramp
+  hard normals via non-indexed per-face geometry; fitted all-walls strategic camera (FOV-derived
+  distance, 72° pitch); the bench report emits its own `cameraSideOmission` so shell report and
+  projection give ONE answer; catalog auto-collapse + bounded inspector at narrow widths.
+  Evidence: `07-construction-site.png` / `08-structure-diagnostics-sheet.png` /
+  `09-responsive-layouts.png`.
+- **Critical self-review (post-C4):** SPRITE_DEPTH_BIAS_MATERIALS now prunes disposed materials
+  (unbounded-growth fix); flicker marker writes confirmed null-safe for markerless environmental
+  rows; dungeon-interior §18 void check updated (see C3); full focused sweep green.
+- **Final gates:** clay-room **247/247** (§35 AO + §36 C2 + §37 C4 families) · light-locks 12/12
+  · dungeon-interior 291/291 · room-shell 53/53 · tactical-query 31/31 · theater-sprites 12/12 ·
+  sprite-registry 27/27 · floor-contact 51/51 · light-lab 42/42 (LIGHT_LAB_SHOTS_DIR redirect) ·
+  manifest OK · `git diff --check` clean. Inherited reds unchanged: diegetic-light 7
+  (LFS-pointer env), interior-camera-frustum 2, occlusion-fade 3.
+- **Packet complete** per the brief: `dev/clay-captures/clayroom-visual-correction/` holds
+  00–09 numbered evidence + `10-final-correction-sheet.png` (16-panel before/after, all
+  checkpoints) + machine-readable receipts (before/, after/, cp1-ao/).
+- **Next:** Phase B theater-boot split (recon memo done — brief is stale vs the 21.3k-line file;
+  extraction order inverts to Clay Room + Light Lab first; split branches only AFTER this lane
+  lands), then Phase C singular clean close.
+
+## 2026-07-25 (visual-correction Checkpoint 0+1) — AO, CLOCK-DRIVEN SUN, STANDEE LAWS [Fable]
 
 Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, checkpoint commit `2cdf2ccb`
 on top of `a3dd41dd`. **Not merged or pushed. FULL CI PENDING.** Owning brief:

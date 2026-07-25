@@ -541,8 +541,12 @@ group("18 — GR4/GR3 wiring: skirt InstancedMesh + kit-graded void/fog backdrop
 {
   ok(/interiorBuildInstancedMesh\(data\.skirt, cx, cz, null, variant, "skirt"\)/.test(bootSrc),
     "setInteriorBoard builds a skirt InstancedMesh off data.skirt");
-  ok(/gradeColorLocal\(\s*\n?\s*\(data\.fog && data\.fog\.color\) \? hexStrToNum\(data\.fog\.color\) : voidTintFor\(env\),/.test(bootSrc),
-    "setInteriorBoard grades its void/fog backdrop color through gradeColorLocal (routes voidTintFor through the kit grade)");
+  // visual-correction Checkpoint 3 (2026-07-25): the backdrop is now RECIPE-AWARE first (a board
+  // carrying a light-recipe lock derives its void from the recipe/celestial arc), with the same
+  // kit-fog and env-keyed fallbacks INSIDE the same gradeColorLocal routing this check has always
+  // protected — the property (graded, kit-routed backdrop) is unchanged, only the source chain grew.
+  ok(/gradeColorLocal\(\s*\n?\s*recipeVoidNum != null \? recipeVoidNum\s*\n?\s*: \(\(data\.fog && data\.fog\.color\) \? hexStrToNum\(data\.fog\.color\) : voidTintFor\(env\)\),/.test(bootSrc),
+    "setInteriorBoard grades its (recipe-aware) void/fog backdrop color through gradeColorLocal (kit-grade routing preserved)");
   ok(/const fogWhisper = \(typeof kit\.fogWhisper === "number"/.test(bootSrc),
     "setInteriorBoard's fog-density default reads kit.fogWhisper (not the old ad-hoc 0.05 literal)");
   ok(!/\(data\.fog && data\.fog\.density\) \|\| 0\.05/.test(bootSrc),

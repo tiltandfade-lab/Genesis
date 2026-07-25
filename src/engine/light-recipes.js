@@ -109,7 +109,13 @@ function lightRecipeValidate(profile) {
     if (profile.source && profile.source.visibleEmitterRequired) {
       if (!light.fixtureId) errors.push(label + ".fixtureId is required");
       if (!light.emitterLocal) errors.push(label + ".emitterLocal is required");
-      if (light.positionStrategy !== "socket-relative") errors.push(label + ".positionStrategy must be socket-relative");
+      // CR-3's written diagnostic-studio exception, kept in lockstep with
+      // build/compile-light-locks.py (2026-07-25 visual-correction Checkpoint 2): explicitly
+      // labelled studio test hardware may float board-relative; production visible emitters
+      // keep the socket-relative mount contract.
+      if (profile.mode !== "diagnostic-studio" && light.positionStrategy !== "socket-relative") {
+        errors.push(label + ".positionStrategy must be socket-relative");
+      }
     }
   });
   return { ok: errors.length === 0, errors: errors };

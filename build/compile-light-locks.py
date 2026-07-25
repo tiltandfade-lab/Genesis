@@ -259,10 +259,21 @@ def validate_lock(lock: object) -> dict:
             if source["visibleEmitterRequired"]:
                 require(isinstance(light.get("fixtureId"), str) and light["fixtureId"],
                         f"{llabel}: visible-emitter sources require fixtureId")
-                require(light.get("mount") in {"floor", "wall", "ceiling"},
-                        f"{llabel}: visible-emitter sources require a physical mount")
-                require(light.get("positionStrategy") == "socket-relative",
-                        f"{llabel}: visible-emitter sources must be socket-relative")
+                # CR-3's own written exception (CLAYROOM-RESET-LADDER "Physical-emitter honesty"):
+                # a DIAGNOSTIC STUDIO rig may use explicitly labelled non-diegetic test lights.
+                # Its visible bulb still renders (fixtureId above), but it floats at the exact
+                # authored board position (mount "none") instead of snapping to whatever wall
+                # slot happens to exist — the snap is how the "opposing" pair ended up on
+                # adjacent walls (visual-correction Checkpoint 2, 2026-07-25). Production
+                # recipes keep the physical-mount + socket-relative contract unchanged.
+                if profile.get("mode") == "diagnostic-studio":
+                    require(light.get("mount") in {"floor", "wall", "ceiling", "none"},
+                            f"{llabel}: diagnostic-studio mount is invalid")
+                else:
+                    require(light.get("mount") in {"floor", "wall", "ceiling"},
+                            f"{llabel}: visible-emitter sources require a physical mount")
+                    require(light.get("positionStrategy") == "socket-relative",
+                            f"{llabel}: visible-emitter sources must be socket-relative")
 
     require(rolled_count == 10, f"expected 10 rolled production profiles, found {rolled_count}")
     require("clay-neutral-truth" in profiles, "missing clay-neutral-truth diagnostic recipe")

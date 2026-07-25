@@ -9433,6 +9433,19 @@ function interiorNearestWallMountSlot(wallMountData, x, z){
 // data DEGRADES to a floor mount at the light's own (x,z), logged once (WALL-VOLUMES-PRACTICALS.md
 // §E0's own defensive contract — "floor fixtures work even if C4.1a mount data is absent").
 function interiorResolveFixturePlacement(light, cx, cz, floorTopMap, wallMountData){
+  // Checkpoint 2 (2026-07-25) — DIAGNOSTIC STUDIO FLOAT: mount "none" places the fixture at its
+  // EXACT authored position (board-relative, y in world units). The physical-emitter honesty law
+  // (CR-3) already distinguishes explicitly-labelled non-diegetic studio hardware from rolled
+  // practicals; a calibration bulb that silently snaps to whatever wall slot happens to exist is
+  // how the "opposing" pair ended up on ADJACENT walls with the readout still claiming opposition
+  // (root-cause notes §2). Production rolled practicals keep the wall/floor mount contract.
+  if(light.mount === "none"){
+    return {
+      mount: "none", ownerSegIndex: null,
+      pos: { x: (light.x || 0) - cx, y: light.y != null ? light.y : 1.7, z: (light.z || 0) - cz },
+      normal: null,
+    };
+  }
   if(light.mount === "wall"){
     const slot = interiorNearestWallMountSlot(wallMountData, light.x || 0, light.z || 0);
     if(slot){
@@ -9587,6 +9600,33 @@ function interiorBuildLights(lights, cx, cz, realmId, floorTopMap, pieces, isBri
       environmentalLight.userData.lightId = String(light.id || light.sourceRef || "environment-light");
       environmentalLight.userData.recipeMode = light.recipeMode || "production-environment";
       group.add(environmentalLight);
+      // Checkpoint 2 (2026-07-25) — READOUT TRUTH: environmental sources register in the SAME
+      // live-light registry the practicals use, so the Lights readout and the lighting proof can
+      // describe the sun/moon/ambient-shaping lights that actually reach the renderer. Before
+      // this, the registry printed `lights: []` under full daylight (root-cause notes §3) — the
+      // panel was structurally unable to tell the truth about five of seven recipes. Steady,
+      // markerless rows; the snapshot reader is already null-tolerant on marker fields.
+      flickerTargets.push({
+        id: String(light.id || light.sourceRef || ("environment-light-" + flickerTargets.length)),
+        sourceRef: light.sourceRef || String(light.id || "environment-light"),
+        state: "steady",
+        seed: String(light.id || "environment-light"),
+        cadenceMs: 480, intervalJitter: 0, directionAmplitude: 0,
+        sampleIndex: 0, normalizedSample: 1,
+        directionSample: { x: 0, y: 0, z: 0 },
+        pl: environmentalLight, marker: null, cone: null,
+        emissiveFlicker: false,
+        baseIntensity: environmentalLight.intensity,
+        baseEmissiveIntensity: 0,
+        baseOpacity: 1,
+        basePointPosition: {
+          x: environmentalLight.position.x,
+          y: environmentalLight.position.y,
+          z: environmentalLight.position.z
+        },
+        baseMarkerPosition: null, baseMarkerRotation: null,
+        amplitude: 0
+      });
       return;
     }
 
@@ -14698,6 +14738,22 @@ window.Theater._spriteShadowStateForTest = function(){
   });
   return rows;
 };
+// Checkpoint 2 solo A/B (diagnosis only): shows warm-only / cool-only / both for the SAME mounted
+// scene by toggling light+emitter visibility — nothing moves, nothing rebuilds, instantly
+// reversible. Pass a light id to solo it, null to restore all.
+window.Theater._claySetLightSoloForTest = function(soloId){
+  const rows = S.interiorLightTargets || [];
+  let touched = 0;
+  rows.forEach(function(r){
+    if(!r || !r.pl) return;
+    const on = soloId == null || r.id === soloId;
+    r.pl.visible = on;
+    if(r.marker) r.marker.visible = on;
+    touched++;
+  });
+  markDirty();
+  return { touched, soloId: soloId == null ? null : String(soloId) };
+};
 // One-shot shadow-pass entry probe: counts onBeforeShadow invocations on the sprite card versus a
 // reference opaque bench mesh across one forced render, proving whether the card enters the
 // renderer's shadow pass at all (THREE calls onBeforeShadow per shadow draw).
@@ -16568,9 +16624,14 @@ function clayRoomLightingSnapshot(label){
     const baseMesh = t.emissiveFlicker ? t.baseEmissiveIntensity : t.baseOpacity;
     const emittedNormalized = t.baseIntensity ? emitted / t.baseIntensity : null;
     const meshNormalized = baseMesh ? mesh / baseMesh : null;
-    const pointPosition = t.pl && t.pl.position
-      ? [n(t.pl.position.x), n(t.pl.position.y), n(t.pl.position.z)]
-      : null;
+    // WORLD position — the readout's mounted-truth line must name where the light actually sits
+    // in the room, not its local offset inside a fixture group (Checkpoint 2 readout truth).
+    const pointPosition = (function(){
+      if(!t.pl || !t.pl.getWorldPosition) return null;
+      const wp = new THREE.Vector3();
+      t.pl.getWorldPosition(wp);
+      return [n(wp.x), n(wp.y), n(wp.z)];
+    })();
     const emitterPosition = t.marker && t.marker.position
       ? [n(t.marker.position.x), n(t.marker.position.y), n(t.marker.position.z)]
       : null;
@@ -16609,6 +16670,7 @@ function clayRoomLightingSnapshot(label){
         : null,
       pointPosition: pointPosition,
       emitterPosition: emitterPosition,
+      celestial: t.pl && t.pl.userData && t.pl.userData.celestial ? t.pl.userData.celestial : null,
       basePointPosition: t.basePointPosition
         ? [n(t.basePointPosition.x), n(t.basePointPosition.y), n(t.basePointPosition.z)]
         : null,
@@ -17648,7 +17710,7 @@ function clayRoomDisposeLightOverlays(){
 function clayRoomBuildLightOverlays(){
   clayRoomDisposeLightOverlays();
   if(S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID || !S.scene) return null;
-  const modes = S.clayRoomLightOverlayModes || { position: true, range: true, shadow: false };
+  const modes = S.clayRoomLightOverlayModes || { position: false, range: false, shadow: false };
   S.clayRoomLightOverlayModes = modes;
   const group = new THREE.Group();
   group.name = "cl-f02-light-overlays";
@@ -18093,7 +18155,7 @@ async function clayRoomCaptureLightingMatrix(){
   if(S.clayRoomMatrixStatusEl) S.clayRoomMatrixStatusEl.textContent = "capturing 1 / 7…";
   const originalRecipeId = S.clayRoomLightRecipeId || "clay-opposing-pair";
   const originalOverlayModes = Object.assign(
-    { position: true, range: true, shadow: false },
+    { position: false, range: false, shadow: false },
     S.clayRoomLightOverlayModes || {}
   );
   const previewSeed = S.clayRoomPreviewSeed || CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
@@ -19430,7 +19492,7 @@ function mountClayRoom(){
     // an honest size-spectrum check; neither view mutates registry worldHeight or tactical span.
     S.clayRoomSpriteScaleMode = "diagnostic-cap";
     S.clayRoomSelectedSpriteSlug = CLAY_SPRITE_CITIZENSHIP_FIXTURE.selectedSlug;
-    S.clayRoomLightOverlayModes = { position: true, range: true, shadow: false };
+    S.clayRoomLightOverlayModes = { position: false, range: false, shadow: false };
     S.clayRoomPreviewSeed = CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
     S.clayCamOffset = { x: 0, z: 0 };
     S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
@@ -20457,7 +20519,7 @@ function clayRoomMountOverlay(record, host){
     button.setAttribute("aria-label", "Toggle " + def[0] + " light overlay");
     button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:5px;";
     button.addEventListener("click", function(){
-      S.clayRoomLightOverlayModes = S.clayRoomLightOverlayModes || { position: true, range: true, shadow: false };
+      S.clayRoomLightOverlayModes = S.clayRoomLightOverlayModes || { position: false, range: false, shadow: false };
       S.clayRoomLightOverlayModes[def[0]] = !S.clayRoomLightOverlayModes[def[0]];
       clayRoomBuildLightOverlays();
       if(S.clayRoomRefreshFixtureControls) S.clayRoomRefreshFixtureControls();
@@ -20618,9 +20680,10 @@ function clayRoomMountOverlay(record, host){
       && snap.lights.length === activeProfile.points.length
       && snap.lights.every(function(l){
         const authoredLight = activeProfile.points.find(function(point){ return point.id === l.id; });
-        if(!authoredLight || l.state !== authoredLight.state || !l.parity) return false;
-        return l.state === "flickering"
-          || (l.emittedNormalized === 1 && l.meshNormalized === 1);
+        if(!authoredLight || l.state !== authoredLight.state) return false;
+        // markerless environmental rows have no emitter mesh to hold parity against
+        const meshOk = l.emitterUuid ? (l.parity && l.meshNormalized === 1) : true;
+        return l.state === "flickering" || (l.emittedNormalized === 1 && meshOk);
       }));
     const flickering = snap.lights.filter(function(l){ return l.state === "flickering"; });
     const steady = snap.lights.filter(function(l){ return l.state === "steady"; });
@@ -20646,21 +20709,41 @@ function clayRoomMountOverlay(record, host){
       ""
     ];
     snap.lights.forEach(function(l){
+      // Checkpoint 2 READOUT TRUTH: every line below is the LIVE mounted object, never the
+      // authored recipe — environmental rows (sun/moon; markerless, no distance) print their own
+      // shape instead of crashing the practical-shaped formatter.
       const sample = l.normalizedSample == null ? "—" : l.normalizedSample.toFixed(6);
       lines.push(l.id + " [" + l.state + "] sample " + sample);
-      lines.push("  emitted " + l.emitted.toFixed(6) + "/" + l.emittedBase.toFixed(6)
-        + " = " + l.emittedNormalized.toFixed(6));
-      lines.push("  mesh    " + l.mesh.toFixed(6) + "/" + l.meshBase.toFixed(6)
-        + " = " + l.meshNormalized.toFixed(6) + " · parity " + (l.parity ? "PASS" : "FAIL"));
-      lines.push("  range " + l.distance.toFixed(2) + " · decay " + l.decay.toFixed(2)
+      lines.push("  emitted " + (l.emitted == null ? "—" : l.emitted.toFixed(6))
+        + "/" + (l.emittedBase == null ? "—" : l.emittedBase.toFixed(6))
+        + (l.emittedNormalized == null ? "" : " = " + l.emittedNormalized.toFixed(6)));
+      if(l.mesh != null){
+        lines.push("  mesh    " + l.mesh.toFixed(6) + "/" + l.meshBase.toFixed(6)
+          + " = " + l.meshNormalized.toFixed(6) + " · parity " + (l.parity ? "PASS" : "FAIL"));
+      }
+      lines.push("  " + (l.distance != null
+          ? "range " + l.distance.toFixed(2) + " · decay " + (l.decay == null ? "—" : l.decay.toFixed(2))
+          : "directional (no falloff)")
         + " · shadows " + (l.castShadow ? "ON" : "OFF"));
-      lines.push("  dance Δ "
-        + [l.directionSample.x, l.directionSample.y, l.directionSample.z]
-          .map(function(value){ return value.toFixed(3); }).join("/")
-        + " · co-located " + (l.coLocated && l.directionWithinBounds ? "PASS" : "FAIL"));
-      lines.push("  interval last/next "
-        + (l.lastIntervalMs == null ? "—" : l.lastIntervalMs.toFixed(0))
-        + "/" + (l.nextIntervalMs == null ? "—" : l.nextIntervalMs.toFixed(0)) + " ms");
+      if(l.pointPosition){
+        lines.push("  mounted pos " + l.pointPosition.map(function(v){ return v.toFixed(2); }).join("/"));
+      }
+      if(l.celestial){
+        const hh = Math.floor(l.celestial.clockMin / 60), mm = Math.round(l.celestial.clockMin % 60);
+        lines.push("  clock " + (hh < 10 ? "0" : "") + hh + ":" + (mm < 10 ? "0" : "") + mm
+          + " · arc dir " + [l.celestial.derivedDir.x, l.celestial.derivedDir.y, l.celestial.derivedDir.z]
+            .map(function(v){ return v.toFixed(2); }).join("/")
+          + " · arc ×" + l.celestial.intensityScale.toFixed(3));
+      }
+      if(l.emitterUuid){
+        lines.push("  dance Δ "
+          + [l.directionSample.x, l.directionSample.y, l.directionSample.z]
+            .map(function(value){ return value.toFixed(3); }).join("/")
+          + " · co-located " + (l.coLocated && l.directionWithinBounds ? "PASS" : "FAIL"));
+        lines.push("  interval last/next "
+          + (l.lastIntervalMs == null ? "—" : l.lastIntervalMs.toFixed(0))
+          + "/" + (l.nextIntervalMs == null ? "—" : l.nextIntervalMs.toFixed(0)) + " ms");
+      }
       lines.push("  ids point " + String(l.pointUuid).slice(0, 8)
         + " · material " + String(l.materialUuid).slice(0, 8));
       const buttons = lightStateButtons[l.id];

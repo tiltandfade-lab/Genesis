@@ -982,9 +982,12 @@ function clayRoomBoardFrom(record, opts){
       // ordinary relative-intensity × shared-gain path.
       renderIntensity: lightRecipe.mode === "diagnostic-studio" ? p.physicalIntensity : undefined,
       distance: p.rangeM / 1.524,
-      // Adam accepted the torch's local brightness and reviewed successive reach extensions. Mark
-      // only that exception so the renderer does not also widen moonlight, lava, or diagnostic rigs.
-      authoredRange: lightRecipe.id === "torchlit",
+      // Checkpoint 2 (2026-07-25): EVERY recipe light carries its authored, validated reach. The
+      // renderer's small-pool safety cap (ITR_LIGHT_DISTANCE_CAP) exists for generic GENERATED
+      // interior lights; a lock-registry recipe range is reviewed data by definition, and capping
+      // it silently was the root cause of the warm/cool pair dying half a room short of the
+      // subjects while the readout kept printing the authored 18.288 m (root-cause notes §2).
+      authoredRange: true,
       decay: p.falloff,
       castShadow: p.shadow.cast,
       shadowBias: p.shadow.bias,

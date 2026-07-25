@@ -1855,5 +1855,43 @@ const check = (name, cond, detail = "") =>
     && /get\("envao"\)/.test(bootSrc));
 }
 
+// 36. CHECKPOINT 2 — warm/cool overlap + readout truth (visual-correction assignment).
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  const engineSrc = read("src/engine/clay-room.js");
+  const recipesSrc = read("src/engine/light-recipes.js");
+  const compilerSrc = read("build/compile-light-locks.py");
+  const lock = JSON.parse(read("data/light-profile-locks.json"));
+  check("36a. every recipe light carries its authored reach (the generated-light cap no longer bites reviewed lock data)",
+    /authoredRange: true,/.test(engineSrc)
+    && !/authoredRange: lightRecipe\.id === "torchlit"/.test(engineSrc));
+  const pair = lock.profiles["clay-opposing-pair"].lights;
+  check("36b. EXECUTED: the diagnostic pair floats at symmetric authored studio positions over the subjects",
+    pair.length === 2
+    && pair[0].mount === "none" && pair[1].mount === "none"
+    && pair[0].pos.x === -pair[1].pos.x
+    && pair[0].pos.y === pair[1].pos.y && pair[0].pos.z === pair[1].pos.z
+    && Math.abs(pair[0].pos.x) > 0.3 && Math.abs(pair[0].pos.x) < 0.8
+    && pair[0].falloff > 0 && pair[1].falloff > 0);
+  check("36c. the diagnostic-studio float exception is scoped identically in BOTH validators (never a silent bypass)",
+    /diagnostic-studio/.test(compilerSrc)
+    && /visible-emitter sources require a physical mount/.test(compilerSrc)
+    && /profile\.mode !== "diagnostic-studio"/.test(recipesSrc)
+    && /must be socket-relative/.test(recipesSrc)
+    && /if\(light\.mount === "none"\)/.test(bootSrc));
+  check("36d. position/range/shadow overlays default OFF for ordinary review",
+    !/\{ position: true, range: true, shadow: false \}/.test(bootSrc)
+    && /\{ position: false, range: false, shadow: false \}/.test(bootSrc));
+  check("36e. environmental lights register in the live registry and the readout prints mounted truth (markerless-safe)",
+    /environmental sources register in the SAME/i.test(bootSrc)
+    && /pl: environmentalLight, marker: null/.test(bootSrc)
+    && /directional \(no falloff\)/.test(bootSrc)
+    && /mounted pos /.test(bootSrc)
+    && /celestial: t\.pl && t\.pl\.userData && t\.pl\.userData\.celestial/.test(bootSrc));
+  check("36f. the solo A/B seam exists and is visibility-only (nothing moves, nothing rebuilds)",
+    /_claySetLightSoloForTest/.test(bootSrc)
+    && /r\.pl\.visible = on/.test(bootSrc));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

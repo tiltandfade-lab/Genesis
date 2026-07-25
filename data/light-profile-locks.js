@@ -1013,7 +1013,7 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           "colorOverride": true,
           "intensityUnit": "tabletop-profile-unit",
           "physicalIntensityUnit": "renderer-intensity",
-          "positionStrategy": "socket-relative",
+          "positionStrategy": "board-relative",
           "azimuthDeg": 0,
           "elevationDeg": 45,
           "spot": {
@@ -1028,7 +1028,7 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
             "budgetPriority": 1
           },
           "fixtureId": "bracket-generic",
-          "mount": "wall",
+          "mount": "none",
           "emitterLocal": {
             "x": 0,
             "y": 0.03,
@@ -1047,13 +1047,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           "intensity": 16,
           "physicalIntensity": 16,
           "pos": {
-            "x": -0.8,
+            "x": -0.53,
             "y": 1.7,
             "z": 0
           },
           "heightM": 2.591,
           "rangeM": 18.288,
-          "falloff": 0,
+          "falloff": 1,
           "state": "steady"
         },
         {
@@ -1062,7 +1062,7 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           "colorOverride": true,
           "intensityUnit": "tabletop-profile-unit",
           "physicalIntensityUnit": "renderer-intensity",
-          "positionStrategy": "socket-relative",
+          "positionStrategy": "board-relative",
           "azimuthDeg": 0,
           "elevationDeg": 45,
           "spot": {
@@ -1077,7 +1077,7 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
             "budgetPriority": 1
           },
           "fixtureId": "bracket-generic",
-          "mount": "wall",
+          "mount": "none",
           "emitterLocal": {
             "x": 0,
             "y": 0.03,
@@ -1096,13 +1096,13 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           "intensity": 9,
           "physicalIntensity": 9,
           "pos": {
-            "x": 0.8,
+            "x": 0.53,
             "y": 1.7,
             "z": 0
           },
           "heightM": 2.591,
           "rangeM": 18.288,
-          "falloff": 0,
+          "falloff": 1,
           "state": "steady"
         }
       ]

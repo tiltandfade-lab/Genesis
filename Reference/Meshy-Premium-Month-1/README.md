@@ -109,6 +109,26 @@ M001-A passes only if:
 If it fails the final condition, remove ordinary boulder clusters from paid production and keep
 Meshy only for exceptional rock mouths, transitions, roots, and strange formations.
 
+### First intake — settings mismatch, silhouette provisionally passed
+
+![M001-A high-poly diagnostic](intake-previews/M001-A-highpoly-settings-mismatch.png)
+
+The first downloaded file was `incoming/M001-A-bouldet-cluster-original.glb .glb`. It is retained
+locally as user-provided intake but is not admitted or committed as the production source. It
+contains:
+
+- 139,328 triangles and 72,220 vertices;
+- four embedded texture images;
+- 24 disconnected geometric islands inside one unnamed mesh;
+- the intended stable three-rock silhouette when inspected in neutral Blender clay.
+
+This is a settings mismatch, not a failed reference image. Do not repeat Image-to-3D. Remesh the
+existing Meshy model with fixed triangle topology at 400 faces. Texture may be omitted in Meshy or
+stripped locally after download.
+
+Save that result as:
+`incoming/M001-A-low-cover-boulder-cluster-remesh-400.glb`
+
 ### ImageGen correction record
 
 The first call produced a visually useful five-view model sheet. It was rejected because a

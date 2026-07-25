@@ -114,6 +114,33 @@ Watch in Meshy:
 - the attachment sockets must emerge as distinct parts rather than being fused to the rails;
 - the model may need a much lower target polygon count than the image implies.
 
+### Meshy intake result
+
+Source:
+`incoming/M019-A-wagon-chassis-original.glb .glb`
+
+Processed donor:
+`processed/M019-A-wagon-chassis-clean-v1.glb`
+
+The literal doubled `.glb .glb` source filename came from the download and remains untouched
+as intake provenance. Meshy delivered one unnamed mesh with 1,898 triangles and 59 disconnected
+geometric islands. The chassis, shafts, bed, braces, axles, and corner sockets were useful.
+The four wheels were the only conspicuously dirty forms: they consumed 20 islands and 935
+triangles, with lumpy rims and radial fan triangulation.
+
+`scripts/model-foundry/clean-meshy-wagon.mjs` preserves the source, removes only the isolated
+wheel geometry, and exports:
+
+- one named `wagon_chassis` mesh;
+- one named `clean_low_poly_wheel` mesh instanced by four named wheel nodes;
+- 963 retained chassis triangles;
+- 272 triangles in the reusable wheel;
+- 2,051 visible triangles in the complete four-wheel scene.
+
+Inspect either GLB with:
+
+`dev/model-foundry/meshy-intake.html?model=/Reference/Meshy-Premium-Month-1/...`
+
 ### Superseded first pass
 
 `reference-images/M019-universal-four-wheel-wagon-chassis.png` is retained as prompt-drift

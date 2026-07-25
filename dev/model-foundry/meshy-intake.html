@@ -1,0 +1,179 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Genesis Meshy Intake Viewer</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #121316; }
+  body { font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; color: #d8cfbf; }
+  canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+  canvas:active { cursor: grabbing; }
+  #hud {
+    position: fixed; inset: 14px auto auto 14px; max-width: min(620px, calc(100vw - 28px));
+    padding: 10px 12px; border: 1px solid #51483c; border-radius: 5px;
+    background: rgb(18 19 22 / .88); box-shadow: 0 8px 28px #0008; pointer-events: none;
+  }
+  #hud b { color: #fff1cf; letter-spacing: .08em; }
+  #stat { display: block; margin-top: 4px; color: #aca18f; }
+  #error { color: #ff9a8e; }
+</style>
+<canvas id="view"></canvas>
+<div id="hud"><b>MESHY INTAKE</b><span id="stat">Loading…</span><span id="error"></span></div>
+<script>
+(() => {
+  "use strict";
+  const canvas = document.querySelector("#view");
+  const ctx = canvas.getContext("2d");
+  const stat = document.querySelector("#stat");
+  const error = document.querySelector("#error");
+  const query = new URLSearchParams(location.search);
+  const modelUrl = query.get("model");
+  let points = [], triangles = [], yaw = -0.72, pitch = -0.42, zoom = 1.08;
+  let dragging = false, lastX = 0, lastY = 0;
+
+  function accessor(gltf, bin, index) {
+    const a = gltf.accessors[index], view = gltf.bufferViews[a.bufferView];
+    const componentCount = ({SCALAR:1,VEC2:2,VEC3:3,VEC4:4})[a.type];
+    const byteSize = ({5120:1,5121:1,5122:2,5123:2,5125:4,5126:4})[a.componentType];
+    const readers = {
+      5120:"getInt8", 5121:"getUint8", 5122:"getInt16",
+      5123:"getUint16", 5125:"getUint32", 5126:"getFloat32"
+    };
+    const littleEndian = byteSize > 1;
+    const start = (view.byteOffset || 0) + (a.byteOffset || 0);
+    const stride = view.byteStride || componentCount * byteSize;
+    const data = new DataView(bin);
+    const output = [];
+    for (let row = 0; row < a.count; row++) {
+      const values = [];
+      for (let column = 0; column < componentCount; column++) {
+        values.push(data[readers[a.componentType]](start + row * stride + column * byteSize, littleEndian));
+      }
+      output.push(componentCount === 1 ? values[0] : values);
+    }
+    return output;
+  }
+
+  function parseGlb(buffer) {
+    const bytes = new Uint8Array(buffer), data = new DataView(buffer);
+    if (data.getUint32(0, true) !== 0x46546c67) throw new Error("Not a GLB file.");
+    let offset = 12, gltf = null, bin = null;
+    while (offset < bytes.length) {
+      const length = data.getUint32(offset, true), type = data.getUint32(offset + 4, true);
+      const chunk = bytes.slice(offset + 8, offset + 8 + length);
+      if (type === 0x4e4f534a) gltf = JSON.parse(new TextDecoder().decode(chunk).replace(/\0+$/, ""));
+      if (type === 0x004e4942) bin = chunk.buffer;
+      offset += 8 + length;
+    }
+    const positions = [], indices = [];
+    const visit = (nodeIndex, parentTranslation = [0,0,0]) => {
+      const node = gltf.nodes[nodeIndex], local = node.translation || [0,0,0];
+      const translation = local.map((value, axis) => value + parentTranslation[axis]);
+      if (node.mesh !== undefined) for (const primitive of gltf.meshes[node.mesh].primitives) {
+        const vertexOffset = positions.length;
+        positions.push(...accessor(gltf, bin, primitive.attributes.POSITION).map(point =>
+          point.map((value, axis) => value + translation[axis])
+        ));
+        indices.push(...accessor(gltf, bin, primitive.indices).map(index => index + vertexOffset));
+      }
+      for (const child of node.children || []) visit(child, translation);
+    };
+    for (const root of gltf.scenes[gltf.scene || 0].nodes) visit(root);
+    return {positions, indices};
+  }
+
+  function fit(rawPoints) {
+    const lo = [Infinity,Infinity,Infinity], hi = [-Infinity,-Infinity,-Infinity];
+    for (const p of rawPoints) for (let axis = 0; axis < 3; axis++) {
+      lo[axis] = Math.min(lo[axis], p[axis]); hi[axis] = Math.max(hi[axis], p[axis]);
+    }
+    const center = lo.map((value, axis) => (value + hi[axis]) / 2);
+    const span = Math.max(...hi.map((value, axis) => value - lo[axis]));
+    return rawPoints.map(p => p.map((value, axis) => (value - center[axis]) / span));
+  }
+
+  function resize() {
+    const ratio = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = Math.round(innerWidth * ratio);
+    canvas.height = Math.round(innerHeight * ratio);
+    render();
+  }
+
+  function rotate(p) {
+    const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    const x = cy * p[0] - sy * p[2], z = sy * p[0] + cy * p[2];
+    return [x, cp * p[1] - sp * z, sp * p[1] + cp * z];
+  }
+
+  function normal(a, b, c) {
+    const ab = [b[0]-a[0], b[1]-a[1], b[2]-a[2]], ac = [c[0]-a[0], c[1]-a[1], c[2]-a[2]];
+    const n = [ab[1]*ac[2]-ab[2]*ac[1], ab[2]*ac[0]-ab[0]*ac[2], ab[0]*ac[1]-ab[1]*ac[0]];
+    const length = Math.hypot(...n) || 1;
+    return n.map(value => value / length);
+  }
+
+  function render() {
+    const width = canvas.width, height = canvas.height;
+    ctx.fillStyle = "#17191d"; ctx.fillRect(0, 0, width, height);
+    if (!points.length) return;
+    const scale = Math.min(width, height) * .76 * zoom;
+    const transformed = points.map(rotate);
+    const faces = triangles.map(ids => {
+      const a = transformed[ids[0]], b = transformed[ids[1]], c = transformed[ids[2]];
+      const n = normal(a,b,c);
+      const light = Math.max(0, n[0] * -.32 + n[1] * .78 + n[2] * .54);
+      return {ids, depth:(a[2]+b[2]+c[2])/3, light};
+    }).sort((a,b) => a.depth - b.depth);
+    ctx.lineJoin = "round";
+    for (const face of faces) {
+      const shade = Math.round(76 + face.light * 122);
+      ctx.beginPath();
+      face.ids.forEach((id, index) => {
+        const p = transformed[id], x = width/2 + p[0]*scale, y = height/2 - p[1]*scale;
+        index ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+      });
+      ctx.closePath();
+      ctx.fillStyle = `rgb(${shade + 18} ${shade + 7} ${Math.max(0, shade - 10)})`;
+      ctx.fill();
+      ctx.strokeStyle = "rgb(34 30 27 / .34)";
+      ctx.lineWidth = Math.max(1, devicePixelRatio || 1);
+      ctx.stroke();
+    }
+  }
+
+  canvas.addEventListener("pointerdown", event => {
+    dragging = true; lastX = event.clientX; lastY = event.clientY; canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener("pointermove", event => {
+    if (!dragging) return;
+    yaw += (event.clientX-lastX) * .009; pitch += (event.clientY-lastY) * .009;
+    pitch = Math.max(-1.35, Math.min(1.35, pitch));
+    lastX = event.clientX; lastY = event.clientY; render();
+  });
+  canvas.addEventListener("pointerup", () => dragging = false);
+  canvas.addEventListener("wheel", event => {
+    event.preventDefault(); zoom = Math.max(.45, Math.min(3.5, zoom * Math.exp(-event.deltaY*.001))); render();
+  }, {passive:false});
+  addEventListener("resize", resize);
+
+  if (!modelUrl) {
+    stat.textContent = "Pass ?model=/path/to/model.glb";
+    return;
+  }
+  fetch(modelUrl).then(response => {
+    if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+    return response.arrayBuffer();
+  }).then(buffer => {
+    const model = parseGlb(buffer);
+    points = fit(model.positions);
+    for (let i=0; i<model.indices.length; i+=3) triangles.push(model.indices.slice(i,i+3));
+    stat.textContent = `${modelUrl.split("/").pop()} · ${points.length} vertices · ${triangles.length} triangles · drag to orbit · wheel to zoom`;
+    resize();
+    window.__ready = true;
+  }).catch(reason => {
+    stat.textContent = "Load failed.";
+    error.textContent = " " + reason.message;
+    window.__error = String(reason);
+  });
+})();
+</script>

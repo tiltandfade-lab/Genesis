@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B06-condition-affinity-MM-v001",
+  "result": "PASS",
+  "thresholds": {
+    "albedoMaeMax": 3,
+    "albedoCorrelationMin": 0.99,
+    "heightStdDevMin": 1,
+    "normalXYStdDevMin": 0.35,
+    "roughnessByteTolerance": 1
+  },
+  "materials": [
+    {
+      "id": "condition-damp-darkening",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-condition-v001/b06-condition-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 34.448,
+        "normalStdDevRgb": [
+          1.6673,
+          2.6998,
+          0.0962
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.4854,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "condition-moss-growth",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-condition-v001/b06-condition-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 29.3374,
+        "normalStdDevRgb": [
+          7.8677,
+          7.2164,
+          0.2365
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.4473,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "condition-lichen",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-condition-v001/b06-condition-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 20.9891,
+        "normalStdDevRgb": [
+          2.766,
+          2.1275,
+          0.0264
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.5086,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "condition-crevice-growth",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-condition-v001/b06-condition-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 31.2004,
+        "normalStdDevRgb": [
+          8.7273,
+          8.0346,
+          0.3783
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.4444,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "condition-deposit-grime",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-condition-v001/b06-condition-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 32.2699,
+        "normalStdDevRgb": [
+          8.9971,
+          8.2935,
+          0.4111
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.4446,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "condition-cleared-use-suppression",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-condition-v001/b06-condition-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 74.645,
+        "normalStdDevRgb": [
+          3.7227,
+          0.0,
+          0.4611
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.7812,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "condition-repair-suppression",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-condition-v001/b06-condition-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 65.1048,
+        "normalStdDevRgb": [
+          6.6647,
+          5.9682,
+          1.2575
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.8281,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B06-trim-imagegen-sprite-first-MM-v001",
+  "generatedAt": "2026-07-25T05:13:52.444Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 1024
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-institutional-base-course-v001.ptex": "d657655c90e942d6e5ef9ad94e8c365ee33aa59d3945405993c021c88ba64599",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-institutional-coping-cap-v001.ptex": "f25d2d64971237732a53d83419d35c91f34a42457124b85204343991d19358a7",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-institutional-cornice-belt-v001.ptex": "17a4abc77ea0cac308f3f0a50d2dac74852a0907b0c732e3032a794c451baaf1",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-institutional-curb-retaining-v001.ptex": "2b5e0aae106c0b0c1c0a1c06bb489f0da1e3372ef523d686b395b455a314b4b4",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-institutional-plain-band-v001.ptex": "a7d307e282edb5b3e745836719462a868e6a6816c7d86576b41832de4f0c7cf7",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-institutional-stair-nosing-v001.ptex": "e32a3289041e290cfab53b9e0c0cacecc1531216b78203974eab39afa914a87e",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-upland-base-course-v001.ptex": "bc1017fbdb147c9b1079629c9005dcfa620c59e0e1efdb6d9a1b62883b648d4b",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-upland-coping-cap-v001.ptex": "e02e085f3c803f6dd693cf97528535375c380f3a6b205761ab1d67a495ace2a8",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-upland-cornice-belt-v001.ptex": "71e63d6cfd618e28fbac34af7f075738068af151183dc7c78266e136637f512f",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-upland-curb-retaining-v001.ptex": "dee3ba2a998d70d3709c0c3af57e799224eb262598d2df104845490b9b3e0cc9",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-upland-plain-band-v001.ptex": "6fb3f95264dfe6bc903645c4a26046458efb96475614cf79b7ea49f824ff9c48",
+    "dev/material-lane/graphs/b06-trim-imagegen-mm-v001/b06-trim-upland-stair-nosing-v001.ptex": "95630e4d68cd967c5899597e2685ae2e2e32b34efaacbcae58ad306192c55fbe"
+  },
+  "outputHashes": {
+    "b06-trim-institutional-base-course-v001_albedo.png": "4d3e2889b392289aedd1f0df522d4a7764af4ab647c5c318fc9ed62a7c0d8d2a",
+    "b06-trim-institutional-base-course-v001_heightmap.png": "33c17b57ddd4330974a693aec8a2a84bfc89ecd2ccae1651cebb6240a53352da",
+    "b06-trim-institutional-base-course-v001_normal.png": "1545a5acfe8f3fd7024ce3d11338f8eb66323d904916723968fed192c4ca4b63",
+    "b06-trim-institutional-base-course-v001_orm.png": "4723848ac551a771ef5918e8edf79e7a37a7a20988aff97e04ce2442675cfa41",
+    "b06-trim-institutional-coping-cap-v001_albedo.png": "dfe3f815dacec94364c8c64565278a26e0c350201e10eb02971d6557f653e7e5",
+    "b06-trim-institutional-coping-cap-v001_heightmap.png": "f842725529d850199bc9fbc63aaf577740f4e4536eaafef87c4eccdd3f8e77e5",
+    "b06-trim-institutional-coping-cap-v001_normal.png": "10158f90e873fb8132427ad9c9a01a3353be4ae4a913b79f75a7abe6790f890f",
+    "b06-trim-institutional-coping-cap-v001_orm.png": "b8a193339ad4992fedf94566813c72e092015e836812865370559c57200a3351",
+    "b06-trim-institutional-cornice-belt-v001_albedo.png": "becded76465085bc1cbb2a8e157f6a8ce1221dcb0edb9fa22647b50c6998a179",
+    "b06-trim-institutional-cornice-belt-v001_heightmap.png": "a6dd075c7166acb5a34bb43bdd77de89689fed3c3e26f144f8d641978443cc8e",
+    "b06-trim-institutional-cornice-belt-v001_normal.png": "7c6b27fb872290520f58b161af99d4b7c00c155d5b156a2414cbb568cbaa0e55",
+    "b06-trim-institutional-cornice-belt-v001_orm.png": "cd2cf41b9799d28df156271750917cd1a192df7997657a03bf66d3bdeb7b77d6",
+    "b06-trim-institutional-curb-retaining-v001_albedo.png": "e57a41d3eb78c295909880286b909b5f340e6d3a9507b429fe3118e0d51f3813",
+    "b06-trim-institutional-curb-retaining-v001_heightmap.png": "b6eb5bd6e5973bae309723fb14f9179229f952ae464e919e0baa2e021ada4ae0",
+    "b06-trim-institutional-curb-retaining-v001_normal.png": "3e26aacc6ebf737161176c9672e1b3b970abab26c7fdf60b73a95621d61a4f57",
+    "b06-trim-institutional-curb-retaining-v001_orm.png": "efaa8efd5f6be814ac6240cc59fb4f82bbf745af354837d9c9ccdbed54e42d03",
+    "b06-trim-institutional-plain-band-v001_albedo.png": "2f586684023e355235818f51f7fd04323e3acf9df4205760b8bb5759d2ea3928",
+    "b06-trim-institutional-plain-band-v001_heightmap.png": "3a0f02b71148035003ff63676dea1cbda25d2fab45e9162eef01c5590b6a6c1c",
+    "b06-trim-institutional-plain-band-v001_normal.png": "af995a5d4771be7518f4a5bc092abc68d8a118ec34d2141ea1b007dc67c57377",
+    "b06-trim-institutional-plain-band-v001_orm.png": "a739dec95dc7c45ecc794e6deb552dbf11a801ef67808f75d073ef062905423e",
+    "b06-trim-institutional-stair-nosing-v001_albedo.png": "e353e5bd73aba378223222203ddeba5b33b67f4fb97b8d2bfea779052407c0f4",
+    "b06-trim-institutional-stair-nosing-v001_heightmap.png": "5b74616ab67b9f4474c7fb99ed2f4a0c3abc4910f155252c60c02c2186910b2d",
+    "b06-trim-institutional-stair-nosing-v001_normal.png": "f3e58b8d9ada7d604700d3e1750bd88167c619d7269a47b3717c42440891a526",
+    "b06-trim-institutional-stair-nosing-v001_orm.png": "a0d97fc5a434555c79bc4d89107db2852ce0634047c1485f2df2bedfcc0acfcc",
+    "b06-trim-upland-base-course-v001_albedo.png": "f77d5c522084d68a4aa201ee72b902af59a3967443304c4bc92dfbc71fc7ac77",
+    "b06-trim-upland-base-course-v001_heightmap.png": "9dadeef3022efde887808cc343f2ba80cf856edd5c56304beec5e26ca5a7324e",
+    "b06-trim-upland-base-course-v001_normal.png": "ae954380ce80469b079273bb40cc2a0c741fd310cf4a56136fb1ae8e4b73ccec",
+    "b06-trim-upland-base-course-v001_orm.png": "3bc234a5c069d8b68dde208e2bb05ceddbb952ab0491024344322df5ad38004a",
+    "b06-trim-upland-coping-cap-v001_albedo.png": "89665c1b84a8be1f84750b8d371beb0174de51eb9f8b99e00862ee5ddc81cf6e",
+    "b06-trim-upland-coping-cap-v001_heightmap.png": "b4eff197dda54c3396b8adc6622c62c7421fcbdcbc2bf17b792b0d475abc5e20",
+    "b06-trim-upland-coping-cap-v001_normal.png": "cf46110573ebfc057ffb366630f2b3fd8f0b1046c00dc61745c93692905431d5",
+    "b06-trim-upland-coping-cap-v001_orm.png": "8ba9bcd3b792b6ad615884e10863a12ad400acfc64a1746b9be65fb9213c30f5",
+    "b06-trim-upland-cornice-belt-v001_albedo.png": "04082cefabd38c61e4795d3f096fb5c8368b568fce1b6e5e7a242588468a6ae2",
+    "b06-trim-upland-cornice-belt-v001_heightmap.png": "3c62e3fd876242f1eafe5fbd86e7985f415fb275eb603a0c77b8c6c160943ef4",
+    "b06-trim-upland-cornice-belt-v001_normal.png": "02337ceb483110165b7e2776d435a7c2793a6b68475616fba145de0c135df737",
+    "b06-trim-upland-cornice-belt-v001_orm.png": "81cce5533865f73fa0c26750479e1038b23bcc9dec8136711008d813279d6698",
+    "b06-trim-upland-curb-retaining-v001_albedo.png": "93edf32980240360b07e4952928eae6ab43eb5bf2c064f7f0ad0920ffe03cddf",
+    "b06-trim-upland-curb-retaining-v001_heightmap.png": "c249dedafb31376c6d52142d99c41f3c166dac089a3d323546f6145aab1e488c",
+    "b06-trim-upland-curb-retaining-v001_normal.png": "3aa9b97d2692f280eb08ec05d26dcbfafbe411b2e387f7ebf88ae103868d16bb",
+    "b06-trim-upland-curb-retaining-v001_orm.png": "fe87db463247ab68895875102d9a76534e6a5c68ce207a668eb53aac664a5b67",
+    "b06-trim-upland-plain-band-v001_albedo.png": "f509b2d67183ea498a1ffa5fd31e74eedc7899aa060b83b2c8515a86768f0bef",
+    "b06-trim-upland-plain-band-v001_heightmap.png": "3a06d572e9bb7b6a79a147dedf73ed828afd67153e22447ca41ef714a0c4ef37",
+    "b06-trim-upland-plain-band-v001_normal.png": "4f387ba2b07ab8e242ed9bb4631cc387fd8585c85a6c801901787d880c5380a3",
+    "b06-trim-upland-plain-band-v001_orm.png": "0d16eed082cb539b13bd71019aaf083ece7f405c8c4a90880cb11903ce426e0d",
+    "b06-trim-upland-stair-nosing-v001_albedo.png": "9d35aae328da08338e23aeefe51b4ea9dee2e4c871d50c78c5ea269cee8632f2",
+    "b06-trim-upland-stair-nosing-v001_heightmap.png": "2cdbe5023d777fceb55f752722ea490da2915c12bec359c182552be073d5619f",
+    "b06-trim-upland-stair-nosing-v001_normal.png": "3e0e996646ff92c11cb7b5eed3d7eda28408ee17d1f633dd3453be12188a2eb4",
+    "b06-trim-upland-stair-nosing-v001_orm.png": "602378895c7411605f40856ee3680166ddd1879a97552425565174acd4e613ee"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 48,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b06-trim-imagegen-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b06-trim-imagegen-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

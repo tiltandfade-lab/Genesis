@@ -1,0 +1,54 @@
+{
+  "schema": "genesis.condition-affinity-source-gate.v1",
+  "results": [
+    {
+      "id": "condition-damp-darkening",
+      "source": "dev/material-lane/source-sprites/b06-condition-v001/condition-damp-darkening-source-v001.png",
+      "metrics": {
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "condition-moss-growth",
+      "source": "dev/material-lane/source-sprites/b06-condition-v001/condition-moss-growth-source-v001.png",
+      "metrics": {
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "condition-lichen",
+      "source": "dev/material-lane/source-sprites/b06-condition-v001/condition-lichen-source-v001.png",
+      "metrics": {
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "condition-crevice-growth",
+      "source": "dev/material-lane/source-sprites/b06-condition-v001/condition-crevice-growth-source-v001.png",
+      "metrics": {
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "condition-deposit-grime",
+      "source": "dev/material-lane/source-sprites/b06-condition-v001/condition-deposit-grime-source-v001.png",
+      "metrics": {
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "condition-cleared-use-suppression",
+      "source": "dev/material-lane/source-sprites/b06-condition-v001/condition-cleared-use-suppression-source-v001.png",
+      "metrics": {
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "condition-repair-suppression",
+      "source": "dev/material-lane/source-sprites/b06-condition-v001/condition-repair-suppression-source-v001.png",
+      "metrics": {
+        "boundaryJumpGate": true
+      }
+    }
+  ]
+}

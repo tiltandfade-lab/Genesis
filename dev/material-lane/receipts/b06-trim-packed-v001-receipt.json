@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B06-trim-h6-v1-packed-v001",
+  "result": "PASS",
+  "determinism": {
+    "byteIdentical": true,
+    "comparedFileCount": 18
+  },
+  "hashes": {
+    "trim-institutional-h6-v1-affinity-1024-v001.png": "4e8e9b9bdd498fdcdbf202685a6473a00bbbc2a08bfd657a61f767331863a7f0",
+    "trim-institutional-h6-v1-affinity-512-v001.png": "3ffcc1df0af81ab58d42a87620558c6fcbfccc2228167a01e74bb8232e10d648",
+    "trim-institutional-h6-v1-basecolor-1024-v001.png": "56c4c3831040ae0b2b0f03fc512509b7b3dbe4eb35c23a7aa6634fe8876577b7",
+    "trim-institutional-h6-v1-basecolor-512-v001.png": "ce3250778762283669e20249b894b06f1e8514d800479166ee4461f6e05f8170",
+    "trim-institutional-h6-v1-normal-1024-v001.png": "9fef3be7997c38512968c697ce8d57e29dcc36e13a06902dc66a5ac3a307e54d",
+    "trim-institutional-h6-v1-normal-512-v001.png": "0c75f6bd2a9d0c1790bcedc7a8383d069a666498338c4eef1a516d32d1d4405c",
+    "trim-institutional-h6-v1-orm-1024-v001.png": "b0c63c27408fa02117025345a2f4094b5156328ac80f3ead96dc7021908bf8f3",
+    "trim-institutional-h6-v1-orm-512-v001.png": "faebcad33ace3740bb8a40e770b2cb08dd9751d12d1e82c39e0a5346b39c5184",
+    "trim-institutional-h6-v1.trim-sheet.json": "51dbba3c22c4cdceef3122eab48eea3624b6dfcd6279f6832cc5c61c6702d3a7",
+    "trim-upland-h6-v1-affinity-1024-v001.png": "1f0aaa920e88a7556de50bc436a55fcc754ad272ad7fe7711a69cccfb85b9408",
+    "trim-upland-h6-v1-affinity-512-v001.png": "ceee70e72ccd2e077d2c138f9639fe4221272f5f8f5820023b09090fbf3fdac3",
+    "trim-upland-h6-v1-basecolor-1024-v001.png": "ba3502a33b31b815135d25610314b85039d4571d3e93da45eba8b2da4ff56351",
+    "trim-upland-h6-v1-basecolor-512-v001.png": "7399f4674f4d8f7bc645851244ac5d9ac923f96e2d3e0d6e23a8770b10757d03",
+    "trim-upland-h6-v1-normal-1024-v001.png": "5993682c27417d2b3f57f319dc887c99c21520c83240e3c3505ee3baea3534d2",
+    "trim-upland-h6-v1-normal-512-v001.png": "73bf30ba427ee78134124f71d40c8675038e7221f800c73414d59e1a0fec6a5a",
+    "trim-upland-h6-v1-orm-1024-v001.png": "0e3ed20ba82293801d970747c03d2feac9ae9feab965975fe2a73c657e121794",
+    "trim-upland-h6-v1-orm-512-v001.png": "28a8679c322f81b62951cbdbecee1bc303033f76dcadde0667cd7b7e7c1c89fd",
+    "trim-upland-h6-v1.trim-sheet.json": "a7f172a85023a525148c7e7e196fc5a811fcb9e31e0562a7f0f15ebedc0105a7"
+  },
+  "reviewRoot": "dev/material-lane/exports/b06-trim-packed-v001/run-a",
+  "proofBoard": "dev/material-lane/proofs/b06-trim-packed-v001/b06-trim-packed-proof-board-v001.png"
+}

@@ -23,6 +23,10 @@ const graphDir = path.resolve(repoRoot, args["graph-dir"]);
 const exportDir = path.resolve(repoRoot, args["export-dir"]);
 const receiptPath = path.resolve(repoRoot, args.receipt);
 const expected = Number(args.expected);
+const resolution = Number(args.size ?? 512);
+if (!Number.isInteger(resolution) || resolution < 16) {
+  throw new Error(`Invalid --size: ${args.size}`);
+}
 const materialMaker =
   process.env.GENESIS_MATERIAL_MAKER ??
   "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker";
@@ -49,6 +53,8 @@ function compile(run) {
       "--export-material",
       "--target",
       "Godot/Godot 4 ORM",
+      "--size",
+      String(resolution),
       "-o",
       output,
       ...graphs.map((file) => path.join(graphDir, file)),
@@ -96,7 +102,7 @@ fs.writeFileSync(
         binary: materialMaker,
         binarySha256: sha256(materialMaker),
         target: "Godot/Godot 4 ORM",
-        resolution: 512,
+        resolution,
       },
       sourceGraphs: Object.fromEntries(
         graphs.map((graph) => [

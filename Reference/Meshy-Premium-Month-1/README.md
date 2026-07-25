@@ -622,3 +622,11 @@ M068-A passes only if:
 - the basket can host a runtime flame and light without removing baked flame-like geometry;
 - the fixture remains readable against both bright and dark walls at the game camera;
 - cleanup is faster than reconstructing the entire fixture natively.
+
+### ImageGen correction record
+
+The first render displaced the horizontal arm from the basket's structural centerline. A
+single-object correction moved the arm and lower brace onto one centered load path beneath the
+ash cup while preserving the camera, mounting plate, two bosses, six open ribs, empty flame
+socket, material treatment, and background. Only the corrected reference above is approved for
+Meshy input.

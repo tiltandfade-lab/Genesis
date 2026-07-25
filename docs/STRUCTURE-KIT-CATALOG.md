@@ -9,9 +9,11 @@ related:
   - "[[BATTLEMAP-TOWNTRAY-COMPOSITION]]"
   - "[[C1A-CLAY-ROOM]]"
   - "[[CODEX-MATERIAL-BRIEF]]"
+  - "[[STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC]]"
 diagrams:
   - diagrams/structure-kit-roof-parapet-vocabulary.svg
   - diagrams/guard-post-anchor-layout.svg
+  - diagrams/structure-kit-junction-and-roof-spine-grammar.svg
 ---
 
 # STRUCTURE-KIT CATALOG — the set-piece module contract for the twelve golden sites
@@ -96,6 +98,21 @@ reachable by a non-flying route** (§6 — the tone law made countable); slope l
 approach + gate present where the assembly demands them. A ruling is not recorded until
 its enforcing check exists (teeth law): the reachability and socket checks land with the
 first C1H validator; until then they are OWED, not claimed.
+
+### Junction and termination resolver — founder ruling 2026-07-25
+
+The ideal-level-art pass exposed that legal butt sockets are necessary but insufficient:
+wall runs, roof planes, stairs, and terrain transitions also need typed endpoints and
+intersection assemblies. Every structural run now terminates into a declared junction.
+The construction profile decides whether the joint is visibly expressed as a post,
+quoin, pier, buttress, frame, or rock transition, or resolved as a hidden seam/shared
+surface for boxes, tents, folded sheets, and monolithic shells.
+
+The full wall graph, roof-edge graph, foundation/stair rules, rejection checks, and
+`SK-J01 Junction House` proof live in
+[`STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC.md`](STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC.md).
+Until that clay proof and validator exist, the direction is ruled and implementation is
+owed.
 
 ## 5. Geometry/paint split (Adam ruling 2026-07-24)
 
@@ -182,6 +199,11 @@ Both families are in the kit; all forms arrive eventually. Build order:
 4. **Hip** — deferred past site 1; its new problem is corner joints. It remains a
    family variant but has no locked debut site; the monastery seed uses gable + spire.
 
+Roof planes do not directly touch other roof planes. Shared and exposed edges resolve
+through typed eave, verge, ridge, ridge-end, hip, valley, flashing, or cutaway-cap roles.
+A ridge is an assembly member joining planes, not trim pasted over an unresolved seam.
+See the shared junction specification above.
+
 Vocabulary reference: `diagrams/structure-kit-roof-parapet-vocabulary.svg`.
 
 All pitched families inherit the walkable-pitch law (§2): low-pitch shed/gable/hip
@@ -243,7 +265,9 @@ reach requires governed geometry.
 terrain stair cut · rock access cluster · floor plate · wall panel (solid) · wall panel
 (arrow slit) · wall panel (window) · doorframe (C1B socket) · gate arch · parapet run
 (merlons + coping) · wall-walk plate · built stair run · shed roof plane · eave trim ·
-pillar/post · crate stack (access prop, shared with prop lane).
+pillar/post · wall end/cap · inner/outer corner · T-junction · foundation/plinth
+transition · wall top/cutaway cap · gable ridge segment/end · stair landing transition ·
+crate stack (access prop, shared with prop lane).
 
 **Assembly tier:** watchtower storey · tower parapet cap · post-house bay · lean-to bay ·
 yard wall run · yard gate · wall-walk stair · terraced yard.

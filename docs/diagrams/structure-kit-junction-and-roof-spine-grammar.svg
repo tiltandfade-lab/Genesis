@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <style>
+      .bg { fill: #10151b; }
+      .panel { fill: #182129; stroke: #3a4a55; stroke-width: 2; }
+      .title { fill: #f3ead7; font: 700 30px Arial, sans-serif; }
+      .head { fill: #f3ead7; font: 700 23px Arial, sans-serif; }
+      .body { fill: #c9d1d6; font: 18px Arial, sans-serif; }
+      .small { fill: #aebbc3; font: 15px Arial, sans-serif; }
+      .wall { fill: none; stroke: #c9b892; stroke-width: 22; stroke-linecap: square; }
+      .wallThin { fill: none; stroke: #c9b892; stroke-width: 13; stroke-linecap: square; }
+      .node { fill: #f1a340; stroke: #ffe0a8; stroke-width: 2; }
+      .post { fill: #b77839; stroke: #f1c27b; stroke-width: 3; }
+      .stone { fill: #a9a79d; stroke: #dad6ca; stroke-width: 2; }
+      .skin { fill: #7b91a1; stroke: #bcd0dc; stroke-width: 3; }
+      .ridge { fill: none; stroke: #f1a340; stroke-width: 10; stroke-linecap: round; }
+      .eave { fill: none; stroke: #55c7c1; stroke-width: 8; stroke-linecap: round; }
+      .verge { fill: none; stroke: #8ab4f8; stroke-width: 8; stroke-linecap: round; }
+      .hip { fill: none; stroke: #d284d7; stroke-width: 8; stroke-linecap: round; }
+      .roofA { fill: #75584c; stroke: #b89a83; stroke-width: 3; }
+      .roofB { fill: #604b46; stroke: #a98b7c; stroke-width: 3; }
+      .terrain { fill: #526448; stroke: #839875; stroke-width: 3; }
+      .plinth { fill: #85847c; stroke: #c6c4b9; stroke-width: 3; }
+      .arrow { fill: none; stroke: #6fd5cf; stroke-width: 4; marker-end: url(#arrowHead); }
+    </style>
+    <marker id="arrowHead" markerWidth="12" markerHeight="12" refX="10" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#6fd5cf"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="1000" class="bg"/>
+  <text x="40" y="52" class="title">STRUCTURE KIT — junction, termination, and roof-spine grammar</text>
+  <text x="40" y="80" class="body">Panels span between typed nodes. Construction changes the expression; the connection law stays stable.</text>
+
+  <!-- Wall graph -->
+  <rect x="35" y="105" width="755" height="390" rx="14" class="panel"/>
+  <text x="60" y="143" class="head">1 · Resolve the wall graph before spawning wall pieces</text>
+
+  <g transform="translate(75,185)">
+    <path d="M0 28 H120" class="wallThin"/>
+    <circle cx="120" cy="28" r="13" class="node"/>
+    <text x="0" y="76" class="body">degree 1 · END</text>
+    <text x="0" y="98" class="small">cap / return / terminal</text>
+  </g>
+
+  <g transform="translate(310,185)">
+    <path d="M0 28 H150" class="wallThin"/>
+    <circle cx="75" cy="28" r="13" class="node"/>
+    <text x="0" y="76" class="body">degree 2 · INLINE</text>
+    <text x="0" y="98" class="small">bond / post / hidden seam</text>
+  </g>
+
+  <g transform="translate(565,185)">
+    <path d="M0 28 H90 V105" class="wallThin"/>
+    <circle cx="90" cy="28" r="13" class="node"/>
+    <text x="0" y="140" class="body">degree 2 · CORNER</text>
+    <text x="0" y="162" class="small">inside + outside closure</text>
+  </g>
+
+  <g transform="translate(75,350)">
+    <path d="M0 35 H160 M80 35 V115" class="wallThin"/>
+    <circle cx="80" cy="35" r="13" class="node"/>
+    <text x="0" y="130" class="body">degree 3 · T</text>
+  </g>
+
+  <g transform="translate(310,350)">
+    <path d="M0 35 H160 M80 0 V105" class="wallThin"/>
+    <circle cx="80" cy="35" r="13" class="node"/>
+    <text x="0" y="130" class="body">degree 4 · CROSS</text>
+  </g>
+
+  <g transform="translate(565,350)">
+    <path d="M0 35 H55 M125 35 H180" class="wallThin"/>
+    <rect x="52" y="4" width="76" height="94" fill="none" stroke="#f1a340" stroke-width="8"/>
+    <text x="0" y="130" class="body">OPENING · JAMB</text>
+  </g>
+
+  <!-- Material profiles -->
+  <rect x="815" y="105" width="750" height="390" rx="14" class="panel"/>
+  <text x="840" y="143" class="head">2 · One corner role, different construction profiles</text>
+
+  <g transform="translate(865,190)">
+    <path d="M0 100 H140 V0" class="wall"/>
+    <rect x="116" y="75" width="48" height="48" class="post"/>
+    <text x="0" y="145" class="body">TIMBER / PALISADE</text>
+    <text x="0" y="168" class="small">expressed structural post</text>
+  </g>
+
+  <g transform="translate(1110,190)">
+    <path d="M0 100 H140 V0" class="wall"/>
+    <g class="stone">
+      <rect x="110" y="70" width="32" height="32"/>
+      <rect x="142" y="70" width="32" height="32"/>
+      <rect x="110" y="38" width="32" height="32"/>
+      <rect x="142" y="38" width="32" height="32"/>
+      <rect x="110" y="6" width="32" height="32"/>
+      <rect x="142" y="6" width="32" height="32"/>
+    </g>
+    <text x="0" y="145" class="body">MASONRY</text>
+    <text x="0" y="168" class="small">bonded return / quoin</text>
+  </g>
+
+  <g transform="translate(1350,190)">
+    <path d="M0 100 H140 V0" fill="none" stroke="#7b91a1" stroke-width="28" stroke-linejoin="round"/>
+    <path d="M140 0 V100" fill="none" stroke="#bcd0dc" stroke-width="3" stroke-dasharray="8 7"/>
+    <text x="-5" y="145" class="body">SKIN / TENT / BOX</text>
+    <text x="-5" y="168" class="small">fold, seam, shared vertex</text>
+  </g>
+
+  <path d="M900 415 H1495" class="arrow"/>
+  <text x="948" y="451" class="body">same collision · cover · support · occlusion · damage socket</text>
+
+  <!-- Roof graph -->
+  <rect x="35" y="520" width="930" height="445" rx="14" class="panel"/>
+  <text x="60" y="560" class="head">3 · Roof planes meet typed edge assemblies</text>
+
+  <!-- Shed -->
+  <g transform="translate(75,620)">
+    <polygon points="0,115 205,45 305,95 100,165" class="roofA"/>
+    <path d="M100 165 L305 95" class="eave"/>
+    <path d="M0 115 L205 45" class="verge"/>
+    <text x="65" y="215" class="body">SHED</text>
+    <text x="5" y="239" class="small">eave · verges · high bearing</text>
+  </g>
+
+  <!-- Gable -->
+  <g transform="translate(360,570)">
+    <polygon points="0,135 135,45 260,110 125,200" class="roofA"/>
+    <polygon points="260,110 365,170 225,258 125,200" class="roofB"/>
+    <path d="M135 45 L260 110" class="ridge"/>
+    <path d="M0 135 L125 200" class="eave"/>
+    <path d="M225 258 L365 170" class="eave"/>
+    <path d="M0 135 L135 45 M125 200 L225 258" class="verge"/>
+    <text x="125" y="305" class="body">GABLE</text>
+    <text x="65" y="329" class="small">ridge + ridge ends · eaves · verges</text>
+  </g>
+
+  <!-- Hip -->
+  <g transform="translate(650,590)">
+    <polygon points="0,145 105,45 210,85 110,190" class="roofA"/>
+    <polygon points="210,85 305,150 205,250 110,190" class="roofB"/>
+    <path d="M105 45 L210 85" class="ridge"/>
+    <path d="M0 145 L105 45 M305 150 L210 85 M110 190 L0 145 M205 250 L305 150" class="hip"/>
+    <path d="M110 190 L205 250" class="eave"/>
+    <text x="105" y="300" class="body">HIP</text>
+    <text x="38" y="324" class="small">ridge · hip spines · eave corners</text>
+  </g>
+
+  <g transform="translate(75,935)">
+    <line x1="0" y1="0" x2="45" y2="0" class="ridge"/>
+    <text x="58" y="7" class="small">ridge</text>
+    <line x1="145" y1="0" x2="190" y2="0" class="eave"/>
+    <text x="203" y="7" class="small">eave</text>
+    <line x1="285" y1="0" x2="330" y2="0" class="verge"/>
+    <text x="343" y="7" class="small">verge</text>
+    <line x1="440" y1="0" x2="485" y2="0" class="hip"/>
+    <text x="498" y="7" class="small">hip / valley family</text>
+  </g>
+
+  <!-- Foundation and stair -->
+  <rect x="995" y="520" width="570" height="445" rx="14" class="panel"/>
+  <text x="1020" y="560" class="head">4 · Runs also terminate at ground and landings</text>
+
+  <g transform="translate(1030,610)">
+    <polygon points="0,155 215,115 285,165 70,205" class="terrain"/>
+    <rect x="80" y="88" width="135" height="68" class="plinth"/>
+    <rect x="97" y="0" width="101" height="88" fill="#c9b892" stroke="#f3e0b6" stroke-width="3"/>
+    <path d="M78 90 H218" fill="none" stroke="#f1a340" stroke-width="8"/>
+    <text x="0" y="275" class="body">WALL → PLINTH → TERRAIN</text>
+    <text x="0" y="298" class="small">support · splash · settlement · rot · repair</text>
+  </g>
+
+  <g transform="translate(1260,625)">
+    <rect x="0" y="175" width="85" height="28" class="plinth"/>
+    <path d="M80 175 L100 150 L120 150 L140 125 L160 125 L180 100 L200 100 L220 75 L240 75 L260 50" fill="none" stroke="#c9b892" stroke-width="18" stroke-linejoin="miter"/>
+    <rect x="250" y="35" width="55" height="30" class="plinth"/>
+    <circle cx="80" cy="175" r="12" class="node"/>
+    <circle cx="260" cy="50" r="12" class="node"/>
+    <text x="-20" y="220" class="body">LANDING → STAIR → LANDING</text>
+    <text x="-20" y="243" class="small">capacity · collision · support</text>
+  </g>
+
+  <text x="1040" y="925" class="body">BLOCK if any visual join, collision seam, light leak,</text>
+  <text x="1040" y="950" class="body">unsupported edge, or stair landing remains unresolved.</text>
+</svg>

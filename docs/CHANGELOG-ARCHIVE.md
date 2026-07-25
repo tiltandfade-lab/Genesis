@@ -14,6 +14,27 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-10 (late night) — ART DIRECTION CLOSED: 13 rulings, two armed waves, dressing art landing
+
+**Added (specs — build is Adam's word)**
+- docs/BEAUTY-WAVE.md (VP0-VP8 + VP1.5 + VP2b): VP0 two-flag study card (ortho-vs-perspective ×
+  PSX-on/off, Adam's pixel-verdict), VP1 true-scale piece fix + registry sizing fold (the kaiju
+  defect), VP1.5 corpus unification pass (realm master palettes + texel density + defringe, one
+  batch, no codex spend), VP2 dressing fold, VP2b THE GALLERY PASS (clipped/reject sprites → framed
+  realm paintings, paintingOf provenance, mimic-guise legal), VP3 ground design, VP4 scene art
+  direction, VP5 battle-UI redesign, VP6 life pass + visible-history scars, VP7 contact grounding,
+  VP8 the beauty-shot gate (side-by-side vs a real Wildermyth frame).
+- docs/UNIFICATION-WAVE.md (UW1-UW4): ONE CHANNEL (diorama; flat table → legacy → retirement),
+  exterior + settlement dioramas, PORTRAITS (busts w/ 3-expression sets — expressionSet law's
+  production surface — + dialogue lower-third).
+- 13 art-direction rulings registered in DESIGN.md: clean-shapes, PS1-scope-cut, perspective camera,
+  framing law, value law, FLAGSHIP REALMS (fantasy/gloom/chrome; realm = expansion pack, ~6-mo
+  drops), master palettes, texel density, portraits, outline law, defringe-standard, visible history,
+  gallery pass. CLEAN-SHAPES + outline clauses patched into all pending codex packets.
+
+**Added (art)**
+- 25 DRESSING-GEN codex sheets landed + backed up UNGATED (flagships flora/clutter/objects +
+  effects core + all accents + ash). VP2 gate/slice/fold is next session's first move.
 ## 2026-07-10 (evening) — WILDERMYTH GRAMMAR: engine marriage BUILT + dressing-gen packets + finale loop gate 5/5
 
 **Added**

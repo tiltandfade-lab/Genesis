@@ -95,6 +95,51 @@ tables, parent loses a tag) · `merge` (absorb the weakest rival; combined tags)
   freehand-in-a-bind. Prefer the world's own history to invention — the world starts rhyming
   with itself.
 
+### §5a. The preference order governs ALL WALKS + the freshness valve (Adam rulings 2026-07-24, golden-sites session)
+
+Three rulings, made while wiring golden-site inhabitants (the monastery was the test case;
+the cascade serves all twelve sites — camp squatters, lair occupants, checkpoint garrisons):
+
+1. **Scope extension:** the recall → pool → mint → freehand preference order applies to
+   **every walk** — including the moment a site is first minted and its occupants rolled.
+   "Who lives here" checks the ledger before touching the dice.
+2. **The freshness valve:** a **guaranteed fresh roll every X walk segments** — the engine
+   must skip the recall preference and mint new at least that often, "to prevent stale
+   story beats and introduce fresh story elements" (Adam, verbatim intent). X is a tunable,
+   playtest-calibrated like other numbers; the valve keeps remember-first from turning the
+   world into a closed loop of its own reruns.
+3. **Lock vs lean:** established WRITTEN facts LOCK the answer outright — if the ledger
+   already names who is here, there is no roll. Regional canon (faction web, pressures)
+   only LEANS the fresh roll's weighting — it tilts odds toward established powers but
+   never forbids a surprise independent. Canon stays sacred; dice stay honest.
+
+Spice interaction (no new law — SPICE-RAISE governs): site-occupant tables are
+Commitment-class (full ladder ceiling), authored with all-band coverage; the play
+distribution comes from the REGION's band weights (baseline 25/25/25/17/8 → rim), so the
+same site table rolls mostly ordinary in the heartland and mostly wrong at the rim.
+Teeth owed: a check proving site/walk rolls consult recall before minting, and that the
+freshness valve actually fires every X segments.
+
+### §5b. The walk-out montage (ADOPTED — Adam 2026-07-24, "a decent compromise")
+
+Leaving an interior through known ground or a discovered exit is ONE declared montage
+beat ("you make your way out — an hour passes"), with three binding strings:
+
+1. **Only over known ground.** Montage-out covers rooms already walked or an exit
+   already found — never unseen space. No teleporting past the unknown; FFT's full
+   overworld hand-wave is explicitly NOT adopted (our space is persistent and honest).
+2. **It costs real time.** The clock advances by the transition; the ledger logs the
+   transit. The walk happened — the player just didn't click it.
+3. **The world may interrupt.** If state says the way out isn't safe (alerted garrison,
+   pursuit, drift, a collapse behind the party), the montage BREAKS into a scene. The
+   drift-on-revisit machinery (§2) is the natural cash-in point: the montage is cheap by
+   default, and the engine spends state changes when it holds them.
+
+Composes with the golden-sites SHORT-EXIT GUARANTEE (every chain's far end offers a
+short way out): the guarantee makes the exit CLOSE; the montage makes the walk to it
+cost nothing when nothing changed. Teeth owed: montage-out refuses unknown ground
+(countable), and interrupt fires when qualifying state exists.
+
 ## §6. Build plan (day-2/3 unit; after the batch + WALK-REFRESH)
 
 1. `node.lastVisitDay` stamps + `worldTurn(w, trigger, ctx)` orchestrator (`src/world/`,

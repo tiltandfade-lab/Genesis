@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#121a22"/>
+      <stop offset="1" stop-color="#202932"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#173d4b"/>
+      <stop offset="1" stop-color="#236a78"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#78909c" stroke-opacity=".11" stroke-width="1"/>
+    </pattern>
+    <marker id="arrowOrange" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12Z" fill="#f2a33a"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12Z" fill="#76b7e5"/>
+    </marker>
+    <marker id="arrowTeal" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0L12 6L0 12Z" fill="#5fd0c4"/>
+    </marker>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .title{font:700 38px Inter,Arial,sans-serif;fill:#f3f4ef}
+      .sub{font:400 18px Inter,Arial,sans-serif;fill:#bdc9cf}
+      .label{font:700 19px Inter,Arial,sans-serif;fill:#eef2f1}
+      .small{font:500 15px Inter,Arial,sans-serif;fill:#c9d3d6}
+      .tiny{font:500 13px Inter,Arial,sans-serif;fill:#aebec4}
+      .cardTitle{font:700 20px Inter,Arial,sans-serif}
+      .cardBody{font:500 15px Inter,Arial,sans-serif;fill:#d6dfe1}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1050" fill="url(#bg)"/>
+  <text x="70" y="64" class="title">SITE 5 — FIRST-BUILD STRATEGY PLAN</text>
+  <text x="70" y="97" class="sub">One truthful work system, three different plans. Top-down diagram; dimensions remain clay-provisional.</text>
+
+  <rect x="60" y="130" width="1480" height="650" rx="24" fill="#0d141a" stroke="#53636c" stroke-width="2"/>
+  <rect x="60" y="130" width="1480" height="650" rx="24" fill="url(#grid)"/>
+
+  <!-- Host rock / playable void -->
+  <path d="M420 205H1335L1440 295V625L1345 715H445L350 645V270Z"
+        fill="#39434a" stroke="#687780" stroke-width="3"/>
+  <path d="M425 340H1275L1370 385V500L1270 550H425Z"
+        fill="#171f25" stroke="#8a8171" stroke-width="3"/>
+  <path d="M430 235H1160L1240 285V335H495L430 305Z"
+        fill="#17242d" stroke="#76b7e5" stroke-width="3"/>
+  <path d="M520 555H1245L1320 610V680H540L470 630Z"
+        fill="url(#water)" stroke="#5fd0c4" stroke-width="3"/>
+
+  <!-- Surface yard -->
+  <path d="M95 220H365V690H95Z" fill="#2c3532" stroke="#aeb98e" stroke-width="3"/>
+  <path d="M110 420H410V550H110Z" fill="#1d2626" stroke="#f2a33a" stroke-width="4"/>
+  <text x="120" y="254" class="label">SURFACE THRESHOLD</text>
+  <text x="120" y="281" class="small">daylight · plan · negotiate · exit</text>
+  <rect x="120" y="315" width="100" height="66" rx="8" fill="#5a4732" stroke="#e2b87b" stroke-width="2"/>
+  <text x="132" y="342" class="small">sorting</text>
+  <text x="135" y="363" class="tiny">ore bin</text>
+  <rect x="240" y="315" width="100" height="66" rx="8" fill="#4a4540" stroke="#a99b88" stroke-width="2"/>
+  <text x="253" y="342" class="small">repair</text>
+  <text x="258" y="363" class="tiny">timber</text>
+  <path d="M120 625L220 575L315 620L215 672Z" fill="#615b50" stroke="#a99b88" stroke-width="2"/>
+  <text x="125" y="710" class="small">spoil / waste</text>
+  <path d="M120 470H330" stroke="#f2a33a" stroke-width="8" marker-end="url(#arrowOrange)"/>
+  <text x="125" y="457" class="small">export</text>
+
+  <!-- Main haul -->
+  <path d="M375 445H1260" stroke="#f2a33a" stroke-width="18" opacity=".28"/>
+  <path d="M375 445H1260" stroke="#f2a33a" stroke-width="6" marker-end="url(#arrowOrange)"/>
+  <text x="590" y="410" class="label" fill="#f2a33a">MAIN HAUL — FAST / BROAD / EXPOSED</text>
+  <text x="590" y="477" class="small">2-cell starting clearance · cargo and large-body route</text>
+
+  <!-- Portal and supports -->
+  <path d="M405 375V515M445 375V515M405 375H445" fill="none" stroke="#d7b174" stroke-width="10"/>
+  <text x="378" y="350" class="small">portal</text>
+  <g stroke="#b89461" stroke-width="7" fill="none">
+    <path d="M590 365V515M625 365V515M590 365H625"/>
+    <path d="M785 365V515M820 365V515M785 365H820"/>
+    <path d="M980 365V515M1015 365V515M980 365H1015"/>
+  </g>
+  <path d="M1120 355V525" stroke="#f06b5f" stroke-width="5" stroke-dasharray="12 10"/>
+  <text x="1020" y="548" class="small" fill="#f58c83">LAST SAFE SUPPORT</text>
+
+  <!-- Carts and cover -->
+  <g fill="#6d533c" stroke="#d0a66e" stroke-width="2">
+    <rect x="650" y="425" width="70" height="40" rx="5"/>
+    <rect x="885" y="425" width="70" height="40" rx="5"/>
+  </g>
+  <g fill="#20282c" stroke="#d0a66e" stroke-width="3">
+    <circle cx="664" cy="469" r="9"/><circle cx="706" cy="469" r="9"/>
+    <circle cx="899" cy="469" r="9"/><circle cx="941" cy="469" r="9"/>
+  </g>
+  <text x="650" y="505" class="tiny">movable cover / blockage lever</text>
+
+  <!-- Manway loop -->
+  <path d="M455 285H1140L1210 330" stroke="#76b7e5" stroke-width="16" opacity=".24"/>
+  <path d="M455 285H1140L1210 330" stroke="#76b7e5" stroke-width="5" marker-end="url(#arrowBlue)"/>
+  <path d="M455 285L425 390" stroke="#76b7e5" stroke-width="5"/>
+  <path d="M1210 330L1240 410" stroke="#76b7e5" stroke-width="5"/>
+  <text x="585" y="261" class="label" fill="#76b7e5">MANWAY / AIR — SLOW / NARROW / QUIET</text>
+  <text x="585" y="311" class="tiny">1-cell starting clearance · people, flank, rescue, escape</text>
+
+  <!-- Face -->
+  <path d="M1260 375L1365 400V500L1260 525Z" fill="#433c3a" stroke="#d9c29c" stroke-width="3"/>
+  <path d="M1300 400L1345 425L1310 448L1350 476L1305 500" fill="none" stroke="#7fd2d0" stroke-width="8" filter="url(#softGlow)"/>
+  <text x="1255" y="570" class="label">ACTIVE UPPER FACE</text>
+  <text x="1265" y="594" class="tiny">still producing</text>
+
+  <!-- Pump and lower water -->
+  <rect x="765" y="535" width="115" height="88" rx="10" fill="#3c4d52" stroke="#5fd0c4" stroke-width="4"/>
+  <circle cx="823" cy="575" r="24" fill="none" stroke="#bcd8d3" stroke-width="5"/>
+  <path d="M823 551V599M799 575H847" stroke="#bcd8d3" stroke-width="4"/>
+  <text x="786" y="647" class="label" fill="#5fd0c4">PUMP</text>
+  <path d="M765 570H530L340 590" fill="none" stroke="#5fd0c4" stroke-width="5" marker-end="url(#arrowTeal)"/>
+  <text x="430" y="555" class="tiny">visible discharge</text>
+  <path d="M880 615H1260" stroke="#5fd0c4" stroke-width="6" stroke-dasharray="14 10" marker-end="url(#arrowTeal)"/>
+  <text x="935" y="650" class="label" fill="#5fd0c4">FLOODED BYPASS</text>
+  <text x="936" y="674" class="tiny">conditional access · water clock · light cost</text>
+
+  <!-- Objectives -->
+  <g filter="url(#softGlow)">
+    <circle cx="290" cy="470" r="17" fill="#f7d36b"/>
+    <circle cx="823" cy="575" r="17" fill="#f7d36b"/>
+    <circle cx="1305" cy="450" r="17" fill="#f7d36b"/>
+  </g>
+  <text x="96" y="755" class="tiny">Gold dots: social/export, water-control, and production objectives</text>
+  <text x="1115" y="755" class="tiny">5-ft planning grid shown for comparison</text>
+
+  <!-- Strategy cards -->
+  <rect x="60" y="810" width="470" height="185" rx="20" fill="#252b2f" stroke="#f2a33a" stroke-width="3"/>
+  <text x="88" y="849" class="cardTitle" fill="#f2a33a">1 · DIRECT HAUL</text>
+  <text x="88" y="882" class="cardBody">Reach the face quickly; move cargo or large allies.</text>
+  <text x="88" y="907" class="cardBody">Tradeoff: witnesses, traffic, direct opposition.</text>
+  <text x="88" y="932" class="cardBody">Lever: clear, block, ride, or redirect the carts.</text>
+  <text x="88" y="957" class="cardBody">Noncombat: pass as crew during the right shift.</text>
+
+  <rect x="565" y="810" width="470" height="185" rx="20" fill="#252b2f" stroke="#76b7e5" stroke-width="3"/>
+  <text x="593" y="849" class="cardTitle" fill="#76b7e5">2 · MANWAY / AIR</text>
+  <text x="593" y="882" class="cardBody">Flank, inspect, rescue, or leave unseen.</text>
+  <text x="593" y="907" class="cardBody">Tradeoff: slower, narrow, limited cargo and bodies.</text>
+  <text x="593" y="932" class="cardBody">Lever: open, seal, or control the air route.</text>
+  <text x="593" y="957" class="cardBody">Noncombat: reach trapped workers without the yard.</text>
+
+  <rect x="1070" y="810" width="470" height="185" rx="20" fill="#252b2f" stroke="#5fd0c4" stroke-width="3"/>
+  <text x="1098" y="849" class="cardTitle" fill="#5fd0c4">3 · FLOODED BYPASS</text>
+  <text x="1098" y="882" class="cardBody">Bypass the held route or recover lower work.</text>
+  <text x="1098" y="907" class="cardBody">Tradeoff: water, footing, time, and light.</text>
+  <text x="1098" y="932" class="cardBody">Lever: repair, stop, or overdrive the pump.</text>
+  <text x="1098" y="957" class="cardBody">Noncombat: make the lower branch reachable again.</text>
+</svg>

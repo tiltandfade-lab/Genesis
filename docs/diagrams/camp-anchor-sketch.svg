@@ -1,0 +1,74 @@
+<svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ct cd" font-family="ui-sans-serif, -apple-system, 'Segoe UI', sans-serif">
+<title id="ct">Camp golden-form sketch — site 2 thin brief (RULED 2026-07-24)</title>
+<desc id="cd">Plan-view sketch of the ruled camp golden form: a clearing in a forest pocket beside a tangent route, fire ring at center ringed by tent masses, stores and a climbable wagon near the route, terrain-owned high ground at the clearing edge, and a partial perimeter statement.</desc>
+<rect x="0" y="0" width="720" height="500" fill="#FFFFFF"/>
+
+<!-- forest pocket -->
+<g fill="#97C459" stroke="#3B6D11" stroke-width="1">
+  <circle cx="60" cy="70" r="22"/><circle cx="115" cy="45" r="18"/><circle cx="175" cy="62" r="24"/>
+  <circle cx="245" cy="40" r="17"/><circle cx="310" cy="58" r="22"/><circle cx="380" cy="38" r="18"/>
+  <circle cx="445" cy="55" r="21"/><circle cx="30" cy="140" r="19"/><circle cx="45" cy="215" r="23"/>
+  <circle cx="32" cy="295" r="18"/><circle cx="55" cy="360" r="20"/><circle cx="680" cy="230" r="21"/>
+  <circle cx="690" cy="300" r="17"/><circle cx="665" cy="365" r="19"/><circle cx="510" cy="42" r="16"/>
+</g>
+<text x="90" y="112" font-size="12" fill="#3B6D11">forest pocket</text>
+
+<!-- clearing -->
+<path d="M 120 150 Q 200 95 330 100 Q 480 92 570 165 Q 640 225 600 300 Q 560 360 460 375 Q 330 392 220 360 Q 110 322 100 240 Q 96 185 120 150 Z"
+      fill="#EAF3DE" stroke="#639922" stroke-width="1.5"/>
+<text x="150" y="170" font-size="12" fill="#639922">clearing</text>
+
+<!-- route ribbon, tangent -->
+<path d="M 0 428 Q 180 400 360 412 Q 540 424 720 405" fill="none" stroke="#D3D1C7" stroke-width="34"/>
+<path d="M 0 428 Q 180 400 360 412 Q 540 424 720 405" fill="none" stroke="#888780" stroke-width="1" stroke-dasharray="6 5"/>
+<text x="14" y="464" font-size="12" fill="#555349">route in</text>
+<text x="640" y="446" font-size="12" fill="#555349">route out</text>
+<text x="290" y="452" font-size="12" fill="#888780">passes beside, never through</text>
+
+<!-- fire ring -->
+<circle cx="330" cy="235" r="15" fill="none" stroke="#B4552D" stroke-width="2.5"/>
+<g fill="#8A8377">
+  <circle cx="330" cy="218" r="2.4"/><circle cx="344" cy="226" r="2.4"/><circle cx="346" cy="242" r="2.4"/>
+  <circle cx="334" cy="251" r="2.4"/><circle cx="318" cy="248" r="2.4"/><circle cx="314" cy="230" r="2.4"/>
+</g>
+<text x="352" y="222" font-size="12" fill="#2A2A2A">fire ring</text>
+
+<!-- tent masses -->
+<g fill="#E8D9B0" stroke="#8A6B3F" stroke-width="1.5">
+  <path d="M 238 202 L 262 158 L 286 202 Z"/>
+  <path d="M 380 190 L 404 146 L 428 190 Z"/>
+  <path d="M 232 316 L 256 272 L 280 316 Z"/>
+  <path d="M 392 322 L 416 278 L 440 322 Z"/>
+</g>
+<text x="188" y="140" font-size="12" fill="#2A2A2A">tent masses (geometry)</text>
+<text x="188" y="155" font-size="11" fill="#8A6B3F">decoration in paint</text>
+
+<!-- stores + wagon -->
+<g fill="#E8D9B0" stroke="#8A6B3F" stroke-width="1.5">
+  <rect x="466" y="296" width="20" height="20"/>
+  <rect x="490" y="302" width="16" height="16"/>
+</g>
+<text x="446" y="288" font-size="12" fill="#2A2A2A">stores / service</text>
+
+<rect x="524" y="330" width="72" height="32" rx="4" fill="#C89A5B" stroke="#B4552D" stroke-width="2"/>
+<circle cx="540" cy="368" r="8" fill="none" stroke="#7A5A2E" stroke-width="2"/>
+<circle cx="580" cy="368" r="8" fill="none" stroke="#7A5A2E" stroke-width="2"/>
+<text x="512" y="322" font-size="12" fill="#2A2A2A">wagon — one always-climbable deck</text>
+
+<!-- terrain high ground -->
+<g fill="none" stroke="#3B6D11" stroke-width="2">
+  <path d="M 520 120 Q 565 92 610 112 Q 648 130 638 165 Q 626 196 578 196 Q 532 194 518 162 Q 510 138 520 120 Z"/>
+  <path d="M 548 132 Q 580 116 606 130 Q 626 142 618 162 Q 608 180 578 179 Q 552 177 545 156 Q 541 142 548 132 Z" stroke-width="1.5"/>
+  <path d="M 568 145 Q 586 137 599 147 Q 607 155 599 164 Q 588 172 574 167 Q 564 160 568 145 Z" stroke-width="1"/>
+</g>
+<text x="486" y="90" font-size="12" fill="#2A2A2A">terrain owns the high ground (unclaimed)</text>
+
+<!-- perimeter statement -->
+<path d="M 140 330 Q 92 268 106 195 Q 118 132 190 100" fill="none"
+      stroke="#8A6B3F" stroke-width="3" stroke-dasharray="10 7" stroke-linecap="round"/>
+<text x="52" y="395" font-size="12" fill="#2A2A2A">perimeter statement</text>
+<text x="52" y="410" font-size="11" fill="#8A6B3F">palisade → brush → nothing</text>
+
+<text x="14" y="20" font-size="12" fill="#2A2A2A" font-weight="700">Camp golden-form sketch — RULED 2026-07-24 (plan view; tent icons, not footprints)</text>
+<text x="14" y="37" font-size="11" fill="#6B675E">surface-anchored capsule · inward ring · route tangent · rust = the ruled tactical anchors (fire, wagon deck)</text>
+</svg>

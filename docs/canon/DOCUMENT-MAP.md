@@ -46,7 +46,18 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Session state / what happened / what's next | `docs/HANDOFF.md` · `docs/CHANGELOG.md` · `docs/NEXT-STEPS.md` | chronological operations surfaces |
 | Graphics governing charter | `docs/GRAPHICS-CONVERGENCE-CHARTER.md` | protected core + convergence law |
 | Is the Clayroom fixture trustworthy? (reset ladder CL-R0…CL-R6) | `docs/CLAYROOM-RESET-LADDER.md` | renderer/fixture-trust gate across passes; gates C1H/C1I/Guard Post 1 |
-| Golden-site structure/material catalog + the Guard Post brief | `docs/GOLDEN-SITES-CATALOG.md` | FFT relational grammar, GP-SHAPE-01, cultural mutation MVP/Ideal, seed law, FFT/import boundary |
+| Golden Site authority and four status gates | `docs/GOLDEN-SITES-CATALOG.md` | audited briefs, recommendation classes, Proof/MVP/Ideal, FFT/import boundary |
+| Golden Site concepting sessions | `docs/GOLDEN-SITE-CONCEPTING-GUIDELINES.md` | generator-first, visual, plain-English session method |
+| Golden Site founder choices | `docs/GOLDEN-SITES-FOUNDER-QUEUE.md` | only unresolved taste/build-order proposals |
+| Golden Site evidence and rendered-proof execution | `docs/GOLDEN-SITES-PROOF-QUEUE.md` | targeted source gaps + countable common/site capture contracts |
+| Site 1 Guard Post working build spec | `docs/SITE-1-GUARD-POST-SPEC.md` | consolidated road/threshold/deck/culture generator and receipt contract |
+| Site 2 Camp/Service working build spec | `docs/SITE-2-CAMP-SERVICE-SPEC.md` | center/shelter/terrain routes, life-support circuits, host-safe generation |
+| Site 3 Dormant/Abandoned retained foundation | `docs/SITE-3-DORMANT-CONCEPT.md` | accepted host-transformation concept; full site deliberately sequenced late/last |
+| Site 4 Monastery/Commune working build spec | `docs/SITE-4-MONASTERY-COMMUNE-SPEC.md` | court/arcade/routine/service generator; proposed variant order remains explicit |
+| Site 5 Mine/Workshop working build spec | `docs/SITE-5-MINE-WORKSHOP-CONCEPT.md` | accepted capsule/first build/stretch; detailed circuits, generator, routes, assets, and proof receipt |
+| Site 7 Natural Lair working build spec | `docs/SITE-7-NATURAL-LAIR-SPEC.md` | origin/ecology/darkness/route generator and short-exit receipt |
+| Site 10 Urban Institution working build spec | `docs/SITE-10-URBAN-INSTITUTION-SPEC.md` | street/frontage/vertical/time generator; research and proposal flags retained |
+| Site 5 research packet | `Reference/Mine-Workshop-Study/` | source ledger + synthesis + local pressure test; declared gaps keep research PARTIAL |
 | Pixel sprite register (canon figure register) | `docs/ART-DEPARTMENT.md` | Adam's 2026-07-15 ruling; quote, never paraphrase |
 | Faceted RESERVE register + prop/decal/kit contracts | `docs/ART-DIRECTION-CANON.md` | sibling scope to ART-DEPARTMENT, not a rival |
 | DM persona/behavior | `docs/DM-CHARTER.md` | |
@@ -158,7 +169,10 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/GEOMETRY-ACCELERATION-TOOLCHAIN.md — proposed — system-spec/SPECCED(2026-07-12)
 - docs/GEOMETRY-OSS-INTEGRATION.md — proposed — system-spec/SPECCED(2026-07-12) — landed pieces tracked in CHANGELOG (geometry default flip)
 - docs/GIT-LFS-MIGRATION.md — operations (done) — runbook/"READY"(2026-07-10) — ⚠ stale: LFS live since 2026-07-18 per DESIGN.md infra note
-- docs/GOLDEN-SITES-CATALOG.md — accepted-supporting — design-study/ACCEPTED-DIRECTION-implementation-unauthorized(2026-07-23) — golden-site kit catalog + Guard Post brief; Desktop packet folded, routes detail to composition/trim/material owners
+- docs/GOLDEN-SITES-CATALOG.md — accepted-supporting — design-study/ACCEPTED-DIRECTION-implementation-unauthorized(audited 2026-07-25) — Golden Site authority; four status gates + audited site briefs; routes detail to composition/trim/material owners
+- docs/GOLDEN-SITE-CONCEPTING-GUIDELINES.md — operations — workflow-guide/ACTIVE(2026-07-25) — generator-first concepting rhythm, visual proof cadence, and session completion checklist
+- docs/GOLDEN-SITES-FOUNDER-QUEUE.md — operations — decision-queue/OPEN(2026-07-25) — six nonblocking founder proposals; never stores research or proof work
+- docs/GOLDEN-SITES-PROOF-QUEUE.md — operations — execution-queue/ACTIVE(2026-07-25) — targeted evidence and retained-fixture acceptance contracts
 - docs/GLOOM-KEY.md — current-canon — system-spec/SPEC-locked-throughline(2026-07-08)
 - docs/GRAPHICS-CONVERGENCE-CHARTER.md — current-canon — design-guide/ACTIVE(2026-07-12) — governing graphics authority
 - docs/GRAPHICS-CONVERGENCE-PLAN.md — current-canon — orchestration-plan/ACTIVE(2026-07-12) — governed_by charter
@@ -287,6 +301,13 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/SHIP-RULES-GATHER.md — research — reference/gathered(2026-07-08)
 - docs/SHIP-TRAVEL.md — proposed — system-spec/awaiting-review(2026-07-08) — ⚠ in-doc RESOLVED section vs header
 - docs/SHOP-UI.md — current-canon — system-spec/BUILT(2026-07-01)
+- docs/SITE-1-GUARD-POST-SPEC.md — accepted-supporting — working-site-spec/PASS-PASS-PASS-CLAY-OPEN(2026-07-25) — Mine-standard family, generator, and exact visual-proof contract
+- docs/SITE-2-CAMP-SERVICE-SPEC.md — accepted-supporting — working-site-spec/FOUNDER-BRIEF-PARTIAL(2026-07-25) — Camp family, circuits, plans, fallback, and visual-proof receipt
+- docs/SITE-3-DORMANT-CONCEPT.md — accepted-supporting — concept-foundation/DEFERRED-LATE(2026-07-25) — retained host-transformation foundation; full work deliberately waits for donor sites
+- docs/SITE-4-MONASTERY-COMMUNE-SPEC.md — accepted-supporting — working-site-spec/FOUNDER-BRIEF-PARTIAL(2026-07-25) — court/routine family and generator with proposal flags
+- docs/SITE-5-MINE-WORKSHOP-CONCEPT.md — accepted-supporting — working-site-spec/PARTIAL(2026-07-25) — detailed Mine/Workshop Proof→MVP→Ideal build and proof contract; exact tuning clay-deferred
+- docs/SITE-7-NATURAL-LAIR-SPEC.md — accepted-supporting — working-site-spec/PASS-PASS-PASS-CLAY-OPEN(2026-07-25) — origin/ecology/darkness family, generator, and receipt
+- docs/SITE-10-URBAN-INSTITUTION-SPEC.md — accepted-supporting — working-site-spec/PARTIAL(2026-07-25) — street/frontage/time family and generator with research/proposal flags
 - docs/SKIN-GRANTS.md — current-canon — system-spec/BUILT(2026-07-02)
 - docs/SOCIAL-SPINE-FIXES.md — proposed — system-spec/SPEC-LOCKED-deferred(2026-07-06) — supersedes FABLE-WINDOW S1/S2/S3/S5
 - docs/SOCIAL.md — current-canon (built) — system-spec/"draft"(2026-06-28) — ⚠ resolvers live per SOCIAL-SPINE-FIXES

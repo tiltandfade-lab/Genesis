@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1040" viewBox="0 0 1600 1040" role="img" aria-labelledby="title desc">
+  <title id="title">Site 5 first build, strained drift mine section</title>
+  <desc id="desc">A fixed-camera cutaway showing surface sorting, a broad haulage route, active upper face, separate manway and air route, supported ground, pump, and a flooding lower branch.</desc>
+  <defs>
+    <linearGradient id="day" x1="0" x2="1">
+      <stop offset="0" stop-color="#fff0b6" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#fff0b6" stop-opacity="0"/>
+    </linearGradient>
+    <style>
+      .bg { fill:#f4f0e6; }
+      .earth { fill:#cbbda2; stroke:#6b614f; stroke-width:5; }
+      .void { fill:#34383a; stroke:#6b614f; stroke-width:5; }
+      .floor { fill:none; stroke:#b8aa8e; stroke-width:10; stroke-linecap:round; }
+      .frame { fill:none; stroke:#8b6034; stroke-width:9; stroke-linecap:round; }
+      .route { fill:none; stroke:#d16838; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
+      .escape { fill:none; stroke:#83a8b0; stroke-width:7; stroke-linecap:round; stroke-dasharray:13 10; }
+      .pipe { fill:none; stroke:#7e78a5; stroke-width:6; stroke-linecap:round; }
+      .water { fill:#79aebb; opacity:.82; }
+      .ore { fill:#b9974e; stroke:#695b3e; stroke-width:3; }
+      .spoil { fill:#8e846f; stroke:#635c50; stroke-width:3; }
+      .worklight { fill:#f2a64b; stroke:#8f5c2a; stroke-width:3; }
+      .label { font-family:Inter,Arial,sans-serif; font-size:27px; font-weight:700; fill:#292b2a; }
+      .body { font-family:Inter,Arial,sans-serif; font-size:21px; fill:#4f4c45; }
+      .small { font-family:Inter,Arial,sans-serif; font-size:18px; fill:#6c685f; }
+      .inside { font-family:Inter,Arial,sans-serif; font-size:19px; fill:#f4f0e6; }
+      .accent { fill:#bd572e; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="1040"/>
+  <text x="55" y="65" class="label" style="font-size:40px">FIRST BUILD — ACTIVE ABOVE, FLOODING BELOW</text>
+  <text x="55" y="104" class="body">The mine remains useful because one complete production path still works.</text>
+
+  <path d="M44 266 L180 238 L315 203 L480 177 L680 165 L900 173 L1130 194 L1370 230 L1560 272 L1560 855 L44 855 Z" class="earth"/>
+
+  <rect x="245" y="360" width="198" height="212" fill="url(#day)"/>
+  <rect x="64" y="505" width="270" height="252" rx="12" fill="#eee5d4" stroke="#7d735f" stroke-width="4"/>
+  <text x="84" y="542" class="label" style="font-size:24px">SORT / REPAIR</text>
+  <rect x="91" y="575" width="95" height="70" fill="#d8c9ab" stroke="#715f44" stroke-width="4"/>
+  <path d="M108 609 L168 609 M138 586 L138 632" class="pipe"/>
+  <path d="M215 655 L245 610 L278 655 Z" class="ore"/>
+  <text x="211" y="685" class="small">ore stock</text>
+  <path d="M80 744 L119 689 L161 744 Z M139 744 L182 708 L218 744 Z" class="spoil"/>
+  <text x="83" y="782" class="small">spoil leaves separately</text>
+
+  <path d="M305 476 Q365 375 450 366 L1328 366 L1377 414 L1328 462 L450 462 Q367 459 305 536 Z" class="void"/>
+  <path d="M318 503 L438 418 L1312 418" class="floor"/>
+
+  <path d="M481 443 L481 386 Q530 342 579 386 L579 443" class="frame"/>
+  <path d="M660 437 L660 383 Q708 343 756 383 L756 437" class="frame"/>
+  <path d="M839 437 L839 383 Q887 343 935 383 L935 437" class="frame"/>
+  <path d="M1018 437 L1018 383 Q1066 343 1114 383 L1114 437" class="frame"/>
+
+  <path d="M1328 366 L1377 414 L1328 462" fill="#a8997f" stroke="#6b614f" stroke-width="5"/>
+  <path d="M1280 418 L1340 418" class="route"/>
+  <circle cx="1213" cy="390" r="11" class="worklight"/>
+  <circle cx="1045" cy="390" r="11" class="worklight"/>
+  <text x="1173" y="334" class="inside">ACTIVE FACE</text>
+  <text x="1030" y="493" class="small">last permanent support</text>
+  <path d="M1110 480 L1110 444" class="route"/>
+
+  <path d="M1268 418 L1020 418 L798 418 L570 418 L422 429 L294 521 L244 610" class="route"/>
+  <text x="372" y="527" class="label accent" style="font-size:24px">BROAD HAULAGE SPINE</text>
+  <text x="372" y="557" class="small">face → sorting/repair → stock/export</text>
+
+  <path d="M720 462 L820 625 L820 790 L1288 790 L1288 666 L895 666 L795 462 Z" class="void"/>
+  <path d="M754 468 L854 690 L1262 690" class="floor"/>
+  <rect x="831" y="716" width="448" height="74" class="water"/>
+  <text x="1016" y="758" class="inside">LOWER WORK DORMANT</text>
+  <text x="1005" y="817" class="small">waterline rises on a recoverable clock</text>
+
+  <rect x="735" y="610" width="88" height="64" rx="10" fill="#d7cab1" stroke="#75644f" stroke-width="4"/>
+  <circle cx="779" cy="642" r="19" fill="none" stroke="#7e78a5" stroke-width="5"/>
+  <path d="M779 623 L779 661 M760 642 L798 642" class="pipe"/>
+  <path d="M779 610 L690 565 L515 565 L515 676 L332 676" class="pipe"/>
+  <text x="500" y="638" class="small">pump + visible discharge</text>
+
+  <path d="M910 366 L984 272 L1120 246 L1220 264" class="void"/>
+  <path d="M914 354 L992 286 L1118 260 L1210 275" class="escape"/>
+  <path d="M1210 275 L1280 234" class="escape"/>
+  <text x="934" y="224" class="label" style="font-size:23px;fill:#587e88">SEPARATE MANWAY / AIR / ESCAPE</text>
+  <text x="1042" y="295" class="inside">narrow route</text>
+
+  <circle cx="624" cy="380" r="13" fill="none" stroke="#f4f0e6" stroke-width="5"/>
+  <path d="M624 394 L624 428 M624 405 L608 416 M624 405 L639 416 M624 428 L612 451 M624 428 L637 451" fill="none" stroke="#f4f0e6" stroke-width="5" stroke-linecap="round"/>
+  <text x="586" y="346" class="inside">6' witness</text>
+
+  <text x="65" y="316" class="label">DAYLIGHT PORTAL</text>
+  <text x="65" y="346" class="small">hard source boundary; active fixtures begin deeper</text>
+  <text x="1197" y="890" class="small">camera-facing ceiling omitted</text>
+  <text x="1197" y="915" class="small">engineered overhead still exists</text>
+
+  <rect x="55" y="932" width="1490" height="76" rx="12" fill="#e6ddca" stroke="#887c66" stroke-width="3"/>
+  <text x="82" y="963" class="body">Three plans: fast exposed haulage · slow narrow manway · conditional flooded bypass</text>
+  <text x="82" y="991" class="small">Levers: repair/disable pump · block haulage · shore face · control manway · divert water · rescue crew · steal ore</text>
+</svg>

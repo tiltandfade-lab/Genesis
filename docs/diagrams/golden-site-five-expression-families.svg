@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1220" viewBox="0 0 1800 1220">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101820"/>
+      <stop offset="1" stop-color="#222c34"/>
+    </linearGradient>
+    <style>
+      .title{font:700 42px Arial,sans-serif;fill:#f4f3ed}
+      .sub{font:400 20px Arial,sans-serif;fill:#bdc9ce}
+      .col{font:700 18px Arial,sans-serif;fill:#d9e3e6;letter-spacing:1px}
+      .site{font:700 23px Arial,sans-serif;fill:#f7f5ed}
+      .promise{font:500 15px Arial,sans-serif;fill:#c7d1d4}
+      .cellTitle{font:700 18px Arial,sans-serif;fill:#f4f3ed}
+      .cellBody{font:500 15px Arial,sans-serif;fill:#c9d4d7}
+      .foot{font:500 15px Arial,sans-serif;fill:#aebdc2}
+    </style>
+  </defs>
+
+  <rect width="1800" height="1220" fill="url(#bg)"/>
+  <text x="70" y="68" class="title">FIVE EXPRESSIONS, ONE RECOGNIZABLE FAMILY</text>
+  <text x="70" y="105" class="sub">The retrofit defines a small, ordinary, large, degraded/repurposed, and unusual expression before any hero scene is polished.</text>
+
+  <g transform="translate(300 145)">
+    <text x="120" y="28" text-anchor="middle" class="col">SMALL</text>
+    <text x="390" y="28" text-anchor="middle" class="col">ORDINARY / RECOMMENDED BUILD</text>
+    <text x="660" y="28" text-anchor="middle" class="col">LARGE</text>
+    <text x="930" y="28" text-anchor="middle" class="col">DEGRADED / REPURPOSED</text>
+    <text x="1200" y="28" text-anchor="middle" class="col">UNUSUAL BUT SUPPORTED</text>
+  </g>
+
+  <!-- Guard Post -->
+  <g transform="translate(70 200)">
+    <rect width="1660" height="170" rx="18" fill="#263139" stroke="#d8a44d" stroke-width="3"/>
+    <rect width="230" height="170" rx="18" fill="#3a3428"/>
+    <text x="24" y="55" class="site">1 · GUARD POST</text>
+    <text x="24" y="84" class="promise">operated threshold</text>
+    <text x="24" y="111" class="promise">controls a journey</text>
+    <g transform="translate(250 22)">
+      <text x="0" y="22" class="cellTitle">Single-room gate watch</text>
+      <text x="0" y="51" class="cellBody">tight route + simple barrier</text>
+      <text x="270" y="22" class="cellTitle">Shoulder overlook</text>
+      <text x="270" y="51" class="cellBody">road · barrier · deck · flank</text>
+      <text x="540" y="22" class="cellTitle">Tower / bridgehead</text>
+      <text x="540" y="51" class="cellBody">longer sight · broader crossing</text>
+      <text x="810" y="22" class="cellTitle">Improvised checkpoint</text>
+      <text x="810" y="51" class="cellBody">damage or new operator; still live</text>
+      <text x="1080" y="22" class="cellTitle">Realm-owned threshold</text>
+      <text x="1080" y="51" class="cellBody">cavern · causeway · magic line</text>
+    </g>
+  </g>
+
+  <!-- Camp -->
+  <g transform="translate(70 390)">
+    <rect width="1660" height="170" rx="18" fill="#263139" stroke="#df7e4e" stroke-width="3"/>
+    <rect width="230" height="170" rx="18" fill="#3b2d28"/>
+    <text x="24" y="55" class="site">2 · CAMP / SERVICE</text>
+    <text x="24" y="84" class="promise">temporary service</text>
+    <text x="24" y="111" class="promise">on borrowed ground</text>
+    <g transform="translate(250 22)">
+      <text x="0" y="22" class="cellTitle">Sleep-and-fire stop</text>
+      <text x="0" y="51" class="cellBody">center + minimal shelter/service</text>
+      <text x="270" y="22" class="cellTitle">Traveling camp</text>
+      <text x="270" y="51" class="cellBody">irregular inward shelter belt</text>
+      <text x="540" y="22" class="cellTitle">Organized camp</text>
+      <text x="540" y="51" class="cellBody">lanes · watches · repeated traces</text>
+      <text x="810" y="22" class="cellTitle">Disturbed camp</text>
+      <text x="810" y="51" class="cellBody">storm · flight · occupation</text>
+      <text x="1080" y="22" class="cellTitle">Rooted or hosted</text>
+      <text x="1080" y="51" class="cellBody">waystation or guest camp</text>
+    </g>
+  </g>
+
+  <!-- Monastery -->
+  <g transform="translate(70 580)">
+    <rect width="1660" height="170" rx="18" fill="#263139" stroke="#a98bd2" stroke-width="3"/>
+    <rect width="230" height="170" rx="18" fill="#322c3d"/>
+    <text x="24" y="55" class="site">4 · MONASTERY</text>
+    <text x="24" y="84" class="promise">communal rule</text>
+    <text x="24" y="111" class="promise">made spatial</text>
+    <g transform="translate(250 22)">
+      <text x="0" y="22" class="cellTitle">Communal house</text>
+      <text x="0" y="51" class="cellBody">yard · hall · sleep · service</text>
+      <text x="270" y="22" class="cellTitle">Level wrapped court</text>
+      <text x="270" y="51" class="cellBody">arcade · gate · head climb</text>
+      <text x="540" y="22" class="cellTitle">Stacked institution</text>
+      <text x="540" y="51" class="cellBody">filtered courts · deeper routine</text>
+      <text x="810" y="22" class="cellTitle">Divided chassis</text>
+      <text x="810" y="51" class="cellBody">refuge · seizure · reform</text>
+      <text x="1080" y="22" class="cellTitle">Specific institution</text>
+      <text x="1080" y="51" class="cellBody">terrace · hospice · school</text>
+    </g>
+  </g>
+
+  <!-- Lair -->
+  <g transform="translate(70 770)">
+    <rect width="1660" height="170" rx="18" fill="#263139" stroke="#72b879" stroke-width="3"/>
+    <rect width="230" height="170" rx="18" fill="#29372c"/>
+    <text x="24" y="55" class="site">7 · NATURAL LAIR</text>
+    <text x="24" y="84" class="promise">causal inhabited</text>
+    <text x="24" y="111" class="promise">or claimed void</text>
+    <g transform="translate(250 22)">
+      <text x="0" y="22" class="cellTitle">Claimed chamber</text>
+      <text x="0" y="51" class="cellBody">mouth + claim + one advantage</text>
+      <text x="270" y="22" class="cellTitle">Walk-in karst</text>
+      <text x="270" y="51" class="cellBody">mouth light · floor · ledge</text>
+      <text x="540" y="22" class="cellTitle">Natural dungeon</text>
+      <text x="540" y="51" class="cellBody">chained rooms + short exit</text>
+      <text x="810" y="22" class="cellTitle">Adopted / displaced</text>
+      <text x="810" y="51" class="cellBody">returning owner · feral mine</text>
+      <text x="1080" y="22" class="cellTitle">Origin-authored void</text>
+      <text x="1080" y="51" class="cellBody">dug · flooded · grown · giant</text>
+    </g>
+  </g>
+
+  <!-- Urban -->
+  <g transform="translate(70 960)">
+    <rect width="1660" height="170" rx="18" fill="#263139" stroke="#6fa8dc" stroke-width="3"/>
+    <rect width="230" height="170" rx="18" fill="#283543"/>
+    <text x="24" y="55" class="site">10 · URBAN</text>
+    <text x="24" y="84" class="promise">street + frontage</text>
+    <text x="24" y="111" class="promise">+ institution</text>
+    <g transform="translate(250 22)">
+      <text x="0" y="22" class="cellTitle">Open-flank frontage</text>
+      <text x="0" y="51" class="cellBody">two ends + owned thresholds</text>
+      <text x="270" y="22" class="cellTitle">Market-hall slice</text>
+      <text x="270" y="51" class="cellBody">hall · fountain · vertical way</text>
+      <text x="540" y="22" class="cellTitle">Institution district</text>
+      <text x="540" y="51" class="cellBody">service depth + upper route</text>
+      <text x="810" y="22" class="cellTitle">Disrupted street</text>
+      <text x="810" y="51" class="cellBody">fire · seizure · closure</text>
+      <text x="1080" y="22" class="cellTitle">Terrain/culture posture</text>
+      <text x="1080" y="51" class="cellBody">stair street · roof street · fair</text>
+    </g>
+  </g>
+
+  <text x="70" y="1180" class="foot">The ordinary column is the current recommended complete build; Monastery order remains PROPOSED. “Degraded” stays only while the operating identity remains; fully dormant transformations belong to Site 3.</text>
+</svg>

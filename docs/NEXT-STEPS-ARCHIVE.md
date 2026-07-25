@@ -18,6 +18,35 @@ just preserves the old ordered-queue framing for anyone reconstructing why a cal
 
 ---
 
+## Do next (2026-07-22 later — canon pass EXECUTED; Adam's review packet is the gate)
+
+The Fable canon-and-scope pass ran docs-only on 2026-07-22. Waves 1-6/10 remain CLOSED; Waves
+7-9/11-12 now hold full PROPOSED records. Nothing closed, nothing built, nothing merged.
+
+1. ☑ **Close Wave 6 explicitly** (15.8; corpus/ledger protections intact).
+2. ☑ **Canon materialized:** `docs/canon/` — README (precedence law) · PRODUCT-SCOPE ·
+   SYSTEM-OWNERSHIP · DECISION-INDEX · QUESTION-COVERAGE · OPEN-QUESTIONS · GLOSSARY ·
+   DOCUMENT-MAP (census of ~290 docs + supersession map + health-debt register).
+3. ☑ **All five remaining waves drafted** in order 7→8→9→11→12 (wave-0N folders: README +
+   proposed dispositions + proposed phasing audit). Coverage: 26 INHERITED · 30 FABLE-PROPOSED
+   · 7 OPEN-ADAM · 6 EVIDENCE-GATED · 1 DEFERRED across the 70-question bank, +5 generated.
+4. ☑ **Ladder/ledger reconciled as proposals** (F8.1 pass, W7 archetype overlay, W9 soak
+   traces, F12.1 bakeoff fixture, new ledger rows) — apply only at Adam's acceptance.
+5. ☑ **ADAM: answer founder Batch 1** — DONE 2026-07-22 (B·B·B·B·B·A; recorded verbatim in the
+   owning §.4 sections; six new GEN-* ids).
+6. ☑ **ADAM: sweep the five wave records** — DONE 2026-07-22/23: all five swept in plain
+   language and explicitly CLOSED (§16.7 · §17.7 · §18.7 · §19.7 · §20.7).
+7. ☑ **Per-module three-horizon register** (Adam's ruling, same day): `docs/canon/
+   MODULE-PHASING.md` — proof/MVP/ideal for every game module, dungeon families ledger-routed;
+   "(proposed)" rows (ship-travel deferral chief among them) ride the same review as item 6.
+8. ◐ **Queued ops unit: DOCS-INDEX tooling** — DEFERRED 2026-07-23 (Adam, wave-12 §20.7):
+   still wanted, but execution must begin with a re-scope pass verifying what has changed
+   since the spec. Stays queued with that precondition.
+9. ☐ Keep `Reference/FFT Battle Maps/` reference-only and untracked; R1/R2 stay supplemental
+   research, never canon or dependency admission.
+10. ☑ **FULL CI discharged** at the 2026-07-23 clean close (full local sweep + merge to
+    master + GitHub CI confirmed — see CHANGELOG 2026-07-23 later entry).
+
 ## Do next (2026-07-19 later — CI GREEN + Wave 1 landed; resume at open decision 3C)
 
 The whole Wave 1 design lane is on master (79 commits, --no-ff). The Direction file runs well past

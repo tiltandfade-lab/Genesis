@@ -1,0 +1,536 @@
+---
+type: working-site-spec
+created: 2026-07-25
+status: WORKING SPEC — research/founder/brief PARTIAL; clay OPEN
+site: 10 — urban institution
+standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
+authority:
+  - GOLDEN-SITES-CATALOG.md
+  - STRUCTURE-KIT-CATALOG.md
+research:
+  - ../Reference/Urban-Study/
+  - ../Reference/Urban-Culture-Study/
+---
+
+# SITE 10 — URBAN INSTITUTION — WORKING SPEC
+
+## Authority and honest status
+
+This document translates the ruled Urban family into the Mine-standard generator and
+proof contract. The catalog remains the decision authority.
+
+Already ruled:
+
+- a slice of town where the road has grown walls;
+- two honest street ends and one vertical way in the Golden Seed;
+- street frontage and party walls as the signature construction;
+- a free-standing market-hall block splitting the square into two streets;
+- attached or free-standing fountain compositions, each preserving one dominant center;
+- two-state shutter-counter as the first frontage mechanism;
+- 3–6-cell frontage bays and continuous gallery as defaults, not universals;
+- roof-as-upper-street as a culture-gated expression;
+- house-owned lanterns by default and civic post lamps only under functioning authority;
+- palette as supporting culture evidence, never sufficient identity;
+- hour rules, signal ownership, fair state later, trade memory, toll purpose/expiry,
+  authority marks, and fire-lawed street as a rolled history option.
+
+Still proposed:
+
+- whether the produce tray is the second MVP stall; and
+- whether one culture answer-object per site is the first affordable noncolor tier.
+
+The research gate remains partial because measured construction, direct shutter/gallery
+evidence, working historic-market imagery, fixed-camera overlook proof, early color, and
+cultural breadth remain insufficient.
+
+## Plain-English promise
+
+This is not “a whole town.” It is one piece of urban life where a public institution,
+the street, the plaza, and the buildings facing them all affect one another.
+
+The player should understand what the street permits at this hour, who owns the
+thresholds and lights, what is being bought or governed, where people can go above or
+behind the public route, and how authority, commerce, water, fire, and household life
+change the same geometry.
+
+## What makes it a site family
+
+Site 10 owns an **inhabited public slice where the road, its frontages, and an
+institution have grown into one operating system**:
+
+`town continuation → public street and center → owned frontages/institution
+→ vertical or service layer → second town continuation`
+
+Traffic, commerce, households, authority, time, water, fire, service, and light explain
+how the slice works. It is large enough to expose those relationships and small enough
+that both street ends honestly promise a town beyond the frame.
+
+A row of generic façades is not an Urban Institution. A courtyard institution governed
+primarily by communal rule belongs to Site 4. A fully stopped district whose main
+identity is abandonment belongs to Site 3.
+
+## Required invariants
+
+- **REQUIRED — a pass-through slice.** At least two street ends connect to the larger
+  town promise. The scene never pretends to be the entire settlement.
+- **REQUIRED — frontage has ownership.** Repeated bays belong to households, trades, or
+  institutions with doors, shutters, light, use, and state.
+- **REQUIRED — public center remains readable.** Hall and fountain form one coherent
+  dominant assembly or one is clearly subordinate in an alternate placement.
+- **REQUIRED — vertical urban life is reachable.** Gallery, roofline, balcony, terrain
+  street, or cellar has an honest route and tactical/social purpose.
+- **REQUIRED — time changes permissions and occupancy.** Hour, signal, authority, and
+  market state affect more than lighting.
+- **REQUIRED — service consequences exist.** Goods, water, waste, fire precautions,
+  deliveries, and household access have destinations.
+- **REQUIRED — several plans.** Public street, frontage/covered route, vertical route,
+  service/timing, and institution rules create different approaches.
+- **DEFAULT — varied frontage.** Bay width, depth, height, shutter, material, use, and
+  repair vary within the culture/authority card.
+- **LICENSED — civic lamps, roof streets, galleries, fair law, fire walls, tolls, or
+  destructible center stack.** Each requires authority, culture, time, history, and
+  construction facts.
+
+## Identity, culture, and circumstance
+
+### Site identity
+
+The identity is the live relation among through street, public center, owned frontage,
+institution, vertical/service access, and a larger unseen town. The player can work
+with or against traffic, owners, shutters, schedules, authority, water, fire, goods,
+signals, and upper routes without the scene pretending to simulate every district.
+
+### Cultural expression
+
+Culture affects frontage construction, party-wall practice, bay rhythm, thresholds,
+trade sorting, time signals, stranger handling, shared-danger response, roof/gallery
+use, water, maintenance, authority marks, household/public boundaries, and light
+ownership. Palette helps those facts read but never substitutes for them.
+
+### Local circumstance
+
+Terrain, street role, institution, market state, authority, hour, traffic, wealth,
+households and trades, available construction, water and fire history, service access,
+damage, fair/toll history, weather, current occupants, and current pressure determine
+the actual slice.
+
+## The site's deck
+
+The Urban site's deck is its **connected upper public or semi-public route**, not simply
+the highest roof. The culture/construction card may express it as a continuous gallery,
+linked roofline, balcony chain, or terrain overlook.
+
+It must have a legal way in, useful movement or social purpose, landing capacity,
+fixed-camera visibility, and a meaningful cost in time, exposure, permission, or
+capacity. A lone decorative balcony and an inaccessible roof do not qualify.
+
+## Five-expression family
+
+1. **Small — open-flank frontage slice.** One active frontage run, two street ends, an
+   open yard or side, and one vertical or service relationship establish ownership and
+   town continuation.
+2. **Ordinary — market-hall slice.** Free-standing open-post hall, coherent fountain
+   center, two frontage edges, two street routes, shutters, plaza, and one vertical way
+   form the recommended first complete scene.
+3. **Large — institution district slice.** Stronger civic, religious, guild, court, or
+   commercial program adds service depth, connected upper circulation, and more
+   consequential authority/time states.
+4. **Degraded or repurposed — disrupted urban slice.** Fire recovery, corrupt or
+   faction-seized authority, market closure, displaced households, or partial
+   abandonment changes ownership and routes while the urban operating relationships
+   remain active. A fully dormant district crosses into Site 3.
+5. **Unusual — terrain or culture-owned town posture.** A stair street, roof-as-street,
+   hillside overlook, fair transformation, fire-lawed street, or nonmarket institution
+   is legal when construction, culture, history, and program facts support it.
+
+Portfolio comparison:
+[five-expression family board](diagrams/golden-site-five-expression-families.svg).
+
+## Growth ladder and implementation order
+
+### Scene ladder
+
+1. **Rung A — open-flank frontage slice:** one street, one active frontage run, open
+   side/yard, two ends, and one vertical or service relation.
+2. **Rung B — market-hall Golden Seed:** free-standing open-post hall, plaza, coherent
+   fountain relation, two frontage edges, two street ends, and one vertical way.
+3. **Rung C — institution district slice:** stronger civic/religious/guild/court
+   program, continuous gallery or roof street, service edges, and time/authority states.
+4. **Rung D — terrain town:** descending/stair street, level overlooks, multiple decks,
+   district boundaries, fair/fire-history and broader institution families.
+
+### Implementation order
+
+**One frontage bay and shutter mechanism → open-flank frontage slice → open-post market
+hall plus attached fountain → gallery/roof access → full market-hall slice → terrain
+street and other institutions.**
+
+This differs from scene size order because the physical shutter/frontage mechanism must
+be proved before the generator repeats it. The produce tray and answer-object tiers
+remain proposals; they cannot block the first structural proof.
+
+## Recommended first build
+
+Prove one frontage bay and its two-state shutter-counter first, then build the Rung-B
+market-hall slice as the first complete retained site. That order isolates the signature
+mechanism before repetition and then tests the smallest scene containing both street
+ends, public center, owned frontage, institution, vertical choice, service, time, and
+authority.
+
+### Golden Seed — market-hall slice
+
+A fixed-camera market-hall slice:
+
+- two visible street ends;
+- a free-standing open-post hall splitting the public space into two routes;
+- a fountain attached to the hall's short end as one center assembly;
+- at least two frontage runs with owned bays and physical shutter-counter states;
+- a public plaza/market apron with functional, collision-honest goods;
+- one vertical way to a gallery, roofline, balcony, or terrain overlook;
+- a service/delivery/waste edge distinct from the formal public center;
+- household and authority/time/light facts;
+- direct, covered/frontage, vertical, and schedule/social plans.
+
+## Working spatial specification
+
+### Required zones
+
+1. **Arrival street end:** readable connection to the unseen town and initial plan space.
+2. **Departure street end:** a distinct continuation, retreat, or through-traffic
+   promise.
+3. **Public street split:** routes passing around/through the hall without becoming one
+   indistinct open floor.
+4. **Market hall:** free-standing block with honest post/roof/circulation and an
+   institution/commerce program.
+5. **Center assembly:** attached fountain for the seed, with coherent use and apron.
+6. **Plaza/market apron:** public gathering, trade, movement, and encounter ground.
+7. **Frontage runs:** party-wall bays with owned thresholds and shutter-counter states.
+8. **Vertical way:** outside stair, cart/low roof, gallery stair, terrain rise, or
+   another licensed access.
+9. **Urban deck:** connected roofline, continuous gallery, balcony chain, or terrain
+   overlook selected by culture/construction.
+10. **Service/delivery edge:** goods arrival, storage, waste, water, fire response, and
+    household back access where the slice admits it.
+11. **Institution threshold:** the hall or sibling institution's formal control point
+    distinct from ordinary shopfront ownership.
+
+### Provisional grid hypotheses
+
+- Horizontal movement uses the 5-foot grid; vertical change uses `h = 2.5 feet`;
+  normal storeys begin at 4h / 10 feet.
+- The ruled **3–6-cell frontage bay** remains a `DEFAULT` hypothesis and WARN-grade
+  variation rule until measured plans and clay prove the range.
+- Party wall thickness, gallery depth, balcony landing, market-hall bay, post spacing,
+  street width, fountain apron, and terrain-street section remain unapproved.
+- Two street routes around/through the hall must each admit the required witness or
+  explicitly declare capacity and congestion.
+- Shutter-counter open and closed poses reserve the same bay id and different collision/
+  interaction facts.
+- Vertical landings and roof/gallery surfaces reserve natural standee bases before
+  goods, rails, chimneys, signs, and laundry.
+- Presentation-large creatures need usable public ground; narrow frontage, gallery, and
+  household routes may exclude them honestly.
+
+### Route promises
+
+| approach | gives the player | asks the player to accept | capacity |
+|---|---|---|---|
+| public street | fastest crossing, lawful visibility, broad movement, direct institution | crowd, watch, toll/curfew, market exposure | group and presentation-large where street permits |
+| hall/frontage | cover, thresholds, trade/social access, multiple local objectives | congestion, owners/witnesses, shutter/door state | ordinary party and goods |
+| vertical deck | height, alternate sightlines, bypass, roof/gallery objectives | access time, exposure, limited landings, fall/route risk | surface-dependent |
+| service/timing | deliveries, waste/water/fire edge, changed permissions and witnesses | schedule cost, authority risk, narrow/backstage access | ordinary/small; cargo route dependent |
+
+At least three plans must be viable. The main street cannot also be the quietest,
+safest, best-covered, and best-informed route. The roof/gallery cannot be a decorative
+dead end.
+
+### Tactical furnishing
+
+- hall posts, fountains, shutter-counters, carts, stalls, goods, railings, and household
+  thresholds create real collision/cover only through governed geometry;
+- the plaza retains enough open ground for movement, crowd state, and a readable center;
+- shutter, gate/curfew, signal, fountain/water, fire wall, goods/traffic, household
+  lights, gallery access, and fair state are candidate levers;
+- objectives may include institution access, records/toll, water, a particular
+  frontage, market stock, signal, authority mark, roof/gallery, or public center;
+- moving goods changes usable ground without reauthoring the street;
+- ordinary crowd state reserves paths and pockets rather than filling every cell with
+  sprites; and
+- retreat can use the second street end or a proven vertical/service connection.
+
+## Eight operating circuits
+
+1. **Street and traffic:** through movement, carts, crowd, arrival/departure, blockage.
+2. **Commerce and goods:** delivery, shutter, counter, stall, storage, trade memory.
+3. **Households/frontages:** ownership, access, occupancy, repair, light, private life.
+4. **Institution and authority:** hall purpose, officials, toll, marks, policing,
+   seizure, corruption.
+5. **Time and signal:** hour, bell/drum/other owner, curfew, market open/closed, fair.
+6. **Water and fire:** fountain/well, delivery, drainage, fire-law history, response.
+7. **Vertical and service access:** roofs, galleries, stairs, cellars, deliveries,
+   waste and retreat.
+8. **Light and public visibility:** daylight, household lanterns, licensed civic lamps,
+   shop light, darkness, closure.
+
+Friendly state labels derive from:
+
+- **traffic:** clear / busy / congested / blocked;
+- **commerce:** open / reduced / closed / fair / seized;
+- **frontage:** occupied / shuttered / abandoned / breached;
+- **authority:** functioning / disputed / corrupt / faction-seized / absent;
+- **permission:** ordinary / tolled / curfew / restricted / suspended by fair;
+- **service:** supplied / delayed / failed / emergency;
+- **access:** open / controlled / restricted / blocked;
+- **cause and recovery:** the clock, actor, event, and action that changes it.
+
+Do not implement `townState = medieval`, `culture = colorful`, or `district = poor` as
+layout/material selectors.
+
+## Strategic gameplay contract
+
+The Golden Seed demonstrates:
+
+- **Public plan:** use law, trade, reputation, crowd, institution, or disguise through
+  the main street and plaza.
+- **Frontage/covered plan:** use hall posts, open/closed counters, owned thresholds, and
+  local relationships to cross, investigate, defend, steal, or shelter.
+- **Vertical plan:** spend access time to gain roof/gallery information, position,
+  bypass, or objective control.
+- **Schedule/service plan:** act during delivery, closure, curfew, signal, fair, water,
+  fire response, or authority change.
+
+At least three are viable and one is noncombat. Urban levers must alter permissions,
+occupants, traffic, visibility, access, or physical state on the same blueprint.
+
+## Generator contract
+
+### Inputs
+
+- terrain and street posture, arrival/departure promises, district edge;
+- scene rung and institution family;
+- culture-answer cards: trade sorting, time signal, policing/strangers, fire;
+- authority, hour, market/fair, toll, fire history, trade memory, and current strain;
+- frontage construction, bay variation, roof/gallery/terrain-deck family;
+- hall and fountain composition;
+- households, trades, occupants, faction, relationship, and routine;
+- water, service, waste, goods, traffic, and light ownership;
+- encounter objective, threat band, arrival side, and creature envelopes.
+
+### Semantic blueprint
+
+Commit:
+
+- two street ends and through-traffic graph;
+- hall, center assembly, plaza apron, frontage runs, and party-wall relations;
+- bay owners, programs, shutter/door/light states;
+- vertical/service routes and capacities;
+- institution/authority, time/signal, commerce, water/fire, and household circuits;
+- public, frontage, vertical, and schedule plan tradeoffs;
+- objectives, interaction anchors, deployment, crowd reservations, and retreat;
+- culture/history answers and visible consequences; and
+- proposal flags, provenance, relaxations, and rejections.
+
+### Generation order
+
+1. Commit terrain, district/institution, culture answers, authority, hour, occupants,
+   objective, and witnesses.
+2. Lay two street ends and the pass-through graph.
+3. Reserve plaza/public void and choose the coherent hall/fountain center composition.
+4. Place the free-standing hall so it splits rather than erases street choice.
+5. Generate frontage runs, party walls, bay owners/programs, and physical shutters.
+6. Place vertical way and selected roof/gallery/terrain deck with honest access.
+7. Place service/delivery/water/waste/fire relationships.
+8. Apply traffic, commerce, frontage, authority, permission, service, and light states.
+9. Reserve routes, crowd pockets, objectives, cover, quiet observation, and retreat.
+10. Validate plans, center, bay rhythm, standees, collision, vertical access, camera,
+    lighting, and changed seeds.
+11. Dress retained ids; palette supports but never replaces construction/ownership.
+
+### Required rejection checks
+
+Reject when:
+
+- either street end is false, blocked, or visually lost;
+- the hall turns the slice into one undifferentiated corridor or impassable plug;
+- hall and fountain compete as unrelated equal landmarks;
+- frontage bays have no owner/program/threshold relation;
+- shutter-counter states are visual swaps without collision/interaction truth;
+- the vertical deck is unreachable, decorative, or hidden by the fixed camera;
+- the service/waste/water/fire circuit has no destination;
+- every useful route collapses onto the public street;
+- crowd or goods destroy deployment, movement, objective, or retreat;
+- household and civic lights have no owner/authority/hour;
+- culture reads only as palette, motif, grime, or prop swap;
+- a historical fire/fair/toll state appears without cause and rule consequence;
+- a guest institution is only a new label over the same room program;
+- changed seed preserves the beauty composition by erasing strategic choice; or
+- an unresolved produce-tray/answer-object proposal is treated as ruled MVP scope.
+
+### Deterministic fallback ladder
+
+1. remove noncanonical loose goods, carts, laundry, and signs;
+2. reduce crowd reservations while preserving occupied zones;
+3. shift or simplify a secondary stall/frontage accessory;
+4. open one frontage flank or widen a route within its street envelope;
+5. simplify the gallery/roof connection while preserving vertical choice;
+6. reduce frontage units or market-hall detail while preserving two ends and center;
+7. degrade to the open-flank frontage rung;
+8. reject and reroll.
+
+Never delete a street end, fake a vertical exit, overlap standees, move the center only
+for framing, make the fountain nonfunctional, or replace cultural answers with hue.
+
+## Culture-answer and institution cards
+
+Every culture/site combination answers:
+
+1. **How are trades sorted?** Mobile, anchored, zoned, mixed, licensed, seasonal, or
+   remembered after departure.
+2. **Who signals time?** Household, temple, guild, ruler, watch, market, or another
+   licensed authority.
+3. **How are strangers and disorder handled?** Gate, tally, sponsor, toll, patrol,
+   curfew, neighborhood, ritual, or negotiated obligation.
+4. **How are fire and shared danger contained?** Material separation, walls, water,
+   watch, law, seasonal restriction, or another causal practice.
+
+The card also owns frontage construction, maintenance, household/public threshold,
+water relation, service/waste practice, light ownership, authority marks, and fair/fire
+history.
+
+The first pair changes at least four construction, organization, ownership, permission,
+schedule, water/fire, light, or interaction facts. Palette is a fifth supporting layer,
+not one of the four required answers. The one-answer-object tier remains `PROPOSED`.
+
+## Occupancy states and hooks
+
+Functioning market/institution, closed hour, corrupt authority, faction seizure, fair,
+fire-recovery street, disrupted water, contested guild/household, abandoned host
+(Site 3), or hidden front (Site 8) may roll when facts support them.
+
+Hooks include toll with dubious purpose, missing merchant/official, stolen water right,
+shuttered unit still lit, fair court dispute, broken signal, curfew crossing, fire-wall
+breach, poisoned fountain, seized hall, trade that has just vanished, household refusing
+authority marks, rooftop pursuit, and delivery that cannot reach its destination.
+Every hook touches a circuit and visible map lever.
+
+## Lighting, roofs, and cutaway
+
+- Daylight belongs to street, plaza, openings, time, and weather.
+- House lanterns belong to a particular frontage; shutter/occupancy state may darken it.
+- Civic post lamps require functioning authority and maintenance.
+- Market/work lights belong to active tasks and hours.
+- Night changes permissions, traffic, witnesses, and open thresholds—not only color.
+- Ambient, AO, contact, and honest silhouette shadows keep stairs, party walls, gallery
+  depth, and standee contact readable without unowned fill lamps.
+- Walkable roofs/galleries require construction, pitch/support, access, capacity,
+  collision, and camera proof.
+- Cutaway omits camera-facing walls/roofs while preserving party-wall, support, private
+  room, rain, light, and access facts.
+
+## Structure, mechanisms, and surfaces
+
+### Inherited
+
+Walls, gables, timber, courts/arcades, stalls/canvas, repeated bays, terrain/retaining,
+stairs, doors, water, generic lights, and hosted Camp vocabulary.
+
+### Site-owned
+
+Street frontage bay and party-wall ends · open/closed shutter-counter socket · plaza
+surface · open-post market hall · fountain-center relation · continuous gallery/balcony
+access · terrain/stair-street family · service/district edge.
+
+### Material / paint / prop demand
+
+- **Material:** brick, plastered/whitewashed rubble, timber frame/infill, clay tile,
+  roof/street/plaza paving, stall surfaces, fountain water.
+- **Paint/decal:** authority marks, trade/history memory, wear/message, unit limewash,
+  signs, shutter/awning marks, fire/repair, toll/curfew/fair.
+- **Prop/mechanism:** shutter-counter, household lantern, licensed civic lamp,
+  awnings/goods, fountain/well, market stalls, carts/containers/laundry/rails,
+  threshold furniture, signal object.
+
+The 54-slot Urban census is a possibility roster, not an MVP shopping list. Collision,
+cover, sight, support, light, access, and interaction obligations outrank dressing.
+
+## Runtime facts and proof receipt
+
+Retain equivalents of:
+
+`sceneRung` · `institutionFamily` · `streetEndIds` · `trafficGraph` · `hallId` ·
+`centerComposition` · `plazaApron` · `frontageRunIds` · `partyWalls` · `bayOwners` ·
+`bayPrograms` · `shutterStates` · `verticalRoute` · `deckId` · `servicePath` ·
+`waterFireState` · `authorityState` · `hourSignalOwner` · `permissionState` ·
+`commerceState` · `tradeMemory` · `lightOwners` · `routeCapacities` ·
+`objectiveIds` · `planTradeoffs` · `cultureAnswers` · `proposalFlags` ·
+`recoveryVerbs` · `relaxations` · `rejections`.
+
+The receipt records seed/version, grid, fixed camera, standee envelopes, culture,
+authority, time, institution and occupancy cards, structure/material/provenance,
+clay/tactical/day/night/dressed ids and captures, validator results, and failures.
+
+## First visual proof
+
+Show the two-state frontage mechanism first, then one live Rung-B market-hall seed
+through the fixed production camera. Keep the committed market layout constant while
+cycling:
+
+1. neutral clay with four standee envelopes, both street ends, hall routes, fountain
+   apron, frontage bays, vertical access, and service edge visible;
+2. tactical overlay naming public, frontage/covered, vertical, and service/schedule
+   plans, capacities, owners, permissions, objectives, and retreat;
+3. dressed day, market-open, closed-hour, and night states with household-owned light
+   plus one separately licensed civic-light comparison;
+4. two changed seeds and a hostile fixed-camera overlook/crowd case;
+5. one noncolor culture answer with its construction, ownership, schedule, or
+   interaction consequence visible.
+
+Reject it if a street end disappears, the hall becomes a plug, the upper route is
+decorative, shutter states lack physical truth, culture becomes palette, or night
+erases party walls, stairs, contact, and standee silhouettes.
+
+## Site boundaries and stretch
+
+- Site 4 owns the communal institutional chassis and repeated arcade.
+- Site 2 may be hosted as a camp/shanty layer after Urban proves its caps.
+- Site 3 owns the fully dormant urban transformation.
+- Site 8 owns a stable hidden/competing control layer.
+- A civic, religious, guild, school, hospital, or inn expression changes program,
+  circulation, outward face, and access—not only signage.
+
+## Proof → MVP → Ideal
+
+### Proof
+
+One deterministic frontage mechanism proof followed by one Rung-B market-hall seed with
+eleven zones, two street ends, coherent hall/fountain center, physical shutter-counter
+states, owned bays, vertical route/deck, service/water/waste edge, four standee
+envelopes, clay/tactical/day/night/dressed captures, two changed seeds, fixed-camera
+overlook adversarial case, and public/frontage/vertical/schedule plans including one
+noncombat.
+
+### MVP
+
+One frontage family; party-wall ends; shutter-counter mechanism; open-post hall;
+attached-fountain center; plaza; two street ends; one vertical family; household light
+and licensed civic light; core material/mark/mechanism set; ordinary, closed, corrupt,
+seized, and abandoned occupancy states; at least one noncolor culture answer beyond
+palette; deterministic rejection and receipts.
+
+### Ideal
+
+All market-hall families; galleries, balconies, roof and terrain streets; measured
+party-wall/frontage variants; full prioritized census; fair and fire-history states;
+culture answer-objects/mechanics if ruled; broad institution/district families;
+non-European urban evidence and culture cards.
+
+## Remaining evidence and proof gaps
+
+- measured frontage, market-hall, party-wall, gallery, balcony, roof-access, and
+  terrain-street plans/sections;
+- direct shutter-counter construction and working-market evidence;
+- fixed-camera roof/overlook and crowd/goods proof;
+- earlier and broader cultural/color evidence;
+- owning-system routing for time, fair, toll, destructibility, and trade memory;
+- rulings on produce tray and answer-object tier; and
+- retained mechanism and scene fixtures in `GOLDEN-SITES-PROOF-QUEUE.md`.

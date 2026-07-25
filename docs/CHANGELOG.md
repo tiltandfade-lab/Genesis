@@ -8,7 +8,67 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-07-24 (latest) — THE CONSOLIDATION CLOSE — five lanes merged to a singular canonical master [Claude Fable 5]
+## 2026-07-25 — GOLDEN SITE STUDY AUDIT + CONGRUENCE CORRECTION [Codex]
+
+### Added
+
+- Added `GOLDEN-SITE-CONCEPTING-GUIDELINES.md` as the default generator-first,
+  plain-English, visually demonstrated session method for every remaining Golden Site.
+- Added the binding strategic-gameplay law: every built level must create readable,
+  meaningfully different plans and site-specific consequences; beauty, realism, and
+  simulation cannot rescue a strategically flat scene.
+- Added the Site 5 Mine/Workshop research packet and working specification: six
+  operating circuits, broad/narrow/conditional route promises, deterministic
+  generation/rejection/fallback rules, culture/organization axes, provisional
+  clearances, asset ownership, proof receipt, and a top-down strategy diagram.
+- Added Mine-standard working specs for Guard Post, Camp, Lair, Monastery, and Urban:
+  each now defines its family boundary, identity/culture/circumstance split, five
+  expressions, learning-first build, required zones, route promises, site-specific
+  operating circuits, strategic plans/levers, generator inputs and semantic blueprint,
+  ordered generation, typed rejection, deterministic fallback, culture/occupant logic,
+  runtime facts, retained proof receipt, and exact first visual demonstration.
+- Added a cross-site five-expression board so the retrofit can be judged as a family
+  system rather than as five isolated hero scenes.
+
+### Changed
+
+- Separated Golden Site completion into four honest gates: researched,
+  founder-ruled, brief-congruent, and clay-proved. Retired “served” as a status word;
+  none of the six working-spec sites currently claims a rendered clay proof.
+- Corrected the founder queue: six nonblocking proposals remain. Added
+  `GOLDEN-SITES-PROOF-QUEUE.md` for evidence and rendered-proof obligations so
+  research debt cannot masquerade as a taste decision.
+- Normalized overbroad recommendations: tent form is selected from concrete
+  climate/material/mobility/status facts rather than culture labels; one dominant
+  center claimant may contain coherent subordinate pieces; descending lair chains and
+  broken ledges are defaults; bolt-holes are licensed; cave ceilings remain world facts
+  under cutaway; palette is supporting culture evidence, never the whole identity.
+- Narrowed the institutional-chassis claim to reusable massing/parts with real
+  circulation, outward-face, access, and court mutations per institution. Added explicit
+  Proof/MVP/Ideal sections and acceptance requirements for Camp, Lair, Monastery, and
+  Urban.
+- Renamed the cross-cutting `makeshift/tribal` vernacular to
+  `makeshift/scavenged`; construction condition is no longer equated with culture,
+  poverty, species, or monstrosity.
+- Advanced Site 5 to honest `PARTIAL / PARTIAL / PARTIAL / OPEN` gates: the accepted
+  active-upper/flooding-lower foundation is now spec-grade, while the missing direct
+  tactical-map cohort, thin measured cultural breadth, unselected mechanism cards, and
+  absent clay fixture remain explicit.
+- Adopted the Mine working spec as the generator-grade standard for every Golden Site.
+  The ten-section catalog brief remains the portfolio summary; the dedicated spec is
+  now required before implementation. Existing founder, research, and clay gate values
+  were preserved during the retrofit.
+
+### Fixed
+
+- Reconciled the Guard Post import audit with the actual lean in-repo packet; the
+  local 346 MB `study-archive/` remains evidence-only and untracked rather than part of
+  the source-controlled reference packet.
+- Updated the Lair section drawing to the hard mouth-light boundary, broken shelf, and
+  cutaway-ceiling rule; repaired clipped Guard Post roof labels; updated the Monastery
+  seed to the level-court first build and its roof sheet to gable + spire.
+
+## 2026-07-24 — THE CONSOLIDATION CLOSE — five lanes merged to a singular canonical master [Claude Fable 5]
 
 ### Added
 - **`docs/STRUCTURE-KIT-CATALOG.md`** — the structure-kit spec for the twelve golden sites,
@@ -917,26 +977,3 @@ vp6 49/0 · standee-verbs 69/0 · gallery 22/0 · vp1c-leak 6/0 (red-first) · b
 combat suite green · full sweep = only the pre-existing table-usage-data red · loop gate 5/5
 re-shot and READ at every landing (one stale-capture-server incident caught: identical pixels
 to the prior tree = the server was serving stale code; kill-before-capture is now in every prompt).
-
-## 2026-07-10 (late night) — ART DIRECTION CLOSED: 13 rulings, two armed waves, dressing art landing
-
-**Added (specs — build is Adam's word)**
-- docs/BEAUTY-WAVE.md (VP0-VP8 + VP1.5 + VP2b): VP0 two-flag study card (ortho-vs-perspective ×
-  PSX-on/off, Adam's pixel-verdict), VP1 true-scale piece fix + registry sizing fold (the kaiju
-  defect), VP1.5 corpus unification pass (realm master palettes + texel density + defringe, one
-  batch, no codex spend), VP2 dressing fold, VP2b THE GALLERY PASS (clipped/reject sprites → framed
-  realm paintings, paintingOf provenance, mimic-guise legal), VP3 ground design, VP4 scene art
-  direction, VP5 battle-UI redesign, VP6 life pass + visible-history scars, VP7 contact grounding,
-  VP8 the beauty-shot gate (side-by-side vs a real Wildermyth frame).
-- docs/UNIFICATION-WAVE.md (UW1-UW4): ONE CHANNEL (diorama; flat table → legacy → retirement),
-  exterior + settlement dioramas, PORTRAITS (busts w/ 3-expression sets — expressionSet law's
-  production surface — + dialogue lower-third).
-- 13 art-direction rulings registered in DESIGN.md: clean-shapes, PS1-scope-cut, perspective camera,
-  framing law, value law, FLAGSHIP REALMS (fantasy/gloom/chrome; realm = expansion pack, ~6-mo
-  drops), master palettes, texel density, portraits, outline law, defringe-standard, visible history,
-  gallery pass. CLEAN-SHAPES + outline clauses patched into all pending codex packets.
-
-**Added (art)**
-- 25 DRESSING-GEN codex sheets landed + backed up UNGATED (flagships flora/clutter/objects +
-  effects core + all accents + ash). VP2 gate/slice/fold is next session's first move.
-

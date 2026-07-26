@@ -172,7 +172,20 @@ function readTheaterSources(){
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-interior-mesh.js follows] */\n"
     + read("src/ui/theater-interior-mesh.js")
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-dressing.js follows] */\n"
-    + read("src/ui/theater-dressing.js");
+    + read("src/ui/theater-dressing.js")
+    // THEATER SPLIT B9 (2026-07-25): the TWO SCENE REALIZERS moved out — setBoard/setUnits to
+    // src/ui/theater-tabletop.js and setInteriorBoard/setInteriorVariant (plus F1's combat grid and
+    // interiorLightingIdentityFor) to src/ui/theater-interior-realize.js, where setInteriorBoard is
+    // DECOMPOSED into seventeen named phase functions whose bodies are verbatim-lifted ranges of the
+    // pre-split body. The clay room's own bench wiring, every clayRoomInit ctx entry, the room-shell
+    // flag family and mount()/retire() stayed in theater-boot.js. Adding both files to the SAME
+    // composite keeps every regex here matching the code it was written to check — no check relaxed,
+    // none dropped. (Check 18j, whose target moved INTO a phase function, is repointed at its own
+    // site below with its job — "the production rebuild funnel fires the hook" — unchanged.)
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-tabletop.js follows] */\n"
+    + read("src/ui/theater-tabletop.js")
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-interior-realize.js follows] */\n"
+    + read("src/ui/theater-interior-realize.js");
 }
 
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");
@@ -698,11 +711,19 @@ const check = (name, cond, detail = "") =>
     // Delete that one call — the mutation that reintroduces CR-1 — and this goes RED. Searched
     // OUTSIDE the additions region on purpose: a call that only exists inside the clay region is a
     // call the production rebuild path never makes.
+    // THEATER SPLIT B9 (2026-07-25): setInteriorBoard now lives in src/ui/theater-interior-realize.js
+    // (in this composite) and its body is a PHASE LIST — the hook call rode with the tail of the
+    // original body into realizePhaseTail. The check's JOB is unchanged: the production rebuild funnel
+    // must fire the hook on every interior rebuild. That is now a two-link chain, and BOTH links are
+    // asserted here, so either mutation still goes RED: delete the hook call from the tail phase, OR
+    // drop realizePhaseTail(pass) from the orchestrator's phase list.
     const outsideRegion = bootSrc.slice(0, bi) + bootSrc.slice(ei);
     const setInteriorBoardBody = (outsideRegion.match(/function\s+setInteriorBoard\s*\([\s\S]*?\n\}/) || [""])[0];
-    check("18j. setInteriorBoard() itself calls the hook (the mutation: remove this line -> CR-1 returns)",
-      /clayRoomAfterInteriorBoardRebuild\s*\(\s*\)/.test(setInteriorBoardBody),
-      "hook not called from setInteriorBoard — every async rebuild would silently restore site materials");
+    const realizeTailBody = (outsideRegion.match(/function\s+realizePhaseTail\s*\(pass\)\s*\{[\s\S]*?\n\}/) || [""])[0];
+    check("18j. setInteriorBoard()'s own phase list runs the tail phase, and that phase calls the hook (the mutation: remove either link -> CR-1 returns)",
+      /realizePhaseTail\s*\(\s*pass\s*\)\s*;/.test(setInteriorBoardBody) &&
+      /clayRoomAfterInteriorBoardRebuild\s*\(\s*\)/.test(realizeTailBody),
+      "hook not reached from setInteriorBoard — every async rebuild would silently restore site materials");
 
     // ...and the per-frame patch it replaced must be gone: clayRoomMaybeAutoMount must no longer
     // reassert lights every frame, or the fixture still carries the asymmetry that hid CR-1.

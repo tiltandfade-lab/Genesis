@@ -61,11 +61,17 @@ const read = (p) => readFileSync(join(ROOT, p), "utf-8");
 // VERBATIM into src/ui/theater-practicals.js; the setInteriorBoard consumer of those fade targets and
 // the four mutable practical gates stayed in src/ui/theater-boot.js. Reading the COMPOSITE keeps every
 // extraction below pulling the REAL source of its own symbol — same extractions, same jobs, none relaxed.
+// THEATER SPLIT B9 (2026-07-25): setInteriorBoard — the consumer whose call-site append block this file
+// extracts and eval's — moved to src/ui/theater-interior-realize.js, where the block rode VERBATIM into
+// realizePhasePracticals. That file joins the SAME composite; the marker, the paren-matched extraction
+// and every assertion are unchanged.
 const bootSrc = read("src/ui/theater-boot.js")
   + "\n/* [verify-e0-1 composite boundary — src/ui/theater-lighting.js follows] */\n"
   + read("src/ui/theater-lighting.js")
   + "\n/* [verify-e0-1 composite boundary — src/ui/theater-practicals.js follows] */\n"
-  + read("src/ui/theater-practicals.js");
+  + read("src/ui/theater-practicals.js")
+  + "\n/* [verify-e0-1 composite boundary — src/ui/theater-interior-realize.js follows] */\n"
+  + read("src/ui/theater-interior-realize.js");
 const BASE_COMMIT = "d316abf8";
 
 let pass = 0, fail = 0;

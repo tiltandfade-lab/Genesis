@@ -43,9 +43,17 @@ const { WHOLE_OBJECT_REGISTRY, loadWholeObjectBuilders } = Figures;
 // anchor — it reads the whole-object registry and the WHOLE_OBJECT_ENABLED gate) and its setBoard call
 // site stayed in src/ui/theater-boot.js. Reading the COMPOSITE keeps every source-shape check below
 // anchored on the REAL source of its own symbol — same regexes, same jobs, none relaxed, none dropped.
+// THEATER SPLIT B9 (2026-07-25): setBoard — mountLightProp's own call site, and the ordering guard in
+// check 4 below — moved VERBATIM into src/ui/theater-tabletop.js; mountLightProp itself stayed in
+// theater-boot.js. The composite grows by that one file so the "mountLightProp is called from setBoard
+// BEFORE applyLightProfile" ordering check still reads BOTH the definition and the call site, in their
+// true homes and in the order they actually execute (theater-boot.js is concatenated first, so the
+// definition still precedes the call site in the composite exactly as it did in the monolith).
 const bootSrc = read("src/ui/theater-boot.js")
   + "\n/* [verify-theater-light-props composite boundary — src/ui/theater-lighting.js follows] */\n"
-  + read("src/ui/theater-lighting.js");
+  + read("src/ui/theater-lighting.js")
+  + "\n/* [verify-theater-light-props composite boundary — src/ui/theater-tabletop.js follows] */\n"
+  + read("src/ui/theater-tabletop.js");
 const lightLock = JSON.parse(read("data/light-profile-locks.json"));
 
 // ============================================================================

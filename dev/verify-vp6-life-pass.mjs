@@ -180,11 +180,16 @@ console.log("\n=== ITEM 2 — torch flicker (theater-boot.js source extraction) 
   // src/ui/theater-practicals.js, while setInteriorBoard's own startLightFlicker call site (check 2e)
   // stayed in src/ui/theater-boot.js. Reading the COMPOSITE keeps every check anchored on the REAL
   // source of its own symbol \u2014 same regexes, same jobs, none relaxed.
+  // THEATER SPLIT B9 (2026-07-25): check 2e pins setInteriorBoard's OWN startLightFlicker call, which
+  // moved with the function into src/ui/theater-interior-realize.js (VERBATIM, inside
+  // realizePhasePracticals). That file joins the SAME composite; the regex and the job are unchanged.
   const bootSrc = read("src/ui/theater-boot.js")
     + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-lighting.js follows] */\n"
     + read("src/ui/theater-lighting.js")
     + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-practicals.js follows] */\n"
-    + read("src/ui/theater-practicals.js");
+    + read("src/ui/theater-practicals.js")
+    + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-interior-realize.js follows] */\n"
+    + read("src/ui/theater-interior-realize.js");
   const ampLine = extractConstLine(bootSrc, "INTERIOR_LIGHT_FLICKER_AMPLITUDE");
   check("2a-setup. INTERIOR_LIGHT_FLICKER_AMPLITUDE const is present", !!ampLine, ampLine);
   const ampVal = ampLine ? Number(ampLine.match(/=\s*([\d.]+)/)[1]) : null;

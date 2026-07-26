@@ -431,8 +431,18 @@ group("G1 — item 2 (camera-side cutaway parity) red-first: kit wall modules ha
   const preFixMountBlock = preFixSrc.slice(preFixSrc.indexOf("interiorBuildKitShellWalls(data.kitShellWalls"), preFixSrc.indexOf("interiorBuildKitShellWalls(data.kitShellWalls") + 400);
   ok(preFixMountBlock.indexOf("ITR_CUTAWAY_PARAPET_FRAC") < 0, "RED: the pre-fix kit-wall mount call site applies no parapet/cutaway treatment at all (the bug the beauty card showed — camera-side kit walls read walled-in)");
 
-  const postFixSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B9 (2026-07-25): setInteriorBoard moved to src/ui/theater-interior-realize.js and its
+  // body became a phase list — itrCameraSideBand is now DECLARED in realizePhaseWallsDoors and the KS-3b
+  // kit-wall mount forEach that consumes it sits in realizePhaseKitShells, which is exactly why the
+  // closure travels between them on the explicit `pass` context rather than being re-derived. The four
+  // GREEN assertions below are unchanged in text and in job; the read is repointed to the realizer, and
+  // one extra assertion pins the shared-ness the group's title claims (the same closure value crosses
+  // the seam, never a second copy).
+  const postFixSrc = read("src/ui/theater-interior-realize.js");
   ok(postFixSrc.indexOf("function itrKitWallRunAxis(") >= 0 || true, "sanity: post-fix source loaded"); // keep this group self-contained even if an earlier group already read it
+  ok(/pass\.itrCameraSideBand = itrCameraSideBand;/.test(postFixSrc)
+    && /const \{[^}]*itrCameraSideBand[^}]*\} = pass;/.test(postFixSrc),
+    "GREEN: the ONE declared closure is what the kit-wall phase consumes — handed across the phase seam on the pass context, never re-derived");
   ok(postFixSrc.indexOf("let itrCameraSideBand = function(){ return false; };") >= 0, "GREEN: itrCameraSideBand is declared as a shared closure (the SAME test the prism wallList parapet cut consumes)");
   // structural proof the KIT WALL mount site actually CONSUMES the shared gate (not just declares it
   // unused nearby) — the exact forEach this unit added, asserted by source-text presence of its own

@@ -289,7 +289,13 @@ group("9/10/11 — GL-LAYER WIRING (text-scan, sealed ES-module boundary — sam
     + "\n/* [verify-bw2-5 composite boundary — src/ui/theater-interior-mesh.js follows] */\n"
     + read("src/ui/theater-interior-mesh.js")
     + "\n/* [verify-bw2-5 composite boundary — src/ui/theater-dressing.js follows] */\n"
-    + read("src/ui/theater-dressing.js");
+    + read("src/ui/theater-dressing.js")
+    // THEATER SPLIT B9 (2026-07-25): setInteriorBoard moved to src/ui/theater-interior-realize.js — the
+    // BW2-5 parapet cutaway pass rode into realizePhaseWallsDoors and the furniture/wall-prop mount
+    // calls into realizePhaseFurniture, each VERBATIM. Adding that file to the SAME composite keeps
+    // both text-scans anchored on the real source of the code they check; neither is relaxed.
+    + "\n/* [verify-bw2-5 composite boundary — src/ui/theater-interior-realize.js follows] */\n"
+    + read("src/ui/theater-interior-realize.js");
   ok(/const yBase = \(typeof inst\.yBase === "number"\)/.test(bootSrc), "interiorBuildInstancedMesh reads inst.yBase");
   ok(/inst\.ox \|\| 0/.test(bootSrc) && /inst\.oz \|\| 0/.test(bootSrc), "interiorBuildInstancedMesh reads inst.ox/inst.oz");
   ok(!/const KNEE = 0\.35/.test(bootSrc), "the old fixed KNEE=0.35 absolute parapet constant is GONE");

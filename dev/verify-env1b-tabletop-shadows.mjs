@@ -343,7 +343,13 @@ async function main() {
     ok(!oldSrc.includes("TABLETOP_SHADOW_MAP_SIZE"), "TABLETOP_SHADOW_MAP_SIZE did not exist at base commit");
     ok(!oldSrc.includes("applyTabletopShadowCasters"), "applyTabletopShadowCasters did not exist at base commit");
     ok(oldSrc.includes("renderer.shadowMap.enabled = false; // §2"), "base commit's mount() still carried the old §2 shadowMap-off default");
-    const newSrc = fs.readFileSync(path.join(repoRoot, "src/ui/theater-boot.js"), "utf-8");
+    // THEATER SPLIT B9 (2026-07-25): mount() stayed in theater-boot.js, but setBoard's own restore moved
+    // VERBATIM to src/ui/theater-tabletop.js (and setInteriorBoard's enable to
+    // src/ui/theater-interior-realize.js). Read the two production files that carry the two lines this
+    // check names; the assertion (BOTH mount's default and setBoard's restore flip to true) is unchanged.
+    const newSrc = fs.readFileSync(path.join(repoRoot, "src/ui/theater-boot.js"), "utf-8")
+      + "\n/* [verify-env1b composite boundary — src/ui/theater-tabletop.js follows] */\n"
+      + fs.readFileSync(path.join(repoRoot, "src/ui/theater-tabletop.js"), "utf-8");
     ok(newSrc.includes("TABLETOP_SHADOW_MAP_SIZE") && newSrc.includes("applyTabletopShadowCasters"),
       "current worktree source carries the new shadow-caster symbols");
     ok(newSrc.match(/renderer\.shadowMap\.enabled = true;/g).length >= 2,

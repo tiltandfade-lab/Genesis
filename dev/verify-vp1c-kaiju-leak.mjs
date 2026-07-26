@@ -222,10 +222,17 @@ async function runRenderCheck() {
 
 async function runMutationCheck() {
   group("4 — mutation: stubbing the two new clearGroup calls off reds check 1 again");
-  const src = read("src/ui/theater-boot.js");
-  // signature updated 2026-07-25 (theater-split B0): the clay lane grew setInteriorBoard a second
-  // renderOpts param; the check's job — BOTH clearGroup calls live inside the function — is unchanged.
-  if (!/function setInteriorBoard\(data(?:, renderOpts)?\)\{[\s\S]*?clearGroup\(S\.unitGroup\);[\s\S]*?clearGroup\(S\.shadowGroup\);/.test(src)) {
+  // THEATER SPLIT B9 (2026-07-25): setInteriorBoard moved to src/ui/theater-interior-realize.js and its
+  // body became a PHASE LIST. The two clearGroup calls rode with the teardown block into
+  // realizePhaseTeardown — the phase the orchestrator calls second. The check's JOB is unchanged (BOTH
+  // clears run on every interior rebuild), so the anchor now asserts the same two-link chain the
+  // rebuild actually takes: the orchestrator's phase list runs realizePhaseTeardown, and that phase's
+  // body holds clearGroup(S.unitGroup) then clearGroup(S.shadowGroup) in that order. Deleting either
+  // clear, or dropping the phase from the list, still reds this check.
+  const src = read("src/ui/theater-interior-realize.js");
+  const hasOrchestrator = /function setInteriorBoard\(data(?:, renderOpts)?\)\{[\s\S]*?realizePhaseTeardown\(pass\);/.test(src);
+  if (!hasOrchestrator ||
+      !/function realizePhaseTeardown\(pass\)\{[\s\S]*?clearGroup\(S\.unitGroup\);[\s\S]*?clearGroup\(S\.shadowGroup\);/.test(src)) {
     fail++;
     console.error("  FAIL: setInteriorBoard's source no longer contains the two clearGroup(S.unitGroup)/clearGroup(S.shadowGroup) lines this fix adds — mutation check can't run against a source that's already missing the fix");
     return;

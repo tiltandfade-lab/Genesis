@@ -506,11 +506,21 @@ group("15 — an unknown/typo'd material name degrades to the mottle painter rat
 // setInteriorBoard and every shadowMap.enabled line stayed in src/ui/theater-boot.js. Reading the
 // COMPOSITE keeps every source-text check below anchored on the REAL source of its own symbol — same
 // regexes, same jobs, none relaxed and none dropped.
+// THEATER SPLIT B9 (2026-07-25): the TWO SCENE REALIZERS moved out too — setBoard/setUnits to
+// src/ui/theater-tabletop.js and setInteriorBoard/setInteriorVariant to
+// src/ui/theater-interior-realize.js (where setInteriorBoard is decomposed into named phase functions
+// whose bodies are verbatim-lifted ranges of the pre-split body). mount() and every root-owned
+// constant stayed in src/ui/theater-boot.js. Both files join the SAME composite for the same reason —
+// every regex below keeps matching the real source of its own symbol; none relaxed, none dropped.
 const bootSrc = read("src/ui/theater-boot.js")
   + "\n/* [verify-dungeon-interior composite boundary — src/ui/theater-lighting.js follows] */\n"
   + read("src/ui/theater-lighting.js")
   + "\n/* [verify-dungeon-interior composite boundary — src/ui/theater-practicals.js follows] */\n"
-  + read("src/ui/theater-practicals.js");
+  + read("src/ui/theater-practicals.js")
+  + "\n/* [verify-dungeon-interior composite boundary — src/ui/theater-tabletop.js follows] */\n"
+  + read("src/ui/theater-tabletop.js")
+  + "\n/* [verify-dungeon-interior composite boundary — src/ui/theater-interior-realize.js follows] */\n"
+  + read("src/ui/theater-interior-realize.js");
 
 group("16 — GR3: a shared HemisphereLight is built once in mount() (table+interior parity by construction)");
 {
@@ -542,6 +552,11 @@ group("17 — shadow-mapping is ON for BOTH channels (ENV-1B, 2026-07-14 — sup
   // stray `= false` line survives anywhere (retire() aside — grep proves there is none at all).
   ok(!/S\.renderer\.shadowMap\.enabled = false;/.test(bootSrc),
     "no code path forces renderer.shadowMap.enabled=false anymore (the old §2/U3 tabletop restore is retired)");
+  // THEATER SPLIT B9 (2026-07-25): the three sites are unchanged, but only ONE of them (mount()'s
+  // renderer default) is still in theater-boot.js — setBoard's restore is now in
+  // src/ui/theater-tabletop.js and setInteriorBoard's enable is in realizePhaseTeardown inside
+  // src/ui/theater-interior-realize.js. Both files are in this composite, so the count of three is
+  // still the honest whole-engine count and the check's job is untouched.
   const onCount = (bootSrc.match(/renderer\.shadowMap\.enabled = true;/g) || []).length;
   ok(onCount === 3, `shadow-mapping is enabled in exactly the three expected places (mount() default, setBoard restore, setInteriorBoard) — found ${onCount}`);
   ok(/function applyTabletopShadowCasters\(\)/.test(bootSrc),
@@ -1089,7 +1104,9 @@ group("29 — FIXED: figureFor's interior branch sizes a combat-foe standee THRO
 
 group("31 — WIRING text-scan: setUnits derives interiorMode from S.lastBoard.kind===\"interior3d\", threads it + wallHeightCap into figureFor, and never double-scales the true-scale plane");
 {
-  const src = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B9 (2026-07-25): setUnits moved VERBATIM to src/ui/theater-tabletop.js — the read is
+  // repointed to its new home; all three regexes and the check's job are unchanged.
+  const src = read("src/ui/theater-tabletop.js");
   ok(/const interiorMode = !!\(S\.lastBoard && S\.lastBoard\.kind === "interior3d"\)/.test(src),
     "setUnits computes interiorMode off the SAME discriminator setInteriorBoard/setBoard establish (S.lastBoard.kind)");
   ok(/figureFor\(u\.archetype, seed, tint, u\.silhouette, u\.weapon, u\.recipeSlug, u\.pcRecipe, u\.kind, u\.className, null, interiorMode, wallHeightCap\)/.test(src),

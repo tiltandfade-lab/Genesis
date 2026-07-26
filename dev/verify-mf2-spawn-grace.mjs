@@ -270,8 +270,17 @@ const bootSrc = read("src/ui/theater-boot.js");
 // B1 — the import + the four production glue functions exist verbatim in the real file.
 // ----------------------------------------------------------------------------
 {
-  check("B1a. theater-boot.js imports pushMountGrace/pushDespawnGrace/pushScreenFade/seededCascadeDelays from ./spawn-grace.js",
-    /from\s+"\.\/spawn-grace\.js"/.test(bootSrc) && /pushMountGrace/.test(bootSrc) && /pushDespawnGrace/.test(bootSrc) && /pushScreenFade/.test(bootSrc) && /seededCascadeDelays/.test(bootSrc));
+  // THEATER SPLIT B9 (2026-07-25): pushScreenFade's ONE consumer was setInteriorBoard's room-transition
+  // fade, which moved to src/ui/theater-interior-realize.js — so that binding is now imported there
+  // (censused dead in the root and trimmed). The other three still ride theater-boot.js's own import
+  // (mfMountGraceFor/mfDespawnGraceFor/mfCascadeMount all stayed root-owned). The check's job — the
+  // production wiring imports the MF-2 tween math from ./spawn-grace.js, never re-implements it —
+  // is unchanged; it just reads both production files now.
+  const graceWiringSrc = bootSrc + "\n/* [verify-mf2 composite boundary — src/ui/theater-interior-realize.js follows] */\n"
+    + read("src/ui/theater-interior-realize.js");
+  check("B1a. the production wiring imports pushMountGrace/pushDespawnGrace/pushScreenFade/seededCascadeDelays from ./spawn-grace.js",
+    /from\s+"\.\/spawn-grace\.js"/.test(bootSrc) && /pushMountGrace/.test(bootSrc) && /pushDespawnGrace/.test(bootSrc)
+    && /from\s+"\.\/spawn-grace\.js"/.test(graceWiringSrc) && /pushScreenFade/.test(graceWiringSrc) && /seededCascadeDelays/.test(bootSrc));
   check("B1b. mfArtMaterialsOf excludes userData.standeeBase-tagged meshes (the base-exclusion mechanism)",
     /function mfArtMaterialsOf/.test(bootSrc) && /standeeBase/.test(bootSrc.slice(bootSrc.indexOf("function mfArtMaterialsOf"), bootSrc.indexOf("function mfArtMaterialsOf") + 800)));
   check("B1c. mfMountGraceFor/mfDespawnGraceFor/mfCascadeMount all present", ["mfMountGraceFor", "mfDespawnGraceFor", "mfCascadeMount"].every((n) => new RegExp("function " + n).test(bootSrc)));
@@ -387,9 +396,12 @@ function makeStubGroup(scaleX, children){
 // standee-verbs.mjs's own Part B RED-FIRST check uses for confirming production wiring exists).
 // ----------------------------------------------------------------------------
 {
-  const setUnitsStart = bootSrc.indexOf("function setUnits(data)");
-  const setUnitsEnd = bootSrc.indexOf("\nfunction ", setUnitsStart + 30);
-  const setUnitsSrc = bootSrc.slice(setUnitsStart, setUnitsEnd > 0 ? setUnitsEnd : setUnitsStart + 6000);
+  // THEATER SPLIT B9 (2026-07-25): setUnits moved VERBATIM to src/ui/theater-tabletop.js (beside
+  // setBoard — the flat tabletop realizer). Read it from its true home, and use the brace-matched
+  // extractFn above rather than the old "slice to the next top-level function" heuristic (setUnits is
+  // now the LAST function in its file, so that heuristic would have silently truncated the body and
+  // half-passed). Every regex and every ordering assertion below is unchanged.
+  const setUnitsSrc = extractFn(read("src/ui/theater-tabletop.js"), "setUnits");
   check("B3a. setUnits diffs wasKnownUnitIds against newUnitIds BEFORE clearGroup(S.unitGroup) runs",
     setUnitsSrc.indexOf("wasKnownUnitIds") >= 0 && setUnitsSrc.indexOf("wasKnownUnitIds") < setUnitsSrc.indexOf("clearGroup(S.unitGroup)"));
   check("B3b. setUnits calls mfDespawnGraceFor for an id absent from the new render (the despawn trigger)",
@@ -409,18 +421,28 @@ function makeStubGroup(scaleX, children){
 // Dressing/Furniture.
 // ----------------------------------------------------------------------------
 {
-  // Signature-agnostic lookup (C1B added a renderOpts param — the old exact-arity
-  // indexOf silently sliced garbage and failed all three checks while the fade law
-  // itself was intact).
-  const sibStart = bootSrc.indexOf("function setInteriorBoard(");
-  const sibEnd = bootSrc.indexOf("\nfunction ", sibStart + 30);
-  const sibSrc = bootSrc.slice(sibStart, sibEnd > 0 ? sibEnd : sibStart + 8000);
+  // THEATER SPLIT B9 (2026-07-25): setInteriorBoard moved to src/ui/theater-interior-realize.js and its
+  // body became a PHASE LIST — the three lines these checks pin now sit in three different phase
+  // functions (isRoomTransition + the opaque snap in realizePhaseIntake, clearGroup(S.tileGroup) in
+  // realizePhaseTeardown, mountPostSuite in realizePhaseCameraFit, pushScreenFade in realizePhaseTail).
+  // The checks' JOBS are unchanged, and their ORDERING teeth are stronger, not weaker: each ordering
+  // assertion now pins BOTH the source-text order inside the module (the phases are emitted in
+  // execution order) AND the orchestrator's own phase-call order, so reordering the phase list reds
+  // these checks even if no line inside a phase moves.
+  const sibSrc = read("src/ui/theater-interior-realize.js");
+  const orchestrator = extractFn(sibSrc, "setInteriorBoard");
+  const phaseOrder = ["realizePhaseIntake", "realizePhaseTeardown", "realizePhaseCameraFit", "realizePhaseTail"]
+    .map((n) => orchestrator.indexOf(n + "(pass);"));
   check("B4a. setInteriorBoard gates the crossfade on isRoomTransition = !!S.lastBoard (skips the very first reveal)",
     /const isRoomTransition = !!S\.lastBoard/.test(sibSrc));
   check("B4b. the overlay snaps opaque BEFORE clearGroup/rebuild (transitionEl.style.opacity = \"1\")",
-    sibSrc.indexOf('S.transitionEl.style.opacity = "1"') >= 0 && sibSrc.indexOf('S.transitionEl.style.opacity = "1"') < sibSrc.indexOf("clearGroup(S.tileGroup)"));
+    sibSrc.indexOf('S.transitionEl.style.opacity = "1"') >= 0
+    && sibSrc.indexOf('S.transitionEl.style.opacity = "1"') < sibSrc.indexOf("clearGroup(S.tileGroup)")
+    && phaseOrder[0] >= 0 && phaseOrder[1] > phaseOrder[0]);
   check("B4c. pushScreenFade is called AFTER the rebuild (mountPostSuite) to fade the overlay back to transparent",
-    sibSrc.indexOf("mountPostSuite(kit, rigOn)") < sibSrc.indexOf("pushScreenFade(buildTheaterCtx()"));
+    sibSrc.indexOf("mountPostSuite(kit, rigOn)") >= 0
+    && sibSrc.indexOf("mountPostSuite(kit, rigOn)") < sibSrc.indexOf("pushScreenFade(buildTheaterCtx()")
+    && phaseOrder[2] >= 0 && phaseOrder[3] > phaseOrder[2]);
 }
 {
   // THEATER SPLIT B8 (2026-07-25): the three CASCADE CONSUMERS (interiorBuildPieces /

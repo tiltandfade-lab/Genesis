@@ -126,12 +126,12 @@ import {
 // module never imports this file — it receives capabilities via clayRoomInit(ctx) at this file's
 // end-of-body, the same timing the region's own end-of-file position used to give it).
 import {
-  mountClayRoom, clayRoomBootSelfMount, clayRoomMaybeAutoMount, clayRoomAfterInteriorBoardRebuild,
+  mountClayRoom, clayRoomBootSelfMount, clayRoomMaybeAutoMount,
   clayRoomCaptureLightingMatrix, clayRoomDoorProofState, clayRoomLightingPixelMetrics,
   clayRoomLightingSnapshot, clayRoomMovementSession, clayRoomProvenanceAudit,
-  clayRoomRecordLightingProbe, clayRoomSetFixture, clayRoomSetLightingRecipe,
+  clayRoomSetFixture, clayRoomSetLightingRecipe,
   clayRoomSetSpriteScaleMode, clayRoomSetStructureDoorState, clayRoomSetStructureStaged,
-  clayRoomSetStructureView, clayRoomSurfaceCensus, clayWallOmissionOn,
+  clayRoomSetStructureView, clayRoomSurfaceCensus,
   CLAY_CAM_ZOOM_MIN, CLAY_ROOM_LIGHTING_BENCH_ID, CLAY_ROOM_LIGHTING_MATRIX_RECIPES,
   CLAY_ROOM_LIGHT_PREVIEW_SEEDS, CLAY_ROOM_LORE_LIGHT_PREVIEWS,
   clayRoomInit, clayRoomSyncState
@@ -185,7 +185,7 @@ import {
 } from "./theater-post.js";
 // split B4 (2026-07-25): the three pure scene-graph disposal helpers. No ctx, no init, no state —
 // see that file's header. retire()/disposeAuxCaches stay in THIS file (the one end-of-life point).
-import { clearGroup, disposeGroupChild } from "./theater-dispose.js";
+import { clearGroup } from "./theater-dispose.js";
 // split B5 (2026-07-25): the BOARD LIGHTING family + the ENV-1/1B/1c tabletop passes + the two interior
 // camera-side lights + the PRACTICAL FLICKER SCHEDULER — same root->leaf ctx law as the modules above.
 // It reads AND writes the live state record, so lightingInit(ctx) at end-of-body is paired with
@@ -197,11 +197,10 @@ import { clearGroup, disposeGroupChild } from "./theater-dispose.js";
 // both read only inside that module and by theater-practicals.js's own leaf->leaf import — so they
 // are deliberately NOT imported here rather than carried as dead bindings.
 import {
-  voidTintFor, LIGHT_PROFILES, LIGHT_DEFAULT_PROFILE, lightProfileFor, applyLightProfile,
-  voidTintForTabletop, applyTabletopExteriorLook,
-  CELESTIAL_ARC, CELESTIAL_PROFILE_SET, celestialArcFor, applyCelestialArc,
-  applyTabletopShadowCasters, mountInteriorCameraKey, mountSpriteCameraFill, updateSpriteCameraFill,
-  INTERIOR_LIGHT_FLICKER_AMPLITUDE, lightFlickerApplySample, lightFlickerStep,
+  LIGHT_PROFILES, LIGHT_DEFAULT_PROFILE, lightProfileFor, applyLightProfile,
+  CELESTIAL_ARC, applyCelestialArc,
+  updateSpriteCameraFill,
+  lightFlickerApplySample, lightFlickerStep,
   startLightFlicker, stopLightFlicker,
   lightingInit, lightingSyncState
 } from "./theater-lighting.js";
@@ -227,7 +226,7 @@ import {
 // Same root->leaf ctx law; it reads S, so motesInit(ctx) at end-of-body is paired with motesSyncState(S)
 // at both `S = createTheaterState()` sites.
 import {
-  interiorBuildMotes, interiorMoteKindFor, startMoteDrift, stopMoteDrift,
+  interiorBuildMotes, stopMoteDrift,
   motesInit, motesSyncState
 } from "./theater-motes.js";
 // split B6 (2026-07-25): the CAMERA / FIT / SHOT family — the authored angles and margins, the one
@@ -244,12 +243,9 @@ import {
 // — all read only inside that module — so they are deliberately NOT imported here rather than carried
 // as dead bindings.
 import {
-  CAM_ELEV_DEG, CAM_YAW_OFFSET_DEG, INTERIOR_FIT_HALF_FLOOR,
-  mf1EaseOutCubic, mf1Lerp, placeCamera, placeCameraTweened, refitTabletopHeightFit,
-  interiorCameraFitFor, interiorFitMaxHeightFor,
-  ITR_SHOT_COMPOSE, shotProjectFor, shotProjectTwoArg,
-  fitFromComposedShot, fitFromComposedCameraWideForTest,
-  F1_COMBAT_CAM_CLAMP_FRAC, f1ClampCamFit,
+  CAM_YAW_OFFSET_DEG, INTERIOR_FIT_HALF_FLOOR,
+  mf1EaseOutCubic, mf1Lerp, placeCamera, placeCameraTweened,
+  shotProjectFor,
   cameraInit, cameraSyncState
 } from "./theater-camera.js";
 // split B6 (2026-07-25): the OCCLUSION / CUTAWAY family — BW2-1b's sightline geometry and per-instance
@@ -333,10 +329,7 @@ import {
 // and the three caches are read only inside that module (and, for interiorFileTexture, by
 // src/ui/theater-dressing.js's own leaf->leaf import), so they are deliberately NOT imported here.
 import {
-  interiorMaterialTexture, interiorSurfaceFileTexture,
-  interiorApplyAODarkening, itrNeutralizeInstanceColors,
-  interiorBuildInstancedMesh, interiorBuildPillarMeshes,
-  itrBuildOcclusionGhostMeshes, itrBuildOcclusionGhostPillarMeshes,
+  interiorBuildInstancedMesh,
   interiorMeshInit, interiorMeshFileTexPending
 } from "./theater-interior-mesh.js";
 // split B8 (2026-07-25): the DRESSING / PROPS family — the dressing texture channel with its async
@@ -354,19 +347,41 @@ import {
 // helpers, WALL_AO_* and the ITR_WALLHANG_* knobs are read only inside that module (the root's
 // _wallHangLawForTest seam takes the four law tables it publishes), so nothing else is carried here.
 import {
-  dressingTextureFor, buildDressingCard,
-  buildFurnitureAssembly, interiorBuildFurniture,
+  dressingTextureFor,
+  buildFurnitureAssembly,
   ITR_WALL_SIDE_YAW, ITR_WALL_SIDE_NORMAL, ITR_WALLHANG_HEIGHT_FRAC, ITR_WALLHANG_WALL_OFFSET,
   interiorBuildWallProps, addWallContactAO,
   interiorBuildPieces, interiorBuildDressing,
   dressingInit, dressingSyncState
 } from "./theater-dressing.js";
+
+// ---- split B9 (2026-07-25): THE TWO SCENE REALIZERS ----
+// docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md §"Suggested migration method" item 5: "preserve the flat
+// tabletop and interior paths as distinct consumers of shared capabilities. Keep setInteriorBoard
+// orchestration readable; do not merely move a single 5,000-line function unchanged and call the split
+// complete." src/ui/theater-tabletop.js owns setBoard/setUnits (plus REALM-PROPS-WIRING §3's prop
+// footprint family and DEAD-STATE's desaturateGroup); src/ui/theater-interior-realize.js owns
+// setInteriorBoard — DECOMPOSED there into seventeen named phase functions over one explicit `pass`
+// context, each phase body a verbatim-lifted range of the pre-split function (its header carries the
+// phase map) — plus setInteriorVariant, F1's combat grid and interiorLightingIdentityFor. The two are
+// PEERS: neither imports the other, and each reaches the shared leaves (camera / lighting / post /
+// dressing / standee-mount / sprites / occlusion / interior-mesh / overlays / motes / practicals /
+// room-mesh / shot / clay-room) directly with this file's own specifiers. This root keeps mount() /
+// reattach() / retire() / rotate() / zoom() / play() and every ctx literal below now hands the
+// IMPORTED realizer bindings to the modules that replay through them (dressing's async art settle,
+// sprites' texture settle, the Light Lab, the Clay Room) — the same function objects window.Theater
+// publishes, so facade identity is unchanged.
+import { setBoard, setUnits, tabletopInit, tabletopSyncState } from "./theater-tabletop.js";
+import {
+  setInteriorBoard, setInteriorVariant, f1BuildCombatGrid,
+  interiorRealizeInit, interiorRealizeSyncState,
+} from "./theater-interior-realize.js";
 // BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
 // see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
 // as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
 import {
-  pushMountGrace, pushDespawnGrace, pushScreenFade, seededCascadeDelays,
-  MOUNT_GRACE_DUR, DESPAWN_GRACE_DUR, DRESSING_CASCADE_STEP_MS, DRESSING_CASCADE_CAP_MS, ROOM_TRANSITION_DUR
+  pushMountGrace, pushDespawnGrace, seededCascadeDelays,
+  MOUNT_GRACE_DUR, DESPAWN_GRACE_DUR, DRESSING_CASCADE_STEP_MS, DRESSING_CASCADE_CAP_MS,
 } from "./spawn-grace.js";
 import * as Parts from "./theater-parts.js";
 // split B3 (2026-07-25): WHOLE_OBJECT_REGISTRY + NEAREST_SUB dropped from this import — their only
@@ -385,21 +400,21 @@ import { loadDonorPiece, socketsByType } from "./theater-donor.js";
 // of the per-cell InstancedMesh box read below — see this file's own ITR_ROOM_SHELL flag + itrBuild*
 // call site (setInteriorBoard) for the wire-in. compileRoomShell is the thin THREE assembler; this file
 // still owns every material (Stage E's job, not this unit's).
-import { compileRoomShell, ROOM_SHELL_TIER_QUANTUM, segmentNormal } from "./theater-room-mesh.js";
+// ---- split B9 (2026-07-25): the C4 ROOM-SHELL COMPILER import is gone from this file. compileRoomShell /
+// ROOM_SHELL_TIER_QUANTUM / segmentNormal had exactly one consumer each — setInteriorBoard's shell block —
+// which now lives in src/ui/theater-interior-realize.js and imports them there with this same specifier.
+// (src/ui/theater-clay-room.js imports the same two directly too; all three resolve to one instance.)
 // GRAPHICS-NORTH-STAR.md STAGE A unit A3 (docs/STAGE-A.md; docs/WALK-NATIVE-A.md A3): the pure shot
 // planner/compositor theater-shot.js's own header flagged this file as the eventual importer ("A3
 // wires the real camera in"). shotPlanFrom/composeShot/defaultCameraCandidates are pure (no THREE, no
 // DOM) — this file supplies the one thing they can't own themselves: a real multi-pose projector (see
 // shotProjectFor, near interiorCameraFitFor below) and the wiring at setInteriorBoard's fit seam.
-import {
-  shotPlanFrom, composeShot, defaultCameraCandidates,
-  // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md) — the pure ray-vs-segment blocking test setInteriorBoard's
-  // wall-upper occlusion pass wires into the existing itrOcclusionClassify tween engine, below.
-  wallUpperBlockingSet, OCCLUSION_SUBJECT_EYE_HEIGHT,
-  // P3-1d (docs/PHASE-3-WAVE-1-SPECS.md) — the restored camera-side upper-band suppression, OR'd into
-  // the same raw-blocking set the ray test above populates.
-  wallUpperCameraSideBlockingSet
-} from "./theater-shot.js";
+// ---- split B9 (2026-07-25): the STAGE-A A3 shot-compose + C4.1b wall-upper-blocking imports are gone from
+// this file. shotPlanFrom / composeShot / defaultCameraCandidates / wallUpperBlockingSet /
+// wallUpperCameraSideBlockingSet / OCCLUSION_SUBJECT_EYE_HEIGHT were read ONLY inside setInteriorBoard
+// (the shot-compose fit and the wall-upper occlusion pass); src/ui/theater-interior-realize.js imports
+// them with this same specifier. window.Theater.shotProjectFor is still republished below off
+// src/ui/theater-camera.js's own binding (unchanged identity).
 // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
 // every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
 // specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
@@ -4297,6 +4312,8 @@ function mount(el, opts){
   spritesSyncState(S);  // split B7: same law for the sprite/billboard family (replay + the facing pass)
   overlaysSyncState(S); // split B7: same law for the overlay family (rings/effects/floaters + S.tweens)
   dressingSyncState(S); // split B8: same law for the dressing/props family (the async real-art replay reads S.mounted/S.lastBoard)
+  tabletopSyncState(S);        // split B9: same law for the flat tabletop realizer (setBoard/setUnits read AND write S)
+  interiorRealizeSyncState(S); // split B9: same law for the interior realizer (every phase reads AND writes S)
   if(priorTextures) S.textures = priorTextures;
   // BEAUTY-WAVE-2 BW2-0: default is now CLEAN (S.psxEnabled false, createTheaterState's own default),
   // so the escape hatch is symmetric — `opts.psx === true` is the dev/nostalgia toggle that turns the
@@ -4478,461 +4495,25 @@ function mount(el, opts){
   return true;
 }
 
-/* REALM-PROPS-WIRING.md §3 — the prop-sizing render pass (PROVISIONAL mapping, §5 decision 2,
-   Adam veto row): a realm prop's Size (theater-data.js's theaterBoardFrom now stamps `size` on any
-   prop entry it resolved via realmPropsFor — see that file's own comment on `propEntry.size`) drives
-   a scale multiplier on top of the model's own authored Medium-normal geometry, PLUS whether the
-   prop's zone tile(s) count as occupied (a future placement pass' "can a unit stand here" query —
-   this render pass only COMPUTES and EXPOSES the occupancy fact via S.propOccupiedZones, per §3's
-   own scope: "occupancy marks the zone tile(s) unstandable in placement", no enforcement wired here).
-     Small  -> 0.55x, decorative (units may share the tile)  -> no occupancy
-     Medium -> 0.80x, shares                                  -> no occupancy
-     Large  -> 1.00x, OCCUPIES (unit may not stand on it)     -> its own zone tile occupied
-     Huge   -> 1.60x, spans toward a second tile               -> BOTH anchor tiles occupied
-   A prop with no Size at all (every pre-unit generic-cover entry, and any realm prop whose size is
-   somehow absent) reads as the Medium-normal default (1x scale, no occupancy) — byte-identical to
-   pre-unit rendering for every caller that never threads a realm prop through (regression law: no
-   realms -> no `size` field -> propFootprint(undefined) resolves the neutral default below). */
-const PROP_FOOTPRINT_BY_SIZE = {
-  Small:  { scale: 0.55, occupies: false, span: false },
-  Medium: { scale: 0.80, occupies: false, span: false },
-  Large:  { scale: 1.00, occupies: true,  span: false },
-  Huge:   { scale: 1.60, occupies: true,  span: true }
-};
-const PROP_FOOTPRINT_DEFAULT = { scale: 1.0, occupies: false, span: false };
-function propFootprint(size){
-  return PROP_FOOTPRINT_BY_SIZE[size] || PROP_FOOTPRINT_DEFAULT;
-}
-
-/* §3 "spanning toward a second tile" — a Huge prop's own zone (band:lane) plus the NEAREST
-   adjacent zone in the same grid (by tile-center distance from the prop's own world position),
-   mirroring mountLightProp's own "nearest real tile" scan discipline (a plain nearest-distance
-   walk, ties broken by array order, never Math.random — deterministic for the same board). Absent
-   grid/tiles (a narrow test harness, a malformed board) degrades to JUST the prop's own zone,
-   never throws. Returns an array of zone key strings (1 entry for every non-Huge/no-span prop, 2
-   for a Huge prop that found a real neighbor). */
-function propSpanZones(p, grid, tiles){
-  const own = p.zone;
-  if(!own) return [];
-  const footprint = propFootprint(p.size);
-  if(!footprint.span || !grid || !tiles || !tiles.length) return own ? [own] : [];
-  let best = null, bestDist = Infinity;
-  tiles.forEach(t => {
-    if(t.zone === own) return;
-    const d = (t.x - p.x) * (t.x - p.x) + (t.z - p.z) * (t.z - p.z);
-    if(d < bestDist){ bestDist = d; best = t.zone; }
-  });
-  return best ? [own, best] : [own];
-}
-
-function setBoard(data){
-  if(!S.mounted || !data) return;
-  // THEATER-NEXT §3.1/§3.2 — dirty-key skip: full-payload stringify (correct-by-construction; a
-  // hand-rolled per-field key would re-derive what stringify already proves, and any missed field is
-  // a stale-board bug). A skipped call must not drain tweens either — nothing changed.
-  const dirtyKey = JSON.stringify(data);
-  if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
-  S.boardKey = dirtyKey;
-  window.Theater.stats.boardBuilds++;
-  // ENV-1B (2026-07-14): shadow-mapping stays ON for the tabletop/combat path too — see mount()'s own
-  // ENV-1B comment above for the full provenance (§2's old "no shadow maps" line retired; Adam's
-  // DESIGN.md ruling wants real cast shadows everywhere). Kept as an explicit restore here (not just
-  // left at mount()'s own true default) for the SAME per-channel discipline the orthoCamera/hemiLight/
-  // keyLight/fillLight restores just below already keep — one obvious place for a future channel-
-  // specific divergence, exactly like every other toggle in this block.
-  if(S.renderer) S.renderer.shadowMap.enabled = true;
-  // GRAPHICS-ENGINE law 2b/VP0: the flat tabletop channel ALWAYS renders ortho, regardless of
-  // INTERIOR_CAM_MODE — only setInteriorBoard ever reads that flag. Restoring S.orthoCamera here
-  // mirrors the shadowMap/hemi restores just above/below (setInteriorBoard is the only place that
-  // ever swaps S.camera to the perspective one, so this is the one place it swaps back).
-  if(S.orthoCamera && S.camera !== S.orthoCamera){ S.camera = S.orthoCamera; placeCamera(); }
-  // GR3: restore the shared hemisphere key to its authored default whenever a table board mounts —
-  // the ONLY place it's ever dimmed is setInteriorBoard's study-rig-only `variant.rig===false` toggle
-  // (no product path sets it), same "one place turns it down, this is the one place it turns back up"
-  // discipline the shadowMap restore just above already keeps.
-  if(S.hemiLight) S.hemiLight.intensity = HEMI_INTENSITY_DEFAULT;
-  // BW2-4b item 1/2: restore the tabletop key/fill DirectionalLights (setInteriorBoard's BRIGHTNESS-LAW
-  // dim is the only place they drop) and disable the interior camera-key shadow light — same "one place
-  // turns it down, this is the one place it turns back up" discipline as the hemi restore above.
-  if(S.keyLight) S.keyLight.intensity = 0.72;
-  if(S.fillLight) S.fillLight.intensity = 0.22;
-  if(S.interiorCameraKey){ S.interiorCameraKey.intensity = 0; S.interiorCameraKey.castShadow = false; }
-  if(S.spriteCameraFill) S.spriteCameraFill.intensity = 0;
-  ITR_SPRITE_EMISSIVE_TINT = 0xffffff; // BW2-4b item 1: the realm-grade sprite floor tint is interior-only
-  // BEAUTY-WAVE-3 THE POST SUITE (BW3-2/3/6): the flat tabletop stays pass-free — tear the DoF/bloom/
-  // grade passes off the composer here (setInteriorBoard is the only place they're added; this is the
-  // one place they come off, mirroring the shadowMap/hemi/key restores just above). Direct render
-  // resumes for the tabletop (renderTheaterFrame's empty-composer fallback).
-  teardownPostSuite();
-  // BEAUTY-WAVE-2.md BW2-1: the flat tabletop's camera fit carries NO standee-height correction term
-  // (placeCamera's own screenHalfHeight addition) — only setInteriorBoard ever computes a nonzero
-  // S.interiorFitMaxHeight, so this is the one place it resets back to the tabletop's permanent 0,
-  // mirroring the orthoCamera/hemiLight restores just above.
-  S.interiorFitMaxHeight = 0;
-  // ENV-3b (docs/ENV-EXTERIOR-WAVE.md composition-fix wave) ruling 2: QF-B3's own S.interiorFitMaxHeight
-  // correction (above) only ever measured MOUNTED FIGURES (setUnits' tabletopTallestTop) — a board's
-  // own TILE geometry (a settlement's `kind:"building"` masses, stamped straight onto the tile column
-  // mesh below, never a "unit") was invisible to that term entirely, so a building mass taller than any
-  // standing figure had NO vertical headroom correction at all: the camera's ortho viewSize fit only
-  // ever "knew" about the board's flat FOOTPRINT plus whatever figure happened to be tallest, so a
-  // building sticking up well past that (even after ruling 1's height cap) got its top cropped and the
-  // frame read as "standing inside the block maze" rather than framing the whole tray (the gate's
-  // camera-crop failure). Tracked fresh every setBoard call (reset here, same convention as every other
-  // per-call-reset field just above/below) and folded into the tile mount loop's own tallest-top read
-  // (below); setUnits' own final S.interiorFitMaxHeight computation (that file's own QF-B3 block) takes
-  // the MAX of this and its own tabletopTallestTop, so neither term can starve the other.
-  S.boardTallestTileTop = 0;
-  S.isInteriorBoard = false; // placeCamera's own tabletop-vs-interior half-floor split
-  drainTweens(S); // A2: force-complete every live tween BEFORE tearing down the board/FX it may reference
-  clearGroup(S.fxGroup); // A2: a new board must never inherit the old board's still-animating debris/glyphs
-  S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
-  clearGroup(S.tileGroup);
-  clearGroup(S.propGroup);
-  clearGroup(S.interiorGroup); // DUNGEON-GRAPH.md U3: a combat board must not leave a prior interior tray's meshes on stage
-  S.interiorLightsBuilt = null;
-  S.interiorLightTargets = [];
-  S.interiorLightingKey = null;
-  S.interiorLightingPreservedThisBuild = false;
-  // REALM-PROPS-WIRING.md §3: recomputed fresh every setBoard call (swept the same way tile/prop
-  // groups are — a stale prior board's occupied zones never survive a re-render). Populated in the
-  // prop-mount loop below, exposed for a future placement-pass consumer (never read/enforced by
-  // this file itself — computing + exposing the fact is this unit's whole scope).
-  S.propOccupiedZones = {};
-
-  const tiles = data.tiles || [];
-  let minX = 0, maxX = 0, minZ = 0, maxZ = 0;
-  tiles.forEach(t => {
-    minX = Math.min(minX, t.x); maxX = Math.max(maxX, t.x);
-    minZ = Math.min(minZ, t.z); maxZ = Math.max(maxZ, t.z);
-  });
-  const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2;
-  // G9 tune 6 (docs/PRE-PLAYTEST-GAUNTLET.md §10b): the off-center/undersized-looking board bug the
-  // orchestrator's tune-5 fill-fraction fix didn't fully solve. Every mesh below (tiles here, units in
-  // setUnits) is positioned at `coord - cx`/`coord - cz` — i.e. the geometry is ALREADY re-centered to
-  // sit at world origin (0,0,0). boardCenter is the camera's lookAt() target (placeCamera) and MUST be
-  // that same world origin, not the pre-shift centroid (cx,cz) — the old code aimed the camera at a
-  // point 4-5 world units away from where the board actually renders, which reads as the board sitting
-  // small and pushed toward one side (exactly what an off-target lookAt in an orthographic camera looks
-  // like: the correctly-sized/centered box appears shifted because the "center of frame" isn't where
-  // the geometry is). boardOrigin keeps the raw (cx,cz) for the tile/unit shift math below (unchanged).
-  S.boardCenter = new THREE.Vector3(0, 0, 0);
-  S.boardOrigin = { cx, cz };
-  // §3 camera fit: half-extent is the larger of the board's own half-width/half-depth (world units;
-  // +1 covers the tile's own half-size at the footprint edge so the fit doesn't clip the outer row).
-  // G9 camera-yaw fix: boardHalfX/boardHalfZ keep the PER-AXIS halves (same +1 pad) so placeCamera can
-  // compute the actual yaw-rotated projected footprint instead of assuming the axis-aligned envelope.
-  S.boardHalfX = (maxX - minX) / 2 + 1;
-  S.boardHalfZ = (maxZ - minZ) / 2 + 1;
-  S.boardHalfExtent = Math.max(S.boardHalfX, S.boardHalfZ);
-
-  // T1.5 §1/§2: env threading — theaterBoardFrom (theater-data.js) stamps `env` on its return; this
-  // is the ONLY place the GL layer learns which palette-driven void/fog tint to show (the tile tints
-  // are already baked into `t.tint` by theater-data.js, so setBoard never re-derives palette colors
-  // itself — it only reads the env label to pick the void/fog background, which theater-data.js has
-  // no GL concept of).
-  // T3 (§4 zoneToWorld): stash the grid this board was derived from so a later verb can resolve a
-  // "band:lane" zone string to the SAME world coordinates a unit standing there would occupy —
-  // mirrors theater-data.js's theaterZoneOrigin math (band*PATCH, lane*PATCH + patch-center), kept in
-  // sync by reusing the identical THEATER_PATCH-equivalent constant this file already defines (TILE_SIZE
-  // is 1 world unit per tile, and theater-data.js's patch is 3 tiles/zone — see zoneToWorld below).
-  S.lastGrid = data.grid || null;
-  // THEATER-ZOOM-SPREAD: small-board bias — a board at or under SMALL_BOARD_BAND_THRESHOLD bands reads
-  // more distant than a bigger board at the SAME fit fraction (less geometry filling the same frame
-  // edge-to-edge), so bias the default zoom one step IN for it. setBoard() is called on EVERY render
-  // while a fight is live (theaterStageSync, src/world/render.js) — re-deriving the bias every single
-  // call would stomp a player's manual Theater.zoom() adjustment on the very next render. Only
-  // (re-)apply the bias the first time this board's own band-count SHAPE is seen (S.zoomBiasBandCount
-  // tracks it): an actual board-size change (a new fight, or the rare mid-fight room-size change)
-  // re-biases as intended, but a same-shape re-render (the common case) leaves S.zoomLevel exactly
-  // where the player last set it via zoom(dir).
-  const bandCount = (S.lastGrid && S.lastGrid.bandCount) || (S.lastGrid && S.lastGrid.bands && S.lastGrid.bands.length) || 0;
-  if(S.zoomBiasBandCount !== bandCount){
-    S.zoomBiasBandCount = bandCount;
-    // U7-lite (Adam 2026-07-03: "battle minis should render at roughly DOUBLE their current screen
-    // size, ~200-300px tall instead of ~100-150px"): bias the default zoom IN by DEFAULT_FIGURE_ZOOM_STEPS
-    // for EVERY board (was: small boards only got a single step). A small board still gets one EXTRA
-    // step on top (it reads more distant at the same fill). This uses the existing zoom-spread multiplier
-    // machinery (no new camera code) and PERSISTS as a default the player can still zoom out from — a
-    // fresh board re-derives it, a same-shape re-render leaves the player's own zoom() untouched. Known
-    // nit (per the ruling): a tighter default can crowd 5 foes in one band; if that reads badly it is
-    // flagged for follow-up, not fixed here.
-    const smallBoardExtra = (bandCount > 0 && bandCount <= SMALL_BOARD_BAND_THRESHOLD) ? 1 : 0;
-    S.zoomLevel = Math.pow(1 / ZOOM_STEP_FACTOR, DEFAULT_FIGURE_ZOOM_STEPS + smallBoardExtra);
-  }
-  const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
-  S.env = env;
-  // U2 (REVIEW-FIXES-0705.md): the board's STAMPED profile is the ONLY path — theater-data.js
-  // resolves it from data/realms.js (the single source), with the tint already converted to a
-  // NUMBER there. No local mirror, no local resolution: a non-realm room (or an older snapshot with
-  // no renderProfile field at all) -> null, which gradeColorLocal treats as a byte-identical no-op
-  // for every call below (figureMaterialFor/applyLightProfile/the void-tint grade). Mirror drift =
-  // the lava-red bright-kingdom incident, 2026-07-05 — this is why the mirror is gone, not patched.
-  S.realmProfile = data.renderProfile || null;
-
-  // P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B step 1): resolve + mount the rolled
-  // profile's lighting prop BEFORE applyLightProfile runs, so S.lightPropAnchor is ready the moment
-  // that function builds this same profile's point light a few lines below. Needs boardHalfX/Z (set
-  // earlier in this function) + cx/cz (the tile-centering locals, also already computed above).
-  mountLightProp(data, cx, cz);
-
-  // BOARD LIGHTING: data.light.profile (theaterBoardFrom's own stamp — src/engine/theater-data.js)
-  // picks the LIGHT_PROFILES entry; falls back to the dark baseline for a board with no light field at
-  // all (an older snapshot / a preview fixture that hasn't set one — same graceful-degrade discipline
-  // as the env fallback just above). Applied AFTER boardHalfX/boardHalfZ are set (earlier in this
-  // function) so point-light positions resolve against the REAL board size, not the pre-board default.
-  const lightProfileKey = (data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE;
-  applyLightProfile(lightProfileKey);
-  // ENV-1 (docs/ENV-EXTERIOR-WAVE.md): tabletop-only exterior differentiation (daylit/overcast/
-  // moonlit) — see TABLETOP_EXTERIOR_LOOK's own header comment above applyLightProfile's definition
-  // for why this is a SEPARATE post-pass rather than an edit to applyLightProfile/LIGHT_PROFILES
-  // themselves. No-op for the protection-set profiles (dark/torchlit/etc).
-  applyTabletopExteriorLook(lightProfileKey);
-  // ENV-1c (docs/ENV-EXTERIOR-WAVE.md): the celestial-arc post-pass — data.clockMin is theater-data.js's
-  // own stamp (src/engine/theater-data.js, threaded from src/world/render.js's theaterHereSourceFor/
-  // theaterStageSync off w.clock.min, the SAME continuous minute dmDigest ships the DM seat). Runs
-  // AFTER applyTabletopExteriorLook (further refines the SAME already-profile-scaled key/ambient) and
-  // BEFORE applyTabletopShadowCasters (so the shadow pass configures against the key's FINAL,
-  // arc-repositioned transform). No-op — byte-identical to pre-ENV-1c — whenever data.clockMin is
-  // absent (a narrow harness, an older snapshot) or lightProfileKey isn't one of the 3 exterior moods.
-  applyCelestialArc(lightProfileKey, data.clockMin != null ? data.clockMin : null);
-  // ENV-1B: every tabletop board's own profile point(s) become shadow casters — see
-  // applyTabletopShadowCasters' own header for the full provenance/scope note. Runs after
-  // applyTabletopExteriorLook so the shadow-casting flag lands on the SAME already-scaled light
-  // instances (order is otherwise inert — shadow config doesn't read intensity).
-  applyTabletopShadowCasters();
-
-  // T1.5 §1/§2 env threading, now ALSO profile-threaded (ENV-1) and clock-threaded (ENV-1c):
-  // voidTintForTabletop reads the celestial arc's own void keyframe first (S.celestialVoidTint,
-  // stamped by applyCelestialArc just above) when a clock is threaded, else falls back to ENV-1's
-  // static per-profile wash (a light sky-tone for daylit, muted grey for overcast, near-dark cool
-  // blue for moonlit), and only falls back further to the plain env-keyed void for the protection-set
-  // profiles — matching this unit's "byte-identical dark/torchlit" guarantee. Computed AFTER
-  // applyLightProfile/applyTabletopExteriorLook/applyCelestialArc (was before, pre-ENV-1) so
-  // S.lightProfileKey/S.celestialVoidTint are current — mountLightProp above doesn't read
-  // scene.background, so this reordering is otherwise inert.
-  const voidTint = gradeColorLocal(voidTintForTabletop(env, lightProfileKey, data.clockMin != null ? data.clockMin : null), S.realmProfile);
-  if(S.scene){
-    S.scene.background = new THREE.Color(voidTint);
-    if(S.scene.fog) S.scene.fog.color = new THREE.Color(voidTint);
-  }
-  if(S.renderer) S.renderer.setClearColor(voidTint, 1);
-
-  const topColorCache = {};
-  const sideColorCache = {};
-  const colorFor = (tint, factor, cache) => {
-    const key = tint + ":" + factor;
-    if(!cache[key]){
-      const c = new THREE.Color(tint);
-      c.multiplyScalar(factor);
-      cache[key] = c;
-    }
-    return cache[key];
-  };
-
-  tiles.forEach(t => {
-    const h = Math.max(0.15, 0.5 + (t.h || 0));
-    const geo = new THREE.BoxGeometry(TILE_SIZE - TILE_GAP, h, TILE_SIZE - TILE_GAP);
-    // §1 rule 2: top != side — strongly contrasted flat colors on the same column, now via
-    // tileMaterialsFor so a matching loaded texture (§4) tints in instead of the flat top color.
-    // BoxGeometry's material groups are [+x,-x,+y,-y,+z,-z]; index 2 is +y (the top face).
-    const materials = tileMaterialsFor(t, topColorCache, sideColorCache, colorFor);
-    const mesh = new THREE.Mesh(geo, materials);
-    mesh.position.set(t.x - cx, h / 2 - 0.5, t.z - cz);
-    // ENV-3b ruling 2: this column's own real world-Y top (mesh center + half-height) — see
-    // S.boardTallestTileTop's own header comment (above, this function's setup block) for why a tall
-    // TILE mass (a settlement building) needs the same camera-fit visibility a mounted figure already
-    // gets via tabletopTallestTop (setUnits). A flat/unelevated tile's top sits at 0, a no-op against
-    // the reset-to-0 default.
-    const tileTop = h - 0.5;
-    if(tileTop > S.boardTallestTileTop) S.boardTallestTileTop = tileTop;
-    // ENV-1B: the tabletop's own ground plane — receives a figure/prop's cast shadow, mirroring the
-    // interior room-shell FLOOR mesh's own receiveShadow=true (never castShadow — a floor casting onto
-    // itself/neighbors is not a meaningful contact-darkness read, same "shadows land on the GROUND"
-    // convention this unit follows throughout).
-    mesh.receiveShadow = true;
-    S.tileGroup.add(mesh);
-  });
-
-  (data.props || []).forEach(p => {
-    // MODEL-GRAMMAR G4: a prop entry carrying `part` (theater-data.js's theaterPropForText keyword
-    // derivation off the segment's feature/hazard text) renders the ACTUAL named part — a cart reads
-    // as a cart, a shrine as a shrine-block — via the SAME renderPartInto composition engine G1/G2
-    // already use for figures. `partParams` rides straight through to the part function (a caller-
-    // seeded params object, never randomness inside the part itself, per §1). No `part` (no keyword
-    // hit for this zone's text, or a legacy caller that never threaded feature text at all) falls
-    // straight through to the exact pre-G4 generic flat prop-box, byte-identical to before (§9
-    // Decision 6's "never worse than today," reapplied to props — this fallback path is untouched).
-    const px = p.x - cx, pz = p.z - cz;
-    // GROUNDING SHADOW (§3): props had NONE before this unit — "props currently may have none — add
-    // them." One shared blob per prop entry, added to S.propGroup (swept by the SAME clearGroup(S.
-    // propGroup) call at the top of setBoard, so it never leaks across re-renders like the unit-side
-    // blobs above don't). A fixed mid-size radius (0.42) rather than a per-part-derived size — the part
-    // library's own footprints vary too much to size against cheaply here, and a slightly-generous
-    // fixed blob under every prop still reads as "this object touches the ground here" without needing
-    // per-part geometry introspection.
-    addGroundingBlob(S.propGroup, px, pz, -0.495, 0.42);
-
-    // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — a biome-scatter dressing entry (theaterBoardBuild's
-    // env2BiomeScatterFor, src/engine/theater-data.js — carries `.slug`/`.cardKind`, never `.part`/
-    // `.model`) renders as a camera-facing billboard card, the SAME buildDressingCard the interior
-    // dressing pipeline already uses (assets/dressing/<slug>.png, or its placeholder card when the
-    // art hasn't landed — dressingTextureFor's own graceful degrade). Checked FIRST, ahead of the
-    // whole-object/part chain below: these entries carry no `.part`/`.model` to fall through onto,
-    // so without this branch every scattered flora/rock/tree rendered as the SAME undifferentiated
-    // flat prop-box the true no-keyword-hit fallback (bottom of this loop) uses — never distinguishing
-    // a Forest fern from a Desert dune. `updateSpriteBillboardYaw` (this file) is extended alongside
-    // this unit to ALSO camera-face S.propGroup's own sprite-tagged children (it previously only
-    // walked S.unitGroup/S.interiorGroup, since no prop ever carried userData.sprite before now).
-    if(p.slug && !p.part && !p.model){
-      const g = buildDressingCard(p);
-      g.position.set(px, 0, pz);
-      S.propGroup.add(g);
-      return;
-    }
-
-    // REALM-PROPS-WIRING.md §3: a realm prop entry carries its own Size (theater-data.js stamps
-    // `p.size` only when theaterRealmPropForText resolved this zone's prop — every other prop entry,
-    // including every pre-unit generic-cover entry, has no `size` at all). propFootprint(undefined)
-    // resolves the neutral 1x/no-occupy default, so a non-realm-prop render path is byte-identical to
-    // before this unit (regression law). occupied zone(s) are recorded on S.propOccupiedZones for a
-    // future placement-pass consumer — this pass computes + exposes the fact, never enforces it.
-    const footprint = propFootprint(p.size);
-    if(footprint.occupies){
-      propSpanZones(p, S.lastGrid, tiles).forEach(zk => { S.propOccupiedZones[zk] = true; });
-    }
-
-    // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 7): before the Parts.PARTS cuboid lookup,
-    // try the whole-object registry keyed "prop:<part>". `pillar-broken` is shared by TWO distinct
-    // rules (standing-stone: intact param; the candelabra/brazier retarget now uses its own
-    // "candelabra" part string instead — see theater-data.js's own comment on that rule) — the
-    // intact/broken variant routes to two DIFFERENT registry entries (prop:pillar-intact vs
-    // prop:pillar-broken) off partParams.intact. Miss (gate off, no registry entry, builder not
-    // loaded, geometry build throws) falls straight through to the EXISTING Parts.PARTS/generic-box
-    // chain below — never a blank zone (§7.1 mutation M5's own contract).
-    // TABLETOP-UNITS.md §U3: pieceKind:"prop" — a resolution miss here resolves to "blank:prop"
-    // (the plain block) instead of null, so the Parts.PARTS/generic-box chain below is reached only
-    // on an actual load failure (gate off / builder not loaded / geometry throws), never a bare miss.
-    if(WHOLE_OBJECT_ENABLED && (p.model || p.part)){
-      // REALM-PROPS-WIRING fix (2026-07-08): a bespoke realm prop carries its own full registry key in
-      // `p.model` ("prop:sentry-turret-mount" etc.) and prefers it — this is what revives the 8 net-new
-      // realm-prop models that were dead when this resolver keyed only off `p.part` (they have no part).
-      // Everything else keeps the exact part-derived key: pillar-broken's intact/broken split, else
-      // "prop:"+part. A `model` miss (unloaded builder / geometry throw) still falls through to the
-      // Parts.PARTS/generic-box chain below, same degrade as a part miss.
-      const wPropKey = p.model
-        ? p.model
-        : ((p.part === "pillar-broken")
-          ? ((p.partParams && p.partParams.intact) ? "prop:pillar-intact" : "prop:pillar-broken")
-          : "prop:" + p.part);
-      const wEntry = resolveWholeObject(wPropKey, "prop");
-      if(wEntry && typeof wEntry.build === "function"){
-        // QF-B1: an authored `partParams.retint` (data/realm-props.js — a realm prop reusing a
-        // whole-object model whose baked palette doesn't match, e.g. the web-mass shape standing in
-        // for "Alley Fire Escape") recolors the cached geometry's baked vertex colors toward that hex
-        // (own cache-key suffix inside wholeObjectGeometryFor — never touches the original-palette
-        // geometry every OTHER reuse of this same key still wants, e.g. Cobweb Mass's genuine web read).
-        const wRetint = (p.partParams && typeof p.partParams.retint === "number") ? p.partParams.retint : null;
-        const wGeo = wholeObjectGeometryFor(wPropKey, false, "prop", wRetint);
-        if(wGeo){
-          const wMats = wholeObjectMaterialsFor(wEntry);
-          const wg = new THREE.Group();
-          const wMesh = new THREE.Mesh(wGeo, wMats);
-          // ENV-1B: a whole-object prop is a solid volumetric body (never a flat billboard cutout) —
-          // both cast and receive, mirroring the interior room-shell furniture/wall/door convention
-          // (theater-boot.js's own solid-object pattern: castShadow=true, receiveShadow=true) rather
-          // than the sprite/dressing-card "cast-only" convention reserved for flat alpha-cutout art.
-          wMesh.castShadow = true;
-          wMesh.receiveShadow = true;
-          wg.add(wMesh);
-          wg.scale.setScalar(WHOLE_OBJECT_SCALE);
-          const wScale = p.partParams && p.partParams.scale;
-          if(wScale && isFinite(wScale) && wScale > 0) wg.scale.multiplyScalar(wScale);
-          // REALM-PROPS-WIRING.md §3: the size->footprint scale multiplies ON TOP of the model's own
-          // authored Medium-normal geometry (props are authored at Medium-normal per §3's own closing
-          // line) — applied AFTER any partParams.scale so a realm prop's Size is the outermost, most
-          // legible scale signal, never silently overridden by an unrelated params.scale.
-          if(footprint.scale !== 1.0) wg.scale.multiplyScalar(footprint.scale);
-          wg.position.set(px, 0, pz);
-          S.propGroup.add(wg);
-          return;
-        }
-      }
-    }
-
-    const partFn = p.part && Parts.PARTS[p.part];
-    if(partFn){
-      const g = new THREE.Group();
-      const propTint = flatTints(0x6b5638);
-      renderPartInto(g, partFn, p.partParams || {}, propTint, { x: 0, y: 0, z: 0 });
-      // ENV-1B: stamp cast+receive on JUST this prop's own freshly-built boxes (a traverse scoped to
-      // `g`, never a change to addBox/renderPartInto themselves — those are SHARED with figure bodies
-      // on both channels, and touching them there would also change the interior channel's own
-      // pieces, breaking byte-stability for no reason). Same solid-object convention as the whole-
-      // object prop mesh just above.
-      g.traverse(n => { if(n.isMesh){ n.castShadow = true; n.receiveShadow = true; } });
-      // BUG REPAIR (found by the MODEL-QA rig's scene captures, 2026-07-03): theater-data.js's own
-      // THEATER_PROP_KEYWORD_RULES emit `params.scale` ({scale:0.6} candelabra, {scale:1.8} colossal
-      // statue, {scale:0.4} grate-rubble, ...) but NO part function reads a scale param — the value
-      // was silently dropped, so every scaled rule mis-rendered at 1.0 (unseen until now because the
-      // G4 browser gate ran on dev/theater-preview.html, which was syntax-dead at the time). Honor it
-      // here at the GROUP level (one multiply, all of the part's boxes together — the exact pattern
-      // SIZE_SCALE already uses for figures). Rule-less props (no scale in partParams) are untouched.
-      const pScale = p.partParams && p.partParams.scale;
-      if(pScale && isFinite(pScale) && pScale > 0) g.scale.setScalar(pScale);
-      // REALM-PROPS-WIRING.md §3: same outermost-scale discipline as the whole-object branch above —
-      // multiplies AFTER partParams.scale, no-op (x1) for every non-realm prop.
-      if(footprint.scale !== 1.0) g.scale.multiplyScalar(footprint.scale);
-      g.position.set(px, 0, pz);
-      S.propGroup.add(g);
-      return;
-    }
-    const geo = new THREE.BoxGeometry(0.5, 0.9, 0.5);
-    const propTex = S.textures.prop;
-    // REALM-RENDER-STYLE.md §3/§4: the absolute flat-box prop fallback (no Parts.PARTS entry, no
-    // whole-object registry hit) is the one prop color that never routes through figureMaterialFor —
-    // graded here directly so every prop tier (whole-object / part / flat-box) shares the same render
-    // grade. gradeColorLocal(0x6b5638, null) is a byte-identical passthrough on a non-realm room.
-    const propColor = gradeColorLocal(0x6b5638, S.realmProfile);
-    const mat = applyPsxShaderTweaks((propTex && propTex !== "pending")
-      ? new THREE.MeshLambertMaterial({ map: propTex, color: propColor })
-      : new THREE.MeshLambertMaterial({ color: propColor }));
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(px, 0.45, pz);
-    // ENV-1B: same solid-object cast+receive convention as the whole-object/part prop tiers above —
-    // the absolute flat-box fallback is still a real box volume, not a billboard cutout.
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    // REALM-PROPS-WIRING.md §3: same scale discipline for the absolute flat-box fallback tier.
-    if(footprint.scale !== 1.0) mesh.scale.multiplyScalar(footprint.scale);
-    S.propGroup.add(mesh);
-  });
-
-  // ENV-3b ruling 2: was a bare placeCamera() call, fitting against whatever S.interiorFitMaxHeight
-  // happened to still hold (0, this function's own reset above, on the FIRST call of a render pass —
-  // or a stale figure-height reading left over from setUnits on a LATER async-replay-only call). The
-  // shared combiner (this function's own header comment, above) folds in S.boardTallestTileTop (just
-  // measured by the tile loop above) alongside whatever figure height is still on record, so a
-  // building's own height is never dropped from the fit — including on a setBoard-only replay.
-  refitTabletopHeightFit();
-  // ENV-3 (docs/ENV-EXTERIOR-WAVE.md) ruling 5 — SYNC-FACE ON REBUILD: every fresh THREE.Group this
-  // function just built (the tile group carries no billboards, but S.propGroup's dressing cards do —
-  // buildDressingCard, above, tags each with userData.sprite=true) starts at rotation.y=0 by
-  // construction; before this fix, the ONLY place that ever corrected it was updateSpriteBillboardYaw's
-  // OWN scan inside scheduleRender's requestAnimationFrame callback — a race that depends on a paint
-  // tick actually landing before anything reads the scene. That race is lost whenever this exact
-  // function re-runs ASYNCHRONOUSLY off dressingTextureFor's own real-art-arrival replay (a few
-  // hundred lines up: "S.boardKey = null; setBoard(S.lastBoard);") — a REAL assets/dressing/<slug>.png
-  // landing for even ONE prop rebuilds the WHOLE propGroup from scratch (clearGroup, above), so every
-  // OTHER card (including permanently-placeholder NPC/market cards whose slug never resolves) goes
-  // back to its fresh, unfaced rotation.y=0 too — found live: the ENV-3 town card capture, a settlement
-  // NPC placeholder card rendering with visibly MIRRORED text (a DoubleSide-textured plane viewed from
-  // its own back reads as a horizontal mirror of its front). Calling the SAME face pass here,
-  // synchronously, the instant this rebuild finishes, makes "freshly built cards face the camera" true
-  // by construction rather than by timing luck — the next real rAF tick's own call is now a harmless,
-  // idempotent no-op (the camera yaw hasn't changed) rather than the only place this ever happened.
-  updateSpriteBillboardYaw();
-  markDirty();
-}
+// ---- THE FLAT TABLETOP REALIZER: extracted to src/ui/theater-tabletop.js (split B9, 2026-07-25) ----
+// setBoard (the combat/settlement tile-column tray) moved there VERBATIM, together with
+// REALM-PROPS-WIRING.md §3's prop footprint family (PROP_FOOTPRINT_BY_SIZE / PROP_FOOTPRINT_DEFAULT /
+// propFootprint / propSpanZones — censused: setBoard is their ONLY reader) and, further down,
+// desaturateGroup + setUnits. Same root->leaf ctx law; it reads AND writes S, so tabletopInit(ctx) at
+// end-of-body is paired with tabletopSyncState(S) at both `S = createTheaterState()` sites.
+// WHAT STAYS HERE, and why: mountLightProp (its own P1' whole-object registry wiring + a
+// dev/verify-theater-light-props.mjs text pin), tileMaterialsFor / addGroundingBlob / baseDiscMatFor /
+// unitTint / applyConditionMods / flatTints / renderPartInto / recipeFor / sizeScaleFor / hashSeed /
+// scorchTintFor / gradeColorLocal / applyPsxShaderTweaks / interiorFloorTopAt / kilterFor (all shared
+// with the interior channel and/or pinned by RED-FIRST text extractions), drainTweens / startTweenLoop /
+// markDirty / buildTheaterCtx (the root's own schedulers and ctx factory), and the MF-2 SPAWN/DESPAWN
+// GRACE GLUE (mfArtMaterialsOf / mfSetMaterialsOpacity / mfMountGraceFor / mfDespawnGraceFor /
+// mfCascadeMount) — B8's ruling, re-censused this step and UPHELD: the family has two consumers,
+// setUnits (there) and theater-dressing.js's cascade (through this file's own ctx), so moving it would
+// have made the interior dressing channel import the tabletop realizer, and would have broken
+// dev/verify-mf2-spawn-grace.mjs's B1a-c/B2 extractions, which read all five out of THIS file's text.
+// The tabletop ctx carries the step's only two accessors on that side: the mutable root `let`s
+// WHOLE_OBJECT_ENABLED (read) and ITR_SPRITE_EMISSIVE_TINT (written back to white by setBoard).
 
 // ---- THE INTERIOR MESH / GL-SURFACE FAMILY: extracted to src/ui/theater-interior-mesh.js (split B8,
 // 2026-07-25) ---- DUNGEON-GRAPH.md U3 / GR1's whole GL layer moved there VERBATIM: the GR1 procedural
@@ -5193,1549 +4774,38 @@ const ITR_ROOM_SHELL_RISER_DARKEN = 0.55;
 // rest of the fit family. dev/verify-f1-combat-in-room.mjs §7 still text-extracts and evals that exact
 // function standalone; its source read is repointed to the theater-boot + theater-camera composite.
 
-// VQ2-RESPEC.md §4 unit F1 — "grid = thin umber lines on the room floor (depthWrite:false,
-// opacity:0.16, polygonOffset, radial fade before wall-adjacent cells)". f1CombatGridTexture() is a
-// small cached CanvasTexture: a single grid cell's border (a thin inset stroke), tiled ONE-PER-LEGAL-
-// CELL by f1BuildCombatGrid below (never a single room-spanning plane — that would draw grid lines
-// across furniture-blocked/non-room cells too, the exact thing "dressing-blocked cells excluded"
-// forbids). Cached module-scope (built once, reused for the life of the session — the texture itself
-// carries no per-room data, only the line pattern).
-let F1_GRID_TEX_CACHE = null;
-function f1CombatGridTexture(){
-  if(F1_GRID_TEX_CACHE) return F1_GRID_TEX_CACHE;
-  if(typeof document === "undefined") return null; // headless/jsdom harness with no canvas — degrade to no texture (solid-color fallback below)
-  const size = 64;
-  const canvas = document.createElement("canvas");
-  canvas.width = size; canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  if(!ctx) return null;
-  ctx.clearRect(0, 0, size, size);
-  ctx.strokeStyle = "#8a5a2b"; // thin umber
-  ctx.lineWidth = 2;
-  ctx.strokeRect(1, 1, size - 2, size - 2);
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.magFilter = THREE.NearestFilter;
-  tex.minFilter = THREE.NearestFilter;
-  F1_GRID_TEX_CACHE = tex;
-  return tex;
-}
-// f1BuildCombatGrid(legalCells, cx, cz, floorTopMap) -> THREE.Group — one 1x1 quad per legal combat
-// cell (GRID LAW: 1 SpatialPlan cell = 1 world unit), flat on the room's own real floor top
-// (interiorFloorTopAt, the SAME derived law every other floor-contact mount in this file uses — never
-// a hardcoded plane). "radial fade before wall-adjacent cells": any legal cell touching the room
-// boundary (one of its 4 orthogonal neighbors is NOT itself a legal cell — a wall, a door threshold,
-// or a dressing-blocked cell) gets its opacity roughly halved instead of the interior's full 0.16, so
-// the overlay visually recedes before it ever touches a wall face rather than terminating with a hard
-// cut. depthWrite:false + polygonOffset (factor/units -1) keep it a pure decal over the floor mesh —
-// visible without z-fighting, never occluding anything drawn after it.
-const F1_GRID_OPACITY = 0.16;
-const F1_GRID_EDGE_OPACITY = 0.08;
-function f1BuildCombatGrid(legalCells, cx, cz, floorTopMap){
-  const group = new THREE.Group();
-  if(!Array.isArray(legalCells) || !legalCells.length) return group;
-  const legalKeys = new Set(legalCells.map((c) => c.x + "," + c.y));
-  const tex = f1CombatGridTexture();
-  const geo = new THREE.PlaneGeometry(0.96, 0.96);
-  geo.rotateX(-Math.PI / 2);
-  legalCells.forEach((c) => {
-    const isEdge = !legalKeys.has((c.x + 1) + "," + c.y) || !legalKeys.has((c.x - 1) + "," + c.y)
-      || !legalKeys.has(c.x + "," + (c.y + 1)) || !legalKeys.has(c.x + "," + (c.y - 1));
-    const opacity = isEdge ? F1_GRID_EDGE_OPACITY : F1_GRID_OPACITY;
-    const mat = new THREE.MeshBasicMaterial({
-      color: 0x8a5a2b, map: tex || null, transparent: true, opacity,
-      depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1,
-      side: THREE.DoubleSide
-    });
-    const mesh = new THREE.Mesh(geo, mat);
-    const floorTop = interiorFloorTopAt(floorTopMap, c.x, c.y);
-    mesh.position.set(c.x - (cx || 0), floorTop + 0.01, c.y - (cz || 0));
-    group.add(mesh);
-  });
-  return group;
-}
-
-function interiorLightingIdentityFor(data, variant){
-  // Lighting objects may survive a geometry-only replay only when every input that can affect their
-  // fixture recipe, placement, scene rig, or authored value is identical. Door/interactable state is
-  // intentionally absent: a hinge swing is not a lighting authoring change.
-  return JSON.stringify({
-    realmId: data && data.realmId,
-    lightProfile: data && data.lightProfile,
-    lights: (data && data.lights) || [],
-    bounds: data && data.bounds,
-    focusRect: data && data.focusRect,
-    walls: data && data.instances && data.instances.wall,
-    doorAxes: data && data.doorAxes,
-    roomShell: ITR_ROOM_SHELL,
-    rig: !variant || variant.rig !== false,
-  });
-}
-
-function setInteriorBoard(data, renderOpts){
-  if(!S.mounted || !data) return;
-  renderOpts = renderOpts || {};
-  // BEAUTY-WAVE-4.md MF-1: capture the TRUE live camera pose as the very FIRST thing this function
-  // does — before drainTweens() (a few lines down) gets a chance to force-complete an in-flight
-  // camera-pose tween to ITS end pose. drainTweens' own job is legitimate (force-settle tweens whose
-  // Object3D/material handles are about to be disposed by the clearGroup calls that follow it) — a
-  // camera-pose tween doesn't hold any such handle (it only ever touches the persistent S.camera), so
-  // it's harmless for drainTweens to complete it too, but doing so BEFORE this capture point would
-  // silently defeat MF-1's own "retarget from the CURRENT interpolated pose" contract (found live
-  // debugging this unit: a fit fired mid-glide always re-derived its start from the OLD tween's own
-  // end, never the live mid-flight pose, because drainTweens had already snapped to it by the time the
-  // old capture point — right before the preview placeCamera() call, much later in this function — ever
-  // ran). Captured unconditionally (even on the dirty-key skip path below) — a wasted clone is cheap.
-  const mf1PreFitPos = S.camera ? S.camera.position.clone() : null;
-  const mf1PreFitTarget = S.cameraLookTarget ? S.cameraLookTarget.clone() : null;
-  // DUNGEON-GRAPH.md U3 render-quality study card: S.interiorVariant (window.Theater.setInteriorVariant,
-  // below) folds into the dirty key so a variant-only change (same board data, different AO/banded/fog
-  // flags — exactly what the study rig does per scene) still forces a rebuild instead of skipping.
-  const variant = S.interiorVariant || {};
-  const dirtyKey = "interior:" + JSON.stringify(variant) + ":" + JSON.stringify(data);
-  if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
-  S.boardKey = dirtyKey;
-  const nextLightingKey = S.clayRoomDiagnosticActive
-    ? interiorLightingIdentityFor(data, variant)
-    : null;
-  const preserveInteriorLighting = !!(
-    S.clayRoomDiagnosticActive
-    && S.interiorLightsBuilt
-    && S.interiorLightsBuilt.group
-    && S.interiorLightsBuilt.group.parent === S.interiorGroup
-    && S.interiorLightingKey === nextLightingKey
-  );
-  const preservedLightsBuilt = preserveInteriorLighting ? S.interiorLightsBuilt : null;
-  const clayLightingProbeBefore = S.clayRoomDiagnosticActive
-    ? clayRoomLightingSnapshot("before-rebuild")
-    : null;
-  S.interiorLightingPreservedThisBuild = preserveInteriorLighting;
-  // BEAUTY-WAVE-4.md MF-2 item 4 (ROOM TRANSITION CROSSFADE): only a REAL swap gets the crossfade —
-  // "walk/travel BOARD SWAPS", not this mount's very first room reveal (nothing to hide a cut FROM
-  // yet; the dressing/piece cascade already wired into interiorBuildPieces/Dressing/Furniture is that
-  // first reveal's own "the room sets itself" beat). S.lastBoard is still the PRIOR board here (this
-  // function only overwrites it a few lines down) — truthy iff a board was already showing. The
-  // overlay snaps OPAQUE synchronously, right here, BEFORE drainTweens/clearGroup/rebuild run — this
-  // whole function is single-threaded JS, so no frame is ever painted mid-rebuild; the opaque snap is
-  // what "the rebuild happens under it" means when the rebuild itself is synchronous. The fade back to
-  // transparent (revealing the NEW room) is pushed once the rebuild + camera fit are done, at this
-  // function's own tail below.
-  // A full-screen fade is travel grammar, never generic rebuild grammar. Same-board async settles,
-  // camera/material replays, and explicitly-local Clayroom state edits rebuild in place.
-  const isRoomTransition = !!S.lastBoard
-    && data !== S.lastBoard
-    && renderOpts.roomTransition !== false;
-  if(isRoomTransition && S.transitionEl){
-    S.transitionEl.style.opacity = "1";
-  }
-  // GRAPHICS-ENGINE law 2b/VP0 (docs/BEAUTY-WAVE.md): the interior channel's own camera-mode switch.
-  // `variant.camMode` (study-rig ONLY — dev/battle-gate/capture-two-flag-card.mjs's ortho/persp cells)
-  // overrides the module default INTERIOR_CAM_MODE for this render only; no product caller ever sets
-  // it, so this degrades to INTERIOR_CAM_MODE everywhere else. setBoard's own S.orthoCamera restore
-  // (above) is the one place that ever swaps back to ortho for the tabletop channel — this is the one
-  // place that ever swaps TO the perspective camera.
-  const camMode = (variant.camMode === "ortho" || variant.camMode === "persp") ? variant.camMode : INTERIOR_CAM_MODE;
-  const wantPersp = camMode === "persp";
-  if(wantPersp && S.perspCamera && S.camera !== S.perspCamera) S.camera = S.perspCamera;
-  else if(!wantPersp && S.orthoCamera && S.camera !== S.orthoCamera) S.camera = S.orthoCamera;
-  window.Theater.stats.boardBuilds++;
-  drainTweens(S);
-  clearGroup(S.fxGroup);
-  if(preserveInteriorLighting) S.interiorGroup.remove(preservedLightsBuilt.group);
-  S.lastBoard = data;
-  // STAGE-A A4 — a genuinely NEW board object (not a same-object rebuild: rotate()/zoom/variant-only
-  // replays never change `data`'s own identity, matching setInteriorVariant's own "null S.boardKey,
-  // replay S.lastBoard" trick) clears the persistent occlusion fade state + hysteresis bearing anchor.
-  // Walking into a new room must never inherit a torn-down room's stale fade entries, or hold a
-  // brand-new room's own first classification against an unrelated old bearing. A same-object replay
-  // correctly PRESERVES fade state across the rebuild — exactly what the hysteresis hold needs.
-  if(data !== S.__occlusionFadeBoardRef){
-    S.occlusionFadeState = new Map();
-    S.occlusionClassifyBearingDeg = null;
-    S.__occlusionFadeBoardRef = data;
-  }
-  clearGroup(S.tileGroup);
-  clearGroup(S.propGroup);
-  clearGroup(S.interiorGroup);
-  // BEAUTY-WAVE.md VP1c (THE LOOP-04 KAIJU PROBE, diagnosed this unit): production's own per-render
-  // sync (src/world/render.js theaterStageSync) pushes the FLAT TABLETOP board+units into S.unitGroup/
-  // S.shadowGroup (window.Theater.setBoard + setUnits) on every renderWorld() while GS.combat.active —
-  // and dm.js's combat_start handler calls renderWorld() at the end of its own case. Those units size
-  // through the pre-VP1 render-height-multiplier convention (GLB_TARGET_HEIGHT x entry.scale x
-  // spriteSizeScaleFor), NOT the true-scale math VP1/VP1b gave interior pieces. Neither group was ever
-  // cleared here, so a caller that drives combat_start and then separately mounts an interior tray
-  // (window.Theater.setInteriorBoard — the dungeon-loop gate's own documented allowance, and any future
-  // combat-in-a-room feature) inherited the leftover flat-tabletop meshes standing in the SAME world-
-  // origin neighborhood the interior camera frames — the kaiju towering in the loop-04/05 contact-sheet
-  // frames. An interior tray's creatures are pieces (VP1/VP1b's own true-scale render family); the flat
-  // tabletop unit family must never coexist with it. setBoard already clears these same two groups for
-  // the reverse direction (a tabletop board must not inherit a prior interior tray's leftover pieces);
-  // this is the missing other half.
-  clearGroup(S.unitGroup);
-  clearGroup(S.shadowGroup);
-  S.propOccupiedZones = {};
-  // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): setInteriorBoard never used to manage S.zoomLevel at
-  // all (only setBoard's own small-board bias ever touched it) — a LATENT gap, harmless before this
-  // unit since the pre-unit fit was always generously padded enough to absorb a stray leftover
-  // zoomLevel from a prior flat-tabletop mount. It stops being harmless now: interiorCameraFitFor's
-  // "beat" fit + placeCamera's own exact-containment correction (this unit) compute a precise
-  // corrected auto-fit distance, and then apply S.zoomLevel ON TOP of it (by design — a PLAYER's own
-  // manual Theater.zoom() call is intentionally allowed to crop past the auto-fit); a stale zoomLevel
-  // inherited from a completely different board (the tabletop's own bias, or a previous interior
-  // board's manual zoom) would silently re-introduce the exact crop this unit fixes. Reset to 1 on
-  // every ACTUAL rebuild (the dirty-key skip above already returns before this line, so a caller
-  // polling the SAME board every render tick never has an in-progress manual zoom reset out from
-  // under it) — mirrors setBoard's own "a fresh board gets a fresh [zoom] reading" convention.
-  S.zoomLevel = 1;
-  S.isInteriorBoard = true; // placeCamera's own tabletop-vs-interior half-floor split
-  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: interior boards get real shadow-mapping — the
-  // tabletop/combat path's "no shadow maps" ruling (§2, this file's mount()-time default + setBoard's
-  // own explicit restore below) is untouched; this is the ONE place shadow-mapping turns on.
-  if(S.renderer) S.renderer.shadowMap.enabled = true;
-
-  const b = data.bounds || { minX: 0, maxX: 0, minZ: 0, maxZ: 0 };
-  // Camera framing: fit to the FOCUS ROOM when the board carries one (interiorBuildBoard's
-  // focusRect — study card v3 "camera pulled into the room"); neighbors still render, they just
-  // sit outside the fitted frame. Fallback: the whole board footprint, the original behavior.
-  const fit = data.focusRect || b;
-  const cx = (fit.minX + fit.maxX) / 2, cz = (fit.minZ + fit.maxZ) / 2;
-  S.boardOrigin = { cx, cz };
-  // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): the camera-FIT box (what placeCamera sizes/aims at) is
-  // now independent of the geometry-mount origin shift above (cx/cz — untouched, room footprints stay
-  // exactly where they always were, per this unit's own OUT OF SCOPE). data.cameraFit is a plain
-  // caller-set field (data.pieces/data.dressing/data.lightProfile's own convention): absent boards
-  // default to "room" mode, byte-identical in SHAPE to the pre-unit fit (still data.focusRect), just
-  // CLOSER (see interiorCameraFitFor's own header). See that function for "beat" mode.
-
-  /* GRAPHICS-NORTH-STAR.md STAGE A unit A3 (docs/STAGE-A.md §A3; docs/WALK-NATIVE-A.md A3): compose
-     the interior camera off the ShotPlan (theater-shot.js) instead of the plain data.cameraFit/
-     focusRect path below, behind ITR_SHOT_COMPOSE (default ON — see that const's own header comment
-     for why it's read off `variant.shotCompose` rather than a bare module flag). shotPlanFrom/
-     composeShot are pure and never touch S.*; this block is the ONLY place their output is allowed to
-     reach the render, and only ever by way of `camFit` below (via fitFromComposedShot — see its own
-     header for why the fit frames the action-cluster EXTENT, reusing interiorCameraFitFor's proven
-     beat crop, rather than the composed camera's full-frustum distance) — the EXACT {center,halfX,
-     halfZ} shape interiorCameraFitFor already returns, so every downstream consumer (placeCamera/
-     placeCameraTweened, the exact-containment correction loop, S.zoomLevel) is untouched either way.
-     FALLBACK EVERYWHERE (byte-identical to pre-unit behavior): `camFit` stays null — falling through
-     to the pre-existing `interiorCameraFitFor(data.cameraFit, fit, cx, cz)` call, unchanged — when the
-     flag is off, when shotPlanFrom/composeShot/defaultCameraCandidates aren't loaded (a narrow
-     harness), when composeShot throws, or when EVERY candidate failed its hard constraints
-     (`metrics.allRejected` — composeShot's own header notes it never returns nothing, always
-     best-effort-picking the highest-scoring REJECTED candidate in that case; that best-effort pick is
-     exactly the spec's "no valid candidate" fallback trigger, not a real composed frame worth trusting).
-     S.lastComposedShot/S.lastShotPlan are harness-facing-only reads (republished onto
-     window.Theater.lastComposedShot/lastShotPlan near this file's other diagnostics, below) — no
-     product code reads either field. S.lastComposedShotAttempt/S.lastComposedShotError are the SAME
-     kind of harness-only diagnostic, one level earlier: the RAW composeShot result (even when
-     all-rejected, so a harness can assert the rejection actually happened) and any thrown error
-     message respectively — neither ever influences camFit itself. */
-  const shotComposeOn = (typeof variant.shotCompose === "boolean") ? variant.shotCompose : ITR_SHOT_COMPOSE;
-  let camFit = null;
-  S.lastComposedShot = null;
-  S.lastShotPlan = null;
-  S.lastComposedShotAttempt = null;
-  S.lastComposedShotError = null;
-  if(shotComposeOn && typeof shotPlanFrom === "function" && typeof composeShot === "function" && typeof defaultCameraCandidates === "function"){
-    try {
-      // S.zoomLevel was reset to 1 a few lines above (this function's own "fresh board gets a fresh
-      // zoom reading" convention) and nothing between there and here touches it — passing 1 explicitly
-      // avoids a reader ever wondering whether a stale zoom could sneak into the composed distance and
-      // then get double-applied by placeCamera's own S.zoomLevel multiplier further downstream.
-      const viewState = { yawDeg: (S.rotationStep * 90) + CAM_YAW_OFFSET_DEG, pitchDeg: CAM_ELEV_DEG, zoomLevel: 1 };
-      const shotPlan = shotPlanFrom(data, (typeof GS !== "undefined" && GS && GS.combat) || null, viewState);
-      const candidates = defaultCameraCandidates(shotPlan, viewState);
-      const composed = composeShot(shotPlan, candidates, shotProjectTwoArg);
-      S.lastComposedShotAttempt = composed;
-      if(composed && composed.camera && !(composed.metrics && composed.metrics.allRejected)){
-        // production: the action-cluster crop (fitFromComposedShot). Test-only: the superseded wide
-        // full-frustum box, only when a harness flips variant.shotComposeWideBoxForTest for its own
-        // figure-height RED-FIRST baseline (see fitFromComposedCameraWideForTest's header).
-        const composedFit = variant.shotComposeWideBoxForTest
-          ? fitFromComposedCameraWideForTest(composed.camera, cx, cz)
-          : fitFromComposedShot(shotPlan, fit, cx, cz);
-        if(composedFit){
-          camFit = composedFit;
-          S.lastComposedShot = composed;
-          S.lastShotPlan = shotPlan;
-        }
-      }
-    } catch(e){ camFit = null; S.lastComposedShotError = e && e.message ? e.message : String(e); } // any throw -> the exact pre-existing focusRect path below, untouched
-  }
-  if(!camFit) camFit = interiorCameraFitFor(data.cameraFit, fit, cx, cz);
-  // VQ2-RESPEC.md §4 unit F1 — "camera yaw/pitch preserved from exploration; target/distance delta
-  // clamped ≤10%". Yaw/pitch are ALREADY preserved by construction: placeCamera()/placeCameraTweened()
-  // derive yaw ONLY from S.rotationStep (mount()-time 0, changed ONLY by the player's own rotate()
-  // call — see this file's own "S.rotationStep =" writers, never touched anywhere in this function),
-  // so a combat render never rotates the camera regardless of what camFit lands on. What CAN move is
-  // camFit itself: shotPlanFrom (a few lines up) already threads GS.combat into the action-cluster
-  // anchors the shot-compose path scores against, so the SAME room's combat-vs-exploration fit can
-  // legitimately differ once units land on real cells (F1's own placement, theaterUnitsOnRoomCells).
-  // f1ClampCamFit bounds that drift: S.f1PreCombatCamFit is the last NON-combat fit this exact room
-  // produced (snapshotted below, every non-combat render — "from exploration" always means the most
-  // recent one, matching a player who was just standing here); a combat render for the SAME
-  // activeRoomId clamps its own camFit against that baseline, never against an unrelated room's.
-  if(data.combat && S.f1PreCombatCamFit && S.f1PreCombatCamFit.activeRoomId === data.activeRoomId){
-    camFit = f1ClampCamFit(camFit, S.f1PreCombatCamFit, F1_COMBAT_CAM_CLAMP_FRAC);
-  } else if(!data.combat){
-    S.f1PreCombatCamFit = { activeRoomId: data.activeRoomId, center: { x: camFit.center.x, z: camFit.center.z }, halfX: camFit.halfX, halfZ: camFit.halfZ };
-  }
-  S.boardCenter = camFit.center;
-  S.boardHalfX = camFit.halfX;
-  S.boardHalfZ = camFit.halfZ;
-  S.boardHalfExtent = Math.max(S.boardHalfX, S.boardHalfZ);
-  // BEAUTY-WAVE-2.md BW2-1: see placeCamera's own screenHalfHeight comment — the fit above is FLOOR-
-  // footprint-only; this is the standee-height correction term it's missing. An explicit
-  // data.cameraFit.maxHeight wins (a caller who already knows its own roster's tallest piece); else
-  // auto-derived from data.pieces' real true-scale heights (interiorSpriteBillboard's own UNCLAMPED
-  // formula — deliberately ignoring the wall-height clamp, since the fit should account for a
-  // creature's full intended height even where the render later clips it for ceiling clearance).
-  S.interiorFitMaxHeight = interiorFitMaxHeightFor(data);
-  S.lastGrid = null; // no band/lane grid on an interior tray — zoneToWorld/zoom-bias callers degrade to their own defaults
-
-  // BEAUTY-WAVE-4.md MF-1: mf1PreFitPos/mf1PreFitTarget (captured at this function's very TOP, before
-  // drainTweens() could force-complete an in-flight camera tween) are what placeCameraTweened() below
-  // uses as its start pose — NOT a fresh read of S.camera here, since the preview placeCamera() call
-  // just below is byte-identical to the authoritative one further down this function (see its own
-  // comment: "idempotent... not a second/different fit") and would already have snapped the camera to
-  // what becomes the "end" pose by the time control reaches past it.
-
-  // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1: a PREVIEW placeCamera() call — every input
-  // it reads (S.boardCenter/halfX/halfZ/halfExtent, S.interiorFitMaxHeight, S.rotationStep,
-  // S.zoomLevel=1 just reset above, S.el's own DOM layout, S.camera's own persp/ortho type already
-  // resolved above this line) is already final by this point in the function, and NOTHING between
-  // here and this function's own later, authoritative placeCamera() call (below) changes any of
-  // them — so this early call is a byte-identical, side-effect-free PREVIEW of the real camera
-  // position (idempotent: calling it twice with no state change between calls yields the same
-  // S.camera.position both times), not a second/different fit. It exists only so the CUTAWAY
-  // pillar/wall-adjacent occlusion test below can raycast from the camera's REAL world position
-  // instead of re-deriving a parallel approximation of it.
-  placeCamera();
-  const occlusionCameraPos = S.camera ? { x: S.camera.position.x, y: S.camera.position.y, z: S.camera.position.z } : null;
-  // STAGE-A A4 — the reclassify-hold decision, computed ONCE per rebuild and shared by every kind's
-  // classification pass below (wall/pillar/furniture): a small camera-bearing move since the last FREE
-  // classification holds every already-seen id's prior commitment; the anchor bearing advances on
-  // every NON-held pass (whether or not anything actually flipped this time), so a long slow drift
-  // still eventually re-anchors instead of comparing forever against one stale bearing.
-  const occlusionBearingNow = itrOcclusionBearingDeg(occlusionCameraPos);
-  const occlusionHoldPrior = S.occlusionClassifyBearingDeg != null && occlusionBearingNow != null &&
-    itrOcclusionBearingDeltaDeg(occlusionBearingNow, S.occlusionClassifyBearingDeg) < ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG;
-  if(!occlusionHoldPrior) S.occlusionClassifyBearingDeg = occlusionBearingNow;
-  // STAGE-A A4: blockers now come from ShotPlan.occlusionTargets (docs/STAGE-A.md §A4), not only the
-  // wall/pillar instance lists S-1 originally tested — furniture (tall crates/cabinets/shelf-units,
-  // data.furniture, BW2-5's own "furniture-class blocker volumes") joins the candidate set whenever
-  // THIS shot's own ShotPlan (S.lastShotPlan, A3, set a few lines above this preview fit) actually
-  // classifies furniture as an occlusion kind. Absent a ShotPlan (ITR_SHOT_COMPOSE off, or a narrow
-  // harness that never builds one), furniture blocking stays off — byte-identical to pre-A4 behavior;
-  // wall/pillar classification is unconditional either way (unchanged from S-1).
-  const occlusionShotTargets = (S.lastShotPlan && Array.isArray(S.lastShotPlan.occlusionTargets)) ? S.lastShotPlan.occlusionTargets : null;
-  const occlusionFurnitureOn = !!(occlusionShotTargets && occlusionShotTargets.some(function(t){ return t && t.kind === "furniture"; }));
-
-  const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
-  S.env = env;
-  S.realmProfile = null; // tileKit colors are already final (src/ui/theater-interior.js) — no second grade pass
-  const kit = data.tileKit || {};
-  // GR3 (docs/GRAPHICS-ENGINE.md build unit GR3, LIGHT RIG LAW): the kit's own gradeTint/gradeStrength
-  // (src/ui/theater-interior.js's tileKit, GR3 addition) becomes a gradeColorLocal-shaped profile —
-  // the SAME grade FUNCTION setBoard's own void-tint line already applies for the flat table (line
-  // ~3981's `gradeColorLocal(voidTintFor(env), S.realmProfile)`), just sourced from the kit's own
-  // authored numbers instead of data/realms.js's REALM_RENDER_DEFAULT table (GR3's "parity" is the
-  // shared math, not a duplicated per-realm registry — the interior kits and the table's realm
-  // profiles are deliberately two different authored sources, per REALM_MATERIALS' own sibling-
-  // registry precedent one unit up). null when a kit carries no grade at all (an unresolved/legacy
-  // realmId) -> gradeColorLocal's own no-op passthrough, never a thrown/undefined color.
-  // study-rig ONLY toggle (dev/battle-gate/capture-interior-study.mjs's rig-on/rig-off card, mirroring
-  // GR1's own materials-on/off convention): `variant.rig === false` drops the grade profile to null
-  // (an honest "no GR3 grade" baseline) and dims the shared hemisphere key to 0 for THIS render — no
-  // product caller ever sets S.interiorVariant, so this is a no-op everywhere except the study card.
-  const rigOn = variant.rig !== false;
-  if(!preserveInteriorLighting && S.hemiLight) S.hemiLight.intensity = rigOn ? HEMI_INTENSITY_DEFAULT : 0;
-  const gradeProfile = (rigOn && kit.gradeStrength)
-    ? { sat: 1, tintAmt: kit.gradeStrength, contrast: 1, tint: hexStrToNum(kit.gradeTint) }
-    : null;
-  // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4 STAGE LAW): "void backdrop tinted per realm — route
-  // voidTintFor through the kit grade" — the fallback branch (a kit with no authored fog.color) now
-  // grades voidTintFor(env) instead of using it raw; a kit-authored fog.color is graded too (the SAME
-  // profile, so the two branches never diverge in how "final" a color reads).
-  // Checkpoint 3 (2026-07-25, "the same dark-brown void persists through very different recipes"):
-  // when the board carries a light-recipe lock, the void/fog answers to the RECIPE, not only the
-  // realm env key. One derivation, two honest sources: a celestial recipe with a clock takes the
-  // celestial arc's own authored void keyframe (the same voidTint the tabletop channel uses); any
-  // other recipe derives a deep backdrop from its authored ambient colour (the recipe's mood is its
-  // ambient), darkened well below surface values so the void stays a void. Boards without a recipe
-  // lock keep the env-keyed tint unchanged.
-  let recipeVoidNum = null;
-  if(data.lightRecipeLock && data.lightRecipeLock.id){
-    const lockRecipe = LIGHT_TUNABLES.profiles[data.lightRecipeLock.id];
-    const celestialLight = (data.lights || []).find(function(l){ return l && l.clockMin != null && CELESTIAL_PROFILE_SET[l.recipeId]; });
-    if(celestialLight){
-      recipeVoidNum = celestialArcFor(celestialLight.recipeId, celestialLight.clockMin).voidTint;
-    } else if(lockRecipe && lockRecipe.ambient){
-      const ambientColor = new THREE.Color(lightRecipeColorNumber(lockRecipe.ambient.color));
-      recipeVoidNum = ambientColor.multiplyScalar(0.16).getHex();
-    }
-  }
-  const fogColorNum = gradeColorLocal(
-    recipeVoidNum != null ? recipeVoidNum
-      : ((data.fog && data.fog.color) ? hexStrToNum(data.fog.color) : voidTintFor(env)),
-    gradeProfile
-  );
-  const fogColorObj = new THREE.Color(fogColorNum);
-  // GR3: the interior fog DEFAULT is now the kit's own fogWhisper (tileKit.fogWhisper, GR3 addition) —
-  // "fog off by default except a whisper where the realm earns it" REPLACES the old ad-hoc per-kit
-  // `fog.density` numbers (0.02-0.035, GR1-era, no shared rationale). study-rig fog variant (d/f):
-  // `variant.fog === false` still swaps in a near-zero-density FogExp2 instead of removing S.scene.fog
-  // outright — placeCamera (above) unconditionally reads S.scene.fog.near/far when it exists, and
-  // setBoard's own combat path expects SOME fog object to mutate .color on, so a null fog would
-  // silently break the NEXT combat render rather than this one.
-  const fogWhisper = (typeof kit.fogWhisper === "number" && isFinite(kit.fogWhisper)) ? kit.fogWhisper : 0;
-  const fogDensity = variant.fog === false ? 0.0015 : fogWhisper;
-  if(S.scene){
-    S.scene.background = fogColorObj;
-    S.scene.fog = new THREE.FogExp2(fogColorObj, fogDensity);
-  }
-  if(S.renderer) S.renderer.setClearColor(fogColorObj, 1);
-
-  S.lightPropAnchor = null; // interior boards carry no light-prop registry mapping (data.light absent) — plain profile lighting
-  // interior boards may name their own profile (the tile kits are dark-value surfaces; the "dark"
-  // default reads near-black on them — study card v1/v2). Falls back to the standing default.
-  if(!preserveInteriorLighting){
-    applyLightProfile((data.lightProfile && LIGHT_PROFILES[data.lightProfile]) ? data.lightProfile : LIGHT_DEFAULT_PROFILE);
-  }
-
-  // LIGHT-CLOSE unit (2026-07-11) — hoisted OUTSIDE `if(rigOn)` below: the fill-number override
-  // (rigOn-gated, unchanged) AND two NEW consumers that must see the SAME classification regardless of
-  // the study-rig flag — interiorBuildLights' bright-practical suppression (its own call site, below)
-  // and the cosmic albedo lift (floor/wall instance-color construction, further below) — both need
-  // isBrightRealm/isEmissiveRealm even on a rigOn===false capture. S.lightProfileKey is already final
-  // (set a moment ago by applyLightProfile above).
-  // docs/DIEGETIC-LIGHT.md L-4 / docs/LIGHT-SIGHT-POLISH.md P-1 — BRIGHT-REALM HEMISPHERE: daylit/
-  // overcast/moonlit are the sun/moon/sky's OWN diegetic reach — they get a per-realm bright-fill row
-  // (ITR_BRIGHT_REALM_FILL / itrBrightRealmFillFor, above) instead of the dim single-torch dungeon
-  // model below (this is the "daylit lost-world reads darker than a torchlit crypt" inversion Adam
-  // caught). P-1's own fix: this used to be ONE global set of numbers (tuned for lost-world's dark
-  // jungle albedo) applied to every bright realm alike — suburb's much lighter kit blew out under
-  // lost-world's numbers. Now keyed on data.realmId, with a luminance-derived fallback for any realm
-  // with no explicit row.
-  const isBrightRealm = ITR_BRIGHT_PROFILES.has(S.lightProfileKey);
-  // docs/LIGHT-SIGHT-POLISH.md P-1 problem 2 — cosmic's voidlit gets its OWN dim/cool/legible path
-  // (ITR_EMISSIVE_SCENE_*, above), distinct from both the dim dungeon default and the sunlit numbers.
-  const isEmissiveRealm = !isBrightRealm && !ITR_EMISSIVE_FILL_DISABLED_FOR_TEST && ITR_EMISSIVE_PROFILES.has(S.lightProfileKey);
-  // LIGHT-CLOSE — COSMIC ALBEDO LIFT gate: a SEPARATE test-only flag from the emissive-light toggle
-  // just above (ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST, near ITR_EMISSIVE_ALBEDO_LIFT) so a harness
-  // can isolate the geometry-albedo lift's OWN contribution to roomMean, independent of the ambient/
-  // hemi/key/fill numbers ITR_EMISSIVE_FILL_DISABLED_FOR_TEST already gates.
-  const applyEmissiveAlbedoLift = isEmissiveRealm && !ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST;
-
-  // BW2-4 THE VALUE PLUNGE (docs/BEAUTY-WAVE-2.md §BW2-4, item 1) — interior scene-wide fill drop.
-  // applyLightProfile just (a) floored ambient to STAGE_AMBIENT_FLOOR, (b) rebuilt the profile's own
-  // overhead fill point(s) into S.pointLights. Both flatten the value structure the mocks avoid and
-  // wash out the torch cast-shadows (addendum: shadows must READ). Drop all three here so the torch/
-  // lamp data.lights carry the scene. Gated behind rigOn so the study-rig's honest "no GR3" baseline
-  // (variant.rig === false) is untouched. MUST run BEFORE interiorBuildLights + startLightFlicker below
-  // so the flicker bases (startLightFlicker snapshots S.pointLights[i].intensity) capture the plunged
-  // fill, not the pre-plunge value. See ITR_SCENE_* constants (near HEMI_*) for the tuned numbers.
-  if(rigOn && !preserveInteriorLighting){
-    const brightFill = isBrightRealm ? itrBrightRealmFillFor(data.realmId, kit) : null;
-    // BW2-4b item 6 — THE GLOOM LIFT: gloom ONLY gets a small ambient bump (fantasy is the reference
-    // register — never brightened). Every other non-bright/non-emissive realm keeps ITR_SCENE_AMBIENT
-    // exactly.
-    const gloomLift = (data.realmId === "gloom") ? ITR_GLOOM_AMBIENT_LIFT : 0;
-    if(S.ambientLight) S.ambientLight.intensity = isBrightRealm ? brightFill.ambient : isEmissiveRealm ? ITR_EMISSIVE_SCENE_AMBIENT : (LIGHT_TUNABLES.sceneAmbient + gloomLift);
-    if(S.hemiLight) S.hemiLight.intensity = isBrightRealm ? brightFill.hemi : isEmissiveRealm ? ITR_EMISSIVE_SCENE_HEMI : ITR_SCENE_HEMI;
-    (S.pointLights || []).forEach((l) => { l.intensity *= isBrightRealm ? brightFill.fillScale : isEmissiveRealm ? ITR_EMISSIVE_SCENE_FILL_SCALE : ITR_SCENE_FILL_SCALE; });
-    // BW2-4b item 1 — THE BRIGHTNESS LAW: dim the tabletop key/fill DirectionalLights to a whisper for
-    // the interior channel. They light a camera-facing billboard's normal at N·L~0.6, so at the mount
-    // default (0.72/0.22) a sprite reads ~0.5 of full-bright everywhere BEFORE any torch — "full
-    // brightness even in the dark", the exact thing the law forbids. setBoard restores the tabletop
-    // values on its own path (mirroring the hemi restore just above the shadowMap toggle there).
-    // L-4/P-1: bright realms restore these MOST of the way toward that tabletop default (sunlit, not
-    // dim, and scaled per-realm); cosmic gets a faint star-key, well under the bright numbers.
-    if(S.keyLight) S.keyLight.intensity = isBrightRealm ? brightFill.key : isEmissiveRealm ? ITR_EMISSIVE_SCENE_KEY : ITR_SCENE_KEY;
-    if(S.fillLight) S.fillLight.intensity = isBrightRealm ? brightFill.fill : isEmissiveRealm ? ITR_EMISSIVE_SCENE_FILL : ITR_SCENE_FILL;
-    // BW2-4b item 2 — camera-key: mount/refresh the soft fill DirectionalLight from the camera's general
-    // direction (L-2: no longer a shadow source by default — see ITR_CAMERA_KEY_CASTS_SHADOW).
-    mountInteriorCameraKey(cx, cz);
-    mountSpriteCameraFill();
-  }
-  // BW2-4b item 1 — REALM GRADE on the sprite floor: tint the emissive readability floor toward this
-  // realm's grade (kit.gradeTint) at ITR_SPRITE_TINT_STRENGTH so a lit standee reads the realm (chrome
-  // cool, fantasy warm) even out of torch reach. White when the kit carries no grade or the study rig is
-  // off. Set BEFORE interiorBuildPieces below (it bakes the emissive color at material-build time).
-  {
-    const gt = (rigOn && kit.gradeTint) ? hexStrToNum(kit.gradeTint) : null;
-    if(gt == null){ ITR_SPRITE_EMISSIVE_TINT = 0xffffff; }
-    else {
-      const s = ITR_SPRITE_TINT_STRENGTH, inv = 1 - s;
-      const r = Math.round(255 * inv + ((gt >> 16) & 255) * s);
-      const g = Math.round(255 * inv + ((gt >> 8) & 255) * s);
-      const b = Math.round(255 * inv + (gt & 255) * s);
-      ITR_SPRITE_EMISSIVE_TINT = (r << 16) | (g << 8) | b;
-    }
-  }
-
-  // GR1 (docs/GRAPHICS-ENGINE.md build unit GR1): floor/wall each bake their own REALM_MATERIALS
-  // painter into a real CanvasTexture (interiorMaterialTexture, above) — replaces the old flat-pattern
-  // texture entirely, per GR1's own "replace the current flat/pattern textures" instruction. The study
-  // rig's `variant.materials === false` (dev/battle-gate/capture-interior-study.mjs's before/after
-  // card) drops back to texture:null (a flat single-color material, interiorBuildInstancedMesh's own
-  // "no texture" branch) so a materials-off shot is an honest OLD-FLAT baseline, not the retired
-  // pattern texture (which no longer exists) — product callers never set this flag, so this is a no-op
-  // everywhere except the study card.
-  // BW2-3 MATERIAL TEXEL (GENERATED-FIRST seam): a folded PACKET-02 texture FILE (kit.*TextureFile,
-  // chosen by interiorBuildBoard's VARIANT ROLL — flagships only) WINS; the procedural REALM_MATERIALS
-  // painter (interiorMaterialTexture) is the FALLBACK for the 9 non-flagship realms. Exactly
-  // `interiorSurfaceFileTexture(...) || <procedural>`. `variant.materials === false` (study rig) still
-  // drops to null (flat) for an honest OLD-FLAT baseline, ahead of both branches.
-  const materialsOn = variant.materials !== false;
-  // LIGHT-CLOSE — COSMIC ALBEDO LIFT (ITR_EMISSIVE_ALBEDO_LIFT, near ITR_EMISSIVE_SCENE_* above): the
-  // procedural texture painter (interiorMaterialTexture) bakes pixels directly off its baseColorHex
-  // argument, so lifting the base HERE — before it's ever painted — lifts the material itself. Only the
-  // emissive/voidlit path's floor/wall base color is ever touched; every other realm's floorColorForRender/
-  // wallColorForRender is byte-identical to kit.floorColor/kit.wallColor.
-  const floorColorForRender = applyEmissiveAlbedoLift ? itrScaleHexValue(kit.floorColor, ITR_EMISSIVE_ALBEDO_LIFT) : kit.floorColor;
-  const wallColorForRender = applyEmissiveAlbedoLift ? itrScaleHexValue(kit.wallColor, ITR_EMISSIVE_ALBEDO_LIFT) : kit.wallColor;
-  const floorTex = materialsOn
-    ? (interiorSurfaceFileTexture("floor", kit.floorTextureFile, kit.floorTextureWrap)
-        || interiorMaterialTexture(kit.floorMaterial, floorColorForRender, data.realmId + ":floor", kit.floorGrain,
-            Math.max(1, b.maxX - b.minX + 1), Math.max(1, b.maxZ - b.minZ + 1)))
-    : null;
-  const wallTex = materialsOn
-    ? (interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap)
-        || interiorMaterialTexture(kit.wallMaterial, wallColorForRender, data.realmId + ":wall", kit.wallGrain,
-            1, Math.max(1, data.wallHeightBase || 1)))
-    : null;
-  // BW2-3 §2b COLUMNS: pillars take the WALL sheet (per-face planar from the wall texture at matching
-  // texel), null on a non-flagship realm OR materials-off — the pre-BW2-3 flat-colored pillar. (TRIM:
-  // the folded trim strip is registered on the tileKit (kit.trimTextureFile) + REALM_TEXTURES but is
-  // NOT GL-wired this unit — its only candidate geometry today is the BW2-5 arch doorframe, which BW2-4
-  // deliberately plunges to near-black, and a baseboard/cornice STRIP stretched over a big arch prism
-  // reads wrong. Trim awaits a dedicated trim-run geometry, unchanged from the pre-BW2-3 "trim stays
-  // flat, registry data not yet GL-wired" note — the arrival is folded + staged, honest, just not
-  // force-fit onto the wrong surface.)
-  // BW2-4b item 4 — PILLAR TEXTURE: pillars now take the SAME fully-resolved wallTex the walls do
-  // (file texture on flagships, procedural REALM_MATERIALS fallback on the other 9 realms), not the
-  // file-only lookup that left every non-flagship pillar an untextured flat monolith (the loop-05
-  // black-pillar read). "columns take the WALL sheet" (BW2-3 §2b), now on every realm per the UV laws.
-  const pillarTex = materialsOn ? wallTex : null;
-
-  // study-rig AO variant (b/e/f): darken instance colors at wall-floor seams (interiorApplyAODarkening,
-  // above) — operates on a SHALLOW-CLONED instances object so the caller's own `data` (which may be
-  // S.lastBoard, replayed by setInteriorVariant below) is never mutated in place.
-  const inst = variant.ao
-    ? interiorApplyAODarkening({
-        floor: (data.instances && data.instances.floor || []).map((o) => Object.assign({}, o)),
-        wall: (data.instances && data.instances.wall || []).map((o) => Object.assign({}, o)),
-        doorframe: (data.instances && data.instances.doorframe || []).map((o) => Object.assign({}, o)),
-        pillar: (data.instances && data.instances.pillar || []).map((o) => Object.assign({}, o)),
-      }, variant.aoFactor)
-    : (data.instances || {});
-  // BW2-2 — THE FLOOR CONTACT LAW: one lookup, built off THIS board's own real floor instances
-  // (inst.floor, post-AO-clone above), cached on S so setUnits (a separate, later call against the
-  // SAME mounted board) can reuse it without rebuilding — see this file's own FLOOR CONTACT LAW header
-  // comment (interiorFloorTopMapFrom/interiorFloorTopAt) for the derivation this replaces the old
-  // hardcoded -0.5/-0.4 assumptions with.
-  S.interiorFloorTopMap = interiorFloorTopMapFrom(inst.floor);
-  // S-1 OCCLUSION FADE (docs/DIEGETIC-LIGHT.md) — sight points computed ONCE here (needs
-  // S.interiorFloorTopMap, just set above) and shared by BOTH the wall-occlusion and pillar-occlusion
-  // masks below; BW2-1b's own pillar-only cutaway used to compute this locally further down this
-  // function — hoisted so walls (which never got a sightline-based treatment at all before S-1, only
-  // the unconditional focusRect parapet below) get the identical treatment.
-  const itrSightPoints = occlusionCameraPos ? itrPieceSightPoints(data.pieces, cx, cz, S.interiorFloorTopMap) : [];
-  // BW2-3: file-textured surfaces neutralize their per-cell color to a value multiplier (the texture
-  // carries the hue). floorFromFile/wallFromFile track which branch floorTex/wallTex resolved from.
-  const floorFromFile = materialsOn && !!kit.floorTextureFile;
-  const wallFromFile = materialsOn && !!kit.wallTextureFile;
-  // LIGHT-CLOSE — COSMIC ALBEDO LIFT: the procedural (non-file) floor list carries RAW baked absolute
-  // colors (theater-interior.js's own itrDarkenHex passes off the AUTHORED kit.floorColor) — multiplied
-  // straight against floorTex, which now paints at the LIFTED floorColorForRender above. Route them
-  // through the SAME itrNeutralizeInstanceColors the from-file branch already uses, referenced against
-  // the ORIGINAL (un-lifted) kit.floorColor — this re-expresses each cell's raw color as a per-cell
-  // VALUE MULTIPLIER (its own tone/jitter/darkening, clamped ~1.2) relative to the realm's own base tone,
-  // so the lift lives ENTIRELY in the (already-lifted) texture and never double-applies. Never touched
-  // on a non-emissive realm — floorList stays exactly `inst.floor`, byte-identical to before this unit.
-  const floorList = (floorFromFile || applyEmissiveAlbedoLift)
-    ? itrNeutralizeInstanceColors(inst.floor, kit.floorColor)
-    : inst.floor;
-  const floorMesh = interiorBuildInstancedMesh(floorList, cx, cz, floorTex, variant, "floor");
-  // STAGE-A A1 test seam, mirrors S.interiorLastWallList/S.interiorLastPillarList's own convention —
-  // the exact per-instance list the live floorMesh was built from (dev/verify-active-room-only.mjs
-  // reads this to assert no floor instance falls inside a non-kept neighbor room's rect).
-  S.interiorLastFloorList = floorList;
-  // CUTAWAY WALLS (study card v4; BEAUTY-WAVE-2.md BW2-5 item 2 amendment): when the board frames a
-  // focus room, the room's CAMERA-SIDE perimeter walls drop to a PARAPET so the camera sees INTO the
-  // room instead of at the outside face of a (possibly scale-domain-tall) wall — the standard dungeon-
-  // view cutaway. PRE-BW2-5 this dropped every camera-side wall to a FIXED absolute height (KNEE=0.35
-  // world units, ~15% of the base 2.4 wall height) regardless of the room's own (possibly scaled)
-  // wall height — thin enough to read as barely-there rather than "a box you look into" (the finale
-  // mock's parapet rim). BW2-5's amendment: "full walls drop to parapet, never to nothing" — a
-  // PROPORTIONAL fraction (ITR_CUTAWAY_PARAPET_FRAC, ~0.4 of THIS wall's own height, scale-domain and
-  // all) so a scaled lair's parapet scales too, and the rim reads as a real low wall, not a knee-strip.
-  // Computed from the camera yaw AT BUILD TIME (a later user rotate keeps the same cutaway until the
-  // next board build — acceptable v1, noted here on purpose).
-  const ITR_CUTAWAY_PARAPET_FRAC = 0.4; // BW2-5 item 2: "≈0.4 wall height"
-  // KS-3b item 2 (docs/KENNEY-SOCKET-WAVE.md) — itrCameraSideBand: the "is this WORLD (x,z) on the
-  // camera-facing side of the room's own focusRect band" test, hoisted out of the wallList map below
-  // into its own closure so the kit-shell wall mounting call further down this function (which never
-  // had ANY cutaway treatment before this unit — the ORCHESTRATOR flag this fixes) can apply the
-  // IDENTICAL test to donor wall RUNS instead of a second, driftable copy of the same yaw/dot-product
-  // math. A board with no framed room (data.focusRect absent) reports "never camera-side" for every
-  // position — full height everywhere, byte-identical to every pre-KS-3b board.
-  let itrCameraSideBand = function(){ return false; };
-  if(data.focusRect){
-    const fr = data.focusRect;
-    const yawNow = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
-    const dirX = Math.sin(yawNow), dirZ = Math.cos(yawNow);
-    itrCameraSideBand = function(x, z){
-      const inBand = x >= fr.minX - 1 && x <= fr.maxX + 1 && z >= fr.minZ - 1 && z <= fr.maxZ + 1;
-      if(!inBand) return false;
-      const rx = x - cx, rz = z - cz;
-      return (rx * dirX + rz * dirZ) > 0;
-    };
-  }
-  let wallList = inst.wall;
-  if(data.focusRect){
-    wallList = inst.wall.map(function(wi){
-      if(!itrCameraSideBand(wi.x, wi.z)) return wi;         // far-side / out-of-band walls stay full height
-      const parapetH = (wi.sy || 1) * ITR_CUTAWAY_PARAPET_FRAC;
-      if((wi.sy || 1) <= parapetH) return wi;              // already at/under parapet height — never GROWS a wall
-      return Object.assign({}, wi, { sy: parapetH });
-    });
-  }
-  // S-1 OCCLUSION FADE (docs/DIEGETIC-LIGHT.md) — separate concern from the focusRect PARAPET just
-  // above (that's whole-room camera-side framing, unconditional on any actual figure; this is
-  // per-figure sightline occlusion, the SAME itrPillarCutawayMask segment-vs-AABB test the pillar path
-  // below already used, generalized to walls — which never got a sightline-based treatment before this
-  // unit). Runs against wallList AFTER the parapet (so an already-parapetted near wall's smaller box is
-  // what's actually tested); any instance whose box sits on a camera->figure segment gets split into an
-  // ankle-height solid stub (rendered here, in the normal opaque wallMesh) + a ~5% ghost of the
-  // removed upper portion (rendered in the separate wallGhostMesh below — its own draw call, only
-  // built when at least one wall instance is actually occluding this frame).
-  // STAGE-A A4: the raw mask is UNCHANGED math (itrPillarCutawayMask); what's new is that the split
-  // decision now runs through itrOcclusionClassify (persistent per-id state + hysteresis hold) instead
-  // of splitting on the raw mask directly — `entry.fading` (blocking, or still easing back up from a
-  // fade-out) decides whether THIS build renders the split, not the instantaneous raw test alone.
-  let wallGhostList = [];   // flat descriptor list — S.interiorLastWallGhostList's own established shape
-  let wallGhostBuild = [];  // {inst, fadeEntry} pairs — drives the individually-tweened ghost meshes below
-  if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && itrSightPoints.length && wallList.length){
-    const wallOcclusionMask = itrPillarCutawayMask(wallList, occlusionCameraPos, itrSightPoints, cx, cz);
-    const wallAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
-    wallList = wallList.map(function(wi, i){
-      const id = itrOcclusionIdFor("wall", wi.x, wi.z, wi.yBase);
-      const entry = itrOcclusionClassify(id, !!wallOcclusionMask[i], occlusionHoldPrior);
-      if(!entry.fading) return wi;
-      const split = itrSplitOccluderForAnkleGhost(wi, wallAnkleH);
-      if(split.ghost){
-        wallGhostList.push(split.ghost);
-        wallGhostBuild.push({ inst: split.ghost, fadeEntry: entry });
-      }
-      return split.stub;
-    });
-  }
-  S.interiorLastWallList = wallList; // S-1 test seam, mirrors S.interiorLastPillarList's own convention
-  S.interiorLastWallGhostList = wallGhostList;
-  // LIGHT-CLOSE — COSMIC ALBEDO LIFT: same "the lift lives in the texture, instances become a relative
-  // value multiplier" mechanism as the floor list above (never a double-apply).
-  const wallMesh = interiorBuildInstancedMesh(
-    (wallFromFile || applyEmissiveAlbedoLift) ? itrNeutralizeInstanceColors(wallList, kit.wallColor) : wallList,
-    cx, cz, wallTex, variant, "wall");
-  // STAGE-A A4: ONE small ghost mesh PER blocking instance (never a big shared material carrying every
-  // ghost of a kind at one flat alpha) — each instance's own live tween mutates ONLY its own material,
-  // so two simultaneously-fading walls at different progress never fight over a shared opacity value.
-  const wallGhostMesh = wallGhostBuild.length ? itrBuildOcclusionGhostMeshes(
-    wallGhostBuild.map(function(pair){
-      return {
-        inst: (wallFromFile || applyEmissiveAlbedoLift) ? itrNeutralizeInstanceColors([pair.inst], kit.wallColor)[0] : pair.inst,
-        fadeEntry: pair.fadeEntry
-      };
-    }),
-    cx, cz, wallTex, variant, "wall") : null;
-  // BW2-4b item 4 — DOORFRAME VALUE + TEXTURE. The doorframe ships trimColor as its instance color; a
-  // textured InstancedMesh MULTIPLIES its map by that per-instance color, so a dark trim double-darkened
-  // the wallTex to a pure-black slab (the loop-02 black-monolith arch — the exact bug the WALL
-  // neutralization one section up already solved). When textured, NEUTRALIZE the doorframe color to a
-  // value multiplier (relative to the wall base, same as the wall path) so the arch shows the wall
-  // texture at proper value, THEN apply the recess-darken (ITR_SCENE_DOORFRAME_VALUE) so it reads a
-  // touch darker than the wall — a recessed textured stone arch, per the mock. Untextured (no wallTex)
-  // keeps the old plain trim-value darken. rigOn-gated so the study baseline stays honest.
-  // Resolve this before the doorframe fallback is built: on the compiled-shell path the wall compiler
-  // owns the doorway socket, so the old three-prism doorway construction must not render at all. Kit
-  // shells still use the legacy/fallback instances because they do not consume compileRoomShell.
-  const useCompiledRoomShell = ITR_ROOM_SHELL && !((data.kitShellWalls && data.kitShellWalls.length) || (data.kitShellFloors && data.kitShellFloors.length));
-  // door-mount map for THIS rebuild (doorAxes + live tune; writes S.doorMountReport)
-  const doorMountMap = itrDoorMountMapFrom(data.doorAxes);
-  const doorframeFallbackSource = useCompiledRoomShell ? [] : (inst.doorframe || []);
-  let doorList = wallTex
-    ? itrNeutralizeInstanceColors(doorframeFallbackSource, kit.wallColor).map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) }))
-    : (rigOn ? doorframeFallbackSource.map((d) => Object.assign({}, d, { color: itrScaleHexValue(d.color, ITR_SCENE_DOORFRAME_VALUE) })) : doorframeFallbackSource);
-  doorList = itrApplyDoorMounts(doorList, doorMountMap); // socket the frame into its wall (clone, never a mutation)
-  // DOORFRAME OCCLUSION FIX (found live re-gating dev/verify-bw2-1b-occlusion.mjs --with-render, checks
-  // 31/32/35): doorframes (the main frame body AND BW2-5's own arch-header prisms) were NEVER wired into
-  // the S-1/A4 occlusion classify pass — only wall/pillar/furniture were (this unit's own STAGE-A A4
-  // header comment, several hundred lines up, lists exactly those three). A doorframe is real, permanent
-  // dungeon architecture — connecting-room doorways sit on genuine camera->standee sightlines the same
-  // way a wall or pillar can (confirmed empirically: a real THREE.Raycaster hit two of a real seeded
-  // room's own arch-header prisms, at their true authored width — 0.736/0.56 fractions of the 0.8 base,
-  // a deliberately NARROWING taper per the arch's own build comment above, not an inflated hitbox — on a
-  // real camera->standee sightline from a wide multi-corner "beat" fit). Root cause was a genuine
-  // coverage gap, not a geometry bug: SAME per-instance itrPillarCutawayMask + itrOcclusionClassify +
-  // itrSplitOccluderForAnkleGhost pattern the wall pass above already runs, applied here to `doorList`
-  // (which is ALREADY fully color-resolved by this point — the neutralize/ITR_SCENE_DOORFRAME_VALUE
-  // darken just above — so a stub/ghost split inherits the correct final color directly with no separate
-  // late-color step, unlike wall/pillar's own two-stage pipeline whose neutralize runs AFTER classify).
-  // Each of the door's 1-3 prisms (main body, archStep1, archStep2) classifies independently — the SAME
-  // per-instance-id discipline itrOcclusionIdFor's own yBase-discrimination already established for a
-  // tapered pillar's stacked shaft+cap. This also depends on itrPillarCutawayMask's own yBase fix (see
-  // that function's own header) — without it, the arch-header prisms' near-ceiling boxes would have been
-  // tested as if sitting near the floor, silently missing the exact instances a real sightline hits.
-  let doorGhostList = [];   // flat descriptor list, mirrors S.interiorLastWallGhostList's own shape
-  let doorGhostBuild = [];  // {inst, fadeEntry} pairs — drives the individually-tweened ghost meshes below
-  if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && doorList.length && itrSightPoints.length){
-    const doorOcclusionMask = itrPillarCutawayMask(doorList, occlusionCameraPos, itrSightPoints, cx, cz);
-    const doorAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
-    doorList = doorList.map(function(di, i){
-      const id = itrOcclusionIdFor("doorframe", di.x, di.z, di.yBase);
-      const entry = itrOcclusionClassify(id, !!doorOcclusionMask[i], occlusionHoldPrior);
-      if(!entry.fading) return di;
-      const split = itrSplitOccluderForAnkleGhost(di, doorAnkleH);
-      if(split.ghost){
-        doorGhostList.push(split.ghost);
-        doorGhostBuild.push({ inst: split.ghost, fadeEntry: entry });
-      }
-      return split.stub;
-    });
-  }
-  // BW2-4b item 4 — DOORFRAME TEXTURE: doorframes carried texture=null (an untextured flat prism), then
-  // the BW2-4 value-plunge darkened them to near-black — the loop-05/loop-02 "black monolith arch". Now
-  // they take the SAME wallTex the walls/pillars do (per-face planar for the vertical prism), with the
-  // darkened-trim instance color kept (NOT neutralized) so the arch reads as textured dark stone with a
-  // whisper of the trim accent hue — the mock's dark textured archway, not a flat black block.
-  const doorMesh = interiorBuildInstancedMesh(doorList, cx, cz, wallTex, variant, "doorframe");
-  // STAGE-A A4: ONE small ghost mesh PER blocking doorframe instance — same "never a big shared material
-  // carrying every ghost of a kind" mandate the wall/pillar ghost builds above already keep.
-  const doorGhostMesh = doorGhostBuild.length ? itrBuildOcclusionGhostMeshes(doorGhostBuild, cx, cz, wallTex, variant, "doorframe") : null;
-  // STAGE-A A1 test seams, same convention as S.interiorLastFloorList/WallList/PillarList above.
-  S.interiorLastDoorList = doorList;
-  S.interiorLastDoorGhostList = doorGhostList; // S-1/A4 test seam — the separately-drawn doorframe ghosts
-  S.interiorLastPortalList = data.portals || [];
-
-  // KS-3 (docs/KENNEY-SOCKET-WAVE.md) — the C4 room-shell compiler builds ONE continuous polygon/wall-
-  // stem mesh from `floorList`'s own cell set, entirely INDEPENDENT of the discrete `inst.wall` cell
-  // array (its wall stem is offset from the floor polygon's own boundary contour, never built from
-  // individual wall-cell boxes) — so a kit wall module and the compiled shell's own continuous stem
-  // would occupy the SAME physical space at every kit-claimed run (found live: a visible double-wall
-  // moire in the first real capture). The compiled shell and the per-cell floorMesh/wallMesh pair below
-  // are ALREADY a mutually-exclusive either/or (itrFloorWallMeshes, a few hundred lines down) gated on
-  // ITR_ROOM_SHELL alone; useCompiledRoomShell extends that SAME gate so a board this build's own
-  // kitShellWalls/kitShellFloors actually claimed something for renders via the per-cell prism path
-  // INSTEAD (floorMesh/wallMesh, which floorList/wallList already derive from the kit-skipped
-  // inst.floor/inst.wall — the same backing my pure-data harness proved gap/overlap-free), never both
-  // systems at once. A board with nothing kit-claimed (KIT_SHELL_ENABLED off, or a shape/scale this
-  // unit's own eligibility tests exclude) is COMPLETELY UNAFFECTED — useCompiledRoomShell reduces to
-  // the bare ITR_ROOM_SHELL flag, byte-identical to pre-KS-3.
-  // `useCompiledRoomShell` is resolved above the fallback-doorframe render path so that path can omit
-  // its applied prisms when this compiler owns the socket. Its shell/per-cell exclusivity law remains
-  // unchanged here.
-
-  // ═══ ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit
-  // C4) — compiles the active room's own floor cells into a CONTINUOUS shell (one triangulated floor
-  // polygon per elevation tier + wall/riser quad-strips from boundary segments) instead of the per-
-  // cell floorMesh/wallMesh InstancedMesh pair above, when useCompiledRoomShell is true (ITR_ROOM_SHELL
-  // on AND — KS-3 — this board has nothing kit-claimed). Built straight off `floorList`/`data.doorAxes`
-  // — the SAME data interiorBuildBoard already produced; this unit never re-reads plan.cells, per the
-  // spec's own "keep interiorBuildBoard as the data producer, the compiler is render-only" instruction.
-  // Pillars/doorframe/skirt/portals/dressing/lights/standees below are UNTOUCHED (they still read
-  // S.interiorFloorTopMap, built earlier off `inst.floor` regardless of this flag).
-  let roomShellMeshes = [];
-  S.interiorLastRoomShell = null;
-  if(useCompiledRoomShell && floorList && floorList.length){
-    // doorAxes is the authoritative one-row-per-door data seam. The old frame list has THREE rows per
-    // door and is now only a non-shell fallback, so deriving apertures from it would couple the real
-    // wall socket back to the very applied geometry this path retires.
-    const shellDoorSources = (data.doorAxes && data.doorAxes.length) ? data.doorAxes : (inst.doorframe || []);
-    const doorKeySet = new Set(shellDoorSources.map((d) => Math.round(d.x) + "," + Math.round(d.z)));
-    const shellCells = floorList.map((f) => {
-      const sy = (typeof f.sy === "number" && Number.isFinite(f.sy)) ? f.sy : ITR_FLOOR_HEIGHT_FALLBACK;
-      return {
-        x: Math.round(f.x), z: Math.round(f.z),
-        tier: Math.round(sy / ROOM_SHELL_TIER_QUANTUM),
-        elevationY: ITR_FLOOR_BASE_Y + sy,
-        isDoor: doorKeySet.has(Math.round(f.x) + "," + Math.round(f.z)),
-      };
-    });
-    // BRIGHTNESS-REGRESSION FIX — THE RESIDUAL-FALLOFF TERM. Measured directly (a controlled gloom
-    // fixture, per-cell vs compiled, same torch/camera): the per-cell path's own floorList[].color
-    // (VP3 tone/jitter/valueScript/rim-vignette, now correctly carried over as vertex color above)
-    // only accounts for a SMALL fraction of why a far-room corner reads dark — corner vs mid-room
-    // color differed by just ~12% (#b3b3b3 vs #cbcbcb in the fixture) while the REAL per-cell RENDER
-    // differed by >2x. The rest is real diegetic falloff (the torch's own physical distance decay +
-    // shadow-casting geometry) that the per-cell path's discrete wall/pillar BOXES apparently occlude
-    // more completely near a room's own corner than the compiled shell's continuous (bevel-inset) wall
-    // does — a real, screenshot-measured render difference this unit closes with an explicit residual
-    // EDGE FACTOR (the directive's own "low-frequency AO... perimeter darkening", now calibrated to the
-    // measured gap rather than guessed): darkens floor/wall tone further as a cell nears the room's own
-    // true boundary (a SEPARATE, smaller-scope term than VP3's own per-cell tone — this is architecture-
-    // level "near the wall" shading, same spirit as real-time AO). Never touches geometry, only the
-    // vertex-color tint fed into the SAME floorColorAt/wallColorForSegment lookups below.
-    const ITR_ROOM_SHELL_EDGE_MIN = 0.44;
-    const ITR_ROOM_SHELL_EDGE_BAND = 2;
-    let shellMinX = Infinity, shellMaxX = -Infinity, shellMinZ = Infinity, shellMaxZ = -Infinity;
-    shellCells.forEach((c) => {
-      if(c.x < shellMinX) shellMinX = c.x; if(c.x > shellMaxX) shellMaxX = c.x;
-      if(c.z < shellMinZ) shellMinZ = c.z; if(c.z > shellMaxZ) shellMaxZ = c.z;
-    });
-    const shellEdgeFactor = (x, z) => {
-      const depth = Math.min(x - shellMinX, shellMaxX - x, z - shellMinZ, shellMaxZ - z);
-      if(depth >= ITR_ROOM_SHELL_EDGE_BAND) return 1;
-      const t = Math.max(0, depth) / ITR_ROOM_SHELL_EDGE_BAND;
-      return ITR_ROOM_SHELL_EDGE_MIN + (1 - ITR_ROOM_SHELL_EDGE_MIN) * t;
-    };
-    // wall height: ANY one raw (pre-parapet, pre-occlusion) wall instance of THIS room shares the
-    // room's own scaleDomain-derived height (ITR_ACTIVE_ROOM_ONLY renders one room at a time) — never
-    // read off the post-cutaway `wallList` below (a DIFFERENT, deliberately-deferred concern; see the
-    // parapet callback's own comment for what IS carried over and what isn't).
-    const roomWallHeight = (inst.wall && inst.wall.length && typeof inst.wall[0].sy === "number")
-      ? inst.wall[0].sy : (data.wallHeightBase || 2);
-    // PARAPET PARITY: reapplies the SAME camera-facing cutaway the per-cell path computes above
-    // (BW2-5 item 2) per COMPILED SEGMENT, so the compiled shell doesn't regress "camera sees into the
-    // room" — the one piece of the existing per-cell view-dependent machinery this unit carries
-    // forward. S-1's PER-FIGURE sightline occlusion ankle-stub/ghost-fade is NOT yet integrated with
-    // the compiled wall (a deliberately scoped gap for a fast-follow — see this unit's own report);
-    // the compiled wall renders at full (parapet-cut) height regardless of figure occlusion.
-    // wallHeightForSegment: C4.1a retires this as the parapet-cut mechanism — every segment now gets
-    // its own real full STRUCTURAL height (roomWallHeight); kept accepted by the compiler for a future
-    // genuine structural variance (a licensed low/ruined wall roll), never a camera-driven cut.
-    const wallHeightForSegment = () => roomWallHeight;
-    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): the C4.1a static near/far-yaw `upperVisibleForSegment`
-    // predicate (a whole-room-band test keyed only on S.rotationStep) is RETIRED here — replaced by a
-    // real camera-to-subject ray test against each segment's own upper volume, computed below once
-    // `shell.wallSegments` exists (wallUpperRawBlocking) and applied per-mesh through the existing
-    // itrOcclusionClassify tween engine at the assembler block. No compiler-level omission changes:
-    // the compiler still builds EVERY segment's own upper geometry unconditionally (unchanged from
-    // C4.1a) — this unit only changes how the ALREADY-BUILT upper mesh's opacity is driven.
-    // per-vertex world-aligned UVs replace the per-instance shared texture.repeat trick (BW2-3 §2b) —
-    // a (1,1) repeat variant of the SAME texture family/seed the per-cell path already resolved above
-    // (reuse, not a new material — Stage E owns actual material changes, not this unit).
-    // BRIGHTNESS-REGRESSION FIX: use floorColorForRender/wallColorForRender (LC-2's own emissive-
-    // albedo-lift-aware values, computed once above — `applyEmissiveAlbedoLift ? lifted : kit.color`),
-    // NOT the raw kit color — the per-cell path's OWN procedural texture (floorTex/wallTex, built
-    // earlier in this function) already paints at the LIFTED value on a lift-eligible realm (cosmic);
-    // building the compiled shell's texture off the raw un-lifted kit color silently dropped that lift
-    // for the shell path, which is why LC-2 (cosmic's own albedo-lift gate) read almost no improvement
-    // between lift-off and lift-on until this fix.
-    const roomShellFloorTex = materialsOn
-      ? (interiorSurfaceFileTexture("floor", kit.floorTextureFile, kit.floorTextureWrap)
-          || interiorMaterialTexture(kit.floorMaterial, floorColorForRender, data.realmId + ":floor:shell", kit.floorGrain, 1, 1))
-      : null;
-    const roomShellWallTex = materialsOn
-      ? (interiorSurfaceFileTexture("wall", kit.wallTextureFile, kit.wallTextureWrap)
-          || interiorMaterialTexture(kit.wallMaterial, wallColorForRender, data.realmId + ":wall:shell", kit.wallGrain, 1, 1))
-      : null;
-    const shellPsxOpts = { worldSurface: true, worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined };
-    // BRIGHTNESS-REGRESSION FIX (docs/ROOM-SHELL-COMPILER.md close, 2026-07-12): the integration gate
-    // (dev/verify-diegetic-light.mjs) caught the compiled shell rendering uniformly too bright — it
-    // dropped VP3's own per-cell floor/wall tone entirely (room tone/jitter/perimeter-darken/
-    // valueScript/rim-vignette AND, on the emissive realm, the albedo-lift mode-switch below).
-    // interiorBuildInstancedMesh's OWN matBase is ALWAYS white (`texture ? {map:texture} :
-    // {color:0xffffff}` — texture or no texture, file or procedural, EVERY per-cell caller stays
-    // white-base) — 100% of the tone comes from the per-instance COLOR multiplying whatever's there.
-    // An EARLIER pass of this fix tried giving the compiled material a flat kit-color BASE for non-
-    // file realms (a guess at "reproducing a double multiply") — that was wrong: it created a hard
-    // multiplicative CEILING no vertex tint could lift past, which is exactly what silently capped
-    // LC-2's own albedo-lift ratio near 1.1x regardless of how strong the lift was pushed (verified:
-    // even a 100x lift only moved cosmic's roomMean from 0.023 to 0.026 — proof the ceiling, not the
-    // lift math, was the bug). The correct fix: white base ALWAYS (matching per-cell exactly), and
-    // the per-VERTEX tint carries floorList's/wallList's OWN already-computed per-cell `.color` value
-    // verbatim (whichever branch that realm's per-cell path already resolved — RAW absolute when
-    // !fromFile && !lift, NEUTRALIZED relative when fromFile || lift; see floorList's own definition
-    // above) — never re-derived here. The emissive-albedo LIFT itself lives entirely in the TEXTURE
-    // argument (floorColorForRender/wallColorForRender, above), matching the per-cell path's own
-    // documented law. Verified: with this model, `node dev/verify-diegetic-light.mjs` after temporarily
-    // forcing ITR_ROOM_SHELL=false (the per-cell path) passes 60/0 including LC-2's own 4.45x ratio —
-    // confirming the gate itself is satisfiable and the compiled-shell numbers below are being chased
-    // against a real, achievable target, not a moving one.
-    // floorLiftOrFile/wallLiftOrFile: the EXACT same branch condition floorList/wallList already use
-    // to decide raw-absolute vs neutralized-relative — hoisted here (before the materials) because the
-    // material base color needs it too (see ITR_ROOM_SHELL_RAW_COMPENSATION below): a lift-eligible or
-    // file-textured realm (gloom, cosmic) stays WHITE base (verified: LC-2 hits 3.40x there — any flat
-    // kit-color base creates a hard multiplicative CEILING no vertex tint can lift past, which is what
-    // silently capped LC-2's own ratio near 1.1x on an earlier pass of this fix). Only the plain RAW-
-    // ABSOLUTE branch (suburb/bright-kingdom/most non-flagship realms — no file, no lift) gets the
-    // compensation, since THAT'S the branch measured to still read too bright otherwise (see below).
-    const floorLiftOrFile = floorFromFile || applyEmissiveAlbedoLift;
-    const wallLiftOrFile = wallFromFile || applyEmissiveAlbedoLift;
-    // RAW-ABSOLUTE PROCEDURAL COMPENSATION (measured, suburb/bright-kingdom): even with the vertex
-    // tint byte-identical to the per-cell path's own instance color, a realm on the RAW-ABSOLUTE
-    // branch still reads measurably brighter compiled than per-cell (suburb daylit ambient-only:
-    // roomMax 0.993/clippedFraction 0.41 vs the per-cell target 0.974/0.03) — the residual traces to
-    // the procedural canvas texture itself (roomShellFloorTex, a SEPARATELY-keyed ":shell" variant at
-    // repeat (1,1)) sampling measurably brighter on average than the per-cell path's own differently-
-    // keyed/-repeated texture, a real texture-generation quirk, not a math error in the tint chain. A
-    // material-base multiplier (not just a vertex one — verified a vertex-only version of this same
-    // compensation barely moved suburb's numbers, since the bright texture dominates) closes it; tuned
-    // against the real gate (suburb/bright-kingdom clip checks), never guessed. NEVER applied on the
-    // fromFile/lift branch (see the header comment above — that's what broke LC-2 the first time).
-    const ITR_ROOM_SHELL_RAW_COMPENSATION = 0.98;
-    const floorMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
-      roomShellFloorTex ? { map: roomShellFloorTex } : {},
-      { color: floorLiftOrFile ? "#ffffff" : itrScaleHexValue(kit.floorColor || "#888888", ITR_ROOM_SHELL_RAW_COMPENSATION), vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
-    const wallBaseColor = wallLiftOrFile ? "#ffffff" : itrScaleHexValue(kit.wallColor || "#888888", ITR_ROOM_SHELL_RAW_COMPENSATION);
-    const wallMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
-      roomShellWallTex ? { map: roomShellWallTex } : {}, { color: wallBaseColor, vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
-    // directive step 7 — risers are a deliberately DARKER material variant, darkened relative to
-    // whatever the wall's OWN base tone is above — never a second, independent darken stacked on the
-    // wall's already-tinted value. Risers don't (yet) carry their own vertex-color gradient (out of
-    // THIS fix's measured scope — no failing gate check reads riser luminance), so `vertexColors:true`
-    // here is a no-op today (every riser vertex defaults white) but kept for consistency/future AO.
-    const riserMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign(
-      roomShellWallTex ? { map: roomShellWallTex } : {},
-      { color: itrScaleHexValue(wallBaseColor, ITR_ROOM_SHELL_RISER_DARKEN), vertexColors: true, side: THREE.DoubleSide })), shellPsxOpts);
-    // floorColorAt/wallColorForSegment: reuse floorList's/wallList's OWN per-cell `.color` value
-    // VERBATIM (never re-derived) — floorList is built earlier in this function by the SAME fromFile-
-    // or-lift branch the per-cell floorMesh already consumes, so the compiled shell inherits whichever
-    // representation (raw-absolute or neutralized-relative) that realm's per-cell path actually uses,
-    // with zero risk of the two paths drifting onto different conventions. `shellEdgeFactor` (defined
-    // above, off the room's own true bounds) is an ADDITIONAL low-frequency darken this unit adds on
-    // top — measured against the per-cell path directly (a controlled gloom fixture, torch 2 cells off
-    // room center): the compiled far-corner floor luminance needed this extra term to fall in the same
-    // band as the per-cell path's own (both floorList's color AND real point-light falloff alone left
-    // a real but insufficient gap — see this unit's own report for the measured before/after numbers).
-    // The RAW-ABSOLUTE procedural compensation lives in the MATERIAL base color above (floorMat/
-    // wallMat), not here — a vertex-only version of the same compensation barely moved suburb's own
-    // numbers (the bright procedural texture dominates), so it needs to multiply the whole pipeline.
-    const shellFloorColorIndex = new Map();
-    (floorList || []).forEach((f) => shellFloorColorIndex.set(Math.round(f.x) + "," + Math.round(f.z), f.color || "#ffffff"));
-    const floorColorAt = (x, z) => itrScaleHexValue(shellFloorColorIndex.get(x + "," + z) || "#ffffff", shellEdgeFactor(x, z));
-    const wallColorSourceList = wallLiftOrFile ? itrNeutralizeInstanceColors(inst.wall, kit.wallColor) : inst.wall;
-    const shellWallColorIndex = new Map();
-    (wallColorSourceList || []).forEach((w) => shellWallColorIndex.set(Math.round(w.x) + "," + Math.round(w.z), w.color || "#ffffff"));
-    // a compiled wall SEGMENT can span several original wall cells (that's the whole point of
-    // simplification) — sample one point per cell-width along the segment's own length, each stepped
-    // HALF a unit OUTWARD (opposite the segment's own inward normal) to land on the actual wall-cell
-    // ring (one unit-grid ring outside the floor boundary, same spacing convention as the floor
-    // cells), then average — a flat per-segment tint (walls don't need an interior gradient; they
-    // already sit at the room's own edge by construction).
-    const wallColorForSegment = (segMeta) => {
-      const n = segmentNormal({ a: segMeta.a, b: segMeta.b });
-      const dx = segMeta.b.x - segMeta.a.x, dz = segMeta.b.z - segMeta.a.z;
-      const steps = Math.max(1, Math.round(Math.hypot(dx, dz)));
-      let sr = 0, sg = 0, sb = 0, cnt = 0;
-      for(let s = 0; s < steps; s++){
-        const t = (s + 0.5) / steps;
-        const px = segMeta.a.x + dx * t, pz = segMeta.a.z + dz * t;
-        const wx = Math.round(px - n.x * 0.5), wz = Math.round(pz - n.z * 0.5);
-        const rawHex = shellWallColorIndex.get(wx + "," + wz);
-        if(rawHex){
-          const c = new THREE.Color(itrScaleHexValue(rawHex, shellEdgeFactor(wx, wz)));
-          sr += c.r; sg += c.g; sb += c.b; cnt++;
-        }
-      }
-      if(!cnt) return "#ffffff";
-      return "#" + new THREE.Color(sr / cnt, sg / cnt, sb / cnt).getHexString();
-    };
-    // STAGE-C3b (docs/STAGE-C.md C3b addendum): `data.activeRoomShape` is theater-interior.js's own
-    // sibling of `focusRect` (interiorBuildBoard's own `plan.rooms.find` lookup) — the active room's
-    // STAGE-C C3 `shape` tag, forwarded VERBATIM. compileRoomShellData itself decides what (if
-    // anything) to do with it: 'circle'/'ellipse' round the boundary, 'octagon'/'L'/'T'/'cross' chamfer
-    // any real staircase run into a diagonal face, 'rect'/'cave'/null take the untouched simplify path
-    // — see theater-room-mesh.js's own `opts.smoothShape` doc for the full per-tag behavior.
-    // C4.1a: the compiler always builds EVERY segment's own upper geometry (upperVisibleForSegment is
-    // NOT threaded into the compiler call here — see this unit's own comment at that const's
-    // declaration above for why); the compiler's `opts.upperVisibleForSegment` stays available for a
-    // genuine STRUCTURAL omission a future caller might license, never this camera-driven one.
-    const shell = compileRoomShell(shellCells, {
-      wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
-      floorColorAt, wallColorForSegment, smoothShape: data.activeRoomShape,
-      // UNIT G2: the migration switch pass-through — default "legacy", test-seam-settable via
-      // window.Theater._setRoomShellPolygonKernel (see that setter's own comment, below).
-      roomShellPolygonKernel: ROOM_SHELL_POLYGON_KERNEL_FLAG,
-    });
-    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): the REQUIRED subject set for the wall-upper ray test —
-    // player/primaryThreat/objective/focalLight, straight off THIS build's own ShotPlan anchors (the
-    // SAME anchors the camera composition a few hundred lines up this function already scored against
-    // — never re-derived here). ShotPlan anchors carry only ground-plane {x,z} (no per-creature true
-    // height) — OCCLUSION_SUBJECT_EYE_HEIGHT is the SAME torso/eye-level proxy theater-shot.js's own
-    // scoring path (penaltyHardOcclusionArea) uses, so runtime and scoring never drift onto two
-    // different subject-height conventions. The spec's 4th required subject ("focal interaction") has
-    // no dedicated ShotPlan anchor yet — focalLight (the dominant practical, the closest existing
-    // analog) stands in until a real one exists; absent a ShotPlan entirely (shotCompose off, or a
-    // narrow harness), subjects stays empty and every upper segment simply reads full/opaque — an
-    // honest "nothing known to protect visibility of" degrade, matching occlusionFurnitureOn's own
-    // ShotPlan-gated convention a few hundred lines up.
-    const wallOcclusionAnchors = S.lastShotPlan ? S.lastShotPlan.anchors : null;
-    const wallOcclusionAnchorSubjects = wallOcclusionAnchors
-      ? ["player", "primaryThreat", "objective", "focalLight"]
-          .map((k) => wallOcclusionAnchors[k]).filter(Boolean)
-          .map((a) => ({ x: a.x, z: a.z, y: OCCLUSION_SUBJECT_EYE_HEIGHT }))
-      : [];
-    // P3-1d (docs/PHASE-3-WAVE-1-SPECS.md P3-1d): extend the ray-test subject list beyond the 4
-    // required ShotPlan anchors to EVERY mounted figure (data.pieces — the SAME source
-    // itrPieceSightPoints reads, raw world {cellX,cellY}, matching wallSegments'/occlusionCameraPos's
-    // own raw-world coordinate frame — never the cx/cz-offset frame itrPieceSightPoints itself returns).
-    // Anchor subjects come first and are never dropped by the cap (they're required by C4.1b's own
-    // decision); only the ADDITIONAL non-anchor figures are capped. No-silent-caps law: log once per
-    // build when a room's mounted-figure count actually exceeds the cap.
-    const OCCLUSION_SUBJECT_CAP = 24; // perf cap on non-anchor occlusion ray-test subjects per board build
-    const mountedFigureSubjects = (data.pieces || [])
-      .filter((p) => p && p.slug)
-      .map((p) => ({ x: p.cellX || 0, z: p.cellY || 0, y: OCCLUSION_SUBJECT_EYE_HEIGHT }));
-    if(mountedFigureSubjects.length > OCCLUSION_SUBJECT_CAP){
-      console.warn("[wallUpperOcclusion] mounted-figure subjects", mountedFigureSubjects.length,
-        "exceed OCCLUSION_SUBJECT_CAP", OCCLUSION_SUBJECT_CAP, "— truncating (no silent cap)");
-    }
-    const wallOcclusionSubjects = wallOcclusionAnchorSubjects.concat(
-      mountedFigureSubjects.slice(0, OCCLUSION_SUBJECT_CAP)
-    );
-    const wallUpperRayBlocking = wallUpperBlockingSet({
-      camera: occlusionCameraPos, subjects: wallOcclusionSubjects, wallSegments: shell.wallSegments
-    });
-    // P3-1d: restore BW2-5's whole-room CAMERA-SIDE upper-band suppression, retired by C4.1b when it
-    // replaced C4.1a's static near/far-yaw `upperVisibleForSegment` (see git 8d1b94f5) with the
-    // exclusive-anchor ray-fade above. wallUpperCameraSideBlockingSet (theater-shot.js, pure) reproduces
-    // that EXACT retired geometry test — camera-side segments within the active room's band drop opaque
-    // upper volume regardless of any specific occluded subject — keyed on shell.wallSegments' own
-    // indices (ownerSegIndex) so it composes with the C4.1b ray-fade above rather than replacing it: a
-    // segment fades if EITHER test flags it (camera-side band suppression ∪ specific-occluder ray
-    // test). The compiler's `upperVisibleForSegment` seam (declared, unused, above) stays untouched —
-    // this is render-time suppression of an already-built mesh's opacity, never compiler-level geometry
-    // omission.
-    const wallUpperCameraSideBlocking = wallUpperCameraSideBlockingSet({
-      focusRect: data.focusRect, wallSegments: shell.wallSegments, cx, cz,
-      yawDeg: (S.rotationStep * 90) + CAM_YAW_OFFSET_DEG
-    });
-    // wallUpperRawBlocking: the UNION consumed by the assembler block below — a segment fades if either
-    // treatment says so (P3-1d Decision item 2: "the two treatments coexist").
-    const wallUpperRawBlocking = new Set([...wallUpperRayBlocking, ...wallUpperCameraSideBlocking]);
-    // CL-R3a (Adam's 2026-07-23 camera-side wall-omission ruling, RULED FOR TEST — verbatim authority
-    // ART-DIRECTION-CANON "Camera-side wall omission"; test spec CLAYROOM-RESET-LADDER §CL-R3a).
-    // Under the FIXED production camera, wallUpperCameraSideBlockingSet's output is a STATIC fact of
-    // the layout (focusRect + wallSegments + a fixed yaw — nothing per-frame in it), so the ruling
-    // promotes it from a fade TARGET to a compile-time build decision: an omitted segment builds NO
-    // upper volume at all (the stem below stays — the mechanics truth-marker). The ray-blocking set
-    // keeps driving the fade for segments that DO build (dynamic piece-occlusion — a pillar between
-    // camera and a figure — is still a render-time question). Gated by clayWallOmissionOn(): ON by
-    // default in the clay fixture (the ruled test bed), OFF in normal play until the test passes and
-    // Adam promotes the ruling; ?wallomit=1/0 overrides either way for the A/B. The decision set is
-    // recorded on S.wallOmissionReport (deterministic, exposed via _wallOmissionForTest) so every
-    // capture receipt names exactly which segments were omitted and by which rule/version.
-    const wallOmissionActive = (typeof clayWallOmissionOn === "function") && clayWallOmissionOn();
-    S.wallOmissionReport = {
-      ruleId: "camera-side-wall-omission", version: 1, active: wallOmissionActive,
-      omitted: [], built: []
-    };
-    if(shell.floorGeometry){
-      const m = new THREE.Mesh(shell.floorGeometry, floorMat);
-      m.position.set(-cx, 0, -cz);
-      m.receiveShadow = true;
-      m.userData.interiorKind = "room-shell-floor";
-      roomShellMeshes.push(m);
-    }
-    // C4.1a WALL VOLUME meshes (docs/WALL-VOLUMES-PRACTICALS.md) — REPLACE the old single wallGeometry
-    // mesh (deprecated stem-inner-face-only bundle at shell.wallGeometry, left unconsumed here so it
-    // never double-renders against the real stem mesh below) with three real bodies: an always-opaque
-    // STEM, one independently-visible UPPER mesh per wall segment, and an optional TRIM mesh.
-    let wallStemMesh = null;
-    if(shell.wallStemGeometry){
-      wallStemMesh = new THREE.Mesh(shell.wallStemGeometry, wallMat);
-      wallStemMesh.position.set(-cx, 0, -cz);
-      wallStemMesh.castShadow = true; wallStemMesh.receiveShadow = true;
-      wallStemMesh.userData.interiorKind = "room-shell-wall-stem";
-      roomShellMeshes.push(wallStemMesh);
-    }
-    // C4.1b (docs/WALL-VOLUMES-PRACTICALS.md): per-segment mid (world x,z) lookup off shell.wallSegments
-    // (the SAME a/b/tier/height metadata list `mountSlots`/wallUpperMeshes key their own ownerSegIndex
-    // against) — used to build this segment's persistent occlusion-fade id, never to rebuild geometry.
-    const wallUpperMeshList = [];
-    (shell.wallUpperMeshes || []).forEach((entry) => {
-      if(!entry.geometry) return;
-      // CL-R3a omission (see the ruling note above wallOmissionReport): camera-side segments build
-      // no upper AT ALL when the ruling is active — not a mesh faded to 0.08, no mesh. This also
-      // stops the ghost-shadow artefact (THREE's shadow pass ignores opacity, so a faded upper still
-      // cast a full shadow; an omitted one cannot). The stem/trim meshes are untouched.
-      const segMidSeg = shell.wallSegments[entry.ownerSegIndex];
-      const segMid = segMidSeg ? { x: (segMidSeg.a.x + segMidSeg.b.x) / 2, z: (segMidSeg.a.z + segMidSeg.b.z) / 2 } : null;
-      if(wallOmissionActive && wallUpperCameraSideBlocking.has(entry.ownerSegIndex)){
-        S.wallOmissionReport.omitted.push({ segIndex: entry.ownerSegIndex, mid: segMid });
-        return;
-      }
-      // built entries carry their mids too (door-tranche receipt gap: built:[0,1,4] was unanswerable)
-      S.wallOmissionReport.built.push({ segIndex: entry.ownerSegIndex, mid: segMid });
-      // C4.1b: each upper mesh gets its OWN cloned material — never the shared `wallMat` the stem/trim
-      // meshes use. Independent per-segment opacity is the entire point of C4.1a's own "one mesh per
-      // segment" decision (theater-boot.js:8907's own comment); sharing `wallMat` here would make
-      // itrOcclusionClassify's tween mutate EVERY upper/stem/trim mesh's opacity at once instead of
-      // just this one segment's. `transparent:true` is set unconditionally (not only while fading) —
-      // the live tween (S.tweens/tickTweens) mutates this exact material's opacity BETWEEN board
-      // rebuilds with no further material swap, so it must already be capable of rendering translucent
-      // the instant a fade starts, not just after the next rebuild happens to notice it. A plain
-      // opacity-only material change — no PBR/bloom work, per this unit's own scope.
-      const upperMat = wallMat.clone();
-      upperMat.transparent = true;
-      const m = new THREE.Mesh(entry.geometry, upperMat);
-      m.position.set(-cx, 0, -cz);
-      m.castShadow = true; m.receiveShadow = true;
-      m.userData.interiorKind = "room-shell-wall-upper";
-      m.userData.ownerSegIndex = entry.ownerSegIndex;
-      const ownerSeg = shell.wallSegments[entry.ownerSegIndex];
-      const mid = ownerSeg ? { x: (ownerSeg.a.x + ownerSeg.b.x) / 2, z: (ownerSeg.a.z + ownerSeg.b.z) / 2 } : { x: 0, z: 0 };
-      // C4.1b: camera-relative per-segment fade — REPLACES C4.1a's static near/far `.visible` toggle.
-      // `id` is keyed on the segment's own world midpoint (itrOcclusionIdFor's established position-
-      // keyed convention every other occluder kind already uses, e.g. "wall"/"doorframe"/"furniture"
-      // above) so the SAME physical wall keeps its persistent fade-state entry across a rebuild even if
-      // compileRoomShellData's own segment array order ever shifts. `rawBlocking` comes straight from
-      // wallUpperRawBlocking (computed once per rebuild, above, off THIS build's real camera position +
-      // required subjects) — itrOcclusionClassify applies the SAME hysteresis+tween engine the wall/
-      // pillar/door/furniture occlusion passes already use (docs/WALL-VOLUMES-PRACTICALS.md C4.1b's own
-      // "reuse itrOcclusionClassify" decision). `.visible` stays permanently true — only opacity ever
-      // changes (this unit's own "never toggle .visible hard once tweening" rule); the stem mesh (built
-      // above, untouched) never enters this classify pass at all, so it can never fade.
-      const id = itrOcclusionIdFor("wall-upper", mid.x, mid.z);
-      const fadeEntry = itrOcclusionClassify(id, wallUpperRawBlocking.has(entry.ownerSegIndex), occlusionHoldPrior);
-      fadeEntry.materials = [upperMat];
-      upperMat.opacity = fadeEntry.opacity;
-      m.visible = true;
-      roomShellMeshes.push(m);
-      // E0-1: `fadeEntry` rides along too — the interiorBuildLights call site (below, same function
-      // scope) appends each wall-mounted fixture's own [bodyClone, emitterMat] into this EXACT entry's
-      // `.materials` array so a fixture tweens in lockstep with the wall segment it's mounted on,
-      // never a second/parallel opacity source.
-      wallUpperMeshList.push({ mesh: m, ownerSegIndex: entry.ownerSegIndex, fadeEntry });
-    });
-    let wallTrimMesh = null;
-    if(shell.wallTrimGeometry){
-      wallTrimMesh = new THREE.Mesh(shell.wallTrimGeometry, wallMat);
-      wallTrimMesh.position.set(-cx, 0, -cz);
-      wallTrimMesh.castShadow = true; wallTrimMesh.receiveShadow = true;
-      wallTrimMesh.userData.interiorKind = "room-shell-wall-trim";
-      roomShellMeshes.push(wallTrimMesh);
-    }
-    if(shell.riserGeometry){
-      const m = new THREE.Mesh(shell.riserGeometry, riserMat);
-      m.position.set(-cx, 0, -cz);
-      m.castShadow = true; m.receiveShadow = true;
-      m.userData.interiorKind = "room-shell-riser";
-      roomShellMeshes.push(m);
-    }
-    // diagnostics + the logical cell<->triangle map (directive step 9) — dev/verify-room-shell-
-    // render.mjs's own primitive-count/bevel/riser assertions read this, never decomposing geometry.
-    // C4.1a additions: wallStemMesh/wallUpperMeshes/wallTrimMesh/mountSlots — E0 (a later unit) parents
-    // wall-mounted fixtures to `mountSlots`; C4.1b re-targets `wallUpperMeshes[].mesh`'s own opacity.
-    S.interiorLastRoomShell = {
-      meta: shell.meta, cellTriangleMap: shell.cellTriangleMap, apertures: shell.apertures,
-      wallSegments: shell.wallSegments, riserSegments: shell.riserSegments, floorTiers: shell.floorTiers,
-      wallStemMesh, wallUpperMeshes: wallUpperMeshList, wallTrimMesh, mountSlots: shell.mountSlots,
-      // UNIT G2 — null except in oss-compare/oss mode (see compileRoomShellData's own return-assembly
-      // comment); exposed here so dev/verify-room-shell-oss.mjs can read live parity diagnostics off
-      // window.Theater._interiorRoomShellForTest() the same way every other room-shell test seam does.
-      parityDiagnostics: shell.parityDiagnostics, ossDiagnostics: shell.ossDiagnostics,
-    };
-  }
-  // BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1, superseded by docs/DIEGETIC-LIGHT.md unit S-1
-  // (Adam's live steer, 2026-07-11): DYNAMIC CUTAWAY for pillar prisms — a pillar between the camera
-  // and a mounted standee. Recomputed every board build (camera refit, BW2-1's own fitMode changes,
-  // AND every standee move-step — a move-step is itself a data.pieces change that forces a fresh
-  // setInteriorBoard call, so "recompute on move-step" falls out of the existing dirty-key rebuild
-  // path for free, no separate hook needed). WAS a pure height stub to a KNEE (ITR_PILLAR_STUB_FRAC's
-  // old 0.3 — Adam's own bug report: "columns and walls still obscure figures" — the old knee (0.72
-  // world units at the 2.4 default) sat BELOW a typical torso sight point, so it never actually
-  // cleared the sightline it claimed to). NOW: an offending instance drops to a genuinely-low ANKLE
-  // stub (itrOcclusionAnkleHeight, same shared deriver the wall path above now also uses) PLUS a ~5%
-  // GHOST of the removed upper portion (itrSplitOccluderForAnkleGhost) so the column still reads as
-  // "there" — see pillarGhostMeshes below, its own (small, occlusion-only) draw call.
-  let pillarList = inst.pillar;
-  let pillarGhostList = [];   // flat descriptor list — S.interiorLastPillarGhostList's own established shape
-  let pillarGhostBuild = [];  // {inst, fadeEntry} pairs — drives the individually-tweened ghost meshes below
-  if(!ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && pillarList && pillarList.length && itrSightPoints.length){
-    const mask = itrPillarCutawayMask(pillarList, occlusionCameraPos, itrSightPoints, cx, cz);
-    const pillarAnkleH = itrOcclusionAnkleHeight(data.wallHeightBase);
-    pillarList = pillarList.map(function(pinst, i){
-      const id = itrOcclusionIdFor("pillar", pinst.x, pinst.z, pinst.yBase);
-      const entry = itrOcclusionClassify(id, !!mask[i], occlusionHoldPrior);
-      if(!entry.fading) return pinst;
-      const split = itrSplitOccluderForAnkleGhost(pinst, pillarAnkleH);
-      if(split.ghost){
-        pillarGhostList.push(split.ghost);
-        pillarGhostBuild.push({ inst: split.ghost, fadeEntry: entry });
-      }
-      return split.stub;
-    });
-  }
-  // BW2-1b — harness diagnostic: the FINAL (post-cutaway) pillar instance list, byte-identical shape
-  // to data.instances.pillar (same length — a stub only rewrites `sy`/`yBase`, never adds/removes an
-  // entry, preserving U3's own draw-call budget for the MAIN mesh) so a harness can assert stub-applied
-  // vs full-height per instance without decomposing InstancedMesh matrices.
-  S.interiorLastPillarList = pillarList;
-  S.interiorLastPillarGhostList = pillarGhostList; // S-1 test seam — the separately-drawn ghosts
-  // BW2-5 THE COLUMN DEMOTION: pillar instances split by `profile` (round gets its own cylinder
-  // mesh) — fed the POST-CUTAWAY list so the sightline stubs apply to every profile alike.
-  const pillarMeshes = interiorBuildPillarMeshes(
-    pillarTex ? itrNeutralizeInstanceColors(pillarList, kit.wallColor) : pillarList,
-    cx, cz, variant, pillarTex);
-  // STAGE-A A4: ONE small ghost mesh PER blocking pillar (never a big shared material carrying every
-  // ghost of a kind at one flat alpha) — see itrBuildOcclusionGhostPillarMeshes's own header.
-  const pillarGhostGroup = pillarGhostBuild.length ? itrBuildOcclusionGhostPillarMeshes(
-    pillarGhostBuild.map(function(pair){
-      return {
-        inst: pillarTex ? itrNeutralizeInstanceColors([pair.inst], kit.wallColor)[0] : pair.inst,
-        fadeEntry: pair.fadeEntry
-      };
-    }),
-    cx, cz, variant, pillarTex) : null;
-  const pillarGhostMeshes = pillarGhostGroup ? [pillarGhostGroup] : [];
-  // GR4 (docs/GRAPHICS-ENGINE.md build unit GR4): the diorama edge skirt — data.skirt (src/ui/theater-
-  // interior.js's interiorBuildBoard, GR4 addition), a sibling of `instances` (never counted toward the
-  // "4 known instance kinds" data-shape check — see that function's own doc comment). Untextured (flat
-  // darkened color, same as pillar/doorframe) — a texture would be wasted detail on a band the camera
-  // only ever sees edge-on.
-  const skirtMesh = interiorBuildInstancedMesh(data.skirt, cx, cz, null, variant, "skirt");
-  // STAGE-A A1 (docs/STAGE-A.md): DARKNESS PORTAL cards — data.portals (src/ui/theater-interior.js's
-  // interiorBuildBoard, A1 addition), a sibling of `instances` same as skirt just above (never counted
-  // toward the "4 known instance kinds" data-shape check). Untextured flat dark slab (the card IS a
-  // flat void-color read, not a surface that wants grain) — null texture, same convention skirt uses.
-  const portalMesh = interiorBuildInstancedMesh(itrApplyDoorMounts(data.portals, doorMountMap), cx, cz, null, variant, "portal");
-  // BW2-5: furniture-class blocker volumes + wall-hang extrusion props (THE PROP PERSPECTIVE LAW) —
-  // built further below (after dressing) since both read S.interiorFloorTopMap; declared here so the
-  // mesh-count/group-add sweep stays one place. See interiorBuildFurniture/interiorBuildWallProps.
-  // S-1 OCCLUSION FADE: the ghost overlays (wallGhostMesh, pillarGhostMeshes) are ADDITIONAL draw
-  // calls over the pre-S-1 budget — only ever created when at least one instance of that kind is
-  // actually occluding a figure this frame (both are null/empty otherwise, so a board with no
-  // occlusion in play costs exactly what it did before this unit).
-  // ROOM-SHELL COMPILER: when ITR_ROOM_SHELL is on and a shell actually compiled, the continuous
-  // floor/wall/riser meshes REPLACE the per-cell floorMesh/wallMesh/wallGhostMesh pair above (never
-  // both — that would double-render the same surfaces). doorMesh/skirtMesh/portalMesh/pillarMeshes
-  // stay unconditional either way (this unit's scope is floor/wall/riser geometry only).
-  const itrFloorWallMeshes = (useCompiledRoomShell && roomShellMeshes.length) ? roomShellMeshes : [floorMesh, wallMesh, wallGhostMesh];
-  const itrAllInteriorMeshes = itrFloorWallMeshes.concat([doorMesh, doorGhostMesh, skirtMesh, portalMesh]).concat(pillarMeshes).concat(pillarGhostMeshes);
-  itrAllInteriorMeshes.forEach((mesh) => { if(mesh) S.interiorGroup.add(mesh); });
-  S.interiorMeshCount = itrAllInteriorMeshes.filter(Boolean).length;
-
-  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: real environmental light sources (data.lights, emitted
-  // by src/ui/theater-interior.js's interiorBuildBoard) — realm-flavored PointLights + their own
-  // visible physical FIXTURES (E0, WALL-VOLUMES-PRACTICALS.md), capped at INTERIOR_SHADOW_CASTER_CAP
-  // shadow-casters.
-  // LIGHT-CLOSE: isBrightRealm (hoisted above) tells interiorBuildLights whether THIS board's profile
-  // is a bright/sky-lit one, so it can suppress torch/lamp practicals at the light seeds (§4.7).
-  // E0 — Seam for wall mounts: thread C4.1a's own mount-slot data (S.interiorLastRoomShell, built by
-  // the shell block above) in so a wall-mount light can snap to its nearest slot; absent (ITR_ROOM_SHELL
-  // off, or a shell that produced zero slots) degrades every wall-mount fixture to floor, defensively.
-  // Wall-omission ruling clause 5 (ART-DIRECTION-CANON, Adam 2026-07-23): "meaningful wall-mounted
-  // content biases to camera-visible walls at placement time — a solver constraint, never a renderer
-  // patch." Found live in the door tranche: the re-pinned walkId re-rolled the room's torch onto the
-  // SOUTH wall, which the omission ruling doesn't build — the fixture hung mid-air on a wall that
-  // isn't there. Slots on omitted segments are filtered out ahead of nearest-slot resolution
-  // (S.wallOmissionReport was just written by the shell block above, same rebuild). If the filter
-  // would empty the list entirely (cannot happen while far walls always build — defensively), the
-  // unfiltered list stands rather than degrading every wall fixture to floor.
-  let mountSlotsForPlacement = S.interiorLastRoomShell ? S.interiorLastRoomShell.mountSlots : null;
-  if(mountSlotsForPlacement && S.wallOmissionReport && S.wallOmissionReport.active && S.wallOmissionReport.omitted.length){
-    const omittedSegs = new Set(S.wallOmissionReport.omitted.map((o) => o.segIndex));
-    const visibleSlots = mountSlotsForPlacement.filter((sl) => sl && !omittedSegs.has(sl.ownerSegIndex));
-    if(visibleSlots.length) mountSlotsForPlacement = visibleSlots;
-  }
-  const wallMountData = S.interiorLastRoomShell
-    ? { mountSlots: mountSlotsForPlacement, wallSegments: S.interiorLastRoomShell.wallSegments }
-    : null;
-  const lightsBuilt = preserveInteriorLighting
-    ? preservedLightsBuilt
-    : interiorBuildLights(data.lights, cx, cz, data.realmId, S.interiorFloorTopMap, data.pieces, isBrightRealm, wallMountData);
-  S.interiorGroup.add(lightsBuilt.group);
-  S.interiorLightsBuilt = lightsBuilt;
-  S.interiorLightTargets = lightsBuilt.flickerTargets;
-  S.interiorLightingKey = nextLightingKey;
-  S.interiorShadowCasterCount = lightsBuilt.casters;
-  S.interiorLightCount = (data.lights || []).length;
-  // E0-1 (docs/PHASE-3-WAVE-1-SPECS.md) — WALL-FIXTURE OCCLUSION-FADE LINKAGE: this is the ONE call
-  // site with BOTH the just-built wall fixtures (lightsBuilt.wallFixtureFadeTargets) AND the per-
-  // segment fadeEntry map (S.interiorLastRoomShell.wallUpperMeshes, built by the room-shell block
-  // above — same ownerSegIndex convention) in scope. For each wall-mounted fixture, find its owning
-  // segment's ALREADY-CREATED fadeEntry and APPEND (never overwrite — the wall segment's own upper
-  // mesh material already occupies `fadeEntry.materials`) the fixture's [bodyClone, emitterMat] pair,
-  // syncing them to the entry's CURRENT opacity immediately (not just on the next tween tick) so a
-  // fixture built mid-fade never floats at opacity 1 for one frame. A fixture whose ownerSegIndex has
-  // no matching entry (a room-shell-less board, or ITR_ROOM_SHELL off) is simply not registered — the
-  // spec's own defensive "unaffected" case.
-  const wallUpperFadeEntries = (S.interiorLastRoomShell && S.interiorLastRoomShell.wallUpperMeshes) || [];
-  (lightsBuilt.wallFixtureFadeTargets || []).forEach((target) => {
-    const owner = wallUpperFadeEntries.find((e) => e.ownerSegIndex === target.ownerSegIndex);
-    if(!owner || !owner.fadeEntry) return;
-    const fadeEntry = owner.fadeEntry;
-    if(!fadeEntry.materials) fadeEntry.materials = [];
-    target.materials.forEach((mat) => {
-      if(!mat) return;
-      fadeEntry.materials.push(mat);
-      mat.opacity = fadeEntry.opacity;
-    });
-  });
-  // L-1 (DIEGETIC-LIGHT.md) harness diagnostic, same read-only convention as interiorShadowCasterCount
-  // above: how many light-shaft cones actually mounted this call (0 whenever ITR_LIGHT_CONE_ENABLED is
-  // false, since interiorBuildLights skips both the mount AND the flickerTargets.cone assignment then).
-  S.interiorLightConeCount = lightsBuilt.flickerTargets.filter((t) => t.cone).length;
-  // LIGHT-CLOSE — harness diagnostic, same convention: how many glow discs actually mounted this call
-  // (0 for every light on a bright/sky-lit profile once ITR_BRIGHT_SUPPRESS_PRACTICALS suppresses them).
-  S.interiorLightGlowCount = lightsBuilt.glowCount;
-  // VP6 item 2: join the interior lights (+ their emissive markers) onto the shared flicker channel —
-  // startLightFlicker tore down any board-level flicker a moment ago (applyLightProfile above always
-  // calls stopLightFlicker first), so this call is the one that actually starts ticking for an interior
-  // board with any lights at all; a light-less room (lightsBuilt.flickerTargets === []) is a clean no-op
-  // (startLightFlicker's own interval self-stops when both lists are empty).
-  if(!preserveInteriorLighting && lightsBuilt.flickerTargets.length){
-    startLightFlicker(INTERIOR_LIGHT_FLICKER_AMPLITUDE, lightsBuilt.flickerTargets);
-  }
-
-  // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: creature/PC billboard sprites standing in the room
-  // (data.pieces, a plain field the caller sets directly on the board object — independent of
-  // interiorBuildBoard, same as data.lightProfile above).
-  // CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b): the solid prisms a standee's own footprint
-  // must clear — wallList/pillarList are the SAME post-cutaway lists just mounted above (cutaway only
-  // ever changes a stubbed instance's sy/height, never its sx/sz footprint, so testing against the
-  // post-cutaway lists is byte-identical to testing against the pre-cutaway ones on the XZ axes this
-  // check actually reads). daisTop rides per BW2-5 (finale preferDais bias).
-  const piecesBuilt = interiorBuildPieces(data.pieces, cx, cz, data.wallHeightBase, S.interiorFloorTopMap, kit.trimColor, [wallList, pillarList, inst.doorframe], data.daisTop);
-  S.interiorGroup.add(piecesBuilt.group);
-  S.interiorPiecesResolved = piecesBuilt.resolved;
-  S.interiorPiecesRequested = piecesBuilt.requested;
-
-  // VQ2-RESPEC.md §4 unit F1 — the combat floor-grid overlay (data.combat.legalCells, stamped by
-  // render.js's theaterStageSync onto the board before this call — see theaterCombatRoomCellsFor,
-  // src/engine/theater-data.js). A pure DECAL layer over the room's own real floor (never new wall/
-  // light/material INSTANCES — the "zero new architecture at combat start" gate reads S.interiorGroup's
-  // wall/floor/light child counts, none of which this touches); mounted as a child of S.interiorGroup
-  // so it's swept by the SAME clearGroup(S.interiorGroup) call above every rebuild, combat or not —
-  // combat_end's next non-combat render (data.combat absent) simply never re-adds it, the exact
-  // "combat end restores exactly" behavior for free, no separate teardown call needed.
-  if(data.combat && Array.isArray(data.combat.legalCells) && data.combat.legalCells.length){
-    S.interiorGroup.add(f1BuildCombatGrid(data.combat.legalCells, cx, cz, S.interiorFloorTopMap));
-  }
-  // BW2-1b — harness-facing diagnostic (mirrors S.interiorDressingWorldPositions, below): one entry
-  // per MOUNTED standee, its REAL world position read straight off the group THREE actually placed
-  // (post CLIP MARGIN nudge) — so an occlusion/clip-margin harness asserts against the mount, never a
-  // parallel formula that could drift from it. piecesBuilt.group's own children are the per-piece
-  // groups (tagged userData.interiorTrueScale, interiorBuildPieces' own convention) FOLLOWED by the
-  // sibling blobGroup (untagged) — filtering on the tag excludes the blob group cleanly.
-  S.interiorPiecesWorldPositions = piecesBuilt.group.children
-    .filter((g) => g.userData && g.userData.interiorTrueScale)
-    .map((g) => ({ x: g.position.x, y: g.position.y, z: g.position.z, height: g.userData.interiorHeight, width: g.userData.interiorWidth, unitId: g.userData.unitId || null }));
-
-  // GRAPHICS-ENGINE.md GR2 §D: dressing cards (data.dressing, src/engine/place-dressing.js's
-  // dressPlan output — a plain field the caller sets directly on the board object, same convention
-  // as data.pieces/data.lightProfile above).
-  const dressingGroup = interiorBuildDressing(data.dressing, cx, cz, S.interiorFloorTopMap, [wallList, pillarList, inst.doorframe]);
-  S.interiorGroup.add(dressingGroup);
-  S.interiorDressingCount = (data.dressing || []).length;
-  // harness-facing diagnostic (dev/verify-dungeon-dressing.mjs check 4: "render mount... origin-
-  // shifted correctly") — one entry per mounted card, its REAL world position read straight off the
-  // group THREE actually placed (never recomputed by the test), so the check proves the mount, not a
-  // parallel formula that could drift from it.
-  S.interiorDressingWorldPositions = dressingGroup.children.map((g) => ({
-    slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z
-  }));
-
-  // BEAUTY-WAVE-2.md BW2-5: furniture-class blocker volumes (data.furniture) + wall-hang extrusion
-  // props (data.wallProps, THE PROP PERSPECTIVE LAW) — both siblings of data.dressing, built off the
-  // SAME roll (see interiorBuildDressing's own skip-blocker/wall-hang comment just above).
-  // STAGE-A A4: furniture joins the occlusion candidate set whenever THIS shot's own ShotPlan actually
-  // classifies furniture as a blocker kind (occlusionFurnitureOn, computed once near occlusionCameraPos
-  // above) — the classify callback runs itrFurnitureOcclusionMask's own per-entry AABB test through the
-  // SAME itrOcclusionClassify persistent-state+hysteresis path wall/pillar already use, per instance.
-  let furnitureFadeById = null; // Map(id -> entry), id = itrOcclusionIdFor("furniture", f.x, f.y)
-  if(occlusionFurnitureOn && !ITR_OCCLUSION_FADE_DISABLED_FOR_TEST && occlusionCameraPos && itrSightPoints.length && (data.furniture || []).length){
-    const furnitureMask = itrFurnitureOcclusionMask(data.furniture, cx, cz, S.interiorFloorTopMap, occlusionCameraPos, itrSightPoints);
-    furnitureFadeById = new Map();
-    (data.furniture || []).forEach(function(f, i){
-      const id = itrOcclusionIdFor("furniture", f.x, f.y);
-      furnitureFadeById.set(id, itrOcclusionClassify(id, !!furnitureMask[i], occlusionHoldPrior));
-    });
-  }
-  const furnitureGroup = interiorBuildFurniture(data.furniture, cx, cz, S.interiorFloorTopMap,
-    furnitureFadeById ? function(f){
-      const entry = furnitureFadeById.get(itrOcclusionIdFor("furniture", f.x, f.y));
-      return entry && entry.fading ? entry : null;
-    } : null);
-  S.interiorGroup.add(furnitureGroup);
-  S.interiorFurnitureCount = (data.furniture || []).length;
-  const wallPropsGroup = interiorBuildWallProps(data.wallProps, cx, cz, S.interiorFloorTopMap, data.wallHeightBase);
-  S.interiorGroup.add(wallPropsGroup);
-  S.interiorWallPropsCount = (data.wallProps || []).length;
-  S.interiorWallPropsWorldPositions = wallPropsGroup.children.map((g) => {
-    // P-2 addendum: the wall-contact AO quad is the extrusion group's 2nd child (addWallContactAO adds
-    // it AFTER the art mesh) — surfacing its local z here lets a harness confirm the AO still hugs the
-    // (possibly repositioned) back face without a separate traverse-the-whole-scene seam.
-    const aoChild = g.children.find((c) => c.userData && c.userData.wallContactAO);
-    return {
-      slug: g.userData && g.userData.dressingSlug, x: g.position.x, y: g.position.y, z: g.position.z,
-      rotY: g.rotation.y, depth: g.children[0] && g.children[0].geometry && g.children[0].geometry.parameters
-        && g.children[0].geometry.parameters.depth,
-      aoPresent: !!aoChild, aoZ: aoChild ? aoChild.position.z : null
-    };
-  });
-
-  // docs/STAGE-D-WAVE-SPECS.md D4 — data.interactables is a plain field the caller sets directly on
-  // the board object (src/engine/theater-data.js's trayFrom — same convention as data.pieces/
-  // data.dressing/data.wallProps above). D4 scope: door archetype only (see
-  // interiorBuildInteractables' own header for the full render-keystone contract). KS-2:
-  // data.kitDoors is interiorBuildBoard's OWN output (theater-interior.js, a sibling of data.instances)
-  // — unlike interactables/pieces/dressing above, this one IS produced by interiorBuildBoard itself.
-  const interactablesGroup = interiorBuildInteractables(data.interactables, cx, cz, S.interiorFloorTopMap, data.kitDoors, data.realmId, S.realmProfile, data.doorAxes);
-  S.interiorGroup.add(interactablesGroup);
-  // D4 — E0-1 FADE COMPLIANCE (the SAME append-never-overwrite pattern the wall-fixture block above
-  // uses, docs/PHASE-3-WAVE-1-SPECS.md E0-1): a door on an occlusion-suppressed wall segment fades
-  // WITH that segment. Each mounted door leaf's material joins the fadeEntry of the wall segment
-  // whose midpoint is nearest the door's own world position (the wall run its aperture interrupts —
-  // shell.wallSegments carries no per-door ownerSegIndex, so nearest-midpoint is this layer's honest
-  // ownership stand-in, same class of geometric stand-in rgDoorApronCells already documents). Opacity
-  // syncs immediately so a door built mid-fade never floats opaque against a ghosted wall. A board
-  // with no room shell (wallUpperFadeEntries empty / ITR_ROOM_SHELL off) registers nothing — E0-1's
-  // own defensive "unaffected" case.
-  if(wallUpperFadeEntries.length){
-    interactablesGroup.children.forEach((hinge) => {
-      const leaf = hinge.userData && hinge.userData.leaf;
-      if(!leaf || !leaf.material) return;
-      const doorPlanX = hinge.position.x + cx, doorPlanZ = hinge.position.z + cz;
-      let owner = null, bestDist = Infinity;
-      wallUpperFadeEntries.forEach((e) => {
-        const seg = S.interiorLastRoomShell && S.interiorLastRoomShell.wallSegments && S.interiorLastRoomShell.wallSegments[e.ownerSegIndex];
-        if(!seg) return;
-        const mx = (seg.a.x + seg.b.x) / 2, mz = (seg.a.z + seg.b.z) / 2;
-        const d = Math.abs(mx - doorPlanX) + Math.abs(mz - doorPlanZ);
-        if(d < bestDist){ bestDist = d; owner = e; }
-      });
-      if(!owner || !owner.fadeEntry) return;
-      if(!owner.fadeEntry.materials) owner.fadeEntry.materials = [];
-      owner.fadeEntry.materials.push(leaf.material);
-      leaf.material.opacity = owner.fadeEntry.opacity;
-    });
-  }
-  S.interiorInteractablesCount = (data.interactables || []).filter((e) => e && e.archetype === "door" && !e.reserve).length;
-  // harness-facing diagnostic (dev/verify-d4-doors.mjs), same convention as
-  // S.interiorDressingWorldPositions above: one entry per MOUNTED door, its REAL world position/state
-  // read straight off the group THREE actually placed, never a parallel formula that could drift.
-  S.interiorInteractablesWorldPositions = interactablesGroup.children.map((hinge) => ({
-    sourceRef: hinge.userData && hinge.userData.sourceRef,
-    archetype: hinge.userData && hinge.userData.archetype,
-    state: hinge.userData && hinge.userData.state,
-    arched: hinge.userData && hinge.userData.arched,
-    x: hinge.position.x, y: hinge.position.y, z: hinge.position.z,
-    leafRotY: hinge.userData && hinge.userData.leaf && hinge.userData.leaf.rotation.y,
-    leafRotX: hinge.userData && hinge.userData.leaf && hinge.userData.leaf.rotation.x,
-    // D4c additive diagnostics — never consumed by anything pre-D4c, safe to extend.
-    brokenVariant: hinge.userData && hinge.userData.brokenVariant,
-    shardCount: (hinge.userData && hinge.userData.shards) ? hinge.userData.shards.length : 0
-  }));
-
-  // KS-3 (docs/KENNEY-SOCKET-WAVE.md) — ROOM SHELLS FROM THE KIT. data.kitShellWalls/data.kitShellFloors
-  // are interiorBuildBoard's OWN output (theater-interior.js, siblings of data.kitDoors — see that
-  // field's own comment above) — pure placement data; both empty whenever KIT_SHELL_ENABLED is off
-  // (theater-interior.js's own flag), so these two builders add zero geometry in that state (the
-  // per-cell prism `wall`/`floor` instance meshes above already cover every cell in full, byte-
-  // identical to pre-KS-3). realmId/realmProfile close the SAME live-grading path the KS-3 door
-  // retrofit above uses — every kit piece (door, wall, floor) now shares one recipe.
-  const kitShellWallGroup = interiorBuildKitShellWalls(data.kitShellWalls, cx, cz, data.realmId, S.realmProfile, data.wallHeightBase);
-  // KS-3b item 2 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag) — CAMERA-SIDE CUTAWAY PARITY. Kit
-  // wall modules previously rendered at full height/opacity unconditionally — the prism wallList
-  // parapet cut a few hundred lines up (itrCameraSideBand/ITR_CUTAWAY_PARAPET_FRAC) only ever touched
-  // `inst.wall`, never these donor-piece runs, so a kit-shelled room read "walled-in" regardless of
-  // camera framing (the diorama's own open-tray identity, BW2-5 item 2, silently didn't apply to the
-  // new shell type). Reuses the IDENTICAL closure + constant the prism path just computed above —
-  // never a second copy of the yaw/dot-product math — applied per RUN (data.kitShellWalls[i], in
-  // WORLD coordinates, zipped by index with kitShellWallGroup.children[i] — interiorBuildKitShellWalls
-  // builds one holder per run in that exact array order) so a mixed kit+prism room's walls cut away
-  // consistently at every camera-facing wall, whichever path rendered it.
-  (data.kitShellWalls || []).forEach(function(run, i){
-    const holder = kitShellWallGroup.children[i];
-    if(!holder || !itrCameraSideBand(run.x || 0, run.z || 0)) return;
-    holder.scale.y *= ITR_CUTAWAY_PARAPET_FRAC;
-  });
-  S.interiorGroup.add(kitShellWallGroup);
-  const kitShellFloorGroup = interiorBuildKitShellFloors(data.kitShellFloors, cx, cz, data.realmId, S.realmProfile);
-  S.interiorGroup.add(kitShellFloorGroup);
-  // harness-facing diagnostics — mirrors S.interiorLastDoorList's own "read what THREE actually placed"
-  // convention, never a parallel formula that could drift from the render.
-  S.interiorLastKitShellWalls = kitShellWallGroup.children.map((h) => ({ x: h.position.x, y: h.position.y, z: h.position.z, rotY: h.rotation.y, axis: h.userData.axis, scaleY: h.scale.y }));
-  S.interiorLastKitShellFloors = kitShellFloorGroup.children.map((h) => ({ x: h.position.x, y: h.position.y, z: h.position.z, room: h.userData.room }));
-
-  // BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals is a plain field the caller
-  // sets directly on the board object (same convention as data.pieces/data.dressing above), sourced
-  // from src/world/prep.js's spatialDecalsForSeg(pn, segNum) — the persist half.
-  const decalsGroup = interiorBuildDecals(data.decals, cx, cz, S.interiorFloorTopMap);
-  S.interiorGroup.add(decalsGroup);
-  S.interiorDecalCount = (data.decals || []).length;
-
-  // BEAUTY-WAVE.md VP6 item 3 — ambient motes, seeded off this board's own focus rect so re-rendering
-  // the SAME board data yields the SAME mote field (never re-rolled every frame).
-  // BW3-4 MOTE COUPLING: data.lights + cx/cz now ride along so interiorBuildMotes can (a) bias spawns
-  // toward the room's own light pools and (b) mount the whole field in the SAME shifted coordinate
-  // space every other piece of interior geometry already uses (see that function's own COORDINATE FIX
-  // comment — the pre-unit call passed raw `b` with no shift at all).
-  stopMoteDrift();
-  const moteSeed = "motes:" + (data.realmId || env) + ":" + JSON.stringify(fit);
-  const moteGroup = interiorBuildMotes(moteSeed, b, interiorMoteKindFor(data.lights), data.lights, cx, cz);
-  S.interiorGroup.add(moteGroup);
-  S.moteGroup = moteGroup;
-  startMoteDrift();
-
-  // BEAUTY-WAVE-4.md MF-1: this is the authoritative fit for the interior channel — covers every
-  // beat/room refit AND every move-step (a move-step forces a fresh setInteriorBoard rebuild, so
-  // "recompute on move-step" falls out of this same call path, per the pillar-cutaway comment above).
-  // Tweened (not the plain placeCamera()) so the camera glides instead of snapping (Feel Law 1).
-  placeCameraTweened((mf1PreFitPos && mf1PreFitTarget) ? { pos: mf1PreFitPos, target: mf1PreFitTarget } : null);
-  // BEAUTY-WAVE-3 THE POST SUITE (BW3-2/3/6): mount DoF + selective bloom + filmic grade onto the
-  // composer for this interior board. AFTER the authoritative placeCamera above so updateDofFocus
-  // projects the FINAL camera fit (the focal band tracks beat-vs-room framing). kit + rigOn are this
-  // function's own locals (the tile kit's authored gradeTint/gradeStrength drive the per-realm grade;
-  // rigOn=false drops to a neutral grade for the study-rig's honest baseline). INTERIOR-ONLY — setBoard
-  // (the flat tabletop) tears it back off.
-  mountPostSuite(kit, rigOn);
-
-  // BEAUTY-WAVE-4.md MF-2 item 4: the rebuild (everything above) has finished — fade the transition
-  // overlay back to transparent over ROOM_TRANSITION_DUR, revealing the freshly-built room. Skipped on
-  // this mount's first reveal (isRoomTransition false — the overlay was never snapped opaque, so a
-  // fade from 0 would be a harmless no-op anyway, but skipping is the honest "no transition happened"
-  // read for a fresh mount's own instrumentation).
-  if(isRoomTransition && S.transitionEl){
-    pushScreenFade(buildTheaterCtx(), {
-      setOpacity: function(v){ S.transitionEl.style.opacity = String(v); },
-      from: 1, to: 0, dur: ROOM_TRANSITION_DUR
-    });
-    startTweenLoop();
-  }
-
-  // CL-R0 (docs/CLAYROOM-RESET-LADDER.md) — THE ONE post-rebuild hook for the Clayroom diagnostic
-  // fixture. It lives HERE, at this function's single exit, because this function is the one funnel
-  // every interior rebuild passes through: the clay mount's own first build and all five
-  // asynchronous replay sites (sprite texture settle ~3078, donor template settle ~4029, dressing
-  // art settle ~9167/9177, the module-scope post-load whole-object replay ~12524, setInteriorVariant
-  // ~11752 / lightLabApplyTunables ~13992). Before CL-R0 the clay fixture reasserted itself from
-  // mountClayRoom() alone plus a per-frame light poll, so every one of those replays silently
-  // restored production site materials — the measured cause of "basic dungeon floor glued to it."
-  // Costs one boolean read (S.clayRoomDiagnosticActive) per interior rebuild in normal play; the
-  // function is declared in this file's CLAY-ROOM ADDITIONS region and hoists.
-  clayRoomAfterInteriorBoardRebuild();
-  if(clayLightingProbeBefore){
-    clayRoomRecordLightingProbe(
-      "door/camera/fade/board rebuild",
-      clayLightingProbeBefore,
-      preserveInteriorLighting
-    );
-  }
-
-  markDirty();
-}
-
-/* window.Theater.setInteriorVariant(flags) — DUNGEON-GRAPH.md U3 render-quality study card ONLY
-   (dev/battle-gate/capture-interior-study.mjs is the sole caller; no product code path sets this).
-   flags: {ao, banded, fog} — see interiorApplyAODarkening / applyPsxShaderTweaks' banded injection /
-   setInteriorBoard's fogOn ternary above for what each does. Merges onto S.interiorVariant (persists
-   across calls, same convention as S.zoomLevel) and, if an interior board is already mounted, forces
-   an immediate rebuild under the new flags by replaying S.lastBoard through setInteriorBoard (the
-   SAME "null the dirty key, replay" trick the async texture/glb loaders already use elsewhere in this
-   file) — the study rig calls this BETWEEN setInteriorBoard(sameBoard) calls to capture every variant
-   of the identical scene. */
-function setInteriorVariant(flags){
-  S.interiorVariant = Object.assign({}, S.interiorVariant, flags || {});
-  if(S.lastBoard && S.lastBoard.kind === "interior3d"){
-    S.boardKey = null;
-    setInteriorBoard(S.lastBoard);
-  }
-}
+// ---- THE INTERIOR REALIZER: extracted to src/ui/theater-interior-realize.js (split B9, 2026-07-25) ----
+// setInteriorBoard and setInteriorVariant moved there, together with VQ2-RESPEC.md §4 unit F1's combat
+// floor-grid overlay (F1_GRID_TEX_CACHE / f1CombatGridTexture / F1_GRID_OPACITY / F1_GRID_EDGE_OPACITY /
+// f1BuildCombatGrid — censused: setInteriorBoard and the Clay Room ctx are its only consumers) and the
+// clay-diagnostic lighting identity (interiorLightingIdentityFor, read only by setInteriorBoard).
+// THE DECOMPOSITION (the brief's item 5): setInteriorBoard is NOT a single moved 1,448-line body there.
+// Its orchestrator keeps only the admission guard (mount/data check, MF-1's pre-fit pose capture, the
+// dirty-key skip — early returns a phase list cannot express) and then calls seventeen named phase
+// functions IN THE ORIGINAL ORDER — realizePhaseIntake / Teardown / Frame / LightBed / Surfaces /
+// WallsDoors / Shell / Pillars / Groups / Practicals / Pieces / Furniture / Doors / KitShells /
+// Atmosphere / CameraFit / Tail — each of whose bodies is a verbatim-lifted contiguous range of the
+// pre-split function. The locals that crossed a phase seam ride one explicit `pass` context object; no
+// statement was reordered, merged or rewritten. That module's header carries the full phase map, the
+// pass-field inventory and the closure/try-catch notes.
+// Same root->leaf ctx law; it reads AND writes S, so interiorRealizeInit(ctx) at end-of-body is paired
+// with interiorRealizeSyncState(S) at both `S = createTheaterState()` sites. It never imports this file;
+// it DOES import theater-clay-room.js for the four CL-R0 hooks, which is acyclic — the clay module takes
+// setInteriorBoard/setInteriorVariant/f1BuildCombatGrid from THIS file's clayRoomInit ctx, never by
+// import.
+// WHAT STAYS HERE, and why: the mutable room-shell flag ITR_ROOM_SHELL with its rootGet/SetRoomShell
+// accessors (the Clay Room live-writes it, and itrDoorMountFor/itrDoorMountMapFrom above still read it)
+// plus its sibling tunables ROOM_SHELL_POLYGON_KERNEL_FLAG (a window.Theater seam), ITR_ROOM_SHELL_UV_DENSITY
+// and ITR_ROOM_SHELL_RISER_DARKEN — the last two censused as single-reader/movable but deliberately kept
+// with their siblings as one root tunables block (B2's law), delivered as plain ctx values;
+// ITR_OCCLUSION_FADE_DISABLED_FOR_TEST (its own seam + two root diagnostic readers below); the whole
+// DOORS family (itrDoorMountMapFrom / itrApplyDoorMounts / interiorBuildInteractables /
+// interiorBuildKitShellWalls / interiorBuildKitShellFloors — the standing d4-doors text-pin ruling);
+// interiorFloorTopMapFrom / interiorFloorTopAt; itrScaleHexValue / itrBrightRealmFillFor / hexStrToNum /
+// gradeColorLocal / applyPsxShaderTweaks; every ITR_SCENE_* / ITR_EMISSIVE_* / ITR_BRIGHT_* authored
+// constant and LIGHT_TUNABLES (the tunables law); and drainTweens / startTweenLoop / markDirty /
+// buildTheaterCtx. Eleven ctx accessor reads/writes cover the six mutable root `let`s the moved bodies
+// still touch live.
 
 /* T3 zoneToWorld (§4 ctx contract, theater-verbs.js): "band:lane" -> the SAME world tile coordinates
    theaterUnitsFrom (theater-data.js) would place a lone occupant of that zone at — reusing THIS
@@ -6925,436 +4995,13 @@ function startTweenLoop(){
   S.tweenRaf = requestAnimationFrame(step);
 }
 
-/* DEAD-STATE (2026-07-03, Adam's ruling): desaturate every mesh in a figure's group toward grayscale —
-   the SAME cheap no-shader luminance-preserving trick vDown (theater-verbs.js) already animates via a
-   tween; this is the static/terminal application for a CORPSE that setUnits renders directly on every
-   refresh (no tween needed — a re-mounted/re-rendered corpse must read gray immediately, not replay an
-   animation). `amount` in [0,1] lets the down-pose (full desaturate, 1.0) share this helper with any
-   future partial-desaturate need without duplicating the RGB math. */
-function desaturateGroup(group, amount){
-  group.traverse(n => {
-    if(!n.material || !n.material.color) return;
-    const c = n.material.color;
-    const gray = c.r * 0.299 + c.g * 0.587 + c.b * 0.114;
-    c.setRGB(
-      c.r + (gray - c.r) * amount,
-      c.g + (gray - c.g) * amount,
-      c.b + (gray - c.b) * amount
-    );
-  });
-}
-
-function setUnits(data){
-  if(!S.mounted || !data) return;
-  // THEATER-NEXT §3.1/§3.2 — same dirty-key skip as setBoard, against its own key.
-  const dirtyKey = JSON.stringify(data);
-  if(dirtyKey === S.unitsKey){ window.Theater.stats.unitSkips++; return; }
-  S.unitsKey = dirtyKey;
-  window.Theater.stats.unitBuilds++;
-  drainTweens(S); // A2: force-complete every live tween BEFORE clearGroup disposes the units they close over
-  S.lastUnits = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
-
-  // BEAUTY-WAVE-4.md MF-2 item 2 (DESPAWN GRACE): diff the PREVIOUSLY-known unit ids against this
-  // render's new set BEFORE clearGroup disposes anything — "defeat removal where corpses don't
-  // persist... board changes". A `down` unit is NOT a despawn (it persists + re-renders every frame
-  // per the DEAD-STATE convention); only an id that's genuinely ABSENT from this render counts. The
-  // despawning figure is pulled OUT of S.unitGroup into a transient S.despawnGroup so clearGroup(
-  // S.unitGroup) just below naturally skips it (it's no longer a child by the time that runs) — no
-  // clearGroup change needed. wasKnownUnitIds is captured here (before S.knownUnitIds is overwritten
-  // at this function's end) so the MOUNT half below can tell a genuinely NEW id from a re-render.
-  const wasKnownUnitIds = S.knownUnitIds || new Set();
-  const newUnitIds = new Set((data.units || []).filter((u) => !u.obliterated).map((u) => String(u.id)));
-  wasKnownUnitIds.forEach(function(id){
-    if(newUnitIds.has(id)) return;
-    let fig = null;
-    for(let i = 0; i < S.unitGroup.children.length; i++){
-      const child = S.unitGroup.children[i];
-      if(child.userData && String(child.userData.unitId) === id){ fig = child; break; }
-    }
-    if(!fig) return; // already gone (e.g. a full retire() beat us here) — nothing to grace
-    S.unitGroup.remove(fig);
-    if(!S.despawnGroup){ S.despawnGroup = new THREE.Group(); if(S.scene) S.scene.add(S.despawnGroup); }
-    S.despawnGroup.add(fig);
-    mfDespawnGraceFor(buildTheaterCtx(), fig, function(){
-      if(S.despawnGroup) S.despawnGroup.remove(fig);
-      disposeGroupChild(fig); // THE BASE LIFTS LAST — this runs strictly after the 200ms art fade completes
-    });
-  });
-
-  clearGroup(S.unitGroup);
-  clearGroup(S.shadowGroup);
-  // DEAD-STATE: obliteration markers ride in S.propGroup (swept by setBoard's clearGroup/retire like
-  // every other prop) — and a stale marker from a since-cleared unit must not survive a UNIT-only
-  // refresh either, so setUnits sweeps its own markers here.
-  // BUG REPAIR (found by the MODEL-QA rig's scene captures, 2026-07-03): this sweep used to be a
-  // wholesale clearGroup(S.propGroup) — which ALSO erased every BOARD prop (cover columns, walk-
-  // feature props + their grounding blobs) that setBoard had just built. The game always calls
-  // setBoard then setUnits on every render, so NO board prop has ever survived to the screen since
-  // the DEAD-STATE pass added that line — invisible in the live game and every fixture alike (unseen
-  // until now because dev/theater-preview.html, the prop visual gate, was syntax-dead at the time).
-  // Fix: remove/dispose ONLY setUnits' own scorch markers (tagged userData.scorchMarker at creation
-  // below), leaving the board's props standing. Dispose per clearGroup's own discipline; the shared
-  // per-call scorchGeo/scorchMat tolerate repeat dispose() (idempotent in three).
-  for(let i = S.propGroup ? S.propGroup.children.length - 1 : -1; i >= 0; i--){
-    const child = S.propGroup.children[i];
-    if(child.userData && child.userData.scorchMarker){
-      S.propGroup.remove(child);
-      if(child.geometry) child.geometry.dispose();
-      if(child.material){
-        if(Array.isArray(child.material)) child.material.forEach(m => m.dispose());
-        else child.material.dispose();
-      }
-    }
-  }
-
-  const cx = (S.boardOrigin && S.boardOrigin.cx) || 0;
-  const cz = (S.boardOrigin && S.boardOrigin.cz) || 0;
-  // BEAUTY-WAVE.md VP1b: the SAME "S.lastBoard.kind === interior3d" discriminator setInteriorBoard/
-  // setBoard already establish (setBoard's flat tabletop board carries no `kind` field at all) — the
-  // FLAT TABLETOP combat path (interiorMode === false here) is untouched, byte-identical to before
-  // this unit (verify-theater-sprites 12/12 is the regression gate for that claim).
-  const interiorMode = !!(S.lastBoard && S.lastBoard.kind === "interior3d");
-  const wallHeightCap = (interiorMode && typeof S.lastBoard.wallHeightBase === "number" && S.lastBoard.wallHeightBase > 0)
-    ? S.lastBoard.wallHeightBase * 0.95
-    : null;
-  // G5 ROUND-1 (ruling 2): the base disc geometry is now sized per-UNIT (size-scaled — see the
-  // baseDiscGeoFor cache below) rather than one shared geometry at a fixed FIGURE_SCALE radius, since
-  // a Small goblin and a Huge ogre now render at different effective scales (ruling 3's SIZE_SCALE)
-  // and their base discs should read proportionate to their own figure, not a one-size shadow blob.
-  const baseDiscGeoCache = {};
-  // P1' WHOLE-OBJECT WIRING (§4 step 6): the underlying radius-keyed cache generalizes to ANY radius
-  // (the whole-object path's D2 formula, entry.discR * WHOLE_OBJECT_SCALE * 1.18 — bumped from 1.12
-  // by the 2026-07-04 capture-gate follow-up, "bolder gold rim" — is not a plain
-  // 0.34*figScale) — baseDiscGeoForRadius is that generalized helper; baseDiscGeoFor(figScale) below
-  // is kept as the ORIGINAL cuboid-path entry point (byte-identical call-site name/signature/radius
-  // formula this file has always used) so it stays the single source both paths share underneath,
-  // without changing the cuboid path's own literal call convention (verify-model-grammar.mjs's own
-  // text-scan checks for the exact `baseDiscGeoFor(figScale)` call site).
-  function baseDiscGeoForRadius(radius){
-    const key = radius.toFixed(3);
-    if(!baseDiscGeoCache[key]) baseDiscGeoCache[key] = new THREE.CircleGeometry(radius, 16);
-    return baseDiscGeoCache[key];
-  }
-  function baseDiscGeoFor(figScale){
-    return baseDiscGeoForRadius(0.34 * figScale);
-  }
-  // DEAD-STATE: a corpse's base disc darkens to near-black — a distinct material (never a mutation
-  // of the shared kind mats) so the corpse read persists across every setUnits refresh.
-  const corpseDiscMat = new THREE.MeshBasicMaterial({ color: 0x0a0a0a, transparent: true, opacity: 0.9, depthWrite: false });
-  // DEAD-STATE: the obliteration tile marker — a thin scorch-tinted quad flush with the floor,
-  // reusing the per-env scorch tint; shared per setUnits call (one env per fight).
-  const scorchGeo = new THREE.CircleGeometry(0.42 * FIGURE_SCALE, 10);
-  const scorchMat = applyPsxShaderTweaks(new THREE.MeshBasicMaterial({
-    color: scorchTintFor(S.env), transparent: true, opacity: 0.88, depthWrite: false
-  }));
-
-  // QF-B3 (TABLETOP_CAMERA_HEADROOM's own header comment, above): the tallest mounted figure's REAL
-  // rendered top (world-space y, floor at 0), measured after this loop below. Only tracked for the
-  // flat tabletop channel (`!S.isInteriorBoard`) — the interior channel already has its own dedicated
-  // computation (interiorFitMaxHeightFor) and must never be stomped by this one.
-  let tabletopTallestTop = 0;
-
-  (data.units || []).forEach(u => {
-    // BW2-2b item 4 (THE KILTER): `let`, not `const` — an interior-true-scale standee nudges these by
-    // a tiny seeded offset below (kilterFor); the flat tabletop path (interiorSpriteFig false) never
-    // reassigns them, so it stays byte-identical to before this unit.
-    let x = u.x - cx, z = u.z - cz;
-
-    // OBLITERATION (the exception per Adam's ruling): no figure, no shadow — a burst+sink FX plays via
-    // the `obliterate` stage_fx verb (src/ui/theater-verbs.js) at the moment the flag is set; THIS
-    // function only owns the RESTING state a re-render lands on afterward — nothing standing, a single
-    // scorch-tinted tile marker left where the unit stood. Checked BEFORE the down branch below since
-    // an obliterated unit is also down by construction (HP<=0) but must never ALSO render as a corpse.
-    if(u.obliterated){
-      // BUGFIX (found live in this unit's own browser check): a flat floor tile's TOP surface sits at
-      // world y=0 (setBoard's own h/2-0.5 math — a flat tile's box spans y=[-0.5,0], center at -0.25,
-      // half-height 0.25 -> top face at 0). The shadow discs below sit at y=-0.49 (well UNDER the tile
-      // top, working only because they're never meant to be seen from above the opaque tile — they
-      // read through anti-aliased edges/via the renderer's blending order in practice). A scorch quad
-      // needs to be VISIBLE from the default camera angle looking down at the board, so it must sit
-      // ABOVE the tile top (y=0), not buried inside the opaque tile geometry the way the old y=-0.485
-      // placement (copy-pasted from the shadow convention without checking it against a floor tile
-      // that isn't elevated/sunk) silently was — that placement rendered nothing, occluded by the
-      // tile's own solid top face. 0.011 clears z-fighting against the flat-floor case while still
-      // reading as "flush with the floor" at this camera's oblique angle.
-      const scorch = new THREE.Mesh(scorchGeo, scorchMat);
-      scorch.rotation.x = -Math.PI / 2;
-      scorch.position.set(x, 0.011, z);
-      scorch.userData.scorchMarker = true; // BUG REPAIR tag — see the selective sweep at the top of setUnits
-      S.propGroup.add(scorch);
-      return;
-    }
-
-    const seed = hashSeed(u.id);
-    const tint = unitTint(u.kind);
-    // PASS 2: theaterUnitsFrom (src/engine/theater-data.js) now stamps `silhouette` (PC/ally class
-    // read: martial/ranger/caster/cleric, undefined for foes) and `weapon` (a shape key every unit
-    // carries — class-derived for PC/allies, name/action-keyword-derived for foes, "none" when no
-    // weapon reads) onto each unit; figureFor threads both into the archetype builder so class
-    // silhouettes + weapon slabs compose without this file re-deriving either.
-    // MODEL-GRAMMAR G2: units may ALSO carry `recipeSlug` (theaterUnitsFrom stamps a foe's
-    // resolved bestiary statId/slug when known) — figureFor resolves it through recipeFor
-    // (overrides-then-generated-then-null) BEFORE falling back to the archetype builder, so a
-    // recipe-driven figure wins whenever one exists for this unit's slug.
-    // MODEL-GRAMMAR G3 §2: `pcRecipe` (PC/ally loadout-mirror units only) outranks both — see
-    // figureFor's own precedence-chain comment.
-    // P1' WHOLE-OBJECT WIRING (§2.4): `className` (lowercased pcRef.class/a.class, pc/ally only,
-    // stamped by theater-data.js's theaterUnitsFrom) resolves the roster-supersession key BEFORE
-    // any of the above — see figureFor's own header comment for the full precedence order.
-    let figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind, u.className, null, interiorMode, wallHeightCap);
-    // x/z already computed at the top of this forEach body (the obliterated branch above returns before
-    // here, so this is the same block scope) — reuse them; a second `const x/z` here is a duplicate
-    // declaration (a hard SyntaxError that stopped this whole module from parsing).
-    // BEAUTY-WAVE.md VP1b, BW2-2-corrected: an interior-true-scale sprite figure's floor-CONTACT line
-    // (not y=0, the tabletop tile-top convention) must sit on THIS cell's own real floor top plus its
-    // own plinth base (interiorFloorTopAt/interiorStandeeContactY — the derived FLOOR CONTACT LAW,
-    // this file's own header comment a few thousand lines up) — replaces the pre-BW2-2 hardcoded
-    // "-0.5 - floorFrac*height" that assumed every floor tile sat exactly at y=-0.5 (it doesn't; the
-    // measured burial this caused is what BW2-2 fixes). interiorBuildPieces (non-combat pieces) applies
-    // the SAME law.
-    const interiorSpriteFig = !!(figure.userData && figure.userData.interiorTrueScale);
-    let posY = 0;
-    if(interiorSpriteFig){
-      const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, u.x, u.z);
-      const contactY = interiorStandeeContactY(floorTop);
-      posY = contactY - (figure.userData.interiorFloorFrac || 0) * figure.userData.interiorHeight;
-      // BW2-2b item 4 (THE KILTER): nudge x/z by a tiny seeded offset BEFORE the base/pool/figure
-      // placement below reads them, so base+sprite+pool all pick up the SAME offset consistently
-      // (never a shadow mismatched from its own standee). Keyed off this unit's own stable id — the
-      // combat-path counterpart to interiorBuildPieces' slug+cell identity (see kilterFor's own header
-      // for the walkId/determinism rationale).
-      const kilter = kilterFor("unit:" + u.id);
-      x += kilter.dx; z += kilter.dz;
-      figure.userData.kilterYawDeg = kilter.yawDeg; // read every frame by updateSpriteBillboardYaw's face()
-      // BW2-2 STANDEE BASES: a plinth cylinder under this combat standee too (spec: "piece + combat
-      // unit"), same construction/child-of-figure convention interiorBuildPieces uses (buildInteriorBase's
-      // own header explains why this makes fall-death's tip-as-one-group behavior free). Radius off
-      // the sprite's own rendered width (figureFor's interior branch stamps interiorWidth alongside
-      // interiorHeight specifically for this — see that branch's own comment).
-      const support = interiorStandeeSupportMetrics(
-        figure.userData.interiorWidth || figure.userData.interiorHeight || 1,
-        u.size,
-        u.tacticalSpanCells
-      );
-      const baseMesh = buildInteriorBase(
-        support.width,
-        support.depth,
-        S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor
-      );
-      figure.add(baseMesh);
-      figure.userData.interiorBaseRadius = support.width * 0.5;
-      figure.userData.interiorBaseWidth = support.width;
-      figure.userData.interiorBaseDepth = support.depth;
-      figure.userData.standeeCollisionNudgeX = 0;
-      figure.userData.standeeCollisionNudgeZ = 0;
-      figure.userData.standeeCollisionRelocated = false;
-      figure.userData.tacticalSpanCells = support.tacticalSpanCells;
-      figure.userData.stairTreadDepth = support.treadDepth;
-      figure.userData.stairFit = support.stairFit;
-      figure.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
-      // BW2-2: this standee's own soft contact pool (VP7's convention, extended to combat units — the
-      // pre-BW2-2 tabletop hostility-disc/groundingBlob pair further below is UNTOUCHED and stays
-      // buried under the true floor exactly as it already was, harmless/invisible; this pool is the
-      // one that actually reads under an interior standee's base).
-      const contactBlob = addInteriorContactBlob(
-        S.shadowGroup, x, z, support.width, floorTop, support.depth
-      );
-      figure.userData.contactBlobMesh = contactBlob;
-    }
-    figure.position.set(x, posY, z);
-    // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 6, §3-D1/D2/D8): a whole-object figure
-    // (tagged by figureFor) takes a COMPLETELY SEPARATE scale/disc path from the cuboid-recipe math
-    // below — D1: applying FIGURE_SCALE x sizeScaleFor on top of the module's own AUTHORED ABSOLUTE
-    // size would double-scale, so it scales by WHOLE_OBJECT_SCALE alone, sizeScaleFor is NEVER
-    // applied on this path. D2: disc radius is entry.discR x WHOLE_OBJECT_SCALE x 1.18 (bumped from
-    // 1.12 — 2026-07-04 capture-gate follow-up, "bolder gold rim" — a touch wider still than the
-    // figure's own footprint so the kind-tint reads as a rim ring around the baked neutral
-    // disc, not painted over it). D8: a down/corpse whole-object unit swaps to the CACHED GRAY
-    // geometry variant (never desaturateGroup, which would mutate the SHARED cached material used by
-    // every other standing figure of the same key) — same topple rotation/y-lift the cuboid path uses.
-    const isWholeObject = !!(figure.userData && figure.userData.wholeObject);
-    let figScale;
-    if(isWholeObject){
-      figScale = WHOLE_OBJECT_SCALE;
-      if(u.down){
-        const grayGeo = wholeObjectGeometryFor(figure.userData.wholeObjectKey, true);
-        if(grayGeo){
-          // swap in the gray-variant mesh (same material array — vertexColors carries the desaturated
-          // buffer, no material mutation needed) in place of the standing mesh this figure group holds.
-          const mats = figure.children[0] && figure.children[0].material;
-          figure.clear();
-          figure.add(new THREE.Mesh(grayGeo, mats));
-        }
-      }
-    } else if(interiorSpriteFig){
-      // BEAUTY-WAVE.md VP1b: interiorSpriteBillboard already baked the FINAL true-scale world height
-      // into the plane geometry itself (HUMAN_TRUE_HEIGHT x scaleTrue, wall-capped) — the same
-      // "authored absolute size, scale by 1 alone" discipline the whole-object path documents just
-      // above. Re-applying FIGURE_SCALE x sizeScaleFor here (the tabletop combat convention below)
-      // would double-scale a plane that is already sized in world units, reproducing the kaiju bug
-      // one line later — this is the fix.
-      figScale = 1;
-    } else {
-      // G5 ROUND-1 (ruling 3): recipe.size (a bestiary/pcRecipe field carried since MODEL-GRAMMAR G2 but
-      // never read until now) scales the WHOLE figure group on top of FIGURE_SCALE — one multiply, so a
-      // weapon module (already a child of this same group, attached via renderPartInto's offset math)
-      // scales together with the body it's gripped by, never independently. The archetype-builder
-      // fallback (no recipe at all) has no size field to read — stays at plain FIGURE_SCALE, matching
-      // §9 Decision 6 ("never worse than today").
-      const effRecipe = u.pcRecipe || recipeFor(u.recipeSlug);
-      figScale = FIGURE_SCALE * sizeScaleFor(effRecipe && effRecipe.size);
-    }
-    figure.scale.setScalar(figScale); // §3 G9 tune: "figure scale ~1.5x current relative to tiles" x size
-    if(u.down){
-      figure.rotation.z = Math.PI / 2;
-      figure.position.y += 0.12 * figScale; // matches the figure's own effective (size-scaled) height
-      // DEAD-STATE: desaturate the WHOLE toppled figure on every render (a setUnits refresh after
-      // the fight must still read as a corpse with no live tween in flight). Whole-object figures
-      // already swapped to their cached gray geometry variant above — desaturateGroup would try to
-      // mutate that geometry's SHARED material color and is skipped for them (D8).
-      if(!isWholeObject) desaturateGroup(figure, 1);
-    }
-    // MODEL-GRAMMAR G3 §2 (conditions as modules): applied AFTER the down-pose (so a prone rotation
-    // mod adds onto, not overwrites, an already-down figure's 90° topple) and BEFORE fled-visibility
-    // (a fled figure is invisible anyway, so attach order there doesn't matter). anchors resolve off
-    // whichever base body this figure actually used — a recipe figure (pcRecipe or bestiary) reads
-    // its own recipe.base's anchors; the archetype-builder fallback has no recipe object to consult,
-    // so it uses torso-biped's anchors (see applyConditionMods' own header for why that's sane).
-    const modAnchors = (u.pcRecipe && Parts.PARTS[u.pcRecipe.base] && Parts.PARTS[u.pcRecipe.base].anchors)
-      || (recipeFor(u.recipeSlug) && Parts.PARTS[recipeFor(u.recipeSlug).base] && Parts.PARTS[recipeFor(u.recipeSlug).base].anchors)
-      || Parts.torsoBiped.anchors;
-    applyConditionMods(figure, u.conditionMods, modAnchors, tint);
-    // QF-B3: measure this figure's REAL rendered top (post scale/position/down-topple/condition-mods —
-    // the very last transform this figure gets) via an actual bounding-box read, not a per-archetype
-    // height guess (see TABLETOP_CAMERA_HEADROOM's own header for why a bbox is the one measurement
-    // that's correct across whole-object/recipe/cuboid/interior-sprite figures alike). A downed/prone
-    // figure is naturally shorter once toppled (rotation.z=Math.PI/2 above) — the bbox reflects that
-    // correctly on its own, no special-casing needed. Skipped entirely on the interior channel (that
-    // system already computes its own fit height — see tabletopTallestTop's own declaration above).
-    if(!S.isInteriorBoard){
-      figure.updateMatrixWorld(true);
-      const figBox = new THREE.Box3().setFromObject(figure);
-      if(isFinite(figBox.max.y) && figBox.max.y > tabletopTallestTop) tabletopTallestTop = figBox.max.y;
-    }
-    if(u.fled) figure.visible = false;
-    // ENV-1B: every TABLETOP figure casts a real shadow (Adam's DESIGN.md cast-shadows ruling — see
-    // mount()'s own ENV-1B provenance comment). Stamped HERE, per-mounted-figure and gated
-    // !interiorMode, rather than inside figureFor/addBox/renderPartInto — those builders are SHARED
-    // with the interior channel, where PC/ally solid figures have never cast (only sprite billboards
-    // and room-shell geometry do there), so stamping in the shared builder would change interior
-    // renders and break that channel's byte-stability. Sprite-billboard figures already carry
-    // castShadow=true + an alpha-tested customDepthMaterial from buildSpriteBillboardMesh (re-setting
-    // is harmless); this traverse is what brings the whole-object/recipe/cuboid solid-figure family
-    // up to the same convention. receiveShadow stays untouched (false) on every figure mesh —
-    // BEAUTY-WAVE-3's "a cast shadow smeared across a flat card reads as a bug" ruling generalizes:
-    // shadows land on the GROUND (the tiles' own receiveShadow=true), never on other minis.
-    // userData.standeeBase (the interior plinth tag) is excluded by the same convention
-    // mfArtMaterialsOf already keeps — a base never casts (degenerate self-shadow at floor level).
-    if(!interiorMode){
-      figure.traverse(n => { if(n.isMesh && !(n.userData && n.userData.standeeBase)) n.castShadow = true; });
-    }
-    // T3 (§4 ctx contract): tag every figure with its unit id so theater-verbs.js's findUnit(id) can
-    // resolve a verb's `who` straight to this live Object3D — no separate id->handle map to keep in
-    // sync, the tag lives on the object itself exactly where setUnits already iterates it.
-    figure.userData.unitId = String(u.id);
-    S.unitGroup.add(figure);
-    // BEAUTY-WAVE-4.md MF-2 item 1 (STANDEE MOUNT): only a genuinely NEW arrival plays the mount-in
-    // fade+scale-settle — a unit that was already known last render (an HP tick, a move, any other
-    // field change that forces a rebuild) must NOT replay the fade every frame, which would read as
-    // flicker rather than "arrival". mfArtMaterialsOf excludes any userData.standeeBase-tagged mesh
-    // on its own, so interior standees' plinth base is already "at full opacity from t=0" for free.
-    if(!wasKnownUnitIds.has(String(u.id))){
-      mfMountGraceFor(buildTheaterCtx(), figure, 0);
-    }
-
-    // G5 ROUND-1 (ruling 2): the base disc REPLACES the flat black blob-shadow as the hostility
-    // signal — a tinted disc/short cylinder under each unit, miniatures-style, matching unitTint's own
-    // kind color (ember red foe / gold PC / blue ally, same palette the figure geometry already used
-    // before ruling 1's natural-channel work moved foe TINT off the body). This is now the ONLY
-    // hostility marker on a foe figure (ruling 1 kills the flat foe body tint in favor of natural
-    // per-creature channel colors — see recipeChannelTints/buildBaseDiscMat below). Slightly WIDER
-    // than the figure footprint (0.34 vs. the old shadow's 0.3 radius) and given a shallow height (a
-    // short cylinder, not a flat disc-on-the-floor) for the "flat base/short cylinder, PSX-clean" read
-    // the ruling calls for. P1' WHOLE-OBJECT WIRING (§3-D2): a whole-object figure ALREADY carries its
-    // own baked neutral disc as the physical base (the module's own geometry) — this hostility disc
-    // renders BENEATH it, widened to entry.discR x WHOLE_OBJECT_SCALE x 1.18 (D10: the disc stays the
-    // ONLY side signal for a whole-object pc/ally, R5 — no figure tinting on this path). CAPTURE-GATE
-    // FOLLOW-UP (2026-07-04, Adam: "a little bit bolder of a read on the gold rim") — widened from
-    // 1.12 to 1.18 per R5's own recorded fallback ("the fix is a rim-intensity bump on the pc disc,
-    // never figure tinting"); the cuboid-path disc radius formula on the line below is UNCHANGED.
-    // A4 (REVIEW-FIXES-0705-VISUAL.md §W2-A finding 4): `|| 0.42` silently replaced an intentional
-    // `discR: 0` (a whole-object entry that legitimately wants no hostility-disc rim showing) with
-    // the 0.42 default — `||` can't distinguish "falsy because absent/undefined" from "falsy because
-    // deliberately zero." `!= null` only falls back for a genuinely missing value (undefined/null),
-    // letting 0 pass through unmolested.
-    const discRadius = isWholeObject
-      ? (figure.userData.wholeObjectDiscR != null ? figure.userData.wholeObjectDiscR : 0.42) * WHOLE_OBJECT_SCALE * 1.18
-      : 0.34 * figScale;
-    // P1' WHOLE-OBJECT WIRING (§3-D2/D10 — CAPTURE-GATE FIX, R5 side-read check): the cuboid path's
-    // hostility disc sits at y=-0.49 — WELL BELOW the tile top (y=0), occluded by the opaque tile
-    // geometry and only reading through incidental blend-order artifacts (see the DEAD-STATE scorch-
-    // marker comment elsewhere in this file for that same mechanism). A whole-object figure carries
-    // its OWN baked neutral disc essentially AT the tile surface (humanoid.js's disc top sits at local
-    // y=0.058, i.e. ~0.075 world units above y=0 once WHOLE_OBJECT_SCALE(1.3) applies) — burying the
-    // hostility disc at -0.49 put it not just under the tile but under the figure's OWN disc too,
-    // doubly occluded, which is exactly what the capture-gate's R5/D10 side-read frame caught: ZERO
-    // gold-tinted pixels anywhere in the disc region (verified by direct pixel scan of dev/model-qa/
-    // p1-wiring-gate/B-wholeobject-fighter-dark-zoom3.png before this fix landed). Per the ruling's
-    // own pre-registered fallback ("the fix is a rim-intensity bump on the pc disc, not figure
-    // tinting"): the whole-object hostility disc seats just BENEATH the tile top instead (y=-0.004,
-    // clearing z-fighting against the flat-floor case the same way the scorch marker's own 0.011
-    // clearance does) so its wider rim is actually visible peeking out from under the figure's own
-    // disc, rather than buried deep inside the tile geometry. The cuboid path's y=-0.49 is UNCHANGED
-    // (byte-identical to before this unit — its own figures have no baked disc of their own to peek
-    // out from beneath, so the existing blend-order mechanism is what that path has always relied on).
-    const discY = isWholeObject ? -0.004 : -0.49;
-    const baseDisc = new THREE.Mesh(baseDiscGeoForRadius(discRadius), u.down ? corpseDiscMat : baseDiscMatFor(u.kind));
-    baseDisc.rotation.x = -Math.PI / 2;
-    baseDisc.position.set(x, discY, z);
-    if(u.fled) baseDisc.visible = false;
-    S.shadowGroup.add(baseDisc);
-
-    // GROUNDING SHADOW (§3): a dark blob quad BENEATH the hostility disc — slightly larger (1.15x the
-    // disc's own radius) and seated a hair lower than the disc so the two never z-fight and the blob
-    // visibly reads as UNDER the disc, not competing with it. Present on EVERY figure regardless of
-    // kind or path, seated relative to that figure's OWN discY (cuboid: -0.495 vs -0.49; whole-object:
-    // a matching -0.005 hair below the disc's own -0.004, same z-fight-avoidance discipline).
-    const groundingBlob = addGroundingBlob(S.shadowGroup, x, z, discY - 0.005, discRadius * 1.15);
-    if(groundingBlob && u.fled) groundingBlob.visible = false;
-  });
-
-  // BEAUTY-WAVE-4.md MF-2: this render's id set becomes the baseline the NEXT setUnits() call diffs
-  // against for both halves (a still-absent id next time is a despawn; an id absent from THIS set that
-  // reappears later is a fresh mount again).
-  S.knownUnitIds = newUnitIds;
-
-  // QF-B3: setBoard already ran placeCamera() once for this render, but at THAT point no unit was
-  // mounted yet, so its screenHalfHeight term had no real standee height to work with (the flat
-  // tabletop's permanent 0 — see TABLETOP_CAMERA_HEADROOM's own header). Now that every figure is
-  // mounted+measured (tabletopTallestTop, above), refit the camera against the REAL tallest one, headroom
-  // included — this is the fit that actually sticks (setUnits always runs after setBoard, never before).
-  // Gated `!S.isInteriorBoard` so the interior channel's own dedicated fit (setInteriorBoard's own
-  // placeCameraTweened call, already correct) is never touched or double-fit by this one. A board with
-  // no units at all (the idle empty table) leaves tabletopTallestTop at 0 — S.interiorFitMaxHeight stays
-  // 0 too, byte-identical to before this unit for that case (screenHalfHeight's height term is a no-op).
-  if(!S.isInteriorBoard){
-    // ENV-3b ruling 2: persist this call's own figure-height measurement onto S (mirroring
-    // S.boardTallestTileTop, setBoard's sibling term) so a LATER setBoard-only replay (dressingTextureFor's
-    // async real-art-arrival re-render, which never calls setUnits again) still has a valid figure
-    // height to fold in via the shared combiner — see refitTabletopHeightFit's own header for the full
-    // mechanism this closes. A board with no units at all (the idle empty table) leaves this at 0,
-    // byte-identical to before this unit for that case.
-    S.unitsTallestTop = tabletopTallestTop;
-    refitTabletopHeightFit();
-  }
-
-  // ENV-3 ruling 5 — SYNC-FACE ON REBUILD: same race setBoard's own matching call (above) closes,
-  // for S.unitGroup's freshly (re)built standees — see that call site's own full header for the
-  // mechanism. Idempotent with the next real rAF tick's own pass.
-  S.standeeCollisionDirty = true;
-  updateSpriteBillboardYaw();
-  markDirty();
-}
+// ---- desaturateGroup + setUnits: extracted to src/ui/theater-tabletop.js (split B9, 2026-07-25) ----
+// DEAD-STATE's desaturateGroup (censused: setUnits is its ONLY caller — theater-whole-object.js names it
+// in prose only, since the whole-object corpse path deliberately swaps a cached gray geometry instead)
+// and setUnits itself moved there VERBATIM beside setBoard, so the flat tabletop channel's board pass and
+// figure pass live together. drainTweens/startTweenLoop stay HERE (retire() and play() are their other
+// callers, and dev/verify-theater-verbs.mjs pins drainTweens' own body to this file); so does the MF-2
+// grace glue setUnits reaches through the tabletop ctx — see the setBoard extraction note above.
 
 function rotate(){
   if(!S.mounted) return;
@@ -7483,6 +5130,8 @@ function retire(){
   spritesSyncState(S);  // split B7: same law for the sprite/billboard family (replay + the facing pass)
   overlaysSyncState(S); // split B7: same law for the overlay family (rings/effects/floaters + S.tweens)
   dressingSyncState(S); // split B8: same law for the dressing/props family (the async real-art replay reads S.mounted/S.lastBoard)
+  tabletopSyncState(S);        // split B9: same law for the flat tabletop realizer (setBoard/setUnits read AND write S)
+  interiorRealizeSyncState(S); // split B9: same law for the interior realizer (every phase reads AND writes S)
 }
 
 /* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 8) — ONE module-scope call, made once at import
@@ -9659,6 +7308,103 @@ dressingInit({
   setInteriorBoard,
   spriteEntryFor,
   textureLoader,
+});
+/* split B9 (2026-07-25) — THE TWO SCENE REALIZERS, same end-of-body ctx law as every module above.
+   Both wire HERE rather than after the import block: their ctx lists carry the live `S` record and
+   TDZ-bound consts (LIGHT_TUNABLES, ITR_FLOOR_*, the ITR_SCENE_* / ITR_EMISSIVE_* families) plus root
+   functions declared far below the imports. Nothing in this file's own top-level body renders a board
+   before this point — the first thing that can is clayRoomBootSelfMount() at the bottom of this block,
+   and loadWholeObjectBuilders' replay callback (module scope, above) only ever fires after the dynamic
+   import() promises settle, i.e. strictly after this synchronous body completes. They are wired AFTER
+   dressingInit because both realizers import theater-dressing.js directly (leaf->leaf: buildDressingCard
+   for ENV-2's biome scatter; interiorBuildPieces/Dressing/Furniture/WallProps for the room), so that
+   module's own mirrors must be live first. tabletopInit's ctx carries two accessors (WHOLE_OBJECT_ENABLED,
+   ITR_SPRITE_EMISSIVE_TINT); interiorRealizeInit's carries six (ITR_ROOM_SHELL,
+   ROOM_SHELL_POLYGON_KERNEL_FLAG, ITR_OCCLUSION_FADE_DISABLED_FOR_TEST,
+   ITR_EMISSIVE_FILL_DISABLED_FOR_TEST, ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST and the
+   ITR_SPRITE_EMISSIVE_TINT setter) — every one a mutable root `let` a window.Theater seam can flip at
+   runtime, which is why neither an import binding nor a copied mirror would do. */
+tabletopInit({
+  S,
+  tabletopCtxWholeObjectEnabled: function(){ return WHOLE_OBJECT_ENABLED; },
+  tabletopCtxSetSpriteEmissiveTint: function(v){ ITR_SPRITE_EMISSIVE_TINT = v; },
+  DEFAULT_FIGURE_ZOOM_STEPS,
+  FIGURE_SCALE,
+  HEMI_INTENSITY_DEFAULT,
+  SMALL_BOARD_BAND_THRESHOLD,
+  THEATER_DEFAULT_ENV_FALLBACK,
+  TILE_GAP,
+  TILE_SIZE,
+  ZOOM_STEP_FACTOR,
+  addGroundingBlob,
+  applyConditionMods,
+  applyPsxShaderTweaks,
+  baseDiscMatFor,
+  buildTheaterCtx,
+  drainTweens,
+  flatTints,
+  gradeColorLocal,
+  hashSeed,
+  interiorFloorTopAt,
+  kilterFor,
+  markDirty,
+  mfDespawnGraceFor,
+  mfMountGraceFor,
+  mountLightProp,
+  recipeFor,
+  renderPartInto,
+  scorchTintFor,
+  sizeScaleFor,
+  tileMaterialsFor,
+  unitTint,
+});
+interiorRealizeInit({
+  S,
+  itrCtxGetRoomShell: rootGetRoomShell,
+  itrCtxRoomShellPolygonKernel: function(){ return ROOM_SHELL_POLYGON_KERNEL_FLAG; },
+  itrCtxOcclusionFadeDisabled: function(){ return ITR_OCCLUSION_FADE_DISABLED_FOR_TEST; },
+  itrCtxEmissiveFillDisabled: function(){ return ITR_EMISSIVE_FILL_DISABLED_FOR_TEST; },
+  itrCtxEmissiveAlbedoLiftDisabled: function(){ return ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST; },
+  itrCtxSetSpriteEmissiveTint: function(v){ ITR_SPRITE_EMISSIVE_TINT = v; },
+  HEMI_INTENSITY_DEFAULT,
+  INTERIOR_CAM_MODE,
+  ITR_BRIGHT_PROFILES,
+  ITR_EMISSIVE_ALBEDO_LIFT,
+  ITR_EMISSIVE_PROFILES,
+  ITR_EMISSIVE_SCENE_AMBIENT,
+  ITR_EMISSIVE_SCENE_FILL,
+  ITR_EMISSIVE_SCENE_FILL_SCALE,
+  ITR_EMISSIVE_SCENE_HEMI,
+  ITR_EMISSIVE_SCENE_KEY,
+  ITR_FLOOR_BASE_Y,
+  ITR_FLOOR_HEIGHT_FALLBACK,
+  ITR_GLOOM_AMBIENT_LIFT,
+  ITR_ROOM_SHELL_RISER_DARKEN,
+  ITR_ROOM_SHELL_UV_DENSITY,
+  ITR_SCENE_DOORFRAME_VALUE,
+  ITR_SCENE_FILL,
+  ITR_SCENE_FILL_SCALE,
+  ITR_SCENE_HEMI,
+  ITR_SCENE_KEY,
+  ITR_SPRITE_TINT_STRENGTH,
+  LIGHT_TUNABLES,
+  THEATER_DEFAULT_ENV_FALLBACK,
+  applyPsxShaderTweaks,
+  buildTheaterCtx,
+  drainTweens,
+  gradeColorLocal,
+  hexStrToNum,
+  interiorBuildInteractables,
+  interiorBuildKitShellFloors,
+  interiorBuildKitShellWalls,
+  interiorFloorTopAt,
+  interiorFloorTopMapFrom,
+  itrApplyDoorMounts,
+  itrBrightRealmFillFor,
+  itrDoorMountMapFrom,
+  itrScaleHexValue,
+  markDirty,
+  startTweenLoop,
 });
 figureBuildInit({
   figCtxSpriteChannelEnabled: function(){ return SPRITE_CHANNEL_ENABLED; },

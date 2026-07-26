@@ -1641,6 +1641,16 @@
      bindStandeeCtx/startIdleBreathe from standee-verbs.js — five one-way leaf->leaf edges, so it is
      tagged AFTER all five and before theater-boot.js's tag. -->
 <script type="module" src="src/ui/theater-dressing.js"></script>
+<!-- THEATER SPLIT B9 (2026-07-25): THE TWO SCENE REALIZERS. theater-tabletop.js owns setBoard/setUnits
+     (the flat tabletop channel); theater-interior-realize.js owns setInteriorBoard — decomposed there
+     into seventeen named phase functions over one explicit pass context — plus setInteriorVariant and
+     F1's combat grid. They are PEERS: neither imports the other. Both import theater-dressing.js and
+     the other leaves above (camera / lighting / post / standee-mount / sprites / whole-object /
+     figure-build / figures / occlusion / interior-mesh / overlays / motes / practicals / room-mesh /
+     shot / spawn-grace / clay-room), so both are tagged AFTER all of those and before
+     theater-boot.js's tag — which imports the realizers and hands them to every replay ctx. -->
+<script type="module" src="src/ui/theater-tabletop.js"></script>
+<script type="module" src="src/ui/theater-interior-realize.js"></script>
 <script type="module" src="src/ui/theater-boot.js"></script>
 <!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
      shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same

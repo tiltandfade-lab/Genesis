@@ -635,3 +635,43 @@ rejected. The approved replacement was regenerated around an explicit centered t
 cradle and octagonal pedestal: the wall arm and lower brace meet the cradle midpoint, which
 supports the ash cup on one visible vertical axis. Eight evenly distributed open ribs now match
 the octagonal rings cleanly. Only the replacement reference above is approved for Meshy input.
+
+### Meshy intake result — accepted
+
+Front proof:
+
+![M068-A cleaned front](intake-previews/M068-A-clean-front.png)
+
+Elevated opening proof:
+
+![M068-A cleaned from above](intake-previews/M068-A-clean-top.png)
+
+Canonical source:
+`incoming/M068-A-wall-flame-sconce-smart-600.glb`
+
+Accepted production donor:
+`processed/M068-A-wall-flame-sconce-clean-v1.glb`
+
+The Smart Topology download arrived at 648 triangles against the 600 target, with 352 shared
+source vertices, 15 disconnected construction islands, no material assignment, and no embedded
+texture payload. The upper ring, lower cup, flame socket, large background-facing gaps, centered
+pedestal and cradle, arm, brace, plate, and bosses all survived as real geometry.
+
+Meshy reduced the eight reference ribs to six substantial symmetric ribs. This is accepted:
+the change improves game-scale thickness while preserving the open-frame silhouette and complete
+support around the basket. Exact rib count is not runtime behavior.
+
+`scripts/model-foundry/clean-meshy-wall-sconce.py` retains every triangle and consolidates the
+15 islands into four replaceable ownership groups:
+
+```text
+basket_ring_and_ash_cup          2 islands    238 triangles
+basket_open_ribs                 6 islands     98 triangles
+centered_cradle_arm_and_brace    4 islands    154 triangles
+mounting_plate_and_bosses        3 islands    158 triangles
+total                           15 islands    648 triangles
+```
+
+The output remains untextured. Genesis owns the flame socket behavior, flame sprite or volume,
+emission, flicker, illumination, smoke, wall registration, materials, soot, fuel state, collision,
+culture treatment, and damage. M068-A passes calibration without a geometry repair pass.

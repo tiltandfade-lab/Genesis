@@ -273,7 +273,7 @@ full production handoff, test this smaller material-diverse set:
 | complete | `M001-A` low-cover boulder cluster | broad geological stone planes | Can a composed cover-anchor silhouette survive low remesh and beat routine procedural placement? **Passed at 236 cleaned triangles after deterministic duplicate-shell removal.** |
 | complete | `M035-A` ridge tent | thin cloth over a timber frame | Can broad cloth, an open threshold, and separable supports survive low remesh? **Passed at 752 cleaned triangles after mirrored rear flaps were replaced with a deterministic back cap whose deep returns and bound seams seal both rear corners.** |
 | complete | `M059-A` forge hearth | masonry mass + iron fittings + empty sockets | Can mixed rigid materials remain legible without buying dense brick, coal, tool, or fastener noise? **Passed at 1,108 triangles with all geometry retained; 60 useful construction islands were consolidated into four ownership groups without a repair pass.** |
-| ready | `M068-A` wall flame sconce | thin forged metal + runtime-owned flame/light | Can a small open metal fixture survive at game scale while flame, emission, and illumination remain engine-owned? **Reference, prompt, Smart Topology 600 target, and intake name are prepared.** |
+| complete | `M068-A` wall flame sconce | thin forged metal + runtime-owned flame/light | Can a small open metal fixture survive at game scale while flame, emission, and illumination remain engine-owned? **Passed at 648 triangles with all geometry retained; Meshy preserved the open flame socket and centered support while simplifying eight reference ribs to six strong symmetric ribs.** |
 
 This focused set replaces the requirement to finish all eight original calibration references
 before writing the production handoff. `M005-A`, `M025-A`, and `M047-A` remain high-priority early
@@ -290,6 +290,11 @@ The focused recipe passes when:
 - repeated or standardized parts are identified for procedural geometry, extrusion, or instancing;
 - the reference-image prompt reliably produces one isolated object in one view rather than a
   model sheet, turnaround, scene, or part catalog.
+
+**Gate result: passed 5/5.** The set includes natural mass, thin cloth, open forged metal,
+mixed-material equipment, and repeated mechanical structure. Every accepted donor is
+texture-independent, and each cleanup is deterministic and faster than native reconstruction.
+The joint Adam / Meshy and Terra / Codex production handoff is now unblocked.
 
 Stop paid generation for a family when two attempts fail for the same structural reason. Return
 its remaining slots to the highest-value successful families or to native construction.

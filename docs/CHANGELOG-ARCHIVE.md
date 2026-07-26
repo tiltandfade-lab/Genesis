@@ -14,6 +14,51 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-11 — BW4 MOTION & FEEL: the stills became footage (4 units landed, hit-stop wiring deferred to MF-3b)
+
+**The wave.** BEAUTY-WAVE-4 (docs/BEAUTY-WAVE-4.md) — the space between verbs. Orchestrated as
+4 background Sonnet executors in isolated worktrees, each personally re-gated on its branch tip
+and landed `--no-ff`; MF-1 first (gating — everything is judged through the camera), then
+MF-2/3/4 in parallel off its tip.
+
+**Added.**
+- **MF-1 CAMERA TWEENS** (`c067276a`) — beat/room/move-step camera refits glide position+target
+  over 320ms ease-out instead of snapping; interruptible retarget from the live interpolated
+  pose; player zoom/rotate stay instant (Feel Law 3). Reuses the `S.tweens`/`tickTweens` channel.
+  The executor found+fixed two real interruption bugs (preview `placeCamera` snapping;
+  `drainTweens` force-completing) by capturing the pre-fit pose at the top of `setInteriorBoard`.
+- **MF-4 TURN & ROUND PRESENTATION** (`f606d14b`) — acting-ring 300ms slide between single-actor
+  handoffs (instant path kept for every other shape); round header 250ms dip-and-return + chip
+  strip single pulse off a one-shot `GS.cmbLastRoundSeen` flag (mirrors `cmbDamageFlashed`); VP5
+  damage floater 60ms pop-in scale. Transform/opacity only — no reflow storms.
+- **MF-3 IMPACT FEEL — mechanism** (`3a245c6b`) — hit-stop freeze (attacker+target verb tweens
+  stall `t` at contact; world + camera-pose tween keep ticking, doubly guarded against freezing
+  an `isCameraPoseTween`), directional recoil, crit white-flash + 2px single-bounce camera nudge,
+  fall-death 80ms hold. Freeze resumes start-shifted (no jump).
+- **MF-2 SPAWN/DESPAWN GRACE** (`fa27aff7`) — standee mount 150ms fade + 4% scale settle
+  (base-first); despawn 200ms fade-into-base (base lifts last); seeded ≤400ms dressing/furniture
+  cascade; room-transition 200ms crossfade. New theater-layer ES module `src/ui/spawn-grace.js`.
+
+**Deferred.**
+- **MF-3b (hit-stop production wiring)** — MF-3's hit-stop/recoil/crit-response are built + tested
+  but DORMANT in real play: production plays `hit-damage` (via the `{hurt:"hit-damage"}` remap) so
+  base shake+flash fire, but the hit-stop freeze + recoil are gated on `opts.attackerId` and
+  crit-response on a `hit-crit` verb, neither of which `theaterFxFromLedger`'s hp case emits.
+  Wiring = thread `attackerId` + a crit flag onto the hp ledger event (an EVENT-CONTRACT addition
+  at the `DM_EVENT_FIELDS` boundary) — flagged for Adam's design call. fall-death's hold IS live.
+- **MF-5 feel gate** — the interactive "does it feel like moving miniatures?" play session (Adam
+  at the keyboard) + the instrumented turn-burst, best shot after MF-3b so the burst can show the
+  hit-stop centerpiece. Interim evidence: the loop-gate contact sheet + `loop-01-camera-mid-tween.png`
+  regenerated on the integrated tree, plus the fake-clock harnesses proving every tween curve.
+
+**Fixed.**
+- `verify-mf1-camera-tweens` settle-await 5s→15s (`978d1402`) — MF-1's own on-mount camera tween
+  needs longer to settle on a cold/contended headless Chrome (matched the frustum harness).
+
+**Gates (all personally re-run by the orchestrator, never self-reports).** check-manifest OK;
+verify-mf1 24/0, verify-mf4 36/0, verify-mf3 47/0, verify-mf2 61/0; the integration gate on the
+merged tree (all four MF harnesses + standee 71/0, theater-verbs 100/0, dungeon-interior 287/0);
+loop gate 5/5 clean, fps 72–253.
 ## 2026-07-11 — BW3 + THE FULL VISUAL CAMPAIGN CLOSED: three waves in one sitting; the engine converged on the mocks
 
 **The arc.** Adam's mock frames became the reference model; three waves landed end to end:

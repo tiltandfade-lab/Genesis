@@ -90,35 +90,6 @@ The Desktop research packet is folded (`CLAYROOM-RESET-LADDER.md`, `GOLDEN-SITES
 6. ☐ **CL-R2…CL-R6** in order, then Guard Post 1 composition (`GOLDEN-SITES-CATALOG.md`).
 7. ☐ **FULL CI PENDING** for this branch — this was a fast checkpoint, not an evening close.
 
-## Do next (2026-07-22 later — canon pass EXECUTED; Adam's review packet is the gate)
-
-The Fable canon-and-scope pass ran docs-only on 2026-07-22. Waves 1-6/10 remain CLOSED; Waves
-7-9/11-12 now hold full PROPOSED records. Nothing closed, nothing built, nothing merged.
-
-1. ☑ **Close Wave 6 explicitly** (15.8; corpus/ledger protections intact).
-2. ☑ **Canon materialized:** `docs/canon/` — README (precedence law) · PRODUCT-SCOPE ·
-   SYSTEM-OWNERSHIP · DECISION-INDEX · QUESTION-COVERAGE · OPEN-QUESTIONS · GLOSSARY ·
-   DOCUMENT-MAP (census of ~290 docs + supersession map + health-debt register).
-3. ☑ **All five remaining waves drafted** in order 7→8→9→11→12 (wave-0N folders: README +
-   proposed dispositions + proposed phasing audit). Coverage: 26 INHERITED · 30 FABLE-PROPOSED
-   · 7 OPEN-ADAM · 6 EVIDENCE-GATED · 1 DEFERRED across the 70-question bank, +5 generated.
-4. ☑ **Ladder/ledger reconciled as proposals** (F8.1 pass, W7 archetype overlay, W9 soak
-   traces, F12.1 bakeoff fixture, new ledger rows) — apply only at Adam's acceptance.
-5. ☑ **ADAM: answer founder Batch 1** — DONE 2026-07-22 (B·B·B·B·B·A; recorded verbatim in the
-   owning §.4 sections; six new GEN-* ids).
-6. ☑ **ADAM: sweep the five wave records** — DONE 2026-07-22/23: all five swept in plain
-   language and explicitly CLOSED (§16.7 · §17.7 · §18.7 · §19.7 · §20.7).
-7. ☑ **Per-module three-horizon register** (Adam's ruling, same day): `docs/canon/
-   MODULE-PHASING.md` — proof/MVP/ideal for every game module, dungeon families ledger-routed;
-   "(proposed)" rows (ship-travel deferral chief among them) ride the same review as item 6.
-8. ◐ **Queued ops unit: DOCS-INDEX tooling** — DEFERRED 2026-07-23 (Adam, wave-12 §20.7):
-   still wanted, but execution must begin with a re-scope pass verifying what has changed
-   since the spec. Stays queued with that precondition.
-9. ☐ Keep `Reference/FFT Battle Maps/` reference-only and untracked; R1/R2 stay supplemental
-   research, never canon or dependency admission.
-10. ☑ **FULL CI discharged** at the 2026-07-23 clean close (full local sweep + merge to
-    master + GitHub CI confirmed — see CHANGELOG 2026-07-23 later entry).
-
 ## Do next (2026-07-23 — ALL TWELVE WAVES DESIGN-CLOSED; the plan is a reading now)
 
 The founder-review session (HANDOFF ⭐ 2026-07-22/23) closed waves 7/8/9/11/12 — the whole
@@ -304,3 +275,16 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O2. ☑ **Fragments for the opening surface — DONE 2026-06-19.** Authored 6–10 word sensory fragments for all 9 world-genesis tables (218 rows) + both pressure tables, held in a parallel `FRAG` map in `genesis.html` (no row-array surgery). Threaded through `lookup`/`rollTbl`/`rollPressure` (each now returns the row `idx` + fragment). **The player sees the fragment at the roll** (genesis cards + the triad nearby), and pressures stay veiled (player sees the fragment, DM holds danger+doom); the world view *after founding* shows real names (the reveal arc), and `handToDM` carries the truth. Bundle/entry rolls already read as fragments, so weren't duplicated. Verified: FRAG arrays align to row counts, runtime threading 0 misses in 9000 rolls, script parses clean.
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
+
+## Do next (2026-07-25, post split + singular close)
+
+1. ☐ **Adam's visual verdicts** — the open PENDING ADAM ledger: visual-correction C2–C4 sheets,
+   the AO contact fix triptych, the split's visual-equivalence sheet, the torchlit C3 look (which
+   also owns the env1* expectation update).
+2. ☐ **Guard-post build resumes on the split architecture** — future graphics changes land in one
+   module each (docs/THEATER-MODULES.md is the map; GOLDEN-SITES-CATALOG.md the program).
+3. ☐ **Split follow-ups** (none block the guard post): d4-doors option-b + theater-doors extraction,
+   AO A/B rig clip-box pin, material-contract re-baseline, root's 16 dead import bindings,
+   dungeon-interior §18 negative-clause rescope, diegetic-light LFS-env reds.
+4. ☐ **Material lane taste pass** (GP-MM-STONE-V001 four stone candidates await Adam's cards) —
+   gates the MM engine wiring.

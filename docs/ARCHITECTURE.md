@@ -441,7 +441,7 @@ consumes the pure tile data, `setUnits` builds figures via a precedence chain (w
 recipe → bestiary recipe → cuboid fallback, so no creature is a bare slab). Render-on-demand (dirty
 flag), flat Lambert + NearestFilter + low internal res for the PSX look; degrades cleanly (no throw)
 without WebGL.
-**Lives in:** `src/ui/theater-boot.js`. **Spec:** docs/BATTLE-THEATER.md
+**Lives in:** `src/ui/theater-boot.js` — since 2026-07-25 the COMPOSITION ROOT (7.5k lines: state, schedulers, doors, facade) over 16 extracted modules (realizers, lighting, practicals, camera, occlusion, sprites, standee mounts, dressing, interior mesh, post suite, skins, whole-object, figures, overlays, motes, dev workbenches) — the map + decision record is docs/THEATER-MODULES.md. **Spec:** docs/BATTLE-THEATER.md
 
 ### Model Grammar (parts, recipes, whole-object registry)
 **What it is.** The "recipes, not models" system that gives almost every creature a distinct figure

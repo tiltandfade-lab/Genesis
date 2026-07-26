@@ -8,6 +8,36 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-25 (later) — VISUAL CORRECTION CLOSED + AO CONTACT FIX + THE THEATER-BOOT SPLIT [Fable]
+
+**Added**
+- `docs/THEATER-MODULES.md` — the 16-module theater map + decision record (the split's architecture proof).
+- `dev/verify-theater-surface.mjs` + `dev/fixtures/theater-surface-baseline.json` — the 219-key
+  window.Theater contract, frozen and gated in real Chrome at every step.
+- `dev/fixtures/theater-split-b0-baseline.md` — the 19-puppeteer-by-hand census law + honest baseline.
+- 16 extracted ES modules (`src/ui/theater-{clay-room,light-lab,skins,whole-object,figure-build,post,
+  dispose,lighting,practicals,motes,camera,occlusion,sprites,standee-mount,overlays,interior-mesh,
+  dressing,tabletop,interior-realize}.js`) — theater-boot.js 21,555 → 7,518 lines; setInteriorBoard
+  is a 17-phase orchestrator; everything else verbatim (multiset-proven per step).
+
+**Changed**
+- ENV_AO_DENOISE re-weighted from a 9-candidate measured sweep (Adam's "gap of light at every planar
+  contact"): creaseLift vs raw 5.38 → 1.59 luma; receipts in `dev/clay-captures/ao-contact-diag/`.
+  VISUAL VERDICT: PENDING ADAM.
+- Visual-correction Checkpoints 2–4 landed on the clay lane (warm/cool overlap + readout truth;
+  lore-native fixtures + recipe-responsive void; honest CL-F01 workbench). PENDING ADAM.
+
+**Fixed**
+- Six harness runners resurrected from the CL-R1 registry-merge import failure (bw2-1b, s5-flip,
+  sprite-join, l2-census, env3-town + qfb-tray via dev/theater-preview.html's missing classic
+  scripts); env1*/l2 scratch builders pin base-commit genesis.html so their RED proofs survive the
+  split; several checks re-anchored on their true subjects. Zero checks weakened.
+
+**Deferred**
+- Door-family extraction (d4-doors option-b recipe recorded), the AO A/B rig's clip-box
+  nondeterminism, material-contract re-baseline, torchlit pinned-look expectation (awaits Adam's
+  C3 verdict) — the full ledger in THEATER-MODULES.md §Follow-ups.
+
 ## 2026-07-25 — CL-R2 MULTIPLY CONTACT + SILHOUETTE SHADOWS + BASE NEON [Codex]
 
 ### Changed
@@ -879,48 +909,3 @@ verify-dungeon-interior 287/0, verify-mf1-camera-tweens 24/0, verify-interior-ca
 verify-walk-card-projection 29/0, verify-bw2-1b (jsdom) 24/0. Capture PNGs READ: A3 after-composed
 reads as a staged diorama (void gone); A4 on/off shows the pillar fade to reveal the standee behind.
 
-## 2026-07-11 — BW4 MOTION & FEEL: the stills became footage (4 units landed, hit-stop wiring deferred to MF-3b)
-
-**The wave.** BEAUTY-WAVE-4 (docs/BEAUTY-WAVE-4.md) — the space between verbs. Orchestrated as
-4 background Sonnet executors in isolated worktrees, each personally re-gated on its branch tip
-and landed `--no-ff`; MF-1 first (gating — everything is judged through the camera), then
-MF-2/3/4 in parallel off its tip.
-
-**Added.**
-- **MF-1 CAMERA TWEENS** (`c067276a`) — beat/room/move-step camera refits glide position+target
-  over 320ms ease-out instead of snapping; interruptible retarget from the live interpolated
-  pose; player zoom/rotate stay instant (Feel Law 3). Reuses the `S.tweens`/`tickTweens` channel.
-  The executor found+fixed two real interruption bugs (preview `placeCamera` snapping;
-  `drainTweens` force-completing) by capturing the pre-fit pose at the top of `setInteriorBoard`.
-- **MF-4 TURN & ROUND PRESENTATION** (`f606d14b`) — acting-ring 300ms slide between single-actor
-  handoffs (instant path kept for every other shape); round header 250ms dip-and-return + chip
-  strip single pulse off a one-shot `GS.cmbLastRoundSeen` flag (mirrors `cmbDamageFlashed`); VP5
-  damage floater 60ms pop-in scale. Transform/opacity only — no reflow storms.
-- **MF-3 IMPACT FEEL — mechanism** (`3a245c6b`) — hit-stop freeze (attacker+target verb tweens
-  stall `t` at contact; world + camera-pose tween keep ticking, doubly guarded against freezing
-  an `isCameraPoseTween`), directional recoil, crit white-flash + 2px single-bounce camera nudge,
-  fall-death 80ms hold. Freeze resumes start-shifted (no jump).
-- **MF-2 SPAWN/DESPAWN GRACE** (`fa27aff7`) — standee mount 150ms fade + 4% scale settle
-  (base-first); despawn 200ms fade-into-base (base lifts last); seeded ≤400ms dressing/furniture
-  cascade; room-transition 200ms crossfade. New theater-layer ES module `src/ui/spawn-grace.js`.
-
-**Deferred.**
-- **MF-3b (hit-stop production wiring)** — MF-3's hit-stop/recoil/crit-response are built + tested
-  but DORMANT in real play: production plays `hit-damage` (via the `{hurt:"hit-damage"}` remap) so
-  base shake+flash fire, but the hit-stop freeze + recoil are gated on `opts.attackerId` and
-  crit-response on a `hit-crit` verb, neither of which `theaterFxFromLedger`'s hp case emits.
-  Wiring = thread `attackerId` + a crit flag onto the hp ledger event (an EVENT-CONTRACT addition
-  at the `DM_EVENT_FIELDS` boundary) — flagged for Adam's design call. fall-death's hold IS live.
-- **MF-5 feel gate** — the interactive "does it feel like moving miniatures?" play session (Adam
-  at the keyboard) + the instrumented turn-burst, best shot after MF-3b so the burst can show the
-  hit-stop centerpiece. Interim evidence: the loop-gate contact sheet + `loop-01-camera-mid-tween.png`
-  regenerated on the integrated tree, plus the fake-clock harnesses proving every tween curve.
-
-**Fixed.**
-- `verify-mf1-camera-tweens` settle-await 5s→15s (`978d1402`) — MF-1's own on-mount camera tween
-  needs longer to settle on a cold/contended headless Chrome (matched the frustum harness).
-
-**Gates (all personally re-run by the orchestrator, never self-reports).** check-manifest OK;
-verify-mf1 24/0, verify-mf4 36/0, verify-mf3 47/0, verify-mf2 61/0; the integration gate on the
-merged tree (all four MF harnesses + standee 71/0, theater-verbs 100/0, dungeon-interior 287/0);
-loop gate 5/5 clean, fps 72–253.

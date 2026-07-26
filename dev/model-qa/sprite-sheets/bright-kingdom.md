@@ -7,7 +7,12 @@ realm: bright-kingdom
 
 # Sprite Batch Prompts — Bright Kingdom (Nintendo-80s cartoon, power-ups you eat, teeth under the candy)
 
-**Not canon** (see `sprite-sheet-prompts.md` for the full disclaimer + shared template). This
+> **Production-format authority (2026-07-24):** The packet grammar demonstrated here is the
+> preferred grammar for new sprite production. Use [`PRODUCTION-FORMAT.md`](PRODUCTION-FORMAT.md)
+> for current grid, cell-aspect, canvas, QA, and receipt fields. Any `5×5` / `25 cells` value
+> below is historical batch data, not a universal default.
+
+**Roster/content status: working, not canon.** This
 file batches EVERY creature in the Bright Kingdom realm bestiary (121 monsters) plus a
 themed NPC roster (43 roles, drawn from the game's own NPC Role Spine + this realm's
 skin/adds) into 25-per-sheet ChatGPT prompts. Names + flavor are pulled verbatim from the live

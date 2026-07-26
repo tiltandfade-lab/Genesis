@@ -6,6 +6,12 @@ Captured from Adam's 2026-07-10 cleanup session so the regen wave doesn't drift.
 The previous prompt blocks were good — **salvage, don't restart wholesale**.
 Regen instructions below are DRAFT until Adam confirms them (§10).
 
+**Production-format amendment (Adam 2026-07-24):**
+`dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` owns all new packet formatting. The realm
+packets' style-block/mechanical-block/numbered-cell grammar is preferred, but their historic
+5×5 counts are not universal defaults. Cell aspect is subject-dependent: characters generally
+4:5; giant/titanic 4:6 is provisional pending tests. Any blanket ratio below is retired.
+
 ## 1. Perspective law (RULED)
 
 - **Compatible set: `front` + `side` + `three-quarter` — all at ground/eye level.**
@@ -19,9 +25,11 @@ Regen instructions below are DRAFT until Adam confirms them (§10).
   (78%) + 100 items**; regen queue 417; off-angle quarantine 78.
   (`dev/model-qa/perspective-survey/final-verdicts.csv`)
 
-## 2. Sheet grid ladder (RULED — cells per generated sheet, by creature size)
+## 2. Sheet grid-density ladder (RULED — cells per generated sheet, by creature size)
 
-| tier | size band | grid | per sheet |
+The third column is `gridColumns × gridRows`, never cell aspect.
+
+| tier | size band | gridColumns × gridRows | per sheet |
 |---|---|---|---|
 | T0 | titanic | 1x1 | 1 |
 | T1 | gargantuan | 1x1 | 1 |
@@ -33,16 +41,24 @@ Regen instructions below are DRAFT until Adam confirms them (§10).
 | T7 | tiny | 7x7 | 49 |
 | T8 | tiniest of the tiny | 8x8 GRID (confirmed: grid, not pixel size) | 64 |
 
-- **Humanoids: ALWAYS 4x6** (4 cols × 6 rows, 24/sheet) — proven more reliable on
-  leg length. Cells taller than wide kill the short-leg squash.
-- **Items and tiny creatures: square (1:1) CELL ASPECT is fine** (confirmed: cell
-  aspect, not one-per-sheet).
+- **Character-heavy density option:** `gridColumns: 4`, `gridRows: 6` (24/sheet) remains proven.
+  This describes capacity, not a 4:6 cell.
+- Items and tiny creatures may use square cells only when their silhouette genuinely fits.
+  Square is subject-authorized, not a family-wide default.
 
-## 3. Canvas aspect = direction hint (RULED)
+## 3. Cell/canvas aspect follows the subject (RULED; amended 2026-07-24)
 
 The generator reads overall canvas aspect ratio as directional guidance per sprite.
 Array sprites so cell aspect ≈ subject aspect: vertical subjects → portrait cells;
 long quadrupeds/serpents/vehicles → landscape cells.
+
+- Characters generally start at `cellAspect: 4:5`.
+- Giant/titanic subjects keep the one-subject sheet and begin with `cellAspect: 4:6` only as a
+  **PROVISIONAL TEST CANDIDATE**. Comparative captures and Adam's ruling determine the exact ratio.
+- Wings, tails, horns, weapons, mounts, and effect silhouettes count as part of the subject.
+- Split incompatible body plans into separate sheets rather than forcing one compromise aspect.
+- Every packet labels `gridColumns`, `gridRows`, `cellAspect`, `aspectStatus`, `aspectReason`, and
+  requested canvas separately. Bare `4×6` is forbidden because it confuses grid with aspect.
 
 ## 4. Style law (RULED 2026-07-10)
 
@@ -158,9 +174,11 @@ Every regen prompt is assembled from these clauses, in this order:
 
 1. **Subject block** — realm, family, the cell roster (slugs + labels from the sheet
    manifest, §8), each subject's size band.
-2. **Grid clause** — humanoids: 4x6 portrait canvas. Beasts: ladder tier grid (§2),
-   canvas aspect chosen to favor the subjects (§3): portrait for vertical subjects,
-   landscape for long ones. Items/tiny: square cells.
+2. **Format/grid/aspect clause** — use `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`.
+   State the exact `gridColumns`, `gridRows`, capacity, subject count, `cellAspect`,
+   `aspectStatus`, `aspectReason`, requested canvas, chroma key, camera, row-major order, and
+   filename. Characters generally start 4:5; giant/titanic 4:6 is provisional; other subjects
+   use the aspect their actual silhouette requires.
 3. **Perspective clause** — "ground-level/eye-level camera only; front, side, or
    three-quarter views; never high-angle, never top-down; feet on an implied flat
    ground line, no floor plane." **BUG COROLLARY (Adam 2026-07-10 PM — the recurring

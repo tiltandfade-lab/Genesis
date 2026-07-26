@@ -5,10 +5,13 @@ docs/SPRITE-TRANSITION.md T2. Companion to the original build/gen-sprite-manifes
 plans sheets FROM data/bestiary.js for the retired 6x6/500-creature run) — this generator instead
 PARSES the already-hand-authored ChatGPT batch-prompt files at dev/model-qa/sprite-sheets/*.md
 (one file per realm, each a mix of Monster/NPC/Domestic animal/Wild animal/Dungeon animal/Kid/PC/
-Expansion sections, 25-per-sheet in general, PC combos 25-per-sheet too, expansion sheets sized
-to whatever the roster needed). Those files are the source of truth for THIS batch of art (they
-already encode the exact per-cell name + pose cue Adam is pasting into ImageGen); this script's
-only job is to turn them into one structured JSON contract the slicer + registry generator can
+Expansion sections, historically 25-per-sheet in general, PC combos 25-per-sheet too, expansion
+sheets sized to whatever the roster needed). Those files are the source of truth for THIS
+historical batch of art (they already encode the exact per-cell name + pose cue Adam is pasting
+into ImageGen). Their document grammar is the preferred production grammar, but their fixed
+numeric layouts are not defaults; `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` owns new
+packet formatting, dynamic subject-based cell aspect, QA, and receipts. This script's only job is
+to turn roster sections into one structured JSON contract the slicer + registry generator can
 read mechanically, instead of everyone re-parsing markdown by eye.
 
 Output: dev/sprite-manifests/v2-manifest.json — GENERATED, same discipline as tables.json: never
@@ -22,8 +25,8 @@ Shape (docs/SPRITE-TRANSITION.md "Shared data shapes"):
                    "cue": "..." } ] } ] }
 
 Parsing rules:
-  - One file per realm under dev/model-qa/sprite-sheets/, EXCEPT INDEX.md (a plain doc index,
-    not a batch-prompt file — skipped).
+  - One file per realm under dev/model-qa/sprite-sheets/, EXCEPT INDEX.md and
+    PRODUCTION-FORMAT.md (authority docs, not batch-prompt files — skipped).
   - realm = the filename stem, EXCEPT pc-characters.md -> realm "pc" (per spec).
   - A batch section is any `### <Kind> sheet <seq>` heading (`<Kind>` in Monster / NPC /
     Domestic animal / Wild animal / Dungeon animal / Kid / PC / Expansion; `<seq>` either
@@ -63,7 +66,7 @@ SRC_DIR = os.path.join(ROOT, "dev", "model-qa", "sprite-sheets")
 OUT_DIR = os.path.join(ROOT, "dev", "sprite-manifests")
 OUT_PATH = os.path.join(OUT_DIR, "v2-manifest.json")
 
-SKIP_FILES = {"INDEX.md"}
+SKIP_FILES = {"INDEX.md", "PRODUCTION-FORMAT.md"}
 
 # filename stem -> realm override (spec: "pc-characters.md -> realm pc; fantasy.md -> realm
 # fantasy" -- fantasy needs no override, only pc-characters does).

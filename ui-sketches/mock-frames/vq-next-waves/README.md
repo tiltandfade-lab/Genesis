@@ -1,9 +1,14 @@
 # Next-Wave Technical Vision References
 
 type: graphics vision packet
-status: ART-DIRECTION TARGETS, 2026-07-12
+status: ART-DIRECTION TARGETS; fixed sprite-sheet format superseded 2026-07-24
 audience: Claude/Codex graphics implementation sessions
 companion: `docs/STAGE-C-ART-DIRECTION-REVIEW.md`
+
+> **Sprite-format supersession:** For new live pixel batches,
+> `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` replaces this packet's old fixed
+> 1×4/fixed-4:6 source recommendation. Grid and cell aspect are declared separately and aspect
+> follows the subject. The frame remains visual/technical evidence.
 
 ## How to use this packet
 
@@ -223,7 +228,8 @@ reference deliberately shows front, oblique, nearly edge-on, rear, and large-mon
 }
 ```
 
-Preferred generated source remains a horizontal `1x4` view strip with each cell a `4:6` portrait.
+Historical generated sources used a horizontal `1x4` view strip with each cell a `4:6` portrait.
+That fixed format is not a new-production default; use the superseding contract named above.
 Automated folding must slice by declaration, key/despill, dilate hidden RGB before mip generation,
 derive bounds/foot anchors, normalize scale semantically, and reject ambiguous support islands unless
 the asset is declared as a swarm/group.

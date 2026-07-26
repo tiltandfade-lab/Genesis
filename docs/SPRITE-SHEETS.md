@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: UN-PARKED 2026-07-09 — Adam locked the sprite transition (docs/SPRITE-TRANSITION.md): creatures become sprites, sourced from the dev/model-qa/sprite-sheets/ prompt lane. This doc's slicer + keying conventions are the resurrected base; the v2 manifest/generator adaptations live in SPRITE-TRANSITION T2. The 2026-07-03 park (3D-figures ruling) is REVERSED for creatures; 3D keeps trays/architecture.
+status: PARTIALLY SUPERSEDED 2026-07-24 — slicer/keying provenance retained; fixed 6×6/hero-single production formatting retired to dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md
 created: 2026-07-03
 related:
   - "[[BATTLE-THEATER]]"   # §3 — the T2-sprites unit consumes assets/sprites/ later
@@ -9,21 +9,23 @@ related:
 
 # Sprite Sheets — creature sprite generation + slicing pipeline
 
-Two build scripts turn the 510-entry bestiary into game-ready 2D creature sprites via a
+> **Formatting authority:** New production packets use
+> `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` and the exact per-realm style block in that
+> directory. The 6×6/36 lane and universal portrait language below describe the first historical
+> pipeline; they are not defaults for new generation. Keep this document for its slicing, chroma,
+> manifest, honest-failure, and slug-addressed handoff provenance.
+
+The historical pipeline used two build scripts to turn the 510-entry bestiary into game-ready 2D creature sprites via a
 ChatGPT paste-a-prompt / drop-a-PNG workflow (Adam's established keying convention: flat
 magenta `#FF00FF` background, key it out in post). Two lanes: **sheets** (6×6 grid, 36
 creatures/image — the bulk tiers) and **hero singles** (one production sprite per image —
 every CR ≥ 3 creature plus every `role: leader`).
 
-**Humanoid sheet formula:** for NPC, kid, gang, fashion-heavy, roller-skate, or otherwise
-humanoid-forward batches, use a true **portrait canvas** by default instead of a square sheet.
-Target **4:5** (`width:height`) and accept a slightly taller portrait output when it preserves
-full bodies. Do not merely ask for "4:5 composition inside a square"; prompt for the actual
-image canvas to be portrait so each row/cell has more vertical room. Keep the same flat
-`#FF00FF` background and grid/order discipline. This prevents the recurring short-legged,
-squat, or boot-cropped outputs seen on square humanoid sheets.
+**Current humanoid starting point:** characters generally use `cellAspect: 4:5`, but aspect is
+subject-dependent and is always declared separately from grid density. Giant/titanic 4:6 is a
+provisional test candidate, not a locked ratio. See the formatting authority above.
 
-## The pipeline
+## The historical 6×6 pipeline
 
 1. **`python3 build/gen-sprite-manifests.py`** reads `data/bestiary.js`, clusters all 508
    real creatures (2 non-creature bestiary rows dropped — doc-header artifacts, not stat

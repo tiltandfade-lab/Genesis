@@ -7,7 +7,12 @@ realm: fantasy
 
 # Sprite Batch Prompts — Fantasy (Genesis's default, unreskinned world)
 
-**Not canon** (see `sprite-sheet-prompts.md` for the full disclaimer + shared template). This is
+> **Production-format authority (2026-07-24):** The packet grammar demonstrated here is the
+> preferred grammar for new sprite production. Use [`PRODUCTION-FORMAT.md`](PRODUCTION-FORMAT.md)
+> for current grid, cell-aspect, canvas, QA, and receipt fields. Any `5×5` / `25 cells` value
+> below is historical batch data, not a universal default.
+
+**Roster/content status: working, not canon.** This is
 the **default fantasy realm** — not one of the 11 named/reskinned realms, but the base world
 Genesis actually ships with: the full 510-entry Monster Manual bestiary (`data/bestiary.js`,
 straight SRD-and-original fantasy stat blocks, no genre reskin) plus the raw 35-archetype NPC

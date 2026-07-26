@@ -47,7 +47,8 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Graphics governing charter | `docs/GRAPHICS-CONVERGENCE-CHARTER.md` | protected core + convergence law |
 | Is the Clayroom fixture trustworthy? (reset ladder CL-R0…CL-R6) | `docs/CLAYROOM-RESET-LADDER.md` | renderer/fixture-trust gate across passes; gates C1H/C1I/Guard Post 1 |
 | Golden-site structure/material catalog + the Guard Post brief | `docs/GOLDEN-SITES-CATALOG.md` | FFT relational grammar, GP-SHAPE-01, cultural mutation MVP/Ideal, seed law, FFT/import boundary |
-| Pixel sprite register (canon figure register) | `docs/ART-DEPARTMENT.md` | Adam's 2026-07-15 ruling; quote, never paraphrase |
+| Pixel sprite register (canon figure register) | `docs/ART-DEPARTMENT.md` | Adam's rulings through 2026-07-24; quote, never paraphrase |
+| New sprite batch packet format | `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` | preferred explicit grammar; subject-based cell aspect; 4:5 character default; giant/titanic 4:6 provisional |
 | Faceted RESERVE register + prop/decal/kit contracts | `docs/ART-DIRECTION-CANON.md` | sibling scope to ART-DEPARTMENT, not a rival |
 | DM persona/behavior | `docs/DM-CHARTER.md` | |
 | DM↔engine event law | `docs/EVENT-CONTRACT.md` (+ generated `dm-contract.json`) | |
@@ -68,7 +69,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/ANIMAL-SOCIAL-HQ.md — implementation-evidence — fix-spec/SPECCED-then-LANDED(2026-07-09) — child of ANIMAL-SOCIAL
 - docs/ANIMAL-SOCIAL.md — current-canon — system-spec/SPECCED-locked(2026-07-08) — built via HQ wave
 - docs/ARCHITECTURE.md — current-canon (implementation map) — architecture/living(2026-07-05) — describes CURRENT code; predates dungeon program by design
-- docs/ART-DEPARTMENT.md — current-canon — style-canon/LAW(2026-07-15) — pixel register home; sibling of ART-DIRECTION-CANON (scoped, not rival)
+- docs/ART-DEPARTMENT.md — current-canon — style-canon/LAW(2026-07-24) — pixel register home; sibling of ART-DIRECTION-CANON (scoped, not rival); routes new packet formatting to dev/model-qa/sprite-sheets/PRODUCTION-FORMAT
 - docs/ART-DIRECTION-CANON.md — current-canon — style-canon/LAW(2026-07-14) — faceted RESERVE register master copy
 - docs/ASSET-PROMPTS.md — operations — working-doc(2026-07-01) — image-gen shopping list; no frontmatter
 - docs/ASSET-SOURCING-RESEARCH.md — research — research(2026-07-16) — license-safe source shortlist
@@ -299,7 +300,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/SPRITE-BILLBOARD-RESEARCH.md — research — none(2026-07-16)
 - docs/SPRITE-GEN-V2.md — current-canon (ruled sections) — none — §10 regen block awaits Adam confirm (memory-tracked)
 - docs/SPRITE-IMPLEMENTATION-STRATEGY.md — implementation-evidence — system-spec/LANDED(2026-07-12)
-- docs/SPRITE-SHEETS.md — current-canon — system-spec/UN-PARKED(2026-07-09)
+- docs/SPRITE-SHEETS.md — current-canon for slicer/keying/runtime provenance — system-spec/PARTIALLY-SUPERSEDED(2026-07-24) — fixed 6×6 + hero-single production format retired to dev/model-qa/sprite-sheets/PRODUCTION-FORMAT
 - docs/SPRITE-TAGS.md — current-canon — none(2026-07-10) — open items section remains
 - docs/SPRITE-TRANSITION.md — current-canon — system-spec/LOCKED/canonical:true(2026-07-09) — creatures→sprites; re-scopes MODEL-FOUNDRY
 - docs/SRD-MECHANIZATION.md — current-canon — system-spec/built(2026-07-01)
@@ -358,7 +359,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - FIGURINE-LIFE-PASS-VISION-QUEST.md — proposed — no frontmatter
 - Genesis Map Vision Quests.md — proposed — no frontmatter
 - MAP-VISION-QUEST-IMPLEMENTATION-GUIDE.md — proposed — ⚠ claims to live "outside the repository" while committed here
-- PC-MONSTER-SPRITE-STYLE-GUIDE.md — accepted-supporting — LOCKED by Adam 2026-07-12 — ⚠ names SPRITE-SHEETS/SPRITE-TRANSITION as runtime authorities w/ unreconciled visual preamble; superseded in style law by ART-DEPARTMENT (2026-07-15 pixel canon)
+- PC-MONSTER-SPRITE-STYLE-GUIDE.md — accepted-supporting reserve-register history — LOCKED by Adam 2026-07-12; live style superseded by ART-DEPARTMENT and fixed 1×4/fixed 4:6 production formatting retired to dev/model-qa/sprite-sheets/PRODUCTION-FORMAT (2026-07-24)
 - REALM-SPRITE-MATRIX-VISION-QUEST.md — research — reference-only
 - REALM-STYLE-FAMILIES-VISION-QUEST.md — proposed
 - SPRITE-SPREAD-BESTIARY-NOTES.md — research — reference-only
@@ -393,7 +394,7 @@ Live-canon: Character Genesis Procedure v1.0 · Starting State Procedure v1.0. E
 - model-coverage-report.md · playtest-chase-0704-findings.md · playtest-findings-shakedown.md · table-order-report.md · top-band-uniqueness-report.md — implementation-evidence
 - realm-mythic-proposals.md — proposed — only Gloom exemplar approved
 - table-lint-baseline.md — operations (diff baseline by design)
-- model-qa/: README (operations) · REFERENCE-DIRECTION (accepted-supporting) · A1-A2-REVIEW / FACETED-MISMATCH-AUDIT / battlemap-playtest-FINDINGS / chassis-catalog / creature-coverage-report (implementation-evidence; coverage claims are dated snapshots ⚠) · pose-refs / refs-highseas-NOTES / sprite-sheet-prompts (research; sprite-sheet-prompts' "sprites were retired" claim is itself superseded by the 07-09 sprite transition + 07-15 pixel canon ⚠)
+- model-qa/: README (operations) · REFERENCE-DIRECTION (accepted-supporting) · A1-A2-REVIEW / FACETED-MISMATCH-AUDIT / battlemap-playtest-FINDINGS / chassis-catalog / creature-coverage-report (implementation-evidence; coverage claims are dated snapshots ⚠) · pose-refs / refs-highseas-NOTES · sprite-sheet-prompts (historical; fixed 5×5 + "sprites retired" claims superseded) · sprite-sheets/PRODUCTION-FORMAT (current operations authority for new packet grammar, grid/aspect/canvas declarations, QA, and receipts)
 
 ### Reference/Procedural-Dungeon-Research/
 - SOURCE-INDEX.md — research — VERIFIED ledger (R1/R2 supplemental inputs; never authority)
@@ -410,7 +411,8 @@ Design-level supersessions (newer ruling owns the topic; older text preserved):
 - W10 F10.6g bounded player rotation → **Wave 3 §12.13 fixed production camera family** (recorded in wave-10 README amendment).
 - DUNGEON-GRAPH.md resident-scaled wording → **P3.4/P6.4 provenance-first scale domains**.
 - Creature 3D model lane (REALM-MODEL-PLAN.md, REALM-MODELS-P3.md, BESTIARY-COVERAGE.md, CREATURE-MODELS-P2.md creature scopes; MODEL-GRAMMAR.md) → **SPRITE-TRANSITION.md (2026-07-09 LOCK)** + **ART-DEPARTMENT.md (2026-07-15 pixel canon)**. MODEL-FOUNDRY re-scoped to trays/props/architecture.
-- PC-MONSTER-SPRITE-STYLE-GUIDE.md (faceted vision variant, 07-12) style law → **ART-DEPARTMENT.md** (pixel register canon) + **ART-DIRECTION-CANON.md** (faceted RESERVE register).
+- PC-MONSTER-SPRITE-STYLE-GUIDE.md (faceted vision variant, 07-12) style law → **ART-DEPARTMENT.md** (pixel register canon) + **ART-DIRECTION-CANON.md** (faceted RESERVE register); fixed 1×4/fixed 4:6 production format → **dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md**.
+- SPRITE-SHEETS.md fixed 6×6/hero-single format + sprite-sheet-prompts.md fixed 5×5 format + regen-v3 fixed-format generators → **dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md**. Historical packets and generators remain for exact reproduction only.
 - VISUAL-ASSET-QUEUE.md → PLACE-ASSET-QUEUE.md (props) + sprite transition (creatures).
 - MICRO-PROPS.md · ROOM-GRAMMAR.md → **BEAUTY-WAVE-5.md** (IA-3 et al.).
 - PHASE-3-DIRECTOR-BRIEF.md → **PHASE-3-WAVE-PLAN.md**.

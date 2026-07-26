@@ -4,6 +4,11 @@
 
 Reference-only sprite exploration. No runtime wiring, sprite registry edits, slicing, manifest changes, or production asset promotion are part of this quest.
 
+> **Format superseded 2026-07-24:** Fixed 1×4 is evidence from this comparison, not live
+> production law. New pixel batches use
+> `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`, with grid and cell aspect declared separately
+> and aspect selected for the subject.
+
 ## Sample sheets
 
 ![Fantasy sample sheet](references/realm-fantasy-sample-sheet.png)
@@ -14,7 +19,9 @@ Reference-only sprite exploration. No runtime wiring, sprite registry edits, sli
 
 The six-role matrix was useful for comparing realm coverage, but it is not the preferred production presentation. The six-up layout compressed the figures and encouraged a more character-lineup/cartoon read.
 
-Preferred future sheet presentation: **1 × 4 horizontal strips** with one figure per generous cell. Use separate strips for PC/NPC and for CR bands when necessary rather than forcing every role into one crowded sheet.
+Historical comparison winner: **1 × 4 horizontal strips** with one figure per generous cell. The
+breathing-room finding survives; the fixed layout does not. New packets may use separate sheets for
+PC/NPC and CR/body-plan bands rather than force every role into one crowded sheet.
 
 The original six-role matrix was:
 
@@ -52,9 +59,10 @@ Across all three sheets:
 
 ## Presentation correction
 
-The 1×4 sheets produced stronger silhouettes and fit the game’s narrow figurine bases better. Treat this as a style invariant, not merely a layout preference:
+The historical 1×4 sheets produced stronger silhouettes and fit the game’s narrow figurine bases
+better. Treat the **breathing-room and silhouette findings** as invariants, not the 1×4 layout:
 
-- one subject per horizontal cell;
+- one subject per declared cell;
 - generous lateral padding for weapons, tails, wings, horns, and cloaks;
 - shared narrow ground line;
 - consistent feet-to-canvas scale;

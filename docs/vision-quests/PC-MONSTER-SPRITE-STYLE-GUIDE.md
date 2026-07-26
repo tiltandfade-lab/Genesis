@@ -2,6 +2,13 @@
 
 ## Status
 
+> **LIVE pixel-production supersession (2026-07-24):** This faceted figurine guide is retained
+> as reserve-register history and supporting evidence. It is not the format or style authority
+> for live pixel sprites. Its fixed `1 × 4` layout, fixed `4:6` cell, green-key, and faceted-style
+> instructions are retired for new live production. Use `docs/ART-DEPARTMENT.md` for pixel style
+> law and `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` for packet, grid, subject-based
+> aspect, QA, and receipt law. Historical prompts below remain verbatim for reproducibility.
+
 **LOCKED by Adam, 2026-07-12:** this mature faceted figurine language is the target for regenerated
 creature, NPC, and PC sprites. `docs/SPRITE-SHEETS.md` and `docs/SPRITE-TRANSITION.md` remain
 authoritative for manifests, slicing, registry integration, fallback, and runtime behavior; their
@@ -79,15 +86,18 @@ SHEET DISCIPLINE:
 - keep weapons, tails, wings, horns, and other extremities inside the cell;
 - preserve consistent scale and baseline.
 
-### Preferred production layout: 1 × 4
+### Historical reserve experiment: 1 × 4
 
-The strongest mature results came from a horizontal 1 × 4 strip rather than a crowded multi-row matrix. Use one figure per generous cell for production-style references. The extra breathing room protects silhouette clarity, keeps proportions adult, and fits the game’s narrow figurine bases. Multi-row sheets are acceptable for mood boards, but should not be the default generation format.
+The strongest results in this reserve experiment came from a horizontal 1 × 4 strip rather than a
+crowded multi-row matrix. The useful finding is generous breathing room for silhouette clarity and
+adult proportions; the fixed layout is retired for new live production.
 
 Avoid shoulder-to-shoulder poster lineups. Leave room for weapons, tails, wings, horns, cloaks, and asymmetrical silhouettes.
 
-### Per-cell aspect rule: 4 × 6 portrait
+### Historical reserve-test cell: 4 × 6 portrait
 
-The horizontal strip is not permission to squash the subjects. Each sprite cell should be treated as a fixed **4:6 portrait cell**, repeated four times across the sheet. The full sheet may therefore be approximately 16:6, but ImageGen must be told the cell ratio explicitly.
+The historical strip treated each sprite cell as a fixed **4:6 portrait cell**, repeated four
+times across the sheet. This records that test; it is not a current universal aspect rule.
 
 - feet sit near a shared lower baseline;
 - the head has room above it;

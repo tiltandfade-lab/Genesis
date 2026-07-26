@@ -212,7 +212,9 @@ bad room. Every beautiful effect must therefore be reproducible data plus a gate
 
 ### Generated sprite intake
 
-1. Generate preferred 1x4 horizontal view strips; each cell is a 4:6 portrait with consistent scale.
+1. Use `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md`: declare grid and cell aspect separately,
+   choosing aspect for the subject. The old universal 1×4/fixed-4:6 intake is retired for new
+   production; characters generally start at 4:5 and giant/titanic 4:6 remains provisional.
 2. Slice by declared grid, never visual guessing.
 3. Flood-fill or chroma-key the background in linear color with spill suppression.
 4. Dilate RGB beneath transparent edge pixels before mip generation.

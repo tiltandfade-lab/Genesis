@@ -1,5 +1,10 @@
 # REGEN-V3 — codex packets (one session per realm)
 
+> **Historical packet index.** These generated packets remain valid reproduction evidence, not
+> formatting authority for new production. Use
+> [`../sprite-sheets/PRODUCTION-FORMAT.md`](../sprite-sheets/PRODUCTION-FORMAT.md) for the
+> preferred explicit packet grammar, dynamic subject-based cell aspect, QA, and receipts.
+
 Generated 2026-07-10 from final-verdicts.csv + docs/SPRITE-GEN-V2.md.
 Each packet is self-contained: exact prompts, exact filenames. Hand a codex session ONE packet file and let it run.
 Manifests (slug/bestiary join keys, replaces-pointers back to the culled cells) are pre-generated in `manifests/` — codex only generates and saves images.

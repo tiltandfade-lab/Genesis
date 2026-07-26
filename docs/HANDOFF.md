@@ -11,6 +11,12 @@ updated: 2026-07-25
 Adam called the fresh start before work branches back out between Fable and Codex. Master is
 the one canonical line; everything committed-and-good is on it and pushed.
 
+- **Later 07-26 (Fable, fast checkpoint `9a465fc8`, FULL CI PENDING — next clean close owns
+  the sweep + push):** DIRECTION.md gained the revenue & studio trajectory addendum
+  ("Living Miniatures": three-game program, free text-beta flywheel, hire ladder, Sept–Oct
+  portfolio sprint) + new `docs/AUTOBATTLER-CONCEPT.md` (PARKED spin-off #1 concept — not in
+  the build queue). Docs-only; local master is 2 commits ahead of origin.
+
 - **Worktrees pruned to two:** the root (`genesis/`, master, orchestrator-only) and
   `Genesis-briefs` (`docs/golden-site-thin-briefs`) — **Codex's LIVE lane**: the Meshy Batch-4
   prompts task was still writing there this morning (09:10), plus uncommitted prison-site brief

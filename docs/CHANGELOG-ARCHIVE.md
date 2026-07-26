@@ -14,6 +14,55 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-12 (later) — STAGE C: REAL ROOM SHAPES — rooms stop being rectangles (C1/C2/C3/C3b, orchestrated)
+
+**The wave.** `docs/STAGE-C.md` (GRAPHICS-NORTH-STAR Stage C) — consume the walk's rolled
+`areaType/dims/side` (previously discarded by `spatializePlan`) into real room geometry feeding the
+landed C4 room-shell compiler. Stacked pipeline, each unit personally re-gated (harnesses + **captures
+READ by the orchestrator** + the loop gate on real dungeons) and landed `--no-ff`. Master tip after the
+wave: `388a4c7b`.
+
+**Added.**
+- **C1 SIZE FIDELITY** (`0ab01533`) — `dspDimsToCells` parses `segment.dims` (feet/5, clamp `[4,24]` =
+  the real d200 ceiling) into the room footprint behind `SPATIAL_SHAPES` (default ON); the two `rng()`
+  draws stay in sequence so determinism + the missing-dims fallback are byte-identical. A "60×60 Grand
+  Octagon" is now a 12×12 room, not a random 4–7 rect.
+- **C2 STRUCTURAL TERRAIN** (`06d31fb8`) — parses `segment.side` prose (raised/dais/platform → +1,
+  sunken/pit/pool → −1) into a `plan.tiers` buffer; `interiorBuildBoard` folds the tier into per-cell
+  `sy`, feeding the compiler's riser render (finale-dais still wins). Placement via a separate hash
+  chain, never the rng stream.
+- **C3 REAL SHAPES** (`bfb5a49f`) — `shapeForArchetype` → `rasterizeShape` emits non-rect FLOOR cells
+  (rotunda→circle, octagon, oval→ellipse, L/T/cross, cave) + `rooms[].shape/cells`; exits derived from
+  the polygon boundary faces (`door.toSeg` binding). `interiorBuildBoard`'s rect-assumption loops now
+  iterate the room's actual cell set (byte-identical for rects). Behind `SPATIAL_SHAPES`.
+- **C3b CLEAN GEOMETRY + cellTriangleMap ROOT FIX** (`388a4c7b`, Adam's "half shapes" catch) —
+  render-only in the C4 compiler (logical cell grid byte-identical, so combat/determinism untouched):
+  circle/ellipse vertices pulled toward the fitted ellipse (roundness deviation 0.099→0.006, ~15×);
+  octagon/L/T/cross staircase runs chamfered to true **45° diagonal wall faces**. PLUS the pre-existing
+  `cellTriangleMap` dropped-cell bug fixed at ROOT: a nearest-triangle fallback (point-to-triangle
+  distance) so no floor cell is ever left unmapped for any shape (bare octagon 76/76, was 74/76).
+
+**Also landed (same session).**
+- **Codex sprite-implementation-strategy** (`74848a3a`, Adam-directed) — the per-asset `renderStrategy`
+  pipeline + decal assets + map/figurine vision-quest docs, committed by this session to clear the
+  shared `theater-interior.js` so Stage C could land; verified green first (dressing 655/0).
+- **`AGENTS.md`** (`22807504`) — the Codex/agent onboarding front door (auto-loaded like CLAUDE.md);
+  points to CLAUDE.md + the reading order + the parallel-session/worktree discipline.
+
+**Fixed.** The C3-shapes taste call surfaced on real pixels: Adam ruled land-then-refine, and C3b's
+diagonals + round rotundas closed it; the `cellTriangleMap` float-epsilon drop (render/hit-test only,
+never combat) fixed at root with a red-first regression (`verify-room-shell` check 8f).
+
+**Battlefield note.** Combat is unchanged — cells are included by cell-CENTER coverage (already true in
+C3), so the partial/half-cell shaping lives entirely in the wall mesh; a mini stands on its full cell,
+the wall clips its corner on the diagonal/curve (FFT-style).
+
+**Gates (all personally re-run).** verify-stage-c-size 25/0, verify-stage-c-terrain 49/0,
+verify-stage-c-shapes 88/0, verify-stage-c3b-circle-smooth 43/0, verify-room-shell 32/0,
+verify-dungeon-interior 287/0, verify-combat-cells 13/0, verify-dungeon-walkbind 20/0,
+verify-dungeon-spatialize 9/0, check-manifest OK; loop gate 5/5 on real dungeons at each unit; captures
+READ (octagon diagonals, round rotunda, L notch).
+
 ## 2026-07-12 — WALK-NATIVE BOUNDARY + STAGE A CLOSED: the composed camera goes live (4 units, orchestrated)
 
 **The wave.** `docs/WALK-NATIVE-A.md` — Adam ruled "build Codex's walk-native boundary first, then

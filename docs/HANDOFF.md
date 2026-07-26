@@ -6,7 +6,44 @@ updated: 2026-07-25
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-25, THEATER-BOOT SPLIT COMPLETE B0–B10) [Fable + Opus executors]
+## ⭐ Latest (2026-07-26, THE SINGULAR FRESH START) [Fable]
+
+Adam called the fresh start before work branches back out between Fable and Codex. Master is
+the one canonical line; everything committed-and-good is on it and pushed.
+
+- **Worktrees pruned to two:** the root (`genesis/`, master, orchestrator-only) and
+  `Genesis-briefs` (`docs/golden-site-thin-briefs`) — **Codex's LIVE lane**: the Meshy Batch-4
+  prompts task was still writing there this morning (09:10), plus uncommitted prison-site brief
+  work (SITE-6 spec, Prison-Custody-Study, world-context projection docs). Do not touch that
+  worktree; when Codex lands, one more merge folds it. Clay-ladder, materials-2,
+  production-contracts, theater-split worktrees removed (branches fully merged, then deleted).
+- **The briefs branch's committed tip (2046712d) IS merged** (`9c099fc6`): golden-site
+  working-spec retrofit (four honest gates; Site 1/2/4/5/7/10 working specs), the Meshy
+  donor-model reference lane ruling + slate, donors M001/M035/M059/M068 admitted, Camp-Study
+  corpus. Four both-append doc conflicts resolved by union (CHANGELOG ×2 incl. archive roll,
+  ART-DIRECTION-CANON torch-reach + Meshy rulings both kept, DOCUMENT-MAP row union).
+- **Light-lab review evidence BANKED** (`62a1244a`, merged `e4b83fdd`): the on-disk
+  `dev/light-lab-shots/` bytes the LIGHT_LAB_SHOTS_DIR guard protects are now committed, so the
+  evidence survived the clay worktree's removal. "The lightlab feedback" = Adam's open visual
+  ledger, restated below — no unfolded Light Lab export exists (Downloads checked).
+- **Branch prune:** 59 merged local branches deleted; 58 merged origin branches deleted
+  (verified zero merged refs left on origin); stale `local/*` + `origin-local/*` remote-tracking
+  refs dropped. **65 unmerged branches survive** (kenney family, kgr8 docs family, faceted F2–F15,
+  sprite-era, playtest/complaints…) — they hold real un-landed commits; triage is future work,
+  not part of this prune. `feat/craft-kin-tension` turned out merged and was pruned.
+- `Reference/FFT-Guard-Post-Study/study-archive/` (346 MB raw acquisition, embedded .git repos)
+  is now **gitignored** — local research cache; the distilled study is the committed docs.
+- **ADAM'S OPEN VISUAL-VERDICT LEDGER (the "lightlab feedback" to resolve):** ① C2 warm/cool
+  overlap (`05-warm-cool-sheet.png`) ② C3 lore-native lighting + the magic/fire/lava darkness-depth
+  taste call (`06-lore-lighting-sheet.png`) ③ C4 CL-F01 workbench (`08-structure-diagnostics-sheet.png`)
+  ④ AO contact-registration fix, tradeoff = slight dither on dark faces
+  (`ao-contact-diag/ao-contact-before-after.png`) ⑤ split visual equivalence + the torchlit
+  0.0177>0.01 pinned-look expectation (`split-equivalence/split-equivalence-sheet.png`)
+  ⑥ CL-F02 stepped sphere/cube display — gates CL-R2 standee work
+  (`cl-r1-lighting-matrix/cl-r1-lighting-comparison.png`). Standing partials: AO
+  passable-not-final; flame flicker passable-not-final; Lighting-Lab time-of-day scrub queued.
+
+## 2026-07-25 — THEATER-BOOT SPLIT COMPLETE B0–B10 [Fable + Opus executors]
 
 Worktree `Genesis-theater-split`, branch `refactor/theater-boot-split` (base: the clay tip +
 docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md). **Not merged or pushed. FULL CI PENDING — and per the
@@ -41,7 +78,7 @@ B0 law, CI alone can never green this lane: the 19 puppeteer harnesses are by-ha
   regenerate generated artifacts, push, GitHub CI green. Conflicts surface to Adam, never
   bulldozed.
 
-## ⭐ Latest (2026-07-25, visual-correction COMPLETE C0–C4) — ALL FIVE CHECKPOINTS DONE [Fable]
+## 2026-07-25 — visual-correction COMPLETE C0–C4 — ALL FIVE CHECKPOINTS DONE [Fable]
 
 Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, head after the self-review
 commit (parents: `2cdf2ccb` C1 → `81314bae` C2 → `0bec7624` C3 → `d71b568d` C4). **Not merged

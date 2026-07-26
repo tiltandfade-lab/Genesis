@@ -3,6 +3,12 @@
 Production slate:
 [`docs/MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md`](../../docs/MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md)
 
+Batch-production handoff:
+[`docs/MESHY-PREMIUM-MONTH-1-BATCH-PRODUCTION-HANDOFF.md`](../../docs/MESHY-PREMIUM-MONTH-1-BATCH-PRODUCTION-HANDOFF.md)
+
+Definitive machine-readable queue:
+[`batch-production-manifest.csv`](batch-production-manifest.csv)
+
 These images are inputs for Meshy Image-to-3D. They are not runtime assets or proof that a
 generated model has passed Genesis admission.
 

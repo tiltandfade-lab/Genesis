@@ -6,6 +6,7 @@ created: 2026-07-25
 budget: 300 Meshy model generations
 reference-root: ../Reference/Meshy-Premium-Month-1/
 related:
+  - "[[MESHY-PREMIUM-MONTH-1-BATCH-PRODUCTION-HANDOFF]]"
   - "[[GOLDEN-SITE-CONCEPTING-GUIDELINES]]"
   - "[[STRUCTURE-KIT-CATALOG]]"
   - "[[STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC]]"
@@ -15,6 +16,11 @@ related:
 ---
 
 # Meshy Premium — Month 1 Model Slate
+
+Batch execution is governed by
+[`MESHY-PREMIUM-MONTH-1-BATCH-PRODUCTION-HANDOFF.md`](MESHY-PREMIUM-MONTH-1-BATCH-PRODUCTION-HANDOFF.md).
+Its generated manifest is the definitive job-by-job queue; this slate remains the source of
+family identity, purpose, and A/B/C/D subject definitions.
 
 ## 0. Decision
 

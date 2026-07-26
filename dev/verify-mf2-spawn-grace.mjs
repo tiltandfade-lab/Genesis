@@ -423,9 +423,16 @@ function makeStubGroup(scaleX, children){
     sibSrc.indexOf("mountPostSuite(kit, rigOn)") < sibSrc.indexOf("pushScreenFade(buildTheaterCtx()"));
 }
 {
-  const piecesSrc = extractFn(bootSrc, "interiorBuildPieces");
-  const dressSrc = extractFn(bootSrc, "interiorBuildDressing");
-  const furnSrc = extractFn(bootSrc, "interiorBuildFurniture");
+  // THEATER SPLIT B8 (2026-07-25): the three CASCADE CONSUMERS (interiorBuildPieces /
+  // interiorBuildDressing / interiorBuildFurniture) moved VERBATIM to src/ui/theater-dressing.js. The
+  // MF-2 grace GLUE itself (mfArtMaterialsOf/mfSetMaterialsOpacity/mfMountGraceFor/mfDespawnGraceFor/
+  // mfCascadeMount, checked in B1/B2 above off bootSrc) deliberately STAYED in theater-boot.js — setUnits
+  // calls two of them directly — and the moved builders reach mfCascadeMount through that module's ctx.
+  // Extract each body from its true home; the checks' job (each builder cascades) is unchanged.
+  const dressingSrc = read("src/ui/theater-dressing.js");
+  const piecesSrc = extractFn(dressingSrc, "interiorBuildPieces");
+  const dressSrc = extractFn(dressingSrc, "interiorBuildDressing");
+  const furnSrc = extractFn(dressingSrc, "interiorBuildFurniture");
   check("B4d. interiorBuildPieces calls mfCascadeMount (item 1+3: room pieces cascade on first reveal)", /mfCascadeMount\(/.test(piecesSrc));
   check("B4e. interiorBuildDressing calls mfCascadeMount (item 3: dressing cascade)", /mfCascadeMount\(/.test(dressSrc));
   check("B4f. interiorBuildFurniture calls mfCascadeMount (item 3: furniture cascade)", /mfCascadeMount\(/.test(furnSrc));

@@ -2827,6 +2827,88 @@
       ]
     },
     {
+      "id": "ui.theater-interior-mesh",
+      "path": "src/ui/theater-interior-mesh.js",
+      "type": "module",
+      "owns": [
+        "*interiorMeshInit",
+        "*interiorMeshFileTexPending",
+        "*INTERIOR_MATERIAL_TEXTURE_CACHE",
+        "*interiorMaterialTexture",
+        "*INTERIOR_FILE_TEX_PENDING",
+        "*INTERIOR_FILE_TEXTURE_CACHE",
+        "*interiorFileTexture",
+        "*ITR_WALL_COURSE_REPEAT",
+        "*interiorSurfaceFileTexture",
+        "*INTERIOR_UNIT_BOX",
+        "*interiorUnitBoxGeometry",
+        "*interiorApplyAODarkening",
+        "*itrNeutralizeInstanceColors",
+        "*interiorBuildInstancedMesh",
+        "*INTERIOR_CYLINDER_GEO",
+        "*interiorCylinderGeometry",
+        "*interiorBuildPillarMeshes",
+        "*itrBuildOcclusionGhostMeshes",
+        "*itrBuildOcclusionGhostPillarMeshes"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B8 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the INTERIOR MESH / GL-SURFACE family, extracted VERBATIM from theater-boot.js: DUNGEON-GRAPH.md U3 / GR1's whole GL layer. The two texture channels (interiorMaterialTexture — the ONE place theater-materials.js's pure pixel buffer becomes a real THREE.CanvasTexture, cached per material+baseColor+seedKey+grain+repeat; and BW2-3's interiorFileTexture — the ONE place a folded PACKET-02 texture FILE becomes a THREE.Texture, async TextureLoader with markDirty replay, its own INTERIOR_FILE_TEX_PENDING decode counter and interiorSurfaceFileTexture + ITR_WALL_COURSE_REPEAT applying the §2b UV MAPPING LAWS per surface). The two shared geometries every interior instance reuses (interiorUnitBoxGeometry's unit cube — VOLUMETRIC WALL LAW, a real BoxGeometry with height, never a flat plane — and BW2-5's interiorCylinderGeometry for round-profile columns). The two pure per-instance colour passes (interiorApplyAODarkening, U3's instance-level equivalent of a baked wall-floor seam AO; itrNeutralizeInstanceColors, BW2-3's relative-luminance neutralization so a folded file texture is not double-darkened by the kit's dark base). interiorBuildInstancedMesh itself — one InstancedMesh per tile KIND (U3 acceptance: draw calls <= 1 per tile kind), the y = yBase + sy/2 - 0.5 ground convention with GR4's skirt band hanging DOWN off the same plane, the shadow law (floors receive-only, skirt neither, ghosts neither), the BW2-1b userData.interiorKind diagnostic stamp and its kind+\"-ghost\" variant, and S-1's ghostOpacity overlay path. BW2-5's interiorBuildPillarMeshes box/round profile split. STAGE-A A4's two per-instance ghost builders (itrBuildOcclusionGhostMeshes / itrBuildOcclusionGhostPillarMeshes — one small mesh + one material per blocking instance, stashed onto the fade entry so itrOcclusionClassify's live tween mutates it every tick with no rebuild; split B6 deliberately left them in theater-boot.js for this step because they carry no occlusion law and would have put THREE into a module censused THREE-free). CENSUSED S-FREE: not one line in this file reads or writes the live theater state record, so — alone among the split modules that hold state-adjacent code — it takes NO SyncState; interiorMeshInit(ctx) at the root's end-of-body is the whole wiring. It owns NO scheduler (zero requestAnimationFrame): the async file-texture decode still ends in the root's own markDirty() dirty-frame kick, exactly as in the monolith. Root->leaf ctx law: never imports theater-boot.js, and imports no sibling either — its only import is \"three\". applyPsxShaderTweaks / nearestify / textureLoader / markDirty stay root-owned and arrive through ctx; materialTexturePixels and MATERIAL_TEXEL_PX stay BARE classic-script globals (src/ui/theater-materials.js republishes them onto window for exactly this sealed ES-module scope), resolved the identical way. window.Theater.interiorFileTexPending is still published from theater-boot.js's own facade block, now reading the moved counter through this module's exported interiorMeshFileTexPending() accessor — one root line changed, zero moved lines. WHAT STAYED IN THE ROOT, censused: the ROOM SHELL (ITR_ROOM_SHELL + rootGet/SetRoomShell, ROOM_SHELL_POLYGON_KERNEL_FLAG, ITR_ROOM_SHELL_UV_DENSITY, ITR_ROOM_SHELL_RISER_DARKEN and the whole compileRoomShell consumer wiring) — there is no standalone builder function to move, every line of it lives inside setInteriorBoard's own body, and the flag is live-read/written by the Clay Room through the root accessors; the SKIRT is likewise not a function but the \"skirt\" shadowKind string setInteriorBoard passes to interiorBuildInstancedMesh, whose skirtBand branch moved with it; and interiorAssignShadowCasters is not here at all — split B5 moved it to src/ui/theater-practicals.js with the practical rig it serves. ZERO accessor swaps and zero changed production lines in this file."
+    },
+    {
+      "id": "ui.theater-dressing",
+      "path": "src/ui/theater-dressing.js",
+      "type": "module",
+      "owns": [
+        "*dressingInit",
+        "*dressingSyncState",
+        "*DRESSING_TEXTURE_CACHE",
+        "*dressingPlaceholderTexture",
+        "*dressingTextureFor",
+        "*CARD_SIZE_BY_KIND",
+        "*dressingCardHeight",
+        "*buildDressingCard",
+        "*FURNITURE_PANEL_TEXTURE_CACHE",
+        "*proceduralPanelTexture",
+        "*furniturePanelMaterial",
+        "*buildFurnitureAssembly",
+        "*interiorBuildFurniture",
+        "*ITR_EDGE_COLOR_CACHE",
+        "*itrPropEdgeColorFor",
+        "*ITR_WALL_SIDE_YAW",
+        "*ITR_WALL_SIDE_NORMAL",
+        "*ITR_WALLHANG_HEIGHT_FRAC",
+        "*ITR_WALLHANG_WALL_OFFSET",
+        "*ITR_WALLHANG_FALLBACK_WALL_HEIGHT",
+        "*buildExtrusionProp",
+        "*interiorBuildWallProps",
+        "*WALL_AO_SCALE",
+        "*WALL_AO_Z_OFFSET",
+        "*addWallContactAO",
+        "*interiorBuildPieces",
+        "*interiorBuildDressing"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-interior-mesh",
+        "ui.theater-sprites",
+        "ui.theater-standee-mount",
+        "ui.theater-occlusion",
+        "ui.standee-verbs"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B8 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the DRESSING / PROPS / SET-PIECE family, extracted VERBATIM from theater-boot.js: GRAPHICS-ENGINE.md GR2 §D's dressing system and its siblings. The dressing texture channel (DRESSING_TEXTURE_CACHE, dressingPlaceholderTexture's synchronous name-label card, and dressingTextureFor — which NEVER returns null, so a card always mounts on the first render pass while the real assets/dressing/<slug>.png races in the background; its async real-art settle moved byte-identically, guards included: cache swap in place, the L2 census \"resolved\" record, then S.mounted && S.lastBoard gating a setInteriorBoard replay for an interior3d board or a setBoard replay for a flat ENV-2 biome-scatter board, each after nulling S.boardKey so the identical-payload skip cannot swallow it — a retired theater still cannot be resurrected by a late texture, and a failed load still keeps the placeholder forever, never retried, never thrown). CARD_SIZE_BY_KIND + dressingCardHeight + buildDressingCard (BW2-4b's LIT cutout family, SPRITE PURITY psxExempt, alpha-cutout shadow casting off the same texture). BW2-5's FURNITURE CHANNEL (FURNITURE_PANEL_TEXTURE_CACHE, proceduralPanelTexture, furniturePanelMaterial's textureFaceFor-or-procedural seam, buildFurnitureAssembly with STAGE-A A4's whole-assembly fadeOpacity, interiorBuildFurniture). THE PROP PERSPECTIVE LAW (ITR_EDGE_COLOR_CACHE + itrPropEdgeColorFor's outermost-opaque-ring edge sampling, ITR_WALL_SIDE_YAW, ITR_WALL_SIDE_NORMAL, LIGHT-SIGHT-POLISH P-2's ITR_WALLHANG_HEIGHT_FRAC / ITR_WALLHANG_WALL_OFFSET / ITR_WALLHANG_FALLBACK_WALL_HEIGHT, buildExtrusionProp's wall-LOCKED shallow prism, interiorBuildWallProps). BW2-2b item 5b's WALL-CONTACT AO (WALL_AO_SCALE / WALL_AO_Z_OFFSET / addWallContactAO — split B7's theater-standee-mount.js header censused it dressing-owned by its one caller and deliberately left it for this step; it still reaches interiorPoolGeoFor / interiorPoolMaterial as imported bindings from that module, so it uses the SAME shared geometry cache and the SAME single material instance it always did). And the two remaining group builders setInteriorBoard dresses a room with: interiorBuildPieces (the room's true-scale creature standees — VP1 sizing, BW2-4b blocker-cell exclusion, THE KILTER composed with the CLIP MARGIN LAW, BW2-2 floor contact + plinth + VP7 contact pool, VP6 idle-breathe) and interiorBuildDressing (the cards, with its BW2-5 blocker/wall-hang skip and the large-card clip nudge). Root->leaf ctx law: never imports theater-boot.js; dressingInit(ctx) at the root's end-of-body is paired with dressingSyncState(S) at both `S = createTheaterState()` sites. FIVE one-way leaf->leaf import edges, all censused acyclic and all spelled with the identical specifiers theater-boot.js uses: interiorFileTexture from ui.theater-interior-mesh, interiorSpriteBillboard from ui.theater-sprites, the mount/contact quartet plus the pool pair from ui.theater-standee-mount, itrBlockerNudgeCell / itrClipNudgeFor / CLIP_DRESSING_EPSILON from ui.theater-occlusion, and bindStandeeCtx / startIdleBreathe from ui.standee-verbs — which is why its <script type=\"module\"> tag follows all five. SCHEDULER LAW: it owns NO requestAnimationFrame (censused zero). The MF-2 SPAWN/DESPAWN GRACE GLUE (mfArtMaterialsOf / mfSetMaterialsOpacity / mfMountGraceFor / mfDespawnGraceFor / mfCascadeMount) deliberately STAYED IN THE ROOT — censused: setUnits calls mfMountGraceFor and mfDespawnGraceFor directly, so the family is figure-grace glue shared by the combat-figure channel and the dressing channel, not dressing-owned; the three cascade call sites here reach mfCascadeMount through ctx, so the seeded stagger is still computed once per set by the SAME function off the SAME seededCascadeDelays / DRESSING_CASCADE_STEP_MS / DRESSING_CASCADE_CAP_MS the root imports from ./spawn-grace.js, and every grace tween still rides the shared S.tweens channel through the root's own startTweenLoop. spriteEntryFor, kilterFor and interiorFloorTopAt stay root-owned (RED-FIRST / dev/verify-d4-doors.mjs text-extraction pins), as do buildTheaterCtx, _censusBoardSceneKind, setBoard, setInteriorBoard, applyPsxShaderTweaks, nearestify, textureLoader and LIGHT_TUNABLES (passed as the SAME object the Light Lab mutates, so spriteEmissiveFloor still reads live). theaterCensusRecord, furnitureFor, INTERIOR_TILE_KITS and textureFaceFor stay BARE classic-script globals. This step's ONLY four accessor swaps live here: the mutable root lets SPRITE_UNLIT_DEBUG and ITR_SPRITE_EMISSIVE_TINT (already B7 accessors on the sprite side) are read live through dressingCtxUnlitDebug / dressingCtxEmissiveTint in buildDressingCard and buildExtrusionProp — the two builders theater-sprites.js's own header names as keeping their own copy of the same branch. Every other moved line is byte-identical to the monolith.",
+      "mustFollow": [
+        "src/ui/theater-interior-mesh.js",
+        "src/ui/theater-sprites.js",
+        "src/ui/theater-standee-mount.js",
+        "src/ui/theater-occlusion.js",
+        "src/ui/standee-verbs.js"
+      ]
+    },
+    {
       "id": "ui.theater-boot",
       "path": "src/ui/theater-boot.js",
       "type": "module",

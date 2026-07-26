@@ -276,7 +276,15 @@ async function main() {
     ok(!/wallSide/.test(preFixBody), "RED-FIRST: the pre-fix body never reads d.wallSide at all — no orientation-aware placement, matching the diagnosed bug");
     ok(preFixBody.split("g.position.set").length - 1 === 1, "RED-FIRST: exactly ONE position.set call in the pre-fix body (a single unconditional floor-center mount, not a resolved/fallback branch)");
 
-    const nowSrc = fs.readFileSync(path.join(repoRoot, "src", "ui", "theater-boot.js"), "utf-8");
+    // THEATER SPLIT B8 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): interiorBuildWallProps — and
+    // the whole DRESSING / PROPS family with it (buildExtrusionProp, ITR_WALL_SIDE_YAW/NORMAL, the
+    // ITR_WALLHANG_* knobs, addWallContactAO) — moved VERBATIM to src/ui/theater-dressing.js. Read the
+    // COMPOSITE of both so the GREEN extraction still finds the CURRENT body; the RED half above still
+    // reads the pinned BASE_SHA git ref of theater-boot.js, so the red/green pair is unchanged, and the
+    // "exactly TWO g.position.set calls" assertion still bites on the same single function body.
+    const nowSrc = fs.readFileSync(path.join(repoRoot, "src", "ui", "theater-boot.js"), "utf-8")
+      + "\n/* [verify-wallhang composite boundary — src/ui/theater-dressing.js follows] */\n"
+      + fs.readFileSync(path.join(repoRoot, "src", "ui", "theater-dressing.js"), "utf-8");
     const nowMatch = nowSrc.match(/function interiorBuildWallProps\([^)]*\)\{[\s\S]*?\n\}/);
     ok(!!nowMatch, "GREEN: could extract the CURRENT interiorBuildWallProps body from the working tree");
     const nowBody = nowMatch ? nowMatch[0] : "";

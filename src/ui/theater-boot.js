@@ -117,7 +117,9 @@ import {
   playStandeeVerb,
   bindStandeeCtx,
   STANDEE_VERBS,
-  startIdleBreathe,
+  // split B8: startIdleBreathe left this list — its ONE reader here was interiorBuildPieces (now
+  // src/ui/theater-dressing.js, which imports it from this same module by the identical specifier).
+  // Reader census run: every remaining mention in this file is prose in a comment.
   stopIdleBreathe
 } from "./standee-verbs.js";
 // split B1 (2026-07-25): the Clay Room workbench module — root->leaf import (acyclic; the clay
@@ -273,7 +275,7 @@ import {
   itrOcclusionBearingDeg, itrOcclusionBearingDeltaDeg, itrOcclusionNextCommitted,
   itrOcclusionClassify, itrOcclusionIdFor, itrSplitOccluderForAnkleGhost,
   itrClosestPointOnAabbXZ, itrCircleAabbPushXZ, itrNearbyPrismBoxes, itrClipNudgeFor,
-  itrBlockerNudgeCell, CLIP_NUDGE_MAX_FRAC, CLIP_DRESSING_EPSILON,
+  CLIP_NUDGE_MAX_FRAC, CLIP_DRESSING_EPSILON, // split B8: itrBlockerNudgeCell left this list — its ONE reader here was interiorBuildPieces (now src/ui/theater-dressing.js, which imports it from this same module by the identical specifier). Reader census run: every remaining mention in this file is prose in a comment.
   occlusionInit, occlusionSyncState
 } from "./theater-occlusion.js";
 // split B7 (2026-07-25): the STANDEE BASE/CONTACT family — CL-R2's visible support plinth and its
@@ -288,7 +290,7 @@ import {
   INTERIOR_BASE_HEIGHT, INTERIOR_BASE_TREAD_DEPTH, INTERIOR_BASE_Y_OFFSET,
   interiorStandeeSupportMetrics, interiorStandeeContactY, buildInteriorBase, setBaseGlow,
   mountedStandeeFigures, resolveMountedStandeeSupportCollisions, syncStandeeContactBlob,
-  interiorPoolTexture, interiorPoolGeoFor, interiorPoolMaterial,
+  interiorPoolTexture, interiorPoolMaterial, // split B8: interiorPoolGeoFor left this list — its ONE reader here was addWallContactAO (now src/ui/theater-dressing.js, which imports it from this same module by the identical specifier, so the AO still uses the SAME shared geometry cache). Reader census run.
   INTERIOR_POOL_Y_OFFSET, addInteriorContactBlob,
   standeeMountInit, standeeMountSyncState
 } from "./theater-standee-mount.js";
@@ -320,6 +322,45 @@ import {
   setActingUnit, projectUnit, spawnFloater,
   overlaysInit, overlaysSyncState
 } from "./theater-overlays.js";
+// split B8 (2026-07-25): the INTERIOR MESH / GL-SURFACE family — the two texture channels, the two
+// shared geometries, the two pure per-instance colour passes, the one InstancedMesh constructor every
+// interior world surface is built by, the pillar profile split and A4's two ghost-mesh builders. Same
+// root->leaf ctx law; censused to NEVER read S, so it takes no SyncState — interiorMeshInit(ctx) at
+// end-of-body is the whole wiring. applyPsxShaderTweaks / nearestify / textureLoader / markDirty stay
+// HERE and reach it through that ctx; materialTexturePixels / MATERIAL_TEXEL_PX stay the bare classic
+// globals they always were. Censused: this list is exactly the mesh surface THIS file still has a live
+// (non-comment) call site for — interiorFileTexture, interiorUnitBoxGeometry, interiorCylinderGeometry
+// and the three caches are read only inside that module (and, for interiorFileTexture, by
+// src/ui/theater-dressing.js's own leaf->leaf import), so they are deliberately NOT imported here.
+import {
+  interiorMaterialTexture, interiorSurfaceFileTexture,
+  interiorApplyAODarkening, itrNeutralizeInstanceColors,
+  interiorBuildInstancedMesh, interiorBuildPillarMeshes,
+  itrBuildOcclusionGhostMeshes, itrBuildOcclusionGhostPillarMeshes,
+  interiorMeshInit, interiorMeshFileTexPending
+} from "./theater-interior-mesh.js";
+// split B8 (2026-07-25): the DRESSING / PROPS family — the dressing texture channel with its async
+// real-art settle, the card/extrusion/furniture builders, the wall-hang placement law, BW2-2b's
+// wall-contact AO, and the four group builders setInteriorBoard dresses a room with. Same root->leaf
+// ctx law; it reads AND writes S, so dressingInit(ctx) at end-of-body is paired with
+// dressingSyncState(S) at both `S = createTheaterState()` sites. It imports interiorFileTexture from
+// theater-interior-mesh.js, interiorSpriteBillboard from theater-sprites.js, the mount/pool quartet
+// from theater-standee-mount.js, the nudge trio from theater-occlusion.js and bindStandeeCtx/
+// startIdleBreathe from standee-verbs.js — five one-way leaf->leaf edges (see its header), which is
+// why its <script type="module"> tag follows all of theirs. The MF-2 grace glue, spriteEntryFor,
+// kilterFor, interiorFloorTopAt, SPRITE_UNLIT_DEBUG and ITR_SPRITE_EMISSIVE_TINT stay HERE — censused,
+// see that file's header for each. Censused: this list is exactly the dressing surface THIS file still
+// has a live (non-comment) call site for; dressingCardHeight, the caches, the panel/edge-colour
+// helpers, WALL_AO_* and the ITR_WALLHANG_* knobs are read only inside that module (the root's
+// _wallHangLawForTest seam takes the four law tables it publishes), so nothing else is carried here.
+import {
+  dressingTextureFor, buildDressingCard,
+  buildFurnitureAssembly, interiorBuildFurniture,
+  ITR_WALL_SIDE_YAW, ITR_WALL_SIDE_NORMAL, ITR_WALLHANG_HEIGHT_FRAC, ITR_WALLHANG_WALL_OFFSET,
+  interiorBuildWallProps, addWallContactAO,
+  interiorBuildPieces, interiorBuildDressing,
+  dressingInit, dressingSyncState
+} from "./theater-dressing.js";
 // BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
 // see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
 // as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
@@ -2039,14 +2080,8 @@ function _censusBoardSceneKind(){
 // counters), whose bodies two RED-FIRST harnesses MUTATE inside this file's own source text
 // (dev/verify-theater-sprites.mjs, dev/verify-sprite-join.mjs) and which no moved body calls.
 
-// GRAPHICS-ENGINE.md GR2 (dressing cards): texture cache keyed by dressing slug — either a
-// synchronously-generated placeholder label-card CanvasTexture (art doesn't exist yet — DRESSING-GEN
-// runs in the codex after this unit) or, once assets/dressing/<slug>.png resolves, the real loaded
-// THREE.Texture swapped in in-place. Unlike SPRITE_TEXTURE_CACHE above, a cache MISS here never
-// returns null — dressingTextureFor always returns a usable texture immediately (the placeholder),
-// so a dressing card never silently fails to mount pending an async load; see dressingTextureFor's
-// own header comment for the swap-on-load mechanics.
-const DRESSING_TEXTURE_CACHE = {};
+// ---- split B8: the DRESSING texture cache (DRESSING_TEXTURE_CACHE) moved to
+// src/ui/theater-dressing.js beside dressingTextureFor, the only thing that reads or writes it. ----
 
 // join-key normalizer (docs/SPRITE-TRANSITION.md's own kebab discipline, loosened further for a
 // forgiving join): lowercase, strip everything but [a-z0-9] so "Grinning Poppet" and a bestiary
@@ -4261,6 +4296,7 @@ function mount(el, opts){
   standeeMountSyncState(S); // split B7: same law for the standee base/contact family (S.standeeCollision*)
   spritesSyncState(S);  // split B7: same law for the sprite/billboard family (replay + the facing pass)
   overlaysSyncState(S); // split B7: same law for the overlay family (rings/effects/floaters + S.tweens)
+  dressingSyncState(S); // split B8: same law for the dressing/props family (the async real-art replay reads S.mounted/S.lastBoard)
   if(priorTextures) S.textures = priorTextures;
   // BEAUTY-WAVE-2 BW2-0: default is now CLEAN (S.psxEnabled false, createTheaterState's own default),
   // so the escape hatch is symmetric — `opts.psx === true` is the dev/nostalgia toggle that turns the
@@ -4898,296 +4934,27 @@ function setBoard(data){
   markDirty();
 }
 
-// ─── DUNGEON-GRAPH.md U3 / GR1 (docs/GRAPHICS-ENGINE.md build unit GR1) — the volumetric interior
-// renderer's GL layer ──────────────────────────────────────────────────────────────────────────────
-// interiorMaterialTexture: the ONE place src/ui/theater-materials.js's pure pixel buffer
-// (materialTexturePixels) becomes an actual THREE.CanvasTexture — putImageData onto a real <canvas>,
-// nearest-filtered, RepeatWrapping (same "data layer elsewhere, GL layer here" split
-// theater-interior.js's own header keeps, one file down: theater-materials.js stays as canvas/DOM-free
-// as theater-interior.js does). Cached per (material,baseColor,seedKey) — GR1's own "boot-time, seeded"
-// instruction: the SAME realm+surface always resolves the SAME cached texture object, baked once, never
-// rebuilt per room/plan/session (materialTexturePixels itself is already deterministic off that same
-// key — this cache just avoids re-painting the identical buffer + re-uploading it to the GPU on every
-// setInteriorBoard call). seedKey is "<realmId>:<surface>" (theater-interior.js's tileKit doesn't carry
-// realmId+surface directly here, so setInteriorBoard passes them through explicitly, below).
-const INTERIOR_MATERIAL_TEXTURE_CACHE = {};
-function interiorMaterialTexture(material, baseColorHex, seedKey, grainIntensity, repeatX, repeatZ){
-  if(!material || !baseColorHex) return null;
-  const key = material + ":" + baseColorHex + ":" + seedKey + ":" + grainIntensity + ":" + repeatX + ":" + repeatZ;
-  if(INTERIOR_MATERIAL_TEXTURE_CACHE[key]) return INTERIOR_MATERIAL_TEXTURE_CACHE[key];
-  const pixels = materialTexturePixels(material, baseColorHex, seedKey, MATERIAL_TEXEL_PX, grainIntensity);
-  const canvas = document.createElement("canvas");
-  canvas.width = pixels.width; canvas.height = pixels.height;
-  const ctx = canvas.getContext("2d");
-  ctx.putImageData(new ImageData(pixels.data, pixels.width, pixels.height), 0, 0);
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
-  tex.repeat.set(Math.max(1, repeatX || 1), Math.max(1, repeatZ || 1));
-  nearestify(tex);
-  INTERIOR_MATERIAL_TEXTURE_CACHE[key] = tex;
-  return tex;
-}
-
-// BW2-3 MATERIAL TEXEL (GENERATED-FIRST): the ONE place a folded PACKET-02 texture FILE
-// (assets/textures/*.png, build/fold-textures.py) becomes a THREE.Texture on a world surface —
-// async TextureLoader (image lands later; onLoad -> markDirty replays the render, the SAME pattern
-// dressingTextureFor/loadTextureManifest already keep). NearestFilter min+mag (BW2-0 world-surface
-// law: the texel is AUTHORED, crisp when magnified — the fold resamples the 512 source DOWN to engine
-// texel so on-stage it is a MAGNIFICATION, no minification shimmer). `wrap` + per-surface `repeat` are
-// the §2b UV MAPPING LAWS, applied by the caller. Cached per url+wrap+repeat so the same surface never
-// re-fetches/re-uploads. INTERIOR_FILE_TEX_PENDING lets a capture harness wait for the async decodes.
-let INTERIOR_FILE_TEX_PENDING = 0;
-const INTERIOR_FILE_TEXTURE_CACHE = {};
-function interiorFileTexture(url, wrapMode, repeatX, repeatZ){
-  if(!url) return null;
-  const key = url + ":" + wrapMode + ":" + repeatX + ":" + repeatZ;
-  if(INTERIOR_FILE_TEXTURE_CACHE[key]) return INTERIOR_FILE_TEXTURE_CACHE[key];
-  const wrap = wrapMode === "mirror" ? THREE.MirroredRepeatWrapping
-             : wrapMode === "clamp" ? THREE.ClampToEdgeWrapping
-             : THREE.RepeatWrapping;
-  INTERIOR_FILE_TEX_PENDING++;
-  const tex = textureLoader.load(url,
-    () => { INTERIOR_FILE_TEX_PENDING = Math.max(0, INTERIOR_FILE_TEX_PENDING - 1); markDirty(); },
-    undefined,
-    () => { INTERIOR_FILE_TEX_PENDING = Math.max(0, INTERIOR_FILE_TEX_PENDING - 1); }); // load failure -> drop, painter/flat wins
-  tex.wrapS = wrap; tex.wrapT = wrap;
-  tex.repeat.set(Math.max(0.0001, repeatX || 1), Math.max(0.0001, repeatZ || 1));
-  nearestify(tex);
-  INTERIOR_FILE_TEXTURE_CACHE[key] = tex;
-  return tex;
-}
-
-// BW2-3 §2b UV MAPPING LAWS — per-surface repeat. Every floor/wall/pillar InstancedMesh instance is a
-// 1x1x* box sharing ONE unit-cube geometry (UV 0..1 per face) and ONE material, so texture.repeat is
-// the per-cell tile count:
-//   FLOOR: repeat (1,1) -> exactly ONE texture tile per 5ft cell; the tile's border grout thereby lands
-//     on the cell boundary -> the grout grid ALIGNS with the combat grid (the room shows roomW x roomD
-//     tiles == room cell dims, the spec's "repeat = room dims" expressed per-cell).
-//   WALL: repeat (1, ITR_WALL_COURSE_REPEAT) -> one texture WIDTH per cell (courses continue seamlessly
-//     across adjacent wall cells) and the full texture HEIGHT (~14 authored courses) over the wall
-//     height. (Scale-domain-taller walls stretch the same courses — the pre-existing shared-material
-//     limitation, not introduced here; base-height flagship walls read at fixed texel.)
-//   TRIM: ClampToEdge, repeat (1,1) -> stretch-to-fit along the run (the one legal stretch case, §2b).
-const ITR_WALL_COURSE_REPEAT = 1.0; // vertical wall repeat multiplier — the taste-loop dial to hit 14+/-3 courses
-function interiorSurfaceFileTexture(surface, file, wrap){
-  if(!file) return null;
-  if(surface === "wall") return interiorFileTexture(file, wrap, 1, ITR_WALL_COURSE_REPEAT);
-  if(surface === "trim") return interiorFileTexture(file, "clamp", 1, 1);
-  return interiorFileTexture(file, wrap, 1, 1); // floor (and any other 1:1-per-cell surface)
-}
-
-// unit cube, shared by every InstancedMesh kind below — each instance's own transform (position+scale
-// baked into its matrix) is what gives it its real footprint/height, per VOLUMETRIC WALL LAW (real
-// BoxGeometry with height, never a flat plane) — never re-created per call.
-let INTERIOR_UNIT_BOX = null;
-function interiorUnitBoxGeometry(){
-  if(!INTERIOR_UNIT_BOX) INTERIOR_UNIT_BOX = new THREE.BoxGeometry(1, 1, 1);
-  return INTERIOR_UNIT_BOX;
-}
-
-// DUNGEON-GRAPH.md U3 render-quality study card (a/e/f variants): "baked vertex AO — darken wall-floor
-// seams". A true per-vertex bake doesn't apply to a shared-geometry InstancedMesh (every instance reuses
-// the SAME unit-cube vertices) — the INSTANCE-level equivalent this rig uses instead is a per-instance
-// COLOR darken on any floor/door cell 4-adjacent to a wall cell (the contact seam), which is what the
-// reference repo's screenshots actually read as: the darker line right where a wall meets the floor.
-// Pure function over the plain instance arrays — no THREE, easy to unit-test, applied only when the
-// study rig's AO variant is on (product callers never set this; see setInteriorVariant below).
-function interiorApplyAODarkening(instances, factor){
-  const wallKeys = new Set((instances.wall || []).map((w) => w.x + "," + w.z));
-  const AO_FACTOR = (typeof factor === "number" && factor > 0 && factor < 1) ? factor : 0.45; // default = card-v6 pick; variant.aoFactor sweeps it (intensity taste card)
-  ["floor", "doorframe"].forEach((kind) => {
-    (instances[kind] || []).forEach((inst) => {
-      const seam = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dz]) => wallKeys.has((inst.x + dx) + "," + (inst.z + dz)));
-      if(!seam) return;
-      const c = new THREE.Color(inst.color || "#ffffff").multiplyScalar(AO_FACTOR);
-      inst.color = "#" + c.getHexString();
-    });
-  });
-  return instances;
-}
-
-// BW2-3 MATERIAL TEXEL — INSTANCE-COLOR NEUTRALIZATION. A floor/wall InstancedMesh multiplies its
-// texture map by each instance's per-cell COLOR (setColorAt). Those colors are the kit's DARK palette
-// anchor (floorColor/wallColor) modulated by the scene value-scripts (BW2-4 rim plunge, VP3 perimeter
-// darken/tone jitter) — perfect for the PROCEDURAL painter, whose texture is a near-flat tint of that
-// same base. But a FOLDED file texture already carries full realm color, so multiplying by the dark
-// base double-darkens it to near-black under the plunged ambient (the gloom R1 read). Fix: convert
-// each per-cell color to a NEUTRAL grey VALUE MULTIPLIER = its luminance RELATIVE to the kit base — so
-// a normal cell reads the texture at full value, while a perimeter/AO-darkened cell still darkens it
-// proportionally (the rim vignette + contact seam survive; only the absolute dark HUE is dropped, which
-// the texture now supplies itself). Pure over the plain instance list (returns a shallow-cloned list).
-function itrNeutralizeInstanceColors(list, baseHex){
-  const base = new THREE.Color(baseHex || "#808080");
-  const baseLum = Math.max(0.02, 0.299 * base.r + 0.587 * base.g + 0.114 * base.b);
-  return (list || []).map(function(inst){
-    const c = new THREE.Color(inst.color || baseHex || "#808080");
-    const lum = 0.299 * c.r + 0.587 * c.g + 0.114 * c.b;
-    const g = Math.max(0, Math.min(1.2, lum / baseLum)); // relative value; >1 clamped so it never blows out
-    return Object.assign({}, inst, { color: "#" + new THREE.Color(g, g, g).getHexString() });
-  });
-}
-
-// one InstancedMesh per tile KIND (floor/wall/doorframe/pillar) — the draw-call budget DUNGEON-GRAPH.md
-// U3's acceptance names ("draw calls <= 1 per tile kind"), however many hundreds/thousands of instances
-// an 80-room plan carries. `list` is one of data.instances.{floor,wall,doorframe,pillar} (§ interiorBuildBoard,
-// src/ui/theater-interior.js) — each entry {x,z,sx,sy,sz,color}. Ground convention matches the existing
-// tile-column math a few hundred lines up (mesh.position.y = h/2-0.5 -> every column's base sits on the
-// SAME y=-0.5 floor plane): here that's y = sy/2 - 0.5. `variant.banded` (study rig only) routes through
-// applyPsxShaderTweaks' quantized-lighting injection.
-function interiorBuildInstancedMesh(list, cx, cz, texture, variant, shadowKind, ghostOpacity){
-  if(!list || !list.length) return null;
-  const geo = interiorUnitBoxGeometry();
-  const vertical = shadowKind === "wall" || shadowKind === "pillar" || shadowKind === "doorframe";
-  // S-1 OCCLUSION FADE (docs/DIEGETIC-LIGHT.md): a caller passing a numeric `ghostOpacity` wants THIS
-  // mesh built as the translucent GHOST overlay for an already-ankle-stubbed occluder list (see
-  // itrSplitOccluderForAnkleGhost) rather than the normal opaque mesh — every existing call site never
-  // passes a 7th argument, so `isGhost` is false and this function's behavior is byte-identical to
-  // before this unit for every non-S-1 caller.
-  const isGhost = typeof ghostOpacity === "number";
-  const matBase = texture ? { map: texture } : { color: 0xffffff };
-  if(isGhost) Object.assign(matBase, { transparent: true, opacity: ghostOpacity, depthWrite: false });
-  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matBase), {
-       banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps,
-       baseAO: (variant && variant.ao && vertical) ? { floor: variant.aoFactor || 0.45, range: 0.22 } : null, // tight contact band — 0.45 spread read as mush (pixel-diff proved it rendered, eyes said no)
-       worldSurface: true, // GRAPHICS-ENGINE law 2 (VP0): the interior channel's floor/wall/doorframe/pillar
-                            // materials are its WORLD surfaces — gate dither+snap through WORLD_PSX_ENABLED
-       worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined });
-  const mesh = new THREE.InstancedMesh(geo, mat, list.length);
-  // BW2-1b — TEST/DIAGNOSTIC TAG: which instance-kind this mesh is (floor/wall/doorframe/pillar/
-  // skirt) — a plain read-only userData stamp (harmless to production rendering) so a harness can
-  // pick the SOLID kinds (wall/pillar/doorframe) out of S.interiorGroup.children for a real
-  // THREE.Raycaster occlusion check (_interiorRaycastClearForTest, below) without this file needing
-  // to expose the raw mesh references any other way. S-1: a ghost overlay is tagged kind+"-ghost" —
-  // deliberately NOT one of the solid tags _interiorRaycastClearForTest filters on, since a translucent
-  // ghost is exactly the geometry that should read as "sightline clear" now.
-  mesh.userData.interiorKind = isGhost ? (shadowKind + "-ghost") : shadowKind;
-  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2: wall/floor/pillar/doorframe instanced meshes cast AND
-  // receive real shadows on an interior board (harmless while renderer.shadowMap.enabled is false on
-  // the combat/tabletop path — these flags are simply never consulted there). Floors are the one
-  // exception on cast: a floor slab casting onto itself/adjacent floor cells buys nothing and only
-  // costs shadow-map budget, so floors receive-only, everything else casts+receives. S-1: a ghost
-  // overlay (~5% opacity) neither casts nor receives — a near-invisible slab throwing/catching a full
-  // shadow would read as a visual bug, not atmosphere.
-  mesh.receiveShadow = isGhost ? false : (shadowKind !== "skirt");
-  mesh.castShadow = isGhost ? false : (shadowKind !== "floor" && shadowKind !== "skirt");
-  const m = new THREE.Matrix4();
-  const colorObj = new THREE.Color();
-  // GR4: every OTHER kind grows UP off the shared y=-0.5 floor plane (position.y = sy/2-0.5, this
-  // function's own header comment); the skirt is the one kind that hangs DOWN off that same plane
-  // instead — its own top face sits flush at y=-0.5 and it extends downward by its own sy, reading as
-  // the underside of the floating slab rather than a second floor layer.
-  const skirtBand = shadowKind === "skirt";
-  // BEAUTY-WAVE-2.md BW2-5: `yBase` (default 0, so every pre-existing instance renders IDENTICALLY to
-  // before this unit) lets a prism's bottom sit ABOVE the shared floor plane instead of always growing
-  // up off it — arch-header prisms stacking on top of a doorframe, a tapered column's narrower cap.
-  // `ox`/`oz` (also default 0) offset the instance WITHIN its own cell — door-reveal jambs sitting in
-  // the margin beside a narrower frame, sub-cell furniture-assembly prisms.
-  list.forEach((inst, i) => {
-    const yBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
-    const y = skirtBand ? (-0.5 - (inst.sy || 1) / 2) : (yBase + (inst.sy || 1) / 2 - 0.5);
-    m.compose(
-      new THREE.Vector3((inst.x + (inst.ox || 0)) - cx, y, (inst.z + (inst.oz || 0)) - cz),
-      new THREE.Quaternion(),
-      new THREE.Vector3(Math.max(0.01, inst.sx || 1), Math.max(0.01, inst.sy || 1), Math.max(0.01, inst.sz || 1))
-    );
-    mesh.setMatrixAt(i, m);
-    colorObj.set(inst.color || "#ffffff");
-    mesh.setColorAt(i, colorObj);
-  });
-  mesh.instanceMatrix.needsUpdate = true;
-  if(mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-  return mesh;
-}
-
-// BW2-5 THE COLUMN DEMOTION: pillar instances now carry an optional `profile` field (square/round/
-// tapered/broken/tapered-cap — theater-interior.js's own column-roll comment). square/tapered/broken/
-// tapered-cap stay box-based (scale/height differences alone read the profile, same shared box
-// InstancedMesh every other kind already uses); "round" gets a small dedicated CylinderGeometry
-// InstancedMesh instead — columns are now RARE (<=1/room, most rooms earn none), so this NEVER
-// meaningfully grows the draw-call budget dev/verify-dungeon-interior.mjs check 2 guards (that check
-// only asserts board.instances' own KEYS, which this split never touches — it's a pure GL-layer
-// interpretation of the SAME `pillar` array).
-let INTERIOR_CYLINDER_GEO = null;
-function interiorCylinderGeometry(){
-  if(!INTERIOR_CYLINDER_GEO) INTERIOR_CYLINDER_GEO = new THREE.CylinderGeometry(0.5, 0.5, 1, 12);
-  return INTERIOR_CYLINDER_GEO;
-}
-function interiorBuildPillarMeshes(list, cx, cz, variant, pillarTex, ghostOpacity){
-  const boxList = (list || []).filter((p) => p.profile !== "round");
-  const roundList = (list || []).filter((p) => p.profile === "round");
-  const meshes = [];
-  // BW2-3 §2b COLUMNS: per-face planar from the WALL sheet (pillarTex) — box pillars route it through
-  // interiorBuildInstancedMesh's own map path, round pillars get it below. null on non-flagship/off ->
-  // the pre-BW2-3 flat-colored pillar, unchanged.
-  const boxMesh = interiorBuildInstancedMesh(boxList, cx, cz, pillarTex || null, variant, "pillar", ghostOpacity);
-  if(boxMesh) meshes.push(boxMesh);
-  if(roundList.length){
-    const geo = interiorCylinderGeometry();
-    // S-1 OCCLUSION FADE: same ghost-overlay convention interiorBuildInstancedMesh's own box path uses
-    // — round pillars are rare (<=1/room) but must fade too when they're the occluder.
-    const isGhost = typeof ghostOpacity === "number";
-    const roundMatBase = pillarTex ? { map: pillarTex } : { color: 0xffffff };
-    if(isGhost) Object.assign(roundMatBase, { transparent: true, opacity: ghostOpacity, depthWrite: false });
-    const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(roundMatBase), {
-      banded: !!(variant && variant.banded), bandedSteps: variant && variant.bandedSteps, worldSurface: true,
-      worldPsxOverride: (variant && typeof variant.worldPsx === "boolean") ? variant.worldPsx : undefined
-    });
-    const mesh = new THREE.InstancedMesh(geo, mat, roundList.length);
-    mesh.receiveShadow = !isGhost; mesh.castShadow = !isGhost;
-    const m = new THREE.Matrix4(); const colorObj = new THREE.Color();
-    roundList.forEach((inst, i) => {
-      const yBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
-      const y = yBase + (inst.sy || 1) / 2 - 0.5;
-      m.compose(
-        new THREE.Vector3((inst.x + (inst.ox || 0)) - cx, y, (inst.z + (inst.oz || 0)) - cz),
-        new THREE.Quaternion(),
-        new THREE.Vector3(Math.max(0.01, inst.sx || 1), Math.max(0.01, inst.sy || 1), Math.max(0.01, inst.sz || 1))
-      );
-      mesh.setMatrixAt(i, m);
-      colorObj.set(inst.color || "#ffffff");
-      mesh.setColorAt(i, colorObj);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
-    if(mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-    meshes.push(mesh);
-  }
-  return meshes;
-}
-
-// STAGE-A A4 (docs/STAGE-A.md §A4) — DYNAMIC OCCLUSION v2's own "small ghost mesh, never a big shared
-// material" mandate: builds ONE ghost mesh per blocking instance (a 1-item interiorBuildInstancedMesh
-// call, reusing 100% of its texture/AO/shading logic) rather than batching every ghost of a kind into
-// one InstancedMesh at one flat opacity. Stashes the built mesh's own material onto `fadeEntry.materials`
-// so itrOcclusionClassify's live tween can mutate it directly, every tick, with no further rebuild
-// between now and whenever the next setInteriorBoard call replaces this mesh. `entries` is a list of
-// {inst, fadeEntry} pairs (inst = the split-out ghost instance descriptor, fadeEntry = that SAME
-// instance's persistent S.occlusionFadeState entry, already carrying its own live `.opacity`).
-function itrBuildOcclusionGhostMeshes(entries, cx, cz, texture, variant, shadowKind){
-  const group = new THREE.Group();
-  (entries || []).forEach(function(pair){
-    if(!pair || !pair.inst || !pair.fadeEntry) return;
-    const mesh = interiorBuildInstancedMesh([pair.inst], cx, cz, texture, variant, shadowKind, pair.fadeEntry.opacity);
-    if(!mesh) return;
-    pair.fadeEntry.materials = [mesh.material];
-    group.add(mesh);
-  });
-  return group.children.length ? group : null;
-}
-// same per-instance-mesh/per-instance-material contract as itrBuildOcclusionGhostMeshes above, routed
-// through interiorBuildPillarMeshes so a round-profile occluder's own CylinderGeometry ghost gets the
-// identical individually-tweened treatment as a box pillar's (interiorBuildPillarMeshes already splits
-// box vs round internally; a single-instance call here returns exactly one of the two mesh families).
-function itrBuildOcclusionGhostPillarMeshes(entries, cx, cz, variant, pillarTex){
-  const group = new THREE.Group();
-  (entries || []).forEach(function(pair){
-    if(!pair || !pair.inst || !pair.fadeEntry) return;
-    const meshes = interiorBuildPillarMeshes([pair.inst], cx, cz, variant, pillarTex, pair.fadeEntry.opacity);
-    if(!meshes || !meshes.length) return;
-    pair.fadeEntry.materials = meshes.map(function(m){ return m.material; });
-    meshes.forEach(function(m){ group.add(m); });
-  });
-  return group.children.length ? group : null;
-}
+// ---- THE INTERIOR MESH / GL-SURFACE FAMILY: extracted to src/ui/theater-interior-mesh.js (split B8,
+// 2026-07-25) ---- DUNGEON-GRAPH.md U3 / GR1's whole GL layer moved there VERBATIM: the GR1 procedural
+// material CanvasTexture baker (interiorMaterialTexture + its cache), the BW2-3 folded-file loader
+// (interiorFileTexture + INTERIOR_FILE_TEX_PENDING + the §2b per-surface repeat resolver
+// interiorSurfaceFileTexture and ITR_WALL_COURSE_REPEAT), the two shared geometries
+// (interiorUnitBoxGeometry / interiorCylinderGeometry), the two pure per-instance colour passes
+// (interiorApplyAODarkening / itrNeutralizeInstanceColors), interiorBuildInstancedMesh itself with
+// GR4's skirt band and the S-1 ghost-opacity path, BW2-5's interiorBuildPillarMeshes profile split, and
+// STAGE-A A4's two per-instance ghost mesh builders (itrBuildOcclusionGhostMeshes /
+// itrBuildOcclusionGhostPillarMeshes — B6 left them here for exactly this step). Same root->leaf ctx
+// law; censused to never read S, so it takes NO SyncState. materialTexturePixels/MATERIAL_TEXEL_PX
+// stay the bare classic-script globals (src/ui/theater-materials.js) they always were, resolved the
+// identical way. applyPsxShaderTweaks / nearestify / textureLoader / markDirty stay HERE and reach it
+// through interiorMeshInit(ctx) at end-of-body.
+// WHAT STAYS HERE, and why: the ROOM SHELL (ITR_ROOM_SHELL + rootGet/SetRoomShell,
+// ROOM_SHELL_POLYGON_KERNEL_FLAG, ITR_ROOM_SHELL_UV_DENSITY, ITR_ROOM_SHELL_RISER_DARKEN and the whole
+// compileRoomShell consumer wiring) — censused: there is no standalone builder function to move, every
+// line of it lives INSIDE setInteriorBoard's own body, and the flag is live-read/written by the Clay
+// Room through the root accessors. The SKIRT is likewise not a function: it is the "skirt" shadowKind
+// string setInteriorBoard passes to interiorBuildInstancedMesh, whose skirtBand branch moved with it.
+// interiorAssignShadowCasters is not here at all — split B5 moved it to src/ui/theater-practicals.js.
 
 /* window.Theater.setInteriorBoard(data) — DUNGEON-GRAPH.md U3's tray-render entry point for a
    src/ui/theater-interior.js `interiorBuildBoard(plan, opts)` output ({kind:"interior3d", env, realmId,
@@ -5321,589 +5088,29 @@ function mfCascadeMount(ctx, entries, keyFor){
   entries.forEach(function(entry, i){ mfMountGraceFor(ctx, entry.group, delays[i]); });
 }
 
-// data.pieces -> billboard sprites standing IN the room (DUNGEON-GRAPH.md U3 iteration-2, ruling 3:
-// "creatures render at true scale... standing on the floor"). Each entry {slug, cellX, cellY,
-// scaleVsHuman?} joins the sprite registry, but — BEAUTY-WAVE.md VP1 fix — sizes through
-// interiorSpriteBillboard's OWN true-scale math (HUMAN_TRUE_HEIGHT * scaleTrue), NOT
-// buildSpriteBillboard's tabletop render-height-multiplier convention (the kaiju bug: a medium
-// creature inherited several world units of TABLE height in a room where 1 unit = 5ft). `entry.floor`
-// (the registry's ground-contact-line fraction, up from the image's bottom edge) offsets the quad
-// down so that line — not just the image's bottom pixel row — sits on y=-0.5, the room floor plane
-// (a flying/floating creature's registry entry can sit its silhouette correctly without this function
-// knowing anything about flight). Returns {group, resolved, requested} so setInteriorBoard can expose
-// "did every piece sprite resolve" on window.Theater for the capture rig's metrics (a piece whose slug
-// doesn't join the registry, or whose texture hasn't loaded yet, silently skips — same total-function/
-// never-throw discipline every other figure resolution in this file keeps).
-// BW2-1b + BW2-5 integration merge: prismLists (CLIP MARGIN LAW) and daisTop (finale dais
-// preferDais bias) are BOTH additive tail params — the two units landed in parallel worktrees
-// and compose here.
-function interiorBuildPieces(pieces, cx, cz, wallHeightBase, floorTopMap, trimColor, prismLists, daisTop){
-  const group = new THREE.Group();
-  // VP7 CONTACT GROUNDING: blobs live in their OWN sibling sub-group, appended to `group` once at
-  // the end — NOT interleaved into `group`'s direct children — so existing/other callers walking
-  // `group.children` in piece order (this function's own established contract: "same order as the
-  // pieces array", relied on by dev/verify-dungeon-interior.mjs's VP1 checks) see byte-identical
-  // indices to before this unit.
-  const blobGroup = new THREE.Group();
-  let resolved = 0;
-  // BEAUTY-WAVE-4.md MF-2 item 3 (DRESSING/FURNITURE CASCADE — pieces are the room's own creatures/
-  // set-pieces, the SAME "the room sets itself" mount reveal the spec names): every piece resolved
-  // this pass is collected here so mfCascadeMount can rank+stagger the whole set ONCE at the end,
-  // rather than each piece guessing its own delay independent of its siblings.
-  const mountEntries = [];
-  // 0.95 * wall height: a titanic-in-a-human-room is a SCALE-DOMAIN problem, not a rendering one —
-  // this cap only keeps a piece from visibly poking through the ceiling.
-  const wallCap = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase * 0.95 : null;
-  (pieces || []).forEach((p) => {
-    const base = spriteEntryFor(p.slug);
-    if(!base) return;
-    const entry = Object.assign({}, base, {
-      scaleVsHuman: p.scaleVsHuman != null ? p.scaleVsHuman : base.scaleVsHuman
-    });
-    const built = interiorSpriteBillboard(entry, p.allowOverheight ? null : wallCap);
-    if(!built) return; // texture not loaded yet — falls through, same as every other billboard resolution
-    // BEAUTY-WAVE-2.md BW2-5 item 3: "the boss standee's cell prefers the dais top". An opt-in
-    // mechanism, additive/non-breaking — a piece the caller tags `preferDais:true` with NO explicit
-    // cellX/cellY defaults onto the board's own finale-room dais anchor (data.daisTop, src/ui/theater-
-    // interior.js's itrDaisAnchor) when one exists; every existing caller that sets a real cellX/cellY
-    // (or doesn't tag preferDais at all) behaves exactly as before.
-    if(p.preferDais && p.cellX == null && p.cellY == null && Array.isArray(daisTop) && daisTop.length){
-      const anchor = (p.roomSegNum != null) ? (daisTop.find((d) => d.roomSegNum === p.roomSegNum) || daisTop[0]) : daisTop[0];
-      if(anchor){ p = Object.assign({}, p, { cellX: anchor.x, cellY: anchor.y }); }
-    }
-    const g = built.group;
-    g.userData.sceneObjectId = p.sourceRef || p.id || p.slug;
-    g.userData.spriteSlug = p.slug;
-    // footX/footY already moved the authored contact anchor onto local origin inside the billboard.
-    // Applying the legacy `floor` fraction here as well would double-offset migrated sprites.
-    const floorFrac = 0;
-    // BW2-4b item 7c — BLOCKER-CELL EXCLUSION: shift a piece off any pillar/doorframe cell it landed on
-    // (the loop-05 wolf-on-a-pillar) to the nearest clear cell before any contact/kilter/clip math reads
-    // it. prismLists = [wallList, pillarList, doorframe]; slice(1) drops walls (perimeter, handled by the
-    // clip nudge). Render-only — the caller's combat cell ownership (p.cellX/Y) is never rewritten.
-    const rawCellX = p.cellX || 0, rawCellY = p.cellY || 0;
-    const freeCell = itrBlockerNudgeCell(rawCellX, rawCellY, (prismLists || []).slice(1));
-    const cellX = freeCell.x, cellY = freeCell.y;
-    // BW2-2: the ground-contact line (image-bottom when floor=0) sits on THIS cell's own real floor
-    // TOP (interiorFloorTopAt — the derived law, never the bare -0.5 plane) plus its own plinth base
-    // (interiorStandeeContactY) — replaces the pre-BW2-2 hardcoded "-0.5 - floorFrac*height" that
-    // assumed every floor tile was paper-thin and sat exactly at y=-0.5 (it doesn't; see this file's
-    // own FLOOR CONTACT LAW header comment a few screens up for the measured burial this caused).
-    const floorTop = interiorFloorTopAt(floorTopMap, cellX, cellY);
-    const contactY = interiorStandeeContactY(floorTop);
-    // BW2-2b item 4 (THE KILTER) + CLIP MARGIN LAW (BW2-1b addendum), COMPOSED at the integration
-    // merge per the spec's own ordering note ("apply kilter BEFORE his clip check runs"): the kilter
-    // offsets first (hand-placed-mini read), then the clip nudge is tested AT the kiltered position
-    // so a kilter that would push a wide sprite into a wall is corrected by the same pass. Both are
-    // visual offsets only — cell ownership (cellX/cellY) is UNTOUCHED. The contact pool below reads
-    // g.position.x/z directly, so pool/base/sprite all share the final composed offset.
-    const kilter = kilterFor(p.slug + ":" + cellX + "," + cellY);
-    const clipNudge = itrClipNudgeFor(cellX + kilter.dx, cellY + kilter.dz, built.width * 0.5, prismLists);
-    if(clipNudge.clamped){
-      console.warn("qa: sprite-oversize", { slug: p.slug, cellX, cellY, rawMagnitude: clipNudge.rawMagnitude, clampedTo: clipNudge.magnitude });
-    }
-    g.position.set(
-      cellX - (cx || 0) + kilter.dx + clipNudge.x,
-      contactY - floorFrac * built.height,
-      cellY - (cz || 0) + kilter.dz + clipNudge.z // origin-shifted like every tile/light (the v3 card bug: raw cell coords rendered pieces outside the fitted frame)
-    );
-    g.userData.kilterYawDeg = kilter.yawDeg; // read every frame by updateSpriteBillboardYaw's face()
-    // CL-R2 STANDEE SUPPORT: a natural shallow strip bounded by the tactical footprint — added as a
-    // CHILD of `g`, a plain SIBLING of `g`'s own inner sprite wrap
-    // (buildSpriteBillboardMesh) so BW2-2b's floor-alignment fix (updateSpriteBillboardYaw) leaves it
-    // floor-flat under everyday camera tilt, while still tipping WITH the sprite when fall-death moves
-    // `g`'s own rotation.x (see buildInteriorBase's own header for the full mechanism).
-    const support = interiorStandeeSupportMetrics(built.width, base.size, p.tacticalSpanCells);
-    const baseMesh = buildInteriorBase(support.width, support.depth, trimColor);
-    g.add(baseMesh);
-    g.userData.standeeBaseMesh = baseMesh; // setActingUnit's BW2-2b glow-toggle target
-    g.userData.interiorTrueScale = true;
-    g.userData.interiorHeight = built.height;
-    g.userData.interiorWidth = built.width;
-    g.userData.interiorFloorFrac = floorFrac;
-    // Kept only as a legacy selection-ring size; the visible support is not circular.
-    g.userData.interiorBaseRadius = support.width * 0.5;
-    g.userData.interiorBaseWidth = support.width;
-    g.userData.interiorBaseDepth = support.depth;
-    g.userData.standeeCollisionNudgeX = 0;
-    g.userData.standeeCollisionNudgeZ = 0;
-    g.userData.standeeCollisionRelocated = false;
-    g.userData.tacticalSpanCells = support.tacticalSpanCells;
-    g.userData.stairTreadDepth = support.treadDepth;
-    g.userData.stairFit = support.stairFit;
-    g.userData.canonicalHeight = built.canonicalHeight;
-    g.userData.oversizeClamped = built.oversizeClamped;
-    g.userData.spriteLabel = p.label || base.name || p.slug;
-    g.userData.spriteStressRole = p.stress || null;
-    g.userData.spriteRegenRecommended = support.tacticalSpanCells >= 2
-      && built.width > support.tacticalSpanCells * 0.95;
-    // DUNGEON-GRAPH.md finale-gate finding: a caller may tag an interior piece with the combat foe's
-    // own `fid` (o.foes[i].fid, combat.js's combatStart) so play(verb,{who:fid}) — the SAME production
-    // standee-verb entry point combat damage already routes through (§A STANDEE VERBS WIRING, this
-    // file's STANDEE_VERB_FOR_THEATER_VERB table) — can resolve a piece standing in an interior room,
-    // not just a unit built by setUnits(). Optional/additive: a piece with no `fid` is untagged and
-    // behaves exactly as before.
-    if(p.fid != null) g.userData.unitId = String(p.fid);
-    group.add(g);
-    // VP7 CONTACT GROUNDING: one pool per piece, at the SAME (x,z) as the piece's own floor-
-    // contact position — added to the sibling `blobGroup` (not as a child of `g`, and not
-    // interleaved into `group`'s own direct children) so it survives at a fixed world y even if a
-    // caller later re-tweens `g`'s own rotation (e.g. a tipped fall-death card, STANDEE_VERBS'
-    // fall-death — the corpse keeps its ground anchor because the pool isn't parented to the
-    // tilting wrapper), and existing callers walking `group.children` in piece order see no change.
-    // BW2-2: seated off THIS cell's own real floor top, not the old hardcoded -0.495.
-    const contactBlob = addInteriorContactBlob(
-      blobGroup, g.position.x, g.position.z, support.width, floorTop, support.depth
-    );
-    g.userData.contactBlobMesh = contactBlob;
-    // VP6 item 1: idle-breathe auto-plays on every living piece the instant it mounts (a fresh
-    // fall-death corpse never reaches this — dead pieces are re-mounted by the NEXT setInteriorBoard
-    // call with p.fid's own userData never carrying userData.corpse from a torn-down prior group, so
-    // this is a clean re-roll for a genuinely-new mount; a corpse persisting WITHIN one mount's
-    // lifetime is fall-death's own stopIdleBreathe(...,true) call, not this mount-time start).
-    bindStandeeCtx(buildTheaterCtx());
-    startIdleBreathe(g, p.slug + ":" + p.cellX + "," + p.cellY);
-    // BEAUTY-WAVE-4.md MF-2 item 3: this piece's own mount-grace entry, keyed the SAME slug+cell
-    // identity kilterFor/idle-breathe already use — staggered below, once every piece has resolved.
-    mountEntries.push({ group: g, key: p.slug + ":" + cellX + "," + cellY });
-    resolved++;
-  });
-  group.add(blobGroup);
-  S.standeeCollisionDirty = true;
-  mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
-  return { group, resolved, requested: (pieces || []).length };
-}
-
-// GRAPHICS-ENGINE.md GR2 §D DRESSING SYSTEM (render half) — data.dressing entries (src/engine/
-// place-dressing.js's dressPlan output: {slug,x,y,primary,cardKind,roomSegNum,lightAffine?}) mount
-// as upright CARDS, the same standee construction billboard pieces already use (nearestify, alpha-
-// cutout, camera-facing yaw+tilt via updateSpriteBillboardYaw's face(), tagged userData.sprite so
-// that function's existing "walk S.interiorGroup one level deep" scan already picks these up with
-// zero changes there), shadow-casting, sized by CARD_SIZE_BY_KIND off the entry's own `cardKind`
-// (small/medium/large, mirroring the manifest's own `size` field).
-const CARD_SIZE_BY_KIND = { small: 0.6, medium: 1.0, large: 1.6 };
-function dressingCardHeight(cardKind){
-  return CARD_SIZE_BY_KIND[cardKind] != null ? CARD_SIZE_BY_KIND[cardKind] : CARD_SIZE_BY_KIND.medium;
-}
-
-// synchronously-built label-card CanvasTexture — the dev-only stand-in for a not-yet-generated
-// assets/dressing/<slug>.png (DRESSING-GEN runs in the codex after this unit; see this file's own
-// GR2 header note above). Small, legible, nearest-filtered (matches every other procedural texture
-// this file builds, e.g. interiorPatternTexture) so it reads clearly as "placeholder art", not a
-// rendering bug, at study-card distances.
-function dressingPlaceholderTexture(slug){
-  const canvas = document.createElement("canvas");
-  canvas.width = 128; canvas.height = 128;
-  const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "#2a2a2a"; ctx.fillRect(0, 0, 128, 128);
-  ctx.strokeStyle = "#c9a85c"; ctx.lineWidth = 4;
-  ctx.strokeRect(4, 4, 120, 120);
-  ctx.fillStyle = "#e8e8e8";
-  ctx.font = "11px monospace";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  // word-wrap the slug across a few lines — long dressing slugs (e.g. "gloom-clutter-mausoleumdoor-
-  // shard") need to break somewhere to stay legible in a 128px card.
-  const words = String(slug || "dressing").split("-");
-  const lines = [];
-  let line = "";
-  words.forEach((w) => {
-    const next = line ? line + "-" + w : w;
-    if(next.length > 14 && line){ lines.push(line); line = w; } else { line = next; }
-  });
-  if(line) lines.push(line);
-  const lineH = 14, startY = 64 - ((lines.length - 1) * lineH) / 2;
-  lines.forEach((ln, i) => ctx.fillText(ln, 64, startY + i * lineH));
-  const tex = new THREE.CanvasTexture(canvas);
-  nearestify(tex);
-  return tex;
-}
-
-// mirrors spriteTextureFor's async-load/replay convention (this file's own established pattern) but
-// NEVER returns null: a cache miss synthesizes+caches the placeholder immediately (so the caller's
-// card mounts on the very first render pass, no pending/blank state) while a real
-// assets/dressing/<slug>.png load races in the background; on success the cache entry is swapped to
-// the real texture and S.lastBoard is replayed (same "null the dirty key, resend" trick), so real art
-// drops in with ZERO code change the moment DRESSING-GEN's files land. A failed load just keeps the
-// placeholder forever (loader that "falls back cleanly", per this unit's own brief) — never retried,
-// never throws.
-function dressingTextureFor(slug){
-  const cached = DRESSING_TEXTURE_CACHE[slug];
-  if(cached) return cached;
-  const placeholder = dressingPlaceholderTexture(slug);
-  DRESSING_TEXTURE_CACHE[slug] = placeholder;
-  // VQ2-RESPEC.md §3 unit L2 — the synchronous name-label CanvasTexture fires HERE, on every slug's
-  // first request this session; a real assets/dressing/<slug>.png (if/when it settles below) upgrades
-  // the SAME slug to "resolved" separately, mirroring what actually renders on screen frame-to-frame
-  // (a placeholder card first, real art once it lands — never invented as already-resolved).
-  if(typeof theaterCensusRecord === "function") theaterCensusRecord("dressing", "placeholder-card", slug, _censusBoardSceneKind());
-  textureLoader.load(
-    "assets/dressing/" + slug + ".png",
-    function(tex){
-      nearestify(tex);
-      DRESSING_TEXTURE_CACHE[slug] = tex;
-      if(typeof theaterCensusRecord === "function") theaterCensusRecord("dressing", "resolved", slug, _censusBoardSceneKind());
-      if(S.mounted && S.lastBoard && S.lastBoard.kind === "interior3d"){
-        S.boardKey = null;
-        setInteriorBoard(S.lastBoard);
-      } else if(S.mounted && S.lastBoard && S.lastBoard.kind !== "interior3d" && Array.isArray(S.lastBoard.props)){
-        // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — the flat tabletop board (setBoard, NOT setInteriorBoard;
-        // no `kind` field at all — see setBoard's own comment on that) can now ALSO carry dressing
-        // cards (a travel leg's biome scatter). Before this unit, this replay-on-real-art-arrival
-        // trick only knew how to re-invoke setInteriorBoard — a flat board's placeholder card would
-        // stay a placeholder FOREVER even after the real assets/dressing/<slug>.png finished loading,
-        // since setBoard was never told to re-run. Mirrors the interior branch exactly: null the dirty
-        // key so the "identical payload" skip doesn't swallow this replay, re-run the SAME last board.
-        S.boardKey = null;
-        setBoard(S.lastBoard);
-      }
-    },
-    undefined,
-    function(){ /* no assets/dressing/<slug>.png yet (or failed) — placeholder stays permanently */ }
-  );
-  return placeholder;
-}
-
-// a single dressing card group — same construction discipline as buildSpriteBillboard (SPRITE PURITY:
-// psxExempt, no dither/vertex-snap on card pixels; camera-facing group, feet-at-origin, alpha-cutout
-// shadow casting via a MeshDepthMaterial keyed off the same texture) — kept as its OWN function
-// (not a buildSpriteBillboard call) since dressing cards resolve via dressingTextureFor (always-
-// available placeholder-or-real) rather than the sprite registry's resolved-or-null join.
-function buildDressingCard(entry){
-  const tex = dressingTextureFor(entry.slug);
-  const h = dressingCardHeight(entry.cardKind);
-  const geo = new THREE.PlaneGeometry(h, h);
-  // BW2-4b item 1 — LIT cutout family: dressing cards RECEIVE the scene like the standee billboards
-  // (same MeshLambert + emissive readability floor, same BRIGHTNESS LAW) so a floor-clutter card in a
-  // dark corner reads dim, not pasted-bright. Purity holds (lighting response only). Debug seam mirrors
-  // the standee's so a full-bright reference frame captures cards unlit too.
-  const mat = SPRITE_UNLIT_DEBUG
-    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true })
-    : new THREE.MeshLambertMaterial({
-        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
-        transparent: true, alphaTest: 0.5, side: THREE.DoubleSide, depthWrite: true
-      });
-  mat.userData.psxExempt = true; // SPRITE PURITY — cards are flat painted art, never PS1-distorted
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.y = h / 2;
-  mesh.castShadow = true;
-  mesh.receiveShadow = false;
-  mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
-    map: tex, alphaTest: 0.5, depthPacking: THREE.RGBADepthPacking
-  });
-  const g = new THREE.Group();
-  g.add(mesh);
-  g.userData.sprite = true; // updateSpriteBillboardYaw's existing scan picks this group up unmodified
-  g.userData.dressingSlug = entry.slug;
-  return g;
-}
-
-// BEAUTY-WAVE-2.md BW2-5 FURNITURE CHANNEL — "mid-room verticality is FURNITURE, not columns" (the
-// chrome mock's crates/cabinets/machines). Real multi-prism BoxGeometry assemblies (furnitureFor(kind,
-// realm), src/ui/theater-interior.js — the shared builder ROOM-GRAMMAR.md §4 names as its own
-// dependency), textured per PACKET-02's planar-face law (textureFaceFor(realm,face) || the procedural
-// panel fallback below — PACKET-02's crate-face arrivals haven't landed yet).
-const FURNITURE_PANEL_TEXTURE_CACHE = {};
-function proceduralPanelTexture(realm, face, baseColorHex){
-  const key = realm + ":" + face + ":" + baseColorHex;
-  if(FURNITURE_PANEL_TEXTURE_CACHE[key]) return FURNITURE_PANEL_TEXTURE_CACHE[key];
-  const pixels = materialTexturePixels("mottle", baseColorHex, "furniture:" + key, MATERIAL_TEXEL_PX, 0.09);
-  const canvas = document.createElement("canvas");
-  canvas.width = pixels.width; canvas.height = pixels.height;
-  const ctx = canvas.getContext("2d");
-  ctx.putImageData(new ImageData(pixels.data, pixels.width, pixels.height), 0, 0);
-  const tex = new THREE.CanvasTexture(canvas);
-  nearestify(tex);
-  FURNITURE_PANEL_TEXTURE_CACHE[key] = tex;
-  return tex;
-}
-function furniturePanelMaterial(realm, face, baseColorHex){
-  // BW2-3: textureFaceFor now returns a folded PACKET-02 face-tile FILE PATH (flagships) or null. A
-  // path loads as a per-face planar ClampToEdge texture (§2b FURNITURE law — one self-contained face
-  // tile per face, never wrapped); null falls back to the procedural panel painter. Same seam shape.
-  const faceFile = textureFaceFor(realm, face);
-  const tex = (faceFile ? interiorFileTexture(faceFile, "clamp", 1, 1) : null)
-    || proceduralPanelTexture(realm, face, baseColorHex);
-  return applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ map: tex }), { worldSurface: true });
-}
-// STAGE-A A4 (docs/STAGE-A.md §A4): `fadeOpacity` (optional, a live-interpolated number from a
-// occlusion-fade entry) renders EVERY prism of this ONE furniture piece translucent+depthWrite:false at
-// that opacity, mirroring the wall/pillar ghost treatment's own contract — a whole-assembly fade rather
-// than a stub/ghost height split (furniture has no single "ankle" that means anything across a table/
-// shelf-unit/cabinet's own varied prism heights; the geometric occlusion test itself already only fires
-// when a prism's real AABB actually straddles the sightline, so an untouched, un-tall piece never fades
-// at all — see itrFurnitureOcclusionBoxFor at this file's setInteriorBoard call site). Every existing
-// caller omits the 2nd argument, so `isFading` is false and this function's output is byte-identical to
-// before this unit for every non-A4 caller. furniturePanelMaterial always builds a FRESH material per
-// call (never cached/shared across furniture pieces — see its own header), so mutating one piece's own
-// materials here can never bleed opacity onto an unrelated furniture instance.
-function buildFurnitureAssembly(entry, fadeOpacity){
-  const recipe = furnitureFor(entry.kind, entry.realmId);
-  const kit = INTERIOR_TILE_KITS ? (INTERIOR_TILE_KITS[entry.realmId] || INTERIOR_TILE_KITS.chrome) : null;
-  const baseColorHex = (kit && kit.trimColor) || "#8a7a63";
-  const isFading = typeof fadeOpacity === "number";
-  const group = new THREE.Group();
-  const materials = [];
-  recipe.prisms.forEach((p) => {
-    const geo = new THREE.BoxGeometry(Math.max(0.02, p.sx), Math.max(0.02, p.sy), Math.max(0.02, p.sz));
-    const mat = furniturePanelMaterial(entry.realmId, p.face, baseColorHex);
-    const topMat = p.topFace ? furniturePanelMaterial(entry.realmId, p.topFace, baseColorHex) : mat;
-    if(isFading) Object.assign(mat, { transparent: true, opacity: fadeOpacity, depthWrite: false });
-    if(isFading && topMat !== mat) Object.assign(topMat, { transparent: true, opacity: fadeOpacity, depthWrite: false });
-    materials.push(mat);
-    if(topMat !== mat) materials.push(topMat);
-    // THREE.BoxGeometry material groups are +X, -X, +Y, -Y, +Z, -Z. A crate remains one six-sided
-    // box; the top merely selects its admitted top face tile instead of inventing lid geometry.
-    const mesh = new THREE.Mesh(geo, topMat === mat ? mat : [mat, mat, topMat, mat, mat, mat]);
-    mesh.position.set(p.dx || 0, (p.yBase || 0) + p.sy / 2, p.dz || 0);
-    mesh.castShadow = !isFading;
-    mesh.receiveShadow = !isFading;
-    group.add(mesh);
-  });
-  group.userData.furnitureKind = recipe.kind;
-  group.userData.dressingSlug = entry.slug;
-  group.userData.sceneObjectId = entry.slug;
-  group.userData.occlusionGhost = isFading;
-  group.userData.occlusionMaterials = materials; // interiorBuildFurniture's own fade-entry wiring reads this
-  return group;
-}
-// data.furniture -> group of furniture assemblies, origin-shifted the SAME way every other interior
-// mount already is (cx/cz subtraction) — feet-on-floor via the SAME FLOOR CONTACT LAW every other
-// mount point reads through (interiorFloorTopAt). STAGE-A A4: `classifyFn(f)` (optional) is called once
-// per furniture entry; a non-null return `{opacity}` renders this ONE piece as an occlusion ghost (its
-// own live-tweened opacity), and its built materials are stashed onto the SAME fade-state entry so
-// itrOcclusionClassify's tween can keep mutating them every tick with no further rebuild. Every existing
-// caller omits `classifyFn`, so this degrades to byte-identical pre-A4 rendering (every prism opaque).
-function interiorBuildFurniture(furniture, cx, cz, floorTopMap, classifyFn){
-  const group = new THREE.Group();
-  // BEAUTY-WAVE-4.md MF-2 item 3: "Dressing/FURNITURE on first room reveal" — furniture assemblies get
-  // the SAME seeded stagger cascade as data.pieces/data.dressing (see mfCascadeMount's own header).
-  const mountEntries = [];
-  (furniture || []).forEach((f) => {
-    if(!f || !f.slug) return;
-    const fadeEntry = (typeof classifyFn === "function") ? classifyFn(f) : null;
-    const g = buildFurnitureAssembly(f, fadeEntry ? fadeEntry.opacity : undefined);
-    if(fadeEntry) fadeEntry.materials = g.userData.occlusionMaterials;
-    const floorTop = interiorFloorTopAt(floorTopMap, f.x || 0, f.y || 0);
-    g.position.set((f.x || 0) - (cx || 0), floorTop, (f.y || 0) - (cz || 0));
-    g.userData.dressingSlug = f.slug;
-    g.userData.sceneObjectId = f.slug;
-    group.add(g);
-    mountEntries.push({ group: g, key: f.slug + ":" + f.x + "," + f.y });
-  });
-  mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
-  return group;
-}
-
-// ADDENDUM — THE PROP PERSPECTIVE LAW: surface-attached props mount as real SHALLOW-EXTRUSION prisms,
-// wall-LOCKED (never camera-billboarded — that's the whole bug this fixes: a billboard always faces
-// the camera regardless of which wall it's mounted on, so at a fixed isometric angle a "screen" can
-// read backwards). Side/back faces are EDGE-SAMPLED off the SAME art texture's own outermost opaque
-// pixel ring (automatic — no second authored color source), front face is the real dressing art.
-const ITR_EDGE_COLOR_CACHE = {};
-function itrPropEdgeColorFor(slug, tex){
-  if(ITR_EDGE_COLOR_CACHE[slug]) return ITR_EDGE_COLOR_CACHE[slug];
-  let color = "#3a3a3a"; // safe neutral fallback (image not yet loaded / canvas-tainted / degenerate)
-  try {
-    const img = tex && tex.image;
-    if(img && img.width && img.height){
-      const cvs = document.createElement("canvas");
-      cvs.width = img.width; cvs.height = img.height;
-      const cctx = cvs.getContext("2d");
-      cctx.drawImage(img, 0, 0);
-      const data = cctx.getImageData(0, 0, img.width, img.height).data;
-      const margin = Math.max(1, Math.round(Math.min(img.width, img.height) * 0.04));
-      let r = 0, g = 0, b = 0, n = 0;
-      const sample = (x, y) => {
-        if(x < 0 || y < 0 || x >= img.width || y >= img.height) return;
-        const i = (y * img.width + x) * 4;
-        if(data[i + 3] < 40) return; // skip near-transparent — "the outermost OPAQUE ring"
-        r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
-      };
-      for(let x = 0; x < img.width; x++){ sample(x, margin); sample(x, img.height - 1 - margin); }
-      for(let y = 0; y < img.height; y++){ sample(margin, y); sample(img.width - 1 - margin, y); }
-      if(n > 0){
-        const hx = (v) => Math.round(v).toString(16).padStart(2, "0");
-        color = "#" + hx(r / n) + hx(g / n) + hx(b / n);
-      }
-    }
-  } catch(e) { /* cross-origin/canvas-tainted or not-yet-loaded image — keep the safe fallback */ }
-  ITR_EDGE_COLOR_CACHE[slug] = color;
-  return color;
-}
-// front (+z local) faces AWAY from the wall the prop is mounted on, into the room — "n"/"s"/"e"/"w"
-// names which side the adjacent WALL cell sits on (itrWallSideAt, src/ui/theater-interior.js).
-const ITR_WALL_SIDE_YAW = { n: 0, s: Math.PI, w: -Math.PI / 2, e: Math.PI / 2 };
-// LIGHT-SIGHT-POLISH.md P-2 — WALL-HANG PLACEMENT FIX. Before this, interiorBuildWallProps mounted
-// every wall-hang extrusion prop at the cell CENTER, at FLOOR level, with no push toward the wall
-// plane — a painting/sconce sat as a small tan box floating mid-room at floor height, showing its
-// edge-sampled tan SIDE faces (the "floating rhomboid" bug). ITR_WALL_SIDE_YAW above already resolves
-// the prop's ROTATION off entry.wallSide (itrWallSideAt, computed once in theater-interior.js off the
-// SpatialPlan's own wall-cell mask — never re-derived here); these two knobs finish the job: lift the
-// mount to wall mid-height, and push the mount point from the cell center onto the actual wall plane.
-// Both named + dialable per the spec's own "Adam dials from the next re-shoot" clause.
-const ITR_WALLHANG_HEIGHT_FRAC = 0.5;  // mount Y = floorTop + wallHeightBase * this fraction (mid-wall)
-const ITR_WALLHANG_WALL_OFFSET = 0.5;  // half a cell (GRID LAW: cellSize=1, theater-interior.js) toward the wall
-const ITR_WALLHANG_FALLBACK_WALL_HEIGHT = 2; // 10 ft; mirrors ITR_WALL_HEIGHT_BASE
-// unit normal pointing FROM the cell center TOWARD the adjacent wall cell it's keyed off — same
-// plan-x->world-x / plan-y->world-z axis mapping interiorBuildWallProps' own position.set already
-// uses, keyed off the SAME entry.wallSide ITR_WALL_SIDE_YAW reads (one resolution, two consumers).
-const ITR_WALL_SIDE_NORMAL = { n: { x: 0, z: -1 }, s: { x: 0, z: 1 }, w: { x: -1, z: 0 }, e: { x: 1, z: 0 } };
-function buildExtrusionProp(entry){
-  const tex = dressingTextureFor(entry.slug);
-  const h = dressingCardHeight(entry.cardKind);
-  const depth = Math.max(0.01, entry.depth || 0.05);
-  const geo = new THREE.BoxGeometry(h, h, depth);
-  const sideColorHex = itrPropEdgeColorFor(entry.slug, tex);
-  // BW2-4b item 1 — LIT cutout family: the extrusion prop's FRONT (art) face receives the scene too
-  // (the side faces are already MeshLambert), so a wall-hung painting/screen tracks the plunge with its
-  // own edges instead of glowing full-bright off a dark wall. Purity holds (lighting response only).
-  const frontMat = SPRITE_UNLIT_DEBUG
-    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.5, depthWrite: true })
-    : new THREE.MeshLambertMaterial({
-        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
-        transparent: true, alphaTest: 0.5, depthWrite: true
-      });
-  frontMat.userData.psxExempt = true; // SPRITE PURITY — the art face is flat painted art, never PS1-distorted
-  const sideMat = new THREE.MeshLambertMaterial({ color: sideColorHex });
-  // BoxGeometry material-group order: 0:+x 1:-x 2:+y 3:-y 4:+z 5:-z — the art sits on +z (index 4)
-  const mesh = new THREE.Mesh(geo, [sideMat, sideMat, sideMat, sideMat, frontMat, sideMat]);
-  mesh.position.y = h / 2;      // same "bottom edge at group origin" convention buildDressingCard keeps
-  mesh.position.z = depth / 2;  // the -z (BACK) face sits flush on the wall plane; extrudes +z into the room
-  mesh.castShadow = true;
-  mesh.receiveShadow = false;
-  mesh.customDepthMaterial = new THREE.MeshDepthMaterial({ map: tex, alphaTest: 0.5, depthPacking: THREE.RGBADepthPacking });
-  const g = new THREE.Group();
-  g.rotation.y = ITR_WALL_SIDE_YAW[entry.wallSide] || 0;
-  g.add(mesh);
-  g.userData.dressingSlug = entry.slug;
-  g.userData.extrusionProp = true; // deliberately NOT userData.sprite — wall-LOCKED, never camera-billboarded
-  g.userData.extrusionHeight = h;   // BW2-2b integration: wall-contact AO sizes its halo off this
-  return g;
-}
-function interiorBuildWallProps(wallProps, cx, cz, floorTopMap, wallHeightBase){
-  const group = new THREE.Group();
-  (wallProps || []).forEach((d) => {
-    if(!d || !d.slug) return;
-    const g = buildExtrusionProp(d);
-    const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
-    // P-2 WALL-HANG PLACEMENT FIX (LIGHT-SIGHT-POLISH.md): buildExtrusionProp's mesh is built so its
-    // BACK face passes through the group's own local origin (mesh.position.z = depth/2, back face at
-    // local z=0) — meaning wherever we place g.position IS the point the back face sits on. Resolve
-    // the wall normal off the SAME entry.wallSide ITR_WALL_SIDE_YAW already rotated the prop with
-    // (itrWallSideAt, computed once in theater-interior.js off the SpatialPlan's own wall-cell mask —
-    // never re-derived/re-guessed here); push that point half a cell toward the wall so the back face
-    // lands ON the wall plane instead of floating at the cell center, and lift it to wall mid-height.
-    const wallNormal = ITR_WALL_SIDE_NORMAL[d.wallSide];
-    if(wallNormal){
-      const wallH = (typeof wallHeightBase === "number" && wallHeightBase > 0) ? wallHeightBase : ITR_WALLHANG_FALLBACK_WALL_HEIGHT;
-      g.position.set(
-        (d.x || 0) - (cx || 0) + wallNormal.x * ITR_WALLHANG_WALL_OFFSET,
-        floorTop + wallH * ITR_WALLHANG_HEIGHT_FRAC,
-        (d.y || 0) - (cz || 0) + wallNormal.z * ITR_WALLHANG_WALL_OFFSET
-      );
-    } else {
-      // degenerate/ambiguous case (itrWallSideAt found no adjacent WALL cell — rare, per its own
-      // comment) — never throw; keep the PRE-FIX placement (floor level, cell center, no push) and
-      // log so it's visible in QA rather than silently producing a still-floating prop.
-      console.warn("qa: wallhang-no-wallside", d.slug, d.x, d.y);
-      g.position.set((d.x || 0) - (cx || 0), floorTop, (d.y || 0) - (cz || 0));
-    }
-    // BW2-2b item 5b (wired here at the integration merge): WALL-CONTACT AO now attaches to the
-    // EXTRUSION prop, not the old flat wall-hang card — BW2-5 rerouted wall-hangs through this
-    // builder (interiorBuildDressing skips primary:"wall-hang" entirely), which made BW2-2b's
-    // original in-loop AO call dead code. The AO halo mounts as a child of the extrusion group,
-    // sitting a hair behind the prop's back face (the wall plane) so it reads as the seam shadow
-    // hugging where the object meets the wall — exactly the mock's painting vignette, and per the
-    // extrusion addendum's own coordination note ("your extrusion gives that band a real volume
-    // edge to hug"). Still valid after the P-2 reposition above: the AO quad is a CHILD of g, mounted
-    // in g's own local space, so it rides along with whatever world position/rotation g now has.
-    addWallContactAO(g, (g.userData && g.userData.extrusionHeight) || 1, 0.005);
-    group.add(g);
-  });
-  return group;
-}
-
-// data.dressing -> group of dressing card standees, origin-shifted the SAME way tiles/lights/pieces
-// already are (the v3 card bug class this unit's own brief calls out by name: raw cell coords render
-// outside the fitted camera frame — every mount in this function goes through the (cx,cz) subtraction,
-// no exceptions).
-
-// BW2-2b item 5b — WALL-CONTACT AO. Every wall-hung dressing card (REALM_DRESSING roster entries
-// tagged `primary:"wall-hang"` in src/engine/place-dressing.js — paintings, the chrome broken-screen,
-// wall clutter) gets a soft dark gradient card mounted directly BEHIND its own billboard at the
-// attachment seam, per Adam's read of the mock's painting ("a soft dark vignette hugging the wall
-// around the frame"): "same CanvasTexture-gradient channel as the pool" (the spec's own words) —
-// interiorPoolGeoFor/interiorPoolMaterial ARE that channel, reused verbatim rather than a second
-// texture/material path. The pool rotates that same PlaneGeometry flat (-90 deg on X) to lie on the
-// floor; this quad leaves it in its AUTHORED orientation (facing +Z, buildSpriteBillboard's own
-// convention) and mounts it as a CHILD of the card's own billboard group at a small negative local Z —
-// "behind" the card in the group's own local frame, which rides along with whatever camera-facing
-// yaw+tilt updateSpriteBillboardYaw gives the PARENT group every frame (this AO quad is a grandchild,
-// never independently tagged userData.sprite, so it never gets its own separate facing pass — it just
-// inherits the parent's transform for free, always reading as flush behind the card from every yaw
-// step). Sized larger than the card so it "halos" past the card's own edges rather than reading as a
-// hard-edged rectangle. Cheap: one extra quad per wall-hang, no SSAO pass.
-const WALL_AO_SCALE = 1.6;     // same multiplier as the pool's own feather-extent (footprint x 1.6)
-const WALL_AO_Z_OFFSET = -0.02;
-function addWallContactAO(cardGroup, cardHeight, zOffset){
-  const radius = Math.max(0.05, (cardHeight || 1) * 0.5 * WALL_AO_SCALE);
-  const mesh = new THREE.Mesh(interiorPoolGeoFor(radius), interiorPoolMaterial());
-  // zOffset: flat billboard cards sit at local z=0 with the camera-facing pass yawing the group, so
-  // "behind the card" is NEGATIVE local z (the original -0.02). An EXTRUSION prop's back face sits ON
-  // the wall plane at local z=0 with the room toward +z, so its seam halo must sit a hair in FRONT of
-  // the wall (+0.005) to be visible around the prop's silhouette — the caller picks per mount type.
-  mesh.position.set(0, (cardHeight || 1) / 2, (typeof zOffset === "number") ? zOffset : WALL_AO_Z_OFFSET);
-  mesh.userData.wallContactAO = true; // verify hook — per-wall-hang AO presence/count check
-  cardGroup.add(mesh);
-  return mesh;
-}
-function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
-  const group = new THREE.Group();
-  // VP7 CONTACT GROUNDING: same sibling-subgroup convention as interiorBuildPieces' blobGroup
-  // (below) — blobs never interleave into `group`'s own direct children.
-  const blobGroup = new THREE.Group();
-  // BEAUTY-WAVE-4.md MF-2 item 3: dressing cards get the SAME seeded stagger cascade as
-  // data.pieces/data.furniture — "the room sets itself" applies to every set-piece family.
-  const mountEntries = [];
-  (dressing || []).forEach((d) => {
-    if(!d || !d.slug) return;
-    // BW2-5: blocker-primary entries render as furniture-class volumes (interiorBuildFurniture,
-    // off the sibling data.furniture array) and wall-hang entries as extrusion props
-    // (interiorBuildWallProps, off data.wallProps) — both derived from this SAME dressing roll, so
-    // skip them here to avoid mounting the same entry twice.
-    if(d.primary === "blocker" || d.primary === "wall-hang") return;
-    const g = buildDressingCard(d);
-    // BW2-2: feet on THIS cell's own real floor top (interiorFloorTopAt — the derived law), replacing
-    // the pre-BW2-2 hardcoded -0.4 (that value's own comment falsely claimed parity with pieces' -0.5
-    // convention — it was actually 0.1 units higher, and still 0.1 below the true nominal floor top;
-    // see this file's FLOOR CONTACT LAW header for the measured numbers). Dressing gets NO plinth base
-    // (per the mock, ui-sketches/mock-frames/mock-01-gloom-combat.png — only combat-representing
-    // standees carry a base; a tombstone/torch/painting sits directly on the floor).
-    const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
-    // CLIP MARGIN LAW (Adam addendum, mid-flight on BW2-1b), item 2 — LARGE cards only ("every
-    // interior piece + large dressing card" is VP7's own existing large-only carve-out, reused
-    // here): may TOUCH the wall plane (that's the point, dpAdjacentToWall already seeds it there) but
-    // never pass THROUGH it — resolved via the SAME itrClipNudgeFor circle-vs-prism push, radius
-    // inflated by CLIP_DRESSING_EPSILON so the card's own true edge clears the wall face by a hair
-    // (no magnitude cap/warning: a wall-adjacent card's own overlap is always small by construction).
-    let dressNudge = { x: 0, z: 0 };
-    if(d.cardKind === "large"){
-      dressNudge = itrClipNudgeFor((d.x || 0), (d.y || 0), dressingCardHeight(d.cardKind) / 2 + CLIP_DRESSING_EPSILON, prismLists, { maxMag: 1 });
-    }
-    g.position.set((d.x || 0) - (cx || 0) + dressNudge.x, floorTop, (d.y || 0) - (cz || 0) + dressNudge.z);
-    group.add(g);
-    // VP7 CONTACT GROUNDING: large dressing cards only (§VP7: "every interior piece + large
-    // dressing card") — small/medium cards (crates, wall clutter) stay floater-free by spec.
-    if(d.cardKind === "large"){
-      addInteriorContactBlob(blobGroup, g.position.x, g.position.z, dressingCardHeight(d.cardKind), floorTop);
-    }
-    mountEntries.push({ group: g, key: d.slug + ":" + d.x + "," + d.y });
-  });
-  group.add(blobGroup);
-  mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
-  return group;
-}
+// ---- THE DRESSING / PROPS FAMILY: extracted to src/ui/theater-dressing.js (split B8, 2026-07-25) ----
+// GR2 §D's dressing system and its siblings moved there VERBATIM: the dressing texture channel
+// (DRESSING_TEXTURE_CACHE + dressingPlaceholderTexture + dressingTextureFor's async real-art settle and
+// its S.mounted-guarded setInteriorBoard/setBoard replay), CARD_SIZE_BY_KIND + dressingCardHeight +
+// buildDressingCard, BW2-5's furniture channel (the panel texture cache, proceduralPanelTexture,
+// furniturePanelMaterial, buildFurnitureAssembly, interiorBuildFurniture), THE PROP PERSPECTIVE LAW
+// (itrPropEdgeColorFor + its cache, ITR_WALL_SIDE_YAW/NORMAL, the P-2 ITR_WALLHANG_* knobs,
+// buildExtrusionProp, interiorBuildWallProps), BW2-2b's WALL-CONTACT AO (WALL_AO_SCALE /
+// WALL_AO_Z_OFFSET / addWallContactAO — B7's standee-mount header censused it dressing-owned and left
+// it for this step), plus interiorBuildPieces and interiorBuildDressing themselves. Same root->leaf ctx
+// law; it reads AND writes S, so dressingInit(ctx) at end-of-body is paired with dressingSyncState(S)
+// at both `S = createTheaterState()` sites. spriteEntryFor, kilterFor, interiorFloorTopAt (all
+// dev/verify-d4-doors.mjs / RED-FIRST text-extraction pins), buildTheaterCtx, _censusBoardSceneKind,
+// setBoard, setInteriorBoard, applyPsxShaderTweaks, nearestify, textureLoader, LIGHT_TUNABLES and the
+// MF-2 grace glue stay HERE and reach it through that ctx; SPRITE_UNLIT_DEBUG and
+// ITR_SPRITE_EMISSIVE_TINT stay HERE as mutable root `let`s read live through two ctx accessors (the
+// step's only four accessor swaps, in buildDressingCard and buildExtrusionProp). theaterCensusRecord /
+// furnitureFor / INTERIOR_TILE_KITS / textureFaceFor stay bare classic-script globals.
+// WHAT STAYS HERE: the MF-2 SPAWN/DESPAWN GRACE GLUE just above (mfArtMaterialsOf /
+// mfSetMaterialsOpacity / mfMountGraceFor / mfDespawnGraceFor / mfCascadeMount) — censused: setUnits
+// calls mfMountGraceFor and mfDespawnGraceFor directly, so the family is figure-grace glue shared by
+// the combat-figure channel and the dressing channel, not dressing-owned. The three cascade call sites
+// in the moved builders reach mfCascadeMount through the ctx above.
 // ---- THE BEAT CAMERA + THE SHOT COMPOSE WIRING: extracted to src/ui/theater-camera.js (split B6) ----
 // BW2-1's interiorCameraFitFor / interiorFitMaxHeightFor (with INTERIOR_ROOM_FIT_PAD and
 // INTERIOR_BEAT_MARGIN_CELLS) and STAGE-A A3's whole shot-compose wiring (ITR_SHOT_COMPOSE, the scratch
@@ -8275,6 +7482,7 @@ function retire(){
   standeeMountSyncState(S); // split B7: same law for the standee base/contact family (S.standeeCollision*)
   spritesSyncState(S);  // split B7: same law for the sprite/billboard family (replay + the facing pass)
   overlaysSyncState(S); // split B7: same law for the overlay family (rings/effects/floaters + S.tweens)
+  dressingSyncState(S); // split B8: same law for the dressing/props family (the async real-art replay reads S.mounted/S.lastBoard)
 }
 
 /* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 8) — ONE module-scope call, made once at import
@@ -8343,7 +7551,7 @@ window.Theater = {
 window.Theater.interiorMeshCount = function(){ return S.interiorMeshCount || 0; };
 // BW2-3 MATERIAL TEXEL: how many folded-texture-file decodes are still in flight (async TextureLoader).
 // A capture harness polls this to 0 before screenshotting so the walls/floors are actually painted.
-window.Theater.interiorFileTexPending = function(){ return INTERIOR_FILE_TEX_PENDING || 0; };
+window.Theater.interiorFileTexPending = function(){ return interiorMeshFileTexPending() || 0; }; // split B8: the counter moved with interiorFileTexture (src/ui/theater-interior-mesh.js) — read through its exported accessor
 
 // DUNGEON-GRAPH.md U3 iteration-2 diagnostics (same "read-only, harness-facing" discipline as
 // interiorMeshCount just above) — the capture rig's metrics.json needs to confirm every piece sprite
@@ -10417,6 +9625,39 @@ overlaysInit({
   markDirty,
   nearestify,
   startTweenLoop,
+  textureLoader,
+});
+/* split B8 (2026-07-25) — the INTERIOR MESH + DRESSING pair, same end-of-body ctx law as every module
+   above. interiorMeshInit runs FIRST of the two: src/ui/theater-dressing.js imports interiorFileTexture
+   straight from src/ui/theater-interior-mesh.js (leaf->leaf), so the mesh module's own mirrors
+   (textureLoader/markDirty/nearestify) must be live before furniturePanelMaterial can resolve a folded
+   face tile. Neither ctx could be hoisted to the import block: both carry `textureLoader` (a TDZ const
+   at module-eval time) and dressing's carries the live `S` record. Nothing in this file's own top-level
+   body builds an interior mesh or dresses a room — the first thing that can is clayRoomBootSelfMount()
+   at the bottom of this block. interiorMeshInit's ctx carries NO accessor (the mesh family reads no
+   mutable root flag at all); dressingInit's carries the step's only two, both already B7 accessors on
+   the sprite side: SPRITE_UNLIT_DEBUG and ITR_SPRITE_EMISSIVE_TINT. */
+interiorMeshInit({
+  applyPsxShaderTweaks,
+  markDirty,
+  nearestify,
+  textureLoader,
+});
+dressingInit({
+  S,
+  dressingCtxUnlitDebug: function(){ return SPRITE_UNLIT_DEBUG; },
+  dressingCtxEmissiveTint: function(){ return ITR_SPRITE_EMISSIVE_TINT; },
+  LIGHT_TUNABLES,
+  _censusBoardSceneKind,
+  applyPsxShaderTweaks,
+  buildTheaterCtx,
+  interiorFloorTopAt,
+  kilterFor,
+  mfCascadeMount,
+  nearestify,
+  setBoard,
+  setInteriorBoard,
+  spriteEntryFor,
   textureLoader,
 });
 figureBuildInit({

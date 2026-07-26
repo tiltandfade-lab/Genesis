@@ -1626,6 +1626,21 @@
      straight from theater-camera.js and setBaseGlow from theater-standee-mount.js (one-way leaf->leaf
      edges), so it is tagged AFTER both and before theater-boot.js's tag. -->
 <script type="module" src="src/ui/theater-overlays.js"></script>
+<!-- THEATER SPLIT B8 (2026-07-25): the INTERIOR MESH / GL-SURFACE family (the GR1 procedural material
+     texture baker, the BW2-3 folded-file loader + the §2b repeat laws, the shared unit-box/cylinder
+     geometries, the U3 seam-AO and BW2-3 instance-colour passes, interiorBuildInstancedMesh itself,
+     BW2-5's pillar profile split and STAGE-A A4's two ghost-mesh builders). Imports only "three" — no
+     sibling edge — so its only ordering requirement is BEFORE theater-dressing.js (which imports
+     interiorFileTexture from it) and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-interior-mesh.js"></script>
+<!-- THEATER SPLIT B8 (2026-07-25): the DRESSING / PROPS family (the dressing texture channel with its
+     async real-art settle, the card/extrusion/furniture builders, the wall-hang placement law,
+     BW2-2b's wall-contact AO, and the four builders setInteriorBoard dresses a room with). Imports
+     interiorFileTexture from theater-interior-mesh.js, interiorSpriteBillboard from theater-sprites.js,
+     the mount/pool quartet from theater-standee-mount.js, the nudge trio from theater-occlusion.js and
+     bindStandeeCtx/startIdleBreathe from standee-verbs.js — five one-way leaf->leaf edges, so it is
+     tagged AFTER all five and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-dressing.js"></script>
 <script type="module" src="src/ui/theater-boot.js"></script>
 <!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
      shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same

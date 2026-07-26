@@ -161,7 +161,18 @@ function readTheaterSources(){
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-standee-mount.js follows] */\n"
     + read("src/ui/theater-standee-mount.js")
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-sprites.js follows] */\n"
-    + read("src/ui/theater-sprites.js");
+    + read("src/ui/theater-sprites.js")
+    // THEATER SPLIT B8 (2026-07-25): the interior MESH / GL-SURFACE family (interiorBuildInstancedMesh
+    // and its texture/geometry/colour-pass neighbours) and the DRESSING / PROPS family (dressingTextureFor,
+    // buildDressingCard, the furniture + extrusion-prop builders, addWallContactAO, interiorBuildPieces,
+    // interiorBuildDressing) moved the same way; setInteriorBoard, the room-shell wiring, the clay room's
+    // own bench wiring and every clayRoomInit ctx entry stayed in theater-boot.js. Adding both files to
+    // the SAME composite keeps every regex here matching the code it was written to check — no check
+    // relaxed, none dropped.
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-interior-mesh.js follows] */\n"
+    + read("src/ui/theater-interior-mesh.js")
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-dressing.js follows] */\n"
+    + read("src/ui/theater-dressing.js");
 }
 
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");

@@ -448,13 +448,13 @@ const WIKI_INDEX = [
     "slug": "theater-renderer-three-js-boot-stage",
     "layer": "UI & Battle Theater",
     "whatItIs": "Genesis's one ES-module boundary — a WebGL battle stage with an FFT-style camera, PS1-grit shading, and a narrow `window.Theater` API.",
-    "howItWorks": "Loaded via a single `<script type=\"module\">` over vendored three.js; `setBoard` consumes the pure tile data, `setUnits` builds figures via a precedence chain (whole-object model → PC recipe → bestiary recipe → cuboid fallback, so no creature is a bare slab). Render-on-demand (dirty flag), flat Lambert + NearestFilter + low internal res for the PSX look; degrades cleanly (no throw) without WebGL.",
+    "howItWorks": "Loaded via a single `<script type=\"module\">` over vendored three.js; `setBoard` consumes the pure tile data, `setUnits` builds figures via a precedence chain (whole-object model → PC recipe → bestiary recipe → cuboid fallback, so no creature is a bare slab). Render-on-demand (dirty flag), flat Lambert + NearestFilter + low internal res for the PSX look; degrades cleanly (no throw) without WebGL. Since 2026-07-25 theater-boot.js is the composition root over 16 extracted theater modules (realizers, lighting, practicals, camera, occlusion, sprites, mounts, dressing, mesh, post, skins, whole-object, figures, overlays, motes, dev workbenches) — map + decision record in docs/THEATER-MODULES.md.",
     "livesIn": [
       "src/ui/theater-boot.js",
       "src/ui/theater-tabletop.js",
       "src/ui/theater-interior-realize.js"
     ],
-    "spec": "docs/BATTLE-THEATER.md — since 2026-07-25 theater-boot.js is the composition root over 16 extracted theater modules; the full map + decision record is docs/THEATER-MODULES.md"
+    "spec": "docs/BATTLE-THEATER.md"
   },
   {
     "system": "Model Grammar (parts, recipes, whole-object registry)",

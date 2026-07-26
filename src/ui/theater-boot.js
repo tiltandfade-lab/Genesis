@@ -170,8 +170,14 @@ import {
 // postprocessing` home for its own passes (ShaderPass/UnrealBloomPass/OutputPass/GTAOPass + its own
 // RenderPass), which is why those imports left this file's block above.
 import {
+  // split B6: `updateDofFocus` left THIS list — after B6 its only two call sites in the whole file
+  // were placeCameraTweened's per-tick and onDone DoF re-focus, which moved to
+  // src/ui/theater-camera.js; that module now imports it straight from theater-post.js (leaf->leaf,
+  // identical specifier, same module instance, same function identity). Reader census run: every
+  // remaining `updateDofFocus` string in this file is prose inside a comment, so the binding was
+  // dead and is trimmed rather than carried.
   postInit, postSyncState, makeGradePass, mountPostSuite, teardownPostSuite,
-  syncPostSuiteResolution, updateDofFocus, updatePostSuiteGrade,
+  syncPostSuiteResolution, updatePostSuiteGrade,
   envAOEnabled, envAOPrepassExcludes,
   ENV_AO_BLEND_INTENSITY, ENV_AO_DENOISE, ENV_AO_ENABLED_DEFAULT, ENV_AO_PARAMS, ENV_AO_RESOLUTION_SCALE
 } from "./theater-post.js";
@@ -222,6 +228,54 @@ import {
   interiorBuildMotes, interiorMoteKindFor, startMoteDrift, stopMoteDrift,
   motesInit, motesSyncState
 } from "./theater-motes.js";
+// split B6 (2026-07-25): the CAMERA / FIT / SHOT family — the authored angles and margins, the one
+// instant fit (placeCamera) and MF-1's glide wrapper, refitTabletopHeightFit's height combiner, the
+// BW2-1 room/beat fit resolvers, STAGE-A A3's shot-compose projector and F1's combat-fit clamp. Same
+// root->leaf ctx law; it reads AND writes the live state record, so cameraInit(ctx) at end-of-body is
+// paired with cameraSyncState(S) at both `S = createTheaterState()` sites. It owns NO scheduler — the
+// camera glide still rides the shared S.tweens/tickTweens channel through the startTweenLoop this root
+// still owns. FOG_FAR / HUMAN_TRUE_HEIGHT / spriteEntryFor / markDirty / startTweenLoop stay HERE and
+// reach it through ctx; it imports updateDofFocus straight from theater-post.js (leaf->leaf).
+// Censused: this list is exactly the camera surface THIS file still has a live (non-comment) call site
+// for. theater-camera.js also owns CAM_FIT_MARGIN, TABLETOP_CAMERA_HEADROOM, MF1_CAMERA_TWEEN_DUR,
+// INTERIOR_ROOM_FIT_PAD, INTERIOR_BEAT_MARGIN_CELLS, shotScratchCamera, shotNumOr and shotCameraAspect
+// — all read only inside that module — so they are deliberately NOT imported here rather than carried
+// as dead bindings.
+import {
+  CAM_ELEV_DEG, CAM_YAW_OFFSET_DEG, INTERIOR_FIT_HALF_FLOOR,
+  mf1EaseOutCubic, mf1Lerp, placeCamera, placeCameraTweened, refitTabletopHeightFit,
+  interiorCameraFitFor, interiorFitMaxHeightFor,
+  ITR_SHOT_COMPOSE, shotProjectFor, shotProjectTwoArg,
+  fitFromComposedShot, fitFromComposedCameraWideForTest,
+  F1_COMBAT_CAM_CLAMP_FRAC, f1ClampCamFit,
+  cameraInit, cameraSyncState
+} from "./theater-camera.js";
+// split B6 (2026-07-25): the OCCLUSION / CUTAWAY family — BW2-1b's sightline geometry and per-instance
+// cutaway masks, STAGE-A A4's fade classifier with its bearing hysteresis, the ankle-stub/ghost
+// splitter, and the CLIP MARGIN LAW's nudge helpers. Same root->leaf ctx law; it reads AND writes S
+// (S.occlusionFadeState + the shared S.tweens channel), so occlusionInit(ctx) at end-of-body is paired
+// with occlusionSyncState(S) at both `S = createTheaterState()` sites. It imports mf1EaseOutCubic +
+// mf1Lerp straight from theater-camera.js (a one-way leaf->leaf edge — see its header), which is why
+// its <script type="module"> tag follows theater-camera.js's. Censused THREE-free: the two ghost MESH
+// builders (itrBuildOcclusionGhostMeshes / itrBuildOcclusionGhostPillarMeshes) and
+// ITR_OCCLUSION_FADE_DISABLED_FOR_TEST stay HERE. Censused: this list is the occlusion surface THIS
+// file still references live — most of the tail entries exist only because window.Theater's
+// _occlusionLawForTest / _clipMarginLawForTest publish blocks below are still assembled in this file,
+// which is exactly how those two published objects keep their old shape AND their old function
+// identities. ITR_OCCLUSION_STUB_DARKEN, ITR_OCCLUSION_STUB_MIN_HEIGHT and itrPointInAnyBox are read
+// only inside that module, so they are deliberately NOT imported here.
+import {
+  itrSegmentIntersectsAabb, itrPieceSightPoints, itrPillarCutawayMask,
+  itrFurnitureOcclusionBoxFor, itrFurnitureOcclusionMask,
+  ITR_PILLAR_STUB_FRAC, ITR_OCCLUSION_STEM_HEIGHT_U, itrPillarStubHeight, itrOcclusionAnkleHeight,
+  ITR_OCCLUSION_UPPER_OPACITY, ITR_OCCLUSION_GHOST_OPACITY,
+  ITR_OCCLUSION_FADE_IN_MS, ITR_OCCLUSION_FADE_OUT_MS, ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG,
+  itrOcclusionBearingDeg, itrOcclusionBearingDeltaDeg, itrOcclusionNextCommitted,
+  itrOcclusionClassify, itrOcclusionIdFor, itrSplitOccluderForAnkleGhost,
+  itrClosestPointOnAabbXZ, itrCircleAabbPushXZ, itrNearbyPrismBoxes, itrClipNudgeFor,
+  itrBlockerNudgeCell, CLIP_NUDGE_MAX_FRAC, CLIP_DRESSING_EPSILON,
+  occlusionInit, occlusionSyncState
+} from "./theater-occlusion.js";
 // BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
 // see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
 // as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
@@ -343,83 +397,16 @@ const WORLD_PSX_ENABLED = false;   // RULED (VERDICT-SEAT, 2026-07-10 night): wo
 const INTERIOR_CAM_MODE = "persp"; // 'ortho' | 'persp' — RULED (VERDICT-SEAT, 2026-07-10 night): ~20deg perspective ON
 const INTERIOR_CAM_FOV_DEG = 20;   // GRAPHICS-ENGINE law 2b: "gentle perspective ~20° FOV"
 
-const CAM_ELEV_DEG = 35;
-// G9 camera-yaw fix (docs/PRE-PLAYTEST-GAUNTLET.md §10b): the board's tile columns are plain
-// axis-aligned boxes (setBoard's BoxGeometry, world X/Z grid) — an isometric/dimetric read is ENTIRELY
-// a function of the camera sitting OFF that grid's axes. A yaw of exactly rotationStep*90° (the old
-// math, with no offset) sits the camera dead-on one axis at every rotation step: it looks straight down
-// a row, so only ONE side face of each tile column is ever visible and the board reads as a flat
-// frontal wall (the regression this fix targets). +45° rotates the camera into the gap between axes —
-// the classic FFT/dimetric camera — so two side faces are always visible and rows recede diagonally.
-const CAM_YAW_OFFSET_DEG = 45;
-// THEATER-ZOOM-SPREAD (Adam 2026-07-03: "still a little too zoomed out"): the default fit tightens
-// from 0.90 -> 0.94 — placeCamera's viewSize is boardHalfExtent/CAM_FIT_MARGIN, so the margin fraction
-// directly IS the board's fill fraction of the constraining canvas axis (a bigger margin -> a smaller
-// viewSize -> the board covers more of the frame). 0.90 measured out to the orchestrator's ~88% report;
-// 0.94 lands close to the requested ~92% without crowding the board against the canvas edge at any
-// rotation step (verify-battle-stage's fixture-2 non-square-room overflow gate, G9 camera-yaw fix,
-// still holds — this only rescales viewSize uniformly, it doesn't touch the yaw-aware footprint math).
-const CAM_FIT_MARGIN = 0.94;
-// QF-B3 (2026-07-14, PLAY-LENS P0 #6 — "the tray camera clips the PC's head"): placeCamera's
-// screenHalfHeight term is `screenHalfDepth * sin(elevation) + (a standee-height term) * cos(elevation)`
-// — the interior/"beat" camera channel already carries a real standee-height term (S.interiorFitMaxHeight,
-// setInteriorBoard's own interiorFitMaxHeightFor), but the FLAT TABLETOP channel (setBoard/setUnits — the
-// node/settlement tray AND live combat both render through this same GL layer) never did: setBoard resets
-// S.interiorFitMaxHeight to 0 with the comment "0 for the flat tabletop... only setInteriorBoard ever
-// computes a nonzero" — i.e. the tray's floor-footprint-only fit term has ZERO knowledge of how TALL a
-// standing figure actually is, so a normal-height PC/NPC standee can have its head cropped by the top
-// frame edge even though its floor cell sits correctly inside the fit (the exact "Ogre Zombie" class of
-// bug BW2-1's own header already names for the interior channel — this closes the matching gap on the
-// tabletop channel). setUnits (below) now measures every mounted figure's REAL rendered bounding-box
-// height (an accurate THREE.Box3 read, not a per-archetype height guess — the tabletop mounts whole-
-// object/recipe/cuboid/interior-sprite figures through several different scale conventions, so a single
-// bbox read is the one measurement that's correct for all of them) and feeds the tallest one into this
-// SAME S.interiorFitMaxHeight field (gated `!S.isInteriorBoard` so it never stomps the interior channel's
-// own dedicated computation), plus this headroom margin — clearance above the tallest figure's own
-// measured top so its head sits inside the frame with room to spare, never flush against the edge.
-const TABLETOP_CAMERA_HEADROOM = 0.3;
-// ENV-3b (docs/ENV-EXTERIOR-WAVE.md composition-fix wave) ruling 2: QF-B3's own S.interiorFitMaxHeight
-// correction (above) was computed ONLY inside setUnits, off a LOCAL tabletopTallestTop var — correct
-// for the ordinary setBoard-then-setUnits render pass, but dressingTextureFor's own async real-art-
-// arrival replay (a real assets/dressing/<slug>.png landing) calls setBoard ALONE ("S.boardKey = null;
-// setBoard(S.lastBoard);", a few hundred lines down) with no accompanying setUnits call — that replay's
-// own placeCamera() call had nothing but the just-reset 0 to fit against, silently dropping the
-// standee-height correction (and, ruling 1/2 both landing together, a settlement's own tall BUILDING
-// masses too) back to a footprint-only fit until the NEXT full setUnits ever ran again. Both
-// measurements now persist on S itself (S.boardTallestTileTop — setBoard's own tile-mount loop;
-// S.unitsTallestTop — setUnits' own unit-mount loop, set just below) rather than living only in a
-// function-local var, so THIS shared combiner can be called from the tail of EITHER setBoard or setUnits
-// and always produce the correct MAX of "the last known tall tile" and "the last known tall figure" —
-// whichever one didn't just re-run keeps its own persisted, still-valid measurement. No-op (S remains
-// untouched, camera unmoved) for the interior channel (setInteriorBoard's own dedicated fit owns that
-// case entirely — see S.isInteriorBoard's own header).
-function refitTabletopHeightFit(){
-  if(S.isInteriorBoard) return;
-  const fitTop = Math.max(S.boardTallestTileTop || 0, S.unitsTallestTop || 0);
-  S.interiorFitMaxHeight = fitTop > 0 ? (fitTop + TABLETOP_CAMERA_HEADROOM) : 0;
-  placeCamera();
-}
-// BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS — the snap killer): every beat/room/move-step camera refit
-// glides position+target over this duration instead of snapping (BW4's 280-350ms band, ease-out).
-// A single fixed value inside the band (not randomized) keeps the motion predictable + fake-clock
-// testable — the SAME number every time a fit fires, matching every other DEFAULT_DUR-style constant
-// in this file/theater-verbs.js. Player zoom()/rotate() calls stay on the plain, instant placeCamera()
-// below (Feel Law 3 — never add lag to player intent); only the programmatic interior board fit
-// (setInteriorBoard's own authoritative placeCamera() call, which also covers move-step refits since
-// a move-step forces a fresh setInteriorBoard rebuild — see that call site's own comment) routes
-// through placeCameraTweened().
-const MF1_CAMERA_TWEEN_DUR = 320;
-const mf1EaseOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-function mf1Lerp(a, b, t){ return a + (b - a) * t; }
-// BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): placeCamera's own degenerate-box floor on hx/hz — was a
-// flat 2 for every board (tabletop AND interior). The tabletop's own boards are never intentionally
-// smaller than that, so 2 stays its floor unchanged (OUT OF SCOPE: "the flat tabletop"). The interior
-// channel's "beat"/CLOSE-room fits are DESIGNED to be tight (a small room or a melee huddle IS the
-// point) — a flat 2 silently re-inflated a small room's fit back out no matter how tight
-// INTERIOR_ROOM_FIT_PAD/INTERIOR_BEAT_MARGIN_CELLS were tuned, so the interior channel gets its own,
-// smaller floor (still nonzero — guards the same degenerate near-zero-footprint collapse the
-// tabletop's floor exists for, just at the interior channel's own real scale).
-const INTERIOR_FIT_HALF_FLOOR = 0.75;
+// ---- CAMERA / FIT / SHOT: extracted to src/ui/theater-camera.js (split B6, 2026-07-25) ----
+// The authored camera angles + margins (CAM_ELEV_DEG, CAM_YAW_OFFSET_DEG, CAM_FIT_MARGIN,
+// TABLETOP_CAMERA_HEADROOM, INTERIOR_FIT_HALF_FLOOR), refitTabletopHeightFit's shared "tallest tile vs
+// tallest figure" combiner, and the BW4 MF-1 camera-tween dials (MF1_CAMERA_TWEEN_DUR, mf1EaseOutCubic,
+// mf1Lerp) moved there VERBATIM alongside placeCamera / placeCameraTweened and the rest of the fit
+// family. This root imports the surface it still calls (top import block), passes capabilities via
+// cameraInit(ctx) at end-of-body, and re-syncs the live S record via cameraSyncState(S) at both
+// `S = createTheaterState()` sites. WORLD_PSX_ENABLED / INTERIOR_CAM_MODE / INTERIOR_CAM_FOV_DEG just
+// above stay HERE: they pick the interior channel's camera TYPE, are read only by mount()'s camera
+// construction and setInteriorBoard's camera swap, and no body in that module reads either.
 const TILE_SIZE = 1;          // world units per abstract tile (theater-data's x/z are already tile-indexed)
 const TILE_GAP = 0.04;        // thin void seam between tile columns (reads as grid without a wireframe)
 // G5 ROUND-1 (ruling 2): was the flat black blob-shadow's opacity; the base disc that REPLACES it
@@ -4724,344 +4711,12 @@ let GRADE_TONEMAP = "agx"; // "none" | "agx" — Adam flipped agx ON 2026-07-14 
 // _aoContactDiagForTest, _envAOPrepassExcludesForTest, _setEnvironmentAOOutputForTest,
 // _setGradeTonemapForTest) is still assigned in this file, below, calling in through those imports.
 
-/* T1.5 §3 camera fit: frame the board to fill ~80% of the canvas — fit the orthographic camera's
-   half-height to the board's own half-extent (its largest tile-footprint radius) with a small margin,
-   independent of aspect so it holds through resize, and independent of rotationStep so a 90°-turned
-   board reads the SAME fill (an orthographic camera looking at a square-ish footprint from any of the
-   4 yaw steps sees the same silhouette envelope — the fit only needs to be recomputed on setBoard,
-   not on every rotate(), but rotate() calls this too for safety against an out-of-order call site).
-   G9 TUNE 5 (docs/PRE-PLAYTEST-GAUNTLET.md §10b): the orchestrator measured the board filling only
-   ~45% of the canvas, high-left of center. Two compounding bugs:
-     1. An unexplained extra `* 1.15` pad on top of the already-intended CAM_FIT_MARGIN division
-        inflated viewSize ~28% past its target, shrinking the board's apparent fill well below 80%.
-     2. The fit only ever sized `viewSize` off the board's half-extent and applied `aspect` to the
-        HORIZONTAL box only (`left`/`right`) — it never checked the fit against BOTH canvas dimensions.
-        On a canvas narrower than it is tall (aspect < 1) this UNDER-fills horizontally (viewSize's
-        vertical target left unchecked against the narrower width), which reads as the board sitting
-        small and pushed toward one side rather than centered and filling the frame.
-   G9 camera-yaw fix (this pass): the tune-5 fit above sized `half` off the AXIS-ALIGNED bounding box
-   (max of the board's raw half-width/half-depth), which is only correct when the camera looks straight
-   down an axis. Restoring the CAM_YAW_OFFSET_DEG 45° dimetric offset means the camera now looks at the
-   board's DIAGONAL, so the true on-screen footprint is the board's YAW-ROTATED projected bounding box —
-   for a rectangle of half-extents (hx,hz) viewed along a ground-plane direction (dx,dz), the projected
-   half-width along that direction's perpendicular is `hx*|dx| + hz*|dz|` (an axis-aligned box's support
-   function). Skipping this and reusing the old axis-aligned `half` at a 45° yaw underestimates the
-   screen footprint by up to ~41% (a square's diagonal vs. its side), which is exactly what overflowed
-   fixture 2 (a non-square 100'x60' room) off the edge of the canvas at some rotation steps. */
-function placeCamera(){
-  if(!S.camera) return;
-  // MF-1 (BEAUTY-WAVE-4.md, Feel Law 3 — "input is never blocked by cosmetic motion"): an INSTANT fit
-  // (this function, called directly by zoom()/rotate()/resize/mount/the tabletop's own setBoard) must
-  // always win outright — cancel any in-flight camera-GLIDE tween first so it can't keep overriding
-  // this call's placement on the next tick (placeCameraTweened() itself also calls this function, but
-  // it does its own equivalent filter first — see that function's header — so this is a no-op there).
-  if(S.tweens && S.tweens.length){
-    S.tweens = S.tweens.filter((tw) => !(tw && tw.isCameraPoseTween));
-  }
-  const rad = (CAM_ELEV_DEG * Math.PI) / 180;
-  const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
-
-  // BEAUTY-WAVE-2.md BW2-1: the degenerate-box floor below is smaller for the interior channel — a
-  // "beat"/CLOSE-room fit is DESIGNED to be tight (a small room or huddle is the whole point), and the
-  // flat tabletop's pre-unit floor (2) was already generous enough that this unit's tighter interior
-  // pads/margins couldn't take effect on a small room/cluster without it. The tabletop's own floor
-  // stays exactly 2 (OUT OF SCOPE: "the flat tabletop" — S.isInteriorBoard is false there, always).
-  const halfFloor = S.isInteriorBoard ? INTERIOR_FIT_HALF_FLOOR : 2;
-  const hx = Math.max(halfFloor, S.boardHalfX || S.boardHalfExtent || 5);
-  const hz = Math.max(halfFloor, S.boardHalfZ || S.boardHalfExtent || 5);
-  // Screen-right axis (ground-plane, perpendicular to the camera's horizontal look direction) and the
-  // ground-plane component of the screen-up axis (the camera's horizontal look direction itself, whose
-  // contribution to screen-vertical is foreshortened by sin(elevation) — see camDist/y below for the
-  // matching elevation split). Support-function projection of the (hx,hz) box onto each.
-  const cosYaw = Math.cos(yaw), sinYaw = Math.sin(yaw);
-  const screenHalfWidth = hx * Math.abs(cosYaw) + hz * Math.abs(sinYaw);
-  const screenHalfDepth = hx * Math.abs(sinYaw) + hz * Math.abs(cosYaw);
-  // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): the floor-footprint-only term above (screenHalfDepth *
-  // sin(elevation)) is a fine vertical-coverage PROXY for a generously-padded ROOM fit (the standing
-  // creatures inside it are always much shorter than the room's own half-extent, so the proxy has
-  // slack to spare) — but it contains NO actual standee-height term, so a "beat" fit tight enough to
-  // satisfy law 2c's floor-cluster+1-cell-margin on its own can still crop a tall participant's HEAD
-  // (found live: an Ogre Zombie true-scaling well above HUMAN_TRUE_HEIGHT overflowed a tight beat
-  // frame even though its FLOOR cell was correctly inside the fit). A vertical world-space segment of
-  // height H, viewed from elevation `rad`, projects to a screen-vertical extent of H*cos(rad) (the
-  // complement of updateSpriteBillboardYaw's own tilt-compensation cosine — that function tilts a
-  // BILLBOARD's mesh geometry to counteract this exact foreshortening for the rendered quad; this is
-  // the same relationship applied to the camera's OWN frustum-containment math instead).
-  // S.interiorFitMaxHeight (setInteriorBoard) is the tallest participant's real world height for the
-  // CURRENT board, 0 for the flat tabletop (setBoard resets it) — additive: a 0 term changes nothing.
-  const screenHalfHeight = screenHalfDepth * Math.sin(rad) + (S.interiorFitMaxHeight || 0) * Math.cos(rad);
-  // half: the larger of the two screen-space half-extents the fit needs to cover — mirrors the old
-  // scalar's role (the single number viewSizeForHeight/Width fit against) but now yaw-aware.
-  const half = Math.max(screenHalfWidth, screenHalfHeight);
-  // aspect must be known BEFORE viewSize is picked, so the fit can be checked against both canvas
-  // dimensions at once (fix #2) — target: the board's ROTATED screen footprint (both the horizontal
-  // and the foreshortened-vertical extents) fills CAM_FIT_MARGIN (0.90 -> ~80% after typical void/
-  // margin framing) of whichever canvas dimension is more constraining.
-  const w = S.el ? (S.el.clientWidth || 480) : 480;
-  const h = S.el ? (S.el.clientHeight || Math.round(w * (9 / 16))) : Math.round(480 * (9 / 16));
-  const aspect = w / Math.max(1, h);
-  // viewSize is the camera's half-HEIGHT. To fill the frame on the height axis: viewSize = screenHalfHeight / margin.
-  // To fill the frame on the width axis: viewSize * aspect = screenHalfWidth / margin  =>  viewSize = screenHalfWidth / (margin * aspect).
-  // Each candidate only guarantees containment on ITS OWN axis — picking the SMALLER (the tune-5 fit's
-  // choice) leaves the OTHER axis under-sized, i.e. cropped, whenever screenHalfWidth != screenHalfHeight
-  // (which the yaw-rotated footprint almost never is, and wasn't even reliably true in the axis-aligned
-  // case on a non-square canvas — this is the actual mechanism behind "fixture 2 overflows"). Taking the
-  // LARGER of the two guarantees BOTH axes are contained: the frustum this produces is always >= the
-  // per-axis requirement, so the more generous axis just carries extra margin instead of clipping the
-  // tighter one (fix #1 already removed the stray 1.15 overshoot so this doesn't over-shrink the board).
-  const viewSizeForHeight = screenHalfHeight / CAM_FIT_MARGIN;
-  const viewSizeForWidth = screenHalfWidth / (CAM_FIT_MARGIN * Math.max(aspect, 0.0001));
-  const fittedViewSize = Math.max(viewSizeForHeight, viewSizeForWidth);
-  // THEATER-ZOOM-SPREAD: zoomLevel scales the FITTED viewSize (a smaller viewSize = a tighter ortho
-  // frustum = the board reads bigger on screen = "zoomed in") — applied here, after the fit itself is
-  // computed, so zoom is always relative to "the board's own auto-fit," never an absolute world-unit
-  // size that would read inconsistently across different board footprints.
-  // GRAPHICS-ENGINE law 2b/2c (VP0/docs/BEAUTY-WAVE.md): S.camera.isPerspectiveCamera (three.js's own
-  // type flag, set on every PerspectiveCamera instance) is the single source of truth for which fit
-  // math runs — whichever camera object setBoard/setInteriorBoard currently has assigned to S.camera
-  // is the one this function fits+positions, no separate mode variable to keep in sync.
-  const isPersp = !!S.camera.isPerspectiveCamera;
-
-  // BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA): the screenHalfWidth/Height support-function estimate
-  // above is a fast, CORRECT-FOR-A-ROUGHLY-SQUARE-BOX approximation — every pre-unit caller (a room
-  // rect, or the whole board) stayed square-ish enough (and generously padded enough) that it always
-  // held. A "beat" participant cluster can be ELONGATED (a melee lined up along one axis is a common,
-  // realistic shape) and/or carry a tall outlier (S.interiorFitMaxHeight) — found live: an elongated
-  // beat cluster under-fit even at height 0 (a pre-existing gap in the approximation, just never
-  // exercised by a fit tight enough to expose it before "beat" mode existed). Rather than re-deriving
-  // a closed-form fix for every box shape, verify the SAME 8 corners interiorFrustumCheck itself
-  // checks (world-axis-aligned box at S.boardCenter, half-extents hx/hz, y in
-  // [0, S.interiorFitMaxHeight]) against the camera THIS function is about to commit to, and push it
-  // back (persp: distance: ortho: viewSize) until every corner actually lands inside NDC [-1,1] — a
-  // short fixed-point correction, not a second fit formula. Costs nothing when the estimate already
-  // holds (the common case: room mode, or a compact/square beat cluster) since the loop exits on its
-  // first pass.
-  const fitBoxCx = (S.boardCenter && typeof S.boardCenter.x === "number") ? S.boardCenter.x : 0;
-  const fitBoxCz = (S.boardCenter && typeof S.boardCenter.z === "number") ? S.boardCenter.z : 0;
-  const fitBoxH = S.interiorFitMaxHeight || 0;
-  const fitCorners = [];
-  [-hx, hx].forEach((dx) => [-hz, hz].forEach((dz) => [0, fitBoxH].forEach((dy) => {
-    fitCorners.push(new THREE.Vector3(fitBoxCx + dx, dy, fitBoxCz + dz));
-  })));
-  function worstCornerNdc(){
-    S.camera.updateMatrixWorld();
-    let worst = 0;
-    fitCorners.forEach((p) => {
-      const v = p.clone().project(S.camera);
-      worst = Math.max(worst, Math.abs(v.x), Math.abs(v.y));
-    });
-    return worst;
-  }
-
-  if(isPersp){
-    // FRAMING LAW 2c: fit the ACTION CLUSTER (participants + margin) fully in frustum. Under a FIXED
-    // FOV, the fit variable is CAMERA DISTANCE, not a frustum half-extent — solve the distance along
-    // each axis that makes the frustum's half-height/half-width (at that distance) equal the board's
-    // own screen-space half-extents at CAM_FIT_MARGIN fill, same containment discipline the ortho
-    // branch already uses (take the LARGER distance so BOTH axes stay contained, never cropped).
-    const fovYRad = (S.camera.fov * Math.PI) / 180;
-    const tanHalfFovY = Math.tan(fovYRad / 2);
-    const distForHeight = (screenHalfHeight / CAM_FIT_MARGIN) / tanHalfFovY;
-    const distForWidth = (screenHalfWidth / (CAM_FIT_MARGIN * Math.max(aspect, 0.0001))) / tanHalfFovY;
-    // half*1.05 floor: guards the degenerate near-zero-elevation/near-zero-footprint case (distForHeight
-    // could otherwise collapse toward 0 and place the camera inside the board) — mirrors the ortho
-    // branch's own `Math.max(half, hx, hz)` floor one function down.
-    let autoFitDist = Math.max(distForHeight, distForWidth, half * 1.05, hx, hz);
-    S.viewSize = null; // no orthographic half-height under perspective; harnesses branch on isPerspectiveCamera instead
-
-    function placeAt(dist){
-      const horiz = Math.cos(rad) * dist;
-      const y = Math.sin(rad) * dist;
-      const x = Math.sin(yaw) * horiz;
-      const z = Math.cos(yaw) * horiz;
-      S.camera.position.set(x, y, z);
-      S.camera.lookAt(S.boardCenter || new THREE.Vector3(0, 0, 0));
-    }
-    S.camera.aspect = aspect;
-    S.camera.near = 0.1;
-
-    // exact-containment correction (see this function's own header comment above), run at the
-    // UN-ZOOMED auto-fit distance — THEATER-ZOOM-SPREAD's own manual zoom-in is INTENTIONALLY allowed
-    // to crop past the auto-fit (that's what zooming in means); correcting post-zoom would instead
-    // fight the player's own zoom lever, defeating it. NDC magnitude scales ~1/distance for a fixed
-    // FOV/lookAt, so scaling distance by the worst corner's own overflow converges in a couple of
-    // passes; capped iterations so a pathological/degenerate box can never spin this into a loop.
-    placeAt(autoFitDist);
-    S.camera.far = Math.max(100, autoFitDist + FOG_FAR + 20);
-    S.camera.updateProjectionMatrix();
-    for(let pass = 0; pass < 6; pass++){
-      const worst = worstCornerNdc();
-      if(worst <= 0.999) break;
-      autoFitDist *= worst / 0.999;
-      placeAt(autoFitDist);
-      S.camera.far = Math.max(100, autoFitDist + FOG_FAR + 20);
-      S.camera.updateProjectionMatrix();
-    }
-
-    // NOW apply the player's own zoom multiplier on top of the corrected auto-fit distance.
-    const camDist = autoFitDist * (S.zoomLevel || 1);
-    placeAt(camDist);
-    S.camera.far = Math.max(100, camDist + FOG_FAR + 20);
-    S.camera.updateProjectionMatrix();
-
-    if(S.scene && S.scene.fog){
-      S.scene.fog.near = camDist * 0.55;
-      S.scene.fog.far = camDist * 1.65;
-    }
-    // MF-1: keep the tracked "current look target" in sync with wherever this (instant, un-tweened)
-    // fit just pointed the camera — placeCameraTweened() reads this as its start-target on the NEXT
-    // fit, whether or not the intervening calls (zoom/rotate/resize) were themselves tweened.
-    S.cameraLookTarget = (S.boardCenter ? S.boardCenter.clone() : new THREE.Vector3(0, 0, 0));
-    return;
-  }
-
-  // camera distance scales with viewSize so a big board doesn't clip through a fixed-distance camera
-  // (T1 used a flat CAM_DIST=26; T1.5 makes it board-relative so the fit holds for any room size).
-  // Distance also needs to clear the board's rotated footprint (not just `half`'s old axis-aligned
-  // reading), so it's derived from the same screen-space half used for the fit.
-  const camDist = Math.max(half, hx, hz) * 2.6;
-  const horiz = Math.cos(rad) * camDist;
-  const y = Math.sin(rad) * camDist;
-  const x = Math.sin(yaw) * horiz;
-  const z = Math.cos(yaw) * horiz;
-  S.camera.position.set(x, y, z);
-  S.camera.lookAt(S.boardCenter || new THREE.Vector3(0, 0, 0));
-
-  // exact-containment correction (see this function's own header comment above), run at the UN-ZOOMED
-  // auto-fit viewSize first — same "don't fight the player's own zoom lever" discipline the persp
-  // branch's own comment explains. An orthographic camera's NDC framing is governed by left/right/
-  // top/bottom, NOT distance — scale viewSize (and left/right proportionally) by the worst corner's
-  // own overflow instead of moving the camera.
-  let autoFitViewSize = fittedViewSize;
-  S.camera.left = -autoFitViewSize * aspect;
-  S.camera.right = autoFitViewSize * aspect;
-  S.camera.top = autoFitViewSize;
-  S.camera.bottom = -autoFitViewSize;
-  S.camera.far = Math.max(100, camDist + FOG_FAR + 20);
-  S.camera.updateProjectionMatrix();
-  for(let pass = 0; pass < 6; pass++){
-    const worst = worstCornerNdc();
-    if(worst <= 0.999) break;
-    autoFitViewSize *= worst / 0.999;
-    S.camera.left = -autoFitViewSize * aspect;
-    S.camera.right = autoFitViewSize * aspect;
-    S.camera.top = autoFitViewSize;
-    S.camera.bottom = -autoFitViewSize;
-    S.camera.updateProjectionMatrix();
-  }
-
-  // NOW apply the player's own zoom multiplier on top of the corrected auto-fit viewSize.
-  // QF-B3: THEATER-ZOOM-SPREAD's own readability default (DEFAULT_FIGURE_ZOOM_STEPS, ~0.51x at 3
-  // steps) is a deliberate zoom-IN bias — a smaller viewSize reads as "closer/bigger" — applied
-  // UNCONDITIONALLY on every flat-tabletop board, board-footprint fit or not. Before this unit,
-  // nothing floored how far that bias could shrink the frame, so it could (and did — pl-001/pl-002)
-  // zoom in past the point where a standing figure's own head still fits: viewSizeForHeight (this
-  // function's own headroom-inclusive height term, now carrying TABLETOP_CAMERA_HEADROOM via
-  // S.interiorFitMaxHeight — see that constant's own header) is the one viewSize below which the
-  // tallest mounted figure's padded top would NOT be contained — clamping the biased viewSize to
-  // never go below it makes "zoom in for readability" and "never crop a head" compatible: a board
-  // whose footprint already demands more room than the bias would give keeps its existing (larger)
-  // fit unchanged (Math.max is a no-op there), and a board that WOULD have over-zoomed past a
-  // figure's head now stops exactly at the safe floor instead.
-  const viewSize = Math.max(autoFitViewSize * (S.zoomLevel || 1), viewSizeForHeight);
-  S.camera.left = -viewSize * aspect;
-  S.camera.right = viewSize * aspect;
-  S.camera.top = viewSize;
-  S.camera.bottom = -viewSize;
-  S.camera.updateProjectionMatrix();
-  S.viewSize = viewSize;
-
-  if(S.scene && S.scene.fog){
-    // fog distances scale with the fit too, so a huge board's far edge still just "softens" instead
-    // of vanishing entirely or not fogging at all — proportional to camDist rather than fixed.
-    S.scene.fog.near = camDist * 0.55;
-    S.scene.fog.far = camDist * 1.65;
-  }
-  // MF-1: see the perspective branch's own matching line above — keeps the tracked look target
-  // current for placeCameraTweened()'s next start-pose read.
-  S.cameraLookTarget = (S.boardCenter ? S.boardCenter.clone() : new THREE.Vector3(0, 0, 0));
-}
-
-/* BEAUTY-WAVE-4.md MF-1 (CAMERA TWEENS): wraps placeCamera() so a programmatic beat/room/move-step
-   camera refit GLIDES from its current live pose to the new fit's pose over MF1_CAMERA_TWEEN_DUR ms
-   (ease-out), instead of the plain placeCamera()'s instant snap. Reuses the SAME tween channel every
-   other verb/effect animates through (S.tweens / tickTweens, theater-verbs.js) — no second tween
-   system. Only wraps POSITION + LOOK TARGET (the fields BW4's MF-1 names); projection-matrix fields
-   (aspect/fov/near/far/ortho left-right-top-bottom, viewSize/zoom) still apply INSTANTLY as part of
-   computing the new fit's end pose, matching the spec's literal "tween position+target" scope — a
-   full projection tween isn't asked for and isn't attempted here.
-
-   INTERRUPTIBLE RETARGET: if a camera tween is already in flight when a new fit arrives, the new
-   tween starts from the CURRENT INTERPOLATED pose (S.camera.position + S.cameraLookTarget, both kept
-   live by the in-flight tween's own onUpdate every frame) — never a restart from the old tween's
-   original start, and never a snap to its old end. The stale tween is spliced out of S.tweens first so
-   only one camera-pose tween is ever live at a time. */
-function placeCameraTweened(preFit){
-  if(!S.mounted || !S.camera){ placeCamera(); return; }
-
-  // start pose = wherever the camera/look-target ACTUALLY were right before THIS fit's math ran.
-  // `preFit` (an explicit {pos,target} snapshot) is required whenever the caller does its own
-  // preview/idempotent placeCamera() call before this one (setInteriorBoard's OCCLUSION LAW preview,
-  // see its own header) — by the time control reaches here S.camera already sits at what will become
-  // the END pose too, so reading S.camera.position "live" at this point would silently no-op every
-  // fit (found live debugging this unit). Falls back to reading the live pose directly for any future
-  // caller that has no such preview step of its own.
-  const startPos = (preFit && preFit.pos) ? preFit.pos.clone() : S.camera.position.clone();
-  const startTarget = (preFit && preFit.target) ? preFit.target.clone()
-    : (S.cameraLookTarget ? S.cameraLookTarget.clone() : new THREE.Vector3(0, 0, 0));
-
-  // cancel any in-flight camera-pose tween (retarget, not stack) — never two competing camera tweens.
-  if(S.tweens && S.tweens.length){
-    S.tweens = S.tweens.filter((tw) => !(tw && tw.isCameraPoseTween));
-  }
-
-  // let the real fit math run + commit — placeCamera() leaves S.camera at the FINAL end pose (and the
-  // final projection), which is exactly the number this function needs; it's then snapped back to the
-  // start pose below so nothing flashes to the end pose before the tween's first tick.
-  placeCamera();
-  const endPos = S.camera.position.clone();
-  const endTarget = (S.cameraLookTarget ? S.cameraLookTarget.clone() : new THREE.Vector3(0, 0, 0));
-
-  // degenerate/no-op fit (e.g. re-fitting the identical board) — nothing to glide, skip the tween.
-  if(startPos.distanceToSquared(endPos) < 1e-8 && startTarget.distanceToSquared(endTarget) < 1e-8){
-    return;
-  }
-
-  S.camera.position.copy(startPos);
-  S.camera.lookAt(startTarget);
-  S.cameraLookTarget = startTarget.clone();
-
-  if(!S.tweens) S.tweens = [];
-  const tw = {
-    start: Date.now(),
-    dur: MF1_CAMERA_TWEEN_DUR,
-    isCameraPoseTween: true,
-    update: (t) => {
-      const e = mf1EaseOutCubic(t);
-      const px = mf1Lerp(startPos.x, endPos.x, e);
-      const py = mf1Lerp(startPos.y, endPos.y, e);
-      const pz = mf1Lerp(startPos.z, endPos.z, e);
-      S.camera.position.set(px, py, pz);
-      const tx = mf1Lerp(startTarget.x, endTarget.x, e);
-      const ty = mf1Lerp(startTarget.y, endTarget.y, e);
-      const tz = mf1Lerp(startTarget.z, endTarget.z, e);
-      S.camera.lookAt(tx, ty, tz);
-      S.cameraLookTarget = new THREE.Vector3(tx, ty, tz);
-      // keep the DoF focal band (BW3-2) tracking the camera continuously through the glide, not just
-      // its start/end — updateDofFocus no-ops safely if the post suite hasn't mounted yet this call.
-      if(typeof updateDofFocus === "function") updateDofFocus();
-    },
-    onDone: () => {
-      S.camera.position.copy(endPos);
-      S.camera.lookAt(endTarget);
-      S.cameraLookTarget = endTarget.clone();
-      if(typeof updateDofFocus === "function") updateDofFocus();
-    }
-  };
-  S.tweens.push(tw);
-  if(typeof markDirty === "function") markDirty();
-  startTweenLoop();
-}
+// ---- placeCamera + placeCameraTweened: extracted to src/ui/theater-camera.js (split B6, 2026-07-25) ----
+// The T1.5 §3 / G9 / BW2-1 camera fit (both the ortho and perspective branches, the exact-containment
+// corner correction, the zoom multiplier applied on top of the auto-fit, and the proportional fog
+// re-scale) and BW4 MF-1's interruptible glide wrapper moved there VERBATIM. FOG_FAR, markDirty and
+// startTweenLoop stay HERE and reach that module through its ctx; updateDofFocus reaches it as a
+// one-way leaf->leaf import from theater-post.js (see theater-camera.js's own header).
 
 // ---- DISPOSAL HELPERS: extracted to src/ui/theater-dispose.js (split B4, 2026-07-25) ----
 // disposeMeshMaybeShared / disposeGroupChild / clearGroup moved VERBATIM to their own module (pure —
@@ -5657,6 +5312,8 @@ function mount(el, opts){
   postSyncState(S);     // split B4: same law for the post suite (it reads AND writes S.postSuite*)
   lightingSyncState(S); // split B5: same law for the lighting family + the flicker scheduler
   motesSyncState(S);    // split B5: same law for the mote field + its own drift scheduler
+  cameraSyncState(S);   // split B6: same law for the camera/fit/shot family (it reads AND writes S)
+  occlusionSyncState(S);// split B6: same law for the occlusion fade state (S.occlusionFadeState + S.tweens)
   if(priorTextures) S.textures = priorTextures;
   // BEAUTY-WAVE-2 BW2-0: default is now CLEAN (S.psxEnabled false, createTheaterState's own default),
   // so the escape hatch is symmetric — `opts.psx === true` is the dev/nostalgia toggle that turns the
@@ -7300,406 +6957,25 @@ function interiorBuildDressing(dressing, cx, cz, floorTopMap, prismLists){
   mfCascadeMount(buildTheaterCtx(), mountEntries, function(entry){ return entry.key; });
   return group;
 }
+// ---- THE BEAT CAMERA + THE SHOT COMPOSE WIRING: extracted to src/ui/theater-camera.js (split B6) ----
+// BW2-1's interiorCameraFitFor / interiorFitMaxHeightFor (with INTERIOR_ROOM_FIT_PAD and
+// INTERIOR_BEAT_MARGIN_CELLS) and STAGE-A A3's whole shot-compose wiring (ITR_SHOT_COMPOSE, the scratch
+// projector — shotScratchCamera / shotNumOr / shotCameraAspect / shotProjectFor / shotProjectTwoArg —
+// plus fitFromComposedShot and the superseded fitFromComposedCameraWideForTest seam) moved there
+// VERBATIM. HUMAN_TRUE_HEIGHT and spriteEntryFor stay HERE and reach that module through its ctx;
+// window.Theater.shotProjectFor is still republished from this file's own publish block below, now off
+// the imported binding (same function identity).
 
-/* BEAUTY-WAVE-2.md BW2-1 (THE BEAT CAMERA) — law 2c wired: "the camera fits the ACTION CLUSTER"
-   (combat beats) vs. "frame the room but CLOSE" (exploration). Pre-unit, setInteriorBoard's camera
-   fit was ALWAYS the room's own focusRect + a flat 2-world-unit pad, aimed at boardCenter=(0,0,0) —
-   correct for "frame the room" but with too loose a pad to read as CLOSE (measured well under the
-   law's own 12%-of-frame-height floor for a medium standee, dev/battle-gate/capture-beat-camera.mjs's
-   own red-first run), and with NO path at all for "fit the participants, not the room" (combat beats
-   would inherit the identical loose room fit regardless of how few combatants are on screen).
-
-   data.cameraFit is a plain caller-set field (data.pieces/data.dressing/data.lightProfile's own
-   established convention on the board object — no setInteriorBoard signature change):
-     absent / {mode:"room"}  — fit `fit` (the room rect, or the whole board footprint with no focus
-                                room) with INTERIOR_ROOM_FIT_PAD world units of margin, aimed at the
-                                room's own center (boardCenter stays (0,0,0) in the already cx/cz-
-                                shifted coordinate frame every mounted instance uses) — CLOSER than
-                                the pre-unit pad, same shape otherwise.
-     {mode:"beat", cells:[{x,y},...], marginCells?} — fit the PARTICIPANT CLUSTER: the bounding box of
-                                `cells` (raw, PRE-shift cell coordinates — the SAME space data.pieces[
-                                ].cellX/cellY and data.focusRect already use) + marginCells (default
-                                INTERIOR_BEAT_MARGIN_CELLS = 1, law 2c's own "+1 cell margin"), aimed
-                                at the cluster's own center — which may sit off the room's center, so
-                                boardCenter is offset accordingly (still in the cx/cz-shifted frame:
-                                clusterCenter - cx/cz). Falls back to "room" mode if `cells` is
-                                missing/empty (never a thrown/blank fit).
-   Geometry (floor/wall/pieces/dressing mount, all keyed off cx/cz above) is COMPLETELY UNTOUCHED by
-   this — only the CAMERA's aim point and half-extents change. Returns {center, halfX, halfZ}, the
-   exact three fields setInteriorBoard assigns to S.boardCenter/S.boardHalfX/S.boardHalfZ. */
-const INTERIOR_ROOM_FIT_PAD = -0.5;    // world units of margin around the room rect — was a flat "+2"
-const INTERIOR_BEAT_MARGIN_CELLS = 1;  // law 2c: "participants + 1 cell margin"
-function interiorCameraFitFor(cameraFit, fit, cx, cz){
-  const mode = cameraFit && cameraFit.mode === "beat" ? "beat" : "room";
-  if(mode === "beat" && Array.isArray(cameraFit.cells) && cameraFit.cells.length){
-    let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
-    cameraFit.cells.forEach(function(c){
-      if(!c) return;
-      const px = (typeof c.x === "number") ? c.x : 0;
-      const pz = (typeof c.y === "number") ? c.y : ((typeof c.z === "number") ? c.z : 0);
-      if(px < minX) minX = px; if(px > maxX) maxX = px;
-      if(pz < minZ) minZ = pz; if(pz > maxZ) maxZ = pz;
-    });
-    if(isFinite(minX) && isFinite(maxX) && isFinite(minZ) && isFinite(maxZ)){
-      const margin = (typeof cameraFit.marginCells === "number" && cameraFit.marginCells >= 0)
-        ? cameraFit.marginCells : INTERIOR_BEAT_MARGIN_CELLS;
-      const clusterCx = (minX + maxX) / 2, clusterCz = (minZ + maxZ) / 2;
-      return {
-        center: new THREE.Vector3(clusterCx - cx, 0, clusterCz - cz),
-        halfX: (maxX - minX) / 2 + margin,
-        halfZ: (maxZ - minZ) / 2 + margin
-      };
-    }
-    // cells present but degenerate (every entry missing x/y) — fall through to "room" below rather
-    // than aim at a NaN/zero-size cluster.
-  }
-  return {
-    center: new THREE.Vector3(0, 0, 0),
-    halfX: (fit.maxX - fit.minX) / 2 + INTERIOR_ROOM_FIT_PAD,
-    halfZ: (fit.maxZ - fit.minZ) / 2 + INTERIOR_ROOM_FIT_PAD
-  };
-}
-
-// BEAUTY-WAVE-2.md BW2-1 — see placeCamera's screenHalfHeight comment for the "why". An explicit
-// data.cameraFit.maxHeight (world units) always wins; else the tallest data.pieces entry's real
-// TRUE-SCALE height (spriteEntryFor's scaleTrue, or a piece's own scaleVsHuman override — the SAME
-// resolution order interiorSpriteBillboard uses, just without its wallHeightCap clamp: the fit should
-// reserve room for a creature's full intended height, not the height it gets clipped to for ceiling
-// clearance). Falls back to HUMAN_TRUE_HEIGHT (an undressed-human default, matching every other
-// "no data" default in this render channel) when there are no pieces at all, or none resolve against
-// the sprite registry — never zero (a zero here would silently re-introduce the pre-unit crop bug on
-// the very first board that ever supplies pieces before the registry has loaded).
-function interiorFitMaxHeightFor(data){
-  if(data && data.cameraFit && typeof data.cameraFit.maxHeight === "number" && data.cameraFit.maxHeight > 0){
-    return data.cameraFit.maxHeight;
-  }
-  let tallest = 0;
-  (data && data.pieces || []).forEach(function(p){
-    if(!p || !p.slug) return;
-    const base = (typeof spriteEntryFor === "function") ? spriteEntryFor(p.slug) : null;
-    const scaleTrue = (typeof p.scaleVsHuman === "number" && p.scaleVsHuman > 0)
-      ? p.scaleVsHuman
-      : (base && typeof base.scaleTrue === "number" && base.scaleTrue > 0) ? base.scaleTrue : null;
-    if(scaleTrue == null) return; // unresolved piece (texture/registry not loaded yet) — skip, don't guess
-    const h = HUMAN_TRUE_HEIGHT * scaleTrue;
-    if(h > tallest) tallest = h;
-  });
-  return tallest > 0 ? tallest : HUMAN_TRUE_HEIGHT;
-}
-
-/* GRAPHICS-NORTH-STAR.md STAGE A unit A3 (docs/STAGE-A.md §A3; docs/WALK-NATIVE-A.md A3) — THE SHOT
-   COMPOSE WIRING. theater-shot.js's ShotPlan/composeShot are pure (no THREE/DOM); this is the one
-   thing they can't own themselves — a real multi-pose projector, and the seam that drives the interior
-   camera fit from the chosen candidate instead of the plain focusRect box.
-
-   ITR_SHOT_COMPOSE (default ON) is this unit's own reversible flag, mirroring theater-interior.js's
-   ITR_ACTIVE_ROOM_ONLY (A1) in NAME/INTENT only — NOT in mechanism. theater-interior.js is a classic
-   <script> (global scope), so `var ITR_ACTIVE_ROOM_ONLY` is directly `window.ITR_ACTIVE_ROOM_ONLY`,
-   flippable from any harness. This file is the ONE sealed ES-module boundary in Genesis (its own
-   header, above) — a top-level `const` here is NOT a `window` property, so a harness can't reach it
-   that way. Every existing study-rig toggle in this exact function already solves that the same way
-   (INTERIOR_CAM_MODE vs. `variant.camMode`, `rigOn` vs. `variant.rig`, a few lines up in
-   setInteriorBoard) — S.interiorVariant / window.Theater.setInteriorVariant() is this file's own
-   established "flip a normally-const render choice at runtime" channel, so ITR_SHOT_COMPOSE follows
-   that precedent: `variant.shotCompose` (boolean) overrides the ITR_SHOT_COMPOSE default when set,
-   exactly like camMode/rigOn do for theirs. */
-const ITR_SHOT_COMPOSE = true;
-
-// shotScratchCamera — ONE lazily-created THREE.PerspectiveCamera, reused across every candidate/point
-// projected (cheap: only its transform+FOV are touched, never attached to S.scene, never rendered
-// through, never visible to any other code). "SCRATCH" per the spec: this is never S.camera.
-let _shotScratchCamera = null;
-function shotScratchCamera(){
-  if(!_shotScratchCamera) _shotScratchCamera = new THREE.PerspectiveCamera(20, 1, 0.05, 4000);
-  return _shotScratchCamera;
-}
-function shotNumOr(v, d){ return (typeof v === "number" && isFinite(v)) ? v : d; }
-// shotCameraAspect — the live canvas aspect when mounted (matches what the REAL camera will render
-// at); a sane fallback otherwise (an unmounted/harness call with no S.el yet).
-function shotCameraAspect(){
-  if(S.el && S.el.clientWidth && S.el.clientHeight) return S.el.clientWidth / Math.max(1, S.el.clientHeight);
-  if(S.camera && S.camera.aspect) return S.camera.aspect;
-  return 16 / 9;
-}
-/* shotProjectFor(cameraPose) -> project(worldPt) -> {ndcX,ndcY}|null — theater-shot.js's own header
-   ("THE PROJECTION CONTRACT") spells out exactly why this must be a MULTI-pose projector: composeShot
-   scores several hypothetical camera poses (4 diagonal yaws + the current orbit) per call, and a single
-   fixed projection through whatever camera is already mounted can't answer "where would this point
-   land under candidate B's pose" without actually moving the live camera there first — an expensive,
-   side-effecting operation a pure caller (and this wiring, which must never perturb what's on screen
-   mid-compose) must never trigger. This positions the SCRATCH camera (never S.camera) per `cameraPose`
-   (the exact `{id,mode,yaw,pitch,fov,target,distance,sharpSubjects}` shape scoreCandidate's own
-   normalizeCandidate produces), updates its matrices, and projects `worldPt` through it — reusing the
-   identical `Vector3.project(camera)` math projectWorldPoint/interiorFrustumCheck already use in this
-   file, just against a camera this function owns instead of the live one. Position math mirrors
-   placeCamera's own yaw/pitch->offset convention (this function's own target-relative orbit, since a
-   candidate's `target` can sit anywhere — placeCamera's version only ever orbits the fixed origin
-   because its own target is always the already cx/cz-shifted S.boardCenter). */
-function shotProjectFor(cameraPose){
-  return function(worldPt){
-    if(!worldPt || !cameraPose) return null;
-    try {
-      const cam = shotScratchCamera();
-      cam.fov = shotNumOr(cameraPose.fov, 20);
-      cam.aspect = shotCameraAspect();
-      cam.near = 0.05;
-      cam.far = 4000;
-      const target = cameraPose.target || { x: 0, z: 0 };
-      const tx = shotNumOr(target.x, 0), ty = shotNumOr(target.y, 0), tz = shotNumOr(target.z, 0);
-      const distance = Math.max(0.1, shotNumOr(cameraPose.distance, 6));
-      const yawRad = (shotNumOr(cameraPose.yaw, 0) * Math.PI) / 180;
-      const pitchRad = (shotNumOr(cameraPose.pitch, 32) * Math.PI) / 180;
-      const horiz = Math.cos(pitchRad) * distance;
-      const height = Math.sin(pitchRad) * distance;
-      cam.position.set(tx + Math.sin(yawRad) * horiz, ty + height, tz + Math.cos(yawRad) * horiz);
-      cam.up.set(0, 1, 0);
-      cam.lookAt(tx, ty, tz);
-      cam.updateProjectionMatrix();
-      cam.updateMatrixWorld(true);
-      const v = new THREE.Vector3(shotNumOr(worldPt.x, 0), shotNumOr(worldPt.y, 0), shotNumOr(worldPt.z, 0)).project(cam);
-      if(!isFinite(v.x) || !isFinite(v.y)) return null;
-      return { ndcX: v.x, ndcY: v.y };
-    } catch(e){ return null; }
-  };
-}
-// shotProjectFor is republished onto window.Theater further down (AFTER the `window.Theater = {...}`
-// object-literal assignment this file makes near its own bottom — every other harness-facing
-// diagnostic in this file, e.g. projectWorldPoint/interiorFrustumCheck, is republished the same way,
-// at that same later point, for the identical reason: window.Theater doesn't exist yet up here).
-// shotProjectTwoArg — the 2-arg adapter theater-shot.js's own composeShot contract actually calls
-// (`project(worldPt, cameraPose)`, one function reused across every candidate — see that file's header
-// "THE PROJECTION CONTRACT"). Trivial curry over shotProjectFor so this file keeps the pose-first
-// naming the spec calls for while still satisfying composeShot's real signature.
-function shotProjectTwoArg(worldPt, cameraPose){ return shotProjectFor(cameraPose)(worldPt); }
-
-/* fitFromComposedShot — converts a composed shot into the exact {center,halfX,halfZ} shape
-   interiorCameraFitFor already returns (setInteriorBoard assigns it straight to
-   S.boardCenter/S.boardHalfX/S.boardHalfZ either way, so this is a drop-in alternate source for that
-   shape, not a second code path downstream of it).
-
-   ROUND 2 FIX (coordinator read of the after-composed capture): the earlier version derived the box
-   half-extent from the composed camera's OWN `distance*tan(fovY/2)` — the full frustum half-height at
-   the target plane, i.e. the WHOLE framed region. Re-fitting THAT box back through placeCamera (which
-   fits a floor box to ~94% of frame, on the 45°-yawed footprint whose screen projection is ~1.41x
-   wider, taking the LARGER of the width/height axes) reproduced a WIDE view and dropped a medium
-   standee to ~13% of frame height — LOOSER than the plain focusRect fit and void-heavy, failing the
-   Stage-A gate ("medium standee 18-25% frame height, minimal dead frame"). The distance→box conversion
-   was the lossy step: composeShot's chosen distance already validated the figure at 18-25% for ITS
-   pose, but placeCamera's box-fit doesn't reproduce that pose from a full-frustum box.
-
-   The fix frames the ACTUAL ACTION-CLUSTER EXTENT instead — the participant/piece positions the
-   ShotPlan already carries — by REUSING interiorCameraFitFor's own "beat" branch, the exact tight-crop
-   path dev/battle-gate/capture-beat-camera.mjs already proved lands a medium standee >=18% frame
-   height. composeShot still runs and still governs the fallback (its metrics.allRejected -> focusRect,
-   below) and still records its chosen pose/metrics for the harness — it just no longer sizes the box
-   from a full-frustum distance; the cluster's own extent (+ the beat margin) sizes it, faithfully
-   reproducing the tight framing composeShot's medium-figure constraint had validated.
-
-   Cells come from the ShotPlan's LIVING pieces (combat units + staged cast cards — all carry
-   living:true, and x/z in the SAME raw pre-shift cell frame `fit`/cx/cz use). Absent any (a pure
-   environment tray with no encounter), falls back to the resolved anchors (player/threat/objective);
-   absent even those, returns null so the caller drops to the plain focusRect room fit. */
-function fitFromComposedShot(shotPlan, fit, cx, cz){
-  if(!shotPlan) return null;
-  const cells = [];
-  (shotPlan.pieces || []).forEach(function(p){
-    if(p && p.living && typeof p.x === "number" && typeof p.z === "number") cells.push({ x: p.x, y: p.z });
-  });
-  if(!cells.length){
-    const a = shotPlan.anchors || {};
-    [a.player, a.primaryThreat, a.objective].forEach(function(an){
-      if(an && typeof an.x === "number" && typeof an.z === "number") cells.push({ x: an.x, y: an.z });
-    });
-  }
-  if(!cells.length) return null; // no action cluster -> the caller's focusRect room fallback fires
-  // interiorCameraFitFor's beat branch never reads `fit` when cells are present+finite; passing the
-  // real `fit` only feeds its internal degenerate-cells fallback, so this is safe either way.
-  return interiorCameraFitFor({ mode: "beat", cells: cells }, fit, cx, cz);
-}
-
-// STAGE-A A3 — TEST-ONLY SEAM (default OFF): the SUPERSEDED full-frustum box (halfExtent =
-// distance*tan(fovY/2), the whole framed region) the round-1 build shipped and the coordinator's own
-// after-composed read flagged as too WIDE (medium standee dropped to ~13% frame height, void-heavy).
-// Kept ONLY so dev/verify-shot-compose.mjs can flip `variant.shotComposeWideBoxForTest` on for a
-// GENUINE, reproducible RED-FIRST baseline of the figure-height check (proving that check catches the
-// loose framing), then flip it off (the default) for the tight, gate-passing green. No product caller
-// ever sets that flag — production always takes fitFromComposedShot's action-cluster crop above.
-function fitFromComposedCameraWideForTest(camera, cx, cz){
-  if(!camera) return null;
-  const target = camera.target || { x: 0, z: 0 };
-  const tx = shotNumOr(target.x, 0), tz = shotNumOr(target.z, 0);
-  const fovRad = (shotNumOr(camera.fov, 20) * Math.PI) / 180;
-  const distance = Math.max(0.1, shotNumOr(camera.distance, 6));
-  const halfExtent = Math.max(0.5, distance * Math.tan(fovRad / 2));
-  return { center: new THREE.Vector3(tx - cx, 0, tz - cz), halfX: halfExtent, halfZ: halfExtent };
-}
-
-// ─── BEAUTY-WAVE-2.md BW2-1b (THE OCCLUSION LAW), item 1 — DYNAMIC CUTAWAY for interior columns/
-// pillar prisms. The CUTAWAY WALLS treatment above (study card v4) only ever touched WALL instances;
-// a pillar sitting between the camera and a standee was never adjusted at all — "loop-03's knight
-// behind a pillar," the law the mock itself keeps (ui-sketches/mock-frames/mock-01-gloom-combat.png:
-// no prism ever eats a character). Pure geometry (no THREE) so it's independently testable in a
-// jsdom-only harness with NO live WebGL renderer needed — same "PART A pure math / PART B live-Chrome
-// integration" split dev/verify-bw2-2-floor-contact.mjs's own header already establishes for this
-// file's sealed ES-module boundary.
-
-// standard slab-method ray-SEGMENT (p0->p1, t clamped to [0,1] — a bounded segment, never an
-// infinite ray, since a pillar standing BEHIND the standee from the camera's view must never cut
-// away) vs axis-aligned-box intersection test. A near-zero-length segment on one axis degrades to a
-// point-containment check on that axis rather than dividing by ~0.
-function itrSegmentIntersectsAabb(p0, p1, boxMin, boxMax){
-  let tmin = 0, tmax = 1;
-  const axes = ["x", "y", "z"];
-  for(let i = 0; i < axes.length; i++){
-    const ax = axes[i];
-    const d = p1[ax] - p0[ax];
-    if(Math.abs(d) < 1e-9){
-      if(p0[ax] < boxMin[ax] || p0[ax] > boxMax[ax]) return false;
-      continue;
-    }
-    let t1 = (boxMin[ax] - p0[ax]) / d, t2 = (boxMax[ax] - p0[ax]) / d;
-    if(t1 > t2){ const tmp = t1; t1 = t2; t2 = tmp; }
-    tmin = Math.max(tmin, t1);
-    tmax = Math.min(tmax, t2);
-    if(tmin > tmax) return false;
-  }
-  return true;
-}
-
-// one approximate torso/head sightline TARGET per mounted standee — the SAME true-scale height
-// resolution interiorFitMaxHeightFor (above) already uses (spriteEntryFor's own scaleTrue, or a
-// piece's own scaleVsHuman override), computed independently of texture load state
-// (interiorSpriteBillboard's real geometry isn't built until interiorBuildPieces runs, LATER in
-// setInteriorBoard than this — see that call's own position below) so this never waits on an async
-// texture round-trip. Falls back to a scaleTrue of 1 (HUMAN_TRUE_HEIGHT) for an unresolved slug, same
-// total-function/never-throw discipline every other resolution in this file keeps.
-function itrPieceSightPoints(pieces, cx, cz, floorTopMap){
-  const pts = [];
-  (pieces || []).forEach((p) => {
-    if(!p || !p.slug) return;
-    const base = (typeof spriteEntryFor === "function") ? spriteEntryFor(p.slug) : null;
-    const scaleTrue = (base && typeof base.scaleTrue === "number" && base.scaleTrue > 0) ? base.scaleTrue
-      : (typeof p.scaleVsHuman === "number" && p.scaleVsHuman > 0) ? p.scaleVsHuman : 1;
-    const height = HUMAN_TRUE_HEIGHT * scaleTrue;
-    const cellX = p.cellX || 0, cellY = p.cellY || 0;
-    const floorTop = interiorFloorTopAt(floorTopMap, cellX, cellY);
-    const contactY = interiorStandeeContactY(floorTop);
-    // torso/head midpoint of the standee's own real height — ONE representative point per standee
-    // (not its whole vertical extent) keeps this an O(pillars*pieces) check; a pillar tall enough to
-    // clip a torso-height sightline reads as "in the way" regardless of whether it also clips the
-    // feet or the crown of the head.
-    pts.push({ x: cellX - (cx || 0), y: contactY + height * 0.5, z: cellY - (cz || 0) });
-  });
-  return pts;
-}
-
-// per-pillar-instance boolean mask: true where ANY sight point's segment (real camera world position
-// -> that standee's own torso point) enters the pillar's own world-space box — the SAME box
-// interiorBuildInstancedMesh actually renders (position=(inst.x-cx, sy/2-0.5, inst.z-cz), half-
-// extents (sx/2,sy/2,sz/2), that function's own header note), so a flagged instance is provably the
-// thing the camera would actually see occluding the standee, not an approximation of it.
-// DOORFRAME-OCCLUSION FIX: `centerY` now folds in `inst.yBase` (default 0, so every pre-existing
-// zero-yBase caller — every wall instance, and a non-tapered pillar shaft — computes the byte-identical
-// box it always did). Before this fix, centerY was hardcoded to `sy/2-0.5` — correct ONLY for a yBase-0
-// instance; ANY instance with a real yBase (a tapered pillar's own CAP, per THE COLUMN-CAP COLLISION
-// comment above itrOcclusionIdFor — and now BW2-5's doorframe ARCH-HEADER prisms, which stack yBase
-// at/above the door's own height) was tested against a box floating near the FLOOR instead of its true
-// position near the ceiling, so a real near-ceiling occluder could never be flagged (or could be
-// wrongly flagged against an unrelated low sightline). Matches interiorBuildInstancedMesh's own
-// `y = yBase + sy/2 - 0.5` placement formula exactly — this is the SAME box that function renders, not
-// an approximation of it, now true for every yBase too.
-function itrPillarCutawayMask(pillarList, cameraPos, sightPoints, cx, cz){
-  const list = pillarList || [];
-  if(!cameraPos || !sightPoints || !sightPoints.length) return list.map(() => false);
-  return list.map((inst) => {
-    const halfX = Math.max(0.01, (inst.sx || 1)) / 2;
-    const halfY = Math.max(0.01, (inst.sy || 1)) / 2;
-    const halfZ = Math.max(0.01, (inst.sz || 1)) / 2;
-    const centerX = (inst.x || 0) - (cx || 0), centerZ = (inst.z || 0) - (cz || 0);
-    const yBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
-    const centerY = yBase + (inst.sy || 1) / 2 - 0.5;
-    const boxMin = { x: centerX - halfX, y: centerY - halfY, z: centerZ - halfZ };
-    const boxMax = { x: centerX + halfX, y: centerY + halfY, z: centerZ + halfZ };
-    return sightPoints.some((pt) => itrSegmentIntersectsAabb(cameraPos, pt, boxMin, boxMax));
-  });
-}
-
-// STAGE-A A4 — furniture's own occlusion AABB: unlike a wall/pillar instance (one box, sx/sy/sz off the
-// instance itself), a furniture piece is a multi-prism assembly (furnitureFor(kind,realm).prisms,
-// theater-interior.js — a pure-data recipe, no THREE) mounted at floorTop. This unions every prism's own
-// local box into ONE world-space AABB for the sightline test — deliberately a single whole-piece box
-// (never per-prism), matching "the blocking INSTANCE" (STAGE-A A4's own wording) being the whole
-// furniture placement, not one drawer/leg/shelf-board of it. Returns null for a slug-less/unresolvable
-// entry (never throws). Pure geometry, no THREE — testable the same jsdom-only way itrSegmentIntersectsAabb
-// itself is.
-function itrFurnitureOcclusionBoxFor(entry, cx, cz, floorTopMap){
-  if(!entry || !entry.slug) return null;
-  const recipe = furnitureFor(entry.kind, entry.realmId);
-  const prisms = (recipe && recipe.prisms) || [];
-  if(!prisms.length) return null;
-  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, minZ = Infinity, maxZ = -Infinity;
-  prisms.forEach((p) => {
-    const hx = Math.max(0.01, p.sx || 0) / 2, hy = Math.max(0.01, p.sy || 0) / 2, hz = Math.max(0.01, p.sz || 0) / 2;
-    const pcx = p.dx || 0, pcy = (p.yBase || 0) + hy, pcz = p.dz || 0;
-    minX = Math.min(minX, pcx - hx); maxX = Math.max(maxX, pcx + hx);
-    minY = Math.min(minY, pcy - hy); maxY = Math.max(maxY, pcy + hy);
-    minZ = Math.min(minZ, pcz - hz); maxZ = Math.max(maxZ, pcz + hz);
-  });
-  const floorTop = interiorFloorTopAt(floorTopMap, entry.x || 0, entry.y || 0);
-  const worldX = (entry.x || 0) - (cx || 0), worldZ = (entry.y || 0) - (cz || 0);
-  return {
-    min: { x: worldX + minX, y: floorTop + minY, z: worldZ + minZ },
-    max: { x: worldX + maxX, y: floorTop + maxY, z: worldZ + maxZ }
-  };
-}
-// per-furniture-entry boolean mask, same "does ANY sight point's camera->torso segment enter this
-// instance's own box" contract as itrPillarCutawayMask above, generalized to the unioned furniture AABB
-// itrFurnitureOcclusionBoxFor derives (rather than a flat sx/sy/sz instance field).
-function itrFurnitureOcclusionMask(furniture, cx, cz, floorTopMap, cameraPos, sightPoints){
-  const list = furniture || [];
-  if(!cameraPos || !sightPoints || !sightPoints.length) return list.map(() => false);
-  return list.map((entry) => {
-    const box = itrFurnitureOcclusionBoxFor(entry, cx, cz, floorTopMap);
-    if(!box) return false;
-    return sightPoints.some((pt) => itrSegmentIntersectsAabb(cameraPos, pt, box.min, box.max));
-  });
-}
-
-// stub height for a flagged occluder (pillar OR wall, docs/DIEGETIC-LIGHT.md unit S-1) — was "~0.3
-// wall height, the parapet grammar" (BW2-1b item 1, a KNEE cut); Adam's live steer on S-1 (2026-07-11)
-// lowered this to a genuine ANKLE: the old 0.3 frac (0.72 world units at the 2.4 wallHeightBase
-// default) never actually cleared a torso-height sight point (itrPieceSightPoints' own contactY +
-// height*0.5 — at HUMAN_TRUE_HEIGHT=1.1/scaleTrue=1 that's contactY+0.55, well above the old stub's
-// own box-top of ~0.22) — the exact bug Adam's report named ("columns and walls still obscure
-// figures"). 0.12 (~0.29 world units at the 2.4 default) sits low enough to clear any realistic
-// standee's torso point. Taken against the BOARD's own nominal wall height (data.wallHeightBase — the
-// un-scaled base a scale-domain-tall room's own pillars/walls are still multiples of, itrWallScale's
-// own convention in theater-interior.js), never an instance's OWN (possibly already-scaled) height —
-// so a titanic lair's occluder stubs to the SAME absolute ankle height a human-scale room's would. The
-// 2.4 fallback mirrors theater-interior.js's own ITR_WALL_HEIGHT_BASE (not window-exported — same "two
-// independent constants declaring the same number" mirroring convention src/engine/place-dressing.js's
-// own DP_CAM_YAW_OFFSET_DEG keeps against this file's CAM_YAW_OFFSET_DEG) for a caller (or synthetic
-// test fixture) that omits data.wallHeightBase entirely. Name kept (itrPillarStubHeight/
-// ITR_PILLAR_STUB_FRAC) for the existing BW2-1b harness's own test seam — see itrOcclusionAnkleHeight
-// alias below, used by the (now shared) wall+pillar S-1 fade path.
-// STAGE-A A4 (docs/STAGE-A.md §A4, 2026-07-12): the solid ankle STEM height is now a flat absolute
-// world-unit constant inside the spec's own 0.12-0.25u band, superseding the wallHeightBase*
-// ITR_PILLAR_STUB_FRAC fraction this comment block above described (0.288u at the 2.4 nominal base —
-// just OUTSIDE the new band). The old fraction's whole rationale was "stub to the SAME absolute ankle
-// height regardless of scale domain" — but wallHeightBase itself already stays ~2.4 (the board's own
-// UNSCALED nominal wall height) across every scale domain, so a flat constant achieves the identical
-// practical effect with a cleaner number inside the tighter A4 band. ITR_PILLAR_STUB_FRAC/
-// wallHeightBase are kept as function-signature/name fossils for the existing harness seam; the
-// returned height no longer actually depends on either.
-const ITR_PILLAR_STUB_FRAC = 0.12;
-const ITR_OCCLUSION_STEM_HEIGHT_U = 0.18; // A4: named const, 0.12-0.25u band — Adam dials from the re-shoot.
-function itrPillarStubHeight(wallHeightBase){
-  return ITR_OCCLUSION_STEM_HEIGHT_U;
-}
-// S-1 alias — the SAME ankle-height deriver, named for its wider (wall+pillar) role in the occlusion
-// fade path below (itrPillarStubHeight kept as the historical/tested name the BW2-1b harness seam
-// already exposes).
-const itrOcclusionAnkleHeight = itrPillarStubHeight;
+// ---- THE OCCLUSION LAW: extracted to src/ui/theater-occlusion.js (split B6, 2026-07-25) ----
+// BW2-1b's segment-vs-AABB primitive (itrSegmentIntersectsAabb), the per-standee sightline targets
+// (itrPieceSightPoints), the pillar and furniture cutaway masks (itrPillarCutawayMask /
+// itrFurnitureOcclusionBoxFor / itrFurnitureOcclusionMask) and the ankle-height deriver + its S-1 alias
+// (ITR_PILLAR_STUB_FRAC / ITR_OCCLUSION_STEM_HEIGHT_U / itrPillarStubHeight / itrOcclusionAnkleHeight)
+// moved there VERBATIM, together with STAGE-A A4's fade classifier and the CLIP MARGIN LAW further
+// down. That module is censused THREE-free and takes occlusionInit(ctx) + occlusionSyncState(S).
+// itrScaleHexValue / interiorFloorTopAt / interiorStandeeContactY / spriteEntryFor / HUMAN_TRUE_HEIGHT /
+// markDirty / startTweenLoop stay HERE and reach it through that ctx; furnitureFor is still the plain
+// classic-script global (src/ui/theater-interior.js) it always was, resolved the identical way.
 // TEST-ONLY SEAM (dev/verify-occlusion-fade.mjs's own RED-FIRST proof): forces setInteriorBoard's
 // wall/pillar occlusion pass off entirely (both kinds render at their ORIGINAL full height, no ankle
 // stub, no ghost) so a harness can render the "nothing occludes this frame at all" baseline and prove
@@ -7707,182 +6983,16 @@ const itrOcclusionAnkleHeight = itrPillarStubHeight;
 // (default-on) render's green. No product caller ever sets this — false everywhere except the harness.
 let ITR_OCCLUSION_FADE_DISABLED_FOR_TEST = false;
 
-// ═══ STAGE-A A4 — DYNAMIC OCCLUSION v2 (docs/STAGE-A.md §A4; docs/WALK-NATIVE-A.md A4) ═══════════
-// Upgrades S-1's flat-opacity ghost (one shared opacity for every ghost of a kind, no animation, no
-// hold before re-classifying) along three axes:
-//  (1) UPPER OPACITY — a named const inside the spec's 0.05-0.10 band (was a flat 0.2, Adam's original
-//      "~5%" P-3 demo call). Still low enough the figure behind reads clearly; still high enough the
-//      column/wall reads as "there, not gone".
-//  (2) PER-INSTANCE TWEEN — each blocking instance gets its OWN opacity, animated on the shared
-//      S.tweens/tickTweens channel (theater-verbs.js — the SAME channel MF-1's camera-pose glide and
-//      every verb/effect tween already rides; never a second hand-rolled rAF loop), persisted across
-//      setInteriorBoard rebuilds in S.occlusionFadeState (Map: id -> {blocking, opacity, materials}).
-//      A re-classify mid-fade INTERRUPTS/RETARGETS from wherever the opacity actually is right now
-//      (the SAME discipline placeCameraTweened's own preFit snapshot keeps for the camera) rather than
-//      snapping or restarting. `materials` is an array (length 1 for a wall/pillar's single ghost
-//      material, length N for a furniture piece's per-prism materials) — the tween mutates every live
-//      material directly each tick; no geometry rebuild is needed between setInteriorBoard calls.
-//  (3) RECLASSIFY HYSTERESIS — a blocker's COMMITTED state only re-evaluates when the camera's own
-//      bearing has moved at least ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG since the last FREE
-//      (non-held) classification pass; a smaller move reuses the prior commit outright, so two
-//      rebuilds whose composed camera drifted a fraction of a degree (theater-shot.js's composeShot
-//      re-picking a marginally different candidate round to round) never flicker an occluder in/out.
-// Blockers ALSO now include tall furniture (data.furniture, BW2-5's own "furniture-class blocker
-// volumes") alongside the wall/pillar instance lists S-1 originally tested — see the ShotPlan-gated
-// occlusionFurnitureOn read at this unit's setInteriorBoard call site (STAGE-A A4: "blockers come from
-// ShotPlan.occlusionTargets, not only original piece cells").
-const ITR_OCCLUSION_UPPER_OPACITY = 0.08;          // 0.05-0.10 band (was flat ITR_OCCLUSION_GHOST_OPACITY=0.2)
-const ITR_OCCLUSION_GHOST_OPACITY = ITR_OCCLUSION_UPPER_OPACITY; // back-compat alias — old name, new value
-const ITR_OCCLUSION_FADE_IN_MS = 150;              // 120-180ms band — fades THROUGH quickly
-const ITR_OCCLUSION_FADE_OUT_MS = 220;             // 180-260ms band — restores to opaque more slowly
-const ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG = 3; // 2-4deg band
-// ANKLE-STUB BLOOM FIX (found live re-gating dev/verify-occlusion-fade.mjs's own GREEN check, flagged
-// as a pre-existing defect in that harness's own A4-1 comment above — confirmed pre-existing on master
-// 46289a45 via git-stash bisection, not an A4 regression). The harness comment's own inherited guess
-// ("a bloom/no-shadow-ghost interaction") pointed at the GHOST; live-toggling the REAL mesh objects in
-// a real Chrome render (not just theory) proved that guess wrong and found the ACTUAL seed:
-//   - Hiding the ghost mesh entirely (Object3D.visible=false, not material.visible — materials don't
-//     have that flag) barely moves the sampled color (194 -> 199, if anything WORSE) — the ghost is not
-//     the seed.
-//   - Hiding the SOLID ANKLE STUB (itrSplitOccluderForAnkleGhost's `stub` — the ordinary, fully-opaque,
-//     non-ghost portion below the ankle cut) drops the sample straight back to baseline (dist ~0.03).
-// Root cause: the stub is NEW geometry — before any cut, this exact (x,z,y<ankleH) volume was the lower
-// half of a TALL box's SIDE walls, never a visible top face (buried inside the solid box, y up to 2.4).
-// Cutting the box down to ankleH (0.18) EXPOSES a large, previously-nonexistent horizontal TOP FACE at
-// floor level. This file's torchlit LIGHT_PROFILES point is decay:0 (a flat, NON-attenuating intensity
-// — see applyLightProfile's own header) with no renderer.toneMapping set anywhere in this file (plain
-// clamp, no asymptotic rolloff) — so a favorably-angled face (high N·L to the point light) can carry a
-// raw linear value many multiples over 1.0, comfortably clearing BLOOM_THRESHOLD (0.68, linear, pre-
-// OutputPass — see the SELECTIVE BLOOM dials above) regardless of alpha. The TALL box's own visible
-// faces at a normal/elevated camera angle are mostly SIDE walls (shallower N·L, under threshold, this
-// harness's own RED-state sample reads a moderate 69/255); the SHORT stub, viewed from the same
-// elevated "beat" camera A4's own beat-fit convention uses, exposes far more of its TOP face instead —
-// the newly-uncovered surface that actually trips bloom (confirmed: darkening the stub's own color
-// removes the spike; the ghost's own material color was independently confirmed inert to this, per the
-// bullets above). Root-cause candidates considered (see this unit's own report for the full empirical
-// trail): (a) tone-map/cap the light model globally — rejected as far outside this defect's scope (a
-// lighting-pipeline change, not an occlusion-fade one, with a much larger blast radius); (b) exempt the
-// stub from bloom via a new per-object mask — rejected, no such mechanism exists anywhere in this file
-// (SELECTIVE BLOOM is one global threshold) and inventing one is a bigger change than this needs; (c)
-// darken JUST the stub's own per-instance color, scoped to itrSplitOccluderForAnkleGhost's own `stub`
-// descriptor — the minimal, correct fix: the stub only ever exists as the truncated remainder of an
-// occluding instance (never a normal free-standing wall/pillar), so darkening it can't mismatch any
-// other visible geometry in the room; it directly targets the newly-exposed surface that is the actual
-// bloom seed, using the SAME itrScaleHexValue per-instance-color convention ITR_ROOM_SHELL_RISER_DARKEN
-// already uses one section up (applied to the FIELD `itrSplitOccluderForAnkleGhost` already computes
-// per-instance, not a material/lighting-pipeline change).
-const ITR_OCCLUSION_STUB_DARKEN = 0.05;
-// THE "sy:0 IS UNSET" FOOTGUN — see itrSplitOccluderForAnkleGhost's own header where this is used: a
-// tiny, deliberately-nonzero (truthy) floor for a fully-ghosted instance's own stub height, so it never
-// collides with interiorBuildInstancedMesh's `inst.sy || 1` "unset -> unit box" fallback. Well under
-// that function's own separate `Math.max(0.01, ...)` render-scale floor, which clamps it the rest of
-// the way to a negligible sliver — this constant only needs to stay nonzero, not any particular size.
-const ITR_OCCLUSION_STUB_MIN_HEIGHT = 1e-4;
-
-// camera BEARING (degrees, world-origin-relative — a cheap, deterministic "has the camera meaningfully
-// moved" proxy; pure math, no THREE) — the angle setInteriorBoard's own occlusionCameraPos sits at
-// around the world origin. Two consecutive builds' bearings differing by less than the hysteresis band
-// above hold the prior classification; a real rotate()-scale move (90 degrees) always exceeds it.
-function itrOcclusionBearingDeg(camPos){
-  if(!camPos) return null;
-  return (Math.atan2(camPos.x, camPos.z) * 180) / Math.PI;
-}
-// shortest unsigned distance between two bearings, wrapped to [0,180] — never the naive difference
-// (which would misjudge e.g. 179 vs -179 as a huge move when it's actually a 2-degree one).
-function itrOcclusionBearingDeltaDeg(a, b){
-  if(a == null || b == null) return Infinity;
-  let d = Math.abs(a - b) % 360;
-  if(d > 180) d = 360 - d;
-  return d;
-}
-// itrOcclusionNextCommitted — the PURE hysteresis decision (no S.*, no THREE): given this rebuild's raw
-// geometric test result, the previously-committed state, and whether this id has ever been classified
-// before, decide the next committed state. `holdPrior` (this rebuild's camera-bearing hold flag)
-// freezes an ALREADY-SEEN id's commitment regardless of the raw result; a brand-new id (never
-// classified before) always takes the raw result fresh — there is no prior commitment to hold onto.
-// Exposed on _occlusionLawForTest so a harness can prove the hysteresis decision directly without
-// needing a live camera to produce a genuinely small bearing delta (the product's own camera only ever
-// moves in discrete 90-degree rotate() steps or full ShotPlan re-composes today — see this unit's own
-// report for why the PURE math is the more direct proof surface here).
-function itrOcclusionNextCommitted(rawBlocking, priorCommitted, everClassified, holdPrior){
-  if(holdPrior && everClassified) return !!priorCommitted;
-  return !!rawBlocking;
-}
-// itrOcclusionClassify(id, rawBlocking, holdPrior) — the STATEFUL half: looks up/creates this id's
-// persistent fade-state entry (S.occlusionFadeState, reset only on a fresh mount() or a genuinely NEW
-// board object — see setInteriorBoard's own board-ref check), applies itrOcclusionNextCommitted, and on
-// a genuine flip (re)targets an opacity tween on the shared S.tweens channel — cancelling (never
-// stacking) any prior tween already live for this SAME id first, the same "retarget, not stack"
-// discipline placeCameraTweened keeps for the camera-pose tween. Returns the live entry ({blocking,
-// opacity, materials}) so the caller can decide whether to render this instance split (stub+ghost) THIS
-// build — `fading` (blocking, OR still easing back up from a fade-out) is the RENDER-time question;
-// `blocking` alone is only the CLASSIFICATION question.
-function itrOcclusionClassify(id, rawBlocking, holdPrior){
-  if(!S.occlusionFadeState) S.occlusionFadeState = new Map();
-  let entry = S.occlusionFadeState.get(id);
-  const everClassified = !!(entry && entry.everClassified);
-  if(!entry){
-    entry = { blocking: false, opacity: 1, materials: null, everClassified: false };
-    S.occlusionFadeState.set(id, entry);
-  }
-  const committed = itrOcclusionNextCommitted(rawBlocking, entry.blocking, everClassified, holdPrior);
-  entry.everClassified = true;
-  if(committed !== entry.blocking){
-    entry.blocking = committed;
-    const target = committed ? ITR_OCCLUSION_UPPER_OPACITY : 1;
-    const dur = committed ? ITR_OCCLUSION_FADE_IN_MS : ITR_OCCLUSION_FADE_OUT_MS;
-    if(!S.tweens) S.tweens = [];
-    S.tweens = S.tweens.filter((tw) => !(tw && tw.isOcclusionFadeTween && tw.occlusionId === id)); // retarget, never stack
-    const startOpacity = entry.opacity;
-    const tw = {
-      start: Date.now(), dur, isOcclusionFadeTween: true, occlusionId: id,
-      update: (t) => {
-        const v = mf1Lerp(startOpacity, target, mf1EaseOutCubic(t));
-        entry.opacity = v;
-        (entry.materials || []).forEach((m) => { if(m) m.opacity = v; });
-      },
-      onDone: () => {
-        entry.opacity = target;
-        (entry.materials || []).forEach((m) => { if(m) m.opacity = target; });
-      }
-    };
-    S.tweens.push(tw);
-    if(typeof markDirty === "function") markDirty();
-    startTweenLoop();
-  }
-  entry.fading = entry.blocking || entry.opacity < 1 - 1e-3;
-  return entry;
-}
-// STAGE-A A4 — the EXACT id string production classification uses (position-rounded, PLUS `yBase` —
-// see below for why). `yBase` defaults 0 so every 2-arg caller (furniture, which never stacks two
-// entries at one cell) keeps its pre-existing id shape untouched.
-//
-// THE COLUMN-CAP COLLISION (found live testing this unit against a real generated dungeon): BW2-5's
-// THE COLUMN DEMOTION stacks a "tapered" column's decorative CAP as a SEPARATE pillar-list instance at
-// the SAME (x,z) as its own shaft (yBase=0 for the shaft, yBase=wallHeightBase for the cap — two real,
-// independent occluder instances at one cell, not one). An id keyed on (kind,x,z) ALONE aliases them
-// onto the SAME S.occlusionFadeState entry; since itrBuildOcclusionGhostPillarMeshes builds+assigns
-// `entry.materials` once per instance IN ORDER, the shaft's own ghost mesh's material reference gets
-// silently OVERWRITTEN by the cap's (built second) — the live tween then only ever mutates the CAP's
-// material, leaving the SHAFT's ghost material frozen at its build-time opacity (1, pre-tick) forever:
-// visually indistinguishable from fully opaque, defeating the fade for exactly the instance actually on
-// the sightline. Reproduced via dev/battle-gate/capture-occlusion-real.mjs's real-dungeon ON/OFF/CONTACT
-// capture (ON read pixel-identical to OFF on a genuine tapered-column room) before this fix; verified
-// fixed after (see this unit's own report for the exact before/after numbers). `yBase` (rounded the
-// same way x/z already are) discriminates the shaft from the cap without needing to know BW2-5's own
-// column-family internals — any two same-cell stacked prisms (a future doorframe-header family too)
-// get their own independent entries the same way.
-function itrOcclusionIdFor(kind, x, z, yBase){
-  const yb = (typeof yBase === "number") ? yBase : 0;
-  return kind + ":" + (Math.round((x || 0) * 1000) / 1000) + "," + (Math.round((z || 0) * 1000) / 1000) + ":" + (Math.round(yb * 1000) / 1000);
-}
-// ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md): default ON, reversible — the SAME
-// "let + window.Theater._set*ForTest setter" convention ITR_OCCLUSION_FADE_DISABLED_FOR_TEST just
-// above already established for a live/harness A-B toggle. ON: the active room's floor/wall/riser
-// come from compileRoomShell(...) (a continuous compiled shell) instead of the per-cell
-// interiorBuildInstancedMesh floor/wall pass below. OFF: byte-identical to pre-this-unit rendering —
-// the documented escape hatch during migration (ROOM-SHELL-COMPILER.md's own "keep the old path
-// behind a diagnostic flag" instruction, mirroring A1's ITR_ACTIVE_ROOM_ONLY reversibility).
+// ---- STAGE-A A4 DYNAMIC OCCLUSION v2: extracted to src/ui/theater-occlusion.js (split B6) ----
+// The A4 tunables (ITR_OCCLUSION_UPPER_OPACITY + its ITR_OCCLUSION_GHOST_OPACITY back-compat alias,
+// ITR_OCCLUSION_FADE_IN_MS / _FADE_OUT_MS, ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG,
+// ITR_OCCLUSION_STUB_DARKEN, ITR_OCCLUSION_STUB_MIN_HEIGHT), the camera-bearing math
+// (itrOcclusionBearingDeg / itrOcclusionBearingDeltaDeg), the pure hysteresis decision
+// (itrOcclusionNextCommitted), the stateful classifier (itrOcclusionClassify — it owns
+// S.occlusionFadeState and retargets its opacity tween on the SHARED S.tweens channel, never a second
+// loop) and itrOcclusionIdFor moved there VERBATIM. S.occlusionClassifyBearingDeg and
+// S.__occlusionFadeBoardRef stay owned HERE: only setInteriorBoard's own per-rebuild hold decision,
+// mount()'s reset and the occlusion-fade diagnostic below touch them.
 let ITR_ROOM_SHELL = true;
 // split B1: the Clay Room module reads/writes this live flag through these accessors (an ES
 // import binding would be read-only and a mirror would go stale under the facade's setRoomShell).
@@ -7915,230 +7025,19 @@ const ITR_ROOM_SHELL_UV_DENSITY = 1;
 // riser side faces read as a DELIBERATELY DARKER material variant (directive step 7) — same value-
 // multiply convention ITR_SCENE_DOORFRAME_VALUE already uses one section up, applied via itrScaleHexValue.
 const ITR_ROOM_SHELL_RISER_DARKEN = 0.55;
-// splits ONE occluding instance into its own SOLID ankle-height STUB (rendered in the normal opaque
-// mesh, unchanged material/shadow behavior — byte-identical to a non-occluding instance except for its
-// shorter sy) + a translucent GHOST spanning from the ankle up to the instance's own full original
-// height (rendered in a separate ITR_OCCLUSION_GHOST_OPACITY overlay mesh, its own draw call — only
-// built at all when at least one instance of that kind is actually occluding this frame). Preserves
-// any pre-existing yBase (a stacked doorframe-header prism's own base offset, BW2-5) rather than
-// assuming 0, so the stub/ghost pair is contiguous at whatever height the instance actually starts at.
-function itrSplitOccluderForAnkleGhost(inst, ankleH){
-  const origYBase = (typeof inst.yBase === "number") ? inst.yBase : 0;
-  const fullH = inst.sy || 1;
-  const instTop = origYBase + fullH;
-  // ABSOLUTE-ANKLE-BAND FIX (DOORFRAME OCCLUSION, found live re-gating dev/verify-bw2-1b-occlusion.mjs
-  // --with-render checks 31/32/35): the solid "ankle" band is an ABSOLUTE world-Y range [0, ankleH] —
-  // the true floor up to the true ankle height — NEVER relative to THIS instance's own local origin.
-  // The pre-fix version measured `ankleH` from the instance's own y=0 regardless of where that instance
-  // actually sat (`stubH = Math.min(fullH, ankleH)`), which is correct ONLY for a yBase=0 instance
-  // (every wall, a pillar's own shaft). A stacked prism whose ENTIRE span already sits ABOVE the true
-  // ankle band — a tapered pillar's own CAP (yBase=wallHeightBase, THE COLUMN-CAP COLLISION comment
-  // above itrOcclusionIdFor) or a doorframe's BW2-5 arch-header prisms (yBase near the door's own top,
-  // each prism itself only 0.16-0.22 tall — SHORTER than a typical ankleH) — has NO overlap with [0,
-  // ankleH] at all. The old math still measured the cut from THAT prism's own y=0, so a short prism
-  // whose own height was comparable to or under ankleH kept MOST OR ALL of itself as an opaque "stub"
-  // (min(0.16, 0.18) = 0.16 — the WHOLE prism), defeating the fade for exactly the case this fix wires
-  // in: a real THREE.Raycaster kept hitting the arch-header "stub" (still tagged plain "doorframe", not
-  // "-ghost") even after occlusion classify correctly flagged it as blocking. Clamping the cut to the
-  // instance's own [origYBase, instTop] range (stubTop, below) means a prism entirely above the band
-  // reduces to a near-zero stub (rendered as InstancedMesh's own existing Math.max(0.01,...) scale
-  // floor — negligible, never literally zero-scale) and hands its ENTIRE height to the ghost — no other
-  // caller's math changes: for any yBase=0 instance, stubTop=min(instTop,ankleH) is exactly the old
-  // `Math.min(fullH, ankleH)` result, byte-identical.
-  const stubTop = Math.min(instTop, Math.max(origYBase, ankleH));
-  const trueStubH = Math.max(0, stubTop - origYBase);
-  // THE "sy:0 IS UNSET" FOOTGUN (found live re-gating checks 31/32/35 a SECOND time, after the
-  // ABSOLUTE-ANKLE-BAND fix above still didn't clear them): interiorBuildInstancedMesh's own matrix
-  // math reads `inst.sy || 1` for BOTH the box's scale AND its Y position -- a deliberate "an instance
-  // that never set sy at all defaults to a unit box" convention every OTHER caller in this file relies
-  // on. But `trueStubH` above can be EXACTLY 0 (a prism entirely above the ankle band, the archStep2
-  // case) -- and 0 is JS-falsy, so `0 || 1` silently becomes 1: the "fully ghosted, no stub" instance
-  // rendered as a FULL 1-WORLD-UNIT solid box instead of vanishing, still very much on the sightline
-  // (confirmed live: the raycast kept hitting the exact same instance, at a shifted distance, after the
-  // band fix alone). A tiny nonzero floor (ITR_OCCLUSION_STUB_MIN_HEIGHT, truthy, so `sy || 1` reads it
-  // literally) sidesteps the footgun without changing interiorBuildInstancedMesh's own shared contract --
-  // that function's EXISTING `Math.max(0.01, ...)` scale floor then clamps this sliver to its own
-  // already-negligible render minimum, same as any other tiny instance.
-  const stubH = trueStubH > 1e-6 ? trueStubH : ITR_OCCLUSION_STUB_MIN_HEIGHT;
-  // ANKLE-STUB BLOOM FIX (see ITR_OCCLUSION_STUB_DARKEN's own header, above this file's A4 tunables):
-  // the stub's own per-instance color is darkened here — this is the ONLY place a stub descriptor gets
-  // built, so every occlusion-fade caller (wall/pillar/round-pillar/furniture/doorframe) is covered
-  // without touching any shared material/lighting code. The pre-cut instance's OWN color is left
-  // untouched on `inst` itself (only the derived `stub` descriptor is darkened) — a non-occluding
-  // instance, or the SAME instance before/after it's classified blocking, always renders at its normal
-  // authored color.
-  const stub = Object.assign({}, inst, { yBase: origYBase, sy: stubH, color: itrScaleHexValue(inst.color || "#ffffff", ITR_OCCLUSION_STUB_DARKEN) });
-  const ghostH = instTop - stubTop;
-  const ghost = ghostH > 1e-6 ? Object.assign({}, inst, { yBase: stubTop, sy: ghostH }) : null;
-  return { stub, ghost };
-}
+// ---- the ankle-stub/ghost SPLITTER + the CLIP MARGIN LAW: extracted to src/ui/theater-occlusion.js
+// (split B6, 2026-07-25) ---- itrSplitOccluderForAnkleGhost and the whole clip-margin family
+// (itrClosestPointOnAabbXZ / itrCircleAabbPushXZ / itrNearbyPrismBoxes / itrClipNudgeFor /
+// itrPointInAnyBox / itrBlockerNudgeCell / CLIP_NUDGE_MAX_FRAC / CLIP_DRESSING_EPSILON) moved there
+// VERBATIM. The two ghost MESH builders (itrBuildOcclusionGhostMeshes /
+// itrBuildOcclusionGhostPillarMeshes, further up beside interiorBuildInstancedMesh) stay HERE: they
+// carry no occlusion law, only per-instance InstancedMesh construction, and moving them would have put
+// THREE into a module the split keeps censused THREE-free.
 
-// ─── ADDENDUM (Adam, mid-flight on BW2-1b) — THE CLIP MARGIN LAW: "the sprites shouldn't clip
-// through geometry." A standee's own quad footprint must not intersect a neighboring prism's
-// (wall/pillar/doorframe) XZ bounds — a WIDE sprite standing hard against a wall/pillar pokes its own
-// silhouette through the geometry (the treant-against-the-wall bug, loop-03). Modeled as a circle
-// (radius = the sprite's own rendered half-width — a conservative, direction-agnostic footprint,
-// since a camera-facing billboard's silhouette sweeps differently depending on view yaw) vs. each
-// nearby prism's axis-aligned box; any overlap NUDGES the standee's own MOUNT POSITION away from the
-// offending prism (never the geometry, never cell ownership/combat-grid occupancy — a pure visual
-// offset), clamped to CLIP_NUDGE_MAX_FRAC (0.3, "<=30% of a cell" per the GRID LAW's 1-cell=1-world-
-// unit convention) of total push magnitude; a push that would need MORE than that to fully resolve
-// logs a qa: sprite-oversize console warning and applies the CLAMPED nudge instead (never teleports
-// the standee off its own cell). Pure geometry (no THREE) — same jsdom-testable-without-a-renderer
-// discipline this unit's own itrPillarCutawayMask family (above) already established.
-
-// nearest point on an axis-aligned box to (px,pz), clamped per-axis — the standard closest-point
-// primitive every circle-vs-AABB test builds on.
-function itrClosestPointOnAabbXZ(px, pz, box){
-  return { x: Math.max(box.minX, Math.min(px, box.maxX)), z: Math.max(box.minZ, Math.min(pz, box.maxZ)) };
-}
-// circle (center px,pz, radius r) vs one AABB — the push vector that would move the CIRCLE's center
-// just clear of the box, or null when there's no overlap at all. A center exactly inside/on the box
-// (dist===0, the fully-degenerate case) falls back to pushing away from the box's OWN center instead
-// — an arbitrary but fully deterministic direction; never reached by any real mount (a standee's own
-// cell is never a wall/pillar cell to begin with), a defensive floor rather than a path any fixture
-// below actually exercises.
-function itrCircleAabbPushXZ(px, pz, radius, box){
-  const closest = itrClosestPointOnAabbXZ(px, pz, box);
-  let dx = px - closest.x, dz = pz - closest.z;
-  let dist = Math.hypot(dx, dz);
-  if(dist >= radius) return null;
-  if(dist < 1e-6){
-    const boxCx = (box.minX + box.maxX) / 2, boxCz = (box.minZ + box.maxZ) / 2;
-    dx = px - boxCx; dz = pz - boxCz;
-    dist = Math.hypot(dx, dz);
-    if(dist < 1e-6){ dx = 0; dz = 1; dist = 1; }
-  }
-  const overlap = radius - dist;
-  return { x: (dx / dist) * overlap, z: (dz / dist) * overlap };
-}
-// prism boxes (RAW, pre-cx/cz-shift cell space — the SAME space every wall/pillar/doorframe instance
-// list already uses) gathered off one or more instance lists, restricted to instances within `reach`
-// cells of (cellX,cellY) — a cheap spatial prefilter, since a standee/card's own footprint never
-// reaches across an entire large plan.
-function itrNearbyPrismBoxes(instanceLists, cellX, cellY, reach){
-  const boxes = [];
-  (instanceLists || []).forEach((list) => {
-    (list || []).forEach((inst) => {
-      if(!inst) return;
-      if(Math.abs((inst.x || 0) - cellX) > reach || Math.abs((inst.z || 0) - cellY) > reach) return;
-      const halfX = Math.max(0.01, (inst.sx || 1)) / 2, halfZ = Math.max(0.01, (inst.sz || 1)) / 2;
-      boxes.push({
-        minX: (inst.x || 0) - halfX, maxX: (inst.x || 0) + halfX,
-        minZ: (inst.z || 0) - halfZ, maxZ: (inst.z || 0) + halfZ
-      });
-    });
-  });
-  return boxes;
-}
-const CLIP_NUDGE_MAX_FRAC = 0.3;      // "<=30% of a cell" (GRID LAW: 1 cell = 1 world unit)
-// itrClipNudgeFor(cellX, cellY, radius, instanceLists, opts) -> {x,z,magnitude,rawMagnitude,clamped}
-// sums the push vector from EVERY overlapping nearby prism (never just the first hit), then clamps
-// the TOTAL magnitude to opts.maxMag (default CLIP_NUDGE_MAX_FRAC) — opts.reach overrides the spatial
-// prefilter radius (defaults to radius+1, generous enough for any real sprite/card footprint).
-function itrClipNudgeFor(cellX, cellY, radius, instanceLists, opts){
-  opts = opts || {};
-  const reach = opts.reach != null ? opts.reach : radius + 1;
-  const maxMag = opts.maxMag != null ? opts.maxMag : CLIP_NUDGE_MAX_FRAC;
-  const boxes = itrNearbyPrismBoxes(instanceLists, cellX, cellY, reach);
-  let pushX = 0, pushZ = 0;
-  boxes.forEach((box) => {
-    const push = itrCircleAabbPushXZ(cellX, cellY, radius, box);
-    if(push){ pushX += push.x; pushZ += push.z; }
-  });
-  const rawMagnitude = Math.hypot(pushX, pushZ);
-  if(rawMagnitude < 1e-9) return { x: 0, z: 0, magnitude: 0, rawMagnitude: 0, clamped: false };
-  if(rawMagnitude <= maxMag) return { x: pushX, z: pushZ, magnitude: rawMagnitude, rawMagnitude, clamped: false };
-  const scale = maxMag / rawMagnitude;
-  return { x: pushX * scale, z: pushZ * scale, magnitude: maxMag, rawMagnitude, clamped: true };
-}
-// BW2-4b item 7c — BLOCKER-CELL EXCLUSION. A piece whose own cell sits ON a pillar/doorframe prism
-// (the loop-05 wolf-on-a-pillar) reads as standing on top of the column, because its floor-contact
-// samples the FLOOR top of that cell while the prism rises through it. itrClipNudgeFor only pushes a
-// WIDE sprite off geometry it OVERLAPS — a piece centered dead-on a 1x1 pillar cell can still land
-// inside it. This picks the nearest cell whose center is clear of every blocker box (BFS ring, ties
-// broken deterministically by ring order then dx/dz), so piece placement excludes blocker cells
-// outright. blockerLists = the pillar+doorframe prism lists (walls excluded — the clip nudge and the
-// room's own perimeter already keep pieces off wall cells). Returns the ORIGINAL cell when it's clear.
-function itrPointInAnyBox(x, z, boxes){
-  for(let i = 0; i < boxes.length; i++){
-    const b = boxes[i];
-    if(x > b.minX && x < b.maxX && z > b.minZ && z < b.maxZ) return true;
-  }
-  return false;
-}
-function itrBlockerNudgeCell(cellX, cellY, blockerLists){
-  const boxes = itrNearbyPrismBoxes(blockerLists, cellX, cellY, 4);
-  if(!boxes.length || !itrPointInAnyBox(cellX, cellY, boxes)) return { x: cellX, y: cellY };
-  for(let ring = 1; ring <= 4; ring++){
-    let best = null;
-    for(let dy = -ring; dy <= ring; dy++){
-      for(let dx = -ring; dx <= ring; dx++){
-        if(Math.max(Math.abs(dx), Math.abs(dy)) !== ring) continue; // ring shell only
-        const nx = cellX + dx, ny = cellY + dy;
-        if(itrPointInAnyBox(nx, ny, boxes)) continue;
-        const d = dx * dx + dy * dy;
-        if(!best || d < best.d || (d === best.d && (dy < best.dy || (dy === best.dy && dx < best.dx)))){
-          best = { x: nx, y: ny, d, dx, dy };
-        }
-      }
-    }
-    if(best) return { x: best.x, y: best.y };
-  }
-  return { x: cellX, y: cellY }; // fully boxed-in (degenerate) — keep the original rather than fling far
-}
-// a large dressing card gets a tiny extra epsilon folded into its own footprint radius before the
-// SAME itrClipNudgeFor call — "may TOUCH the wall plane (that's the point) but not pass through it":
-// unlike a standee (which should clear the geometry entirely, clamp-and-warn on failure), a large
-// card is INTENDED to sit flush against a wall — this only stops it clipping THROUGH, with no
-// magnitude cap/warning (a card's own placement is already wall-adjacent by construction, dpAdjacentToWall,
-// so the overlap here is always small).
-const CLIP_DRESSING_EPSILON = 0.02;
-
-// VQ2-RESPEC.md §4 unit F1 — "target/distance delta clamped ≤10%" (combat-in-room's own camera law,
-// Sol P-F). f1ClampCamFit(camFit, baseline, maxFrac) bounds a combat render's composed fit against the
-// SAME room's last non-combat (exploration) fit: the TARGET (camFit.center) is clamped to an absolute
-// delta of at most `maxFrac` of the room's own fitted extent (max(baseline.halfX,halfZ,1) — the room's
-// footprint is the natural "how far is far" reference; using the raw center coordinate itself would be
-// unstable near the room-mode default of ~(0,0)). The DISTANCE proxy (halfX/halfZ — what
-// placeCamera's screenHalf*/viewSize math actually scales off) is clamped as a relative delta off its
-// OWN baseline value instead (a room's fitted half-extent is never ~0, so a plain relative bound is
-// safe there). Never mutates its inputs; returns a NEW {center,halfX,halfZ} object every time.
-const F1_COMBAT_CAM_CLAMP_FRAC = 0.10;
-function f1ClampCamFit(camFit, baseline, maxFrac){
-  if(!camFit || !baseline) return camFit;
-  const scale = Math.max(baseline.halfX || 0, baseline.halfZ || 0, 1);
-  const maxCenterDelta = scale * maxFrac;
-  const dx = camFit.center.x - baseline.center.x, dz = camFit.center.z - baseline.center.z;
-  const centerDist = Math.hypot(dx, dz);
-  let center = camFit.center;
-  if(centerDist > maxCenterDelta && centerDist > 0){
-    const k = maxCenterDelta / centerDist;
-    const clampedX = baseline.center.x + dx * k, clampedZ = baseline.center.z + dz * k;
-    // interiorCameraFitFor/fitFromComposedShot always hand back a REAL THREE.Vector3 for `.center`
-    // (placeCamera's own S.boardCenter.clone() call downstream requires it) — clone+mutate here so
-    // the clamped result stays a Vector3 in production, never a bare `new THREE.Vector3(...)` call
-    // (which would make this function un-eval-able outside a THREE-loaded context; dev/verify-f1-
-    // combat-in-room.mjs §7 extracts + evals this exact function text standalone, no THREE global,
-    // to unit-test the pure clamp math). A plain {x,z}-shaped input (that harness's own fixtures)
-    // degrades to a plain object the same way.
-    if(typeof camFit.center.clone === "function"){
-      center = camFit.center.clone();
-      if(typeof center.set === "function") center.set(clampedX, center.y, clampedZ);
-      else { center.x = clampedX; center.z = clampedZ; }
-    } else {
-      center = { x: clampedX, z: clampedZ };
-    }
-  }
-  function clampExtent(cur, base){
-    if(!(base > 0)) return cur;
-    const maxDelta = base * maxFrac;
-    const delta = cur - base;
-    if(Math.abs(delta) <= maxDelta) return cur;
-    return base + Math.sign(delta) * maxDelta;
-  }
-  return { center, halfX: clampExtent(camFit.halfX, baseline.halfX), halfZ: clampExtent(camFit.halfZ, baseline.halfZ) };
-}
+// ---- F1 COMBAT-FIT CLAMP: extracted to src/ui/theater-camera.js (split B6, 2026-07-25) ----
+// VQ2-RESPEC.md §4 unit F1's F1_COMBAT_CAM_CLAMP_FRAC + f1ClampCamFit moved there VERBATIM with the
+// rest of the fit family. dev/verify-f1-combat-in-room.mjs §7 still text-extracts and evals that exact
+// function standalone; its source read is repointed to the theater-boot + theater-camera composite.
 
 // VQ2-RESPEC.md §4 unit F1 — "grid = thin umber lines on the room floor (depthWrite:false,
 // opacity:0.16, polygonOffset, radial fade before wall-adjacent cells)". f1CombatGridTexture() is a
@@ -10424,6 +9323,8 @@ function retire(){
   postSyncState(S);     // split B4: same law for the post suite (it reads AND writes S.postSuite*)
   lightingSyncState(S); // split B5: same law for the lighting family + the flicker scheduler
   motesSyncState(S);    // split B5: same law for the mote field + its own drift scheduler
+  cameraSyncState(S);   // split B6: same law for the camera/fit/shot family (it reads AND writes S)
+  occlusionSyncState(S);// split B6: same law for the occlusion fade state (S.occlusionFadeState + S.tweens)
 }
 
 /* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 8) — ONE module-scope call, made once at import
@@ -12497,6 +11398,33 @@ practicalsInit({
 motesInit({
   S,
   markDirty,
+});
+/* ---- split B6: wire the camera / occlusion modules (see each file's own header) ----
+   Both sit in this end-of-body block for the same reason B4/B5's do: their ctx carries the live `S`
+   record, which does not exist at module-eval time, and nothing in this file's own top-level body
+   places a camera or classifies an occluder — the first thing that can is clayRoomBootSelfMount() at
+   the bottom of this block. cameraInit runs FIRST of the two: theater-occlusion.js imports
+   mf1EaseOutCubic/mf1Lerp straight from theater-camera.js (leaf->leaf), so the camera module's own
+   bindings must be live before any occlusion body can run a fade tween. Neither ctx carries a mutable
+   root flag — there is not one accessor in either file (ITR_OCCLUSION_FADE_DISABLED_FOR_TEST stays
+   here and has no reader in either module). */
+cameraInit({
+  S,
+  FOG_FAR,
+  HUMAN_TRUE_HEIGHT,
+  markDirty,
+  spriteEntryFor,
+  startTweenLoop,
+});
+occlusionInit({
+  S,
+  HUMAN_TRUE_HEIGHT,
+  interiorFloorTopAt,
+  interiorStandeeContactY,
+  itrScaleHexValue,
+  markDirty,
+  spriteEntryFor,
+  startTweenLoop,
 });
 figureBuildInit({
   figCtxSpriteChannelEnabled: function(){ return SPRITE_CHANNEL_ENABLED; },

@@ -2623,6 +2623,97 @@
       "desc": "THEATER SPLIT B5 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — BEAUTY-WAVE.md VP6 item 3's AMBIENT MOTE FIELD and its OWN drift scheduler, extracted VERBATIM from theater-boot.js: the seeded hash/RNG (moteHash32/moteRng), the kit-driven ember-vs-dust classifier (interiorMoteKindFor/MOTE_TINT), the soft additive speck texture (moteSoftTexture), the per-room field builder (interiorBuildMotes) and the drift loop (startMoteDrift's requestAnimationFrame chain + stopMoteDrift's cancel). The rAF ownership is INTACT AND UNSHARED — still guarded on S.moteRaf, still self-stopping the instant S.mounted is false or the group is gone, still a SEPARATE scheduler from ui.theater-lighting's flicker loop and from theater-boot.js's dirty-frame/tween loops (the brief's protected scheduler-separation contract; nothing was unified). Root->leaf ctx law: never imports theater-boot.js; motesInit(ctx) at the root's end-of-body, motesSyncState(S) at both `S = createTheaterState()` sites. The mote GROUP's end-of-life (S.moteGroup disposal in retire()/clearGroup) stays in the root, so there is still ONE true dispose point. There is not a single accessor swap in this file — every moved line is byte-identical to the monolith."
     },
     {
+      "id": "ui.theater-camera",
+      "path": "src/ui/theater-camera.js",
+      "type": "module",
+      "owns": [
+        "*cameraInit",
+        "*cameraSyncState",
+        "*CAM_ELEV_DEG",
+        "*CAM_YAW_OFFSET_DEG",
+        "*CAM_FIT_MARGIN",
+        "*TABLETOP_CAMERA_HEADROOM",
+        "*refitTabletopHeightFit",
+        "*MF1_CAMERA_TWEEN_DUR",
+        "*mf1EaseOutCubic",
+        "*mf1Lerp",
+        "*INTERIOR_FIT_HALF_FLOOR",
+        "*placeCamera",
+        "*placeCameraTweened",
+        "*INTERIOR_ROOM_FIT_PAD",
+        "*INTERIOR_BEAT_MARGIN_CELLS",
+        "*interiorCameraFitFor",
+        "*interiorFitMaxHeightFor",
+        "*ITR_SHOT_COMPOSE",
+        "*shotScratchCamera",
+        "*shotNumOr",
+        "*shotCameraAspect",
+        "*shotProjectFor",
+        "*shotProjectTwoArg",
+        "*fitFromComposedShot",
+        "*fitFromComposedCameraWideForTest",
+        "*F1_COMBAT_CAM_CLAMP_FRAC",
+        "*f1ClampCamFit"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-post"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B6 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the CAMERA / FIT / SHOT family, extracted VERBATIM from theater-boot.js: the authored camera angles and margins (CAM_ELEV_DEG, CAM_YAW_OFFSET_DEG, CAM_FIT_MARGIN, TABLETOP_CAMERA_HEADROOM, INTERIOR_FIT_HALF_FLOOR); the ONE fit both render channels funnel through (placeCamera — the ortho tabletop branch and the perspective interior branch, the exact-containment corner correction, the player zoom multiplier applied on top of the auto-fit, and the proportional fog re-scale, still branching on S.camera.isPerspectiveCamera exactly as before) plus refitTabletopHeightFit's shared tallest-tile/tallest-figure combiner; BEAUTY-WAVE-4 MF-1's interruptible camera glide (MF1_CAMERA_TWEEN_DUR / mf1EaseOutCubic / mf1Lerp / placeCameraTweened); BW2-1's beat-vs-room fit resolvers (INTERIOR_ROOM_FIT_PAD / INTERIOR_BEAT_MARGIN_CELLS / interiorCameraFitFor / interiorFitMaxHeightFor); STAGE-A A3's whole SHOT COMPOSE WIRING (ITR_SHOT_COMPOSE, the scratch multi-pose projector shotScratchCamera/shotNumOr/shotCameraAspect/shotProjectFor/shotProjectTwoArg, fitFromComposedShot and the superseded fitFromComposedCameraWideForTest RED-first seam); and VQ2-RESPEC.md §4 unit F1's F1_COMBAT_CAM_CLAMP_FRAC / f1ClampCamFit. It owns NO scheduler: the camera glide still rides the SHARED S.tweens / tickTweens channel through the root's own startTweenLoop (the brief's protected scheduler-separation contract — the flicker, mote and dirty-frame loops are untouched, nothing was unified). Root->leaf ctx law: never imports theater-boot.js; capabilities arrive via cameraInit(ctx) at the root's end-of-body, and the live state record is re-synced via cameraSyncState(S) at both `S = createTheaterState()` sites. One-way leaf->leaf import of updateDofFocus from ui.theater-post (censused acyclic — that module reads nothing here), which is why its <script type=\"module\"> tag follows theater-post.js's. INTERIOR_CAM_MODE / INTERIOR_CAM_FOV_DEG stay in theater-boot.js (the camera TYPE choice, read only by mount()'s camera construction and setInteriorBoard's camera swap; censused — no body here reads either), as do FOG_FAR, HUMAN_TRUE_HEIGHT, spriteEntryFor, markDirty, startTweenLoop and the whole THEATER-ZOOM-SPREAD player-input block. There is not ONE accessor swap in this file — every moved production line is byte-identical to the monolith.",
+      "mustFollow": [
+        "src/ui/theater-post.js"
+      ]
+    },
+    {
+      "id": "ui.theater-occlusion",
+      "path": "src/ui/theater-occlusion.js",
+      "type": "module",
+      "owns": [
+        "*occlusionInit",
+        "*occlusionSyncState",
+        "*itrSegmentIntersectsAabb",
+        "*itrPieceSightPoints",
+        "*itrPillarCutawayMask",
+        "*itrFurnitureOcclusionBoxFor",
+        "*itrFurnitureOcclusionMask",
+        "*ITR_PILLAR_STUB_FRAC",
+        "*ITR_OCCLUSION_STEM_HEIGHT_U",
+        "*itrPillarStubHeight",
+        "*itrOcclusionAnkleHeight",
+        "*ITR_OCCLUSION_UPPER_OPACITY",
+        "*ITR_OCCLUSION_GHOST_OPACITY",
+        "*ITR_OCCLUSION_FADE_IN_MS",
+        "*ITR_OCCLUSION_FADE_OUT_MS",
+        "*ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG",
+        "*ITR_OCCLUSION_STUB_DARKEN",
+        "*ITR_OCCLUSION_STUB_MIN_HEIGHT",
+        "*itrOcclusionBearingDeg",
+        "*itrOcclusionBearingDeltaDeg",
+        "*itrOcclusionNextCommitted",
+        "*itrOcclusionClassify",
+        "*itrOcclusionIdFor",
+        "*itrSplitOccluderForAnkleGhost",
+        "*itrClosestPointOnAabbXZ",
+        "*itrCircleAabbPushXZ",
+        "*itrNearbyPrismBoxes",
+        "*itrClipNudgeFor",
+        "*itrPointInAnyBox",
+        "*itrBlockerNudgeCell",
+        "*CLIP_NUDGE_MAX_FRAC",
+        "*CLIP_DRESSING_EPSILON"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-camera"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B6 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the OCCLUSION / CUTAWAY family, extracted VERBATIM from theater-boot.js: BEAUTY-WAVE-2 BW2-1b's THE OCCLUSION LAW (the segment-vs-AABB primitive itrSegmentIntersectsAabb, the per-standee sightline targets itrPieceSightPoints, the per-instance cutaway masks itrPillarCutawayMask / itrFurnitureOcclusionBoxFor / itrFurnitureOcclusionMask, and the ankle-height deriver with its S-1 alias); STAGE-A A4's DYNAMIC OCCLUSION v2 (the whole authored tunable set, the camera-bearing math, the pure hysteresis decision itrOcclusionNextCommitted, the stateful classifier itrOcclusionClassify which owns S.occlusionFadeState, and itrOcclusionIdFor's column-cap-safe id production); the ankle-stub/ghost splitter itrSplitOccluderForAnkleGhost; and Adam's CLIP MARGIN LAW addendum (itrClosestPointOnAabbXZ / itrCircleAabbPushXZ / itrNearbyPrismBoxes / itrClipNudgeFor / itrPointInAnyBox / itrBlockerNudgeCell + CLIP_NUDGE_MAX_FRAC and CLIP_DRESSING_EPSILON). CENSUSED THREE-FREE: not one moved line constructs or touches a THREE object, so this module has no `import * as THREE` at all — the jsdom-testable-without-a-renderer property the monolith's own headers claimed for this family is preserved exactly. It owns NO scheduler: the per-instance opacity fade rides the SHARED S.tweens / tickTweens channel through the root's own startTweenLoop, never a second rAF loop (the brief's protected scheduler-separation contract; nothing was unified). Root->leaf ctx law: never imports theater-boot.js; occlusionInit(ctx) at the root's end-of-body, occlusionSyncState(S) at both `S = createTheaterState()` sites. One-way leaf->leaf import of mf1EaseOutCubic + mf1Lerp from ui.theater-camera (censused acyclic — that module reads nothing here), which is why its <script type=\"module\"> tag follows theater-camera.js's. furnitureFor stays a bare classic-script global (src/ui/theater-interior.js), resolved the identical way it always was. ITR_OCCLUSION_FADE_DISABLED_FOR_TEST stays root-owned behind its window.Theater seam and — censused — has NO reader in this module (its four production readers are setInteriorBoard's own occlusion gates), so unlike B2-B5's flag law it needs no ctx accessor and this file has ZERO accessor lines. The two ghost MESH builders (itrBuildOcclusionGhostMeshes / itrBuildOcclusionGhostPillarMeshes) stay in theater-boot.js beside interiorBuildInstancedMesh: they carry no occlusion law, only per-instance InstancedMesh construction. window.Theater._occlusionLawForTest and _clipMarginLawForTest are still assembled in theater-boot.js's own publish block, so both published objects keep the identical shape AND the identical function identities across the split.",
+      "mustFollow": [
+        "src/ui/theater-camera.js"
+      ]
+    },
+    {
       "id": "ui.theater-boot",
       "path": "src/ui/theater-boot.js",
       "type": "module",

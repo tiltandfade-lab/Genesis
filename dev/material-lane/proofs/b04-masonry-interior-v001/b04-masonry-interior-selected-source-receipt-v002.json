@@ -1,0 +1,179 @@
+{
+  "schema": "genesis.b04-material-source-gate.v1",
+  "materialMakerApplied": false,
+  "boundaryGateRatio": 1.1,
+  "board": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-board-v002.png",
+  "results": [
+    {
+      "id": "wall-ashlar-dressed",
+      "label": "Wall / dressed ashlar",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-ashlar-dressed-selected-v001.png",
+      "selectionMethod": "approved B02 sprite-first parent + 512px normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 5.462,
+        "topBottomRms": 7.937,
+        "internalXJumpP95": 15.321,
+        "internalYJumpP95": 18.227,
+        "xBoundaryToInternalP95": 0.357,
+        "yBoundaryToInternalP95": 0.435,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "wall-rough-hewn-block",
+      "label": "Wall / rough-hewn block",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-rough-hewn-block-selected-v001.png",
+      "selectionMethod": "period-contract ImageGen retry v002 + 32px X-only color lock + normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 0.533,
+        "topBottomRms": 5.734,
+        "internalXJumpP95": 11.333,
+        "internalYJumpP95": 15.373,
+        "xBoundaryToInternalP95": 0.047,
+        "yBoundaryToInternalP95": 0.373,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "wall-dry-stack-fieldstone",
+      "label": "Wall / dry-stack fieldstone",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-dry-stack-fieldstone-selected-v001.png",
+      "selectionMethod": "raw ImageGen v001 + normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 6.575,
+        "topBottomRms": 5.912,
+        "internalXJumpP95": 12.946,
+        "internalYJumpP95": 20.07,
+        "xBoundaryToInternalP95": 0.508,
+        "yBoundaryToInternalP95": 0.295,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "wall-brick",
+      "label": "Wall / brick",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-brick-selected-v001.png",
+      "selectionMethod": "period-contract ImageGen retry v002 + normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 6.949,
+        "topBottomRms": 9.178,
+        "internalXJumpP95": 20.634,
+        "internalYJumpP95": 46.756,
+        "xBoundaryToInternalP95": 0.337,
+        "yBoundaryToInternalP95": 0.196,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "wall-plastered-rubble",
+      "label": "Wall / plastered rubble",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-plastered-rubble-selected-v001.png",
+      "selectionMethod": "raw ImageGen v001 + normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 4.718,
+        "topBottomRms": 5.56,
+        "internalXJumpP95": 4.804,
+        "internalYJumpP95": 6.328,
+        "xBoundaryToInternalP95": 0.982,
+        "yBoundaryToInternalP95": 0.879,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "floor-flagstone",
+      "label": "Floor / flagstone",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-flagstone-selected-v001.png",
+      "selectionMethod": "raw ImageGen v001 + normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 4.407,
+        "topBottomRms": 5.362,
+        "internalXJumpP95": 10.803,
+        "internalYJumpP95": 12.844,
+        "xBoundaryToInternalP95": 0.408,
+        "yBoundaryToInternalP95": 0.417,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "floor-plank",
+      "label": "Floor / plank",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-plank-selected-v001.png",
+      "selectionMethod": "raw ImageGen v001 + normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 6.302,
+        "topBottomRms": 11.559,
+        "internalXJumpP95": 12.104,
+        "internalYJumpP95": 46.154,
+        "xBoundaryToInternalP95": 0.521,
+        "yBoundaryToInternalP95": 0.25,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "floor-packed-earth",
+      "label": "Floor / packed earth",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-packed-earth-selected-v001.png",
+      "selectionMethod": "ImageGen v001 + 24px continuous-field lock + normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 0.507,
+        "topBottomRms": 0.503,
+        "internalXJumpP95": 4.517,
+        "internalYJumpP95": 4.641,
+        "xBoundaryToInternalP95": 0.112,
+        "yBoundaryToInternalP95": 0.108,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "floor-cobble",
+      "label": "Floor / cobble",
+      "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-cobble-selected-v001.png",
+      "selectionMethod": "raw ImageGen v001 + normalization",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "leftRightRms": 12.577,
+        "topBottomRms": 14.936,
+        "internalXJumpP95": 17.639,
+        "internalYJumpP95": 19.353,
+        "xBoundaryToInternalP95": 0.713,
+        "yBoundaryToInternalP95": 0.772,
+        "boundaryJumpGate": true
+      }
+    }
+  ]
+}

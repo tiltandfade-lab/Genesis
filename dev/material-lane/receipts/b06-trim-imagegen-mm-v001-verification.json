@@ -1,0 +1,446 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B06-trim-imagegen-sprite-first-MM-v001",
+  "result": "PASS",
+  "thresholds": {
+    "albedoMaeMax": 3,
+    "albedoCorrelationMin": 0.99,
+    "heightStdDevMin": 1,
+    "normalXYStdDevMin": 0.35,
+    "roughnessByteTolerance": 1
+  },
+  "materials": [
+    {
+      "id": "trim-institutional-plain-band",
+      "culture": "institutional",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 12.0271,
+        "normalStdDevRgb": [
+          7.4825,
+          14.4374,
+          2.0669
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.3727,
+          203.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 204,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-institutional-base-course",
+      "culture": "institutional",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 9.4254,
+        "normalStdDevRgb": [
+          6.1,
+          10.6512,
+          2.1705
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.4449,
+          203.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 204,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-institutional-cornice-belt",
+      "culture": "institutional",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 16.4752,
+        "normalStdDevRgb": [
+          4.9584,
+          17.4487,
+          4.1659
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.3051,
+          203.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 204,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-institutional-coping-cap",
+      "culture": "institutional",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 16.2734,
+        "normalStdDevRgb": [
+          6.4536,
+          15.5125,
+          4.8237
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.3399,
+          203.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 204,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-institutional-stair-nosing",
+      "culture": "institutional",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 8.839,
+        "normalStdDevRgb": [
+          4.0523,
+          8.8704,
+          1.6132
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.5404,
+          203.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 204,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-institutional-curb-retaining",
+      "culture": "institutional",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 21.7463,
+        "normalStdDevRgb": [
+          14.6131,
+          19.3839,
+          6.1485
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.1026,
+          203.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 204,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-upland-plain-band",
+      "culture": "upland",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 13.9136,
+        "normalStdDevRgb": [
+          7.3038,
+          14.5915,
+          2.1858
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.3076,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-upland-base-course",
+      "culture": "upland",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 24.2953,
+        "normalStdDevRgb": [
+          10.9342,
+          20.3118,
+          4.8634
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.0757,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-upland-cornice-belt",
+      "culture": "upland",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 19.5933,
+        "normalStdDevRgb": [
+          13.2149,
+          17.6577,
+          3.8261
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.1285,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-upland-coping-cap",
+      "culture": "upland",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 19.742,
+        "normalStdDevRgb": [
+          8.4899,
+          18.8148,
+          4.2467
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.1555,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-upland-stair-nosing",
+      "culture": "upland",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 26.7022,
+        "normalStdDevRgb": [
+          13.3724,
+          28.5498,
+          7.9909
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.7305,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "trim-upland-curb-retaining",
+      "culture": "upland",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b06-trim-imagegen-v001/b06-trim-imagegen-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 31.2381,
+        "normalStdDevRgb": [
+          16.0117,
+          29.4974,
+          8.5407
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.595,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

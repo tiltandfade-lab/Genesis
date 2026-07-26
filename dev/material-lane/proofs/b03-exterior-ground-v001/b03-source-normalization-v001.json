@@ -1,0 +1,89 @@
+{
+  "schema": "genesis.material-source-normalization.v1",
+  "targetDimensions": [
+    512,
+    512
+  ],
+  "records": [
+    {
+      "id": "grass-meadow",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/grass-meadow-seamlocked-v001.png",
+      "sourceSha256": "c22d88681938ce67b8def7ac3d230d408a047358314e4e0946cb1a17dfa5f1bc",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "output": "dev/material-lane/source-sprites/b03-exterior-ground-v001/grass-meadow-selected-v001.png",
+      "outputSha256": "11a1668cb3d0858c476eb44ead141109b9edb3656f34b952f2df4c2304d63387",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "method": "square-preserving Lanczos normalization to pinned 512px delivery size"
+    },
+    {
+      "id": "worn-path",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/worn-path-source-v001.png",
+      "sourceSha256": "eb9130de8904d3b173b23adcd81c5cf364bf96750556fc31b4a86d4244e54bf3",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "output": "dev/material-lane/source-sprites/b03-exterior-ground-v001/worn-path-selected-v001.png",
+      "outputSha256": "3c6014aec5e7c87905d17b69f17fae53d5d0cc0a4f9388709adfdf5730e2c39e",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "method": "square-preserving Lanczos normalization to pinned 512px delivery size"
+    },
+    {
+      "id": "mud",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/mud-seamlocked-v001.png",
+      "sourceSha256": "fd0f5d0d9140ac5aa130de69c27ace791e8d24c06433639f78a0bd382cbef74c",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "output": "dev/material-lane/source-sprites/b03-exterior-ground-v001/mud-selected-v001.png",
+      "outputSha256": "379c891141636ad8479d8059764ef6f1adbd6044bb398f119f57659cfa74aee6",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "method": "square-preserving Lanczos normalization to pinned 512px delivery size"
+    },
+    {
+      "id": "gravel-scree",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/gravel-scree-seamlocked-v001.png",
+      "sourceSha256": "43bdb6efa8c3306692327137e1ec625e609b4b589bc5952b0fffd136a1b58f2b",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "output": "dev/material-lane/source-sprites/b03-exterior-ground-v001/gravel-scree-selected-v001.png",
+      "outputSha256": "1edb247bbcb59be7174b449b54393f28c6f531ca12ea7cce43df6a6cc8892e83",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "method": "square-preserving Lanczos normalization to pinned 512px delivery size"
+    },
+    {
+      "id": "marsh-bog",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/marsh-bog-seamlocked-v001.png",
+      "sourceSha256": "834f76b6ea9c13cc058ece576f57501996c79c4d4c0bbd3aeb909a82c0edb641",
+      "sourceDimensions": [
+        1254,
+        1254
+      ],
+      "output": "dev/material-lane/source-sprites/b03-exterior-ground-v001/marsh-bog-selected-v001.png",
+      "outputSha256": "59e30e0cd164254dd92b047cdd7611649496ed28119f5bbfe5aaac341a8d83cc",
+      "outputDimensions": [
+        512,
+        512
+      ],
+      "method": "square-preserving Lanczos normalization to pinned 512px delivery size"
+    }
+  ]
+}

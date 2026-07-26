@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B05-makeshift-card-v001",
+  "harness": "dev/material-cards/b05-makeshift-mm-v001.html",
+  "browserQa": {
+    "stage": "ready",
+    "cards": 6,
+    "renders": 24,
+    "squareMapFrames": true,
+    "pageErrors": []
+  },
+  "fixture": {
+    "meters": [5.2, 1.65],
+    "uvRepeat": [3.151515, 1],
+    "texelScaleXY": 1
+  }
+}

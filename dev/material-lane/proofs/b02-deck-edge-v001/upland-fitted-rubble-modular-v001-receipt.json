@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "workflow": "ImageGen component library -> deterministic modular course topology -> MM later",
+  "materialId": "upland-fitted-rubble-upstand",
+  "workingSize": [
+    576,
+    576
+  ],
+  "outputSize": [
+    512,
+    512
+  ],
+  "components": {
+    "source": "dev/material-lane/source-sprites/b02-deck-edge-v001/upland-fitted-rubble-components-alpha-v001.png",
+    "sheetGrid": [
+      4,
+      4
+    ],
+    "count": 16,
+    "neverRotatedOrFlipped": true
+  },
+  "assembly": {
+    "xStep": 96,
+    "yStep": 72,
+    "columns": 6,
+    "rows": 8,
+    "stagger": 48,
+    "variantSeed": 82417,
+    "variantGrid": [
+      [
+        11,
+        10,
+        5,
+        11,
+        10,
+        15
+      ],
+      [
+        2,
+        0,
+        12,
+        13,
+        0,
+        1
+      ],
+      [
+        14,
+        7,
+        5,
+        14,
+        9,
+        7
+      ],
+      [
+        2,
+        4,
+        1,
+        15,
+        12,
+        13
+      ],
+      [
+        6,
+        9,
+        6,
+        8,
+        3,
+        15
+      ],
+      [
+        9,
+        11,
+        8,
+        3,
+        10,
+        1
+      ],
+      [
+        7,
+        5,
+        4,
+        2,
+        7,
+        11
+      ],
+      [
+        15,
+        1,
+        10,
+        13,
+        5,
+        8
+      ]
+    ],
+    "variantCounts": [
+      2,
+      4,
+      3,
+      2,
+      2,
+      4,
+      2,
+      4,
+      3,
+      3,
+      4,
+      4,
+      2,
+      3,
+      2,
+      4
+    ],
+    "baseColor": [
+      77,
+      73,
+      63,
+      255
+    ]
+  },
+  "topologyProof": {
+    "grid_closes_on_both_axes": true,
+    "components_never_rotated_or_flipped": true,
+    "exposed_edges_remain_down": true,
+    "variant_distribution_balanced": true,
+    "no_identical_orthogonal_neighbours": true,
+    "delivery_dimensions_match_receipt": true
+  },
+  "metrics": {
+    "left_right_rms": 17.09,
+    "top_bottom_rms": 0.0,
+    "internal_x_jump_p95": 19.721,
+    "internal_y_jump_p95": 31.806,
+    "x_boundary_to_internal_p95": 0.867,
+    "y_boundary_to_internal_p95": 0.0,
+    "boundary_jump_gate": true
+  },
+  "status": "PASS",
+  "outputs": {
+    "tile": "dev/material-lane/proofs/b02-deck-edge-v001/upland-fitted-rubble-modular-v001.png",
+    "repeat": "dev/material-lane/proofs/b02-deck-edge-v001/upland-fitted-rubble-modular-v001-repeat-3x3.png",
+    "board": "dev/material-lane/proofs/b02-deck-edge-v001/upland-fitted-rubble-modular-v001-board.png"
+  }
+}

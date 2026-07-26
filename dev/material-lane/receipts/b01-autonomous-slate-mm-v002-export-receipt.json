@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-SLATE-MM-V002",
+  "generatedAt": "2026-07-24T22:43:13.433Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "graph": {
+    "path": "dev/material-lane/graphs/b01-autonomous-slate-mm-v002/b01-autonomous-roof-slate-v002.ptex",
+    "sha256": "f23ca51336442f2b71c907832edd1438d323400c50c46326820c0d8027383382"
+  },
+  "outputHashes": {
+    "b01-autonomous-roof-slate-v002_albedo.png": "36b895c5e895b3fd34eefd14dff7c3c34ca9b6df0775eb021d5b23b659f7983b",
+    "b01-autonomous-roof-slate-v002_heightmap.png": "c7321b132c21c4ad9afad33378e2232ed551e6e9f10d5a4a1a8d6cffb2cca77f",
+    "b01-autonomous-roof-slate-v002_normal.png": "464b3bd4fc4c62bfdcc33c8696cd4652ffcfa918783af057f8d9c30942980465",
+    "b01-autonomous-roof-slate-v002_orm.png": "e9ea07dbc3b2b245046081f9ab82c45c294a84b744d55b5c07ef6cc307c97cef"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 4,
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b01-autonomous-slate-mm-v002/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b01-autonomous-slate-mm-v002/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

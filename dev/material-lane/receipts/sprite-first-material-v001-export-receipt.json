@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "SPRITE-FIRST-MATERIAL-V001",
+  "generatedAt": "2026-07-24T20:19:42.396Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/experiments/sprite-first-v001/sprite-first-clay-tiles-v001.ptex": "65b4e4efc23e96ac2222caf7fbf4c3c195a0d6c78a6532f5b73d46ee4756e882",
+    "dev/material-lane/graphs/experiments/sprite-first-v001/sprite-first-plank-siding-v001.ptex": "780aa77bb6306c3ccb74c33831241d517b176de7580134f6c5a9cfb02e8d3fa3",
+    "dev/material-lane/graphs/experiments/sprite-first-v001/sprite-first-timber-shingles-v001.ptex": "7cbceb36ce238f3e84f6a3b6d4f1ec0553d241dbeb77dee683a7b043e5be53ce"
+  },
+  "outputHashes": {
+    "sprite-first-clay-tiles-v001_albedo.png": "c51078ddb902497e5c7ca06ab872a2610bab0402a4b2b68ed8c3deef8b322dda",
+    "sprite-first-clay-tiles-v001_heightmap.png": "facc848cc3cacca7b9f033b92b2ce5991b22e011af40a66f9e87368c6169c455",
+    "sprite-first-clay-tiles-v001_normal.png": "ede1cbf938e9edea65b341d7da93862c53d4005b48c48939e1abee30e99fb56c",
+    "sprite-first-clay-tiles-v001_orm.png": "c9bfa7d32742eb7c800e6ca1ed10c9958b4abd8d63058a9692ea87244404d1d1",
+    "sprite-first-plank-siding-v001_albedo.png": "c42035e6f85a86db30861e83fc4ea71fe9fee789adc02c6fbb5fb15b53a371d9",
+    "sprite-first-plank-siding-v001_heightmap.png": "fd9ff6cca5fa32d0a30b91cfa29be8ec9ac78a2d6b02118a765e59783da4750d",
+    "sprite-first-plank-siding-v001_normal.png": "d1fdcc8aab24c8e94a9b89ac0db2e86b82eb109e4fe97fea4fcd4173fc0b0420",
+    "sprite-first-plank-siding-v001_orm.png": "62fd57b129f2762ac5658b0feb67b36e4f3d27af08312c357e9f2f31ec3ec31d",
+    "sprite-first-timber-shingles-v001_albedo.png": "036aae2dcfc898ba194630cc1ee3a9384bab94ed98f8282173fc8cbd60a43f23",
+    "sprite-first-timber-shingles-v001_heightmap.png": "309e96bb14c1d424785b66a6885913f9b8cd49b5f7f38cdc7242ea5a8eb68ce3",
+    "sprite-first-timber-shingles-v001_normal.png": "4699b513b21b6daa39c3ae0afc2ce547c95b5b567ac75b7ec8afec47d0f249ee",
+    "sprite-first-timber-shingles-v001_orm.png": "ba2bf218233444c513f7a97dadaf0757258de281110154a9a8f2bd23150fa8b3"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 12,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/sprite-first-material-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/sprite-first-material-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

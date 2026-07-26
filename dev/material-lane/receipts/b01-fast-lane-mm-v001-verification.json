@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B01-fast-lane-sprite-first-MM-v001",
+  "result": "PASS",
+  "thresholds": {
+    "albedoMaeMax": 3,
+    "albedoCorrelationMin": 0.99,
+    "heightStdDevMin": 1,
+    "normalXYStdDevMin": 0.35,
+    "roughnessByteTolerance": 1
+  },
+  "materials": [
+    {
+      "id": "timber-structural-grain",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.8787,
+        "pixelCorrelation": 0.9996,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b01-fast-lane-v001/b01-fast-lane-selected-candidates-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 1.1374,
+        "normalStdDevRgb": [
+          0.3557,
+          0.2423,
+          0.4816
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.5636,
+          173.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 173,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "roof-thatch",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 2.5592,
+        "pixelCorrelation": 0.9982,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b01-fast-lane-v001/b01-fast-lane-selected-candidates-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 20.5353,
+        "normalStdDevRgb": [
+          6.3809,
+          12.106,
+          0.7153
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.3574,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "roof-turf-sod",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 1.1573,
+        "pixelCorrelation": 0.9981,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b01-fast-lane-v001/b01-fast-lane-selected-candidates-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 3.9418,
+        "normalStdDevRgb": [
+          1.1093,
+          1.2472,
+          0.1989
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.524,
+          224.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 224,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "roof-hide-canvas-tarp",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.8909,
+        "pixelCorrelation": 0.9993,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b01-fast-lane-v001/b01-fast-lane-selected-candidates-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 34.7185,
+        "normalStdDevRgb": [
+          12.5406,
+          12.0405,
+          3.0138
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.3208,
+          203.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 204,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

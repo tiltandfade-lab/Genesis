@@ -1,0 +1,103 @@
+{
+  "schema": "genesis.exterior-ground-source-gate.v1",
+  "materialMakerApplied": false,
+  "boundaryGateRatio": 1.1,
+  "board": "dev/material-lane/proofs/b03-exterior-ground-v001/b03-exterior-ground-source-board-v001.png",
+  "results": [
+    {
+      "id": "grass-meadow",
+      "label": "Grass / meadow",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/grass-meadow-source-v001.png",
+      "selectionMethod": "raw ImageGen v001",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 18.568,
+        "topBottomRms": 20.568,
+        "internalXJumpP95": 18.757,
+        "internalYJumpP95": 17.308,
+        "xBoundaryToInternalP95": 0.99,
+        "yBoundaryToInternalP95": 1.188,
+        "boundaryJumpGate": false
+      }
+    },
+    {
+      "id": "worn-path",
+      "label": "Worn path",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/worn-path-source-v001.png",
+      "selectionMethod": "raw ImageGen v001",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 8.248,
+        "topBottomRms": 9.207,
+        "internalXJumpP95": 8.809,
+        "internalYJumpP95": 10.909,
+        "xBoundaryToInternalP95": 0.936,
+        "yBoundaryToInternalP95": 0.844,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "mud",
+      "label": "Mud",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/mud-source-v001.png",
+      "selectionMethod": "raw ImageGen v001",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 9.277,
+        "topBottomRms": 9.088,
+        "internalXJumpP95": 8.082,
+        "internalYJumpP95": 8.522,
+        "xBoundaryToInternalP95": 1.148,
+        "yBoundaryToInternalP95": 1.066,
+        "boundaryJumpGate": false
+      }
+    },
+    {
+      "id": "gravel-scree",
+      "label": "Gravel / scree",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/gravel-scree-source-v001.png",
+      "selectionMethod": "raw ImageGen v001",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 38.743,
+        "topBottomRms": 38.906,
+        "internalXJumpP95": 34.205,
+        "internalYJumpP95": 34.449,
+        "xBoundaryToInternalP95": 1.133,
+        "yBoundaryToInternalP95": 1.129,
+        "boundaryJumpGate": false
+      }
+    },
+    {
+      "id": "marsh-bog",
+      "label": "Marsh / bog",
+      "source": "dev/material-lane/source-sprites/b03-exterior-ground-v001/marsh-bog-source-v001.png",
+      "selectionMethod": "raw ImageGen v001",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "metrics": {
+        "leftRightRms": 13.649,
+        "topBottomRms": 15.311,
+        "internalXJumpP95": 12.004,
+        "internalYJumpP95": 12.87,
+        "xBoundaryToInternalP95": 1.137,
+        "yBoundaryToInternalP95": 1.19,
+        "boundaryJumpGate": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-SLATE-MM-V002",
+  "result": "PASS",
+  "sourceIdentity": {
+    "meanAbsoluteError": 0.0,
+    "pixelCorrelation": 1.0,
+    "preserved": true
+  },
+  "inheritedSourceSeamGate": {
+    "manifest": "dev/material-lane/manifests/b01-autonomous-slate-v006.source.json",
+    "passed": true
+  },
+  "depth": {
+    "heightStdDev": 16.8366,
+    "normalStdDevRgb": [
+      19.6438,
+      17.9136,
+      6.6693
+    ],
+    "broadSignalPresent": true
+  },
+  "orm": {
+    "meanRgb": [
+      254.007,
+      198.0,
+      0.0
+    ],
+    "expectedRoughnessByte": 199,
+    "metallicMaxByte": 0,
+    "valid": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B04-masonry-interior-card-v003",
+  "harness": "dev/material-cards/b04-masonry-interior-mm-v003.html",
+  "browserQa": {
+    "stage": "ready",
+    "cards": 9,
+    "renders": 36,
+    "wallFixtures": 5,
+    "floorFixtures": 4,
+    "squareMapFrames": true,
+    "pageErrors": []
+  },
+  "fixtureContract": {
+    "walls": {
+      "meters": [5.2, 1.65],
+      "uvRepeat": [3.151515, 1],
+      "texelScaleXY": 1
+    },
+    "floors": {
+      "meters": [5.2, 5.2],
+      "uvRepeat": [3, 3],
+      "texelScaleXY": 1
+    }
+  }
+}

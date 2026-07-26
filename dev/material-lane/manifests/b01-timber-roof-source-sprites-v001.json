@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "batch": "B01-timber-and-roof-fields",
+  "date": "2026-07-24",
+  "workflow": "sprite-first-mm-second",
+  "generator": {
+    "mode": "built-in ImageGen",
+    "source_prompt_shared": "Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, not a smooth painterly illustration and not cartoony); Traditional Monster Manual fantasy illustration turned pixel-sprite; warm parchment-adjacent palette; painterly dithered shading; medium value contrast; Genesis default fantasy world. Square 1:1, front-on orthographic edge-to-edge surface tile. Neutral albedo only: no directional lighting, cast shadow, vignette, frame, labels, props, scene context, weather narrative, watermark, or text. Must repeat seamlessly left-to-right and top-to-bottom. CLEAN-SHAPES: clean value shapes first; dither only in shadows and edges; large flat value planes carry the construction read at 50% zoom.",
+    "repair_prompt": "Edit this exact material source sprite only to make it a strictly seamless repeating square tile on both axes. Preserve subject, palette, construction rhythm, pixel-art register, and broad value groups. Change only what is necessary at outer edges so left matches right and top matches bottom without a visible join. Preserve neutral albedo; no directional lighting, cast shadow, vignette, border, scene, text, props, damage, moss, or new objects. Keep dither restrained to edges/shadows; do not add noisy detail."
+  },
+  "acceptance": {
+    "test": "direct outer-edge RGB RMS",
+    "threshold": 10.0,
+    "units": "0-255 RGB"
+  },
+  "candidates": [
+    {"slug":"timber-structural-grain","source_v001":"source-sprites/b01-timber-roof-v001/timber-structural-grain-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/timber-structural-grain-source-v002.png","left_right_rms":15.18,"top_bottom_rms":20.53,"sha256":"4b7c2bbb80aaba6739d2110cf82992e451f5b11ce3f772e5d5354e10541acbde","status":"FAIL"},
+    {"slug":"roof-timber-shingle","source_v001":"source-sprites/b01-timber-roof-v001/roof-timber-shingle-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-timber-shingle-source-v002.png","left_right_rms":47.26,"top_bottom_rms":40.29,"sha256":"1884d4ad004a23ae494373c65d52124b70c2382a901eb9810cf4c2e6bbaaef81","status":"FAIL"},
+    {"slug":"roof-plank-batten","source_v001":"source-sprites/b01-timber-roof-v001/roof-plank-batten-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-plank-batten-source-v002.png","left_right_rms":9.33,"top_bottom_rms":10.68,"sha256":"fa4b7e7a8494eab7213fbff57ff9c25b452291a92e239b82280691eece9238d1","status":"FAIL"},
+    {"slug":"roof-slate","source_v001":"source-sprites/b01-timber-roof-v001/roof-slate-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-slate-source-v002.png","left_right_rms":15.86,"top_bottom_rms":45.86,"sha256":"ed7d11250a79b712a88dfddfbcc7b153cb95b7ef4169aaa93cf0cb83254ae5c1","status":"FAIL"},
+    {"slug":"roof-clay-tile","source_v001":"source-sprites/b01-timber-roof-v001/roof-clay-tile-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-clay-tile-source-v002.png","left_right_rms":27.62,"top_bottom_rms":38.73,"sha256":"781664883fa0e213e6ddf65bf1479f5406175f2c0b10cd90de6a165bf511a3b7","status":"FAIL"},
+    {"slug":"roof-thatch","source_v001":"source-sprites/b01-timber-roof-v001/roof-thatch-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-thatch-source-v002.png","left_right_rms":15.22,"top_bottom_rms":21.32,"sha256":"9df57f472670022d19e5647041a54e7ae76c796ca48e17fe76bb0e31735264dc","status":"FAIL"},
+    {"slug":"roof-turf-sod","source_v001":"source-sprites/b01-timber-roof-v001/roof-turf-sod-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-turf-sod-source-v002.png","left_right_rms":22.55,"top_bottom_rms":54.20,"sha256":"eb0405ca6c011cc5aca4509c8b0e8c3a4640dbb39f2bee0f8f0063c4631434af","status":"FAIL"},
+    {"slug":"roof-hide-canvas-tarp","source_v001":"source-sprites/b01-timber-roof-v001/roof-hide-canvas-tarp-source-v001.png","repair_v002":"source-sprites/b01-timber-roof-v001/roof-hide-canvas-tarp-source-v002.png","left_right_rms":25.68,"top_bottom_rms":26.04,"sha256":"722086f154382a5aeb7ab1d4721f103534a0c5f568d8d18a480c1d7d23cdaeff","status":"FAIL"}
+  ],
+  "edge_lock_trial_v003": {
+    "purpose": "Controlled prompt-variation test after the v001/v002 source gate failure.",
+    "prompt_delta": "Describe an infinite flat 2D repeating material pattern rather than a roof plane; require zero perspective, zero directional lighting, no start/end row, and opposite-edge continuation at the same phase.",
+    "result": "Improved visual orthography and at least one axis per tested asset, but no asset passed the two-axis repeat proof.",
+    "candidates": [
+      {"slug":"roof-plank-batten","path":"source-sprites/b01-timber-roof-v001/roof-plank-batten-source-v003.png","left_right_rms":15.14,"top_bottom_rms":7.42,"status":"FAIL"},
+      {"slug":"roof-slate","path":"source-sprites/b01-timber-roof-v001/roof-slate-source-v003.png","left_right_rms":12.26,"top_bottom_rms":8.91,"status":"FAIL"},
+      {"slug":"roof-clay-tile","path":"source-sprites/b01-timber-roof-v001/roof-clay-tile-source-v003.png","left_right_rms":26.90,"top_bottom_rms":13.53,"status":"FAIL"},
+      {"slug":"roof-hide-canvas-tarp","path":"source-sprites/b01-timber-roof-v001/roof-hide-canvas-tarp-source-v003.png","left_right_rms":16.69,"top_bottom_rms":11.23,"status":"FAIL"}
+    ]
+  },
+  "result": "SOURCE-GATE-FAILED; no Material Maker graphs or PBR maps were created."
+}

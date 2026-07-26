@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "workflow": "ImageGen component library -> deterministic modular course topology -> MM later",
+  "materialId": "roof-timber-shingle",
+  "workingSize": [
+    576,
+    576
+  ],
+  "outputSize": [
+    512,
+    512
+  ],
+  "components": {
+    "source": "dev/material-lane/source-sprites/b01-autonomous-p2-v001/roof-timber-shingle-components-alpha-v001.png",
+    "sheetGrid": [
+      4,
+      4
+    ],
+    "count": 16,
+    "neverRotatedOrFlipped": true
+  },
+  "assembly": {
+    "xStep": 48,
+    "yStep": 72,
+    "columns": 12,
+    "rows": 8,
+    "stagger": 24,
+    "variantSeed": 94117,
+    "variantGrid": [
+      [
+        9,
+        0,
+        4,
+        3,
+        13,
+        5,
+        9,
+        11,
+        10,
+        2,
+        5,
+        12
+      ],
+      [
+        10,
+        7,
+        6,
+        1,
+        11,
+        1,
+        15,
+        4,
+        6,
+        13,
+        3,
+        15
+      ],
+      [
+        7,
+        2,
+        0,
+        12,
+        14,
+        8,
+        12,
+        7,
+        11,
+        6,
+        15,
+        9
+      ],
+      [
+        13,
+        10,
+        5,
+        3,
+        0,
+        14,
+        2,
+        14,
+        8,
+        2,
+        6,
+        7
+      ],
+      [
+        3,
+        11,
+        9,
+        4,
+        14,
+        15,
+        1,
+        8,
+        10,
+        0,
+        10,
+        4
+      ],
+      [
+        9,
+        5,
+        14,
+        7,
+        13,
+        12,
+        8,
+        12,
+        11,
+        2,
+        3,
+        15
+      ],
+      [
+        13,
+        1,
+        4,
+        5,
+        4,
+        3,
+        7,
+        0,
+        5,
+        12,
+        13,
+        9
+      ],
+      [
+        2,
+        8,
+        11,
+        15,
+        1,
+        8,
+        14,
+        10,
+        1,
+        6,
+        7,
+        4
+      ]
+    ],
+    "variantCounts": [
+      5,
+      6,
+      6,
+      6,
+      7,
+      6,
+      5,
+      7,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "baseColor": [
+      58,
+      36,
+      24,
+      255
+    ]
+  },
+  "topologyProof": {
+    "grid_closes_on_both_axes": true,
+    "components_never_rotated_or_flipped": true,
+    "exposed_edges_remain_down": true,
+    "variant_distribution_balanced": true,
+    "no_identical_orthogonal_neighbours": true,
+    "delivery_dimensions_match_receipt": true
+  },
+  "metrics": {
+    "left_right_rms": 19.213,
+    "top_bottom_rms": 17.656,
+    "internal_x_jump_p95": 48.61,
+    "internal_y_jump_p95": 27.214,
+    "x_boundary_to_internal_p95": 0.395,
+    "y_boundary_to_internal_p95": 0.649,
+    "boundary_jump_gate": true
+  },
+  "status": "PASS",
+  "outputs": {
+    "tile": "dev/material-lane/proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle.png",
+    "repeat": "dev/material-lane/proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle-repeat-3x3.png",
+    "board": "dev/material-lane/proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle-board.png"
+  }
+}

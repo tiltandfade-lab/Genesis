@@ -1,0 +1,22 @@
+{
+  "schema": "genesis.material-source-seam-repair.v1",
+  "materialId": "upland-fitted-rubble-upstand",
+  "source": "dev/material-lane/source-sprites/b02-deck-edge-v001/upland-fitted-rubble-upstand-source-v001.png",
+  "output": "dev/material-lane/source-sprites/b02-deck-edge-v001/upland-fitted-rubble-upstand-seamlocked-v001.png",
+  "repeat": "dev/material-lane/proofs/b02-deck-edge-v001/upland-fitted-rubble-upstand-seamlocked-v001-repeat-3x3.png",
+  "method": "opposite-edge pair average with inward cosine feather",
+  "repairBandPixels": 32,
+  "repairBandFractionPerEdge": 0.0255,
+  "declaredScope": "irregular non-periodic fitted-stone field; visual joint-integrity review required",
+  "rejectedAlternative": "modular component rescue v001-v002 passed topology but failed fitted-density taste",
+  "before": {
+    "x_boundary_to_internal_p95": 1.118,
+    "y_boundary_to_internal_p95": 1.14,
+    "boundary_jump_gate": false
+  },
+  "after": {
+    "x_boundary_to_internal_p95": 0.0,
+    "y_boundary_to_internal_p95": 0.0,
+    "boundary_jump_gate": true
+  }
+}

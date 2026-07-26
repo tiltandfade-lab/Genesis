@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B06-condition-affinity-MM-v001",
+  "generatedAt": "2026-07-25T04:35:40.956Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/b06-condition-mm-v001/b06-condition-cleared-use-suppression-v001.ptex": "80f460286a4d3299d9e3fea854344cb02b81a5d57b67ccb9a6fc0250b97d7fd3",
+    "dev/material-lane/graphs/b06-condition-mm-v001/b06-condition-crevice-growth-v001.ptex": "719d861999e250bdd353cb98272347244a799b2a37637751277ac245664c073c",
+    "dev/material-lane/graphs/b06-condition-mm-v001/b06-condition-damp-darkening-v001.ptex": "62b222db1c959dc41a618fa2405ca2abbf819917102bc21777481a1fbbae7b04",
+    "dev/material-lane/graphs/b06-condition-mm-v001/b06-condition-deposit-grime-v001.ptex": "f1c8a8feba79c147dff1b04e911da0f5def59d01aa1eadd74cf6133d69273313",
+    "dev/material-lane/graphs/b06-condition-mm-v001/b06-condition-lichen-v001.ptex": "2641e9b5894e5e556d21693d1aba15a4d775a9316b8cd90672631806ea030e5a",
+    "dev/material-lane/graphs/b06-condition-mm-v001/b06-condition-moss-growth-v001.ptex": "ccd2055f4c64a1d93099c9b8345011c627d4535b25787f871715372f63f6c904",
+    "dev/material-lane/graphs/b06-condition-mm-v001/b06-condition-repair-suppression-v001.ptex": "8ef7e70c9892d3c71fa4d5fe32b341b09d4ec8bd2abf110cce6137964b296a73"
+  },
+  "outputHashes": {
+    "b06-condition-cleared-use-suppression-v001_albedo.png": "e7601329b839a6bb4e9587da9a14c533e13685b23fcee596d94f518b30dbddb7",
+    "b06-condition-cleared-use-suppression-v001_heightmap.png": "1e25e04e91a543c642bb82949a13958f208af96bde63badde7bd78a310c05d96",
+    "b06-condition-cleared-use-suppression-v001_normal.png": "43ebfab078d1cfab4a2aac003ac6568c6ffc34882663b1bfc576031c7a3d31e9",
+    "b06-condition-cleared-use-suppression-v001_orm.png": "9a9df2a3c95c64adef9433021f3c04b95bb2909cac45b43a8efc1fd445ba2119",
+    "b06-condition-crevice-growth-v001_albedo.png": "f0723500b70790b942caafc40f52d6c86480c776f77d2aef017c1df1f632e112",
+    "b06-condition-crevice-growth-v001_heightmap.png": "8332e0fe003ac164e944f292a42be90a8f5eba4612061ba1570a71549572792e",
+    "b06-condition-crevice-growth-v001_normal.png": "6636749184e447537c9630606f84747e1018c30fffc3abd650287be18ed29523",
+    "b06-condition-crevice-growth-v001_orm.png": "c26e384eabb09aecc4f134c2116ad6cb9bb0fa4c0178ec1b43590ce7d88e6ab5",
+    "b06-condition-damp-darkening-v001_albedo.png": "4815fcbd0cb2c6976087901449100f8e568598885f4c821385b11d4cc70d5958",
+    "b06-condition-damp-darkening-v001_heightmap.png": "11a30805f657f05b20f5ab4b5ea56a33defe3d787515d5a2dd53579b7a5a6d4e",
+    "b06-condition-damp-darkening-v001_normal.png": "790ff528e2bfc70ca18071c624b8d29d5e92a536da3bdfe043efdb788ddbb5e7",
+    "b06-condition-damp-darkening-v001_orm.png": "1395428576530d022b9c0260f2ef9ca19ea637b5836320488fb6b8833d9c4458",
+    "b06-condition-deposit-grime-v001_albedo.png": "e3e96b7eb52a557b26097c8c2b547fccdc8b148729f2aaa35d88a1143fa50e2e",
+    "b06-condition-deposit-grime-v001_heightmap.png": "749dc79947685d18cc3f82dab6bc91681786ab086cdfc87675291c270725ac42",
+    "b06-condition-deposit-grime-v001_normal.png": "9070d2adb657a15dc5b77da124c3d6392b59453092289c373083eff0f4717425",
+    "b06-condition-deposit-grime-v001_orm.png": "a7a52f2e0b88602d9d7760e911e9ece318e16744af78a58061dd5aa5649316a6",
+    "b06-condition-lichen-v001_albedo.png": "25d0ac42af53aa4545830c69560e3a7e15481caf01c45265df73d361d6346ec2",
+    "b06-condition-lichen-v001_heightmap.png": "127a4ec15c30d6e93b89323367bb414a84b5194b29bb7e1ccdb5b6446003b0bb",
+    "b06-condition-lichen-v001_normal.png": "1470b8750ba718f07cfc9e216576b51eff0d1ca67bd0965e8e89babac1e29917",
+    "b06-condition-lichen-v001_orm.png": "c09e91320da792a0cef7d40f20067d2df85e640c6e4474187b87c23fca427d83",
+    "b06-condition-moss-growth-v001_albedo.png": "c215b396ee0c515a95e38a4f6a873d2efb96b8459ff5396d0da99c138150f04c",
+    "b06-condition-moss-growth-v001_heightmap.png": "d391c1609c8bdfbec2ec048296378de0df4af7dbc0d57dac64ea236f4f1fa5d7",
+    "b06-condition-moss-growth-v001_normal.png": "a67a8f708fe61e3d12d3da99de14da8b5d290e9c26bba50b16cb8693900958c9",
+    "b06-condition-moss-growth-v001_orm.png": "cf1337ec00b5c2a1b58786487feb76b3818a3bb4d52c58c5ce787b5208771403",
+    "b06-condition-repair-suppression-v001_albedo.png": "fa680ed311a1e830b4e03eef7811607594d2ca0acd65894678274239b76987ac",
+    "b06-condition-repair-suppression-v001_heightmap.png": "caedebd70c5282d2679108f91bb1e9fa1bda7dc127202a8d073ba1c1d7d93fca",
+    "b06-condition-repair-suppression-v001_normal.png": "4576866fc4a2aa028dd19c58d3075268a5725d5179e919788d21ab5c62fa523b",
+    "b06-condition-repair-suppression-v001_orm.png": "5604039cbb3a03ceca486fe45dd154406e96a823f45b72d76e4989a7c27e78cd"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 28,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b06-condition-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b06-condition-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

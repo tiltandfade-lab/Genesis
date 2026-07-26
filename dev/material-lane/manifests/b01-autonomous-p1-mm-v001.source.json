@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B01-P1-approved-source-to-MM-v001",
+  "workflow": "approved source sprite -> conservative MM depth/PBR derivation",
+  "controlledRule": "Albedo is the approved autonomous source sprite unchanged. MM may only derive broad height, normal, AO, and subject roughness.",
+  "sourceGateReceipt": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-receipt.json",
+  "materials": [
+    {
+      "id": "roof-plank-batten",
+      "label": "Roof plank-and-batten",
+      "source": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-plank.png",
+      "sourceId": "plank",
+      "roughness": 0.68,
+      "normalStrength": 0.28,
+      "aoStrength": 0.2,
+      "blur": 4,
+      "depthScale": 0.02,
+      "sourceSha256": "e36b42be9db28d8b722138248a3a6af6ba37de171b666e4bfde261e7e27254bf",
+      "graph": "dev/material-lane/graphs/b01-autonomous-p1-v001/b01-autonomous-roof-plank-batten-v001.ptex",
+      "graphSha256": "9ebbf45bdb72d04b086269a912ee0da81518f51acec732e9d891d50027b7487b",
+      "materialTreatment": {
+        "albedo": "approved source sprite connected directly to Material albedo; no MM recolor or synthesis",
+        "height": "source luminance at 0.85 contrast, quantized to 16 steps, then broad blurred (radius 4)",
+        "normalStrength": 0.28,
+        "ambientOcclusionStrength": 0.2,
+        "roughness": 0.68,
+        "metallic": 0,
+        "depthScale": 0.02,
+        "intent": "Broad construction relief only; painted grain, dither, and edge accents must not become micro-embossing."
+      }
+    },
+    {
+      "id": "roof-slate",
+      "label": "Roof slate",
+      "source": "dev/material-lane/proofs/b01-autonomous-v001/b01-autonomous-v001-slate.png",
+      "sourceId": "slate",
+      "roughness": 0.78,
+      "normalStrength": 0.32,
+      "aoStrength": 0.24,
+      "blur": 3,
+      "depthScale": 0.02,
+      "sourceSha256": "f58b95f1ce8f261bdbfc04493ee1e67713f0683dbb0124920fa11f45abf620c8",
+      "graph": "dev/material-lane/graphs/b01-autonomous-p1-v001/b01-autonomous-roof-slate-v001.ptex",
+      "graphSha256": "09c9abb70edab91b0e4807500ffc5da8caf6b4f02ba72f350504cb3d3993afa9",
+      "materialTreatment": {
+        "albedo": "approved source sprite connected directly to Material albedo; no MM recolor or synthesis",
+        "height": "source luminance at 0.85 contrast, quantized to 16 steps, then broad blurred (radius 3)",
+        "normalStrength": 0.32,
+        "ambientOcclusionStrength": 0.24,
+        "roughness": 0.78,
+        "metallic": 0,
+        "depthScale": 0.02,
+        "intent": "Broad construction relief only; painted grain, dither, and edge accents must not become micro-embossing."
+      }
+    }
+  ]
+}

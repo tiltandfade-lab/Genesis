@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-SLATE-MM-V002",
+  "workflow": "approved slate v006 source -> conservative MM depth/PBR derivation",
+  "sourceGateManifest": "dev/material-lane/manifests/b01-autonomous-slate-v006.source.json",
+  "source": "dev/material-lane/proofs/b01-autonomous-v006/b01-autonomous-v006-slate.png",
+  "sourceSha256": "3a2e4a7dc4bd83693c5040e709c5fd738e67465b6f4229e5d6f9e66c55f3fa3f",
+  "graph": "dev/material-lane/graphs/b01-autonomous-slate-mm-v002/b01-autonomous-roof-slate-v002.ptex",
+  "graphSha256": "f23ca51336442f2b71c907832edd1438d323400c50c46326820c0d8027383382",
+  "materialTreatment": {
+    "albedo": "approved slate v006 source connected directly to Material albedo",
+    "height": "luminance at 0.85 contrast, 16 steps, broad blur radius 3",
+    "normalStrength": 0.32,
+    "ambientOcclusionStrength": 0.24,
+    "roughness": 0.78,
+    "metallic": 0,
+    "depthScale": 0.02,
+    "intent": "Broad course and slate separation only; do not emboss painted mineral texture or dither."
+  }
+}

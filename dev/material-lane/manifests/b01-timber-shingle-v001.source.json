@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-TIMBER-SHINGLE-V001",
+  "status": "TECHNICAL-SOURCE-PASS / TASTE-APPROVED",
+  "workflow": "ImageGen component library -> chroma alpha -> modular course adapter -> taste approval -> MM",
+  "generation": {
+    "mode": "built-in ImageGen",
+    "referenceSources": [
+      "dev/material-lane/source-sprites/b01-timber-roof-v001/roof-timber-shingle-source-v001.png",
+      "dev/material-lane/source-sprites/b01-timber-roof-v001/roof-timber-shingle-source-v002.png"
+    ],
+    "prompt": "Create exactly sixteen separate split-timber roofing shingle sprites in a clean 4-column by 4-row component sheet, matching the supplied warm timber-shingle roof references. Every shingle is upright: squared hidden attachment edge at the top and hand-split, softly rounded or modestly irregular exposed edge at the bottom. No rotation, flipping, perspective, or upside-down pieces. Use a flat #00ff00 chroma background. Keep a coherent maintained warm oak/cedar family with narrow variation across honey brown, muted chestnut, and warm ochre-brown. Use broad quiet wood planes, restrained vertical split grain, sparse knots, and slight handmade silhouette differences. Exactly sixteen isolated components; no shadows, AO, bevel lighting, labels, text, nails as focal points, roof field, moss, rot, damage, or extra objects."
+  },
+  "components": {
+    "chroma": {"path": "dev/material-lane/source-sprites/b01-autonomous-p2-v001/roof-timber-shingle-components-chroma-v001.png", "sha256": "fe79a9ae7014a6488f14c53cc137366238111ee8f0e19d3cf389441075d5c3ed"},
+    "alpha": {"path": "dev/material-lane/source-sprites/b01-autonomous-p2-v001/roof-timber-shingle-components-alpha-v001.png", "sha256": "6bc86f44d8b230dd8c87fed528c46fcaa2c374efad9573acfae328611df54a25", "validation": "RGBA 1254x1254; transparent corners; opaque coverage 0.5024"}
+  },
+  "assembly": {
+    "script": "dev/material-lane/build-modular-course-proof.py",
+    "receipt": "dev/material-lane/proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle-receipt.json",
+    "workingSize": [576, 576], "deliverySize": [512, 512], "xStep": 48, "yStep": 72, "variantSeed": 94117
+  },
+  "acceptedSource": {
+    "path": "dev/material-lane/proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle.png",
+    "sha256": "40a549ed758a7996f100cfa35b318b5a3d94e6540578d7354bcf5c6e3bb21033",
+    "repeatProof": "dev/material-lane/proofs/b01-autonomous-p2-v003/b01-autonomous-p2-v003-timber-shingle-repeat-3x3.png",
+    "repeatProofSha256": "23330493c3360eb7cefa2055f553f8bad14aeaff14659fa7733fb2deeccc8c37",
+    "technicalGate": "PASS", "tasteGate": "APPROVED"
+  }
+}

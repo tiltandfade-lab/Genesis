@@ -1,0 +1,186 @@
+{
+  "connections": [
+    {
+      "from": "source_sprite",
+      "from_port": 0,
+      "to": "height_luma",
+      "to_port": 0
+    },
+    {
+      "from": "height_luma",
+      "from_port": 0,
+      "to": "height_from_sprite",
+      "to_port": 0
+    },
+    {
+      "from": "height_from_sprite",
+      "from_port": 0,
+      "to": "normal_from_sprite",
+      "to_port": 0
+    },
+    {
+      "from": "height_from_sprite",
+      "from_port": 0,
+      "to": "ao_from_sprite",
+      "to_port": 0
+    },
+    {
+      "from": "source_sprite",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 0
+    },
+    {
+      "from": "metallic_zero",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 1
+    },
+    {
+      "from": "subject_roughness",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 2
+    },
+    {
+      "from": "normal_from_sprite",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 4
+    },
+    {
+      "from": "ao_from_sprite",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 5
+    },
+    {
+      "from": "height_from_sprite",
+      "from_port": 0,
+      "to": "Material",
+      "to_port": 6
+    }
+  ],
+  "label": "Sprite-first experiment / Overlapped timber shingles / v001",
+  "name": "sprite_first_timber_shingles_v001",
+  "node_position": {
+    "x": 0,
+    "y": 0
+  },
+  "nodes": [
+    {
+      "name": "source_sprite",
+      "node_position": {
+        "x": -540,
+        "y": -90
+      },
+      "parameters": {
+        "image": "%PROJECT_PATH%/../../../source-sprites/experiment-v001/timber-shingles-source-v001.png"
+      },
+      "type": "image"
+    },
+    {
+      "name": "height_luma",
+      "node_position": {
+        "x": -280,
+        "y": 150
+      },
+      "parameters": {
+        "brightness": 0,
+        "contrast": 1.05,
+        "mode": 2,
+        "steps": 32
+      },
+      "type": "greyscale"
+    },
+    {
+      "name": "height_from_sprite",
+      "node_position": {
+        "x": -70,
+        "y": 150
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 2,
+        "param2": 1
+      },
+      "type": "fast_blur"
+    },
+    {
+      "name": "normal_from_sprite",
+      "node_position": {
+        "x": 150,
+        "y": 80
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 0.45,
+        "param2": 0,
+        "param4": 1
+      },
+      "type": "normal_map"
+    },
+    {
+      "name": "ao_from_sprite",
+      "node_position": {
+        "x": 150,
+        "y": 250
+      },
+      "parameters": {
+        "param0": 9,
+        "param1": 16,
+        "param2": 0.35,
+        "param3": 1
+      },
+      "type": "occlusion2"
+    },
+    {
+      "name": "metallic_zero",
+      "node_position": {
+        "x": 90,
+        "y": -220
+      },
+      "parameters": {
+        "color": 0
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "name": "subject_roughness",
+      "node_position": {
+        "x": 90,
+        "y": -110
+      },
+      "parameters": {
+        "color": 0.76
+      },
+      "type": "uniform_greyscale"
+    },
+    {
+      "export_paths": {},
+      "name": "Material",
+      "node_position": {
+        "x": 420,
+        "y": 20
+      },
+      "parameters": {
+        "albedo_color": {
+          "a": 1,
+          "b": 1,
+          "g": 1,
+          "r": 1,
+          "type": "Color"
+        },
+        "ao": 1,
+        "depth_scale": 0.035,
+        "emission_energy": 1,
+        "metallic": 1,
+        "normal": 1,
+        "roughness": 1,
+        "size": 9,
+        "sss": 0
+      },
+      "type": "material"
+    }
+  ]
+}

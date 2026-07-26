@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B04-masonry-interior-sprite-first-MM-v001",
+  "result": "FAIL",
+  "thresholds": {
+    "albedoMaeMax": 3,
+    "albedoCorrelationMin": 0.99,
+    "heightStdDevMin": 1,
+    "normalXYStdDevMin": 0.35,
+    "roughnessByteTolerance": 1
+  },
+  "materials": [
+    {
+      "id": "wall-ashlar-dressed",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 38.9791,
+        "normalStdDevRgb": [
+          15.6377,
+          27.2411,
+          7.3701
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.71,
+          198.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 199,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "wall-rough-hewn-block",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 33.6931,
+        "normalStdDevRgb": [
+          12.7444,
+          25.1428,
+          7.2207
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.8712,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "wall-dry-stack-fieldstone",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 61.4574,
+        "normalStdDevRgb": [
+          25.674,
+          37.0632,
+          14.7394
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          252.759,
+          219.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 219,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "wall-brick",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 11.2789,
+        "normalStdDevRgb": [
+          6.2796,
+          9.8322,
+          0.7848
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.3349,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "wall-plastered-rubble",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 0.7105,
+        "normalStdDevRgb": [
+          0.1893,
+          0.2297,
+          0.4286
+        ],
+        "broadSignalPresent": false
+      },
+      "orm": {
+        "meanRgb": [
+          254.6097,
+          224.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 224,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "floor-flagstone",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 35.4643,
+        "normalStdDevRgb": [
+          20.3427,
+          21.0223,
+          7.4515
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.874,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "floor-plank",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 26.8732,
+        "normalStdDevRgb": [
+          5.3785,
+          25.7931,
+          5.1809
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.9197,
+          183.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 184,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "floor-packed-earth",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 0.5481,
+        "normalStdDevRgb": [
+          0.1913,
+          0.2085,
+          0.4127
+        ],
+        "broadSignalPresent": false
+      },
+      "orm": {
+        "meanRgb": [
+          254.6342,
+          229.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 230,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "floor-cobble",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.0,
+        "pixelCorrelation": 1.0,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b04-masonry-interior-v001/b04-masonry-interior-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 49.185,
+        "normalStdDevRgb": [
+          32.0227,
+          31.8847,
+          9.9176
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          252.6692,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

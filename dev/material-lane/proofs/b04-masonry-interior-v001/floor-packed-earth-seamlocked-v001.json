@@ -1,0 +1,21 @@
+{
+  "schema": "genesis.material-source-seam-repair.v1",
+  "materialId": "floor-packed-earth",
+  "source": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-packed-earth-source-v001.png",
+  "output": "dev/material-lane/source-sprites/b04-masonry-interior-v001/floor-packed-earth-seamlocked-v001.png",
+  "repeat": "dev/material-lane/proofs/b04-masonry-interior-v001/floor-packed-earth-seamlocked-v001-repeat-3x3.png",
+  "method": "opposite-edge pair average with inward cosine feather",
+  "repairBandPixels": 24,
+  "repairBandFractionPerEdge": 0.0191,
+  "declaredScope": "continuous non-periodic top-down packed-earth field",
+  "before": {
+    "xBoundaryToInternalP95": 1.107,
+    "yBoundaryToInternalP95": 1.062,
+    "boundaryJumpGate": false
+  },
+  "after": {
+    "xBoundaryToInternalP95": 0.0,
+    "yBoundaryToInternalP95": 0.0,
+    "boundaryJumpGate": true
+  }
+}

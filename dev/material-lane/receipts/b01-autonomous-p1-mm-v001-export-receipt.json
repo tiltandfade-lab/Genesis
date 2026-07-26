@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B01-P1-approved-source-to-MM-v001",
+  "generatedAt": "2026-07-24T22:17:53.368Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/b01-autonomous-p1-v001/b01-autonomous-roof-plank-batten-v001.ptex": "9ebbf45bdb72d04b086269a912ee0da81518f51acec732e9d891d50027b7487b",
+    "dev/material-lane/graphs/b01-autonomous-p1-v001/b01-autonomous-roof-slate-v001.ptex": "09c9abb70edab91b0e4807500ffc5da8caf6b4f02ba72f350504cb3d3993afa9"
+  },
+  "outputHashes": {
+    "b01-autonomous-roof-plank-batten-v001_albedo.png": "3b735e275ff03ebb21ffd34ea6fca5647922e17087d57b9341864920cdd18c10",
+    "b01-autonomous-roof-plank-batten-v001_heightmap.png": "9279a3781e9013e318cbccf1c112939f4c36ee6e89876b41568c4d82d6a8c877",
+    "b01-autonomous-roof-plank-batten-v001_normal.png": "61bfbe94fa7bf5c8f34e7923bac35906c0c3a57ac38f894c3ff1da5bcd9b18fb",
+    "b01-autonomous-roof-plank-batten-v001_orm.png": "d1281053517aa509f864c89cdb48f181a57dec3e811d08e27ba43a4138f1a6ce",
+    "b01-autonomous-roof-slate-v001_albedo.png": "51438ddb19e630565d1366cfda0e144e2a6e3795c54dfa9cbd6cefc2d9062a5e",
+    "b01-autonomous-roof-slate-v001_heightmap.png": "8b0c49965f477ddad9c775846b8d59ae2c0883edc781dd1cb0a7c62688043535",
+    "b01-autonomous-roof-slate-v001_normal.png": "e3f6dbeb9fdfa5e5f1f9e97a8e958e9689abec493113fab9ec0b2028934bbca7",
+    "b01-autonomous-roof-slate-v001_orm.png": "3faa2962fbdd8996e12909295a6a1dd25f504c83d0cb7d62a5be47842120e555"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 8,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b01-autonomous-p1-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b01-autonomous-p1-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

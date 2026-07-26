@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Genesis — Sprite-first Material Experiment</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --black: #0b0c0b;
+      --panel: #171713;
+      --line: #403a31;
+      --ink: #eee7d8;
+      --muted: #9f9687;
+      --gold: #d0a550;
+      --green: #90aa83;
+      --blue: #8da4bd;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--black); color: var(--ink); }
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: .01em;
+    }
+    #sheet { width: 2400px; margin: 0 auto; padding: 42px; }
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 30px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 22px;
+      margin-bottom: 24px;
+    }
+    .eyebrow { color: var(--gold); font-size: 15px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 5px 0 0; font: 500 46px/1.06 Georgia, serif; }
+    .batch { color: var(--muted); font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: right; }
+    .law {
+      margin: 0 0 28px;
+      padding: 14px 18px;
+      border-left: 4px solid var(--gold);
+      background: #15140f;
+      color: #d8cfbd;
+      font: 18px/1.45 Georgia, serif;
+    }
+    .law strong { color: #f0ca7e; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: start; }
+    .card {
+      min-width: 0;
+      background: linear-gradient(180deg, #1b1b17, #121310);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 40px #0008;
+      padding: 20px;
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 70px;
+      margin-bottom: 15px;
+    }
+    .candidate-id { color: var(--gold); font: 700 12px/1.2 ui-monospace, monospace; letter-spacing: .08em; }
+    h2 { margin: 4px 0 3px; font: 500 26px/1.08 Georgia, serif; }
+    .status { color: var(--green); font: 11px/1.3 ui-monospace, monospace; text-transform: uppercase; }
+    .roughness { color: var(--muted); font: 12px/1.4 ui-monospace, monospace; text-align: right; }
+    .maps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    figure { margin: 0; min-width: 0; }
+    .map-frame, .render-frame {
+      position: relative;
+      overflow: hidden;
+      background: #0d0e0d;
+      border: 1px solid #494236;
+    }
+    .map-frame { aspect-ratio: 1; }
+    .map-frame > img { width: 100%; height: 100%; display: block; object-fit: cover; image-rendering: pixelated; }
+    .repeat {
+      width: 100%;
+      height: 100%;
+      background-repeat: repeat;
+      background-size: 33.333% 33.333%;
+      image-rendering: pixelated;
+    }
+    figcaption {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 6px;
+      color: var(--muted);
+      font: 10px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .channel { color: var(--blue); text-transform: none; letter-spacing: 0; }
+    .renders { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+    .render-frame { aspect-ratio: 16 / 11; }
+    .render-frame img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .render-label {
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      padding: 4px 7px;
+      background: #080908d9;
+      color: #eee5d2;
+      border: 1px solid #50483b;
+      font: 9px/1.2 ui-monospace, monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .verdict {
+      margin-top: 15px;
+      padding-top: 12px;
+      border-top: 1px solid #353129;
+      color: #c8c0b0;
+      font: 13px/1.45 Georgia, serif;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding-top: 22px;
+      color: #82796b;
+      font: 12px/1.4 ui-monospace, monospace;
+    }
+    body.single #sheet { width: 1540px; padding: 36px; }
+    body.single .cards { grid-template-columns: 1fr; }
+    body.single .card { padding: 28px; }
+    body.single .card-head { min-height: 0; }
+    body.single h2 { font-size: 34px; }
+    body.single .maps { grid-template-columns: repeat(6, 1fr); }
+    body.single .renders { grid-template-columns: 1fr 1fr; }
+    body.single .render-frame { aspect-ratio: 16 / 9; }
+  </style>
+</head>
+<body>
+  <main id="sheet">
+    <header class="masthead">
+      <div>
+        <div class="eyebrow">Genesis · Controlled pipeline proof</div>
+        <h1>Sprite First → Material Maker Depth Second</h1>
+      </div>
+      <div class="batch">SPRITE-FIRST-MATERIAL-V001<br>3 source sprites · MM 1.3 · 512 px · Godot 4 ORM</div>
+    </header>
+    <p class="law"><strong>Controlled rule:</strong> the generated source sprite remains the albedo. Material Maker derives height, normal, and ambient occlusion from that sprite; only roughness changes by subject.</p>
+    <section class="cards" id="cards"></section>
+    <footer class="footer">
+      <span>Left render: source sprite + scalar roughness. Right render: identical albedo and rig + MM normal/AO/ORM.</span>
+      <span>three.js r166 · MeshStandardMaterial · AgX · fixed raking light</span>
+    </footer>
+  </main>
+  <script type="module">
+    import * as THREE from "../../vendor/three/three.module.js";
+
+    const query = new URLSearchParams(location.search);
+    const candidateFilter = query.get("candidate");
+    document.body.classList.toggle("single", Boolean(candidateFilter));
+
+    const manifest = await fetch("../material-lane/manifests/sprite-first-material-experiment-v001.source.json").then((response) => {
+      if (!response.ok) throw new Error(`manifest ${response.status}`);
+      return response.json();
+    });
+    const candidates = manifest.candidates.filter((candidate) => !candidateFilter || candidate.id === candidateFilter);
+    if (!candidates.length) throw new Error(`Unknown candidate ${candidateFilter}`);
+
+    const assetUrl = (repoPath) => `../../${repoPath}`;
+    const outputRoot = "../../dev/material-lane/exports/sprite-first-material-v001/run-a";
+    const mapsFor = (candidate) => {
+      const stem = `sprite-first-${candidate.id}-v001`;
+      return {
+        source: assetUrl(candidate.source),
+        albedo: `${outputRoot}/${stem}_albedo.png`,
+        height: `${outputRoot}/${stem}_heightmap.png`,
+        normal: `${outputRoot}/${stem}_normal.png`,
+        orm: `${outputRoot}/${stem}_orm.png`
+      };
+    };
+
+    function cardMarkup(candidate) {
+      const maps = mapsFor(candidate);
+      const treatment = candidate.materialTreatment;
+      return `
+        <article class="card" data-candidate="${candidate.id}">
+          <header class="card-head">
+            <div>
+              <div class="candidate-id">${candidate.id}</div>
+              <h2>${candidate.label}</h2>
+              <div class="status">deterministic MM export</div>
+            </div>
+            <div class="roughness">roughness ${treatment.roughness.toFixed(2)}<br>metallic 0.00<br>normal 0.45</div>
+          </header>
+          <div class="maps">
+            <figure>
+              <div class="map-frame"><img src="${maps.source}" alt="${candidate.id} generated source sprite"></div>
+              <figcaption><span>Source sprite</span><span>generated</span></figcaption>
+            </figure>
+            <figure>
+              <div class="map-frame"><img src="${maps.albedo}" alt="${candidate.id} MM albedo"></div>
+              <figcaption><span>MM albedo</span><span>sRGB</span></figcaption>
+            </figure>
+            <figure>
+              <div class="map-frame"><div class="repeat" style="background-image:url('${maps.albedo}')"></div></div>
+              <figcaption><span>3×3 repeat</span><span>seam evidence</span></figcaption>
+            </figure>
+            <figure>
+              <div class="map-frame"><img src="${maps.height}" alt="${candidate.id} derived height"></div>
+              <figcaption><span>Derived height</span><span>sprite luma</span></figcaption>
+            </figure>
+            <figure>
+              <div class="map-frame"><img src="${maps.normal}" alt="${candidate.id} derived normal"></div>
+              <figcaption><span>Derived normal</span><span>linear</span></figcaption>
+            </figure>
+            <figure>
+              <div class="map-frame"><img src="${maps.orm}" alt="${candidate.id} ORM"></div>
+              <figcaption><span>ORM</span><span class="channel">R AO · G rough · B metal</span></figcaption>
+            </figure>
+          </div>
+          <div class="renders">
+            <figure>
+              <div class="render-frame" data-render="sprite"><span class="render-label">sprite only · same roughness</span></div>
+              <figcaption><span>Before MM depth</span><span>fixed rig</span></figcaption>
+            </figure>
+            <figure>
+              <div class="render-frame" data-render="depth"><span class="render-label">sprite + MM depth</span></div>
+              <figcaption><span>After MM depth</span><span>normal + AO</span></figcaption>
+            </figure>
+          </div>
+          <div class="verdict">Judge the character of the source at left, then ask whether the right-hand render adds useful tactile separation without replacing or flattening that identity.</div>
+        </article>`;
+    }
+
+    document.querySelector("#cards").innerHTML = candidates.map(cardMarkup).join("");
+
+    const loader = new THREE.TextureLoader();
+    const loadTexture = (url) => new Promise((resolve, reject) => loader.load(url, resolve, undefined, reject));
+    async function loadMaps(candidate) {
+      const urls = mapsFor(candidate);
+      const [albedo, normal, orm] = await Promise.all([
+        loadTexture(urls.albedo),
+        loadTexture(urls.normal),
+        loadTexture(urls.orm)
+      ]);
+      albedo.colorSpace = THREE.SRGBColorSpace;
+      albedo.magFilter = THREE.NearestFilter;
+      albedo.minFilter = THREE.NearestMipmapNearestFilter;
+      normal.colorSpace = THREE.NoColorSpace;
+      orm.colorSpace = THREE.NoColorSpace;
+      normal.magFilter = orm.magFilter = THREE.LinearFilter;
+      normal.minFilter = orm.minFilter = THREE.LinearMipmapLinearFilter;
+      for (const texture of [albedo, normal, orm]) {
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      }
+      return { albedo, normal, orm };
+    }
+
+    function lights(scene) {
+      scene.add(new THREE.HemisphereLight(0xd8d3c5, 0x1a1d22, 0.55));
+      const rake = new THREE.DirectionalLight(0xffd7a3, 3.3);
+      rake.position.set(-5.8, 3.9, 2.2);
+      rake.castShadow = true;
+      rake.shadow.mapSize.set(1024, 1024);
+      rake.shadow.camera.left = rake.shadow.camera.bottom = -6;
+      rake.shadow.camera.right = rake.shadow.camera.top = 6;
+      rake.shadow.bias = -0.0005;
+      scene.add(rake);
+      const cool = new THREE.PointLight(0x9db7e7, 12, 15, 2);
+      cool.position.set(4.5, 4, 4);
+      scene.add(cool);
+    }
+
+    function materialFor(mode, maps, candidate) {
+      const options = {
+        map: maps.albedo,
+        roughness: candidate.materialTreatment.roughness,
+        metalness: 0
+      };
+      if (mode === "depth") {
+        Object.assign(options, {
+          normalMap: maps.normal,
+          aoMap: maps.orm,
+          roughnessMap: maps.orm,
+          metalnessMap: maps.orm,
+          roughness: 1,
+          metalness: 1,
+          aoMapIntensity: 0.82
+        });
+      }
+      const material = new THREE.MeshStandardMaterial(options);
+      if (mode === "depth") material.normalScale.set(0.85, 0.85);
+      return material;
+    }
+
+    function renderScene(frame, mode, maps, candidate) {
+      const width = Math.max(360, Math.round(frame.clientWidth));
+      const height = Math.max(250, Math.round(frame.clientHeight));
+      const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(width, height, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.AgXToneMapping;
+      renderer.toneMappingExposure = 1.02;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x14171a);
+      lights(scene);
+
+      const geometry = new THREE.BoxGeometry(5.2, 4.1, 0.28, 1, 1, 1);
+      geometry.setAttribute("uv1", geometry.attributes.uv.clone());
+      const slab = new THREE.Mesh(geometry, materialFor(mode, maps, candidate));
+      slab.position.y = 2.14;
+      slab.rotation.y = THREE.MathUtils.degToRad(-7);
+      slab.castShadow = slab.receiveShadow = true;
+      scene.add(slab);
+
+      const floor = new THREE.Mesh(
+        new THREE.PlaneGeometry(18, 18),
+        new THREE.MeshStandardMaterial({ color: 0x2c2d2b, roughness: 0.95, metalness: 0 })
+      );
+      floor.rotation.x = -Math.PI / 2;
+      floor.receiveShadow = true;
+      scene.add(floor);
+
+      const camera = new THREE.PerspectiveCamera(27, width / height, 0.1, 100);
+      camera.position.set(4.5, 3.45, 7.6);
+      camera.lookAt(0, 2.05, 0);
+      renderer.render(scene, camera);
+
+      const image = new Image();
+      image.alt = `${candidate.id} ${mode} fixed-rig render`;
+      image.src = renderer.domElement.toDataURL("image/png");
+      frame.prepend(image);
+      renderer.dispose();
+      renderer.forceContextLoss();
+      scene.traverse((object) => {
+        object.geometry?.dispose?.();
+        if (object.material && !Array.isArray(object.material)) object.material.dispose?.();
+      });
+      return { mode, width, height };
+    }
+
+    const renderReport = [];
+    for (const candidate of candidates) {
+      const maps = await loadMaps(candidate);
+      const card = document.querySelector(`[data-candidate="${candidate.id}"]`);
+      const renders = [];
+      for (const frame of card.querySelectorAll("[data-render]")) {
+        renders.push(renderScene(frame, frame.dataset.render, maps, candidate));
+      }
+      renderReport.push({ candidateId: candidate.id, renders });
+    }
+    await document.fonts.ready;
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    window.__renderReport = {
+      threeRevision: THREE.REVISION,
+      renderer: "WebGLRenderer",
+      material: "MeshStandardMaterial",
+      toneMapping: "AgXToneMapping",
+      comparison: "same albedo, geometry, roughness, camera, and lights; MM normal/AO enabled only on depth render",
+      candidates: renderReport
+    };
+    window.__ready = true;
+  </script>
+</body>
+</html>

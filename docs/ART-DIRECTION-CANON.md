@@ -1704,3 +1704,26 @@ Binding consequences:
 The current sconce and smooth flicker are accepted as passable for this CL-R1 checkpoint. Flicker
 polish remains open; this is not permission to remove its deterministic proof or silently promote
 the current motion as the final open-flame treatment.
+
+## SPRITE-FIRST MATERIAL AUTHORING (Adam, 2026-07-24 — binding; verbatim)
+
+> "alright switched to a lower model and immediately ran into problems. so fable may have decided
+> that materials shouldn't be built sprite first, but I am overriding that immediately, sprites
+> first, materials layered on those sprites second. i like the richness of character that the
+> sprites give us. Just for science, can you generate 3 different sprites and then just do 3
+> different materials so I can make this decision with some evidence?"
+
+Binding consequences:
+
+- A new base material begins as a Genesis surface sprite. That sprite establishes the color,
+  construction character, painterly pixel treatment, and play-distance read.
+- Material Maker is the second pass. It imports the approved sprite as albedo and derives or
+  authors structural height, normal, AO, roughness, and related PBR channels on top. It may not
+  replace the sprite with a procedurally invented albedo.
+- Source-sprite and derived-material evidence must be shown together. The controlled comparison
+  keeps albedo, geometry, camera, roughness, and light fixed and changes only the MM depth channels.
+- Illustration grain, outlines, and painted shading are not automatically physical relief. If a
+  direct luminance conversion embosses those marks, the depth graph must isolate broader
+  construction structure while preserving the sprite.
+- Required repeat axes are source-sprite acceptance gates. MM derivation does not launder a visible
+  source seam into a production material.

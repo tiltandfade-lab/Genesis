@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B02-deck-edge-culture-candidates-MM-v001",
+  "result": "PASS",
+  "thresholds": {
+    "albedoMaeMax": 3,
+    "albedoCorrelationMin": 0.99,
+    "heightStdDevMin": 1,
+    "normalXYStdDevMin": 0.35,
+    "roughnessByteTolerance": 1
+  },
+  "materials": [
+    {
+      "id": "institutional-dressed-ashlar",
+      "culture": "Institutional",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.7689,
+        "pixelCorrelation": 0.9968,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b02-deck-edge-selected-v001/b02-deck-edge-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 42.345,
+        "normalStdDevRgb": [
+          19.0808,
+          33.1382,
+          10.964
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.3127,
+          193.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 194,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "institutional-frontier-coursed",
+      "culture": "Institutional",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 1.1414,
+        "pixelCorrelation": 0.997,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b02-deck-edge-selected-v001/b02-deck-edge-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 59.3021,
+        "normalStdDevRgb": [
+          23.1256,
+          31.0818,
+          13.616
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.1965,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "upland-fitted-rubble-upstand",
+      "culture": "Upland",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 1.7255,
+        "pixelCorrelation": 0.9953,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b02-deck-edge-selected-v001/b02-deck-edge-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 51.6666,
+        "normalStdDevRgb": [
+          26.6391,
+          49.2606,
+          15.8906
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          252.066,
+          219.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 219,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "upland-heavy-timber-edge",
+      "culture": "Upland",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 1.6042,
+        "pixelCorrelation": 0.9984,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b02-deck-edge-selected-v001/b02-deck-edge-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 57.2547,
+        "normalStdDevRgb": [
+          42.4934,
+          19.1535,
+          15.8878
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          252.8043,
+          183.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 184,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "upland-timber-cribbed-rubble",
+      "culture": "Upland",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 2.557,
+        "pixelCorrelation": 0.9957,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b02-deck-edge-selected-v001/b02-deck-edge-selected-source-receipt-v001.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 58.918,
+        "normalStdDevRgb": [
+          42.3956,
+          47.6783,
+          18.7508
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          251.2368,
+          198.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 199,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

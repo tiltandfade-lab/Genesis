@@ -1,0 +1,19 @@
+{
+  "schema": "genesis.material-source-seam-repair.v1",
+  "source": "dev/material-lane/source-sprites/b01-fast-lane-v001/timber-structural-grain-source-v001.png",
+  "output": "dev/material-lane/source-sprites/b01-fast-lane-v001/timber-structural-grain-seamlocked-v001.png",
+  "method": "opposite-edge pair average with inward cosine feather",
+  "repair_band_pixels": 48,
+  "repair_band_fraction_per_edge": 0.0383,
+  "construction_safe_scope": "continuous non-periodic fields only",
+  "before": {
+    "x_boundary_to_internal_p95": 1.244,
+    "y_boundary_to_internal_p95": 1.63,
+    "boundary_jump_gate": false
+  },
+  "after": {
+    "x_boundary_to_internal_p95": 0.0,
+    "y_boundary_to_internal_p95": 0.0,
+    "boundary_jump_gate": true
+  }
+}

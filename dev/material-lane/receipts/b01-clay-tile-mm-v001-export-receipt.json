@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-CLAY-TILE-MM-V001",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "graph": {
+    "path": "dev/material-lane/graphs/b01-clay-tile-mm-v001/b01-roof-clay-tile-v001.ptex",
+    "sha256": "f9f4097ba740cbe2536a9563fdff200ed10333fa44d3c55fefb5453f5ef79028"
+  },
+  "outputHashes": {
+    "b01-roof-clay-tile-v001_albedo.png": "5305ebb48d348d1f52bd30ebc475465cf85ac45ef78cab2c63a47682dc9c6f65",
+    "b01-roof-clay-tile-v001_heightmap.png": "32e9b98c3dbcc53064692171fe3e80e387511d143e633cc4c4229825ce25345b",
+    "b01-roof-clay-tile-v001_normal.png": "58d0bad7ee95272556b92a7339acce76adb655071920143ab5ed1a95720c7dc6",
+    "b01-roof-clay-tile-v001_orm.png": "6ea63ccd9ba6613467fef50d235ab43d6264c0cb85d60572d2fc521760914493"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 4
+  }
+}

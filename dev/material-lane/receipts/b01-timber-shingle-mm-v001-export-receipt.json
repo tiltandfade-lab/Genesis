@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "assetId": "B01-ROOF-TIMBER-SHINGLE-MM-V001",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "graph": {
+    "path": "dev/material-lane/graphs/b01-timber-shingle-mm-v001/b01-roof-timber-shingle-v001.ptex",
+    "sha256": "32c2372aac2d30d17452ac888b6290acf9b6595248e986b573fe8f047195fef6"
+  },
+  "outputHashes": {
+    "b01-roof-timber-shingle-v001_albedo.png": "e6fc3c77c7d010bd5ac67acd415e608d65cb2e1909687620bee3a26a88d3c784",
+    "b01-roof-timber-shingle-v001_heightmap.png": "c5ba3c61dc4508b78a43bf1ae79db62caad02ded32725cce827e162a66e10c41",
+    "b01-roof-timber-shingle-v001_normal.png": "fcc846c6730f1f4bb27582b3a9b15f4967995817803af8f3397aa65998b1ce63",
+    "b01-roof-timber-shingle-v001_orm.png": "64cdb840dda1c474c903b9714446b9411c252c38f20145bca9355959a31165d2"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 4,
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b01-timber-shingle-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b01-timber-shingle-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

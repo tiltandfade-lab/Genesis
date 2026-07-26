@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "SPRITE-FIRST-MATERIAL-V001",
+  "purpose": "Compare generated surface sprites directly with Material Maker depth layered on top.",
+  "controlledRule": "The source sprite remains the albedo. Material Maker derives height, normal, and AO from it and supplies subject-appropriate roughness.",
+  "candidates": [
+    {
+      "id": "plank-siding",
+      "label": "Horizontal plank siding",
+      "generationMode": "built-in-imagegen",
+      "prompt": "Style block: Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from.\n\nCLEAN-SHAPES law: clean value shapes FIRST, grit as seasoning. Dither confined to shadow regions and edges — never mid-tones; large flat value planes carry the form; silhouette-first. Every sheet is JUDGED AT 50% ZOOM (play distance) — grit that reads as noise at half size fails.\n\nGenerate a square, front-on, orthographic, seamless, edge-to-edge material source sprite. Neutral albedo only: no cast shadow, directional lighting, vignette, frame, labels, props, scene context, damage story, moss, dirt, soot, or weather narrative. Keep large value families readable and the surface construction unmistakable at half size.\n\nSubject: warm aged oak horizontal plank siding, broad boards with restrained handmade width variation, narrow dark joints, sparse wood grain, sturdy frontier-fantasy construction, no nails as focal points.",
+      "source": "dev/material-lane/source-sprites/experiment-v001/plank-siding-source-v001.png",
+      "sourceSha256": "fc9079bf9c24fc27f01bca6c402862b448e74b45e5736acacc81544ac72ab6a7",
+      "graph": "dev/material-lane/graphs/experiments/sprite-first-v001/sprite-first-plank-siding-v001.ptex",
+      "graphSha256": "780aa77bb6306c3ccb74c33831241d517b176de7580134f6c5a9cfb02e8d3fa3",
+      "materialTreatment": {
+        "albedo": "source sprite unchanged by the graph",
+        "height": "greyscale(source sprite), contrast 1.05, 32 steps, fast blur sigma 2",
+        "normalStrength": 0.45,
+        "ambientOcclusionStrength": 0.35,
+        "roughness": 0.66,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "timber-shingles",
+      "label": "Overlapped timber shingles",
+      "generationMode": "built-in-imagegen",
+      "prompt": "Style block: Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from.\n\nCLEAN-SHAPES law: clean value shapes FIRST, grit as seasoning. Dither confined to shadow regions and edges — never mid-tones; large flat value planes carry the form; silhouette-first. Every sheet is JUDGED AT 50% ZOOM (play distance) — grit that reads as noise at half size fails.\n\nGenerate a square, front-on, orthographic, seamless, edge-to-edge material source sprite. Neutral albedo only: no cast shadow, directional lighting, vignette, frame, labels, props, scene context, damage story, moss, dirt, soot, or weather narrative. Keep large value families readable and the surface construction unmistakable at half size.\n\nSubject: warm brown split-timber roof shingles in coherent overlapping horizontal courses, slight handmade width and edge variation, readable individual pieces, restrained grain, no broken or missing shingles.",
+      "source": "dev/material-lane/source-sprites/experiment-v001/timber-shingles-source-v001.png",
+      "sourceSha256": "0880629d54178b8c37148bb02a58ac58864fcefeb36a3a9e993f7b3ca4aaf626",
+      "graph": "dev/material-lane/graphs/experiments/sprite-first-v001/sprite-first-timber-shingles-v001.ptex",
+      "graphSha256": "7cbceb36ce238f3e84f6a3b6d4f1ec0553d241dbeb77dee683a7b043e5be53ce",
+      "materialTreatment": {
+        "albedo": "source sprite unchanged by the graph",
+        "height": "greyscale(source sprite), contrast 1.05, 32 steps, fast blur sigma 2",
+        "normalStrength": 0.45,
+        "ambientOcclusionStrength": 0.35,
+        "roughness": 0.76,
+        "metallic": 0
+      }
+    },
+    {
+      "id": "clay-tiles",
+      "label": "Fired clay roof tiles",
+      "generationMode": "built-in-imagegen",
+      "prompt": "Style block: Pixel-art sprite rendering (visible pixel grid, retro game-sprite look, NOT a smooth painterly illustration, NOT cartoony — proportions stay grounded and true-to-tone even rendered at pixel scale). traditional Monster Manual fantasy illustration turned pixel-sprite, warm parchment-adjacent palette, painterly dithered shading, medium value contrast, no genre-bending — this is Genesis's actual default/unreskinned fantasy world, the baseline every other realm departs from.\n\nCLEAN-SHAPES law: clean value shapes FIRST, grit as seasoning. Dither confined to shadow regions and edges — never mid-tones; large flat value planes carry the form; silhouette-first. Every sheet is JUDGED AT 50% ZOOM (play distance) — grit that reads as noise at half size fails.\n\nGenerate a square, front-on, orthographic, seamless, edge-to-edge material source sprite. Neutral albedo only: no cast shadow, directional lighting, vignette, frame, labels, props, scene context, damage story, moss, dirt, soot, or weather narrative. Keep large value families readable and the surface construction unmistakable at half size.\n\nSubject: warm terracotta fired-clay roof tiles in coherent overlapping courses, subtly irregular handmade profiles, readable curved tile rhythm, restrained color variation, no cracks, chips, lichen, or missing tiles.",
+      "source": "dev/material-lane/source-sprites/experiment-v001/clay-tiles-source-v001.png",
+      "sourceSha256": "ef99bb9e67d5df7384520c4207c3510e8c9ca41d290a9ca558d13ba068d1601a",
+      "graph": "dev/material-lane/graphs/experiments/sprite-first-v001/sprite-first-clay-tiles-v001.ptex",
+      "graphSha256": "65b4e4efc23e96ac2222caf7fbf4c3c195a0d6c78a6532f5b73d46ee4756e882",
+      "materialTreatment": {
+        "albedo": "source sprite unchanged by the graph",
+        "height": "greyscale(source sprite), contrast 1.05, 32 steps, fast blur sigma 2",
+        "normalStrength": 0.45,
+        "ambientOcclusionStrength": 0.35,
+        "roughness": 0.7,
+        "metallic": 0
+      }
+    }
+  ]
+}

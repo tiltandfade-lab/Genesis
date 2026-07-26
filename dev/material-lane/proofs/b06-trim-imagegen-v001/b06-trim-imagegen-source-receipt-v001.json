@@ -1,0 +1,223 @@
+{
+  "schema": "genesis.imagegen-trim-source-gate.v1",
+  "axisContract": "repeat U; clamp V",
+  "threshold": "wrapped U boundary <= 1.10x ordinary internal X p95 jump",
+  "results": [
+    {
+      "id": "trim-institutional-plain-band",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-plain-band-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-plain-band-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 2.4689,
+        "internalXJumpP95": 5.8017,
+        "xBoundaryToInternalP95": 0.4255,
+        "boundaryJumpGate": true
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 5.7648,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-institutional-base-course",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-base-course-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-base-course-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 5.3868,
+        "internalXJumpP95": 4.3124,
+        "xBoundaryToInternalP95": 1.2492,
+        "boundaryJumpGate": false
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 4.2965,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-institutional-cornice-belt",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-cornice-belt-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-cornice-belt-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 4.4947,
+        "internalXJumpP95": 6.7308,
+        "xBoundaryToInternalP95": 0.6678,
+        "boundaryJumpGate": true
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 6.6802,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-institutional-coping-cap",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-coping-cap-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-coping-cap-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 5.7812,
+        "internalXJumpP95": 4.5567,
+        "xBoundaryToInternalP95": 1.2687,
+        "boundaryJumpGate": false
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 4.5509,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-institutional-stair-nosing",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-stair-nosing-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-stair-nosing-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 3.4891,
+        "internalXJumpP95": 1.4117,
+        "xBoundaryToInternalP95": 2.4715,
+        "boundaryJumpGate": false
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 1.385,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-institutional-curb-retaining",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-curb-retaining-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-institutional-curb-retaining-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 5.5054,
+        "internalXJumpP95": 19.153,
+        "xBoundaryToInternalP95": 0.2874,
+        "boundaryJumpGate": true
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 18.3151,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-upland-plain-band",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-plain-band-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-plain-band-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 5.8582,
+        "internalXJumpP95": 10.3704,
+        "xBoundaryToInternalP95": 0.5649,
+        "boundaryJumpGate": true
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 10.294,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-upland-base-course",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-base-course-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-base-course-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 7.3241,
+        "internalXJumpP95": 9.4668,
+        "xBoundaryToInternalP95": 0.7737,
+        "boundaryJumpGate": true
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 9.4668,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-upland-cornice-belt",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-cornice-belt-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-cornice-belt-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 5.833,
+        "internalXJumpP95": 8.6177,
+        "xBoundaryToInternalP95": 0.6769,
+        "boundaryJumpGate": true
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 8.6177,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-upland-coping-cap",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-coping-cap-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-coping-cap-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 7.693,
+        "internalXJumpP95": 8.2218,
+        "xBoundaryToInternalP95": 0.9357,
+        "boundaryJumpGate": true
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 7.9617,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-upland-stair-nosing",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-stair-nosing-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-stair-nosing-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 14.9875,
+        "internalXJumpP95": 17.5666,
+        "xBoundaryToInternalP95": 0.8532,
+        "boundaryJumpGate": true
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 17.3486,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "trim-upland-curb-retaining",
+      "source": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-curb-retaining-source-v001.png",
+      "rawSource": "dev/material-lane/source-sprites/b06-trim-imagegen-v001/trim-upland-curb-retaining-source-raw-v001.png",
+      "selectionMethod": "ImageGen source normalized to 1024; U-only opposite-edge cosine seam lock (64 px); V remains clamp-only",
+      "rawMetrics": {
+        "leftRightRms": 21.4551,
+        "internalXJumpP95": 16.3543,
+        "xBoundaryToInternalP95": 1.3119,
+        "boundaryJumpGate": false
+      },
+      "metrics": {
+        "leftRightRms": 0.0,
+        "internalXJumpP95": 16.229,
+        "xBoundaryToInternalP95": 0.0,
+        "boundaryJumpGate": true
+      }
+    }
+  ]
+}

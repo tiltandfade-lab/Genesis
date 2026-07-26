@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B05-makeshift-sprite-first-MM-v001",
+  "generatedAt": "2026-07-25T04:08:17.606Z",
+  "materialMaker": {
+    "version": "1.3",
+    "binary": "/Applications/Material Maker 1.3.app/Contents/MacOS/material_maker",
+    "binarySha256": "597b199fae597c4f7af27c894018e444e1ba5c1ccb399f1e738e2552ebbe5feb",
+    "target": "Godot/Godot 4 ORM",
+    "resolution": 512
+  },
+  "sourceGraphs": {
+    "dev/material-lane/graphs/b05-makeshift-mm-v001/b05-makeshift-bone-tusk-stakes-v001.ptex": "1bac4a6a79dcb34f2acfaeb7ef39794082e86282a7e02d2325c6f1a12c460fc2",
+    "dev/material-lane/graphs/b05-makeshift-mm-v001/b05-makeshift-mud-daub-v001.ptex": "945fb9bb8782c9cc3b5863f3787ad63829555e6c1702f792d1e71a9b41c819e7",
+    "dev/material-lane/graphs/b05-makeshift-mm-v001/b05-makeshift-scavenged-plank-v001.ptex": "eaa6c35ac394f9d80910be3cb444ceaa3ddedc5dbd558936feb07ceb61a30454",
+    "dev/material-lane/graphs/b05-makeshift-mm-v001/b05-makeshift-stretched-hide-v001.ptex": "9a24966dce5163604cc4d255f54038349f613a3781c8f77dcce1bdb96841a9f5",
+    "dev/material-lane/graphs/b05-makeshift-mm-v001/b05-makeshift-swamp-moss-thatch-v001.ptex": "ee87fd81d713f4c44616b5fc394a50b1ec29579e49206247a836bbea874b9554",
+    "dev/material-lane/graphs/b05-makeshift-mm-v001/b05-makeshift-wattle-v001.ptex": "7d3bf1acf3eaea051351132a9ee2adc8d81143f210a04fe6bc38437fb28c215d"
+  },
+  "outputHashes": {
+    "b05-makeshift-bone-tusk-stakes-v001_albedo.png": "a9057f21565de0cf751a9e511613fe04ce2d6dd81d0f9c889cad966f8d8bc442",
+    "b05-makeshift-bone-tusk-stakes-v001_heightmap.png": "2d9be8c2c970c2e18036406d70fdcd25cae174e15a32175fc63d99ed4a9819f2",
+    "b05-makeshift-bone-tusk-stakes-v001_normal.png": "1bffa5c390df180b41cc49963a63fdf441b8a19ccb044877f16c6050165e19d9",
+    "b05-makeshift-bone-tusk-stakes-v001_orm.png": "d0d4588e2eff1b650194cf82bf037643f8d040fd70313dfd73b9e65aaacf7ea0",
+    "b05-makeshift-mud-daub-v001_albedo.png": "a28ba1389beec8e98990e60ec6371c4f82e03b6a66c7dec55a3f2edc30538438",
+    "b05-makeshift-mud-daub-v001_heightmap.png": "42a332970fd406c683ef813f96656198181ea96aa80bec9e422b2a03fcd80c42",
+    "b05-makeshift-mud-daub-v001_normal.png": "e1cb60fb34d169348899e70f465806f2d058080889f3871f0a7d5d5c8b33237d",
+    "b05-makeshift-mud-daub-v001_orm.png": "091e1be8ec81c2d223bd96a6291ad57b87b258297d592ca99119d084e4ec58be",
+    "b05-makeshift-scavenged-plank-v001_albedo.png": "87989b1db878fe256fe5e5e5f4fa8ea9af6c80113ec61ac0186119b61262e217",
+    "b05-makeshift-scavenged-plank-v001_heightmap.png": "0ae7c3ad8e947821e090374df0f9f580281cf566d783150d9940ac536a350892",
+    "b05-makeshift-scavenged-plank-v001_normal.png": "88af93ead95b31a37b4f971ca94b186b2ed1a38c5117d73dd75ae3f8c902bc68",
+    "b05-makeshift-scavenged-plank-v001_orm.png": "045c9b34ac7f4ba505d7dd3ea777b8440be47429720e90580518962465e149e5",
+    "b05-makeshift-stretched-hide-v001_albedo.png": "f332d2488cb9bf671c36b38991de853d974c9b208e77dd58cdd41b963ee12eaa",
+    "b05-makeshift-stretched-hide-v001_heightmap.png": "518d4df4d525ec65fcf37ec07698f0916930f349c3eaeeed9a424f8258ae320d",
+    "b05-makeshift-stretched-hide-v001_normal.png": "3a8d5413373f8f462284cbb8814f7d2ac57707196f93762ad59daac9d433ca39",
+    "b05-makeshift-stretched-hide-v001_orm.png": "26ec7429b41c135f0f526abd08bec52b289bbd5f802f816aedd4340576bd7332",
+    "b05-makeshift-swamp-moss-thatch-v001_albedo.png": "1a554cfb146cbcd681fb0a27880aed722d127eb5f8ab1469a20a1ec0f2ca399b",
+    "b05-makeshift-swamp-moss-thatch-v001_heightmap.png": "eb9deeabe196c0689bb26a8a1cfae377d93f4fc760d9cdeeef42c696eac7eb8e",
+    "b05-makeshift-swamp-moss-thatch-v001_normal.png": "c14fbefad28838ad7ac5e5e13135e7e2900b3384e779c889241f4c582746978e",
+    "b05-makeshift-swamp-moss-thatch-v001_orm.png": "229ba3ae3d73fae4eb8596276a0da8705fdb5ec6418a8be0d782500d7399684f",
+    "b05-makeshift-wattle-v001_albedo.png": "2ffaedcc8eea50c58f3a491a7443ce780cb4de1be8968c97aeb4d9d5e62811ce",
+    "b05-makeshift-wattle-v001_heightmap.png": "5bb32cec4c0923d1aee8c2a5a55d0be6ff416adea9683c271ba4341d74903f50",
+    "b05-makeshift-wattle-v001_normal.png": "3b2150cfe0ae4ebc1bdbe5c5a40cfec239b47d79379ecb4e137de56336a8fa9d",
+    "b05-makeshift-wattle-v001_orm.png": "b144e257bd251c7b2438cb91fed136c930513a4bab1dc8c3a49f96ac95a949d1"
+  },
+  "determinism": {
+    "runs": [
+      "run-a",
+      "run-b"
+    ],
+    "byteIdentical": true,
+    "comparedFileCount": 24,
+    "requiredChannels": [
+      "albedo",
+      "height",
+      "normal",
+      "orm"
+    ],
+    "timeoutRecoveries": {
+      "runA": false,
+      "runB": false
+    }
+  },
+  "reviewOutputRoot": "dev/material-lane/exports/b05-makeshift-mm-v001/run-a",
+  "comparisonOutputRoot": "dev/material-lane/exports/b05-makeshift-mm-v001/run-b",
+  "logs": [
+    "run-a-material-maker.log",
+    "run-b-material-maker.log"
+  ]
+}

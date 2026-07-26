@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "B03-exterior-ground-sprite-first-MM-v001",
+  "result": "FAIL",
+  "thresholds": {
+    "albedoMaeMax": 3,
+    "albedoCorrelationMin": 0.99,
+    "heightStdDevMin": 1,
+    "normalXYStdDevMin": 0.35,
+    "roughnessByteTolerance": 1
+  },
+  "materials": [
+    {
+      "id": "grass-meadow",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 1.5983,
+        "pixelCorrelation": 0.9982,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b03-exterior-ground-v001/b03-exterior-ground-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 2.0302,
+        "normalStdDevRgb": [
+          0.5404,
+          0.6036,
+          0.342
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.5083,
+          224.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 224,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "worn-path",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 1.0067,
+        "pixelCorrelation": 0.9992,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b03-exterior-ground-v001/b03-exterior-ground-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 1.3365,
+        "normalStdDevRgb": [
+          0.1732,
+          0.174,
+          0.4975
+        ],
+        "broadSignalPresent": false
+      },
+      "orm": {
+        "meanRgb": [
+          254.5273,
+          214.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 214,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "mud",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 0.914,
+        "pixelCorrelation": 0.997,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b03-exterior-ground-v001/b03-exterior-ground-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 18.3461,
+        "normalStdDevRgb": [
+          12.109,
+          12.8109,
+          1.5822
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.2266,
+          168.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 168,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "gravel-scree",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 3.7553,
+        "pixelCorrelation": 0.9909,
+        "preserved": false
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b03-exterior-ground-v001/b03-exterior-ground-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 21.5048,
+        "normalStdDevRgb": [
+          20.8409,
+          22.399,
+          3.8564
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.6247,
+          209.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 209,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "marsh-bog",
+      "culture": null,
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "meanAbsoluteError": 1.132,
+        "pixelCorrelation": 0.9954,
+        "preserved": true
+      },
+      "inheritedSourceSeamGate": {
+        "receipt": "dev/material-lane/proofs/b03-exterior-ground-v001/b03-exterior-ground-selected-source-receipt-v002.json",
+        "passed": true
+      },
+      "depth": {
+        "heightStdDev": 2.4992,
+        "normalStdDevRgb": [
+          0.4165,
+          0.4583,
+          0.4577
+        ],
+        "broadSignalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          254.5258,
+          178.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 178,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

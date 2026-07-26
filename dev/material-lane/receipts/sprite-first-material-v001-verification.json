@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "SPRITE-FIRST-MATERIAL-V001",
+  "result": {
+    "proofOfMethod": "PASS",
+    "productionReady": "FAIL",
+    "productionBlocker": "Generated source-sprite edges require a dedicated seamless repair pass."
+  },
+  "thresholds": {
+    "identityMaeMax": 3,
+    "identityCorrelationMin": 0.99,
+    "heightStdDevMin": 5,
+    "normalHorizontalStdDevMin": 2,
+    "seamEdgeRmsMax": 10
+  },
+  "candidates": [
+    {
+      "id": "plank-siding",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "bilinearResizeMeanAbsoluteError": 1.4957,
+        "pixelCorrelation": 0.9984,
+        "preserved": true
+      },
+      "seams": {
+        "leftRightEdgeRms": 5.0741,
+        "topBottomEdgeRms": 28.9372,
+        "productionReady": false
+      },
+      "depth": {
+        "heightStdDev": 22.9037,
+        "normalMeanRgb": [
+          126.9145,
+          126.1407,
+          245.7391
+        ],
+        "normalStdDevRgb": [
+          11.7927,
+          43.4476,
+          10.7497
+        ],
+        "signalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.1421,
+          168.0,
+          0.0
+        ],
+        "stdDevRgb": [
+          3.0502,
+          0.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 168,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "timber-shingles",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "bilinearResizeMeanAbsoluteError": 2.0573,
+        "pixelCorrelation": 0.9967,
+        "preserved": true
+      },
+      "seams": {
+        "leftRightEdgeRms": 25.7075,
+        "topBottomEdgeRms": 24.6157,
+        "productionReady": false
+      },
+      "depth": {
+        "heightStdDev": 30.8829,
+        "normalMeanRgb": [
+          127.7058,
+          128.4175,
+          241.942
+        ],
+        "normalStdDevRgb": [
+          45.6847,
+          26.6063,
+          15.2381
+        ],
+        "signalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          252.6604,
+          193.0,
+          0.0
+        ],
+        "stdDevRgb": [
+          3.6205,
+          0.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 194,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    },
+    {
+      "id": "clay-tiles",
+      "dimensions": [
+        512,
+        512
+      ],
+      "sourceIdentity": {
+        "bilinearResizeMeanAbsoluteError": 1.2311,
+        "pixelCorrelation": 0.9991,
+        "preserved": true
+      },
+      "seams": {
+        "leftRightEdgeRms": 15.8347,
+        "topBottomEdgeRms": 19.1315,
+        "productionReady": false
+      },
+      "depth": {
+        "heightStdDev": 22.3081,
+        "normalMeanRgb": [
+          127.0586,
+          127.7599,
+          249.9356
+        ],
+        "normalStdDevRgb": [
+          22.6896,
+          23.326,
+          6.9391
+        ],
+        "signalPresent": true
+      },
+      "orm": {
+        "meanRgb": [
+          253.8916,
+          178.0,
+          0.0
+        ],
+        "stdDevRgb": [
+          1.9108,
+          0.0,
+          0.0
+        ],
+        "expectedRoughnessByte": 178,
+        "metallicMaxByte": 0,
+        "valid": true
+      }
+    }
+  ]
+}

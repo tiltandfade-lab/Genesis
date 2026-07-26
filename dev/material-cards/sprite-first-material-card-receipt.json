@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "experimentId": "SPRITE-FIRST-MATERIAL-V001",
+  "generatedAt": "2026-07-24T20:16:48.139Z",
+  "harness": "dev/material-cards/sprite-first-material-experiment.html",
+  "browser": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "captureCount": 4,
+  "captures": [
+    "dev/material-cards/out/sprite-first-material-v001/sprite-first-material-overview.png",
+    "dev/material-cards/out/sprite-first-material-v001/plank-siding-sprite-first-material-card.png",
+    "dev/material-cards/out/sprite-first-material-v001/timber-shingles-sprite-first-material-card.png",
+    "dev/material-cards/out/sprite-first-material-v001/clay-tiles-sprite-first-material-card.png"
+  ],
+  "renderContract": {
+    "threeRevision": "166",
+    "renderer": "WebGLRenderer",
+    "material": "MeshStandardMaterial",
+    "toneMapping": "AgXToneMapping",
+    "comparison": "same albedo, geometry, roughness, camera, and lights; MM normal/AO enabled only on depth render",
+    "candidates": [
+      {
+        "candidateId": "plank-siding",
+        "renders": [
+          {
+            "mode": "sprite",
+            "width": 360,
+            "height": 250
+          },
+          {
+            "mode": "depth",
+            "width": 360,
+            "height": 250
+          }
+        ]
+      },
+      {
+        "candidateId": "timber-shingles",
+        "renders": [
+          {
+            "mode": "sprite",
+            "width": 360,
+            "height": 250
+          },
+          {
+            "mode": "depth",
+            "width": 360,
+            "height": 250
+          }
+        ]
+      },
+      {
+        "candidateId": "clay-tiles",
+        "renders": [
+          {
+            "mode": "sprite",
+            "width": 360,
+            "height": 250
+          },
+          {
+            "mode": "depth",
+            "width": 360,
+            "height": 250
+          }
+        ]
+      }
+    ]
+  },
+  "pageErrors": []
+}

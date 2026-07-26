@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "workflow": "ImageGen component library -> deterministic modular course topology -> MM later",
+  "materialId": "roof-clay-tile",
+  "workingSize": [
+    576,
+    576
+  ],
+  "outputSize": [
+    512,
+    512
+  ],
+  "components": {
+    "source": "dev/material-lane/source-sprites/b01-autonomous-p3-v001/roof-clay-tile-components-alpha-v001.png",
+    "sheetGrid": [
+      4,
+      4
+    ],
+    "count": 16,
+    "neverRotatedOrFlipped": true
+  },
+  "assembly": {
+    "xStep": 48,
+    "yStep": 72,
+    "columns": 12,
+    "rows": 8,
+    "stagger": 24,
+    "variantSeed": 56231,
+    "variantGrid": [
+      [
+        8,
+        11,
+        6,
+        8,
+        14,
+        10,
+        11,
+        14,
+        12,
+        4,
+        15,
+        7
+      ],
+      [
+        0,
+        3,
+        4,
+        3,
+        7,
+        1,
+        10,
+        13,
+        9,
+        13,
+        12,
+        6
+      ],
+      [
+        9,
+        1,
+        2,
+        15,
+        0,
+        2,
+        5,
+        9,
+        2,
+        1,
+        10,
+        7
+      ],
+      [
+        13,
+        5,
+        0,
+        11,
+        6,
+        7,
+        13,
+        10,
+        8,
+        5,
+        0,
+        11
+      ],
+      [
+        1,
+        6,
+        9,
+        4,
+        12,
+        14,
+        5,
+        8,
+        15,
+        2,
+        15,
+        12
+      ],
+      [
+        14,
+        3,
+        1,
+        12,
+        14,
+        10,
+        8,
+        5,
+        9,
+        4,
+        7,
+        11
+      ],
+      [
+        3,
+        2,
+        15,
+        1,
+        4,
+        8,
+        3,
+        14,
+        3,
+        5,
+        4,
+        2
+      ],
+      [
+        12,
+        6,
+        11,
+        6,
+        7,
+        9,
+        15,
+        0,
+        10,
+        0,
+        13,
+        9
+      ]
+    ],
+    "variantCounts": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      7,
+      6,
+      6,
+      6,
+      5,
+      6,
+      6
+    ],
+    "baseColor": [
+      106,
+      46,
+      24,
+      255
+    ]
+  },
+  "topologyProof": {
+    "grid_closes_on_both_axes": true,
+    "components_never_rotated_or_flipped": true,
+    "exposed_edges_remain_down": true,
+    "variant_distribution_balanced": true,
+    "no_identical_orthogonal_neighbours": true,
+    "delivery_dimensions_match_receipt": true
+  },
+  "metrics": {
+    "left_right_rms": 10.144,
+    "top_bottom_rms": 25.06,
+    "internal_x_jump_p95": 20.143,
+    "internal_y_jump_p95": 30.772,
+    "x_boundary_to_internal_p95": 0.504,
+    "y_boundary_to_internal_p95": 0.814,
+    "boundary_jump_gate": true
+  },
+  "status": "PASS",
+  "outputs": {
+    "tile": "dev/material-lane/proofs/b01-autonomous-p3-v001/b01-autonomous-p3-v001-clay-tile.png",
+    "repeat": "dev/material-lane/proofs/b01-autonomous-p3-v001/b01-autonomous-p3-v001-clay-tile-repeat-3x3.png",
+    "board": "dev/material-lane/proofs/b01-autonomous-p3-v001/b01-autonomous-p3-v001-clay-tile-board.png"
+  }
+}

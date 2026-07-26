@@ -1,0 +1,109 @@
+{
+  "schema": "genesis.b05-source-gate.v1",
+  "boundaryGateRatio": 1.1,
+  "board": "dev/material-lane/proofs/b05-makeshift-v001/b05-makeshift-selected-source-board-v001.png",
+  "results": [
+    {
+      "id": "makeshift-mud-daub",
+      "parentSource": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-mud-daub-source-v001.png",
+      "parentSourceSha256": "68471046fc6f9671d203a878493453a26c80cf09713b402ddbd1f1d2444bab7e",
+      "source": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-mud-daub-selected-v001.png",
+      "sourceSha256": "723a7339d539353ad1783669b5c57f7124c35f55fa7f2f82f3c8ebd762f1e919",
+      "selectionMethod": "ImageGen v001 + 32px continuous-field lock",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "xBoundaryToInternalP95": 0.093,
+        "yBoundaryToInternalP95": 0.064,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "makeshift-wattle",
+      "parentSource": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-wattle-source-v002.png",
+      "parentSourceSha256": "f083a14736872b62acef118adb31a606c687da09e3b0f9c0ab9ddb1f4bd2c9c1",
+      "source": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-wattle-selected-v001.png",
+      "sourceSha256": "b5034f5eee8a034496d7fb67e45f86efa83cf38e9106a55b17867dc490298a6b",
+      "selectionMethod": "ImageGen v002 + 84px period rebuild from y=493",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "xBoundaryToInternalP95": 0.951,
+        "yBoundaryToInternalP95": 0.339,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "makeshift-stretched-hide",
+      "parentSource": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-stretched-hide-source-v001.png",
+      "parentSourceSha256": "183a588f7c6e77d9ce98f0a9fb8f8b6c19f9453baa2c29177c737a1383dba09d",
+      "source": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-stretched-hide-selected-v001.png",
+      "sourceSha256": "50a01de5e92c349daa2b5fb227658d9ae6133ce2f4c8b28c617550be6b53f8f3",
+      "selectionMethod": "raw ImageGen",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "xBoundaryToInternalP95": 0.889,
+        "yBoundaryToInternalP95": 0.682,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "makeshift-bone-tusk-stakes",
+      "parentSource": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-bone-tusk-stakes-source-v001.png",
+      "parentSourceSha256": "1e8adb73f221e1f2a5189ed5caa2f86aa94ca16f87697a8dea93f5a7fda693b8",
+      "source": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-bone-tusk-stakes-selected-v001.png",
+      "sourceSha256": "2c62cc2635143021af6d272aff3397ff4f19a947d26dedba88cca238c6308a45",
+      "selectionMethod": "raw ImageGen",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "xBoundaryToInternalP95": 0.476,
+        "yBoundaryToInternalP95": 0.468,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "makeshift-scavenged-plank",
+      "parentSource": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-scavenged-plank-source-v001.png",
+      "parentSourceSha256": "4878123199b2e3164720ed4f02a70f8b4c65f2ec603bd8c5eea21ffbc7f607b1",
+      "source": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-scavenged-plank-selected-v001.png",
+      "sourceSha256": "ef85d2424ed4222dae3e159f1bb47ed158718d047d37dae83c816e1e19d708a5",
+      "selectionMethod": "raw ImageGen",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "xBoundaryToInternalP95": 0.283,
+        "yBoundaryToInternalP95": 0.339,
+        "boundaryJumpGate": true
+      }
+    },
+    {
+      "id": "makeshift-swamp-moss-thatch",
+      "parentSource": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-swamp-moss-thatch-source-v002.png",
+      "parentSourceSha256": "7e266852da9b5a4996fb73ecb6ff67681545f9b15119e11a87619a025a054a6f",
+      "source": "dev/material-lane/source-sprites/b05-makeshift-v001/makeshift-swamp-moss-thatch-selected-v001.png",
+      "sourceSha256": "77371ddd325b51680b34f23af1ff50cfae568937238e62ac70b54399fb501b8f",
+      "selectionMethod": "ImageGen v002 + 163px period rebuild from y=332",
+      "dimensions": [
+        512,
+        512
+      ],
+      "metrics": {
+        "xBoundaryToInternalP95": 0.78,
+        "yBoundaryToInternalP95": 0.894,
+        "boundaryJumpGate": true
+      }
+    }
+  ]
+}

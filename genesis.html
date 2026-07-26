@@ -1607,6 +1607,25 @@
      straight from theater-camera.js above (a one-way leaf->leaf edge), so it is tagged AFTER it and
      before theater-boot.js's tag. -->
 <script type="module" src="src/ui/theater-occlusion.js"></script>
+<!-- THEATER SPLIT B7 (2026-07-25): the STANDEE BASE/CONTACT family (CL-R2's visible support plinth +
+     its collision resolver, BW2-2's contact line and soft MULTIPLY contact pool, BW2-2b's turn glow).
+     Imports only "three" — no sibling edge. Same import/dedupe convention as the tags above
+     (theater-boot.js `import`s it; this second entry point exists so check-manifest.py's
+     module-tag-pairing check is satisfied, and browsers dedupe an ES module by URL). Tagged BEFORE
+     theater-sprites.js and theater-overlays.js, which both import from it. -->
+<script type="module" src="src/ui/theater-standee-mount.js"></script>
+<!-- THEATER SPLIT B7 (2026-07-25): the PIXEL-SPRITE / BILLBOARD family (the texture cache + async
+     loader, the SRD size ladder, the one billboard constructor with its STANDEE-WINS-TIES depth-bias
+     shader injection, the tabletop + interior TRUE-SCALE wrappers, and the per-render facing pass).
+     Imports CAM_ELEV_DEG/CAM_YAW_OFFSET_DEG from theater-camera.js, updateSpriteCameraFill from
+     theater-lighting.js and the standee-mount trio from theater-standee-mount.js — three one-way
+     leaf->leaf edges, so it is tagged AFTER all three and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-sprites.js"></script>
+<!-- THEATER SPLIT B7 (2026-07-25): the OVERLAY family (VP6's decals + hit-effect cards, VP5's
+     diegetic selection ring with MF-4's slide, VP5's damage floaters). Imports mf1EaseOutCubic/mf1Lerp
+     straight from theater-camera.js and setBaseGlow from theater-standee-mount.js (one-way leaf->leaf
+     edges), so it is tagged AFTER both and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-overlays.js"></script>
 <script type="module" src="src/ui/theater-boot.js"></script>
 <!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
      shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same

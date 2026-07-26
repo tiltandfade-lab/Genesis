@@ -2714,6 +2714,119 @@
       ]
     },
     {
+      "id": "ui.theater-standee-mount",
+      "path": "src/ui/theater-standee-mount.js",
+      "type": "module",
+      "owns": [
+        "*standeeMountInit",
+        "*standeeMountSyncState",
+        "*INTERIOR_BASE_HEIGHT",
+        "*INTERIOR_BASE_TREAD_DEPTH",
+        "*INTERIOR_BASE_Y_OFFSET",
+        "*BASE_GLOW_EMISSIVE_HEX",
+        "*interiorTacticalSpanFor",
+        "*interiorStandeeSupportMetrics",
+        "*interiorBaseGeoFor",
+        "*interiorBaseMaterialsFor",
+        "*interiorStandeeContactY",
+        "*buildInteriorBase",
+        "*setBaseGlow",
+        "*STANDEE_SUPPORT_CLEARANCE",
+        "*standeeSupportObb",
+        "*standeeSupportRadiusOn",
+        "*standeeSupportPenetration",
+        "*standeeCollisionSign",
+        "*mountedStandeeFigures",
+        "*resolveMountedStandeeSupportCollisions",
+        "*syncStandeeContactBlob",
+        "*interiorPoolTexture",
+        "*interiorPoolGeoFor",
+        "*interiorPoolMaterial",
+        "*INTERIOR_POOL_Y_OFFSET",
+        "*addInteriorContactBlob"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B7 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the STANDEE BASE / CONTACT family, extracted VERBATIM from theater-boot.js: CL-R2's visible standee support (the shallow rounded plinth INTERIOR_BASE_HEIGHT/INTERIOR_BASE_TREAD_DEPTH/INTERIOR_BASE_Y_OFFSET, its tactical-span bound interiorTacticalSpanFor/interiorStandeeSupportMetrics, the rounded-extrude geometry cache interiorBaseGeoFor with its primitive-geometry harness fallback, the realm-trim material cache interiorBaseMaterialsFor, and buildInteriorBase's per-instance material clone); BW2-2's standee contact line (interiorStandeeContactY = floorTop + INTERIOR_BASE_Y_OFFSET + INTERIOR_BASE_HEIGHT); BW2-2b item 3's TURN GLOW (BASE_GLOW_EMISSIVE_HEX + setBaseGlow); CL-R2's VISIBLE SUPPORT COLLISION resolver (STANDEE_SUPPORT_CLEARANCE, the oriented-rectangle standeeSupportObb/standeeSupportRadiusOn/standeeSupportPenetration separating-axis pass, the deterministic hashSeed tie-break standeeCollisionSign, mountedStandeeFigures' two-root traversal, and resolveMountedStandeeSupportCollisions' 12-pass ordered sweep with its S.standeeCollisionAudit record); and BW2-2's SOFT RADIAL MULTIPLY contact pool (interiorPoolTexture's shared gradient CanvasTexture, interiorPoolGeoFor/interiorPoolMaterial, INTERIOR_POOL_Y_OFFSET, addInteriorContactBlob and syncStandeeContactBlob's per-yaw re-seat). Every authored number moved byte-identically; there is not one accessor swap in the file. Never imports theater-boot.js — its only import is \"three\"; capabilities arrive via standeeMountInit(ctx) (ITR_FLOOR_BASE_Y, ITR_FLOOR_HEIGHT_FALLBACK, hashSeed, hexToRGB, rgbToHex, scaleRGB) and the live state record is re-synced by standeeMountSyncState(S) at both `S = createTheaterState()` sites. ROOT-OWNED, DELIBERATELY LEFT BEHIND: THE KILTER (kilterFor/KILTER_YAW_DEG/KILTER_POS_FRAC) and the FLOOR half of the contact law (interiorFloorTopMapFrom/interiorFloorTopAt/ITR_FLOOR_BASE_Y/ITR_FLOOR_HEIGHT_FALLBACK) — all text-extracted from theater-boot.js's own source by dev/verify-d4-doors.mjs (and the two consts by verify-bw3-4-light-shafts / verify-e0-1-fixture-fade / verify-visible-practicals); and addWallContactAO/WALL_AO_SCALE/WALL_AO_Z_OFFSET, dressing-owned by its one caller interiorBuildWallProps, which reaches interiorPoolGeoFor/interiorPoolMaterial as imported bindings so it shares the SAME geometry cache and the SAME single material instance it always did."
+    },
+    {
+      "id": "ui.theater-sprites",
+      "path": "src/ui/theater-sprites.js",
+      "type": "module",
+      "owns": [
+        "*spritesInit",
+        "*spritesSyncState",
+        "*spritesSetDepthBiasUnits",
+        "*spritesGetDepthBiasUnits",
+        "*SPRITE_TEXTURE_CACHE",
+        "*SPRITE_TEXTURE_SRC",
+        "*SPRITE_SIZE_SCALE",
+        "*spriteSizeScaleFor",
+        "*spriteSrgbTaggingOn",
+        "*spriteTextureFor",
+        "*SPRITE_DEPTH_BIAS_UNITS",
+        "*SPRITE_DEPTH_BIAS_MATERIALS",
+        "*STANDEE_SIDE_SHELL_THICKNESS",
+        "*standeeSideShellMaterials",
+        "*buildSpriteBillboardMesh",
+        "*buildSpriteBillboard",
+        "*interiorSpriteBillboard",
+        "*updateSpriteBillboardYaw"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-camera",
+        "ui.theater-lighting",
+        "ui.theater-standee-mount"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B7 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the PIXEL-SPRITE / BILLBOARD family, extracted VERBATIM from theater-boot.js and carrying the brief's own §Protected contract that pixel sprites are the canonical live figure register: the slug-keyed texture cache and its resolved-path side table (SPRITE_TEXTURE_CACHE / SPRITE_TEXTURE_SRC — still published on window.Theater._spriteTextureCache/_spriteTextureSrcCache as the SAME live objects, through imported bindings), the S5 cache-key invalidation law and the async TextureLoader path with its CL-R1 sRGB tagging (spriteSrgbTaggingOn / spriteTextureFor, including the units + interior-pieces replay on load and the census records on failure), the SRD size ladder (SPRITE_SIZE_SCALE / spriteSizeScaleFor), the standee side shell (STANDEE_SIDE_SHELL_THICKNESS / standeeSideShellMaterials), the ONE billboard constructor every sprite in the game is built by (buildSpriteBillboardMesh — the alpha-cutout law, the LIT MeshLambert + emissive readability floor, the SPRITE PURITY psxExempt tag, the footX/footY contact anchor, the eager standeeWrap camera-tilt split, and the alpha-silhouette customDepthMaterial/customDistanceMaterial shadow pair), the STANDEE-WINS-TIES depth bias (SPRITE_DEPTH_BIAS_UNITS / SPRITE_DEPTH_BIAS_MATERIALS + the onBeforeCompile view-space injection and its customProgramCacheKey \"standee-depth-bias-v1\"), the tabletop and interior TRUE-SCALE sizing wrappers (buildSpriteBillboard / interiorSpriteBillboard), and the per-render Y-axis facing pass (updateSpriteBillboardYaw). SHADER-KEY LAW: the injection closure and its cache key moved BYTE-IDENTICALLY, which is why SPRITE_DEPTH_BIAS_UNITS moved with them instead of staying a root `let` behind an accessor — the root's window.Theater._setStandeeDepthBiasForTest seam now writes and reads it through spritesSetDepthBiasUnits/spritesGetDepthBiasUnits and prunes the SAME SPRITE_DEPTH_BIAS_MATERIALS array through its imported binding. Never imports theater-boot.js: capabilities arrive via spritesInit(ctx), the live state record is re-synced by spritesSyncState(S) at both `S = createTheaterState()` sites, and exactly two mutable root `let`s are read LIVE through ctx accessors (SPRITE_UNLIT_DEBUG, ITR_SPRITE_EMISSIVE_TINT) because root dressing builders and the board setters also read/write them. Three one-way leaf->leaf edges, censused acyclic: CAM_ELEV_DEG/CAM_YAW_OFFSET_DEG from theater-camera.js, updateSpriteCameraFill from theater-lighting.js, and mountedStandeeFigures/resolveMountedStandeeSupportCollisions/syncStandeeContactBlob from theater-standee-mount.js. Owns NO scheduler: updateSpriteBillboardYaw is still driven by the root's own scheduleRender rAF tick, the post-mount pass and the facade's deterministic test seam. ROOT-OWNED, DELIBERATELY LEFT BEHIND: FACETED_FLIP_ENABLED (its literal is rewritten inside theater-boot.js's own source text by dev/verify-l2-census.mjs and dev/battle-gate/capture-s5-flip-card.mjs), spriteAssetPathFor (reads that literal directly and is mirrored gate-for-gate by root's _spriteCensusOutcome; also text-asserted against the root by dev/verify-s5-faceted-flip.mjs), and the registry JOIN spriteEntryFor/normalizeSpriteKey/SPRITE_JOIN_NAME_FALLBACK_COUNT/_WARNED, whose bodies dev/verify-theater-sprites.mjs and dev/verify-sprite-join.mjs MUTATE inside theater-boot.js's source text for their RED-FIRST proofs and which no moved body calls.",
+      "mustFollow": [
+        "src/ui/theater-camera.js",
+        "src/ui/theater-lighting.js",
+        "src/ui/theater-standee-mount.js"
+      ]
+    },
+    {
+      "id": "ui.theater-overlays",
+      "path": "src/ui/theater-overlays.js",
+      "type": "module",
+      "owns": [
+        "*overlaysInit",
+        "*overlaysSyncState",
+        "*DECAL_KIND_COLOR",
+        "*decalGeoFor",
+        "*INTERIOR_DECAL_Y_OFFSET",
+        "*interiorBuildDecals",
+        "*EFFECT_CARD_DUR",
+        "*effectRingGeoFor",
+        "*EFFECT_PROC_COLOR",
+        "*effectCardFor",
+        "*spawnEffectCard",
+        "*ACTING_RING_MAT",
+        "*actingRingGeoFor",
+        "*MF4_RING_SLIDE_DUR",
+        "*actingRingRadiusFor",
+        "*actingRingWorldPosFor",
+        "*setActingUnit",
+        "*projectUnit",
+        "*spawnFloater"
+      ],
+      "callTimeDeps": [
+        "ui.theater-boot",
+        "ui.theater-camera",
+        "ui.theater-standee-mount"
+      ],
+      "layer": "ui",
+      "desc": "THEATER SPLIT B7 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — the OVERLAY / FEEDBACK family, extracted VERBATIM from theater-boot.js: BEAUTY-WAVE VP6 item 4's VISIBLE HISTORY decals (DECAL_KIND_COLOR / decalGeoFor / INTERIOR_DECAL_Y_OFFSET / interiorBuildDecals, still seated off this cell's own derived floor top); VP6 item 5's HIT-EFFECTS SEAM (EFFECT_CARD_DUR / effectRingGeoFor / EFFECT_PROC_COLOR / effectCardFor's real-art-or-procedural-ring resolution and spawnEffectCard's S.fxGroup mount + tween-driven expiry); VP5 item 2's DIEGETIC SELECTION ring with BEAUTY-WAVE-4 MF-4 item 1's 300ms slide (ACTING_RING_MAT / actingRingGeoFor / MF4_RING_SLIDE_DUR / actingRingRadiusFor / actingRingWorldPosFor / setActingUnit — the slide-eligibility shape, the stale-slide cancel, the instant path for every other shape, and the always-instant base glow, all byte-identical); and VP5 item 3's DAMAGE FLOATERS (projectUnit's world->canvas-pixel projection and spawnFloater's anchor-at-spawn DOM node with its deterministic 650ms reap). SCHEDULER LAW: both animations ride the SHARED S.tweens / tickTweens channel exactly as before — this module owns no rAF loop and no timer beyond spawnFloater's own node reap; nothing was unified or re-cadenced. Never imports theater-boot.js: capabilities arrive via overlaysInit(ctx) (findUnit, interiorFloorTopAt, markDirty, nearestify, startTweenLoop, textureLoader) and the live state record is re-synced by overlaysSyncState(S) at both `S = createTheaterState()` sites. Two one-way leaf->leaf edges, censused acyclic: mf1EaseOutCubic/mf1Lerp from theater-camera.js (the same edge theater-occlusion.js already takes) and setBaseGlow from theater-standee-mount.js. There is not one accessor swap in the file. ROOT-OWNED, DELIBERATELY LEFT BEHIND: findUnit (dev/verify-standee-verbs.mjs text-extracts play() from theater-boot.js and evals it against a findUnit stub), interiorFloorTopAt (a dev/verify-d4-doors.mjs text pin), S.floaterEl's own creation/teardown in mount()/reattach()/retire(), spawnEffectCard's production caller inside play(), and every window.Theater publish (setActingUnit / projectUnit / spawnFloater).",
+      "mustFollow": [
+        "src/ui/theater-camera.js",
+        "src/ui/theater-standee-mount.js"
+      ]
+    },
+    {
       "id": "ui.theater-boot",
       "path": "src/ui/theater-boot.js",
       "type": "module",

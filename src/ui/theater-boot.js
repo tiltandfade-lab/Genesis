@@ -276,6 +276,50 @@ import {
   itrBlockerNudgeCell, CLIP_NUDGE_MAX_FRAC, CLIP_DRESSING_EPSILON,
   occlusionInit, occlusionSyncState
 } from "./theater-occlusion.js";
+// split B7 (2026-07-25): the STANDEE BASE/CONTACT family — CL-R2's visible support plinth and its
+// collision resolver, BW2-2's contact line + soft MULTIPLY contact pool, BW2-2b's turn glow. Same
+// root->leaf ctx law; it reads AND writes S (S.standeeCollisionAudit/Dirty), so standeeMountInit(ctx)
+// at end-of-body is paired with standeeMountSyncState(S) at both `S = createTheaterState()` sites. It
+// imports only "three" — no sibling edge at all. THE KILTER (kilterFor/KILTER_*), the FLOOR half of
+// the contact law (interiorFloorTopMapFrom/interiorFloorTopAt/ITR_FLOOR_BASE_Y/
+// ITR_FLOOR_HEIGHT_FALLBACK — all dev/verify-d4-doors.mjs text-extraction pins) and addWallContactAO
+// (dressing-owned by its one caller) stay HERE.
+import {
+  INTERIOR_BASE_HEIGHT, INTERIOR_BASE_TREAD_DEPTH, INTERIOR_BASE_Y_OFFSET,
+  interiorStandeeSupportMetrics, interiorStandeeContactY, buildInteriorBase, setBaseGlow,
+  mountedStandeeFigures, resolveMountedStandeeSupportCollisions, syncStandeeContactBlob,
+  interiorPoolTexture, interiorPoolGeoFor, interiorPoolMaterial,
+  INTERIOR_POOL_Y_OFFSET, addInteriorContactBlob,
+  standeeMountInit, standeeMountSyncState
+} from "./theater-standee-mount.js";
+// split B7 (2026-07-25): the SPRITE / BILLBOARD family — the texture cache + async loader, the SRD
+// size ladder, the billboard mesh constructor with its STANDEE-WINS-TIES depth-bias shader injection,
+// the tabletop + interior TRUE-SCALE wrappers, and the per-render facing pass. Same root->leaf ctx
+// law; it reads AND writes S, so spritesInit(ctx) at end-of-body is paired with spritesSyncState(S)
+// at both `S = createTheaterState()` sites. It takes CAM_ELEV_DEG/CAM_YAW_OFFSET_DEG from
+// theater-camera.js, updateSpriteCameraFill from theater-lighting.js and the standee mount trio from
+// theater-standee-mount.js as one-way leaf->leaf edges (see its header), which is why its
+// <script type="module"> tag follows all three. FACETED_FLIP_ENABLED, spriteAssetPathFor,
+// spriteEntryFor + the registry JOIN, SPRITE_CHANNEL_ENABLED, SPRITE_UNLIT_DEBUG and
+// ITR_SPRITE_EMISSIVE_TINT stay HERE — censused, see that file's header for each.
+import {
+  SPRITE_TEXTURE_CACHE, SPRITE_TEXTURE_SRC, spriteSizeScaleFor, spriteTextureFor,
+  SPRITE_DEPTH_BIAS_MATERIALS, spritesSetDepthBiasUnits, spritesGetDepthBiasUnits,
+  buildSpriteBillboardMesh, buildSpriteBillboard, interiorSpriteBillboard, updateSpriteBillboardYaw,
+  spritesInit, spritesSyncState
+} from "./theater-sprites.js";
+// split B7 (2026-07-25): the OVERLAY family — VP6's decals + hit-effect cards, VP5's diegetic
+// selection ring with MF-4's 300ms slide, VP5's damage floaters and their unit->screen projector.
+// Same root->leaf ctx law; it reads AND writes S (S.actingIds/actingRingMeshes/actingGlowBaseMeshes/
+// effectTexCache + the shared S.tweens channel), so overlaysInit(ctx) at end-of-body is paired with
+// overlaysSyncState(S) at both `S = createTheaterState()` sites. It imports mf1EaseOutCubic/mf1Lerp
+// from theater-camera.js and setBaseGlow from theater-standee-mount.js (one-way leaf->leaf edges).
+// findUnit (a dev/verify-standee-verbs.mjs text pin) and every facade seam stay HERE.
+import {
+  INTERIOR_DECAL_Y_OFFSET, interiorBuildDecals, EFFECT_CARD_DUR, effectCardFor, spawnEffectCard,
+  setActingUnit, projectUnit, spawnFloater,
+  overlaysInit, overlaysSyncState
+} from "./theater-overlays.js";
 // BEAUTY-WAVE-4.md MF-2 (SPAWN/DESPAWN GRACE): the sibling zero-THREE-coupling tween-producer module —
 // see that file's own header for why mount/despawn/cascade/room-transition tweens live there instead of
 // as closures in this file (unit-testable via a real Node `import`, no jsdom/sandbox needed).
@@ -1975,20 +2019,25 @@ function _censusBoardSceneKind(){
   return S.lastBoard.kind === "interior3d" ? "interior" : "tabletop";
 }
 
-// texture cache, keyed by sprite slug: undefined (never requested) | "pending" | "failed" | a loaded
-// THREE.Texture. Exposed read/write on window.Theater._spriteTextureCache (bottom of this file) as a
-// TEST-ONLY seam — dev/verify-theater-sprites.mjs pre-seeds a fake Texture here to exercise the
-// cut-status render path without a real network/file image load (the spec's own "stub texture
-// loader" instruction); nothing in product logic writes to this object from outside spriteTextureFor.
-const SPRITE_TEXTURE_CACHE = {};
-// VQ2-RESPEC.md S5 cache-key law: SPRITE_TEXTURE_CACHE stays SLUG-keyed (existing diagnostic/
-// capture-script contract — window.Theater._spriteTextureCache is read by slug elsewhere, e.g.
-// dev/battle-gate/capture-mediums-lineup.mjs), but a slug's RESOLVED PATH can change mid-session
-// (FACETED_FLIP_ENABLED toggled, or a registry regen flips runtimeAdmitted) — SPRITE_TEXTURE_SRC
-// remembers which path is CURRENTLY loaded under each slug's cache entry, so spriteTextureFor can
-// tell a real cache hit from a STALE one (same slug, different resolved asset) and evict+reload
-// instead of silently serving the wrong asset's texture under the old key.
-const SPRITE_TEXTURE_SRC = {};
+// ---- THE SPRITE / BILLBOARD FAMILY: extracted to src/ui/theater-sprites.js (split B7, 2026-07-25)
+// ---- The slug-keyed texture cache + its resolved-path side table (SPRITE_TEXTURE_CACHE /
+// SPRITE_TEXTURE_SRC — still published on window.Theater._spriteTextureCache /
+// _spriteTextureSrcCache below as the SAME live objects, via imported bindings), the SRD size ladder,
+// the async loader (spriteSrgbTaggingOn/spriteTextureFor), the standee side shell, the one billboard
+// mesh constructor with its STANDEE-WINS-TIES depth-bias shader injection (moved BYTE-IDENTICALLY —
+// SPRITE_DEPTH_BIAS_UNITS moved WITH it so no accessor could touch the injection closure), and the
+// two sizing wrappers (buildSpriteBillboard / interiorSpriteBillboard) live in their own module now.
+// It never imports this root: spritesInit(ctx) at end-of-body hands it the capabilities that stay
+// here — and, as ACCESSORS never mirrors, the two live root `let`s the facade/board setters write,
+// SPRITE_UNLIT_DEBUG and ITR_SPRITE_EMISSIVE_TINT.
+//
+// STAYING HERE, DELIBERATELY (censused): FACETED_FLIP_ENABLED (its literal is rewritten in THIS
+// file's source text by dev/verify-l2-census.mjs and dev/battle-gate/capture-s5-flip-card.mjs),
+// spriteAssetPathFor (reads that literal directly, and _spriteCensusOutcome below exists to MIRROR
+// its gate — splitting the pair would have put one half behind an accessor and the other on the bare
+// literal), and the registry JOIN (spriteEntryFor + normalizeSpriteKey + the TIER-2 fallback
+// counters), whose bodies two RED-FIRST harnesses MUTATE inside this file's own source text
+// (dev/verify-theater-sprites.mjs, dev/verify-sprite-join.mjs) and which no moved body calls.
 
 // GRAPHICS-ENGINE.md GR2 (dressing cards): texture cache keyed by dressing slug — either a
 // synchronously-generated placeholder label-card CanvasTexture (art doesn't exist yet — DRESSING-GEN
@@ -2103,161 +2152,20 @@ function spriteEntryFor(recipeSlug){
   return null; // no cut entry by that name — a pending-only match (or no match at all) falls through
 }
 
-// SPRITE-SIZE LADDER — deliberately its OWN table, not a reuse of sizeScaleFor's SIZE_SCALE above.
-// SIZE_SCALE is a cosmetic in-game-readability tune (gargantuan/medium = 2.2x) for the cuboid/recipe
-// figure family; a billboard plane instead bakes the SRD size CATEGORY's real space ratio (5ft
-// Medium square vs. a 20ft Gargantuan footprint = 4 squares = 4x) so "a Gargantuan dragon sprite must
-// visibly dwarf a Medium PC sprite" (the spec's own decision 4 wording) holds at the geometry level,
-// not just a readability nudge — this is the ratio dev/verify-theater-sprites.mjs's check (c) proves.
-const SPRITE_SIZE_SCALE = {
-  tiny: 0.5, small: 1, medium: 1, large: 2, huge: 3, gargantuan: 4
-};
-function spriteSizeScaleFor(size){
-  const s = (size || "medium").toLowerCase();
-  return SPRITE_SIZE_SCALE[s] != null ? SPRITE_SIZE_SCALE[s] : 1;
-}
+// ---- split B7: the SPRITE-SIZE LADDER + spriteSizeScaleFor moved to src/ui/theater-sprites.js
+// (buildSpriteBillboard is their only reader). ----
 
-/* Async texture fetch, mirroring the glb path's own "resolved now or fall through, pick it up on the
-   next replay" convention (loadWholeObjectBuilders' onSettled callback, this file's module-scope call
-   near the bottom): a cache miss kicks off THREE.TextureLoader.load and returns null immediately (this
-   call's figure falls through to the 3D chain, exactly like a whole-object entry whose builder isn't
-   loaded yet) — success nearest-filters the texture (no mipmap smear, matching the PS1/cutout look)
-   and, if the theater is still mounted, replays S.lastUnits (same null-the-dirty-key-then-resend
-   trick loadWholeObjectBuilders' callback uses) so the sprite appears on the very next render without
-   the caller having to re-drive anything. A failed load caches "failed" — permanently falls through,
-   never retried, never throws.
+// ---- split B7: spriteTextureFor + the CL-R1 colour-space flag moved to src/ui/theater-sprites.js. ----
 
-   VQ2-RESPEC.md S5 -- takes the full registry ENTRY now (was just `slug`) so it can resolve THROUGH
-   the entry's own admission fields (spriteAssetPathFor, above) instead of hard-building the legacy
-   path itself. Cache-key law: SPRITE_TEXTURE_SRC[slug] remembers which path is currently loaded
-   under SPRITE_TEXTURE_CACHE[slug] -- a resolved-path mismatch (the flip fired, or a regen changed
-   this slug's admission, since the last request) evicts the stale entry and reloads from the NEW
-   path, rather than serving a legacy texture out of a cache slot the candidate now owns (or vice
-   versa) under the same slug key. */
-// CL-R1: sprite colour-space tagging. ON by default (the proven-correct behaviour); ?spritesrgb=0
-// or GS.spriteSrgb === false restores the old untagged path so the causal A/B stays reproducible
-// rather than living only in a banked screenshot.
-let SPRITE_SRGB_FLAG = null;
-function spriteSrgbTaggingOn(){
-  if(SPRITE_SRGB_FLAG === null){
-    let on = true;
-    try {
-      if(typeof window !== "undefined"){
-        if(window.GS && window.GS.spriteSrgb === false) on = false;
-        else if(window.location && window.location.search
-          && new URLSearchParams(window.location.search).get("spritesrgb") === "0") on = false;
-      }
-    } catch(e){}
-    SPRITE_SRGB_FLAG = on;
-  }
-  return SPRITE_SRGB_FLAG;
-}
-function spriteTextureFor(entry){
-  // named spriteSlug (not `slug`) -- `slug` is a symbol world.state already owns; a same-named
-  // const/let/var here (even function-local) trips check-manifest's single-definition DRIFT check,
-  // which scans by regex, not real scope (build/check-manifest.py's own documented limitation).
-  const spriteSlug = entry && entry.slug;
-  if(!spriteSlug) return null;
-  const path = spriteAssetPathFor(entry);
-  // A slug never seen before (SPRITE_TEXTURE_SRC has no prior record) just records `path` without
-  // evicting -- a test harness pre-seeding SPRITE_TEXTURE_CACHE[slug] directly (the "stub texture
-  // loader" seam, dev/verify-theater-sprites.mjs) must still hit on ITS first read; only a slug
-  // seen before whose resolved path has since CHANGED (a real flip, mid-session) is stale.
-  const priorPath = SPRITE_TEXTURE_SRC[spriteSlug];
-  SPRITE_TEXTURE_SRC[spriteSlug] = path;
-  if(priorPath !== undefined && priorPath !== path){
-    delete SPRITE_TEXTURE_CACHE[spriteSlug]; // stale -- loaded (or pending/failed) from a DIFFERENT path
-  }
-  const cached = SPRITE_TEXTURE_CACHE[spriteSlug];
-  if(cached && cached !== "pending" && cached !== "failed") return cached;
-  if(cached === "pending") return null;
-  if(cached === "failed"){
-    // VQ2-RESPEC.md §3 unit L2 — a slug that already failed to load stays permanently failed (never
-    // retried, per this function's own header); each subsequent request is a fresh demand hitting the
-    // same dead end, so it's recorded every time, not just on the original failure.
-    if(typeof theaterCensusRecord === "function") theaterCensusRecord("sprite-texture", "sprite-load-failed", spriteSlug, _censusBoardSceneKind());
-    return null;
-  }
-  SPRITE_TEXTURE_CACHE[spriteSlug] = "pending";
-  textureLoader.load(
-    path,
-    function(tex){
-      // BEAUTY-WAVE-2 BW2-0: magFilter stays Nearest (crisp when magnified — the pixel-art law, a
-      // creature sprite viewed close must show its authored texel grid, not smoothed mush). minFilter
-      // becomes Linear (was Nearest) — a billboard plane shrinks as it recedes/rotates, and
-      // Nearest-minification is what actually produced the "mode-7" shimmer/warp (nearest-picks a
-      // single aliasing texel per screen pixel instead of blending the covered footprint); Linear
-      // minification kills that without needing mipmaps (NPOT-safe — generateMipmaps stays false,
-      // Linear minFilter doesn't require them, only NearestMipmap*/LinearMipmap* variants do).
-      tex.magFilter = THREE.NearestFilter;
-      tex.minFilter = THREE.LinearFilter;
-      tex.generateMipmaps = false;
-      // CL-R1 CAUSAL A/B SEAM (docs/CLAYROOM-RESET-LADDER.md §CL-R1) — Adam, 2026-07-23: "the sprite
-      // is back to an overexposed undersaturated crappy looking piece of paper". THE CANDIDATE CAUSE:
-      // this loader never tagged the PNG's colour space, while every other authored colour texture in
-      // this file does (~891, ~944, ~13930). three r166 defaults WebGLRenderer.outputColorSpace to
-      // SRGBColorSpace and this file never overrides it, so an UNTAGGED texture is sampled as if its
-      // sRGB bytes were already linear and then gamma-encoded a SECOND time on output. That transform
-      // lifts midtones hard and collapses chroma — pale, low-contrast, "sickly", which is exactly the
-      // symptom. Gated behind ?spritesrgb=1 for now so the fix is proven by a reproducible A/B capture
-      // (source art vs unlit render vs lit render, tagged vs untagged) rather than asserted, per the
-      // ladder's own causality law. Flip to unconditional once the A/B is banked and Adam has ruled.
-      if(spriteSrgbTaggingOn()) tex.colorSpace = THREE.SRGBColorSpace;
-      SPRITE_TEXTURE_CACHE[spriteSlug] = tex;
-      if(S.mounted && S.lastUnits){
-        S.unitsKey = null; // force the dirty-key skip past, same trick as the glb-settle replay
-        setUnits(S.lastUnits);
-      }
-      // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: an interior board's `pieces` are billboard sprites
-      // too (interiorBuildPieces -> buildSpriteBillboard, same async-texture-not-loaded-yet miss this
-      // callback exists to recover from) — S.lastUnits alone (above) never covers them, since pieces
-      // mount via S.lastBoard/setInteriorBoard, a completely separate replay target. Same "null the
-      // dirty key, replay" trick, gated to the interior3d board kind so a combat board's lastBoard is
-      // never accidentally replayed through the wrong builder.
-      if(S.mounted && S.lastBoard && S.lastBoard.kind === "interior3d"){
-        S.boardKey = null;
-        setInteriorBoard(S.lastBoard);
-      }
-    },
-    undefined,
-    function(){
-      SPRITE_TEXTURE_CACHE[spriteSlug] = "failed";
-      // VQ2-RESPEC.md §3 unit L2 — the FIRST failure, recorded at the moment it happens (the "failed"
-      // cache-state check above only catches requests AFTER this one).
-      if(typeof theaterCensusRecord === "function") theaterCensusRecord("sprite-texture", "sprite-load-failed", spriteSlug, _censusBoardSceneKind());
-    }
-  );
-  return null;
-}
-
-/* Billboard construction (T4.2): a single THREE plane, textured, nearest-filtered, alpha-cutout (no
-   blend-order fighting between overlapping sprites), sized from the SPRITE-SIZE LADDER above times
-   GLB_TARGET_HEIGHT (the module-height convention this file already established for the glb path,
-   L1173 — reused here rather than inventing a second height constant, since both paths bake an
-   ABSOLUTE authored size into their own geometry the same way). Seated feet-at-0 (mesh.position.y =
-   h/2 lifts the plane's own center up to half its height, matching every other figure's feet-on-the-
-   base-disc convention) — the base disc ITSELF is untouched (setUnits' own math; see this unit's
-   header note: this group carries no userData.wholeObject, so it falls through setUnits' EXISTING
-   non-whole-object disc branch, unmodified by this unit). Y-axis-only billboarding to the camera is
-   applied per render pass by updateSpriteBillboardYaw() (scheduleRender, below) rather than baked
-   here — the group's OWN rotation.y is reset every dirty render, so it never drifts out of sync with
-   whichever way setUnits/rotate() last left the camera. */
-// BEAUTY-WAVE.md VP1: shared billboard-mesh construction, factored out of buildSpriteBillboard so
-// the interior TRUE-SCALE path (interiorSpriteBillboard, below) can build a differently-proportioned
-// (width != height, from the texture's own aspect) plane through the exact same material/shadow
-// setup, rather than forking that logic a second time. w/h are already-final WORLD units; this
-// function does no sizing math of its own.
 // BW2-4b item 1 — LIT SPRITES debug seam: forces the OLD unlit MeshBasic path so the iterate-loop
 // measurement harness can capture a full-bright REFERENCE frame (the 1.0 the BRIGHTNESS LAW measures
 // every lit sprite as a ratio of) from the identical scene. No product caller sets it — toggled only
 // by window.Theater.__setSpriteUnlitDebug (below), and a re-mount rebuilds sprites under the new flag.
 let SPRITE_UNLIT_DEBUG = false;
-// STANDEE-WINS-TIES bias (2026-07-25): view-space camera-ward depth pull applied in the sprite
-// card's vertex stage (depth test+write only — pixels, anchors, and cast shadows untouched). A
-// LIVE-tunable uniform so the diagnostic A/B can prove the bias in one call; the authored default
-// is the reviewed production value, not a taste slider.
-let SPRITE_DEPTH_BIAS_UNITS = 0.25;
-const SPRITE_DEPTH_BIAS_MATERIALS = [];
+// ---- split B7: SPRITE_DEPTH_BIAS_UNITS + SPRITE_DEPTH_BIAS_MATERIALS moved to
+// src/ui/theater-sprites.js (SHADER-KEY LAW — the injection closure that reads the units had to move
+// byte-identically). The facade seam below writes/reads them through that module's accessors, and
+// prunes the SAME array object through its imported binding. ----
 // BW2-4b item 1 — REALM GRADE on the sprite floor: the emissive readability floor is tinted toward the
 // current interior realm's grade (chrome cool, fantasy warm, gloom cold-violet) so a lit standee reads
 // the realm even where no nearby torch reaches it (the mock's cool soldiers / warm knights). White (no
@@ -2265,223 +2173,11 @@ const SPRITE_DEPTH_BIAS_MATERIALS = [];
 // setBoard resets it to white. A SUBTLE blend (ITR_SPRITE_TINT_STRENGTH) — never a saturated wash.
 let ITR_SPRITE_EMISSIVE_TINT = 0xffffff;
 const ITR_SPRITE_TINT_STRENGTH = 0.5;
-const STANDEE_SIDE_SHELL_THICKNESS = 0.035;
-let STANDEE_SIDE_SHELL_MATERIALS = null;
-function standeeSideShellMaterials(){
-  if(STANDEE_SIDE_SHELL_MATERIALS) return STANDEE_SIDE_SHELL_MATERIALS;
-  const side = new THREE.MeshLambertMaterial({
-    color: 0x3d342b,
-    side: THREE.DoubleSide
-  });
-  const hiddenFace = new THREE.MeshBasicMaterial({
-    transparent: true,
-    opacity: 0,
-    depthWrite: false,
-    colorWrite: false,
-    side: THREE.DoubleSide
-  });
-  // THREE.BoxGeometry groups: +X, -X, +Y, -Y, +Z, -Z. Only the four thin edges render;
-  // front/back stay invisible so transparent PNG regions never reveal a rectangular backing card.
-  STANDEE_SIDE_SHELL_MATERIALS = [side, side, side, side, hiddenFace, hiddenFace];
-  return STANDEE_SIDE_SHELL_MATERIALS;
-}
-function buildSpriteBillboardMesh(tex, w, h, entry){
-  entry = entry || {};
-  const spriteSlug = entry.slug || null;
-  const alphaCutoff = (typeof entry.alphaCutoff === "number")
-    ? Math.max(0, Math.min(1, entry.alphaCutoff)) : 0.5;
-  const footX = (typeof entry.footX === "number")
-    ? Math.max(0, Math.min(1, entry.footX)) : 0.5;
-  const footY = (typeof entry.footY === "number")
-    ? Math.max(0, Math.min(1, entry.footY)) : 1;
-  const geo = new THREE.PlaneGeometry(w, h);
-  // BW2-4b item 1 — THE BRIGHTNESS LAW (see ITR_SCENE_KEY/ITR_SPRITE_EMISSIVE_FLOOR): the billboard is
-  // now LIT — a MeshLambertMaterial that RECEIVES the interior hemisphere key + torch PointLights +
-  // the realm-graded ambient, so a sprite beside a torch reads warmer/brighter than the same sprite in
-  // a dark corner (the HD-2D integration trick). SPRITE PURITY holds: this is a LIGHTING response only,
-  // zero geometric/texel distortion (no dither, no vertex-snap — it still never routes through
-  // applyPsxShaderTweaks). emissiveMap = the sprite's own texture at ITR_SPRITE_EMISSIVE_FLOOR gives an
-  // albedo-scaled readability floor so a dark-art creature never crushes to unreadable black, WITHOUT
-  // ever reading as day-lit (emissive is a fixed dim self-illumination, not a light). receiveShadow
-  // stays OFF (U3 ruling: a cast shadow smeared across a flat cutout reads as a bug). The debug flag
-  // (SPRITE_UNLIT_DEBUG) restores the old full-bright MeshBasic for the measurement reference capture.
-  const mat = SPRITE_UNLIT_DEBUG
-    ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true })
-    : new THREE.MeshLambertMaterial({
-        map: tex, emissiveMap: tex, emissive: ITR_SPRITE_EMISSIVE_TINT, emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor,
-        transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true
-      });
-  SPRITE_DEPTH_BIAS_MATERIALS.push(mat);
-  // (SPRITE_DEPTH_BIAS_UNITS + the registry are module-scope, declared beside SPRITE_UNLIT_DEBUG.)
-  // STANDEE-WINS-TIES depth law (Adam, 2026-07-25: "the sprite should be in front of the sphere"):
-  // a flat card beside a bulging prop (the bench sphere's near limb) loses the per-pixel depth
-  // fight along its card edges even when the standee's cell is nearer — physically true for the
-  // geometry, wrong for the tabletop fiction, where an upright standee occludes props behind its
-  // cell. The card's DEPTH (test + write) is pulled a quarter-unit camera-ward in view space at
-  // the vertex stage; screen pixels, foot anchor, selection, and the alpha-silhouette CAST SHADOW
-  // (customDepthMaterial, untouched) all stay exactly where they were. A real occluder — a pillar
-  // or wall half a cell nearer — still covers the card; only near-ties flip to the standee.
-  mat.onBeforeCompile = function(shader){
-    shader.uniforms.uStandeeDepthBias = { value: SPRITE_DEPTH_BIAS_UNITS };
-    mat.userData.standeeDepthBiasUniform = shader.uniforms.uStandeeDepthBias;
-    shader.vertexShader = "uniform float uStandeeDepthBias;\n" + shader.vertexShader.replace(
-      "#include <project_vertex>",
-      [
-        "vec4 mvPosition = vec4( transformed, 1.0 );",
-        "mvPosition = modelViewMatrix * mvPosition;",
-        "mvPosition.z += uStandeeDepthBias; // STANDEE-WINS-TIES: camera-ward depth bias (view units)",
-        "gl_Position = projectionMatrix * mvPosition;"
-      ].join("\n")
-    );
-  };
-  // shared program across sprite materials must key on the injected chunk, not collide with stock Lambert
-  mat.customProgramCacheKey = function(){ return "standee-depth-bias-v1"; };
-  // DUNGEON-GRAPH.md U3 iteration-2, SPRITE PURITY ruling (Adam 2026-07-10 evening): billboards must
-  // carry ZERO PS1 distortion (no dither, no vertex-snap) — a flat-cut 2D sprite reads as a sticker
-  // the moment its texel grid wobbles or dithers, unlike a real low-poly mesh where those tricks read
-  // as "in-world" texture grain. This material deliberately never routes through applyPsxShaderTweaks
-  // (contrast wholeObjectMaterialsFor/figureMaterialFor/interiorBuildInstancedMesh, which all do).
-  // userData.psxExempt is a TESTABILITY flag only (no runtime behavior reads it) — dev/verify-dungeon-
-  // interior.mjs's sprite-purity check asserts it's set (billboards) vs. absent+psxApplied set (walls).
-  mat.userData.psxExempt = true;
-  const mesh = new THREE.Mesh(geo, mat);
-  // Layer 0 keeps the complete production light response. Layer 2 adds the sprite-only camera fill;
-  // the camera itself still sees layer 0, so this is a LIGHT MASK, never a visibility fork.
-  if(mesh.layers) mesh.layers.enable(SPRITE_CAMERA_FILL_LAYER);
-  // `footX`/`footY` are the ONE authored contact/rotation anchor. Move the art around local origin
-  // so that exact image coordinate sits at (0,0), rather than compensating later with a second
-  // `floor` offset. The legacy bottom-centre default (0.5,1) is byte-identical to x=0,y=h/2.
-  mesh.position.set((0.5 - footX) * w, (footY - 0.5) * h, STANDEE_SIDE_SHELL_THICKNESS / 2 + 0.001);
-  // DUNGEON-GRAPH.md U3 iteration-2, ruling 2 (real light sources + cast shadows, interiors only):
-  // a billboard CASTS a shadow (so creature silhouettes fall on the interior floor) via a dedicated
-  // alpha-tested depth + distance material (a plain opaque shadow pass would cast a solid SQUARE
-  // shadow off the plane's full quad, not the sprite's actual cutout silhouette) but never RECEIVES one (a receiving
-  // billboard would show other casters' shadows smeared across its own flat alpha-cutout face, which
-  // reads as a lighting bug, not grounding). Harmless when renderer.shadowMap.enabled is false (the
-  // combat/tabletop path, §2's untouched "no shadow maps" ruling) — shadowMap being globally off means
-  // these per-mesh flags are simply never consulted there.
-  mesh.castShadow = true;
-  mesh.receiveShadow = false;
-  mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
-    map: tex, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthPacking: THREE.RGBADepthPacking
-  });
-  // Directional/spot lights use customDepthMaterial; point lights use customDistanceMaterial.
-  // Both sample the already-resident sprite alpha, so every production shadow-light type receives
-  // the same cutout silhouette without adding a second caster or another texture.
-  mesh.customDistanceMaterial = new THREE.MeshDistanceMaterial({
-    map: tex, alphaTest: alphaCutoff, side: THREE.DoubleSide
-  });
-  const g = new THREE.Group();
-  // BW2-2b item 1 (FLOOR-ALIGNED BASES — "the bug"): the sprite mesh lives in its OWN inner wrapper,
-  // built EAGERLY here (not lazily on first verb, standee-verbs.js's pre-BW2-2b ensureWrap convention)
-  // so camera-pitch tilt has somewhere to go that ISN'T this outer group `g` the moment a standee
-  // mounts — before this fix, updateSpriteBillboardYaw stamped `fig.rotation.x = tilt` straight onto
-  // `g`, and BW2-2's plinth base (added later as a plain CHILD of `g` — buildInteriorBase's own header)
-  // inherited that tilt with it, reading as a coin propped up on edge instead of a flat mini base. Now
-  // only `wrap` (holding the cutout plane + its thin side shell) gets the camera tilt (see
-  // updateSpriteBillboardYaw below); a support/selection ring mounted as a SIBLING of `wrap`
-  // directly on `g` (interiorBuildPieces/setUnits,
-  // setActingUnit) stays floor-flat under `g`'s own yaw-only rotation. `g.userData.standeeWrap` is the
-  // SAME identity key standee-verbs.js's runKeyframeVerb reads/writes — see that file's own updated
-  // COMPOSITION CONTRACT header for the other half of this split (verb-tilt, e.g. fall-death, now
-  // writes `g.rotation.x` directly instead, freed by camera-tilt vacating that field).
-  const wrap = new THREE.Group();
-  const shell = new THREE.Mesh(
-    new THREE.BoxGeometry(w, h, STANDEE_SIDE_SHELL_THICKNESS),
-    standeeSideShellMaterials()
-  );
-  shell.position.set((0.5 - footX) * w, (footY - 0.5) * h, 0);
-  // The shell gives the standee a visible physical edge, but it is still a full rectangular box.
-  // If it enters a shadow map it projects that hidden card shape behind the alpha-cut sprite. The
-  // cutout plane above is the sole shadow caster; removing this redundant caster is also cheaper.
-  shell.castShadow = false;
-  shell.receiveShadow = false;
-  shell.userData.standeeSideShell = true;
-  shell.userData.spriteSlug = spriteSlug;
-  wrap.add(shell);
-  wrap.add(mesh);
-  g.add(wrap);
-  g.userData.sprite = true;
-  g.userData.spriteSlug = spriteSlug;
-  g.userData.spriteBillboardMesh = mesh; // updateSpriteBillboardYaw's per-frame Y-facing target
-  g.userData.standeeWrap = wrap;
-  g.userData.standeeSideShell = shell;
-  g.userData.footX = footX;
-  g.userData.footY = footY;
-  g.userData.alphaCutoff = alphaCutoff;
-  g.userData.contentBounds = entry.contentBounds || null;
-  return g;
-}
+// ---- split B7: the standee side shell + buildSpriteBillboardMesh + buildSpriteBillboard moved to
+// src/ui/theater-sprites.js. ----
 
-function buildSpriteBillboard(entry){
-  const tex = spriteTextureFor(entry); // S5: resolves through entry's own admission fields, not just the slug
-  if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
-  // entry.scale = the per-slug heads-line-up calibration from the sprite-review overlay
-  // (dev/sprite-review.py -> sprite-tags-overlay.json -> gen-sprite-registry.py) — crops vary
-  // in headroom/tightness, so the size ladder alone can't make same-size creatures read the
-  // same height.
-  const calib = (typeof entry.scale === "number" && entry.scale > 0) ? entry.scale : 1;
-  // DUNGEON-GRAPH.md law 1 (TRUE-SCALE RENDER LAW): scaleVsHuman (feet/5.5, the real progression-payoff
-  // ratio) wins over the SRD size-CATEGORY ladder (spriteSizeScaleFor) whenever it's present — on either
-  // the registry entry itself (once data/sprite-registry.js's corpus-sizing fold lands, HANDOFF item 2)
-  // or passed straight through on the board piece data (`entry.scaleVsHuman`, a caller-supplied override
-  // — no registry edit required to exercise true scale today). Absent on both -> the old compressed
-  // SRD-category ladder, byte-identical to before this law (the "legacy fallback view only" clause).
-  // NOTE (BEAUTY-WAVE.md VP1 OUT OF SCOPE): this is the TABLETOP convention, deliberately untouched —
-  // interior pieces route through interiorSpriteBillboard below, its own TRUE-SCALE sizing.
-  const sizeMultiplier = (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
-    ? entry.scaleVsHuman
-    : spriteSizeScaleFor(entry.size);
-  const h = sizeMultiplier * GLB_TARGET_HEIGHT * calib;
-  return buildSpriteBillboardMesh(tex, h, h, entry); // square plane; the sprite's own alpha silhouette reads the real shape
-}
-
-// BEAUTY-WAVE.md VP1 (the kaiju-scale-bug fix): interior pieces are TRUE-SCALE (cellSize: 1 world
-// unit = 5ft, DUNGEON-GRAPH.md law 1), NOT the tabletop's render-height-multiplier convention above
-// — a medium creature must stand ~1.1 world units tall in a room, not several. Height comes from
-// entry.worldHeight (the authoritative feet value) or a caller-supplied scaleVsHuman override,
-// falling back to the registry's legacy rounded scaleTrue and then 1.0 when neither is present.
-// Reading worldHeight directly avoids turning a 0.25-ft rat into 0.275 ft through scaleTrue's
-// intentionally compact two-decimal generated representation. Width is derived from the loaded
-// texture's own pixel aspect ratio (a sprite crop is rarely square) rather than the tabletop's
-// baked square plane. Returns {group, height} so interiorBuildPieces can floor-offset + wall-clamp
-// without re-deriving the height.
-function interiorSpriteBillboard(entry, wallHeightCap){
-  const tex = spriteTextureFor(entry); // S5: resolves through entry's own admission fields, not just the slug
-  if(!tex) return null; // not loaded yet / failed load -> caller falls through, never rejects
-  // A caller-supplied scaleVsHuman is an explicit presentation override (the CL-R2 preferred cap
-  // uses it without mutating authored worldHeight), so it wins over the registry's canonical value.
-  const scaleTrue = (typeof entry.scaleVsHuman === "number" && entry.scaleVsHuman > 0)
-    ? entry.scaleVsHuman
-    : (typeof entry.worldHeight === "number" && entry.worldHeight > 0)
-      ? entry.worldHeight / 5.5
-      : (typeof entry.scaleTrue === "number" && entry.scaleTrue > 0)
-        ? entry.scaleTrue
-        : 1.0;
-  let h = HUMAN_TRUE_HEIGHT * scaleTrue;
-  let oversizeClamped = false;
-  // Cap render height at the room's wall height * 0.95 (a titanic in a human room is a SCALE-DOMAIN
-  // problem — DUNGEON-GRAPH.md's scale-domain law — not something this renderer should paper over by
-  // clipping through the ceiling).
-  if(typeof wallHeightCap === "number" && wallHeightCap > 0 && h > wallHeightCap){
-    h = wallHeightCap;
-    oversizeClamped = true;
-  }
-  const img = tex.image;
-  const aspect = (img && img.width && img.height) ? (img.width / img.height) : 1;
-  const w = h * aspect;
-  const g = buildSpriteBillboardMesh(tex, w, h, entry);
-  if(oversizeClamped){
-    console.warn("qa: oversize-clamped", entry.slug, "-> capped at wall height", wallHeightCap);
-  }
-  return {
-    group: g,
-    height: h,
-    width: w,
-    canonicalHeight: HUMAN_TRUE_HEIGHT * scaleTrue,
-    oversizeClamped: oversizeClamped
-  };
-}
+// ---- split B7: interiorSpriteBillboard (the VP1 TRUE-SCALE wrapper) moved to
+// src/ui/theater-sprites.js. ----
 
 // ---- FIGURE RESOLUTION: extracted to src/ui/theater-figure-build.js (split B3, 2026-07-25) ----
 // figureFor (the sprite -> whole-object/glb -> pcRecipe -> bestiary-recipe -> archetype-cuboid
@@ -2647,157 +2343,22 @@ function interiorFloorTopAt(floorTopMap, x, z){
   return (typeof v === "number") ? v : fallback;
 }
 
-// CL-R2 — STANDEE SUPPORTS: the visible support is a shallow, softly rounded strip under every
-// interior standee, not a circular gameplay token. The tactical footprint remains the authoritative
-// occupied-cell span; this support is only the physical-looking foot that holds the cutout upright.
-// A Medium-or-larger support is exactly one stair tread deep (1/3 cell), while Small/Tiny supports
-// may be shallower. This lets a 5-ft citizen sit naturally on any of the three treads represented by
-// one cell without changing its 5x5 tactical ownership. Width is bounded by the tactical span, so a
-// very wide sprite exposes an art-regeneration problem instead of silently inventing a collision disc.
-const INTERIOR_BASE_HEIGHT = 0.09;                 // BW2-2b item 2: 0.04 -> ~0.09 ("a real plinth, per the mock read")
-const INTERIOR_BASE_TREAD_DEPTH = 1 / 3;
-const INTERIOR_BASE_Y_OFFSET = 0.006;              // clears the contact pool's own +0.003 (below) — never z-fights it
-// BW2-2b item 3 (TURN GLOW) — the accent gold every acting standee's ring already uses (ACTING_RING_MAT,
-// below); the base's own top/side materials swap TOWARD this on emissive when a standee is acting, so
-// ring + glowing plinth read "your turn" together, diegetically.
-const BASE_GLOW_EMISSIVE_HEX = 0xd4af6e;
-const INTERIOR_BASE_GEO_CACHE = {};
-function interiorTacticalSpanFor(size, authoredSpan){
-  if(Number.isFinite(authoredSpan) && authoredSpan > 0) return authoredSpan;
-  const key = String(size || "Medium").toLowerCase();
-  if(key === "tiny") return 0.5;
-  if(key === "large") return 2;
-  if(key === "huge") return 3;
-  if(key === "gargantuan") return 4;
-  return 1;
-}
-function interiorStandeeSupportMetrics(renderedWidth, size, authoredSpan){
-  const tacticalSpan = interiorTacticalSpanFor(size, authoredSpan);
-  const sizeKey = String(size || (tacticalSpan <= 0.5 ? "Tiny" : "Medium")).toLowerCase();
-  const depth = sizeKey === "tiny" ? 0.18 : (sizeKey === "small" ? 0.26 : INTERIOR_BASE_TREAD_DEPTH);
-  const minimumWidth = depth * 1.35;
-  const maximumWidth = Math.max(minimumWidth, tacticalSpan * 0.82);
-  const width = Math.max(minimumWidth, Math.min(maximumWidth, Math.max(0.05, renderedWidth || 1) * 0.82));
-  return {
-    width: width,
-    depth: depth,
-    tacticalSpanCells: tacticalSpan,
-    treadDepth: INTERIOR_BASE_TREAD_DEPTH,
-    stairFit: depth <= INTERIOR_BASE_TREAD_DEPTH + 0.000001
-  };
-}
-function interiorBaseGeoFor(width, depth){
-  const safeWidth = Math.max(0.08, width || 0.45);
-  const safeDepth = Math.max(0.08, depth || INTERIOR_BASE_TREAD_DEPTH);
-  const key = safeWidth.toFixed(3) + "x" + safeDepth.toFixed(3);
-  if(!INTERIOR_BASE_GEO_CACHE[key]){
-    if(typeof THREE.Shape === "function" && typeof THREE.ExtrudeGeometry === "function"){
-      const radius = Math.min(safeDepth * 0.42, safeWidth * 0.16);
-      const x0 = -safeWidth / 2, x1 = safeWidth / 2;
-      const z0 = -safeDepth / 2, z1 = safeDepth / 2;
-      const shape = new THREE.Shape();
-      shape.moveTo(x0 + radius, z0);
-      shape.lineTo(x1 - radius, z0);
-      shape.quadraticCurveTo(x1, z0, x1, z0 + radius);
-      shape.lineTo(x1, z1 - radius);
-      shape.quadraticCurveTo(x1, z1, x1 - radius, z1);
-      shape.lineTo(x0 + radius, z1);
-      shape.quadraticCurveTo(x0, z1, x0, z1 - radius);
-      shape.lineTo(x0, z0 + radius);
-      shape.quadraticCurveTo(x0, z0, x0 + radius, z0);
-      const geo = new THREE.ExtrudeGeometry(shape, {
-        depth: INTERIOR_BASE_HEIGHT,
-        bevelEnabled: true,
-        bevelSegments: 1,
-        bevelSize: Math.min(0.018, radius * 0.18),
-        bevelThickness: 0.012,
-        curveSegments: 4
-      });
-      // Shape lies in XY and extrudes +Z. +90deg about X maps its shape-Y to world Z and the
-      // extrusion downward from local y=0, keeping the top face on the shared feet/contact origin.
-      geo.rotateX(Math.PI / 2);
-      INTERIOR_BASE_GEO_CACHE[key] = geo;
-    } else {
-      // Test harnesses may provide only the primitive geometry constructors. Preserve the same
-      // dimensions/contact law there; production Three.js always takes the rounded extrusion above.
-      const geo = new THREE.BoxGeometry(safeWidth, INTERIOR_BASE_HEIGHT, safeDepth);
-      if(typeof geo.translate === "function") geo.translate(0, -INTERIOR_BASE_HEIGHT / 2, 0);
-      INTERIOR_BASE_GEO_CACHE[key] = geo;
-    }
-  }
-  return INTERIOR_BASE_GEO_CACHE[key];
-}
-const INTERIOR_BASE_MAT_CACHE = {};
-function interiorBaseMaterialsFor(trimHex){
-  const key = trimHex || "#8a8478";
-  if(INTERIOR_BASE_MAT_CACHE[key]) return INTERIOR_BASE_MAT_CACHE[key];
-  const c = hexToRGB(key);
-  // BW2-4b item 3 — BASE TINT: bases were pale lily-pads (side x0.55 / top x1.4 off the bright trim
-  // accent read as lit stone in noon light). Darkened to realm-trim STONE per the gloom mock — dark
-  // sides, a subtly lighter (not bright) top — so a base reads as shadowed ground, and adjacent bases
-  // fusing in a melee huddle read as one dark shadow-blob rather than a pale pad. Now that sprites +
-  // bases are both LIT and the interior key is a whisper, these multipliers are the base's whole value.
-  const sideRGB = scaleRGB(c, 0.30);
-  const topRGB = scaleRGB(c, 0.62);
-  const side = new THREE.MeshLambertMaterial({ color: rgbToHex(sideRGB.r, sideRGB.g, sideRGB.b) });
-  const top = new THREE.MeshLambertMaterial({ color: rgbToHex(topRGB.r, topRGB.g, topRGB.b) });
-  // ExtrudeGeometry material groups: [0]=front/back caps, [1]=side wall.
-  const mats = [top, side];
-  INTERIOR_BASE_MAT_CACHE[key] = mats;
-  return mats;
-}
-// interiorStandeeContactY: the world Y a standee's own feet-line (its group's local y=0 —
-// buildSpriteBillboardMesh's bottom-anchored convention) must sit at so the sprite reads as STANDING ON
-// its own base's TOP FACE, not the raw floor. A registry floorFrac (a flying/floating creature's
-// ground-contact fraction) still applies ON TOP of this exactly as it did pre-BW2-2 — it now lifts
-// further above the base top instead of the bare -0.5 plane, same relative behavior, corrected origin.
-function interiorStandeeContactY(floorTop){
-  return floorTop + INTERIOR_BASE_Y_OFFSET + INTERIOR_BASE_HEIGHT;
-}
-// buildInteriorBase — one plinth mesh. Added as a CHILD of the standee's own figure group (never a
-// sibling blob-group entry, and — BW2-2b item 1 — never a child of that group's own inner sprite wrap
-// either, see buildSpriteBillboardMesh's own header) so BW2-2's item 4 ("the whole miniature-with-base
-// tips as one") holds WITHOUT any reparenting trick: standee-verbs.js's fall-death now tips the OUTER
-// group's own rotation.x directly (freed by camera-tilt moving to the inner wrap — see
-// updateSpriteBillboardYaw), and a base mounted here as a plain sibling child of that same outer group
-// rides along automatically, exactly like a real miniature-with-base tipping as one rigid piece. The
-// blob/pool stays in its own untouched sibling group (added to S.shadowGroup/blobGroup directly, never
-// to this figure), exactly per spec item 4's "the blob stays put." Local position is fixed regardless
-// of floorFrac — the group's own world Y already carries the full contact-line math
-// (interiorStandeeContactY minus floorFrac*height, at the call sites below), so the base's local origin
-// is always "flush under local y=0": the group's local y=0 IS the base's own top face, which is also
-// exactly where a floorFrac=0 sprite's own bottom edge sits (buildSpriteBillboardMesh's
-// mesh.position.y=h/2 convention) — one shared local reference point, no separate bookkeeping.
-function buildInteriorBase(width, depth, trimHex){
-  const geo = interiorBaseGeoFor(width, depth);
-  // BW2-2b item 3 (TURN GLOW): the cache above (interiorBaseMaterialsFor) deliberately shares ONE
-  // material set per realm trim color across every standee mounted from the same board — cheap, and
-  // correct for a static plinth tint. Turning a SINGLE acting standee's base gold via that shared
-  // object would light up every OTHER standee sharing the same trim color too. Clone once per base
-  // mesh here so setActingUnit's glow toggle only ever touches THIS standee's own materials.
-  const mats = interiorBaseMaterialsFor(trimHex).map((m) => m.clone());
-  const mesh = new THREE.Mesh(geo, mats);
-  mesh.position.set(0, 0, 0);
-  mesh.receiveShadow = true;
-  mesh.castShadow = true;
-  mesh.userData.standeeBase = true; // verify-bw2-2's per-standee base-count check
-  mesh.userData.supportForm = "shallow-rounded-strip";
-  mesh.userData.supportWidth = width;
-  mesh.userData.supportDepth = depth;
-  mesh.userData.supportHeight = INTERIOR_BASE_HEIGHT;
-  return mesh;
-}
-// setBaseGlow(mesh, glowing) — BW2-2b item 3: toggles the acting-standee "your turn" plinth glow by
-// writing straight to each of the base's own (per-instance-cloned, see buildInteriorBase above)
-// materials' `emissive` channel — MeshLambertMaterial supports emissive self-illumination but has no
-// `emissiveIntensity` knob (that's a MeshStandardMaterial-only field), so a flat on/off hex swap is the
-// whole mechanism; combined with the existing gold acting ring (ACTING_RING_MAT) this reads as "ring +
-// glowing plinth together" per the spec. Null-safe (a non-interior figure has no base mesh at all).
-function setBaseGlow(mesh, glowing){
-  if(!mesh || !mesh.material) return;
-  const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-  mats.forEach((m) => { if(m && m.emissive) m.emissive.setHex(glowing ? BASE_GLOW_EMISSIVE_HEX : 0x000000); });
-}
+// ---- THE STANDEE BASE/CONTACT FAMILY: extracted to src/ui/theater-standee-mount.js (split B7,
+// 2026-07-25) ---- CL-R2's visible support (INTERIOR_BASE_*/interiorTacticalSpanFor/
+// interiorStandeeSupportMetrics/interiorBaseGeoFor/interiorBaseMaterialsFor/buildInteriorBase),
+// BW2-2's contact line (interiorStandeeContactY), BW2-2b's turn glow (BASE_GLOW_EMISSIVE_HEX/
+// setBaseGlow), CL-R2's support-collision resolver (STANDEE_SUPPORT_CLEARANCE/standeeSupport*/
+// standeeCollisionSign/mountedStandeeFigures/resolveMountedStandeeSupportCollisions/
+// syncStandeeContactBlob) and BW2-2's soft MULTIPLY contact pool (interiorPoolTexture/
+// interiorPoolGeoFor/interiorPoolMaterial/INTERIOR_POOL_Y_OFFSET/addInteriorContactBlob) live in
+// their own module now. It never imports this root: standeeMountInit(ctx) at end-of-body hands it
+// ITR_FLOOR_BASE_Y/ITR_FLOOR_HEIGHT_FALLBACK (verify-d4-doors text pins, unmoved), hashSeed and the
+// hexToRGB/rgbToHex/scaleRGB colour helpers. THE KILTER (kilterFor + KILTER_YAW_DEG +
+// KILTER_POS_FRAC, another verify-d4-doors text pin) stays HERE, in place, between setBaseGlow's old
+// position and the collision family's — the split stepped around it. addWallContactAO stays HERE too
+// (dressing/wall-prop-owned by its one caller, interiorBuildWallProps) and reaches
+// interiorPoolGeoFor/interiorPoolMaterial as imported bindings, so it shares the SAME geometry cache
+// and the SAME single material instance it always did.
 
 // BW2-2b item 4 — THE KILTER (Adam's taste ruling: "a figurine placed on that particular 5x5 tile" —
 // minis should read hand-placed, not machine-snapped dead-center on their cell). kilterFor(seedKey)
@@ -2833,226 +2394,7 @@ function kilterFor(seedKey){
   };
 }
 
-// CL-R2 follow-up — VISIBLE SUPPORT COLLISION. Tactical occupancy remains owned by the board/query
-// layer; this pass only prevents two rendered standee strips from occupying the same physical space.
-// Each support is an oriented rectangle (the standee yaw rotates it). A small deterministic
-// minimum-translation push moves the later-mounted piece along the shallowest separating axis,
-// exactly like nudging two board pieces apart without changing either piece's logical square.
-const STANDEE_SUPPORT_CLEARANCE = 0.035;
-function standeeSupportObb(fig){
-  if(!fig || !fig.userData) return null;
-  const width = Number(fig.userData.interiorBaseWidth);
-  const depth = Number(fig.userData.interiorBaseDepth);
-  if(!(width > 0) || !(depth > 0)) return null;
-  const yaw = fig.rotation ? fig.rotation.y || 0 : 0;
-  return {
-    fig: fig,
-    cx: fig.position.x,
-    cz: fig.position.z,
-    halfWidth: width * 0.5 + STANDEE_SUPPORT_CLEARANCE * 0.5,
-    halfDepth: depth * 0.5 + STANDEE_SUPPORT_CLEARANCE * 0.5,
-    widthAxis: { x: Math.cos(yaw), z: -Math.sin(yaw) },
-    depthAxis: { x: Math.sin(yaw), z: Math.cos(yaw) }
-  };
-}
-function standeeSupportRadiusOn(obb, axis){
-  return obb.halfWidth * Math.abs(obb.widthAxis.x * axis.x + obb.widthAxis.z * axis.z)
-    + obb.halfDepth * Math.abs(obb.depthAxis.x * axis.x + obb.depthAxis.z * axis.z);
-}
-function standeeSupportPenetration(a, b){
-  if(!a || !b) return null;
-  const dx = b.cx - a.cx, dz = b.cz - a.cz;
-  const axes = [a.widthAxis, a.depthAxis, b.widthAxis, b.depthAxis];
-  let best = null;
-  for(let i = 0; i < axes.length; i++){
-    const axis = axes[i];
-    const signedDistance = dx * axis.x + dz * axis.z;
-    const overlap = standeeSupportRadiusOn(a, axis) + standeeSupportRadiusOn(b, axis) - Math.abs(signedDistance);
-    if(overlap <= 0) return null;
-    if(!best || overlap < best.overlap){
-      best = { axis: axis, overlap: overlap, signedDistance: signedDistance };
-    }
-  }
-  return best;
-}
-function standeeCollisionSign(a, b, penetration){
-  if(Math.abs(penetration.signedDistance) > 0.000001) return penetration.signedDistance < 0 ? -1 : 1;
-  const aKey = String(a.fig.userData.sceneObjectId || a.fig.userData.unitId || a.fig.userData.spriteSlug || "");
-  const bKey = String(b.fig.userData.sceneObjectId || b.fig.userData.unitId || b.fig.userData.spriteSlug || "");
-  return (hashSeed(aKey + "->" + bKey) & 1) ? 1 : -1;
-}
-function mountedStandeeFigures(){
-  const figures = [];
-  function visit(root){
-    if(!root || typeof root.traverse !== "function") return;
-    root.traverse(function(node){
-      if(!node || !node.userData || !node.userData.sprite || node.userData.standeeCollisionExcluded) return;
-      if(node.userData.interiorBaseWidth > 0 && node.userData.interiorBaseDepth > 0) figures.push(node);
-    });
-  }
-  visit(S.interiorGroup);
-  visit(S.unitGroup);
-  return figures;
-}
-function resolveMountedStandeeSupportCollisions(){
-  const figures = mountedStandeeFigures();
-  let relocations = 0, checkedPairs = 0;
-  // Later-mounted pieces move; earlier pieces remain stable. Repeating the ordered sweep handles a
-  // piece that needs to clear two neighbors without introducing random or frame-dependent motion.
-  for(let pass = 0; pass < 12; pass++){
-    let movedThisPass = false;
-    for(let i = 1; i < figures.length; i++){
-      for(let j = 0; j < i; j++){
-        const a = standeeSupportObb(figures[j]), b = standeeSupportObb(figures[i]);
-        checkedPairs++;
-        const hit = standeeSupportPenetration(a, b);
-        if(!hit) continue;
-        const sign = standeeCollisionSign(a, b, hit);
-        const push = hit.overlap + 0.001;
-        figures[i].position.x += hit.axis.x * push * sign;
-        figures[i].position.z += hit.axis.z * push * sign;
-        figures[i].userData.standeeCollisionNudgeX =
-          (figures[i].userData.standeeCollisionNudgeX || 0) + hit.axis.x * push * sign;
-        figures[i].userData.standeeCollisionNudgeZ =
-          (figures[i].userData.standeeCollisionNudgeZ || 0) + hit.axis.z * push * sign;
-        figures[i].userData.standeeCollisionRelocated = true;
-        relocations++;
-        movedThisPass = true;
-      }
-    }
-    if(!movedThisPass) break;
-  }
-  let remainingOverlaps = 0;
-  for(let i = 1; i < figures.length; i++){
-    for(let j = 0; j < i; j++){
-      if(standeeSupportPenetration(standeeSupportObb(figures[j]), standeeSupportObb(figures[i]))){
-        remainingOverlaps++;
-      }
-    }
-  }
-  S.standeeCollisionAudit = {
-    pieces: figures.length,
-    checkedPairs: checkedPairs,
-    relocations: relocations,
-    remainingOverlaps: remainingOverlaps
-  };
-  S.standeeCollisionDirty = false;
-}
 
-// The soft pool is deliberately a little larger than the physical strip and biased slightly behind
-// it. The dense core still touches the support, while the feather remains visible instead of being
-// completely hidden by the base. Sync runs whenever billboards face the camera, so movement,
-// collision relocation, and inspection yaw can never leave the pool behind.
-function syncStandeeContactBlob(fig){
-  if(!fig || !fig.userData || !fig.userData.contactBlobMesh) return;
-  const blob = fig.userData.contactBlobMesh;
-  const yaw = fig.rotation ? fig.rotation.y || 0 : 0;
-  const depth = Number(fig.userData.interiorBaseDepth) || 0.33;
-  const offset = Math.min(0.12, Math.max(0.045, depth * 0.24));
-  blob.position.x = fig.position.x + Math.sin(yaw) * offset;
-  blob.position.z = fig.position.z + Math.cos(yaw) * offset;
-  blob.rotation.order = "YXZ";
-  blob.rotation.x = -Math.PI / 2;
-  blob.rotation.y = yaw;
-  blob.userData.contactOffset = offset;
-  blob.userData.linkedSceneObjectId = fig.userData.sceneObjectId || fig.userData.unitId || null;
-}
-
-// BW2-2 ADDENDUM (Adam, mid-flight review — "the contact shadow... really sells the illusion"): the
-// contact pool is a SOFT RADIAL MULTIPLY quad, replacing VP7's flat hard-edged disc. The texture is
-// opaque white at its rim (multiply identity) and falls toward dark gray at contact. THREE's
-// MultiplyBlending therefore computes `floor * pool` after the floor has already received ambient and
-// diegetic shadow: the contact patch remains darker than an already-shadowed tread instead of merely
-// painting a second flat black value over it. ONE shared gradient CanvasTexture (never a per-standee
-// canvas — the gradient SHAPE is identical everywhere; only the quad's own world-space SCALE differs
-// per standee footprint), linear-filtered (SPRITE PURITY's nearest-only rule guards CHARACTER pixels —
-// buildSpriteBillboardMesh's own header comment names the exemption for exactly this kind of
-// non-character ground shadow/blob quad).
-let INTERIOR_POOL_TEXTURE = null;
-function interiorPoolTexture(){
-  if(INTERIOR_POOL_TEXTURE) return INTERIOR_POOL_TEXTURE;
-  const size = 128;
-  const canvas = document.createElement("canvas");
-  canvas.width = size; canvas.height = size;
-  // total-function discipline (every other texture builder in this file — interiorMaterialTexture,
-  // dressingPlaceholderTexture — degrades cleanly rather than throwing): a jsdom harness with no native
-  // `canvas` npm package installed returns ctx===null (a real browser/Chrome, the only place this ever
-  // actually renders, always resolves a working 2D context) — skip the paint rather than crash, and
-  // hand back an untextured (but still valid) CanvasTexture so interiorBuildPieces/setUnits' pool-mount
-  // call sites never need their own null-guard.
-  const ctx = canvas.getContext && canvas.getContext("2d");
-  if(ctx && typeof ctx.createRadialGradient === "function"){
-    // White is the multiply identity, so the square quad disappears completely outside the soft pool.
-    // Gray—not alpha—owns the occlusion strength. This keeps the result load-bearing in both lit and
-    // already-shadowed floor values; the contact core multiplies either value down proportionally.
-    ctx.fillStyle = "rgb(255,255,255)";
-    ctx.fillRect(0, 0, size, size);
-    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
-    grad.addColorStop(0, "rgb(64,64,64)");      // 0.25× at the hidden center beneath the standee
-    grad.addColorStop(0.46, "rgb(92,92,92)");   // dense contact band hugging the support
-    grad.addColorStop(0.72, "rgb(170,170,170)");// readable occlusion just beyond the base edge
-    grad.addColorStop(1, "rgb(255,255,255)");   // exact multiply identity at the rim
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, size, size);
-  }
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; // deliberately NOT nearestify() — SPRITE PURITY's carve-out for non-character ground shadows
-  tex.userData.contactMultiplyMap = true;
-  INTERIOR_POOL_TEXTURE = tex;
-  return tex;
-}
-const INTERIOR_POOL_GEO_CACHE = {};
-function interiorPoolGeoFor(radius){
-  const key = radius.toFixed(3);
-  if(!INTERIOR_POOL_GEO_CACHE[key]) INTERIOR_POOL_GEO_CACHE[key] = new THREE.PlaneGeometry(radius * 2, radius * 2);
-  return INTERIOR_POOL_GEO_CACHE[key];
-}
-let INTERIOR_POOL_MAT = null;
-function interiorPoolMaterial(){
-  if(!INTERIOR_POOL_MAT){
-    INTERIOR_POOL_MAT = new THREE.MeshBasicMaterial({
-      map: interiorPoolTexture(),
-      transparent: false,
-      blending: THREE.MultiplyBlending,
-      depthWrite: false,
-      side: THREE.DoubleSide,
-      toneMapped: false
-    });
-    INTERIOR_POOL_MAT.userData.contactBlendMode = "multiply";
-  }
-  return INTERIOR_POOL_MAT;
-}
-// BEAUTY-WAVE.md VP7 (CONTACT GROUNDING), BW2-2-upgraded: interior pieces + combat units + large
-// dressing cards get one soft contact pool each (reuse, don't reinvent). `texWidth` is the standee/
-// card's own rendered world-space width (radius = texWidth*0.4, unchanged from VP7 — a hair under half
-// its footprint); the POOL itself extends further per the addendum ("feather extends ~1.6x the base
-// radius"). `floorTop` (BW2-2) replaces the old hardcoded y=-0.495 — the pool now seats a hair above
-// THIS cell's own real floor surface (never the bare -0.5 plane), below every base's own +INTERIOR_BASE_Y_OFFSET
-// so the two never z-fight.
-const INTERIOR_POOL_Y_OFFSET = 0.003;
-function addInteriorContactBlob(group, x, z, texWidth, floorTop, texDepth){
-  if(!group) return null;
-  const footprint = Math.max(0.05, (texWidth || 1) * 0.48);
-  const poolRadius = footprint * 1.55;
-  const mesh = new THREE.Mesh(interiorPoolGeoFor(poolRadius), interiorPoolMaterial());
-  mesh.rotation.x = -Math.PI / 2;
-  if(Number.isFinite(texDepth) && texDepth > 0){
-    // Keep the feather tied to the natural standee strip instead of restoring a circular token
-    // silhouette in shadow. Geometry remains shared; scale alone makes the pool elliptical.
-    mesh.scale.y = Math.max(0.18, texDepth / Math.max(0.001, texWidth || 1));
-  }
-  const y = (typeof floorTop === "number" ? floorTop : ITR_FLOOR_BASE_Y + ITR_FLOOR_HEIGHT_FALLBACK) + INTERIOR_POOL_Y_OFFSET;
-  mesh.position.set(x, y, z);
-  mesh.userData.contactBlob = true; // verify-dungeon-interior's per-piece blob-count check
-  mesh.userData.contactWidth = texWidth;
-  mesh.userData.contactDepth = Number.isFinite(texDepth) ? texDepth : texWidth;
-  mesh.userData.contactPoolDiameter = poolRadius * 2;
-  mesh.userData.contactBlendMode = "multiply";
-  mesh.userData.contactMultiplyIdentityRim = true;
-  mesh.renderOrder = 2;
-  group.add(mesh);
-  return mesh;
-}
 
 // docs/STAGE-D-WAVE-SPECS.md D4 — DOORS-FIRST render keystone (BEAUTY-WAVE-5.md IA-4, "doors ship
 // first"). data.interactables mirrors data.dressing/data.pieces (a plain field the caller sets
@@ -3925,342 +3267,21 @@ function interiorBuildKitShellFloors(floorBlocks, cx, cz, realmId, realmProfile)
   return group;
 }
 
-// BEAUTY-WAVE.md VP6 item 4 — VISIBLE HISTORY (render half). data.decals mirrors data.dressing/
-// data.pieces (a plain field the caller sets directly on the board object, sourced from
-// src/world/prep.js's spatialDecalsForSeg(pn, segNum) — the PERSIST half lives there, not here; this
-// function only renders whatever decal records that call already returned). Each entry
-// {x,y,kind,roomSegNum} — kind in {blood,scorch,impact,dust} — reuses the SAME flat-ground-quad
-// convention the cover-patch channel established (theater-interior.js's itrCoverCardFor/proceduralSplat
-// seam, VP3 item 3): a colored CircleGeometry card laid flat at the floor plane, no real art needed (the
-// spec's own "VP3's cover channel" instruction — reuse the render idiom, not a new mechanism). No
-// dedicated decal art has landed (assets/dressing has no per-decal slugs), so every decal is currently
-// the procedural tint card — the seam is here (kindColor) the moment real decal art wants to join it.
-const DECAL_KIND_COLOR = {
-  blood: 0x6e1414, scorch: 0x2a2018, impact: 0x8a8478, dust: 0xcfc9a8
-};
-const DECAL_GEO_CACHE = {};
-function decalGeoFor(radius){
-  const key = radius.toFixed(3);
-  if(!DECAL_GEO_CACHE[key]) DECAL_GEO_CACHE[key] = new THREE.CircleGeometry(radius, 10);
-  return DECAL_GEO_CACHE[key];
-}
-const INTERIOR_DECAL_Y_OFFSET = 0.010; // BW2-2: relative to THIS cell's own floor top (interiorFloorTopAt), not the bare -0.5 plane — clears the contact-pool layer's own +0.003 offset
-function interiorBuildDecals(decals, cx, cz, floorTopMap){
-  const group = new THREE.Group();
-  (decals || []).forEach((d) => {
-    const color = DECAL_KIND_COLOR[d.kind] || DECAL_KIND_COLOR.impact;
-    const mat = new THREE.MeshBasicMaterial({
-      color, transparent: true, opacity: 0.6, depthWrite: false, side: THREE.DoubleSide
-    });
-    const mesh = new THREE.Mesh(decalGeoFor(0.32), mat);
-    mesh.rotation.x = -Math.PI / 2;
-    // BW2-2: a hair above THIS cell's own real floor top (interiorFloorTopAt), never the bare -0.5
-    // plane the pre-BW2-2 hardcode assumed — visible history reads ON the actual floor surface, still
-    // above the contact-pool layer so the two never fight for the same plane.
-    const floorTop = interiorFloorTopAt(floorTopMap, d.x || 0, d.y || 0);
-    mesh.position.set((d.x || 0) - (cx || 0), floorTop + INTERIOR_DECAL_Y_OFFSET, (d.y || 0) - (cz || 0));
-    mesh.userData.decalKind = d.kind || "impact";
-    group.add(mesh);
-  });
-  return group;
-}
+// ---- THE OVERLAY FAMILY: extracted to src/ui/theater-overlays.js (split B7, 2026-07-25) ----
+// VP6's visible-history decals (DECAL_KIND_COLOR/decalGeoFor/INTERIOR_DECAL_Y_OFFSET/
+// interiorBuildDecals), VP6's hit-effect cards (EFFECT_CARD_DUR/effectRingGeoFor/EFFECT_PROC_COLOR/
+// effectCardFor/spawnEffectCard), VP5's diegetic selection ring with MF-4's slide (ACTING_RING_MAT/
+// actingRingGeoFor/MF4_RING_SLIDE_DUR/actingRingRadiusFor/actingRingWorldPosFor/setActingUnit) and
+// VP5's damage floaters (projectUnit/spawnFloater) live in their own module now. It never imports
+// this root: overlaysInit(ctx) at end-of-body hands it findUnit (a verify-standee-verbs text pin,
+// unmoved), interiorFloorTopAt (a verify-d4-doors text pin, unmoved), markDirty, nearestify,
+// startTweenLoop and textureLoader; it takes setBaseGlow from theater-standee-mount.js and
+// mf1EaseOutCubic/mf1Lerp from theater-camera.js as one-way leaf->leaf edges. Every facade seam and
+// production call site (play()'s hit/down wiring, setInteriorBoard's decal mount, the
+// window.Theater.setActingUnit/projectUnit/spawnFloater publishes) stays HERE, unmoved.
 
-/* BEAUTY-WAVE.md VP6 item 5 — HIT-EFFECTS SEAM. hit-damage/fall-death (act-cast stays out of scope for
-   THIS unit's production wiring — see below) spawn an effect card at the target: real effects-core art
-   the moment it lands (effectCardFor's own async cache-with-placeholder-replay convention, same idiom
-   as dressingTextureFor/dressingPlaceholderTexture just above) OR a procedural flash-ring quad standing
-   in behind the SAME seam while no art has landed yet (`effectCardFor(name) || proceduralRing`, the
-   spec's own literal words). Oversized 1.5-2x at the target per GRAPHICS-ENGINE §B. Lives in S.fxGroup
-   (already swept every board swap by clearGroup(S.fxGroup) in setInteriorBoard/retire — zero new
-   cleanup bookkeeping needed) and expires via a normal S.tweens entry (the SAME tween array
-   buildTheaterCtx/tickTweens already drain every frame) fading opacity to 0 over EFFECT_CARD_DUR ms,
-   then removing + disposing itself — "assert spawn+expiry" per the spec's own verify line. */
-const EFFECT_CARD_DUR = 420;
-const EFFECT_RING_GEO_CACHE = {};
-function effectRingGeoFor(radius){
-  const key = radius.toFixed(3);
-  if(!EFFECT_RING_GEO_CACHE[key]) EFFECT_RING_GEO_CACHE[key] = new THREE.RingGeometry(radius * 0.55, radius, 20);
-  return EFFECT_RING_GEO_CACHE[key];
-}
-const EFFECT_PROC_COLOR = { "hit-damage": 0xff5040, "fall-death": 0x8a8478, "act-cast": 0x8a6bff };
-// effectCardFor(name) — real effects-core art seam (VP2's fold, GR2 §D-adjacent convention): tries
-// assets/dressing/effect-<name>.png via the SAME async TextureLoader-with-cache pattern as
-// dressingTextureFor, but returns null (not a placeholder) synchronously until a real texture resolves —
-// an absent effect texture is the documented `|| proceduralRing` fallback below, never a labeled
-// placeholder card (a placeholder reads as "art is coming"; a procedural ring reads as "this IS the
-// effect, art will refine it later" — the correct fallback register for a combat-feedback flash).
-function effectCardFor(name){
-  if(!S.effectTexCache) S.effectTexCache = {};
-  const key = "effect:" + name;
-  if(!(key in S.effectTexCache)){
-    S.effectTexCache[key] = null; // pending
-    textureLoader.load(
-      "assets/dressing/effect-" + name + ".png",
-      (tex) => { nearestify(tex); S.effectTexCache[key] = tex; },
-      undefined,
-      () => { S.effectTexCache[key] = false; } // confirmed missing — never retried
-    );
-  }
-  const cached = S.effectTexCache[key];
-  return cached ? cached : null;
-}
-function spawnEffectCard(name, x, y, z, oversize){
-  if(!S.fxGroup) return null;
-  const size = 1 * (oversize || 1.7); // "oversized 1.5-2x" — 1.7 is the seam's own default midpoint
-  const tex = effectCardFor(name);
-  const color = EFFECT_PROC_COLOR[name] || 0xffffff;
-  const mat = new THREE.MeshBasicMaterial({
-    map: tex || null, color: tex ? 0xffffff : color, transparent: true, opacity: 0.95,
-    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
-  });
-  const geo = tex ? new THREE.PlaneGeometry(size, size) : effectRingGeoFor(size * 0.5);
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.rotation.x = -Math.PI / 2;
-  mesh.position.set(x, y, z);
-  mesh.userData.effectCard = name;
-  S.fxGroup.add(mesh);
-  const baseOpacity = mat.opacity;
-  S.tweens.push({
-    start: Date.now(), dur: EFFECT_CARD_DUR,
-    update(t){ mat.opacity = baseOpacity * (1 - t); },
-    onDone(){
-      if(mesh.parent) mesh.parent.remove(mesh);
-      if(mat.dispose) mat.dispose();
-      if(geo && geo.dispose && !tex) { /* cached ring geo — never dispose the shared cache entry */ }
-    }
-  });
-  startTweenLoop();
-  return mesh;
-}
 
-/* BEAUTY-WAVE VP5 item 2 — diegetic selection: "the acting unit's chip highlights AND its standee
-   gets a ground-ring glow (reuse the blob-quad channel, accent color)." Same convention as
-   addGroundingBlob just above (a flat circle quad, seated at the floor plane) but a thin RING
-   (inner radius carved out) so it reads as a glow ANNOUNCING the figure rather than a shadow
-   grounding it, and it rides the accent gold rather than near-black. Mounted as a CHILD of the
-   unit's own figure group (not a separate group tracked by world x/z) so it inherits the figure's
-   position/rotation for free and gets swept automatically the instant clearGroup() disposes that
-   figure on the next setUnits() — no separate cleanup bookkeeping needed beyond the one call below
-   that removes the previous ring before adding a new one. */
-const ACTING_RING_MAT = new THREE.MeshBasicMaterial({
-  color: 0xd4af6e, transparent: true, opacity: 0.85, side: THREE.DoubleSide, depthWrite: false
-});
-const ACTING_RING_GEO_CACHE = {};
-function actingRingGeoFor(radius){
-  const key = radius.toFixed(3);
-  if(!ACTING_RING_GEO_CACHE[key]) ACTING_RING_GEO_CACHE[key] = new THREE.RingGeometry(radius * 0.7, radius, 28);
-  return ACTING_RING_GEO_CACHE[key];
-}
-// BEAUTY-WAVE-4.md MF-4 item 1 (the rhythm layer): the acting-ring's own slide duration, same
-// tween-channel discipline as MF-1's placeCameraTweened (reuses mf1EaseOutCubic/mf1Lerp above —
-// they're generic numeric-ease helpers despite the mf1-prefixed name, not camera-specific).
-const MF4_RING_SLIDE_DUR = 300;
-// interior standees wrap their own base rim (radius derived from the stamped base radius); tabletop
-// figures use the fixed 0.6 floor-blob convention. Pulled out of setActingUnit's old inline body so
-// both the slide path and the instant (re)mount path below share one derivation.
-function actingRingRadiusFor(fig){
-  const interiorFig = !!(fig.userData && fig.userData.interiorTrueScale);
-  return interiorFig ? Math.max(0.12, (fig.userData.interiorBaseRadius || 0.3) * 1.2) : 0.6;
-}
-// world-space target for the ring: the fig's own world position plus the SAME fixed local y offset
-// the pre-MF-4 child-of-fig mount used (a hair above local y=0 for an interior standee's base-rim
-// contact line, -0.48 for a tabletop figure — see the original comment preserved on the instant path
-// below). A ring is a flat disc rotated flat (-90° on local X) so it's radially symmetric — reading
-// its position in world space instead of as a fig-child is visually identical as long as the fig
-// itself never scales/tilts off the vertical (true for every figure this renders today), which is
-// exactly what lets the MF-4 slide below move the SAME mesh across two different figures' local
-// frames without a re-parent mid-flight.
-function actingRingWorldPosFor(fig){
-  const interiorFig = !!(fig.userData && fig.userData.interiorTrueScale);
-  const world = new THREE.Vector3();
-  fig.getWorldPosition(world);
-  world.y += interiorFig ? 0.003 : -0.48;
-  return world;
-}
-/* setActingUnit(idOrIds) — takes a single unit id OR an array (COMBAT.md's side-based initiative has
-   no single "current actor," only a currently-acting SIDE — the PC is one unit so its turn lights one
-   ring, but the foes' turn can mean several live foes could act, so the caller passes every live id on
-   the acting side; the existing .cmb-active chip class already does the identical "highlight the whole
-   side" thing, this is that same design call applied to standees). id(s)=null/[] clears every ring
-   (between rounds / no fight). Returns the count of rings actually mounted (0 if none resolved).
 
-   BEAUTY-WAVE-4.md MF-4 item 1: "the gold base glow + ring TWEEN between units — a 300ms slide of the
-   ring to the next actor — instead of blinking/teleporting." A clean single-actor-to-single-actor
-   HANDOFF (exactly one previous acting id, exactly one new one, and they differ — the common "whose
-   turn it is" case for the PC or a lone acting foe) now SLIDES the existing ring mesh from the old
-   actor's world position to the new actor's over MF4_RING_SLIDE_DUR ms on the shared S.tweens channel,
-   instead of the old instant remove+recreate. Any other shape — first reveal (0 -> N), a full clear
-   (N -> 0), a multi-unit acting SIDE on either end, or the same id repeated — keeps the pre-MF-4
-   instant behavior verbatim (a slide only reads as "the eye follows whose turn it is" between exactly
-   two rings; interpolating N>1 rings has no single well-defined path and isn't asked for). The base
-   glow itself is NOT slid (a base is a fixed mesh per unit — there's nothing physical to interpolate
-   between two different bases) — it keeps toggling instantly per the existing BW2-2b law; only the
-   one ring object animates. */
-function setActingUnit(idOrIds){
-  const ids = idOrIds == null ? [] : (Array.isArray(idOrIds) ? idOrIds : [idOrIds]);
-
-  // cancel any in-flight ring-slide tween first — never two competing slides live at once, same
-  // retarget-not-stack discipline as MF-1's placeCameraTweened cancelling a stale camera-pose tween.
-  if(S.tweens && S.tweens.length){
-    S.tweens = S.tweens.filter((tw) => !(tw && tw.isRingSlideTween));
-  }
-
-  // BW2-2b item 3 (TURN GLOW): revert every PREVIOUSLY-glowing base before mounting the new set —
-  // instant in every case, slide or not (see header above).
-  (S.actingGlowBaseMeshes || []).forEach(function(m){ setBaseGlow(m, false); });
-  S.actingGlowBaseMeshes = [];
-
-  // resolve the new id set's figs up front — needed both for the slide-eligibility check and the
-  // instant mount loop below.
-  const figsById = {};
-  ids.forEach(function(id){
-    if(id == null) return;
-    const fig = findUnit(id);
-    if(fig) figsById[id] = fig;
-  });
-  const newResolvedIds = ids.filter((id) => figsById[id]);
-  const prevIds = S.actingIds || [];
-
-  const canSlide = prevIds.length === 1 && newResolvedIds.length === 1 && prevIds[0] !== newResolvedIds[0]
-    && S.actingRingMeshes && S.actingRingMeshes.length === 1 && S.actingRingMeshes[0].parent;
-
-  if(canSlide){
-    const ringMesh = S.actingRingMeshes[0];
-    const fromWorld = ringMesh.getWorldPosition(new THREE.Vector3());
-    const toFig = figsById[newResolvedIds[0]];
-    const toWorld = actingRingWorldPosFor(toFig);
-    const toRadius = actingRingRadiusFor(toFig);
-    const toInterior = !!(toFig.userData && toFig.userData.interiorTrueScale);
-
-    // detach from the old fig and reparent to the scene root AT its current world position, so the
-    // tween below can move it in pure world space without fighting either fig's local transform.
-    if(ringMesh.parent) ringMesh.parent.remove(ringMesh);
-    ringMesh.position.copy(fromWorld);
-    ringMesh.rotation.x = -Math.PI / 2;
-    S.scene.add(ringMesh);
-
-    if(!S.tweens) S.tweens = [];
-    S.tweens.push({
-      start: Date.now(),
-      dur: MF4_RING_SLIDE_DUR,
-      isRingSlideTween: true,
-      update: (t) => {
-        const e = mf1EaseOutCubic(t);
-        ringMesh.position.set(
-          mf1Lerp(fromWorld.x, toWorld.x, e),
-          mf1Lerp(fromWorld.y, toWorld.y, e),
-          mf1Lerp(fromWorld.z, toWorld.z, e)
-        );
-      },
-      onDone: () => {
-        // dock into the new fig's local frame — matches the instant-mount convention exactly (see the
-        // radius/Y comment on the instant path below), so any later board rebuild sees the same
-        // parented-to-fig shape it always has, slide or not.
-        toFig.add(ringMesh);
-        ringMesh.position.set(0, toInterior ? 0.003 : -0.48, 0);
-        const wantGeo = actingRingGeoFor(toRadius);
-        if(ringMesh.geometry !== wantGeo) ringMesh.geometry = wantGeo;
-      }
-    });
-    markDirty();
-    startTweenLoop();
-
-    // the new actor's base glow mounts instantly (unchanged BW2-2b law) — only the ring itself is
-    // mid-flight this turn.
-    if(toInterior && toFig.userData.standeeBaseMesh){
-      setBaseGlow(toFig.userData.standeeBaseMesh, true);
-      S.actingGlowBaseMeshes.push(toFig.userData.standeeBaseMesh);
-    }
-    S.actingIds = newResolvedIds;
-    return 1;
-  }
-
-  // instant path — byte-identical to the pre-MF-4 behavior, used for first reveal, a full clear, any
-  // multi-unit acting side, or a same-id no-op call.
-  (S.actingRingMeshes || []).forEach(function(m){ if(m.parent) m.parent.remove(m); });
-  S.actingRingMeshes = [];
-  let mounted = 0;
-  newResolvedIds.forEach(function(id){
-    const fig = figsById[id];
-    // BW2-2: an interior true-scale standee's ring relocates to wrap its own BASE rim (slightly
-    // larger radius, same gold) instead of the tabletop's fixed 0.6-radius floor-blob convention below
-    // — the base radius was stamped onto userData at mount time (interiorBuildPieces/setUnits, both
-    // above) specifically for this. A non-interior (tabletop combat) figure carries no
-    // interiorTrueScale flag at all, so it falls through to the exact pre-BW2-2 radius/Y — byte-
-    // identical, untouched.
-    const interiorFig = !!(fig.userData && fig.userData.interiorTrueScale);
-    const ringRadius = actingRingRadiusFor(fig);
-    const mesh = new THREE.Mesh(actingRingGeoFor(ringRadius), ACTING_RING_MAT);
-    mesh.rotation.x = -Math.PI / 2;
-    // interior: a hair above local y=0 — which IS the base's own top face / the standee's own
-    // contact line (buildInteriorBase's header explains why local 0 is that shared reference point) —
-    // so the ring reads as wrapping the base rim. tabletop (unchanged): -0.48, above the grounding
-    // blob's -0.495 and below the hostility base disc, per the SAME layering law addGroundingBlob's
-    // header documents ("never fighting it for the same plane").
-    mesh.position.set(0, interiorFig ? 0.003 : -0.48, 0);
-    fig.add(mesh);
-    S.actingRingMeshes.push(mesh);
-    // BW2-2b item 3: the base itself glows gold too (joins the ring, not a replacement) — only an
-    // interior standee HAS a base mesh at all (stamped onto userData at mount time, same discriminator
-    // as the ring radius above); a tabletop figure's own hostility disc/grounding blob are untouched.
-    if(interiorFig && fig.userData.standeeBaseMesh){
-      setBaseGlow(fig.userData.standeeBaseMesh, true);
-      S.actingGlowBaseMeshes.push(fig.userData.standeeBaseMesh);
-    }
-    mounted++;
-  });
-  S.actingIds = newResolvedIds;
-  markDirty();
-  return mounted;
-}
-
-/* BEAUTY-WAVE VP5 item 3 — damage floaters. projectUnit(id) turns a mounted unit's world position
-   into on-screen pixel coordinates (relative to the canvas host), the SAME Vector3.project(camera)
-   math interiorFrustumCheck already uses above, just for one point instead of a room's corners.
-   headHeight defaults to HUMAN_TRUE_HEIGHT-ish (1.1, matching interiorFrustumCheck's own default)
-   so the floater spawns near a standing figure's head, not its feet. */
-function projectUnit(id, headHeight){
-  if(!S.mounted || !S.camera || !S.renderer) return null;
-  const fig = findUnit(id);
-  if(!fig) return null;
-  const h = (typeof headHeight === "number" && isFinite(headHeight)) ? headHeight : 1.1;
-  const world = new THREE.Vector3();
-  fig.getWorldPosition(world);
-  world.y += h;
-  S.camera.updateMatrixWorld();
-  const v = world.clone().project(S.camera);
-  const rect = S.renderer.domElement.getBoundingClientRect();
-  const w = rect.width || S.renderer.domElement.clientWidth || 1;
-  const hgt = rect.height || S.renderer.domElement.clientHeight || 1;
-  const x = (v.x * 0.5 + 0.5) * w;
-  const y = (1 - (v.y * 0.5 + 0.5)) * hgt;
-  const onscreen = v.z < 1 && Math.abs(v.x) <= 1 && Math.abs(v.y) <= 1;
-  return { x, y, onscreen };
-}
-
-/* spawnFloater(id, text, opts) — appends one ephemeral DOM node into S.floaterEl (the persistent
-   overlay div created at mount()/reattach() above, so it survives the host's innerHTML replacement
-   on the NEXT combat re-render same as the canvas does). AMENDED per the VP5 spec's 2c-framing note:
-   "either reproject per-frame while alive, or anchor at spawn and rely on the fast fade; never let a
-   floater drift onto the wrong standee after a camera fit" — this picks anchor-at-spawn (the fade is
-   only 600ms, well inside a single camera-fit beat, so drift risk is negligible and it avoids a
-   per-frame rAF hook keeping a reference to a figure that might get disposed mid-fade). Returns the
-   node (or null if the unit can't be projected — e.g. pre-mount, headless, or off-board). */
-function spawnFloater(id, text, opts){
-  if(!S.floaterEl) return null;
-  const pos = projectUnit(id, opts && opts.headHeight);
-  if(!pos) return null;
-  const el = document.createElement("div");
-  el.className = "theater-floater" + (opts && opts.variant ? (" theater-floater-" + opts.variant) : "");
-  el.style.left = pos.x + "px";
-  el.style.top = pos.y + "px";
-  el.textContent = String(text == null ? "" : text);
-  S.floaterEl.appendChild(el);
-  // fast, deterministic cleanup — no reliance on an animationend listener firing (a re-render that
-  // detaches floaterEl mid-fade must not leak the node or the timer's closure forever).
-  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 650);
-  return el;
-}
 
 function hashSeed(id){
   let h = 0;
@@ -4462,89 +3483,12 @@ function markDirty(){
   scheduleRender();
 }
 
-// SPRITE-TRANSITION T4.2: Y-axis-only billboarding — every sprite group (tagged userData.sprite by
-// buildSpriteBillboard) turns to face the camera's current yaw step each render pass, rotating the
-// GROUP about Y only (rotation.x/z stay 0 — "sprites stay upright" per the spec) rather than a true
-// look-at (which would also tip the plane's top toward/away from the camera at this game's fixed
-// elevation, reading as a leaning card instead of an upright PS1/Doom sprite). The camera only ever
-// sits at one of placeCamera's 4 discrete 90°-step yaws (+ the fixed CAM_YAW_OFFSET_DEG dimetric
-// offset), so recomputing this on every dirty render (cheap — a handful of live sprite units at most)
-// is simpler and just as correct as hooking rotate()/placeCamera() separately. A plane is authored
-// facing +Z (buildSpriteBillboard's own PlaneGeometry default); +PI turns that face to point back at
-// the camera position (which sits at angle `yaw` from the board origin, looking inward).
-function updateSpriteBillboardYaw(){
-  updateSpriteCameraFill();
-  const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
-  const facing = yaw + Math.PI;
-  // Camera-pitch tilt (Adam 2026-07-10 evening): an upright quad under the elevated ortho camera
-  // foreshortens vertically by cos(elevation) — reads as a SQUASHED sprite. Tilting each standee
-  // back by the camera elevation makes the quad camera-perpendicular: full sprite height on
-  // screen, no distortion, feet still anchored at the group origin. rotation order YXZ so the
-  // pitch rides the yaw.
-  const tilt = (CAM_ELEV_DEG * Math.PI) / 180; // top leans AWAY from the camera (standee), not into the floor
-  // BW2-2b item 1 (FLOOR-ALIGNED BASES): camera-pitch tilt now lands on the standee's INNER wrapper
-  // (g.userData.standeeWrap, built eagerly by buildSpriteBillboardMesh above — holds ONLY the sprite
-  // mesh) instead of the OUTER group `fig` itself. `fig.rotation.x` is deliberately left untouched
-  // here — a plinth base/acting ring mounted as a direct SIBLING child of `fig` (never of the wrap)
-  // then stays floor-flat under `fig`'s own yaw-only rotation, and `fig.rotation.x` is FREE for
-  // standee-verbs.js's verb-tilt (fall-death) to tip the whole mini — base included — as one rigid
-  // body (see that file's runKeyframeVerb). A group whose wrap is missing (defensive — every real
-  // sprite built via buildSpriteBillboardMesh has one) falls back to the pre-BW2-2b behavior on the
-  // OUTER group so nothing silently stops tilting.
-  // BW2-2b item 4 (THE KILTER): a per-standee seeded yaw jitter (kilterFor, below) rides on TOP of the
-  // camera-relative facing yaw, applied to the OUTER group (fig) — so the WHOLE mini (base+sprite)
-  // reads as sitting a hair off-true on its tile, exactly like a hand-placed physical miniature, per
-  // Adam's mock read (ui-sketches/mock-frames/mock-01-gloom-combat.png: the ghost's base sits
-  // perceptibly off-kilter next to the knight's square one).
-  function face(fig){
-    fig.rotation.order = "YXZ";
-    const kilterRad = ((fig.userData.kilterYawDeg || 0) * Math.PI) / 180;
-    const viewOffset = Number.isFinite(fig.userData.claySpriteViewYawOffset)
-      ? fig.userData.claySpriteViewYawOffset : 0;
-    fig.rotation.y = facing + kilterRad + viewOffset;
-    const wrap = fig.userData.standeeWrap;
-    if(wrap){
-      wrap.rotation.order = "YXZ";
-      wrap.rotation.x = tilt;
-    } else {
-      fig.rotation.x = tilt;
-    }
-  }
-  if(S.unitGroup){
-    for(let i = 0; i < S.unitGroup.children.length; i++){
-      const fig = S.unitGroup.children[i];
-      if(fig && fig.userData && fig.userData.sprite) face(fig);
-    }
-  }
-  // ENV-2 (docs/ENV-EXTERIOR-WAVE.md) — the flat tabletop's own board.props (setBoard, above) can now
-  // carry biome-scatter dressing CARDS (buildDressingCard — same userData.sprite tag every other
-  // billboard group in this file already carries), mounted into S.propGroup. This group was NEVER
-  // scanned here before this unit (no prop ever carried userData.sprite) — a pure additive no-op for
-  // every existing board/prop; only ENV-2's own new dressing cards are affected.
-  if(S.propGroup){
-    for(let i = 0; i < S.propGroup.children.length; i++){
-      const fig = S.propGroup.children[i];
-      if(fig && fig.userData && fig.userData.sprite) face(fig);
-    }
-  }
-  // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: interior "pieces" (creature/PC sprites standing in the
-  // room) are billboard groups too (interiorBuildPieces -> buildSpriteBillboard, same userData.sprite
-  // tag), but they live in S.interiorGroup's own pieces sub-group, not S.unitGroup — walk the group
-  // tree one level deep (interiorGroup -> {tile/wall/light/pieces sub-groups} -> sprite groups) rather
-  // than a flat scan, so this stays cheap even on an 80-room whole-plan interior render.
-  if(S.interiorGroup){
-    for(let i = 0; i < S.interiorGroup.children.length; i++){
-      const sub = S.interiorGroup.children[i];
-      if(!sub || !sub.children) continue;
-      for(let j = 0; j < sub.children.length; j++){
-        const fig = sub.children[j];
-        if(fig && fig.userData && fig.userData.sprite) face(fig);
-      }
-    }
-  }
-  if(S.standeeCollisionDirty) resolveMountedStandeeSupportCollisions();
-  mountedStandeeFigures().forEach(syncStandeeContactBlob);
-}
+// ---- SPRITE BILLBOARD FACING: extracted to src/ui/theater-sprites.js (split B7, 2026-07-25) ----
+// updateSpriteBillboardYaw (the per-render Y-axis facing pass, its kilter/claySpriteViewYawOffset
+// composition, the camera-pitch tilt onto each standee's inner wrap, and the support-collision +
+// contact-pool sync tail) lives with the rest of the sprite family now. Its three call sites are
+// unchanged and still HERE: scheduleRender's rAF tick (just below), the post-mount pass, and
+// window.Theater._updateSpriteBillboardYawForTest.
 
 function scheduleRender(){
   if(!S.mounted || S.raf) return;
@@ -5314,6 +4258,9 @@ function mount(el, opts){
   motesSyncState(S);    // split B5: same law for the mote field + its own drift scheduler
   cameraSyncState(S);   // split B6: same law for the camera/fit/shot family (it reads AND writes S)
   occlusionSyncState(S);// split B6: same law for the occlusion fade state (S.occlusionFadeState + S.tweens)
+  standeeMountSyncState(S); // split B7: same law for the standee base/contact family (S.standeeCollision*)
+  spritesSyncState(S);  // split B7: same law for the sprite/billboard family (replay + the facing pass)
+  overlaysSyncState(S); // split B7: same law for the overlay family (rings/effects/floaters + S.tweens)
   if(priorTextures) S.textures = priorTextures;
   // BEAUTY-WAVE-2 BW2-0: default is now CLEAN (S.psxEnabled false, createTheaterState's own default),
   // so the escape hatch is symmetric — `opts.psx === true` is the dev/nostalgia toggle that turns the
@@ -9325,6 +8272,9 @@ function retire(){
   motesSyncState(S);    // split B5: same law for the mote field + its own drift scheduler
   cameraSyncState(S);   // split B6: same law for the camera/fit/shot family (it reads AND writes S)
   occlusionSyncState(S);// split B6: same law for the occlusion fade state (S.occlusionFadeState + S.tweens)
+  standeeMountSyncState(S); // split B7: same law for the standee base/contact family (S.standeeCollision*)
+  spritesSyncState(S);  // split B7: same law for the sprite/billboard family (replay + the facing pass)
+  overlaysSyncState(S); // split B7: same law for the overlay family (rings/effects/floaters + S.tweens)
 }
 
 /* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 8) — ONE module-scope call, made once at import
@@ -10116,16 +9066,16 @@ window.Theater.__setSpriteUnlitDebug = function(on){ SPRITE_UNLIT_DEBUG = !!on; 
 // bounded A/B for the standee depth bias — sets the live uniform on every registered sprite
 // material (no recompile; the uniform is injected at first compile). Diagnosis + capture only.
 window.Theater._setStandeeDepthBiasForTest = function(units){
-  SPRITE_DEPTH_BIAS_UNITS = (typeof units === "number") ? units : 0.25;
+  spritesSetDepthBiasUnits((typeof units === "number") ? units : 0.25); // split B7: the value moved to theater-sprites.js (SHADER-KEY LAW — see that file's header); written through its exported accessor
   // prune disposed materials while walking (board rebuilds retire cards; the registry must not
   // accumulate dead references across a long session)
   for(let i = SPRITE_DEPTH_BIAS_MATERIALS.length - 1; i >= 0; i--){
     const m = SPRITE_DEPTH_BIAS_MATERIALS[i];
     if(!m || m.disposed || (m.userData && m.userData.retired)){ SPRITE_DEPTH_BIAS_MATERIALS.splice(i, 1); continue; }
-    if(m.userData && m.userData.standeeDepthBiasUniform) m.userData.standeeDepthBiasUniform.value = SPRITE_DEPTH_BIAS_UNITS;
+    if(m.userData && m.userData.standeeDepthBiasUniform) m.userData.standeeDepthBiasUniform.value = spritesGetDepthBiasUnits(); // split B7: read through theater-sprites.js's accessor
   }
   markDirty();
-  return SPRITE_DEPTH_BIAS_UNITS;
+  return spritesGetDepthBiasUnits(); // split B7: read through theater-sprites.js's accessor
 };
 window.Theater._setSpriteSamplingForTest = function(mode){
   const linearMutation = mode === "linear";
@@ -11425,6 +10375,49 @@ occlusionInit({
   markDirty,
   spriteEntryFor,
   startTweenLoop,
+});
+/* split B7 (2026-07-25) — the SPRITE / STANDEE-MOUNT / OVERLAY trio, same end-of-body ctx law as
+   every module above: all three read the live S record, and their ctx lists carry TDZ-bound consts
+   (LIGHT_TUNABLES, ITR_FLOOR_*) plus root functions declared far below this file's import block, so
+   they wire HERE and not right after the imports. Nothing in this file's own top-level body builds a
+   sprite, mounts a base or spawns an overlay before this point — the first thing that can is
+   clayRoomBootSelfMount() at the bottom of this block. standeeMountInit runs FIRST of the three:
+   theater-sprites.js imports mountedStandeeFigures/resolveMountedStandeeSupportCollisions/
+   syncStandeeContactBlob straight from theater-standee-mount.js (leaf->leaf) and theater-overlays.js
+   imports setBaseGlow from it, so that module's own S must be live before any facing pass or ring
+   mount can run. spritesInit's ctx carries the only two accessors in this step (the mutable root
+   `let`s SPRITE_UNLIT_DEBUG and ITR_SPRITE_EMISSIVE_TINT); the other two ctx lists carry none. */
+standeeMountInit({
+  S,
+  ITR_FLOOR_BASE_Y,
+  ITR_FLOOR_HEIGHT_FALLBACK,
+  hashSeed,
+  hexToRGB,
+  rgbToHex,
+  scaleRGB,
+});
+spritesInit({
+  S,
+  spritesCtxUnlitDebug: function(){ return SPRITE_UNLIT_DEBUG; },
+  spritesCtxEmissiveTint: function(){ return ITR_SPRITE_EMISSIVE_TINT; },
+  GLB_TARGET_HEIGHT,
+  HUMAN_TRUE_HEIGHT,
+  LIGHT_TUNABLES,
+  SPRITE_CAMERA_FILL_LAYER,
+  _censusBoardSceneKind,
+  setInteriorBoard,
+  setUnits,
+  spriteAssetPathFor,
+  textureLoader,
+});
+overlaysInit({
+  S,
+  findUnit,
+  interiorFloorTopAt,
+  markDirty,
+  nearestify,
+  startTweenLoop,
+  textureLoader,
 });
 figureBuildInit({
   figCtxSpriteChannelEnabled: function(){ return SPRITE_CHANNEL_ENABLED; },

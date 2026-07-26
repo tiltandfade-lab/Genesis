@@ -150,7 +150,18 @@ function readTheaterSources(){
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-lighting.js follows] */\n"
     + read("src/ui/theater-lighting.js")
     + "\n/* [verify-clay-room composite boundary — src/ui/theater-practicals.js follows] */\n"
-    + read("src/ui/theater-practicals.js");
+    + read("src/ui/theater-practicals.js")
+    // THEATER SPLIT B7 (2026-07-25): the sprite/billboard family (spriteTextureFor + its CL-R1 sRGB
+    // flag, buildSpriteBillboardMesh, interiorSpriteBillboard) and the standee base/contact family
+    // (interiorStandeeSupportMetrics + INTERIOR_BASE_*, the support-collision resolver, the contact
+    // pool) moved the same way; spriteAssetPathFor, the clay room's own bench/sprite wiring and every
+    // interiorSpriteBillboard/interiorStandeeSupportMetrics CALL SITE stayed in theater-boot.js.
+    // Adding both files to the SAME composite keeps every regex here matching the code it was written
+    // to check — no check relaxed, none dropped.
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-standee-mount.js follows] */\n"
+    + read("src/ui/theater-standee-mount.js")
+    + "\n/* [verify-clay-room composite boundary — src/ui/theater-sprites.js follows] */\n"
+    + read("src/ui/theater-sprites.js");
 }
 
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");

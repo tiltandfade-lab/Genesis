@@ -169,7 +169,13 @@ group("5 — RED-FIRST/GREEN (BW2-2b item 1, text-proof): today's face() tilts t
 
   // GREEN: today's real source splits the tilt onto the wrap; the outer group's rotation.x is never
   // unconditionally assigned `tilt` inside face() anymore.
-  const bootSrcNow = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B7 (2026-07-25): updateSpriteBillboardYaw — and with it the inner face(fig) body
+  // this GREEN half reads — moved VERBATIM to src/ui/theater-sprites.js. Read the composite of both so
+  // the extraction still finds it; the RED half above still reads the pinned pre-fix git ref of
+  // theater-boot.js, so the red/green pair is unchanged.
+  const bootSrcNow = read("src/ui/theater-boot.js")
+    + "\n/* [verify-bw2-2 composite boundary — src/ui/theater-sprites.js follows] */\n"
+    + read("src/ui/theater-sprites.js");
   const nowMatch = bootSrcNow.match(/function face\(fig\)\{[\s\S]*?\n  \}/);
   ok(!!nowMatch, "GREEN: could extract the CURRENT face() body from the working tree");
   ok(!!nowMatch && /wrap\.rotation\.x\s*=\s*tilt/.test(nowMatch[0]),

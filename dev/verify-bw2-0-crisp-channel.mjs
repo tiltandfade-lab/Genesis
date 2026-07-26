@@ -64,7 +64,15 @@ const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", detail));
 
 const PREFIX_REF = "864261b5"; // pinned: the master tip this feat/bw2-0-crisp-channel branch forked from
-const NEW_SOURCE = read("src/ui/theater-boot.js");
+// THEATER SPLIT B7 (2026-07-25): spriteTextureFor (whose texture-load callback carries check 8's
+// magFilter/minFilter/generateMipmaps snippet) moved VERBATIM to src/ui/theater-sprites.js. NEW_SOURCE
+// is the composite of both so extractSpriteFilterSnippet below still finds it, while every other
+// extraction here (applyPsxCanvasSize, nearestify, createTheaterState, the PSX consts, mount()'s
+// opts.psx line) keeps matching its unmoved home in theater-boot.js. OLD_SOURCE stays the single
+// pre-fix git ref it always was — job unchanged on both sides of the RED/GREEN pair.
+const NEW_SOURCE = read("src/ui/theater-boot.js")
+  + "\n/* [verify-bw2-0 composite boundary — src/ui/theater-sprites.js follows] */\n"
+  + read("src/ui/theater-sprites.js");
 const OLD_SOURCE = execFileSync("git", ["show", `${PREFIX_REF}:src/ui/theater-boot.js`], { cwd: ROOT, encoding: "utf-8" });
 
 console.log("\n[1 — sanity: pinned pre-fix ref really predates this unit]");

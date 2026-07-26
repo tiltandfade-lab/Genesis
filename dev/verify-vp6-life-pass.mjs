@@ -338,7 +338,13 @@ console.log("\n=== ITEM 4 — VISIBLE HISTORY / decal persistence (src/world/pre
 // ============================================================================
 console.log("\n=== ITEM 5 — hit-effects seam (theater-boot.js source-extraction sandbox) ===");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B7 (2026-07-25): the hit-effect seam (spawnEffectCard/effectCardFor/
+  // effectRingGeoFor/EFFECT_CARD_DUR/EFFECT_PROC_COLOR) moved VERBATIM to src/ui/theater-overlays.js;
+  // its production caller inside play() stayed in theater-boot.js. This sandbox reads the composite of
+  // both so every extraction below finds the same bodies it always did — job unchanged.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-vp6-life-pass composite boundary — src/ui/theater-overlays.js follows] */\n"
+    + read("src/ui/theater-overlays.js");
   const spawnFnSrc = extractFn(bootSrc, "spawnEffectCard");
   const effectCardFnSrc = extractFn(bootSrc, "effectCardFor");
   const ringGeoFnSrc = extractFn(bootSrc, "effectRingGeoFor");

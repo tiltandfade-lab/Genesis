@@ -1329,6 +1329,7 @@
 <script src="data/monster-flavor.js"></script>
 <script src="data/realm-bestiary.js"></script>
 <script src="data/sprite-registry.js"></script>
+<script src="data/light-profile-locks.js"></script>
 <script src="data/items.js"></script>
 <!-- MODEL-GRAMMAR G2 (docs/MODEL-GRAMMAR.md §3): generated recipes + PART_NAMES snapshot, then the
      hand-authored slug overrides (wins by slug) — both must load before src/engine/theater-data.js's
@@ -1394,6 +1395,7 @@
 <script src="src/engine/place-semantics.js"></script>
 <script src="src/engine/place-projection.js"></script>
 <script src="src/engine/walk-scene.js"></script>
+<script src="src/engine/light-recipes.js"></script>
 <script src="src/engine/clay-room.js"></script>
 <script src="src/engine/place-dressing.js"></script>
 <script src="src/engine/place-distribution.js"></script>
@@ -1539,6 +1541,116 @@
      classic-script world below. Panel mount (wiring this into the combat panel) is a later integration
      pass, not this unit — T1 shipped the module + a standalone preview page (dev/theater-preview.html)
      as its visual gate; T3 extends that same preview page with a verb demo row. -->
+<!-- THEATER SPLIT B1 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): the Clay Room
+     workbench (?clayroom=1), extracted from theater-boot.js — imported by theater-boot.js via a
+     plain ES `import`, and ALSO given its own <script type="module"> tag here so check-manifest.py's
+     module-tag-pairing check is satisfied; browsers dedupe an ES module by URL, so this is a
+     harmless no-op second entry point, same convention every sibling module tag documents. Placed
+     BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-clay-room.js"></script>
+<!-- THEATER SPLIT B2 (2026-07-25): the Light Lab (LL-1) module — same import/dedupe convention as
+     the clay-room tag above; the lighting consts the lab tunes stay in theater-boot.js. -->
+<script type="module" src="src/ui/theater-light-lab.js"></script>
+<!-- THEATER SPLIT B3 (2026-07-25): the pixel-skin + floor-texture family — same import/dedupe
+     convention as the two tags above (theater-boot.js `import`s it; this second entry point exists so
+     check-manifest.py's module-tag-pairing check is satisfied, and browsers dedupe an ES module by
+     URL). Placed BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-skins.js"></script>
+<!-- THEATER SPLIT B3 (2026-07-25): the whole-object geometry/material factory + the GLB seam — same
+     import/dedupe convention as the tags above (theater-boot.js `import`s it; this second entry point
+     exists so check-manifest.py's module-tag-pairing check is satisfied, and browsers dedupe an ES
+     module by URL). Placed BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-whole-object.js"></script>
+<!-- THEATER SPLIT B3 (2026-07-25): figureFor's resolution chain + the legacy weapon composer — same
+     import/dedupe convention as the tags above (theater-boot.js `import`s it; this second entry point
+     exists so check-manifest.py's module-tag-pairing check is satisfied, and browsers dedupe an ES
+     module by URL). Placed BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-figure-build.js"></script>
+<!-- THEATER SPLIT B4 (2026-07-25): the post-processing suite (DoF / masked bloom / filmic grade +
+     AgX) and the environment-AO pass — same import/dedupe convention as the tags above
+     (theater-boot.js `import`s it; this second entry point exists so check-manifest.py's
+     module-tag-pairing check is satisfied, and browsers dedupe an ES module by URL). It is the
+     `three/addons/postprocessing` import site for its own passes. Placed BEFORE theater-boot.js's
+     tag (dependency order). -->
+<script type="module" src="src/ui/theater-post.js"></script>
+<!-- THEATER SPLIT B4 (2026-07-25): the three pure scene-graph disposal helpers (no THREE, no state,
+     no ctx) — same import/dedupe convention as the tags above. retire()/disposeAuxCaches stay in
+     theater-boot.js. Placed BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-dispose.js"></script>
+<!-- THEATER SPLIT B5 (2026-07-25): the BOARD LIGHTING family — LIGHT_PROFILES/applyLightProfile, the
+     ENV-1/ENV-1B/ENV-1c tabletop exterior + celestial-arc passes, the two interior camera-side lights,
+     and the PRACTICAL FLICKER SCHEDULER (its own rAF loop, still separate from the mote loop below).
+     Same import/dedupe convention as the tags above (theater-boot.js `import`s it; this second entry
+     point exists so check-manifest.py's module-tag-pairing check is satisfied, and browsers dedupe an
+     ES module by URL). Placed BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-lighting.js"></script>
+<!-- THEATER SPLIT B5 (2026-07-25): the interior PRACTICAL-FIXTURE family (E0 visible practicals, the U3
+     shadow-caster budget, the glow disc / light card / emitter nub / light-shaft cone builders,
+     interiorBuildLights). Imports four symbols straight from theater-lighting.js above (a one-way
+     leaf->leaf edge), so it is tagged AFTER it and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-practicals.js"></script>
+<!-- THEATER SPLIT B5 (2026-07-25): VP6's ambient mote field and its OWN drift scheduler — a SEPARATE
+     rAF loop from the flicker scheduler in theater-lighting.js (the brief's protected scheduler
+     separation; nothing was unified). Same import/dedupe convention as the tags above. -->
+<script type="module" src="src/ui/theater-motes.js"></script>
+<!-- THEATER SPLIT B6 (2026-07-25): the CAMERA / FIT / SHOT family — the authored camera angles and
+     margins, placeCamera + MF-1's placeCameraTweened glide, refitTabletopHeightFit's height combiner,
+     the BW2-1 room/beat fit resolvers, STAGE-A A3's shot-compose projector and F1's combat-fit clamp.
+     Same import/dedupe convention as the tags above (theater-boot.js `import`s it; this second entry
+     point exists so check-manifest.py's module-tag-pairing check is satisfied, and browsers dedupe an
+     ES module by URL). It imports updateDofFocus from theater-post.js (tagged above) — a one-way
+     leaf->leaf edge. Placed BEFORE theater-boot.js's tag (dependency order). -->
+<script type="module" src="src/ui/theater-camera.js"></script>
+<!-- THEATER SPLIT B6 (2026-07-25): the OCCLUSION / CUTAWAY family (BW2-1b's sightline geometry and
+     cutaway masks, STAGE-A A4's fade classifier + bearing hysteresis, the ankle-stub/ghost splitter,
+     the CLIP MARGIN LAW's nudge helpers). Censused THREE-free. Imports mf1EaseOutCubic + mf1Lerp
+     straight from theater-camera.js above (a one-way leaf->leaf edge), so it is tagged AFTER it and
+     before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-occlusion.js"></script>
+<!-- THEATER SPLIT B7 (2026-07-25): the STANDEE BASE/CONTACT family (CL-R2's visible support plinth +
+     its collision resolver, BW2-2's contact line and soft MULTIPLY contact pool, BW2-2b's turn glow).
+     Imports only "three" — no sibling edge. Same import/dedupe convention as the tags above
+     (theater-boot.js `import`s it; this second entry point exists so check-manifest.py's
+     module-tag-pairing check is satisfied, and browsers dedupe an ES module by URL). Tagged BEFORE
+     theater-sprites.js and theater-overlays.js, which both import from it. -->
+<script type="module" src="src/ui/theater-standee-mount.js"></script>
+<!-- THEATER SPLIT B7 (2026-07-25): the PIXEL-SPRITE / BILLBOARD family (the texture cache + async
+     loader, the SRD size ladder, the one billboard constructor with its STANDEE-WINS-TIES depth-bias
+     shader injection, the tabletop + interior TRUE-SCALE wrappers, and the per-render facing pass).
+     Imports CAM_ELEV_DEG/CAM_YAW_OFFSET_DEG from theater-camera.js, updateSpriteCameraFill from
+     theater-lighting.js and the standee-mount trio from theater-standee-mount.js — three one-way
+     leaf->leaf edges, so it is tagged AFTER all three and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-sprites.js"></script>
+<!-- THEATER SPLIT B7 (2026-07-25): the OVERLAY family (VP6's decals + hit-effect cards, VP5's
+     diegetic selection ring with MF-4's slide, VP5's damage floaters). Imports mf1EaseOutCubic/mf1Lerp
+     straight from theater-camera.js and setBaseGlow from theater-standee-mount.js (one-way leaf->leaf
+     edges), so it is tagged AFTER both and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-overlays.js"></script>
+<!-- THEATER SPLIT B8 (2026-07-25): the INTERIOR MESH / GL-SURFACE family (the GR1 procedural material
+     texture baker, the BW2-3 folded-file loader + the §2b repeat laws, the shared unit-box/cylinder
+     geometries, the U3 seam-AO and BW2-3 instance-colour passes, interiorBuildInstancedMesh itself,
+     BW2-5's pillar profile split and STAGE-A A4's two ghost-mesh builders). Imports only "three" — no
+     sibling edge — so its only ordering requirement is BEFORE theater-dressing.js (which imports
+     interiorFileTexture from it) and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-interior-mesh.js"></script>
+<!-- THEATER SPLIT B8 (2026-07-25): the DRESSING / PROPS family (the dressing texture channel with its
+     async real-art settle, the card/extrusion/furniture builders, the wall-hang placement law,
+     BW2-2b's wall-contact AO, and the four builders setInteriorBoard dresses a room with). Imports
+     interiorFileTexture from theater-interior-mesh.js, interiorSpriteBillboard from theater-sprites.js,
+     the mount/pool quartet from theater-standee-mount.js, the nudge trio from theater-occlusion.js and
+     bindStandeeCtx/startIdleBreathe from standee-verbs.js — five one-way leaf->leaf edges, so it is
+     tagged AFTER all five and before theater-boot.js's tag. -->
+<script type="module" src="src/ui/theater-dressing.js"></script>
+<!-- THEATER SPLIT B9 (2026-07-25): THE TWO SCENE REALIZERS. theater-tabletop.js owns setBoard/setUnits
+     (the flat tabletop channel); theater-interior-realize.js owns setInteriorBoard — decomposed there
+     into seventeen named phase functions over one explicit pass context — plus setInteriorVariant and
+     F1's combat grid. They are PEERS: neither imports the other. Both import theater-dressing.js and
+     the other leaves above (camera / lighting / post / standee-mount / sprites / whole-object /
+     figure-build / figures / occlusion / interior-mesh / overlays / motes / practicals / room-mesh /
+     shot / spawn-grace / clay-room), so both are tagged AFTER all of those and before
+     theater-boot.js's tag — which imports the realizers and hands them to every replay ctx. -->
+<script type="module" src="src/ui/theater-tabletop.js"></script>
+<script type="module" src="src/ui/theater-interior-realize.js"></script>
 <script type="module" src="src/ui/theater-boot.js"></script>
 <!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
      shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same

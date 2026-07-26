@@ -143,6 +143,13 @@
 <script src="../src/engine/core.js"></script>
 <script src="../src/engine/combat.js"></script>
 <script src="../src/engine/theater-data.js"></script>
+<!-- Light-recipe registry (2026-07-25): theater-boot.js's LIGHT_PROFILES/LIGHT_TUNABLES now build
+     at module eval from the shared LIGHT_RECIPE_REGISTRY (the CL-R2 unification) — the compiled
+     locks + registry classic scripts must precede its module tag here exactly as they do in
+     genesis.html, or the module throws at eval and window.Theater never appears (found live by
+     verify-env3-town/verify-qfb-tray at the theater-split B0 baseline census). -->
+<script src="../data/light-profile-locks.js"></script>
+<script src="../src/engine/light-recipes.js"></script>
 <!-- The ES-module boundary (theater-boot.js) attaches window.Theater asynchronously — the fixture
      wiring below polls for it rather than assuming synchronous availability. theater-verbs.js is
      ALSO given its own tag here (mirrors genesis.html) even though theater-boot.js already imports

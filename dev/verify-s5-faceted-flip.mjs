@@ -50,7 +50,7 @@ function ensureThreeShim(){
   const base = join(ROOT, "node_modules", "three");
   const loaderDir = join(base, "addons", "loaders");
   const postDir = join(base, "addons", "postprocessing");
-  const shimVersion = "bw3-post-suite";
+  const shimVersion = "cp1-env-ao"; // visual-correction Checkpoint 1: +GTAOPass (+GTAOShader/PoissonDenoiseShader/SimplexNoise re-exports; lockstep across all shim writers sharing node_modules/three)
   const versionFile = join(base, ".shim-version");
   if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
@@ -64,6 +64,14 @@ function ensureThreeShim(){
   writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
   writeFileSync(join(postDir, "UnrealBloomPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/UnrealBloomPass.js";\n`);
   writeFileSync(join(postDir, "OutputPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/OutputPass.js";\n`);
+  writeFileSync(join(postDir, "GTAOPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/GTAOPass.js";\n`);
+  const shaderDir = join(base, "addons", "shaders");
+  const mathDir = join(base, "addons", "math");
+  mkdirSync(shaderDir, { recursive: true });
+  mkdirSync(mathDir, { recursive: true });
+  writeFileSync(join(shaderDir, "GTAOShader.js"), `export * from "../../../../vendor/three/addons/shaders/GTAOShader.js";\n`);
+  writeFileSync(join(shaderDir, "PoissonDenoiseShader.js"), `export * from "../../../../vendor/three/addons/shaders/PoissonDenoiseShader.js";\n`);
+  writeFileSync(join(mathDir, "SimplexNoise.js"), `export * from "../../../../vendor/three/addons/math/SimplexNoise.js";\n`);
   writeFileSync(versionFile, shimVersion + "\n");
   console.log("(bootstrap) wrote node_modules/three vendor shim (" + shimVersion + ")");
 }
@@ -140,6 +148,16 @@ global.window = dom.window;
 global.document = dom.window.document;
 global.SPRITE_REGISTRY = {};
 global.window.SPRITE_REGISTRY = {};
+// Light-recipe classic globals (2026-07-25, split B3 re-gate): theater-boot's eval now builds
+// LIGHT_PROFILES/LIGHT_TUNABLES from the shared src/engine/light-recipes.js registry (the CL-R1
+// merge a979c22d) — the production page loads it as a classic script BEFORE the module. Same
+// stubs verify-bw2-2 and (since B0) verify-bw2-1b carry; the direct-import runners must model
+// the same production global contract.
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 
 function fakeTexture(tag){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, _tag: tag }; }
 

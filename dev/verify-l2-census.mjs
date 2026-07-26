@@ -80,7 +80,7 @@ function ensureThreeShim(){
   const base = join(ROOT, "node_modules", "three");
   const loaderDir = join(base, "addons", "loaders");
   const postDir = join(base, "addons", "postprocessing");
-  const shimVersion = "bw3-post-suite";
+  const shimVersion = "cp1-env-ao"; // visual-correction Checkpoint 1: +GTAOPass (+GTAOShader/PoissonDenoiseShader/SimplexNoise re-exports; lockstep across all shim writers sharing node_modules/three)
   const versionFile = join(base, ".shim-version");
   if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
@@ -94,6 +94,14 @@ function ensureThreeShim(){
   writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
   writeFileSync(join(postDir, "UnrealBloomPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/UnrealBloomPass.js";\n`);
   writeFileSync(join(postDir, "OutputPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/OutputPass.js";\n`);
+  writeFileSync(join(postDir, "GTAOPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/GTAOPass.js";\n`);
+  const shaderDir = join(base, "addons", "shaders");
+  const mathDir = join(base, "addons", "math");
+  mkdirSync(shaderDir, { recursive: true });
+  mkdirSync(mathDir, { recursive: true });
+  writeFileSync(join(shaderDir, "GTAOShader.js"), `export * from "../../../../vendor/three/addons/shaders/GTAOShader.js";\n`);
+  writeFileSync(join(shaderDir, "PoissonDenoiseShader.js"), `export * from "../../../../vendor/three/addons/shaders/PoissonDenoiseShader.js";\n`);
+  writeFileSync(join(mathDir, "SimplexNoise.js"), `export * from "../../../../vendor/three/addons/math/SimplexNoise.js";\n`);
   writeFileSync(versionFile, shimVersion + "\n");
   console.log("(bootstrap) wrote node_modules/three vendor shim (" + shimVersion + ")");
 }
@@ -136,12 +144,18 @@ check("RED: pre-L2 theater-data.js never calls theaterCensusRecord", !OLD_THEATE
 
 const NEW_STATE = read("src/state.js");
 const NEW_BOOT = read("src/ui/theater-boot.js");
+const NEW_FIGURE_BUILD = read("src/ui/theater-figure-build.js");
 const NEW_MATERIALS = read("src/ui/theater-materials.js");
 const NEW_THEATER_DATA = read("src/engine/theater-data.js");
 check("GREEN: real src/state.js defines theaterCensusRecord + GS.theaterCensus",
   NEW_STATE.includes("function theaterCensusRecord(") && NEW_STATE.includes("theaterCensus:"));
 check("GREEN: real theater-boot.js exposes _censusForTest and calls theaterCensusRecord at multiple seams",
-  NEW_BOOT.includes("_censusForTest") && (NEW_BOOT.match(/theaterCensusRecord\(/g) || []).length >= 6);
+  // THEATER SPLIT B3/B5 (2026-07-25): figureFor and its census seams moved to
+  // src/ui/theater-figure-build.js — the instrument's call sites are counted across the composite
+  // (root retains the dressing/materials seams). The job — census wired at multiple figure seams —
+  // is unchanged.
+  (NEW_BOOT + NEW_FIGURE_BUILD).includes("_censusForTest")
+    && ((NEW_BOOT + NEW_FIGURE_BUILD).match(/theaterCensusRecord\(/g) || []).length >= 6);
 check("GREEN: real theater-materials.js's materialFamilyFor calls theaterCensusRecord (guarded)",
   NEW_MATERIALS.includes("theaterCensusRecord(") && NEW_MATERIALS.includes('typeof theaterCensusRecord === "function"'));
 check("GREEN: real theater-data.js's settlement facade build calls theaterCensusRecord (guarded)",
@@ -252,6 +266,14 @@ const dom = new JSDOM(
 global.window = dom.window;
 global.document = dom.window.document;
 global.SPRITE_REGISTRY = registry;
+// Light-recipe classic globals (2026-07-25, split B5 re-gate): theater-boot's eval builds
+// LIGHT_PROFILES/LIGHT_TUNABLES from the shared src/engine/light-recipes.js registry (CL-R1 merge)
+// — the production page loads it as a classic script first. Same stubs as bw2-2/bw2-1b/s5-flip.
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 global.window.SPRITE_REGISTRY = registry;
 
 // jsdom ships no real 2D canvas backing (the "canvas" npm package isn't part of this repo's
@@ -436,8 +458,20 @@ check("GREEN re-proof: the real source's dressing placeholder-card entry, alread
 // ----------------------------------------------------------------------------------------------
 console.log("\n=== c6. ZERO BEHAVIOR CHANGE — scene-graph shape identical pre-L2 vs post-L2 ===");
 if(green.ok && red.ok){
-  check("c6a. resolved-sprite figure's scene-graph shape is byte-identical pre-L2 vs post-L2",
-    JSON.stringify(green.spriteShape) === JSON.stringify(red.spriteShape),
+  // 2026-07-25 (resurfaced by the split re-gate): this compare had been UNREACHABLE since the
+  // CL-R1 registry merge (the GREEN prerequisite threw before reaching it). Reachable again, it
+  // caught four userData fields the engine legitimately grew AFTER the pre-L2 pin — footX/footY
+  // (BW2-2 floor-contact law), alphaCutoff (BW2-0 crisp channel), contentBounds (CL-F03 sprite
+  // citizenship). Those are feature work, not census leakage — the check's job is that the CENSUS
+  // changes nothing, so the known post-L2 feature fields are normalized out of BOTH sides and the
+  // rest of the byte-identical claim still bites.
+  const stripPostL2 = (shape) => {
+    const c = JSON.parse(JSON.stringify(shape));
+    if(c && c.userData) for(const k of ["footX","footY","alphaCutoff","contentBounds"]) delete c.userData[k];
+    return c;
+  };
+  check("c6a. resolved-sprite figure's scene-graph shape is byte-identical pre-L2 vs post-L2 (known post-L2 feature fields normalized)",
+    JSON.stringify(stripPostL2(green.spriteShape)) === JSON.stringify(stripPostL2(red.spriteShape)),
     `green=${JSON.stringify(green.spriteShape)} red=${JSON.stringify(red.spriteShape)}`);
   check("c6b. forced-cuboid figure's scene-graph shape is byte-identical pre-L2 vs post-L2",
     JSON.stringify(green.cuboidShape) === JSON.stringify(red.cuboidShape),

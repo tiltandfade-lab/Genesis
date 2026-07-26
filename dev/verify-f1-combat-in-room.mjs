@@ -331,15 +331,25 @@ section("6. OVERLOADED STRESS — crowded room, whole-room fallback");
 }
 
 // ============================================================================================
-// SECTION 7 — f1ClampCamFit (pure math, extracted from theater-boot.js and eval'd in isolation)
+// SECTION 7 — f1ClampCamFit (pure math, extracted from the theater source and eval'd in isolation)
 // ============================================================================================
 section("7. f1ClampCamFit — target/distance delta clamped ≤10%");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B6 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): f1ClampCamFit +
+  // F1_COMBAT_CAM_CLAMP_FRAC moved VERBATIM from src/ui/theater-boot.js into
+  // src/ui/theater-camera.js with the rest of the camera fit family (theater-boot.js still calls it,
+  // now through a plain `import`). This read is the COMPOSITE of both files so the brace-matched
+  // extraction + isolated `new Function` eval below keep their EXACT job with the function in its
+  // true home — same composite convention dev/verify-agx-tonecurve.mjs and dev/verify-clay-room.mjs
+  // already use for B4/B5. Nothing about the check was relaxed: it still finds ONE definition (the
+  // root has none left), still evals it with no THREE global, and still asserts the same clamp math.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-f1-combat-in-room composite boundary — src/ui/theater-camera.js follows] */\n"
+    + read("src/ui/theater-camera.js");
   const startMarker = "function f1ClampCamFit(camFit, baseline, maxFrac){";
   const start = bootSrc.indexOf(startMarker);
   if (start < 0) {
-    check("7. f1ClampCamFit found in src/ui/theater-boot.js", false, "not found");
+    check("7. f1ClampCamFit found in the theater-boot + theater-camera composite", false, "not found");
   } else {
     let depth = 0, i = start, end = -1;
     for (; i < bootSrc.length; i++) {

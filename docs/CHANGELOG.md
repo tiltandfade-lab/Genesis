@@ -8,6 +8,123 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-25 (later) — VISUAL CORRECTION CLOSED + AO CONTACT FIX + THE THEATER-BOOT SPLIT [Fable]
+
+**Added**
+- `docs/THEATER-MODULES.md` — the 16-module theater map + decision record (the split's architecture proof).
+- `dev/verify-theater-surface.mjs` + `dev/fixtures/theater-surface-baseline.json` — the 219-key
+  window.Theater contract, frozen and gated in real Chrome at every step.
+- `dev/fixtures/theater-split-b0-baseline.md` — the 19-puppeteer-by-hand census law + honest baseline.
+- 16 extracted ES modules (`src/ui/theater-{clay-room,light-lab,skins,whole-object,figure-build,post,
+  dispose,lighting,practicals,motes,camera,occlusion,sprites,standee-mount,overlays,interior-mesh,
+  dressing,tabletop,interior-realize}.js`) — theater-boot.js 21,555 → 7,518 lines; setInteriorBoard
+  is a 17-phase orchestrator; everything else verbatim (multiset-proven per step).
+
+**Changed**
+- ENV_AO_DENOISE re-weighted from a 9-candidate measured sweep (Adam's "gap of light at every planar
+  contact"): creaseLift vs raw 5.38 → 1.59 luma; receipts in `dev/clay-captures/ao-contact-diag/`.
+  VISUAL VERDICT: PENDING ADAM.
+- Visual-correction Checkpoints 2–4 landed on the clay lane (warm/cool overlap + readout truth;
+  lore-native fixtures + recipe-responsive void; honest CL-F01 workbench). PENDING ADAM.
+
+**Fixed**
+- Six harness runners resurrected from the CL-R1 registry-merge import failure (bw2-1b, s5-flip,
+  sprite-join, l2-census, env3-town + qfb-tray via dev/theater-preview.html's missing classic
+  scripts); env1*/l2 scratch builders pin base-commit genesis.html so their RED proofs survive the
+  split; several checks re-anchored on their true subjects. Zero checks weakened.
+
+**Deferred**
+- Door-family extraction (d4-doors option-b recipe recorded), the AO A/B rig's clip-box
+  nondeterminism, material-contract re-baseline, torchlit pinned-look expectation (awaits Adam's
+  C3 verdict) — the full ledger in THEATER-MODULES.md §Follow-ups.
+
+## 2026-07-25 — CL-R2 MULTIPLY CONTACT + SILHOUETTE SHADOWS + BASE NEON [Codex]
+
+### Changed
+
+- Soft standee contact pools now use a true multiply texture: opaque white at the identity rim,
+  dark gray at contact, and `toneMapped:false`. They proportionally darken both lit floor and
+  already-shadowed floor values instead of alpha-painting a replacement black value.
+- The 1–30-foot presentation view is now the working default; true scale remains a canonical size
+  check. Neither mode mutates registry `worldHeight` or tactical occupancy.
+- The selected cyan sidewall now reads as neon through one support-shaped additive spill seated
+  beneath the base. The center PointLight was removed; selection handoff hides the prior spill before
+  exactly one new base emits.
+- Sprite planes now cast their alpha-tested artwork silhouette in both depth and distance shadow
+  passes. The visible rectangular edge shell no longer casts, removing floating card shadows in
+  daylight and moonlight with one fewer caster.
+- The CL-R2 receipt and sheet were regenerated. New assertions prove all seven contact pools use
+  the multiply contract, every cast shadow uses the alpha silhouette, presentation is the default,
+  and the base neon is linked, exclusive, support-shaped, center-bulb-free, and shadowless.
+
+### Fixed
+
+- Updated the optional real-Chrome floor-contact harness for CL-R2's natural rounded-strip support
+  rather than its retired circular-base geometry. The live map/material check now passes 79/79;
+  Clayroom passes 208/208 and the manifest remains OK. **FULL CI PENDING.**
+
+## 2026-07-24 (latest) — CL-R2 COMPLETE SPRITE CITIZENSHIP CANDIDATE [Codex]
+
+### Added
+
+- **`CL-F03 sprite-citizenship`** — seven real registry sprites spanning 0.25–60 canonical feet now
+  share one production lineup, with true-scale/capped A/B, tactical-footprint overlays, source
+  metadata, width flags, and neutral/dark/warm/cool/day production-light controls.
+- **Natural stair-fit standees** — shallow rounded supports replace visible circular plinths.
+  Medium support depth is one 1/3-cell tread; Tiny/Small may be shallower. A thin side shell and
+  retained face/three-quarter/edge stair samples prove physical citizenship from every view.
+- **Sprite Editor crosshair completion** — independent draggable `footX` and `footY`, click
+  placement, source-pixel keyboard nudges, alpha-contact reset, compiled reset, content bounds, and
+  overlay-to-registry compilation.
+- **Reproducible CL-R2 evidence** — `dev/clay-captures/cl-r2-sprite-citizenship/` banks early/
+  settled true scale, cap/edge/deep-zoom live UI, five lighting contexts, a composed sheet, live
+  JSON receipt, and a separate geometry/scale measurement artifact.
+- **Physical standee follow-up** — governed Clayroom zoom now reaches roughly 8.3× closer;
+  deterministic oriented-support separation prevents visible bases from overlapping; contact
+  shadows stay linked to relocation/yaw and feather visibly outside the support.
+- **Sprite-only face fill and base-ring selection** — one camera-side, shadowless spotlight affects
+  only sprite faces with gentle falloff. Selection emits from only the base's vertical sidewall,
+  with no character outline and no glowing base top.
+- **Shadow-form environment floor** — diagnostic darkness now retains a 0.06 shadowless hemisphere
+  bounce. Strong key shadows remain photographic, while treads, risers, and wall turns hold slightly
+  different dark values instead of collapsing into one flat shadow tone.
+
+### Changed
+
+- Interior billboard origin now consumes canonical `footX`/`footY` once; legacy `floor` values
+  migrate in the registry generator rather than double-offsetting the runtime.
+- Diagnostic scale overrides can temporarily cap presentation without changing canonical
+  `worldHeight`. The comparison cap is now 1–30 feet; true scale remains canonical, and Treant and
+  Kraken remain loudly flagged for taller/more-upright regeneration.
+
+### Deferred
+
+- Final production policy for exceptional encounter scale domains. The 30-foot cap remains a
+  diagnostic comparison; a canonical 60-foot Kraken still requires an environment built to contain
+  it. Fable owns full re-gate/landing; **FULL CI PENDING**.
+
+## 2026-07-24 (later) — CL-R1 LIGHTING BENCH ACCEPTANCE SURFACE COMPLETED [Codex]
+
+### Added
+- **Live final-pixel diagnostics on CL-F02** — the Clayroom now places the admitted authored goblin
+  PNG beside its rendered screen crop and reports median/p95 brightness, white/black clipping,
+  chroma spread, and sprite-vs-local-surround readability deltas. The recurring readout samples a
+  small same-frame canvas copy only when the view changes or the user refreshes it; full-resolution
+  readback is reserved for explicit capture, so measurement adds no recurring animation hitch.
+- **Lore-native preview strip + deterministic seed preview** — sun/day, moon/night, arcane crystal,
+  torch flame, and lava reuse the existing compiled renderer recipes; A/B/C seeds affect only a
+  disposable cloned flicker sequence and never mutate the authored light lock.
+- **One-click seven-recipe comparison sheet** — neutral, diagnostic warm/cool, day, moon, magic,
+  torch, and lava are composed into one downloadable PNG with a JSON receipt. Animated stills use
+  deterministic sample 2, the prior live recipe is restored, and the capture rejects a lore-native
+  card with no real mounted renderer light. Evidence is in
+  `dev/clay-captures/cl-r1-lighting-matrix/`; the capture recorded zero console errors/warnings.
+
+### Changed
+- `dev/verify-clay-room.mjs` now carries CL-F02 checks 32j–32m (189/189 total), covering real pixel
+  measurement, source/render comparison, the shared lore recipe set, disposable seed clones, and
+  deterministic PNG/receipt capture.
+
 ## 2026-07-24 (latest) — THE CONSOLIDATION CLOSE — five lanes merged to a singular canonical master [Claude Fable 5]
 
 ### Added
@@ -791,152 +908,4 @@ verify-walk-stamped-provenance 34/0, verify-shot-compose 29/0, verify-occlusion-
 verify-dungeon-interior 287/0, verify-mf1-camera-tweens 24/0, verify-interior-camera-frustum 14/0,
 verify-walk-card-projection 29/0, verify-bw2-1b (jsdom) 24/0. Capture PNGs READ: A3 after-composed
 reads as a staged diorama (void gone); A4 on/off shows the pillar fade to reveal the standee behind.
-
-## 2026-07-11 — BW4 MOTION & FEEL: the stills became footage (4 units landed, hit-stop wiring deferred to MF-3b)
-
-**The wave.** BEAUTY-WAVE-4 (docs/BEAUTY-WAVE-4.md) — the space between verbs. Orchestrated as
-4 background Sonnet executors in isolated worktrees, each personally re-gated on its branch tip
-and landed `--no-ff`; MF-1 first (gating — everything is judged through the camera), then
-MF-2/3/4 in parallel off its tip.
-
-**Added.**
-- **MF-1 CAMERA TWEENS** (`c067276a`) — beat/room/move-step camera refits glide position+target
-  over 320ms ease-out instead of snapping; interruptible retarget from the live interpolated
-  pose; player zoom/rotate stay instant (Feel Law 3). Reuses the `S.tweens`/`tickTweens` channel.
-  The executor found+fixed two real interruption bugs (preview `placeCamera` snapping;
-  `drainTweens` force-completing) by capturing the pre-fit pose at the top of `setInteriorBoard`.
-- **MF-4 TURN & ROUND PRESENTATION** (`f606d14b`) — acting-ring 300ms slide between single-actor
-  handoffs (instant path kept for every other shape); round header 250ms dip-and-return + chip
-  strip single pulse off a one-shot `GS.cmbLastRoundSeen` flag (mirrors `cmbDamageFlashed`); VP5
-  damage floater 60ms pop-in scale. Transform/opacity only — no reflow storms.
-- **MF-3 IMPACT FEEL — mechanism** (`3a245c6b`) — hit-stop freeze (attacker+target verb tweens
-  stall `t` at contact; world + camera-pose tween keep ticking, doubly guarded against freezing
-  an `isCameraPoseTween`), directional recoil, crit white-flash + 2px single-bounce camera nudge,
-  fall-death 80ms hold. Freeze resumes start-shifted (no jump).
-- **MF-2 SPAWN/DESPAWN GRACE** (`fa27aff7`) — standee mount 150ms fade + 4% scale settle
-  (base-first); despawn 200ms fade-into-base (base lifts last); seeded ≤400ms dressing/furniture
-  cascade; room-transition 200ms crossfade. New theater-layer ES module `src/ui/spawn-grace.js`.
-
-**Deferred.**
-- **MF-3b (hit-stop production wiring)** — MF-3's hit-stop/recoil/crit-response are built + tested
-  but DORMANT in real play: production plays `hit-damage` (via the `{hurt:"hit-damage"}` remap) so
-  base shake+flash fire, but the hit-stop freeze + recoil are gated on `opts.attackerId` and
-  crit-response on a `hit-crit` verb, neither of which `theaterFxFromLedger`'s hp case emits.
-  Wiring = thread `attackerId` + a crit flag onto the hp ledger event (an EVENT-CONTRACT addition
-  at the `DM_EVENT_FIELDS` boundary) — flagged for Adam's design call. fall-death's hold IS live.
-- **MF-5 feel gate** — the interactive "does it feel like moving miniatures?" play session (Adam
-  at the keyboard) + the instrumented turn-burst, best shot after MF-3b so the burst can show the
-  hit-stop centerpiece. Interim evidence: the loop-gate contact sheet + `loop-01-camera-mid-tween.png`
-  regenerated on the integrated tree, plus the fake-clock harnesses proving every tween curve.
-
-**Fixed.**
-- `verify-mf1-camera-tweens` settle-await 5s→15s (`978d1402`) — MF-1's own on-mount camera tween
-  needs longer to settle on a cold/contended headless Chrome (matched the frustum harness).
-
-**Gates (all personally re-run by the orchestrator, never self-reports).** check-manifest OK;
-verify-mf1 24/0, verify-mf4 36/0, verify-mf3 47/0, verify-mf2 61/0; the integration gate on the
-merged tree (all four MF harnesses + standee 71/0, theater-verbs 100/0, dungeon-interior 287/0);
-loop gate 5/5 clean, fps 72–253.
-
-## 2026-07-11 — BW3 + THE FULL VISUAL CAMPAIGN CLOSED: three waves in one sitting; the engine converged on the mocks
-
-**The arc.** Adam's mock frames became the reference model; three waves landed end to end:
-BW2 (10 units: crisp channel/PS1 retired game-wide, beat camera, floor contact + bases +
-kilter, occlusion + clip margin, textures + variant roll, value plunge, silhouette + furniture
-+ extrusion props, gallery, UI) → BW3 (composer seam byte-identical, light shafts + mote
-coupling, seam-softening, LIT SPRITES + THE BRIGHTNESS LAW, post suite: tilt-shift DoF +
-emissive bloom + filmic grade + the OutputPass sRGB fix). BW4 MOTION & FEEL specced + queued.
-
-**Laws ruled this session (DESIGN registered):** PS1 RETIRED GAME-WIDE · FLOOR CONTACT ·
-OCCLUSION + CLIP MARGIN · PROP PERSPECTIVE (flat art on contextual-depth extrusions,
-edge-sampled sides, tier ladder box/silhouette/card) · THE KILTER · THE BRIGHTNESS LAW
-(full-bright only in full white light) · SPRITE PURITY AMENDMENT (purity = no distortion,
-lighting REQUIRED) · UV MAPPING LAWS (floor 1:1/cell — grout aligns with the combat grid) ·
-COLUMN DEMOTION (furniture is cover) · THE FEEL LAWS (BW4).
-
-**Also:** MOCK-GEN reference loop (PACKET-01 frames = the targets; PACKET-02 textures folded,
-18/18; PACKET-03 flat-props authored + style-rider v2) · grid-snap (spritefusion) proven
-destructive, reconstruction gate kept · corpus unification r2 (hue-safe; r1 reverted at the
-eyes gate) · ROOM-GRAMMAR + BEAUTY-WAVE-4 specced · 6 real pre-existing bugs fixed by
-executors in passing (mote origin-shift, preview importmap, stale shims, kaiju leak).
-
-**Verification at close:** every unit orchestrator re-gated; interior 287/0 · dressing 451/0 ·
-scene-direction 17/0 · floor-contact 48/0 · occlusion 24/0 · silhouette 87/0 · texel 116/0 ·
-shafts 44/0 · seams 146/0 · crisp 37/0 · sprites 12/0 · manifest OK · loop gate 5/5 at every
-landing · fps 124-164 with all passes. Deferred: BW2-4b's quiet camera-key shadow (taste
-call), wall-hang axis 7b (unreproduced), trim GL-wiring, gallery-pass harness side effect,
-GIT-LFS (tomorrow, Adam), audio design night.
-
-## 2026-07-10 (later night) — THE BEAUTY WAVE EXECUTED: all 11 units + VP8 landed, the diorama transformed
-
-**Context.** Adam delegated the taste verdicts to Fable ("you've been outsmarting me") and said
-"orchestrate this wave now." One session: spec re-review (6 gaps found+folded), verdicts ruled,
-3 execution stages (2 + 6 + 5 executors, Workflow-throttled, worktree-isolated), every unit
-personally re-gated, every visual gate READ.
-
-**Ruled (delegated verdict seat; DESIGN.md registered)**
-- CAMERA = perspective ~20° ON · PSX dither+snap OFF world (VP0 4-cell card shot WITH standees,
-  confirmed on pixels). §G closed: corpses persist FOREVER · weather defers to UW1 riding VP6's
-  mote channel · blood full-grim applies to visuals, children carve-out MECHANICAL.
-
-**Added**
-- VP0 camera/world-PSX flags + defaults flip; VP1+VP1b TRUE-SCALE (registry feet/scaleTrue on
-  896 slugs; interior pieces + combat standees) · VP2 dressing fold (14 dg sheets → assets/dressing,
-  REALM_DRESSING generated) · VP2b GALLERY PASS (4 paintings reclaimed: dragon/colossus/kraken/
-  tarrasque; one already hangs in a rolled dungeon) · VP3 ground design · VP4 SCENE_DIRECTION
-  (17/0 harness; study card taste-gated: four distinct room moods) · VP5 battle UI off the stage
-  (chip strip, acting ring, floaters) · VP6 life pass (idle-breathe, flicker, motes, VISIBLE
-  HISTORY decals cap 12/room FIFO in pn.spatial.decals, child carve-out mechanical, effect seam)
-  · VP7 contact blobs · VP8 beauty shot (5 full-res frames + gap caption).
-- MOCK-GEN reference-model loop (Adam's idea): dev/model-qa/mock-gen/PACKET-01.md — 8 target-frame
-  prompts, ChatGPT as our own reference model; mocks propose, laws dispose.
-
-**Fixed**
-- **THE KAIJU ROOT CAUSE (VP1c):** three fixes deep — sizing math was never broken; production's
-  theaterStageSync pushed flat-tabletop units into S.unitGroup and `setInteriorBoard` never cleared
-  it, so pre-VP1 kaiju meshes rendered OVER correct interior pieces. Two clearGroup calls, red-first.
-- VP1.5 corpus unification REVERTED at the orchestrator's eyes gate (green snake→brown = hue
-  murder; magenta flecks) and REBUILT as r2: union-histogram palettes w/ hue-family floor (executor
-  self-corrected 2%→0.5% when its own card read caught a second snake), Lab quantize, integer-ratio
-  texel, magenta exclusion. 42 flagged vs r1's 206; snake/ghost regression fixtures now permanent.
-- Sweep fixture drift: VP1's red-first merge-base self-invalidation (pinned 63d3073), model-grammar
-  figure-Y pattern widened for VP1b's posY (x/z-identity invariant intact).
-- **Grid-snap verdict:** Adam's spritefusion-pixel-snapper lead PROVEN DESTRUCTIVE on our art
-  (3-sprite + raw-arrival proof cards; detector locks onto texture rhythm, majority-vote eats
-  sub-cell detail). Kept: the reconstruction-error validity gate as a future slicer option.
-
-**Deferred**
-- VP8 gap queue: combat BEAT FRAMING (law 2c not yet driving the camera), light-marker quads need
-  emissive art, chrome creature sprites (realm dressed but uninhabited), gloom/chrome density tune.
-- GIT-LFS now urgent: GitHub warns on the two 79MB pre-unification zips.
-- Executor scar for the ledger: two narrator-deaths on VP1.5-r2 (zero commits, caught by disk-truth
-  both times; one corrective SendMessage revived it — the babysitting protocol worked).
-
-**Verification.** check-manifest OK · interior 282/0 · dressing 379/0 · scene-direction 17/0 ·
-vp6 49/0 · standee-verbs 69/0 · gallery 22/0 · vp1c-leak 6/0 (red-first) · battle-stage 42/0 ·
-combat suite green · full sweep = only the pre-existing table-usage-data red · loop gate 5/5
-re-shot and READ at every landing (one stale-capture-server incident caught: identical pixels
-to the prior tree = the server was serving stale code; kill-before-capture is now in every prompt).
-
-## 2026-07-10 (late night) — ART DIRECTION CLOSED: 13 rulings, two armed waves, dressing art landing
-
-**Added (specs — build is Adam's word)**
-- docs/BEAUTY-WAVE.md (VP0-VP8 + VP1.5 + VP2b): VP0 two-flag study card (ortho-vs-perspective ×
-  PSX-on/off, Adam's pixel-verdict), VP1 true-scale piece fix + registry sizing fold (the kaiju
-  defect), VP1.5 corpus unification pass (realm master palettes + texel density + defringe, one
-  batch, no codex spend), VP2 dressing fold, VP2b THE GALLERY PASS (clipped/reject sprites → framed
-  realm paintings, paintingOf provenance, mimic-guise legal), VP3 ground design, VP4 scene art
-  direction, VP5 battle-UI redesign, VP6 life pass + visible-history scars, VP7 contact grounding,
-  VP8 the beauty-shot gate (side-by-side vs a real Wildermyth frame).
-- docs/UNIFICATION-WAVE.md (UW1-UW4): ONE CHANNEL (diorama; flat table → legacy → retirement),
-  exterior + settlement dioramas, PORTRAITS (busts w/ 3-expression sets — expressionSet law's
-  production surface — + dialogue lower-third).
-- 13 art-direction rulings registered in DESIGN.md: clean-shapes, PS1-scope-cut, perspective camera,
-  framing law, value law, FLAGSHIP REALMS (fantasy/gloom/chrome; realm = expansion pack, ~6-mo
-  drops), master palettes, texel density, portraits, outline law, defringe-standard, visible history,
-  gallery pass. CLEAN-SHAPES + outline clauses patched into all pending codex packets.
-
-**Added (art)**
-- 25 DRESSING-GEN codex sheets landed + backed up UNGATED (flagships flora/clutter/objects +
-  effects core + all accents + ash). VP2 gate/slice/fold is next session's first move.
 

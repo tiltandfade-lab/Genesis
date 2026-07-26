@@ -216,14 +216,15 @@ def standee_contract_for(overlay_entry, cut_record):
     """B1 contract fields: footX, footY, contentBounds, alphaCutoff, shadowProfile.
 
     Priority (VQ2-RESPEC.md S3 / PHASE-3-WAVE-2-SPECS.md B1):
-      1. faceted cut-report record (S2) -> contentBounds direct, footX = footContact (already
+      1. explicit authored overlay footX/footY -> canonical editor ruling.
+      2. faceted cut-report record (S2) -> contentBounds direct, footX = footContact (already
          x-normalized), footY = contentBounds[3] (the alpha bbox's bottom edge, same row the
          cut report's foot_contact_x measured — normalized top-down, 0=top/1=bottom).
-      2. legacy overlay `floor` (ground-contact fraction UP FROM THE BOTTOM edge) -> footY =
+      3. legacy overlay `floor` (ground-contact fraction UP FROM THE BOTTOM edge) -> footY =
          1 - floor (converted to the same top-down convention), footX defaults to bbox center
          (floor carries no x measurement). contentBounds stays null (not measured for legacy-only
          art).
-      3. neither -> bbox bottom-center default (footX 0.5, footY 1.0), contentBounds null.
+      4. neither -> bbox bottom-center default (footX 0.5, footY 1.0), contentBounds null.
     """
     content_bounds = None
     foot_x = foot_y = None
@@ -233,15 +234,25 @@ def standee_contract_for(overlay_entry, cut_record):
         if isinstance(cut_record.get("footContact"), (int, float)):
             foot_x = round(float(cut_record["footContact"]), 6)
         foot_y = content_bounds[3]
+    overlay_bounds = overlay_entry.get("contentBounds")
+    if isinstance(overlay_bounds, list) and len(overlay_bounds) == 4:
+        content_bounds = [round(float(v), 6) for v in overlay_bounds]
 
-    if foot_x is None or foot_y is None:
+    overlay_foot_x = overlay_entry.get("footX")
+    overlay_foot_y = overlay_entry.get("footY")
+    if isinstance(overlay_foot_x, (int, float)) and 0 <= overlay_foot_x <= 1:
+        foot_x = round(float(overlay_foot_x), 6)
+    if isinstance(overlay_foot_y, (int, float)) and 0 <= overlay_foot_y <= 1:
+        foot_y = round(float(overlay_foot_y), 6)
+
+    if foot_y is None:
         floor = overlay_entry.get("floor")
         if isinstance(floor, (int, float)) and 0 < floor <= 0.9:
-            foot_x = 0.5
             foot_y = round(1.0 - float(floor), 4)
-        else:
-            foot_x = 0.5
-            foot_y = 1.0
+    if foot_x is None:
+        foot_x = 0.5
+    if foot_y is None:
+        foot_y = 1.0
 
     return {
         "footX": foot_x,

@@ -760,13 +760,25 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
 // ============================================================================
 console.log("\n=== G5 ROUND-2 finding 2: base disc — circular, under the feet, flat-capped ===");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B9 (2026-07-25): setUnits — and with it baseDiscGeoFor/baseDiscGeoForRadius, the disc
+  // mount and the scorch marker — moved VERBATIM to src/ui/theater-tabletop.js; addGroundingBlob and
+  // every Parts lookup stayed in theater-boot.js. Reading the COMPOSITE keeps each scan below anchored
+  // on the real source of its own symbol, and keeps the two NEGATIVE scans (S.shadowGroup.scale /
+  // baseDisc.scale must not exist ANYWHERE) at their full pre-split breadth.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-model-grammar composite boundary — src/ui/theater-tabletop.js follows] */\n"
+    + read("src/ui/theater-tabletop.js");
   // (a) circular: CircleGeometry's segment-count 3rd arg — pull it straight from the source so this
   // check tracks the REAL call, not a hand-typed assumption. A CircleGeometry with too few segments
   // (e.g. 4-6) reads as a visible polygon/near-square at PSX low-res; 16 already an actual circle.
-  const circleCall = bootSrc.match(/new THREE\.CircleGeometry\(([^)]*)\)/);
-  check("baseDiscGeoFor uses THREE.CircleGeometry (genuinely round primitive, not a box/plane)", !!circleCall, "no CircleGeometry(...) call found in theater-boot.js");
-  if (circleCall) {
+  // B9 note: this used to take the FIRST CircleGeometry call in theater-boot.js, which was
+  // groundingBlobGeoFor's (also 16) — the check passed while reading a call that is not its subject.
+  // Now that baseDiscGeoForRadius lives in a file of its own, the match is anchored on that function's
+  // own body so the check finally reads what its label names. Same assertion, same value (16), same
+  // job — a validator made true, not a diff greened.
+  const circleCall = (bootSrc.match(/function baseDiscGeoForRadius\([\s\S]*?new THREE\.CircleGeometry\(([^)]*)\)/) || []).slice(0);
+  check("baseDiscGeoFor uses THREE.CircleGeometry (genuinely round primitive, not a box/plane)", !!circleCall.length, "no CircleGeometry(...) call found inside baseDiscGeoForRadius");
+  if (circleCall.length) {
     // THREE.CircleGeometry(radius, segments) — 2 args; segments is index 1, not 2 (an earlier draft
     // of this check assumed a 3-arg signature and always read `undefined` — caught by this check's
     // own red-first run against the unfixed source, left documented here since it's a real gotcha).

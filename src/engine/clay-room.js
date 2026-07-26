@@ -30,35 +30,9 @@
    dungeon segment once C1B's move/preview-commit work gives this room somewhere to be rolled FROM.
 */
 
-// ─── CLAY_C1A_LIGHT_PROFILE (D4, wave-12 founder rider P12.12-R1) ─────────────────────────────
-// Two points at two different color temperatures on OPPOSING sides of the room + one low ambient.
-// Shape mirrors LIGHT_PROFILES' own per-profile entries (src/ui/theater-boot.js ~6234-6280) —
-// `points[].pos` is a board-relative FRACTION (that file's own header: resolved against
-// S.boardHalfX/boardHalfZ), `points[].color`/`intensity` are plain THREE.PointLight args — so
-// whichever mechanism ends up consuming this (see docs/C1A-CLAY-ROOM.md D4 + the theater-boot.js
-// wire-in's own report) can treat it exactly like any other authored profile. Hex colors match the
-// two precedent profiles the spec names verbatim: warm 0xffa04a is torchlit's own point color
-// (theater-boot.js:6236), cool 0xaebfe8 is moonlit's own point color (theater-boot.js:6265);
-// intensities (16/9) sit in the same order as those two profiles' own points (18/8). Ambient is
-// authored at 0.18 (<=0.25, the D4 ceiling) — see the wire-in report for how this authored value
-// survives (or is superseded by) the interior channel's own readability floor.
-var CLAY_C1A_LIGHT_PROFILE = Object.freeze({
-  points: Object.freeze([
-    Object.freeze({
-      id: "clay-west-warm", side: "west", color: 0xffa04a, intensity: 16,
-      state: "steady",
-      flicker: Object.freeze({ seed: "clay-c1a:west-warm", amplitude: 0.12, cadenceMs: 480 }),
-      pos: Object.freeze({ x: -0.8, y: 1.7, z: 0 })
-    }),
-    Object.freeze({
-      id: "clay-east-cool", side: "east", color: 0xaebfe8, intensity: 9,
-      state: "steady",
-      flicker: Object.freeze({ seed: "clay-c1a:east-cool", amplitude: 0.12, cadenceMs: 480 }),
-      pos: Object.freeze({ x: 0.8, y: 1.7, z: 0 })
-    })
-  ]),
-  ambient: Object.freeze({ color: 0xffffff, intensity: 0.18 })
-});
+// CL-R1 lighting recipes no longer live in this fixture. The compatibility symbol
+// CLAY_C1A_LIGHT_PROFILE is projected by src/engine/light-recipes.js from the same
+// compiled lock that seeds the Light Lab.
 
 /* ─── CL-R0 — CLAY_DIAGNOSTIC_SURFACE_RECIPE (docs/CLAYROOM-RESET-LADDER.md §CL-R0) ───────────────
    The diagnostic-clay surface selection is DATA, not renderer code. The renderer executes routes;
@@ -88,7 +62,13 @@ var CLAY_C1A_LIGHT_PROFILE = Object.freeze({
    family (CL-F01..CL-F06), not for one room. */
 var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
   id: "clay-diagnostic-surface",
-  version: 1,
+  // v2 (2026-07-25, visual-correction checkpoint 1 — Adam: "there's no sprite shadow cast on the
+  // standee base itself"): the standee BASE previously inherited the sprite family's passthrough
+  // and kept its near-black production trim, which swallowed the card's real cast shadow
+  // (measured: the shadow lands; the albedo hides it). In a diagnostic clay studio the base is a
+  // physical surface under test like any other — it now routes to clay so cast shadows and AO
+  // read on it. The sprite ART stays passthrough, untouched.
+  version: 2,
   modes: Object.freeze(["clay", "role-id"]),
   defaultMode: "clay",
   clayColor: "#8a8a8a",       // D7's own flat clay-grey, unchanged
@@ -112,6 +92,9 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
     furniture: Object.freeze({ route: "diagnostic-clay", roleColor: "#bf9f6f" }),
     emitter:   Object.freeze({ route: "passthrough",     roleColor: "#ffd88a" }),
     sprite:    Object.freeze({ route: "passthrough",     roleColor: "#ff5fbf" }),
+    // v2: the standee's physical support strip — clay like every other surface under test, so the
+    // sprite's own cast shadow and the contact AO are readable on it (the sprite ART stays above).
+    "standee-base": Object.freeze({ route: "diagnostic-clay", roleColor: "#6fbfbf" }),
     door:      Object.freeze({ route: "passthrough",     roleColor: "#ffffff" }),
     // Found by the CL-R0 census itself: the first routed capture reported nine UNCLAIMED surfaces —
     // the citizen's own soft contact pool (addInteriorContactBlob, userData.contactBlob) and eight
@@ -121,9 +104,447 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
     // grey stand-in. OPEN for CL-R1: whether the diagnostic modes should suppress atmosphere entirely
     // (motes are additive ember quads — honest production output, but noise in a measurement rig).
     "contact-shadow": Object.freeze({ route: "passthrough", roleColor: "#5fbfbf" }),
-    mote:             Object.freeze({ route: "passthrough", roleColor: "#bf5f5f" })
+    mote:             Object.freeze({ route: "passthrough", roleColor: "#bf5f5f" }),
+    // CL-R3 diagnostic overlays (socket axes, access faces, negative-control rejection) are
+    // intentionally coloured truth aids, not architecture. They bypass the neutral-clay swap.
+    "diagnostic-overlay": Object.freeze({ route: "passthrough", roleColor: "#6fcfff" })
   })
 });
+
+/* ─── Bench preview clock for celestial recipes (Adam's 2026-07-25 ruling: shadows fall from the
+   clock-mapped sun) — the clay fixtures carry no live walk clock, so each celestial recipe previews
+   at one FIXED, named bench time. The renderer derives direction from the shared celestial arc
+   (clock -> direction, the one owner); these numbers only choose WHICH moment the bench shows.
+   486 = 08:06 morning sun (oblique, warm, off the camera axis) · 1290 = 21:30 early-night moon. */
+var CLAY_CELESTIAL_PREVIEW_CLOCK = Object.freeze({
+  daylit: 486,
+  overcast: 486,
+  moonlit: 1290
+});
+
+/* ─── CL-R1 / CL-F02 — LIGHTING BENCH FIXTURE ──────────────────────────────────────────────────
+   The room-truth fixture answers architecture/movement questions. This second fixture answers one
+   narrower question: what does a named light recipe do to neutral form as distance, face direction,
+   and elevation change? It is fixture DATA only. theater-boot.js projects these descriptors through
+   the already-mounted production Theater scene; no light, camera, exposure rule, or second renderer
+   lives here.
+
+   Coordinates are offsets from the spatialized room centre in tabletop world units (1 u = 5 ft).
+   The three boxes form one continuous staircase in Z, so each tread is exactly one cell-depth third
+   (1/3 u) deep: the same depth target Adam set for eventual natural standee supports on stairs.
+   Sphere/cube are deliberately matte and similarly sized so highlight shape and face transitions can
+   be compared without material noise. The retained approved goblin is moved beside them through the
+   ordinary board.pieces path so sprite response stays in the same frame. */
+var CLAY_LIGHTING_BENCH_FIXTURE = Object.freeze({
+  id: "cl-f02-lighting-bench",
+  version: 1,
+  label: "CL-F02 lighting bench",
+  question: "Do diagnostic and rolled light recipes produce controlled, motivated light?",
+  spriteCell: Object.freeze({ x: 10, z: 7 }),
+  primitives: Object.freeze([
+    Object.freeze({
+      id: "bench-step-low", primitive: "box", role: "riser",
+      size: Object.freeze({ x: 2.4, y: 0.24, z: 1 / 3 }),
+      offset: Object.freeze({ x: -1.5, z: 1 / 3 })
+    }),
+    Object.freeze({
+      id: "bench-step-mid", primitive: "box", role: "riser",
+      size: Object.freeze({ x: 2.4, y: 0.48, z: 1 / 3 }),
+      offset: Object.freeze({ x: -1.5, z: 0 })
+    }),
+    Object.freeze({
+      id: "bench-step-high", primitive: "box", role: "riser",
+      size: Object.freeze({ x: 2.4, y: 0.72, z: 1 / 3 }),
+      offset: Object.freeze({ x: -1.5, z: -1 / 3 })
+    }),
+    Object.freeze({
+      id: "bench-matte-cube", primitive: "box", role: "furniture",
+      size: Object.freeze({ x: 1.15, y: 1.15, z: 1.15 }),
+      offset: Object.freeze({ x: 0.45, z: 0 })
+    }),
+    Object.freeze({
+      id: "bench-matte-sphere", primitive: "sphere", role: "furniture",
+      radius: 0.66,
+      offset: Object.freeze({ x: 2.05, z: 0 })
+    })
+  ]),
+  overlays: Object.freeze({
+    position: "emitter crosshair + floor drop",
+    range: "25/50/100 percent physical-range rings",
+    shadow: "wire shadow volume (point) or frustum (spot)"
+  })
+});
+
+// clayRoomLightingBenchFixtureFrom(record) -> the immutable CL-F02 input. The minimum-size guard is
+// loud because silently clipping the comparison forms against a smaller room would make the bench
+// appear valid while changing the question it answers.
+function clayRoomLightingBenchFixtureFrom(record){
+  if(!record || !record.dims){
+    throw new Error("clayRoomLightingBenchFixtureFrom: record with dims required");
+  }
+  if(record.dims.w < 9 || record.dims.d < 9){
+    throw new Error("clayRoomLightingBenchFixtureFrom: CL-F02 requires at least a 9x9 room — got " +
+      record.dims.w + "x" + record.dims.d);
+  }
+  return CLAY_LIGHTING_BENCH_FIXTURE;
+}
+
+/* ─── CL-R2 / CL-F03 — SPRITE CITIZENSHIP FIXTURE ──────────────────────────────────────────────
+   The lineup deliberately spans the live pixel corpus rather than repeating the room-truth goblin.
+   Coordinates are local cells inside the 15×15 C1B room. They advance along a camera-horizontal
+   diagonal so true-scale silhouettes compare in one frame without changing the fixed production
+   camera. `tacticalSpanCells` is gameplay truth; the visible support under the art is presentation
+   geometry and never becomes collision/occupancy authority.
+
+   The 60-foot Kraken is intentionally retained despite its review-fail/prototype-admitted state:
+   Adam asked to see the actual largest creature beside a human and to flag overly wide big art for
+   taller/upright regeneration. Hiding it behind the already-approved subset would defeat that test.
+   The 1–30-foot cap is the preferred PRESENTATION SCALE. True scale remains available as an honest
+   size-spectrum check; neither view mutates registry worldHeight or tactical occupancy. */
+var CLAY_SPRITE_CITIZENSHIP_FIXTURE = Object.freeze({
+  id: "cl-f03-sprite-citizenship",
+  version: 1,
+  label: "CL-F03 sprite citizenship",
+  question: "Do live pixel sprites remain physical, readable citizens across the true scale range?",
+  selectedSlug: "spr-pc-human-fighter-female",
+  candidatePresentationCap: Object.freeze({
+    minFeet: 1,
+    maxFeet: 30,
+    label: "preferred presentation scale — canonical height and tactical footprint stay unchanged"
+  }),
+  stair: Object.freeze({
+    id: "sprite-stair-fit",
+    treadDepth: 1 / 3,
+    treadWidth: 2.4,
+    riserHeight: 0.24,
+    steps: 3
+  }),
+  cast: Object.freeze([
+    Object.freeze({
+      slug: "spr-fantasy-dungeon-animal-blind-cave-rat-pale-sightless-thrives-in-total-dark-first-sign-something-s-been-dug-through",
+      label: "Blind cave rat", stress: "smallest live height", tacticalSpanCells: 0.5,
+      lineupCell: Object.freeze({ x: 1, z: 13 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-winged-kobold-urd",
+      label: "Winged kobold", stress: "small dark fantasy creature", tacticalSpanCells: 1,
+      lineupCell: Object.freeze({ x: 3, z: 11 })
+    }),
+    Object.freeze({
+      slug: "spr-pc-human-fighter-female",
+      label: "Human fighter", stress: "human reference · skin/cloth/metal", tacticalSpanCells: 1,
+      lineupCell: Object.freeze({ x: 5, z: 9 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-flaming-skeleton",
+      label: "Flaming skeleton", stress: "pale/highlight clipping", tacticalSpanCells: 1,
+      lineupCell: Object.freeze({ x: 7, z: 7 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-wraith",
+      label: "Wraith", stress: "dark/irregular alpha edge", tacticalSpanCells: 1,
+      lineupCell: Object.freeze({ x: 9, z: 5 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-treant",
+      label: "Treant", stress: "tall Huge silhouette", tacticalSpanCells: 3,
+      lineupCell: Object.freeze({ x: 11, z: 3 })
+    }),
+    Object.freeze({
+      slug: "spr-fantasy-kraken",
+      label: "Kraken", stress: "largest live height · width/regeneration test", tacticalSpanCells: 4,
+      lineupCell: Object.freeze({ x: 13, z: 1 })
+    })
+  ])
+});
+
+function clayRoomSpriteCitizenshipFixtureFrom(record){
+  if(!record || !record.dims){
+    throw new Error("clayRoomSpriteCitizenshipFixtureFrom: record with dims required");
+  }
+  if(record.dims.w < 15 || record.dims.d < 15){
+    throw new Error("clayRoomSpriteCitizenshipFixtureFrom: CL-F03 requires the 15x15 scale room — got " +
+      record.dims.w + "x" + record.dims.d);
+  }
+  return CLAY_SPRITE_CITIZENSHIP_FIXTURE;
+}
+
+/* ─── CL-R3 / CL-F01 — STRUCTURE BENCH FIXTURE ─────────────────────────────────────────────────
+   The construction grammar is data. theater-boot.js projects these dimensions and sockets through
+   the production room-shell compiler and generic part assemblers; this engine file owns no THREE,
+   camera, or Guard Post special case. */
+var CLAY_STRUCTURE_KIT_CATALOG = Object.freeze({
+  id: "genesis-structure-kit",
+  version: 1,
+  gridLaw: Object.freeze({
+    cellFeet: 5, cellWorldUnits: 1,
+    verticalQuantumFeet: 2.5, verticalQuantumWorldUnits: 0.5,
+    storeyQuanta: 4, storeyFeet: 10, storeyWorldUnits: 2,
+    maxWalkableSlopeDeg: 30
+  }),
+  socketTypes: Object.freeze([
+    "floor-mount", "wall-mount", "top-surface", "hinge",
+    "butt-join-n", "butt-join-e", "butt-join-s", "butt-join-w",
+    "walk-surface", "catch", "terrain-join", "roof-pitch-join", "open"
+  ]),
+  accessKinds: Object.freeze(["walk", "climb-cost", "climb-dc", "none"]),
+  climbMechanicsImplemented: false,
+  provenance: Object.freeze({
+    author: "Genesis procedural structure grammar",
+    source: "docs/STRUCTURE-KIT-CATALOG.md",
+    license: "project-native",
+    donorFile: null
+  })
+});
+
+var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
+  id: "cl-f01-structure-bench",
+  version: 1,
+  label: "CL-F01 structure bench",
+  question: "Can generic construction atoms make believable, mechanically legible architecture?",
+  catalogId: CLAY_STRUCTURE_KIT_CATALOG.id,
+  defaultView: "assembled",
+  views: Object.freeze(["assembled", "sockets", "access", "negative", "strategic"]),
+  wallOmission: Object.freeze({
+    ruleId: "camera-side-wall-omission",
+    version: 1,
+    initialState: Object.freeze({ staged: true, latched: true }),
+    stagedEvent: "space-entered",
+    releaseEvent: "space-left-play",
+    doorEventsDoNotRestage: true,
+    carveouts: Object.freeze({
+      aperture: true,
+      structuralMass: true,
+      strategicView: true
+    })
+  }),
+  // Notched shell: convex + concave corners. Its north strip holds broad +h and -h slabs.
+  shellCells: Object.freeze((function(){
+    var rows = [];
+    for(var z = 1; z <= 6; z++){
+      for(var x = 1; x <= 6; x++){
+        if(x >= 5 && z <= 2) continue;
+        var tier = (z >= 5 && x <= 3) ? 1 : ((z >= 5 && x >= 4) ? -1 : 0);
+        rows.push(Object.freeze({
+          x: x, z: z, tier: tier,
+          isDoor: z === 1 && x === 3,
+          sourceRef: "cl-f01:shell:" + x + "," + z
+        }));
+      }
+    }
+    return rows;
+  })()),
+  pieces: Object.freeze([
+    Object.freeze({
+      id: "straight-wall", kind: "wall-run", label: "straight wall · endpoint + cap",
+      at: Object.freeze({ x: 9.5, z: 2 }), axis: "x", length: 3.5, height: 2, thickness: 0.22,
+      sockets: Object.freeze([
+        Object.freeze({ id: "straight-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "straight-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "none", inner: "none", outer: "none" })
+    }),
+    Object.freeze({
+      id: "t-junction", kind: "t-junction", label: "T-junction · single owner",
+      at: Object.freeze({ x: 10.5, z: 5 }), axis: "x", length: 3, branchLength: 1.45,
+      height: 2, thickness: 0.22,
+      sockets: Object.freeze([
+        Object.freeze({ id: "t-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "t-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) }),
+        Object.freeze({ id: "t-branch", type: "butt-join-s", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      access: Object.freeze({ top: "none", mainInner: "none", branchInner: "none" })
+    }),
+    Object.freeze({
+      id: "one-cell-stair", kind: "stair", label: "one-cell stair + landing",
+      at: Object.freeze({ x: 8.5, z: 8.6 }), width: 1, run: 1.5, rise: 0.5, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "stair-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "stair-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "wide-stair", kind: "stair", label: "wide stair + landing",
+      at: Object.freeze({ x: 10.5, z: 8.6 }), width: 2, run: 1.5, rise: 0.5, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "wide-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "wide-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "shallow-ramp", kind: "ramp", label: "shallow ramp · 26.565°",
+      at: Object.freeze({ x: 13, z: 8.6 }), width: 1.2, run: 1, rise: 0.5,
+      sockets: Object.freeze([
+        Object.freeze({ id: "ramp-low", type: "terrain-join", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "ramp-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ top: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "half-height-blocker", kind: "blocker", label: "half-height blocker / parapet base",
+      at: Object.freeze({ x: 8.75, z: 11.8 }), axis: "x", length: 2.5, height: 0.5, thickness: 0.34,
+      sockets: Object.freeze([
+        Object.freeze({ id: "blocker-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "blocker-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-cost" })
+    }),
+    Object.freeze({
+      id: "square-support", kind: "support-square", label: "square support",
+      at: Object.freeze({ x: 11.5, z: 11.8 }), width: 0.55, height: 2,
+      sockets: Object.freeze([
+        Object.freeze({ id: "square-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "square-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+    }),
+    Object.freeze({
+      id: "round-support", kind: "support-round", label: "round support",
+      at: Object.freeze({ x: 13, z: 11.8 }), radius: 0.31, height: 2,
+      sockets: Object.freeze([
+        Object.freeze({ id: "round-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "round-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+    }),
+    /* Checkpoint 4 (2026-07-25) — THE ASSEMBLED EXAMPLE. The same generic atoms composed into one
+       legible construction against the shell's own raised terrace (tier +1, cells x1-3 z5-6): a
+       wide stair climbs the terrace exactly one 2.5-ft quantum (rise 0.5 = the grid law), a
+       half-height blocker stands on the terrace edge as a parapet base (lift = tier height), and
+       two square posts flank the approach. Nothing bespoke: every entry reuses an existing kind,
+       socket vocabulary, and access class — this is the "same pieces form a believable whole"
+       proof, not a new geometry family. `assembly: true` marks the group for the workbench lane. */
+    Object.freeze({
+      id: "assembly-approach-stair", kind: "stair", label: "ASSEMBLY · terrace stair",
+      assembly: true,
+      at: Object.freeze({ x: 2, z: 4.05 }), width: 2, run: 1.5, rise: 0.5, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "approach-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: -1 }) }),
+        Object.freeze({ id: "approach-high", type: "top-surface", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-parapet", kind: "blocker", label: "ASSEMBLY · terrace parapet base",
+      assembly: true, lift: 0.5,
+      at: Object.freeze({ x: 2, z: 5.95 }), axis: "x", length: 2.4, height: 0.4, thickness: 0.26,
+      sockets: Object.freeze([
+        Object.freeze({ id: "parapet-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "parapet-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) }),
+        Object.freeze({ id: "parapet-seat", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "climb-cost", faces: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-post-west", kind: "support-square", label: "ASSEMBLY · approach post W",
+      assembly: true,
+      at: Object.freeze({ x: 0.95, z: 3.45 }), width: 0.45, height: 1.1,
+      sockets: Object.freeze([
+        Object.freeze({ id: "post-w-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "post-w-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-post-east", kind: "support-square", label: "ASSEMBLY · approach post E",
+      assembly: true,
+      at: Object.freeze({ x: 3.05, z: 3.45 }), width: 0.45, height: 1.1,
+      sockets: Object.freeze([
+        Object.freeze({ id: "post-e-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
+        Object.freeze({ id: "post-e-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+    })
+  ]),
+  opening: Object.freeze({
+    id: "hinged-opening", state: "ajar", width: 0.72, height: 1.6, threshold: true,
+    socket: Object.freeze({ id: "opening-hinge", type: "hinge", axis: Object.freeze({ x: 1, z: 0 }) }),
+    access: Object.freeze({ threshold: "walk", leaf: "none", frame: "none" }),
+    swingClearanceDeg: 90
+  }),
+  // One production standee behind one production pillar forces the existing sightline classifier
+  // to demonstrate the remaining dynamic cutaway/ghost path. It is a scale/cutaway witness, not a
+  // new structure atom and not a second occlusion algorithm.
+  cutawayWitness: Object.freeze({
+    id: "structure-cutaway-witness",
+    pieceSlug: "spr-pc-human-fighter-female",
+    pieceCell: Object.freeze({ x: 6.7, z: 8.8 }),
+    occluder: Object.freeze({
+      id: "structure-cutaway-pillar",
+      at: Object.freeze({ x: 7.6, z: 9.7 }),
+      sx: 0.7, sy: 2, sz: 0.7, profile: "square"
+    })
+  }),
+  negativeControl: Object.freeze({
+    id: "wrong-axis-join", label: "wrong-axis socket · must reject",
+    at: Object.freeze({ x: 12.2, z: 5.6 }),
+    source: Object.freeze({ id: "bad-source-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) }),
+    candidate: Object.freeze({ id: "bad-candidate-north", type: "butt-join-n", axis: Object.freeze({ x: 0, z: -1 }) }),
+    expectedReason: "socket-axis-mismatch"
+  })
+});
+
+/* The wall-omission latch is scene truth, not door-angle truth. The C1B connection state machine
+   supplies door-state events, but those events deliberately preserve this latch: opening a door
+   does not reveal an entire room, and closing it does not erase actors who have already entered.
+   Only explicit staging/release events change the room's participation in play. */
+function clayStructureStagingLatchTransition(state, event){
+  var prior = state && typeof state === "object" ? state : { staged: false, latched: false };
+  var next = {
+    staged: !!prior.staged,
+    latched: !!prior.latched,
+    lastEvent: prior.lastEvent || "initial-sealed",
+    doorState: prior.doorState || "shut"
+  };
+  var type = event && event.type;
+  if(type === CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.stagedEvent){
+    next.staged = true;
+    next.latched = true;
+  } else if(type === CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.releaseEvent){
+    next.staged = false;
+    next.latched = false;
+  } else if(type === "door-state"){
+    var doorState = String(event.state || "");
+    if(["shut", "ajar", "open"].indexOf(doorState) < 0){
+      throw new Error("clayStructureStagingLatchTransition: unknown door state " + doorState);
+    }
+    next.doorState = doorState;
+  } else {
+    throw new Error("clayStructureStagingLatchTransition: unknown event " + String(type));
+  }
+  next.lastEvent = type;
+  return Object.freeze(next);
+}
+
+function clayStructureSocketJoinAssessment(source, candidate){
+  if(!source || !candidate) return Object.freeze({ accepted: false, reason: "socket-missing" });
+  var a = source.axis || {}, b = candidate.axis || {};
+  var opposing = Number(a.x || 0) + Number(b.x || 0) === 0
+    && Number(a.z || 0) + Number(b.z || 0) === 0;
+  if(!opposing) return Object.freeze({ accepted: false, reason: "socket-axis-mismatch" });
+  var sourceButt = String(source.type || "").indexOf("butt-join-") === 0;
+  var candidateButt = String(candidate.type || "").indexOf("butt-join-") === 0;
+  if(sourceButt !== candidateButt) return Object.freeze({ accepted: false, reason: "socket-type-mismatch" });
+  return Object.freeze({ accepted: true, reason: "compatible" });
+}
+
+function clayRoomStructureBenchFixtureFrom(record){
+  if(!record || !record.dims){
+    throw new Error("clayRoomStructureBenchFixtureFrom: record with dims required");
+  }
+  if(record.dims.w < 15 || record.dims.d < 15){
+    throw new Error("clayRoomStructureBenchFixtureFrom: CL-F01 requires the 15x15 construction room — got " +
+      record.dims.w + "x" + record.dims.d);
+  }
+  var bad = CLAY_STRUCTURE_BENCH_FIXTURE.negativeControl;
+  var assessment = clayStructureSocketJoinAssessment(bad.source, bad.candidate);
+  if(assessment.accepted || assessment.reason !== bad.expectedReason){
+    throw new Error("clayRoomStructureBenchFixtureFrom: negative control did not reject by " + bad.expectedReason);
+  }
+  return CLAY_STRUCTURE_BENCH_FIXTURE;
+}
 
 /* clayDiagnosticRoleForKind(kind) -> a normalized recipe role, or null.
    Maps the renderer's OWN `userData.interiorKind` vocabulary (theater-boot.js's
@@ -138,6 +559,7 @@ function clayDiagnosticRoleForKind(kind){
   if(k === "room-shell-wall-stem" || k === "room-shell-wall-upper" || k === "kit-shell-wall") return "wall";
   if(k === "room-shell-wall-trim") return "trim";
   if(k === "room-shell-riser") return "riser";
+  if(k === "clay-diagnostic-overlay") return "diagnostic-overlay";
   if(CLAY_DIAGNOSTIC_SURFACE_RECIPE.roles[k]) return k;
   return null;
 }
@@ -492,8 +914,9 @@ function clayRoomDoorEdgeFor(door, room){
 // board.dressing are left EMPTY (never hand-built) — see the door-leaf note in this function's body
 // and this unit's own build report for why, and CLAUDE.md's "an untagged/exempt/red state that tells
 // the truth beats a green that lies" for why that gap is reported, not patched.
-function clayRoomBoardFrom(record){
+function clayRoomBoardFrom(record, opts){
   if(!record) throw new Error("clayRoomBoardFrom: record required");
+  opts = opts || {};
   var doSpatialize = (typeof spatializePlan !== "undefined") ? spatializePlan : null;
   var doBuildBoard = (typeof interiorBuildBoard !== "undefined") ? interiorBuildBoard : null;
   if(!doSpatialize) throw new Error("clayRoomBoardFrom: spatializePlan is not loaded (src/engine/place-spatialize.js must load before this call)");
@@ -557,39 +980,93 @@ function clayRoomBoardFrom(record){
     KIT_DOORS_ENABLED = priorKitDoors;
   }
 
-  // CL-R1 — the authored opposing pair travels through the SAME fixture-data -> fixture builder ->
-  // PointLight/emitter path as every production interior practical. The generated board already
-  // carries a deterministic production fixture recipe; clone its physical fixture fields rather
-  // than duplicating ITR_FIXTURE_RECIPES in this engine module. Only placement, colour, authored
-  // renderer intensity, identity, and the explicit per-light state belong to this named test recipe.
-  // `renderIntensity` is consumed by interiorBuildLights as an absolute renderer value; ordinary
-  // production rows keep their relative `intensity` + shared gain contract unchanged.
+  // CL-R1 — select a named recipe from the shared compiled registry. The default remains the
+  // opposing-pair diagnostic, but the workbench may rebuild this same production board with neutral
+  // truth or a lore-native rolled recipe. No Clayroom-only light values remain here.
+  var lightRecipeId = opts.lightRecipeId || "clay-opposing-pair";
+  var lightRecipe = opts.lightRecipe || lightRecipeFor(lightRecipeId);
+  if(!lightRecipe || lightRecipe.id !== lightRecipeId){
+    throw new Error("clayRoomBoardFrom: light recipe id mismatch for '" + lightRecipeId + "'");
+  }
   var fixtureTemplate = board.lights && board.lights[0];
-  if(!fixtureTemplate){
+  if(lightRecipe.lights.length && !fixtureTemplate){
     throw new Error("clayRoomBoardFrom: production interiorBuildBoard produced no fixture template for the CL-R1 opposing pair");
   }
   var roomCx = room.x + (room.w - 1) / 2;
   var roomCz = room.y + (room.d - 1) / 2;
   var roomHalfX = (room.w - 1) / 2 + 1;
   var roomHalfZ = (room.d - 1) / 2 + 1;
-  board.lights = CLAY_C1A_LIGHT_PROFILE.points.map(function(p){
+  board.lights = lightRecipe.lights.filter(function(p){ return p.enabled !== false; }).map(function(p){
+    var fixtureId = p.fixtureId || fixtureTemplate.fixtureId;
+    var kind = fixtureId && fixtureId.indexOf("torch") >= 0 ? "torch" : "lamp";
     return Object.assign({}, fixtureTemplate, {
+      recipeId: lightRecipe.id,
+      // Adam's ruling (2026-07-25): "the shadows should fall relative to the actual position of
+      // the sun since its position is mapped to the actual clock." The celestial arc
+      // (clock -> sun/moon direction) is the ONE owner of celestial light direction; a celestial
+      // light therefore carries its world clock so the renderer derives direction from the arc
+      // instead of a second authored-azimuth authority. The clay fixtures have no live walk clock,
+      // so each celestial recipe previews at a fixed bench time (morning sun, late-evening moon —
+      // oblique angles that keep cast shadows readable under the fixed production camera).
+      clockMin: (lightRecipe.source && lightRecipe.source.class === "celestial"
+        && CLAY_CELESTIAL_PREVIEW_CLOCK[lightRecipe.id] != null)
+        ? CLAY_CELESTIAL_PREVIEW_CLOCK[lightRecipe.id] : null,
       id: p.id,
       sourceRef: p.id,
+      recipeMode: lightRecipe.mode,
+      sourceClass: lightRecipe.source.class,
+      visibleEmitterRequired: lightRecipe.source.visibleEmitterRequired,
       x: roomCx + p.pos.x * roomHalfX,
       z: roomCz + p.pos.z * roomHalfZ,
       y: p.pos.y,
+      lightType: p.type,
+      temperatureK: p.temperatureK,
+      colorOverride: p.colorOverride,
       color: p.color,
-      renderIntensity: p.intensity,
-      state: p.state,
+      intensity: p.physicalIntensity,
+      intensityUnit: p.physicalIntensityUnit,
+      positionStrategy: p.positionStrategy,
+      // Preserve the already-reviewed diagnostic exposure exactly. Production practicals keep the
+      // ordinary relative-intensity × shared-gain path.
+      renderIntensity: lightRecipe.mode === "diagnostic-studio" ? p.physicalIntensity : undefined,
+      distance: p.rangeM / 1.524,
+      // Checkpoint 2 (2026-07-25): EVERY recipe light carries its authored, validated reach. The
+      // renderer's small-pool safety cap (ITR_LIGHT_DISTANCE_CAP) exists for generic GENERATED
+      // interior lights; a lock-registry recipe range is reviewed data by definition, and capping
+      // it silently was the root cause of the warm/cool pair dying half a room short of the
+      // subjects while the readout kept printing the authored 18.288 m (root-cause notes §2).
+      authoredRange: true,
+      decay: p.falloff,
+      castShadow: p.shadow.cast,
+      shadowBias: p.shadow.bias,
+      shadowNormalBias: p.shadow.normalBias,
+      shadowMapSize: p.shadow.mapSize,
+      shadowBudgetPriority: p.shadow.budgetPriority,
+      spot: p.spot,
+      azimuthDeg: p.azimuthDeg,
+      elevationDeg: p.elevationDeg,
+      kind: kind,
+      fixtureId: fixtureId,
+      mount: p.mount || fixtureTemplate.mount,
+      emitterLocal: p.emitterLocal || fixtureTemplate.emitterLocal,
+      state: p.state || "steady",
       flicker: {
-        seed: p.flicker.seed,
+        seed: p.flicker.seed || ("clay-c1a:" + lightRecipe.id + ":" + p.id),
         amplitude: p.flicker.amplitude,
-        cadenceMs: p.flicker.cadenceMs
+        cadenceMs: p.flicker.cadenceMs,
+        intervalJitter: p.flicker.intervalJitter,
+        directionAmplitude: p.flicker.directionAmplitude
       },
       forceVisiblePractical: true
     });
   });
+  board.lightRecipeLock = {
+    id: lightRecipe.id,
+    mode: lightRecipe.mode,
+    source: lightRecipe.source,
+    lockSetId: LIGHT_PROFILE_LOCKS_COMPILED.id,
+    lockSetVersion: LIGHT_PROFILE_LOCKS_COMPILED.version
+  };
 
   var cellById = {};
   (record.cells || []).forEach(function(c){ cellById[c.id] = c; });
@@ -645,7 +1122,14 @@ function clayRoomBoardFrom(record){
   }];
   board.dressing = [];
 
-  return { board: board, room: room, plan: plan, fixture: fixture };
+  return {
+    board: board,
+    room: room,
+    plan: plan,
+    fixture: fixture,
+    lightRecipeId: lightRecipe.id,
+    lightRecipeMode: lightRecipe.mode
+  };
 }
 
 /* ─── C1B MOVEMENT ADAPTER ───────────────────────────────────────────────────────────────────

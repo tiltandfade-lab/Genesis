@@ -58,7 +58,16 @@ console.log("  Negative control: 3a is RED-FIRST — flag \"none\" hard-clips, p
 // MEANING is preserved forever: the unit introduced these symbols, and "none" reproduces the
 // pre-AgX look byte-for-byte.
 const MASTER_REF = "074cf05d";
-const NEW_SOURCE = read("src/ui/theater-boot.js");
+// THEATER SPLIT B4 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): makeGradePass, its GRADE_*
+// uniform seeds and AGX_TONEMAP_GLSL moved VERBATIM to src/ui/theater-post.js; the GRADE_TONEMAP
+// `let` and its window.Theater._setGradeTonemapForTest seam stayed in theater-boot.js (a mutable root
+// flag behind a ctx accessor). NEW_SOURCE reads the COMPOSITE of both files so every check below —
+// the section-0 surface regexes, the byte-identical FS_NONE diff, and the vm-sandbox execution of the
+// real extracted makeGradePass — keeps its exact job with each symbol in its true home. OLD_SOURCE is
+// still the pre-AgX monolith at MASTER_REF, which is the whole point of the "none ≡ master" proof.
+const NEW_SOURCE = read("src/ui/theater-boot.js")
+  + "\n/* [verify-agx-tonecurve composite boundary — src/ui/theater-post.js follows] */\n"
+  + read("src/ui/theater-post.js");
 const OLD_SOURCE = execFileSync("git", ["show", `${MASTER_REF}:src/ui/theater-boot.js`], { cwd: ROOT, encoding: "utf-8", maxBuffer: 1024 * 1024 * 64 });
 
 // ─── source-extraction helpers (dev/verify-bw2-0-crisp-channel.mjs's own established convention) ──
@@ -248,8 +257,13 @@ function makeGradePassRunner(src) {
 
   const sandbox = { THREE: { Vector2: FakeVector2, Color: FakeColor }, ShaderPass: FakeShaderPass, __out: null };
   vm.createContext(sandbox);
+  // THEATER SPLIT B4 (2026-07-25): makeGradePass now lives in src/ui/theater-post.js and reads the
+  // root-owned GRADE_TONEMAP `let` through the ctx accessor postCtxGetGradeTonemap() (an import
+  // binding is read-only; a copied mirror would go stale the moment _setGradeTonemapForTest flips it).
+  // Defining that accessor over the sandbox's own pinned `let` reproduces EXACTLY what theater-boot.js
+  // supplies at runtime, so the flag flip below still drives the real function — job unchanged.
   vm.runInContext(
-    `let GRADE_TONEMAP = "none";\n${constDecls}\n${agxGlslMatch[0]}\n${makeGradePassSrc}`,
+    `let GRADE_TONEMAP = "none";\nfunction postCtxGetGradeTonemap(){ return GRADE_TONEMAP; }\n${constDecls}\n${agxGlslMatch[0]}\n${makeGradePassSrc}`,
     sandbox
   );
   return {
@@ -369,6 +383,8 @@ async function renderGradeCurve(newSrc) {
         setUniform1f("uVignette", consts.GRADE_VIGNETTE);
         setUniform1f("uVigInner", consts.GRADE_VIGNETTE_INNER);
         setUniform1f("uVigOuter", consts.GRADE_VIGNETTE_OUTER);
+        setUniform1f("uExposureFloor", consts.GRADE_EXPOSURE_FLOOR);
+        setUniform1f("uTonemapStrength", 1.0);
         const tintLoc = gl.getUniformLocation(prog, "uTint");
         if (tintLoc) gl.uniform3f(tintLoc, 1.0, 1.0, 1.0);
         const resLoc = gl.getUniformLocation(prog, "uResolution");

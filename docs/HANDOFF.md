@@ -1,10 +1,294 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-24
+updated: 2026-07-25
 ---
 
 # Genesis — Session Hand-off
+
+## ⭐ Latest (2026-07-25, THEATER-BOOT SPLIT COMPLETE B0–B10) [Fable + Opus executors]
+
+Worktree `Genesis-theater-split`, branch `refactor/theater-boot-split` (base: the clay tip +
+docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md). **Not merged or pushed. FULL CI PENDING — and per the
+B0 law, CI alone can never green this lane: the 19 puppeteer harnesses are by-hand gates.**
+
+- **theater-boot.js: 21,555 → 7,518 lines; 16 new ES modules** (map + decision record:
+  `docs/THEATER-MODULES.md`). Ten commits B0–B10, each gated by the 219-key facade contract
+  (dev/verify-theater-surface.mjs, real Chrome, both boot modes), the focused harness set, and
+  from B4 on a deterministic WebGL shader-source fingerprint — byte-identical across the whole
+  program. The one sanctioned restructuring: setInteriorBoard is a 17-phase orchestrator
+  (phase map in theater-interior-realize.js's header); everything else moved verbatim
+  (multiset-proven per step; 13 documented accessor swaps total).
+- **Visual equivalence proven** (`dev/clay-captures/split-equivalence/`): 4 before/after pairs
+  vs the pre-split tip — tabletop bit-identical; interior/clay/dark at or below the
+  instrument's same-code A/A noise. Lifecycle: 3 live retire→mount cycles clean. Performance:
+  distributions overlap; memory parity.
+- **Harnesses came out STRONGER**: 6 runners gained the light-recipe classic-global stubs that
+  had silently killed them since the CL-R1 registry merge (bw2-1b 0/1→24/0+49/0 render;
+  s5-flip 12/2→30/0; sprite-join 5/4→20/0; l2-census 23/6→33/0 incl. a resurrected compare);
+  env1*/l2 scratch builders pin base-commit genesis.html; ks3 +1 assertion; several checks
+  re-anchored on their true subjects. Zero checks weakened (every repoint documented in its
+  commit).
+- **Census-found defects fixed en route** (all pre-existing, proven): theater-preview.html
+  missing the registry scripts; two runner-parity gaps; a stale vp1c signature pin; the B9
+  decomposition's own audit caught+fixed its one latent cross-phase ReferenceError red/green.
+- **Follow-ups** recorded in THEATER-MODULES.md §Follow-ups (d4-doors option-b for a future
+  door extraction, the AO A/B rig's clip-box nondeterminism, material-contract re-baseline,
+  dead bindings, §18 negative clause, torchlit expectation pending Adam's verdict).
+- **Next: Phase C — the singular clean close**: survey all lanes (clay/cl-r1-r3 at 9b0fb090
+  incl. the AO contact fix PENDING ADAM; this branch; material/wave-2; docs/golden-site-thin-
+  briefs; docs/production-contracts), serialized merges to master via /genesis-clean-close,
+  regenerate generated artifacts, push, GitHub CI green. Conflicts surface to Adam, never
+  bulldozed.
+
+## ⭐ Latest (2026-07-25, visual-correction COMPLETE C0–C4) — ALL FIVE CHECKPOINTS DONE [Fable]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, head after the self-review
+commit (parents: `2cdf2ccb` C1 → `81314bae` C2 → `0bec7624` C3 → `d71b568d` C4). **Not merged
+or pushed. FULL CI PENDING.** Every checkpoint below carries `VISUAL VERDICT: PENDING ADAM` —
+the critical self-review stood in for per-checkpoint verdicts per Adam's 2026-07-25 directive.
+
+- **Checkpoint 2 — warm/cool overlap + readout truth.** The opposing pair floats at authored
+  positions via the diagnostic-studio `mount: "none"` exception (scoped in BOTH validators in
+  lockstep — compile-light-locks.py + light-recipes.js); `authoredRange: true` on every
+  lock-registry light so `ITR_LIGHT_DISTANCE_CAP=7` only bites generated lights; both pools
+  overlap the central subjects with no dark seam; the panel readout prints MOUNTED world
+  positions, live ranges/intensities, and celestial clock lines; overlays default OFF at all
+  four entry sites. Evidence: `03-warm-only` / `04-cool-only` / `05-warm-cool-overlap` +
+  `05-warm-cool-sheet.png` (warm-pixel counts in the packet receipts).
+- **Checkpoint 3 — lore-native sources + dark readability + responsive void.** Magic-glow got a
+  crystal emitter fixture and lavalit an emissive molten-fissure fixture (both through the
+  production fixture-group path, staged to light the subjects); torchlit keeps its accepted
+  flame; **the interior void/fog now responds to the recipe** — `data.lightRecipeLock` derives
+  the backdrop from the celestial arc's voidTint (celestial recipes) or ambient×0.16, still
+  routed through `gradeColorLocal` (the dungeon-interior §18 check was updated to the new source
+  chain — same protected property, recipe-aware first). Sprite silhouette shadows + camera fill
+  intact. Evidence: `06-lore-lighting-sheet.png`. Magic/fire/lava darkness depth remains Adam's
+  taste call on the open ledger.
+- **Checkpoint 4 — CL-F01 honest workbench.** Ordered specimen lane + a coherent assembled
+  example (approach stair, lifted parapet, twin posts — all with real sockets + access classes);
+  typed socket arrows + per-face access frames (walk/climb-cost/climb-dc/none color law); ramp
+  hard normals via non-indexed per-face geometry; fitted all-walls strategic camera (FOV-derived
+  distance, 72° pitch); the bench report emits its own `cameraSideOmission` so shell report and
+  projection give ONE answer; catalog auto-collapse + bounded inspector at narrow widths.
+  Evidence: `07-construction-site.png` / `08-structure-diagnostics-sheet.png` /
+  `09-responsive-layouts.png`.
+- **Critical self-review (post-C4):** SPRITE_DEPTH_BIAS_MATERIALS now prunes disposed materials
+  (unbounded-growth fix); flicker marker writes confirmed null-safe for markerless environmental
+  rows; dungeon-interior §18 void check updated (see C3); full focused sweep green.
+- **Final gates:** clay-room **247/247** (§35 AO + §36 C2 + §37 C4 families) · light-locks 12/12
+  · dungeon-interior 291/291 · room-shell 53/53 · tactical-query 31/31 · theater-sprites 12/12 ·
+  sprite-registry 27/27 · floor-contact 51/51 · light-lab 42/42 (LIGHT_LAB_SHOTS_DIR redirect) ·
+  manifest OK · `git diff --check` clean. Inherited reds unchanged: diegetic-light 7
+  (LFS-pointer env), interior-camera-frustum 2, occlusion-fade 3.
+- **AO contact-registration fix (2026-07-25, post-close — Adam's live report):** "a gap of light
+  at every planar contact" — diagnosed as the Poisson denoise averaging away the 1-2-texel crease
+  line (lumaPhi 10 never gated a 0..1 AO term; depthPhi 8 is plane-distance wider than the room;
+  normalPhi can't help where half-res normals are averaged). ENV_AO_DENOISE re-weighted from a
+  9-candidate measured sweep (lumaPhi 0.25 / depthPhi 0.5 / normalPhi 16 / radius 2): creaseLift
+  vs the raw reference 5.38 -> 1.59 luma; flats keep smoothing below raw's noise; strictly fewer
+  filter taps. Evidence: `dev/clay-captures/ao-contact-diag/` (incl. the before/after/reference
+  triptych + sweep receipts); new `_aoContactDiagForTest` seam. Commit `203619d5`;
+  clay-room 247/247. Tradeoff (Adam's eye): slightly more visible dither on dark faces.
+  VISUAL VERDICT: PENDING ADAM.
+- **Packet complete** per the brief: `dev/clay-captures/clayroom-visual-correction/` holds
+  00–09 numbered evidence + `10-final-correction-sheet.png` (16-panel before/after, all
+  checkpoints) + machine-readable receipts (before/, after/, cp1-ao/).
+- **Next:** Phase B theater-boot split (recon memo done — brief is stale vs the 21.3k-line file;
+  extraction order inverts to Clay Room + Light Lab first; split branches only AFTER this lane
+  lands), then Phase C singular clean close.
+
+## 2026-07-25 (visual-correction Checkpoint 0+1) — AO, CLOCK-DRIVEN SUN, STANDEE LAWS [Fable]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, checkpoint commit `2cdf2ccb`
+on top of `a3dd41dd`. **Not merged or pushed. FULL CI PENDING.** Owning brief:
+`docs/FABLE-CLAYROOM-VISUAL-CORRECTION-ASSIGNMENT.md`; continuation prompt:
+`docs/FABLE-VISUAL-CORRECTION-CONTINUATION-PROMPT.md`.
+
+- Checkpoint 0 (Adam-verified): every diagnosis reproduced with receipts; root causes named with
+  file:line evidence in `dev/clay-captures/clayroom-visual-correction/00-root-cause-notes.md`.
+- Checkpoint 1 (seven Adam review rounds, each finding fixed same-session):
+  restrained GTAO through the production composer (vendored verbatim from pinned three@0.166.0,
+  hash-gated; transparent/no-depth-write quads excluded from the AO G-buffer; device-pixel
+  registration; A/B button + `?envao=0` + seams; 58–60 FPS measured); clay-studio neutral
+  (0.55 ambient + shadowless straight-down studio skylight, authored lock); **sun/moon direction,
+  colour, and intensity derive from the celestial arc per the world clock** (one owner across both
+  channels — bench previews 08:06/21:30; authored azimuth is only the no-clock fallback);
+  room-sized shadow frusta at 1024 maps with rebalanced bias (no peter-panning);
+  **STANDEE-WINS-TIES** (sprite cards pull 0.25 u camera-ward in depth only — uniform +
+  `_setStandeeDepthBiasForTest`); **surface recipe v2** (standee bases route to diagnostic clay,
+  per-mesh clone so selection glow stays scoped, sprite cast shadows/AO now read on bases).
+- Adam's standing verdicts on the ledger: AO accepted-as-passable, *not yet mathematically
+  perfect*; open-flame flicker still passable-not-final; Lighting-Lab time-of-day scrub is a
+  queued follow-up (data path in place).
+- Capture-instrument truth (the packet rigs): billboard yaw settles before forced renders; the
+  close pair captures one-state-per-call with markers; `LIGHT_LAB_SHOTS_DIR` redirects harness
+  screenshot output so the banked `dev/light-lab-shots/` bytes are never clobbered (those files
+  remain uncommitted review evidence — one accidental regeneration happened before the guard
+  existed and is disclosed in the session log).
+- Gates at checkpoint: clay-room 235/235 (new §35 AO family, incl. an executed exclusion-rule
+  truth table + vendor hashes) · light-locks 12/12 · dungeon-interior 291/291 (all seven
+  node_modules three-shim writers extended in lockstep: `cp1-env-ao`) · room-shell 53/53 ·
+  tactical-query 31/31 · theater-sprites 12/12 · sprite-registry 27/27 · manifest OK. Inherited
+  reds unchanged and named: diegetic-light 7 (LFS-pointer env), interior-camera-frustum 2,
+  occlusion-fade 3.
+- **Remaining in this lane:** correction Checkpoints 2 (warm/cool overlap + readout truth),
+  3 (lore-native sources + dark readability + responsive void), 4 (CL-F01 honest workbench);
+  then the theater-boot split (brief:
+  `../Genesis-theater-split/docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md`, own worktree); then the
+  full clean close merging every lane back to a singular master (Adam's 2026-07-25 directive:
+  autonomous, Opus-5 subagents authorized, critical self-review in place of per-checkpoint
+  verdicts).
+
+## 2026-07-25 (CL-R3 visual checkpoint) — REUSABLE STRUCTURE GRAMMAR CANDIDATE [Codex]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`. **Not merged or pushed.
+Fable re-gates and lands. FULL CI PENDING.**
+
+- `CL-F01 structure-bench` is live through the production interior renderer and production
+  `compileRoomShell` path. Its frozen catalog carries the 5-ft cell, 2.5-ft vertical quantum,
+  10-ft storey, and ≤30° walkable-slope laws; all base and extension socket families; typed
+  `walk` / `climb-cost` / `climb-dc` / `none` face data; and source provenance. It does not claim
+  climb mechanics.
+- The 32-cell notched shell proves three elevation tiers, exposed slab/riser faces, convex and
+  concave turns, wall thickness/caps, one retained aperture, threshold, hinged shadow-casting leaf,
+  and broad raised/sunken regions. Generic assemblers add a straight wall, flush single-owner T,
+  one-cell and wide stairs with landings, a 26.565° ramp, half-height blocker, and square/round
+  supports.
+- The wrong-axis negative control remains physically separated and reports
+  `socket-axis-mismatch`; selectable socket and access overlays expose the authored data directly.
+- The remaining CL-R3a wall-omission obligations are now executable. The staging latch is separate
+  from the existing C1B Connection's door angle: door open while sealed does not stage the room;
+  explicit entry into play omits camera-side uppers; shutting the door afterward does not
+  re-conceal actors; leaving play releases the latch and recompiles every upper. Aperture uppers
+  and structural risers remain built.
+- `ALL WALLS` is a governed map-reading mode: fixed 72° pitch, production perspective camera, and
+  a real board/shell rebuild with zero omitted uppers. It is not a hidden-mesh reveal or free orbit.
+- Dynamic figure obstruction remains on the production
+  `itrPillarCutawayMask → itrOcclusionClassify` path. A Human Fighter behind a production pillar
+  produces one blocking and one faded witness plus a pillar ghost.
+- Evidence: `dev/clay-captures/cl-r3/` contains early/live UI, assembled daylight, sockets, access,
+  wrong-axis, role-ID, moonlight, strategic all-walls, and staging-latch frames; composed sheet;
+  JSON receipt; and independent measurement. Live capture 23/23, measurement 17/17, zero browser
+  errors/warnings.
+- Focused greens: Clayroom 228/228; room-shell compiler 53/53; dungeon interior 291/291;
+  tactical query 31/31; manifest OK; syntax and diff checks OK. Three pre-existing broad harness
+  reds already named in the ladder's CL-R0 sweep remain visible: room-shell-render (shell-on pass
+  does not mount), occlusion-fade (pixel A/B is identical although raycast/geometry proof passes),
+  and interior-camera-frustum (orthographic red-first mutation no longer breaks fit). No threshold
+  was weakened. **FULL CI PENDING.**
+
+## ⭐ Latest (2026-07-25, CL-R2 visual checkpoint) — COMPLETE SPRITE CITIZENSHIP CANDIDATE [Codex]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`. **Not merged or pushed.
+Fable re-gates and lands. FULL CI PENDING.**
+
+- `CL-F03 sprite-citizenship` is live through the production interior renderer with seven authored
+  source sprites spanning the full stress spectrum: Blind Cave Rat, Winged Kobold, Human Fighter,
+  Flaming Skeleton, Wraith, Treant, and Kraken (0.25–60 canonical feet).
+- Visible circular plinths are gone. Tactical footprints remain separate mechanics; the physical
+  stand is a shallow rounded strip. Medium depth equals exactly one stair tread (1/3 cell), while
+  Tiny and Small may be shallower. A real three-tread fixture retains face, three-quarter, and edge
+  samples, and a thin side shell keeps every card visible edge-on.
+- The existing Sprite Editor now owns independent draggable `footX`/`footY` crosshairs, click
+  placement, 1-pixel arrows / 5-pixel Shift+arrows, alpha-derived contact reset, compiled reset,
+  normalized and pixel readouts, content bounds, and alpha cutoff. Overlay values compile into the
+  registry; the old `floor` field migrates at the generator boundary.
+- The inspector opens in preferred 1–30-foot presentation scale without mutating `worldHeight` or
+  tactical occupancy. True scale remains one click away as the canonical size check and proves the
+  60-foot Kraken honestly requires a matching encounter-scale environment.
+- Governed Clayroom zoom now reaches the 0.12 clamp (about 8.3× closer than fit). Visible standee
+  supports use deterministic OBB separation: the banked seven-piece lineup records one slight
+  relocation and zero remaining overlaps, while tactical cell ownership remains unchanged.
+- Every soft contact shadow is linked back to its standee and follows its final position/yaw. The
+  pool is larger and slightly biased beyond the support, so it remains visible instead of hiding
+  completely underneath the base. Its opaque-white identity rim and gray radial texture now use
+  true multiply blending, so contact stays darker than an already-shadowed floor value.
+- A shadowless camera-side spotlight lives on a sprite-only light layer and uses gentle falloff,
+  improving face colour/readability without lifting the room. Selection emits from the shallow
+  vertical sidewall of the base as a cyan glow ring; the sprite and base top stay unlit. There is no
+  hidden center PointLight: one additive spill shaped to the rounded support sits immediately beneath
+  it, so only a soft neon feather escapes around the blue material. The receipt proves selection
+  handoff hides the old spill before exactly one new base emits.
+- Standee cast shadows now use the sprite texture's alpha silhouette for directional/spot depth
+  shadows and point-light distance shadows. The full rectangular edge shell remains visible but
+  cannot cast, removing the floating-card rectangles seen in daylight and moonlight without adding
+  a shadow draw.
+- No environment material was added. Diagnostic modes now retain a 0.06 shadowless HemisphereLight
+  floor: enough sky/ground value difference to read stair treads, risers, and wall turns in shadow,
+  without weakening the direct-light shadow or inventing another visible source.
+- Treant and Kraken are automatically flagged for taller/more-upright regeneration because their
+  rendered width nearly consumes the tactical footprint.
+- Neutral, moon/dark, torch/warm, magic/cool, and daylight controls reuse the shared production
+  light recipes. Evidence: `dev/clay-captures/cl-r2-sprite-citizenship/` (early/settled true scale,
+  cap/edge live frames, five lighting contexts, composed sheet, JSON receipt, and separate
+  measurements; zero console errors).
+- Focused gates: Clayroom 208/208; sprite registry 27/27; theater sprites 12/12; floor contact
+  79/79 including live-Chrome multiply pixels; dungeon interior 291/291; manifest OK.
+  **FULL CI PENDING.**
+
+## ⭐ Latest (2026-07-24, CL-R1 visual checkpoint) — SHARED LIGHT RECIPES + SMOOTH LORE-NATIVE TORCH [Codex]
+
+Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, from consolidated master
+`6e86ba52`. **Not merged or pushed. CL-R2 has not begun.**
+
+- One authored/compiled recipe registry now drives the rolled world profiles, Lighting Lab, and
+  Clayroom. It carries ten rolled recipes plus neutral and warm/cool diagnostics, with at most four
+  lights and complete ambient/exposure/tone/bloom/sprite/light/fixture/shadow/flicker fields.
+- The Clayroom has three honest modes: neutral measurement; warm/cool calibration bulbs visibly
+  marked `TEST ONLY`; and a grounded, wall-mounted fantasy torch visibly marked lore-native.
+  Environmental sun/moon/magic sources do not invent counterfeit lamp housings.
+- Adam accepted the torch room's close brightness, then reviewed successive reach increases so
+  grounded rooms do not need torches everywhere. The first 30 → 60-foot result was still too
+  restrained, so the torch alone now reaches 120 feet (renderer distance 24) while keeping its
+  intensity and real shadow casting unchanged. Adam then ruled that the gradient still needed to
+  move outward, first from decay 2.0 to 1.75 and then by the same 0.25 step to the current 1.50.
+  Saved `torch`, `torch-range2x`, `torch-range4x`, `torch-falloff175`, and `torch-falloff150` frames
+  preserve the visual progression. The Lighting Lab range ceiling is 60 metres so the current
+  authored value remains editable.
+- The torch is now authored as a living open flame: deterministic irregular targets around 420 ms,
+  ±10% intensity, and a tiny bounded direction shift. The visible flame and real shadow-casting
+  point light remain co-located. The first proof exposed hard 240–720 ms pose jumps; Adam rejected
+  that as choppy. The production loop now interpolates every display frame (normally 60 FPS), while
+  keeping the seeded target sequence reproducible and throttling text telemetry so it cannot steal
+  time from the visual animation.
+- Lighting Lab now edits the full structured recipe, not a one-point shortcut, with bounded
+  validation, undo/redo, authored reset, export, and deterministic compile/fold back to the same
+  lock shape.
+- The retained `CL-F02 lighting-bench` is now live in the same production renderer: three neutral
+  one-third-cell-depth steps, a matte cube and sphere, one approved production sprite, no crate/door
+  clutter, and no drifting motes. It defaults open in the Lights tab beside the retained Room Truth
+  fixture. Position, exact 25/50/100-percent physical-range, and point-shadow-volume/spot-frustum
+  overlays read the mounted lights directly. Its last presentation pass is also built: source PNG
+  beside live rendered sprite pixels; final-frame brightness, clipping, chroma, and local-readability
+  measurements; deterministic A/B/C animation-seed previews; and one-click access to the existing
+  sun, moon, magic, fire, and lava recipes.
+- `BUILD COMPLETE 7-LIGHT SHEET` captures neutral, warm/cool, day, moon, magic, torch, and lava from
+  the production framebuffer, pins animated stills to seeded sample 2, restores the live recipe, and
+  exposes PNG/JSON downloads. The receipt records one real mounted renderer light for every
+  lore-native card. The live readout uses a small same-frame copy so continuous flame animation does
+  not inherit a recurring full-resolution GPU readback hitch; measurement is event-driven, while the
+  already-reviewed flame remains on its per-display-frame interpolation loop.
+- The washed-out goblin was tested one cause at a time through the production renderer. The causal
+  sheet separates colour-space tagging, lit/unlit material response, sampling, tone mapping,
+  compositing, and light energy. Wrong sRGB interpretation and intensity above 30 are executable
+  negative controls; no saturation slider was added.
+- Final evidence: `dev/clay-captures/cl-r1-lighting/` (three modes, early/settled/explain/clean
+  frames, receipts, measurements) and `dev/clay-captures/cl-r1-causality/` (13-card contact sheet,
+  receipt, measurements), plus `dev/clay-captures/cl-r1-lighting-matrix/` (seven-card PNG, live UI,
+  full receipt). Two fresh matrix runs produced byte-identical PNG and receipt hashes. All final
+  captures recorded zero console errors/warnings.
+- Focused gates: light locks 12/12; Light Lab 42/42; Clayroom 189/189; theater lighting 21/21;
+  light props 10/10; local lighting 69/69; fixture fade 32/32; practical fixtures 98/98;
+  manifest OK. **FULL CI PENDING.** One broad
+  visual-protection harness still reports
+  the torchlit old/new interior mean pixel delta `0.0177 > 0.01`; daylit and tabletop dark remain
+  inside the threshold. This remains visible for Fable's re-gate rather than being weakened.
+- The live stop gate now includes the smooth decay-1.5 torch flame, warm-vs-cool balance, immediate
+  torch readability, the intentionally flat neutral reference, and the dedicated CL-F02 stepped
+  sphere/cube display with overlays, pixel cards, lore-native preview strip, and complete comparison
+  sheet. Adam's CL-F02 visual verdict is pending. Standee base/footprint and the
+  small→human→largest scaling spectrum belong to CL-R2 after that ruling.
 
 ## ⭐ Latest (2026-07-24, evening) — THE CONSOLIDATION CLOSE: singular canonical master [Claude Fable 5]
 

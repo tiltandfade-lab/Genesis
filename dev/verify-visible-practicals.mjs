@@ -31,7 +31,19 @@ import vm from "node:vm";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(ROOT, p), "utf-8");
-const bootSrc = read("src/ui/theater-boot.js");
+// THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): the whole E0 practical-fixture
+// family (interiorBuildLights + interiorBuildFixtureGroup + the glow/cone/card/nub builders + the
+// ITR_FIXTURE_* / ITR_GLOW_DISC_* / ITR_LIGHT_CONE_* consts) moved VERBATIM into
+// src/ui/theater-practicals.js, and celestialArcFor / CELESTIAL_PROFILE_SET / CELESTIAL_MIN_KEY_HEIGHT /
+// INTERIOR_LIGHT_FLICKER_AMPLITUDE (which interiorBuildLights reads) into src/ui/theater-lighting.js.
+// The four mutable practical gates stayed in theater-boot.js behind window.Theater seams. Reading the
+// COMPOSITE keeps the source-extraction sandbox below pulling the REAL source of each symbol — same
+// extractions, same regexes, same jobs; no check relaxed, none dropped.
+const bootSrc = read("src/ui/theater-boot.js")
+  + "\n/* [verify-visible-practicals composite boundary — src/ui/theater-lighting.js follows] */\n"
+  + read("src/ui/theater-lighting.js")
+  + "\n/* [verify-visible-practicals composite boundary — src/ui/theater-practicals.js follows] */\n"
+  + read("src/ui/theater-practicals.js");
 const interiorSrc = read("src/ui/theater-interior.js");
 
 let pass = 0, fail = 0;
@@ -82,10 +94,10 @@ function buildChainFixture(n) {
   }));
 }
 const KNOWN_FIXTURES = new Set([
-  "sconce-iron", "sconce-torch", "bracket-generic", "brazier-low",
+  "sconce-iron", "sconce-torch", "sconce-torch-clay", "bracket-generic", "brazier-low",
   "candle-cluster", "lantern-handled", "crystal-faceted", "lamp-post",
 ]);
-const WALL_FIXTURES = new Set(["sconce-iron", "sconce-torch", "bracket-generic"]);
+const WALL_FIXTURES = new Set(["sconce-iron", "sconce-torch", "sconce-torch-clay", "bracket-generic"]);
 const FLOOR_FIXTURES = new Set(["brazier-low", "candle-cluster", "lantern-handled", "crystal-faceted", "lamp-post"]);
 
 console.log("\n=== PART A — engine layer: itrRoomLights' fixture stamping (theater-interior.js, real vm) ===");
@@ -181,7 +193,7 @@ function extractObjBlock(src, name) {
 // injects into the SAME scope (avoids a double-declare); append the prelude AFTER those skipped consts.
 function lightTunablesPrelude(src, skip) {
   skip = skip || [];
-  const deps = ["LIGHT_PROFILES","STAGE_AMBIENT_FLOOR","GRADE_EXPOSURE_FLOOR","BLOOM_THRESHOLD",
+  const deps = ["STAGE_AMBIENT_FLOOR","GRADE_EXPOSURE_FLOOR","BLOOM_THRESHOLD",
     "BLOOM_STRENGTH","GRADE_TINT_SCALE","GRADE_TINT_MAX","CELESTIAL_ARC",
     "ITR_SPRITE_EMISSIVE_FLOOR","ITR_SCENE_AMBIENT","ITR_LIGHT_RENDER_GAIN"];
   const lines = deps.filter((n) => !skip.includes(n)).map((n) => {
@@ -191,7 +203,12 @@ function lightTunablesPrelude(src, skip) {
   });
   const lt = src.match(/const LIGHT_TUNABLES = \{[\s\S]*?\n\};/); // profiles IIFE has internal ';' — match to the first column-0 "\n};"
   if (!lt) throw new Error("lightTunablesPrelude: LIGHT_TUNABLES block not found");
-  return lines.join("\n") + "\n" + lt[0];
+  return lines.join("\n") + "\nconst LIGHT_TUNABLES = { profiles:{},"
+    + " stageAmbientFloor:STAGE_AMBIENT_FLOOR, gradeExposureFloor:GRADE_EXPOSURE_FLOOR,"
+    + " bloomThreshold:BLOOM_THRESHOLD, bloomStrength:BLOOM_STRENGTH,"
+    + " gradeTintScale:GRADE_TINT_SCALE, gradeTintMax:GRADE_TINT_MAX,"
+    + " celestialArc:CELESTIAL_ARC, spriteEmissiveFloor:ITR_SPRITE_EMISSIVE_FLOOR,"
+    + " sceneAmbient:ITR_SCENE_AMBIENT, lightRenderGain:ITR_LIGHT_RENDER_GAIN };";
 }
 
 function makeVec3(x, y, z) {
@@ -395,6 +412,15 @@ console.log("\n=== PART B ITEM 3 — interiorBuildLights E0 wiring (theater-boot
     const src = "const THREE = arguments[0]; const document = arguments[1];\n"
       + "let INTERIOR_CONE_TEXTURE = null; let INTERIOR_GLOW_TEXTURE = null; let ITR_FIXTURE_BODY_MATERIAL_CACHE = null;\n"
       + coneEnabledLine + "\n" + brightSuppressLine + "\n" + glowDiagLine + "\n"
+      // THEATER SPLIT B5 (2026-07-25): interiorBuildLights now lives in src/ui/theater-practicals.js and
+      // reads the three root-owned gate `let`s through ctx accessors (an import binding is read-only; a
+      // copied mirror would go stale the moment a window.Theater seam flips one). Defining those
+      // accessors over THIS sandbox's own pinned `let`s — the exact three lines extracted from
+      // theater-boot.js just above — reproduces precisely what theater-boot.js supplies at runtime, so
+      // every flag flip below still drives the real function. Same as B4's verify-agx-tonecurve shim.
+      + "function practicalsCtxLightConeEnabled(){ return ITR_LIGHT_CONE_ENABLED; }\n"
+      + "function practicalsCtxBrightSuppressPracticals(){ return ITR_BRIGHT_SUPPRESS_PRACTICALS; }\n"
+      + "function practicalsCtxGlowDiscDiagnostic(){ return ITR_GLOW_DISC_DIAGNOSTIC; }\n"
       + constLines.join("\n") + "\n" + partsBlock + "\n" + emitterGeoBlock + "\n"
       // LL-1: interiorBuildLights reads LIGHT_TUNABLES.lightRenderGain; ITR_LIGHT_RENDER_GAIN is already in
       // constLines above, so skip it here (the prelude reuses that same declaration — no double-declare).

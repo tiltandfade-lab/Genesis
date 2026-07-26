@@ -1,0 +1,2745 @@
+{
+  "label": "warm-cool",
+  "requestedLightRecipeId": "clay-opposing-pair",
+  "captureTab": "Lights (movement overlays cleared)",
+  "capturedBy": "dev/capture-clayroom-fixture.cjs",
+  "url": "http://127.0.0.1:4173/genesis.html?clayroom=1&clayfixture=lighting-bench",
+  "runtimePath": "authored JSON lock -> compiled light registry -> clayRoomBoardFrom() -> spatializePlan -> interiorBuildBoard -> setInteriorBoard (production interior channel)",
+  "viewport": {
+    "width": 1280,
+    "height": 720,
+    "deviceScaleFactor": 2
+  },
+  "regions": {
+    "full": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "floor": [
+      0.42,
+      0.73,
+      0.58,
+      0.86
+    ],
+    "sprite": [
+      0.25,
+      0.37,
+      0.35,
+      0.6
+    ],
+    "crate": [
+      0.53,
+      0.38,
+      0.69,
+      0.75
+    ],
+    "doorframe": [
+      0.84,
+      0.38,
+      0.95,
+      0.62
+    ]
+  },
+  "timeline": {
+    "early": {
+      "fixture": {
+        "id": "clay-c1a",
+        "version": 1,
+        "tier": "test",
+        "seed": 113311726,
+        "seedHex": "0x6c0ffee",
+        "dims": {
+          "w": 15,
+          "d": 15
+        },
+        "portal": {
+          "id": "portal-c1a",
+          "connectionId": "connection-clay-north",
+          "connectionVersion": 1,
+          "edge": "n",
+          "cell": "c-6-0",
+          "state": "closed"
+        },
+        "object": {
+          "id": "obj-crate-c1a",
+          "kind": "crate",
+          "cell": "c-6-7"
+        },
+        "citizen": {
+          "id": "cit-goblin-c1a",
+          "bestiaryId": "goblin-warrior",
+          "cell": "c-6-10",
+          "worldHeight": 3.5,
+          "heightSource": "measured"
+        },
+        "provenance": {
+          "pass": "C1A",
+          "derivation": "spatialize-plan",
+          "created": "2026-07-23"
+        }
+      },
+      "lightRecipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-opposing-pair",
+        "label": "Clayroom warm/cool diagnostic",
+        "rolled": false,
+        "mode": "diagnostic-studio",
+        "source": {
+          "class": "diagnostic",
+          "label": "two visible calibration bulbs",
+          "loreNative": false,
+          "visibleEmitterRequired": true
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.18
+        },
+        "lights": [
+          {
+            "type": "point",
+            "temperatureK": 2800,
+            "colorOverride": true,
+            "intensityUnit": "tabletop-profile-unit",
+            "physicalIntensityUnit": "renderer-intensity",
+            "positionStrategy": "socket-relative",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "spot": {
+              "coneDeg": 45,
+              "penumbra": 0
+            },
+            "shadow": {
+              "cast": true,
+              "bias": -0.002,
+              "normalBias": 0,
+              "mapSize": 512,
+              "budgetPriority": 1
+            },
+            "fixtureId": "bracket-generic",
+            "mount": "wall",
+            "emitterLocal": {
+              "x": 0,
+              "y": 0.03,
+              "z": 0.12
+            },
+            "flicker": {
+              "amplitude": 0.12,
+              "cadenceMs": 480,
+              "intervalJitter": 0,
+              "directionAmplitude": 0,
+              "recipeId": "steady",
+              "seed": "clay-c1a:west-warm"
+            },
+            "id": "clay-west-warm",
+            "label": "warm calibration bulb",
+            "enabled": true,
+            "color": 16752714,
+            "intensity": 16,
+            "physicalIntensity": 16,
+            "pos": {
+              "x": -0.8,
+              "y": 1.7,
+              "z": 0
+            },
+            "heightM": 2.591,
+            "rangeM": 18.288,
+            "falloff": 0,
+            "state": "steady"
+          },
+          {
+            "type": "point",
+            "temperatureK": 9000,
+            "colorOverride": true,
+            "intensityUnit": "tabletop-profile-unit",
+            "physicalIntensityUnit": "renderer-intensity",
+            "positionStrategy": "socket-relative",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "spot": {
+              "coneDeg": 45,
+              "penumbra": 0
+            },
+            "shadow": {
+              "cast": true,
+              "bias": -0.002,
+              "normalBias": 0,
+              "mapSize": 512,
+              "budgetPriority": 1
+            },
+            "fixtureId": "bracket-generic",
+            "mount": "wall",
+            "emitterLocal": {
+              "x": 0,
+              "y": 0.03,
+              "z": 0.12
+            },
+            "flicker": {
+              "amplitude": 0.12,
+              "cadenceMs": 480,
+              "intervalJitter": 0,
+              "directionAmplitude": 0,
+              "recipeId": "steady",
+              "seed": "clay-c1a:east-cool"
+            },
+            "id": "clay-east-cool",
+            "label": "cool calibration bulb",
+            "enabled": true,
+            "color": 11452392,
+            "intensity": 9,
+            "physicalIntensity": 9,
+            "pos": {
+              "x": 0.8,
+              "y": 1.7,
+              "z": 0
+            },
+            "heightM": 2.591,
+            "rangeM": 18.288,
+            "falloff": 0,
+            "state": "steady"
+          }
+        ]
+      },
+      "lightingBench": {
+        "fixtureId": "cl-f02-lighting-bench",
+        "benchMounted": true,
+        "primitives": [
+          {
+            "id": "bench-step-low",
+            "primitive": "box",
+            "role": "riser",
+            "castShadow": true,
+            "receiveShadow": true
+          },
+          {
+            "id": "bench-step-mid",
+            "primitive": "box",
+            "role": "riser",
+            "castShadow": true,
+            "receiveShadow": true
+          },
+          {
+            "id": "bench-step-high",
+            "primitive": "box",
+            "role": "riser",
+            "castShadow": true,
+            "receiveShadow": true
+          },
+          {
+            "id": "bench-matte-cube",
+            "primitive": "box",
+            "role": "furniture",
+            "castShadow": true,
+            "receiveShadow": true
+          },
+          {
+            "id": "bench-matte-sphere",
+            "primitive": "sphere",
+            "role": "furniture",
+            "castShadow": true,
+            "receiveShadow": true
+          }
+        ],
+        "overlayModes": {
+          "position": true,
+          "range": true,
+          "shadow": false
+        },
+        "overlays": [
+          {
+            "kind": "position",
+            "lightId": "clay-west-warm",
+            "rangeFraction": null,
+            "range": null
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-west-warm",
+            "rangeFraction": 0.25,
+            "range": 7
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-west-warm",
+            "rangeFraction": 0.5,
+            "range": 7
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-west-warm",
+            "rangeFraction": 1,
+            "range": 7
+          },
+          {
+            "kind": "position",
+            "lightId": "clay-east-cool",
+            "rangeFraction": null,
+            "range": null
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-east-cool",
+            "rangeFraction": 0.25,
+            "range": 7
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-east-cool",
+            "rangeFraction": 0.5,
+            "range": 7
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-east-cool",
+            "rangeFraction": 1,
+            "range": 7
+          }
+        ],
+        "motesSuppressed": true
+      },
+      "lightLock": {
+        "id": "genesis-light-profiles",
+        "version": 1,
+        "schemaVersion": 2
+      },
+      "lightingProof": {
+        "snapshot": {
+          "label": "test-read",
+          "at": 1784942103106,
+          "ambient": {
+            "uuid": "91494206-223f-47be-87d4-fa6a9febf53e",
+            "intensity": 0.18,
+            "color": 16777215
+          },
+          "rig": {
+            "hemi": {
+              "uuid": "6e3bb8c5-c57d-4305-8236-41959750b972",
+              "intensity": 0,
+              "color": 16773596
+            },
+            "key": {
+              "uuid": "61c2625f-d6ba-491a-a26b-def3faa6c745",
+              "intensity": 0,
+              "color": 16777215
+            },
+            "fill": {
+              "uuid": "538cccf2-ccae-4a9f-ac98-1103f44bea05",
+              "intensity": 0,
+              "color": 16777215
+            },
+            "cameraKey": {
+              "uuid": "155fb350-27da-48fa-9de3-432484e4a8bd",
+              "intensity": 0,
+              "color": 16777215
+            }
+          },
+          "lights": [
+            {
+              "id": "clay-west-warm",
+              "sourceRef": "clay-west-warm",
+              "state": "steady",
+              "sampleIndex": 0,
+              "normalizedSample": 1,
+              "emitted": 16,
+              "emittedBase": 16,
+              "emittedNormalized": 1,
+              "mesh": 1.6,
+              "meshBase": 1.6,
+              "meshNormalized": 1,
+              "parity": true,
+              "pointUuid": "d74adb42-0164-400e-afcd-aa3f1662c330",
+              "emitterUuid": "d4e7d044-8b6b-4267-b73c-538987912368",
+              "materialUuid": "849fccbc-a3d6-4fbd-9f37-4ec16d41f135",
+              "color": 16752714,
+              "distance": 7,
+              "decay": 0,
+              "castShadow": true,
+              "shadowMapSize": [
+                512,
+                512
+              ],
+              "shadowCameraFar": 7,
+              "pointPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "emitterPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "basePointPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "baseEmitterPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "directionSample": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "directionAmplitude": 0,
+              "directionWithinBounds": true,
+              "coLocated": true,
+              "cadenceMs": 480,
+              "intervalJitter": 0,
+              "lastIntervalMs": null,
+              "nextIntervalMs": null,
+              "materialColor": 0,
+              "materialEmissive": 16752714,
+              "materialOpacity": 1
+            },
+            {
+              "id": "clay-east-cool",
+              "sourceRef": "clay-east-cool",
+              "state": "steady",
+              "sampleIndex": 0,
+              "normalizedSample": 1,
+              "emitted": 9,
+              "emittedBase": 9,
+              "emittedNormalized": 1,
+              "mesh": 1.6,
+              "meshBase": 1.6,
+              "meshNormalized": 1,
+              "parity": true,
+              "pointUuid": "eeee9b86-bcb2-4465-85e1-68b61c8ee1a3",
+              "emitterUuid": "bf955ca6-3552-41d2-a78f-134c89e662e6",
+              "materialUuid": "e2135cc3-aeb0-468b-9118-6baaca4359a7",
+              "color": 11452392,
+              "distance": 7,
+              "decay": 0,
+              "castShadow": true,
+              "shadowMapSize": [
+                512,
+                512
+              ],
+              "shadowCameraFar": 7,
+              "pointPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "emitterPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "basePointPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "baseEmitterPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "directionSample": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "directionAmplitude": 0,
+              "directionWithinBounds": true,
+              "coLocated": true,
+              "cadenceMs": 480,
+              "intervalJitter": 0,
+              "lastIntervalMs": null,
+              "nextIntervalMs": null,
+              "materialColor": 0,
+              "materialEmissive": 11452392,
+              "materialOpacity": 1
+            }
+          ]
+        },
+        "probe": {
+          "label": "recipe switch → clay-opposing-pair",
+          "expectedReplacement": true,
+          "preserved": false,
+          "duringPass": true,
+          "afterPass": true
+        }
+      },
+      "surfaceRecipe": {
+        "id": "clay-diagnostic-surface",
+        "version": 1,
+        "modes": [
+          "clay",
+          "role-id"
+        ],
+        "defaultMode": "clay",
+        "clayColor": "#8a8a8a",
+        "unclaimedColor": "#ff00ff",
+        "gridColor": "#141414",
+        "gridOpacity": 0.3,
+        "roles": {
+          "floor": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5f8fbf"
+          },
+          "wall": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf6f6f"
+          },
+          "riser": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf8f4f"
+          },
+          "trim": {
+            "route": "diagnostic-clay",
+            "roleColor": "#8fbf5f"
+          },
+          "doorframe": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bfbf5f"
+          },
+          "portal": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5fbf9f"
+          },
+          "pillar": {
+            "route": "diagnostic-clay",
+            "roleColor": "#9f6fbf"
+          },
+          "skirt": {
+            "route": "diagnostic-clay",
+            "roleColor": "#4f5f6f"
+          },
+          "furniture": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf9f6f"
+          },
+          "emitter": {
+            "route": "passthrough",
+            "roleColor": "#ffd88a"
+          },
+          "sprite": {
+            "route": "passthrough",
+            "roleColor": "#ff5fbf"
+          },
+          "door": {
+            "route": "passthrough",
+            "roleColor": "#ffffff"
+          },
+          "contact-shadow": {
+            "route": "passthrough",
+            "roleColor": "#5fbfbf"
+          },
+          "mote": {
+            "route": "passthrough",
+            "roleColor": "#bf5f5f"
+          }
+        }
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          24.8182,
+          24.576,
+          24.8182
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676",
+        "canvasCount": 1,
+        "shadowMap": true,
+        "cameraIsPerspective": true
+      },
+      "lights": {
+        "profileKey": "dark",
+        "ambient": 0.18,
+        "hemi": 0,
+        "key": 0,
+        "fill": 0
+      },
+      "surfaces": [
+        {
+          "kind": "room-shell-floor",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 16,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-stem",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 94,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-upper",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-upper",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 28,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-upper",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-upper",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 10,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-trim",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 20,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "skirt",
+          "isInstanced": true,
+          "count": 64,
+          "triangleCount": 12,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "portal",
+          "isInstanced": true,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        }
+      ],
+      "texturedSurfaceCount": 0,
+      "surfaceOwners": {
+        "recipe": {
+          "id": "clay-diagnostic-surface",
+          "version": 1,
+          "mode": "clay"
+        },
+        "surfaces": [
+          {
+            "role": "floor",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.315,
+              0
+            ],
+            "size": [
+              15,
+              0.03,
+              15
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-floor",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.19,
+              0
+            ],
+            "size": [
+              15.56,
+              0.4,
+              15.56
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-stem",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -4.627,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              6.255,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              1,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              3.627,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              8.255,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -7.61,
+              0.84,
+              0
+            ],
+            "size": [
+              0.29,
+              1.78,
+              15.51
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "trim",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.177,
+              0
+            ],
+            "size": [
+              15.475,
+              0.305,
+              15.475
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-trim",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "skirt",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              1,
+              1,
+              1
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/skirt",
+            "instances": 64,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "portal",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              1,
+              1,
+              1
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/portal",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -7.45,
+              1.112,
+              0
+            ],
+            "size": [
+              0.045,
+              0.045,
+              0.102
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -7.38,
+              1.127,
+              0
+            ],
+            "size": [
+              0.086,
+              0.09,
+              0.074
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -7.38,
+              1.13,
+              0
+            ],
+            "size": [
+              0.095,
+              0.1,
+              0.082
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#000000",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.5,
+              1.112,
+              -7.45
+            ],
+            "size": [
+              0.045,
+              0.045,
+              0.102
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.5,
+              1.127,
+              -7.38
+            ],
+            "size": [
+              0.086,
+              0.09,
+              0.074
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.5,
+              1.13,
+              -7.38
+            ],
+            "size": [
+              0.095,
+              0.1,
+              0.082
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#000000",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              2.799,
+              0.084,
+              -0.201
+            ],
+            "size": [
+              0.731,
+              0.704,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              2.941,
+              -0.249,
+              -0.058
+            ],
+            "size": [
+              0.526,
+              0.09,
+              0.526
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              2.941,
+              -0.297,
+              -0.058
+            ],
+            "size": [
+              0.936,
+              0.936,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1.5,
+              -0.18,
+              0.333
+            ],
+            "size": [
+              2.4,
+              0.24,
+              0.333
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1.5,
+              -0.06,
+              0
+            ],
+            "size": [
+              2.4,
+              0.48,
+              0.333
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1.5,
+              0.06,
+              -0.333
+            ],
+            "size": [
+              2.4,
+              0.72,
+              0.333
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "furniture",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0.45,
+              0.275,
+              0
+            ],
+            "size": [
+              1.15,
+              1.15,
+              1.15
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/furniture",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "furniture",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              2.05,
+              0.36,
+              0
+            ],
+            "size": [
+              1.32,
+              1.32,
+              1.32
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/furniture",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          }
+        ],
+        "unclaimed": [],
+        "texturedClayCount": 0
+      },
+      "wallOmission": {
+        "ruleId": "camera-side-wall-omission",
+        "version": 1,
+        "active": true,
+        "omitted": [
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 18.5,
+              "z": 27
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 11,
+              "z": 34.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 0,
+            "mid": {
+              "x": 6.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 1,
+            "mid": {
+              "x": 10,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 14.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 5,
+            "mid": {
+              "x": 3.5,
+              "z": 27
+            }
+          }
+        ]
+      },
+      "fixtures": [
+        {
+          "x": -7.38,
+          "y": 1.1300733725183965,
+          "z": 2.6645352591003756e-17,
+          "fixtureId": "bracket-generic",
+          "mount": "wall",
+          "ownerSegIndex": 5,
+          "emissiveIntensity": 1.6
+        },
+        {
+          "x": 3.5,
+          "y": 1.1300733725183965,
+          "z": -7.38,
+          "fixtureId": "bracket-generic",
+          "mount": "wall",
+          "ownerSegIndex": 2,
+          "emissiveIntensity": 1.6
+        }
+      ],
+      "doorMount": {
+        "shellOn": true,
+        "alongDefault": 0.64,
+        "boundaryAlong": 0.5,
+        "depthInWallDefault": 0.14,
+        "tune": null,
+        "perDoor": [
+          {
+            "x": 10,
+            "z": 20,
+            "dx": 0,
+            "dz": -0.64,
+            "dy": 0
+          }
+        ]
+      },
+      "provenanceAudit": {
+        "tagged": [
+          {
+            "type": "Group",
+            "builder": "setInteriorBoard",
+            "bbox": {
+              "min": [
+                -8.5,
+                -0.9,
+                -8.5
+              ],
+              "max": [
+                8.5,
+                1.73,
+                8.5
+              ]
+            }
+          },
+          {
+            "type": "LineSegments",
+            "builder": "clayRoomBuildSeamGrid",
+            "bbox": {
+              "min": [
+                -7.5,
+                -0.29,
+                -7.5
+              ],
+              "max": [
+                7.5,
+                -0.29,
+                7.5
+              ]
+            }
+          },
+          {
+            "type": "Group",
+            "builder": "clayRoomBuildLightOverlays",
+            "bbox": {
+              "min": [
+                -14.38,
+                -0.282,
+                -14.38
+              ],
+              "max": [
+                10.5,
+                1.35,
+                7
+              ]
+            }
+          },
+          {
+            "type": "AmbientLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          }
+        ],
+        "orphans": []
+      },
+      "stats": {
+        "boardBuilds": 4,
+        "boardSkips": 0
+      }
+    },
+    "settled": {
+      "fixture": {
+        "id": "clay-c1a",
+        "version": 1,
+        "tier": "test",
+        "seed": 113311726,
+        "seedHex": "0x6c0ffee",
+        "dims": {
+          "w": 15,
+          "d": 15
+        },
+        "portal": {
+          "id": "portal-c1a",
+          "connectionId": "connection-clay-north",
+          "connectionVersion": 1,
+          "edge": "n",
+          "cell": "c-6-0",
+          "state": "closed"
+        },
+        "object": {
+          "id": "obj-crate-c1a",
+          "kind": "crate",
+          "cell": "c-6-7"
+        },
+        "citizen": {
+          "id": "cit-goblin-c1a",
+          "bestiaryId": "goblin-warrior",
+          "cell": "c-6-10",
+          "worldHeight": 3.5,
+          "heightSource": "measured"
+        },
+        "provenance": {
+          "pass": "C1A",
+          "derivation": "spatialize-plan",
+          "created": "2026-07-23"
+        }
+      },
+      "lightRecipe": {
+        "exposureFloor": 0.006,
+        "toneMap": {
+          "profile": "agx",
+          "strength": 1
+        },
+        "bloom": {
+          "threshold": 0.68,
+          "strength": 1.15
+        },
+        "atmosphereFact": null,
+        "spriteResponse": {
+          "emissiveFloor": 0.05,
+          "materialRecipe": "lit-standee-v1",
+          "invariants": {
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "linear",
+            "alphaMode": "registry-cutoff"
+          }
+        },
+        "id": "clay-opposing-pair",
+        "label": "Clayroom warm/cool diagnostic",
+        "rolled": false,
+        "mode": "diagnostic-studio",
+        "source": {
+          "class": "diagnostic",
+          "label": "two visible calibration bulbs",
+          "loreNative": false,
+          "visibleEmitterRequired": true
+        },
+        "ambient": {
+          "color": 16777215,
+          "intensity": 0.18
+        },
+        "lights": [
+          {
+            "type": "point",
+            "temperatureK": 2800,
+            "colorOverride": true,
+            "intensityUnit": "tabletop-profile-unit",
+            "physicalIntensityUnit": "renderer-intensity",
+            "positionStrategy": "socket-relative",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "spot": {
+              "coneDeg": 45,
+              "penumbra": 0
+            },
+            "shadow": {
+              "cast": true,
+              "bias": -0.002,
+              "normalBias": 0,
+              "mapSize": 512,
+              "budgetPriority": 1
+            },
+            "fixtureId": "bracket-generic",
+            "mount": "wall",
+            "emitterLocal": {
+              "x": 0,
+              "y": 0.03,
+              "z": 0.12
+            },
+            "flicker": {
+              "amplitude": 0.12,
+              "cadenceMs": 480,
+              "intervalJitter": 0,
+              "directionAmplitude": 0,
+              "recipeId": "steady",
+              "seed": "clay-c1a:west-warm"
+            },
+            "id": "clay-west-warm",
+            "label": "warm calibration bulb",
+            "enabled": true,
+            "color": 16752714,
+            "intensity": 16,
+            "physicalIntensity": 16,
+            "pos": {
+              "x": -0.8,
+              "y": 1.7,
+              "z": 0
+            },
+            "heightM": 2.591,
+            "rangeM": 18.288,
+            "falloff": 0,
+            "state": "steady"
+          },
+          {
+            "type": "point",
+            "temperatureK": 9000,
+            "colorOverride": true,
+            "intensityUnit": "tabletop-profile-unit",
+            "physicalIntensityUnit": "renderer-intensity",
+            "positionStrategy": "socket-relative",
+            "azimuthDeg": 0,
+            "elevationDeg": 45,
+            "spot": {
+              "coneDeg": 45,
+              "penumbra": 0
+            },
+            "shadow": {
+              "cast": true,
+              "bias": -0.002,
+              "normalBias": 0,
+              "mapSize": 512,
+              "budgetPriority": 1
+            },
+            "fixtureId": "bracket-generic",
+            "mount": "wall",
+            "emitterLocal": {
+              "x": 0,
+              "y": 0.03,
+              "z": 0.12
+            },
+            "flicker": {
+              "amplitude": 0.12,
+              "cadenceMs": 480,
+              "intervalJitter": 0,
+              "directionAmplitude": 0,
+              "recipeId": "steady",
+              "seed": "clay-c1a:east-cool"
+            },
+            "id": "clay-east-cool",
+            "label": "cool calibration bulb",
+            "enabled": true,
+            "color": 11452392,
+            "intensity": 9,
+            "physicalIntensity": 9,
+            "pos": {
+              "x": 0.8,
+              "y": 1.7,
+              "z": 0
+            },
+            "heightM": 2.591,
+            "rangeM": 18.288,
+            "falloff": 0,
+            "state": "steady"
+          }
+        ]
+      },
+      "lightingBench": {
+        "fixtureId": "cl-f02-lighting-bench",
+        "benchMounted": true,
+        "primitives": [
+          {
+            "id": "bench-step-low",
+            "primitive": "box",
+            "role": "riser",
+            "castShadow": true,
+            "receiveShadow": true
+          },
+          {
+            "id": "bench-step-mid",
+            "primitive": "box",
+            "role": "riser",
+            "castShadow": true,
+            "receiveShadow": true
+          },
+          {
+            "id": "bench-step-high",
+            "primitive": "box",
+            "role": "riser",
+            "castShadow": true,
+            "receiveShadow": true
+          },
+          {
+            "id": "bench-matte-cube",
+            "primitive": "box",
+            "role": "furniture",
+            "castShadow": true,
+            "receiveShadow": true
+          },
+          {
+            "id": "bench-matte-sphere",
+            "primitive": "sphere",
+            "role": "furniture",
+            "castShadow": true,
+            "receiveShadow": true
+          }
+        ],
+        "overlayModes": {
+          "position": true,
+          "range": true,
+          "shadow": false
+        },
+        "overlays": [
+          {
+            "kind": "position",
+            "lightId": "clay-west-warm",
+            "rangeFraction": null,
+            "range": null
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-west-warm",
+            "rangeFraction": 0.25,
+            "range": 7
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-west-warm",
+            "rangeFraction": 0.5,
+            "range": 7
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-west-warm",
+            "rangeFraction": 1,
+            "range": 7
+          },
+          {
+            "kind": "position",
+            "lightId": "clay-east-cool",
+            "rangeFraction": null,
+            "range": null
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-east-cool",
+            "rangeFraction": 0.25,
+            "range": 7
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-east-cool",
+            "rangeFraction": 0.5,
+            "range": 7
+          },
+          {
+            "kind": "range",
+            "lightId": "clay-east-cool",
+            "rangeFraction": 1,
+            "range": 7
+          }
+        ],
+        "motesSuppressed": true
+      },
+      "lightLock": {
+        "id": "genesis-light-profiles",
+        "version": 1,
+        "schemaVersion": 2
+      },
+      "lightingProof": {
+        "snapshot": {
+          "label": "test-read",
+          "at": 1784942110144,
+          "ambient": {
+            "uuid": "91494206-223f-47be-87d4-fa6a9febf53e",
+            "intensity": 0.18,
+            "color": 16777215
+          },
+          "rig": {
+            "hemi": {
+              "uuid": "6e3bb8c5-c57d-4305-8236-41959750b972",
+              "intensity": 0,
+              "color": 16773596
+            },
+            "key": {
+              "uuid": "61c2625f-d6ba-491a-a26b-def3faa6c745",
+              "intensity": 0,
+              "color": 16777215
+            },
+            "fill": {
+              "uuid": "538cccf2-ccae-4a9f-ac98-1103f44bea05",
+              "intensity": 0,
+              "color": 16777215
+            },
+            "cameraKey": {
+              "uuid": "155fb350-27da-48fa-9de3-432484e4a8bd",
+              "intensity": 0,
+              "color": 16777215
+            }
+          },
+          "lights": [
+            {
+              "id": "clay-west-warm",
+              "sourceRef": "clay-west-warm",
+              "state": "steady",
+              "sampleIndex": 0,
+              "normalizedSample": 1,
+              "emitted": 16,
+              "emittedBase": 16,
+              "emittedNormalized": 1,
+              "mesh": 1.6,
+              "meshBase": 1.6,
+              "meshNormalized": 1,
+              "parity": true,
+              "pointUuid": "d74adb42-0164-400e-afcd-aa3f1662c330",
+              "emitterUuid": "d4e7d044-8b6b-4267-b73c-538987912368",
+              "materialUuid": "849fccbc-a3d6-4fbd-9f37-4ec16d41f135",
+              "color": 16752714,
+              "distance": 7,
+              "decay": 0,
+              "castShadow": true,
+              "shadowMapSize": [
+                512,
+                512
+              ],
+              "shadowCameraFar": 7,
+              "pointPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "emitterPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "basePointPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "baseEmitterPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "directionSample": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "directionAmplitude": 0,
+              "directionWithinBounds": true,
+              "coLocated": true,
+              "cadenceMs": 480,
+              "intervalJitter": 0,
+              "lastIntervalMs": null,
+              "nextIntervalMs": null,
+              "materialColor": 0,
+              "materialEmissive": 16752714,
+              "materialOpacity": 1
+            },
+            {
+              "id": "clay-east-cool",
+              "sourceRef": "clay-east-cool",
+              "state": "steady",
+              "sampleIndex": 0,
+              "normalizedSample": 1,
+              "emitted": 9,
+              "emittedBase": 9,
+              "emittedNormalized": 1,
+              "mesh": 1.6,
+              "meshBase": 1.6,
+              "meshNormalized": 1,
+              "parity": true,
+              "pointUuid": "eeee9b86-bcb2-4465-85e1-68b61c8ee1a3",
+              "emitterUuid": "bf955ca6-3552-41d2-a78f-134c89e662e6",
+              "materialUuid": "e2135cc3-aeb0-468b-9118-6baaca4359a7",
+              "color": 11452392,
+              "distance": 7,
+              "decay": 0,
+              "castShadow": true,
+              "shadowMapSize": [
+                512,
+                512
+              ],
+              "shadowCameraFar": 7,
+              "pointPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "emitterPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "basePointPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "baseEmitterPosition": [
+                0,
+                0.03,
+                0.12
+              ],
+              "directionSample": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "directionAmplitude": 0,
+              "directionWithinBounds": true,
+              "coLocated": true,
+              "cadenceMs": 480,
+              "intervalJitter": 0,
+              "lastIntervalMs": null,
+              "nextIntervalMs": null,
+              "materialColor": 0,
+              "materialEmissive": 11452392,
+              "materialOpacity": 1
+            }
+          ]
+        },
+        "probe": {
+          "label": "recipe switch → clay-opposing-pair",
+          "expectedReplacement": true,
+          "preserved": false,
+          "duringPass": true,
+          "afterPass": true
+        }
+      },
+      "surfaceRecipe": {
+        "id": "clay-diagnostic-surface",
+        "version": 1,
+        "modes": [
+          "clay",
+          "role-id"
+        ],
+        "defaultMode": "clay",
+        "clayColor": "#8a8a8a",
+        "unclaimedColor": "#ff00ff",
+        "gridColor": "#141414",
+        "gridOpacity": 0.3,
+        "roles": {
+          "floor": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5f8fbf"
+          },
+          "wall": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf6f6f"
+          },
+          "riser": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf8f4f"
+          },
+          "trim": {
+            "route": "diagnostic-clay",
+            "roleColor": "#8fbf5f"
+          },
+          "doorframe": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bfbf5f"
+          },
+          "portal": {
+            "route": "diagnostic-clay",
+            "roleColor": "#5fbf9f"
+          },
+          "pillar": {
+            "route": "diagnostic-clay",
+            "roleColor": "#9f6fbf"
+          },
+          "skirt": {
+            "route": "diagnostic-clay",
+            "roleColor": "#4f5f6f"
+          },
+          "furniture": {
+            "route": "diagnostic-clay",
+            "roleColor": "#bf9f6f"
+          },
+          "emitter": {
+            "route": "passthrough",
+            "roleColor": "#ffd88a"
+          },
+          "sprite": {
+            "route": "passthrough",
+            "roleColor": "#ff5fbf"
+          },
+          "door": {
+            "route": "passthrough",
+            "roleColor": "#ffffff"
+          },
+          "contact-shadow": {
+            "route": "passthrough",
+            "roleColor": "#5fbfbf"
+          },
+          "mote": {
+            "route": "passthrough",
+            "roleColor": "#bf5f5f"
+          }
+        }
+      },
+      "camera": {
+        "kind": "perspective",
+        "fov": 20,
+        "zoom": null,
+        "position": [
+          24.8182,
+          24.576,
+          24.8182
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "near": 0.1,
+        "far": 119.50971581478993
+      },
+      "renderer": {
+        "backingPx": "1260x1352",
+        "cssPx": "630x676",
+        "canvasCount": 1,
+        "shadowMap": true,
+        "cameraIsPerspective": true
+      },
+      "lights": {
+        "profileKey": "dark",
+        "ambient": 0.18,
+        "hemi": 0,
+        "key": 0,
+        "fill": 0
+      },
+      "surfaces": [
+        {
+          "kind": "room-shell-floor",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 16,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-stem",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 94,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-upper",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-upper",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 28,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-upper",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-upper",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 10,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "room-shell-wall-trim",
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": 20,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "skirt",
+          "isInstanced": true,
+          "count": 64,
+          "triangleCount": 12,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": "portal",
+          "isInstanced": true,
+          "count": 1,
+          "triangleCount": 12,
+          "colorHex": "#8a8a8a",
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        },
+        {
+          "kind": null,
+          "isInstanced": false,
+          "count": 1,
+          "triangleCount": null,
+          "colorHex": null,
+          "mapInfo": null
+        }
+      ],
+      "texturedSurfaceCount": 0,
+      "surfaceOwners": {
+        "recipe": {
+          "id": "clay-diagnostic-surface",
+          "version": 1,
+          "mode": "clay"
+        },
+        "surfaces": [
+          {
+            "role": "floor",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.315,
+              0
+            ],
+            "size": [
+              15,
+              0.03,
+              15
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-floor",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.19,
+              0
+            ],
+            "size": [
+              15.56,
+              0.4,
+              15.56
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-stem",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -4.627,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              6.255,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              1,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              3.627,
+              0.84,
+              -7.61
+            ],
+            "size": [
+              8.255,
+              1.78,
+              0.29
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "wall",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -7.61,
+              0.84,
+              0
+            ],
+            "size": [
+              0.29,
+              1.78,
+              15.51
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-upper",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "trim",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              -0.177,
+              0
+            ],
+            "size": [
+              15.475,
+              0.305,
+              15.475
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/room-shell-wall-trim",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "skirt",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              1,
+              1,
+              1
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/skirt",
+            "instances": 64,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "portal",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              1,
+              1,
+              1
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/portal",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": true
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -7.45,
+              1.112,
+              0
+            ],
+            "size": [
+              0.045,
+              0.045,
+              0.102
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -7.38,
+              1.127,
+              0
+            ],
+            "size": [
+              0.086,
+              0.09,
+              0.074
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              -7.38,
+              1.13,
+              0
+            ],
+            "size": [
+              0.095,
+              0.1,
+              0.082
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#000000",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.5,
+              1.112,
+              -7.45
+            ],
+            "size": [
+              0.045,
+              0.045,
+              0.102
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.5,
+              1.127,
+              -7.38
+            ],
+            "size": [
+              0.086,
+              0.09,
+              0.074
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#33302a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "emitter",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              3.5,
+              1.13,
+              -7.38
+            ],
+            "size": [
+              0.095,
+              0.1,
+              0.082
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#000000",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              2.799,
+              0.084,
+              -0.201
+            ],
+            "size": [
+              0.731,
+              0.704,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "sprite",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              2.941,
+              -0.249,
+              -0.058
+            ],
+            "size": [
+              0.526,
+              0.09,
+              0.526
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": false,
+            "colorHex": null,
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "contact-shadow",
+            "route": "passthrough",
+            "group": "interiorGroup",
+            "pos": [
+              2.941,
+              -0.297,
+              -0.058
+            ],
+            "size": [
+              0.936,
+              0.936,
+              0
+            ],
+            "rotY": 0,
+            "builder": "unattributed",
+            "instances": 1,
+            "textured": true,
+            "colorHex": "#ffffff",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1.5,
+              -0.18,
+              0.333
+            ],
+            "size": [
+              2.4,
+              0.24,
+              0.333
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1.5,
+              -0.06,
+              0
+            ],
+            "size": [
+              2.4,
+              0.48,
+              0.333
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "riser",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              -1.5,
+              0.06,
+              -0.333
+            ],
+            "size": [
+              2.4,
+              0.72,
+              0.333
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/riser",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "furniture",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              0.45,
+              0.275,
+              0
+            ],
+            "size": [
+              1.15,
+              1.15,
+              1.15
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/furniture",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          },
+          {
+            "role": "furniture",
+            "route": "diagnostic-clay",
+            "group": "interiorGroup",
+            "pos": [
+              2.05,
+              0.36,
+              0
+            ],
+            "size": [
+              1.32,
+              1.32,
+              1.32
+            ],
+            "rotY": 0,
+            "builder": "interiorBuildInstancedMesh/furniture",
+            "instances": 1,
+            "textured": false,
+            "colorHex": "#8a8a8a",
+            "instanceColorNeutralized": false
+          }
+        ],
+        "unclaimed": [],
+        "texturedClayCount": 0
+      },
+      "wallOmission": {
+        "ruleId": "camera-side-wall-omission",
+        "version": 1,
+        "active": true,
+        "omitted": [
+          {
+            "segIndex": 3,
+            "mid": {
+              "x": 18.5,
+              "z": 27
+            }
+          },
+          {
+            "segIndex": 4,
+            "mid": {
+              "x": 11,
+              "z": 34.5
+            }
+          }
+        ],
+        "built": [
+          {
+            "segIndex": 0,
+            "mid": {
+              "x": 6.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 1,
+            "mid": {
+              "x": 10,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 2,
+            "mid": {
+              "x": 14.5,
+              "z": 19.5
+            }
+          },
+          {
+            "segIndex": 5,
+            "mid": {
+              "x": 3.5,
+              "z": 27
+            }
+          }
+        ]
+      },
+      "fixtures": [
+        {
+          "x": -7.38,
+          "y": 1.1300733725183965,
+          "z": 2.6645352591003756e-17,
+          "fixtureId": "bracket-generic",
+          "mount": "wall",
+          "ownerSegIndex": 5,
+          "emissiveIntensity": 1.6
+        },
+        {
+          "x": 3.5,
+          "y": 1.1300733725183965,
+          "z": -7.38,
+          "fixtureId": "bracket-generic",
+          "mount": "wall",
+          "ownerSegIndex": 2,
+          "emissiveIntensity": 1.6
+        }
+      ],
+      "doorMount": {
+        "shellOn": true,
+        "alongDefault": 0.64,
+        "boundaryAlong": 0.5,
+        "depthInWallDefault": 0.14,
+        "tune": null,
+        "perDoor": [
+          {
+            "x": 10,
+            "z": 20,
+            "dx": 0,
+            "dz": -0.64,
+            "dy": 0
+          }
+        ]
+      },
+      "provenanceAudit": {
+        "tagged": [
+          {
+            "type": "Group",
+            "builder": "setInteriorBoard",
+            "bbox": {
+              "min": [
+                -8.5,
+                -0.9,
+                -8.5
+              ],
+              "max": [
+                8.5,
+                1.73,
+                8.5
+              ]
+            }
+          },
+          {
+            "type": "LineSegments",
+            "builder": "clayRoomBuildSeamGrid",
+            "bbox": {
+              "min": [
+                -7.5,
+                -0.29,
+                -7.5
+              ],
+              "max": [
+                7.5,
+                -0.29,
+                7.5
+              ]
+            }
+          },
+          {
+            "type": "Group",
+            "builder": "clayRoomBuildLightOverlays",
+            "bbox": {
+              "min": [
+                -14.38,
+                -0.282,
+                -14.38
+              ],
+              "max": [
+                10.5,
+                1.35,
+                7
+              ]
+            }
+          },
+          {
+            "type": "AmbientLight",
+            "builder": "clayRoomApplyLightProfile",
+            "bbox": null
+          }
+        ],
+        "orphans": []
+      },
+      "stats": {
+        "boardBuilds": 4,
+        "boardSkips": 0
+      }
+    }
+  },
+  "settleDelta": {
+    "texturedSurfaceCountEarly": 0,
+    "texturedSurfaceCountSettled": 0,
+    "boardBuildsEarly": 4,
+    "boardBuildsSettled": 4,
+    "surfacesChanged": false
+  },
+  "consoleErrors": [],
+  "consoleWarnings": [],
+  "warningVerdict": "PASS"
+}

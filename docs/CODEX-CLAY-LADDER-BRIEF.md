@@ -1,7 +1,8 @@
 # CODEX-CLAY-LADDER-BRIEF — climb CL-R1 → CL-R3 (the guard-house building process, foundation courses)
 
 type: agent-brief
-status: ACTIVE 2026-07-24 (post-consolidation; master is the singular canonical line)
+status: COMPLETE 2026-07-25 — CL-R1 / CL-R2 / CL-R3 engineering and capture packets built;
+  founder visual verdicts and Fable re-gate/landing remain
 consumer: Codex. Adam hands this to a fresh Codex session.
 owning spec: `docs/CLAYROOM-RESET-LADDER.md` — read it FIRST, fully. This brief sequences and
 scopes; the ladder doc owns every rung's contract. Standing gate (NEXT-STEPS, Adam's ruling):

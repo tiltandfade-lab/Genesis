@@ -1625,3 +1625,82 @@ The primary Move region is a filled highlight. The Dash-only extension is a holl
 locked-secondary meaning remains legible without color. Both regions, the selected route, movement cost, portal
 state, and final position must project engine query/receipt answers; the Clayroom renderer may not calculate a
 second path or movement rule.
+
+## CLAYROOM FANTASY-TORCH REACH (Adam, 2026-07-24 — binding; verbatim)
+
+> "i think the torch room brightness is about right, but unless we want torches everywhere, we
+> might want to extend the range of the torch 2x, make sure it still has a smooth falloff and casts
+> shadows"
+
+Binding consequences:
+
+- The accepted close-to-flame brightness stays fixed. Doubling reach is not permission to double
+  source intensity or flatten the room into uniform orange fill.
+- The lore-native `torchlit` recipe's maximum reach doubles from 30 feet to 60 feet (6 to 12
+  tabletop world units; authored `rangeM` 9.144 → 18.288).
+- Its smooth physical falloff remains decay 2, and the real point light continues to cast shadows
+  across the extended reach.
+- The extended-range exception belongs to the reviewed fantasy torch. It does not silently widen
+  moonlight, lava, diagnostic bulbs, or generic generated interior lights.
+
+## CLAYROOM FANTASY-TORCH REACH, SECOND DOUBLING (Adam, 2026-07-24 — binding; verbatim)
+
+After reviewing the first doubled-range capture:
+
+> "it's still a little too restrained, let's double it one more time"
+
+This supersedes only the preceding 60-foot maximum. The torch now reaches 120 feet (24 tabletop
+world units; authored `rangeM` 36.576). Its already-accepted close brightness, decay-2 falloff,
+shadow casting, and torch-only scope remain unchanged.
+
+## CLAYROOM FANTASY-TORCH FALLOFF (Adam, 2026-07-24 — binding; verbatim)
+
+After reviewing the 120-foot capture:
+
+> "that's a little better, though i think the falloff needs to scale outward a bit"
+
+The torch keeps its accepted source brightness, 120-foot maximum, and shadow casting. Its smooth
+falloff broadens modestly from decay 2.0 to 1.75 so more of the useful gradient lives away from the
+flame. This supersedes the preceding decay-2 value only; the torch-specific scope remains.
+
+## CLAYROOM FANTASY-TORCH FALLOFF, SECOND OUTWARD STEP (Adam, 2026-07-24 — binding; verbatim)
+
+After reviewing decay 1.75:
+
+> "ah so close, lets just incrase that one more tie by the same factor"
+
+Apply the same 0.25 outward step once more: decay 1.75 → 1.50. The accepted source brightness,
+120-foot maximum, color, shadows, and torch-only scope remain unchanged.
+
+## CLAYROOM OPEN-FLAME DANCE (Adam, 2026-07-24 — binding; verbatim)
+
+> "ok, now a real flame sconce will dance a bit, with a slight modulation in directionality and
+> intensity at random intervals, can i see some proof of that"
+
+After reviewing the first stepped implementation:
+
+> "what fps we running at here, that looked choppy af"
+
+> "ok so fix that please"
+
+Binding consequences:
+
+- The reviewed open-flame torch is an explicit `flickering` practical even though ordinary generated
+  practicals still default to `steady`. This does not authorize global flicker.
+- It chooses deterministic, seeded intensity and direction targets at irregular intervals. The
+  current authored recipe uses ±10% intensity, a 420 ms cadence with 55% interval variation, and a
+  0.025-local-unit directional bound.
+- The visible flame and real point-light origin remain co-located and move together inside that
+  bound. This is a tiny flame-origin dance that changes highlights and cast shadows; it does not
+  convert a wall sconce into a spotlight.
+- Target changes must be interpolated continuously on `requestAnimationFrame` at the display refresh
+  rate (normally 60 FPS), never presented as one-to-four hard jumps per second. Seeded target choice
+  remains reproducible; the path between targets is smooth.
+
+## CLAYROOM OPEN-FLAME CHECKPOINT (Adam, 2026-07-24 — additive; verbatim)
+
+> "let's work on it, i think the sconce is looking good the flicker still needs work but its passable for now"
+
+The current sconce and smooth flicker are accepted as passable for this CL-R1 checkpoint. Flicker
+polish remains open; this is not permission to remove its deterministic proof or silently promote
+the current motion as the final open-flame treatment.

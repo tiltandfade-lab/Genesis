@@ -667,9 +667,16 @@ group("8b — E0-1 fade compliance: the door leaf joins its owning wall segment'
   // wallUpperFadeEntries — the same reasoning E0-1's own fixture block documents), so this section
   // asserts the extracted block's load-bearing invariants against the real source text, the same
   // technique verify-e0-1-fixture-fade.mjs's check 0 uses for symbol-level claims.
-  const blockStart = bootSrc.indexOf("D4 — E0-1 FADE COMPLIANCE");
-  ok(blockStart > 0, "the D4 E0-1 fade-compliance block exists in setInteriorBoard");
-  const block = blockStart > 0 ? bootSrc.slice(blockStart, blockStart + 2200) : "";
+  // THEATER SPLIT B9 (2026-07-25): setInteriorBoard moved to src/ui/theater-interior-realize.js and its
+  // body became a phase list; this block rode VERBATIM into realizePhaseDoors — still the ONE scope
+  // holding both the mounted doors and wallUpperFadeEntries (the pass context carries the latter in
+  // from realizePhasePracticals). The read is repointed to that file; the block marker, the slice
+  // window and all five invariants are unchanged. interiorBuildInteractables itself stayed root-owned,
+  // which is why the rest of this harness still reads bootSrc.
+  const realizeSrc = read("src/ui/theater-interior-realize.js");
+  const blockStart = realizeSrc.indexOf("D4 — E0-1 FADE COMPLIANCE");
+  ok(blockStart > 0, "the D4 E0-1 fade-compliance block exists in setInteriorBoard's door phase");
+  const block = blockStart > 0 ? realizeSrc.slice(blockStart, blockStart + 2200) : "";
   ok(/owner\.fadeEntry\.materials\.push\(leaf\.material\)/.test(block), "the door leaf material is APPENDED (never overwrites) into the segment's fadeEntry.materials");
   ok(/leaf\.material\.opacity = owner\.fadeEntry\.opacity/.test(block), "the leaf opacity syncs to the entry's CURRENT opacity immediately (a door built mid-fade never floats opaque)");
   ok(/if\(!owner\.fadeEntry\.materials\) owner\.fadeEntry\.materials = \[\]/.test(block), "a fadeEntry with no materials list yet gets one created, not clobbered");

@@ -376,8 +376,23 @@ console.log("\n=== PART A2 — theater-boot.js's drainTweens/PIXEL_SKIN_CACHE LR
    pixelSkinHash/nearestify — A3's checks are about the CACHE/EVICTION mechanism, not texture content,
    which verify-pixel-skin.mjs already covers in full) + a stub THREE.CanvasTexture that just tags
    itself disposed on .dispose(). This exercises the REAL logic straight from the source file, not a
-   re-implementation. */
-const bootSrc = readFileSync(join(ROOT, "src/ui/theater-boot.js"), "utf-8");
+   re-implementation.
+
+   THEATER SPLIT B3 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): this block extracts symbols
+   that now live in TWO files — drainTweens/disposeAuxCaches/retire stayed in src/ui/theater-boot.js,
+   while pixelSkinTextureFor/disposePixelSkinCache/PIXEL_SKIN_CACHE/PIXEL_SKIN_CACHE_CAP moved VERBATIM
+   into src/ui/theater-skins.js. Reading the COMPOSITE keeps every extraction pulling the REAL source
+   of its own symbol; no check is relaxed and none is dropped. */
+/* THEATER SPLIT B9 (2026-07-25): setBoard and setUnits — whose bodies checks A10e/A10f text-scan for
+   the drain-before-teardown order — moved VERBATIM into src/ui/theater-tabletop.js. drainTweens,
+   disposeAuxCaches and retire stayed in theater-boot.js (A10a-d/A10g are untouched). The tabletop
+   realizer joins the SAME composite so bodyOf() keeps pulling each body from its true home; every
+   assertion is unchanged. */
+const bootSrc = readFileSync(join(ROOT, "src/ui/theater-boot.js"), "utf-8")
+  + "\n/* [verify-theater-verbs composite boundary — src/ui/theater-skins.js follows] */\n"
+  + readFileSync(join(ROOT, "src/ui/theater-skins.js"), "utf-8")
+  + "\n/* [verify-theater-verbs composite boundary — src/ui/theater-tabletop.js follows] */\n"
+  + readFileSync(join(ROOT, "src/ui/theater-tabletop.js"), "utf-8");
 function extractFn(src, name){
   const sig = "function " + name + "(";
   const start = src.indexOf(sig);

@@ -146,7 +146,19 @@ console.log("=== SECTION A: theater-figures.js blank-piece fallback ===");
   check("every garbage key resolves non-null for pieceKind:\"prop\"", allPropNonNull, "");
 
   console.log("\n--- A-WIRING: the real render call sites pass pieceKind (source-text scan) ---");
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B3 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): figureFor moved VERBATIM
+  // into src/ui/theater-figure-build.js; the props path (setBoard) and mountLightProp's deliberately
+  // pieceKind-less lookup stayed in theater-boot.js. Reading the COMPOSITE keeps all five call-site
+  // scans below anchored on the real source of their own call site — same regexes, same jobs.
+  // THEATER SPLIT B9 (2026-07-25): the props path travelled with setBoard into
+  // src/ui/theater-tabletop.js; mountLightProp stayed in theater-boot.js. Adding the tabletop realizer
+  // to the SAME composite keeps the two props-path scans anchored on the real source of their own call
+  // site — same regexes, same jobs.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-tabletop-u3 composite boundary — src/ui/theater-figure-build.js follows] */\n"
+    + read("src/ui/theater-figure-build.js")
+    + "\n/* [verify-tabletop-u3 composite boundary — src/ui/theater-tabletop.js follows] */\n"
+    + read("src/ui/theater-tabletop.js");
   check("figureFor's whole-object gate calls resolveWholeObject(wKey, \"figure\")",
     /resolveWholeObject\(wKey,\s*"figure"\)/.test(bootSrc), "");
   check("figureFor's geometry call passes \"figure\" through wholeObjectGeometryFor",

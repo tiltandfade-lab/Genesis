@@ -9,7 +9,7 @@
    neither of which that rig records.
 
    Usage (server must already be serving THIS worktree):
-     node dev/capture-clayroom-fixture.cjs <outDir> <label> [port] [extraQuery]
+     node dev/capture-clayroom-fixture.cjs <outDir> <label> [port] [extraQuery] [lightRecipeId]
 
    Everything it reads is an existing read-only diagnostic seam (window.Theater._*ForTest) or a
    pure engine global (clayRoomRecordFrom / CLAY_* ). It never mutates page state except to click
@@ -23,7 +23,8 @@ const OUT = process.argv[2];
 const LABEL = process.argv[3] || "capture";
 const PORT = process.argv[4] || "5176";
 const EXTRA = process.argv[5] || "";
-if (!OUT) { console.error("usage: node dev/capture-clayroom-fixture.cjs <outDir> <label> [port] [extraQuery]"); process.exit(2); }
+const LIGHT_RECIPE_ID = process.argv[6] || "";
+if (!OUT) { console.error("usage: node dev/capture-clayroom-fixture.cjs <outDir> <label> [port] [extraQuery] [lightRecipeId]"); process.exit(2); }
 const BASE = "http://127.0.0.1:" + PORT;
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -59,7 +60,13 @@ function pageProbe() {
                  worldHeight: rec.citizen.bodyForm.worldHeight, heightSource: rec.citizen.bodyForm.heightSource },
       provenance: rec.provenance ? { pass: rec.provenance.pass, derivation: rec.provenance.derivation, created: rec.provenance.created } : null,
     } : null,
-    lightRecipe: (typeof CLAY_C1A_LIGHT_PROFILE !== "undefined") ? JSON.parse(JSON.stringify(CLAY_C1A_LIGHT_PROFILE)) : null,
+    lightRecipe: T._clayLightingRecipeForTest ? T._clayLightingRecipeForTest() : null,
+    lightingBench: T._clayLightingBenchForTest ? T._clayLightingBenchForTest() : null,
+    lightLock: (typeof LIGHT_PROFILE_LOCKS_COMPILED !== "undefined")
+      ? { id: LIGHT_PROFILE_LOCKS_COMPILED.id, version: LIGHT_PROFILE_LOCKS_COMPILED.version,
+          schemaVersion: LIGHT_PROFILE_LOCKS_COMPILED.schemaVersion }
+      : null,
+    lightingProof: T._clayLightingProofForTest ? T._clayLightingProofForTest() : null,
     surfaceRecipe: (typeof CLAY_DIAGNOSTIC_SURFACE_RECIPE !== "undefined")
       ? JSON.parse(JSON.stringify(CLAY_DIAGNOSTIC_SURFACE_RECIPE)) : null,
     camera: T._clayCameraPoseForTest ? T._clayCameraPoseForTest() : null,
@@ -95,6 +102,13 @@ function pageProbe() {
     defaultViewport: VIEWPORT,
   });
   const page = await browser.newPage();
+  // The repository intentionally has no favicon. Keep that browser-chrome request from polluting
+  // the application error receipt; every real Genesis request still reaches the server unchanged.
+  await page.setRequestInterception(true);
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname === "/favicon.ico") request.respond({ status: 204 });
+    else request.continue();
+  });
   const consoleErrors = [], consoleWarnings = [];
   page.on("console", (m) => {
     if (m.type() === "error") consoleErrors.push(m.text());
@@ -108,6 +122,19 @@ function pageProbe() {
     () => document.querySelector("canvas") && /renderer size/.test(document.body.innerText),
     { timeout: 30000 }
   );
+  if (LIGHT_RECIPE_ID) {
+    const applied = await page.evaluate((id) => {
+      return !!(window.Theater && window.Theater._claySetLightingRecipeForTest
+        && window.Theater._claySetLightingRecipeForTest(id));
+    }, LIGHT_RECIPE_ID);
+    if (!applied) throw new Error("could not apply light recipe " + LIGHT_RECIPE_ID);
+    await page.evaluate(() => {
+      const button = [...document.querySelectorAll("button")]
+        .find((entry) => entry.getAttribute("aria-label") === "Clayroom lighting proof");
+      if (button) button.click();
+    });
+    await new Promise((r) => setTimeout(r, 350));
+  }
 
   // THE SETTLE TIMELINE. `early` is the frame right after mount, BEFORE the goblin's sprite PNG
   // finishes loading and fires spriteTextureFor's own setInteriorBoard(S.lastBoard) replay;
@@ -152,9 +179,11 @@ function pageProbe() {
 
   const receipt = {
     label: LABEL,
+    requestedLightRecipeId: LIGHT_RECIPE_ID || "clay-opposing-pair",
+    captureTab: LIGHT_RECIPE_ID ? "Lights (movement overlays cleared)" : "default workbench tab",
     capturedBy: "dev/capture-clayroom-fixture.cjs",
     url,
-    runtimePath: "genesis.html -> theater-boot.js clayRoomBootSelfMount() -> mountClayRoom() -> clayRoomBoardFrom() -> spatializePlan -> interiorBuildBoard -> setInteriorBoard (production interior channel)",
+    runtimePath: "authored JSON lock -> compiled light registry -> clayRoomBoardFrom() -> spatializePlan -> interiorBuildBoard -> setInteriorBoard (production interior channel)",
     viewport: VIEWPORT,
     regions: REGIONS,
     timeline: { early, settled },
@@ -168,6 +197,7 @@ function pageProbe() {
     },
     consoleErrors,
     consoleWarnings,
+    warningVerdict: consoleWarnings.length === 0 ? "PASS" : "REVIEW",
   };
   fs.writeFileSync(path.join(OUT, LABEL + "-receipt.json"), JSON.stringify(receipt, null, 2));
   await browser.close();

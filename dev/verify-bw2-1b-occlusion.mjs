@@ -64,7 +64,7 @@ function ensureThreeShim(){
   // return`) would never add on a shim an earlier-running verify-*.mjs already wrote. A version
   // marker forces a re-write when the shim's own contents are stale.
   const postDir = join(base, "addons", "postprocessing");
-  const shimVersion = "bw3-post-suite"; // BW3-2/3/6 THE POST SUITE: +UnrealBloomPass +OutputPass (kept in lockstep with dev/verify-theater-sprites.mjs — all shim writers share node_modules/three)
+  const shimVersion = "cp1-env-ao"; // visual-correction Checkpoint 1: +GTAOPass/+GTAOShader/+PoissonDenoiseShader/+SimplexNoise (lockstep across all shim writers sharing node_modules/three)
   const versionFile = join(base, ".shim-version");
   if(existsSync(join(base, "package.json")) && existsSync(versionFile) && readFileSync(versionFile, "utf-8").trim() === shimVersion) return;
   mkdirSync(loaderDir, { recursive: true });
@@ -78,6 +78,14 @@ function ensureThreeShim(){
   writeFileSync(join(postDir, "ShaderPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/ShaderPass.js";\n`);
   writeFileSync(join(postDir, "UnrealBloomPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/UnrealBloomPass.js";\n`);
   writeFileSync(join(postDir, "OutputPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/OutputPass.js";\n`);
+  writeFileSync(join(postDir, "GTAOPass.js"), `export * from "../../../../vendor/three/addons/postprocessing/GTAOPass.js";\n`);
+  const shaderDir = join(base, "addons", "shaders");
+  const mathDir = join(base, "addons", "math");
+  mkdirSync(shaderDir, { recursive: true });
+  mkdirSync(mathDir, { recursive: true });
+  writeFileSync(join(shaderDir, "GTAOShader.js"), `export * from "../../../../vendor/three/addons/shaders/GTAOShader.js";\n`);
+  writeFileSync(join(shaderDir, "PoissonDenoiseShader.js"), `export * from "../../../../vendor/three/addons/shaders/PoissonDenoiseShader.js";\n`);
+  writeFileSync(join(mathDir, "SimplexNoise.js"), `export * from "../../../../vendor/three/addons/math/SimplexNoise.js";\n`);
   writeFileSync(versionFile, shimVersion + "\n");
 }
 function ensureJsdomShim(){
@@ -131,6 +139,15 @@ const registry = JSON.parse(process.argv[3]);
 const dom = new JSDOM(\`<!doctype html><html><body><div id="stage" style="width:400px;height:300px"></div></body></html>\`, { runScripts: "dangerously", url: "http://localhost/" });
 global.window = dom.window; global.document = dom.window.document;
 global.SPRITE_REGISTRY = registry; global.window.SPRITE_REGISTRY = registry;
+// Light-recipe classic globals (2026-07-25): theater-boot's LIGHT_PROFILES/LIGHT_TUNABLES now build
+// at module eval from the shared src/engine/light-recipes.js registry (the CL-R2 unification), which
+// the production page loads as a classic script BEFORE this module. Same stubs verify-bw2-2's runner
+// already carries — the two direct-import runners must model the same production global contract.
+global.LIGHT_RECIPE_REGISTRY = {};
+global.lightRecipeLegacyProfile = (value) => value;
+global.lightRecipeDeepClone = (value) => JSON.parse(JSON.stringify(value));
+global.lightRecipeDeepFreeze = (value) => value;
+global.LIGHT_LAB_COMPILED_SETTINGS = { stageAmbientFloor: 0.42, gradeExposureFloor: 0.006, bloomThreshold: 0.68, bloomStrength: 1.15, gradeTintScale: 0.45, gradeTintMax: 0.12, celestialArc: {}, spriteEmissiveFloor: 0.05, sceneAmbient: 0.13, lightRenderGain: 4.5 };
 function fakeTexture(){ return { magFilter: null, minFilter: null, generateMipmaps: true, isTexture: true, image: { width: 100, height: 200 } }; }
 const result = { ok: false, error: null };
 try {

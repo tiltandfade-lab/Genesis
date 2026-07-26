@@ -125,8 +125,27 @@ function buildOldCodeScratch() {
   const scratch = path.join(repoRoot, ".env1b-red-scratch");
   fs.rmSync(scratch, { recursive: true, force: true });
   fs.mkdirSync(path.join(scratch, "src", "ui"), { recursive: true });
+  // THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md) — TWO-FILE PIN, and why it is
+  // required for this proof to mean anything. Before the split, src/ui/theater-boot.js WAS the whole GL
+  // layer, so swapping that one file made a complete "old code" tree. It no longer is: splits B1-B5
+  // extracted theater-clay-room / -light-lab / -skins / -whole-object / -figure-build / -post / -dispose /
+  // -lighting / -practicals / -motes, and TODAY's genesis.html carries a <script type="module"> tag for
+  // each of them. Symlinking today's genesis.html into this scratch would therefore load the BASE
+  // COMMIT's MONOLITH *and* the post-split modules on the same page — two theater facades racing to
+  // publish window.Theater, i.e. a meaningless RED. Fix, both halves of one idea:
+  //   (a) genesis.html is materialized from the SAME BASE_COMMIT (it is the file that decides which
+  //       modules exist at all), and
+  //   (b) any src/ui/theater-*.js that does not exist at BASE_COMMIT is not symlinked in either.
+  // Verified: `git diff --diff-filter=D BASE_COMMIT HEAD -- src data` is empty, so every file the base
+  // genesis.html references still exists in this worktree and resolves through the symlinks. NOT ONE
+  // ASSERTION BELOW IS RELAXED by this — it only restores the RED side to a coherent single-facade tree.
+  const existsAtBase = (repoPath) => {
+    try { execFileSync("git", ["cat-file", "-e", `${BASE_COMMIT}:${repoPath}`], { cwd: repoRoot, stdio: "ignore" }); return true; }
+    catch (e) { return false; }
+  };
   for (const entry of fs.readdirSync(repoRoot)) {
     if (entry === "src" || entry === ".env1b-red-scratch" || entry === ".git") continue;
+    if (entry === "genesis.html") continue; // split B5: pinned from BASE_COMMIT below, never today's tag list
     fs.symlinkSync(path.join(repoRoot, entry), path.join(scratch, entry));
   }
   for (const entry of fs.readdirSync(path.join(repoRoot, "src"))) {
@@ -135,10 +154,16 @@ function buildOldCodeScratch() {
   }
   for (const entry of fs.readdirSync(path.join(repoRoot, "src", "ui"))) {
     if (entry === "theater-boot.js") continue;
+    // split B5: a theater-*.js module that did not exist at BASE_COMMIT must NOT join the old-code tree.
+    if (/^theater-.*\.js$/.test(entry) && !existsAtBase("src/ui/" + entry)) continue;
     fs.symlinkSync(path.join(repoRoot, "src", "ui", entry), path.join(scratch, "src", "ui", entry));
   }
   const oldSource = execFileSync("git", ["show", `${BASE_COMMIT}:src/ui/theater-boot.js`], { cwd: repoRoot, encoding: "utf-8", maxBuffer: 1024 * 1024 * 64 });
   fs.writeFileSync(path.join(scratch, "src", "ui", "theater-boot.js"), oldSource);
+  // split B5: the matching genesis.html — same commit, so the page loads exactly the module set that
+  // existed alongside this monolith and nothing that did not.
+  const oldHtml = execFileSync("git", ["show", `${BASE_COMMIT}:genesis.html`], { cwd: repoRoot, encoding: "utf-8", maxBuffer: 1024 * 1024 * 64 });
+  fs.writeFileSync(path.join(scratch, "genesis.html"), oldHtml);
   return scratch;
 }
 
@@ -318,7 +343,13 @@ async function main() {
     ok(!oldSrc.includes("TABLETOP_SHADOW_MAP_SIZE"), "TABLETOP_SHADOW_MAP_SIZE did not exist at base commit");
     ok(!oldSrc.includes("applyTabletopShadowCasters"), "applyTabletopShadowCasters did not exist at base commit");
     ok(oldSrc.includes("renderer.shadowMap.enabled = false; // §2"), "base commit's mount() still carried the old §2 shadowMap-off default");
-    const newSrc = fs.readFileSync(path.join(repoRoot, "src/ui/theater-boot.js"), "utf-8");
+    // THEATER SPLIT B9 (2026-07-25): mount() stayed in theater-boot.js, but setBoard's own restore moved
+    // VERBATIM to src/ui/theater-tabletop.js (and setInteriorBoard's enable to
+    // src/ui/theater-interior-realize.js). Read the two production files that carry the two lines this
+    // check names; the assertion (BOTH mount's default and setBoard's restore flip to true) is unchanged.
+    const newSrc = fs.readFileSync(path.join(repoRoot, "src/ui/theater-boot.js"), "utf-8")
+      + "\n/* [verify-env1b composite boundary — src/ui/theater-tabletop.js follows] */\n"
+      + fs.readFileSync(path.join(repoRoot, "src/ui/theater-tabletop.js"), "utf-8");
     ok(newSrc.includes("TABLETOP_SHADOW_MAP_SIZE") && newSrc.includes("applyTabletopShadowCasters"),
       "current worktree source carries the new shadow-caster symbols");
     ok(newSrc.match(/renderer\.shadowMap\.enabled = true;/g).length >= 2,

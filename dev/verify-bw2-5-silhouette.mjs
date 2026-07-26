@@ -278,7 +278,24 @@ group("8 — PROP PERSPECTIVE LAW: every wall-hang dressing entry has a matching
 
 group("9/10/11 — GL-LAYER WIRING (text-scan, sealed ES-module boundary — same discipline dev/verify-dungeon-interior.mjs check 18 keeps)");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B8 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): the INSTANCED-GEOMETRY family
+  // (interiorBuildInstancedMesh + interiorBuildPillarMeshes + interiorCylinderGeometry) moved VERBATIM to
+  // src/ui/theater-interior-mesh.js, and the DRESSING/PROPS family (interiorBuildFurniture,
+  // buildFurnitureAssembly, interiorBuildWallProps, buildExtrusionProp, itrPropEdgeColorFor,
+  // interiorBuildPieces, interiorBuildDressing) to src/ui/theater-dressing.js. setInteriorBoard and the
+  // cutaway pass stayed in theater-boot.js. Reading the COMPOSITE keeps every regex below anchored on the
+  // REAL source of its own symbol — same regexes, same jobs, none relaxed and none dropped.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-bw2-5 composite boundary — src/ui/theater-interior-mesh.js follows] */\n"
+    + read("src/ui/theater-interior-mesh.js")
+    + "\n/* [verify-bw2-5 composite boundary — src/ui/theater-dressing.js follows] */\n"
+    + read("src/ui/theater-dressing.js")
+    // THEATER SPLIT B9 (2026-07-25): setInteriorBoard moved to src/ui/theater-interior-realize.js — the
+    // BW2-5 parapet cutaway pass rode into realizePhaseWallsDoors and the furniture/wall-prop mount
+    // calls into realizePhaseFurniture, each VERBATIM. Adding that file to the SAME composite keeps
+    // both text-scans anchored on the real source of the code they check; neither is relaxed.
+    + "\n/* [verify-bw2-5 composite boundary — src/ui/theater-interior-realize.js follows] */\n"
+    + read("src/ui/theater-interior-realize.js");
   ok(/const yBase = \(typeof inst\.yBase === "number"\)/.test(bootSrc), "interiorBuildInstancedMesh reads inst.yBase");
   ok(/inst\.ox \|\| 0/.test(bootSrc) && /inst\.oz \|\| 0/.test(bootSrc), "interiorBuildInstancedMesh reads inst.ox/inst.oz");
   ok(!/const KNEE = 0\.35/.test(bootSrc), "the old fixed KNEE=0.35 absolute parapet constant is GONE");

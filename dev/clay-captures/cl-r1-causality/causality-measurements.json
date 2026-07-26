@@ -1,0 +1,240 @@
+{
+  "kind": "cl-r1-causality-measurements",
+  "metric": "Rec.709 display luma and HSV saturation over alpha-bearing source pixels or non-neutral rendered sprite pixels (RGB spread >=10)",
+  "cards": {
+    "source": {
+      "path": "assets/sprites/spr-fantasy-goblin-warrior.png",
+      "size": [
+        215,
+        207
+      ],
+      "metrics": {
+        "measuredPixels": 17037,
+        "medianLuma": 49.67,
+        "p05Luma": 2.71,
+        "p95Luma": 143.8,
+        "meanSaturation": 145.67,
+        "meanChromaSpread": 44.74,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 11.529
+    },
+    "01-color-wrong-untagged": {
+      "path": "dev/clay-captures/cl-r1-causality/01-color-wrong-untagged-sprite.png",
+      "size": [
+        120,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 819,
+        "medianLuma": 62.4,
+        "p05Luma": 10.25,
+        "p95Luma": 108.08,
+        "meanSaturation": 142.72,
+        "meanChromaSpread": 43.45,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.757
+    },
+    "02-color-production-srgb": {
+      "path": "dev/clay-captures/cl-r1-causality/02-color-production-srgb-sprite.png",
+      "size": [
+        120,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 602,
+        "medianLuma": 29.42,
+        "p05Luma": 5.98,
+        "p95Luma": 91.73,
+        "meanSaturation": 203.4,
+        "meanChromaSpread": 44.09,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.618
+    },
+    "03-material-unlit": {
+      "path": "dev/clay-captures/cl-r1-causality/03-material-unlit-sprite.png",
+      "size": [
+        122,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 817,
+        "medianLuma": 63.63,
+        "p05Luma": 8.68,
+        "p95Luma": 151.67,
+        "meanSaturation": 175.46,
+        "meanChromaSpread": 62.17,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 3.606
+    },
+    "04-material-lit": {
+      "path": "dev/clay-captures/cl-r1-causality/04-material-lit-sprite.png",
+      "size": [
+        122,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 625,
+        "medianLuma": 26.64,
+        "p05Luma": 6.19,
+        "p95Luma": 92.66,
+        "meanSaturation": 205.47,
+        "meanChromaSpread": 44.05,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.605
+    },
+    "05-sampling-wrong-linear": {
+      "path": "dev/clay-captures/cl-r1-causality/05-sampling-wrong-linear-sprite.png",
+      "size": [
+        122,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 623,
+        "medianLuma": 26.63,
+        "p05Luma": 6.19,
+        "p95Luma": 90.3,
+        "meanSaturation": 205.86,
+        "meanChromaSpread": 44.07,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.602
+    },
+    "06-sampling-production-nearest": {
+      "path": "dev/clay-captures/cl-r1-causality/06-sampling-production-nearest-sprite.png",
+      "size": [
+        122,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 572,
+        "medianLuma": 27.6,
+        "p05Luma": 5.76,
+        "p95Luma": 92.94,
+        "meanSaturation": 204.4,
+        "meanChromaSpread": 44.33,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.56
+    },
+    "07-tonemap-none": {
+      "path": "dev/clay-captures/cl-r1-causality/07-tonemap-none-sprite.png",
+      "size": [
+        120,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 702,
+        "medianLuma": 24.96,
+        "p05Luma": 5.19,
+        "p95Luma": 78.45,
+        "meanSaturation": 204.93,
+        "meanChromaSpread": 37.1,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.227
+    },
+    "08-tonemap-production-agx": {
+      "path": "dev/clay-captures/cl-r1-causality/08-tonemap-production-agx-sprite.png",
+      "size": [
+        120,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 561,
+        "medianLuma": 26.44,
+        "p05Luma": 5.76,
+        "p95Luma": 85.95,
+        "meanSaturation": 206.55,
+        "meanChromaSpread": 44.3,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.573
+    },
+    "09-compositing-post-off": {
+      "path": "dev/clay-captures/cl-r1-causality/09-compositing-post-off-sprite.png",
+      "size": [
+        120,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 710,
+        "medianLuma": 28.03,
+        "p05Luma": 8.7,
+        "p95Luma": 76.7,
+        "meanSaturation": 178.46,
+        "meanChromaSpread": 32.73,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.421
+    },
+    "10-compositing-production-post": {
+      "path": "dev/clay-captures/cl-r1-causality/10-compositing-production-post-sprite.png",
+      "size": [
+        120,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 571,
+        "medianLuma": 26.85,
+        "p05Luma": 5.76,
+        "p95Luma": 92.66,
+        "meanSaturation": 204.61,
+        "meanChromaSpread": 44.33,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 2.587
+    },
+    "11-energy-production-torch": {
+      "path": "dev/clay-captures/cl-r1-causality/11-energy-production-torch-sprite.png",
+      "size": [
+        120,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 2152,
+        "medianLuma": 27.99,
+        "p05Luma": 7.25,
+        "p95Luma": 37.85,
+        "meanSaturation": 109.69,
+        "meanChromaSpread": 16.51,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 1.337
+    },
+    "12-energy-overpowered": {
+      "path": "dev/clay-captures/cl-r1-causality/12-energy-overpowered-sprite.png",
+      "size": [
+        122,
+        124
+      ],
+      "metrics": {
+        "measuredPixels": 4103,
+        "medianLuma": 33.05,
+        "p05Luma": 13.19,
+        "p95Luma": 52.29,
+        "meanSaturation": 127.48,
+        "meanChromaSpread": 25.16,
+        "clippedHighlightPct": 0.0
+      },
+      "edgeStrength": 1.449
+    }
+  },
+  "pairDeltas": {
+    "colourSpace": {
+      "wrongToProductionSaturation": 60.68,
+      "wrongToProductionChromaSpread": 0.64
+    },
+    "sampling": {
+      "linearToNearestEdgeStrength": -0.042
+    },
+    "lightEnergy": {
+      "productionToOverpoweredMedianLuma": 5.06,
+      "productionToOverpoweredP95Luma": 14.44
+    }
+  }
+}

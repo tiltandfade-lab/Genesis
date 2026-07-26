@@ -530,3 +530,107 @@ palette-conformed. The 10 staged realms are **not** — their palette JSONs are 
 Cross-linked from `docs/README.md`'s index and `docs/HANDOFF.md`'s graphics-authority block
 (both edited in this same change, one line each) — per Adam's ruling, this file and its style
 authorities should never require archaeology to find again.
+
+---
+
+## 11. CL-R2 standee base and scale rulings (verbatim, Adam, 2026-07-24)
+
+> yes, agreed if you could make that pass that would be so much better. also, i am not certain we
+> need circular bases anymore. as long as the character calculates as that 5x5 base (or higher or
+> smaller depending on the creature) i would rather have a natural looking standee base like the
+> ones that you rendered in the latest mock ups for the dev tool interface. think about how the
+> standee is going to fit on a staircase right. like one stair is probably going to be 1/3 of a 5x5
+> stair case, so the standee depth should probably be a match for stair depth. i think if we can
+> reconcile that match then most of our standee problems should be solved
+
+> we do need to see the biggest creature alongside the average human size creatures and then some
+> small creatures and make some decisions about the scaling spectrum. we may have to cap big and
+> small creatures, and that's ok, also some of the big creatures might just be too wide, if so we
+> can flag those for re-genning as taller more upright sprites
+
+The CL-R2 candidate keeps the tactical footprint separate from the visible support, uses a shallow
+rounded strip whose Medium depth is exactly one third of a cell, and preserves canonical size data.
+The 1–30-foot presentation scale is now the working default; true scale remains one click away as an
+honest size-spectrum check, and a genuinely gigantic encounter still requires architecture scaled
+to contain it.
+
+---
+
+## 12. CL-R2 follow-up: physical separation, readable sprites, and selection (verbatim, Adam, 2026-07-24)
+
+> ok, first, i should be able to zoom in further. second the drop shadows do not seem to line up
+> with the bases, third collision between bases shouldn't be allowed, i think a forced slight
+> relocation should happen, just like pieces on a board that can't ever full occupy the same space.
+> i actually like the true scale, but i am willing to compromise a bit, it looks like you limited
+> the sprite to 20ft tall, but i think a kraken should actually be a gigantic creature and if you
+> ever encounter it you need to be in a situation where the environment is scaled to actually
+> encounter it. maybe 30 ft is better. also the drop shadows are essentially invisible on the
+> pieces that it is aligned with, which kind of defeats the purpose, i would also like to see the
+> rim or outer face of the piece light up and actually cast a little glow when that piece is
+> selected. also, im not sure how you got the mock up pieces to be lit so well, but maybe just
+> relying on ambient and room lighting alone isn't quite sufficient for the sprites, they might
+> need their own light cast from the camera itself that doesn't cast shadows, that has a falloff
+> that gently lights the sprite's face, because in dark environments everything looks rusty and
+> cruddy and not great
+
+Selection clarification:
+
+> oh, for the slection light i just meant the actual vertical face of the base of the piece to like
+> up, like a glow ring, does that make sense?
+
+Implemented reading: governed zoom now reaches roughly 8.3× closer; visible support rectangles use
+deterministic oriented-box separation without changing their tactical cells; each soft contact
+shadow is linked to its standee, follows relocation/yaw, and extends visibly past the support; the
+camera-side fill affects sprite faces only and casts no shadow; and selection lights only the
+base's shallow vertical sidewall, never the character card or the base top.
+
+Environment-shadow clarification:
+
+> ok, something we don't have is like an environment material, im not sure that we need it
+> necessarily, but we do need enough ambient light that i can make out the stairs in the shadow,
+> even if it's just slightly, right now all shadow is exactly the same value, which i appreciate as
+> a photographer, but i do need to be able to make out some level of forms in the dark
+
+Implemented reading: no new environment material yet. A very low, shadowless hemisphere floor
+supplies sky/ground bounce, so upward treads, vertical risers, and wall turns retain slightly
+different dark values. Direct-light shadows remain strong; the floor only prevents every un-keyed
+face from collapsing to the same black.
+
+---
+
+## 13. CL-R2 grounding and selected-base emission follow-up (verbatim, Adam, 2026-07-25)
+
+> that's great, is there any way we can get the contact shadows to actually be darker than the
+> shadow value in the shadows? with a multiply effect? is there any way i can get the selected base
+> piece to emit a tiny amount of light?
+
+Implemented candidate reading: the soft contact texture now uses an opaque-white identity rim and
+gray radial multiplier through true multiply blending. It darkens the floor after ambient,
+diegetic light, and cast-shadow value have resolved, so contact remains visibly below an
+already-shadowed surface rather than introducing one replacement black value.
+
+Presentation-scale and cast-shadow correction:
+
+> hmm, maybe the presentation scale is the way to go since that's as big as the bases ever really
+> get, also i just realized the cast shadows are just rectangles? wack, how much extra does it cost
+> to cast the silhouette of the actual sprite? the daylight and moon cast shadows just look wrong,
+> just some odd floating rectangle behind the sprite? what is that, not even close
+
+Implemented reading: 1–30 feet is the default presentation view; true scale remains the canonical
+size check. The rectangle came from the standee's full backing shell entering the shadow map. The
+shell remains visible edge-on but is now non-casting. The sprite plane is the sole caster, with the
+same alpha-tested texture used by both depth shadows (directional/spot) and distance shadows
+(point). This removes one redundant caster, so silhouette shadows cost the same or slightly less
+than the rejected rectangle.
+
+Selected-base emission clarification:
+
+> so with the base face halo light, the light is still coming from a light source at the center of
+> the base, but i want the light to be coming from the blue material itself, like a little neon glow
+> under the selected piece does that make sense?
+
+Implemented reading: there is no center PointLight. The vertical sidewall is the visible emissive
+source, paired with one shadowless additive spill shaped to the support's own rounded-strip
+footprint and seated immediately beneath it. The opaque base hides the spill's center, leaving only
+a soft cyan feather outside the blue material; selection handoff hides the previous spill before the
+new base emits.

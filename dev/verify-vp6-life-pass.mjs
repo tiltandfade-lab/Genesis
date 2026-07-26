@@ -174,7 +174,22 @@ console.log("\n=== ITEM 1 — idle-breathe (src/ui/standee-verbs.js, real import
 // ============================================================================
 console.log("\n=== ITEM 2 — torch flicker (theater-boot.js source extraction) ===");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md):
+  // INTERIOR_LIGHT_FLICKER_AMPLITUDE and startLightFlicker moved VERBATIM into
+  // src/ui/theater-lighting.js, interiorBuildLights (which collects the flickerTargets) into
+  // src/ui/theater-practicals.js, while setInteriorBoard's own startLightFlicker call site (check 2e)
+  // stayed in src/ui/theater-boot.js. Reading the COMPOSITE keeps every check anchored on the REAL
+  // source of its own symbol \u2014 same regexes, same jobs, none relaxed.
+  // THEATER SPLIT B9 (2026-07-25): check 2e pins setInteriorBoard's OWN startLightFlicker call, which
+  // moved with the function into src/ui/theater-interior-realize.js (VERBATIM, inside
+  // realizePhasePracticals). That file joins the SAME composite; the regex and the job are unchanged.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-lighting.js follows] */\n"
+    + read("src/ui/theater-lighting.js")
+    + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-practicals.js follows] */\n"
+    + read("src/ui/theater-practicals.js")
+    + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-interior-realize.js follows] */\n"
+    + read("src/ui/theater-interior-realize.js");
   const ampLine = extractConstLine(bootSrc, "INTERIOR_LIGHT_FLICKER_AMPLITUDE");
   check("2a-setup. INTERIOR_LIGHT_FLICKER_AMPLITUDE const is present", !!ampLine, ampLine);
   const ampVal = ampLine ? Number(ampLine.match(/=\s*([\d.]+)/)[1]) : null;
@@ -194,7 +209,13 @@ console.log("\n=== ITEM 2 — torch flicker (theater-boot.js source extraction) 
 // ============================================================================
 console.log("\n=== ITEM 3 — ambient motes (theater-boot.js source-extraction sandbox) ===");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B5 (2026-07-25): the whole mote family (moteHash32/moteRng/interiorMoteKindFor/
+  // moteSoftTexture/interiorBuildMotes + MOTE_* consts + the drift loop) moved VERBATIM into
+  // src/ui/theater-motes.js; setInteriorBoard's own call site stayed in theater-boot.js. Composite read
+  // keeps this extraction sandbox running the REAL functions \u2014 job unchanged.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-vp6 composite boundary \u2014 src/ui/theater-motes.js follows] */\n"
+    + read("src/ui/theater-motes.js");
   // moteSoftTexture + its MOTE_SOFT_TEX cache are the soft-dot-mote helper interiorBuildMotes now
   // calls (the "floating rhomboid" fix). Extract it too and seed the cache var — headless it hits
   // the `typeof document === "undefined"` guard and returns null, so the count/bounds asserts hold.
@@ -322,7 +343,13 @@ console.log("\n=== ITEM 4 — VISIBLE HISTORY / decal persistence (src/world/pre
 // ============================================================================
 console.log("\n=== ITEM 5 — hit-effects seam (theater-boot.js source-extraction sandbox) ===");
 {
-  const bootSrc = read("src/ui/theater-boot.js");
+  // THEATER SPLIT B7 (2026-07-25): the hit-effect seam (spawnEffectCard/effectCardFor/
+  // effectRingGeoFor/EFFECT_CARD_DUR/EFFECT_PROC_COLOR) moved VERBATIM to src/ui/theater-overlays.js;
+  // its production caller inside play() stayed in theater-boot.js. This sandbox reads the composite of
+  // both so every extraction below finds the same bodies it always did — job unchanged.
+  const bootSrc = read("src/ui/theater-boot.js")
+    + "\n/* [verify-vp6-life-pass composite boundary — src/ui/theater-overlays.js follows] */\n"
+    + read("src/ui/theater-overlays.js");
   const spawnFnSrc = extractFn(bootSrc, "spawnEffectCard");
   const effectCardFnSrc = extractFn(bootSrc, "effectCardFor");
   const ringGeoFnSrc = extractFn(bootSrc, "effectRingGeoFor");

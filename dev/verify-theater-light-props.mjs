@@ -38,7 +38,23 @@ const check = (name, cond, detail = "") =>
 
 const Figures = await import(FIGURES_URL);
 const { WHOLE_OBJECT_REGISTRY, loadWholeObjectBuilders } = Figures;
-const bootSrc = read("src/ui/theater-boot.js");
+// THEATER SPLIT B5 (2026-07-25; docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md): LIGHT_PROFILES and
+// applyLightProfile moved VERBATIM into src/ui/theater-lighting.js, while mountLightProp (the Unit B
+// anchor — it reads the whole-object registry and the WHOLE_OBJECT_ENABLED gate) and its setBoard call
+// site stayed in src/ui/theater-boot.js. Reading the COMPOSITE keeps every source-shape check below
+// anchored on the REAL source of its own symbol — same regexes, same jobs, none relaxed, none dropped.
+// THEATER SPLIT B9 (2026-07-25): setBoard — mountLightProp's own call site, and the ordering guard in
+// check 4 below — moved VERBATIM into src/ui/theater-tabletop.js; mountLightProp itself stayed in
+// theater-boot.js. The composite grows by that one file so the "mountLightProp is called from setBoard
+// BEFORE applyLightProfile" ordering check still reads BOTH the definition and the call site, in their
+// true homes and in the order they actually execute (theater-boot.js is concatenated first, so the
+// definition still precedes the call site in the composite exactly as it did in the monolith).
+const bootSrc = read("src/ui/theater-boot.js")
+  + "\n/* [verify-theater-light-props composite boundary — src/ui/theater-lighting.js follows] */\n"
+  + read("src/ui/theater-lighting.js")
+  + "\n/* [verify-theater-light-props composite boundary — src/ui/theater-tabletop.js follows] */\n"
+  + read("src/ui/theater-tabletop.js");
+const lightLock = JSON.parse(read("data/light-profile-locks.json"));
 
 // ============================================================================
 // 1. every "light:<key>" registry entry names a REAL LIGHT_PROFILES key
@@ -47,16 +63,14 @@ console.log("=== 1. light: registry keys match real LIGHT_PROFILES entries ===")
 {
   const lightKeys = Object.keys(WHOLE_OBJECT_REGISTRY).filter(k => k.startsWith("light:"));
   check("at least one light: registry entry exists", lightKeys.length > 0, lightKeys.length);
-  // scrape the real LIGHT_PROFILES key set out of theater-boot.js (a text-scan cross-reference —
-  // this module can't import that classic-script-adjacent ES-module const directly without pulling
-  // in the whole GL file, so a targeted regex over its own object-literal keys is the pure-layer way).
-  const profilesBlockMatch = bootSrc.match(/const LIGHT_PROFILES = \{([\s\S]*?)\n\};/);
-  check("theater-boot.js's LIGHT_PROFILES block is found (red if the table were ever renamed/removed)",
-    !!profilesBlockMatch, "");
-  const realProfileKeys = profilesBlockMatch
-    ? [...profilesBlockMatch[1].matchAll(/^\s*(?:"([\w-]+)"|([\w-]+)):\s*\{/gm)].map(m => m[1] || m[2])
-    : [];
-  check("scraped at least 9 real LIGHT_PROFILES keys", realProfileKeys.length >= 9, JSON.stringify(realProfileKeys));
+  // CL-R1 moved the authority from a private theater object literal to the validated authored lock.
+  // Read that source of truth directly; theater-boot's LIGHT_PROFILES is now a runtime compatibility
+  // projection and intentionally has no scrapeable literal block.
+  const profilesBlockMatch = /const LIGHT_PROFILES = Object\.freeze/.test(bootSrc);
+  check("theater-boot.js projects LIGHT_PROFILES from the shared compiled registry",
+    profilesBlockMatch && /LIGHT_RECIPE_REGISTRY/.test(bootSrc), "");
+  const realProfileKeys = Object.keys(lightLock.profiles || {});
+  check("shared lock carries at least 9 real LIGHT_PROFILES keys", realProfileKeys.length >= 9, JSON.stringify(realProfileKeys));
 
   const badKeys = lightKeys.filter(k => !realProfileKeys.includes(k.slice("light:".length)));
   check("every light: registry key names a REAL LIGHT_PROFILES entry", badKeys.length === 0, JSON.stringify(badKeys));

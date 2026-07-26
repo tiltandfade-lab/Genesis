@@ -1,6 +1,6 @@
 ---
 type: direction
-status: STANDING — the project director's trajectory doc (Adam granted Fable the seat 2026-07-03). Supersedes NEXT-STEPS ordering where they disagree; fix the drift in the same change. Adam holds every taste, content, and spend ruling. Amended 2026-07-03 late — reconciled with the concurrent session's close (CHANGELOG later 7: G5 rounds 1–2 done live with Adam; the 9 blessed realms merged; combat_start opened in real DM hands).
+status: STANDING — the project director's trajectory doc (Adam granted Fable the seat 2026-07-03). Supersedes NEXT-STEPS ordering where they disagree; fix the drift in the same change. Adam holds every taste, content, and spend ruling. Amended 2026-07-03 late — reconciled with the concurrent session's close (CHANGELOG later 7: G5 rounds 1–2 done live with Adam; the 9 blessed realms merged; combat_start opened in real DM hands). Amended 2026-07-26 — the revenue & studio trajectory addendum appended at the end (commercial horizon only; build sequencing untouched).
 created: 2026-07-03
 related:
   - "[[DESIGN-GUIDE]]"
@@ -162,3 +162,119 @@ Seat live at ≤15s routine, measured across a real hour · cost ≤$2/session m
 session passed · the Adam ledger empty (resolved or explicitly parked) · fired-tables
 craft round 1 done. **Then** launch talk. Until these six are green, "what should we
 build next?" has a standing answer: whichever of them is red.
+
+---
+
+# DIRECTION addendum — 2026-07-26: revenue & studio trajectory ("Living Miniatures")
+
+> **Scope:** the commercial/portfolio horizon only — how Genesis-the-studio gets funded
+> through the fall-2027 flagship launch. This section does NOT reorder build sequencing;
+> `docs/canon/README.md` keeps that authority. Talked through with Adam 2026-07-26;
+> Adam holds every spend/launch ruling as always.
+
+## §A The money read
+
+Game revenue is **2027 money**. Nothing between now and mid-2027 plans on it.
+2026 runway = murals (now upgradeable with Blender/Meshy 3D wall mockups — a sellable
+service improvement available immediately) + AI-engineering contract work (§F).
+December 2026 cash = murals. Standing rule: any pre-2027 game income is a bonus, never a plan.
+
+## §B The three-game universe (one brand: miniatures that come alive)
+
+All spin-offs share Genesis's fiction — living miniatures on a photographed tabletop —
+so each game advertises the next and assets flip between them.
+
+1. **Micro-autobattler** (single-player PvE roguelike form — Astronarch/Despot's shape;
+   explicitly NOT PvP autochess, which needs backend + live-ops). **The pipeline-learner,
+   not the money-maker:** cheap enough to flop while it teaches the full Steam ceremony
+   (store page, capsule, wishlists, Next Fest demo, launch discount, review/patch rhythm).
+   Skinned as figurines fighting on a diorama table. Uses existing monsters/stats/loot +
+   the combat engine (script already owns the numbers); no AI, no narration. ~$5–8.
+   Target: early 2027, through the ENTIRE ceremony including a Next Fest.
+   **Concept sketched:** `docs/AUTOBATTLER-CONCEPT.md` (2026-07-26, PARKED) — booster-
+   collection economy, the earned-randomness monetization law, trigger grammar, art/
+   animation laws, the UI-kit doctrine, v1 cut lines, open founder rulings.
+2. **Game-shop sim** — **the revenue shot.** Hook no competitor has: the shop sells
+   miniatures that come alive; customers buy figurines/terrain and build little game
+   worlds in-store. Sprite→3D stock upgrades as an in-game progression that mirrors the
+   real production pipeline. Genre is proven-hot (TCG Card Shop Simulator: solo dev, $13,
+   ~2.9M copies; Supermarket Simulator: 2–5M owners) and flooded with copycats — the
+   living-miniatures hook is the differentiation. The vertical slice doubles as a
+   publisher pitch (sim publishers scout Next Fest; the publisher route = marketing +
+   capital in one deal — cf. Despot's Game → tinyBuild). Target: Early Access mid-2027;
+   its revenue funds the fall flagship push.
+3. **Genesis flagship** — fall 2027, launching into an audience that has lived in the
+   universe for a year. Later flip: the autobattler appears INSIDE the shop game as the
+   game customers play.
+
+**Tactics game (XCOM-like on the FFT grammar): explicitly game #4.** It's the closest
+sibling to the flagship — which is exactly why it waits; it competes for the same systems
+while they're still moving.
+
+## §C The free text beta flywheel ("Genesis: Text Edition")
+
+The DM-only text version ships **FREE, never paid** — badged as the flagship's living
+beta (itch and/or a Steam Playtest attached to the flagship's store page), BYOK or
+capped hosted turns.
+
+- **Why not paid:** paid text AI-DM on Steam is a decayed shelf (AI Dungeon down to
+  double-digit concurrents); category growth lives on web subscriptions (Friends &
+  Fables 100k+ users, Old Greg's Tavern 225k+) — which validates DEMAND for the
+  category while damning the paid-text-on-Steam form. Steam is visual; the real
+  differentiator (mechanized dice, real tables, real persistence vs. prompt-wrappers)
+  is invisible in a text screenshot. And paid AI narration before the model economics
+  are solved = shipping a service with negative margins.
+- **What free buys (the triple flywheel):**
+  1. **Transcripts in the event-contract format = the training corpus** for the
+     bundled/fine-tuned small DM — the cheap exit from the latency law and the thing
+     that eventually makes every commercial version viable.
+  2. **Demand data = the procedural coverage spec.** What players ask worlds to do is
+     the edge-case list the procedural system must generate. Free scenario discovery,
+     free QA, at population scale.
+  3. **Community + wishlists** accruing on the flagship's page a year early.
+- **Anti-spoil:** worlds persist into the full release — beta players' text-born worlds
+  carry forward and get rendered in miniature. Early access deepens investment;
+  persistence is the anti-spoiler.
+- **Design note (when built):** a client-side text build leaks table data. Either roll
+  server-side or accept a limited, curated beta slice. Interacts with the going-private
+  plan — rule this before the beta ships.
+
+## §D Marketing doctrine
+
+The bottleneck is Adam's drive, not tooling — so the doctrine removes Adam from the loop
+except for taste. Indie marketing = **hook + demo + cadence** (Backpack Battles: the
+demo WAS the campaign — 9 months live, 38 patches, 19k CCU before launch → 640k copies
+in month one). The hook is a design decision (§B owns it). The demo is a build artifact.
+The cadence is factory work: Fable drafts devlogs/clip scripts/store copy, Codex cuts
+footage; Adam's irreplaceable share ≈ 1 hour/week of taste calls. **No marketing
+employee before revenue** — for game one the "marketing hire" is the factory, or a
+publisher.
+
+## §E The hire ladder (money-gated, contractors before employees)
+
+1. Per-launch contractors: trailer editor, capsule artist.
+2. **DM fine-tune specialist — a CONTRACT project, not an employee**, and only once the
+   §C transcript corpus is real (the corpus is the job spec).
+3. Leads for the shop/tactics games — only from shop-game revenue.
+Employees exist after recurring revenue exists. Until then the factory is the staff.
+
+## §F The Sept–Oct 2026 portfolio sprint (the runway lever)
+
+Goal: a visible AI-engineering portfolio that converts to contract work — proof =
+shipped artifacts + written process, not claims.
+
+- **Piece 1 — the tile tool** (Codex's sprite→cut→seamless-tile mechanism) packaged
+  public with a demo video. It's generic tooling, not moat. Free / suggested-donation:
+  the tool is an ADVERTISEMENT for contract work; tool revenue is incidental. Its story
+  is the sell: built independently from a real production need, in production use.
+- **Piece 2 — the factory case study**: orchestration lanes, gate discipline,
+  verification culture — extends `docs/POSITIONING.md` ("the factory is the career").
+- **Piece 3 — the free text beta itself** as a live AI-product demo, when it exists.
+- **The moat rule:** package generic tooling + process writeups. NEVER the tables, the
+  materials look, or the procedural system — those go private, not on Patreon.
+- **Channel truth:** a portfolio is necessary, not sufficient. Distribution = Show HN,
+  X/LinkedIn gamedev+AI circles, and the mural-client small-business network. The
+  mural-commission acquisition muscle transfers; "money comes easy after" is calibrated
+  to "conversations convert much better after."
+- Patreon/subscription: only once a content cadence + audience exist (earliest: after
+  the pipeline-learner launch). Suggested-donation on the tile tool is the near-term form.

@@ -86,3 +86,9 @@ dev/state-eval/out/
 # Cold shelf (2026-07-18): heavy archival files moved to Google Drive "Genesis Cold Shelf".
 # Restore via dev/cold-shelf/fetch-cold.mjs (reads dev/cold-shelf/manifest.json). *.pdf already ignored above.
 quarantine-pack/
+
+# FFT guard-post study raw acquisition (2026-07-25): 346 MB of cloned third-party tools
+# (heretic, GaneshaDx, libfft, material_maker) with embedded .git repos + extracted game
+# assets. Local research cache only — the distilled study lives in the committed
+# Reference/FFT-Guard-Post-Study/ docs; reacquisition steps in its ACQUISITION.md.
+Reference/FFT-Guard-Post-Study/study-archive/

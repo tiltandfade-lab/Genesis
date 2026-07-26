@@ -81,6 +81,16 @@ the critical self-review stood in for per-checkpoint verdicts per Adam's 2026-07
   sprite-registry 27/27 · floor-contact 51/51 · light-lab 42/42 (LIGHT_LAB_SHOTS_DIR redirect) ·
   manifest OK · `git diff --check` clean. Inherited reds unchanged: diegetic-light 7
   (LFS-pointer env), interior-camera-frustum 2, occlusion-fade 3.
+- **AO contact-registration fix (2026-07-25, post-close — Adam's live report):** "a gap of light
+  at every planar contact" — diagnosed as the Poisson denoise averaging away the 1-2-texel crease
+  line (lumaPhi 10 never gated a 0..1 AO term; depthPhi 8 is plane-distance wider than the room;
+  normalPhi can't help where half-res normals are averaged). ENV_AO_DENOISE re-weighted from a
+  9-candidate measured sweep (lumaPhi 0.25 / depthPhi 0.5 / normalPhi 16 / radius 2): creaseLift
+  vs the raw reference 5.38 -> 1.59 luma; flats keep smoothing below raw's noise; strictly fewer
+  filter taps. Evidence: `dev/clay-captures/ao-contact-diag/` (incl. the before/after/reference
+  triptych + sweep receipts); new `_aoContactDiagForTest` seam. Commit `203619d5`;
+  clay-room 247/247. Tradeoff (Adam's eye): slightly more visible dither on dark faces.
+  VISUAL VERDICT: PENDING ADAM.
 - **Packet complete** per the brief: `dev/clay-captures/clayroom-visual-correction/` holds
   00–09 numbered evidence + `10-final-correction-sheet.png` (16-panel before/after, all
   checkpoints) + machine-readable receipts (before/, after/, cp1-ao/).

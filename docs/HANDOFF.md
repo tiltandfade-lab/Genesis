@@ -6,6 +6,41 @@ updated: 2026-07-25
 
 # Genesis — Session Hand-off
 
+## ⭐ Latest (2026-07-25, THEATER-BOOT SPLIT COMPLETE B0–B10) [Fable + Opus executors]
+
+Worktree `Genesis-theater-split`, branch `refactor/theater-boot-split` (base: the clay tip +
+docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md). **Not merged or pushed. FULL CI PENDING — and per the
+B0 law, CI alone can never green this lane: the 19 puppeteer harnesses are by-hand gates.**
+
+- **theater-boot.js: 21,555 → 7,518 lines; 16 new ES modules** (map + decision record:
+  `docs/THEATER-MODULES.md`). Ten commits B0–B10, each gated by the 219-key facade contract
+  (dev/verify-theater-surface.mjs, real Chrome, both boot modes), the focused harness set, and
+  from B4 on a deterministic WebGL shader-source fingerprint — byte-identical across the whole
+  program. The one sanctioned restructuring: setInteriorBoard is a 17-phase orchestrator
+  (phase map in theater-interior-realize.js's header); everything else moved verbatim
+  (multiset-proven per step; 13 documented accessor swaps total).
+- **Visual equivalence proven** (`dev/clay-captures/split-equivalence/`): 4 before/after pairs
+  vs the pre-split tip — tabletop bit-identical; interior/clay/dark at or below the
+  instrument's same-code A/A noise. Lifecycle: 3 live retire→mount cycles clean. Performance:
+  distributions overlap; memory parity.
+- **Harnesses came out STRONGER**: 6 runners gained the light-recipe classic-global stubs that
+  had silently killed them since the CL-R1 registry merge (bw2-1b 0/1→24/0+49/0 render;
+  s5-flip 12/2→30/0; sprite-join 5/4→20/0; l2-census 23/6→33/0 incl. a resurrected compare);
+  env1*/l2 scratch builders pin base-commit genesis.html; ks3 +1 assertion; several checks
+  re-anchored on their true subjects. Zero checks weakened (every repoint documented in its
+  commit).
+- **Census-found defects fixed en route** (all pre-existing, proven): theater-preview.html
+  missing the registry scripts; two runner-parity gaps; a stale vp1c signature pin; the B9
+  decomposition's own audit caught+fixed its one latent cross-phase ReferenceError red/green.
+- **Follow-ups** recorded in THEATER-MODULES.md §Follow-ups (d4-doors option-b for a future
+  door extraction, the AO A/B rig's clip-box nondeterminism, material-contract re-baseline,
+  dead bindings, §18 negative clause, torchlit expectation pending Adam's verdict).
+- **Next: Phase C — the singular clean close**: survey all lanes (clay/cl-r1-r3 at 9b0fb090
+  incl. the AO contact fix PENDING ADAM; this branch; material/wave-2; docs/golden-site-thin-
+  briefs; docs/production-contracts), serialized merges to master via /genesis-clean-close,
+  regenerate generated artifacts, push, GitHub CI green. Conflicts surface to Adam, never
+  bulldozed.
+
 ## ⭐ Latest (2026-07-25, visual-correction COMPLETE C0–C4) — ALL FIVE CHECKPOINTS DONE [Fable]
 
 Worktree `worktrees/Genesis-clay-ladder`, branch `clay/cl-r1-r3`, head after the self-review

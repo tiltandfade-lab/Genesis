@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1320" width="900" height="1320" font-family="Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="1320" fill="#f6f3ec"/>
+
+  <text x="40" y="46" font-size="22" font-weight="bold" fill="#26211a">Monastery Study — the stepped-yard problem, and the three reconciliations</text>
+  <text x="40" y="70" font-size="13" fill="#5c5348">Sections through the site. Gate at left (low), sanctuary at right (high). Reference evidence only — nothing here is ruled.</text>
+
+  <!-- ==================== THE PROBLEM ==================== -->
+  <text x="40" y="118" font-size="16" font-weight="bold" fill="#8a3324">THE PROBLEM — the RULED seed as written</text>
+  <text x="40" y="138" font-size="12" fill="#5c5348">A continuous level walk cannot wrap a sloping yard: the walk, and the four doors that open off it, all need one datum.</text>
+
+  <g>
+    <path d="M60,290 L200,290 L200,268 L340,268 L340,246 L480,246 L480,224 L620,224 L620,300 L60,300 Z" fill="#ded3bd" stroke="#7a6a52" stroke-width="2"/>
+    <rect x="48" y="252" width="20" height="38" fill="#a8977a" stroke="#6d5f48" stroke-width="1.5"/>
+    <text x="30" y="246" font-size="11" fill="#5c5348">gate (low)</text>
+    <rect x="524" y="176" width="64" height="48" fill="#8f7f63" stroke="#4d4335" stroke-width="1.5"/>
+    <path d="M524,176 L556,150 L588,176 Z" fill="#6d5f48" stroke="#4d4335" stroke-width="1.5"/>
+    <text x="634" y="198" font-size="11" fill="#5c5348">chapel (high)</text>
+    <line x1="70" y1="202" x2="586" y2="202" stroke="#8a3324" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="196" y="195" font-size="11" fill="#8a3324">the arcade walk wants ONE level…</text>
+    <g stroke="#8a3324" stroke-width="1.4">
+      <line x1="120" y1="202" x2="120" y2="290"/><line x1="260" y1="202" x2="260" y2="268"/>
+      <line x1="400" y1="202" x2="400" y2="246"/><line x1="540" y1="202" x2="540" y2="224"/>
+    </g>
+    <text x="106" y="320" font-size="11" fill="#8a3324">…but its piers land at four different heights</text>
+  </g>
+
+  <!-- ==================== A ==================== -->
+  <line x1="40" y1="336" x2="860" y2="336" stroke="#cdc2ab" stroke-width="1"/>
+  <text x="40" y="366" font-size="16" font-weight="bold" fill="#26211a">A — arcade on the TERRACE FACE</text>
+  <text x="40" y="386" font-size="12" fill="#5c5348">Precedent: Palestrina (six terraces on arcaded retaining walls) · FFT Orbonne (arched openings in the causeway flank).</text>
+  <text x="40" y="404" font-size="12" fill="#5c5348">Cheapest. The arcade reads from below and retains the level above it. You lose the wrapped yard; you gain a monumental climb.</text>
+
+  <g>
+    <path d="M60,560 L230,560 L230,520 L400,520 L400,480 L570,480 L570,570 L60,570 Z" fill="#ded3bd" stroke="#7a6a52" stroke-width="2"/>
+    <g fill="#a8977a" stroke="#6d5f48" stroke-width="1.2">
+      <rect x="230" y="520" width="170" height="40"/>
+      <rect x="400" y="480" width="170" height="40"/>
+    </g>
+    <g fill="#3f382c">
+      <path d="M248,560 v-20 a10,10 0 0 1 20,0 v20 Z"/><path d="M288,560 v-20 a10,10 0 0 1 20,0 v20 Z"/>
+      <path d="M328,560 v-20 a10,10 0 0 1 20,0 v20 Z"/><path d="M368,560 v-20 a10,10 0 0 1 20,0 v20 Z"/>
+      <path d="M418,520 v-20 a10,10 0 0 1 20,0 v20 Z"/><path d="M458,520 v-20 a10,10 0 0 1 20,0 v20 Z"/>
+      <path d="M498,520 v-20 a10,10 0 0 1 20,0 v20 Z"/><path d="M538,520 v-20 a10,10 0 0 1 20,0 v20 Z"/>
+    </g>
+    <path d="M296,520 l0,-8 l14,0 l0,-8 l14,0 l0,-8 l14,0" fill="none" stroke="#8a3324" stroke-width="2.2"/>
+    <text x="286" y="466" font-size="11" fill="#8a3324">axial stair</text>
+    <rect x="48" y="524" width="20" height="36" fill="#a8977a" stroke="#6d5f48" stroke-width="1.5"/>
+    <text x="38" y="518" font-size="11" fill="#5c5348">gate</text>
+    <rect x="482" y="436" width="64" height="44" fill="#8f7f63" stroke="#4d4335" stroke-width="1.5"/>
+    <path d="M482,436 L514,412 L546,436 Z" fill="#6d5f48" stroke="#4d4335" stroke-width="1.5"/>
+    <text x="592" y="458" font-size="11" fill="#5c5348">sanctuary on the top bench</text>
+    <text x="228" y="592" font-size="11" fill="#8a3324">the arcade is the retaining front, seen from below — never wrapped around a slope</text>
+  </g>
+
+  <!-- ==================== B ==================== -->
+  <line x1="40" y1="608" x2="860" y2="608" stroke="#cdc2ab" stroke-width="1"/>
+  <text x="40" y="638" font-size="16" font-weight="bold" fill="#26211a">B — LEVEL yard, one big flight at its head</text>
+  <text x="40" y="658" font-size="12" fill="#5c5348">Precedent: Key Gompa (a flat plaza with a painted mandala, then a broad stair to the temple door) · Tashilhunpo · Rila.</text>
+  <text x="40" y="676" font-size="12" fill="#5c5348">Least new geometry. The wrapped arcade survives intact; the whole climb becomes one monumental stair into the sanctuary.</text>
+
+  <g>
+    <rect x="60" y="800" width="500" height="32" fill="#ded3bd" stroke="#7a6a52" stroke-width="2"/>
+    <line x1="60" y1="750" x2="560" y2="750" stroke="#6d5f48" stroke-width="3"/>
+    <g fill="#a8977a" stroke="#6d5f48" stroke-width="1.2"><rect x="60" y="750" width="14" height="50"/><rect x="546" y="750" width="14" height="50"/></g>
+    <g fill="none" stroke="#6d5f48" stroke-width="1.6">
+      <path d="M92,800 v-28 a13,13 0 0 1 26,0 v28"/><path d="M142,800 v-28 a13,13 0 0 1 26,0 v28"/>
+      <path d="M192,800 v-28 a13,13 0 0 1 26,0 v28"/><path d="M242,800 v-28 a13,13 0 0 1 26,0 v28"/>
+      <path d="M292,800 v-28 a13,13 0 0 1 26,0 v28"/><path d="M342,800 v-28 a13,13 0 0 1 26,0 v28"/>
+      <path d="M392,800 v-28 a13,13 0 0 1 26,0 v28"/><path d="M442,800 v-28 a13,13 0 0 1 26,0 v28"/>
+      <path d="M492,800 v-28 a13,13 0 0 1 26,0 v28"/>
+    </g>
+    <text x="146" y="822" font-size="11" fill="#4d4335">one level datum — the arcade runs all four sides honestly</text>
+    <rect x="44" y="756" width="18" height="44" fill="#a8977a" stroke="#6d5f48" stroke-width="1.5"/>
+    <text x="34" y="748" font-size="11" fill="#5c5348">gate</text>
+    <path d="M560,800 l16,0 l0,-11 l16,0 l0,-11 l16,0 l0,-11 l16,0 l0,-11 l16,0" fill="none" stroke="#8a3324" stroke-width="2.4"/>
+    <text x="552" y="854" font-size="11" fill="#8a3324">ONE broad flight</text>
+    <rect x="624" y="756" width="96" height="14" fill="#ded3bd" stroke="#7a6a52" stroke-width="1.5"/>
+    <rect x="632" y="712" width="72" height="44" fill="#8f7f63" stroke="#4d4335" stroke-width="1.5"/>
+    <path d="M632,712 L668,686 L704,712 Z" fill="#6d5f48" stroke="#4d4335" stroke-width="1.5"/>
+    <text x="730" y="738" font-size="11" fill="#5c5348">chapel</text>
+  </g>
+
+  <!-- ==================== C ==================== -->
+  <line x1="40" y1="876" x2="860" y2="876" stroke="#cdc2ab" stroke-width="1"/>
+  <text x="40" y="906" font-size="16" font-weight="bold" fill="#26211a">C — TWO level courts at different heights</text>
+  <text x="40" y="926" font-size="12" fill="#5c5348">Precedent: the Bhutanese dzong — Paro's administrative court sits about 6 m above the monastic one; the entry stairs are made to be pulled up.</text>
+  <text x="40" y="944" font-size="12" fill="#5c5348">Most geometry. Buys two distinct tactical rooms, a defensible internal stair, and a second, quieter threshold between them.</text>
+
+  <g>
+    <rect x="60" y="1074" width="290" height="32" fill="#ded3bd" stroke="#7a6a52" stroke-width="2"/>
+    <line x1="60" y1="1030" x2="350" y2="1030" stroke="#6d5f48" stroke-width="3"/>
+    <g fill="none" stroke="#6d5f48" stroke-width="1.6">
+      <path d="M84,1074 v-26 a12,12 0 0 1 24,0 v26"/><path d="M132,1074 v-26 a12,12 0 0 1 24,0 v26"/>
+      <path d="M180,1074 v-26 a12,12 0 0 1 24,0 v26"/><path d="M228,1074 v-26 a12,12 0 0 1 24,0 v26"/>
+      <path d="M276,1074 v-26 a12,12 0 0 1 24,0 v26"/>
+    </g>
+    <text x="82" y="1096" font-size="11" fill="#4d4335">OUTER court — guests, stores, stables</text>
+    <rect x="44" y="1032" width="18" height="42" fill="#a8977a" stroke="#6d5f48" stroke-width="1.5"/>
+    <text x="34" y="1024" font-size="11" fill="#5c5348">gate</text>
+
+    <path d="M350,1074 l12,0 l0,-10 l12,0 l0,-10 l12,0 l0,-10 l12,0 l0,-10 l12,0" fill="none" stroke="#8a3324" stroke-width="2.4"/>
+    <rect x="396" y="1000" width="16" height="24" fill="#a8977a" stroke="#6d5f48" stroke-width="1.5"/>
+    <text x="230" y="1014" font-size="11" fill="#8a3324">inner gate — the second, quieter filter</text>
+
+    <rect x="412" y="1024" width="268" height="82" fill="#ded3bd" stroke="#7a6a52" stroke-width="2"/>
+    <line x1="416" y1="978" x2="680" y2="978" stroke="#6d5f48" stroke-width="3"/>
+    <g fill="none" stroke="#6d5f48" stroke-width="1.6">
+      <path d="M436,1024 v-26 a12,12 0 0 1 24,0 v26"/><path d="M484,1024 v-26 a12,12 0 0 1 24,0 v26"/>
+      <path d="M532,1024 v-26 a12,12 0 0 1 24,0 v26"/><path d="M580,1024 v-26 a12,12 0 0 1 24,0 v26"/>
+      <path d="M628,1024 v-26 a12,12 0 0 1 24,0 v26"/>
+    </g>
+    <text x="430" y="1096" font-size="11" fill="#4d4335">INNER cloister — closed to outsiders</text>
+    <rect x="600" y="976" width="66" height="48" fill="#8f7f63" stroke="#4d4335" stroke-width="1.5"/>
+    <path d="M600,976 L633,950 L666,976 Z" fill="#6d5f48" stroke="#4d4335" stroke-width="1.5"/>
+    <text x="700" y="1002" font-size="11" fill="#5c5348">chapel</text>
+  </g>
+
+  <!-- ==================== FOOTER ==================== -->
+  <line x1="40" y1="1146" x2="860" y2="1146" stroke="#cdc2ab" stroke-width="1"/>
+  <text x="40" y="1176" font-size="13" font-weight="bold" fill="#26211a">What holds regardless of which is chosen</text>
+  <text x="40" y="1200" font-size="12" fill="#5c5348">· GATE LOW is the best-evidenced clause in the ruling — every terraced compound in the study arrives at the foot of the climb.</text>
+  <text x="40" y="1220" font-size="12" fill="#5c5348">· Real compounds concentrate the height change into ONE or TWO monumental moves, never an even gradient.</text>
+  <text x="40" y="1240" font-size="12" fill="#5c5348">· The evidenced gate position on the approach axis is the low CENTRE; a low corner gate is not contradicted, only unevidenced.</text>
+  <text x="40" y="1260" font-size="12" fill="#5c5348">· The sanctuary may instead stand FREE in the middle of the void (Rila) rather than commanding its head — a different fight entirely.</text>
+  <text x="40" y="1292" font-size="11" fill="#8a7d6b">Genesis Monastery Study, 2026-07-24 · lane-2-hillside-vs-flat.md §5 and synthesis.md §4 · reference evidence only, nothing ruled.</text>
+</svg>

@@ -63,6 +63,66 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
   rather than its retired circular-base geometry. The live map/material check now passes 79/79;
   Clayroom passes 208/208 and the manifest remains OK. **FULL CI PENDING.**
 
+## 2026-07-25 — GOLDEN SITE STUDY AUDIT + CONGRUENCE CORRECTION [Codex]
+
+### Added
+
+- Added `GOLDEN-SITE-CONCEPTING-GUIDELINES.md` as the default generator-first,
+  plain-English, visually demonstrated session method for every remaining Golden Site.
+- Added the binding strategic-gameplay law: every built level must create readable,
+  meaningfully different plans and site-specific consequences; beauty, realism, and
+  simulation cannot rescue a strategically flat scene.
+- Added the Site 5 Mine/Workshop research packet and working specification: six
+  operating circuits, broad/narrow/conditional route promises, deterministic
+  generation/rejection/fallback rules, culture/organization axes, provisional
+  clearances, asset ownership, proof receipt, and a top-down strategy diagram.
+- Added Mine-standard working specs for Guard Post, Camp, Lair, Monastery, and Urban:
+  each now defines its family boundary, identity/culture/circumstance split, five
+  expressions, learning-first build, required zones, route promises, site-specific
+  operating circuits, strategic plans/levers, generator inputs and semantic blueprint,
+  ordered generation, typed rejection, deterministic fallback, culture/occupant logic,
+  runtime facts, retained proof receipt, and exact first visual demonstration.
+- Added a cross-site five-expression board so the retrofit can be judged as a family
+  system rather than as five isolated hero scenes.
+
+### Changed
+
+- Separated Golden Site completion into four honest gates: researched,
+  founder-ruled, brief-congruent, and clay-proved. Retired “served” as a status word;
+  none of the six working-spec sites currently claims a rendered clay proof.
+- Corrected the founder queue: six nonblocking proposals remain. Added
+  `GOLDEN-SITES-PROOF-QUEUE.md` for evidence and rendered-proof obligations so
+  research debt cannot masquerade as a taste decision.
+- Normalized overbroad recommendations: tent form is selected from concrete
+  climate/material/mobility/status facts rather than culture labels; one dominant
+  center claimant may contain coherent subordinate pieces; descending lair chains and
+  broken ledges are defaults; bolt-holes are licensed; cave ceilings remain world facts
+  under cutaway; palette is supporting culture evidence, never the whole identity.
+- Narrowed the institutional-chassis claim to reusable massing/parts with real
+  circulation, outward-face, access, and court mutations per institution. Added explicit
+  Proof/MVP/Ideal sections and acceptance requirements for Camp, Lair, Monastery, and
+  Urban.
+- Renamed the cross-cutting `makeshift/tribal` vernacular to
+  `makeshift/scavenged`; construction condition is no longer equated with culture,
+  poverty, species, or monstrosity.
+- Advanced Site 5 to honest `PARTIAL / PARTIAL / PARTIAL / OPEN` gates: the accepted
+  active-upper/flooding-lower foundation is now spec-grade, while the missing direct
+  tactical-map cohort, thin measured cultural breadth, unselected mechanism cards, and
+  absent clay fixture remain explicit.
+- Adopted the Mine working spec as the generator-grade standard for every Golden Site.
+  The ten-section catalog brief remains the portfolio summary; the dedicated spec is
+  now required before implementation. Existing founder, research, and clay gate values
+  were preserved during the retrofit.
+
+### Fixed
+
+- Reconciled the Guard Post import audit with the actual lean in-repo packet; the
+  local 346 MB `study-archive/` remains evidence-only and untracked rather than part of
+  the source-controlled reference packet.
+- Updated the Lair section drawing to the hard mouth-light boundary, broken shelf, and
+  cutaway-ceiling rule; repaired clipped Guard Post roof labels; updated the Monastery
+  seed to the level-court first build and its roof sheet to gable + spire.
+
 ## 2026-07-24 (latest) — CL-R2 COMPLETE SPRITE CITIZENSHIP CANDIDATE [Codex]
 
 ### Added
@@ -829,83 +889,4 @@ verify-stage-c-shapes 88/0, verify-stage-c3b-circle-smooth 43/0, verify-room-she
 verify-dungeon-interior 287/0, verify-combat-cells 13/0, verify-dungeon-walkbind 20/0,
 verify-dungeon-spatialize 9/0, check-manifest OK; loop gate 5/5 on real dungeons at each unit; captures
 READ (octagon diagonals, round rotunda, L notch).
-
-## 2026-07-12 — WALK-NATIVE BOUNDARY + STAGE A CLOSED: the composed camera goes live (4 units, orchestrated)
-
-**The wave.** `docs/WALK-NATIVE-A.md` — Adam ruled "build Codex's walk-native boundary first, then
-A3." Executes Codex's walk-native amendment (`WALK-NATIVE-DIORAMA-CONTRACT.md`) as the prerequisite
-to wiring the dormant A2 ShotPlan, then closes GRAPHICS-NORTH-STAR Stage A. Four background Sonnet
-executors in isolated worktrees, each personally re-gated on its branch tip (captures READ by the
-orchestrator, never self-report) and landed `--no-ff`; WDV-1 ∥ WDV-2 first, then A3 off WDV-1, A4
-off A3. Master tip after the wave: `00b775f8`.
-
-**Added.**
-- **WDV-1 `walkSceneFrom`** (new pure module `src/engine/walk-scene.js`, owns `walkSceneFrom`) —
-  Codex's anti-drift boundary: consumes the stored walk + active segment + overlay + spatial + live
-  state and classifies every walk fact into visual roles (structure/connection/surface/practical/
-  citizen/interactable/dressing/condition/atmosphere/hidden/trace) each with field provenance
-  (`sourceRef {walkId,segmentNum,fieldPath,tableId,roll}`). **Wraps** the existing card-dealer
-  (`walkSceneProjectionFrom`) — never re-deals or re-rolls. `trayFrom` stamps `board.walkScene`
-  (additive; `board.projection` kept). Pure — no THREE/DOM/RNG/world-writes. 32/0, three checks
-  (provenance completeness / atmo isolation / hidden gating) red-first proven; raw-immutability +
-  determinism + graph-fidelity green.
-- **WDV-2 stamped provenance** — `walkPickStamped(tableId,...cols)` + a `segment.rollRefs` sibling
-  map on the graphics-critical tables (area/feature/dressing/door/light/object/scene/sceneFrame/
-  signOfPassage). Byte-additive: every existing field shape identical (the same single roll is
-  reused, no second roll). Optional `provOut` params on `dwalkDoorRoll`/`walkPickInteractable` for
-  door/interactable provenance. 34/0, byte-compat red-first proven.
-- **A3 shot-compose** — **the composed camera is now live in production.** `setInteriorBoard` builds
-  `shotPlanFrom` + `composeShot` and drives the composed camera behind `ITR_SHOT_COMPOSE` (default
-  ON, focusRect fallback). New scratch-`THREE.Camera` 2-arg projector (`shotProjectFor`) for
-  composeShot's multi-pose scoring. `shotPlanFrom` consumes `tray.walkScene` for anchors/provenance
-  (+ `walkRef/segmentRef/fieldRefs/register` on the ShotPlan). Framing crops to the action cluster
-  via the `interiorCameraFitFor` beat branch — medium standee **0.208** frame height (Stage-A gate
-  0.18–0.25), tighter than the focusRect fit's 0.134. 29/0 incl. a red-first figure-height check.
-- **A4 dynamic occlusion v2** — blockers from the live `ShotPlan.occlusionTargets` (walls/pillars/
-  furniture); per-instance ghost + own material (never a shared batch); named consts (upper opacity
-  **0.08** [0.05–0.10], stem **0.18u** [0.12–0.25], fades 150/220ms, hysteresis 3°) replacing the
-  flat 0.2; tween on the MF-1 channel; interruption-safe retargeting + reclassify hold.
-
-**Changed.**
-- Stage A is CLOSED: the interior no longer fits the raw room rect — it composes on the action
-  cluster and occludes dynamically. Frames `04`/`11` approximated, read as staged encounters.
-
-**Fixed.**
-- **A3 round-1 framing regression, caught at the capture gate** — the first A3 build re-centered the
-  cluster but zoomed *wider* (medium standee ~0.13, void-heavy). The orchestrator read the PNG,
-  flagged it, and a bounded corrective (`fitFromComposedShot` crops the action-cluster extent via the
-  proven beat branch instead of the composed camera's full frustum half-height) landed it at 0.208.
-- **A4 tapered-column occlusion aliasing** — a column's shaft + cap share one `(x,z)` cell; the
-  occlusion id aliased them onto one fade-state so the wrong instance faded. Fixed by folding `yBase`
-  into `itrOcclusionIdFor`.
-
-**Fixed (occlusion-fade hotfix, same day — merge `07d2f733`).** The two pre-existing render-only
-reds A4 surfaced (both verified pre-existing on master 46289a45, auto-skip in CI) — fixed at the
-root, not masked:
-- Ghost bloom halo: the occlusion ankle-**stub** (no shadow/AO) tripped UnrealBloom in dark rooms →
-  darken JUST the stub's own per-instance color (`itrScaleHexValue`, the `ITR_ROOM_SHELL_RISER_DARKEN`
-  convention), scoped to occluding instances. `verify-occlusion-fade` 39/1 → **40/0**; harness
-  assertion untouched (code-only fix).
-- Doorframe classify gap: doorframes (+ BW2-5 arch-header prisms) were never wired into the occlusion
-  classify pass → wired into the SAME per-instance `itrOcclusionClassify`+ghost pattern. Also found +
-  fixed a real harness bug (checks read raycasts against the stale pre-MF-1-tween camera →
-  `settleCameraTween`) and, after instrumenting 100 seeds (0 over-fires), replaced check 32's unsound
-  seed-lottery `anyFullHeight` with a **constructed control (32b)** — an ON-sightline pillar stubs
-  while a self-checked OFF-sightline control stays full. `verify-bw2-1b --with-render` 39/4 → **49/0**.
-- **Stage-A production diff reviewed clean** (low-effort Opus pass over WDV-1/2 + A3 + A4 + hotfix):
-  no correctness bugs; walk-native project-only law, A3 fallback safety, scratch-camera non-leak, A4
-  determinism all confirmed. Two non-blocking awareness notes on record: `feature` cards fold into the
-  citizens lane as `living:true` (framing-only, never rendered); `walkSceneFrom` re-runs the projector
-  with a single-room plan.
-
-**Deferred.**
-- Codex's WDV-3 (table visual metadata), WDV-4 (overlay/state key unification), WDV-5 (cross-env
-  diorama gate) remain as the later walk-native recommendations (`WALK-NATIVE-DIORAMA-CONTRACT.md`).
-
-**Gates (all personally re-run by the orchestrator).** check-manifest OK; verify-walk-scene 32/0,
-verify-walk-stamped-provenance 34/0, verify-shot-compose 29/0, verify-occlusion-fade (render;
-1 pre-existing pixel red), verify-theater-shot **107/0** (94 + 13 new WalkScene checks),
-verify-dungeon-interior 287/0, verify-mf1-camera-tweens 24/0, verify-interior-camera-frustum 14/0,
-verify-walk-card-projection 29/0, verify-bw2-1b (jsdom) 24/0. Capture PNGs READ: A3 after-composed
-reads as a staged diorama (void gone); A4 on/off shows the pillar fade to reveal the standee behind.
 

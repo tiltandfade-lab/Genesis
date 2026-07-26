@@ -1,6 +1,6 @@
 ---
 type: design-spec
-status: DRAFT — Adam redline pending (open redlines in §12)
+status: RULED — redline rounds 1–2 closed (§13–§14), founder queue empty; occupancy-license addendum 2026-07-24 (§15)
 created: 2026-07-24
 owner: Fable (named writing task, NEXT-STEPS 2026-07-23 block, C1H opener)
 related:
@@ -9,9 +9,11 @@ related:
   - "[[BATTLEMAP-TOWNTRAY-COMPOSITION]]"
   - "[[C1A-CLAY-ROOM]]"
   - "[[CODEX-MATERIAL-BRIEF]]"
+  - "[[STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC]]"
 diagrams:
   - diagrams/structure-kit-roof-parapet-vocabulary.svg
   - diagrams/guard-post-anchor-layout.svg
+  - diagrams/structure-kit-junction-and-roof-spine-grammar.svg
 ---
 
 # STRUCTURE-KIT CATALOG — the set-piece module contract for the twelve golden sites
@@ -52,6 +54,15 @@ states the demand).
 - Free step-up: **≤1h** costs nothing (stairs/terrace steps). 2h in one move = climb (§6).
 - Walkable slope: **≤30°** (matches the uneven-ground proof's audited limit); steeper
   ground is "guarded slope" — visible, not standable.
+- **Extended to roofs (Adam 2026-07-24, monastery session): creatures and PCs can walk
+  on a pitched roof when the pitch is ≤ the walkable-slope limit** — the same one law
+  covering ground, terraces, wall walks, and now roof planes (the exact degree number
+  stays clay-calibrated; ground's audited 30° is the starting default). Steeper pitches
+  are the roof's guarded slope: visible, never standable. Every roof piece carries its
+  pitch as a tactical fact and derives its access class from it; declaring a roof
+  walkable brings the standard reachability obligation with it — a non-flying route must
+  exist. The visual proof rides the standee-base rework (bases are being reworked to sit
+  on sloped surfaces without looking broken); that lane owns the look and Adam gates it.
 - Terraces are ground at n×h with retaining faces; the wall walk is the same contract
   on top of a built piece. One law, two expressions
   (see `diagrams/structure-kit-roof-parapet-vocabulary.svg`, panel 3).
@@ -87,6 +98,21 @@ reachable by a non-flying route** (§6 — the tone law made countable); slope l
 approach + gate present where the assembly demands them. A ruling is not recorded until
 its enforcing check exists (teeth law): the reachability and socket checks land with the
 first C1H validator; until then they are OWED, not claimed.
+
+### Junction and termination resolver — founder ruling 2026-07-25
+
+The ideal-level-art pass exposed that legal butt sockets are necessary but insufficient:
+wall runs, roof planes, stairs, and terrain transitions also need typed endpoints and
+intersection assemblies. Every structural run now terminates into a declared junction.
+The construction profile decides whether the joint is visibly expressed as a post,
+quoin, pier, buttress, frame, or rock transition, or resolved as a hidden seam/shared
+surface for boxes, tents, folded sheets, and monolithic shells.
+
+The full wall graph, roof-edge graph, foundation/stair rules, rejection checks, and
+`SK-J01 Junction House` proof live in
+[`STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC.md`](STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC.md).
+Until that clay proof and validator exist, the direction is ruled and implementation is
+owed.
 
 ## 5. Geometry/paint split (Adam ruling 2026-07-24)
 
@@ -170,10 +196,22 @@ Both families are in the kit; all forms arrive eventually. Build order:
 2. **Shed / lean-to** — the minimal pitched form: one plane. Teaches paint-on-slope, eave
    overhang, and the roof-meets-wall junction. The guard post's supporting rooms are sheds.
 3. **Gable** — adds the ridge joint + gable-end wall variant. Unlocks domestic sites.
-4. **Hip** — deferred past site 1; only new problem is corner joints; arrives with the
-   institutional site that wants it (monastery/prison).
+4. **Hip** — deferred past site 1; its new problem is corner joints. It remains a
+   family variant but has no locked debut site; the monastery seed uses gable + spire.
+
+Roof planes do not directly touch other roof planes. Shared and exposed edges resolve
+through typed eave, verge, ridge, ridge-end, hip, valley, flashing, or cutaway-cap roles.
+A ridge is an assembly member joining planes, not trim pasted over an unresolved seam.
+See the shared junction specification above.
 
 Vocabulary reference: `diagrams/structure-kit-roof-parapet-vocabulary.svg`.
+
+All pitched families inherit the walkable-pitch law (§2): low-pitch shed/gable/hip
+planes are standable surfaces, and rooftop fighting is intended — the rooftop/frontage
+§10.3 dimension banks properly at site 10. Hip's debut DEFERRED by the M11 resolution
+(Adam 2026-07-24): it stays in the family, but the monastery seed roofs its hall
+gable + spire (FFT's institutional cohort carries zero hips); hip promotes in when a
+culture or estate expression wants the manor read.
 
 ## 8. Realm-skin axis + the material kit catalogue (bill of materials)
 
@@ -200,13 +238,36 @@ Skin binding: realm/culture selects the material picks and trim variants
 (CultureVisualConstitution → SiteCultureImprint per Wave 3); the rolled condition vector
 selects override buckets (MATERIAL-LANE §5). Same fact drives texture, decals, and prose.
 
+### Site 5 mine/workshop demand addendum
+
+The mine's possibility roster extends §8; it does not mint a second material authority:
+
+| demand slot | possibilities | first horizon |
+|---|---|---|
+| worked host | hard rock · soft rock · stratified rock · compacted earth · cut salt/crystal where licensed | Proof needs at least two visibly distinct ground cards |
+| support timber | fresh structural timber · aged maintained timber · wet/darkened timber · repaired/scabbed member | Proof; support state must read without a tooltip |
+| hardware and carrier | iron/bronze straps and pins · rope/leather · wood wheel/runner · rail where technology licenses it | Proof uses one cart or sledge family |
+| water | seep · standing sump · moving drain/discharge · mineral-stained waterline | Proof; water has source and destination |
+| useful material | ore/mineral/stone/salt/resource family with face, loose, sorted, and stored expressions | Proof needs one coherent resource family |
+| waste | spoil · tailings · slag · offcut · sludge | Proof needs a destination distinct from useful product |
+| work surfaces | packed earth · timber platform · rough stone bench · workshop plank/stone | Proof |
+| process condition | wheel wear · tool cuts · wetness · seep/mineral stain · soot/heat · maintenance/repair | Proof uses only the facts its live process owns |
+
+Mine marks—claim/survey, grade, shift/tally, last-safe-support, waterline, repair,
+ownership, memorial, and ritual—remain decal/paint demand. Pumps, carts, sorting
+surfaces, air devices, hoists, and processors remain mechanism/prop demand. Any item
+that changes collision, cover, route capacity, support, light position, or interaction
+reach requires governed geometry.
+
 ## 9. Guard-post shopping list (bill of pieces — PROPOSED, redline R4)
 
 **Fine tier:** terrain slab (uneven-ground output) · terrace retaining face (1h/2h) ·
 terrain stair cut · rock access cluster · floor plate · wall panel (solid) · wall panel
 (arrow slit) · wall panel (window) · doorframe (C1B socket) · gate arch · parapet run
 (merlons + coping) · wall-walk plate · built stair run · shed roof plane · eave trim ·
-pillar/post · crate stack (access prop, shared with prop lane).
+pillar/post · wall end/cap · inner/outer corner · T-junction · foundation/plinth
+transition · wall top/cutaway cap · gable ridge segment/end · stair landing transition ·
+crate stack (access prop, shared with prop lane).
 
 **Assembly tier:** watchtower storey · tower parapet cap · post-house bay · lean-to bay ·
 yard wall run · yard gate · wall-walk stair · terraced yard.
@@ -279,10 +340,10 @@ procedural shape language to construct anything the game needs.
 | # | golden site | vernacular | inherits | invents (signature) |
 |---:|---|---|---|---|
 | 1 | guard post | military-masonry | — (founding buy) | the entire core (§9) |
-| 2 | camp / service | timber | shed, posts, terrain | palisade run, fire ring, tent props |
+| 2 | camp / service | timber | shed, posts, terrain | palisade run, fire ring, tent props, wagon deck, watch platform (occ-licensed), rung-2 service set — RULED thin brief in GOLDEN-SITES-CATALOG |
 | 3 | dormant / abandoned | any + condition | full host kit | collapse/rubble pieces, breach |
-| 4 | monastery / commune | dressed-institutional | walls, terraces | cloister arcade, hip roof, courtyard |
-| 5 | mine / workshop | excavated | stairs, terraces, timber | tunnel portal, shoring frames, ramps |
+| 4 | monastery / commune | dressed-institutional | walls, terraces, gable/shed/flat roofs | cloister arcade, court range, processional head platform |
+| 5 | mine / workshop | excavated | terrain, rock, stairs/terraces, wall/shell, timber, water, workshop threshold | worked portal, support/lagging family, haul ramps/landings, manway, drain/sump/waterline, spoil terrain, processing threshold, shaft collar/landing (Ideal) |
 | 6 | prison / institution | military + dressed | walls, parapet, gates | cell partitions, bar grating (cutout) |
 | 7 | natural lair | natural | rock clusters, terraces | cave shell set (modular-cave donor) |
 | 8 | infiltrated / layered | host site's | full host kit | concealed pieces (false wall, trapdoor — W4 secrets) |
@@ -291,14 +352,45 @@ procedural shape language to construct anything the game needs.
 | 11 | mixed-scale / dragon | any | full kits | titan-scale (2×) piece variants, hoard terrain |
 | 12 | anomalous / living / mobile | exotic | smallest structural buy | organic/impossible connectors; biggest skin buy |
 
-**Vernacular 6 — makeshift/tribal (Adam addition 2026-07-24):** monster-built
-construction — lashed poles, scavenged plank patchwork, hide/canvas canopies, mud daub,
-wattle, bone/tusk stakes, crooked-geometry piece variants. Not a thirteenth site: a
-cross-cutting vernacular any site family can roll when its builders are tribal
-("imagine some bullywugs throwing one together in a swamp" — Adam). The bullywug
-checkpoint is the proof case: the SAME guard-post assembly grammar (watch position,
-barrier, gate, shelter) skinned makeshift. Site 1's grammar generalizing across builder
-cultures is exactly the cultural-mutation direction Codex is drafting
+Generator-grade family expressions, site ownership, assembly order, interaction
+boundaries, material/paint/prop demand, and proof receipts now live in the Mine-standard
+working specs linked by `GOLDEN-SITES-CATALOG.md`. This matrix remains the cross-site
+vernacular authority; a site spec may refine its own buy but may not silently change
+another site's owner or the shared socket/access rules.
+
+### Site 5 structure ownership
+
+Site 5's authored structural atoms are: worked portal/lintel · support set
+(post/cap/sill) · lagging panel · mine pillar · work-face end · broad haul
+ramp/landing · narrow manway segment · drain/channel · sump edge · waterline socket ·
+spoil/tailings terrain · last-safe-support marker socket · processing threshold · shaft
+collar/landing later.
+
+Its first reviewed assemblies are:
+
+1. **supported drift bay** — worked void + support set + lagging options + practical-
+   light/mark sockets;
+2. **haul transition** — broad route + cart parking/clearance + drain edge;
+3. **manway/air segment** — one-cell starting clearance + people route + air relation;
+4. **pump ledge** — sump + maintainable pump footprint + visible discharge connector;
+5. **face threshold** — last-safe support + active work envelope + useful/waste split;
+6. **surface sort/repair threshold** — sorting surface + two destinations + stock/export
+   connector.
+
+Pumps, carts/sledges, bins, sorting tables, ventilation devices, hoists, crushers,
+stamps, wash assemblies, and forges are interaction/mechanism citizens owned by their
+eventual furnishing/system lane. The structure kit reserves their footprint, access,
+support, sockets, and route capacity; it does not duplicate their state machines.
+
+**Vernacular 6 — makeshift/scavenged (renamed by the 2026-07-25 audit):**
+lashed poles, scavenged plank patchwork, hide/canvas canopies, mud daub, wattle,
+bone/tusk stakes, and repair-constrained geometry. This is a construction condition
+available to any culture or species when materials, time, tools, history, and occupancy
+support it—not a synonym for “tribal,” poor, or monstrous. Not a thirteenth site: a
+cross-cutting vernacular any site family can roll. The bullywug checkpoint is one proof
+case: the SAME guard-post assembly grammar (watch position, barrier, gate, shelter)
+expressed through local swamp materials and available craft. Site 1's grammar
+generalizing across builder cultures is exactly the cultural-mutation direction Codex is drafting
 ("Guard Post Cultural Mutation — MVP and Ideal," §10).
 
 ## 12. Kenney donor law + provenance
@@ -316,7 +408,9 @@ ALL-ART-IS-PLACEHOLDER seam when beauty passes earn it. Every catalog entry carr
 - **R3** climb DCs — ✅ BANDED (12/15/17) + condition modifier + per-storey checks;
   script-tagged, never DM-invented; threat handled as NPC response (§6).
 - **R4** guard-post piece list — ✅ stands as proposed ("can't identify anything missing yet").
-- **R5** vernaculars — ✅ grouping confirmed + vernacular 6 makeshift/tribal ADDED (§11);
+- **R5** vernaculars — ✅ grouping confirmed + vernacular 6 added, then renamed
+  makeshift/scavenged by the 2026-07-25 audit to keep construction condition separate
+  from culture/species (§11);
   hip-roof-first site still open (monastery proposed).
 - **R6** anchor layout — ✅ CLOSED by import: LOCKED golden form = roadside post built
   into a hill shoulder; primary spatial sentence locked (§10); sketch redrawn.
@@ -398,6 +492,13 @@ material expression, and the makeshift vernacular (§11) is its construction exp
 Coverage dividend: bandit/trader/haunted occupancies of site 1 bank early evidence
 toward site families 2 (service), 3 (dormant), and 8 (infiltrated) without new
 structure.
+
+**Occupancy may license pieces (Adam 2026-07-24, site-2 camp thin brief).** The axis
+extends beyond roster/dressing/hook selection: an occupancy may LICENSE a signature piece.
+First case: the camp's lashed timber watch platform, licensed to militaristic occupancies
+(military, bandit) only. A licensed piece is validated like any other (sockets, access
+classes, reachability); the license gates its PRESENCE, not its rules. Detail in the site-2
+thin brief (GOLDEN-SITES-CATALOG.md).
 
 **The ARRIVAL HOOK LAW (site-scoped).** "I don't think ANY node should roll without
 some kind of active hook." Every rolled site arrival presents an active hook,

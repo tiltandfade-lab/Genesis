@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-labelledby="title desc">
+  <title id="title">Site 3 dormant and abandoned place family</title>
+  <desc id="desc">Five related expressions: suspended shelter, neglected waystation, dead institutional wing, breached and reclaimed host, and deliberately closed cultural variant.</desc>
+  <defs>
+    <style>
+      .bg { fill:#f5f1e7; }
+      .ink { fill:#282a28; }
+      .muted { fill:#6e6a60; }
+      .card { fill:#fffdf7; stroke:#b9ae98; stroke-width:3; }
+      .first { fill:#fff8e8; stroke:#b85a32; stroke-width:5; }
+      .structure { fill:#d7cab0; stroke:#655d4f; stroke-width:5; }
+      .void { fill:#f5f1e7; stroke:#655d4f; stroke-width:4; }
+      .route { fill:none; stroke:#8b867b; stroke-width:9; stroke-linecap:round; }
+      .fail { fill:none; stroke:#b85a32; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; }
+      .green { fill:none; stroke:#5c7d3c; stroke-width:6; stroke-linecap:round; }
+      .mark { fill:none; stroke:#5f5c91; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; }
+      .dash { stroke-dasharray:12 10; }
+      .label { font-family:Inter,Arial,sans-serif; font-size:28px; font-weight:700; fill:#282a28; }
+      .body { font-family:Inter,Arial,sans-serif; font-size:20px; fill:#504d46; }
+      .small { font-family:Inter,Arial,sans-serif; font-size:17px; fill:#6e6a60; }
+      .kicker { font-family:Inter,Arial,sans-serif; font-size:17px; font-weight:700; letter-spacing:1.5px; fill:#b85a32; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="980"/>
+  <text x="62" y="72" class="label" style="font-size:42px">SITE 3 — WHEN A PLACE STOPS WORKING</text>
+  <text x="62" y="112" class="body">The old purpose remains readable. The reason it stopped changes how the player uses it now.</text>
+
+  <rect x="55" y="165" width="286" height="520" rx="18" class="card"/>
+  <text x="80" y="210" class="kicker">SMALL</text>
+  <text x="80" y="250" class="label">Suspended</text>
+  <path d="M94 440 L94 326 L295 326 L295 440" class="structure"/>
+  <path d="M78 326 L194 268 L311 326" class="structure"/>
+  <rect x="166" y="368" width="55" height="72" class="void"/>
+  <path d="M118 480 L273 480" class="route dash"/>
+  <path d="M134 381 L151 398 M151 381 L134 398" class="fail"/>
+  <text x="80" y="535" class="body">Intact and deliberately</text>
+  <text x="80" y="566" class="body">emptied. Damage is</text>
+  <text x="80" y="597" class="body">not required.</text>
+  <text x="80" y="648" class="small">A sealed shed or shelter.</text>
+
+  <rect x="361" y="150" width="286" height="550" rx="18" class="first"/>
+  <text x="386" y="197" class="kicker">ORDINARY · FIRST PROOF</text>
+  <text x="386" y="237" class="label">Neglected</text>
+  <path d="M391 462 L391 327 L608 327 L608 462" class="structure"/>
+  <path d="M375 327 L499 265 L624 327" class="structure"/>
+  <rect x="468" y="384" width="63" height="78" class="void"/>
+  <path d="M386 508 L620 508" class="route"/>
+  <path d="M544 462 L578 432 L604 462" class="fail"/>
+  <path d="M421 366 L440 351 M432 377 L451 362" class="green"/>
+  <circle cx="430" cy="485" r="23" class="void"/>
+  <line x1="412" y1="468" x2="448" y2="502" class="fail"/>
+  <text x="386" y="557" class="body">A working waystation</text>
+  <text x="386" y="588" class="body">whose warmth, supplies,</text>
+  <text x="386" y="619" class="body">and upkeep have failed.</text>
+  <text x="386" y="668" class="small">Compare operating ↔ dormant.</text>
+
+  <rect x="667" y="165" width="286" height="520" rx="18" class="card"/>
+  <text x="692" y="210" class="kicker">LARGE</text>
+  <text x="692" y="250" class="label">Dead wing</text>
+  <rect x="703" y="304" width="214" height="160" class="structure"/>
+  <line x1="774" y1="304" x2="774" y2="464" stroke="#655d4f" stroke-width="4"/>
+  <line x1="846" y1="304" x2="846" y2="464" stroke="#655d4f" stroke-width="4"/>
+  <rect x="724" y="360" width="29" height="104" class="void"/>
+  <rect x="795" y="360" width="29" height="104" class="void"/>
+  <path d="M846 304 L885 344 L917 314" class="fail"/>
+  <path d="M695 505 L925 505" class="route dash"/>
+  <text x="692" y="556" class="body">Repeated rooms fall out</text>
+  <text x="692" y="587" class="body">of service in a pattern.</text>
+  <text x="692" y="618" class="body">Scale comes from its host.</text>
+  <text x="692" y="650" class="small">Mine, monastery, prison, or market.</text>
+
+  <rect x="973" y="165" width="286" height="520" rx="18" class="card"/>
+  <text x="998" y="210" class="kicker">DEGRADED</text>
+  <text x="998" y="250" class="label">Reclaimed</text>
+  <path d="M1008 461 L1008 333 L1093 333 L1123 364 L1160 324 L1223 324 L1223 461" class="structure"/>
+  <path d="M997 333 L1097 274 L1130 302" class="structure"/>
+  <path d="M1003 507 C1050 470 1061 442 1092 411 C1128 374 1158 399 1218 346" class="green"/>
+  <path d="M1030 489 C1064 445 1104 483 1142 425" class="green"/>
+  <path d="M1100 461 L1133 427 L1164 461" class="fail"/>
+  <text x="998" y="556" class="body">Collapse or erosion makes</text>
+  <text x="998" y="587" class="body">a new route. Weather and</text>
+  <text x="998" y="618" class="body">nature occupy the silence.</text>
+  <text x="998" y="650" class="small">Selective failure—not rubble soup.</text>
+
+  <rect x="1279" y="165" width="266" height="520" rx="18" class="card"/>
+  <text x="1304" y="210" class="kicker">UNUSUAL</text>
+  <text x="1304" y="250" class="label">Closed</text>
+  <path d="M1315 459 L1315 329 L1508 329 L1508 459" class="structure"/>
+  <path d="M1302 329 L1411 270 L1521 329" class="structure"/>
+  <rect x="1380" y="372" width="62" height="87" class="void"/>
+  <path d="M1374 369 L1448 464 M1448 369 L1374 464" class="mark"/>
+  <path d="M1337 495 L1488 495" class="route dash"/>
+  <path d="M1350 302 L1364 288 L1378 302 L1364 316 Z" class="mark"/>
+  <text x="1304" y="548" class="body">Sealed, dismantled,</text>
+  <text x="1304" y="579" class="body">marked, memorialized,</text>
+  <text x="1304" y="610" class="body">or ritually retired.</text>
+  <text x="1304" y="650" class="small">Culture shapes how people leave.</text>
+
+  <rect x="55" y="738" width="1490" height="170" rx="18" fill="#e8e0cf" stroke="#8d8068" stroke-width="3"/>
+  <text x="82" y="784" class="label">The shared rule</text>
+  <text x="82" y="824" class="body">Keep the host's purpose, culture, routes, and history legible. Change only what the recorded cause would change.</text>
+  <text x="82" y="862" class="body">No generic ruin prefab · no “vines = abandoned” shortcut · no maintained flame without a present owner.</text>
+  <text x="82" y="894" class="small">Stable replacement occupants promote the place toward Site 8: infiltrated / layered control.</text>
+</svg>

@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050" role="img" aria-labelledby="title desc">
+  <title id="title">Site 5 strained mine and workshop family</title>
+  <desc id="desc">Five related expressions and the shared source-to-export production chain.</desc>
+  <defs>
+    <style>
+      .bg { fill:#f2eee4; }
+      .card { fill:#fffdf7; stroke:#b4aa96; stroke-width:3; }
+      .first { fill:#fff7e5; stroke:#b8562f; stroke-width:5; }
+      .rock { fill:#d2c5ab; stroke:#665e50; stroke-width:5; stroke-linejoin:round; }
+      .void { fill:#f2eee4; stroke:#665e50; stroke-width:4; }
+      .timber { fill:none; stroke:#7b5632; stroke-width:7; stroke-linecap:round; }
+      .haul { fill:none; stroke:#b8562f; stroke-width:7; stroke-linecap:round; stroke-linejoin:round; }
+      .support { fill:none; stroke:#6b7698; stroke-width:5; stroke-linecap:round; }
+      .water { fill:#a9cbd2; stroke:#598694; stroke-width:4; }
+      .spoil { fill:#b7aa8d; stroke:#756b58; stroke-width:3; }
+      .green { fill:none; stroke:#668348; stroke-width:5; }
+      .label { font-family:Inter,Arial,sans-serif; font-size:28px; font-weight:700; fill:#282a28; }
+      .body { font-family:Inter,Arial,sans-serif; font-size:19px; fill:#504d46; }
+      .small { font-family:Inter,Arial,sans-serif; font-size:16px; fill:#6e6a60; }
+      .kicker { font-family:Inter,Arial,sans-serif; font-size:16px; font-weight:700; letter-spacing:1.5px; fill:#b8562f; }
+      .flowbox { fill:#fffdf7; stroke:#817865; stroke-width:3; }
+      .flowtext { font-family:Inter,Arial,sans-serif; font-size:20px; font-weight:700; fill:#282a28; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="1050"/>
+  <text x="58" y="68" class="label" style="font-size:42px">SITE 5 — USEFUL WORK UNDER PRESSURE</text>
+  <text x="58" y="108" class="body" style="font-size:22px">The player can trace what the site makes, what keeps it running, and where it may recover or break.</text>
+
+  <rect x="52" y="155" width="288" height="510" rx="18" class="card"/>
+  <text x="76" y="199" class="kicker">SMALL</text>
+  <text x="76" y="239" class="label">Prospect</text>
+  <path d="M78 435 L78 330 L160 272 L255 315 L313 292 L313 435 Z" class="rock"/>
+  <path d="M151 435 L151 355 Q194 318 238 355 L238 435" class="void"/>
+  <path d="M148 371 L240 371 M160 346 L160 434 M228 346 L228 434" class="timber"/>
+  <path d="M123 468 L288 468" class="haul"/>
+  <path d="M92 448 L121 421 L148 448 Z" class="spoil"/>
+  <text x="76" y="522" class="body">One shallow cut, spoil,</text>
+  <text x="76" y="550" class="body">tools, and a repair shed.</text>
+  <text x="76" y="596" class="small">Enough evidence to judge</text>
+  <text x="76" y="620" class="small">whether the find is promising.</text>
+
+  <rect x="360" y="140" width="288" height="540" rx="18" class="first"/>
+  <text x="384" y="185" class="kicker">ORDINARY · FIRST STRUCTURE</text>
+  <text x="384" y="225" class="label">Drift + yard</text>
+  <path d="M385 448 L385 328 L473 270 L621 315 L621 448 Z" class="rock"/>
+  <path d="M446 448 L446 350 Q491 313 536 350 L536 448" class="void"/>
+  <path d="M443 368 L539 368 M456 343 L456 447 M526 343 L526 447" class="timber"/>
+  <path d="M409 476 L614 476" class="haul"/>
+  <rect x="548" y="393" width="57" height="55" class="void"/>
+  <path d="M563 421 L590 421 M576 407 L576 435" class="support"/>
+  <path d="M402 455 L430 426 L457 455 Z" class="spoil"/>
+  <text x="384" y="531" class="body">Face → ramp → sorting</text>
+  <text x="384" y="559" class="body">and repair → export.</text>
+  <text x="384" y="604" class="small">Every useful and waste flow</text>
+  <text x="384" y="628" class="small">has a visible destination.</text>
+
+  <rect x="668" y="155" width="288" height="510" rx="18" class="card"/>
+  <text x="692" y="199" class="kicker">LARGE</text>
+  <text x="692" y="239" class="label">Shaft complex</text>
+  <rect x="731" y="283" width="164" height="165" class="rock"/>
+  <rect x="792" y="283" width="41" height="165" class="void"/>
+  <path d="M812 268 L812 448 M747 335 L879 335 M747 397 L879 397" class="support"/>
+  <path d="M758 270 L812 230 L866 270" class="timber"/>
+  <path d="M704 477 L920 477" class="haul"/>
+  <text x="692" y="531" class="body">A hoist joins several</text>
+  <text x="692" y="559" class="body">working levels.</text>
+  <text x="692" y="604" class="small">Lift, air, water, and crew access</text>
+  <text x="692" y="628" class="small">become separate pressure points.</text>
+
+  <rect x="976" y="155" width="288" height="510" rx="18" class="card"/>
+  <text x="1000" y="199" class="kicker">STRAINED</text>
+  <text x="1000" y="239" class="label">Partial flood</text>
+  <rect x="1011" y="283" width="218" height="168" class="rock"/>
+  <rect x="1030" y="306" width="180" height="55" class="void"/>
+  <rect x="1030" y="380" width="180" height="55" class="void"/>
+  <rect x="1030" y="405" width="180" height="30" class="water"/>
+  <path d="M1042 333 L1197 333 M1042 407 L1197 407" class="haul"/>
+  <path d="M1216 389 C1195 365 1182 365 1165 389" class="support"/>
+  <text x="1000" y="510" class="body">Upper work continues.</text>
+  <text x="1000" y="538" class="body">Lower extraction goes dark</text>
+  <text x="1000" y="566" class="body">as the pump loses ground.</text>
+  <text x="1000" y="612" class="small">A recoverable clock—not a</text>
+  <text x="1000" y="636" class="small">uniform “failing mine” skin.</text>
+
+  <rect x="1284" y="155" width="264" height="510" rx="18" class="card"/>
+  <text x="1308" y="199" class="kicker">UNUSUAL · LICENSED</text>
+  <text x="1308" y="239" class="label">Open cut</text>
+  <path d="M1307 426 L1307 303 L1523 303 L1523 426 Z" class="rock"/>
+  <path d="M1322 324 L1496 324 L1457 357 L1496 357 L1449 393 L1516 393" class="void"/>
+  <path d="M1324 454 C1380 430 1431 472 1515 438" class="haul"/>
+  <path d="M1344 409 L1370 381 L1394 409 Z M1400 429 L1422 402 L1447 429 Z" class="spoil"/>
+  <text x="1308" y="510" class="body">Quarry, crystal seam,</text>
+  <text x="1308" y="538" class="body">volcanic forge, or another</text>
+  <text x="1308" y="566" class="body">resource-owned expression.</text>
+  <text x="1308" y="612" class="small">Geology and realm facts license</text>
+  <text x="1308" y="636" class="small">the form and its consequences.</text>
+
+  <rect x="52" y="720" width="1496" height="272" rx="18" fill="#e6ddca" stroke="#887c66" stroke-width="3"/>
+  <text x="78" y="766" class="label">The shared production chain</text>
+
+  <rect x="82" y="806" width="215" height="62" rx="10" class="flowbox"/>
+  <text x="189" y="845" text-anchor="middle" class="flowtext">SOURCE / FACE</text>
+  <path d="M302 837 L350 837" class="haul"/>
+
+  <rect x="356" y="806" width="215" height="62" rx="10" class="flowbox"/>
+  <text x="463" y="845" text-anchor="middle" class="flowtext">EXTRACT / WORK</text>
+  <path d="M576 837 L624 837" class="haul"/>
+
+  <rect x="630" y="806" width="180" height="62" rx="10" class="flowbox"/>
+  <text x="720" y="845" text-anchor="middle" class="flowtext">HAUL</text>
+  <path d="M815 837 L863 837" class="haul"/>
+
+  <rect x="869" y="806" width="235" height="62" rx="10" class="flowbox"/>
+  <text x="986" y="845" text-anchor="middle" class="flowtext">SORT / PROCESS</text>
+  <path d="M1109 837 L1157 837" class="haul"/>
+
+  <rect x="1163" y="806" width="310" height="62" rx="10" class="flowbox"/>
+  <text x="1318" y="845" text-anchor="middle" class="flowtext">STORE / EXPORT</text>
+
+  <text x="82" y="916" class="body">Support flows:</text>
+  <text x="242" y="916" class="body">AIR · WATER · SHORING · POWER · TOOLS · LABOR · MAINTENANCE · WASTE</text>
+  <text x="82" y="956" class="small">Strained means at least one useful path still works while a named bottleneck creates visible pressure.</text>
+</svg>

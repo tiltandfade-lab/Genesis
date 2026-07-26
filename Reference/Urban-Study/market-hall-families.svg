@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 660" width="1240" height="660" font-family="Georgia, 'Times New Roman', serif">
+  <title>The four market-hall families — Urban Study lane 1</title>
+  <desc>Comparative elevations of four historic market-hall types, drawn at one scale on the Genesis grid, with a plan strip showing how each behaves as a tactical object.</desc>
+
+  <rect x="0" y="0" width="1240" height="660" fill="#f4f1ea"/>
+
+  <text x="32" y="42" font-size="23" fill="#23201b">The market hall is four different buildings</text>
+  <text x="32" y="66" font-size="14" fill="#6a6459">Urban Study lane 1 · one scale · Genesis grid: 1 cell = 5 ft, 1 h = 2.5 ft · figure = 6 ft · EVIDENCE, NOT A RULING</text>
+
+  <defs>
+    <pattern id="stone" width="10" height="6" patternUnits="userSpaceOnUse">
+      <rect width="10" height="6" fill="#cfc7b6"/>
+      <path d="M0 6 H10 M5 0 V6" stroke="#b3a894" stroke-width="0.7"/>
+    </pattern>
+    <pattern id="tile" width="8" height="5" patternUnits="userSpaceOnUse">
+      <rect width="8" height="5" fill="#a8705a"/>
+      <path d="M0 5 H8" stroke="#8b5946" stroke-width="0.8"/>
+    </pattern>
+    <pattern id="slate" width="8" height="5" patternUnits="userSpaceOnUse">
+      <rect width="8" height="5" fill="#7f8189"/>
+      <path d="M0 5 H8" stroke="#666870" stroke-width="0.8"/>
+    </pattern>
+    <pattern id="road" width="9" height="9" patternUnits="userSpaceOnUse">
+      <rect width="9" height="9" fill="#e2ddd1"/>
+      <circle cx="4.5" cy="4.5" r="1.5" fill="#cdc6b6"/>
+    </pattern>
+    <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8a6a2f"/>
+    </marker>
+  </defs>
+
+  <!-- ===================== ground + grid ===================== -->
+  <g stroke="#ded8ca" stroke-width="1">
+    <line x1="66" y1="352" x2="1186" y2="352"/><line x1="66" y1="324" x2="1186" y2="324"/>
+    <line x1="66" y1="296" x2="1186" y2="296"/><line x1="66" y1="268" x2="1186" y2="268"/>
+    <line x1="66" y1="240" x2="1186" y2="240"/><line x1="66" y1="212" x2="1186" y2="212"/>
+    <line x1="66" y1="184" x2="1186" y2="184"/><line x1="66" y1="156" x2="1186" y2="156"/>
+  </g>
+  <line x1="66" y1="380" x2="1186" y2="380" stroke="#8a8270" stroke-width="1.6"/>
+  <g font-size="10" fill="#9a927f">
+    <text x="1192" y="356">4h</text><text x="1192" y="300">8h</text>
+    <text x="1192" y="244">12h</text><text x="1192" y="188">16h</text>
+  </g>
+  <g fill="#5d5648">
+    <circle cx="46" cy="352" r="4.5"/><rect x="42.5" y="358" width="7" height="22" rx="2"/>
+  </g>
+  <text x="46" y="396" font-size="10" fill="#8a8270" text-anchor="middle">6 ft</text>
+
+  <!-- ============================================================ A -->
+  <g>
+    <text x="80" y="106" font-size="16" fill="#23201b">A · Open post hall</text>
+    <text x="80" y="124" font-size="11.5" fill="#7a7263">Ledbury 1617 · Questembert · Dunster</text>
+
+    <path d="M78 208 L206 152 L334 208 Z" fill="url(#tile)" stroke="#7d5040" stroke-width="1.5"/>
+    <rect x="86" y="208" width="240" height="62" fill="#efe9dc" stroke="#6d6455" stroke-width="1.5"/>
+    <g stroke="#4e463a" stroke-width="3">
+      <path d="M86 208 V270 M326 208 V270 M146 208 V270 M206 208 V270 M266 208 V270"/>
+      <path d="M86 238 H326"/>
+      <path d="M92 214 L140 238 M140 214 L92 238 M212 214 L260 238 M260 214 L212 238"/>
+    </g>
+    <rect x="160" y="216" width="34" height="18" fill="#3d3a34"/>
+    <rect x="226" y="216" width="34" height="18" fill="#3d3a34"/>
+    <path d="M86 270 H326" stroke="#4e463a" stroke-width="4"/>
+    <g stroke="#4e463a" stroke-width="6" stroke-linecap="square">
+      <path d="M98 272 V366"/><path d="M152 272 V366"/><path d="M206 272 V366"/>
+      <path d="M260 272 V366"/><path d="M314 272 V366"/>
+    </g>
+    <g fill="none" stroke="#4e463a" stroke-width="3">
+      <path d="M98 292 Q118 274 136 272"/><path d="M152 292 Q132 274 114 272"/>
+      <path d="M206 292 Q226 274 244 272"/><path d="M260 292 Q240 274 222 272"/>
+    </g>
+    <rect x="98" y="342" width="216" height="24" fill="url(#stone)" stroke="#a2977f" stroke-width="1"/>
+    <g fill="#bfb5a0" stroke="#9a8f78" stroke-width="1">
+      <rect x="92" y="366" width="14" height="14"/><rect x="146" y="366" width="14" height="14"/>
+      <rect x="200" y="366" width="14" height="14"/><rect x="254" y="366" width="14" height="14"/>
+      <rect x="308" y="366" width="14" height="14"/>
+    </g>
+    <path d="M334 366 L334 352 L344 352 L344 338 L354 338 L354 324 L364 324 L364 272 L326 272 L326 366 Z"
+          fill="#d8c9a8" stroke="#8b7a5c" stroke-width="1.4"/>
+    <text x="345" y="322" font-size="9" fill="#6d6455" transform="rotate(-90 345 322)">outside stair</text>
+
+    <text x="80" y="404" font-size="11" fill="#5d5648">Roof on posts, no walls. Waist-high</text>
+    <text x="80" y="418" font-size="11" fill="#5d5648">dwarf wall between = counter + cover.</text>
+  </g>
+
+  <!-- ============================================================ B -->
+  <g transform="translate(300,0)">
+    <text x="80" y="106" font-size="16" fill="#23201b">B · Arcaded stone hall</text>
+    <text x="80" y="124" font-size="11.5" fill="#7a7263">Chipping Campden 1627 · Shrewsbury 1596</text>
+
+    <path d="M84 210 L206 150 L328 210 Z" fill="url(#stone)" stroke="#9a8f78" stroke-width="1.5"/>
+    <rect x="96" y="210" width="220" height="62" fill="url(#stone)" stroke="#9a8f78" stroke-width="1.5"/>
+    <rect x="150" y="222" width="26" height="34" rx="13" fill="#3d3a34"/>
+    <rect x="196" y="222" width="26" height="34" rx="13" fill="#3d3a34"/>
+    <rect x="242" y="222" width="26" height="34" rx="13" fill="#3d3a34"/>
+    <rect x="96" y="272" width="220" height="10" fill="#c3b9a3" stroke="#9a8f78" stroke-width="1"/>
+    <rect x="96" y="282" width="220" height="84" fill="url(#stone)" stroke="#9a8f78" stroke-width="1.5"/>
+    <g fill="#efe9dc" stroke="#8f8570" stroke-width="1.2">
+      <path d="M116 366 V318 Q136 296 156 318 V366 Z"/>
+      <path d="M176 366 V318 Q196 296 216 318 V366 Z"/>
+      <path d="M236 366 V318 Q256 296 276 318 V366 Z"/>
+    </g>
+    <g fill="#bfb5a0" stroke="#9a8f78" stroke-width="1">
+      <rect x="92" y="366" width="24" height="14"/><rect x="156" y="366" width="20" height="14"/>
+      <rect x="216" y="366" width="20" height="14"/><rect x="276" y="366" width="24" height="14"/>
+    </g>
+
+    <text x="80" y="404" font-size="11" fill="#5d5648">Same idea in masonry. Piers are</text>
+    <text x="80" y="418" font-size="11" fill="#5d5648">heavier — real cover, less sightline.</text>
+  </g>
+
+  <!-- ============================================================ C -->
+  <g transform="translate(600,0)">
+    <text x="80" y="106" font-size="16" fill="#23201b">C · Enclosed barn hall</text>
+    <text x="80" y="124" font-size="11.5" fill="#7a7263">Saint-Pierre-sur-Dives</text>
+
+    <path d="M78 300 L206 142 L334 300 Z" fill="url(#tile)" stroke="#7d5040" stroke-width="1.5"/>
+    <g fill="url(#tile)" stroke="#7d5040" stroke-width="1">
+      <path d="M138 264 L152 244 L166 264 Z"/><path d="M192 246 L206 226 L220 246 Z"/>
+      <path d="M246 264 L260 244 L274 264 Z"/>
+    </g>
+    <g fill="#3d3a34">
+      <rect x="145" y="258" width="14" height="8"/><rect x="199" y="240" width="14" height="8"/>
+      <rect x="253" y="258" width="14" height="8"/>
+    </g>
+    <rect x="96" y="300" width="220" height="66" fill="url(#stone)" stroke="#9a8f78" stroke-width="1.5"/>
+    <path d="M182 366 V326 Q206 306 230 326 V366 Z" fill="#6b4b32" stroke="#4a3322" stroke-width="1.5"/>
+    <path d="M206 366 V318" stroke="#4a3322" stroke-width="1.2"/>
+    <rect x="122" y="336" width="14" height="20" fill="#3d3a34"/>
+    <rect x="276" y="336" width="14" height="20" fill="#3d3a34"/>
+
+    <text x="80" y="404" font-size="11" fill="#5d5648">Walls and one huge roof. A mass, not</text>
+    <text x="80" y="418" font-size="11" fill="#5d5648">a canopy — a real interior you enter.</text>
+  </g>
+
+  <!-- ============================================================ D -->
+  <g transform="translate(900,0)">
+    <text x="80" y="106" font-size="16" fill="#23201b">D · Free-standing arcaded block</text>
+    <text x="80" y="124" font-size="11.5" fill="#7a7263">Kraków, the Sukiennice</text>
+
+    <rect x="56" y="352" width="40" height="28" fill="url(#road)"/>
+    <rect x="262" y="352" width="34" height="28" fill="url(#road)"/>
+    <text x="76" y="371" font-size="9" fill="#8a8270" text-anchor="middle">street</text>
+    <text x="279" y="371" font-size="9" fill="#8a8270" text-anchor="middle">street</text>
+
+    <path d="M92 214 L180 168 L268 214 Z" fill="url(#slate)" stroke="#5f6068" stroke-width="1.5"/>
+    <rect x="100" y="214" width="160" height="60" fill="url(#stone)" stroke="#9a8f78" stroke-width="1.5"/>
+    <g fill="#3d3a34">
+      <rect x="116" y="228" width="18" height="30" rx="9"/><rect x="150" y="228" width="18" height="30" rx="9"/>
+      <rect x="184" y="228" width="18" height="30" rx="9"/><rect x="218" y="228" width="18" height="30" rx="9"/>
+    </g>
+    <rect x="94" y="274" width="172" height="9" fill="#c3b9a3" stroke="#9a8f78" stroke-width="1"/>
+    <rect x="100" y="283" width="160" height="83" fill="#efe9dc" stroke="#9a8f78" stroke-width="1.5"/>
+    <g fill="url(#stone)" stroke="#9a8f78" stroke-width="1">
+      <rect x="100" y="283" width="12" height="83"/><rect x="138" y="283" width="12" height="83"/>
+      <rect x="174" y="283" width="12" height="83"/><rect x="210" y="283" width="12" height="83"/>
+      <rect x="248" y="283" width="12" height="83"/>
+    </g>
+    <g fill="none" stroke="#b3a894" stroke-width="1.4">
+      <path d="M112 314 Q125 296 138 314"/><path d="M150 314 Q162 296 174 314"/>
+      <path d="M186 314 Q198 296 210 314"/><path d="M222 314 Q235 296 248 314"/>
+    </g>
+
+    <text x="80" y="404" font-size="11" fill="#5d5648">Stands IN the square with a public</text>
+    <text x="80" y="418" font-size="11" fill="#5d5648">arcade down each long side.</text>
+  </g>
+
+  <!-- ===================== plan strip ===================== -->
+  <line x1="32" y1="440" x2="1208" y2="440" stroke="#ded8ca" stroke-width="1"/>
+  <text x="32" y="470" font-size="15" fill="#23201b">As a tactical object — plan</text>
+  <text x="32" y="488" font-size="11.5" fill="#7a7263">gold arrow = movement through · green dash = a sightline that survives · red bar = a sightline that is stopped</text>
+
+  <!-- A plan -->
+  <g>
+    <rect x="80" y="506" width="236" height="82" fill="#efe9dc" stroke="#b3a894" stroke-width="1.2"/>
+    <g fill="#4e463a">
+      <rect x="98" y="520" width="9" height="9"/><rect x="150" y="520" width="9" height="9"/>
+      <rect x="202" y="520" width="9" height="9"/><rect x="254" y="520" width="9" height="9"/>
+      <rect x="98" y="566" width="9" height="9"/><rect x="150" y="566" width="9" height="9"/>
+      <rect x="202" y="566" width="9" height="9"/><rect x="254" y="566" width="9" height="9"/>
+    </g>
+    <path d="M68 534 H328" stroke="#3f7d6a" stroke-width="2" stroke-dasharray="7 5"/>
+    <path d="M68 552 H328" stroke="#3f7d6a" stroke-width="2" stroke-dasharray="7 5"/>
+    <path d="M126 602 L126 496" stroke="#8a6a2f" stroke-width="2" marker-end="url(#ar)"/>
+    <path d="M232 602 L232 496" stroke="#8a6a2f" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="198" y="624" font-size="11" fill="#3f7d6a" text-anchor="middle">passable and see-through in every direction</text>
+  </g>
+
+  <!-- B plan -->
+  <g transform="translate(300,0)">
+    <rect x="80" y="506" width="236" height="82" fill="#efe9dc" stroke="#b3a894" stroke-width="1.2"/>
+    <g fill="#8a8270">
+      <rect x="94" y="506" width="18" height="82"/><rect x="152" y="506" width="18" height="82"/>
+      <rect x="210" y="506" width="18" height="82"/><rect x="268" y="506" width="18" height="82"/>
+    </g>
+    <path d="M68 546 H328" stroke="#3f7d6a" stroke-width="2" stroke-dasharray="7 5"/>
+    <path d="M131 602 L131 496" stroke="#8a6a2f" stroke-width="2" marker-end="url(#ar)"/>
+    <path d="M247 602 L247 496" stroke="#8a6a2f" stroke-width="2" marker-end="url(#ar)"/>
+    <text x="198" y="624" font-size="11" fill="#7a7263" text-anchor="middle">passable in bays; crossways sight broken by piers</text>
+  </g>
+
+  <!-- C plan -->
+  <g transform="translate(600,0)">
+    <rect x="80" y="506" width="236" height="82" fill="#ded8ca" stroke="#8a8270" stroke-width="2.5"/>
+    <rect x="182" y="584" width="32" height="8" fill="#6b4b32"/>
+    <path d="M198 602 L198 590" stroke="#8a6a2f" stroke-width="2" marker-end="url(#ar)"/>
+    <path d="M68 540 H160" stroke="#a4402f" stroke-width="4"/>
+    <path d="M236 540 H328" stroke="#a4402f" stroke-width="4"/>
+    <text x="198" y="624" font-size="11" fill="#a4402f" text-anchor="middle">one door; it blocks the plaza completely</text>
+  </g>
+
+  <!-- D plan -->
+  <g transform="translate(900,0)">
+    <rect x="80" y="506" width="236" height="82" fill="#ded8ca" stroke="#8a8270" stroke-width="1.6"/>
+    <rect x="80" y="506" width="236" height="18" fill="#efe9dc" stroke="#b3a894" stroke-width="1"/>
+    <rect x="80" y="570" width="236" height="18" fill="#efe9dc" stroke="#b3a894" stroke-width="1"/>
+    <g fill="#8a8270">
+      <rect x="96" y="510" width="8" height="10"/><rect x="150" y="510" width="8" height="10"/>
+      <rect x="204" y="510" width="8" height="10"/><rect x="258" y="510" width="8" height="10"/>
+      <rect x="96" y="574" width="8" height="10"/><rect x="150" y="574" width="8" height="10"/>
+      <rect x="204" y="574" width="8" height="10"/><rect x="258" y="574" width="8" height="10"/>
+    </g>
+    <path d="M68 515 H332" stroke="#8a6a2f" stroke-width="2"/>
+    <path d="M68 579 H332" stroke="#8a6a2f" stroke-width="2"/>
+    <path d="M68 547 H150" stroke="#a4402f" stroke-width="4"/>
+    <path d="M246 547 H332" stroke="#a4402f" stroke-width="4"/>
+    <text x="198" y="624" font-size="11" fill="#7a7263" text-anchor="middle">splits one space into two covered streets</text>
+  </g>
+
+  <text x="32" y="644" font-size="11" fill="#7a7263">All four carry an upper room reached from outside — a grain store before it was a council chamber — and the type often has a lockup below. Founder packet Q1 asks which family the seed is.</text>
+  <text x="32" y="658" font-size="11" fill="#9a927f">Drawn from photographs; no measured drawing was obtained for any of them, so proportions here are indicative, not dimensions.</text>
+</svg>

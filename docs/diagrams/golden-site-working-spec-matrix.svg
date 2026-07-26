@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1150" viewBox="0 0 1800 1150">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101820"/>
+      <stop offset="1" stop-color="#222c34"/>
+    </linearGradient>
+    <style>
+      .title{font:700 40px Arial,sans-serif;fill:#f4f3ed}
+      .sub{font:400 19px Arial,sans-serif;fill:#bdc9ce}
+      .chip{font:700 15px Arial,sans-serif;fill:#e8efef}
+      .site{font:700 24px Arial,sans-serif;fill:#f5f4ee}
+      .id{font:700 15px Arial,sans-serif;fill:#111820}
+      .head{font:700 15px Arial,sans-serif;fill:#93a5ad;letter-spacing:1px}
+      .body{font:500 17px Arial,sans-serif;fill:#e0e6e7}
+      .small{font:500 14px Arial,sans-serif;fill:#b9c6ca}
+      .status{font:700 14px Arial,sans-serif}
+    </style>
+  </defs>
+
+  <rect width="1800" height="1150" fill="url(#bg)"/>
+  <text x="70" y="66" class="title">THE MINE STANDARD — RETROFITTED ACROSS SIX GOLDEN SITES</text>
+  <text x="70" y="101" class="sub">Each working spec now defines its family, five expressions, fun choices, rejection rules, and exact first visual proof.</text>
+
+  <g transform="translate(70 135)">
+    <g>
+      <rect x="0" y="0" width="180" height="44" rx="22" fill="#34434b" stroke="#6e858f"/>
+      <text x="90" y="28" text-anchor="middle" class="chip">REQUIRED ZONES</text>
+    </g>
+    <g transform="translate(195)">
+      <rect x="0" y="0" width="180" height="44" rx="22" fill="#34434b" stroke="#6e858f"/>
+      <text x="90" y="28" text-anchor="middle" class="chip">ROUTE PROMISES</text>
+    </g>
+    <g transform="translate(390)">
+      <rect x="0" y="0" width="180" height="44" rx="22" fill="#34434b" stroke="#6e858f"/>
+      <text x="90" y="28" text-anchor="middle" class="chip">OPERATING CIRCUITS</text>
+    </g>
+    <g transform="translate(585)">
+      <rect x="0" y="0" width="180" height="44" rx="22" fill="#34434b" stroke="#6e858f"/>
+      <text x="90" y="28" text-anchor="middle" class="chip">STRATEGIC PLANS</text>
+    </g>
+    <g transform="translate(780)">
+      <rect x="0" y="0" width="180" height="44" rx="22" fill="#34434b" stroke="#6e858f"/>
+      <text x="90" y="28" text-anchor="middle" class="chip">GENERATION ORDER</text>
+    </g>
+    <g transform="translate(975)">
+      <rect x="0" y="0" width="180" height="44" rx="22" fill="#34434b" stroke="#6e858f"/>
+      <text x="90" y="28" text-anchor="middle" class="chip">TYPED REJECTION</text>
+    </g>
+    <g transform="translate(1170)">
+      <rect x="0" y="0" width="180" height="44" rx="22" fill="#34434b" stroke="#6e858f"/>
+      <text x="90" y="28" text-anchor="middle" class="chip">SAFE FALLBACK</text>
+    </g>
+    <g transform="translate(1365)">
+      <rect x="0" y="0" width="295" height="44" rx="22" fill="#34434b" stroke="#6e858f"/>
+      <text x="148" y="28" text-anchor="middle" class="chip">RUNTIME FACTS + RECEIPT</text>
+    </g>
+  </g>
+
+  <text x="335" y="228" class="head">PLAYER'S MAIN CHOICES</text>
+  <text x="905" y="228" class="head">SITE-SPECIFIC SYSTEMS / LEVERS</text>
+  <text x="1525" y="228" class="head">HONEST GATES</text>
+
+  <!-- Guard Post -->
+  <g transform="translate(70 250)">
+    <rect width="1660" height="125" rx="18" fill="#263139" stroke="#d8a44d" stroke-width="3"/>
+    <rect x="22" y="24" width="48" height="48" rx="24" fill="#d8a44d"/>
+    <text x="46" y="55" text-anchor="middle" class="id">1</text>
+    <text x="88" y="48" class="site">GUARD POST</text>
+    <text x="88" y="76" class="small">controls a journey</text>
+    <text x="335" y="48" class="body">checkpoint/social · terrain flank · take the deck</text>
+    <text x="335" y="78" class="small">front is broad and watched; flank costs slope/time; deck holds the advantage</text>
+    <text x="905" y="48" class="body">road · barrier · watch · garrison · repair · light</text>
+    <text x="905" y="78" class="small">equal cover class across both culture constructions</text>
+    <text x="1525" y="48" class="status" fill="#80d5a2">R / F / B: PASS</text>
+    <text x="1525" y="78" class="status" fill="#e8b768">CLAY: OPEN</text>
+  </g>
+
+  <!-- Camp -->
+  <g transform="translate(70 390)">
+    <rect width="1660" height="125" rx="18" fill="#263139" stroke="#df7e4e" stroke-width="3"/>
+    <rect x="22" y="24" width="48" height="48" rx="24" fill="#df7e4e"/>
+    <text x="46" y="55" text-anchor="middle" class="id">2</text>
+    <text x="88" y="48" class="site">CAMP / SERVICE</text>
+    <text x="88" y="76" class="small">borrows a pause</text>
+    <text x="335" y="48" class="body">open front · shelter seam · terrain edge · schedule</text>
+    <text x="335" y="78" class="small">center, footprints, watch, carrier, water and waste all create choices</text>
+    <text x="905" y="48" class="body">people · shelter · fire · supplies · watch · traces</text>
+    <text x="905" y="78" class="small">tent form comes from concrete compatibility facts, not a culture label</text>
+    <text x="1525" y="48" class="status" fill="#e8b768">R: PASS</text>
+    <text x="1525" y="73" class="status" fill="#e8b768">F / B: PARTIAL</text>
+    <text x="1525" y="98" class="status" fill="#e8b768">CLAY: OPEN</text>
+  </g>
+
+  <!-- Monastery -->
+  <g transform="translate(70 530)">
+    <rect width="1660" height="125" rx="18" fill="#263139" stroke="#a98bd2" stroke-width="3"/>
+    <rect x="22" y="24" width="48" height="48" rx="24" fill="#a98bd2"/>
+    <text x="46" y="55" text-anchor="middle" class="id">4</text>
+    <text x="88" y="48" class="site">MONASTERY / COMMUNE</text>
+    <text x="88" y="76" class="small">rule becomes architecture</text>
+    <text x="335" y="48" class="body">ceremonial axis · arcade ring · service route · head</text>
+    <text x="335" y="78" class="small">routine, privacy and authority change who can use each path</text>
+    <text x="905" y="48" class="body">access · routine · provision · knowledge · authority · light</text>
+    <text x="905" y="78" class="small">proposed variant order remains flagged rather than silently locked</text>
+    <text x="1525" y="48" class="status" fill="#e8b768">R: PASS</text>
+    <text x="1525" y="73" class="status" fill="#e8b768">F / B: PARTIAL</text>
+    <text x="1525" y="98" class="status" fill="#e8b768">CLAY: OPEN</text>
+  </g>
+
+  <!-- Mine -->
+  <g transform="translate(70 670)">
+    <rect width="1660" height="125" rx="18" fill="#263139" stroke="#55c8ba" stroke-width="3"/>
+    <rect x="22" y="24" width="48" height="48" rx="24" fill="#55c8ba"/>
+    <text x="46" y="55" text-anchor="middle" class="id">5</text>
+    <text x="88" y="48" class="site">MINE / WORKSHOP</text>
+    <text x="88" y="76" class="small">useful work under pressure</text>
+    <text x="335" y="48" class="body">broad haul · narrow manway · flooded bypass</text>
+    <text x="335" y="78" class="small">speed, capacity, exposure, water, light and timing remain separate tradeoffs</text>
+    <text x="905" y="48" class="body">product · people · water · air · support · light</text>
+    <text x="905" y="78" class="small">the new generator-grade standard</text>
+    <text x="1525" y="48" class="status" fill="#e8b768">R / F / B: PARTIAL</text>
+    <text x="1525" y="78" class="status" fill="#e8b768">CLAY: OPEN</text>
+  </g>
+
+  <!-- Lair -->
+  <g transform="translate(70 810)">
+    <rect width="1660" height="125" rx="18" fill="#263139" stroke="#72b879" stroke-width="3"/>
+    <rect x="22" y="24" width="48" height="48" rx="24" fill="#72b879"/>
+    <text x="46" y="55" text-anchor="middle" class="id">7</text>
+    <text x="88" y="48" class="site">NATURAL LAIR</text>
+    <text x="88" y="76" class="small">ecology becomes a level</text>
+    <text x="335" y="48" class="body">floor route · ledge route · light/ecology · bolt-hole</text>
+    <text x="335" y="78" class="small">origin, body, darkness and short exit constrain the honest options</text>
+    <text x="905" y="48" class="body">occupant · access · visibility · claim · scent · hazard</text>
+    <text x="905" y="78" class="small">no unowned lights; ceiling truth survives cutaway omission</text>
+    <text x="1525" y="48" class="status" fill="#80d5a2">R / F / B: PASS</text>
+    <text x="1525" y="78" class="status" fill="#e8b768">CLAY: OPEN</text>
+  </g>
+
+  <!-- Urban -->
+  <g transform="translate(70 950)">
+    <rect width="1660" height="125" rx="18" fill="#263139" stroke="#6fa8dc" stroke-width="3"/>
+    <rect x="22" y="24" width="48" height="48" rx="24" fill="#6fa8dc"/>
+    <text x="46" y="55" text-anchor="middle" class="id">10</text>
+    <text x="88" y="48" class="site">URBAN INSTITUTION</text>
+    <text x="88" y="76" class="small">the road grows walls</text>
+    <text x="335" y="48" class="body">public street · frontage/hall · vertical deck · schedule</text>
+    <text x="335" y="78" class="small">household ownership, traffic, time and authority change the same slice</text>
+    <text x="905" y="48" class="body">traffic · commerce · household · authority · time · service</text>
+    <text x="905" y="78" class="small">palette supports culture; construction and permissions carry it</text>
+    <text x="1525" y="48" class="status" fill="#e8b768">R / F / B: PARTIAL</text>
+    <text x="1525" y="78" class="status" fill="#e8b768">CLAY: OPEN</text>
+  </g>
+
+  <text x="70" y="1120" class="small">R = researched · F = founder-ruled · B = brief-congruent. Working-spec detail does not alter these gates or substitute for retained clay proof.</text>
+</svg>

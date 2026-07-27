@@ -1,0 +1,2196 @@
+[
+  {
+    "idx": 0,
+    "brief": {
+      "species": "Human",
+      "class": "Fighter",
+      "background": "Soldier"
+    },
+    "charName": "Reynard Underwood",
+    "headline": "a Soldier Human Fighter who suffered a tragedy",
+    "life": {
+      "age": "31–40",
+      "birthplace": {
+        "roll": 42,
+        "total": 42,
+        "text": "At home"
+      },
+      "family": {
+        "text": "Mother and father",
+        "absent": null
+      },
+      "siblings": {
+        "text": "None",
+        "count": 0,
+        "birthOrder": null
+      },
+      "lifestyle": "Modest",
+      "childhoodHome": "A large house",
+      "childhoodMemory": "Everyone knew my name, and I had friends everywhere.",
+      "decisions": {
+        "background": "War was the weather of my childhood; fighting is simply what I know.",
+        "classTraining": "A monster took someone from me, and I learned to take monsters apart."
+      },
+      "events": [
+        {
+          "roll": 4,
+          "summary": "You suffered a tragedy.",
+          "detail": "A family member or close friend died. (cause of death: An accident, unrelated)",
+          "hook": "suffered a tragedy",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A loved one, lost",
+              "desc": "now dead — an accident, unrelated"
+            }
+          ]
+        },
+        {
+          "roll": 8,
+          "summary": "You suffered a tragedy.",
+          "detail": "You were jailed for a crime you didn't commit — 6 years of hard labor.",
+          "hook": "suffered a tragedy",
+          "seeds": []
+        },
+        {
+          "roll": 57,
+          "summary": "You worked a while at your old trade (+6 gp).",
+          "detail": "",
+          "hook": "worked a while at your old trade (+6 gp)",
+          "seeds": []
+        },
+        {
+          "roll": 41,
+          "summary": "You made a fast friend of a wanderer like yourself.",
+          "detail": "Your friend is a dwarf artisan or guild member, friendly to you, alive and well.",
+          "hook": "made a fast friend of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A friend from the past",
+              "desc": "a dwarf artisan or guild member, friendly to you, alive and well"
+            }
+          ]
+        },
+        {
+          "roll": 21,
+          "summary": "You fell in love or were wed.",
+          "detail": "Your love is an elf artisan or guild member, friendly to you, alive but doing poorly.",
+          "hook": "fell in love or were wed",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A love or spouse",
+              "desc": "an elf artisan or guild member, friendly to you, alive but doing poorly"
+            }
+          ]
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 87,
+      "band": "Strange",
+      "name": "The Shimmering Maw",
+      "desc": "A village suspended by massive chains over a crater of fused, multicolored glass.",
+      "rawText": "The Shimmering Maw: A village suspended by massive chains over a crater of fused, multicolored glass."
+    },
+    "hometownHistory": {
+      "total": 7,
+      "band": "Grounded",
+      "text": "The last dry ground before the marsh — everyone stops to gather themselves before crossing."
+    },
+    "hometownMyth": {
+      "total": 81,
+      "band": "Textured",
+      "text": "The Dreaming Family: One family each generation is born with prophetic dreams, and by custom they belong to the town — dreams recorded, interpreted by the council, acted on. The family has never refused; no one is certain they could. The current dreamer is nine, hates it, and has started lying, and exactly one councilwoman has noticed that the town is now navigating by the invented dreams of a spiteful child, and is saying nothing, because the invented ones keep coming true."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 71,
+      "idx": 29,
+      "cat": "Textured",
+      "name": "Apex Station 4",
+      "desc": "Clockwork ruins reclaimed by a bioluminescent, aggressive jungle."
+    },
+    "bornWhere": "Apex Station 4",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "sent or summoned",
+      "foot": "nothing but what you carry",
+      "standing": "owed a favor by them",
+      "standingFaction": "The Ochre-Stained",
+      "proximity": {
+        "relationship": "tie",
+        "faction": "The Ochre-Stained",
+        "kind": "martial",
+        "dominant": true
+      },
+      "tension": {
+        "danger": "the dispossessed are organizing toward revolt",
+        "dangerFrag": "the cast-out are gathering, quietly",
+        "kind": "internal",
+        "doomDM": "the town falls — taken, occupied, or made to kneel",
+        "realDM": null
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "a gang's lieutenant testing whether you'll kneel",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Ochre-Stained (the dominant power) — means to restore a lost status, title, or homeland",
+            "src": "power"
+          },
+          {
+            "text": "The Ochre-Stained — you are tied to them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "A loved one, lost — now dead — an accident, unrelated",
+            "src": "past"
+          },
+          {
+            "text": "A friend from the past — a dwarf artisan or guild member, friendly to you, alive and well",
+            "src": "past"
+          }
+        ],
+        "things": [
+          {
+            "text": "a token of trust that opens one door, once",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Miller's Leat",
+            "src": "place"
+          },
+          {
+            "text": "The Salt-Lick Flats",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Miller's Leat",
+      "The Salt-Lick Flats"
+    ],
+    "factions": [
+      {
+        "name": "The Ochre-Stained",
+        "dominant": true,
+        "agenda": "restore a lost status, title, or homeland",
+        "method": "open force"
+      },
+      {
+        "name": "The Slaters' Company",
+        "dominant": false,
+        "agenda": "break, absorb, or outlast a rival",
+        "method": "open force"
+      },
+      {
+        "name": "The Apothecary's Knot",
+        "dominant": false,
+        "agenda": "wake, finish, or feed something old",
+        "method": "coercion and made examples"
+      },
+      {
+        "name": "The Gentry's Guard",
+        "dominant": false,
+        "agenda": "wake, finish, or feed something old",
+        "method": "faith and persuasion"
+      }
+    ]
+  },
+  {
+    "idx": 1,
+    "brief": {
+      "species": "Elf",
+      "class": "Wizard",
+      "background": "Sage"
+    },
+    "charName": "Del Withrethin",
+    "headline": "a Sage Elf Wizard who suffered a tragedy",
+    "life": {
+      "age": "21–30",
+      "birthplace": {
+        "roll": 9,
+        "total": 9,
+        "text": "At home"
+      },
+      "family": {
+        "text": "A single father or stepfather",
+        "absent": "A parent died (roll Cause of Death)."
+      },
+      "siblings": {
+        "text": "1d4+1",
+        "count": 2,
+        "birthOrder": "Younger"
+      },
+      "lifestyle": "Modest",
+      "childhoodHome": "A large house",
+      "childhoodMemory": "I had several friends and a mostly happy childhood.",
+      "decisions": {
+        "background": "A mentor cracked open a door in my mind that I could never close again.",
+        "classTraining": "A learned relative decided I was clever enough to be worth the teaching."
+      },
+      "events": [
+        {
+          "roll": 7,
+          "summary": "You suffered a tragedy.",
+          "detail": "You were exiled from your community for a reason never told to you.",
+          "hook": "suffered a tragedy",
+          "seeds": []
+        },
+        {
+          "roll": 49,
+          "summary": "You made a fast friend of a wanderer like yourself.",
+          "detail": "Your friend is a goliath artisan or guild member, friendly to you, missing or unknown.",
+          "hook": "made a fast friend of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A friend from the past",
+              "desc": "a goliath artisan or guild member, friendly to you, missing or unknown"
+            }
+          ]
+        },
+        {
+          "roll": 28,
+          "summary": "You fell in love or were wed.",
+          "detail": "Your love is a human sailor, friendly to you, alive and quite successful.",
+          "hook": "fell in love or were wed",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A love or spouse",
+              "desc": "a human sailor, friendly to you, alive and quite successful"
+            }
+          ]
+        },
+        {
+          "roll": 14,
+          "summary": "A bit of good fortune found you.",
+          "detail": "A hedge-mage gave you a scroll holding one small spell (a cantrip; DM's choice).",
+          "hook": "a bit of good fortune found you",
+          "seeds": []
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 50,
+      "band": "Grounded",
+      "name": "Rivenmoor Crossing",
+      "desc": "A peat-bog village that exists because the single dry causeway across the moor begins here and ends at the other side.",
+      "rawText": "Rivenmoor Crossing: A peat-bog village that exists because the single dry causeway across the moor begins here and ends at the other side."
+    },
+    "hometownHistory": {
+      "total": 17,
+      "band": "Grounded",
+      "text": "A fertile bottomland that simply fed too many people to leave."
+    },
+    "hometownMyth": {
+      "total": 72,
+      "band": "Textured",
+      "text": "The Bone Tithe: Every seventh harvest, the miller buries one sack of flour unground at the field's edge. His grandfather skipped it once and the mill burned. Buyers accept the seventh-year shortfall without comment, the sack is carried out in silence, and the burying-spot is churned earth going back centuries — nobody has ever dug one back up, and the miller owns three dogs to keep it that way."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 37,
+      "idx": 12,
+      "cat": "Grounded",
+      "name": "The Pilgrim's Ascent",
+      "desc": "Stone switchbacks leading to a monastery carved into a cliffside."
+    },
+    "bornWhere": "The Pilgrim's Ascent",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "recruited for this, specifically",
+      "foot": "a shared enemy with someone local",
+      "standing": "in their debt",
+      "standingFaction": "The Ironwood Circle",
+      "proximity": {
+        "relationship": "tie",
+        "faction": "The Hearth-Watch",
+        "kind": "martial",
+        "dominant": false
+      },
+      "tension": {
+        "danger": "a haunting or a curse no one will name has settled in",
+        "dangerFrag": "a cold no one will name has moved in",
+        "kind": "internal",
+        "doomDM": "displacement — the people scatter",
+        "realDM": "an object that should have been destroyed"
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "a bound fiend that has named you the price of its freedom",
+            "src": "fresh",
+            "band": "Volatile"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Ironwood Circle (the dominant power) — means to seize control of a vital resource",
+            "src": "power"
+          },
+          {
+            "text": "The Hearth-Watch — you are tied to them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "A friend from the past — a goliath artisan or guild member, friendly to you, missing or unknown",
+            "src": "past"
+          },
+          {
+            "text": "A love or spouse — a human sailor, friendly to you, alive and quite successful",
+            "src": "past"
+          }
+        ],
+        "things": [
+          {
+            "text": "a letter you were asked to deliver, sender unknown",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Tithe-Barn",
+            "src": "place"
+          },
+          {
+            "text": "The Wayward Shrine",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Tithe-Barn",
+      "The Wayward Shrine"
+    ],
+    "factions": [
+      {
+        "name": "The Ironwood Circle",
+        "dominant": true,
+        "agenda": "seize control of a vital resource",
+        "method": "commerce and debt"
+      },
+      {
+        "name": "The Hearth-Watch",
+        "dominant": false,
+        "agenda": "break, absorb, or outlast a rival",
+        "method": "coercion and made examples"
+      }
+    ]
+  },
+  {
+    "idx": 2,
+    "brief": {
+      "species": "Dwarf",
+      "class": "Cleric",
+      "background": "Acolyte"
+    },
+    "charName": "Yurgunn Ruby-Eye",
+    "headline": "a Acolyte Dwarf Cleric who met someone who mattered",
+    "life": {
+      "age": "21–30",
+      "birthplace": {
+        "roll": 5,
+        "total": 5,
+        "text": "At home"
+      },
+      "family": {
+        "text": "A single mother or stepmother",
+        "absent": "A parent abandoned you."
+      },
+      "siblings": {
+        "text": "None",
+        "count": 0,
+        "birthOrder": null
+      },
+      "lifestyle": "Modest",
+      "childhoodHome": "A mansion",
+      "childhoodMemory": "I had a few close friends and an ordinary childhood.",
+      "decisions": {
+        "background": "One sermon cracked me open like a nut, and I poured myself into the work after.",
+        "classTraining": "Something on the far side of the veil named me its hand in the world."
+      },
+      "events": [
+        {
+          "roll": 72,
+          "summary": "You met someone who mattered.",
+          "detail": "They are a human criminal, friendly to you, alive and well.",
+          "hook": "met someone who mattered",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "Someone important you met",
+              "desc": "a human criminal, friendly to you, alive and well"
+            }
+          ]
+        },
+        {
+          "roll": 48,
+          "summary": "You made a fast friend of a wanderer like yourself.",
+          "detail": "Your friend is a halfling laborer, friendly to you, alive and quite successful.",
+          "hook": "made a fast friend of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A friend from the past",
+              "desc": "a halfling laborer, friendly to you, alive and quite successful"
+            }
+          ]
+        },
+        {
+          "roll": 26,
+          "summary": "You fell in love or were wed.",
+          "detail": "Your love is a halfling farmer or herder, friendly to you, alive but doing poorly.",
+          "hook": "fell in love or were wed",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A love or spouse",
+              "desc": "a halfling farmer or herder, friendly to you, alive but doing poorly"
+            }
+          ]
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 55,
+      "band": "Grounded",
+      "name": "The Quarantine Port",
+      "desc": "A harbor where incoming ships must anchor offshore for forty days before any cargo or passenger touches land.",
+      "rawText": "The Quarantine Port: A harbor where incoming ships must anchor offshore for forty days before any cargo or passenger touches land."
+    },
+    "hometownHistory": {
+      "total": 24,
+      "band": "Grounded",
+      "text": "A border customs post, grown fat on the duties both realms charge."
+    },
+    "hometownMyth": {
+      "total": 37,
+      "band": "Grounded",
+      "text": "The Second Moon Night: Once a generation the moon doubles for a single night, and children conceived then are born with two shadows and twice the ambition. Birth records are checked against the last occurrence, \"moon-got\" is either a boast or a slur depending on the tavern, and two of the last three mayors campaigned on it."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 25,
+      "idx": 8,
+      "cat": "Grounded",
+      "name": "The Cobbled Tannery",
+      "desc": "A district of brine and leather built over natural sea caves."
+    },
+    "bornWhere": "The Cobbled Tannery",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "carrying something to deliver",
+      "foot": "a patron's eye already on you",
+      "standing": "in their debt",
+      "standingFaction": "The Navigator's Lodge",
+      "proximity": {
+        "relationship": "member",
+        "faction": "The Hearth-Watch",
+        "kind": "divine",
+        "dominant": false
+      },
+      "tension": {
+        "danger": "a blood-feud between families or quarters is turning open",
+        "dangerFrag": "old family grudges sharpening to blades",
+        "kind": "internal",
+        "doomDM": "a permanent loss — a place razed, a resource gone",
+        "realDM": null
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "a creditor who says you owe a debt you don't remember",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Navigator's Lodge (the dominant power) — means to wake, finish, or feed something old",
+            "src": "power"
+          },
+          {
+            "text": "The Hearth-Watch — you are a sworn member of them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "Someone important you met — a human criminal, friendly to you, alive and well",
+            "src": "past"
+          },
+          {
+            "text": "A friend from the past — a halfling laborer, friendly to you, alive and quite successful",
+            "src": "past"
+          }
+        ],
+        "things": [
+          {
+            "text": "a stolen thing in your pack you didn't put there",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Miller's Leat",
+            "src": "place"
+          },
+          {
+            "text": "The Charcoal Burner's Ring",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Miller's Leat",
+      "The Charcoal Burner's Ring"
+    ],
+    "factions": [
+      {
+        "name": "The Navigator's Lodge",
+        "dominant": true,
+        "agenda": "wake, finish, or feed something old",
+        "method": "marriage and blood-ties"
+      },
+      {
+        "name": "The Gravity-Movers",
+        "dominant": false,
+        "agenda": "restore a lost status, title, or homeland",
+        "method": "commerce and debt"
+      },
+      {
+        "name": "The Hearth-Watch",
+        "dominant": false,
+        "agenda": "win legitimacy — to be loved, not merely feared",
+        "method": "faith and persuasion"
+      }
+    ]
+  },
+  {
+    "idx": 3,
+    "brief": {
+      "species": "Halfling",
+      "class": "Rogue",
+      "background": "Criminal"
+    },
+    "charName": "Sam Elderberry",
+    "headline": "a Criminal Halfling Rogue who a bit of good fortune found you",
+    "life": {
+      "age": "41–50",
+      "birthplace": {
+        "roll": 83,
+        "total": 83,
+        "text": "In a keep, tower, or great house"
+      },
+      "family": {
+        "text": "A single mother or stepmother",
+        "absent": "A parent abandoned you."
+      },
+      "siblings": {
+        "text": "None",
+        "count": 0,
+        "birthOrder": null
+      },
+      "lifestyle": "Modest",
+      "childhoodHome": "A small house",
+      "childhoodMemory": "I had a few close friends and an ordinary childhood.",
+      "decisions": {
+        "background": "I fell in with a bad crowd and turned out to have a talent for their work.",
+        "classTraining": "I ran with a crew who taught me to get what I want by guile, not force."
+      },
+      "events": [
+        {
+          "roll": 12,
+          "summary": "A bit of good fortune found you.",
+          "detail": "A local temple owes you one healing, up to your hit point maximum.",
+          "hook": "a bit of good fortune found you",
+          "seeds": []
+        },
+        {
+          "roll": 90,
+          "summary": "You fought in a battle.",
+          "detail": "You survived, but the nights bring it back in nightmares.",
+          "hook": "fought in a battle",
+          "seeds": [
+            {
+              "kind": "mark",
+              "text": "You survived, but the nights bring it back in nightmares."
+            }
+          ]
+        },
+        {
+          "roll": 57,
+          "summary": "You worked a while at your old trade (+6 gp).",
+          "detail": "",
+          "hook": "worked a while at your old trade (+6 gp)",
+          "seeds": []
+        },
+        {
+          "roll": 56,
+          "summary": "You worked a while at your old trade (+8 gp).",
+          "detail": "",
+          "hook": "worked a while at your old trade (+8 gp)",
+          "seeds": []
+        },
+        {
+          "roll": 41,
+          "summary": "You made a fast friend of a wanderer like yourself.",
+          "detail": "Your friend is a goliath artisan or guild member, indifferent to you, alive and well.",
+          "hook": "made a fast friend of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A friend from the past",
+              "desc": "a goliath artisan or guild member, indifferent to you, alive and well"
+            }
+          ]
+        },
+        {
+          "roll": 16,
+          "summary": "A bit of good fortune found you.",
+          "detail": "You saved a commoner's life; they owe you a life-debt and travel with you.",
+          "hook": "a bit of good fortune found you",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A life-debt companion",
+              "desc": "a human exile, hermit, or refugee, friendly to you, alive and well"
+            }
+          ]
+        },
+        {
+          "roll": 72,
+          "summary": "You met someone who mattered.",
+          "detail": "They are a dwarf artisan or guild member, friendly to you, alive and quite successful.",
+          "hook": "met someone who mattered",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "Someone important you met",
+              "desc": "a dwarf artisan or guild member, friendly to you, alive and quite successful"
+            }
+          ]
+        },
+        {
+          "roll": 68,
+          "summary": "You worked a while at your old trade (+2 gp).",
+          "detail": "",
+          "hook": "worked a while at your old trade (+2 gp)",
+          "seeds": []
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 8,
+      "band": "Grounded",
+      "name": "Old Oak Wharf",
+      "desc": "A river trading post built entirely from the timber of a single gargantuan fallen tree.",
+      "rawText": "Old Oak Wharf: A river trading post built entirely from the timber of a single gargantuan fallen tree."
+    },
+    "hometownHistory": {
+      "total": 4,
+      "band": "Grounded",
+      "text": "A bridge over the one fordable narrows for fifty miles, and the town is the toll."
+    },
+    "hometownMyth": {
+      "total": 40,
+      "band": "Grounded",
+      "text": "The Glutton's Bell: A famously fat magistrate decreed a bell rung whenever a feast was laid, so he'd never miss one; he died mid-feast, and now the bell rings once at every funeral instead — \"his last course.\" Feasts here begin only after a moment of silence for the man who'd have hated the pause."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 81,
+      "idx": 31,
+      "cat": "Textured",
+      "name": "The Dorsal Market",
+      "desc": "A trading hub upon the spine of a gargantuan, slow-flying sky-whale."
+    },
+    "bornWhere": "The Dorsal Market",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "carrying something to deliver",
+      "foot": "a patron's eye already on you",
+      "standing": "a stranger, unknown and unproven",
+      "standingFaction": "The Tithe-Keepers",
+      "proximity": {
+        "relationship": "tie",
+        "faction": "The Crier's Circle",
+        "kind": "criminal",
+        "dominant": false
+      },
+      "tension": {
+        "danger": "a guild or cartel is tightening its grip on a vital trade",
+        "dangerFrag": "fewer hands hold the trade each week",
+        "kind": "internal",
+        "doomDM": "the town falls — taken, occupied, or made to kneel",
+        "realDM": null
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "a guard captain with no patience for newcomers",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "friends": [
+          {
+            "text": "A life-debt companion — a human exile, hermit, or refugee, friendly to you, alive and well",
+            "src": "past"
+          },
+          {
+            "text": "The Tithe-Keepers (the dominant power) — means to widen its territory or reach",
+            "src": "power"
+          }
+        ],
+        "complications": [
+          {
+            "text": "A friend from the past — a goliath artisan or guild member, indifferent to you, alive and well",
+            "src": "past"
+          },
+          {
+            "text": "Someone important you met — a dwarf artisan or guild member, friendly to you, alive and quite successful",
+            "src": "past"
+          }
+        ],
+        "things": [
+          {
+            "text": "a coin from no mint anyone can name",
+            "src": "fresh",
+            "band": "Textured"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Salt-Lick Flats",
+            "src": "place"
+          },
+          {
+            "text": "The Weeping Quarry",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Salt-Lick Flats",
+      "The Weeping Quarry"
+    ],
+    "factions": [
+      {
+        "name": "The Tithe-Keepers",
+        "dominant": true,
+        "agenda": "widen its territory or reach",
+        "method": "faith and persuasion"
+      },
+      {
+        "name": "The Toll-Pylon Families",
+        "dominant": false,
+        "agenda": "impose its creed, law, or taboo on everyone",
+        "method": "commerce and debt"
+      },
+      {
+        "name": "The Mercers' Union",
+        "dominant": false,
+        "agenda": "restore a lost status, title, or homeland",
+        "method": "marriage and blood-ties"
+      },
+      {
+        "name": "The Crier's Circle",
+        "dominant": false,
+        "agenda": "restore a lost status, title, or homeland",
+        "method": "sabotage and accidents"
+      }
+    ]
+  },
+  {
+    "idx": 4,
+    "brief": {
+      "species": "Tiefling",
+      "class": "Warlock",
+      "background": "Hermit"
+    },
+    "charName": "Cimer Love",
+    "headline": "a Hermit Tiefling Warlock who made an enemy of a wanderer like yourself",
+    "life": {
+      "age": "21–30",
+      "birthplace": {
+        "roll": 81,
+        "total": 81,
+        "text": "In a tavern or inn"
+      },
+      "family": {
+        "text": "An adoptive family",
+        "absent": "A parent died (roll Cause of Death)."
+      },
+      "siblings": {
+        "text": "None",
+        "count": 0,
+        "birthOrder": null
+      },
+      "lifestyle": "Poor",
+      "childhoodHome": "On the streets",
+      "childhoodMemory": "I had several friends and a mostly happy childhood.",
+      "decisions": {
+        "background": "I lost everyone and everything; going it alone was all that was left.",
+        "classTraining": "In my worst hour I prayed to anything listening, and something answered."
+      },
+      "events": [
+        {
+          "roll": 39,
+          "summary": "You made an enemy of a wanderer like yourself.",
+          "detail": "Your enemy is a human laborer, friendly to you, alive but doing poorly.",
+          "hook": "made an enemy of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "An enemy made in the past",
+              "desc": "a human laborer, friendly to you, alive but doing poorly"
+            }
+          ]
+        },
+        {
+          "roll": 9,
+          "summary": "You suffered a tragedy.",
+          "detail": "War ground your home community into ruin.",
+          "hook": "suffered a tragedy",
+          "seeds": []
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 48,
+      "band": "Grounded",
+      "name": "Fishgut Alley",
+      "desc": "A processing quarter built on reclaimed foreshore where the catch is gutted, salted, and barreled before it can rot.",
+      "rawText": "Fishgut Alley: A processing quarter built on reclaimed foreshore where the catch is gutted, salted, and barreled before it can rot."
+    },
+    "hometownHistory": {
+      "total": 69,
+      "band": "Textured",
+      "text": "Settled as a penal colony; half the founding names are still spoken with a flinch."
+    },
+    "hometownMyth": {
+      "total": 11,
+      "band": "Grounded",
+      "text": "The Debt-Stone: A waist-high crossroads marker where debts were once carved in tally-marks. Locals touch it before any deal; welchers find their names freshly scratched into it overnight by parties unknown, and having your name on the stone is worse than a magistrate's judgment — no one trades with you until it's sanded off, and the sanding costs a public apology."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 41,
+      "idx": 14,
+      "cat": "Grounded",
+      "name": "The Drowned Port",
+      "desc": "A coastal town where half the streets flood at high tide."
+    },
+    "bornWhere": "The Drowned Port",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "stranded — the road or your luck ran out",
+      "foot": "a skill the town badly needs right now",
+      "standing": "in their debt",
+      "standingFaction": "The Crier's Circle",
+      "proximity": {
+        "relationship": "tie",
+        "faction": "The Bog-Iron Consortium",
+        "kind": "criminal",
+        "dominant": false
+      },
+      "tension": {
+        "danger": "the town itself is slowly becoming something else",
+        "dangerFrag": "the place itself is quietly changing",
+        "kind": "internal",
+        "doomDM": "displacement — the people scatter",
+        "realDM": "a hive or chorus, the people becoming one mind"
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "An enemy made in the past — a human laborer, friendly to you, alive but doing poorly",
+            "src": "past"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Crier's Circle (the dominant power) — means to restore a lost status, title, or homeland",
+            "src": "power"
+          },
+          {
+            "text": "The Bog-Iron Consortium — you are tied to them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "The Bog-Iron Consortium stands at open war with The Crier's Circle",
+            "src": "power"
+          }
+        ],
+        "things": [
+          {
+            "text": "a coded note you can't yet read",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Signal Cairn",
+            "src": "place"
+          },
+          {
+            "text": "The Copper-Roof Gatehouse",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Signal Cairn",
+      "The Copper-Roof Gatehouse"
+    ],
+    "factions": [
+      {
+        "name": "The Crier's Circle",
+        "dominant": true,
+        "agenda": "restore a lost status, title, or homeland",
+        "method": "law, charters, and bureaucracy"
+      },
+      {
+        "name": "The Bog-Iron Consortium",
+        "dominant": false,
+        "agenda": "amass wealth by whatever means",
+        "method": "infiltration and spies"
+      },
+      {
+        "name": "The Color-Miners",
+        "dominant": false,
+        "agenda": "break, absorb, or outlast a rival",
+        "method": "marriage and blood-ties"
+      }
+    ]
+  },
+  {
+    "idx": 5,
+    "brief": {
+      "species": "Orc",
+      "class": "Barbarian",
+      "background": "Outlander"
+    },
+    "charName": "Resh Bloodtusk",
+    "headline": "a Outlander Orc Barbarian who made an enemy of a wanderer like yourself",
+    "life": {
+      "age": "20 or younger",
+      "birthplace": {
+        "roll": 46,
+        "total": 46,
+        "text": "At home"
+      },
+      "family": {
+        "text": "Mother and father",
+        "absent": null
+      },
+      "siblings": {
+        "text": "None",
+        "count": 0,
+        "birthOrder": null
+      },
+      "lifestyle": "Modest",
+      "childhoodHome": "A mansion",
+      "childhoodMemory": "I had a few close friends and an ordinary childhood.",
+      "decisions": {
+        "background": "I learned what hunts in the dark beyond the fences, and swore to stand against it.",
+        "classTraining": "My fury kept my people alive when nothing else would."
+      },
+      "events": [
+        {
+          "roll": 38,
+          "summary": "You made an enemy of a wanderer like yourself.",
+          "detail": "Your enemy is a human farmer or herder, friendly to you, alive but doing poorly.",
+          "hook": "made an enemy of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "An enemy made in the past",
+              "desc": "a human farmer or herder, friendly to you, alive but doing poorly"
+            }
+          ]
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 2,
+      "band": "Grounded",
+      "name": "High-Harrow Gate",
+      "desc": "A crumbling grey-stone fortification guarding a mist-shrouded mountain pass.",
+      "rawText": "High-Harrow Gate: A crumbling grey-stone fortification guarding a mist-shrouded mountain pass."
+    },
+    "hometownHistory": {
+      "total": 99,
+      "band": "Volatile",
+      "text": "Settled to contain a thing the founders couldn't kill; the town is the lid, and the lid is loosening."
+    },
+    "hometownMyth": {
+      "total": 20,
+      "band": "Grounded",
+      "text": "The Bargain Ferry: The old ferryman charges each passenger what they can least afford to lose — a coin from the poor, a secret from the rich, an hour of honest talk from the lonely. Locals budget for the crossing like a confession, and the truly guilty walk twelve miles to the bridge."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 39,
+      "idx": 13,
+      "cat": "Grounded",
+      "name": "Wind-Break Village",
+      "desc": "A settlement in the lee of a massive ancient wall of unknown origin."
+    },
+    "bornWhere": "Wind-Break Village",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "sent or summoned",
+      "foot": "a room already paid for",
+      "standing": "wanted by them for something specific",
+      "standingFaction": "The Charcoal Syndicate",
+      "proximity": {
+        "relationship": "tie",
+        "faction": "The Crier's Circle",
+        "kind": "social",
+        "dominant": false
+      },
+      "tension": {
+        "danger": "a haunting or a curse no one will name has settled in",
+        "dangerFrag": "a cold no one will name has moved in",
+        "kind": "internal",
+        "doomDM": "a death, a hanging, or a massacre",
+        "realDM": "a contagion of dreams or memory, passing sleeper to sleeper"
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "An enemy made in the past — a human farmer or herder, friendly to you, alive but doing poorly",
+            "src": "past"
+          },
+          {
+            "text": "The Charcoal Syndicate (the dominant power) — means to seize control of a vital resource",
+            "src": "power"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Crier's Circle — you are tied to them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "The Crier's Circle stands nursing an old grudge with The Charcoal Syndicate",
+            "src": "power"
+          }
+        ],
+        "things": [
+          {
+            "text": "a token of trust that opens one door, once",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Wayward Shrine",
+            "src": "place"
+          },
+          {
+            "text": "The Weeping Quarry",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Wayward Shrine",
+      "The Weeping Quarry"
+    ],
+    "factions": [
+      {
+        "name": "The Charcoal Syndicate",
+        "dominant": true,
+        "agenda": "seize control of a vital resource",
+        "method": "sabotage and accidents"
+      },
+      {
+        "name": "The Crier's Circle",
+        "dominant": false,
+        "agenda": "impose its creed, law, or taboo on everyone",
+        "method": "rumor and propaganda"
+      },
+      {
+        "name": "The Bioluminescent Path",
+        "dominant": false,
+        "agenda": "bury a dangerous truth, or drag one into the light",
+        "method": "infiltration and spies"
+      }
+    ]
+  },
+  {
+    "idx": 6,
+    "brief": {
+      "species": "Gnome",
+      "class": "Bard",
+      "background": "Entertainer"
+    },
+    "charName": "Nissa",
+    "headline": "a Entertainer Gnome Bard who fought in a battle",
+    "life": {
+      "age": "21–30",
+      "birthplace": {
+        "roll": 46,
+        "total": 46,
+        "text": "At home"
+      },
+      "family": {
+        "text": "A single father or stepfather",
+        "absent": "A parent died (roll Cause of Death)."
+      },
+      "siblings": {
+        "text": "1d4+1",
+        "count": 4,
+        "birthOrder": "Older"
+      },
+      "lifestyle": "Poor",
+      "childhoodHome": "A room in a poor quarter",
+      "childhoodMemory": "I had a few close friends and an ordinary childhood.",
+      "decisions": {
+        "background": "My family sang for their supper, and I was born already knowing the chorus.",
+        "classTraining": "A master heard something in me and schooled me in the old ways."
+      },
+      "events": [
+        {
+          "roll": 90,
+          "summary": "You fought in a battle.",
+          "detail": "You were struck down and left for dead; you woke hours later remembering nothing.",
+          "hook": "fought in a battle",
+          "seeds": []
+        },
+        {
+          "roll": 62,
+          "summary": "You worked a while at your old trade (+7 gp).",
+          "detail": "",
+          "hook": "worked a while at your old trade (+7 gp)",
+          "seeds": []
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 39,
+      "band": "Grounded",
+      "name": "The Shrine-Village of Anker's Cross",
+      "desc": "A hamlet that exists only to serve the pilgrims passing through to a greater shrine farther up the road.",
+      "rawText": "The Shrine-Village of Anker's Cross: A hamlet that exists only to serve the pilgrims passing through to a greater shrine farther up the road."
+    },
+    "hometownHistory": {
+      "total": 86,
+      "band": "Textured",
+      "text": "A wrecking village that once lured ships onto the rocks for their cargo — respectable now, and touchy about it."
+    },
+    "hometownMyth": {
+      "total": 68,
+      "band": "Textured",
+      "text": "The Borrowed Year: The founder bargained ten years of his life to the river, and the river still comes to collect on the anniversary — every year, the water rises exactly to the founding stone, a 20-ft granite block on the bank, and no higher. The town treats the stone as a creditor's mark. The year the water stopped 1 ft short, nobody celebrated; everyone wondered what was being saved up."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 68,
+      "idx": 28,
+      "cat": "Textured",
+      "name": "The Shimmering Maw",
+      "desc": "A village suspended by chains over a crater of fused, multicolored glass."
+    },
+    "bornWhere": "The Shimmering Maw",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "for refuge — lying low, or starting over",
+      "foot": "an old acquaintance or contact in town",
+      "standing": "watched, or marked",
+      "standingFaction": "The Iron-Strap Guild",
+      "proximity": {
+        "relationship": "tie",
+        "faction": "The Iron-Strap Guild",
+        "kind": "criminal",
+        "dominant": true
+      },
+      "tension": {
+        "danger": "a rival settlement's ambitions are pressing inward",
+        "dangerFrag": "a neighbor's ambition leans inward",
+        "kind": "external",
+        "doomDM": "the town falls — taken, occupied, or made to kneel",
+        "realDM": null
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "The Iron-Strap Guild (the dominant power) — means to seize control of a vital resource",
+            "src": "power"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Iron-Strap Guild — you are tied to them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "The Echo-Chamber Council stands enemies by creed with The Iron-Strap Guild",
+            "src": "power"
+          }
+        ],
+        "things": [
+          {
+            "text": "a map with one landmark you recognize and the rest blank",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Tanner's Reach",
+            "src": "place"
+          },
+          {
+            "text": "The Salt-Lick Flats",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Tanner's Reach",
+      "The Salt-Lick Flats"
+    ],
+    "factions": [
+      {
+        "name": "The Iron-Strap Guild",
+        "dominant": true,
+        "agenda": "seize control of a vital resource",
+        "method": "smuggling and the black market"
+      },
+      {
+        "name": "The Echo-Chamber Council",
+        "dominant": false,
+        "agenda": "widen its territory or reach",
+        "method": "commerce and debt"
+      },
+      {
+        "name": "The Mercers' Union",
+        "dominant": false,
+        "agenda": "seize control of a vital resource",
+        "method": "rumor and propaganda"
+      }
+    ]
+  },
+  {
+    "idx": 7,
+    "brief": {
+      "species": "Goliath",
+      "class": "Paladin",
+      "background": "Noble"
+    },
+    "charName": "Manneo Skywatcher",
+    "headline": "a Noble Goliath Paladin who something happened to you that had no ordinary explanation",
+    "life": {
+      "age": "41–50",
+      "birthplace": {
+        "roll": 67,
+        "total": 67,
+        "text": "In a barn or outbuilding"
+      },
+      "family": {
+        "text": "Mother and father",
+        "absent": null
+      },
+      "siblings": {
+        "text": "1d3",
+        "count": 3,
+        "birthOrder": "Older"
+      },
+      "lifestyle": "Squalid",
+      "childhoodHome": "A rundown shack",
+      "childhoodMemory": "I made friends easily and loved being among people.",
+      "decisions": {
+        "background": "My house was disgraced, and I mean to scrub the stain off our name.",
+        "classTraining": "I served as a squire and learned enough to swear an oath of my own."
+      },
+      "events": [
+        {
+          "roll": 85,
+          "summary": "Something happened to you that had no ordinary explanation.",
+          "detail": "You stood in a holy place and felt the presence of the divine.",
+          "hook": "something happened to you that had no ordinary explanation",
+          "seeds": []
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 82,
+      "band": "Textured",
+      "name": "Deadseason Port",
+      "desc": "A port that runs at full capacity six months a year and is half-abandoned the other six, with a permanent argument about who is responsible for the town during the off-season.",
+      "rawText": "Deadseason Port: A port that runs at full capacity six months a year and is half-abandoned the other six, with a permanent argument about who is responsible for the town during the off-season."
+    },
+    "hometownHistory": {
+      "total": 47,
+      "band": "Grounded",
+      "text": "Refugees from a war stopped one hard winter and never found a reason good enough to leave."
+    },
+    "hometownMyth": {
+      "total": 93,
+      "band": "Strange",
+      "text": "The Star-Sown Field: The rare herbs in the high meadow grew from the dust of a fallen comet, and the herbs are real: they cure what they shouldn't, they grow in a perfect 300-ft ellipse, and they die if transplanted an inch beyond it. Herbalists rent harvesting rights by the hour. What the town doesn't advertise: the ellipse is measurably narrower each decade, the way a wound closes — or the way something buried finishes being spent."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 40,
+      "idx": 14,
+      "cat": "Grounded",
+      "name": "The Drowned Port",
+      "desc": "A coastal town where half the streets flood at high tide."
+    },
+    "bornWhere": "The Drowned Port",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "carrying something to deliver",
+      "foot": "nothing but what you carry",
+      "standing": "owed a favor by them",
+      "standingFaction": "The Orchard-Wardens",
+      "proximity": {
+        "relationship": "member",
+        "faction": "The Orchard-Wardens",
+        "kind": "divine",
+        "dominant": true
+      },
+      "tension": {
+        "danger": "the town itself is slowly becoming something else",
+        "dangerFrag": "the place itself is quietly changing",
+        "kind": "internal",
+        "doomDM": "the town falls — taken, occupied, or made to kneel",
+        "realDM": "a wound still spreading from something that already happened here"
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "a local tough collecting a protection you can't pay",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Orchard-Wardens (the dominant power) — means to impose its creed, law, or taboo on everyone",
+            "src": "power"
+          },
+          {
+            "text": "The Orchard-Wardens — you are a sworn member of them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "The Ochre-Stained stands holding an uneasy truce with The Orchard-Wardens",
+            "src": "power"
+          }
+        ],
+        "things": [
+          {
+            "text": "a stolen thing in your pack you didn't put there",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Floating Paving Stones",
+            "src": "place"
+          },
+          {
+            "text": "The Weeping Quarry",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Floating Paving Stones",
+      "The Weeping Quarry"
+    ],
+    "factions": [
+      {
+        "name": "The Orchard-Wardens",
+        "dominant": true,
+        "agenda": "impose its creed, law, or taboo on everyone",
+        "method": "faith and persuasion"
+      },
+      {
+        "name": "The Ochre-Stained",
+        "dominant": false,
+        "agenda": "widen its territory or reach",
+        "method": "ritual and the occult"
+      }
+    ]
+  },
+  {
+    "idx": 8,
+    "brief": {
+      "species": "Dragonborn",
+      "class": "Sorcerer",
+      "background": "Charlatan"
+    },
+    "charName": "Gilkass Shestendeliath",
+    "headline": "a Charlatan Dragonborn Sorcerer who a bit of good fortune found you",
+    "life": {
+      "age": "21–30",
+      "birthplace": {
+        "roll": 31,
+        "total": 31,
+        "text": "At home"
+      },
+      "family": {
+        "text": "A single father or stepfather",
+        "absent": "A parent abandoned you."
+      },
+      "siblings": {
+        "text": "None",
+        "count": 0,
+        "birthOrder": null
+      },
+      "lifestyle": "Poor",
+      "childhoodHome": "A rundown shack",
+      "childhoodMemory": "I had a few close friends and an ordinary childhood.",
+      "decisions": {
+        "background": "Poverty frightened me more than dishonesty, so I chose the dishonesty.",
+        "classTraining": "At my birth the milk soured and the iron went strange — an omen, they said."
+      },
+      "events": [
+        {
+          "roll": 14,
+          "summary": "A bit of good fortune found you.",
+          "detail": "An apothecary gifted you a flask of acid.",
+          "hook": "a bit of good fortune found you",
+          "seeds": []
+        },
+        {
+          "roll": 71,
+          "summary": "You met someone who mattered.",
+          "detail": "They are a halfling soldier, friendly to you, alive and well.",
+          "hook": "met someone who mattered",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "Someone important you met",
+              "desc": "a halfling soldier, friendly to you, alive and well"
+            }
+          ]
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 74,
+      "band": "Textured",
+      "name": "Bridgetax",
+      "desc": "A river-town founded by the men who collected the toll, whose descendants now own every business in the valley and still collect, though the original charter expired a century ago.",
+      "rawText": "Bridgetax: A river-town founded by the men who collected the toll, whose descendants now own every business in the valley and still collect, though the original charter expired a century ago."
+    },
+    "hometownHistory": {
+      "total": 15,
+      "band": "Grounded",
+      "text": "A stand of old timber worth the cutting, and a mill built to cut it."
+    },
+    "hometownMyth": {
+      "total": 46,
+      "band": "Grounded",
+      "text": "The Tanner's Curse: A tanner cheated on his measures for thirty years and was found dead in his own vat; the smell, they say, never left his street. The tanners' row still weighs everything twice — once for the customer, once \"for him\" — and the second weighing is always generous, the way you'd overpay a ghost."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 2,
+      "idx": 0,
+      "cat": "Grounded",
+      "name": "The Bog-Iron Camp",
+      "desc": "Mud-caked tents surrounding a shallow, rust-colored peat mine."
+    },
+    "bornWhere": "The Bog-Iron Camp",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "carrying something to deliver",
+      "foot": "nothing but what you carry",
+      "standing": "a stranger, unknown and unproven",
+      "standingFaction": "The Star-Seekers",
+      "proximity": {
+        "relationship": "member",
+        "faction": "The Glass-Singers",
+        "kind": "martial",
+        "dominant": false
+      },
+      "tension": {
+        "danger": "a sickness is spreading through the poorer quarters",
+        "dangerFrag": "a sickness creeping through the low streets",
+        "kind": "internal",
+        "doomDM": "a death, a hanging, or a massacre",
+        "realDM": null
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "a merchant you unknowingly undercut",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Star-Seekers (the dominant power) — means to restore a lost status, title, or homeland",
+            "src": "power"
+          },
+          {
+            "text": "The Glass-Singers — you are a sworn member of them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "Someone important you met — a halfling soldier, friendly to you, alive and well",
+            "src": "past"
+          },
+          {
+            "text": "The Glass-Singers stands at open war with The Star-Seekers",
+            "src": "power"
+          }
+        ],
+        "things": [
+          {
+            "text": "a vial of something unlabeled",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Witch-Hazel Copse",
+            "src": "place"
+          },
+          {
+            "text": "The Floating Paving Stones",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Witch-Hazel Copse",
+      "The Floating Paving Stones"
+    ],
+    "factions": [
+      {
+        "name": "The Star-Seekers",
+        "dominant": true,
+        "agenda": "restore a lost status, title, or homeland",
+        "method": "rumor and propaganda"
+      },
+      {
+        "name": "The Glass-Singers",
+        "dominant": false,
+        "agenda": "widen its territory or reach",
+        "method": "coercion and made examples"
+      }
+    ]
+  },
+  {
+    "idx": 9,
+    "brief": {
+      "species": "Human",
+      "class": "Druid",
+      "background": "Folk Hero"
+    },
+    "charName": "Hubert Hedley",
+    "headline": "a Folk Hero Human Druid who made an enemy of a wanderer like yourself",
+    "life": {
+      "age": "41–50",
+      "birthplace": {
+        "roll": 59,
+        "total": 59,
+        "text": "In a healer's or midwife's house"
+      },
+      "family": {
+        "text": "A single father or stepfather",
+        "absent": "A parent vanished to a fate unknown."
+      },
+      "siblings": {
+        "text": "1d6+2",
+        "count": 6,
+        "birthOrder": "Twin, triplet or quadruplet"
+      },
+      "lifestyle": "Poor",
+      "childhoodHome": "A small house",
+      "childhoodMemory": "I spent most of it alone, with no close friends.",
+      "decisions": {
+        "background": "When the moment came for someone to stand up, I found it was me.",
+        "classTraining": "A friend among the circles changed how I saw the world, so I gave back to it."
+      },
+      "events": [
+        {
+          "roll": 38,
+          "summary": "You made an enemy of a wanderer like yourself.",
+          "detail": "Your enemy is a human sailor, friendly to you, alive and infamous.",
+          "hook": "made an enemy of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "An enemy made in the past",
+              "desc": "a human sailor, friendly to you, alive and infamous"
+            }
+          ]
+        },
+        {
+          "roll": 40,
+          "summary": "You made an enemy of a wanderer like yourself.",
+          "detail": "Your enemy is a human artisan or guild member, indifferent to you, alive but doing poorly.",
+          "hook": "made an enemy of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "An enemy made in the past",
+              "desc": "a human artisan or guild member, indifferent to you, alive but doing poorly"
+            }
+          ]
+        },
+        {
+          "roll": 85,
+          "summary": "Something happened to you that had no ordinary explanation.",
+          "detail": "You escaped certain death and believe a god's hand turned it aside.",
+          "hook": "something happened to you that had no ordinary explanation",
+          "seeds": []
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 57,
+      "band": "Grounded",
+      "name": "The Potters' Quarter",
+      "desc": "A riverside district of clay banks and smoking kilns, its lanes ankle-deep in red slip and its exports stacked on every wharf.",
+      "rawText": "The Potters' Quarter: A riverside district of clay banks and smoking kilns, its lanes ankle-deep in red slip and its exports stacked on every wharf."
+    },
+    "hometownHistory": {
+      "total": 93,
+      "band": "Strange",
+      "text": "A town that appears on no map drawn from outside, only on maps drawn from within."
+    },
+    "hometownMyth": {
+      "total": 52,
+      "band": "Grounded",
+      "text": "The Seven Brothers: Seven mountain peaks are seven brothers who quarreled over their father's field until they turned to stone mid-argument. Inheritance disputes here go to mandatory arbitration within seven days — nobody wants to \"make the eighth peak\" — and the arbitrator opens every session by pointing east at the skyline."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 40,
+      "idx": 14,
+      "cat": "Grounded",
+      "name": "The Drowned Port",
+      "desc": "A coastal town where half the streets flood at high tide."
+    },
+    "bornWhere": "The Drowned Port",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "sent or summoned",
+      "foot": "nothing but what you carry",
+      "standing": "in their debt",
+      "standingFaction": "The Hearth-Watch",
+      "proximity": {
+        "relationship": "tie",
+        "faction": "The Hearth-Watch",
+        "kind": "criminal",
+        "dominant": true
+      },
+      "tension": {
+        "danger": "a blood-feud between families or quarters is turning open",
+        "dangerFrag": "old family grudges sharpening to blades",
+        "kind": "internal",
+        "doomDM": "displacement — the people scatter",
+        "realDM": "a hive or chorus, the people becoming one mind"
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "An enemy made in the past — a human sailor, friendly to you, alive and infamous",
+            "src": "past"
+          },
+          {
+            "text": "An enemy made in the past — a human artisan or guild member, indifferent to you, alive but doing poorly",
+            "src": "past"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Hearth-Watch (the dominant power) — means to seize control of a vital resource",
+            "src": "power"
+          },
+          {
+            "text": "The Hearth-Watch — you are tied to them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "The Silent Censors stands rivals over one prize with The Hearth-Watch",
+            "src": "power"
+          }
+        ],
+        "things": [
+          {
+            "text": "a mirror that shows a room you have never entered",
+            "src": "fresh",
+            "band": "Strange"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Wayward Shrine",
+            "src": "place"
+          },
+          {
+            "text": "The Rust-Creek Smelter",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Wayward Shrine",
+      "The Rust-Creek Smelter"
+    ],
+    "factions": [
+      {
+        "name": "The Hearth-Watch",
+        "dominant": true,
+        "agenda": "seize control of a vital resource",
+        "method": "smuggling and the black market"
+      },
+      {
+        "name": "The Silent Censors",
+        "dominant": false,
+        "agenda": "amass wealth by whatever means",
+        "method": "faith and persuasion"
+      },
+      {
+        "name": "The Bog-Iron Consortium",
+        "dominant": false,
+        "agenda": "acquire one specific relic, secret, or person",
+        "method": "rumor and propaganda"
+      }
+    ]
+  },
+  {
+    "idx": 10,
+    "brief": {
+      "species": "Elf",
+      "class": "Ranger",
+      "background": "Sailor"
+    },
+    "charName": "Adran Ofandrus",
+    "headline": "a Sailor Elf Ranger who made an enemy of a wanderer like yourself",
+    "life": {
+      "age": "41–50",
+      "birthplace": {
+        "roll": 38,
+        "total": 38,
+        "text": "At home"
+      },
+      "family": {
+        "text": "A grandparent or grandparents",
+        "absent": "A parent was imprisoned, enslaved, or taken away."
+      },
+      "siblings": {
+        "text": "None",
+        "count": 0,
+        "birthOrder": null
+      },
+      "lifestyle": "Modest",
+      "childhoodHome": "A rundown shack",
+      "childhoodMemory": "I spent most of it alone, with no close friends.",
+      "decisions": {
+        "background": "A relative who lived by the tide took me out to learn the water.",
+        "classTraining": "I made myself the first line between the settlements and the dark beyond."
+      },
+      "events": [
+        {
+          "roll": 32,
+          "summary": "You made an enemy of a wanderer like yourself.",
+          "detail": "Your enemy is a human entertainer, friendly to you, alive and infamous.",
+          "hook": "made an enemy of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "An enemy made in the past",
+              "desc": "a human entertainer, friendly to you, alive and infamous"
+            }
+          ]
+        },
+        {
+          "roll": 13,
+          "summary": "A bit of good fortune found you.",
+          "detail": "You saved a commoner's life; they owe you a life-debt and travel with you.",
+          "hook": "a bit of good fortune found you",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A life-debt companion",
+              "desc": "a human farmer or herder, friendly to you, alive and well"
+            }
+          ]
+        },
+        {
+          "roll": 96,
+          "summary": "You brushed up against the workings of magic.",
+          "detail": "You watched a powerful spell cast up close.",
+          "hook": "brushed up against the workings of magic",
+          "seeds": []
+        },
+        {
+          "roll": 40,
+          "summary": "You made an enemy of a wanderer like yourself.",
+          "detail": "Your enemy is an elf entertainer, friendly to you, alive and well.",
+          "hook": "made an enemy of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "An enemy made in the past",
+              "desc": "an elf entertainer, friendly to you, alive and well"
+            }
+          ]
+        },
+        {
+          "roll": 26,
+          "summary": "You fell in love or were wed.",
+          "detail": "Your love is a dwarf priest, friendly to you, alive and well.",
+          "hook": "fell in love or were wed",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "A love or spouse",
+              "desc": "a dwarf priest, friendly to you, alive and well"
+            }
+          ]
+        },
+        {
+          "roll": 36,
+          "summary": "You made an enemy of a wanderer like yourself.",
+          "detail": "Your enemy is a gnome farmer or herder, friendly to you, alive and well.",
+          "hook": "made an enemy of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "An enemy made in the past",
+              "desc": "a gnome farmer or herder, friendly to you, alive and well"
+            }
+          ]
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 73,
+      "band": "Textured",
+      "name": "The Lien-Holders' Market",
+      "desc": "A prosperous trading town whose entire economy runs on debt instruments — no coin changes hands, only promissory notes, and the clerks who validate them run everything.",
+      "rawText": "The Lien-Holders' Market: A prosperous trading town whose entire economy runs on debt instruments — no coin changes hands, only promissory notes, and the clerks who validate them run everything."
+    },
+    "hometownHistory": {
+      "total": 59,
+      "band": "Grounded",
+      "text": "A garrison town that outlived its war and learned to farm."
+    },
+    "hometownMyth": {
+      "total": 76,
+      "band": "Textured",
+      "text": "The Agreed Silence: There is one question you do not ask here — about the north road, and what happened to the last survey party. Locals say it's rude. The road is maintained, though: graded, hedged, kept fit for travel by a crew that goes out in daylight, works fast, and bills the council under a line item that just says \"the arrangement.\""
+    },
+    "worldOriginMasterSetting": {
+      "roll": 25,
+      "idx": 8,
+      "cat": "Grounded",
+      "name": "The Cobbled Tannery",
+      "desc": "A district of brine and leather built over natural sea caves."
+    },
+    "bornWhere": "The Cobbled Tannery",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "carrying something to deliver",
+      "foot": "a lead or rumor only you hold",
+      "standing": "owed a favor by them",
+      "standingFaction": "The Gentry's Guard",
+      "proximity": {
+        "relationship": "none"
+      },
+      "tension": {
+        "danger": "a blood-feud between families or quarters is turning open",
+        "dangerFrag": "old family grudges sharpening to blades",
+        "kind": "internal",
+        "doomDM": "a permanent loss — a place razed, a resource gone",
+        "realDM": null
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "An enemy made in the past — a human entertainer, friendly to you, alive and infamous",
+            "src": "past"
+          },
+          {
+            "text": "An enemy made in the past — an elf entertainer, friendly to you, alive and well",
+            "src": "past"
+          }
+        ],
+        "friends": [
+          {
+            "text": "A life-debt companion — a human farmer or herder, friendly to you, alive and well",
+            "src": "past"
+          },
+          {
+            "text": "The Gentry's Guard (the dominant power) — means to amass wealth by whatever means",
+            "src": "power"
+          }
+        ],
+        "complications": [
+          {
+            "text": "A love or spouse — a dwarf priest, friendly to you, alive and well",
+            "src": "past"
+          },
+          {
+            "text": "The Color-Miners stands secretly in league behind a public feud with The Gentry's Guard",
+            "src": "power"
+          }
+        ],
+        "things": [
+          {
+            "text": "a token of trust that opens one door, once",
+            "src": "fresh",
+            "band": "Grounded"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Witch-Hazel Copse",
+            "src": "place"
+          },
+          {
+            "text": "The Low-Tide Graveyard",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Witch-Hazel Copse",
+      "The Low-Tide Graveyard"
+    ],
+    "factions": [
+      {
+        "name": "The Gentry's Guard",
+        "dominant": true,
+        "agenda": "amass wealth by whatever means",
+        "method": "commerce and debt"
+      },
+      {
+        "name": "The Color-Miners",
+        "dominant": false,
+        "agenda": "win legitimacy — to be loved, not merely feared",
+        "method": "coercion and made examples"
+      },
+      {
+        "name": "The Tithe-Keepers",
+        "dominant": false,
+        "agenda": "impose its creed, law, or taboo on everyone",
+        "method": "law, charters, and bureaucracy"
+      }
+    ]
+  },
+  {
+    "idx": 11,
+    "brief": {
+      "species": "Halfling",
+      "class": "Monk",
+      "background": "Urchin"
+    },
+    "charName": "Blossom",
+    "headline": "a Urchin Halfling Monk who made an enemy of a wanderer like yourself",
+    "life": {
+      "age": "21–30",
+      "birthplace": {
+        "roll": 64,
+        "total": 64,
+        "text": "In a cart or wagon on the road"
+      },
+      "family": {
+        "text": "A grandparent or grandparents",
+        "absent": "A parent vanished to a fate unknown."
+      },
+      "siblings": {
+        "text": "None",
+        "count": 0,
+        "birthOrder": null
+      },
+      "lifestyle": "Modest",
+      "childhoodHome": "A rundown shack",
+      "childhoodMemory": "Others thought me strange, so I had few companions.",
+      "decisions": {
+        "background": "A thief gathered up the orphans, and we earned our keep with light fingers.",
+        "classTraining": "I went looking for a deeper understanding of where I fit in the world."
+      },
+      "events": [
+        {
+          "roll": 34,
+          "summary": "You made an enemy of a wanderer like yourself.",
+          "detail": "Your enemy is an elf farmer or herder, friendly to you, alive and quite successful.",
+          "hook": "made an enemy of a wanderer like yourself",
+          "seeds": [
+            {
+              "kind": "npc",
+              "role": "An enemy made in the past",
+              "desc": "an elf farmer or herder, friendly to you, alive and quite successful"
+            }
+          ]
+        },
+        {
+          "roll": 92,
+          "summary": "You committed a crime — or were blamed for one.",
+          "detail": "Smuggling — You did it (or helped), but were found not guilty anyway.",
+          "hook": "committed a crime — or were blamed for one",
+          "seeds": []
+        },
+        {
+          "roll": 62,
+          "summary": "You worked a while at your old trade (+11 gp).",
+          "detail": "",
+          "hook": "worked a while at your old trade (+11 gp)",
+          "seeds": []
+        }
+      ]
+    },
+    "hometownMasterSetting": {
+      "total": 79,
+      "band": "Textured",
+      "name": "The Garrison-Wife Town",
+      "desc": "A settlement of dependents and camp-followers that outlasted the army it followed, now governing itself with a military rank structure that has no military left to justify it.",
+      "rawText": "The Garrison-Wife Town: A settlement of dependents and camp-followers that outlasted the army it followed, now governing itself with a military rank structure that has no military left to justify it."
+    },
+    "hometownHistory": {
+      "total": 66,
+      "band": "Grounded",
+      "text": "A granary-and-windmill that became the safest place to store a hard year's grain."
+    },
+    "hometownMyth": {
+      "total": 10,
+      "band": "Grounded",
+      "text": "The Drowned Bells: The bells of a sunken village downriver still ring during a lunar eclipse. Every eclipse, half the town stands on the bank in the cold listening, and the ferryman charges triple for \"bell seats\" midstream, and afterward everyone agrees they heard it, in the way people agree at funerals."
+    },
+    "worldOriginMasterSetting": {
+      "roll": 1,
+      "idx": 0,
+      "cat": "Grounded",
+      "name": "The Bog-Iron Camp",
+      "desc": "Mud-caked tents surrounding a shallow, rust-colored peat mine."
+    },
+    "bornWhere": "The Bog-Iron Camp",
+    "spawnWhereOverride": null,
+    "entry": {
+      "why": "for work and coin",
+      "foot": "a shared enemy with someone local",
+      "standing": "owed a favor by them",
+      "standingFaction": "The Navigator's Lodge",
+      "proximity": {
+        "relationship": "member",
+        "faction": "The Gravity-Movers",
+        "kind": "criminal",
+        "dominant": false
+      },
+      "tension": {
+        "danger": "the border of the world is thinning here; something is coming through",
+        "dangerFrag": "the edge of the world wears thin here",
+        "kind": "external",
+        "doomDM": "the town falls — taken, occupied, or made to kneel",
+        "realDM": "the land of the dead, the boundary worn thin — manifesting as scattered bleed-points with no center"
+      },
+      "bundle": {
+        "enemies": [
+          {
+            "text": "An enemy made in the past — an elf farmer or herder, friendly to you, alive and quite successful",
+            "src": "past"
+          }
+        ],
+        "friends": [
+          {
+            "text": "The Navigator's Lodge (the dominant power) — means to win legitimacy — to be loved, not merely feared",
+            "src": "power"
+          },
+          {
+            "text": "The Gravity-Movers — you are a sworn member of them",
+            "src": "proximity"
+          }
+        ],
+        "complications": [
+          {
+            "text": "The Slaters' Company stands one has infiltrated the other with The Navigator's Lodge",
+            "src": "power"
+          }
+        ],
+        "things": [
+          {
+            "text": "a coin from no mint anyone can name",
+            "src": "fresh",
+            "band": "Textured"
+          }
+        ],
+        "places": [
+          {
+            "text": "The Rust-Creek Smelter",
+            "src": "place"
+          },
+          {
+            "text": "The Drover's Rest",
+            "src": "place"
+          }
+        ]
+      }
+    },
+    "gazetteerPlaces": [
+      "The Rust-Creek Smelter",
+      "The Drover's Rest"
+    ],
+    "factions": [
+      {
+        "name": "The Navigator's Lodge",
+        "dominant": true,
+        "agenda": "win legitimacy — to be loved, not merely feared",
+        "method": "sabotage and accidents"
+      },
+      {
+        "name": "The Slaters' Company",
+        "dominant": false,
+        "agenda": "settle an old blood-debt",
+        "method": "marriage and blood-ties"
+      },
+      {
+        "name": "The Gravity-Movers",
+        "dominant": false,
+        "agenda": "acquire one specific relic, secret, or person",
+        "method": "smuggling and the black market"
+      }
+    ]
+  }
+]

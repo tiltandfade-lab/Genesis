@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Genesis Procedural Connective Parts Gallery</title>
+  <link rel="icon" href="data:,">
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111517;color:#e8dcc1;font-family:Inter,system-ui,sans-serif}
+    canvas{display:block;width:100%;height:100%}
+    header{position:fixed;z-index:2;left:22px;top:18px;max-width:430px;padding:15px 18px;background:#15191cee;border:1px solid #5c5549}
+    h1{margin:0 0 5px;font:600 20px Georgia,serif}p{margin:0;color:#aaa69d;font-size:11px;line-height:1.45}
+  </style>
+  <script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+</head>
+<body>
+  <header>
+    <h1>Forty Engine-Owned Connective Parts</h1>
+    <p>Every object is generated from code, carries semantic material channels and named sockets, and is presentation-normalized here only so small hardware can be inspected beside larger parts. Warm plinths are the revised original ten; teal plinths are the first expansion; blue plinths are the power-transfer, routing, fastening, reinforcement, and ground-contact expansion.</p>
+  </header>
+  <script type="module">
+    import * as THREE from "three";
+    import {
+      PROCEDURAL_PART_KINDS,
+      createProceduralPart,
+    } from "/src/ui/theater-procedural-kit.js?parts-gallery-v2";
+
+    const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,1));
+    renderer.setSize(innerWidth,innerHeight);
+    renderer.outputColorSpace=THREE.SRGBColorSpace;
+    renderer.shadowMap.enabled=true;
+    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure=1.12;
+    document.body.prepend(renderer.domElement);
+
+    const scene=new THREE.Scene();
+    scene.background=new THREE.Color(0x151a1c);
+    scene.fog=new THREE.Fog(0x151a1c,16,26);
+    scene.add(new THREE.HemisphereLight(0xd9e7eb,0x40362c,2.45));
+    const sun=new THREE.DirectionalLight(0xffddb0,3.7);
+    sun.position.set(-5,10,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+    const fill=new THREE.DirectionalLight(0x91bee0,1.35);fill.position.set(6,5,-5);scene.add(fill);
+
+    const ground=new THREE.Mesh(new THREE.PlaneGeometry(18,12),new THREE.MeshStandardMaterial({color:0x3f423b,roughness:.98}));
+    ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+    const grid=new THREE.GridHelper(17,34,0x74684f,0x4d5049);grid.position.y=.004;scene.add(grid);
+
+    function label(text,x,z){
+      const canvas=document.createElement("canvas");canvas.width=360;canvas.height=76;
+      const context=canvas.getContext("2d");
+      context.fillStyle="#efe0bd";context.font="600 25px Georgia";context.textAlign="center";
+      context.fillText(text.toUpperCase(),180,42);
+      const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+      const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthWrite:false}));
+      sprite.scale.set(1.25,.28,1);sprite.position.set(x,1.02,z);scene.add(sprite);
+    }
+
+    const columns=[-6.65,-4.75,-2.85,-.95,.95,2.85,4.75,6.65];
+    const rows=[-3.5,-1.75,0,1.75,3.5];
+    const objects=[];
+    PROCEDURAL_PART_KINDS.forEach((kind,index)=>{
+      const x=columns[index%8],z=rows[Math.floor(index/8)];
+      const pedestal=new THREE.Mesh(
+        new THREE.BoxGeometry(1.35,.055,1.03),
+        new THREE.MeshStandardMaterial({color:index<10?0x4b4b42:index<20?0x3e4b4d:0x3e4655,roughness:.96}),
+      );
+      pedestal.position.set(x,.027,z);pedestal.receiveShadow=true;scene.add(pedestal);
+
+      const part=createProceduralPart(kind,{
+        seedKey:`connective-proof:${kind}`,
+        contextText:"structures built from local living ironwood",
+      });
+      const initialBounds=new THREE.Box3().setFromObject(part);
+      const size=initialBounds.getSize(new THREE.Vector3());
+      const scale=Math.max(.82,Math.min(2.15,.68/Math.max(size.x,size.y,size.z)));
+      part.scale.setScalar(scale);
+      const scaledBounds=new THREE.Box3().setFromObject(part);
+      part.position.set(x,-scaledBounds.min.y+.075,z);
+      part.rotation.y=-.16;
+      part.traverse(node=>{if(node.isMesh){node.castShadow=true;node.receiveShadow=false;}});
+      scene.add(part);objects.push(part);label(kind,x,z);
+    });
+
+    const camera=new THREE.PerspectiveCamera(36,innerWidth/innerHeight,.03,48);
+    camera.position.set(0,10.8,15.2);camera.lookAt(0,.35,0);
+    function frame(){renderer.render(scene,camera);requestAnimationFrame(frame)}frame();
+
+    window.__proceduralPartsGalleryReady=true;
+    window.__proceduralPartsGallery=objects;
+    window.__proceduralPartsCatalog=PROCEDURAL_PART_KINDS;
+    addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+  </script>
+</body>
+</html>

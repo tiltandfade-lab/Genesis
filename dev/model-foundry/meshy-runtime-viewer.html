@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Genesis Meshy Runtime Pack — Guard Post Proof</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #111315; }
+    canvas { display: block; width: 100%; height: 100%; }
+    .panel { position: fixed; z-index: 2; backdrop-filter: blur(12px); background: #141719dd; border: 1px solid #4b443a; box-shadow: 0 18px 60px #0008; }
+    #title { left: 18px; top: 18px; width: 330px; padding: 18px; }
+    h1 { font: 600 19px/1.15 Georgia, serif; margin: 0 0 7px; color: #f0dfbd; letter-spacing: .02em; }
+    p { margin: 0; color: #aaa79f; font-size: 12px; line-height: 1.45; }
+    #status { margin-top: 12px; color: #d7c18f; }
+    label { display:block; margin-top:12px; color:#8f8b82; font-size:10px; text-transform:uppercase; letter-spacing:.08em; }
+    select { width:100%; margin-top:5px; padding:7px 9px; color:#e7dec9; background:#252826; border:1px solid #625a49; }
+    #asset-list { right: 18px; top: 18px; bottom: 18px; width: 300px; overflow: auto; padding: 8px; }
+    .asset { padding: 9px 10px; border-bottom: 1px solid #ffffff12; cursor: pointer; border-left: 3px solid transparent; }
+    .asset:hover, .asset.active { background: #ffffff0c; border-left-color: #e6b85e; }
+    .asset b { display: block; color: #ded8cb; font-size: 12px; }
+    .asset span { color: #85837e; font-size: 10px; }
+    #legend { left: 18px; bottom: 18px; padding: 11px 14px; color: #aaa79f; font-size: 11px; }
+    .key { display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: #e6b85e; }
+  </style>
+  <script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+</head>
+<body>
+  <div id="title" class="panel">
+    <h1>Guard Post Donor Library</h1>
+    <p>Fifteen accepted Meshy donors, compiled into Genesis scale, materials, gameplay footprints, sockets, ownership groups, and local LODs.</p>
+    <label>Regional material context
+      <select id="material-context">
+        <option value="pine">Pine frontier</option>
+        <option value="ironwood">Ironwood region</option>
+        <option value="driftwood">Salt-coast driftwood</option>
+        <option value="creosote">Creosote mine</option>
+        <option value="oak">Oak settlement</option>
+      </select>
+    </label>
+    <label>Review lighting
+      <select id="review-lighting">
+        <option value="proof">Flat material proof</option>
+        <option value="lit">Lit engine preview</option>
+      </select>
+    </label>
+    <p id="status">Loading runtime pack…</p>
+    <p id="selected">Selected: none</p>
+  </div>
+  <div id="asset-list" class="panel"></div>
+  <div id="legend" class="panel"><span class="key"></span>Click model to identify · left-drag orbit · right/Shift-drag pan · wheel zoom</div>
+  <script type="module">
+    import * as THREE from "three";
+    import { loadDonorPiece, donorIndexFor } from "/src/ui/theater-donor.js?meshy-material-v4";
+
+    const renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    document.body.prepend(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x171b1d);
+    scene.fog = new THREE.Fog(0x171b1d, 12, 25);
+    const camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, .03, 80);
+    const target = new THREE.Vector3(0,.8,0);
+    let orbitYaw=.73, orbitPitch=.52, orbitRadius=17.5, dragging=false, panning=false, moved=false, lastX=0, lastY=0;
+    function placeCamera(){
+      camera.position.set(
+        target.x + Math.sin(orbitYaw)*Math.cos(orbitPitch)*orbitRadius,
+        target.y + Math.sin(orbitPitch)*orbitRadius,
+        target.z + Math.cos(orbitYaw)*Math.cos(orbitPitch)*orbitRadius
+      );
+      camera.lookAt(target);
+    }
+    placeCamera();
+    renderer.domElement.addEventListener("contextmenu",event=>event.preventDefault());
+    renderer.domElement.addEventListener("pointerdown",event=>{
+      dragging=true;panning=event.button===2||event.shiftKey;moved=false;lastX=event.clientX;lastY=event.clientY;
+      renderer.domElement.setPointerCapture(event.pointerId);
+    });
+    renderer.domElement.addEventListener("pointerup",event=>{
+      if(!moved && event.button===0) pickAsset(event);
+      dragging=false;panning=false;
+    });
+    renderer.domElement.addEventListener("pointermove",event=>{
+      if(!dragging)return;
+      const dx=event.clientX-lastX,dy=event.clientY-lastY;
+      if(Math.abs(dx)+Math.abs(dy)>2)moved=true;
+      if(panning){
+        const right=new THREE.Vector3().setFromMatrixColumn(camera.matrix,0);
+        const up=new THREE.Vector3().setFromMatrixColumn(camera.matrix,1);
+        target.addScaledVector(right,-dx*orbitRadius*.0012).addScaledVector(up,dy*orbitRadius*.0012);
+      } else {
+        orbitYaw-=dx*.006;orbitPitch=Math.max(.12,Math.min(1.2,orbitPitch+dy*.004));
+      }
+      lastX=event.clientX;lastY=event.clientY;placeCamera();
+    });
+    renderer.domElement.addEventListener("wheel",event=>{orbitRadius=Math.max(2,Math.min(30,orbitRadius+event.deltaY*.012));placeCamera();},{passive:true});
+
+    scene.add(new THREE.HemisphereLight(0xd3e2e8, 0x4a4032, 2.35));
+    const sun = new THREE.DirectionalLight(0xffdfad, 3.0);
+    sun.position.set(-5, 9, 4); sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    Object.assign(sun.shadow.camera, {left:-10,right:10,top:10,bottom:-10,near:.1,far:30});
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight(0x9fbce0, 1.65); fill.position.set(7, 5, -7); scene.add(fill);
+
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(22, 18), new THREE.MeshStandardMaterial({color:0x424137, roughness:.95}));
+    ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+    const grid = new THREE.GridHelper(18, 18, 0x776a50, 0x4a4941); grid.position.y = .004; scene.add(grid);
+    const wallMat = new THREE.MeshStandardMaterial({color:0x4b473c,roughness:.94});
+    const wall = new THREE.Mesh(new THREE.BoxGeometry(8,2.4,.25), wallMat);
+    wall.position.set(1,1.2,-4.22);
+    wall.castShadow=wall.receiveShadow=true;
+    scene.add(wall);
+
+    const layout = [
+      ["short-household-ridge-tent",-4.4,0,-2.4,0.12], ["universal-wagon-chassis",-3.8,0,2.2,-.15],
+      ["public-notice-signal-board",-1.9,0,-3.35,0], ["alarm-bell-yoke",-.2,0,-3.35,0],
+      ["wall-flame-sconce",1.7,.62,-3.63,0], ["archive-lectern",3.3,0,-2.6,-.25],
+      ["camp-kitchen-stores",4.6,0,-.8,-.35], ["compact-field-forge",3.5,0,1.2,.1],
+      ["timber-holding-cage",4.4,0,3.15,0], ["timber-repair-brace",1.8,0,-3.2,0],
+      ["wattle-screen",.2,0,3.7,0], ["movable-timber-barricade",-2.1,0,3.65,0],
+      ["chevaux-de-frise",-1.8,0,.75,.15], ["gabion-stone-basket",.55,0,1.85,0],
+      ["low-cover-boulder-cluster",2.0,0,2.8,0]
+    ];
+    const objects = new Map();
+    const materialAudit = {};
+    const index = await donorIndexFor("meshy-genesis");
+    const contextId = new URLSearchParams(location.search).get("material") || "pine";
+    const reviewLighting = new URLSearchParams(location.search).get("lighting") || "proof";
+    const contextText = {
+      pine:"fresh-cut pine, resin and sawdust",
+      ironwood:"structures built from local living ironwood",
+      driftwood:"salt-warped driftwood with rust-stained iron",
+      creosote:"soot-black creosote over raw pine",
+      oak:"stout local oak, worn smooth by use"
+    }[contextId];
+    const contextSelect = document.querySelector("#material-context");
+    contextSelect.value = contextId;
+    contextSelect.onchange = () => {
+      const url = new URL(location.href);
+      url.searchParams.set("material", contextSelect.value);
+      location.href = url.href;
+    };
+    const lightingSelect = document.querySelector("#review-lighting");
+    lightingSelect.value = reviewLighting;
+    lightingSelect.onchange = () => {
+      const url = new URL(location.href);
+      url.searchParams.set("lighting", lightingSelect.value);
+      location.href = url.href;
+    };
+    for (const [slug,x,y,z,rotation] of layout) {
+      const piece = await loadDonorPiece("meshy-genesis", slug, {
+        realmId:"fantasy", seedKey:`guard-post:${slug}`, contextText,
+        materialContext:{ceramic:"earthenware"},
+        materialProof:reviewLighting==="proof"
+      });
+      piece.position.set(x,y,z); piece.rotation.y = rotation;
+      piece.userData.viewerSlug=slug;
+      piece.traverse(node => { if(node.isMesh){node.castShadow=true;node.receiveShadow=true;} });
+      materialAudit[slug]=[];
+      piece.traverse(node=>{
+        if(!node.isMesh)return;
+        materialAudit[slug].push({
+          name:node.name,
+          family:node.userData?.genesisDonor?.materialFamily||null,
+          color:node.material?.color?.getHexString?.()||null,
+          materialType:node.material?.type||null
+        });
+      });
+      scene.add(piece); objects.set(slug,piece);
+    }
+
+    const list = document.querySelector("#asset-list");
+    const rowsBySlug = new Map();
+    function selectAsset(slug){
+      const object=objects.get(slug); if(!object)return;
+      document.querySelectorAll(".asset").forEach(item=>item.classList.remove("active"));
+      rowsBySlug.get(slug)?.classList.add("active");
+      const box=new THREE.Box3().setFromObject(object),center=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());
+      target.copy(center);orbitRadius=Math.max(size.length()*2.1,2.4);placeCamera();
+      document.querySelector("#selected").textContent=`Selected: ${slug.replaceAll("-"," ")}`;
+    }
+    const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
+    function pickAsset(event){
+      const rect=renderer.domElement.getBoundingClientRect();
+      pointer.set(((event.clientX-rect.left)/rect.width)*2-1,-((event.clientY-rect.top)/rect.height)*2+1);
+      raycaster.setFromCamera(pointer,camera);
+      for(const hit of raycaster.intersectObjects([...objects.values()],true)){
+        let node=hit.object;
+        while(node&&!node.userData.viewerSlug)node=node.parent;
+        if(node?.userData.viewerSlug){selectAsset(node.userData.viewerSlug);return;}
+      }
+    }
+    for (const [slug,entry] of Object.entries(index)) {
+      const row=document.createElement("div"); row.className="asset";
+      row.innerHTML=`<b>${slug.replaceAll("-"," ")}</b><span>${entry.category} · ${entry.collision} · ${entry.lods.length} LODs · ${entry.sockets.length} sockets</span>`;
+      row.onclick=()=>selectAsset(slug);
+      rowsBySlug.set(slug,row);
+      list.append(row);
+    }
+    document.querySelector("#status").textContent=`PASS · ${Object.keys(index).length} assets · 45 engine GLBs · runtime loader active`;
+    document.body.dataset.materialAudit=JSON.stringify(materialAudit);
+    window.__meshyRuntimeReady = true;
+    window.__meshyRuntimeAssets = objects;
+
+    function frame(){ renderer.render(scene,camera); requestAnimationFrame(frame); } frame();
+    addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+  </script>
+</body>
+</html>

@@ -1,15 +1,19 @@
 ---
 type: working-site-spec
 created: 2026-07-25
+updated: 2026-07-26
 status: WORKING SPEC — research/founder/brief PARTIAL; clay OPEN
 site: 10 — urban institution
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 authority:
   - GOLDEN-SITES-CATALOG.md
+  - GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md
   - STRUCTURE-KIT-CATALOG.md
 research:
   - ../Reference/Urban-Study/
   - ../Reference/Urban-Culture-Study/
+preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
+context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---
 
 # SITE 10 — URBAN INSTITUTION — WORKING SPEC
@@ -66,8 +70,14 @@ how the slice works. It is large enough to expose those relationships and small 
 that both street ends honestly promise a town beyond the frame.
 
 A row of generic façades is not an Urban Institution. A courtyard institution governed
-primarily by communal rule belongs to Site 4. A fully stopped district whose main
-identity is abandonment belongs to Site 3.
+primarily by communal rule belongs to Site 4 even when it stands in a town. A fully
+stopped district whose main identity is abandonment belongs to Site 3.
+
+A town tavern, diner, noodle bar, public house, or lodging frontage is a **Tavern venue
+program hosted by Site 10's urban fabric**, not a Site 10 subtype and not proof of the
+whole Urban family. Its service and lodging obligations come from
+`TAVERN-VENUE-ROUTING-BRIEF.md`; Site 10 supplies public frontage, district continuity,
+ambient/cold population, and urban approach.
 
 ## Required invariants
 
@@ -316,6 +326,28 @@ occupants, traffic, visibility, access, or physical state on the same blueprint.
 - water, service, waste, goods, traffic, and light ownership;
 - encounter objective, threat band, arrival side, and creature envelopes.
 
+### Current-roller preservation
+
+This spec consumes the Site 10 record in
+`GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md`.
+
+- `LIVE`: world `master`/`arch`/nearby/taboo/myth/faction/pressure axes; Place Spine
+  Market, Commons, Gathering-place, Threshold, Hall-of-law, and compatible Works;
+  realm-skinned civic forms; `rollPlace`, typed building kits, and the live urban walk's
+  topology, setup, skin, segment, scene, encounter, dressing, atmosphere, interactable,
+  light, and background facts.
+- `AUTHORED-UNWIRED`: `urban-area-type`, including Suspended Cage, Prison Block, and
+  Catwalk Maze, is not consumed by `rollUrbanWalk`.
+- `TARGET-ADAPTER`: the Urban Institution grammar must adapt the live urban graph and
+  explicitly declare any future `urban-area-type` boundary; it may not create a parallel
+  town generator or claim unwired rows are live.
+
+Before implementation, retain one non-market civic/service institution, one vertical
+or water-bound expression, and one strange setting/material result in addition to the
+market-hall slice. The Golden Seed proves street/frontage/vertical/time relationships;
+it is neither the universal institution nor a frequency target. The receipt preserves
+all upstream world/place/building/urban-walk refs.
+
 ### Semantic blueprint
 
 Commit:
@@ -427,6 +459,26 @@ Every hook touches a circuit and visible map lever.
 - Cutaway omits camera-facing walls/roofs while preserving party-wall, support, private
   room, rain, light, and access facts.
 
+### Rolled world-context projection
+
+Urban context continues both true street/water edges, owned frontage, district mass,
+roof/vertical posture, and current hour/state into bounded urban fabric. It does not
+claim that the entire city is rendered or simulated, and it cannot add a street,
+bridge, canal, roof route, shop, door, crowd, or civic service absent from the
+canonical graph/state.
+
+The first context receipt is
+`../Reference/Golden-Site-World-Context/ROLL-RECEIPTS.json#CTX-URBAN-13`:
+The Canal-Knot + Rough-Hewn Basalt. Low basalt district mass and paired street/canal
+continuations are direct. Foundry smoke, market animals, and the Hollowed Bridge need
+owned sources or known edges. The whispered name does not license a painted figure.
+
+Social/exploration-to-combat remount retains the same background state alongside the
+same streets, roofs, doors, citizens, damage, actors, knowledge, and ids.
+Context-off/on captures and receipts add `worldContextPlanId`, band/recipe ids,
+street/water/portal/support refs, source refs, omissions, false-affordance rejections,
+and fallbacks.
+
 ## Structure, mechanisms, and surfaces
 
 ### Inherited
@@ -467,7 +519,8 @@ Retain equivalents of:
 
 The receipt records seed/version, grid, fixed camera, standee envelopes, culture,
 authority, time, institution and occupancy cards, structure/material/provenance,
-clay/tactical/day/night/dressed ids and captures, validator results, and failures.
+clay/tactical/day/night/dressed ids and captures, validator results, failures,
+`rollerLineage`, and `sourceRollRefs`.
 
 ## First visual proof
 

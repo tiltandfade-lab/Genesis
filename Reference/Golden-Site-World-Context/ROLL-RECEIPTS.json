@@ -1,0 +1,180 @@
+{
+  "schema": "genesis.golden-site-world-context.roll-receipts/v1",
+  "created": "2026-07-25",
+  "status": "implementation evidence; real current roller results; not product world seeds or runtime context proof",
+  "sourceRevision": "2046712d0b5ae147f1ce40f641f866297040fc8f",
+  "runtimeTruth": {
+    "worldGenesisRng": "The current player-facing world ritual uses Math.random and does not persist a replayable RNG seed.",
+    "auditHarness": "Mulberry32 replaces Math.random only inside the read-only replay harness.",
+    "pipeline": [
+      "lookup('master')",
+      "lookup('smell')",
+      "lookup('sound')",
+      "lookup('arch')",
+      "lookup('taboo')",
+      "lookup('nearby') twice with the live distinct-result retry",
+      "lookup('myth')",
+      "lookup('faction')",
+      "lookup('pressure')"
+    ]
+  },
+  "sourceHashes": {
+    "data/world-tables.js": "db0e6676f9438ae179b00453cd2ff1ad2b4a1cf8191e40e9c305f2a143eeb533",
+    "data/creation-flow.js": "eea5810c4711eea685ce772dff01f9d76fdf28c38270e59c74e2749a995a17c9",
+    "src/engine/core.js": "8195d5265844b8b049857daf93b0d6a2d787cc1599eb9ef5aa5af945848cc4a8"
+  },
+  "worldGenesisReceipts": [
+    {
+      "id": "CTX-GP-19",
+      "siteStudy": "Site 1 — Guard Post",
+      "replayHarnessSeed": 19,
+      "rolls": {
+        "master": { "total": 6, "band": "Grounded", "name": "High-Harrow Gate", "desc": "A crumbling grey-stone fortification guarding a mist-shrouded mountain pass." },
+        "smell": { "total": 33, "band": "Grounded", "name": "Leather & Oil", "desc": "Tanned hide and a well-kept armory." },
+        "sound": { "total": 46, "band": "Grounded", "name": "Children at Play", "desc": "Shrieks and laughter down a narrow lane." },
+        "arch": { "total": 76, "band": "Textured", "name": "Bone & Sinew", "desc": "Lashed megafauna bone, scrimshawed and weather-bleached." },
+        "taboo": { "total": 99, "band": "Volatile", "name": "The Tithe of Years", "desc": "Each soul owes the town one memory a year; to withhold is to rot." },
+        "nearby": [
+          { "total": 33, "name": "The Hanging Crane" },
+          { "total": 66, "name": "The Drover's Rest" }
+        ],
+        "myth": { "total": 54, "band": "Grounded", "name": "The Drowned Bells", "desc": "A sunken village's bells ring during a lunar eclipse." },
+        "faction": { "total": 53, "band": "Grounded", "name": "The Apothecary's Knot", "desc": "Herbalists controlling the supply of medicine — and toxin." },
+        "pressure": { "total": 83, "band": "Less Grounded", "name": "The Fading Vision", "desc": "Your sight is turning monochrome; find a source of pigment." }
+      },
+      "projectionStudy": {
+        "direct": ["mist-shrouded mountain pass", "fortification", "Bone & Sinew construction"],
+        "conditional": ["nearby-place silhouettes only when node direction/knowledge licenses them"],
+        "notAutomaticallyVisible": ["children named only by sound", "memory tithe", "drowned-bell myth", "faction goal", "subjective fading vision"]
+      }
+    },
+    {
+      "id": "CTX-CAMP-7",
+      "siteStudy": "Site 2 — Camp / Service",
+      "replayHarnessSeed": 7,
+      "rolls": {
+        "master": { "total": 2, "band": "Grounded", "name": "The Bog-Iron Camp", "desc": "Mud-caked tents surrounding a shallow, rust-colored peat mine." },
+        "smell": { "total": 7, "band": "Grounded", "name": "Woodsmoke & Pine", "desc": "A hearth fire burning resinous wood." },
+        "sound": { "total": 98, "band": "Volatile", "name": "The Wrong Hour", "desc": "Dusk-bells at dawn; the day disagrees." },
+        "arch": { "total": 70, "band": "Textured", "name": "Fused Glass", "desc": "Multicolored sand melted into translucent, jagged walls." },
+        "taboo": { "total": 53, "band": "Grounded", "name": "The Unfinished Work", "desc": "Never speak of an artwork before it is finished." },
+        "nearby": [
+          { "total": 41, "name": "The Tanner's Reach" },
+          { "total": 47, "name": "The Ruined Apiary" }
+        ],
+        "myth": { "total": 24, "band": "Grounded", "name": "The Seven Brothers", "desc": "A constellation myth explaining seven nearby peaks." },
+        "faction": { "total": 56, "band": "Grounded", "name": "The Apothecary's Knot", "desc": "Herbalists controlling the supply of medicine — and toxin." },
+        "pressure": { "total": 73, "band": "Grounded", "name": "The Falling Structure", "desc": "A nearby landmark is cracking and looks ready to collapse." }
+      },
+      "projectionStudy": {
+        "direct": ["rust-colored peat ground", "mud-caked tent field", "Fused Glass construction"],
+        "conditional": ["woodsmoke only with a mounted fire source", "falling landmark only after the landmark is physically established"],
+        "notAutomaticallyVisible": ["the Wrong Hour sound as a false sunset", "unfinished-work taboo", "constellation myth", "faction goal"]
+      }
+    },
+    {
+      "id": "CTX-MONASTERY-68",
+      "siteStudy": "Site 4 — Monastery / Commune",
+      "replayHarnessSeed": 68,
+      "rolls": {
+        "master": { "total": 37, "band": "Grounded", "name": "The Pilgrim's Ascent", "desc": "Stone switchbacks leading to a monastery carved into a cliffside." },
+        "smell": { "total": 29, "band": "Grounded", "name": "Crushed Herbs", "desc": "Green and sharp — a healer's garden." },
+        "sound": { "total": 14, "band": "Grounded", "name": "Wind in Thatch", "desc": "Dry rustle through straw roofs and eaves." },
+        "arch": { "total": 98, "band": "Volatile", "name": "Sounded Glass", "desc": "Panes that hold a note; the building hums the day's weather." },
+        "taboo": { "total": 13, "band": "Grounded", "name": "The Threshold Coin", "desc": "Leave a copper on the sill before entering a stranger's home." },
+        "nearby": [
+          { "total": 53, "name": "The Signal Cairn" },
+          { "total": 43, "name": "The Tanner's Reach" }
+        ],
+        "myth": { "total": 100, "band": "Strange", "name": "The Dream-Eater", "desc": "An entity eats the memories of those who sleep in soft spots." },
+        "faction": { "total": 74, "band": "Grounded", "name": "The Scrimshaw Ring", "desc": "A coastal faction dealing in whalebone and tide-graveyard finds." },
+        "pressure": { "total": 57, "band": "Grounded", "name": "The Impending Auction", "desc": "A crowd gathers to permanently sell off a strategic resource." }
+      },
+      "projectionStudy": {
+        "direct": ["cliffside monastery", "stone switchbacks", "Sounded Glass construction"],
+        "conditional": ["healer's garden when the site/host owns it", "Signal Cairn only as a known directional node", "auction crowd as state-mounted citizens"],
+        "notAutomaticallyVisible": ["Dream-Eater", "threshold taboo", "coastal faction goal"]
+      }
+    },
+    {
+      "id": "CTX-MINE-39",
+      "siteStudy": "Site 5 — Mine / Workshop",
+      "replayHarnessSeed": 39,
+      "rolls": {
+        "master": { "total": 8, "band": "Grounded", "name": "The Ivory Pit", "desc": "A vertical city carved into the sides of an exhausted white-marble quarry." },
+        "smell": { "total": 76, "band": "Textured", "name": "Burnt Sugar & Iron", "desc": "Sweet and metallic at once, faintly wrong." },
+        "sound": { "total": 55, "band": "Grounded", "name": "Cart-Wheels & Hooves", "desc": "The grind and clop of traffic on stone." },
+        "arch": { "total": 4, "band": "Grounded", "name": "Rough-Hewn Basalt", "desc": "Heavy dark volcanic stone with visible chisel marks." },
+        "taboo": { "total": 85, "band": "Textured", "name": "The Morning Dream", "desc": "Never tell a dream aloud before noon, lest it come true." },
+        "nearby": [
+          { "total": 61, "name": "The Miller's Leat" },
+          { "total": 1, "name": "The Tithe-Barn" }
+        ],
+        "myth": { "total": 29, "band": "Grounded", "name": "The Traitor's Tree", "desc": "An ancient tree where a historical betrayal took place." },
+        "faction": { "total": 95, "band": "Less Grounded", "name": "The Color-Miners", "desc": "Obsessed with extracting impossible pigments from Strange places." },
+        "pressure": { "total": 78, "band": "Grounded", "name": "The Curiosity Seekers", "desc": "Local children or bored residents surround you with questions." }
+      },
+      "projectionStudy": {
+        "direct": ["vertical exhausted white-marble quarry", "Rough-Hewn Basalt built structures"],
+        "conditional": ["real cart route", "Miller's Leat only with known adjacency", "Color-Miner pigment traces only through owned work/state"],
+        "notAutomaticallyVisible": ["burnt-sugar smell as literal smoke", "dream taboo", "Traitor's Tree", "unmounted child crowd"]
+      }
+    },
+    {
+      "id": "CTX-LAIR-254",
+      "siteStudy": "Site 7 — Natural Lair",
+      "replayHarnessSeed": 254,
+      "rolls": {
+        "master": { "total": 92, "band": "Strange", "name": "The Gravity-Well", "desc": "A forest of trees all growing toward a floating, magnetic black stone." },
+        "smell": { "total": 68, "band": "Textured", "name": "Ozone", "desc": "The air just before lightning, with no storm in sight." },
+        "sound": { "total": 55, "band": "Grounded", "name": "Cart-Wheels & Hooves", "desc": "The grind and clop of traffic on stone." },
+        "arch": { "total": 23, "band": "Grounded", "name": "Fieldstone & Mortar", "desc": "Rounded river stones set in pale lime mortar." },
+        "taboo": { "total": 96, "band": "Volatile", "name": "The Unbroken Circle", "desc": "Step beyond the wall after dark and your place here is unmade." },
+        "nearby": [
+          { "total": 66, "name": "The Drover's Rest" },
+          { "total": 80, "name": "The Witch-Hazel Copse" }
+        ],
+        "myth": { "total": 25, "band": "Grounded", "name": "The Seven Brothers", "desc": "A constellation myth explaining seven nearby peaks." },
+        "faction": { "total": 74, "band": "Grounded", "name": "The Scrimshaw Ring", "desc": "A coastal faction dealing in whalebone and tide-graveyard finds." },
+        "pressure": { "total": 20, "band": "Grounded", "name": "The Quarantined Exit", "desc": "The only visible exit is barred by a 'minor' outbreak or dispute." }
+      },
+      "projectionStudy": {
+        "direct": ["forest growth bending toward a floating magnetic black stone", "Fieldstone & Mortar only on licensed worked/adopted structure"],
+        "conditional": ["ozone particles/light only with physical atmospheric expression", "quarantined exit as a real route state", "nearby copse only through known adjacency"],
+        "notAutomaticallyVisible": ["cart traffic without a route", "Unbroken Circle taboo", "constellation myth", "coastal faction goal"]
+      }
+    },
+    {
+      "id": "CTX-URBAN-13",
+      "siteStudy": "Site 10 — Urban Institution",
+      "replayHarnessSeed": 13,
+      "rolls": {
+        "master": { "total": 57, "band": "Grounded", "name": "The Canal-Knot", "desc": "A low city threaded with canals, where every street has a twin made of water." },
+        "smell": { "total": 37, "band": "Grounded", "name": "Hot Iron & Coal", "desc": "The metallic breath of a foundry." },
+        "sound": { "total": 8, "band": "Grounded", "name": "Distant Lowing", "desc": "Cattle and pack animals calling from a market." },
+        "arch": { "total": 5, "band": "Grounded", "name": "Rough-Hewn Basalt", "desc": "Heavy dark volcanic stone with visible chisel marks." },
+        "taboo": { "total": 4, "band": "Grounded", "name": "The Steel Silence", "desc": "Never draw or sharpen a blade within sight of a communal well." },
+        "nearby": [
+          { "total": 1, "name": "The Tithe-Barn" },
+          { "total": 10, "name": "The Hollowed Bridge" }
+        ],
+        "myth": { "total": 36, "band": "Grounded", "name": "The Salt-King's Debt", "desc": "The salt flats formed from a defeated monarch's tears." },
+        "faction": { "total": 56, "band": "Grounded", "name": "The Apothecary's Knot", "desc": "Herbalists controlling the supply of medicine — and toxin." },
+        "pressure": { "total": 88, "band": "Less Grounded", "name": "The Echoing Call", "desc": "Your own name is whispered from within a strange structure." }
+      },
+      "projectionStudy": {
+        "direct": ["low canal city", "paired street/water continuations", "Rough-Hewn Basalt construction"],
+        "conditional": ["foundry smoke only from an owned foundry/state", "market animals as state-mounted actors", "Hollowed Bridge only through a known edge"],
+        "notAutomaticallyVisible": ["Steel Silence taboo", "Salt-King myth", "faction goal", "a painted figure for the whispered name"]
+      }
+    }
+  ],
+  "composedReceiptRefs": [
+    {
+      "id": "CTX-PRISON-6198",
+      "siteStudy": "Site 6 — Prison / Custody",
+      "receipt": "../Golden-Site-Ideal-Art/prison/ROLL-RECEIPTS.json#RC-PRISON-01-ART-6198",
+      "summary": "The Shimmering Maw + Living Ironwood + The jailhouse + hanging cage; fresh deterministic reconstruction, not the missing original save."
+    }
+  ]
+}

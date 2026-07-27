@@ -4,6 +4,8 @@ created: 2026-07-25
 status: WORKING SPEC — founder foundation accepted; research PARTIAL; clay OPEN
 site: 5 — strained mine / workshop
 method: GOLDEN-SITE-CONCEPTING-GUIDELINES.md
+preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
+context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 research:
   - ../Reference/Mine-Workshop-Study/SOURCE-LEDGER.md
   - ../Reference/Mine-Workshop-Study/synthesis.md
@@ -328,6 +330,26 @@ Before layout, the roll commits:
 - realm-owned exceptions; and
 - encounter objective, threat band, creature envelopes, and arrival direction.
 
+### Current-roller preservation
+
+This spec consumes the Site 5 record in
+`GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md`.
+
+- `LIVE`: world `master`/`arch`/nearby/faction/pressure axes; Place Spine Workplace,
+  Workshop, Works, Storehouse, and compatible place/camp expressions; live building
+  interiors, dungeon area/elevation/feature results, and dungeon/wilderness walk skins.
+- `LIVE-COMPOSED`: drift mine, vertical quarry, boomtown, penal works, smelter,
+  mill/workshop, flooded machinery, failed machinery, and strange-material extraction.
+- `TARGET-ADAPTER`: the Mine/Workshop grammar translating those facts into the
+  source-to-processing-to-export chain and its labor, maintenance, hazard, and custody
+  circuits.
+
+Before implementation, retain one vertical quarry or shaft, one workshop or mill, and
+one failed, flooded, penal, or strange-material result in addition to the strained drift
+mine. The Golden Seed proves interacting production and hazard circuits; it is not the
+universal underground form. The receipt preserves upstream world/place/building/walk
+facts and the local area/elevation/feature refs.
+
 ### Semantic blueprint
 
 The roll produces named nodes and connections before it places scenery:
@@ -482,10 +504,11 @@ The eventual schema names may change, but the fixture must retain the equivalent
 `lightOwners` · `routeCapacities` · `objectiveIds` · `planTradeoffs` ·
 `recoveryVerbs` · `relaxations` · `rejections`.
 
-The proof receipt must also record seed/version, committed grid, camera, standee
-envelopes, culture/organization cards, operating-state causes, selected assemblies,
-provenance, clay/tactical/dressed surface ids, capture ids, validation results, and any
-fallback used. A screenshot without that receipt is a study image, not retained proof.
+The proof receipt must also record seed/version, `rollerLineage`, `sourceRollRefs`,
+committed grid, camera, standee envelopes, culture/organization cards, operating-state
+causes, selected assemblies, provenance, clay/tactical/dressed surface ids, capture ids,
+validation results, and any fallback used. A screenshot without that receipt is a study
+image, not retained proof.
 
 ## Lighting and cutaway
 
@@ -500,6 +523,26 @@ fallback used. A screenshot without that receipt is a study image, not retained 
 - The mine has an engineered overhead boundary. The fixed camera omits the
   camera-facing ceiling while showing enough lintel, frame, side wall, and back mass
   to make support and clearance believable.
+
+### Rolled world-context projection
+
+Mine context must explain the larger source-to-processing-to-export host: geology,
+quarry or mountain mass, spoil, water, roads, hoists, settlement support, and the
+continuation of real shafts or haul routes. A painted crane, tunnel mouth, leat, cart
+road, or workshop cannot replace a canonical connector, mechanism, provider, or
+destination.
+
+The first context receipt is
+`../Reference/Golden-Site-World-Context/ROLL-RECEIPTS.json#CTX-MINE-39`:
+The Ivory Pit + Rough-Hewn Basalt. The vertical exhausted white-marble quarry and dark
+basalt structures directly license a strong far-field geology/construction contrast.
+Cart traffic, the Miller's Leat, Color-Miner traces, and curious residents require
+their actual route, work, or actor state.
+
+Context-off/on captures retain identical working faces, haulage/manway routes, water,
+support, product, waste, actors, knowledge, and ids. The receipt adds
+`worldContextPlanId`, band/recipe ids, geology/portal/support refs, source refs,
+omissions, false-affordance rejections, and fallbacks.
 
 ## Boundaries with other sites
 

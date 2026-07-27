@@ -1,0 +1,4164 @@
+{
+  "merged": {
+    "urbanType": [
+      {
+        "key": "Entertainment Strip",
+        "count": 33,
+        "pct": 12.79
+      },
+      {
+        "key": "Harborfront",
+        "count": 31,
+        "pct": 12.02
+      },
+      {
+        "key": "Underworks",
+        "count": 27,
+        "pct": 10.47
+      },
+      {
+        "key": "Market Ward",
+        "count": 27,
+        "pct": 10.47
+      },
+      {
+        "key": "Civic Center",
+        "count": 26,
+        "pct": 10.08
+      },
+      {
+        "key": "Industrial Ward",
+        "count": 25,
+        "pct": 9.69
+      },
+      {
+        "key": "Ruined Quarter",
+        "count": 24,
+        "pct": 9.3
+      },
+      {
+        "key": "Slums / Low Ward",
+        "count": 23,
+        "pct": 8.91
+      },
+      {
+        "key": "Temple Ward",
+        "count": 23,
+        "pct": 8.91
+      },
+      {
+        "key": "Noble Quarter",
+        "count": 19,
+        "pct": 7.36
+      }
+    ],
+    "dungeonType": [
+      {
+        "key": "Subterranean Crypt",
+        "count": 54,
+        "pct": 21.34
+      },
+      {
+        "key": "Natural Cavern",
+        "count": 52,
+        "pct": 20.55
+      },
+      {
+        "key": "Military Fortification",
+        "count": 37,
+        "pct": 14.62
+      },
+      {
+        "key": "Infrastructure Hub",
+        "count": 35,
+        "pct": 13.83
+      },
+      {
+        "key": "Sunken Estate",
+        "count": 26,
+        "pct": 10.28
+      },
+      {
+        "key": "Religious Sanctuary",
+        "count": 23,
+        "pct": 9.09
+      },
+      {
+        "key": "Prison / Asylum",
+        "count": 11,
+        "pct": 4.35
+      },
+      {
+        "key": "Laboratory / Workshop",
+        "count": 10,
+        "pct": 3.95
+      },
+      {
+        "key": "The Living Hive",
+        "count": 3,
+        "pct": 1.19
+      },
+      {
+        "key": "The Megastructure",
+        "count": 2,
+        "pct": 0.79
+      }
+    ],
+    "wildFeature": [
+      {
+        "key": "Trilithon: Two standing stones with a lintel on top.",
+        "count": 6,
+        "pct": 1.11
+      },
+      {
+        "key": "Iron Pillar: Rusting cylinder humming faintly.",
+        "count": 6,
+        "pct": 1.11
+      },
+      {
+        "key": "Crystal Geode: Smashed open, revealing jagged interior.",
+        "count": 6,
+        "pct": 1.11
+      },
+      {
+        "key": "Bone Pile: A massive mound of bleached humanoid bones.",
+        "count": 6,
+        "pct": 1.11
+      },
+      {
+        "key": "Grandfather Clock: Ticking loudly, perfectly clean.",
+        "count": 5,
+        "pct": 0.93
+      },
+      {
+        "key": "Lone Boulder: A massive, unmovable rock.",
+        "count": 5,
+        "pct": 0.93
+      },
+      {
+        "key": "Plush Carpet: An incredibly long red runner unrolled in the dirt.",
+        "count": 5,
+        "pct": 0.93
+      },
+      {
+        "key": "Ruined Watchtower: Stone cylinder, roof missing.",
+        "count": 5,
+        "pct": 0.93
+      },
+      {
+        "key": "Giant Anchor: Rusted iron hook the size of a house.",
+        "count": 5,
+        "pct": 0.93
+      },
+      {
+        "key": "Giant Bear Trap: A 15-foot wide rusted iron jaw mechanism.",
+        "count": 5,
+        "pct": 0.93
+      },
+      {
+        "key": "Terraced Slopes: Earth naturally shaped like giant stairs.",
+        "count": 5,
+        "pct": 0.93
+      },
+      {
+        "key": "Towering Mesa: Steep-sided, flat-topped earth pillar.",
+        "count": 5,
+        "pct": 0.93
+      },
+      {
+        "key": "Aqueduct Pillar: Massive stone support for a ruined water bridge.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Crumbling Corner: Two walls meeting at a 90-degree angle.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Balanced Rock: Massive boulder on a tiny pedestal.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Oasis / Hot Spring: A small pool of perfectly clear water.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Floating Weapon: A normal longsword, frozen 20 feet in the air.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Singing Crystals: Shards of quartz that hum in the wind.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Floating Rock Steps: 1d4+1 stones hovering like stairs.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Giant Chainmail: A single pauldron from a colossal suit of armor.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Whirlpool / Siphon: Water actively draining underground.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Wooden Blockhouse: Rotting timber fort.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Tangled Briar Patch: A dense knot of sharp wood.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Wrecked Galleon (Bow): The front half of a massive ship.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Hollow Rock: A boulder with a cave-like interior.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Bramble Wall: Impassable thicket of thorns.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Ghost Ship: An illusion of a ship that loops a 5-sec crash.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Executioner's Block: Stained wooden stump & basket.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Earthwork Trench: Defensive ditch and dirt berm.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Obsidian Pillar: Razor-sharp black glass.",
+        "count": 4,
+        "pct": 0.74
+      },
+      {
+        "key": "Natural Amphitheater: A bowl-shaped depression.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Giant Shield: A 20-foot tall iron shield propped against a rock.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Geothermal Vent: Fissure blowing hot steam.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Overhanging Cliff: A shear drop-off dominating the map.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Twin Menhirs: Two stones forming a natural gate.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Shattered Airship: Gondola of a crashed zeppelin.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Ruined Mill: Stone foundation and a broken waterwheel.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Silent Zone: A patch of earth where no sound exists.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Sunken Altar: Slab resting inside a depression.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Maze Segment: A 30'x30' area of tall hedgerows/walls.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Crystal Cave Mouth: A tunnel entrance lined with geodes.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Split Boulder: A giant rock cracked perfectly in half.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Broken Stone Bridge: Center span has collapsed.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Crystal Outcropping: Jagged cluster of amethyst/quartz.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Caravan Wreckage: Three smashed wagons in a circle.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Palanquin: An enclosed litter with rotting silk curtains.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Petrified Waterfall: A cascade of water turned to solid stone.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Colossal Sword Hilt: The blade is buried deep underground.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Giant Skeleton (Humanoid): Half buried in the terrain.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Crashed Skiff: A small flying boat, sails torn, resting in the dirt.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Colossal Statue (Head): Half-buried giant face.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Bisected Tower: Tower cleanly cut in half vertically.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Basalt Columns: Hexagonal stepping stones.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Giant Drum: A war-drum the size of a house, skin torn.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Ruined Bathhouse: Tiled depression filled with debris.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Eldritch Crystal: Pulses with a slow, purple heartbeat.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Collapsed Mine Shaft: Timber-shored hole in the earth.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Overturned Caravel: Ship hull entirely upside down.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Stone Row: Linear wall of spaced standing stones.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Abstract Sculpture: Twisting geometric stone shapes.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Shadow-Weave Patch: Colors are inverted and greyscale.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Stone Compass: A massive navigational rose carved into the ground.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Leaning Megalith: Stone propped on another.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Bottomless Crevasse: A jagged crack in the earth.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Gargantuan Skull: Dragon or demon skull.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Stone Throne: A massive seat meant for a Titan.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Crystal Lens: A 10-foot tall magnifying glass on a brass stand.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Mushroom Ring: A perfect circle of giant toadstools.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Petroglyph Stone: Covered in spiral carvings.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Bioluminescent Grove: Flora glowing neon blue/green.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Giant Axe: Imbedded in the earth, blade serving as a wall.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Spiked Column: Pillar wrapped in iron barbs.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Buried Shrine: Roof flush with the ground level.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Glass Tree: A perfect, life-sized replica of an oak in blown glass.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Natural Arch: Wind-carved stone/ice bridge.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Iron Bell: A massive bell resting on its side.",
+        "count": 3,
+        "pct": 0.56
+      },
+      {
+        "key": "Mirror of the Sky: A stone frame holding a water-mirror.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Heroic Statue: Humanoid warrior with sword raised.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Beached Longship: Viking-style hull, ribs exposed.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Spectral Flames: Blue fire burning on bare dirt.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Coral Brain: A massive, dry land-coral outcropping.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stepped Sinkhole: Depression falling away in 5' tiers.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Acidic Seep: Green, hissing liquid pooling in rock.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Overhanging Wall: Wall leaning forward dangerously.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Giant Spear: A 30-foot long iron weapon impaled in the dirt.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Collapsed Mine Cart: Spilled load of coal/ore.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Ornate Birdcage (Giant): 15-foot-tall golden cage, door open.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Wrecked Galleon (Stern): The captain's quarters, intact.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Well: Circular wall dropping into darkness.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Cairn Marker: Neatly stacked pyramid of stones.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Giant Anvil: A 15-foot long blacksmith's block.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Gargantuan Ribcage: Bones of a mythical beast.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Hand: A colossal hand reaching out of the earth.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Jagged Menhir: Rough, unworked shard of rock.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Colossal Chain: Massive iron links anchored in rock.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Anti-Gravity Zone: Dirt and pebbles float upward here.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Giant Hourglass: Sand flowing upward instead of downward.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Chasm with Landbridge: A natural stone span over a void.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Tilted Obelisk: Leaning precariously to one side.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Eldritch Machinery: Spinning brass rings and lenses.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Solitary Archway: Freestanding stone arch.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Floating Crystal: A spinning gem hovering 10' off the ground.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Gnomish Music Box: Enlarged to the size of a wagon.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Shattered Idol: Legs remain, torso exploded.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Iron Gate: A heavy portcullis standing with no walls around it.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Meteorite Crater (Glowing): Impact hole filled with radioactive slag.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Tiered Ziggurat Altar: Three-stepped platform.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Perfectly Set Dinner Table: Fine china and chairs in the wild.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Giant Bird Nest: Woven from timber and ship masts.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Floating Earth Mote: A chunk of land hovering in the air.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Shattered Golem: The legs and pelvis of a 40' tall stone construct.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Insectoid Hive: Towering mound of hardened mud/resin.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Cradle: A heavy rock basin sized for a giant infant.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Lava Flow: Sluggish, glowing river of molten rock.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Grave Mound: A simple dirt hill with a crude marker.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Bleeding Stone: A boulder that weeps red sap/blood.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Eye: A massive carved eye looking straight up.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Wrecked Rowboat: Small vessel rotting in the elements.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Colossal Dagger: Thrust into the ground, creating a metal pillar.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Wooden Stocks: Pillory for public punishment.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Fallen Megalith: Massive stone tipped over.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Trail Cairn: A shoulder-high cairn of stacked stones marking the path.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Iron Grate: Massive metal sewer/vent cover in the ground.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Gargantuan Shed Skin: Molt of a colossal snake/worm.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Eroded Sphinx: Winged beast scoured by weather.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Chained Statue: Stone figure bound in iron links.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Fallen Bell: A 10,000 lb bronze church bell.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Petrified Cloud: A localized bank of fog turned to solid gray stone.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Skull Pyramid: Hundreds of skulls stacked neatly.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Wild Magic Zone: Air shimmers with iridescent colors.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Hollow Idol: Bronze or stone statue with a door.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Floating Obelisk: Broken base hovering mid-air.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Hanging Tapestry: Suspended between two trees/rocks.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Dressing Mirror: Full-length silver mirror.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Giant Shell: An empty, pearlescent snail/turtle shell.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Iron Sphere: A perfect, seamless ball of rusted metal.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Silk Pavilion: An opulent, pristine merchant's tent.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Redoubt: Thick bunker with a flat roof.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Chalk Pillar: Soft, white, powdery stone.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Web-Choked Trees: Forest canopy bound in thick silk.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Twin Pillars: Two identical columns side-by-side.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Gargantuan Helmet: A rusting giant's helm resting on its side.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Crescent Stones: Half-circle of 5 monoliths.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Gibbet Tree: A dead tree hanging with 1d4 iron cages.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Brimstone Pillar: Yellow-streaked, foul-smelling rock.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Tower of Books: A 20-foot-tall spiral stack of dusty tomes.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Fossilized Wagon: Cart and horse turned entirely to stone.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Cursed Soil: Ground is black, oily, and smells of rot.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Coffin (Hanging): Suspended by thick chains between rocks.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Petrified Monstrosity: A basilisk/medusa victim.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Kneeling Statue: Figure bowed in servitude.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Archery Blind: A single V-shaped stone barricade.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Shattered Obelisk: Snapped in half, top missing.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Open Sarcophagus: A stone coffin, lid pushed aside.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Floating Obelisk (Shattered): 5 pieces of a pillar hovering in a line.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Font: Basin filled with stagnant rainwater.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Giant Skeleton (Beast): Ribs of a gargantuan dinosaur/tarrasque.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Giant Birdcage (Smashed): Rusted iron bars crushed inward.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Collapsed Gatehouse: Two ruined stumps of towers.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Glass Desert: Sand fused into a jagged sheet of glass.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Narrow Fissure: A treacherous, 5-foot-wide crack.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Giant Sundial (Broken): The gnomon is snapped off.",
+        "count": 2,
+        "pct": 0.37
+      },
+      {
+        "key": "Stone Bridge: Solid masonry over a dry depression.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Floating Steps: 3 stone slabs hovering in a staircase shape.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Multi-Armed Idol: Forgotten deity with 6 arms.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Crystal Chandelier: Lying smashed on the ground.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Elemental Shrine: Altar radiating extreme cold/heat.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Meteorite Fragment: Smoking, metallic space rock.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Circular Dais: Raised platform of smooth stone.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Sunken Monolith: Leaning deep into a mud/snow pit.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Iron Chains: A massive pile of rusted anchor links.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Glass Dome: A shattered botanical greenhouse.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Petrified Geyser: A column of boiling water frozen into solid ice.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Whispering Stone: Megalith with a natural hole.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Giant Chain Anchor: An iron spike driven 30 feet into the earth.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Petrified Dragon: A wyrm turned entirely to stone.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Stone Sarcophagus (Sealed): Heavy stone lid still attached.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Eroded Obelisk: Stone pillar with faded icons.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Giant Chessboard: 40x40 grid of black and white marble.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Siege Engine: Rusted, inoperable catapult/trebuchet.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Weeping Willow (Petrified): Stone tree with drooping stone branches.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Hollow Log: A massive fallen redwood/mushroom stalk.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Obsidian Mirror: A 10x10 slab of polished black glass.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Thorny Arch: A natural bridge woven of razorvine.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Basalt Slab: Perfectly smooth, indestructible block.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Totem Pole: Carved wooden beast faces.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Breached Rampart: Wall with a massive hole blown in it.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Time-Locked Debris: Falling rocks frozen mid-air.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Suit of Armor: Standing rigidly at attention, empty inside.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Velvet Chaise Lounge: Expensive couch sitting in the mud/snow.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Stone Serpents: Two intertwined statues forming a helix.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Carved Menhir: Monolith shaped like a weapon.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Colossal Statue (Hand): Fingers reaching upward.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Bloodstained Altar: Flat slab with drainage grooves.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Ford Mooring Post: A weathered mooring post at a river crossing, rope still knotted to it.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Taxidermy Bear: Stuffed and mounted, decaying.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Gargoyle Plinth: Monstrous watcher on a tall base.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Clockwork Wreckage: Gears and brass from a machine.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Weeping Statue: Water seeps from the stone eyes.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Offering Table: Covered in rotted flora/fruit.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Mud Flat: A broad area of sticky, treacherous ground.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Collapsed Dome: Ruined hemispherical roof.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Desecrated Altar: Shrine smeared with foul ichor/blood.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Giant Pitcher: A 15-foot tall ceramic jug, tipped over.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Fallen Star: A chunk of glowing white-hot rock.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Fungal Bloom: Towering, 20-foot-tall mushrooms.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Ruined Fountain: Cracked stone basin, dry.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Domed Shrine: Small gazebo-like structure.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Crashed Chariot: Bronze war-cart, wheels shattered.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Fallen Colossus: Entire 50' statue lying in the dirt.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Overgrown Column: Choked in thick local flora.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Sandstone Pillar: Wind-carved and top-heavy.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Giant Chandelier (Crystal): Hanging from a massive branch/arch.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Giant Arrow: A ballista bolt the size of a pine tree.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Funeral Pyre (Unlit): Stacked wood awaiting a body.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Meteoric Crater: Impact zone from a fallen star.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Iron Cage: Rusted gibbet hanging from a post.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Stepping Stones: Massive carved blocks crossing a hazard.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Wagon Ruin: Overturned merchant cart.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Impaled Skeleton: Remains lashed to a wooden stake.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Floating Water Globe: A sphere of water hovering mid-air.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Giant Tuning Fork: A two-pronged metal spire.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Carnivorous Plant: A massive flytrap or mantrap.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Giant Cauldron: Massive iron pot on cold coals.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Rope Bridge (Ruined): Snapped bridge hanging from a cliff/tree.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Windmill Base: Stone foundation of a destroyed mill.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Crumbling Needle: Dangerously fragile spire.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Rocking Horse: Child's wooden toy, rocking with no wind.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Rubble Mound: The crumbled remains of a monument.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Beached Leviathan: Rotting corpse of a whale/kraken.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Clockwork Sentinel (Broken): A massive, dead iron golem.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Wooden Palisade: Ruined log wall.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Ballista Emplacement: Broken bolt-thrower on a swivel.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Petrified Root System: Huge roots breaking the earth.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Great Fallen Log: A vast fallen trunk furred with moss, blocking the way.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Marble Bust: A finely carved head of an unknown noble.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Brass Telescope: Mounted on a tripod, aimed at the dirt.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Gargantuan Eggshells: Leathery shards the size of carts.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Rubble Field (Colossal): Massive boulders from a mountain.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Ancient Barrow: A grassy hill with a stone door.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Aqueduct Span: A 30' section of raised waterway.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Ruined Trebuchet: The throwing arm and counterweight of a siege engine.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Spore Cloud: A patch of terrain covered in thick fungus.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Stone Sundial: Shadows cast by it always point to the nearest PC.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Hollowed Column: Base hollowed out like a tree.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Altar of Skulls: Slab resting on piled bone/rock.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Shattered Throne: A massive stone seat, split down the middle.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Rusted Vault Door: A circular bank door ripped from its hinges.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Chariot Tomb: A rusted chariot buried with its skeletal horses.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Low Stone Fence: Fieldstone boundary marker.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Abandoned Campsite: Tattered tents and cold firepit.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Crystal Pool: Perfectly clear water revealing the deep bottom.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Iron Safe: A massive, 5,000 lb locked bank vault.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Lighthouse Stump: Coastal/cliff beacon, top sheared off.",
+        "count": 1,
+        "pct": 0.19
+      },
+      {
+        "key": "Lava Tube: A hollow stone pipe formed by ancient magma.",
+        "count": 1,
+        "pct": 0.19
+      }
+    ],
+    "wildAreaShape": [
+      {
+        "key": "50' x 50' Four-Point Star",
+        "count": 18,
+        "pct": 3.34
+      },
+      {
+        "key": "40' x 40' U-Turn (20' wide)",
+        "count": 18,
+        "pct": 3.34
+      },
+      {
+        "key": "60' x 60' Octagon",
+        "count": 17,
+        "pct": 3.15
+      },
+      {
+        "key": "50' x 50' Triangle/Wedge",
+        "count": 16,
+        "pct": 2.97
+      },
+      {
+        "key": "40' x 50' Rectangular Basin",
+        "count": 16,
+        "pct": 2.97
+      },
+      {
+        "key": "30' x 40' Kidney Shape",
+        "count": 16,
+        "pct": 2.97
+      },
+      {
+        "key": "60' x 90' Figure-Eight",
+        "count": 16,
+        "pct": 2.97
+      },
+      {
+        "key": "60' x 80' Hollow Square (20' wide)",
+        "count": 15,
+        "pct": 2.78
+      },
+      {
+        "key": "40' x 60' Trapezoid",
+        "count": 14,
+        "pct": 2.6
+      },
+      {
+        "key": "60' x 80' Oval Valley",
+        "count": 14,
+        "pct": 2.6
+      },
+      {
+        "key": "20' x 30' Rectangular Basin",
+        "count": 14,
+        "pct": 2.6
+      },
+      {
+        "key": "20' x 20' Square Clearing",
+        "count": 14,
+        "pct": 2.6
+      },
+      {
+        "key": "30' x 50' Crescent Moon",
+        "count": 14,
+        "pct": 2.6
+      },
+      {
+        "key": "60' x 80' Kidney Shape",
+        "count": 12,
+        "pct": 2.23
+      },
+      {
+        "key": "30' x 40' Rectangular Basin",
+        "count": 12,
+        "pct": 2.23
+      },
+      {
+        "key": "30' x 30' Four-Point Star",
+        "count": 11,
+        "pct": 2.04
+      },
+      {
+        "key": "50' Diameter Circle",
+        "count": 11,
+        "pct": 2.04
+      },
+      {
+        "key": "50' x 80' Large Valley",
+        "count": 11,
+        "pct": 2.04
+      },
+      {
+        "key": "40' x 40' Diamond",
+        "count": 11,
+        "pct": 2.04
+      },
+      {
+        "key": "60' x 60' Diamond",
+        "count": 11,
+        "pct": 2.04
+      },
+      {
+        "key": "40' x 60' Figure-Eight",
+        "count": 11,
+        "pct": 2.04
+      },
+      {
+        "key": "20' x 60' Narrow Gorge",
+        "count": 10,
+        "pct": 1.86
+      },
+      {
+        "key": "30' x 30' Square Clearing",
+        "count": 10,
+        "pct": 1.86
+      },
+      {
+        "key": "20' x 30' D-Shape Clearing",
+        "count": 10,
+        "pct": 1.86
+      },
+      {
+        "key": "20' x 40' Zig-Zag Pass",
+        "count": 10,
+        "pct": 1.86
+      },
+      {
+        "key": "60' x 60' Cross-Junction (20' wide)",
+        "count": 10,
+        "pct": 1.86
+      },
+      {
+        "key": "50' x 80' Crescent Moon",
+        "count": 10,
+        "pct": 1.86
+      },
+      {
+        "key": "20' x 50' Parallel Tunnels",
+        "count": 10,
+        "pct": 1.86
+      },
+      {
+        "key": "40' x 100' S-Curve (20' wide)",
+        "count": 10,
+        "pct": 1.86
+      },
+      {
+        "key": "80' x 80' Cross-Junction (30' wide)",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "20' x 20' U-Turn (10' wide)",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "40' x 40' Octagon",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "30' x 30' Y-Junction (10' wide)",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "70' x 70' T-Junction (30' wide)",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "40' x 80' Funnel",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "40' x 100' Parallel Tunnels",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "50' x 50' T-Junction (20' wide)",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "20' x 80' Winding Trail",
+        "count": 9,
+        "pct": 1.67
+      },
+      {
+        "key": "40' x 40' L-Shape (20' wide)",
+        "count": 8,
+        "pct": 1.48
+      },
+      {
+        "key": "20' x 50' S-Curve (10' wide)",
+        "count": 8,
+        "pct": 1.48
+      },
+      {
+        "key": "60' x 60' Y-Junction (20' wide)",
+        "count": 8,
+        "pct": 1.48
+      },
+      {
+        "key": "20' x 40' Funnel",
+        "count": 8,
+        "pct": 1.48
+      },
+      {
+        "key": "30' Diameter Circle",
+        "count": 7,
+        "pct": 1.3
+      },
+      {
+        "key": "30' x 40' Hollow Square (10' wide)",
+        "count": 7,
+        "pct": 1.3
+      },
+      {
+        "key": "60' x 60' L-Shape (30' wide)",
+        "count": 7,
+        "pct": 1.3
+      },
+      {
+        "key": "40' x 80' Zig-Zag Pass",
+        "count": 7,
+        "pct": 1.3
+      },
+      {
+        "key": "40' x 60' D-Shape Basin",
+        "count": 7,
+        "pct": 1.3
+      },
+      {
+        "key": "40' x 40' Square Clearing",
+        "count": 7,
+        "pct": 1.3
+      },
+      {
+        "key": "30' x 50' Oval Basin",
+        "count": 7,
+        "pct": 1.3
+      },
+      {
+        "key": "30' x 30' Triangle/Wedge",
+        "count": 5,
+        "pct": 0.93
+      }
+    ],
+    "wildBiome": [
+      {
+        "key": "Forest",
+        "count": 77,
+        "pct": 14.29
+      },
+      {
+        "key": "Mountain",
+        "count": 67,
+        "pct": 12.43
+      },
+      {
+        "key": "Arctic",
+        "count": 66,
+        "pct": 12.24
+      },
+      {
+        "key": "Swamp",
+        "count": 63,
+        "pct": 11.69
+      },
+      {
+        "key": "Grassland",
+        "count": 63,
+        "pct": 11.69
+      },
+      {
+        "key": "Hill",
+        "count": 60,
+        "pct": 11.13
+      },
+      {
+        "key": "Desert",
+        "count": 59,
+        "pct": 10.95
+      },
+      {
+        "key": "Coastal",
+        "count": 52,
+        "pct": 9.65
+      },
+      {
+        "key": "Underwater",
+        "count": 16,
+        "pct": 2.97
+      },
+      {
+        "key": "Deeplands",
+        "count": 16,
+        "pct": 2.97
+      }
+    ],
+    "urbanThreat": [
+      {
+        "key": "Heretical Inquisitor Cell",
+        "count": 8,
+        "pct": 3.1
+      },
+      {
+        "key": "Necromancer Cells",
+        "count": 7,
+        "pct": 2.71
+      },
+      {
+        "key": "Grave Robber Gang",
+        "count": 6,
+        "pct": 2.33
+      },
+      {
+        "key": "Shadow Creature Lair",
+        "count": 6,
+        "pct": 2.33
+      },
+      {
+        "key": "Restless Haunting",
+        "count": 6,
+        "pct": 2.33
+      },
+      {
+        "key": "Rogue Wizard Ring",
+        "count": 6,
+        "pct": 2.33
+      },
+      {
+        "key": "Rival Guild",
+        "count": 6,
+        "pct": 2.33
+      },
+      {
+        "key": "Goliath Stronghold",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Dockside Enforcers",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Enchantment Ring",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Religious Fanatic Sect",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Foreign Spy Network",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Demon Summoning Ring",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "War Profiteer Cartel",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Arcane Smugglers",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Mind-Thief Agents",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Noble House Agent",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Blackmailer Ring",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Imp Summoning Pact",
+        "count": 5,
+        "pct": 1.94
+      },
+      {
+        "key": "Corrupt Guard",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Fey Court in the City",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Street Gang",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Shadow Cult",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Hag Coven (Sewers)",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Mimic Hoard",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Extortion Racket",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Doppelganger Ring",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Dragon Cult",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Undead Congregation",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Fey Incursion",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Tomb Robber Syndicate",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Yuan-ti Infiltrators",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "City Watch Turncoat",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Cloaked Cult of the Old God",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Sewer Creature Nest",
+        "count": 4,
+        "pct": 1.55
+      },
+      {
+        "key": "Golem Workshop",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Awakened Animal Cult",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Wight-Led Militia",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Wererat Warren",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Alchemist Cabal",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Vampire Spawn Nest",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Eye-Tyrant Crime Lord",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Ooze Infestation",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Lamia's Court",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Shadow Fell Bleed",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Devil Agent Network",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Werewolf Pack",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Doppelganger Network",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Con Artist Operation",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Gnoll Raiding Band",
+        "count": 3,
+        "pct": 1.16
+      },
+      {
+        "key": "Slave Ring Network",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Aberrations Beneath",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Thieves' Guild",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Shadow Thieves Guild",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Assassin's Syndicate",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Quasit Infiltrator",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Chaos-Frog Chaos Cult",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Changeling Infiltrators",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Smuggling Cartel",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Black Market Fence Network",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Smuggler Ring",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Necromancer Academy",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Elemental Cult",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Gray Dwarf Slave Trade",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Lich's Undead Army",
+        "count": 2,
+        "pct": 0.78
+      },
+      {
+        "key": "Shade Enclave",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Coup Plotters",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Arena Fight Pit Lords",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Foreign Embassy Black Ops",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Revolutionary Cell",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Rogue Wizard Cabal",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Ghost Court",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Slaver Syndicate",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Cult of the Forgotten God",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Devil-Pact Church",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Mercenary Company",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Noble House Private Army",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Tyranny's Secret Police",
+        "count": 1,
+        "pct": 0.39
+      },
+      {
+        "key": "Magical Weapons Dealers",
+        "count": 1,
+        "pct": 0.39
+      }
+    ],
+    "dungeonThreat": [
+      {
+        "key": "Risen Dead",
+        "count": 21,
+        "pct": 8.3
+      },
+      {
+        "key": "Beast Den",
+        "count": 21,
+        "pct": 8.3
+      },
+      {
+        "key": "Gnoll Warband",
+        "count": 20,
+        "pct": 7.91
+      },
+      {
+        "key": "Cultist Shrine",
+        "count": 17,
+        "pct": 6.72
+      },
+      {
+        "key": "Ooze Outbreak",
+        "count": 15,
+        "pct": 5.93
+      },
+      {
+        "key": "Orc Raid Camp",
+        "count": 12,
+        "pct": 4.74
+      },
+      {
+        "key": "Necromancer's Workshop",
+        "count": 11,
+        "pct": 4.35
+      },
+      {
+        "key": "Bandit Stronghold",
+        "count": 11,
+        "pct": 4.35
+      },
+      {
+        "key": "Construct Watch",
+        "count": 10,
+        "pct": 3.95
+      },
+      {
+        "key": "Vampire Domain",
+        "count": 10,
+        "pct": 3.95
+      },
+      {
+        "key": "Shadow Court",
+        "count": 10,
+        "pct": 3.95
+      },
+      {
+        "key": "Earth Bound",
+        "count": 8,
+        "pct": 3.16
+      },
+      {
+        "key": "Spider Nest",
+        "count": 8,
+        "pct": 3.16
+      },
+      {
+        "key": "Serpent Pit",
+        "count": 8,
+        "pct": 3.16
+      },
+      {
+        "key": "Fire Cult",
+        "count": 8,
+        "pct": 3.16
+      },
+      {
+        "key": "Lizardfolk Warren",
+        "count": 7,
+        "pct": 2.77
+      },
+      {
+        "key": "Goblin Warrens",
+        "count": 6,
+        "pct": 2.37
+      },
+      {
+        "key": "Planar Seepage",
+        "count": 6,
+        "pct": 2.37
+      },
+      {
+        "key": "Dragon Lair",
+        "count": 6,
+        "pct": 2.37
+      },
+      {
+        "key": "Fungal Bloom",
+        "count": 5,
+        "pct": 1.98
+      },
+      {
+        "key": "Thieves' Guild",
+        "count": 5,
+        "pct": 1.98
+      },
+      {
+        "key": "Fey Trespass",
+        "count": 4,
+        "pct": 1.58
+      },
+      {
+        "key": "Hag Domain",
+        "count": 4,
+        "pct": 1.58
+      },
+      {
+        "key": "Deep-Elf Outpost",
+        "count": 3,
+        "pct": 1.19
+      },
+      {
+        "key": "Aberrant Nest",
+        "count": 3,
+        "pct": 1.19
+      },
+      {
+        "key": "Demon Infestation",
+        "count": 3,
+        "pct": 1.19
+      },
+      {
+        "key": "Lycanthrope Pack",
+        "count": 3,
+        "pct": 1.19
+      },
+      {
+        "key": "Deeplands Hunters",
+        "count": 3,
+        "pct": 1.19
+      },
+      {
+        "key": "Shadow Breach",
+        "count": 3,
+        "pct": 1.19
+      },
+      {
+        "key": "Giant Colony",
+        "count": 1,
+        "pct": 0.4
+      },
+      {
+        "key": "Devil Pact",
+        "count": 1,
+        "pct": 0.4
+      }
+    ],
+    "urbanEnc": [
+      {
+        "key": "Enemy",
+        "count": 250,
+        "pct": 19.79
+      },
+      {
+        "key": "Rumor",
+        "count": 186,
+        "pct": 14.73
+      },
+      {
+        "key": "Problem",
+        "count": 172,
+        "pct": 13.62
+      },
+      {
+        "key": "Empty",
+        "count": 147,
+        "pct": 11.64
+      },
+      {
+        "key": "Hazard",
+        "count": 135,
+        "pct": 10.69
+      },
+      {
+        "key": "Social",
+        "count": 132,
+        "pct": 10.45
+      },
+      {
+        "key": "Spectacle",
+        "count": 97,
+        "pct": 7.68
+      },
+      {
+        "key": "Boon",
+        "count": 81,
+        "pct": 6.41
+      },
+      {
+        "key": "Commerce",
+        "count": 63,
+        "pct": 4.99
+      }
+    ],
+    "dungeonEnc": [
+      {
+        "key": "Enemy",
+        "count": 298,
+        "pct": 24.43
+      },
+      {
+        "key": "Problem",
+        "count": 251,
+        "pct": 20.57
+      },
+      {
+        "key": "Hazard",
+        "count": 188,
+        "pct": 15.41
+      },
+      {
+        "key": "Discovery",
+        "count": 163,
+        "pct": 13.36
+      },
+      {
+        "key": "Social",
+        "count": 135,
+        "pct": 11.07
+      },
+      {
+        "key": "Empty",
+        "count": 122,
+        "pct": 10
+      },
+      {
+        "key": "Lore",
+        "count": 63,
+        "pct": 5.16
+      }
+    ],
+    "wildEnc": [
+      {
+        "key": "Enemy",
+        "count": 613,
+        "pct": 29.02
+      },
+      {
+        "key": "Hazard",
+        "count": 544,
+        "pct": 25.76
+      },
+      {
+        "key": "Social",
+        "count": 401,
+        "pct": 18.99
+      },
+      {
+        "key": "Problem",
+        "count": 334,
+        "pct": 15.81
+      },
+      {
+        "key": "Empty",
+        "count": 123,
+        "pct": 5.82
+      },
+      {
+        "key": "Discovery",
+        "count": 97,
+        "pct": 4.59
+      }
+    ],
+    "dungeonFinaleType": [
+      {
+        "key": "Living Core",
+        "count": 32,
+        "pct": 12.65
+      },
+      {
+        "key": "Control Nexus",
+        "count": 30,
+        "pct": 11.86
+      },
+      {
+        "key": "Revelation Site",
+        "count": 29,
+        "pct": 11.46
+      },
+      {
+        "key": "Ascension Platform",
+        "count": 28,
+        "pct": 11.07
+      },
+      {
+        "key": "False End",
+        "count": 28,
+        "pct": 11.07
+      },
+      {
+        "key": "Escape Crisis",
+        "count": 25,
+        "pct": 9.88
+      },
+      {
+        "key": "Sanctum of Quiet",
+        "count": 24,
+        "pct": 9.49
+      },
+      {
+        "key": "Confrontation Chamber",
+        "count": 21,
+        "pct": 8.3
+      },
+      {
+        "key": "Planar Breach",
+        "count": 11,
+        "pct": 4.35
+      },
+      {
+        "key": "Temporal Collapse",
+        "count": 10,
+        "pct": 3.95
+      },
+      {
+        "key": "Mirror Chamber",
+        "count": 7,
+        "pct": 2.77
+      },
+      {
+        "key": "Engine Break",
+        "count": 5,
+        "pct": 1.98
+      },
+      {
+        "key": "World Scar",
+        "count": 3,
+        "pct": 1.19
+      }
+    ],
+    "urbanTrack": [
+      {
+        "key": "Discovery",
+        "count": 123,
+        "pct": 47.67
+      },
+      {
+        "key": "Social",
+        "count": 76,
+        "pct": 29.46
+      },
+      {
+        "key": "Combat",
+        "count": 59,
+        "pct": 22.87
+      }
+    ]
+  },
+  "goldenSiteMapping": {
+    "urbanMapped": {
+      "rows": [
+        {
+          "key": "Entertainment Strip",
+          "count": 33,
+          "pct": 12.79,
+          "site": null,
+          "note": "UNMAPPED — taverns/theaters/gambling district; Site 10's brief covers civic/market, not entertainment."
+        },
+        {
+          "key": "Harborfront",
+          "count": 31,
+          "pct": 12.02,
+          "site": null,
+          "note": "UNMAPPED — docks/harbor infrastructure has no golden-site owner; adjacent to Site 10 but not named in its brief."
+        },
+        {
+          "key": "Underworks",
+          "count": 27,
+          "pct": 10.47,
+          "site": "8 Infiltrated / Layered",
+          "note": "sewers/undercity read as the concealed-layer condition (Site 8), not a standalone site noun."
+        },
+        {
+          "key": "Market Ward",
+          "count": 27,
+          "pct": 10.47,
+          "site": "10 Urban Institution",
+          "note": "direct — stalls/plaza are named Site 10 pieces."
+        },
+        {
+          "key": "Civic Center",
+          "count": 26,
+          "pct": 10.08,
+          "site": "10 Urban Institution",
+          "note": "direct — civic/institutional buildings are Site 10's core."
+        },
+        {
+          "key": "Industrial Ward",
+          "count": 25,
+          "pct": 9.69,
+          "site": "5 Mine / Workshop",
+          "note": "direct — workshop/forge vernacular."
+        },
+        {
+          "key": "Ruined Quarter",
+          "count": 24,
+          "pct": 9.3,
+          "site": "3 Dormant / Abandoned",
+          "note": "direct — 'ruined' is exactly the abandoned/condition site."
+        },
+        {
+          "key": "Slums / Low Ward",
+          "count": 23,
+          "pct": 8.91,
+          "site": null,
+          "note": "UNMAPPED — poverty district; not a named golden-site vernacular."
+        },
+        {
+          "key": "Temple Ward",
+          "count": 23,
+          "pct": 8.91,
+          "site": "10 Urban Institution",
+          "note": "urban-context religious building; Site 4 (Monastery/Commune) is the rural-commune expression of the same vernacular, not this district."
+        },
+        {
+          "key": "Noble Quarter",
+          "count": 19,
+          "pct": 7.36,
+          "site": "10 Urban Institution",
+          "note": "civic/residential district; loosely covered by Site 10's town vernacular."
+        }
+      ],
+      "total": 258,
+      "mappedCount": 171,
+      "unmappedCount": 87,
+      "perSite": {
+        "8 Infiltrated / Layered": 27,
+        "10 Urban Institution": 95,
+        "5 Mine / Workshop": 25,
+        "3 Dormant / Abandoned": 24
+      }
+    },
+    "dungeonMapped": {
+      "rows": [
+        {
+          "key": "Subterranean Crypt",
+          "count": 54,
+          "pct": 21.34,
+          "site": "3 Dormant / Abandoned",
+          "note": "funerary/tomb space; closest fit is the abandoned/condition family (full host kit + collapse), not a distinct golden site."
+        },
+        {
+          "key": "Natural Cavern",
+          "count": 52,
+          "pct": 20.55,
+          "site": "7 Natural Lair",
+          "note": "direct — 'natural' vernacular is Site 7's own."
+        },
+        {
+          "key": "Military Fortification",
+          "count": 37,
+          "pct": 14.62,
+          "site": "9 Contested Fortress",
+          "note": "direct — military-masonry family; Site 1 Guard Post is the small end of the same vernacular."
+        },
+        {
+          "key": "Infrastructure Hub",
+          "count": 35,
+          "pct": 13.83,
+          "site": null,
+          "note": "UNMAPPED — aqueduct/utility hub; adjacent to Site 5's excavated vernacular but functionally a city-utility space, not extraction/craft."
+        },
+        {
+          "key": "Sunken Estate",
+          "count": 26,
+          "pct": 10.28,
+          "site": "3 Dormant / Abandoned",
+          "note": "a flooded/collapsed manor — the abandoned/condition family."
+        },
+        {
+          "key": "Religious Sanctuary",
+          "count": 23,
+          "pct": 9.09,
+          "site": "4 Monastery / Commune",
+          "note": "direct."
+        },
+        {
+          "key": "Prison / Asylum",
+          "count": 11,
+          "pct": 4.35,
+          "site": "6 Prison / Institution",
+          "note": "direct."
+        },
+        {
+          "key": "Laboratory / Workshop",
+          "count": 10,
+          "pct": 3.95,
+          "site": "5 Mine / Workshop",
+          "note": "direct."
+        },
+        {
+          "key": "The Living Hive",
+          "count": 3,
+          "pct": 1.19,
+          "site": "12 Anomalous / Living / Mobile",
+          "note": "direct — explicitly a living structure."
+        },
+        {
+          "key": "The Megastructure",
+          "count": 2,
+          "pct": 0.79,
+          "site": "11 Mixed-Scale / Dragon",
+          "note": "closest fit is the titan-scale family; could equally read as Site 12 anomalous — genuinely ambiguous."
+        }
+      ],
+      "total": 253,
+      "mappedCount": 218,
+      "unmappedCount": 35,
+      "perSite": {
+        "3 Dormant / Abandoned": 80,
+        "7 Natural Lair": 52,
+        "9 Contested Fortress": 37,
+        "4 Monastery / Commune": 23,
+        "6 Prison / Institution": 11,
+        "5 Mine / Workshop": 10,
+        "12 Anomalous / Living / Mobile": 3,
+        "11 Mixed-Scale / Dragon": 2
+      }
+    },
+    "wildMapped": {
+      "rows": [
+        {
+          "key": "Trilithon: Two standing stones with a lintel on top.",
+          "count": 6,
+          "pct": 1.11,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Iron Pillar: Rusting cylinder humming faintly.",
+          "count": 6,
+          "pct": 1.11,
+          "site": null
+        },
+        {
+          "key": "Crystal Geode: Smashed open, revealing jagged interior.",
+          "count": 6,
+          "pct": 1.11,
+          "site": null
+        },
+        {
+          "key": "Bone Pile: A massive mound of bleached humanoid bones.",
+          "count": 6,
+          "pct": 1.11,
+          "site": null
+        },
+        {
+          "key": "Grandfather Clock: Ticking loudly, perfectly clean.",
+          "count": 5,
+          "pct": 0.93,
+          "site": null
+        },
+        {
+          "key": "Lone Boulder: A massive, unmovable rock.",
+          "count": 5,
+          "pct": 0.93,
+          "site": null
+        },
+        {
+          "key": "Plush Carpet: An incredibly long red runner unrolled in the dirt.",
+          "count": 5,
+          "pct": 0.93,
+          "site": null
+        },
+        {
+          "key": "Ruined Watchtower: Stone cylinder, roof missing.",
+          "count": 5,
+          "pct": 0.93,
+          "site": "1 Guard Post"
+        },
+        {
+          "key": "Giant Anchor: Rusted iron hook the size of a house.",
+          "count": 5,
+          "pct": 0.93,
+          "site": null
+        },
+        {
+          "key": "Giant Bear Trap: A 15-foot wide rusted iron jaw mechanism.",
+          "count": 5,
+          "pct": 0.93,
+          "site": null
+        },
+        {
+          "key": "Terraced Slopes: Earth naturally shaped like giant stairs.",
+          "count": 5,
+          "pct": 0.93,
+          "site": null
+        },
+        {
+          "key": "Towering Mesa: Steep-sided, flat-topped earth pillar.",
+          "count": 5,
+          "pct": 0.93,
+          "site": null
+        },
+        {
+          "key": "Aqueduct Pillar: Massive stone support for a ruined water bridge.",
+          "count": 4,
+          "pct": 0.74,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Crumbling Corner: Two walls meeting at a 90-degree angle.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Balanced Rock: Massive boulder on a tiny pedestal.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Oasis / Hot Spring: A small pool of perfectly clear water.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Floating Weapon: A normal longsword, frozen 20 feet in the air.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Singing Crystals: Shards of quartz that hum in the wind.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Floating Rock Steps: 1d4+1 stones hovering like stairs.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Giant Chainmail: A single pauldron from a colossal suit of armor.",
+          "count": 4,
+          "pct": 0.74,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Whirlpool / Siphon: Water actively draining underground.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Wooden Blockhouse: Rotting timber fort.",
+          "count": 4,
+          "pct": 0.74,
+          "site": "1 Guard Post"
+        },
+        {
+          "key": "Tangled Briar Patch: A dense knot of sharp wood.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Wrecked Galleon (Bow): The front half of a massive ship.",
+          "count": 4,
+          "pct": 0.74,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Hollow Rock: A boulder with a cave-like interior.",
+          "count": 4,
+          "pct": 0.74,
+          "site": "7 Natural Lair"
+        },
+        {
+          "key": "Bramble Wall: Impassable thicket of thorns.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Ghost Ship: An illusion of a ship that loops a 5-sec crash.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Executioner's Block: Stained wooden stump & basket.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Earthwork Trench: Defensive ditch and dirt berm.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Obsidian Pillar: Razor-sharp black glass.",
+          "count": 4,
+          "pct": 0.74,
+          "site": null
+        },
+        {
+          "key": "Natural Amphitheater: A bowl-shaped depression.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Giant Shield: A 20-foot tall iron shield propped against a rock.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Geothermal Vent: Fissure blowing hot steam.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Overhanging Cliff: A shear drop-off dominating the map.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Twin Menhirs: Two stones forming a natural gate.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Shattered Airship: Gondola of a crashed zeppelin.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Ruined Mill: Stone foundation and a broken waterwheel.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "5 Mine / Workshop"
+        },
+        {
+          "key": "Silent Zone: A patch of earth where no sound exists.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Sunken Altar: Slab resting inside a depression.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Maze Segment: A 30'x30' area of tall hedgerows/walls.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Crystal Cave Mouth: A tunnel entrance lined with geodes.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "7 Natural Lair"
+        },
+        {
+          "key": "Split Boulder: A giant rock cracked perfectly in half.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Broken Stone Bridge: Center span has collapsed.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Crystal Outcropping: Jagged cluster of amethyst/quartz.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Caravan Wreckage: Three smashed wagons in a circle.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "2 Camp / Service"
+        },
+        {
+          "key": "Palanquin: An enclosed litter with rotting silk curtains.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Petrified Waterfall: A cascade of water turned to solid stone.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Colossal Sword Hilt: The blade is buried deep underground.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Giant Skeleton (Humanoid): Half buried in the terrain.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Crashed Skiff: A small flying boat, sails torn, resting in the dirt.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Colossal Statue (Head): Half-buried giant face.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Bisected Tower: Tower cleanly cut in half vertically.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Basalt Columns: Hexagonal stepping stones.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Giant Drum: A war-drum the size of a house, skin torn.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Ruined Bathhouse: Tiled depression filled with debris.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Eldritch Crystal: Pulses with a slow, purple heartbeat.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Collapsed Mine Shaft: Timber-shored hole in the earth.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "5 Mine / Workshop"
+        },
+        {
+          "key": "Overturned Caravel: Ship hull entirely upside down.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Stone Row: Linear wall of spaced standing stones.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Abstract Sculpture: Twisting geometric stone shapes.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Shadow-Weave Patch: Colors are inverted and greyscale.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Stone Compass: A massive navigational rose carved into the ground.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Leaning Megalith: Stone propped on another.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Bottomless Crevasse: A jagged crack in the earth.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Gargantuan Skull: Dragon or demon skull.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Stone Throne: A massive seat meant for a Titan.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Crystal Lens: A 10-foot tall magnifying glass on a brass stand.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Mushroom Ring: A perfect circle of giant toadstools.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Petroglyph Stone: Covered in spiral carvings.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Bioluminescent Grove: Flora glowing neon blue/green.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "5 Mine / Workshop"
+        },
+        {
+          "key": "Giant Axe: Imbedded in the earth, blade serving as a wall.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Spiked Column: Pillar wrapped in iron barbs.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Buried Shrine: Roof flush with the ground level.",
+          "count": 3,
+          "pct": 0.56,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Glass Tree: A perfect, life-sized replica of an oak in blown glass.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Natural Arch: Wind-carved stone/ice bridge.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Iron Bell: A massive bell resting on its side.",
+          "count": 3,
+          "pct": 0.56,
+          "site": null
+        },
+        {
+          "key": "Mirror of the Sky: A stone frame holding a water-mirror.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Heroic Statue: Humanoid warrior with sword raised.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Beached Longship: Viking-style hull, ribs exposed.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Spectral Flames: Blue fire burning on bare dirt.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Coral Brain: A massive, dry land-coral outcropping.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Stepped Sinkhole: Depression falling away in 5' tiers.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Acidic Seep: Green, hissing liquid pooling in rock.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Overhanging Wall: Wall leaning forward dangerously.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Giant Spear: A 30-foot long iron weapon impaled in the dirt.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Collapsed Mine Cart: Spilled load of coal/ore.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "5 Mine / Workshop"
+        },
+        {
+          "key": "Ornate Birdcage (Giant): 15-foot-tall golden cage, door open.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "6 Prison / Institution"
+        },
+        {
+          "key": "Wrecked Galleon (Stern): The captain's quarters, intact.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Stone Well: Circular wall dropping into darkness.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Cairn Marker: Neatly stacked pyramid of stones.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Giant Anvil: A 15-foot long blacksmith's block.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "5 Mine / Workshop"
+        },
+        {
+          "key": "Gargantuan Ribcage: Bones of a mythical beast.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "6 Prison / Institution"
+        },
+        {
+          "key": "Stone Hand: A colossal hand reaching out of the earth.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Jagged Menhir: Rough, unworked shard of rock.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Colossal Chain: Massive iron links anchored in rock.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Anti-Gravity Zone: Dirt and pebbles float upward here.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Giant Hourglass: Sand flowing upward instead of downward.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Chasm with Landbridge: A natural stone span over a void.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Tilted Obelisk: Leaning precariously to one side.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Eldritch Machinery: Spinning brass rings and lenses.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Solitary Archway: Freestanding stone arch.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Floating Crystal: A spinning gem hovering 10' off the ground.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Gnomish Music Box: Enlarged to the size of a wagon.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "2 Camp / Service"
+        },
+        {
+          "key": "Shattered Idol: Legs remain, torso exploded.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Iron Gate: A heavy portcullis standing with no walls around it.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "1 Guard Post"
+        },
+        {
+          "key": "Meteorite Crater (Glowing): Impact hole filled with radioactive slag.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Tiered Ziggurat Altar: Three-stepped platform.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Perfectly Set Dinner Table: Fine china and chairs in the wild.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Giant Bird Nest: Woven from timber and ship masts.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "7 Natural Lair"
+        },
+        {
+          "key": "Floating Earth Mote: A chunk of land hovering in the air.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Shattered Golem: The legs and pelvis of a 40' tall stone construct.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Insectoid Hive: Towering mound of hardened mud/resin.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "7 Natural Lair"
+        },
+        {
+          "key": "Stone Cradle: A heavy rock basin sized for a giant infant.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Lava Flow: Sluggish, glowing river of molten rock.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Grave Mound: A simple dirt hill with a crude marker.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Bleeding Stone: A boulder that weeps red sap/blood.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Stone Eye: A massive carved eye looking straight up.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Wrecked Rowboat: Small vessel rotting in the elements.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Colossal Dagger: Thrust into the ground, creating a metal pillar.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Wooden Stocks: Pillory for public punishment.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Fallen Megalith: Massive stone tipped over.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Trail Cairn: A shoulder-high cairn of stacked stones marking the path.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Iron Grate: Massive metal sewer/vent cover in the ground.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Gargantuan Shed Skin: Molt of a colossal snake/worm.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Eroded Sphinx: Winged beast scoured by weather.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Chained Statue: Stone figure bound in iron links.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Fallen Bell: A 10,000 lb bronze church bell.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Petrified Cloud: A localized bank of fog turned to solid gray stone.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "10 Urban Institution"
+        },
+        {
+          "key": "Skull Pyramid: Hundreds of skulls stacked neatly.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Wild Magic Zone: Air shimmers with iridescent colors.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Hollow Idol: Bronze or stone statue with a door.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Floating Obelisk: Broken base hovering mid-air.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Hanging Tapestry: Suspended between two trees/rocks.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Dressing Mirror: Full-length silver mirror.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Giant Shell: An empty, pearlescent snail/turtle shell.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Iron Sphere: A perfect, seamless ball of rusted metal.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Silk Pavilion: An opulent, pristine merchant's tent.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "2 Camp / Service"
+        },
+        {
+          "key": "Stone Redoubt: Thick bunker with a flat roof.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "1 Guard Post"
+        },
+        {
+          "key": "Chalk Pillar: Soft, white, powdery stone.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Web-Choked Trees: Forest canopy bound in thick silk.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Twin Pillars: Two identical columns side-by-side.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Gargantuan Helmet: A rusting giant's helm resting on its side.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Crescent Stones: Half-circle of 5 monoliths.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Gibbet Tree: A dead tree hanging with 1d4 iron cages.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "6 Prison / Institution"
+        },
+        {
+          "key": "Brimstone Pillar: Yellow-streaked, foul-smelling rock.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Tower of Books: A 20-foot-tall spiral stack of dusty tomes.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Fossilized Wagon: Cart and horse turned entirely to stone.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "2 Camp / Service"
+        },
+        {
+          "key": "Cursed Soil: Ground is black, oily, and smells of rot.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Stone Coffin (Hanging): Suspended by thick chains between rocks.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Petrified Monstrosity: A basilisk/medusa victim.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Kneeling Statue: Figure bowed in servitude.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Stone Archery Blind: A single V-shaped stone barricade.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Shattered Obelisk: Snapped in half, top missing.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Open Sarcophagus: A stone coffin, lid pushed aside.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned (funerary)"
+        },
+        {
+          "key": "Floating Obelisk (Shattered): 5 pieces of a pillar hovering in a line.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Stone Font: Basin filled with stagnant rainwater.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Giant Skeleton (Beast): Ribs of a gargantuan dinosaur/tarrasque.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Giant Birdcage (Smashed): Rusted iron bars crushed inward.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "6 Prison / Institution"
+        },
+        {
+          "key": "Collapsed Gatehouse: Two ruined stumps of towers.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Glass Desert: Sand fused into a jagged sheet of glass.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Narrow Fissure: A treacherous, 5-foot-wide crack.",
+          "count": 2,
+          "pct": 0.37,
+          "site": null
+        },
+        {
+          "key": "Giant Sundial (Broken): The gnomon is snapped off.",
+          "count": 2,
+          "pct": 0.37,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Stone Bridge: Solid masonry over a dry depression.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Floating Steps: 3 stone slabs hovering in a staircase shape.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Multi-Armed Idol: Forgotten deity with 6 arms.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Crystal Chandelier: Lying smashed on the ground.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Elemental Shrine: Altar radiating extreme cold/heat.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Meteorite Fragment: Smoking, metallic space rock.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Circular Dais: Raised platform of smooth stone.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Sunken Monolith: Leaning deep into a mud/snow pit.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Iron Chains: A massive pile of rusted anchor links.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Glass Dome: A shattered botanical greenhouse.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Petrified Geyser: A column of boiling water frozen into solid ice.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Whispering Stone: Megalith with a natural hole.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Giant Chain Anchor: An iron spike driven 30 feet into the earth.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Petrified Dragon: A wyrm turned entirely to stone.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Stone Sarcophagus (Sealed): Heavy stone lid still attached.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned (funerary)"
+        },
+        {
+          "key": "Eroded Obelisk: Stone pillar with faded icons.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Giant Chessboard: 40x40 grid of black and white marble.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Siege Engine: Rusted, inoperable catapult/trebuchet.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Weeping Willow (Petrified): Stone tree with drooping stone branches.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Hollow Log: A massive fallen redwood/mushroom stalk.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Obsidian Mirror: A 10x10 slab of polished black glass.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Thorny Arch: A natural bridge woven of razorvine.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Basalt Slab: Perfectly smooth, indestructible block.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Totem Pole: Carved wooden beast faces.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Breached Rampart: Wall with a massive hole blown in it.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "1 Guard Post"
+        },
+        {
+          "key": "Time-Locked Debris: Falling rocks frozen mid-air.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Suit of Armor: Standing rigidly at attention, empty inside.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "2 Camp / Service"
+        },
+        {
+          "key": "Velvet Chaise Lounge: Expensive couch sitting in the mud/snow.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Stone Serpents: Two intertwined statues forming a helix.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Carved Menhir: Monolith shaped like a weapon.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Colossal Statue (Hand): Fingers reaching upward.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Bloodstained Altar: Flat slab with drainage grooves.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Ford Mooring Post: A weathered mooring post at a river crossing, rope still knotted to it.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Taxidermy Bear: Stuffed and mounted, decaying.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Gargoyle Plinth: Monstrous watcher on a tall base.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Clockwork Wreckage: Gears and brass from a machine.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Weeping Statue: Water seeps from the stone eyes.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Offering Table: Covered in rotted flora/fruit.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Mud Flat: A broad area of sticky, treacherous ground.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Collapsed Dome: Ruined hemispherical roof.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Desecrated Altar: Shrine smeared with foul ichor/blood.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Giant Pitcher: A 15-foot tall ceramic jug, tipped over.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Fallen Star: A chunk of glowing white-hot rock.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Fungal Bloom: Towering, 20-foot-tall mushrooms.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Ruined Fountain: Cracked stone basin, dry.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Domed Shrine: Small gazebo-like structure.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Crashed Chariot: Bronze war-cart, wheels shattered.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Fallen Colossus: Entire 50' statue lying in the dirt.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Overgrown Column: Choked in thick local flora.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Sandstone Pillar: Wind-carved and top-heavy.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Giant Chandelier (Crystal): Hanging from a massive branch/arch.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Giant Arrow: A ballista bolt the size of a pine tree.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Funeral Pyre (Unlit): Stacked wood awaiting a body.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Meteoric Crater: Impact zone from a fallen star.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Iron Cage: Rusted gibbet hanging from a post.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "6 Prison / Institution"
+        },
+        {
+          "key": "Stepping Stones: Massive carved blocks crossing a hazard.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Wagon Ruin: Overturned merchant cart.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "2 Camp / Service"
+        },
+        {
+          "key": "Impaled Skeleton: Remains lashed to a wooden stake.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Floating Water Globe: A sphere of water hovering mid-air.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Giant Tuning Fork: A two-pronged metal spire.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Carnivorous Plant: A massive flytrap or mantrap.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Giant Cauldron: Massive iron pot on cold coals.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Rope Bridge (Ruined): Snapped bridge hanging from a cliff/tree.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Windmill Base: Stone foundation of a destroyed mill.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "5 Mine / Workshop"
+        },
+        {
+          "key": "Crumbling Needle: Dangerously fragile spire.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Rocking Horse: Child's wooden toy, rocking with no wind.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Rubble Mound: The crumbled remains of a monument.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Beached Leviathan: Rotting corpse of a whale/kraken.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Clockwork Sentinel (Broken): A massive, dead iron golem.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Wooden Palisade: Ruined log wall.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Ballista Emplacement: Broken bolt-thrower on a swivel.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Petrified Root System: Huge roots breaking the earth.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Great Fallen Log: A vast fallen trunk furred with moss, blocking the way.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Marble Bust: A finely carved head of an unknown noble.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Brass Telescope: Mounted on a tripod, aimed at the dirt.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Gargantuan Eggshells: Leathery shards the size of carts.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Rubble Field (Colossal): Massive boulders from a mountain.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "11 Mixed-Scale / Dragon"
+        },
+        {
+          "key": "Ancient Barrow: A grassy hill with a stone door.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned (funerary)"
+        },
+        {
+          "key": "Aqueduct Span: A 30' section of raised waterway.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Ruined Trebuchet: The throwing arm and counterweight of a siege engine.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Spore Cloud: A patch of terrain covered in thick fungus.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Stone Sundial: Shadows cast by it always point to the nearest PC.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Hollowed Column: Base hollowed out like a tree.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Altar of Skulls: Slab resting on piled bone/rock.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "4 Monastery / Commune"
+        },
+        {
+          "key": "Shattered Throne: A massive stone seat, split down the middle.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned"
+        },
+        {
+          "key": "Rusted Vault Door: A circular bank door ripped from its hinges.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "10 Urban Institution"
+        },
+        {
+          "key": "Chariot Tomb: A rusted chariot buried with its skeletal horses.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "3 Dormant / Abandoned (funerary)"
+        },
+        {
+          "key": "Low Stone Fence: Fieldstone boundary marker.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Abandoned Campsite: Tattered tents and cold firepit.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "2 Camp / Service"
+        },
+        {
+          "key": "Crystal Pool: Perfectly clear water revealing the deep bottom.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        },
+        {
+          "key": "Iron Safe: A massive, 5,000 lb locked bank vault.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "10 Urban Institution"
+        },
+        {
+          "key": "Lighthouse Stump: Coastal/cliff beacon, top sheared off.",
+          "count": 1,
+          "pct": 0.19,
+          "site": "1 Guard Post"
+        },
+        {
+          "key": "Lava Tube: A hollow stone pipe formed by ancient magma.",
+          "count": 1,
+          "pct": 0.19,
+          "site": null
+        }
+      ],
+      "total": 539,
+      "mappedCount": 177,
+      "unmappedCount": 362,
+      "perSite": {
+        "4 Monastery / Commune": 30,
+        "1 Guard Post": 15,
+        "3 Dormant / Abandoned": 50,
+        "11 Mixed-Scale / Dragon": 27,
+        "7 Natural Lair": 11,
+        "5 Mine / Workshop": 14,
+        "2 Camp / Service": 12,
+        "6 Prison / Institution": 9,
+        "10 Urban Institution": 4,
+        "3 Dormant / Abandoned (funerary)": 5
+      }
+    }
+  }
+}

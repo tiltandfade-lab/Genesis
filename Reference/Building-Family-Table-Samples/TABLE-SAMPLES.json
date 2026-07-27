@@ -1,0 +1,869 @@
+{
+  "schema": "genesis.building-family-table-samples.v1",
+  "created": "2026-07-26",
+  "status": "TASTE SAMPLES — not final table corpus and not live runtime data",
+  "sourceAuthority": [
+    "docs/BUILDING-PROGRAM-TABLE-FAMILIES.md",
+    "docs/SITE-6-PRISON-CUSTODY-SPEC.md",
+    "docs/TAVERN-VENUE-ROUTING-BRIEF.md",
+    "Reference/Prison-Custody-Study/synthesis.md",
+    "Reference/Building-Type-Roll-Study/ROLL-RECEIPTS.json"
+  ],
+  "sampleLaw": [
+    "A family chassis may contain only relationships every listed program can honestly consume.",
+    "The program layer owns occupation, service, operator, safety, and program-specific obligations.",
+    "Operating state and current scene alter a valid program without replacing it.",
+    "Spice intensifies a named program surface and preserves program identity.",
+    "Realm changes technology, material, labor, practice, etiquette, and spatial emphasis rather than merely relabeling the result.",
+    "Prison/Custody is a dedicated family governed by the Site 6 lifecycle."
+  ],
+  "profiles": [
+    {
+      "id": "grounded-frontier",
+      "spiceBand": "Grounded",
+      "realm": "frontier",
+      "contextTags": []
+    },
+    {
+      "id": "textured-chrome",
+      "spiceBand": "Textured",
+      "realm": "chrome",
+      "contextTags": []
+    },
+    {
+      "id": "strange-gloom",
+      "spiceBand": "Strange",
+      "realm": "gloom",
+      "contextTags": []
+    },
+    {
+      "id": "volatile-frontier",
+      "spiceBand": "Volatile",
+      "realm": "frontier",
+      "contextTags": ["licensed-world-adapter"],
+      "preferContextSpecificRows": true
+    }
+  ],
+  "families": [
+    {
+      "id": "BF-PUBLIC-SERVICE",
+      "label": "Public Service / Hospitality",
+      "sharedGrammar": "A legible public arrival meets recognition or payment, an occupied customer area, a service edge, controlled support space, and truthful egress.",
+      "forbids": [
+        "No chassis row decides that the place serves drink, bathing, or gambling.",
+        "No private or back-of-house route becomes public merely to solve a scene."
+      ],
+      "chassis": [
+        {
+          "id": "PS-CH-01",
+          "text": "Broad street room with a long service edge; preparation and secure storage sit behind it, with a separate delivery door.",
+          "scale": "small-to-medium",
+          "provides": ["public arrival", "recognition/payment", "customer floor", "service edge", "back delivery", "two egress paths"]
+        },
+        {
+          "id": "PS-CH-02",
+          "text": "Covered arcade opens into a customer courtyard; two reservable side rooms share a screened service range and rear staff passage.",
+          "scale": "medium",
+          "provides": ["weather threshold", "public court", "reservable rooms", "screened service", "staff passage"]
+        },
+        {
+          "id": "PS-CH-03",
+          "text": "Corner frontage feeds two connected public rooms around a central recognition desk; service rooms and a narrow staff stair occupy the inner corner.",
+          "scale": "small-to-medium",
+          "provides": ["two public zones", "central recognition", "controlled service", "upper or lower support"]
+        },
+        {
+          "id": "PS-CH-04",
+          "text": "Long hall divided into a lively front bay and quieter rear bay; payment sits between them, while support runs along one side wall.",
+          "scale": "medium",
+          "provides": ["noise gradient", "shared payment", "continuous service", "front and rear exits"]
+        },
+        {
+          "id": "PS-CH-05",
+          "text": "Split-level venue with the main public floor above a lower service range; an overlook and separate staff stair keep both levels legible.",
+          "scale": "medium-to-large",
+          "provides": ["public floor", "overlook", "lower service", "separate staff circulation", "accessible alternate route"]
+        },
+        {
+          "id": "PS-CH-06",
+          "text": "Public pavilion inside a larger host building; it owns a staffed service enclosure and secure store but receives one utility from a named shared provider.",
+          "scale": "small-hosted",
+          "provides": ["host threshold", "public pavilion", "service enclosure", "secure store", "external provider route"]
+        }
+      ],
+      "states": [
+        {
+          "id": "PS-ST-01",
+          "text": "Ordinary service: staffing, supplies, and customer capacity are balanced."
+        },
+        {
+          "id": "PS-ST-02",
+          "text": "Rush or backlog: the customer floor is full and one service station has become the bottleneck."
+        },
+        {
+          "id": "PS-ST-03",
+          "text": "Partial operation: one room is closed for repair, cleaning, shortage, or a failed utility."
+        },
+        {
+          "id": "PS-ST-04",
+          "text": "Reserved use: a private booking or protected clientele controls part of the public floor without erasing ordinary egress."
+        }
+      ],
+      "programs": [
+        {
+          "id": "tavern",
+          "label": "Tavern",
+          "invariants": ["hospitality", "drink or food service", "responsible host", "social floor", "payment or patronage", "service and supply"],
+          "arrangements": [
+            {"id": "TV-AR-01", "text": "Drinkhouse with a public bar, small cold store or cellar, simple food preparation, and no lodging."},
+            {"id": "TV-AR-02", "text": "Mealhouse with visible kitchen pass, communal tables, a smaller drinking edge, and timed sittings."},
+            {"id": "TV-AR-03", "text": "Road inn with common room below, guest rooms above or around a court, stable or transport provider, and night access rules.", "chassisAllow": ["PS-CH-02", "PS-CH-03", "PS-CH-05"]},
+            {"id": "TV-AR-04", "text": "Member-backed hostelry whose public room remains open while one reservable room and a credit ledger serve regulars."}
+          ],
+          "scenes": [
+            {"id": "TV-SC-01", "text": "A delayed drink delivery has the keeper deciding which regulars still receive their usual order."},
+            {"id": "TV-SC-02", "text": "Two travelers need the last bed, and each claims a different local promise gives them priority."},
+            {"id": "TV-SC-03", "text": "A meal is leaving the kitchen while its intended table quietly abandons the room."},
+            {"id": "TV-SC-04", "text": "A tab is being settled with information, but the named person has just entered through the other door."}
+          ],
+          "spice": [
+            {"id": "TV-SP-G", "band": "Grounded", "text": "The house ledger shows one patron has been paying another patron's tab for months.", "affects": "credit and relationships", "preserves": "hospitality service"},
+            {"id": "TV-SP-T", "band": "Textured", "text": "One table is always kept laid for a party whose reservation predates the current keeper.", "affects": "seating and house custom", "preserves": "public room and service"},
+            {"id": "TV-SP-S", "band": "Strange", "text": "A drink poured from one marked tap tastes like the last place the customer truly considered home.", "affects": "one service fixture", "preserves": "drink service and payment"},
+            {"id": "TV-SP-V", "band": "Volatile", "text": "Every unpaid promise spoken over the bar becomes audible to its creditor at closing time.", "affects": "credit and closing routine", "preserves": "tavern operation"}
+          ],
+          "realm": {
+            "frontier": {"label": "Inn / Alehouse", "realization": "Hearth, casks, cellar or cool store, kitchen smoke, stable or road supply, host-led etiquette."},
+            "chrome": {"label": "Noodle Bar / Listening House", "realization": "Ventilated cookline, refrigeration, compact counter service, booked booths, delivery access, powered light and sound."},
+            "gloom": {"label": "Diner / Roadhouse", "realization": "Grill line, coffee and bottle storage, booths and counter, back lot delivery, jukebox or radio custom, late-shift staffing."}
+          }
+        },
+        {
+          "id": "bathhouse",
+          "label": "Bathhouse",
+          "invariants": ["arrival and payment/custom", "changing", "washing or heat service", "clean/used flow", "water and waste", "privacy and safety"],
+          "arrangements": [
+            {"id": "BH-AR-01", "text": "Sequential bath with changing, wash room, hot room, cooling edge, and a staffed linen point."},
+            {"id": "BH-AR-02", "text": "Communal washhouse with timed bathing, laundry service, heated water store, and family/private screens."},
+            {"id": "BH-AR-03", "text": "Steam house with one shared hot chamber, cold rinse, rest room, and tightly controlled fuel and ventilation."},
+            {"id": "BH-AR-04", "text": "Appointment bath with several small rooms supplied from one service spine and a shared recovery lounge.", "chassisAllow": ["PS-CH-02", "PS-CH-03", "PS-CH-05"]}
+          ],
+          "scenes": [
+            {"id": "BH-SC-01", "text": "The hot-water queue is slipping, and the keeper must choose between a promised group and ordinary customers."},
+            {"id": "BH-SC-02", "text": "A missing garment has halted one changing area while attendants compare tags and baskets."},
+            {"id": "BH-SC-03", "text": "A patron refuses to leave the cooling room until someone hears a private accusation."},
+            {"id": "BH-SC-04", "text": "A drain inspection has exposed a concealed bundle that clearly entered from inside the bathing circuit."}
+          ],
+          "spice": [
+            {"id": "BH-SP-G", "band": "Grounded", "text": "The linen tally proves someone has been using the closed room after hours.", "affects": "laundry and access", "preserves": "bathing operation"},
+            {"id": "BH-SP-T", "band": "Textured", "text": "One basin remains warm after the furnace is banked, but only while the room is occupied.", "affects": "one water fixture", "preserves": "heat and service ownership"},
+            {"id": "BH-SP-S", "band": "Strange", "text": "Steam briefly reveals old scars that the bather no longer carries.", "affects": "steam chamber perception", "preserves": "ordinary bathing route"},
+            {"id": "BH-SP-V", "band": "Volatile", "text": "Water released from the final drain carries one spoken secret into every connected basin.", "affects": "drainage and privacy", "preserves": "water system and venue identity"}
+          ],
+          "realm": {
+            "frontier": {"label": "Bathhouse / Washhouse", "realization": "Boiler or furnace, cisterns, tubs and hot rooms, linen labor, fuel delivery, yard drainage."},
+            "chrome": {"label": "Spa / Capsule Bath", "realization": "Pumped water, heat exchangers, lockers, filtered wet zones, booking system, maintenance corridors."},
+            "gloom": {"label": "Public Baths / Sauna", "realization": "Boiler room, tiled wet rooms, lockers and towels, practical ventilation, posted hours, municipal or private keeper."}
+          }
+        },
+        {
+          "id": "gambling-den",
+          "label": "Gambling Den",
+          "invariants": ["recognized stakes", "game floor", "bank or settlement", "oversight", "cash or debt security", "exit and dispute response"],
+          "arrangements": [
+            {"id": "GD-AR-01", "text": "Open low-stakes hall with several visible tables, a central cash box, and one floor watcher."},
+            {"id": "GD-AR-02", "text": "Public front room feeds screened high-stakes tables whose entry and settlement are separately controlled."},
+            {"id": "GD-AR-03", "text": "Betting house with posted events or contests, ticket/tally counter, result board, and payout window."},
+            {"id": "GD-AR-04", "text": "Club game room where membership, credit, food and drink service, and private arbitration carry more weight than cash at the table."}
+          ],
+          "scenes": [
+            {"id": "GD-SC-01", "text": "A disputed final hand has frozen one table while the house checks the deck and the debt book."},
+            {"id": "GD-SC-02", "text": "A regular wants their credit extended before a backer arrives to revoke it."},
+            {"id": "GD-SC-03", "text": "The result board contradicts the sealed tally held behind the counter."},
+            {"id": "GD-SC-04", "text": "A winner cannot collect because the person authorized to open the reserve has vanished through the staff route."}
+          ],
+          "spice": [
+            {"id": "GD-SP-G", "band": "Grounded", "text": "One dealer has been rounding every disputed stake in favor of the same quiet patron.", "affects": "settlement and trust", "preserves": "games and bank"},
+            {"id": "GD-SP-T", "band": "Textured", "text": "A retired game table still records wagers in its scarred surface when coins touch it.", "affects": "one table and records", "preserves": "ordinary play"},
+            {"id": "GD-SP-S", "band": "Strange", "text": "One set of dice lands honestly but whispers the result a heartbeat before it stops.", "affects": "one gaming implement", "preserves": "stakes and uncertainty"},
+            {"id": "GD-SP-V", "band": "Volatile", "text": "A debt accepted at the private table transfers the debtor's luck to the house until repayment.", "affects": "credit and consequence", "preserves": "gambling operation"}
+          ],
+          "realm": {
+            "frontier": {"label": "Gaming House", "realization": "Dice, cards or boards, strongbox, handwritten credit, visible house watcher, food/drink from owned or named provider."},
+            "chrome": {"label": "Betting Lounge / Game Club", "realization": "Electronic or projected odds, identity-controlled accounts, surveillance, cashier cage, private rooms and service access."},
+            "gloom": {"label": "Card Room / Betting Parlor", "realization": "Tables and booths, chalk or lit result board, cash window, back-office book, floor manager and parking/alley access."}
+          }
+        }
+      ]
+    },
+    {
+      "id": "BF-CIVIC-AUTHORITY",
+      "label": "Civic / Authority",
+      "sharedGrammar": "A public, member, or duty threshold reaches recognized authority, decision or assembly space, records, a controlled inner zone, and staff circulation.",
+      "forbids": [
+        "No family row supplies involuntary custody as its primary program.",
+        "Secure rooms remain subordinate to the selected civic program."
+      ],
+      "chassis": [
+        {
+          "id": "CA-CH-01",
+          "text": "Public counter and waiting bay lead to one decision chamber; records and staff work occupy a controlled rear strip.",
+          "scale": "small",
+          "provides": ["public threshold", "waiting", "decision room", "records", "staff strip"]
+        },
+        {
+          "id": "CA-CH-02",
+          "text": "Member or petitioner hall faces a raised authority position; two side rooms support consultation, records, or duty work.",
+          "scale": "small-to-medium",
+          "provides": ["assembly", "authority focus", "side support", "controlled storage"]
+        },
+        {
+          "id": "CA-CH-03",
+          "text": "Gated court or muster yard leads to a duty room, secure issue store, and command office with a separate staff entrance.",
+          "scale": "medium",
+          "provides": ["controlled yard", "duty station", "secure store", "command", "staff entrance"]
+        },
+        {
+          "id": "CA-CH-04",
+          "text": "Arcaded public hall separates clerk or recognition desk, formal chamber, private consultation, and a fire-secure record room.",
+          "scale": "medium",
+          "provides": ["public hall", "clerk desk", "formal chamber", "consultation", "secure archive"]
+        },
+        {
+          "id": "CA-CH-05",
+          "text": "A configurable central floor supports assembly or drill; perimeter offices, issue rooms, and records open from a controlled circulation ring.",
+          "scale": "medium-to-large",
+          "provides": ["flexible central floor", "perimeter support", "controlled ring", "multiple duty roles"]
+        },
+        {
+          "id": "CA-CH-06",
+          "text": "Two-storey civic house places public business below and committee, command, or deliberation above; staff and records use a rear stair.",
+          "scale": "medium",
+          "provides": ["public lower floor", "controlled upper floor", "rear staff stair", "records"]
+        }
+      ],
+      "states": [
+        {"id": "CA-ST-01", "text": "Ordinary session: public business and staff work follow the posted order."},
+        {"id": "CA-ST-02", "text": "Handoff: one duty group is replacing another and authority, keys, records, or pending cases are being acknowledged."},
+        {"id": "CA-ST-03", "text": "Overload: petitioners, members, cases, patrol needs, or records exceed the normal public capacity."},
+        {"id": "CA-ST-04", "text": "Emergency authority: the public floor remains legible, but one controlled room has become a temporary command or deliberation center."}
+      ],
+      "programs": [
+        {
+          "id": "guildhall",
+          "label": "Guildhall",
+          "invariants": ["member recognition", "collective authority", "business or standards", "dues/contracts/records", "assembly", "officers or stewards"],
+          "arrangements": [
+            {"id": "GH-AR-01", "text": "Trade guild with dues desk, contract hall, sample or standard display, officers' room, and archive."},
+            {"id": "GH-AR-02", "text": "Craft guild with member hall, examination bench, shared tools or patterns, stores, and masters' chamber."},
+            {"id": "GH-AR-03", "text": "Carriers' or labor hall with hiring board, muster floor, relief fund desk, meeting room, and equipment issue."},
+            {"id": "GH-AR-04", "text": "Merchant association with public arbitration hours, members' exchange floor, private committees, and bonded records."}
+          ],
+          "scenes": [
+            {"id": "GH-SC-01", "text": "A candidate's examination piece passes every visible standard but bears a prohibited maker's mark."},
+            {"id": "GH-SC-02", "text": "Two officers claim authority to sign the same contract before the next caravan departs."},
+            {"id": "GH-SC-03", "text": "The hiring board lists a crew that insists it never accepted the job."},
+            {"id": "GH-SC-04", "text": "A relief payment is due, but the member's status was changed during the night."}
+          ],
+          "spice": [
+            {"id": "GH-SP-G", "band": "Grounded", "text": "The dues ledger contains a perfectly regular payment from a member everyone remembers burying.", "affects": "membership records", "preserves": "guild business"},
+            {"id": "GH-SP-T", "band": "Textured", "text": "One old standard rejects work made with a technique the current masters cannot identify.", "affects": "examination and standards", "preserves": "craft authority"},
+            {"id": "GH-SP-S", "band": "Strange", "text": "The hall's master pattern subtly alters itself after every unanimous vote.", "affects": "collective decision record", "preserves": "assembly and standards"},
+            {"id": "GH-SP-V", "band": "Volatile", "text": "Any contract sealed in the officers' room compels the guild's building—not its members—to enforce one clause.", "affects": "contracts and site behavior", "preserves": "guild authority"}
+          ],
+          "realm": {
+            "frontier": {"label": "Guildhall / Company Hall", "realization": "Member marks, samples, contract tables, muster space, physical ledgers, shared stores and officer keys."},
+            "chrome": {"label": "Trade Consortium / Labor Exchange", "realization": "Credential gates, fabrication standards, data archive, booking floor, committee suites and controlled equipment issue."},
+            "gloom": {"label": "Union Hall / Business Association", "realization": "Meeting floor, hiring board, records office, sample cases, benefit desk, committee rooms and practical back entrance."}
+          }
+        },
+        {
+          "id": "garrison",
+          "label": "Garrison",
+          "invariants": ["duty command", "muster", "arms or equipment control", "patrol/readiness", "rest and relief", "public or strategic response"],
+          "arrangements": [
+            {"id": "GA-AR-01", "text": "Town watch station with report desk, muster room, equipment issue, captain's office, and short-rest bunks."},
+            {"id": "GA-AR-02", "text": "Gate garrison with gate control, guardroom, armory, relief room, wall or road access, and alarm station."},
+            {"id": "GA-AR-03", "text": "Barracks company with parade or drill court, squad rooms, mess provider, stores, command, and sentry circuit.", "chassisAllow": ["CA-CH-03", "CA-CH-05"]},
+            {"id": "GA-AR-04", "text": "Rapid-response post with ready room, vehicle or mount edge, equipment racks, briefing wall, and maintenance supply.", "chassisAllow": ["CA-CH-01", "CA-CH-03", "CA-CH-05"]}
+          ],
+          "scenes": [
+            {"id": "GA-SC-01", "text": "An outgoing patrol refuses to surrender one issued weapon because its replacement crew is incomplete."},
+            {"id": "GA-SC-02", "text": "A public report contradicts the watch log and the named patrol has not returned to answer it."},
+            {"id": "GA-SC-03", "text": "The alarm test has revealed that one post receives the signal too late."},
+            {"id": "GA-SC-04", "text": "A relief crew arrives early carrying orders signed by an authority the commander cannot verify."}
+          ],
+          "spice": [
+            {"id": "GA-SP-G", "band": "Grounded", "text": "The equipment ledger shows one shield or protective rig has been issued continuously for years without return.", "affects": "issue and accountability", "preserves": "garrison readiness"},
+            {"id": "GA-SP-T", "band": "Textured", "text": "One alarm station signals a threat category omitted from every current drill.", "affects": "alarm and doctrine", "preserves": "response system"},
+            {"id": "GA-SP-S", "band": "Strange", "text": "The muster marks briefly include any absent guard who is in immediate danger.", "affects": "muster information", "preserves": "duty organization"},
+            {"id": "GA-SP-V", "band": "Volatile", "text": "Weapons drawn from one rack cannot be turned against the authority named at the last shift handoff.", "affects": "armory permission", "preserves": "equipment custody and command"}
+          ],
+          "realm": {
+            "frontier": {"label": "Watch House / Barracks", "realization": "Muster yard, arms chest or armory, patrol board, bunks, stable or road access, bells and relief watch."},
+            "chrome": {"label": "Security Precinct / Response Hub", "realization": "Dispatch wall, controlled equipment lockers, ready bays, surveillance feeds, decontamination or maintenance support."},
+            "gloom": {"label": "Sheriff's Office / Armory", "realization": "Report counter, squad room, evidence handoff to external custody, gun or gear cage, motor pool or back lot, radio dispatch."}
+          }
+        },
+        {
+          "id": "court",
+          "label": "Court",
+          "invariants": ["recognized adjudicator", "parties or petitioners", "hearing/decision", "record", "private deliberation or consultation", "enforceable outcome route"],
+          "arrangements": [
+            {"id": "CT-AR-01", "text": "Single-magistrate court with clerk desk, waiting, hearing room, consultation room, secure records, and bailiff station."},
+            {"id": "CT-AR-02", "text": "Arbitration hall with several small hearing rooms, shared filing desk, mediators' workroom, and public settlement board."},
+            {"id": "CT-AR-03", "text": "Circuit court occupying a configurable hall on hearing days and returning records to a traveling or external archive."},
+            {"id": "CT-AR-04", "text": "Claims and notary court with public counter, document examination, short hearings, payment, and registered issue/appeal route."}
+          ],
+          "scenes": [
+            {"id": "CT-SC-01", "text": "Two filed copies of the same order differ by one name, and both bear valid marks."},
+            {"id": "CT-SC-02", "text": "A hearing cannot begin because the person responsible for interpreting one party's testimony has withdrawn."},
+            {"id": "CT-SC-03", "text": "A settlement has been reached in private, but the public record would expose a different dispute."},
+            {"id": "CT-SC-04", "text": "The bailiff has received enforcement instructions before the adjudicator announces a decision."}
+          ],
+          "spice": [
+            {"id": "CT-SP-G", "band": "Grounded", "text": "The appeals register shows one case was reopened under a deadline that does not exist in current rules.", "affects": "procedure and record", "preserves": "adjudication"},
+            {"id": "CT-SP-T", "band": "Textured", "text": "A sealed deliberation room carries sound outward only when the speakers agree.", "affects": "privacy and consensus", "preserves": "hearing and deliberation"},
+            {"id": "CT-SP-S", "band": "Strange", "text": "One witness chair grows noticeably heavier with each statement the speaker believes false.", "affects": "testimony fixture", "preserves": "court procedure"},
+            {"id": "CT-SP-V", "band": "Volatile", "text": "A formally entered judgment changes one physical threshold in the building until appealed or fulfilled.", "affects": "judgment and access", "preserves": "recognized authority"}
+          ],
+          "realm": {
+            "frontier": {"label": "Magistrate's Court / Hall of Law", "realization": "Clerk and petition desk, hearing chamber, seals and ledgers, bailiff route, public notice, nearby external holding if required."},
+            "chrome": {"label": "Arbitration Floor / Tribunal", "realization": "Identity check, recorded hearing rooms, evidence display, secure files, private deliberation, service and enforcement handoff."},
+            "gloom": {"label": "County Court / Municipal Hearing Office", "realization": "Clerk counter, courtroom or hearing room, records vault, judge or examiner chamber, sheriff adjacency without prison ownership."}
+          }
+        }
+      ]
+    },
+    {
+      "id": "BF-HOUSEHOLD-ESTATE",
+      "label": "Household / Estate",
+      "sharedGrammar": "Controlled reception mediates between outside claims and private household life while service circulation, property records, food, sleep, sanitation, dependants, and labor remain credible.",
+      "forbids": [
+        "The Manor cannot be replaced by a shop, hospital, school, or unrelated institution.",
+        "A mixed or former use must be selected explicitly and cannot erase the functioning household."
+      ],
+      "chassis": [
+        {
+          "id": "HE-CH-01",
+          "text": "Compact urban manor with formal front rooms, private upper household, rear service court, and separate staff stair.",
+          "scale": "small-to-medium",
+          "provides": ["controlled arrival", "reception", "private household", "service court", "staff circulation"]
+        },
+        {
+          "id": "HE-CH-02",
+          "text": "Courtyard estate with reception and administration on the public side, family rooms on one wing, and kitchens, stores, and staff lodging on another.",
+          "scale": "medium-to-large",
+          "provides": ["public range", "private wing", "service wing", "shared court", "property office"]
+        },
+        {
+          "id": "HE-CH-03",
+          "text": "Long hall-house with a formal central room, screened service end, private solar or suite, guest chambers, and working yard.",
+          "scale": "medium",
+          "provides": ["great room", "service screen", "private suite", "guests", "working yard"]
+        },
+        {
+          "id": "HE-CH-04",
+          "text": "Tower or vertical house with reception below, household rooms above, secure records between them, and service access from a lower side entry.",
+          "scale": "small-footprint",
+          "provides": ["vertical privacy gradient", "reception", "secure records", "service entry", "roof or upper watch"]
+        },
+        {
+          "id": "HE-CH-05",
+          "text": "Estate lodge facing a managed yard or garden; the main house contains reception and family rooms while detached service buildings supply food, storage, and labor.",
+          "scale": "distributed",
+          "provides": ["formal house", "managed grounds", "external service providers", "estate work", "guest approach"]
+        },
+        {
+          "id": "HE-CH-06",
+          "text": "Divided household around one formal stair: two private branches share reception, kitchen/service, chapel or quiet room, and estate records but control separate thresholds.",
+          "scale": "medium",
+          "provides": ["shared authority spaces", "two private domains", "service core", "records", "contested thresholds"]
+        }
+      ],
+      "states": [
+        {"id": "HE-ST-01", "text": "Receiving day: household officers and front rooms are active while private rooms remain controlled."},
+        {"id": "HE-ST-02", "text": "Private household: ordinary domestic and estate work continues with formal rooms mostly closed."},
+        {"id": "HE-ST-03", "text": "Understaffed or absent owner: a steward, caretaker, or elder combines several roles and some service spaces are dormant."},
+        {"id": "HE-ST-04", "text": "Succession or occupation: two claims divide permissions, records, rooms, or staff without changing the building's household identity."}
+      ],
+      "programs": [
+        {
+          "id": "manor",
+          "label": "Manor",
+          "invariants": ["household authority", "reception", "private life", "service and labor", "property/estate records", "food/sleep/sanitation", "accountable controller"],
+          "arrangements": [
+            {"id": "MN-AR-01", "text": "Resident household led by an owner or elder, with a steward handling petitions, accounts, guests, and estate work."},
+            {"id": "MN-AR-02", "text": "Absentee owner's house where a bailiff and small permanent household maintain property, rents, repairs, and formal reception."},
+            {"id": "MN-AR-03", "text": "Multigenerational household whose two branches share service and authority rooms but keep separate private thresholds and dependants."},
+            {"id": "MN-AR-04", "text": "Official residence where household life coexists with scheduled petitions, audiences, or local administration in the front range."}
+          ],
+          "scenes": [
+            {"id": "MN-SC-01", "text": "Two tenants dispute a boundary while the steward discovers that the filed rent roll uses an older property line."},
+            {"id": "MN-SC-02", "text": "A guest has arrived under a genuine invitation issued by a household member who denies sending it."},
+            {"id": "MN-SC-03", "text": "The kitchen and stable or transport staff have both been promised the same limited delivery."},
+            {"id": "MN-SC-04", "text": "A dependant is moving rooms, and every household branch interprets the reassignment as a statement of succession."}
+          ],
+          "spice": [
+            {"id": "MN-SP-G", "band": "Grounded", "text": "Two household account books disagree about the support owed to one dependant.", "affects": "estate obligations", "preserves": "household and records"},
+            {"id": "MN-SP-T", "band": "Textured", "text": "A reception room appears in household inventories but not in the filed plan, although servants describe cleaning it.", "affects": "records and known space", "preserves": "manor identity"},
+            {"id": "MN-SP-S", "band": "Strange", "text": "Ancestral portraits answer only questions whose subjects were once discussed within their hearing.", "affects": "reception memory", "preserves": "household authority and history"},
+            {"id": "MN-SP-V", "band": "Volatile", "text": "One private threshold recognizes a disputed heir as owner and denies the current household head.", "affects": "private access and succession", "preserves": "estate conflict"}
+          ],
+          "realm": {
+            "frontier": {"label": "Manor / Estate House", "realization": "Stewarded reception, household rooms, kitchen and stores, service court, rent or land records, gardens, stable or work providers."},
+            "chrome": {"label": "Penthouse / Family Compound", "realization": "Controlled lobby, formal entertaining floor, private suites, service elevator or corridor, household staff, asset records and building systems."},
+            "gloom": {"label": "Old Family Place / Big House", "realization": "Front parlor and dining room, family bedrooms, kitchen and utility rooms, back stair or porch, property office, yard and local dependants."}
+          }
+        }
+      ]
+    },
+    {
+      "id": "BF-RITUAL-INSTITUTION",
+      "label": "Ritual / Institution",
+      "sharedGrammar": "A participant threshold establishes conduct and preparation before a ritual focus, while officiant support, offerings or records, restricted space, services, and gathering remain causally connected.",
+      "forbids": [
+        "A shrine prop cannot substitute for active ritual practice and responsible custody.",
+        "Realm symbolism cannot erase participant, officiant, offering, service, or restricted-space relationships."
+      ],
+      "chassis": [
+        {
+          "id": "RI-CH-01",
+          "text": "Axial threshold and preparation bay lead to a common ritual hall and focused sanctuary; officiant rooms and offering store sit behind the focus.",
+          "scale": "small-to-medium",
+          "provides": ["preparation", "common hall", "ritual focus", "officiant support", "offering store"]
+        },
+        {
+          "id": "RI-CH-02",
+          "text": "Open court holds gathering and procession; a roofed ritual chamber, side instruction room, and service range form its protected edge.",
+          "scale": "medium",
+          "provides": ["procession court", "ritual chamber", "instruction", "service range", "public gathering"]
+        },
+        {
+          "id": "RI-CH-03",
+          "text": "Congregational hall faces a raised or enclosed focus, with side aisles or paths to private counsel, offerings, storage, and officiant circulation.",
+          "scale": "medium-to-large",
+          "provides": ["large assembly", "focus", "private counsel", "offerings", "officiant route"]
+        },
+        {
+          "id": "RI-CH-04",
+          "text": "Clustered shrine house links several small focuses through one shared preparation room, keeper station, offering record, and quiet court.",
+          "scale": "small",
+          "provides": ["multiple focuses", "shared preparation", "keeper", "offering record", "quiet court"]
+        },
+        {
+          "id": "RI-CH-05",
+          "text": "A spring, cave, tree, ruin, or other world-owned focus is approached through a managed threshold; shelter, offerings, instruction, and sanitation remain built around it.",
+          "scale": "site-linked",
+          "provides": ["world focus", "managed approach", "shelter", "offering custody", "service and sanitation"]
+        },
+        {
+          "id": "RI-CH-06",
+          "text": "Upper public hall and lower restricted chamber share one ritual axis; separate officiant circulation and a service stair preserve access truth.",
+          "scale": "medium",
+          "provides": ["public ritual", "restricted ritual", "vertical relation", "officiant route", "service stair"]
+        }
+      ],
+      "states": [
+        {"id": "RI-ST-01", "text": "Ordinary observance: the focus, officiant support, and public threshold operate on their normal cadence."},
+        {"id": "RI-ST-02", "text": "Preparation: staff and participants are arranging a rite, teaching, offering, or procession not yet begun."},
+        {"id": "RI-ST-03", "text": "Festival or crisis attendance: gathering exceeds ordinary interior capacity and uses the approach or court."},
+        {"id": "RI-ST-04", "text": "Mourning, interdiction, or repair: the main focus is restricted while a smaller valid practice continues elsewhere in the site."}
+      ],
+      "programs": [
+        {
+          "id": "temple",
+          "label": "Temple",
+          "invariants": ["recognized practice", "participant threshold", "ritual focus", "officiant or keeper", "offerings/records", "restricted/support space", "service and gathering"],
+          "arrangements": [
+            {"id": "TP-AR-01", "text": "Congregational temple with scheduled common observance, teaching or counsel, offerings, and an officiant household or staff."},
+            {"id": "TP-AR-02", "text": "Pilgrimage temple whose approach, reception, offering custody, rest, and crowd cadence matter as much as the inner focus."},
+            {"id": "TP-AR-03", "text": "Healing or intercession temple with waiting, examination or counsel, ritual treatment, recovery, records, and sanitation."},
+            {"id": "TP-AR-04", "text": "Keeper shrine serving several household, ancestor, civic, or road observances through a shared threshold and small support range."}
+          ],
+          "scenes": [
+            {"id": "TP-SC-01", "text": "An offering has been correctly received but attributed to the wrong petitioner in the public record."},
+            {"id": "TP-SC-02", "text": "The officiant must decide whether an arriving group may join a rite whose preparation rules they could not have followed."},
+            {"id": "TP-SC-03", "text": "A healing petitioner asks that the result be recorded under someone else's name."},
+            {"id": "TP-SC-04", "text": "A maintenance worker has found a message inside a ritual fixture that is not supposed to open."}
+          ],
+          "spice": [
+            {"id": "TP-SP-G", "band": "Grounded", "text": "The offering record shows one donor has quietly supported two publicly opposed observances.", "affects": "offerings and relationships", "preserves": "temple practice"},
+            {"id": "TP-SP-T", "band": "Textured", "text": "One threshold retains the scent, dust, or condensation of the last procession long after cleaning.", "affects": "ritual approach", "preserves": "ordinary material operation"},
+            {"id": "TP-SP-S", "band": "Strange", "text": "The ritual focus answers one repeated gesture differently when performed by someone under an unspoken obligation.", "affects": "ritual response", "preserves": "practice and officiation"},
+            {"id": "TP-SP-V", "band": "Volatile", "text": "An accepted offering transfers its attached vow to the next person who removes it without authority.", "affects": "offering custody", "preserves": "temple authority and consequence"}
+          ],
+          "realm": {
+            "frontier": {"label": "Temple / Shrine House", "realization": "Processional or public threshold, altar or world focus, offerings, lamps and fuel, keeper rooms, instruction, charity or healing provider."},
+            "chrome": {"label": "Sanctum / Reflection Clinic", "realization": "Controlled quiet threshold, immersive or technical focus, scheduled sessions, secure offerings/data, counselors or officiants, life-safety systems."},
+            "gloom": {"label": "Church / Roadside Chapel / Healing Mission", "realization": "Vestibule, sanctuary or meeting hall, office and counsel room, donation records, kitchen or aid provider, practical maintenance and community schedule."}
+          }
+        }
+      ]
+    },
+    {
+      "id": "BF-LOGISTICS",
+      "label": "Logistics",
+      "sharedGrammar": "A receiving edge converts arriving goods into identified, handled, stored, counted, and dispatched loads through staff-controlled routes connected to real vehicles or carriers.",
+      "forbids": [
+        "Storage cannot be an inert pile without ownership, route, handling, and dispatch truth.",
+        "A dock relationship requires actual water, vehicle, loading, or transfer facts."
+      ],
+      "chassis": [
+        {
+          "id": "LG-CH-01",
+          "text": "Street receiving doors open to inspection and sorting; storage bays fill the rear while a separate dispatch lane reaches the opposite side.",
+          "scale": "small-to-medium",
+          "provides": ["receiving", "inspection", "sorting", "storage", "separate dispatch"]
+        },
+        {
+          "id": "LG-CH-02",
+          "text": "Vehicle yard fronts covered loading sheds and deep storage; counting office and secure goods room overlook the shared handling court.",
+          "scale": "medium-to-large",
+          "provides": ["vehicle yard", "covered loading", "deep storage", "counting", "secure goods"]
+        },
+        {
+          "id": "LG-CH-03",
+          "text": "Tall store uses a hoist or lift beside stacked floors; receiving, weighing, and dispatch remain separated at ground level.",
+          "scale": "vertical",
+          "provides": ["vertical storage", "hoist", "ground handling", "weight control", "dispatch"]
+        },
+        {
+          "id": "LG-CH-04",
+          "text": "A long transit shed has numbered temporary bays, cross-aisles, a tally station, and direct loading edges on both long sides.",
+          "scale": "medium",
+          "provides": ["temporary bays", "cross-aisles", "tally", "two loading faces", "fast turnover"]
+        },
+        {
+          "id": "LG-CH-05",
+          "text": "Secure compact store combines intake, weighing, and dispatch at one controlled desk while dangerous or valuable goods occupy separated cells.",
+          "scale": "small",
+          "provides": ["controlled desk", "compact handling", "segregated storage", "audit route"]
+        },
+        {
+          "id": "LG-CH-06",
+          "text": "Waterside or vehicle-side house bridges a public paperwork front to a restricted loading platform, with manifests, gear, short-term storage, and staff rest behind.",
+          "scale": "host-edge",
+          "provides": ["public paperwork", "restricted platform", "manifest control", "gear", "short-term storage"]
+        }
+      ],
+      "states": [
+        {"id": "LG-ST-01", "text": "Normal throughput: arriving, stored, and departing loads fit the handling and record capacity."},
+        {"id": "LG-ST-02", "text": "Arrival surge: one carrier has delivered early and sorting or temporary storage is consuming a route."},
+        {"id": "LG-ST-03", "text": "Inventory discrepancy: physical goods, seals, ownership, or manifest totals do not reconcile."},
+        {"id": "LG-ST-04", "text": "Hazard or access loss: weather, damage, contamination, labor dispute, tide, or vehicle failure has closed one handling edge."}
+      ],
+      "programs": [
+        {
+          "id": "warehouse",
+          "label": "Warehouse",
+          "invariants": ["receiving", "identified goods", "handling", "storage", "count/ownership", "dispatch", "staff and vehicle route"],
+          "arrangements": [
+            {"id": "WH-AR-01", "text": "Merchant warehouse with long-term owned bays, sample or inspection bench, counting office, and scheduled customer dispatch."},
+            {"id": "WH-AR-02", "text": "Bonded store where seals, customs or authority, secure cages, and release orders control movement."},
+            {"id": "WH-AR-03", "text": "Transit warehouse with numbered short-stay bays, cross-docking, rapid tally, and little long-term storage."},
+            {"id": "WH-AR-04", "text": "Special-condition store whose cool, dry, ventilated, guarded, or hazardous bays create distinct handling and failure rules."}
+          ],
+          "scenes": [
+            {"id": "WH-SC-01", "text": "A sealed load occupies the correct bay but the seal belongs to a different owner."},
+            {"id": "WH-SC-02", "text": "Workers refuse to move one crate because its recorded weight changes between stations."},
+            {"id": "WH-SC-03", "text": "A customer arrives with a valid release order for goods already staged for someone else."},
+            {"id": "WH-SC-04", "text": "A roof or utility failure is forcing a rapid choice about which goods receive the remaining protected space."}
+          ],
+          "spice": [
+            {"id": "WH-SP-G", "band": "Grounded", "text": "One numbered bay has been paid for continuously although no employee remembers seeing it occupied.", "affects": "rent and records", "preserves": "storage operation"},
+            {"id": "WH-SP-T", "band": "Textured", "text": "Dust settles everywhere except along a handling route absent from the current floor plan.", "affects": "route history", "preserves": "warehouse fabric"},
+            {"id": "WH-SP-S", "band": "Strange", "text": "Goods placed in one bay acquire the smell and temperature of their intended destination.", "affects": "one storage bay", "preserves": "ownership and dispatch"},
+            {"id": "WH-SP-V", "band": "Volatile", "text": "Any load left after its release date begins replacing nearby labels with its own destination.", "affects": "identification and delay", "preserves": "logistics stakes"}
+          ],
+          "realm": {
+            "frontier": {"label": "Warehouse / Storehouse", "realization": "Cart court, loading doors, hoist, timber racks, seals and ledgers, watchman, roof and damp control."},
+            "chrome": {"label": "Freight Depot / Secure Storage", "realization": "Loading bays, lifts, tracked units, climate or hazard zones, scanners, dispatch office and controlled vehicle circulation."},
+            "gloom": {"label": "Warehouse / Distribution Shed", "realization": "Truck dock or rail siding, pallets and shelves, receiving office, cages, inventory sheets, forklifts or hand gear, roof and utility risk."}
+          }
+        },
+        {
+          "id": "dock-house",
+          "label": "Dock-House",
+          "invariants": ["water/vehicle edge", "arrival and departure control", "manifest or booking", "loading labor/gear", "short storage", "weather/tide/route knowledge", "public and restricted access"],
+          "arrangements": [
+            {"id": "DH-AR-01", "text": "Harbormaster or quay office with public berth desk, tide and arrival board, restricted platform access, signal gear, and incident records.", "chassisAllow": ["LG-CH-02", "LG-CH-04", "LG-CH-06"]},
+            {"id": "DH-AR-02", "text": "Stevedore dispatch house with hiring/muster, gear issue, gang assignment, tally, and direct loading-platform route.", "chassisAllow": ["LG-CH-02", "LG-CH-04", "LG-CH-06"]},
+            {"id": "DH-AR-03", "text": "Customs or bonded dock-house with declaration counter, inspection, seal store, temporary hold, and release to vessel or road.", "chassisAllow": ["LG-CH-02", "LG-CH-04", "LG-CH-05", "LG-CH-06"]},
+            {"id": "DH-AR-04", "text": "Ferry or packet house with ticket/booking, waiting, baggage, crew room, timetable, and controlled gangway or vehicle ramp.", "chassisAllow": ["LG-CH-02", "LG-CH-04", "LG-CH-06"]}
+          ],
+          "scenes": [
+            {"id": "DH-SC-01", "text": "Two vessels or carriers claim the same berth under different valid schedules."},
+            {"id": "DH-SC-02", "text": "A labor gang has assembled, but its gear was issued to a crew that never appeared."},
+            {"id": "DH-SC-03", "text": "An arriving passenger's baggage bears a cargo seal and is being diverted to inspection."},
+            {"id": "DH-SC-04", "text": "The weather or tide board has changed while the instrument or observer responsible still reports the earlier reading."}
+          ],
+          "spice": [
+            {"id": "DH-SP-G", "band": "Grounded", "text": "The berth book reserves one arrival every week for a carrier no current worker has seen.", "affects": "schedule and berth", "preserves": "dock control"},
+            {"id": "DH-SP-T", "band": "Textured", "text": "One length of platform remains wet or frost-marked regardless of tide and weather.", "affects": "one loading edge", "preserves": "physical dock operation"},
+            {"id": "DH-SP-S", "band": "Strange", "text": "The arrival board posts one vessel or vehicle a day before any message announces it.", "affects": "route knowledge", "preserves": "scheduling and verification"},
+            {"id": "DH-SP-V", "band": "Volatile", "text": "A cargo accepted under the wrong destination begins pulling its carrier toward that destination when departure starts.", "affects": "manifest and movement", "preserves": "dispatch consequence"}
+          ],
+          "realm": {
+            "frontier": {"label": "Harbor House / Quay Office", "realization": "Tide board, berth book, signal mast, cranes or tackle, gang muster, bonded shed and boat/cart access."},
+            "chrome": {"label": "Port Control / Freight Interface", "realization": "Traffic display, berth locks, cargo screening, powered lifts, secure holds, crew access, weather and system redundancy."},
+            "gloom": {"label": "Dock Office / Ferry Terminal", "realization": "Ticket or manifest counter, radio room, waiting, baggage and freight shed, gangway controls, back-lot loading and storm procedure."}
+          }
+        }
+      ]
+    },
+    {
+      "id": "BF-SHOP-WORKSHOP",
+      "label": "Shop / Workshop",
+      "sharedGrammar": "A customer or commission edge connects to transaction, stock, work or preparation where required, secure material, utilities and waste, operator position, and delivery.",
+      "forbids": [
+        "A family chassis is occupation-neutral; printer, smith, apothecary, or other source occupants never migrate with geometry.",
+        "Each program must supply its own work, safety, storage, and professional-service obligations."
+      ],
+      "chassis": [
+        {
+          "id": "SW-CH-01",
+          "text": "Street counter leads to a rear workroom, secure store, and service yard with delivery and waste access.",
+          "scale": "small-to-medium",
+          "provides": ["customer edge", "transaction", "workroom", "secure store", "service yard"]
+        },
+        {
+          "id": "SW-CH-02",
+          "text": "Open work bay faces a customer edge; materials occupy a side room while office, valuables, and records sit behind the operator.",
+          "scale": "medium",
+          "provides": ["visible work", "customer boundary", "materials", "secure office", "records"]
+        },
+        {
+          "id": "SW-CH-03",
+          "text": "Domestic front room serves customers beside an attached workshop; a rear delivery passage separates supplies and waste from household access.",
+          "scale": "small-live-work",
+          "provides": ["customer room", "attached work", "household boundary", "rear delivery", "waste route"]
+        },
+        {
+          "id": "SW-CH-04",
+          "text": "Arcade stall owns a lockable counter and demonstration surface while a shared back passage reaches a dedicated store or offsite workshop.",
+          "scale": "small-hosted",
+          "provides": ["stall", "transaction", "demonstration", "shared service", "external provider"]
+        },
+        {
+          "id": "SW-CH-05",
+          "text": "Corner shop combines two display fronts, a screened consultation or fitting alcove, rear work/preparation, and a cool or secure cellar.",
+          "scale": "small-to-medium",
+          "provides": ["display", "consultation", "rear work", "cellar", "two public approaches"]
+        },
+        {
+          "id": "SW-CH-06",
+          "text": "Yard-front workshop places noisy, hot, bulky, or hazardous work in a covered bay; office/counter, material shed, and delivery gate stay separately controllable.",
+          "scale": "medium-to-large",
+          "provides": ["work yard", "customer office", "materials shed", "delivery gate", "hazard separation"]
+        }
+      ],
+      "states": [
+        {"id": "SW-ST-01", "text": "Ordinary trade: work, stock, customer service, utilities, and delivery are balanced."},
+        {"id": "SW-ST-02", "text": "Demand backlog: customer orders, consultations, preparations, repairs, or commissions exceed the current operator's time or safe capacity."},
+        {"id": "SW-ST-03", "text": "Supply shortage: one controlled material or external provider is delaying otherwise valid work."},
+        {"id": "SW-ST-04", "text": "Inspection or repair: one work surface, utility, safety control, or storage zone is unavailable and changes service."}
+      ],
+      "programs": [
+        {
+          "id": "smithy",
+          "label": "Smithy",
+          "invariants": ["metalwork service", "heat/power", "work and quench/cooling", "material stock", "tool and commission custody", "ventilation/fire safety", "delivery"],
+          "arrangements": [
+            {"id": "SM-AR-01", "text": "Repair smith with public commission desk, general forge, quench, parts stock, and an active queue of ordinary tools and fittings."},
+            {"id": "SM-AR-02", "text": "Production forge with repeated work stations, fuel and bar stock, finishing bench, quality check, and dispatch for contracted batches.", "chassisAllow": ["SW-CH-02", "SW-CH-06"]},
+            {"id": "SM-AR-03", "text": "Armorer with fitting space, secure finished stock, heatwork separated from customers, and records for issued or commissioned protection."},
+            {"id": "SM-AR-04", "text": "Farrier or vehicle smith with yard access, animal or chassis restraint, hoof/wheel fittings, forge, and safe waiting edge.", "chassisAllow": ["SW-CH-01", "SW-CH-02", "SW-CH-06"]}
+          ],
+          "scenes": [
+            {"id": "SM-SC-01", "text": "An expensive commission is complete, but the person named to collect it denies ordering it."},
+            {"id": "SM-SC-02", "text": "A cracked tool from a local crew reveals the same flaw in several pieces from one material batch."},
+            {"id": "SM-SC-03", "text": "The quench or cooling system has been reserved for urgent work that has not yet arrived."},
+            {"id": "SM-SC-04", "text": "A customer demands a repair while refusing to surrender the damaged object's concealed attachment."}
+          ],
+          "spice": [
+            {"id": "SM-SP-G", "band": "Grounded", "text": "An expensive commission remains uncollected while storage fees quietly exceed its final payment.", "affects": "commission custody", "preserves": "smithy work"},
+            {"id": "SM-SP-T", "band": "Textured", "text": "A sealed chimney or power duct implies an inaccessible former hearth or work bay.", "affects": "workshop history and ventilation", "preserves": "safe active forge"},
+            {"id": "SM-SP-S", "band": "Strange", "text": "Tools return to their assigned places and continue the last motion taught by a dead master.", "affects": "tool behavior", "preserves": "operator and work surfaces"},
+            {"id": "SM-SP-V", "band": "Volatile", "text": "Metal worked here refuses to cross one named threshold while hot.", "affects": "heatwork and circulation", "preserves": "forge logistics"}
+          ],
+          "realm": {
+            "frontier": {"label": "Smithy / Forge", "realization": "Forge and fuel, bellows or draft, anvil and benches, quench, bar/scrap stock, yard delivery, sparks and fire control."},
+            "chrome": {"label": "Fabrication Shop / Machine Bay", "realization": "Powered tools, welding or thermal work, ventilation, parts racks, inspection, secure commissions and loading bay."},
+            "gloom": {"label": "Repair Garage / Metal Shop", "realization": "Service counter, work bays, torch or welder, parts cage, fluids and waste, lift or yard, job tickets and practical fire safety."}
+          }
+        },
+        {
+          "id": "apothecary",
+          "label": "Apothecary",
+          "invariants": ["customer recognition", "consultation/instruction", "preparation or real provider", "stock and controlled substances", "water/heat/cold/ventilation", "sanitation/waste", "responsible practitioner"],
+          "arrangements": [
+            {"id": "AP-AR-01", "text": "Retail dispensary with front counter, screened advice, rear compounding, ordinary stock, controlled cabinet, and delivery record."},
+            {"id": "AP-AR-02", "text": "Consultation practice with waiting, private examination or counsel, small preparation room, medicine store, wash point, and patient notes."},
+            {"id": "AP-AR-03", "text": "Domestic herbal practice with customer room, drying and preparation, garden or supplier relation, cool store, and household boundary."},
+            {"id": "AP-AR-04", "text": "Clinic-apothecary with triage counter, treatment room, dispensary, cold or secure stock, sanitation, and separate clinical waste."}
+          ],
+          "scenes": [
+            {"id": "AP-SC-01", "text": "An assistant is preparing a renewal signed before the physician or authorizing practitioner died."},
+            {"id": "AP-SC-02", "text": "Two remedies with similar labels require opposite storage, and one has been returned to the wrong shelf."},
+            {"id": "AP-SC-03", "text": "A supplier offers the missing ingredient only if the practitioner accepts an unrecorded substitute batch."},
+            {"id": "AP-SC-04", "text": "A patient reports a side effect that matches another customer's formula rather than their own."}
+          ],
+          "spice": [
+            {"id": "AP-SP-G", "band": "Grounded", "text": "A renewable prescription bears the signature of a practitioner known to be dead.", "affects": "authorization and records", "preserves": "dispensing"},
+            {"id": "AP-SP-T", "band": "Textured", "text": "The cold store remains cold without a visible mechanism, but its temperature log is otherwise ordinary.", "affects": "stock storage", "preserves": "medicine custody"},
+            {"id": "AP-SP-S", "band": "Strange", "text": "Several remedies consistently treat a different mapped condition than the wording on their labels.", "affects": "diagnosis and labels", "preserves": "preparation and responsibility"},
+            {"id": "AP-SP-V", "band": "Volatile", "text": "One preparation transfers a symptom into the next person who enters the consultation alcove.", "affects": "treatment and room use", "preserves": "apothecary service"}
+          ],
+          "realm": {
+            "frontier": {"label": "Apothecary / Herbalist", "realization": "Herbs and compounds, drying or supplier route, scales and preparation, water and heat, cool/secure stock, consultation and waste."},
+            "chrome": {"label": "Unlicensed Clinic / Med Shop", "realization": "Waiting and diagnostic surface, cold storage, sterile preparation, disposables, locked drugs, ventilation and clinical waste."},
+            "gloom": {"label": "Drugstore / Back Clinic", "realization": "Prescription counter, shelves and stockroom, back consultation, refrigerator, sink and sanitation, controlled cabinet, delivery and records."}
+          }
+        },
+        {
+          "id": "general",
+          "label": "General Store",
+          "invariants": ["broad ordinary stock", "display and request", "transaction", "back stock", "delivery", "inventory and credit", "responsible shopkeeper"],
+          "arrangements": [
+            {"id": "GS-AR-01", "text": "Counter store with dense shelves, requested goods behind the keeper, back stock, bulk delivery, and household credit book."},
+            {"id": "GS-AR-02", "text": "Open browse shop with visible ordinary goods, staffed counter, secure valuables, packing bench, and rear receiving."},
+            {"id": "GS-AR-03", "text": "Supply depot serving travelers or crews through prepacked kits, bulk staples, special orders, and a loading yard."},
+            {"id": "GS-AR-04", "text": "Village store and post or message counter sharing one public room while parcels, stock, accounts, and private correspondence remain separated."}
+          ],
+          "scenes": [
+            {"id": "GS-SC-01", "text": "The last unit of an ordinary necessity has been promised to two customers under different forms of credit."},
+            {"id": "GS-SC-02", "text": "A special order arrived correctly addressed but contains the standard goods for another climate or region."},
+            {"id": "GS-SC-03", "text": "A supplier's invoice proves several shelf prices are now below replacement cost."},
+            {"id": "GS-SC-04", "text": "A returned kit is complete except for one cheap item whose absence makes the rest unsafe to use."}
+          ],
+          "spice": [
+            {"id": "GS-SP-G", "band": "Grounded", "text": "The credit book carries a household that no longer exists, yet someone keeps making exact payments.", "affects": "credit and customer identity", "preserves": "ordinary commerce"},
+            {"id": "GS-SP-T", "band": "Textured", "text": "One shelf is always stocked in the order customers will request its goods that day.", "affects": "display and demand", "preserves": "inventory"},
+            {"id": "GS-SP-S", "band": "Strange", "text": "A sealed travel kit contains one modest item appropriate to the buyer's next serious delay.", "affects": "one stocked kit", "preserves": "transaction and stock limits"},
+            {"id": "GS-SP-V", "band": "Volatile", "text": "Goods purchased on credit begin wearing the marks of the lender's household until the debt is settled.", "affects": "credit and ownership", "preserves": "store economy"}
+          ],
+          "realm": {
+            "frontier": {"label": "General Store / Provisioner", "realization": "Counter and shelves, bulk bins, rope and tools, back stock, delivery yard, handwritten orders and household credit."},
+            "chrome": {"label": "Supply Kiosk / Utility Mart", "realization": "Modular goods, locked technical stock, pickup counter, inventory system, parcel lockers, loading or courier edge."},
+            "gloom": {"label": "Hardware and Grocery / Corner Store", "realization": "Aisles and counter, stockroom, cooler or utility goods, loading alley, layaway or account book, local parcel service."}
+          }
+        },
+        {
+          "id": "arcanist",
+          "label": "Arcanist's Shop",
+          "invariants": ["specialist consultation", "components or bounded works", "demonstration/verification", "hazard and access control", "secure stock", "records/provenance", "responsible practitioner"],
+          "arrangements": [
+            {"id": "AR-AR-01", "text": "Component shop with consultation counter, ordinary reagents, locked rare stock, verification bench, and controlled disposal."},
+            {"id": "AR-AR-02", "text": "Scroll, pattern, or encoded-work dealer with reading desk, copying or activation room, secure archive, and provenance records."},
+            {"id": "AR-AR-03", "text": "Commission workshop with customer interview, isolated fabrication cell, test surface, material store, and collection protocol."},
+            {"id": "AR-AR-04", "text": "Appraisal and ward service with intake quarantine, diagnostic bench, consultation, secure hold, and return or escalation route."}
+          ],
+          "scenes": [
+            {"id": "AR-SC-01", "text": "A component passes every test but its provenance belongs to a batch recorded as destroyed."},
+            {"id": "AR-SC-02", "text": "A customer wants an appraisal without allowing the object to cross the shop's intake boundary."},
+            {"id": "AR-SC-03", "text": "A completed commission responds correctly to the wrong authorized user."},
+            {"id": "AR-SC-04", "text": "The disposal container is full because one harmless residue refuses to become inert."}
+          ],
+          "spice": [
+            {"id": "AR-SP-G", "band": "Grounded", "text": "A rare component's provenance record names a perfectly ordinary supplier who denies ever handling it.", "affects": "stock provenance", "preserves": "specialist trade"},
+            {"id": "AR-SP-T", "band": "Textured", "text": "The demonstration surface retains a faint diagram of the last failed test until a successful one replaces it.", "affects": "verification history", "preserves": "test protocol"},
+            {"id": "AR-SP-S", "band": "Strange", "text": "One locked drawer opens only when the requester accurately states what they will not use its contents for.", "affects": "secure stock permission", "preserves": "operator control"},
+            {"id": "AR-SP-V", "band": "Volatile", "text": "Any unreceipted component leaving the shop causes its storage condition to manifest around the carrier.", "affects": "stock custody and theft", "preserves": "shop boundary"}
+          ],
+          "realm": {
+            "frontier": {"label": "Arcanist / Charmwright", "realization": "Component drawers, consultation, inscribed or worked bench, locked cabinet, test circle or safe surface, provenance and disposal."},
+            "chrome": {"label": "Esoteric Tech / Black Clinic", "realization": "Controlled components, diagnostic instruments, isolated work cell, access logs, shielding or ventilation, hazardous waste and secure pickup."},
+            "gloom": {"label": "Occult Supply / Repair Office", "realization": "Front counter, reference files, back workroom, locked case, test bench, practical containment, alley delivery and discreet appointments."}
+          }
+        }
+      ]
+    },
+    {
+      "id": "BF-CUSTODY",
+      "label": "Prison / Custody",
+      "sharedGrammar": "An authority receives identifiable people and property, classifies and assigns them to controlled holding, sustains service and routine, applies a disposition, and exposes precommitted routes to release, transfer, escape, rescue, force, failure, and aftermath.",
+      "forbids": [
+        "No civic room list, cellblock label, or security skin substitutes for the eight custody circuits.",
+        "No generated prison may require narrator mercy or one impossible check as its only exit.",
+        "Prisoner property, case evidence, contraband, and institution property retain distinct identities even when they share a secure realization."
+      ],
+      "chassis": [
+        {
+          "id": "CU-CH-01",
+          "text": "Rung-A watchhouse: public keeper threshold, one controlled holding room or cell, staff-side property cabinet, external service route, and explicit release or transfer.",
+          "scale": "rung-a",
+          "provides": ["authority", "intake", "single holding", "property cabinet", "external services", "disposition"]
+        },
+        {
+          "id": "CU-CH-02",
+          "text": "Keeper-house civic jail: street-facing keeper room, controlled inner threshold, short cell bank, raised landing, walled yard, intake-side property closet, and rear household/service access.",
+          "scale": "rung-b",
+          "provides": ["keeper authority", "intake/property", "correlated cells", "control landing", "yard", "rear service"]
+        },
+        {
+          "id": "CU-CH-03",
+          "text": "Ledger-and-shift jail: waiting and intake-search, staff-only attributed property, numbered holding children, count/handoff station, control landing, yard, and separate staff/service route.",
+          "scale": "rung-b-to-c",
+          "provides": ["record authority", "intake/search", "property custody", "numbered holdings", "handoff", "staff route"]
+        },
+        {
+          "id": "CU-CH-04",
+          "text": "Bounded-liberty court: controlled outer gate surrounds rooms or wards, supervised common movement, visitor/account edge, services, and a strong release/re-arrest boundary.",
+          "scale": "specialized",
+          "provides": ["perimeter custody", "common movement", "visitor/account", "services", "exit authority"]
+        },
+        {
+          "id": "CU-CH-05",
+          "text": "Gallery wing: reception and classification feed repeated cells along an observed gallery, with staff spine, service hatches, yard or work route, property store, and emergency release.",
+          "scale": "rung-c",
+          "provides": ["classification", "repeated assembly", "observation", "staff spine", "services", "emergency"]
+        },
+        {
+          "id": "CU-CH-06",
+          "text": "Warded exceptional holding: one or more cells depend on a visible support, energy, name, living material, gravity, or suspension system with operator access, service rig, property destination, emergency release, and honest failure surfaces.",
+          "scale": "licensed-exceptional",
+          "requires": ["licensed-world-adapter"],
+          "provides": ["world-owned containment", "operator", "support dependency", "service access", "property", "failure and release"]
+        }
+      ],
+      "states": [
+        {"id": "CU-ST-01", "text": "Routine custody: count, meals or service, visits or hearings, staff relief, and disposition proceed on their committed cadence."},
+        {"id": "CU-ST-02", "text": "Admission or transfer surge: intake, search, classification, property, and assignment are under visible load."},
+        {"id": "CU-ST-03", "text": "Overcapacity or restricted movement: classification and services are strained, but the compiler retains truthful routes and consequences."},
+        {"id": "CU-ST-04", "text": "Partial containment failure: one force, permission, service, or control layer is damaged or desynchronized and alert has changed access."}
+      ],
+      "programs": [
+        {
+          "id": "prison-custody",
+          "label": "Prison / Custody",
+          "programLayerLabel": "custody doctrine / operating model",
+          "invariants": ["authority/record", "people/classification", "access/observation", "property/evidence", "service/health", "routine/contact", "force/emergency", "disposition/continuity"],
+          "arrangements": [
+            {"id": "CU-AR-01", "text": "Keeper-House Civic Custody: authority and several circuits concentrate in a named keeper and attached household while cells, property, yard, and service remain explicit.", "chassisAllow": ["CU-CH-01", "CU-CH-02"]},
+            {"id": "CU-AR-02", "text": "Ledger-and-Shift Civic Custody: numbered people and holdings, signed commitment/release, attributed property, count/handoff, and role-bound access survive staff change.", "chassisAllow": ["CU-CH-02", "CU-CH-03", "CU-CH-04", "CU-CH-05"]},
+            {"id": "CU-AR-03", "text": "Short-Hold Watchhouse: one operator combines intake, oversight, record, and release while a single holding, property cabinet, and external services preserve the complete lifecycle.", "chassisAllow": ["CU-CH-01"]},
+            {"id": "CU-AR-04", "text": "Warded Exceptional Custody: a licensed world mechanism replaces some ordinary barriers but retains operator, support, service, property, disposition, emergency release, and all plan families.", "chassisAllow": ["CU-CH-06"], "requires": ["licensed-world-adapter"]}
+          ],
+          "scenes": [
+            {"id": "CU-SC-01", "text": "The count is correct, but one held person is assigned to the wrong stable holding child and the reason matters before the next movement."},
+            {"id": "CU-SC-02", "text": "A valid release or transfer order has arrived while the attributed property container cannot be reconciled with its receipt."},
+            {"id": "CU-SC-03", "text": "A meal, water, waste, medical, repair, or operator-relief provider has missed its cadence, opening one route while worsening another condition."},
+            {"id": "CU-SC-04", "text": "The disposition clock advances at the next handoff, but the authority record, keeper testimony, and prisoner's identity do not agree."}
+          ],
+          "spice": [
+            {"id": "CU-SP-G", "band": "Grounded", "text": "One cell can be opened from inside because of a known maintenance fault scheduled for repair after the next transfer.", "affects": "force surface and routine", "preserves": "custody, response, and consequences"},
+            {"id": "CU-SP-T", "band": "Textured", "text": "A custody room exists in current records but is absent from the public plan; staff route references prove it is not invented on discovery.", "affects": "knowledge and recorded topology", "preserves": "committed site"},
+            {"id": "CU-SP-S", "band": "Strange", "text": "One lock recognizes legal disposition rather than its physical key, creating both a lawful route and a falsification target.", "affects": "permission and release", "preserves": "authority and counterplay"},
+            {"id": "CU-SP-V", "band": "Volatile", "text": "At shift change one holding changes physical destination while preserving its occupants, support demands, property links, and failure surfaces.", "affects": "holding location and handoff", "preserves": "stable identities and custody lifecycle"}
+          ],
+          "realm": {
+            "frontier": {"label": "Gaol / Stockade / Keeper-House Jail", "realization": "Commission or court claim, keeper or shift, cells/pen/yard, keys and records, property cabinet/store, household or civic services, road transfer and finite disposition."},
+            "chrome": {"label": "Detention / Processing Unit", "realization": "Identity and intake search, controlled property, modular or specialized holdings, access systems, surveillance, service and medical routes, shift handoff, emergency release."},
+            "gloom": {"label": "County Jail / Lockup", "realization": "Booking desk, holding cells or short block, property bags and evidence handoff, control booth or keeper station, meal and medical provider, court/road transfer and release desk."}
+          }
+        }
+      ]
+    }
+  ]
+}

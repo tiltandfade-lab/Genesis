@@ -1,14 +1,18 @@
 ---
 type: working-site-spec
 created: 2026-07-25
+updated: 2026-07-26
 status: WORKING SPEC — research PASS; founder and brief PARTIAL; clay OPEN
 site: 2 — camp / service
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 authority:
   - GOLDEN-SITES-CATALOG.md
+  - GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md
   - STRUCTURE-KIT-CATALOG.md
 research:
   - ../Reference/Camp-Study/
+preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
+context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---
 
 # SITE 2 — CAMP / SERVICE — WORKING SPEC
@@ -62,6 +66,11 @@ A scatter of tents without a center, service logic, routine, or route relationsh
 not a Camp. A permanent block with rooted frontage belongs to the waystation expression
 or another host family. A military occupation may threaten a road, but that behavior
 comes from the occupancy roll rather than from “camp” itself.
+
+A roadside tavern, relay inn, or travelers' alehouse is a **Tavern venue program
+inside the route-service/waystation expression**, not something Site 2 owns everywhere.
+Its hospitality obligations come from `TAVERN-VENUE-ROUTING-BRIEF.md`; Site 2 supplies
+the borrowed-route or rooted-service relationship.
 
 ## Required invariants
 
@@ -309,6 +318,27 @@ and at least one plan. Noncombat play is mandatory for ordinary camps.
 - light/fuel ownership;
 - threat band, encounter objective, and creature envelopes.
 
+### Current-roller preservation
+
+This spec consumes the Site 2 record in
+`GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md`.
+
+- `LIVE`: world `master`/`arch`/nearby/faction/pressure axes; Place Spine Hideout,
+  Commons, Lodging, Workplace, Works, and compatible route-service expressions;
+  realm-skinned dry-gulch camp, wagon yard, stagecoach relay, and current
+  place/wilderness-walk context.
+- `LIVE-COMPOSED`: industrial, refugee, winter/seasonal, boom, traveling, hosted,
+  and rooted-service camps assembled from independent permanence, use, route, occupant,
+  climate, and material facts.
+- `TARGET-ADAPTER`: the Camp/Service grammar translating those facts without turning
+  every camp into a checkpoint or traveler clearing.
+
+Before implementation, retain one working/industrial camp, one displaced or refugee
+camp, and one semi-permanent road-service result in addition to the borrowed-clearing
+seed. That seed proves route-edge inversion and camp organization; it is not a universal
+size, climate, permanence, or occupancy. The receipt preserves host and upstream
+world/place/walk facts.
+
 ### Semantic blueprint
 
 Commit before geometry:
@@ -411,6 +441,25 @@ Every hook touches a real circuit and a visible objective.
   terrain without inventing fill lamps.
 - The selected standee's base-face emission remains presentation state, not camp light.
 
+### Rolled world-context projection
+
+The camp's context projection must make borrowed ground and route relationship legible
+without promoting every camp into a settlement. Band 1 continues the real route tangent,
+terrain support, water edge, or host-site boundary. Bands 2–3 show the licensed biome,
+landform, nearby service fabric, and permanence/departure traces at lower detail.
+
+The first context receipt is
+`../Reference/Golden-Site-World-Context/ROLL-RECEIPTS.json#CTX-CAMP-7`:
+Bog-Iron Camp + Fused Glass. Rust peat, mud-caked tents, and fused-glass construction
+may coexist. Woodsmoke needs a mounted fire; the falling landmark needs an established
+landmark. The Wrong Hour is a sound roll and does not license a false sunset.
+
+Background people, animals, carts, fires, and occupied shelters remain state-mounted,
+not baked into a reusable plate. Context-off/on captures retain identical camp
+footprints, route, center, services, actors, and ids. The receipt adds
+`worldContextPlanId`, band/recipe ids, host/portal/support refs, source refs, omissions,
+false-affordance rejections, and fallbacks.
+
 ## Structure, mechanisms, and surfaces
 
 ### Inherited
@@ -448,7 +497,8 @@ Retain equivalents of:
 
 The receipt also records seed/version, camera, grid, standee envelopes, occupancy and
 culture/organization cards, selected assemblies and provenance, clay/tactical/dressed
-surface ids, captures, validation results, and failed candidates.
+surface ids, captures, validation results, failed candidates, `rollerLineage`, and
+`sourceRollRefs`.
 
 ## First visual proof
 

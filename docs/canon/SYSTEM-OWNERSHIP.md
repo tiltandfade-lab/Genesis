@@ -2,6 +2,7 @@
 type: canon
 status: ACTIVE — the authority map: which system owns which facts
 created: 2026-07-22
+updated: 2026-07-26
 owner: docs/canon/README.md (precedence law)
 ---
 
@@ -39,7 +40,7 @@ Two columns of truth run through this file and must never be conflated:
 
 | Fact family | Accepted owner | Ruled in |
 |---|---|---|
-| Site semantics (purpose, doctrine, history, obligations, ecology) | RoomProgram / purpose-family obligation programs | Waves 1-2 |
+| Site identity, host semantics, transforms, and active extent | persistent `SiteIdentity` + host `RoomProgram`/operating-model obligations + ordered `TransformStack` + bounded `MaterializationWindow` | Waves 1-2; `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` reconciliation |
 | Spatial legality (cells, volumes, elevation, boundaries, zones, provenance) | `SpatialPlanV2` via the staged pipeline SpatialIntent → legality → `TacticalCompositionPlan` → `SurfaceAssemblyPlan` | Wave 3 P3.5 |
 | Connections, portals, secrets, vertical traversal, circulation | canonical `Connection` objects + traversal transactions + Secret Networks | Wave 4 (single subject authority) |
 | Furnishing, dressing, containers, touched state | hierarchical assemblies + tiered container truth + touched-dressing assertions | Wave 5 |
@@ -96,6 +97,10 @@ Two columns of truth run through this file and must never be conflated:
    re-decide.
 10. **Reactive difficulty scaling.** No system silently rescales because the player found a tool,
     tactic, or cache. (Wave 1 §8.11; Wave 2 G2.1 counter law; `docs/DIFFICULTY.md`)
+11. **Golden number as runtime site authority.** The twelve Golden Sites are the
+    acceptance portfolio, not a mutually exclusive site enum. Ordinary host/venue
+    programs and cross-host transforms compose through the shared semantic/spatial
+    path. (`docs/GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`)
 
 ## 5. Cutover law
 

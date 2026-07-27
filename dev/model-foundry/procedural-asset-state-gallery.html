@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Genesis Procedural Asset State Recipes</title>
+  <link rel="icon" href="data:,">
+  <style>
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111517;color:#e8dcc1;font-family:Inter,system-ui,sans-serif}
+    canvas{display:block;width:100%;height:100%}
+    header{position:fixed;z-index:2;left:24px;top:20px;max-width:560px;padding:15px 18px;background:#15191cee;border:1px solid #5c5549}
+    h1{margin:0 0 5px;font:600 20px Georgia,serif}p{margin:0;color:#aaa69d;font-size:11px;line-height:1.45}
+  </style>
+  <script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+</head>
+<body>
+  <header><h1>One Barrier, Three Independent State Axes</h1><p>Condition, access, and occupancy can combine. These eight legacy calls are shown as strongly differentiated presets of the exact same barrier geometry.</p></header>
+  <script type="module">
+    import * as THREE from "three";
+    import {
+      PROCEDURAL_STATES,
+      createProceduralBarrier,
+      applyProceduralState,
+    } from "/src/ui/theater-procedural-kit.js?state-gallery-v2";
+
+    const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,1));renderer.setSize(innerWidth,innerHeight);
+    renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=true;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
+    document.body.prepend(renderer.domElement);
+    const scene=new THREE.Scene();scene.background=new THREE.Color(0x151a1c);
+    scene.add(new THREE.HemisphereLight(0xd9e7eb,0x40362c,2.35));
+    const sun=new THREE.DirectionalLight(0xffddb0,3.6);sun.position.set(-5,9,5);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+    const fill=new THREE.DirectionalLight(0x91bee0,1.3);fill.position.set(6,4,-5);scene.add(fill);
+    const ground=new THREE.Mesh(new THREE.PlaneGeometry(14,8),new THREE.MeshStandardMaterial({color:0x42443c,roughness:.98}));
+    ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+    const grid=new THREE.GridHelper(13,26,0x756950,0x4d4f48);grid.position.y=.004;scene.add(grid);
+
+    const descriptions={
+      intact:"sound + ready",
+      repaired:"cross-braced + patched",
+      damaged:"sagging + broken member",
+      breached:"open gap + rubble",
+      open:"gate swung clear",
+      closed:"gate barred shut",
+      occupied:"stocked + activity light",
+      abandoned:"sagging + overgrown",
+    };
+    function label(text,description,x,z){
+      const canvas=document.createElement("canvas");canvas.width=420;canvas.height=112;
+      const ctx=canvas.getContext("2d");ctx.fillStyle="#f0dfb8";ctx.font="600 28px Georgia";ctx.textAlign="center";ctx.fillText(text.toUpperCase(),210,40);
+      ctx.fillStyle="#aeb7b2";ctx.font="500 18px Inter, sans-serif";ctx.fillText(description,210,74);
+      const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+      const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,transparent:true,depthWrite:false}));
+      sprite.scale.set(2.15,.58,1);sprite.position.set(x,1.55,z);scene.add(sprite);
+    }
+    const positions=[[-4.65,-1.45],[-1.55,-1.45],[1.55,-1.45],[4.65,-1.45],[-4.05,1.55],[-1.35,1.55],[1.35,1.55],[4.05,1.55]];
+    const groups=[];
+    PROCEDURAL_STATES.forEach((state,index)=>{
+      const baseOptions={seedKey:"state-proof:shared-base",contextText:"structures built from local living ironwood"};
+      const base=createProceduralBarrier(baseOptions);
+      applyProceduralState(base,state,{...baseOptions,seedKey:`state-proof:dressing:${state}`,containerKinds:["crate","barrel","sack"]});
+      const [x,z]=positions[index];base.position.set(x,0,z);base.rotation.y=-.12;base.scale.setScalar(1.08);
+      base.traverse(node=>{if(node.isMesh){node.castShadow=true;node.receiveShadow=true;}});
+      scene.add(base);groups.push(base);label(state,descriptions[state],x,z);
+    });
+
+    const camera=new THREE.PerspectiveCamera(36,innerWidth/innerHeight,.03,50);
+    camera.position.set(0,7.9,10.8);camera.lookAt(0,.42,0);
+    function frame(){renderer.render(scene,camera);requestAnimationFrame(frame)}frame();
+    window.__proceduralStateGalleryReady=true;
+    window.__proceduralStateGallery=groups.map(group=>group.userData.genesisProceduralKit.state);
+    window.__proceduralStateRecipes=groups.map(group=>group.userData.genesisProceduralKit.recipe);
+    window.__proceduralStateMetrics=groups.map(group=>{
+      const names=[],movable=[];
+      group.traverse(node=>{
+        if(node.isMesh&&node.visible)names.push(node.name);
+        if(node.userData?.genesisProcedural?.stateRole==="movable"){
+          movable.push([node.rotation.x,node.rotation.y,node.rotation.z,node.position.y].map(value=>Number(value.toFixed(3))));
+        }
+      });
+      return {names:names.sort(),movable};
+    });
+    addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+  </script>
+</body>
+</html>

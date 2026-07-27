@@ -2,13 +2,15 @@
 type: design-study
 status: ACCEPTED DIRECTION; IMPLEMENTATION UNAUTHORIZED
 created: 2026-07-23
+updated: 2026-07-26
 owner: this file (the golden-site structure/material kit catalog and the Guard Post site brief)
 authority: subordinate to `ART-DIRECTION-CANON.md` (Adam's verbatim rulings),
   `GRAPHICS-CONVERGENCE-CHARTER.md` (graphics law), `canon/PRODUCT-SCOPE.md` (scope tiers) and
   `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids). Gated by
   `CLAYROOM-RESET-LADDER.md`. Routes detail to `BATTLEMAP-TOWNTRAY-COMPOSITION.md` (composition),
   `TRIM-SHEET-PIPELINE.md` (trim), `MATERIAL-LANE.md` (material authoring), `PLACE-GEN.md` (place
-  generation), `MODEL-GRAMMAR.md` / `BLENDER-MODEL-SPEC.md` (geometry contracts).
+  generation), `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` (site/program/transform/materialization
+  taxonomy), `MODEL-GRAMMAR.md` / `BLENDER-MODEL-SPEC.md` (geometry contracts).
 sources: Desktop working packet, folded into the repository 2026-07-23 and left intact on Desktop —
   `~/Desktop/Genesis Golden Sites - Structure and Material Catalog.md`;
   `~/Desktop/Genesis FFT Guard Post Study/` (README, analysis/*, historical-reference/*).
@@ -54,6 +56,17 @@ any current canonical ruling.** Three places where the packet needed *routing* r
    [BATTLEMAP-TOWNTRAY-COMPOSITION.md](BATTLEMAP-TOWNTRAY-COMPOSITION.md) (the C1H owner). The FFT
    relational grammar below supplies *taste rules and anti-rules* over that compiler; it does not
    create a second geometry or reservation authority.
+4. **Rolled world context.** Portal/support aprons, context cards, reusable background
+   images, far fields, atmosphere, and context receipts belong to
+   [GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md](GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md).
+   A site brief declares its context obligations; it does not invent a second backdrop
+   renderer or turn background art into mechanics.
+5. **Ontology and engine marriage.** Walk families, persistent site identity, host
+   programs, operating models, cross-host transforms, materialization windows, semantic
+   plans, projections, and ordinary venue fixtures are separated by
+   [GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md](GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md).
+   This catalog owns the twelve-case coverage portfolio; it does not turn the twelve
+   names into a runtime enum.
 
 ## THE FFT BOUNDARY (binding)
 
@@ -480,9 +493,10 @@ the four gates.
 | 2 Camp / Service | PASS | PARTIAL | PARTIAL | OPEN | hosted-camp mechanism and build orders remain proposed |
 | 4 Monastery / Commune | PASS | PARTIAL | PARTIAL | OPEN | M1/M2/M4/M5 build order is proposed; cultural breadth and metric evidence remain thin |
 | 5 Mine / Workshop | PARTIAL | PARTIAL | PARTIAL | OPEN | working spec and initial source-led synthesis exist; direct tactical-map and broader measured/cultural evidence gaps remain; no rendered proof exists |
+| 6 Prison / Custody | PARTIAL | PARTIAL | PARTIAL | OPEN | initial architecture/operation/property study and first doctrine pair returned; global measured breadth, later doctrines, implementation reconciliation, and clay proof remain open |
 | 7 Natural Lair | PASS | PASS | PASS | OPEN | congruent brief and current diagram now agree; no rendered proof exists |
 | 10 Urban Institution | PARTIAL | PARTIAL | PARTIAL | OPEN | body/culture studies returned, but load-bearing construction and visual gaps remain |
-| 3/6/8/9/11/12 | OPEN | OPEN | OPEN | OPEN | not yet through the depth-law pipeline; site 3 concept is retained but full work is deliberately late/last |
+| 3/8/9/11/12 | OPEN | OPEN | OPEN | OPEN | not yet through the depth-law pipeline; Site 3's transform concept and Site 8's transform ontology are retained, but neither has completed the full site pipeline |
 
 The detailed work queue and countable capture contract live in
 `GOLDEN-SITES-PROOF-QUEUE.md`.
@@ -507,9 +521,32 @@ universal law.
 
 ## The twelve golden sites
 
+### Portfolio roles, not twelve runtime kinds
+
+The portfolio deliberately mixes several proof roles:
+
+- **host/program families:** Sites 1, 2, 4, 5, 6, 7, and 10;
+- **cross-host transforms:** Site 3 dormant/abandoned and Site 8 layered control;
+- **scale/relationship stress cases:** Sites 9 and 11; and
+- **substrate/ownership stress case:** Site 12.
+
+Site 8 therefore applies to a tavern, prison, mine, monastery, fortress, camp, or other
+host when persistent competing claims satisfy its semantic predicate; it does not own
+a unique map grammar. Map size affects the materialized expression, not whether the
+conflict remains canon.
+
+Common places such as taverns, shops, shrines, homes, and clinics are ordinary venue
+programs rather than missing Golden numbers. High-frequency venues may receive retained
+**Golden Venue fixtures** through the shared compiler. The first is
+`VENUE-TAVERN-01`, routed by
+[TAVERN-VENUE-ROUTING-BRIEF.md](TAVERN-VENUE-ROUTING-BRIEF.md). It exercises Site 2
+route service, Site 10 urban frontage, and Site 8 layered control without becoming
+Golden Site 13.
+
 Guard Post supplied the first full brief and the original comparison bar. Camp, Natural
-Lair, Monastery/Commune, Mine/Workshop, and Urban Institution now also have dedicated
-working specs at the Mine standard; their honest gate values remain in the table above.
+Lair, Monastery/Commune, Mine/Workshop, Prison/Custody, and Urban Institution now also
+have dedicated working specs at the Mine standard; their honest gate values remain in
+the table above.
 The unserved sites gain **thin briefs** as they are reached, followed by working specs
 before implementation; **the portfolio is accumulated, never a first batch**
 (CLAY-PROOF-LADDER delivery law 4). No further Guard Post choice is required merely to
@@ -571,7 +608,8 @@ states the family boundary, identity/culture/circumstance split, five expression
 learning-first build, and exact first visual demonstration. Current retrofits:
 `SITE-1-GUARD-POST-SPEC.md` · `SITE-2-CAMP-SERVICE-SPEC.md` ·
 `SITE-4-MONASTERY-COMMUNE-SPEC.md` · `SITE-5-MINE-WORKSHOP-CONCEPT.md` ·
-`SITE-7-NATURAL-LAIR-SPEC.md` · `SITE-10-URBAN-INSTITUTION-SPEC.md`.
+`SITE-6-PRISON-CUSTODY-SPEC.md` · `SITE-7-NATURAL-LAIR-SPEC.md` ·
+`SITE-10-URBAN-INSTITUTION-SPEC.md`.
 
 ![Mine-standard working-spec coverage](diagrams/golden-site-working-spec-matrix.svg)
 
@@ -1481,13 +1519,187 @@ lighting, hook support, and stable proof receipts.
 **Ideal:** the forms, processing, culture, mechanism, and guest-host expansions listed
 in §4 after their own evidence and proof gates.
 
+## Site 6 — Prison / Custody — thin brief
+
+**Status:** `RESEARCHED: PARTIAL` · `FOUNDER-RULED: PARTIAL` ·
+`BRIEF-CONGRUENT: PARTIAL` · `CLAY-PROVED: OPEN`.
+
+The prison inherits substantial accepted semantic work from the procedural-dungeon
+program. PR1/PR2 rule its first-build/degradation/promotion order and first deck. The
+initial `Reference/Prison-Custody-Study/` packet now supplies architecture, operations,
+property/evidence, comparative doctrine, and cultural-answer evidence, but declared
+breadth gaps and every visual/play fixture remain.
+
+Generator-grade implementation contract: `SITE-6-PRISON-CUSTODY-SPEC.md`.
+
+### 1. Functional capsule
+
+**Inherited ruling plus site wording proposed for review:** a prison turns people,
+possessions, time, and permission into controlled flows. It remains recognizable through
+custody, unequal access, oversight/control, operator routine, property custody, finite
+disposition, and precommitted ways to change the situation.
+
+Outside arrival and captured arrival use one committed map. Starting inside changes
+position, knowledge, permission, and carried gear; it never rerolls topology, guards,
+property, history, or escape edges.
+
+Every captured-start fixture requires at least three viable plan families: one
+social/legal, one routine/covert, and one force/disruption or environmental plan.
+Hidden routes, loose fixtures, missed tools, keys, relationships, and schedule openings
+are committed before the player uses them.
+
+### 2. Growth ladder and build order
+
+- **Rung A — Lockup:** one shared barred room or 1–2 cells; combined oversight/records;
+  property cabinet; external meals; secure-yard or degraded sanitation.
+- **Rung B — Civic jail:** four to eight stable cell children; public desk/intake;
+  keeper control; secure yard; cabinet/closet property; staff/service route.
+- **Rung C — Prison wing:** repeated cells or pens; classification; shifts; separate
+  public and secure circulation; dedicated records/evidence/services by load.
+- **Rung D — Prison complex:** several blocks/zones or mixed accommodation domains;
+  full institutional ecology; multiple control layers; city, fortress, penal,
+  breach-bank, or realm expressions.
+
+**RULED — PR1 (Adam, 2026-07-25):** Rung-B four-cell civic jail first → Rung-A
+one-room lockup as degradation → Rung-C prison wing as promotion.
+
+The first build is B rather than A because it is the smallest rung that proves repeated
+children, public/staff/prisoner circulation, property, services, protected variation,
+and a control position together.
+
+`PROPOSED` internal sequence around that ruled spine: truthful
+cell/lock/property/control component preflight → B proof → A degradation → C promotion
+→ first matched culture/doctrine pair → suspended living-ironwood retained composition
+→ Rung-D complex. Proof evidence may reorder the component, retained-composition,
+culture, and Rung-D steps without reopening B → A → C.
+
+### 3. MVP slice
+
+Rungs A and B production-worthy · one Rung-C promotion · functioning,
+strained/corrupt, breached, and abandoned/repurposed states · matched
+`PR-DOC-01`/`PR-DOC-02` culture/custody-doctrine proof · correlated stable holding
+children · complete
+small-site operating model · cabinet/closet/dedicated property/evidence realizations as
+load permits · exact confiscated-property lifecycle · finite disposition · routine/
+shift · locks/force truth · motivated light · persistent aftermath · one licensed
+strange-material expression.
+
+### 4. Ideal expansion
+
+City/campus, fortress, penal, quarantine, hostage, military, mixed-domain, and
+breach/realm prisons · classification, visitation, kitchens, sanitation, infirmary,
+workshops, yards, courts, transfer, staff shifts, and multi-block ecology · giant,
+aquatic, airborne, extradimensional, living, and inverted containment · broad legal/
+cultural doctrines · systemic rescues, riots, releases, transfers, occupations,
+reforms, collapses, searches, repairs, and persistent escape consequences.
+
+### 5. The deck
+
+The prison deck is the **control position governing two or more custody
+relationships**: cells and yard, intake and secure corridor, transfer and block gates,
+or several suspended holdings.
+
+It may be a raised keeper landing, gallery, crosswalk, central station, gatehouse walk,
+ward-control platform, or hanging-cell winch station. A tiny lockup may degrade to a
+grade-level keeper threshold.
+
+**RULED — PR2 (Adam, 2026-07-25):** build the raised keeper landing first. It makes
+elevation-as-control visible and testable while retaining access and counterplay; the
+flat threshold remains the Rung-A variant.
+
+### 6. Structural coverage banked (§10.3)
+
+Tight institutional interior · intentionally repeated small units · controlled
+threshold and interlock · secure subdivision · raised gallery/control · bounded yard ·
+public-to-secure transition · staff-only property edge · suspended platform/cage and
+void relation · mixed-domain portal/ward edge at Ideal.
+
+### 7. Inherit / invent split
+
+**Inherits:** Site 4 court/range/repeated-bay massing · Site 10 street/frontage/urban
+host · Site 1 gate, observation, wall, and garrison language · Site 2 temporary
+stockade/service overlays · Site 5 penal-work hosts · walls, doors, stairs, roofs,
+galleries, platforms, containers, lights, canonical connections, access classes, and
+cutaway.
+
+**Invents:** correlated cell/pen/cage family · secure partition and cell front ·
+grille/bar/mesh/ward door · keeper threshold/control landing · prison gallery/crosswalk ·
+sally-port/interlock · secure-yard subdivision · intake/search/property transfer ·
+evidence security sockets · visiting barrier · meal/count/service hatch ·
+restraint/anchor · hanging-cell support/winch/gangway · exact property-custody adapter ·
+outside-in/captured-inside replay gate.
+
+### 8. Material demand
+
+Institutional masonry, timber, metal bar/mesh/chain, stockade earth/plank, plaster,
+paving, roof, water/waste, bedding/canvas, locks, hinges, anchors, restraint, ward or
+realm containment, and licensed living/growing construction · numbers, charges,
+authority, count, property tags, scratched messages, repair/escape, cleaning, moisture,
+soot, blood, corruption, route tells, and ward lines · keys/seals, records, search
+surface, property containers, meal/water/sanitation, medical/work/repair tools, alarm,
+visitor barrier, winch, contraband, and emergency gear.
+
+Any bar, chain, wall, lock, door, anchor, railing, hatch, container, light, or tool that
+changes collision, cover, sight, sound, support, capacity, force, light, or interaction
+requires truthful geometry/mechanics.
+
+Confiscated prisoner property, crime/case evidence, contraband, and institution property
+are separate custody classes even when a low-volume jail shares one secured cabinet or
+closet. `PR-SHAPE-01` keeps captured gear at the staff-only intake/property edge. Larger
+loads promote to a reception/property store; case evidence may separate or route to a
+real court/watch/civic provider. Every item retains identity, owner/source, custodian,
+container/location, state, and release/return authority.
+
+### 9. Occupancy and hooks
+
+Functioning civic jail · overfull/corrupt gaol · military stockade · hostage/ransom,
+debt, labor, quarantine, political, or religious custody · faction-seized prison ·
+penal-work annex · exceptional ward containment · riot/breach · recently escaped-from ·
+abandoned/repurposed prison · prison run by former prisoners.
+
+Captured hooks: execution/transfer/ransom/interrogation/labor clock · switched or
+dangerous property · divided guard · wrong identity · prior-escape trace · another
+prisoner's move · external attack/fire/flood/realm change.
+
+Outside hooks: rescue · visit/hearing · recover evidence/property · missing
+prisoner/guard/record · escort/transfer · inspect corruption · deliver supplies · stop
+execution/riot/escape/sale/breach · learn why one cell is always empty.
+
+### 10. Stretch analysis
+
+The reusable dividend is custody as a semantic/access system: controlled thresholds,
+correlated repeated units, exact property custody, observer-specific access views,
+control positions, schedules/clocks, truthful force surfaces, service dependencies, and
+entry-state replay. Those parts support court holding, quarantine, hospital isolation,
+school discipline, hostage rescue, military detention, monster containment, penal work,
+and vault security only when the host's own facts license them.
+
+Capture remains its own event path. Capture in an arbitrary active walk reuses or mints
+one holding node and does not silently produce a Golden Site. Site 6 compiles when a
+prison/custody place is actually committed; a transfer to it is a causal transition.
+
+### Proof → MVP → Ideal
+
+**Proof:** component truth for cell/lock/control/property/clock/hidden knowledge; one
+deterministic Rung-B four-cell civic jail; exact outside-in and captured-inside replays;
+three-plus captured plans; same-identity property recovery; state cycling; two changed
+seeds; matched `PR-DOC-01 — Keeper-House Civic Custody` versus
+`PR-DOC-02 — Ledger-and-Shift Civic Custody`; Rung-A degradation; suspended living-ironwood
+`RC-PRISON-01`; adversarial body, darkness/camera, and missing-provider/hazard cases.
+
+**MVP:** the slice in §3, including one Rung-C promotion and production-safe capture/
+property/access/force/service/aftermath mechanics.
+
+**Ideal:** the breadth in §4, with large canonical capacity and deterministic lazy child
+materialization rather than facade cells or heavyweight generation for every child.
+
 ## Site 10 — Urban Institution — thin brief
 
 **Status:** `RESEARCHED: PARTIAL` · `FOUNDER-RULED: PARTIAL` ·
 `BRIEF-CONGRUENT: PARTIAL` · `CLAY-PROVED: OPEN`.
 
 The fourth donor (town vernacular). With it, all six construction vernaculars are open
-at ruling level; the remaining seven sites may plan recombination from owned parts.
+at ruling level; the still-unserved sites may plan recombination from owned parts.
 The Urban Body and Urban Culture packets have returned, but the evidence gaps listed
 below prevent the site from claiming a completed research gate.
 

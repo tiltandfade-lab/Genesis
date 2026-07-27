@@ -1,0 +1,892 @@
+{
+  "schemaVersion": 1,
+  "recipeVersion": "meshy-runtime-v1",
+  "catalog": "Reference/Meshy-Premium-Month-1/runtime-citizenship.json",
+  "assets": [
+    {
+      "sourceSha256": "ace403537680c5ef063df653c6ca289577b990dffe0070b07507bac4b89c12c0",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M001-A-low-cover-boulder-cluster-clean-v1.glb",
+      "canonicalScale": 1.15,
+      "dimensions": [
+        1.0,
+        0.39746,
+        0.93164
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "top-surface",
+          "position": [
+            0,
+            0.19727,
+            0
+          ]
+        }
+      ],
+      "jobId": "M001-A",
+      "slug": "low-cover-boulder-cluster",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "low-cover-boulder-cluster.glb",
+          "ratio": 1.0,
+          "bytes": 21204
+        },
+        {
+          "level": 1,
+          "file": "low-cover-boulder-cluster-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 14104
+        },
+        {
+          "level": 2,
+          "file": "low-cover-boulder-cluster-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 9340
+        }
+      ],
+      "recipeHash": "d15406a23420b31237516675eaafa09a07941cc04056c0e839af00e92a1ae2cf"
+    },
+    {
+      "sourceSha256": "d7826ba88f23f3cb981db04fa83503696a85b6274fbf075425b0e0df75700a34",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M019-A-wagon-chassis-clean-v2.glb",
+      "canonicalScale": 2.1207100591715977,
+      "dimensions": [
+        0.99023,
+        0.21677,
+        0.45309
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "cargo-bed",
+          "position": [
+            0,
+            0.06553,
+            0
+          ]
+        },
+        {
+          "type": "tow-point",
+          "position": [
+            -0.5,
+            0.02979,
+            0
+          ]
+        }
+      ],
+      "jobId": "M019-A",
+      "slug": "universal-wagon-chassis",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "universal-wagon-chassis.glb",
+          "ratio": 1.0,
+          "bytes": 115236
+        },
+        {
+          "level": 1,
+          "file": "universal-wagon-chassis-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 89476
+        },
+        {
+          "level": 2,
+          "file": "universal-wagon-chassis-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 55876
+        }
+      ],
+      "recipeHash": "2b98cdb851d227b2a929c09692751c79ec3514a28d20cee8c084340ffe518829"
+    },
+    {
+      "sourceSha256": "ed74995b31a56d67c60ee9a6c3baa0bb70797d1a6af129d25ba4376f39ad4c49",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M035-A-short-household-ridge-tent-clean-v1.glb",
+      "canonicalScale": 2.2857142857142856,
+      "dimensions": [
+        0.65625,
+        0.43784,
+        1.0
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "entrance",
+          "position": [
+            0.32812,
+            0,
+            0
+          ]
+        }
+      ],
+      "jobId": "M035-A",
+      "slug": "short-household-ridge-tent",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "short-household-ridge-tent.glb",
+          "ratio": 1.0,
+          "bytes": 58996
+        },
+        {
+          "level": 1,
+          "file": "short-household-ridge-tent-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 39072
+        },
+        {
+          "level": 2,
+          "file": "short-household-ridge-tent-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 23900
+        }
+      ],
+      "recipeHash": "3449c8795a44e9c48ffab8b2337b92eeac09fdeb457e85273a6be515a9d3df4a"
+    },
+    {
+      "sourceSha256": "be54b7290e2b3477427eb05eed3b128ee8b2603029fea399157fe6e29483054d",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M049-D-public-notice-and-signal-board-clean-v2.glb",
+      "canonicalScale": 1.3011153603263028,
+      "dimensions": [
+        0.99914,
+        0.86084,
+        0.23695
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "display-face",
+          "position": [
+            0,
+            0.2658,
+            0.11927
+          ]
+        },
+        {
+          "type": "signal-top",
+          "position": [
+            0,
+            0.42871,
+            0
+          ]
+        }
+      ],
+      "jobId": "M049-D",
+      "slug": "public-notice-signal-board",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "public-notice-signal-board.glb",
+          "ratio": 1.0,
+          "bytes": 54852
+        },
+        {
+          "level": 1,
+          "file": "public-notice-signal-board-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 37524
+        },
+        {
+          "level": 2,
+          "file": "public-notice-signal-board-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 23100
+        }
+      ],
+      "recipeHash": "68d29957a9ae4d894b0255e7dea534f69123af0cd88d97488d8afa2b5fd042ff"
+    },
+    {
+      "sourceSha256": "06a3f2baaeec5c83b04b10e92e916423bcbe43043f72cba077afcd5ee217a1c2",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M052-A-bell-or-gong-yoke-clean-v2.glb",
+      "canonicalScale": 1.2522686393872222,
+      "dimensions": [
+        0.99819,
+        0.8604,
+        0.4231
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "interaction",
+          "position": [
+            0.50002,
+            0.19338,
+            0
+          ]
+        },
+        {
+          "type": "signal-origin",
+          "position": [
+            0,
+            0.3094,
+            0
+          ]
+        }
+      ],
+      "jobId": "M052-A",
+      "slug": "alarm-bell-yoke",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "alarm-bell-yoke.glb",
+          "ratio": 1.0,
+          "bytes": 55748
+        },
+        {
+          "level": 1,
+          "file": "alarm-bell-yoke-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 37568
+        },
+        {
+          "level": 2,
+          "file": "alarm-bell-yoke-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 23252
+        }
+      ],
+      "recipeHash": "bc9d1e6a8748bacef415c4c296de68477895101a224e79cddc9c8431619d9bd5"
+    },
+    {
+      "sourceSha256": "3795dbe22f0ce693f83bed04154b751d84c4f22aead01d59320ea328ec960df0",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M053-A-archive-lectern-and-scribe-station-clean-v2.glb",
+      "canonicalScale": 0.9210124034132807,
+      "dimensions": [
+        0.85725,
+        0.9989,
+        0.73442
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "writing-surface",
+          "position": [
+            0,
+            0.38912,
+            0
+          ]
+        },
+        {
+          "type": "interaction",
+          "position": [
+            0.42916,
+            0.22449,
+            0
+          ]
+        }
+      ],
+      "jobId": "M053-A",
+      "slug": "archive-lectern",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "archive-lectern.glb",
+          "ratio": 1.0,
+          "bytes": 53548
+        },
+        {
+          "level": 1,
+          "file": "archive-lectern-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 34284
+        },
+        {
+          "level": 2,
+          "file": "archive-lectern-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 21716
+        }
+      ],
+      "recipeHash": "b42012b030884548ec653f539e1bc2c676b10025f9d76d5a84e5e21ef652adb8"
+    },
+    {
+      "sourceSha256": "36455c7863dde73929a5f5d049a3700bf1c6c51f44761639f50968d73265501b",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M054-A-chevaux-de-frise-and-spike-barrier-clean-v2.glb",
+      "canonicalScale": 2.0,
+      "dimensions": [
+        1.0,
+        0.29285,
+        0.32544
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "join-west",
+          "position": [
+            -0.5,
+            0.05127,
+            0
+          ]
+        },
+        {
+          "type": "join-east",
+          "position": [
+            0.5,
+            0.05127,
+            0
+          ]
+        }
+      ],
+      "jobId": "M054-A",
+      "slug": "chevaux-de-frise",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "chevaux-de-frise.glb",
+          "ratio": 1.0,
+          "bytes": 65172
+        },
+        {
+          "level": 1,
+          "file": "chevaux-de-frise-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 42616
+        },
+        {
+          "level": 2,
+          "file": "chevaux-de-frise-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 25940
+        }
+      ],
+      "recipeHash": "4cb52a0bb9bb6dcb1a4bd791d34c63766b3c2ebe4d03a351c5f04340ef23953e"
+    },
+    {
+      "sourceSha256": "36030b8169567058792d1ddc691d3720d81638aa9dec6b9e1f7c37ae70b008fd",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M055-A-movable-timber-barricade-clean-v2.glb",
+      "canonicalScale": 1.4489152922588127,
+      "dimensions": [
+        1.00075,
+        0.64212,
+        0.51433
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "join-west",
+          "position": [
+            -0.50047,
+            0.11195,
+            0
+          ]
+        },
+        {
+          "type": "join-east",
+          "position": [
+            0.50047,
+            0.11195,
+            0
+          ]
+        }
+      ],
+      "jobId": "M055-A",
+      "slug": "movable-timber-barricade",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "movable-timber-barricade.glb",
+          "ratio": 1.0,
+          "bytes": 60608
+        },
+        {
+          "level": 1,
+          "file": "movable-timber-barricade-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 42056
+        },
+        {
+          "level": 2,
+          "file": "movable-timber-barricade-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 25960
+        }
+      ],
+      "recipeHash": "224df7a89939091d58c644a93ef53c88954e90a9eae8c501f4d11b92a7885d91"
+    },
+    {
+      "sourceSha256": "9e0cb00c9412fc594ff55286557fb6fe9358d00c7e65e88c967d265df48719b9",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M056-A-wattle-and-woven-screen-clean-v1.glb",
+      "canonicalScale": 1.55,
+      "dimensions": [
+        1.0,
+        0.42676,
+        0.22705
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "join-west",
+          "position": [
+            -0.5,
+            0.07451,
+            0
+          ]
+        },
+        {
+          "type": "join-east",
+          "position": [
+            0.5,
+            0.07451,
+            0
+          ]
+        }
+      ],
+      "jobId": "M056-A",
+      "slug": "wattle-screen",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "wattle-screen.glb",
+          "ratio": 1.0,
+          "bytes": 68920
+        },
+        {
+          "level": 1,
+          "file": "wattle-screen-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 43448
+        },
+        {
+          "level": 2,
+          "file": "wattle-screen-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 26128
+        }
+      ],
+      "recipeHash": "5f54e48ddd05fecec4592b9c36b3fb79c6766a17a675f686b23c53c6a8020363"
+    },
+    {
+      "sourceSha256": "d7986152920c6ead3fdb987fab7653c352e91a7af5f576bc2d068e064f8f42cd",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M057-A-gabion-and-stone-basket-cluster-clean-v1.glb",
+      "canonicalScale": 1.05,
+      "dimensions": [
+        1.0,
+        0.54492,
+        0.72656
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "stack-top",
+          "position": [
+            0,
+            0.27344,
+            0
+          ]
+        },
+        {
+          "type": "join-west",
+          "position": [
+            -0.5,
+            0.0957,
+            0
+          ]
+        },
+        {
+          "type": "join-east",
+          "position": [
+            0.5,
+            0.0957,
+            0
+          ]
+        }
+      ],
+      "jobId": "M057-A",
+      "slug": "gabion-stone-basket",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "gabion-stone-basket.glb",
+          "ratio": 1.0,
+          "bytes": 65840
+        },
+        {
+          "level": 1,
+          "file": "gabion-stone-basket-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 41772
+        },
+        {
+          "level": 2,
+          "file": "gabion-stone-basket-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 25256
+        }
+      ],
+      "recipeHash": "6cdca1ec672e95a1d40a98674cc7f37f490eb8e9af91f40921490eea68c756ac"
+    },
+    {
+      "sourceSha256": "a2cd318dcdf57a6b174a924462e193fbbd7c97b18dfc911867cf4863deef0ff9",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M058-A-holding-cage-or-animal-pen-module-clean-v2.glb",
+      "canonicalScale": 1.352390143970078,
+      "dimensions": [
+        1.00049,
+        0.82816,
+        0.80662
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "hinge",
+          "position": [
+            -0.50049,
+            0.20704,
+            0.40379
+          ]
+        },
+        {
+          "type": "occupant",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "interaction",
+          "position": [
+            0.50049,
+            0.18634,
+            0
+          ]
+        }
+      ],
+      "jobId": "M058-A",
+      "slug": "timber-holding-cage",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "timber-holding-cage.glb",
+          "ratio": 1.0,
+          "bytes": 72932
+        },
+        {
+          "level": 1,
+          "file": "timber-holding-cage-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 48044
+        },
+        {
+          "level": 2,
+          "file": "timber-holding-cage-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 30080
+        }
+      ],
+      "recipeHash": "7e3503f34fb16e41f11e504fc235d9d5d9aa7b63a2f7bd860e9e12e97e1d2159"
+    },
+    {
+      "sourceSha256": "64453ec023bac0101c565353abbd91a57346a5e2f720afca94344a90b6ba2bee",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M059-A-compact-field-forge-clean-v1.glb",
+      "canonicalScale": 1.7248226950354608,
+      "dimensions": [
+        1.0,
+        0.55078,
+        0.52344
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "fire-origin",
+          "position": [
+            0,
+            0.19277,
+            0
+          ]
+        },
+        {
+          "type": "interaction",
+          "position": [
+            0.5,
+            0.12393,
+            0
+          ]
+        }
+      ],
+      "jobId": "M059-A",
+      "slug": "compact-field-forge",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "compact-field-forge.glb",
+          "ratio": 1.0,
+          "bytes": 88360
+        },
+        {
+          "level": 1,
+          "file": "compact-field-forge-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 55716
+        },
+        {
+          "level": 2,
+          "file": "compact-field-forge-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 33804
+        }
+      ],
+      "recipeHash": "96fce74a8f240ba0fdb7f8b8994aab8c8793de6319480186720e11d2cec1329c"
+    },
+    {
+      "sourceSha256": "f2e32957f9ce767c13817387b961d9ff11c8364b5feed83f8a3ed9ad2a2c5ac9",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M062-B-timber-repair-and-brace-cluster-clean-v2.glb",
+      "canonicalScale": 1.4534769680879858,
+      "dimensions": [
+        0.71563,
+        0.99761,
+        0.20838
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "wall-mount",
+          "position": [
+            0,
+            0.24878,
+            -0.10547
+          ]
+        },
+        {
+          "type": "join-top",
+          "position": [
+            0,
+            0.49755,
+            0
+          ]
+        }
+      ],
+      "jobId": "M062-B",
+      "slug": "timber-repair-brace",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "timber-repair-brace.glb",
+          "ratio": 1.0,
+          "bytes": 52812
+        },
+        {
+          "level": 1,
+          "file": "timber-repair-brace-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 35168
+        },
+        {
+          "level": 2,
+          "file": "timber-repair-brace-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 21756
+        }
+      ],
+      "recipeHash": "53c507b48bfab6490d0fa7e3c3a2460b0358ac0971cfae204cf6a4023ffc7859"
+    },
+    {
+      "sourceSha256": "8d9dcd9041bd8886f00a2a987a02b2cf9477910f3fd14022709c4a16fa2c2b06",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M064-B-camp-kitchen-and-stores-cluster-clean-v2.glb",
+      "canonicalScale": 1.448554486083626,
+      "dimensions": [
+        1.001,
+        0.51567,
+        0.33746
+      ],
+      "sockets": [
+        {
+          "type": "floor-mount",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "type": "supply",
+          "position": [
+            0,
+            0.14182,
+            0
+          ]
+        },
+        {
+          "type": "interaction",
+          "position": [
+            0.50051,
+            0.11604,
+            0
+          ]
+        }
+      ],
+      "jobId": "M064-B",
+      "slug": "camp-kitchen-stores",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "camp-kitchen-stores.glb",
+          "ratio": 1.0,
+          "bytes": 66216
+        },
+        {
+          "level": 1,
+          "file": "camp-kitchen-stores-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 43728
+        },
+        {
+          "level": 2,
+          "file": "camp-kitchen-stores-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 28080
+        }
+      ],
+      "recipeHash": "f20075446bc149e462c7daf390e985e5fccbac15ab29904864ffb1377262e78f"
+    },
+    {
+      "sourceSha256": "250bc491fba20c1e0c1df1554f27c96b846ef9880491e0b1f04c2fe40f0926d7",
+      "source": "Reference/Meshy-Premium-Month-1/processed/M068-A-wall-flame-sconce-clean-v1.glb",
+      "canonicalScale": 0.48872727272727273,
+      "dimensions": [
+        0.53906,
+        0.85938,
+        0.99609
+      ],
+      "sockets": [
+        {
+          "type": "wall-mount",
+          "position": [
+            0,
+            0.21484,
+            -0.5
+          ]
+        },
+        {
+          "type": "light-origin",
+          "position": [
+            0,
+            0.30938,
+            0.175
+          ]
+        },
+        {
+          "type": "flame-origin",
+          "position": [
+            0,
+            0.33516,
+            0.175
+          ]
+        }
+      ],
+      "jobId": "M068-A",
+      "slug": "wall-flame-sconce",
+      "outputs": [
+        {
+          "level": 0,
+          "file": "wall-flame-sconce.glb",
+          "ratio": 1.0,
+          "bytes": 53296
+        },
+        {
+          "level": 1,
+          "file": "wall-flame-sconce-lod1.glb",
+          "ratio": 0.62,
+          "bytes": 33872
+        },
+        {
+          "level": 2,
+          "file": "wall-flame-sconce-lod2.glb",
+          "ratio": 0.36,
+          "bytes": 20908
+        }
+      ],
+      "recipeHash": "d7e2f2699b82598a1304fd3457c96cc54cb423a721efbf21ce46e3b3cb86f3e3"
+    }
+  ]
+}

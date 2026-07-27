@@ -1667,6 +1667,10 @@
      module is reachable (dev console `window.TheaterDonor`, and this unit's own capture/verify
      harnesses) ahead of that wiring. -->
 <script type="module" src="src/ui/theater-donor.js"></script>
+<!-- Engine-owned reusable geometry: standardized mechanical parts, paths, FX, cargo sockets,
+     surface media, condition recipes, and semantic material channels. Loaded after the donor
+     adapter because it deliberately reuses the same regional material resolver. -->
+<script type="module" src="src/ui/theater-procedural-kit.js"></script>
 <script>
 
 /* ============================================================

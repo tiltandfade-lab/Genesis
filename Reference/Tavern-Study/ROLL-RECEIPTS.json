@@ -1,0 +1,3931 @@
+{
+  "schema": "genesis.tavern-study.roll-receipts.v1",
+  "capturedOn": "2026-07-26",
+  "repositoryHead": "2046712d0b5ae147f1ce40f641f866297040fc8f",
+  "sourcePaths": [
+    "data/building-kits.js",
+    "data/place-skins.js",
+    "src/engine/codex-roll.js",
+    "src/world/urban.js",
+    "Engine/02. _Procedures/Tavern Generator 2.0.md",
+    "Engine/03. _Tables/03. Session Mechanics/Tavern/"
+  ],
+  "captureRules": {
+    "sampleCount": 12,
+    "realms": [
+      "frontier",
+      "chrome",
+      "gloom"
+    ],
+    "samplesPerRealm": 4,
+    "placeBias": [
+      2,
+      11
+    ],
+    "livePath": "rollPlace -> codexAdd -> buildingApproach('tavern') -> buildingContact",
+    "depthLane": "direct rollTable calls; compiled and preserved, explicitly not wired into the live typed-building lifecycle"
+  },
+  "receipts": [
+    {
+      "receiptId": "TVR-FRONTIER-01",
+      "realm": "frontier",
+      "seed": {
+        "label": "VENUE-TAVERN-01/frontier/7",
+        "value": 2005132359,
+        "selectionNonce": 7,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:the-peat-cutter-s-row",
+          "kind": "location",
+          "name": "The Peat-Cutter's Row",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "The Peat-Cutter's Row: A bog-side hamlet of low turf-roofed cottages, its economy wholly dependent on dried peat fuel.",
+            "trait": "The town issues its own letters of credit, honored across a wide trade network; the town's bank is small and the system runs on reputation rather than reserves, which has worked for two generations.",
+            "calamity": "A large merchant house accepted a letter of credit last month and presented it last week to find the issuing bank's master has died and the successor has put all outstanding letters under review pending an audit.",
+            "secret": "A family with historical connections to a lich cult borrowed an object from their inheritance vault to pay a debt; they returned a convincing copy; the original is gone; the lich has noticed.",
+            "history": "Settled to contain a thing the founders couldn't kill; the town is the lid, and the lid is loosening.",
+            "archetypeKey": 2,
+            "archetypeLabel": "The saloon",
+            "archetypeNote": "Drink, food, and talk after dark; every side of every feud at adjacent tables.",
+            "space": "roomy",
+            "staff": {
+              "min": 2,
+              "max": 4
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 3,
+              "d": 3
+            }
+          },
+          "fields": {
+            "desc": "A bog-side hamlet of low turf-roofed cottages, its economy wholly dependent on dried peat fuel.",
+            "trait": "The town issues its own letters of credit, honored across a wide trade network; the town's bank is small and the system runs on reputation rather than reserves, which has worked for two generations.",
+            "calamity": "A large merchant house accepted a letter of credit last month and presented it last week to find the issuing bank's master has died and the successor has put all outstanding letters under review pending an audit.",
+            "type": "The saloon"
+          },
+          "dm": {
+            "secret": "A family with historical connections to a lich cult borrowed an object from their inheritance vault to pay a debt; they returned a convincing copy; the original is gone; the lich has noticed.",
+            "secretBand": "Grounded",
+            "history": "Settled to contain a thing the founders couldn't kill; the town is the lid, and the lid is loosening.",
+            "itemsPool": "realm-items-frontier",
+            "dressing": {
+              "props": "frontier",
+              "surfaces": "frontier"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "Tavern",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Prancing Pony",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#9"
+            },
+            "rolled": {
+              "layout": "Long warehouse floor, a raised office at one end, a loading dock.",
+              "feature": "Crates stacked higher than is safe, one of them labeled wrong.",
+              "inside": "A dockworker who has been paid to watch one particular crate.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "Long warehouse floor, a raised office at one end, a loading dock.",
+              "feature": "Crates stacked higher than is safe, one of them labeled wrong."
+            },
+            "dm": {
+              "inside": "A dockworker who has been paid to watch one particular crate.",
+              "feature": "Crates stacked higher than is safe, one of them labeled wrong."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-prancing-pony",
+            "kind": "location",
+            "name": "The Prancing Pony",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "Tavern",
+              "interior": {
+                "layout": "Long warehouse floor, a raised office at one end, a loading dock.",
+                "feature": "Crates stacked higher than is safe, one of them labeled wrong.",
+                "inside": "A dockworker who has been paid to watch one particular crate.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "Long warehouse floor, a raised office at one end, a loading dock.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:traulam-dalanthan",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:traulam-dalanthan",
+            "kind": "npc",
+            "name": "Traulam Dalanthan",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Half-Elf: Walking in two worlds; combining human ambition with elven artistic tastes and refined senses.",
+              "role": "Laborer, Porter, or Dockhand",
+              "quirk": null,
+              "mannerism": "They constantly slur their words, speak with a lisp, or stutter.",
+              "flawSecret": null,
+              "bond": null,
+              "fear": "False Hope — Acting too soon.",
+              "leverage": null,
+              "want": "Arrange a rival's slow ruin, and watch it from a good seat. — envy, feud",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "female",
+              "coherence": "wrinkled",
+              "archetypeKey": 3,
+              "roleNote": "Moves the heavy things; sees everything, is asked nothing.",
+              "roleCls": "labor"
+            },
+            "fields": {
+              "species": "Elf",
+              "role": "Laborer, Porter, or Dockhand",
+              "demeanor": "They constantly slur their words, speak with a lisp, or stutter."
+            },
+            "dm": {
+              "secret": null,
+              "fear": "False Hope — Acting too soon.",
+              "bond": null,
+              "leverage": null,
+              "want": "Arrange a rival's slow ruin, and watch it from a good seat. — envy, feud",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "Every oath sworn in the town's history is being called in — oldest first: the founding families' pledge to \"keep the ford free to all\" enforced itself last week, dissolving toll rights held for centuries — and the enforcement is working forward through the archive toward the present.",
+                "pressure": "The town's order rests on generations of quietly broken vows, and everyone with property is doing frantic archival math; the guild's charter oaths come due within the month; and the NPC — whose family, the records show, swore the town's very first oath — cannot find in any archive what it actually said.",
+                "ifIgnored": "The enforcement reaches the present and every living oath snaps taut at once — marriages, apprenticeships, drunken vows at the tavern rail — a town suddenly run by its own given word, no clause forgiven. And at the last, the founding oath surfaces to be honored: sworn by the NPC's ancestor, binding the family line to a duty the town has needed exactly once before, and will need again by winter.",
+                "tags": "oath, time, authority",
+                "band": "Volatile",
+                "ref": "npc-hook#269"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 4,
+            "ids": [
+              "npc:yeba-mare",
+              "npc:oskar-bofdann",
+              "npc:brottor-rumnaheim",
+              "npc:avelina"
+            ],
+            "partialIds": [],
+            "band": "sleepy",
+            "count": 4,
+            "hookedId": "npc:traulam-dalanthan"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-prancing-pony",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — Every teller in the room somehow agrees on a detail that isn't in the ledger at all. — The fact is bound and real; this one specific added detail didn't come from it — and nobody can say where it did.",
+              "band": "Volatile",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": null
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 10,
+            "band": null,
+            "text": "Thieves' guild hangout",
+            "cells": [
+              "Thieves' guild hangout"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 4,
+            "band": null,
+            "text": "Comfortable",
+            "cells": [
+              "Comfortable"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 5,
+            "band": null,
+            "text": "City watch, soldiers, and mercenaries",
+            "cells": [
+              "City watch, soldiers, and mercenaries"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 14,
+            "band": null,
+            "text": "Educated debates & philosophy",
+            "cells": [
+              "Educated debates & philosophy"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 3,
+          "band": null,
+          "text": "Clinking glasses and plates — Smoky, with a low-hanging cloud — Woodsmoke and ash",
+          "cells": [
+            "Clinking glasses and plates",
+            "Smoky, with a low-hanging cloud",
+            "Woodsmoke and ash"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 8,
+          "band": null,
+          "text": "Uses flowery speech or long words incorrectly.",
+          "cells": [
+            "Uses flowery speech or long words incorrectly."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 16,
+          "band": null,
+          "text": "A cloaked figure ducks out the back door the exact moment the PCs walk in the front.",
+          "cells": [
+            "A cloaked figure ducks out the back door the exact moment the PCs walk in the front."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-FRONTIER-02",
+      "realm": "frontier",
+      "seed": {
+        "label": "VENUE-TAVERN-01/frontier/13",
+        "value": 278613846,
+        "selectionNonce": 13,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:soot-side-slums",
+          "kind": "location",
+          "name": "Soot-Side Slums",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "Soot-Side Slums: An industrial district on the edge of a coal-burning furnace city.",
+            "trait": "A formal garden containing plants from every climate zone was planted by a famous naturalist two hundred years ago; it is the town's most visited site and its most expensive ongoing maintenance obligation.",
+            "calamity": "The head gardener died last season and the position has been unfilled; several rare specimens are visibly declining; the naturalist's descendant arrived last week and is publicly cataloguing what has been lost.",
+            "secret": "A council referendum that would have changed the water allocation was declared \"unclear\" and never rerun; the original ballots still exist in a private collection.",
+            "history": "A hot spring that draws the sick, the rich, and the desperate.",
+            "archetypeKey": 2,
+            "archetypeLabel": "The saloon",
+            "archetypeNote": "Drink, food, and talk after dark; every side of every feud at adjacent tables.",
+            "space": "roomy",
+            "staff": {
+              "min": 2,
+              "max": 4
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 4,
+              "d": 3
+            }
+          },
+          "fields": {
+            "desc": "An industrial district on the edge of a coal-burning furnace city.",
+            "trait": "A formal garden containing plants from every climate zone was planted by a famous naturalist two hundred years ago; it is the town's most visited site and its most expensive ongoing maintenance obligation.",
+            "calamity": "The head gardener died last season and the position has been unfilled; several rare specimens are visibly declining; the naturalist's descendant arrived last week and is publicly cataloguing what has been lost.",
+            "type": "The saloon"
+          },
+          "dm": {
+            "secret": "A council referendum that would have changed the water allocation was declared \"unclear\" and never rerun; the original ballots still exist in a private collection.",
+            "secretBand": "Grounded",
+            "history": "A hot spring that draws the sick, the rich, and the desperate.",
+            "itemsPool": "realm-items-frontier",
+            "dressing": {
+              "props": "frontier",
+              "surfaces": "frontier"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "Tavern",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Leering Demon",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#81"
+            },
+            "rolled": {
+              "layout": "Post office branch: counter room, a sorting room, a master's office at the rear.",
+              "feature": "A package in the sorting room with no address — only a symbol.",
+              "inside": "A sorting clerk who says it comes in every month and someone always claims it.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "Post office branch: counter room, a sorting room, a master's office at the rear.",
+              "feature": "A package in the sorting room with no address — only a symbol."
+            },
+            "dm": {
+              "inside": "A sorting clerk who says it comes in every month and someone always claims it.",
+              "feature": "A package in the sorting room with no address — only a symbol."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-leering-demon",
+            "kind": "location",
+            "name": "The Leering Demon",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "Tavern",
+              "interior": {
+                "layout": "Post office branch: counter room, a sorting room, a master's office at the rear.",
+                "feature": "A package in the sorting room with no address — only a symbol.",
+                "inside": "A sorting clerk who says it comes in every month and someone always claims it.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "Post office branch: counter room, a sorting room, a master's office at the rear.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:yasmeh-karyar",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:yasmeh-karyar",
+            "kind": "npc",
+            "name": "Yasmeh Karyar",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Human (Highlander): Fair-skinned humans from the distant northwest.",
+              "role": "Miner or Excavator",
+              "quirk": null,
+              "mannerism": "They chew continuously on something, like a twig, a pipe, or a fingernail.",
+              "flawSecret": null,
+              "bond": null,
+              "fear": "Acceptance — Fear that this is “how it is now.”",
+              "leverage": null,
+              "want": "Shed the family name and be known for their own, whatever it takes. — pride, family",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "female",
+              "coherence": "wrinkled",
+              "archetypeKey": 4,
+              "roleNote": "Works the dark and the tight places; patient underground.",
+              "roleCls": "labor"
+            },
+            "fields": {
+              "species": "Human",
+              "role": "Miner or Excavator",
+              "demeanor": "They chew continuously on something, like a twig, a pipe, or a fingernail."
+            },
+            "dm": {
+              "secret": null,
+              "fear": "Acceptance — Fear that this is “how it is now.”",
+              "bond": null,
+              "leverage": null,
+              "want": "Shed the family name and be known for their own, whatever it takes. — pride, family",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The barber-surgeon NPC pulled a tooth last week and it's still growing in the jar — a fine tusk by Thursday — and the man it came from swears he can feel it: everything the jar-tooth touches, he tastes.",
+                "pressure": "The patient wants it back or destroyed; the other extractions in the drawer have started twitching in sympathy; and a discreet buyer wants \"the whole set, and the ledger of whose is whose.\"",
+                "ifIgnored": "The buyer gets the drawer. Somewhere, someone now owns a tasting-set of half the town's mouths — and begins seasoning conversations accordingly: who tastes fear at a name, who tastes iron when the levy money comes up.",
+                "tags": "curse, trade, secret",
+                "band": "Strange",
+                "ref": "npc-hook#205"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 4,
+            "ids": [
+              "npc:fabrillo-rossiani",
+              "npc:tomph-hollowhowl",
+              "npc:vittoarte-baretti",
+              "npc:ardvash-karfard"
+            ],
+            "partialIds": [
+              "npc:animal-partial"
+            ],
+            "band": "sleepy",
+            "count": 4,
+            "hookedId": "npc:yasmeh-karyar"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-leering-demon",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — The teller swapped who asked for help and who gave it. — Roles reversed, sympathetically, in whichever direction flatters the teller's preferred side.",
+              "band": "Grounded",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": {
+              "text": "Protest",
+              "band": ""
+            }
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 16,
+            "band": null,
+            "text": "Caters to specific race or guild",
+            "cells": [
+              "Caters to specific race or guild"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 6,
+            "band": null,
+            "text": "Aristocratic",
+            "cells": [
+              "Aristocratic"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 7,
+            "band": null,
+            "text": "Adventurers, explorers, and bounty hunters",
+            "cells": [
+              "Adventurers, explorers, and bounty hunters"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 1,
+            "band": null,
+            "text": "Delicious cuisine",
+            "cells": [
+              "Delicious cuisine"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 16,
+          "band": null,
+          "text": "Sudden glass shattering — Lit by a localized, indoor magical daylight — Metallic tang of copper",
+          "cells": [
+            "Sudden glass shattering",
+            "Lit by a localized, indoor magical daylight",
+            "Metallic tang of copper"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 5,
+          "band": null,
+          "text": "Unflappably polite, even when being insulted or threatened.",
+          "cells": [
+            "Unflappably polite, even when being insulted or threatened."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 4,
+          "band": null,
+          "text": "A patron stands on a table, making a drunken, scandalous toast about a local noble.",
+          "cells": [
+            "A patron stands on a table, making a drunken, scandalous toast about a local noble."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-FRONTIER-03",
+      "realm": "frontier",
+      "seed": {
+        "label": "VENUE-TAVERN-01/frontier/14",
+        "value": 328946703,
+        "selectionNonce": 14,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:the-dorsal-market",
+          "kind": "location",
+          "name": "The Dorsal Market",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "The Dorsal Market: A trading hub built upon the spine of a gargantuan, flying sky-whale.",
+            "trait": "The town's primary employer is a large pottery works that produces a recognizable regional style; the kiln smoke is visible for miles and the clay pits are the town's visible extraction scar.",
+            "calamity": "The clay pits have reached a harder stratum; the pottery works has been paying to remove it but has now found that the hard stratum contains something the removal contractor won't describe clearly in writing.",
+            "secret": "A tithe payment destined for the church was diverted during transit; the priest who received the falsified receipt died the following year; the church's regional auditor is due on a visitation.",
+            "history": "A debtors' settlement, where a great lord dumped everyone who owed him and let them sort it out.",
+            "archetypeKey": 11,
+            "archetypeLabel": "The boarding house",
+            "archetypeNote": "Beds for strangers; the ledger of who passed through.",
+            "space": "roomy",
+            "staff": {
+              "min": 1,
+              "max": 3
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 4,
+              "d": 3
+            }
+          },
+          "fields": {
+            "desc": "A trading hub built upon the spine of a gargantuan, flying sky-whale.",
+            "trait": "The town's primary employer is a large pottery works that produces a recognizable regional style; the kiln smoke is visible for miles and the clay pits are the town's visible extraction scar.",
+            "calamity": "The clay pits have reached a harder stratum; the pottery works has been paying to remove it but has now found that the hard stratum contains something the removal contractor won't describe clearly in writing.",
+            "type": "The boarding house"
+          },
+          "dm": {
+            "secret": "A tithe payment destined for the church was diverted during transit; the priest who received the falsified receipt died the following year; the church's regional auditor is due on a visitation.",
+            "secretBand": "Grounded",
+            "history": "A debtors' settlement, where a great lord dumped everyone who owed him and let them sort it out.",
+            "itemsPool": "realm-items-frontier",
+            "dressing": {
+              "props": "frontier",
+              "surfaces": "frontier"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "Tavern",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Lonely Mountain",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#30"
+            },
+            "rolled": {
+              "layout": "Furrier's: front display room, a back cold room, a locked basement with drainage.",
+              "feature": "A pelt that doesn't match any local animal, still tagged with a trader's mark.",
+              "inside": "A furrier who says the beast came from very far north.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "Furrier's: front display room, a back cold room, a locked basement with drainage.",
+              "feature": "A pelt that doesn't match any local animal, still tagged with a trader's mark."
+            },
+            "dm": {
+              "inside": "A furrier who says the beast came from very far north.",
+              "feature": "A pelt that doesn't match any local animal, still tagged with a trader's mark."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-lonely-mountain",
+            "kind": "location",
+            "name": "The Lonely Mountain",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "Tavern",
+              "interior": {
+                "layout": "Furrier's: front display room, a back cold room, a locked basement with drainage.",
+                "feature": "A pelt that doesn't match any local animal, still tagged with a trader's mark.",
+                "inside": "A furrier who says the beast came from very far north.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "Furrier's: front display room, a back cold room, a locked basement with drainage.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:madion-galgorn",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:madion-galgorn",
+            "kind": "npc",
+            "name": "Madion Galgorn",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Human (Heartlander): Tawny-skinned folk from the central lands; brown hair, green or brown eyes.",
+              "role": "Company / railroad agent",
+              "quirk": null,
+              "mannerism": "They make constant jokes or terrible puns.",
+              "flawSecret": null,
+              "bond": null,
+              "fear": "The Past — Old mistakes resurfacing.",
+              "leverage": null,
+              "want": "Dance well enough that a room forgets its troubles watching them. — art, pride",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "male",
+              "coherence": "wrinkled",
+              "archetypeKey": "add:Company / railroad agent",
+              "roleNote": "Buying the future out from under everyone, politely, with papers.",
+              "roleCls": "elite"
+            },
+            "fields": {
+              "species": "Human",
+              "role": "Company / railroad agent",
+              "demeanor": "They make constant jokes or terrible puns."
+            },
+            "dm": {
+              "secret": null,
+              "fear": "The Past — Old mistakes resurfacing.",
+              "bond": null,
+              "leverage": null,
+              "want": "Dance well enough that a room forgets its troubles watching them. — art, pride",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The apothecary's \"winter tonic\" started as medicine for the NPC's back and became the hour the day is arranged around. The apothecary has raised the price twice; the NPC sold the good chisels last week.",
+                "pressure": "The apothecary has begun asking for favors instead of coin — small deliveries, no questions — and the NPC's trade work is visibly coarsening.",
+                "ifIgnored": "The deliveries turn out to be the tonic itself, to households the NPC knows. They're not a customer anymore; they're the route.",
+                "tags": "addiction, trade, guilt",
+                "band": "Grounded",
+                "ref": "npc-hook#67"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 3,
+            "ids": [
+              "npc:aoirigan-kilwal",
+              "npc:gerald-quill",
+              "npc:takseok-leung"
+            ],
+            "partialIds": [],
+            "band": "sleepy",
+            "count": 3,
+            "hookedId": "npc:madion-galgorn"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-lonely-mountain",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Color — A traveling cook mentions a spice shortage somewhere south. — Kitchen gossip — genuinely inconsequential, genuinely the kind of thing people talk about anyway.",
+              "band": "Grounded",
+              "lensKind": "Color",
+              "fact": null,
+              "dm": {
+                "realFact": null
+              }
+            },
+            "ambientEncounter": null
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 17,
+            "band": null,
+            "text": "Caters to specific race or guild",
+            "cells": [
+              "Caters to specific race or guild"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 3,
+            "band": null,
+            "text": "Modest",
+            "cells": [
+              "Modest"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 5,
+            "band": null,
+            "text": "City watch, soldiers, and mercenaries",
+            "cells": [
+              "City watch, soldiers, and mercenaries"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 16,
+            "band": null,
+            "text": "High fashion & gossip",
+            "cells": [
+              "High fashion & gossip"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 6,
+          "band": null,
+          "text": "The rhythmic thumping of tankards — Clear, with mist clinging to the floorboards — Pipe weed and tobacco",
+          "cells": [
+            "The rhythmic thumping of tankards",
+            "Clear, with mist clinging to the floorboards",
+            "Pipe weed and tobacco"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 17,
+          "band": null,
+          "text": "Missing an ear, an eye, or a few fingers, but refuses to explain why.",
+          "cells": [
+            "Missing an ear, an eye, or a few fingers, but refuses to explain why."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 2,
+          "band": null,
+          "text": "A sudden bar brawl erupts between two tables over a game of cards; chairs fly.",
+          "cells": [
+            "A sudden bar brawl erupts between two tables over a game of cards; chairs fly."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-FRONTIER-04",
+      "realm": "frontier",
+      "seed": {
+        "label": "VENUE-TAVERN-01/frontier/18",
+        "value": 396057179,
+        "selectionNonce": 18,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:the-ivory-pit",
+          "kind": "location",
+          "name": "The Ivory Pit",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "The Ivory Pit: A vertical city carved into the sides of an exhausted white-marble quarry.",
+            "trait": "A shrine village grown permanent: the original population was caretakers of a roadside holy site; they stayed, their children stayed, and now the shrine is surrounded by a market town of several thousand.",
+            "calamity": "The pilgrimage season is half over and attendance is down by a third; the caretaker families are cutting staff and there are rumors that the route's main sponsor has redirected funding to a competing site.",
+            "secret": "A desperate bargain made with a night hag during a plague year: the hag lifted the plague in exchange for a firstborn child to be delivered at adulthood; the plague lifted; the child grew up; the hag came; the family ran, and has been running, for twenty-two years.",
+            "history": "A burial ground so old the living settled to keep watch over the dead.",
+            "archetypeKey": 11,
+            "archetypeLabel": "The boarding house",
+            "archetypeNote": "Beds for strangers; the ledger of who passed through.",
+            "space": "roomy",
+            "staff": {
+              "min": 1,
+              "max": 3
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 4,
+              "d": 4
+            }
+          },
+          "fields": {
+            "desc": "A vertical city carved into the sides of an exhausted white-marble quarry.",
+            "trait": "A shrine village grown permanent: the original population was caretakers of a roadside holy site; they stayed, their children stayed, and now the shrine is surrounded by a market town of several thousand.",
+            "calamity": "The pilgrimage season is half over and attendance is down by a third; the caretaker families are cutting staff and there are rumors that the route's main sponsor has redirected funding to a competing site.",
+            "type": "The boarding house"
+          },
+          "dm": {
+            "secret": "A desperate bargain made with a night hag during a plague year: the hag lifted the plague in exchange for a firstborn child to be delivered at adulthood; the plague lifted; the child grew up; the hag came; the family ran, and has been running, for twenty-two years.",
+            "secretBand": "Grounded",
+            "history": "A burial ground so old the living settled to keep watch over the dead.",
+            "itemsPool": "realm-items-frontier",
+            "dressing": {
+              "props": "frontier",
+              "surfaces": "frontier"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "Tavern",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Leering Demon",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#209"
+            },
+            "rolled": {
+              "layout": "A tavern with two cellars, the second one accessible only from the first via a rack that swings out.",
+              "feature": "The second cellar has no drinks -- only correspondence, bound by year, going back thirty years.",
+              "inside": "A barkeep who says that belonged to the previous owner and she hasn't decided what to do with it.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "A tavern with two cellars, the second one accessible only from the first via a rack that swings out.",
+              "feature": "The second cellar has no drinks -- only correspondence, bound by year, going back thirty years."
+            },
+            "dm": {
+              "inside": "A barkeep who says that belonged to the previous owner and she hasn't decided what to do with it.",
+              "feature": "The second cellar has no drinks -- only correspondence, bound by year, going back thirty years."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-leering-demon",
+            "kind": "location",
+            "name": "The Leering Demon",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "Tavern",
+              "interior": {
+                "layout": "A tavern with two cellars, the second one accessible only from the first via a rack that swings out.",
+                "feature": "The second cellar has no drinks -- only correspondence, bound by year, going back thirty years.",
+                "inside": "A barkeep who says that belonged to the previous owner and she hasn't decided what to do with it.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "A tavern with two cellars, the second one accessible only from the first via a rack that swings out.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:astveig-torvson",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:astveig-torvson",
+            "kind": "npc",
+            "name": "Astveig Torvson",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Halfling (Stout / Strongheart): Hardy and poison-resistant; rumored to have dwarven blood.",
+              "role": "Cult Recruiter or Crimper",
+              "quirk": null,
+              "mannerism": "They talk entirely too much and never let the players get a word in edgewise.",
+              "flawSecret": null,
+              "bond": "A debt owed to them by the most powerful merchant in the district — real, documented, and entirely uncollectable in practice.",
+              "fear": null,
+              "leverage": null,
+              "want": "Keep the secret buried one more season. One more. One more. — secret",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "female",
+              "coherence": "wrinkled",
+              "archetypeKey": 26,
+              "roleNote": "Charisma aimed at the desperate; sells belonging.",
+              "roleCls": "faith"
+            },
+            "fields": {
+              "species": "Halfling",
+              "role": "Cult Recruiter or Crimper",
+              "demeanor": "They talk entirely too much and never let the players get a word in edgewise."
+            },
+            "dm": {
+              "secret": null,
+              "fear": null,
+              "bond": "A debt owed to them by the most powerful merchant in the district — real, documented, and entirely uncollectable in practice.",
+              "leverage": null,
+              "want": "Keep the secret buried one more season. One more. One more. — secret",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The NPC hasn't left the porch chair in a month, and everything they neglect improves: the unweeded garden fruits, the unmended fence straightens, the unswept shop draws customers who praise its atmosphere.",
+                "pressure": "The ward's strivers are quietly furious; the guild drafts a censure for \"unearned prosperity\"; and the NPC — not lazy but exhausted in a way they can't name — has begun to suspect the chair, which was their grandfather's, and which he also never left.",
+                "ifIgnored": "The chair's terms come clear when the NPC finally stands: everything untended slumps back within the week — and the choice the grandfather made, and the NPC's father refused, presents itself: sit, and the household thrives around your stillness; rise, and earn it all the hard way. The chair creaks. It can wait.",
+                "tags": "sloth, bargain, family",
+                "band": "Textured",
+                "ref": "npc-hook#163"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 4,
+            "ids": [
+              "npc:nefetra",
+              "npc:ptaphres-nefertepu",
+              "npc:herleva-carrow",
+              "npc:charles"
+            ],
+            "partialIds": [],
+            "band": "sleepy",
+            "count": 4,
+            "hookedId": "npc:astveig-torvson"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-leering-demon",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — The scale of a faction's involvement inverted. — A bit player got promoted to mastermind, or a mastermind demoted to bystander, in the retelling.",
+              "band": "Textured",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": null
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 12,
+            "band": null,
+            "text": "Upper-class dining club",
+            "cells": [
+              "Upper-class dining club"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 2,
+            "band": null,
+            "text": "Poor",
+            "cells": [
+              "Poor"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 8,
+            "band": null,
+            "text": "Artists, bards, and performers",
+            "cells": [
+              "Artists, bards, and performers"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 1,
+            "band": null,
+            "text": "Delicious cuisine",
+            "cells": [
+              "Delicious cuisine"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 15,
+          "band": null,
+          "text": "A droning, repetitive chant — Flickering, erratic torchlight — Manure and wet dog",
+          "cells": [
+            "A droning, repetitive chant",
+            "Flickering, erratic torchlight",
+            "Manure and wet dog"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 16,
+          "band": null,
+          "text": "Chews on something (a toothpick, a pipe, a bit of leather).",
+          "cells": [
+            "Chews on something (a toothpick, a pipe, a bit of leather)."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 15,
+          "band": null,
+          "text": "A musician is playing a haunting, sorrowful dirge that has the entire room captivated in silence.",
+          "cells": [
+            "A musician is playing a haunting, sorrowful dirge that has the entire room captivated in silence."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-CHROME-01",
+      "realm": "chrome",
+      "seed": {
+        "label": "VENUE-TAVERN-01/chrome/0",
+        "value": 268292329,
+        "selectionNonce": 0,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:the-gravity-well",
+          "kind": "location",
+          "name": "The Gravity-Well",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "The Gravity-Well: A forest where the trees grow toward the center of a floating, magnetic black stone.",
+            "trait": "The town has a resident echo: certain phrases, spoken in certain locations, come back in a different voice — not a true echo, but a response, often delayed, that answers the question asked rather than repeating it.",
+            "calamity": "Someone asked the echo a specific question last week and the answer it gave has caused three families to stop speaking to each other; no one will repeat what the question was.",
+            "secret": "One wealthy house was let off the wall-levy \"just this once\" during the rebuild; every house has refused to pay it since, the wall has gone thirty years unrepaired, and the breach on the north side is widening.",
+            "history": "A hot spring that draws the sick, the rich, and the desperate.",
+            "archetypeKey": 11,
+            "archetypeLabel": "The capsule flophouse",
+            "archetypeNote": "Beds for strangers; the ledger of who passed through.",
+            "space": "roomy",
+            "staff": {
+              "min": 1,
+              "max": 3
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 3,
+              "d": 4
+            }
+          },
+          "fields": {
+            "desc": "A forest where the trees grow toward the center of a floating, magnetic black stone.",
+            "trait": "The town has a resident echo: certain phrases, spoken in certain locations, come back in a different voice — not a true echo, but a response, often delayed, that answers the question asked rather than repeating it.",
+            "calamity": "Someone asked the echo a specific question last week and the answer it gave has caused three families to stop speaking to each other; no one will repeat what the question was.",
+            "type": "The capsule flophouse"
+          },
+          "dm": {
+            "secret": "One wealthy house was let off the wall-levy \"just this once\" during the rebuild; every house has refused to pay it since, the wall has gone thirty years unrepaired, and the breach on the north side is widening.",
+            "secretBand": "Grounded",
+            "history": "A hot spring that draws the sick, the rich, and the desperate.",
+            "itemsPool": "realm-items-chrome",
+            "dressing": {
+              "props": "chrome",
+              "surfaces": "chrome"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "Noodle Bar",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Wandering Eagle",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#178"
+            },
+            "rolled": {
+              "layout": "Street-level money deposit office for a banking house: a single counter room, a pneumatic or runner system to a larger vault off-site.",
+              "feature": "A deposit token that has never been claimed, dated eight years back.",
+              "inside": "A counter-clerk who says unclaimed tokens are held indefinitely, policy, and the name on the account is common enough to offer no help.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "Street-level money deposit office for a banking house: a single counter room, a pneumatic or runner system to a larger vault off-site.",
+              "feature": "A deposit token that has never been claimed, dated eight years back."
+            },
+            "dm": {
+              "inside": "A counter-clerk who says unclaimed tokens are held indefinitely, policy, and the name on the account is common enough to offer no help.",
+              "feature": "A deposit token that has never been claimed, dated eight years back."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-wandering-eagle",
+            "kind": "location",
+            "name": "The Wandering Eagle",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "Noodle Bar",
+              "interior": {
+                "layout": "Street-level money deposit office for a banking house: a single counter room, a pneumatic or runner system to a larger vault off-site.",
+                "feature": "A deposit token that has never been claimed, dated eight years back.",
+                "inside": "A counter-clerk who says unclaimed tokens are held indefinitely, policy, and the name on the account is common enough to offer no help.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "Street-level money deposit office for a banking house: a single counter room, a pneumatic or runner system to a larger vault off-site.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:hedstein-torvvik",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:hedstein-torvvik",
+            "kind": "npc",
+            "name": "Hedstein Torvvik",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Human (Heartlander): Tawny-skinned folk from the central lands; brown hair, green or brown eyes.",
+              "role": "Caravan Guard or Outrider",
+              "quirk": null,
+              "mannerism": "They take absolute, literal meaning from everything the player characters say.",
+              "flawSecret": null,
+              "bond": null,
+              "fear": "Acceptance — Fear that this is “how it is now.”",
+              "leverage": null,
+              "want": "Make one song the whole valley sings without ever knowing whose it was. — art, song",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "male",
+              "coherence": "wrinkled",
+              "archetypeKey": 21,
+              "roleNote": "Wary of the road; values a good pair of boots.",
+              "roleCls": "authority"
+            },
+            "fields": {
+              "species": "Human",
+              "role": "Caravan Guard or Outrider",
+              "demeanor": "They take absolute, literal meaning from everything the player characters say."
+            },
+            "dm": {
+              "secret": null,
+              "fear": "Acceptance — Fear that this is “how it is now.”",
+              "bond": null,
+              "leverage": null,
+              "want": "Make one song the whole valley sings without ever knowing whose it was. — art, song",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The NPC's youngest apprentice never leaves a wet footprint — rain, ford, or bath-house, the boy's prints dry a heartbeat later — and the tannery cat crosses the street to avoid him.",
+                "pressure": "The boy is a fine worker and doesn't know. His mother, asked about his father, changes the subject with her whole body. The drought is entering its second month.",
+                "ifIgnored": "The dowser's rod stops at the boy in the market like a compass needle. The old wives conclude the obvious — the river married into town — and the river, dry and slighted, expects its son's wages.",
+                "tags": "child, curse, family",
+                "band": "Textured",
+                "ref": "npc-hook#132"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 3,
+            "ids": [
+              "npc:argran-skullsplit",
+              "npc:ella-nopenstallen",
+              "npc:vondal-holderhek"
+            ],
+            "partialIds": [],
+            "band": "sleepy",
+            "count": 3,
+            "hookedId": "npc:hedstein-torvvik"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-wandering-eagle",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Color — Word is a foreign fleet has been sighted somewhere down the coast. — Sailors' talk, entirely outside anything the ledger tracks — no hook, no mechanical weight. The fleet, if it exists, sails through some other story than this world's.",
+              "band": "Textured",
+              "lensKind": "Color",
+              "fact": null,
+              "dm": {
+                "realFact": null
+              }
+            },
+            "ambientEncounter": null
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 15,
+            "band": null,
+            "text": "Gambling den",
+            "cells": [
+              "Gambling den"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 1,
+            "band": null,
+            "text": "Squalid",
+            "cells": [
+              "Squalid"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 8,
+            "band": null,
+            "text": "Artists, bards, and performers",
+            "cells": [
+              "Artists, bards, and performers"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 13,
+            "band": null,
+            "text": "Complete godlessness",
+            "cells": [
+              "Complete godlessness"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 18,
+          "band": null,
+          "text": "A loud, boastful story being told — Swirling dust motes catch the light — Pine needles and sap",
+          "cells": [
+            "A loud, boastful story being told",
+            "Swirling dust motes catch the light",
+            "Pine needles and sap"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 7,
+          "band": null,
+          "text": "Talks in a raspy whisper, forcing patrons to lean in.",
+          "cells": [
+            "Talks in a raspy whisper, forcing patrons to lean in."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 4,
+          "band": null,
+          "text": "A patron stands on a table, making a drunken, scandalous toast about a local noble.",
+          "cells": [
+            "A patron stands on a table, making a drunken, scandalous toast about a local noble."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-CHROME-02",
+      "realm": "chrome",
+      "seed": {
+        "label": "VENUE-TAVERN-01/chrome/1",
+        "value": 251514710,
+        "selectionNonce": 1,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:the-garrison-wife-town",
+          "kind": "location",
+          "name": "The Garrison-Wife Town",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "The Garrison-Wife Town: A settlement of dependents and camp-followers that outlasted the army it followed, now governing itself with a military rank structure that has no military left to justify it.",
+            "trait": "A quarry town: the stone comes out of the hillside in blocks, loaded onto wagons at the cutting yard, and the dust settles on everything by noon.",
+            "calamity": "The main quarry face partially collapsed last week, sealing the primary shaft and trapping equipment; the quarry company's position is that the face is stable enough to resume; the cutters' union disagrees loudly.",
+            "secret": "One wealthy house was let off the wall-levy \"just this once\" during the rebuild; every house has refused to pay it since, the wall has gone thirty years unrepaired, and the breach on the north side is widening.",
+            "history": "A lighthouse and the keepers' kin, grown into a hamlet on the rocks.",
+            "archetypeKey": 2,
+            "archetypeLabel": "The noodle bar under the rail line",
+            "archetypeNote": "Drink, food, and talk after dark; every side of every feud at adjacent tables.",
+            "space": "roomy",
+            "staff": {
+              "min": 2,
+              "max": 4
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 3,
+              "d": 4
+            }
+          },
+          "fields": {
+            "desc": "A settlement of dependents and camp-followers that outlasted the army it followed, now governing itself with a military rank structure that has no military left to justify it.",
+            "trait": "A quarry town: the stone comes out of the hillside in blocks, loaded onto wagons at the cutting yard, and the dust settles on everything by noon.",
+            "calamity": "The main quarry face partially collapsed last week, sealing the primary shaft and trapping equipment; the quarry company's position is that the face is stable enough to resume; the cutters' union disagrees loudly.",
+            "type": "The noodle bar under the rail line"
+          },
+          "dm": {
+            "secret": "One wealthy house was let off the wall-levy \"just this once\" during the rebuild; every house has refused to pay it since, the wall has gone thirty years unrepaired, and the breach on the north side is widening.",
+            "secretBand": "Grounded",
+            "history": "A lighthouse and the keepers' kin, grown into a hamlet on the rocks.",
+            "itemsPool": "realm-items-chrome",
+            "dressing": {
+              "props": "chrome",
+              "surfaces": "chrome"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "Noodle Bar",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Leaping Spirit",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#16"
+            },
+            "rolled": {
+              "layout": "Mill floor with the wheel mechanism, a grain store, a miller's quarters.",
+              "feature": "The grinding wheel running though there's no one feeding grain.",
+              "inside": "A miller who says it does that sometimes.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "Mill floor with the wheel mechanism, a grain store, a miller's quarters.",
+              "feature": "The grinding wheel running though there's no one feeding grain."
+            },
+            "dm": {
+              "inside": "A miller who says it does that sometimes.",
+              "feature": "The grinding wheel running though there's no one feeding grain."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-leaping-spirit",
+            "kind": "location",
+            "name": "The Leaping Spirit",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "Noodle Bar",
+              "interior": {
+                "layout": "Mill floor with the wheel mechanism, a grain store, a miller's quarters.",
+                "feature": "The grinding wheel running though there's no one feeding grain.",
+                "inside": "A miller who says it does that sometimes.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "Mill floor with the wheel mechanism, a grain store, a miller's quarters.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:batnai-erdgal",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:batnai-erdgal",
+            "kind": "npc",
+            "name": "Batnai Erdgal",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Dwarf (Shield / Mountain): Tall (for a dwarf) and light-skinned; accostomed to rugged, difficult lives.",
+              "role": "Herbalist or Apothecary",
+              "quirk": null,
+              "mannerism": "They are blustering, loud, and full of hot air.",
+              "flawSecret": null,
+              "bond": "A letter of good standing from the guild that one bad word from a foreman could revoke overnight.",
+              "fear": null,
+              "leverage": null,
+              "want": "Win back the good name their family lost, and hand it down clean. — pride, family",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "female",
+              "coherence": "wrinkled",
+              "archetypeKey": 15,
+              "roleNote": "Smells of bitterroot; knows what heals and what doesn't.",
+              "roleCls": "care"
+            },
+            "fields": {
+              "species": "Dwarf",
+              "role": "Herbalist or Apothecary",
+              "demeanor": "They are blustering, loud, and full of hot air."
+            },
+            "dm": {
+              "secret": null,
+              "fear": null,
+              "bond": "A letter of good standing from the guild that one bad word from a foreman could revoke overnight.",
+              "leverage": null,
+              "want": "Win back the good name their family lost, and hand it down clean. — pride, family",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The NPC's twin married exactly the life the NPC wanted — the farm, the man, the ease — and now the twin is sick, and the NPC has been asked to move in and help.",
+                "pressure": "The husband is grieving in advance and grateful; the sister watches the NPC do her chores with unreadable eyes; the ward already murmurs about \"how naturally she fits.\"",
+                "ifIgnored": "The sister recovers — or doesn't — and either way something has been decided in that house without anyone saying it aloud. The NPC's own life is now the abandoned one.",
+                "tags": "envy, family, love",
+                "band": "Grounded",
+                "ref": "npc-hook#39"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 3,
+            "ids": [
+              "npc:batgal-batbayar",
+              "npc:zolmaa-gantur",
+              "npc:saruna-nomerdene"
+            ],
+            "partialIds": [
+              "npc:animal-partial",
+              "npc:animal-partial-2"
+            ],
+            "band": "sleepy",
+            "count": 3,
+            "hookedId": "npc:batnai-erdgal"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-leaping-spirit",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — A specific object became \"treasure,\" generically. — Whatever it actually was has been smoothed into the vaguest, most exciting word available.",
+              "band": "Grounded",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": {
+              "text": "Drunk (A drunk staggers over and mistakes a PC for a hated rival)",
+              "band": ""
+            }
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 19,
+            "band": null,
+            "text": "Brothel",
+            "cells": [
+              "Brothel"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 6,
+            "band": null,
+            "text": "Aristocratic",
+            "cells": [
+              "Aristocratic"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 5,
+            "band": null,
+            "text": "City watch, soldiers, and mercenaries",
+            "cells": [
+              "City watch, soldiers, and mercenaries"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 14,
+            "band": null,
+            "text": "Educated debates & philosophy",
+            "cells": [
+              "Educated debates & philosophy"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 20,
+          "band": null,
+          "text": "The sharp twang of a bowstring — Strangely colorless, gray light — Delicious, spiced cider",
+          "cells": [
+            "The sharp twang of a bowstring",
+            "Strangely colorless, gray light",
+            "Delicious, spiced cider"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 11,
+          "band": null,
+          "text": "Makes constant, terrible jokes or puns.",
+          "cells": [
+            "Makes constant, terrible jokes or puns."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 7,
+          "band": null,
+          "text": "Two patrons are engaged in a fierce, high-stakes arm-wrestling match while the crowd places bets.",
+          "cells": [
+            "Two patrons are engaged in a fierce, high-stakes arm-wrestling match while the crowd places bets."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-CHROME-03",
+      "realm": "chrome",
+      "seed": {
+        "label": "VENUE-TAVERN-01/chrome/2",
+        "value": 234737091,
+        "selectionNonce": 2,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:the-walled-orchard",
+          "kind": "location",
+          "name": "The Walled Orchard",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "The Walled Orchard: A fortified agricultural estate where the local Lord protects rare, drought-resistant fruit.",
+            "trait": "A fortress-town where every adult citizen holds a militia rank; the granary is its own garrison and the weapons-store is audited quarterly.",
+            "calamity": "The enemy is four days out, the granary burned last month, the weapons-store audit is incomplete, and the garrison commander is very calm about all of this in a way that has people worried.",
+            "secret": "During a livestock disease outbreak, the wrong disease was identified and the wrong treatment applied; the actual pathogen is still in the soil and responds badly to the treatment that killed the wrong one.",
+            "history": "An orchard estate, walled against frost and thieves, that fed a village into being.",
+            "archetypeKey": 11,
+            "archetypeLabel": "The capsule flophouse",
+            "archetypeNote": "Beds for strangers; the ledger of who passed through.",
+            "space": "roomy",
+            "staff": {
+              "min": 1,
+              "max": 3
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 3,
+              "d": 4
+            }
+          },
+          "fields": {
+            "desc": "A fortified agricultural estate where the local Lord protects rare, drought-resistant fruit.",
+            "trait": "A fortress-town where every adult citizen holds a militia rank; the granary is its own garrison and the weapons-store is audited quarterly.",
+            "calamity": "The enemy is four days out, the granary burned last month, the weapons-store audit is incomplete, and the garrison commander is very calm about all of this in a way that has people worried.",
+            "type": "The capsule flophouse"
+          },
+          "dm": {
+            "secret": "During a livestock disease outbreak, the wrong disease was identified and the wrong treatment applied; the actual pathogen is still in the soil and responds badly to the treatment that killed the wrong one.",
+            "secretBand": "Grounded",
+            "history": "An orchard estate, walled against frost and thieves, that fed a village into being.",
+            "itemsPool": "realm-items-chrome",
+            "dressing": {
+              "props": "chrome",
+              "surfaces": "chrome"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "Noodle Bar",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Staggering Dwarf",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#222"
+            },
+            "rolled": {
+              "layout": "A temple with a secondary shrine room that doesn't appear to have any exterior wall -- it's surrounded on all sides by interior space.",
+              "feature": "The shrine inside has no deity associated with the temple -- a different faith's image, much older.",
+              "inside": "A priest who says it was here when they built around it and the two faiths have an arrangement.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "A temple with a secondary shrine room that doesn't appear to have any exterior wall -- it's surrounded on all sides by interior space.",
+              "feature": "The shrine inside has no deity associated with the temple -- a different faith's image, much older."
+            },
+            "dm": {
+              "inside": "A priest who says it was here when they built around it and the two faiths have an arrangement.",
+              "feature": "The shrine inside has no deity associated with the temple -- a different faith's image, much older."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-staggering-dwarf",
+            "kind": "location",
+            "name": "The Staggering Dwarf",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "Noodle Bar",
+              "interior": {
+                "layout": "A temple with a secondary shrine room that doesn't appear to have any exterior wall -- it's surrounded on all sides by interior space.",
+                "feature": "The shrine inside has no deity associated with the temple -- a different faith's image, much older.",
+                "inside": "A priest who says it was here when they built around it and the two faiths have an arrangement.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "A temple with a secondary shrine room that doesn't appear to have any exterior wall -- it's surrounded on all sides by interior space.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:hatao-vanoi",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:hatao-vanoi",
+            "kind": "npc",
+            "name": "Hatao Vanoi",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Dwarf (Shield / Mountain): Tall (for a dwarf) and light-skinned; accostomed to rugged, difficult lives.",
+              "role": "Herbalist or Apothecary",
+              "quirk": null,
+              "mannerism": "They act as if they know everything, constantly correcting the player characters.",
+              "flawSecret": null,
+              "bond": "The man who married above his station and must keep his common-born mother from ever meeting his wife's family.",
+              "fear": null,
+              "leverage": null,
+              "want": "Outshine the sibling who was always the favorite — at last, undeniably. — envy, family",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "male",
+              "coherence": "wrinkled",
+              "archetypeKey": 15,
+              "roleNote": "Smells of bitterroot; knows what heals and what doesn't.",
+              "roleCls": "care"
+            },
+            "fields": {
+              "species": "Dwarf",
+              "role": "Herbalist or Apothecary",
+              "demeanor": "They act as if they know everything, constantly correcting the player characters."
+            },
+            "dm": {
+              "secret": null,
+              "fear": null,
+              "bond": "The man who married above his station and must keep his common-born mother from ever meeting his wife's family.",
+              "leverage": null,
+              "want": "Outshine the sibling who was always the favorite — at last, undeniably. — envy, family",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The NPC keeps copies: ten years of manifests that don't match the council's published tariffs. Someone on the council has been shorting the town, and the NPC can prove who.",
+                "pressure": "A council clerk just requested the NPC's \"complete records\" for a routine survey. Routine surveys don't come with a militia escort waiting outside.",
+                "ifIgnored": "Records surrendered, true copies hidden — and the NPC becomes the one person that councilor can't afford to leave standing. They both know it.",
+                "tags": "authority, witness, justice",
+                "band": "Grounded",
+                "ref": "npc-hook#28"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 2,
+            "ids": [
+              "npc:einna-pennoc",
+              "npc:hatao-wuung"
+            ],
+            "partialIds": [
+              "npc:animal-partial"
+            ],
+            "band": "sleepy",
+            "count": 2,
+            "hookedId": "npc:hatao-vanoi"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-staggering-dwarf",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — The rumor names a person who, per every other account, wasn't there. — The ledger's actor list doesn't include them — but the story insists, specifically and without hedging.",
+              "band": "Strange",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": {
+              "text": "Pickpocket (A thief tries to lift a PC's coin purse while they are distracted)",
+              "band": ""
+            }
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 9,
+            "band": null,
+            "text": "Raucous dive",
+            "cells": [
+              "Raucous dive"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 6,
+            "band": null,
+            "text": "Aristocratic",
+            "cells": [
+              "Aristocratic"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 10,
+            "band": null,
+            "text": "Transients, travelers, and outcasts",
+            "cells": [
+              "Transients, travelers, and outcasts"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 19,
+            "band": null,
+            "text": "Incredibly strong drink",
+            "cells": [
+              "Incredibly strong drink"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 12,
+          "band": null,
+          "text": "The rhythmic chopping of a butcher's knife — Steamy and sweltering — Freshly baked bread",
+          "cells": [
+            "The rhythmic chopping of a butcher's knife",
+            "Steamy and sweltering",
+            "Freshly baked bread"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 5,
+          "band": null,
+          "text": "Unflappably polite, even when being insulted or threatened.",
+          "cells": [
+            "Unflappably polite, even when being insulted or threatened."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 5,
+          "band": null,
+          "text": "A pickpocket is actively trying to lift a coin purse from a distracted, wealthy patron.",
+          "cells": [
+            "A pickpocket is actively trying to lift a coin purse from a distracted, wealthy patron."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-CHROME-04",
+      "realm": "chrome",
+      "seed": {
+        "label": "VENUE-TAVERN-01/chrome/6",
+        "value": 301847567,
+        "selectionNonce": 6,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:the-dorsal-market",
+          "kind": "location",
+          "name": "The Dorsal Market",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "The Dorsal Market: A trading hub built upon the spine of a gargantuan, flying sky-whale.",
+            "trait": "The town is the western terminus of a major trade road; goods either begin here or end here, and the warehousing district is the largest architectural feature.",
+            "calamity": "A fire in the warehouse district last month left three warehouses destroyed and several more smoke-damaged; the goods inside belonged to a dozen different merchants and the insurance claim process has effectively frozen commerce.",
+            "secret": "A vampire lord approached the town council two generations ago with an arrangement: he keeps the wolves off the cattle; the council provides one quiet disappearance per year; the current council inherited the ledger and has not cancelled the contract.",
+            "history": "A ferry crossing where the river runs too deep and too wide to bridge.",
+            "archetypeKey": 2,
+            "archetypeLabel": "The noodle bar under the rail line",
+            "archetypeNote": "Drink, food, and talk after dark; every side of every feud at adjacent tables.",
+            "space": "roomy",
+            "staff": {
+              "min": 2,
+              "max": 4
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 3,
+              "d": 4
+            }
+          },
+          "fields": {
+            "desc": "A trading hub built upon the spine of a gargantuan, flying sky-whale.",
+            "trait": "The town is the western terminus of a major trade road; goods either begin here or end here, and the warehousing district is the largest architectural feature.",
+            "calamity": "A fire in the warehouse district last month left three warehouses destroyed and several more smoke-damaged; the goods inside belonged to a dozen different merchants and the insurance claim process has effectively frozen commerce.",
+            "type": "The noodle bar under the rail line"
+          },
+          "dm": {
+            "secret": "A vampire lord approached the town council two generations ago with an arrangement: he keeps the wolves off the cattle; the council provides one quiet disappearance per year; the current council inherited the ledger and has not cancelled the contract.",
+            "secretBand": "Grounded",
+            "history": "A ferry crossing where the river runs too deep and too wide to bridge.",
+            "itemsPool": "realm-items-chrome",
+            "dressing": {
+              "props": "chrome",
+              "surfaces": "chrome"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "Noodle Bar",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Golden Dolphin",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#262"
+            },
+            "rolled": {
+              "layout": "A workshop where the tools return to their places between visits.",
+              "feature": "Every tool bears a use-mark suggesting daily work, but there is never anyone present.",
+              "inside": "A craftsman's apprentice who says the shop has been this way since the master died; the work continues without her and she leaves the products at the market stall.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "A workshop where the tools return to their places between visits.",
+              "feature": "Every tool bears a use-mark suggesting daily work, but there is never anyone present."
+            },
+            "dm": {
+              "inside": "A craftsman's apprentice who says the shop has been this way since the master died; the work continues without her and she leaves the products at the market stall.",
+              "feature": "Every tool bears a use-mark suggesting daily work, but there is never anyone present."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-golden-dolphin",
+            "kind": "location",
+            "name": "The Golden Dolphin",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "Noodle Bar",
+              "interior": {
+                "layout": "A workshop where the tools return to their places between visits.",
+                "feature": "Every tool bears a use-mark suggesting daily work, but there is never anyone present.",
+                "inside": "A craftsman's apprentice who says the shop has been this way since the master died; the work continues without her and she leaves the products at the market stall.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "A workshop where the tools return to their places between visits.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:rose-tosscobble",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:rose-tosscobble",
+            "kind": "npc",
+            "name": "Rose Tosscobble",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Halfling (Stout / Strongheart): Hardy and poison-resistant; rumored to have dwarven blood.",
+              "role": "Laborer, Porter, or Dockhand",
+              "quirk": null,
+              "mannerism": "They chew continuously on something, like a twig, a pipe, or a fingernail.",
+              "flawSecret": null,
+              "bond": null,
+              "fear": "Scarcity — Hunger, tools, or shelter.",
+              "leverage": null,
+              "want": "Stand up, this time, for the person no one else will stand up for. — justice, charity",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "female",
+              "coherence": "wrinkled",
+              "archetypeKey": 3,
+              "roleNote": "Moves the heavy things; sees everything, is asked nothing.",
+              "roleCls": "labor"
+            },
+            "fields": {
+              "species": "Halfling",
+              "role": "Laborer, Porter, or Dockhand",
+              "demeanor": "They chew continuously on something, like a twig, a pipe, or a fingernail."
+            },
+            "dm": {
+              "secret": null,
+              "fear": "Scarcity — Hunger, tools, or shelter.",
+              "bond": null,
+              "leverage": null,
+              "want": "Stand up, this time, for the person no one else will stand up for. — justice, charity",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The NPC's blushes leave marks — a faint rose stain on whatever they're touching when the shame lands — and their workbench, their ledger, and one entire pew now map a private history the town is learning to read.",
+                "pressure": "The stains don't fade; the priest has noticed the pew; and the NPC's apprentice, cruel in the way of clever boys, has begun engineering small embarrassments near expensive surfaces.",
+                "ifIgnored": "The town learns the code fluently — rose-stained goods sell at a knowing discount — and the NPC's blushes, having nowhere to hide, simply stop: composure total and permanent, which everyone praises, and which the spouse alone understands as the day the NPC sealed shut.",
+                "tags": "shame, curse, trade",
+                "band": "Textured",
+                "ref": "npc-hook#161"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 3,
+            "ids": [
+              "npc:takyong-sunim",
+              "npc:kwannh",
+              "npc:amenkare-nefertepu"
+            ],
+            "partialIds": [],
+            "band": "sleepy",
+            "count": 3,
+            "hookedId": "npc:rose-tosscobble"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-golden-dolphin",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — The precise cost got rounded toward whatever sounds fair. — Not a lie exactly — just a number smoothed toward what the teller feels the thing was worth.",
+              "band": "Grounded",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": null
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 11,
+            "band": null,
+            "text": "Gathering place for a secret society",
+            "cells": [
+              "Gathering place for a secret society"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 4,
+            "band": null,
+            "text": "Comfortable",
+            "cells": [
+              "Comfortable"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 2,
+            "band": null,
+            "text": "Merchants, guild artisans, and traders",
+            "cells": [
+              "Merchants, guild artisans, and traders"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 10,
+            "band": null,
+            "text": "Utter decadence",
+            "cells": [
+              "Utter decadence"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 4,
+          "band": null,
+          "text": "A bard tuning an instrument — Dimly lit by sputtering, dying candles — Dank, moldy earth",
+          "cells": [
+            "A bard tuning an instrument",
+            "Dimly lit by sputtering, dying candles",
+            "Dank, moldy earth"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 16,
+          "band": null,
+          "text": "Chews on something (a toothpick, a pipe, a bit of leather).",
+          "cells": [
+            "Chews on something (a toothpick, a pipe, a bit of leather)."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 1,
+          "band": null,
+          "text": "A tipsy drunk staggers toward a PC, mistaking them for an old friend or a hated rival.",
+          "cells": [
+            "A tipsy drunk staggers toward a PC, mistaking them for an old friend or a hated rival."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-GLOOM-01",
+      "realm": "gloom",
+      "seed": {
+        "label": "VENUE-TAVERN-01/gloom/0",
+        "value": 2760356655,
+        "selectionNonce": 0,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:slate-roof-rise",
+          "kind": "location",
+          "name": "Slate-Roof Rise",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "Slate-Roof Rise: A hillside town known for its high-quality stone quarries and narrow, winding stairs.",
+            "trait": "The town sits on a navigable lake and operates a ferry network across it; the ferry schedules determine where people live relative to where they work more than the roads do.",
+            "calamity": "Ice formed on the lake six weeks early and the ferry network shut down; the ice is not thick enough to walk on reliably; people are walking on it anyway and two have gone through.",
+            "secret": "The hill shepherd who reported strange lights was dismissed as a drunk; his flock was found scattered; he was found unharmed but spoke differently after; he is still here, still a shepherd, still watching something in the hills he won't describe.",
+            "history": "A coal seam near the surface, and a sky that hasn't been fully clear since.",
+            "archetypeKey": 2,
+            "archetypeLabel": "The diner that closes at 9 sharp",
+            "archetypeNote": "Drink, food, and talk after dark; every side of every feud at adjacent tables.",
+            "space": "roomy",
+            "staff": {
+              "min": 2,
+              "max": 4
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 4,
+              "d": 4
+            },
+            "namePattern": "The old <Family> place"
+          },
+          "fields": {
+            "desc": "A hillside town known for its high-quality stone quarries and narrow, winding stairs.",
+            "trait": "The town sits on a navigable lake and operates a ferry network across it; the ferry schedules determine where people live relative to where they work more than the roads do.",
+            "calamity": "Ice formed on the lake six weeks early and the ferry network shut down; the ice is not thick enough to walk on reliably; people are walking on it anyway and two have gone through.",
+            "type": "The diner that closes at 9 sharp"
+          },
+          "dm": {
+            "secret": "The hill shepherd who reported strange lights was dismissed as a drunk; his flock was found scattered; he was found unharmed but spoke differently after; he is still here, still a shepherd, still watching something in the hills he won't describe.",
+            "secretBand": "Grounded",
+            "history": "A coal seam near the surface, and a sky that hasn't been fully clear since.",
+            "itemsPool": "realm-items-gloom",
+            "dressing": {
+              "props": "gloom",
+              "surfaces": "gloom"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "The Diner",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Lonely Mountain",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#297"
+            },
+            "rolled": {
+              "layout": "A great hall where the portraits on the walls track visitors with their painted eyes, and the painted subjects occasionally speak -- quietly, only on topics they would have known in life.",
+              "feature": "Two portraits are in an ongoing argument that has been audible since the estate changed hands.",
+              "inside": "A steward who has started seating dinner guests away from those two portraits after an incident.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "A great hall where the portraits on the walls track visitors with their painted eyes, and the painted subjects occasionally speak -- quietly, only on topics they would have known in life.",
+              "feature": "Two portraits are in an ongoing argument that has been audible since the estate changed hands."
+            },
+            "dm": {
+              "inside": "A steward who has started seating dinner guests away from those two portraits after an incident.",
+              "feature": "Two portraits are in an ongoing argument that has been audible since the estate changed hands."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-lonely-mountain",
+            "kind": "location",
+            "name": "The Lonely Mountain",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "The Diner",
+              "interior": {
+                "layout": "A great hall where the portraits on the walls track visitors with their painted eyes, and the painted subjects occasionally speak -- quietly, only on topics they would have known in life.",
+                "feature": "Two portraits are in an ongoing argument that has been audible since the estate changed hands.",
+                "inside": "A steward who has started seating dinner guests away from those two portraits after an incident.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "A great hall where the portraits on the walls track visitors with their painted eyes, and the painted subjects occasionally speak -- quietly, only on topics they would have known in life.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:fazan-zazadeh",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:fazan-zazadeh",
+            "kind": "npc",
+            "name": "Fazan Zazadeh",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Human (Highlander): Fair-skinned humans from the distant northwest.",
+              "role": "Farmer or Grower",
+              "quirk": null,
+              "mannerism": "They are paranoid and think anyone who acts nice is actually hiding evil intent.",
+              "flawSecret": null,
+              "bond": null,
+              "fear": null,
+              "leverage": "Holds the buried deed to the land the new fort is already rising on. — secret, authority",
+              "want": "Understand the one thing no one alive understands yet — and be the first who did. — curiosity, pride",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "male",
+              "coherence": "wrinkled",
+              "archetypeKey": 1,
+              "roleNote": "Tied to the land and its seasons; the base everyone eats from.",
+              "roleCls": "labor"
+            },
+            "fields": {
+              "species": "Human",
+              "role": "Farmer or Grower",
+              "demeanor": "They are paranoid and think anyone who acts nice is actually hiding evil intent."
+            },
+            "dm": {
+              "secret": null,
+              "fear": null,
+              "bond": null,
+              "leverage": "Holds the buried deed to the land the new fort is already rising on. — secret, authority",
+              "want": "Understand the one thing no one alive understands yet — and be the first who did. — curiosity, pride",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The neighbor has been feeding the NPC's hound behind the fence for months — it's fat, glossy, and last week it followed the neighbor home and wouldn't come back. The NPC wants the dog's heart back, not just the dog.",
+                "pressure": "The neighbor has started calling it by a new name in public, and it answers. The NPC has begun leaving scraps out for the neighbor's prize goats.",
+                "ifIgnored": "The street becomes an arms race of stolen affections — dogs, goats, then somebody's apprentice — until it ends the old way: a fence line, an axe, and the watch.",
+                "tags": "silly, envy, beast",
+                "band": "Grounded",
+                "ref": "npc-hook#11"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 2,
+            "ids": [
+              "npc:joan-hedley",
+              "npc:rahim-daqari"
+            ],
+            "partialIds": [],
+            "band": "sleepy",
+            "count": 2,
+            "hookedId": "npc:fazan-zazadeh"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-lonely-mountain",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — The scale of the place involved grew. — A single building became \"the whole quarter\" somewhere between the third and fourth teller.",
+              "band": "Grounded",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": null
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 10,
+            "band": null,
+            "text": "Thieves' guild hangout",
+            "cells": [
+              "Thieves' guild hangout"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 6,
+            "band": null,
+            "text": "Aristocratic",
+            "cells": [
+              "Aristocratic"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 10,
+            "band": null,
+            "text": "Transients, travelers, and outcasts",
+            "cells": [
+              "Transients, travelers, and outcasts"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 19,
+            "band": null,
+            "text": "Incredibly strong drink",
+            "cells": [
+              "Incredibly strong drink"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 2,
+          "band": null,
+          "text": "A tense, murmuring quiet — Clear, but drafty and cold — Stale, spilled ale",
+          "cells": [
+            "A tense, murmuring quiet",
+            "Clear, but drafty and cold",
+            "Stale, spilled ale"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 14,
+          "band": null,
+          "text": "Squints at everyone as if they are hard of seeing.",
+          "cells": [
+            "Squints at everyone as if they are hard of seeing."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 5,
+          "band": null,
+          "text": "A pickpocket is actively trying to lift a coin purse from a distracted, wealthy patron.",
+          "cells": [
+            "A pickpocket is actively trying to lift a coin purse from a distracted, wealthy patron."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-GLOOM-02",
+      "realm": "gloom",
+      "seed": {
+        "label": "VENUE-TAVERN-01/gloom/2",
+        "value": 2793911893,
+        "selectionNonce": 2,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:high-harrow-gate",
+          "kind": "location",
+          "name": "High-Harrow Gate",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "High-Harrow Gate: A crumbling grey-stone fortification guarding a mist-shrouded mountain pass.",
+            "trait": "The harbor is the town's lung: deep enough for ocean-going ships, sheltered by a natural headland, and busy enough that the harbormaster's office runs three shifts.",
+            "calamity": "A wreck is sitting in the main channel after a storm three days ago — the crew got off but the ship didn't — and the salvage rights dispute between the owner, the insurers, and the harbormaster is holding up all traffic.",
+            "secret": "The local militia was authorized to operate in a crisis; the crisis ended; the authorization was not rescinded; the militia's interpretation of its mandate has been expanding steadily since, and the council has been finding the expansion useful.",
+            "history": "A dye-works on a river that runs a different color each week.",
+            "archetypeKey": 2,
+            "archetypeLabel": "The diner that closes at 9 sharp",
+            "archetypeNote": "Drink, food, and talk after dark; every side of every feud at adjacent tables.",
+            "space": "roomy",
+            "staff": {
+              "min": 2,
+              "max": 4
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 3,
+              "d": 4
+            },
+            "namePattern": "<Town> <label>"
+          },
+          "fields": {
+            "desc": "A crumbling grey-stone fortification guarding a mist-shrouded mountain pass.",
+            "trait": "The harbor is the town's lung: deep enough for ocean-going ships, sheltered by a natural headland, and busy enough that the harbormaster's office runs three shifts.",
+            "calamity": "A wreck is sitting in the main channel after a storm three days ago — the crew got off but the ship didn't — and the salvage rights dispute between the owner, the insurers, and the harbormaster is holding up all traffic.",
+            "type": "The diner that closes at 9 sharp"
+          },
+          "dm": {
+            "secret": "The local militia was authorized to operate in a crisis; the crisis ended; the authorization was not rescinded; the militia's interpretation of its mandate has been expanding steadily since, and the council has been finding the expansion useful.",
+            "secretBand": "Textured",
+            "history": "A dye-works on a river that runs a different color each week.",
+            "itemsPool": "realm-items-gloom",
+            "dressing": {
+              "props": "gloom",
+              "surfaces": "gloom"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "The Diner",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Gilded Rose",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#58"
+            },
+            "rolled": {
+              "layout": "Chandler's warehouse district outlet: floor stacked with crate-boxed candles, a small counting desk.",
+              "feature": "An invoice for a shipment to an address that is a field outside town.",
+              "inside": "A chandler's factor who says the order was placed in person and fully paid.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "Chandler's warehouse district outlet: floor stacked with crate-boxed candles, a small counting desk.",
+              "feature": "An invoice for a shipment to an address that is a field outside town."
+            },
+            "dm": {
+              "inside": "A chandler's factor who says the order was placed in person and fully paid.",
+              "feature": "An invoice for a shipment to an address that is a field outside town."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-gilded-rose",
+            "kind": "location",
+            "name": "The Gilded Rose",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "The Diner",
+              "interior": {
+                "layout": "Chandler's warehouse district outlet: floor stacked with crate-boxed candles, a small counting desk.",
+                "feature": "An invoice for a shipment to an address that is a field outside town.",
+                "inside": "A chandler's factor who says the order was placed in person and fully paid.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "Chandler's warehouse district outlet: floor stacked with crate-boxed candles, a small counting desk.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:isetiy-ptahnefru",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:isetiy-ptahnefru",
+            "kind": "npc",
+            "name": "Isetiy Ptahnefru",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Elf (Moon / High): Pale, alabaster skin; the most common and friendly of the elves, often dwelling among humans.",
+              "role": "Crafter or Artisan",
+              "quirk": null,
+              "mannerism": "They get noticeably bitter or angry if they are not the center of attention.",
+              "flawSecret": null,
+              "bond": "The backlog of unfiled complaints at the ward house that, if ever processed, would reveal three unresolved matters in their name.",
+              "fear": null,
+              "leverage": null,
+              "want": "Build a fortune by rigging every game they play — and be admired for the winning. — greed, pride",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "female",
+              "coherence": "wrinkled",
+              "archetypeKey": 7,
+              "roleNote": "Their tools carry their whole history.",
+              "roleCls": "craft"
+            },
+            "fields": {
+              "species": "Elf",
+              "role": "Crafter or Artisan",
+              "demeanor": "They get noticeably bitter or angry if they are not the center of attention."
+            },
+            "dm": {
+              "secret": null,
+              "fear": null,
+              "bond": "The backlog of unfiled complaints at the ward house that, if ever processed, would reveal three unresolved matters in their name.",
+              "leverage": null,
+              "want": "Build a fortune by rigging every game they play — and be admired for the winning. — greed, pride",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The NPC's great-grandfather's portrait has started dispensing advice — lips unmoving, voice from behind the canvas — and the advice is good: crop rotations, debt timing, which suitor lies.",
+                "pressure": "It has begun asking small favors in return: turn me to the window; burn juniper on the sill; find out what they built over the old orchard. The favors are getting specific.",
+                "ifIgnored": "The favors complete something. The portrait's last request is an apology, delivered to a name nobody knows, at the orchard site, at dusk — and delivered or not, great-grandfather stops advising and starts warning. The first warning is about the family.",
+                "tags": "haunt, family, bargain",
+                "band": "Strange",
+                "ref": "npc-hook#208"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 2,
+            "ids": [
+              "npc:joan",
+              "npc:eloise-vane"
+            ],
+            "partialIds": [],
+            "band": "sleepy",
+            "count": 2,
+            "hookedId": "npc:isetiy-ptahnefru"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-gilded-rose",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — A single act became a pattern. — It happened once; the telling makes it sound like a habit, and now everyone's braced for a repeat.",
+              "band": "Grounded",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": {
+              "text": "Corpse",
+              "band": ""
+            }
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 4,
+            "band": null,
+            "text": "Quiet, low-key bar",
+            "cells": [
+              "Quiet, low-key bar"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 6,
+            "band": null,
+            "text": "Aristocratic",
+            "cells": [
+              "Aristocratic"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 4,
+            "band": null,
+            "text": "Criminals, smugglers, and fences",
+            "cells": [
+              "Criminals, smugglers, and fences"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 20,
+            "band": null,
+            "text": "Fierce local patriotism",
+            "cells": [
+              "Fierce local patriotism"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 13,
+          "band": null,
+          "text": "Screaming from the kitchen — Lit by colorful, stained-glass lanterns — Strong, bracing sea salt",
+          "cells": [
+            "Screaming from the kitchen",
+            "Lit by colorful, stained-glass lanterns",
+            "Strong, bracing sea salt"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 18,
+          "band": null,
+          "text": "Constantly taps fingers on the bar impatiently.",
+          "cells": [
+            "Constantly taps fingers on the bar impatiently."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 2,
+          "band": null,
+          "text": "A sudden bar brawl erupts between two tables over a game of cards; chairs fly.",
+          "cells": [
+            "A sudden bar brawl erupts between two tables over a game of cards; chairs fly."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-GLOOM-03",
+      "realm": "gloom",
+      "seed": {
+        "label": "VENUE-TAVERN-01/gloom/15",
+        "value": 396143883,
+        "selectionNonce": 15,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:twicebuilt",
+          "kind": "location",
+          "name": "Twicebuilt",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "Twicebuilt: A town that burned and was rebuilt one street to the east, so half its cellars still open onto the charred footprints of the first.",
+            "trait": "A timber town in a managed forest: the loggers work in sections, the sawyer's yard smells of fresh pine, and the reforestation schedule is the only long-term plan anyone takes seriously.",
+            "calamity": "The reforestation schedule shows this section was supposed to rest for another decade; the timber company has begun cutting it early without filing the required variance, and the forest warden found out this morning.",
+            "secret": "The original survey stakes were pulled and reset before the magistrate arrived; the land is registered to someone who does not own it by any honest measure.",
+            "history": "Built by twins, or rivals, who each laid out half — and the halves still don't quite line up.",
+            "archetypeKey": 11,
+            "archetypeLabel": "The motel off the county route",
+            "archetypeNote": "Beds for strangers; the ledger of who passed through.",
+            "space": "roomy",
+            "staff": {
+              "min": 1,
+              "max": 3
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 3,
+              "d": 3
+            },
+            "namePattern": "The old <Family> place"
+          },
+          "fields": {
+            "desc": "A town that burned and was rebuilt one street to the east, so half its cellars still open onto the charred footprints of the first.",
+            "trait": "A timber town in a managed forest: the loggers work in sections, the sawyer's yard smells of fresh pine, and the reforestation schedule is the only long-term plan anyone takes seriously.",
+            "calamity": "The reforestation schedule shows this section was supposed to rest for another decade; the timber company has begun cutting it early without filing the required variance, and the forest warden found out this morning.",
+            "type": "The motel off the county route"
+          },
+          "dm": {
+            "secret": "The original survey stakes were pulled and reset before the magistrate arrived; the land is registered to someone who does not own it by any honest measure.",
+            "secretBand": "Grounded",
+            "history": "Built by twins, or rivals, who each laid out half — and the halves still don't quite line up.",
+            "itemsPool": "realm-items-gloom",
+            "dressing": {
+              "props": "gloom",
+              "surfaces": "gloom"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "The Diner",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Barking Dog",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#65"
+            },
+            "rolled": {
+              "layout": "Translator's cramped office: desk room, a reference library shelf-room, a waiting alcove.",
+              "feature": "A letter on the desk, half-translated, the second half held to the candle and then stopped.",
+              "inside": "A translator who says the second half changed the meaning of the first and she needed to think.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "Translator's cramped office: desk room, a reference library shelf-room, a waiting alcove.",
+              "feature": "A letter on the desk, half-translated, the second half held to the candle and then stopped."
+            },
+            "dm": {
+              "inside": "A translator who says the second half changed the meaning of the first and she needed to think.",
+              "feature": "A letter on the desk, half-translated, the second half held to the candle and then stopped."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-barking-dog",
+            "kind": "location",
+            "name": "The Barking Dog",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "The Diner",
+              "interior": {
+                "layout": "Translator's cramped office: desk room, a reference library shelf-room, a waiting alcove.",
+                "feature": "A letter on the desk, half-translated, the second half held to the candle and then stopped.",
+                "inside": "A translator who says the second half changed the meaning of the first and she needed to think.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "Translator's cramped office: desk room, a reference library shelf-room, a waiting alcove.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:ariuna",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:ariuna",
+            "kind": "npc",
+            "name": "Ariuna",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Human (Northfolk): Tall, fair-skinned humans from the savage north; raven-black or blond hair.",
+              "role": "Farmer or Grower",
+              "quirk": null,
+              "mannerism": "They are dressed completely inappropriately for the weather or the current occasion.",
+              "flawSecret": "His youngest child is not slow — the child is being kept ignorant because a competent heir would expose the way the estate is being managed.",
+              "bond": null,
+              "fear": null,
+              "leverage": null,
+              "want": "Fall properly, ruinously in love again, even knowing how it ended last time. — love, lust",
+              "motivation": null,
+              "roleHint": "tavern-keeper",
+              "gender": "female",
+              "coherence": "wrinkled",
+              "archetypeKey": 1,
+              "roleNote": "Tied to the land and its seasons; the base everyone eats from.",
+              "roleCls": "labor"
+            },
+            "fields": {
+              "species": "Human",
+              "role": "Farmer or Grower",
+              "demeanor": "They are dressed completely inappropriately for the weather or the current occasion."
+            },
+            "dm": {
+              "secret": "His youngest child is not slow — the child is being kept ignorant because a competent heir would expose the way the estate is being managed.",
+              "fear": null,
+              "bond": null,
+              "leverage": null,
+              "want": "Fall properly, ruinously in love again, even knowing how it ended last time. — love, lust",
+              "motivation": null,
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The NPC bought luck from a man at the crossroads — and luck, it turns out, is conserved: the street's misfortunes now flow around the NPC and land on the neighbors. Roof-slates miss them and find someone else.",
+                "pressure": "The ward is doing the math, and the crossroads man has begun offering everyone the same deal. An arms race of fortune is forming, priced in things dearer than coin.",
+                "ifIgnored": "The ward buys in en masse; misfortune concentrates catastrophically on the holdouts — and the crossroads man, business booming, opens a permanent stall.",
+                "tags": "greed, bargain, envy",
+                "band": "Volatile",
+                "ref": "npc-hook#240"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 3,
+            "ids": [
+              "npc:rosman",
+              "npc:sukhbold",
+              "npc:narauna-nomtur"
+            ],
+            "partialIds": [
+              "npc:animal-partial"
+            ],
+            "band": "sleepy",
+            "count": 3,
+            "hookedId": "npc:ariuna"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-barking-dog",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — The cause got simpler than it was. — A tangled, ordinary reason collapsed into one clean villain or one clean stroke of luck.",
+              "band": "Grounded",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": null
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 7,
+            "band": null,
+            "text": "Raucous dive",
+            "cells": [
+              "Raucous dive"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 1,
+            "band": null,
+            "text": "Squalid",
+            "cells": [
+              "Squalid"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 2,
+            "band": null,
+            "text": "Merchants, guild artisans, and traders",
+            "cells": [
+              "Merchants, guild artisans, and traders"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 11,
+            "band": null,
+            "text": "Piety or religious patrons",
+            "cells": [
+              "Piety or religious patrons"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 11,
+          "band": null,
+          "text": "Raucous, off-key singing — Pitch black in the corners, bright at the bar — Rotting vegetation",
+          "cells": [
+            "Raucous, off-key singing",
+            "Pitch black in the corners, bright at the bar",
+            "Rotting vegetation"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 5,
+          "band": null,
+          "text": "Unflappably polite, even when being insulted or threatened.",
+          "cells": [
+            "Unflappably polite, even when being insulted or threatened."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 12,
+          "band": null,
+          "text": "The barkeep is in a screaming match with a supplier over the quality of a recently delivered keg.",
+          "cells": [
+            "The barkeep is in a screaming match with a supplier over the quality of a recently delivered keg."
+          ]
+        }
+      }
+    },
+    {
+      "receiptId": "TVR-GLOOM-04",
+      "realm": "gloom",
+      "seed": {
+        "label": "VENUE-TAVERN-01/gloom/17",
+        "value": 429699121,
+        "selectionNonce": 17,
+        "selectionRule": "first rollPlace invocation must resolve to universal spine key 2 (Watering-hole) or 11 (Lodging)"
+      },
+      "liveIntegratedPath": {
+        "place": {
+          "id": "location:rivenmoor-crossing",
+          "kind": "location",
+          "name": "Rivenmoor Crossing",
+          "provenance": "rolled",
+          "source": null,
+          "rolled": {
+            "setting": "Rivenmoor Crossing: A peat-bog village that exists because the single dry causeway across the moor begins here and ends at the other side.",
+            "trait": "The town's economy runs on a single seasonal crop — hops, saffron, tobacco — that employs most of the population for six weeks of the year and requires them to find other income for the remaining forty-six.",
+            "calamity": "The crop failed this year: late frost, followed by drought, followed by a pest that finished the survivors; the seasonal workforce has nowhere to go and the town has no reserve fund because it has never needed one.",
+            "secret": "The founders agreed to share the spring with the hill-people above; the agreement is in a locked box nobody opens; the hill-people remember it differently than the box says.",
+            "history": "Raised as a quarantine camp for something the maps no longer name — and the gates still lock from the outside.",
+            "archetypeKey": 2,
+            "archetypeLabel": "The diner that closes at 9 sharp",
+            "archetypeNote": "Drink, food, and talk after dark; every side of every feud at adjacent tables.",
+            "space": "roomy",
+            "staff": {
+              "min": 2,
+              "max": 4
+            },
+            "cast": {
+              "anchor": "trade",
+              "ambient": [
+                "service",
+                "margin"
+              ]
+            },
+            "dims": {
+              "w": 4,
+              "d": 4
+            },
+            "namePattern": "<Family>'s <label>"
+          },
+          "fields": {
+            "desc": "A peat-bog village that exists because the single dry causeway across the moor begins here and ends at the other side.",
+            "trait": "The town's economy runs on a single seasonal crop — hops, saffron, tobacco — that employs most of the population for six weeks of the year and requires them to find other income for the remaining forty-six.",
+            "calamity": "The crop failed this year: late frost, followed by drought, followed by a pest that finished the survivors; the seasonal workforce has nowhere to go and the town has no reserve fund because it has never needed one.",
+            "type": "The diner that closes at 9 sharp"
+          },
+          "dm": {
+            "secret": "The founders agreed to share the spring with the hill-people above; the agreement is in a locked box nobody opens; the hill-people remember it differently than the box says.",
+            "secretBand": "Grounded",
+            "history": "Raised as a quarantine camp for something the maps no longer name — and the gates still lock from the outside.",
+            "itemsPool": "realm-items-gloom",
+            "dressing": {
+              "props": "gloom",
+              "surfaces": "gloom"
+            }
+          },
+          "status": {
+            "known": false,
+            "soft": true,
+            "at": "home",
+            "condition": "ok"
+          },
+          "links": []
+        },
+        "typedBuildingRoll": {
+          "ok": true,
+          "type": "tavern",
+          "kit": {
+            "label": "The Diner",
+            "functionLine": "drink, gossip, a room for the night — the town's living room",
+            "proprietorRoleHint": "tavern-keeper",
+            "patronsLane": "locals-and-travelers",
+            "economyTie": "lodging",
+            "hookLane": "rumor",
+            "namePattern": "tavern-name",
+            "delegatesToShop": null,
+            "tavern": true
+          },
+          "name": "The Roaring Horde",
+          "interior": {
+            "kind": "location",
+            "name": "an interior",
+            "provenance": "rolled",
+            "source": {
+              "type": "building",
+              "ref": "building-interior#2"
+            },
+            "rolled": {
+              "layout": "Shopfront, counter, curtained back stall, a trap to the cellar.",
+              "feature": "A strongbox bolted to the floor, its keyhole worn bright.",
+              "inside": "A clerk doing sums he's been told not to discuss.",
+              "kind": "tavern"
+            },
+            "fields": {
+              "desc": "Shopfront, counter, curtained back stall, a trap to the cellar.",
+              "feature": "A strongbox bolted to the floor, its keyhole worn bright."
+            },
+            "dm": {
+              "inside": "A clerk doing sums he's been told not to discuss.",
+              "feature": "A strongbox bolted to the floor, its keyhole worn bright."
+            }
+          }
+        },
+        "approach": {
+          "ok": true,
+          "building": {
+            "id": "location:the-roaring-horde",
+            "kind": "location",
+            "name": "The Roaring Horde",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "buildingType": "tavern",
+              "kit": "The Diner",
+              "interior": {
+                "layout": "Shopfront, counter, curtained back stall, a trap to the cellar.",
+                "feature": "A strongbox bolted to the floor, its keyhole worn bright.",
+                "inside": "A clerk doing sums he's been told not to discuss.",
+                "kind": "tavern"
+              }
+            },
+            "fields": {
+              "desc": "Shopfront, counter, curtained back stall, a trap to the cellar.",
+              "functionLine": "drink, gossip, a room for the night — the town's living room"
+            },
+            "dm": {
+              "proprietorId": "npc:thiala-goltorah",
+              "shopId": null
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": [
+              {
+                "rel": "located-in",
+                "to": "home"
+              }
+            ]
+          },
+          "proprietor": {
+            "id": "npc:thiala-goltorah",
+            "kind": "npc",
+            "name": "Thiala Goltorah",
+            "provenance": "rolled",
+            "source": null,
+            "rolled": {
+              "race": "Elf (Moon / High): Pale, alabaster skin; the most common and friendly of the elves, often dwelling among humans.",
+              "role": "Servant or Maid",
+              "quirk": "Carries a metal flask engraved with initials.",
+              "mannerism": "They use colorful oaths, exclamations, and foul language.",
+              "flawSecret": "Has been collecting fines on a road toll that was officially abolished two years ago; pockets every coin.",
+              "bond": "The quiet agreement with two other journeymen to hold wages firm and not underbid each other, which one of them just broke.",
+              "fear": "Isolation — Being left alone with it.",
+              "leverage": "Owes a favor to someone they hoped never to hear from again. — debt, fear",
+              "want": "Clear the small debt before the neighbors learn to count it. — debt",
+              "motivation": "Sewing a split seam on a leather apron while still wearing it, needle working blind around the side of the torso.",
+              "roleHint": "tavern-keeper",
+              "gender": "female",
+              "coherence": "tangled",
+              "archetypeKey": 5,
+              "roleNote": "Invisible to the powerful, and so hears every secret.",
+              "roleCls": "service"
+            },
+            "fields": {
+              "species": "Elf",
+              "role": "Servant or Maid",
+              "demeanor": "Carries a metal flask engraved with initials.; They use colorful oaths, exclamations, and foul language."
+            },
+            "dm": {
+              "secret": "Has been collecting fines on a road toll that was officially abolished two years ago; pockets every coin.",
+              "fear": "Isolation — Being left alone with it.",
+              "bond": "The quiet agreement with two other journeymen to hold wages firm and not underbid each other, which one of them just broke.",
+              "leverage": "Owes a favor to someone they hoped never to hear from again. — debt, fear",
+              "want": "Clear the small debt before the neighbors learn to count it. — debt",
+              "motivation": "Sewing a split seam on a leather apron while still wearing it, needle working blind around the side of the torso.",
+              "assignedBuilding": true,
+              "hook": {
+                "text": "The NPC has fallen for the portrait-sitter who comes Thursdays — married, charming, and exactly aware of it. The sittings have stretched to three hours, and the portrait has been \"nearly done\" since spring.",
+                "pressure": "The spouse commissioned the portrait as an anniversary gift — due at the feast — and has started asking why it takes so long. The sitter books another session, and another, and pays double for a silence that was never discussed.",
+                "ifIgnored": "The portrait is unveiled at the feast: perfect, loving, and unmistakably painted by someone besotted. Everyone at the table reads it in one look — including the spouse.",
+                "tags": "lust, trade, secret",
+                "band": "Grounded",
+                "ref": "npc-hook#61"
+              }
+            },
+            "status": {
+              "known": true,
+              "soft": false,
+              "at": "home",
+              "condition": "ok"
+            },
+            "links": []
+          },
+          "ambient": {
+            "minted": 3,
+            "ids": [
+              "npc:marcedino",
+              "npc:shaman-mehshahi",
+              "npc:renmondo"
+            ],
+            "partialIds": [],
+            "band": "sleepy",
+            "count": 3,
+            "hookedId": "npc:thiala-goltorah"
+          }
+        },
+        "contact": {
+          "result": {
+            "ok": true,
+            "id": "location:the-roaring-horde",
+            "type": "tavern",
+            "distantWord": {
+              "text": "Distortion — Every teller in the room somehow agrees on a detail that isn't in the ledger at all. — The fact is bound and real; this one specific added detail didn't come from it — and nobody can say where it did.",
+              "band": "Volatile",
+              "lensKind": "Distortion",
+              "fact": {
+                "ledgerId": "prior-fact",
+                "type": "outcome",
+                "day": 35,
+                "text": "The bridge at Far Reach was closed after the flood.",
+                "nodeId": "far"
+              },
+              "dm": {
+                "realFact": "The bridge at Far Reach was closed after the flood."
+              }
+            },
+            "ambientEncounter": null
+          },
+          "buildingStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          },
+          "proprietorStatusAfter": {
+            "known": true,
+            "soft": false,
+            "at": "home",
+            "condition": "ok"
+          }
+        }
+      },
+      "compiledUnwiredDepthLane": {
+        "foundation": {
+          "tavernType": {
+            "id": "tavern-type-d20-source-dmg-p-113",
+            "dice": "d20",
+            "total": 6,
+            "band": null,
+            "text": "Raucous dive",
+            "cells": [
+              "Raucous dive"
+            ]
+          },
+          "qualityTier": {
+            "id": "quality-tier-d6-source-phb-lifestyle-expenses",
+            "dice": "d6",
+            "total": 3,
+            "band": null,
+            "text": "Modest",
+            "cells": [
+              "Modest"
+            ]
+          },
+          "whoItServes": {
+            "id": "who-it-serves-d10",
+            "dice": "d10",
+            "total": 9,
+            "band": null,
+            "text": "Scholars, sages, and magic-users",
+            "cells": [
+              "Scholars, sages, and magic-users"
+            ]
+          },
+          "knownFor": {
+            "id": "known-for-its-d20-source-adapted-from-dmg-p-114",
+            "dice": "d20",
+            "total": 12,
+            "band": null,
+            "text": "High-stakes gambling",
+            "cells": [
+              "High-stakes gambling"
+            ]
+          }
+        },
+        "sensoryAtmosphere": {
+          "id": "tavern-sensory-atmosphere",
+          "dice": "d20",
+          "total": 7,
+          "band": null,
+          "text": "Cheering from a corner game — Warm and unnaturally stifling — Sulfurous or ozone tang",
+          "cells": [
+            "Cheering from a corner game",
+            "Warm and unnaturally stifling",
+            "Sulfurous or ozone tang"
+          ]
+        },
+        "barkeepQuirk": {
+          "id": "tavern-barkeep-quirk",
+          "dice": "d20",
+          "total": 7,
+          "band": null,
+          "text": "Talks in a raspy whisper, forcing patrons to lean in.",
+          "cells": [
+            "Talks in a raspy whisper, forcing patrons to lean in."
+          ]
+        },
+        "inMediaRes": {
+          "id": "tavern-in-media-res",
+          "dice": "d20",
+          "total": 10,
+          "band": null,
+          "text": "A local bully and their thugs are harassing an out-of-town merchant in the corner.",
+          "cells": [
+            "A local bully and their thugs are harassing an out-of-town merchant in the corner."
+          ]
+        }
+      }
+    }
+  ]
+}

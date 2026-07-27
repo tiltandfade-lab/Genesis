@@ -9,6 +9,8 @@ authority:
   - STRUCTURE-KIT-CATALOG.md
 research:
   - ../Reference/Lair-Study/
+preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
+context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---
 
 # SITE 7 — NATURAL LAIR — WORKING SPEC
@@ -282,6 +284,26 @@ need investigation, traversal, rescue, resource, or environmental plans.
 - light-needing inhabitants, nature emissives, and carried-light expectation;
 - occupancy posture, alert, objective, threat band, and creature witnesses.
 
+### Current-roller preservation
+
+This spec consumes the Site 7 record in
+`GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md`.
+
+- `LIVE`: world `master`/`arch`/nearby/faction/pressure axes; compatible Place Spine
+  Wild-margin, Hideout, Ruin, and natural-nearby expressions; wilderness/dungeon skins;
+  dungeon cave, cavern, ledge, fissure, shaft, pool, area, elevation, and feature facts.
+- `LIVE-COMPOSED`: organic, creature-dug, grown, collapsed, flooded, adopted-worked,
+  small-den, and massive-lair expressions assembled from origin, occupant, ecology,
+  material, and host history.
+- `TARGET-ADAPTER`: the Natural Lair grammar translating those facts into mouth,
+  claim/resource, occupant travel, hazard, deck, deeper way, and short-exit truth.
+
+Before implementation, retain one non-karst organic or grown result, one vertical or
+flooded result, and one adopted-worked or unusually large result in addition to the
+walk-in karst seed. The Golden Seed proves a readable mouth, claim, deck, and short exit;
+it is not the family. The receipt preserves upstream world/place/walk facts and the
+room-level area/elevation/feature refs.
+
 ### Semantic blueprint
 
 Commit:
@@ -386,6 +408,26 @@ empty den whose owner is returning. Each touches a circuit and map lever.
   back/side mass and clearance, and retains sockets for drips, roots, stalactites,
   hazards, and collapse.
 
+### Rolled world-context projection
+
+The lair projects biome, ecology, occupant scale, origin, water, entrance light, and
+enclosing mass. Band 1 explains the mouth, terrain support, shell, or true bolt-hole
+portal. Bands 2–3 may show canopy, cliff, cavern, water, host ruin, or regional anomaly.
+Worked background construction requires a licensed adopted/host history.
+
+The first context receipt is
+`../Reference/Golden-Site-World-Context/ROLL-RECEIPTS.json#CTX-LAIR-254`:
+The Gravity-Well + Fieldstone & Mortar. Trees physically growing toward the floating
+magnetic stone are direct world context. Fieldstone appears only on licensed worked or
+adopted structure. Cart traffic needs a route; the quarantined exit must be a real
+route state; taboo, myth, and faction goal do not become scenery.
+
+Context does not invent practical lights, exits, climb routes, prey, or occupants.
+Context-off/on captures retain identical mouth, chambers, routes, hazards, actors,
+knowledge, and ids. The receipt adds `worldContextPlanId`, band/recipe ids,
+mouth/portal/support refs, source refs, omissions, false-affordance rejections, and
+fallbacks.
+
 ## Structure, mechanisms, and surfaces
 
 ### Inherited
@@ -424,7 +466,8 @@ Retain equivalents of:
 
 The receipt records seed/version, grid, fixed camera, standee envelopes, origin and
 occupancy cards, shell/connection/material provenance, clay/tactical/dark/dressed
-surface ids, light state, captures, validation results, and failed candidates.
+surface ids, light state, captures, validation results, failed candidates,
+`rollerLineage`, and `sourceRollRefs`.
 
 ## First visual proof
 

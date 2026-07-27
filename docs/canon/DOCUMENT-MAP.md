@@ -48,17 +48,27 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 | Is the Clayroom fixture trustworthy? (reset ladder CL-R0…CL-R6) | `docs/CLAYROOM-RESET-LADDER.md` | renderer/fixture-trust gate across passes; gates C1H/C1I/Guard Post 1 |
 | Golden Site authority and four status gates | `docs/GOLDEN-SITES-CATALOG.md` | audited briefs, recommendation classes, Proof/MVP/Ideal, FFT/import boundary |
 | Golden Site concepting sessions | `docs/GOLDEN-SITE-CONCEPTING-GUIDELINES.md` | generator-first, visual, plain-English session method |
+| Golden Site ontology and engine marriage | `docs/GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` | story/walk/site/program/transform/materialization/projection authority and portfolio-role taxonomy |
+| Golden Site current-roller lineage and retained compositions | `docs/GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md` | implementation-evidence statuses, per-site preservation records, receipt contract, known wiring gaps |
+| Golden Site rolled world context and background images | `docs/GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md` | playfield/apron/background bands, real-roll source eligibility, reusable plate/card contract, fallbacks, and proof |
 | Golden Site founder choices | `docs/GOLDEN-SITES-FOUNDER-QUEUE.md` | only unresolved taste/build-order proposals |
 | Golden Site evidence and rendered-proof execution | `docs/GOLDEN-SITES-PROOF-QUEUE.md` | targeted source gaps + countable common/site capture contracts |
+| Tavern venue and cross-site routing | `docs/TAVERN-VENUE-ROUTING-BRIEF.md` | live source audit, Public-Service/Hospitality family layering, Site 2/4/8/10 routing, `VENUE-TAVERN-01` proof |
+| Typed building family/table architecture | `docs/BUILDING-PROGRAM-TABLE-FAMILIES.md` | superseding founder ruling: seven coherent chassis families including dedicated Prison/Custody, per-program operation/current-scene/Spice layers, realm doctrine, d300 reduced to untyped/adaptive-reuse role |
+| Typed building family taste samples | `Reference/Building-Family-Table-Samples/` | seven d6/d4 sample tranches, explicit arrangement/chassis eligibility, all fourteen live programs plus custody, and 28 deterministic founder-review receipts |
 | Meshy volumetric donor-model month | `docs/MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md` | 75 families × four variants; references under `Reference/Meshy-Premium-Month-1/`; subordinate to art canon and construction routing |
 | Site 1 Guard Post working build spec | `docs/SITE-1-GUARD-POST-SPEC.md` | consolidated road/threshold/deck/culture generator and receipt contract |
 | Site 2 Camp/Service working build spec | `docs/SITE-2-CAMP-SERVICE-SPEC.md` | center/shelter/terrain routes, life-support circuits, host-safe generation |
 | Site 3 Dormant/Abandoned retained foundation | `docs/SITE-3-DORMANT-CONCEPT.md` | accepted host-transformation concept; full site deliberately sequenced late/last |
 | Site 4 Monastery/Commune working build spec | `docs/SITE-4-MONASTERY-COMMUNE-SPEC.md` | court/arcade/routine/service generator; proposed variant order remains explicit |
 | Site 5 Mine/Workshop working build spec | `docs/SITE-5-MINE-WORKSHOP-CONCEPT.md` | accepted capsule/first build/stretch; detailed circuits, generator, routes, assets, and proof receipt |
+| Site 6 Prison/Custody working build spec | `docs/SITE-6-PRISON-CUSTODY-SPEC.md` | custody/property/access/routine/force generator; outside-in and captured-inside replay contract |
 | Site 7 Natural Lair working build spec | `docs/SITE-7-NATURAL-LAIR-SPEC.md` | origin/ecology/darkness/route generator and short-exit receipt |
 | Site 10 Urban Institution working build spec | `docs/SITE-10-URBAN-INSTITUTION-SPEC.md` | street/frontage/vertical/time generator; research and proposal flags retained |
 | Site 5 research packet | `Reference/Mine-Workshop-Study/` | source ledger + synthesis + local pressure test; declared gaps keep research PARTIAL |
+| Site 6 research + doctrine packet | `Reference/Prison-Custody-Study/` | architecture/operation/property source ledger + synthesis + selected Keeper-House/Ledger-and-Shift proof pair; declared breadth and clay gaps keep research PARTIAL |
+| Tavern real-roll + research packet | `Reference/Tavern-Study/` | twelve deterministic receipts, current-path audit, source ledger, HospitalityVenue synthesis, superseded d300 gate proposal retained for history/adaptive reuse, and cross-program Prison/Smithy coverage audit |
+| Building-type roll stack packet | `Reference/Building-Type-Roll-Study/` | 42 live integrated rolls across all fourteen kits, same-seed realm mirrors, Prison/Custody boundary, and before-state evidence that current building layers are not walk-like reconciled |
 | Pixel sprite register (canon figure register) | `docs/ART-DEPARTMENT.md` | Adam's rulings through 2026-07-24; quote, never paraphrase |
 | New sprite batch packet format | `dev/model-qa/sprite-sheets/PRODUCTION-FORMAT.md` | preferred explicit grammar; subject-based cell aspect; 4:5 character default; giant/titanic 4:6 provisional |
 | Faceted RESERVE register + prop/decal/kit contracts | `docs/ART-DIRECTION-CANON.md` | sibling scope to ART-DEPARTMENT, not a rival |
@@ -108,6 +118,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/BLENDER-MODEL-SPEC.md — current-canon — system-spec/LOCKED(2026-07-08) — external Blender pipeline contract (lane parked)
 - docs/BLOCKWRIGHT.md — superseded — system-spec(2026-07-01) — ⚠ stale self-presentation; pivot recorded only in siblings (BATTLE-THEATER/BATTLE-VISUALS)
 - docs/BREACH.md — current-canon — system-spec/specced(2026-07-02) — breach/nightmare skin; Fray/Spice authority consumed by Wave 10 travel rulings
+- docs/BUILDING-PROGRAM-TABLE-FAMILIES.md — accepted-supporting — system-spec/ACCEPTED-DIRECTION-seven-family-taste-sampler-returned-live-implementation-deferred(2026-07-26) — seven typed chassis families including dedicated Prison/Custody, program layers, realm/Spice ownership, d300 reduced-role ruling, and Manor/Apothecary first authoring pair
 - docs/CAMEO-CAST.md — proposed — system-spec/awaiting-review(2026-07-08)
 - docs/CHANGELOG-ARCHIVE.md — archive — changelog-archive(2026-07-09) — read-only overflow
 - docs/CHANGELOG.md — operations — none — dated chronological record, newest 25
@@ -173,6 +184,9 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/GIT-LFS-MIGRATION.md — operations (done) — runbook/"READY"(2026-07-10) — ⚠ stale: LFS live since 2026-07-18 per DESIGN.md infra note
 - docs/GOLDEN-SITES-CATALOG.md — accepted-supporting — design-study/ACCEPTED-DIRECTION-implementation-unauthorized(audited 2026-07-25) — Golden Site authority; four status gates + audited site briefs; routes detail to composition/trim/material owners
 - docs/GOLDEN-SITE-CONCEPTING-GUIDELINES.md — operations — workflow-guide/ACTIVE(2026-07-25) — generator-first concepting rhythm, visual proof cadence, and session completion checklist
+- docs/GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md — accepted-supporting — system-contract/ACCEPTED-DIRECTION-implementation-unauthorized(2026-07-26) — story/walk/site/program/transform/materialization/projection authority split; classifies the twelve as coverage proof roles and ordinary venues as shared-compiler programs
+- docs/GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md — audit — design-audit/ACTIVE-IMPLEMENTATION-EVIDENCE(2026-07-25) — current live/composed/unwired source inventory, retained site compositions, receipt contract, and implementation gaps
+- docs/GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md — accepted-supporting — system-spec/ACCEPTED-DIRECTION-implementation-unauthorized(2026-07-25) — real-roll context apron/background image/style contract and shared Golden Site proof
 - docs/GOLDEN-SITES-FOUNDER-QUEUE.md — operations — decision-queue/OPEN(2026-07-25) — six nonblocking founder proposals; never stores research or proof work
 - docs/GOLDEN-SITES-PROOF-QUEUE.md — operations — execution-queue/ACTIVE(2026-07-25) — targeted evidence and retained-fixture acceptance contracts
 - docs/GLOOM-KEY.md — current-canon — system-spec/SPEC-locked-throughline(2026-07-08)
@@ -309,6 +323,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/SITE-3-DORMANT-CONCEPT.md — accepted-supporting — concept-foundation/DEFERRED-LATE(2026-07-25) — retained host-transformation foundation; full work deliberately waits for donor sites
 - docs/SITE-4-MONASTERY-COMMUNE-SPEC.md — accepted-supporting — working-site-spec/FOUNDER-BRIEF-PARTIAL(2026-07-25) — court/routine family and generator with proposal flags
 - docs/SITE-5-MINE-WORKSHOP-CONCEPT.md — accepted-supporting — working-site-spec/PARTIAL(2026-07-25) — detailed Mine/Workshop Proof→MVP→Ideal build and proof contract; exact tuning clay-deferred
+- docs/SITE-6-PRISON-CUSTODY-SPEC.md — accepted-supporting — working-site-spec/RESEARCH-FOUNDER-BRIEF-PARTIAL(2026-07-25) — prison/custody family, selected Keeper-House/Ledger-and-Shift doctrine proof, four-class property continuity, access/force circuits, and dual-entry contract
 - docs/SITE-7-NATURAL-LAIR-SPEC.md — accepted-supporting — working-site-spec/PASS-PASS-PASS-CLAY-OPEN(2026-07-25) — origin/ecology/darkness family, generator, and receipt
 - docs/SITE-10-URBAN-INSTITUTION-SPEC.md — accepted-supporting — working-site-spec/PARTIAL(2026-07-25) — street/frontage/time family and generator with research/proposal flags
 - docs/SKIN-GRANTS.md — current-canon — system-spec/BUILT(2026-07-02)
@@ -348,6 +363,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/TAG-VOCABULARY.md — current-canon — registry/canon(2026-07-08)
 - docs/TAROT-2.md — proposed — system-spec/SPEC-LOCKED-deferred(2026-07-06) — successor to TAROT-SESSION (schema layer; one-directional)
 - docs/TAROT-SESSION.md — accepted-supporting — system-spec/specced(2026-07-01) — canonical for DRAW/vector/roller-hook
+- docs/TAVERN-VENUE-ROUTING-BRIEF.md — accepted-supporting — routing-brief/ACCEPTED-DIRECTION-typed-family-table-architecture-founder-ruled-implementation-unauthorized(2026-07-26) — live tavern audit, Public-Service/Hospitality layering, cross-site routing, layered-control example, and `VENUE-TAVERN-01` retained fixture
 - docs/THEATER-NEXT.md — proposed — system-spec/SPEC-LOCKED-deferred(2026-07-06) — overlaps later-built STAGE waves; reconcile at build
 - docs/TIER-SCOPE.md — current-canon — system-spec/locked(2026-06-26)
 - docs/TIYL-DEEPENING.md — proposed — system-spec/build-ready(2026-07-01)
@@ -359,7 +375,7 @@ Classification vocabulary: `current-canon` · `accepted-supporting` · `implemen
 - docs/UI-VISION-QUEST.md — implementation-evidence — design-spec/executing(2026-07-11) — verify completion vs CHANGELOG
 - docs/UNIFICATION-WAVE.md — proposed — system-spec/SPECCED(2026-07-10) — ⚠ "art direction is CLOSED" claim contradicted by later activity
 - docs/UNIT-STANDARDIZATION-REPORT.md — generated-report — none — snapshot only
-- docs/URBAN-FABRIC.md — proposed — system-spec/specced(2026-07-02) — future town authority = Wave 10 F10.9h district-graph law
+- docs/URBAN-FABRIC.md — implementation-evidence/current built subsystem — system-spec/BUILT(batch-3 unit 9; re-audited 2026-07-26) — typed buildings, soft→hard lifecycle, lazy districts, and tavern story surfaces are live; future town graph authority = Wave 10 F10.9h, Golden semantic/spatial venue composition remains unbuilt
 - docs/VISUAL-ASSET-QUEUE.md — superseded — reference(2026-07-08) — props→PLACE-ASSET-QUEUE; creatures→sprite transition
 - docs/VQ2-RESPEC.md — operations — build-plan/ACTIVE(2026-07-15)
 - docs/WALK-CARD-DEALING.md — proposed — system-spec/proposed-runtime-seam(2026-07-12) — secret/discovery semantics ceded to wave-04 (07-22 note)

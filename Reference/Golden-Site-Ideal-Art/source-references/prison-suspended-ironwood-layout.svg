@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e9c87b"/>
+    </marker>
+    <style>
+      .wood{fill:#7a5136;stroke:#241d19;stroke-width:10;stroke-linejoin:round}
+      .ironwood{fill:#4d684e;stroke:#241d19;stroke-width:10;stroke-linejoin:round}
+      .glass{fill:#48657a;stroke:#17232a;stroke-width:8}
+      .chain{fill:none;stroke:#2e3537;stroke-width:18;stroke-linecap:round}
+      .rope{fill:none;stroke:#a17a43;stroke-width:12;stroke-linecap:round}
+      .route{fill:none;stroke:#e9c87b;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+      .label{font:700 28px Arial,sans-serif;fill:#f3eee5;text-anchor:middle}
+      .small{font:600 22px Arial,sans-serif;fill:#e5d9c9;text-anchor:middle}
+      .title{font:700 42px Arial,sans-serif;fill:#f3eee5}
+      .meta{font:500 23px Arial,sans-serif;fill:#c7c1b6}
+    </style>
+  </defs>
+  <rect width="1600" height="1000" fill="#182128"/>
+  <text x="80" y="70" class="title">RC-PRISON-01 — Suspended Living-Ironwood Solitary Cell</text>
+  <text x="80" y="108" class="meta">seed 6198 • The Shimmering Maw • fresh deterministic reconstruction, not the missing save</text>
+
+  <path d="M0 760 C220 680 325 735 500 800 C730 885 930 790 1170 815 C1350 835 1485 890 1600 850 V1000 H0 Z" class="glass"/>
+  <path d="M40 900 C250 790 440 950 680 855 C910 760 1125 920 1570 790" fill="none" stroke="#9c5f94" stroke-width="22" opacity=".7"/>
+  <path d="M0 810 C220 880 405 770 620 900 C850 1030 1160 740 1600 905" fill="none" stroke="#c5984d" stroke-width="18" opacity=".75"/>
+  <text x="1260" y="913" class="label">FUSED GLASS CRATER / VOID</text>
+
+  <path class="chain" d="M250 140 C225 260 220 350 210 455"/>
+  <path class="chain" d="M455 130 C465 260 470 345 480 455"/>
+  <path class="chain" d="M1070 105 C1080 235 1090 315 1120 445"/>
+  <path class="chain" d="M1350 115 C1320 225 1315 330 1320 455"/>
+
+  <path class="ironwood" d="M115 455 L520 420 L575 680 L95 710 Z"/>
+  <text x="325" y="535" class="label">KEEPER / WINCH PLATFORM</text>
+  <text x="325" y="575" class="small">remote property chest + lever</text>
+  <circle cx="445" cy="630" r="40" fill="#b38b50" stroke="#241d19" stroke-width="8"/>
+  <rect x="190" y="595" width="135" height="75" rx="8" class="wood"/>
+
+  <path class="wood" d="M525 540 L1005 515 L1018 595 L535 625 Z"/>
+  <path d="M600 555 L955 535" class="route"/>
+  <text x="770" y="500" class="small">narrow 5 × 10 ft gangway</text>
+
+  <path class="rope" d="M1030 215 C1035 330 1040 420 1075 510"/>
+  <path class="rope" d="M1355 210 C1345 330 1340 415 1330 505"/>
+
+  <path class="ironwood" d="M1030 500 L1340 485 L1390 725 L1015 750 Z"/>
+  <path d="M1080 510 C1110 560 1075 650 1105 735 M1170 500 C1195 555 1160 650 1190 738 M1260 495 C1290 560 1250 645 1280 730 M1340 500 C1360 565 1325 650 1350 718" fill="none" stroke="#8bab70" stroke-width="24" stroke-linecap="round"/>
+  <path d="M1050 550 C1140 520 1240 555 1350 520 M1038 645 C1145 610 1260 655 1370 620" fill="none" stroke="#705038" stroke-width="18" stroke-linecap="round"/>
+  <text x="1200" y="620" class="label">GROWN WOOD CELL</text>
+  <text x="1200" y="657" class="small">solitary crate / lattice</text>
+
+  <path d="M1400 470 L1550 390 L1600 570 L1450 655 Z" class="ironwood"/>
+  <text x="1495" y="485" class="small">village span</text>
+
+  <g transform="translate(90 845)">
+    <rect width="920" height="82" rx="12" fill="#26323a" stroke="#77828a" stroke-width="3"/>
+    <text x="30" y="32" class="meta">ordinary roll path: place + material + jailhouse + hanging cage</text>
+    <text x="30" y="63" class="meta">the incompatible theatre-interior row is retained in the receipt but not consumed</text>
+  </g>
+</svg>

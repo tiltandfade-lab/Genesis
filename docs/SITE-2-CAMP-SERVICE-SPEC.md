@@ -1,8 +1,12 @@
+STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+
 ---
 type: working-site-spec
 created: 2026-07-25
-updated: 2026-07-26
-status: WORKING SPEC — research PASS; founder and brief PARTIAL; clay OPEN
+updated: 2026-07-27 (gap-close addendum added; original rulings unchanged — see addendum
+  section for scope)
+status: WORKING SPEC — research PASS; founder and brief PARTIAL; clay OPEN (gap-close pass
+  2026-07-27 proposes no status change — see addendum)
 site: 2 — camp / service
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 authority:
@@ -11,11 +15,182 @@ authority:
   - STRUCTURE-KIT-CATALOG.md
 research:
   - ../Reference/Camp-Study/
+  - ../Reference/Camp-Service-Study-0727/synthesis.md
+  - ../Reference/Camp-Service-Study-0727/MEASURED-REFERENCES.md
+  - ../Reference/Camp-Service-Study-0727/BREADTH-SWEEP.md
+  - ../Reference/Camp-Service-Study-0727/FFT-COHORT-COMPARISON.md
 preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
 context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---
 
 # SITE 2 — CAMP / SERVICE — WORKING SPEC
+
+## Gap-closure addendum (2026-07-27 campaign) — authority, honest gates, and the founder packet
+
+This section is additive. It changes no ruling, invariant, capsule, deck, growth ladder, or
+operating-circuit definition above or below it. It exists to hold the §1-equivalent authority
+statement the working-spec standard requires (guidelines step 8, section 1: "authority, honest
+gates, ruled decisions, and unresolved proposals") for the evidence added this pass, and to
+carry the founder-packet deliverable the 2026-07-27 campaign brief requested.
+
+**Authority.** This addendum is authored under the 2026-07-27 golden-sites campaign brief:
+"Site 2 — EVIDENCE-THICKENING toward the proposed rulings: hosted-camp mechanism + build
+orders are PROPOSED pending Adam. Do NOT self-rule." It is subordinate to every ruling already
+recorded in this document and in `GOLDEN-SITES-CATALOG.md`. **Nothing in this addendum rules
+the permanence ladder's build order, the tent-kit order, or the guest-family mechanism.** Every
+recommendation below is offered under the generator principle — a proposed build order with
+its reasoning shown, per `GOLDEN-SITES-CATALOG.md` line 586 ("founder questions arrive as
+proposed build orders, not as A-or-B choices").
+
+**Honest gates.** The catalog's status-gate table (2026-07-25 audit) records Site 2 as
+`RESEARCHED: PASS`, `FOUNDER-RULED: PARTIAL`, `BRIEF-CONGRUENT: PARTIAL`, `CLAY-PROVED: OPEN`,
+with the stated reason: "hosted-camp mechanism and build orders remain proposed." This
+addendum does not change that reading — the depth law's real-image reference lane and a
+second, service-economy-angle FFT comparison are new this pass, but the prior 2026-07-24
+Camp Study had already delivered a breadth sweep, image lane, and FFT cohort read, so
+`RESEARCHED` was already `PASS` before this pass began. **Proposed status-gate values
+(PROPOSED — pending Codex adversarial review, not self-declared final):**
+
+| gate | catalog value (2026-07-25) | proposed value (this pass) | reason |
+|---|---|---|---|
+| RESEARCHED | PASS | PASS (unchanged) | already passed on the prior study's breadth/image/FFT work; this pass adds a service-economy-specific thickening layer, not a first pass |
+| FOUNDER-RULED | PARTIAL | PARTIAL (unchanged) | no card selection was ruled this pass; the founder packet below is evidence for Adam's decision, not a decision |
+| BRIEF-CONGRUENT | PARTIAL | PARTIAL (unchanged) | this pass adds an addendum; it does not restructure the existing fifteen-section standard |
+| CLAY-PROVED | OPEN | OPEN (unchanged) | no fixture was built this pass |
+
+This table is a proposal recorded in this working spec only. The shared
+`GOLDEN-SITES-CATALOG.md` status-gate table is untouched by this pass.
+
+**Ruled decisions.** None added this pass. Every finding in the 2026-07-27 packet is offered
+as evidence or as a `PROPOSED` candidate.
+
+### The founder packet — evidence for/against the three proposed build orders
+
+Per THE GENERATOR PRINCIPLE, each entry records the proposed build order, the evidence for and
+against it, a recommendation and its reason, what the choice changes later, whether it is easy
+to revise, and what would let Adam judge it directly. Full citations and reasoning:
+`../Reference/Camp-Service-Study-0727/MEASURED-REFERENCES.md`.
+
+#### FQ-CS-1 — Does the permanence-ladder implementation order hold?
+
+**Proposed build order (unchanged):** Exterior Rung 0 Golden Seed → Rung 1 traces →
+militarized Rung 0–1 → Rung 2 waystation → hosted expressions.
+
+**Evidence for.** Three historically unrelated real service systems — the Roman `cursus
+publicus` (mutatio/mansio), Scottish drove-road stances/inns, and the Pony Express relay/home-
+station network — independently converge on the same two-tier minimal-stop/rooted-stop shape
+the ladder already proposes, at real, cited spacing and staffing numbers. Two of the three
+real rung-2 buildings this pass photographed still stand today (`LICENSE-LEDGER.md` CS-02,
+CS-03).
+
+**Evidence against / complicating.** The real systems are mostly linear-network properties
+(a state or company laying out fixed spacing at once), not per-site organic growth — only the
+drove-road case is documented as growing organically from a bare stance into a built inn. This
+does not argue against the proposed order; it argues that the already-ruled "two rollers, one
+technology" split (camp and waystation are separate roller entry points) correctly handles
+both the organic-growth case the proposed order tests first and the institution-built case it
+does not test first.
+
+**Recommendation:** keep the proposed order — it tests the harder, more informative organic-
+growth case first, per the guidelines' step 4 learning-value test. Add one cheap, free-once-
+rolled card fact the real evidence surfaces: an `organic-grown` vs. `institution-built` origin
+tag on rung 2, since real waystations visibly differ by which they are.
+
+**What it changes later:** the origin tag is additive to the generator's semantic blueprint
+(§"Semantic blueprint," provenance field) and does not touch any zone, circuit, or rejection
+rule. **Easy to revise?** Yes — it is a card fact, not a structural rule.
+
+**Needs to judge it:** a rung-2 golden-seed capture with the origin tag exposed in the
+provenance receipt, reviewed alongside an ordinary rung-2 capture without it.
+
+#### FQ-CS-2 — Does the tent-kit build order hold?
+
+**Proposed build order (unchanged):** bell/cone → Roman troop tent → the low open span → the
+dome/bender.
+
+**Evidence for.** All four forms are real, well-documented, independently sourced traditions.
+The British Army bell tent is a real standardized, mass-produced, ordered-row military form
+(photographed this pass, `LICENSE-LEDGER.md` CS-05, with CS-06 pending). The Roman `papilio`
+is confirmed 10 Roman feet square, closing a citation gap the working spec previously asserted
+without a source. The Bedouin `bayt al-sha'ar` is confirmed genuinely open-fronted with
+adjustable walls, directly supporting the "room you can shoot into" claim. The Romani bender
+is a real, fast-erect, expedient dome form.
+
+**Evidence against / complicating.** The dome/bender is arguably the cheapest and fastest of
+the four forms to build, by construction-cost logic — the opposite end of the proposed order
+from where it sits. This is a real, arguable tension, not a research-settled question.
+
+**Recommendation:** keep the proposed order — the same reasoning the SITE-11 founder packet
+used for its own build-order tension (`FQ-11-1`): the cheapest-to-build and the most-
+informative-to-build first are different questions, and a single dome teaches nothing about
+ordered-row placement or open-front sightline mechanics that the bell/cone and Roman tent
+teach immediately.
+
+**What it changes later:** nothing structural — this is sequencing, not exclusion; all four
+forms remain in the roller regardless of build order.
+
+**Easy to revise?** Yes — sequencing cost only.
+
+**Needs to judge it:** the existing first-visual-proof plan already calls for "three genuinely
+different shelter families" exposed in the dressed capture (working spec, "First visual
+proof"); reviewing that capture against the order above is sufficient.
+
+#### FQ-CS-3 — Does the guest-family (hosted-camp) mechanism's cap language hold?
+
+**Proposed mechanism (unchanged, still `PROPOSED — Fable's mechanism, awaiting redline`):**
+host-governed caps; dungeon caps stay at rung ≤1; urban caps "loosen" toward an "impoverished/
+shanty quarter" expression.
+
+**Evidence for.** Jordan's Zaatari refugee camp is a real, bounded, host-governed camp (state
+land, UNHCR-administered — structurally "borrowing someone else's floor") that grew a
+substantial rooted service economy (an unplanned market street, an estimated $12.7M/month
+informal economy) while remaining, administratively, a camp rather than a municipality —
+photographed this pass at both the aerial/grid scale (`LICENSE-LEDGER.md` CS-08) and, pending,
+the ground/shop-row scale (CS-09). This is direct support for the mechanism's core claim.
+
+**Evidence against / complicating.** The same case shows the proposed caps may be too soft on
+the upper end: Zaatari's decade-long drift toward de facto permanent-city status is the live,
+empirical version of a boundary `SETTLED-LIFE-SITES-PROGRAM.md` §3.4 already names as open and
+unclaimed by any of the twelve sites (a permanent poor-quarter/warren, distinct from Site 2's
+temporary case). The FFT comparison in this pass's packet independently corroborates the
+boundary: FFT's closest analog (Slums in Dorter) reads as rooted, addressed-street
+architecture, not a borrowed-ground camp — a visually testable version of where the hand-off
+should occur.
+
+**Recommendation:** add an explicit exit condition to the guest-family mechanism — a named
+point (population, duration, or a visible shift from unaddressed tent rows to addressed
+frontage) at which a hosted urban camp hands off to `SETTLED-LIFE-SITES-PROGRAM.md`'s
+permanent-slum entry instead of continuing to loosen Site 2's own cap. This is a proposal, not
+a ruling; the exact threshold is a taste/product-direction choice, not something research can
+settle.
+
+**What it changes later:** this is the highest-consequence of the three questions — it decides
+whether a long-running hosted camp remains Site 2's responsibility indefinitely or eventually
+becomes a different program's responsibility. Getting it wrong either lets Site 2 quietly grow
+into an unbounded settlement generator, or strands a long-lived camp with no promotion path.
+
+**Easy to revise?** Moderately — it is a threshold, not a structural mechanism, but every
+system built against "Site 2 owns hosted urban camps indefinitely" would need rework if the
+threshold is added later instead of now.
+
+**Needs to judge it:** a side-by-side of an early-stage hosted urban camp capture (tent rows,
+no addressed frontage) against a late-stage one (addressed frontage, rooted shopfronts) so the
+visible difference the exit condition would key on can be judged directly, rather than argued
+in prose.
+
+### Two small, non-blocking roster additions (proposed, not ruled)
+
+Surfaced by this pass's breadth sweep and cross-checked against live Engine tables in
+`intel-sites/SITE-2-SPAWNABLE.md`:
+
+1. A **sutler/vivandière-class occupant role** — a merchant who trades inside a camp
+   regardless of who controls it, distinct from the existing occupancy roster's "who runs the
+   camp" roles. The live `Trader or Peddler` NPC Role (rows 56–59) could carry this reading
+   without a new table.
+2. A **"trade rendezvous / fair" occupancy variant** inside the existing "Large — customary or
+   organized camp" band, Rung 0–1 only — large, temporary, trade-dominant, and never rooted,
+   distinct from "caravan waystation" (rooted/service-oriented) and from military/bandit. The
+   Rocky Mountain fur-trade rendezvous is the real case behind this proposal.
 
 ## Authority and honest status
 

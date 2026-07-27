@@ -1,8 +1,10 @@
+STATUS: DRAFT — PENDING CODEX ADVERSARIAL REVIEW (2026-07-27 campaign)
+
 ---
 type: working-site-spec
 created: 2026-07-25
-updated: 2026-07-26
-status: WORKING SPEC — research PASS; founder and brief PARTIAL; clay OPEN
+updated: 2026-07-27
+status: WORKING SPEC — research PASS (evidence-thickened 2026-07-27); founder and brief PARTIAL; clay OPEN
 site: 4 — monastery / commune
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 authority:
@@ -11,6 +13,8 @@ authority:
   - STRUCTURE-KIT-CATALOG.md
 research:
   - ../Reference/Monastery-Study/
+  - ../Reference/Monastery-Study-0727/
+spawnable: intel-sites/SITE-4-SPAWNABLE.md
 preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
 context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---
@@ -46,6 +50,19 @@ Still proposed:
 
 All variants are admitted. Their implementation order remains founder-facing and this
 spec must not promote the proposal to a ruling.
+
+**2026-07-27 evidence-thickening addendum.** `../Reference/Monastery-Study-0727/` broadens the
+cultural sweep to eight monastic/communal building traditions (four new: Coptic/Egyptian,
+Ethiopian/Aksumite, Japanese Zen Buddhist, Islamic Sufi; three new commune variants never
+researched before this pass: American Shaker, Oneida, Israeli kibbutz) and adds real measured
+cell/refectory/cloister dimensions plus Genesis's own live Monastery Cloister / Gate House
+scene-frame numbers (`Reference/Monastery-Study-0727/MEASURED-REFERENCES.md` §5). Its
+`synthesis.md` §2 produces a decision-ready founder packet for the M1/M2/M4/M5 build order
+below — every question stated with alternatives, a recommendation, and a reason. **The build
+order remains PROPOSED; this addendum makes it cheap to rule, it does not rule it.** One
+out-of-frame finding (the Japanese Zen *shichidō garan* is a sequence of separate halls, not a
+wrapped-courtyard chassis) is flagged as an open classification question, not folded into any
+existing category.
 
 A courtyard inn or hostel is a licensed **guest program** over this chassis, not proof
 that all taverns are Site 4 institutions. Its hospitality/lodging obligations come from
@@ -559,9 +576,21 @@ non-Christian communal examples; guest institutions after their own evidence/pro
 
 ## Remaining evidence and proof gaps
 
-- obtain measured arcade bay/section before dimensions become cards;
-- broaden cultural and non-Christian/non-European communal evidence;
-- obtain guest-institution circulation evidence;
-- rule M1/M2/M4/M5 implementation order;
+- ~~obtain measured arcade bay/section before dimensions become cards~~ — **evidence-thickened
+  2026-07-27**: real cell/refectory/cloister dimensions plus Genesis's own live Monastery
+  Cloister/Gate House scene-frame numbers now exist (`Reference/Monastery-Study-0727/
+  MEASURED-REFERENCES.md`); no arcade bay has been clay-measured, so this remains open at the
+  clay-proof gate even though the research gate is closed;
+- ~~broaden cultural and non-Christian/non-European communal evidence~~ — **evidence-thickened
+  2026-07-27**: four new monastic building cultures and three new commune variants now
+  researched and imaged (`Reference/Monastery-Study-0727/BREADTH-SWEEP.md`); still open —
+  broader African, South/Southeast Asian, and pre-Columbian communal evidence beyond this pass's
+  eight traditions;
+- obtain guest-institution circulation evidence (unchanged — still open);
+- rule M1/M2/M4/M5 implementation order — **now decision-ready**
+  (`Reference/Monastery-Study-0727/synthesis.md` §2), still requires Adam's ruling;
+- resolve the Japanese Zen *shichidō garan* classification question (new, 2026-07-27: is a
+  sequence-of-halls institution a Site 4 chassis variant or an out-of-scope host, per
+  `GOLDEN-SITE-CONCEPTING-GUIDELINES.md` step 0.5?);
 - clay-prove court size, stair width, arcade fit, roofs, camera, plans, and lighting; and
 - build and retain the fixture in `GOLDEN-SITES-PROOF-QUEUE.md`.

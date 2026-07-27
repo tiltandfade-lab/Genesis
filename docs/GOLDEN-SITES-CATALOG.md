@@ -490,13 +490,20 @@ the four gates.
 | site | researched | founder-ruled | brief-congruent | clay-proved | current reason |
 |---|---|---|---|---|---|
 | 1 Guard Post | PASS | PASS | PASS | OPEN | recent-repair card and final material/culture taste ride the proof; no rendered fixture has passed |
-| 2 Camp / Service | PASS | PARTIAL | PARTIAL | OPEN | hosted-camp mechanism and build orders remain proposed |
-| 4 Monastery / Commune | PASS | PARTIAL | PARTIAL | OPEN | M1/M2/M4/M5 build order is proposed; cultural breadth and metric evidence remain thin |
-| 5 Mine / Workshop | PARTIAL | PARTIAL | PARTIAL | OPEN | working spec and initial source-led synthesis exist; direct tactical-map and broader measured/cultural evidence gaps remain; no rendered proof exists |
-| 6 Prison / Custody | PARTIAL | PARTIAL | PARTIAL | OPEN | initial architecture/operation/property study and first doctrine pair returned; global measured breadth, later doctrines, implementation reconciliation, and clay proof remain open |
+| 2 Camp / Service | PASS | PARTIAL | PARTIAL | OPEN | hosted-camp mechanism and build orders remain proposed; 2026-07-27 pass adds cross-cultural permanence-ladder + tent-kit sourcing and surfaces a guest-family exit-condition question |
+| 3 Dormant / Abandoned | PARTIAL | OPEN | PARTIAL | OPEN | 2026-07-27: first depth-law pass returned (breadth sweep, 12-image ledger, FFT comparison, live-roller audit); decay ladder, aperture law, and funerary-host boundary are all proposed and unruled; no rendered fixture exists |
+| 4 Monastery / Commune | PASS | PARTIAL | PARTIAL | OPEN | M1/M2/M4/M5 build order is proposed, now decision-ready; 2026-07-27 pass widens cultural breadth to eight monastic/communal traditions with measured sources; no rendered fixture exists |
+| 5 Mine / Workshop | PASS | PARTIAL | PARTIAL | OPEN | 2026-07-27: FFT mine/workshop cohort and dated measured sources close the direct tactical-map gap (proposed promotion to PASS); Site 5/BF-SHOP-WORKSHOP boundary and the 10-ft haul hypothesis remain open |
+| 6 Prison / Custody | PARTIAL | PARTIAL | PARTIAL | OPEN | initial architecture/operation/property study and first doctrine pair returned; 2026-07-27 pass adds cross-cultural evidence (Qing yamen, Edo jail) and a second doctrine pair raising one new open question; global measured breadth, reconciliation, and clay proof remain open |
 | 7 Natural Lair | PASS | PASS | PASS | OPEN | congruent brief and current diagram now agree; no rendered proof exists |
-| 10 Urban Institution | PARTIAL | PARTIAL | PARTIAL | OPEN | body/culture studies returned, but load-bearing construction and visual gaps remain |
-| 3/8/9/11/12 | OPEN | OPEN | OPEN | OPEN | not yet through the depth-law pipeline; Site 3's transform concept and Site 8's transform ontology are retained, but neither has completed the full site pipeline |
+| 8 Layered Control | PARTIAL | PARTIAL | PARTIAL | OPEN | 2026-07-27: first depth-law pass returned (breadth sweep, 12-image lane, FFT cohort, engine audit); eligibility predicate and expression ladder are founder-ruled, but the three-host proof set and build order are proposed and founder question Q2 is potentially blocking; no culture study, no clay fixture |
+| 9 Contested Fortress | PARTIAL | OPEN | PARTIAL | OPEN | 2026-07-27: breadth sweep, 15-image lane, FFT fortress cohort, and live-roller audit returned; measured demand is for interiors the image lane lacks; no founder ruling of any kind exists; no clay fixture |
+| 10 Urban Institution | PARTIAL | PARTIAL | PARTIAL | OPEN | body/culture studies returned, but load-bearing construction and visual gaps remain; 2026-07-27 gap-closure addendum adds construction evidence and an FFT civic-assembly grammar; market-hall/BF-CIVIC-AUTHORITY boundary stays open |
+| 11 Mixed Scale / Dragon Domain | PARTIAL | OPEN | PARTIAL | OPEN | 2026-07-27: first depth-law pass returned; measured demand is prop-shaped, not site-shaped; two-body law, aperture pair, hoard terrain, and the Site-12 boundary are all proposed and unruled; nothing rendered |
+| 12 Anomalous / Living / Mobile | PARTIAL | OPEN | PARTIAL | OPEN | 2026-07-27: depth law's three lanes served and demand re-measured; no measured drawing, no culture study, family F has no evidence; every build order proposed; no fixture rendered |
+
+2026-07-27 campaign rows are lane-proposed and PENDING CODEX ADVERSARIAL REVIEW — the
+review may demote any value.
 
 The detailed work queue and countable capture contract live in
 `GOLDEN-SITES-PROOF-QUEUE.md`.

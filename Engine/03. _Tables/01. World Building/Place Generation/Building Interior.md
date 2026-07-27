@@ -13,9 +13,9 @@ remembers: codex
 
 #building-interior
 
-> **The inside of a building** — connected spaces, a notable feature, and who or what is inside, for any building the players enter. One roll so the DM never has to invent an interior. The spice ladder escalates the SPACE ITSELF (ordinary rooms -> a hidden room -> impossible geometry). **d300 — 300 unique rows**, spice-graded 198/60/27/12/3 (66/20/9/4/1 -> Grounded/Textured/Strange/Volatile/Mythic), Commitment ceiling. Authored 2026-06-24.
+> **The inside of a building** — connected spaces, a notable feature, and who or what is inside, for any building the players enter. One roll so the DM never has to invent an interior. The spice ladder escalates the SPACE ITSELF (ordinary rooms -> a hidden room -> impossible geometry). **d301 — 301 unique rows**, spice-graded 198/60/27/12/4 (65.8/19.9/9.0/4.0/1.3 -> Grounded/Textured/Strange/Volatile/Mythic), Commitment ceiling. Authored 2026-06-24; row 301 added 2026-07-27 by the spawn audit (docs/TABLE-SEEDING-REVIEW-0727.md) — a deliberate Mythic-share bump from 1.00% to 1.33%, no existing row touched.
 
-| d300 | Band | Layout (connected spaces) | Notable Feature | Who / What Is Inside |
+| d301 | Band | Layout (connected spaces) | Notable Feature | Who / What Is Inside |
 | --- | --- | --- | --- | --- |
 | 1 | Grounded | A front room, a back room, a ladder to a sleeping loft. | A hearth banked low, a kettle still warm on the hook. | An old woman who was plainly expecting someone else. |
 | 2 | Grounded | Shopfront, counter, curtained back stall, a trap to the cellar. | A strongbox bolted to the floor, its keyhole worn bright. | A clerk doing sums he's been told not to discuss. |
@@ -317,5 +317,6 @@ remembers: codex
 | 298 | Mythic | The inside is a city under a brass sky; the door behind you is now a hundred feet up a tower wall. | Rain here falls upward, and it is raining. | A figure on a throne older than the country, who has been waiting for whoever holds this door open. |
 | 299 | Mythic | The building contains a single corridor that circles back on itself with no apparent center -- walking it brings you past the same doors in a different order each time. | One door, always different, is always the one that leads to the outside. Finding it requires not looking for it. | The corridor is occupied by travelers who entered at different times and have been walking since; they trade supplies and information and are calm. |
 | 300 | Mythic | Beyond the threshold is a space the size of a cathedral nave, floored with soil, roofed with the underside of the night sky -- stars visible, but wrong stars in the wrong season. | A tree grows from the floor to the ceiling, old past any natural reckoning, and one door is set into its trunk. | In the roots, something that was once a person, woven into the wood, speaking in a voice like growth rings, answering any question put to it with absolute truth -- about things that haven't happened yet. |
+| 301 | Mythic | The warren has no oldest street. Walk it end to end and every resident points to a different lane as the first one ever built — and every lane has proof: a cornerstone dated in an old hand, a grandmother buried under the threshold, a door that has always, always been that color. | The town's own founding charter, consulted on the spot, agrees with whichever lane you asked about last. | An old woman resetting a single loose cobblestone that she has reset, she says without any doubt at all, every day of her life and her mother's life before her — and the stone is always the first stone. |
 
 ^building-interior

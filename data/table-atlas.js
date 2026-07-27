@@ -947,7 +947,10 @@ const TABLE_ATLAS_DATA = {
     "category": "Unsorted",
     "consumers": {
       "chain": [],
-      "code": [],
+      "code": [
+        "animal-knowledge-scope.js",
+        "animal-realm-skins.js"
+      ],
       "procedure": []
     },
     "die": 12,
@@ -960,7 +963,7 @@ const TABLE_ATLAS_DATA = {
     "status": "active",
     "sub": null,
     "tableClass": "Fork",
-    "wiring": "ORACLE-ONLY"
+    "wiring": "WIRED"
   },
   "animal-tell": {
     "bands": {
@@ -1591,7 +1594,7 @@ const TABLE_ATLAS_DATA = {
   "building-interior": {
     "bands": {
       "Grounded": 198,
-      "Mythic": 3,
+      "Mythic": 4,
       "Strange": 27,
       "Textured": 60,
       "Volatile": 12,
@@ -1686,7 +1689,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 50
+      "unbanded": 100
     },
     "category": "Unsorted",
     "consumers": {
@@ -1694,13 +1697,13 @@ const TABLE_ATLAS_DATA = {
       "code": [],
       "procedure": []
     },
-    "die": 50,
+    "die": 100,
     "domain": "Social / Sentient NPCs",
     "id": "child-saw",
     "name": "child-saw",
     "path": null,
     "playerFacing": "reveal",
-    "rows": 50,
+    "rows": 100,
     "status": "active",
     "sub": null,
     "tableClass": "Fork",
@@ -3126,12 +3129,14 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 200
+      "unbanded": 215
     },
     "category": "03. Session Mechanics",
     "consumers": {
       "chain": [],
       "code": [
+        "dungeon-walk.js",
+        "place-spatialize.js",
         "table-atlas.js"
       ],
       "procedure": [
@@ -3416,7 +3421,9 @@ const TABLE_ATLAS_DATA = {
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "theater-boot.js",
+        "walk-interactables.js"
       ],
       "procedure": [
         "Dungeon Encounter v2.0.md"
@@ -3448,7 +3455,8 @@ const TABLE_ATLAS_DATA = {
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "theater-boot.js"
       ],
       "procedure": [
         "Dungeon Encounter v2.0.md"
@@ -3706,13 +3714,14 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 153
+      "unbanded": 169
     },
     "category": "03. Session Mechanics",
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "walk-interactables.js"
       ],
       "procedure": [
         "5-Room Dungeon Generator v3.1.md",
@@ -3813,7 +3822,8 @@ const TABLE_ATLAS_DATA = {
         "Puzzle Type.md"
       ],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "walk-interactables.js"
       ],
       "procedure": [
         "5-Room Dungeon Generator v3.1.md",
@@ -5037,7 +5047,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 30
+      "unbanded": 33
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -5067,7 +5077,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 45
+      "unbanded": 48
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -5162,7 +5172,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 100
+      "unbanded": 112
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -7566,7 +7576,9 @@ const TABLE_ATLAS_DATA = {
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "npc-role-skins.js",
+        "table-atlas.js",
+        "wiki.js"
       ],
       "procedure": [
         "Quick NPC Generator 2.0.md"
@@ -7597,7 +7609,10 @@ const TABLE_ATLAS_DATA = {
     "category": "Unsorted",
     "consumers": {
       "chain": [],
-      "code": [],
+      "code": [
+        "npc-role-skins.js",
+        "wiki.js"
+      ],
       "procedure": []
     },
     "die": 35,
@@ -7610,7 +7625,7 @@ const TABLE_ATLAS_DATA = {
     "status": "active",
     "sub": null,
     "tableClass": "Fork",
-    "wiring": "ORACLE-ONLY"
+    "wiring": "WIRED"
   },
   "npc-secret": {
     "bands": {
@@ -8057,6 +8072,105 @@ const TABLE_ATLAS_DATA = {
     "path": null,
     "playerFacing": "reveal",
     "rows": 25,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Commitment",
+    "wiring": "WIRED"
+  },
+  "opening-register-medias": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 2,
+      "Textured": 10,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 0
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "handoff.js",
+        "render.js",
+        "starting-state.js",
+        "world-gen.js"
+      ],
+      "procedure": []
+    },
+    "die": 12,
+    "domain": "World Building / Starting State",
+    "id": "opening-register-medias",
+    "name": "opening-register-medias",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 12,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Commitment",
+    "wiring": "WIRED"
+  },
+  "opening-register-mythic": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 6,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 0
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "handoff.js",
+        "render.js",
+        "starting-state.js",
+        "world-gen.js"
+      ],
+      "procedure": []
+    },
+    "die": 6,
+    "domain": "World Building / Starting State",
+    "id": "opening-register-mythic",
+    "name": "opening-register-mythic",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 6,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Commitment",
+    "wiring": "WIRED"
+  },
+  "opening-register-wrong": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 12,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 0
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "handoff.js",
+        "render.js",
+        "starting-state.js",
+        "world-gen.js"
+      ],
+      "procedure": []
+    },
+    "die": 12,
+    "domain": "World Building / Starting State",
+    "id": "opening-register-wrong",
+    "name": "opening-register-wrong",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 12,
     "status": "active",
     "sub": null,
     "tableClass": "Commitment",
@@ -8753,6 +8867,37 @@ const TABLE_ATLAS_DATA = {
     "tableClass": null,
     "wiring": "UNMAPPED"
   },
+  "place-spine": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 24
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "place-skins.js",
+        "wiki.js"
+      ],
+      "procedure": []
+    },
+    "die": 24,
+    "domain": "Realms / Place Generation",
+    "id": "place-spine",
+    "name": "place-spine",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 24,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Fork",
+    "wiring": "WIRED"
+  },
   "place-traits": {
     "bands": {
       "Grounded": 66,
@@ -9224,9 +9369,9 @@ const TABLE_ATLAS_DATA = {
   "realm-items-bright-kingdom": {
     "bands": {
       "Grounded": 20,
-      "Mythic": 1,
-      "Strange": 12,
-      "Textured": 14,
+      "Mythic": 2,
+      "Strange": 15,
+      "Textured": 15,
       "Volatile": 3,
       "other": 0,
       "unbanded": 0
@@ -9237,13 +9382,13 @@ const TABLE_ATLAS_DATA = {
       "code": [],
       "procedure": []
     },
-    "die": 50,
+    "die": 55,
     "domain": "Session Mechanics / Realms",
     "id": "realm-items-bright-kingdom",
     "name": "realm-items-bright-kingdom",
     "path": null,
     "playerFacing": "reveal",
-    "rows": 50,
+    "rows": 55,
     "status": "active",
     "sub": null,
     "tableClass": "Commitment",
@@ -9391,10 +9536,10 @@ const TABLE_ATLAS_DATA = {
   },
   "realm-items-lost-world": {
     "bands": {
-      "Grounded": 20,
+      "Grounded": 21,
       "Mythic": 1,
-      "Strange": 12,
-      "Textured": 14,
+      "Strange": 13,
+      "Textured": 16,
       "Volatile": 3,
       "other": 0,
       "unbanded": 0
@@ -9405,13 +9550,13 @@ const TABLE_ATLAS_DATA = {
       "code": [],
       "procedure": []
     },
-    "die": 50,
+    "die": 54,
     "domain": "Session Mechanics / Realms",
     "id": "realm-items-lost-world",
     "name": "realm-items-lost-world",
     "path": null,
     "playerFacing": "reveal",
-    "rows": 50,
+    "rows": 54,
     "status": "active",
     "sub": null,
     "tableClass": "Commitment",
@@ -9447,11 +9592,11 @@ const TABLE_ATLAS_DATA = {
   },
   "realm-items-suburb": {
     "bands": {
-      "Grounded": 20,
+      "Grounded": 24,
       "Mythic": 1,
-      "Strange": 12,
-      "Textured": 14,
-      "Volatile": 3,
+      "Strange": 15,
+      "Textured": 18,
+      "Volatile": 4,
       "other": 0,
       "unbanded": 0
     },
@@ -9461,13 +9606,13 @@ const TABLE_ATLAS_DATA = {
       "code": [],
       "procedure": []
     },
-    "die": 50,
+    "die": 62,
     "domain": "Session Mechanics / Realms",
     "id": "realm-items-suburb",
     "name": "realm-items-suburb",
     "path": null,
     "playerFacing": "reveal",
-    "rows": 50,
+    "rows": 62,
     "status": "active",
     "sub": null,
     "tableClass": "Commitment",
@@ -9597,6 +9742,36 @@ const TABLE_ATLAS_DATA = {
     "tableClass": "Fork",
     "wiring": "WIRED"
   },
+  "room-elevation-profile": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 7
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "dungeon-walk.js"
+      ],
+      "procedure": []
+    },
+    "die": 100,
+    "domain": "Session Mechanics / Dungeons",
+    "id": "room-elevation-profile",
+    "name": "room-elevation-profile",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 7,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Fork",
+    "wiring": "WIRED"
+  },
   "scene-tones": {
     "bands": {
       "Grounded": 0,
@@ -9714,6 +9889,39 @@ const TABLE_ATLAS_DATA = {
     "path": null,
     "playerFacing": "reveal",
     "rows": 9,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Commitment",
+    "wiring": "WIRED"
+  },
+  "starting-state-opening-register": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 5,
+      "unbanded": 0
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "handoff.js",
+        "render.js",
+        "starting-state.js",
+        "world-gen.js"
+      ],
+      "procedure": []
+    },
+    "die": 100,
+    "domain": "World Building / Starting State",
+    "id": "starting-state-opening-register",
+    "name": "starting-state-opening-register",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 5,
     "status": "active",
     "sub": null,
     "tableClass": "Commitment",
@@ -11334,7 +11542,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 300
+      "unbanded": 301
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -12644,7 +12852,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 105
+      "unbanded": 106
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -12800,7 +13008,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 30
+      "unbanded": 32
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -12830,7 +13038,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 50
+      "unbanded": 52
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -12892,7 +13100,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 100
+      "unbanded": 110
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -13214,7 +13422,7 @@ const TABLE_ATLAS_DATA = {
   "walk-skin-wilderness": {
     "bands": {
       "Grounded": 66,
-      "Mythic": 1,
+      "Mythic": 2,
       "Strange": 9,
       "Textured": 20,
       "Volatile": 4,
@@ -13335,6 +13543,36 @@ const TABLE_ATLAS_DATA = {
     "tableClass": "Commitment",
     "wiring": "WIRED"
   },
+  "wild-animal-kind": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 12
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [
+        "animal-knowledge-scope.js"
+      ],
+      "procedure": []
+    },
+    "die": 12,
+    "domain": "Social / Sentient NPCs",
+    "id": "wild-animal-kind",
+    "name": "wild-animal-kind",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 12,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Fork",
+    "wiring": "WIRED"
+  },
   "wilderness-active-magic": {
     "bands": {
       "Grounded": 0,
@@ -13375,7 +13613,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 300
+      "unbanded": 312
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -13538,13 +13776,14 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 10
+      "unbanded": 11
     },
     "category": "03. Session Mechanics",
     "consumers": {
       "chain": [],
       "code": [
-        "table-atlas.js"
+        "table-atlas.js",
+        "theater-data.js"
       ],
       "procedure": [
         "Wilderness Encounter v2.0.md"
@@ -13634,7 +13873,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 20
+      "unbanded": 24
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -13731,7 +13970,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 303
+      "unbanded": 317
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -13955,7 +14194,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 305
+      "unbanded": 307
     },
     "category": "03. Session Mechanics",
     "consumers": {

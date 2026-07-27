@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| d153 | Feature / Landmark | Visual Description | Dimensions & Tactical Notes |
+| d169 | Feature / Landmark | Visual Description | Dimensions & Tactical Notes |
 | ---- | ------------------ | ------------------ | ---------------------------- |
 | 01   | Crumbled Masonry   | Fallen stone blocks choke half the corridor. | 10'×15' field, 2' mounds — Difficult Terrain; Half cover from substantial mounds |
 | 02   | Crumbled Masonry   | A collapsed arch spills rubble across the floor. | 5'×15' spread from arch base, 3' high — Difficult Terrain; Half cover |
@@ -163,4 +163,20 @@ voice_critical: false
 | 151  | Cold Hearth        | A great fireplace set into the wall, ash long dead in the grate. | 6'×3' footprint, 8' high — Half cover; flue is a 1'-wide climb-shaft to the level above (DC 13 Athletics) |
 | 152  | Toppled Bookcase   | A tall bookcase fallen across the floor, spilling rotted ledgers. | 8'×2' footprint on its face, 2' high — Half cover along its length; Difficult Terrain to clamber over |
 | 153  | Funeral Bier       | A draped stone bier stands at the room's heart, its cloth grey with dust. | 7'×3' footprint, 3' high — Half cover; Investigation DC 12 finds what was left with the departed |
+| 154  | Aqueduct Trough    | An open stone channel of moving water cuts across the floor. | 3' wide, 2' deep, spans room — Difficult Terrain to cross; DC 10 Athletics or wade (loud) |
+| 155  | Aqueduct Trough    | Waist-high stone trough carries water along one wall, overflow dripping steadily. | 2' wide, 3' high, 20' long — Half cover; current strong enough to sweep a dropped object away |
+| 156  | Sluice Gate Mechanism | A heavy iron gate spans the channel, worked by a corroded rack-and-pinion wheel. | 5' wide gate, 4' high — DC 14 Str to raise; opening floods or drains an adjacent area within 1 minute |
+| 157  | Cistern Overflow Grate | A sunken grate vents excess water with a steady rushing echo from below. | 5' x 5' opening, 1' deep frame — Pry open DC 12 Str; sound carries 60' through the channel system |
+| 158  | Shoring Frame      | A timber support frame braces the passage, joints pinned and sound. | 5' wide, 8' high — Total cover per post; marks the last-safe boundary before unsupported ground |
+| 159  | Shoring Frame      | A support frame has split along one post, timber creaking under load. | 5' wide, 8' high, visibly strained — Total cover; collapses on 12+ damage (2d6 Bludgeoning, DC 13 Dex half) |
+| 160  | Ore Cart & Rail Track | A length of iron rail runs through the room, one loaded ore cart parked on it. | Rail 2' wide, cart 4'x3'x3' — Cart is Half cover, can be pushed (DC 10 Str) to block or ram a 5' space |
+| 161  | Windlass / Winch Mechanism | A hand-cranked hoist stands over a vertical shaft, cable taut. | 4'x4' footprint, 6' high — Str DC 12 to crank; can raise/lower 300 lbs at half speed |
+| 162  | Cell Grille Door   | A barred door, man-height, set into a partition wall. | 3' wide, 7' high — Str DC 15 to bend bars; lock DC 13 Thieves' Tools |
+| 163  | Property Lockbox   | An iron-strapped chest sits bolted to the floor, tagged with a wax seal. | 3'x2'x2' footprint — Half cover; DC 15 Str or DC 13 Thieves' Tools to open; contents tagged and cataloged |
+| 164  | Keeper's Watch Desk | A raised desk faces the room, a ledger and key-ring pegs within reach. | 4'x3' footprint, 3' high — Half cover; Investigation DC 12 reads recent entries |
+| 165  | War Table          | A large tilted map table dominates the space, pins and painted terrain still in place. | 6'x8' footprint, 3' high — Half cover; History or Investigation DC 12 reads the plotted campaign |
+| 166  | Siege Engine Mount | A fixed cradle and anchor bolts mark where a heavy engine was once, or is still, seated. | 8'x8' footprint — Total cover if occupied; DC 14 Athletics to re-arm a stripped mount in 1 minute |
+| 167  | The Weeping Cistern | A vast reservoir fills the chamber, its surface moving faintly against no draft, no current, no reason. | 40'x40'x10' deep — every channel in the level runs toward it; Insight DC 16 or the room feels watched |
+| 168  | Suspended Growing Cell | A cage of living hardwood hangs from thick roots over a black drop, new shoots still sealing its seams. | 5'x5'x6' cell, 15'-40' up — DC 14 Athletics to reach; bars are AC 16, 30 HP, regrow 5 HP/day if not burned |
+| 169  | Hooded Work Lamp Post | A worker's hooded oil lamp still hangs from an iron post, its shutter half-closed. | 1' diameter post, 5' high — Dim Light 10' radius when lit; Half cover from the post itself. |
 ^dungeon-feature

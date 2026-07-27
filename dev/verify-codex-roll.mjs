@@ -29,7 +29,15 @@ const check = (n, c, d = "") => c ? (pass++, console.log("  ✓", n)) : (fail++,
 check("tables.js populated GENESIS_TABLES", win.GENESIS_TABLES && Object.keys(win.GENESIS_TABLES).length > 300);
 for (const f of ["rollNPC","rollPlace","rollItem","rollBuildingInterior","npcSpeciesFromRace","npcRolledName","placeNameDesc"])
   check(`global ${f}`, typeof win[f] === "function");
-check("the three Phase-5 d300 tables compiled", ["plot-item","plot-lock","building-interior"].every(id=>win.GENESIS_TABLES[id] && win.GENESIS_TABLES[id].rows.length===300));
+// SPAWN-AUDIT 2026-07-27 (docs/TABLE-SEEDING-REVIEW-0727.md): this check's job is "the Phase-5 d300
+// tier compiled and is fully populated," and it encoded that as rows.length===300 — an exact count
+// that was only ever true because nothing had been added since authoring. `building-interior` grew
+// additively to 301 rows (one Mythic row, Adam-directed). Exact-300 is the wrong invariant for a
+// corpus whose own edit-safety law documents additive row growth as safe by construction, so the
+// count is scoped to a FLOOR rather than deleted: a truncated or partly-parsed compile still fails,
+// while a legal additive seed no longer does. Do NOT re-tighten this to a literal without also
+// deciding that these three tables are frozen.
+check("the three Phase-5 d300 tables compiled", ["plot-item","plot-lock","building-interior"].every(id=>win.GENESIS_TABLES[id] && win.GENESIS_TABLES[id].rows.length>=300));
 
 // --- race → species mapper ---
 check("mapper: Dwarf", win.npcSpeciesFromRace("Dwarf (Hill): stocky") === "Dwarf");

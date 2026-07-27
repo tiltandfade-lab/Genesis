@@ -736,7 +736,14 @@ const THEATER_FLOOR_BIOME_MAP = {
   Grassland: "grass", Forest: "leaf-litter", Jungle: "leaf-litter",
   Desert: "sand", Coastal: "sand", Arctic: "snow-ice",
   Mountain: "scree", Hill: "cracked-earth", Swamp: "mud", Underdark: "cave-rock",
-  Deeplands: "cave-rock", Underwater: "cave-rock"
+  Deeplands: "cave-rock", Underwater: "cave-rock",
+  /* SPAWN-AUDIT 2026-07-27 (docs/TABLE-SEEDING-REVIEW-0727.md, wilderness SEED 4): the
+     `wilderness-biome-type` table grew d10 -> d11 with an 11th row, "Fey-Bent Hollow". Keyed here
+     in the SAME change as the row, because that is exactly the bug this block's own note above
+     documents — a real rolled biome with no entry here silently renders as the generic
+     THEATER_FLOOR_ENV_FALLBACK.wilderness ("cracked-earth") forever. It is a forest pocket, so it
+     reads off the forest floor. */
+  "Fey-Bent Hollow": "leaf-litter"
 };
 
 /* ENV-2 (docs/ENV-EXTERIOR-WAVE.md "Travel legs project their rolled biome") — BIOME_DRESSING maps
@@ -807,6 +814,16 @@ const BIOME_DRESSING = {
     { slug: "fantasy-flora-lilypad", cardKind: "small" },
     { slug: "gloom-flora-nightshade", cardKind: "small" },
     { slug: "fantasy-flora-cattailreed", cardKind: "small" }
+  ] },
+  /* SPAWN-AUDIT 2026-07-27 (wilderness SEED 4) — companion to the 11th `wilderness-biome-type` row.
+     No new art: every slug below already ships in assets/dressing/. A forest pocket whose light has
+     stopped agreeing with the land around it, so the pool is the Forest register crossed with two
+     gloom flora, and the advisory bias is moonlit rather than daylit. */
+  "Fey-Bent Hollow": { ground: "leaf-litter", profileBias: "moonlit", pool: [
+    { slug: "fantasy-flora-birchgrove", cardKind: "medium" },
+    { slug: "fantasy-flora-mossboulder", cardKind: "medium" },
+    { slug: "fantasy-flora-wildflowerpatch", cardKind: "small" },
+    { slug: "gloom-flora-nightshade", cardKind: "small" }
   ] }
 };
 // unknown/unrecognized biome word -> this generic pool (spec: "unknown biome degrades to the generic

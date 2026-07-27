@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-|d300|The "Room" (Playable Space)|The "Walls" (Boundaries)|The "Doors & Side Areas" (Tactical Features)|
+|d312|The "Room" (Playable Space)|The "Walls" (Boundaries)|The "Doors & Side Areas" (Tactical Features)|
 |:--|:--|:--|:--|
 |**001**|20' x 20' Square Clearing|Impassable thorny brush / razor-sharp coral.|One 5' wide game trail entering south; 5'x5' heavy cover in the center.|
 |**002**|20' x 20' Square Clearing|Steep 10-foot earthen/snow banks.|10' wide sloped exit north; a 5' deep natural pit in one corner.|
@@ -310,5 +310,17 @@ voice_critical: false
 |**298**|40' x 100' S-Curve (20' wide)|Deep, rushing water / hazardous mud.|20' wide path with two sharp turns; 20'x20' dry spots at turns.|
 |**299**|40' x 100' S-Curve (20' wide)|20-foot high sheer rock / ice cliffs.|20' wide path with two sharp turns; the trail slopes upward 20 feet.|
 |**300**|40' x 100' S-Curve (20' wide)|Thick, choking fog / spore clouds.|20' wide path with two sharp turns; lightly obscured; difficult terrain.|
+|**301**|20' x 20' Square Clearing|Broken chasm rim / unseen drop into dark below.|A 5' wide natural ledge rings the near edge; the far rim is unreachable without a climb or a jump.|
+|**302**|30' x 30' Square Clearing|Broken chasm rim / unseen drop into dark below.|10' wide entrance path; a broken shelf 10' down the near wall offers a landing before the true bottom.|
+|**303**|50' x 80' Large Valley|Broken chasm rim / unseen drop into dark below.|20' wide main path hugs the rim; a rubble-crowned ledge juts out over the drop, wide enough to stand and fight from.|
+|**304**|30' Diameter Circle|Broken chasm rim / unseen drop into dark below.|10' wide entrance; the center third of the circle has given way entirely — a true void, not difficult terrain.|
+|**305**|60' x 60' Octagon|Broken chasm rim / unseen drop into dark below.|20' wide path in; a terraced shelf at each cardinal point offers cover and elevation over the central drop.|
+|**306**|20' x 60' Narrow Gorge|Broken chasm rim / unseen drop into dark below.|The gorge floor has partly collapsed; a 5' wide ledge continues along one wall where the true floor does not.|
+|**307**|40' x 60' Trapezoid|Broken chasm rim / unseen drop into dark below.|20' wide entrance at the wide end narrows toward a sheer unrailed drop at the point.|
+|**308**|60' x 80' Oval Valley|Broken chasm rim / unseen drop into dark below.|20' wide paths on opposite ends; a broken shelf runs the long axis, 10' above a floor that never fully resolves in the dark.|
+|**309**|50' x 50' T-Junction (20' wide)|Broken chasm rim / unseen drop into dark below.|10' wide paths at all three ends; the stem overlooks the drop from a natural balcony rather than crossing it.|
+|**310**|40' x 40' Diamond|Broken chasm rim / unseen drop into dark below.|10' wide paths at opposite points; the center has fallen away, leaving two facing ledges rather than a floor.|
+|**311**|30' x 50' Crescent Moon|Broken chasm rim / unseen drop into dark below.|10' wide paths at both tips; the inner curve is a continuous broken shelf overlooking the void at its center.|
+|**312**|60' x 80' Kidney Shape|Broken chasm rim / unseen drop into dark below.|20' wide paths at both ends; a wide natural deck occupies the shape's waist, the only solid ground over the drop below.|
 
 ^wilderness-area-type

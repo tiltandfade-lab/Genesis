@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| **d45** | **Identity** | **Behavioral Role** | **Low CR** | **Mid CR** | **Boss** | **Composition Scale** | **Environmental Signature** |
+| **d48** | **Identity** | **Behavioral Role** | **Low CR** | **Mid CR** | **Boss** | **Composition Scale** | **Environmental Signature** |
 | :------ | :----------- | :------------------ | :--------- | :--------- | :------- | :-------------------- | :-------------------------- |
 | **1** | Risen Dead | Lurking Predator | Ghoul / Zombie | Wight / Wraith | Necromancer / Vampire | 1d4 per room; 1 Mid per 2 rooms; 1 Boss at finale | Bone fragments underfoot; necromantic residue on all metal surfaces; grave dirt smell throughout |
 | **2** | Risen Dead | Professional Watch | Ghoul / Shadow | Wight / Shadow Demon | Necromancer / Vampire | 1d4 per room; 1d2 Mid per 2 rooms; 1 Boss at finale | Organized ghoul guard posts; patrol-worn floor paths; necromantic wards scratched into door frames |
@@ -55,4 +55,7 @@ voice_critical: false
 | **43** | Shadow Breach | Unstable Distortion | Shadow / Darkness Shade | Shadow Demon / Wraith | Shadow Dragon (Young) / Vampire | 1 per room; 1 Mid per 3 rooms; 1 Boss at finale | Darkness actively resists all light sources; shadows cast toward the light; faint screaming at the edge of hearing |
 | **44** | Elder Deep-Thing's Reach | Core Presence | Sea Spawn / Dominated Humanoid | Clawed Drowner / Fish-Folk Archpriest | Elder Deep-Thing | 1 per room; 1 Mid per 3 rooms; 1 Boss at finale | Dominated NPCs repeat tasks endlessly; Elder Deep-Thing eye-motif etched into every surface; deep rhythmic thrumming |
 | **45** | Devil Pact | Specialist Task-Force | Imp / Bearded Devil | Barbed Devil / Chain Devil | Horned Devil / Bone Devil | 1d2 per room; 1 Mid per 2 rooms; 1 Boss at finale | Contract language covering every surface; souls sealed in gems visible in alcoves; hellfire scorch circles at ritual sites |
+| **46** | Custody Institution | Professional Watch | Veteran / Spy | Gladiator / Berserker Pack | Warlord / Assassin (the Keeper) | 1d4 per block; 1 Mid per 2 blocks; 1 Boss at finale (Keeper-House doctrine: one named keeper's authority binds the whole roster) | Keys and reputation both hang from one belt; kin sleep in the gatehouse; the boundary between household and holding block is a single unlocked door |
+| **47** | Warded Exceptional Containment | Latent Mechanisms | Animated Armor / Flying Sword | Shield Guardian / Stone Golem | Iron Golem + Mage (Warden-Adept) | 1 per cell-ward; 1 Mid per 2 wards; 1 Boss at finale (the containment holds something worse than its guards) | Ward-seals renewed daily in fresh chalk; every corridor's attention bends toward one door; the entire routine schedule exists to keep that door closed |
+| **48** | Contested Claim | Specialist Task-Force | Scout / Thug | Bandit Captain / Veteran | Warlord / Assassin (rival claimant) | 1d2 per work-face; 1 Mid per 2 work-faces; 1 Boss at finale (two rosters, one seam — roll twice on Category for the second crew) | Claim-stakes driven in duplicate, one set older; ore carts marked with two different guild brands; a support timber freshly sabotaged, not yet reported |
 ^dungeon-threat-identity-t2

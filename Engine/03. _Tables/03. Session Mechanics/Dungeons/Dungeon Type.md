@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| d100 | Dungeon Archetype      | Original Purpose              | Current Atmosphere                                      |
+| d112 | Dungeon Archetype      | Original Purpose              | Current Atmosphere                                      |
 | ---- | ---------------------- | ----------------------------- | ------------------------------------------------------- |
 | 01   | Natural Cavern         | Geological formation          | Damp stone, distant drips, organic echoes.              |
 | 02   | Natural Cavern         | Geological formation          | Moss-lined walls and slick mineral runoff.              |
@@ -110,4 +110,16 @@ voice_critical: false
 | 98   | The Megastructure      | Anomaly / Ancient technology  | Metallic corridors hum softly with impossible geometry. |
 | 99   | The Megastructure      | Anomaly / Ancient technology  | Non-euclidean walls shift in faint mechanical rhythm.   |
 | 100  | The Living Hive        | Biological growth / Nest      | Pulsing walls breathe in warm, claustrophobic rhythm.   |
+| 101  | Mine / Extraction Works | Extraction / Ore working | Timber-braced tunnels smell of turned earth and cold iron. |
+| 102  | Mine / Extraction Works | Extraction / Ore working | Ore carts sit cold on rails worn bright by use. |
+| 103  | Mine / Extraction Works | Extraction / Ore working | Deep drill-scars spiral against the grain of the rock, following no vein a miner would recognize. |
+| 104  | Mine / Extraction Works | Extraction / Ore working | The seam gave way to something that pulses, faintly, in time with every miner's heartbeat still down there. |
+| 105  | Prison / Asylum         | Containment / Isolation | A ledger of names covers one wall, each entry crossed through in a different hand. |
+| 106  | Prison / Asylum         | Containment / Isolation | The cell doors are numbered in a sequence that skips every number a prisoner has ever spoken aloud. |
+| 107  | Prison / Asylum         | Containment / Isolation | The bars are grown, not built — hardwood knit shut around old prisoners, and new shoots are still sealing the seams. |
+| 108  | Military Fortification  | Defensive bunker / Outpost | Chain-of-command plaques still hang in order, though the names have all been scratched to nothing. |
+| 109  | Military Fortification  | Defensive bunker / Outpost | The fortifications keep going long after any reasonable siege would have ended — walls behind walls behind walls. |
+| 110  | Military Fortification  | Defensive bunker / Outpost | This was never one keep. Three garrisons built over three centuries, each certain it was the first, each wall arguing with the one before it. |
+| 111  | Infrastructure Hub      | Sewers / Aqueducts / Mines | Cistern locks are stamped with a ward crest nobody currently in charge recognizes. |
+| 112  | Infrastructure Hub      | Sewers / Aqueducts / Mines | Every channel in the system flows toward one cistern, uphill, against any grade a mason would have cut on purpose. |
 ^dungeon-type

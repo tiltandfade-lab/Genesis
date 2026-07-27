@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| **d200** | **Area Type** | **Base Dimensions** | **Side Area & Structural Features** |
+| **d215** | **Area Type** | **Base Dimensions** | **Side Area & Structural Features** |
 | :------- | :------------ | :------------------ | :----------------------------------- |
 | **001** | Narrow Passage | 5' x 20' straight | 5' x 5' blind alcove cut into the left wall at the midpoint. |
 | **002** | Narrow Passage | 5' x 30' straight | 5' x 10' dead-end spur branching right near the far end. |
@@ -210,4 +210,19 @@ voice_critical: false
 | **198** | Bifurcated Hall | 40' x 40' square | Split down the center by a 10' high stone wall with no opening; both halves have their own entrance and exit; 10' x 10' connecting crawlspace at floor level. |
 | **199** | Convergence Chamber | 40' x 40' square | Four separate corridors enter from different directions and do not exit; 10' x 10' raised central node where they meet; clearly designed as a terminal space. |
 | **200** | Planar Gate Room | 40' x 40' octagon | Inlaid binding circle (25' diameter) at the center; 10' x 20' elevated viewing gallery at one face; the air hums faintly regardless of what has occurred here. |
+| **201** | Cistern Chamber | 25' x 25' square, 8' ceiling | Sunken basin fills the center (4' deep, still water); 10' x 10' raised inspection walk along one wall, iron rail missing two sections. |
+| **202** | Aqueduct Channel | 10' x 50' straight, open channel down the center | 3' wide flowing channel runs the full length (2' deep, moving water); 5' x 5' maintenance landing where the channel passes under a low arch. |
+| **203** | Pump / Valve Room | 15' x 15' square | 10' x 10' array of iron valve-wheels and pipe junctions along one wall; sump pit in the floor (3' deep) feeds a seized pump mechanism. |
+| **204** | Culvert Junction | 5' diameter, three converging pipes | Each culvert mouth is a 3' circle at a different height; center floor is a grated drain over a 10' drop to a lower channel. |
+| **205** | Well Shaft | 6' diameter vertical shaft | Iron rungs descend the shaft wall; 5' x 5' landing halfway down where a side culvert breaks into the shaft. |
+| **206** | Ore Face / Work Gallery | 15' x 25' irregular, angled ceiling | The working face is a 10' wide seam of exposed ore; tool marks and a scatter of broken picks lie at its base. |
+| **207** | Haul Ramp Landing | 15' x 20' graded landing | Cart rails converge here from two directions; 10' x 10' loading apron where carts are tipped and reloaded. |
+| **208** | Sorting & Repair Yard | 20' x 25' rectangle | Sorting troughs and waste bins line one wall; 10' x 10' repair bench alcove with spare timber stacked against it. |
+| **209** | Pump Sump / Flooded Branch | 20' x 20' square, floor slopes down 5' | Standing water fills the lower half (2'-4' deep); a chained pump mechanism sits at the boundary, working or not. |
+| **210** | Keeper's Control Landing | 10' x 15' raised platform (6' up) | Overlooks the cell fronts below; iron stair or ladder access; desk and key-ring pegs bolted to the rail. |
+| **211** | Sally-Port / Interlock | 8' x 10' between two barred doors | Only one door can be unlocked at a time (mechanism visible); no cover inside, deliberately. |
+| **212** | Intake & Property Room | 15' x 15' square | Search table at the center; 10' x 10' locked property cabinet recessed into the far wall, tags and ledger nearby. |
+| **213** | War Room / Strategy Hall | 20' x 25' rectangle | A large tilted map table dominates the center; 10' x 10' alcove holds racked dispatch tubes and a cold brazier. |
+| **214** | Battlement / Siege Deck | 10' x 60' open-topped walkway | Crenellations line the outer edge (half cover); 10' x 10' engine mount at one end, ballista or trebuchet anchor bolts still in the stone. |
+| **215** | Suspended Prison Ward | 30' x 30' void with a hanging cell cluster | Living-wood cell cages hang from thick roots or chains over a black drop; a single winch gangway is the only fixed crossing. |
 ^dungeon-area-type

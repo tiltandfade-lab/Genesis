@@ -11,7 +11,7 @@ voice_critical: false
 # Urban Threat Identity T2
 **Creature Pools for Tier 2 Urban Play (Levels 5–10)**
 
-| d50 | Threat Identity | Low CR (1–3) | Mid CR (4–6) | Boss CR (7–10) |
+| d52 | Threat Identity | Low CR (1–3) | Mid CR (4–6) | Boss CR (7–10) |
 | ---: | --- | --- | --- | --- |
 | 1 | **Shadow Thieves Guild** | Thug / Spy / Bandit Captain | Assassin / Master Thief | Archmage / Assassin (buffed) |
 | 2 | **Assassin's Syndicate** | Cultist / Thug | Professional Killer / Poisoner | Blackguard / Rogue Assassin |
@@ -63,4 +63,6 @@ voice_critical: false
 | 48 | **Gray Dwarf Slave Trade** | Gray Dwarf / Slave Guard | Gray Dwarf Sergeant / Gray Dwarf Mage | Gray Dwarf Warlord / Gray Dwarf Psionic |
 | 49 | **Gnoll Raiding Band** | Gnoll / Gnoll Warrior | Gnoll Pack Leader / Gnoll Priestess | Gnoll Warlord / Demon-Possessed Gnoll |
 | 50 | **Lich's Undead Army** | Zombie / Skeleton | Wight / Ghast | Lich / Mummy Lord |
+| 51 | **City Prison Uprising** | Guard / Thug | Veteran / Berserker Pack | Warlord / Champion (self-declared Warden) |
+| 52 | **Quarantine Authority** | Guard / Commoner (quarantined) | War Priest / Poisoner | Evil High Priest / Mummy Lord (the quarantine's true cause) |
 ^urban-threat-identity-t2

@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| d100 | Urban Archetype | Original Purpose | Current Atmosphere |
+| d110 | Urban Archetype | Original Purpose | Current Atmosphere |
 | ---- | -------------- | ---------------- | ------------------ |
 | 01 | Market Ward | Trade / daily commerce | Tight foot traffic; shouted prices; elbows and coinpurses. |
 | 02 | Market Ward | Trade / daily commerce | Awnings flap; spices hang in the air; constant bargaining. |
@@ -110,4 +110,14 @@ voice_critical: false
 | 98 | Ruined Quarter | Disaster / abandonment | A hidden cellar door gapes; cool air rises like breath. |
 | 99 | Ruined Quarter | Disaster / abandonment | A broken statue’s face is missing; the base has fresh scratches. |
 | 100 | Ruined Quarter | Disaster / abandonment | A quiet block suddenly isn’t: a signal whistle, then movement everywhere. |
+| 101 | Residential Ward | Ordinary housing / domestic life | Laundry lines cross overhead; a woman calls a child in for supper. |
+| 102 | Residential Ward | Ordinary housing / domestic life | Doorstep gossip in low voices; someone's cooking draws a small crowd of noses. |
+| 103 | Residential Ward | Ordinary housing / domestic life | Repair work half-finished on a roof; a dog barks at nothing, then everything. |
+| 104 | Residential Ward | Ordinary housing / domestic life | Shared well in a courtyard; buckets and elbows and an old argument about turns. |
+| 105 | Residential Ward | Ordinary housing / domestic life | A funeral procession turns the corner; every door along the street closes at once. |
+| 106 | Residential Ward | Ordinary housing / domestic life | Children's chalk games drawn over yesterday's, and the day before's. |
+| 107 | Residential Ward | Ordinary housing / domestic life | A landlord's agent checks names against a list; someone ducks down a side path. |
+| 108 | Residential Ward | Ordinary housing / domestic life | Window boxes and drying herbs; a neighbor borrows salt through a cracked door. |
+| 109 | Residential Ward | Ordinary housing / domestic life | A newlywed couple's door garlanded; an older door two houses down left bare on purpose. |
+| 110 | Residential Ward | Ordinary housing / domestic life | Quiet past the curfew bell; one window still lit, and everyone pretends not to notice. |
 ^urban-type

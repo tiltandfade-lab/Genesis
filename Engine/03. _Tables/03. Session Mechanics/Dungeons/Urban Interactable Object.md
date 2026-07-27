@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| d300 | Interactable Object                 | Primary     | Secondary   | Signal   | Visibility  | Tone    |
+| d301 | Interactable Object                 | Primary     | Secondary   | Signal   | Visibility  | Tone    |
 | ---- | ----------------------------------- | ----------- | ----------- | -------- | ----------- | ------- |
 | 1    | **loose cobblestone**               | Hazard      | Clue        | Quiet    | Semi-Hidden | Mundane |
 | 2    | **loose floorboard**                | Clue        | Hazard      | Quiet    | Semi-Hidden | Mundane |
@@ -310,5 +310,6 @@ voice_critical: false
 | 298  | **Fey Crossroads**                  | Weird       | Resource    | Quiet    | Obvious     | Weird   |
 | 299  | **Bleeding Architecture**           | Weird       | Hazard      | Quiet    | Obvious     | Weird   |
 | 300  | **The Monolith Chunk**              | Cover       | Weird       | Quiet    | Obvious     | Weird   |
+| 301  | **Shutter-Counter Storefront**      | Access      | Resource    | Quiet    | Obvious     | Mundane |
 
 ^urban-interactable-object

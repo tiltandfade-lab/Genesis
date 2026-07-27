@@ -1220,6 +1220,8 @@
         "donorIndexFor",
         "donorGradeColor",
         "donorOutlineStyleFor",
+        "donorMaterialForFamily",
+        "donorMaterialContextFromText",
         "socketsOf",
         "socketsByType"
       ],
@@ -1227,6 +1229,46 @@
         "window.materialTexturePixels"
       ],
       "desc": "KS-1 (docs/KENNEY-SOCKET-WAVE.md) the Kenney donor RUNTIME loader \u2014 the ONE runtime file this unit touches (its own spec: do NOT edit theater-boot.js/theater-materials.js/gen-sprite-registry.py, other concurrent units own them). A SIXTH ES-module boundary file (parallel to theater-boot/theater-verbs/theater-parts/theater-figures/ref-bestiary), own <script type=\"module\"> tag in genesis.html loaded AFTER theater-boot.js's tag (same convention as ref-bestiary.js). Pairs with the build-time normalizer build/normalize-donors.py (that script strips authored Kenney materials wholesale, classifies each node into a Genesis material family \u2014 stone|wood|iron|roof|glass|cloth \u2014 stamps sockets (floor-mount/wall-mount/top-surface/hinge/butt-join-{n|s|e|w}) + canonicalScale into node.extras.genesisDonor, and BAKES canonicalScale into each output GLB's own root-node scale so a plain GLTFLoader.load() already returns Genesis-world-unit-correct geometry). THREE's GLTFLoader copies glTF node `extras` onto the parsed Object3D's `.userData` (documented loader behavior, not custom parsing) \u2014 that is how socket metadata 'rides userData (classic-script friendly)' per the KS-1 spec. loadDonorPiece(pack, slug, {realmProfile, realmId, seedKey}) fetches assets/models-normalized/<pack>/index.json (cached), GLTFLoader-loads + clones the normalized GLB, walks every node's stamped materialFamily and rebuilds a THREE.MeshStandardMaterial per Sol P-B's recipe (roughness 0.82-0.94, metalness 0 except iron 0.35, five-band albedo through a LOCAL MIRROR of theater-boot.js's gradeColorLocal \u2014 that function is sealed/unexported, so this file carries an intentional byte-identical-formula mirror, the SAME precedented pattern gradeColorLocal's own header documents for ITS relationship to data/realms.js's gradeColor \u2014 and nearest-filtered 32x32 grain REUSING theater-materials.js's already-exported window.materialTexturePixels pixel painter, only the canvas-upload wrapping is local). Applies a per-realm outline hull (donorOutlineStyleFor) per docs/BEAUTY-WAVE.md's OUTLINE LAW (fantasy=selective dark-umber / gloom=full near-black / chrome=none), an honest first 3D adaptation of a law authored for 2D sprite post-processing (documented approximation, not a literal port, in this file's own header). Not yet wired into the live interior scene or any classic-script call site \u2014 that integration is KS-2 (door assembly) / KS-3 (room shells from the kit), registered/sequenced after this unit's bridge gate. Republishes onto window.TheaterDonor defensively (same pattern theater-materials.js/theater-interior.js use) for dev-console reachability ahead of that wiring."
+    },
+    {
+      "id": "ui.theater-procedural-kit",
+      "path": "src/ui/theater-procedural-kit.js",
+      "type": "module",
+      "mustFollow": [
+        "src/ui/theater-donor.js"
+      ],
+      "owns": [
+        "PROCEDURAL_KIT",
+        "PROCEDURAL_PART_KINDS",
+        "PROCEDURAL_PART_CATALOG",
+        "PROCEDURAL_PATH_KINDS",
+        "PROCEDURAL_FX_KINDS",
+        "PROCEDURAL_SURFACE_KINDS",
+        "PROCEDURAL_CONTAINER_KINDS",
+        "PROCEDURAL_STATES",
+        "PROCEDURAL_CONDITIONS",
+        "PROCEDURAL_ACCESS_STATES",
+        "PROCEDURAL_OCCUPANCY_STATES",
+        "PROCEDURAL_CHANNELS",
+        "createProceduralPart",
+        "createProceduralPartForUse",
+        "proceduralPartKindsForUse",
+        "createProceduralPath",
+        "createProceduralFx",
+        "createProceduralSurface",
+        "createProceduralContainer",
+        "createCargoSocketRack",
+        "createProceduralBarrier",
+        "applyProceduralState",
+        "applyProceduralStateRecipe",
+        "attachProceduralAtSocket",
+        "socketsOfProcedural",
+        "tickProcedural"
+      ],
+      "callTimeDeps": [
+        "window.materialTexturePixels"
+      ],
+      "desc": "Engine-owned reusable geometry kit for forty standardized mechanical and connective parts, procedural rope and chain, flame/ember/magic/smoke modules, cargo and container sockets, signs/papers/banners/decals, composable condition/access/occupancy recipes, a stateful barrier assembly, and semantic material channels. Reuses ui.theater-donor's regional material resolver; every group carries deterministic provenance and sockets and remains independent of imported donor geometry."
     },
     {
       "id": "world.render",

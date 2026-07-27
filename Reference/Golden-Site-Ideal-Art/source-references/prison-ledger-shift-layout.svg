@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8e2f2a"/>
+    </marker>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#315f79"/>
+    </marker>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#b9ad9b" stroke-width="2"/>
+    </pattern>
+    <style>
+      .wall{fill:#55504a;stroke:#252525;stroke-width:12;stroke-linejoin:round}
+      .floor{fill:#d8cdbb;stroke:#252525;stroke-width:8}
+      .cell{fill:#9ca8a8;stroke:#252525;stroke-width:8}
+      .office{fill:#c6a97e;stroke:#252525;stroke-width:8}
+      .yard{fill:#91a177;stroke:#252525;stroke-width:8}
+      .bar{stroke:#293438;stroke-width:8}
+      .route{fill:none;stroke:#8e2f2a;stroke-width:14;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+      .route2{fill:none;stroke:#315f79;stroke-width:12;stroke-linecap:round;stroke-dasharray:24 18;marker-end:url(#arrow2)}
+      .label{font:700 28px Arial,sans-serif;fill:#202020;text-anchor:middle}
+      .small{font:600 22px Arial,sans-serif;fill:#202020;text-anchor:middle}
+      .title{font:700 42px Arial,sans-serif;fill:#202020}
+      .meta{font:500 23px Arial,sans-serif;fill:#4c4540}
+    </style>
+  </defs>
+  <rect width="1600" height="1000" fill="#f3eee5"/>
+  <text x="80" y="70" class="title">PR-DOC-02 — Ledger-and-Shift Civic Custody</text>
+  <text x="80" y="108" class="meta">seed 21095 • Thorngate Keep • Fieldstone &amp; Mortar • matched four-cell capacity</text>
+
+  <path class="wall" d="M150 190 H1410 V820 H150 Z"/>
+  <rect x="190" y="230" width="1180" height="550" class="floor"/>
+  <rect x="190" y="700" width="1180" height="80" fill="url(#grid)" opacity=".32"/>
+
+  <rect x="190" y="570" width="270" height="210" class="office"/>
+  <text x="325" y="652" class="label">PUBLIC WAITING</text>
+  <text x="325" y="688" class="small">outside the secure line</text>
+
+  <rect x="460" y="570" width="230" height="210" class="office"/>
+  <text x="575" y="635" class="label">INTAKE</text>
+  <text x="575" y="670" class="small">search + register</text>
+  <rect x="485" y="700" width="180" height="40" fill="#70533b" stroke="#252525" stroke-width="6"/>
+
+  <rect x="190" y="230" width="240" height="300" class="office"/>
+  <text x="310" y="345" class="label">RECORDS</text>
+  <text x="310" y="382" class="small">ledger / warrant</text>
+  <text x="310" y="414" class="small">property lockers</text>
+
+  <rect x="430" y="230" width="240" height="300" class="office"/>
+  <text x="550" y="345" class="label">INTERVIEW</text>
+  <text x="550" y="382" class="small">single lockable room</text>
+
+  <rect x="690" y="495" width="250" height="150" fill="#80694c" stroke="#252525" stroke-width="8"/>
+  <text x="815" y="550" class="label">RAISED STATION</text>
+  <text x="815" y="585" class="small">shift handoff / control</text>
+  <path d="M690 645 l-55 55 h55 z" fill="#a58b69" stroke="#252525" stroke-width="7"/>
+
+  <rect x="690" y="230" width="250" height="225" class="yard"/>
+  <text x="815" y="325" class="label">SECURE YARD</text>
+  <text x="815" y="362" class="small">service loop / old hatch</text>
+
+  <g>
+    <rect x="970" y="230" width="200" height="240" class="cell"/>
+    <rect x="1170" y="230" width="200" height="240" class="cell"/>
+    <rect x="970" y="540" width="200" height="240" class="cell"/>
+    <rect x="1170" y="540" width="200" height="240" class="cell"/>
+    <rect x="970" y="470" width="400" height="70" fill="#d8cdbb" stroke="#252525" stroke-width="8"/>
+    <line x1="970" y1="450" x2="1370" y2="450" class="bar"/>
+    <line x1="970" y1="560" x2="1370" y2="560" class="bar"/>
+    <text x="1070" y="345" class="label">CELL 1</text>
+    <text x="1270" y="345" class="label">CELL 2</text>
+    <text x="1070" y="670" class="label">CELL 3</text>
+    <text x="1270" y="670" class="label">CELL 4</text>
+    <text x="1170" y="512" class="small">short secure corridor</text>
+  </g>
+
+  <path d="M205 735 C360 700 500 650 685 600 C795 570 880 530 984 510" class="route"/>
+  <path d="M310 260 C455 190 650 200 800 290 C900 350 905 450 920 508" class="route2"/>
+  <path d="M815 250 C895 205 1020 195 1240 225" class="route2"/>
+
+  <g transform="translate(90 875)">
+    <rect width="1420" height="70" rx="12" fill="#e5dccd" stroke="#70675f" stroke-width="3"/>
+    <path d="M40 35 H170" class="route"/>
+    <text x="300" y="44" class="meta">public / intake movement</text>
+    <path d="M610 35 H740" class="route2"/>
+    <text x="890" y="44" class="meta">staff shift / service loop</text>
+    <text x="1255" y="44" class="meta">1 square = 5 ft study module</text>
+  </g>
+</svg>

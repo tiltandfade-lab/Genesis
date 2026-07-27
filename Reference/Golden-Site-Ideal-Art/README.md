@@ -32,10 +32,28 @@ already exists as a production asset.
 - No asset density that a small Three.js production cannot plausibly build, repeat, and
   maintain.
 
+## Rolled world-context amendment — 2026-07-25
+
+`../../docs/GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md` now makes the world around the
+playfield part of the Golden Site target. Exterior sites should project retained
+setting, material, terrain, adjacency, elevation, time, weather, and current-state rolls
+into an honest portal/support apron and near/mid/far background field.
+
+Most images in this packet predate that contract. Their neutral studio/void backgrounds
+remain useful for studying the site chassis, but they are not automatically the finished
+exterior target. The Shimmering Maw prison is the clearest positive example: suspended
+settlement fragments, chains, ironwood supports, and the fused-glass crater carry real
+rolled context beyond the playable floor.
+
+Future context revisions must preserve the existing site geometry and must not paint
+false routes, actors, interactables, destinations, state, or secrets. Reusable
+background plates and context cards are derived from real roll tags; they are not
+bespoke runtime images per seed.
+
 The first Guard Post render is the style calibration image:
 [modern-FFT style proof](style-calibration/guard-post-modern-fft-proof.png).
 
-## The 18 targets
+## The 21 targets
 
 ### Guard Post
 
@@ -107,6 +125,21 @@ inventing practical lights.
 These preserve two street continuations, owned frontage, public center, institution,
 upper urban route, and service consequences across an ordinary market, a live recovery
 state, and a terrain/culture-owned stair street.
+
+### Prison / Custody
+
+![Prison variations](contact-sheets/prison-variations.png)
+
+1. [Slate-Roof Keeper-House Civic Jail](prison/01-slate-roof-keeper-house-civic-jail.png)
+2. [Thorngate Ledger-and-Shift Civic Jail](prison/02-thorngate-ledger-and-shift-civic-jail.png)
+3. [Shimmering Maw Suspended Ironwood Cell](prison/03-shimmering-maw-suspended-ironwood-cell.png)
+
+The first pair holds four-cell capacity and camera intent constant while changing the
+institutional layout, not merely the palette. The third is a fresh deterministic
+reconstruction of the retained suspended-cell composition. Its seed independently
+reaches The Shimmering Maw, Living Ironwood, The jailhouse, and a hanging cage through
+the current ordinary roller calls; it is not mislabeled as the unavailable original
+save. See the [roll receipts and prompt notes](prison/README.md).
 
 ## Native procedural decay
 

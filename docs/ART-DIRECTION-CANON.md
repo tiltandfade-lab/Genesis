@@ -1011,6 +1011,25 @@ Moving between venues first uses a short Urban Walk or honest direct threshold; 
 but canonical time and due changes still occur. Offscreen town activity is receipt-driven rather than a visual claim
 that every street and citizen remains continuously simulated.
 
+### Real-roll map backgrounds belong to the Golden Site projection (Adam, 2026-07-25)
+
+> "also makes me think we need to do a pass on background images and background styles
+> for the maps based on real rolls at some point"
+
+> "no better time than now, makes perfect sense with our golden sites"
+
+A finished Golden Site should not float in a generic presentation void when retained
+world, place, adjacency, material, terrain, elevation, light, weather, history, or
+current-state rolls establish a visible world around it. Those facts project outward
+from the canonical playfield into an honest context apron and background field.
+
+The playable grid remains mechanical truth. Reusable background images, context cards,
+procedural support geometry, atmosphere, and far-field plates may express rolled
+context, but they cannot invent routes, actors, interactables, destinations, state, or
+knowledge. Pre-alpha does not require bespoke or runtime-generated imagery per seed.
+The full source, realization, fallback, receipt, and proof contract lives in
+`GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md`.
+
 ### Promoted town citizens; semantic remount; dormant companion-roaming hooks (Adam, 2026-07-22)
 
 > 1. B

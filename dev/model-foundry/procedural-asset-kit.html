@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Genesis Engine-Owned Procedural Asset Kit</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #101315; }
+    canvas { display: block; width: 100%; height: 100%; }
+    .panel { position: fixed; z-index: 3; background: #15191ce8; border: 1px solid #5d5548; box-shadow: 0 16px 48px #0009; backdrop-filter: blur(14px); }
+    #intro { top: 18px; left: 18px; width: 350px; padding: 18px; }
+    h1 { margin: 0 0 7px; color: #f1dfb7; font: 600 20px/1.15 Georgia, serif; letter-spacing: .015em; }
+    p { margin: 0; color: #aaa79e; font-size: 12px; line-height: 1.48; }
+    #status { margin-top: 11px; color: #d8bd7d; }
+    #performance { margin-top: 3px; color: #77c9d9; font-variant-numeric: tabular-nums; }
+    label { display: block; margin-top: 12px; color: #8e8b84; font-size: 10px; letter-spacing: .085em; text-transform: uppercase; }
+    select { width: 100%; margin-top: 5px; padding: 7px 9px; color: #eee3cb; background: #252a2b; border: 1px solid #625b4e; }
+    #inventory { right: 18px; top: 18px; bottom: 18px; width: 285px; padding: 8px; overflow: auto; }
+    .section { padding: 10px 9px 5px; color: #c6a45f; font: 600 11px/1 Georgia, serif; text-transform: uppercase; letter-spacing: .12em; }
+    .item { padding: 8px 10px; border-left: 3px solid transparent; border-bottom: 1px solid #ffffff10; cursor: pointer; }
+    .item:hover, .item.active { background: #ffffff0b; border-left-color: #6ac6db; }
+    .item b { display: block; color: #d9d5cb; font-size: 11px; }
+    .item span { color: #7f817d; font-size: 10px; }
+    #legend { left: 18px; bottom: 18px; padding: 10px 13px; color: #aaa79e; font-size: 11px; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; background: #6ac6db; }
+  </style>
+  <script type="importmap">{"imports":{"three":"/vendor/three/three.module.js","three/addons/":"/vendor/three/addons/"}}</script>
+</head>
+<body>
+  <div id="intro" class="panel">
+    <h1>Engine-Owned Asset Foundry</h1>
+    <p>Reusable geometry generated from code: mechanics, paths, effects, cargo sockets, surface media, material channels, and condition recipes.</p>
+    <label>Regional material context
+      <select id="context">
+        <option value="pine">Pine frontier</option>
+        <option value="ironwood">Ironwood culture</option>
+        <option value="driftwood">Salt-coast salvage</option>
+        <option value="creosote">Creosote mine</option>
+        <option value="oak">Oak settlement</option>
+      </select>
+    </label>
+    <label>State laboratory
+      <select id="state">
+        <option>intact</option><option>repaired</option><option>damaged</option><option>breached</option>
+        <option>open</option><option>closed</option><option>occupied</option><option>abandoned</option>
+      </select>
+    </label>
+    <p id="status">Building procedural catalog…</p>
+    <p id="performance">Live renderer: measuring…</p>
+    <p id="selected">Selected: complete foundry</p>
+  </div>
+  <div id="inventory" class="panel"></div>
+  <div id="legend" class="panel"><span class="dot"></span>Click an object or list item · left-drag orbit · right/Shift-drag pan · wheel zoom</div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import {
+      PROCEDURAL_KIT,
+      createProceduralPart,
+      createProceduralPath,
+      createProceduralFx,
+      createProceduralSurface,
+      createProceduralContainer,
+      createCargoSocketRack,
+      createProceduralBarrier,
+      applyProceduralState,
+      attachProceduralAtSocket,
+      tickProcedural,
+    } from "/src/ui/theater-procedural-kit.js?foundry-v3";
+
+    const query = new URLSearchParams(location.search);
+    const contextId = query.get("material") || "ironwood";
+    const contextText = {
+      pine: "fresh-cut pine, resin and sawdust",
+      ironwood: "structures built from local living ironwood",
+      driftwood: "salt-warped driftwood with rust-stained iron",
+      creosote: "soot-black creosote over raw pine",
+      oak: "stout local oak worn smooth by use",
+    }[contextId];
+    const baseOptions = { seedKey: "procedural-foundry", realmId: "fantasy", contextText };
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.12;
+    document.body.prepend(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x151a1c);
+    scene.fog = new THREE.Fog(0x151a1c, 18, 34);
+    const camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, 0.03, 80);
+    const target = new THREE.Vector3(0, 0.72, -0.35);
+    let yaw = 0.72, pitch = 0.54, radius = 13.4, dragging = false, panning = false, moved = false, lastX = 0, lastY = 0;
+    function placeCamera() {
+      camera.position.set(
+        target.x + Math.sin(yaw) * Math.cos(pitch) * radius,
+        target.y + Math.sin(pitch) * radius,
+        target.z + Math.cos(yaw) * Math.cos(pitch) * radius,
+      );
+      camera.lookAt(target);
+    }
+    placeCamera();
+    renderer.domElement.addEventListener("contextmenu", (event) => event.preventDefault());
+    renderer.domElement.addEventListener("pointerdown", (event) => {
+      dragging = true; panning = event.button === 2 || event.shiftKey; moved = false; lastX = event.clientX; lastY = event.clientY;
+      renderer.domElement.setPointerCapture(event.pointerId);
+    });
+    renderer.domElement.addEventListener("pointerup", (event) => {
+      if (!moved && event.button === 0) pick(event);
+      dragging = false; panning = false;
+    });
+    renderer.domElement.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      const dx = event.clientX - lastX, dy = event.clientY - lastY;
+      if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+      if (panning) {
+        const right = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0);
+        const up = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 1);
+        target.addScaledVector(right, -dx * radius * 0.0012).addScaledVector(up, dy * radius * 0.0012);
+      } else {
+        yaw -= dx * 0.006;
+        pitch = Math.max(0.12, Math.min(1.2, pitch + dy * 0.004));
+      }
+      lastX = event.clientX; lastY = event.clientY; placeCamera();
+    });
+    renderer.domElement.addEventListener("wheel", (event) => {
+      radius = Math.max(1.5, Math.min(32, radius + event.deltaY * 0.012)); placeCamera();
+    }, { passive: true });
+
+    scene.add(new THREE.HemisphereLight(0xdbe8ed, 0x41372c, 2.2));
+    const sun = new THREE.DirectionalLight(0xffddb0, 3.8);
+    sun.position.set(-6, 10, 4); sun.castShadow = true; sun.shadow.mapSize.set(512, 512);
+    Object.assign(sun.shadow.camera, { left: -14, right: 14, top: 14, bottom: -14, near: 0.1, far: 35 });
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight(0x9bc7e4, 1.4); fill.position.set(7, 5, -8); scene.add(fill);
+
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(26, 20), new THREE.MeshStandardMaterial({ color: 0x3d4039, roughness: 0.98 }));
+    ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+    const grid = new THREE.GridHelper(20, 20, 0x7a6b52, 0x4b4d46); grid.position.y = 0.004; scene.add(grid);
+
+    const objects = new Map();
+    const categories = new Map();
+    function register(key, label, category, object, position, rotation) {
+      object.position.set(...position);
+      if (rotation) object.rotation.set(...rotation);
+      object.userData.foundryKey = key;
+      object.userData.foundryLabel = label;
+      object.traverse((node) => {
+        node.userData.foundryRoot = key;
+        if (node.isMesh) { node.castShadow = true; node.receiveShadow = false; }
+      });
+      scene.add(object);
+      objects.set(key, object);
+      if (!categories.has(category)) categories.set(category, []);
+      categories.get(category).push({ key, label, object });
+      return object;
+    }
+
+    const partPositions = [
+      ["wheel", -4.5, -4.25], ["axle", -3.55, -4.25], ["handle", -2.6, -4.25], ["crank", -1.65, -4.25], ["hinge", -0.7, -4.25],
+      ["latch", 0.25, -4.25], ["hook", 1.2, -4.25], ["bracket", 2.15, -4.25], ["spike", 3.1, -4.25], ["foot", 4.05, -4.25],
+      ["pulley", -4.5, -3.25], ["bearing-block", -3.55, -3.25], ["clamp", -2.6, -3.25], ["collar", -1.65, -3.25], ["coupler", -0.7, -3.25],
+      ["eyelet", 0.25, -3.25], ["cleat", 1.2, -3.25], ["pin", 2.15, -3.25], ["rung", 3.1, -3.25], ["cap", 4.05, -3.25],
+      ["gear", -4.5, -2.25], ["sprocket", -3.55, -2.25], ["ratchet", -2.6, -2.25], ["pawl", -1.65, -2.25], ["winch-drum", -0.7, -2.25],
+      ["spool", 0.25, -2.25], ["roller", 1.2, -2.25], ["chain-guide", 2.15, -2.25], ["fairlead", 3.1, -2.25], ["shackle", 4.05, -2.25],
+      ["swivel", -4.5, -1.25], ["tensioner", -3.55, -1.25], ["buckle", -2.6, -1.25], ["strap-loop", -1.65, -1.25], ["corner-plate", -0.7, -1.25],
+      ["gusset", 0.25, -1.25], ["anchor-plate", 1.2, -1.25], ["wedge", 2.15, -1.25], ["runner", 3.1, -1.25], ["socket-cup", 4.05, -1.25],
+    ];
+    for (const [kind, x, z] of partPositions) {
+      const part = createProceduralPart(kind, { ...baseOptions, seedKey: `part:${kind}` });
+      const localBounds = new THREE.Box3().setFromObject(part);
+      register(`part:${kind}`, kind, "standardized parts", part, [x, -localBounds.min.y + 0.025, z], kind === "wheel" || kind === "pulley" ? [0, 0, 0] : null);
+    }
+
+    register("path:rope", "rope run", "engine paths",
+      createProceduralPath("rope", [[-0.7, 0, 0], [-0.35, 0.25, 0.08], [0.1, 0.08, -0.08], [0.7, 0.2, 0]], { ...baseOptions, seedKey: "path:rope" }),
+      [-4.2, 0.25, 0.15]);
+    register("path:chain", "chain run", "engine paths",
+      createProceduralPath("chain", [[-0.7, 0.35, 0], [-0.35, 0.05, 0], [0.1, 0.16, 0.04], [0.7, 0, 0]], { ...baseOptions, seedKey: "path:chain" }),
+      [-2.4, 0.25, 0.15]);
+
+    const containerKinds = ["crate", "barrel", "sack", "jar", "basket"];
+    containerKinds.forEach((kind, index) => {
+      register(`container:${kind}`, kind, "containers",
+        createProceduralContainer(kind, { ...baseOptions, seedKey: `container:${kind}` }),
+        [-0.8 + index * 0.85, 0, 0.15]);
+    });
+
+    const surfaces = [["sign", -4.2], ["paper", -2.85], ["banner", -1.5], ["decal", -0.15]];
+    surfaces.forEach(([kind, x]) => {
+      const surface = createProceduralSurface(kind, { ...baseOptions, seedKey: `surface:${kind}`, label: kind === "sign" ? "WATCH" : "" });
+      register(`surface:${kind}`, kind, "surface media", surface, [x, kind === "sign" ? 0.85 : 0.55, 1.75], kind === "decal" ? [-Math.PI / 2, 0, 0] : null);
+    });
+
+    const fxKinds = [["flame", 1.3], ["ember", 2.4], ["magic", 3.5], ["smoke", 4.6]];
+    fxKinds.forEach(([kind, x]) => {
+      const fx = createProceduralFx(kind, { ...baseOptions, seedKey: `fx:${kind}`, scale: 0.85 });
+      register(`fx:${kind}`, kind, "effects", fx, [x, 0.08, 1.75]);
+    });
+
+    // A real socket assembly: one axle, two standardized wheels, a cargo rack, and swappable cargo.
+    const assembly = createCargoSocketRack({ ...baseOptions, seedKey: "assembly:cart", slots: 3 });
+    assembly.name = "socket-assembled-cart";
+    assembly.position.y = 0.38;
+    const axle = createProceduralPart("axle", { ...baseOptions, seedKey: "assembly:axle", length: 1.25 });
+    axle.position.y = -0.22;
+    const leftWheel = createProceduralPart("wheel", { ...baseOptions, seedKey: "assembly:wheel", radius: 0.3 });
+    const rightWheel = createProceduralPart("wheel", { ...baseOptions, seedKey: "assembly:wheel", radius: 0.3 });
+    attachProceduralAtSocket(axle, leftWheel, "wheel-left");
+    attachProceduralAtSocket(axle, rightWheel, "wheel-right");
+    assembly.add(axle);
+    ["crate", "barrel", "sack"].forEach((kind, index) => {
+      attachProceduralAtSocket(assembly, createProceduralContainer(kind, { ...baseOptions, seedKey: `assembly:${kind}`, scale: 0.62 }), "cargo", index);
+    });
+    register("assembly:cart", "socket-assembled cargo cart", "assemblies", assembly, [-2.2, 0, 3.55], [0, -0.2, 0]);
+
+    // Winch assembly proves crank + rope + hook as replaceable modules.
+    const winch = new THREE.Group();
+    const winchOptions = { ...baseOptions, seedKey: "assembly:winch" };
+    const uprightMat = createProceduralPart("foot", winchOptions).children[0].material;
+    const post = new THREE.Mesh(new THREE.BoxGeometry(0.16, 1.2, 0.16), uprightMat); post.position.y = 0.6; winch.add(post);
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(1.25, 0.15, 0.16), uprightMat); beam.position.set(0.42, 1.15, 0); winch.add(beam);
+    const drum = createProceduralPart("winch-drum", { ...winchOptions, length: 0.44, radius: 0.14 });
+    drum.position.set(0.28, 0.78, 0); winch.add(drum);
+    const crank = createProceduralPart("crank", winchOptions); crank.scale.setScalar(0.72); crank.position.set(-0.03, 0.78, 0.16); winch.add(crank);
+    const ratchet = createProceduralPart("ratchet", { ...winchOptions, radius: 0.18, teeth: 9 });
+    ratchet.scale.setScalar(0.72); ratchet.rotation.y = Math.PI / 2; ratchet.position.set(0.01, 0.78, 0); winch.add(ratchet);
+    const pawl = createProceduralPart("pawl", { ...winchOptions, length: 0.3 });
+    pawl.scale.setScalar(0.58); pawl.rotation.z = -0.35; pawl.position.set(0.02, 1.02, 0.02); winch.add(pawl);
+    const fairlead = createProceduralPart("fairlead", { ...winchOptions, width: 0.34, height: 0.24 });
+    fairlead.scale.setScalar(0.72); fairlead.position.set(0.76, 1.07, 0); winch.add(fairlead);
+    const rope = createProceduralPath("rope", [[0.28, 0.94, 0], [0.76, 1.07, 0], [0.8, 0.28, 0]], { ...winchOptions, radius: 0.018 }); winch.add(rope);
+    const hook = createProceduralPart("hook", { ...winchOptions, scale: 0.6 }); hook.position.set(0.8, 0.02, 0); winch.add(hook);
+    register("assembly:winch", "modular winch", "assemblies", winch, [0.2, 0, 3.4], [0, 0.15, 0]);
+
+    const sconce = new THREE.Group();
+    const sconceBracket = createProceduralPart("bracket", { ...baseOptions, seedKey: "assembly:sconce-bracket", size: 0.42 });
+    sconceBracket.rotation.z = Math.PI / 2;
+    sconce.add(sconceBracket);
+    const sconceFlame = createProceduralFx("flame", { ...baseOptions, seedKey: "assembly:sconce-flame", scale: 0.7, lightIntensity: 0.45 });
+    sconceFlame.position.set(0.37, 0.28, 0);
+    sconce.add(sconceFlame);
+    const sconceSmoke = createProceduralFx("smoke", { ...baseOptions, seedKey: "assembly:sconce-smoke", count: 4 });
+    sconceSmoke.position.copy(sconceFlame.position).add(new THREE.Vector3(0, 0.28, 0));
+    sconce.add(sconceSmoke);
+    register("assembly:sconce", "bracketed flame fixture", "assemblies", sconce, [1.7, 0.55, 3.55], [0, -0.15, 0]);
+
+    const gate = new THREE.Group();
+    const gateOptions = { ...baseOptions, seedKey: "assembly:gate" };
+    const gateFootLeft = createProceduralPart("foot", gateOptions); gateFootLeft.position.x = -0.48; gate.add(gateFootLeft);
+    const gateFootRight = createProceduralPart("foot", gateOptions); gateFootRight.position.x = 0.48; gate.add(gateFootRight);
+    const gateWood = gateFootLeft.children.find((child) => child.isMesh)?.material;
+    const gateLeaf = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.58, 0.09), gateWood);
+    gateLeaf.position.set(0, 0.55, 0); gate.add(gateLeaf);
+    [-0.48, 0.48].forEach((x) => {
+      const post = new THREE.Mesh(new THREE.BoxGeometry(0.13, 1.05, 0.13), gateWood);
+      post.position.set(x, 0.58, 0); gate.add(post);
+    });
+    const gateHinge = createProceduralPart("hinge", { ...gateOptions, height: 0.28 }); gateHinge.position.set(-0.39, 0.58, 0.07); gate.add(gateHinge);
+    const gateLatch = createProceduralPart("latch", gateOptions); gateLatch.scale.setScalar(0.68); gateLatch.position.set(0.25, 0.58, 0.07); gate.add(gateLatch);
+    [-0.24, 0, 0.24].forEach((x, index) => {
+      const spike = createProceduralPart("spike", { ...gateOptions, length: 0.25, radius: 0.055 });
+      spike.position.set(x, 0.84, 0); gate.add(spike);
+    });
+    register("assembly:gate", "socket-ready gate hardware", "assemblies", gate, [3.05, 0, 3.55], [0, -0.15, 0]);
+
+    // The lab uses a real closure with breachable members, a hinge pivot, and occupant sockets.
+    const stateLab = createProceduralBarrier({ ...baseOptions, seedKey: "state-lab" });
+    register("state:lab", "state recipe laboratory", "state recipes", stateLab, [-4.25, 0, 3.55], [0, 0.15, 0]);
+
+    function makeLabel(text, position) {
+      const canvas = document.createElement("canvas"); canvas.width = 512; canvas.height = 72;
+      const context = canvas.getContext("2d"); context.clearRect(0, 0, 512, 72);
+      context.fillStyle = "#efe0bd"; context.font = "600 28px Georgia"; context.textAlign = "center"; context.fillText(text, 256, 45);
+      const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
+      sprite.scale.set(2.35, 0.34, 1); sprite.position.set(...position); scene.add(sprite);
+    }
+    makeLabel("STANDARDIZED PARTS · 40", [0, 1.35, -4.45]);
+    makeLabel("PATHS + CONTAINERS", [0, 1.35, 0.05]);
+    makeLabel("SURFACES + EFFECTS", [0, 1.5, 1.65]);
+    makeLabel("SOCKET ASSEMBLIES", [0.3, 1.8, 3.55]);
+
+    const list = document.querySelector("#inventory");
+    const rows = new Map();
+    for (const [category, entries] of categories) {
+      const heading = document.createElement("div"); heading.className = "section"; heading.textContent = category; list.append(heading);
+      for (const entry of entries) {
+        const row = document.createElement("div"); row.className = "item";
+        const sockets = entry.object.userData.sockets?.length || 0;
+        const meshes = []; entry.object.traverse((node) => { if (node.isMesh || node.isPoints) meshes.push(node); });
+        row.innerHTML = `<b>${entry.label}</b><span>${meshes.length} generated elements · ${sockets} root sockets</span>`;
+        row.onclick = () => select(entry.key);
+        rows.set(entry.key, row); list.append(row);
+      }
+    }
+    function select(key) {
+      const object = objects.get(key); if (!object) return;
+      document.querySelectorAll(".item").forEach((row) => row.classList.remove("active"));
+      rows.get(key)?.classList.add("active");
+      const box = new THREE.Box3().setFromObject(object), center = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
+      target.copy(center); radius = Math.max(1.8, size.length() * 2.7); placeCamera();
+      document.querySelector("#selected").textContent = `Selected: ${object.userData.foundryLabel}`;
+    }
+    const raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
+    function pick(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
+      raycaster.setFromCamera(pointer, camera);
+      for (const hit of raycaster.intersectObjects([...objects.values()], true)) {
+        let node = hit.object;
+        while (node && !node.userData.foundryRoot) node = node.parent;
+        if (node?.userData.foundryRoot) { select(node.userData.foundryRoot); return; }
+      }
+    }
+
+    const contextSelect = document.querySelector("#context"); contextSelect.value = contextId;
+    contextSelect.onchange = () => {
+      const url = new URL(location.href); url.searchParams.set("material", contextSelect.value); location.href = url.href;
+    };
+    const stateSelect = document.querySelector("#state");
+    const requestedState = query.get("state") || "intact"; stateSelect.value = requestedState;
+    function setState(state) {
+      applyProceduralState(stateLab, state, { ...baseOptions, seedKey: `state-lab:${state}`, containerKind: "barrel" });
+      document.querySelector("#selected").textContent = `State laboratory: ${state}`;
+    }
+    stateSelect.onchange = () => setState(stateSelect.value);
+    setState(requestedState);
+
+    const expected = {
+      parts: PROCEDURAL_KIT.partKinds.length,
+      paths: PROCEDURAL_KIT.pathKinds.length,
+      effects: PROCEDURAL_KIT.fxKinds.length,
+      surfaces: PROCEDURAL_KIT.surfaceKinds.length,
+      containers: PROCEDURAL_KIT.containerKinds.length,
+      states: PROCEDURAL_KIT.states.length,
+      channels: PROCEDURAL_KIT.channels.length,
+    };
+    document.querySelector("#status").textContent =
+      `PASS · ${expected.parts} parts · ${expected.paths} paths · ${expected.effects} FX · ${expected.surfaces} surfaces · ${expected.containers} containers · ${expected.states} states`;
+    window.__proceduralKitReady = true;
+    window.__proceduralKitObjects = objects;
+    window.__proceduralKitAudit = expected;
+    window.__proceduralKitBenchmark = (iterations = 30) => {
+      const count = Math.max(1, Math.min(120, Math.floor(iterations)));
+      const started = performance.now();
+      for (let index = 0; index < count; index++) {
+        const sampleTime = (started + index * 16.667) / 1000;
+        tickProcedural(scene, sampleTime, 1 / 60);
+        renderer.render(scene, camera);
+      }
+      renderer.getContext().finish();
+      const elapsed = performance.now() - started;
+      return {
+        iterations: count,
+        totalMs: elapsed,
+        averageMs: elapsed / count,
+        renderCapacityFps: count * 1000 / elapsed,
+      };
+    };
+
+    let prior = performance.now(), frameSamples = [], frameCount = 0;
+    function frame(now) {
+      const rawFrameMs = now - prior;
+      const delta = Math.min(0.05, rawFrameMs / 1000); prior = now;
+      if (rawFrameMs > 0 && rawFrameMs < 100) frameSamples.push(rawFrameMs);
+      if (frameSamples.length > 90) frameSamples.shift();
+      frameCount++;
+      if (frameCount % 30 === 0 && frameSamples.length) {
+        const averageMs = frameSamples.reduce((sum, value) => sum + value, 0) / frameSamples.length;
+        const fps = Math.min(999, 1000 / averageMs);
+        document.querySelector("#performance").textContent =
+          `Live renderer: ${fps.toFixed(0)} FPS · ${averageMs.toFixed(1)} ms/frame`;
+      }
+      tickProcedural(scene, now / 1000, delta);
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    addEventListener("resize", () => {
+      camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>

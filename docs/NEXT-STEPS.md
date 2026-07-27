@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-25
+updated: 2026-07-26
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -18,27 +18,59 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 roll into `NEXT-STEPS-ARCHIVE.md` via `python3 build/archive-docs.py --emit`. Standing plan
 sections (tracks/layers/etc.) are never auto-archived.
 
-## Do next (2026-07-25 — Golden Site study audit corrected the completion claims)
+## Do next (2026-07-26 — Golden Site ontology / engine marriage)
 
 The audit separated four gates that the 2026-07-24 running record had collapsed:
 `RESEARCHED` · `FOUNDER-RULED` · `BRIEF-CONGRUENT` · `CLAY-PROVED`. The older uses of
 “served” and “queue empty” below are preserved as session history but are **superseded
 as current status** by `GOLDEN-SITES-CATALOG.md`.
 
-1. ☐ Resolve the six nonblocking founder proposals in
+1. ☑ Capture the docs-only engine marriage in
+   `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`: the story engine remains authority;
+   urban/wilderness/dungeon remain traversal families; host programs, operating
+   models, transforms, materialization windows, semantic plans, composition, assets,
+   and projections receive separate ownership. Reclassify Sites 3/8 as cross-host
+   transforms and preserve honest quiet space.
+2. ☑ Audit tavern truth and route `VENUE-TAVERN-01` through
+   `TAVERN-VENUE-ROUTING-BRIEF.md`. The typed tavern path is live and its dedicated
+   harness passes 33/33. The returned `Reference/Tavern-Study/` packet now retains
+   twelve deterministic real rolls plus a cross-tradition source ledger and proposed
+   HospitalityVenue compiler contract. Only 1/12 ungated typed calls selected a row
+   explicitly describing a tavern. The 42-roll cross-program cohort then falsified the
+   gate-only correction: all fourteen same-seed realm mirrors kept identical
+   interiors, and program/person layers remained unrelated. The superseding
+   founder-ruling in `BUILDING-PROGRAM-TABLE-FAMILIES.md` preserves the raw d300 for
+   untyped discovery while moving typed generation to coherent family chassis plus
+   program arrangement/current-scene/Spice and realm-doctrine layers. The
+   `Reference/Building-Type-Roll-Study/` before-state now adds 42 integrated rolls
+   across all fourteen kits, same-seed realm mirrors, and the real Prison/Custody
+   boundary; it proves current building layers do not yet reconcile like the walks.
+   `Reference/Building-Family-Table-Samples/` now supplies the first after-direction
+   taste packet: seven small family tranches, dedicated Prison/Custody, explicit
+   arrangement/chassis eligibility, and 28 deterministic layered receipts. These are
+   founder-review samples, not final d20s or live compilation.
+   The Golden-grade semantic/spatial venue fixture remains open.
+3. ☐ Let CL-R3 finish in its existing construction lane. Then reconcile its admitted
+   generic construction product against the ontology contract before opening semantic
+   compiler implementation; do not edit CL-R3 files from the Golden lane.
+4. ☐ Build the shared ontology proof in `GOLDEN-SITES-PROOF-QUEUE.md`: compile one live
+   tavern through the common semantic/composition path, preserve SceneTray→BattleMap
+   identity, apply layered control to the compact host and two unlike hosts, prove
+   legal semantic overflow, and retain one large quiet-space fixture.
+5. ☐ Resolve the six nonblocking founder proposals in
    `GOLDEN-SITES-FOUNDER-QUEUE.md` (four monastery build-order choices, Urban produce
    tray tier, UC10 answer-object tier).
-2. ☐ Run the targeted source work in `GOLDEN-SITES-PROOF-QUEUE.md`: monastery metric
+6. ☐ Run the targeted source work in `GOLDEN-SITES-PROOF-QUEUE.md`: monastery metric
    and cultural breadth; Mine direct tactical-map cohort, broader measured plans, and
    first mechanism/culture cards; Urban measured frontage/hall, shutter, party wall,
    balcony, working-market, and fixed-camera evidence.
-3. ☐ Build retained deterministic proofs in order: Guard Post → Camp → Lair →
+7. ☐ Build retained deterministic proofs in order: Guard Post → Camp → Lair →
    Monastery → Mine → Urban. The Mine proof uses the accepted active-upper/flooding-
    lower Rung-B fixture and must demonstrate broad, narrow, and conditional plans.
    Every proof needs clay/tactical/dressed captures, motivated lighting, AO/contact/
    readable darkness, human scale, changed seeds, and an adversarial envelope. No site
    currently has `CLAY-PROVED: PASS`.
-4. ☐ Implement from the Mine-standard dedicated working specs now linked by
+8. ☐ Implement from the Mine-standard dedicated working specs now linked by
    `GOLDEN-SITES-CATALOG.md`. They define family expressions, culture/circumstance,
    learning-first builds, zones, circuits, plans, generation, rejection/fallback,
    runtime facts, proof receipts, and exact first visual demonstrations. Research

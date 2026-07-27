@@ -1,9 +1,11 @@
 ---
 type: concept-board
 created: 2026-07-25
+updated: 2026-07-26
 status: FOUNDATION ACCEPTED — full research and build deferred late/last
 site: 3 — dormant / abandoned place
 method: GOLDEN-SITE-CONCEPTING-GUIDELINES.md
+authority: GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md
 ---
 
 # SITE 3 — DORMANT / ABANDONED PLACE
@@ -27,7 +29,7 @@ matter to how you explore it now.
 The player should feel that they are reading the remains of a real place rather than
 walking through a generic pile of ruins.
 
-## What makes it a site family
+## What makes it a Golden transform
 
 Site 3 is not one architectural style. It is a transformation family applied to an
 existing host: a guard post, waystation, camp structure, lair, monastery range, market
@@ -50,8 +52,9 @@ original culture and architectural identity.
   culture, and component provenance are transformed rather than replaced by a generic
   ruin prefab.
 - **REQUIRED — no stable new operator owns the place.** Passing scavengers, animals,
-  weather, or an encounter are legal. A functioning replacement population promotes
-  the site toward Site 8, infiltrated/layered control.
+  weather, or an encounter are legal. A functioning replacement population removes or
+  changes the Dormant transform. It becomes Site 8 evidence only when at least two
+  persistent simultaneous claims retain a consequential control difference.
 - **DEFAULT — damage is selective.** Most of the place remains coherent enough to make
   the important failure legible.
 - **LICENSED — supernatural persistence.** Haunting, magical stasis, cursed closure, or

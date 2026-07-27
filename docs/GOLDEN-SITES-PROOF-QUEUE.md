@@ -2,6 +2,7 @@
 
 type: execution-queue
 created: 2026-07-25
+updated: 2026-07-26
 authority: `GOLDEN-SITES-CATALOG.md` status gates
 founder choices: `GOLDEN-SITES-FOUNDER-QUEUE.md`
 
@@ -18,7 +19,8 @@ capture required before a status gate may move.
 
 Every Golden Site proof must:
 
-1. originate in a real deterministic Genesis roll and retain its receipt;
+1. originate in a real deterministic Genesis roll and retain its receipt, including
+   `rollerLineage` and `sourceRollRefs`;
 2. use the fixed production camera, with governed zoom/pan/focus and no orbit;
 3. include a six-foot human witness plus the relevant small/large standee envelopes;
 4. show clay, tactical-overlay, and dressed/lighted captures over the same committed
@@ -33,12 +35,142 @@ Every Golden Site proof must:
    occlusion/contact, and honest cast shadows;
 9. include at least two changed seeds and one adversarial envelope while preserving
    strategic quality without requiring an identical solution;
-10. preserve mechanics, routes, provenance, and ids when dressing is applied; and
-11. retain failures as diagnostic evidence rather than silently hand-authoring them
+10. include a context-disabled capture and a real-roll context-enabled capture over
+    identical mechanics, ids, portals, and knowledge;
+11. preserve mechanics, routes, provenance, and ids when dressing/context is applied;
+    and
+12. retain failures as diagnostic evidence rather than silently hand-authoring them
    away.
 
 A site earns `CLAY-PROVED: PASS` only when the canonical hero, changed-seed sheet, and
 adversarial sheet all pass. One flattering image is insufficient.
+
+## Shared ontology / host-transform proof
+
+Owner: `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`.
+
+This proof begins only after the active CL-R3 lane has delivered its construction
+product and the handoff has been reconciled. It may consume the admitted construction
+grammar; it may not rewrite CL-R3's fixture or validators.
+
+### Targeted evidence
+
+- Normalize one existing world/place/walk/building chain into a provenance-backed
+  semantic request without replacing its live roller.
+- Separate persistent `SiteIdentity`, `HostProgram`, `TransformStack`, and
+  `MaterializationWindow` in the receipt.
+- Apply one transform to at least three unlike hosts without a host-specific transform
+  branch.
+- Prove one tiny transformed venue without map expansion and one legal semantic
+  overflow into a precommitted frontier.
+- Prove one large active window with broad quiet space and one concentrated activity
+  knot; prop density is not an acceptance metric.
+- Remount one committed venue from SceneTray to BattleMap with stable site, zone,
+  threshold, surface, object, and actor ids.
+- Exercise the semantic asset fallback ladder without dropping a required role.
+
+### Required fixtures
+
+`VENUE-TAVERN-01` supplies the first small ordinary venue and the first compact
+`LayeredControl` case. Site 8 additionally requires the same transform over two unlike
+hosts, provisionally Prison and Mine or another pair with live receipts. A large Site 9,
+10, or 11 fixture supplies the honest-empty-space case.
+
+Passing this shared proof does not make any numbered site `CLAY-PROVED`; each site still
+owes its own family fixture.
+
+## Golden Venue fixture — `VENUE-TAVERN-01`
+
+Owner: `TAVERN-VENUE-ROUTING-BRIEF.md`.
+
+### Targeted evidence
+
+- Start from a live Watering-hole, Lodging, or typed-tavern record and retain its world,
+  realm, place, proprietor, ambient cast, interior, encounter, rumor, lodging, and
+  provenance facts.
+- Preserve the twelve baseline receipts in `../Reference/Tavern-Study/ROLL-RECEIPTS.json`.
+  Their broad interior selections and unresolved program/operator/culture
+  relationships are regression evidence for the ungated caller and must not be
+  hand-corrected at source.
+- Preserve `../Reference/Building-Type-Roll-Study/` as the shared before-state: 42
+  integrated rolls across all fourteen live kits, fourteen same-seed realm mirrors,
+  and the actual Prison/Custody boundary. Re-run the same requests after family/program
+  layering and show chassis, arrangement, current scene, contextual Spice,
+  realm/culture transformation, obligations, people reconciliation, and retained
+  source facts.
+- Compile the smallest honest hospitality operating model: arrival, service,
+  common-space, supply/waste, responsible staff, egress, hours, capacity, and every
+  conditional lodging/private obligation actually rolled.
+- Distinguish property/controller, operator, responsible host, household, staff, and
+  supplier roles; do not treat `roleHint` as proof of a hospitality occupation.
+- Derive attendance from spatial/service capacity and schedule rather than using an
+  independent population total.
+- Route typed Tavern through the `BF-PUBLIC-SERVICE` chassis family plus
+  HospitalityVenue arrangement, current-scene, and Spice layers. Do not use the flat
+  d300 as its primary interior selector.
+- Preserve the raw d300 for untyped discovery. A whole d300 row may enter the typed
+  path only through an explicitly selected adaptive-reuse transform; otherwise migrate
+  reviewed compatible relationships into family/program tables with lineage.
+- On detail escalation, derive zones, thresholds, people, providers, and tactical
+  reservations from the same committed layered result.
+- Apply an evidence-backed hospitality culture/doctrine card that changes practice,
+  access, service, and spatial priorities—not merely label and props.
+- Route a roadside/service expression through Site 2 and an urban-frontage expression
+  through Site 10 without forking the tavern program.
+- Apply Site 8's transform to the same compact host: public-room control versus a
+  second claim over a back-room threshold, deliveries, or private introductions.
+- Preserve dormant tactical reservations through social play, then promote the same
+  venue to BattleMap after a plausible escalation.
+- Record truthful asset fallbacks and reject the generic medieval-tavern default when
+  realm/culture facts require another hospitality expression.
+
+### Required fixture
+
+Provisional hero: `TVR-CHROME-04`; changed-seed companion: `TVR-GLOOM-01`;
+lodging/adversarial companion: `TVR-FRONTIER-04`. The first is a recommendation, not a
+founder lock.
+
+One selected ordinary real-roll tavern, its compact layered-control transform, one
+changed realm/context expression, and one adversarial small envelope. Retain social,
+exploration, clay, tactical, dressed, context-off/on, and BattleMap-promotion captures
+over stable ids. Demonstrate social, access/information, retreat, and forceful plans
+with understandable consequences.
+
+This is a Golden Venue fixture, not Site 13 and not a substitute for Sites 2, 8, or 10.
+
+## Shared world-context projection proof
+
+Owner: `GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md`.
+
+### Targeted evidence
+
+- Compile the six current world-genesis harness receipts in
+  `../Reference/Golden-Site-World-Context/ROLL-RECEIPTS.json` plus the retained Prison
+  receipt into source-eligible/omitted/rejected context inputs.
+- Define `WorldContextProjectionPlan` without adding legal cells, connectors,
+  interactables, actors, destinations, or knowledge.
+- Build a procedural portal/support apron, one layered context-card family, one
+  reusable far-field plate family, and the grade/fog-only fallback.
+- Add background-image metadata for camera family, horizon, safe crop, depth band,
+  grade, time/weather compatibility, masks, provenance, and interactive-noun
+  prohibition.
+- Prove portal alignment, false-affordance rejection, fixed-camera contrast, cutaway
+  coexistence, and context performance.
+
+### Required fixture
+
+One unchanged Golden Site chassis under two materially different real-roll context
+receipts; one unchanged context receipt around two legal site chassis; one vertical or
+water/void case; one enclosing case; one ordinary terrain/settlement case; and one
+licensed strange case.
+
+Retain context-off/on clay, tactical, dressed, day/night, layer-debug, and adversarial
+captures; `rollerLineage`, `sourceRollRefs`, `WorldContextProjectionPlan`, every omitted
+or rejected fact, portal/support refs, plate/card/mesh recipe ids, grade/light/weather
+compatibility, performance counts, fallbacks, and failures.
+
+This shared fixture does not replace any site's own context obligations below and does
+not earn `CLAY-PROVED` for a site whose tactical fixture remains open.
 
 ## Site 1 — Guard Post
 
@@ -195,6 +327,78 @@ high-water case that honestly rejects, reroutes, or reduces the operation.
 Retain the seed/version receipt, semantic blueprint, six operating circuits, route
 capacities, standee/collision results, plan tradeoffs, ids, provenance, captures,
 relaxations, and rejected candidates.
+
+## Site 6 — Prison / Custody
+
+Working spec: `SITE-6-PRISON-CUSTODY-SPEC.md`.
+
+### Evidence already attached — 2026-07-25
+
+- `../Reference/Golden-Site-Ideal-Art/prison/ROLL-RECEIPTS.json` records real current
+  roller lineage for seed `2959` / `PR-DOC-01`, seed `21095` / `PR-DOC-02`, and seed
+  `6198` / `RC-PRISON-01`.
+- `../Reference/Golden-Site-Ideal-Art/contact-sheets/prison-variations.png` and its
+  three full-resolution siblings prove that the matched doctrine pair can be
+  compositionally distinct and that the retained suspended-cell roll can survive the
+  accepted fixed-camera art language.
+- This is ideal-art/layout evidence only. It does not satisfy the fixture, body,
+  force, darkness, exact property lifecycle, or deterministic runtime receipt checks
+  below and does not advance `CLAY-PROVED`.
+
+### Targeted evidence
+
+- Extend `Reference/Prison-Custody-Study/` beyond its returned initial depth pass with
+  measured non-European small-jail/holding plans and direct premodern non-carceral
+  custody evidence. Keep architecture evidence separate from institutional inference
+  and fantasy adapters.
+- Add direct hostage/surety, quarantine, religious-penance, and broader household/
+  communal custody sources before promoting those doctrine cards; do not treat one
+  modern carceral or colonial plan as universal.
+- Convert the packet's property classes and eight operating circuits into proof
+  receipts: authority/record, people/classification, access/observation,
+  property/evidence, services/health, routine/contact, force/emergency, and
+  disposition/continuity.
+- Prove the selected first pair—`PR-DOC-01 — Keeper-House Civic Custody` versus
+  `PR-DOC-02 — Ledger-and-Shift Civic Custody`—on matched capacity/legal inputs. Reject
+  paper, prop, symbol, or palette-only difference.
+- Measure cells, passages, control positions, yards, grilles, doors, chains/supports,
+  and intended body/escort/evacuation envelopes in clay.
+- Test repeated bars, deep corridors, galleries, dark cells, and suspended voids
+  through the fixed camera without relying on unowned fill lights or cutaway that leaks
+  secrets.
+- Reconcile capture provenance and exact property removal/recovery with the canonical
+  item event before claiming the captured-start loop is production-safe.
+
+### Required fixture
+
+`PR-SHAPE-01`, one deterministic Rung-B four-cell civic jail: public desk/intake,
+correlated stable cells, keeper control landing, secure yard, staff-only property
+realization, real service/sanitation dependencies, protected discretionary space,
+finite disposition, and truthful locks/force surfaces.
+
+Replay the exact committed plan from public outside, covert outside, captured cell, and
+staff-diagnostic states without moving topology, occupants, property, history, clocks,
+or hidden edges. Demonstrate social/legal, routine/procedural, covert/secret, and
+force/disruption plans, with at least three viable before disposition fires. Include
+exact property-id custody and identity-preserving return, one persistent failed-attempt
+consequence, day/night/shift/alert/breach states, four body envelopes, two changed
+seeds, matched `PR-DOC-01`/`PR-DOC-02`, a Rung-A degradation, and adversarial body,
+camera/darkness, and missing-provider/evidence-hazard cases.
+
+The property receipt must distinguish prisoner property, crime/case evidence,
+contraband/unauthorized property, and institution property. Low volume may share one
+secure realization, but owner/source, custodian, container/location, state, access, and
+release/return authority may not collapse.
+
+Retain `RC-PRISON-01`, the suspended living-ironwood solitary cell, as a second
+composition fixture produced through ordinary world/material/holding inputs—never a
+named-row or seed branch. Its receipt must include void/support/gangway or winch,
+property, disposition, and the same social/routine/covert/force escape grammar.
+
+Retain world/place/building/walk/capture lineage, obligation/realization trace, access
+views, cell/child ids, property snapshots and events, route capacities, force/light/
+service states, plan tradeoffs, proposal flags, clay/tactical/dressed/cutaway captures,
+fallbacks, and rejections.
 
 ## Site 10 — Urban Institution
 

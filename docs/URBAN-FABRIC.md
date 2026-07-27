@@ -1,7 +1,8 @@
 ---
 type: system-spec
-status: specced 2026-07-02 midday — batch-3 unit 9. Verified gap: typed buildings absent; Tavern 2.0 + Settlement 1.1 are robust but VAULT-ONLY (zero in-app wiring); no persistent city structure.
+status: BUILT — batch-3 unit 9; 2026-07-26 audit: typed buildings, tavern surfaces, and lazy districts live; Golden-grade semantic/spatial venue composition remains unbuilt
 created: 2026-07-02
+updated: 2026-07-26
 related:
   - "[[ON-DEMAND-GEN]]"
   - "[[ECONOMY-SINKS]]"
@@ -11,6 +12,24 @@ related:
 ---
 
 # Urban Fabric — typed buildings, lazy districts, the tavern as a surface
+
+## §-1. 2026-07-26 status and ontology reconciliation
+
+The verified findings in §0 are the **pre-build audit that motivated this spec**, not
+current runtime status. The implementation now lives in `data/building-kits.js`,
+`src/world/urban.js`, `src/engine/codex-roll.js`, and the related place, economy, and
+wiring sources. `node dev/verify-urban-fabric.mjs` passed 33/33 on 2026-07-26.
+
+The tavern is an ordinary venue/host program, not a numbered Golden Site. Site 2 may
+host its roadside/service expression; Site 10 may host its urban-frontage expression;
+Site 4 may host a licensed courtyard-inn guest expression; Sites 3 and 8 may transform
+the same host. The shared routing and required `VENUE-TAVERN-01` proof live in
+`TAVERN-VENUE-ROUTING-BRIEF.md`; the governing taxonomy lives in
+`GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`.
+
+What remains unbuilt is not “the tavern” in story/runtime terms. It is the
+Golden-grade semantic venue plan, shared tactical composition, stable SceneTray →
+BattleMap identity, and retained visual fixture.
 
 ## §0. Verified findings + Adam's forks (2026-07-02)
 

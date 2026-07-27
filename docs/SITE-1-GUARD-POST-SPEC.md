@@ -9,6 +9,8 @@ authority:
   - STRUCTURE-KIT-CATALOG.md
 research:
   - ../Reference/FFT-Guard-Post-Study/
+preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
+context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---
 
 # SITE 1 — GUARD POST — WORKING SPEC
@@ -305,6 +307,26 @@ combat, social play, stealth, investigation, and aftermath.
 - condition/chronology, overgrowth, time/weather, and light owner;
 - encounter objective, threat band, arrival side, traffic and creature envelopes.
 
+### Current-roller preservation
+
+This spec consumes the Site 1 record in
+`GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md`.
+
+- `LIVE`: world `master`/`arch`/nearby/faction/pressure axes; Place Spine
+  Threshold, Crossing, Watch-post, and compatible Hall-of-law expressions;
+  realm-skinned gates, checkpoints, signal towers, lookouts, and `rollPlace`
+  setting/trait/secret/history facts.
+- `LIVE-COMPOSED`: bridge, pass, wall, platform, urban-edge, faction-run, and
+  strange-material posts assembled from those independent axes.
+- `TARGET-ADAPTER`: the Guard Post functional grammar translating compatible place
+  facts into a controlled transition/observation plan.
+
+Before implementation, retain one bridge or palisade result, one urban/realm
+checkpoint, and one unusual-setting or unusual-material result in addition to
+`GP-SHAPE-01`. The Golden Seed proves the shoulder-overlook relation; it is not a
+universal topology or frequency target. The receipt preserves the upstream world/place
+facts rather than replacing them with a single site seed.
+
 ### Semantic blueprint
 
 Commit:
@@ -414,6 +436,26 @@ start a search.
   licensed pieces and cap sections but never redesign geometry.
 - Selected-base material emission remains presentation state, not a world light source.
 
+### Rolled world-context projection
+
+The guard post consumes the shared `WorldContextProjectionPlan`. Band 1 continues only
+the real controlled road/bridge/pass/wall portal and the terrain or structure supporting
+the lookout. Bands 2–3 may show the licensed pass, settlement edge, ridge, wall, bridge,
+or distant known place while keeping the controlled transition and observation
+silhouette dominant.
+
+The first context receipt is
+`../Reference/Golden-Site-World-Context/ROLL-RECEIPTS.json#CTX-GP-19`:
+High-Harrow Gate + Bone & Sinew. Mist, pass geometry, fortification, and construction
+are direct inputs; children named only by sound, the memory tithe, faction goal, myth,
+and subjective fading vision are not automatically painted into the background.
+
+No context layer may add a second approach, gate, bridge, ladder, deck, or route. The
+proof retains context-off/on captures over identical road, threshold, deck, actors,
+knowledge, and ids, then changes the context receipt without rewriting
+`GP-SHAPE-01`. The receipt adds `worldContextPlanId`, band/recipe ids, portal/support
+refs, context source refs, omissions, false-affordance rejections, and fallbacks.
+
 ## Structure, mechanisms, and surfaces
 
 ### Site-owned structure
@@ -454,7 +496,8 @@ Retain equivalents of:
 The receipt records seed/version and pinned recipes, grid, camera, standee envelopes,
 terrain/route/culture/occupancy cards, byte-equivalent tactical plans for the culture
 pair, structures/materials/provenance, clay/material/cutaway/gameplay capture ids,
-validator results, fallbacks, and failed candidates.
+validator results, fallbacks, failed candidates, `rollerLineage`, and
+`sourceRollRefs`.
 
 ## First visual proof
 

@@ -1,14 +1,18 @@
 ---
 type: working-site-spec
 created: 2026-07-25
+updated: 2026-07-26
 status: WORKING SPEC — research PASS; founder and brief PARTIAL; clay OPEN
 site: 4 — monastery / commune
 standard: SITE-5-MINE-WORKSHOP-CONCEPT.md
 authority:
   - GOLDEN-SITES-CATALOG.md
+  - GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md
   - STRUCTURE-KIT-CATALOG.md
 research:
   - ../Reference/Monastery-Study/
+preservation: GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md
+context-projection: GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md
 ---
 
 # SITE 4 — MONASTERY / COMMUNE — WORKING SPEC
@@ -42,6 +46,11 @@ Still proposed:
 
 All variants are admitted. Their implementation order remains founder-facing and this
 spec must not promote the proposal to a ruling.
+
+A courtyard inn or hostel is a licensed **guest program** over this chassis, not proof
+that all taverns are Site 4 institutions. Its hospitality/lodging obligations come from
+`TAVERN-VENUE-ROUTING-BRIEF.md`; Site 4 contributes only the court, range, guest-filter,
+and communal-circulation relationships that the rolled form actually licenses.
 
 ## Plain-English promise
 
@@ -311,6 +320,26 @@ routes rather than merely triggering narration.
 - light/heat ownership and time;
 - encounter objective, threat band, arrival side, and creature envelopes.
 
+### Current-roller preservation
+
+This spec consumes the Site 4 record in
+`GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md`.
+
+- `LIVE`: world `master`/`arch`/nearby/myth/taboo/faction/pressure axes; Place Spine
+  Shrine, Seat-of-learning, Lodging, House-of-healing, and compatible Commons/Works
+  expressions; building-interior religious lodging/cell programs; dungeon cloister,
+  chapel, elevation, and walk-skin facts where called.
+- `LIVE-COMPOSED`: cliff-carved, vertical processional, pilgrimage-route,
+  distributed-house, guest-house, and level-court communities.
+- `TARGET-ADAPTER`: the Monastery/Commune grammar translating those sources into
+  communal routine, ritual threshold, work/service flow, and guest access.
+
+Before implementation, retain one cliff-carved or strongly vertical result and one
+distributed or guest-house result in addition to the level wrapped court. The Golden
+Seed proves communal organization and repetition, not a universal courtyard topology.
+Cell rows remain lodging/discipline expressions here; involuntary custody belongs to
+Site 6. The receipt preserves upstream world/place/building/walk facts.
+
 ### Semantic blueprint
 
 Commit:
@@ -418,6 +447,26 @@ lever.
 - Cutaway omits camera-facing roof/upper wall pieces while preserving room, support,
   rain, light, and access facts.
 
+### Rolled world-context projection
+
+The commune's context projection continues its real arrival/processional route,
+cliff/court/terrace support, surrounding work/service landscape, and licensed guest or
+pilgrimage relationship. It may imply a larger communal world through broad ranges and
+silhouettes, but every distinct shrine, cell row, bell, garden, archive, or service
+building needs a real provider.
+
+The first context receipt is
+`../Reference/Golden-Site-World-Context/ROLL-RECEIPTS.json#CTX-MONASTERY-68`:
+The Pilgrim's Ascent + Sounded Glass. Cliff switchbacks, carved mass, and sounded-glass
+construction are direct. A healer's garden, Signal Cairn, or auction crowd appears
+only when its node/site/state is mounted. The Dream-Eater and restricted knowledge stay
+latent.
+
+Context-off/on captures retain identical court, arcade, permissions, routines, actors,
+knowledge, and ids. The receipt adds `worldContextPlanId`, band/recipe ids,
+processional/portal/support refs, source refs, omissions, false-affordance rejections,
+and fallbacks.
+
 ## Structure, mechanisms, and surfaces
 
 ### Inherited
@@ -456,7 +505,8 @@ Retain equivalents of:
 
 The receipt records seed/version, grid, fixed camera, standee envelopes, culture/rule
 and occupancy cards, selected structures/materials/provenance, clay/tactical/day/night/
-dressed ids and captures, validator results, and failed candidates.
+dressed ids and captures, validator results, failed candidates, `rollerLineage`, and
+`sourceRollRefs`.
 
 ## First visual proof
 

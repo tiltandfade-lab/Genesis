@@ -869,3 +869,14 @@ Desktop packet remains intact and unmodified.
   per the decision-capture rule: the six Clayroom reset redlines, the FFT low-poly construction
   language, the narrative-furnishing boundary, and the Material Maker 1.3 / every-material-is-a-seed
   rulings.
+
+## Locked decisions (2026-07-26 — Golden Site ontology / engine marriage)
+
+| Decision | Choice |
+|---|---|
+| Golden Site definition | **Accepted:** the twelve Golden Sites are a deterministic, provenance-backed coverage and acceptance portfolio, not twelve mutually exclusive runtime site types. They may overlap because host programs, cross-host transforms, scale/relationship stresses, and substrate/ownership stresses compose. Authority: `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`. |
+| Story-to-visual authority | **Accepted:** story/world canon remains first authority. Urban, wilderness, and dungeon remain traversal families that may enter persistent bounded sites. Site identity, host program/operating model, transform stack, materialization window, semantic site plan, tactical composition, surface assembly, semantic asset resolution, and SceneTray/TownTray/BattleMap projection remain distinct ownership layers. Lower visual layers may not reroll or delete inconvenient truth. |
+| Layered control | **Accepted:** Site 8 is a cross-host `LayeredControl` transform, eligible from persistent simultaneous claims with a consequential control difference—not from map size. Its spatial expression ranges from shared-room recognition/schedule differences through localized and distributed control to open conflict. Map growth requires semantic overflow plus prelicensed unobserved capacity or a real external provider; it may never invent a useful room or exit after observation. |
+| Space and density | **Accepted:** large active windows may retain broad quiet space, while activity concentrates into a small number of truthful knots. Map area does not imply prop, stall, encounter, or faction density. |
+| Tavern routing | **Accepted:** tavern is a first-class ordinary venue/host program, not Golden Site 13. Site 2 may express route-service taverns; Site 10 urban-frontage taverns; Site 4 licensed courtyard-inn guest forms; Sites 3 and 8 transform the same host. `VENUE-TAVERN-01` becomes the first retained Golden Venue fixture. The current typed tavern/story path is live; Golden-grade semantic/spatial composition and visual proof remain unbuilt. Authority: `TAVERN-VENUE-ROUTING-BRIEF.md`. |
+| CL-R3 boundary | **Accepted:** this pass is docs-only. CL-R3 remains the provider of neutral-clay runs, corners, ends, openings, tiers, risers, connectors, blockers, sockets, and access classes; it owns no story semantics. Golden semantic implementation waits for a post-CL-R3 reconciliation and may not alter the active construction lane. |

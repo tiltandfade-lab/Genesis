@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8e2f2a"/>
+    </marker>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#b9ad9b" stroke-width="2"/>
+    </pattern>
+    <style>
+      .wall{fill:#4c4a49;stroke:#252525;stroke-width:12;stroke-linejoin:round}
+      .floor{fill:#dbcdb7;stroke:#252525;stroke-width:8}
+      .cell{fill:#9daeb1;stroke:#252525;stroke-width:8}
+      .service{fill:#b8a57d;stroke:#252525;stroke-width:8}
+      .yard{fill:#9cab80;stroke:#252525;stroke-width:8}
+      .void{fill:#ede6d9;stroke:#252525;stroke-width:8}
+      .bar{stroke:#2c3539;stroke-width:8}
+      .route{fill:none;stroke:#8e2f2a;stroke-width:14;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+      .route2{fill:none;stroke:#315f79;stroke-width:12;stroke-linecap:round;stroke-dasharray:24 18;marker-end:url(#arrow)}
+      .label{font:700 29px Arial,sans-serif;fill:#202020;text-anchor:middle}
+      .small{font:600 23px Arial,sans-serif;fill:#202020;text-anchor:middle}
+      .title{font:700 42px Arial,sans-serif;fill:#202020}
+      .meta{font:500 23px Arial,sans-serif;fill:#4c4540}
+    </style>
+  </defs>
+  <rect width="1600" height="1000" fill="#f3eee5"/>
+  <text x="80" y="70" class="title">PR-DOC-01 — Keeper-House Civic Custody</text>
+  <text x="80" y="108" class="meta">seed 2959 • Slate-Roof Rise • Rough-Hewn Basalt • four cells + debtors' pen</text>
+
+  <path class="wall" d="M150 190 H1410 V820 H150 Z"/>
+  <rect x="190" y="230" width="1180" height="550" class="floor"/>
+  <rect x="190" y="700" width="1180" height="80" fill="url(#grid)" opacity=".34"/>
+
+  <rect x="190" y="230" width="420" height="250" class="floor"/>
+  <text x="400" y="330" class="label">KEEPER HOUSE</text>
+  <text x="400" y="368" class="small">public desk + intake</text>
+  <rect x="260" y="390" width="220" height="48" rx="8" fill="#6f4e36" stroke="#252525" stroke-width="6"/>
+  <rect x="500" y="250" width="90" height="180" class="service"/>
+  <text x="545" y="318" class="small" transform="rotate(-90 545 318)">PROPERTY</text>
+
+  <rect x="610" y="230" width="360" height="250" class="yard"/>
+  <text x="790" y="335" class="label">SECURE YARD</text>
+  <text x="790" y="372" class="small">rear service + cistern</text>
+  <circle cx="905" cy="405" r="38" fill="#657c82" stroke="#252525" stroke-width="7"/>
+
+  <rect x="970" y="230" width="400" height="250" class="service"/>
+  <text x="1170" y="330" class="label">DEBTORS' PEN</text>
+  <text x="1170" y="368" class="small">communal holding</text>
+  <line x1="990" y1="455" x2="1350" y2="455" class="bar"/>
+
+  <rect x="540" y="500" width="280" height="100" fill="#80694c" stroke="#252525" stroke-width="8"/>
+  <text x="680" y="548" class="label">RAISED KEEPER</text>
+  <text x="680" y="580" class="small">landing / control</text>
+  <path d="M540 600 l-55 55 h55 z" fill="#a58b69" stroke="#252525" stroke-width="7"/>
+
+  <rect x="190" y="610" width="260" height="170" class="void"/>
+  <text x="320" y="680" class="label">STREET</text>
+  <text x="320" y="718" class="small">public threshold</text>
+
+  <g>
+    <rect x="850" y="500" width="125" height="280" class="cell"/>
+    <rect x="975" y="500" width="125" height="280" class="cell"/>
+    <rect x="1100" y="500" width="125" height="280" class="cell"/>
+    <rect x="1225" y="500" width="145" height="280" class="cell"/>
+    <line x1="850" y1="520" x2="850" y2="760" class="bar"/>
+    <line x1="975" y1="520" x2="975" y2="760" class="bar"/>
+    <line x1="1100" y1="520" x2="1100" y2="760" class="bar"/>
+    <line x1="1225" y1="520" x2="1225" y2="760" class="bar"/>
+    <text x="912" y="642" class="small">CELL 1</text>
+    <text x="1037" y="642" class="small">CELL 2</text>
+    <text x="1162" y="642" class="small">CELL 3</text>
+    <text x="1297" y="642" class="small">CELL 4</text>
+  </g>
+
+  <path d="M205 742 C350 720 455 630 540 560 C670 454 758 522 856 638" class="route"/>
+  <path d="M570 510 C650 435 695 410 790 392" class="route2"/>
+  <path d="M1360 300 C1290 330 1195 420 1140 505" class="route2"/>
+
+  <g transform="translate(90 875)">
+    <rect width="1420" height="70" rx="12" fill="#e5dccd" stroke="#70675f" stroke-width="3"/>
+    <path d="M40 35 H170" class="route"/>
+    <text x="300" y="44" class="meta">public / prisoner movement</text>
+    <path d="M610 35 H740" class="route2"/>
+    <text x="880" y="44" class="meta">staff / service movement</text>
+    <text x="1255" y="44" class="meta">1 square = 5 ft study module</text>
+  </g>
+</svg>

@@ -117,6 +117,7 @@ const MATERIAL_RECIPE = Object.freeze({
   roof: { roughness: 0.88, metalness: 0.0 },
   glass: { roughness: 0.30, metalness: 0.0 },
   cloth: { roughness: 0.92, metalness: 0.0 },
+  ceramic: { roughness: 0.89, metalness: 0.0 },
 });
 
 // a five-band base albedo per family (the "five-band albedo" the recipe calls for — a small fixed
@@ -130,7 +131,55 @@ const FAMILY_ALBEDO_BANDS = Object.freeze({
   roof: [0x3a2f28, 0x4c3e33, 0x604f40, 0x77634f, 0x8f7a63],
   glass: [0x5f7a7d, 0x6f8b8e, 0x82a0a3, 0x9bb8ba, 0xb6d3d4],
   cloth: [0x4a3f4e, 0x5c4f61, 0x716374, 0x877689, 0x9c8c9e],
+  ceramic: [0x6b5140, 0x80634d, 0x96775e, 0xad8e72, 0xc4a58b],
 });
+
+// The mesh owns only its structural family. The active place may specialize that family without
+// recompiling geometry: a wood barricade can therefore become pine, ironwood, driftwood, etc.
+const DONOR_MATERIAL_VARIANT_BANDS = Object.freeze({
+  pine: [0x6b4a2a,0x815d34,0x99723f,0xb18a51,0xc8a268],
+  oak: [0x4d321f,0x62432a,0x795637,0x906b45,0xa98259],
+  ironwood: [0x241b18,0x342520,0x47332a,0x5c4435,0x725743],
+  driftwood: [0x5b5a50,0x706f62,0x858476,0x9a9989,0xb0af9e],
+  rotwood: [0x312d20,0x423b29,0x554b33,0x695d3f,0x7d7050],
+  "creosote-pine": [0x211c18,0x302820,0x42362a,0x554535,0x695743],
+  "wrought-iron": [0x25272a,0x34373b,0x45494e,0x585d63,0x6d7379],
+  "rusted-iron": [0x3b2921,0x51362a,0x694634,0x815a41,0x9a7050],
+  "blackened-iron": [0x18191b,0x242629,0x323538,0x42464a,0x555a5f],
+  granite: [0x4b4a48,0x5f5d59,0x74716c,0x898680,0x9e9a93],
+  sandstone: [0x70543b,0x896849,0xa27d59,0xbb936b,0xd1aa80],
+  slate: [0x30373d,0x414a51,0x535e66,0x66727a,0x7b8790],
+  canvas: [0x706451,0x877962,0x9d8f76,0xb4a58b,0xcabca2],
+  wool: [0x574b4e,0x6c5d61,0x827176,0x99868c,0xaf9da3],
+  earthenware: [0x704631,0x89563c,0xa26848,0xbb7d58,0xd0956c],
+});
+
+const DONOR_CONTEXT_TEXT_RULES = Object.freeze([
+  [/\bironwood\b/i, { wood: "ironwood" }],
+  [/\bcreosote\b.*\bpine\b|\bpine\b.*\bcreosote\b/i, { wood: "creosote-pine" }],
+  [/\bdriftwood\b|brine-bleached|salt-warped/i, { wood: "driftwood", iron: "rusted-iron" }],
+  [/\brotwood\b|rott(?:ed|ing) wood/i, { wood: "rotwood" }],
+  [/\bpine\b|pine needle|resin|sawdust/i, { wood: "pine" }],
+  [/\boak\b/i, { wood: "oak" }],
+  [/\brust\b|rust-stain|oxidized/i, { iron: "rusted-iron" }],
+  [/\bsoot\b|blackened|scorched/i, { iron: "blackened-iron" }],
+  [/\bgranite\b/i, { stone: "granite" }],
+  [/\bsandstone\b/i, { stone: "sandstone" }],
+  [/\bslate\b|shale/i, { stone: "slate" }],
+]);
+
+export function donorMaterialContextFromText(text, explicit) {
+  const context = Object.assign({}, explicit || {});
+  const source = Array.isArray(text) ? text.filter(Boolean).join(" ") : String(text || "");
+  for (const [pattern, patch] of DONOR_CONTEXT_TEXT_RULES) {
+    if (pattern.test(source)) {
+      for (const [family, variant] of Object.entries(patch)) {
+        if (context[family] == null) context[family] = variant; // ordered most-specific-first
+      }
+    }
+  }
+  return context;
+}
 
 // tiny deterministic string hash (mulberry-32 seeding pattern already used elsewhere in this repo,
 // e.g. src/engine/place-spatialize.js's dspHashStr — this module intentionally stays dependency-
@@ -144,8 +193,8 @@ function donorHashStr(str) {
   return h >>> 0;
 }
 
-function donorAlbedoBandColor(family, seedKey) {
-  const bands = FAMILY_ALBEDO_BANDS[family] || FAMILY_ALBEDO_BANDS.stone;
+function donorAlbedoBandColor(family, seedKey, variant) {
+  const bands = DONOR_MATERIAL_VARIANT_BANDS[variant] || FAMILY_ALBEDO_BANDS[family] || FAMILY_ALBEDO_BANDS.stone;
   const idx = donorHashStr(family + ":" + seedKey) % bands.length;
   return bands[idx];
 }
@@ -202,7 +251,7 @@ const DONOR_PAINT_KEY = Object.freeze({
   // "whisper of material" family (no dedicated weave painter exists yet in theater-materials.js —
   // an honest, not a hidden, choice); glass gets no painter at all (see donorMaterialForFamily,
   // below — glass is a transmission material, painting a grain texture onto it is wrong).
-  roof: "stone-course", cloth: "bone",
+  roof: "stone-course", cloth: "bone", ceramic: "bone",
 });
 
 const DONOR_TEXTURE_CACHE = {};
@@ -233,10 +282,21 @@ function donorMaterialTexture(family, baseColorHex, seedKey) {
 // donorMaterialForFamily(family, seedKey, profile) -> THREE.Material — the actual "rebuild with
 // Genesis materials" step, Sol P-B: roughness 0.82-0.94 / metalness 0 (iron 0.35) / five-band
 // albedo through gradeColorLocal / nearest 32x32 grain through interiorMaterialTexture.
-function donorMaterialForFamily(family, seedKey, profile) {
+export function donorMaterialForFamily(family, textureSeedKey, profile, materialContext, colorSeedKey, materialProof) {
   const recipe = MATERIAL_RECIPE[family] || MATERIAL_RECIPE.stone;
-  const baseHex = donorAlbedoBandColor(family, seedKey);
+  const variant = materialContext && materialContext[family];
+  // All faces of one structural family on one asset share the same regional stock/color band.
+  // Per-part variation belongs in the low-contrast grain texture, not in a different species/tone.
+  const baseHex = donorAlbedoBandColor(family, colorSeedKey || textureSeedKey, variant);
   const gradedHex = donorGradeColor(baseHex, profile);
+  if (materialProof) {
+    return new THREE.MeshBasicMaterial({
+      // Deliberately texture-free: proof mode answers only "does this face own the same material
+      // family/variant?" without grain, light, fog response, or per-part texture seeds.
+      color: gradedHex,
+      side: THREE.DoubleSide,
+    });
+  }
   if (family === "glass") {
     // glass is a transmission material, not a grain-painted opaque surface — MeshPhysicalMaterial
     // with transmission, per the cut list's own "no realistic caustics" law (P-E, quoted in
@@ -246,14 +306,20 @@ function donorMaterialForFamily(family, seedKey, profile) {
     return new THREE.MeshPhysicalMaterial({
       color: gradedHex, roughness: recipe.roughness, metalness: recipe.metalness,
       transmission: 0.75, thickness: 0.05, transparent: true, opacity: 0.85,
+      side: THREE.DoubleSide,
     });
   }
-  const map = donorMaterialTexture(family, gradedHex, seedKey);
+  const map = donorMaterialTexture(family, gradedHex, textureSeedKey + ":" + (variant || "generic"));
   return new THREE.MeshStandardMaterial({
     color: map ? 0xffffff : gradedHex, // texture already carries the graded base color; flat fallback uses it directly
     map: map || null,
     roughness: recipe.roughness,
     metalness: recipe.metalness,
+    // Meshy frequently mirrors repeated donor parts (especially paired wheels, braces, and
+    // supports) without reversing triangle winding. FrontSide materials make half the pair vanish,
+    // exposing the dark inverted-hull outline and falsely reading as a different material. Donor
+    // geometry is therefore deliberately double-sided at the adapter boundary.
+    side: THREE.DoubleSide,
   });
 }
 
@@ -308,6 +374,9 @@ const DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES = Object.freeze({ floor: true });
 //                         = byte-identical unpainted passthrough, same convention as gradeColorLocal)
 //   opts.realmId        — drives donorOutlineStyleFor (null/unknown realm = no outline hull)
 //   opts.seedKey         — deterministic grain/albedo-band seed (defaults to "pack/slug")
+//   opts.materialContext — family -> regional material variant, e.g. {wood:"ironwood"}
+//   opts.contextText     — rolled narrative/sensory text; derives variants through the same seam
+//   opts.materialProof   — unlit family-color proof for material-ownership QA only
 // Returns a FRESH clone every call (SkeletonUtils-free clone via Object3D.clone(true), safe here
 // since donor pieces carry no skinning) so two placed instances of the same donor never share a
 // mutable Object3D graph; materials/textures ARE shared/cached (DONOR_TEXTURE_CACHE, the material
@@ -328,7 +397,13 @@ export async function loadDonorPiece(pack, slug, opts) {
 
   const seedKey = opts.seedKey || cacheKey;
   const realmProfile = opts.realmProfile || null;
-  const outlineStyle = opts.realmId ? donorOutlineStyleFor(opts.realmId) : null;
+  const materialContext = donorMaterialContextFromText(opts.contextText, opts.materialContext);
+  // Meshy assemblies are decomposed into many offset/mirrored ownership meshes. An inverted hull
+  // scaled around each submesh's local origin can cross back over the source surface, presenting
+  // as a false dark material on two of four wheels or alternating braces. Until the outline system
+  // operates on one whole-asset silhouette, Meshy donors deliberately omit per-submesh hulls.
+  const outlineStyle = (opts.realmId && pack !== "meshy-genesis" && !opts.materialProof)
+    ? donorOutlineStyleFor(opts.realmId) : null;
   const sockets = [];
   const materialFamiliesApplied = [];
 
@@ -340,7 +415,10 @@ export async function loadDonorPiece(pack, slug, opts) {
       }
       if (donorData.materialFamily && obj.isMesh) {
         const family = donorData.materialFamily;
-        obj.material = donorMaterialForFamily(family, seedKey + ":" + obj.name, realmProfile);
+        obj.material = donorMaterialForFamily(
+          family, seedKey + ":" + obj.name, realmProfile, materialContext, seedKey + ":" + family
+          , !!opts.materialProof
+        );
         materialFamiliesApplied.push(family);
         // KS-3b item 1 — see DONOR_OUTLINE_HULL_EXEMPT_CATEGORIES's own header: flat/volume-less
         // categories (floor) skip the hull, it can only Z-fight a coincident double-sided quad.
@@ -361,6 +439,7 @@ export async function loadDonorPiece(pack, slug, opts) {
     canonicalScale: entry.canonicalScale,
     recipeHash: entry.recipeHash,
     companionLeaf: entry.companionLeaf || null,
+    materialContext,
   };
   group.userData.sockets = sockets;
   return group;
@@ -384,6 +463,7 @@ export function socketsByType(group, type) {
 // classic caller without a second edit later. ─────────────────────────────────────────────────────
 if (typeof window !== "undefined") {
   window.TheaterDonor = {
-    loadDonorPiece, donorIndexFor, donorGradeColor, donorOutlineStyleFor, socketsOf, socketsByType,
+    loadDonorPiece, donorIndexFor, donorGradeColor, donorOutlineStyleFor, donorMaterialForFamily,
+    donorMaterialContextFromText, socketsOf, socketsByType,
   };
 }

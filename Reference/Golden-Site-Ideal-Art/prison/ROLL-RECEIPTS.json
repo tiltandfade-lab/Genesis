@@ -1,0 +1,322 @@
+{
+  "schema": "genesis.golden-site-ideal-art.roll-receipts/v1",
+  "status": "visual-direction evidence only; not runtime generator or clay proof",
+  "created": "2026-07-25",
+  "sourceRevision": "2046712d0b5ae147f1ce40f641f866297040fc8f",
+  "rng": {
+    "algorithm": "mulberry32",
+    "method": "Each seed was supplied to the current repository rollers in a jsdom harness. Source table draws were instrumented without replacing the production roll functions."
+  },
+  "render": {
+    "mode": "built-in ImageGen with repository reference images",
+    "sharedReferences": [
+      "../style-calibration/guard-post-modern-fft-proof.png",
+      "../source-references/genesis-camera-geometry-lighting.png",
+      "../source-references/genesis-standee-scale-and-base.png"
+    ],
+    "outputSha256": {
+      "01-slate-roof-keeper-house-civic-jail.png": "b7be8acf296e9ad061b467996d9783c0ec2996e3957fc0208f0b29b6f6367034",
+      "02-thorngate-ledger-and-shift-civic-jail.png": "45c5292d8e472baf3d2551dd7b67754b1393de12f90350dfc0b18decf55f73e6",
+      "03-shimmering-maw-suspended-ironwood-cell.png": "c1523cc5917bfdda1d24b33636112f18284cdfffcce904fd6f75bcb67bf04a48",
+      "../contact-sheets/prison-variations.png": "cc2ebc8a2a60a0ea11b6db2893843ff91793ac8e173671de1a61eef7133babda"
+    }
+  },
+  "sourceHashes": {
+    "tables.js": "431c31af26ed161b735171387913f09e29a684fd8fd995f913aebdda396b2d88",
+    "data/world-tables.js": "db0e6676f9438ae179b00453cd2ff1ad2b4a1cf8191e40e9c305f2a143eeb533",
+    "data/place-skins.js": "301fc1cf9b159d37e44f2584aa857071d4eae2a28c1ddc87a3b9aa8def101ab0",
+    "src/engine/codex-roll.js": "a0fb08f9ccdc77935f53a4f8fa80b1f09084571790dd21b3d96451fa9a3fd2f3",
+    "src/world/capture.js": "66f04308de8457dbbf506300fc494e53325447d400e9c43828fd6eff154636d4",
+    "data/realm-props.js": "a82d7232cb63a0ce676f328ad090af610f425843c4a0d5803b961396ddb124f8"
+  },
+  "pipeline": [
+    "lookup('arch')",
+    "rollPlace({ realm: 'frontier', depth: true, archetypeBias: [5] })",
+    "rollBuildingInterior({ kind: 'jail' })",
+    "rollCapture({})",
+    "rollWalkSkin('urban', 'baseline')",
+    "sceneDressingForPlace('frontier', place.rolled.archetypeKey)"
+  ],
+  "receipts": [
+    {
+      "id": "PR-DOC-01-ART-2959",
+      "image": "01-slate-roof-keeper-house-civic-jail.png",
+      "layoutReference": "../source-references/prison-keeper-house-layout.svg",
+      "seed": 2959,
+      "doctrine": "PR-DOC-01 — Keeper-House Civic Custody",
+      "rolls": {
+        "architecture": {
+          "source": "T.arch",
+          "total": 1,
+          "result": "Rough-Hewn Basalt"
+        },
+        "placeMasterSetting": {
+          "source": "place-master-setting",
+          "total": 18,
+          "result": "Slate-Roof Rise"
+        },
+        "placeTrait": {
+          "source": "place-traits",
+          "total": 96,
+          "result": "Volatile — fortress-town militia; enemy four days out; granary burned; weapon audit incomplete"
+        },
+        "placeSecret": {
+          "source": "place-secret",
+          "total": 137,
+          "result": "Textured — Formalized the Disappearances"
+        },
+        "placeHistory": {
+          "source": "place-history",
+          "total": 89,
+          "result": "Strange — founders followed an animal that was not quite an animal"
+        },
+        "archetype": {
+          "key": 5,
+          "name": "The jailhouse",
+          "summary": "Judgment, records, and the cells under it.",
+          "staff": "2–3",
+          "rolledDims": "3x3",
+          "adapterNote": "The Site 6 visual adapter applies the founder-ruled PR-SHAPE-01 four-cell Rung-B capacity; rolledDims are retained, not presented as the final cell count."
+        },
+        "buildingInterior": {
+          "source": "building-interior",
+          "total": 19,
+          "tone": "Grounded",
+          "layout": "Gaol: guard room, four cells on one side, a debtors' pen at the end.",
+          "feature": "A cell that is unlocked from the inside.",
+          "inside": "A sleeping turnkey, an awake prisoner, and someone in shadows.",
+          "consumed": true
+        },
+        "capture": {
+          "receiptStatus": "LIVE-UNDER-RECEIPTED",
+          "disposition": "ransom",
+          "fuse": 8,
+          "confiscation": "boss keeps the finest piece",
+          "opening": "the captors failed to take one tool",
+          "holding": "flooded pit"
+        },
+        "walkSkin": {
+          "source": "walk-skin-urban",
+          "total": 73,
+          "result": "A body was found and the stories are changing."
+        }
+      },
+      "layoutAdapter": {
+        "accepted": [
+          "street-facing keeper room and intake",
+          "four cells on one side",
+          "debtors' pen at the far end",
+          "raised keeper landing",
+          "secure rear yard and service route",
+          "staff-side secure property closet",
+          "flooded old pit expressed as a rear cistern/service hazard"
+        ],
+        "tacticalRead": "Public threshold, keeper control, cell frontage, rear service, yard, property recovery, and a covert inside-latch opportunity remain readable from the fixed camera."
+      },
+      "assetAnchors": [
+        {
+          "registry": "Case-File Desk",
+          "model": "prop:table-slab",
+          "productionProxy": "assets/models/kenney-furniture-kit/desk.glb"
+        },
+        {
+          "registry": "Brig Cage",
+          "model": "prop:cage-frame",
+          "productionProxy": "assets/models-normalized/kenney-modular-dungeon-kit/gate-metal-bars.glb"
+        },
+        {
+          "registry": "Cinderblock Stack",
+          "model": "prop:table-slab",
+          "productionProxy": "assets/models/kenney-furniture-kit/table.glb"
+        }
+      ]
+    },
+    {
+      "id": "PR-DOC-02-ART-21095",
+      "image": "02-thorngate-ledger-and-shift-civic-jail.png",
+      "layoutReference": "../source-references/prison-ledger-shift-layout.svg",
+      "seed": 21095,
+      "doctrine": "PR-DOC-02 — Ledger-and-Shift Civic Custody",
+      "rolls": {
+        "architecture": {
+          "source": "T.arch",
+          "total": 22,
+          "result": "Fieldstone & Mortar"
+        },
+        "placeMasterSetting": {
+          "source": "place-master-setting",
+          "total": 51,
+          "result": "Thorngate Keep"
+        },
+        "placeTrait": {
+          "source": "place-traits",
+          "total": 67,
+          "result": "Textured — built atop an older lower city; a cellar excavation found furnished rooms and a burning lamp"
+        },
+        "placeSecret": {
+          "source": "place-secret",
+          "total": 41,
+          "result": "Grounded — false water-safety certificate"
+        },
+        "placeHistory": {
+          "source": "place-history",
+          "total": 64,
+          "result": "An orchard estate walled against frost and thieves"
+        },
+        "archetype": {
+          "key": 5,
+          "name": "The jailhouse",
+          "summary": "Judgment, records, and the cells under it.",
+          "staff": "2–3",
+          "rolledDims": "3x3",
+          "adapterNote": "The matched doctrine proof holds the same PR-SHAPE-01 four-cell capacity as PR-DOC-01."
+        },
+        "buildingInterior": {
+          "source": "building-interior",
+          "total": 78,
+          "layout": "Magistrate's holding office attached to gaol: intake, records, single lockable interview room.",
+          "feature": "A signed warrant with the name left blank.",
+          "inside": "A clerk.",
+          "consumed": true
+        },
+        "capture": {
+          "receiptStatus": "LIVE-UNDER-RECEIPTED",
+          "disposition": "interrogation",
+          "fuse": 5,
+          "confiscation": "gear hangs on the jailer's belt",
+          "opening": "one bar is loose",
+          "holding": "black-iron cell"
+        },
+        "walkSkin": {
+          "source": "walk-skin-urban",
+          "total": 69,
+          "result": "The watch has doubled patrols, torches, and formations."
+        }
+      },
+      "layoutAdapter": {
+        "accepted": [
+          "public waiting outside the secure line",
+          "intake/search, records, property, and lockable interview",
+          "raised central station with explicit shift handoff",
+          "four cells in two opposing pairs",
+          "short secure corridor and rear service loop",
+          "older-city hatch retained as a covert edge"
+        ],
+        "tacticalRead": "The same capacity and fixed-camera envelope as PR-DOC-01 produces a structurally different institution: records and staff process reshape routes instead of merely changing props or palette."
+      },
+      "assetAnchors": [
+        {
+          "registry": "Case-File Desk",
+          "model": "prop:table-slab",
+          "productionProxy": "assets/models/kenney-furniture-kit/desk.glb"
+        },
+        {
+          "registry": "Brig Cage",
+          "model": "prop:cage-frame",
+          "productionProxy": "assets/models-normalized/kenney-modular-dungeon-kit/gate-metal-bars.glb"
+        },
+        {
+          "registry": "Cinderblock Stack",
+          "model": "prop:table-slab",
+          "productionProxy": "assets/models/kenney-furniture-kit/table.glb"
+        }
+      ]
+    },
+    {
+      "id": "RC-PRISON-01-ART-6198",
+      "image": "03-shimmering-maw-suspended-ironwood-cell.png",
+      "layoutReference": "../source-references/prison-suspended-ironwood-layout.svg",
+      "seed": 6198,
+      "doctrine": "Retained strange-material composition fixture",
+      "provenance": "Fresh ordinary-path deterministic reconstruction that independently reproduces the retained playthrough composition; it is not the unavailable original save.",
+      "rolls": {
+        "architecture": {
+          "source": "T.arch",
+          "total": 90,
+          "result": "Living Ironwood"
+        },
+        "placeMasterSetting": {
+          "source": "place-master-setting",
+          "total": 87,
+          "result": "Strange — The Shimmering Maw, a village suspended by massive chains over a fused multicolored-glass crater"
+        },
+        "placeTrait": {
+          "source": "place-traits",
+          "total": 91,
+          "result": "Strange — overlapping, rotated old street grid visible in certain light; cartographer missing"
+        },
+        "placeSecret": {
+          "source": "place-secret",
+          "total": 5,
+          "result": "A magistrate ordered the marsh-folk boats burned; the debt is unpaid"
+        },
+        "placeHistory": {
+          "source": "place-history",
+          "total": 96,
+          "result": "Volatile — former quarantine camp; gates still lock from outside"
+        },
+        "archetype": {
+          "key": 5,
+          "name": "The jailhouse",
+          "summary": "Judgment, records, and the cells under it.",
+          "staff": "2–3",
+          "rolledDims": "4x3"
+        },
+        "buildingInterior": {
+          "source": "building-interior",
+          "total": 291,
+          "tone": "Volatile",
+          "result": "Theatre preset for an unperformed performance; personal items of the missing cast; stage manager will not pass the wings.",
+          "consumed": false,
+          "rejection": "incompatible-program — retained in lineage but not forced into a jailhouse holding fixture"
+        },
+        "capture": {
+          "receiptStatus": "LIVE-UNDER-RECEIPTED",
+          "disposition": "trophy",
+          "fuse": 6,
+          "confiscation": "one missed item remains",
+          "opening": "a nearby captive or guard could be turned",
+          "holding": "a hanging cage"
+        },
+        "walkSkin": {
+          "source": "walk-skin-urban",
+          "total": 80,
+          "result": "Tax collectors press harder and seizures increase."
+        }
+      },
+      "layoutAdapter": {
+        "accepted": [
+          "small keeper/winch platform tied into the suspended settlement",
+          "narrow gangway to a solitary hanging cell",
+          "grown ironwood box/lattice rather than a metal cage",
+          "chains, roots, ropes, and pulley support over the void",
+          "remote locked property chest on the keeper platform",
+          "one captive and one keeper/turnable nearby actor"
+        ],
+        "tacticalRead": "A short direct crossing, a support/winch disruption route, social access through the keeper, and a remote property-recovery objective remain legible without inventing a named-row branch."
+      },
+      "assetAnchors": [
+        {
+          "registry": "Brig Cage",
+          "model": "prop:cage-frame",
+          "usage": "semantic holding-frame anchor only; the rolled Living Ironwood material changes the visible fixture"
+        },
+        {
+          "path": "assets/models/kenney-retro-fantasy-kit/pulley.glb"
+        },
+        {
+          "path": "assets/models/kenney-retro-fantasy-kit/pulley-crate.glb"
+        },
+        {
+          "path": "assets/models/kenney-retro-fantasy-kit/wood-floor-railing.glb"
+        },
+        {
+          "path": "assets/models/kenney-retro-fantasy-kit/stairs-wood.glb"
+        },
+        {
+          "path": "assets/models/kenney-pirate-kit/crate.glb"
+        }
+      ]
+    }
+  ]
+}

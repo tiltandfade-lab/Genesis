@@ -2,6 +2,7 @@
 type: canon
 status: ACTIVE — stable decision ids over the chronological registries
 created: 2026-07-22
+updated: 2026-07-26
 owner: docs/canon/README.md (precedence law)
 ---
 
@@ -128,6 +129,9 @@ The program's decisions live in the wave records; this index routes rather than 
 | GEN-PDG-5 | Implementation hold: no build authorized before Wave 12's gate | IMPLEMENTATION-HOLD.md | ACTIVE |
 | GEN-PDG-6 | Waves 7-9/11-12 dispositions: **ALL CLOSED** at the 2026-07-22/23 founder-review session (W7 §16.7 · W8 §17.7 · W9 §18.7 · W11 §19.7 · W12 §20.7) with founder Batch-1 rulings, sweep riders (hand floor, harness-first, no-plot-armor, three-tier worlds, visual-engine priority, never-brick), and 10 tracked follow-ups (F7.1-3, F8.1-2, F9.1-3, F11.1, F12.1). **The design program is complete; build stays gated on Q12-B** | wave-07…wave-12 records | CLOSED (design only) |
 | GEN-PDG-7 | Recovery-package gate: tagged, verified, LFS-complete recovery point + bundle + Drive archive is the first gate of any implementation plan | Wave 1 §8.14.1/.3 | ACCEPTED (Wave 12 owns) |
+| GEN-PDG-8 | Golden Sites are a provenance-backed acceptance portfolio, not twelve runtime site types; host programs, cross-host transforms, scale/relationship cases, and substrate/ownership cases compose through one story→semantic→spatial→projection path | DESIGN.md 2026-07-26; GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md | ACCEPTED (implementation unauthorized) |
+| GEN-PDG-9 | Site 8 is the `LayeredControl` cross-host transform; persistent competing claims decide canon, semantic capacity decides spatial expression, and map growth requires prelicensed overflow | DESIGN.md 2026-07-26; GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md | ACCEPTED (implementation unauthorized) |
+| GEN-PDG-10 | Tavern is an ordinary venue/host program routed through Site 2/4/10 contexts and Site 3/8 transforms; `VENUE-TAVERN-01` is a retained Golden Venue fixture, not Site 13 | DESIGN.md 2026-07-26; TAVERN-VENUE-ROUTING-BRIEF.md | ACCEPTED (live story path; spatial proof open) |
 
 ## H. Operations and infrastructure
 

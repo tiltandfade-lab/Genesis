@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "policy": "Source donors are renamed or classified, never deleted.",
+  "records": [
+    {
+      "originalUploadName": "Meshy_AI_Medieval_Notice_Board_0726205703_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M049-D-public-notice-and-signal-board-smart-700.glb",
+      "disposition": "canonical",
+      "bytes": 14416,
+      "sha256": "d46e06c14bce52542fbd0c80c86f847452bb042b55f83cd99657ff73f6a2c4ca"
+    },
+    {
+      "originalUploadName": "Meshy_AI_Iron_Alarm_Bell_Timbe_0726210351_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M052-A-bell-or-gong-yoke-smart-900.glb",
+      "disposition": "canonical",
+      "bytes": 14840,
+      "sha256": "2616f29a3ca12d6d492b95c2c548a88347125f8fb33b32188f0e05ad25497570"
+    },
+    {
+      "originalUploadName": "Meshy_AI_Lectern_Inspection_St_0726210431_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M053-A-archive-lectern-and-scribe-station-smart-800.glb",
+      "disposition": "canonical",
+      "bytes": 15268,
+      "sha256": "3edae2da4a33ab3610931c1df317cc8fb539aca60be8b489a8e07c85e97f6c64"
+    },
+    {
+      "originalUploadName": "Meshy_AI_chevaux_de_frise_barr_0726210459_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M054-A-chevaux-de-frise-and-spike-barrier-smart-800.glb",
+      "disposition": "canonical",
+      "bytes": 15952,
+      "sha256": "71deb6e440f8dc5297b16f54b26178ff4c67a80402133b69d0f4d11193355d48"
+    },
+    {
+      "originalUploadName": "Meshy_AI_timber_barricade_lowp_0726210720_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M055-A-movable-timber-barricade-smart-800.glb",
+      "disposition": "canonical",
+      "bytes": 16064,
+      "sha256": "ead770a81df3a27c707a73235ba8b4cc360ba535b8537722036c31f0019617ab"
+    },
+    {
+      "originalUploadName": "Meshy_AI_Wattle_Fence_Screen_L_0726210636_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M056-A-wattle-and-woven-screen-smart-800.glb",
+      "disposition": "canonical",
+      "bytes": 16460,
+      "sha256": "b00fa155aedcf84d426dc68dab74cc0886d0bb2e77dd70e458b76037edf728b4"
+    },
+    {
+      "originalUploadName": "Meshy_AI_Gabion_Stone_Basket_L_0726211019_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M057-A-gabion-and-stone-basket-cluster-smart-900.glb",
+      "disposition": "canonical",
+      "bytes": 16668,
+      "sha256": "3dc8963e8d080cbc2b53aa8f0ef050b1af20a056986371e00e888addb746c1f5"
+    },
+    {
+      "originalUploadName": "Meshy_AI_Timber_Holding_Cage_L_0726210916_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M058-A-holding-cage-or-animal-pen-module-smart-1200.glb",
+      "disposition": "canonical",
+      "bytes": 20376,
+      "sha256": "f3ebc671b80dba25a379b0e10f776c37ae0f3c29c2b5e12b0afd86adae5c6123"
+    },
+    {
+      "originalUploadName": "Meshy_AI_timber_brace_donor_cl_0726211055_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M062-B-timber-repair-and-brace-cluster-smart-700.glb",
+      "disposition": "canonical",
+      "bytes": 13016,
+      "sha256": "a6ba6c11502213d0286400c15c7eb1a8eddc50a1bea40456dc7b38212f902d6a"
+    },
+    {
+      "originalUploadName": "Meshy_AI_Military_Stores_Clust_0726211154_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/M064-B-camp-kitchen-and-stores-cluster-smart-1000.glb",
+      "disposition": "canonical",
+      "bytes": 19132,
+      "sha256": "7ba5cc249ade5dbfb0b727ac6edd234d2c4ea3d253b8930ddb49cd295a225e4d"
+    },
+    {
+      "originalUploadName": "M005-A-wide-cave-mouth-with-reveal-noisy-attempt-smart-1200.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/rejected/M005-A-wide-cave-mouth-with-reveal-noisy-attempt-smart-1200.glb",
+      "disposition": "rejected",
+      "bytes": 22416,
+      "sha256": "22bc766d3615600e86d89a0be385fdb7853d2931cf0d62aec6a6e9366a684cc8"
+    },
+    {
+      "originalUploadName": "Meshy_AI_Gabion_Stone_Basket_L_0726210808_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/variants/M057-A-gabion-alternate-1-smart-900.glb",
+      "disposition": "variants",
+      "bytes": 16752,
+      "sha256": "9065438ae9d1eaad3fdb8a396e978a69975b276f5c15ae1ac460c07c29035b84"
+    },
+    {
+      "originalUploadName": "Meshy_AI_Gabion_Stone_Basket_L_0726211210_generate.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/variants/M057-A-gabion-alternate-2-smart-900.glb",
+      "disposition": "variants",
+      "bytes": 17044,
+      "sha256": "6ed539de84dd0d815557cdd13cea7145d2e77148baf4e06e266c76dc997f3a56"
+    },
+    {
+      "originalUploadName": "M068-A-wall-flame-sconce-chunky-candidate-smart-600.glb",
+      "canonicalPath": "Reference/Meshy-Premium-Month-1/incoming/variants/M068-A-wall-flame-sconce-chunky-candidate-smart-600.glb",
+      "disposition": "variants",
+      "bytes": 14724,
+      "sha256": "5061886d7c121d72df76bb15997a3259ea6a7cf03079fd9751c5789badb734fc"
+    }
+  ]
+}

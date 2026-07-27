@@ -48,7 +48,7 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 **North star** (`type: design-guide`) — the dream, the look, and the ordered path; sits *above* the decision registry.
 
 - `CLAYROOM-RESET-LADDER.md` — **the Clayroom reset/proof ladder (CL-R0…CL-R6)**: the Clayroom is a deterministic procedural acceptance fixture, and this is the renderer/fixture-trust gate that must pass before C1H, C1I, or Guard Post 1 may consume it. Also owns the diagnostic-clay surface contract, the clay capture/receipt law, Lighting Lab 2.0's recipe contract, the bounded Sprite Editor crosshair delta, and the Clayroom Workbench boundary. CL-R0 BUILT 2026-07-23. (2026-07-23)
-- `GOLDEN-SITES-CATALOG.md` — living Golden Site authority: four honest status gates and portfolio briefs. The Mine-standard generator-grade suite is `SITE-1-GUARD-POST-SPEC.md`, `SITE-2-CAMP-SERVICE-SPEC.md`, `SITE-4-MONASTERY-COMMUNE-SPEC.md`, `SITE-5-MINE-WORKSHOP-CONCEPT.md`, `SITE-7-NATURAL-LAIR-SPEC.md`, and `SITE-10-URBAN-INSTITUTION-SPEC.md`; each defines its five-expression family, culture/circumstance, learning-first build, zones, circuits, plans, generation, rejection/fallback, runtime facts, proof receipt, and first visual demonstration without overstating its gates. `SITE-3-DORMANT-CONCEPT.md` preserves the accepted dormant-site foundation for its deliberately late/last pass. Future sessions follow `GOLDEN-SITE-CONCEPTING-GUIDELINES.md`; choices route to `GOLDEN-SITES-FOUNDER-QUEUE.md`, evidence/render work to `GOLDEN-SITES-PROOF-QUEUE.md`, and implementation detail to the owning composition/material specs. (audited and retrofitted 2026-07-25)
+- `GOLDEN-SITES-CATALOG.md` — living Golden Site authority: four honest status gates and portfolio briefs. `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` defines the story→walk→site identity→host program→transform→materialization→semantic plan→composition→projection contract and classifies the twelve as host, transform, scale/relationship, or substrate proof roles rather than runtime site types. The Mine-standard generator-grade suite is `SITE-1-GUARD-POST-SPEC.md`, `SITE-2-CAMP-SERVICE-SPEC.md`, `SITE-4-MONASTERY-COMMUNE-SPEC.md`, `SITE-5-MINE-WORKSHOP-CONCEPT.md`, `SITE-6-PRISON-CUSTODY-SPEC.md`, `SITE-7-NATURAL-LAIR-SPEC.md`, and `SITE-10-URBAN-INSTITUTION-SPEC.md`; each defines its five-expression family, culture/circumstance, learning-first build, zones, circuits, plans, generation, rejection/fallback, runtime facts, proof receipt, and first visual demonstration without overstating its gates. `TAVERN-VENUE-ROUTING-BRIEF.md` records the live tavern audit and routes `VENUE-TAVERN-01` as a shared Golden Venue fixture rather than Site 13. `BUILDING-PROGRAM-TABLE-FAMILIES.md` records the superseding 42-roll ruling: typed buildings use seven coherent chassis families plus program operation/current-scene/Spice and realm-doctrine layers; Prison/Custody owns a dedicated family governed by Site 6, and the d300 remains for untyped discovery and explicit adaptive reuse. The Tavern and all-building receipt packets live under `../Reference/Tavern-Study/` and `../Reference/Building-Type-Roll-Study/`. `GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md` classifies live, composed, authored-but-unwired, interpretive, and proposed-adapter sources; preserves current rolled compositions; and supplies the required `rollerLineage` / `sourceRollRefs` contract. `GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md` makes real-roll portal/support aprons, context cards, reusable background images, far fields, atmosphere, knowledge safety, and context-off/on receipts part of the shared Golden Site proof. `SITE-3-DORMANT-CONCEPT.md` preserves the accepted dormant-site foundation for its deliberately late/last pass. Site 6's returned initial depth/doctrine evidence lives in `../Reference/Prison-Custody-Study/`. Future sessions follow `GOLDEN-SITE-CONCEPTING-GUIDELINES.md`; choices route to `GOLDEN-SITES-FOUNDER-QUEUE.md`, evidence/render work to `GOLDEN-SITES-PROOF-QUEUE.md`, and implementation detail to the owning composition/material/context specs. (ontology/venue research pass 2026-07-26)
 - `GRAPHICS-CONVERGENCE-CHARTER.md` — governing graphics authority: protect the walk/table engine while deliberately converging generated scenes on the approved mockups; visual-compiler boundaries, C0-C8 ladder, no-human production contract, and Claude session protocol. (2026-07-12)
 - `ART-DEPARTMENT.md` (`type: style-canon`, sibling of `ART-DIRECTION-CANON.md`) — the pixel sprite register's canonical home: live-corpus state, the per-realm style law index (quoted verbatim), and the two regeneration runbooks (regen an in-style sheet / fold a staged realm live). Start here for any sprite generation or review work. (2026-07-15)
 - `DESIGN-GUIDE.md` — the pillars, the visual bible, the T0–T7 roadmap. When it and `DESIGN.md` disagree, fix the drift in the same change. (2026-07-01)
@@ -136,7 +136,8 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
 - `TIYL-DEEPENING.md` — This Is Your Life — deepening (names · presentation · the prep bridge); build-ready (2026-07-01).
 - `TIYL-UI-PORT.md` — the bardo leaves the centered-card era — TIYL ported to full-bleed UI; Sonnet-executable (2026-07-03).
 - `TRAVEL-WALKS.md` — the journey IS a walk — travel consumes the walk roller; build-ready (2026-07-01).
-- `URBAN-FABRIC.md` — typed buildings, lazy districts, the tavern as a surface; specced, batch-3 unit 9 (2026-07-02).
+- `URBAN-FABRIC.md` — typed buildings, lazy districts, and the tavern as a surface; built batch-3 unit 9, with Golden-grade semantic/spatial venue composition still open (status re-audited 2026-07-26).
+- `BUILDING-PROGRAM-TABLE-FAMILIES.md` — accepted typed-building correction: seven coherent family chassis tables, including dedicated Prison/Custody, plus per-program arrangement, current-scene, Spice, and realm-doctrine layers; the flat d300 is no longer the primary selector for a committed building type (2026-07-26).
 - `WALK-CONSUMPTION.md` — making the DM run the walks it's handed (and capture as re-entry); draft (2026-06-30).
 - `WALK-REFRESH.md` — live rosters, full-suite treasure, the rolled skin; build-ready except skin-table voice review (2026-07-01).
 - `WORLD-TURN.md` — change-over-time, unified — faction clocks, drift, NPC life-events; build-ready except drift/life-event samples (2026-07-01).
@@ -176,9 +177,42 @@ canon-and-scope pass). Small index-and-law files, never spec duplicates: `canon/
   dungeon graph, room grammar, walk, table, combat, and renderer seams.
 - `../Reference/Procedural-Dungeon-Research/SOURCE-INDEX.md` — verified source ledger for the bundled
   nine-paper PDF corpus and the rendered research report.
+- `../Reference/Prison-Custody-Study/` — Site 6 initial depth and culture/doctrine packet:
+  authoritative architecture/operation/property sources, evidence/inference boundary,
+  synthesis, selected `PR-DOC-01`/`PR-DOC-02` comparison, later doctrine candidates,
+  and declared gaps that keep research `PARTIAL`. (2026-07-25)
+- `../Reference/Tavern-Study/` — twelve deterministic live tavern-path receipts,
+  current/unwired/archive audit, cross-tradition hospitality source ledger,
+  `HospitalityVenueProfile` synthesis, and the superseded d300-gate proposal retained
+  for untyped preservation and explicit adaptive reuse. Typed successor:
+  `BUILDING-PROGRAM-TABLE-FAMILIES.md`. Research/implementation evidence only.
+  (2026-07-26)
+- `../Reference/Building-Type-Roll-Study/` — 42 deterministic integrated rolls
+  covering all fourteen live building kits at three d300 bands, fourteen same-seed
+  realm mirrors, and the actual Prison/Custody source boundary. Establishes the
+  before-state: the layers stack mechanically but do not yet reconcile program,
+  culture, people, or Spice like the walks. (2026-07-26)
+- `../Reference/Building-Family-Table-Samples/` — seven small family-table taste
+  tranches, including dedicated Prison/Custody, and 28 deterministic layered sample
+  receipts across all fourteen live programs plus custody. Explicit arrangement/
+  chassis eligibility prevents nonsense combinations; founder taste calls remain
+  open before final d20 expansion. (2026-07-26)
+- `../Reference/Golden-Site-Ideal-Art/prison/` — three rolled Site 6 ideal-art layouts:
+  matched Keeper-House and Ledger-and-Shift four-cell civic jails plus a fresh
+  deterministic reconstruction of the suspended living-ironwood cell, with seed/table
+  lineage, adapter decisions, layout diagrams, asset anchors, and prompt notes.
+  Visual direction only; no clay or runtime gate advancement. (2026-07-25)
+- `../Reference/Golden-Site-World-Context/` — six complete current world-genesis
+  replay-harness receipts plus the retained Prison composition reference. The audit
+  seeds make the live unseeded roll order reproducible for study; they are not product
+  world seeds. Supports Golden Site context/background projection. (2026-07-25)
 - `EXTRUDED-SPRITE-PROP-LIBRARY.md` — production plan for the realm-specific prop bank: generated
   silhouettes/faces/motifs routed through EXTRUDE, FACED_BOX, or MODEL; compiler, registry, QA,
   no-human workflow, and ES-0 through ES-5 rollout. (2026-07-12)
+- `PROCEDURAL-ASSET-KIT.md` — implemented engine-owned construction vocabulary: standardized
+  mechanical parts, rope/chain paths, FX, cargo sockets and containers, signs/papers/banners/decals,
+  forty connective parts, composable condition/access/occupancy recipes, regional material
+  channels, interactive proof pages, and browser verification. (2026-07-27)
 - `OFFLINE-ART-FOUNDRY-RESEARCH.md` — executable Kenney/OSS audit and the deterministic donor-parts
   grammar: 49-pack census, 13-pack shortlist, prop IR, geometry/texture gates, and OF-1–OF-6 plan.
 - `FABLE-DEV-TOOLS.md` — rough future-tool queue: Table Atlas, NPC Library, Town Builder, and

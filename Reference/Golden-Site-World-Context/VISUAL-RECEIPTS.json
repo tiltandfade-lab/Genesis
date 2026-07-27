@@ -1,0 +1,70 @@
+{
+  "schema": "genesis.golden-site-world-context.visual-receipts/v1",
+  "created": "2026-07-25",
+  "status": "offline visual-direction evidence; not a runtime plate manifest or renderer proof",
+  "generationMode": "built-in image generation with local reference images",
+  "sharedReferenceImages": [
+    {
+      "path": "../Golden-Site-Ideal-Art/style-calibration/guard-post-modern-fft-proof.png",
+      "role": "approved modern isometric tactical-diorama rendering language"
+    },
+    {
+      "path": "../Golden-Site-Ideal-Art/prison/03-shimmering-maw-suspended-ironwood-cell.png",
+      "role": "rich rolled context, environmental depth, and atmospheric continuation"
+    },
+    {
+      "path": "../Golden-Site-Ideal-Art/source-references/genesis-camera-geometry-lighting.png",
+      "role": "fixed three-quarter isometric camera and broad readable geometry"
+    }
+  ],
+  "targets": [
+    {
+      "id": "CTX-TASTE-01",
+      "path": "taste-targets/01-high-harrow-bone-and-sinew-context.png",
+      "rollReceipt": "ROLL-RECEIPTS.json#CTX-GP-19",
+      "projectionFamilies": ["VERTICAL_DEPTH", "SETTLEMENT_FABRIC"],
+      "dimensions": { "width": 1672, "height": 941 },
+      "sha256": "c3c23ed3c9847960544a861513e5a93bbf79faf1047c22970fb65a1ba0965d74",
+      "verdict": "retain as a far-field composition and material-language target"
+    },
+    {
+      "id": "CTX-TASTE-02",
+      "path": "taste-targets/02-bog-iron-fused-glass-context.png",
+      "rollReceipt": "ROLL-RECEIPTS.json#CTX-CAMP-7",
+      "projectionFamilies": ["REGIONAL_TERRAIN", "SETTLEMENT_FABRIC"],
+      "dimensions": { "width": 1672, "height": 941 },
+      "sha256": "9d060f82f287995759306111b117f9fb4950a7625b83b2a445236276d0e22e74",
+      "verdict": "retain as a collision-of-place-and-material target"
+    },
+    {
+      "id": "CTX-TASTE-03",
+      "path": "taste-targets/03-canal-knot-basalt-context.png",
+      "rollReceipt": "ROLL-RECEIPTS.json#CTX-URBAN-13",
+      "projectionFamilies": ["WATER_NETWORK", "SETTLEMENT_FABRIC"],
+      "dimensions": { "width": 1672, "height": 941 },
+      "sha256": "db49b4ee5a966fc598ae899dbf3dd8d365adb28fc1bb8a29610580135056a8f2",
+      "verdict": "retain revised broad-mass version; reject the first route-like draft"
+    },
+    {
+      "id": "CTX-TASTE-04",
+      "path": "taste-targets/04-gravity-well-fieldstone-context.png",
+      "rollReceipt": "ROLL-RECEIPTS.json#CTX-LAIR-254",
+      "projectionFamilies": ["REALITY_DISTORTION", "REGIONAL_TERRAIN"],
+      "dimensions": { "width": 1672, "height": 941 },
+      "sha256": "0885aef3d9574d2eea4340035556e84e78c79d831be091c34cc7ee52711e008c",
+      "verdict": "retain as a high-spice physical-anomaly target"
+    }
+  ],
+  "contactSheet": {
+    "path": "contact-sheets/context-style-targets.png",
+    "dimensions": { "width": 2112, "height": 1334 },
+    "sha256": "f509909c34eea7faaaf814aee834a89cb99d082bcea7c3cd6d9f53b512625d98"
+  },
+  "limitations": [
+    "Images are flattened taste targets, not layer-separated production assets.",
+    "The quiet lower apron is a composition study, not a calibrated tray mask.",
+    "Lighting and atmosphere are not yet declared against runtime time/weather compatibility metadata.",
+    "No current renderer mounts these images from a WorldContextProjectionPlan.",
+    "Fine background topology remains noncanonical even when it is visible in a target."
+  ]
+}

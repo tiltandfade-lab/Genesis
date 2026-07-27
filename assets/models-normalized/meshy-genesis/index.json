@@ -1,0 +1,1078 @@
+{
+  "alarm-bell-yoke": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.25226864,
+    "category": "signal",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "alarm-bell-yoke.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 55748,
+        "file": "alarm-bell-yoke.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 37568,
+        "file": "alarm-bell-yoke-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 23252,
+        "file": "alarm-bell-yoke-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "iron",
+      "wood"
+    ],
+    "recipeHash": "bc9d1e6a8748bacef415c4c296de68477895101a224e79cddc9c8431619d9bd5",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "bell",
+      "yoke",
+      "striker"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.50002,
+          0.19338,
+          0
+        ],
+        "type": "interaction"
+      },
+      {
+        "position": [
+          0,
+          0.3094,
+          0
+        ],
+        "type": "signal-origin"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "archive-lectern": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.9210124,
+    "category": "workstation",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "archive-lectern.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 53548,
+        "file": "archive-lectern.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 34284,
+        "file": "archive-lectern-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 21716,
+        "file": "archive-lectern-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "b42012b030884548ec653f539e1bc2c676b10025f9d76d5a84e5e21ef652adb8",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "writing-slab",
+      "storage",
+      "frame"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.38912,
+          0
+        ],
+        "type": "writing-surface"
+      },
+      {
+        "position": [
+          0.42916,
+          0.22449,
+          0
+        ],
+        "type": "interaction"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "camp-kitchen-stores": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.44855449,
+    "category": "stores",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "camp-kitchen-stores.glb",
+    "footprint": [
+      2,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 66216,
+        "file": "camp-kitchen-stores.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 43728,
+        "file": "camp-kitchen-stores-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 28080,
+        "file": "camp-kitchen-stores-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "ceramic",
+      "wood"
+    ],
+    "recipeHash": "f20075446bc149e462c7daf390e985e5fccbac15ab29904864ffb1377262e78f",
+    "scaleAxes": [
+      "uniform",
+      "x"
+    ],
+    "semanticParts": [
+      "rack",
+      "container",
+      "jar"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.14182,
+          0
+        ],
+        "type": "supply"
+      },
+      {
+        "position": [
+          0.50051,
+          0.11604,
+          0
+        ],
+        "type": "interaction"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "chevaux-de-frise": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.0,
+    "category": "defense",
+    "collision": "full-cover",
+    "companionLeaf": null,
+    "file": "chevaux-de-frise.glb",
+    "footprint": [
+      2,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 65172,
+        "file": "chevaux-de-frise.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 42616,
+        "file": "chevaux-de-frise-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 25940,
+        "file": "chevaux-de-frise-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "4cb52a0bb9bb6dcb1a4bd791d34c63766b3c2ebe4d03a351c5f04340ef23953e",
+    "scaleAxes": [
+      "uniform",
+      "x"
+    ],
+    "semanticParts": [
+      "spine",
+      "spike",
+      "support"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -0.5,
+          0.05127,
+          0
+        ],
+        "type": "join-west"
+      },
+      {
+        "position": [
+          0.5,
+          0.05127,
+          0
+        ],
+        "type": "join-east"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "compact-field-forge": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.7248227,
+    "category": "workstation",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "compact-field-forge.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 88360,
+        "file": "compact-field-forge.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 55716,
+        "file": "compact-field-forge-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 33804,
+        "file": "compact-field-forge-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "iron",
+      "stone",
+      "wood"
+    ],
+    "recipeHash": "96fce74a8f240ba0fdb7f8b8994aab8c8793de6319480186720e11d2cec1329c",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "hearth",
+      "anvil",
+      "bellows",
+      "fuel-rack"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.19277,
+          0
+        ],
+        "type": "fire-origin"
+      },
+      {
+        "position": [
+          0.5,
+          0.12393,
+          0
+        ],
+        "type": "interaction"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "gabion-stone-basket": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.05,
+    "category": "defense",
+    "collision": "full-cover",
+    "companionLeaf": null,
+    "file": "gabion-stone-basket.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 65840,
+        "file": "gabion-stone-basket.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 41772,
+        "file": "gabion-stone-basket-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 25256,
+        "file": "gabion-stone-basket-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "iron",
+      "stone"
+    ],
+    "recipeHash": "6cdca1ec672e95a1d40a98674cc7f37f490eb8e9af91f40921490eea68c756ac",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "stone-pack",
+      "basket-frame"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.27344,
+          0
+        ],
+        "type": "stack-top"
+      },
+      {
+        "position": [
+          -0.5,
+          0.0957,
+          0
+        ],
+        "type": "join-west"
+      },
+      {
+        "position": [
+          0.5,
+          0.0957,
+          0
+        ],
+        "type": "join-east"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "low-cover-boulder-cluster": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.15,
+    "category": "natural-cover",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "low-cover-boulder-cluster.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 21204,
+        "file": "low-cover-boulder-cluster.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 14104,
+        "file": "low-cover-boulder-cluster-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 9340,
+        "file": "low-cover-boulder-cluster-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "stone"
+    ],
+    "recipeHash": "d15406a23420b31237516675eaafa09a07941cc04056c0e839af00e92a1ae2cf",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "boulder"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.19727,
+          0
+        ],
+        "type": "top-surface"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "movable-timber-barricade": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.44891529,
+    "category": "defense",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "movable-timber-barricade.glb",
+    "footprint": [
+      2,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 60608,
+        "file": "movable-timber-barricade.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 42056,
+        "file": "movable-timber-barricade-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 25960,
+        "file": "movable-timber-barricade-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "224df7a89939091d58c644a93ef53c88954e90a9eae8c501f4d11b92a7885d91",
+    "scaleAxes": [
+      "uniform",
+      "x"
+    ],
+    "semanticParts": [
+      "plank",
+      "upright",
+      "brace"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -0.50047,
+          0.11195,
+          0
+        ],
+        "type": "join-west"
+      },
+      {
+        "position": [
+          0.50047,
+          0.11195,
+          0
+        ],
+        "type": "join-east"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "public-notice-signal-board": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.30111536,
+    "category": "civic-signal",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "public-notice-signal-board.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 54852,
+        "file": "public-notice-signal-board.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 37524,
+        "file": "public-notice-signal-board-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 23100,
+        "file": "public-notice-signal-board-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "iron",
+      "wood"
+    ],
+    "recipeHash": "68d29957a9ae4d894b0255e7dea534f69123af0cd88d97488d8afa2b5fd042ff",
+    "scaleAxes": [
+      "uniform",
+      "x"
+    ],
+    "semanticParts": [
+      "display-panel",
+      "roof-cap",
+      "post",
+      "brace"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.2658,
+          0.11927
+        ],
+        "type": "display-face"
+      },
+      {
+        "position": [
+          0,
+          0.42871,
+          0
+        ],
+        "type": "signal-top"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "short-household-ridge-tent": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.28571429,
+    "category": "shelter",
+    "collision": "solid",
+    "companionLeaf": null,
+    "file": "short-household-ridge-tent.glb",
+    "footprint": [
+      2,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 58996,
+        "file": "short-household-ridge-tent.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 39072,
+        "file": "short-household-ridge-tent-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 23900,
+        "file": "short-household-ridge-tent-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "cloth",
+      "wood"
+    ],
+    "recipeHash": "3449c8795a44e9c48ffab8b2337b92eeac09fdeb457e85273a6be515a9d3df4a",
+    "scaleAxes": [
+      "uniform",
+      "x"
+    ],
+    "semanticParts": [
+      "cloth-shell",
+      "ridge-pole",
+      "support"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0.32812,
+          0,
+          0
+        ],
+        "type": "entrance"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "timber-holding-cage": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.35239014,
+    "category": "containment",
+    "collision": "solid",
+    "companionLeaf": null,
+    "file": "timber-holding-cage.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 72932,
+        "file": "timber-holding-cage.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 48044,
+        "file": "timber-holding-cage-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 30080,
+        "file": "timber-holding-cage-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "7e3503f34fb16e41f11e504fc235d9d5d9aa7b63a2f7bd860e9e12e97e1d2159",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "bar-frame",
+      "door-panel"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -0.50049,
+          0.20704,
+          0.40379
+        ],
+        "type": "hinge"
+      },
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "occupant"
+      },
+      {
+        "position": [
+          0.50049,
+          0.18634,
+          0
+        ],
+        "type": "interaction"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "timber-repair-brace": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.45347697,
+    "category": "architecture",
+    "collision": "solid",
+    "companionLeaf": null,
+    "file": "timber-repair-brace.glb",
+    "footprint": [
+      1,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 52812,
+        "file": "timber-repair-brace.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 35168,
+        "file": "timber-repair-brace-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 21756,
+        "file": "timber-repair-brace-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "stone",
+      "wood"
+    ],
+    "recipeHash": "53c507b48bfab6490d0fa7e3c3a2460b0358ac0971cfae204cf6a4023ffc7859",
+    "scaleAxes": [
+      "uniform",
+      "z"
+    ],
+    "semanticParts": [
+      "brace-member",
+      "post",
+      "footing"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.24878,
+          -0.10547
+        ],
+        "type": "wall-mount"
+      },
+      {
+        "position": [
+          0,
+          0.49755,
+          0
+        ],
+        "type": "join-top"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "universal-wagon-chassis": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 2.12071006,
+    "category": "transport",
+    "collision": "solid",
+    "companionLeaf": null,
+    "file": "universal-wagon-chassis.glb",
+    "footprint": [
+      2,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 115236,
+        "file": "universal-wagon-chassis.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 89476,
+        "file": "universal-wagon-chassis-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 55876,
+        "file": "universal-wagon-chassis-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "2b98cdb851d227b2a929c09692751c79ec3514a28d20cee8c084340ffe518829",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "chassis",
+      "wheel"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          0,
+          0.06553,
+          0
+        ],
+        "type": "cargo-bed"
+      },
+      {
+        "position": [
+          -0.5,
+          0.02979,
+          0
+        ],
+        "type": "tow-point"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "wall-flame-sconce": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 0.48872727,
+    "category": "light-fixture",
+    "collision": "none",
+    "companionLeaf": null,
+    "file": "wall-flame-sconce.glb",
+    "footprint": [
+      0,
+      0
+    ],
+    "lods": [
+      {
+        "bytes": 53296,
+        "file": "wall-flame-sconce.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 33872,
+        "file": "wall-flame-sconce-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 20908,
+        "file": "wall-flame-sconce-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "iron"
+    ],
+    "recipeHash": "d7e2f2699b82598a1304fd3457c96cc54cb423a721efbf21ce46e3b3cb86f3e3",
+    "scaleAxes": [
+      "uniform"
+    ],
+    "semanticParts": [
+      "wall-plate",
+      "arm",
+      "flame-cup"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0.21484,
+          -0.5
+        ],
+        "type": "wall-mount"
+      },
+      {
+        "position": [
+          0,
+          0.30938,
+          0.175
+        ],
+        "type": "light-origin"
+      },
+      {
+        "position": [
+          0,
+          0.33516,
+          0.175
+        ],
+        "type": "flame-origin"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  },
+  "wattle-screen": {
+    "admissionClass": "DIRECT_MODULATED",
+    "canonicalScale": 1.55,
+    "category": "screen",
+    "collision": "half-cover",
+    "companionLeaf": null,
+    "file": "wattle-screen.glb",
+    "footprint": [
+      2,
+      1
+    ],
+    "lods": [
+      {
+        "bytes": 68920,
+        "file": "wattle-screen.glb",
+        "level": 0,
+        "ratio": 1.0
+      },
+      {
+        "bytes": 43448,
+        "file": "wattle-screen-lod1.glb",
+        "level": 1,
+        "ratio": 0.62
+      },
+      {
+        "bytes": 26128,
+        "file": "wattle-screen-lod2.glb",
+        "level": 2,
+        "ratio": 0.36
+      }
+    ],
+    "materialFamilies": [
+      "wood"
+    ],
+    "recipeHash": "5f54e48ddd05fecec4592b9c36b3fb79c6766a17a675f686b23c53c6a8020363",
+    "scaleAxes": [
+      "uniform",
+      "x"
+    ],
+    "semanticParts": [
+      "woven-band",
+      "post"
+    ],
+    "sockets": [
+      {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "type": "floor-mount"
+      },
+      {
+        "position": [
+          -0.5,
+          0.07451,
+          0
+        ],
+        "type": "join-west"
+      },
+      {
+        "position": [
+          0.5,
+          0.07451,
+          0
+        ],
+        "type": "join-east"
+      }
+    ],
+    "stateOwner": "site-runtime"
+  }
+}

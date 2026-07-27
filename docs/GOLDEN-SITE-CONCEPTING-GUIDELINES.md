@@ -1,6 +1,7 @@
 ---
 type: workflow-guide
 created: 2026-07-25
+updated: 2026-07-26
 status: ACTIVE
 authority: GOLDEN-SITES-CATALOG.md
 ---
@@ -26,6 +27,8 @@ By the end of a healthy concepting cycle, we should know:
 - how culture changes the solution;
 - how terrain, climate, materials, wealth, permanence, occupants, and current use
   change it;
+- how the same real rolls project beyond the tactical footprint into a truthful world
+  context rather than a generic void;
 - what its small, ordinary, large, degraded, and unusual expressions look like;
 - which first build teaches us the most about the rest of the family;
 - what belongs in Proof, MVP, and Ideal; and
@@ -65,6 +68,45 @@ candidates just as it rejects broken geometry.
 
 ## The session, in order
 
+### 0. Audit the current rollers
+
+Before choosing a hero composition, inspect the current paths that can already produce
+this site's ingredients. Use `GOLDEN-SITE-ROLLER-PRESERVATION-LEDGER.md` as the shared
+ledger and extend it when a new source or retained composition is found.
+
+Record:
+
+- live world, place, building, walk, room, feature, capture, and occupancy sources;
+- exact table ids or Track-A keys and the roller that consumes them;
+- at least one real rolled result or honestly reconstructed composition worth retaining;
+- whether each source is `LIVE`, `LIVE-COMPOSED`, `AUTHORED-UNWIRED`,
+  `ORACLE-MANUAL`, `INTERPRETIVE`, or a proposed `TARGET-ADAPTER`; and
+- which existing outcomes would be lost if the Golden Seed were mistaken for the family.
+
+This is a preservation and classification pass, not a demand to keep every historical
+implementation. Anything deliberately superseded needs a named replacement and cutover.
+An authored row that is not called by the relevant player-facing roller must never be
+described as live.
+
+### 0.5. Classify the request before inventing a site family
+
+Use `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md` to ask what the proposed Golden case is
+actually proving:
+
+- a **host program** with a distinct operating model;
+- a **cross-host transform** that should work over unlike programs;
+- a **scale/relationship** stress case;
+- a **substrate/ownership** stress case; or
+- an **ordinary venue fixture** needed to prove the common path.
+
+Do not create a new geometry generator merely because a story state is visually rich.
+Apply dormant, layered control, occupation, damage, flooding, repair, and similar states
+as transforms when the host retains its identity. Do not create a new numbered Golden
+Site merely because a common venue—such as a tavern—deserves a retained proof.
+
+Record the host, transform stack, entering walk family, and smallest honest
+materialization window before choosing a hero composition.
+
 ### 1. State the site's promise
 
 Begin without discussing individual props or architectural details. Answer, in plain
@@ -94,6 +136,27 @@ mobility, purpose, and permanence decide which expression of that tradition appe
 
 When a recommendation depends on more than one layer, name the contributing facts.
 Avoid rules shaped like “Culture X always receives object Y.”
+
+### 2.5. Project the real roll beyond the tray
+
+Before polishing a hero image, separate:
+
+- the canonical playfield and its true portals/supports;
+- the context apron that explains how those edges sit in the world; and
+- the near, mid, far, and atmospheric context that can be derived from visible,
+  knowledge-safe world/place facts.
+
+Use `GOLDEN-SITE-WORLD-CONTEXT-PROJECTION.md`. Background is not a generic biome choice
+and not permission to paint mechanics. Audit the world setting, persistent architecture,
+nearby nodes/edges, terrain/biome, place setting/traits/history, topology, elevation,
+water/void, time, weather, light, current state, and host relationships.
+
+Classify every candidate background fact as direct visual noun, physical property,
+visible process, sensory-only, social/narrative, or secret/latent. Only the first three
+may project automatically, and visible processes still require current local state.
+
+Retain at least one real context roll for the family. A changed context roll should be
+able to transform the world's silhouette without silently changing the site's mechanics.
 
 ### 3. Concept a family before polishing a hero
 
@@ -140,12 +203,16 @@ The first useful demonstration should show:
 - legal footprints, collision, stairs, slopes, and support;
 - approach, deployment, objective, interaction, retreat, and alternate routes;
 - the same committed layout in clay, tactical, and dressed presentations;
+- the same committed layout with context disabled and with its real-roll context
+  projection enabled;
 - the distinct viable plans, their tradeoffs, and the site-specific levers that make
   them possible;
 - motivated daylight, moonlight, magic, flame, or other setting-owned light;
 - a dark case in which stairs, ledges, figures, and nearby forms remain readable
   through exposure, restrained ambient bounce, AO, contact, and honest cast shadows;
 - at least two changed seeds; and
+- at least one changed world-context receipt over an otherwise unchanged site chassis;
+  and
 - one deliberately hostile envelope, camera, or density case.
 
 Darkness may be dark. Readability support must not pretend that an unexplained lamp
@@ -208,14 +275,17 @@ The working spec must state:
 6. site-specific operating circuits and factorized mutable states;
 7. strategic levers and at least three demonstrable plans, including noncombat where
    the premise permits it;
-8. generator inputs, semantic blueprint, and ordered generation pass;
-9. countable rejection rules and a deterministic simplification/fallback ladder;
-10. culture, construction, organization, ecology, or occupant cards appropriate to the
+8. current roller sources, their live/unwired/interpretive/adapter status, retained
+   compositions, and the `rollerLineage` / `sourceRollRefs` receipt;
+9. generator inputs, semantic blueprint, and ordered generation pass;
+10. countable rejection rules and a deterministic simplification/fallback ladder;
+11. culture, construction, organization, ecology, or occupant cards appropriate to the
     family—never one label or palette standing in for them;
-11. occupancy states, hooks, lighting/cutaway law, and site boundaries;
-12. inherited/site-owned structure, mechanisms, material, decal, and prop demand;
-13. retained runtime facts, stable ids, provenance, and proof-receipt fields; and
-14. Proof, MVP, Ideal, remaining evidence, and the next visible demonstration.
+12. occupancy states, hooks, lighting/cutaway law, rolled world-context projection, and
+    site boundaries;
+13. inherited/site-owned structure, mechanisms, material, decal, and prop demand;
+14. retained runtime facts, stable ids, provenance, and proof-receipt fields; and
+15. Proof, MVP, Ideal, remaining evidence, and the next visible demonstration.
 
 Numbers in a working spec are hypotheses until clay and play accept them. Adding detail
 must never silently turn a `PROPOSED` build order or card into a ruling. A working spec
@@ -223,14 +293,17 @@ is buildable instruction; `CLAY-PROVED` still requires the actual retained fixtu
 
 ## Recommended working rhythm
 
-1. Codex presents a short visual concept board and a plain-English site promise.
-2. Adam corrects the promise and the intended player experience.
-3. Codex shows the family, its variable axes, and a recommended first build.
-4. Adam answers only the consequential taste questions.
-5. Codex builds and presents the clay proof.
-6. Adam responds to the visible result.
-7. Codex tests changed seeds and an adversarial case, then corrects failures.
-8. Codex finalizes the brief, ladder, queues, and retained evidence.
+1. Codex audits the live rollers and shows the current results/compositions that must
+   remain generatively reachable.
+2. Codex presents a short visual concept board, the rolled world-context evidence, and
+   a plain-English site promise.
+3. Adam corrects the promise and the intended player experience.
+4. Codex shows the family, its variable axes, and a recommended first build.
+5. Adam answers only the consequential taste questions.
+6. Codex builds and presents the clay proof.
+7. Adam responds to the visible result.
+8. Codex tests changed seeds and an adversarial case, then corrects failures.
+9. Codex finalizes the brief, ladder, queues, lineage, and retained evidence.
 
 If the session becomes dominated by prose, pause and produce the next useful comparison,
 diagram, or live proof.
@@ -240,12 +313,16 @@ diagram, or live proof.
 A concepting session is ready to hand off when:
 
 - [ ] the player-facing promise is one clear paragraph or less;
+- [ ] current roller sources and retained compositions are classified without treating
+  authored-but-unwired content as live;
+- [ ] the site names its real-roll context inputs, legal apron/background families,
+  forbidden visual claims, and grade-only fallback;
 - [ ] invariants are separated from defaults and variants;
 - [ ] culture and local circumstance both have named influence;
 - [ ] the five-expression family has been compared visually;
 - [ ] the first build has an explicit learning rationale;
 - [ ] a generator-grade working spec defines zones, circuits, plans, inputs, generation,
-  rejection, fallback, runtime facts, and receipt;
+  rejection, fallback, runtime facts, roller lineage, source roll refs, and receipt;
 - [ ] Proof, MVP, and Ideal are separate;
 - [ ] founder questions contain only real taste choices;
 - [ ] the next clay demonstration is precisely defined; and

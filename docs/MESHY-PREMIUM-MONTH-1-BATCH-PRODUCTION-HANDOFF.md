@@ -271,14 +271,41 @@ For every queued row:
 ```text
 mode: Image to 3D
 topology: Smart Topology
-target: use targetPolygons from the manifest
-texture: off
+target: use targetPolygons from the manifest as the target triangle count
+texture: NO TEXTURE by default; TEXTURED only when material differentiation is needed
 image enhancement: off
 ```
 
-Paste the exact `meshyPrompt` cell from the row. Do not add polygon specifications inside the prose;
-the Smart Topology field owns that number. Do not ask Meshy for texture, flame, smoke, liquid,
-lighting, labels, or background removal.
+Paste the exact `meshyPrompt` cell from the row, prefixed with one of these opening sentences after
+replacing `N` with the row's `targetPolygons` value:
+
+```text
+SMART TOPOLOGY — TARGET N TRIANGLES — NO TEXTURE.
+```
+
+```text
+SMART TOPOLOGY — TARGET N TRIANGLES — TEXTURED, WITH CLEARLY DIFFERENTIATED MATERIAL REGIONS.
+```
+
+Use **NO TEXTURE** for single-material assets and for assets whose physical parts are already
+unambiguous from geometry. Use **TEXTURED** when wood, metal, stone, cloth, ceramic, cargo, or other
+regions would otherwise be difficult to identify during intake. A textured result is a temporary
+material diagram; Genesis still replaces its baked appearance with local semantic materials.
+
+Smart Topology currently produces triangle output. Meshy's separate Quad Remesh operation is not
+part of this production recipe and must not be implied by prompt wording. If an accepted donor later
+needs editable quad-like construction in Blender, Genesis selectively flattens intended planar
+triangle pairs, rebuilds simple primitives, or performs local retopology without paying for a global
+quad remesh. Do not ask Meshy for flame, smoke, liquid, lighting, labels, or background removal.
+
+When presenting Meshy jobs to Adam in chat, use this locked format:
+
+1. show one approved reference image directly in chat;
+2. place exactly one copyable prompt immediately below that image;
+3. begin the prompt with Smart Topology, target triangle count, and either NO TEXTURE or TEXTURED;
+4. do not place paths, setup checklists, commentary, fill-in fields, or other prose between the image
+   and its prompt;
+5. repeat once per model, preserving manifest order.
 
 One approved reference image may produce one planned model. A material-only recolor, mirrored copy,
 ordinary rescale, LOD, open/closed transform, or procedural attachment does not earn another Meshy

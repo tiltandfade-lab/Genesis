@@ -9,6 +9,9 @@ Batch-production handoff:
 Definitive machine-readable queue:
 [`batch-production-manifest.csv`](batch-production-manifest.csv)
 
+Structural planarity audit:
+[`STRUCTURAL-PLANARITY-PASS-2026-07-26.md`](STRUCTURAL-PLANARITY-PASS-2026-07-26.md)
+
 These images are inputs for Meshy Image-to-3D. They are not runtime assets or proof that a
 generated model has passed Genesis admission.
 
@@ -31,7 +34,12 @@ Adam does not need to rename Meshy downloads.
 1. Save or drag the download into `incoming/` with whatever filename Meshy supplies.
 2. Say that the file is in and identify the model ID only if more than one test is active.
 3. Codex inspects the GLB, confirms which stage was downloaded, and renames it canonically.
-4. Codex never admits or commits the file until its contents match the canonical name.
+4. Codex writes accepted lightweight geometry to `processed/`, routes worthwhile raw donors to
+   `source-archive/`, and routes useful alternates and rejects to their named subfolders.
+5. Heavy baked-texture wrappers may be deleted after their useful geometry and proof renders are
+   preserved; Genesis custom materials remain the runtime authority.
+6. `incoming/` is a temporary inbox, not storage. Finish every intake pass with it empty and remove
+   the empty directory so the next upload is unmistakable.
 
 Canonical pattern:
 
@@ -50,6 +58,24 @@ M001-A-low-cover-boulder-cluster-clean-v1.glb
 `original`, `remesh-N`, and `clean-vN` describe actual file state. They are not interchangeable.
 Avoid overwriting an earlier download when convenient because the comparison can help diagnose a
 failure, but an overwrite is acceptable when the prior stage is knowingly disposable.
+
+## Meshy topology and texture wording
+
+Smart Topology produces triangle output. Begin each Meshy prompt with one of these literal contracts:
+
+```text
+SMART TOPOLOGY — TARGET N TRIANGLES — NO TEXTURE.
+```
+
+```text
+SMART TOPOLOGY — TARGET N TRIANGLES — TEXTURED, WITH CLEARLY DIFFERENTIATED MATERIAL REGIONS.
+```
+
+Use `NO TEXTURE` unless a mixed-material asset needs visible differentiation during intake. A
+textured download is a temporary material diagram, not runtime art. Do not describe Smart Topology
+as quad topology. Meshy's separate Quad Remesh is not the production default; Genesis performs
+selective planar correction or local reconstruction in Blender when a structural donor needs
+cleaner editing surfaces.
 
 ## M001-A — low-cover boulder cluster
 

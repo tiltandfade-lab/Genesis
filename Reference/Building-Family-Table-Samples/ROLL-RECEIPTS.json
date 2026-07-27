@@ -1,0 +1,2079 @@
+{
+  "schema": "genesis.building-family-taste-rolls.v1",
+  "generatedOn": "2026-07-26",
+  "source": "Reference/Building-Family-Table-Samples/TABLE-SAMPLES.json",
+  "sourceSha256": "a4f67438a57e7fab820ab764ba70b7aa59e9d8a381c9fd8d63517f2cb7aee1de",
+  "sampler": "dev/roll-building-family-samples.mjs",
+  "familyCount": 7,
+  "programCount": 15,
+  "receiptsPerFamily": 4,
+  "receiptCount": 28,
+  "profiles": [
+    {
+      "id": "grounded-frontier",
+      "spiceBand": "Grounded",
+      "realm": "frontier",
+      "contextTags": []
+    },
+    {
+      "id": "textured-chrome",
+      "spiceBand": "Textured",
+      "realm": "chrome",
+      "contextTags": []
+    },
+    {
+      "id": "strange-gloom",
+      "spiceBand": "Strange",
+      "realm": "gloom",
+      "contextTags": []
+    },
+    {
+      "id": "volatile-frontier",
+      "spiceBand": "Volatile",
+      "realm": "frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "preferContextSpecificRows": true
+    }
+  ],
+  "receipts": [
+    {
+      "receiptId": "BF-PUBLIC-SERVICE-01",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-PUBLIC-SERVICE/tavern/grounded-frontier/0",
+        "value": 1002213948
+      },
+      "familyId": "BF-PUBLIC-SERVICE",
+      "familyLabel": "Public Service / Hospitality",
+      "programId": "tavern",
+      "programLabel": "Tavern",
+      "profileId": "grounded-frontier",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "PS-CH-04",
+          "text": "Long hall divided into a lively front bay and quieter rear bay; payment sits between them, while support runs along one side wall.",
+          "scale": "medium",
+          "provides": [
+            "noise gradient",
+            "shared payment",
+            "continuous service",
+            "front and rear exits"
+          ]
+        },
+        "programArrangement": {
+          "id": "TV-AR-01",
+          "text": "Drinkhouse with a public bar, small cold store or cellar, simple food preparation, and no lodging."
+        },
+        "operatingState": {
+          "id": "PS-ST-03",
+          "text": "Partial operation: one room is closed for repair, cleaning, shortage, or a failed utility."
+        },
+        "currentScene": {
+          "id": "TV-SC-01",
+          "text": "A delayed drink delivery has the keeper deciding which regulars still receive their usual order."
+        },
+        "spice": {
+          "id": "TV-SP-G",
+          "band": "Grounded",
+          "text": "The house ledger shows one patron has been paying another patron's tab for months.",
+          "affects": "credit and relationships",
+          "preserves": "hospitality service"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Inn / Alehouse",
+          "realization": "Hearth, casks, cellar or cool store, kitchen smoke, stable or road supply, host-led etiquette."
+        }
+      },
+      "preservedInvariants": [
+        "hospitality",
+        "drink or food service",
+        "responsible host",
+        "social floor",
+        "payment or patronage",
+        "service and supply"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Grounded",
+        "selectedSpiceBand": "Grounded",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Tavern — Inn / Alehouse. Long hall divided into a lively front bay and quieter rear bay; payment sits between them, while support runs along one side wall. Drinkhouse with a public bar, small cold store or cellar, simple food preparation, and no lodging. Operating state: Partial operation: one room is closed for repair, cleaning, shortage, or a failed utility. Current scene: A delayed drink delivery has the keeper deciding which regulars still receive their usual order. Grounded Spice: The house ledger shows one patron has been paying another patron's tab for months. Realm realization: Hearth, casks, cellar or cool store, kitchen smoke, stable or road supply, host-led etiquette."
+    },
+    {
+      "receiptId": "BF-PUBLIC-SERVICE-02",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-PUBLIC-SERVICE/bathhouse/textured-chrome/1",
+        "value": 1678829952
+      },
+      "familyId": "BF-PUBLIC-SERVICE",
+      "familyLabel": "Public Service / Hospitality",
+      "programId": "bathhouse",
+      "programLabel": "Bathhouse",
+      "profileId": "textured-chrome",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "PS-CH-03",
+          "text": "Corner frontage feeds two connected public rooms around a central recognition desk; service rooms and a narrow staff stair occupy the inner corner.",
+          "scale": "small-to-medium",
+          "provides": [
+            "two public zones",
+            "central recognition",
+            "controlled service",
+            "upper or lower support"
+          ]
+        },
+        "programArrangement": {
+          "id": "BH-AR-03",
+          "text": "Steam house with one shared hot chamber, cold rinse, rest room, and tightly controlled fuel and ventilation."
+        },
+        "operatingState": {
+          "id": "PS-ST-02",
+          "text": "Rush or backlog: the customer floor is full and one service station has become the bottleneck."
+        },
+        "currentScene": {
+          "id": "BH-SC-03",
+          "text": "A patron refuses to leave the cooling room until someone hears a private accusation."
+        },
+        "spice": {
+          "id": "BH-SP-T",
+          "band": "Textured",
+          "text": "One basin remains warm after the furnace is banked, but only while the room is occupied.",
+          "affects": "one water fixture",
+          "preserves": "heat and service ownership"
+        },
+        "realm": {
+          "id": "chrome",
+          "label": "Spa / Capsule Bath",
+          "realization": "Pumped water, heat exchangers, lockers, filtered wet zones, booking system, maintenance corridors."
+        }
+      },
+      "preservedInvariants": [
+        "arrival and payment/custom",
+        "changing",
+        "washing or heat service",
+        "clean/used flow",
+        "water and waste",
+        "privacy and safety"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Textured",
+        "selectedSpiceBand": "Textured",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Bathhouse — Spa / Capsule Bath. Corner frontage feeds two connected public rooms around a central recognition desk; service rooms and a narrow staff stair occupy the inner corner. Steam house with one shared hot chamber, cold rinse, rest room, and tightly controlled fuel and ventilation. Operating state: Rush or backlog: the customer floor is full and one service station has become the bottleneck. Current scene: A patron refuses to leave the cooling room until someone hears a private accusation. Textured Spice: One basin remains warm after the furnace is banked, but only while the room is occupied. Realm realization: Pumped water, heat exchangers, lockers, filtered wet zones, booking system, maintenance corridors."
+    },
+    {
+      "receiptId": "BF-PUBLIC-SERVICE-03",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-PUBLIC-SERVICE/gambling-den/strange-gloom/2",
+        "value": 2491682252
+      },
+      "familyId": "BF-PUBLIC-SERVICE",
+      "familyLabel": "Public Service / Hospitality",
+      "programId": "gambling-den",
+      "programLabel": "Gambling Den",
+      "profileId": "strange-gloom",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "PS-CH-02",
+          "text": "Covered arcade opens into a customer courtyard; two reservable side rooms share a screened service range and rear staff passage.",
+          "scale": "medium",
+          "provides": [
+            "weather threshold",
+            "public court",
+            "reservable rooms",
+            "screened service",
+            "staff passage"
+          ]
+        },
+        "programArrangement": {
+          "id": "GD-AR-02",
+          "text": "Public front room feeds screened high-stakes tables whose entry and settlement are separately controlled."
+        },
+        "operatingState": {
+          "id": "PS-ST-04",
+          "text": "Reserved use: a private booking or protected clientele controls part of the public floor without erasing ordinary egress."
+        },
+        "currentScene": {
+          "id": "GD-SC-03",
+          "text": "The result board contradicts the sealed tally held behind the counter."
+        },
+        "spice": {
+          "id": "GD-SP-S",
+          "band": "Strange",
+          "text": "One set of dice lands honestly but whispers the result a heartbeat before it stops.",
+          "affects": "one gaming implement",
+          "preserves": "stakes and uncertainty"
+        },
+        "realm": {
+          "id": "gloom",
+          "label": "Card Room / Betting Parlor",
+          "realization": "Tables and booths, chalk or lit result board, cash window, back-office book, floor manager and parking/alley access."
+        }
+      },
+      "preservedInvariants": [
+        "recognized stakes",
+        "game floor",
+        "bank or settlement",
+        "oversight",
+        "cash or debt security",
+        "exit and dispute response"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Strange",
+        "selectedSpiceBand": "Strange",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Gambling Den — Card Room / Betting Parlor. Covered arcade opens into a customer courtyard; two reservable side rooms share a screened service range and rear staff passage. Public front room feeds screened high-stakes tables whose entry and settlement are separately controlled. Operating state: Reserved use: a private booking or protected clientele controls part of the public floor without erasing ordinary egress. Current scene: The result board contradicts the sealed tally held behind the counter. Strange Spice: One set of dice lands honestly but whispers the result a heartbeat before it stops. Realm realization: Tables and booths, chalk or lit result board, cash window, back-office book, floor manager and parking/alley access."
+    },
+    {
+      "receiptId": "BF-PUBLIC-SERVICE-04",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-PUBLIC-SERVICE/tavern/volatile-frontier/3",
+        "value": 2164505027
+      },
+      "familyId": "BF-PUBLIC-SERVICE",
+      "familyLabel": "Public Service / Hospitality",
+      "programId": "tavern",
+      "programLabel": "Tavern",
+      "profileId": "volatile-frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "layers": {
+        "familyChassis": {
+          "id": "PS-CH-04",
+          "text": "Long hall divided into a lively front bay and quieter rear bay; payment sits between them, while support runs along one side wall.",
+          "scale": "medium",
+          "provides": [
+            "noise gradient",
+            "shared payment",
+            "continuous service",
+            "front and rear exits"
+          ]
+        },
+        "programArrangement": {
+          "id": "TV-AR-01",
+          "text": "Drinkhouse with a public bar, small cold store or cellar, simple food preparation, and no lodging."
+        },
+        "operatingState": {
+          "id": "PS-ST-03",
+          "text": "Partial operation: one room is closed for repair, cleaning, shortage, or a failed utility."
+        },
+        "currentScene": {
+          "id": "TV-SC-04",
+          "text": "A tab is being settled with information, but the named person has just entered through the other door."
+        },
+        "spice": {
+          "id": "TV-SP-V",
+          "band": "Volatile",
+          "text": "Every unpaid promise spoken over the bar becomes audible to its creditor at closing time.",
+          "affects": "credit and closing routine",
+          "preserves": "tavern operation"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Inn / Alehouse",
+          "realization": "Hearth, casks, cellar or cool store, kitchen smoke, stable or road supply, host-led etiquette."
+        }
+      },
+      "preservedInvariants": [
+        "hospitality",
+        "drink or food service",
+        "responsible host",
+        "social floor",
+        "payment or patronage",
+        "service and supply"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Volatile",
+        "selectedSpiceBand": "Volatile",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Tavern — Inn / Alehouse. Long hall divided into a lively front bay and quieter rear bay; payment sits between them, while support runs along one side wall. Drinkhouse with a public bar, small cold store or cellar, simple food preparation, and no lodging. Operating state: Partial operation: one room is closed for repair, cleaning, shortage, or a failed utility. Current scene: A tab is being settled with information, but the named person has just entered through the other door. Volatile Spice: Every unpaid promise spoken over the bar becomes audible to its creditor at closing time. Realm realization: Hearth, casks, cellar or cool store, kitchen smoke, stable or road supply, host-led etiquette."
+    },
+    {
+      "receiptId": "BF-CIVIC-AUTHORITY-01",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-CIVIC-AUTHORITY/guildhall/grounded-frontier/0",
+        "value": 770284955
+      },
+      "familyId": "BF-CIVIC-AUTHORITY",
+      "familyLabel": "Civic / Authority",
+      "programId": "guildhall",
+      "programLabel": "Guildhall",
+      "profileId": "grounded-frontier",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "CA-CH-06",
+          "text": "Two-storey civic house places public business below and committee, command, or deliberation above; staff and records use a rear stair.",
+          "scale": "medium",
+          "provides": [
+            "public lower floor",
+            "controlled upper floor",
+            "rear staff stair",
+            "records"
+          ]
+        },
+        "programArrangement": {
+          "id": "GH-AR-04",
+          "text": "Merchant association with public arbitration hours, members' exchange floor, private committees, and bonded records."
+        },
+        "operatingState": {
+          "id": "CA-ST-03",
+          "text": "Overload: petitioners, members, cases, patrol needs, or records exceed the normal public capacity."
+        },
+        "currentScene": {
+          "id": "GH-SC-03",
+          "text": "The hiring board lists a crew that insists it never accepted the job."
+        },
+        "spice": {
+          "id": "GH-SP-G",
+          "band": "Grounded",
+          "text": "The dues ledger contains a perfectly regular payment from a member everyone remembers burying.",
+          "affects": "membership records",
+          "preserves": "guild business"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Guildhall / Company Hall",
+          "realization": "Member marks, samples, contract tables, muster space, physical ledgers, shared stores and officer keys."
+        }
+      },
+      "preservedInvariants": [
+        "member recognition",
+        "collective authority",
+        "business or standards",
+        "dues/contracts/records",
+        "assembly",
+        "officers or stewards"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Grounded",
+        "selectedSpiceBand": "Grounded",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Guildhall — Guildhall / Company Hall. Two-storey civic house places public business below and committee, command, or deliberation above; staff and records use a rear stair. Merchant association with public arbitration hours, members' exchange floor, private committees, and bonded records. Operating state: Overload: petitioners, members, cases, patrol needs, or records exceed the normal public capacity. Current scene: The hiring board lists a crew that insists it never accepted the job. Grounded Spice: The dues ledger contains a perfectly regular payment from a member everyone remembers burying. Realm realization: Member marks, samples, contract tables, muster space, physical ledgers, shared stores and officer keys."
+    },
+    {
+      "receiptId": "BF-CIVIC-AUTHORITY-02",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-CIVIC-AUTHORITY/garrison/textured-chrome/1",
+        "value": 1795920353
+      },
+      "familyId": "BF-CIVIC-AUTHORITY",
+      "familyLabel": "Civic / Authority",
+      "programId": "garrison",
+      "programLabel": "Garrison",
+      "profileId": "textured-chrome",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "CA-CH-05",
+          "text": "A configurable central floor supports assembly or drill; perimeter offices, issue rooms, and records open from a controlled circulation ring.",
+          "scale": "medium-to-large",
+          "provides": [
+            "flexible central floor",
+            "perimeter support",
+            "controlled ring",
+            "multiple duty roles"
+          ]
+        },
+        "programArrangement": {
+          "id": "GA-AR-03",
+          "text": "Barracks company with parade or drill court, squad rooms, mess provider, stores, command, and sentry circuit.",
+          "chassisAllow": [
+            "CA-CH-03",
+            "CA-CH-05"
+          ]
+        },
+        "operatingState": {
+          "id": "CA-ST-01",
+          "text": "Ordinary session: public business and staff work follow the posted order."
+        },
+        "currentScene": {
+          "id": "GA-SC-02",
+          "text": "A public report contradicts the watch log and the named patrol has not returned to answer it."
+        },
+        "spice": {
+          "id": "GA-SP-T",
+          "band": "Textured",
+          "text": "One alarm station signals a threat category omitted from every current drill.",
+          "affects": "alarm and doctrine",
+          "preserves": "response system"
+        },
+        "realm": {
+          "id": "chrome",
+          "label": "Security Precinct / Response Hub",
+          "realization": "Dispatch wall, controlled equipment lockers, ready bays, surveillance feeds, decontamination or maintenance support."
+        }
+      },
+      "preservedInvariants": [
+        "duty command",
+        "muster",
+        "arms or equipment control",
+        "patrol/readiness",
+        "rest and relief",
+        "public or strategic response"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Textured",
+        "selectedSpiceBand": "Textured",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Garrison — Security Precinct / Response Hub. A configurable central floor supports assembly or drill; perimeter offices, issue rooms, and records open from a controlled circulation ring. Barracks company with parade or drill court, squad rooms, mess provider, stores, command, and sentry circuit. Operating state: Ordinary session: public business and staff work follow the posted order. Current scene: A public report contradicts the watch log and the named patrol has not returned to answer it. Textured Spice: One alarm station signals a threat category omitted from every current drill. Realm realization: Dispatch wall, controlled equipment lockers, ready bays, surveillance feeds, decontamination or maintenance support."
+    },
+    {
+      "receiptId": "BF-CIVIC-AUTHORITY-03",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-CIVIC-AUTHORITY/court/strange-gloom/2",
+        "value": 1197664959
+      },
+      "familyId": "BF-CIVIC-AUTHORITY",
+      "familyLabel": "Civic / Authority",
+      "programId": "court",
+      "programLabel": "Court",
+      "profileId": "strange-gloom",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "CA-CH-01",
+          "text": "Public counter and waiting bay lead to one decision chamber; records and staff work occupy a controlled rear strip.",
+          "scale": "small",
+          "provides": [
+            "public threshold",
+            "waiting",
+            "decision room",
+            "records",
+            "staff strip"
+          ]
+        },
+        "programArrangement": {
+          "id": "CT-AR-01",
+          "text": "Single-magistrate court with clerk desk, waiting, hearing room, consultation room, secure records, and bailiff station."
+        },
+        "operatingState": {
+          "id": "CA-ST-03",
+          "text": "Overload: petitioners, members, cases, patrol needs, or records exceed the normal public capacity."
+        },
+        "currentScene": {
+          "id": "CT-SC-01",
+          "text": "Two filed copies of the same order differ by one name, and both bear valid marks."
+        },
+        "spice": {
+          "id": "CT-SP-S",
+          "band": "Strange",
+          "text": "One witness chair grows noticeably heavier with each statement the speaker believes false.",
+          "affects": "testimony fixture",
+          "preserves": "court procedure"
+        },
+        "realm": {
+          "id": "gloom",
+          "label": "County Court / Municipal Hearing Office",
+          "realization": "Clerk counter, courtroom or hearing room, records vault, judge or examiner chamber, sheriff adjacency without prison ownership."
+        }
+      },
+      "preservedInvariants": [
+        "recognized adjudicator",
+        "parties or petitioners",
+        "hearing/decision",
+        "record",
+        "private deliberation or consultation",
+        "enforceable outcome route"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Strange",
+        "selectedSpiceBand": "Strange",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Court — County Court / Municipal Hearing Office. Public counter and waiting bay lead to one decision chamber; records and staff work occupy a controlled rear strip. Single-magistrate court with clerk desk, waiting, hearing room, consultation room, secure records, and bailiff station. Operating state: Overload: petitioners, members, cases, patrol needs, or records exceed the normal public capacity. Current scene: Two filed copies of the same order differ by one name, and both bear valid marks. Strange Spice: One witness chair grows noticeably heavier with each statement the speaker believes false. Realm realization: Clerk counter, courtroom or hearing room, records vault, judge or examiner chamber, sheriff adjacency without prison ownership."
+    },
+    {
+      "receiptId": "BF-CIVIC-AUTHORITY-04",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-CIVIC-AUTHORITY/guildhall/volatile-frontier/3",
+        "value": 50815256
+      },
+      "familyId": "BF-CIVIC-AUTHORITY",
+      "familyLabel": "Civic / Authority",
+      "programId": "guildhall",
+      "programLabel": "Guildhall",
+      "profileId": "volatile-frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "layers": {
+        "familyChassis": {
+          "id": "CA-CH-06",
+          "text": "Two-storey civic house places public business below and committee, command, or deliberation above; staff and records use a rear stair.",
+          "scale": "medium",
+          "provides": [
+            "public lower floor",
+            "controlled upper floor",
+            "rear staff stair",
+            "records"
+          ]
+        },
+        "programArrangement": {
+          "id": "GH-AR-01",
+          "text": "Trade guild with dues desk, contract hall, sample or standard display, officers' room, and archive."
+        },
+        "operatingState": {
+          "id": "CA-ST-04",
+          "text": "Emergency authority: the public floor remains legible, but one controlled room has become a temporary command or deliberation center."
+        },
+        "currentScene": {
+          "id": "GH-SC-04",
+          "text": "A relief payment is due, but the member's status was changed during the night."
+        },
+        "spice": {
+          "id": "GH-SP-V",
+          "band": "Volatile",
+          "text": "Any contract sealed in the officers' room compels the guild's building—not its members—to enforce one clause.",
+          "affects": "contracts and site behavior",
+          "preserves": "guild authority"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Guildhall / Company Hall",
+          "realization": "Member marks, samples, contract tables, muster space, physical ledgers, shared stores and officer keys."
+        }
+      },
+      "preservedInvariants": [
+        "member recognition",
+        "collective authority",
+        "business or standards",
+        "dues/contracts/records",
+        "assembly",
+        "officers or stewards"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Volatile",
+        "selectedSpiceBand": "Volatile",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Guildhall — Guildhall / Company Hall. Two-storey civic house places public business below and committee, command, or deliberation above; staff and records use a rear stair. Trade guild with dues desk, contract hall, sample or standard display, officers' room, and archive. Operating state: Emergency authority: the public floor remains legible, but one controlled room has become a temporary command or deliberation center. Current scene: A relief payment is due, but the member's status was changed during the night. Volatile Spice: Any contract sealed in the officers' room compels the guild's building—not its members—to enforce one clause. Realm realization: Member marks, samples, contract tables, muster space, physical ledgers, shared stores and officer keys."
+    },
+    {
+      "receiptId": "BF-HOUSEHOLD-ESTATE-01",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-HOUSEHOLD-ESTATE/manor/grounded-frontier/0",
+        "value": 940185424
+      },
+      "familyId": "BF-HOUSEHOLD-ESTATE",
+      "familyLabel": "Household / Estate",
+      "programId": "manor",
+      "programLabel": "Manor",
+      "profileId": "grounded-frontier",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "HE-CH-06",
+          "text": "Divided household around one formal stair: two private branches share reception, kitchen/service, chapel or quiet room, and estate records but control separate thresholds.",
+          "scale": "medium",
+          "provides": [
+            "shared authority spaces",
+            "two private domains",
+            "service core",
+            "records",
+            "contested thresholds"
+          ]
+        },
+        "programArrangement": {
+          "id": "MN-AR-04",
+          "text": "Official residence where household life coexists with scheduled petitions, audiences, or local administration in the front range."
+        },
+        "operatingState": {
+          "id": "HE-ST-01",
+          "text": "Receiving day: household officers and front rooms are active while private rooms remain controlled."
+        },
+        "currentScene": {
+          "id": "MN-SC-04",
+          "text": "A dependant is moving rooms, and every household branch interprets the reassignment as a statement of succession."
+        },
+        "spice": {
+          "id": "MN-SP-G",
+          "band": "Grounded",
+          "text": "Two household account books disagree about the support owed to one dependant.",
+          "affects": "estate obligations",
+          "preserves": "household and records"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Manor / Estate House",
+          "realization": "Stewarded reception, household rooms, kitchen and stores, service court, rent or land records, gardens, stable or work providers."
+        }
+      },
+      "preservedInvariants": [
+        "household authority",
+        "reception",
+        "private life",
+        "service and labor",
+        "property/estate records",
+        "food/sleep/sanitation",
+        "accountable controller"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Grounded",
+        "selectedSpiceBand": "Grounded",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Manor — Manor / Estate House. Divided household around one formal stair: two private branches share reception, kitchen/service, chapel or quiet room, and estate records but control separate thresholds. Official residence where household life coexists with scheduled petitions, audiences, or local administration in the front range. Operating state: Receiving day: household officers and front rooms are active while private rooms remain controlled. Current scene: A dependant is moving rooms, and every household branch interprets the reassignment as a statement of succession. Grounded Spice: Two household account books disagree about the support owed to one dependant. Realm realization: Stewarded reception, household rooms, kitchen and stores, service court, rent or land records, gardens, stable or work providers."
+    },
+    {
+      "receiptId": "BF-HOUSEHOLD-ESTATE-02",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-HOUSEHOLD-ESTATE/manor/textured-chrome/1",
+        "value": 3788182681
+      },
+      "familyId": "BF-HOUSEHOLD-ESTATE",
+      "familyLabel": "Household / Estate",
+      "programId": "manor",
+      "programLabel": "Manor",
+      "profileId": "textured-chrome",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "HE-CH-01",
+          "text": "Compact urban manor with formal front rooms, private upper household, rear service court, and separate staff stair.",
+          "scale": "small-to-medium",
+          "provides": [
+            "controlled arrival",
+            "reception",
+            "private household",
+            "service court",
+            "staff circulation"
+          ]
+        },
+        "programArrangement": {
+          "id": "MN-AR-03",
+          "text": "Multigenerational household whose two branches share service and authority rooms but keep separate private thresholds and dependants."
+        },
+        "operatingState": {
+          "id": "HE-ST-02",
+          "text": "Private household: ordinary domestic and estate work continues with formal rooms mostly closed."
+        },
+        "currentScene": {
+          "id": "MN-SC-01",
+          "text": "Two tenants dispute a boundary while the steward discovers that the filed rent roll uses an older property line."
+        },
+        "spice": {
+          "id": "MN-SP-T",
+          "band": "Textured",
+          "text": "A reception room appears in household inventories but not in the filed plan, although servants describe cleaning it.",
+          "affects": "records and known space",
+          "preserves": "manor identity"
+        },
+        "realm": {
+          "id": "chrome",
+          "label": "Penthouse / Family Compound",
+          "realization": "Controlled lobby, formal entertaining floor, private suites, service elevator or corridor, household staff, asset records and building systems."
+        }
+      },
+      "preservedInvariants": [
+        "household authority",
+        "reception",
+        "private life",
+        "service and labor",
+        "property/estate records",
+        "food/sleep/sanitation",
+        "accountable controller"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Textured",
+        "selectedSpiceBand": "Textured",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Manor — Penthouse / Family Compound. Compact urban manor with formal front rooms, private upper household, rear service court, and separate staff stair. Multigenerational household whose two branches share service and authority rooms but keep separate private thresholds and dependants. Operating state: Private household: ordinary domestic and estate work continues with formal rooms mostly closed. Current scene: Two tenants dispute a boundary while the steward discovers that the filed rent roll uses an older property line. Textured Spice: A reception room appears in household inventories but not in the filed plan, although servants describe cleaning it. Realm realization: Controlled lobby, formal entertaining floor, private suites, service elevator or corridor, household staff, asset records and building systems."
+    },
+    {
+      "receiptId": "BF-HOUSEHOLD-ESTATE-03",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-HOUSEHOLD-ESTATE/manor/strange-gloom/2",
+        "value": 3841489055
+      },
+      "familyId": "BF-HOUSEHOLD-ESTATE",
+      "familyLabel": "Household / Estate",
+      "programId": "manor",
+      "programLabel": "Manor",
+      "profileId": "strange-gloom",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "HE-CH-01",
+          "text": "Compact urban manor with formal front rooms, private upper household, rear service court, and separate staff stair.",
+          "scale": "small-to-medium",
+          "provides": [
+            "controlled arrival",
+            "reception",
+            "private household",
+            "service court",
+            "staff circulation"
+          ]
+        },
+        "programArrangement": {
+          "id": "MN-AR-02",
+          "text": "Absentee owner's house where a bailiff and small permanent household maintain property, rents, repairs, and formal reception."
+        },
+        "operatingState": {
+          "id": "HE-ST-03",
+          "text": "Understaffed or absent owner: a steward, caretaker, or elder combines several roles and some service spaces are dormant."
+        },
+        "currentScene": {
+          "id": "MN-SC-03",
+          "text": "The kitchen and stable or transport staff have both been promised the same limited delivery."
+        },
+        "spice": {
+          "id": "MN-SP-S",
+          "band": "Strange",
+          "text": "Ancestral portraits answer only questions whose subjects were once discussed within their hearing.",
+          "affects": "reception memory",
+          "preserves": "household authority and history"
+        },
+        "realm": {
+          "id": "gloom",
+          "label": "Old Family Place / Big House",
+          "realization": "Front parlor and dining room, family bedrooms, kitchen and utility rooms, back stair or porch, property office, yard and local dependants."
+        }
+      },
+      "preservedInvariants": [
+        "household authority",
+        "reception",
+        "private life",
+        "service and labor",
+        "property/estate records",
+        "food/sleep/sanitation",
+        "accountable controller"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Strange",
+        "selectedSpiceBand": "Strange",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Manor — Old Family Place / Big House. Compact urban manor with formal front rooms, private upper household, rear service court, and separate staff stair. Absentee owner's house where a bailiff and small permanent household maintain property, rents, repairs, and formal reception. Operating state: Understaffed or absent owner: a steward, caretaker, or elder combines several roles and some service spaces are dormant. Current scene: The kitchen and stable or transport staff have both been promised the same limited delivery. Strange Spice: Ancestral portraits answer only questions whose subjects were once discussed within their hearing. Realm realization: Front parlor and dining room, family bedrooms, kitchen and utility rooms, back stair or porch, property office, yard and local dependants."
+    },
+    {
+      "receiptId": "BF-HOUSEHOLD-ESTATE-04",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-HOUSEHOLD-ESTATE/manor/volatile-frontier/3",
+        "value": 4110353391
+      },
+      "familyId": "BF-HOUSEHOLD-ESTATE",
+      "familyLabel": "Household / Estate",
+      "programId": "manor",
+      "programLabel": "Manor",
+      "profileId": "volatile-frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "layers": {
+        "familyChassis": {
+          "id": "HE-CH-03",
+          "text": "Long hall-house with a formal central room, screened service end, private solar or suite, guest chambers, and working yard.",
+          "scale": "medium",
+          "provides": [
+            "great room",
+            "service screen",
+            "private suite",
+            "guests",
+            "working yard"
+          ]
+        },
+        "programArrangement": {
+          "id": "MN-AR-03",
+          "text": "Multigenerational household whose two branches share service and authority rooms but keep separate private thresholds and dependants."
+        },
+        "operatingState": {
+          "id": "HE-ST-04",
+          "text": "Succession or occupation: two claims divide permissions, records, rooms, or staff without changing the building's household identity."
+        },
+        "currentScene": {
+          "id": "MN-SC-04",
+          "text": "A dependant is moving rooms, and every household branch interprets the reassignment as a statement of succession."
+        },
+        "spice": {
+          "id": "MN-SP-V",
+          "band": "Volatile",
+          "text": "One private threshold recognizes a disputed heir as owner and denies the current household head.",
+          "affects": "private access and succession",
+          "preserves": "estate conflict"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Manor / Estate House",
+          "realization": "Stewarded reception, household rooms, kitchen and stores, service court, rent or land records, gardens, stable or work providers."
+        }
+      },
+      "preservedInvariants": [
+        "household authority",
+        "reception",
+        "private life",
+        "service and labor",
+        "property/estate records",
+        "food/sleep/sanitation",
+        "accountable controller"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Volatile",
+        "selectedSpiceBand": "Volatile",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Manor — Manor / Estate House. Long hall-house with a formal central room, screened service end, private solar or suite, guest chambers, and working yard. Multigenerational household whose two branches share service and authority rooms but keep separate private thresholds and dependants. Operating state: Succession or occupation: two claims divide permissions, records, rooms, or staff without changing the building's household identity. Current scene: A dependant is moving rooms, and every household branch interprets the reassignment as a statement of succession. Volatile Spice: One private threshold recognizes a disputed heir as owner and denies the current household head. Realm realization: Stewarded reception, household rooms, kitchen and stores, service court, rent or land records, gardens, stable or work providers."
+    },
+    {
+      "receiptId": "BF-RITUAL-INSTITUTION-01",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-RITUAL-INSTITUTION/temple/grounded-frontier/0",
+        "value": 3833422758
+      },
+      "familyId": "BF-RITUAL-INSTITUTION",
+      "familyLabel": "Ritual / Institution",
+      "programId": "temple",
+      "programLabel": "Temple",
+      "profileId": "grounded-frontier",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "RI-CH-04",
+          "text": "Clustered shrine house links several small focuses through one shared preparation room, keeper station, offering record, and quiet court.",
+          "scale": "small",
+          "provides": [
+            "multiple focuses",
+            "shared preparation",
+            "keeper",
+            "offering record",
+            "quiet court"
+          ]
+        },
+        "programArrangement": {
+          "id": "TP-AR-04",
+          "text": "Keeper shrine serving several household, ancestor, civic, or road observances through a shared threshold and small support range."
+        },
+        "operatingState": {
+          "id": "RI-ST-02",
+          "text": "Preparation: staff and participants are arranging a rite, teaching, offering, or procession not yet begun."
+        },
+        "currentScene": {
+          "id": "TP-SC-01",
+          "text": "An offering has been correctly received but attributed to the wrong petitioner in the public record."
+        },
+        "spice": {
+          "id": "TP-SP-G",
+          "band": "Grounded",
+          "text": "The offering record shows one donor has quietly supported two publicly opposed observances.",
+          "affects": "offerings and relationships",
+          "preserves": "temple practice"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Temple / Shrine House",
+          "realization": "Processional or public threshold, altar or world focus, offerings, lamps and fuel, keeper rooms, instruction, charity or healing provider."
+        }
+      },
+      "preservedInvariants": [
+        "recognized practice",
+        "participant threshold",
+        "ritual focus",
+        "officiant or keeper",
+        "offerings/records",
+        "restricted/support space",
+        "service and gathering"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Grounded",
+        "selectedSpiceBand": "Grounded",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Temple — Temple / Shrine House. Clustered shrine house links several small focuses through one shared preparation room, keeper station, offering record, and quiet court. Keeper shrine serving several household, ancestor, civic, or road observances through a shared threshold and small support range. Operating state: Preparation: staff and participants are arranging a rite, teaching, offering, or procession not yet begun. Current scene: An offering has been correctly received but attributed to the wrong petitioner in the public record. Grounded Spice: The offering record shows one donor has quietly supported two publicly opposed observances. Realm realization: Processional or public threshold, altar or world focus, offerings, lamps and fuel, keeper rooms, instruction, charity or healing provider."
+    },
+    {
+      "receiptId": "BF-RITUAL-INSTITUTION-02",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-RITUAL-INSTITUTION/temple/textured-chrome/1",
+        "value": 4064725619
+      },
+      "familyId": "BF-RITUAL-INSTITUTION",
+      "familyLabel": "Ritual / Institution",
+      "programId": "temple",
+      "programLabel": "Temple",
+      "profileId": "textured-chrome",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "RI-CH-04",
+          "text": "Clustered shrine house links several small focuses through one shared preparation room, keeper station, offering record, and quiet court.",
+          "scale": "small",
+          "provides": [
+            "multiple focuses",
+            "shared preparation",
+            "keeper",
+            "offering record",
+            "quiet court"
+          ]
+        },
+        "programArrangement": {
+          "id": "TP-AR-03",
+          "text": "Healing or intercession temple with waiting, examination or counsel, ritual treatment, recovery, records, and sanitation."
+        },
+        "operatingState": {
+          "id": "RI-ST-04",
+          "text": "Mourning, interdiction, or repair: the main focus is restricted while a smaller valid practice continues elsewhere in the site."
+        },
+        "currentScene": {
+          "id": "TP-SC-03",
+          "text": "A healing petitioner asks that the result be recorded under someone else's name."
+        },
+        "spice": {
+          "id": "TP-SP-T",
+          "band": "Textured",
+          "text": "One threshold retains the scent, dust, or condensation of the last procession long after cleaning.",
+          "affects": "ritual approach",
+          "preserves": "ordinary material operation"
+        },
+        "realm": {
+          "id": "chrome",
+          "label": "Sanctum / Reflection Clinic",
+          "realization": "Controlled quiet threshold, immersive or technical focus, scheduled sessions, secure offerings/data, counselors or officiants, life-safety systems."
+        }
+      },
+      "preservedInvariants": [
+        "recognized practice",
+        "participant threshold",
+        "ritual focus",
+        "officiant or keeper",
+        "offerings/records",
+        "restricted/support space",
+        "service and gathering"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Textured",
+        "selectedSpiceBand": "Textured",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Temple — Sanctum / Reflection Clinic. Clustered shrine house links several small focuses through one shared preparation room, keeper station, offering record, and quiet court. Healing or intercession temple with waiting, examination or counsel, ritual treatment, recovery, records, and sanitation. Operating state: Mourning, interdiction, or repair: the main focus is restricted while a smaller valid practice continues elsewhere in the site. Current scene: A healing petitioner asks that the result be recorded under someone else's name. Textured Spice: One threshold retains the scent, dust, or condensation of the last procession long after cleaning. Realm realization: Controlled quiet threshold, immersive or technical focus, scheduled sessions, secure offerings/data, counselors or officiants, life-safety systems."
+    },
+    {
+      "receiptId": "BF-RITUAL-INSTITUTION-03",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-RITUAL-INSTITUTION/temple/strange-gloom/2",
+        "value": 2205817193
+      },
+      "familyId": "BF-RITUAL-INSTITUTION",
+      "familyLabel": "Ritual / Institution",
+      "programId": "temple",
+      "programLabel": "Temple",
+      "profileId": "strange-gloom",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "RI-CH-02",
+          "text": "Open court holds gathering and procession; a roofed ritual chamber, side instruction room, and service range form its protected edge.",
+          "scale": "medium",
+          "provides": [
+            "procession court",
+            "ritual chamber",
+            "instruction",
+            "service range",
+            "public gathering"
+          ]
+        },
+        "programArrangement": {
+          "id": "TP-AR-03",
+          "text": "Healing or intercession temple with waiting, examination or counsel, ritual treatment, recovery, records, and sanitation."
+        },
+        "operatingState": {
+          "id": "RI-ST-04",
+          "text": "Mourning, interdiction, or repair: the main focus is restricted while a smaller valid practice continues elsewhere in the site."
+        },
+        "currentScene": {
+          "id": "TP-SC-02",
+          "text": "The officiant must decide whether an arriving group may join a rite whose preparation rules they could not have followed."
+        },
+        "spice": {
+          "id": "TP-SP-S",
+          "band": "Strange",
+          "text": "The ritual focus answers one repeated gesture differently when performed by someone under an unspoken obligation.",
+          "affects": "ritual response",
+          "preserves": "practice and officiation"
+        },
+        "realm": {
+          "id": "gloom",
+          "label": "Church / Roadside Chapel / Healing Mission",
+          "realization": "Vestibule, sanctuary or meeting hall, office and counsel room, donation records, kitchen or aid provider, practical maintenance and community schedule."
+        }
+      },
+      "preservedInvariants": [
+        "recognized practice",
+        "participant threshold",
+        "ritual focus",
+        "officiant or keeper",
+        "offerings/records",
+        "restricted/support space",
+        "service and gathering"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Strange",
+        "selectedSpiceBand": "Strange",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Temple — Church / Roadside Chapel / Healing Mission. Open court holds gathering and procession; a roofed ritual chamber, side instruction room, and service range form its protected edge. Healing or intercession temple with waiting, examination or counsel, ritual treatment, recovery, records, and sanitation. Operating state: Mourning, interdiction, or repair: the main focus is restricted while a smaller valid practice continues elsewhere in the site. Current scene: The officiant must decide whether an arriving group may join a rite whose preparation rules they could not have followed. Strange Spice: The ritual focus answers one repeated gesture differently when performed by someone under an unspoken obligation. Realm realization: Vestibule, sanctuary or meeting hall, office and counsel room, donation records, kitchen or aid provider, practical maintenance and community schedule."
+    },
+    {
+      "receiptId": "BF-RITUAL-INSTITUTION-04",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-RITUAL-INSTITUTION/temple/volatile-frontier/3",
+        "value": 3081063825
+      },
+      "familyId": "BF-RITUAL-INSTITUTION",
+      "familyLabel": "Ritual / Institution",
+      "programId": "temple",
+      "programLabel": "Temple",
+      "profileId": "volatile-frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "layers": {
+        "familyChassis": {
+          "id": "RI-CH-06",
+          "text": "Upper public hall and lower restricted chamber share one ritual axis; separate officiant circulation and a service stair preserve access truth.",
+          "scale": "medium",
+          "provides": [
+            "public ritual",
+            "restricted ritual",
+            "vertical relation",
+            "officiant route",
+            "service stair"
+          ]
+        },
+        "programArrangement": {
+          "id": "TP-AR-02",
+          "text": "Pilgrimage temple whose approach, reception, offering custody, rest, and crowd cadence matter as much as the inner focus."
+        },
+        "operatingState": {
+          "id": "RI-ST-02",
+          "text": "Preparation: staff and participants are arranging a rite, teaching, offering, or procession not yet begun."
+        },
+        "currentScene": {
+          "id": "TP-SC-03",
+          "text": "A healing petitioner asks that the result be recorded under someone else's name."
+        },
+        "spice": {
+          "id": "TP-SP-V",
+          "band": "Volatile",
+          "text": "An accepted offering transfers its attached vow to the next person who removes it without authority.",
+          "affects": "offering custody",
+          "preserves": "temple authority and consequence"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Temple / Shrine House",
+          "realization": "Processional or public threshold, altar or world focus, offerings, lamps and fuel, keeper rooms, instruction, charity or healing provider."
+        }
+      },
+      "preservedInvariants": [
+        "recognized practice",
+        "participant threshold",
+        "ritual focus",
+        "officiant or keeper",
+        "offerings/records",
+        "restricted/support space",
+        "service and gathering"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Volatile",
+        "selectedSpiceBand": "Volatile",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Temple — Temple / Shrine House. Upper public hall and lower restricted chamber share one ritual axis; separate officiant circulation and a service stair preserve access truth. Pilgrimage temple whose approach, reception, offering custody, rest, and crowd cadence matter as much as the inner focus. Operating state: Preparation: staff and participants are arranging a rite, teaching, offering, or procession not yet begun. Current scene: A healing petitioner asks that the result be recorded under someone else's name. Volatile Spice: An accepted offering transfers its attached vow to the next person who removes it without authority. Realm realization: Processional or public threshold, altar or world focus, offerings, lamps and fuel, keeper rooms, instruction, charity or healing provider."
+    },
+    {
+      "receiptId": "BF-LOGISTICS-01",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-LOGISTICS/warehouse/grounded-frontier/0",
+        "value": 2326900717
+      },
+      "familyId": "BF-LOGISTICS",
+      "familyLabel": "Logistics",
+      "programId": "warehouse",
+      "programLabel": "Warehouse",
+      "profileId": "grounded-frontier",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "LG-CH-02",
+          "text": "Vehicle yard fronts covered loading sheds and deep storage; counting office and secure goods room overlook the shared handling court.",
+          "scale": "medium-to-large",
+          "provides": [
+            "vehicle yard",
+            "covered loading",
+            "deep storage",
+            "counting",
+            "secure goods"
+          ]
+        },
+        "programArrangement": {
+          "id": "WH-AR-01",
+          "text": "Merchant warehouse with long-term owned bays, sample or inspection bench, counting office, and scheduled customer dispatch."
+        },
+        "operatingState": {
+          "id": "LG-ST-02",
+          "text": "Arrival surge: one carrier has delivered early and sorting or temporary storage is consuming a route."
+        },
+        "currentScene": {
+          "id": "WH-SC-01",
+          "text": "A sealed load occupies the correct bay but the seal belongs to a different owner."
+        },
+        "spice": {
+          "id": "WH-SP-G",
+          "band": "Grounded",
+          "text": "One numbered bay has been paid for continuously although no employee remembers seeing it occupied.",
+          "affects": "rent and records",
+          "preserves": "storage operation"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Warehouse / Storehouse",
+          "realization": "Cart court, loading doors, hoist, timber racks, seals and ledgers, watchman, roof and damp control."
+        }
+      },
+      "preservedInvariants": [
+        "receiving",
+        "identified goods",
+        "handling",
+        "storage",
+        "count/ownership",
+        "dispatch",
+        "staff and vehicle route"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Grounded",
+        "selectedSpiceBand": "Grounded",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Warehouse — Warehouse / Storehouse. Vehicle yard fronts covered loading sheds and deep storage; counting office and secure goods room overlook the shared handling court. Merchant warehouse with long-term owned bays, sample or inspection bench, counting office, and scheduled customer dispatch. Operating state: Arrival surge: one carrier has delivered early and sorting or temporary storage is consuming a route. Current scene: A sealed load occupies the correct bay but the seal belongs to a different owner. Grounded Spice: One numbered bay has been paid for continuously although no employee remembers seeing it occupied. Realm realization: Cart court, loading doors, hoist, timber racks, seals and ledgers, watchman, roof and damp control."
+    },
+    {
+      "receiptId": "BF-LOGISTICS-02",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-LOGISTICS/dock-house/textured-chrome/1",
+        "value": 3893452909
+      },
+      "familyId": "BF-LOGISTICS",
+      "familyLabel": "Logistics",
+      "programId": "dock-house",
+      "programLabel": "Dock-House",
+      "profileId": "textured-chrome",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "LG-CH-02",
+          "text": "Vehicle yard fronts covered loading sheds and deep storage; counting office and secure goods room overlook the shared handling court.",
+          "scale": "medium-to-large",
+          "provides": [
+            "vehicle yard",
+            "covered loading",
+            "deep storage",
+            "counting",
+            "secure goods"
+          ]
+        },
+        "programArrangement": {
+          "id": "DH-AR-01",
+          "text": "Harbormaster or quay office with public berth desk, tide and arrival board, restricted platform access, signal gear, and incident records.",
+          "chassisAllow": [
+            "LG-CH-02",
+            "LG-CH-04",
+            "LG-CH-06"
+          ]
+        },
+        "operatingState": {
+          "id": "LG-ST-01",
+          "text": "Normal throughput: arriving, stored, and departing loads fit the handling and record capacity."
+        },
+        "currentScene": {
+          "id": "DH-SC-03",
+          "text": "An arriving passenger's baggage bears a cargo seal and is being diverted to inspection."
+        },
+        "spice": {
+          "id": "DH-SP-T",
+          "band": "Textured",
+          "text": "One length of platform remains wet or frost-marked regardless of tide and weather.",
+          "affects": "one loading edge",
+          "preserves": "physical dock operation"
+        },
+        "realm": {
+          "id": "chrome",
+          "label": "Port Control / Freight Interface",
+          "realization": "Traffic display, berth locks, cargo screening, powered lifts, secure holds, crew access, weather and system redundancy."
+        }
+      },
+      "preservedInvariants": [
+        "water/vehicle edge",
+        "arrival and departure control",
+        "manifest or booking",
+        "loading labor/gear",
+        "short storage",
+        "weather/tide/route knowledge",
+        "public and restricted access"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Textured",
+        "selectedSpiceBand": "Textured",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Dock-House — Port Control / Freight Interface. Vehicle yard fronts covered loading sheds and deep storage; counting office and secure goods room overlook the shared handling court. Harbormaster or quay office with public berth desk, tide and arrival board, restricted platform access, signal gear, and incident records. Operating state: Normal throughput: arriving, stored, and departing loads fit the handling and record capacity. Current scene: An arriving passenger's baggage bears a cargo seal and is being diverted to inspection. Textured Spice: One length of platform remains wet or frost-marked regardless of tide and weather. Realm realization: Traffic display, berth locks, cargo screening, powered lifts, secure holds, crew access, weather and system redundancy."
+    },
+    {
+      "receiptId": "BF-LOGISTICS-03",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-LOGISTICS/warehouse/strange-gloom/2",
+        "value": 4000156554
+      },
+      "familyId": "BF-LOGISTICS",
+      "familyLabel": "Logistics",
+      "programId": "warehouse",
+      "programLabel": "Warehouse",
+      "profileId": "strange-gloom",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "LG-CH-04",
+          "text": "A long transit shed has numbered temporary bays, cross-aisles, a tally station, and direct loading edges on both long sides.",
+          "scale": "medium",
+          "provides": [
+            "temporary bays",
+            "cross-aisles",
+            "tally",
+            "two loading faces",
+            "fast turnover"
+          ]
+        },
+        "programArrangement": {
+          "id": "WH-AR-02",
+          "text": "Bonded store where seals, customs or authority, secure cages, and release orders control movement."
+        },
+        "operatingState": {
+          "id": "LG-ST-01",
+          "text": "Normal throughput: arriving, stored, and departing loads fit the handling and record capacity."
+        },
+        "currentScene": {
+          "id": "WH-SC-03",
+          "text": "A customer arrives with a valid release order for goods already staged for someone else."
+        },
+        "spice": {
+          "id": "WH-SP-S",
+          "band": "Strange",
+          "text": "Goods placed in one bay acquire the smell and temperature of their intended destination.",
+          "affects": "one storage bay",
+          "preserves": "ownership and dispatch"
+        },
+        "realm": {
+          "id": "gloom",
+          "label": "Warehouse / Distribution Shed",
+          "realization": "Truck dock or rail siding, pallets and shelves, receiving office, cages, inventory sheets, forklifts or hand gear, roof and utility risk."
+        }
+      },
+      "preservedInvariants": [
+        "receiving",
+        "identified goods",
+        "handling",
+        "storage",
+        "count/ownership",
+        "dispatch",
+        "staff and vehicle route"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Strange",
+        "selectedSpiceBand": "Strange",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Warehouse — Warehouse / Distribution Shed. A long transit shed has numbered temporary bays, cross-aisles, a tally station, and direct loading edges on both long sides. Bonded store where seals, customs or authority, secure cages, and release orders control movement. Operating state: Normal throughput: arriving, stored, and departing loads fit the handling and record capacity. Current scene: A customer arrives with a valid release order for goods already staged for someone else. Strange Spice: Goods placed in one bay acquire the smell and temperature of their intended destination. Realm realization: Truck dock or rail siding, pallets and shelves, receiving office, cages, inventory sheets, forklifts or hand gear, roof and utility risk."
+    },
+    {
+      "receiptId": "BF-LOGISTICS-04",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-LOGISTICS/dock-house/volatile-frontier/3",
+        "value": 1166724371
+      },
+      "familyId": "BF-LOGISTICS",
+      "familyLabel": "Logistics",
+      "programId": "dock-house",
+      "programLabel": "Dock-House",
+      "profileId": "volatile-frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "layers": {
+        "familyChassis": {
+          "id": "LG-CH-06",
+          "text": "Waterside or vehicle-side house bridges a public paperwork front to a restricted loading platform, with manifests, gear, short-term storage, and staff rest behind.",
+          "scale": "host-edge",
+          "provides": [
+            "public paperwork",
+            "restricted platform",
+            "manifest control",
+            "gear",
+            "short-term storage"
+          ]
+        },
+        "programArrangement": {
+          "id": "DH-AR-01",
+          "text": "Harbormaster or quay office with public berth desk, tide and arrival board, restricted platform access, signal gear, and incident records.",
+          "chassisAllow": [
+            "LG-CH-02",
+            "LG-CH-04",
+            "LG-CH-06"
+          ]
+        },
+        "operatingState": {
+          "id": "LG-ST-04",
+          "text": "Hazard or access loss: weather, damage, contamination, labor dispute, tide, or vehicle failure has closed one handling edge."
+        },
+        "currentScene": {
+          "id": "DH-SC-03",
+          "text": "An arriving passenger's baggage bears a cargo seal and is being diverted to inspection."
+        },
+        "spice": {
+          "id": "DH-SP-V",
+          "band": "Volatile",
+          "text": "A cargo accepted under the wrong destination begins pulling its carrier toward that destination when departure starts.",
+          "affects": "manifest and movement",
+          "preserves": "dispatch consequence"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Harbor House / Quay Office",
+          "realization": "Tide board, berth book, signal mast, cranes or tackle, gang muster, bonded shed and boat/cart access."
+        }
+      },
+      "preservedInvariants": [
+        "water/vehicle edge",
+        "arrival and departure control",
+        "manifest or booking",
+        "loading labor/gear",
+        "short storage",
+        "weather/tide/route knowledge",
+        "public and restricted access"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Volatile",
+        "selectedSpiceBand": "Volatile",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Dock-House — Harbor House / Quay Office. Waterside or vehicle-side house bridges a public paperwork front to a restricted loading platform, with manifests, gear, short-term storage, and staff rest behind. Harbormaster or quay office with public berth desk, tide and arrival board, restricted platform access, signal gear, and incident records. Operating state: Hazard or access loss: weather, damage, contamination, labor dispute, tide, or vehicle failure has closed one handling edge. Current scene: An arriving passenger's baggage bears a cargo seal and is being diverted to inspection. Volatile Spice: A cargo accepted under the wrong destination begins pulling its carrier toward that destination when departure starts. Realm realization: Tide board, berth book, signal mast, cranes or tackle, gang muster, bonded shed and boat/cart access."
+    },
+    {
+      "receiptId": "BF-SHOP-WORKSHOP-01",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-SHOP-WORKSHOP/smithy/grounded-frontier/0",
+        "value": 3724269599
+      },
+      "familyId": "BF-SHOP-WORKSHOP",
+      "familyLabel": "Shop / Workshop",
+      "programId": "smithy",
+      "programLabel": "Smithy",
+      "profileId": "grounded-frontier",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "SW-CH-01",
+          "text": "Street counter leads to a rear workroom, secure store, and service yard with delivery and waste access.",
+          "scale": "small-to-medium",
+          "provides": [
+            "customer edge",
+            "transaction",
+            "workroom",
+            "secure store",
+            "service yard"
+          ]
+        },
+        "programArrangement": {
+          "id": "SM-AR-04",
+          "text": "Farrier or vehicle smith with yard access, animal or chassis restraint, hoof/wheel fittings, forge, and safe waiting edge.",
+          "chassisAllow": [
+            "SW-CH-01",
+            "SW-CH-02",
+            "SW-CH-06"
+          ]
+        },
+        "operatingState": {
+          "id": "SW-ST-02",
+          "text": "Demand backlog: customer orders, consultations, preparations, repairs, or commissions exceed the current operator's time or safe capacity."
+        },
+        "currentScene": {
+          "id": "SM-SC-03",
+          "text": "The quench or cooling system has been reserved for urgent work that has not yet arrived."
+        },
+        "spice": {
+          "id": "SM-SP-G",
+          "band": "Grounded",
+          "text": "An expensive commission remains uncollected while storage fees quietly exceed its final payment.",
+          "affects": "commission custody",
+          "preserves": "smithy work"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Smithy / Forge",
+          "realization": "Forge and fuel, bellows or draft, anvil and benches, quench, bar/scrap stock, yard delivery, sparks and fire control."
+        }
+      },
+      "preservedInvariants": [
+        "metalwork service",
+        "heat/power",
+        "work and quench/cooling",
+        "material stock",
+        "tool and commission custody",
+        "ventilation/fire safety",
+        "delivery"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Grounded",
+        "selectedSpiceBand": "Grounded",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Smithy — Smithy / Forge. Street counter leads to a rear workroom, secure store, and service yard with delivery and waste access. Farrier or vehicle smith with yard access, animal or chassis restraint, hoof/wheel fittings, forge, and safe waiting edge. Operating state: Demand backlog: customer orders, consultations, preparations, repairs, or commissions exceed the current operator's time or safe capacity. Current scene: The quench or cooling system has been reserved for urgent work that has not yet arrived. Grounded Spice: An expensive commission remains uncollected while storage fees quietly exceed its final payment. Realm realization: Forge and fuel, bellows or draft, anvil and benches, quench, bar/scrap stock, yard delivery, sparks and fire control."
+    },
+    {
+      "receiptId": "BF-SHOP-WORKSHOP-02",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-SHOP-WORKSHOP/apothecary/textured-chrome/1",
+        "value": 322684468
+      },
+      "familyId": "BF-SHOP-WORKSHOP",
+      "familyLabel": "Shop / Workshop",
+      "programId": "apothecary",
+      "programLabel": "Apothecary",
+      "profileId": "textured-chrome",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "SW-CH-03",
+          "text": "Domestic front room serves customers beside an attached workshop; a rear delivery passage separates supplies and waste from household access.",
+          "scale": "small-live-work",
+          "provides": [
+            "customer room",
+            "attached work",
+            "household boundary",
+            "rear delivery",
+            "waste route"
+          ]
+        },
+        "programArrangement": {
+          "id": "AP-AR-01",
+          "text": "Retail dispensary with front counter, screened advice, rear compounding, ordinary stock, controlled cabinet, and delivery record."
+        },
+        "operatingState": {
+          "id": "SW-ST-02",
+          "text": "Demand backlog: customer orders, consultations, preparations, repairs, or commissions exceed the current operator's time or safe capacity."
+        },
+        "currentScene": {
+          "id": "AP-SC-03",
+          "text": "A supplier offers the missing ingredient only if the practitioner accepts an unrecorded substitute batch."
+        },
+        "spice": {
+          "id": "AP-SP-T",
+          "band": "Textured",
+          "text": "The cold store remains cold without a visible mechanism, but its temperature log is otherwise ordinary.",
+          "affects": "stock storage",
+          "preserves": "medicine custody"
+        },
+        "realm": {
+          "id": "chrome",
+          "label": "Unlicensed Clinic / Med Shop",
+          "realization": "Waiting and diagnostic surface, cold storage, sterile preparation, disposables, locked drugs, ventilation and clinical waste."
+        }
+      },
+      "preservedInvariants": [
+        "customer recognition",
+        "consultation/instruction",
+        "preparation or real provider",
+        "stock and controlled substances",
+        "water/heat/cold/ventilation",
+        "sanitation/waste",
+        "responsible practitioner"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Textured",
+        "selectedSpiceBand": "Textured",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Apothecary — Unlicensed Clinic / Med Shop. Domestic front room serves customers beside an attached workshop; a rear delivery passage separates supplies and waste from household access. Retail dispensary with front counter, screened advice, rear compounding, ordinary stock, controlled cabinet, and delivery record. Operating state: Demand backlog: customer orders, consultations, preparations, repairs, or commissions exceed the current operator's time or safe capacity. Current scene: A supplier offers the missing ingredient only if the practitioner accepts an unrecorded substitute batch. Textured Spice: The cold store remains cold without a visible mechanism, but its temperature log is otherwise ordinary. Realm realization: Waiting and diagnostic surface, cold storage, sterile preparation, disposables, locked drugs, ventilation and clinical waste."
+    },
+    {
+      "receiptId": "BF-SHOP-WORKSHOP-03",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-SHOP-WORKSHOP/general/strange-gloom/2",
+        "value": 1107788976
+      },
+      "familyId": "BF-SHOP-WORKSHOP",
+      "familyLabel": "Shop / Workshop",
+      "programId": "general",
+      "programLabel": "General Store",
+      "profileId": "strange-gloom",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "SW-CH-04",
+          "text": "Arcade stall owns a lockable counter and demonstration surface while a shared back passage reaches a dedicated store or offsite workshop.",
+          "scale": "small-hosted",
+          "provides": [
+            "stall",
+            "transaction",
+            "demonstration",
+            "shared service",
+            "external provider"
+          ]
+        },
+        "programArrangement": {
+          "id": "GS-AR-01",
+          "text": "Counter store with dense shelves, requested goods behind the keeper, back stock, bulk delivery, and household credit book."
+        },
+        "operatingState": {
+          "id": "SW-ST-01",
+          "text": "Ordinary trade: work, stock, customer service, utilities, and delivery are balanced."
+        },
+        "currentScene": {
+          "id": "GS-SC-04",
+          "text": "A returned kit is complete except for one cheap item whose absence makes the rest unsafe to use."
+        },
+        "spice": {
+          "id": "GS-SP-S",
+          "band": "Strange",
+          "text": "A sealed travel kit contains one modest item appropriate to the buyer's next serious delay.",
+          "affects": "one stocked kit",
+          "preserves": "transaction and stock limits"
+        },
+        "realm": {
+          "id": "gloom",
+          "label": "Hardware and Grocery / Corner Store",
+          "realization": "Aisles and counter, stockroom, cooler or utility goods, loading alley, layaway or account book, local parcel service."
+        }
+      },
+      "preservedInvariants": [
+        "broad ordinary stock",
+        "display and request",
+        "transaction",
+        "back stock",
+        "delivery",
+        "inventory and credit",
+        "responsible shopkeeper"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Strange",
+        "selectedSpiceBand": "Strange",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "General Store — Hardware and Grocery / Corner Store. Arcade stall owns a lockable counter and demonstration surface while a shared back passage reaches a dedicated store or offsite workshop. Counter store with dense shelves, requested goods behind the keeper, back stock, bulk delivery, and household credit book. Operating state: Ordinary trade: work, stock, customer service, utilities, and delivery are balanced. Current scene: A returned kit is complete except for one cheap item whose absence makes the rest unsafe to use. Strange Spice: A sealed travel kit contains one modest item appropriate to the buyer's next serious delay. Realm realization: Aisles and counter, stockroom, cooler or utility goods, loading alley, layaway or account book, local parcel service."
+    },
+    {
+      "receiptId": "BF-SHOP-WORKSHOP-04",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-SHOP-WORKSHOP/arcanist/volatile-frontier/3",
+        "value": 3698137799
+      },
+      "familyId": "BF-SHOP-WORKSHOP",
+      "familyLabel": "Shop / Workshop",
+      "programId": "arcanist",
+      "programLabel": "Arcanist's Shop",
+      "profileId": "volatile-frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "layers": {
+        "familyChassis": {
+          "id": "SW-CH-03",
+          "text": "Domestic front room serves customers beside an attached workshop; a rear delivery passage separates supplies and waste from household access.",
+          "scale": "small-live-work",
+          "provides": [
+            "customer room",
+            "attached work",
+            "household boundary",
+            "rear delivery",
+            "waste route"
+          ]
+        },
+        "programArrangement": {
+          "id": "AR-AR-01",
+          "text": "Component shop with consultation counter, ordinary reagents, locked rare stock, verification bench, and controlled disposal."
+        },
+        "operatingState": {
+          "id": "SW-ST-02",
+          "text": "Demand backlog: customer orders, consultations, preparations, repairs, or commissions exceed the current operator's time or safe capacity."
+        },
+        "currentScene": {
+          "id": "AR-SC-01",
+          "text": "A component passes every test but its provenance belongs to a batch recorded as destroyed."
+        },
+        "spice": {
+          "id": "AR-SP-V",
+          "band": "Volatile",
+          "text": "Any unreceipted component leaving the shop causes its storage condition to manifest around the carrier.",
+          "affects": "stock custody and theft",
+          "preserves": "shop boundary"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Arcanist / Charmwright",
+          "realization": "Component drawers, consultation, inscribed or worked bench, locked cabinet, test circle or safe surface, provenance and disposal."
+        }
+      },
+      "preservedInvariants": [
+        "specialist consultation",
+        "components or bounded works",
+        "demonstration/verification",
+        "hazard and access control",
+        "secure stock",
+        "records/provenance",
+        "responsible practitioner"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Volatile",
+        "selectedSpiceBand": "Volatile",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Arcanist's Shop — Arcanist / Charmwright. Domestic front room serves customers beside an attached workshop; a rear delivery passage separates supplies and waste from household access. Component shop with consultation counter, ordinary reagents, locked rare stock, verification bench, and controlled disposal. Operating state: Demand backlog: customer orders, consultations, preparations, repairs, or commissions exceed the current operator's time or safe capacity. Current scene: A component passes every test but its provenance belongs to a batch recorded as destroyed. Volatile Spice: Any unreceipted component leaving the shop causes its storage condition to manifest around the carrier. Realm realization: Component drawers, consultation, inscribed or worked bench, locked cabinet, test circle or safe surface, provenance and disposal."
+    },
+    {
+      "receiptId": "BF-CUSTODY-01",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-CUSTODY/prison-custody/grounded-frontier/0",
+        "value": 206926155
+      },
+      "familyId": "BF-CUSTODY",
+      "familyLabel": "Prison / Custody",
+      "programId": "prison-custody",
+      "programLabel": "Prison / Custody",
+      "profileId": "grounded-frontier",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "CU-CH-01",
+          "text": "Rung-A watchhouse: public keeper threshold, one controlled holding room or cell, staff-side property cabinet, external service route, and explicit release or transfer.",
+          "scale": "rung-a",
+          "provides": [
+            "authority",
+            "intake",
+            "single holding",
+            "property cabinet",
+            "external services",
+            "disposition"
+          ]
+        },
+        "programArrangement": {
+          "id": "CU-AR-03",
+          "text": "Short-Hold Watchhouse: one operator combines intake, oversight, record, and release while a single holding, property cabinet, and external services preserve the complete lifecycle.",
+          "chassisAllow": [
+            "CU-CH-01"
+          ]
+        },
+        "operatingState": {
+          "id": "CU-ST-01",
+          "text": "Routine custody: count, meals or service, visits or hearings, staff relief, and disposition proceed on their committed cadence."
+        },
+        "currentScene": {
+          "id": "CU-SC-03",
+          "text": "A meal, water, waste, medical, repair, or operator-relief provider has missed its cadence, opening one route while worsening another condition."
+        },
+        "spice": {
+          "id": "CU-SP-G",
+          "band": "Grounded",
+          "text": "One cell can be opened from inside because of a known maintenance fault scheduled for repair after the next transfer.",
+          "affects": "force surface and routine",
+          "preserves": "custody, response, and consequences"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Gaol / Stockade / Keeper-House Jail",
+          "realization": "Commission or court claim, keeper or shift, cells/pen/yard, keys and records, property cabinet/store, household or civic services, road transfer and finite disposition."
+        }
+      },
+      "preservedInvariants": [
+        "authority/record",
+        "people/classification",
+        "access/observation",
+        "property/evidence",
+        "service/health",
+        "routine/contact",
+        "force/emergency",
+        "disposition/continuity"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Grounded",
+        "selectedSpiceBand": "Grounded",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Prison / Custody — Gaol / Stockade / Keeper-House Jail. Rung-A watchhouse: public keeper threshold, one controlled holding room or cell, staff-side property cabinet, external service route, and explicit release or transfer. Short-Hold Watchhouse: one operator combines intake, oversight, record, and release while a single holding, property cabinet, and external services preserve the complete lifecycle. Operating state: Routine custody: count, meals or service, visits or hearings, staff relief, and disposition proceed on their committed cadence. Current scene: A meal, water, waste, medical, repair, or operator-relief provider has missed its cadence, opening one route while worsening another condition. Grounded Spice: One cell can be opened from inside because of a known maintenance fault scheduled for repair after the next transfer. Realm realization: Commission or court claim, keeper or shift, cells/pen/yard, keys and records, property cabinet/store, household or civic services, road transfer and finite disposition."
+    },
+    {
+      "receiptId": "BF-CUSTODY-02",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-CUSTODY/prison-custody/textured-chrome/1",
+        "value": 3303125366
+      },
+      "familyId": "BF-CUSTODY",
+      "familyLabel": "Prison / Custody",
+      "programId": "prison-custody",
+      "programLabel": "Prison / Custody",
+      "profileId": "textured-chrome",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "CU-CH-03",
+          "text": "Ledger-and-shift jail: waiting and intake-search, staff-only attributed property, numbered holding children, count/handoff station, control landing, yard, and separate staff/service route.",
+          "scale": "rung-b-to-c",
+          "provides": [
+            "record authority",
+            "intake/search",
+            "property custody",
+            "numbered holdings",
+            "handoff",
+            "staff route"
+          ]
+        },
+        "programArrangement": {
+          "id": "CU-AR-02",
+          "text": "Ledger-and-Shift Civic Custody: numbered people and holdings, signed commitment/release, attributed property, count/handoff, and role-bound access survive staff change.",
+          "chassisAllow": [
+            "CU-CH-02",
+            "CU-CH-03",
+            "CU-CH-04",
+            "CU-CH-05"
+          ]
+        },
+        "operatingState": {
+          "id": "CU-ST-02",
+          "text": "Admission or transfer surge: intake, search, classification, property, and assignment are under visible load."
+        },
+        "currentScene": {
+          "id": "CU-SC-03",
+          "text": "A meal, water, waste, medical, repair, or operator-relief provider has missed its cadence, opening one route while worsening another condition."
+        },
+        "spice": {
+          "id": "CU-SP-T",
+          "band": "Textured",
+          "text": "A custody room exists in current records but is absent from the public plan; staff route references prove it is not invented on discovery.",
+          "affects": "knowledge and recorded topology",
+          "preserves": "committed site"
+        },
+        "realm": {
+          "id": "chrome",
+          "label": "Detention / Processing Unit",
+          "realization": "Identity and intake search, controlled property, modular or specialized holdings, access systems, surveillance, service and medical routes, shift handoff, emergency release."
+        }
+      },
+      "preservedInvariants": [
+        "authority/record",
+        "people/classification",
+        "access/observation",
+        "property/evidence",
+        "service/health",
+        "routine/contact",
+        "force/emergency",
+        "disposition/continuity"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Textured",
+        "selectedSpiceBand": "Textured",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Prison / Custody — Detention / Processing Unit. Ledger-and-shift jail: waiting and intake-search, staff-only attributed property, numbered holding children, count/handoff station, control landing, yard, and separate staff/service route. Ledger-and-Shift Civic Custody: numbered people and holdings, signed commitment/release, attributed property, count/handoff, and role-bound access survive staff change. Operating state: Admission or transfer surge: intake, search, classification, property, and assignment are under visible load. Current scene: A meal, water, waste, medical, repair, or operator-relief provider has missed its cadence, opening one route while worsening another condition. Textured Spice: A custody room exists in current records but is absent from the public plan; staff route references prove it is not invented on discovery. Realm realization: Identity and intake search, controlled property, modular or specialized holdings, access systems, surveillance, service and medical routes, shift handoff, emergency release."
+    },
+    {
+      "receiptId": "BF-CUSTODY-03",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-CUSTODY/prison-custody/strange-gloom/2",
+        "value": 3375518276
+      },
+      "familyId": "BF-CUSTODY",
+      "familyLabel": "Prison / Custody",
+      "programId": "prison-custody",
+      "programLabel": "Prison / Custody",
+      "profileId": "strange-gloom",
+      "contextTags": [],
+      "layers": {
+        "familyChassis": {
+          "id": "CU-CH-01",
+          "text": "Rung-A watchhouse: public keeper threshold, one controlled holding room or cell, staff-side property cabinet, external service route, and explicit release or transfer.",
+          "scale": "rung-a",
+          "provides": [
+            "authority",
+            "intake",
+            "single holding",
+            "property cabinet",
+            "external services",
+            "disposition"
+          ]
+        },
+        "programArrangement": {
+          "id": "CU-AR-01",
+          "text": "Keeper-House Civic Custody: authority and several circuits concentrate in a named keeper and attached household while cells, property, yard, and service remain explicit.",
+          "chassisAllow": [
+            "CU-CH-01",
+            "CU-CH-02"
+          ]
+        },
+        "operatingState": {
+          "id": "CU-ST-03",
+          "text": "Overcapacity or restricted movement: classification and services are strained, but the compiler retains truthful routes and consequences."
+        },
+        "currentScene": {
+          "id": "CU-SC-04",
+          "text": "The disposition clock advances at the next handoff, but the authority record, keeper testimony, and prisoner's identity do not agree."
+        },
+        "spice": {
+          "id": "CU-SP-S",
+          "band": "Strange",
+          "text": "One lock recognizes legal disposition rather than its physical key, creating both a lawful route and a falsification target.",
+          "affects": "permission and release",
+          "preserves": "authority and counterplay"
+        },
+        "realm": {
+          "id": "gloom",
+          "label": "County Jail / Lockup",
+          "realization": "Booking desk, holding cells or short block, property bags and evidence handoff, control booth or keeper station, meal and medical provider, court/road transfer and release desk."
+        }
+      },
+      "preservedInvariants": [
+        "authority/record",
+        "people/classification",
+        "access/observation",
+        "property/evidence",
+        "service/health",
+        "routine/contact",
+        "force/emergency",
+        "disposition/continuity"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Strange",
+        "selectedSpiceBand": "Strange",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Prison / Custody — County Jail / Lockup. Rung-A watchhouse: public keeper threshold, one controlled holding room or cell, staff-side property cabinet, external service route, and explicit release or transfer. Keeper-House Civic Custody: authority and several circuits concentrate in a named keeper and attached household while cells, property, yard, and service remain explicit. Operating state: Overcapacity or restricted movement: classification and services are strained, but the compiler retains truthful routes and consequences. Current scene: The disposition clock advances at the next handoff, but the authority record, keeper testimony, and prisoner's identity do not agree. Strange Spice: One lock recognizes legal disposition rather than its physical key, creating both a lawful route and a falsification target. Realm realization: Booking desk, holding cells or short block, property bags and evidence handoff, control booth or keeper station, meal and medical provider, court/road transfer and release desk."
+    },
+    {
+      "receiptId": "BF-CUSTODY-04",
+      "seed": {
+        "label": "BUILDING-FAMILY-TASTE/BF-CUSTODY/prison-custody/volatile-frontier/3",
+        "value": 63548360
+      },
+      "familyId": "BF-CUSTODY",
+      "familyLabel": "Prison / Custody",
+      "programId": "prison-custody",
+      "programLabel": "Prison / Custody",
+      "profileId": "volatile-frontier",
+      "contextTags": [
+        "licensed-world-adapter"
+      ],
+      "layers": {
+        "familyChassis": {
+          "id": "CU-CH-06",
+          "text": "Warded exceptional holding: one or more cells depend on a visible support, energy, name, living material, gravity, or suspension system with operator access, service rig, property destination, emergency release, and honest failure surfaces.",
+          "scale": "licensed-exceptional",
+          "requires": [
+            "licensed-world-adapter"
+          ],
+          "provides": [
+            "world-owned containment",
+            "operator",
+            "support dependency",
+            "service access",
+            "property",
+            "failure and release"
+          ]
+        },
+        "programArrangement": {
+          "id": "CU-AR-04",
+          "text": "Warded Exceptional Custody: a licensed world mechanism replaces some ordinary barriers but retains operator, support, service, property, disposition, emergency release, and all plan families.",
+          "chassisAllow": [
+            "CU-CH-06"
+          ],
+          "requires": [
+            "licensed-world-adapter"
+          ]
+        },
+        "operatingState": {
+          "id": "CU-ST-02",
+          "text": "Admission or transfer surge: intake, search, classification, property, and assignment are under visible load."
+        },
+        "currentScene": {
+          "id": "CU-SC-03",
+          "text": "A meal, water, waste, medical, repair, or operator-relief provider has missed its cadence, opening one route while worsening another condition."
+        },
+        "spice": {
+          "id": "CU-SP-V",
+          "band": "Volatile",
+          "text": "At shift change one holding changes physical destination while preserving its occupants, support demands, property links, and failure surfaces.",
+          "affects": "holding location and handoff",
+          "preserves": "stable identities and custody lifecycle"
+        },
+        "realm": {
+          "id": "frontier",
+          "label": "Gaol / Stockade / Keeper-House Jail",
+          "realization": "Commission or court claim, keeper or shift, cells/pen/yard, keys and records, property cabinet/store, household or civic services, road transfer and finite disposition."
+        }
+      },
+      "preservedInvariants": [
+        "authority/record",
+        "people/classification",
+        "access/observation",
+        "property/evidence",
+        "service/health",
+        "routine/contact",
+        "force/emergency",
+        "disposition/continuity"
+      ],
+      "validation": {
+        "familyOwnsProgram": true,
+        "arrangementEligibleForContext": true,
+        "chassisEligibleForContext": true,
+        "chassisAllowsArrangement": true,
+        "requestedSpiceBand": "Volatile",
+        "selectedSpiceBand": "Volatile",
+        "realmRealizationPresent": true,
+        "programIdentityReadableBeforeDmInterpretation": "taste-call-required"
+      },
+      "readout": "Prison / Custody — Gaol / Stockade / Keeper-House Jail. Warded exceptional holding: one or more cells depend on a visible support, energy, name, living material, gravity, or suspension system with operator access, service rig, property destination, emergency release, and honest failure surfaces. Warded Exceptional Custody: a licensed world mechanism replaces some ordinary barriers but retains operator, support, service, property, disposition, emergency release, and all plan families. Operating state: Admission or transfer surge: intake, search, classification, property, and assignment are under visible load. Current scene: A meal, water, waste, medical, repair, or operator-relief provider has missed its cadence, opening one route while worsening another condition. Volatile Spice: At shift change one holding changes physical destination while preserving its occupants, support demands, property links, and failure surfaces. Realm realization: Commission or court claim, keeper or shift, cells/pen/yard, keys and records, property cabinet/store, household or civic services, road transfer and finite disposition."
+    }
+  ]
+}

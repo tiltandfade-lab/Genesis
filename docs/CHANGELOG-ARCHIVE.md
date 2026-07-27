@@ -14,6 +14,38 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-13 (overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry (orchestrated)
+
+Codex researches, Claude orchestrates (`docs/GRAPHICS-CONVERGENCE-CHARTER.md` governs; execution spine
+`docs/GRAPHICS-CONVERGENCE-PLAN.md`). 14 units, each personally re-gated (harnesses re-run + captures
+READ, never self-report), landed `--no-ff`. Master tip after the run: `4da62a9d`.
+
+**Added.**
+- **Wall-volumes wave** — C4.1a wall volumes + Phase-0 octagon miter · C4.1b segment ray-occlusion ·
+  E0 physical practicals (glow-disc retired) · C4.1c floor+riser congruence.
+- **Phase 0 instrumentation (dev-only)** — R0 pinned tool bootstrap (`dev/geometry-tools/`) · G0 52
+  ground-truth fixtures + injected-adapter harness (row-101 sunken-collapse red-first) · R2 fast-check
+  fuzz · R3 webgl-lint/Spector diagnostics · R4 pixelmatch capture-regression · GP-1 GPU telemetry +
+  material census.
+- **Phase 1** — R1 four-path geometry bakeoff → ruling (`dev/geometry-research/bakeoff/ruling.json`):
+  floors = polygon-clipping + Earcut; walls = clipper2-ts Strategy-A offset; clipper2 booleans + its CDT
+  triangulator rejected (CDT silently wrong, reproduced). Measured a real ~0.31u corner-gap defect.
+- **Phase 2 (behind `ROOM_SHELL_POLYGON_KERNEL = legacy|oss-compare|oss`, DEFAULT legacy)** — G1
+  `src/ui/geometry/polygon-kernel.js` + vendored earcut/polygon-clipping (fixes 7 legacy floor defects,
+  0 regressions) · G2 floor integration (oss unions+triangulates-with-holes; row-101 3-tier hole
+  recovered; F08/F11 corrected) · G3 aperture-delimited wall runs + vendored clipper2-ts (corner gap
+  0.3111u→0 at stem/cap/footing separately, 100% provenance, 0 unintended joins; verify-wall-runs-oss 71/0).
+
+**Changed.**
+- Fixed the incorrect "never a gap" comment at `theater-room-mesh.js:904` (per SOL — the per-segment
+  construction *does* gap at ordinary convex corners).
+
+**Deferred (Adam's morning decisions — both change the DEFAULT render).**
+- negative-`sy` fix (`theater-boot.js:8888` `f.sy > 0` → `isFinite`) so sunken arenas render sunken
+  (red-first in G0, promoted `geo-regression-be825c9cc76b` in R2) — parked tier-height domain.
+- Flip the geometry default `legacy → oss` after a stabilization hold (OSS §15); optionally broaden G3
+  fuzz + shoot an outside-low grazing capture first.
+
 ## 2026-07-12 (later) — STAGE C: REAL ROOM SHAPES — rooms stop being rectangles (C1/C2/C3/C3b, orchestrated)
 
 **The wave.** `docs/STAGE-C.md` (GRAPHICS-NORTH-STAR Stage C) — consume the walk's rolled

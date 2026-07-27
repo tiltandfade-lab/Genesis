@@ -8,6 +8,22 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-27 — Integration close: four lanes landed; TIYL starts diversified; settled-life program ruled [Fable]
+
+**Added**
+- **The Opening Register** (`feat/opening-register`): minute-zero d100 band roll — settled 25 / arrival-with-edge 25 / in-medias-res 30 / wrong 15 / mythic 5, all four founder questions RULED (weights locked; no player lean for now; WRONG realm-honest; MYTHIC may permanently mark the world). New `SS.eRegister` + `eNowMedias/eNowWrong/eNowMythic` (Engine md source + inline mirror), `rollEntry` wiring, `renderOpening`/`charHandoff` surfacing. `verify-opening-register` 15/15 red-first; acceptance rerun: 9/12 hot openings vs the prior 12/12 settled monoculture. Spec: `TIYL-START-DIVERSITY.md`; unit spec: `OPENING-REGISTER-BUILD.md`.
+- **Settled-life sites program** (`SETTLED-LIFE-SITES-PROGRAM.md`, §7 all four RULED: dwelling folds into the Manor's low end; working quay first; ONE persistent returnable home settlement; curiosities silhouette-grade + small usable subset) + **Meshy wilderness set-piece queue** (26 models / 14 families proposed) + `docs/intel/` evidence bank (marathon spatial mining · 1,050-walk census · 12-start TIYL batch).
+- **Codex lane complete** (`docs/golden-site-thin-briefs`): Site-6 Prison/Custody brief + study packets, Tavern + Building-Type roll studies, Meshy Batch-4 runtime pack + `theater-procedural-kit.js` (additive, verified), building-program table families, urban fabric. Internal review: safe-to-land, 4 edit-needs routed to a follow-up Codex session.
+- **Clay lane capture** (`feat/clay-rounds-capture`): CL-R3→R5 capture rounds (44 dirs) + theater/clay module state + re-baselined light locks; parked `SHOP-SIM-CONCEPT.md`.
+
+**Changed**
+- **Hometown = where you're from** (Adam 2026-07-26): `bornWhere` resolves the bardo hometown roll; the world-seed start place is now "Starting location" in all player-facing language (the two rolls are two facts, no longer a contradiction).
+
+**Fixed**
+- Gazetteer places forward their descriptions into the entry bundle; the spice-graded `EB.places` fresh-archetype table is live again (2 canon + 1 fresh composition — PROPOSED default pending Adam). `verify-tiyl-entry` 19/19 red-first.
+
+**Verification** — full CI-equivalent sweep on the integrated master: 20 dep-skips (the CI render/paint skip set), one documented flake (`verify-coherence-dial` — 51/0 in isolation under both envs twice; red only under concurrent-gate load), zero other reds; check-manifest OK; bridge 64/0; table-lint 37/0; bug-probes 2/32 known-open.
+
 ## 2026-07-26 — THE SINGULAR FRESH START [Fable]
 
 **Changed**
@@ -829,36 +845,4 @@ gallery-pass} — render-flake/CI-auto-skip, fail identically pre-flip). check-m
 **Deferred.** §15 step 10 (remove the legacy triangulation path) waits until the stabilization hold
 passes with no rollback-worthy defect. Phase 3 (GP-2..4 visual production) now rides on the flipped
 geometry, gated on Codex research + charter tool-adoption/spend gates.
-
-## 2026-07-13 (overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry (orchestrated)
-
-Codex researches, Claude orchestrates (`docs/GRAPHICS-CONVERGENCE-CHARTER.md` governs; execution spine
-`docs/GRAPHICS-CONVERGENCE-PLAN.md`). 14 units, each personally re-gated (harnesses re-run + captures
-READ, never self-report), landed `--no-ff`. Master tip after the run: `4da62a9d`.
-
-**Added.**
-- **Wall-volumes wave** — C4.1a wall volumes + Phase-0 octagon miter · C4.1b segment ray-occlusion ·
-  E0 physical practicals (glow-disc retired) · C4.1c floor+riser congruence.
-- **Phase 0 instrumentation (dev-only)** — R0 pinned tool bootstrap (`dev/geometry-tools/`) · G0 52
-  ground-truth fixtures + injected-adapter harness (row-101 sunken-collapse red-first) · R2 fast-check
-  fuzz · R3 webgl-lint/Spector diagnostics · R4 pixelmatch capture-regression · GP-1 GPU telemetry +
-  material census.
-- **Phase 1** — R1 four-path geometry bakeoff → ruling (`dev/geometry-research/bakeoff/ruling.json`):
-  floors = polygon-clipping + Earcut; walls = clipper2-ts Strategy-A offset; clipper2 booleans + its CDT
-  triangulator rejected (CDT silently wrong, reproduced). Measured a real ~0.31u corner-gap defect.
-- **Phase 2 (behind `ROOM_SHELL_POLYGON_KERNEL = legacy|oss-compare|oss`, DEFAULT legacy)** — G1
-  `src/ui/geometry/polygon-kernel.js` + vendored earcut/polygon-clipping (fixes 7 legacy floor defects,
-  0 regressions) · G2 floor integration (oss unions+triangulates-with-holes; row-101 3-tier hole
-  recovered; F08/F11 corrected) · G3 aperture-delimited wall runs + vendored clipper2-ts (corner gap
-  0.3111u→0 at stem/cap/footing separately, 100% provenance, 0 unintended joins; verify-wall-runs-oss 71/0).
-
-**Changed.**
-- Fixed the incorrect "never a gap" comment at `theater-room-mesh.js:904` (per SOL — the per-segment
-  construction *does* gap at ordinary convex corners).
-
-**Deferred (Adam's morning decisions — both change the DEFAULT render).**
-- negative-`sy` fix (`theater-boot.js:8888` `f.sy > 0` → `isFinite`) so sunken arenas render sunken
-  (red-first in G0, promoted `geo-regression-be825c9cc76b` in R2) — parked tier-height domain.
-- Flip the geometry default `legacy → oss` after a stabilization hold (OSS §15); optionally broaden G3
-  fuzz + shoot an outside-low grazing capture first.
 

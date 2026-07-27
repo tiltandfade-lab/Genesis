@@ -926,3 +926,69 @@ position) rather than the world seed, the ledger carries both facts as distinct 
 legacy/no-hometown world still falls back correctly. Regression-checked against
 `verify-place-tiyl.mjs`, `verify-proximity.mjs`, `verify-rebirth-flow.mjs`, `verify-saga.mjs`,
 `verify-tiyl.mjs`, `verify-bardo-port.mjs`, and `verify-place-roll.mjs` — all stay green.
+
+## The Opening Register — TIYL-START-DIVERSITY (2026-07-27)
+
+The 2026-07-26 batch roll (`docs/intel/tiyl-starts.md`, 12 starts, real dice) found the openings
+the chain produces are a monoculture: 12 of 12 opened in a settlement, 11 of 12 were calm
+arrivals, spice at minute zero ran Grounded 9 / Textured 3. Nothing in the tables was broken —
+the system was doing exactly what it was built to do; what it was built to do is now ruled wrong
+for minute zero specifically (Adam, verbatim: *"we really need to do something about that... the
+hometown start is fine SOMETIMES but not most of the time"*). `docs/TIYL-START-DIVERSITY.md` is
+the design rationale; `docs/OPENING-REGISTER-BUILD.md` is the executable build unit this entry
+records as landed.
+
+**The fix:** a single d100 **Opening Register** roll (`SS.eRegister`, `data/starting-state.js`),
+rolled FIRST in `rollEntry()` (`src/engine/world-gen.js`) — upstream of and independent from the
+existing why/foot/standing triplet, which runs UNCHANGED for every band. The register decides how
+hot/strange minute zero is; hot bands additionally roll a small situation table (`SS.eNowMedias` /
+`SS.eNowWrong` / `SS.eNowMythic`) layered on top of (never replacing) the `foot` roll, and the
+result is stored as `c.entry.register = {band, roll, situation, live}`. Surfaced wherever the
+triplet already renders (`renderOpening` in `src/world/render.js`, `charHandoff` in
+`src/world/handoff.js`) and appended to the entry ledger line (`src/engine/world-gen.js`), matching
+each surface's existing presentation convention (same visibility rule, same juice-chip styling).
+
+**RULED by Adam (2026-07-27) — all four `TIYL-START-DIVERSITY.md` §6 questions, in one message
+(the decisive-answers law):**
+
+1. **The weights — locked as authored.** 25 SETTLED / 25 ARRIVAL WITH EDGE / 30 IN MEDIAS RES / 15
+   WRONG / 5 MYTHIC COLD OPEN ("weights are good"). Remains the founder's dial — the gentler
+   (35/25/25/10/5) and hotter (15/25/35/18/7) stocks stay documented in
+   `TIYL-START-DIVERSITY.md` §6.1 as the one-row revision if live play argues for a change.
+2. **No player lean at world creation, for now.** Pure dice; the register is part of rolling a
+   world into being, same as every other Starting State table. The safe/standard/feral lean stays
+   a documented two-line weight swap, reopened only if Adam reopens it.
+3. **WRONG is realm-honest.** Rows are authored as realm-adaptive archetypes for the DM to
+   instantiate in the world's own register — no proper nouns, no genre-specific technology, no
+   realm-violating imagery. WRONG means *this world* is wrong, never that the genre changed.
+4. **MYTHIC's permanence — yes.** ("It's fine, it was gonna get changed at some point! Let the
+   game be weird.") A 96–100 cold open may permanently mark the world from turn one; the six
+   `eNowMythic` rows are authored with that world-marking weight, no two alike in kind (celestial,
+   chthonic, temporal, communal, personal-apotheosis, cosmological).
+
+**One deliberate, fenced bend in the spice law:** the register's rarity curve (30% IN MEDIAS RES,
+15% WRONG, 5% MYTHIC — all far hotter than ambient SPICE-CURVE rarity) is a **one-time authored
+moment, spent once, at character birth.** After turn zero the normal SPICE-CURVE rarity resumes
+everywhere — this entry is the citation that fences the bend: it is never precedent for a
+time-escalation dial, which stays banned.
+
+**v1 scoping note:** this unit is **class-blind** — every band, and every row within a hot band,
+stays reachable by every class/species/background; there is no lean of any kind yet. Class/
+background-weighted leans on the register (a barbarian leaning IN MEDIAS RES, a sage leaning
+SETTLED) arrive only if/when the unreviewed sibling spec `TIYL-WEIGHTED-STARTS` is adopted — that
+spec would compose with this one (it moves WHERE the start lands; this one moves HOW HOT it
+opens) through the same weighted-duplicate-array mechanism `CLASS_FACTION_AFFINITY` already uses.
+Adopting this spec neither requires nor blocks that one.
+
+**Teeth:** `dev/verify-opening-register.mjs` — RED-FIRST proven against the unwired base
+(`fa7a6fdb`, 8 of 12 checks failed cleanly on "register absent," MISSING=300/300) before any table/
+wiring/consumer code landed. Green asserts: a 300-entry census over fresh `rollEntry()` calls sees
+all five bands with shares within ±6 points of the authored weights (never a fixed RNG position —
+real dice, shape only); every medias/wrong/mythic sample carries a `situation` with the correct
+juice tag and `live:true`, edge carries `live:true`+`situation:null`, settled carries
+`live:false`+`situation:null`; the entry ledger line for a hot band names the band and situation
+while a settled character's line stays byte-identical in shape to the pre-unit output; and a legacy
+`c.entry` with no `register` key (the pre-unit save shape) still renders through both known
+consumers without throwing. `dev/acceptance-opening-register.mjs` re-runs the 12-start batch
+protocol (one per class) against the built register — the monoculture is visibly broken (all five
+bands present across 12 rolls where the pre-unit chain produced 12/12 settlement, 11/12 calm).

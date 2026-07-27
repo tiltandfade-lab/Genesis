@@ -68,7 +68,7 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
   // (measured: the shadow lands; the albedo hides it). In a diagnostic clay studio the base is a
   // physical surface under test like any other — it now routes to clay so cast shadows and AO
   // read on it. The sprite ART stays passthrough, untouched.
-  version: 2,
+  version: 5,
   modes: Object.freeze(["clay", "role-id"]),
   defaultMode: "clay",
   clayColor: "#8a8a8a",       // D7's own flat clay-grey, unchanged
@@ -78,12 +78,19 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
   // clay, white-on-#8a8a8a stopped reading at all. A dark line is the contrast-correct choice
   // against clay, and against the brighter role-id fills too. Opacity stays inside D12a's own
   // 0.25-0.35 law.
-  gridColor: "#141414",
-  gridOpacity: 0.3,
+  // v5: 1 px WebGL lines still vanished over detailed albedo at the governed review zoom even when
+  // the receipt correctly named the surface. The renderer now turns every surface-clipped segment
+  // into a narrow world-space strip and alpha-weights a multiply blend, so texture remains visible
+  // underneath while the grid remains visible in the final pixels.
+  gridColor: "#26313b",
+  gridOpacity: 0.34,
+  gridStripWidth: 0.025,
+  gridBlendContract: "alpha-weighted-multiply",
   roles: Object.freeze({
     floor:     Object.freeze({ route: "diagnostic-clay", roleColor: "#5f8fbf" }),
     wall:      Object.freeze({ route: "diagnostic-clay", roleColor: "#bf6f6f" }),
     riser:     Object.freeze({ route: "diagnostic-clay", roleColor: "#bf8f4f" }),
+    foundation:Object.freeze({ route: "diagnostic-clay", roleColor: "#70584a" }),
     trim:      Object.freeze({ route: "diagnostic-clay", roleColor: "#8fbf5f" }),
     doorframe: Object.freeze({ route: "diagnostic-clay", roleColor: "#bfbf5f" }),
     portal:    Object.freeze({ route: "diagnostic-clay", roleColor: "#5fbf9f" }),
@@ -107,7 +114,15 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
     mote:             Object.freeze({ route: "passthrough", roleColor: "#bf5f5f" }),
     // CL-R3 diagnostic overlays (socket axes, access faces, negative-control rejection) are
     // intentionally coloured truth aids, not architecture. They bypass the neutral-clay swap.
-    "diagnostic-overlay": Object.freeze({ route: "passthrough", roleColor: "#6fcfff" })
+    "diagnostic-overlay": Object.freeze({ route: "passthrough", roleColor: "#6fcfff" }),
+    // CL-R4b is an isolated material-integration fixture. These specimens carry the two candidate
+    // sprite-first parents and compiled PBR maps, so the diagnostic clay sweep must leave them
+    // intact. This dev-only route does not promote the candidate into production selection.
+    "material-proof": Object.freeze({ route: "passthrough", roleColor: "#d4b86a" }),
+    // CL-R5 composes those approved parents with the admitted h6-v1 trim family. Body and trim
+    // materials remain independently switchable inside the retained fixture; the ordinary clay
+    // diagnostic sweep must therefore leave the complete structure proof intact.
+    "trim-proof": Object.freeze({ route: "passthrough", roleColor: "#c7b58c" })
   })
 });
 
@@ -120,6 +135,57 @@ var CLAY_CELESTIAL_PREVIEW_CLOCK = Object.freeze({
   daylit: 486,
   overcast: 486,
   moonlit: 1290
+});
+
+/* ─── CL-R3 LIGHTING STUDY — SOURCE + ROOM-MOOD PAIRS ───────────────────────────────────────────
+   The production recipe remains the physical/narrative source of truth. These bounded layers add
+   a bounded ambient/hemisphere field plus a restrained void/fog tint. Neither light type can cast
+   a shadow, and the combined authored intensity stays below the source-plus-mood energy cap. The
+   field is deliberately strong enough to expose the room as a volume: the early XCOM, gloom, and
+   overgrown-chamber visions use practicals as punctuation inside readable coloured ambience, not
+   as the sole exposure for every surface.
+   This is data so a later room/theme compiler can select it without copying UI constants. */
+var CLAY_ROOM_MOOD_LAYERS = Object.freeze({
+  id: "clay-room-mood-layers",
+  version: 1,
+  defaultId: "none",
+  maxCombinedIntensity: 0.85,
+  layers: Object.freeze({
+    none: Object.freeze({
+      id: "none", label: "SOURCE ONLY", themes: Object.freeze(["diagnostic"]),
+      ambient: Object.freeze({ color: "#ffffff", intensity: 0 }),
+      hemisphere: Object.freeze({ sky: "#ffffff", ground: "#ffffff", intensity: 0 }),
+      void: Object.freeze({ color: "#0a0908", mix: 0 })
+    }),
+    "dawn-violet": Object.freeze({
+      id: "dawn-violet", label: "VIOLET DAWN",
+      themes: Object.freeze(["dawn", "fantasy", "occupied"]),
+      ambient: Object.freeze({ color: "#695777", intensity: 0.055 }),
+      hemisphere: Object.freeze({ sky: "#8a7397", ground: "#503d35", intensity: 0.105 }),
+      void: Object.freeze({ color: "#23192d", mix: 0.52 })
+    }),
+    "crypt-violet": Object.freeze({
+      id: "crypt-violet", label: "VIOLET CRYPT",
+      themes: Object.freeze(["night", "gloom", "dungeon"]),
+      ambient: Object.freeze({ color: "#4b4568", intensity: 0.05 }),
+      hemisphere: Object.freeze({ sky: "#625c83", ground: "#292237", intensity: 0.09 }),
+      void: Object.freeze({ color: "#141124", mix: 0.62 })
+    }),
+    "dungeon-cold": Object.freeze({
+      id: "dungeon-cold", label: "COLD DUNGEON",
+      themes: Object.freeze(["dungeon", "torchlit", "occupied"]),
+      ambient: Object.freeze({ color: "#615c73", intensity: 0.24 }),
+      hemisphere: Object.freeze({ sky: "#76718a", ground: "#312b32", intensity: 0.52 }),
+      void: Object.freeze({ color: "#15131d", mix: 0.72 })
+    }),
+    "spore-haze": Object.freeze({
+      id: "spore-haze", label: "SPORE HAZE",
+      themes: Object.freeze(["organic", "fungal", "unhinged"]),
+      ambient: Object.freeze({ color: "#4b685d", intensity: 0.22 }),
+      hemisphere: Object.freeze({ sky: "#66877a", ground: "#2d3440", intensity: 0.46 }),
+      void: Object.freeze({ color: "#10201e", mix: 0.6 })
+    })
+  })
 });
 
 /* ─── CL-R1 / CL-F02 — LIGHTING BENCH FIXTURE ──────────────────────────────────────────────────
@@ -160,7 +226,10 @@ var CLAY_LIGHTING_BENCH_FIXTURE = Object.freeze({
     Object.freeze({
       id: "bench-matte-cube", primitive: "box", role: "furniture",
       size: Object.freeze({ x: 1.15, y: 1.15, z: 1.15 }),
-      offset: Object.freeze({ x: 0.45, z: 0 })
+      // The stair's right edge is x=-0.3 in this fixture. Cube half-width is 0.575, so x=0.263
+      // interlocks the two by 0.012 u: an honest right-angle contact test, not the former 0.175-u
+      // exposed-floor gap that looked like an AO light leak at the close diagnostic camera.
+      offset: Object.freeze({ x: 0.263, z: 0 })
     }),
     Object.freeze({
       id: "bench-matte-sphere", primitive: "sphere", role: "furniture",
@@ -187,6 +256,439 @@ function clayRoomLightingBenchFixtureFrom(record){
       record.dims.w + "x" + record.dims.d);
   }
   return CLAY_LIGHTING_BENCH_FIXTURE;
+}
+
+/* ─── CL-R4b / CL-F04 — MATCHED TWO-PARENT MATERIAL INTEGRATION BENCH ──────────────────────────
+   Two sprite-first parents are projected over the same minimum architecture under one camera and
+   light rig: a true 3x3 floor repeat, vertical walls meeting at 90 degrees, a framed opening, an
+   elevation rise, stair treads, risers, and horizontal caps. Each bay owns the same local
+   world-space UV phase, so this is a parent comparison rather than a composition comparison.
+
+   Adam accepted the dressed-ashlar SOURCE SCALE as the reference scale for a future white brick;
+   that is a scale ruling, not approval of its current palette or promotion into production. Both
+   parents remain taste-pending. Exact source sprites remain albedo authority; Material Maker 1.3
+   contributes tangent-space normal and Godot-4 ORM channels only. Hashes come from the deterministic
+   B04 v003 export receipt so the live capture names immutable admitted lineage. */
+var CLAY_MATERIAL_BENCH_MATERIALS = Object.freeze([
+  Object.freeze({
+    id: "wall-ashlar-dressed",
+    label: "Fine ashlar · white-brick scale",
+    family: "white-brick-scale-reference",
+    tasteStatus: "PENDING",
+    scaleStatus: "ACCEPTED AS WHITE-BRICK REFERENCE",
+    workflow: "sprite-first albedo + Material Maker depth",
+    sourceSprite: "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-ashlar-dressed-selected-v001.png",
+    sourceSha256: "580d9512e87b66a837d54dfdebf1369dc6636384e7d26c64d1030d57bee60cd9",
+    graph: "dev/material-lane/graphs/b04-masonry-interior-mm-v003/b04-wall-ashlar-dressed-v003.ptex",
+    graphSha256: "278de2cb298fe0f0ec337b1fa153b8ad91493d1a5de9456d88deb40079ba5600",
+    exportRoot: "dev/material-lane/exports/b04-masonry-interior-mm-v003/run-a",
+    exportStem: "b04-wall-ashlar-dressed-v003",
+    exportReceipt: "dev/material-lane/receipts/b04-masonry-interior-mm-v003-export-receipt.json",
+    maps: Object.freeze({
+      albedo: Object.freeze({
+        suffix: "_albedo.png",
+        sha256: "362948a3d1e97fa9b3bc600a4aa1371e11edac15cbe5a78492afeed382b15ff8",
+        colorSpace: "sRGB"
+      }),
+      normal: Object.freeze({
+        suffix: "_normal.png",
+        sha256: "6276d07a557e0c31d4b27aa230a2ba73d8986cb42b6923bdb1414d945a8d08d3",
+        colorSpace: "linear"
+      }),
+      orm: Object.freeze({
+        suffix: "_orm.png",
+        sha256: "de2893203d364f0b5c0748a61a7b79a4e934b74a0b3e1774cae078e409c76c2b",
+        colorSpace: "linear",
+        channels: Object.freeze({ r: "ambient-occlusion", g: "roughness", b: "metalness" })
+      })
+    }),
+    normalScale: 1,
+    normalNegativeScale: 2.5,
+    aoMapIntensity: 0.72,
+    roughnessFallback: 0.78,
+    metalnessFallback: 0
+  }),
+  Object.freeze({
+    id: "wall-rough-hewn-block",
+    label: "Rough-hewn block",
+    family: "large-block-masonry",
+    tasteStatus: "PENDING",
+    scaleStatus: "REVIEW IN MATCHED BAY",
+    workflow: "sprite-first albedo + Material Maker depth",
+    sourceSprite: "dev/material-lane/source-sprites/b04-masonry-interior-v001/wall-rough-hewn-block-selected-v001.png",
+    sourceSha256: "76762f482195e591edc5cd261b9925174c08687ca5d49bdf9f66490cafc89b01",
+    graph: "dev/material-lane/graphs/b04-masonry-interior-mm-v003/b04-wall-rough-hewn-block-v003.ptex",
+    graphSha256: "8831691cd3b2db6afbd2d9e91a765ac88aadcb1a677b6c6331f58763462f58a3",
+    exportRoot: "dev/material-lane/exports/b04-masonry-interior-mm-v003/run-a",
+    exportStem: "b04-wall-rough-hewn-block-v003",
+    exportReceipt: "dev/material-lane/receipts/b04-masonry-interior-mm-v003-export-receipt.json",
+    maps: Object.freeze({
+      albedo: Object.freeze({
+        suffix: "_albedo.png",
+        sha256: "6f2af30d9bfb911d4d3b6b55b820a198902421d2360da99a57ef9b6c4d8807fe",
+        colorSpace: "sRGB"
+      }),
+      normal: Object.freeze({
+        suffix: "_normal.png",
+        sha256: "e07640ed75b83b9b00070020976455641dd62ce2e071c8eaf5d0054feeb03d69",
+        colorSpace: "linear"
+      }),
+      orm: Object.freeze({
+        suffix: "_orm.png",
+        sha256: "a92f9b0da981ae9e516e97976259721fb5e1f10bba5e43d2e8dfca4ef1292460",
+        colorSpace: "linear",
+        channels: Object.freeze({ r: "ambient-occlusion", g: "roughness", b: "metalness" })
+      })
+    }),
+    normalScale: 1,
+    normalNegativeScale: 2.5,
+    aoMapIntensity: 0.72,
+    roughnessFallback: 0.84,
+    metalnessFallback: 0
+  })
+]);
+var CLAY_MATERIAL_BENCH_FIXTURE = Object.freeze({
+  id: "cl-f04-material-bench",
+  version: 3,
+  label: "CL-F04 material bench · CL-R4b",
+  question: "Do two sprite-first parents retain readable scale, phase, grid contrast, and channel meaning in matched architectural bays?",
+  tasteStatus: "PENDING",
+  defaultMode: "pbr",
+  modes: Object.freeze(["pbr", "albedo-fallback", "clay-control", "normal-negative"]),
+  metersPerWorldUnit: 1.524,
+  metersPerTile: 1.65,
+  repeatProof: Object.freeze({
+    x: 3,
+    z: 3,
+    clearSpanWorldUnits: 3.248031,
+    contract: "three-by-three visible field measured inside the wall centerlines"
+  }),
+  supportFootprint: Object.freeze({
+    wallThickness: 0.24,
+    underlapSides: Object.freeze(["west", "north"]),
+    contract: "floor substrate reaches the outer face of every wall that bears on it"
+  }),
+  phaseAnchor: Object.freeze({ x: -1.624016, y: 0.18, z: -1.624016 }),
+  // `material` remains a compatibility alias for old dev-console readers; all live fixture logic
+  // consumes `materials` and `bays`, so no renderer path can accidentally collapse back to one.
+  material: CLAY_MATERIAL_BENCH_MATERIALS[0],
+  materials: CLAY_MATERIAL_BENCH_MATERIALS,
+  bays: Object.freeze([
+    Object.freeze({
+      id: "white-brick-scale-bay",
+      label: "Fine white-brick scale",
+      materialId: "wall-ashlar-dressed",
+      offset: Object.freeze({ x: -2.05, z: 0 })
+    }),
+    Object.freeze({
+      id: "large-block-bay",
+      label: "Large rough-hewn block",
+      materialId: "wall-rough-hewn-block",
+      offset: Object.freeze({ x: 2.05, z: 0 })
+    })
+  ]),
+  // Offsets are relative to the live room centre; y is measured from the host floor top.
+  // 3.248031 world units = 4.95 m = exactly three 1.65 m texture tiles.
+  specimens: Object.freeze([
+    Object.freeze({
+      id: "material-floor-3x3", role: "floor",
+      // The visible room field remains exactly 3x3 repeats between wall centerlines. The solid
+      // extends another half wall outward on the two bearing sides, so neither wall overhangs the
+      // substrate while the open south/east edges retain the reviewed clear-span boundary.
+      size: Object.freeze({ x: 3.368031, y: 0.18, z: 3.368031 }),
+      offset: Object.freeze({ x: -0.06, y: 0.09, z: -0.06 }),
+      traversableTop: true
+    }),
+    Object.freeze({
+      id: "material-wall-west", role: "wall",
+      size: Object.freeze({ x: 0.24, y: 2.165354, z: 3.248031 }),
+      offset: Object.freeze({ x: -1.624016, y: 1.262677, z: 0 }),
+      traversableTop: false
+    }),
+    Object.freeze({
+      id: "material-wall-north-left", role: "opening",
+      size: Object.freeze({ x: 1.199016, y: 2.165354, z: 0.24 }),
+      offset: Object.freeze({ x: -1.024508, y: 1.262677, z: -1.624016 }),
+      traversableTop: false
+    }),
+    Object.freeze({
+      id: "material-wall-north-right", role: "opening",
+      size: Object.freeze({ x: 1.199016, y: 2.165354, z: 0.24 }),
+      offset: Object.freeze({ x: 1.024508, y: 1.262677, z: -1.624016 }),
+      traversableTop: false
+    }),
+    Object.freeze({
+      id: "material-opening-header", role: "opening",
+      size: Object.freeze({ x: 0.85, y: 0.665354, z: 0.24 }),
+      offset: Object.freeze({ x: 0, y: 2.012677, z: -1.624016 }),
+      traversableTop: false
+    }),
+    Object.freeze({
+      id: "material-raised-deck", role: "cap",
+      size: Object.freeze({ x: 1.624016, y: 0.54, z: 1.624016 }),
+      offset: Object.freeze({ x: 0.812008, y: 0.45, z: 0.812008 }),
+      traversableTop: true
+    }),
+    Object.freeze({
+      id: "material-step-low", role: "riser",
+      // Nested ground-up stair solids: these two specimens extend beyond the floor slab's footprint,
+      // so their bottoms must use the host floor datum rather than the slab-top datum.
+      size: Object.freeze({ x: 1.05, y: 0.36, z: 0.54 }),
+      offset: Object.freeze({ x: 0.525, y: 0.18, z: 2.434016 }),
+      traversableTop: true
+    }),
+    Object.freeze({
+      id: "material-step-high", role: "riser",
+      size: Object.freeze({ x: 1.05, y: 0.54, z: 0.54 }),
+      offset: Object.freeze({ x: 0.525, y: 0.27, z: 1.894016 }),
+      traversableTop: true
+    })
+  ])
+});
+function clayRoomMaterialBenchFixtureFrom(record){
+  if(!record || !record.dims){
+    throw new Error("clayRoomMaterialBenchFixtureFrom: record with dims required");
+  }
+  if(record.dims.w < 7 || record.dims.d < 7){
+    throw new Error("clayRoomMaterialBenchFixtureFrom: CL-F04 requires at least a 7x7 room — got " +
+      record.dims.w + "x" + record.dims.d);
+  }
+  return CLAY_MATERIAL_BENCH_FIXTURE;
+}
+
+/* ─── CL-R5 / CL-F05 — MATCHED, FULLY TRIMMED STRUCTURE INTEGRATION BENCH ──────────────────────
+   CL-F04 proved the two body parents in isolation. CL-F05 asks the next compositional question:
+   can one complete, inhabitable cutaway-room recipe route wall, floor, and the six admitted h6-v1
+   trim roles without seams, orphaned corners, scale drift, or tactical changes?
+
+   The two structures are architectural twins. Their body parents swap, while the trim culture
+   changes from Institutional to Upland. This prevents a flattering one-off composition from
+   disguising a routing failure. Every camera-side wall remains present as Adam's ruled one-foot
+   stub; far walls remain full height; the north opening is framed rather than cut into a floating
+   panel. Geometry dimensions are fixture data, not procedural generation. */
+var CLAY_TRIM_BENCH_SLOTS = Object.freeze([
+  Object.freeze({
+    id: "plain-band", semanticRole: "plain-band", profileId: "GP-TR-P00",
+    rectPx: Object.freeze([0, 16, 1024, 96]), repeatWorldLength: 1
+  }),
+  Object.freeze({
+    id: "base-course", semanticRole: "base-course", profileId: "GP-TR-P01",
+    rectPx: Object.freeze([0, 144, 1024, 160]), repeatWorldLength: 1
+  }),
+  Object.freeze({
+    id: "cornice-belt", semanticRole: "cornice-belt", profileId: "GP-TR-P02",
+    rectPx: Object.freeze([0, 336, 1024, 160]), repeatWorldLength: 1.25
+  }),
+  Object.freeze({
+    id: "coping-cap", semanticRole: "coping-cap", profileId: "GP-TR-P03",
+    rectPx: Object.freeze([0, 528, 1024, 128]), repeatWorldLength: 1
+  }),
+  Object.freeze({
+    id: "stair-nosing", semanticRole: "stair-nosing", profileId: "GP-TR-P04",
+    rectPx: Object.freeze([0, 688, 1024, 96]), repeatWorldLength: 0.75
+  }),
+  Object.freeze({
+    id: "curb-retaining", semanticRole: "curb-retaining", profileId: "GP-TR-P05",
+    rectPx: Object.freeze([0, 816, 1024, 192]), repeatWorldLength: 1.25
+  })
+]);
+var CLAY_TRIM_BENCH_CULTURES = Object.freeze([
+  Object.freeze({
+    id: "institutional", label: "Institutional · dressed cut stone",
+    atlasRoot: "dev/material-lane/exports/b06-trim-packed-v001/run-a",
+    atlasStem: "trim-institutional-h6-v1",
+    atlasMetadata: "trim-institutional-h6-v1.trim-sheet.json",
+    metadataSha256: "51dbba3c22c4cdceef3122eab48eea3624b6dfcd6279f6832cc5c61c6702d3a7",
+    maps: Object.freeze({
+      basecolor: Object.freeze({
+        file: "trim-institutional-h6-v1-basecolor-512-v001.png",
+        sha256: "ce3250778762283669e20249b894b06f1e8514d800479166ee4461f6e05f8170",
+        colorSpace: "sRGB"
+      }),
+      normal: Object.freeze({
+        file: "trim-institutional-h6-v1-normal-512-v001.png",
+        sha256: "0c75f6bd2a9d0c1790bcedc7a8383d069a666498338c4eef1a516d32d1d4405c",
+        colorSpace: "linear"
+      }),
+      orm: Object.freeze({
+        file: "trim-institutional-h6-v1-orm-512-v001.png",
+        sha256: "faebcad33ace3740bb8a40e770b2cb08dd9751d12d1e82c39e0a5346b39c5184",
+        colorSpace: "linear"
+      })
+    }),
+    coreColor: "#c7bca7"
+  }),
+  Object.freeze({
+    id: "upland", label: "Upland · rugged field stone",
+    atlasRoot: "dev/material-lane/exports/b06-trim-packed-v001/run-a",
+    atlasStem: "trim-upland-h6-v1",
+    atlasMetadata: "trim-upland-h6-v1.trim-sheet.json",
+    metadataSha256: "a7f172a85023a525148c7e7e196fc5a811fcb9e31e0562a7f0f15ebedc0105a7",
+    maps: Object.freeze({
+      basecolor: Object.freeze({
+        file: "trim-upland-h6-v1-basecolor-512-v001.png",
+        sha256: "7399f4674f4d8f7bc645851244ac5d9ac923f96e2d3e0d6e23a8770b10757d03",
+        colorSpace: "sRGB"
+      }),
+      normal: Object.freeze({
+        file: "trim-upland-h6-v1-normal-512-v001.png",
+        sha256: "73bf30ba427ee78134124f71d40c8675038e7221f800c73414d59e1a0fec6a5a",
+        colorSpace: "linear"
+      }),
+      orm: Object.freeze({
+        file: "trim-upland-h6-v1-orm-512-v001.png",
+        sha256: "28a8679c322f81b62951cbdbecee1bc303033f76dcadde0667cd7b7e7c1c89fd",
+        colorSpace: "linear"
+      })
+    }),
+    coreColor: "#8f877a"
+  })
+]);
+var CLAY_TRIM_BENCH_FIXTURE = Object.freeze({
+  id: "cl-f05-trim-bench",
+  version: 1,
+  label: "CL-F05 complete trimmed structures · CL-R5",
+  question: "Do approved wall/floor parents and all six trim roles compose into complete, believable rooms?",
+  tasteStatus: "REVIEW",
+  defaultMode: "pbr",
+  modes: Object.freeze(["pbr", "trim-debug", "albedo-only", "clay-control"]),
+  atlasLayoutId: "h6-v1",
+  atlasRuntimeSize: Object.freeze([1024, 1024]),
+  atlasSampleSize: Object.freeze([512, 512]),
+  exportReceipt: "dev/material-lane/receipts/b06-trim-packed-v001-receipt.json",
+  verificationReceipt: "dev/material-lane/receipts/b06-trim-imagegen-mm-v001-verification.json",
+  slots: CLAY_TRIM_BENCH_SLOTS,
+  cultures: CLAY_TRIM_BENCH_CULTURES,
+  architecture: Object.freeze({
+    width: 3.34,
+    depth: 3.16,
+    wallThickness: 0.22,
+    wallHeight: 2.28,
+    stubHeight: 0.2,
+    stubFeet: 1,
+    slabThickness: 0.18,
+    openingCenterX: -0.62,
+    openingWidth: 0.82,
+    openingHeight: 1.48,
+    platform: Object.freeze({ width: 1.42, depth: 1.18, height: 0.54 }),
+    stair: Object.freeze({ width: 1.02, treadDepth: 0.48, lowHeight: 0.18, highHeight: 0.36 }),
+    contactEmbed: 0.012,
+    trimReliefDepth: 0.04
+  }),
+  structures: Object.freeze([
+    Object.freeze({
+      id: "institutional-workroom",
+      label: "Institutional workroom",
+      cultureId: "institutional",
+      wallMaterialId: "wall-ashlar-dressed",
+      floorMaterialId: "wall-rough-hewn-block",
+      offset: Object.freeze({ x: -2.08, z: -0.12 })
+    }),
+    Object.freeze({
+      id: "upland-guard-room",
+      label: "Upland guard room",
+      cultureId: "upland",
+      wallMaterialId: "wall-rough-hewn-block",
+      floorMaterialId: "wall-ashlar-dressed",
+      offset: Object.freeze({ x: 2.08, z: -0.12 })
+    })
+  ]),
+  routingContract: Object.freeze({
+    bodyParentsPerStructure: 2,
+    trimRolesPerStructure: 6,
+    cutawayStubFeet: 1,
+    grid: "every flat or traversable top; traversal permission remains separate",
+    tactics: "fixture presentation only; zero collision, occupancy, or movement-authority mutation"
+  })
+});
+function clayRoomTrimArchitectureAudit(fixture){
+  var dims = fixture && fixture.architecture;
+  if(!dims) return Object.freeze({ pass: false, reason: "missing-architecture" });
+  var epsilon = 0.00001;
+  var inner = {
+    minX: -dims.width / 2 + dims.wallThickness,
+    maxX: dims.width / 2 - dims.wallThickness,
+    minZ: -dims.depth / 2 + dims.wallThickness,
+    maxZ: dims.depth / 2 - dims.wallThickness
+  };
+  var platform = dims.platform, stair = dims.stair, embed = dims.contactEmbed;
+  var platformCenter = {
+    x: inner.maxX - platform.width / 2,
+    z: inner.minZ + platform.depth / 2
+  };
+  var platformBounds = {
+    minX: platformCenter.x - platform.width / 2,
+    maxX: platformCenter.x + platform.width / 2,
+    minZ: platformCenter.z - platform.depth / 2,
+    maxZ: platformCenter.z + platform.depth / 2
+  };
+  var stairDepth = stair.treadDepth + embed * 2;
+  var highCenterZ = platformBounds.maxZ + stair.treadDepth / 2 - embed;
+  var lowCenterZ = platformBounds.maxZ + stair.treadDepth * 1.5 - embed * 2;
+  var stairMinX = platformCenter.x - stair.width / 2;
+  var stairMaxX = platformCenter.x + stair.width / 2;
+  var highBounds = {
+    minX: stairMinX, maxX: stairMaxX,
+    minZ: highCenterZ - stairDepth / 2,
+    maxZ: highCenterZ + stairDepth / 2
+  };
+  var lowBounds = {
+    minX: stairMinX, maxX: stairMaxX,
+    minZ: lowCenterZ - stairDepth / 2,
+    maxZ: lowCenterZ + stairDepth / 2
+  };
+  var door = {
+    minX: dims.openingCenterX - dims.openingWidth / 2,
+    maxX: dims.openingCenterX + dims.openingWidth / 2
+  };
+  function inside(bounds){
+    return bounds.minX >= inner.minX - epsilon
+      && bounds.maxX <= inner.maxX + epsilon
+      && bounds.minZ >= inner.minZ - epsilon
+      && bounds.maxZ <= inner.maxZ + epsilon;
+  }
+  var rise = stair.lowHeight;
+  var checks = Object.freeze({
+    platformInsideRoom: inside(platformBounds),
+    highTreadInsideRoom: inside(highBounds),
+    lowTreadInsideRoom: inside(lowBounds),
+    equalRiseSequence: Math.abs(stair.highHeight - rise * 2) <= epsilon
+      && Math.abs(platform.height - rise * 3) <= epsilon,
+    highTreadMeetsPlatform: highBounds.minZ <= platformBounds.maxZ + epsilon
+      && highBounds.maxZ > platformBounds.maxZ,
+    lowTreadMeetsHighTread: lowBounds.minZ <= highBounds.maxZ + epsilon
+      && lowBounds.maxZ > highBounds.maxZ,
+    curbYieldsStairOpening: stair.width < platform.width - epsilon
+      && (platform.width - stair.width) / 2 > epsilon,
+    doorwayClearOfPlatform: door.maxX <= platformBounds.minX - 0.05
+  });
+  var failed = Object.keys(checks).filter(function(key){ return !checks[key]; });
+  return Object.freeze({
+    pass: failed.length === 0,
+    failed: Object.freeze(failed),
+    checks: checks,
+    innerBounds: Object.freeze(inner),
+    platformBounds: Object.freeze(platformBounds),
+    highTreadBounds: Object.freeze(highBounds),
+    lowTreadBounds: Object.freeze(lowBounds),
+    doorBounds: Object.freeze(door),
+    contract: "inside-room + equal-rises + contact-overlap + open-curb + clear-doorway"
+  });
+}
+function clayRoomTrimBenchFixtureFrom(record){
+  if(!record || !record.dims){
+    throw new Error("clayRoomTrimBenchFixtureFrom: record with dims required");
+  }
+  if(record.dims.w < 11 || record.dims.d < 9){
+    throw new Error("clayRoomTrimBenchFixtureFrom: CL-F05 requires at least an 11x9 room — got " +
+      record.dims.w + "x" + record.dims.d);
+  }
+  var architectureAudit = clayRoomTrimArchitectureAudit(CLAY_TRIM_BENCH_FIXTURE);
+  if(!architectureAudit.pass){
+    throw new Error("clayRoomTrimBenchFixtureFrom: invalid stair/platform integration — " +
+      architectureAudit.failed.join(", "));
+  }
+  return CLAY_TRIM_BENCH_FIXTURE;
 }
 
 /* ─── CL-R2 / CL-F03 — SPRITE CITIZENSHIP FIXTURE ──────────────────────────────────────────────
@@ -275,12 +777,20 @@ function clayRoomSpriteCitizenshipFixtureFrom(record){
    camera, or Guard Post special case. */
 var CLAY_STRUCTURE_KIT_CATALOG = Object.freeze({
   id: "genesis-structure-kit",
-  version: 1,
+  version: 3,
   gridLaw: Object.freeze({
     cellFeet: 5, cellWorldUnits: 1,
     verticalQuantumFeet: 2.5, verticalQuantumWorldUnits: 0.5,
     storeyQuanta: 4, storeyFeet: 10, storeyWorldUnits: 2,
-    maxWalkableSlopeDeg: 30
+    cutawayStubFeet: 1, cutawayStubWorldUnits: 0.2,
+    maxWalkableSlopeDeg: 30,
+    stairAdapter: Object.freeze({
+      footprintCells: 1,
+      maxRiseFeet: 5,
+      maxRiseWorldUnits: 1,
+      examplesFeet: Object.freeze([2, 3, 5]),
+      fullStoreyUnits: 2
+    })
   }),
   socketTypes: Object.freeze([
     "floor-mount", "wall-mount", "top-surface", "hinge",
@@ -288,7 +798,14 @@ var CLAY_STRUCTURE_KIT_CATALOG = Object.freeze({
     "walk-surface", "catch", "terrain-join", "roof-pitch-join", "open"
   ]),
   accessKinds: Object.freeze(["walk", "climb-cost", "climb-dc", "none"]),
-  climbMechanicsImplemented: false,
+  climbMechanicsImplemented: true,
+  climbLaw: Object.freeze({
+    playerD20Required: true,
+    defaultAthleticsModifier: 3,
+    defaultDc: 15,
+    severeFailureMargin: 3,
+    tenFootFallDamage: "1d6"
+  }),
   provenance: Object.freeze({
     author: "Genesis procedural structure grammar",
     source: "docs/STRUCTURE-KIT-CATALOG.md",
@@ -299,12 +816,12 @@ var CLAY_STRUCTURE_KIT_CATALOG = Object.freeze({
 
 var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
   id: "cl-f01-structure-bench",
-  version: 1,
+  version: 4,
   label: "CL-F01 structure bench",
   question: "Can generic construction atoms make believable, mechanically legible architecture?",
   catalogId: CLAY_STRUCTURE_KIT_CATALOG.id,
   defaultView: "assembled",
-  views: Object.freeze(["assembled", "sockets", "access", "negative", "strategic"]),
+  views: Object.freeze(["assembled", "stairs", "sockets", "access", "climb", "negative", "strategic"]),
   wallOmission: Object.freeze({
     ruleId: "camera-side-wall-omission",
     version: 1,
@@ -342,7 +859,13 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
         Object.freeze({ id: "straight-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
         Object.freeze({ id: "straight-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) })
       ]),
-      access: Object.freeze({ top: "none", inner: "none", outer: "none" })
+      climbDC: 15,
+      access: Object.freeze({ top: "walk", inner: "climb-dc", outer: "climb-dc" }),
+      entry: Object.freeze({
+        normal: "Athletics climb, then balance",
+        small: "Athletics climb, then balance",
+        topCheck: "balance"
+      })
     }),
     Object.freeze({
       id: "t-junction", kind: "t-junction", label: "T-junction · single owner",
@@ -356,8 +879,8 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
       access: Object.freeze({ top: "none", mainInner: "none", branchInner: "none" })
     }),
     Object.freeze({
-      id: "one-cell-stair", kind: "stair", label: "one-cell stair + landing",
-      at: Object.freeze({ x: 8.5, z: 8.6 }), width: 1, run: 1.5, rise: 0.5, steps: 3,
+      id: "one-cell-stair", kind: "stair", label: "5×5 stair · 5 ft maximum rise",
+      at: Object.freeze({ x: 11.2, z: 8.5 }), width: 1, run: 1, rise: 1, steps: 3,
       sockets: Object.freeze([
         Object.freeze({ id: "stair-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
         Object.freeze({ id: "stair-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
@@ -365,8 +888,26 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
       access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
     }),
     Object.freeze({
-      id: "wide-stair", kind: "stair", label: "wide stair + landing",
-      at: Object.freeze({ x: 10.5, z: 8.6 }), width: 2, run: 1.5, rise: 0.5, steps: 3,
+      id: "two-foot-stair", kind: "stair", label: "5×5 stair · 2 ft rise",
+      at: Object.freeze({ x: 8.2, z: 8.5 }), width: 1, run: 1, rise: 0.4, steps: 2,
+      sockets: Object.freeze([
+        Object.freeze({ id: "two-foot-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "two-foot-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "three-foot-stair", kind: "stair", label: "5×5 stair · 3 ft rise",
+      at: Object.freeze({ x: 9.7, z: 8.5 }), width: 1, run: 1, rise: 0.6, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "three-foot-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "three-foot-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "wide-stair", kind: "stair", label: "wide 5×5 stair · 5 ft rise",
+      at: Object.freeze({ x: 13.1, z: 8.5 }), width: 2, run: 1, rise: 1, steps: 3,
       sockets: Object.freeze([
         Object.freeze({ id: "wide-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
         Object.freeze({ id: "wide-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
@@ -374,8 +915,26 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
       access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
     }),
     Object.freeze({
+      id: "inside-corner-stair", kind: "stair-inner-corner", label: "inside-corner stair",
+      at: Object.freeze({ x: 8.3, z: 10.6 }), width: 1.35, run: 1.35, rise: 0.6, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "inside-corner-low", type: "walk-surface", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "inside-corner-high", type: "top-surface", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "outside-corner-stair", kind: "stair-outer-corner", label: "outside-corner stair",
+      at: Object.freeze({ x: 10.4, z: 10.6 }), width: 1.35, run: 1.35, rise: 0.6, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "outside-corner-low", type: "walk-surface", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "outside-corner-high", type: "top-surface", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
       id: "shallow-ramp", kind: "ramp", label: "shallow ramp · 26.565°",
-      at: Object.freeze({ x: 13, z: 8.6 }), width: 1.2, run: 1, rise: 0.5,
+      at: Object.freeze({ x: 13, z: 10.6 }), width: 1.2, run: 1, rise: 0.5,
       sockets: Object.freeze([
         Object.freeze({ id: "ramp-low", type: "terrain-join", axis: Object.freeze({ x: 0, z: 1 }) }),
         Object.freeze({ id: "ramp-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
@@ -384,7 +943,7 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
     }),
     Object.freeze({
       id: "half-height-blocker", kind: "blocker", label: "half-height blocker / parapet base",
-      at: Object.freeze({ x: 8.75, z: 11.8 }), axis: "x", length: 2.5, height: 0.5, thickness: 0.34,
+      at: Object.freeze({ x: 8.6, z: 12.5 }), axis: "x", length: 2.2, height: 0.5, thickness: 0.34,
       sockets: Object.freeze([
         Object.freeze({ id: "blocker-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
         Object.freeze({ id: "blocker-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
@@ -393,33 +952,43 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
     }),
     Object.freeze({
       id: "square-support", kind: "support-square", label: "square support",
-      at: Object.freeze({ x: 11.5, z: 11.8 }), width: 0.55, height: 2,
+      at: Object.freeze({ x: 10.8, z: 12.5 }), width: 0.55, height: 2,
       sockets: Object.freeze([
         Object.freeze({ id: "square-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
         Object.freeze({ id: "square-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
       ]),
-      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+      access: Object.freeze({ shaft: "climb-dc", top: "walk" }),
+      climbDC: 15,
+      entry: Object.freeze({
+        normal: "climb or exceptional jump, then balance",
+        small: "climb, then balance",
+        topCheck: "balance"
+      })
     }),
     Object.freeze({
       id: "round-support", kind: "support-round", label: "round support",
-      at: Object.freeze({ x: 13, z: 11.8 }), radius: 0.31, height: 2,
+      at: Object.freeze({ x: 12.4, z: 12.5 }), radius: 0.31, height: 2,
       sockets: Object.freeze([
         Object.freeze({ id: "round-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
         Object.freeze({ id: "round-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
       ]),
-      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+      access: Object.freeze({ shaft: "climb-dc", top: "walk" }),
+      climbDC: 15,
+      entry: Object.freeze({
+        normal: "climb or exceptional jump, then balance",
+        small: "climb, then balance",
+        topCheck: "balance"
+      })
     }),
-    /* Checkpoint 4 (2026-07-25) — THE ASSEMBLED EXAMPLE. The same generic atoms composed into one
-       legible construction against the shell's own raised terrace (tier +1, cells x1-3 z5-6): a
-       wide stair climbs the terrace exactly one 2.5-ft quantum (rise 0.5 = the grid law), a
-       half-height blocker stands on the terrace edge as a parapet base (lift = tier height), and
-       two square posts flank the approach. Nothing bespoke: every entry reuses an existing kind,
-       socket vocabulary, and access class — this is the "same pieces form a believable whole"
-       proof, not a new geometry family. `assembly: true` marks the group for the workbench lane. */
+    /* THE ASSEMBLED EXAMPLE. The shell's ordinary floor is already +0.5 world units above the site
+       datum and the raised terrace is +1.0; every lift below is therefore an absolute offset from
+       the fixture floor, not a tier ordinal. The terrace stair starts on +0.5 and lands on +1.0.
+       Its parapet sits on +1.0. A separate straight proof uses two adjacent ordinary 5x5 stair
+       atoms to reach an occupied 10-ft second floor; a three-cell L proof adds one turning landing. */
     Object.freeze({
       id: "assembly-approach-stair", kind: "stair", label: "ASSEMBLY · terrace stair",
-      assembly: true,
-      at: Object.freeze({ x: 2, z: 4.05 }), width: 2, run: 1.5, rise: 0.5, steps: 3,
+      assembly: true, lift: 0.5,
+      at: Object.freeze({ x: 2, z: 4 }), width: 2, run: 1, rise: 0.5, steps: 3,
       sockets: Object.freeze([
         Object.freeze({ id: "approach-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: -1 }) }),
         Object.freeze({ id: "approach-high", type: "top-surface", axis: Object.freeze({ x: 0, z: 1 }) })
@@ -428,34 +997,213 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
     }),
     Object.freeze({
       id: "assembly-parapet", kind: "blocker", label: "ASSEMBLY · terrace parapet base",
-      assembly: true, lift: 0.5,
-      at: Object.freeze({ x: 2, z: 5.95 }), axis: "x", length: 2.4, height: 0.4, thickness: 0.26,
+      assembly: true, lift: 1,
+      at: Object.freeze({ x: 2, z: 6.35 }), axis: "x", length: 2.7, height: 0.4, thickness: 0.26,
       sockets: Object.freeze([
         Object.freeze({ id: "parapet-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
         Object.freeze({ id: "parapet-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) }),
         Object.freeze({ id: "parapet-seat", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
       ]),
-      access: Object.freeze({ top: "climb-cost", faces: "none" })
+      access: Object.freeze({ top: "walk", faces: "climb-cost" }),
+      entry: Object.freeze({ normal: "balance", small: "walk", topCheck: "balance" })
     }),
     Object.freeze({
-      id: "assembly-post-west", kind: "support-square", label: "ASSEMBLY · approach post W",
-      assembly: true,
-      at: Object.freeze({ x: 0.95, z: 3.45 }), width: 0.45, height: 1.1,
+      id: "assembly-return-west", kind: "blocker", label: "ASSEMBLY · west corner return",
+      assembly: true, lift: 1,
+      at: Object.freeze({ x: 0.65, z: 5.4 }), axis: "z", length: 1.9, height: 0.4, thickness: 0.26,
+      sockets: Object.freeze([
+        Object.freeze({ id: "return-west-south", type: "butt-join-s", axis: Object.freeze({ x: 0, z: -1 }) }),
+        Object.freeze({ id: "return-west-north", type: "butt-join-n", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-cost" })
+    }),
+    Object.freeze({
+      id: "assembly-return-east", kind: "blocker", label: "ASSEMBLY · east corner return",
+      assembly: true, lift: 1,
+      at: Object.freeze({ x: 3.35, z: 5.4 }), axis: "z", length: 1.9, height: 0.4, thickness: 0.26,
+      sockets: Object.freeze([
+        Object.freeze({ id: "return-east-south", type: "butt-join-s", axis: Object.freeze({ x: 0, z: -1 }) }),
+        Object.freeze({ id: "return-east-north", type: "butt-join-n", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-cost" })
+    }),
+    Object.freeze({
+      id: "assembly-post-west", kind: "support-square", label: "terrace post W · diagnostic",
+      assembly: false, lift: 0.5,
+      at: Object.freeze({ x: 0.75, z: 4.55 }), width: 0.45, height: 1.1,
       sockets: Object.freeze([
         Object.freeze({ id: "post-w-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
         Object.freeze({ id: "post-w-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
       ]),
-      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+      access: Object.freeze({ shaft: "climb-dc", top: "walk" }),
+      climbDC: 12,
+      entry: Object.freeze({ normal: "climb, then balance", small: "climb, then balance", topCheck: "balance" })
     }),
     Object.freeze({
-      id: "assembly-post-east", kind: "support-square", label: "ASSEMBLY · approach post E",
-      assembly: true,
-      at: Object.freeze({ x: 3.05, z: 3.45 }), width: 0.45, height: 1.1,
+      id: "assembly-post-east", kind: "support-square", label: "terrace post E · diagnostic",
+      assembly: false, lift: 0.5,
+      at: Object.freeze({ x: 3.25, z: 4.55 }), width: 0.45, height: 1.1,
       sockets: Object.freeze([
         Object.freeze({ id: "post-e-floor", type: "floor-mount", axis: Object.freeze({ x: 0, z: 0 }) }),
         Object.freeze({ id: "post-e-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
       ]),
-      access: Object.freeze({ shaft: "climb-dc", top: "none" })
+      access: Object.freeze({ shaft: "climb-dc", top: "walk" }),
+      climbDC: 12,
+      entry: Object.freeze({ normal: "climb, then balance", small: "climb, then balance", topCheck: "balance" })
+    }),
+    Object.freeze({
+      id: "assembly-story-lower-stair", kind: "stair", label: "ASSEMBLY · storey stair 1 of 2",
+      assembly: true,
+      proofFamily: "straight-storey",
+      direction: -1,
+      at: Object.freeze({ x: 10, z: 10 }), width: 1, run: 1, rise: 1, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "story-lower-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "story-lower-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-story-landing", kind: "platform", label: "DIAGNOSTIC · optional 5 ft landing",
+      assembly: false, lift: 1,
+      at: Object.freeze({ x: 13, z: 10 }), width: 1, depth: 1, thickness: 0.18,
+      sockets: Object.freeze([
+        Object.freeze({ id: "story-landing-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "story-landing-high", type: "walk-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-cost" })
+    }),
+    Object.freeze({
+      id: "assembly-story-upper-stair", kind: "stair", label: "ASSEMBLY · storey stair 2 of 2",
+      assembly: true, proofFamily: "straight-storey", lift: 1, direction: -1,
+      at: Object.freeze({ x: 10, z: 9 }), width: 1, run: 1, rise: 1, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "story-upper-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "story-upper-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-second-floor", kind: "platform", label: "ASSEMBLY · occupied second floor",
+      assembly: true, proofFamily: "straight-storey", lift: 2,
+      at: Object.freeze({ x: 10, z: 7.5 }), width: 3, depth: 2, thickness: 0.2,
+      sockets: Object.freeze([
+        Object.freeze({ id: "second-floor-entry", type: "walk-surface", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "second-floor-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-dc" }),
+      climbDC: 15,
+      entry: Object.freeze({ normal: "two stair units or Athletics climb", small: "two stair units or Athletics climb", topCheck: "none" })
+    }),
+    Object.freeze({
+      id: "l-storey-lower-stair", kind: "stair", label: "L STOREY · lower flight",
+      assembly: false, proofFamily: "l-storey", direction: -1,
+      at: Object.freeze({ x: 13, z: 11 }), width: 1, run: 1, rise: 1, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "l-storey-lower-low", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "l-storey-lower-high", type: "top-surface", axis: Object.freeze({ x: 0, z: -1 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "l-storey-landing", kind: "platform", label: "L STOREY · turning landing",
+      assembly: false, proofFamily: "l-storey", lift: 1,
+      at: Object.freeze({ x: 13, z: 10 }), width: 1, depth: 1, thickness: 0.18,
+      sockets: Object.freeze([
+        Object.freeze({ id: "l-storey-landing-south", type: "walk-surface", axis: Object.freeze({ x: 0, z: 1 }) }),
+        Object.freeze({ id: "l-storey-landing-west", type: "walk-surface", axis: Object.freeze({ x: -1, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-cost" })
+    }),
+    Object.freeze({
+      id: "l-storey-upper-stair", kind: "stair", label: "L STOREY · upper turning flight",
+      assembly: false, proofFamily: "l-storey", lift: 1, axis: "x", direction: -1,
+      at: Object.freeze({ x: 12, z: 10 }), width: 1, run: 1, rise: 1, steps: 3,
+      sockets: Object.freeze([
+        Object.freeze({ id: "l-storey-upper-low", type: "walk-surface", axis: Object.freeze({ x: 1, z: 0 }) }),
+        Object.freeze({ id: "l-storey-upper-high", type: "top-surface", axis: Object.freeze({ x: -1, z: 0 }) })
+      ]),
+      access: Object.freeze({ treads: "walk", sides: "climb-cost", underside: "none" })
+    }),
+    Object.freeze({
+      id: "l-storey-second-floor", kind: "platform", label: "L STOREY · occupied second floor",
+      assembly: false, proofFamily: "l-storey", lift: 2,
+      at: Object.freeze({ x: 10.5, z: 10 }), width: 2, depth: 2, thickness: 0.2,
+      sockets: Object.freeze([
+        Object.freeze({ id: "l-storey-deck-east", type: "walk-surface", axis: Object.freeze({ x: 1, z: 0 }) }),
+        Object.freeze({ id: "l-storey-deck-top", type: "top-surface", axis: Object.freeze({ x: 0, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-dc" }),
+      climbDC: 15,
+      entry: Object.freeze({ normal: "two flights plus turning landing", small: "two flights plus turning landing", topCheck: "none" })
+    }),
+    Object.freeze({
+      id: "assembly-workroom-back-west", kind: "wall-run", label: "ASSEMBLY · workroom back wall W",
+      assembly: true,
+      at: Object.freeze({ x: 9, z: 8.5 }), axis: "x", length: 1, height: 2, thickness: 0.22,
+      sockets: Object.freeze([
+        Object.freeze({ id: "workroom-back-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "workroom-back-door-w", type: "open", axis: Object.freeze({ x: 1, z: 0 }) })
+      ]),
+      climbDC: 15,
+      access: Object.freeze({ top: "walk", inner: "climb-dc", outer: "climb-dc" }),
+      entry: Object.freeze({ normal: "Athletics climb, then balance", small: "Athletics climb, then balance", topCheck: "balance" })
+    }),
+    Object.freeze({
+      id: "assembly-workroom-back-east", kind: "wall-run", label: "ASSEMBLY · workroom back wall E",
+      assembly: true,
+      at: Object.freeze({ x: 11, z: 8.5 }), axis: "x", length: 1, height: 2, thickness: 0.22,
+      sockets: Object.freeze([
+        Object.freeze({ id: "workroom-back-door-e", type: "open", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "workroom-back-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) })
+      ]),
+      climbDC: 15,
+      access: Object.freeze({ top: "walk", inner: "climb-dc", outer: "climb-dc" }),
+      entry: Object.freeze({ normal: "Athletics climb, then balance", small: "Athletics climb, then balance", topCheck: "balance" })
+    }),
+    Object.freeze({
+      id: "assembly-workroom-west", kind: "wall-run", label: "ASSEMBLY · workroom west wall",
+      assembly: true,
+      at: Object.freeze({ x: 8.5, z: 7.5 }), axis: "z", length: 2, height: 2, thickness: 0.22,
+      sockets: Object.freeze([
+        Object.freeze({ id: "workroom-west-south", type: "butt-join-s", axis: Object.freeze({ x: 0, z: -1 }) }),
+        Object.freeze({ id: "workroom-west-north", type: "butt-join-n", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      climbDC: 15,
+      access: Object.freeze({ top: "walk", inner: "climb-dc", outer: "climb-dc" }),
+      entry: Object.freeze({ normal: "Athletics climb, then balance", small: "Athletics climb, then balance", topCheck: "balance" })
+    }),
+    Object.freeze({
+      id: "assembly-workroom-east", kind: "wall-run", label: "ASSEMBLY · workroom east wall",
+      assembly: true,
+      at: Object.freeze({ x: 11.5, z: 7.5 }), axis: "z", length: 2, height: 2, thickness: 0.22,
+      sockets: Object.freeze([
+        Object.freeze({ id: "workroom-east-south", type: "butt-join-s", axis: Object.freeze({ x: 0, z: -1 }) }),
+        Object.freeze({ id: "workroom-east-north", type: "butt-join-n", axis: Object.freeze({ x: 0, z: 1 }) })
+      ]),
+      climbDC: 15,
+      access: Object.freeze({ top: "walk", inner: "climb-dc", outer: "climb-dc" }),
+      entry: Object.freeze({ normal: "Athletics climb, then balance", small: "Athletics climb, then balance", topCheck: "balance" })
+    }),
+    Object.freeze({
+      id: "assembly-second-parapet-west", kind: "blocker", label: "ASSEMBLY · second-floor parapet W",
+      assembly: true, lift: 2,
+      at: Object.freeze({ x: 8.95, z: 8.35 }), axis: "x", length: 0.8, height: 0.4, thickness: 0.26,
+      sockets: Object.freeze([
+        Object.freeze({ id: "second-parapet-west", type: "butt-join-w", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "second-parapet-door-w", type: "open", axis: Object.freeze({ x: 1, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-cost" })
+    }),
+    Object.freeze({
+      id: "assembly-second-parapet-east", kind: "blocker", label: "ASSEMBLY · second-floor parapet E",
+      assembly: true, lift: 2,
+      at: Object.freeze({ x: 11.05, z: 8.35 }), axis: "x", length: 0.8, height: 0.4, thickness: 0.26,
+      sockets: Object.freeze([
+        Object.freeze({ id: "second-parapet-door-e", type: "open", axis: Object.freeze({ x: -1, z: 0 }) }),
+        Object.freeze({ id: "second-parapet-east", type: "butt-join-e", axis: Object.freeze({ x: 1, z: 0 }) })
+      ]),
+      access: Object.freeze({ top: "walk", faces: "climb-cost" })
     })
   ]),
   opening: Object.freeze({
@@ -485,6 +1233,55 @@ var CLAY_STRUCTURE_BENCH_FIXTURE = Object.freeze({
     expectedReason: "socket-axis-mismatch"
   })
 });
+
+/* CL-R3 ACCESS RESOLUTION. Geometry and selection stay renderer-owned, but the check is a pure,
+   deterministic rule answer. Like TacticalQueryKernel's uncertain traversals, the caller supplies
+   the player's open d20; this function never rolls or reads mutable world state. */
+function clayStructureClimbResolve(target, input){
+  input = input || {};
+  var law = CLAY_STRUCTURE_KIT_CATALOG.climbLaw;
+  var access = target && target.access || {};
+  var climbClass = access.shaft || access.faces || access.inner || access.outer || null;
+  if(climbClass !== "climb-dc"){
+    return Object.freeze({
+      ok: false,
+      reason: climbClass === "climb-cost" ? "climb-cost-no-check" : "target-not-check-climbable"
+    });
+  }
+  if(!Number.isInteger(input.d20) || input.d20 < 1 || input.d20 > 20){
+    return Object.freeze({
+      ok: false,
+      reason: "player-d20-required",
+      min: 1,
+      max: 20
+    });
+  }
+  var dc = Number.isFinite(Number(target.climbDC)) ? Number(target.climbDC) : law.defaultDc;
+  var modifier = Number.isFinite(Number(input.athleticsModifier))
+    ? Number(input.athleticsModifier)
+    : law.defaultAthleticsModifier;
+  var total = input.d20 + modifier;
+  var passed = total >= dc;
+  var missBy = passed ? 0 : dc - total;
+  var severe = !passed && missBy >= law.severeFailureMargin;
+  return Object.freeze({
+    ok: true,
+    targetId: String(target.id || "climb-target"),
+    skill: "athletics",
+    d20: input.d20,
+    modifier: modifier,
+    total: total,
+    dc: dc,
+    passed: passed,
+    outcome: passed ? "perched" : (severe ? "fell" : "lost-grip"),
+    fall: severe,
+    prone: severe,
+    fallFeet: severe ? 10 : 0,
+    damage: severe ? law.tenFootFallDamage : "none",
+    movementWasted: !passed,
+    balanceRequired: passed && !!(target.entry && target.entry.topCheck === "balance")
+  });
+}
 
 /* The wall-omission latch is scene truth, not door-angle truth. The C1B connection state machine
    supplies door-state events, but those events deliberately preserve this latch: opening a door
@@ -706,7 +1503,17 @@ function clayRoomRecordFrom(seed){
 
   // The real production crate blocks the center line. East and west detours are both lawful; the
   // west shoulder is difficult terrain, making the two route receipts materially different.
-  var object = Object.freeze({ id: "obj-crate-c1a", kind: "crate", cell: clayCellId(6, 7) });
+  var object = Object.freeze({
+    id: "obj-crate-c1a",
+    kind: "crate",
+    cell: clayCellId(6, 7),
+    access: Object.freeze({
+      top: "walk",
+      faces: "climb-cost",
+      smallEntry: "relaxed step/clamber",
+      normalEntry: "ordinary climb"
+    })
+  });
 
   // Citizen: another distinct interior cell.
   var bodyForm = clayGoblinBodyForm();

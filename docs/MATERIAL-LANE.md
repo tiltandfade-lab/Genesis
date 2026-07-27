@@ -8,6 +8,13 @@ MATERIAL-IDENTITY reconciled, NEXT-STEPS registered, charter §5 adoption entry 
 authoring handoff is `docs/CODEX-MATERIAL-BRIEF.md`. Stage A is open now (dev tooling/offline
 authoring); Stage B queues behind the visual-proof track (C1I window) per §6.
 
+**2026-07-27 implementation note.** Adam approved both CL-R4b masonry parents. The CL-R5/CL-F05
+candidate now proves their composition with the deterministically packed B06 Institutional and
+Upland `h6-v1` trim atlases in two matched complete cutaway rooms. This is an integration proof,
+not wholesale production promotion: exact body/trim routing, repeat-safe slot sampling, ORM/UV1,
+geometry-owned relief, all-top grid projection, and the stair/platform layout invariant are live;
+the composed visual verdict remains open.
+
 Provenance: authored 2026-07-23 from the Material Maker crash investigation + Adam's design
 consult (this session). All rulings quoted below with dates are Adam's.
 
@@ -169,6 +176,11 @@ obsidian, crystal; etc.).
 Coverage requirement at close: every realm's floor+wall+trim mappable from PASS-ruled
 materials; every existing recipe key covered 1:1.
 
+**White-brick scale lock (Adam, 2026-07-26).** The source scale currently carried by
+`wall-ashlar-dressed-selected-v001.png` is the accepted reference scale for the future white-brick
+parent. Preserve that unit-to-mortar relationship when its palette is authored. This is a scale
+acceptance only: the current ashlar palette remains taste-pending and is not a production promotion.
+
 ---
 
 ## 4. Stage B — engine implementation ladder (after taste approval only)
@@ -187,8 +199,11 @@ materials; every existing recipe key covered 1:1.
 4. **Render scale becomes a first-class quality setting** (auto-defaulted per machine; DPR
    1–1.25 expected on the gate machine). Protected-core renderer change — rides with the
    experiment, never hot-patched.
-5. **Trim GL-wiring** (already owed — trim textures registered but not wired) using
-   PASS-ruled trim-sheet content per TRIM-SHEET-PIPELINE.
+5. **Trim GL-wiring** using PASS-ruled trim-sheet content per TRIM-SHEET-PIPELINE.
+   **CL-F05 candidate built 2026-07-27:** Institutional + Upland B06 `h6-v1` basecolor/normal/ORM
+   are live on repeat-segmented, band-clamped trim faces with geometry-owned profile cores and
+   body/trim-independent fallback modes. Production promotion still waits on the composed visual
+   verdict.
 6. **envMap + metalness** only when chrome earns it (one shared low-res PMREM per realm).
 7. Asset convention: `assets/materials/<slug>/{albedo,normal,orm}.png` + a generated
    manifest keyed by slug; `assets/textures-psx/` naming retired as it's superseded.

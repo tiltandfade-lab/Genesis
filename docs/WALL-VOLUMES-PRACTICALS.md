@@ -86,9 +86,12 @@ end `RESULT: OK`; **never** run `dev/verify-bridge.py`. World-unit convention: *
 - **Runtime A4 occlusion machinery** (currently runs only on the per-cell `wallList`, NOT the shell):
   `itrOcclusionClassify(id, rawBlocking, holdPrior)` **:7869-7904** (pure hysteresis decision
   `itrOcclusionNextCommitted` **:7856**; opacity tween mutates `entry.materials.forEach(m=>m.opacity=v)`
-  **:7890-7895**). Tunables: `ITR_OCCLUSION_STEM_HEIGHT_U=0.18` **:7744**, `ITR_OCCLUSION_UPPER_OPACITY=0.08`
+  **:7890-7895**). Tunables: `ITR_OCCLUSION_STEM_HEIGHT_U=0.20` (exactly one foot),
+  `ITR_OCCLUSION_UPPER_OPACITY=0.08`
   **:7783**, fade `150/220ms` **:7785-7786**, `ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG=3` **:7787**. This
-  classify/tween engine is REUSABLE as-is by C4.1b.
+  classify/tween engine is REUSABLE as-is by C4.1b. **Superseded 2026-07-26:** every cutaway path
+  now uses an exact 0.20u / one-foot total stub; compiled volume walls express that as a 0.14u body
+  plus the existing 0.06u cap.
 - ShotPlan occlusion targets: `S.lastShotPlan.occlusionTargets` read **:8345**; produced by
   `occlusionTargetsFromTray(tray)` `theater-shot.js:386-392` as **positions only** `{id,kind,x,z}`.
   `penaltyHardOcclusionArea(...)` is a **stub returning 0** `theater-shot.js:647` — no ray/segment test
@@ -180,7 +183,7 @@ Extend the opts contract on `compileRoomShellData`/`compileRoomShell` (defaults 
 
 ```js
 opts.wallThickness        // number, inward extrusion depth (0.22). realm/material profile 0.15–0.32.
-opts.wallStemHeight       // number, persistent capped-stem body height (0.28). 0.22–0.40.
+opts.wallStemHeight       // number, persistent stub BODY height (0.14).
 opts.wallCapHeight        // number, top-cap slab thickness (0.06).
 opts.wallCapOverhang      // number, cap projection past each face per side (0.035). 0.025–0.06.
 opts.wallFooting          // number, base-course projection past the outer face (0.06). 0.04–0.10.
@@ -189,6 +192,10 @@ opts.upperVisibleForSegment// OPTIONAL (segMeta)->bool. default ()=>true. replac
                            //   override: when it returns false, that segment emits stem+cap+footing
                            //   only (no upper) — the capped tray edge. Pure module: no camera concept.
 ```
+
+Current cutaway invariant (Adam, 2026-07-26): `wallStemHeight + wallCapHeight === 0.20u`, exactly
+one foot at the Clayroom scale. This is no longer a proportional parapet or a tunable 0.22–0.40u
+range.
 
 Keep `wallHeightForSegment` accepted for back-compat but deprecate its use for the parapet cut; the
 near/far decision now flows through `upperVisibleForSegment` (a boolean, not a height fraction), so

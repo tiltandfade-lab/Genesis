@@ -24,6 +24,8 @@ const LABEL = process.argv[3] || "capture";
 const PORT = process.argv[4] || "5176";
 const EXTRA = process.argv[5] || "";
 const LIGHT_RECIPE_ID = process.argv[6] || "";
+const MATERIAL_MODE = new URLSearchParams(EXTRA).get("materialmode") || "";
+const TRIM_MODE = new URLSearchParams(EXTRA).get("trimmode") || "";
 if (!OUT) { console.error("usage: node dev/capture-clayroom-fixture.cjs <outDir> <label> [port] [extraQuery] [lightRecipeId]"); process.exit(2); }
 const BASE = "http://127.0.0.1:" + PORT;
 fs.mkdirSync(OUT, { recursive: true });
@@ -62,6 +64,11 @@ function pageProbe() {
     } : null,
     lightRecipe: T._clayLightingRecipeForTest ? T._clayLightingRecipeForTest() : null,
     lightingBench: T._clayLightingBenchForTest ? T._clayLightingBenchForTest() : null,
+    materialBench: T._clayMaterialBenchForTest ? T._clayMaterialBenchForTest() : null,
+    trimBench: T._clayTrimBenchForTest ? T._clayTrimBenchForTest() : null,
+    structureBench: T._clayStructureBenchForTest ? T._clayStructureBenchForTest() : null,
+    traversabilityGrid: T._clayTraversabilityGridForTest
+      ? T._clayTraversabilityGridForTest() : null,
     lightLock: (typeof LIGHT_PROFILE_LOCKS_COMPILED !== "undefined")
       ? { id: LIGHT_PROFILE_LOCKS_COMPILED.id, version: LIGHT_PROFILE_LOCKS_COMPILED.version,
           schemaVersion: LIGHT_PROFILE_LOCKS_COMPILED.schemaVersion }
@@ -119,9 +126,25 @@ function pageProbe() {
   const url = BASE + "/genesis.html?clayroom=1" + (EXTRA ? "&" + EXTRA : "");
   await page.goto(url, { waitUntil: "load", timeout: 60000 });
   await page.waitForFunction(
-    () => document.querySelector("canvas") && /renderer size/.test(document.body.innerText),
+    () => document.querySelector("canvas") && document.getElementById("clay-room-overlay"),
     { timeout: 30000 }
   );
+  if (MATERIAL_MODE) {
+    const applied = await page.evaluate((mode) => {
+      return !!(window.Theater && window.Theater._claySetMaterialModeForTest
+        && window.Theater._claySetMaterialModeForTest(mode));
+    }, MATERIAL_MODE);
+    if (!applied) throw new Error("could not apply material mode " + MATERIAL_MODE);
+    await new Promise((r) => setTimeout(r, 350));
+  }
+  if (TRIM_MODE) {
+    const applied = await page.evaluate((mode) => {
+      return !!(window.Theater && window.Theater._claySetTrimModeForTest
+        && window.Theater._claySetTrimModeForTest(mode));
+    }, TRIM_MODE);
+    if (!applied) throw new Error("could not apply trim mode " + TRIM_MODE);
+    await new Promise((r) => setTimeout(r, 350));
+  }
   if (LIGHT_RECIPE_ID) {
     const applied = await page.evaluate((id) => {
       return !!(window.Theater && window.Theater._claySetLightingRecipeForTest
@@ -160,12 +183,42 @@ function pageProbe() {
   await page.evaluate(() => {
     const p = document.getElementById("clay-room-overlay");
     if (p) p.style.display = "none";
+    const ids = [
+      "clay-room-workbench-topbar",
+      "clay-room-workbench-catalog",
+      "clay-room-workbench-scene",
+      "clay-room-workbench-viewport"
+    ];
+    window.__clayCaptureChromeStyles = {};
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) window.__clayCaptureChromeStyles[id] = el.getAttribute("style") || "";
+    });
+    ["clay-room-workbench-topbar", "clay-room-workbench-catalog", "clay-room-workbench-scene"]
+      .forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+      });
+    const viewport = document.getElementById("clay-room-workbench-viewport");
+    if (viewport) {
+      viewport.style.left = "0";
+      viewport.style.right = "0";
+      viewport.style.top = "0";
+      viewport.style.bottom = "0";
+    }
+    window.dispatchEvent(new Event("resize"));
   });
-  await new Promise((r) => setTimeout(r, 300));
+  await new Promise((r) => setTimeout(r, 500));
   await page.screenshot({ path: path.join(OUT, LABEL + "-04-clean-no-overlay.png") });
   await page.evaluate(() => {
     const p = document.getElementById("clay-room-overlay");
     if (p) p.style.display = "";
+    Object.entries(window.__clayCaptureChromeStyles || {}).forEach(([id, style]) => {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute("style", style);
+    });
+    window.__clayCaptureChromeStyles = null;
+    window.dispatchEvent(new Event("resize"));
   });
   await new Promise((r) => setTimeout(r, 200));
 
@@ -180,6 +233,8 @@ function pageProbe() {
   const receipt = {
     label: LABEL,
     requestedLightRecipeId: LIGHT_RECIPE_ID || "clay-opposing-pair",
+    requestedMaterialMode: MATERIAL_MODE || null,
+    requestedTrimMode: TRIM_MODE || null,
     captureTab: LIGHT_RECIPE_ID ? "Lights (movement overlays cleared)" : "default workbench tab",
     capturedBy: "dev/capture-clayroom-fixture.cjs",
     url,
@@ -205,4 +260,5 @@ function pageProbe() {
     "texturedSurfaces early=" + early.texturedSurfaceCount + " settled=" + settled.texturedSurfaceCount,
     "boardBuilds=" + (settled.stats && settled.stats.boardBuilds),
     "consoleErrors=" + consoleErrors.length);
+  process.exit(0);
 })().catch((e) => { console.error("CAPTURE_FAILED", e.message); process.exit(1); });

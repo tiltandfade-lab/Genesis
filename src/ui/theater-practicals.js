@@ -440,7 +440,12 @@ function interiorBuildFixtureGroup(light){
   // Guarded because the vm-extraction verify harnesses (verify-theater-light-props / -visible-practicals /
   // -bw3-4-light-shafts / -e0-1-fixture-fade, the whole fixture cluster) run this code against a stubbed
   // THREE whose Mesh has no `.layers` — a real THREE.Mesh always does, so this is a pure no-op in production.
-  if(emitter.layers) emitter.layers.enable(BLOOM_LAYER);
+  // The Clayroom torch's distant, sub-pixel cone was being upsampled by the coarse bloom mask into
+  // a bright square card even though no card geometry existed. Keep the real emissive flame in the
+  // beauty pass and the co-located shadow-casting PointLight, but do not feed this tiny source into
+  // the masked blur. Larger fixture families retain the existing bloom punctuation.
+  if(emitter.layers && fixtureId !== "sconce-torch-clay") emitter.layers.enable(BLOOM_LAYER);
+  emitter.userData.bloomSuppressed = fixtureId === "sconce-torch-clay";
   emitter.position.set(el.x || 0, el.y || 0, el.z || 0);
   emitter.castShadow = false; emitter.receiveShadow = false; // a fixture's own flame/bulb never shadows itself, same discipline the old glow disc/nub kept
   group.add(emitter);

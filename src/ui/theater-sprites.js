@@ -592,6 +592,18 @@ function updateSpriteBillboardYaw(){
     const viewOffset = Number.isFinite(fig.userData.claySpriteViewYawOffset)
       ? fig.userData.claySpriteViewYawOffset : 0;
     fig.rotation.y = facing + kilterRad + viewOffset;
+    // CL-R3 stair parking: the billboard may continue facing the camera while its physical plinth
+    // holds a stable world yaw across a narrow tread. Counter-rotate only the base child inside the
+    // billboard group; collision/contact math reads the same world yaw from claySupportWorldYaw.
+    if(Number.isFinite(fig.userData.claySupportWorldYaw) && fig.children){
+      for(let i = 0; i < fig.children.length; i++){
+        const child = fig.children[i];
+        if(child && child.userData && child.userData.standeeBase){
+          child.rotation.order = "YXZ";
+          child.rotation.y = fig.userData.claySupportWorldYaw - fig.rotation.y;
+        }
+      }
+    }
     const wrap = fig.userData.standeeWrap;
     if(wrap){
       wrap.rotation.order = "YXZ";

@@ -1,0 +1,149 @@
+{
+  "gate": "CL-R3",
+  "fixture": "CL-F01",
+  "sourceReceipt": "cl-r3-structure-bench-receipt.json",
+  "measuredAt": "2026-07-27T01:47:03.632Z",
+  "values": {
+    "floorCells": 32,
+    "tiers": [
+      -1,
+      0,
+      1
+    ],
+    "wallSegments": 11,
+    "riserSegments": 3,
+    "polygonKernel": "oss",
+    "foundationRuns": 9,
+    "foundationCorners": 11,
+    "wallJunctions": 5,
+    "cutawayReturns": 4,
+    "adaptiveStairRisesFeet": [
+      5,
+      2,
+      3,
+      5
+    ],
+    "straightStoreyFootprintCells": 2,
+    "lStoreyFootprintCells": 3,
+    "lStoreyTurnDeg": 90,
+    "stairParking": {
+      "ok": true,
+      "version": 1,
+      "specId": "assembly-story-lower-stair",
+      "stepIndex": 1,
+      "stepCount": 3,
+      "axis": "z",
+      "direction": -1,
+      "surfaceY": 0.39167,
+      "targetWorld": {
+        "x": 3,
+        "y": 0.49967,
+        "z": 3
+      },
+      "supportWorldYawDeg": 0,
+      "tread": {
+        "along": 0.37333,
+        "cross": 1,
+        "logicalDepth": 0.33333
+      },
+      "support": {
+        "along": 0.33333,
+        "cross": 0.70811,
+        "alongMargin": 0.02,
+        "crossMargin": 0.14594,
+        "baseBottomClearance": 0.006
+      },
+      "centered": true,
+      "baseBottomOnSurface": true,
+      "balanced": true,
+      "clipsTreadEdge": false
+    },
+    "apertures": 1,
+    "omittedUpperSegments": 5,
+    "strategicBuiltUpperSegments": 11,
+    "rampDegrees": 26.565,
+    "mountedMeshes": 690,
+    "shadowCasters": 122,
+    "shadowReceivers": 127,
+    "shadowContact": {
+      "rendererFilter": "pcf",
+      "frontFaceShadowCasters": 122,
+      "automaticShadowCasters": 0,
+      "directionalLights": [
+        {
+          "id": "sun-key",
+          "bias": -0.001,
+          "normalBias": 0,
+          "mapSize": [
+            2048,
+            2048
+          ]
+        }
+      ]
+    },
+    "traversabilityGrid": {
+      "contract": "every-flat-or-traversable-surface",
+      "hostFloorCells": 225,
+      "shellFloorCells": 32,
+      "stairTreads": 9,
+      "walkableTops": 10,
+      "rampSurfaces": 0,
+      "crateTops": 0,
+      "roundTops": 0,
+      "uniqueSegments": 661
+    },
+    "moodPairs": [
+      {
+        "pairId": "daylit+dawn-violet",
+        "combinedMoodIntensity": 0.16,
+        "sourceRetained": true,
+        "moodCastsShadow": false
+      },
+      {
+        "pairId": "moonlit+crypt-violet",
+        "combinedMoodIntensity": 0.14,
+        "sourceRetained": true,
+        "moodCastsShadow": false
+      },
+      {
+        "pairId": "torchlit+dungeon-cold",
+        "combinedMoodIntensity": 0.76,
+        "sourceRetained": true,
+        "moodCastsShadow": false
+      },
+      {
+        "pairId": "fungal-glow+spore-haze",
+        "combinedMoodIntensity": 0.68,
+        "sourceRetained": true,
+        "moodCastsShadow": false
+      }
+    ],
+    "dynamicCutawayCandidates": 68
+  },
+  "checks": {
+    "fixture": true,
+    "cells": true,
+    "elevations": true,
+    "construction": true,
+    "adaptiveStairs": true,
+    "balancedStairParking": true,
+    "standableSupports": true,
+    "slope": true,
+    "joinFailure": true,
+    "shadows": true,
+    "shadowContact": true,
+    "ownership": true,
+    "provenance": true,
+    "dynamicCutaway": true,
+    "stagedLatch": true,
+    "rawDoorDoesNotStage": true,
+    "explicitRestaging": true,
+    "strategicAllWalls": true,
+    "omissionCarveouts": true,
+    "climbMechanics": true,
+    "traversabilityGrid": true,
+    "sourcePlusMood": true,
+    "console": true
+  },
+  "failed": []
+}

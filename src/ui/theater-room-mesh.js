@@ -143,8 +143,12 @@ const DEFAULT_RADIAL_SMOOTH_BLEND = 0.88;
 // PURE (no camera/THREE concept below this line — the near/far show-or-hide decision is a caller-
 // supplied BOOLEAN predicate, `opts.upperVisibleForSegment`, never computed here).
 const DEFAULT_WALL_THICKNESS = 0.22;      // 0.15-0.32 realm/material band
-const DEFAULT_WALL_STEM_HEIGHT = 0.28;    // 0.22-0.40 band — the persistent capped-stem body height
 const DEFAULT_WALL_CAP_HEIGHT = 0.06;     // top-cap slab thickness
+// Cutaway wall truth: body + cap reaches exactly 0.2u = one foot at the canonical 5 ft/world-unit
+// scale. The upper volume begins inside the cap band, so full walls stay continuous while a hidden
+// upper leaves a readable one-foot plan stub instead of an absent wall.
+const DEFAULT_CUTAWAY_STUB_HEIGHT = 0.2;
+const DEFAULT_WALL_STEM_HEIGHT = DEFAULT_CUTAWAY_STUB_HEIGHT - DEFAULT_WALL_CAP_HEIGHT;
 const DEFAULT_WALL_CAP_OVERHANG = 0.035;  // 0.025-0.06 band — cap projection past each face per side
 const DEFAULT_WALL_FOOTING = 0.06;        // 0.04-0.10 band — base-course projection past the outer face
 const DEFAULT_WALL_MOUNT_EYE_HEIGHT = 1.4; // world Y of a default inner-face mount slot ("eye-height band")

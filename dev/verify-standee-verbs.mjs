@@ -229,6 +229,21 @@ function sampleAt(tween, t) {
   check("A5c. move-step ends AT the target position (persist:true — no snap-back)",
     Math.abs(standee.group.position.x - 3) < 1e-9 && Math.abs(standee.group.position.z - 4) < 1e-9,
     JSON.stringify(standee.group.position));
+
+  const verticalCtx = stubCtx();
+  bindStandeeCtx(verticalCtx);
+  const climber = makeStubStandee("climber");
+  climber.group.position.set(0, 0, 0);
+  playStandeeVerb(climber.group, "move-step", { targetPos: { x: 0, y: 2, z: 0 } });
+  sampleAt(verticalCtx.tweens[0], 0.5);
+  check("A5d. elevation traversal interpolates target Y plus the same hop arc",
+    Math.abs(climber.group.position.y - 1.15) < 1e-9,
+    JSON.stringify(climber.group.position));
+  sampleAt(verticalCtx.tweens[0], 1);
+  verticalCtx.tweens[0].onDone();
+  check("A5e. elevation traversal settles on the target height",
+    Math.abs(climber.group.position.y - 2) < 1e-9,
+    JSON.stringify(climber.group.position));
 }
 
 // ----------------------------------------------------------------------------

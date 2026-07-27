@@ -271,7 +271,9 @@ function itrFurnitureOcclusionMask(furniture, cx, cz, floorTopMap, cameraPos, si
 // wallHeightBase are kept as function-signature/name fossils for the existing harness seam; the
 // returned height no longer actually depends on either.
 const ITR_PILLAR_STUB_FRAC = 0.12;
-const ITR_OCCLUSION_STEM_HEIGHT_U = 0.18; // A4: named const, 0.12-0.25u band — Adam dials from the re-shoot.
+// Adam's 2026-07-26 cutaway ruling: an occluding wall remains legible as an exact one-foot stub.
+// One world unit is five feet, so every dynamic wall/pillar split retains 0.2u of solid geometry.
+const ITR_OCCLUSION_STEM_HEIGHT_U = 0.2;
 function itrPillarStubHeight(wallHeightBase){
   return ITR_OCCLUSION_STEM_HEIGHT_U;
 }

@@ -4,7 +4,9 @@ status: SPECCED — CL-R0 BUILT (2026-07-23); CL-R1 engineering/visual-review ca
   (2026-07-24), close torch brightness accepted and smooth decay-1.5 flame review live; dedicated
   CL-F02 bench + overlays + live pixel cards + seven-recipe capture built, visual verdict pending;
   CL-R2 engineering/visual-review candidate BUILT (2026-07-24), visual verdict pending; CL-R3
-  engineering/visual-review candidate BUILT (2026-07-25), visual verdict pending; CL-R4…CL-R6 remain
+  engineering/visual-review candidate BUILT (2026-07-25), visual verdict pending; CL-R4b matched
+  two-parent integration bench BUILT and both parents approved (2026-07-27); CL-R5 matched complete
+  trimmed-structure bench BUILT (2026-07-27), visual verdict pending; CL-R6 remains
 created: 2026-07-23
 owner: this file (the single owning specification for the Clayroom reset/proof ladder)
 authority: subordinate to `procedural-dungeon-direction/CLAY-PROOF-LADDER.md` (clay-pass ids) and
@@ -86,8 +88,8 @@ primary question.
 | `CL-F01 structure-bench` | Do generic construction atoms join and terminate correctly? | runs, corners, ends, openings, tiers, risers, connectors, blocker | **BUILT; VISUAL VERDICT PENDING (CL-R3)**. Production shell/compiler, generic atoms, typed sockets/access, wrong-axis rejection, staged wall omission, all-walls strategic view |
 | `CL-F02 lighting-bench` | Do diagnostic and rolled light recipes produce controlled, motivated light? | neutral stepped surfaces, one matte sphere/cube, visible fixtures, sprite | **BUILT; VISUAL VERDICT PENDING (CL-R1)**. Selectable room/bench fixtures; one-third-cell stairs, matte sphere/cube, approved sprite, mote suppression, live position/range/shadow-volume overlays |
 | `CL-F03 sprite-citizenship` | Does source pixel art remain a physical, correctly coloured standee? | representative sprites across size/alpha/value bands | **BUILT; VISUAL VERDICT PENDING (CL-R2)**. Seven-source stress cast, canonical/capped scale A/B, natural tread-depth support, tactical footprint, side shell, stair views, and five production-light contexts |
-| `CL-F04 material-bench` | Do material channels, scale, UVs, roles, and fallbacks work? | floor, wall, riser, trim skeleton, timber, iron, ground | unbuilt (CL-R4) |
-| `CL-F05 trim-bench` | Does the `h6-v1` sheet project without hiding geometry defects? | straight/non-multiple runs, corners, endpoint, opening, stair, curb, T-junction | unbuilt (CL-R5) |
+| `CL-F04 material-bench` | Do material channels, scale, UVs, roles, grid contrast, and fallbacks work? | matched floor, wall, opening, riser, cap bays; two exact parents simultaneously | **CL-R4b BUILT; BOTH PARENTS APPROVED 2026-07-27.** Fine ashlar/white-brick scale reference beside rough-hewn block, four comparison modes, exact lineage receipt, multiply grid |
+| `CL-F05 trim-bench` | Does the `h6-v1` sheet project without hiding geometry defects? | two complete matched cutaway rooms; supported slab, full/stub walls, opening, owned corner, platform/stair, six trim roles | **BUILT; VISUAL VERDICT PENDING (CL-R5).** Institutional + Upland B06 atlases, PBR/role-debug/albedo/clay modes, repeat-safe UV runs, every-top grid, stair/door/layout invariant |
 | `CL-F06 seed-stress` | Do bounded procedural variants remain legal and readable? | retained seed matrix plus adversarial dimensions/joins | unbuilt (CL-R6) |
 
 ## The ladder
@@ -523,6 +525,20 @@ flush single-owner T, one-cell and wide stairs with landings, a 26.565° ramp, h
 and square/round supports. A wrong-axis pair remains physically separated and names
 `socket-axis-mismatch`.
 
+The continuity correction extends that candidate with common-datum foundations, full-height
+interpenetrating corner quoins, short cutaway returns, stair/landing contact interlocks, distinct
+inside/outside corner stair families, two-cell straight and three-cell L-shaped full-storey stairs,
+and an executable click-to-climb/perch/fall branch for walls and both support families. Cast-shadow
+contact uses front-face shadow casting with the reviewed directional bias/normal-bias pair; no
+geometry is displaced merely to disguise a light slit.
+
+The diagnostic grid is now a support-surface projection rather than one base-floor plane. It is
+rebuilt from live floor-top truth plus compiled shell tiers and tagged geometry surfaces, and covers
+floor cells, raised/sunken shell cells, stair treads, landings/decks, walkable ramps, exposed column
+tops, and the production room-truth crate top. Hidden structure specimens do not leak grid lines
+into the active proof view. Small object tops are clipped to their real bounds and do not claim a
+false 5-ft tactical footprint.
+
 The omission proof now closes the remaining CL-R3a fixture obligations. Scene staging is a
 latched state separate from the C1B door angle: an open door alone does not stage the room; entering
 play omits camera-side uppers; a later shut-door commit does not re-conceal actors; leaving play
@@ -545,8 +561,9 @@ proves one blocking and one faded witness.
 | Strategic mode is governed | `ALL WALLS` is a named fixed 72° camera mode, not orbit; crossing into/out of it rebuilds the production board and shell. |
 | Dynamic cutaway stays production-native | Receipt reports production Human witness + pillar, classifier candidates, one blocking/one faded result, and a mounted pillar ghost. |
 | Dark-form and ownership checks survive | Production moonlight and role-ID frames reuse the same geometry; census reports zero unclaimed surfaces and zero texture-bound diagnostic clay. |
-| Repeatable evidence | `dev/clay-captures/cl-r3/`: early/live UI, assembled, sockets, access, wrong-axis, role-ID, moonlight, strategic, staging-latch frames, composed sheet, JSON receipt, and independent measurement. Live capture 23/23; measurement 17/17; zero browser errors/warnings. |
-| Executable gate | `dev/verify-clay-room.mjs` 228/228; focused companion gates and manifest recorded in HANDOFF. **FULL CI PENDING.** |
+| Traversability grid follows support truth | The live report names `every-flat-or-traversable-surface` and separately counts host floor cells, shell tiers, stair treads, walkable tops, ramp surfaces, crate tops, and round tops. Focused access-view probes require one circular support top and one sloped ramp; CL-F00 requires the real production crate top. |
+| Repeatable evidence | `dev/clay-captures/cl-r3-continuity-grid-mood-v18/`: early/live UI, assembled continuity, full-storey stairs, tread parking, corners, sockets, access/climb/fall, wrong-axis, role-ID, moonlight, strategic, staging-latch, four source-plus-mood frames, traversability-grid frames, composed sheet, JSON receipt, and independent measurement. Live capture 38/38; measurement 23/23; zero browser errors/warnings. |
+| Executable gate | `dev/verify-clay-room.mjs` 255/255; focused companion gates and manifest recorded in HANDOFF. **FULL CI PENDING.** |
 
 **CL-R3a — BUILT 2026-07-23.** The wall-omission ruling tested in `CL-F00`, all through the
 production shell compiler (now the clay default; `?clayshell=0` restores the instanced A/B):
@@ -603,6 +620,77 @@ The Clayroom proves the seed **parents** and the routing. The Guard Post proves 
 maintained-overgrown-stone combination, road/ground relation, chronological repair story, and
 cultural selection. Authoring authority stays with [MATERIAL-LANE.md](MATERIAL-LANE.md).
 
+**CL-R4a — first granular parent integration (BUILT 2026-07-26; taste pending).** `CL-F04` now
+routes one exact sprite-first parent, `wall-ashlar-dressed`, through the production renderer. The
+selected source sprite remains albedo authority; the admitted Material Maker B04 v003 graph supplies
+tangent normal and Godot-4 ORM. The fixture proves PBR, exact-albedo fallback, clay control, and an
+intentional over-normal negative control across eight specimens covering floor, wall, opening,
+riser, and cap. World-space UV phase is shared; the visible interior field remains exactly 3×3 at
+1.65 m/tile; UV1 exists for AO; the receipt counts each bound channel and carries source, graph, and
+map hashes.
+
+The pass found and corrected three integration defects before review:
+
+- the MM graph had already baked its authored normal strength, so applying `0.18` again at runtime
+  double-attenuated relief; runtime scale is now neutral `1.0`;
+- stair risers extended beyond the material slab but inherited its top datum, leaving their bottoms
+  0.9 ft above the host floor; they are now nested ground-up solids with unchanged tread heights;
+- the exact 3×3 floor field stopped at wall centerlines; its substrate now extends beneath the full
+  west/north bearing-wall footprint while the visible repeat field and UV phase remain unchanged.
+
+The wider CL-R3/CL-R4 contact ruling is also live: every upper-hidden wall path retains an exact
+one-foot stub, and the traversability grid is rebuilt from the final mounted surface census. The
+current structure receipt reports 32 shell-floor cells, 9 stair treads, 10 other walkable tops, and
+661 unique segments; the grid was contrast-corrected within its existing 0.25–0.35 opacity law so
+that this proof is visible at the governed review camera.
+
+Evidence:
+
+- `dev/clay-captures/cl-r4a-stone-parent-v006/pbr-02-settled.png`
+- `dev/clay-captures/cl-r4a-stone-parent-v006/pbr-receipt.json`
+- `dev/clay-captures/cl-r3-contact-grid-v002/structure-02-settled.png`
+- `dev/clay-captures/cl-r3-contact-grid-v002/structure-receipt.json`
+- `dev/verify-clay-room.mjs`: **264 passed, 0 failed**
+
+This is integration acceptance only. The ashlar’s visual character is still Adam’s decision, no
+production material has been promoted, and timber/iron/ground family expansion remains blocked
+until the first stone parent’s scale and taste are accepted or replaced.
+
+**CL-R4b — simultaneous parent + final-pixel grid proof (BUILT 2026-07-26; both parents
+approved 2026-07-27).**
+Adam accepted the existing ashlar source **scale** as the white-brick reference and required two
+materials in the same proof. `CL-F04` v3 now mounts two complete matched bays: that fine
+white-brick-scale parent and the admitted B04 v003 rough-hewn-block parent. Each bay repeats the
+same eight specimens under the same physical tile scale, local UV phase, camera, light, and active
+comparison mode. Both parents retain exact source-sprite albedo authority and banked graph/map
+hashes. The fixture reports 16 material surfaces and eight explicitly traversable tops.
+
+The receipt-only grid failure is also closed at the renderer rather than relabelled:
+
+- every deduplicated surface segment becomes a narrow world-space triangle strip rather than a
+  backend-limited 1 px GL line;
+- the premultiplied custom blend computes alpha-weighted multiply, darkening the albedo beneath it
+  without glow or bleaching;
+- depth testing and support clipping remain active, so the overlay cannot show through an object
+  or mint a false walk polygon;
+- all horizontal material tops are covered, including floor, stair, deck, wall, and header caps;
+  traversal permission remains a separate explicit fact;
+- the live grid receipt records the renderer, blend contract, strip width, covered surface count,
+  unique segments, and generated quad count.
+
+Evidence:
+
+- `dev/clay-captures/cl-r4b-two-material-grid-v001/cl-r4b-final-02-settled.png`
+- `dev/clay-captures/cl-r4b-two-material-grid-v001/cl-r4b-final-04-clean-no-overlay.png`
+- `dev/clay-captures/cl-r4b-two-material-grid-v001/cl-r4b-final-receipt.json`
+- `dev/clay-captures/cl-r4b-two-material-grid-v001/structure-grid-final-04-clean-no-overlay.png`
+- `dev/clay-captures/cl-r4b-two-material-grid-v001/structure-grid-final-receipt.json`
+- `dev/verify-clay-room.mjs`: **264 passed, 0 failed**
+
+This proves simultaneous renderer integration and grid legibility. Adam approved both parent
+looks on 2026-07-27. That taste verdict licenses their use in the retained composition proof;
+production-wide material assignment remains a separate promotion/routing decision.
+
 ### CL-R5 — trim-sheet projection
 
 **Primary question:** does trim infrastructure work before aesthetic trim enters the Guard Post?
@@ -615,6 +703,39 @@ geometry-only fallbacks · zero tactical/collision change.
 
 Only after the diagnostic sheet passes are Material Maker stone strips packed and judged. Contract
 authority stays with [TRIM-SHEET-PIPELINE.md](TRIM-SHEET-PIPELINE.md); this rung is its clay gate.
+
+**Candidate implementation (BUILT 2026-07-27; visual verdict pending).** `CL-F05 trim-bench`
+mounts two architectural twins through the production Theater scene. The Institutional workroom
+uses the approved fine-brick-scale parent on walls, rough block on its floor, and the admitted
+Institutional B06 trim atlas. The Upland guard room swaps the two body parents and uses the Upland
+atlas. Both rooms carry a supported slab, full north/west walls, exact one-foot south/east cutaway
+stubs, an owned interior corner, framed north doorway, base course, cornice, coping, raised
+north-east platform, retaining curb, and two-tread approach. This is composition evidence, not a
+procedural-room claim and not production promotion.
+
+The renderer splits every trim run at the slot's declared world-repeat boundary, keeps U inside
+`[0,1]`, clamps V inside the selected h6-v1 band, and provides UV1 for ORM ambient occlusion.
+Shallow geometry-owned profile cores supply silhouette and contact behind the exact atlas face.
+The retained modes are PBR beauty, six-colour semantic role debug, exact-albedo-only, and neutral
+clay. Every declared body top, wall/stub cap, platform, and tread is included in the same
+surface-clipped multiply-grid census; traversal permission remains separate.
+
+**Stair integration invariant.** The first composition capture exposed a fixture-authoring failure:
+the stair sequence was valid in isolation but had been placed through the south wall and a curb
+continued across its landing. That local correction is now a pre-mount architecture audit rather
+than a screenshot patch. It refuses the fixture unless platform and both treads stay inside inner
+wall bounds, `.18 → .36 → .54` rises remain equal, adjacent solids overlap at contact, the high
+tread meets the platform, the curb yields a stair-width opening, and the low doorway does not
+intersect the raised platform. The regression harness mutates the room depth to reproduce and reject
+the old out-of-room failure class.
+
+Evidence:
+
+- `dev/clay-captures/cl-r5-trimmed-structures-v005/cl-r5-pbr-04-clean-no-overlay.png`
+- `dev/clay-captures/cl-r5-trimmed-structures-v005/cl-r5-pbr-receipt.json`
+- `dev/clay-captures/cl-r5-trimmed-structures-v005/cl-r5-role-debug-04-clean-no-overlay.png`
+- `dev/clay-captures/cl-r5-trimmed-structures-v005/cl-r5-role-debug-receipt.json`
+- `dev/verify-clay-room.mjs`: **272 passed, 0 failed**, including executed CL-F05 architecture audit
 
 ### CL-R6 — deterministic seed resilience
 
@@ -702,6 +823,36 @@ compiled lock`. `build/fold-lightlab.py` is useful evidence but must eventually 
 non-diegetic test lights. A *production rolled practical* must remain co-located with a visible
 housing/emitter and a valid mount socket. The UI and the capture receipt must say which mode is
 active; the two may never be visually or semantically conflated.
+
+**Source-plus-mood law.** A room recipe is not allowed to replace its natural or practical source
+with an arbitrary invisible coloured bulb. It composes four bounded layers:
+
+1. **Source key** — the sun, moon, opening, torch, fungus, or other authored source owns direction,
+   the brightest local cue, and the hard/defining shadow.
+2. **Room mood** — a bounded hemisphere/ambient/fog field selected from a theme-gated palette. It
+   must be strong enough to expose the room as a coloured volume, but it does not cast a competing
+   hard shadow or replace the source's directional/local hierarchy.
+3. **Derived bounce/accent** — restrained colour returned from the source and nearby surfaces or
+   physical emitters; it must remain spatially explainable.
+4. **Exposure/grade** — protects the hierarchy instead of flattening it: the source remains legible,
+   shadow retains depth, and important sprites remain readable.
+
+The semantic roll chooses a *coupled pair*, not one all-purpose colour. Dawn can therefore keep a
+warm low-angle sun while rolling cool violet ambient sky; a dungeon can keep small warm practical
+pools while rolling a cold, low-value room fill. More unhinged palette pairings are licensed only
+by explicit themes or room types. CL-F02 must prove each recipe both with the mood layer enabled and
+with that layer isolated, so a pleasing frame cannot conceal a missing or overpowered natural
+source.
+
+**CL-R3 lighting-study implementation (review candidate, 2026-07-26).** The Clayroom now couples
+the production source recipes to separately selectable `dawn-violet`, `crypt-violet`,
+`dungeon-cold`, and `spore-haze` fields. Each field consists only of non-shadow-casting ambient and
+hemisphere light plus a void/fog tint; the original source lights remain mounted and visible in the
+receipt. The target hierarchy is grounded in the recovered early frames
+`mock-01-chrome-combat.png`, `mock-01-gloom-combat.png`, and
+`mock-01-fantasy-explore.png`: broad room condition first, practical/effect punctuation second.
+The torch practical keeps its physical source and shadow while its coarse bloom layer is suppressed.
+Artistic approval of the current palette/energy remains Adam's call.
 
 ## Sprite Editor — extend, do not replace
 

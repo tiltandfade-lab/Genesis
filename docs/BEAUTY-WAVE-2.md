@@ -186,9 +186,10 @@ Per `mock-01-fantasy-explore.png` (door arches with real depth) + `mock-01-final
 1. **Door arches:** doorframe prisms gain an arch header (2-3 stacked prisms corbelling in, or
    one arch-profile prism) + visible wall THICKNESS at openings (door reveals — the mock's
    doorways read deep).
-2. **Parapet rim:** cutaway (camera-side) walls render as a low parapet (≈ 0.4 wall height)
+2. **Parapet rim:** cutaway (camera-side) walls render as an exact 1 ft / 0.20u retained stub
    instead of vanishing entirely — the diorama reads as a box you look into (the finale mock).
-   Cutaway law amended: full walls drop to parapet, never to nothing.
+   Cutaway law amended 2026-07-26: full walls drop to the one-foot stub, never to nothing. This
+   supersedes the earlier proportional ≈0.4-wall-height target.
 3. **Finale dais:** finale rooms get a centered 2-step dais platform (extends VP3's micro-step
    channel with real 0.15-0.25 steps, walkable, combat-grid-aware) — the staging law's floor.
    The setPiece focal (and the boss standee's cell) prefer the dais top.

@@ -1760,3 +1760,102 @@ Binding consequences:
   geometry/state variants each, totaling the available 300 model slots. The definitive list and
   production order live in `MESHY-PREMIUM-MONTH-1-MODEL-SLATE.md`; its exclusions preserve the
   cheaper procedural, extrusion, faced-box, sprite, shader, and narrative lanes.
+
+## CLAYROOM LAYERED MOOD + TRAVERSABILITY GRID (Adam, 2026-07-26 — additive; verbatim)
+
+> "how do we capture those mood lighting effects without obliterating natural sources? wouldn't dawn be even better with a nice mood lighting layered onto it? wouldn't the dungeon be even scarier?"
+
+> "starting to look very good. i don't like the current state of the mood lighting, i don't think the sample imagegen visions are just an obvious single source of lighting, also the weird torch pixel blob gotta go
+>
+> something I am noticing that we will need is that the grid that is overlaid on the floor plane, should be overlaid across any flat or traversible surface"
+
+Binding consequences:
+
+- A room mood is a coloured environmental field layered around its natural or practical source.
+  The source still owns its visible emitter, direction, brightest local cue, and defining shadow;
+  the room field keeps the rest of the volume readable and may not collapse into one arbitrary
+  invisible coloured bulb.
+- The early visual targets are
+  `ui-sketches/mock-frames/mock-01-chrome-combat.png`,
+  `ui-sketches/mock-frames/mock-01-gloom-combat.png`, and
+  `ui-sketches/mock-frames/mock-01-fantasy-explore.png`: broad coloured ambience/bounce establishes
+  the room condition while practicals and effects act as local punctuation.
+- A visible practical must retain a physical, readable emitter. Coarse square bloom or a detached
+  pixel blob is not an acceptable substitute for flame or glow geometry.
+- The tactical grid follows the support surface rather than remaining a decal on the base floor.
+  It projects across floor tiers, terraces, landings, stair treads, walkable slopes, and accessible
+  object/support tops; non-cell-sized tops are clipped to their actual support polygon and do not
+  mint a fake 5-foot footprint.
+
+## CLAYROOM TEXTURE HANDOFF + CONTACT TRUTH (Adam, 2026-07-26 — binding; verbatim)
+
+> "ok first off, great job on everything but the mood lighting, you can put that aside for now, i think it's time to start moving on to texturing because i get the feeling this is gonna suck"
+
+> "so i am not sure if we are doing this or not, but walls that cutaway or are there but don't render, i would prefer if they rendered a 1ft tall stub so i can get a feel for where the wall would actually be"
+
+> "also, those stairs are floating in the test image"
+
+> "i also see that the floor of the room doesn't sit flush with the walls that sit on top of it, the floor comes up a little shorter than the actual walls"
+
+> "and i don't see the grid overlay on the floor in the structure"
+
+Binding consequences:
+
+- The current mood-lighting study is parked, neither approved nor deleted. Texture/material proof
+  becomes the active next gate and begins with one parent at a time.
+- A cutaway or upper-hidden wall retains an exact one-foot solid stub. The full wall remains
+  mechanically true; only its upper rendering changes. Door and opening carve-outs remain honest.
+- Architectural contact may not be implied by shadows or hidden by texture. Stairs begin on their
+  actual support datum, floor substrates bear the full footprint of walls placed on them, and all
+  joins must remain closed under cast shadows and AO.
+- The tactical grid must be visibly legible on the final traversable-surface census, including
+  structure floors and stair treads. A receipt-only grid that disappears at the review camera does
+  not satisfy the ruling.
+
+## CLAYROOM TWO-MATERIAL + VISIBLE GRID PROOF (Adam, 2026-07-26 — binding; verbatim)
+
+> "on both of the sample images you provided there are clear examples of floors or walkable surface with no grid overlay
+>
+> yeah, the ashlar at that scale makes for a great brick, remember that scale for a white brick because it works perfectly
+>
+> let's go ahead and prove two materials simultaneously and make sure the grid reads even on top of the material, the grid might need a multiply blend mode applied to it to be visible on the textured floor, but i do want it visible."
+
+Binding consequences:
+
+- A grid census or geometry receipt is insufficient when the grid disappears in the final image.
+  Every declared flat or traversable top must carry a surface-clipped overlay that remains readable
+  at the governed review camera and resolution.
+- The overlay darkens the material underneath via alpha-weighted multiply. It remains depth-tested,
+  does not glow or bleach the albedo, and does not create a false support polygon beyond the real
+  surface boundary.
+- The current dressed-ashlar source scale is accepted and retained as the scale reference for a
+  future white-brick parent. This ruling accepts scale, not the current palette and not production
+  promotion.
+- CL-F04 proves two exact source-authority material parents simultaneously in matched bays. Both
+  bays use the same geometry, physical tile scale, UV phase law, camera, light, grid renderer, and
+  comparison mode so the evidence changes material parent rather than scene composition.
+
+## CLAYROOM COMPLETE TRIMMED STRUCTURES + PREVENTIVE INVARIANTS (Adam, 2026-07-27 — binding; verbatim)
+
+> "yeah i think both of those materials look great, now i would like to see some structures built fully trimmed out, and with varying textures applied correctly"
+
+> "those stairs make no sense, they're just plopped into the structure, half floating outside of the structure"
+
+> "when you run into problems like this are you making sure they will never happen again or are you only correcting it in this singular instance?"
+
+Binding consequences:
+
+- Both CL-R4b masonry parents pass Adam's visual taste gate. Their use in the retained CL-F05
+  composition proof is approved; broader production assignment remains an explicit routing step,
+  not an inference from the taste verdict.
+- A fully trimmed structure is a complete architectural assembly, not a texture sampler: supported
+  floor, owned wall corners and endpoints, honest cutaway stubs, framed openings, base/cornice/cap
+  hierarchy, and trim at elevation transitions and stair/curb boundaries must read together.
+- Material variation must be semantically routed and reviewable. Matched structures swap approved
+  body parents and culture-owned trim while keeping architecture, camera, light, and comparison
+  mode fixed; six-colour role debug remains available over the exact same geometry.
+- A visible correction is insufficient when the failure can recur. The relevant architectural
+  relationship becomes a pre-mount invariant plus a negative regression: stairs and platforms stay
+  inside inner wall bounds, rises remain equal, adjacent solids overlap at contact, the top tread
+  meets its landing, a retaining curb yields the stair opening, and a doorway cannot intersect the
+  raised platform. Illegal compositions reject loudly instead of rendering a curated exception.

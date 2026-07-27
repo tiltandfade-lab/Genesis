@@ -171,6 +171,13 @@ build next?" has a standing answer: whichever of them is red.
 > through the fall-2027 flagship launch. This section does NOT reorder build sequencing;
 > `docs/canon/README.md` keeps that authority. Talked through with Adam 2026-07-26;
 > Adam holds every spend/launch ruling as always.
+>
+> **REBUILT same day (07-26 late), under adversarial scrutiny at Adam's order.** §§A–F
+> below stand as reference (the universe, the flywheel, the doctrines) but **the gated
+> skeleton at the end supersedes them wherever they conflict** — in particular: the
+> Sept–Oct sprint is re-scoped revenue-first (the December gap is verified real), all
+> game revenue is de-weighted to median-case, the camera ruling is reopened, the
+> publisher demoted, and every phase now carries an entry gate and a kill criterion.
 
 ## §A The money read
 
@@ -203,6 +210,10 @@ so each game advertises the next and assets flip between them.
    publisher pitch (sim publishers scout Next Fest; the publisher route = marketing +
    capital in one deal — cf. Despot's Game → tinyBuild). Target: Early Access mid-2027;
    its revenue funds the fall flagship push.
+   **Concept sketched:** `docs/SHOP-SIM-CONCEPT.md` (2026-07-26, PARKED) — proven-spine/
+   living-layer split, realms-as-product-lines, the counter pack-open moment, camera
+   RULED dollhouse (Adam 07-26, Two Point lineage), the diorama-editor law (constrained
+   kit; authored-scenes-into-the-procedural-pool flip), vertical-slice definition, v1 cut lines.
 3. **Genesis flagship** — fall 2027, launching into an audience that has lived in the
    universe for a year. Later flip: the autobattler appears INSIDE the shop game as the
    game customers play.
@@ -278,3 +289,88 @@ shipped artifacts + written process, not claims.
   to "conversations convert much better after."
 - Patreon/subscription: only once a content cadence + audience exist (earliest: after
   the pipeline-learner launch). Suggested-donation on the tile tool is the near-term form.
+
+---
+
+## THE GATED SKELETON (the 07-26 late rebuild — this supersedes §§A–F where they conflict)
+
+Adam's order: rebuild under aggressive adversarial judgment, operate with that
+perspective as the known obstacle, approach the dream optimistically — "nobody wins if
+they don't try." The dream stays whole; the gates are how it survives contact.
+
+### Standing laws
+
+1. **MEDIAN LAW** — no game revenue is load-bearing until measured. Plan every phase on
+   the median outcome (median Steam indie: low-thousands lifetime); ride any upside.
+   Strike "funds the flagship" language until a real number exists.
+2. **ONE-BODY LAW** — Adam's attention is the budgeted resource. One game in production
+   at a time; serialization over parallelism; every phase declares its Adam-hours cap.
+3. **SERVICE-BEFORE-SPECULATION** — when runway is short, service income (murals, AI
+   contracts: booked work that pays on completion) outranks product speculation (games).
+   This is the founder's own monetization law applied to the career: sell certainty,
+   earn the randomness.
+4. **GATE LAW** — no phase starts before its entry gate is met, however exciting; every
+   phase carries a kill/park criterion decided BEFORE it begins.
+
+### G0 — Runway (NOW → December; the driving fact)
+
+**VERIFIED GAP (Adam 07-26): last mural booking mid-August; leads exist but nothing
+concrete behind it.** Therefore Sept–Oct is a **revenue sprint first, portfolio second**:
+close mural leads, land the first AI contract; the portfolio pieces (tile tool, factory
+case study) are built as sales collateral FOR those conversations, not as ends in
+themselves. **FOUNDER INPUT NEEDED: the December number** (need vs. banked) — the gap,
+not enthusiasm, allocates the Sept–Oct hours. **KILL:** if by Oct 1 the gap isn't
+closing, all spin-off/game work pauses for income work; games resume when runway holds.
+(The flagship's seat critical path continues regardless — it is days of work and it IS
+the G1 measurement.)
+
+### G1 — DM economics: measure, don't assume (front of the program)
+
+Demand is proven (Friends & Fables 100k+ users at $20–40/mo; Old Greg's Tavern 225k+) —
+Adam: "that's all I need to continue." Unproven: **our cost per session.** The seat work
+already on the build's critical path IS this measurement (≤15s routine, ~$1/hr target).
+Worst case is not death: usage-priced play (session fees / monthly sub — Adam's named
+fallback) turns DM cost into pass-through. **GATE OUT:** a measured $/session + latency
+number a pricing model can be designed around. G2 then probes what players tolerate.
+
+### G2 — Free text beta (FREE; the flywheel of §C)
+
+**ENTRY:** playability gate met + G0 stable. Purpose per §C (transcripts = DM corpus +
+procedural coverage spec; community + flagship wishlists) **plus now: the
+willingness-to-pay probe** for session-fee/sub tolerance. **LAWS:** promise world
+IMPORT into the flagship, never save-compatibility (the forever-tax); support burden
+capped — if it eats more than a set weekly hour budget, freeze features, don't grow them.
+
+### G3 — Pipeline-learner: the autobattler (`docs/AUTOBATTLER-CONCEPT.md`)
+
+**ENTRY:** G0 green + flagship playability gate MET + a declared attention budget
+(factory lanes + capped Adam hours/week). **PURPOSE:** learn the full Steam ceremony
+end-to-end + seed the Living Miniatures brand. **REVENUE TARGET: none** — median
+assumption low-thousands; anything more is upside. **KILL:** if it slips badly or
+starves flagship soak, park it — the ceremony can be learned on something even smaller.
+
+### G4 — The shop sim (`docs/SHOP-SIM-CONCEPT.md`): the upside shot, entered on evidence
+
+**ENTRY:** autobattler SHIPPED + a real demand signal from G2/G3 (wishlist/demo
+thresholds defined when G3 ships — numbers, not vibes). **CAMERA REOPENED** (Adam
+07-26: "willing to consider first-person if it makes more sense for the purpose it
+serves"): decided at slice start by a short dual blockout probe, judged on the slice's
+purpose (revenue — the genre's proven winners are all first-person, plausibly causally)
+with taste as tiebreak; the middle path is explicitly on the table — dollhouse spine +
+first-person tactile zoom vignettes (pack-open, mini placement) to capture the genre's
+dopamine without a full FP game. **KILL:** Next Fest demo underperforms its threshold →
+re-scope or park; full production never enters on hope. **Publisher: opportunistic
+only, never load-bearing** (industry funding fell ~$12B→$2.4B, 2021→2024; Adam wasn't
+counting on one anyway).
+
+### G5 — The flagship (fall 2027 = aim, not altar)
+
+Launches on evidence — beta community + measured DM economics + soak — never on
+calendar. The date moves before the quality bar does.
+
+### Hires & the dream
+
+Ladder per §E (contractors → fine-tune contract → leads), plus one law: **hires are
+funded by measured recurring revenue, never projections.** The dream — the three-game
+universe, the diorama-editor flywheel, the studio — stays whole. Gates are its armor,
+not its cage.

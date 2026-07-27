@@ -1,0 +1,1785 @@
+{
+  "fixture": "CL-F01",
+  "focus": "assembly-second-floor",
+  "states": [
+    {
+      "state": {
+        "id": "01-legacy-auto-1024",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "normalBias": 0.03,
+        "bias": -0.0003,
+        "mapSize": 1024,
+        "filter": "pcf",
+        "shadowSide": "auto"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "01-legacy-auto-1024.png"
+    },
+    {
+      "state": {
+        "id": "02-legacy-auto-ao-off",
+        "aoEnabled": false,
+        "normalBias": 0.03,
+        "bias": -0.0003,
+        "mapSize": 1024,
+        "filter": "pcf",
+        "shadowSide": "auto"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": false,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": -0.0003,
+            "normalBias": 0.03,
+            "mapSize": [
+              1024,
+              1024
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "02-legacy-auto-ao-off.png"
+    },
+    {
+      "state": {
+        "id": "03-culprit-auto-2048",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "normalBias": 0,
+        "bias": 0,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "auto"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "03-culprit-auto-2048.png"
+    },
+    {
+      "state": {
+        "id": "04-culprit-auto-ao-off",
+        "aoEnabled": false,
+        "normalBias": 0,
+        "bias": 0,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "auto"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": false,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "04-culprit-auto-ao-off.png"
+    },
+    {
+      "state": {
+        "id": "05-production-front-bias",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "normalBias": 0,
+        "bias": -0.001,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "front"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "05-production-front-bias.png"
+    },
+    {
+      "state": {
+        "id": "06-production-front-ao-off",
+        "aoEnabled": false,
+        "normalBias": 0,
+        "bias": -0.001,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "front"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": false,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "06-production-front-ao-off.png"
+    },
+    {
+      "state": {
+        "id": "07-production-front-fullres-ao",
+        "aoEnabled": true,
+        "aoMode": "fullres",
+        "normalBias": 0,
+        "bias": -0.001,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "front"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 1324,
+            "h": 1352
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "07-production-front-fullres-ao.png"
+    },
+    {
+      "state": {
+        "id": "08-front-zero-bias-acne",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "normalBias": 0,
+        "bias": 0,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "front"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "08-front-zero-bias-acne.png"
+    },
+    {
+      "state": {
+        "id": "09-front-small-bias-acne",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "normalBias": 0,
+        "bias": -0.0005,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "front"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0005,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0005,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": -0.0005,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.0005,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": -0.0005,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "09-front-small-bias-acne.png"
+    },
+    {
+      "state": {
+        "id": "10-auto-pcf-4096-residual",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "normalBias": 0,
+        "bias": 0,
+        "mapSize": 4096,
+        "filter": "pcf",
+        "shadowSide": "auto"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              4096,
+              4096
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              4096,
+              4096
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              4096,
+              4096
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              4096,
+              4096
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              4096,
+              4096
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "10-auto-pcf-4096-residual.png"
+    },
+    {
+      "state": {
+        "id": "11-auto-soft-filter-failure",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "normalBias": 0,
+        "bias": 0,
+        "mapSize": 2048,
+        "filter": "pcf-soft",
+        "shadowSide": "auto"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "11-auto-soft-filter-failure.png"
+    },
+    {
+      "state": {
+        "id": "12-auto-basic-filter-failure",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "normalBias": 0,
+        "bias": 0,
+        "mapSize": 2048,
+        "filter": "basic",
+        "shadowSide": "auto"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": true,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": 0,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "12-auto-basic-filter-failure.png"
+    },
+    {
+      "state": {
+        "id": "13-ao-only",
+        "aoEnabled": true,
+        "aoMode": "fullres",
+        "aoOutput": "ao",
+        "castShadow": false,
+        "normalBias": 0,
+        "bias": -0.001,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "front"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 4,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 1324,
+            "h": 1352
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "13-ao-only.png"
+    },
+    {
+      "state": {
+        "id": "14-shadow-off",
+        "aoEnabled": true,
+        "aoMode": "on",
+        "castShadow": false,
+        "normalBias": 0,
+        "bias": -0.001,
+        "mapSize": 2048,
+        "filter": "pcf",
+        "shadowSide": "front"
+      },
+      "applied": {
+        "ao": {
+          "built": true,
+          "enabled": true,
+          "enabledDefault": true,
+          "urlResolvedEnabled": true,
+          "mounted": true,
+          "params": {
+            "radius": 0.42,
+            "distanceExponent": 1,
+            "thickness": 0.6,
+            "distanceFallOff": 1,
+            "scale": 1.4,
+            "samples": 12,
+            "screenSpaceRadius": false
+          },
+          "denoise": {
+            "lumaPhi": 0.25,
+            "depthPhi": 0.5,
+            "normalPhi": 16,
+            "radius": 2,
+            "radiusExponent": 1,
+            "rings": 2,
+            "samples": 8
+          },
+          "blendIntensity": 1,
+          "output": 0,
+          "perspectiveDefine": 1,
+          "targetSize": {
+            "w": 662,
+            "h": 676
+          },
+          "lastPrepassExcludedCount": 4
+        },
+        "shadows": [
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "sun-key",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "DirectionalLight",
+            "type": "DirectionalLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          },
+          {
+            "id": "SpotLight",
+            "type": "SpotLight",
+            "castShadow": false,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": [
+              2048,
+              2048
+            ]
+          }
+        ],
+        "camera": {
+          "kind": "perspective",
+          "fov": 20,
+          "zoom": null,
+          "position": [
+            10.8728,
+            7.796,
+            8.3728
+          ],
+          "target": [
+            3,
+            0,
+            0.5
+          ],
+          "near": 0.1,
+          "far": 116.63311323763995,
+          "clayZoom": 0.24,
+          "clayZoomRange": [
+            0.12,
+            2.5
+          ]
+        }
+      },
+      "file": "14-shadow-off.png"
+    }
+  ],
+  "errors": []
+}

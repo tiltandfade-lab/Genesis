@@ -112,7 +112,7 @@ const THIRDS_POINTS = [
 // discipline DEFAULT_WALL_HEIGHT's header comment already documents for a sibling module) rather than
 // imported — a caller that built the real shell with a DIFFERENT stemHeight/wallHeight passes its own
 // values through wallUpperBlockingSet's opts; these are only the fallback when it doesn't.
-const OCCLUSION_DEFAULT_STEM_HEIGHT = 0.28;   // mirrors theater-room-mesh.js's DEFAULT_WALL_STEM_HEIGHT
+const OCCLUSION_DEFAULT_STEM_HEIGHT = 0.2;    // one-foot retained cutaway top; 1 world unit = 5 ft
 const OCCLUSION_DEFAULT_WALL_HEIGHT = 2.4;    // mirrors theater-room-mesh.js's DEFAULT_WALL_HEIGHT
 const OCCLUSION_SUBJECT_EYE_HEIGHT = 1.2;     // world Y used for a subject anchor that only carries {x,z}
                                                // (every ShotPlan anchor today) — a torso/eye-level proxy,

@@ -645,9 +645,9 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           },
           "shadow": {
             "cast": true,
-            "bias": -0.0003,
-            "normalBias": 0.03,
-            "mapSize": 1024,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": 2048,
             "budgetPriority": 1
           },
           "fixtureId": "",
@@ -730,9 +730,9 @@ var LIGHT_PROFILE_LOCKS_COMPILED = {
           },
           "shadow": {
             "cast": true,
-            "bias": -0.0003,
-            "normalBias": 0.03,
-            "mapSize": 1024,
+            "bias": -0.001,
+            "normalBias": 0,
+            "mapSize": 2048,
             "budgetPriority": 1
           },
           "fixtureId": "",

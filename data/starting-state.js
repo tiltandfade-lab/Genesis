@@ -27,6 +27,56 @@ const SS={
   eWhyHere:{die:12,rows:[[1,2,"for work and coin"],[3,3,"for refuge — lying low, or starting over"],[4,4,"just passing through"],[5,5,"sent or summoned"],[6,6,"searching for someone, or something"],[7,7,"carrying something to deliver"],[8,8,"called by a debt or obligation"],[9,9,"drawn by a rumor"],[10,10,"stranded — the road or your luck ran out"],[11,11,"on a pilgrimage or under a vow"],[12,12,"recruited for this, specifically"]]},
   eFoot:{die:12,rows:[[1,1,"an old acquaintance or contact in town"],[2,2,"a room already paid for"],[3,3,"a letter of introduction or a token of trust"],[4,4,"a lead or rumor only you hold"],[5,5,"a small debt owed to you here"],[6,6,"a skill the town badly needs right now"],[7,7,"a cache or item waiting for you"],[8,8,"a patron's eye already on you"],[9,9,"a shared enemy with someone local"],[10,10,"kin here, for better or worse"],[11,11,"a faction that, for now, tolerates you"],[12,12,"nothing but what you carry"]]},
   eStanding:{die:10,rows:[[1,2,"a stranger, unknown and unproven"],[3,3,"useful — they mean to use you"],[4,4,"in their debt"],[5,5,"owed a favor by them"],[6,6,"watched, or marked"],[7,7,"mistaken for someone, for good or ill"],[8,8,"kin or an old tie to one of their own"],[9,9,"an old enemy of theirs"],[10,10,"wanted by them for something specific"]]},
+  /* OPENING REGISTER — d100, rolled first in rollEntry(), decides how hot/strange minute zero
+     is (docs/TIYL-START-DIVERSITY.md; RULED by Adam 2026-07-27: weights locked as authored).
+     Row = [lo,hi,key]; key is the internal band id the wiring reads off `.text`.
+     1–25 settled · 26–50 edge (ARRIVAL WITH EDGE) · 51–80 medias (IN MEDIAS RES) ·
+     81–95 wrong · 96–100 mythic (MYTHIC COLD OPEN). Source: Opening Register.md */
+  eRegister:{die:100,rows:[[1,25,"settled"],[26,50,"edge"],[51,80,"medias"],[81,95,"wrong"],[96,100,"mythic"]]},
+  /* IN MEDIAS RES — d12 situation table for the "medias" band: verbs mid-flight, a danger
+     clock already running at turn zero. Row = [lo,hi,text,band]; band Textured except rows
+     11–12 (Strange). Source: Opening Register.md */
+  eNowMedias:{die:12,rows:[
+    [1,1,"the rope is in your hands and fraying, and the shouting below is getting closer","Textured"],
+    [2,2,"the building you woke in is on fire, and the door is not where it was last night","Textured"],
+    [3,3,"you are running full out and you don't remember starting, and the footsteps behind you just closed the gap","Textured"],
+    [4,4,"the ambush is already sprung and your weapon is still sheathed, and the first blow is already on its way","Textured"],
+    [5,5,"the water is at your knees and climbing fast, and the only door out just went under","Textured"],
+    [6,6,"you are standing over a body with blood on your hands you can't explain, and voices are coming up the stairs","Textured"],
+    [7,7,"the caravan around you is under attack from both sides, and no one has told you which one you're supposed to be defending","Textured"],
+    [8,8,"you are flat against a cliff ledge in the dark with no rope, and the hand that was holding yours just let go","Textured"],
+    [9,9,"the cell door is standing wide open in front of you, and somewhere close a bell has just started ringing","Textured"],
+    [10,10,"the crowd around you has just become a riot, and the first thrown stone was aimed at you","Textured"],
+    [11,11,"you are beating the brush on someone else's hunt, and whatever they're hunting just found you first","Strange"],
+    [12,12,"the theft in your hands is already falling apart, and the owner has just turned around","Strange"]]},
+  /* WRONG — d12 situation table for the "wrong" band: states, not violence; player unhurt,
+     questions armed. Realm-honest (RULED 2026-07-27): realm-adaptive archetypes only, no
+     genre-violating specifics. Row = [lo,hi,text,band]; band always Strange.
+     Source: Opening Register.md */
+  eNowWrong:{die:12,rows:[
+    [1,1,"you are dressed for a ceremony you don't remember, and everyone is waiting on you","Strange"],
+    [2,2,"the town is silent at noon, and every door on the street stands open","Strange"],
+    [3,3,"you are standing at your own funeral, and the mourners keep waiting for you to lie back down","Strange"],
+    [4,4,"every stranger in this town greets you by name, and none of them will say how they know it","Strange"],
+    [5,5,"a mark has appeared on your skin overnight, and it grows warmer whenever someone stares at it","Strange"],
+    [6,6,"you keep passing people wearing your own face, and not one of them seems to notice","Strange"],
+    [7,7,"the season here is wrong by your own reckoning, and no one will explain how much time has passed","Strange"],
+    [8,8,"the whole street calls you by a name that isn't yours, gently correcting you whenever you argue","Strange"],
+    [9,9,"there is a letter in your hand addressed to you in your own writing, and you don't remember writing it","Strange"],
+    [10,10,"every animal in sight keeps its distance from you, and the ones that live here are quietly leaving","Strange"],
+    [11,11,"you wake already mid-sentence, finishing words you don't remember starting","Strange"],
+    [12,12,"your face is nailed to a notice on every door in town, and everyone thanks you for whatever it says you did","Strange"]]},
+  /* MYTHIC COLD OPEN — d6 situation table for the "mythic" band: world-grade strangeness,
+     rare and real; per the band-calibration law a cold open here is allowed to mark the
+     world permanently from turn one (RULED 2026-07-27: "let the game be weird"). Row =
+     [lo,hi,text,band]; band always Mythic. Source: Opening Register.md */
+  eNowMythic:{die:6,rows:[
+    [1,1,"the sky has a seam in it tonight, and you are the only one looking up","Mythic"],
+    [2,2,"the ground beneath this exact spot has been hollow for longer than anyone has lived, and tonight you can hear it breathing","Mythic"],
+    [3,3,"you have already lived through this exact day once, and you are the only one who remembers how it went differently","Mythic"],
+    [4,4,"every soul in this place dreamed the same dream tonight, and in every version of it, you were the one who opened the last door","Mythic"],
+    [5,5,"something that was only ever said about you has just become true, and the world is quietly rearranging itself around it","Mythic"],
+    [6,6,"one law this world has never broken gives way in front of you tonight, and it does not spring back","Mythic"]]},
 };
 const SS_CONC={buried:"cBuried",intrusion:"cIntrusion",becoming:"cBecoming",curse:"cCurse"};
 /* ENTRY BUNDLE — fresh-roll fallbacks for the 5 opening slots (Option C).

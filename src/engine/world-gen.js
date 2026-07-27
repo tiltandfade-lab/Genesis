@@ -76,6 +76,12 @@ function rollFactionProximity(w,c){
   return {relationship,faction:f.name,kind:factionKind(f),dominant:!!f.dominant};
 }
 function rollEntry(w,c){
+  // OPENING REGISTER (docs/TIYL-START-DIVERSITY.md; RULED by Adam 2026-07-27): a single d100,
+  // rolled FIRST, upstream of the why/foot/standing triplet — decides how hot/strange minute
+  // zero is. Weights locked as authored (25/25/30/15/5); no player lean. `band` is the key
+  // column SS.eRegister's rows carry in `.text` (rollTbl's row[2]); the hot-band situation
+  // roll and the ledger line below both key off it.
+  const reg=rollTbl(SS.eRegister),band=reg.text;
   const {npcs,threads}=entrySeeds(w,c);
   const dom=(w.factions||[]).find(f=>f.dominant),rivals=(w.factions||[]).filter(f=>!f.dominant);
   const B={enemies:[],friends:[],complications:[],things:[],places:[]},promoted=[];
@@ -120,10 +126,18 @@ function rollEntry(w,c){
   // 5) Option C — any still-empty slot is filled by the script from the fresh tables (never punt to the DM)
   ["enemies","friends","complications","things","places"].forEach(s=>{if(!B[s].length)B[s].push(ebRoll(s));});
 
+  // Situation roll for the hot bands — "what is true in this exact second," layered ON TOP of
+  // the foot roll above (which stays unconditional for every band, per OPENING-REGISTER-BUILD
+  // §1.3e). settled/edge carry no situation row. `situation.tag` is where rollTbl (src/engine/
+  // tables.js) surfaces an EB-convention row's 4th-column band string (same field ebRoll reads
+  // as `.band` after renaming it) — that becomes the situation's player-facing juice tag.
+  const situation=band==="medias"?rollTbl(SS.eNowMedias):band==="wrong"?rollTbl(SS.eNowWrong):band==="mythic"?rollTbl(SS.eNowMythic):null;
+
   const why=searchThread?"searching for someone you lost":rollTbl(SS.eWhyHere).text;
   const foot=rollTbl(SS.eFoot).text;
   const standingFaction=dom?dom.name:"the local power";
   c.entry={why,foot,standing,standingFaction,proximity:prox,bundle:B,
+    register:{band,roll:reg.roll,situation:situation?{text:situation.text,juice:situation.tag}:null,live:band!=="settled"},
     tension:tp?{danger:tp.danger,dangerFrag:tp.dangerFrag,kind:tp.kind,doomDM:tp.doom,realDM:tp.real?tp.real.text:null}:null};
 
   if(prox.relationship!=="none"&&prox.faction)addLedger(w,"canon",{kind:"proximity",char:c.id,faction:prox.faction,relationship:prox.relationship,factionKind:prox.kind},
@@ -131,7 +145,8 @@ function rollEntry(w,c){
   if(promoted.length)addLedger(w,"canon",{kind:"anchor",char:c.id,roles:promoted,place:c.bornWhere},
     `Anchored to ${c.bornWhere}: ${promoted.join("; ")} — present at the opening.`);
   addLedger(w,"canon",{kind:"entry",char:c.id},
-    `${c.name} arrives ${why}; to ${standingFaction}, ${standing}.${c.entry.tension?" Opening tension: "+c.entry.tension.danger+".":""}`);}
+    `${c.name} arrives ${why}; to ${standingFaction}, ${standing}.${c.entry.tension?" Opening tension: "+c.entry.tension.danger+".":""}`+
+    (band!=="settled"?` Opening register: ${band}${situation?" — "+situation.text:""}.`:``));}
 function ssFactionTurn(w){
   if(!w.factions||!w.factions.length)return;
   const f=w.factions[rollDie(w.factions.length)-1];const t=rollTbl(SS.fTurn);

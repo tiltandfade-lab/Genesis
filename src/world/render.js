@@ -68,6 +68,7 @@ function renderOpening(w,c){
   return `<div class="section"><h3>The Opening <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">your arrival — the DM holds what's hidden</span></h3>
     <div style="font-size:17px;color:var(--ink);margin-bottom:8px;line-height:1.55">You came here <strong style="color:var(--bone)">${en.why}</strong>; to <strong style="color:var(--bone)">${en.standingFaction}</strong> you are <strong style="color:var(--bone)">${en.standing}</strong>; you have <strong style="color:var(--bone)">${en.foot}</strong>.</div>
     ${en.tension?`<div style="font-size:17px;color:var(--gold-soft);margin-bottom:6px">◭ Looming: ${en.tension.dangerFrag||en.tension.danger}</div>`:""}
+    ${en.register&&en.register.band!=="settled"?`<div style="font-size:17px;color:var(--gold-soft);margin-bottom:6px">✦ Opening register: ${en.register.band}${en.register.situation?" — "+en.register.situation.text:""}${en.register.situation?chip({band:en.register.situation.juice}):""}</div>`:""}
     ${rows}</div>`;
 }
 

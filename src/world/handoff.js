@@ -18,6 +18,7 @@ Life events: ${L.events.map(e=>e.summary+(e.detail?` (${e.detail})`:"")).join(" 
   if(c.entry){const en=c.entry,B=en.bundle||{},sl=k=>(B[k]||[]).map(x=>x.text).join("; ")||"—";
     out+=`\nMY ARRIVAL: I came here ${en.why}; to ${en.standingFaction||"the local power"} I am ${en.standing}; I have ${en.foot}.`;
     if(en.tension)out+=`\nOPENING TENSION (${en.tension.kind}): ${en.tension.danger}.${en.tension.realDM?` [DM ONLY — the truth: ${en.tension.realDM}]`:""}${en.tension.doomDM?` [DM ONLY — if its clock fills: ${en.tension.doomDM}]`:""}`;
+    if(en.register&&en.register.band!=="settled")out+=`\nOPENING REGISTER (${en.register.band}): ${en.register.situation?en.register.situation.text+".":"the opening tension here is already present-tense, not latent."}`;
     out+=`\nTHE OPENING BUNDLE — weave these into the first scene:\n  ⚔ Enemies: ${sl("enemies")}\n  🤝 Friends: ${sl("friends")}\n  🪢 Complications: ${sl("complications")}\n  ◈ Things: ${sl("things")}\n  ⌖ Places: ${sl("places")}`;}
   return out;
 }

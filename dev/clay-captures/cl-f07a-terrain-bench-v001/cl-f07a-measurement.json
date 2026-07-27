@@ -1,0 +1,1197 @@
+{
+  "captureDir": "dev/clay-captures/cl-f07a-terrain-bench-v001",
+  "fixture": "cl-f07-terrain-bench",
+  "proof": "CL-F07a",
+  "scenes": [
+    {
+      "capture": 1,
+      "sceneId": "thirteen-piece-sheet",
+      "label": "01-thirteen-piece-sheet",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 564,
+      "standableCells": 546,
+      "witnesses": 12,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "01-thirteen-piece-sheet-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 51.339,
+          "edgePct": 4.304,
+          "meanLuma": 101.09,
+          "p05Luma": 25.35,
+          "p50Luma": 117.39,
+          "p95Luma": 119.61
+        },
+        {
+          "file": "01-thirteen-piece-sheet-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 51.339,
+          "edgePct": 4.307,
+          "meanLuma": 101.09,
+          "p05Luma": 25.35,
+          "p50Luma": 117.39,
+          "p95Luma": 119.61
+        },
+        {
+          "file": "01-thirteen-piece-sheet-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            32,
+            29,
+            27
+          ],
+          "contentPct": 80.53,
+          "edgePct": 8.321,
+          "meanLuma": 74.93,
+          "p05Luma": 24.08,
+          "p50Luma": 81.61,
+          "p95Luma": 119.61
+        },
+        {
+          "file": "01-thirteen-piece-sheet-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 51.206,
+          "edgePct": 3.79,
+          "meanLuma": 100.29,
+          "p05Luma": 19.94,
+          "p50Luma": 117.39,
+          "p95Luma": 119.61
+        }
+      ],
+      "productionContentPct": 51.339,
+      "strategicContentPct": 80.53,
+      "productionEdgePct": 4.307,
+      "strategicEdgePct": 8.321,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 2,
+      "sceneId": "one-clamp-proof",
+      "label": "02-one-clamp-proof",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 2,
+      "cellMeshes": 162,
+      "standableCells": 162,
+      "witnesses": 4,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "02-one-clamp-proof-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 46.364,
+          "edgePct": 4.153,
+          "meanLuma": 104.91,
+          "p05Luma": 25.43,
+          "p50Luma": 117.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "02-one-clamp-proof-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 46.364,
+          "edgePct": 4.155,
+          "meanLuma": 104.91,
+          "p05Luma": 25.43,
+          "p50Luma": 117.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "02-one-clamp-proof-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 51.945,
+          "edgePct": 5.163,
+          "meanLuma": 100.56,
+          "p05Luma": 24.57,
+          "p50Luma": 117.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "02-one-clamp-proof-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 46.242,
+          "edgePct": 3.64,
+          "meanLuma": 104.12,
+          "p05Luma": 19.35,
+          "p50Luma": 117.61,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 46.364,
+      "strategicContentPct": 51.945,
+      "productionEdgePct": 4.155,
+      "strategicEdgePct": 5.163,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f0",
+      "frameIndex": 0,
+      "boundary": "sheer-cliff",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f0-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 57.355,
+          "edgePct": 4.345,
+          "meanLuma": 95.51,
+          "p05Luma": 25.35,
+          "p50Luma": 116.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f0-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 57.355,
+          "edgePct": 4.346,
+          "meanLuma": 95.51,
+          "p05Luma": 25.35,
+          "p50Luma": 116.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f0-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 63.772,
+          "edgePct": 5.262,
+          "meanLuma": 94.32,
+          "p05Luma": 25.64,
+          "p50Luma": 115.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f0-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 57.233,
+          "edgePct": 3.831,
+          "meanLuma": 94.72,
+          "p05Luma": 17.14,
+          "p50Luma": 116.39,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 57.355,
+      "strategicContentPct": 63.772,
+      "productionEdgePct": 4.346,
+      "strategicEdgePct": 5.262,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f1",
+      "frameIndex": 1,
+      "boundary": "earthen-bank",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f1-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.659,
+          "edgePct": 4.194,
+          "meanLuma": 98.82,
+          "p05Luma": 25.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f1-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.66,
+          "edgePct": 4.195,
+          "meanLuma": 98.82,
+          "p05Luma": 25.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f1-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 63.183,
+          "edgePct": 5.298,
+          "meanLuma": 95.43,
+          "p05Luma": 26.35,
+          "p50Luma": 115.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f1-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.539,
+          "edgePct": 3.685,
+          "meanLuma": 98.03,
+          "p05Luma": 18.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 54.66,
+      "strategicContentPct": 63.183,
+      "productionEdgePct": 4.195,
+      "strategicEdgePct": 5.298,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f2",
+      "frameIndex": 2,
+      "boundary": "water-mud",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f2-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 53.718,
+          "edgePct": 4.573,
+          "meanLuma": 104.16,
+          "p05Luma": 25.64,
+          "p50Luma": 117.32,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f2-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 53.719,
+          "edgePct": 4.578,
+          "meanLuma": 104.16,
+          "p05Luma": 25.64,
+          "p50Luma": 117.32,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f2-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 63.021,
+          "edgePct": 5.15,
+          "meanLuma": 100.88,
+          "p05Luma": 29.78,
+          "p50Luma": 115.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f2-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 53.598,
+          "edgePct": 4.063,
+          "meanLuma": 103.37,
+          "p05Luma": 21.01,
+          "p50Luma": 117.32,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 53.719,
+      "strategicContentPct": 63.021,
+      "productionEdgePct": 4.578,
+      "strategicEdgePct": 5.15,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f3",
+      "frameIndex": 3,
+      "boundary": "thorn-thicket",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f3-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.419,
+          "edgePct": 4.946,
+          "meanLuma": 98.93,
+          "p05Luma": 20.29,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f3-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.421,
+          "edgePct": 4.951,
+          "meanLuma": 98.93,
+          "p05Luma": 20.29,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f3-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 63.172,
+          "edgePct": 6.281,
+          "meanLuma": 95.53,
+          "p05Luma": 20.86,
+          "p50Luma": 115.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f3-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.299,
+          "edgePct": 4.432,
+          "meanLuma": 98.14,
+          "p05Luma": 12.58,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 54.421,
+      "strategicContentPct": 63.172,
+      "productionEdgePct": 4.951,
+      "strategicEdgePct": 6.281,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f4",
+      "frameIndex": 4,
+      "boundary": "trunk-field",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f4-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.721,
+          "edgePct": 5.951,
+          "meanLuma": 99.2,
+          "p05Luma": 20.29,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f4-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.722,
+          "edgePct": 5.954,
+          "meanLuma": 99.2,
+          "p05Luma": 20.29,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f4-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 63.137,
+          "edgePct": 6.682,
+          "meanLuma": 96.77,
+          "p05Luma": 22.72,
+          "p50Luma": 115.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f4-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.601,
+          "edgePct": 5.441,
+          "meanLuma": 98.41,
+          "p05Luma": 12.58,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 54.722,
+      "strategicContentPct": 63.137,
+      "productionEdgePct": 5.954,
+      "strategicEdgePct": 6.682,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 3,
+      "sceneId": "boundary-sheet",
+      "label": "03-boundary-sheet-f5",
+      "frameIndex": 5,
+      "boundary": "fog-volume",
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "03-boundary-sheet-f5-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.292,
+          "edgePct": 4.949,
+          "meanLuma": 104.13,
+          "p05Luma": 25.72,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f5-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.293,
+          "edgePct": 4.955,
+          "meanLuma": 104.13,
+          "p05Luma": 25.72,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f5-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 63.144,
+          "edgePct": 5.569,
+          "meanLuma": 101.08,
+          "p05Luma": 32.43,
+          "p50Luma": 115.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "03-boundary-sheet-f5-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.173,
+          "edgePct": 4.436,
+          "meanLuma": 103.34,
+          "p05Luma": 21.01,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 54.293,
+      "strategicContentPct": 63.144,
+      "productionEdgePct": 4.955,
+      "strategicEdgePct": 5.569,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 4,
+      "sceneId": "route-proof",
+      "label": "04-route-proof",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 2,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "04-route-proof-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.381,
+          "edgePct": 4.839,
+          "meanLuma": 99.31,
+          "p05Luma": 25.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "04-route-proof-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.381,
+          "edgePct": 4.838,
+          "meanLuma": 99.31,
+          "p05Luma": 25.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "04-route-proof-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 62.913,
+          "edgePct": 6.736,
+          "meanLuma": 95.53,
+          "p05Luma": 25.72,
+          "p50Luma": 115.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "04-route-proof-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.259,
+          "edgePct": 4.325,
+          "meanLuma": 98.52,
+          "p05Luma": 18.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 54.381,
+      "strategicContentPct": 62.913,
+      "productionEdgePct": 4.838,
+      "strategicEdgePct": 6.736,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 5,
+      "sceneId": "walk-down-16",
+      "label": "05-walk-down-16",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 8,
+      "standableCells": 8,
+      "witnesses": 1,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "05-walk-down-16-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            136,
+            116,
+            110
+          ],
+          "contentPct": 74.372,
+          "edgePct": 5.093,
+          "meanLuma": 88.47,
+          "p05Luma": 24.35,
+          "p50Luma": 108.25,
+          "p95Luma": 120.53
+        },
+        {
+          "file": "05-walk-down-16-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            136,
+            116,
+            110
+          ],
+          "contentPct": 74.377,
+          "edgePct": 5.09,
+          "meanLuma": 88.47,
+          "p05Luma": 24.35,
+          "p50Luma": 108.24,
+          "p95Luma": 120.53
+        },
+        {
+          "file": "05-walk-down-16-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            136,
+            116,
+            110
+          ],
+          "contentPct": 61.481,
+          "edgePct": 4.481,
+          "meanLuma": 101.29,
+          "p05Luma": 25.43,
+          "p50Luma": 116.47,
+          "p95Luma": 120.53
+        },
+        {
+          "file": "05-walk-down-16-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            136,
+            116,
+            110
+          ],
+          "contentPct": 74.28,
+          "edgePct": 4.567,
+          "meanLuma": 87.66,
+          "p05Luma": 20.01,
+          "p50Luma": 109.18,
+          "p95Luma": 120.53
+        }
+      ],
+      "productionContentPct": 74.377,
+      "strategicContentPct": 61.481,
+      "productionEdgePct": 5.09,
+      "strategicEdgePct": 4.481,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 6,
+      "sceneId": "support-graph",
+      "label": "06-support-graph",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 192,
+      "standableCells": 100,
+      "witnesses": 2,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "06-support-graph-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.382,
+          "edgePct": 6.151,
+          "meanLuma": 99.37,
+          "p05Luma": 25.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "06-support-graph-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.381,
+          "edgePct": 6.151,
+          "meanLuma": 99.37,
+          "p05Luma": 25.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "06-support-graph-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 62.912,
+          "edgePct": 8.428,
+          "meanLuma": 95.63,
+          "p05Luma": 26.35,
+          "p50Luma": 115.39,
+          "p95Luma": 119.82
+        },
+        {
+          "file": "06-support-graph-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            135,
+            116,
+            110
+          ],
+          "contentPct": 54.26,
+          "edgePct": 5.637,
+          "meanLuma": 98.58,
+          "p05Luma": 18.92,
+          "p50Luma": 116.61,
+          "p95Luma": 119.82
+        }
+      ],
+      "productionContentPct": 54.381,
+      "strategicContentPct": 62.912,
+      "productionEdgePct": 6.151,
+      "strategicEdgePct": 8.428,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    },
+    {
+      "capture": 7,
+      "sceneId": "dark",
+      "label": "07-dark",
+      "frameIndex": null,
+      "boundary": null,
+      "built": true,
+      "fieldCount": 1,
+      "cellMeshes": 564,
+      "standableCells": 546,
+      "witnesses": 12,
+      "witnessFailures": 0,
+      "frames": [
+        {
+          "file": "07-dark-01-early-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            87,
+            80,
+            88
+          ],
+          "contentPct": 49.647,
+          "edgePct": 3.334,
+          "meanLuma": 83.75,
+          "p05Luma": 57.93,
+          "p50Luma": 81.07,
+          "p95Luma": 127.53
+        },
+        {
+          "file": "07-dark-02-settled-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            87,
+            80,
+            88
+          ],
+          "contentPct": 49.649,
+          "edgePct": 3.334,
+          "meanLuma": 83.75,
+          "p05Luma": 57.93,
+          "p50Luma": 81.07,
+          "p95Luma": 127.53
+        },
+        {
+          "file": "07-dark-03-settled-strategic.png",
+          "pixels": 115230,
+          "backdrop": [
+            120,
+            128,
+            145
+          ],
+          "contentPct": 60.388,
+          "edgePct": 6.257,
+          "meanLuma": 99.71,
+          "p05Luma": 58.06,
+          "p50Luma": 106.31,
+          "p95Luma": 127.53
+        },
+        {
+          "file": "07-dark-04-clean-production.png",
+          "pixels": 115230,
+          "backdrop": [
+            87,
+            80,
+            88
+          ],
+          "contentPct": 49.525,
+          "edgePct": 2.612,
+          "meanLuma": 82.88,
+          "p05Luma": 18.8,
+          "p50Luma": 81.07,
+          "p95Luma": 127.53
+        }
+      ],
+      "productionContentPct": 49.649,
+      "strategicContentPct": 60.388,
+      "productionEdgePct": 3.334,
+      "strategicEdgePct": 6.257,
+      "cameraPairDistinct": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (File not found)",
+        "Failed to load resource: the server responded with a status of 404 (File not found)"
+      ]
+    }
+  ],
+  "gates": {
+    "walkableCellsAbove30Deg": 0,
+    "maxWalkableSlopeDeg": 26.5651,
+    "illegalWalkEdges": 0,
+    "unownedFacesAt2hPlus": 0,
+    "unreachableStandableSurfaces": 0,
+    "boundaryStringsResolved": 7,
+    "boundaryStringsTotal": 7,
+    "boundaryKinds": 6,
+    "d50Terrain": 37,
+    "d50NonTerrainDeclared": 13,
+    "d50Unresolved": 0,
+    "d50Total": 50,
+    "coveragePlaced": 18,
+    "coverageTotal": 18,
+    "coverageCanonicalForms": 13,
+    "coverageFailed": []
+  },
+  "failures": [],
+  "oneClamp": {
+    "sameGenerator": true,
+    "sameParametersExceptClamp": true,
+    "parameterDiff": [
+      "slopeClamp"
+    ],
+    "hill": {
+      "maxWalkStepH": 1,
+      "maxWalkSlopeDeg": 26.56505117707799,
+      "faces": 0,
+      "maxH": 4,
+      "fingerprint": "daf2e882-0fc6d988"
+    },
+    "cliff": {
+      "maxWalkStepH": 1,
+      "maxWalkSlopeDeg": 26.56505117707799,
+      "faces": 20,
+      "maxH": 6,
+      "fingerprint": "c196c924-8e7b621e"
+    },
+    "cellsLoweredByClamp": 20,
+    "hillHasNoFaces": true,
+    "cliffHasFaces": true,
+    "verdict": "ONE CHASSIS \u2014 hill and cliff differ only by slopeClamp"
+  },
+  "walkDown": {
+    "degraded": true,
+    "legalBoard": true,
+    "requestedFootprintCells": 30,
+    "finalFootprintCells": 8,
+    "trayCells": 16
+  },
+  "fingerprints": [
+    {
+      "id": "cl-f07a-thirteen-piece-sheet",
+      "fingerprint": "79460788-46a623f4"
+    },
+    {
+      "id": "cl-f07a-one-clamp-hill",
+      "fingerprint": "daf2e882-0fc6d988"
+    },
+    {
+      "id": "cl-f07a-one-clamp-cliff",
+      "fingerprint": "c196c924-8e7b621e"
+    },
+    {
+      "id": "cl-f07a-boundary-sheer-cliff",
+      "fingerprint": "8a33b47a-5f625056"
+    },
+    {
+      "id": "cl-f07a-boundary-earthen-bank",
+      "fingerprint": "23d65508-2dd14e1c"
+    },
+    {
+      "id": "cl-f07a-boundary-water-mud",
+      "fingerprint": "3ef9da18-96212144"
+    },
+    {
+      "id": "cl-f07a-boundary-thorn-thicket",
+      "fingerprint": "f2eccc68-4b2a2106"
+    },
+    {
+      "id": "cl-f07a-boundary-trunk-field",
+      "fingerprint": "90037868-9d9c27ec"
+    },
+    {
+      "id": "cl-f07a-boundary-fog-volume",
+      "fingerprint": "7db7e418-a1cf0166"
+    },
+    {
+      "id": "cl-f07a-route-proof",
+      "fingerprint": "cd5337bb-de6ce58b"
+    },
+    {
+      "id": "cl-f07a-walk-down-16",
+      "fingerprint": "3aa808e1-8988671d"
+    },
+    {
+      "id": "cl-f07a-route-proof",
+      "fingerprint": "cd5337bb-de6ce58b"
+    },
+    {
+      "id": "cl-f07a-dark",
+      "fingerprint": "a471c61a-8d97041e"
+    }
+  ],
+  "determinism": {
+    "gate": "same segment id -> byte-identical heightfield, twice, in separate page loads",
+    "pageLoads": 2,
+    "fieldsCompared": 13,
+    "byteIdentical": true,
+    "fingerprintsIdentical": true,
+    "fingerprints": [
+      {
+        "scene": "thirteen-piece-sheet",
+        "id": "cl-f07a-thirteen-piece-sheet",
+        "fingerprint": "79460788-46a623f4"
+      },
+      {
+        "scene": "one-clamp-proof",
+        "id": "cl-f07a-one-clamp-hill",
+        "fingerprint": "daf2e882-0fc6d988"
+      },
+      {
+        "scene": "one-clamp-proof",
+        "id": "cl-f07a-one-clamp-cliff",
+        "fingerprint": "c196c924-8e7b621e"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-sheer-cliff",
+        "fingerprint": "8a33b47a-5f625056"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-earthen-bank",
+        "fingerprint": "23d65508-2dd14e1c"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-water-mud",
+        "fingerprint": "3ef9da18-96212144"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-thorn-thicket",
+        "fingerprint": "f2eccc68-4b2a2106"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-trunk-field",
+        "fingerprint": "90037868-9d9c27ec"
+      },
+      {
+        "scene": "boundary-sheet",
+        "id": "cl-f07a-boundary-fog-volume",
+        "fingerprint": "7db7e418-a1cf0166"
+      },
+      {
+        "scene": "route-proof",
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "scene": "walk-down-16",
+        "id": "cl-f07a-walk-down-16",
+        "fingerprint": "3aa808e1-8988671d"
+      },
+      {
+        "scene": "support-graph",
+        "id": "cl-f07a-route-proof",
+        "fingerprint": "cd5337bb-de6ce58b"
+      },
+      {
+        "scene": "dark",
+        "id": "cl-f07a-dark",
+        "fingerprint": "a471c61a-8d97041e"
+      }
+    ],
+    "result": "PASS"
+  },
+  "scenesMeasured": 12,
+  "result": "PASS"
+}

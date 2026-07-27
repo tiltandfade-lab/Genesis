@@ -222,6 +222,9 @@ function clayRoomFixtureIdFromLocation(){
     if(raw === "trim" || raw === "trim-bench" || raw === CLAY_ROOM_TRIM_BENCH_ID){
       return CLAY_ROOM_TRIM_BENCH_ID;
     }
+    if(raw === "terrain" || raw === "terrain-bench" || raw === "cl-f07-terrain-bench"){
+      return "cl-f07-terrain-bench";
+    }
   } catch(e){}
   // The active reset-ladder checkpoint opens on the fixture under review. Earlier fixtures remain
   // one click away and can be pinned directly with ?clayfixture=room or ?clayfixture=lights.
@@ -476,7 +479,8 @@ function clayRoomSetFixture(fixtureId, reason){
     && fixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
     && fixtureId !== CLAY_ROOM_SPRITE_BENCH_ID
     && fixtureId !== CLAY_ROOM_MATERIAL_BENCH_ID
-    && fixtureId !== CLAY_ROOM_TRIM_BENCH_ID){
+    && fixtureId !== CLAY_ROOM_TRIM_BENCH_ID
+    && fixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID){
     return false;
   }
   if(!S.clayRoomCompiled || !S.clayRoomRecord) return false;
@@ -486,7 +490,8 @@ function clayRoomSetFixture(fixtureId, reason){
       ? 0.72 : (fixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
       : (fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65
         : (fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID ? 0.78
-          : (fixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5 : 1))));
+          : (fixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5
+            : (fixtureId === CLAY_ROOM_TERRAIN_BENCH_ID ? 0.42 : 1)))));
   S.boardKey = null;
   const session = clayRoomMovementSession();
   const board = (session && clayRoomMovementBoardFromState(session.state)) || S.clayRoomCompiled.board;
@@ -501,7 +506,8 @@ function clayRoomSetFixture(fixtureId, reason){
       || fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
       || fixtureId === CLAY_ROOM_SPRITE_BENCH_ID
       || fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
-      || fixtureId === CLAY_ROOM_TRIM_BENCH_ID) && roomOnlySelected){
+      || fixtureId === CLAY_ROOM_TRIM_BENCH_ID
+      || fixtureId === CLAY_ROOM_TERRAIN_BENCH_ID) && roomOnlySelected){
       const recipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId];
       const light = recipe && (recipe.lights || []).find(function(row){ return row.enabled !== false; });
       if(light) S.clayRoomWorkbenchSelect(light.id, "fixture switch");
@@ -3794,6 +3800,548 @@ function clayRoomMountSpriteBench(){
   return group;
 }
 
+/* ─── CL-F07 TERRAIN BENCH (docs/TERRAIN-PROGRAM.md §4.1/§4.3) ─────────────────────────────────
+   The sixth bench in this module, following CL-F00…CL-F05 exactly: the ENGINE owns the terrain
+   (src/engine/terrain-{field,pieces,bench}.js author every height, face, water datum and support
+   edge); this function only PROJECTS what the chassis already decided. It never invents a height,
+   never smooths one, and never authors a second renderer — a rule the clay-proof contract states
+   and the walk-native diorama contract restates as "dioramas project walk facts".
+
+   Placement decision (2026-07-27, grounds in docs/DESIGN.md): the terrain bench lives here rather
+   than in a new theater ES module because all five existing benches do, this module already holds
+   every capability terrain needs (THREE, S, interiorFloorTopAt, clayStructure*, the standee mount,
+   the governed 72° camera), and a sixth bench in a new module would require rewiring the root's
+   ctx injection — protected core the graphics charter tells me not to touch for a first pass. */
+const CLAY_ROOM_TERRAIN_BENCH_ID = "cl-f07-terrain-bench";
+const CLAY_TERRAIN_SCENE_IDS = Object.freeze([
+  "thirteen-piece-sheet", "one-clamp-proof", "boundary-sheet", "route-proof",
+  "walk-down-16", "support-graph", "dark"
+]);
+/* Diagnostic colours, deliberately NOT art: the clay register stays neutral so Adam is ruling on
+   FORM, and every non-clay colour here is an overlay that a capture can turn off. */
+const CLAY_TERRAIN_COLORS = Object.freeze({
+  ground: 0x9c9a95, guarded: 0x7a736c, boulder: 0x8d857c, water: 0x4d7f96,
+  thicket: 0x5d6b4b, trunks: 0x6b5b47, fog: 0xb8bcc2,
+  standable: 0x6fcfff, unreachable: 0xff3030, entry: 0xffd166,
+  approach: 0x8fe08f, retreat: 0xe08f8f, objective: 0xffd166, span: 0xc8a06a
+});
+
+function clayRoomTerrainSceneIdFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terrainscene") : null;
+    if(raw && CLAY_TERRAIN_SCENE_IDS.indexOf(raw) >= 0) return raw;
+  } catch(e){}
+  return CLAY_TERRAIN_SCENE_IDS[0];
+}
+
+/* Which frame of a multi-frame scene (the boundary sheet's six) this mount carries. */
+function clayRoomTerrainFrameFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terrainframe") : null;
+    if(raw != null && raw !== "" && isFinite(Number(raw))) return Math.max(0, Number(raw) | 0);
+  } catch(e){}
+  return null;
+}
+
+function clayRoomSetTerrainFrame(frameIndex){
+  S.clayRoomTerrainFrame = frameIndex == null ? null : Math.max(0, frameIndex | 0);
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID) return false;
+  if(S.clayRoomTerrainBenchGroup && S.clayRoomTerrainBenchGroup.parent){
+    S.clayRoomTerrainBenchGroup.parent.remove(S.clayRoomTerrainBenchGroup);
+    clearGroup(S.clayRoomTerrainBenchGroup);
+  }
+  S.clayRoomTerrainWitnessRetry = false;
+  clayRoomMountTerrainBench();
+  markDirty(); scheduleRender();
+  return true;
+}
+
+function clayRoomTerrainSeedFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terrainseed") : null;
+    if(raw != null && raw !== "" && isFinite(Number(raw))) return Number(raw) >>> 0;
+  } catch(e){}
+  return null;
+}
+
+/* One field -> one group of cell columns. Ground is SOLID, so every standable cell is a column
+   from the field's own floor datum up to its top surface — not a floating tile. A void cell emits
+   nothing, which is what makes a chasm a hole rather than a dark texture. */
+function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
+  const h = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+  const group = new THREE.Group();
+  group.name = "terrain-field-" + field.id;
+  group.userData.terrainFieldId = field.id;
+  group.userData.terrainFingerprint = field.fingerprint;
+  const cellMeshes = [];
+  /* A cell's column reaches down to its LOWEST ORTHOGONAL NEIGHBOUR, not to the deepest point of
+     the whole field. Ground is a continuous mass and its exposed face is only as tall as the drop
+     beside it — running every column to the field minimum turns a 1h berm into a 22-ft monolith
+     and hides the very faces this bench exists to show. A void neighbour drops the full depth,
+     because that is exactly what a chasm wall is. */
+  function baseHFor(c){
+    let low = c.h;
+    [[c.x - 1, c.y], [c.x + 1, c.y], [c.x, c.y - 1], [c.x, c.y + 1]].forEach(function(nb){
+      if(nb[0] < 0 || nb[1] < 0 || nb[0] >= field.extent.x || nb[1] >= field.extent.y){
+        low = Math.min(low, c.h - 1);
+        return;
+      }
+      const n = field.cells[nb[1] * field.extent.x + nb[0]];
+      low = Math.min(low, n.kind === "void" ? field.metrics.minH - 2 : n.h);
+    });
+    return low - 1;
+  }
+  const floorH = field.metrics.minH - 1;
+  field.cells.forEach(function(c){
+    if(c.kind === "void") return;
+    const topH = c.h + c.sub;
+    const cellBaseH = baseHFor(c);
+    const columnH = Math.max(0.05, (topH - cellBaseH) * h);
+    const kindColor = c.kind === "guarded-slope" ? CLAY_TERRAIN_COLORS.guarded
+      : (c.kind === "boulder" ? CLAY_TERRAIN_COLORS.boulder : CLAY_TERRAIN_COLORS.ground);
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, columnH, 1),
+      clayStructureMaterial(c.inPlayfield ? kindColor : kindColor));
+    mesh.position.set(
+      originCell.x + c.x - origin.cx + 0.5,
+      baseY + cellBaseH * h + columnH / 2,
+      originCell.z + c.y - origin.cz + 0.5
+    );
+    clayStructureTag(mesh, "cl-f07:" + field.id + ":cell", c.kind === "guarded-slope" ? "riser" : "floor");
+    mesh.castShadow = true;
+    mesh.userData.terrainCell = { x: c.x, y: c.y, h: c.h, kind: c.kind,
+      standable: c.standable, inPlayfield: c.inPlayfield, owner: c.owner,
+      surface: c.surface, localSlopeDeg: c.localSlopeDeg };
+    group.add(mesh);
+    cellMeshes.push(mesh);
+  });
+
+  /* Volume boundaries (thicket, trunk field, fog) are OCCUPANCY, not ground: they stand ON the
+     cell they govern and declare whether they stop movement, sight, or both. */
+  field.cells.forEach(function(c){
+    if(!c.surface) return;
+    const volume = c.surface === "thicket" ? { color: CLAY_TERRAIN_COLORS.thicket, height: 3, opacity: 1 }
+      : c.surface === "trunk-field" ? { color: CLAY_TERRAIN_COLORS.trunks, height: 5, opacity: 1 }
+      : c.surface === "fog" ? { color: CLAY_TERRAIN_COLORS.fog, height: 3, opacity: 0.34 }
+      : null;
+    if(!volume) return;
+    const geo = c.surface === "trunk-field"
+      ? new THREE.CylinderGeometry(0.3, 0.36, volume.height * h, 7)
+      : new THREE.BoxGeometry(0.94, volume.height * h, 0.94);
+    const mat = new THREE.MeshStandardMaterial({ color: volume.color, roughness: 0.95, metalness: 0,
+      transparent: volume.opacity < 1, opacity: volume.opacity });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(
+      originCell.x + c.x - origin.cx + 0.5,
+      baseY + (c.h) * h + volume.height * h / 2,
+      originCell.z + c.y - origin.cz + 0.5
+    );
+    mesh.castShadow = c.surface !== "fog";
+    mesh.receiveShadow = true;
+    mesh.userData.interiorKind = "clay-terrain-volume";
+    mesh.userData.terrainVolume = { surface: c.surface, cell: { x: c.x, y: c.y } };
+    group.add(mesh);
+  });
+
+  /* Water is a PLANE at a datum. One quad per water body, at the datum, so the shoreline the
+     player sees is the DERIVED one — wherever the ground crosses the plane. */
+  const waterBodies = {};
+  field.cells.forEach(function(c){
+    if(!(c.depthH > 0)) return;
+    const datum = c.h + c.depthH;
+    const key = datum.toFixed(3);
+    if(!waterBodies[key]) waterBodies[key] = { datum: datum, cells: [] };
+    waterBodies[key].cells.push(c);
+  });
+  Object.keys(waterBodies).forEach(function(key){
+    const body = waterBodies[key];
+    body.cells.forEach(function(c){
+      const quad = new THREE.Mesh(new THREE.PlaneGeometry(1, 1),
+        new THREE.MeshStandardMaterial({ color: CLAY_TERRAIN_COLORS.water, roughness: 0.22,
+          metalness: 0, transparent: true, opacity: 0.72 }));
+      quad.rotation.x = -Math.PI / 2;
+      quad.position.set(
+        originCell.x + c.x - origin.cx + 0.5,
+        baseY + body.datum * h + 0.004,
+        originCell.z + c.y - origin.cz + 0.5
+      );
+      quad.userData.interiorKind = "clay-terrain-water";
+      quad.userData.terrainWater = { datumH: body.datum, depthH: c.depthH };
+      quad.receiveShadow = false;
+      group.add(quad);
+    });
+  });
+
+  /* THE SUPPORT-GRAPH OVERLAY — the CL-R3 traversability grid projected onto terrain. Every
+     walkable cell claimed, every guarded slope excluded, and any unreachable standable surface
+     drawn RED so a failure is visible rather than merely counted. */
+  if(opts && opts.supportOverlay){
+    field.cells.forEach(function(c){
+      if(!c.standable) return;
+      const y = baseY + (c.h + c.sub) * h + 0.02;
+      const cx = originCell.x + c.x - origin.cx + 0.5;
+      const cz = originCell.z + c.y - origin.cz + 0.5;
+      const color = c.reachableNonFlying ? CLAY_TERRAIN_COLORS.standable : CLAY_TERRAIN_COLORS.unreachable;
+      const pts = [
+        new THREE.Vector3(cx - 0.46, y, cz - 0.46), new THREE.Vector3(cx + 0.46, y, cz - 0.46),
+        new THREE.Vector3(cx + 0.46, y, cz + 0.46), new THREE.Vector3(cx - 0.46, y, cz + 0.46)
+      ];
+      const loop = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({ color: color, transparent: true,
+          opacity: c.reachableNonFlying ? 0.6 : 1, depthWrite: false }));
+      loop.userData.interiorKind = "clay-diagnostic-overlay";
+      loop.userData.terrainSupportCell = { x: c.x, y: c.y, reachable: !!c.reachableNonFlying };
+      group.add(loop);
+    });
+  }
+  return { group: group, floorH: floorH, cellMeshes: cellMeshes };
+}
+
+function clayTerrainCellWorld(field, originCell, baseY, origin, index){
+  const h = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+  const c = field.cells[index];
+  return new THREE.Vector3(
+    originCell.x + c.x - origin.cx + 0.5,
+    baseY + (c.h + c.sub) * h,
+    originCell.z + c.y - origin.cz + 0.5
+  );
+}
+
+function clayTerrainPlaceWitness(group, slug, position, label, failures){
+  const note = function(why){ if(failures) failures.push({ slug: slug, label: label, why: why }); return null; };
+  const entry = (typeof spriteEntryFor === "function") ? spriteEntryFor(slug) : null;
+  if(!entry) return note("no sprite registry entry for " + slug);
+  let built = null;
+  try { built = interiorSpriteBillboard(entry, null); }
+  catch(e){ return note("interiorSpriteBillboard threw: " + (e && e.message)); }
+  if(!built) return note("interiorSpriteBillboard returned null (texture not ready?)");
+  const figure = built.group;
+  figure.position.set(position.x, interiorStandeeContactY(position.y), position.z);
+  const support = interiorStandeeSupportMetrics(built.width, entry.size, 1);
+  const base = buildInteriorBase(support.width, support.depth,
+    S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor);
+  figure.add(base);
+  figure.userData.standeeBaseMesh = base;
+  figure.userData.interiorBaseWidth = support.width;
+  figure.userData.interiorBaseDepth = support.depth;
+  figure.userData.standeeCollisionExcluded = true;
+  figure.userData.interiorHeight = built.height;
+  figure.userData.clayTerrainWitness = { slug: slug, label: label || null };
+  figure.userData.sceneObjectId = "terrain-witness-" + (label || slug);
+  group.add(figure);
+  return { slug: slug, label: label || null, height: built.height,
+    at: { x: position.x, y: position.y, z: position.z } };
+}
+
+function clayRoomMountTerrainBench(){
+  S.clayRoomTerrainBenchGroup = null;
+  S.clayRoomTerrainReport = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  /* The chassis is a classic-script engine module. If it has not loaded, the bench refuses to
+     draw rather than inventing terrain — a renderer that can author ground is the exact failure
+     the walk-native contract forbids. */
+  if(typeof terrainBenchSceneBuild !== "function" || typeof CL_F07_TERRAIN_BENCH === "undefined"){
+    S.clayRoomTerrainReport = { error: "terrain chassis not loaded (src/engine/terrain-*.js)" };
+    return null;
+  }
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+
+  /* The host's MOVE/DASH range overlay is a 15x15 room diagnostic. When the Clayroom opens
+     STRAIGHT onto a bench from the URL, clayRoomSetFixture never runs, so the overlay the initial
+     mount drew is never disposed — it survives as a magenta patch of host-room cells sitting in the
+     middle of an outdoor field, which is both wrong and unreadable. Dispose it here, on every
+     rebuild, so the frame carries only terrain's own overlays. */
+  if(typeof clayRoomDisposeMovementOverlay === "function") clayRoomDisposeMovementOverlay();
+
+  const sceneId = S.clayRoomTerrainSceneId || clayRoomTerrainSceneIdFromLocation();
+  S.clayRoomTerrainSceneId = sceneId;
+  const seed = S.clayRoomTerrainSeed != null ? S.clayRoomTerrainSeed : clayRoomTerrainSeedFromLocation();
+  const frameIndex = S.clayRoomTerrainFrame != null
+    ? S.clayRoomTerrainFrame : clayRoomTerrainFrameFromLocation();
+  let scene;
+  try {
+    scene = terrainBenchSceneBuild(sceneId, seed, { frameIndex: frameIndex });
+  } catch(error){
+    S.clayRoomTerrainReport = { error: String(error && error.message || error), sceneId: sceneId };
+    return null;
+  }
+
+  /* The 15x15 host supplies the calibrated grid, camera, light and shadow receiver, exactly as
+     CL-F01 uses it. Its perimeter uppers are not specimens and would enclose an outdoor field in
+     a room, so the same suppression the structure bench applies is applied here. */
+  S.interiorGroup.traverse(function(node){
+    const kind = node.userData && node.userData.interiorKind;
+    if(kind === "room-shell-wall-upper" || kind === "room-shell-wall-trim"
+      || kind === "room-shell-wall-stem" || kind === "room-shell-floor"
+      || kind === "skirt" || kind === "portal"){
+      node.visible = false;
+      node.userData.clayTerrainHostSuppressed = true;
+    }
+  });
+
+  const group = new THREE.Group();
+  group.name = CL_F07_TERRAIN_BENCH.id + ":" + sceneId;
+  group.userData.clayTerrainBench = true;
+  group.userData.fixtureId = CL_F07_TERRAIN_BENCH.id;
+  group.userData.fixtureVersion = CL_F07_TERRAIN_BENCH.version;
+  group.userData.terrainSceneId = sceneId;
+
+  const baseY = interiorFloorTopAt(S.interiorFloorTopMap, room.x + 7, room.y + 7);
+  const fields = scene.fields || [];
+  /* Multi-field scenes (the one-clamp pair, the six boundary frames) lay their fields out in one
+     row, centred on the host, so a single frame carries the comparison the capture is about. */
+  const gap = 2;
+  const totalWidth = fields.reduce(function(sum, f){ return sum + f.extent.x; }, 0)
+    + gap * Math.max(0, fields.length - 1);
+  let cursorX = room.x + 7 - totalWidth / 2;
+  const built = [];
+  const witnesses = [];
+  const witnessFailures = [];
+  fields.forEach(function(field, index){
+    const originCell = { x: cursorX, z: room.y + 7 - field.extent.y / 2 };
+    const fieldBuild = clayTerrainBuildFieldGroup(field, originCell, baseY, origin, {
+      supportOverlay: sceneId === "support-graph"
+    });
+    fieldBuild.group.userData.terrainFieldIndex = index;
+    group.add(fieldBuild.group);
+    built.push({ field: field, originCell: originCell, floorH: fieldBuild.floorH,
+      cellMeshes: fieldBuild.cellMeshes.length });
+
+    /* THE SIX-FOOT HUMAN WITNESS ON EVERY RELIEF DATUM IN THE SAME FRAME (§4.2 condition 2). On
+       the sheet that is one per piece; elsewhere it is the extremes of the field's own relief. */
+    const spec = scene.spec && scene.spec.pieces ? scene.spec : null;
+    if(sceneId === "thirteen-piece-sheet" || sceneId === "dark"){
+      (spec ? spec.pieces : []).forEach(function(piece){
+        if(!piece.witnessCell) return;
+        const wIdx = piece.witnessCell.y * field.extent.x + piece.witnessCell.x;
+        const cell = field.cells[wIdx];
+        if(!cell || !cell.standable) return;
+        const placed = clayTerrainPlaceWitness(fieldBuild.group,
+          CL_F07_TERRAIN_BENCH.witnessSlug,
+          clayTerrainCellWorld(field, originCell, baseY, origin, wIdx), piece.id, witnessFailures);
+        if(placed) witnesses.push(Object.assign({ piece: piece.id }, placed));
+      });
+    } else {
+      const standables = field.cells.filter(function(c){ return c.standable; });
+      if(standables.length){
+        const lowest = standables.reduce(function(a, b){ return b.h < a.h ? b : a; });
+        const highest = standables.reduce(function(a, b){ return b.h > a.h ? b : a; });
+        const picks = [{ cell: lowest, label: "foot" }];
+        if(highest.index !== lowest.index) picks.push({ cell: highest, label: "top" });
+        /* The three envelopes read DIFFERENTLY against terrain than against architecture, which is
+           why CL-F03's cast does not substitute: a 2h step a Medium climbs is a wall to a Small. */
+        const envelopes = CL_F07_TERRAIN_BENCH.witnessEnvelopes;
+        picks.forEach(function(pick, pIdx){
+          const env = envelopes[Math.min(pIdx === 0 ? 1 : 0, envelopes.length - 1)];
+          const placed = clayTerrainPlaceWitness(fieldBuild.group,
+            pIdx === 0 ? CL_F07_TERRAIN_BENCH.witnessSlug : env.slug,
+            clayTerrainCellWorld(field, originCell, baseY, origin, pick.cell.index),
+            field.id + ":" + pick.label, witnessFailures);
+          if(placed) witnesses.push(Object.assign({ datum: pick.label, fieldId: field.id }, placed));
+        });
+      }
+    }
+
+    /* THE ROUTE PROOF overlay: approach / deployment / objective / retreat drawn on the frame
+       (clay-proof contract item 5), from the chassis's own BFS over the walk graph. */
+    if(sceneId === "route-proof" && scene.route){
+      const drawPath = function(path, color, tag){
+        if(!path) return;
+        for(let i = 0; i + 1 < path.length; i++){
+          const a = clayTerrainCellWorld(field, originCell, baseY, origin, path[i]);
+          const b = clayTerrainCellWorld(field, originCell, baseY, origin, path[i + 1]);
+          a.y += 0.05; b.y += 0.05;
+          const strip = clayStructureStripBetween(a, b, color, "route", "cl-f07:route:" + tag, 0.09);
+          strip.userData.terrainRoute = tag;
+          fieldBuild.group.add(strip);
+        }
+      };
+      drawPath(scene.route.approach, CLAY_TERRAIN_COLORS.approach, "approach");
+      drawPath(scene.route.retreat, CLAY_TERRAIN_COLORS.retreat, "retreat");
+      (scene.route.deployment || []).forEach(function(idx){
+        const p = clayTerrainCellWorld(field, originCell, baseY, origin, idx);
+        const marker = new THREE.Mesh(new THREE.RingGeometry(0.26, 0.4, 16),
+          new THREE.MeshBasicMaterial({ color: CLAY_TERRAIN_COLORS.entry, depthTest: false,
+            depthWrite: false, toneMapped: false, side: THREE.DoubleSide }));
+        marker.rotation.x = -Math.PI / 2;
+        marker.position.set(p.x, p.y + 0.05, p.z);
+        marker.renderOrder = 72;
+        marker.userData.interiorKind = "clay-diagnostic-overlay";
+        marker.userData.terrainRoute = "deployment";
+        fieldBuild.group.add(marker);
+      });
+      if(scene.route.objective != null){
+        const p = clayTerrainCellWorld(field, originCell, baseY, origin, scene.route.objective);
+        const pin = new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.7, 10),
+          new THREE.MeshBasicMaterial({ color: CLAY_TERRAIN_COLORS.objective, toneMapped: false }));
+        pin.position.set(p.x, p.y + 0.5, p.z);
+        pin.userData.interiorKind = "clay-diagnostic-overlay";
+        pin.userData.terrainRoute = "objective";
+        fieldBuild.group.add(pin);
+      }
+    }
+
+    /* R1-13 CHASSIS HOOKS: the beams. A beam is NOT graded ground — writing it into the heightfield
+       would mint a false 5-ft footprint in the support graph — so the chassis produced the anchors
+       and the undercut, and the renderer draws the span between them. */
+    if(typeof terrainAnchorSet === "function" && typeof terrainSpanNetwork === "function"){
+      const anchors = terrainAnchorSet(field);
+      if(anchors.length >= 2){
+        const network = terrainSpanNetwork(anchors, { spanCount: Math.min(2, anchors.length - 1),
+          diameterFt: 2, heightAboveDatumH: 1, barkCondition: "sound", undercutDepthH: 1 });
+        network.spans.forEach(function(span){
+          const ai = span.from.at.y * field.extent.x + span.from.at.x;
+          const bi = span.to.at.y * field.extent.x + span.to.at.x;
+          if(!field.cells[ai] || !field.cells[bi]) return;
+          const a = clayTerrainCellWorld(field, originCell, baseY, origin, ai);
+          const b = clayTerrainCellWorld(field, originCell, baseY, origin, bi);
+          const rise = span.heightAboveDatumH * TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+          a.y += rise; b.y += rise;
+          const len = a.distanceTo(b);
+          if(len < 0.5 || len > 8) return;
+          const beam = new THREE.Mesh(
+            new THREE.CylinderGeometry(span.diameterFt / 10, span.diameterFt / 10 * (1 + span.taper), len, 8),
+            clayStructureMaterial(CLAY_TERRAIN_COLORS.span));
+          beam.position.copy(a).add(b).multiplyScalar(0.5);
+          beam.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0),
+            b.clone().sub(a).normalize());
+          beam.castShadow = true;
+          beam.userData.interiorKind = "clay-terrain-span";
+          beam.userData.terrainSpan = { id: span.id, treadWidthFt: span.treadWidthFt,
+            movement: span.movement, climbDc: span.climbDc, collapse: span.collapse };
+          fieldBuild.group.add(beam);
+        });
+        fieldBuild.group.userData.terrainSpanNetwork = {
+          spanCount: network.spanCount, junctionCount: network.junctionCount,
+          deferred: network.deferred };
+      }
+    }
+    cursorX += field.extent.x + gap;
+  });
+
+  S.interiorGroup.add(group);
+  S.clayRoomTerrainBenchGroup = group;
+
+  /* The governed zoom is fitted to the FIELD, not to the 15x15 host room: a 24x24 bench sheet or
+     six 12x16 boundary frames in a row do not fit a room-sized frame, and a cropped proof frame is
+     not a proof. Still a governed zoom inside the fixture's own range — never a free orbit. */
+  const spanCells = Math.max(totalWidth, fields.length
+    ? Math.max.apply(null, fields.map(function(f){ return f.extent.y; })) : 15);
+  const fitZoom = Math.max(0.3, Math.min(2.5, (spanCells / 15) * 1.28));
+  S.clayCamZoom = fitZoom;
+  S.clayRoomTerrainHalfSpan = spanCells / 2;
+  group.userData.terrainFitZoom = fitZoom;
+  clayRoomApplyCamPose();
+
+  /* The receipt. One source of numbers: the same terrainBenchGateReport() the jsdom harness calls,
+     plus what this frame actually placed, so a capture can never disagree with the gate. */
+  S.clayRoomTerrainReport = {
+    fixtureId: CL_F07_TERRAIN_BENCH.id,
+    fixtureVersion: CL_F07_TERRAIN_BENCH.version,
+    status: CL_F07_TERRAIN_BENCH.status,
+    proof: CL_F07_TERRAIN_BENCH.proof,
+    sceneId: sceneId,
+    frameIndex: frameIndex,
+    frameCount: scene.frameCount || 1,
+    boundary: scene.boundary || null,
+    seed: fields.length ? fields[0].seed : null,
+    view: S.clayRoomTerrainView || "production",
+    fitZoom: fitZoom,
+    strategicDistanceClamped: S.clayRoomStrategicDistanceClamped || null,
+    hostSuppressed: ["room-shell-floor", "room-shell-wall-stem", "room-shell-wall-upper",
+      "room-shell-wall-trim", "skirt", "portal"],
+    gridLaw: TERRAIN_GRID_LAW,
+    fields: built.map(function(b){
+      return {
+        id: b.field.id, segmentId: b.field.segmentId, seed: b.field.seed,
+        fingerprint: b.field.fingerprint,
+        extent: b.field.extent, shape: b.field.shape,
+        slopeClamp: b.field.slopeClamp, waterDatumH: b.field.waterDatumH,
+        metrics: b.field.metrics,
+        pieces: b.field.pieces,
+        degradedFrom: b.field.degradedFrom,
+        cellMeshes: b.cellMeshes
+      };
+    }),
+    witnesses: witnesses,
+    witnessFailures: witnessFailures,
+    oneClamp: scene.proof || null,
+    route: scene.route ? {
+      sourceRow: scene.route.sourceRow, namedEntries: scene.route.namedEntries,
+      approachCells: scene.route.approach ? scene.route.approach.length : 0,
+      retreatCells: scene.route.retreat ? scene.route.retreat.length : 0,
+      deploymentCells: scene.route.deployment.length,
+      objective: scene.route.objective, plans: scene.route.plans
+    } : null,
+    walkDown: scene.walkDown ? {
+      degradedFrom: scene.walkDown.degradedFrom, legalBoard: scene.walkDown.legalBoard,
+      requestedFootprintCells: scene.walkDown.requestedFootprintCells,
+      finalFootprintCells: scene.walkDown.finalFootprintCells,
+      trayCells: scene.walkDown.trayCells } : null,
+    support: scene.support || null,
+    gate: (typeof terrainBenchGateReport === "function") ? terrainBenchGateReport(seed) : null
+  };
+  /* Read-only capture seams, in this file's established window.Theater._*ForTest convention.
+     The view seam is the ONLY one that mutates, and it mutates exactly one governed camera mode —
+     never a free orbit, which the clay-proof contract forbids. */
+  /* Sprite textures load ASYNCHRONOUSLY. The first mount can legitimately run before the witness
+     PNG has decoded, and a bench with no witness in it proves nothing about scale — §4.2's second
+     condition is the six-foot human on every relief datum. So: if any witness was refused for a
+     not-ready texture, request one rebuild once the decode has had time to land. Bounded to a
+     single retry (a flag on S), so it can never become a render loop. */
+  if(witnessFailures.length && !S.clayRoomTerrainWitnessRetry){
+    S.clayRoomTerrainWitnessRetry = true;
+    setTimeout(function(){
+      if(S.clayRoomFixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID) return;
+      if(S.clayRoomTerrainBenchGroup && S.clayRoomTerrainBenchGroup.parent){
+        S.clayRoomTerrainBenchGroup.parent.remove(S.clayRoomTerrainBenchGroup);
+        clearGroup(S.clayRoomTerrainBenchGroup);
+      }
+      clayRoomMountTerrainBench();
+      markDirty(); scheduleRender();
+    }, 900);
+  }
+  if(window.Theater){
+    window.Theater._clayTerrainBenchForTest = function(){ return S.clayRoomTerrainReport || null; };
+    window.Theater._clayTerrainSetViewForTest = function(view){ return clayRoomSetTerrainView(view); };
+    window.Theater._clayTerrainSetFrameForTest = function(i){ return clayRoomSetTerrainFrame(i); };
+    window.Theater._clayInteriorGroupForTest = function(){ return S.interiorGroup || null; };
+  }
+  S.standeeCollisionDirty = true;
+  return group;
+}
+
+function clayRoomSetTerrainScene(sceneId){
+  if(CLAY_TERRAIN_SCENE_IDS.indexOf(sceneId) < 0) return false;
+  S.clayRoomTerrainSceneId = sceneId;
+  S.clayRoomTerrainWitnessRetry = false;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID) return false;
+  if(S.clayRoomTerrainBenchGroup && S.clayRoomTerrainBenchGroup.parent){
+    S.clayRoomTerrainBenchGroup.parent.remove(S.clayRoomTerrainBenchGroup);
+    clearGroup(S.clayRoomTerrainBenchGroup);
+  }
+  clayRoomMountTerrainBench();
+  markDirty(); scheduleRender();
+  return true;
+}
+
+function clayRoomSetTerrainView(view){
+  if(view !== "production" && view !== "strategic") return false;
+  S.clayRoomTerrainView = view;
+  clayRoomApplyCamPose();
+  return true;
+}
+
+function clayRoomTerrainBenchSnapshot(){
+  return S.clayRoomTerrainReport || null;
+}
+
 function clayRoomSuppressLightingBenchNoise(){
   if((S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID
     && S.clayRoomFixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
@@ -4474,16 +5022,18 @@ function clayRoomAfterInteriorBoardRebuild(){
   clayRoomMountSpriteBench();
   clayRoomMountMaterialBench();
   clayRoomMountTrimBench();
+  clayRoomMountTerrainBench();
   clayRoomSuppressLightingBenchNoise();
   clayRoomApplyDiagnosticSurfaces();
   clayRoomApplyLightProfile(S.clayRoomRecord);
   clayRoomApplyMoodLayer();
   clayRoomBuildLightOverlays();
   clayRoomDisposeSeamGrid();
-  S.clayGridMesh = clayRoomBuildSeamGrid(
-    S.clayRoomRecord,
-    S.clayRoomCompiled && S.clayRoomCompiled.room
-  );
+  S.clayGridMesh = S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID ? null
+    : clayRoomBuildSeamGrid(
+      S.clayRoomRecord,
+      S.clayRoomCompiled && S.clayRoomCompiled.room
+    );
   clayRoomTagAllProvenance();
   // pan/zoom survives rebuilds without compounding: capture THIS rebuild's fresh camera fit, then
   // re-derive the pose from fit ∘ offset ∘ zoom (see the CLAY CAMERA PAN/ZOOM block).
@@ -5281,8 +5831,10 @@ function clayRoomApplyCamPose(){
   const zoom = S.clayCamZoom || 1;
   const target = S.clayCamFit.target.clone(); target.x += off.x; target.z += off.z;
   const pos = S.clayCamFit.pos.clone(); pos.x += off.x; pos.z += off.z;
-  if(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
-    && S.clayRoomStructureView === "strategic"){
+  if((S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    && S.clayRoomStructureView === "strategic")
+    || (S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID
+      && S.clayRoomTerrainView === "strategic")){
     // The strategic camera is the one governed pitch exception named by the wall-omission ruling:
     // fixed 72° map-reading pitch, same production bearing, pan, target, and perspective camera.
     // It is a named mode, never free orbit. Every wall is compiled in this mode (see CL-F01 mount).
@@ -5293,13 +5845,27 @@ function clayRoomApplyCamPose(){
     // and governed zoom are unchanged — only the fit is honest to the viewport now.
     let distance;
     {
-      const halfDiag = Math.sqrt(
-        Math.pow(S.boardHalfX || 8, 2) + Math.pow(S.boardHalfZ || 8, 2)
-      ) * 1.12 + 1.5; // margin: wall thickness + breathing room
+      const terrainSpan = (S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID
+        && S.clayRoomTerrainHalfSpan) ? S.clayRoomTerrainHalfSpan : null;
+      const halfDiag = terrainSpan
+        ? terrainSpan * 1.42 + 1.5
+        : Math.sqrt(
+            Math.pow(S.boardHalfX || 8, 2) + Math.pow(S.boardHalfZ || 8, 2)
+          ) * 1.12 + 1.5; // margin: wall thickness + breathing room
       const vFov = ((S.camera.fov || 20) * Math.PI / 180) / 2;
       const aspect = S.camera.aspect || 1;
       const hFov = Math.atan(Math.tan(vFov) * aspect);
-      distance = (halfDiag / Math.tan(Math.min(vFov, hFov))) * zoom;
+      /* Never multiply a fit by a fit: on the terrain bench the governed zoom IS the size fit. */
+      distance = (halfDiag / Math.tan(Math.min(vFov, hFov))) * (terrainSpan ? 1 : zoom);
+      /* And never fit past the FAR PLANE. A camera parked beyond `far` renders an empty frame, which
+         is the failure that got this bench's first strategic pass banked as a brown rectangle. Clamp
+         and record it rather than shipping a blank proof. */
+      const farLimit = (S.camera.far || 100) * 0.8;
+      if(distance > farLimit){
+        S.clayRoomStrategicDistanceClamped = { requested: distance, applied: farLimit,
+          reason: "camera fit exceeded the far plane" };
+        distance = farLimit;
+      } else S.clayRoomStrategicDistanceClamped = null;
     }
     const ground = new THREE.Vector2(ray.x, ray.z);
     if(ground.lengthSq() < 0.0001) ground.set(1, 1);
@@ -5891,10 +6457,11 @@ function mountClayRoom(){
     S.clayRoomPreviewSeed = CLAY_ROOM_LIGHT_PREVIEW_SEEDS[0];
     S.clayCamOffset = { x: 0, z: 0 };
     S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
-      ? 0.72 : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
+      ? 0.72 : (S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID ? 0.42
+      : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
         : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65
           : (S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID ? 0.78
-            : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5 : 1))));
+            : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5 : 1)))));
     S.clayRoomStructureView = CLAY_STRUCTURE_BENCH_FIXTURE.defaultView;
     S.clayRoomMaterialMode = CLAY_MATERIAL_BENCH_FIXTURE.defaultMode;
     S.clayRoomTrimMode = CLAY_TRIM_BENCH_FIXTURE.defaultMode;
@@ -6736,7 +7303,8 @@ function clayRoomMountOverlay(record, host){
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
     [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"],
     [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL"],
-    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"]
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"],
+    [CLAY_ROOM_TERRAIN_BENCH_ID, "TERRAIN"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -7065,7 +7633,8 @@ function clayRoomMountOverlay(record, host){
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTING BENCH"],
     [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE BENCH"],
     [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL BENCH"],
-    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM BENCH"]
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM BENCH"],
+    [CLAY_ROOM_TERRAIN_BENCH_ID, "TERRAIN BENCH"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -7535,7 +8104,8 @@ function clayRoomMountOverlay(record, host){
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
     [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"],
     [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL"],
-    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"]
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"],
+    [CLAY_ROOM_TERRAIN_BENCH_ID, "TERRAIN"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -7727,7 +8297,8 @@ function clayRoomMountOverlay(record, host){
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHT"],
     [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE"],
     [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL"],
-    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"]
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"],
+    [CLAY_ROOM_TERRAIN_BENCH_ID, "TERRAIN"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -7846,7 +8417,8 @@ function clayRoomMountOverlay(record, host){
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHT", "lights"],
     [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE", "sprites"],
     [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL", "materials"],
-    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM", "trim"]
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM", "trim"],
+    [CLAY_ROOM_TERRAIN_BENCH_ID, "TERRAIN", "terrain"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -8318,6 +8890,12 @@ export {
   clayWallOmissionOn,
   CLAY_CAM_ZOOM_MIN,
   CLAY_CAM_ZOOM_MAX,
+  clayRoomSetTerrainScene,
+  clayRoomSetTerrainFrame,
+  clayRoomSetTerrainView,
+  clayRoomTerrainBenchSnapshot,
+  CLAY_ROOM_TERRAIN_BENCH_ID,
+  CLAY_TERRAIN_SCENE_IDS,
   CLAY_ROOM_LIGHTING_BENCH_ID,
   CLAY_ROOM_MATERIAL_BENCH_ID,
   CLAY_ROOM_TRIM_BENCH_ID,

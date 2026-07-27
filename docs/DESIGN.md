@@ -1002,3 +1002,138 @@ while a settled character's line stays byte-identical in shape to the pre-unit o
 consumers without throwing. `dev/acceptance-opening-register.mjs` re-runs the 12-start batch
 protocol (one per class) against the built register — the monoculture is visibly broken (all five
 bands present across 12 rolls where the pre-unit chain produced 12/12 settlement, 11/12 calm).
+
+## The terrain chassis — TERRAIN-PROGRAM rung 1 / CL-F07a first pass (2026-07-27) — PROPOSED
+
+**Status: PROPOSED. First pass. Every visual verdict is Adam's and Codex's — nothing here declares
+a visual "on", and Codex revision is invited on all of it.** Cites `TERRAIN-PROGRAM.md` §2.0 (the
+chassis and the one geometric law), §2.1 (R1-01…R1-12), §3.5 (R1-13), §4.1/§4.2/§4.3 (the CL-F07
+fixture, the four required conditions, and the CL-F07a proof). That spec lives in the Genesis-clayspec
+lane and remains the authority; this entry records only what was BUILT against it and why.
+
+**What landed.** One chassis, thirteen presets, one bench, two gates.
+
+- `src/engine/terrain-field.js` — R1-00, the terrain field. Seeded, deterministic, cell-quantized to
+  the tactical grid, with the shaping-op vocabulary (radial · ridge · basin · slot · terrace · apron ·
+  scatter · patch), face minting at 2h+ deltas, the walk/non-flying support graphs, the 60%-tray
+  walk-down, and the heightfield fingerprint the determinism gate compares.
+- `src/engine/terrain-pieces.js` — the thirteen presets, plus the three demand-table resolvers
+  (boundary kinds, all 50 `wilderness-tactical-terrain` rows, the `wilderness-footing` coverage
+  grammar) and the R1-13 anchor/span hooks.
+- `src/engine/terrain-bench.js` — `CL-F07 terrain-bench` fixture data: the seven CL-F07a scenes as
+  field specs, and `terrainBenchGateReport()`, which IS the executable gate.
+- `src/ui/theater-clay-room.js` — the CL-F07 bench mount, projecting the chassis through the
+  production renderer.
+
+### Decisions made this pass, with grounds
+
+**1. The clamp is a min-plus Lipschitz lower envelope, not an iterative smoother.**
+`h_final[c] = min over d of (h_demand[d] + clamp · manhattan(c,d))`, edge cost `max(clamp[a],
+clamp[b])`, computed by alternating chamfer sweeps to a fixed point. *Grounds:* it is
+order-independent and terminating, so the same spec is byte-identical every run; and it **cannot**
+emit an illegal slope. §2.1 R1-02 names the >1h walkable step as "the single most likely place this
+system lies" — under a Lipschitz envelope that lie is structurally impossible rather than merely
+tested for. An edge touching a guarded cell costs nothing, which is precisely the statement "a face
+is permitted here, and the guarded piece owns it".
+
+**2. The one-clamp claim is measured, not asserted.** `terrainOneClampProof()` builds a hill and a
+cliff from **one parameter object used twice**, serializes both parameter sets with `slopeClamp`
+elided, and fails unless the two serializations are byte-identical. Result: same generator, sole
+diff `slopeClamp`, hill max walkable step **1h / 26.5651°** with **0 faces**, cliff **20 faces**,
+**20 cells lowered by the clamp**. If this had failed the instruction was to stop and report rather
+than fudge; it did not fail.
+
+**3. Sub-quantum noise is budgeted, not global.** Full requested amplitude on guarded cells; on
+walk-connected cells, capped at the 30° headroom (`(tan30·5/2.5 − 1)/2 = 0.0774h` per cell). Noise
+never changes a cell's tier, so the walk graph is unaffected by construction. *Grounds:* the 30°
+limit is measured on the RENDERED surface, and unbudgeted break-up on a 1h step would breach it
+while every integer-only check stayed green.
+
+**4. Water is a plane at a datum, and a field may carry more than one.** The basin op cuts the hole;
+the water surface is a horizontal plane and the shoreline is *derived* — so raising `waterDatumH`
+floods outward for free, correctly, following the real ground (§2.1 R1-05's "whole design"). Extended
+to **per-body planes**: a pond and a stream cut on one tray do not share a water table, and perched
+water tables are ordinary geology.
+
+**5. Reachability is measured twice; the gate is the non-flying number.** Walk-only and
+walk∪climb are both reported. A climb is not flight, so gating on walk-only would reject legal
+boards; reporting only non-flying would hide a board that needs a climb where none was intended.
+
+**6. An entry is a way IN, not a cell on the rim.** A playfield cell beside an 8h boundary cliff is
+not an entry; a cell beside a gap in it is. *Grounds:* 94.3% of area-type rows name an entry and
+every one must land on a walkable edge cell — a gate that counts every rim cell proves nothing. The
+measurable consequence is visible in the boundary sheet: the thicket frame admits **8** entry cells
+and the fog frame **36**, because fog blocks sight and not movement.
+
+**7. The coverage resolver places all 18 distinct live strings, not just the 13 the spec names.**
+The `wilderness-footing` table carries "One 10x10 patch" as well as "10x10 patch", plus "10x20
+patch". *Grounds:* CLAUDE.md's "validators preserve the thing's job" — reporting only the canonical
+13 would satisfy the gate while leaving five real strings unplaceable. Both counts are reported.
+
+**8. Berm-and-trench is guarded, not walkable-clamped.** A berm WITH its paired ditch is a 2h step
+from ditch floor to crest — which is exactly what d50 row 5's "5 extra feet of movement to climb
+out" means. Under the walkable clamp the chassis correctly flattened the earthwork to a stripe;
+the fix was to state the piece's real construction, not to weaken the law.
+
+**9. Thirteen bays are thirteen SITES, and the bench gutter is clamp-exempt.** On the sheet, a 1-cell
+gutter at the base datum would clamp every bay's crest down to its distance from that gutter. Marking
+the gutter exempt states the truth (this is a bench of separate sites side by side, not one
+continuous arrival) instead of shaving thirteen pieces to make one field legal. Recorded in the
+receipt as `gutterClampExempt` so no frame is read as a continuous arrival.
+
+**10. Renderer placement: the bench lives in `theater-clay-room.js` beside CL-F00…CL-F05.** *Grounds:*
+all five existing benches do; that module already holds every capability terrain needs (THREE, `S`,
+`interiorFloorTopAt`, the clay material/tag helpers, the standee mount, the governed 72° camera);
+and a sixth bench in a new theater ES module would have required rewiring the root's ctx injection —
+protected core the graphics charter forbids touching for a first pass. The chassis itself is three
+new **engine** modules in classic-script globals, registered in `manifest.json` and `genesis.html`.
+The renderer authors no terrain: it refuses to draw at all when the chassis is absent.
+
+### Declared deviations and deferrals
+
+- **§4.1 names the census median (12×16) as the fixture's field; capture 1 uses a 24×24 bench sheet.**
+  Thirteen pieces cannot be legible on 192 cells — five usable cells per bay is already the minimum
+  at which a 3h hill reaches its crest without the clamp shaving it, and thirteen such bays is 24×24.
+  Captures 3, 4 and 6 — the ones whose claim is about an *arrival* — use the median 12×16 kidney
+  exactly, so the arrival-sized proof is kept where it is load-bearing.
+- **R1-13 ships chassis hooks, not the full network** (as §3.5 permits and this pass declares).
+  Built: anchors derived from the field, the span solver, tread width *derived* from diameter, the
+  three roles, and collapse as a declared property with a countable trigger — all four §3.5 morph
+  cases come from one parameterization with no code branch. Deferred: multi-level junction routing
+  and the renderer's finished beam bodies (a placeholder cylinder stands in). `terrainSpanNetwork()`
+  returns its own `deferred` string so the gap is in the data, not only in this doc.
+- **The 12 of 13 witness placements on the sheet.** R1-13's bay is a stream cut; its witness cell is
+  not standable, so no witness is placed there. Reported, not padded.
+- **Rung-1 pieces are clay volumes, not materials.** Ground materials are a separate gated program
+  (M12 / CL-R4) and were not touched.
+- **Lighting is calibrated for the 15×15 host room.** A 24×24 field falls off at its edges. That is a
+  CL-R1 question, not a terrain one, and is flagged for Adam rather than patched from this lane.
+
+### Teeth
+
+`dev/verify-terrain-bench.mjs` — **60 passed, 0 failed**, and it carries a `--red` mode that re-runs
+every assertion against a blanked chassis: **0 passed, 20 failed**, so every gate is proven to have
+teeth in the same process rather than in a comment. The seven §4.3 gates, verbatim:
+
+| gate | measured |
+|---|---|
+| zero walkable cells above 30° | **0** (max walkable slope **26.5651°**, 13 fields) |
+| zero unowned faces at 2h+ neighbour deltas | **0** |
+| zero unreachable standable surfaces | **0** (non-flying) |
+| all 6 boundary strings resolve | **6 kinds / 7 distinct live strings, 7 resolve** |
+| all 50 d50 rows resolve or are declared non-terrain with a reason | **37 terrain + 13 non-terrain = 50, 0 unresolved** |
+| all 13 footing coverage strings place | **13 canonical + 5 more = 18/18 place** |
+| determinism, twice, in separate page loads | **PASS** — jsdom (2 fresh windows) *and* browser (2 fresh page loads, 13 fields byte-identical) |
+
+`dev/measure-clay-terrain-bench.py` is the capture-side half: it measures **edge density** inside the
+canvas, because a camera fitted past the far plane returns a smooth fog gradient that reads as
+"content" against any modal-colour test — which is exactly how this bench's first 72° strategic pass
+banked an empty brown rectangle that no green unit test noticed. It also fails a camera "pair" whose
+two frames are identical, a scene that reports built while placing zero cell meshes, and any refused
+witness. That failure is retained as diagnostic evidence, not hand-authored away.
+
+**Front-end gate (Adam's and Codex's — never mine): does the ground look like ground?** The capture
+packet is `dev/clay-captures/cl-f07a-terrain-bench-v001/` — the seven CL-F07a sets, each banked at
+the fixed production camera *and* the governed 72° map-reading pitch, with a receipt per frame
+carrying the committed layout ids, the parameter sets, the construction sentence each piece claims,
+and the rolled source rows.

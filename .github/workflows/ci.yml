@@ -128,6 +128,14 @@ jobs:
       - name: verify-table-lint.py (table linter self-test)
         run: python3 dev/verify-table-lint.py
 
+      # W3 stale-artifact guard (docs/DESIGN.md 2026-07-27): tables.json/tables.js are committed
+      # but GENERATED — this recompiles the real Engine table source into a throwaway temp dir
+      # (never touching the real committed files) and fails if the fresh output isn't
+      # byte-identical to what's committed, catching the "authored tables, forgot to recompile"
+      # class of bug check-manifest/table-lint can't see. Stdlib-only, no jsdom/deps needed.
+      - name: verify-compile-fresh.py (tables.json/tables.js staleness gate)
+        run: python3 dev/verify-compile-fresh.py
+
       - name: playtest-bug-probes.mjs (running regression list)
         env:
           JSDOM_HOME: ${{ github.workspace }}/dev/jsdom-home

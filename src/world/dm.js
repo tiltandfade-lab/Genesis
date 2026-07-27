@@ -1578,8 +1578,9 @@ const DM_EVENT_SOURCES = ["detected","declared","player","branch"];
    neither accepted nor aliased are KEPT (warn-only — never dropped; an under-censused row must
    degrade to a spurious warning, not a broken handler) but console.warn + ONE `drift` ledger line
    per event so a silent no-op is impossible to miss. Events NOT listed here (and unknown types)
-   pass through untouched — the whole-payload-pass handlers (hire/capture/downtime/…) and
-   forward-compatible types stay unjudged. Every key here MUST be a member of DM_EVENT_TYPES
+   pass through untouched — the whole-payload-pass handlers (hire/downtime/…; capture graduated
+   OUT of this group 2026-07-27, UNIT W6 — see its own entry below) and forward-compatible types
+   stay unjudged. Every key here MUST be a member of DM_EVENT_TYPES
    (the ROOT-B probe enforces it). Doc twin: docs/EVENT-CONTRACT.md §"Payload aliases".
 
    `num:[…]` (HQ2-1, HOTFIX-QUEUE 07-07 keystone) — the per-field NUMERIC-COERCION tag: the payload
@@ -1710,6 +1711,16 @@ const DM_EVENT_FIELDS = {
   walk_advance:      { accept:["nodeId","toSeg"] },
   walk_update:       { accept:["nodeId","overlay","seg"] },
   walk_complete:     { accept:["abandoned","nodeId"] },
+  // UNIT W6 (2026-07-27, Site-6 blocker #1): capture graduated OUT of the whole-payload-pass
+  // exemption — holdingSeg is the segment-to-reenter, genuinely numeric (matched via `s.num===
+  // p.holdingSeg` in applyCapture, src/world/capture.js), so an un-coerced DM-supplied STRING
+  // ("2" instead of 2) used to fail that `typeof==="number"` gate silently and mis-route the PC
+  // (a fresh/different segment instead of the one named) — the HQ2-1 bug class. The other four
+  // fields were already read whole-payload-pass pre-fix (captorFactionId/disposition/leverId/
+  // source); registering them here only adds drift-detection for a typo'd key, never narrows what
+  // already worked. docs/EVENT-CONTRACT.md's capture row + its "whole-payload-pass handlers
+  // (hire/downtime/…)" list were updated in the same pass — capture is no longer in that list.
+  capture:           { accept:["captorFactionId","disposition","holdingSeg","leverId","source"], num:["holdingSeg"] },
   open_shop:         { accept:["archetype","codexId","name","nodeId","shopId","tier"] },
   // CROWNING-BASTION.md §7.B1.1 — the bastion claim. EITHER-gated (Q5: a closed front OR a
   // tier-scaled gold price); one per world (Q6). `payGold` is the player's ACK that gold will be

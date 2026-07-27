@@ -4056,7 +4056,7 @@
         "CAPTURE_CONFISCATION",
         "CAPTURE_OPENING",
         "CAPTURE_HOLDING_TAGS",
-        "capPick",
+        "capRoll",
         "rollCapture",
         "capChooseCaptor",
         "capHoldingSegment",
@@ -4085,10 +4085,10 @@
         "codexGet",
         "rollNPC",
         "CT",
-        "pick",
+        "rollDie",
         "regionForNode"
       ],
-      "desc": "Capture as re-entry: drops a subdued PC into a holding segment of the active walk (WALK-CONSUMPTION §6)."
+      "desc": "Capture as re-entry: drops a subdued PC into a holding segment of the active walk (WALK-CONSUMPTION §6). UNIT W6 (2026-07-27): every sub-roll carries a {table,roll,idx} receipt via capRoll()."
     },
     {
       "id": "world.triage",

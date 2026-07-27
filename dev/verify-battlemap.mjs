@@ -374,16 +374,74 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
-// 14. Regression smoke — footprint/Map Footprint is a documented NULL-SAFE gap (§3b, follow-up unit)
+// 14. UNIT W2 (docs/DESIGN.md, fix/wiring-teeth-0727, 2026-07-27) — wilderness-tactical-terrain's
+//     "Map Footprint" column now COMPILES (a named DM-only row field — Engine/00. _System/
+//     compile-tables.py, the Legs/Pool precedent) and is EXPOSED on rolled terrain results
+//     (src/engine/wild-walk.js's wwalkEncounter, via the new walkPickTagged helper in
+//     src/engine/walk.js; also on compiled.js's rollTable()/rollTableAtBand()/rollTableInRange()
+//     decoders as `.footprint` for any table that carries the column).
+//
+//     WHY THIS REPLACES THE OLD 14a-ONLY COMMENT: the previous text here (pre-W2) asserted, verbatim,
+//     "no wilderness-tactical-terrain 'Map Footprint' column exists in the compiled tables yet"
+//     (docs/TERRAIN-PROGRAM.md M8, read-only sibling worktree Genesis-clayspec: "Fifty authored
+//     footprints ... are stranded in markdown. Spec: compile the column. This is the cheapest item
+//     on the entire list and it unblocks every other one"). That claim is now FALSE — 14b/14c below
+//     prove the column compiles and reaches a rolled result, with real dice (distribution/shape only,
+//     never a fixed RNG position). 14a itself is KEPT, UNWEAKENED: it is still true and still matters
+//     — TERRAIN-PROGRAM.md's own missing-list ownership table files footprint->zone-occupancy parsing
+//     under the SEPARATE "engine wiring" lane (M9/M12), not M8's "compile" lane this unit closes.
+//     cmZoneGrid must keep working null-safe until that later unit lands.
 // ============================================================================
 {
   const win = freshWin();
-  // no wilderness-tactical-terrain "Map Footprint" column exists in the compiled tables yet (BATCH2-
-  // GUARDRAILS G0/G9 + BATTLEMAP.md §3b: "a follow-up craft/tag unit, not a §4 blocker") — cmZoneGrid
-  // never reaches for a footprint field, so an encounter/segment with no footprint data still produces
-  // a valid grid (null-safe, not a crash/undefined).
+  // cmZoneGrid derives the grid from room `dims` alone and never reaches for a footprint field —
+  // still true post-W2 on purpose: footprint -> zone-occupancy parsing (BATTLEMAP.md §3b: "15'×15'
+  // ≈ one zone…") is a separate, later engine-wiring unit. A segment with no footprint wiring still
+  // produces a valid grid (null-safe, not a crash/undefined).
   const g = win.cmZoneGrid({ dims: "40' x 60'" });
-  check("14a. cmZoneGrid never reaches for an unbuilt footprint field (null-safe placeholder)", Array.isArray(g.bands) && Array.isArray(g.lanes), JSON.stringify(g));
+  check("14a. cmZoneGrid never reaches for an unbuilt footprint field (null-safe placeholder — footprint->zone-occupancy parsing is still a separate follow-up unit, BATTLEMAP.md §3b)", Array.isArray(g.bands) && Array.isArray(g.lanes), JSON.stringify(g));
+}
+{
+  const win = freshWin();
+  // 14b. the compiled table itself: sample many draws (never a fixed RNG position — distribution/
+  // shape only) and prove EVERY row now carries a real, non-empty `.footprint` off rollTable's
+  // decoder (src/engine/compiled.js), AND that it is excluded from the player-facing `.cells`/`.text`
+  // — DM-only, same as legs/pool (BATTLEMAP.md §3b: "DM-only column... the Legs/Pool precedent").
+  const N = 25;
+  const draws = [];
+  for (let i = 0; i < N; i++) draws.push(win.rollTable("wilderness-tactical-terrain"));
+  const allHaveFootprint = draws.every((r) => r && typeof r.footprint === "string" && r.footprint.length > 0);
+  check("14b1. every sampled roll of wilderness-tactical-terrain carries a non-empty .footprint (x25 draws, distribution-only)",
+    allHaveFootprint, JSON.stringify(draws.filter((r) => !r || !r.footprint).slice(0, 3)));
+  const distinctFootprints = new Set(draws.map((r) => r && r.footprint));
+  check("14b2. the sampled footprints are real per-row data, not a constant placeholder (>=2 distinct values across 25 draws)",
+    distinctFootprints.size >= 2, JSON.stringify([...distinctFootprints]));
+  const leaksIntoCells = draws.some((r) => r.footprint && Array.isArray(r.cells) && r.cells.some((c) => c === r.footprint));
+  check("14b3. the footprint text is NOT duplicated into the player-facing .cells columns (DM-only, excluded like legs/pool)",
+    !leaksIntoCells, "a sampled row's cells[] contained its own footprint text verbatim");
+}
+{
+  // 14c. wwalkEncounter's Enemy branch: the SAME single terrain draw now ALSO surfaces
+  // `terrainFootprint` on the rolled result (src/engine/wild-walk.js) — no second dice roll (a
+  // second draw would be the "never rolls twice for a field" bug walkPickStamped's own comment
+  // warns against); bounded retry to find Enemy-branch rolls, never a fixed RNG position.
+  const win = freshWin();
+  const enemyRolls = [];
+  for (let i = 0; i < 400 && enemyRolls.length < 10; i++) {
+    const enc = win.wwalkEncounter(1, null, null, {});
+    if (enc && enc.isEnemy) enemyRolls.push(enc);
+  }
+  check("14c1. (fixture) at least 10 Enemy-branch encounters found within the retry budget (proves this isn't a vacuous pass)",
+    enemyRolls.length >= 10, `found ${enemyRolls.length}`);
+  const allCarryFootprint = enemyRolls.every((e) => typeof e.terrainFootprint === "string" && e.terrainFootprint.length > 0);
+  check("14c2. every Enemy-branch encounter carries a non-empty .terrainFootprint alongside .terrain",
+    allCarryFootprint, JSON.stringify(enemyRolls.filter((e) => !e.terrainFootprint).slice(0, 3)));
+  const allDistinctFromTerrain = enemyRolls.every((e) => e.terrainFootprint !== e.terrain);
+  check("14c3. .terrainFootprint is genuinely distinct data from .terrain on every sampled roll (not an alias/duplicate)",
+    allDistinctFromTerrain, JSON.stringify(enemyRolls.filter((e) => e.terrainFootprint === e.terrain).slice(0, 3)));
+  const distinctFP = new Set(enemyRolls.map((e) => e.terrainFootprint));
+  check("14c4. the sampled .terrainFootprint values are real per-row data (>=2 distinct across the sample)",
+    distinctFP.size >= 2, JSON.stringify([...distinctFP]));
 }
 
 // ============================================================================

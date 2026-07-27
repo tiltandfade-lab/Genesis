@@ -1002,3 +1002,500 @@ while a settled character's line stays byte-identical in shape to the pre-unit o
 consumers without throwing. `dev/acceptance-opening-register.mjs` re-runs the 12-start batch
 protocol (one per class) against the built register — the monoculture is visibly broken (all five
 bands present across 12 rolls where the pre-unit chain produced 12/12 settlement, 11/12 calm).
+
+## Capture-path roll receipts — Site-6 blocker #1 (2026-07-27)
+
+**PROPOSED (UNIT W6, tier-2 engine correctness — Codex/founder review pending).** Evidence source:
+Site-6 self-flagged this as its blocker #1 during golden-site brief work — capture rolls are
+"under-receipted/unseeded," a gap shared by every consumer of `src/world/capture.js`, not a
+Site-6-local defect. Two independent gaps, both in `WALK-CONSUMPTION §6`'s capture-as-re-entry path:
+
+1. **No receipts at all.** `rollCapture()`'s four sub-rolls (disposition/confiscation/opening/
+   holding-noun) picked via `capPick(arr)` → `pick(arr)` → a raw `arr[Math.floor(Math.random()*
+   arr.length)]` index draw that discards the die value the instant it's read. Nothing recorded
+   WHICH roll produced a capture's disposition/confiscation/opening/cell — the one rolled record in
+   this engine with no audit trail, unlike world-gen's gazetteer entries (`rolledOf()`,
+   `src/world/play.js`), codex NPC/place mints, or any compiled-table roll.
+2. **`capture` was never in `DM_EVENT_FIELDS`.** It sat in the deliberate "whole-payload-pass"
+   exemption (docs/EVENT-CONTRACT.md), so `holdingSeg` — the segment-to-reenter, matched via
+   `s.num===p.holdingSeg` in `applyCapture` — had no numeric coercion. A DM (or LLM DM-seat) supplying
+   the JSON-plausible STRING `"2"` instead of the number `2` silently failed the handler's own
+   `typeof p.holdingSeg==="number"` gate: the named segment was silently ignored and a different (or
+   freshly minted) segment was used instead — the HQ2-1 bug class (CLAUDE.md "Disciplines":
+   normalization lives at the contract boundary, never a per-handler coercion).
+
+**The fix.** `capRoll(tableId, arr)` (`src/world/capture.js`, replacing the retired `capPick`) rolls
+via `rollDie(arr.length)` — a genuine die in `[1,N]` — and returns `{value, rolled:{table,roll,idx}}`;
+`idx=roll-1` is the flat 1:1 map a one-entry-per-face local array needs (compiled tables band multiple
+rows per roll via `lookup()`'s range search — these four arrays don't). `rollCapture()` now returns a
+`.rolled` bundle keyed `disposition/confiscation/opening/holdingNoun`, each `{table,roll,idx}` or
+`null`. The table ids are synthetic (`capture-disposition`/`-holding`/`-confiscation`/`-opening`) —
+these are local JS arrays, not `T[]`/compiled `CT()` tables, so there is no real table name to borrow.
+A DM-declared, VALID disposition override (`rollCapture({disposition:"execution"})`) is honored
+verbatim with `rolled.disposition:null` — truthful: no die was rolled for a value the DM supplied
+outright, matching `rolledOf()`'s own null-on-no-roll rule exactly (`(o,table)=>(o&&o.roll!=null)?
+{...}:null`). An UNKNOWN/garbled override id still falls back to a real roll, and that fallback now
+receipts normally (the existing defensive behavior is unchanged — now just audit-visible). The bundle
+rides three places: the `outcome`/`kind:"capture"` ledger beat, `t.c.captured.rolled` (the persisted
+capture-state stamp), and `applyCapture`'s own return value — one truth, not a private copy in each.
+
+`capture` is now registered in `DM_EVENT_FIELDS`: `{accept:["captorFactionId","disposition",
+"holdingSeg","leverId","source"], num:["holdingSeg"]}` — graduating it OUT of the whole-payload-pass
+exemption (docs/EVENT-CONTRACT.md's list + `src/world/dm.js`'s own comment above `DM_EVENT_FIELDS`
+were both updated in the same pass to stop calling `capture` an example of that group). The four
+pre-existing fields (`captorFactionId`/`disposition`/`leverId`/`source`) were already read
+whole-payload-pass before this unit — registering them only adds drift-detection for a typo'd key,
+never narrows what already worked; `holdingSeg` is the one field genuinely numeric, and is now folded
+through `dmFoldPayload`'s `dmNum` exactly like every other math-bound field in the contract (the SAME
+seam `hp_changed.delta`/`grapple.bonus`/etc. use — never a bespoke per-handler coercion in
+`capture.js`). This is a correctness fix, not a taste call — flagged PROPOSED because it is
+Sonnet-authored engine work landing under the arrival law, not because the direction is in question.
+
+**Explicitly untouched (scope guard).** Confiscation/item-mutation semantics are NOT part of this
+unit — capture's confiscation still moves gear via `codex_update`, not `item_changed`, exactly as
+docs/EVENT-CONTRACT.md already notes ("a candidate to reconcile later"); that reconciliation hits
+ITEMS Part II's latent decisions and stays founder-gated. This unit adds receipts to the EXISTING
+confiscation choice (`roll.confiscation`) — it does not change what confiscation DOES.
+
+**Known deviation, flagged not silently absorbed:** `dm-contract.json` (generated from
+`DM_EVENT_FIELDS` by `build/gen-dm-contract.py`) is now stale — its committed `capture` entry still
+reads `"fields": null` where a regeneration would now emit the five-field accept list + the
+`holdingSeg` num tag. Per CLAUDE.md's generated-artifact law ("never hand-merged … regenerate from
+source at the master merge"), this branch deliberately does NOT run `--emit`; `dev/playtest-bug-
+probes.mjs`'s CONTRACT-1 guard still passes (capture's own contract example payload is `{}`, which
+folds clean regardless of registration) — the drift is real but non-load-bearing until the next
+`gen-dm-contract.py --emit` pass, which the master-merge/integration step owns.
+
+**Teeth:** `dev/verify-capture-receipts.mjs` — RED-FIRST proven against the unmodified base (33 of 46
+assertions failed cleanly: no `.rolled` bundle anywhere, `DM_EVENT_FIELDS.capture` undefined, and the
+concrete HQ2-1 probe caught the bug LIVE — `capture{holdingSeg:"1"}` landed the PC on a freshly minted
+segment #6 instead of the named #1, with the walk's segment count climbing 5→6; full verbatim red
+output retained in the session report). Green asserts: every sub-roll's receipt is well-formed AND
+truthful (`idx` really does point at the value `rollCapture` returned, not just an in-bounds number); a
+300-roll census covers more than one distinct `idx` per table and never leaves `[1,N]` (distribution/
+shape only — never a fixed RNG position, since `Math.random` is genuinely unseeded in this engine); the
+receipt bundle is identical across the ledger beat / `t.c.captured` / the return value; the STRING-
+holdingSeg probe now lands on the named segment with zero segments minted; and an unrecognized capture
+key now fires one `payload-drift` ledger line (proof the fold is really running, not a silent bypass).
+Regression-checked against `dev/verify-capture.mjs` (21/21), `dev/verify-dm-seam.mjs` (47/47),
+`dev/verify-event-num-fold.mjs` (13/13 probes, including P5's "every `num` field is also an `accept`
+field" self-check), `dev/verify-walk-consumption.mjs` (37/37), and `dev/playtest-bug-probes.mjs`'s
+ROOT-B + CONTRACT-1 guards — all stay green (2 pre-existing, out-of-domain PRESENT probes, BUG-07
+`distant_word` and BUG-06c `codex_update` note-dropping, are unrelated to capture and unchanged by this
+unit). `python3 build/check-manifest.py` — OK (0 errors; `capPick`→`capRoll` and `pick`→`rollDie`
+swapped in `manifest.json`'s `owns`/`callTimeDeps` for `world.capture`; no new layer-inversion warning,
+`rollDie` is `engine.core` L1 calling down into `world.capture` L4).
+
+## Walk fact wiring — urban-area-type / wilderness-footing / urban-footing (2026-07-27)
+
+**PROPOSED (fix/wiring-teeth-0727 — orchestrator re-gate + Adam review pending).** UNIT W1: stop
+discarding rolled walk facts that were already authored, already compiled, and in one case already
+being rolled — just never carried into the walk/segment object. Consumption wiring ONLY; no
+rendering, no table authoring, no new mechanic. Three independent gaps, each confirmed by direct
+source read before any code changed:
+
+1. **`urban-area-type` (d200, `Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Area Type.md`)
+   — authored, compiled into `tables.json`, never consumed by `rollUrbanWalk`.** Flagged as an
+   explicit known gap in `docs/SITE-6-PRISON-CUSTODY-SPEC.md` ("`urban-area-type` is authored but
+   not consumed by `rollUrbanWalk`," also listed under that spec's `AUTHORED-UNWIRED` roller-ledger
+   row). `data/table-atlas.js`/`data/table-usage.js` mark it `"WIRED"`, but that field only means
+   "compiled into `table-atlas.js`" — a grep of every `src/**/*.js` file for the table id found zero
+   engine callers before this unit. **Fixed:** wired the same way `dungeon-walk.js`'s `dwalkArea`
+   carries area onto every dungeon room, INCLUDING the finale (`dwalkArea` is called before that
+   file's own finale branch) — `rollUrbanWalk` (`src/engine/walk.js`) now rolls
+   `walkPickStamped("urban-area-type",1,2,3)` for every segment, finale included, stamping flat
+   `areaType`/`dims`/`side` fields plus a `rollRefs.area` receipt (`{tableId,total,band}`, byte-
+   identical shape to `dwalkArea`'s own `_roll` sibling).
+2. **`wilderness-footing` (d200, `.../Wilderness Footing.md`) — rolled, but only column 1 read.**
+   The table carries 3 columns (`Surface Flavor (Biome Agnostic)` | `Coverage Area` | `Mechanical
+   Impact & Tracking`); `wild-walk.js`'s per-leg roll was `walkPick("wilderness-footing",1)` —
+   columns 2-3 (coverage geometry, movement/tracking mechanics) were rolled and immediately
+   discarded every leg. Evidence: `docs/TERRAIN-PROGRAM.md` §1.2D ("### D. The ground roller —
+   `wilderness-footing` (d200)"), a DRAFT working-site-spec in the sibling worktree
+   `Genesis-clayspec` (read-only reference here, not adopted canon — cited for its table-shape
+   read, not for any of its own un-ruled proposals). **Fixed:** upgraded to
+   `walkPickStamped("wilderness-footing",1,2,3)` — the SAME single `walkRnd()` pick as before (zero
+   extra `Math.random()` draws, so no other field on the leg or any later leg shifts), with the
+   pre-existing `footing` string field left BYTE-UNCHANGED (still column 1, still a plain string —
+   `skin-grants.js` string-concats it, `theater-data.js`/`walk-scene.js` read it as a string;
+   changing its type would be a rendering change, which this unit forbids). The previously-discarded
+   columns land as two new sibling fields, `footingCoverage`/`footingImpact`, plus a
+   `rollRefs.footing` receipt. Scope discipline: this upgrades the EXISTING per-leg roll only — the
+   arrival/finale segment did not roll footing before this unit and still doesn't; no new roll site
+   was invented.
+3. **`urban-footing` (d100, `.../Urban Footing.md`) — authored, compiled, never rolled by ANY
+   builder.** Confirmed by grep: dungeon has no footing table at all; only `wild-walk.js` ever
+   touched a `*-footing` table id, and only the wilderness one. **Fixed:** rolled fresh in
+   `rollUrbanWalk`, in the same per-segment slot `wilderness-footing` rolls per-leg — every
+   non-finale urban segment, NEVER the finale (mirrors wilderness: footing is never rolled for the
+   arrival segment either) — same 3-field shape as fix 2 above (`footing`/`footingCoverage`/
+   `footingImpact` + `rollRefs.footing`).
+
+**Files touched:** `src/engine/wild-walk.js` (fix 2), `src/engine/walk.js` (fixes 1 and 3). No
+table markdown, no render/theater/DM code, no manifest changes (no new module, no new `owns`
+symbol — `check-manifest.py` RESULT: OK unchanged).
+
+**Teeth:** `dev/verify-walk-fact-wiring.mjs` — RED-FIRST proven against the unwired base (branch
+`fix/wiring-teeth-0727`, pre-fix commit): 4 of 11 checks failed cleanly (`segment.areaType`/
+`.footingCoverage`/`.footingImpact` all `undefined`, `rollRefs.area`/`rollRefs.footing` absent) —
+the other 7 (footing's string-shape guard, both finale/arrival footing-exemption regression
+guards, the cross-check on dungeon's pre-existing `rollRefs`) already passed, since those describe
+behavior this unit does not change. Green (11/11) asserts, across multiple `segCount`/`legCount`
+values and repeated fresh (unseeded) rolls — never a fixed RNG position: every urban segment
+including the finale carries non-empty `areaType`/`dims`/`side` + a valid `rollRefs.area`
+(`tableId==="urban-area-type"`, integer `total` in `[1,200]`, `band===null` — the table is 100%
+unbanded, confirmed against `data/table-atlas.js`'s own band tally); every wilderness leg carries
+`footing` as a plain string plus non-empty `footingCoverage`/`footingImpact` + a valid
+`rollRefs.footing`, while the arrival segment still carries none of the three; every non-finale
+urban segment carries the same footing triple + a valid `rollRefs.footing`
+(`tableId==="urban-footing"`, total in `[1,100]`), while the urban finale carries none of it.
+
+Also re-ran (and, for one, extended) the existing walk-domain harness suite — all green:
+`dev/verify-walk-stamped-provenance.mjs` (34/34; see its own inline note below),
+`dev/verify-walk-consumption.mjs` (37/37), `dev/verify-walk-refresh.mjs` (19/19),
+`dev/verify-dressing.mjs` (31/31), `dev/verify-atmosphere.mjs` (36/36),
+`dev/verify-travel-walks.mjs` (28/28), `dev/verify-job-walks.mjs` (41/41),
+`dev/verify-wiring-a.mjs` (54/54), `dev/verify-wiring-b.mjs` (48/48),
+`dev/verify-skin-grants.mjs` (42/42), `dev/verify-scene-risk.mjs` (46/46),
+`dev/verify-urban-fabric.mjs` (33/33), `dev/verify-regions.mjs` (32/32),
+`dev/verify-tarot.mjs` (50/50), `dev/verify-breach.mjs` (43/43),
+`dev/verify-spice-raise.mjs` (14/14), `dev/verify-theater-lighting.mjs` (21/21),
+`dev/verify-walk-scene.mjs` (32/32), `dev/verify-walk.mjs` (2801/2801),
+`dev/verify-durability.mjs` (50/50), `dev/verify-env2-travel.mjs` (25/25),
+`dev/verify-table-atlas.mjs` (23/23), `dev/verify-table-usage-data.mjs` (7/7),
+`dev/verify-capture.mjs` (21/21).
+
+**One pre-existing harness required a scoped extension, not a plain re-run:**
+`dev/verify-walk-stamped-provenance.mjs`'s checks 1c/1d/1e assert the CURRENT walk output, minus
+`rollRefs`, is byte-identical to a frozen pre-WDV-2 reference commit under an identical seed — the
+same additivity trap ELEV-1 hit before this unit (its own inline comment documents the precedent).
+This unit's new fields are flat (not gated behind a key that vanishes when empty) and fixes 1/3 add
+genuine new `Math.random()` draws, so both the new KEYS and a downstream PRNG-stream shift would
+have failed 1d/1e as false regressions. Extended the file's existing `NEUTRALIZE_ELEV1` pattern
+with a sibling `NEUTRALIZE_WIRING_TEETH_0727` (empties `urban-area-type`/`urban-footing` for that
+check's DOM only, taking `walkPickStamped`'s zero-draw early-return path) and widened
+`stripRollRefs` to take an explicit `extraKeys` list (dungeon: none; urban:
+`areaType,dims,side,footing,footingCoverage,footingImpact`; wilderness:
+`footingCoverage,footingImpact` — `footing` itself is deliberately NOT stripped there, since it is
+byte-unchanged and must still match the reference). Confirmed RED first (1d/1e failed cleanly,
+1c/2/3/4 unaffected) before applying the extension, then GREEN after (34/34, including the 1a/1b
+mutation proof still catching a real corruption through the same neutralized path) — this is the
+"fix or scope the validator" law (CLAUDE.md), applied to keep the gate truthful rather than either
+silencing it or leaving it spuriously red for a legitimate, in-scope additive change.
+
+## Stale-Artifact Compile Guard — W3 (2026-07-27)
+
+While building this guard, its very first (unstaged) run against this worktree's real,
+unmodified HEAD found `tables.json`/`tables.js` genuinely STALE: 386 committed table ids vs. the
+390 a fresh compile of the current `Engine/03. _Tables` + `Asset Library` source produces. The
+four missing tables — `opening-register-medias`, `opening-register-mythic`,
+`opening-register-wrong`, `starting-state-opening-register` — are exactly the Opening Register
+feature's tables (merged at `bc74f82d`, entry above): the authored Engine markdown landed, but
+nobody re-ran `compile-tables.py --emit` afterward, and the derived usage artifact was equally
+stale, so nothing flagged the drift before now. This is the incident this unit exists to make
+structurally impossible to miss again.
+
+**PROPOSED (Fable default):** `dev/verify-compile-fresh.py` — a new CI gate that recompiles the
+real committed table source into a throwaway temp directory and fails if the result isn't
+byte-identical to committed `tables.json`/`tables.js`. `Engine/00. _System/compile-tables.py` has
+no `--check`/dry-run-to-path flag (read before building this, per the unit's own instruction) —
+it hardcodes both output paths off its own `__file__`. Rather than hand-copy or reimplement the
+compiler (a copy silently drifts and defeats the guard's own purpose the moment
+compile-tables.py next changes), the harness reuses the "monkeypatch via source-replace + exec"
+technique `dev/verify-table-lint.py` already established: read the compiler's own source text at
+run time, replace ONLY its two literal output-write expressions with a path into
+`tempfile.mkdtemp()`, and `exec()` the patched source with `sys.argv=[...,"--emit"]`. Everything
+else — `ROOTS`, the safety denylist, the `build/lint-tables.py` gate subprocess call — stays
+pointed at the real repo, so the safety scan and lint gate both run for real, exactly as a true
+recompile would. A `src.count(...)==1` assertion guards the redirect itself: if the compiler's
+write lines ever change shape, the harness fails loudly instead of silently falling through to
+writing the real committed files.
+
+**Byte diff, not semantic — with a documented escape hatch.** `compile-tables.py` embeds no
+timestamp/random/uuid anywhere (grepped; no such import exists in the file at all), and every
+input to its output ordering is `sorted(...)` or in-order iteration, so two compiles of identical
+source should be byte-identical. The harness doesn't just assert this in a comment: its
+"double-compile determinism" check runs the fresh compile twice, independently, and proves
+byte-identity before trusting the committed-vs-fresh comparison below it. Across every run this
+session (initial red, the green round-trip, the re-confirmed red after revert — 4+ independent
+full compiles of the real ~865-file table corpus) the fresh-compile hash was identical every
+time (`tables.json` fresh sha256 `ec5e335b…`, `tables.js` fresh sha256 `4c02dd46…`). If the
+compiler is ever changed to embed something non-deterministic, that determinism check goes red
+on its own (even on perfectly clean source) — `_print_semantic_summary()` (a parsed-JSON
+key-level diff, already running today as a diagnostic layered on top of the byte gate) is the
+documented fallback at that point, not a rewrite.
+
+**Red-first, both directions, proven locally — no staging needed for the red half, since HEAD
+already was stale:**
+1. Unstaged real HEAD → `python3 dev/verify-compile-fresh.py` → exit 1, 7 passed / 2 failed,
+   naming the 4 missing table ids via the semantic breakdown.
+2. Staged a known-fresh state by actually running the real
+   `python3 "Engine/00. _System/compile-tables.py" --emit` (390 tables emitted) → reran the
+   guard → exit 0, 9 passed / 0 failed.
+3. `git checkout -- tables.json tables.js` to restore the original committed blobs (sha256
+   confirmed byte-identical to the pre-test originals; `git status`/`git diff --stat` confirmed
+   clean) → reran the guard → exit 1 again, same 2 failures, same missing-table names — proving
+   the guard is deterministic and the revert left no residue.
+
+**Wired into `.github/workflows/ci.yml`** as its own step, directly after `verify-table-lint.py`
+(both concern the same tables pipeline) and before `playtest-bug-probes.mjs`. Stdlib-only
+(`hashlib`/`json`/`os`/`shutil`/`subprocess`/`sys`/`tempfile`/`types`) — no jsdom, no new
+dependency, matching the workflow's existing plain-Python-harness convention
+(`verify-bridge.py`/`verify-table-lint.py`). Adds roughly 6s to the run (multiple full compiles
+of the real corpus across the guard's own redundancy checks).
+
+**Open item this entry deliberately does NOT resolve:** the real staleness found above is still
+live in this worktree's committed `tables.json`/`tables.js` as of this entry — fixing it (a real
+`--emit` + commit) is a generated-artifact regeneration, which CLAUDE.md's parallel-worktree law
+reserves for the master-merge integration step, not an individual lane. Landing this CI step as
+written will fail CI on this branch until that recompile lands (either its own unit or folded
+into the integration merge) — flagged here rather than silently fixed out-of-scope by this unit.
+
+**Teeth:** `dev/verify-compile-fresh.py` itself — run by hand per the red-first sequence above,
+and wired into CI per this entry.
+
+## Map Footprint Compiles — W2 (2026-07-27)
+
+`dev/verify-battlemap.mjs:381`, verbatim, used to assert *"no wilderness-tactical-terrain 'Map
+Footprint' column exists in the compiled tables yet"* (docs/TERRAIN-PROGRAM.md M8, read-only
+sibling worktree Genesis-clayspec: *"Fifty authored footprints ... are stranded in markdown.
+Spec: compile the column. This is the cheapest item on the entire list and it unblocks every
+other one"*). The 50-row `wilderness-tactical-terrain` d50 (`Engine/03. _Tables/03. Session
+Mechanics/Dungeons/Wilderness Tactical Terrain.md`) has always carried a `Map Footprint` column
+in its source markdown — every row, 100% coverage — but the compiler had no mechanism to hoist
+it into an addressable field, and the one consumer (`wild-walk.js`'s `wwalkEncounter`) never
+asked for it.
+
+**PROPOSED (Fable default):** compile `Map Footprint` the same way `Legs`/`Pool`/`Grants`/
+`Motif` already compile — a header-name match in `Engine/00. _System/compile-tables.py`
+(`h.strip()=='map footprint'`, unscoped like band/legs/pool: audited for collisions against
+every dice-table header in `Engine/03. _Tables/` + `Asset Library` at fix time — zero hits)
+hoists it into a NEW named row slot, `row[10]`, padded onto every compiled table the same
+unconditional way legs/pool (row[6]/row[7]) and grants/motif (row[8]/row[9]) already are — so
+`row[10]` means "footprint" globally, never a table-dependent position. Excluded from the
+merged `.text`/`.cells` (DM-only, per BATTLEMAP.md §3b: *"DM-only column, compiler carries it —
+the Legs/Pool precedent"*). `src/engine/compiled.js`'s `rollTable()`/`rollTableAtBand()`/
+`rollTableInRange()` decoders expose it as `.footprint` (defaults `""` for the 389 other tables
+— byte-identical for everything that doesn't carry the column). A new `walkPickTagged(id,col,
+tag)` helper (`src/engine/walk.js`) reaches the row-6..10 tag slots off the SAME single
+`walkRnd()` draw `walkPick` already made (no second roll — the same discipline
+`walkPickStamped`'s own comment names). `wild-walk.js`'s `wwalkEncounter` now surfaces
+`terrainFootprint` alongside the pre-existing `terrain` string on all three Enemy-branch return
+shapes (Faction Clash, realm creature, live-roster).
+
+**Compile pipeline swept for OTHER dropped columns while in there.** A read-only audit
+(reproducing the compiler's own header-collision logic against every dice-table block in
+`Engine/03. _Tables/` + `Asset Library`, no writes) found the `band`/`legs`/`pool`/`grants`/
+`motif` detectors hitting ONLY their intended tables — 70/1/1/9/9 hits respectively, zero false
+positives, including the `dungeon-art-motif`/`urban-art-motif` collision the code's own
+SKIN-GRANTS.md comment already documents and the `is_walk_skin` tid-scope already resolves.
+Clean bill of health: nothing else is silently misrouted by this mechanism. One related-but-
+different-shaped item, NOT fixed here (not trivially same-shape): `wilderness-feature` (d303)
+carries a `Dimensions (Footprint & Height)` column that is an ordinary, un-hoisted content
+column like the other 300+ tables' columns — not pathological, just not a DM-only tag the way
+`Map Footprint` is specified to be, and it combines two concepts (footprint + height) a
+same-shape fix can't split cleanly. Left for its own unit if wanted.
+
+**Regenerated via `--emit`, never hand-edited** (`python3 "Engine/00. _System/compile-tables.py"
+--emit`): 0 REAL coverage bugs, lint gate clean, 390 tables emitted. This run ALSO closed the
+staleness UNIT W3 (above) had already found and deliberately deferred — the repo's committed
+`tables.json`/`tables.js` were missing the 4 Opening Register tables (386 vs a fresh 390); W2's
+required `--emit` brought them current as a side effect, and `dev/verify-compile-fresh.py` (W3's
+own guard) now passes 9/9 where it was red before this unit landed. **Deviation flagged, not
+fixed here:** `data/table-usage.js` is a SEPARATE generated index (`build/gen-table-usage-
+audit.py`, reads `tables.json`) that is now stale in the OTHER direction — still built off the
+386-table state, so `dev/verify-table-usage-data.mjs`'s own count check (386 vs 390) now fails.
+Confirmed by direct count inspection this is the SAME pre-existing gap W3 documented, not caused
+by W2's column change (the compiler edit here never touches table membership, only per-row
+column shape). Regenerating `data/table-usage.js`/`data/table-atlas.js` is left to the
+integration step, per W3's own explicit deferral and CLAUDE.md's worktree law on
+generated-artifact regeneration.
+
+**Red-first, both directions, proven locally:**
+1. `dev/verify-battlemap.mjs` §14, extended (14b/14c) against the real UNCHANGED base: 52 passed
+   / **4 failed** (14b1/14b2/14c2/14c4 — footprint absent, exactly the predicted gap).
+2. Fix landed (compiler + `compiled.js` + `walk.js` + `wild-walk.js`) + `--emit` regenerate →
+   rerun → **56 passed / 0 failed**.
+
+**Two sibling-unit harnesses updated to track this unit's legitimate, additive schema change**
+(not weakened — same invariant, current shape): `dev/verify-roll-telemetry.mjs`'s hardcoded
+`rollTable()` key-list (its REAL job — tally-is-a-side-channel — untouched; the list just now
+includes `footprint`, the same way it already includes legs/pool/grants/motif from earlier
+units). `dev/verify-walk-stamped-provenance.mjs`'s wilderness BASE_SHA byte-compat check (1e)
+gained a nested `encounter.terrainFootprint` strip alongside its existing flat-field `extraKeys`
+mechanism — proven NECESSARY, not decorative: under SEED=12345 (the harness's own seed) none of
+the 5 wilderness legs roll an Enemy branch, so the gap was invisible by luck; a direct scan
+found SEED=1 does roll one, confirming the nested key leaks into the byte-compat JSON without
+the strip, and is closed with it (both states directly executed, not inferred).
+
+**Teeth:** `dev/verify-battlemap.mjs` §14 (56/0, run by hand) — plus the full domain regression
+sweep this session, all green: `check-manifest.py`, `verify-skin-grants.mjs`, `verify-breach.mjs`,
+`verify-codex-roll.mjs`, `verify-consequence.mjs`, `verify-tarot.mjs`, `verify-walk.mjs`,
+`verify-travel-walks.mjs`, `verify-walk-refresh.mjs`, `verify-walk-consumption.mjs`,
+`verify-walk-binding.mjs`, `verify-walk-scene.mjs`, `verify-walk-card-projection.mjs`,
+`verify-monster-story.mjs`, `verify-walk-fact-wiring.mjs`, `verify-live-fallbacks.mjs`,
+`verify-walk-stamped-provenance.mjs`, `verify-compile-fresh.py`, `verify-table-atlas.mjs`,
+`verify-roll-branches.mjs`, `verify-safety-guard.mjs`, `verify-roll-telemetry.mjs`.
+
+## The dead-fallback audit — EB.complications and EB.places' Option-C branch confirmed dead (2026-07-27)
+
+UNIT W4. This week's EB.places fix (see "TIYL entry-wiring fix" above) and a wilderness
+single-draw-limit bug referenced only in session memory (not locatable in this worktree's
+currently-wired `src/engine` — searched every `function *Roll(`, every `!x.length` empty-slot
+guard, and every "fallback"/"fresh" mention across `src/engine`+`src/world`+`src/creator`; `EB`/
+`ebRoll` is the only canon-first/fresh-if-empty family that shape turned up) are the same class of
+bug: a fresh-roll fallback table that is reachable in principle but never actually fires, so its
+content silently never surfaces to a player. `dev/verify-live-fallbacks.mjs` is a standing harness
+against a recurrence — it drives N=200 independent headless character creations through the real
+production pipeline (`bindWorld → rollStartingState → cgRollLife → cgBind → rollEntry`, real dice
+throughout, no fixed RNG position asserted) and asserts every one of `rollEntry`'s 5 Option-C
+dispatch sites (`src/engine/world-gen.js:127`, the `["enemies","friends","complications","things",
+"places"].forEach(s=>{if(!B[s].length)B[s].push(ebRoll(s));})` line) either fires at least once or
+is listed in the harness's own `KNOWN_DEAD` registry with a reason. Red-first proof: temporarily
+deleting `"things"` from that array (the one slot analytically guaranteed to depend on Option C —
+nothing upstream ever fills it) makes the harness correctly report `EB.things` newly-dead exit 1;
+reverted before landing (`git diff` on `world-gen.js` is empty).
+
+**PROPOSED finding (Fable, evidence attached — not a ruling; fixes are a design call):**
+
+- **`EB.complications`'s Option-C branch is dead — 0/200, and not by chance.** `rollStartingState`
+  always runs inside `bindWorld`, before any character exists, and always produces at least one
+  rival faction (`rollDie(3)` is 1-3, never 0; the `rivals.push(...)` is unconditional regardless of
+  the name-collision retry loop above it). `rollEntry`'s step 3
+  (`if(rivals[0])add("complications",...)`) therefore fires on literally every call, filling
+  `B.complications` before the Option-C forEach ever runs — for every character in every world,
+  first PC or rebirth successor alike (`w.factions` is never emptied once set). `EB.complications`
+  (`data/starting-state.js`) — a full d100 spice-graded table, Volatile/Mythic rows included — has
+  never been rolled by a real player and structurally cannot be under the current wiring.
+- **`EB.places`'s Option-C branch (its 2nd listing in the same forEach) is dead too, but this one is
+  inert, not a content gap.** `src/engine/world-gen.js:124` already pushes one fresh
+  `ebRoll("places")` unconditionally, one line above the forEach that lists `"places"` among its 5
+  slots — by the time the forEach runs, `B.places.length` is always ≥1, so its own guard can never
+  pass for that slot. The `EB.places` TABLE itself is exercised on every trial (0/200 double-fires,
+  200/200 single-fires) — this is a harmless leftover from the 2026-07-26 fix that added the
+  unconditional push but never pruned `"places"` out of the Option-C array, not a hole in what
+  players see.
+- **`EB.friends` is alive but rare enough to flag, not KNOWN_DEAD.** Fired between 6/200 and 19/200
+  (3-9.5%) across repeated real-dice runs this session — same risk shape as the pre-fix EB.places
+  bug: the dominant faction's non-adversarial default (~80% of standing rolls) plus faction
+  proximity's tie/member roll (~80%) between them leave only a narrow band where nothing else has
+  already filled the slot. Read `entrySeeds`' role-routing regex too
+  (`/lover|companion|life-debt|employer/`) while investigating why: a life event tagged plain
+  `"friend"` or `"love"` (role text "A friend from the past" / "A love or spouse") does **not**
+  match that regex and falls through to `"complications"` instead of `"friends"` — a separate,
+  unverified routing observation surfaced by this audit, not confirmed as a bug and not this unit's
+  to fix.
+- **`EB.enemies` (108/200, 100/200, 105/200 across runs — roughly half) and `EB.things` (200/200,
+  always) are healthy** — included here as the audit's positive controls, not findings.
+
+**Teeth:** `dev/verify-live-fallbacks.mjs` — red-first proven against a temporarily-injected dead
+path (deleting `"things"` from the dispatch array), reverted clean, then run for real; its own
+`KNOWN_DEAD` registry carries the complications/places findings above with the same evidence,
+dated, so the harness itself stays green while the finding stays legible for Codex to revise.
+
+## Mirror-map drift guard — W5 (2026-07-27)
+
+UNIT W5. `THEATER_FLOOR_BIOME_MAP` + `BIOME_DRESSING` (`src/engine/theater-data.js`) are hand-keyed
+to `wilderness-biome-type`'s exact row names — the ENV-2 fix (this doc, "Walk fact wiring" section
+and `dev/verify-env2-travel.mjs` checks 8/8b/8c) already lived through the bug this class produces:
+two of the ten real biomes ("Deeplands"/"Underwater") silently fell through to a generic fallback
+tint because the map was hand-typed against a stale array instead of the real compiled table, and
+was hand-fixed without a general-purpose guard against it recurring. This unit builds that guard and
+sweeps the rest of the codebase for the same shape of drift risk.
+
+**PROPOSED (Fable default):** `dev/verify-mirror-maps.mjs` — a registry-driven completeness gate.
+For every hand-keyed map/array whose keys are meant to mirror another source's enumerable names (a
+compiled Engine table's row-name column, or another hand-authored module's own id list), it asserts
+every source name is present as a key. Where a map's own comments document an *intentional* partial-
+coverage default instead (WALK_ARCHETYPES' "best-effort... falls back to authored-pool-only",
+WILDERNESS_BIOMES' table-not-loaded emergency path), the gate doesn't demand totality — it instead
+calls the real consuming function several times with a name guaranteed absent and asserts the
+documented fallback actually fires cleanly (shape/membership only, never a fixed RNG position, same
+law `verify-tiyl-entry.mjs` already sets). Row names are read the same way the app itself reads them
+— `walkRows(tableId)[i][5][0]`, the exact cell index every real call site this unit checked
+(`wwalkBiome`, `dwalkEncounter`'s topology/threat picks, `walk.js`'s composition/threat picks,
+`urban.js`'s `rollTable().cells[0]`) already uses — never re-derived from the Engine markdown by a
+separate parser that could itself drift from the compiler.
+
+**A jsdom gotcha worth recording for the next harness author:** `win.eval(bigSource)` (the
+established `verify-tiyl-entry.mjs` boot pattern) is an *indirect* eval — top-level `var`/function
+declarations attach to `window` as expected, but top-level `const`/`let` (how every mirror map in
+this codebase is declared) do not, and are invisible even to a second, separate `win.eval()` call.
+Confirmed empirically before writing this harness (a throwaway probe: `win.MY_CONST_MAP` reads
+`undefined` after `win.eval("const MY_CONST_MAP={...}")`, in real Node + the repo's own jsdom
+install). The harness works around it by appending its own read-only probe as the literal tail
+expression of the SAME `eval()` call that boots the app — the probe's return value (`JSON.stringify`
+of everything it needs) becomes that eval's completion value, so it shares the map's original
+lexical scope. Every later functional check just calls the app's own exported functions
+(`resolveArchetypePool`, `wwalkBiome`, `walkRows`) directly off `win`, which works fine post-boot
+(function declarations close over their module's consts regardless of how they're later invoked).
+
+**Findings — the three known mirrors, plus six more this unit's sweep found, none previously
+guarded:**
+1. `THEATER_FLOOR_BIOME_MAP` / `BIOME_DRESSING` (`theater-data.js`) ← `wilderness-biome-type`. The
+   two named in the unit brief. Currently 10/10 both (the ENV-2 fix holds).
+2. `BUILDING_KIT_REALM_LABELS.{chrome,gloom}` (`data/building-kits.js`) ← `BUILDING_KITS`' own 14
+   keys. The third known mirror — its own comment already states the law this gate mechanizes
+   ("no partial maps... would silently fall back to the Frontier label on a missing key"). 14/14
+   both today.
+3. **NEW** — `DISTRICT_TYPE_REALM_LABELS.{chrome,gloom}` (`src/world/urban.js`) ← `urban-district-
+   type` (20 rows). Same exact law as #2 by its own cross-reference comment. 20/20 both today.
+4. **NEW** — `DWALK_SLOT_MAP` (`dungeon-walk.js`) ← `dungeon-enemy-composition` (10 distinct
+   Compositions), and `WALK_SLOT_MAP` (`walk.js`) ← `urban-enemy-composition` (10). An unmapped
+   Composition degrades a multi-creature encounter (e.g. "The Elite Pair") to a single low-CR
+   creature via the bare `||["low"]` at the call site — silent difficulty flattening. 10/10 both.
+5. **NEW** — the `dungeon-topology` quartet (`dungeon-walk.js`): `DUNGEON_TOPOLOGIES` (array) is
+   itself the validation allowlist for the real topology roll (`topoName = DUNGEON_TOPOLOGIES.
+   indexOf(tn)>=0 ? tn : walkRnd(DUNGEON_TOPOLOGIES)`) — a real roll not in this array gets
+   *discarded* and replaced with a random topology, with the kept description text then narrating
+   the wrong one. Downstream, `DWALK_TOPO_SIZE`/`DWALK_TOPOLOGY_MIN_SEGS` silently mis-tune,
+   and `DWALK_GRAPH_BUILDERS[resolved](segCount)` has **no fallback guard at its call site at all**
+   — a missing key there is a hard crash, not a silent mis-render, the highest-severity member of
+   this whole sweep. 12/12 across all four today.
+6. **NEW** — `REALM_ADJACENCY` (`dungeon-walk.js`) and `ANIMAL_REALM_SKINS` (`data/animal-realm-
+   skins.js`), both ← `REALM_IDS` (`data/realms.js`'s 11-realm founding slate). The latter's own
+   comment already claims "all 11 present below" — this gate is the first thing that actually checks
+   that claim. 11/11 both today.
+7. (documented-partial, informational, not a gap) `WALK_ARCHETYPES` (`walk-archetypes.js`) ←
+   5 tables (`wilderness-enemy-category`, `dungeon-`/`urban-threat-identity-t1/t2`). Its own header
+   says coverage is "best-effort" — surprisingly, it's actually 100% across all five today (8/8,
+   21/21, 28/28, 30/30, 50/50); the documented authored-pool fallback also verified working.
+8. (documented-partial, informational) `WILDERNESS_BIOMES` (`wild-walk.js`) — a stale fallback array
+   (still carries "Underdark"/"Jungle", the exact retired words the ENV-2 fix comment names) only
+   reachable when the compiled table fails to load entirely. `wwalkBiome`'s own degrade path was
+   verified to still return a usable shape when forced empty.
+
+Reviewed and found already-compliant (an explicit, *working* in-file default exists — deliberately
+left out of the gate's registry): `REALM_MATERIALS`/`INTERIOR_TILE_KITS`, `REALM_TEXTURES`/
+`OUTLINE_STYLE_BY_REALM` (3-flagship-only by design, accessor returns `null` and callers already
+treat that as "no override"), the `SETTLEMENT_FACADE_*_BY_REALM`/`SETTLEMENT_STREET_PROP_POOL_BY_
+REALM` trio (named `*_DEFAULT` consts + a defaulting accessor), `DWALK_TOPOLOGY_FALLBACK`/
+`WALK_TOPOLOGY_FALLBACK` (correctly missing only their own terminal/smallest topology, which the
+resolve loop's own `||"The Spine"`/`||"The Trail"` already catches). Out of scope by definition
+(generated, not hand-keyed): `REALM_DRESSING`, `REALM_SURFACES`, `REALM_PROPS`. Not table-row-keyed
+at all (rolled from code, no compiled table to drift against): `URBAN_TOPOLOGIES` and its sibling
+maps.
+
+**Red-first, both directions, two independent maps in two different files:**
+1. Clean HEAD → `node dev/verify-mirror-maps.mjs` → exit 0, 18 passed / 0 failed.
+2. Deleted `Underwater` from `THEATER_FLOOR_BIOME_MAP` (`theater-data.js`) AND `arcanist` from
+   `BUILDING_KIT_REALM_LABELS.gloom` (`building-kits.js`) → reran → exit 1, 16 passed / 2 failed:
+   `THEATER_FLOOR_BIOME_MAP: total coverage of wilderness-biome-type (10 rows) — missing:
+   ["Underwater"]` and `BUILDING_KIT_REALM_LABELS.gloom: total coverage of BUILDING_KIT_TYPES (14
+   rows) — missing: ["arcanist"]` — every other one of the 18 checks stayed green (the gate is
+   per-map, not all-or-nothing).
+3. Reverted both edits by hand → `git diff --stat -- src/engine/theater-data.js data/building-
+   kits.js` empty, `git diff --check` clean on both → reran → exit 0, 18 passed / 0 failed again,
+   identical to step 1 — proving the guard is deterministic and the revert left no residue.
+
+**Gates run clean on the unmodified worktree (post-revert):** `python3 build/check-manifest.py` →
+`RESULT: OK` (only pre-existing, unrelated layer WARNs). The five pre-existing harnesses whose
+domain this unit's reading touched, all green: `dev/verify-theater-data.mjs` (329/329),
+`dev/verify-env2-travel.mjs` (25/25 — includes its own point-checks on the ENV-2 fix this unit's
+header cites), `dev/verify-realm-wiring.mjs` (78/78), `dev/verify-urban-fabric.mjs` (33/33),
+`dev/verify-role-realms.mjs` (30/30).
+
+**Teeth:** `dev/verify-mirror-maps.mjs` — red-first proven against two independently temporarily-
+sabotaged maps in two different files, reverted clean, run for real; exit 1 on any BLOCK-tier
+coverage gap, informational-only (never blocking) on the two maps that document their own partial
+coverage as intentional.

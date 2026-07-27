@@ -10,7 +10,15 @@
 
    ENGINE OWNS THE NOUNS: only four sub-rolls are new dice (disposition / holding-when-minted /
    confiscation / opening) — they seed a HANDLE, not a scene. The captor, the cell-when-reused, and the
-   lever are pulled from LIVE state (faction clocks, active walk, pre-cast). All internals `cap`-prefixed. */
+   lever are pulled from LIVE state (faction clocks, active walk, pre-cast). All internals `cap`-prefixed.
+
+   UNIT W6 (2026-07-27, Site-6 blocker #1): every one of the four sub-rolls now carries a standard
+   rolled RECEIPT — {table,roll,idx} — matching rolledOf()'s convention (src/world/play.js), built by
+   capRoll() below (a die-based pick, never the old capPick()/pick()/Math.random()-index draw that
+   discarded the roll entirely). A DM-declared override (rollCapture({disposition:"execution"})) still
+   wins outright and carries NO receipt — null, truthfully, matching rolledOf()'s own null-on-no-roll
+   rule: no dice were rolled for a value the DM handed the script directly. See docs/DESIGN.md
+   "Capture-path roll receipts" for the paper trail. */
 
 // ─── disposition sets the clock. execution-pending is short BY DESIGN — it must be able to fire. ──
 const CAPTURE_DISPOSITIONS = [
@@ -44,19 +52,39 @@ const CAPTURE_OPENING = [
 // segment shapes that already read as a holding (reuse instead of minting)
 const CAPTURE_HOLDING_TAGS = /cell|pit|hold(ing)?|cage|vault|strongroom|oubliette|gaol|jail|dungeon|brig|cellar|crypt|prison|stockade/i;
 
-function capPick(arr){ return (typeof pick==="function") ? pick(arr) : arr[0]; }
+/* UNIT W6 — a RECEIPTED die-pick over a plain local array (never a T[]/compiled CT() table, so there
+   is no real table to lookup() against). roll=rollDie(arr.length) is a genuine die value in [1,N];
+   idx=roll-1 is the flat 1:1 map a single-row-per-face array needs (compiled tables band multiple
+   rows per roll via lookup()'s findIndex — these arrays don't, one entry IS one face). Returns
+   {value, rolled:{table,roll,idx}} — the receipt shape matches rolledOf()'s field names exactly
+   (src/world/play.js) so a caller can drop it straight into a `rolled` payload/ledger field.
+   Degrades to {value:arr[0], rolled:null} when rollDie is unavailable — same defensive posture
+   capPick (retired this unit) held for a missing `pick`. */
+function capRoll(tableId, arr){
+  if(typeof rollDie!=="function" || !arr || !arr.length) return { value: arr&&arr[0], rolled:null };
+  const roll=rollDie(arr.length), idx=roll-1;
+  return { value: arr[idx], rolled: { table:tableId, roll, idx } };
+}
 
-/* the four new sub-rolls — nouns only. */
+/* the four new sub-rolls — nouns only, now each carrying a receipt. A DM-declared disposition
+   override (opts.disposition, a known id) is honored verbatim with NO receipt (rolled.disposition
+   stays null — truthful: no die was rolled for a value the DM supplied outright); an unknown/garbled
+   id falls back to a real roll exactly as before, and THAT roll receipts normally. */
 function rollCapture(opts){
   opts=opts||{};
-  const disposition = opts.disposition
-    ? (CAPTURE_DISPOSITIONS.find(d=>d.id===opts.disposition) || capPick(CAPTURE_DISPOSITIONS))
-    : capPick(CAPTURE_DISPOSITIONS);
+  let disposition=null, dispositionRolled=null;
+  if(opts.disposition) disposition = CAPTURE_DISPOSITIONS.find(d=>d.id===opts.disposition) || null;
+  if(!disposition){
+    const r=capRoll("capture-disposition", CAPTURE_DISPOSITIONS);
+    disposition=r.value; dispositionRolled=r.rolled;
+  }
+  const confiscationR = capRoll("capture-confiscation", CAPTURE_CONFISCATION);
+  const openingR      = capRoll("capture-opening",      CAPTURE_OPENING);
+  const holdingR      = capRoll("capture-holding",       CAPTURE_HOLDING);
   return {
-    disposition,
-    confiscation: capPick(CAPTURE_CONFISCATION),
-    opening:      capPick(CAPTURE_OPENING),
-    holdingNoun:  capPick(CAPTURE_HOLDING),
+    disposition, confiscation:confiscationR.value, opening:openingR.value, holdingNoun:holdingR.value,
+    rolled: { disposition:dispositionRolled, confiscation:confiscationR.rolled,
+              opening:openingR.rolled, holdingNoun:holdingR.rolled },
   };
 }
 
@@ -174,7 +202,7 @@ function applyCapture(w, p){
   t.c.conditions = t.c.conditions || [];
   if(t.c.conditions.indexOf("captured")<0) t.c.conditions.push("captured");
   t.c.captured = { dispositionId:roll.disposition.id, frontId:front.id, captor:captor?captor.name:null,
-                   confiscation:roll.confiscation.id, leverId:leverId||null, at:nodeId };
+                   confiscation:roll.confiscation.id, leverId:leverId||null, at:nodeId, rolled:roll.rolled };
 
   // TRANSITION-CONTRACT.md §3.7 — capture composes with a non-lethal KO upstream (the DM emits
   // hp_changed{nonlethal:true} then capture{…}); capture itself only owns its own +60 tick
@@ -184,13 +212,15 @@ function applyCapture(w, p){
   // 5) one ledger beat carrying all the nouns + walk provenance (Step C sees the capture loop)
   const wk=(typeof walkStamp==="function")?walkStamp(w):null;
   addLedger(w,"outcome",{kind:"capture",dispositionId:roll.disposition.id,captor:captor?captor.name:null,
-      confiscation:roll.confiscation.id,leverId:leverId||null,minted,frontId:front.id,walk:wk,advanceMin:60,source:p.source||"play"},
+      confiscation:roll.confiscation.id,leverId:leverId||null,minted,frontId:front.id,walk:wk,advanceMin:60,
+      source:p.source||"play",rolled:roll.rolled},
     `⛓ Taken${captor?(" by "+captor.name):""} — ${roll.disposition.label.toLowerCase()}. ${cap1(roll.confiscation.text)}. `+
     `The clock turns toward ${roll.disposition.doom}.`);
 
   return { ok:true, captor:captor?captor.name:null, disposition:roll.disposition.id,
            fuse:roll.disposition.fuse, frontId:front.id, holdingSeg:seg?seg.num:null, minted,
-           leverId:leverId||null, confiscation:roll.confiscation.id, opening:roll.opening, at:nodeId };
+           leverId:leverId||null, confiscation:roll.confiscation.id, opening:roll.opening, at:nodeId,
+           rolled:roll.rolled };
 }
 
 function cap1(s){ s=s||""; return s.charAt(0).toUpperCase()+s.slice(1); }

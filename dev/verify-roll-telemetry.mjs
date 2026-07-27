@@ -41,9 +41,15 @@ const stubTables = {
   check("rollTable returns the expected row shape", before && before.id === "t" && before.text === "stub row");
   check("GS.tableRolls.t === 3 (three calls tallied)", win.GS.tableRolls.t === 3, String(win.GS.tableRolls.t));
 
-  // byte-identical return shape proof — the tally is a side-channel, not a behavior change
+  // byte-identical return shape proof — the tally is a side-channel, not a behavior change.
+  // `footprint` added (UNIT W2, docs/DESIGN.md, fix/wiring-teeth-0727, 2026-07-27): TERRAIN-
+  // PROGRAM.md M8 / BATTLEMAP.md §3b's Map Footprint column now compiles as a named row field
+  // (compile-tables.py, the Legs/Pool precedent) and rollTable() exposes it the same way it already
+  // exposes legs/pool/grants/motif — a real, intentional shape growth this list must track, not the
+  // side-channel corruption this check actually guards against (that invariant is unchanged: the
+  // KEY SET must still be identical call-to-call, whatever it currently is).
   const again = win.rollTable("t");
-  const expectedKeys = ["id", "dice", "total", "band", "text", "fragment", "cells", "legs", "pool", "grants", "motif"];
+  const expectedKeys = ["id", "dice", "total", "band", "text", "fragment", "cells", "legs", "pool", "grants", "motif", "footprint"];
   const sameKeys = expectedKeys.every((k) => k in again) && Object.keys(again).length === expectedKeys.length;
   check("return object keys unchanged (tally is a side-channel)", sameKeys, Object.keys(again).join(","));
   check("GS.tableRolls.t === 4 after a 4th call", win.GS.tableRolls.t === 4, String(win.GS.tableRolls.t));

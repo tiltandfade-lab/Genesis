@@ -26002,6 +26002,435 @@ null,
 ]
 ]
 },
+"starting-state-opening-register": {
+"dice": "d100",
+"die": 100,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "World Building / Starting State",
+"rows": [
+[
+1,
+25,
+"SETTLED",
+"Today's behavior, demoted to one band: ordinary business in an ordinary place. The why/foot/standing triplet runs exactly as it does today; the opening tension stays latent.",
+null,
+[
+"SETTLED",
+"Today's behavior, demoted to one band: ordinary business in an ordinary place. The why/foot/standing triplet runs exactly as it does today; the opening tension stays latent."
+]
+],
+[
+26,
+50,
+"ARRIVAL WITH EDGE",
+"The same arrival triplet, but the world's tension is already present-tense: something is visibly wrong in this place as you arrive, and the opening tension is live, not latent.",
+null,
+[
+"ARRIVAL WITH EDGE",
+"The same arrival triplet, but the world's tension is already present-tense: something is visibly wrong in this place as you arrive, and the opening tension is live, not latent."
+]
+],
+[
+51,
+80,
+"IN MEDIAS RES",
+"The opening is the middle of an event — a danger clock is running at turn zero. See \"In Medias Res — Situation,\" below.",
+null,
+[
+"IN MEDIAS RES",
+"The opening is the middle of an event — a danger clock is running at turn zero. See \"In Medias Res — Situation,\" below."
+]
+],
+[
+81,
+95,
+"WRONG",
+"Bizarre, not (necessarily) violent — player unhurt, questions armed. See \"Wrong — Situation,\" below.",
+null,
+[
+"WRONG",
+"Bizarre, not (necessarily) violent — player unhurt, questions armed. See \"Wrong — Situation,\" below."
+]
+],
+[
+96,
+100,
+"MYTHIC COLD OPEN",
+"World-grade strangeness at minute zero, rare and real — allowed to mark the world permanently from turn one. See \"Mythic Cold Open — Situation,\" below.",
+null,
+[
+"MYTHIC COLD OPEN",
+"World-grade strangeness at minute zero, rare and real — allowed to mark the world permanently from turn one. See \"Mythic Cold Open — Situation,\" below."
+]
+]
+]
+},
+"opening-register-medias": {
+"dice": "d12",
+"die": 12,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "World Building / Starting State",
+"rows": [
+[
+1,
+1,
+"Textured",
+"the rope is in your hands and fraying, and the shouting below is getting closer",
+null,
+[
+"Textured",
+"the rope is in your hands and fraying, and the shouting below is getting closer"
+]
+],
+[
+2,
+2,
+"Textured",
+"the building you woke in is on fire, and the door is not where it was last night",
+null,
+[
+"Textured",
+"the building you woke in is on fire, and the door is not where it was last night"
+]
+],
+[
+3,
+3,
+"Textured",
+"you are running full out and you don't remember starting, and the footsteps behind you just closed the gap",
+null,
+[
+"Textured",
+"you are running full out and you don't remember starting, and the footsteps behind you just closed the gap"
+]
+],
+[
+4,
+4,
+"Textured",
+"the ambush is already sprung and your weapon is still sheathed, and the first blow is already on its way",
+null,
+[
+"Textured",
+"the ambush is already sprung and your weapon is still sheathed, and the first blow is already on its way"
+]
+],
+[
+5,
+5,
+"Textured",
+"the water is at your knees and climbing fast, and the only door out just went under",
+null,
+[
+"Textured",
+"the water is at your knees and climbing fast, and the only door out just went under"
+]
+],
+[
+6,
+6,
+"Textured",
+"you are standing over a body with blood on your hands you can't explain, and voices are coming up the stairs",
+null,
+[
+"Textured",
+"you are standing over a body with blood on your hands you can't explain, and voices are coming up the stairs"
+]
+],
+[
+7,
+7,
+"Textured",
+"the caravan around you is under attack from both sides, and no one has told you which one you're supposed to be defending",
+null,
+[
+"Textured",
+"the caravan around you is under attack from both sides, and no one has told you which one you're supposed to be defending"
+]
+],
+[
+8,
+8,
+"Textured",
+"you are flat against a cliff ledge in the dark with no rope, and the hand that was holding yours just let go",
+null,
+[
+"Textured",
+"you are flat against a cliff ledge in the dark with no rope, and the hand that was holding yours just let go"
+]
+],
+[
+9,
+9,
+"Textured",
+"the cell door is standing wide open in front of you, and somewhere close a bell has just started ringing",
+null,
+[
+"Textured",
+"the cell door is standing wide open in front of you, and somewhere close a bell has just started ringing"
+]
+],
+[
+10,
+10,
+"Textured",
+"the crowd around you has just become a riot, and the first thrown stone was aimed at you",
+null,
+[
+"Textured",
+"the crowd around you has just become a riot, and the first thrown stone was aimed at you"
+]
+],
+[
+11,
+11,
+"Strange",
+"you are beating the brush on someone else's hunt, and whatever they're hunting just found you first",
+null,
+[
+"Strange",
+"you are beating the brush on someone else's hunt, and whatever they're hunting just found you first"
+]
+],
+[
+12,
+12,
+"Strange",
+"the theft in your hands is already falling apart, and the owner has just turned around",
+null,
+[
+"Strange",
+"the theft in your hands is already falling apart, and the owner has just turned around"
+]
+]
+]
+},
+"opening-register-wrong": {
+"dice": "d12",
+"die": 12,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "World Building / Starting State",
+"rows": [
+[
+1,
+1,
+"Strange",
+"you are dressed for a ceremony you don't remember, and everyone is waiting on you",
+null,
+[
+"Strange",
+"you are dressed for a ceremony you don't remember, and everyone is waiting on you"
+]
+],
+[
+2,
+2,
+"Strange",
+"the town is silent at noon, and every door on the street stands open",
+null,
+[
+"Strange",
+"the town is silent at noon, and every door on the street stands open"
+]
+],
+[
+3,
+3,
+"Strange",
+"you are standing at your own funeral, and the mourners keep waiting for you to lie back down",
+null,
+[
+"Strange",
+"you are standing at your own funeral, and the mourners keep waiting for you to lie back down"
+]
+],
+[
+4,
+4,
+"Strange",
+"every stranger in this town greets you by name, and none of them will say how they know it",
+null,
+[
+"Strange",
+"every stranger in this town greets you by name, and none of them will say how they know it"
+]
+],
+[
+5,
+5,
+"Strange",
+"a mark has appeared on your skin overnight, and it grows warmer whenever someone stares at it",
+null,
+[
+"Strange",
+"a mark has appeared on your skin overnight, and it grows warmer whenever someone stares at it"
+]
+],
+[
+6,
+6,
+"Strange",
+"you keep passing people wearing your own face, and not one of them seems to notice",
+null,
+[
+"Strange",
+"you keep passing people wearing your own face, and not one of them seems to notice"
+]
+],
+[
+7,
+7,
+"Strange",
+"the season here is wrong by your own reckoning, and no one will explain how much time has passed",
+null,
+[
+"Strange",
+"the season here is wrong by your own reckoning, and no one will explain how much time has passed"
+]
+],
+[
+8,
+8,
+"Strange",
+"the whole street calls you by a name that isn't yours, gently correcting you whenever you argue",
+null,
+[
+"Strange",
+"the whole street calls you by a name that isn't yours, gently correcting you whenever you argue"
+]
+],
+[
+9,
+9,
+"Strange",
+"there is a letter in your hand addressed to you in your own writing, and you don't remember writing it",
+null,
+[
+"Strange",
+"there is a letter in your hand addressed to you in your own writing, and you don't remember writing it"
+]
+],
+[
+10,
+10,
+"Strange",
+"every animal in sight keeps its distance from you, and the ones that live here are quietly leaving",
+null,
+[
+"Strange",
+"every animal in sight keeps its distance from you, and the ones that live here are quietly leaving"
+]
+],
+[
+11,
+11,
+"Strange",
+"you wake already mid-sentence, finishing words you don't remember starting",
+null,
+[
+"Strange",
+"you wake already mid-sentence, finishing words you don't remember starting"
+]
+],
+[
+12,
+12,
+"Strange",
+"your face is nailed to a notice on every door in town, and everyone thanks you for whatever it says you did",
+null,
+[
+"Strange",
+"your face is nailed to a notice on every door in town, and everyone thanks you for whatever it says you did"
+]
+]
+]
+},
+"opening-register-mythic": {
+"dice": "d6",
+"die": 6,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "World Building / Starting State",
+"rows": [
+[
+1,
+1,
+"Mythic",
+"the sky has a seam in it tonight, and you are the only one looking up",
+null,
+[
+"Mythic",
+"the sky has a seam in it tonight, and you are the only one looking up"
+]
+],
+[
+2,
+2,
+"Mythic",
+"the ground beneath this exact spot has been hollow for longer than anyone has lived, and tonight you can hear it breathing",
+null,
+[
+"Mythic",
+"the ground beneath this exact spot has been hollow for longer than anyone has lived, and tonight you can hear it breathing"
+]
+],
+[
+3,
+3,
+"Mythic",
+"you have already lived through this exact day once, and you are the only one who remembers how it went differently",
+null,
+[
+"Mythic",
+"you have already lived through this exact day once, and you are the only one who remembers how it went differently"
+]
+],
+[
+4,
+4,
+"Mythic",
+"every soul in this place dreamed the same dream tonight, and in every version of it, you were the one who opened the last door",
+null,
+[
+"Mythic",
+"every soul in this place dreamed the same dream tonight, and in every version of it, you were the one who opened the last door"
+]
+],
+[
+5,
+5,
+"Mythic",
+"something that was only ever said about you has just become true, and the world is quietly rearranging itself around it",
+null,
+[
+"Mythic",
+"something that was only ever said about you has just become true, and the world is quietly rearranging itself around it"
+]
+],
+[
+6,
+6,
+"Mythic",
+"one law this world has never broken gives way in front of you tonight, and it does not spring back",
+null,
+[
+"Mythic",
+"one law this world has never broken gives way in front of you tonight, and it does not spring back"
+]
+]
+]
+},
 "why-you-re-here-fork": {
 "dice": "d12",
 "die": 12,
@@ -236391,2401 +236820,3201 @@ null,
 1,
 1,
 "",
-"Mundane: Perfectly circular fairy ring of mundane mushrooms. — 15' diameter — No magical effect.",
+"Mundane: Perfectly circular fairy ring of mundane mushrooms. — No magical effect.",
 null,
 [
 "Mundane: Perfectly circular fairy ring of mundane mushrooms.",
-"15' diameter",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"15' diameter"
 ],
 [
 2,
 2,
 "",
-"Mundane: Harmless foxfire algae glowing faintly in the dark. — 5'x5' patch — No magical effect. Sheds Dim Light 5 ft.",
+"Mundane: Harmless foxfire algae glowing faintly in the dark. — No magical effect. Sheds Dim Light 5 ft.",
 null,
 [
 "Mundane: Harmless foxfire algae glowing faintly in the dark.",
-"5'x5' patch",
 "No magical effect. Sheds Dim Light 5 ft."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5' patch"
 ],
 [
 3,
 3,
 "",
-"Mundane: Wind whistling through rocks that sounds like chanting. — Entire Area — No magical effect.",
+"Mundane: Wind whistling through rocks that sounds like chanting. — No magical effect.",
 null,
 [
 "Mundane: Wind whistling through rocks that sounds like chanting.",
-"Entire Area",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 4,
 4,
 "",
-"Mundane: A strangely warm geothermal vent. — 5'x5' patch — No magical effect.",
+"Mundane: A strangely warm geothermal vent. — No magical effect.",
 null,
 [
 "Mundane: A strangely warm geothermal vent.",
-"5'x5' patch",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5' patch"
 ],
 [
 5,
 5,
 "",
-"Mundane: A tree that has grown completely sideways. — 10' line — No magical effect.",
+"Mundane: A tree that has grown completely sideways. — No magical effect.",
 null,
 [
 "Mundane: A tree that has grown completely sideways.",
-"10' line",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' line"
 ],
 [
 6,
 6,
 "",
-"Mundane: A puddle of water that reflects light strangely. — 5'x5' patch — No magical effect.",
+"Mundane: A puddle of water that reflects light strangely. — No magical effect.",
 null,
 [
 "Mundane: A puddle of water that reflects light strangely.",
-"5'x5' patch",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5' patch"
 ],
 [
 7,
 7,
 "",
-"Mundane: Highly magnetic mundane lodestone outcropping. — 10' radius — No magical effect.",
+"Mundane: Highly magnetic mundane lodestone outcropping. — No magical effect.",
 null,
 [
 "Mundane: Highly magnetic mundane lodestone outcropping.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 8,
 8,
 "",
-"Mundane: A patch of earth scorched by a mundane lightning strike. — 10' radius — No magical effect.",
+"Mundane: A patch of earth scorched by a mundane lightning strike. — No magical effect.",
 null,
 [
 "Mundane: A patch of earth scorched by a mundane lightning strike.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 9,
 9,
 "",
-"Mundane: Unusually massive, but mundane, animal tracks. — 10' line — No magical effect.",
+"Mundane: Unusually massive, but mundane, animal tracks. — No magical effect.",
 null,
 [
 "Mundane: Unusually massive, but mundane, animal tracks.",
-"10' line",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' line"
 ],
 [
 10,
 10,
 "",
-"Mundane: A strange, sweet-smelling mundane sap dripping from flora. — 5' radius — No magical effect.",
+"Mundane: A strange, sweet-smelling mundane sap dripping from flora. — No magical effect.",
 null,
 [
 "Mundane: A strange, sweet-smelling mundane sap dripping from flora.",
-"5' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 11,
 11,
 "",
-"Mundane: A rock formation that looks exactly like a skull. — 10'x10' — No magical effect.",
+"Mundane: A rock formation that looks exactly like a skull. — No magical effect.",
 null,
 [
 "Mundane: A rock formation that looks exactly like a skull.",
-"10'x10'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10'"
 ],
 [
 12,
 12,
 "",
-"Mundane: An eerie, sudden drop in mundane wind. — Entire Area — No magical effect.",
+"Mundane: An eerie, sudden drop in mundane wind. — No magical effect.",
 null,
 [
 "Mundane: An eerie, sudden drop in mundane wind.",
-"Entire Area",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 13,
 13,
 "",
-"Mundane: A completely barren patch of dirt where nothing grows. — 10' radius — No magical effect.",
+"Mundane: A completely barren patch of dirt where nothing grows. — No magical effect.",
 null,
 [
 "Mundane: A completely barren patch of dirt where nothing grows.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 14,
 14,
 "",
-"Mundane: A bush entirely stripped of leaves by normal insects. — 5'x5' — No magical effect.",
+"Mundane: A bush entirely stripped of leaves by normal insects. — No magical effect.",
 null,
 [
 "Mundane: A bush entirely stripped of leaves by normal insects.",
-"5'x5'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 15,
 15,
 "",
-"Mundane: Water flowing slightly uphill due to an optical illusion. — 10' line — No magical effect.",
+"Mundane: Water flowing slightly uphill due to an optical illusion. — No magical effect.",
 null,
 [
 "Mundane: Water flowing slightly uphill due to an optical illusion.",
-"10' line",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' line"
 ],
 [
 16,
 16,
 "",
-"Mundane: A patch of quartz crystals sparkling intensely. — 5' radius — No magical effect.",
+"Mundane: A patch of quartz crystals sparkling intensely. — No magical effect.",
 null,
 [
 "Mundane: A patch of quartz crystals sparkling intensely.",
-"5' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 17,
 17,
 "",
-"Mundane: A perfectly spherical mundane boulder. — 5'x5' — No magical effect.",
+"Mundane: A perfectly spherical mundane boulder. — No magical effect.",
 null,
 [
 "Mundane: A perfectly spherical mundane boulder.",
-"5'x5'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 18,
 18,
 "",
-"Mundane: A sudden, mundane updraft of warm air. — 10' radius — No magical effect.",
+"Mundane: A sudden, mundane updraft of warm air. — No magical effect.",
 null,
 [
 "Mundane: A sudden, mundane updraft of warm air.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 19,
 19,
 "",
-"Mundane: A massive pile of bones from a natural predator kill. — 10'x10' — No magical effect.",
+"Mundane: A massive pile of bones from a natural predator kill. — No magical effect.",
 null,
 [
 "Mundane: A massive pile of bones from a natural predator kill.",
-"10'x10'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10'"
 ],
 [
 20,
 20,
 "",
-"Mundane: A tree bleeding thick, red sap. — 5'x5' — No magical effect.",
+"Mundane: A tree bleeding thick, red sap. — No magical effect.",
 null,
 [
 "Mundane: A tree bleeding thick, red sap.",
-"5'x5'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 21,
 21,
 "",
-"Mundane: Deep claw marks gouged into solid stone. — 5' line — No magical effect.",
+"Mundane: Deep claw marks gouged into solid stone. — No magical effect.",
 null,
 [
 "Mundane: Deep claw marks gouged into solid stone.",
-"5' line",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' line"
 ],
 [
 22,
 22,
 "",
-"Mundane: A patch of unusually colorful, non-toxic wildflowers. — 10' radius — No magical effect.",
+"Mundane: A patch of unusually colorful, non-toxic wildflowers. — No magical effect.",
 null,
 [
 "Mundane: A patch of unusually colorful, non-toxic wildflowers.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 23,
 23,
 "",
-"Mundane: A naturally occurring echo chamber. — Entire Area — No magical effect. Disadvantage on Stealth (Sound).",
+"Mundane: A naturally occurring echo chamber. — No magical effect. Disadvantage on Stealth (Sound).",
 null,
 [
 "Mundane: A naturally occurring echo chamber.",
-"Entire Area",
 "No magical effect. Disadvantage on Stealth (Sound)."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 24,
 24,
 "",
-"Mundane: A patch of perfectly smooth, glass-like ice or obsidian. — 15' radius — No magical effect.",
+"Mundane: A patch of perfectly smooth, glass-like ice or obsidian. — No magical effect.",
 null,
 [
 "Mundane: A patch of perfectly smooth, glass-like ice or obsidian.",
-"15' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 25,
 25,
 "",
-"Mundane: A foul smell from a hidden, mundane rotting carcass. — 20' radius — No magical effect.",
+"Mundane: A foul smell from a hidden, mundane rotting carcass. — No magical effect.",
 null,
 [
 "Mundane: A foul smell from a hidden, mundane rotting carcass.",
-"20' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 26,
 26,
 "",
-"Mundane: Hundreds of harmless beetles marching in a straight line. — 30' line — No magical effect.",
+"Mundane: Hundreds of harmless beetles marching in a straight line. — No magical effect.",
 null,
 [
 "Mundane: Hundreds of harmless beetles marching in a straight line.",
-"30' line",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"30' line"
 ],
 [
 27,
 27,
 "",
-"Mundane: A patch of earth dusted with natural white chalk. — 10' radius — No magical effect.",
+"Mundane: A patch of earth dusted with natural white chalk. — No magical effect.",
 null,
 [
 "Mundane: A patch of earth dusted with natural white chalk.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 28,
 28,
 "",
-"Mundane: A thick, naturally occurring fog bank. — 30' radius — No magical effect. Lightly Obscured.",
+"Mundane: A thick, naturally occurring fog bank. — No magical effect. Lightly Obscured.",
 null,
 [
 "Mundane: A thick, naturally occurring fog bank.",
-"30' radius",
 "No magical effect. Lightly Obscured."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 29,
 29,
 "",
-"Mundane: A tree struck by lightning, split perfectly down the middle. — 5'x5' — No magical effect.",
+"Mundane: A tree struck by lightning, split perfectly down the middle. — No magical effect.",
 null,
 [
 "Mundane: A tree struck by lightning, split perfectly down the middle.",
-"5'x5'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 30,
 30,
 "",
-"Mundane: A natural spring bubbling with carbonated water. — 5' radius — No magical effect.",
+"Mundane: A natural spring bubbling with carbonated water. — No magical effect.",
 null,
 [
 "Mundane: A natural spring bubbling with carbonated water.",
-"5' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 31,
 31,
 "",
-"Mundane: A patch of mud that looks exactly like drying blood. — 10' radius — No magical effect.",
+"Mundane: A patch of mud that looks exactly like drying blood. — No magical effect.",
 null,
 [
 "Mundane: A patch of mud that looks exactly like drying blood.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 32,
 32,
 "",
-"Mundane: A strangely uniform grouping of three identical trees/rocks. — 15' triangle — No magical effect.",
+"Mundane: A strangely uniform grouping of three identical trees/rocks. — No magical effect.",
 null,
 [
 "Mundane: A strangely uniform grouping of three identical trees/rocks.",
-"15' triangle",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"15' triangle"
 ],
 [
 33,
 33,
 "",
-"Mundane: Harmless localized static electricity. — 10' radius — No magical effect.",
+"Mundane: Harmless localized static electricity. — No magical effect.",
 null,
 [
 "Mundane: Harmless localized static electricity.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 34,
 34,
 "",
-"Mundane: A pile of stones naturally weathered into square blocks. — 10'x10' — No magical effect.",
+"Mundane: A pile of stones naturally weathered into square blocks. — No magical effect.",
 null,
 [
 "Mundane: A pile of stones naturally weathered into square blocks.",
-"10'x10'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10'"
 ],
 [
 35,
 35,
 "",
-"Mundane: A sudden influx of harmless, non-magical butterflies. — 20' radius — No magical effect.",
+"Mundane: A sudden influx of harmless, non-magical butterflies. — No magical effect.",
 null,
 [
 "Mundane: A sudden influx of harmless, non-magical butterflies.",
-"20' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 36,
 36,
 "",
-"Mundane: A patch of dead, grey grass in an otherwise green area. — 10' radius — No magical effect.",
+"Mundane: A patch of dead, grey grass in an otherwise green area. — No magical effect.",
 null,
 [
 "Mundane: A patch of dead, grey grass in an otherwise green area.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 37,
 37,
 "",
-"Mundane: A tree root shaped like a grasping hand. — 5'x5' — No magical effect.",
+"Mundane: A tree root shaped like a grasping hand. — No magical effect.",
 null,
 [
 "Mundane: A tree root shaped like a grasping hand.",
-"5'x5'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 38,
 38,
 "",
-"Mundane: A harmless, natural sinkhole. — 10' radius — No magical effect.",
+"Mundane: A harmless, natural sinkhole. — No magical effect.",
 null,
 [
 "Mundane: A harmless, natural sinkhole.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 39,
 39,
 "",
-"Mundane: A localized patch of heavy, damp air. — 20' radius — No magical effect.",
+"Mundane: A localized patch of heavy, damp air. — No magical effect.",
 null,
 [
 "Mundane: A localized patch of heavy, damp air.",
-"20' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 40,
 40,
 "",
-"Mundane: A rock covered in naturally occurring yellow sulfur. — 5'x5' — No magical effect.",
+"Mundane: A rock covered in naturally occurring yellow sulfur. — No magical effect.",
 null,
 [
 "Mundane: A rock covered in naturally occurring yellow sulfur.",
-"5'x5'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 41,
 41,
 "",
-"Mundane: A bush with berries that look metallic. — 5'x5' — No magical effect.",
+"Mundane: A bush with berries that look metallic. — No magical effect.",
 null,
 [
 "Mundane: A bush with berries that look metallic.",
-"5'x5'",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 42,
 42,
 "",
-"Mundane: A natural pit filled with harmless rainwater. — 10' radius — No magical effect.",
+"Mundane: A natural pit filled with harmless rainwater. — No magical effect.",
 null,
 [
 "Mundane: A natural pit filled with harmless rainwater.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 43,
 43,
 "",
-"Mundane: A patch of earth that smells strongly of ozone. — 15' radius — No magical effect.",
+"Mundane: A patch of earth that smells strongly of ozone. — No magical effect.",
 null,
 [
 "Mundane: A patch of earth that smells strongly of ozone.",
-"15' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 44,
 44,
 "",
-"Mundane: A strangely quiet spot where insects make no noise. — 20' radius — No magical effect.",
+"Mundane: A strangely quiet spot where insects make no noise. — No magical effect.",
 null,
 [
 "Mundane: A strangely quiet spot where insects make no noise.",
-"20' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 45,
 45,
 "",
-"Mundane: A fallen log completely hollowed out by termites. — 20' line — No magical effect.",
+"Mundane: A fallen log completely hollowed out by termites. — No magical effect.",
 null,
 [
 "Mundane: A fallen log completely hollowed out by termites.",
-"20' line",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"20' line"
 ],
 [
 46,
 46,
 "",
-"Mundane: A patch of frost remaining despite warm weather. — 5' radius — No magical effect.",
+"Mundane: A patch of frost remaining despite warm weather. — No magical effect.",
 null,
 [
 "Mundane: A patch of frost remaining despite warm weather.",
-"5' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 47,
 47,
 "",
-"Mundane: A natural rock bridge that looks delicately carved. — 10' line — No magical effect.",
+"Mundane: A natural rock bridge that looks delicately carved. — No magical effect.",
 null,
 [
 "Mundane: A natural rock bridge that looks delicately carved.",
-"10' line",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' line"
 ],
 [
 48,
 48,
 "",
-"Mundane: A small harmless dirt devil (whirlwind). — 5' radius — No magical effect.",
+"Mundane: A small harmless dirt devil (whirlwind). — No magical effect.",
 null,
 [
 "Mundane: A small harmless dirt devil (whirlwind).",
-"5' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 49,
 49,
 "",
-"Mundane: A patch of earth covered in naturally shed snake skins. — 10' radius — No magical effect.",
+"Mundane: A patch of earth covered in naturally shed snake skins. — No magical effect.",
 null,
 [
 "Mundane: A patch of earth covered in naturally shed snake skins.",
-"10' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 50,
 50,
 "",
-"Mundane: A massive, completely ordinary anthill. — 5' radius — No magical effect.",
+"Mundane: A massive, completely ordinary anthill. — No magical effect.",
 null,
 [
 "Mundane: A massive, completely ordinary anthill.",
-"5' radius",
 "No magical effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 51,
 51,
 "",
-"Minor: _Dancing Lights_ linger, forming humanoid shapes. — 20' radius — Sheds Dim Light. No damage.",
+"Minor: _Dancing Lights_ linger, forming humanoid shapes. — Sheds Dim Light. No damage.",
 null,
 [
 "Minor: _Dancing Lights_ linger, forming humanoid shapes.",
-"20' radius",
 "Sheds Dim Light. No damage."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 52,
 52,
 "",
-"Minor: _Faerie Fire_ residue clings to the flora. — 10' radius — Objects/plants glow. Creatures moving through gain no mechanical penalty, just flavor.",
+"Minor: _Faerie Fire_ residue clings to the flora. — Objects/plants glow. Creatures moving through gain no mechanical penalty, just flavor.",
 null,
 [
 "Minor: _Faerie Fire_ residue clings to the flora.",
-"10' radius",
 "Objects/plants glow. Creatures moving through gain no mechanical penalty, just flavor."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 53,
 53,
 "",
-"Minor: _Druidcraft_ causes all flowers in the area to bloom rapidly. — Entire Area — Instantaneous flavor effect.",
+"Minor: _Druidcraft_ causes all flowers in the area to bloom rapidly. — Instantaneous flavor effect.",
 null,
 [
 "Minor: _Druidcraft_ causes all flowers in the area to bloom rapidly.",
-"Entire Area",
 "Instantaneous flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 54,
 54,
 "",
-"Minor: _Druidcraft_ causes all leaves to wither and fall instantly. — Entire Area — Instantaneous flavor effect.",
+"Minor: _Druidcraft_ causes all leaves to wither and fall instantly. — Instantaneous flavor effect.",
 null,
 [
 "Minor: _Druidcraft_ causes all leaves to wither and fall instantly.",
-"Entire Area",
 "Instantaneous flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 55,
 55,
 "",
-"Minor: _Thaumaturgy_ causes harmless tremors in the ground. — 30' radius — Tremors last 1 minute.",
+"Minor: _Thaumaturgy_ causes harmless tremors in the ground. — Tremors last 1 minute.",
 null,
 [
 "Minor: _Thaumaturgy_ causes harmless tremors in the ground.",
-"30' radius",
 "Tremors last 1 minute."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 56,
 56,
 "",
-"Minor: _Thaumaturgy_ creates the faint sound of distant battle. — Entire Area — Auditory illusion.",
+"Minor: _Thaumaturgy_ creates the faint sound of distant battle. — Auditory illusion.",
 null,
 [
 "Minor: _Thaumaturgy_ creates the faint sound of distant battle.",
-"Entire Area",
 "Auditory illusion."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 57,
 57,
 "",
-"Minor: _Prestidigitation_ leaves the overwhelming smell of lavender. — 20' radius — Masks natural scents (Disadvantage to tracking by smell).",
+"Minor: _Prestidigitation_ leaves the overwhelming smell of lavender. — Masks natural scents (Disadvantage to tracking by smell).",
 null,
 [
 "Minor: _Prestidigitation_ leaves the overwhelming smell of lavender.",
-"20' radius",
 "Masks natural scents (Disadvantage to tracking by smell)."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 58,
 58,
 "",
-"Minor: _Prestidigitation_ makes the air unnaturally cold. — 10' cube — Temperature drop. No damage.",
+"Minor: _Prestidigitation_ makes the air unnaturally cold. — Temperature drop. No damage.",
 null,
 [
 "Minor: _Prestidigitation_ makes the air unnaturally cold.",
-"10' cube",
 "Temperature drop. No damage."
-]
+],
+"",
+"",
+"",
+"",
+"10' cube"
 ],
 [
 59,
 59,
 "",
-"Minor: _Minor Illusion_ of a small, glowing treasure chest. — 5' cube — Fades if touched.",
+"Minor: _Minor Illusion_ of a small, glowing treasure chest. — Fades if touched.",
 null,
 [
 "Minor: _Minor Illusion_ of a small, glowing treasure chest.",
-"5' cube",
 "Fades if touched."
-]
+],
+"",
+"",
+"",
+"",
+"5' cube"
 ],
 [
 60,
 60,
 "",
-"Minor: _Minor Illusion_ of a faint, ghostly weeping. — 15' radius — Auditory illusion.",
+"Minor: _Minor Illusion_ of a faint, ghostly weeping. — Auditory illusion.",
 null,
 [
 "Minor: _Minor Illusion_ of a faint, ghostly weeping.",
-"15' radius",
 "Auditory illusion."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 61,
 61,
 "",
-"Minor: _Light_ spell permanently cast on a high branch/stalactite. — 20' radius — Sheds Bright Light 20 ft., Dim Light 20 ft.",
+"Minor: _Light_ spell permanently cast on a high branch/stalactite. — Sheds Bright Light 20 ft., Dim Light 20 ft.",
 null,
 [
 "Minor: _Light_ spell permanently cast on a high branch/stalactite.",
-"20' radius",
 "Sheds Bright Light 20 ft., Dim Light 20 ft."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 62,
 62,
 "",
-"Minor: _Continual Flame_ burns on a stone without consuming it. — 5' radius — Sheds Bright Light. Deals no fire damage.",
+"Minor: _Continual Flame_ burns on a stone without consuming it. — Sheds Bright Light. Deals no fire damage.",
 null,
 [
 "Minor: _Continual Flame_ burns on a stone without consuming it.",
-"5' radius",
 "Sheds Bright Light. Deals no fire damage."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 63,
 63,
 "",
-"Minor: _Purify Food and Drink_ residue; all puddles are perfectly clear. — 10' radius — Water is safe to drink.",
+"Minor: _Purify Food and Drink_ residue; all puddles are perfectly clear. — Water is safe to drink.",
 null,
 [
 "Minor: _Purify Food and Drink_ residue; all puddles are perfectly clear.",
-"10' radius",
 "Water is safe to drink."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 64,
 64,
 "",
-"Minor: _Mold Earth_ has excavated a perfect 5-foot cube pit. — 5'x5' — 5-foot deep pit (Difficult Terrain to exit).",
+"Minor: _Mold Earth_ has excavated a perfect 5-foot cube pit. — 5-foot deep pit (Difficult Terrain to exit).",
 null,
 [
 "Minor: _Mold Earth_ has excavated a perfect 5-foot cube pit.",
-"5'x5'",
 "5-foot deep pit (Difficult Terrain to exit)."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 65,
 65,
 "",
-"Minor: _Shape Water_ has frozen a small pond into solid ice. — 5' radius — Slippery surface (Difficult Terrain).",
+"Minor: _Shape Water_ has frozen a small pond into solid ice. — Slippery surface (Difficult Terrain).",
 null,
 [
 "Minor: _Shape Water_ has frozen a small pond into solid ice.",
-"5' radius",
 "Slippery surface (Difficult Terrain)."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 66,
 66,
 "",
-"Minor: _Control Flames_ has turned a campfire's ash bright blue. — 5' radius — Flavor effect.",
+"Minor: _Control Flames_ has turned a campfire's ash bright blue. — Flavor effect.",
 null,
 [
 "Minor: _Control Flames_ has turned a campfire's ash bright blue.",
-"5' radius",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 67,
 67,
 "",
-"Minor: _Gust_ causes a constant, harmless swirling wind. — 10' radius — Extinguishes unprotected flames (candles/torches).",
+"Minor: _Gust_ causes a constant, harmless swirling wind. — Extinguishes unprotected flames (candles/torches).",
 null,
 [
 "Minor: _Gust_ causes a constant, harmless swirling wind.",
-"10' radius",
 "Extinguishes unprotected flames (candles/torches)."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 68,
 68,
 "",
-"Minor: _Message_ repeats a cryptic warning when crossed. — 5' line — Auditory trigger.",
+"Minor: _Message_ repeats a cryptic warning when crossed. — Auditory trigger.",
 null,
 [
 "Minor: _Message_ repeats a cryptic warning when crossed.",
-"5' line",
 "Auditory trigger."
-]
+],
+"",
+"",
+"",
+"",
+"5' line"
 ],
 [
 69,
 69,
 "",
-"Minor: _Alarm_ (Mental) triggers, alerting an unknown caster far away. — 20' cube — Silent trigger. The party feels a slight mental \"ping.\"",
+"Minor: _Alarm_ (Mental) triggers, alerting an unknown caster far away. — Silent trigger. The party feels a slight mental \"ping.\"",
 null,
 [
 "Minor: _Alarm_ (Mental) triggers, alerting an unknown caster far away.",
-"20' cube",
 "Silent trigger. The party feels a slight mental \"ping.\""
-]
+],
+"",
+"",
+"",
+"",
+"20' cube"
 ],
 [
 70,
 70,
 "",
-"Minor: _Alarm_ (Audible) triggers a loud ringing handbell sound. — 20' cube — Alerts all creatures within 60 feet.",
+"Minor: _Alarm_ (Audible) triggers a loud ringing handbell sound. — Alerts all creatures within 60 feet.",
 null,
 [
 "Minor: _Alarm_ (Audible) triggers a loud ringing handbell sound.",
-"20' cube",
 "Alerts all creatures within 60 feet."
-]
+],
+"",
+"",
+"",
+"",
+"20' cube"
 ],
 [
 71,
 71,
 "",
-"Minor: _Magic Mouth_ on a rock speaks a riddle. — 5' radius — Triggers when a creature approaches within 5 feet.",
+"Minor: _Magic Mouth_ on a rock speaks a riddle. — Triggers when a creature approaches within 5 feet.",
 null,
 [
 "Minor: _Magic Mouth_ on a rock speaks a riddle.",
-"5' radius",
 "Triggers when a creature approaches within 5 feet."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 72,
 72,
 "",
-"Minor: _Unseen Servant_ endlessly sweeps the dirt in a circle. — 15' radius — Invisible force. Can be disrupted easily.",
+"Minor: _Unseen Servant_ endlessly sweeps the dirt in a circle. — Invisible force. Can be disrupted easily.",
 null,
 [
 "Minor: _Unseen Servant_ endlessly sweeps the dirt in a circle.",
-"15' radius",
 "Invisible force. Can be disrupted easily."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 73,
 73,
 "",
-"Minor: A hovering, glowing spectral shield (_Shield_ echo). — 5' radius — Disappears if touched.",
+"Minor: A hovering, glowing spectral shield (_Shield_ echo). — Disappears if touched.",
 null,
 [
 "Minor: A hovering, glowing spectral shield (_Shield_ echo).",
-"5' radius",
 "Disappears if touched."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 74,
 74,
 "",
-"Minor: _Mage Armor_ residue makes the air feel hard and glassy. — 5' cube — Flavor effect.",
+"Minor: _Mage Armor_ residue makes the air feel hard and glassy. — Flavor effect.",
 null,
 [
 "Minor: _Mage Armor_ residue makes the air feel hard and glassy.",
-"5' cube",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' cube"
 ],
 [
 75,
 75,
 "",
-"Minor: _Feather Fall_ zone; gravity is slightly reduced. — 10' radius — Creatures take no fall damage if they drop within this zone.",
+"Minor: _Feather Fall_ zone; gravity is slightly reduced. — Creatures take no fall damage if they drop within this zone.",
 null,
 [
 "Minor: _Feather Fall_ zone; gravity is slightly reduced.",
-"10' radius",
 "Creatures take no fall damage if they drop within this zone."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 76,
 76,
 "",
-"Minor: _Jump_ zone; the ground is magically springy. — 10' radius — Jump distance is tripled if jumping from this zone.",
+"Minor: _Jump_ zone; the ground is magically springy. — Jump distance is tripled if jumping from this zone.",
 null,
 [
 "Minor: _Jump_ zone; the ground is magically springy.",
-"10' radius",
 "Jump distance is tripled if jumping from this zone."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 77,
 77,
 "",
-"Minor: _Longstrider_ echo; creatures feel a sudden burst of energy. — 15' radius — First move action taken from here gains +10 feet speed.",
+"Minor: _Longstrider_ echo; creatures feel a sudden burst of energy. — First move action taken from here gains +10 feet speed.",
 null,
 [
 "Minor: _Longstrider_ echo; creatures feel a sudden burst of energy.",
-"15' radius",
 "First move action taken from here gains +10 feet speed."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 78,
 78,
 "",
-"Minor: _Speak with Animals_ echo; ambient animal chirps sound like words. — Entire Area — Flavor effect.",
+"Minor: _Speak with Animals_ echo; ambient animal chirps sound like words. — Flavor effect.",
 null,
 [
 "Minor: _Speak with Animals_ echo; ambient animal chirps sound like words.",
-"Entire Area",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 79,
 79,
 "",
-"Minor: _Bless_ residue; a feeling of profound courage washes over the party. — 20' radius — First attack roll made in this zone gains +1d4.",
+"Minor: _Bless_ residue; a feeling of profound courage washes over the party. — First attack roll made in this zone gains +1d4.",
 null,
 [
 "Minor: _Bless_ residue; a feeling of profound courage washes over the party.",
-"20' radius",
 "First attack roll made in this zone gains +1d4."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 80,
 80,
 "",
-"Minor: _Bane_ residue; a feeling of deep dread fills the air. — 20' radius — First saving throw made in this zone suffers -1d4.",
+"Minor: _Bane_ residue; a feeling of deep dread fills the air. — First saving throw made in this zone suffers -1d4.",
 null,
 [
 "Minor: _Bane_ residue; a feeling of deep dread fills the air.",
-"20' radius",
 "First saving throw made in this zone suffers -1d4."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 81,
 81,
 "",
-"Minor: Harmless pink bubbles float up from the soil. — 15' radius — Visually distracting.",
+"Minor: Harmless pink bubbles float up from the soil. — Visually distracting.",
 null,
 [
 "Minor: Harmless pink bubbles float up from the soil.",
-"15' radius",
 "Visually distracting."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 82,
 82,
 "",
-"Minor: A swarm of illusory butterflies flutters aimlessly. — 10' radius — Lightly Obscures the area.",
+"Minor: A swarm of illusory butterflies flutters aimlessly. — Lightly Obscures the area.",
 null,
 [
 "Minor: A swarm of illusory butterflies flutters aimlessly.",
-"10' radius",
 "Lightly Obscures the area."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 83,
 83,
 "",
-"Minor: All metal weapons drawn here faintly hum with energy. — Entire Area — Flavor effect.",
+"Minor: All metal weapons drawn here faintly hum with energy. — Flavor effect.",
 null,
 [
 "Minor: All metal weapons drawn here faintly hum with energy.",
-"Entire Area",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 84,
 84,
 "",
-"Minor: Gravity is slightly skewed; pebbles float 1 inch off the ground. — 10' radius — Flavor effect.",
+"Minor: Gravity is slightly skewed; pebbles float 1 inch off the ground. — Flavor effect.",
 null,
 [
 "Minor: Gravity is slightly skewed; pebbles float 1 inch off the ground.",
-"10' radius",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 85,
 85,
 "",
-"Minor: _Color Spray_ residue; a permanent rainbow hangs in the air. — 15' cone — Flavor effect.",
+"Minor: _Color Spray_ residue; a permanent rainbow hangs in the air. — Flavor effect.",
 null,
 [
 "Minor: _Color Spray_ residue; a permanent rainbow hangs in the air.",
-"15' cone",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"15' cone"
 ],
 [
 86,
 86,
 "",
-"Minor: _Sleep_ residue; creatures feel overwhelmingly drowsy. — 20' radius — Disadvantage on Initiative rolls if starting combat here.",
+"Minor: _Sleep_ residue; creatures feel overwhelmingly drowsy. — Disadvantage on Initiative rolls if starting combat here.",
 null,
 [
 "Minor: _Sleep_ residue; creatures feel overwhelmingly drowsy.",
-"20' radius",
 "Disadvantage on Initiative rolls if starting combat here."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 87,
 87,
 "",
-"Minor: _Sanctuary_ echo; predators refuse to enter this exact spot. — 10' radius — Safe resting zone. Beasts will not cross the boundary.",
+"Minor: _Sanctuary_ echo; predators refuse to enter this exact spot. — Safe resting zone. Beasts will not cross the boundary.",
 null,
 [
 "Minor: _Sanctuary_ echo; predators refuse to enter this exact spot.",
-"10' radius",
 "Safe resting zone. Beasts will not cross the boundary."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 88,
 88,
 "",
-"Minor: _Hide from Undead_ residue; smells of holy incense. — 15' radius — Undead cannot perceive creatures inside this zone.",
+"Minor: _Hide from Undead_ residue; smells of holy incense. — Undead cannot perceive creatures inside this zone.",
 null,
 [
 "Minor: _Hide from Undead_ residue; smells of holy incense.",
-"15' radius",
 "Undead cannot perceive creatures inside this zone."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 89,
 89,
 "",
-"Minor: _Find Familiar_ echo; a spectral cat watches the party, then fades. — 5' radius — Flavor effect.",
+"Minor: _Find Familiar_ echo; a spectral cat watches the party, then fades. — Flavor effect.",
 null,
 [
 "Minor: _Find Familiar_ echo; a spectral cat watches the party, then fades.",
-"5' radius",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 90,
 90,
 "",
-"Minor: _Tenser's Floating Disk_ sits abandoned, holding a pile of rocks. — 3' radius — Immobile force construct.",
+"Minor: _Tenser's Floating Disk_ sits abandoned, holding a pile of rocks. — Immobile force construct.",
 null,
 [
 "Minor: _Tenser's Floating Disk_ sits abandoned, holding a pile of rocks.",
-"3' radius",
 "Immobile force construct."
-]
+],
+"",
+"",
+"",
+"",
+"3' radius"
 ],
 [
 91,
 91,
 "",
-"Minor: _Goodberry_ bush; 1d4 berries remain on a glowing plant. — 5'x5' — Eating a berry restores 1 HP and nourishes for 1 day.",
+"Minor: _Goodberry_ bush; 1d4 berries remain on a glowing plant. — Eating a berry restores 1 HP and nourishes for 1 day.",
 null,
 [
 "Minor: _Goodberry_ bush; 1d4 berries remain on a glowing plant.",
-"5'x5'",
 "Eating a berry restores 1 HP and nourishes for 1 day."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 92,
 92,
 "",
-"Minor: A faint aura of _Detect Magic_ causes magic items to glow faintly. — Entire Area — Party instantly knows if they are carrying magic items.",
+"Minor: A faint aura of _Detect Magic_ causes magic items to glow faintly. — Party instantly knows if they are carrying magic items.",
 null,
 [
 "Minor: A faint aura of _Detect Magic_ causes magic items to glow faintly.",
-"Entire Area",
 "Party instantly knows if they are carrying magic items."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 93,
 93,
 "",
-"Minor: _Comprehend Languages_ echo; wind sounds like Common. — Entire Area — Flavor effect.",
+"Minor: _Comprehend Languages_ echo; wind sounds like Common. — Flavor effect.",
 null,
 [
 "Minor: _Comprehend Languages_ echo; wind sounds like Common.",
-"Entire Area",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 94,
 94,
 "",
-"Minor: _Identify_ echo; touching a rock gives you its exact geological history. — 5'x5' — Flavor effect.",
+"Minor: _Identify_ echo; touching a rock gives you its exact geological history. — Flavor effect.",
 null,
 [
 "Minor: _Identify_ echo; touching a rock gives you its exact geological history.",
-"5'x5'",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 95,
 95,
 "",
-"Minor: A single, glowing _Magic Missile_ dart frozen in mid-air. — 1' radius — Shoots into the ground and vanishes if touched.",
+"Minor: A single, glowing _Magic Missile_ dart frozen in mid-air. — Shoots into the ground and vanishes if touched.",
 null,
 [
 "Minor: A single, glowing _Magic Missile_ dart frozen in mid-air.",
-"1' radius",
 "Shoots into the ground and vanishes if touched."
-]
+],
+"",
+"",
+"",
+"",
+"1' radius"
 ],
 [
 96,
 96,
 "",
-"Minor: _Ray of Frost_ scorch mark; an object frozen at absolute zero. — 5'x5' — Touching it bare-handed deals 1 Cold damage.",
+"Minor: _Ray of Frost_ scorch mark; an object frozen at absolute zero. — Touching it bare-handed deals 1 Cold damage.",
 null,
 [
 "Minor: _Ray of Frost_ scorch mark; an object frozen at absolute zero.",
-"5'x5'",
 "Touching it bare-handed deals 1 Cold damage."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 97,
 97,
 "",
-"Minor: _Acid Splash_ puddle; harmless green liquid bubbling. — 5' radius — Flavor effect.",
+"Minor: _Acid Splash_ puddle; harmless green liquid bubbling. — Flavor effect.",
 null,
 [
 "Minor: _Acid Splash_ puddle; harmless green liquid bubbling.",
-"5' radius",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 98,
 98,
 "",
-"Minor: _Poison Spray_ residue; a noxious but non-damaging yellow vapor. — 5' radius — Smells awful.",
+"Minor: _Poison Spray_ residue; a noxious but non-damaging yellow vapor. — Smells awful.",
 null,
 [
 "Minor: _Poison Spray_ residue; a noxious but non-damaging yellow vapor.",
-"5' radius",
 "Smells awful."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 99,
 99,
 "",
-"Minor: _Chill Touch_ echo; a skeletal handprint burned into a surface. — 5'x5' — Flavor effect.",
+"Minor: _Chill Touch_ echo; a skeletal handprint burned into a surface. — Flavor effect.",
 null,
 [
 "Minor: _Chill Touch_ echo; a skeletal handprint burned into a surface.",
-"5'x5'",
 "Flavor effect."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 100,
 100,
 "",
-"Minor: _Mending_ zone; torn cloth or broken twigs instantly repair themselves. — 10' radius — Repairs minor mundane objects within the zone.",
+"Minor: _Mending_ zone; torn cloth or broken twigs instantly repair themselves. — Repairs minor mundane objects within the zone.",
 null,
 [
 "Minor: _Mending_ zone; torn cloth or broken twigs instantly repair themselves.",
-"10' radius",
 "Repairs minor mundane objects within the zone."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 101,
 101,
 "",
-"Moderate: _Grease_ puddle; magically slick mud or oil. — 10' square — Difficult Terrain. DC 12 Dex save or fall Prone when entering.",
+"Moderate: _Grease_ puddle; magically slick mud or oil. — Difficult Terrain. DC 12 Dex save or fall Prone when entering.",
 null,
 [
 "Moderate: _Grease_ puddle; magically slick mud or oil.",
-"10' square",
 "Difficult Terrain. DC 12 Dex save or fall Prone when entering."
-]
+],
+"",
+"",
+"",
+"",
+"10' square"
 ],
 [
 102,
 102,
 "",
-"Moderate: _Entangle_ trap; animated grasping roots. — 20' square — Difficult Terrain. DC 13 Str save or be Restrained.",
+"Moderate: _Entangle_ trap; animated grasping roots. — Difficult Terrain. DC 13 Str save or be Restrained.",
 null,
 [
 "Moderate: _Entangle_ trap; animated grasping roots.",
-"20' square",
 "Difficult Terrain. DC 13 Str save or be Restrained."
-]
+],
+"",
+"",
+"",
+"",
+"20' square"
 ],
 [
 103,
 103,
 "",
-"Moderate: _Web_ trap; sticky, magical spider silk spanning a gap. — 20' cube — Difficult Terrain. DC 13 Dex save or be Restrained. Flammable.",
+"Moderate: _Web_ trap; sticky, magical spider silk spanning a gap. — Difficult Terrain. DC 13 Dex save or be Restrained. Flammable.",
 null,
 [
 "Moderate: _Web_ trap; sticky, magical spider silk spanning a gap.",
-"20' cube",
 "Difficult Terrain. DC 13 Dex save or be Restrained. Flammable."
-]
+],
+"",
+"",
+"",
+"",
+"20' cube"
 ],
 [
 104,
 104,
 "",
-"Moderate: _Spike Growth_; jagged magical thorns burst from the soil. — 20' radius — Difficult Terrain. Deals 2d4 Piercing per 5 ft moved.",
+"Moderate: _Spike Growth_; jagged magical thorns burst from the soil. — Difficult Terrain. Deals 2d4 Piercing per 5 ft moved.",
 null,
 [
 "Moderate: _Spike Growth_; jagged magical thorns burst from the soil.",
-"20' radius",
 "Difficult Terrain. Deals 2d4 Piercing per 5 ft moved."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 105,
 105,
 "",
-"Moderate: _Fog Cloud_; dense, rolling magical mist. — 20' radius — Heavily Obscured (blocks line of sight entirely).",
+"Moderate: _Fog Cloud_; dense, rolling magical mist. — Heavily Obscured (blocks line of sight entirely).",
 null,
 [
 "Moderate: _Fog Cloud_; dense, rolling magical mist.",
-"20' radius",
 "Heavily Obscured (blocks line of sight entirely)."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 106,
 106,
 "",
-"Moderate: _Darkness_; a sphere of absolute, magical blackness. — 15' radius — Heavily Obscured. Darkvision cannot pierce it.",
+"Moderate: _Darkness_; a sphere of absolute, magical blackness. — Heavily Obscured. Darkvision cannot pierce it.",
 null,
 [
 "Moderate: _Darkness_; a sphere of absolute, magical blackness.",
-"15' radius",
 "Heavily Obscured. Darkvision cannot pierce it."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 107,
 107,
 "",
-"Moderate: _Silence_; an eerie sphere devoid of all sound. — 20' radius — Immune to Thunder damage. Verbal casting is impossible.",
+"Moderate: _Silence_; an eerie sphere devoid of all sound. — Immune to Thunder damage. Verbal casting is impossible.",
 null,
 [
 "Moderate: _Silence_; an eerie sphere devoid of all sound.",
-"20' radius",
 "Immune to Thunder damage. Verbal casting is impossible."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 108,
 108,
 "",
-"Moderate: _Stinking Cloud_; nauseating yellow gas. — 20' radius — Heavily Obscured. DC 13 Con save or lose Action to retching.",
+"Moderate: _Stinking Cloud_; nauseating yellow gas. — Heavily Obscured. DC 13 Con save or lose Action to retching.",
 null,
 [
 "Moderate: _Stinking Cloud_; nauseating yellow gas.",
-"20' radius",
 "Heavily Obscured. DC 13 Con save or lose Action to retching."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 109,
 109,
 "",
-"Moderate: _Plant Growth_; explosively thick, choked vegetation. — Entire Area — Moving 1 foot costs 4 feet of movement.",
+"Moderate: _Plant Growth_; explosively thick, choked vegetation. — Moving 1 foot costs 4 feet of movement.",
 null,
 [
 "Moderate: _Plant Growth_; explosively thick, choked vegetation.",
-"Entire Area",
 "Moving 1 foot costs 4 feet of movement."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 110,
 110,
 "",
-"Moderate: _Sleet Storm_; freezing rain and slick ice. — 40' cylinder — Heavily Obscured. Extinguishes fire. DC 13 Dex save or Prone.",
+"Moderate: _Sleet Storm_; freezing rain and slick ice. — Heavily Obscured. Extinguishes fire. DC 13 Dex save or Prone.",
 null,
 [
 "Moderate: _Sleet Storm_; freezing rain and slick ice.",
-"40' cylinder",
 "Heavily Obscured. Extinguishes fire. DC 13 Dex save or Prone."
-]
+],
+"",
+"",
+"",
+"",
+"40' cylinder"
 ],
 [
 111,
 111,
 "",
-"Moderate: _Flaming Sphere_ remnant; a ball of fire rolls aimlessly. — 5' sphere — 2d6 Fire damage if it rams a creature (DC 13 Dex save for half).",
+"Moderate: _Flaming Sphere_ remnant; a ball of fire rolls aimlessly. — 2d6 Fire damage if it rams a creature (DC 13 Dex save for half).",
 null,
 [
 "Moderate: _Flaming Sphere_ remnant; a ball of fire rolls aimlessly.",
-"5' sphere",
 "2d6 Fire damage if it rams a creature (DC 13 Dex save for half)."
-]
+],
+"",
+"",
+"",
+"",
+"5' sphere"
 ],
 [
 112,
 112,
 "",
-"Moderate: _Moonbeam_ pillar; a pale, localized cylinder of light. — 5' cylinder — 2d10 Radiant damage (DC 13 Con). Shapechangers revert form.",
+"Moderate: _Moonbeam_ pillar; a pale, localized cylinder of light. — 2d10 Radiant damage (DC 13 Con). Shapechangers revert form.",
 null,
 [
 "Moderate: _Moonbeam_ pillar; a pale, localized cylinder of light.",
-"5' cylinder",
 "2d10 Radiant damage (DC 13 Con). Shapechangers revert form."
-]
+],
+"",
+"",
+"",
+"",
+"5' cylinder"
 ],
 [
 113,
 113,
 "",
-"Moderate: _Daylight_ object; a stone radiating brilliant sunlight. — 60' radius — Sheds Bright Light. Nullifies magical darkness.",
+"Moderate: _Daylight_ object; a stone radiating brilliant sunlight. — Sheds Bright Light. Nullifies magical darkness.",
 null,
 [
 "Moderate: _Daylight_ object; a stone radiating brilliant sunlight.",
-"60' radius",
 "Sheds Bright Light. Nullifies magical darkness."
-]
+],
+"",
+"",
+"",
+"",
+"60' radius"
 ],
 [
 114,
 114,
 "",
-"Moderate: _Wind Wall_; an invisible curtain of howling gales. — 50' line — Keeps out fog/gases. Ranged weapon attacks automatically miss.",
+"Moderate: _Wind Wall_; an invisible curtain of howling gales. — Keeps out fog/gases. Ranged weapon attacks automatically miss.",
 null,
 [
 "Moderate: _Wind Wall_; an invisible curtain of howling gales.",
-"50' line",
 "Keeps out fog/gases. Ranged weapon attacks automatically miss."
-]
+],
+"",
+"",
+"",
+"",
+"50' line"
 ],
 [
 115,
 115,
 "",
-"Moderate: _Gaseous Form_ trap; an area that forces creatures into vapor. — 10' cube — DC 13 Con save or become a gaseous cloud for 1 minute.",
+"Moderate: _Gaseous Form_ trap; an area that forces creatures into vapor. — DC 13 Con save or become a gaseous cloud for 1 minute.",
 null,
 [
 "Moderate: _Gaseous Form_ trap; an area that forces creatures into vapor.",
-"10' cube",
 "DC 13 Con save or become a gaseous cloud for 1 minute."
-]
+],
+"",
+"",
+"",
+"",
+"10' cube"
 ],
 [
 116,
 116,
 "",
-"Moderate: _Mirror Image_ zone; reality splinters. — 15' radius — Creatures entering gain 1d3 illusory duplicates for 1 minute.",
+"Moderate: _Mirror Image_ zone; reality splinters. — Creatures entering gain 1d3 illusory duplicates for 1 minute.",
 null,
 [
 "Moderate: _Mirror Image_ zone; reality splinters.",
-"15' radius",
 "Creatures entering gain 1d3 illusory duplicates for 1 minute."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 117,
 117,
 "",
-"Moderate: _Blink_ zone; the Ethereal plane overlaps here. — 20' radius — 50% chance at end of turn to vanish to the Ethereal Plane.",
+"Moderate: _Blink_ zone; the Ethereal plane overlaps here. — 50% chance at end of turn to vanish to the Ethereal Plane.",
 null,
 [
 "Moderate: _Blink_ zone; the Ethereal plane overlaps here.",
-"20' radius",
 "50% chance at end of turn to vanish to the Ethereal Plane."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 118,
 118,
 "",
-"Moderate: _Levitate_ trap; a localized anti-gravity patch. — 10' radius — DC 13 Con save or float 20 feet into the air.",
+"Moderate: _Levitate_ trap; a localized anti-gravity patch. — DC 13 Con save or float 20 feet into the air.",
 null,
 [
 "Moderate: _Levitate_ trap; a localized anti-gravity patch.",
-"10' radius",
 "DC 13 Con save or float 20 feet into the air."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 119,
 119,
 "",
-"Moderate: _Enlarge_ field; magic swells physical size. — 15' radius — Creatures inside become Large, gaining Advantage on Str checks.",
+"Moderate: _Enlarge_ field; magic swells physical size. — Creatures inside become Large, gaining Advantage on Str checks.",
 null,
 [
 "Moderate: _Enlarge_ field; magic swells physical size.",
-"15' radius",
 "Creatures inside become Large, gaining Advantage on Str checks."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 120,
 120,
 "",
-"Moderate: _Reduce_ field; magic shrinks physical size. — 15' radius — Creatures inside become Small, gaining Disadvantage on Str checks.",
+"Moderate: _Reduce_ field; magic shrinks physical size. — Creatures inside become Small, gaining Disadvantage on Str checks.",
 null,
 [
 "Moderate: _Reduce_ field; magic shrinks physical size.",
-"15' radius",
 "Creatures inside become Small, gaining Disadvantage on Str checks."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 121,
 121,
 "",
-"Moderate: _Slow_ aura; time crawls at a fraction of normal speed. — 20' cube — DC 13 Wis save; half speed, no Reactions, 1 attack only.",
+"Moderate: _Slow_ aura; time crawls at a fraction of normal speed. — DC 13 Wis save; half speed, no Reactions, 1 attack only.",
 null,
 [
 "Moderate: _Slow_ aura; time crawls at a fraction of normal speed.",
-"20' cube",
 "DC 13 Wis save; half speed, no Reactions, 1 attack only."
-]
+],
+"",
+"",
+"",
+"",
+"20' cube"
 ],
 [
 122,
 122,
 "",
-"Moderate: _Haste_ aura; time accelerates rapidly. — 20' cube — Speed is doubled, +2 AC, gain one extra Action.",
+"Moderate: _Haste_ aura; time accelerates rapidly. — Speed is doubled, +2 AC, gain one extra Action.",
 null,
 [
 "Moderate: _Haste_ aura; time accelerates rapidly.",
-"20' cube",
 "Speed is doubled, +2 AC, gain one extra Action."
-]
+],
+"",
+"",
+"",
+"",
+"20' cube"
 ],
 [
 123,
 123,
 "",
-"Moderate: _Water Walk_ puddle; liquid that acts as solid ground. — 20' radius — Creatures can walk across water, mud, or snow here easily.",
+"Moderate: _Water Walk_ puddle; liquid that acts as solid ground. — Creatures can walk across water, mud, or snow here easily.",
 null,
 [
 "Moderate: _Water Walk_ puddle; liquid that acts as solid ground.",
-"20' radius",
 "Creatures can walk across water, mud, or snow here easily."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 124,
 124,
 "",
-"Moderate: _Meld into Stone_ trap; earth pulls at creatures. — 10' radius — DC 13 Dex save or sink halfway into the stone (Restrained).",
+"Moderate: _Meld into Stone_ trap; earth pulls at creatures. — DC 13 Dex save or sink halfway into the stone (Restrained).",
 null,
 [
 "Moderate: _Meld into Stone_ trap; earth pulls at creatures.",
-"10' radius",
 "DC 13 Dex save or sink halfway into the stone (Restrained)."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 125,
 125,
 "",
-"Moderate: _Phantom Steed_ run; illusory horses stampede through. — 30' line — DC 13 Dex save or take 2d6 Force damage from the herd.",
+"Moderate: _Phantom Steed_ run; illusory horses stampede through. — DC 13 Dex save or take 2d6 Force damage from the herd.",
 null,
 [
 "Moderate: _Phantom Steed_ run; illusory horses stampede through.",
-"30' line",
 "DC 13 Dex save or take 2d6 Force damage from the herd."
-]
+],
+"",
+"",
+"",
+"",
+"30' line"
 ],
 [
 126,
 126,
 "",
-"Moderate: _Shatter_ echo; a localized zone of intense ringing pressure. — 10' radius — DC 13 Con save or take 3d8 Thunder damage.",
+"Moderate: _Shatter_ echo; a localized zone of intense ringing pressure. — DC 13 Con save or take 3d8 Thunder damage.",
 null,
 [
 "Moderate: _Shatter_ echo; a localized zone of intense ringing pressure.",
-"10' radius",
 "DC 13 Con save or take 3d8 Thunder damage."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 127,
 127,
 "",
-"Moderate: _Crown of Madness_ residue; twisted psychic energy. — 15' radius — DC 13 Wis save or immediately make a melee attack against an ally.",
+"Moderate: _Crown of Madness_ residue; twisted psychic energy. — DC 13 Wis save or immediately make a melee attack against an ally.",
 null,
 [
 "Moderate: _Crown of Madness_ residue; twisted psychic energy.",
-"15' radius",
 "DC 13 Wis save or immediately make a melee attack against an ally."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 128,
 128,
 "",
-"Moderate: _Zone of Truth_; a perfectly serene, magically enforced clearing. — 15' radius — DC 13 Charisma save; on fail, deliberate lies cannot be spoken.",
+"Moderate: _Zone of Truth_; a perfectly serene, magically enforced clearing. — DC 13 Charisma save; on fail, deliberate lies cannot be spoken.",
 null,
 [
 "Moderate: _Zone of Truth_; a perfectly serene, magically enforced clearing.",
-"15' radius",
 "DC 13 Charisma save; on fail, deliberate lies cannot be spoken."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 129,
 129,
 "",
-"Moderate: _Pass without Trace_ veil; shadows cling to everything. — 30' radius — +10 to Stealth checks while inside; cannot be tracked by magic.",
+"Moderate: _Pass without Trace_ veil; shadows cling to everything. — +10 to Stealth checks while inside; cannot be tracked by magic.",
 null,
 [
 "Moderate: _Pass without Trace_ veil; shadows cling to everything.",
-"30' radius",
 "+10 to Stealth checks while inside; cannot be tracked by magic."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 130,
 130,
 "",
-"Moderate: _Barkskin_ spores; floating dust hardens the skin. — 20' radius — AC cannot be lower than 16 while inside the zone.",
+"Moderate: _Barkskin_ spores; floating dust hardens the skin. — AC cannot be lower than 16 while inside the zone.",
 null,
 [
 "Moderate: _Barkskin_ spores; floating dust hardens the skin.",
-"20' radius",
 "AC cannot be lower than 16 while inside the zone."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 131,
 131,
 "",
-"Moderate: _Suggestion_ whisper; the wind urges travelers to sleep. — 30' radius — DC 13 Wis save or lie down and sleep for 1 hour.",
+"Moderate: _Suggestion_ whisper; the wind urges travelers to sleep. — DC 13 Wis save or lie down and sleep for 1 hour.",
 null,
 [
 "Moderate: _Suggestion_ whisper; the wind urges travelers to sleep.",
-"30' radius",
 "DC 13 Wis save or lie down and sleep for 1 hour."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 132,
 132,
 "",
-"Moderate: _Fear_ aura; an overwhelming sense of dread. — 30' cone — DC 13 Wis save or drop held items and flee the area.",
+"Moderate: _Fear_ aura; an overwhelming sense of dread. — DC 13 Wis save or drop held items and flee the area.",
 null,
 [
 "Moderate: _Fear_ aura; an overwhelming sense of dread.",
-"30' cone",
 "DC 13 Wis save or drop held items and flee the area."
-]
+],
+"",
+"",
+"",
+"",
+"30' cone"
 ],
 [
 133,
 133,
 "",
-"Moderate: _Hypnotic Pattern_; shifting, glowing colors in the air. — 30' cube — DC 13 Wis save or be Charmed and Incapacitated (staring).",
+"Moderate: _Hypnotic Pattern_; shifting, glowing colors in the air. — DC 13 Wis save or be Charmed and Incapacitated (staring).",
 null,
 [
 "Moderate: _Hypnotic Pattern_; shifting, glowing colors in the air.",
-"30' cube",
 "DC 13 Wis save or be Charmed and Incapacitated (staring)."
-]
+],
+"",
+"",
+"",
+"",
+"30' cube"
 ],
 [
 134,
 134,
 "",
-"Moderate: _Dispel Magic_ node; a dead spot in the Pattern. — 10' radius — Suppresses all active magical effects and items within.",
+"Moderate: _Dispel Magic_ node; a dead spot in the Pattern. — Suppresses all active magical effects and items within.",
 null,
 [
 "Moderate: _Dispel Magic_ node; a dead spot in the Pattern.",
-"10' radius",
 "Suppresses all active magical effects and items within."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 135,
 135,
 "",
-"Moderate: _Glyph of Warding_ (Explosive); hidden rune on a landmark. — 5' radius — Triggers if touched. 5d8 Fire/Cold/Lightning (DC 14 Dex half).",
+"Moderate: _Glyph of Warding_ (Explosive); hidden rune on a landmark. — Triggers if touched. 5d8 Fire/Cold/Lightning (DC 14 Dex half).",
 null,
 [
 "Moderate: _Glyph of Warding_ (Explosive); hidden rune on a landmark.",
-"5' radius",
 "Triggers if touched. 5d8 Fire/Cold/Lightning (DC 14 Dex half)."
-]
+],
+"",
+"",
+"",
+"",
+"5' radius"
 ],
 [
 136,
 136,
 "",
-"Moderate: _Nondetection_ bubble; a hazy, blurry pocket of air. — 20' radius — Creatures inside cannot be targeted by Divination magic.",
+"Moderate: _Nondetection_ bubble; a hazy, blurry pocket of air. — Creatures inside cannot be targeted by Divination magic.",
 null,
 [
 "Moderate: _Nondetection_ bubble; a hazy, blurry pocket of air.",
-"20' radius",
 "Creatures inside cannot be targeted by Divination magic."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 137,
 137,
 "",
-"Moderate: _Protection from Energy_; a pocket of localized elemental shielding. — 15' radius — Grants Resistance to Fire or Cold damage while inside.",
+"Moderate: _Protection from Energy_; a pocket of localized elemental shielding. — Grants Resistance to Fire or Cold damage while inside.",
 null,
 [
 "Moderate: _Protection from Energy_; a pocket of localized elemental shielding.",
-"15' radius",
 "Grants Resistance to Fire or Cold damage while inside."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 138,
 138,
 "",
-"Moderate: _Vampiric Touch_ shadow; darkness that leeches life. — 10' radius — 3d6 Necrotic damage; undead regain hit points here.",
+"Moderate: _Vampiric Touch_ shadow; darkness that leeches life. — 3d6 Necrotic damage; undead regain hit points here.",
 null,
 [
 "Moderate: _Vampiric Touch_ shadow; darkness that leeches life.",
-"10' radius",
 "3d6 Necrotic damage; undead regain hit points here."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 139,
 139,
 "",
-"Moderate: _Ray of Enfeeblement_ chill; the air saps physical strength. — 15' radius — Weapon attacks deal half damage while standing inside.",
+"Moderate: _Ray of Enfeeblement_ chill; the air saps physical strength. — Weapon attacks deal half damage while standing inside.",
 null,
 [
 "Moderate: _Ray of Enfeeblement_ chill; the air saps physical strength.",
-"15' radius",
 "Weapon attacks deal half damage while standing inside."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 140,
 140,
 "",
-"Moderate: _Blindness/Deafness_ curse; a pocket of sensory deprivation. — 15' radius — DC 13 Con save or become Blinded while inside.",
+"Moderate: _Blindness/Deafness_ curse; a pocket of sensory deprivation. — DC 13 Con save or become Blinded while inside.",
 null,
 [
 "Moderate: _Blindness/Deafness_ curse; a pocket of sensory deprivation.",
-"15' radius",
 "DC 13 Con save or become Blinded while inside."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 141,
 141,
 "",
-"Moderate: _Mirror Zone_; reflections detach and confuse. — 30' radius — Attacks against creatures inside have a 20% miss chance.",
+"Moderate: _Mirror Zone_; reflections detach and confuse. — Attacks against creatures inside have a 20% miss chance.",
 null,
 [
 "Moderate: _Mirror Zone_; reflections detach and confuse.",
-"30' radius",
 "Attacks against creatures inside have a 20% miss chance."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 142,
 142,
 "",
-"Moderate: _Haunted Region_; skeletons reanimate rapidly. — Entire Area — Humanoids dying here instantly rise as Skeletons.",
+"Moderate: _Haunted Region_; skeletons reanimate rapidly. — Humanoids dying here instantly rise as Skeletons.",
 null,
 [
 "Moderate: _Haunted Region_; skeletons reanimate rapidly.",
-"Entire Area",
 "Humanoids dying here instantly rise as Skeletons."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 143,
 143,
 "",
-"Moderate: _Psychic Resonance_; thoughts project loudly. — 30' radius — Telepathic communication is automatic; thoughts can be \"heard\".",
+"Moderate: _Psychic Resonance_; thoughts project loudly. — Telepathic communication is automatic; thoughts can be \"heard\".",
 null,
 [
 "Moderate: _Psychic Resonance_; thoughts project loudly.",
-"30' radius",
 "Telepathic communication is automatic; thoughts can be \"heard\"."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 144,
 144,
 "",
-"Moderate: _Infested Zone_; biting magical mites. — Entire Area — Disadvantage on concentration checks from constant biting.",
+"Moderate: _Infested Zone_; biting magical mites. — Disadvantage on concentration checks from constant biting.",
 null,
 [
 "Moderate: _Infested Zone_; biting magical mites.",
-"Entire Area",
 "Disadvantage on concentration checks from constant biting."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 145,
 145,
 "",
-"Moderate: _Blessing of the Ancients_; weapons spark with power. — 20' radius — Nonmagical weapons act as +1 Magic Weapons inside.",
+"Moderate: _Blessing of the Ancients_; weapons spark with power. — Nonmagical weapons act as +1 Magic Weapons inside.",
 null,
 [
 "Moderate: _Blessing of the Ancients_; weapons spark with power.",
-"20' radius",
 "Nonmagical weapons act as +1 Magic Weapons inside."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 146,
 146,
 "",
-"Moderate: _Gravity Warp_; range is distorted. — Entire Area — Ranged weapon attacks have their normal/long range halved.",
+"Moderate: _Gravity Warp_; range is distorted. — Ranged weapon attacks have their normal/long range halved.",
 null,
 [
 "Moderate: _Gravity Warp_; range is distorted.",
-"Entire Area",
 "Ranged weapon attacks have their normal/long range halved."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 147,
 147,
 "",
-"Moderate: _Cursed Soil_; healing is suppressed. — 30' radius — Healing magic and Hit Dice restore half the normal hit points.",
+"Moderate: _Cursed Soil_; healing is suppressed. — Healing magic and Hit Dice restore half the normal hit points.",
 null,
 [
 "Moderate: _Cursed Soil_; healing is suppressed.",
-"30' radius",
 "Healing magic and Hit Dice restore half the normal hit points."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 148,
 148,
 "",
-"Moderate: _Fairy Ring_; localized teleportation. — Two 5' rings — Stepping in one instantly teleports you to the other.",
+"Moderate: _Fairy Ring_; localized teleportation. — Stepping in one instantly teleports you to the other.",
 null,
 [
 "Moderate: _Fairy Ring_; localized teleportation.",
-"Two 5' rings",
 "Stepping in one instantly teleports you to the other."
-]
+],
+"",
+"",
+"",
+"",
+"Two 5' rings"
 ],
 [
 149,
 149,
 "",
-"Moderate: _Transmuted Earth_; stone turned to deep mud. — 20' cube — Sucking mud. Costs 4 feet of movement for every 1 foot moved.",
+"Moderate: _Transmuted Earth_; stone turned to deep mud. — Sucking mud. Costs 4 feet of movement for every 1 foot moved.",
 null,
 [
 "Moderate: _Transmuted Earth_; stone turned to deep mud.",
-"20' cube",
 "Sucking mud. Costs 4 feet of movement for every 1 foot moved."
-]
+],
+"",
+"",
+"",
+"",
+"20' cube"
 ],
 [
 150,
 150,
 "",
-"Moderate: _Ice Storm_ remnant; perpetual hail falls here. — 20' cylinder — 2d8 Bludgeoning, 4d6 Cold damage (DC 14 Dex half).",
+"Moderate: _Ice Storm_ remnant; perpetual hail falls here. — 2d8 Bludgeoning, 4d6 Cold damage (DC 14 Dex half).",
 null,
 [
 "Moderate: _Ice Storm_ remnant; perpetual hail falls here.",
-"20' cylinder",
 "2d8 Bludgeoning, 4d6 Cold damage (DC 14 Dex half)."
-]
+],
+"",
+"",
+"",
+"",
+"20' cylinder"
 ],
 [
 151,
 151,
 "",
-"Phenomenal: _Wild Magic Zone_; the Pattern is unstable. — Entire Area — Spells cast here trigger a Wild Magic Surge (Roll d20; 1=Surge).",
+"Phenomenal: _Wild Magic Zone_; the Pattern is unstable. — Spells cast here trigger a Wild Magic Surge (Roll d20; 1=Surge).",
 null,
 [
 "Phenomenal: _Wild Magic Zone_; the Pattern is unstable.",
-"Entire Area",
 "Spells cast here trigger a Wild Magic Surge (Roll d20; 1=Surge)."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 152,
 152,
 "",
-"Phenomenal: _Dead Magic Zone_; the Pattern is torn completely. — Entire Area — Magic items fail, spells cannot be cast. Functions as _Antimagic Field_.",
+"Phenomenal: _Dead Magic Zone_; the Pattern is torn completely. — Magic items fail, spells cannot be cast. Functions as _Antimagic Field_.",
 null,
 [
 "Phenomenal: _Dead Magic Zone_; the Pattern is torn completely.",
-"Entire Area",
 "Magic items fail, spells cannot be cast. Functions as _Antimagic Field_."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 153,
 153,
 "",
-"Phenomenal: _Reverse Gravity_; an invisible column of inverted physics. — 50' cylinder — Creatures fall upward 50 feet (DC 15 Dex save to grab an edge).",
+"Phenomenal: _Reverse Gravity_; an invisible column of inverted physics. — Creatures fall upward 50 feet (DC 15 Dex save to grab an edge).",
 null,
 [
 "Phenomenal: _Reverse Gravity_; an invisible column of inverted physics.",
-"50' cylinder",
 "Creatures fall upward 50 feet (DC 15 Dex save to grab an edge)."
-]
+],
+"",
+"",
+"",
+"",
+"50' cylinder"
 ],
 [
 154,
 154,
 "",
-"Phenomenal: _Wall of Fire_; a roaring curtain of permanent flame. — 60' line — 5d8 Fire damage if crossed. Opaque (blocks line of sight).",
+"Phenomenal: _Wall of Fire_; a roaring curtain of permanent flame. — 5d8 Fire damage if crossed. Opaque (blocks line of sight).",
 null,
 [
 "Phenomenal: _Wall of Fire_; a roaring curtain of permanent flame.",
-"60' line",
 "5d8 Fire damage if crossed. Opaque (blocks line of sight)."
-]
+],
+"",
+"",
+"",
+"",
+"60' line"
 ],
 [
 155,
 155,
 "",
-"Phenomenal: _Cloudkill_; a lingering depression filled with toxic green vapor. — 20' radius — 5d8 Poison damage on entering/starting turn (DC 15 Con half).",
+"Phenomenal: _Cloudkill_; a lingering depression filled with toxic green vapor. — 5d8 Poison damage on entering/starting turn (DC 15 Con half).",
 null,
 [
 "Phenomenal: _Cloudkill_; a lingering depression filled with toxic green vapor.",
-"20' radius",
 "5d8 Poison damage on entering/starting turn (DC 15 Con half)."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 156,
 156,
 "",
-"Phenomenal: _Sickening Radiance_; a crater glowing with sickly green light. — 30' radius — 4d10 Radiant damage and 1 level of Exhaustion (DC 15 Con).",
+"Phenomenal: _Sickening Radiance_; a crater glowing with sickly green light. — 4d10 Radiant damage and 1 level of Exhaustion (DC 15 Con).",
 null,
 [
 "Phenomenal: _Sickening Radiance_; a crater glowing with sickly green light.",
-"30' radius",
 "4d10 Radiant damage and 1 level of Exhaustion (DC 15 Con)."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 157,
 157,
 "",
-"Phenomenal: _Evard's Black Tentacles_; rubbery appendages burst from dirt. — 20' square — DC 15 Dex save or take 3d6 Bludgeoning and be Restrained.",
+"Phenomenal: _Evard's Black Tentacles_; rubbery appendages burst from dirt. — DC 15 Dex save or take 3d6 Bludgeoning and be Restrained.",
 null,
 [
 "Phenomenal: _Evard's Black Tentacles_; rubbery appendages burst from dirt.",
-"20' square",
 "DC 15 Dex save or take 3d6 Bludgeoning and be Restrained."
-]
+],
+"",
+"",
+"",
+"",
+"20' square"
 ],
 [
 158,
 158,
 "",
-"Phenomenal: _Hallucinatory Terrain_; an illusion hiding a massive hazard. — 150' cube — A cliff looks like a gentle slope, or a swamp looks like a meadow.",
+"Phenomenal: _Hallucinatory Terrain_; an illusion hiding a massive hazard. — A cliff looks like a gentle slope, or a swamp looks like a meadow.",
 null,
 [
 "Phenomenal: _Hallucinatory Terrain_; an illusion hiding a massive hazard.",
-"150' cube",
 "A cliff looks like a gentle slope, or a swamp looks like a meadow."
-]
+],
+"",
+"",
+"",
+"",
+"150' cube"
 ],
 [
 159,
 159,
 "",
-"Phenomenal: _Maelstrom_; a swirling vortex of violently churning earth. — 30' radius — Difficult Terrain. DC 15 Str save or be pulled 10 ft to the center.",
+"Phenomenal: _Maelstrom_; a swirling vortex of violently churning earth. — Difficult Terrain. DC 15 Str save or be pulled 10 ft to the center.",
 null,
 [
 "Phenomenal: _Maelstrom_; a swirling vortex of violently churning earth.",
-"30' radius",
 "Difficult Terrain. DC 15 Str save or be pulled 10 ft to the center."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 160,
 160,
 "",
-"Phenomenal: _Forbiddance_; an ancient celestial ward. — Entire Area — Celestials/Fiends/Undead take 5d10 Radiant/Necrotic dmg per turn.",
+"Phenomenal: _Forbiddance_; an ancient celestial ward. — Celestials/Fiends/Undead take 5d10 Radiant/Necrotic dmg per turn.",
 null,
 [
 "Phenomenal: _Forbiddance_; an ancient celestial ward.",
-"Entire Area",
 "Celestials/Fiends/Undead take 5d10 Radiant/Necrotic dmg per turn."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 161,
 161,
 "",
-"Phenomenal: _Hallow_; a localized site of divine power. — 60' radius — Celestials/Fiends/Undead cannot enter. Includes a _Silence_ effect.",
+"Phenomenal: _Hallow_; a localized site of divine power. — Celestials/Fiends/Undead cannot enter. Includes a _Silence_ effect.",
 null,
 [
 "Phenomenal: _Hallow_; a localized site of divine power.",
-"60' radius",
 "Celestials/Fiends/Undead cannot enter. Includes a _Silence_ effect."
-]
+],
+"",
+"",
+"",
+"",
+"60' radius"
 ],
 [
 162,
 162,
 "",
-"Phenomenal: _Symbol of Pain_; a glowing rune etched into the ground. — 60' radius — DC 15 Con save or suffer terrible pain (Disadvantage on attacks).",
+"Phenomenal: _Symbol of Pain_; a glowing rune etched into the ground. — DC 15 Con save or suffer terrible pain (Disadvantage on attacks).",
 null,
 [
 "Phenomenal: _Symbol of Pain_; a glowing rune etched into the ground.",
-"60' radius",
 "DC 15 Con save or suffer terrible pain (Disadvantage on attacks)."
-]
+],
+"",
+"",
+"",
+"",
+"60' radius"
 ],
 [
 163,
 163,
 "",
-"Phenomenal: _Wall of Force_; an invisible, indestructible barrier bisecting the map. — 100' line — Blocks all movement, attacks, and line of effect. Immune to dispel.",
+"Phenomenal: _Wall of Force_; an invisible, indestructible barrier bisecting the map. — Blocks all movement, attacks, and line of effect. Immune to dispel.",
 null,
 [
 "Phenomenal: _Wall of Force_; an invisible, indestructible barrier bisecting the map.",
-"100' line",
 "Blocks all movement, attacks, and line of effect. Immune to dispel."
-]
+],
+"",
+"",
+"",
+"",
+"100' line"
 ],
 [
 164,
 164,
 "",
-"Phenomenal: _Prismatic Wall_ shard; a shimmering, multi-colored barricade. — 30' line — Touching it requires 7 successive saving throws vs elemental damage.",
+"Phenomenal: _Prismatic Wall_ shard; a shimmering, multi-colored barricade. — Touching it requires 7 successive saving throws vs elemental damage.",
 null,
 [
 "Phenomenal: _Prismatic Wall_ shard; a shimmering, multi-colored barricade.",
-"30' line",
 "Touching it requires 7 successive saving throws vs elemental damage."
-]
+],
+"",
+"",
+"",
+"",
+"30' line"
 ],
 [
 165,
 165,
 "",
-"Phenomenal: _Meteor Swarm_ craters; 4 massive impact zones still burning. — Four 40' spheres — Areas deal 2d6 Fire damage to any creature entering.",
+"Phenomenal: _Meteor Swarm_ craters; 4 massive impact zones still burning. — Areas deal 2d6 Fire damage to any creature entering.",
 null,
 [
 "Phenomenal: _Meteor Swarm_ craters; 4 massive impact zones still burning.",
-"Four 40' spheres",
 "Areas deal 2d6 Fire damage to any creature entering."
-]
+],
+"",
+"",
+"",
+"",
+"Four 40' spheres"
 ],
 [
 166,
 166,
 "",
-"Phenomenal: _Far Realm Rift_; reality bends into fleshy eyes and maws. — 20' radius — DC 15 Wis save or suffer _Confusion_. Area is fleshy Difficult Terrain.",
+"Phenomenal: _Far Realm Rift_; reality bends into fleshy eyes and maws. — DC 15 Wis save or suffer _Confusion_. Area is fleshy Difficult Terrain.",
 null,
 [
 "Phenomenal: _Far Realm Rift_; reality bends into fleshy eyes and maws.",
-"20' radius",
 "DC 15 Wis save or suffer _Confusion_. Area is fleshy Difficult Terrain."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 167,
 167,
 "",
-"Phenomenal: _Time Dilation_; a shimmering bubble of frozen time. — 30' radius — Acts as _Time Stop_. Creatures inside are frozen in place and immune to damage.",
+"Phenomenal: _Time Dilation_; a shimmering bubble of frozen time. — Acts as _Time Stop_. Creatures inside are frozen in place and immune to damage.",
 null,
 [
 "Phenomenal: _Time Dilation_; a shimmering bubble of frozen time.",
-"30' radius",
 "Acts as _Time Stop_. Creatures inside are frozen in place and immune to damage."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 168,
 168,
 "",
-"Phenomenal: _Antimagic Field_; a localized suppression sphere. — 10' radius — Spells and magic items are completely nullified within.",
+"Phenomenal: _Antimagic Field_; a localized suppression sphere. — Spells and magic items are completely nullified within.",
 null,
 [
 "Phenomenal: _Antimagic Field_; a localized suppression sphere.",
-"10' radius",
 "Spells and magic items are completely nullified within."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 169,
 169,
 "",
-"Phenomenal: _Earthquake_ fissure; the ground is violently trembling. — 50' radius — DC 15 Dex save or fall Prone. 25% chance of 10-foot fissures opening.",
+"Phenomenal: _Earthquake_ fissure; the ground is violently trembling. — DC 15 Dex save or fall Prone. 25% chance of 10-foot fissures opening.",
 null,
 [
 "Phenomenal: _Earthquake_ fissure; the ground is violently trembling.",
-"50' radius",
 "DC 15 Dex save or fall Prone. 25% chance of 10-foot fissures opening."
-]
+],
+"",
+"",
+"",
+"",
+"50' radius"
 ],
 [
 170,
 170,
 "",
-"Phenomenal: _Incendiary Cloud_; a rolling bank of white-hot ash. — 20' radius — 10d8 Fire damage on entering/starting turn (DC 15 Dex half).",
+"Phenomenal: _Incendiary Cloud_; a rolling bank of white-hot ash. — 10d8 Fire damage on entering/starting turn (DC 15 Dex half).",
 null,
 [
 "Phenomenal: _Incendiary Cloud_; a rolling bank of white-hot ash.",
-"20' radius",
 "10d8 Fire damage on entering/starting turn (DC 15 Dex half)."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 171,
 171,
 "",
-"Phenomenal: _Storm of Vengeance_ core; a terrifying localized tempest. — 360' radius — Acid rain deals 1d6 Acid damage per turn. Deafening thunder.",
+"Phenomenal: _Storm of Vengeance_ core; a terrifying localized tempest. — Acid rain deals 1d6 Acid damage per turn. Deafening thunder.",
 null,
 [
 "Phenomenal: _Storm of Vengeance_ core; a terrifying localized tempest.",
-"360' radius",
 "Acid rain deals 1d6 Acid damage per turn. Deafening thunder."
-]
+],
+"",
+"",
+"",
+"",
+"360' radius"
 ],
 [
 172,
 172,
 "",
-"Phenomenal: _Sunburst_ remnant; blinding, permanent holy light. — 60' radius — Undead take 2d6 Radiant damage per turn. Heavily Obscures via glare.",
+"Phenomenal: _Sunburst_ remnant; blinding, permanent holy light. — Undead take 2d6 Radiant damage per turn. Heavily Obscures via glare.",
 null,
 [
 "Phenomenal: _Sunburst_ remnant; blinding, permanent holy light.",
-"60' radius",
 "Undead take 2d6 Radiant damage per turn. Heavily Obscures via glare."
-]
+],
+"",
+"",
+"",
+"",
+"60' radius"
 ],
 [
 173,
 173,
 "",
-"Phenomenal: _Maze_ portal; an archway glowing with shifting geometric lines. — 5'x5' — Entering banishes the creature to an extradimensional labyrinth (DC 20 Int to escape).",
+"Phenomenal: _Maze_ portal; an archway glowing with shifting geometric lines. — Entering banishes the creature to an extradimensional labyrinth (DC 20 Int to escape).",
 null,
 [
 "Phenomenal: _Maze_ portal; an archway glowing with shifting geometric lines.",
-"5'x5'",
 "Entering banishes the creature to an extradimensional labyrinth (DC 20 Int to escape)."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 174,
 174,
 "",
-"Phenomenal: _Feeblemind_ ward; a psychic trap meant to break intruders. — 10' radius — DC 15 Int save or Int and Cha drop to 1 (cannot cast spells).",
+"Phenomenal: _Feeblemind_ ward; a psychic trap meant to break intruders. — DC 15 Int save or Int and Cha drop to 1 (cannot cast spells).",
 null,
 [
 "Phenomenal: _Feeblemind_ ward; a psychic trap meant to break intruders.",
-"10' radius",
 "DC 15 Int save or Int and Cha drop to 1 (cannot cast spells)."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 175,
 175,
 "",
-"Phenomenal: _Flesh to Stone_ trap; a basilisk's eye mounted on a plinth. — 30' cone — DC 15 Con save or begin turning to stone (Restrained).",
+"Phenomenal: _Flesh to Stone_ trap; a basilisk's eye mounted on a plinth. — DC 15 Con save or begin turning to stone (Restrained).",
 null,
 [
 "Phenomenal: _Flesh to Stone_ trap; a basilisk's eye mounted on a plinth.",
-"30' cone",
 "DC 15 Con save or begin turning to stone (Restrained)."
-]
+],
+"",
+"",
+"",
+"",
+"30' cone"
 ],
 [
 176,
 176,
 "",
-"Phenomenal: _Globe of Invulnerability_; a shimmering sphere of force. — 10' radius — Blocks all spells of 5th level or lower from outside.",
+"Phenomenal: _Globe of Invulnerability_; a shimmering sphere of force. — Blocks all spells of 5th level or lower from outside.",
 null,
 [
 "Phenomenal: _Globe of Invulnerability_; a shimmering sphere of force.",
-"10' radius",
 "Blocks all spells of 5th level or lower from outside."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 177,
 177,
 "",
-"Phenomenal: _Guards and Wards_; an old stronghold's lingering defense. — Entire Area — Doors are _Arcane Locked_, corridors filled with _Fog Cloud_.",
+"Phenomenal: _Guards and Wards_; an old stronghold's lingering defense. — Doors are _Arcane Locked_, corridors filled with _Fog Cloud_.",
 null,
 [
 "Phenomenal: _Guards and Wards_; an old stronghold's lingering defense.",
-"Entire Area",
 "Doors are _Arcane Locked_, corridors filled with _Fog Cloud_."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 178,
 178,
 "",
-"Phenomenal: _Blight_ aura; the earth here aggressively drains life. — 30' radius — Flora is dead. 8d8 Necrotic damage to plant creatures (DC 15 Con).",
+"Phenomenal: _Blight_ aura; the earth here aggressively drains life. — Flora is dead. 8d8 Necrotic damage to plant creatures (DC 15 Con).",
 null,
 [
 "Phenomenal: _Blight_ aura; the earth here aggressively drains life.",
-"30' radius",
 "Flora is dead. 8d8 Necrotic damage to plant creatures (DC 15 Con)."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 179,
 179,
 "",
-"Phenomenal: _Confusion_ gas; shimmering, intoxicating spores. — 20' radius — DC 15 Wis save or act randomly on turn (roll d10).",
+"Phenomenal: _Confusion_ gas; shimmering, intoxicating spores. — DC 15 Wis save or act randomly on turn (roll d10).",
 null,
 [
 "Phenomenal: _Confusion_ gas; shimmering, intoxicating spores.",
-"20' radius",
 "DC 15 Wis save or act randomly on turn (roll d10)."
-]
+],
+"",
+"",
+"",
+"",
+"20' radius"
 ],
 [
 180,
 180,
 "",
-"Phenomenal: _Fire Storm_ scorch; sheets of roaring flame randomly erupt. — Ten 10' cubes — Erupts on Initiative 20. 7d10 Fire damage (DC 15 Dex half).",
+"Phenomenal: _Fire Storm_ scorch; sheets of roaring flame randomly erupt. — Erupts on Initiative 20. 7d10 Fire damage (DC 15 Dex half).",
 null,
 [
 "Phenomenal: _Fire Storm_ scorch; sheets of roaring flame randomly erupt.",
-"Ten 10' cubes",
 "Erupts on Initiative 20. 7d10 Fire damage (DC 15 Dex half)."
-]
+],
+"",
+"",
+"",
+"",
+"Ten 10' cubes"
 ],
 [
 181,
 181,
 "",
-"Phenomenal: _Planar Bleed (Fire)_; the Elemental Plane of Fire overlaps. — Entire Area — Extreme Heat (Exhaustion risk). Fire spells are cast at +1 level.",
+"Phenomenal: _Planar Bleed (Fire)_; the Elemental Plane of Fire overlaps. — Extreme Heat (Exhaustion risk). Fire spells are cast at +1 level.",
 null,
 [
 "Phenomenal: _Planar Bleed (Fire)_; the Elemental Plane of Fire overlaps.",
-"Entire Area",
 "Extreme Heat (Exhaustion risk). Fire spells are cast at +1 level."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 182,
 182,
 "",
-"Phenomenal: _Planar Bleed (Water)_; gravity shifts, the air acts like deep ocean. — 40' radius — Swimming speed required. Creatures can drown in the air.",
+"Phenomenal: _Planar Bleed (Water)_; gravity shifts, the air acts like deep ocean. — Swimming speed required. Creatures can drown in the air.",
 null,
 [
 "Phenomenal: _Planar Bleed (Water)_; gravity shifts, the air acts like deep ocean.",
-"40' radius",
 "Swimming speed required. Creatures can drown in the air."
-]
+],
+"",
+"",
+"",
+"",
+"40' radius"
 ],
 [
 183,
 183,
 "",
-"Phenomenal: _Planar Bleed (Shadowfell)_; colors drain, despair sets in. — Entire Area — Undead gain Advantage on saves. Light sources are halved.",
+"Phenomenal: _Planar Bleed (Shadowfell)_; colors drain, despair sets in. — Undead gain Advantage on saves. Light sources are halved.",
 null,
 [
 "Phenomenal: _Planar Bleed (Shadowfell)_; colors drain, despair sets in.",
-"Entire Area",
 "Undead gain Advantage on saves. Light sources are halved."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 184,
 184,
 "",
-"Phenomenal: _Planar Bleed (Feywild)_; wildly overgrown, intoxicatingly bright. — Entire Area — DC 15 Wis save to leave area or lose all memory of the visit.",
+"Phenomenal: _Planar Bleed (Feywild)_; wildly overgrown, intoxicatingly bright. — DC 15 Wis save to leave area or lose all memory of the visit.",
 null,
 [
 "Phenomenal: _Planar Bleed (Feywild)_; wildly overgrown, intoxicatingly bright.",
-"Entire Area",
 "DC 15 Wis save to leave area or lose all memory of the visit."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 185,
 185,
 "",
-"Phenomenal: _Entropic Collapse_; reality is literally unraveling into dust. — 10' radius — 5d6 Psychic damage and Dazed on entry (DC 15 Will save).",
+"Phenomenal: _Entropic Collapse_; reality is literally unraveling into dust. — 5d6 Psychic damage and Dazed on entry (DC 15 Will save).",
 null,
 [
 "Phenomenal: _Entropic Collapse_; reality is literally unraveling into dust.",
-"10' radius",
 "5d6 Psychic damage and Dazed on entry (DC 15 Will save)."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 186,
 186,
 "",
-"Phenomenal: _Spell Turning_ field; a reflective pocket of ambient magic. — 15' radius — Any spell cast into this area reflects back on the caster.",
+"Phenomenal: _Spell Turning_ field; a reflective pocket of ambient magic. — Any spell cast into this area reflects back on the caster.",
 null,
 [
 "Phenomenal: _Spell Turning_ field; a reflective pocket of ambient magic.",
-"15' radius",
 "Any spell cast into this area reflects back on the caster."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius"
 ],
 [
 187,
 187,
 "",
-"Phenomenal: _True Polymorph_ trap; a magical pool of liquid silver. — 10' pool — Touching it forces a DC 15 Wis save or turn into a random Beast.",
+"Phenomenal: _True Polymorph_ trap; a magical pool of liquid silver. — Touching it forces a DC 15 Wis save or turn into a random Beast.",
 null,
 [
 "Phenomenal: _True Polymorph_ trap; a magical pool of liquid silver.",
-"10' pool",
 "Touching it forces a DC 15 Wis save or turn into a random Beast."
-]
+],
+"",
+"",
+"",
+"",
+"10' pool"
 ],
 [
 188,
 188,
 "",
-"Phenomenal: _Mirage Arcane_; the entire terrain is a tactile illusion. — 1 mile — Area looks and _feels_ completely different (e.g., lava feels hot).",
+"Phenomenal: _Mirage Arcane_; the entire terrain is a tactile illusion. — Area looks and _feels_ completely different (e.g., lava feels hot).",
 null,
 [
 "Phenomenal: _Mirage Arcane_; the entire terrain is a tactile illusion.",
-"1 mile",
 "Area looks and _feels_ completely different (e.g., lava feels hot)."
-]
+],
+"",
+"",
+"",
+"",
+"1 mile"
 ],
 [
 189,
 189,
 "",
-"Phenomenal: _Vacuum Rift_; a hole tearing into the negative energy plane. — 10' radius — Pulls creatures 10 ft toward center. Deals 4d10 Necrotic damage.",
+"Phenomenal: _Vacuum Rift_; a hole tearing into the negative energy plane. — Pulls creatures 10 ft toward center. Deals 4d10 Necrotic damage.",
 null,
 [
 "Phenomenal: _Vacuum Rift_; a hole tearing into the negative energy plane.",
-"10' radius",
 "Pulls creatures 10 ft toward center. Deals 4d10 Necrotic damage."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 190,
 190,
 "",
-"Phenomenal: _Necrotic Tempest_; black clouds raining bones and dark energy. — 100' radius — 3d6 Necrotic damage per round. Dead creatures instantly rise as Zombies.",
+"Phenomenal: _Necrotic Tempest_; black clouds raining bones and dark energy. — 3d6 Necrotic damage per round. Dead creatures instantly rise as Zombies.",
 null,
 [
 "Phenomenal: _Necrotic Tempest_; black clouds raining bones and dark energy.",
-"100' radius",
 "3d6 Necrotic damage per round. Dead creatures instantly rise as Zombies."
-]
+],
+"",
+"",
+"",
+"",
+"100' radius"
 ],
 [
 191,
 191,
 "",
-"Phenomenal: _Flaywind_; an eldritch storm of sand and razor-sharp magical glass. — Entire Area — 1d4 Slashing damage per turn. Heavily Obscured.",
+"Phenomenal: _Flaywind_; an eldritch storm of sand and razor-sharp magical glass. — 1d4 Slashing damage per turn. Heavily Obscured.",
 null,
 [
 "Phenomenal: _Flaywind_; an eldritch storm of sand and razor-sharp magical glass.",
-"Entire Area",
 "1d4 Slashing damage per turn. Heavily Obscured."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 192,
 192,
 "",
-"Phenomenal: _Awakened Ecology_; the trees and rocks possess malicious sentience. — Entire Area — _Treants_ and _Galeb Duhr_ animate to attack intruders.",
+"Phenomenal: _Awakened Ecology_; the trees and rocks possess malicious sentience. — _Treants_ and _Galeb Duhr_ animate to attack intruders.",
 null,
 [
 "Phenomenal: _Awakened Ecology_; the trees and rocks possess malicious sentience.",
-"Entire Area",
 "_Treants_ and _Galeb Duhr_ animate to attack intruders."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 193,
 193,
 "",
-"Phenomenal: _Weird_ illusion; the area projects the party's deepest fears. — 30' radius — DC 15 Wis save or be Frightened and take 4d10 Psychic damage.",
+"Phenomenal: _Weird_ illusion; the area projects the party's deepest fears. — DC 15 Wis save or be Frightened and take 4d10 Psychic damage.",
 null,
 [
 "Phenomenal: _Weird_ illusion; the area projects the party's deepest fears.",
-"30' radius",
 "DC 15 Wis save or be Frightened and take 4d10 Psychic damage."
-]
+],
+"",
+"",
+"",
+"",
+"30' radius"
 ],
 [
 194,
 194,
 "",
-"Phenomenal: _Gate_ tear; an uncontrolled two-way portal. — 10' circle — Random creatures from the Abyss/Nine Hells occasionally spill out.",
+"Phenomenal: _Gate_ tear; an uncontrolled two-way portal. — Random creatures from the Abyss/Nine Hells occasionally spill out.",
 null,
 [
 "Phenomenal: _Gate_ tear; an uncontrolled two-way portal.",
-"10' circle",
 "Random creatures from the Abyss/Nine Hells occasionally spill out."
-]
+],
+"",
+"",
+"",
+"",
+"10' circle"
 ],
 [
 195,
 195,
 "",
-"Phenomenal: _Wish_ echo; reality shifts chaotically based on spoken words. — Entire Area — The first sentence spoken aloud here becomes literally true.",
+"Phenomenal: _Wish_ echo; reality shifts chaotically based on spoken words. — The first sentence spoken aloud here becomes literally true.",
 null,
 [
 "Phenomenal: _Wish_ echo; reality shifts chaotically based on spoken words.",
-"Entire Area",
 "The first sentence spoken aloud here becomes literally true."
-]
+],
+"",
+"",
+"",
+"",
+"Entire Area"
 ],
 [
 196,
 196,
 "",
-"Phenomenal: _Imprisonment_ node; a massive crystal holding a Titan. — 5'x5' — Indestructible. Emits an aura of profound dread.",
+"Phenomenal: _Imprisonment_ node; a massive crystal holding a Titan. — Indestructible. Emits an aura of profound dread.",
 null,
 [
 "Phenomenal: _Imprisonment_ node; a massive crystal holding a Titan.",
-"5'x5'",
 "Indestructible. Emits an aura of profound dread."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5'"
 ],
 [
 197,
 197,
 "",
-"Phenomenal: _Chain Lightning_ storm; erratic arcing electricity bounds between rocks. — 50' radius — 10d8 Lightning damage to random targets on Initiative 20.",
+"Phenomenal: _Chain Lightning_ storm; erratic arcing electricity bounds between rocks. — 10d8 Lightning damage to random targets on Initiative 20.",
 null,
 [
 "Phenomenal: _Chain Lightning_ storm; erratic arcing electricity bounds between rocks.",
-"50' radius",
 "10d8 Lightning damage to random targets on Initiative 20."
-]
+],
+"",
+"",
+"",
+"",
+"50' radius"
 ],
 [
 198,
 198,
 "",
-"Phenomenal: _Eldritch Machinery_; spinning brass rings altering physics. — 15'x15' — Gravity points sideways. Disadvantage on Perception (loud humming).",
+"Phenomenal: _Eldritch Machinery_; spinning brass rings altering physics. — Gravity points sideways. Disadvantage on Perception (loud humming).",
 null,
 [
 "Phenomenal: _Eldritch Machinery_; spinning brass rings altering physics.",
-"15'x15'",
 "Gravity points sideways. Disadvantage on Perception (loud humming)."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15'"
 ],
 [
 199,
 199,
 "",
-"Phenomenal: _Forcecage_ labyrinth; invisible walls trap travelers. — 20'x20' — Maze of indestructible 10x10 boxes. Teleportation requires a Charisma save.",
+"Phenomenal: _Forcecage_ labyrinth; invisible walls trap travelers. — Maze of indestructible 10x10 boxes. Teleportation requires a Charisma save.",
 null,
 [
 "Phenomenal: _Forcecage_ labyrinth; invisible walls trap travelers.",
-"20'x20'",
 "Maze of indestructible 10x10 boxes. Teleportation requires a Charisma save."
-]
+],
+"",
+"",
+"",
+"",
+"20'x20'"
 ],
 [
 200,
 200,
 "",
-"Phenomenal: _Divine Intervention_ residue; a crater of pure astral power. — 60' radius — One character gains resistance to Necrotic damage. Heals all afflictions.",
+"Phenomenal: _Divine Intervention_ residue; a crater of pure astral power. — One character gains resistance to Necrotic damage. Heals all afflictions.",
 null,
 [
 "Phenomenal: _Divine Intervention_ residue; a crater of pure astral power.",
-"60' radius",
 "One character gains resistance to Necrotic damage. Heals all afflictions."
-]
+],
+"",
+"",
+"",
+"",
+"60' radius"
 ]
 ]
 },
@@ -245008,601 +246237,801 @@ null,
 1,
 1,
 "",
-"Earthen Berm / Low Ridge: A raised lip of dirt, snow, or rock. — 5' wide, 20' long — Half Cover (+2 AC/Dex saves). Drops to Total Cover if a creature falls Prone behind it.",
+"Earthen Berm / Low Ridge: A raised lip of dirt, snow, or rock. — Half Cover (+2 AC/Dex saves). Drops to Total Cover if a creature falls Prone behind it.",
 null,
 [
 "Earthen Berm / Low Ridge: A raised lip of dirt, snow, or rock.",
-"5' wide, 20' long",
 "Half Cover (+2 AC/Dex saves). Drops to Total Cover if a creature falls Prone behind it."
-]
+],
+"",
+"",
+"",
+"",
+"5' wide, 20' long"
 ],
 [
 2,
 2,
 "",
-"Thick-Trunked Tree / Stout Monolith: A massive, solid obstacle. — 5'x5' space — Three-Quarters Cover (+5 AC/Dex saves). Blocks Line of Sight.",
+"Thick-Trunked Tree / Stout Monolith: A massive, solid obstacle. — Three-Quarters Cover (+5 AC/Dex saves). Blocks Line of Sight.",
 null,
 [
 "Thick-Trunked Tree / Stout Monolith: A massive, solid obstacle.",
-"5'x5' space",
 "Three-Quarters Cover (+5 AC/Dex saves). Blocks Line of Sight."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5' space"
 ],
 [
 3,
 3,
 "",
-"Copse / Rock Cluster: A tight grouping of trees or stalagmites. — 15'x15' area — Half Cover to anyone inside. Blocks Line of Sight for attacks passing entirely through it.",
+"Copse / Rock Cluster: A tight grouping of trees or stalagmites. — Half Cover to anyone inside. Blocks Line of Sight for attacks passing entirely through it.",
 null,
 [
 "Copse / Rock Cluster: A tight grouping of trees or stalagmites.",
-"15'x15' area",
 "Half Cover to anyone inside. Blocks Line of Sight for attacks passing entirely through it."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15' area"
 ],
 [
 4,
 4,
 "",
-"Dense Canopy / Overhang: Thick branches or a stone ceiling. — 20'x20' overhead — Tactical Ceiling. Blocks aerial attacks. Flying creatures cannot ascend more than 10 feet here.",
+"Dense Canopy / Overhang: Thick branches or a stone ceiling. — Tactical Ceiling. Blocks aerial attacks. Flying creatures cannot ascend more than 10 feet here.",
 null,
 [
 "Dense Canopy / Overhang: Thick branches or a stone ceiling.",
-"20'x20' overhead",
 "Tactical Ceiling. Blocks aerial attacks. Flying creatures cannot ascend more than 10 feet here."
-]
+],
+"",
+"",
+"",
+"",
+"20'x20' overhead"
 ],
 [
 5,
 5,
 "",
-"Natural Trench / Dry Creek: A recessed channel in the earth. — 10' wide, 30' long — Depression. Creatures inside have Half Cover from attackers outside, but must spend 5 extra feet of movement to climb out.",
+"Natural Trench / Dry Creek: A recessed channel in the earth. — Depression. Creatures inside have Half Cover from attackers outside, but must spend 5 extra feet of movement to climb out.",
 null,
 [
 "Natural Trench / Dry Creek: A recessed channel in the earth.",
-"10' wide, 30' long",
 "Depression. Creatures inside have Half Cover from attackers outside, but must spend 5 extra feet of movement to climb out."
-]
+],
+"",
+"",
+"",
+"",
+"10' wide, 30' long"
 ],
 [
 6,
 6,
 "",
-"Fallen Log / Toppled Pillar: A heavy, horizontal barrier. — 5' wide, 15' long — Half Cover. Vaulting over it costs 5 extra feet of movement.",
+"Fallen Log / Toppled Pillar: A heavy, horizontal barrier. — Half Cover. Vaulting over it costs 5 extra feet of movement.",
 null,
 [
 "Fallen Log / Toppled Pillar: A heavy, horizontal barrier.",
-"5' wide, 15' long",
 "Half Cover. Vaulting over it costs 5 extra feet of movement."
-]
+],
+"",
+"",
+"",
+"",
+"5' wide, 15' long"
 ],
 [
 7,
 7,
 "",
-"Heavy Brush / Thickets: Waist-high, dense vegetation. — 10'x10' patch — Lightly Obscured (Disadvantage on Perception) and Difficult Terrain.",
+"Heavy Brush / Thickets: Waist-high, dense vegetation. — Lightly Obscured (Disadvantage on Perception) and Difficult Terrain.",
 null,
 [
 "Heavy Brush / Thickets: Waist-high, dense vegetation.",
-"10'x10' patch",
 "Lightly Obscured (Disadvantage on Perception) and Difficult Terrain."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10' patch"
 ],
 [
 8,
 8,
 "",
-"Fog Bank / Steam Vent: A lingering cloud of dense vapor. — 15' radius sphere — Heavily Obscured (Blocks vision entirely; creatures effectively suffer the Blinded condition looking in or out).",
+"Fog Bank / Steam Vent: A lingering cloud of dense vapor. — Heavily Obscured (Blocks vision entirely; creatures effectively suffer the Blinded condition looking in or out).",
 null,
 [
 "Fog Bank / Steam Vent: A lingering cloud of dense vapor.",
-"15' radius sphere",
 "Heavily Obscured (Blocks vision entirely; creatures effectively suffer the Blinded condition looking in or out)."
-]
+],
+"",
+"",
+"",
+"",
+"15' radius sphere"
 ],
 [
 9,
 9,
 "",
-"Hanging Moss / Vines: Thick curtains dangling from above. — 10' wide, 20' long — Lightly Obscured. Does not impede movement.",
+"Hanging Moss / Vines: Thick curtains dangling from above. — Lightly Obscured. Does not impede movement.",
 null,
 [
 "Hanging Moss / Vines: Thick curtains dangling from above.",
-"10' wide, 20' long",
 "Lightly Obscured. Does not impede movement."
-]
+],
+"",
+"",
+"",
+"",
+"10' wide, 20' long"
 ],
 [
 10,
 10,
 "",
-"Tall Reeds / Deep Snow: Chest-high, yielding terrain. — 20'x20' area — Small creatures have Total Cover; Medium creatures have Half Cover. Difficult Terrain.",
+"Tall Reeds / Deep Snow: Chest-high, yielding terrain. — Small creatures have Total Cover; Medium creatures have Half Cover. Difficult Terrain.",
 null,
 [
 "Tall Reeds / Deep Snow: Chest-high, yielding terrain.",
-"20'x20' area",
 "Small creatures have Total Cover; Medium creatures have Half Cover. Difficult Terrain."
-]
+],
+"",
+"",
+"",
+"",
+"20'x20' area"
 ],
 [
 11,
 11,
 "",
-"Sniper’s Perch: A naturally elevated, hidden shelf. — 5'x5' platform, 15' up — Elevation & Cover. Grants Three-Quarters Cover against attackers below. Requires DC 13 Athletics to scale.",
+"Sniper’s Perch: A naturally elevated, hidden shelf. — Elevation & Cover. Grants Three-Quarters Cover against attackers below. Requires DC 13 Athletics to scale.",
 null,
 [
 "Sniper’s Perch: A naturally elevated, hidden shelf.",
-"5'x5' platform, 15' up",
 "Elevation & Cover. Grants Three-Quarters Cover against attackers below. Requires DC 13 Athletics to scale."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5' platform, 15' up"
 ],
 [
 12,
 12,
 "",
-"Choke Point: Two massive obstacles leaving a narrow gap. — 5' wide gap — Bottleneck. Forces single-file movement. A creature dodging in the gap provides Half Cover to allies behind them.",
+"Choke Point: Two massive obstacles leaving a narrow gap. — Bottleneck. Forces single-file movement. A creature dodging in the gap provides Half Cover to allies behind them.",
 null,
 [
 "Choke Point: Two massive obstacles leaving a narrow gap.",
-"5' wide gap",
 "Bottleneck. Forces single-file movement. A creature dodging in the gap provides Half Cover to allies behind them."
-]
+],
+"",
+"",
+"",
+"",
+"5' wide gap"
 ],
 [
 13,
 13,
 "",
-"Narrow Crevice / Fissure: A tight squeeze through rock or roots. — 5' wide, 15' long — Medium creatures must Squeeze (Disadvantage on attacks/Dex saves, attacks against them have Advantage, speed halved). Small creatures move normally.",
+"Narrow Crevice / Fissure: A tight squeeze through rock or roots. — Medium creatures must Squeeze (Disadvantage on attacks/Dex saves, attacks against them have Advantage, speed halved). Small creatures move normally.",
 null,
 [
 "Narrow Crevice / Fissure: A tight squeeze through rock or roots.",
-"5' wide, 15' long",
 "Medium creatures must Squeeze (Disadvantage on attacks/Dex saves, attacks against them have Advantage, speed halved). Small creatures move normally."
-]
+],
+"",
+"",
+"",
+"",
+"5' wide, 15' long"
 ],
 [
 14,
 14,
 "",
-"Terraced Steps: Natural stairs of rock or packed earth. — Three 5' wide rows — Elevation. Each step requires 5 extra feet of movement to climb, but grants Advantage on melee attacks against targets on lower steps.",
+"Terraced Steps: Natural stairs of rock or packed earth. — Elevation. Each step requires 5 extra feet of movement to climb, but grants Advantage on melee attacks against targets on lower steps.",
 null,
 [
 "Terraced Steps: Natural stairs of rock or packed earth.",
-"Three 5' wide rows",
 "Elevation. Each step requires 5 extra feet of movement to climb, but grants Advantage on melee attacks against targets on lower steps."
-]
+],
+"",
+"",
+"",
+"",
+"Three 5' wide rows"
 ],
 [
 15,
 15,
 "",
-"Steep Scree / Icy Slope: A treacherous, angled surface. — 15'x15' slope — Difficult Terrain. If a creature takes the Dash action here, it must succeed on a DC 12 Acrobatics check or fall Prone.",
+"Steep Scree / Icy Slope: A treacherous, angled surface. — Difficult Terrain. If a creature takes the Dash action here, it must succeed on a DC 12 Acrobatics check or fall Prone.",
 null,
 [
 "Steep Scree / Icy Slope: A treacherous, angled surface.",
-"15'x15' slope",
 "Difficult Terrain. If a creature takes the Dash action here, it must succeed on a DC 12 Acrobatics check or fall Prone."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15' slope"
 ],
 [
 16,
 16,
 "",
-"Blind Corner: A sharp, L-shaped bend in a canyon or forest path. — L-Shape — Line of Sight Blocker. Impossible to target creatures around the bend with ranged attacks or spells.",
+"Blind Corner: A sharp, L-shaped bend in a canyon or forest path. — Line of Sight Blocker. Impossible to target creatures around the bend with ranged attacks or spells.",
 null,
 [
 "Blind Corner: A sharp, L-shaped bend in a canyon or forest path.",
-"L-Shape",
 "Line of Sight Blocker. Impossible to target creatures around the bend with ranged attacks or spells."
-]
+],
+"",
+"",
+"",
+"",
+"L-Shape"
 ],
 [
 17,
 17,
 "",
-"Sinkhole / Crater: A sudden bowl-shaped drop. — 10' diameter, 5' deep — Depression. Creatures inside are Prone to attackers outside (attacks from outside have Disadvantage if > 5ft away).",
+"Sinkhole / Crater: A sudden bowl-shaped drop. — Depression. Creatures inside are Prone to attackers outside (attacks from outside have Disadvantage if > 5ft away).",
 null,
 [
 "Sinkhole / Crater: A sudden bowl-shaped drop.",
-"10' diameter, 5' deep",
 "Depression. Creatures inside are Prone to attackers outside (attacks from outside have Disadvantage if > 5ft away)."
-]
+],
+"",
+"",
+"",
+"",
+"10' diameter, 5' deep"
 ],
 [
 18,
 18,
 "",
-"Stepping Stones: Solid footing spaced across a hazard. — 1d4+2 5' spaces — Platforming. Normal movement if walking. Dashing requires a DC 12 Acrobatics check or the creature falls into the surrounding hazard.",
+"Stepping Stones: Solid footing spaced across a hazard. — Platforming. Normal movement if walking. Dashing requires a DC 12 Acrobatics check or the creature falls into the surrounding hazard.",
 null,
 [
 "Stepping Stones: Solid footing spaced across a hazard.",
-"1d4+2 5' spaces",
 "Platforming. Normal movement if walking. Dashing requires a DC 12 Acrobatics check or the creature falls into the surrounding hazard."
-]
+],
+"",
+"",
+"",
+"",
+"1d4+2 5' spaces"
 ],
 [
 19,
 19,
 "",
-"Briar Patch / Razor Rock: Extremely jagged, hostile terrain. — 10'x10' patch — Hazardous Difficult Terrain. Moving through costs 1 extra foot, and deals 1d4 Slashing damage per 5 feet moved.",
+"Briar Patch / Razor Rock: Extremely jagged, hostile terrain. — Hazardous Difficult Terrain. Moving through costs 1 extra foot, and deals 1d4 Slashing damage per 5 feet moved.",
 null,
 [
 "Briar Patch / Razor Rock: Extremely jagged, hostile terrain.",
-"10'x10' patch",
 "Hazardous Difficult Terrain. Moving through costs 1 extra foot, and deals 1d4 Slashing damage per 5 feet moved."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10' patch"
 ],
 [
 20,
 20,
 "",
-"Sucking Mud / Deep Drifts: Viscous or collapsing ground. — 15'x15' patch — Severe Hindrance. Every 1 foot of movement costs 2 extra feet (effectively 1/3 speed).",
+"Sucking Mud / Deep Drifts: Viscous or collapsing ground. — Severe Hindrance. Every 1 foot of movement costs 2 extra feet (effectively 1/3 speed).",
 null,
 [
 "Sucking Mud / Deep Drifts: Viscous or collapsing ground.",
-"15'x15' patch",
 "Severe Hindrance. Every 1 foot of movement costs 2 extra feet (effectively 1/3 speed)."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15' patch"
 ],
 [
 21,
 21,
 "",
-"Wind Funnel: A natural corridor that accelerates air. — 10' wide, 30' long — Wind Shear. Ranged weapon attacks passing through this line have Disadvantage.",
+"Wind Funnel: A natural corridor that accelerates air. — Wind Shear. Ranged weapon attacks passing through this line have Disadvantage.",
 null,
 [
 "Wind Funnel: A natural corridor that accelerates air.",
-"10' wide, 30' long",
 "Wind Shear. Ranged weapon attacks passing through this line have Disadvantage."
-]
+],
+"",
+"",
+"",
+"",
+"10' wide, 30' long"
 ],
 [
 22,
 22,
 "",
-"Hollow Tunnel: A massive rotting log or water-carved tube. — 5' wide, 15' long — Total Cover. Medium creatures must crawl (Prone rules apply).",
+"Hollow Tunnel: A massive rotting log or water-carved tube. — Total Cover. Medium creatures must crawl (Prone rules apply).",
 null,
 [
 "Hollow Tunnel: A massive rotting log or water-carved tube.",
-"5' wide, 15' long",
 "Total Cover. Medium creatures must crawl (Prone rules apply)."
-]
+],
+"",
+"",
+"",
+"",
+"5' wide, 15' long"
 ],
 [
 23,
 23,
 "",
-"Shattered Debris / Rubble: Field of broken stone, ice, or timber. — 20'x20' area — Difficult Terrain. Grants Half Cover to creatures that drop Prone within it.",
+"Shattered Debris / Rubble: Field of broken stone, ice, or timber. — Difficult Terrain. Grants Half Cover to creatures that drop Prone within it.",
 null,
 [
 "Shattered Debris / Rubble: Field of broken stone, ice, or timber.",
-"20'x20' area",
 "Difficult Terrain. Grants Half Cover to creatures that drop Prone within it."
-]
+],
+"",
+"",
+"",
+"",
+"20'x20' area"
 ],
 [
 24,
 24,
 "",
-"Natural Bridge: A stone arch, fallen tree, or ice span over a drop. — 5' wide, 20' long — Precarious Span. No cover. Taking damage while on the bridge requires a DC 10 Acrobatics check or fall off.",
+"Natural Bridge: A stone arch, fallen tree, or ice span over a drop. — Precarious Span. No cover. Taking damage while on the bridge requires a DC 10 Acrobatics check or fall off.",
 null,
 [
 "Natural Bridge: A stone arch, fallen tree, or ice span over a drop.",
-"5' wide, 20' long",
 "Precarious Span. No cover. Taking damage while on the bridge requires a DC 10 Acrobatics check or fall off."
-]
+],
+"",
+"",
+"",
+"",
+"5' wide, 20' long"
 ],
 [
 25,
 25,
 "",
-"Deep Water / Thick Acid: A pool of opaque liquid. — 15'x15' pool — Swimming Required. Costs 1 extra foot of movement. Melee attacks made underwater have Disadvantage (except daggers/spears/tridents).",
+"Deep Water / Thick Acid: A pool of opaque liquid. — Swimming Required. Costs 1 extra foot of movement. Melee attacks made underwater have Disadvantage (except daggers/spears/tridents).",
 null,
 [
 "Deep Water / Thick Acid: A pool of opaque liquid.",
-"15'x15' pool",
 "Swimming Required. Costs 1 extra foot of movement. Melee attacks made underwater have Disadvantage (except daggers/spears/tridents)."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15' pool"
 ],
 [
 26,
 26,
 "",
-"Glaring Surface: A patch of highly reflective ice, water, or crystal. — 10'x10' patch — Visual Hazard. Creatures looking across or standing in this area in bright light have Disadvantage on Perception.",
+"Glaring Surface: A patch of highly reflective ice, water, or crystal. — Visual Hazard. Creatures looking across or standing in this area in bright light have Disadvantage on Perception.",
 null,
 [
 "Glaring Surface: A patch of highly reflective ice, water, or crystal.",
-"10'x10' patch",
 "Visual Hazard. Creatures looking across or standing in this area in bright light have Disadvantage on Perception."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10' patch"
 ],
 [
 27,
 27,
 "",
-"Spore/Pollen Cloud: A localized haze of biological irritants. — 10' radius sphere — Lightly Obscured. Creatures ending their turn inside cannot take Reactions until the end of their next turn.",
+"Spore/Pollen Cloud: A localized haze of biological irritants. — Lightly Obscured. Creatures ending their turn inside cannot take Reactions until the end of their next turn.",
 null,
 [
 "Spore/Pollen Cloud: A localized haze of biological irritants.",
-"10' radius sphere",
 "Lightly Obscured. Creatures ending their turn inside cannot take Reactions until the end of their next turn."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius sphere"
 ],
 [
 28,
 28,
 "",
-"Unstable Crust: Thin ice, brittle stone, or rotted roots. — 10'x10' patch — Trapdoor Terrain. Breaks instantly if two or more Medium creatures stand on it, dropping them into a 5-foot pit.",
+"Unstable Crust: Thin ice, brittle stone, or rotted roots. — Trapdoor Terrain. Breaks instantly if two or more Medium creatures stand on it, dropping them into a 5-foot pit.",
 null,
 [
 "Unstable Crust: Thin ice, brittle stone, or rotted roots.",
-"10'x10' patch",
 "Trapdoor Terrain. Breaks instantly if two or more Medium creatures stand on it, dropping them into a 5-foot pit."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10' patch"
 ],
 [
 29,
 29,
 "",
-"Dead Zone / Antimagic Flora: A patch of weirdly silent ground. — 15'x15' area — Magical Dampener. Magical light sources entering the area are suppressed (shed no light) until they leave.",
+"Dead Zone / Antimagic Flora: A patch of weirdly silent ground. — Magical Dampener. Magical light sources entering the area are suppressed (shed no light) until they leave.",
 null,
 [
 "Dead Zone / Antimagic Flora: A patch of weirdly silent ground.",
-"15'x15' area",
 "Magical Dampener. Magical light sources entering the area are suppressed (shed no light) until they leave."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15' area"
 ],
 [
 30,
 30,
 "",
-"Echoing Hollow: A bowl of stone or dense hardwood. — 20'x20' area — Acoustic Amplifier. Stealth checks made here automatically fail due to extreme echoing.",
+"Echoing Hollow: A bowl of stone or dense hardwood. — Acoustic Amplifier. Stealth checks made here automatically fail due to extreme echoing.",
 null,
 [
 "Echoing Hollow: A bowl of stone or dense hardwood.",
-"20'x20' area",
 "Acoustic Amplifier. Stealth checks made here automatically fail due to extreme echoing."
-]
+],
+"",
+"",
+"",
+"",
+"20'x20' area"
 ],
 [
 31,
 31,
 "",
-"Thick Webbing / Sap: A naturally sticky patch of terrain. — 10'x10' patch — Difficult Terrain. Creatures entering must make a DC 12 Dex save or be Restrained. (Webs: AC 10, 5 HP, vulnerable to fire).",
+"Thick Webbing / Sap: A naturally sticky patch of terrain. — Difficult Terrain. Creatures entering must make a DC 12 Dex save or be Restrained. (Webs: AC 10, 5 HP, vulnerable to fire).",
 null,
 [
 "Thick Webbing / Sap: A naturally sticky patch of terrain.",
-"10'x10' patch",
 "Difficult Terrain. Creatures entering must make a DC 12 Dex save or be Restrained. (Webs: AC 10, 5 HP, vulnerable to fire)."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10' patch"
 ],
 [
 32,
 32,
 "",
-"Concealing Depression: A shallow dip obscured by ground cover. — 10'x10' patch — Hideout. Creatures inside have Advantage on Stealth checks to Hide.",
+"Concealing Depression: A shallow dip obscured by ground cover. — Hideout. Creatures inside have Advantage on Stealth checks to Hide.",
 null,
 [
 "Concealing Depression: A shallow dip obscured by ground cover.",
-"10'x10' patch",
 "Hideout. Creatures inside have Advantage on Stealth checks to Hide."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10' patch"
 ],
 [
 33,
 33,
 "",
-"Clinging Kelp / Grasping Roots: Active, hindering flora. — 15'x15' patch — Difficult Terrain. A creature starting its turn here must make a DC 10 Str save or its speed is reduced to 0 for the turn.",
+"Clinging Kelp / Grasping Roots: Active, hindering flora. — Difficult Terrain. A creature starting its turn here must make a DC 10 Str save or its speed is reduced to 0 for the turn.",
 null,
 [
 "Clinging Kelp / Grasping Roots: Active, hindering flora.",
-"15'x15' patch",
 "Difficult Terrain. A creature starting its turn here must make a DC 10 Str save or its speed is reduced to 0 for the turn."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15' patch"
 ],
 [
 34,
 34,
 "",
-"Magnetic Anomaly: Ground rich in lodestone. — 10' radius — Metal Hindrance. Creatures wearing metal armor treat this as Difficult Terrain.",
+"Magnetic Anomaly: Ground rich in lodestone. — Metal Hindrance. Creatures wearing metal armor treat this as Difficult Terrain.",
 null,
 [
 "Magnetic Anomaly: Ground rich in lodestone.",
-"10' radius",
 "Metal Hindrance. Creatures wearing metal armor treat this as Difficult Terrain."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 35,
 35,
 "",
-"Gushing Waterfall / Silt Cascade: A curtain of falling matter. — 15' wide line — Heavily Obscured. Grants Total Cover against ranged weapon attacks (projectiles are knocked down).",
+"Gushing Waterfall / Silt Cascade: A curtain of falling matter. — Heavily Obscured. Grants Total Cover against ranged weapon attacks (projectiles are knocked down).",
 null,
 [
 "Gushing Waterfall / Silt Cascade: A curtain of falling matter.",
-"15' wide line",
 "Heavily Obscured. Grants Total Cover against ranged weapon attacks (projectiles are knocked down)."
-]
+],
+"",
+"",
+"",
+"",
+"15' wide line"
 ],
 [
 36,
 36,
 "",
-"Rampart of Bone/Fossil: The massive ribs of a dead leviathan. — 5' wide, 20' long — Slotted Cover. Grants Three-Quarters Cover, but does not block Line of Sight (can see/shoot through the ribs).",
+"Rampart of Bone/Fossil: The massive ribs of a dead leviathan. — Slotted Cover. Grants Three-Quarters Cover, but does not block Line of Sight (can see/shoot through the ribs).",
 null,
 [
 "Rampart of Bone/Fossil: The massive ribs of a dead leviathan.",
-"5' wide, 20' long",
 "Slotted Cover. Grants Three-Quarters Cover, but does not block Line of Sight (can see/shoot through the ribs)."
-]
+],
+"",
+"",
+"",
+"",
+"5' wide, 20' long"
 ],
 [
 37,
 37,
 "",
-"Boiling Puddle / Magma Seep: A localized thermal hazard. — 5'x5' patch — Hazard. A creature entering the space or ending its turn there takes 1d6 Fire damage.",
+"Boiling Puddle / Magma Seep: A localized thermal hazard. — Hazard. A creature entering the space or ending its turn there takes 1d6 Fire damage.",
 null,
 [
 "Boiling Puddle / Magma Seep: A localized thermal hazard.",
-"5'x5' patch",
 "Hazard. A creature entering the space or ending its turn there takes 1d6 Fire damage."
-]
+],
+"",
+"",
+"",
+"",
+"5'x5' patch"
 ],
 [
 38,
 38,
 "",
-"Static-Charged Brush: Flora crackling with ambient energy. — 10'x10' patch — Hazard. A creature taking the Dash action through this area takes 1d4 Lightning damage.",
+"Static-Charged Brush: Flora crackling with ambient energy. — Hazard. A creature taking the Dash action through this area takes 1d4 Lightning damage.",
 null,
 [
 "Static-Charged Brush: Flora crackling with ambient energy.",
-"10'x10' patch",
 "Hazard. A creature taking the Dash action through this area takes 1d4 Lightning damage."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10' patch"
 ],
 [
 39,
 39,
 "",
-"Slippery Ledge: A 5-foot wide pathway next to a drop-off. — 5' wide, 20' long — Precarious Path. If a creature is hit by a melee attack here, it must succeed on a DC 10 Dex save or fall off the edge.",
+"Slippery Ledge: A 5-foot wide pathway next to a drop-off. — Precarious Path. If a creature is hit by a melee attack here, it must succeed on a DC 10 Dex save or fall off the edge.",
 null,
 [
 "Slippery Ledge: A 5-foot wide pathway next to a drop-off.",
-"5' wide, 20' long",
 "Precarious Path. If a creature is hit by a melee attack here, it must succeed on a DC 10 Dex save or fall off the edge."
-]
+],
+"",
+"",
+"",
+"",
+"5' wide, 20' long"
 ],
 [
 40,
 40,
 "",
-"Scattered Caltrops (Natural): Hardened seed pods or sharp shells. — 10'x10' patch — Hazard. Moving through at normal speed requires a DC 15 Acrobatics check; failure halts movement and deals 1 Piercing dmg.",
+"Scattered Caltrops (Natural): Hardened seed pods or sharp shells. — Hazard. Moving through at normal speed requires a DC 15 Acrobatics check; failure halts movement and deals 1 Piercing dmg.",
 null,
 [
 "Scattered Caltrops (Natural): Hardened seed pods or sharp shells.",
-"10'x10' patch",
 "Hazard. Moving through at normal speed requires a DC 15 Acrobatics check; failure halts movement and deals 1 Piercing dmg."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10' patch"
 ],
 [
 41,
 41,
 "",
-"Rubble Ramp: A collapsed wall or rockfall forming a ramp. — 10' wide, 15' long — Difficult Terrain Elevation. Allows passage to a 10-foot height without requiring an Athletics climbing check.",
+"Rubble Ramp: A collapsed wall or rockfall forming a ramp. — Difficult Terrain Elevation. Allows passage to a 10-foot height without requiring an Athletics climbing check.",
 null,
 [
 "Rubble Ramp: A collapsed wall or rockfall forming a ramp.",
-"10' wide, 15' long",
 "Difficult Terrain Elevation. Allows passage to a 10-foot height without requiring an Athletics climbing check."
-]
+],
+"",
+"",
+"",
+"",
+"10' wide, 15' long"
 ],
 [
 42,
 42,
 "",
-"Submerged Drop-off: Water/Mud that suddenly gets much deeper. — 10' line — Hidden Hazard. The first 5 feet is shallow (Difficult Terrain), the next step drops into 10-foot deep water (Swimming).",
+"Submerged Drop-off: Water/Mud that suddenly gets much deeper. — Hidden Hazard. The first 5 feet is shallow (Difficult Terrain), the next step drops into 10-foot deep water (Swimming).",
 null,
 [
 "Submerged Drop-off: Water/Mud that suddenly gets much deeper.",
-"10' line",
 "Hidden Hazard. The first 5 feet is shallow (Difficult Terrain), the next step drops into 10-foot deep water (Swimming)."
-]
+],
+"",
+"",
+"",
+"",
+"10' line"
 ],
 [
 43,
 43,
 "",
-"Shifting Dunes / Loose Dust: Granular inclines. — 15'x15' area — Difficult Terrain. Creatures pushed or shoved here slide an extra 5 feet in the direction of the push.",
+"Shifting Dunes / Loose Dust: Granular inclines. — Difficult Terrain. Creatures pushed or shoved here slide an extra 5 feet in the direction of the push.",
 null,
 [
 "Shifting Dunes / Loose Dust: Granular inclines.",
-"15'x15' area",
 "Difficult Terrain. Creatures pushed or shoved here slide an extra 5 feet in the direction of the push."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15' area"
 ],
 [
 44,
 44,
 "",
-"Crystalline Outcropping: Jagged, fragile formations. — 5'x10' patch — Half Cover. If hit by a bludgeoning or thunder attack, it shatters, dealing 1d4 Slashing to adjacent creatures and destroying the cover.",
+"Crystalline Outcropping: Jagged, fragile formations. — Half Cover. If hit by a bludgeoning or thunder attack, it shatters, dealing 1d4 Slashing to adjacent creatures and destroying the cover.",
 null,
 [
 "Crystalline Outcropping: Jagged, fragile formations.",
-"5'x10' patch",
 "Half Cover. If hit by a bludgeoning or thunder attack, it shatters, dealing 1d4 Slashing to adjacent creatures and destroying the cover."
-]
+],
+"",
+"",
+"",
+"",
+"5'x10' patch"
 ],
 [
 45,
 45,
 "",
-"Shadow-Drenched Thicket: An area of unnaturally persistent gloom. — 20'x20' area — Dim Light. Darkvision is required to see clearly. Creatures without Darkvision have Disadvantage on Perception.",
+"Shadow-Drenched Thicket: An area of unnaturally persistent gloom. — Dim Light. Darkvision is required to see clearly. Creatures without Darkvision have Disadvantage on Perception.",
 null,
 [
 "Shadow-Drenched Thicket: An area of unnaturally persistent gloom.",
-"20'x20' area",
 "Dim Light. Darkvision is required to see clearly. Creatures without Darkvision have Disadvantage on Perception."
-]
+],
+"",
+"",
+"",
+"",
+"20'x20' area"
 ],
 [
 46,
 46,
 "",
-"Floating Earth Mote: A chunk of land hovering mid-air. — 10'x10', 10' up — Airborne Platform. Grants the high ground. Provides Total Cover to creatures under it.",
+"Floating Earth Mote: A chunk of land hovering mid-air. — Airborne Platform. Grants the high ground. Provides Total Cover to creatures under it.",
 null,
 [
 "Floating Earth Mote: A chunk of land hovering mid-air.",
-"10'x10', 10' up",
 "Airborne Platform. Grants the high ground. Provides Total Cover to creatures under it."
-]
+],
+"",
+"",
+"",
+"",
+"10'x10', 10' up"
 ],
 [
 47,
 47,
 "",
-"Vortex / Maelstrom: A swirling anomaly in air or water. — 10' radius — Pulling Zone. Creatures starting their turn within 10 feet are pulled 5 feet toward the center.",
+"Vortex / Maelstrom: A swirling anomaly in air or water. — Pulling Zone. Creatures starting their turn within 10 feet are pulled 5 feet toward the center.",
 null,
 [
 "Vortex / Maelstrom: A swirling anomaly in air or water.",
-"10' radius",
 "Pulling Zone. Creatures starting their turn within 10 feet are pulled 5 feet toward the center."
-]
+],
+"",
+"",
+"",
+"",
+"10' radius"
 ],
 [
 48,
 48,
 "",
-"Porous Pumice / Hollow Crust: Highly brittle ground. — 15'x15' area — Fragile Terrain. Any spell dealing thunder or bludgeoning damage turns this area into Difficult Terrain instantly.",
+"Porous Pumice / Hollow Crust: Highly brittle ground. — Fragile Terrain. Any spell dealing thunder or bludgeoning damage turns this area into Difficult Terrain instantly.",
 null,
 [
 "Porous Pumice / Hollow Crust: Highly brittle ground.",
-"15'x15' area",
 "Fragile Terrain. Any spell dealing thunder or bludgeoning damage turns this area into Difficult Terrain instantly."
-]
+],
+"",
+"",
+"",
+"",
+"15'x15' area"
 ],
 [
 49,
 49,
 "",
-"Overgrown Ruin Wall: A 10-foot tall straight barrier. — 5' thick, 20' long — Total Cover. Can be climbed (DC 10 Athletics). Fighting from the top grants Half Cover to the lower body.",
+"Overgrown Ruin Wall: A 10-foot tall straight barrier. — Total Cover. Can be climbed (DC 10 Athletics). Fighting from the top grants Half Cover to the lower body.",
 null,
 [
 "Overgrown Ruin Wall: A 10-foot tall straight barrier.",
-"5' thick, 20' long",
 "Total Cover. Can be climbed (DC 10 Athletics). Fighting from the top grants Half Cover to the lower body."
-]
+],
+"",
+"",
+"",
+"",
+"5' thick, 20' long"
 ],
 [
 50,
 50,
 "",
-"Perfect Ambush Ring: A clearing surrounded by high ground and cover. — 20'x20' center — Kill Zone. The center is completely exposed. The 10-foot perimeter around it is elevated and grants Three-Quarters Cover.",
+"Perfect Ambush Ring: A clearing surrounded by high ground and cover. — Kill Zone. The center is completely exposed. The 10-foot perimeter around it is elevated and grants Three-Quarters Cover.",
 null,
 [
 "Perfect Ambush Ring: A clearing surrounded by high ground and cover.",
-"20'x20' center",
 "Kill Zone. The center is completely exposed. The 10-foot perimeter around it is elevated and grants Three-Quarters Cover."
-]
+],
+"",
+"",
+"",
+"",
+"20'x20' center"
 ]
 ]
 },

@@ -6,7 +6,30 @@ updated: 2026-07-27
 
 # Genesis — Session Hand-off
 
-## ⭐ Latest (2026-07-27, CL-R5 COMPLETE TRIMMED-STRUCTURE PROOF) [Codex]
+## ⭐ Latest (2026-07-27, INTEGRATION CLOSE + CAMPAIGN LAUNCH) [Fable]
+
+Everything is landed: master now holds the clay CL-R3→R5 capture lane, Codex's completed
+golden-site lane (Site-6 prison brief, Meshy Batch-4 runtime, building programs, urban fabric),
+the TIYL wiring fix (hometown = where you're from; "Starting location" rename; EB.places
+revived), and the Opening Register (minute-zero band roll, all four founder questions RULED —
+acceptance rerun broke the 12/12-settled monoculture: 9/12 hot). Settled-life program §7 all
+four RULED (dwelling→Manor low end · working quay first · ONE persistent home settlement ·
+curiosities silhouette+usable-subset). Full CI-equivalent gate green (20 dep-skips, one
+documented coherence-dial flake — 51/0 in isolation), bridge 64/0, table-lint 37/0.
+
+**In flight (2026-07-27 autonomous day):** (1) golden-sites research campaign — all twelve to
+working-spec standard, 3/8/9/11/12 specced AS transform/state specs per the noun/state ruling,
+everything flagged PENDING CODEX ADVERSARIAL REVIEW; (2) spec-vs-tables spawn audit with
+additive spice-preserving seeding (sample rows per band go to Adam for review); (3) clayroom
+phase — architectural proof-backlog (item/dressing/interactive assembly), terrain program
+(generic-first: cliffs/crevices/chasms/ponds/hills; climbable roots over canopy; in-engine =
+procedural + morphable), ground-materials program (patches, trim sheets, seamless blends over
+the MM pipeline). End-of-day: two Codex handover prompts + table review sheet.
+
+**Do next (pick up here):** read the campaign close-out in this file's next entry; review gates
+are the two Codex prompts, the table sample-rows sheet, and the PROPOSED places composition.
+
+## Latest (2026-07-27, CL-R5 COMPLETE TRIMMED-STRUCTURE PROOF) [Codex]
 
 Adam approved both CL-R4b material parents and asked for complete structures with varying textures
 routed correctly. `CL-F05 trim-bench` v1 is now a retained production-renderer fixture with two
@@ -36,7 +59,7 @@ architectural twins:
   diagnostic frames plus receipts, both with the architecture audit green and zero browser
   errors/warnings.
 
-## ⭐ Latest (2026-07-26, CL-R4b TWO-MATERIAL + MULTIPLY-GRID PROOF) [Codex]
+## Latest (2026-07-26, CL-R4b TWO-MATERIAL + MULTIPLY-GRID PROOF) [Codex]
 
 `CL-F04` v3 now proves two exact sprite-first parents simultaneously in matched production-renderer
 bays. This was taste-pending at capture time; Adam approved both on 2026-07-27. Production routing
@@ -62,7 +85,7 @@ still remains a separate promotion decision.
 - **Superseded next decision:** Adam approved the two parents and advanced to complete trimmed
   structures. Mood lighting remains parked.
 
-## ⭐ Latest (2026-07-26, THE SINGULAR FRESH START) [Fable]
+## Latest (2026-07-26, THE SINGULAR FRESH START) [Fable]
 
 Adam called the fresh start before work branches back out between Fable and Codex. Master is
 the one canonical line; everything committed-and-good is on it and pushed.

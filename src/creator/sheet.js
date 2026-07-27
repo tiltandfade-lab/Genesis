@@ -45,7 +45,14 @@ function cgBind(){
   if(!GS.CGEN.class||!GS.CGEN.background){toast("Choose a class & background first");return;}
   const name=((GS.CGEN.name||(document.getElementById("cgName")||{}).value)||"").trim()||"the Stranger";
   const bg=BACKGROUNDS[GS.CGEN.background]||{};const ex=cgSheetExtras();
-  const c={id:uid(),name,pronouns:GS.CGEN.pronouns||"they",status:"living",bornAt:Date.now(),bornWhere:GS.CGEN.spawnWhere||w.seed.master.name,
+  // Adam's ruling 2026-07-26: hometown = where you're from. bornWhere resolves to the bardo
+  // hometown roll (world.seed.hometown.setting, via hometownSettingName — src/world/play.js) ahead
+  // of the world's master-setting/start node; GS.CGEN.spawnWhere (an explicit override some flows
+  // pass, e.g. a rebirth successor waking in a named distant region — rollCharacter(spawnWhere))
+  // still wins when set. Falls back to w.seed.master.name only when no hometown roll exists —
+  // legacy saves predating the hometown beat, or the manual charge-sheet flow (rollCharacter with
+  // no spawnWhere), which never rolls one.
+  const c={id:uid(),name,pronouns:GS.CGEN.pronouns||"they",status:"living",bornAt:Date.now(),bornWhere:GS.CGEN.spawnWhere||hometownSettingName(w)||w.seed.master.name,
     sheet:{species:GS.CGEN.species,class:GS.CGEN.class,background:GS.CGEN.background,feat:bg.feat||"",tool:ex.tool,languages:ex.languages,
       level:1,xp:0,   // advancement spine (docs/ADVANCEMENT.md): XP accrues here, levels up on a rest (capped at Tier 2 / L10)
       scores:GS.CGEN.scores,mods:d.mods,hp:d.hp,ac:d.ac,profBonus:d.pb,passivePerception:d.pp,

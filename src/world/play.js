@@ -69,7 +69,12 @@ function bindWorld(){
   setNodeXY(world,originId,0,0);
   (GS.SEED.nearby||[]).forEach((p,i)=>{const nid=addNode(world,p.name,"Place");const a=(-90+i*73)*Math.PI/180,rad=3+(i%2);setNodeXY(world,nid,Math.cos(a)*rad,Math.sin(a)*rad);});
   // founding ledger entries (the spine's first writes)
-  addLedger(world,"canon",{fact:`${GS.SEED.master.name} — ${GS.SEED.master.desc}`,origin:true},`${name} was rolled into being at ${GS.SEED.master.name}.`);
+  // Adam's ruling 2026-07-26: player-facing language never calls the world's first node the
+  // character's "origin"/birthplace — that word belongs to the separate Hometown fact just below
+  // (the bardo hometown-setting beat). This line is relabeled "Starting location" to match the
+  // "Hometown: X" line's own label style; the internal `origin:true` data tag is unchanged (it only
+  // marks this as a world-gen seed fact for ledgerPlayerVisible's filter, src/world/render.js).
+  addLedger(world,"canon",{fact:`${GS.SEED.master.name} — ${GS.SEED.master.desc}`,origin:true},`Starting location: ${GS.SEED.master.name}.`);
   if(GS.SEED.ht_setting&&GS.SEED.ht_history&&GS.SEED.ht_myth){
     const strip=s=>(s||"").replace(/\*\*([^*]+)\*\*/g,"$1");
     const stg=strip(GS.SEED.ht_setting.text),hist=strip(GS.SEED.ht_history.text),myth=strip(GS.SEED.ht_myth.text);
@@ -96,6 +101,25 @@ function bindWorld(){
   U.worlds[id]=world; U.activeWorldId=id; saveU(U);
   toast("A new world enters the universe ✦");
   renderWorld(); showTab('world');
+}
+
+/* TIYL-ENTRY-WIRING (Adam's ruling 2026-07-26): "hometown should be where you are from" — the
+   bardo hometown-setting beat (GS.SEED.ht_setting, folded onto world.seed.hometown.setting just
+   above) and the world's master-setting beat (GS.SEED.master, this function's originId) are two
+   INDEPENDENT d100 draws off two different tables (data/creation-flow.js's `master` STAGES table
+   vs the compiled `place-master-setting` table bardo.js:14 rolls) — they will not generally match.
+   Extracts the plain place name a bound character's `bornWhere` should carry: every row of the
+   compiled `place-master-setting` table leads its `.text` with "Name: description." (confirmed
+   against all 100 compiled rows — NOT `**bold**` markdown; that's a different table's convention
+   and doesn't apply here) — pull just the name, matching the plain-string shape GS.SEED.master.name
+   already has. Returns null when no hometown roll exists on this world (a legacy save from before
+   the hometown beat existed) — callers fall back to the master-setting name, unchanged from
+   pre-fix behavior. */
+function hometownSettingName(w){
+  const ht=w&&w.seed&&w.seed.hometown&&w.seed.hometown.setting;
+  if(!ht||!ht.text)return null;
+  const m=/^([^:]+):\s*/.exec(ht.text);
+  return m?m[1].trim():null;
 }
 
 /* PLACE-GEN §7 unit 9 (TIYL start routing, docs/PLACE-GEN.md ADDENDUM §7D item 9): the bardo

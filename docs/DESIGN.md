@@ -869,3 +869,60 @@ Desktop packet remains intact and unmodified.
   per the decision-capture rule: the six Clayroom reset redlines, the FFT low-poly construction
   language, the narrative-furnishing boundary, and the Material Maker 1.3 / every-material-is-a-seed
   rulings.
+
+## TIYL entry-wiring fix — hometown/starting-location + the dead EB.places path (2026-07-26)
+
+A TIYL audit found two wiring bugs in the character/world opening: the bardo **hometown** beat
+(`src/creator/bardo.js:14`, rolls `place-master-setting`) and the world **STAGES** "master" beat
+(`data/creation-flow.js`'s `master` table, read via `lookup()` in `bindWorld`) are two INDEPENDENT
+d100 draws off two different tables that never generally match — yet `cgBind` (`src/creator/sheet.js`)
+set a character's `bornWhere` from `GS.CGEN.spawnWhere||w.seed.master.name`, i.e. the WORLD seed,
+never the hometown roll (`GS.CGEN.spawnWhere` is never actually set during a normal bardo passage).
+Separately, `rollEntry` (`src/engine/world-gen.js`) seeded the opening bundle's "places" slot from up
+to 2 gazetteer records via `add("places",g.name,"place")` — forwarding only the name and silently
+dropping `g.desc` — and because those 2 canon entries almost always exist, the Option-C
+"still-empty slot" fallback never fired for places, so the richer spice-graded `EB.places` table
+(`data/starting-state.js`) never rolled in practice.
+
+**RULED by Adam (2026-07-26), verbatim intent:** *"hometown should be where you are from and origin
+should probably be renamed to starting location."* Two changes follow from this:
+
+- **Hometown = where you're from.** `bornWhere` now resolves via
+  `GS.CGEN.spawnWhere||hometownSettingName(w)||w.seed.master.name` (the new `hometownSettingName(w)`
+  helper lives beside `bindWorld` in `src/world/play.js`). It extracts the plain name off
+  `world.seed.hometown.setting.text` — every row of the compiled `place-master-setting` table leads
+  with `"Name: description."` (confirmed against all 100 compiled rows; not `**bold**` markdown, a
+  different table's convention). `GS.CGEN.spawnWhere` still wins when a flow explicitly sets it (a
+  rebirth successor waking in a named distant region); the world's master-setting name remains the
+  final fallback for legacy saves that predate the hometown beat, and for the manual charge-sheet
+  flow (`rollCharacter`), which never rolls a hometown at all. Every consumer of `bornWhere` (Saga's
+  place bump, the world-gen anchor ledger line, `charHandoff`'s "who entered at X") was traced and
+  stays coherent — none needed a change, since they all just read whatever string `bornWhere` holds.
+- **"Origin" → "starting location" in player-facing language.** `bindWorld`'s founding ledger line
+  changed from `"<name> was rolled into being at X."` to `"Starting location: X."` — parallel to the
+  adjacent `"Hometown: X · Origin: Y · Myth: Z."` line's own label style. That Hometown line's own
+  inner `"Origin:"` label is a different, legitimate sense of the word (the hometown's OWN founding
+  history — the `ht_history` beat, "How It Began") and was deliberately left untouched. Internal
+  names (the `origin:true` ledger-data tag that marks a world-gen seed fact for
+  `ledgerPlayerVisible`'s filter, `originId`/`mintOriginPlaceThread`, etc.) are unchanged — this is a
+  language/semantics fix, not a rename sweep.
+
+**Fixed as part of the same pass:** `rollEntry`'s gazetteer→places seeding now forwards the
+description (`` `${g.name} — ${g.desc}` ``), matching the plain-string/src-tag shape every consumer
+already reads (`charHandoff`, `renderOpening`).
+
+**PROPOSED (Fable default, Adam's morning review pending):** one fresh `EB.places` roll
+(`ebRoll("places")`) is now ALWAYS pushed onto the places bundle, on top of the up-to-2 canon
+gazetteer entries — bypassing `add()`'s normal 2-item cap, which every other opening-bundle slot
+still respects. Places is now the one slot that can carry 3 entries (2 canon + 1 fresh archetype)
+instead of 2. This revives `EB.places` from dead code, but the 2-canon-plus-1-fresh composition
+itself (vs., say, capping at 2 total, or biasing the fresh roll's odds) is a taste call Adam has not
+yet signed off — flagged here rather than silently promoted to a locked ruling.
+
+**Teeth:** `dev/verify-tiyl-entry.mjs` (RED-first proven against pre-fix source) asserts all of the
+above — gazetteer places carry desc, a fresh `EB.places` entry always lands, `bornWhere` matches a
+REAL hometown roll (looped until it diverges from a real master-setting roll, never a fixed RNG
+position) rather than the world seed, the ledger carries both facts as distinct lines, and a
+legacy/no-hometown world still falls back correctly. Regression-checked against
+`verify-place-tiyl.mjs`, `verify-proximity.mjs`, `verify-rebirth-flow.mjs`, `verify-saga.mjs`,
+`verify-tiyl.mjs`, `verify-bardo-port.mjs`, and `verify-place-roll.mjs` — all stay green.

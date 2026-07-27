@@ -103,7 +103,19 @@ function rollEntry(w,c){
 
   // 4) pressures → the Opening Tension (kept as the headline) + contested Places from the gazetteer
   const tp=pickTension(w,adversarial);
-  (w.gazetteer||[]).filter(g=>g.type==="Place").slice(0,2).forEach(g=>add("places",g.name,"place"));
+  // PLACE-DESC-FIX (Adam's ruling 2026-07-26): forward the gazetteer record's OWN description — the
+  // old `add("places",g.name,"place")` dropped g.desc silently, unlike every other opening-bundle
+  // slot (see the backstory-NPC `line` two blocks up, which always folds n.desc in). "Name — desc"
+  // matches the plain-string/src-tag shape every consumer already reads (x.text, e.g. handoff.js's
+  // charHandoff / render.js's renderOpening).
+  (w.gazetteer||[]).filter(g=>g.type==="Place").slice(0,2).forEach(g=>add("places",g.desc?`${g.name} — ${g.desc}`:g.name,"place"));
+  // PLACE-DESC-FIX also revives EB.places (Adam's ruling 2026-07-26 — FABLE-PROPOSED DEFAULT,
+  // morning review pending, docs/DESIGN.md): pre-fix, step 5's Option-C fallback below only fires
+  // when a slot is completely EMPTY, and the 2 canon gazetteer places above (present on essentially
+  // every world) meant EB.places' own spice-graded fresh-archetype table never rolled at all. Pushed
+  // directly — bypassing add()'s 2-item cap, which every OTHER slot still respects — so places alone
+  // can carry up to 3 entries: 2 canon gazetteer + 1 fresh archetype, always.
+  B.places.push(ebRoll("places"));
 
   // 5) Option C — any still-empty slot is filled by the script from the fresh tables (never punt to the DM)
   ["enemies","friends","complications","things","places"].forEach(s=>{if(!B[s].length)B[s].push(ebRoll(s));});

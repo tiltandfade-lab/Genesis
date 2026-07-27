@@ -70,9 +70,21 @@
    custom parsing needed, GLTFLoader does it for free). loadDonorPiece below walks the loaded scene
    and republishes every node's `userData.genesisDonor.sockets` onto ONE flat array on the
    returned group's own userData.sockets, so a caller never needs to traverse the hierarchy itself.
+
+   A1 SOCKET ALGEBRA (docs/CLAYROOM-PROOF-BACKLOG.md § A1, decision-log D1) — 2026-07-27. That flat
+   array used to carry this module's OWN record shape, `{node, type, position}`, written onto the
+   same `userData.sockets` key theater-procedural-kit.js writes with a disjoint vocabulary and no
+   orientation at all. It now carries the one canonical record, built by socketFromDonorExtras().
+   The stamped glTF extras are unchanged (build/normalize-donors.py still writes POSITION ONLY, and
+   its output GLBs are byte-untouched by this change) — the projection happens at the runtime
+   contract boundary, per CLAUDE.md's "normalization lives at the contract boundary, not in
+   handlers". Because the normalizer supplies no orientation, each record's
+   `provenance.frameSource` reads "type-default": the normal/tangent come from the socket TYPE's
+   declared default, and that weakness is RECORDED rather than hidden behind a plausible vector.
 */
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { socketFromDonorExtras, socketsOfKind } from "./theater-socket-algebra.js";
 
 // ─── index fetch + cache ────────────────────────────────────────────────────────────────────────
 const DONOR_INDEX_CACHE = {}; // pack -> Promise<index object> (assets/models-normalized/<pack>/index.json)
@@ -405,13 +417,22 @@ export async function loadDonorPiece(pack, slug, opts) {
   const outlineStyle = (opts.realmId && pack !== "meshy-genesis" && !opts.materialProof)
     ? donorOutlineStyleFor(opts.realmId) : null;
   const sockets = [];
+  const socketOrdinals = new Map(); // type -> next ordinal, so ids stay unique across the hierarchy
   const materialFamiliesApplied = [];
 
   group.traverse((obj) => {
     const donorData = obj.userData && obj.userData.genesisDonor;
     if (donorData) {
       if (Array.isArray(donorData.sockets)) {
-        donorData.sockets.forEach((s) => sockets.push(Object.assign({ node: obj.name }, s)));
+        donorData.sockets.forEach((s) => {
+          const ordinal = socketOrdinals.get(s.type) || 0;
+          socketOrdinals.set(s.type, ordinal + 1);
+          sockets.push(socketFromDonorExtras(Object.assign({ node: obj.name }, s), {
+            ordinal,
+            ownerRef: `donor:${pack}/${slug}`,
+            source: "donor-normalizer",
+          }));
+        });
       }
       if (donorData.materialFamily && obj.isMesh) {
         const family = donorData.materialFamily;
@@ -447,13 +468,16 @@ export async function loadDonorPiece(pack, slug, opts) {
 
 // socketsOf(group) -> the flat socket array a loaded piece carries (convenience read, mirrors the
 // "userData (classic-script friendly)" law — a future classic-script caller can read
-// pieceGroup.userData.sockets directly with no import needed once the group exists).
+// pieceGroup.userData.sockets directly with no import needed once the group exists). Post-A1 that
+// array holds canonical socket records; read a seat position with socketPosition(), never `.position`.
 export function socketsOf(group) {
   return (group && group.userData && group.userData.sockets) || [];
 }
 
+// A1: alias-aware. A caller asking for "butt-join-w" now also finds a Meshy piece's own "join-west",
+// because the registry declares them the same join — a bare `s.type === type` never could.
 export function socketsByType(group, type) {
-  return socketsOf(group).filter((s) => s.type === type);
+  return socketsOfKind(socketsOf(group), type);
 }
 
 // ─── classic-script bridge — same republish pattern theater-materials.js/theater-interior.js use

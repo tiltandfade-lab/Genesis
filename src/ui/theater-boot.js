@@ -402,6 +402,11 @@ import { resolveWholeObject, loadWholeObjectBuilders } from "./theater-figures.j
 // preload-then-clone convention just below) and interiorBuildKitDoorMesh (near
 // interiorBuildInteractableDoorMesh) for the actual mount.
 import { loadDonorPiece, socketsByType } from "./theater-donor.js";
+// A1 SOCKET ALGEBRA (docs/CLAYROOM-PROOF-BACKLOG.md § A1, decision-log D1) — 2026-07-27. A socket
+// record's seat position lives at `frame.position`, never at a flat `.position`; socketPosition()
+// is the ONE accessor a reader uses, so a later frame change (a measured normal, a moved origin)
+// cannot silently desync the two kit-door/floor-mount read sites below.
+import { socketPosition } from "./theater-socket-algebra.js";
 // ROOM-SHELL COMPILER (docs/ROOM-SHELL-COMPILER.md; docs/GRAPHICS-NORTH-STAR.md Stage C unit C4): the
 // active room's cells compiled into a CONTINUOUS shell (floor polygon + wall/riser quad-strips) instead
 // of the per-cell InstancedMesh box read below — see this file's own ITR_ROOM_SHELL flag + itrBuild*
@@ -2711,7 +2716,7 @@ function itrDoorBuildShatterShardMesh(shardDesc, color){
 const DONOR_TEMPLATE_CACHE = {}; // "pack/slug@realmId" -> "pending" | {group, floorMountLocal} | undefined
 function donorPieceFloorMountLocal(group){
   const fm = socketsByType(group, "floor-mount")[0];
-  return fm ? fm.position : [0, 0, 0];
+  return fm ? socketPosition(fm) : [0, 0, 0];
 }
 function donorTemplateFor(pack, slug, realmId, realmProfile){
   const rid = realmId || "fantasy";
@@ -2752,7 +2757,7 @@ let kitDoorTemplateReady = false;
 function kitDoorSplitTemplate(rawGroup){
   const hingeSockets = socketsByType(rawGroup, "hinge");
   if(!hingeSockets.length) return null; // an admitted piece with no hinge socket -> never a kit door, prism fallback
-  const hingeLocal = hingeSockets[0].position;
+  const hingeLocal = socketPosition(hingeSockets[0]);
   let leafObj = null;
   rawGroup.traverse((obj) => {
     if(leafObj) return;

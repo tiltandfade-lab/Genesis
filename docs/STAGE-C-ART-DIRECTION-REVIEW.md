@@ -152,7 +152,7 @@ wallSegment = {
   inwardNormal,
   thickness: 0.22,       // realm/material profile, normally 0.15-0.32u
   fullHeight: 2.4,
-  stemHeight: 0.28,      // persistent cutaway/parapet body, normally 0.22-0.40u
+  stemHeight: 0.14,      // persistent body; + 0.06 cap = exact 0.20u / 1 ft cutaway stub
   capHeight: 0.06,
   mountSlots: [],
   sourceRef

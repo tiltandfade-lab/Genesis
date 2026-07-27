@@ -446,12 +446,13 @@ group("G1 — item 2 (camera-side cutaway parity) red-first: kit wall modules ha
   ok(postFixSrc.indexOf("let itrCameraSideBand = function(){ return false; };") >= 0, "GREEN: itrCameraSideBand is declared as a shared closure (the SAME test the prism wallList parapet cut consumes)");
   // structural proof the KIT WALL mount site actually CONSUMES the shared gate (not just declares it
   // unused nearby) — the exact forEach this unit added, asserted by source-text presence of its own
-  // distinctive call shape (ITR_CUTAWAY_PARAPET_FRAC multiplied into a kit holder's own scale.y).
+  // distinctive call shape (the same absolute one-foot target divided by the full wall height).
   const postMountIdx = postFixSrc.indexOf("(data.kitShellWalls || []).forEach(function(run, i){");
   ok(postMountIdx >= 0, "GREEN: the kit-wall mount site's own per-run camera-side forEach is present");
   const postMountBlock = postFixSrc.slice(postMountIdx, postMountIdx + 400);
   ok(postMountBlock.indexOf("itrCameraSideBand(run.x || 0, run.z || 0)") >= 0, "GREEN: the forEach calls itrCameraSideBand on the run's own WORLD (x,z) — the identical predicate the prism wallList path already computed, not a second copy");
-  ok(postMountBlock.indexOf("holder.scale.y *= ITR_CUTAWAY_PARAPET_FRAC") >= 0, "GREEN: a camera-side run's holder is scaled down by the SAME ITR_CUTAWAY_PARAPET_FRAC constant the prism parapet cut uses (one shared fraction, not a drifted duplicate)");
+  ok(postMountBlock.indexOf("holder.scale.y *= Math.min(1, ITR_CUTAWAY_STUB_HEIGHT_U / fullH)") >= 0,
+    "GREEN: a camera-side run is scaled to the SAME absolute one-foot stub target as the prism path");
   // the actual OPACITY/HEIGHT RESPONSE in a real camera-side fixture is the real-browser capture cards
   // this unit re-shot (dev/battle-gate/ks3-kit-shells/{rect,l}-kit-on.png) — READ by the executor per
   // the report; the near/camera-side kit walls visibly drop to parapet height there, this harness has

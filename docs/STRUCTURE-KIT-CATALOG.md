@@ -66,6 +66,25 @@ states the demand).
 - Terraces are ground at n×h with retaining faces; the wall walk is the same contract
   on top of a built piece. One law, two expressions
   (see `diagrams/structure-kit-roof-parapet-vocabulary.svg`, panel 3).
+- **Traversability-grid projection (Adam 2026-07-26):** the visible tactical grid follows the
+  support graph instead of remaining on the base floor plane. It projects onto floor tiers,
+  terraces, landings, individual stair treads, walkable slopes and roofs, and exposed accessible
+  tops such as crates and columns. The projection is clipped to each real support polygon; a round
+  perch remains round, a slope keeps its pitch, and a sub-cell object top does not mint a false
+  5×5-ft occupancy cell. Inaccessible or hidden geometry does not acquire walk-grid citizenship
+  merely because it has an upward-facing triangle.
+- **Stair adapter correction (Adam, 2026-07-26):** a single straight stair unit occupies
+  a **5×5-ft footprint** and may bridge any authored rise from near-flat through **5 ft**.
+  The CL-F01 proof carries explicit 2-ft, 3-ft, and 5-ft examples; two maximum-rise
+  units bridge one 10-ft storey. Stair tread elevations are circulation geometry, not
+  new terrain datums, so their intermediate risers may subdivide the `h` quantum.
+  Inside-corner and outside-corner stair families are required siblings. CL-F01 now
+  distinguishes them geometrically: the inside family is a nested solid infill for a
+  concave 90-degree room corner; the outside family is an open-quadrant L-wrap around a
+  convex corner. The eventual generator chooses tread count from rise while preserving
+  the one-cell footprint, walkable top surfaces, and continuous contact at both landings.
+  The live storey proof composes two ordinary maximum-rise units around a +5-ft landing
+  into an occupied +10-ft deck over a three-wall workroom.
 
 ## 3. Two-tier grain (Adam ruling 2026-07-24)
 
@@ -108,6 +127,19 @@ The construction profile decides whether the joint is visibly expressed as a pos
 quoin, pier, buttress, frame, or rock transition, or resolved as a hidden seam/shared
 surface for boxes, tents, folded sheets, and monolithic shells.
 
+CL-F01's current bounded connective-tissue implementation uses the OSS polygon kernel,
+plinths that descend to the common site datum, full-height interpenetrating corner quoins,
+and short full-height cutaway returns where a governed camera omission meets a surviving
+wall. Structural contact geometry overlaps by 0.02 world units at foundations, adjacent
+stair treads, landings, and terminal blocks; it does not depend on exact coplanar faces to
+hide a zoom-level light slit.
+
+The socket proof remains an endpoint-compatibility proof, not yet a Sims-style wall
+extrusion tool. The intended authoring verb is now explicit: click a typed anchor, drag or
+choose a legal run length, then let the construction resolver manufacture the repeated
+wall run, terminal corners, foundations, and elevation transitions. Interactive
+anchor-to-run expansion and its dimensional validator remain procedural-lane work.
+
 The full wall graph, roof-edge graph, foundation/stair rules, rejection checks, and
 `SK-J01 Junction House` proof live in
 [`STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC.md`](STRUCTURE-KIT-JUNCTION-AND-ROOF-SPINE-SPEC.md).
@@ -139,6 +171,17 @@ Per-face access classes:
 | `ladder` | DEFERRED | movement undesigned; XCOM model candidate | — |
 | `none` | inaccessible | — | overhangs, sealed faces |
 
+Access class is assigned per face and does not mean “the whole object has one access
+state.” A crate has a `walk` top and `climb-cost` faces; Small creatures treat entry as
+a relaxed step/clamber while normal creatures use the ordinary climb route. A column
+has a `walk` top and a `climb-dc` shaft when no ceiling seals the perch: reaching it is
+an exceptional jump-and-balance or climb-and-balance sequence. CL-F01 now executes that
+contract on both square and round columns, plus compiled wall faces: the production
+viewport raycast selects the face, the player supplies an open d20, the pure resolver
+applies the tagged Athletics DC, and the existing standee movement verb traverses the
+actual Y elevation to the perch or back to the floor. `none` is no longer a valid
+default for an exposed support top.
+
 **The shortcut law (proposed):** a `climb-dc` face may never be the ONLY route to a
 standable surface. Validation guarantees full reachability through `walk` + `climb-cost`
 alone; DC climbs are optional shortcuts and flanking spice. This preserves both the
@@ -154,15 +197,16 @@ Adam's "big roll" feeling emerges from accumulated odds and stakes, not an infla
 number. A guard on top is handled as threat response (readied attacks, the SRD shove),
 never as DC arithmetic.
 
-**The climb gamble (PARKED — post-MVP, Adam 2026-07-24; may be worked out in the clay
-room):** player selects a `climb-dc` face → DC prompt from the piece tag → margin-graded
+**The climb gamble (CL-F01 PROTOTYPE IMPLEMENTED; production promotion still gated):**
+player selects a `climb-dc` face → DC prompt from the piece tag → margin-graded
 outcomes per the standing degrees-of-failure doctrine: fail by 1–2 = lost grip (movement
 wasted, no fall); fail by 3+ = fall from current height (SRD: 1d6 per 10 ft + Prone).
 Crits compose with the existing Crit-Magnitude system (second-d20 spike) rather than
 minting new grammar; Adam's sketched rewards (regained movement, bonus action) are
-natural lens outputs there. MVP ships classes `walk` + `climb-cost` only —
-deterministic, FFT-legible — but every piece face carries its access class from day one
-so the gamble bolts on without retrofit (Adam confirmed 2026-07-24).
+natural lens outputs there. The bounded Clayroom prototype proves target selection,
+open-roll validation, success-to-perch, lost grip, severe fall, Prone, and 1d6 output.
+It does not yet promote multi-storey accumulation, movement-budget consumption, gear
+edits, or Crit-Magnitude composition into ordinary production encounters.
 
 ### 6a. Gear edits the access graph — status: PLANNED BUILD (Adam 2026-07-24: "let's plan on those mechanics being built into the game")
 

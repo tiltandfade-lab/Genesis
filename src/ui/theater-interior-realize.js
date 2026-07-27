@@ -53,7 +53,7 @@
      from LightBed       — env, kit, rigOn, isBrightRealm, applyEmissiveAlbedoLift
      from Surfaces       — materialsOn, floorColorForRender, wallColorForRender, wallTex, pillarTex,
                            inst, itrSightPoints, floorFromFile, wallFromFile, floorList, floorMesh
-     from WallsDoors     — itrCameraSideBand, ITR_CUTAWAY_PARAPET_FRAC, wallList, wallMesh,
+     from WallsDoors     — itrCameraSideBand, ITR_CUTAWAY_STUB_HEIGHT_U, wallList, wallMesh,
                            wallGhostMesh, useCompiledRoomShell, doorMountMap, doorMesh, doorGhostMesh
      from Shell          — roomShellMeshes
      from Pillars        — pillarList, pillarMeshes, pillarGhostMeshes
@@ -125,6 +125,7 @@ import { mountPostSuite } from "./theater-post.js";
 import { interiorBuildLights } from "./theater-practicals.js";
 import { interiorBuildMotes, interiorMoteKindFor, startMoteDrift, stopMoteDrift } from "./theater-motes.js";
 import {
+  ITR_OCCLUSION_STEM_HEIGHT_U,
   ITR_OCCLUSION_RECLASSIFY_HYSTERESIS_DEG,
   itrFurnitureOcclusionMask, itrOcclusionAnkleHeight, itrOcclusionBearingDeg,
   itrOcclusionBearingDeltaDeg, itrOcclusionClassify, itrOcclusionIdFor, itrPieceSightPoints,
@@ -139,7 +140,9 @@ import {
   interiorBuildDressing, interiorBuildFurniture, interiorBuildPieces, interiorBuildWallProps,
 } from "./theater-dressing.js";
 import { interiorBuildDecals } from "./theater-overlays.js";
-import { ROOM_SHELL_TIER_QUANTUM, compileRoomShell, segmentNormal } from "./theater-room-mesh.js";
+import {
+  DEFAULT_WALL_CAP_HEIGHT, ROOM_SHELL_TIER_QUANTUM, compileRoomShell, segmentNormal,
+} from "./theater-room-mesh.js";
 import {
   OCCLUSION_SUBJECT_EYE_HEIGHT, composeShot, defaultCameraCandidates, shotPlanFrom,
   wallUpperBlockingSet, wallUpperCameraSideBlockingSet,
@@ -895,11 +898,12 @@ function realizePhaseWallsDoors(pass){
   // world units, ~15% of the base 2.4 wall height) regardless of the room's own (possibly scaled)
   // wall height — thin enough to read as barely-there rather than "a box you look into" (the finale
   // mock's parapet rim). BW2-5's amendment: "full walls drop to parapet, never to nothing" — a
-  // PROPORTIONAL fraction (ITR_CUTAWAY_PARAPET_FRAC, ~0.4 of THIS wall's own height, scale-domain and
-  // all) so a scaled lair's parapet scales too, and the rim reads as a real low wall, not a knee-strip.
+  // Adam's 2026-07-26 ruling replaces the proportional parapet with a canonical one-foot plan stub.
+  // One world unit is five feet, so the retained opaque geometry reaches 0.2u and never grows a wall
+  // that was already structurally lower than that.
   // Computed from the camera yaw AT BUILD TIME (a later user rotate keeps the same cutaway until the
   // next board build — acceptable v1, noted here on purpose).
-  const ITR_CUTAWAY_PARAPET_FRAC = 0.4; // BW2-5 item 2: "≈0.4 wall height"
+  const ITR_CUTAWAY_STUB_HEIGHT_U = ITR_OCCLUSION_STEM_HEIGHT_U;
   // KS-3b item 2 (docs/KENNEY-SOCKET-WAVE.md) — itrCameraSideBand: the "is this WORLD (x,z) on the
   // camera-facing side of the room's own focusRect band" test, hoisted out of the wallList map below
   // into its own closure so the kit-shell wall mounting call further down this function (which never
@@ -923,9 +927,10 @@ function realizePhaseWallsDoors(pass){
   if(data.focusRect){
     wallList = inst.wall.map(function(wi){
       if(!itrCameraSideBand(wi.x, wi.z)) return wi;         // far-side / out-of-band walls stay full height
-      const parapetH = (wi.sy || 1) * ITR_CUTAWAY_PARAPET_FRAC;
-      if((wi.sy || 1) <= parapetH) return wi;              // already at/under parapet height — never GROWS a wall
-      return Object.assign({}, wi, { sy: parapetH });
+      const fullH = wi.sy || 1;
+      const stubH = Math.min(fullH, ITR_CUTAWAY_STUB_HEIGHT_U);
+      if(fullH <= stubH) return wi;                         // already at/under stub height — never GROWS a wall
+      return Object.assign({}, wi, { sy: stubH });
     });
   }
   // S-1 OCCLUSION FADE (docs/DIEGETIC-LIGHT.md) — separate concern from the focusRect PARAPET just
@@ -1049,7 +1054,7 @@ function realizePhaseWallsDoors(pass){
   // KS-3b's kit-wall cutaway (realizePhaseKitShells) multiplies the SAME authored fraction into its own
   // holders — one shared constant, never a drifted duplicate — so it crosses the seam with the closure
   // it belongs to rather than being re-declared downstream.
-  pass.ITR_CUTAWAY_PARAPET_FRAC = ITR_CUTAWAY_PARAPET_FRAC;
+  pass.ITR_CUTAWAY_STUB_HEIGHT_U = ITR_CUTAWAY_STUB_HEIGHT_U;
   pass.wallList = wallList;
   pass.wallMesh = wallMesh;
   pass.wallGhostMesh = wallGhostMesh;
@@ -1295,6 +1300,9 @@ function realizePhaseShell(pass){
     const shell = compileRoomShell(shellCells, {
       wallHeight: roomWallHeight, wallHeightForSegment, uvDensity: ITR_ROOM_SHELL_UV_DENSITY,
       floorColorAt, wallColorForSegment, smoothShape: data.activeRoomShape,
+      // Stem BODY plus cap reaches the same exact one-foot cutaway top used by the prism and kit
+      // paths. Full-height walls remain continuous because their upper begins at the body seam.
+      wallStemHeight: Math.max(0.01, ITR_OCCLUSION_STEM_HEIGHT_U - DEFAULT_WALL_CAP_HEIGHT),
       // UNIT G2: the migration switch pass-through — default "legacy", test-seam-settable via
       // window.Theater._setRoomShellPolygonKernel (see that setter's own comment, below).
       roomShellPolygonKernel: itrCtxRoomShellPolygonKernel(),
@@ -1336,7 +1344,8 @@ function realizePhaseShell(pass){
       mountedFigureSubjects.slice(0, OCCLUSION_SUBJECT_CAP)
     );
     const wallUpperRayBlocking = wallUpperBlockingSet({
-      camera: occlusionCameraPos, subjects: wallOcclusionSubjects, wallSegments: shell.wallSegments
+      camera: occlusionCameraPos, subjects: wallOcclusionSubjects, wallSegments: shell.wallSegments,
+      stemHeight: ITR_OCCLUSION_STEM_HEIGHT_U
     });
     // P3-1d: restore BW2-5's whole-room CAMERA-SIDE upper-band suppression, retired by C4.1b when it
     // replaced C4.1a's static near/far-yaw `upperVisibleForSegment` (see git 8d1b94f5) with the
@@ -1370,6 +1379,8 @@ function realizePhaseShell(pass){
     const wallOmissionActive = (typeof clayWallOmissionOn === "function") && clayWallOmissionOn();
     S.wallOmissionReport = {
       ruleId: "camera-side-wall-omission", version: 1, active: wallOmissionActive,
+      retainedStubFeet: 1,
+      retainedStubWorldUnits: ITR_OCCLUSION_STEM_HEIGHT_U,
       omitted: [], built: []
     };
     if(shell.floorGeometry){
@@ -1826,7 +1837,7 @@ function realizePhaseDoors(pass){
 /* PHASE 14 (realizePhaseKitShells) — KS-3's kit shell walls/floors with the KS-3b camera-side
    cutaway parity pass. VERBATIM from theater-boot.js lines 6623-6653. */
 function realizePhaseKitShells(pass){
-  const { data, cx, cz, itrCameraSideBand, ITR_CUTAWAY_PARAPET_FRAC } = pass;
+  const { data, cx, cz, itrCameraSideBand, ITR_CUTAWAY_STUB_HEIGHT_U } = pass;
 
   // KS-3 (docs/KENNEY-SOCKET-WAVE.md) — ROOM SHELLS FROM THE KIT. data.kitShellWalls/data.kitShellFloors
   // are interiorBuildBoard's OWN output (theater-interior.js, siblings of data.kitDoors — see that
@@ -1838,18 +1849,20 @@ function realizePhaseKitShells(pass){
   const kitShellWallGroup = interiorBuildKitShellWalls(data.kitShellWalls, cx, cz, data.realmId, S.realmProfile, data.wallHeightBase);
   // KS-3b item 2 (docs/KENNEY-SOCKET-WAVE.md's own KS-3 gate flag) — CAMERA-SIDE CUTAWAY PARITY. Kit
   // wall modules previously rendered at full height/opacity unconditionally — the prism wallList
-  // parapet cut a few hundred lines up (itrCameraSideBand/ITR_CUTAWAY_PARAPET_FRAC) only ever touched
+  // cutaway pass a few hundred lines up (itrCameraSideBand/ITR_CUTAWAY_STUB_HEIGHT_U) only ever touched
   // `inst.wall`, never these donor-piece runs, so a kit-shelled room read "walled-in" regardless of
   // camera framing (the diorama's own open-tray identity, BW2-5 item 2, silently didn't apply to the
-  // new shell type). Reuses the IDENTICAL closure + constant the prism path just computed above —
-  // never a second copy of the yaw/dot-product math — applied per RUN (data.kitShellWalls[i], in
+  // new shell type). Reuses the IDENTICAL closure + one-foot target the prism path just computed
+  // above — never a second copy of the yaw/dot-product math — applied per RUN (data.kitShellWalls[i], in
   // WORLD coordinates, zipped by index with kitShellWallGroup.children[i] — interiorBuildKitShellWalls
   // builds one holder per run in that exact array order) so a mixed kit+prism room's walls cut away
   // consistently at every camera-facing wall, whichever path rendered it.
   (data.kitShellWalls || []).forEach(function(run, i){
     const holder = kitShellWallGroup.children[i];
     if(!holder || !itrCameraSideBand(run.x || 0, run.z || 0)) return;
-    holder.scale.y *= ITR_CUTAWAY_PARAPET_FRAC;
+    const fullH = (typeof data.wallHeightBase === "number" && data.wallHeightBase > 0)
+      ? data.wallHeightBase : 2;
+    holder.scale.y *= Math.min(1, ITR_CUTAWAY_STUB_HEIGHT_U / fullH);
   });
   S.interiorGroup.add(kitShellWallGroup);
   const kitShellFloorGroup = interiorBuildKitShellFloors(data.kitShellFloors, cx, cz, data.realmId, S.realmProfile);
@@ -1961,4 +1974,3 @@ export function setInteriorVariant(flags){
     setInteriorBoard(S.lastBoard);
   }
 }
-

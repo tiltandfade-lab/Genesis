@@ -311,6 +311,7 @@ function runKeyframeVerb(standee, spec, opts, verbName){
   const target = (opts && opts.targetPos && typeof opts.targetPos.x === "number" && typeof opts.targetPos.z === "number")
     ? opts.targetPos : null;
   const deltaX = target ? (target.x - baseX) : 0;
+  const deltaY = target && typeof target.y === "number" ? (target.y - baseY) : 0;
   const deltaZ = target ? (target.z - baseZ) : 0;
 
   const { orig: origMat, clone: mat } = cloneMaterialForTween(mesh);
@@ -340,7 +341,14 @@ function runKeyframeVerb(standee, spec, opts, verbName){
     // the other.
     const jxWorldX = recoilDir ? s.jx * recoilDir.x : s.jx;
     const jxWorldZ = recoilDir ? s.jx * recoilDir.z : 0;
-    group.position.set(baseX + deltaX * s.along + jxWorldX, baseY + s.dy, baseZ + deltaZ * s.along + jxWorldZ);
+    // `along` is a true 3D traversal fraction. Existing floor moves have deltaY=0 and remain
+    // byte-for-byte planar; elevation access (stairs/climb/fall) can supply a real target Y instead
+    // of reporting a perch while leaving the actor hidden at the shaft's base.
+    group.position.set(
+      baseX + deltaX * s.along + jxWorldX,
+      baseY + deltaY * s.along + s.dy,
+      baseZ + deltaZ * s.along + jxWorldZ
+    );
     group.rotation.x = s.tiltX;
     group.scale.set(baseScaleX * s.scale, baseScaleY * s.scale * s.scaleY, baseScaleZ * s.scale);
     if(baseColor && mat.color){

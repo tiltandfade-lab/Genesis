@@ -76,7 +76,13 @@ check("6. compiled recipes carry the complete per-recipe/per-light authoring con
     && runtime.torch.lights[0].flicker.intervalJitter === 0.55
     && runtime.torch.lights[0].flicker.directionAmplitude === 0.025
     && runtime.torch.lights[0].shadow.cast === true
-    && runtime.torch.lights[0].shadow.mapSize === 512,
+    && runtime.torch.lights[0].shadow.mapSize === 512
+    && authored.profiles.daylit.lights[0].shadow.bias === -0.001
+    && authored.profiles.daylit.lights[0].shadow.normalBias === 0
+    && authored.profiles.daylit.lights[0].shadow.mapSize === 2048
+    && authored.profiles.moonlit.lights[0].shadow.bias === -0.001
+    && authored.profiles.moonlit.lights[0].shadow.normalBias === 0
+    && authored.profiles.moonlit.lights[0].shadow.mapSize === 2048,
   runtime.torch);
 
 console.log("\n=== red mutations ===");

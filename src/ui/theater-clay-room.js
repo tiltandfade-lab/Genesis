@@ -19,7 +19,7 @@
    through the clayCtxGet/SetRoomShell accessors instead of a stale mirror. */
 import * as THREE from "three";
 import { playStandeeVerb, bindStandeeCtx, stopIdleBreathe } from "./standee-verbs.js";
-import { compileRoomShell, segmentNormal } from "./theater-room-mesh.js";
+import { DEFAULT_WALL_CAP_HEIGHT, compileRoomShell, segmentNormal } from "./theater-room-mesh.js";
 import { tickTweens } from "./theater-verbs.js";
 
 // ---- root-capability mirrors (wired once by clayRoomInit; S re-synced by clayRoomSyncState) ----
@@ -35,7 +35,7 @@ let lightFlickerStep, lightLabApplyTunables, lightLabMaybeAutoMount, lightLabSho
 let mount, mountLightLab, placeCameraTweened, play, renderTheaterFrame;
 let retire, rotate, scheduleRender, setBaseGlow, setInteriorBoard;
 let setInteriorVariant, spriteAssetPathFor, spriteEntryFor, spriteTextureFor, startLightFlicker;
-let startTweenLoop, stopLightFlicker, stopMoteDrift, zoom, BLOOM_LAYER;
+let startTweenLoop, stopLightFlicker, stopMoteDrift, syncStandeeContactBlob, zoom, BLOOM_LAYER;
 let HUMAN_TRUE_HEIGHT, INTERIOR_BASE_HEIGHT, INTERIOR_BASE_TREAD_DEPTH, INTERIOR_CAM_MODE, ITR_DOOR_DEPTH_IN_WALL_DEFAULT;
 let ITR_DOOR_MOUNT_ALONG_SHELL, ITR_DOOR_SWING_TWEEN_MS, ITR_SHADOW_FORM_HEMI_FLOOR, LIGHT_LAB_AUTHORED_BASELINE, LIGHT_TUNABLES;
 let PSX_RES_SCALE;
@@ -94,6 +94,7 @@ export function clayRoomInit(ctx){
     startTweenLoop,
     stopLightFlicker,
     stopMoteDrift,
+    syncStandeeContactBlob,
     zoom,
     BLOOM_LAYER,
     HUMAN_TRUE_HEIGHT,
@@ -173,6 +174,8 @@ const CLAY_ROOM_TRUTH_FIXTURE_ID = "cl-f00-room-truth";
 const CLAY_ROOM_STRUCTURE_BENCH_ID = "cl-f01-structure-bench";
 const CLAY_ROOM_LIGHTING_BENCH_ID = "cl-f02-lighting-bench";
 const CLAY_ROOM_SPRITE_BENCH_ID = "cl-f03-sprite-citizenship";
+const CLAY_ROOM_MATERIAL_BENCH_ID = "cl-f04-material-bench";
+const CLAY_ROOM_TRIM_BENCH_ID = "cl-f05-trim-bench";
 const CLAY_ROOM_SPRITE_SCALE_MODES = Object.freeze(["true-scale", "diagnostic-cap"]);
 const CLAY_ROOM_LIGHT_PREVIEW_SEEDS = Object.freeze(["A", "B", "C"]);
 const CLAY_ROOM_LORE_LIGHT_PREVIEWS = Object.freeze([
@@ -181,6 +184,13 @@ const CLAY_ROOM_LORE_LIGHT_PREVIEWS = Object.freeze([
   Object.freeze({ id: "magic-glow", label: "MAGIC", source: "arcane crystal" }),
   Object.freeze({ id: "torchlit", label: "FIRE", source: "torch flame" }),
   Object.freeze({ id: "lavalit", label: "LAVA", source: "molten fissure" })
+]);
+const CLAY_ROOM_MOOD_EXAMPLES = Object.freeze([
+  Object.freeze({ id: "none", label: "SOURCE ONLY" }),
+  Object.freeze({ id: "dawn-violet", label: "VIOLET DAWN" }),
+  Object.freeze({ id: "crypt-violet", label: "VIOLET CRYPT" }),
+  Object.freeze({ id: "dungeon-cold", label: "COLD DUNGEON" }),
+  Object.freeze({ id: "spore-haze", label: "SPORE HAZE" })
 ]);
 const CLAY_ROOM_LIGHTING_MATRIX_RECIPES = Object.freeze([
   "clay-neutral-truth",
@@ -205,6 +215,12 @@ function clayRoomFixtureIdFromLocation(){
     }
     if(raw === "sprites" || raw === "sprite-citizenship" || raw === CLAY_ROOM_SPRITE_BENCH_ID){
       return CLAY_ROOM_SPRITE_BENCH_ID;
+    }
+    if(raw === "materials" || raw === "material-bench" || raw === CLAY_ROOM_MATERIAL_BENCH_ID){
+      return CLAY_ROOM_MATERIAL_BENCH_ID;
+    }
+    if(raw === "trim" || raw === "trim-bench" || raw === CLAY_ROOM_TRIM_BENCH_ID){
+      return CLAY_ROOM_TRIM_BENCH_ID;
     }
   } catch(e){}
   // The active reset-ladder checkpoint opens on the fixture under review. Earlier fixtures remain
@@ -288,6 +304,125 @@ function clayRoomApplyLightProfile(record){
   }
 }
 
+function clayRoomMoodLayerRecord(id){
+  const vocabulary = (typeof CLAY_ROOM_MOOD_LAYERS !== "undefined")
+    ? CLAY_ROOM_MOOD_LAYERS : null;
+  if(!vocabulary || !vocabulary.layers) return null;
+  return vocabulary.layers[id] || vocabulary.layers[vocabulary.defaultId] || null;
+}
+function clayRoomDisposeMoodLayer(){
+  const group = S.clayRoomMoodGroup;
+  if(group && group.parent) group.parent.remove(group);
+  S.clayRoomMoodGroup = null;
+}
+function clayRoomApplyMoodLayer(){
+  if(!S.scene) return null;
+  const layer = clayRoomMoodLayerRecord(S.clayRoomMoodLayerId || "none");
+  if(!layer) return null;
+  clayRoomDisposeMoodLayer();
+  const group = new THREE.Group();
+  group.name = "clay-room-mood-" + layer.id;
+  group.userData.clayRoomMood = true;
+  group.userData.moodLayerId = layer.id;
+  group.userData.nonShadowCasting = true;
+  if(layer.ambient.intensity > 0){
+    const ambient = new THREE.AmbientLight(layer.ambient.color, layer.ambient.intensity);
+    ambient.name = "room-mood-ambient";
+    ambient.castShadow = false;
+    ambient.userData.clayRoomMoodLight = true;
+    ambient.userData.moodRole = "ambient-volume";
+    group.add(ambient);
+  }
+  if(layer.hemisphere.intensity > 0){
+    const hemi = new THREE.HemisphereLight(
+      layer.hemisphere.sky,
+      layer.hemisphere.ground,
+      layer.hemisphere.intensity
+    );
+    hemi.name = "room-mood-hemisphere";
+    hemi.castShadow = false;
+    hemi.userData.clayRoomMoodLight = true;
+    hemi.userData.moodRole = "sky-ground-volume";
+    group.add(hemi);
+  }
+  S.scene.add(group);
+  S.clayRoomMoodGroup = group;
+
+  const baseBackground = S.clayRoomMoodBaseBackground;
+  if(baseBackground != null && S.scene.background && S.scene.background.isColor){
+    const mixed = new THREE.Color(baseBackground).lerp(
+      new THREE.Color(layer.void.color),
+      Math.max(0, Math.min(1, layer.void.mix || 0))
+    );
+    S.scene.background.copy(mixed);
+    if(S.scene.fog && S.scene.fog.color) S.scene.fog.color.copy(mixed);
+    if(S.renderer) S.renderer.setClearColor(mixed, 1);
+  }
+  return clayRoomMoodSnapshot();
+}
+function clayRoomSetMoodLayer(id, reason){
+  const layer = clayRoomMoodLayerRecord(id);
+  if(!layer || layer.id !== id) return false;
+  S.clayRoomMoodLayerId = id;
+  S.clayRoomPixelMetricsCache = null;
+  clayRoomApplyMoodLayer();
+  if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
+  markDirty();
+  scheduleRender();
+  return true;
+}
+function clayRoomMoodSnapshot(){
+  const layer = clayRoomMoodLayerRecord(S.clayRoomMoodLayerId || "none");
+  if(!layer) return null;
+  const sourceRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId] || null;
+  const sourceLights = [];
+  if(S.interiorGroup){
+    S.interiorGroup.traverse(function(light){
+      if(!light || !light.isLight || !light.userData || !light.userData.lightId) return;
+      sourceLights.push({
+        id: light.userData.lightId,
+        type: light.type,
+        visible: light.visible !== false,
+        intensity: Number.isFinite(light.intensity) ? +light.intensity.toFixed(5) : null,
+        castShadow: !!light.castShadow
+      });
+    });
+  }
+  const moodLights = [];
+  if(S.clayRoomMoodGroup){
+    S.clayRoomMoodGroup.children.forEach(function(light){
+      if(!light || !light.isLight) return;
+      moodLights.push({
+        role: light.userData.moodRole || null,
+        type: light.type,
+        intensity: Number.isFinite(light.intensity) ? +light.intensity.toFixed(5) : null,
+        castShadow: !!light.castShadow
+      });
+    });
+  }
+  const combinedMoodIntensity = layer.ambient.intensity + layer.hemisphere.intensity;
+  return {
+    vocabularyId: CLAY_ROOM_MOOD_LAYERS.id,
+    vocabularyVersion: CLAY_ROOM_MOOD_LAYERS.version,
+    pairId: (S.clayRoomLightRecipeId || "none") + "+" + layer.id,
+    baseRecipeId: S.clayRoomLightRecipeId || null,
+    sourceClass: sourceRecipe && sourceRecipe.source ? sourceRecipe.source.class : null,
+    sourceLabel: sourceRecipe && sourceRecipe.source ? sourceRecipe.source.label : null,
+    layerId: layer.id,
+    label: layer.label,
+    themes: layer.themes.slice(),
+    combinedMoodIntensity: +combinedMoodIntensity.toFixed(5),
+    energyCap: CLAY_ROOM_MOOD_LAYERS.maxCombinedIntensity,
+    underEnergyCap: combinedMoodIntensity <= CLAY_ROOM_MOOD_LAYERS.maxCombinedIntensity,
+    sourceLights: sourceLights,
+    moodLights: moodLights,
+    sourceRetained: sourceLights.length > 0 && sourceLights.every(function(row){ return row.visible; }),
+    moodCastsShadow: moodLights.some(function(row){ return row.castShadow; }),
+    background: S.scene && S.scene.background && S.scene.background.isColor
+      ? S.scene.background.getHex() : null
+  };
+}
+
 function clayRoomSetLightingRecipe(recipeId, reason){
   if(!S.clayRoomRecord || !LIGHT_TUNABLES.profiles[recipeId]) return false;
   S.clayRoomPixelMetricsCache = null;
@@ -339,15 +474,19 @@ function clayRoomSetFixture(fixtureId, reason){
   if(fixtureId !== CLAY_ROOM_TRUTH_FIXTURE_ID
     && fixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID
     && fixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
-    && fixtureId !== CLAY_ROOM_SPRITE_BENCH_ID){
+    && fixtureId !== CLAY_ROOM_SPRITE_BENCH_ID
+    && fixtureId !== CLAY_ROOM_MATERIAL_BENCH_ID
+    && fixtureId !== CLAY_ROOM_TRIM_BENCH_ID){
     return false;
   }
   if(!S.clayRoomCompiled || !S.clayRoomRecord) return false;
   S.clayRoomFixtureId = fixtureId;
   S.clayCamOffset = { x: 0, z: 0 };
   S.clayCamZoom = fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
-    ? 0.72 : (fixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
-      : (fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65 : 1));
+      ? 0.72 : (fixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
+      : (fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65
+        : (fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID ? 0.78
+          : (fixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5 : 1))));
   S.boardKey = null;
   const session = clayRoomMovementSession();
   const board = (session && clayRoomMovementBoardFromState(session.state)) || S.clayRoomCompiled.board;
@@ -360,7 +499,9 @@ function clayRoomSetFixture(fixtureId, reason){
       || S.clayRoomSelectedId === S.clayRoomRecord.object.id;
     if((fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
       || fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
-      || fixtureId === CLAY_ROOM_SPRITE_BENCH_ID) && roomOnlySelected){
+      || fixtureId === CLAY_ROOM_SPRITE_BENCH_ID
+      || fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
+      || fixtureId === CLAY_ROOM_TRIM_BENCH_ID) && roomOnlySelected){
       const recipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId];
       const light = recipe && (recipe.lights || []).find(function(row){ return row.enabled !== false; });
       if(light) S.clayRoomWorkbenchSelect(light.id, "fixture switch");
@@ -376,10 +517,27 @@ function clayRoomSetFixture(fixtureId, reason){
       S.clayRoomWorkbenchSelect("compiled-shell", "fixture switch");
       if(typeof S.clayRoomShowTab === "function") S.clayRoomShowTab("structure");
     }
+    if(fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID){
+      S.clayRoomSelectedId = CLAY_MATERIAL_BENCH_FIXTURE.materials[0].id;
+      S.clayRoomWorkbenchSelect(S.clayRoomSelectedId, "fixture switch");
+      if(typeof S.clayRoomShowTab === "function") S.clayRoomShowTab("materials");
+    }
+    if(fixtureId === CLAY_ROOM_TRIM_BENCH_ID){
+      S.clayRoomSelectedId = CLAY_TRIM_BENCH_FIXTURE.structures[0].id;
+      S.clayRoomWorkbenchSelect(S.clayRoomSelectedId, "fixture switch");
+      if(typeof S.clayRoomShowTab === "function") S.clayRoomShowTab("trim");
+    }
   }
   if(typeof S.clayRoomRefreshLights === "function") S.clayRoomRefreshLights();
   if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
   if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+  if(typeof S.clayRoomRefreshMaterials === "function") S.clayRoomRefreshMaterials();
+  if(typeof S.clayRoomRefreshTrim === "function") S.clayRoomRefreshTrim();
+  if(fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID || fixtureId === CLAY_ROOM_TRIM_BENCH_ID){
+    S.clayRoomCatalogCollapsed = true;
+    clayRoomApplyWorkbenchLayout();
+    setTimeout(function(){ if(S.resizeHandler) S.resizeHandler(); }, 0);
+  }
   return true;
 }
 
@@ -445,6 +603,7 @@ function clayRoomLightingSnapshot(label){
         : false,
       pointUuid: t.pl ? t.pl.uuid : null,
       emitterUuid: t.marker ? t.marker.uuid : null,
+      emitterBloomSuppressed: !!(t.marker && t.marker.userData && t.marker.userData.bloomSuppressed),
       materialUuid: t.marker && t.marker.material ? t.marker.material.uuid : null,
       color: colorOf(t.pl),
       distance: t.pl ? n(t.pl.distance) : null,
@@ -628,6 +787,10 @@ const CLAY_DIAGNOSTIC_MATERIALS = {};   // "#rrggbb" -> shared MeshLambertMateri
 function clayDiagnosticMaterialFor(hex){
   if(!CLAY_DIAGNOSTIC_MATERIALS[hex]){
     CLAY_DIAGNOSTIC_MATERIALS[hex] = new THREE.MeshLambertMaterial({ color: hex });
+    // Match the production world-surface shadow contract. Leaving this at THREE's automatic
+    // FrontSide -> back-face shadow rule produces a false bright seam between flush clay blocks.
+    CLAY_DIAGNOSTIC_MATERIALS[hex].shadowSide = THREE.FrontSide;
+    CLAY_DIAGNOSTIC_MATERIALS[hex].userData.shadowContactMode = "front-face";
   }
   return CLAY_DIAGNOSTIC_MATERIALS[hex];
 }
@@ -662,6 +825,7 @@ function clayRoomSurfaceMode(){
 function clayRoomSurfaceRoleFor(node, ancestorRole){
   if(!node) return ancestorRole || null;
   const ud = node.userData || {};
+  if(ud.clayMaterialBenchSurface) return "material-proof";            // CL-F04 candidate material
   const byKind = clayDiagnosticRoleForKind(ud.interiorKind);           // interiorBuildInstancedMesh / room-shell / kit-shell
   if(byKind) return byKind;
   // recipe v2: the standee support strip is its OWN surface under test (clay-routed so cast
@@ -850,11 +1014,14 @@ function clayRoomSurfaceCensus(){
    structure-part assemblers own the remaining catalog atoms. All meshes remain in the same scene,
    camera, lights, shadows, tone map, and diagnostic-surface router as gameplay. */
 function clayStructureMaterial(color){
-  return new THREE.MeshStandardMaterial({
+  const material = new THREE.MeshStandardMaterial({
     color: color || CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor,
     roughness: 0.96,
     metalness: 0
   });
+  material.shadowSide = THREE.FrontSide;
+  material.userData.shadowContactMode = "front-face";
+  return material;
 }
 function clayStructureTag(mesh, specId, kind){
   mesh.castShadow = kind !== "floor";
@@ -916,6 +1083,51 @@ const CLAY_SOCKET_TYPE_COLORS = {
   "walk-surface": 0x66dfa0, "top-surface": 0x6f8fff, "terrain-join": 0xc08a5a,
   "hinge": 0xff7ad8, "catch": 0xffe066, "floor-mount": 0xb9c2cc, "wall-mount": 0xb9c2cc,
 };
+function clayStructureOverlayLabel(text, x, y, z, color, view, specId){
+  const canvas = document.createElement("canvas");
+  canvas.width = 256;
+  canvas.height = 64;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "rgba(12,17,22,0.88)";
+  ctx.fillRect(0, 4, 256, 56);
+  ctx.strokeStyle = "#" + new THREE.Color(color).getHexString();
+  ctx.lineWidth = 4;
+  ctx.strokeRect(2, 6, 252, 52);
+  ctx.fillStyle = "#f4f7fa";
+  ctx.font = "700 23px ui-monospace, monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(String(text || "").toUpperCase(), 128, 33);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: texture,
+    transparent: true,
+    depthTest: false,
+    depthWrite: false,
+    toneMapped: false
+  }));
+  sprite.position.set(x, y, z);
+  sprite.scale.set(0.9, 0.225, 1);
+  sprite.userData.interiorKind = "clay-diagnostic-overlay";
+  sprite.userData.structureOverlayView = view;
+  sprite.userData.structureSpecId = specId;
+  sprite.renderOrder = 74;
+  return sprite;
+}
+function clayStructureSocketLabel(socket){
+  const axis = socket.axis || {};
+  const direction = Math.abs(axis.x || 0) > Math.abs(axis.z || 0)
+    ? ((axis.x || 0) > 0 ? "E" : "W")
+    : ((axis.z || 0) > 0 ? "S" : ((axis.z || 0) < 0 ? "N" : ""));
+  const shortType = String(socket.type || "")
+    .replace(/^butt-join-./, "BUTT")
+    .replace("-surface", "")
+    .replace("-mount", "")
+    .replace("-join", "");
+  return (direction ? direction + " · " : "") + shortType;
+}
 function clayStructureAddSocketOverlay(group, spec, rawFloor, origin){
   const at = spec.at;
   const lift = spec.lift || 0;
@@ -938,11 +1150,20 @@ function clayStructureAddSocketOverlay(group, spec, rawFloor, origin){
       const headR = new THREE.Vector3(tip.x - ax * 0.14 - px * 0.1, y, tip.z - az * 0.14 - pz * 0.1);
       group.add(clayStructureStripBetween(headL, tip, color, "sockets", spec.id, 0.05));
       group.add(clayStructureStripBetween(headR, tip, color, "sockets", spec.id, 0.05));
+      group.add(clayStructureOverlayLabel(
+        clayStructureSocketLabel(socket),
+        tip.x + ax * 0.18, y + 0.18 + index * 0.04, tip.z + az * 0.18,
+        color, "sockets", spec.id
+      ));
     } else {
       group.add(clayStructureStripBetween(
         new THREE.Vector3(x - 0.16, y, z), new THREE.Vector3(x + 0.16, y, z), color, "sockets", spec.id, 0.045));
       group.add(clayStructureStripBetween(
         new THREE.Vector3(x, y, z - 0.16), new THREE.Vector3(x, y, z + 0.16), color, "sockets", spec.id, 0.045));
+      group.add(clayStructureOverlayLabel(
+        clayStructureSocketLabel(socket),
+        x, y + 0.22 + index * 0.05, z, color, "sockets", spec.id
+      ));
     }
   });
 }
@@ -956,7 +1177,7 @@ function clayStructureAddAccessOverlay(group, spec, rawFloor, origin){
   const at = spec.at;
   const lift = spec.lift || 0;
   const width = spec.width || spec.length || ((spec.radius || 0.35) * 2) || 1;
-  const depth = spec.run || spec.thickness || ((spec.radius || 0.35) * 2) || 0.45;
+  const depth = spec.depth || spec.run || spec.thickness || ((spec.radius || 0.35) * 2) || 0.45;
   const hw = Math.max(0.22, width / 2), hd = Math.max(0.18, depth / 2);
   const cx0 = at.x - origin.cx, cz0 = at.z - origin.cz;
   const h = (spec.rise || spec.height || 0.1);
@@ -964,8 +1185,14 @@ function clayStructureAddAccessOverlay(group, spec, rawFloor, origin){
   const topY = rawFloor + lift + h + 0.025;
   const access = spec.access || {};
   const topClass = access.top || access.treads || null;
-  const sideClass = access.sides || access.shaft || access.faces || null;
+  const sideClass = access.sides || access.shaft || access.faces || access.inner || access.outer || null;
   const colorFor = function(cls){ return CLAY_ACCESS_CLASS_COLORS[cls] != null ? CLAY_ACCESS_CLASS_COLORS[cls] : 0xf3bd55; };
+  const accessLabel = function(face, cls){
+    if(face === "TOP" && cls === "walk") return "TOP · STANDABLE";
+    if(cls === "climb-dc") return face + " · ROLL TO CLIMB";
+    if(cls === "climb-cost") return face + " · CLIMB COST";
+    return face + " · " + cls;
+  };
   const frame = function(points, cls){
     if(!cls) return;
     for(let i = 0; i < points.length - 1; i++){
@@ -987,6 +1214,12 @@ function clayStructureAddAccessOverlay(group, spec, rawFloor, origin){
       new THREE.Vector3(cx0 - hw, topY, cz0 - hd)
     ], topClass);
   }
+  if(topClass){
+    group.add(clayStructureOverlayLabel(
+      accessLabel("TOP", topClass),
+      cx0, topY + 0.19, cz0, colorFor(topClass), "access", spec.id
+    ));
+  }
   // SIDE faces (the two camera-facing planes under the fixed production camera: +x and +z)
   if(sideClass){
     frame([
@@ -999,6 +1232,72 @@ function clayStructureAddAccessOverlay(group, spec, rawFloor, origin){
       new THREE.Vector3(cx0 + hw, topY, cz0 + hd), new THREE.Vector3(cx0 - hw, topY, cz0 + hd),
       new THREE.Vector3(cx0 - hw, baseY, cz0 + hd)
     ], sideClass);
+    group.add(clayStructureOverlayLabel(
+      accessLabel("SIDE", sideClass),
+      cx0 + hw + 0.08, baseY + Math.max(0.22, h * 0.55), cz0 + hd + 0.08,
+      colorFor(sideClass), "access", spec.id
+    ));
+  }
+}
+const CLAY_STRUCTURE_CONTACT_EMBED = 0.02;
+function clayStructureCornerStair(group, spec, rawFloor, origin, add){
+  const size = Math.max(0.75, spec.run || spec.width || 1);
+  const steps = Math.max(2, spec.steps || 3);
+  const tread = size / steps;
+  const minX = spec.at.x - origin.cx - size / 2;
+  const minZ = spec.at.z - origin.cz - size / 2;
+  const maxX = minX + size;
+  const maxZ = minZ + size;
+  for(let i = 0; i < steps; i++){
+    const height = spec.rise * (i + 1) / steps;
+    const geometryHeight = height + CLAY_STRUCTURE_CONTACT_EMBED;
+    const remaining = size - i * tread;
+    const startX = minX + i * tread;
+    const startZ = minZ + i * tread;
+    const tagStep = function(mesh){
+      mesh.userData.structureStepIndex = i;
+      mesh.userData.structureStepCount = steps;
+      mesh.userData.structureStepAxis = "corner";
+      mesh.userData.structureStepDirection = 1;
+      mesh.userData.structureStepSurfaceY = rawFloor + (spec.lift || 0) + height;
+      mesh.userData.structureStepTreadDepth = tread;
+      mesh.userData.structureGridShape = "rect";
+      return mesh;
+    };
+    // INNER is the inverse of OUTER, not another shrinking outer corner. Its smallest bridge tread
+    // is the LOWEST surface at the concave corner; successively higher non-overlapping L-bands expand
+    // away from it and continue both incoming flights' rise. OUTER keeps the convex open-quadrant
+    // wrap: a large low L contracts toward its small high corner.
+    if(spec.kind === "stair-inner-corner"){
+      const span = tread * (i + 1);
+      const bandX = maxX - span;
+      const bandZ = maxZ - span;
+      tagStep(add(
+        new THREE.Mesh(new THREE.BoxGeometry(span, geometryHeight, tread), clayStructureMaterial()),
+        rawFloor + height / 2 - CLAY_STRUCTURE_CONTACT_EMBED / 2,
+        bandX + span / 2, bandZ + tread / 2, "riser"
+      ));
+      if(span > tread + 0.001){
+        tagStep(add(
+          new THREE.Mesh(new THREE.BoxGeometry(tread, geometryHeight, span - tread), clayStructureMaterial()),
+          rawFloor + height / 2 - CLAY_STRUCTURE_CONTACT_EMBED / 2,
+          bandX + tread / 2, bandZ + tread + (span - tread) / 2, "riser"
+        ));
+      }
+    } else {
+      tagStep(add(
+        new THREE.Mesh(new THREE.BoxGeometry(remaining, geometryHeight, tread), clayStructureMaterial()),
+        rawFloor + height / 2 - CLAY_STRUCTURE_CONTACT_EMBED / 2,
+        startX + remaining / 2, startZ + tread / 2, "riser"
+      ));
+      if(remaining > tread + 0.001){
+        tagStep(add(
+          new THREE.Mesh(new THREE.BoxGeometry(tread, geometryHeight, remaining - tread), clayStructureMaterial()),
+          rawFloor + height / 2 - CLAY_STRUCTURE_CONTACT_EMBED / 2,
+          startX + tread / 2, startZ + tread + (remaining - tread) / 2, "riser"
+        ));
+      }
+    }
   }
 }
 function clayStructureBuildPart(group, spec, rawFloor, origin){
@@ -1007,44 +1306,145 @@ function clayStructureBuildPart(group, spec, rawFloor, origin){
     // spec.lift: assembled pieces may stand on the shell's own tiers (world-unit vertical offset)
     mesh.position.set(x == null ? spec.at.x - origin.cx : x, y + (spec.lift || 0), z == null ? spec.at.z - origin.cz : z);
     clayStructureTag(mesh, spec.id, kind || "furniture");
+    mesh.userData.structureAssembly = !!spec.assembly;
+    mesh.userData.structureProofFamily = spec.proofFamily || null;
+    mesh.userData.structureSpecimenPhysical = true;
     group.add(mesh);
+    return mesh;
+  }
+  function groundBox(width, height, depth, x, z, kind){
+    return add(
+      new THREE.Mesh(
+        new THREE.BoxGeometry(width, height + CLAY_STRUCTURE_CONTACT_EMBED, depth),
+        mat.clone()
+      ),
+      rawFloor + height / 2 - CLAY_STRUCTURE_CONTACT_EMBED / 2,
+      x, z, kind
+    );
+  }
+  function addConnectorBlock(x, z, width, height, depth, kind){
+    const block = groundBox(width, height, depth, x, z, kind || "wall");
+    block.userData.structureConnector = true;
+    return block;
+  }
+  function markWalkSurface(mesh, surfaceY, shape){
+    if(!mesh) return mesh;
+    mesh.userData.structureWalkSurfaceY = surfaceY;
+    mesh.userData.structureGridShape = shape || "rect";
     return mesh;
   }
   if(spec.kind === "wall-run"){
     const dims = spec.axis === "z"
       ? [spec.thickness, spec.height, spec.length]
       : [spec.length, spec.height, spec.thickness];
-    add(new THREE.Mesh(new THREE.BoxGeometry(dims[0], dims[1], dims[2]), mat),
-      rawFloor + spec.height / 2, null, null, "wall");
+    const wallRun = groundBox(dims[0], dims[1], dims[2], null, null, "wall");
+    if(spec.access && spec.access.top === "walk"){
+      markWalkSurface(wallRun, rawFloor + (spec.lift || 0) + spec.height, "rect");
+    }
+    const half = spec.length / 2;
+    const cap = Math.max(0.3, spec.thickness + 0.12);
+    if(spec.axis === "z"){
+      addConnectorBlock(spec.at.x - origin.cx, spec.at.z - origin.cz - half, cap, spec.height, cap, "wall");
+      addConnectorBlock(spec.at.x - origin.cx, spec.at.z - origin.cz + half, cap, spec.height, cap, "wall");
+    } else {
+      addConnectorBlock(spec.at.x - origin.cx - half, spec.at.z - origin.cz, cap, spec.height, cap, "wall");
+      addConnectorBlock(spec.at.x - origin.cx + half, spec.at.z - origin.cz, cap, spec.height, cap, "wall");
+    }
   } else if(spec.kind === "t-junction"){
-    add(new THREE.Mesh(new THREE.BoxGeometry(spec.length, spec.height, spec.thickness), mat),
-      rawFloor + spec.height / 2, null, null, "wall");
+    groundBox(spec.length, spec.height, spec.thickness, null, null, "wall");
     // Branch ends flush on the main run's outer face: no overlapping internal end volume.
     const branchZ = spec.at.z - origin.cz + spec.thickness / 2 + spec.branchLength / 2;
-    add(new THREE.Mesh(new THREE.BoxGeometry(spec.thickness, spec.height, spec.branchLength), mat.clone()),
-      rawFloor + spec.height / 2, spec.at.x - origin.cx, branchZ, "wall");
+    groundBox(spec.thickness, spec.height, spec.branchLength, spec.at.x - origin.cx, branchZ, "wall");
+    addConnectorBlock(
+      spec.at.x - origin.cx, spec.at.z - origin.cz + spec.thickness / 2,
+      spec.thickness + 0.16, spec.height, spec.thickness + 0.16, "wall"
+    );
   } else if(spec.kind === "stair"){
     const tread = spec.run / spec.steps;
+    const direction = spec.direction === -1 ? -1 : 1;
+    const axis = spec.axis === "x" ? "x" : "z";
     for(let i = 0; i < spec.steps; i++){
       const height = spec.rise * (i + 1) / spec.steps;
-      const z = spec.at.z - origin.cz - spec.run / 2 + tread * (i + 0.5);
-      add(new THREE.Mesh(new THREE.BoxGeometry(spec.width, height, tread), mat.clone()),
-        rawFloor + height / 2, spec.at.x - origin.cx, z, "riser");
+      const along = direction * (-spec.run / 2 + tread * (i + 0.5));
+      const x = spec.at.x - origin.cx + (axis === "x" ? along : 0);
+      const z = spec.at.z - origin.cz + (axis === "z" ? along : 0);
+      // Treads interpenetrate their neighbours by one contact embed on each edge. This removes the
+      // zoom-level light slit that exact coplanar faces can expose after AO/downsample filtering.
+      const step = axis === "x"
+        ? groundBox(tread + CLAY_STRUCTURE_CONTACT_EMBED * 2, height, spec.width, x, z, "riser")
+        : groundBox(spec.width, height, tread + CLAY_STRUCTURE_CONTACT_EMBED * 2, x, z, "riser");
+      step.userData.structureStepIndex = i;
+      step.userData.structureStepCount = spec.steps;
+      step.userData.structureStepAxis = axis;
+      step.userData.structureStepDirection = direction;
+      step.userData.structureStepSurfaceY = rawFloor + (spec.lift || 0) + height;
+      step.userData.structureStepTreadDepth = tread;
+      step.userData.structureGridShape = "rect";
     }
-    const landing = new THREE.Mesh(new THREE.BoxGeometry(spec.width, spec.rise, 0.42), mat.clone());
-    add(landing, rawFloor + spec.rise / 2, spec.at.x - origin.cx, spec.at.z - origin.cz + spec.run / 2 + 0.21, "riser");
+  } else if(spec.kind === "stair-inner-corner" || spec.kind === "stair-outer-corner"){
+    clayStructureCornerStair(group, spec, rawFloor, origin, add);
+  } else if(spec.kind === "platform"){
+    const thickness = spec.thickness || 0.18;
+    const platform = add(
+      new THREE.Mesh(
+        new THREE.BoxGeometry(
+          spec.width,
+          thickness + CLAY_STRUCTURE_CONTACT_EMBED * 2,
+          spec.depth || spec.run || 1
+        ),
+        mat.clone()
+      ),
+      rawFloor - thickness / 2,
+      spec.at.x - origin.cx,
+      spec.at.z - origin.cz,
+      "floor"
+    );
+    platform.userData.structureWalkSurfaceY = rawFloor + (spec.lift || 0);
+    platform.userData.structureGridShape = "rect";
   } else if(spec.kind === "ramp"){
-    add(new THREE.Mesh(clayStructureRampGeometry(spec.width, spec.run, spec.rise), mat),
-      rawFloor, null, null, "riser");
+    const ramp = add(new THREE.Mesh(clayStructureRampGeometry(spec.width, spec.run, spec.rise), mat),
+      rawFloor - CLAY_STRUCTURE_CONTACT_EMBED, null, null, "riser");
+    ramp.userData.structureRampGrid = {
+      width: spec.width,
+      run: spec.run,
+      rise: spec.rise,
+      lowY: rawFloor + (spec.lift || 0),
+      highY: rawFloor + (spec.lift || 0) + spec.rise
+    };
   } else if(spec.kind === "blocker"){
-    add(new THREE.Mesh(new THREE.BoxGeometry(spec.length, spec.height, spec.thickness), mat),
-      rawFloor + spec.height / 2, null, null, "wall");
+    const dims = spec.axis === "z"
+      ? [spec.thickness, spec.height, spec.length]
+      : [spec.length, spec.height, spec.thickness];
+    const blocker = groundBox(dims[0], dims[1], dims[2], null, null, "wall");
+    if(spec.access && spec.access.top === "walk"){
+      markWalkSurface(blocker, rawFloor + (spec.lift || 0) + spec.height, "rect");
+    }
+    const half = spec.length / 2;
+    const cap = Math.max(0.3, spec.thickness + 0.12);
+    if(spec.axis === "z"){
+      addConnectorBlock(spec.at.x - origin.cx, spec.at.z - origin.cz - half, cap, spec.height, cap, "wall");
+      addConnectorBlock(spec.at.x - origin.cx, spec.at.z - origin.cz + half, cap, spec.height, cap, "wall");
+    } else {
+      addConnectorBlock(spec.at.x - origin.cx - half, spec.at.z - origin.cz, cap, spec.height, cap, "wall");
+      addConnectorBlock(spec.at.x - origin.cx + half, spec.at.z - origin.cz, cap, spec.height, cap, "wall");
+    }
   } else if(spec.kind === "support-square"){
-    add(new THREE.Mesh(new THREE.BoxGeometry(spec.width, spec.height, spec.width), mat),
-      rawFloor + spec.height / 2, null, null, "pillar");
+    addConnectorBlock(null, null, spec.width + 0.14, 0.12, spec.width + 0.14, "foundation");
+    const squareSupport = groundBox(spec.width, spec.height, spec.width, null, null, "pillar");
+    markWalkSurface(squareSupport, rawFloor + (spec.lift || 0) + spec.height, "rect");
   } else if(spec.kind === "support-round"){
-    add(new THREE.Mesh(new THREE.CylinderGeometry(spec.radius, spec.radius * 1.04, spec.height, 20), mat),
-      rawFloor + spec.height / 2, null, null, "pillar");
+    const plinth = new THREE.Mesh(
+      new THREE.CylinderGeometry(spec.radius * 1.25, spec.radius * 1.3, 0.12 + CLAY_STRUCTURE_CONTACT_EMBED, 20),
+      mat.clone()
+    );
+    add(plinth, rawFloor + 0.06 - CLAY_STRUCTURE_CONTACT_EMBED / 2, null, null, "foundation");
+    const shaft = new THREE.Mesh(
+      new THREE.CylinderGeometry(spec.radius, spec.radius * 1.04, spec.height + CLAY_STRUCTURE_CONTACT_EMBED, 20),
+      mat
+    );
+    add(shaft, rawFloor + spec.height / 2 - CLAY_STRUCTURE_CONTACT_EMBED / 2, null, null, "pillar");
+    markWalkSurface(shaft, rawFloor + (spec.lift || 0) + spec.height, "circle");
+    shaft.userData.structureGridRadius = spec.radius;
   }
   clayStructureAddSocketOverlay(group, spec, rawFloor, origin);
   clayStructureAddAccessOverlay(group, spec, rawFloor, origin);
@@ -1097,11 +1497,36 @@ function clayStructureBuildOpening(group, shell, fixture, tierHeights, origin){
 }
 function clayRoomApplyStructureViewVisibility(view){
   const group = S.clayRoomStructureBenchGroup;
+  const focused = S.clayRoomSelectedId;
+  const focusOverlay = view === "sockets" || view === "access";
   if(group){
     group.traverse(function(node){
-      const ownView = node.userData && node.userData.structureOverlayView;
-      if(ownView) node.visible = ownView === view;
+      const data = node.userData || {};
+      const ownView = data.structureOverlayView;
+      const specId = data.structureSpecId;
+      if(ownView){
+        node.visible = ownView === view && (!focusOverlay || !focused || specId === focused);
+      } else if(data.structureNegativeControl){
+        node.visible = view === "negative";
+      } else if(data.structureSpecimenPhysical){
+        if(view === "stairs"){
+          node.visible = !!data.structureProofFamily
+            && (!S.clayRoomStructureProofFamilyFocus
+              || data.structureProofFamily === S.clayRoomStructureProofFamilyFocus);
+        } else if(view === "assembled" || view === "strategic"){
+          node.visible = !!data.structureAssembly;
+        } else if(view === "sockets" || view === "access" || view === "climb"){
+          node.visible = !!focused && specId === focused;
+        } else {
+          node.visible = false;
+        }
+      }
     });
+  }
+  if(S.clayRoomRecord && S.clayRoomCompiled){
+    clayRoomDisposeSeamGrid();
+    S.clayGridMesh = clayRoomBuildSeamGrid(S.clayRoomRecord, S.clayRoomCompiled.room);
+    clayRoomTagAllProvenance();
   }
   clayRoomApplyCamPose();
   if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
@@ -1119,7 +1544,22 @@ function clayRoomRebuildStructureBench(reason){
 }
 function clayRoomSetStructureView(view){
   if(CLAY_STRUCTURE_BENCH_FIXTURE.views.indexOf(view) < 0) return false;
+  if(view === "sockets" || view === "access" || view === "climb"){
+    const focused = CLAY_STRUCTURE_BENCH_FIXTURE.pieces.some(function(spec){
+      return spec.id === S.clayRoomSelectedId;
+    });
+    const needsAccessExample = (view === "access" || view === "climb")
+      && S.clayRoomSelectedId === "straight-wall";
+    if(!focused || needsAccessExample){
+      const fallbackId = view === "sockets" ? "straight-wall" : "square-support";
+      S.clayRoomSelectedId = fallbackId;
+      if(typeof S.clayRoomWorkbenchSelect === "function"){
+        S.clayRoomWorkbenchSelect(fallbackId, "structure " + view + " focus");
+      }
+    }
+  }
   const wasStrategic = S.clayRoomStructureView === "strategic";
+  if(view === "stairs") S.clayRoomStructureProofFamilyFocus = null;
   S.clayRoomStructureView = view;
   const isStrategic = view === "strategic";
   // Strategic mode changes the compiler input: every upper is built. Crossing that boundary
@@ -1160,9 +1600,611 @@ function clayRoomSetStructureDoorState(state){
   );
   return clayRoomRebuildStructureBench("clayroom-structure-door-" + state);
 }
+function clayRoomStructureClimbSession(){
+  return S.clayRoomStructureClimbSession || null;
+}
+function clayRoomStructureClimbActor(){
+  const fixture = S.clayRoomRecord && clayRoomStructureBenchFixtureFrom(S.clayRoomRecord);
+  if(!fixture) return null;
+  return clayRoomNodeForSelection(fixture.cutawayWitness.id)
+    || clayRoomNodeForSelection(fixture.cutawayWitness.pieceSlug);
+}
+function clayRoomStructureClimbSessionEnsure(){
+  if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID) return null;
+  let session = S.clayRoomStructureClimbSession;
+  const actor = clayRoomStructureClimbActor();
+  if(!session){
+    session = S.clayRoomStructureClimbSession = {
+      version: 1,
+      target: null,
+      last: null,
+      busy: false,
+      phase: "ready",
+      athleticsModifier: CLAY_STRUCTURE_KIT_CATALOG.climbLaw.defaultAthleticsModifier,
+      actorBase: actor ? {
+        x: actor.position.x,
+        y: actor.position.y,
+        z: actor.position.z
+      } : null
+    };
+  } else if(actor && !session.actorBase){
+    session.actorBase = { x: actor.position.x, y: actor.position.y, z: actor.position.z };
+  }
+  return session;
+}
+function clayRoomStructureClimbTargetSpec(id, hitNode){
+  const fixture = S.clayRoomRecord && clayRoomStructureBenchFixtureFrom(S.clayRoomRecord);
+  const authored = fixture && fixture.pieces.find(function(spec){ return spec.id === id; });
+  if(authored) return authored;
+  const kind = hitNode && hitNode.userData && hitNode.userData.interiorKind;
+  if(/^compiled-/.test(String(id || "")) && kind === "wall"){
+    return {
+      id: id,
+      label: "compiled 10 ft wall",
+      kind: "wall-run",
+      height: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.storeyWorldUnits,
+      climbDC: 15,
+      access: { faces: "climb-dc", top: "walk" },
+      entry: {
+        normal: "Athletics climb, then balance",
+        small: "Athletics climb, then balance",
+        topCheck: "balance"
+      }
+    };
+  }
+  return null;
+}
+function clayRoomStructureClimbTargetBox(id, hitNode){
+  const box = new THREE.Box3();
+  let found = false;
+  if(/^compiled-/.test(String(id || "")) && hitNode && hitNode.isMesh){
+    box.setFromObject(hitNode);
+    found = !box.isEmpty();
+  } else if(S.clayRoomStructureBenchGroup){
+    S.clayRoomStructureBenchGroup.traverse(function(node){
+      if(!node.isMesh || !node.userData || !node.userData.structureSpecimenPhysical) return;
+      if(node.userData.structureSpecId !== id) return;
+      const partBox = new THREE.Box3().setFromObject(node);
+      if(partBox.isEmpty()) return;
+      if(!found) box.copy(partBox);
+      else box.union(partBox);
+      found = true;
+    });
+  }
+  return found ? box : null;
+}
+function clayRoomStructureClimbTargetSet(id, hitNode, hitPoint){
+  const session = clayRoomStructureClimbSessionEnsure();
+  if(!session || session.busy) return false;
+  const spec = clayRoomStructureClimbTargetSpec(id, hitNode);
+  if(!spec) return false;
+  const access = spec.access || {};
+  const climbClass = access.shaft || access.faces || access.inner || access.outer || null;
+  if(climbClass !== "climb-dc") return false;
+  const box = clayRoomStructureClimbTargetBox(id, hitNode);
+  if(!box) return false;
+  const center = box.getCenter(new THREE.Vector3());
+  const point = hitPoint && hitPoint.isVector3 ? hitPoint : center;
+  const actor = clayRoomStructureClimbActor();
+  session.target = {
+    id: spec.id,
+    label: spec.label,
+    kind: spec.kind,
+    access: spec.access,
+    entry: spec.entry || null,
+    climbDC: spec.climbDC || CLAY_STRUCTURE_KIT_CATALOG.climbLaw.defaultDc,
+    surfaceY: box.max.y,
+    perchWorld: {
+      x: spec.kind === "support-square" || spec.kind === "support-round" ? center.x : point.x,
+      // A standee group's origin is the TOP of its own base; the base extends downward by
+      // INTERIOR_BASE_HEIGHT. Seating the group origin directly on box.max.y embedded most of the
+      // plinth in a column top. Measure the rounded base's real bounding box (including its bevel)
+      // so the base BOTTOM clears the support by the same 0.006 u used everywhere else.
+      y: clayRoomStructureStandeeOriginYForSurface(actor, box.max.y),
+      z: spec.kind === "support-square" || spec.kind === "support-round" ? center.z : point.z
+    }
+  };
+  session.last = null;
+  session.phase = "targeted";
+  if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+  return true;
+}
+function clayRoomStructureStepMesh(id, stepIndex){
+  let found = null;
+  if(!S.clayRoomStructureBenchGroup) return found;
+  S.clayRoomStructureBenchGroup.traverse(function(node){
+    if(found || !node.isMesh || !node.userData) return;
+    if(node.userData.structureSpecId !== id) return;
+    if(Number(node.userData.structureStepIndex) !== Number(stepIndex)) return;
+    found = node;
+  });
+  return found;
+}
+function clayRoomStructureSupportLock(actor, worldYaw, surfaceY){
+  if(!actor || !actor.userData) return;
+  actor.userData.claySupportWorldYaw = worldYaw;
+  actor.userData.claySupportSurfaceY = surfaceY;
+  if(actor.children){
+    actor.children.forEach(function(child){
+      if(!child || !child.userData || !child.userData.standeeBase) return;
+      child.rotation.order = "YXZ";
+      child.rotation.y = worldYaw - (actor.rotation ? actor.rotation.y || 0 : 0);
+    });
+  }
+  if(typeof syncStandeeContactBlob === "function") syncStandeeContactBlob(actor);
+}
+function clayRoomStructureSupportUnlock(actor){
+  if(!actor || !actor.userData) return;
+  delete actor.userData.claySupportWorldYaw;
+  delete actor.userData.claySupportSurfaceY;
+  if(actor.children){
+    actor.children.forEach(function(child){
+      if(child && child.userData && child.userData.standeeBase) child.rotation.y = 0;
+    });
+  }
+  if(typeof syncStandeeContactBlob === "function") syncStandeeContactBlob(actor);
+}
+function clayRoomStructureBaseClearanceAudit(actor, surfaceY){
+  if(!actor) return null;
+  actor.updateMatrixWorld(true);
+  let base = null;
+  if(actor.children){
+    base = actor.children.find(function(child){
+      return child && child.userData && child.userData.standeeBase;
+    }) || null;
+  }
+  if(!base) return null;
+  const baseBox = new THREE.Box3().setFromObject(base);
+  const clearance = baseBox.min.y - surfaceY;
+  return {
+    surfaceY: +surfaceY.toFixed(5),
+    baseBottomY: +baseBox.min.y.toFixed(5),
+    baseTopY: +baseBox.max.y.toFixed(5),
+    clearance: +clearance.toFixed(5),
+    baseBottomOnSurface: clearance >= -0.0001 && clearance <= 0.01
+  };
+}
+function clayRoomStructureStandeeOriginYForSurface(actor, surfaceY){
+  if(!actor) return interiorStandeeContactY(surfaceY);
+  actor.updateMatrixWorld(true);
+  let base = null;
+  if(actor.children){
+    base = actor.children.find(function(child){
+      return child && child.userData && child.userData.standeeBase;
+    }) || null;
+  }
+  if(!base) return interiorStandeeContactY(surfaceY);
+  const actorWorld = actor.getWorldPosition(new THREE.Vector3());
+  const baseBox = new THREE.Box3().setFromObject(base);
+  const originAboveBottom = actorWorld.y - baseBox.min.y;
+  const productionClearance = interiorStandeeContactY(0) - INTERIOR_BASE_HEIGHT;
+  return surfaceY + productionClearance + originAboveBottom;
+}
+function clayRoomStructureParkingAudit(actor, step, id, stepIndex, surfaceY, worldYaw){
+  actor.updateMatrixWorld(true);
+  step.updateMatrixWorld(true);
+  const treadBox = new THREE.Box3().setFromObject(step);
+  const treadCenter = treadBox.getCenter(new THREE.Vector3());
+  let base = null;
+  if(actor.children){
+    base = actor.children.find(function(child){
+      return child && child.userData && child.userData.standeeBase;
+    }) || null;
+  }
+  const baseBox = base ? new THREE.Box3().setFromObject(base) : new THREE.Box3();
+  const axis = step.userData.structureStepAxis === "x" ? "x" : "z";
+  const alongSpan = axis === "x"
+    ? treadBox.max.x - treadBox.min.x
+    : treadBox.max.z - treadBox.min.z;
+  const crossSpan = axis === "x"
+    ? treadBox.max.z - treadBox.min.z
+    : treadBox.max.x - treadBox.min.x;
+  const supportAlong = Number(actor.userData.interiorBaseDepth) || INTERIOR_BASE_TREAD_DEPTH;
+  const supportCross = Number(actor.userData.interiorBaseWidth) || supportAlong;
+  const alongMargin = (alongSpan - supportAlong) / 2;
+  const crossMargin = (crossSpan - supportCross) / 2;
+  const clearance = base && !baseBox.isEmpty() ? baseBox.min.y - surfaceY : null;
+  return {
+    version: 1,
+    specId: id,
+    stepIndex: Number(stepIndex),
+    stepCount: Number(step.userData.structureStepCount),
+    axis: axis,
+    direction: Number(step.userData.structureStepDirection),
+    surfaceY: +surfaceY.toFixed(5),
+    targetWorld: {
+      x: +treadCenter.x.toFixed(5),
+      y: +actor.getWorldPosition(new THREE.Vector3()).y.toFixed(5),
+      z: +treadCenter.z.toFixed(5)
+    },
+    supportWorldYawDeg: +(worldYaw * 180 / Math.PI).toFixed(1),
+    tread: {
+      along: +alongSpan.toFixed(5),
+      cross: +crossSpan.toFixed(5),
+      logicalDepth: +Number(step.userData.structureStepTreadDepth).toFixed(5)
+    },
+    support: {
+      along: +supportAlong.toFixed(5),
+      cross: +supportCross.toFixed(5),
+      alongMargin: +alongMargin.toFixed(5),
+      crossMargin: +crossMargin.toFixed(5),
+      baseBottomClearance: clearance == null ? null : +clearance.toFixed(5)
+    },
+    centered: Math.abs(actor.getWorldPosition(new THREE.Vector3()).x - treadCenter.x) < 0.001
+      && Math.abs(actor.getWorldPosition(new THREE.Vector3()).z - treadCenter.z) < 0.001,
+    baseBottomOnSurface: clearance != null && clearance >= -0.0001 && clearance <= 0.01,
+    balanced: alongMargin >= -0.0001 && crossMargin >= -0.0001,
+    clipsTreadEdge: alongMargin < -0.0001 || crossMargin < -0.0001
+  };
+}
+function clayRoomStructureParkActorOnStep(id, stepIndex, options){
+  const actor = clayRoomStructureClimbActor();
+  const step = clayRoomStructureStepMesh(id, stepIndex);
+  if(!actor || !step) return { ok: false, reason: actor ? "step-not-found" : "actor-not-found" };
+  const stepBox = new THREE.Box3().setFromObject(step);
+  const center = stepBox.getCenter(new THREE.Vector3());
+  const surfaceY = stepBox.max.y;
+  const axis = step.userData.structureStepAxis === "x" ? "x" : "z";
+  const worldYaw = axis === "x" ? Math.PI / 2 : 0;
+  const worldTarget = new THREE.Vector3(
+    center.x,
+    clayRoomStructureStandeeOriginYForSurface(actor, surfaceY),
+    center.z
+  );
+  const localTarget = actor.parent ? actor.parent.worldToLocal(worldTarget.clone()) : worldTarget;
+  clayRoomStructureSupportLock(actor, worldYaw, surfaceY);
+  const finish = function(){
+    actor.position.copy(localTarget);
+    clayRoomStructureSupportLock(actor, worldYaw, surfaceY);
+    S.clayRoomStructureParking = clayRoomStructureParkingAudit(
+      actor, step, id, stepIndex, surfaceY, worldYaw
+    );
+    markDirty();
+    scheduleRender();
+  };
+  if(options && options.animate){
+    bindStandeeCtx(buildTheaterCtx());
+    const started = playStandeeVerb(actor, "move-step", { targetPos: localTarget, onDone: finish });
+    if(started) startTweenLoop();
+    else finish();
+  } else {
+    finish();
+  }
+  return Object.assign({ ok: true }, S.clayRoomStructureParking || {
+    specId: id, stepIndex: Number(stepIndex), pending: true
+  });
+}
+function clayRoomStructureClimbReset(){
+  const session = clayRoomStructureClimbSessionEnsure();
+  if(!session || session.busy) return false;
+  const actor = clayRoomStructureClimbActor();
+  if(actor && session.actorBase){
+    actor.position.set(session.actorBase.x, session.actorBase.y, session.actorBase.z);
+    clayRoomStructureSupportUnlock(actor);
+  }
+  S.clayRoomStructureParking = null;
+  S.clayRoomStructurePerchAudit = null;
+  session.last = null;
+  session.phase = session.target ? "targeted" : "ready";
+  markDirty();
+  scheduleRender();
+  if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+  return true;
+}
+function clayRoomStructureClimbAttempt(d20, athleticsModifier){
+  const session = clayRoomStructureClimbSessionEnsure();
+  if(!session || session.busy || !session.target){
+    return { ok: false, reason: session && session.busy ? "climb-animation-active" : "climb-target-required" };
+  }
+  const result = clayStructureClimbResolve(session.target, {
+    d20: Number(d20),
+    athleticsModifier: Number(athleticsModifier)
+  });
+  if(!result.ok){
+    session.last = result;
+    if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+    return result;
+  }
+  session.last = result;
+  session.athleticsModifier = result.modifier;
+  session.phase = result.passed ? "climbing" : "slipping";
+  const actor = clayRoomStructureClimbActor();
+  if(!actor || !session.actorBase){
+    session.phase = result.outcome;
+    if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+    return result;
+  }
+  actor.position.set(session.actorBase.x, session.actorBase.y, session.actorBase.z);
+  const perchWorld = new THREE.Vector3(
+    session.target.perchWorld.x,
+    session.target.perchWorld.y,
+    session.target.perchWorld.z
+  );
+  const perchLocal = actor.parent ? actor.parent.worldToLocal(perchWorld.clone()) : perchWorld;
+  const baseLocal = new THREE.Vector3(session.actorBase.x, session.actorBase.y, session.actorBase.z);
+  const finish = function(){
+    session.busy = false;
+    session.phase = result.outcome;
+    if(result.passed){
+      actor.userData.claySupportSurfaceY = session.target.surfaceY;
+      if(typeof syncStandeeContactBlob === "function") syncStandeeContactBlob(actor);
+      S.clayRoomStructurePerchAudit = clayRoomStructureBaseClearanceAudit(
+        actor, session.target.surfaceY
+      );
+    } else {
+      clayRoomStructureSupportUnlock(actor);
+      S.clayRoomStructurePerchAudit = null;
+    }
+    if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+    markDirty();
+    scheduleRender();
+  };
+  bindStandeeCtx(buildTheaterCtx());
+  session.busy = true;
+  if(result.passed){
+    const started = playStandeeVerb(actor, "move-step", { targetPos: perchLocal, onDone: finish });
+    if(started) startTweenLoop();
+    else {
+      actor.position.copy(perchLocal);
+      finish();
+    }
+  } else {
+    const halfway = baseLocal.clone().lerp(perchLocal, 0.55);
+    const started = playStandeeVerb(actor, "move-step", {
+      targetPos: halfway,
+      onDone: function(){
+        session.phase = result.fall ? "falling" : "losing-grip";
+        if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+        setTimeout(function(){
+          bindStandeeCtx(buildTheaterCtx());
+          const fell = playStandeeVerb(actor, "move-step", { targetPos: baseLocal, onDone: finish });
+          if(fell) startTweenLoop();
+          else {
+            actor.position.copy(baseLocal);
+            finish();
+          }
+        }, 0);
+      }
+    });
+    if(started) startTweenLoop();
+    else {
+      actor.position.copy(baseLocal);
+      finish();
+    }
+  }
+  if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+  return result;
+}
+function clayRoomStructureClimbSnapshot(){
+  const session = clayRoomStructureClimbSession();
+  if(!session) return null;
+  return {
+    version: session.version,
+    target: session.target ? Object.assign({}, session.target, {
+      access: Object.assign({}, session.target.access),
+      perchWorld: Object.assign({}, session.target.perchWorld)
+    }) : null,
+    last: session.last ? Object.assign({}, session.last) : null,
+    busy: session.busy,
+    phase: session.phase,
+    athleticsModifier: session.athleticsModifier,
+    actorBase: session.actorBase ? Object.assign({}, session.actorBase) : null,
+    perchAudit: S.clayRoomStructurePerchAudit
+      ? Object.assign({}, S.clayRoomStructurePerchAudit)
+      : null
+  };
+}
+function clayRoomStructureFocusSpec(id, zoom){
+  if(!S.clayCamFit) return false;
+  const box = clayRoomStructureClimbTargetBox(id, null);
+  if(!box) return false;
+  const center = box.getCenter(new THREE.Vector3());
+  const target = S.clayCamFit.target;
+  S.clayCamOffset = {
+    x: center.x - target.x,
+    z: center.z - target.z
+  };
+  S.clayCamZoom = Math.min(
+    CLAY_CAM_ZOOM_MAX,
+    Math.max(CLAY_CAM_ZOOM_MIN, Number(zoom) || 0.28)
+  );
+  clayRoomApplyCamPose();
+  return true;
+}
+function clayRoomStructureFocusProofFamily(family, zoom){
+  if(!S.clayCamFit || !S.clayRoomStructureBenchGroup) return false;
+  S.clayRoomStructureProofFamilyFocus = family;
+  if(S.clayRoomStructureView === "stairs"){
+    clayRoomApplyStructureViewVisibility("stairs");
+  }
+  const box = new THREE.Box3();
+  let found = false;
+  S.clayRoomStructureBenchGroup.traverse(function(node){
+    if(!node.isMesh || !node.userData || !node.userData.structureSpecimenPhysical) return;
+    if(node.userData.structureProofFamily !== family) return;
+    const partBox = new THREE.Box3().setFromObject(node);
+    if(partBox.isEmpty()) return;
+    if(!found) box.copy(partBox);
+    else box.union(partBox);
+    found = true;
+  });
+  if(!found) return false;
+  const center = box.getCenter(new THREE.Vector3());
+  const target = S.clayCamFit.target;
+  S.clayCamOffset = { x: center.x - target.x, z: center.z - target.z };
+  S.clayCamZoom = Math.min(
+    CLAY_CAM_ZOOM_MAX,
+    Math.max(CLAY_CAM_ZOOM_MIN, Number(zoom) || 0.28)
+  );
+  clayRoomApplyCamPose();
+  return true;
+}
+function clayStructureBuildShellFoundations(group, shell, tierHeights, datumY, origin){
+  const wallThickness = 0.22;
+  const foundationThickness = wallThickness + 0.1;
+  const cornerWidth = foundationThickness + 0.08;
+  const corners = new Set();
+  let runCount = 0;
+  let cornerCount = 0;
+  (shell.wallSegments || []).forEach(function(seg){
+    const topY = tierHeights[seg.tier];
+    const height = topY - datumY;
+    if(!(height > 0.02)) return;
+    const dx = seg.b.x - seg.a.x, dz = seg.b.z - seg.a.z;
+    const length = Math.max(0.01, Math.hypot(dx, dz));
+    const run = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        length + foundationThickness,
+        height + CLAY_STRUCTURE_CONTACT_EMBED * 2,
+        foundationThickness
+      ),
+      clayStructureMaterial()
+    );
+    run.position.set(
+      (seg.a.x + seg.b.x) / 2 - origin.cx,
+      datumY + height / 2,
+      (seg.a.z + seg.b.z) / 2 - origin.cz
+    );
+    run.rotation.y = -Math.atan2(dz, dx);
+    clayStructureTag(run, "compiled-foundation", "foundation");
+    run.userData.structureConnector = true;
+    run.userData.structureFoundationTier = seg.tier;
+    group.add(run);
+    runCount++;
+    [seg.a, seg.b].forEach(function(point){
+      const key = [point.x, point.z, seg.tier].join(",");
+      if(corners.has(key)) return;
+      corners.add(key);
+      const corner = new THREE.Mesh(
+        new THREE.BoxGeometry(
+          cornerWidth,
+          height + CLAY_STRUCTURE_CONTACT_EMBED * 2,
+          cornerWidth
+        ),
+        clayStructureMaterial()
+      );
+      corner.position.set(point.x - origin.cx, datumY + height / 2, point.z - origin.cz);
+      clayStructureTag(corner, "compiled-foundation", "foundation");
+      corner.userData.structureConnector = true;
+      corner.userData.structureFoundationCorner = true;
+      corner.userData.structureFoundationTier = seg.tier;
+      group.add(corner);
+      cornerCount++;
+    });
+  });
+  return {
+    datumY: datumY,
+    runCount: runCount,
+    cornerCount: cornerCount,
+    contactEmbed: CLAY_STRUCTURE_CONTACT_EMBED
+  };
+}
+function clayStructureBuildShellJunctions(group, shell, tierHeights, origin, omittedKeys){
+  const wallThickness = 0.22;
+  const junctionWidth = wallThickness + CLAY_STRUCTURE_CONTACT_EMBED * 3;
+  const storeyHeight = CLAY_STRUCTURE_KIT_CATALOG.gridLaw.storeyWorldUnits;
+  const buckets = new Map();
+  const segmentKey = function(seg){
+    return [seg.a.x, seg.a.z, seg.b.x, seg.b.z].join(",");
+  };
+  (shell.wallSegments || []).forEach(function(seg){
+    const dx = seg.b.x - seg.a.x, dz = seg.b.z - seg.a.z;
+    const orientation = Math.abs(dx) >= Math.abs(dz) ? "x" : "z";
+    [seg.a, seg.b].forEach(function(point){
+      const key = [point.x, point.z, seg.tier].join(",");
+      const bucket = buckets.get(key) || {
+        point: point,
+        tier: seg.tier,
+        orientations: new Set(),
+        incident: []
+      };
+      bucket.orientations.add(orientation);
+      bucket.incident.push(seg);
+      buckets.set(key, bucket);
+    });
+  });
+  let junctionCount = 0;
+  let cutawayReturnCount = 0;
+  buckets.forEach(function(bucket){
+    if(!(bucket.orientations.has("x") && bucket.orientations.has("z"))) return;
+    const hasVisibleIncident = bucket.incident.some(function(seg){
+      return !omittedKeys || !omittedKeys.has(segmentKey(seg));
+    });
+    if(!hasVisibleIncident) return;
+    const floorY = tierHeights[bucket.tier];
+    if(!Number.isFinite(floorY)) return;
+    const junction = new THREE.Mesh(
+      new THREE.BoxGeometry(
+        junctionWidth,
+        storeyHeight + CLAY_STRUCTURE_CONTACT_EMBED * 2,
+        junctionWidth
+      ),
+      clayStructureMaterial()
+    );
+    junction.position.set(
+      bucket.point.x - origin.cx,
+      floorY + storeyHeight / 2,
+      bucket.point.z - origin.cz
+    );
+    clayStructureTag(junction, "compiled-junction", "wall");
+    junction.userData.structureConnector = true;
+    junction.userData.structureWallCorner = true;
+    junction.userData.structureJunctionTier = bucket.tier;
+    group.add(junction);
+    junctionCount++;
+
+    // A camera-side omission may remove one incident wall while leaving its perpendicular neighbour.
+    // A bare quoin at that transition still reads like a broken wall end. Carry the omitted run a
+    // short distance around the corner as a full-height dollhouse return: the room remains open to
+    // the governed camera, but the surviving wall visibly turns a real corner before the cutaway.
+    const omittedIncident = bucket.incident.filter(function(seg){
+      return omittedKeys && omittedKeys.has(segmentKey(seg));
+    });
+    const builtIncident = bucket.incident.filter(function(seg){
+      return !omittedKeys || !omittedKeys.has(segmentKey(seg));
+    });
+    if(omittedIncident.length && builtIncident.length){
+      omittedIncident.forEach(function(seg){
+        const other = (seg.a.x === bucket.point.x && seg.a.z === bucket.point.z) ? seg.b : seg.a;
+        const dx = other.x - bucket.point.x, dz = other.z - bucket.point.z;
+        const segLength = Math.hypot(dx, dz);
+        if(segLength < 0.001) return;
+        const returnLength = Math.min(0.42, segLength * 0.42);
+        const ux = dx / segLength, uz = dz / segLength;
+        const cutawayReturn = new THREE.Mesh(
+          new THREE.BoxGeometry(
+            returnLength + CLAY_STRUCTURE_CONTACT_EMBED * 2,
+            storeyHeight + CLAY_STRUCTURE_CONTACT_EMBED * 2,
+            wallThickness + CLAY_STRUCTURE_CONTACT_EMBED * 2
+          ),
+          clayStructureMaterial()
+        );
+        cutawayReturn.position.set(
+          bucket.point.x + ux * returnLength / 2 - origin.cx,
+          floorY + storeyHeight / 2,
+          bucket.point.z + uz * returnLength / 2 - origin.cz
+        );
+        cutawayReturn.rotation.y = -Math.atan2(uz, ux);
+        clayStructureTag(cutawayReturn, "compiled-cutaway-return", "wall");
+        cutawayReturn.userData.structureConnector = true;
+        cutawayReturn.userData.structureCutawayReturn = true;
+        cutawayReturn.userData.structureJunctionTier = bucket.tier;
+        group.add(cutawayReturn);
+        cutawayReturnCount++;
+      });
+    }
+  });
+  return {
+    count: junctionCount,
+    cutawayReturns: cutawayReturnCount,
+    width: junctionWidth,
+    profile: "interpenetrating full-height corner quoin"
+  };
+}
 function clayRoomMountStructureBench(){
   S.clayRoomStructureBenchGroup = null;
   S.clayRoomStructureReport = null;
+  S.clayRoomStructureClimbSession = null;
   if(S.clayRoomFixtureId !== CLAY_ROOM_STRUCTURE_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
     return null;
   }
@@ -1201,6 +2243,19 @@ function clayRoomMountStructureBench(){
       sourceRef: cell.sourceRef
     };
   });
+  group.userData.structureWalkSurfaces = cells.map(function(cell){
+    return {
+      source: "compiled-shell-cell",
+      shape: "rect",
+      x: cell.x - origin.cx,
+      z: cell.z - origin.cz,
+      y: tierHeights[cell.tier],
+      width: 1,
+      depth: 1,
+      tier: cell.tier,
+      sourceRef: cell.sourceRef
+    };
+  });
   const omittedKeys = new Set();
   const staging = S.clayRoomStructureStageLatch || Object.freeze({
     staged: !!fixture.wallOmission.initialState.staged,
@@ -1227,9 +2282,13 @@ function clayRoomMountStructureBench(){
   }
   const shell = compileRoomShell(cells, {
     tierHeights,
+    roomShellPolygonKernel: "oss",
     wallHeight: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.storeyWorldUnits,
     wallThickness: 0.22,
-    wallStemHeight: 0.28,
+    wallStemHeight: Math.max(
+      0.01,
+      CLAY_STRUCTURE_KIT_CATALOG.gridLaw.cutawayStubWorldUnits - DEFAULT_WALL_CAP_HEIGHT
+    ),
     wallCapHeight: 0.06,
     wallCapOverhang: 0.035,
     upperVisibleForSegment
@@ -1256,6 +2315,16 @@ function clayRoomMountStructureBench(){
   addShell(shell.riserGeometry, "riser", "compiled-shell", true);
   group.add(shellGroup);
 
+  // CL-R3 correction: the compiler owns the mitered wall/floor topology; this first bounded
+  // connective assembly closes the vertical gap it intentionally does not own. Every perimeter
+  // wall above the lowest site datum gets a continuous plinth down to that datum, plus overlapping
+  // corner blocks. The overlap is deliberate contact geometry: no coplanar one-pixel light seam.
+  const foundationBuilt = clayStructureBuildShellFoundations(
+    group, shell, tierHeights, tierHeights[-1], origin
+  );
+  const junctionBuilt = clayStructureBuildShellJunctions(
+    group, shell, tierHeights, origin, omittedKeys
+  );
   const openingBuilt = clayStructureBuildOpening(group, shell, fixture, tierHeights, origin);
   fixture.pieces.forEach(function(spec){
     const worldSpec = Object.assign({}, spec, {
@@ -1272,8 +2341,10 @@ function clayRoomMountStructureBench(){
   const badX = room.x + bad.at.x - origin.cx, badZ = room.y + bad.at.z - origin.cz;
   const badA = clayStructureTag(new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.72, 0.22), badMat), bad.id, "wall");
   badA.position.set(badX - 0.55, baseFloor + 0.385, badZ);
+  badA.userData.structureNegativeControl = true;
   const badB = clayStructureTag(new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.72, 0.8), badMat.clone()), bad.id, "wall");
   badB.position.set(badX + 0.32, baseFloor + 0.385, badZ + 0.42);
+  badB.userData.structureNegativeControl = true;
   group.add(badA, badB);
   const xY = baseFloor + 0.82;
   group.add(
@@ -1304,6 +2375,7 @@ function clayRoomMountStructureBench(){
     gridLaw: CLAY_STRUCTURE_KIT_CATALOG.gridLaw,
     shell: {
       meta: shell.meta,
+      polygonKernel: "oss",
       apertures: shell.apertures.length,
       tiers: Object.keys(tierHeights).map(Number).sort(),
       riserSegments: shell.riserSegments.length,
@@ -1312,7 +2384,8 @@ function clayRoomMountStructureBench(){
       builtUpperSegments: shell.wallUpperMeshes.length,
       omittedUpperSegments: omittedKeys.size,
       totalUpperSegments: shell.wallUpperMeshes.length + omittedKeys.size,
-      exposedSlabSides: !!shell.riserGeometry
+      exposedSlabSides: !!shell.riserGeometry,
+      foundations: foundationBuilt
     },
     // Checkpoint 4 reporting parity ("the fixture can report all uppers present while also saying
     // camera-side omission is active"): the omission projection is derived HERE, from the exact
@@ -1321,6 +2394,8 @@ function clayRoomMountStructureBench(){
       ruleId: fixture.wallOmission.ruleId,
       version: fixture.wallOmission.version,
       active: omissionActive,
+      retainedStubFeet: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.cutawayStubFeet,
+      retainedStubWorldUnits: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.cutawayStubWorldUnits,
       omitted: shell.wallSegments
         .map(function(seg, i){ return { seg: seg, segIndex: i }; })
         .filter(function(row){ return omittedKeys.has([row.seg.a.x, row.seg.a.z, row.seg.b.x, row.seg.b.z].join(",")); })
@@ -1340,6 +2415,8 @@ function clayRoomMountStructureBench(){
       strategicView: strategicView,
       cameraMode: strategicView ? "top-down-strategic" : "fixed-production",
       active: omissionActive,
+      retainedStubFeet: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.cutawayStubFeet,
+      retainedStubWorldUnits: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.cutawayStubWorldUnits,
       carveouts: fixture.wallOmission.carveouts,
       apertureUpperBuilt: !!openingBuilt,
       structuralMassBuilt: shell.riserSegments.length > 0,
@@ -1356,10 +2433,69 @@ function clayRoomMountStructureBench(){
     },
     specimens: fixture.pieces.map(function(spec){
       return {
-        id: spec.id, kind: spec.kind, sockets: spec.sockets, access: spec.access,
+        id: spec.id, kind: spec.kind, assembly: !!spec.assembly,
+        sockets: spec.sockets, access: spec.access, climbDC: spec.climbDC || null,
+        entry: spec.entry || null,
         provenance: CLAY_STRUCTURE_KIT_CATALOG.provenance
       };
     }),
+    stairAdapter: {
+      law: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.stairAdapter,
+      examples: fixture.pieces
+        .filter(function(spec){
+          return spec.kind === "stair" && !spec.assembly && !spec.proofFamily && spec.run === 1;
+        })
+        .map(function(spec){
+          return {
+            id: spec.id,
+            riseFeet: +(spec.rise * CLAY_STRUCTURE_KIT_CATALOG.gridLaw.cellFeet).toFixed(1),
+            footprintCells: spec.run,
+            steps: spec.steps
+          };
+        }),
+      cornerFamilies: fixture.pieces
+        .filter(function(spec){ return spec.kind === "stair-inner-corner" || spec.kind === "stair-outer-corner"; })
+        .map(function(spec){ return spec.kind; }),
+      cornerTopologies: fixture.pieces
+        .filter(function(spec){ return spec.kind === "stair-inner-corner" || spec.kind === "stair-outer-corner"; })
+        .map(function(spec){
+          return {
+            id: spec.id,
+            kind: spec.kind,
+            topology: spec.kind === "stair-inner-corner"
+              ? "inverse-expanding-l-bands-smallest-low"
+              : "open-quadrant-l-wrap-smallest-high"
+          };
+        }),
+      fullStoreyProof: {
+        lowerId: "assembly-story-lower-stair",
+        upperId: "assembly-story-upper-stair",
+        deckId: "assembly-second-floor",
+        stairUnits: 2,
+        footprintCells: 2,
+        riseFeet: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.storeyFeet,
+        connected: true
+      },
+      lStoreyProof: {
+        lowerId: "l-storey-lower-stair",
+        landingId: "l-storey-landing",
+        upperId: "l-storey-upper-stair",
+        deckId: "l-storey-second-floor",
+        footprintCells: 3,
+        turnDeg: 90,
+        riseFeet: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.storeyFeet,
+        connected: true
+      }
+    },
+    connectiveTissue: {
+      polygonKernel: "oss",
+      foundationRuns: foundationBuilt.runCount,
+      foundationCorners: foundationBuilt.cornerCount,
+      wallJunctions: junctionBuilt.count,
+      cutawayReturns: junctionBuilt.cutawayReturns,
+      contactEmbed: foundationBuilt.contactEmbed,
+      connectorProfile: "overlapping plinth + full-height corner quoin + endpoint cap"
+    },
     slope: {
       degrees: +slopeDeg.toFixed(3),
       maxDegrees: CLAY_STRUCTURE_KIT_CATALOG.gridLaw.maxWalkableSlopeDeg,
@@ -1381,7 +2517,1100 @@ function clayRoomMountStructureBench(){
     climbMechanicsImplemented: CLAY_STRUCTURE_KIT_CATALOG.climbMechanicsImplemented,
     provenance: CLAY_STRUCTURE_KIT_CATALOG.provenance
   };
+  clayRoomStructureClimbSessionEnsure();
   clayRoomApplyStructureViewVisibility(S.clayRoomStructureView || fixture.defaultView);
+  return group;
+}
+
+/* CL-F04 material bench — two unpromoted sprite-first parents through the production renderer in
+   matched bays. The fixture owns no procedural material choice: it proves channel interpretation,
+   world scale, UV phase, grid contrast, fallback, and architectural continuity for the exact
+   candidates named by CLAY_MATERIAL_BENCH_FIXTURE. */
+const CLAY_MATERIAL_TEXTURE_CACHE = new Map();
+function clayRoomMaterialTexture(url, colorSpace){
+  const key = url + "|" + colorSpace;
+  if(CLAY_MATERIAL_TEXTURE_CACHE.has(key)) return CLAY_MATERIAL_TEXTURE_CACHE.get(key);
+  const pending = new Promise(function(resolve, reject){
+    new THREE.TextureLoader().load(url, function(texture){
+      texture.colorSpace = colorSpace === "sRGB"
+        ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.NearestFilter;
+      texture.generateMipmaps = false;
+      texture.needsUpdate = true;
+      resolve(texture);
+    }, undefined, function(error){
+      reject(error || new Error("Texture failed: " + url));
+    });
+  });
+  CLAY_MATERIAL_TEXTURE_CACHE.set(key, pending);
+  return pending;
+}
+function clayRoomMaterialMapUrl(materialSpec, channel){
+  const spec = materialSpec.maps[channel];
+  return "/" + materialSpec.exportRoot + "/" + materialSpec.exportStem + spec.suffix;
+}
+function clayRoomMaterialLoadSet(materialSpec){
+  const sourceUrl = "/" + materialSpec.sourceSprite;
+  const albedoUrl = clayRoomMaterialMapUrl(materialSpec, "albedo");
+  const normalUrl = clayRoomMaterialMapUrl(materialSpec, "normal");
+  const ormUrl = clayRoomMaterialMapUrl(materialSpec, "orm");
+  return Promise.allSettled([
+    clayRoomMaterialTexture(albedoUrl, "sRGB"),
+    clayRoomMaterialTexture(normalUrl, "linear"),
+    clayRoomMaterialTexture(ormUrl, "linear")
+  ]).then(function(results){
+    const albedoResult = results[0];
+    if(albedoResult.status === "fulfilled"){
+      return {
+        albedo: albedoResult.value,
+        normal: results[1].status === "fulfilled" ? results[1].value : null,
+        orm: results[2].status === "fulfilled" ? results[2].value : null,
+        albedoSource: "compiled-exact",
+        errors: results.map(function(result, index){
+          return result.status === "rejected"
+            ? ["albedo", "normal", "orm"][index] + ": " + String(result.reason) : null;
+        }).filter(Boolean)
+      };
+    }
+    // The source sprite is the albedo authority. If a compiled map is absent, the truthful
+    // fallback is that exact sprite plus scalar roughness—not clay, magenta, or a different stone.
+    return clayRoomMaterialTexture(sourceUrl, "sRGB").then(function(source){
+      return {
+        albedo: source,
+        normal: results[1].status === "fulfilled" ? results[1].value : null,
+        orm: results[2].status === "fulfilled" ? results[2].value : null,
+        albedoSource: "source-authority-fallback",
+        errors: results.map(function(result, index){
+          return result.status === "rejected"
+            ? ["albedo", "normal", "orm"][index] + ": " + String(result.reason) : null;
+        }).filter(Boolean)
+      };
+    });
+  });
+}
+function clayRoomMaterialUvProject(geometry, worldPosition, phase, worldUnitsPerTile){
+  const position = geometry.attributes.position;
+  const normal = geometry.attributes.normal;
+  const uv = geometry.attributes.uv;
+  for(let i = 0; i < position.count; i++){
+    const x = worldPosition.x + position.getX(i);
+    const y = worldPosition.y + position.getY(i);
+    const z = worldPosition.z + position.getZ(i);
+    const nx = normal.getX(i), ny = normal.getY(i);
+    let u, v;
+    if(Math.abs(ny) > 0.5){
+      u = (x - phase.x) / worldUnitsPerTile;
+      v = (z - phase.z) / worldUnitsPerTile;
+    } else if(Math.abs(nx) > 0.5){
+      u = (z - phase.z) / worldUnitsPerTile;
+      v = (y - phase.y) / worldUnitsPerTile;
+    } else {
+      u = (x - phase.x) / worldUnitsPerTile;
+      v = (y - phase.y) / worldUnitsPerTile;
+    }
+    uv.setXY(i, u, v);
+  }
+  uv.needsUpdate = true;
+  geometry.setAttribute("uv1", uv.clone());
+}
+function clayRoomMaterialUvBounds(geometry){
+  const uv = geometry && geometry.attributes && geometry.attributes.uv;
+  if(!uv) return null;
+  let minU = Infinity, minV = Infinity, maxU = -Infinity, maxV = -Infinity;
+  for(let i = 0; i < uv.count; i++){
+    minU = Math.min(minU, uv.getX(i)); maxU = Math.max(maxU, uv.getX(i));
+    minV = Math.min(minV, uv.getY(i)); maxV = Math.max(maxV, uv.getY(i));
+  }
+  return [minU, minV, maxU, maxV].map(function(value){ return +value.toFixed(5); });
+}
+function clayRoomMaterialForMode(materialSpec, textures, mode){
+  if(mode === "clay-control"){
+    const clay = clayStructureMaterial(CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor);
+    clay.userData.clayMaterialBenchMode = mode;
+    clay.userData.clayMaterialPbrReady = !!(
+      textures && textures.albedo && textures.normal && textures.orm
+    );
+    return clay;
+  }
+  const hasPbr = !!(textures && textures.albedo && textures.normal && textures.orm);
+  const usePbr = hasPbr && (mode === "pbr" || mode === "normal-negative");
+  const material = new THREE.MeshStandardMaterial({
+    map: textures && textures.albedo ? textures.albedo : null,
+    color: textures && textures.albedo ? 0xffffff : 0xb8b1a5,
+    roughness: usePbr ? 1 : materialSpec.roughnessFallback,
+    metalness: usePbr ? 1 : materialSpec.metalnessFallback
+  });
+  if(usePbr){
+    material.normalMap = textures.normal;
+    material.normalMapType = THREE.TangentSpaceNormalMap;
+    const scale = mode === "normal-negative"
+      ? materialSpec.normalNegativeScale : materialSpec.normalScale;
+    material.normalScale.set(scale, scale);
+    material.aoMap = textures.orm;
+    material.aoMapIntensity = materialSpec.aoMapIntensity;
+    material.roughnessMap = textures.orm;
+    material.metalnessMap = textures.orm;
+  }
+  material.shadowSide = THREE.FrontSide;
+  material.userData.clayMaterialBenchMode = usePbr ? mode : "albedo-fallback";
+  material.userData.clayMaterialPbrReady = hasPbr;
+  return material;
+}
+function clayRoomApplyMaterialBenchMode(){
+  const group = S.clayRoomMaterialBenchGroup;
+  if(!group) return false;
+  const fixture = clayRoomMaterialBenchFixtureFrom(S.clayRoomRecord);
+  const requested = fixture.modes.indexOf(S.clayRoomMaterialMode) >= 0
+    ? S.clayRoomMaterialMode : fixture.defaultMode;
+  const textureSets = group.userData.materialTextureSets || {};
+  const materialsById = {};
+  fixture.materials.forEach(function(materialSpec){
+    materialsById[materialSpec.id] = clayRoomMaterialForMode(
+      materialSpec,
+      textureSets[materialSpec.id] || null,
+      requested
+    );
+  });
+  group.traverse(function(node){
+    if(!node.isMesh || !node.userData || !node.userData.clayMaterialBenchSurface) return;
+    node.material = materialsById[node.userData.materialParentId];
+  });
+  const actualModes = {};
+  const pbrReadyByParent = {};
+  fixture.materials.forEach(function(materialSpec){
+    const material = materialsById[materialSpec.id];
+    actualModes[materialSpec.id] = material.userData.clayMaterialBenchMode;
+    pbrReadyByParent[materialSpec.id] = !!material.userData.clayMaterialPbrReady;
+  });
+  const uniqueActualModes = Array.from(new Set(Object.keys(actualModes).map(function(id){
+    return actualModes[id];
+  })));
+  group.userData.materialRequestedMode = requested;
+  group.userData.materialActualModes = actualModes;
+  group.userData.materialActualMode = uniqueActualModes.length === 1
+    ? uniqueActualModes[0] : "mixed";
+  group.userData.materialPbrReadyByParent = pbrReadyByParent;
+  group.userData.materialPbrReady = fixture.materials.every(function(materialSpec){
+    return pbrReadyByParent[materialSpec.id];
+  });
+  S.clayRoomMaterialReport = clayRoomMaterialBenchSnapshot();
+  if(typeof S.clayRoomRefreshMaterials === "function") S.clayRoomRefreshMaterials();
+  markDirty();
+  scheduleRender();
+  return true;
+}
+function clayRoomSetMaterialMode(mode){
+  const fixture = clayRoomMaterialBenchFixtureFrom(S.clayRoomRecord);
+  if(fixture.modes.indexOf(mode) < 0) return false;
+  S.clayRoomMaterialMode = mode;
+  return clayRoomApplyMaterialBenchMode();
+}
+function clayRoomMaterialBenchSnapshot(){
+  const group = S.clayRoomMaterialBenchGroup;
+  const fixture = S.clayRoomRecord
+    ? clayRoomMaterialBenchFixtureFrom(S.clayRoomRecord) : CLAY_MATERIAL_BENCH_FIXTURE;
+  if(!group) return {
+    fixtureId: fixture.id,
+    fixtureVersion: fixture.version,
+    mounted: false,
+    tasteStatus: fixture.tasteStatus
+  };
+  const surfaces = [];
+  group.traverse(function(node){
+    if(!node.isMesh || !node.userData || !node.userData.clayMaterialBenchSurface) return;
+    const material = Array.isArray(node.material) ? node.material[0] : node.material;
+    surfaces.push({
+      id: node.userData.materialSpecId,
+      bayId: node.userData.materialBayId,
+      materialParentId: node.userData.materialParentId,
+      role: node.userData.materialSurfaceRole,
+      traversableTop: !!node.userData.materialTraversableTop,
+      contactEmbed: node.userData.clayContactEmbed || 0,
+      uvBounds: clayRoomMaterialUvBounds(node.geometry),
+      uv1Present: !!(node.geometry && node.geometry.attributes && node.geometry.attributes.uv1),
+      receiveShadow: !!node.receiveShadow,
+      castShadow: !!node.castShadow,
+      channels: {
+        albedo: !!(material && material.map),
+        normal: !!(material && material.normalMap),
+        ao: !!(material && material.aoMap),
+        roughness: !!(material && material.roughnessMap),
+        metalness: !!(material && material.metalnessMap)
+      }
+    });
+  });
+  const channelBoundCounts = ["albedo", "normal", "ao", "roughness", "metalness"].reduce(
+    function(counts, channel){
+      counts[channel] = surfaces.filter(function(surface){
+        return surface.channels[channel];
+      }).length;
+      return counts;
+    }, {}
+  );
+  return {
+    fixtureId: fixture.id,
+    fixtureVersion: fixture.version,
+    mounted: true,
+    question: fixture.question,
+    tasteStatus: fixture.tasteStatus,
+    material: null,
+    materials: fixture.materials.map(function(materialSpec){
+      const textures = group.userData.materialTextureSets
+        ? group.userData.materialTextureSets[materialSpec.id] : null;
+      return {
+        id: materialSpec.id,
+        label: materialSpec.label,
+        family: materialSpec.family,
+        tasteStatus: materialSpec.tasteStatus,
+        scaleStatus: materialSpec.scaleStatus,
+        workflow: materialSpec.workflow,
+        sourceSprite: materialSpec.sourceSprite,
+        sourceSha256: materialSpec.sourceSha256,
+        graph: materialSpec.graph,
+        graphSha256: materialSpec.graphSha256,
+        exportReceipt: materialSpec.exportReceipt,
+        mapHashes: {
+          albedo: materialSpec.maps.albedo.sha256,
+          normal: materialSpec.maps.normal.sha256,
+          orm: materialSpec.maps.orm.sha256
+        },
+        actualMode: group.userData.materialActualModes
+          ? group.userData.materialActualModes[materialSpec.id] : "loading",
+        pbrReady: group.userData.materialPbrReadyByParent
+          ? !!group.userData.materialPbrReadyByParent[materialSpec.id] : false,
+        albedoSource: textures ? textures.albedoSource : "loading",
+        loadErrors: textures ? textures.errors.slice() : []
+      };
+    }),
+    bays: fixture.bays,
+    scale: {
+      metersPerTile: fixture.metersPerTile,
+      metersPerWorldUnit: fixture.metersPerWorldUnit,
+      worldUnitsPerTile: +(fixture.metersPerTile / fixture.metersPerWorldUnit).toFixed(6),
+      repeatProof: fixture.repeatProof,
+      supportFootprint: fixture.supportFootprint,
+      phaseAnchor: fixture.phaseAnchor
+    },
+    requestedMode: group.userData.materialRequestedMode || S.clayRoomMaterialMode,
+    actualMode: group.userData.materialActualMode || "loading",
+    pbrReady: !!group.userData.materialPbrReady,
+    fallback: "exact source albedo + scalar roughness/metalness when normal or ORM is absent",
+    surfaceCount: surfaces.length,
+    groundedSurfaceCount: surfaces.filter(function(surface){ return surface.contactEmbed > 0; }).length,
+    channelBoundCounts: channelBoundCounts,
+    roles: Array.from(new Set(surfaces.map(function(row){ return row.role; }))).sort(),
+    surfaces: surfaces
+  };
+}
+function clayRoomMountMaterialBench(){
+  S.clayRoomMaterialBenchGroup = null;
+  S.clayRoomMaterialReport = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_MATERIAL_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  const fixture = clayRoomMaterialBenchFixtureFrom(S.clayRoomRecord);
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+
+  // The outer room is a calibrated camera/light/shadow host, not a second stone composition.
+  S.interiorGroup.traverse(function(node){
+    const kind = node.userData && node.userData.interiorKind;
+    if(kind === "room-shell-wall-upper" || kind === "room-shell-wall-trim"){
+      node.visible = false;
+      node.userData.clayMaterialHostSuppressed = true;
+    }
+  });
+  const rawX = room.x + (room.w - 1) / 2;
+  const rawZ = room.y + (room.d - 1) / 2;
+  const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, rawX, rawZ);
+  const centerX = rawX - origin.cx;
+  const centerZ = rawZ - origin.cz - 0.35;
+  const worldUnitsPerTile = fixture.metersPerTile / fixture.metersPerWorldUnit;
+  const group = new THREE.Group();
+  group.name = fixture.id;
+  group.userData.clayMaterialBench = true;
+  group.userData.clayMaterialBenchSurface = true;
+  group.userData.fixtureId = fixture.id;
+  group.userData.fixtureVersion = fixture.version;
+  group.userData.materialWalkSurfaces = [];
+  group.userData.materialGridSurfaces = [];
+  group.userData.materialTextureSets = {};
+  fixture.bays.forEach(function(bay){
+    const materialSpec = fixture.materials.find(function(candidate){
+      return candidate.id === bay.materialId;
+    });
+    if(!materialSpec) throw new Error("CL-F04 bay has no material parent: " + bay.materialId);
+    const bayCenterX = centerX + bay.offset.x;
+    const bayCenterZ = centerZ + bay.offset.z;
+    const phase = new THREE.Vector3(
+      bayCenterX + fixture.phaseAnchor.x,
+      floorTop + fixture.phaseAnchor.y,
+      bayCenterZ + fixture.phaseAnchor.z
+    );
+    fixture.specimens.forEach(function(spec){
+      const authoredPosition = new THREE.Vector3(
+        bayCenterX + spec.offset.x,
+        floorTop + spec.offset.y,
+        bayCenterZ + spec.offset.z
+      );
+      // Exact face-to-face stair joins can open into a dark anti-contact slit once cast shadows and
+      // the AO/downsample path are both active. Preserve every authored top elevation, but sink solid
+      // specimens into their support and let adjacent risers overlap slightly along the run.
+      const verticalEmbed = spec.role === "floor" ? 0 : CLAY_STRUCTURE_CONTACT_EMBED;
+      const runEmbed = spec.role === "riser" ? CLAY_STRUCTURE_CONTACT_EMBED * 2 : 0;
+      const position = authoredPosition.clone();
+      position.y -= verticalEmbed / 2;
+      const geometry = new THREE.BoxGeometry(
+        spec.size.x,
+        spec.size.y + verticalEmbed,
+        spec.size.z + runEmbed
+      );
+      clayRoomMaterialUvProject(geometry, position, phase, worldUnitsPerTile);
+      const mesh = new THREE.Mesh(
+        geometry,
+        clayRoomMaterialForMode(materialSpec, null, "albedo-fallback")
+      );
+      mesh.name = bay.id + "-" + spec.id;
+      mesh.position.copy(position);
+      mesh.castShadow = spec.role !== "floor";
+      mesh.receiveShadow = true;
+      mesh.userData.clayMaterialBenchSurface = true;
+      mesh.userData.materialSpecId = spec.id;
+      mesh.userData.materialBayId = bay.id;
+      mesh.userData.materialParentId = materialSpec.id;
+      mesh.userData.materialSurfaceRole = spec.role;
+      mesh.userData.materialTraversableTop = !!spec.traversableTop;
+      mesh.userData.clayContactEmbed = verticalEmbed || runEmbed;
+      mesh.userData.interiorKind = "material-proof";
+      group.add(mesh);
+      // Every horizontal top is a flat surface even when it is not ordinary walk terrain. Grid it
+      // (wall/header caps included) while keeping traversal permission as a separate explicit fact.
+      group.userData.materialGridSurfaces.push({
+        id: bay.id + "-" + spec.id,
+        bayId: bay.id,
+        materialParentId: materialSpec.id,
+        traversable: !!spec.traversableTop,
+        minX: authoredPosition.x - spec.size.x / 2,
+        maxX: authoredPosition.x + spec.size.x / 2,
+        minZ: authoredPosition.z - spec.size.z / 2,
+        maxZ: authoredPosition.z + spec.size.z / 2,
+        y: authoredPosition.y + spec.size.y / 2
+      });
+      if(spec.traversableTop){
+        group.userData.materialWalkSurfaces.push({
+          id: bay.id + "-" + spec.id,
+          bayId: bay.id,
+          materialParentId: materialSpec.id,
+          minX: authoredPosition.x - spec.size.x / 2,
+          maxX: authoredPosition.x + spec.size.x / 2,
+          minZ: authoredPosition.z - spec.size.z / 2,
+          maxZ: authoredPosition.z + spec.size.z / 2,
+          y: authoredPosition.y + spec.size.y / 2
+        });
+      }
+    });
+  });
+  S.interiorGroup.add(group);
+  S.clayRoomMaterialBenchGroup = group;
+  S.clayRoomMaterialMode = fixture.modes.indexOf(S.clayRoomMaterialMode) >= 0
+    ? S.clayRoomMaterialMode : fixture.defaultMode;
+  S.clayRoomMaterialReport = clayRoomMaterialBenchSnapshot();
+  Promise.all(fixture.materials.map(function(materialSpec){
+    return clayRoomMaterialLoadSet(materialSpec).then(function(textures){
+      return { id: materialSpec.id, textures: textures };
+    }).catch(function(error){
+      return {
+        id: materialSpec.id,
+        textures: {
+          albedo: null, normal: null, orm: null,
+          albedoSource: "unavailable",
+          errors: [String(error)]
+        }
+      };
+    });
+  })).then(function(results){
+    if(S.clayRoomMaterialBenchGroup !== group) return;
+    results.forEach(function(result){
+      group.userData.materialTextureSets[result.id] = result.textures;
+    });
+    clayRoomApplyMaterialBenchMode();
+  });
+  return group;
+}
+
+/* CL-F05 trim bench — two complete, matched cutaway rooms. Body parents use CL-F04's exact
+   world-space projection; trim faces use the admitted h6-v1 atlas layout and split every run at a
+   repeat boundary so U never wraps through a neighbouring semantic band. Profile cores provide
+   real silhouette/relief behind those exact sampled faces. */
+const CLAY_TRIM_TEXTURE_CACHE = new Map();
+const CLAY_TRIM_ROLE_COLORS = Object.freeze({
+  "plain-band": "#63b6e6",
+  "base-course": "#65c77d",
+  "cornice-belt": "#d7b84b",
+  "coping-cap": "#d879c8",
+  "stair-nosing": "#ef805f",
+  "curb-retaining": "#8d7fe1"
+});
+function clayRoomTrimTexture(url, colorSpace){
+  const key = url + "|" + colorSpace;
+  if(CLAY_TRIM_TEXTURE_CACHE.has(key)) return CLAY_TRIM_TEXTURE_CACHE.get(key);
+  const pending = new Promise(function(resolve, reject){
+    new THREE.TextureLoader().load(url, function(texture){
+      texture.colorSpace = colorSpace === "sRGB"
+        ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.magFilter = THREE.LinearFilter;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.generateMipmaps = true;
+      texture.needsUpdate = true;
+      resolve(texture);
+    }, undefined, function(error){
+      reject(error || new Error("Trim texture failed: " + url));
+    });
+  });
+  CLAY_TRIM_TEXTURE_CACHE.set(key, pending);
+  return pending;
+}
+function clayRoomTrimLoadSet(culture){
+  return Promise.allSettled(["basecolor", "normal", "orm"].map(function(channel){
+    const map = culture.maps[channel];
+    return clayRoomTrimTexture("/" + culture.atlasRoot + "/" + map.file, map.colorSpace);
+  })).then(function(results){
+    return {
+      basecolor: results[0].status === "fulfilled" ? results[0].value : null,
+      normal: results[1].status === "fulfilled" ? results[1].value : null,
+      orm: results[2].status === "fulfilled" ? results[2].value : null,
+      errors: results.map(function(result, index){
+        return result.status === "rejected"
+          ? ["basecolor", "normal", "orm"][index] + ": " + String(result.reason) : null;
+      }).filter(Boolean)
+    };
+  });
+}
+function clayRoomTrimRunGeometry(run, slot, runtimeSize){
+  const origin = new THREE.Vector3(run.start[0], run.start[1], run.start[2]);
+  const along = new THREE.Vector3(run.tangent[0], run.tangent[1], run.tangent[2]).normalize();
+  const across = new THREE.Vector3(run.cross[0], run.cross[1], run.cross[2]);
+  const outward = new THREE.Vector3(run.normal[0], run.normal[1], run.normal[2]).normalize();
+  const frontWinding = along.clone().cross(across).dot(outward) >= 0;
+  const repeat = slot.repeatWorldLength;
+  const y = slot.rectPx[1], height = slot.rectPx[3];
+  const v0 = 1 - ((y + height - 1) / runtimeSize[1]);
+  const v1 = 1 - ((y + 1) / runtimeSize[1]);
+  const positions = [], normals = [], uvs = [], indices = [], chunks = [];
+  let cursor = 0, vertex = 0;
+  while(cursor < run.length - 1e-7){
+    const worldPhase = (run.phaseOrigin || 0) + cursor;
+    let localPhase = ((worldPhase % repeat) + repeat) % repeat;
+    if(repeat - localPhase < 1e-6) localPhase = 0;
+    const segmentLength = Math.min(run.length - cursor, repeat - localPhase);
+    const p0 = origin.clone().addScaledVector(along, cursor);
+    const p1 = origin.clone().addScaledVector(along, cursor + segmentLength);
+    const p2 = p1.clone().add(across);
+    const p3 = p0.clone().add(across);
+    const u0 = localPhase / repeat, u1 = (localPhase + segmentLength) / repeat;
+    [p0, p1, p2, p3].forEach(function(point){
+      positions.push(point.x, point.y, point.z);
+      normals.push(outward.x, outward.y, outward.z);
+    });
+    uvs.push(u0, v0, u1, v0, u1, v1, u0, v1);
+    if(frontWinding){
+      indices.push(vertex, vertex + 1, vertex + 2, vertex, vertex + 2, vertex + 3);
+    } else {
+      indices.push(vertex, vertex + 2, vertex + 1, vertex, vertex + 3, vertex + 2);
+    }
+    chunks.push({
+      startWorld: +cursor.toFixed(5),
+      length: +segmentLength.toFixed(5),
+      u0: +u0.toFixed(6),
+      u1: +u1.toFixed(6)
+    });
+    cursor += segmentLength;
+    vertex += 4;
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  geometry.setAttribute("uv1", new THREE.Float32BufferAttribute(uvs.slice(), 2));
+  geometry.setIndex(indices);
+  geometry.computeBoundingSphere();
+  return {
+    geometry: geometry,
+    report: {
+      id: run.id,
+      structureId: run.structureId,
+      slotId: slot.id,
+      semanticRole: slot.semanticRole,
+      length: run.length,
+      repeatWorldLength: repeat,
+      phaseStart: +((((run.phaseOrigin || 0) % repeat) + repeat) % repeat).toFixed(5),
+      phaseEnd: +(((((run.phaseOrigin || 0) + run.length) % repeat) + repeat) % repeat).toFixed(5),
+      segmentCount: chunks.length,
+      nonExactRepeat: Math.abs((run.length / repeat) - Math.round(run.length / repeat)) > 1e-6,
+      uvRange: {
+        u: [Math.min.apply(null, chunks.map(function(chunk){ return chunk.u0; })),
+          Math.max.apply(null, chunks.map(function(chunk){ return chunk.u1; }))],
+        v: [+v0.toFixed(6), +v1.toFixed(6)]
+      },
+      chunks: chunks
+    }
+  };
+}
+function clayRoomTrimMaterial(culture, slot, textures, mode, core){
+  if(mode === "clay-control"){
+    const clay = clayStructureMaterial(CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor);
+    clay.userData.clayTrimActualMode = mode;
+    clay.userData.clayTrimPbrReady = !!(
+      textures && textures.basecolor && textures.normal && textures.orm
+    );
+    return clay;
+  }
+  if(mode === "trim-debug"){
+    const debug = new THREE.MeshStandardMaterial({
+      color: CLAY_TRIM_ROLE_COLORS[slot.semanticRole] || "#d6d6d6",
+      roughness: 0.82,
+      metalness: 0
+    });
+    debug.userData.clayTrimActualMode = mode;
+    debug.userData.clayTrimPbrReady = !!(
+      textures && textures.basecolor && textures.normal && textures.orm
+    );
+    return debug;
+  }
+  const pbrReady = !!(textures && textures.basecolor && textures.normal && textures.orm);
+  const pbr = mode === "pbr" && pbrReady;
+  const material = new THREE.MeshStandardMaterial({
+    map: !core && textures ? textures.basecolor : null,
+    color: core ? culture.coreColor : (textures && textures.basecolor ? 0xffffff : culture.coreColor),
+    roughness: pbr ? 1 : 0.78,
+    metalness: 0
+  });
+  if(pbr && !core){
+    material.normalMap = textures.normal;
+    material.normalMapType = THREE.TangentSpaceNormalMap;
+    material.normalScale.set(0.9, 0.9);
+    material.aoMap = textures.orm;
+    material.aoMapIntensity = 0.68;
+    material.roughnessMap = textures.orm;
+    material.metalnessMap = textures.orm;
+    material.metalness = 1;
+  }
+  material.userData.clayTrimActualMode = pbr ? "pbr" : "albedo-only";
+  material.userData.clayTrimPbrReady = pbrReady;
+  return material;
+}
+function clayRoomTrimCoreGeometry(run, depth){
+  const along = new THREE.Vector3(run.tangent[0], run.tangent[1], run.tangent[2]).normalize();
+  const across = new THREE.Vector3(run.cross[0], run.cross[1], run.cross[2]);
+  const normal = new THREE.Vector3(run.normal[0], run.normal[1], run.normal[2]).normalize();
+  const size = new THREE.Vector3(
+    Math.abs(along.x) * run.length + Math.abs(across.x) + Math.abs(normal.x) * depth,
+    Math.abs(along.y) * run.length + Math.abs(across.y) + Math.abs(normal.y) * depth,
+    Math.abs(along.z) * run.length + Math.abs(across.z) + Math.abs(normal.z) * depth
+  );
+  const center = new THREE.Vector3(run.start[0], run.start[1], run.start[2])
+    .addScaledVector(along, run.length / 2)
+    .addScaledVector(across, 0.5)
+    .addScaledVector(normal, depth / 2);
+  return {
+    geometry: new THREE.BoxGeometry(
+      Math.max(0.008, size.x),
+      Math.max(0.008, size.y),
+      Math.max(0.008, size.z)
+    ),
+    position: center
+  };
+}
+function clayRoomApplyTrimBenchMode(){
+  const group = S.clayRoomTrimBenchGroup;
+  if(!group) return false;
+  const fixture = clayRoomTrimBenchFixtureFrom(S.clayRoomRecord);
+  const mode = fixture.modes.indexOf(S.clayRoomTrimMode) >= 0
+    ? S.clayRoomTrimMode : fixture.defaultMode;
+  const bodyMode = mode === "pbr" ? "pbr"
+    : (mode === "albedo-only" ? "albedo-fallback" : "clay-control");
+  const bodySets = group.userData.trimBodyTextureSets || {};
+  const trimSets = group.userData.trimTextureSets || {};
+  group.traverse(function(node){
+    if(!node.isMesh || !node.userData) return;
+    if(node.userData.clayTrimBodySurface){
+      const materialSpec = CLAY_MATERIAL_BENCH_FIXTURE.materials.find(function(row){
+        return row.id === node.userData.materialParentId;
+      });
+      node.material = clayRoomMaterialForMode(
+        materialSpec,
+        bodySets[materialSpec.id] || null,
+        bodyMode
+      );
+    } else if(node.userData.clayTrimSurface || node.userData.clayTrimCore){
+      const culture = fixture.cultures.find(function(row){
+        return row.id === node.userData.trimCultureId;
+      });
+      const slot = fixture.slots.find(function(row){
+        return row.id === node.userData.trimSlotId;
+      });
+      node.material = clayRoomTrimMaterial(
+        culture,
+        slot,
+        trimSets[culture.id] || null,
+        mode,
+        !!node.userData.clayTrimCore
+      );
+    }
+  });
+  group.userData.trimRequestedMode = mode;
+  group.userData.trimPbrReady = fixture.cultures.every(function(culture){
+    const set = trimSets[culture.id];
+    return !!(set && set.basecolor && set.normal && set.orm);
+  }) && fixture.structures.every(function(structure){
+    return [structure.wallMaterialId, structure.floorMaterialId].every(function(id){
+      const set = bodySets[id];
+      return !!(set && set.albedo && set.normal && set.orm);
+    });
+  });
+  S.clayRoomTrimReport = clayRoomTrimBenchSnapshot();
+  if(typeof S.clayRoomRefreshTrim === "function") S.clayRoomRefreshTrim();
+  markDirty();
+  scheduleRender();
+  return true;
+}
+function clayRoomSetTrimMode(mode){
+  const fixture = clayRoomTrimBenchFixtureFrom(S.clayRoomRecord);
+  if(fixture.modes.indexOf(mode) < 0) return false;
+  S.clayRoomTrimMode = mode;
+  return clayRoomApplyTrimBenchMode();
+}
+function clayRoomTrimBenchSnapshot(){
+  const fixture = S.clayRoomRecord
+    ? clayRoomTrimBenchFixtureFrom(S.clayRoomRecord) : CLAY_TRIM_BENCH_FIXTURE;
+  const group = S.clayRoomTrimBenchGroup;
+  if(!group){
+    return {
+      fixtureId: fixture.id,
+      fixtureVersion: fixture.version,
+      mounted: false,
+      tasteStatus: fixture.tasteStatus
+    };
+  }
+  const body = [], trim = [];
+  group.traverse(function(node){
+    if(!node.isMesh || !node.userData) return;
+    if(node.userData.clayTrimBodySurface){
+      const material = Array.isArray(node.material) ? node.material[0] : node.material;
+      body.push({
+        id: node.name,
+        structureId: node.userData.trimStructureId,
+        parentId: node.userData.materialParentId,
+        role: node.userData.trimBodyRole,
+        gridTop: !!node.userData.trimGridTop,
+        channels: {
+          albedo: !!(material && material.map),
+          normal: !!(material && material.normalMap),
+          orm: !!(material && material.roughnessMap && material.aoMap && material.metalnessMap)
+        }
+      });
+    }
+    if(node.userData.clayTrimSurface){
+      const material = Array.isArray(node.material) ? node.material[0] : node.material;
+      trim.push({
+        id: node.name,
+        structureId: node.userData.trimStructureId,
+        cultureId: node.userData.trimCultureId,
+        slotId: node.userData.trimSlotId,
+        role: node.userData.trimSemanticRole,
+        uv1Present: !!(node.geometry && node.geometry.attributes && node.geometry.attributes.uv1),
+        mapBound: !!(material && material.map),
+        report: node.userData.trimRunReport
+      });
+    }
+  });
+  const runReports = trim.map(function(row){ return row.report; });
+  return {
+    fixtureId: fixture.id,
+    fixtureVersion: fixture.version,
+    mounted: true,
+    question: fixture.question,
+    tasteStatus: fixture.tasteStatus,
+    requestedMode: group.userData.trimRequestedMode || S.clayRoomTrimMode,
+    pbrReady: !!group.userData.trimPbrReady,
+    atlasLayoutId: fixture.atlasLayoutId,
+    atlasRuntimeSize: fixture.atlasRuntimeSize,
+    structures: fixture.structures,
+    cultures: fixture.cultures.map(function(culture){
+      const textures = group.userData.trimTextureSets[culture.id];
+      return {
+        id: culture.id,
+        label: culture.label,
+        metadataSha256: culture.metadataSha256,
+        pbrReady: !!(textures && textures.basecolor && textures.normal && textures.orm),
+        errors: textures ? textures.errors.slice() : []
+      };
+    }),
+    architecture: fixture.architecture,
+    architectureAudit: clayRoomTrimArchitectureAudit(fixture),
+    routingContract: fixture.routingContract,
+    bodySurfaceCount: body.length,
+    trimSurfaceCount: trim.length,
+    trimCoreCount: group.userData.trimCoreCount,
+    gridSurfaceCount: (group.userData.trimGridSurfaces || []).length,
+    walkSurfaceCount: (group.userData.trimWalkSurfaces || []).length,
+    semanticRoles: Array.from(new Set(trim.map(function(row){ return row.role; }))).sort(),
+    allRolesPerStructure: fixture.structures.every(function(structure){
+      return fixture.slots.every(function(slot){
+        return trim.some(function(row){
+          return row.structureId === structure.id && row.role === slot.semanticRole;
+        });
+      });
+    }),
+    segmentedRuns: runReports.filter(function(report){ return report.segmentCount > 1; }).length,
+    nonExactRepeatRuns: runReports.filter(function(report){ return report.nonExactRepeat; }).length,
+    uvClamped: runReports.every(function(report){
+      return report.uvRange.u[0] >= 0 && report.uvRange.u[1] <= 1
+        && report.uvRange.v[0] >= 0 && report.uvRange.v[1] <= 1;
+    }),
+    body: body,
+    trim: trim
+  };
+}
+function clayRoomMountTrimBench(){
+  S.clayRoomTrimBenchGroup = null;
+  S.clayRoomTrimReport = null;
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TRIM_BENCH_ID || !S.interiorGroup || !S.clayRoomRecord){
+    return null;
+  }
+  const fixture = clayRoomTrimBenchFixtureFrom(S.clayRoomRecord);
+  const room = S.clayRoomCompiled && S.clayRoomCompiled.room;
+  const origin = S.boardOrigin;
+  if(!room || !origin) return null;
+  S.interiorGroup.traverse(function(node){
+    const kind = node.userData && node.userData.interiorKind;
+    if(kind === "room-shell-wall-upper" || kind === "room-shell-wall-trim"){
+      node.visible = false;
+      node.userData.clayTrimHostSuppressed = true;
+    }
+    if(kind === "portal"){
+      node.visible = false;
+      node.userData.clayTrimHostSuppressed = true;
+    }
+  });
+  const rawX = room.x + (room.w - 1) / 2;
+  const rawZ = room.y + (room.d - 1) / 2;
+  const hostFloorTop = interiorFloorTopAt(S.interiorFloorTopMap, rawX, rawZ);
+  const sceneCenterX = rawX - origin.cx;
+  const sceneCenterZ = rawZ - origin.cz - 0.25;
+  const dims = fixture.architecture;
+  const group = new THREE.Group();
+  group.name = fixture.id;
+  group.userData.fixtureId = fixture.id;
+  group.userData.fixtureVersion = fixture.version;
+  group.userData.clayTrimBench = true;
+  group.userData.trimBodyTextureSets = {};
+  group.userData.trimTextureSets = {};
+  group.userData.trimGridSurfaces = [];
+  group.userData.trimWalkSurfaces = [];
+  group.userData.trimRunReports = [];
+  group.userData.trimCoreCount = 0;
+
+  function materialSpec(id){
+    return CLAY_MATERIAL_BENCH_FIXTURE.materials.find(function(row){ return row.id === id; });
+  }
+  function cultureSpec(id){
+    return fixture.cultures.find(function(row){ return row.id === id; });
+  }
+  function slotSpec(id){
+    return fixture.slots.find(function(row){ return row.id === id; });
+  }
+  function addBodyBox(structure, spec, center, size, parentId, role, gridTop, traversable){
+    const parent = materialSpec(parentId);
+    const embed = role === "floor" ? 0 : dims.contactEmbed;
+    const authored = new THREE.Vector3(center[0], center[1], center[2]);
+    const position = authored.clone();
+    position.y -= embed / 2;
+    const geometry = new THREE.BoxGeometry(size[0], size[1] + embed, size[2]);
+    const phase = new THREE.Vector3(
+      sceneCenterX + structure.offset.x - dims.width / 2,
+      hostFloorTop + dims.slabThickness,
+      sceneCenterZ + structure.offset.z - dims.depth / 2
+    );
+    clayRoomMaterialUvProject(
+      geometry,
+      position,
+      phase,
+      CLAY_MATERIAL_BENCH_FIXTURE.metersPerTile / CLAY_MATERIAL_BENCH_FIXTURE.metersPerWorldUnit
+    );
+    const mesh = new THREE.Mesh(
+      geometry,
+      clayRoomMaterialForMode(parent, null, "albedo-fallback")
+    );
+    mesh.name = structure.id + "-" + spec;
+    mesh.position.copy(position);
+    mesh.castShadow = role !== "floor";
+    mesh.receiveShadow = true;
+    mesh.userData.interiorKind = "trim-proof";
+    mesh.userData.clayTrimBodySurface = true;
+    mesh.userData.trimStructureId = structure.id;
+    mesh.userData.materialParentId = parentId;
+    mesh.userData.trimBodyRole = role;
+    mesh.userData.trimGridTop = !!gridTop;
+    group.add(mesh);
+    if(gridTop){
+      const surface = {
+        id: mesh.name,
+        structureId: structure.id,
+        traversable: !!traversable,
+        minX: authored.x - size[0] / 2,
+        maxX: authored.x + size[0] / 2,
+        minZ: authored.z - size[2] / 2,
+        maxZ: authored.z + size[2] / 2,
+        y: authored.y + size[1] / 2
+      };
+      group.userData.trimGridSurfaces.push(surface);
+      if(traversable) group.userData.trimWalkSurfaces.push(surface);
+    }
+    return mesh;
+  }
+  function addTrimRun(structure, definition){
+    const culture = cultureSpec(structure.cultureId);
+    const slot = slotSpec(definition.slotId);
+    const normal = new THREE.Vector3(
+      definition.normal[0], definition.normal[1], definition.normal[2]
+    ).normalize();
+    const frontStart = [
+      definition.start[0] + normal.x * (dims.trimReliefDepth + 0.002),
+      definition.start[1] + normal.y * (dims.trimReliefDepth + 0.002),
+      definition.start[2] + normal.z * (dims.trimReliefDepth + 0.002)
+    ];
+    const surfaceDefinition = Object.assign({}, definition, {
+      start: frontStart,
+      structureId: structure.id
+    });
+    const built = clayRoomTrimRunGeometry(
+      surfaceDefinition,
+      slot,
+      fixture.atlasRuntimeSize
+    );
+    const surface = new THREE.Mesh(
+      built.geometry,
+      clayRoomTrimMaterial(culture, slot, null, "albedo-only", false)
+    );
+    surface.name = structure.id + "-" + definition.id;
+    surface.castShadow = false;
+    surface.receiveShadow = true;
+    surface.userData.interiorKind = "trim-proof";
+    surface.userData.clayTrimSurface = true;
+    surface.userData.trimStructureId = structure.id;
+    surface.userData.trimCultureId = culture.id;
+    surface.userData.trimSlotId = slot.id;
+    surface.userData.trimSemanticRole = slot.semanticRole;
+    surface.userData.trimRunReport = built.report;
+    group.add(surface);
+    const coreBuilt = clayRoomTrimCoreGeometry(definition, dims.trimReliefDepth);
+    const core = new THREE.Mesh(
+      coreBuilt.geometry,
+      clayRoomTrimMaterial(culture, slot, null, "albedo-only", true)
+    );
+    core.name = surface.name + "-profile-core";
+    core.position.copy(coreBuilt.position);
+    core.castShadow = true;
+    core.receiveShadow = true;
+    core.userData.interiorKind = "trim-proof";
+    core.userData.clayTrimCore = true;
+    core.userData.trimStructureId = structure.id;
+    core.userData.trimCultureId = culture.id;
+    core.userData.trimSlotId = slot.id;
+    core.userData.trimSemanticRole = slot.semanticRole;
+    group.add(core);
+    group.userData.trimRunReports.push(built.report);
+    group.userData.trimCoreCount++;
+  }
+
+  fixture.structures.forEach(function(structure){
+    const cx = sceneCenterX + structure.offset.x;
+    const cz = sceneCenterZ + structure.offset.z;
+    const floorY = hostFloorTop;
+    const baseY = floorY + dims.slabThickness;
+    const w = dims.width, d = dims.depth, t = dims.wallThickness, h = dims.wallHeight;
+    // Keep the north doorway in the low west bay. The raised platform occupies the north-east
+    // corner; sharing the same threshold footprint would turn the lower half of the doorway into
+    // an accidental retaining wall.
+    const openingCenterX = cx + dims.openingCenterX;
+    const openingLeft = openingCenterX - dims.openingWidth / 2;
+    const openingRight = openingCenterX + dims.openingWidth / 2;
+    const leftWallMin = cx - w / 2 + t;
+    const rightWallMax = cx + w / 2 - t;
+    const leftLength = openingLeft - leftWallMin;
+    const rightLength = rightWallMax - openingRight;
+    const wallCenterY = baseY + h / 2;
+    const stubCenterY = baseY + dims.stubHeight / 2;
+
+    addBodyBox(structure, "supported-slab",
+      [cx, floorY + dims.slabThickness / 2, cz],
+      [w + t, dims.slabThickness, d + t],
+      structure.floorMaterialId, "floor", true, true);
+    addBodyBox(structure, "west-wall",
+      [cx - w / 2 + t / 2, wallCenterY, cz],
+      [t, h, d], structure.wallMaterialId, "wall", true, false);
+    addBodyBox(structure, "north-wall-left",
+      [(leftWallMin + openingLeft) / 2, wallCenterY, cz - d / 2 + t / 2],
+      [leftLength, h, t], structure.wallMaterialId, "wall", true, false);
+    addBodyBox(structure, "north-wall-right",
+      [(openingRight + rightWallMax) / 2, wallCenterY, cz - d / 2 + t / 2],
+      [rightLength, h, t], structure.wallMaterialId, "wall", true, false);
+    addBodyBox(structure, "north-opening-header",
+      [openingCenterX, baseY + dims.openingHeight + (h - dims.openingHeight) / 2, cz - d / 2 + t / 2],
+      [dims.openingWidth, h - dims.openingHeight, t],
+      structure.wallMaterialId, "opening", true, false);
+    addBodyBox(structure, "south-wall-stub",
+      [cx, stubCenterY, cz + d / 2 - t / 2],
+      [w, dims.stubHeight, t], structure.wallMaterialId, "cutaway-stub", true, false);
+    addBodyBox(structure, "east-wall-stub",
+      [cx + w / 2 - t / 2, stubCenterY, cz],
+      [t, dims.stubHeight, d], structure.wallMaterialId, "cutaway-stub", true, false);
+
+    const platform = dims.platform;
+    const stair = dims.stair;
+    const platformCx = cx + w / 2 - t - platform.width / 2;
+    // The platform seats against the north wall and the two-tread approach remains wholly inside
+    // the room. The earlier +0.40 placement pushed the low tread through the south cutaway stub,
+    // making an otherwise valid .18 -> .36 -> .54 rise sequence read as a floating add-on.
+    const platformCz = cz - d / 2 + t + platform.depth / 2;
+    const platformSouth = platformCz + platform.depth / 2;
+    addBodyBox(structure, "raised-platform",
+      [platformCx, baseY + platform.height / 2, platformCz],
+      [platform.width, platform.height, platform.depth],
+      structure.floorMaterialId, "platform", true, true);
+    addBodyBox(structure, "stair-high",
+      [platformCx, baseY + stair.highHeight / 2,
+        platformSouth + stair.treadDepth / 2 - dims.contactEmbed],
+      [stair.width, stair.highHeight, stair.treadDepth + dims.contactEmbed * 2],
+      structure.floorMaterialId, "stair", true, true);
+    addBodyBox(structure, "stair-low",
+      [platformCx, baseY + stair.lowHeight / 2,
+        platformSouth + stair.treadDepth * 1.5 - dims.contactEmbed * 2],
+      [stair.width, stair.lowHeight, stair.treadDepth + dims.contactEmbed * 2],
+      structure.floorMaterialId, "stair", true, true);
+
+    const westInnerX = cx - w / 2 + t;
+    const eastInnerX = cx + w / 2 - t;
+    const northInnerZ = cz - d / 2 + t;
+    const southInnerZ = cz + d / 2 - t;
+    const innerW = w - t * 2, innerD = d - t * 2;
+    const baseBandH = 0.22, corniceH = 0.22, frameW = 0.14;
+    const phase = structure.id === "institutional-workroom" ? 0.17 : 0.41;
+    const runs = [
+      { id: "west-base-course", slotId: "base-course",
+        start: [westInnerX, baseY, northInnerZ], tangent: [0,0,1], cross: [0,baseBandH,0],
+        normal: [1,0,0], length: innerD, phaseOrigin: phase },
+      { id: "north-base-left", slotId: "base-course",
+        start: [leftWallMin, baseY, northInnerZ], tangent: [1,0,0], cross: [0,baseBandH,0],
+        normal: [0,0,1], length: leftLength, phaseOrigin: phase },
+      { id: "north-base-right", slotId: "base-course",
+        start: [openingRight, baseY, northInnerZ], tangent: [1,0,0], cross: [0,baseBandH,0],
+        normal: [0,0,1], length: rightLength, phaseOrigin: phase + leftLength + dims.openingWidth },
+      { id: "south-stub-base", slotId: "base-course",
+        start: [cx - innerW / 2, baseY, southInnerZ], tangent: [1,0,0], cross: [0,baseBandH,0],
+        normal: [0,0,-1], length: innerW, phaseOrigin: phase },
+      { id: "east-stub-base", slotId: "base-course",
+        start: [eastInnerX, baseY, cz - innerD / 2], tangent: [0,0,1], cross: [0,baseBandH,0],
+        normal: [-1,0,0], length: innerD, phaseOrigin: phase },
+      { id: "west-cornice", slotId: "cornice-belt",
+        start: [westInnerX, baseY + h - corniceH, northInnerZ], tangent: [0,0,1], cross: [0,corniceH,0],
+        normal: [1,0,0], length: innerD, phaseOrigin: phase },
+      { id: "north-cornice", slotId: "cornice-belt",
+        start: [leftWallMin, baseY + h - corniceH, northInnerZ], tangent: [1,0,0], cross: [0,corniceH,0],
+        normal: [0,0,1], length: innerW, phaseOrigin: phase },
+      { id: "west-coping", slotId: "coping-cap",
+        start: [cx - w / 2, baseY + h, cz - d / 2], tangent: [0,0,1], cross: [t,0,0],
+        normal: [0,1,0], length: d, phaseOrigin: phase },
+      { id: "north-coping", slotId: "coping-cap",
+        start: [cx - w / 2, baseY + h, cz - d / 2], tangent: [1,0,0], cross: [0,0,t],
+        normal: [0,1,0], length: w, phaseOrigin: phase },
+      { id: "south-stub-coping", slotId: "coping-cap",
+        start: [cx - w / 2, baseY + dims.stubHeight, cz + d / 2 - t], tangent: [1,0,0], cross: [0,0,t],
+        normal: [0,1,0], length: w, phaseOrigin: phase },
+      { id: "east-stub-coping", slotId: "coping-cap",
+        start: [cx + w / 2 - t, baseY + dims.stubHeight, cz - d / 2], tangent: [0,0,1], cross: [t,0,0],
+        normal: [0,1,0], length: d, phaseOrigin: phase },
+      { id: "door-left-jamb", slotId: "plain-band",
+        start: [openingLeft - frameW, baseY, northInnerZ], tangent: [0,1,0], cross: [frameW,0,0],
+        normal: [0,0,1], length: dims.openingHeight, phaseOrigin: phase },
+      { id: "door-right-jamb", slotId: "plain-band",
+        start: [openingRight, baseY, northInnerZ], tangent: [0,1,0], cross: [frameW,0,0],
+        normal: [0,0,1], length: dims.openingHeight, phaseOrigin: phase },
+      { id: "door-header-band", slotId: "plain-band",
+        start: [openingLeft - frameW, baseY + dims.openingHeight, northInnerZ], tangent: [1,0,0], cross: [0,frameW,0],
+        normal: [0,0,1], length: dims.openingWidth + frameW * 2, phaseOrigin: phase },
+      { id: "inside-corner-west-return", slotId: "plain-band",
+        start: [westInnerX, baseY, northInnerZ], tangent: [0,1,0], cross: [0,0,frameW],
+        normal: [1,0,0], length: h, phaseOrigin: phase },
+      { id: "inside-corner-north-return", slotId: "plain-band",
+        start: [westInnerX, baseY, northInnerZ], tangent: [0,1,0], cross: [frameW,0,0],
+        normal: [0,0,1], length: h, phaseOrigin: phase },
+      // The retaining curb owns the platform front but yields the actual stair opening. Continuing
+      // one solid band across the landing would make the stair terminate at a wall.
+      { id: "platform-front-curb-left", slotId: "curb-retaining",
+        start: [platformCx - platform.width / 2, baseY, platformSouth],
+        tangent: [1,0,0], cross: [0,platform.height,0], normal: [0,0,1],
+        length: (platform.width - stair.width) / 2, phaseOrigin: phase },
+      { id: "platform-front-curb-right", slotId: "curb-retaining",
+        start: [platformCx + stair.width / 2, baseY, platformSouth],
+        tangent: [1,0,0], cross: [0,platform.height,0], normal: [0,0,1],
+        length: (platform.width - stair.width) / 2,
+        phaseOrigin: phase + (platform.width + stair.width) / 2 },
+      { id: "platform-side-curb", slotId: "curb-retaining",
+        start: [platformCx - platform.width / 2, baseY, platformCz - platform.depth / 2],
+        tangent: [0,0,1], cross: [0,platform.height,0],
+        normal: [-1,0,0], length: platform.depth, phaseOrigin: phase },
+      { id: "high-stair-nosing", slotId: "stair-nosing",
+        start: [platformCx - stair.width / 2, baseY + stair.highHeight - 0.09,
+          platformSouth + stair.treadDepth - dims.contactEmbed],
+        tangent: [1,0,0], cross: [0,0.09,0], normal: [0,0,1],
+        length: stair.width, phaseOrigin: phase },
+      { id: "low-stair-nosing", slotId: "stair-nosing",
+        start: [platformCx - stair.width / 2, baseY + stair.lowHeight - 0.09,
+          platformSouth + stair.treadDepth * 2 - dims.contactEmbed * 2],
+        tangent: [1,0,0], cross: [0,0.09,0], normal: [0,0,1],
+        length: stair.width, phaseOrigin: phase }
+    ];
+    runs.forEach(function(run){ addTrimRun(structure, run); });
+  });
+  S.interiorGroup.add(group);
+  S.clayRoomTrimBenchGroup = group;
+  S.clayRoomTrimMode = fixture.modes.indexOf(S.clayRoomTrimMode) >= 0
+    ? S.clayRoomTrimMode : fixture.defaultMode;
+  S.clayRoomTrimReport = clayRoomTrimBenchSnapshot();
+  const bodyIds = Array.from(new Set(fixture.structures.reduce(function(ids, structure){
+    return ids.concat([structure.wallMaterialId, structure.floorMaterialId]);
+  }, [])));
+  Promise.all([
+    Promise.all(bodyIds.map(function(id){
+      return clayRoomMaterialLoadSet(materialSpec(id)).then(function(textures){
+        return { id: id, textures: textures };
+      });
+    })),
+    Promise.all(fixture.cultures.map(function(culture){
+      return clayRoomTrimLoadSet(culture).then(function(textures){
+        return { id: culture.id, textures: textures };
+      });
+    }))
+  ]).then(function(results){
+    if(S.clayRoomTrimBenchGroup !== group) return;
+    results[0].forEach(function(result){
+      group.userData.trimBodyTextureSets[result.id] = result.textures;
+    });
+    results[1].forEach(function(result){
+      group.userData.trimTextureSets[result.id] = result.textures;
+    });
+    clayRoomApplyTrimBenchMode();
+  }).catch(function(error){
+    group.userData.trimLoadError = String(error);
+    clayRoomApplyTrimBenchMode();
+  });
   return group;
 }
 
@@ -1408,13 +3637,19 @@ function clayRoomMountLightingBench(){
   group.userData.fixtureId = fixture.id;
   group.userData.fixtureVersion = fixture.version;
   fixture.primitives.forEach(function(spec){
-    let geometry, height;
+    let geometry, height, contactSink;
     if(spec.primitive === "sphere"){
       geometry = new THREE.SphereGeometry(spec.radius, 32, 20);
       height = spec.radius * 2;
+      contactSink = CLAY_STRUCTURE_CONTACT_EMBED;
     } else {
-      geometry = new THREE.BoxGeometry(spec.size.x, spec.size.y, spec.size.z);
+      geometry = new THREE.BoxGeometry(
+        spec.size.x,
+        spec.size.y + CLAY_STRUCTURE_CONTACT_EMBED,
+        spec.size.z
+      );
       height = spec.size.y;
+      contactSink = CLAY_STRUCTURE_CONTACT_EMBED / 2;
     }
     const material = new THREE.MeshStandardMaterial({
       color: CLAY_DIAGNOSTIC_SURFACE_RECIPE.clayColor,
@@ -1423,12 +3658,17 @@ function clayRoomMountLightingBench(){
     });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.name = spec.id;
-    mesh.position.set(centerX + spec.offset.x, floorTop + height / 2, centerZ + spec.offset.z);
+    mesh.position.set(
+      centerX + spec.offset.x,
+      floorTop + height / 2 - contactSink,
+      centerZ + spec.offset.z
+    );
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     mesh.userData.interiorKind = spec.role;
     mesh.userData.clayBenchPrimitive = spec.id;
     mesh.userData.clayBenchPrimitiveType = spec.primitive;
+    mesh.userData.clayContactEmbed = CLAY_STRUCTURE_CONTACT_EMBED;
     group.add(mesh);
   });
   S.interiorGroup.add(group);
@@ -2223,13 +4463,27 @@ async function clayRoomCaptureLightingMatrix(){
    then provenance re-tagging (the rebuild replaced the children the previous tags pointed at). */
 function clayRoomAfterInteriorBoardRebuild(){
   if(!S.clayRoomDiagnosticActive) return;
+  // setInteriorBoard has just restored the base recipe's own void/fog. Bank that source-owned
+  // colour before the independent room-mood layer blends over it; direct mood switches always
+  // return to this clean base rather than compounding one tint into the next.
+  if(S.scene && S.scene.background && S.scene.background.isColor){
+    S.clayRoomMoodBaseBackground = S.scene.background.getHex();
+  }
   clayRoomMountStructureBench();
   clayRoomMountLightingBench();
   clayRoomMountSpriteBench();
+  clayRoomMountMaterialBench();
+  clayRoomMountTrimBench();
   clayRoomSuppressLightingBenchNoise();
   clayRoomApplyDiagnosticSurfaces();
   clayRoomApplyLightProfile(S.clayRoomRecord);
+  clayRoomApplyMoodLayer();
   clayRoomBuildLightOverlays();
+  clayRoomDisposeSeamGrid();
+  S.clayGridMesh = clayRoomBuildSeamGrid(
+    S.clayRoomRecord,
+    S.clayRoomCompiled && S.clayRoomCompiled.room
+  );
   clayRoomTagAllProvenance();
   // pan/zoom survives rebuilds without compounding: capture THIS rebuild's fresh camera fit, then
   // re-derive the pose from fit ∘ offset ∘ zoom (see the CLAY CAMERA PAN/ZOOM block).
@@ -2265,8 +4519,8 @@ function clayRoomSettleCameraPoseTween(){
 
 // ─── D12a (Adam's founder redline, capture packet #1, 2026-07-23 — verbatim: "i need a semi-
 // transparent grid overlaying the seams of the tiles") ───────────────────────────────────────────
-// A semi-transparent THREE.LineSegments grid drawn exactly on every cell BOUNDARY of the record's
-// own floor — a visual truth aid, never a second source of cell geometry. Line COUNT is derived
+// A semi-transparent world-space strip grid drawn exactly on every cell BOUNDARY of the record's
+// own floor — a visual truth aid, never a second source of cell geometry. Segment COUNT is derived
 // FROM record.dims, never a hardcoded literal: (w+1) lines running along Z (one per x-boundary,
 // x=0..w) + (d+1) lines running along X (one per z-boundary, z=0..d) — exactly the spec's own
 // "(w+1)+(d+1) lines". Origin/cell-size math mirrors the SAME law the floor itself renders through:
@@ -2279,8 +4533,12 @@ function clayRoomSettleCameraPoseTween(){
 // just above the floor's own TOP surface via interiorFloorTopAt (the SAME derived-never-hand-tuned
 // law every other floor-contact mount in this file already uses) plus a small clearance
 // (CLAY_GRID_CLEARANCE, matching f1BuildCombatGrid's own +0.01 decal-clearance convention, this
-// file ~10411) — enough to clear z-fighting without visibly floating. LineBasicMaterial (linewidth
-// is capped at 1 on most GL backends — accepted per spec, never fought with a fatter-line shader).
+// file ~10411) — enough to clear z-fighting without visibly floating. GL line width used to be
+// capped at 1 px on most backends, which made correct coverage disappear over detailed
+// albedo at review scale. Each deduplicated segment now becomes a narrow surface-clipped quad whose
+// premultiplied custom blend performs alpha-weighted multiply:
+//     destination × (1 - alpha + gridColour × alpha)
+// This darkens the underlying material without bleaching it, glowing, or erasing its texture.
 // depthWrite:false (this file's own standard transparent-decal pairing) keeps it from corrupting
 // the depth buffer other transparent draws (the citizen's sprite billboard) test against; a
 // renderOrder BELOW the scene default (0) draws it EARLY in the transparent queue so it composites
@@ -2301,6 +4559,7 @@ function clayRoomSettleCameraPoseTween(){
 // are forbidden here). D12a's own 0.25-0.35 opacity law is enforced on the recipe by the harness.
 function clayRoomGridColor(){ return CLAY_DIAGNOSTIC_SURFACE_RECIPE.gridColor; }
 function clayRoomGridOpacity(){ return CLAY_DIAGNOSTIC_SURFACE_RECIPE.gridOpacity; }
+function clayRoomGridStripWidth(){ return CLAY_DIAGNOSTIC_SURFACE_RECIPE.gridStripWidth; }
 const CLAY_GRID_CLEARANCE = 0.01;   // matches f1BuildCombatGrid's own +0.01 (this file ~10411)
 // CL-R0 COORDINATE FIX (found by the provenance audit's own new bbox field, not by eye): this grid
 // was authored against the record's LOCAL 0..4 cell frame, but D15 re-wired the render to compile
@@ -2313,33 +4572,246 @@ const CLAY_GRID_CLEARANCE = 0.01;   // matches f1BuildCombatGrid's own +0.01 (th
 // near-black; CL-R0's legible clay is what made the absence visible. `roomRect` is the spatialized
 // room (clayRoomBoardFrom's own `room`), passed in rather than re-derived so the grid can never
 // drift from wherever the spatializer actually put the room.
+function clayRoomDisposeSeamGrid(){
+  const grid = S.clayGridMesh;
+  if(!grid) return;
+  if(grid.parent) grid.parent.remove(grid);
+  if(grid.geometry && grid.geometry.dispose) grid.geometry.dispose();
+  if(grid.material && grid.material.dispose) grid.material.dispose();
+  S.clayGridMesh = null;
+}
 function clayRoomBuildSeamGrid(record, roomRect){
-  if(!S.scene) return null;
+  if(!S.scene || !record || !record.dims) return null;
   const ox = roomRect && typeof roomRect.x === "number" ? roomRect.x : 0;
   const oz = roomRect && typeof roomRect.y === "number" ? roomRect.y : 0;
-  const cx = (S.boardOrigin && typeof S.boardOrigin.cx === "number") ? S.boardOrigin.cx : ox + (record.dims.w - 1) / 2;
-  const cz = (S.boardOrigin && typeof S.boardOrigin.cz === "number") ? S.boardOrigin.cz : oz + (record.dims.d - 1) / 2;
-  // Sample the floor-top map at a REAL cell of this room (its own origin cell), not at plan (0,0) —
-  // which is outside the room entirely and silently returned the fallback height.
-  const floorTop = interiorFloorTopAt(S.interiorFloorTopMap, ox, oz); // this record's floor is flat — any of its cells answers the same value
-  const y = floorTop + CLAY_GRID_CLEARANCE;
-  const minX = ox - 0.5 - cx, maxX = ox + (record.dims.w - 1) + 0.5 - cx;
-  const minZ = oz - 0.5 - cz, maxZ = oz + (record.dims.d - 1) + 0.5 - cz;
+  const cx = (S.boardOrigin && typeof S.boardOrigin.cx === "number")
+    ? S.boardOrigin.cx : ox + (record.dims.w - 1) / 2;
+  const cz = (S.boardOrigin && typeof S.boardOrigin.cz === "number")
+    ? S.boardOrigin.cz : oz + (record.dims.d - 1) / 2;
+  const segments = [];
+  const segmentKeys = new Set();
+  const report = {
+    contract: "every-flat-or-traversable-surface",
+    hostFloorCells: 0,
+    shellFloorCells: 0,
+    stairTreads: 0,
+    walkableTops: 0,
+    rampSurfaces: 0,
+    crateTops: 0,
+    roundTops: 0,
+    materialSurfaces: 0,
+    trimSurfaces: 0,
+    uniqueSegments: 0,
+    generatedQuadCount: 0,
+    renderer: "surface-clipped-world-strips",
+    blendContract: CLAY_DIAGNOSTIC_SURFACE_RECIPE.gridBlendContract,
+    stripWidthWorldUnits: clayRoomGridStripWidth()
+  };
+  function pointKey(p){
+    return [p.x, p.y, p.z].map(function(value){ return Number(value).toFixed(4); }).join(",");
+  }
+  function addSegment(a, b){
+    const ak = pointKey(a), bk = pointKey(b);
+    const key = ak < bk ? ak + "|" + bk : bk + "|" + ak;
+    if(segmentKeys.has(key)) return;
+    segmentKeys.add(key);
+    segments.push([a.clone(), b.clone()]);
+  }
+  function addRect(minX, maxX, minZ, maxZ, y){
+    const p0 = new THREE.Vector3(minX, y, minZ);
+    const p1 = new THREE.Vector3(maxX, y, minZ);
+    const p2 = new THREE.Vector3(maxX, y, maxZ);
+    const p3 = new THREE.Vector3(minX, y, maxZ);
+    addSegment(p0, p1); addSegment(p1, p2); addSegment(p2, p3); addSegment(p3, p0);
+  }
+  function addCellGridRect(minX, maxX, minZ, maxZ, y){
+    addRect(minX, maxX, minZ, maxZ, y);
+    const firstX = Math.ceil(minX + cx - 0.5);
+    for(let rawX = firstX; ; rawX++){
+      const x = rawX + 0.5 - cx;
+      if(x >= maxX - 0.0001) break;
+      if(x > minX + 0.0001){
+        addSegment(new THREE.Vector3(x, y, minZ), new THREE.Vector3(x, y, maxZ));
+      }
+    }
+    const firstZ = Math.ceil(minZ + cz - 0.5);
+    for(let rawZ = firstZ; ; rawZ++){
+      const z = rawZ + 0.5 - cz;
+      if(z >= maxZ - 0.0001) break;
+      if(z > minZ + 0.0001){
+        addSegment(new THREE.Vector3(minX, y, z), new THREE.Vector3(maxX, y, z));
+      }
+    }
+  }
+  function addCircle(x, z, y, radius){
+    const steps = 24;
+    for(let index = 0; index < steps; index++){
+      const a = index / steps * Math.PI * 2;
+      const b = (index + 1) / steps * Math.PI * 2;
+      addSegment(
+        new THREE.Vector3(x + Math.cos(a) * radius, y, z + Math.sin(a) * radius),
+        new THREE.Vector3(x + Math.cos(b) * radius, y, z + Math.sin(b) * radius)
+      );
+    }
+  }
+
+  // The host floor may eventually carry cell-specific tiers. Read each live floor-top lookup rather
+  // than assuming one Y plane, and de-duplicate shared coplanar edges so opacity stays authored.
+  for(let ix = 0; ix < record.dims.w; ix++){
+    for(let iz = 0; iz < record.dims.d; iz++){
+      const y = interiorFloorTopAt(S.interiorFloorTopMap, ox + ix, oz + iz) + CLAY_GRID_CLEARANCE;
+      const x = ox + ix - cx, z = oz + iz - cz;
+      addRect(x - 0.5, x + 0.5, z - 0.5, z + 0.5, y);
+      report.hostFloorCells++;
+    }
+  }
+
+  const structure = S.clayRoomStructureBenchGroup;
+  if(structure){
+    (structure.userData.structureWalkSurfaces || []).forEach(function(surface){
+      addRect(
+        surface.x - surface.width / 2,
+        surface.x + surface.width / 2,
+        surface.z - surface.depth / 2,
+        surface.z + surface.depth / 2,
+        surface.y + CLAY_GRID_CLEARANCE
+      );
+      report.shellFloorCells++;
+    });
+    structure.updateMatrixWorld(true);
+    structure.traverse(function(node){
+      if(!node || !node.isMesh || node.visible === false || !node.userData) return;
+      const ud = node.userData;
+      if(ud.structureRampGrid){
+        const ramp = ud.structureRampGrid;
+        const lowLeft = node.localToWorld(new THREE.Vector3(
+          -ramp.width / 2, CLAY_GRID_CLEARANCE, -ramp.run / 2
+        ));
+        const lowRight = node.localToWorld(new THREE.Vector3(
+          ramp.width / 2, CLAY_GRID_CLEARANCE, -ramp.run / 2
+        ));
+        const highRight = node.localToWorld(new THREE.Vector3(
+          ramp.width / 2, ramp.rise + CLAY_GRID_CLEARANCE, ramp.run / 2
+        ));
+        const highLeft = node.localToWorld(new THREE.Vector3(
+          -ramp.width / 2, ramp.rise + CLAY_GRID_CLEARANCE, ramp.run / 2
+        ));
+        addSegment(lowLeft, lowRight);
+        addSegment(lowRight, highRight);
+        addSegment(highRight, highLeft);
+        addSegment(highLeft, lowLeft);
+        report.rampSurfaces++;
+        return;
+      }
+      const surfaceY = ud.structureStepSurfaceY != null
+        ? ud.structureStepSurfaceY : ud.structureWalkSurfaceY;
+      if(surfaceY == null) return;
+      const box = new THREE.Box3().setFromObject(node);
+      const y = surfaceY + CLAY_GRID_CLEARANCE;
+      if(ud.structureGridShape === "circle"){
+        const center = new THREE.Vector3();
+        node.getWorldPosition(center);
+        addCircle(center.x, center.z, y, ud.structureGridRadius || Math.min(
+          box.max.x - box.min.x,
+          box.max.z - box.min.z
+        ) / 2);
+        report.roundTops++;
+      } else {
+        addRect(box.min.x, box.max.x, box.min.z, box.max.z, y);
+      }
+      if(ud.structureStepSurfaceY != null) report.stairTreads++;
+      else report.walkableTops++;
+    });
+  }
+
+  // CL-F04 material specimens are genuine walkable tops, not a texture-only backdrop. Extend the
+  // same canonical one-cell grid phase over every declared top while leaving walls/riser faces
+  // unobscured for material review.
+  const materialBench = S.clayRoomMaterialBenchGroup;
+  if(materialBench){
+    (materialBench.userData.materialGridSurfaces || []).forEach(function(surface){
+      addCellGridRect(
+        surface.minX, surface.maxX, surface.minZ, surface.maxZ,
+        surface.y + CLAY_GRID_CLEARANCE
+      );
+      report.materialSurfaces++;
+    });
+  }
+  const trimBench = S.clayRoomTrimBenchGroup;
+  if(trimBench){
+    (trimBench.userData.trimGridSurfaces || []).forEach(function(surface){
+      addCellGridRect(
+        surface.minX, surface.maxX, surface.minZ, surface.maxZ,
+        surface.y + CLAY_GRID_CLEARANCE
+      );
+      report.trimSurfaces++;
+    });
+  }
+
+  // The room-truth crate is production FACED_BOX geometry, not a Clayroom re-creation. Its live
+  // assembly bounds own the overlay, so a later size/material change moves the top grid with it.
+  let crateRoot = null;
+  if(S.interiorGroup && record.object && record.object.access && record.object.access.top === "walk"){
+    S.interiorGroup.traverse(function(node){
+      if(crateRoot || !node || !node.userData) return;
+      if(node.userData.sceneObjectId === record.object.id && node.userData.furnitureKind === "crate"){
+        crateRoot = node;
+      }
+    });
+  }
+  if(crateRoot){
+    crateRoot.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(crateRoot);
+    addRect(
+      box.min.x, box.max.x, box.min.z, box.max.z,
+      box.max.y + CLAY_GRID_CLEARANCE
+    );
+    report.crateTops++;
+  }
+
+  report.uniqueSegments = segmentKeys.size;
   const pts = [];
-  for(let ix = 0; ix <= record.dims.w; ix++){
-    const x = ox + ix - 0.5 - cx;
-    pts.push(x, y, minZ, x, y, maxZ);
-  }
-  for(let iz = 0; iz <= record.dims.d; iz++){
-    const z = oz + iz - 0.5 - cz;
-    pts.push(minX, y, z, maxX, y, z);
-  }
+  const halfWidth = clayRoomGridStripWidth() / 2;
+  segments.forEach(function(segment){
+    const a = segment[0], b = segment[1];
+    const dx = b.x - a.x, dz = b.z - a.z;
+    const horizontalLength = Math.hypot(dx, dz);
+    if(horizontalLength < 0.000001) return;
+    const px = -dz / horizontalLength * halfWidth;
+    const pz = dx / horizontalLength * halfWidth;
+    const a0 = [a.x + px, a.y, a.z + pz];
+    const a1 = [a.x - px, a.y, a.z - pz];
+    const b0 = [b.x + px, b.y, b.z + pz];
+    const b1 = [b.x - px, b.y, b.z - pz];
+    pts.push(
+      a0[0], a0[1], a0[2], a1[0], a1[1], a1[2], b0[0], b0[1], b0[2],
+      a1[0], a1[1], a1[2], b1[0], b1[1], b1[2], b0[0], b0[1], b0[2]
+    );
+    report.generatedQuadCount++;
+  });
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
-  const mat = new THREE.LineBasicMaterial({ color: clayRoomGridColor(), transparent: true, opacity: clayRoomGridOpacity(), depthWrite: false });
-  const grid = new THREE.LineSegments(geo, mat);
+  const mat = new THREE.MeshBasicMaterial({
+    color: clayRoomGridColor(),
+    transparent: true,
+    opacity: clayRoomGridOpacity(),
+    premultipliedAlpha: true,
+    blending: THREE.CustomBlending,
+    blendEquation: THREE.AddEquation,
+    blendSrc: THREE.DstColorFactor,
+    blendDst: THREE.OneMinusSrcAlphaFactor,
+    depthTest: true,
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -2,
+    side: THREE.DoubleSide
+  });
+  const grid = new THREE.Mesh(geo, mat);
+  grid.name = "clay-traversability-grid";
   grid.renderOrder = -1;
   grid.userData.clayGrid = true;
+  grid.userData.clayGridReport = report;
   S.scene.add(grid);
   return grid;
 }
@@ -2589,6 +5061,31 @@ function clayRoomMovementBoardFromState(state){
       wallProps: []
     });
   }
+  if(S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID){
+    const room = compiled.room;
+    pieces = pieces.map(function(piece){
+      return Object.assign({}, piece, {
+        cellX: room.x + 5,
+        cellY: room.y + 9
+      });
+    });
+    return Object.assign({}, base, {
+      pieces: pieces,
+      furniture: [],
+      interactables: [],
+      dressing: [],
+      wallProps: []
+    });
+  }
+  if(S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID){
+    return Object.assign({}, base, {
+      pieces: [],
+      furniture: [],
+      interactables: [],
+      dressing: [],
+      wallProps: []
+    });
+  }
   if(S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID){
     const fixture = clayRoomSpriteCitizenshipFixtureFrom(S.clayRoomRecord);
     const room = compiled.room;
@@ -2722,6 +5219,7 @@ function clayRoomTagAllProvenance(){
   if(S.interiorGroup) clayRoomTagProvenance(S.interiorGroup, "setInteriorBoard"); // board/figure/lights/furniture — nested
   if(S.clayGridMesh) clayRoomTagProvenance(S.clayGridMesh, "clayRoomBuildSeamGrid"); // grid
   if(S.clayRoomLightOverlayGroup) clayRoomTagProvenance(S.clayRoomLightOverlayGroup, "clayRoomBuildLightOverlays");
+  if(S.clayRoomMoodGroup) clayRoomTagProvenance(S.clayRoomMoodGroup, "clayRoomApplyMoodLayer");
   if(S.ambientLight) clayRoomTagProvenance(S.ambientLight, "clayRoomApplyLightProfile"); // lights
   (S.pointLights || []).forEach(function(l){ clayRoomTagProvenance(l, "clayRoomApplyLightProfile"); }); // lights
 }
@@ -3035,6 +5533,9 @@ function clayRoomPickAt(ev, host){
       const id = ud.structureSpecId || ud.sceneObjectId || ud.lightId || ud.dressingSlug;
       if(id){
         S.clayRoomSelectedId = id;
+        if(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID){
+          clayRoomStructureClimbTargetSet(id, hits[i].object, hits[i].point);
+        }
         if(S.clayRoomWorkbenchSelect) S.clayRoomWorkbenchSelect(id, "viewport");
         return id;
       }
@@ -3318,6 +5819,11 @@ function mountClayRoom(){
   try {
     if(S.clayRoomMounted) return;
     const record = clayRoomRecordFrom(0x6c0ffee); // the CI seed, pinned per docs/C1A-CLAY-ROOM.md wire-in step 1
+    const initialFixtureId = clayRoomFixtureIdFromLocation();
+    // CL-F04/05 are focused visual comparisons. Collapse the generic object catalog by default so
+    // the production renderer keeps a landscape review viewport; the rail remains one click away.
+    if(initialFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
+      || initialFixtureId === CLAY_ROOM_TRIM_BENCH_ID) S.clayRoomCatalogCollapsed = true;
 
     const workbench = clayRoomBuildWorkbenchChrome(record);
     const host = workbench.host;
@@ -3337,11 +5843,12 @@ function mountClayRoom(){
     // question, not a CL-R0 one.
     clayCtxSetRoomShell(clayRoomShellOverrideOn()); // restored in clayRoomUnmount — see this function's own header note above (split B1: accessor — ES import bindings are read-only)
 
-    const initialFixtureId = clayRoomFixtureIdFromLocation();
     // CL-R3's canonical review is the daylight hero: neutral clay still carries no authored site
     // material, while the shared production sun makes wall thickness, caps, stairs, and slab faces
     // readable without diagnostic bulbs. Other fixtures retain their existing opposing-pair start.
-    const initialLightRecipeId = initialFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    const initialLightRecipeId = (initialFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+      || initialFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
+      || initialFixtureId === CLAY_ROOM_TRIM_BENCH_ID)
       ? "daylit"
       : "clay-opposing-pair";
     const compiled = clayRoomBoardFrom(record, { lightRecipeId: initialLightRecipeId }); // D15 — real spatializer + interiorBuildBoard (src/engine/clay-room.js)
@@ -3374,6 +5881,7 @@ function mountClayRoom(){
     S.clayRoomRecord = record;
     S.clayRoomCompiled = compiled;
     S.clayRoomLightRecipeId = compiled.lightRecipeId || "clay-opposing-pair";
+    S.clayRoomMoodLayerId = CLAY_ROOM_MOOD_LAYERS.defaultId;
     S.clayRoomFixtureId = initialFixtureId;
     // CL-R2 ruling: presentation scale is the working default. True scale stays one click away as
     // an honest size-spectrum check; neither view mutates registry worldHeight or tactical span.
@@ -3384,8 +5892,12 @@ function mountClayRoom(){
     S.clayCamOffset = { x: 0, z: 0 };
     S.clayCamZoom = S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
       ? 0.72 : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
-        : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65 : 1));
+        : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65
+          : (S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID ? 0.78
+            : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5 : 1))));
     S.clayRoomStructureView = CLAY_STRUCTURE_BENCH_FIXTURE.defaultView;
+    S.clayRoomMaterialMode = CLAY_MATERIAL_BENCH_FIXTURE.defaultMode;
+    S.clayRoomTrimMode = CLAY_TRIM_BENCH_FIXTURE.defaultMode;
     S.clayRoomStructureStageLatch = clayStructureStagingLatchTransition(
       null,
       { type: CLAY_STRUCTURE_BENCH_FIXTURE.wallOmission.stagedEvent }
@@ -3399,9 +5911,8 @@ function mountClayRoom(){
     );
     S.clayRoomDiagnosticActive = true;
     setInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
-    S.clayGridMesh = clayRoomBuildSeamGrid(record, compiled.room); // D12a — after setInteriorBoard so S.boardOrigin/S.interiorFloorTopMap are already live; compiled.room is the spatializer's REAL room rect (CL-R0 coordinate fix)
     clayRoomMovementRangesRender();
-    clayRoomTagAllProvenance(); // D13 — re-tag now that the grid (built after the hook ran) exists
+    clayRoomTagAllProvenance();
     markDirty();
     scheduleRender();
 
@@ -3493,7 +6004,13 @@ function clayRoomMountOverlay(record, host){
   title.setAttribute("aria-label", "Drag Clayroom panel");
   title.style.cssText = "font-weight:600;margin-bottom:4px;display:flex;gap:6px;justify-content:space-between;align-items:center;cursor:move;user-select:none;touch-action:none;";
   const titleText = document.createElement("span");
-  titleText.textContent = "INSPECTOR · CLAY ROOM C1A";
+  titleText.textContent = S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    ? "CL-F01 · STRUCTURE REVIEW"
+    : (S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
+      ? "CL-F04 · MATERIAL REVIEW"
+      : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID
+        ? "CL-F05 · TRIMMED STRUCTURES"
+        : "INSPECTOR · CLAY ROOM C1A"));
   titleText.style.cssText = "flex:1;";
   title.appendChild(titleText);
   const resetPositionBtn = document.createElement("button");
@@ -3720,13 +6237,33 @@ function clayRoomMountOverlay(record, host){
   const spritesTabBtn = document.createElement("button");
   spritesTabBtn.textContent = "Sprites";
   spritesTabBtn.setAttribute("aria-label", "Clayroom sprite citizenship proof");
-  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, structureTabBtn, lightsTabBtn, spritesTabBtn].forEach(function(b){
+  const materialsTabBtn = document.createElement("button");
+  materialsTabBtn.textContent = "Materials";
+  materialsTabBtn.setAttribute("aria-label", "Clayroom material integration proof");
+  const trimTabBtn = document.createElement("button");
+  trimTabBtn.textContent = "Trim";
+  trimTabBtn.setAttribute("aria-label", "Clayroom complete trimmed structure proof");
+  [factsTabBtn, explainTabBtn, surfacesTabBtn, mountTabBtn, stateTabBtn, movementTabBtn, structureTabBtn, lightsTabBtn, spritesTabBtn, materialsTabBtn, trimTabBtn].forEach(function(b){
     b.style.cssText = "flex:1 1 46px;font:11px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;cursor:pointer;padding:4px;";
   });
   tabBar.appendChild(factsTabBtn); tabBar.appendChild(explainTabBtn); tabBar.appendChild(surfacesTabBtn);
   tabBar.appendChild(mountTabBtn); tabBar.appendChild(stateTabBtn); tabBar.appendChild(movementTabBtn);
   tabBar.appendChild(structureTabBtn); tabBar.appendChild(lightsTabBtn); tabBar.appendChild(spritesTabBtn);
+  tabBar.appendChild(materialsTabBtn); tabBar.appendChild(trimTabBtn);
   panel.appendChild(tabBar);
+  if(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    || S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
+    || S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID){
+    // CL-R3 correction: the generic object editor is useful in the ordinary Clayroom, but it
+    // buried this focused review under scope buttons, editor actions, renderer telemetry, and nine
+    // tabs. The structure fixture rebuilds the overlay when entered, so it can present one task:
+    // the structure view itself. Fixture switching remains inside the Structure body.
+    selectionCard.style.display = "none";
+    rendererLine.style.display = "none";
+    recipeLine.style.display = "none";
+    camHint.style.display = "none";
+    tabBar.style.display = "none";
+  }
 
   const factsBody = document.createElement("pre");
   factsBody.style.cssText = "white-space:pre-wrap;font:11px/1.4 monospace;color:#dde;margin:0;";
@@ -4179,23 +6716,27 @@ function clayRoomMountOverlay(record, host){
   // CL-R3 Structure tab — inspection and A/B views over the mounted production structure bench.
   // The controls reveal authored facts; they do not mutate dimensions or invent a second builder.
   const structureBody = document.createElement("div");
-  structureBody.style.cssText = "display:none;font:10px/1.42 monospace;color:#dde;";
+  structureBody.style.cssText = "display:none;font:10px/1.45 -apple-system,sans-serif;color:#dde;";
   const structureIntro = document.createElement("div");
   structureIntro.innerHTML =
-    "<div style='color:#9fd4ec;margin-bottom:4px'>CL-F01 · REUSABLE CONSTRUCTION GRAMMAR</div>" +
-    "<div style='color:#9ab'>Production shell + generic atoms + the ASSEMBLY terrace (same pieces composed). " +
-    "SOCKET arrows point along their join axis — <span style='color:#35d8ff'>butt-join</span> · <span style='color:#66dfa0'>walk-surface</span> · " +
-    "<span style='color:#6f8fff'>top-surface</span> · <span style='color:#c08a5a'>terrain-join</span> · <span style='color:#ff7ad8'>hinge</span> · " +
-    "<span style='color:#b9c2cc'>mount</span>. ACCESS frames are per-face — <span style='color:#66dfa0'>walk</span> · " +
-    "<span style='color:#f3bd55'>climb-cost</span> · <span style='color:#ff6d68'>climb-dc</span> · <span style='color:#8a9099'>none</span>. Red X = rejected join.</div>";
+    "<div style='color:#9fd4ec;font:600 12px monospace;margin-bottom:4px'>CL-F01 · STRUCTURAL CONTINUITY</div>" +
+    "<div style='color:#9ab'>Corners, foundations, elevation joins, stairs, and access. Select one view; diagnostic overlays focus on one piece.</div>";
   structureBody.appendChild(structureIntro);
+  const structureFixtureDetails = document.createElement("details");
+  structureFixtureDetails.style.cssText = "margin:7px 0;color:#9ab;";
+  const structureFixtureSummary = document.createElement("summary");
+  structureFixtureSummary.textContent = "Switch fixture";
+  structureFixtureSummary.style.cssText = "cursor:pointer;color:#aeb9c6;font:9px monospace;";
+  structureFixtureDetails.appendChild(structureFixtureSummary);
   const structureFixtureNav = document.createElement("div");
-  structureFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:7px 0;";
+  structureFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:5px 0;";
   [
     [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM"],
     [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE"],
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
-    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"]
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"],
+    [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL"],
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -4205,18 +6746,27 @@ function clayRoomMountOverlay(record, host){
       if(def[0] === CLAY_ROOM_STRUCTURE_BENCH_ID) clayShowTab("structure");
       else if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
       else if(def[0] === CLAY_ROOM_SPRITE_BENCH_ID) clayShowTab("sprites");
+      else if(def[0] === CLAY_ROOM_MATERIAL_BENCH_ID) clayShowTab("materials");
+      else if(def[0] === CLAY_ROOM_TRIM_BENCH_ID) clayShowTab("trim");
       else clayShowTab("movement");
     });
     structureFixtureNav.appendChild(button);
   });
-  structureBody.appendChild(structureFixtureNav);
+  structureFixtureDetails.appendChild(structureFixtureNav);
+  structureBody.appendChild(structureFixtureDetails);
+  const structureViewLabel = document.createElement("div");
+  structureViewLabel.textContent = "VIEW";
+  structureViewLabel.style.cssText = "color:#7f8d9c;font:600 9px monospace;letter-spacing:.12em;margin:8px 0 4px;";
+  structureBody.appendChild(structureViewLabel);
   const structureViewActions = document.createElement("div");
-  structureViewActions.style.cssText = "display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:7px;";
+  structureViewActions.style.cssText = "display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:7px;";
   const structureViewButtons = {};
   [
     ["assembled", "ASSEMBLED"],
+    ["stairs", "STAIRS"],
     ["sockets", "SOCKETS"],
     ["access", "ACCESS"],
+    ["climb", "CLIMB"],
     ["negative", "BAD JOIN"],
     ["strategic", "ALL WALLS"]
   ].forEach(function(def){
@@ -4229,8 +6779,14 @@ function clayRoomMountOverlay(record, host){
     structureViewButtons[def[0]] = button;
   });
   structureBody.appendChild(structureViewActions);
+  const structureStageDetails = document.createElement("details");
+  structureStageDetails.style.cssText = "margin:5px 0 8px;color:#9ab;";
+  const structureStageSummary = document.createElement("summary");
+  structureStageSummary.textContent = "Scene staging controls";
+  structureStageSummary.style.cssText = "cursor:pointer;color:#aeb9c6;font:9px monospace;";
+  structureStageDetails.appendChild(structureStageSummary);
   const structureStageActions = document.createElement("div");
-  structureStageActions.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:7px;";
+  structureStageActions.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:5px 0;";
   const structureStageButtons = {};
   [
     ["sealed", "LEAVE PLAY", function(){ clayRoomSetStructureStaged(false); }],
@@ -4246,34 +6802,196 @@ function clayRoomMountOverlay(record, host){
     structureStageActions.appendChild(button);
     structureStageButtons[def[0]] = button;
   });
-  structureBody.appendChild(structureStageActions);
-  const structureParts = document.createElement("div");
-  structureParts.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:7px;";
+  structureStageDetails.appendChild(structureStageActions);
+  structureBody.appendChild(structureStageDetails);
   const structureFixture = clayRoomStructureBenchFixtureFrom(record);
+  const structurePieceLabel = document.createElement("label");
+  structurePieceLabel.textContent = "FOCUS PIECE";
+  structurePieceLabel.style.cssText = "display:block;color:#7f8d9c;font:600 9px monospace;letter-spacing:.12em;margin:8px 0 4px;";
+  const structurePieceSelect = document.createElement("select");
+  structurePieceSelect.setAttribute("aria-label", "Choose Clayroom structure focus piece");
+  structurePieceSelect.style.cssText = "width:100%;background:#20252c;color:#e2e8ef;border:1px solid #46515e;border-radius:4px;padding:7px;font:10px monospace;margin-bottom:7px;";
   structureFixture.pieces.forEach(function(spec){
-    const button = document.createElement("button");
-    button.textContent = spec.label;
-    button.title = spec.kind + " · " + spec.sockets.map(function(s){ return s.type; }).join(", ");
-    button.style.cssText = "font:8px/1.25 monospace;text-align:left;background:#252a32;color:#ccd5df;border:1px solid #414955;border-radius:3px;padding:4px;cursor:pointer;";
-    button.addEventListener("click", function(){
-      S.clayRoomSelectedId = spec.id;
-      S.clayRoomWorkbenchSelect(spec.id, "structure catalog");
-    });
-    structureParts.appendChild(button);
+    const option = document.createElement("option");
+    option.value = spec.id;
+    option.textContent = (spec.assembly ? "ASSEMBLY · " : "") + spec.label.replace(/^ASSEMBLY · /, "");
+    structurePieceSelect.appendChild(option);
   });
-  structureBody.appendChild(structureParts);
+  structurePieceSelect.addEventListener("change", function(){
+    S.clayRoomSelectedId = structurePieceSelect.value;
+    clayRoomStructureClimbTargetSet(structurePieceSelect.value, null, null);
+    S.clayRoomWorkbenchSelect(structurePieceSelect.value, "structure focus");
+    clayRoomApplyStructureViewVisibility(S.clayRoomStructureView || structureFixture.defaultView);
+  });
+  structureBody.appendChild(structurePieceLabel);
+  structureBody.appendChild(structurePieceSelect);
+  const structureLegend = document.createElement("div");
+  structureLegend.id = "clay-room-structure-legend";
+  structureLegend.style.cssText = "background:#171d24;border:1px solid #35414d;border-radius:4px;padding:8px;color:#aeb9c6;margin-bottom:7px;";
+  structureBody.appendChild(structureLegend);
+  const structureSummaryCard = document.createElement("div");
+  structureSummaryCard.style.cssText = "background:#202831;border-left:3px solid #6fcfff;padding:8px;margin:7px 0;color:#dfe7ef;";
+  structureBody.appendChild(structureSummaryCard);
+  const structureClimbCard = document.createElement("div");
+  structureClimbCard.style.cssText = "background:#171d24;border:1px solid #40505f;border-radius:4px;padding:8px;margin:7px 0;color:#dfe7ef;";
+  const structureClimbTitle = document.createElement("div");
+  structureClimbTitle.textContent = "CLICK-TO-CLIMB";
+  structureClimbTitle.style.cssText = "color:#f0c76c;font:700 10px monospace;letter-spacing:.08em;margin-bottom:4px;";
+  const structureClimbTarget = document.createElement("div");
+  structureClimbTarget.style.cssText = "color:#aebdcb;font:9px/1.4 monospace;margin-bottom:6px;";
+  const structureClimbControls = document.createElement("div");
+  structureClimbControls.style.cssText = "display:grid;grid-template-columns:64px 54px 1fr;gap:5px;align-items:end;";
+  const structureClimbRollLabel = document.createElement("label");
+  structureClimbRollLabel.textContent = "OPEN d20";
+  structureClimbRollLabel.style.cssText = "display:grid;gap:2px;color:#8090a0;font:8px monospace;";
+  const structureClimbRoll = document.createElement("input");
+  structureClimbRoll.type = "number";
+  structureClimbRoll.min = "1";
+  structureClimbRoll.max = "20";
+  structureClimbRoll.value = "12";
+  structureClimbRoll.setAttribute("aria-label", "Clayroom climb open d20");
+  structureClimbRoll.style.cssText = "width:100%;background:#20252c;color:#f4f7fa;border:1px solid #4b5967;border-radius:3px;padding:5px;font:10px monospace;";
+  structureClimbRollLabel.appendChild(structureClimbRoll);
+  const structureClimbModLabel = document.createElement("label");
+  structureClimbModLabel.textContent = "ATH";
+  structureClimbModLabel.style.cssText = structureClimbRollLabel.style.cssText;
+  const structureClimbMod = document.createElement("input");
+  structureClimbMod.type = "number";
+  structureClimbMod.value = String(CLAY_STRUCTURE_KIT_CATALOG.climbLaw.defaultAthleticsModifier);
+  structureClimbMod.setAttribute("aria-label", "Clayroom climb Athletics modifier");
+  structureClimbMod.style.cssText = structureClimbRoll.style.cssText;
+  structureClimbModLabel.appendChild(structureClimbMod);
+  const structureClimbAttempt = document.createElement("button");
+  structureClimbAttempt.textContent = "RESOLVE CLIMB";
+  structureClimbAttempt.style.cssText = "font:9px monospace;background:#5c4724;color:#fff1c8;border:1px solid #8a6a31;border-radius:3px;padding:6px 4px;cursor:pointer;";
+  structureClimbControls.append(structureClimbRollLabel, structureClimbModLabel, structureClimbAttempt);
+  const structureClimbResult = document.createElement("div");
+  structureClimbResult.style.cssText = "color:#8fa0b0;font:9px/1.4 monospace;margin-top:6px;";
+  const structureClimbReset = document.createElement("button");
+  structureClimbReset.textContent = "RESET CLIMBER";
+  structureClimbReset.style.cssText = "margin-top:6px;font:8px monospace;background:#252a32;color:#aebdcb;border:1px solid #404b57;border-radius:3px;padding:4px 7px;cursor:pointer;";
+  structureClimbCard.append(
+    structureClimbTitle,
+    structureClimbTarget,
+    structureClimbControls,
+    structureClimbResult,
+    structureClimbReset
+  );
+  structureBody.appendChild(structureClimbCard);
+  structureClimbAttempt.addEventListener("click", function(){
+    clayRoomStructureClimbAttempt(
+      Number(structureClimbRoll.value),
+      Number(structureClimbMod.value)
+    );
+  });
+  structureClimbReset.addEventListener("click", clayRoomStructureClimbReset);
+  const structureEngineering = document.createElement("details");
+  structureEngineering.style.cssText = "margin-top:8px;color:#9ba8b6;";
+  const structureEngineeringSummary = document.createElement("summary");
+  structureEngineeringSummary.textContent = "Engineering receipt";
+  structureEngineeringSummary.style.cssText = "cursor:pointer;font:9px monospace;";
+  structureEngineering.appendChild(structureEngineeringSummary);
   const structureOut = document.createElement("pre");
   structureOut.id = "clay-room-structure-readout";
-  structureOut.style.cssText = "white-space:pre-wrap;color:#dde;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;";
-  structureBody.appendChild(structureOut);
+  structureOut.style.cssText = "white-space:pre-wrap;color:#cdd7e1;border-top:1px solid #333;padding-top:6px;margin:6px 0 0;font:9px/1.45 monospace;";
+  structureEngineering.appendChild(structureOut);
+  structureBody.appendChild(structureEngineering);
   function clayStructureRender(){
     const snap = window.Theater._clayStructureBenchForTest();
     Object.keys(structureViewButtons).forEach(function(view){
       structureViewButtons[view].style.background = snap && snap.view === view ? "#35516a" : "#2a2a30";
     });
     if(!snap){
+      structureLegend.textContent = "Switch to the Structure fixture to mount CL-F01.";
+      structureSummaryCard.textContent = "No structure fixture mounted.";
+      structureClimbTarget.textContent = "No structure fixture mounted.";
+      structureClimbResult.textContent = "";
+      structureClimbAttempt.disabled = true;
       structureOut.textContent = "Switch to the Structure fixture to mount CL-F01.";
       return;
+    }
+    const climb = clayRoomStructureClimbSnapshot();
+    structureClimbAttempt.disabled = !climb || !climb.target || climb.busy;
+    structureClimbAttempt.style.opacity = structureClimbAttempt.disabled ? "0.5" : "1";
+    structureClimbTarget.textContent = climb && climb.target
+      ? climb.target.label + " · Athletics DC " + climb.target.climbDC + " · click another wall/column to retarget"
+      : "Click a wall, square column, or round column in the 3D view.";
+    if(climb && climb.last && climb.last.ok){
+      structureClimbResult.textContent =
+        "d20 " + climb.last.d20 + " + " + climb.last.modifier + " = " + climb.last.total +
+        " vs DC " + climb.last.dc + " · " + climb.last.outcome.toUpperCase() +
+        (climb.last.damage !== "none" ? " · " + climb.last.damage + " fall damage" : "") +
+        (climb.last.balanceRequired ? " · balance still required on top" : "");
+      structureClimbResult.style.color = climb.last.passed ? "#78dda4" : "#ff8f85";
+    } else {
+      structureClimbResult.textContent = climb && climb.busy
+        ? "Resolving " + climb.phase + "…"
+        : "Success perches the human witness; failure visibly returns them to the floor.";
+      structureClimbResult.style.color = "#8fa0b0";
+    }
+    const selectedSpec = snap.specimens.find(function(row){ return row.id === S.clayRoomSelectedId; })
+      || snap.specimens.find(function(row){ return row.id === "straight-wall"; })
+      || snap.specimens[0];
+    if(selectedSpec){
+      structurePieceSelect.value = selectedSpec.id;
+    }
+    const selectedFixtureSpec = structureFixture.pieces.find(function(row){
+      return selectedSpec && row.id === selectedSpec.id;
+    });
+    const socketList = selectedSpec
+      ? selectedSpec.sockets.map(function(socket){ return clayStructureSocketLabel(socket); }).join(" · ")
+      : "—";
+    const accessList = selectedSpec
+      ? Object.keys(selectedSpec.access).map(function(face){
+          return face + " = " + selectedSpec.access[face];
+        }).join(" · ")
+      : "—";
+    const legendByView = {
+      assembled:
+        "<strong style='color:#dce7f1'>ASSEMBLED</strong><br>" +
+        "Clay geometry only. Darker base masses are foundations; proud blocks close endpoints and corners.",
+      stairs:
+        "<strong style='color:#dce7f1'>STOREY STAIR PROOFS</strong><br>" +
+        "Straight = two 5×5 flights. L = lower flight + turning landing + upper flight. Both reach occupied 10 ft decks.",
+      sockets:
+        "<strong style='color:#dce7f1'>SOCKET KEY · selected piece only</strong><br>" +
+        "<span style='color:#35d8ff'>cyan butt</span> · <span style='color:#66dfa0'>green walk</span> · " +
+        "<span style='color:#6f8fff'>blue top</span> · <span style='color:#c08a5a'>brown terrain</span> · " +
+        "<span style='color:#ff7ad8'>pink hinge</span> · <span style='color:#b9c2cc'>grey mount</span>",
+      access:
+        "<strong style='color:#dce7f1'>ACCESS KEY · selected piece only</strong><br>" +
+        "<span style='color:#66dfa0'>green walk</span> · <span style='color:#f3bd55'>amber climb cost</span> · " +
+        "<span style='color:#ff6d68'>red climb/check</span> · <span style='color:#8a9099'>grey none</span>",
+      climb:
+        "<strong style='color:#dce7f1'>CLIMB TEST · selected target only</strong><br>" +
+        "Clean geometry view. Click a wall or column, enter the open d20 below, and resolve.",
+      negative:
+        "<strong style='color:#dce7f1'>BAD JOIN</strong><br>Red X = rejected axis pairing. The physical gap remains visible.",
+      strategic:
+        "<strong style='color:#dce7f1'>ALL WALLS</strong><br>Strategic camera rebuilds every upper; foundations remain continuous to datum."
+    };
+    structureLegend.innerHTML = legendByView[snap.view] || legendByView.assembled;
+    if(snap.view === "sockets"){
+      structureSummaryCard.innerHTML =
+        "<strong>" + selectedFixtureSpec.label + "</strong><br><span style='color:#9fb0c0'>" + socketList + "</span>";
+    } else if(snap.view === "access"){
+      const entryText = selectedSpec.entry
+        ? "<br><span style='color:#9fb0c0'>Normal: " + selectedSpec.entry.normal +
+          " · Small: " + selectedSpec.entry.small + "</span>"
+        : "";
+      structureSummaryCard.innerHTML =
+        "<strong>" + selectedFixtureSpec.label + "</strong><br><span style='color:#9fb0c0'>" +
+        accessList + "</span>" + entryText;
+    } else if(snap.view === "negative"){
+      structureSummaryCard.innerHTML =
+        "<strong>Join rejected</strong><br><span style='color:#9fb0c0'>" +
+        snap.negativeControl.reason + " · geometry was not snapped</span>";
+    } else {
+      structureSummaryCard.innerHTML =
+        "<strong>Continuity candidate</strong><br><span style='color:#9fb0c0'>" +
+        snap.shell.polygonKernel.toUpperCase() + " corners · " +
+        snap.connectiveTissue.foundationRuns + " foundation runs · " +
+        snap.connectiveTissue.wallJunctions + " full-height wall junctions · two 5×5 units reach the 10 ft floor</span>";
     }
     structureStageButtons.staged.style.background = snap.wallOmission.staged ? "#35543b" : "#252a32";
     structureStageButtons.sealed.style.background = snap.wallOmission.staged ? "#252a32" : "#684a28";
@@ -4285,9 +7003,29 @@ function clayRoomMountOverlay(record, host){
         + " ft · storey = " + snap.gridLaw.storeyFeet + " ft",
       "SHELL " + snap.shell.meta.floorCellCount + " cells · " + snap.shell.wallSegments + " wall runs · "
         + snap.shell.riserSegments + " retaining/riser runs",
-      "      tiers " + snap.shell.tiers.join("/") + " · slab sides " + (snap.shell.exposedSlabSides ? "PASS" : "FAIL")
+      "      " + snap.shell.polygonKernel.toUpperCase() + " kernel · tiers " + snap.shell.tiers.join("/")
+        + " · slab sides " + (snap.shell.exposedSlabSides ? "PASS" : "FAIL")
         + " · omitted near uppers " + snap.shell.omittedUpperSegments,
-      "OMISSION " + (snap.wallOmission.active ? "STEM ONLY" : "ALL UPPERS") + " · staged "
+      "FOUNDATION " + snap.connectiveTissue.foundationRuns + " runs · "
+        + snap.connectiveTissue.foundationCorners + " corner blocks · contact embed "
+        + snap.connectiveTissue.contactEmbed + " u",
+      "JUNCTIONS " + snap.connectiveTissue.wallJunctions + " full-height corner quoins · "
+        + snap.connectiveTissue.cutawayReturns + " cutaway returns · "
+        + snap.connectiveTissue.connectorProfile,
+      "STAIRS 5×5 adapter · examples "
+        + snap.stairAdapter.examples.map(function(row){ return row.riseFeet + " ft"; }).join("/")
+        + " · INNER " + snap.stairAdapter.cornerTopologies[0].topology
+        + " · OUTER " + snap.stairAdapter.cornerTopologies[1].topology,
+      "STOREY " + snap.stairAdapter.fullStoreyProof.stairUnits + " stair units → "
+        + snap.stairAdapter.fullStoreyProof.riseFeet + " ft occupied deck · "
+        + (snap.stairAdapter.fullStoreyProof.connected ? "CONNECTED" : "FAIL"),
+      "L STOREY " + snap.stairAdapter.lStoreyProof.footprintCells + " cells · "
+        + snap.stairAdapter.lStoreyProof.turnDeg + "° turn → "
+        + snap.stairAdapter.lStoreyProof.riseFeet + " ft occupied deck · "
+        + (snap.stairAdapter.lStoreyProof.connected ? "CONNECTED" : "FAIL"),
+      "OMISSION " + (snap.wallOmission.active
+        ? snap.wallOmission.retainedStubFeet + " FT STUB"
+        : "ALL UPPERS") + " · staged "
         + (snap.wallOmission.staged ? "YES" : "NO") + " · latched "
         + (snap.wallOmission.latched ? "YES" : "NO") + " · door " + snap.wallOmission.doorState,
       "         camera " + snap.wallOmission.cameraMode + " · aperture "
@@ -4306,6 +7044,8 @@ function clayRoomMountOverlay(record, host){
         + " · dynamic classifier " + snap.dynamicCutaway.candidates + " candidates / "
         + snap.dynamicCutaway.blocking + " blocking / " + snap.dynamicCutaway.faded + " faded",
       "MESHES " + snap.mountedMeshes + " · shadow casters " + snap.shadowCasters + " · receivers " + snap.shadowReceivers,
+      "SHADOW CONTACT " + snap.shadowContact.rendererFilter.toUpperCase() + " · front-face solid casters "
+        + snap.shadowContact.frontFaceShadowCasters + " · automatic " + snap.shadowContact.automaticShadowCasters,
       "PROVENANCE " + snap.provenance.author + " · " + snap.provenance.source
     ];
     structureOut.textContent = lines.join("\n");
@@ -4323,7 +7063,9 @@ function clayRoomMountOverlay(record, host){
     [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM TRUTH"],
     [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE BENCH"],
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTING BENCH"],
-    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE BENCH"]
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE BENCH"],
+    [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL BENCH"],
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM BENCH"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -4374,6 +7116,26 @@ function clayRoomMountOverlay(record, host){
     lightingModeButtons[def.id] = button;
   });
   lightsBody.appendChild(lorePreviewActions);
+
+  const moodLayerLabel = document.createElement("div");
+  moodLayerLabel.textContent = "ROOM MOOD · layered over the source · never a shadow caster";
+  moodLayerLabel.style.cssText = "color:#b8a0d0;margin:8px 0 4px;";
+  lightsBody.appendChild(moodLayerLabel);
+  const moodLayerActions = document.createElement("div");
+  moodLayerActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:7px;";
+  const moodLayerButtons = {};
+  CLAY_ROOM_MOOD_EXAMPLES.forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def.label;
+    button.setAttribute("aria-label", "Layer Clayroom mood " + def.id + " over the current source");
+    button.style.cssText = "font:9px monospace;background:#2a2a30;color:#ddd;border:1px solid #554966;border-radius:3px;cursor:pointer;padding:5px;";
+    button.addEventListener("click", function(){
+      clayRoomSetMoodLayer(def.id, "clayroom-mood-button");
+    });
+    moodLayerActions.appendChild(button);
+    moodLayerButtons[def.id] = button;
+  });
+  lightsBody.appendChild(moodLayerActions);
 
   const seedLabel = document.createElement("div");
   seedLabel.textContent = "ANIMATION SEED PREVIEW · physical values stay locked";
@@ -4580,6 +7342,7 @@ function clayRoomMountOverlay(record, host){
     const steady = snap.lights.filter(function(l){ return l.state === "steady"; });
     const isolationPass = flickering.length === 1
       && steady.every(function(l){ return l.emittedNormalized === 1 && l.meshNormalized === 1 && l.parity; });
+    const mood = clayRoomMoodSnapshot();
     const lines = [
       "fixture " + (S.clayRoomFixtureId || "—")
         + (S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
@@ -4590,6 +7353,11 @@ function clayRoomMountOverlay(record, host){
       "recipe " + activeRecipe.id + " · " + activeRecipe.mode,
       "source " + activeRecipe.source.label
         + (activeRecipe.source.loreNative ? " · LORE-NATIVE" : " · DIAGNOSTIC ONLY"),
+      "room mood " + (mood ? mood.label : "—") + " · pair " + (mood ? mood.pairId : "—"),
+      "mood energy " + (mood ? mood.combinedMoodIntensity.toFixed(3) : "—")
+        + " / " + (mood ? mood.energyCap.toFixed(3) : "—")
+        + " · shadows " + (mood && mood.moodCastsShadow ? "FAIL" : "NONE")
+        + " · source retained " + (mood && mood.sourceRetained ? "PASS" : "FAIL"),
       "authored baseline " + (baselineActive ? "PASS" : "inactive (restore available)"),
       "one-light isolation " + (flickering.length === 1 ? (isolationPass ? "PASS" : "FAIL") : "arm exactly one flicker"),
       "ambient " + (snap.ambient ? snap.ambient.intensity.toFixed(2) : "—")
@@ -4658,6 +7426,9 @@ function clayRoomMountOverlay(record, host){
     }
     Object.keys(lightingModeButtons).forEach(function(id){
       lightingModeButtons[id].style.background = id === activeRecipe.id ? "#35516a" : "#2a2a30";
+    });
+    Object.keys(moodLayerButtons).forEach(function(id){
+      moodLayerButtons[id].style.background = id === S.clayRoomMoodLayerId ? "#503e66" : "#2a2a30";
     });
     Object.keys(seedButtons).forEach(function(seed){
       seedButtons[seed].style.background = seed === (S.clayRoomPreviewSeed || "A") ? "#4b3f61" : "#2a2a30";
@@ -4757,12 +7528,14 @@ function clayRoomMountOverlay(record, host){
   spritesBody.appendChild(spritesIntro);
 
   const spriteFixtureNav = document.createElement("div");
-  spriteFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:7px 0;";
+  spriteFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:7px 0;";
   [
     [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM"],
     [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCTURE"],
     [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHTS"],
-    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"]
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITES"],
+    [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL"],
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"]
   ].forEach(function(def){
     const button = document.createElement("button");
     button.textContent = def[1];
@@ -4771,6 +7544,8 @@ function clayRoomMountOverlay(record, host){
       clayRoomSetFixture(def[0], "clayroom-sprite-fixture-nav");
       if(def[0] === CLAY_ROOM_STRUCTURE_BENCH_ID) clayShowTab("structure");
       else if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
+      else if(def[0] === CLAY_ROOM_MATERIAL_BENCH_ID) clayShowTab("materials");
+      else if(def[0] === CLAY_ROOM_TRIM_BENCH_ID) clayShowTab("trim");
       else if(def[0] === CLAY_ROOM_TRUTH_FIXTURE_ID) clayShowTab("movement");
       else clayShowTab("sprites");
     });
@@ -4933,6 +7708,244 @@ function clayRoomMountOverlay(record, host){
   }
   S.clayRoomRefreshSprites = claySpritesRender;
 
+  // CL-R4b Materials tab — two exact parents in matched bays and four truthful comparison modes.
+  // The compact hierarchy is a review card, not a dump of every manifest field.
+  const materialsBody = document.createElement("div");
+  materialsBody.style.cssText = "display:none;font:11px/1.45 -apple-system,sans-serif;color:#dde;";
+  const materialsIntro = document.createElement("div");
+  materialsIntro.innerHTML =
+    "<div style='color:#e2bd68;font:600 12px monospace;margin-bottom:4px'>CL-R4b · TWO MATERIALS · SAME TEST</div>" +
+    "<div style='font:500 18px Georgia,serif;color:#f0eadc'>Fine brick scale × large block</div>" +
+    "<div style='color:#9fa9b4;margin-top:3px'>Matched geometry, phase, camera, and light. Taste pending; no production material has been promoted.</div>";
+  materialsBody.appendChild(materialsIntro);
+
+  const materialFixtureNav = document.createElement("div");
+  materialFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:9px 0;";
+  [
+    [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM"],
+    [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCT"],
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHT"],
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE"],
+    [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL"],
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.style.cssText = "font:8px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", function(){
+      clayRoomSetFixture(def[0], "clayroom-material-fixture-nav");
+      if(def[0] === CLAY_ROOM_STRUCTURE_BENCH_ID) clayShowTab("structure");
+      else if(def[0] === CLAY_ROOM_LIGHTING_BENCH_ID) clayShowTab("lights");
+      else if(def[0] === CLAY_ROOM_SPRITE_BENCH_ID) clayShowTab("sprites");
+      else if(def[0] === CLAY_ROOM_MATERIAL_BENCH_ID) clayShowTab("materials");
+      else if(def[0] === CLAY_ROOM_TRIM_BENCH_ID) clayShowTab("trim");
+      else clayShowTab("movement");
+    });
+    materialFixtureNav.appendChild(button);
+  });
+  materialsBody.appendChild(materialFixtureNav);
+
+  const materialSourceGrid = document.createElement("div");
+  materialSourceGrid.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;";
+  CLAY_MATERIAL_BENCH_FIXTURE.materials.forEach(function(materialSpec){
+    const card = document.createElement("button");
+    card.type = "button";
+    card.style.cssText = "display:grid;grid-template-columns:66px 1fr;gap:7px;text-align:left;background:#17191d;color:#dde;border:1px solid #3c4148;padding:6px;cursor:pointer;";
+    card.addEventListener("click", function(){
+      S.clayRoomWorkbenchSelect(materialSpec.id, "material parent card");
+    });
+    const image = document.createElement("img");
+    image.src = "/" + materialSpec.sourceSprite;
+    image.alt = materialSpec.label + " source sprite";
+    image.style.cssText = "width:64px;height:64px;object-fit:cover;image-rendering:pixelated;border:1px solid #555;";
+    const text = document.createElement("div");
+    text.innerHTML =
+      "<div style='color:#7f8d9c;font:8px monospace;letter-spacing:.08em'>ALBEDO AUTHORITY</div>" +
+      "<div style='margin-top:2px;font:600 10px sans-serif'>" + materialSpec.label + "</div>" +
+      "<div style='color:" + (materialSpec.scaleStatus.indexOf("ACCEPTED") >= 0 ? "#79d69a" : "#c9a765") +
+      ";font:8px/1.3 monospace;margin-top:4px'>" + materialSpec.scaleStatus + "</div>";
+    card.appendChild(image);
+    card.appendChild(text);
+    materialSourceGrid.appendChild(card);
+  });
+  materialsBody.appendChild(materialSourceGrid);
+
+  const materialModeLabel = document.createElement("div");
+  materialModeLabel.textContent = "COMPARE";
+  materialModeLabel.style.cssText = "color:#7f8d9c;font:600 9px monospace;letter-spacing:.12em;margin:8px 0 4px;";
+  materialsBody.appendChild(materialModeLabel);
+  const materialModeActions = document.createElement("div");
+  materialModeActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:5px;";
+  const materialModeButtons = {};
+  [
+    ["pbr", "PBR", "albedo + normal + ORM"],
+    ["albedo-fallback", "ALBEDO ONLY", "truthful missing-map fallback"],
+    ["clay-control", "CLAY", "same geometry and light"],
+    ["normal-negative", "TOO MUCH NORMAL", "intentional rejection control"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.innerHTML = "<span style='display:block;font:600 9px monospace'>" + def[1] +
+      "</span><span style='display:block;color:#99a2ad;font:8px/1.25 sans-serif;margin-top:2px'>" + def[2] + "</span>";
+    button.style.cssText = "min-height:48px;background:#25282e;color:#e3e8ee;border:1px solid #464b54;border-radius:3px;padding:5px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetMaterialMode(def[0]); });
+    materialModeActions.appendChild(button);
+    materialModeButtons[def[0]] = button;
+  });
+  materialsBody.appendChild(materialModeActions);
+
+  const materialReadout = document.createElement("div");
+  materialReadout.style.cssText = "margin-top:8px;border-top:1px solid #383d45;padding-top:7px;";
+  materialsBody.appendChild(materialReadout);
+  function clayMaterialsRender(){
+    const snap = clayRoomMaterialBenchSnapshot();
+    Object.keys(materialModeButtons).forEach(function(mode){
+      materialModeButtons[mode].style.background = mode === snap.requestedMode
+        ? (mode === "normal-negative" ? "#653a31" : "#3d4f3d") : "#25282e";
+    });
+    const pbrColor = snap.pbrReady ? "#79d69a" : "#d5a65c";
+    const roles = snap.roles && snap.roles.length ? snap.roles.join(" · ") : "loading";
+    const uvPass = !!(snap.surfaces && snap.surfaces.length
+      && snap.surfaces.every(function(row){ return row.uv1Present; }));
+    const gridReport = S.clayGridMesh && S.clayGridMesh.userData
+      ? S.clayGridMesh.userData.clayGridReport : null;
+    const parentLine = snap.materials && snap.materials.length
+      ? snap.materials.map(function(row){
+        return row.label + " " + (row.pbrReady ? "READY" : "FALLBACK");
+      }).join("<br>") : "loading";
+    materialReadout.innerHTML =
+      "<div style='display:grid;grid-template-columns:1fr auto;gap:3px 8px;background:#17191d;border:1px solid #3c4148;padding:8px'>" +
+      "<span style='color:#9fa9b4'>Runtime maps</span><span style='color:" + pbrColor + ";font:600 10px monospace'>" + (snap.pbrReady ? "READY" : "FALLBACK") + "</span>" +
+      "<span style='color:#9fa9b4'>Material parents</span><span style='font:9px/1.45 monospace;text-align:right'>" + parentLine + "</span>" +
+      "<span style='color:#9fa9b4'>Actual mode</span><span style='font:10px monospace'>" + (snap.actualMode || "loading") + "</span>" +
+      "<span style='color:#9fa9b4'>Physical scale</span><span style='font:10px monospace'>" + (snap.scale ? snap.scale.metersPerTile.toFixed(2) + " m / tile" : "—") + "</span>" +
+      "<span style='color:#9fa9b4'>Floor repeat</span><span style='font:10px monospace'>2 bays × 3 × 3 exact</span>" +
+      "<span style='color:#9fa9b4'>Architectural roles</span><span style='font:10px monospace;text-align:right'>" + roles + "</span>" +
+      "<span style='color:#9fa9b4'>AO UV1</span><span style='color:" + (uvPass ? "#79d69a" : "#d5a65c") + ";font:600 10px monospace'>" + (uvPass ? "PASS" : "LOADING") + "</span>" +
+      "<span style='color:#9fa9b4'>Flat / walk grid</span><span style='font:10px monospace'>" + (gridReport ? gridReport.materialSurfaces + " tops" : "loading") + "</span>" +
+      "<span style='color:#9fa9b4'>Grid blend</span><span style='font:9px monospace'>" + (gridReport ? gridReport.blendContract : "loading") + "</span>" +
+      "</div>" +
+      "<div style='color:#8f99a4;font:9px/1.4 monospace;margin-top:6px'>LINEAGE · 2 × B04 v003 · exact albedo · tangent normal · ORM R/AO G/rough B/metal · surface-clipped multiply grid</div>";
+  }
+  S.clayRoomRefreshMaterials = clayMaterialsRender;
+
+  // CL-R5 Trim tab — complete-room composition, with the diagnostic role colours retained as an
+  // audit mode over the exact same profile geometry and routing.
+  const trimBody = document.createElement("div");
+  trimBody.style.cssText = "display:none;font:11px/1.45 -apple-system,sans-serif;color:#dde;";
+  const trimIntro = document.createElement("div");
+  trimIntro.innerHTML =
+    "<div style='color:#c9b484;font:600 12px monospace;margin-bottom:4px'>CL-R5 · COMPLETE STRUCTURES</div>" +
+    "<div style='font:500 18px Georgia,serif;color:#f0eadc'>Same room · swapped body parents · culture-owned trim</div>" +
+    "<div style='color:#9fa9b4;margin-top:3px'>Supported slabs, full far walls, one-foot cutaway stubs, owned corners, framed openings, platforms, and stairs.</div>";
+  trimBody.appendChild(trimIntro);
+  const trimFixtureNav = document.createElement("div");
+  trimFixtureNav.style.cssText = "display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:9px 0;";
+  [
+    [CLAY_ROOM_TRUTH_FIXTURE_ID, "ROOM", "movement"],
+    [CLAY_ROOM_STRUCTURE_BENCH_ID, "STRUCT", "structure"],
+    [CLAY_ROOM_LIGHTING_BENCH_ID, "LIGHT", "lights"],
+    [CLAY_ROOM_SPRITE_BENCH_ID, "SPRITE", "sprites"],
+    [CLAY_ROOM_MATERIAL_BENCH_ID, "MATERIAL", "materials"],
+    [CLAY_ROOM_TRIM_BENCH_ID, "TRIM", "trim"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.textContent = def[1];
+    button.style.cssText = "font:8px monospace;background:#2a2a30;color:#ddd;border:1px solid #444;border-radius:3px;padding:5px 1px;cursor:pointer;";
+    button.addEventListener("click", function(){
+      clayRoomSetFixture(def[0], "clayroom-trim-fixture-nav");
+      clayShowTab(def[2]);
+    });
+    trimFixtureNav.appendChild(button);
+  });
+  trimBody.appendChild(trimFixtureNav);
+
+  const trimCultureGrid = document.createElement("div");
+  trimCultureGrid.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;";
+  CLAY_TRIM_BENCH_FIXTURE.structures.forEach(function(structure){
+    const culture = CLAY_TRIM_BENCH_FIXTURE.cultures.find(function(row){
+      return row.id === structure.cultureId;
+    });
+    const wall = CLAY_MATERIAL_BENCH_FIXTURE.materials.find(function(row){
+      return row.id === structure.wallMaterialId;
+    });
+    const floor = CLAY_MATERIAL_BENCH_FIXTURE.materials.find(function(row){
+      return row.id === structure.floorMaterialId;
+    });
+    const card = document.createElement("button");
+    card.type = "button";
+    card.style.cssText = "display:grid;grid-template-columns:74px 1fr;gap:7px;text-align:left;background:#17191d;color:#dde;border:1px solid #3c4148;padding:6px;cursor:pointer;";
+    card.addEventListener("click", function(){
+      S.clayRoomWorkbenchSelect(structure.id, "trim structure card");
+    });
+    const image = document.createElement("img");
+    image.src = "/" + culture.atlasRoot + "/" + culture.maps.basecolor.file;
+    image.alt = culture.label + " h6-v1 trim atlas";
+    image.style.cssText = "width:72px;height:72px;object-fit:cover;image-rendering:pixelated;border:1px solid #555;";
+    const text = document.createElement("div");
+    text.innerHTML =
+      "<div style='color:#7f8d9c;font:8px monospace;letter-spacing:.08em'>" + culture.id.toUpperCase() + "</div>" +
+      "<div style='margin-top:2px;font:600 10px sans-serif'>" + structure.label + "</div>" +
+      "<div style='color:#b9c3ce;font:8px/1.35 monospace;margin-top:4px'>WALL · " + wall.label +
+      "<br>FLOOR · " + floor.label + "<br>TRIM · h6-v1 / 6 roles</div>";
+    card.appendChild(image);
+    card.appendChild(text);
+    trimCultureGrid.appendChild(card);
+  });
+  trimBody.appendChild(trimCultureGrid);
+
+  const trimModeLabel = document.createElement("div");
+  trimModeLabel.textContent = "VIEW";
+  trimModeLabel.style.cssText = "color:#7f8d9c;font:600 9px monospace;letter-spacing:.12em;margin:8px 0 4px;";
+  trimBody.appendChild(trimModeLabel);
+  const trimModeActions = document.createElement("div");
+  trimModeActions.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:5px;";
+  const trimModeButtons = {};
+  [
+    ["pbr", "PBR BEAUTY", "body + culture trim maps"],
+    ["trim-debug", "ROLE DEBUG", "six semantic colours"],
+    ["albedo-only", "ALBEDO ONLY", "normal / ORM removed"],
+    ["clay-control", "CLAY", "same complete geometry"]
+  ].forEach(function(def){
+    const button = document.createElement("button");
+    button.innerHTML = "<span style='display:block;font:600 9px monospace'>" + def[1] +
+      "</span><span style='display:block;color:#99a2ad;font:8px/1.25 sans-serif;margin-top:2px'>" + def[2] + "</span>";
+    button.style.cssText = "min-height:48px;background:#25282e;color:#e3e8ee;border:1px solid #464b54;border-radius:3px;padding:5px;cursor:pointer;";
+    button.addEventListener("click", function(){ clayRoomSetTrimMode(def[0]); });
+    trimModeActions.appendChild(button);
+    trimModeButtons[def[0]] = button;
+  });
+  trimBody.appendChild(trimModeActions);
+  const trimReadout = document.createElement("div");
+  trimReadout.style.cssText = "margin-top:8px;border-top:1px solid #383d45;padding-top:7px;";
+  trimBody.appendChild(trimReadout);
+  function clayTrimRender(){
+    const snap = clayRoomTrimBenchSnapshot();
+    Object.keys(trimModeButtons).forEach(function(mode){
+      trimModeButtons[mode].style.background = mode === snap.requestedMode
+        ? (mode === "trim-debug" ? "#4b425f" : "#3d4f3d") : "#25282e";
+    });
+    const readyColor = snap.pbrReady ? "#79d69a" : "#d5a65c";
+    const roles = snap.semanticRoles && snap.semanticRoles.length
+      ? snap.semanticRoles.join(" · ") : "loading";
+    const gridReport = S.clayGridMesh && S.clayGridMesh.userData
+      ? S.clayGridMesh.userData.clayGridReport : null;
+    trimReadout.innerHTML =
+      "<div style='display:grid;grid-template-columns:1fr auto;gap:3px 8px;background:#17191d;border:1px solid #3c4148;padding:8px'>" +
+      "<span style='color:#9fa9b4'>Runtime maps</span><span style='color:" + readyColor + ";font:600 10px monospace'>" + (snap.pbrReady ? "READY" : "LOADING / FALLBACK") + "</span>" +
+      "<span style='color:#9fa9b4'>Complete rooms</span><span style='font:10px monospace'>2 matched</span>" +
+      "<span style='color:#9fa9b4'>Body surfaces</span><span style='font:10px monospace'>" + (snap.bodySurfaceCount || 0) + "</span>" +
+      "<span style='color:#9fa9b4'>Trim faces / cores</span><span style='font:10px monospace'>" + (snap.trimSurfaceCount || 0) + " / " + (snap.trimCoreCount || 0) + "</span>" +
+      "<span style='color:#9fa9b4'>Six roles per room</span><span style='color:" + (snap.allRolesPerStructure ? "#79d69a" : "#d5a65c") + ";font:600 10px monospace'>" + (snap.allRolesPerStructure ? "PASS" : "LOADING") + "</span>" +
+      "<span style='color:#9fa9b4'>Semantic routing</span><span style='max-width:185px;font:8px/1.35 monospace;text-align:right'>" + roles + "</span>" +
+      "<span style='color:#9fa9b4'>Repeat-safe runs</span><span style='font:10px monospace'>" + (snap.segmentedRuns || 0) + " segmented · " + (snap.nonExactRepeatRuns || 0) + " non-multiple</span>" +
+      "<span style='color:#9fa9b4'>Atlas UV clamp</span><span style='color:" + (snap.uvClamped ? "#79d69a" : "#d5a65c") + ";font:600 10px monospace'>" + (snap.uvClamped ? "PASS" : "REVIEW") + "</span>" +
+      "<span style='color:#9fa9b4'>Flat-surface grid</span><span style='font:10px monospace'>" + (gridReport ? gridReport.trimSurfaces + " tops" : "loading") + "</span>" +
+      "<span style='color:#9fa9b4'>Cutaway wall</span><span style='font:10px monospace'>" + CLAY_TRIM_BENCH_FIXTURE.architecture.stubFeet + " ft retained stub</span>" +
+      "</div>" +
+      "<div style='color:#8f99a4;font:9px/1.4 monospace;margin-top:6px'>LINEAGE · B04 body parents + deterministic B06 h6-v1 trim · exact basecolor · tangent normal · ORM · zero tactical mutation</div>";
+  }
+  S.clayRoomRefreshTrim = clayTrimRender;
+
   panel.appendChild(factsBody);
   panel.appendChild(explainBody);
   panel.appendChild(surfacesBody);
@@ -4942,6 +7955,8 @@ function clayRoomMountOverlay(record, host){
   panel.appendChild(structureBody);
   panel.appendChild(lightsBody);
   panel.appendChild(spritesBody);
+  panel.appendChild(materialsBody);
+  panel.appendChild(trimBody);
 
   function clayShowTab(which){
     factsBody.style.display = which === "facts" ? "" : "none";
@@ -4953,6 +7968,8 @@ function clayRoomMountOverlay(record, host){
     structureBody.style.display = which === "structure" ? "" : "none";
     lightsBody.style.display = which === "lights" ? "" : "none";
     spritesBody.style.display = which === "sprites" ? "" : "none";
+    materialsBody.style.display = which === "materials" ? "" : "none";
+    trimBody.style.display = which === "trim" ? "" : "none";
     factsTabBtn.style.background = which === "facts" ? "#3a3a44" : "#2a2a30";
     explainTabBtn.style.background = which === "explain" ? "#3a3a44" : "#2a2a30";
     surfacesTabBtn.style.background = which === "surfaces" ? "#3a3a44" : "#2a2a30";
@@ -4962,6 +7979,8 @@ function clayRoomMountOverlay(record, host){
     structureTabBtn.style.background = which === "structure" ? "#3a3a44" : "#2a2a30";
     lightsTabBtn.style.background = which === "lights" ? "#3a3a44" : "#2a2a30";
     spritesTabBtn.style.background = which === "sprites" ? "#3a3a44" : "#2a2a30";
+    materialsTabBtn.style.background = which === "materials" ? "#3a3a44" : "#2a2a30";
+    trimTabBtn.style.background = which === "trim" ? "#3a3a44" : "#2a2a30";
     S.clayRoomMovementPickMode = which === "movement";
     if(which === "surfaces") clayRenderSurfacesTab();
     if(which === "mount") clayMountRender();
@@ -4971,6 +7990,8 @@ function clayRoomMountOverlay(record, host){
     if(which === "structure") clayStructureRender();
     if(which === "lights") clayLightsRender();
     if(which === "sprites") claySpritesRender();
+    if(which === "materials") clayMaterialsRender();
+    if(which === "trim") clayTrimRender();
     if(CLAY_ROOM_PANEL_POSITION){
       const panelRect = panel.getBoundingClientRect();
       clayPanelPlace(panelRect.left, panelRect.top, true);
@@ -5012,6 +8033,28 @@ function clayRoomMountOverlay(record, host){
       tab: "sprites",
       socket: false,
       sprite: true
+    };
+    const materialSpec = CLAY_MATERIAL_BENCH_FIXTURE.materials.find(function(row){
+      return row.id === id;
+    });
+    if(materialSpec) return {
+      name: materialSpec.label,
+      type: "TASTE-PENDING MATERIAL PARENT",
+      ref: materialSpec.id,
+      tab: "materials",
+      socket: false,
+      sprite: false
+    };
+    const trimStructure = CLAY_TRIM_BENCH_FIXTURE.structures.find(function(row){
+      return row.id === id;
+    });
+    if(trimStructure) return {
+      name: trimStructure.label,
+      type: trimStructure.cultureId.toUpperCase() + " · COMPLETE TRIMMED STRUCTURE",
+      ref: trimStructure.id,
+      tab: "trim",
+      socket: false,
+      sprite: false
     };
     const activeRecipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId]
       || LIGHT_TUNABLES.profiles["clay-opposing-pair"];
@@ -5061,7 +8104,8 @@ function clayRoomMountOverlay(record, host){
     socketScopeBtn.style.opacity = info.socket ? "1" : "0.55";
     socketScopeBtn.textContent = info.socket ? "🔒 SOCKET" : "SOCKET — N/A";
     stateScopeBtn.style.opacity = info.tab === "state" || info.tab === "structure"
-      || info.tab === "lights" || info.tab === "sprites" ? "1" : "0.7";
+      || info.tab === "lights" || info.tab === "sprites" || info.tab === "materials"
+      || info.tab === "trim" ? "1" : "0.7";
     document.querySelectorAll("[data-clay-scene-id]").forEach(function(b){
       const active = b.dataset.claySceneId === id
         || (id === record.citizen.bestiaryId && b.dataset.claySceneId === record.citizen.id);
@@ -5070,6 +8114,17 @@ function clayRoomMountOverlay(record, host){
       b.style.color = active ? "#f0f8ff" : "#cbd3dc";
     });
     clayRoomHighlightSelection(id);
+    if(info.tab === "structure"){
+      clayRoomStructureClimbTargetSet(id, null, null);
+      clayRoomApplyStructureViewVisibility(S.clayRoomStructureView || CLAY_STRUCTURE_BENCH_FIXTURE.defaultView);
+      if(typeof S.clayRoomRefreshStructure === "function") S.clayRoomRefreshStructure();
+    }
+    if(info.tab === "materials" && typeof S.clayRoomRefreshMaterials === "function"){
+      S.clayRoomRefreshMaterials();
+    }
+    if(info.tab === "trim" && typeof S.clayRoomRefreshTrim === "function"){
+      S.clayRoomRefreshTrim();
+    }
   };
   instanceScopeBtn.addEventListener("click", function(){
     sessionLaw.textContent = "INSTANCE · SESSION ONLY · transforms here never rewrite the production socket.";
@@ -5117,9 +8172,14 @@ function clayRoomMountOverlay(record, host){
   structureTabBtn.addEventListener("click", function(){ clayShowTab("structure"); });
   lightsTabBtn.addEventListener("click", function(){ clayShowTab("lights"); });
   spritesTabBtn.addEventListener("click", function(){ clayShowTab("sprites"); });
+  materialsTabBtn.addEventListener("click", function(){ clayShowTab("materials"); });
+  trimTabBtn.addEventListener("click", function(){ clayShowTab("trim"); });
   clayShowTab(S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
     ? "structure" : (S.clayRoomFixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
-      ? "lights" : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? "sprites" : "movement")));
+      ? "lights" : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID
+        ? "sprites" : (S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
+          ? "materials" : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID
+            ? "trim" : "movement")))));
 
   document.body.appendChild(panel);
   if(CLAY_ROOM_PANEL_POSITION){
@@ -5136,7 +8196,11 @@ function clayRoomMountOverlay(record, host){
       ? "compiled-shell"
       : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID
       ? (S.clayRoomSelectedSpriteSlug || spriteFixture.selectedSlug)
-      : (S.clayRoomSelectedId || record.portal.id)));
+      : (S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
+        ? CLAY_MATERIAL_BENCH_FIXTURE.materials[0].id
+        : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID
+          ? CLAY_TRIM_BENCH_FIXTURE.structures[0].id
+          : (S.clayRoomSelectedId || record.portal.id)))));
   S.clayRoomWorkbenchSelect(initialSelection, "initial");
   S.clayRoomRefreshLightCatalog();
   clayRefreshFixtureControls();
@@ -5228,20 +8292,37 @@ export {
   clayRoomDoorProofState,
   clayRoomLightingPixelMetrics,
   clayRoomLightingSnapshot,
+  clayRoomMaterialBenchSnapshot,
+  clayRoomTrimBenchSnapshot,
+  clayRoomMoodSnapshot,
   clayRoomMovementSession,
   clayRoomProvenanceAudit,
   clayRoomRecordLightingProbe,
   clayRoomSetFixture,
   clayRoomSetLightingRecipe,
+  clayRoomSetMaterialMode,
+  clayRoomSetTrimMode,
+  clayRoomSetMoodLayer,
   clayRoomSetSpriteScaleMode,
+  clayRoomStructureClimbAttempt,
+  clayRoomStructureClimbReset,
+  clayRoomStructureClimbSnapshot,
+  clayRoomStructureClimbTargetSet,
+  clayRoomStructureFocusProofFamily,
+  clayRoomStructureFocusSpec,
+  clayRoomStructureParkActorOnStep,
   clayRoomSetStructureDoorState,
   clayRoomSetStructureStaged,
   clayRoomSetStructureView,
   clayRoomSurfaceCensus,
   clayWallOmissionOn,
   CLAY_CAM_ZOOM_MIN,
+  CLAY_CAM_ZOOM_MAX,
   CLAY_ROOM_LIGHTING_BENCH_ID,
+  CLAY_ROOM_MATERIAL_BENCH_ID,
+  CLAY_ROOM_TRIM_BENCH_ID,
   CLAY_ROOM_LIGHTING_MATRIX_RECIPES,
   CLAY_ROOM_LIGHT_PREVIEW_SEEDS,
-  CLAY_ROOM_LORE_LIGHT_PREVIEWS
+  CLAY_ROOM_LORE_LIGHT_PREVIEWS,
+  CLAY_ROOM_MOOD_EXAMPLES
 };

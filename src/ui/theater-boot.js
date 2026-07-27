@@ -128,12 +128,19 @@ import {
 import {
   mountClayRoom, clayRoomBootSelfMount, clayRoomMaybeAutoMount,
   clayRoomCaptureLightingMatrix, clayRoomDoorProofState, clayRoomLightingPixelMetrics,
-  clayRoomLightingSnapshot, clayRoomMovementSession, clayRoomProvenanceAudit,
-  clayRoomSetFixture, clayRoomSetLightingRecipe,
-  clayRoomSetSpriteScaleMode, clayRoomSetStructureDoorState, clayRoomSetStructureStaged,
+  clayRoomLightingSnapshot, clayRoomMaterialBenchSnapshot, clayRoomTrimBenchSnapshot, clayRoomMoodSnapshot,
+  clayRoomMovementSession, clayRoomProvenanceAudit,
+  clayRoomSetFixture, clayRoomSetLightingRecipe, clayRoomSetMaterialMode, clayRoomSetTrimMode, clayRoomSetMoodLayer,
+  clayRoomSetSpriteScaleMode, clayRoomStructureClimbAttempt, clayRoomStructureClimbReset,
+  clayRoomStructureClimbSnapshot, clayRoomStructureClimbTargetSet,
+  clayRoomStructureFocusProofFamily, clayRoomStructureFocusSpec,
+  clayRoomStructureParkActorOnStep,
+  clayRoomSetStructureDoorState, clayRoomSetStructureStaged,
   clayRoomSetStructureView, clayRoomSurfaceCensus,
-  CLAY_CAM_ZOOM_MIN, CLAY_ROOM_LIGHTING_BENCH_ID, CLAY_ROOM_LIGHTING_MATRIX_RECIPES,
-  CLAY_ROOM_LIGHT_PREVIEW_SEEDS, CLAY_ROOM_LORE_LIGHT_PREVIEWS,
+  CLAY_CAM_ZOOM_MIN, CLAY_CAM_ZOOM_MAX, CLAY_ROOM_LIGHTING_BENCH_ID, CLAY_ROOM_LIGHTING_MATRIX_RECIPES,
+  CLAY_ROOM_LIGHT_PREVIEW_SEEDS, CLAY_ROOM_LORE_LIGHT_PREVIEWS, CLAY_ROOM_MATERIAL_BENCH_ID,
+  CLAY_ROOM_TRIM_BENCH_ID,
+  CLAY_ROOM_MOOD_EXAMPLES,
   clayRoomInit, clayRoomSyncState
 } from "./theater-clay-room.js";
 // split B2 (2026-07-25): the Light Lab module — same root->leaf ctx law as the clay room above.
@@ -3507,6 +3514,7 @@ function createTheaterState(){
     clayRoomLightOverlayModes: null, clayRoomLightReadoutTimer: null, clayRoomLightRecipeId: null, clayRoomLightingBaseline: null,
     clayRoomLightingBenchGroup: null, clayRoomLightingMatrixArtifact: null, clayRoomLightingMatrixOverlay: null, clayRoomLightingProbe: null,
     clayRoomLightingProbeToken: null, clayRoomMatrixCaptureInProgress: null, clayRoomMatrixStatusEl: null, clayRoomMounted: null,
+    clayRoomMoodBaseBackground: null, clayRoomMoodGroup: null, clayRoomMoodLayerId: null,
     clayRoomMovementOverlayGroup: null, clayRoomMovementOverlaySummary: null, clayRoomMovementPickMode: null, clayRoomMovementPreviewCell: null,
     clayRoomOverlayEl: null, clayRoomPanelDragCleanup: null, clayRoomPanelResizeHandler: null, clayRoomPixelMetricsCache: null,
     clayRoomPreviewSeed: null, clayRoomProvenanceRoots: null, clayRoomRecord: null, clayRoomRefreshFixtureControls: null,
@@ -4201,6 +4209,15 @@ function applyPsxShaderTweaks(material, opts){
   // stretch flags with WORLD_PSX_ENABLED for those materials only — every other call site (tabletop
   // tiles/props/figures) reads PSX_DITHER_ENABLED/PSX_VERTEX_SNAP_ENABLED exactly as before, untouched.
   const worldSurface = !!(opts && opts.worldSurface);
+  // CL-R3 cast-shadow contact registration. THREE's automatic shadow-side rule writes the BACK
+  // faces of ordinary front-sided materials into the shadow map. That is a useful generic acne
+  // guard, but on thick modular architecture it moves the caster depth behind the visible plane:
+  // two genuinely flush/interpenetrating blocks then acquire a bright PCF fringe at their contact.
+  // Solid world surfaces cast from their visible/front faces instead. The celestial recipes carry
+  // the small negative depth bias that this requires to avoid front-face self-shadow striping.
+  // Figures, sprites, emitters, and translucent overlays do not opt into worldSurface and retain
+  // THREE's normal automatic rule.
+  if(worldSurface) material.shadowSide = THREE.FrontSide;
   // worldPsxOverride (study-rig ONLY — dev/battle-gate/capture-two-flag-card.mjs's world-PSX on/off
   // cells): interiorBuildInstancedMesh threads S.interiorVariant.worldPsx through here so the card
   // can sweep both states of the flag in one page load without touching the module const. No product
@@ -4290,6 +4307,7 @@ function applyPsxShaderTweaks(material, opts){
   // without needing to re-derive the WORLD_PSX_ENABLED/PSX_*_ENABLED AND logic itself.
   material.userData.psxApplied = true;
   material.userData.psxWorldSurface = worldSurface;
+  material.userData.shadowContactMode = worldSurface ? "front-face" : "automatic";
   material.userData.psxDitherResolved = ditherOn;
   material.userData.psxSnapResolved = snapOn;
   return material;
@@ -4340,6 +4358,11 @@ function mount(el, opts){
   // they are the AO-substitute contact-darkness grounding Adam's own ruling calls for, orthogonal to a
   // real cast shadow, not a competing "no shadow maps" holdover.
   renderer.shadowMap.enabled = true;
+  // CL-R3 contact diagnosis: make the chosen sharp filter explicit. PCFSoft widened the erroneous
+  // contact fringe into a glow and Basic preserved hard stair-step aliasing; ordinary PCF at the
+  // celestial profiles' 2048 lock was the bounded setting that reduced the quantization fringe
+  // without erasing cast-shadow structure.
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   el.innerHTML = "";
   el.appendChild(renderer.domElement);
   applyPsxCanvasSize(renderer, renderer.domElement, width, height);
@@ -5499,6 +5522,11 @@ window.Theater.interiorBoardOrigin = function(){ return S.boardOrigin ? { cx: S.
 window.Theater._claySurfaceCensusForTest = function(){
   return (typeof clayRoomSurfaceCensus === "function" && S.interiorGroup) ? clayRoomSurfaceCensus() : null;
 };
+window.Theater._clayTraversabilityGridForTest = function(){
+  return S.clayGridMesh && S.clayGridMesh.userData
+    ? Object.assign({}, S.clayGridMesh.userData.clayGridReport || {})
+    : null;
+};
 // CL-R3a — the omission decision set, verbatim off S (deterministic board data, echoed into every
 // capture receipt so a frame names exactly which wall segments were omitted and by which rule).
 window.Theater._wallOmissionForTest = function(){ return S.wallOmissionReport || null; };
@@ -5522,6 +5550,14 @@ window.Theater._clayLightingRecipeForTest = function(){
 window.Theater._claySetLightingRecipeForTest = function(id){
   return (typeof clayRoomSetLightingRecipe === "function")
     ? clayRoomSetLightingRecipe(id, "clayroom-test-seam")
+    : false;
+};
+window.Theater._clayMoodLayerForTest = function(){
+  return (typeof clayRoomMoodSnapshot === "function") ? clayRoomMoodSnapshot() : null;
+};
+window.Theater._claySetMoodLayerForTest = function(id){
+  return (typeof clayRoomSetMoodLayer === "function")
+    ? clayRoomSetMoodLayer(id, "clayroom-mood-test-seam")
     : false;
 };
 window.Theater._clayLightingPixelMetricsForTest = function(){
@@ -5573,10 +5609,31 @@ window.Theater._clayLightingBenchForTest = function(){
     matrixRecipes: CLAY_ROOM_LIGHTING_MATRIX_RECIPES.slice()
   };
 };
+window.Theater._clayMaterialBenchForTest = function(){
+  return (typeof clayRoomMaterialBenchSnapshot === "function")
+    ? clayRoomMaterialBenchSnapshot()
+    : null;
+};
+window.Theater._claySetMaterialModeForTest = function(mode){
+  return (typeof clayRoomSetMaterialMode === "function")
+    ? clayRoomSetMaterialMode(mode)
+    : false;
+};
+window.Theater._clayTrimBenchForTest = function(){
+  return (typeof clayRoomTrimBenchSnapshot === "function")
+    ? clayRoomTrimBenchSnapshot()
+    : null;
+};
+window.Theater._claySetTrimModeForTest = function(mode){
+  return (typeof clayRoomSetTrimMode === "function")
+    ? clayRoomSetTrimMode(mode)
+    : false;
+};
 window.Theater._clayStructureBenchForTest = function(){
   if(!S.clayRoomStructureReport) return null;
   const group = S.clayRoomStructureBenchGroup;
   let mountedMeshes = 0, shadowCasters = 0, shadowReceivers = 0, hostSuppressedMeshes = 0;
+  let frontFaceShadowCasters = 0, automaticShadowCasters = 0;
   if(S.interiorGroup){
     S.interiorGroup.traverse(function(node){
       if(node.userData && node.userData.clayStructureHostSuppressed) hostSuppressedMeshes++;
@@ -5586,8 +5643,28 @@ window.Theater._clayStructureBenchForTest = function(){
     group.traverse(function(node){
       if(!node.isMesh) return;
       mountedMeshes++;
-      if(node.castShadow) shadowCasters++;
+      if(node.castShadow){
+        shadowCasters++;
+        const mats = Array.isArray(node.material) ? node.material : [node.material];
+        if(mats.length && mats.every(function(mat){ return mat && mat.shadowSide === THREE.FrontSide; })){
+          frontFaceShadowCasters++;
+        } else {
+          automaticShadowCasters++;
+        }
+      }
       if(node.receiveShadow) shadowReceivers++;
+    });
+  }
+  const directionalShadowLights = [];
+  if(S.scene){
+    S.scene.traverse(function(node){
+      if(!node || !node.isDirectionalLight || !node.castShadow || !node.shadow) return;
+      directionalShadowLights.push({
+        id: node.userData && node.userData.lightId || node.name || "directional",
+        bias: +node.shadow.bias,
+        normalBias: +node.shadow.normalBias,
+        mapSize: [node.shadow.mapSize.x, node.shadow.mapSize.y]
+      });
     });
   }
   const fade = window.Theater._occlusionFadeSummaryForTest();
@@ -5597,7 +5674,21 @@ window.Theater._clayStructureBenchForTest = function(){
     mountedMeshes,
     shadowCasters,
     shadowReceivers,
+    shadowContact: {
+      rendererFilter: S.renderer && S.renderer.shadowMap
+        ? (S.renderer.shadowMap.type === THREE.PCFShadowMap ? "pcf" : "other")
+        : "none",
+      frontFaceShadowCasters,
+      automaticShadowCasters,
+      directionalLights: directionalShadowLights
+    },
+    traversabilityGrid: S.clayGridMesh && S.clayGridMesh.userData
+      ? Object.assign({}, S.clayGridMesh.userData.clayGridReport || {})
+      : null,
+    mood: (typeof clayRoomMoodSnapshot === "function") ? clayRoomMoodSnapshot() : null,
     hostSuppressedMeshes,
+    climb: clayRoomStructureClimbSnapshot(),
+    parking: S.clayRoomStructureParking ? Object.assign({}, S.clayRoomStructureParking) : null,
     cameraSideOmission: (S.clayRoomStructureReport && S.clayRoomStructureReport.cameraSideOmission)
       || S.wallOmissionReport || null,
     dynamicCutaway: {
@@ -5617,6 +5708,24 @@ window.Theater._claySetStructureStagedForTest = function(staged){
 };
 window.Theater._claySetStructureDoorStateForTest = function(state){
   return clayRoomSetStructureDoorState(state);
+};
+window.Theater._claySelectStructureClimbTargetForTest = function(id){
+  return clayRoomStructureClimbTargetSet(id, null, null);
+};
+window.Theater._clayResolveStructureClimbForTest = function(d20, modifier){
+  return clayRoomStructureClimbAttempt(d20, modifier);
+};
+window.Theater._clayResetStructureClimbForTest = function(){
+  return clayRoomStructureClimbReset();
+};
+window.Theater._clayFocusStructureSpecForTest = function(id, zoom){
+  return clayRoomStructureFocusSpec(id, zoom);
+};
+window.Theater._clayFocusStructureProofForTest = function(family, zoom){
+  return clayRoomStructureFocusProofFamily(family, zoom);
+};
+window.Theater._clayParkStructureStepForTest = function(id, stepIndex, animate){
+  return clayRoomStructureParkActorOnStep(id, stepIndex, { animate: !!animate });
 };
 window.Theater._claySetFixtureForTest = function(id){
   return (typeof clayRoomSetFixture === "function")
@@ -5802,6 +5911,11 @@ window.Theater._clayMovementProofForTest = function(){
     overlay: S.clayRoomMovementOverlaySummary || null
   };
 };
+window.Theater._claySetMovementOverlayVisibleForTest = function(visible){
+  if(!S.clayRoomMovementOverlayGroup) return false;
+  S.clayRoomMovementOverlayGroup.visible = visible !== false;
+  return S.clayRoomMovementOverlayGroup.visible;
+};
 window.Theater._clayProvenanceAuditForTest = function(){
   return (typeof clayRoomProvenanceAudit === "function") ? clayRoomProvenanceAudit() : null;
 };
@@ -5831,6 +5945,103 @@ window.Theater._interiorSceneLightsForTest = function(){
   };
 };
 window.Theater.shadowMapEnabled = function(){ return !!(S.renderer && S.renderer.shadowMap.enabled); };
+// CL-R3 contact-light diagnosis. Positive shadow normal-bias offsets the receiver used for the
+// shadow comparison away from its real surface. At perpendicular/planar contacts that can separate
+// the shadow from the geometry ("peter panning") even when the meshes physically interpenetrate.
+// This test-only seam reads or temporarily sweeps the live shadow lights so the capture rig can
+// distinguish geometry, GTAO, and shadow-map registration without editing an authored light lock
+// between frames.
+window.Theater._clayShadowContactForTest = function(mode){
+  const rows = [];
+  if(!S.scene) return rows;
+  const rendererShadow = S.renderer && S.renderer.shadowMap ? S.renderer.shadowMap : null;
+  let shadowAllocationChanged = false;
+  let materialShadowSide = null;
+  if(mode && typeof mode === "object" && rendererShadow && typeof mode.filter === "string"){
+    const filterTypes = {
+      basic: THREE.BasicShadowMap,
+      pcf: THREE.PCFShadowMap,
+      "pcf-soft": THREE.PCFSoftShadowMap,
+      vsm: THREE.VSMShadowMap
+    };
+    if(Object.prototype.hasOwnProperty.call(filterTypes, mode.filter)
+      && rendererShadow.type !== filterTypes[mode.filter]){
+      rendererShadow.type = filterTypes[mode.filter];
+      shadowAllocationChanged = true;
+    }
+  }
+  if(mode && typeof mode === "object" && typeof mode.shadowSide === "string"){
+    const shadowSides = {
+      auto: null,
+      front: THREE.FrontSide,
+      back: THREE.BackSide,
+      double: THREE.DoubleSide
+    };
+    if(Object.prototype.hasOwnProperty.call(shadowSides, mode.shadowSide)){
+      materialShadowSide = mode.shadowSide;
+      S.scene.traverse(function(obj){
+        if(!obj || !obj.isMesh || !obj.material) return;
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+        mats.forEach(function(mat){
+          if(!mat) return;
+          mat.shadowSide = shadowSides[mode.shadowSide];
+          mat.needsUpdate = true;
+        });
+      });
+      shadowAllocationChanged = true;
+    }
+  }
+  S.scene.traverse(function(light){
+    if(!light || !light.isLight || !light.shadow) return;
+    if(mode && typeof mode === "object"){
+      if(typeof mode.castShadow === "boolean") light.castShadow = mode.castShadow;
+      if(Number.isFinite(Number(mode.bias))) light.shadow.bias = Number(mode.bias);
+      if(Number.isFinite(Number(mode.normalBias))) light.shadow.normalBias = Number(mode.normalBias);
+      if([256, 512, 1024, 2048, 4096].indexOf(Number(mode.mapSize)) >= 0
+        && (light.shadow.mapSize.x !== Number(mode.mapSize)
+          || light.shadow.mapSize.y !== Number(mode.mapSize))){
+        light.shadow.mapSize.set(Number(mode.mapSize), Number(mode.mapSize));
+        shadowAllocationChanged = true;
+      }
+      if(shadowAllocationChanged && light.shadow.map){
+        light.shadow.map.dispose();
+        light.shadow.map = null;
+      }
+    }
+    rows.push({
+      id: light.userData && (light.userData.lightId || light.userData.sourceRef) || light.name || light.type,
+      type: light.type,
+      castShadow: !!light.castShadow,
+      bias: Number(light.shadow.bias) || 0,
+      normalBias: Number(light.shadow.normalBias) || 0,
+      mapSize: light.shadow.mapSize
+        ? [light.shadow.mapSize.x, light.shadow.mapSize.y]
+        : null
+    });
+  });
+  if(mode && typeof mode === "object"){
+    if(rendererShadow) rendererShadow.needsUpdate = true;
+    if(shadowAllocationChanged){
+      S.scene.traverse(function(obj){
+        if(!obj || !obj.isMesh || !obj.material) return;
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+        mats.forEach(function(mat){ if(mat) mat.needsUpdate = true; });
+      });
+    }
+    markDirty();
+  }
+  rows.renderer = {
+    type: rendererShadow ? rendererShadow.type : null,
+    filter: rendererShadow
+      ? (rendererShadow.type === THREE.PCFSoftShadowMap ? "pcf-soft"
+        : (rendererShadow.type === THREE.PCFShadowMap ? "pcf"
+          : (rendererShadow.type === THREE.BasicShadowMap ? "basic"
+            : (rendererShadow.type === THREE.VSMShadowMap ? "vsm" : "unknown"))))
+      : null,
+    materialShadowSide
+  };
+  return rows;
+};
 // ENV-1 (docs/ENV-EXTERIOR-WAVE.md) — harness-facing diagnostic for the TABLETOP channel (setBoard),
 // same read-only convention as _interiorSceneLightsForTest above but for the flat-tray light rig:
 // the resolved profile key, live ambient/point-light state, and the actual scene.background hex
@@ -7501,6 +7712,7 @@ clayRoomInit({
   startTweenLoop,
   stopLightFlicker,
   stopMoteDrift,
+  syncStandeeContactBlob,
   zoom,
   BLOOM_LAYER,
   HUMAN_TRUE_HEIGHT,

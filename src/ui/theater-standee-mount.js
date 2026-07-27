@@ -247,7 +247,9 @@ function standeeSupportObb(fig){
   const width = Number(fig.userData.interiorBaseWidth);
   const depth = Number(fig.userData.interiorBaseDepth);
   if(!(width > 0) || !(depth > 0)) return null;
-  const yaw = fig.rotation ? fig.rotation.y || 0 : 0;
+  const yaw = Number.isFinite(fig.userData.claySupportWorldYaw)
+    ? fig.userData.claySupportWorldYaw
+    : (fig.rotation ? fig.rotation.y || 0 : 0);
   return {
     fig: fig,
     cx: fig.position.x,
@@ -349,11 +351,16 @@ function resolveMountedStandeeSupportCollisions(){
 function syncStandeeContactBlob(fig){
   if(!fig || !fig.userData || !fig.userData.contactBlobMesh) return;
   const blob = fig.userData.contactBlobMesh;
-  const yaw = fig.rotation ? fig.rotation.y || 0 : 0;
+  const yaw = Number.isFinite(fig.userData.claySupportWorldYaw)
+    ? fig.userData.claySupportWorldYaw
+    : (fig.rotation ? fig.rotation.y || 0 : 0);
   const depth = Number(fig.userData.interiorBaseDepth) || 0.33;
   const offset = Math.min(0.12, Math.max(0.045, depth * 0.24));
   blob.position.x = fig.position.x + Math.sin(yaw) * offset;
   blob.position.z = fig.position.z + Math.cos(yaw) * offset;
+  if(Number.isFinite(fig.userData.claySupportSurfaceY)){
+    blob.position.y = fig.userData.claySupportSurfaceY + INTERIOR_POOL_Y_OFFSET;
+  }
   blob.rotation.order = "YXZ";
   blob.rotation.x = -Math.PI / 2;
   blob.rotation.y = yaw;

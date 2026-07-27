@@ -299,8 +299,9 @@ group("9/10/11 — GL-LAYER WIRING (text-scan, sealed ES-module boundary — sam
   ok(/const yBase = \(typeof inst\.yBase === "number"\)/.test(bootSrc), "interiorBuildInstancedMesh reads inst.yBase");
   ok(/inst\.ox \|\| 0/.test(bootSrc) && /inst\.oz \|\| 0/.test(bootSrc), "interiorBuildInstancedMesh reads inst.ox/inst.oz");
   ok(!/const KNEE = 0\.35/.test(bootSrc), "the old fixed KNEE=0.35 absolute parapet constant is GONE");
-  ok(/ITR_CUTAWAY_PARAPET_FRAC/.test(bootSrc) && /\(wi\.sy \|\| 1\) \* ITR_CUTAWAY_PARAPET_FRAC/.test(bootSrc),
-    "the cutaway pass computes a PROPORTIONAL parapet height off the wall's own sy");
+  ok(/ITR_CUTAWAY_STUB_HEIGHT_U\s*=\s*ITR_OCCLUSION_STEM_HEIGHT_U/.test(bootSrc)
+    && /Math\.min\(fullH,\s*ITR_CUTAWAY_STUB_HEIGHT_U\)/.test(bootSrc),
+    "the cutaway pass retains an absolute one-foot stub and never grows an already-lower wall");
   ok(/function interiorBuildPillarMeshes/.test(bootSrc), "interiorBuildPillarMeshes exists (profile-based pillar mesh split)");
   ok(/profile === "round"/.test(bootSrc) && /interiorCylinderGeometry/.test(bootSrc), "round-profile pillars route through a dedicated cylinder geometry");
   ok(/function interiorBuildFurniture/.test(bootSrc), "interiorBuildFurniture exists");

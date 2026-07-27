@@ -1,10 +1,66 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-25
+updated: 2026-07-27
 ---
 
 # Genesis — Session Hand-off
+
+## ⭐ Latest (2026-07-27, CL-R5 COMPLETE TRIMMED-STRUCTURE PROOF) [Codex]
+
+Adam approved both CL-R4b material parents and asked for complete structures with varying textures
+routed correctly. `CL-F05 trim-bench` v1 is now a retained production-renderer fixture with two
+architectural twins:
+
+- Institutional workroom: approved fine-brick-scale walls, approved rough-block floor,
+  Institutional B06 `h6-v1` trim.
+- Upland guard room: the body parents swap, with Upland B06 `h6-v1` trim.
+- Each has a supported slab, full far walls, exact one-foot camera-side stubs, owned corner,
+  unobstructed framed doorway, base course, cornice, coping, raised platform, split retaining curb,
+  and an internal two-tread approach.
+- All six semantic trim roles bind exact packed basecolor/normal/ORM lineage. Runs split at repeat
+  boundaries, V stays clamped to its atlas band, UV1 is present, profile geometry owns relief, and
+  PBR / role-debug / albedo-only / clay modes use the same structure.
+- Every declared horizontal top joins the multiply-grid census; the live receipt reports 20 body
+  surfaces, 42 trim faces + 42 profile cores after the split curb, 20 grid tops, eight walk tops,
+  both cultures PBR-ready, all six roles per room, and zero browser errors. Reconfirm exact counts
+  from the final receipt if later geometry changes.
+- Adam caught the initial stair assembly crossing the room boundary. The correction is now a
+  reusable pre-mount architecture invariant, not a one-off placement: inside-room bounds, equal
+  rise sequence, contact overlap, platform connection, open curb, and doorway/platform separation
+  all must pass. A deliberately narrowed-room mutation reproduces and rejects the old failure.
+- Focused gates: Clayroom **272/272**, wall volumes **35/35**, wall occlusion **23/23**,
+  silhouettes **162/162**, and kit shells **160/160**; manifest validation and diff hygiene also
+  pass. Visual verdict on CL-F05 remains Adam's.
+- Evidence family: `dev/clay-captures/cl-r5-trimmed-structures-v005/` — final PBR and six-role
+  diagnostic frames plus receipts, both with the architecture audit green and zero browser
+  errors/warnings.
+
+## ⭐ Latest (2026-07-26, CL-R4b TWO-MATERIAL + MULTIPLY-GRID PROOF) [Codex]
+
+`CL-F04` v3 now proves two exact sprite-first parents simultaneously in matched production-renderer
+bays. This was taste-pending at capture time; Adam approved both on 2026-07-27. Production routing
+still remains a separate promotion decision.
+
+- Left: `wall-ashlar-dressed`, relabelled as the **fine white-brick scale reference** after Adam
+  accepted its scale. This does not approve its current palette.
+- Right: admitted B04 v003 `wall-rough-hewn-block`. Material Maker run A/run B exported byte-identical
+  albedo/height/normal/ORM; all hashes match the banked receipt.
+- Both bays use the same eight specimens, 1.65 m/tile physical scale, local UV phase, camera, light,
+  and mode. Live PBR receipt: 16 surfaces, both parents `pbrReady`, zero load errors.
+- The invisible-grid failure was fixed at the renderer: backend-limited 1 px lines became
+  depth-tested, surface-clipped world strips with premultiplied alpha-weighted multiply. The final
+  material receipt reports 16 covered horizontal tops and 602 generated strips. Structure capture
+  also visibly grids the host floor, terraces, stair treads, and declared accessible tops.
+- Prior CL-R4a contact corrections remain: neutral runtime normal scale, ground-up material stairs,
+  full bearing-wall substrate, exact one-foot cutaway stubs.
+- Evidence: `dev/clay-captures/cl-r4b-two-material-grid-v001/cl-r4b-final-02-settled.png`,
+  `cl-r4b-final-04-clean-no-overlay.png`, `cl-r4b-final-receipt.json`, plus the
+  `structure-grid-final-*` packet in the same directory.
+- Focused verification: Clayroom **264/264**, wall volumes **35/35**, wall occlusion **23/23**,
+  silhouettes **162/162**, kit shells **160/160**; manifest OK.
+- **Superseded next decision:** Adam approved the two parents and advanced to complete trimmed
+  structures. Mood lighting remains parked.
 
 ## ⭐ Latest (2026-07-26, THE SINGULAR FRESH START) [Fable]
 

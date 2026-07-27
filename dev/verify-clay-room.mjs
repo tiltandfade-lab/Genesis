@@ -381,7 +381,7 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
-// 7. renderer-owns-zero-mechanics grep-gate (theater-boot.js additions region)
+// 7. renderer projects explicit player input; it never rolls or applies world/combat events.
 // ============================================================================
 {
   const bootSrc = readTheaterSources();
@@ -393,10 +393,8 @@ const check = (name, cond, detail = "") =>
       "not found yet — expected once the U2 wire-in lands");
   } else {
     const region = bootSrc.slice(bi, ei + endMark.length);
-    // "FUTURE ROLLS" is workbench provenance language, not a gameplay mechanic invocation.
-    const mechanicsRegion = region.replace(/future rolls/gi, "");
-    const hit = mechanicsRegion.match(/d20|roll|applyEvent|attack/);
-    check("7. theater-boot.js clay-room additions contain no d20|roll|applyEvent|attack tokens",
+    const hit = region.match(/Math\.random|applyEvent|resolveAttack|attack\s*\(/);
+    check("7. Clayroom may project an open d20 but never rolls or invokes world/combat mechanics",
       !hit, hit ? ("matched \"" + hit[0] + "\" near index " + hit.index) : "");
   }
 }
@@ -521,16 +519,17 @@ const check = (name, cond, detail = "") =>
     const fnMatch = region.match(/function\s+clayRoomBuildSeamGrid\s*\(\s*record,\s*roomRect\s*\)\s*\{([\s\S]*?)\n\}/);
     const fnBody = fnMatch ? fnMatch[1] : "";
 
-    // line count derived FROM record.dims — never a hardcoded cell count (the spec's own "(w+1)+(d+1)
-    // lines, derived FROM record.dims"). Checks the actual loop-bound comparisons, not just any mention
-    // of the string "record.dims" (a comment alone would falsely pass a looser test).
-    check("13b. grid line count loops read <= record.dims.w (never a hardcoded literal)",
-      /<=\s*record\.dims\.w/.test(fnBody), fnBody);
-    check("13c. grid line count loops read <= record.dims.d (never a hardcoded literal)",
-      /<=\s*record\.dims\.d/.test(fnBody), fnBody);
+    // The widened traversability contract now emits one rectangle per live cell so each cell can
+    // carry its own floor-top Y. Bounds still derive from record.dims, never a hardcoded count.
+    check("13b. host-cell grid loop reads < record.dims.w (never a hardcoded literal)",
+      /<\s*record\.dims\.w/.test(fnBody), fnBody);
+    check("13c. host-cell grid loop reads < record.dims.d (never a hardcoded literal)",
+      /<\s*record\.dims\.d/.test(fnBody), fnBody);
 
-    check("13d. THREE.LineSegments is used to render the grid",
-      /new\s+THREE\.LineSegments\s*\(/.test(fnBody));
+    check("13d. deduplicated segments become world-space strip triangles in one THREE.Mesh",
+      /segments\.push\(\[a\.clone\(\), b\.clone\(\)\]\)/.test(fnBody)
+      && /report\.generatedQuadCount\+\+/.test(fnBody)
+      && /new\s+THREE\.Mesh\s*\(\s*geo,\s*mat\s*\)/.test(fnBody));
 
     // opacity in [0.25, 0.35]. REWRITTEN for CL-R0: the authored value moved out of a literal in
     // theater-boot.js and into CLAY_DIAGNOSTIC_SURFACE_RECIPE (src/engine/clay-room.js), because the
@@ -559,15 +558,52 @@ const check = (name, cond, detail = "") =>
     check("13g. the seam grid is offset by the spatialized room rect (never the record's local frame)",
       /function\s+clayRoomBuildSeamGrid\s*\(\s*record,\s*roomRect\s*\)/.test(region) &&
       /const\s+ox\s*=\s*roomRect/.test(fnBody) && /const\s+oz\s*=\s*roomRect/.test(fnBody), fnBody);
-    check("13h. mountClayRoom passes the real spatialized room rect into the grid builder",
-      /clayRoomBuildSeamGrid\s*\(\s*record\s*,\s*compiled\.room\s*\)/.test(region), region.slice(0, 0));
-    check("13f. the recipe-backed opacity reader is actually wired into the LineBasicMaterial",
-      /LineBasicMaterial\(\{[^}]*opacity:\s*clayRoomGridOpacity\(\)/.test(fnBody), fnBody);
+    check("13h. the one rebuild hook passes the real compiled room rect into the grid builder",
+      /clayRoomBuildSeamGrid\s*\(\s*S\.clayRoomRecord\s*,\s*S\.clayRoomCompiled\s*&&\s*S\.clayRoomCompiled\.room\s*\)/.test(region),
+      region.slice(0, 0));
+    check("13f. the grid is a depth-tested, surface-clipped alpha-weighted multiply mesh",
+      /MeshBasicMaterial\(\{[^}]*opacity:\s*clayRoomGridOpacity\(\)/.test(fnBody)
+      && /premultipliedAlpha:\s*true/.test(fnBody)
+      && /blending:\s*THREE\.CustomBlending/.test(fnBody)
+      && /blendSrc:\s*THREE\.DstColorFactor/.test(fnBody)
+      && /blendDst:\s*THREE\.OneMinusSrcAlphaFactor/.test(fnBody)
+      && /depthTest:\s*true/.test(fnBody)
+      && /gridBlendContract/.test(fnBody), fnBody);
 
     // "sit under the figures/objects visually (render order)" — a renderOrder below the scene
     // default (0) on the grid object.
     check("13i. the grid mesh is given a renderOrder below the scene default (renders under other transparent draws)",
       /grid\.renderOrder\s*=\s*-\d/.test(fnBody), fnBody);
+    check("13j. the grid consumes live floor heights, structure tops/ramps, material tops, and the production crate",
+      /interiorFloorTopAt\(S\.interiorFloorTopMap/.test(fnBody)
+      && /structureStepSurfaceY/.test(fnBody)
+      && /structureWalkSurfaceY/.test(fnBody)
+      && /structureRampGrid/.test(fnBody)
+      && /materialGridSurfaces/.test(fnBody)
+      && /furnitureKind\s*===\s*"crate"/.test(fnBody),
+      fnBody);
+    const moodVocabulary = gridWin.CLAY_ROOM_MOOD_LAYERS;
+    const moodLayers = moodVocabulary && Object.values(moodVocabulary.layers || {});
+    check("13k. EXECUTED: every authored mood is a bounded ambient+hemisphere field",
+      moodVocabulary
+      && moodVocabulary.defaultId === "none"
+      && Number.isFinite(moodVocabulary.maxCombinedIntensity)
+      && moodLayers.length >= 5
+      && moodLayers.every((layer) => (
+        layer.ambient.intensity >= 0
+        && layer.hemisphere.intensity >= 0
+        && layer.ambient.intensity + layer.hemisphere.intensity
+          <= moodVocabulary.maxCombinedIntensity
+      )),
+      JSON.stringify(moodVocabulary));
+    check("13l. source-plus-mood preserves source lights, mounts no mood shadow caster, and suppresses the torch blob",
+      /new\s+THREE\.AmbientLight\(layer\.ambient\.color,\s*layer\.ambient\.intensity\)/.test(region)
+      && /new\s+THREE\.HemisphereLight\(/.test(region)
+      && /ambient\.castShadow\s*=\s*false/.test(region)
+      && /hemi\.castShadow\s*=\s*false/.test(region)
+      && /sourceRetained:/.test(region)
+      && /emitter\.userData\.bloomSuppressed\s*=\s*fixtureId\s*===\s*"sconce-torch-clay"/.test(bootSrc),
+      "mood/source/blob wiring incomplete");
   }
 }
 
@@ -1506,8 +1542,12 @@ const check = (name, cond, detail = "") =>
       && steps.every((row) => row.primitive === "box" && row.role === "riser" && row.size.z === 1 / 3)
       && steps[0].size.y < steps[1].size.y && steps[1].size.y < steps[2].size.y,
       JSON.stringify(steps));
-    check("32c. matched neutral comparison forms include one cube, one sphere, and an approved-sprite cell",
-      fixture.primitives.some((row) => row.id === "bench-matte-cube" && row.primitive === "box")
+    const cube = fixture.primitives.find((row) => row.id === "bench-matte-cube");
+    const highStep = fixture.primitives.find((row) => row.id === "bench-step-high");
+    const contactOverlap = (highStep.offset.x + highStep.size.x / 2) - (cube.offset.x - cube.size.x / 2);
+    check("32c. matched neutral forms include a true cube/stair contact, one sphere, and an approved-sprite cell",
+      cube && cube.primitive === "box"
+      && contactOverlap > 0 && contactOverlap <= 0.02
       && fixture.primitives.some((row) => row.id === "bench-matte-sphere" && row.primitive === "sphere")
       && Number.isInteger(fixture.spriteCell.x) && Number.isInteger(fixture.spriteCell.z),
       JSON.stringify(fixture));
@@ -1524,7 +1564,8 @@ const check = (name, cond, detail = "") =>
     /function\s+clayRoomMountLightingBench/.test(bootSrc)
     && /S\.interiorGroup\.add\(group\)/.test(bootSrc)
     && /mesh\.castShadow\s*=\s*true/.test(bootSrc)
-    && /mesh\.receiveShadow\s*=\s*true/.test(bootSrc));
+    && /mesh\.receiveShadow\s*=\s*true/.test(bootSrc)
+    && /mesh\.userData\.clayContactEmbed\s*=\s*CLAY_STRUCTURE_CONTACT_EMBED/.test(bootSrc));
   check("32f. CL-F02 keeps the production sprite path while removing room-truth crate/door clutter",
     /clayRoomLightingBenchFixtureFrom\(S\.clayRoomRecord\)/.test(bootSrc)
     && /cellX:\s*room\.x\s*\+\s*fixture\.spriteCell\.x/.test(bootSrc)
@@ -1728,26 +1769,35 @@ const check = (name, cond, detail = "") =>
     const catalog = win.CLAY_STRUCTURE_KIT_CATALOG;
     check("34a. CL-F01 and its structure catalog are frozen, versioned fixture data",
       fixture.id === "cl-f01-structure-bench"
-      && fixture.version === 1
+      && fixture.version === 4
       && fixture.catalogId === catalog.id
+      && catalog.version === 3
       && Object.isFrozen(fixture)
       && Object.isFrozen(catalog)
       && Object.isFrozen(fixture.pieces),
       JSON.stringify({ fixture: fixture.id, catalog: catalog.id }));
-    check("34b. grid law is 5-ft cells, 2.5-ft h, 10-ft storey, and a 30-degree walkable ceiling",
+    check("34b. grid law includes 5-ft cells, 10-ft storeys, a one-foot cutaway stub, and a 30-degree walkable ceiling",
       catalog.gridLaw.cellFeet === 5
       && catalog.gridLaw.cellWorldUnits === 1
       && catalog.gridLaw.verticalQuantumFeet === 2.5
       && catalog.gridLaw.verticalQuantumWorldUnits === 0.5
       && catalog.gridLaw.storeyQuanta === 4
       && catalog.gridLaw.storeyWorldUnits === 2
+      && catalog.gridLaw.cutawayStubFeet === 1
+      && catalog.gridLaw.cutawayStubWorldUnits === 0.2
       && catalog.gridLaw.maxWalkableSlopeDeg === 30);
     const kinds = new Set(fixture.pieces.map((row) => row.kind));
-    check("34c. generic atoms cover straight/T walls, one/wide stairs, ramp, blocker, and both supports",
+    check("34c. generic atoms cover walls, adaptive/corner stairs, ramp, blocker, and both supports",
       ["wall-run", "t-junction", "stair", "ramp", "blocker", "support-square", "support-round"]
         .every((kind) => kinds.has(kind))
-      && fixture.pieces.filter((row) => row.kind === "stair" && !row.assembly).map((row) => row.width).sort().join(",") === "1,2"
-      && fixture.pieces.filter((row) => row.assembly).length >= 4 // Checkpoint 4: the composed terrace example exists
+      && kinds.has("stair-inner-corner") && kinds.has("stair-outer-corner")
+      && [2, 3, 5].every((feet) => fixture.pieces.some((row) => (
+        row.kind === "stair" && !row.assembly && row.run === 1 && row.rise * catalog.gridLaw.cellFeet === feet
+      )))
+      && catalog.gridLaw.stairAdapter.footprintCells === 1
+      && catalog.gridLaw.stairAdapter.maxRiseFeet === 5
+      && catalog.gridLaw.stairAdapter.fullStoreyUnits === 2
+      && fixture.pieces.filter((row) => row.assembly).length >= 6
       && fixture.cutawayWitness.pieceSlug === "spr-pc-human-fighter-female"
       && fixture.cutawayWitness.occluder.profile === "square");
     const tiers = new Set(fixture.shellCells.map((row) => row.tier));
@@ -1777,10 +1827,25 @@ const check = (name, cond, detail = "") =>
       !rejection.accepted
       && rejection.reason === "socket-axis-mismatch"
       && rejection.reason === bad.expectedReason);
-    check("34h. climb access is labelled without claiming climb mechanics",
+    const square = fixture.pieces.find((row) => row.id === "square-support");
+    const climbed = win.clayStructureClimbResolve(square, { d20: 12, athleticsModifier: 3 });
+    const lostGrip = win.clayStructureClimbResolve(square, { d20: 10, athleticsModifier: 3 });
+    const fell = win.clayStructureClimbResolve(square, { d20: 1, athleticsModifier: 3 });
+    const missingRoll = win.clayStructureClimbResolve(square, {});
+    check("34h. climb access resolves an explicit open d20 to perch/lost-grip/fall without engine RNG",
       catalog.accessKinds.includes("climb-cost")
       && catalog.accessKinds.includes("climb-dc")
-      && catalog.climbMechanicsImplemented === false);
+      && catalog.climbMechanicsImplemented === true
+      && catalog.climbLaw.playerD20Required
+      && climbed.ok && climbed.passed && climbed.outcome === "perched"
+      && lostGrip.ok && !lostGrip.passed && lostGrip.outcome === "lost-grip" && lostGrip.fallFeet === 0
+      && fell.ok && !fell.passed && fell.outcome === "fell" && fell.damage === "1d6"
+      && !missingRoll.ok && missingRoll.reason === "player-d20-required"
+      && fixture.pieces.filter((row) => row.kind === "support-square" || row.kind === "support-round")
+        .every((row) => row.access.top === "walk" && row.access.shaft === "climb-dc" && row.entry.topCheck === "balance")
+      && record.object.access.top === "walk"
+      && record.object.access.faces === "climb-cost"
+      && /relaxed/.test(record.object.access.smallEntry));
     const ramp = fixture.pieces.find((row) => row.kind === "ramp");
     check("34i. the authored ramp stays within the catalog slope law",
       Math.atan2(ramp.rise, ramp.run) * 180 / Math.PI <= catalog.gridLaw.maxWalkableSlopeDeg);
@@ -1833,7 +1898,7 @@ const check = (name, cond, detail = "") =>
     && /provenance/.test(bootSrc));
   check("34p. CL-F01 opens as the active ladder fixture under the daylight hero and suppresses only host upper clutter",
     /return\s+CLAY_ROOM_STRUCTURE_BENCH_ID/.test(bootSrc)
-    && /initialFixtureId\s*===\s*CLAY_ROOM_STRUCTURE_BENCH_ID[\s\S]{0,80}\?\s*"daylit"/.test(bootSrc)
+    && /initialFixtureId\s*===\s*CLAY_ROOM_STRUCTURE_BENCH_ID[\s\S]{0,180}\?\s*"daylit"/.test(bootSrc)
     && /kind\s*===\s*"room-shell-wall-upper"\s*\|\|\s*kind\s*===\s*"room-shell-wall-trim"/.test(bootSrc)
     && /clayStructureHostSuppressed/.test(bootSrc));
   check("34q. fixture lifecycle, workbench selection, and diagnostic surface ownership all include structure",
@@ -1869,6 +1934,82 @@ const check = (name, cond, detail = "") =>
     && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
     && /_claySetStructureStagedForTest/.test(bootSrc)
     && /_claySetStructureDoorStateForTest/.test(bootSrc));
+  check("34u. CL-F01 uses the production OSS corner kernel and builds datum-connected foundations with contact overlap",
+    /roomShellPolygonKernel:\s*"oss"/.test(bootSrc)
+    && /function\s+clayStructureBuildShellFoundations/.test(bootSrc)
+    && /function\s+clayStructureBuildShellJunctions/.test(bootSrc)
+    && /CLAY_STRUCTURE_CONTACT_EMBED\s*=\s*0\.02/.test(bootSrc)
+    && /structureFoundationCorner/.test(bootSrc)
+    && /structureWallCorner/.test(bootSrc)
+    && /connectorProfile:\s*"overlapping plinth \+ full-height corner quoin \+ endpoint cap"/.test(bootSrc));
+  check("34v. the focused structure UI labels socket/access overlays and collapses engineering telemetry",
+    /function\s+clayStructureOverlayLabel/.test(bootSrc)
+    && /SOCKET KEY · selected piece only/.test(bootSrc)
+    && /ACCESS KEY · selected piece only/.test(bootSrc)
+    && /structureEngineeringSummary\.textContent\s*=\s*"Engineering receipt"/.test(bootSrc)
+    && /structurePieceSelect/.test(bootSrc)
+    && /selectionCard\.style\.display\s*=\s*"none"/.test(bootSrc)
+    && /tabBar\.style\.display\s*=\s*"none"/.test(bootSrc));
+  try {
+    const fixture = win.CLAY_STRUCTURE_BENCH_FIXTURE;
+    const straightLower = fixture.pieces.find((row) => row.id === "assembly-story-lower-stair");
+    const straightUpper = fixture.pieces.find((row) => row.id === "assembly-story-upper-stair");
+    const straightDeck = fixture.pieces.find((row) => row.id === "assembly-second-floor");
+    const lProof = fixture.pieces.filter((row) => row.proofFamily === "l-storey");
+    check("34w. storey stairs prove a two-cell straight run and a three-cell ninety-degree L run",
+      straightLower.at.z === 10
+      && straightUpper.at.z === 9
+      && straightLower.steps === 3
+      && straightUpper.steps === 3
+      && straightLower.proofFamily === "straight-storey"
+      && straightUpper.proofFamily === "straight-storey"
+      && straightDeck.proofFamily === "straight-storey"
+      && lProof.filter((row) => row.kind === "stair").length === 2
+      && lProof.filter((row) => row.kind === "platform").length === 2
+      && lProof.some((row) => row.id === "l-storey-upper-stair" && row.axis === "x")
+      && lProof.some((row) => row.id === "l-storey-landing")
+      && fixture.views.includes("stairs"));
+  } catch(e) {
+    check("34w. storey stair fixture proof executes without throw", false, e.stack || String(e));
+  }
+  check("34x. inner-corner inversion and surface-aware standee parking are live renderer laws",
+    /inverse of OUTER/.test(bootSrc)
+    && /inverse-expanding-l-bands-smallest-low/.test(bootSrc)
+    && /structureStepSurfaceY/.test(bootSrc)
+    && /function\s+clayRoomStructureParkActorOnStep/.test(bootSrc)
+    && /interiorStandeeContactY\(surfaceY\)/.test(bootSrc)
+    && /claySupportWorldYaw/.test(bootSrc)
+    && /_clayParkStructureStepForTest/.test(bootSrc)
+    && /baseBottomOnSurface/.test(bootSrc));
+  try {
+    const locks = JSON.parse(read("data/light-profile-locks.json")).profiles;
+    const celestialShadow = (id) => locks[id].lights[0].shadow;
+    check("34y. solid world surfaces use front-face PCF contact shadows with the calibrated celestial bias",
+      /if\(worldSurface\)\s*material\.shadowSide\s*=\s*THREE\.FrontSide/.test(bootSrc)
+      && /CLAY_DIAGNOSTIC_MATERIALS\[hex\]\.shadowSide\s*=\s*THREE\.FrontSide/.test(bootSrc)
+      && /renderer\.shadowMap\.type\s*=\s*THREE\.PCFShadowMap/.test(bootSrc)
+      && /frontFaceShadowCasters/.test(bootSrc)
+      && celestialShadow("daylit").bias === -0.001
+      && celestialShadow("daylit").normalBias === 0
+      && celestialShadow("daylit").mapSize === 2048
+      && celestialShadow("moonlit").bias === -0.001
+      && celestialShadow("moonlit").normalBias === 0
+      && celestialShadow("moonlit").mapSize === 2048);
+  } catch(e) {
+    check("34y. solid world surfaces use front-face PCF contact shadows with the calibrated celestial bias",
+      false, e.stack || String(e));
+  }
+  const cutawaySrc = bootSrc
+    + read("src/ui/theater-occlusion.js")
+    + read("src/ui/theater-room-mesh.js")
+    + read("src/ui/theater-shot.js");
+  check("34z. every cutaway path retains the same exact one-foot wall stub and reports it",
+    /ITR_OCCLUSION_STEM_HEIGHT_U\s*=\s*0\.2/.test(cutawaySrc)
+    && /ITR_CUTAWAY_STUB_HEIGHT_U\s*=\s*ITR_OCCLUSION_STEM_HEIGHT_U/.test(cutawaySrc)
+    && /wallStemHeight:\s*Math\.max\([\s\S]{0,180}cutawayStubWorldUnits\s*-\s*DEFAULT_WALL_CAP_HEIGHT/.test(cutawaySrc)
+    && /retainedStubFeet:\s*CLAY_STRUCTURE_KIT_CATALOG\.gridLaw\.cutawayStubFeet/.test(cutawaySrc)
+    && /retainedStubWorldUnits:\s*ITR_OCCLUSION_STEM_HEIGHT_U/.test(cutawaySrc)
+    && /holder\.scale\.y\s*\*=\s*Math\.min\(1,\s*ITR_CUTAWAY_STUB_HEIGHT_U\s*\/\s*fullH\)/.test(cutawaySrc));
 }
 
 // 35. ENVIRONMENT AO (visual-correction Checkpoint 1 — docs/FABLE-CLAYROOM-VISUAL-CORRECTION-
@@ -2004,6 +2145,216 @@ const check = (name, cond, detail = "") =>
   check("37f. the strategic camera fits from ROOM BOUNDS + live fov/aspect, and workbench chrome yields the viewport majority when narrow",
     /halfDiag \/ Math\.tan\(Math\.min\(vFov, hFov\)\)/.test(bootSrc)
     && /catalogAutoCollapsed = w < 1000 && S\.clayRoomCatalogCollapsed !== false/.test(bootSrc));
+}
+
+// 38. CL-R4b / CL-F04 — two sprite-first material parents in matched production-renderer bays.
+// This is a taste-pending integration gate, not production promotion.
+{
+  const win = freshWin();
+  const bootSrc = readTheaterSources();
+  const engineSrc = read("src/engine/clay-room.js");
+  const captureSrc = read("dev/capture-clayroom-fixture.cjs");
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const fixture = win.clayRoomMaterialBenchFixtureFrom(record);
+    check("38a. CL-F04 is a frozen, versioned, two-parent/two-bay taste-pending comparison fixture",
+      fixture.id === "cl-f04-material-bench"
+      && fixture.version === 3
+      && fixture.tasteStatus === "PENDING"
+      && fixture.materials.length === 2
+      && fixture.bays.length === 2
+      && fixture.bays.every((bay) => fixture.materials.some((material) => material.id === bay.materialId))
+      && Object.isFrozen(fixture)
+      && Object.isFrozen(fixture.materials)
+      && fixture.materials.every(Object.isFrozen)
+      && Object.isFrozen(fixture.bays)
+      && Object.isFrozen(fixture.specimens)
+      && ["pbr", "albedo-fallback", "clay-control", "normal-negative"]
+        .every((mode) => fixture.modes.includes(mode)));
+
+    const worldUnitsPerTile = fixture.metersPerTile / fixture.metersPerWorldUnit;
+    const floor = fixture.specimens.find((row) => row.id === "material-floor-3x3");
+    const westWall = fixture.specimens.find((row) => row.id === "material-wall-west");
+    const northWall = fixture.specimens.find((row) => row.id === "material-wall-north-left");
+    const lowStep = fixture.specimens.find((row) => row.id === "material-step-low");
+    const highStep = fixture.specimens.find((row) => row.id === "material-step-high");
+    check("38b. the visible floor field is an exact 3x3 repeat, its substrate bears the full wall footprint, and every role is present",
+      Math.abs(fixture.repeatProof.clearSpanWorldUnits / worldUnitsPerTile - 3) < 0.00001
+      && fixture.repeatProof.x === 3 && fixture.repeatProof.z === 3
+      && Math.abs(
+        floor.offset.x - floor.size.x / 2
+        - (westWall.offset.x - westWall.size.x / 2)
+      ) < 0.00001
+      && Math.abs(
+        floor.offset.z - floor.size.z / 2
+        - (northWall.offset.z - northWall.size.z / 2)
+      ) < 0.00001
+      && Math.abs(floor.size.x - fixture.repeatProof.clearSpanWorldUnits
+        - fixture.supportFootprint.wallThickness / 2) < 0.00001
+      && fixture.supportFootprint.underlapSides.join(",") === "west,north"
+      && ["floor", "wall", "opening", "riser", "cap"].every((role) =>
+        fixture.specimens.some((row) => row.role === role))
+      && fixture.specimens.filter((row) => row.traversableTop).length === 4);
+
+    check("38b2. stair specimens are nested ground-up solids with unchanged authored tread heights",
+      Math.abs(lowStep.offset.y - lowStep.size.y / 2) < 0.00001
+      && Math.abs(highStep.offset.y - highStep.size.y / 2) < 0.00001
+      && Math.abs((lowStep.offset.y + lowStep.size.y / 2) - 0.36) < 0.00001
+      && Math.abs((highStep.offset.y + highStep.size.y / 2) - 0.54) < 0.00001
+      && highStep.size.y > lowStep.size.y);
+
+    const receipt = JSON.parse(read(fixture.materials[0].exportReceipt));
+    check("38c. both sprites, graphs, and runtime map sets share the banked B04 v003 hash lineage",
+      fixture.materials.every((material) => (
+        receipt.sourceGraphs[material.graph] === material.graphSha256
+        && receipt.outputHashes[material.exportStem + "_albedo.png"] === material.maps.albedo.sha256
+        && receipt.outputHashes[material.exportStem + "_normal.png"] === material.maps.normal.sha256
+        && receipt.outputHashes[material.exportStem + "_orm.png"] === material.maps.orm.sha256
+      ))
+      && receipt.determinism.byteIdentical === true);
+
+    check("38d. both source sprites stay albedo authority; the fine parent records Adam's white-brick scale ruling",
+      fixture.materials.every((material) => (
+        /source-sprites\/b04-masonry-interior-v001/.test(material.sourceSprite)
+        && material.workflow === "sprite-first albedo + Material Maker depth"
+        && material.normalScale === 1
+        && material.normalNegativeScale > 1
+        && material.maps.albedo.colorSpace === "sRGB"
+        && material.maps.normal.colorSpace === "linear"
+        && material.maps.orm.channels.r === "ambient-occlusion"
+        && material.maps.orm.channels.g === "roughness"
+        && material.maps.orm.channels.b === "metalness"
+      ))
+      && fixture.materials[0].scaleStatus === "ACCEPTED AS WHITE-BRICK REFERENCE");
+  } catch(e) {
+    check("38a-d. CL-F04 pure fixture checks execute without throw", false, e.stack || String(e));
+  }
+
+  check("38e. production renderer binding handles sRGB/linear channels, ORM routing, AO uv1, world-phase UVs, and channel counts",
+    /texture\.colorSpace = colorSpace === "sRGB"[\s\S]{0,100}THREE\.SRGBColorSpace : THREE\.NoColorSpace/.test(bootSrc)
+    && /material\.normalMap = textures\.normal/.test(bootSrc)
+    && /material\.aoMap = textures\.orm/.test(bootSrc)
+    && /material\.roughnessMap = textures\.orm/.test(bootSrc)
+    && /material\.metalnessMap = textures\.orm/.test(bootSrc)
+    && /geometry\.setAttribute\("uv1", uv\.clone\(\)\)/.test(bootSrc)
+    && /function clayRoomMaterialUvProject/.test(bootSrc)
+    && /worldUnitsPerTile/.test(bootSrc)
+    && /channelBoundCounts/.test(bootSrc)
+    && /roughness:\s*!!\(material && material\.roughnessMap\)/.test(bootSrc));
+
+  check("38f. missing PBR maps fall back to the exact source albedo and the diagnostic recipe preserves only material-proof specimens",
+    /source-authority-fallback/.test(bootSrc)
+    && /exact source albedo \+ scalar roughness\/metalness/.test(bootSrc)
+    && /if\(ud\.clayMaterialBenchSurface\) return "material-proof"/.test(bootSrc)
+    && /"material-proof": Object\.freeze\(\{ route: "passthrough"/.test(engineSrc));
+
+  check("38g. CL-F04 mounts in the one rebuild lifecycle and exposes focused UI plus live receipt seams",
+    /clayRoomMountMaterialBench\(\);/.test(bootSrc)
+    && /_clayMaterialBenchForTest/.test(bootSrc)
+    && /_claySetMaterialModeForTest/.test(bootSrc)
+    && /CL-R4b · TWO MATERIALS · SAME TEST/.test(bootSrc)
+    && /fixture\.bays\.forEach/.test(bootSrc)
+    && /materialParentId/.test(bootSrc)
+    && /materialGridSurfaces\.push/.test(bootSrc)
+    && /traversal permission as a separate explicit fact/.test(bootSrc)
+    && /S\.clayRoomCatalogCollapsed = true/.test(bootSrc)
+    && /materialBench: T\._clayMaterialBenchForTest/.test(captureSrc)
+    && /get\("materialmode"\)/.test(captureSrc)
+    && /const\s+verticalEmbed\s*=\s*spec\.role\s*===\s*"floor"\s*\?\s*0\s*:\s*CLAY_STRUCTURE_CONTACT_EMBED/.test(bootSrc)
+    && /const\s+runEmbed\s*=\s*spec\.role\s*===\s*"riser"\s*\?\s*CLAY_STRUCTURE_CONTACT_EMBED\s*\*\s*2\s*:\s*0/.test(bootSrc)
+    && /groundedSurfaceCount/.test(bootSrc));
+}
+
+// 39. CL-R5 / CL-F05 — complete matched structures with admitted h6-v1 trim routing.
+{
+  const win = freshWin();
+  const bootSrc = readTheaterSources();
+  const engineSrc = read("src/engine/clay-room.js");
+  const captureSrc = read("dev/capture-clayroom-fixture.cjs");
+  try {
+    const record = win.clayRoomRecordFrom(0x6c0ffee);
+    const fixture = win.clayRoomTrimBenchFixtureFrom(record);
+    const audit = win.clayRoomTrimArchitectureAudit(fixture);
+    check("39a. CL-F05 is frozen matched two-structure data with two cultures and all six h6-v1 roles",
+      fixture.id === "cl-f05-trim-bench"
+      && fixture.version === 1
+      && fixture.atlasLayoutId === "h6-v1"
+      && fixture.structures.length === 2
+      && fixture.cultures.length === 2
+      && fixture.slots.length === 6
+      && new Set(fixture.slots.map((slot) => slot.semanticRole)).size === 6
+      && Object.isFrozen(fixture)
+      && Object.isFrozen(fixture.structures)
+      && Object.isFrozen(fixture.cultures)
+      && Object.isFrozen(fixture.slots));
+
+    check("39b. the two rooms are architectural twins that swap wall/floor parents and retain one-foot cutaway stubs",
+      fixture.structures[0].wallMaterialId === fixture.structures[1].floorMaterialId
+      && fixture.structures[0].floorMaterialId === fixture.structures[1].wallMaterialId
+      && fixture.structures[0].cultureId !== fixture.structures[1].cultureId
+      && fixture.architecture.stubFeet === 1
+      && Math.abs(fixture.architecture.stubHeight * 5 - 1) < 0.00001);
+
+    const badArchitecture = Object.assign({}, fixture.architecture, { depth: 2.2 });
+    const badAudit = win.clayRoomTrimArchitectureAudit({ architecture: badArchitecture });
+    check("39c. the architecture invariant admits the integrated stair and rejects the old out-of-room class",
+      audit.pass === true
+      && Object.values(audit.checks).every(Boolean)
+      && audit.contract === "inside-room + equal-rises + contact-overlap + open-curb + clear-doorway"
+      && badAudit.pass === false
+      && badAudit.checks.lowTreadInsideRoom === false
+      && audit.checks.doorwayClearOfPlatform === true
+      && audit.checks.curbYieldsStairOpening === true);
+
+    const packedReceipt = JSON.parse(read(fixture.exportReceipt));
+    check("39d. both admitted culture atlases bind exact packed basecolor/normal/ORM hash lineage",
+      fixture.cultures.every((culture) =>
+        ["basecolor", "normal", "orm"].every((channel) => {
+          const map = culture.maps[channel];
+          return packedReceipt.hashes[map.file] === map.sha256;
+        })
+      )
+      && packedReceipt.determinism.byteIdentical === true
+      && packedReceipt.determinism.comparedFileCount === 18);
+  } catch(e) {
+    check("39a-d. CL-F05 pure fixture and architecture-audit checks execute without throw", false, e.stack || String(e));
+  }
+
+  check("39e. trim runs clamp V to their slot and split repeat-safe U chunks with AO uv1",
+    /function clayRoomTrimRunGeometry/.test(bootSrc)
+    && /const v0 = 1 - \(\(y \+ height - 1\) \/ runtimeSize\[1\]\)/.test(bootSrc)
+    && /const segmentLength = Math\.min\(run\.length - cursor, repeat - localPhase\)/.test(bootSrc)
+    && /geometry\.setAttribute\("uv1", new THREE\.Float32BufferAttribute\(uvs\.slice\(\), 2\)\)/.test(bootSrc)
+    && /nonExactRepeat/.test(bootSrc)
+    && /uvClamped/.test(bootSrc));
+
+  check("39f. body and trim channels remain independently truthful across PBR, role-debug, albedo, and clay modes",
+    /CLAY_TRIM_ROLE_COLORS/.test(bootSrc)
+    && /mode === "trim-debug"/.test(bootSrc)
+    && /clayRoomMaterialForMode\(/.test(bootSrc)
+    && /clayRoomTrimMaterial\(/.test(bootSrc)
+    && /material\.normalMap = textures\.normal/.test(bootSrc)
+    && /material\.aoMap = textures\.orm/.test(bootSrc)
+    && /"trim-proof": Object\.freeze\(\{ route: "passthrough"/.test(engineSrc));
+
+  check("39g. stair/platform placement derives from inner wall bounds and the retaining curb yields the stair opening",
+    /platformCx = cx \+ w \/ 2 - t - platform\.width \/ 2/.test(bootSrc)
+    && /platformCz = cz - d \/ 2 \+ t \+ platform\.depth \/ 2/.test(bootSrc)
+    && /platform-front-curb-left/.test(bootSrc)
+    && /platform-front-curb-right/.test(bootSrc)
+    && /\(platform\.width - stair\.width\) \/ 2/.test(bootSrc)
+    && !/const platformCz = cz \+ 0\.40/.test(bootSrc));
+
+  check("39h. CL-F05 mounts in the single rebuild lifecycle, grids every declared top, and exposes retained UI/capture seams",
+    /clayRoomMountTrimBench\(\);/.test(bootSrc)
+    && /trimGridSurfaces/.test(bootSrc)
+    && /report\.trimSurfaces\+\+/.test(bootSrc)
+    && /_clayTrimBenchForTest/.test(bootSrc)
+    && /_claySetTrimModeForTest/.test(bootSrc)
+    && /CL-R5 · COMPLETE STRUCTURES/.test(bootSrc)
+    && /trimBench: T\._clayTrimBenchForTest/.test(captureSrc)
+    && /get\("trimmode"\)/.test(captureSrc)
+    && /requestedTrimMode/.test(captureSrc));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

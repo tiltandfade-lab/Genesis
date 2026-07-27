@@ -3,7 +3,7 @@ id: dungeon-type
 type: table
 domain: Session Mechanics / Dungeons
 status: source
-table_class: Fork
+table_class: Commitment
 player_facing: reveal
 voice_critical: false
 ---

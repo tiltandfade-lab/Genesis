@@ -4009,7 +4009,53 @@ function clayTerrainCellWorld(field, originCell, baseY, origin, index){
   );
 }
 
-function clayTerrainPlaceWitness(group, slug, position, label, failures, contact){
+/* Pick the cell in a piece's bay that best READS as ground under a standee: the most same-height
+   orthogonal neighbours wins, then the lowest, then cell order. Deterministic, and it never leaves
+   a witness on a one-cell pinnacle that its own billboard hides. */
+function clayTerrainSameHeightNeighbours(field, idx){
+  const ex = field.extent.x, ey = field.extent.y;
+  const c = field.cells[idx];
+  if(!c) return 0;
+  let same = 0;
+  [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function(d){
+    const nx = c.x + d[0], ny = c.y + d[1];
+    if(nx < 0 || ny < 0 || nx >= ex || ny >= ey) return;
+    const n = field.cells[ny * ex + nx];
+    if(n && n.standable && n.h === c.h) same++;
+  });
+  return same;
+}
+
+function clayTerrainSupportedWitnessCell(field, piece){
+  const ex = field.extent.x, ey = field.extent.y;
+  const bay = piece.bay;
+  const authored = piece.witnessCell.y * ex + piece.witnessCell.x;
+  if(!bay) return authored;
+  let best = null, bestScore = null;
+  for(let y = bay.y; y < bay.y + bay.d && y < ey; y++){
+    for(let x = bay.x; x < bay.x + bay.w && x < ex; x++){
+      const idx = y * ex + x;
+      const c = field.cells[idx];
+      if(!c || !c.standable) continue;
+      let same = 0;
+      [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function(d){
+        const nx = x + d[0], ny = y + d[1];
+        if(nx < 0 || ny < 0 || nx >= ex || ny >= ey) return;
+        const n = field.cells[ny * ex + nx];
+        if(n && n.standable && n.h === c.h) same++;
+      });
+      const score = [same, -c.h, -idx];
+      if(!bestScore || score[0] > bestScore[0]
+        || (score[0] === bestScore[0] && score[1] > bestScore[1])
+        || (score[0] === bestScore[0] && score[1] === bestScore[1] && score[2] > bestScore[2])){
+        bestScore = score; best = idx;
+      }
+    }
+  }
+  return best == null ? authored : best;
+}
+
+function clayTerrainPlaceWitness(group, slug, position, label, failures, contact, contactSupport){
   const note = function(why){ if(failures) failures.push({ slug: slug, label: label, why: why }); return null; };
   const entry = (typeof spriteEntryFor === "function") ? spriteEntryFor(slug) : null;
   if(!entry) return note("no sprite registry entry for " + slug);
@@ -4033,6 +4079,7 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
      checked against "0 levitations" rather than assumed. */
   if(contact){
     contact.push({ label: label || null, slug: slug,
+      sameHeightNeighbours: contactSupport == null ? null : contactSupport,
       groundY: Number(position.y.toFixed(4)),
       standeeY: Number(figure.position.y.toFixed(4)),
       gap: Number((figure.position.y - position.y).toFixed(4)) });
@@ -4053,7 +4100,7 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
    them. Visibility only — nothing is unmounted or destroyed, so the host bench is whole again the
    moment another fixture is selected. */
 function clayTerrainSuppressHostChrome(){
-  const suppressed = { shell: 0, door: 0, fixture: 0, mote: 0, overlay: 0 };
+  const suppressed = { shell: 0, door: 0, fixture: 0, mote: 0, overlay: 0, unowned: 0 };
   const root = S.interiorGroup;
   if(!root || !S.clayRoomRecord) return suppressed;
   const portalId = S.clayRoomRecord.portal && S.clayRoomRecord.portal.id;
@@ -4091,6 +4138,25 @@ function clayTerrainSuppressHostChrome(){
     node.userData.clayTerrainHostSuppressed = bucket;
     suppressed[bucket]++;
   });
+
+  /* THE CLOSING RULE. Named buckets catch what we have already identified; this catches the rest.
+     Anything in the interior group that the terrain bench did not build is host chrome by
+     definition — the crate's occlusion ghost, an unmarked prop, whatever the host adds next. Only
+     MESHES, so the 17d law holds: a light is never hidden and never detached, and the bench's own
+     subtree is excluded outright rather than matched on a tag that the diagnostic surface pass can
+     also stamp onto terrain (the mistake that erased the field). */
+  const benchGroup = S.clayRoomTerrainBenchGroup;
+  if(benchGroup){
+    root.traverse(function(node){
+      if(!node.isMesh || node.isLight || node.visible === false) return;
+      let cur = node, mine = false;
+      while(cur){ if(cur === benchGroup){ mine = true; break; } cur = cur.parent; }
+      if(mine) return;
+      node.visible = false;
+      node.userData.clayTerrainHostSuppressed = "unowned";
+      suppressed.unowned = (suppressed.unowned || 0) + 1;
+    });
+  }
   /* A fixture BODY is an unmarked sibling of its emitter inside the practical's own group. Round 1
      DETACHED that group — and `clay-opposing-pair` is literally a two-point-light opposing pair
      whose lights live inside those two practicals, so the detach carried the scene's entire
@@ -4113,7 +4179,7 @@ function clayTerrainSuppressHostChrome(){
      second pass skips what the first already hid, so a delta reads as "0 suppressed" on a frame
      where the door and both fixtures are in fact gone — a receipt that says nothing was suppressed
      while the suppression is working is worse than no receipt. */
-  const total = { shell: 0, door: 0, fixture: 0, mote: 0, overlay: 0 };
+  const total = { shell: 0, door: 0, fixture: 0, mote: 0, overlay: 0, unowned: 0 };
   root.traverse(function(node){
     const b = node.userData && node.userData.clayTerrainHostSuppressed;
     if(b && total[b] != null) total[b]++;
@@ -4286,13 +4352,21 @@ function clayRoomMountTerrainBench(){
     if(sceneId === "thirteen-piece-sheet" || sceneId === "dark"){
       (spec ? spec.pieces : []).forEach(function(piece){
         if(!piece.witnessCell) return;
-        const wIdx = piece.witnessCell.y * field.extent.x + piece.witnessCell.x;
+        /* A WITNESS MUST STAND ON FOOTING THAT READS AS FOOTING. The authored cell is a fixed bay
+           corner; on R1-03 that corner is the top of a ONE-CELL crevice wall, and a 6-ft billboard
+           on a 5-ft pinnacle hides its own support — the figure reads as hovering with the pillar's
+           top corner peeking out beneath it as a small grey wedge. That is exactly the "floating
+           figure with a drop-marker" in the packet, and it was geometrically correct the whole time,
+           which is why every contact measurement passed.
+           So: prefer the best-supported standable cell in the piece's own bay — most same-height
+           orthogonal neighbours, then lowest, then cell order for determinism. */
+        const wIdx = clayTerrainSupportedWitnessCell(field, piece);
         const cell = field.cells[wIdx];
         if(!cell || !cell.standable) return;
         const placed = clayTerrainPlaceWitness(fieldBuild.group,
           CL_F07_TERRAIN_BENCH.witnessSlug,
           clayTerrainCellWorld(field, originCell, baseY, origin, wIdx), piece.id,
-          witnessFailures, witnessContact);
+          witnessFailures, witnessContact, clayTerrainSameHeightNeighbours(field, wIdx));
         if(placed) witnesses.push(Object.assign({ piece: piece.id }, placed));
       });
     } else {
@@ -4310,7 +4384,8 @@ function clayRoomMountTerrainBench(){
           const placed = clayTerrainPlaceWitness(fieldBuild.group,
             pIdx === 0 ? CL_F07_TERRAIN_BENCH.witnessSlug : env.slug,
             clayTerrainCellWorld(field, originCell, baseY, origin, pick.cell.index),
-            field.id + ":" + pick.label, witnessFailures, witnessContact);
+            field.id + ":" + pick.label, witnessFailures, witnessContact,
+            clayTerrainSameHeightNeighbours(field, pick.cell.index));
           if(placed) witnesses.push(Object.assign({ datum: pick.label, fieldId: field.id }, placed));
         });
       }
@@ -4358,8 +4433,24 @@ function clayRoomMountTerrainBench(){
     /* R1-13 CHASSIS HOOKS: the beams. A beam is NOT graded ground — writing it into the heightfield
        would mint a false 5-ft footprint in the support graph — so the chassis produced the anchors
        and the undercut, and the renderer draws the span between them. */
-    if(typeof terrainAnchorSet === "function" && typeof terrainSpanNetwork === "function"){
-      const anchors = terrainAnchorSet(field);
+    /* SPANS ARE BUILT ONLY WHERE THE SPEC ASKS FOR ONE, AND ONLY ON THAT PIECE'S OWN ANCHORS.
+       Building them on every field from whatever anchors the whole field happened to yield put two
+       beams off the far edge of the sheet at z=-11.5, hanging 1h above the highest anchor they could
+       find — the "two floating objects" in the packet. A cylinder seen end-on at this camera reads
+       as a small grey wedge, which is exactly what it looked like. */
+    const spanPiece = (spec && spec.pieces ? spec.pieces : []).filter(function(p){
+      return p.pieceId === "R1-13";
+    })[0];
+    if(spanPiece && typeof terrainAnchorSet === "function" && typeof terrainSpanNetwork === "function"){
+      const bay = spanPiece.bay;
+      const anchors = terrainAnchorSet(field).filter(function(a){
+        if(!a.at) return false;
+        /* inside the piece's own bay when it has one, and inside the field always */
+        if(a.at.x < 0 || a.at.y < 0 || a.at.x >= field.extent.x || a.at.y >= field.extent.y) return false;
+        if(!bay) return true;
+        return a.at.x >= bay.x && a.at.x < bay.x + bay.w
+          && a.at.y >= bay.y && a.at.y < bay.y + bay.d;
+      });
       if(anchors.length >= 2){
         const network = terrainSpanNetwork(anchors, { spanCount: Math.min(2, anchors.length - 1),
           diameterFt: 2, heightAboveDatumH: 1, barkCondition: "sound", undercutDepthH: 1 });
@@ -4381,8 +4472,16 @@ function clayRoomMountTerrainBench(){
             b.clone().sub(a).normalize());
           beam.castShadow = true;
           beam.userData.interiorKind = "clay-terrain-span";
+          const bayMinX = bay ? originCell.x + bay.x - origin.cx : null;
+          const bayMaxX = bay ? bayMinX + bay.w : null;
+          const bayMinZ = bay ? originCell.z + bay.y - origin.cz : null;
+          const bayMaxZ = bay ? bayMinZ + bay.d : null;
+          const mid = beam.position;
           beam.userData.terrainSpan = { id: span.id, treadWidthFt: span.treadWidthFt,
-            movement: span.movement, climbDc: span.climbDc, collapse: span.collapse };
+            movement: span.movement, climbDc: span.climbDc, collapse: span.collapse,
+            declaringPiece: spanPiece.id,
+            outsideDeclaringBay: bay ? (mid.x < bayMinX - 1 || mid.x > bayMaxX + 1
+              || mid.z < bayMinZ - 1 || mid.z > bayMaxZ + 1) : false };
           fieldBuild.group.add(beam);
         });
         fieldBuild.group.userData.terrainSpanNetwork = {
@@ -4443,7 +4542,62 @@ function clayRoomMountTerrainBench(){
     }),
     witnesses: witnesses,
     witnessFailures: witnessFailures,
+    /* COUNTABLE FRAME CENSUS, walked off the live scene after everything is mounted. The bench may
+       contain terrain, water, volumes, its own witnesses, declared span beams and its own overlays
+       — and nothing else. A foreign figure, or a bench object that is none of those, is a defect
+       the receipt must name rather than a thing a viewer has to spot. */
+    fieldWorldBounds: built.map(function(bd){
+      return { id: bd.field.id,
+        minX: bd.originCell.x - origin.cx, maxX: bd.originCell.x - origin.cx + bd.field.extent.x,
+        minZ: bd.originCell.z - origin.cz, maxZ: bd.originCell.z - origin.cz + bd.field.extent.y };
+    }),
+    frameCensus: (function(){
+      const c = { terrainCells: 0, water: 0, volumes: 0, spans: 0, overlays: 0,
+        witnessFigures: 0, witnessParts: 0, foreignFigures: 0, untagged: 0, untaggedSample: [],
+        spanPositions: [], spansOutsideDeclaringBay: 0, fieldBounds: null };
+      if(!S.interiorGroup) return c;
+      function visible(node){
+        let cur = node;
+        while(cur){ if(cur.visible === false) return false; cur = cur.parent; }
+        return true;
+      }
+      S.interiorGroup.traverse(function(node){
+        const ud = node.userData || {};
+        if(ud.clayTerrainWitness && visible(node)) c.witnessFigures++;
+        if(!(node.isMesh || node.isSprite) || !visible(node)) return;
+        let inWitness = false, cur = node;
+        while(cur){ if(cur.userData && cur.userData.clayTerrainWitness){ inWitness = true; break; } cur = cur.parent; }
+        if(ud.terrainCell) c.terrainCells++;
+        else if(ud.terrainWater) c.water++;
+        else if(ud.terrainVolume) c.volumes++;
+        else if(ud.terrainSpan){
+          c.spans++;
+          /* A span must sit over the piece that declared it. Recording each beam's world position
+             makes "a beam floating off the edge of the field" a number rather than something a
+             human has to notice in a 2x crop. */
+          const sp = new THREE.Vector3(); node.getWorldPosition(sp);
+          c.spanPositions = c.spanPositions || [];
+          c.spanPositions.push([Number(sp.x.toFixed(2)), Number(sp.y.toFixed(2)), Number(sp.z.toFixed(2))]);
+          if(ud.terrainSpan.outsideDeclaringBay) c.spansOutsideDeclaringBay = (c.spansOutsideDeclaringBay || 0) + 1;
+        }
+        else if(ud.terrainSupportCell || ud.terrainRoute) c.overlays++;
+        else if(inWitness) c.witnessParts++;
+        else if(ud.sceneObjectId || ud.unitId || ud.spriteSlug || ud.bestiaryId) c.foreignFigures++;
+        else {
+          c.untagged++;
+          if(c.untaggedSample.length < 6){
+            const wp = new THREE.Vector3(); node.getWorldPosition(wp);
+            c.untaggedSample.push({ keys: Object.keys(ud).slice(0, 6),
+              at: [Number(wp.x.toFixed(2)), Number(wp.y.toFixed(2)), Number(wp.z.toFixed(2))] });
+          }
+        }
+      });
+      return c;
+    })(),
     witnessContact: witnessContact,
+    witnessMinSupport: witnessContact.length
+      ? Math.min.apply(null, witnessContact.map(function(c){
+          return c.sameHeightNeighbours == null ? 4 : c.sameHeightNeighbours; })) : null,
     witnessMaxGap: witnessContact.length
       ? Number(Math.max.apply(null, witnessContact.map(function(c){ return c.gap; })).toFixed(4)) : null,
     hostSuppressed: hostSuppressed,

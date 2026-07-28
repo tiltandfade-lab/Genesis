@@ -1268,3 +1268,62 @@ standee-verbs 73/0, room-shell 53/0, active-room-only 22/0, theater-lighting 21/
 nothing *legible*, passed a green gate — once on fog gradient read as edges, twice on a backdrop
 read as illumination. Every capture-side gate here must be calibrated against a banked frame a human
 has actually looked at, and must measure the thing it names rather than the frame that contains it.
+
+### CL-F07a fix pass, round 3 — the two floating objects, finally identified (2026-07-27, on c4e17f71)
+
+Three rounds identified the same two objects three different ways. Two of those identifications were
+wrong, including one of mine that shipped in a commit message. The chain is recorded because the
+near-misses are the point.
+
+| round | claim | verdict |
+|---|---|---|
+| 1 (mine) | "the two hovering objects were the calibration bulb practicals" | **WRONG.** The bulbs were there and did need handling, but they were not the floaters. Detaching them removed the recipe's own point lights and caused round 2's unlit scenes. |
+| 2 (Fable) | "the host clay-room's RESIDENT CAST figures, mounting at room boot at default spawn height" | **WRONG.** A whole-scene walk finds no resident cast: `foreignFigures = 0` in every scene. |
+| 3 (measured) | **two stray R1-13 span beams, plus a witness on a one-cell pinnacle** | **CORRECT**, by isolation and projection. |
+
+**How it was settled — by removal, not by eye.** Hiding the whole bench group emptied the region;
+hiding only witnesses removed the *figure* but left the *wedge*; hiding only terrain cells removed
+the *wedge*. So they were two different objects with two different owners.
+
+**Object 1 — the figure: my own witness, on a pinnacle.** The R1-03 witness stood on the top of a
+**one-cell crevice wall**. A six-foot billboard on a five-foot pillar hides its own support, so it
+reads as hovering with the pillar's corner peeking out beneath. It was geometrically perfect the
+whole time — distance to its column 0.00, gap 0.096 — which is exactly why every contact
+measurement passed and the frame still looked wrong. Witnesses now take the **best-supported**
+standable cell in their piece's bay (most same-height orthogonal neighbours, then lowest, then cell
+order for determinism). All thirteen now report `sameHeightNeighbours: 4`, and R1-07 — which
+previously had no standable cell at its authored corner — now places, so the sheet carries 13
+witnesses rather than 12.
+
+**Object 2 — the wedge: two stray R1-13 span beams.** The renderer built spans on **every** field
+from **whatever anchors the whole field yielded**, so the sheet got two beams hanging 1h above the
+highest anchors available, at `z = -11.5` — off the far edge of a field whose bounds are
+`minZ -12 / maxZ 12`. Spans are now built only for a field whose spec actually declares an R1-13
+piece, and only from anchors inside that piece's own bay. Proven red first: with the pre-fix
+renderer the receipt reads `spans: 2, spansOutsideDeclaringBay: 2` at `[[-7, 1.69, -11.5],
+[-3, 0.94, -11.5]]`; after the fix, `spansOutsideDeclaringBay: 0` with both beams inside the R1-13
+bay at ground level.
+
+**One remaining grey wedge, named rather than hidden.** A small wedge persists at pixel
+(1461, 706) of the sheet. Projecting every cell through the live camera pose identifies it as
+terrain cell **[16, 4]** — `h=3, kind ground`, the corner of R1-03's crevice wall. It is real
+terrain doing its job; it looks detached only because the bench's one-cell gutter drops away on two
+sides of it. **This is a bench-layout artifact, not a defect, and it is Adam's call whether the
+gutter should be widened or the crevice inset.** It is named here rather than quietly deleted:
+deleting terrain to make a frame tidier is the one thing this program must never do.
+
+**New countable gates, so no future floater needs an eye.** The receipt now carries a **frame
+census** walked off the live scene — terrain cells, water, volumes, spans, overlays, witness figures,
+witness parts, **foreign figures**, and untagged objects with positions — plus each span's world
+position and whether it left its declaring bay, and the field's own world bounds. The measurement
+fails on any foreign figure, on `figures != witnesses placed`, and on any span outside its declaring
+bay. Chrome suppression also gained a **closing rule**: anything in the interior group the bench did
+not build is host chrome, matched by **ownership** rather than by a tag — because matching on
+`clayRole` once hid all 564 terrain cells, and the 17d law (never hide or detach a light) still
+stands above it.
+
+**Gates:** `dev/verify-terrain-bench.mjs` **71 passed / 0 failed** (`--red` 0/21) with three new
+checks (frame census present, spans scoped to the declaring piece, unowned meshes suppressed by
+ownership). `dev/measure-clay-terrain-bench.py` **RESULT: PASS** over 12 sets, every set reporting
+`figures = witnesses, foreign = 0, strays = 0`. `check-manifest` **RESULT: OK**. Determinism
+**PASS**. All 12 sets re-captured.

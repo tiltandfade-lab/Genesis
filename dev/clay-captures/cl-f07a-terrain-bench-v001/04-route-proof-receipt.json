@@ -179,10 +179,44 @@
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-route-proof",
+          "minX": -6,
+          "maxX": 6,
+          "minZ": -8,
+          "maxZ": 8
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 20,
+        "witnessFigures": 2,
+        "witnessParts": 6,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "cl-f07a-route-proof:foot",
           "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 2,
           "groundY": -0.288,
           "standeeY": -0.192,
           "gap": 0.096
@@ -190,11 +224,13 @@
         {
           "label": "cl-f07a-route-proof:top",
           "slug": "spr-fantasy-winged-kobold-urd",
+          "sameHeightNeighbours": 2,
           "groundY": 0.1831,
           "standeeY": 0.2791,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 2,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -202,6 +238,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
@@ -927,7 +964,7 @@
           "group": "moteGroup",
           "pos": [
             4.302,
-            0.412,
+            0.413,
             -4.392
           ],
           "size": [
@@ -948,7 +985,7 @@
           "group": "moteGroup",
           "pos": [
             2.218,
-            1.224,
+            1.225,
             -2.931
           ],
           "size": [
@@ -969,7 +1006,7 @@
           "group": "moteGroup",
           "pos": [
             1.797,
-            0.02,
+            0.021,
             -2.509
           ],
           "size": [
@@ -990,7 +1027,7 @@
           "group": "moteGroup",
           "pos": [
             2.798,
-            1.499,
+            1.5,
             -3.089
           ],
           "size": [
@@ -1011,7 +1048,7 @@
           "group": "moteGroup",
           "pos": [
             3.136,
-            0.622,
+            0.623,
             -3.302
           ],
           "size": [
@@ -1032,7 +1069,7 @@
           "group": "moteGroup",
           "pos": [
             2.688,
-            1.299,
+            1.301,
             -3.096
           ],
           "size": [
@@ -1053,7 +1090,7 @@
           "group": "moteGroup",
           "pos": [
             3.746,
-            0.79,
+            0.792,
             -4.483
           ],
           "size": [
@@ -1074,7 +1111,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            0.884,
+            0.886,
             2.252
           ],
           "size": [
@@ -5666,48 +5703,6 @@
           "textured": false,
           "colorHex": "#ffd166",
           "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -3,
-            1.197,
-            -7.5
-          ],
-          "size": [
-            0.5,
-            2.264,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -3.5,
-            1.198,
-            -7
-          ],
-          "size": [
-            0.5,
-            2.267,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
         }
       ],
       "unclaimed": [],
@@ -5813,7 +5808,7 @@
       "cells": 192,
       "water": 0,
       "volumes": 0,
-      "spans": 2,
+      "spans": 0,
       "overlays": 20,
       "witnesses": 2
     }
@@ -5979,10 +5974,44 @@
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-route-proof",
+          "minX": -6,
+          "maxX": 6,
+          "minZ": -8,
+          "maxZ": 8
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 20,
+        "witnessFigures": 2,
+        "witnessParts": 6,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "cl-f07a-route-proof:foot",
           "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 2,
           "groundY": -0.288,
           "standeeY": -0.192,
           "gap": 0.096
@@ -5990,11 +6019,13 @@
         {
           "label": "cl-f07a-route-proof:top",
           "slug": "spr-fantasy-winged-kobold-urd",
+          "sameHeightNeighbours": 2,
           "groundY": 0.1831,
           "standeeY": 0.2791,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 2,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -6002,6 +6033,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
@@ -6727,7 +6759,7 @@
           "group": "moteGroup",
           "pos": [
             4.302,
-            0.619,
+            0.628,
             -4.392
           ],
           "size": [
@@ -6748,7 +6780,7 @@
           "group": "moteGroup",
           "pos": [
             2.218,
-            1.514,
+            1.526,
             -2.931
           ],
           "size": [
@@ -6769,7 +6801,7 @@
           "group": "moteGroup",
           "pos": [
             1.797,
-            0.412,
+            0.427,
             -2.509
           ],
           "size": [
@@ -6790,7 +6822,7 @@
           "group": "moteGroup",
           "pos": [
             2.798,
-            1.85,
+            1.864,
             -3.089
           ],
           "size": [
@@ -6811,7 +6843,7 @@
           "group": "moteGroup",
           "pos": [
             3.136,
-            0.98,
+            0.994,
             -3.302
           ],
           "size": [
@@ -6832,7 +6864,7 @@
           "group": "moteGroup",
           "pos": [
             2.688,
-            1.717,
+            1.734,
             -3.096
           ],
           "size": [
@@ -6853,7 +6885,7 @@
           "group": "moteGroup",
           "pos": [
             3.746,
-            1.185,
+            1.201,
             -4.483
           ],
           "size": [
@@ -6874,7 +6906,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.307,
+            1.324,
             2.252
           ],
           "size": [
@@ -11466,48 +11498,6 @@
           "textured": false,
           "colorHex": "#ffd166",
           "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -3,
-            1.197,
-            -7.5
-          ],
-          "size": [
-            0.5,
-            2.264,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -3.5,
-            1.198,
-            -7
-          ],
-          "size": [
-            0.5,
-            2.267,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
         }
       ],
       "unclaimed": [],
@@ -11613,7 +11603,7 @@
       "cells": 192,
       "water": 0,
       "volumes": 0,
-      "spans": 2,
+      "spans": 0,
       "overlays": 20,
       "witnesses": 2
     }
@@ -11779,10 +11769,44 @@
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-route-proof",
+          "minX": -6,
+          "maxX": 6,
+          "minZ": -8,
+          "maxZ": 8
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 20,
+        "witnessFigures": 2,
+        "witnessParts": 6,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "cl-f07a-route-proof:foot",
           "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 2,
           "groundY": -0.288,
           "standeeY": -0.192,
           "gap": 0.096
@@ -11790,11 +11814,13 @@
         {
           "label": "cl-f07a-route-proof:top",
           "slug": "spr-fantasy-winged-kobold-urd",
+          "sameHeightNeighbours": 2,
           "groundY": 0.1831,
           "standeeY": 0.2791,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 2,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -11802,6 +11828,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
@@ -12527,7 +12554,7 @@
           "group": "moteGroup",
           "pos": [
             4.302,
-            0.676,
+            0.68,
             -4.392
           ],
           "size": [
@@ -12548,7 +12575,7 @@
           "group": "moteGroup",
           "pos": [
             2.218,
-            1.593,
+            1.6,
             -2.931
           ],
           "size": [
@@ -12569,7 +12596,7 @@
           "group": "moteGroup",
           "pos": [
             1.797,
-            0.519,
+            0.527,
             -2.509
           ],
           "size": [
@@ -12590,7 +12617,7 @@
           "group": "moteGroup",
           "pos": [
             2.798,
-            1.946,
+            1.954,
             -3.089
           ],
           "size": [
@@ -12611,7 +12638,7 @@
           "group": "moteGroup",
           "pos": [
             3.136,
-            1.078,
+            1.086,
             -3.302
           ],
           "size": [
@@ -12632,7 +12659,7 @@
           "group": "moteGroup",
           "pos": [
             2.688,
-            1.831,
+            1.84,
             -3.096
           ],
           "size": [
@@ -12653,7 +12680,7 @@
           "group": "moteGroup",
           "pos": [
             3.746,
-            1.293,
+            1.302,
             -4.483
           ],
           "size": [
@@ -12674,7 +12701,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.422,
+            1.432,
             2.252
           ],
           "size": [
@@ -17266,48 +17293,6 @@
           "textured": false,
           "colorHex": "#ffd166",
           "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -3,
-            1.197,
-            -7.5
-          ],
-          "size": [
-            0.5,
-            2.264,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -3.5,
-            1.198,
-            -7
-          ],
-          "size": [
-            0.5,
-            2.267,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
         }
       ],
       "unclaimed": [],
@@ -17413,7 +17398,7 @@
       "cells": 192,
       "water": 0,
       "volumes": 0,
-      "spans": 2,
+      "spans": 0,
       "overlays": 20,
       "witnesses": 2
     }

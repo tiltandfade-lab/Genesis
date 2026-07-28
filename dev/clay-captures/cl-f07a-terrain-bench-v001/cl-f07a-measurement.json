@@ -13,7 +13,7 @@
       "fieldCount": 1,
       "cellMeshes": 564,
       "standableCells": 546,
-      "witnesses": 12,
+      "witnesses": 13,
       "witnessFailures": 0,
       "frames": [
         {
@@ -24,13 +24,13 @@
             174,
             171
           ],
-          "terrainPx": 16738,
+          "terrainPx": 16751,
           "terrainP05Luma": 23.29,
           "terrainP50Luma": 141.04,
           "terrainP95Luma": 171.33,
-          "contentPct": 60.778,
-          "edgePct": 8.853,
-          "meanLuma": 155.54,
+          "contentPct": 60.748,
+          "edgePct": 8.742,
+          "meanLuma": 155.62,
           "p05Luma": 52.28,
           "p50Luma": 173.4,
           "p95Luma": 177.61
@@ -43,13 +43,13 @@
             174,
             171
           ],
-          "terrainPx": 16738,
+          "terrainPx": 16751,
           "terrainP05Luma": 23.29,
           "terrainP50Luma": 141.04,
           "terrainP95Luma": 171.33,
-          "contentPct": 60.778,
-          "edgePct": 8.853,
-          "meanLuma": 155.54,
+          "contentPct": 60.748,
+          "edgePct": 8.742,
+          "meanLuma": 155.62,
           "p05Luma": 52.28,
           "p50Luma": 173.4,
           "p95Luma": 177.61,
@@ -63,13 +63,13 @@
             123,
             115
           ],
-          "terrainPx": 26238,
-          "terrainP05Luma": 32.8,
+          "terrainPx": 26090,
+          "terrainP05Luma": 32.38,
           "terrainP50Luma": 167.18,
           "terrainP95Luma": 176.61,
-          "contentPct": 70.728,
-          "edgePct": 16.795,
-          "meanLuma": 133.37,
+          "contentPct": 70.338,
+          "edgePct": 16.469,
+          "meanLuma": 133.55,
           "p05Luma": 48.43,
           "p50Luma": 126.67,
           "p95Luma": 176.4,
@@ -83,32 +83,71 @@
             174,
             171
           ],
-          "terrainPx": 16411,
-          "terrainP05Luma": 12.51,
-          "terrainP50Luma": 132.48,
+          "terrainPx": 16424,
+          "terrainP05Luma": 12.58,
+          "terrainP50Luma": 132.27,
           "terrainP95Luma": 171.4,
-          "contentPct": 60.617,
-          "edgePct": 7.227,
-          "meanLuma": 154.89,
-          "p05Luma": 36.12,
+          "contentPct": 60.59,
+          "edgePct": 7.119,
+          "meanLuma": 154.96,
+          "p05Luma": 38.1,
           "p50Luma": 173.4,
           "p95Luma": 177.61
         }
       ],
-      "productionContentPct": 60.778,
-      "strategicContentPct": 70.728,
-      "productionEdgePct": 8.853,
-      "strategicEdgePct": 16.795,
+      "productionContentPct": 60.748,
+      "strategicContentPct": 70.338,
+      "productionEdgePct": 8.742,
+      "strategicEdgePct": 16.469,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 564,
+        "water": 5,
+        "volumes": 0,
+        "spans": 2,
+        "overlays": 0,
+        "witnessFigures": 13,
+        "witnessParts": 39,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [
+          [
+            -11.5,
+            -0.3,
+            8
+          ],
+          [
+            -11,
+            -0.3,
+            8
+          ]
+        ],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 13,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -116,7 +155,7 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
-      "terrainPx": 16738,
+      "terrainPx": 16751,
       "terrainP50Luma": 141.04
     },
     {
@@ -140,13 +179,13 @@
             174,
             171
           ],
-          "terrainPx": 14705,
+          "terrainPx": 14695,
           "terrainP05Luma": 22.86,
           "terrainP50Luma": 158.97,
           "terrainP95Luma": 171.4,
-          "contentPct": 55.64,
-          "edgePct": 8.776,
-          "meanLuma": 158.66,
+          "contentPct": 55.617,
+          "edgePct": 8.66,
+          "meanLuma": 158.7,
           "p05Luma": 51.28,
           "p50Luma": 174.4,
           "p95Luma": 177.61
@@ -159,13 +198,13 @@
             174,
             171
           ],
-          "terrainPx": 14705,
+          "terrainPx": 14695,
           "terrainP05Luma": 22.86,
           "terrainP50Luma": 158.97,
           "terrainP95Luma": 171.4,
-          "contentPct": 55.64,
-          "edgePct": 8.776,
-          "meanLuma": 158.66,
+          "contentPct": 55.617,
+          "edgePct": 8.66,
+          "meanLuma": 158.7,
           "p05Luma": 51.28,
           "p50Luma": 174.4,
           "p95Luma": 177.61,
@@ -179,17 +218,17 @@
             174,
             171
           ],
-          "terrainPx": 16961,
+          "terrainPx": 16959,
           "terrainP05Luma": 23.36,
-          "terrainP50Luma": 138.48,
+          "terrainP50Luma": 136.55,
           "terrainP95Luma": 171.33,
           "contentPct": 61.297,
-          "edgePct": 10.711,
-          "meanLuma": 156.09,
-          "p05Luma": 49.5,
+          "edgePct": 10.472,
+          "meanLuma": 156.18,
+          "p05Luma": 49.87,
           "p50Luma": 173.4,
           "p95Luma": 177.61,
-          "lumaSpread": 128.11
+          "lumaSpread": 127.74
         },
         {
           "file": "02-one-clamp-proof-04-clean-production.png",
@@ -199,32 +238,60 @@
             174,
             171
           ],
-          "terrainPx": 14377,
-          "terrainP05Luma": 12.37,
+          "terrainPx": 14368,
+          "terrainP05Luma": 12.23,
           "terrainP50Luma": 160.18,
           "terrainP95Luma": 171.4,
-          "contentPct": 55.472,
-          "edgePct": 7.152,
-          "meanLuma": 158.0,
-          "p05Luma": 45.0,
+          "contentPct": 55.45,
+          "edgePct": 7.036,
+          "meanLuma": 158.03,
+          "p05Luma": 44.21,
           "p50Luma": 174.61,
           "p95Luma": 177.61
         }
       ],
-      "productionContentPct": 55.64,
+      "productionContentPct": 55.617,
       "strategicContentPct": 61.297,
-      "productionEdgePct": 8.776,
-      "strategicEdgePct": 10.711,
+      "productionEdgePct": 8.66,
+      "strategicEdgePct": 10.472,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 162,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 4,
+        "witnessParts": 12,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 4,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -232,7 +299,7 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
-      "terrainPx": 14705,
+      "terrainPx": 14695,
       "terrainP50Luma": 158.97
     },
     {
@@ -256,13 +323,13 @@
             174,
             171
           ],
-          "terrainPx": 19087,
+          "terrainPx": 19074,
           "terrainP05Luma": 24.29,
           "terrainP50Luma": 126.67,
           "terrainP95Luma": 171.11,
-          "contentPct": 66.698,
-          "edgePct": 9.446,
-          "meanLuma": 147.98,
+          "contentPct": 66.662,
+          "edgePct": 9.399,
+          "meanLuma": 148.03,
           "p05Luma": 46.21,
           "p50Luma": 172.4,
           "p95Luma": 177.61
@@ -275,13 +342,13 @@
             174,
             171
           ],
-          "terrainPx": 19087,
+          "terrainPx": 19074,
           "terrainP05Luma": 24.29,
           "terrainP50Luma": 126.67,
           "terrainP95Luma": 171.11,
-          "contentPct": 66.698,
-          "edgePct": 9.446,
-          "meanLuma": 147.98,
+          "contentPct": 66.662,
+          "edgePct": 9.399,
+          "meanLuma": 148.03,
           "p05Luma": 46.21,
           "p50Luma": 172.4,
           "p95Luma": 177.61,
@@ -299,9 +366,9 @@
           "terrainP05Luma": 25.08,
           "terrainP50Luma": 126.67,
           "terrainP95Luma": 171.11,
-          "contentPct": 73.185,
-          "edgePct": 10.097,
-          "meanLuma": 145.84,
+          "contentPct": 73.183,
+          "edgePct": 9.987,
+          "meanLuma": 145.89,
           "p05Luma": 49.43,
           "p50Luma": 170.4,
           "p95Luma": 177.61,
@@ -315,32 +382,60 @@
             174,
             171
           ],
-          "terrainPx": 18760,
+          "terrainPx": 18746,
           "terrainP05Luma": 12.58,
           "terrainP50Luma": 126.67,
           "terrainP95Luma": 171.33,
-          "contentPct": 66.53,
-          "edgePct": 7.82,
-          "meanLuma": 147.32,
+          "contentPct": 66.495,
+          "edgePct": 7.775,
+          "meanLuma": 147.38,
           "p05Luma": 30.28,
           "p50Luma": 172.4,
           "p95Luma": 177.61
         }
       ],
-      "productionContentPct": 66.698,
-      "strategicContentPct": 73.185,
-      "productionEdgePct": 9.446,
-      "strategicEdgePct": 10.097,
+      "productionContentPct": 66.662,
+      "strategicContentPct": 73.183,
+      "productionEdgePct": 9.399,
+      "strategicEdgePct": 9.987,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -348,7 +443,7 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
-      "terrainPx": 19087,
+      "terrainPx": 19074,
       "terrainP50Luma": 126.67
     },
     {
@@ -372,13 +467,13 @@
             174,
             171
           ],
-          "terrainPx": 17943,
+          "terrainPx": 17928,
           "terrainP05Luma": 24.29,
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.703,
-          "edgePct": 9.34,
-          "meanLuma": 152.43,
+          "contentPct": 63.667,
+          "edgePct": 9.263,
+          "meanLuma": 152.48,
           "p05Luma": 48.21,
           "p50Luma": 173.33,
           "p95Luma": 177.61
@@ -391,13 +486,13 @@
             174,
             171
           ],
-          "terrainPx": 17943,
+          "terrainPx": 17928,
           "terrainP05Luma": 24.29,
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.703,
-          "edgePct": 9.34,
-          "meanLuma": 152.43,
+          "contentPct": 63.667,
+          "edgePct": 9.263,
+          "meanLuma": 152.48,
           "p05Luma": 48.21,
           "p50Luma": 173.33,
           "p95Luma": 177.61,
@@ -411,17 +506,17 @@
             123,
             115
           ],
-          "terrainPx": 32917,
-          "terrainP05Luma": 40.2,
+          "terrainPx": 32853,
+          "terrainP05Luma": 39.58,
           "terrainP50Luma": 173.33,
           "terrainP95Luma": 177.61,
-          "contentPct": 83.888,
-          "edgePct": 10.074,
-          "meanLuma": 148.55,
-          "p05Luma": 49.7,
+          "contentPct": 83.733,
+          "edgePct": 9.985,
+          "meanLuma": 148.6,
+          "p05Luma": 49.78,
           "p50Luma": 170.4,
           "p95Luma": 177.61,
-          "lumaSpread": 127.91
+          "lumaSpread": 127.83
         },
         {
           "file": "03-boundary-sheet-f1-04-clean-production.png",
@@ -431,32 +526,60 @@
             174,
             171
           ],
-          "terrainPx": 17616,
+          "terrainPx": 17601,
           "terrainP05Luma": 12.58,
-          "terrainP50Luma": 127.6,
+          "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.535,
-          "edgePct": 7.716,
-          "meanLuma": 151.77,
+          "contentPct": 63.51,
+          "edgePct": 7.642,
+          "meanLuma": 151.83,
           "p05Luma": 30.28,
           "p50Luma": 173.33,
           "p95Luma": 177.61
         }
       ],
-      "productionContentPct": 63.703,
-      "strategicContentPct": 83.888,
-      "productionEdgePct": 9.34,
-      "strategicEdgePct": 10.074,
+      "productionContentPct": 63.667,
+      "strategicContentPct": 83.733,
+      "productionEdgePct": 9.263,
+      "strategicEdgePct": 9.985,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -464,7 +587,7 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
-      "terrainPx": 17943,
+      "terrainPx": 17928,
       "terrainP50Luma": 127.67
     },
     {
@@ -493,8 +616,8 @@
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
           "contentPct": 62.742,
-          "edgePct": 7.379,
-          "meanLuma": 156.39,
+          "edgePct": 7.185,
+          "meanLuma": 156.46,
           "p05Luma": 56.21,
           "p50Luma": 173.4,
           "p95Luma": 177.61
@@ -512,8 +635,8 @@
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
           "contentPct": 62.742,
-          "edgePct": 7.379,
-          "meanLuma": 156.39,
+          "edgePct": 7.185,
+          "meanLuma": 156.46,
           "p05Luma": 56.21,
           "p50Luma": 173.4,
           "p95Luma": 177.61,
@@ -527,17 +650,17 @@
             123,
             115
           ],
-          "terrainPx": 30180,
+          "terrainPx": 30055,
           "terrainP05Luma": 33.58,
           "terrainP50Luma": 174.33,
           "terrainP95Luma": 177.61,
-          "contentPct": 76.97,
-          "edgePct": 6.401,
-          "meanLuma": 152.38,
-          "p05Luma": 77.27,
+          "contentPct": 76.645,
+          "edgePct": 6.17,
+          "meanLuma": 152.49,
+          "p05Luma": 87.84,
           "p50Luma": 170.4,
           "p95Luma": 177.61,
-          "lumaSpread": 100.34
+          "lumaSpread": 89.77
         },
         {
           "file": "03-boundary-sheet-f2-04-clean-production.png",
@@ -552,27 +675,55 @@
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
           "contentPct": 62.585,
-          "edgePct": 5.756,
-          "meanLuma": 155.74,
+          "edgePct": 5.56,
+          "meanLuma": 155.81,
           "p05Luma": 51.0,
           "p50Luma": 173.4,
           "p95Luma": 177.61
         }
       ],
       "productionContentPct": 62.742,
-      "strategicContentPct": 76.97,
-      "productionEdgePct": 7.379,
-      "strategicEdgePct": 6.401,
+      "strategicContentPct": 76.645,
+      "productionEdgePct": 7.185,
+      "strategicEdgePct": 6.17,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -605,12 +756,12 @@
             171
           ],
           "terrainPx": 17854,
-          "terrainP05Luma": 23.8,
-          "terrainP50Luma": 127.67,
+          "terrainP05Luma": 23.72,
+          "terrainP50Luma": 127.6,
           "terrainP95Luma": 171.33,
           "contentPct": 63.52,
-          "edgePct": 10.426,
-          "meanLuma": 151.5,
+          "edgePct": 10.263,
+          "meanLuma": 151.58,
           "p05Luma": 32.8,
           "p50Luma": 173.33,
           "p95Luma": 177.61
@@ -624,12 +775,12 @@
             171
           ],
           "terrainPx": 17854,
-          "terrainP05Luma": 23.8,
-          "terrainP50Luma": 127.67,
+          "terrainP05Luma": 23.72,
+          "terrainP50Luma": 127.6,
           "terrainP95Luma": 171.33,
           "contentPct": 63.52,
-          "edgePct": 10.426,
-          "meanLuma": 151.5,
+          "edgePct": 10.263,
+          "meanLuma": 151.58,
           "p05Luma": 32.8,
           "p50Luma": 173.33,
           "p95Luma": 177.61,
@@ -648,12 +799,12 @@
           "terrainP50Luma": 126.67,
           "terrainP95Luma": 171.11,
           "contentPct": 72.51,
-          "edgePct": 11.307,
-          "meanLuma": 147.57,
-          "p05Luma": 41.99,
+          "edgePct": 11.072,
+          "meanLuma": 147.68,
+          "p05Luma": 42.07,
           "p50Luma": 170.4,
           "p95Luma": 177.61,
-          "lumaSpread": 135.62
+          "lumaSpread": 135.54
         },
         {
           "file": "03-boundary-sheet-f3-04-clean-production.png",
@@ -663,32 +814,60 @@
             174,
             171
           ],
-          "terrainPx": 17527,
+          "terrainPx": 17526,
           "terrainP05Luma": 12.58,
           "terrainP50Luma": 126.89,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.36,
-          "edgePct": 8.8,
-          "meanLuma": 150.85,
-          "p05Luma": 19.43,
+          "contentPct": 63.352,
+          "edgePct": 8.639,
+          "meanLuma": 150.92,
+          "p05Luma": 19.78,
           "p50Luma": 173.33,
           "p95Luma": 177.61
         }
       ],
       "productionContentPct": 63.52,
       "strategicContentPct": 72.51,
-      "productionEdgePct": 10.426,
-      "strategicEdgePct": 11.307,
+      "productionEdgePct": 10.263,
+      "strategicEdgePct": 11.072,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -697,7 +876,7 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
       "terrainPx": 17854,
-      "terrainP50Luma": 127.67
+      "terrainP50Luma": 127.6
     },
     {
       "capture": 3,
@@ -725,8 +904,8 @@
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
           "contentPct": 63.925,
-          "edgePct": 10.954,
-          "meanLuma": 150.58,
+          "edgePct": 10.766,
+          "meanLuma": 150.65,
           "p05Luma": 26.9,
           "p50Luma": 173.33,
           "p95Luma": 177.61
@@ -744,8 +923,8 @@
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
           "contentPct": 63.925,
-          "edgePct": 10.954,
-          "meanLuma": 150.58,
+          "edgePct": 10.766,
+          "meanLuma": 150.65,
           "p05Luma": 26.9,
           "p50Luma": 173.33,
           "p95Luma": 177.61,
@@ -764,8 +943,8 @@
           "terrainP50Luma": 126.67,
           "terrainP95Luma": 171.11,
           "contentPct": 72.485,
-          "edgePct": 11.192,
-          "meanLuma": 147.38,
+          "edgePct": 10.967,
+          "meanLuma": 147.49,
           "p05Luma": 33.58,
           "p50Luma": 170.4,
           "p95Luma": 177.61,
@@ -784,27 +963,55 @@
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.33,
           "contentPct": 63.767,
-          "edgePct": 9.332,
-          "meanLuma": 149.93,
-          "p05Luma": 18.76,
+          "edgePct": 9.143,
+          "meanLuma": 150.0,
+          "p05Luma": 18.97,
           "p50Luma": 173.33,
           "p95Luma": 177.61
         }
       ],
       "productionContentPct": 63.925,
       "strategicContentPct": 72.485,
-      "productionEdgePct": 10.954,
-      "strategicEdgePct": 11.192,
+      "productionEdgePct": 10.766,
+      "strategicEdgePct": 10.967,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -838,11 +1045,11 @@
           ],
           "terrainPx": 17707,
           "terrainP05Luma": 24.29,
-          "terrainP50Luma": 137.55,
+          "terrainP50Luma": 137.53,
           "terrainP95Luma": 171.33,
           "contentPct": 63.312,
-          "edgePct": 8.244,
-          "meanLuma": 156.42,
+          "edgePct": 8.128,
+          "meanLuma": 156.48,
           "p05Luma": 56.21,
           "p50Luma": 173.33,
           "p95Luma": 177.61
@@ -857,11 +1064,11 @@
           ],
           "terrainPx": 17707,
           "terrainP05Luma": 24.29,
-          "terrainP50Luma": 137.55,
+          "terrainP50Luma": 137.53,
           "terrainP95Luma": 171.33,
           "contentPct": 63.312,
-          "edgePct": 8.244,
-          "meanLuma": 156.42,
+          "edgePct": 8.128,
+          "meanLuma": 156.48,
           "p05Luma": 56.21,
           "p50Luma": 173.33,
           "p95Luma": 177.61,
@@ -875,17 +1082,17 @@
             123,
             115
           ],
-          "terrainPx": 31849,
-          "terrainP05Luma": 35.72,
+          "terrainPx": 31762,
+          "terrainP05Luma": 35.51,
           "terrainP50Luma": 173.4,
           "terrainP95Luma": 177.61,
-          "contentPct": 81.845,
-          "edgePct": 8.057,
-          "meanLuma": 152.87,
-          "p05Luma": 78.74,
+          "contentPct": 81.6,
+          "edgePct": 7.901,
+          "meanLuma": 152.96,
+          "p05Luma": 87.84,
           "p50Luma": 170.4,
           "p95Luma": 177.61,
-          "lumaSpread": 98.87
+          "lumaSpread": 89.77
         },
         {
           "file": "03-boundary-sheet-f5-04-clean-production.png",
@@ -895,32 +1102,60 @@
             174,
             171
           ],
-          "terrainPx": 17380,
+          "terrainPx": 17379,
           "terrainP05Luma": 12.58,
           "terrainP50Luma": 135.18,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.153,
-          "edgePct": 6.622,
-          "meanLuma": 155.77,
+          "contentPct": 63.145,
+          "edgePct": 6.509,
+          "meanLuma": 155.83,
           "p05Luma": 51.0,
           "p50Luma": 173.4,
           "p95Luma": 177.61
         }
       ],
       "productionContentPct": 63.312,
-      "strategicContentPct": 81.845,
-      "productionEdgePct": 8.244,
-      "strategicEdgePct": 8.057,
+      "strategicContentPct": 81.6,
+      "productionEdgePct": 8.128,
+      "strategicEdgePct": 7.901,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -929,7 +1164,7 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
       "terrainPx": 17707,
-      "terrainP50Luma": 137.55
+      "terrainP50Luma": 137.53
     },
     {
       "capture": 4,
@@ -952,13 +1187,13 @@
             174,
             171
           ],
-          "terrainPx": 17813,
+          "terrainPx": 17798,
           "terrainP05Luma": 24.29,
           "terrainP50Luma": 128.89,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.388,
-          "edgePct": 9.976,
-          "meanLuma": 152.88,
+          "contentPct": 63.352,
+          "edgePct": 9.91,
+          "meanLuma": 152.93,
           "p05Luma": 48.28,
           "p50Luma": 173.33,
           "p95Luma": 177.61
@@ -971,13 +1206,13 @@
             174,
             171
           ],
-          "terrainPx": 17813,
+          "terrainPx": 17798,
           "terrainP05Luma": 24.29,
           "terrainP50Luma": 128.89,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.388,
-          "edgePct": 9.976,
-          "meanLuma": 152.88,
+          "contentPct": 63.352,
+          "edgePct": 9.91,
+          "meanLuma": 152.93,
           "p05Luma": 48.28,
           "p50Luma": 173.33,
           "p95Luma": 177.61,
@@ -991,13 +1226,13 @@
             174,
             171
           ],
-          "terrainPx": 21394,
+          "terrainPx": 21393,
           "terrainP05Luma": 24.72,
           "terrainP50Luma": 126.67,
           "terrainP95Luma": 171.11,
-          "contentPct": 72.255,
-          "edgePct": 11.966,
-          "meanLuma": 148.76,
+          "contentPct": 72.245,
+          "edgePct": 11.871,
+          "meanLuma": 148.8,
           "p05Luma": 49.43,
           "p50Luma": 170.4,
           "p95Luma": 177.61,
@@ -1011,32 +1246,60 @@
             174,
             171
           ],
-          "terrainPx": 17486,
+          "terrainPx": 17471,
           "terrainP05Luma": 12.58,
           "terrainP50Luma": 127.89,
           "terrainP95Luma": 171.4,
-          "contentPct": 63.23,
-          "edgePct": 8.354,
-          "meanLuma": 152.23,
-          "p05Luma": 30.21,
+          "contentPct": 63.197,
+          "edgePct": 8.288,
+          "meanLuma": 152.28,
+          "p05Luma": 30.0,
           "p50Luma": 173.4,
           "p95Luma": 177.61
         }
       ],
-      "productionContentPct": 63.388,
-      "strategicContentPct": 72.255,
-      "productionEdgePct": 9.976,
-      "strategicEdgePct": 11.966,
+      "productionContentPct": 63.352,
+      "strategicContentPct": 72.245,
+      "productionEdgePct": 9.91,
+      "strategicEdgePct": 11.871,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 20,
+        "witnessFigures": 2,
+        "witnessParts": 6,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 2,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -1044,7 +1307,7 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
-      "terrainPx": 17813,
+      "terrainPx": 17798,
       "terrainP50Luma": 128.89
     },
     {
@@ -1068,14 +1331,14 @@
             174,
             171
           ],
-          "terrainPx": 25976,
-          "terrainP05Luma": 26.22,
-          "terrainP50Luma": 92.54,
+          "terrainPx": 25940,
+          "terrainP05Luma": 26.08,
+          "terrainP50Luma": 92.76,
           "terrainP95Luma": 170.4,
-          "contentPct": 77.192,
-          "edgePct": 7.643,
-          "meanLuma": 125.63,
-          "p05Luma": 50.21,
+          "contentPct": 77.097,
+          "edgePct": 7.438,
+          "meanLuma": 125.85,
+          "p05Luma": 49.57,
           "p50Luma": 159.19,
           "p95Luma": 177.61
         },
@@ -1087,17 +1350,17 @@
             174,
             171
           ],
-          "terrainPx": 25976,
-          "terrainP05Luma": 26.22,
-          "terrainP50Luma": 92.54,
+          "terrainPx": 25940,
+          "terrainP05Luma": 26.08,
+          "terrainP50Luma": 92.76,
           "terrainP95Luma": 170.4,
-          "contentPct": 77.192,
-          "edgePct": 7.643,
-          "meanLuma": 125.63,
-          "p05Luma": 50.21,
+          "contentPct": 77.097,
+          "edgePct": 7.438,
+          "meanLuma": 125.85,
+          "p05Luma": 49.57,
           "p50Luma": 159.19,
           "p95Luma": 177.61,
-          "lumaSpread": 127.4
+          "lumaSpread": 128.04
         },
         {
           "file": "05-walk-down-16-03-settled-strategic.png",
@@ -1107,17 +1370,17 @@
             174,
             171
           ],
-          "terrainPx": 19557,
+          "terrainPx": 19487,
           "terrainP05Luma": 24.29,
           "terrainP50Luma": 126.67,
           "terrainP95Luma": 171.11,
-          "contentPct": 67.685,
-          "edgePct": 7.455,
-          "meanLuma": 147.25,
-          "p05Luma": 53.21,
+          "contentPct": 67.5,
+          "edgePct": 7.009,
+          "meanLuma": 147.43,
+          "p05Luma": 53.28,
           "p50Luma": 172.33,
           "p95Luma": 177.61,
-          "lumaSpread": 124.4
+          "lumaSpread": 124.33
         },
         {
           "file": "05-walk-down-16-04-clean-production.png",
@@ -1127,32 +1390,60 @@
             174,
             171
           ],
-          "terrainPx": 25649,
-          "terrainP05Luma": 13.44,
-          "terrainP50Luma": 90.98,
+          "terrainPx": 25613,
+          "terrainP05Luma": 13.37,
+          "terrainP50Luma": 92.54,
           "terrainP95Luma": 170.4,
-          "contentPct": 77.025,
-          "edgePct": 6.018,
-          "meanLuma": 124.96,
-          "p05Luma": 16.44,
+          "contentPct": 76.93,
+          "edgePct": 5.814,
+          "meanLuma": 125.18,
+          "p05Luma": 15.65,
           "p50Luma": 161.19,
           "p95Luma": 177.61
         }
       ],
-      "productionContentPct": 77.192,
-      "strategicContentPct": 67.685,
-      "productionEdgePct": 7.643,
-      "strategicEdgePct": 7.455,
+      "productionContentPct": 77.097,
+      "strategicContentPct": 67.5,
+      "productionEdgePct": 7.438,
+      "strategicEdgePct": 7.009,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 8,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 1,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -1160,8 +1451,8 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
-      "terrainPx": 25976,
-      "terrainP50Luma": 92.54
+      "terrainPx": 25940,
+      "terrainP50Luma": 92.76
     },
     {
       "capture": 6,
@@ -1184,13 +1475,13 @@
             174,
             171
           ],
-          "terrainPx": 17813,
+          "terrainPx": 17798,
           "terrainP05Luma": 24.29,
-          "terrainP50Luma": 131.67,
+          "terrainP50Luma": 131.68,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.388,
-          "edgePct": 9.682,
-          "meanLuma": 152.91,
+          "contentPct": 63.355,
+          "edgePct": 9.614,
+          "meanLuma": 152.96,
           "p05Luma": 49.21,
           "p50Luma": 173.33,
           "p95Luma": 177.61
@@ -1203,13 +1494,13 @@
             174,
             171
           ],
-          "terrainPx": 17813,
+          "terrainPx": 17798,
           "terrainP05Luma": 24.29,
-          "terrainP50Luma": 131.67,
+          "terrainP50Luma": 131.68,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.388,
-          "edgePct": 9.682,
-          "meanLuma": 152.91,
+          "contentPct": 63.355,
+          "edgePct": 9.614,
+          "meanLuma": 152.96,
           "p05Luma": 49.21,
           "p50Luma": 173.33,
           "p95Luma": 177.61,
@@ -1223,17 +1514,17 @@
             174,
             171
           ],
-          "terrainPx": 21394,
+          "terrainPx": 21393,
           "terrainP05Luma": 24.72,
           "terrainP50Luma": 127.67,
           "terrainP95Luma": 171.11,
-          "contentPct": 72.255,
-          "edgePct": 11.333,
-          "meanLuma": 148.83,
-          "p05Luma": 51.99,
+          "contentPct": 72.245,
+          "edgePct": 11.21,
+          "meanLuma": 148.88,
+          "p05Luma": 52.0,
           "p50Luma": 170.4,
           "p95Luma": 177.61,
-          "lumaSpread": 125.62
+          "lumaSpread": 125.61
         },
         {
           "file": "06-support-graph-04-clean-production.png",
@@ -1243,32 +1534,60 @@
             174,
             171
           ],
-          "terrainPx": 17486,
+          "terrainPx": 17471,
           "terrainP05Luma": 12.58,
-          "terrainP50Luma": 130.48,
+          "terrainP50Luma": 130.53,
           "terrainP95Luma": 171.33,
-          "contentPct": 63.22,
-          "edgePct": 8.059,
-          "meanLuma": 152.24,
-          "p05Luma": 32.04,
+          "contentPct": 63.197,
+          "edgePct": 7.991,
+          "meanLuma": 152.31,
+          "p05Luma": 32.0,
           "p50Luma": 173.4,
           "p95Luma": 177.61
         }
       ],
-      "productionContentPct": 63.388,
-      "strategicContentPct": 72.255,
-      "productionEdgePct": 9.682,
-      "strategicEdgePct": 11.333,
+      "productionContentPct": 63.355,
+      "strategicContentPct": 72.245,
+      "productionEdgePct": 9.614,
+      "strategicEdgePct": 11.21,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "daylit",
       "appliedLightRecipe": "daylit",
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 0,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 2,
+        "witnessParts": 6,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 2,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 0,
@@ -1276,8 +1595,8 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
-      "terrainPx": 17813,
-      "terrainP50Luma": 131.67
+      "terrainPx": 17798,
+      "terrainP50Luma": 131.68
     },
     {
       "capture": 7,
@@ -1289,7 +1608,7 @@
       "fieldCount": 1,
       "cellMeshes": 564,
       "standableCells": 546,
-      "witnesses": 12,
+      "witnesses": 13,
       "witnessFailures": 0,
       "frames": [
         {
@@ -1300,13 +1619,13 @@
             80,
             88
           ],
-          "terrainPx": 11950,
+          "terrainPx": 11957,
           "terrainP05Luma": 5.87,
           "terrainP50Luma": 19.29,
           "terrainP95Luma": 75.07,
-          "contentPct": 50.273,
-          "edgePct": 4.268,
-          "meanLuma": 66.41,
+          "contentPct": 50.255,
+          "edgePct": 4.237,
+          "meanLuma": 66.4,
           "p05Luma": 6.8,
           "p50Luma": 80.07,
           "p95Luma": 82.07
@@ -1319,13 +1638,13 @@
             80,
             88
           ],
-          "terrainPx": 11950,
+          "terrainPx": 11957,
           "terrainP05Luma": 5.87,
           "terrainP50Luma": 19.29,
           "terrainP95Luma": 75.07,
-          "contentPct": 50.273,
-          "edgePct": 4.268,
-          "meanLuma": 66.41,
+          "contentPct": 50.255,
+          "edgePct": 4.237,
+          "meanLuma": 66.4,
           "p05Luma": 6.8,
           "p50Luma": 80.07,
           "p95Luma": 82.07,
@@ -1339,17 +1658,17 @@
             7,
             16
           ],
-          "terrainPx": 20212,
+          "terrainPx": 20190,
           "terrainP05Luma": 23.65,
           "terrainP50Luma": 78.07,
           "terrainP95Luma": 81.14,
-          "contentPct": 54.273,
-          "edgePct": 5.112,
-          "meanLuma": 39.4,
-          "p05Luma": 5.8,
-          "p50Luma": 16.85,
+          "contentPct": 54.265,
+          "edgePct": 5.166,
+          "meanLuma": 39.43,
+          "p05Luma": 5.73,
+          "p50Luma": 17.29,
           "p95Luma": 81.07,
-          "lumaSpread": 75.27
+          "lumaSpread": 75.34
         },
         {
           "file": "07-dark-04-clean-production.png",
@@ -1359,32 +1678,71 @@
             80,
             88
           ],
-          "terrainPx": 11493,
-          "terrainP05Luma": 5.8,
-          "terrainP50Luma": 10.79,
+          "terrainPx": 11500,
+          "terrainP05Luma": 5.87,
+          "terrainP50Luma": 10.72,
           "terrainP95Luma": 75.07,
-          "contentPct": 49.913,
-          "edgePct": 3.309,
+          "contentPct": 49.895,
+          "edgePct": 3.28,
           "meanLuma": 65.52,
           "p05Luma": 6.8,
           "p50Luma": 80.07,
           "p95Luma": 82.07
         }
       ],
-      "productionContentPct": 50.273,
-      "strategicContentPct": 54.273,
-      "productionEdgePct": 4.268,
-      "strategicEdgePct": 5.112,
+      "productionContentPct": 50.255,
+      "strategicContentPct": 54.265,
+      "productionEdgePct": 4.237,
+      "strategicEdgePct": 5.166,
       "cameraPairDistinct": true,
       "witnessMaxGap": 0.096,
       "requestedLightRecipe": "dark",
       "appliedLightRecipe": "dark",
+      "frameCensus": {
+        "terrainCells": 564,
+        "water": 5,
+        "volumes": 0,
+        "spans": 2,
+        "overlays": 0,
+        "witnessFigures": 13,
+        "witnessParts": 39,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [
+          [
+            -11.5,
+            -0.3,
+            8
+          ],
+          [
+            -11,
+            -0.3,
+            8
+          ]
+        ],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
+      "figuresInScene": 13,
+      "foreignFigures": 0,
+      "spansOutsideDeclaringBay": 0,
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": 6,
@@ -1392,7 +1750,7 @@
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
       ],
-      "terrainPx": 11950,
+      "terrainPx": 11957,
       "terrainP50Luma": 19.29
     }
   ],
@@ -1507,12 +1865,12 @@
     "03-boundary-sheet-f0": 126.67,
     "03-boundary-sheet-f1": 127.67,
     "03-boundary-sheet-f2": 127.67,
-    "03-boundary-sheet-f3": 127.67,
+    "03-boundary-sheet-f3": 127.6,
     "03-boundary-sheet-f4": 127.67,
-    "03-boundary-sheet-f5": 137.55,
+    "03-boundary-sheet-f5": 137.53,
     "04-route-proof": 128.89,
-    "05-walk-down-16": 92.54,
-    "06-support-graph": 131.67
+    "05-walk-down-16": 92.76,
+    "06-support-graph": 131.68
   },
   "determinism": {
     "gate": "same segment id -> byte-identical heightfield, twice, in separate page loads",

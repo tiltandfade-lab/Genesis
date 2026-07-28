@@ -237,6 +237,33 @@ def measure(capture_dir):
         if terrain.get("lightRecipeDrift"):
             fail("%s: the renderer reported light-recipe drift" % label_of(cap))
 
+        # THE COUNTABLE FRAME CENSUS. "No figure in the frame except the bench's own witnesses",
+        # and "no beam outside the piece that declared it", as numbers rather than as something a
+        # reviewer has to catch in a 2x crop.
+        census = terrain.get("frameCensus") or {}
+        scene["frameCensus"] = census
+        if not census:
+            fail("%s: no frame census recorded" % label_of(cap))
+        else:
+            figures = census.get("witnessFigures", 0)
+            foreign = census.get("foreignFigures", 0)
+            placed = len(terrain.get("witnesses") or [])
+            scene["figuresInScene"] = figures
+            scene["foreignFigures"] = foreign
+            if foreign:
+                fail("%s: %d foreign figure(s) in frame — the bench may contain no figure except "
+                     "its own witnesses" % (label_of(cap), foreign))
+            if figures != placed:
+                fail("%s: figures in scene (%d) != witnesses placed (%d)"
+                     % (label_of(cap), figures, placed))
+            stray = census.get("spansOutsideDeclaringBay", 0)
+            scene["spansOutsideDeclaringBay"] = stray
+            if stray:
+                fail("%s: %d span beam(s) outside the piece that declared them — a beam floating "
+                     "off the field" % (label_of(cap), stray))
+            if census.get("terrainCells", 0) == 0:
+                fail("%s: zero terrain cells in the frame census" % label_of(cap))
+
         host = terrain.get("hostSuppressed") or {}
         scene["hostSuppressed"] = host
         scene["foreignLightsNeutralized"] = len(terrain.get("foreignLightsNeutralized") or [])
@@ -345,11 +372,13 @@ def main():
     print("  scenes measured: %d" % report["scenesMeasured"])
     for s in report["scenes"]:
         print("  %d %-26s built=%s fields=%d cells=%4d standable=%4d witnesses=%2d "
-              "prodEdge=%5.2f%% stratEdge=%5.2f%% gap=%s light=%s"
+              "prodEdge=%5.2f%% stratEdge=%5.2f%% gap=%s light=%-6s fig=%s/%s stray=%s"
               % (s["capture"], s.get("label") or s["sceneId"], s["built"], s["fieldCount"],
                  s["cellMeshes"], s["standableCells"], s["witnesses"],
                  s["productionEdgePct"] or 0.0, s["strategicEdgePct"] or 0.0,
-                 s.get("witnessMaxGap"), s.get("appliedLightRecipe") or "-"))
+                 s.get("witnessMaxGap"), s.get("appliedLightRecipe") or "-",
+                 s.get("figuresInScene"), s.get("foreignFigures"),
+                 s.get("spansOutsideDeclaringBay")))
     print("  terrain-region p50 luma — lit: %s | dark: %s"
           % (", ".join("%s=%.1f" % (k.split("-", 1)[-1], v) for k, v in report.get("litTerrainP50", {}).items()),
              (next((s for s in report["scenes"] if s["sceneId"] == "dark"), {}) or {}).get("terrainP50Luma")))

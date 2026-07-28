@@ -454,6 +454,25 @@ guard("17. frame hygiene", () => {
      "0 levitations" instead of assumed. */
   check("17e. witness placement records ground contact",
     /witnessContact/.test(region) && /witnessMaxGap/.test(region) && /groundY/.test(region));
+
+  /* 17f — a COUNTABLE frame census: what is in the frame, by tag, walked off the live scene.
+     Three rounds of "two floating objects" were each identified by eye and twice misidentified;
+     the frame must count itself. */
+  check("17f. the receipt carries a countable frame census",
+    /frameCensus/.test(region) && /foreignFigures/.test(region)
+    && /witnessFigures/.test(region) && /untaggedSample/.test(region));
+
+  /* 17g — spans are built only for the piece that declares one, on that piece's own anchors.
+     Building them from whatever anchors the whole field yielded put two beams off the far edge. */
+  check("17g. span beams are scoped to the declaring R1-13 piece and its own bay",
+    /spanPiece/.test(region) && /outsideDeclaringBay/.test(region)
+    && /pieceId === "R1-13"/.test(region));
+
+  /* 17h — the closing rule: anything in the interior group the bench did not build is host chrome,
+     matched by OWNERSHIP rather than by a tag the diagnostic pass can also stamp onto terrain. */
+  check("17h. unowned host meshes are suppressed by ownership, never by a shared tag",
+    /clayTerrainHostSuppressed = "unowned"/.test(region)
+    && /if\(!node\.isMesh \|\| node\.isLight/.test(region));
 });
 
 // ============================================================================

@@ -139,15 +139,50 @@
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-boundary-thorn-thicket",
+          "minX": -6,
+          "maxX": 6,
+          "minZ": -8,
+          "maxZ": 8
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "cl-f07a-boundary-thorn-thicket:foot",
           "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 2,
           "groundY": -0.288,
           "standeeY": -0.192,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 2,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -155,6 +190,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
@@ -843,7 +879,7 @@
           "group": "moteGroup",
           "pos": [
             4.302,
-            0.425,
+            0.413,
             -4.392
           ],
           "size": [
@@ -864,7 +900,7 @@
           "group": "moteGroup",
           "pos": [
             2.218,
-            1.241,
+            1.225,
             -2.931
           ],
           "size": [
@@ -885,7 +921,7 @@
           "group": "moteGroup",
           "pos": [
             1.797,
-            0.043,
+            0.021,
             -2.509
           ],
           "size": [
@@ -906,7 +942,7 @@
           "group": "moteGroup",
           "pos": [
             2.798,
-            1.52,
+            1.501,
             -3.089
           ],
           "size": [
@@ -927,7 +963,7 @@
           "group": "moteGroup",
           "pos": [
             3.136,
-            0.643,
+            0.623,
             -3.302
           ],
           "size": [
@@ -948,7 +984,7 @@
           "group": "moteGroup",
           "pos": [
             2.688,
-            1.324,
+            1.301,
             -3.096
           ],
           "size": [
@@ -969,7 +1005,7 @@
           "group": "moteGroup",
           "pos": [
             3.746,
-            0.813,
+            0.792,
             -4.483
           ],
           "size": [
@@ -990,7 +1026,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            0.909,
+            0.886,
             2.252
           ],
           "size": [
@@ -5771,48 +5807,6 @@
           "textured": false,
           "colorHex": null,
           "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -1,
-            0.214,
-            -6.5
-          ],
-          "size": [
-            0.5,
-            1,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            0,
-            0.2,
-            -6.5
-          ],
-          "size": [
-            0.5,
-            1.001,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
         }
       ],
       "unclaimed": [],
@@ -5918,7 +5912,7 @@
       "cells": 192,
       "water": 0,
       "volumes": 32,
-      "spans": 2,
+      "spans": 0,
       "overlays": 0,
       "witnesses": 1
     }
@@ -6044,15 +6038,50 @@
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-boundary-thorn-thicket",
+          "minX": -6,
+          "maxX": 6,
+          "minZ": -8,
+          "maxZ": 8
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "cl-f07a-boundary-thorn-thicket:foot",
           "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 2,
           "groundY": -0.288,
           "standeeY": -0.192,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 2,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -6060,6 +6089,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
@@ -6748,7 +6778,7 @@
           "group": "moteGroup",
           "pos": [
             4.302,
-            0.635,
+            0.628,
             -4.392
           ],
           "size": [
@@ -6769,7 +6799,7 @@
           "group": "moteGroup",
           "pos": [
             2.218,
-            1.536,
+            1.527,
             -2.931
           ],
           "size": [
@@ -6790,7 +6820,7 @@
           "group": "moteGroup",
           "pos": [
             1.797,
-            0.442,
+            0.429,
             -2.509
           ],
           "size": [
@@ -6811,7 +6841,7 @@
           "group": "moteGroup",
           "pos": [
             2.798,
-            1.877,
+            1.865,
             -3.089
           ],
           "size": [
@@ -6832,7 +6862,7 @@
           "group": "moteGroup",
           "pos": [
             3.136,
-            1.008,
+            0.996,
             -3.302
           ],
           "size": [
@@ -6853,7 +6883,7 @@
           "group": "moteGroup",
           "pos": [
             2.688,
-            1.749,
+            1.735,
             -3.096
           ],
           "size": [
@@ -6874,7 +6904,7 @@
           "group": "moteGroup",
           "pos": [
             3.746,
-            1.215,
+            1.202,
             -4.483
           ],
           "size": [
@@ -6895,7 +6925,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.339,
+            1.325,
             2.252
           ],
           "size": [
@@ -11676,48 +11706,6 @@
           "textured": false,
           "colorHex": null,
           "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -1,
-            0.214,
-            -6.5
-          ],
-          "size": [
-            0.5,
-            1,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            0,
-            0.2,
-            -6.5
-          ],
-          "size": [
-            0.5,
-            1.001,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
         }
       ],
       "unclaimed": [],
@@ -11823,7 +11811,7 @@
       "cells": 192,
       "water": 0,
       "volumes": 32,
-      "spans": 2,
+      "spans": 0,
       "overlays": 0,
       "witnesses": 1
     }
@@ -11949,15 +11937,50 @@
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-boundary-thorn-thicket",
+          "minX": -6,
+          "maxX": 6,
+          "minZ": -8,
+          "maxZ": 8
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 192,
+        "water": 0,
+        "volumes": 32,
+        "spans": 0,
+        "overlays": 0,
+        "witnessFigures": 1,
+        "witnessParts": 3,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "cl-f07a-boundary-thorn-thicket:foot",
           "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 2,
           "groundY": -0.288,
           "standeeY": -0.192,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 2,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -11965,6 +11988,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
@@ -12653,7 +12677,7 @@
           "group": "moteGroup",
           "pos": [
             4.302,
-            0.694,
+            0.683,
             -4.392
           ],
           "size": [
@@ -12674,7 +12698,7 @@
           "group": "moteGroup",
           "pos": [
             2.218,
-            1.619,
+            1.604,
             -2.931
           ],
           "size": [
@@ -12695,7 +12719,7 @@
           "group": "moteGroup",
           "pos": [
             1.797,
-            0.553,
+            0.533,
             -2.509
           ],
           "size": [
@@ -12716,7 +12740,7 @@
           "group": "moteGroup",
           "pos": [
             2.798,
-            1.977,
+            1.959,
             -3.089
           ],
           "size": [
@@ -12737,7 +12761,7 @@
           "group": "moteGroup",
           "pos": [
             3.136,
-            1.109,
+            1.091,
             -3.302
           ],
           "size": [
@@ -12758,7 +12782,7 @@
           "group": "moteGroup",
           "pos": [
             2.688,
-            1.868,
+            1.846,
             -3.096
           ],
           "size": [
@@ -12779,7 +12803,7 @@
           "group": "moteGroup",
           "pos": [
             3.746,
-            1.327,
+            1.307,
             -4.483
           ],
           "size": [
@@ -12800,7 +12824,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.459,
+            1.438,
             2.252
           ],
           "size": [
@@ -17581,48 +17605,6 @@
           "textured": false,
           "colorHex": null,
           "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -1,
-            0.214,
-            -6.5
-          ],
-          "size": [
-            0.5,
-            1,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            0,
-            0.2,
-            -6.5
-          ],
-          "size": [
-            0.5,
-            1.001,
-            0.5
-          ],
-          "rotY": 0,
-          "builder": "interiorBuildInstancedMesh/clay-terrain-span",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#c8a06a",
-          "instanceColorNeutralized": false
         }
       ],
       "unclaimed": [],
@@ -17728,7 +17710,7 @@
       "cells": 192,
       "water": 0,
       "volumes": 32,
-      "spans": 2,
+      "spans": 0,
       "overlays": 0,
       "witnesses": 1
     }

@@ -399,8 +399,8 @@
           "label": "R1-01",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": -0.3175335939461365,
+            "x": -6.5,
+            "y": -0.3051869383268058,
             "z": -7.5
           }
         },
@@ -410,9 +410,9 @@
           "label": "R1-02",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": 0.20050337227527054,
-            "z": -7.5
+            "x": -5.5,
+            "y": -0.2849760190397501,
+            "z": -6.5
           }
         },
         {
@@ -421,9 +421,9 @@
           "label": "R1-03",
           "height": 1.1199999999999999,
           "at": {
-            "x": 4.5,
-            "y": 1.2076496791932732,
-            "z": -7.5
+            "x": 0.5,
+            "y": -0.287919217441231,
+            "z": -6.5
           }
         },
         {
@@ -432,8 +432,8 @@
           "label": "R1-04",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.31669238235801456,
+            "x": 9.5,
+            "y": -0.32734802731778473,
             "z": -7.5
           }
         },
@@ -444,8 +444,8 @@
           "height": 1.1199999999999999,
           "at": {
             "x": -7.5,
-            "y": -0.299258859786205,
-            "z": -1.5
+            "y": -0.27502913458272815,
+            "z": -5.5
           }
         },
         {
@@ -454,9 +454,20 @@
           "label": "R1-06",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": -0.2940537162031978,
-            "z": -1.5
+            "x": -5.5,
+            "y": -0.3105785665987059,
+            "z": -5.5
+          }
+        },
+        {
+          "piece": "R1-07",
+          "slug": "spr-pc-human-fighter-female",
+          "label": "R1-07",
+          "height": 1.1199999999999999,
+          "at": {
+            "x": 0.5,
+            "y": -0.3086734063178301,
+            "z": -5.5
           }
         },
         {
@@ -465,9 +476,9 @@
           "label": "R1-08",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.27046090125571937,
-            "z": -1.5
+            "x": 6.5,
+            "y": -0.3032237158901989,
+            "z": -5.5
           }
         },
         {
@@ -476,9 +487,9 @@
           "label": "R1-09",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": 0.7113132805330677,
-            "z": 4.5
+            "x": -6.5,
+            "y": -0.32894594592042264,
+            "z": 0.5
           }
         },
         {
@@ -487,9 +498,9 @@
           "label": "R1-10",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": -0.32282013282179833,
-            "z": 4.5
+            "x": -0.5,
+            "y": -0.28265546532813457,
+            "z": 0.5
           }
         },
         {
@@ -498,9 +509,9 @@
           "label": "R1-11",
           "height": 1.1199999999999999,
           "at": {
-            "x": 4.5,
-            "y": -0.2713251244928688,
-            "z": 4.5
+            "x": 0.5,
+            "y": -0.30818243557121605,
+            "z": 0.5
           }
         },
         {
@@ -509,9 +520,9 @@
           "label": "R1-12",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.3298481996683404,
-            "z": 4.5
+            "x": 6.5,
+            "y": -0.3135639274260029,
+            "z": 3.5
           }
         },
         {
@@ -520,99 +531,164 @@
           "label": "R1-13",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": -0.29040980990510434,
-            "z": 10.5
+            "x": -10.5,
+            "y": -0.28609743372537194,
+            "z": 6.5
           }
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-dark",
+          "minX": -12,
+          "maxX": 12,
+          "minZ": -12,
+          "maxZ": 12
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 564,
+        "water": 5,
+        "volumes": 0,
+        "spans": 2,
+        "overlays": 0,
+        "witnessFigures": 13,
+        "witnessParts": 39,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [
+          [
+            -11.5,
+            -0.3,
+            8
+          ],
+          [
+            -11,
+            -0.3,
+            8
+          ]
+        ],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "R1-01",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3175,
-          "standeeY": -0.2215,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3052,
+          "standeeY": -0.2092,
           "gap": 0.096
         },
         {
           "label": "R1-02",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 0.2005,
-          "standeeY": 0.2965,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.285,
+          "standeeY": -0.189,
           "gap": 0.096
         },
         {
           "label": "R1-03",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 1.2076,
-          "standeeY": 1.3036,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2879,
+          "standeeY": -0.1919,
           "gap": 0.096
         },
         {
           "label": "R1-04",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3167,
-          "standeeY": -0.2207,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3273,
+          "standeeY": -0.2313,
           "gap": 0.096
         },
         {
           "label": "R1-05",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2993,
-          "standeeY": -0.2033,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.275,
+          "standeeY": -0.179,
           "gap": 0.096
         },
         {
           "label": "R1-06",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2941,
-          "standeeY": -0.1981,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3106,
+          "standeeY": -0.2146,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-07",
+          "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3087,
+          "standeeY": -0.2127,
           "gap": 0.096
         },
         {
           "label": "R1-08",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2705,
-          "standeeY": -0.1745,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3032,
+          "standeeY": -0.2072,
           "gap": 0.096
         },
         {
           "label": "R1-09",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 0.7113,
-          "standeeY": 0.8073,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3289,
+          "standeeY": -0.2329,
           "gap": 0.096
         },
         {
           "label": "R1-10",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3228,
-          "standeeY": -0.2268,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2827,
+          "standeeY": -0.1867,
           "gap": 0.096
         },
         {
           "label": "R1-11",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2713,
-          "standeeY": -0.1753,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3082,
+          "standeeY": -0.2122,
           "gap": 0.096
         },
         {
           "label": "R1-12",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3298,
-          "standeeY": -0.2338,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3136,
+          "standeeY": -0.2176,
           "gap": 0.096
         },
         {
           "label": "R1-13",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2904,
-          "standeeY": -0.1944,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2861,
+          "standeeY": -0.1901,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 4,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -620,6 +696,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [
@@ -1351,7 +1428,7 @@
           "group": "moteGroup",
           "pos": [
             1.102,
-            0.424,
+            0.425,
             -1.192
           ],
           "size": [
@@ -1372,7 +1449,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.239,
+            1.241,
             0.269
           ],
           "size": [
@@ -1393,7 +1470,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.041,
+            0.043,
             0.691
           ],
           "size": [
@@ -1414,7 +1491,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.518,
+            1.52,
             0.111
           ],
           "size": [
@@ -1435,7 +1512,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            0.641,
+            0.643,
             -0.102
           ],
           "size": [
@@ -1456,7 +1533,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.322,
+            1.325,
             0.104
           ],
           "size": [
@@ -1477,7 +1554,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            0.811,
+            0.814,
             -1.283
           ],
           "size": [
@@ -1498,7 +1575,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            0.907,
+            0.91,
             2.252
           ],
           "size": [
@@ -13467,8 +13544,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.312,
+            -6.5,
+            0.325,
             -7.5
           ],
           "size": [
@@ -13488,8 +13565,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.312,
+            -6.5,
+            0.325,
             -7.481
           ],
           "size": [
@@ -13509,8 +13586,8 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            -0.267,
+            -6.5,
+            -0.254,
             -7.5
           ],
           "size": [
@@ -13530,8 +13607,134 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.83,
+            -5.5,
+            0.345,
+            -6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -5.5,
+            0.345,
+            -6.481
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            -5.5,
+            -0.234,
+            -6.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            0.342,
+            -6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            0.342,
+            -6.481
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            -0.237,
+            -6.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            9.5,
+            0.302,
             -7.5
           ],
           "size": [
@@ -13551,8 +13754,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.83,
+            9.5,
+            0.302,
             -7.481
           ],
           "size": [
@@ -13572,134 +13775,8 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.252,
-            -7.5
-          ],
-          "size": [
-            0.744,
-            0.114,
-            0.369
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.837,
-            -7.5
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0.035
-          ],
-          "rotY": 0,
-          "builder": "buildSpriteBillboard",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.837,
-            -7.481
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": true,
-          "colorHex": "#ffffff",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "standee-base",
-          "route": "diagnostic-clay",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.259,
-            -7.5
-          ],
-          "size": [
-            0.744,
-            0.114,
-            0.369
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            0.313,
-            -7.5
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0.035
-          ],
-          "rotY": 0,
-          "builder": "buildSpriteBillboard",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            0.313,
-            -7.481
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": true,
-          "colorHex": "#ffffff",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "standee-base",
-          "route": "diagnostic-clay",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            -0.266,
+            9.5,
+            -0.276,
             -7.5
           ],
           "size": [
@@ -13720,8 +13797,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            0.331,
-            -1.5
+            0.355,
+            -5.5
           ],
           "size": [
             0.864,
@@ -13741,8 +13818,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            0.331,
-            -1.482
+            0.355,
+            -5.481
           ],
           "size": [
             0.864,
@@ -13762,8 +13839,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            -0.248,
-            -1.5
+            -0.224,
+            -5.5
           ],
           "size": [
             0.744,
@@ -13782,9 +13859,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.336,
-            -1.5
+            -5.5,
+            0.319,
+            -5.5
           ],
           "size": [
             0.864,
@@ -13803,9 +13880,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.336,
-            -1.482
+            -5.5,
+            0.319,
+            -5.481
           ],
           "size": [
             0.864,
@@ -13824,9 +13901,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            -0.243,
-            -1.5
+            -5.5,
+            -0.26,
+            -5.5
           ],
           "size": [
             0.744,
@@ -13845,9 +13922,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.359,
-            -1.5
+            0.5,
+            0.321,
+            -5.5
           ],
           "size": [
             0.864,
@@ -13866,9 +13943,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.359,
-            -1.482
+            0.5,
+            0.321,
+            -5.481
           ],
           "size": [
             0.864,
@@ -13887,9 +13964,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            -0.219,
-            -1.5
+            0.5,
+            -0.258,
+            -5.5
           ],
           "size": [
             0.744,
@@ -13908,9 +13985,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            1.341,
-            4.5
+            6.5,
+            0.327,
+            -5.5
           ],
           "size": [
             0.864,
@@ -13929,9 +14006,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            1.341,
-            4.519
+            6.5,
+            0.327,
+            -5.481
           ],
           "size": [
             0.864,
@@ -13950,9 +14027,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.762,
-            4.5
+            6.5,
+            -0.252,
+            -5.5
           ],
           "size": [
             0.744,
@@ -13971,9 +14048,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.307,
-            4.5
+            -6.5,
+            0.301,
+            0.5
           ],
           "size": [
             0.864,
@@ -13992,9 +14069,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.307,
-            4.519
+            -6.5,
+            0.301,
+            0.518
           ],
           "size": [
             0.864,
@@ -14013,9 +14090,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            -0.272,
-            4.5
+            -6.5,
+            -0.278,
+            0.5
           ],
           "size": [
             0.744,
@@ -14034,9 +14111,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            0.359,
-            4.5
+            -0.5,
+            0.347,
+            0.5
           ],
           "size": [
             0.864,
@@ -14055,9 +14132,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            0.359,
-            4.519
+            -0.5,
+            0.347,
+            0.518
           ],
           "size": [
             0.864,
@@ -14076,9 +14153,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            -0.22,
-            4.5
+            -0.5,
+            -0.232,
+            0.5
           ],
           "size": [
             0.744,
@@ -14097,9 +14174,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.3,
-            4.5
+            0.5,
+            0.322,
+            0.5
           ],
           "size": [
             0.864,
@@ -14118,9 +14195,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.3,
-            4.519
+            0.5,
+            0.322,
+            0.518
           ],
           "size": [
             0.864,
@@ -14139,9 +14216,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            -0.279,
-            4.5
+            0.5,
+            -0.257,
+            0.5
           ],
           "size": [
             0.744,
@@ -14160,9 +14237,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.339,
-            10.5
+            6.5,
+            0.316,
+            3.5
           ],
           "size": [
             0.864,
@@ -14181,9 +14258,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.339,
-            10.518
+            6.5,
+            0.316,
+            3.518
           ],
           "size": [
             0.864,
@@ -14202,9 +14279,72 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            -0.239,
-            10.5
+            6.5,
+            -0.263,
+            3.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            0.344,
+            6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            0.344,
+            6.519
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            -0.235,
+            6.5
           ],
           "size": [
             0.744,
@@ -14223,13 +14363,13 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7,
-            1.691,
-            -11.5
+            -11.5,
+            -0.3,
+            8
           ],
           "size": [
             0.5,
-            3.178,
+            1.418,
             0.5
           ],
           "rotY": 0,
@@ -14244,16 +14384,16 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -3,
-            0.941,
-            -11.5
+            -11,
+            -0.3,
+            8
           ],
           "size": [
             0.5,
-            7.162,
+            1.736,
             0.5
           ],
-          "rotY": 0,
+          "rotY": 0.212,
           "builder": "interiorBuildInstancedMesh/clay-terrain-span",
           "instances": 1,
           "textured": false,
@@ -14366,7 +14506,7 @@
       "volumes": 0,
       "spans": 2,
       "overlays": 0,
-      "witnesses": 12
+      "witnesses": 13
     }
   },
   "settled": {
@@ -14750,8 +14890,8 @@
           "label": "R1-01",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": -0.3175335939461365,
+            "x": -6.5,
+            "y": -0.3051869383268058,
             "z": -7.5
           }
         },
@@ -14761,9 +14901,9 @@
           "label": "R1-02",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": 0.20050337227527054,
-            "z": -7.5
+            "x": -5.5,
+            "y": -0.2849760190397501,
+            "z": -6.5
           }
         },
         {
@@ -14772,9 +14912,9 @@
           "label": "R1-03",
           "height": 1.1199999999999999,
           "at": {
-            "x": 4.5,
-            "y": 1.2076496791932732,
-            "z": -7.5
+            "x": 0.5,
+            "y": -0.287919217441231,
+            "z": -6.5
           }
         },
         {
@@ -14783,8 +14923,8 @@
           "label": "R1-04",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.31669238235801456,
+            "x": 9.5,
+            "y": -0.32734802731778473,
             "z": -7.5
           }
         },
@@ -14795,8 +14935,8 @@
           "height": 1.1199999999999999,
           "at": {
             "x": -7.5,
-            "y": -0.299258859786205,
-            "z": -1.5
+            "y": -0.27502913458272815,
+            "z": -5.5
           }
         },
         {
@@ -14805,9 +14945,20 @@
           "label": "R1-06",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": -0.2940537162031978,
-            "z": -1.5
+            "x": -5.5,
+            "y": -0.3105785665987059,
+            "z": -5.5
+          }
+        },
+        {
+          "piece": "R1-07",
+          "slug": "spr-pc-human-fighter-female",
+          "label": "R1-07",
+          "height": 1.1199999999999999,
+          "at": {
+            "x": 0.5,
+            "y": -0.3086734063178301,
+            "z": -5.5
           }
         },
         {
@@ -14816,9 +14967,9 @@
           "label": "R1-08",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.27046090125571937,
-            "z": -1.5
+            "x": 6.5,
+            "y": -0.3032237158901989,
+            "z": -5.5
           }
         },
         {
@@ -14827,9 +14978,9 @@
           "label": "R1-09",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": 0.7113132805330677,
-            "z": 4.5
+            "x": -6.5,
+            "y": -0.32894594592042264,
+            "z": 0.5
           }
         },
         {
@@ -14838,9 +14989,9 @@
           "label": "R1-10",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": -0.32282013282179833,
-            "z": 4.5
+            "x": -0.5,
+            "y": -0.28265546532813457,
+            "z": 0.5
           }
         },
         {
@@ -14849,9 +15000,9 @@
           "label": "R1-11",
           "height": 1.1199999999999999,
           "at": {
-            "x": 4.5,
-            "y": -0.2713251244928688,
-            "z": 4.5
+            "x": 0.5,
+            "y": -0.30818243557121605,
+            "z": 0.5
           }
         },
         {
@@ -14860,9 +15011,9 @@
           "label": "R1-12",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.3298481996683404,
-            "z": 4.5
+            "x": 6.5,
+            "y": -0.3135639274260029,
+            "z": 3.5
           }
         },
         {
@@ -14871,99 +15022,164 @@
           "label": "R1-13",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": -0.29040980990510434,
-            "z": 10.5
+            "x": -10.5,
+            "y": -0.28609743372537194,
+            "z": 6.5
           }
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-dark",
+          "minX": -12,
+          "maxX": 12,
+          "minZ": -12,
+          "maxZ": 12
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 564,
+        "water": 5,
+        "volumes": 0,
+        "spans": 2,
+        "overlays": 0,
+        "witnessFigures": 13,
+        "witnessParts": 39,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [
+          [
+            -11.5,
+            -0.3,
+            8
+          ],
+          [
+            -11,
+            -0.3,
+            8
+          ]
+        ],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "R1-01",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3175,
-          "standeeY": -0.2215,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3052,
+          "standeeY": -0.2092,
           "gap": 0.096
         },
         {
           "label": "R1-02",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 0.2005,
-          "standeeY": 0.2965,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.285,
+          "standeeY": -0.189,
           "gap": 0.096
         },
         {
           "label": "R1-03",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 1.2076,
-          "standeeY": 1.3036,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2879,
+          "standeeY": -0.1919,
           "gap": 0.096
         },
         {
           "label": "R1-04",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3167,
-          "standeeY": -0.2207,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3273,
+          "standeeY": -0.2313,
           "gap": 0.096
         },
         {
           "label": "R1-05",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2993,
-          "standeeY": -0.2033,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.275,
+          "standeeY": -0.179,
           "gap": 0.096
         },
         {
           "label": "R1-06",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2941,
-          "standeeY": -0.1981,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3106,
+          "standeeY": -0.2146,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-07",
+          "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3087,
+          "standeeY": -0.2127,
           "gap": 0.096
         },
         {
           "label": "R1-08",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2705,
-          "standeeY": -0.1745,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3032,
+          "standeeY": -0.2072,
           "gap": 0.096
         },
         {
           "label": "R1-09",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 0.7113,
-          "standeeY": 0.8073,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3289,
+          "standeeY": -0.2329,
           "gap": 0.096
         },
         {
           "label": "R1-10",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3228,
-          "standeeY": -0.2268,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2827,
+          "standeeY": -0.1867,
           "gap": 0.096
         },
         {
           "label": "R1-11",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2713,
-          "standeeY": -0.1753,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3082,
+          "standeeY": -0.2122,
           "gap": 0.096
         },
         {
           "label": "R1-12",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3298,
-          "standeeY": -0.2338,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3136,
+          "standeeY": -0.2176,
           "gap": 0.096
         },
         {
           "label": "R1-13",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2904,
-          "standeeY": -0.1944,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2861,
+          "standeeY": -0.1901,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 4,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -14971,6 +15187,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [
@@ -15702,7 +15919,7 @@
           "group": "moteGroup",
           "pos": [
             1.102,
-            0.641,
+            0.642,
             -1.192
           ],
           "size": [
@@ -15723,7 +15940,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.544,
+            1.546,
             0.269
           ],
           "size": [
@@ -15744,7 +15961,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.452,
+            0.455,
             0.691
           ],
           "size": [
@@ -15765,7 +15982,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.886,
+            1.889,
             0.111
           ],
           "size": [
@@ -15786,7 +16003,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            1.017,
+            1.02,
             -0.102
           ],
           "size": [
@@ -15807,7 +16024,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.76,
+            1.763,
             0.104
           ],
           "size": [
@@ -15828,7 +16045,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            1.226,
+            1.229,
             -1.283
           ],
           "size": [
@@ -15849,7 +16066,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.351,
+            1.354,
             2.252
           ],
           "size": [
@@ -27818,8 +28035,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.312,
+            -6.5,
+            0.325,
             -7.5
           ],
           "size": [
@@ -27839,8 +28056,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.312,
+            -6.5,
+            0.325,
             -7.481
           ],
           "size": [
@@ -27860,8 +28077,8 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            -0.267,
+            -6.5,
+            -0.254,
             -7.5
           ],
           "size": [
@@ -27881,8 +28098,134 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.83,
+            -5.5,
+            0.345,
+            -6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -5.5,
+            0.345,
+            -6.481
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            -5.5,
+            -0.234,
+            -6.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            0.342,
+            -6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            0.342,
+            -6.481
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            -0.237,
+            -6.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            9.5,
+            0.302,
             -7.5
           ],
           "size": [
@@ -27902,8 +28245,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.83,
+            9.5,
+            0.302,
             -7.481
           ],
           "size": [
@@ -27923,134 +28266,8 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.252,
-            -7.5
-          ],
-          "size": [
-            0.744,
-            0.114,
-            0.369
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.837,
-            -7.5
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0.035
-          ],
-          "rotY": 0,
-          "builder": "buildSpriteBillboard",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.837,
-            -7.481
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": true,
-          "colorHex": "#ffffff",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "standee-base",
-          "route": "diagnostic-clay",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.259,
-            -7.5
-          ],
-          "size": [
-            0.744,
-            0.114,
-            0.369
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            0.313,
-            -7.5
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0.035
-          ],
-          "rotY": 0,
-          "builder": "buildSpriteBillboard",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            0.313,
-            -7.481
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": true,
-          "colorHex": "#ffffff",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "standee-base",
-          "route": "diagnostic-clay",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            -0.266,
+            9.5,
+            -0.276,
             -7.5
           ],
           "size": [
@@ -28071,8 +28288,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            0.331,
-            -1.5
+            0.355,
+            -5.5
           ],
           "size": [
             0.864,
@@ -28092,8 +28309,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            0.331,
-            -1.482
+            0.355,
+            -5.481
           ],
           "size": [
             0.864,
@@ -28113,8 +28330,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            -0.248,
-            -1.5
+            -0.224,
+            -5.5
           ],
           "size": [
             0.744,
@@ -28133,9 +28350,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.336,
-            -1.5
+            -5.5,
+            0.319,
+            -5.5
           ],
           "size": [
             0.864,
@@ -28154,9 +28371,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.336,
-            -1.482
+            -5.5,
+            0.319,
+            -5.481
           ],
           "size": [
             0.864,
@@ -28175,9 +28392,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            -0.243,
-            -1.5
+            -5.5,
+            -0.26,
+            -5.5
           ],
           "size": [
             0.744,
@@ -28196,9 +28413,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.359,
-            -1.5
+            0.5,
+            0.321,
+            -5.5
           ],
           "size": [
             0.864,
@@ -28217,9 +28434,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.359,
-            -1.482
+            0.5,
+            0.321,
+            -5.481
           ],
           "size": [
             0.864,
@@ -28238,9 +28455,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            -0.219,
-            -1.5
+            0.5,
+            -0.258,
+            -5.5
           ],
           "size": [
             0.744,
@@ -28259,9 +28476,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            1.341,
-            4.5
+            6.5,
+            0.327,
+            -5.5
           ],
           "size": [
             0.864,
@@ -28280,9 +28497,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            1.341,
-            4.519
+            6.5,
+            0.327,
+            -5.481
           ],
           "size": [
             0.864,
@@ -28301,9 +28518,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.762,
-            4.5
+            6.5,
+            -0.252,
+            -5.5
           ],
           "size": [
             0.744,
@@ -28322,9 +28539,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.307,
-            4.5
+            -6.5,
+            0.301,
+            0.5
           ],
           "size": [
             0.864,
@@ -28343,9 +28560,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.307,
-            4.519
+            -6.5,
+            0.301,
+            0.518
           ],
           "size": [
             0.864,
@@ -28364,9 +28581,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            -0.272,
-            4.5
+            -6.5,
+            -0.278,
+            0.5
           ],
           "size": [
             0.744,
@@ -28385,9 +28602,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            0.359,
-            4.5
+            -0.5,
+            0.347,
+            0.5
           ],
           "size": [
             0.864,
@@ -28406,9 +28623,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            0.359,
-            4.519
+            -0.5,
+            0.347,
+            0.518
           ],
           "size": [
             0.864,
@@ -28427,9 +28644,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            -0.22,
-            4.5
+            -0.5,
+            -0.232,
+            0.5
           ],
           "size": [
             0.744,
@@ -28448,9 +28665,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.3,
-            4.5
+            0.5,
+            0.322,
+            0.5
           ],
           "size": [
             0.864,
@@ -28469,9 +28686,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.3,
-            4.519
+            0.5,
+            0.322,
+            0.518
           ],
           "size": [
             0.864,
@@ -28490,9 +28707,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            -0.279,
-            4.5
+            0.5,
+            -0.257,
+            0.5
           ],
           "size": [
             0.744,
@@ -28511,9 +28728,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.339,
-            10.5
+            6.5,
+            0.316,
+            3.5
           ],
           "size": [
             0.864,
@@ -28532,9 +28749,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.339,
-            10.518
+            6.5,
+            0.316,
+            3.518
           ],
           "size": [
             0.864,
@@ -28553,9 +28770,72 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            -0.239,
-            10.5
+            6.5,
+            -0.263,
+            3.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            0.344,
+            6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            0.344,
+            6.519
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            -0.235,
+            6.5
           ],
           "size": [
             0.744,
@@ -28574,13 +28854,13 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7,
-            1.691,
-            -11.5
+            -11.5,
+            -0.3,
+            8
           ],
           "size": [
             0.5,
-            3.178,
+            1.418,
             0.5
           ],
           "rotY": 0,
@@ -28595,16 +28875,16 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -3,
-            0.941,
-            -11.5
+            -11,
+            -0.3,
+            8
           ],
           "size": [
             0.5,
-            7.162,
+            1.736,
             0.5
           ],
-          "rotY": 0,
+          "rotY": 0.212,
           "builder": "interiorBuildInstancedMesh/clay-terrain-span",
           "instances": 1,
           "textured": false,
@@ -28717,7 +28997,7 @@
       "volumes": 0,
       "spans": 2,
       "overlays": 0,
-      "witnesses": 12
+      "witnesses": 13
     }
   },
   "strategic": {
@@ -29101,8 +29381,8 @@
           "label": "R1-01",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": -0.3175335939461365,
+            "x": -6.5,
+            "y": -0.3051869383268058,
             "z": -7.5
           }
         },
@@ -29112,9 +29392,9 @@
           "label": "R1-02",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": 0.20050337227527054,
-            "z": -7.5
+            "x": -5.5,
+            "y": -0.2849760190397501,
+            "z": -6.5
           }
         },
         {
@@ -29123,9 +29403,9 @@
           "label": "R1-03",
           "height": 1.1199999999999999,
           "at": {
-            "x": 4.5,
-            "y": 1.2076496791932732,
-            "z": -7.5
+            "x": 0.5,
+            "y": -0.287919217441231,
+            "z": -6.5
           }
         },
         {
@@ -29134,8 +29414,8 @@
           "label": "R1-04",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.31669238235801456,
+            "x": 9.5,
+            "y": -0.32734802731778473,
             "z": -7.5
           }
         },
@@ -29146,8 +29426,8 @@
           "height": 1.1199999999999999,
           "at": {
             "x": -7.5,
-            "y": -0.299258859786205,
-            "z": -1.5
+            "y": -0.27502913458272815,
+            "z": -5.5
           }
         },
         {
@@ -29156,9 +29436,20 @@
           "label": "R1-06",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": -0.2940537162031978,
-            "z": -1.5
+            "x": -5.5,
+            "y": -0.3105785665987059,
+            "z": -5.5
+          }
+        },
+        {
+          "piece": "R1-07",
+          "slug": "spr-pc-human-fighter-female",
+          "label": "R1-07",
+          "height": 1.1199999999999999,
+          "at": {
+            "x": 0.5,
+            "y": -0.3086734063178301,
+            "z": -5.5
           }
         },
         {
@@ -29167,9 +29458,9 @@
           "label": "R1-08",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.27046090125571937,
-            "z": -1.5
+            "x": 6.5,
+            "y": -0.3032237158901989,
+            "z": -5.5
           }
         },
         {
@@ -29178,9 +29469,9 @@
           "label": "R1-09",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": 0.7113132805330677,
-            "z": 4.5
+            "x": -6.5,
+            "y": -0.32894594592042264,
+            "z": 0.5
           }
         },
         {
@@ -29189,9 +29480,9 @@
           "label": "R1-10",
           "height": 1.1199999999999999,
           "at": {
-            "x": -1.5,
-            "y": -0.32282013282179833,
-            "z": 4.5
+            "x": -0.5,
+            "y": -0.28265546532813457,
+            "z": 0.5
           }
         },
         {
@@ -29200,9 +29491,9 @@
           "label": "R1-11",
           "height": 1.1199999999999999,
           "at": {
-            "x": 4.5,
-            "y": -0.2713251244928688,
-            "z": 4.5
+            "x": 0.5,
+            "y": -0.30818243557121605,
+            "z": 0.5
           }
         },
         {
@@ -29211,9 +29502,9 @@
           "label": "R1-12",
           "height": 1.1199999999999999,
           "at": {
-            "x": 10.5,
-            "y": -0.3298481996683404,
-            "z": 4.5
+            "x": 6.5,
+            "y": -0.3135639274260029,
+            "z": 3.5
           }
         },
         {
@@ -29222,99 +29513,164 @@
           "label": "R1-13",
           "height": 1.1199999999999999,
           "at": {
-            "x": -7.5,
-            "y": -0.29040980990510434,
-            "z": 10.5
+            "x": -10.5,
+            "y": -0.28609743372537194,
+            "z": 6.5
           }
         }
       ],
       "witnessFailures": [],
+      "fieldWorldBounds": [
+        {
+          "id": "cl-f07a-dark",
+          "minX": -12,
+          "maxX": 12,
+          "minZ": -12,
+          "maxZ": 12
+        }
+      ],
+      "frameCensus": {
+        "terrainCells": 564,
+        "water": 5,
+        "volumes": 0,
+        "spans": 2,
+        "overlays": 0,
+        "witnessFigures": 13,
+        "witnessParts": 39,
+        "foreignFigures": 0,
+        "untagged": 1,
+        "untaggedSample": [
+          {
+            "keys": [],
+            "at": [
+              -1,
+              0.01,
+              0
+            ]
+          }
+        ],
+        "spanPositions": [
+          [
+            -11.5,
+            -0.3,
+            8
+          ],
+          [
+            -11,
+            -0.3,
+            8
+          ]
+        ],
+        "spansOutsideDeclaringBay": 0,
+        "fieldBounds": null
+      },
       "witnessContact": [
         {
           "label": "R1-01",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3175,
-          "standeeY": -0.2215,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3052,
+          "standeeY": -0.2092,
           "gap": 0.096
         },
         {
           "label": "R1-02",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 0.2005,
-          "standeeY": 0.2965,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.285,
+          "standeeY": -0.189,
           "gap": 0.096
         },
         {
           "label": "R1-03",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 1.2076,
-          "standeeY": 1.3036,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2879,
+          "standeeY": -0.1919,
           "gap": 0.096
         },
         {
           "label": "R1-04",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3167,
-          "standeeY": -0.2207,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3273,
+          "standeeY": -0.2313,
           "gap": 0.096
         },
         {
           "label": "R1-05",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2993,
-          "standeeY": -0.2033,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.275,
+          "standeeY": -0.179,
           "gap": 0.096
         },
         {
           "label": "R1-06",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2941,
-          "standeeY": -0.1981,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3106,
+          "standeeY": -0.2146,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-07",
+          "slug": "spr-pc-human-fighter-female",
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3087,
+          "standeeY": -0.2127,
           "gap": 0.096
         },
         {
           "label": "R1-08",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2705,
-          "standeeY": -0.1745,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3032,
+          "standeeY": -0.2072,
           "gap": 0.096
         },
         {
           "label": "R1-09",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": 0.7113,
-          "standeeY": 0.8073,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3289,
+          "standeeY": -0.2329,
           "gap": 0.096
         },
         {
           "label": "R1-10",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3228,
-          "standeeY": -0.2268,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2827,
+          "standeeY": -0.1867,
           "gap": 0.096
         },
         {
           "label": "R1-11",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2713,
-          "standeeY": -0.1753,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3082,
+          "standeeY": -0.2122,
           "gap": 0.096
         },
         {
           "label": "R1-12",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.3298,
-          "standeeY": -0.2338,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.3136,
+          "standeeY": -0.2176,
           "gap": 0.096
         },
         {
           "label": "R1-13",
           "slug": "spr-pc-human-fighter-female",
-          "groundY": -0.2904,
-          "standeeY": -0.1944,
+          "sameHeightNeighbours": 4,
+          "groundY": -0.2861,
+          "standeeY": -0.1901,
           "gap": 0.096
         }
       ],
+      "witnessMinSupport": 4,
       "witnessMaxGap": 0.096,
       "hostSuppressed": {
         "shell": 9,
@@ -29322,6 +29678,7 @@
         "fixture": 0,
         "mote": 8,
         "overlay": 1,
+        "unowned": 0,
         "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [
@@ -30053,7 +30410,7 @@
           "group": "moteGroup",
           "pos": [
             1.102,
-            0.694,
+            0.695,
             -1.192
           ],
           "size": [
@@ -30074,7 +30431,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.619,
+            1.62,
             0.269
           ],
           "size": [
@@ -30095,7 +30452,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.554,
+            0.555,
             0.691
           ],
           "size": [
@@ -30116,7 +30473,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.977,
+            1.979,
             0.111
           ],
           "size": [
@@ -30137,7 +30494,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            1.11,
+            1.111,
             -0.102
           ],
           "size": [
@@ -30158,7 +30515,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.868,
+            1.87,
             0.104
           ],
           "size": [
@@ -30179,7 +30536,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            1.328,
+            1.33,
             -1.283
           ],
           "size": [
@@ -30200,7 +30557,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.46,
+            1.462,
             2.252
           ],
           "size": [
@@ -42169,8 +42526,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.312,
+            -6.5,
+            0.325,
             -7.5
           ],
           "size": [
@@ -42190,8 +42547,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.312,
+            -6.5,
+            0.325,
             -7.481
           ],
           "size": [
@@ -42211,8 +42568,8 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            -0.267,
+            -6.5,
+            -0.254,
             -7.5
           ],
           "size": [
@@ -42232,8 +42589,134 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.83,
+            -5.5,
+            0.345,
+            -6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -5.5,
+            0.345,
+            -6.481
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            -5.5,
+            -0.234,
+            -6.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            0.342,
+            -6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            0.342,
+            -6.481
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            0.5,
+            -0.237,
+            -6.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            9.5,
+            0.302,
             -7.5
           ],
           "size": [
@@ -42253,8 +42736,8 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.83,
+            9.5,
+            0.302,
             -7.481
           ],
           "size": [
@@ -42274,134 +42757,8 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.252,
-            -7.5
-          ],
-          "size": [
-            0.744,
-            0.114,
-            0.369
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.837,
-            -7.5
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0.035
-          ],
-          "rotY": 0,
-          "builder": "buildSpriteBillboard",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.837,
-            -7.481
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": true,
-          "colorHex": "#ffffff",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "standee-base",
-          "route": "diagnostic-clay",
-          "group": "interiorGroup",
-          "pos": [
-            4.5,
-            1.259,
-            -7.5
-          ],
-          "size": [
-            0.744,
-            0.114,
-            0.369
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            0.313,
-            -7.5
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0.035
-          ],
-          "rotY": 0,
-          "builder": "buildSpriteBillboard",
-          "instances": 1,
-          "textured": false,
-          "colorHex": null,
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "sprite",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            0.313,
-            -7.481
-          ],
-          "size": [
-            0.864,
-            1.12,
-            0
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": true,
-          "colorHex": "#ffffff",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "standee-base",
-          "route": "diagnostic-clay",
-          "group": "interiorGroup",
-          "pos": [
-            10.5,
-            -0.266,
+            9.5,
+            -0.276,
             -7.5
           ],
           "size": [
@@ -42422,8 +42779,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            0.331,
-            -1.5
+            0.355,
+            -5.5
           ],
           "size": [
             0.864,
@@ -42443,8 +42800,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            0.331,
-            -1.482
+            0.355,
+            -5.481
           ],
           "size": [
             0.864,
@@ -42464,8 +42821,8 @@
           "group": "interiorGroup",
           "pos": [
             -7.5,
-            -0.248,
-            -1.5
+            -0.224,
+            -5.5
           ],
           "size": [
             0.744,
@@ -42484,9 +42841,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.336,
-            -1.5
+            -5.5,
+            0.319,
+            -5.5
           ],
           "size": [
             0.864,
@@ -42505,9 +42862,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.336,
-            -1.482
+            -5.5,
+            0.319,
+            -5.481
           ],
           "size": [
             0.864,
@@ -42526,9 +42883,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            -0.243,
-            -1.5
+            -5.5,
+            -0.26,
+            -5.5
           ],
           "size": [
             0.744,
@@ -42547,9 +42904,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.359,
-            -1.5
+            0.5,
+            0.321,
+            -5.5
           ],
           "size": [
             0.864,
@@ -42568,9 +42925,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.359,
-            -1.482
+            0.5,
+            0.321,
+            -5.481
           ],
           "size": [
             0.864,
@@ -42589,9 +42946,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            -0.219,
-            -1.5
+            0.5,
+            -0.258,
+            -5.5
           ],
           "size": [
             0.744,
@@ -42610,9 +42967,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            1.341,
-            4.5
+            6.5,
+            0.327,
+            -5.5
           ],
           "size": [
             0.864,
@@ -42631,9 +42988,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            1.341,
-            4.519
+            6.5,
+            0.327,
+            -5.481
           ],
           "size": [
             0.864,
@@ -42652,9 +43009,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.762,
-            4.5
+            6.5,
+            -0.252,
+            -5.5
           ],
           "size": [
             0.744,
@@ -42673,9 +43030,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.307,
-            4.5
+            -6.5,
+            0.301,
+            0.5
           ],
           "size": [
             0.864,
@@ -42694,9 +43051,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            0.307,
-            4.519
+            -6.5,
+            0.301,
+            0.518
           ],
           "size": [
             0.864,
@@ -42715,9 +43072,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -1.5,
-            -0.272,
-            4.5
+            -6.5,
+            -0.278,
+            0.5
           ],
           "size": [
             0.744,
@@ -42736,9 +43093,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            0.359,
-            4.5
+            -0.5,
+            0.347,
+            0.5
           ],
           "size": [
             0.864,
@@ -42757,9 +43114,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            0.359,
-            4.519
+            -0.5,
+            0.347,
+            0.518
           ],
           "size": [
             0.864,
@@ -42778,9 +43135,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            4.5,
-            -0.22,
-            4.5
+            -0.5,
+            -0.232,
+            0.5
           ],
           "size": [
             0.744,
@@ -42799,9 +43156,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.3,
-            4.5
+            0.5,
+            0.322,
+            0.5
           ],
           "size": [
             0.864,
@@ -42820,9 +43177,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            0.3,
-            4.519
+            0.5,
+            0.322,
+            0.518
           ],
           "size": [
             0.864,
@@ -42841,9 +43198,9 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            10.5,
-            -0.279,
-            4.5
+            0.5,
+            -0.257,
+            0.5
           ],
           "size": [
             0.744,
@@ -42862,9 +43219,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.339,
-            10.5
+            6.5,
+            0.316,
+            3.5
           ],
           "size": [
             0.864,
@@ -42883,9 +43240,9 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            0.339,
-            10.518
+            6.5,
+            0.316,
+            3.518
           ],
           "size": [
             0.864,
@@ -42904,9 +43261,72 @@
           "route": "diagnostic-clay",
           "group": "interiorGroup",
           "pos": [
-            -7.5,
-            -0.239,
-            10.5
+            6.5,
+            -0.263,
+            3.5
+          ],
+          "size": [
+            0.744,
+            0.114,
+            0.369
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            0.344,
+            6.5
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0.035
+          ],
+          "rotY": 0,
+          "builder": "buildSpriteBillboard",
+          "instances": 1,
+          "textured": false,
+          "colorHex": null,
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "sprite",
+          "route": "passthrough",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            0.344,
+            6.519
+          ],
+          "size": [
+            0.864,
+            1.12,
+            0
+          ],
+          "rotY": 0,
+          "builder": "unattributed",
+          "instances": 1,
+          "textured": true,
+          "colorHex": "#ffffff",
+          "instanceColorNeutralized": false
+        },
+        {
+          "role": "standee-base",
+          "route": "diagnostic-clay",
+          "group": "interiorGroup",
+          "pos": [
+            -10.5,
+            -0.235,
+            6.5
           ],
           "size": [
             0.744,
@@ -42925,13 +43345,13 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -7,
-            1.691,
-            -11.5
+            -11.5,
+            -0.3,
+            8
           ],
           "size": [
             0.5,
-            3.178,
+            1.418,
             0.5
           ],
           "rotY": 0,
@@ -42946,16 +43366,16 @@
           "route": "passthrough",
           "group": "interiorGroup",
           "pos": [
-            -3,
-            0.941,
-            -11.5
+            -11,
+            -0.3,
+            8
           ],
           "size": [
             0.5,
-            7.162,
+            1.736,
             0.5
           ],
-          "rotY": 0,
+          "rotY": 0.212,
           "builder": "interiorBuildInstancedMesh/clay-terrain-span",
           "instances": 1,
           "textured": false,
@@ -43068,7 +43488,7 @@
       "volumes": 0,
       "spans": 2,
       "overlays": 0,
-      "witnesses": 12
+      "witnesses": 13
     }
   },
   "consoleErrors": [

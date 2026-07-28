@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "family": "prop-kit",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/prop-kit-positive.json",
+  "manifestSha256": "2fbfffadf26e7aa1755ba91bf98e3191f1f325eb1e3f31e8df9d2ef7605aaa1e",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "componentCountMatches": true,
+    "idsUnique": true,
+    "allComponentsHaveAlpha": true,
+    "allAnchorsGrounded": true,
+    "atlasContainsEveryId": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-suite/runs/prop-kit/positive/atlas.png",
+    "metadata": "dev/model-qa/assetforge-suite/runs/prop-kit/positive/kit.json",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/prop-kit/positive/proof-board.png"
+  },
+  "details": {
+    "componentCount": 3,
+    "expectedCount": 3
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

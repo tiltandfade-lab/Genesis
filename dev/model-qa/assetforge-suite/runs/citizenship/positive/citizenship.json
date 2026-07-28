@@ -1,0 +1,15 @@
+{
+  "slug": "fixture-guard",
+  "source": "dev/model-qa/assetforge-suite/fixtures/sprite.png",
+  "sourceSha256": "97b25d23afa67c8effc165e4e02b5a43c51fab609855aa7698037715aa769c63",
+  "contentBounds": [
+    18,
+    12,
+    59,
+    81
+  ],
+  "footX": 0.3780487804878049,
+  "footY": 1.0,
+  "worldHeightFeet": 6,
+  "alphaCutoff": 12
+}

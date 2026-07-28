@@ -6,6 +6,35 @@ updated: 2026-07-27
 
 # Genesis — Session Hand-off
 
+## Latest (2026-07-27, ASSETFORGE TWELVE-FAMILY V1) [Codex]
+
+Assetforge now has executable first vertical slices for all twelve planned visual compiler
+families. `build/assetforge.py` owns the public CLI; `build/assetforge_apps.py` owns the eleven
+non-emote compilers. Every output stays quarantined and `PASS` never means art admission.
+
+- The sprite-emote factory accepts registered PC/NPC/monster sources, emits exact realm-style
+  prompt packets, ingests keyed six-state sheets, and proves baselines, seated compression, scale,
+  palette, atlas metadata, and a mandatory visual checklist. Canonical states are neutral, angry,
+  happy, near-death, seated field-rest, and true rear view. The rear-view hand defect is preserved
+  as a failing visual-review control; corrected PC v003 is mechanically green but still visually
+  `INCOMPLETE`, not admitted.
+- The boundary compiler resolves all 256 raw eight-neighbor masks to exactly 47 legal blob shapes,
+  checks 2,312 compatible neighbor pairs, preserves all eleven torture-map topologies, and proves a
+  seeded field containing every canonical shape.
+- Modular repeat, prop kit, condition state, palette, trim/nine-slice, decal/stamp, sprite
+  citizenship, atlas optimization, material-map proposal, and visual-regression compilers are
+  executable through the same CLI.
+- Retained suite: `dev/model-qa/assetforge-suite/`; command:
+  `python3 build/assetforge.py suite self-test --force`. Final V1 receipt: 11/11 positive controls
+  pass and 11/11 red-first controls reject. The emote suite separately passes all ten fixture
+  outcomes plus its live-output safety guard, including PC/NPC/humanoid/non-humanoid coverage and
+  the rear-hand rejection.
+- Canon/spec/index: `docs/ASSETFORGE.md`, `docs/ART-DEPARTMENT.md`,
+  `docs/ART-DIRECTION-CANON.md`, `docs/DEV-PORTAL.md`, and `docs/README.md`.
+
+**Next honest promotion:** run the boundary and repeat compilers on one admitted Genesis material/
+component sheet, then seek Adam's visual verdict before routing any output into a runtime registry.
+
 ## ⭐ Latest (2026-07-27, INTEGRATION CLOSE + CAMPAIGN LAUNCH) [Fable]
 
 Everything is landed: master now holds the clay CL-R3→R5 capture lane, Codex's completed

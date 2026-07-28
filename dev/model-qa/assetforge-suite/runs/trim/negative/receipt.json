@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "family": "trim-nine-slice",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/trim-negative-small.json",
+  "manifestSha256": "bd429bab88c1aec3e8f24f32486f143421d1c7645f3d78eb4ee89eeedcc2660d",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "sourceHashMatches": true,
+    "insetsValid": true,
+    "allTargetsLegal": false,
+    "capsPreservedExactly": false,
+    "everyTargetDimensionProved": false
+  },
+  "outputs": {
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/trim/negative/proof-board.png"
+  },
+  "details": {
+    "targets": [
+      [
+        18,
+        18
+      ]
+    ],
+    "errors": [
+      "target smaller than fixed caps"
+    ]
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

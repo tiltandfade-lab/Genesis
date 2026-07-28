@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "family": "modular-repeat",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/repeat-negative-empty.json",
+  "manifestSha256": "d0f119607903fff86378a70f810f7c424892ae8b7e6f28c58a80e249f474a28a",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "sourceHashMatches": true,
+    "componentsIsolated": false,
+    "toroidalClosureExact": true,
+    "allComponentsPlaced": true,
+    "variantCadencePresent": true
+  },
+  "outputs": {
+    "tile": "dev/model-qa/assetforge-suite/runs/repeat/negative/tile.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/repeat/negative/proof-board.png"
+  },
+  "details": {
+    "componentCount": 0,
+    "placements": [],
+    "edgeDelta": 0.0
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

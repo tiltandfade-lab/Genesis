@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-fantasy-dire-wolf-v001",
+  "spriteSlug": "spr-fantasy-dire-wolf",
+  "subjectKind": "monster",
+  "inputs": {
+    "job": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-fantasy-dire-wolf-v001.job.json",
+    "jobSha256": "efde1525a775c9c6b02899907dd1408dec678c2e8408368b477426c144129134",
+    "source": "assets/sprites/spr-fantasy-dire-wolf.png",
+    "sourceSha256": "a6c0c07da09316fbf34e5d8fd4a4b6389e5897887a107482841ef9328c047484",
+    "sheet": "dev/model-qa/emote-factory/self-test/fixtures/spr-fantasy-dire-wolf--valid.png",
+    "sheetSha256": "b02cc25d761727167a354529713ead558881ce3ce5e30baaa25bd66e5aa2bf04"
+  },
+  "generation": {
+    "provider": null,
+    "model": null,
+    "generationCallId": null,
+    "seed": null,
+    "promptPath": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-fantasy-dire-wolf-v001.prompt.md"
+  },
+  "format": {
+    "requestedCanvas": [
+      1200,
+      640
+    ],
+    "actualCanvas": [
+      1200,
+      640
+    ],
+    "requestedCellAspect": "5:4",
+    "requestedCellDimensions": [
+      400,
+      320
+    ],
+    "actualDerivedCellDimensions": [
+      400,
+      320
+    ],
+    "cellAspectRelativeError": 0.0,
+    "stateCountExpected": 6,
+    "stateCountObserved": 6
+  },
+  "crossStateMetrics": {
+    "medianFootY": 0.880878,
+    "maximumBaselineDelta": 0.0,
+    "medianHeightOccupancy": 0.621875,
+    "maximumRelativeHeightDelta": 0.0,
+    "licensedCompressionRatios": [
+      1.0
+    ]
+  },
+  "states": {
+    "neutral": {
+      "contentBounds": [
+        0.2,
+        0.259375,
+        0.8,
+        0.88125
+      ],
+      "footX": 0.621554,
+      "footY": 0.880878,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.621875,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/states/spr-fantasy-dire-wolf--neutral.png",
+      "sha256": "0995fb8cbed4a7510d9e7f46bdc6989e31bd9ff44e2989696b0efcf11aeaf6d5"
+    },
+    "angry": {
+      "contentBounds": [
+        0.2,
+        0.259375,
+        0.8,
+        0.88125
+      ],
+      "footX": 0.621554,
+      "footY": 0.880878,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.621875,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/states/spr-fantasy-dire-wolf--angry.png",
+      "sha256": "0995fb8cbed4a7510d9e7f46bdc6989e31bd9ff44e2989696b0efcf11aeaf6d5"
+    },
+    "happy": {
+      "contentBounds": [
+        0.2,
+        0.259375,
+        0.8,
+        0.88125
+      ],
+      "footX": 0.621554,
+      "footY": 0.880878,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.621875,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/states/spr-fantasy-dire-wolf--happy.png",
+      "sha256": "0995fb8cbed4a7510d9e7f46bdc6989e31bd9ff44e2989696b0efcf11aeaf6d5"
+    },
+    "near-death": {
+      "contentBounds": [
+        0.2,
+        0.259375,
+        0.8,
+        0.88125
+      ],
+      "footX": 0.621554,
+      "footY": 0.880878,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.621875,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/states/spr-fantasy-dire-wolf--near-death.png",
+      "sha256": "0995fb8cbed4a7510d9e7f46bdc6989e31bd9ff44e2989696b0efcf11aeaf6d5"
+    },
+    "resting": {
+      "contentBounds": [
+        0.2,
+        0.259375,
+        0.8,
+        0.88125
+      ],
+      "footX": 0.621554,
+      "footY": 0.880878,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.621875,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "licensed-compression",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/states/spr-fantasy-dire-wolf--resting.png",
+      "sha256": "0995fb8cbed4a7510d9e7f46bdc6989e31bd9ff44e2989696b0efcf11aeaf6d5"
+    },
+    "rear-view": {
+      "contentBounds": [
+        0.2,
+        0.259375,
+        0.8,
+        0.88125
+      ],
+      "footX": 0.621554,
+      "footY": 0.880878,
+      "widthOccupancy": 0.6,
+      "heightOccupancy": 0.621875,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/states/spr-fantasy-dire-wolf--rear-view.png",
+      "sha256": "0995fb8cbed4a7510d9e7f46bdc6989e31bd9ff44e2989696b0efcf11aeaf6d5"
+    }
+  },
+  "gates": {
+    "sourceHashMatchesJob": true,
+    "sheetDimensionsDivisibleByGrid": true,
+    "cellAspectWithinTolerance": true,
+    "allRequiredStatesPopulated": true,
+    "cellBordersClear": true,
+    "magentaEdgeResidueWithinLimit": true,
+    "sharedBaselineWithinTolerance": true,
+    "relativeHeightWithinTolerance": true,
+    "licensedCompressionWithinEnvelope": true,
+    "sourcePaletteCoverageWithinBudget": true,
+    "atlasDimensionsMatchSheet": true
+  },
+  "mechanicalIdentity": "PASS",
+  "visualIdentity": "REVIEW_REQUIRED",
+  "tasteStatus": "REVIEW_REQUIRED",
+  "runtimeAdmission": "CANDIDATE",
+  "technicalStatus": "PASS",
+  "failureReasons": [],
+  "outputs": {
+    "atlas": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/atlas.png",
+    "atlasSha256": "28cf3b83cae0d33f09773735f78005204a044d0cd1123425b3e42ea93395a64b",
+    "metadata": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/atlas.json",
+    "metadataSha256": "3170d00968326940a345a390e4b06643567be9d37e515ea4562d1cd47472b9ec",
+    "proofBoard": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/proof-board.png",
+    "proofBoardSha256": "dd342f38d43e202211e1ab26465e9569f72012ef5c030b6130b02c036d92c74d",
+    "visualReview": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/visual-review.json",
+    "visualReviewSha256": "03e3a07e91119159cfabd754e7c5aaf17e1b2592fb4ae3fd35f147717cbd0e82"
+  }
+}

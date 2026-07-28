@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-citizenship",
+  "slug": "fixture-edge",
+  "source": "dev/model-qa/assetforge-suite/fixtures/sprite-edge.png",
+  "worldHeightFeet": 6
+}

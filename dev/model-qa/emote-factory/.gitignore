@@ -1,0 +1,22 @@
+# Assetforge writes reproducible build products here. Keep compact source fixtures, receipts, and
+# positive proof boards; do not grow Git/LFS with every derived atlas or per-state cut.
+outputs/
+self-test/runs/**/atlas.png
+self-test/runs/**/atlas.json
+self-test/runs/**/states/
+self-test/runs/**/visual-review.json
+self-test/runs/**/proof-board.png
+!self-test/runs/*/valid/proof-board.png
+
+# Rejected/historical pilots retain their raw return, receipt, proof board, and review decision.
+# Their runtime-shaped atlases and state cuts regenerate and are not retained. V003 is the current
+# canonical candidate and intentionally remains unignored in full.
+pilots/emote-spr-fantasy-goblin-warrior-v001/atlas.png
+pilots/emote-spr-fantasy-goblin-warrior-v001/atlas.json
+pilots/emote-spr-fantasy-goblin-warrior-v001/states/
+pilots/emote-spr-pc-human-fighter-male-v001/atlas.png
+pilots/emote-spr-pc-human-fighter-male-v001/atlas.json
+pilots/emote-spr-pc-human-fighter-male-v001/states/
+pilots/emote-spr-pc-human-fighter-male-v002/atlas.png
+pilots/emote-spr-pc-human-fighter-male-v002/atlas.json
+pilots/emote-spr-pc-human-fighter-male-v002/states/

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote-visual-review",
+  "jobId": "emote-spr-pc-human-fighter-male-v001",
+  "spriteSlug": "spr-pc-human-fighter-male",
+  "technicalReceipt": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/receipt.json",
+  "proofBoard": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/proof-board.png",
+  "reviewer": "Assetforge self-test",
+  "reviewedOn": "2026-07-28",
+  "states": {
+    "neutral": {
+      "label": "Neutral",
+      "verdict": "PASS",
+      "checks": {
+        "stateRead": "PASS",
+        "identityContinuity": "PASS",
+        "anatomyAndHands": "PASS",
+        "equipmentPresenceAndAttachment": "PASS",
+        "equipmentGripAndContact": "PASS",
+        "silhouetteContinuity": "PASS",
+        "playScaleRead": "PASS"
+      },
+      "notes": ""
+    },
+    "angry": {
+      "label": "Angry",
+      "verdict": "PASS",
+      "checks": {
+        "stateRead": "PASS",
+        "identityContinuity": "PASS",
+        "anatomyAndHands": "PASS",
+        "equipmentPresenceAndAttachment": "PASS",
+        "equipmentGripAndContact": "PASS",
+        "silhouetteContinuity": "PASS",
+        "playScaleRead": "PASS"
+      },
+      "notes": ""
+    },
+    "happy": {
+      "label": "Happy",
+      "verdict": "PASS",
+      "checks": {
+        "stateRead": "PASS",
+        "identityContinuity": "PASS",
+        "anatomyAndHands": "PASS",
+        "equipmentPresenceAndAttachment": "PASS",
+        "equipmentGripAndContact": "PASS",
+        "silhouetteContinuity": "PASS",
+        "playScaleRead": "PASS"
+      },
+      "notes": ""
+    },
+    "near-death": {
+      "label": "Near death",
+      "verdict": "PASS",
+      "checks": {
+        "stateRead": "PASS",
+        "identityContinuity": "PASS",
+        "anatomyAndHands": "PASS",
+        "equipmentPresenceAndAttachment": "PASS",
+        "equipmentGripAndContact": "PASS",
+        "silhouetteContinuity": "PASS",
+        "playScaleRead": "PASS"
+      },
+      "notes": ""
+    },
+    "resting": {
+      "label": "Resting",
+      "verdict": "PASS",
+      "checks": {
+        "stateRead": "PASS",
+        "identityContinuity": "PASS",
+        "anatomyAndHands": "PASS",
+        "equipmentPresenceAndAttachment": "PASS",
+        "equipmentGripAndContact": "PASS",
+        "silhouetteContinuity": "PASS",
+        "playScaleRead": "PASS"
+      },
+      "notes": ""
+    },
+    "rear-view": {
+      "label": "Rear view",
+      "verdict": "FAIL",
+      "checks": {
+        "stateRead": "PASS",
+        "identityContinuity": "PASS",
+        "anatomyAndHands": "FAIL",
+        "equipmentPresenceAndAttachment": "PASS",
+        "equipmentGripAndContact": "PASS",
+        "silhouetteContinuity": "PASS",
+        "playScaleRead": "PASS",
+        "trueRearConstructionNotMirror": "PASS",
+        "rearEquipmentAttachment": "PASS"
+      },
+      "notes": "Synthetic malformed-hand negative control."
+    }
+  },
+  "overallNotes": "",
+  "allowedCheckValues": [
+    "PASS",
+    "FAIL"
+  ],
+  "instructions": "Inspect the source, full-size states, and play-scale row. Set every applicable check to PASS or FAIL and each state verdict to PASS or FAIL. Any FAIL rejects visual identity. Blank checks keep the review incomplete. Technical PASS cannot fill these."
+}

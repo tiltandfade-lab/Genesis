@@ -1002,3 +1002,20 @@ while a settled character's line stays byte-identical in shape to the pre-unit o
 consumers without throwing. `dev/acceptance-opening-register.mjs` re-runs the 12-start batch
 protocol (one per class) against the built register — the monoculture is visibly broken (all five
 bands present across 12 rolls where the pre-unit chain produced 12/12 settlement, 11/12 calm).
+
+## Assetforge visual-compiler family (2026-07-27)
+
+Assetforge is the build-time compiler boundary between generated visual proposals and Genesis
+runtime citizenship. Its shared envelope is manifest → exact source/prompt provenance →
+quarantined ingest → deterministic compilation → family-specific proof → receipt → separate
+admission. A technical `PASS` can never make a taste ruling or silently replace a live asset.
+
+All twelve planned first vertical slices are built. Sprite emotes retain an additional explicit
+visual-identity/anatomy checklist; all other V1 families pair one passing fixture with one
+preserved red-first control. The boundary dialect is `boundary-blob47-v1`: eight-neighbor raw masks
+sanitize into 47 canonical semantic shapes and runtime consumers address semantic ids rather than
+atlas coordinates. Inferred material maps remain proposals, atlas packing remains lossless
+infrastructure, and regression detection reports change without deciding whether it is good.
+
+Owning contract: `ASSETFORGE.md`. Executable surface: `build/assetforge.py`. Retained evidence:
+`dev/model-qa/emote-factory/` and `dev/model-qa/assetforge-suite/`.

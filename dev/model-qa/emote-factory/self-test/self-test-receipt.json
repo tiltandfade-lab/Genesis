@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "suite": "assetforge-sprite-emote-v1",
+  "algorithmVersion": "sprite-emote-v1",
+  "technicalStatus": "PASS",
+  "fixtures": [
+    {
+      "fixture": "spr-pc-human-fighter-male:valid-transport",
+      "expected": "PASS",
+      "actual": "PASS",
+      "receipt": "dev/model-qa/emote-factory/self-test/runs/spr-pc-human-fighter-male/valid/receipt.json"
+    },
+    {
+      "fixture": "spr-fantasy-land-worker-dragonborn:valid-transport",
+      "expected": "PASS",
+      "actual": "PASS",
+      "receipt": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-land-worker-dragonborn/valid/receipt.json"
+    },
+    {
+      "fixture": "spr-fantasy-goblin-warrior:valid-transport",
+      "expected": "PASS",
+      "actual": "PASS",
+      "receipt": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/valid/receipt.json"
+    },
+    {
+      "fixture": "spr-fantasy-dire-wolf:valid-transport",
+      "expected": "PASS",
+      "actual": "PASS",
+      "receipt": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-dire-wolf/valid/receipt.json"
+    },
+    {
+      "fixture": "spr-fantasy-goblin-warrior:missing-state",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "failureReasons": [
+        "allRequiredStatesPopulated",
+        "sharedBaselineWithinTolerance",
+        "relativeHeightWithinTolerance",
+        "sourcePaletteCoverageWithinBudget"
+      ],
+      "receipt": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/missing-state/receipt.json"
+    },
+    {
+      "fixture": "spr-fantasy-goblin-warrior:baseline-drift",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "failureReasons": [
+        "sharedBaselineWithinTolerance"
+      ],
+      "receipt": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/receipt.json"
+    },
+    {
+      "fixture": "spr-fantasy-goblin-warrior:palette-drift",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "failureReasons": [
+        "sourcePaletteCoverageWithinBudget"
+      ],
+      "receipt": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/palette-drift/receipt.json"
+    },
+    {
+      "fixture": "spr-fantasy-goblin-warrior:boundary-contamination",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "failureReasons": [
+        "cellBordersClear"
+      ],
+      "receipt": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/boundary-contamination/receipt.json"
+    },
+    {
+      "fixture": "visual-review:all-checks-pass",
+      "expected": "PASS",
+      "actual": "PASS",
+      "receipt": "dev/model-qa/emote-factory/self-test/reviews/all-pass-receipt.json"
+    },
+    {
+      "fixture": "visual-review:rear-hand-fail",
+      "expected": "FAIL",
+      "actual": "FAIL",
+      "failedChecks": [
+        "rear-view:verdict",
+        "rear-view:anatomyAndHands"
+      ],
+      "receipt": "dev/model-qa/emote-factory/self-test/reviews/rear-hand-fail-receipt.json"
+    }
+  ],
+  "assertions": {
+    "pcAccepted": true,
+    "npcAccepted": true,
+    "humanoidMonsterAccepted": true,
+    "nonHumanoidMonsterAccepted": true,
+    "missingStateRejected": true,
+    "baselineDriftRejected": true,
+    "paletteDriftRejected": true,
+    "boundaryContaminationRejected": true,
+    "completeVisualReviewAccepted": true,
+    "rearHandVisualFailureRejected": true,
+    "liveAssetOutputRejected": true
+  }
+}

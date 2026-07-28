@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "family": "condition-state",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/condition-positive.json",
+  "manifestSha256": "f16d48e9f680c6370dbe023d6dd853aa7ec5a60b1eecfc90b08ec78b02a14e9d",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "allStatesPresent": true,
+    "dimensionsLocked": true,
+    "silhouetteWithinLicense": true,
+    "damageIsLocalNotReplacement": true,
+    "declaredSeverityOrdered": true
+  },
+  "outputs": {
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/condition/positive/proof-board.png"
+  },
+  "details": {
+    "outsideAlphaRatio": {
+      "damaged": 0.0,
+      "burned": 0.0,
+      "corrupted": 0.0
+    },
+    "changedRatio": {
+      "damaged": 0.00039426123984947516,
+      "burned": 0.0011632872846108141,
+      "corrupted": 0.0016377005347593583
+    }
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

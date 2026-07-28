@@ -1878,3 +1878,48 @@ Binding consequences:
   inside inner wall bounds, rises remain equal, adjacent solids overlap at contact, the top tread
   meets its landing, a retaining curb yields the stair opening, and a doorway cannot intersect the
   raised platform. Illegal compositions reject loudly instead of rendering a curated exception.
+
+## ASSETFORGE SPRITE-EMOTE AND BOUNDARY-COMPILER RULINGS (Adam, 2026-07-27 — binding; verbatim)
+
+> "on top of that a sprite-emote factory would also be nice, like if I could get you to just take any sprite and generate/proof/prove emote states for any monster/pc/npc sprite"
+
+The build-time sprite-emote factory may accept any registered monster, PC, or NPC sprite as input.
+That broad input scope creates quarantined candidates; it does not supersede the existing boss/PC
+runtime priority or grant automatic admission.
+
+> "please spec the expansions that you mentioned too, the boundary auto tile compiler would be so incredibly useful"
+
+The Assetforge expansion family includes a boundary auto-tile compiler. Its contract is semantic
+neighbor topology compiled into deterministic boundary variants and proof maps, not a prompt-only
+tile sheet or a renderer-owned adjacency guess. The detailed compiler and proof contract live in
+`ASSETFORGE.md`.
+
+> "we probably need emotes like neutral, angry, happy, near death, resting, and facing the other direction"
+
+> "as in viewed from behind"
+
+The default six-state pack is `neutral`, `angry`, `happy`, `near-death`, `resting`, and
+`rear-view`. Rear view is a true 180-degree back construction of the same subject, not a mirrored
+front sprite.
+
+> "resting should be more like a seated pose, think of ramza in the field blowing the grass"
+
+Resting is a quiet seated field-rest pose. The reference governs the emotional and pose read only;
+it does not license copied character design, grass, scenery, or other game content. Seated height
+compression is explicitly licensed and proven separately from ordinary standing-state scale drift.
+
+> "his hand is a little weird in the rear view shot, make sure the process screens for that"
+
+Every state requires explicit visual review of anatomy and hands, equipment presence and
+attachment, grip/contact, silhouette continuity, identity, and play-scale read. Rear view also
+requires true-back construction and rear equipment-attachment review. A failed check rejects the
+candidate; an unanswered check keeps it incomplete; technical measurements can never override
+either result.
+
+> "can you go ahead and build and prove the other assetforge apps?"
+
+The eleven remaining Assetforge families require executable first vertical slices, not roadmap-only
+specs. Each is considered proven only when its compiler emits quarantined outputs, a visual proof
+board, a machine-readable receipt, a passing positive fixture, and a preserved red-first fixture
+that fails for the intended invariant. This build mandate does not grant production admission or
+allow a technical proof to substitute for art-direction review.

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-citizenship",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/citizenship-positive.json",
+  "manifestSha256": "b5354f0d052cb385d3832ac68c2d87deb11ddbf0a1684662411427fb0b903f0b",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "opaqueContentPresent": true,
+    "sourceHasSafeBorder": true,
+    "worldHeightIsExplicit": true,
+    "footAnchorNormalized": true,
+    "thumbnailGenerated": true
+  },
+  "outputs": {
+    "sprite": "dev/model-qa/assetforge-suite/runs/citizenship/positive/sprite.png",
+    "metadata": "dev/model-qa/assetforge-suite/runs/citizenship/positive/citizenship.json",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/citizenship/positive/proof-board.png"
+  },
+  "details": {},
+  "runtimeAdmission": "CANDIDATE"
+}

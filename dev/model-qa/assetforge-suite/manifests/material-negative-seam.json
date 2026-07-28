@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "family": "material-map-baker",
+  "albedo": "dev/model-qa/assetforge-suite/fixtures/nonperiodic-material.png",
+  "seamRequired": true,
+  "maxSourceEdgeDelta": 0
+}

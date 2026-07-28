@@ -446,3 +446,10 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    amends; then the DESIGN.md entry flips from PROPOSED to RULED.
 5. ☐ **Adam's visual verdicts** — carried: the PENDING ADAM ledger (C2–C4 sheets, AO triptych,
    split equivalence, torchlit C3).
+6. ☑ **Assetforge V1 compiler family** — all twelve first vertical slices are executable. The
+   non-emote suite passes 11/11 positive controls and rejects 11/11 preserved red-first controls;
+   the emote suite passes 10/10 fixture outcomes plus its live-output guard, including the
+   rear-view hand failure.
+7. ☐ **Assetforge first production-material taste gate** — compile one admitted material and one
+   admitted component sheet through boundary + repeat, review the resulting topology/cadence
+   boards with Adam, and only then design runtime-registry admission.

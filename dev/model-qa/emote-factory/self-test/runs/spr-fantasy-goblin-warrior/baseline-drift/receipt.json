@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-fantasy-goblin-warrior-v001",
+  "spriteSlug": "spr-fantasy-goblin-warrior",
+  "subjectKind": "monster",
+  "inputs": {
+    "job": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-fantasy-goblin-warrior-v001.job.json",
+    "jobSha256": "2f92696987df2b143a19429840d9432d736acfc6c46e3fb3d4bb1cd6c73928af",
+    "source": "assets/sprites/spr-fantasy-goblin-warrior.png",
+    "sourceSha256": "d49935c34ebe4a3e3e97994c328754cfb0d20e7e1a805a3877d9d0399c819086",
+    "sheet": "dev/model-qa/emote-factory/self-test/fixtures/spr-fantasy-goblin-warrior--baseline-drift.png",
+    "sheetSha256": "5dc71cd67e641e9884b05de66536d35e58a97be7dd1fe60251d3c8bc463e1855"
+  },
+  "generation": {
+    "provider": null,
+    "model": null,
+    "generationCallId": null,
+    "seed": null,
+    "promptPath": "dev/model-qa/emote-factory/self-test/jobs/emote-spr-fantasy-goblin-warrior-v001.prompt.md"
+  },
+  "format": {
+    "requestedCanvas": [
+      1152,
+      768
+    ],
+    "actualCanvas": [
+      1152,
+      768
+    ],
+    "requestedCellAspect": "1:1",
+    "requestedCellDimensions": [
+      384,
+      384
+    ],
+    "actualDerivedCellDimensions": [
+      384,
+      384
+    ],
+    "cellAspectRelativeError": 0.0,
+    "stateCountExpected": 6,
+    "stateCountObserved": 6
+  },
+  "crossStateMetrics": {
+    "medianFootY": 0.879896,
+    "maximumBaselineDelta": 0.180157,
+    "medianHeightOccupancy": 0.619792,
+    "maximumRelativeHeightDelta": 0.0,
+    "licensedCompressionRatios": [
+      1.0
+    ]
+  },
+  "states": {
+    "neutral": {
+      "contentBounds": [
+        0.174479,
+        0.260417,
+        0.822917,
+        0.880208
+      ],
+      "footX": 0.218016,
+      "footY": 0.879896,
+      "widthOccupancy": 0.648438,
+      "heightOccupancy": 0.619792,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/states/spr-fantasy-goblin-warrior--neutral.png",
+      "sha256": "6c366d297eb453142f408b822d9a2d44384df70675a9c99a058c20cca88e3bf5"
+    },
+    "angry": {
+      "contentBounds": [
+        0.174479,
+        0.260417,
+        0.822917,
+        0.880208
+      ],
+      "footX": 0.218016,
+      "footY": 0.879896,
+      "widthOccupancy": 0.648438,
+      "heightOccupancy": 0.619792,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/states/spr-fantasy-goblin-warrior--angry.png",
+      "sha256": "6c366d297eb453142f408b822d9a2d44384df70675a9c99a058c20cca88e3bf5"
+    },
+    "happy": {
+      "contentBounds": [
+        0.174479,
+        0.260417,
+        0.822917,
+        0.880208
+      ],
+      "footX": 0.218016,
+      "footY": 0.879896,
+      "widthOccupancy": 0.648438,
+      "heightOccupancy": 0.619792,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/states/spr-fantasy-goblin-warrior--happy.png",
+      "sha256": "6c366d297eb453142f408b822d9a2d44384df70675a9c99a058c20cca88e3bf5"
+    },
+    "near-death": {
+      "contentBounds": [
+        0.174479,
+        0.260417,
+        0.822917,
+        0.880208
+      ],
+      "footX": 0.218016,
+      "footY": 0.879896,
+      "widthOccupancy": 0.648438,
+      "heightOccupancy": 0.619792,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/states/spr-fantasy-goblin-warrior--near-death.png",
+      "sha256": "6c366d297eb453142f408b822d9a2d44384df70675a9c99a058c20cca88e3bf5"
+    },
+    "resting": {
+      "contentBounds": [
+        0.174479,
+        0.260417,
+        0.822917,
+        0.880208
+      ],
+      "footX": 0.218016,
+      "footY": 0.879896,
+      "widthOccupancy": 0.648438,
+      "heightOccupancy": 0.619792,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "licensed-compression",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/states/spr-fantasy-goblin-warrior--resting.png",
+      "sha256": "6c366d297eb453142f408b822d9a2d44384df70675a9c99a058c20cca88e3bf5"
+    },
+    "rear-view": {
+      "contentBounds": [
+        0.174479,
+        0.080729,
+        0.822917,
+        0.700521
+      ],
+      "footX": 0.218016,
+      "footY": 0.699739,
+      "widthOccupancy": 0.648438,
+      "heightOccupancy": 0.619792,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 1.0,
+      "heightPolicy": "standard",
+      "path": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/states/spr-fantasy-goblin-warrior--rear-view.png",
+      "sha256": "6c366d297eb453142f408b822d9a2d44384df70675a9c99a058c20cca88e3bf5"
+    }
+  },
+  "gates": {
+    "sourceHashMatchesJob": true,
+    "sheetDimensionsDivisibleByGrid": true,
+    "cellAspectWithinTolerance": true,
+    "allRequiredStatesPopulated": true,
+    "cellBordersClear": true,
+    "magentaEdgeResidueWithinLimit": true,
+    "sharedBaselineWithinTolerance": false,
+    "relativeHeightWithinTolerance": true,
+    "licensedCompressionWithinEnvelope": true,
+    "sourcePaletteCoverageWithinBudget": true,
+    "atlasDimensionsMatchSheet": true
+  },
+  "mechanicalIdentity": "FAIL",
+  "visualIdentity": "REVIEW_REQUIRED",
+  "tasteStatus": "REVIEW_REQUIRED",
+  "runtimeAdmission": "CANDIDATE",
+  "technicalStatus": "FAIL",
+  "failureReasons": [
+    "sharedBaselineWithinTolerance"
+  ],
+  "outputs": {
+    "atlas": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/atlas.png",
+    "atlasSha256": "f3eb7dd6b63c268450349adb2b3a7bd047805229f2c8baf48299a4e1ec06d5e4",
+    "metadata": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/atlas.json",
+    "metadataSha256": "d7331a8a5e8b53e22849f8df22de59645ac4b4d7c79dd6461df40d4f3d9000bd",
+    "proofBoard": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/proof-board.png",
+    "proofBoardSha256": "148b8f70edf5e6fa52a3d778bc621c9e3b3d3255854349a8972fe79425ec9de8",
+    "visualReview": "dev/model-qa/emote-factory/self-test/runs/spr-fantasy-goblin-warrior/baseline-drift/visual-review.json",
+    "visualReviewSha256": "73943c7479011fc8eef7ad2c12c3e764e8aa38a8bbc00da6d937bced8b74ac2b"
+  }
+}

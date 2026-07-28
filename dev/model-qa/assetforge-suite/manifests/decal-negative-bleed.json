@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "family": "decal-stamp",
+  "sheet": "dev/model-qa/assetforge-suite/fixtures/decal-sheet-bleed.png",
+  "ids": [
+    "blood-pool",
+    "scorch"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-citizenship",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/citizenship-negative-edge.json",
+  "manifestSha256": "78fa402bc7d49bac35997f18c75a52cb674f874811fdf53d8c993c6db6d8962a",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "sourceHashMatches": true,
+    "opaqueContentPresent": true,
+    "sourceHasSafeBorder": false,
+    "worldHeightIsExplicit": true,
+    "footAnchorNormalized": true,
+    "thumbnailGenerated": true
+  },
+  "outputs": {
+    "sprite": "dev/model-qa/assetforge-suite/runs/citizenship/negative/sprite.png",
+    "metadata": "dev/model-qa/assetforge-suite/runs/citizenship/negative/citizenship.json",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/citizenship/negative/proof-board.png"
+  },
+  "details": {},
+  "runtimeAdmission": "CANDIDATE"
+}

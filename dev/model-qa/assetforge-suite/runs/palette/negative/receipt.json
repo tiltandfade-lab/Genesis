@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "family": "palette-harmonizer",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/palette-negative-protected.json",
+  "manifestSha256": "bcf42570e0144a59babcc867e68d4bd1e01c796fd94607e502f63080d99ebf3e",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "sourceHashMatches": true,
+    "paletteNonEmpty": true,
+    "protectedColorsRepresentable": false,
+    "everyOpaquePixelInPalette": false,
+    "meanColorDistanceWithinBudget": true,
+    "valueHierarchyPreserved": true
+  },
+  "outputs": {
+    "image": "dev/model-qa/assetforge-suite/runs/palette/negative/harmonized.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/palette/negative/proof-board.png"
+  },
+  "details": {
+    "meanColorDistance": 0.0,
+    "valueRankAgreement": 1.0,
+    "outputColorCount": 4
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

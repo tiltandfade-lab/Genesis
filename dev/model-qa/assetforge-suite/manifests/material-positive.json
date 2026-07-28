@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "family": "material-map-baker",
+  "albedo": "dev/model-qa/assetforge-suite/fixtures/periodic-material.png",
+  "sourceSha256": "53b62db24d3fc77f773c2fc8794ee9a23afe1a3b9d9b8000f21b79886c158589",
+  "seamRequired": true,
+  "maxSourceEdgeDelta": 0,
+  "normalStrength": 1.8
+}

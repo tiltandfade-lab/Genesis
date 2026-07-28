@@ -8,6 +8,30 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-27 — Assetforge twelve-family V1 [Codex]
+
+**Added**
+- `build/assetforge.py` + `build/assetforge_apps.py`: manifest-driven sprite-emote, boundary,
+  modular-repeat, prop-kit, condition-state, palette, nine-slice, decal, sprite-citizenship, atlas,
+  material-map, and visual-regression compilers. Every family writes quarantined outputs, a proof
+  board, and a machine-readable receipt.
+- Retained positive and red-first corpus under `dev/model-qa/assetforge-suite/`. The suite passes
+  all 11 positive controls and rejects all 11 invalid controls. Boundary proof resolves 256 raw
+  masks to 47 legal shapes, checks 2,312 compatible neighbor pairs, preserves eleven torture-map
+  topologies, and covers all 47 shapes in one seeded field.
+- Sprite-emote pilot corpus with exact ImageGen provenance, three PC iterations, one historical
+  goblin pilot, runtime-ready candidate atlas/state metadata, and explicit visual-review receipts.
+
+**Changed**
+- Canonical emote pack is neutral, angry, happy, near-death, seated field-rest, and true rear view.
+  Rear anatomy, hands, grip/contact, and equipment attachment are mandatory visual checks; the
+  rejected v002 hand and corrected-but-still-unreviewed v003 remain honestly distinct.
+
+**Deferred**
+- No candidate is automatically admitted. PC v003 remains visual-review `INCOMPLETE`; the
+  non-emote suite proves compiler invariants on fixtures, not production-art taste. The first
+  production promotion begins with one admitted material/component sheet and Adam's verdict.
+
 ## 2026-07-27 — Integration close: four lanes landed; TIYL starts diversified; settled-life program ruled [Fable]
 
 **Added**
@@ -811,38 +835,4 @@ Fable's Phase-3 call; (2) **Open5e `srd-2024`** (CC-BY-4.0) as a build-time cros
 
 **Deferred.** Fable weighs in on Phase 3, potentially expands/orchestrates the next waves. All four adoption
 candidates are recommendations, not decisions.
-
-## 2026-07-13 — GEOMETRY DEFAULT FLIPPED legacy→oss (§15 step 8) + stabilization hold opened (orchestrated)
-
-Adam **delegated the flip verdict to Claude conditional on sound pre-flip evidence** ("run the pre-flip
-evidence wave, then if evidence is sound, authorize the flip, and continue fleshing out all visual
-engine changes as specified"). Branch `feat/geometry-oss-flip`, landed `--no-ff`, gates re-run by me.
-
-**Changed.**
-- **`ROOM_SHELL_POLYGON_KERNEL_FLAG` (theater-boot.js) `legacy`→`oss`** — production now renders the
-  PolygonKernel floor + aperture-delimited wall-run path (G1/G2/G3). The module-level
-  `ROOM_SHELL_POLYGON_KERNEL` const (theater-room-mesh.js) **stays `legacy`** as the bare-call/dev
-  fallback, retaining the legacy path for the §15 step-9 stabilization hold; the flag is still
-  seam-settable back via `window.Theater._setRoomShellPolygonKernel`.
-
-**Added.**
-- **`dev/capture-oss-integrated.mjs`** — filled OSS §15 promotion steps 6–7 (the only genuine pre-flip
-  gap; F1 outside-low grazing capture + F2 5000-room gap/provenance fuzz already existed and re-gated
-  green). Boots a real in-session room, mounts it under legacy then oss at the product camera, reads
-  `renderer.info` full-chain draw submissions + resource census. Output committed to
-  `dev/oss-integrated-shots/` for review.
-
-**Evidence (all re-run/read by me).** Numeric: verify-wall-runs-oss **92/0** (corner gap 0 at
-stem/cap/footing, both cap lips, 100% provenance), verify-wall-runs-oss-fuzz over **5000 randomized
-rooms** (zero join-gap, full segment provenance, acute-bevel + red-first negative control),
-verify-geometry-fixtures **28/0** (7 legacy defects fixed, 0 regressions), room-shell parity **48/0**.
-Visual: outside-low grazing — oss closes the corner with a continuous mitered cap lip; product-camera
-integrated — oss ≡ legacy at the player-visible shot. Perf: draw calls **Δ0**, triangles **Δ−286**
-(oss cheaper), geometries/programs **Δ0**, textures **+2** one-time. **Full 197-harness sweep: 4 reds,
-ALL verified pre-existing on master** (verify-{room-shell-render,diegetic-light,occlusion-fade,
-gallery-pass} — render-flake/CI-auto-skip, fail identically pre-flip). check-manifest OK.
-
-**Deferred.** §15 step 10 (remove the legacy triangulation path) waits until the stabilization hold
-passes with no rollback-worthy defect. Phase 3 (GP-2..4 visual production) now rides on the flipped
-geometry, gated on Codex research + charter tool-adoption/spend gates.
 

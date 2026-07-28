@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "family": "palette-harmonizer",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/palette-positive.json",
+  "manifestSha256": "061c102f2da85fd665a91974c805415c765bc20ea0c423e9dc5fe07d54e6b66e",
+  "technicalStatus": "PASS",
+  "gates": {
+    "sourceHashMatches": true,
+    "paletteNonEmpty": true,
+    "protectedColorsRepresentable": true,
+    "everyOpaquePixelInPalette": true,
+    "meanColorDistanceWithinBudget": true,
+    "valueHierarchyPreserved": true
+  },
+  "outputs": {
+    "image": "dev/model-qa/assetforge-suite/runs/palette/positive/harmonized.png",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/palette/positive/proof-board.png"
+  },
+  "details": {
+    "meanColorDistance": 0.0,
+    "valueRankAgreement": 1.0,
+    "outputColorCount": 4
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "family": "sprite-emote",
+  "algorithmVersion": "sprite-emote-v1",
+  "jobId": "emote-spr-pc-human-fighter-male-v001",
+  "spriteSlug": "spr-pc-human-fighter-male",
+  "subjectKind": "pc",
+  "inputs": {
+    "job": "dev/model-qa/emote-factory/jobs/emote-spr-pc-human-fighter-male-v001.job.json",
+    "jobSha256": "5e9f1e7b3bb966f293c7bad76a75b26dfe4f4602893b755fd0bed5c1212ed251",
+    "source": "assets/sprites/spr-pc-human-fighter-male.png",
+    "sourceSha256": "d307d7ac9183075b11a7cc922e0bb1dcc71041397727a43c1fac7abc883fa7a8",
+    "sheet": "dev/model-qa/emote-factory/returns/emote-spr-pc-human-fighter-male-v001-imagegen.png",
+    "sheetSha256": "152d0ec847641d0ba38c88330a46431eb68501e556b0449cae80d09738dfd20f"
+  },
+  "generation": {
+    "provider": "OpenAI built-in image_gen",
+    "model": "unreported-by-built-in-tool",
+    "generationCallId": "call_iHGfSFHZj49jHzDx6NEbIfug",
+    "seed": null,
+    "promptPath": "dev/model-qa/emote-factory/jobs/emote-spr-pc-human-fighter-male-v001.imagegen-call.prompt.md"
+  },
+  "format": {
+    "requestedCanvas": [
+      1152,
+      768
+    ],
+    "actualCanvas": [
+      1536,
+      1024
+    ],
+    "requestedCellAspect": "1:1",
+    "requestedCellDimensions": [
+      384,
+      384
+    ],
+    "actualDerivedCellDimensions": [
+      512,
+      512
+    ],
+    "cellAspectRelativeError": 0.0,
+    "stateCountExpected": 6,
+    "stateCountObserved": 6
+  },
+  "crossStateMetrics": {
+    "medianFootY": 0.899217,
+    "maximumBaselineDelta": 0.03816,
+    "medianHeightOccupancy": 0.850586,
+    "maximumRelativeHeightDelta": 0.086108
+  },
+  "states": {
+    "neutral": {
+      "contentBounds": [
+        0.238281,
+        0.064453,
+        0.900391,
+        0.917969
+      ],
+      "footX": 0.804305,
+      "footY": 0.917808,
+      "widthOccupancy": 0.662109,
+      "heightOccupancy": 0.853516,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.989842,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/states/spr-pc-human-fighter-male--neutral.png",
+      "sha256": "1be192bbb4e7539e69112864eeda2c6d2967823759859f50f167ebc2452d023b"
+    },
+    "angry": {
+      "contentBounds": [
+        0.119141,
+        0.070312,
+        0.845703,
+        0.917969
+      ],
+      "footX": 0.722114,
+      "footY": 0.917808,
+      "widthOccupancy": 0.726562,
+      "heightOccupancy": 0.847656,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.988345,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/states/spr-pc-human-fighter-male--angry.png",
+      "sha256": "99f128b6456db3480e58ad8c8189ff36b9bcc9530e08b1f74e2f78975cf5c3aa"
+    },
+    "happy": {
+      "contentBounds": [
+        0.101562,
+        0.064453,
+        0.763672,
+        0.919922
+      ],
+      "footX": 0.664384,
+      "footY": 0.919765,
+      "widthOccupancy": 0.662109,
+      "heightOccupancy": 0.855469,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.989193,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/states/spr-pc-human-fighter-male--happy.png",
+      "sha256": "54bc21d0a8d548da72e88377e8ed2828c1f413d2ef971311079eaf1f10729196"
+    },
+    "near-death": {
+      "contentBounds": [
+        0.207031,
+        0.083984,
+        0.857422,
+        0.861328
+      ],
+      "footX": 0.681996,
+      "footY": 0.861057,
+      "widthOccupancy": 0.650391,
+      "heightOccupancy": 0.777344,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.98595,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/states/spr-pc-human-fighter-male--near-death.png",
+      "sha256": "6e0cfcc9cfba8b3fd147bf84198d4bc96560d3975e5ab9ba215cd19ad4c54888"
+    },
+    "resting": {
+      "contentBounds": [
+        0.191406,
+        0.001953,
+        0.773438,
+        0.880859
+      ],
+      "footX": 0.353229,
+      "footY": 0.880626,
+      "widthOccupancy": 0.582031,
+      "heightOccupancy": 0.878906,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.989159,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/states/spr-pc-human-fighter-male--resting.png",
+      "sha256": "e71073af195d9faef34c5bcbd66b71cff40c756e3ba6a88ade790b7ef081e29f"
+    },
+    "rear-view": {
+      "contentBounds": [
+        0.115234,
+        0.029297,
+        0.712891,
+        0.876953
+      ],
+      "footX": 0.313112,
+      "footY": 0.876712,
+      "widthOccupancy": 0.597656,
+      "heightOccupancy": 0.847656,
+      "borderClearance": 1.0,
+      "magentaEdgeResidue": 0.0,
+      "sourcePaletteCoverage": 0.993357,
+      "path": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/states/spr-pc-human-fighter-male--rear-view.png",
+      "sha256": "9d50d942316c3dd4c4479663811497228c365ad1150c310dae33e9a73faaf641"
+    }
+  },
+  "gates": {
+    "sourceHashMatchesJob": true,
+    "sheetDimensionsDivisibleByGrid": true,
+    "cellAspectWithinTolerance": true,
+    "allRequiredStatesPopulated": true,
+    "cellBordersClear": true,
+    "magentaEdgeResidueWithinLimit": true,
+    "sharedBaselineWithinTolerance": true,
+    "relativeHeightWithinTolerance": true,
+    "sourcePaletteCoverageWithinBudget": true,
+    "atlasDimensionsMatchSheet": true
+  },
+  "mechanicalIdentity": "PASS",
+  "visualIdentity": "REVIEW_REQUIRED",
+  "tasteStatus": "REVIEW_REQUIRED",
+  "runtimeAdmission": "CANDIDATE",
+  "technicalStatus": "PASS",
+  "failureReasons": [],
+  "outputs": {
+    "atlas": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/atlas.png",
+    "atlasSha256": "dd498b7adc61a084133e34c5c950d0ad814cfe4b2217e1afb11dd1c49a1fad69",
+    "metadata": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/atlas.json",
+    "metadataSha256": "23204146dce494886f8e8bff21bd86c0fce75938b0362bc16c7f12541d92a014",
+    "proofBoard": "dev/model-qa/emote-factory/pilots/emote-spr-pc-human-fighter-male-v001/proof-board.png",
+    "proofBoardSha256": "5a95e8eb371ab355700c98904a15ddb1848c597c5fbd6be1c6492873d40834e7"
+  }
+}

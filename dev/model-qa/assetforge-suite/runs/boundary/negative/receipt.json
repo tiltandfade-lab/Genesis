@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "family": "boundary-autotile",
+  "algorithmVersion": "assetforge-suite-v1",
+  "manifest": "dev/model-qa/assetforge-suite/manifests/boundary-negative-seam.json",
+  "manifestSha256": "37dcb17201d72139a025eb2171ab30fefdb1be48b636310a3c94a9faed693a31",
+  "technicalStatus": "FAIL",
+  "gates": {
+    "sourceHashMatches": true,
+    "sourceIsSeamless": false,
+    "all256RawMasksResolve": true,
+    "exactly47CanonicalShapes": true,
+    "diagonalSanitizationLegal": true,
+    "lookupDeterministic": true,
+    "allCanonicalShapesPacked": true,
+    "allTortureMapsRendered": true,
+    "neighborClosureExhaustive": false,
+    "tortureMapTopologyPreserved": true,
+    "seededFieldContainsEveryCanonicalShape": true
+  },
+  "outputs": {
+    "atlas": "dev/model-qa/assetforge-suite/runs/boundary/negative/atlas.png",
+    "metadata": "dev/model-qa/assetforge-suite/runs/boundary/negative/atlas.json",
+    "proofBoard": "dev/model-qa/assetforge-suite/runs/boundary/negative/proof-board.png"
+  },
+  "details": {
+    "canonicalShapeCount": 47,
+    "rawMaskCount": 256,
+    "sourceEdgeDelta": 42.833333333333336,
+    "compatibleNeighborPairsChecked": 0,
+    "seededFieldShapeCoverage": 47
+  },
+  "runtimeAdmission": "CANDIDATE"
+}

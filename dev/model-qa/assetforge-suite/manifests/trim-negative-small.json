@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "family": "trim-nine-slice",
+  "source": "dev/model-qa/assetforge-suite/fixtures/nine-slice-source.png",
+  "insets": [
+    12,
+    12,
+    12,
+    12
+  ],
+  "targets": [
+    [
+      18,
+      18
+    ]
+  ]
+}

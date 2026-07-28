@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "family": "atlas-optimizer",
+  "paddingPx": 2,
+  "maxWidthPx": 256,
+  "assets": [
+    {
+      "id": "a",
+      "path": "dev/model-qa/assetforge-suite/fixtures/atlas-a.png"
+    },
+    {
+      "id": "b",
+      "path": "dev/model-qa/assetforge-suite/fixtures/atlas-b.png"
+    }
+  ]
+}

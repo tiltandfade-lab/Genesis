@@ -14,6 +14,39 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-13 — GEOMETRY DEFAULT FLIPPED legacy→oss (§15 step 8) + stabilization hold opened (orchestrated)
+
+Adam **delegated the flip verdict to Claude conditional on sound pre-flip evidence** ("run the pre-flip
+evidence wave, then if evidence is sound, authorize the flip, and continue fleshing out all visual
+engine changes as specified"). Branch `feat/geometry-oss-flip`, landed `--no-ff`, gates re-run by me.
+
+**Changed.**
+- **`ROOM_SHELL_POLYGON_KERNEL_FLAG` (theater-boot.js) `legacy`→`oss`** — production now renders the
+  PolygonKernel floor + aperture-delimited wall-run path (G1/G2/G3). The module-level
+  `ROOM_SHELL_POLYGON_KERNEL` const (theater-room-mesh.js) **stays `legacy`** as the bare-call/dev
+  fallback, retaining the legacy path for the §15 step-9 stabilization hold; the flag is still
+  seam-settable back via `window.Theater._setRoomShellPolygonKernel`.
+
+**Added.**
+- **`dev/capture-oss-integrated.mjs`** — filled OSS §15 promotion steps 6–7 (the only genuine pre-flip
+  gap; F1 outside-low grazing capture + F2 5000-room gap/provenance fuzz already existed and re-gated
+  green). Boots a real in-session room, mounts it under legacy then oss at the product camera, reads
+  `renderer.info` full-chain draw submissions + resource census. Output committed to
+  `dev/oss-integrated-shots/` for review.
+
+**Evidence (all re-run/read by me).** Numeric: verify-wall-runs-oss **92/0** (corner gap 0 at
+stem/cap/footing, both cap lips, 100% provenance), verify-wall-runs-oss-fuzz over **5000 randomized
+rooms** (zero join-gap, full segment provenance, acute-bevel + red-first negative control),
+verify-geometry-fixtures **28/0** (7 legacy defects fixed, 0 regressions), room-shell parity **48/0**.
+Visual: outside-low grazing — oss closes the corner with a continuous mitered cap lip; product-camera
+integrated — oss ≡ legacy at the player-visible shot. Perf: draw calls **Δ0**, triangles **Δ−286**
+(oss cheaper), geometries/programs **Δ0**, textures **+2** one-time. **Full 197-harness sweep: 4 reds,
+ALL verified pre-existing on master** (verify-{room-shell-render,diegetic-light,occlusion-fade,
+gallery-pass} — render-flake/CI-auto-skip, fail identically pre-flip). check-manifest OK.
+
+**Deferred.** §15 step 10 (remove the legacy triangulation path) waits until the stabilization hold
+passes with no rollback-worthy defect. Phase 3 (GP-2..4 visual production) now rides on the flipped
+geometry, gated on Codex research + charter tool-adoption/spend gates.
 ## 2026-07-13 (overnight) — GRAPHICS CONVERGENCE: wall-volumes wave + Phase 0/1/2 geometry (orchestrated)
 
 Codex researches, Claude orchestrates (`docs/GRAPHICS-CONVERGENCE-CHARTER.md` governs; execution spine

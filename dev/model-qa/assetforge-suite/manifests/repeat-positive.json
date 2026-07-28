@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "family": "modular-repeat",
+  "componentSheet": "dev/model-qa/assetforge-suite/fixtures/components.png",
+  "sourceSha256": "96e1f8d45ddd3a1750308f774d3a6281000c21b0e806274f022d7293ed445d96",
+  "tileSizePx": 96,
+  "minimumComponents": 3,
+  "seed": 203
+}

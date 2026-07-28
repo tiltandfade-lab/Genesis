@@ -474,6 +474,9 @@ async function runRenderCheck(){
       await sleep(150);
     }
 
+    if(process.argv.includes("--prove-21b-teeth")){
+      await page.evaluate(() => { window.__BW22_PROVE_21B_TEETH = true; });
+    }
     const result = await page.evaluate(async () => {
       const el = document.createElement("div");
       el.style.width = "800px"; el.style.height = "600px";
@@ -516,8 +519,49 @@ async function runRenderCheck(){
       // rotation.x; today that must read 0 (world +Y, floor-flat) while the sprite's inner wrap alone
       // carries the camera-pitch tilt.
       T._updateSpriteBillboardYawForTest();
-      r.figRotationXBeforeTip = fig.rotation.x;         // expect 0 — the base's own world-up stays +Y
+      r.figRotationXBeforeTip = fig.rotation.x;         // fall-death's channel: 0 until a verb plays
       r.wrapRotationXBeforeTip = fig.userData.standeeWrap.rotation.x; // expect the nonzero camera tilt
+      // TERRAIN-EXPRESSION §1 P2 (2026-07-28) — 21b USED TO ASSERT THE WRONG THING. Its title claimed
+      // "the base's world-up stays +Y" but its assertion read `fig.rotation.x`, the OUTER group. The
+      // B1 slope treatment puts ground conformance on the BASE CHILD's own .x/.z, so the old
+      // assertion would have stayed green while the base tilted — a gate silently no longer covering
+      // its subject, which is worse than one that fails. So MEASURE THE BASE'S OWN WORLD UP, through
+      // its own world matrix, and record every rotation channel beside it so the three-owner split is
+      // stated rather than implied.
+      const baseChild = fig.children.filter((c) => c.userData && c.userData.standeeBase)[0] || null;
+      r.baseChildFound = !!baseChild;
+      // THE TEETH PROOF, run in the same process rather than asserted in a comment (--prove-21b-teeth):
+      // tilt the base child by 0.3 rad and re-read BOTH assertions. The OLD one (fig.rotation.x === 0)
+      // stays green on a visibly tilted plinth; the NEW one fires. That single pair of numbers is the
+      // whole argument for the rewrite, and it means this gate has demonstrably not stopped covering
+      // its subject.
+      if(window.__BW22_PROVE_21B_TEETH && baseChild){
+        baseChild.rotation.x = 0.3;
+        baseChild.updateMatrixWorld(true);
+        const te = baseChild.matrixWorld.elements;
+        const tl = Math.hypot(te[4], te[5], te[6]) || 1;
+        r.teeth = {
+          tiltedBaseWorldUpTiltDeg: Math.acos(Math.max(-1, Math.min(1, te[5] / tl))) * 180 / Math.PI,
+          oldAssertionStillGreen: fig.rotation.x === 0
+        };
+        baseChild.rotation.x = 0;
+        baseChild.updateMatrixWorld(true);
+      }
+      if(baseChild){
+        baseChild.updateMatrixWorld(true);
+        const e = baseChild.matrixWorld.elements;   // column-major; column 1 is the local +Y axis
+        const ux = e[4], uy = e[5], uz = e[6];
+        const len = Math.hypot(ux, uy, uz) || 1;
+        r.baseWorldUp = [ux / len, uy / len, uz / len];
+        r.baseWorldUpTiltDeg = Math.acos(Math.max(-1, Math.min(1, uy / len))) * 180 / Math.PI;
+        r.baseLocalRotation = { x: baseChild.rotation.x, y: baseChild.rotation.y, z: baseChild.rotation.z };
+      }
+      r.tiltChannelOwners = {
+        outerGroupRotationX: "standee-verbs.js fall-death — tips the whole miniature, base included",
+        standeeWrapRotationX: "updateSpriteBillboardYaw camera-pitch tilt — the CARD only",
+        baseChildRotationXZ: "TERRAIN-EXPRESSION B1 ground conformance — the PLINTH only"
+      };
+      r.planeTiltRecorded = fig.userData.clayStandeePlaneTilt || null;
       r.figRotationYBeforeTip = fig.rotation.y;          // facing (+ this unit's own kilter offset)
 
       const mountedRing = T.setActingUnit("u1");
@@ -577,10 +621,24 @@ async function runRenderCheck(){
       ok(Math.abs(result.baseRadius - result.baseWidth * 0.5) < 1e-6,
         `combat standee selection-ring radius (${result.baseRadius}) === the natural support width (${result.baseWidth}) / 2`);
 
-      group("21b — GREEN (live values, BW2-2b item 1): under a REAL render pass, the base's world-up stays +Y (outer group rotation.x === 0) while the sprite's inner wrap alone carries the nonzero camera-pitch tilt");
-      ok(result.figRotationXBeforeTip === 0, `BEFORE any verb plays, the OUTER group's rotation.x (what the base/ring inherit as plain siblings) is exactly 0 — floor-flat — found ${result.figRotationXBeforeTip}`);
+      group("21b — GREEN (live values, BW2-2b item 1 + TERRAIN-EXPRESSION §1 P2): THREE ROTATION CHANNELS, THREE OWNERS, stated explicitly — and the base's world-up is MEASURED off its own world matrix rather than inferred from the outer group");
+      ok(result.baseChildFound, "the base child exists to be measured");
+      ok(Array.isArray(result.baseWorldUp) && result.baseWorldUpTiltDeg < 0.001,
+        `CHANNEL 3 (base child .x/.z — TERRAIN-EXPRESSION B1 ground conformance): on this FLAT board the plinth's own world-up is +Y to within ${(result.baseWorldUpTiltDeg || 0).toFixed(6)} deg, measured through baseChild.matrixWorld — up=[${(result.baseWorldUp || []).map((v) => v.toFixed(6)).join(", ")}]. This is the assertion the old 21b only appeared to make: it read fig.rotation.x, so a tilted BASE would have left it green`);
+      ok(result.planeTiltRecorded === null,
+        `and no stand-plane tilt is recorded on a flat interior board (clayStandeePlaneTilt === null) — B1 conforms to graded ground and does nothing at all on level ground`);
+      ok(result.figRotationXBeforeTip === 0, `CHANNEL 1 (outer group .x — standee-verbs.js fall-death): exactly 0 before any verb plays — found ${result.figRotationXBeforeTip}`);
       ok(typeof result.wrapRotationXBeforeTip === "number" && Math.abs(result.wrapRotationXBeforeTip) > 0.01,
-        `the sprite's OWN inner wrap carries the nonzero camera-pitch tilt (${result.wrapRotationXBeforeTip}) — the split is real, not just "nothing rotates"`);
+        `CHANNEL 2 (standeeWrap .x — the camera-pitch tilt, the CARD only): carries the nonzero tilt (${result.wrapRotationXBeforeTip}) — the split is real, not just "nothing rotates"`);
+      if(result.teeth){
+        group("21b-TEETH — the rewrite proved: tilt the base child and watch the OLD assertion stay green");
+        ok(result.teeth.tiltedBaseWorldUpTiltDeg > 15,
+          `with the base child tilted 0.3 rad, the NEW assertion measures ${result.teeth.tiltedBaseWorldUpTiltDeg.toFixed(3)} deg of world-up tilt and FIRES`);
+        ok(result.teeth.oldAssertionStillGreen === true,
+          `...while the OLD assertion (fig.rotation.x === 0) is STILL TRUE on that same tilted plinth. A gate that cannot fail is not a gate`);
+      }
+      ok(JSON.stringify(Object.keys(result.tiltChannelOwners || {})) === JSON.stringify(["outerGroupRotationX", "standeeWrapRotationX", "baseChildRotationXZ"]),
+        `all three channels are NAMED with their owner in the receipt, so a future change that puts tilt on the wrong one is a contradiction rather than a silent overlap: ${JSON.stringify(result.tiltChannelOwners)}`);
 
       group("22 — GREEN: the acting ring relocates to wrap the base rim (BW2-2 item 2)");
       ok(result.ringMounted === 1, "setActingUnit mounted exactly one ring");

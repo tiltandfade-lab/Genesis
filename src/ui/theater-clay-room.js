@@ -3867,6 +3867,218 @@ function clayRoomTerrainSeedFromLocation(){
   return null;
 }
 
+/* WHICH RUNG OF THE EXPRESSION LADDER this mount carries (docs/TERRAIN-EXPRESSION-BUILD.md §5).
+   The rung is a RENDER-TIME device mask over an otherwise identical field: same seed, same camera,
+   same layout throughout, which is precisely what makes the six captures a bin-isolation ladder and
+   not six different boards. An unknown rung throws inside terrainExpressionFlags rather than
+   falling back to naked — a capture labelled `prop` that quietly rendered naked is the same class
+   of lie the light-recipe round already cost us. */
+function clayRoomTerrainRungFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terrainrung") : null;
+    if(raw) return String(raw);
+  } catch(e){}
+  return null;
+}
+
+/* WHICH PROOF PROBE this mount carries. `standee-contract` adds the §3 B3 matrix — three envelopes
+   on each of the four surface classes a standee must survive — ON TOP of the scene's own witnesses,
+   at FREE yaw. It is a URL flag rather than an eighth scene precisely so the seven CL-F07a captures
+   and every gate that counts them stay exactly as they were. */
+function clayRoomTerrainProbeFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terrainprobe") : null;
+    if(raw) return String(raw);
+  } catch(e){}
+  return null;
+}
+
+function clayRoomTerrainFlags(){
+  const rung = S.clayRoomTerrainRung || clayRoomTerrainRungFromLocation() || "naked";
+  if(typeof terrainExpressionFlags !== "function"){
+    return { rungId: "naked", rungIndex: 0, rungLabel: "A0 · NAKED (expression chassis absent)",
+      on: [], off: [], anyDevice: false };
+  }
+  return terrainExpressionFlags(rung);
+}
+
+function clayRoomSetTerrainRung(rungId){
+  S.clayRoomTerrainRung = rungId == null ? null : String(rungId);
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID) return false;
+  if(S.clayRoomTerrainBenchGroup && S.clayRoomTerrainBenchGroup.parent){
+    S.clayRoomTerrainBenchGroup.parent.remove(S.clayRoomTerrainBenchGroup);
+    clearGroup(S.clayRoomTerrainBenchGroup);
+  }
+  S.clayRoomTerrainWitnessRetry = false;
+  clayRoomMountTerrainBench();
+  markDirty(); scheduleRender();
+  return true;
+}
+
+/* ─── THE EXPRESSION DEVICES, projected (docs/TERRAIN-EXPRESSION-BUILD.md §2-§4) ──────────────
+   Every one of these reads src/engine/terrain-expression.js and draws what it says. None of them
+   writes a height, a standable flag, a walk edge or a cover value — that is what the six-rung
+   walk-fingerprint gate re-proves rather than what this comment claims. */
+const CLAY_TERRAIN_CAP_H = 0.10;        /* wu — the cap slab whose 1x1 top plane is never cut */
+const CLAY_TERRAIN_CHAMFER = 0.125;     /* wu — 1/8 cell, and it lives BELOW the top plane (A3) */
+const CLAY_TERRAIN_ROLLOVER = 0.16;     /* wu — how far the top material hangs down a face (A2) */
+const CLAY_TERRAIN_NOSING = 0.06;       /* wu — the tread's overhang past its riser (B2) */
+
+function clayTerrainScaleHex(hex, factor){
+  const r = Math.max(0, Math.min(255, Math.round(((hex >> 16) & 255) * factor)));
+  const g = Math.max(0, Math.min(255, Math.round(((hex >> 8) & 255) * factor)));
+  const b = Math.max(0, Math.min(255, Math.round((hex & 255) * factor)));
+  return (r << 16) | (g << 8) | b;
+}
+
+/* Which of a cell's four sides is EXPOSED — the neighbour is lower, void, or off the field. An
+   exposed side is where every device in this family is allowed to spend; an interior side is a
+   seam between two equal grounds and must stay welded shut or the field reads as loose tiles. */
+function clayTerrainExposedSides(field, c){
+  const ex = field.extent.x, ey = field.extent.y;
+  function drop(dx, dy){
+    const nx = c.x + dx, ny = c.y + dy;
+    if(nx < 0 || ny < 0 || nx >= ex || ny >= ey) return 99;
+    const n = field.cells[ny * ex + nx];
+    if(!n || n.kind === "void") return 99;
+    return c.h - n.h;
+  }
+  return { w: drop(-1, 0), e: drop(1, 0), n: drop(0, -1), s: drop(0, 1) };
+}
+
+/* The cell's rendered top, as four corner heights in WORLD Y. Centre stays exactly at the chassis's
+   own (h + sub) — that is the guarantee that keeps the standee's foot height, the walk graph,
+   occupancy, cover and reach untouched while the surface bends. */
+function clayTerrainCapCorners(field, index, flags, baseY){
+  const q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+  const uv = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]];
+  return uv.map(function(p){
+    return baseY + terrainCellTopH(field, index, p[0], p[1], flags) * q;
+  });
+}
+
+/* A2 — MATERIAL ROLL-OVER AT THE ARRIS. The top's own material wraps the top edge and hangs down
+   the face with a noisy, per-cell-varied lower boundary, so the hard two-tone cube line never
+   exists. Three segments per exposed side, each with its own seeded depth: "the two tones
+   interpenetrate", which is the whole device. */
+function clayTerrainRolloverMesh(field, c, sides, topY, colour){
+  const segs = 3;
+  const pos = [];
+  const rnd = terrainRng(terrainHash32(field.seed + ":roll:" + c.x + "," + c.y));
+  const edges = [
+    { key: "w", ax: -0.5, az0: -0.5, az1: 0.5, axis: "z" },
+    { key: "e", ax: 0.5, az0: -0.5, az1: 0.5, axis: "z" },
+    { key: "n", ax: -0.5, az0: 0.5, az1: -0.5, axis: "x" },
+    { key: "s", ax: -0.5, az0: 0.5, az1: -0.5, axis: "x" }
+  ];
+  function quad(x0, z0, x1, z1, d0, d1){
+    const yTop = topY;
+    pos.push(x0, yTop, z0, x1, yTop, z1, x1, yTop - d1, z1);
+    pos.push(x0, yTop, z0, x1, yTop - d1, z1, x0, yTop - d0, z0);
+  }
+  ["w", "e", "n", "s"].forEach(function(key){
+    if(!(sides[key] > 0)) return;
+    for(let i = 0; i < segs; i++){
+      const t0 = -0.5 + i / segs, t1 = -0.5 + (i + 1) / segs;
+      const d0 = CLAY_TERRAIN_ROLLOVER * (0.45 + rnd() * 0.75);
+      const d1 = CLAY_TERRAIN_ROLLOVER * (0.45 + rnd() * 0.75);
+      if(key === "w") quad(-0.5, t0, -0.5, t1, d0, d1);
+      else if(key === "e") quad(0.5, t1, 0.5, t0, d0, d1);
+      else if(key === "n") quad(t1, -0.5, t0, -0.5, d0, d1);
+      else quad(t0, 0.5, t1, 0.5, d0, d1);
+    }
+  });
+  if(!pos.length) return null;
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, clayStructureMaterial(colour));
+  mesh.material.side = THREE.DoubleSide;
+  mesh.userData.terrainExpression = "A2-rollover";
+  return mesh;
+}
+
+/* A4 — THE TWO-FREQUENCY JOINT. A fine unit far smaller than the cell PLUS one coarse course at
+   the cell pitch, so the ruled tactical overlay lands on a mortar line instead of on nothing. At
+   clay fidelity (no textures on this bench yet) the joint is drawn as line geometry rather than as
+   a UV scale; the RULE is the deliverable and the expression is provisional — recorded as such in
+   docs/DESIGN.md rather than presented as the final material. */
+function clayTerrainJointMesh(field, index, flags, baseY, cx, cz, coarseColour, fineColour){
+  const q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+  const lift = 0.006;
+  function y(u, v){ return baseY + terrainCellTopH(field, index, u, v, flags) * q + lift; }
+  const coarse = [];
+  const ring = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5]];
+  for(let i = 0; i + 1 < ring.length; i++){
+    coarse.push(cx + ring[i][0], y(ring[i][0], ring[i][1]), cz + ring[i][1]);
+    coarse.push(cx + ring[i + 1][0], y(ring[i + 1][0], ring[i + 1][1]), cz + ring[i + 1][1]);
+  }
+  const fine = [];
+  const n = 4;                                     /* the fine unit: a quarter cell, never in ratio 1 */
+  for(let k = 1; k < n; k++){
+    const t = -0.5 + k / n;
+    fine.push(cx - 0.5, y(-0.5, t), cz + t, cx + 0.5, y(0.5, t), cz + t);
+    fine.push(cx + t, y(t, -0.5), cz - 0.5, cx + t, y(t, 0.5), cz + 0.5);
+  }
+  const group = new THREE.Group();
+  /* A JOINT IS ALWAYS DARKER THAN ITS SURROUND, in every light case. A line cannot be lit in three.js
+     — LineBasicMaterial ignores every light in the scene — so an ordinary line drawn over the DARK
+     scene blazes as a bright cross-hatch and reads as HUD wireframe, which is the exact opposite of
+     this device's purpose. Caught by looking at the banked dark frame, not by any number.
+     MULTIPLY is the fix and it is the same trick the contact pool already uses: white is the
+     identity, so a grey line darkens whatever is under it by a fixed ratio whether the ground is
+     noon-lit or nearly black, and it can never add light. */
+  function seg(points, grey){
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
+    const line = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({
+      color: grey, blending: THREE.MultiplyBlending, transparent: false,
+      depthWrite: false, toneMapped: false }));
+    line.userData.terrainExpression = "A4-joint";
+    line.userData.contactBlendMode = "multiply";
+    group.add(line);
+  }
+  seg(fine, 0xc8c8c8);       /* the fine unit: a light touch, well under the cell pitch */
+  seg(coarse, 0x8c8c8c);     /* one coarse course AT the cell pitch — the one the overlay lands on */
+  group.userData.terrainExpression = "A4-joint";
+  return group;
+}
+
+/* A7 — SEAM AND FACE DRESSING. The XCOM move: the volume behind a thin face is free, so fill it
+   where neither cover nor pathing is generating. Here that is horizontal banding on the exposed
+   face — bedded strata / coursed masonry — which is FFT device #7 and the reason `655bd60e…`
+   survives being the most literally cube-stacked map in the corpus. */
+function clayTerrainFaceBands(field, c, sides, topY, faceBottomY, colour, flags){
+  const group = new THREE.Group();
+  const height = topY - faceBottomY;
+  if(height < 0.18) return null;
+  const bandCount = Math.max(1, Math.min(5, Math.floor(height / 0.22)));
+  const rnd = terrainRng(terrainHash32(field.seed + ":band:" + c.x + "," + c.y));
+  ["w", "e", "n", "s"].forEach(function(key){
+    if(!(sides[key] > 0)) return;
+    for(let i = 0; i < bandCount; i++){
+      const frac = (i + 0.5) / bandCount;
+      const jitter = flags.jitter ? (rnd() - 0.5) * 0.06 : 0;
+      const by = topY - height * frac + jitter;
+      const thick = 0.035 + rnd() * 0.03;
+      const proud = 0.022;
+      const tone = clayTerrainScaleHex(colour, flags.jitter ? (0.80 + rnd() * 0.30) : 0.88);
+      const geo = (key === "w" || key === "e")
+        ? new THREE.BoxGeometry(proud * 2, thick, 0.98)
+        : new THREE.BoxGeometry(0.98, thick, proud * 2);
+      const mesh = new THREE.Mesh(geo, clayStructureMaterial(tone));
+      mesh.position.set(key === "w" ? -0.5 : (key === "e" ? 0.5 : 0), by,
+        key === "n" ? -0.5 : (key === "s" ? 0.5 : 0));
+      mesh.castShadow = true; mesh.receiveShadow = true;
+      mesh.userData.terrainExpression = "A7-face-band";
+      group.add(mesh);
+    }
+  });
+  return group.children.length ? group : null;
+}
+
 /* One field -> one group of cell columns. Ground is SOLID, so every standable cell is a column
    from the field's own floor datum up to its top surface — not a floating tile. A void cell emits
    nothing, which is what makes a chasm a hole rather than a dark texture. */
@@ -3895,6 +4107,10 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     return low - 1;
   }
   const floorH = field.metrics.minH - 1;
+  /* THE RUNG. `naked` takes the byte-identical legacy path below — one BoxGeometry per cell,
+     nothing added — so the A0 control frame is genuinely the control and not a re-implementation
+     that happens to look similar. Every device only ever runs on the expressed branch. */
+  const flags = (opts && opts.flags) || { anyDevice: false };
   field.cells.forEach(function(c){
     if(c.kind === "void") return;
     const topH = c.h + c.sub;
@@ -3902,21 +4118,143 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     const columnH = Math.max(0.05, (topH - cellBaseH) * h);
     const kindColor = c.kind === "guarded-slope" ? CLAY_TERRAIN_COLORS.guarded
       : (c.kind === "boulder" ? CLAY_TERRAIN_COLORS.boulder : CLAY_TERRAIN_COLORS.ground);
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, columnH, 1),
-      clayStructureMaterial(c.inPlayfield ? kindColor : kindColor));
-    mesh.position.set(
-      originCell.x + c.x - origin.cx + 0.5,
-      baseY + cellBaseH * h + columnH / 2,
-      originCell.z + c.y - origin.cz + 0.5
-    );
-    clayStructureTag(mesh, "cl-f07:" + field.id + ":cell", c.kind === "guarded-slope" ? "riser" : "floor");
-    mesh.castShadow = true;
-    mesh.userData.terrainCell = { x: c.x, y: c.y, h: c.h, kind: c.kind,
+    const cx = originCell.x + c.x - origin.cx + 0.5;
+    const cz = originCell.z + c.y - origin.cz + 0.5;
+    if(!flags.anyDevice){
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, columnH, 1),
+        clayStructureMaterial(c.inPlayfield ? kindColor : kindColor));
+      mesh.position.set(cx, baseY + cellBaseH * h + columnH / 2, cz);
+      clayStructureTag(mesh, "cl-f07:" + field.id + ":cell", c.kind === "guarded-slope" ? "riser" : "floor");
+      mesh.castShadow = true;
+      mesh.userData.terrainCell = { x: c.x, y: c.y, h: c.h, kind: c.kind,
+        standable: c.standable, inPlayfield: c.inPlayfield, owner: c.owner,
+        surface: c.surface, localSlopeDeg: c.localSlopeDeg };
+      group.add(mesh);
+      cellMeshes.push(mesh);
+      return;
+    }
+
+    /* ── the expressed cell ───────────────────────────────────────────────────────────────── */
+    const cellGroup = new THREE.Group();
+    cellGroup.position.set(cx, 0, cz);
+    const sides = clayTerrainExposedSides(field, c);
+    const corners = clayTerrainCapCorners(field, c.index, flags, baseY);   /* nw ne se sw, world Y */
+    const centreTopY = baseY + topH * h;
+    const minCornerY = Math.min.apply(null, corners);
+    const capBottomY = minCornerY - CLAY_TERRAIN_CAP_H;
+    const wash = (typeof terrainCellWashFactor === "function")
+      ? terrainCellWashFactor(field, c.index, flags) : 1;
+    const cellColour = clayTerrainScaleHex(kindColor, wash);
+
+    /* A3 — the shaft is INSET on exposed sides only; the cap keeps the full 1x1 top plane, so the
+       chamfer is a cap OVERHANG that lives strictly below the top plane and intrudes 0.000 wu on
+       the standee's protected disc at any size (STANDEE-CONTRACT §5's compatibility rule). An
+       interior side is never inset, or the ground would read as loose tiles with slots between. */
+    const inset = flags.chamfer ? CLAY_TERRAIN_CHAMFER : 0;
+    const iw = sides.w > 0 ? inset : 0, ie = sides.e > 0 ? inset : 0;
+    const inn = sides.n > 0 ? inset : 0, is = sides.s > 0 ? inset : 0;
+    const shaftH = Math.max(0.02, capBottomY - (baseY + cellBaseH * h));
+    const shaft = new THREE.Mesh(
+      new THREE.BoxGeometry(Math.max(0.05, 1 - iw - ie), shaftH, Math.max(0.05, 1 - inn - is)),
+      clayStructureMaterial(clayTerrainScaleHex(cellColour, 0.94)));
+    shaft.position.set((iw - ie) / 2, capBottomY - shaftH / 2, (inn - is) / 2);
+    clayStructureTag(shaft, "cl-f07:" + field.id + ":cell",
+      c.kind === "guarded-slope" ? "riser" : "floor");
+    shaft.castShadow = true;
+    shaft.userData.terrainExpression = "A3-shaft";
+    cellGroup.add(shaft);
+
+    /* B2 — THE NOSING. FFT's cell-scale stair is tread = 1 cell, riser = 1 Genesis quantum, and the
+       device that stops the run reading as stacked cubes is the tread overhanging its riser. A side
+       whose neighbour is exactly one quantum down is a tread edge; give it a real nosing. */
+    const nose = flags.nosing ? CLAY_TERRAIN_NOSING : 0;
+    const nw = nose && sides.w === 1 ? nose : 0, ne2 = nose && sides.e === 1 ? nose : 0;
+    const nn = nose && sides.n === 1 ? nose : 0, ns = nose && sides.s === 1 ? nose : 0;
+
+    /* the cap: a folded/graded top surface split along B4's own per-cell diagonal, plus a skirt to
+       capBottomY at the full (nosed) footprint, so no crack between neighbours can open. */
+    const x0 = -0.5 - nw, x1 = 0.5 + ne2, z0 = -0.5 - nn, z1 = 0.5 + ns;
+    const cy = corners;                                            /* [nw, ne, se, sw] */
+    const diag = flags.fold && typeof terrainCellFoldDiagonal === "function"
+      ? terrainCellFoldDiagonal(field, c.index) : 0;
+    const capPos = [];
+    function tri(a, b, cc){ capPos.push(a[0], a[1], a[2], b[0], b[1], b[2], cc[0], cc[1], cc[2]); }
+    const P = [[x0, cy[0], z0], [x1, cy[1], z0], [x1, cy[2], z1], [x0, cy[3], z1]];
+    /* WINDING. Three.js culls back faces, and a top face wound clockwise-from-above has its normal
+       pointing DOWN — the cell top then simply is not drawn and the backdrop shows through it.
+       Round-5's own version of the round-4 lesson: the first cut of this cap was wound the other way
+       and the frames came back with black holes in the sheet, which the pixel-coverage gate caught
+       as 6 declared cells landing on backdrop in the dark scene. The order below is checked by the
+       right-hand rule: for the diag=0 split, (P3-P0) x (P1-P0) has +Y as its y component. */
+    if(diag){ tri(P[0], P[2], P[1]); tri(P[0], P[3], P[2]); }
+    else { tri(P[0], P[3], P[1]); tri(P[1], P[3], P[2]); }
+    /* skirt */
+    for(let e = 0; e < 4; e++){
+      const a = P[e], b = P[(e + 1) % 4];
+      tri(a, b, [b[0], capBottomY, b[2]]);
+      tri(a, [b[0], capBottomY, b[2]], [a[0], capBottomY, a[2]]);
+    }
+    const capGeo = new THREE.BufferGeometry();
+    capGeo.setAttribute("position", new THREE.Float32BufferAttribute(capPos, 3));
+    capGeo.computeVertexNormals();
+    const cap = new THREE.Mesh(capGeo, clayStructureMaterial(cellColour));
+    clayStructureTag(cap, "cl-f07:" + field.id + ":cell",
+      c.kind === "guarded-slope" ? "riser" : "floor");
+    cap.castShadow = true;
+    cap.userData.terrainCell = { x: c.x, y: c.y, h: c.h, kind: c.kind,
       standable: c.standable, inPlayfield: c.inPlayfield, owner: c.owner,
       surface: c.surface, localSlopeDeg: c.localSlopeDeg };
-    group.add(mesh);
-    cellMeshes.push(mesh);
+    cellGroup.add(cap);
+    cellMeshes.push(cap);
+
+    if(flags.rollover){
+      const roll = clayTerrainRolloverMesh(field, c, sides, capBottomY + 0.004,
+        clayTerrainScaleHex(cellColour, 0.86));
+      if(roll) cellGroup.add(roll);
+    }
+    if(flags.joint){
+      cellGroup.add(clayTerrainJointMesh(field, c.index, flags, baseY, 0, 0,
+        clayTerrainScaleHex(cellColour, 0.55), clayTerrainScaleHex(cellColour, 0.78)));
+    }
+    if(flags.facedress){
+      const faceBottom = baseY + cellBaseH * h;
+      const bands = clayTerrainFaceBands(field, c, sides, capBottomY - 0.05, faceBottom,
+        cellColour, flags);
+      if(bands) cellGroup.add(bands);
+    }
+    group.add(cellGroup);
   });
+
+  /* A5 — EDGE-BIASED OCCLUDERS. Break the grid with something that is not on the grid. Every site
+     the placement law emits sits ON a cell boundary, so a piece is by construction half on one cell
+     and half on the other and its centre is 0.5 wu from either stand point — outside the 0.466
+     protected radius of the worst Medium, which is the whole ring the standee contract leaves. */
+  if(flags.occluders && typeof terrainOccluderSites === "function"){
+    const sites = terrainOccluderSites(field, flags);
+    sites.forEach(function(site){
+      const j = flags.jitter && typeof terrainExpressionJitter === "function"
+        ? terrainExpressionJitter(field.seed, site.key)
+        : { sinkH: 0, tiltXDeg: 0, tiltZDeg: 0, yawDeg: 0, tone: 1, scale: 1 };
+      const size = site.sizeCells * j.scale;
+      const mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(size * 0.5, 0),
+        clayStructureMaterial(clayTerrainScaleHex(CLAY_TERRAIN_COLORS.boulder, j.tone)));
+      mesh.position.set(
+        originCell.x + site.u - origin.cx,
+        baseY + site.seatH * h + size * 0.5 - j.sinkH * h - 0.02,
+        originCell.z + site.v - origin.cz
+      );
+      mesh.rotation.order = "YXZ";
+      mesh.rotation.y = j.yawDeg * Math.PI / 180;
+      mesh.rotation.x = j.tiltXDeg * Math.PI / 180;
+      mesh.rotation.z = j.tiltZDeg * Math.PI / 180;
+      mesh.castShadow = true; mesh.receiveShadow = true;
+      mesh.userData.terrainExpression = "A5-occluder";
+      mesh.userData.terrainOccluder = { kind: site.kind, straddles: site.straddles,
+        deltaH: site.deltaH, key: site.key };
+      group.add(mesh);
+    });
+    group.userData.terrainOccluderCount = sites.length;
+  }
 
   /* Volume boundaries (thicket, trunk field, fog) are OCCUPANCY, not ground: they stand ON the
      cell they govern and declare whether they stop movement, sight, or both. */
@@ -4083,7 +4421,7 @@ function clayTerrainSupportedWitnessCell(field, piece){
   return best == null ? authored : best;
 }
 
-function clayTerrainPlaceWitness(group, slug, position, label, failures, contact, contactSupport){
+function clayTerrainPlaceWitness(group, slug, position, label, failures, contact, contactSupport, plane){
   const note = function(why){ if(failures) failures.push({ slug: slug, label: label, why: why }); return null; };
   const entry = (typeof spriteEntryFor === "function") ? spriteEntryFor(slug) : null;
   if(!entry) return note("no sprite registry entry for " + slug);
@@ -4101,8 +4439,53 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
   figure.userData.interiorBaseWidth = support.width;
   figure.userData.interiorBaseDepth = support.depth;
   figure.userData.standeeCollisionExcluded = true;
+  /* F3 is measured against the support polygon this envelope actually owns — one cell for a
+     Medium, two for a Large, three for a Huge. Measuring a Huge against one cell would report a
+     0.67 overhang that is not a defect but a category error. */
+  figure.userData.clayStandeeSpanCells = support.tacticalSpanCells;
   figure.userData.interiorHeight = built.height;
-  figure.userData.clayTerrainWitness = { slug: slug, label: label || null };
+  figure.userData.clayTerrainWitness = { slug: slug, label: label || null,
+    surfaceClass: (plane && plane.surfaceClass) || null,
+    envelope: (plane && plane.envelope) || null };
+  /* B1 — THE TILTED PLINTH (docs/TERRAIN-EXPRESSION-BUILD.md §3, STANDEE-CONTRACT §3(d)). Plant a
+     flat plinth on a graded cell and every yaw except "long axis exactly across the gradient"
+     buries the uphill half and leaves the downhill half airborne — 0.09-0.43 wu of error, 3-15 px
+     of visible defect at the production read. Tilting the plinth to the cell's own declared stand
+     plane is the ONLY option with zero error at every yaw, by construction.
+
+     THE THREE ROTATION BUDGETS STAY SEPARATE, and this writes only the third:
+       · the OUTER group's rotation.x is standee-verbs.js's fall-death tip — untouched here;
+       · the sprite's own camera-pitch tilt lives on standeeWrap — untouched here;
+       · the BASE CHILD's rotation.x/.z were unused by anything. They are the plinth's own
+         conformance to the ground, and they are what this writes.
+     The base child's rotation.y is written every frame by updateSpriteBillboardYaw, so the tilt is
+     stored on userData and re-applied there rather than fought over. */
+  const dYdx = plane ? plane.dYdx || 0 : 0;
+  const dYdz = plane ? plane.dYdz || 0 : 0;
+  const tilted = !!(plane && plane.tilt && (Math.abs(dYdx) > 1e-9 || Math.abs(dYdz) > 1e-9));
+  if(tilted){
+    /* Only the FACT and the world gradient are recorded here. The angles themselves are written by
+       updateSpriteBillboardYaw, every frame, because the tilt is a WORLD fact on a child of a group
+       that turns with the camera — baking an angle at placement would point the plinth uphill at
+       exactly one camera step and downhill at the opposite one. One writer, no second truth. */
+    figure.userData.clayStandeePlaneTilt = { dYdx: dYdx, dYdz: dYdz,
+      tiltDeg: Number((Math.atan(Math.sqrt(dYdx * dYdx + dYdz * dYdz)) * 180 / Math.PI).toFixed(4)) };
+  }
+  /* the pool is a SECOND, larger footprint and it breaks before the plinth does: a flat quad 1.22 wu
+     wide over sloping ground penetrates/floats by +-0.303 wu. It tilts with the plinth. */
+  figure.userData.claySupportSurfaceY = position.y;
+  figure.userData.clayStandeePlane = { y: position.y, dYdx: dYdx, dYdz: dYdz, tilted: tilted,
+    slopeDeg: plane ? plane.slopeDeg || 0 : 0, normal: plane ? plane.normal || null : null };
+  figure.userData.clayStandeeBaseBox = (function(){
+    const geo = base.geometry;
+    if(geo && typeof geo.computeBoundingBox === "function"){
+      if(!geo.boundingBox) geo.computeBoundingBox();
+      const bb = geo.boundingBox;
+      if(bb) return { w: bb.max.x - bb.min.x, d: bb.max.z - bb.min.z,
+        yMin: bb.min.y, yMax: bb.max.y };
+    }
+    return { w: support.width, d: support.depth, yMin: -INTERIOR_BASE_HEIGHT, yMax: 0 };
+  })();
   /* Record the ground this witness was placed ON and the gap it ended at, so "0 refusals" can be
      checked against "0 levitations" rather than assumed. */
   if(contact){
@@ -4116,6 +4499,115 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
   group.add(figure);
   return { slug: slug, label: label || null, height: built.height,
     at: { x: position.x, y: position.y, z: position.z } };
+}
+
+/* ─── THE WITNESS FACING + CONTACT INSTRUMENT (read LIVE, after the facing pass) ───────────────
+   TWO defects this exists to make countable, both named in the round-5 research:
+
+   P1 — the terrain witnesses never billboard. updateSpriteBillboardYaw's interior sweep walked
+   exactly two levels (interiorGroup -> sub -> figure) while a terrain witness lives three down
+   (interiorGroup -> bench -> field -> figure), so every terrain proof ever banked tested only the
+   easy axis-aligned yaw — the exact case that hides the stair-overhang problem. The check here is
+   PHYSICAL, not constant-matched: does the card's own normal point at the camera?
+
+   P2 — WITNESS_MAX_GAP measures the ORIGIN gap, which interiorStandeeContactY pins at exactly 0.096
+   by construction. It cannot move, so it reads green on a plinth whose uphill corner is buried
+   0.217 wu and whose downhill corner is 0.217 wu airborne. This reports the NEAREST-CONTACT GAP
+   UNDER THE PLINTH FOOTPRINT — four corners of the plinth's RENDERED bbox against the support plane
+   sampled at each corner — and prints the legacy number beside it so the receipt carries the
+   argument for the replacement rather than a claim about it. */
+function clayTerrainWitnessFacingReport(){
+  const out = { measured: false, camera: null, witnesses: [] };
+  if(!S.clayRoomTerrainBenchGroup || !S.camera) return out;
+  S.camera.updateMatrixWorld(true);
+  const cam = new THREE.Vector3(); S.camera.getWorldPosition(cam);
+  out.camera = [Number(cam.x.toFixed(3)), Number(cam.y.toFixed(3)), Number(cam.z.toFixed(3))];
+  out.measured = true;
+  S.clayRoomTerrainBenchGroup.traverse(function(node){
+    const ud = node.userData || {};
+    if(!ud.clayTerrainWitness) return;
+    const wp = new THREE.Vector3(); node.getWorldPosition(wp);
+    /* the card is authored facing +Z; rotation.y = facing turns that face back at the camera */
+    const yaw = node.rotation ? node.rotation.y || 0 : 0;
+    const normal = { x: Math.sin(yaw), z: Math.cos(yaw) };
+    let dx = cam.x - wp.x, dz = cam.z - wp.z;
+    const len = Math.sqrt(dx * dx + dz * dz) || 1;
+    dx /= len; dz /= len;
+    const dot = Math.max(-1, Math.min(1, normal.x * dx + normal.z * dz));
+    /* CONVENTION-FREE. updateSpriteBillboardYaw sets rotation.y = yaw + PI, so the card's local +Z
+       ends up pointing 180 degrees from the camera and its OTHER face is the visible one — measured,
+       not assumed. What matters for P1 is not which face is front but that the card is
+       PERPENDICULAR to the view direction, which is true for exactly one yaw regardless of which
+       side is textured. A witness that never faced reads 45 degrees off; a faced one reads ~0. */
+    const perpErr = Math.min(Math.acos(dot), Math.PI - Math.acos(dot)) * 180 / Math.PI;
+    const wrap = ud.standeeWrap;
+    const baseMesh = ud.standeeBaseMesh;
+    const plane = ud.clayStandeePlane || { y: wp.y, dYdx: 0, dYdz: 0, tilted: false };
+    const box = ud.clayStandeeBaseBox || { w: 0.744, d: 0.3693, yMin: -0.102, yMax: 0.012 };
+    /* the base child's own world yaw (it may be counter-rotated by claySupportWorldYaw) */
+    const baseYaw = baseMesh ? yaw + (baseMesh.rotation ? baseMesh.rotation.y || 0 : 0) : yaw;
+    /* MEASURED off the live scene graph, never modelled: the plinth's four bbox corners taken
+       through its own world matrix, so a rotation-order mistake in the tilt shows as a gap instead
+       of cancelling out of both sides of the arithmetic. */
+    let cornersWorld = null;
+    if(baseMesh && typeof baseMesh.localToWorld === "function"){
+      baseMesh.updateMatrixWorld(true);
+      const hw = box.w / 2, hd = box.d / 2;
+      cornersWorld = [[-hw, box.yMin, -hd], [hw, box.yMin, -hd], [hw, box.yMin, hd], [-hw, box.yMin, hd]]
+        .map(function(p){
+          const v = baseMesh.localToWorld(new THREE.Vector3(p[0], p[1], p[2]));
+          return [v.x, v.y, v.z];
+        });
+    }
+    let probe = null;
+    if(typeof terrainStandeeContactProbe === "function"){
+      probe = terrainStandeeContactProbe({
+        bboxW: box.w, bboxD: box.d, yawRad: baseYaw,
+        originY: wp.y, bottomBelowOrigin: -box.yMin,
+        standX: wp.x, standZ: wp.z, cornersWorld: cornersWorld,
+        supportHalfX: (ud.clayStandeeSpanCells || 1) / 2,
+        supportHalfZ: (ud.clayStandeeSpanCells || 1) / 2,
+        tilted: !!plane.tilted, planeDYdx: plane.dYdx, planeDYdz: plane.dYdz,
+        planeAt: function(x, z){
+          return plane.y + (x - wp.x) * (plane.dYdx || 0) + (z - wp.z) * (plane.dYdz || 0);
+        }
+      });
+    }
+    out.witnesses.push({
+      label: ud.clayTerrainWitness.label, slug: ud.clayTerrainWitness.slug,
+      surfaceClass: ud.clayTerrainWitness.surfaceClass || null,
+      envelope: ud.clayTerrainWitness.envelope || null,
+      spanCells: ud.clayStandeeSpanCells || null,
+      at: [Number(wp.x.toFixed(3)), Number(wp.y.toFixed(3)), Number(wp.z.toFixed(3))],
+      yawRad: Number(yaw.toFixed(5)),
+      yawDeg: Number((yaw * 180 / Math.PI).toFixed(3)),
+      facingErrorDeg: Number((Math.acos(dot) * 180 / Math.PI).toFixed(3)),
+      cardPerpErrorDeg: Number(perpErr.toFixed(3)),
+      billboards: perpErr <= 15,
+      wrapTiltDeg: wrap && wrap.rotation
+        ? Number((wrap.rotation.x * 180 / Math.PI).toFixed(3)) : null,
+      outerTiltXDeg: node.rotation ? Number((node.rotation.x * 180 / Math.PI).toFixed(4)) : null,
+      baseTiltXDeg: baseMesh && baseMesh.rotation
+        ? Number((baseMesh.rotation.x * 180 / Math.PI).toFixed(3)) : null,
+      baseTiltZDeg: baseMesh && baseMesh.rotation
+        ? Number((baseMesh.rotation.z * 180 / Math.PI).toFixed(3)) : null,
+      baseBox: { w: Number(box.w.toFixed(4)), d: Number(box.d.toFixed(4)),
+        yMin: Number(box.yMin.toFixed(4)) },
+      standPlane: { slopeDeg: Number((plane.slopeDeg || 0).toFixed(3)), tilted: !!plane.tilted,
+        dYdx: Number((plane.dYdx || 0).toFixed(5)), dYdz: Number((plane.dYdz || 0).toFixed(5)) },
+      contact: probe
+    });
+  });
+  const gaps = out.witnesses.map(function(w){ return w.contact ? w.contact.maxCornerGap : 0; });
+  const mins = out.witnesses.map(function(w){ return w.contact ? w.contact.minCornerGap : 0; });
+  out.worstMaxCornerGap = gaps.length ? Number(Math.max.apply(null, gaps).toFixed(5)) : null;
+  out.worstMinCornerGap = mins.length ? Number(Math.min.apply(null, mins).toFixed(5)) : null;
+  out.worstFacingErrorDeg = out.witnesses.length
+    ? Number(Math.max.apply(null, out.witnesses.map(function(w){ return w.cardPerpErrorDeg; })).toFixed(3))
+    : null;
+  out.nonBillboarding = out.witnesses.filter(function(w){ return w.cardPerpErrorDeg > 15; }).length;
+  out.distinctYaws = Array.from(new Set(out.witnesses.map(function(w){ return w.yawDeg; })));
+  return out;
 }
 
 /* HOST CHROME. The 15×15 host supplies the calibrated grid, camera, light and shadow receiver
@@ -4353,6 +4845,20 @@ function clayRoomMountTerrainBench(){
   group.userData.terrainSceneId = sceneId;
 
   const baseY = interiorFloorTopAt(S.interiorFloorTopMap, room.x + 7, room.y + 7);
+  /* THE EXPRESSION RUNG. Resolved ONCE per mount and handed to every device, so a frame can never
+     be half one rung and half another. */
+  const expressionFlags = clayRoomTerrainFlags();
+  /* ONE publication of the cell's stand plane, read by the renderer that draws the cap AND by the
+     standee mount that tilts the plinth. Two derivations would be two truths and the plinth would
+     float on one of them (STANDEE-CONTRACT §3(d)'s second rider). */
+  const standPlaneFor = function(field, index){
+    if(typeof terrainCellStandPlane !== "function"){
+      return { dYdx: 0, dYdz: 0, slopeDeg: 0, tilt: false, normal: [0, 1, 0] };
+    }
+    const p = terrainCellStandPlane(field, index, expressionFlags);
+    return { dYdx: p.dYdx, dYdz: p.dYdz, slopeDeg: p.slopeDeg, normal: p.normal,
+      tilt: !!expressionFlags.slopeplinth };
+  };
   const fields = scene.fields || [];
   /* Multi-field scenes (the one-clamp pair, the six boundary frames) lay their fields out in one
      row, centred on the host, so a single frame carries the comparison the capture is about. */
@@ -4364,10 +4870,13 @@ function clayRoomMountTerrainBench(){
   const witnesses = [];
   const witnessFailures = [];
   const witnessContact = [];
+  const contractProbe = clayRoomTerrainProbeFromLocation() === "standee-contract";
+  const contractPicks = {};
   fields.forEach(function(field, index){
     const originCell = { x: cursorX, z: room.y + 7 - field.extent.y / 2 };
     const fieldBuild = clayTerrainBuildFieldGroup(field, originCell, baseY, origin, {
-      supportOverlay: sceneId === "support-graph"
+      supportOverlay: sceneId === "support-graph",
+      flags: expressionFlags
     });
     fieldBuild.group.userData.terrainFieldIndex = index;
     group.add(fieldBuild.group);
@@ -4407,7 +4916,8 @@ function clayRoomMountTerrainBench(){
         const placed = clayTerrainPlaceWitness(fieldBuild.group,
           CL_F07_TERRAIN_BENCH.witnessSlug,
           clayTerrainCellWorld(field, originCell, baseY, origin, wIdx), piece.id,
-          witnessFailures, witnessContact, clayTerrainSameHeightNeighbours(field, wIdx));
+          witnessFailures, witnessContact, clayTerrainSameHeightNeighbours(field, wIdx),
+          standPlaneFor(field, wIdx));
         if(placed) witnesses.push(Object.assign({ piece: piece.id }, placed));
       });
     } else {
@@ -4426,10 +4936,35 @@ function clayRoomMountTerrainBench(){
             pIdx === 0 ? CL_F07_TERRAIN_BENCH.witnessSlug : env.slug,
             clayTerrainCellWorld(field, originCell, baseY, origin, pick.cell.index),
             field.id + ":" + pick.label, witnessFailures, witnessContact,
-            clayTerrainSameHeightNeighbours(field, pick.cell.index));
+            clayTerrainSameHeightNeighbours(field, pick.cell.index),
+            standPlaneFor(field, pick.cell.index));
           if(placed) witnesses.push(Object.assign({ datum: pick.label, fieldId: field.id }, placed));
         });
       }
+    }
+
+    /* §3 B3 — THE STANDEE CONTRACT MATRIX. Three envelopes on each of the four surface classes a
+       standee must survive (flat / edge / run / face-top), at FREE yaw — the yaw regime no banked
+       terrain capture had ever exercised, because until P1 landed the terrain witnesses never
+       billboarded at all. Only ever the FIRST field, so the matrix reads as one row per class and
+       not as six copies across a boundary sheet. */
+    if(contractProbe && index === 0 && typeof terrainContractCellPicks === "function"){
+      const picks = terrainContractCellPicks(field, { perClass: 3, minSpacing: 4 });
+      const envs = CL_F07_TERRAIN_BENCH.witnessEnvelopes;
+      Object.keys(picks).forEach(function(cls){
+        picks[cls].forEach(function(cellIdx, k){
+          const env = envs[Math.min(k, envs.length - 1)];
+          const plane = standPlaneFor(field, cellIdx);
+          plane.surfaceClass = cls;
+          plane.envelope = env.envelope;
+          const placed = clayTerrainPlaceWitness(fieldBuild.group, env.slug,
+            clayTerrainCellWorld(field, originCell, baseY, origin, cellIdx),
+            "contract:" + cls + ":" + env.envelope, witnessFailures, witnessContact,
+            clayTerrainSameHeightNeighbours(field, cellIdx), plane);
+          if(placed) witnesses.push(Object.assign({ contract: cls, envelope: env.envelope }, placed));
+        });
+      });
+      contractPicks[field.id] = picks;
     }
 
     /* THE ROUTE PROOF overlay: approach / deployment / objective / retreat drawn on the frame
@@ -4570,6 +5105,39 @@ function clayRoomMountTerrainBench(){
     lightRecipeDrift: !!(requestedLightRecipe && S.clayRoomLightRecipeId !== requestedLightRecipe),
     neutralizeHostRig: neutralizeRig,
     gridLaw: TERRAIN_GRID_LAW,
+    /* WHICH DEVICES DREW THIS FRAME, and the walk-only fingerprint of every field in it. The second
+       half is what makes "this is a dressing pass" provable rather than claimed: it folds only the
+       heights, the standable flags, the walk adjacency, the faces and the entries — nothing a
+       render device can reach — so it must be byte-identical across all six rungs. */
+    expression: {
+      rungId: expressionFlags.rungId,
+      rungIndex: expressionFlags.rungIndex,
+      rungLabel: expressionFlags.rungLabel,
+      devicesOn: expressionFlags.on,
+      devicesOff: expressionFlags.off,
+      shallowGradeH: (typeof TERRAIN_SHALLOW_GRADE_H === "number") ? TERRAIN_SHALLOW_GRADE_H : null,
+      shallowGradeDeg: (typeof terrainSlopeDegForStepH === "function"
+        && typeof TERRAIN_SHALLOW_GRADE_H === "number")
+        ? Number(terrainSlopeDegForStepH(TERRAIN_SHALLOW_GRADE_H).toFixed(3)) : null,
+      walkStepDeg: (typeof terrainSlopeDegForStepH === "function")
+        ? Number(terrainSlopeDegForStepH(1).toFixed(3)) : null,
+      noiseBudgetH: (typeof TERRAIN_WALK_NOISE_BUDGET_H === "object")
+        ? TERRAIN_WALK_NOISE_BUDGET_H.perCellH : null,
+      capH: CLAY_TERRAIN_CAP_H, chamfer: CLAY_TERRAIN_CHAMFER,
+      rollover: CLAY_TERRAIN_ROLLOVER, nosing: CLAY_TERRAIN_NOSING,
+      walkFingerprints: (typeof terrainWalkFingerprint === "function")
+        ? built.map(function(b){ return { id: b.field.id, walk: terrainWalkFingerprint(b.field) }; })
+        : null,
+      probe: contractProbe ? "standee-contract" : null,
+      contractPicks: contractProbe ? contractPicks : null,
+      contract: (typeof TERRAIN_STANDEE_CONTRACT === "object")
+        ? { protectedDiameterMediumCap: Number(terrainProtectedDiameter("mediumCap").toFixed(4)),
+            protectedDiameterMedium: Number(terrainProtectedDiameter("medium").toFixed(4)),
+            protectedDiameterSmall: Number(terrainProtectedDiameter("small").toFixed(4)),
+            protectedDiameterLarge: Number(terrainProtectedDiameter("large").toFixed(4)),
+            thresholds: TERRAIN_CONTACT_THRESHOLDS }
+        : null
+    },
     fields: built.map(function(b){
       return {
         id: b.field.id, segmentId: b.field.segmentId, seed: b.field.seed,
@@ -4599,6 +5167,7 @@ function clayRoomMountTerrainBench(){
     frameCensus: (function(){
       const c = { terrainCells: 0, water: 0, volumes: 0, spans: 0, overlays: 0,
         witnessFigures: 0, witnessParts: 0, foreignFigures: 0, untagged: 0, untaggedSample: [],
+        expression: 0, occluders: 0,
         spanPositions: [], spansOutsideDeclaringBay: 0, fieldBounds: null };
       if(!S.interiorGroup) return c;
       function visible(node){
@@ -4626,6 +5195,10 @@ function clayRoomMountTerrainBench(){
           if(ud.terrainSpan.outsideDeclaringBay) c.spansOutsideDeclaringBay = (c.spansOutsideDeclaringBay || 0) + 1;
         }
         else if(ud.terrainSupportCell || ud.terrainRoute) c.overlays++;
+        else if(ud.terrainExpression){
+          c.expression = (c.expression || 0) + 1;
+          if(ud.terrainOccluder) c.occluders = (c.occluders || 0) + 1;
+        }
         else if(inWitness) c.witnessParts++;
         else if(ud.sceneObjectId || ud.unitId || ud.spriteSlug || ud.bestiaryId) c.foreignFigures++;
         else {
@@ -4737,6 +5310,13 @@ function clayRoomMountTerrainBench(){
       return true;
     };
     window.Theater._clayTerrainSetFrameForTest = function(i){ return clayRoomSetTerrainFrame(i); };
+    /* THE FACING + CONTACT INSTRUMENT, read LIVE after the render pass — see
+       clayTerrainWitnessFacingReport's own header for the two defects it exists to count. */
+    window.Theater._clayTerrainWitnessFacingForTest = function(){ return clayTerrainWitnessFacingReport(); };
+    window.Theater._clayTerrainSetRungForTest = function(id){ return clayRoomSetTerrainRung(id); };
+    window.Theater._clayTerrainExpressionForTest = function(){
+      return (S.clayRoomTerrainReport && S.clayRoomTerrainReport.expression) || null;
+    };
     window.Theater._clayInteriorGroupForTest = function(){ return S.interiorGroup || null; };
   }
   S.standeeCollisionDirty = true;

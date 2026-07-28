@@ -41,7 +41,21 @@ MIN_CONTENT_PCT = 2.0             # a frame with less than this much non-backdro
 MIN_EDGE_PCT = 1.5                # on the fixed 200x200 grid an empty region measures 0.00% and a
                                   # frame with modelled form measures 4.5-6% — a 3x margin either way
 MIN_LUMA_SPREAD = 12.0            # p95-p05: a frame with no modelled form is luma-flat
-WITNESS_MAX_GAP = 0.2             # world units between a standee's foot and the ground it stands on
+# ─── THE CONTACT GATE (TERRAIN-EXPRESSION §1 P2) ──────────────────────────────────────────────
+# WITNESS_MAX_GAP measured the ORIGIN gap — standeeY minus groundY — which interiorStandeeContactY
+# pins at exactly 0.096 by construction. It cannot move. It read green on a plinth whose uphill
+# corner was 0.217 wu buried and whose downhill corner was 0.217 wu airborne: the one gate that
+# existed for "is the figure floating" would have passed the exact picture Adam was worried about.
+#
+# Replaced (not extended — the old constant is gone) with the measurement it always claimed to be:
+# THE NEAREST-CONTACT GAP UNDER THE PLINTH FOOTPRINT, taken at the four corners of the plinth's
+# RENDERED bounding box through its own world matrix, against the support plane sampled AT each
+# corner. Two thresholds, both signed, because burial and levitation are different defects.
+WITNESS_MAX_CORNER_GAP = 0.012    # F2 — daylight under a corner. One bevelThickness; 0.4 px at 35 px/wu
+WITNESS_MIN_CORNER_GAP = -0.030   # F1 — buried past the authored 0.006 embed plus a quarter plinth
+WITNESS_MAX_OVERHANG_FRAC = 0.02  # F3 — plinth area hanging past the support polygon it owns
+WITNESS_MAX_PERP_ERROR_DEG = 15.0 # P1 — the card must be perpendicular to the view direction
+LEGACY_ORIGIN_GAP = 0.096         # printed beside the new numbers; it is a constant, not a signal
 DARK_MAX_P95_LUMA = 110.0         # the dark case must actually be dark, not merely labelled dark
 VIEWPORT_CROP = (0.20, 0.05, 0.74, 0.98)   # the canvas column, excluding the docked side panels
 
@@ -83,6 +97,13 @@ def _m4_apply(e, v):
         e[2] * x + e[6] * y + e[10] * z + e[14] * w,
         e[3] * x + e[7] * y + e[11] * z + e[15] * w,
     )
+
+
+def probe_of(receipt, key):
+    """One probe block out of a capture receipt, by name. `clean` is the frame the coverage gate
+    reads (nothing in it sits behind a docked panel), so it is also the frame the contact numbers
+    are taken from; `settled` is the fallback for a receipt written before the clean probe existed."""
+    return receipt.get(key) or None
 
 
 def project_to_frame(proj, point):
@@ -485,11 +506,64 @@ def measure(capture_dir):
         scene["coverageMissing"] = prod_cov.get("missingCells")
 
         # --- the three capture-side defects, now measured on every set --------------------
-        max_gap = terrain.get("witnessMaxGap")
-        scene["witnessMaxGap"] = max_gap
-        if max_gap is not None and max_gap > WITNESS_MAX_GAP:
-            fail("%s: a witness is airborne (max gap %.3f > %.3f) — 0 refusals must also "
-                 "mean 0 levitations" % (label_of(cap), max_gap, WITNESS_MAX_GAP))
+        # THE CONTACT GATE, rewritten. The legacy origin gap is still recorded, but only as the
+        # constant it is; every decision below reads the per-corner numbers.
+        scene["witnessLegacyOriginGap"] = terrain.get("witnessMaxGap")
+        facing = (probe_of(receipt, "clean") or probe_of(receipt, "settled")
+                  or {}).get("witnessFacing")
+        scene["witnessFacing"] = None
+        if facing is None or not facing.get("measured"):
+            fail("%s: no witness facing/contact measurement in the receipt — a capture that cannot "
+                 "say where each plinth's corners sit cannot claim 0 levitations"
+                 % label_of(cap))
+        else:
+            rows = facing.get("witnesses") or []
+            scene["witnessFacing"] = {
+                "count": len(rows),
+                "worstMaxCornerGap": facing.get("worstMaxCornerGap"),
+                "worstMinCornerGap": facing.get("worstMinCornerGap"),
+                "worstPerpErrorDeg": facing.get("worstFacingErrorDeg"),
+                "nonBillboarding": facing.get("nonBillboarding"),
+                "distinctYaws": facing.get("distinctYaws"),
+                "legacyOriginGaps": sorted({r["contact"]["legacyOriginGap"]
+                                            for r in rows if r.get("contact")}),
+            }
+            # P1 — the witnesses must billboard. Before this build they never did, at any depth.
+            if facing.get("nonBillboarding"):
+                fail("%s: %d of %d witnesses are not camera-facing (worst perpendicular error "
+                     "%.2f deg > %.2f) — a terrain proof at a locked axis-aligned yaw is the exact "
+                     "case that hides the slope and stair-overhang problems"
+                     % (label_of(cap), facing["nonBillboarding"], len(rows),
+                        facing.get("worstFacingErrorDeg") or 0, WITNESS_MAX_PERP_ERROR_DEG))
+            # F2 — levitation, measured under the footprint rather than at the origin.
+            worst_max = facing.get("worstMaxCornerGap")
+            if worst_max is not None and worst_max > WITNESS_MAX_CORNER_GAP:
+                fail("%s: a plinth corner is AIRBORNE (%.5f > %.5f wu) — measured at the plinth's "
+                     "rendered bbox corners against the support plane, which is the measurement the "
+                     "old origin-gap gate could not make"
+                     % (label_of(cap), worst_max, WITNESS_MAX_CORNER_GAP))
+            # F1 — burial.
+            worst_min = facing.get("worstMinCornerGap")
+            if worst_min is not None and worst_min < WITNESS_MIN_CORNER_GAP:
+                fail("%s: a plinth corner is BURIED (%.5f < %.5f wu) — the uphill half of a "
+                     "flat-planted plinth swallowed by its own cell"
+                     % (label_of(cap), worst_min, WITNESS_MIN_CORNER_GAP))
+            # F3 — overhang past the support polygon this envelope owns.
+            over = [r for r in rows
+                    if (r.get("contact") or {}).get("overhangFrac", 0) > WITNESS_MAX_OVERHANG_FRAC]
+            if over:
+                fail("%s: %d plinth(s) overhang their own support polygon past %.0f%% of their "
+                     "footprint (worst %.3f, %s)"
+                     % (label_of(cap), len(over), WITNESS_MAX_OVERHANG_FRAC * 100,
+                        max(r["contact"]["overhangFrac"] for r in over),
+                        over[0].get("label")))
+            # And the argument for the replacement, kept in the report rather than in a comment:
+            # every legacy origin gap is the same constant, on every frame, forever.
+            legacy = scene["witnessFacing"]["legacyOriginGaps"]
+            if rows and (len(legacy) != 1 or abs(legacy[0] - LEGACY_ORIGIN_GAP) > 1e-3):
+                fail("%s: the legacy origin gap is no longer the constant %.3f (%s) — if that ever "
+                     "becomes true the replacement argument needs re-deriving"
+                     % (label_of(cap), LEGACY_ORIGIN_GAP, legacy))
 
         requested = terrain.get("requestedLightRecipe")
         if not requested:

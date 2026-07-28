@@ -604,6 +604,42 @@ function updateSpriteBillboardYaw(){
         }
       }
     }
+    // TERRAIN-EXPRESSION B1 (docs/TERRAIN-EXPRESSION-BUILD.md §3): a plinth standing on GRADED
+    // ground conforms to the ground's own plane instead of being planted flat on it — the only
+    // treatment with zero error at every yaw (STANDEE-CONTRACT-NONFLAT §3(d); flat-plant carries
+    // 0.09-0.43 wu of penetration/float, 3-15 px of visible defect at the production read).
+    //
+    // The tilt is a WORLD-space fact and the base is a child of a group that turns with the camera,
+    // so the world gradient is rotated into the figure's own local frame here, every frame, rather
+    // than baked once at placement (where it would spin with the yaw and point uphill only at one
+    // camera step). Local x maps to world (cos, -sin) and local z to world (sin, cos).
+    //
+    // ROTATION-BUDGET DISCIPLINE, unchanged: `fig.rotation.x` stays standee-verbs.js's fall-death
+    // tip and is never written here; the sprite's camera-pitch tilt stays on the wrap below; this
+    // writes ONLY the base child's own .x/.z, which nothing else has ever used.
+    const planeTilt = fig.userData.clayStandeePlaneTilt;
+    if(planeTilt && fig.children){
+      const phi = fig.rotation.y;
+      const cosP = Math.cos(phi), sinP = Math.sin(phi);
+      const localDx = planeTilt.dYdx * cosP - planeTilt.dYdz * sinP;
+      const localDz = planeTilt.dYdx * sinP + planeTilt.dYdz * cosP;
+      // Solved, not guessed. Under Euler order YXZ the composite is Ry(phi)*Rx(tx)*Rz(tz), and local
+      // up (0,1,0) lands at (-sin tz, cos tx cos tz, sin tx cos tz). Matching that to the plane's own
+      // normal (-a', 1, -b') gives tx = -atan(b') and tz = atan(a' cos tx) exactly. The measured
+      // proof that these are the right signs is the contact probe: with them the plinth's four
+      // rendered bbox corners all read the SAME gap (spread ~0); with either sign flipped the spread
+      // opens to 0.13-0.53 wu, which is precisely the flat-plant defect this device exists to kill.
+      const tiltX = -Math.atan(localDz);
+      const tiltZ = Math.atan(localDx * Math.cos(tiltX));
+      for(let i = 0; i < fig.children.length; i++){
+        const child = fig.children[i];
+        if(child && child.userData && child.userData.standeeBase){
+          child.rotation.order = "YXZ";
+          child.rotation.x = tiltX;
+          child.rotation.z = tiltZ;
+        }
+      }
+    }
     const wrap = fig.userData.standeeWrap;
     if(wrap){
       wrap.rotation.order = "YXZ";
@@ -631,18 +667,33 @@ function updateSpriteBillboardYaw(){
   }
   // DUNGEON-GRAPH.md U3 iteration-2, ruling 3: interior "pieces" (creature/PC sprites standing in the
   // room) are billboard groups too (interiorBuildPieces -> buildSpriteBillboard, same userData.sprite
-  // tag), but they live in S.interiorGroup's own pieces sub-group, not S.unitGroup — walk the group
-  // tree one level deep (interiorGroup -> {tile/wall/light/pieces sub-groups} -> sprite groups) rather
-  // than a flat scan, so this stays cheap even on an 80-room whole-plan interior render.
+  // tag), but they live in S.interiorGroup's own sub-groups, not S.unitGroup.
+  //
+  // TERRAIN-EXPRESSION §1 P1 (2026-07-28) — THE DEPTH BUG. This walked EXACTLY two levels
+  // (interiorGroup -> sub -> figure). Every bench that mounts its own group tree therefore had its
+  // figures silently skipped: a CL-F07 terrain witness lives three down
+  // (interiorGroup -> bench -> field -> figure), so it kept rotation.y = 0, stayed grid-aligned,
+  // showed its side shell as a rectangular box outline, and — worse — meant EVERY banked terrain
+  // proof had exercised only the easy axis-aligned plinth yaw, which is exactly the case that hides
+  // the stair-overhang and slope problems. Measured before the fix: 13 of 13 witnesses at 44.6-52.0
+  // degrees of facing error.
+  //
+  // FIXED GENERICALLY, not special-cased for terrain: descend the whole interior subtree and face
+  // every sprite group found, at any depth. A sprite group's own children are never sprite groups,
+  // so the walk stops at each hit; the traversal is still bounded and still cheap on an 80-room
+  // whole-plan render (mountedStandeeFigures below already does a full deep traverse, and the
+  // asymmetry between that and this two-level walk WAS the bug).
   if(S.interiorGroup){
-    for(let i = 0; i < S.interiorGroup.children.length; i++){
-      const sub = S.interiorGroup.children[i];
-      if(!sub || !sub.children) continue;
-      for(let j = 0; j < sub.children.length; j++){
-        const fig = sub.children[j];
-        if(fig && fig.userData && fig.userData.sprite) face(fig);
+    const faceDescendants = (node) => {
+      if(!node || !node.children) return;
+      for(let i = 0; i < node.children.length; i++){
+        const child = node.children[i];
+        if(!child) continue;
+        if(child.userData && child.userData.sprite){ face(child); continue; }
+        faceDescendants(child);
       }
-    }
+    };
+    faceDescendants(S.interiorGroup);
   }
   if(S.standeeCollisionDirty) resolveMountedStandeeSupportCollisions();
   mountedStandeeFigures().forEach(syncStandeeContactBlob);

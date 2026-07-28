@@ -22,7 +22,13 @@ const puppeteer = require(path.join(process.env.HOME, ".genesis-jsdom", "node_mo
 const OUT = process.argv[2];
 const PORT = process.argv[3] || "5176";
 const ONLY = process.argv[4] || "all";
-if (!OUT) { console.error("usage: node dev/capture-clay-terrain-bench.cjs <outDir> [port] [sceneId|all]"); process.exit(2); }
+/* TERRAIN-EXPRESSION §5 — the bin-isolation ladder. One rung per run, over an otherwise identical
+   field: same seed, same camera, same layout. Omitted = `naked`, which is the byte-identical legacy
+   render, so an un-flagged capture bank is exactly what it was before this build. */
+const RUNG = process.argv[5] || "naked";
+const PROBE = process.argv[6] || null;
+const SEED = process.argv[7] || null;
+if (!OUT) { console.error("usage: node dev/capture-clay-terrain-bench.cjs <outDir> [port] [sceneId|all] [rung] [probe] [seed]"); process.exit(2); }
 const BASE = "http://127.0.0.1:" + PORT;
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -61,6 +67,13 @@ function pageProbe() {
         })
       : null,
     camera: T._clayCameraPoseForTest ? T._clayCameraPoseForTest() : null,
+    /* THE WITNESS FACING + CONTACT INSTRUMENT, read LIVE after the render pass. Before
+       TERRAIN-EXPRESSION §1 P1 the terrain witnesses never billboarded at all (13 of 13 at 44.6-52.0
+       degrees of facing error), so every banked terrain proof had exercised only the easy
+       axis-aligned plinth yaw. This is what makes that countable rather than something a reviewer
+       has to spot in a 2x crop — and it carries the NEAREST-CONTACT GAP under each plinth's
+       footprint, which is the measurement WITNESS_MAX_GAP could never make. */
+    witnessFacing: T._clayTerrainWitnessFacingForTest ? T._clayTerrainWitnessFacingForTest() : null,
     surfaceCensus: T._claySurfaceCensusForTest ? T._claySurfaceCensusForTest() : null,
     traversabilityGrid: T._clayTraversabilityGridForTest ? T._clayTraversabilityGridForTest() : null,
     lightRecipe: T._clayLightingRecipeForTest ? T._clayLightingRecipeForTest() : null,
@@ -112,7 +125,7 @@ async function plate(page, filename) {
   });
 
   const index = { fixture: "cl-f07-terrain-bench", proof: "CL-F07a", captures: [],
-    determinism: null, gate: null,
+    determinism: null, gate: null, rung: RUNG, probe: PROBE, seed: SEED,
     generatedAt: new Date().toISOString(), viewport: VIEWPORT };
 
   async function openScene(scene) {
@@ -129,7 +142,9 @@ async function plate(page, filename) {
     });
     page.on("pageerror", (e) => consoleErrors.push(String(e)));
     const url = BASE + "/genesis.html?clayroom=1&clayfixture=terrain&terrainscene=" + scene.id
-      + (scene.frameIndex != null ? "&terrainframe=" + scene.frameIndex : "");
+      + (scene.frameIndex != null ? "&terrainframe=" + scene.frameIndex : "")
+      + "&terrainrung=" + RUNG + (PROBE ? "&terrainprobe=" + PROBE : "")
+      + (SEED ? "&terrainseed=" + SEED : "");
     await page.goto(url, { waitUntil: "load", timeout: 60000 });
     await page.waitForFunction(
       () => document.querySelector("canvas") && document.getElementById("clay-room-overlay"),
@@ -218,6 +233,8 @@ async function plate(page, filename) {
       proof: "CL-F07a",
       capture: scene.capture,
       sceneId: scene.id,
+      rung: RUNG,
+      probe: PROBE,
       frameIndex: scene.frameIndex != null ? scene.frameIndex : null,
       claim: (settled.terrain && settled.terrain.sceneId === scene.id) ? "built" : "NOT BUILT",
       lightRecipeRequested: scene.light,

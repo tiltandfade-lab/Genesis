@@ -1450,3 +1450,170 @@ against the captured fit, which differs from the host's fresh fit after any resi
 **Not done here:** no visual verdict, and no re-capture — the banked CL-F07a frames are unchanged by
 this (the rig never resizes), and `measure` still reports **RESULT: PASS** at 100% coverage over all
 12 sets. Whether the live viewer's re-framing after a resize is the *right* framing is Adam's call.
+
+## Terrain expression — getting off the chonky blocks, with standee proof (2026-07-28) — PROPOSED
+
+Adam, on the fixed CL-F07a frames: *"we just need a bit more expression to get us a little further
+from minecraft… perhaps the corners of each grid block can be expressed by a 1/9 sized block… let's
+explore some options with standee proof."* Built to `docs/TERRAIN-EXPRESSION-BUILD.md`, on the three
+research deliverables behind it (FFT surface grammar over the 22-map corpus, the standee contract
+measured against the real `ExtrudeGeometry`, and the XCOM / modular-tabletop grid-breaking study).
+**No visual verdict is taken here. Adam and Codex rule the look; this produces the evidence.**
+
+### THE PARTITION, and why the 1/9 corner block moved rather than shipped
+
+Three independent measurements say a walkable cell top must stay almost flat: the standee's
+protected area is a disc of **0.932 wu — 93% of the cell**, leaving a free ring of 0.034 wu (about
+two inches); `TERRAIN_WALK_NOISE_BUDGET_H.perCellH` allows **2.32 inches** of relief per walkable
+cell; and FFT itself keeps walkable tops flat or gently graded and spends its expression at the
+edges. So: **shape belongs on the faces, dressing belongs on the floor, and the arris carries both.**
+
+Adam's 1/9 instinct is right and its *size* is about half — a 3×3 subdivision cuts 1.15 ft into the
+protected disc at free yaw, and 1/6 of a cell edge is the largest that clears a Medium. But that
+whole calculation only applies if the corner treatment touches the **top plane**. Relocated below it
+— a cap that keeps its full 1×1 top and a shaft inset beneath — the corner softens at *any* size and
+intrudes **0.000 wu**. That is what A3 ships, and it is also FFT's own answer (the projecting
+coping/cornice on nearly every built edge in the corpus). A corner block that raises or lowers a cell
+top is a **gameplay change wearing a dressing label**: it shrinks the usable top to 0.333 wu while
+still reporting `standable: true`. Named in §6 of the build spec, not built.
+
+### Two prerequisites, both red-first
+
+**P1 — the terrain witnesses never billboarded.** `updateSpriteBillboardYaw`'s interior sweep walked
+*exactly two levels*; a CL-F07 witness lives three down (`interiorGroup → bench → field → figure`).
+Measured before the fix: **13 of 13 witnesses at 44.6–52.0° of facing error, `rotation.y = 0`, wrap
+tilt 0** — so every terrain proof ever banked in this repo had exercised only the easy axis-aligned
+plinth yaw, which is exactly the case that hides the slope and stair-overhang problems. Fixed
+generically (descend the whole interior subtree; a sprite group's children are never sprite groups,
+so the walk still stops at each hit) rather than special-cased for terrain — the asymmetry between
+this two-level walk and `mountedStandeeFigures`' full deep `traverse` *was* the bug.
+
+**P2 — two gates would have stayed green on the failure picture.** `WITNESS_MAX_GAP` measured the
+*origin* gap, which `interiorStandeeContactY` pins at exactly 0.096 and which therefore cannot move:
+it reads green on a plinth whose uphill corner is 0.217 wu buried and whose downhill corner is
+0.217 wu airborne. Replaced — not extended — with the **nearest-contact gap under the plinth
+footprint**, taken at the four corners of the plinth's *rendered* bbox through its own world matrix,
+against the support plane sampled at each corner. `verify-bw2-2` group 21b was titled *"the base's
+world-up stays +Y"* while asserting `fig.rotation.x === 0` on the **outer group** — a proposition the
+B1 slope treatment slips straight past. Rewritten to measure the base child's world-up off
+`matrixWorld`, and to state all three rotation channels with their owners. Both rewrites carry their
+own teeth proof in-process: the jsdom gate executes the flat-plant case and prints the legacy 0.096
+beside the new ±0.21; `--prove-21b-teeth` tilts the base child and shows the *old* assertion still
+green at 17.2° of measured tilt.
+
+### Decisions taken here, with grounds
+
+1. **The rung is a render-time device mask over an unchanged field, not an eighth scene.** Grounds:
+   §5 asks for "same seed, same camera, same layout throughout", which is exactly what a render mask
+   gives; and it keeps `CL_F07_TERRAIN_BENCH.scenes` at seven so every existing gate that counts them
+   stays as it was. `verify-terrain-bench` is **73 passed / 0 failed**, unchanged.
+2. **The geometry devices ride the MATERIAL rung.** Grounds: the ladder exists for *bin* isolation
+   and a geometry-only rung would isolate nothing Adam is ruling on. They are still bin-labelled
+   `geometry` in the registry — an explicit fourth bin exists so a shape change cannot hide in a
+   dressing bin — so the choice stays visible rather than laundered.
+3. **The declared stand plane has ONE publisher.** `terrainCellStandPlane` is read by the renderer
+   that draws the cap *and* by the standee mount that tilts the plinth. Grounds: two derivations
+   would be two truths and the plinth would float on one of them. Its centre is the chassis's own
+   `h + sub` and never moves, which is what keeps foot height, walk graph, occupancy, cover and reach
+   untouched while the surface bends.
+4. **The plinth tilt is written once per frame, in the facing pass, in world space.** Grounds: the
+   tilt is a world fact on a child of a group that turns with the camera; baking an angle at
+   placement points the plinth uphill at one camera step and downhill at the opposite one. The signs
+   were *solved* from the YXZ composition, not guessed — the wrong signs still tilt the plinth and
+   still look plausible, and the contact probe is what caught them: **corner spread 0.128–0.534 wu
+   with a sign flipped, 0.000 with them right.**
+5. **The tri-split fold is sub-quantum relief over one declared stand plane, not two surfaces.**
+   Grounds: a Medium needs 0.831 wu and a half-cell triangle inscribes 0.586 — two standable
+   triangles was never available, and minting one would change the walkable-cell count. The fold is
+   additionally attenuated to **exactly zero at the stand point**, so a plinth never sits on a crease.
+6. **The shallow grade is `TERRAIN_SHALLOW_GRADE_H = 0.65` quanta per cell = 18.00°** — the corpus's
+   common walkable grade, measured off `image2`'s move-range quads. Render-only: the integer field,
+   the walk census, cover and LOS do not move. **A true half-quantum height is a founder decision and
+   is explicitly NOT taken here** — this rung exists so Adam can see the shallow grade beside the
+   26.565° step and rule. Consequence worth stating: because the field stays integer, a 1h step under
+   C1 renders as an 18° graded top with a residual **0.675-quantum riser** at the boundary rather
+   than as a continuous ramp. That is the honest limit of render-only.
+7. **A4's two-frequency joint is expressed as coarse+fine joint LINES, not a UV scale.** Grounds:
+   the clay bench has no textures yet; the *rule* (fine unit far smaller than the cell, one coarse
+   course at the cell pitch to carry the ruled overlay) is the deliverable and the expression is
+   provisional. Recorded as provisional rather than presented as the final material.
+8. **The occluder law places on the boundary, never in the cell.** Every site's centre is exactly on
+   a grid line, 0.5 wu from either stand point — outside the 0.466 protected radius of the worst
+   Medium by the full 0.034 wu ring the contract leaves. Gated, not asserted.
+9. **F3 is measured against the support polygon the envelope actually owns** (one cell for a Medium,
+   two for a Large, three for a Huge). Measuring a Huge against one cell reports a 0.67 overhang that
+   is a category error, not a defect.
+10. **The B3 matrix rides a URL probe (`?terrainprobe=standee-contract`), not a new fixture**, and
+    the four "surface cases" are stated as the four **cell classes** they actually are — flat / edge /
+    run / face-top. Grounds: in an integer heightfield a cell-scale stair run and a graded slope are
+    the *same cell class*; only the render differs. Saying so is more honest than building four
+    fixtures that pretend otherwise.
+
+### The gate
+
+`terrainWalkFingerprint` folds only heights, `standable`, `inPlayfield`, `guarded`, walk adjacency,
+faces and entries — nothing a render device can reach. Cover and LOS are not folded separately
+because on this chassis both are *derived* from those same arrays. **The instrument is proved able
+to fail before it is trusted:** six gameplay mutations (a standable flag, a walk edge, a height, a
+face delta, an entry, a playfield flag) each move it, a purely visual edit does not, and the full
+`terrainFieldFingerprint` *does* move on that same visual edit — which is precisely why a walk-only
+instrument had to exist.
+
+**Result: byte-identical across all six rungs, on all seven scenes, in jsdom and again in the
+browser** — same walk fingerprint, same standable census, same walk edges, same faces, same entries,
+same full field fingerprint. This is a dressing pass, proved rather than claimed.
+
+### Two defects that only LOOKING found
+
+Both were caught in the eyes-on pass over the banked frames, and neither would have been caught by
+any number this build added. Recorded because the round-4 lesson was exactly this shape.
+
+1. **The cap's top face was wound backwards.** Three.js culls back faces; a top triangle wound
+   clockwise-from-above has its normal pointing DOWN, so the cell top simply is not drawn and the
+   backdrop shows through. The lit frames still measured **100% coverage** (the skirt, the shaft and
+   the neighbouring cells kept the sample points non-backdrop); the dark scene's 72° read was the
+   only gate that caught it, at **6 of 560 declared cells landing on backdrop**. Fixed by reversing
+   both top triangles, checked against the right-hand rule rather than by eye.
+2. **The two-frequency joint read as an unlit HUD cross-hatch.** `LineBasicMaterial` ignores every
+   light in the scene, so over the DARK scene the joint blazed bright over near-black ground —
+   precisely the opposite of the device's purpose, which is to stop the ruled overlay reading as
+   HUD. No number moved: the dark terrain got *brighter* (p50 luma 6.8 → 27), which the lit/dark gate
+   is happy with. Fixed with **MultiplyBlending**, the same mechanism the contact pool already uses:
+   white is the identity, so a grey joint darkens whatever is under it by a fixed ratio in any light
+   case and can never add light. **A joint is always darker than its surround** is now a property of
+   the blend rather than of the colour.
+
+Worth recording that the second fix subsumed a residual the first one left: with the additive joint
+the dark 72° read measured **99.64% (2 of 560)** against the 99.0% floor, both misses outer-rim
+cells whose sample sat inside the plate tolerance because the unlit joint had raised the whole dark
+frame toward the backdrop's own value. With the multiply joint, **every frame of both full sets is
+back to 100.00% coverage**. The threshold was never moved.
+
+### What the B3 envelope matrix actually proves, stated exactly
+
+`clayTerrainPlaceWitness` passes `authoredSpan = 1` for every witness (pre-existing, at both call
+sites), and `interiorStandeeSupportMetrics` bounds plinth width at `tacticalSpan × 0.82`. So the
+three plinths the matrix exercises measure **0.4697 × 0.2856 (Small), 0.7441 × 0.3693 (Medium) and
+0.856 × 0.3693** — the last being the Medium-CAP width, worn by the Huge witness whose *sprite* is
+huge but whose base is clamped. That is the worst case in the protected-disc table (0.932 wu) and it
+is the one that matters, so the matrix is worth what it says: **protected discs 0.550 / 0.831 / 0.932
+wu, all four surface classes, free yaw, zero corner spread, zero overhang.** A true Large or Huge
+plinth (1.676 / 2.496 wu wide, spanning 2 or 3 cells) is **NOT** proved by it. Changing the authored
+span would change what the bench shows, which is Adam's call, not a gate's.
+
+### Not done here (named, not built)
+
+Sub-cell corner blocks that move a cell top · true half-quantum heights · non-rectilinear footprints ·
+undercuts and floor-over-floor · live destruction · **the structure-kit stair's tread nosing**. That
+last one is deliberate: §5 of the standee research shows the 0.373 wu tread clears a Medium by
+0.0020 wu only because of an unrelated shadow-slit inflation, and that fixing it properly needs the
+founder ruling on tread count per stair unit (cap at 2 treads, shrink the base depth, or formalise
+the nosing). The **free-yaw failure is stated as a number instead** — a Medium-cap plinth spans
+0.866 wu along a 0.373 wu tread, 0.247 wu off each side — and `claySupportWorldYaw` is untouched.
+The cell-scale stair nosing that FFT actually uses (tread = 1 cell, riser = 1 quantum) IS built, on
+terrain, where the tread is a whole cell and free yaw is safe.
+
+**Pre-existing, found while gating, not fixed here:** `verify-bw2-2-floor-contact --with-render`
+check 23 (the fall-death tween reaching π/2) fails ~2 runs in 3 **at HEAD as well as on this branch**,
+with a different partial angle each time — a tween-timing race in the harness, not a regression.
+`verify-env1b-tabletop-shadows` fails its interior3d/torchlit pixel-diff identically at HEAD (34/1).

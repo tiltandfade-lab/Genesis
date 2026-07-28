@@ -1202,3 +1202,69 @@ be pale.
 clay-room 272/0, theater-shot 107/0, standee-verbs 73/0, room-shell 53/0, active-room-only 22/0,
 theater-lighting 21/0, theater-sprites 12/0. Determinism still **PASS**, 13 fields, two page loads.
 All 12 capture sets re-banked. The front-end verdict remains Adam's and Codex's.
+
+### CL-F07a fix pass, round 2 — the lit scenes were unlit (2026-07-27, stacked on af5b1a49)
+
+Adam caught what Fable and I both missed: the round-1 light fix left **nine of the twelve capture
+sets rendering as unlit silhouettes** on a pale backdrop. Only the emissive witnesses read. This
+entry records the cause, the two design errors behind it, and the metric defect that hid it.
+
+**Cause: `clay-opposing-pair` is a two-point-light recipe whose lights live inside the calibration
+practicals — and round 1 DETACHED those practicals.** I removed the fixture groups to stop their
+housings floating over the field, and carried the scene's entire illumination out with them. What
+remained was a 0.18 ambient and a sprite-camera fill, which lights standees, not ground. Chrome
+suppression now hides the practical's **mesh bodies only** and never touches a light or a group that
+contains one.
+
+**Design error 1 — declaring a light case and taking the host rig down were the same decision.**
+Round 1 read "neutralise the rig iff the scene declares a light case." The dark scene declared one;
+the production scenes declared **nothing**, so they kept the neutralisation with no substitute.
+Those are now two independent per-scene facts: `lightRecipeId` (mandatory) and `neutralizeHostRig`
+(true for `dark` alone).
+
+**Design error 2 — absence of a declaration was a silent fallback.** `terrainBenchSceneLightRecipe`
+now **throws** for a scene with no declared light case. A scene cannot render black by omission any
+more; it fails at build time. Every production scene declares **`daylit`** — the standard clay
+production-capture illumination, the recipe `theater-clay-room`'s own `initialLightRecipeId` opens
+CL-F01/CL-F04/CL-F05 on and the one the known-good construction-bench captures were banked under.
+Scene 7 declares `dark`.
+
+**The metric defect that hid it, and why it was the same mistake twice.** My luma checks measured
+the **whole frame**, where a pale backdrop dominates: whole-frame p50 was **117.4 for a genuinely
+lit render and 117.4 for a near-black one — identical to the decimal**. The "lit sheet 119" figure
+in the round-1 entry was the backdrop's number, not the terrain's. Luma is now measured over the
+**terrain's own screen region** (every pixel more than 18 from the modal backdrop colour), with a
+minimum region size so an empty frame cannot pass by having no region at all. The floor (45) and the
+dark ceiling (40) are calibrated against `cda3784c`'s genuinely lit renders (terrain p50 65.9 and
+86.0), recovered from git history rather than guessed.
+
+**Proven red first, as required.** The new terrain-region check was run against the round-1 capture
+dir *before* the lighting fix landed and correctly failed nine sets by name. Round-1 → round-2
+terrain-region p50, all twelve:
+
+| set | round 1 | round 2 | |
+|---|---:|---:|---|
+| thirteen-piece-sheet | **32.0** | 141.0 | was unlit |
+| one-clamp-proof | 79.3 | 159.0 | survived |
+| boundary-sheet f0–f4 | **29.3** | 126.7–127.7 | was unlit |
+| boundary-sheet f5 | **39.4** | 137.6 | was unlit |
+| route-proof | **29.3** | 128.9 | was unlit |
+| walk-down-16 | 117.4 | 92.5 | survived |
+| support-graph | **37.8** | 131.7 | was unlit |
+| dark | 19.3 | 19.3 | correctly dark throughout |
+
+Two sets survived round 1 because their fields are small and sat close enough to the one surviving
+spot to keep some light — which is exactly why a whole-frame average could not tell the difference.
+
+**Gates:** `dev/verify-terrain-bench.mjs` **68 passed / 0 failed** (`--red` 0/21), with four new
+checks: every scene declares a light case, production scenes declare the standard illumination, a
+missing declaration throws, and only `dark` neutralises the rig — plus 17d rewritten to assert that
+chrome suppression never removes a light. `dev/measure-clay-terrain-bench.py` **RESULT: PASS** over
+12 sets. `check-manifest` **RESULT: OK**. clay-room 272/0, theater-shot 107/0, theater-verbs 100/0,
+standee-verbs 73/0, room-shell 53/0, active-room-only 22/0, theater-lighting 21/0, theater-sprites
+12/0. Determinism **PASS**, 13 fields, two page loads. All 12 sets re-captured.
+
+**Standing lesson for this program:** three times now a frame that rendered nothing, or rendered
+nothing *legible*, passed a green gate — once on fog gradient read as edges, twice on a backdrop
+read as illumination. Every capture-side gate here must be calibrated against a banked frame a human
+has actually looked at, and must measure the thing it names rather than the frame that contains it.

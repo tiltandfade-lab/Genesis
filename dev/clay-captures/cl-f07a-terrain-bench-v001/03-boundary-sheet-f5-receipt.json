@@ -44,9 +44,10 @@
       "view": "production",
       "fitZoom": 1.3653333333333333,
       "strategicDistanceClamped": null,
-      "requestedLightRecipe": null,
-      "appliedLightRecipe": "clay-opposing-pair",
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
       "lightRecipeDrift": false,
+      "neutralizeHostRig": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -143,10 +144,10 @@
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
-        "fixture": 2,
+        "fixture": 0,
         "mote": 8,
         "overlay": 1,
-        "detachedPracticals": 2
+        "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
       "oneClamp": null,
@@ -833,9 +834,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            5.342,
-            0.413,
-            -1.192
+            4.302,
+            0.414,
+            -4.392
           ],
           "size": [
             0.066,
@@ -854,9 +855,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            3.258,
-            1.224,
-            0.269
+            2.218,
+            1.226,
+            -2.931
           ],
           "size": [
             0.092,
@@ -875,9 +876,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -5.643,
-            0.02,
-            0.691
+            1.797,
+            0.023,
+            -2.509
           ],
           "size": [
             0.073,
@@ -896,9 +897,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.642,
-            1.5,
-            0.111
+            2.798,
+            1.502,
+            -3.089
           ],
           "size": [
             0.056,
@@ -917,9 +918,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.304,
-            0.622,
-            -0.102
+            3.136,
+            0.624,
+            -3.302
           ],
           "size": [
             0.092,
@@ -938,9 +939,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.752,
-            1.3,
-            0.104
+            2.688,
+            1.302,
+            -3.096
           ],
           "size": [
             0.077,
@@ -959,9 +960,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            4.786,
-            0.791,
-            -1.283
+            3.746,
+            0.793,
+            -4.483
           ],
           "size": [
             0.111,
@@ -981,7 +982,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            0.885,
+            0.888,
             2.252
           ],
           "size": [
@@ -5831,24 +5832,24 @@
           "alphaMode": "registry-cutoff"
         }
       },
-      "id": "clay-opposing-pair",
-      "label": "Clayroom warm/cool diagnostic",
-      "rolled": false,
-      "mode": "diagnostic-studio",
+      "id": "daylit",
+      "label": "Daylight",
+      "rolled": true,
+      "mode": "production-environment",
       "source": {
-        "class": "diagnostic",
-        "label": "two visible calibration bulbs",
-        "loreNative": false,
-        "visibleEmitterRequired": true
+        "class": "celestial",
+        "label": "sunlight and skylight through an opening",
+        "loreNative": true,
+        "visibleEmitterRequired": false
       },
       "ambient": {
-        "color": 16777215,
-        "intensity": 0.18
+        "color": 14212320,
+        "intensity": 0.55
       },
       "lights": [
         {
-          "type": "point",
-          "temperatureK": 2800,
+          "type": "directional",
+          "temperatureK": 5500,
           "colorOverride": true,
           "intensityUnit": "tabletop-profile-unit",
           "physicalIntensityUnit": "renderer-intensity",
@@ -5861,90 +5862,38 @@
           },
           "shadow": {
             "cast": true,
-            "bias": -0.002,
+            "bias": -0.001,
             "normalBias": 0,
-            "mapSize": 512,
+            "mapSize": 2048,
             "budgetPriority": 1
           },
-          "fixtureId": "bracket-generic",
+          "fixtureId": "",
           "mount": "none",
           "emitterLocal": {
             "x": 0,
-            "y": 0.03,
-            "z": 0.12
-          },
-          "flicker": {
-            "amplitude": 0.12,
-            "cadenceMs": 480,
-            "intervalJitter": 0,
-            "directionAmplitude": 0,
-            "recipeId": "steady",
-            "seed": "clay-c1a:west-warm"
-          },
-          "id": "clay-west-warm",
-          "label": "warm calibration bulb",
-          "enabled": true,
-          "color": 16752714,
-          "intensity": 16,
-          "physicalIntensity": 16,
-          "pos": {
-            "x": -0.53,
-            "y": 1.7,
+            "y": 0,
             "z": 0
           },
-          "heightM": 2.591,
-          "rangeM": 18.288,
-          "falloff": 1,
-          "state": "steady"
-        },
-        {
-          "type": "point",
-          "temperatureK": 9000,
-          "colorOverride": true,
-          "intensityUnit": "tabletop-profile-unit",
-          "physicalIntensityUnit": "renderer-intensity",
-          "positionStrategy": "board-relative",
-          "azimuthDeg": 0,
-          "elevationDeg": 45,
-          "spot": {
-            "coneDeg": 45,
-            "penumbra": 0
-          },
-          "shadow": {
-            "cast": true,
-            "bias": -0.002,
-            "normalBias": 0,
-            "mapSize": 512,
-            "budgetPriority": 1
-          },
-          "fixtureId": "bracket-generic",
-          "mount": "none",
-          "emitterLocal": {
-            "x": 0,
-            "y": 0.03,
-            "z": 0.12
-          },
           "flicker": {
-            "amplitude": 0.12,
+            "amplitude": 0,
             "cadenceMs": 480,
             "intervalJitter": 0,
             "directionAmplitude": 0,
-            "recipeId": "steady",
-            "seed": "clay-c1a:east-cool"
+            "recipeId": "steady"
           },
-          "id": "clay-east-cool",
-          "label": "cool calibration bulb",
+          "id": "sun-key",
+          "label": "sun key",
           "enabled": true,
-          "color": 11452392,
+          "color": 16773848,
           "intensity": 9,
-          "physicalIntensity": 9,
+          "physicalIntensity": 1.1,
           "pos": {
-            "x": 0.53,
-            "y": 1.7,
-            "z": 0
+            "x": 0.4,
+            "y": 3,
+            "z": -0.4
           },
-          "heightM": 2.591,
-          "rangeM": 18.288,
+          "heightM": 4.572,
+          "rangeM": 15.24,
           "falloff": 1,
           "state": "steady"
         }
@@ -5992,9 +5941,10 @@
       "view": "production",
       "fitZoom": 1.3653333333333333,
       "strategicDistanceClamped": null,
-      "requestedLightRecipe": null,
-      "appliedLightRecipe": "clay-opposing-pair",
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
       "lightRecipeDrift": false,
+      "neutralizeHostRig": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -6091,10 +6041,10 @@
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
-        "fixture": 2,
+        "fixture": 0,
         "mote": 8,
         "overlay": 1,
-        "detachedPracticals": 2
+        "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
       "oneClamp": null,
@@ -6781,9 +6731,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            5.342,
+            4.302,
             0.632,
-            -1.192
+            -4.392
           ],
           "size": [
             0.066,
@@ -6802,9 +6752,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            3.258,
+            2.218,
             1.532,
-            0.269
+            -2.931
           ],
           "size": [
             0.092,
@@ -6823,9 +6773,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -5.643,
-            0.436,
-            0.691
+            1.797,
+            0.435,
+            -2.509
           ],
           "size": [
             0.073,
@@ -6844,9 +6794,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.642,
-            1.872,
-            0.111
+            2.798,
+            1.871,
+            -3.089
           ],
           "size": [
             0.056,
@@ -6865,9 +6815,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.304,
-            1.003,
-            -0.102
+            3.136,
+            1.002,
+            -3.302
           ],
           "size": [
             0.092,
@@ -6886,9 +6836,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.752,
+            2.688,
             1.743,
-            0.104
+            -3.096
           ],
           "size": [
             0.077,
@@ -6907,9 +6857,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            4.786,
-            1.21,
-            -1.283
+            3.746,
+            1.209,
+            -4.483
           ],
           "size": [
             0.111,
@@ -11779,24 +11729,24 @@
           "alphaMode": "registry-cutoff"
         }
       },
-      "id": "clay-opposing-pair",
-      "label": "Clayroom warm/cool diagnostic",
-      "rolled": false,
-      "mode": "diagnostic-studio",
+      "id": "daylit",
+      "label": "Daylight",
+      "rolled": true,
+      "mode": "production-environment",
       "source": {
-        "class": "diagnostic",
-        "label": "two visible calibration bulbs",
-        "loreNative": false,
-        "visibleEmitterRequired": true
+        "class": "celestial",
+        "label": "sunlight and skylight through an opening",
+        "loreNative": true,
+        "visibleEmitterRequired": false
       },
       "ambient": {
-        "color": 16777215,
-        "intensity": 0.18
+        "color": 14212320,
+        "intensity": 0.55
       },
       "lights": [
         {
-          "type": "point",
-          "temperatureK": 2800,
+          "type": "directional",
+          "temperatureK": 5500,
           "colorOverride": true,
           "intensityUnit": "tabletop-profile-unit",
           "physicalIntensityUnit": "renderer-intensity",
@@ -11809,90 +11759,38 @@
           },
           "shadow": {
             "cast": true,
-            "bias": -0.002,
+            "bias": -0.001,
             "normalBias": 0,
-            "mapSize": 512,
+            "mapSize": 2048,
             "budgetPriority": 1
           },
-          "fixtureId": "bracket-generic",
+          "fixtureId": "",
           "mount": "none",
           "emitterLocal": {
             "x": 0,
-            "y": 0.03,
-            "z": 0.12
-          },
-          "flicker": {
-            "amplitude": 0.12,
-            "cadenceMs": 480,
-            "intervalJitter": 0,
-            "directionAmplitude": 0,
-            "recipeId": "steady",
-            "seed": "clay-c1a:west-warm"
-          },
-          "id": "clay-west-warm",
-          "label": "warm calibration bulb",
-          "enabled": true,
-          "color": 16752714,
-          "intensity": 16,
-          "physicalIntensity": 16,
-          "pos": {
-            "x": -0.53,
-            "y": 1.7,
+            "y": 0,
             "z": 0
           },
-          "heightM": 2.591,
-          "rangeM": 18.288,
-          "falloff": 1,
-          "state": "steady"
-        },
-        {
-          "type": "point",
-          "temperatureK": 9000,
-          "colorOverride": true,
-          "intensityUnit": "tabletop-profile-unit",
-          "physicalIntensityUnit": "renderer-intensity",
-          "positionStrategy": "board-relative",
-          "azimuthDeg": 0,
-          "elevationDeg": 45,
-          "spot": {
-            "coneDeg": 45,
-            "penumbra": 0
-          },
-          "shadow": {
-            "cast": true,
-            "bias": -0.002,
-            "normalBias": 0,
-            "mapSize": 512,
-            "budgetPriority": 1
-          },
-          "fixtureId": "bracket-generic",
-          "mount": "none",
-          "emitterLocal": {
-            "x": 0,
-            "y": 0.03,
-            "z": 0.12
-          },
           "flicker": {
-            "amplitude": 0.12,
+            "amplitude": 0,
             "cadenceMs": 480,
             "intervalJitter": 0,
             "directionAmplitude": 0,
-            "recipeId": "steady",
-            "seed": "clay-c1a:east-cool"
+            "recipeId": "steady"
           },
-          "id": "clay-east-cool",
-          "label": "cool calibration bulb",
+          "id": "sun-key",
+          "label": "sun key",
           "enabled": true,
-          "color": 11452392,
+          "color": 16773848,
           "intensity": 9,
-          "physicalIntensity": 9,
+          "physicalIntensity": 1.1,
           "pos": {
-            "x": 0.53,
-            "y": 1.7,
-            "z": 0
+            "x": 0.4,
+            "y": 3,
+            "z": -0.4
           },
-          "heightM": 2.591,
-          "rangeM": 18.288,
+          "heightM": 4.572,
+          "rangeM": 15.24,
           "falloff": 1,
           "state": "steady"
         }
@@ -11940,9 +11838,10 @@
       "view": "production",
       "fitZoom": 1.3653333333333333,
       "strategicDistanceClamped": null,
-      "requestedLightRecipe": null,
-      "appliedLightRecipe": "clay-opposing-pair",
+      "requestedLightRecipe": "daylit",
+      "appliedLightRecipe": "daylit",
       "lightRecipeDrift": false,
+      "neutralizeHostRig": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -12039,10 +11938,10 @@
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
-        "fixture": 2,
+        "fixture": 0,
         "mote": 8,
         "overlay": 1,
-        "detachedPracticals": 2
+        "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [],
       "oneClamp": null,
@@ -12729,9 +12628,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            5.342,
-            0.689,
-            -1.192
+            4.302,
+            0.694,
+            -4.392
           ],
           "size": [
             0.066,
@@ -12750,9 +12649,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            3.258,
-            1.612,
-            0.269
+            2.218,
+            1.619,
+            -2.931
           ],
           "size": [
             0.092,
@@ -12771,9 +12670,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -5.643,
-            0.543,
-            0.691
+            1.797,
+            0.554,
+            -2.509
           ],
           "size": [
             0.073,
@@ -12792,9 +12691,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.642,
-            1.968,
-            0.111
+            2.798,
+            1.977,
+            -3.089
           ],
           "size": [
             0.056,
@@ -12813,9 +12712,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.304,
-            1.101,
-            -0.102
+            3.136,
+            1.11,
+            -3.302
           ],
           "size": [
             0.092,
@@ -12834,9 +12733,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            -4.752,
-            1.857,
-            0.104
+            2.688,
+            1.869,
+            -3.096
           ],
           "size": [
             0.077,
@@ -12855,9 +12754,9 @@
           "route": "passthrough",
           "group": "moteGroup",
           "pos": [
-            4.786,
-            1.318,
-            -1.283
+            3.746,
+            1.328,
+            -4.483
           ],
           "size": [
             0.111,
@@ -12877,7 +12776,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.449,
+            1.46,
             2.252
           ],
           "size": [
@@ -17727,24 +17626,24 @@
           "alphaMode": "registry-cutoff"
         }
       },
-      "id": "clay-opposing-pair",
-      "label": "Clayroom warm/cool diagnostic",
-      "rolled": false,
-      "mode": "diagnostic-studio",
+      "id": "daylit",
+      "label": "Daylight",
+      "rolled": true,
+      "mode": "production-environment",
       "source": {
-        "class": "diagnostic",
-        "label": "two visible calibration bulbs",
-        "loreNative": false,
-        "visibleEmitterRequired": true
+        "class": "celestial",
+        "label": "sunlight and skylight through an opening",
+        "loreNative": true,
+        "visibleEmitterRequired": false
       },
       "ambient": {
-        "color": 16777215,
-        "intensity": 0.18
+        "color": 14212320,
+        "intensity": 0.55
       },
       "lights": [
         {
-          "type": "point",
-          "temperatureK": 2800,
+          "type": "directional",
+          "temperatureK": 5500,
           "colorOverride": true,
           "intensityUnit": "tabletop-profile-unit",
           "physicalIntensityUnit": "renderer-intensity",
@@ -17757,90 +17656,38 @@
           },
           "shadow": {
             "cast": true,
-            "bias": -0.002,
+            "bias": -0.001,
             "normalBias": 0,
-            "mapSize": 512,
+            "mapSize": 2048,
             "budgetPriority": 1
           },
-          "fixtureId": "bracket-generic",
+          "fixtureId": "",
           "mount": "none",
           "emitterLocal": {
             "x": 0,
-            "y": 0.03,
-            "z": 0.12
-          },
-          "flicker": {
-            "amplitude": 0.12,
-            "cadenceMs": 480,
-            "intervalJitter": 0,
-            "directionAmplitude": 0,
-            "recipeId": "steady",
-            "seed": "clay-c1a:west-warm"
-          },
-          "id": "clay-west-warm",
-          "label": "warm calibration bulb",
-          "enabled": true,
-          "color": 16752714,
-          "intensity": 16,
-          "physicalIntensity": 16,
-          "pos": {
-            "x": -0.53,
-            "y": 1.7,
+            "y": 0,
             "z": 0
           },
-          "heightM": 2.591,
-          "rangeM": 18.288,
-          "falloff": 1,
-          "state": "steady"
-        },
-        {
-          "type": "point",
-          "temperatureK": 9000,
-          "colorOverride": true,
-          "intensityUnit": "tabletop-profile-unit",
-          "physicalIntensityUnit": "renderer-intensity",
-          "positionStrategy": "board-relative",
-          "azimuthDeg": 0,
-          "elevationDeg": 45,
-          "spot": {
-            "coneDeg": 45,
-            "penumbra": 0
-          },
-          "shadow": {
-            "cast": true,
-            "bias": -0.002,
-            "normalBias": 0,
-            "mapSize": 512,
-            "budgetPriority": 1
-          },
-          "fixtureId": "bracket-generic",
-          "mount": "none",
-          "emitterLocal": {
-            "x": 0,
-            "y": 0.03,
-            "z": 0.12
-          },
           "flicker": {
-            "amplitude": 0.12,
+            "amplitude": 0,
             "cadenceMs": 480,
             "intervalJitter": 0,
             "directionAmplitude": 0,
-            "recipeId": "steady",
-            "seed": "clay-c1a:east-cool"
+            "recipeId": "steady"
           },
-          "id": "clay-east-cool",
-          "label": "cool calibration bulb",
+          "id": "sun-key",
+          "label": "sun key",
           "enabled": true,
-          "color": 11452392,
+          "color": 16773848,
           "intensity": 9,
-          "physicalIntensity": 9,
+          "physicalIntensity": 1.1,
           "pos": {
-            "x": 0.53,
-            "y": 1.7,
-            "z": 0
+            "x": 0.4,
+            "y": 3,
+            "z": -0.4
           },
-          "heightM": 2.591,
-          "rangeM": 18.288,
+          "heightM": 4.572,
+          "rangeM": 15.24,
           "falloff": 1,
           "state": "steady"
         }

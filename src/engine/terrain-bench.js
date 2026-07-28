@@ -29,18 +29,25 @@ var CL_F07_TERRAIN_BENCH = Object.freeze({
   cameras: Object.freeze(["production", "strategic-72"]),
   scenes: Object.freeze([
     Object.freeze({ id: "thirteen-piece-sheet", capture: 1, label: "The thirteen-piece sheet",
+      lightRecipeId: "daylit",
       claim: "every rung-1 piece exists, on one field, at both cameras, with the witness on each" }),
     Object.freeze({ id: "one-clamp-proof", capture: 2, label: "The one-clamp proof",
+      lightRecipeId: "daylit",
       claim: "a hill and a cliff from the SAME parameter set with only slopeClamp changed" }),
     Object.freeze({ id: "boundary-sheet", capture: 3, label: "The boundary sheet",
+      lightRecipeId: "daylit",
       claim: "all six wilderness-area-type boundary strings as the perimeter of one 60x80 kidney" }),
     Object.freeze({ id: "route-proof", capture: 4, label: "The route proof",
+      lightRecipeId: "daylit",
       claim: "a real area-type row's named entry resolves to a walkable edge cell; two terrain-caused plans" }),
     Object.freeze({ id: "walk-down-16", capture: 5, label: "The walk-down proof",
+      lightRecipeId: "daylit",
       claim: "the 16-cell tray asked for a chasm it cannot hold walks down and records degradedFrom" }),
     Object.freeze({ id: "support-graph", capture: 6, label: "The support-graph proof",
+      lightRecipeId: "daylit",
       claim: "the CL-R3 traversability grid projected; zero standable surfaces unreachable without flight" }),
     Object.freeze({ id: "dark", capture: 7, label: "Dark", lightRecipeId: "dark",
+      neutralizeHostRig: true,
       claim: "terrain in darkness — the edge must stay findable by something diegetic" })
   ]),
   /* The census median arrival: 60'x80' = 12x16 cells = 192. The sheet needs the 80'x80' maximum
@@ -68,12 +75,31 @@ var CL_F07_TERRAIN_BENCH = Object.freeze({
   })
 });
 
-/* The light case a scene declares. Scene 7 is the §4.2 "all rungs" hostile case: darkness may be
-   dark, but the edge must still be findable. Declaring it here means the mount reasserts it on
-   every rebuild instead of trusting a one-shot call from a capture rig. */
+/* THE LIGHT CASE EVERY SCENE DECLARES. `daylit` is the standard clay production-capture
+   illumination — the recipe CL-F01/CL-F04/CL-F05 open on (theater-clay-room's own
+   initialLightRecipeId) and the one the known-good construction-bench captures were banked under.
+   Scene 7 declares `dark`, the §4.2 hostile case: darkness may be dark, but the edge must still be
+   findable.
+
+   ABSENCE IS A BUILD ERROR, NOT A FALLBACK. Round 1 scoped rig-neutralisation to "scenes that
+   declare a light case" while leaving the production scenes declaring nothing — so they kept the
+   neutralisation and got no substitute, and every one of them rendered as an unlit silhouette.
+   A scene with no declared light case must now fail loudly at build time instead of quietly
+   rendering black. */
 function terrainBenchSceneLightRecipe(sceneId){
   var scene = CL_F07_TERRAIN_BENCH.scenes.filter(function(s){ return s.id === sceneId; })[0];
-  return (scene && scene.lightRecipeId) || null;
+  if(!scene) throw new Error("terrainBenchSceneLightRecipe: unknown scene " + sceneId);
+  if(!scene.lightRecipeId){
+    throw new Error("terrainBenchSceneLightRecipe: scene " + sceneId + " declares no light case");
+  }
+  return scene.lightRecipeId;
+}
+
+/* Only a scene whose whole point is the absence of light may take the host rig down. Every other
+   scene keeps it — that rig is what lights the clay. */
+function terrainBenchSceneNeutralizesRig(sceneId){
+  var scene = CL_F07_TERRAIN_BENCH.scenes.filter(function(s){ return s.id === sceneId; })[0];
+  return !!(scene && scene.neutralizeHostRig);
 }
 
 /* Thirteen bays over the 16x16 maximum tray. Each piece is built in its own 4x4 local bay and

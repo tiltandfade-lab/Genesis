@@ -402,12 +402,25 @@ guard("15. renderer boundary", () => {
 // ============================================================================
 console.log("17. frame hygiene (regressions found in the first capture packet)");
 guard("17. frame hygiene", () => {
-  /* 17a — the light case is fixture DATA, not a capture-rig argument. The first dark capture
-     rendered pale because the rig's one-shot call was the only thing asserting it. */
-  check("17a. the dark scene declares its light recipe in the fixture data",
-    W.terrainBenchSceneLightRecipe("dark") === "dark"
-    && W.terrainBenchSceneLightRecipe("thirteen-piece-sheet") === null,
-    String(W.terrainBenchSceneLightRecipe("dark")));
+  /* 17a — EVERY scene declares a light case, and absence is a build error. Round 1 scoped
+     rig-neutralisation to "scenes that declare a light case" while the production scenes declared
+     nothing: they kept the neutralisation, got no substitute, and every one rendered unlit. */
+  const scenes = W.CL_F07_TERRAIN_BENCH.scenes.map(s => s.id);
+  const declared = scenes.map(id => [id, W.terrainBenchSceneLightRecipe(id)]);
+  check("17a. every bench scene declares an explicit light case",
+    declared.length === 7 && declared.every(([, r]) => typeof r === "string" && r.length > 0),
+    JSON.stringify(declared));
+  check("17a2. the production scenes declare the standard clay capture illumination, dark declares dark",
+    declared.filter(([id]) => id !== "dark").every(([, r]) => r === "daylit")
+    && W.terrainBenchSceneLightRecipe("dark") === "dark");
+  /* A missing declaration must FAIL LOUDLY rather than fall back to black. */
+  let threw = false;
+  try { W.terrainBenchSceneLightRecipe("no-such-scene"); } catch(e){ threw = true; }
+  check("17a3. a scene with no declared light case throws instead of falling back", threw);
+  /* Declaring a light case and taking the host rig down are separate decisions. */
+  check("17a4. only the dark scene neutralises the host rig",
+    W.terrainBenchSceneNeutralizesRig("dark") === true
+    && scenes.filter(id => id !== "dark").every(id => W.terrainBenchSceneNeutralizesRig(id) === false));
 
   const src = read("src/ui/theater-clay-room.js");
   const start = src.indexOf("CL-F07 TERRAIN BENCH");
@@ -427,11 +440,15 @@ guard("17. frame hygiene", () => {
 
   /* 17d — host room furniture is DETACHED, because the flicker driver writes `visible` on the
      fixture bodies every frame and a hide loses that race. */
-  check("17d. host practicals are detached (not merely hidden) and restorable",
+  /* 17d — chrome suppression must NEVER touch a light. clay-opposing-pair is a two-point-light
+     recipe whose lights live inside the calibration practicals; detaching those groups carried the
+     scene's whole illumination out with the housings. */
+  check("17d. host chrome is suppressed without ever removing a light",
     /clayTerrainSuppressHostChrome/.test(region)
     && /clayTerrainRestoreHostChrome/.test(src)
-    && /parent\.remove\(group\)/.test(region)
-    && /isDoorLeaf/.test(region));
+    && /isDoorLeaf/.test(region)
+    && /if\(child\.isLight\) return;/.test(region)
+    && !/parent\.remove\(group\)/.test(region));
 
   /* 17e — every witness records the ground it stands on, so "0 refusals" is checkable against
      "0 levitations" instead of assumed. */

@@ -27,6 +27,10 @@ import sys
 from PIL import Image
 
 BACKGROUND_TOLERANCE = 6          # chroma spread under which a pixel counts as flat backdrop
+TERRAIN_TOLERANCE = 18            # distance from the modal backdrop colour that counts as terrain
+MIN_TERRAIN_PX = 400              # below this the "terrain region" is too small to measure honestly
+LIT_MIN_TERRAIN_P50 = 45.0        # calibrated on cda3784c's genuinely lit renders (p50 65.9 / 86.0)
+DARK_MAX_TERRAIN_P50 = 40.0       # the dark case must be dark WHERE THE TERRAIN IS
 MIN_CONTENT_PCT = 2.0             # a frame with less than this much non-backdrop rendered nothing
 MIN_EDGE_PCT = 1.5                # on the fixed 200x200 grid an empty region measures 0.00% and a
                                   # frame with modelled form measures 4.5-6% — a 3x margin either way
@@ -61,10 +65,19 @@ def frame_stats(path):
 
     content = 0
     lumas = []
+    terrain_lumas = []
     for r, g, b in px:
-        if (abs(r - backdrop[0]) + abs(g - backdrop[1]) + abs(b - backdrop[2])) > BACKGROUND_TOLERANCE:
+        dist = abs(r - backdrop[0]) + abs(g - backdrop[1]) + abs(b - backdrop[2])
+        if dist > BACKGROUND_TOLERANCE:
             content += 1
-        lumas.append(0.2126 * r + 0.7152 * g + 0.0722 * b)
+        luma = 0.2126 * r + 0.7152 * g + 0.0722 * b
+        lumas.append(luma)
+        # THE TERRAIN'S OWN SCREEN REGION. Measuring luma over the whole frame let a black,
+        # unlit field pass a "lit" check on the strength of the pale backdrop behind it: the
+        # whole-frame p50 was 117 for a good render AND for a near-black one, identical to the
+        # decimal. Everything that is not the modal backdrop colour is what was actually drawn.
+        if dist > TERRAIN_TOLERANCE:
+            terrain_lumas.append(luma)
 
     # EDGE DENSITY is the honest "did anything render" test. A flat backdrop and a smooth fog
     # GRADIENT both read as high contentPct against a single modal colour — which is exactly how an
@@ -91,10 +104,21 @@ def frame_stats(path):
     def pct(p):
         return round(lumas[min(n - 1, int(n * p))], 2)
 
+    terrain_sorted = sorted(terrain_lumas)
+
+    def tpct(p):
+        if not terrain_sorted:
+            return None
+        return round(terrain_sorted[min(len(terrain_sorted) - 1, int(len(terrain_sorted) * p))], 2)
+
     return {
         "file": os.path.basename(path),
         "pixels": n,
         "backdrop": list(backdrop),
+        "terrainPx": len(terrain_sorted),
+        "terrainP05Luma": tpct(0.05),
+        "terrainP50Luma": tpct(0.50),
+        "terrainP95Luma": tpct(0.95),
         "contentPct": round(100.0 * content / n, 3),
         "edgePct": edge_pct,
         "meanLuma": round(sum(lumas) / n, 2),
@@ -201,6 +225,9 @@ def measure(capture_dir):
                  "mean 0 levitations" % (label_of(cap), max_gap, WITNESS_MAX_GAP))
 
         requested = terrain.get("requestedLightRecipe")
+        if not requested:
+            fail("%s: no light case declared for this scene — every bench scene must declare one"
+                 % label_of(cap))
         applied = terrain.get("appliedLightRecipe")
         scene["requestedLightRecipe"] = requested
         scene["appliedLightRecipe"] = applied
@@ -260,22 +287,40 @@ def measure(capture_dir):
     if gate.get("maxWalkableSlopeDeg") is not None and gate["maxWalkableSlopeDeg"] > 30:
         fail("gate: max walkable slope %s deg exceeds 30" % gate["maxWalkableSlopeDeg"])
 
-    # The dark case has to be dark in the PIXELS. Labelling a pale frame "dark" is precisely the
-    # defect this gate exists for.
+    # LIT vs DARK, measured WHERE THE TERRAIN IS. The whole-frame version of this check passed a
+    # near-black field on the strength of the backdrop behind it; these numbers come from the
+    # terrain's own screen region and nothing else.
+    lit_p50 = {}
+    for sc in report["scenes"]:
+        f = next((fr for fr in sc["frames"] if "settled-production" in fr["file"]), None)
+        if not f:
+            continue
+        sc["terrainPx"] = f.get("terrainPx")
+        sc["terrainP50Luma"] = f.get("terrainP50Luma")
+        if not f.get("terrainPx") or f["terrainPx"] < MIN_TERRAIN_PX:
+            fail("%s: terrain region is only %s px — nothing measurable was drawn"
+                 % (sc.get("label") or sc["sceneId"], f.get("terrainPx")))
+            continue
+        declared = sc.get("appliedLightRecipe")
+        if sc["sceneId"] == "dark":
+            if f["terrainP50Luma"] > DARK_MAX_TERRAIN_P50:
+                fail("dark: the terrain is not dark (terrain p50 %.1f > %.1f)"
+                     % (f["terrainP50Luma"], DARK_MAX_TERRAIN_P50))
+        else:
+            lit_p50[sc.get("label") or sc["sceneId"]] = f["terrainP50Luma"]
+            if f["terrainP50Luma"] < LIT_MIN_TERRAIN_P50:
+                fail("%s: the terrain is UNLIT (terrain p50 %.1f < %.1f) — the frame's pale "
+                     "backdrop is not illumination"
+                     % (sc.get("label") or sc["sceneId"], f["terrainP50Luma"], LIT_MIN_TERRAIN_P50))
+    report["litTerrainP50"] = lit_p50
+
     dark = next((s for s in report["scenes"] if s["sceneId"] == "dark"), None)
-    if dark:
-        f = next((fr for fr in dark["frames"] if "settled-production" in fr["file"]), None)
-        if f:
-            dark["p95Luma"] = f["p95Luma"]
-            if f["p95Luma"] > DARK_MAX_P95_LUMA:
-                fail("dark: the frame is not dark (p95 luma %.1f > %.1f)"
-                     % (f["p95Luma"], DARK_MAX_P95_LUMA))
-        lit = next((s for s in report["scenes"] if s["sceneId"] == "thirteen-piece-sheet"), None)
-        if lit and f:
-            lf = next((fr for fr in lit["frames"] if "settled-production" in fr["file"]), None)
-            if lf and f["p95Luma"] >= lf["p95Luma"]:
-                fail("dark: the dark frame is not darker than the lit sheet "
-                     "(p95 %.1f vs %.1f)" % (f["p95Luma"], lf["p95Luma"]))
+    if dark and lit_p50:
+        dmax = dark.get("terrainP50Luma")
+        lmin = min(lit_p50.values())
+        if dmax is not None and dmax >= lmin:
+            fail("dark: the dark terrain is not darker than the dimmest lit terrain "
+                 "(%.1f vs %.1f)" % (dmax, lmin))
 
     det = index.get("determinism") or {}
     report["determinism"] = det
@@ -305,6 +350,9 @@ def main():
                  s["cellMeshes"], s["standableCells"], s["witnesses"],
                  s["productionEdgePct"] or 0.0, s["strategicEdgePct"] or 0.0,
                  s.get("witnessMaxGap"), s.get("appliedLightRecipe") or "-"))
+    print("  terrain-region p50 luma — lit: %s | dark: %s"
+          % (", ".join("%s=%.1f" % (k.split("-", 1)[-1], v) for k, v in report.get("litTerrainP50", {}).items()),
+             (next((s for s in report["scenes"] if s["sceneId"] == "dark"), {}) or {}).get("terrainP50Luma")))
     print("  determinism: %s (%s fields, %s page loads)"
           % (report["determinism"].get("result"),
              report["determinism"].get("fieldsCompared"),

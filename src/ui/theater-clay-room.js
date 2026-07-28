@@ -4091,38 +4091,24 @@ function clayTerrainSuppressHostChrome(){
     node.userData.clayTerrainHostSuppressed = bucket;
     suppressed[bucket]++;
   });
-  /* A fixture BODY is an unmarked sibling of its emitter inside the practical's own group, and the
-     flicker driver WRITES `visible` on those bodies every frame — so hiding them loses the same
-     race the camera-tracking lights lose. DETACH the whole practical group instead, remembering
-     its parent and index so the restore puts it back exactly where it was. */
-  const practicals = [];
+  /* A fixture BODY is an unmarked sibling of its emitter inside the practical's own group. Round 1
+     DETACHED that group — and `clay-opposing-pair` is literally a two-point-light opposing pair
+     whose lights live inside those two practicals, so the detach carried the scene's entire
+     illumination out with the housings. Every production frame then rendered as an unlit
+     silhouette on a pale backdrop, which the whole-frame luma gate could not see.
+     NEVER touch a light, and never hide a group that contains one: hide the MESH bodies only. */
   root.traverse(function(node){
     if(!(node.userData && node.userData.fixtureEmitter)) return;
-    const par = node.parent;
-    if(!par || par === root || !par.parent) return;
-    if(practicals.indexOf(par) >= 0) return;
-    /* ONLY the emitter's immediate parent, and only if that subtree is purely a practical. Walking
-       three ancestors up detached a shared group and took the entire terrain field off the scene
-       with it — the sheet came back as an empty rectangle with a few standees in it. A detach must
-       be provably surgical before it is allowed to happen. */
-    let holdsOther = false;
-    par.traverse(function(child){
-      const cd = child.userData || {};
-      if(cd.terrainCell || cd.terrainWater || cd.terrainVolume || cd.terrainSpan
-        || cd.clayTerrainWitness || cd.terrainSupportCell || cd.terrainRoute
-        || cd.interiorKind === "room-shell-floor") holdsOther = true;
+    const practical = node.parent;
+    if(!practical || practical === root) return;
+    practical.traverse(function(child){
+      if(child.isLight) return;
+      if(!child.isMesh || child.visible === false) return;
+      child.visible = false;
+      child.userData.clayTerrainHostSuppressed = "fixture";
     });
-    if(holdsOther) return;
-    practicals.push(par);
   });
-  S.clayRoomTerrainDetachedPracticals = S.clayRoomTerrainDetachedPracticals || [];
-  practicals.forEach(function(group){
-    const parent = group.parent;
-    if(!parent) return;
-    const index = parent.children.indexOf(group);
-    S.clayRoomTerrainDetachedPracticals.push({ group: group, parent: parent, index: index });
-    parent.remove(group);
-  });
+
   /* Report the CUMULATIVE state, not this pass's delta. The sweep runs twice per rebuild and the
      second pass skips what the first already hid, so a delta reads as "0 suppressed" on a frame
      where the door and both fixtures are in fact gone — a receipt that says nothing was suppressed
@@ -4132,8 +4118,7 @@ function clayTerrainSuppressHostChrome(){
     const b = node.userData && node.userData.clayTerrainHostSuppressed;
     if(b && total[b] != null) total[b]++;
   });
-  total.fixture += (S.clayRoomTerrainDetachedPracticals || []).length;
-  total.detachedPracticals = (S.clayRoomTerrainDetachedPracticals || []).length;
+  total.detachedPracticals = 0;   /* nothing is detached any more — see the note above */
   return total;
 }
 
@@ -4253,18 +4238,16 @@ function clayRoomMountTerrainBench(){
   /* THE SCENE'S OWN LIGHT CASE. Declared in the fixture data and asserted here, so every rebuild
      reasserts it — a one-shot call from a capture rig is silently lost to the next board replay,
      and "requested dark" then ships as a receipt field with a pale frame beside it. */
-  const requestedLightRecipe = (typeof terrainBenchSceneLightRecipe === "function")
-    ? terrainBenchSceneLightRecipe(sceneId) : null;
-  if(requestedLightRecipe && S.clayRoomLightRecipeId !== requestedLightRecipe){
+  const requestedLightRecipe = terrainBenchSceneLightRecipe(sceneId);
+  if(S.clayRoomLightRecipeId !== requestedLightRecipe){
     clayRoomSetLightingRecipe(requestedLightRecipe, "cl-f07-scene-light-case");
   }
-  /* SCOPED TO SCENES THAT DECLARE A LIGHT CASE. Neutralising the base rig in EVERY scene was an
-     overcorrection that had to be caught in the frames: the theater rig is what lights the clay in
-     the first place, so removing it everywhere left the terrain unlit and the sheet came back as an
-     empty brown rectangle with a few emissive standees floating in it. Only a scene that declares
-     its own light case (scene 7) may take the rig down — for every other scene the rig stays and is
-     restored if a previous scene took it. */
-  const foreignLights = requestedLightRecipe
+  /* DECLARING a light case and TAKING THE HOST RIG DOWN are two different decisions. Round 1
+     conflated them: "neutralise iff the scene declares a recipe" meant the production scenes —
+     which declared nothing — kept a neutralised rig with no substitute and went black. Only a scene
+     whose whole point is the absence of light may take the rig down; every other scene keeps it. */
+  const neutralizeRig = terrainBenchSceneNeutralizesRig(sceneId);
+  const foreignLights = neutralizeRig
     ? clayTerrainNeutralizeForeignLights()
     : (clayTerrainRestoreForeignLights(), []);
 
@@ -4444,6 +4427,7 @@ function clayRoomMountTerrainBench(){
     appliedLightRecipe: S.clayRoomLightRecipeId
       || (S.clayRoomCompiled && S.clayRoomCompiled.lightRecipeId) || null,
     lightRecipeDrift: !!(requestedLightRecipe && S.clayRoomLightRecipeId !== requestedLightRecipe),
+    neutralizeHostRig: neutralizeRig,
     gridLaw: TERRAIN_GRID_LAW,
     fields: built.map(function(b){
       return {
@@ -5224,9 +5208,9 @@ function clayRoomAfterInteriorBoardRebuild(){
      time is always one step behind both. Restores the moment any other fixture is selected, so
      this costs the other five benches nothing. */
   if(S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID){
-    const declaresLightCase = !!(S.clayRoomTerrainReport
-      && S.clayRoomTerrainReport.requestedLightRecipe);
-    const lateLights = declaresLightCase ? clayTerrainNeutralizeForeignLights() : [];
+    const sceneNeutralizes = typeof terrainBenchSceneNeutralizesRig === "function"
+      && terrainBenchSceneNeutralizesRig(S.clayRoomTerrainSceneId);
+    const lateLights = sceneNeutralizes ? clayTerrainNeutralizeForeignLights() : [];
     const lateChrome = clayTerrainSuppressHostChrome();
     if(S.clayRoomTerrainReport){
       S.clayRoomTerrainReport.foreignLightsNeutralized = lateLights;

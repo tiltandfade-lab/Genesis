@@ -35,6 +35,7 @@
       "requestedLightRecipe": "dark",
       "appliedLightRecipe": "dark",
       "lightRecipeDrift": false,
+      "neutralizeHostRig": true,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -616,10 +617,10 @@
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
-        "fixture": 2,
+        "fixture": 0,
         "mote": 8,
         "overlay": 1,
-        "detachedPracticals": 2
+        "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [
         {
@@ -1371,7 +1372,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.24,
+            1.239,
             0.269
           ],
           "size": [
@@ -1392,7 +1393,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.042,
+            0.041,
             0.691
           ],
           "size": [
@@ -1413,7 +1414,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.519,
+            1.518,
             0.111
           ],
           "size": [
@@ -1434,7 +1435,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            0.642,
+            0.641,
             -0.102
           ],
           "size": [
@@ -1455,7 +1456,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.323,
+            1.322,
             0.104
           ],
           "size": [
@@ -1476,7 +1477,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            0.812,
+            0.811,
             -1.283
           ],
           "size": [
@@ -1497,7 +1498,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            0.908,
+            0.907,
             2.252
           ],
           "size": [
@@ -14385,6 +14386,7 @@
       "requestedLightRecipe": "dark",
       "appliedLightRecipe": "dark",
       "lightRecipeDrift": false,
+      "neutralizeHostRig": true,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -14966,10 +14968,10 @@
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
-        "fixture": 2,
+        "fixture": 0,
         "mote": 8,
         "overlay": 1,
-        "detachedPracticals": 2
+        "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [
         {
@@ -15700,7 +15702,7 @@
           "group": "moteGroup",
           "pos": [
             1.102,
-            0.645,
+            0.641,
             -1.192
           ],
           "size": [
@@ -15721,7 +15723,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.55,
+            1.544,
             0.269
           ],
           "size": [
@@ -15742,7 +15744,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.46,
+            0.452,
             0.691
           ],
           "size": [
@@ -15763,7 +15765,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.893,
+            1.886,
             0.111
           ],
           "size": [
@@ -15784,7 +15786,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            1.024,
+            1.017,
             -0.102
           ],
           "size": [
@@ -15805,7 +15807,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.769,
+            1.76,
             0.104
           ],
           "size": [
@@ -15826,7 +15828,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            1.234,
+            1.226,
             -1.283
           ],
           "size": [
@@ -15847,7 +15849,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.359,
+            1.351,
             2.252
           ],
           "size": [
@@ -28735,6 +28737,7 @@
       "requestedLightRecipe": "dark",
       "appliedLightRecipe": "dark",
       "lightRecipeDrift": false,
+      "neutralizeHostRig": true,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -29316,10 +29319,10 @@
       "hostSuppressed": {
         "shell": 9,
         "door": 1,
-        "fixture": 2,
+        "fixture": 0,
         "mote": 8,
         "overlay": 1,
-        "detachedPracticals": 2
+        "detachedPracticals": 0
       },
       "foreignLightsNeutralized": [
         {
@@ -30050,7 +30053,7 @@
           "group": "moteGroup",
           "pos": [
             1.102,
-            0.704,
+            0.694,
             -1.192
           ],
           "size": [
@@ -30071,7 +30074,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.633,
+            1.619,
             0.269
           ],
           "size": [
@@ -30092,7 +30095,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.573,
+            0.554,
             0.691
           ],
           "size": [
@@ -30113,7 +30116,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.994,
+            1.977,
             0.111
           ],
           "size": [
@@ -30134,7 +30137,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            1.127,
+            1.11,
             -0.102
           ],
           "size": [
@@ -30155,7 +30158,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.889,
+            1.868,
             0.104
           ],
           "size": [
@@ -30176,7 +30179,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            1.347,
+            1.328,
             -1.283
           ],
           "size": [
@@ -30197,7 +30200,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.48,
+            1.46,
             2.252
           ],
           "size": [

@@ -1734,6 +1734,7 @@
       "owns": [
         "CL_F07_TERRAIN_BENCH",
         "terrainBenchSceneLightRecipe",
+        "terrainBenchSceneNeutralizesRig",
         "terrainBenchSheetSpec",
         "terrainBenchSheetParams",
         "TERRAIN_ONE_CLAMP_BASE",

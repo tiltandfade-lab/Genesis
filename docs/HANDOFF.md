@@ -6,6 +6,62 @@ updated: 2026-07-28
 
 # Genesis — Session Hand-off
 
+## Latest (2026-07-28, ASSETFORGE GROUND-FIELD V2 / CLAYROOM) [Codex]
+
+The missing exterior-ground process now exists as a distinct Assetforge compiler and a production
+Theater integration proof. It is not another seamless-single-tile claim.
+
+- **Compiler:** `ground-field` quilts 64 deterministic interior variants behind exact two-color
+  Wang edges, hash-selects them across a 15×15 field, adds a 6×5 low-frequency color/roughness
+  field, scatters bare-soil/stones/grass-clumps/wear overlays, and projects a smoothed path with
+  blended shoulders.
+- **Anti-repeat evidence:** all 64 variants appear in the real field; the largest identical-tile
+  share is `0.04`. The repeated-single negative control retains an exact tile-period pixel
+  difference of `0.0`; the compiled field measures `14.321615`. All 4,096 compatible Wang
+  neighbor pairs close exactly.
+- **Scale correction:** V1 enlarged a 96 px crop from a 1,254 px one-cell meadow source over a
+  whole world cell. V2 first normalizes the complete admitted material to one cell, bakes at
+  192 texels/cell, and emits a 2880×2880 field plus height, normal, and ORM.
+- **Production seam:** boards may optionally supply `board.groundField`. The production
+  interior and tabletop realizers share one adapter that mounts compiled albedo/normal/ORM on a
+  subdivided shadow-receiving `MeshStandardMaterial` plane. Boards without the payload retain the
+  existing ground path.
+- **Actual Clayroom proof:** CL-F06 uses the governed
+  `clayRoomBoardFrom → interiorBuildBoard → setInteriorBoard` route, production perspective camera,
+  lights, shadows, and interior surface routing. It requests zero pieces and resolves zero legacy
+  model fallbacks. The old flat battlefield-style proof was withdrawn and removed.
+- **Sampling boundary:** this change does not alter sprite sampling. Ground-field textures use
+  trilinear mipmapped minification and up to 8× anisotropy for wide oblique views; albedo
+  magnification remains nearest. The separately rejected blurry citizenship-v2 work remains
+  unresolved.
+- **Admission boundary:** receipts say `CANDIDATE`. The tool and integration are mechanically
+  proved; the generated field is prototype art awaiting founder visual review and is not routed
+  into a production wilderness board.
+
+Evidence:
+
+- Compiler receipt:
+  `dev/model-qa/assetforge-real/runs/ground-field/positive/receipt.json`
+- Governed Clayroom receipt:
+  `dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-proof-receipt.json`
+- Compiled/control/rotated captures:
+  `dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/`
+
+Reproduce:
+
+```bash
+python3 build/assetforge.py ground-field compile \
+  dev/model-qa/assetforge-real/manifests/ground-field-real.json \
+  --output-dir dev/model-qa/assetforge-real/runs/ground-field/positive --force
+python3 build/assetforge.py suite self-test --force
+node dev/capture-ground-field-clayroom-proof.mjs
+```
+
+**Next honest promotion:** Adam reviews the governed Clayroom compiled/control/rotated set. If the
+visual direction is accepted, route a real wilderness board descriptor to `board.groundField` and
+tune overlay/path vocabulary per biome; do not conflate that with the still-open pixel-safe
+sprite-citizenship correction.
+
 ## Latest (2026-07-28, ASSETFORGE V2 FOUNDER RE-REVIEW) [Codex]
 
 Adam rejected the newest citizenship and path presentation proofs. Their mechanical receipts remain

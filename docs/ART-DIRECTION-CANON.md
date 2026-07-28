@@ -2028,3 +2028,22 @@ Binding consequences:
 - The existing per-room/per-cell tone jitter and small cover splats are supporting layers, not an
   adequate substitute for breaking albedo repetition. The previously rejected `forcePeriodic`
   modular-repeat output remains rejected.
+
+## GROUND-FIELD COMPILER MANDATE (Adam, 2026-07-28 — binding; verbatim)
+
+> "The missing tool is really a ground-field compiler, not another seamless-tile maker:
+> Generate several edge-compatible variants through texture quilting.
+> Select them deterministically using Wang/hash placement.
+> Add a much larger low-frequency color/roughness variation field.
+> Place sparse semantic overlays—bare soil, stones, grass clumps, wear.
+> Project paths into that field with blended shoulders.
+> Prove it in the actual engine across a large camera-visible area.
+>
+> this sounds like it should happen now"
+
+The ground-field compiler is a distinct Assetforge family and an immediate implementation mandate.
+It consumes seamless material parents but may not claim that one repeated parent solves visible
+cadence. A complete candidate requires all six stages named above, a deterministic repeated-tile
+negative control, machine-verifiable edge and cadence gates, and retained production-Theater
+captures over a large field with the governed camera, lighting, shadows, props, and standees.
+Technical success establishes a prototype candidate only; visual admission remains Adam's.

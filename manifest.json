@@ -2960,6 +2960,18 @@
       ]
     },
     {
+      "id": "ui.theater-ground-field",
+      "path": "src/ui/theater-ground-field.js",
+      "type": "module",
+      "owns": [
+        "*mountCompiledGroundField"
+      ],
+      "callTimeDeps": [],
+      "layer": "ui",
+      "desc": "Shared optional compiled ground-field projection for both production Theater scene realizers. Loads and caches one field-scale albedo/roughness pair, applies the renderer's established texture filter and PBR shader path, mounts one shadow-receiving world plane over the caller's resolved footprint, records a machine-readable runtime report, and replays through the owning realizer when asynchronous maps settle. It owns no board semantics, camera, fixture, or production admission decision.",
+      "mustFollow": []
+    },
+    {
       "id": "ui.theater-tabletop",
       "path": "src/ui/theater-tabletop.js",
       "type": "module",
@@ -2978,6 +2990,7 @@
         "ui.theater-boot",
         "ui.theater-parts",
         "ui.theater-dispose",
+        "ui.theater-ground-field",
         "ui.theater-camera",
         "ui.theater-lighting",
         "ui.theater-post",
@@ -2993,6 +3006,7 @@
       "mustFollow": [
         "src/ui/theater-parts.js",
         "src/ui/theater-dispose.js",
+        "src/ui/theater-ground-field.js",
         "src/ui/theater-camera.js",
         "src/ui/theater-lighting.js",
         "src/ui/theater-post.js",
@@ -3040,6 +3054,7 @@
       "callTimeDeps": [
         "ui.theater-boot",
         "ui.theater-dispose",
+        "ui.theater-ground-field",
         "ui.theater-camera",
         "ui.theater-lighting",
         "ui.theater-post",
@@ -3058,6 +3073,7 @@
       "desc": "THEATER SPLIT B9 (docs/FABLE-THEATER-BOOT-SPLIT-BRIEF.md, 2026-07-25) — THE INTERIOR REALIZER, the second of the two scene realizers, and the one place the brief's item 5 forbids a straight 1,448-line move: setInteriorBoard is DECOMPOSED here into seventeen named phase functions (realizePhaseIntake / Teardown / Frame / LightBed / Surfaces / WallsDoors / Shell / Pillars / Groups / Practicals / Pieces / Furniture / Doors / KitShells / Atmosphere / CameraFit / Tail), each of whose bodies is a VERBATIM-lifted contiguous range of the pre-split function; the exported orchestrator keeps only the admission guard (mount/data check, MF-1's pre-fit pose capture, the dirty-key skip — early returns a phase list cannot express) and then calls them in the original order over one explicit `pass` context carrying exactly the locals that crossed a seam. No statement was reordered, merged or rewritten. Also here: setInteriorVariant, VQ2-RESPEC §4 unit F1's combat floor-grid overlay and the clay-diagnostic interiorLightingIdentityFor. Peer to ui.theater-tabletop — neither imports the other. Imports theater-clay-room.js for the four CL-R0 hooks, which is acyclic (the clay module takes setInteriorBoard/setInteriorVariant/f1BuildCombatGrid from theater-boot.js's ctx, never by import). Root->leaf ctx law: interiorRealizeInit(ctx) at end-of-body, interiorRealizeSyncState(S) at both createTheaterState() sites; six ctx accessors cover the mutable root lets ITR_ROOM_SHELL, ROOM_SHELL_POLYGON_KERNEL_FLAG, ITR_OCCLUSION_FADE_DISABLED_FOR_TEST, ITR_EMISSIVE_FILL_DISABLED_FOR_TEST, ITR_EMISSIVE_ALBEDO_LIFT_DISABLED_FOR_TEST and ITR_SPRITE_EMISSIVE_TINT. The doors family, the room-shell tunables and every ITR_SCENE_*/ITR_EMISSIVE_* constant stay root-owned and arrive through that ctx.",
       "mustFollow": [
         "src/ui/theater-dispose.js",
+        "src/ui/theater-ground-field.js",
         "src/ui/theater-camera.js",
         "src/ui/theater-lighting.js",
         "src/ui/theater-post.js",

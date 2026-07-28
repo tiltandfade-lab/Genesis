@@ -4,6 +4,7 @@
   "technicalStatus": "PASS",
   "familiesRequested": [
     "boundary",
+    "ground-field",
     "repeat",
     "prop-kit",
     "condition",
@@ -15,9 +16,9 @@
     "material",
     "regression"
   ],
-  "familyCount": 11,
-  "positiveControlsPassed": 11,
-  "negativeControlsRejected": 11,
+  "familyCount": 12,
+  "positiveControlsPassed": 12,
+  "negativeControlsRejected": 12,
   "destructiveOutputGuards": {
     "workspaceRoot": true,
     "liveAssetChild": true
@@ -38,6 +39,21 @@
         "neighborClosureExhaustive"
       ],
       "negativeReceipt": "dev/model-qa/assetforge-suite/runs/boundary/negative/receipt.json"
+    },
+    {
+      "family": "ground-field",
+      "positiveExpected": "PASS",
+      "positiveActual": "PASS",
+      "positiveProofBoard": "dev/model-qa/assetforge-suite/runs/ground-field/positive/proof-board.png",
+      "positiveReceipt": "dev/model-qa/assetforge-suite/runs/ground-field/positive/receipt.json",
+      "negativeExpected": "FAIL",
+      "negativeActual": "FAIL",
+      "negativeFailedGates": [
+        "deterministicWangHashPlacement",
+        "singleTileCadenceBroken",
+        "compiledPixelsBreakExactTilePeriod"
+      ],
+      "negativeReceipt": "dev/model-qa/assetforge-suite/runs/ground-field/negative/receipt.json"
     },
     {
       "family": "repeat",

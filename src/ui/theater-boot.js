@@ -3355,7 +3355,7 @@ function hashSeed(id){
 function createTheaterState(){
   return {
     mounted: false, el: null, renderer: null, scene: null, camera: null,
-    tileGroup: null, propGroup: null, unitGroup: null, shadowGroup: null,
+    tileGroup: null, propGroup: null, unitGroup: null, shadowGroup: null, groundFieldReport: null,
     rotationStep: 0, dirty: false, raf: null, resizeHandler: null,
     // T1.5: board-fit tracking (§3 camera fit) — the half-extents (world units) of the LAST board's
     // tile footprint, used both at setBoard time and on every rotate() so the fit survives rotation.
@@ -7601,6 +7601,8 @@ tabletopInit({
   sizeScaleFor,
   tileMaterialsFor,
   unitTint,
+  nearestify,
+  textureLoader,
 });
 interiorRealizeInit({
   S,
@@ -7648,7 +7650,9 @@ interiorRealizeInit({
   itrDoorMountMapFrom,
   itrScaleHexValue,
   markDirty,
+  nearestify,
   startTweenLoop,
+  textureLoader,
 });
 figureBuildInit({
   figCtxSpriteChannelEnabled: function(){ return SPRITE_CHANNEL_ENABLED; },

@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "qualification": {
+    "kind": "real-repository-asset",
+    "admission": "candidate-only"
+  },
+  "family": "ground-field",
+  "compiler": "ground-field-quilt-wang-macro-semantic-path-pbr-v2",
+  "baseMaterial": {
+    "tile": "dev/material-lane/source-sprites/b03-exterior-ground-v001/grass-meadow-seamlocked-v001.png",
+    "sha256": "c22d88681938ce67b8def7ac3d230d408a047358314e4e0946cb1a17dfa5f1bc"
+  },
+  "pathMaterial": {
+    "tile": "dev/material-lane/source-sprites/b03-exterior-ground-v001/worn-path-selected-v001.png",
+    "sha256": "3c6014aec5e7c87905d17b69f17fae53d5d0cc0a4f9388709adfdf5730e2c39e"
+  },
+  "tileSizePx": 192,
+  "edgeBandPx": 2,
+  "quiltPatchPx": 96,
+  "quiltOverlapPx": 24,
+  "wangEdgeColors": 2,
+  "variantsPerWangCode": 4,
+  "fieldCells": [
+    15,
+    15
+  ],
+  "macroGrid": [
+    6,
+    5
+  ],
+  "macroColorStrength": 0.1,
+  "roughnessRange": [
+    148,
+    238
+  ],
+  "pathRoughness": 184,
+  "semanticOverlays": {
+    "bareSoil": 14,
+    "stones": 28,
+    "grassClumps": 18,
+    "wear": 12
+  },
+  "path": {
+    "points": [
+      [
+        0.0,
+        0.76
+      ],
+      [
+        0.17,
+        0.63
+      ],
+      [
+        0.36,
+        0.67
+      ],
+      [
+        0.55,
+        0.46
+      ],
+      [
+        0.72,
+        0.39
+      ],
+      [
+        0.86,
+        0.23
+      ],
+      [
+        1.0,
+        0.28
+      ]
+    ],
+    "widthCells": 0.9,
+    "shoulderCells": 0.62
+  },
+  "minimumVariantDifference": 0.012,
+  "maximumIdenticalTileShare": 0.35,
+  "minimumFieldCellCount": 225,
+  "minimumRoughnessRange": 48,
+  "seed": 84017
+}

@@ -3,7 +3,7 @@ type: next-steps
 branch: Genesis
 status: living
 created: 2026-06-18
-updated: 2026-07-26
+updated: 2026-07-28
 related:
   - "[[DESIGN]]"
   - "[[GAP-ANALYSIS]]"
@@ -24,6 +24,16 @@ The audit separated four gates that the 2026-07-24 running record had collapsed:
 `RESEARCHED` · `FOUNDER-RULED` · `BRIEF-CONGRUENT` · `CLAY-PROVED`. The older uses of
 “served” and “queue empty” below are preserved as session history but are **superseded
 as current status** by `GOLDEN-SITES-CATALOG.md`.
+
+**Assetforge ground-field side lane (2026-07-28): ☑ mechanically complete, founder review
+pending.** Built the distinct quilt/Wang/hash ground-field compiler, macro color/roughness field,
+sparse semantic overlays, and blended path projection. CL-F06 now compares the corrected 15×15,
+2880×2880 PBR field with an exact repeated-single negative control through the governed Clayroom
+interior/camera/light/shadow path and at a rotated camera. The first flat battlefield-style proof
+and its physically enlarged material scale were withdrawn. All compiler and Clayroom gates pass;
+runtime admission remains `CANDIDATE`. Next promotion is a founder verdict on those individual
+Clayroom captures, followed by routing one real wilderness board if accepted. Pixel-safe sprite
+citizenship remains a separate open correction.
 
 1. ☑ Capture the docs-only engine marriage in
    `GOLDEN-SITE-ONTOLOGY-ENGINE-MARRIAGE.md`: the story engine remains authority;

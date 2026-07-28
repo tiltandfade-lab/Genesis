@@ -17,7 +17,12 @@ from collections import Counter, deque
 from pathlib import Path
 from typing import Any, Callable
 
-from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps, ImageStat
+
+try:
+    import numpy as np
+except ImportError:  # The small self-test fixtures retain the pure-Pillow fallback below.
+    np = None
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +31,7 @@ CHROMA = (255, 0, 255)
 ALGORITHM_VERSION = "assetforge-suite-v1"
 FAMILIES = (
     "boundary",
+    "ground-field",
     "repeat",
     "prop-kit",
     "condition",
@@ -2706,6 +2712,21 @@ def compile_atlas(manifest_path: Path, output_dir: Path, force: bool = False) ->
 
 def normal_from_height(height: Image.Image, strength: float) -> Image.Image:
     gray = height.convert("L")
+    if np is not None:
+        values = np.asarray(gray, dtype=np.float32)
+        left = np.roll(values, 1, axis=1)
+        right = np.roll(values, -1, axis=1)
+        up = np.roll(values, 1, axis=0)
+        down = np.roll(values, -1, axis=0)
+        nx = -(right - left) / 255.0 * strength
+        ny = -(down - up) / 255.0 * strength
+        length = np.sqrt(nx * nx + ny * ny + 1.0)
+        normal = np.stack((
+            np.rint((nx / length * 0.5 + 0.5) * 255.0),
+            np.rint((ny / length * 0.5 + 0.5) * 255.0),
+            np.rint((1.0 / length * 0.5 + 0.5) * 255.0),
+        ), axis=2)
+        return force_periodic(Image.fromarray(np.clip(normal, 0, 255).astype(np.uint8), "RGB"))
     px = gray.load()
     out = Image.new("RGB", gray.size, (128, 128, 255))
     target = out.load()
@@ -2795,6 +2816,902 @@ def compile_material(manifest_path: Path, output_dir: Path, force: bool = False)
     )
 
 
+# Ground-field compiler -----------------------------------------------------
+
+GROUND_FIELD_EDGE_NAMES = ("n", "e", "s", "w")
+
+
+def ground_field_hash(seed: int, *parts: Any) -> int:
+    payload = ":".join([str(seed), *(str(part) for part in parts)])
+    return int(hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16], 16)
+
+
+def ground_field_wrapped_crop(
+    source: Image.Image,
+    x: int,
+    y: int,
+    width: int,
+    height: int,
+) -> Image.Image:
+    source = source.convert("RGB")
+    result = Image.new("RGB", (width, height))
+    start_x = -(x % source.width)
+    start_y = -(y % source.height)
+    for paste_y in range(start_y, height, source.height):
+        for paste_x in range(start_x, width, source.width):
+            result.paste(source, (paste_x, paste_y))
+    return result
+
+
+def ground_field_overlap_error(
+    existing: Image.Image,
+    candidate: Image.Image,
+    left_overlap: int,
+    top_overlap: int,
+) -> float:
+    old = existing.convert("RGB")
+    new = candidate.convert("RGB")
+    old_px = old.load()
+    new_px = new.load()
+    total = 0
+    samples = 0
+    step = 2
+    if left_overlap:
+        for y in range(0, old.height, step):
+            for x in range(0, min(left_overlap, old.width), step):
+                total += sum(
+                    abs(old_px[x, y][channel] - new_px[x, y][channel])
+                    for channel in range(3)
+                )
+                samples += 3
+    if top_overlap:
+        for y in range(0, min(top_overlap, old.height), step):
+            for x in range(left_overlap, old.width, step):
+                total += sum(
+                    abs(old_px[x, y][channel] - new_px[x, y][channel])
+                    for channel in range(3)
+                )
+                samples += 3
+    return total / max(1, samples)
+
+
+def ground_field_quilt_tile(
+    source: Image.Image,
+    size: int,
+    border: int,
+    patch_size: int,
+    overlap: int,
+    seed: int,
+) -> Image.Image:
+    """Patch-quilt one tile, then leave its perimeter ready for Wang edge strips.
+
+    Candidate patches are selected by minimum RGB error against already-laid top/left
+    overlaps. The winning overlaps use hard minimum-error cuts, preserving the source's
+    pixel vocabulary instead of introducing a blurred alpha feather.
+    """
+    source = source.convert("RGB")
+    tile = ground_field_wrapped_crop(
+        source,
+        ground_field_hash(seed, "base-x") % source.width,
+        ground_field_hash(seed, "base-y") % source.height,
+        size,
+        size,
+    )
+    step = max(4, patch_size - overlap)
+    stop = size - border
+    for py in range(border, stop, step):
+        for px in range(border, stop, step):
+            width = min(patch_size, stop - px)
+            height = min(patch_size, stop - py)
+            if width <= 0 or height <= 0:
+                continue
+            left_overlap = min(overlap, width) if px > border else 0
+            top_overlap = min(overlap, height) if py > border else 0
+            existing = tile.crop((px, py, px + width, py + height))
+            candidates = []
+            for candidate_index in range(12):
+                sx = ground_field_hash(seed, px, py, candidate_index, "x") % source.width
+                sy = ground_field_hash(seed, px, py, candidate_index, "y") % source.height
+                candidate = ground_field_wrapped_crop(source, sx, sy, width, height)
+                error = ground_field_overlap_error(
+                    existing,
+                    candidate,
+                    left_overlap,
+                    top_overlap,
+                )
+                candidates.append((error, candidate_index, candidate))
+            _error, _candidate_index, winner = min(candidates, key=lambda row: (row[0], row[1]))
+
+            mask = Image.new("L", (width, height), 255)
+            mask_px = mask.load()
+            old_px = existing.load()
+            new_px = winner.load()
+            vertical_seam = 0
+            horizontal_seam = 0
+            if left_overlap:
+                column_errors = []
+                for x in range(left_overlap):
+                    value = 0
+                    for y in range(height):
+                        value += sum(
+                            abs(old_px[x, y][channel] - new_px[x, y][channel])
+                            for channel in range(3)
+                        )
+                    column_errors.append(value)
+                vertical_seam = min(
+                    range(left_overlap),
+                    key=lambda x: (column_errors[x], x),
+                )
+            if top_overlap:
+                row_errors = []
+                for y in range(top_overlap):
+                    value = 0
+                    for x in range(width):
+                        value += sum(
+                            abs(old_px[x, y][channel] - new_px[x, y][channel])
+                            for channel in range(3)
+                        )
+                    row_errors.append(value)
+                horizontal_seam = min(
+                    range(top_overlap),
+                    key=lambda y: (row_errors[y], y),
+                )
+            for y in range(height):
+                for x in range(width):
+                    keep_old = (
+                        (left_overlap and x < vertical_seam)
+                        or (top_overlap and y < horizontal_seam)
+                    )
+                    if keep_old:
+                        mask_px[x, y] = 0
+            tile.paste(winner, (px, py), mask)
+    return tile
+
+
+def ground_field_edge_library(
+    source: Image.Image,
+    size: int,
+    border: int,
+    edge_colors: int,
+    seed: int,
+) -> tuple[list[Image.Image], list[Image.Image], Image.Image]:
+    horizontal = []
+    vertical = []
+    for edge_code in range(edge_colors):
+        horizontal_strip = ground_field_wrapped_crop(
+            source,
+            ground_field_hash(seed, "horizontal", edge_code, "x") % source.width,
+            ground_field_hash(seed, "horizontal", edge_code, "y") % source.height,
+            size,
+            border,
+        )
+        # The two outward rows represent opposite sides of the same Wang edge code.
+        # Make those exact, while preserving the source-authored interior rows.
+        horizontal_strip.paste(
+            horizontal_strip.crop((0, 0, size, 1)),
+            (0, border - 1),
+        )
+        horizontal.append(horizontal_strip)
+        vertical_strip = ground_field_wrapped_crop(
+            source,
+            ground_field_hash(seed, "vertical", edge_code, "x") % source.width,
+            ground_field_hash(seed, "vertical", edge_code, "y") % source.height,
+            border,
+            size,
+        )
+        vertical_strip.paste(
+            vertical_strip.crop((0, 0, 1, size)),
+            (border - 1, 0),
+        )
+        vertical.append(vertical_strip)
+    corner = force_periodic(
+        ground_field_wrapped_crop(
+            source,
+            ground_field_hash(seed, "corner", "x") % source.width,
+            ground_field_hash(seed, "corner", "y") % source.height,
+            border,
+            border,
+        )
+    )
+    return horizontal, vertical, corner
+
+
+def ground_field_apply_edges(
+    tile: Image.Image,
+    codes: tuple[int, int, int, int],
+    horizontal: list[Image.Image],
+    vertical: list[Image.Image],
+    corner: Image.Image,
+    border: int,
+) -> Image.Image:
+    north, east, south, west = codes
+    result = tile.convert("RGB")
+    size = result.width
+    result.paste(horizontal[north], (0, 0))
+    result.paste(horizontal[south], (0, size - border))
+    result.paste(vertical[west], (0, 0))
+    result.paste(vertical[east], (size - border, 0))
+    for x, y in (
+        (0, 0),
+        (size - border, 0),
+        (0, size - border),
+        (size - border, size - border),
+    ):
+        result.paste(corner, (x, y))
+    return result
+
+
+def ground_field_tile_id(codes: tuple[int, int, int, int]) -> str:
+    base = "-".join(
+        f"{name}{code}"
+        for name, code in zip(GROUND_FIELD_EDGE_NAMES, codes[:4])
+    )
+    return base + (f"-v{codes[4]}" if len(codes) > 4 else "")
+
+
+def ground_field_tiles(
+    source: Image.Image,
+    size: int,
+    border: int,
+    patch_size: int,
+    overlap: int,
+    edge_colors: int,
+    variants_per_code: int,
+    seed: int,
+) -> dict[tuple[int, ...], Image.Image]:
+    horizontal, vertical, corner = ground_field_edge_library(
+        source,
+        size,
+        border,
+        edge_colors,
+        seed,
+    )
+    result = {}
+    for north in range(edge_colors):
+        for east in range(edge_colors):
+            for south in range(edge_colors):
+                for west in range(edge_colors):
+                    edge_codes = (north, east, south, west)
+                    for variant in range(variants_per_code):
+                        codes = (*edge_codes, variant)
+                        quilt = ground_field_quilt_tile(
+                            source,
+                            size,
+                            border,
+                            patch_size,
+                            overlap,
+                            ground_field_hash(seed, "quilt", *codes),
+                        )
+                        result[codes] = ground_field_apply_edges(
+                            quilt,
+                            edge_codes,
+                            horizontal,
+                            vertical,
+                            corner,
+                            border,
+                        )
+    return result
+
+
+def ground_field_placement(
+    cells_x: int,
+    cells_y: int,
+    edge_colors: int,
+    variants_per_code: int,
+    seed: int,
+    repeated_single: bool = False,
+) -> list[list[tuple[int, ...]]]:
+    if repeated_single:
+        return [[(0, 0, 0, 0, 0) for _x in range(cells_x)] for _y in range(cells_y)]
+    result: list[list[tuple[int, ...]]] = []
+    for y in range(cells_y):
+        row = []
+        for x in range(cells_x):
+            north = (
+                result[y - 1][x][2]
+                if y
+                else ground_field_hash(seed, x, y, "north") % edge_colors
+            )
+            west = (
+                row[x - 1][1]
+                if x
+                else ground_field_hash(seed, x, y, "west") % edge_colors
+            )
+            east = ground_field_hash(seed, x, y, "east") % edge_colors
+            south = ground_field_hash(seed, x, y, "south") % edge_colors
+            variant = ground_field_hash(seed, x, y, "variant") % variants_per_code
+            row.append((north, east, south, west, variant))
+        result.append(row)
+    return result
+
+
+def ground_field_render_tiles(
+    tiles: dict[tuple[int, ...], Image.Image],
+    placement: list[list[tuple[int, ...]]],
+    tile_size: int,
+) -> Image.Image:
+    field = Image.new(
+        "RGB",
+        (len(placement[0]) * tile_size, len(placement) * tile_size),
+    )
+    for y, row in enumerate(placement):
+        for x, codes in enumerate(row):
+            field.paste(tiles[codes], (x * tile_size, y * tile_size))
+    return field
+
+
+def ground_field_macro(
+    width: int,
+    height: int,
+    grid: tuple[int, int],
+    seed: int,
+) -> Image.Image:
+    rng = random.Random(ground_field_hash(seed, "macro"))
+    values = [rng.randrange(24, 232) for _ in range(grid[0] * grid[1])]
+    if values:
+        values[0] = 8
+        values[-1] = 247
+    low = Image.new("L", grid)
+    low.putdata(values)
+    return low.resize((width, height), Image.Resampling.BICUBIC)
+
+
+def ground_field_apply_macro(
+    field: Image.Image,
+    macro: Image.Image,
+    strength: float,
+) -> Image.Image:
+    source = field.convert("RGB")
+    if np is not None:
+        color = np.asarray(source, dtype=np.float32)
+        signed = (np.asarray(macro, dtype=np.float32) - 128.0) / 127.0
+        factors = np.stack((
+            1.0 + signed * strength,
+            1.0 + signed * strength * 0.72,
+            1.0 - signed * strength * 0.16,
+        ), axis=2)
+        compiled = np.rint(color * factors)
+        return Image.fromarray(np.clip(compiled, 0, 255).astype(np.uint8), "RGB")
+    output = Image.new("RGB", source.size)
+    source_px = source.load()
+    macro_px = macro.load()
+    output_px = output.load()
+    for y in range(source.height):
+        for x in range(source.width):
+            r, g, b = source_px[x, y]
+            signed = (macro_px[x, y] - 128) / 127
+            # A subtle warm/cool drift rides the luminance field; it is intentionally much
+            # broader than a Wang cell and never changes the source texture's local vocabulary.
+            factors = (
+                1 + signed * strength * 1.00,
+                1 + signed * strength * 0.72,
+                1 - signed * strength * 0.16,
+            )
+            output_px[x, y] = tuple(
+                max(0, min(255, round(channel * factor)))
+                for channel, factor in zip((r, g, b), factors)
+            )
+    return output
+
+
+def ground_field_roughness(
+    macro: Image.Image,
+    minimum: int,
+    maximum: int,
+) -> Image.Image:
+    span = maximum - minimum
+    return macro.point(lambda value: minimum + round((value / 255) * span))
+
+
+def ground_field_semantic_overlays(
+    field: Image.Image,
+    path_material: Image.Image,
+    config: dict[str, Any],
+    tile_size: int,
+    seed: int,
+) -> tuple[Image.Image, Image.Image, list[dict[str, Any]]]:
+    result = field.convert("RGB")
+    semantic_mask = Image.new("L", result.size, 0)
+    mask_draw = ImageDraw.Draw(semantic_mask)
+    draw = ImageDraw.Draw(result)
+    rng = random.Random(ground_field_hash(seed, "semantic-overlays"))
+    path_texture = ground_field_wrapped_crop(
+        path_material,
+        ground_field_hash(seed, "overlay-path-x") % path_material.width,
+        ground_field_hash(seed, "overlay-path-y") % path_material.height,
+        result.width,
+        result.height,
+    )
+    records = []
+    kinds = (
+        ("bare-soil", int(config.get("bareSoil", 10)), 64),
+        ("stones", int(config.get("stones", 18)), 128),
+        ("grass-clumps", int(config.get("grassClumps", 12)), 192),
+        ("wear", int(config.get("wear", 8)), 255),
+    )
+    for kind, count, mask_value in kinds:
+        for index in range(count):
+            cx = rng.randrange(tile_size // 2, max(tile_size // 2 + 1, result.width - tile_size // 2))
+            cy = rng.randrange(tile_size // 2, max(tile_size // 2 + 1, result.height - tile_size // 2))
+            if kind == "bare-soil":
+                rx = rng.randrange(max(4, tile_size // 5), max(5, tile_size // 2))
+                ry = rng.randrange(max(4, tile_size // 8), max(5, tile_size // 3))
+                points = []
+                for point_index in range(14):
+                    angle = point_index * math.tau / 14
+                    jitter = rng.uniform(0.72, 1.12)
+                    points.append((
+                        round(cx + math.cos(angle) * rx * jitter),
+                        round(cy + math.sin(angle) * ry * jitter),
+                    ))
+                local_mask = Image.new("L", result.size, 0)
+                ImageDraw.Draw(local_mask).polygon(points, fill=150)
+                local_mask = local_mask.filter(ImageFilter.GaussianBlur(max(1, tile_size // 28)))
+                result = Image.composite(path_texture, result, local_mask)
+                draw = ImageDraw.Draw(result)
+                mask_draw.polygon(points, fill=mask_value)
+                bbox = [cx - rx, cy - ry, cx + rx, cy + ry]
+            elif kind == "stones":
+                radius = rng.randrange(max(2, tile_size // 28), max(3, tile_size // 12))
+                points = [
+                    (
+                        round(cx + math.cos(point * math.tau / 7) * radius * rng.uniform(0.75, 1.2)),
+                        round(cy + math.sin(point * math.tau / 7) * radius * rng.uniform(0.75, 1.2)),
+                    )
+                    for point in range(7)
+                ]
+                draw.polygon(points, fill=(105, 101, 83), outline=(54, 57, 47))
+                draw.line((cx - radius, cy - radius // 2, cx + radius // 2, cy - radius), fill=(159, 151, 119), width=1)
+                mask_draw.polygon(points, fill=mask_value)
+                bbox = [cx - radius, cy - radius, cx + radius, cy + radius]
+            elif kind == "grass-clumps":
+                radius = rng.randrange(max(4, tile_size // 12), max(5, tile_size // 5))
+                for blade in range(7):
+                    dx = rng.randrange(-radius, radius + 1)
+                    height = rng.randrange(max(4, radius // 2), radius + 2)
+                    draw.line((cx + dx, cy + radius // 3, cx + dx // 2, cy - height), fill=(74, 103, 42), width=max(1, tile_size // 64))
+                    draw.line((cx + dx + 1, cy + radius // 3, cx + dx // 2 + 1, cy - height), fill=(171, 178, 70), width=1)
+                mask_draw.ellipse((cx - radius, cy - radius, cx + radius, cy + radius), fill=mask_value)
+                bbox = [cx - radius, cy - radius, cx + radius, cy + radius]
+            else:
+                rx = rng.randrange(max(5, tile_size // 7), max(6, tile_size // 3))
+                ry = rng.randrange(max(3, tile_size // 16), max(4, tile_size // 8))
+                local_mask = Image.new("L", result.size, 0)
+                ImageDraw.Draw(local_mask).ellipse((cx - rx, cy - ry, cx + rx, cy + ry), fill=92)
+                result = Image.composite(path_texture, result, local_mask)
+                draw = ImageDraw.Draw(result)
+                mask_draw.ellipse((cx - rx, cy - ry, cx + rx, cy + ry), fill=mask_value)
+                bbox = [cx - rx, cy - ry, cx + rx, cy + ry]
+            records.append({
+                "id": f"{kind}-{index + 1:03d}",
+                "kind": kind,
+                "centerPx": [cx, cy],
+                "centerNormalized": [
+                    round(cx / result.width, 6),
+                    round(cy / result.height, 6),
+                ],
+                "bboxPx": bbox,
+            })
+    return result, semantic_mask, records
+
+
+def ground_field_project_path(
+    field: Image.Image,
+    path_material: Image.Image,
+    path_spec: dict[str, Any],
+    tile_size: int,
+    seed: int,
+) -> tuple[Image.Image, Image.Image, Image.Image]:
+    core = Image.new("L", field.size, 0)
+    points = [
+        (
+            round(float(point[0]) * (field.width - 1)),
+            round(float(point[1]) * (field.height - 1)),
+        )
+        for point in path_spec.get("points", [])
+    ]
+    if len(points) < 2:
+        return field.convert("RGB"), core, core.copy()
+    # Chaikin subdivision keeps the authored waypoints but turns their hard polyline elbows
+    # into a broad, walkable curve before rasterization.
+    for _iteration in range(3):
+        smoothed = [points[0]]
+        for first, second in zip(points, points[1:]):
+            smoothed.append((
+                round(first[0] * 0.75 + second[0] * 0.25),
+                round(first[1] * 0.75 + second[1] * 0.25),
+            ))
+            smoothed.append((
+                round(first[0] * 0.25 + second[0] * 0.75),
+                round(first[1] * 0.25 + second[1] * 0.75),
+            ))
+        smoothed.append(points[-1])
+        points = smoothed
+    core_width = max(2, round(float(path_spec.get("widthCells", 0.9)) * tile_size))
+    shoulder_width = max(
+        1,
+        round(float(path_spec.get("shoulderCells", 0.55)) * tile_size),
+    )
+    ImageDraw.Draw(core).line(points, fill=255, width=core_width, joint="curve")
+    for point in points:
+        ImageDraw.Draw(core).ellipse(
+            (
+                point[0] - core_width // 2,
+                point[1] - core_width // 2,
+                point[0] + core_width // 2,
+                point[1] + core_width // 2,
+            ),
+            fill=255,
+        )
+    blurred = core.filter(ImageFilter.GaussianBlur(max(1, shoulder_width / 2.4)))
+    shoulder = ImageChops.lighter(core, blurred)
+    path_texture = ground_field_wrapped_crop(
+        path_material,
+        ground_field_hash(seed, "path-x") % path_material.width,
+        ground_field_hash(seed, "path-y") % path_material.height,
+        field.width,
+        field.height,
+    )
+    projected = Image.composite(path_texture, field.convert("RGB"), shoulder)
+    return projected, core, shoulder
+
+
+def ground_field_neighbor_closure(
+    tiles: dict[tuple[int, ...], Image.Image],
+) -> tuple[bool, int]:
+    checked = 0
+    for first_codes, first in tiles.items():
+        for second_codes, second in tiles.items():
+            if first_codes[1] == second_codes[3]:
+                checked += 1
+                if ImageChops.difference(
+                    first.crop((first.width - 1, 0, first.width, first.height)),
+                    second.crop((0, 0, 1, second.height)),
+                ).getbbox():
+                    return False, checked
+            if first_codes[2] == second_codes[0]:
+                checked += 1
+                if ImageChops.difference(
+                    first.crop((0, first.height - 1, first.width, first.height)),
+                    second.crop((0, 0, second.width, 1)),
+                ).getbbox():
+                    return False, checked
+    return True, checked
+
+
+def ground_field_variant_difference(
+    tiles: dict[tuple[int, ...], Image.Image],
+) -> float:
+    images = list(tiles.values())
+    scores = []
+    for index, first in enumerate(images):
+        for second in images[index + 1 :]:
+            diff = ImageChops.difference(first, second).convert("L")
+            sample = diff.resize((16, 16), Image.Resampling.BOX)
+            scores.append(sum(sample.getdata()) / (255 * 256))
+    return sum(scores) / max(1, len(scores))
+
+
+def ground_field_tile_period_difference(image: Image.Image, tile_size: int) -> float:
+    rgb = image.convert("RGB")
+    scores = []
+    for dx, dy in ((tile_size, 0), (0, tile_size), (tile_size, tile_size)):
+        first = rgb.crop((0, 0, rgb.width - dx, rgb.height - dy))
+        second = rgb.crop((dx, dy, rgb.width, rgb.height))
+        scores.append(
+            sum(ImageStat.Stat(ImageChops.difference(first, second)).mean) / 3
+        )
+    return sum(scores) / len(scores)
+
+
+def compile_ground_field(
+    manifest_path: Path,
+    output_dir: Path,
+    force: bool = False,
+) -> dict[str, Any]:
+    manifest = read_json(manifest_path)
+    guarded_reset(output_dir, force)
+    base_spec = manifest["baseMaterial"]
+    path_spec = manifest["pathMaterial"]
+    base_path = resolve_manifest_path(manifest_path, base_spec["tile"])
+    path_path = resolve_manifest_path(manifest_path, path_spec["tile"])
+    base_authored = Image.open(base_path).convert("RGB")
+    path_authored = Image.open(path_path).convert("RGB")
+    tile_size = int(manifest.get("tileSizePx", 96))
+    border = int(manifest.get("edgeBandPx", max(6, tile_size // 10)))
+    patch_size = int(manifest.get("quiltPatchPx", max(24, tile_size // 2)))
+    overlap = int(manifest.get("quiltOverlapPx", max(6, patch_size // 4)))
+    edge_colors = int(manifest.get("wangEdgeColors", 2))
+    variants_per_code = int(manifest.get("variantsPerWangCode", 1))
+    cells = manifest.get("fieldCells", [16, 12])
+    cells_x, cells_y = int(cells[0]), int(cells[1])
+    seed = int(manifest.get("seed", 48271))
+    placement_mode = manifest.get("placementMode", "wang-hash")
+
+    # A source material image represents ONE world tile, regardless of its authoring resolution.
+    # Cropping a tile_size window directly from a 1,254 px source and then mapping that tiny window
+    # over one world cell enlarges every grass blade by ~13x at tile_size=96—the exact "low-res
+    # stretched ground" failure CL-F06 caught. Normalize each admitted material to the compiler's
+    # per-cell texel density first; quilting may rearrange that vocabulary, but it may not silently
+    # change its physical scale.
+    base = base_authored.resize((tile_size, tile_size), Image.Resampling.LANCZOS)
+    path_material = path_authored.resize((tile_size, tile_size), Image.Resampling.LANCZOS)
+
+    tiles = ground_field_tiles(
+        base,
+        tile_size,
+        border,
+        patch_size,
+        overlap,
+        edge_colors,
+        variants_per_code,
+        seed,
+    )
+    tile_assets = [
+        (ground_field_tile_id(codes), image.convert("RGBA"))
+        for codes, image in sorted(tiles.items())
+    ]
+    atlas, atlas_placements = shelf_pack(
+        tile_assets,
+        padding=2,
+        max_width=min(2048, (tile_size + 4) * max(4, edge_colors ** 2)),
+    )
+    atlas.save(output_dir / "wang-atlas.png")
+    write_json(
+        output_dir / "wang-atlas.json",
+        {
+            "schemaVersion": 1,
+            "tileSizePx": tile_size,
+            "edgeColors": edge_colors,
+            "tiles": {
+                ground_field_tile_id(codes): {
+                    "edges": dict(zip(GROUND_FIELD_EDGE_NAMES, codes)),
+                    "variant": codes[4],
+                    "rect": list(atlas_placements[ground_field_tile_id(codes)]),
+                }
+                for codes in sorted(tiles)
+            },
+        },
+    )
+
+    repeated_single = placement_mode == "repeated-single"
+    placement = ground_field_placement(
+        cells_x,
+        cells_y,
+        edge_colors,
+        variants_per_code,
+        seed,
+        repeated_single=repeated_single,
+    )
+    placement_rebuilt = ground_field_placement(
+        cells_x,
+        cells_y,
+        edge_colors,
+        variants_per_code,
+        seed,
+        repeated_single=repeated_single,
+    )
+    quilted_field = ground_field_render_tiles(tiles, placement, tile_size)
+    macro_grid_value = manifest.get("macroGrid", [6, 5])
+    macro_grid = (int(macro_grid_value[0]), int(macro_grid_value[1]))
+    macro = ground_field_macro(
+        quilted_field.width,
+        quilted_field.height,
+        macro_grid,
+        seed,
+    )
+    overlays_config = manifest.get("semanticOverlays", {})
+    overlay_field, overlay_mask, semantic_records = ground_field_semantic_overlays(
+        quilted_field,
+        path_material,
+        overlays_config,
+        tile_size,
+        seed,
+    )
+    projected, path_core, path_shoulder = ground_field_project_path(
+        overlay_field,
+        path_material,
+        manifest.get("path", {}),
+        tile_size,
+        seed,
+    )
+    color_strength = float(manifest.get("macroColorStrength", 0.13))
+    albedo = ground_field_apply_macro(projected, macro, color_strength)
+    roughness_range = manifest.get("roughnessRange", [142, 236])
+    roughness = ground_field_roughness(
+        macro,
+        int(roughness_range[0]),
+        int(roughness_range[1]),
+    )
+    if path_core.getbbox():
+        path_roughness = Image.new("L", roughness.size, int(manifest.get("pathRoughness", 184)))
+        roughness = Image.composite(path_roughness, roughness, path_shoulder)
+    # Match the material-lane renderer contract instead of treating the field as a color card.
+    # These are deterministic proposal channels derived from the final composed field, so path
+    # shoulders and semantic overlays participate in the same tangent-space lighting as the grass.
+    height = albedo.convert("L").filter(
+        ImageFilter.GaussianBlur(float(manifest.get("heightBlur", 1.15)))
+    )
+    normal = normal_from_height(height, float(manifest.get("normalStrength", 2.2)))
+    ao_blur = height.filter(ImageFilter.GaussianBlur(float(manifest.get("aoBlur", 2.2))))
+    ao = ao_blur.point(lambda value: max(0, min(255, 200 + round(value * 55 / 255))))
+    metalness = Image.new("L", albedo.size, 0)
+    orm = Image.merge("RGB", (ao, roughness, metalness))
+
+    albedo.save(output_dir / "field-albedo.png")
+    height.save(output_dir / "field-height.png")
+    normal.save(output_dir / "field-normal.png")
+    orm.save(output_dir / "field-orm.png")
+    roughness.save(output_dir / "field-roughness.png")
+    macro.save(output_dir / "macro-variation.png")
+    overlay_mask.save(output_dir / "semantic-overlay-mask.png")
+    path_core.save(output_dir / "path-core-mask.png")
+    path_shoulder.save(output_dir / "path-shoulder-mask.png")
+    write_json(
+        output_dir / "semantic-overlays.json",
+        {
+            "schemaVersion": 1,
+            "fieldSizePx": list(albedo.size),
+            "records": semantic_records,
+        },
+    )
+    placement_payload = {
+        "schemaVersion": 1,
+        "algorithm": "wang-hash-placement-v1",
+        "seed": seed,
+        "fieldCells": [cells_x, cells_y],
+        "tileSizePx": tile_size,
+        "placementMode": placement_mode,
+        "rows": [
+            [
+                {
+                    "tile": ground_field_tile_id(codes),
+                    "edges": dict(zip(GROUND_FIELD_EDGE_NAMES, codes[:4])),
+                    "variant": codes[4],
+                }
+                for codes in row
+            ]
+            for row in placement
+        ],
+    }
+    write_json(output_dir / "wang-placement.json", placement_payload)
+
+    single_tile = ground_field_render_tiles(
+        {(0, 0, 0, 0, 0): tiles[(0, 0, 0, 0, 0)]},
+        [[(0, 0, 0, 0, 0) for _x in range(cells_x)] for _y in range(cells_y)],
+        tile_size,
+    )
+    single_tile.save(output_dir / "repeated-single-baseline.png")
+    quilted_field.save(output_dir / "field-wang-only.png")
+    proof_board(
+        "Ground-field compiler — cadence, macro field, semantics, path",
+        [
+            ("repeated single tile", single_tile),
+            ("Wang quilt field", quilted_field),
+            ("compiled albedo", albedo),
+            ("compiled normal", normal),
+            ("compiled ORM", orm),
+            ("macro color field", macro.convert("RGB")),
+            ("roughness field", roughness.convert("RGB")),
+            ("semantic overlays", overlay_mask.convert("RGB")),
+            ("path core", path_core.convert("RGB")),
+            ("blended shoulders", path_shoulder.convert("RGB")),
+            ("quilted Wang variants", atlas),
+        ],
+        output_dir / "proof-board.png",
+        (260, 210),
+        3,
+    )
+
+    closure_ok, pairs_checked = ground_field_neighbor_closure(tiles)
+    tile_ids = [ground_field_tile_id(codes) for row in placement for codes in row]
+    tile_counts = Counter(tile_ids)
+    maximum_share = max(tile_counts.values()) / max(1, len(tile_ids))
+    roughness_min, roughness_max = roughness.getextrema()
+    normal_blue_min = normal.getextrema()[2][0]
+    shoulder_values = set(path_shoulder.resize((128, 128), Image.Resampling.BOX).getdata())
+    semantic_kinds = Counter(record["kind"] for record in semantic_records)
+    variant_difference = ground_field_variant_difference(tiles)
+    repeated_period_difference = ground_field_tile_period_difference(single_tile, tile_size)
+    compiled_period_difference = ground_field_tile_period_difference(albedo, tile_size)
+    placement_hash = hashlib.sha256(
+        json.dumps(placement, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    rebuilt_hash = hashlib.sha256(
+        json.dumps(placement_rebuilt, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    gates = {
+        "baseSourceHashMatches": not base_spec.get("sha256")
+        or sha256_file(base_path) == base_spec["sha256"],
+        "pathSourceHashMatches": not path_spec.get("sha256")
+        or sha256_file(path_path) == path_spec["sha256"],
+        "textureQuiltingProducedDistinctVariants": variant_difference
+        >= float(manifest.get("minimumVariantDifference", 0.012)),
+        "wangTileSetComplete": len(tiles) == edge_colors ** 4 * variants_per_code,
+        "wangNeighborClosureExact": closure_ok and pairs_checked > 0,
+        "deterministicWangHashPlacement": placement_mode == "wang-hash"
+        and placement_hash == rebuilt_hash,
+        "singleTileCadenceBroken": maximum_share
+        <= float(manifest.get("maximumIdenticalTileShare", 0.35)),
+        "repeatedControlRetainsExactTilePeriod": repeated_period_difference == 0,
+        "compiledPixelsBreakExactTilePeriod": compiled_period_difference
+        >= float(manifest.get("minimumTilePeriodDifference", 8.0)),
+        "largeCameraFieldCompiled": cells_x * cells_y
+        >= int(manifest.get("minimumFieldCellCount", 120)),
+        "macroFieldLargerThanTileCadence": (
+            quilted_field.width / max(1, macro_grid[0]) >= tile_size * 2
+            and quilted_field.height / max(1, macro_grid[1]) >= tile_size * 2
+        ),
+        "roughnessHasLowFrequencyRange": roughness_max - roughness_min
+        >= int(manifest.get("minimumRoughnessRange", 48)),
+        "materialLaneChannelsShareDimensions": (
+            height.size == albedo.size
+            and normal.size == albedo.size
+            and orm.size == albedo.size
+        ),
+        "normalChannelHasValidHemisphere": normal_blue_min >= 128,
+        "allSemanticOverlayKindsPresent": all(
+            semantic_kinds[kind] > 0
+            for kind in ("bare-soil", "stones", "grass-clumps", "wear")
+        ),
+        "pathCoreContinuous": bool(path_core.getbbox())
+        and len(manifest.get("path", {}).get("points", [])) >= 2,
+        "pathShouldersContainBlendValues": any(0 < value < 255 for value in shoulder_values),
+    }
+    return finish_receipt(
+        "ground-field",
+        manifest_path,
+        output_dir,
+        gates,
+        {
+            "albedo": repo_path(output_dir / "field-albedo.png"),
+            "height": repo_path(output_dir / "field-height.png"),
+            "normal": repo_path(output_dir / "field-normal.png"),
+            "orm": repo_path(output_dir / "field-orm.png"),
+            "repeatedSingleBaseline": repo_path(output_dir / "repeated-single-baseline.png"),
+            "wangOnlyField": repo_path(output_dir / "field-wang-only.png"),
+            "roughness": repo_path(output_dir / "field-roughness.png"),
+            "macroVariation": repo_path(output_dir / "macro-variation.png"),
+            "semanticOverlayMask": repo_path(output_dir / "semantic-overlay-mask.png"),
+            "semanticOverlays": repo_path(output_dir / "semantic-overlays.json"),
+            "pathCoreMask": repo_path(output_dir / "path-core-mask.png"),
+            "pathShoulderMask": repo_path(output_dir / "path-shoulder-mask.png"),
+            "wangAtlas": repo_path(output_dir / "wang-atlas.png"),
+            "wangAtlasMetadata": repo_path(output_dir / "wang-atlas.json"),
+            "wangPlacement": repo_path(output_dir / "wang-placement.json"),
+            "proofBoard": repo_path(output_dir / "proof-board.png"),
+        },
+        {
+            "compiler": "ground-field-quilt-wang-macro-semantic-path-pbr-v2",
+            "fieldCells": [cells_x, cells_y],
+            "fieldSizePx": list(albedo.size),
+            "sourceMaterialScale": {
+                "baseAuthoredPx": list(base_authored.size),
+                "pathAuthoredPx": list(path_authored.size),
+                "normalizedWorldTilePx": tile_size,
+            },
+            "wangVariantCount": len(tiles),
+            "variantsPerWangCode": variants_per_code,
+            "wangNeighborPairsChecked": pairs_checked,
+            "variantDifference": round(variant_difference, 6),
+            "uniqueTilesPlaced": len(tile_counts),
+            "maximumIdenticalTileShare": round(maximum_share, 6),
+            "repeatedTilePeriodDifference": round(repeated_period_difference, 6),
+            "compiledTilePeriodDifference": round(compiled_period_difference, 6),
+            "macroGrid": list(macro_grid),
+            "macroCellSpanInTiles": [
+                round(cells_x / macro_grid[0], 3),
+                round(cells_y / macro_grid[1], 3),
+            ],
+            "roughnessRange": [roughness_min, roughness_max],
+            "normalBlueMinimum": normal_blue_min,
+            "semanticOverlayCounts": dict(semantic_kinds),
+            "pathPointCount": len(manifest.get("path", {}).get("points", [])),
+            "placementSha256": placement_hash,
+        },
+    )
+
+
 # Visual regression foundry ------------------------------------------------
 
 def compile_regression(manifest_path: Path, output_dir: Path, force: bool = False) -> dict[str, Any]:
@@ -2847,6 +3764,7 @@ def compile_regression(manifest_path: Path, output_dir: Path, force: bool = Fals
 
 COMPILERS: dict[str, Callable[[Path, Path, bool], dict[str, Any]]] = {
     "boundary": compile_boundary,
+    "ground-field": compile_ground_field,
     "repeat": compile_repeat,
     "prop-kit": compile_prop_kit,
     "condition": compile_condition,
@@ -2972,6 +3890,21 @@ def run_suite_self_test(
     nonperiodic_image = fixture_periodic_material()
     ImageDraw.Draw(nonperiodic_image).rectangle((0, 0, 6, 63), fill=(248, 20, 20))
     nonperiodic = save_fixture(fixtures / "nonperiodic-material.png", nonperiodic_image)
+    ground_base_image = fixture_periodic_material(128)
+    ground_base_draw = ImageDraw.Draw(ground_base_image)
+    for index in range(42):
+        x = ground_field_hash(194, index, "x") % 128
+        y = ground_field_hash(194, index, "y") % 128
+        ground_base_draw.ellipse((x - 2, y - 2, x + 2, y + 2), fill=(88, 113, 58))
+    ground_base_image = force_periodic(ground_base_image)
+    ground_base = save_fixture(fixtures / "ground-field-base.png", ground_base_image)
+    ground_path_image = ImageOps.colorize(
+        ground_base_image.convert("L"),
+        black=(70, 46, 32),
+        white=(181, 132, 76),
+    )
+    ground_path_image = force_periodic(ground_path_image)
+    ground_path = save_fixture(fixtures / "ground-field-path.png", ground_path_image)
     components = save_fixture(fixtures / "components.png", fixture_component_sheet())
     empty_components = save_fixture(fixtures / "components-empty.png", Image.new("RGB", (96, 64), CHROMA))
     prop_sheet = save_fixture(fixtures / "prop-sheet.png", fixture_component_sheet())
@@ -3015,6 +3948,51 @@ def run_suite_self_test(
                 "insideMaterial": {"tile": rel(nonperiodic)},
                 "tileSizePx": 64,
                 "maxSourceEdgeDelta": 0,
+            }),
+        ),
+        "ground-field": (
+            manifest_file(output_root, "ground-field-positive", {
+                "schemaVersion": 1,
+                "family": "ground-field",
+                "baseMaterial": {"tile": rel(ground_base), "sha256": sha256_file(ground_base)},
+                "pathMaterial": {"tile": rel(ground_path), "sha256": sha256_file(ground_path)},
+                "tileSizePx": 64,
+                "edgeBandPx": 6,
+                "quiltPatchPx": 32,
+                "quiltOverlapPx": 8,
+                "wangEdgeColors": 2,
+                "fieldCells": [10, 8],
+                "minimumFieldCellCount": 80,
+                "macroGrid": [4, 3],
+                "semanticOverlays": {"bareSoil": 3, "stones": 6, "grassClumps": 4, "wear": 3},
+                "path": {
+                    "points": [[0.02, 0.72], [0.25, 0.55], [0.48, 0.58], [0.75, 0.34], [0.98, 0.30]],
+                    "widthCells": 0.8,
+                    "shoulderCells": 0.45,
+                },
+                "seed": 48271,
+            }),
+            manifest_file(output_root, "ground-field-negative-repeat", {
+                "schemaVersion": 1,
+                "family": "ground-field",
+                "baseMaterial": {"tile": rel(ground_base), "sha256": sha256_file(ground_base)},
+                "pathMaterial": {"tile": rel(ground_path), "sha256": sha256_file(ground_path)},
+                "tileSizePx": 64,
+                "edgeBandPx": 6,
+                "quiltPatchPx": 32,
+                "quiltOverlapPx": 8,
+                "wangEdgeColors": 2,
+                "fieldCells": [10, 8],
+                "minimumFieldCellCount": 80,
+                "macroGrid": [4, 3],
+                "placementMode": "repeated-single",
+                "semanticOverlays": {"bareSoil": 3, "stones": 6, "grassClumps": 4, "wear": 3},
+                "path": {
+                    "points": [[0.02, 0.72], [0.48, 0.58], [0.98, 0.30]],
+                    "widthCells": 0.8,
+                    "shoulderCells": 0.45,
+                },
+                "seed": 48271,
             }),
         ),
         "repeat": (
@@ -3338,7 +4316,7 @@ def register_parsers(families) -> None:
             init_parser.add_argument("--force", action="store_true")
     suite = families.add_parser("suite", help="run every non-emote Assetforge proof")
     actions = suite.add_subparsers(dest="action", required=True)
-    test = actions.add_parser("self-test", help="run all 11 positive and negative proof pairs")
+    test = actions.add_parser("self-test", help="run every positive and negative proof pair")
     test.add_argument("--output-dir", type=Path, default=DEFAULT_ROOT)
     test.add_argument("--force", action="store_true")
 

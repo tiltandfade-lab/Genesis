@@ -8,6 +8,42 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-28 — Assetforge ground-field compiler + governed Clayroom proof [Codex]
+
+**Added**
+- Added the `ground-field` Assetforge family: deterministic texture quilting, exact Wang-edge
+  closure, hash placement, large low-frequency albedo/roughness variation, sparse semantic
+  bare-soil/stone/grass/wear overlays, and smoothed paths with blended shoulders.
+- Added a real B03 manifest and retained compiler products: field albedo/height/normal/ORM,
+  Wang atlas and placement metadata, macro/semantic/path masks, repeated-single control, proof
+  board, and machine-readable receipt.
+- Added an optional `board.groundField` adapter shared by the production tabletop and interior
+  realizers, plus the governed CL-F06 Clayroom fixture and capture script.
+
+**Proved**
+- Real compile passes 17 gates: 64 variants, all 64 used in a 15×15 field, `0.04` maximum identical
+  share, 4,096 exact compatible-edge checks, roughness range 148–238, matched PBR channel
+  dimensions, and all four semantic overlay kinds.
+- The exact repeated control has `0.0` tile-period pixel difference; the compiled field has
+  `14.321615`, providing a direct cadence-breaking negative control.
+- Governed Clayroom receipt passes compiled albedo/normal/ORM loading, standard lit material,
+  shadow receipt, full 15×15 coverage, wide-angle mipmapped/anisotropic ground sampling, repeated
+  control, alternate camera, zero legacy cast/model resolution, and zero unexpected runtime errors.
+- The non-emote Assetforge suite is now 12/12 positive and 12/12 expected negative.
+
+**Corrected**
+- Withdrew and removed the flat battlefield-style proof after founder review identified that it
+  was not the governed Clayroom.
+- Fixed a physical-scale error that cropped 96 px from a 1,254 px one-cell source and enlarged it
+  over one world cell. V2 normalizes the complete source material to one cell, uses 192 texels per
+  cell, emits a 2880×2880 field, and binds full material channels. Sprite sampling was not changed.
+
+**Deferred**
+- The output remains a prototype `CANDIDATE`, not admitted production art. A real wilderness board
+  route and biome-specific visual tuning wait for founder review.
+- Sprite scaling was not changed. The previously rejected mipmapped citizenship-v2 implementation
+  remains a separate open problem.
+
 ## 2026-07-28 — Assetforge v2 founder re-review [Codex]
 
 **Corrected**
@@ -743,43 +779,3 @@ sharper evidence) · B2 physical standee + B4 kill size-inference (B2 is Adam's 
 build) · r*-v2 return dirs (56 files) unprocessed pending ruling · 21 fantasy orphan heights =
 `missing` (Adam's editor pass) · gloom/chrome faceted tranches (all 252 candidates are
 fantasy/pc).
-
-## 2026-07-15 — THE AUTONOMOUS ARC: quick-fix wave + ENV/EXTERIOR (daytime · sun/moon · biomes · town) + PL-3 [Claude Opus 4.8, autonomous per Adam's delegation]
-
-Adam delegated ("take your direction on the wave order, work autonomously"); the ledger ordered the
-waves. Every unit orchestrator-re-gated (own harness runs, every card READ + shared in-chat per
-Adam's ask), landed `--no-ff`, pushed. Master tip `c0a60b77`.
-
-**Fixed (QUICK-FIX WAVE, ledger P0):**
-- QF-B: the "wireframe cage" = buildWebMass (spider web, baked ghost-silk vertex colors) reused as
-  placeholder for ~15 props → luma-preserving `retint` authored in realm-props.json (generator-
-  threaded); head-clip + arrival-blob shared one root (tabletop camera carried no figure height) →
-  TABLETOP_CAMERA_HEADROOM. QF-A: class-wide scoping bug — the active-room render mounted the WHOLE
-  plan's doors+dressing in the current room's frame (also explains ledger P2 #14) + the door
-  cell-pick could land on the neighbor's paired entry; 8/8 rooms now at the 0.5u wall offset.
-  Rat-miscast + vanishing-PC honestly could-not-reproduce (leads documented; lens re-tests).
-
-**Added (ENV/EXTERIOR WAVE — Adam's "we don't even have daytime! or a town scene", measured then built):**
-- **ENV-1 light profiles differentiate everywhere** (root: void tint env-keyed never profile-keyed +
-  STAGE_AMBIENT_FLOOR clamping; daylit-vs-moonlit luma 0.0254 → 0.528; TABLETOP_EXTERIOR_LOOK = the
-  re-tune table). **ENV-1b cast shadows on the tabletop** (Adam's ruling; the fake "no shadow maps"
-  law retired — see DESIGN.md 2026-07-14; darkening 0.154 proven; fps floor ~660). **ENV-1c the
-  sun and moon MOVE** (Adam's ruling; continuous clock → celestial arc; key travels 11.25u dawn→noon,
-  shadows flip sides morning/dusk; CELESTIAL_ARC keyframes; manual 3-way merge composed with ENV-3 —
-  towns carry the clock). **ENV-2 travel legs project their ROLLED biome** (wild-walk already rolled
-  one per leg — the tray discarded it; BIOME_DRESSING 10 biomes → existing-asset pools; ground-map
-  fix for Deeplands/Underwater; the "missing PC" = arrangeTableau centering (0,0) on corner-anchored
-  boards). **ENV-3 the settlement tray** (root: settlements deliberately bind no place record →
-  fell to idle; nodeIsSettlementKind routes them; diner-class proven untouched) + **ENV-3b the
-  composition** (orchestrator bounced round 1: monolith cubes/maze camera/fused lots/toast/mirrored
-  cards — all 5 root-caused, incl. one race with two symptoms: the async art-arrival replay dropped
-  the height-fit AND rebuilt cards unfaced).
-
-**PL-3 (the composed-stack lens re-run):** same route, 26 shots, 0 breaks — **6 ledger items
-verified FIXED in real play** (travel biomes under a morning sky; the PC casting a morning-direction
-shadow; profiles distinct; PC centered/framed; no wireframes; arrival real). Deltas appended to
-dev/play-lens/ledger.md.
-
-**Deferred / Adam's red-pen packet:** facade art (doors/windows/roofs) + NPC card art (ImageGen/kit
-lane) · daylit soft-shadow + arc keyframe tuning (one table each) · Stage E exposure/bloom (next in
-ledger order) · combat-leg delta read next audit · town lens-read at a record-less settlement node.

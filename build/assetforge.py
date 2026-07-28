@@ -8,6 +8,7 @@ Implemented families:
     python3 build/assetforge.py emote review VISUAL_REVIEW_JSON
     python3 build/assetforge.py emote self-test
     python3 build/assetforge.py boundary compile MANIFEST --output-dir DIR
+    python3 build/assetforge.py ground-field compile MANIFEST --output-dir DIR
     python3 build/assetforge.py repeat compile MANIFEST --output-dir DIR
     python3 build/assetforge.py prop-kit compile MANIFEST --output-dir DIR
     python3 build/assetforge.py condition compile MANIFEST --output-dir DIR
@@ -21,9 +22,10 @@ Implemented families:
     python3 build/assetforge.py suite self-test
 
 The emote family accepts a registered monster, NPC, or PC sprite and writes a self-contained
-ImageGen production packet. The other families compile deterministic topology, repeat, kit, state,
-palette, trim, decal, citizenship, atlas, material-map, and regression products. Outputs remain
-under quarantine by default and are never admitted into the live registry by this script.
+ImageGen production packet. The other families compile deterministic topology, ground fields,
+repeat, kit, state, palette, trim, decal, citizenship, atlas, material-map, and regression products.
+Outputs remain under quarantine by default and are never admitted into the live registry by this
+script.
 
 Dependency: Pillow. Everything after image generation is deterministic from the source image,
 job manifest, returned sheet, and algorithm version.

@@ -119,6 +119,10 @@ var CLAY_DIAGNOSTIC_SURFACE_RECIPE = Object.freeze({
     // sprite-first parents and compiled PBR maps, so the diagnostic clay sweep must leave them
     // intact. This dev-only route does not promote the candidate into production selection.
     "material-proof": Object.freeze({ route: "passthrough", roleColor: "#d4b86a" }),
+    // CL-F06 is the real Assetforge ground-field candidate mounted through the production
+    // interior/Clayroom realizer. Its compiled albedo + roughness are the subject under test, so
+    // repainting it diagnostic grey would erase the question the fixture exists to answer.
+    "ground-field-proof": Object.freeze({ route: "passthrough", roleColor: "#7f9f69" }),
     // CL-R5 composes those approved parents with the admitted h6-v1 trim family. Body and trim
     // materials remain independently switchable inside the retained fixture; the ordinary clay
     // diagnostic sweep must therefore leave the complete structure proof intact.

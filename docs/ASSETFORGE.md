@@ -91,6 +91,7 @@ python3 build/assetforge.py emote self-test ...
 python3 build/assetforge.py boundary init MATERIAL --dialect enclosure --output JOB.json
 python3 build/assetforge.py boundary init MATERIAL --outside-material OUTSIDE.png --dialect path --output JOB.json
 python3 build/assetforge.py boundary compile JOB.json --output-dir DIR
+python3 build/assetforge.py ground-field compile JOB.json --output-dir DIR
 python3 build/assetforge.py repeat compile JOB.json --output-dir DIR
 python3 build/assetforge.py prop-kit compile JOB.json --output-dir DIR
 python3 build/assetforge.py condition compile JOB.json --output-dir DIR
@@ -122,16 +123,17 @@ The order below is based on reusable leverage, not visual novelty.
 |---:|---|---|---|---|
 | 1 | Sprite-emote factory | one registered sprite + state vocabulary -> discrete state atlas | identity locks, alpha/chroma, occupancy, baseline, scale, atlas and play-scale board | **V1 BUILT + PROVEN** |
 | 2 | Boundary auto-tile compiler | paired material fields + enclosure/path/road/cliff dialect -> complete connected-boundary set | exhaustive masks, neighbor closure, topology/elevation renders | **V2 MULTI-DIALECT BUILT + PROVEN** |
-| 3 | Modular repeat compiler | component sheet -> infinite course/field tile | toroidal closure, variant balance, seam/cadence board | **V1 BUILT + PROVEN** |
-| 4 | Prop/kit sheet compiler | related prop sheet -> isolated, named, anchored prop kit | count/order, alpha, footprint, scale ladder, contact board | **V1 BUILT + PROVEN** |
-| 5 | Condition-state factory | pristine asset -> damaged, burned, wet, frozen, corrupted variants | identity mask, damage locality, state ordering, no silhouette fraud | **V1 BUILT + PROVEN** |
-| 6 | Palette harmonizer | admitted art + realm palette -> constrained candidate variants | CIEDE2000, hue/value hierarchy, protected semantic colors | **CANONICAL WRAPPER BUILT + PROVEN** |
-| 7 | Trim and nine-slice compiler | ornament strips/corners -> stretch-safe UI/world trim | cap preservation, center repeat/stretch, every target dimension | **V1 BUILT + PROVEN** |
-| 8 | Decal/stamp compiler | marks sheet -> rotation/scale-safe decal library | alpha fringe, mip/readability, surface bleed, density board | **V1 BUILT + PROVEN** |
-| 9 | Sprite citizenship adapter | raw sprite -> canonical registry preflight + renderer contract | canonical metadata, canvas preservation, real low-light renderer A/B | **CANONICAL ADAPTER + RENDERER V2 PROVEN** |
-| 10 | Atlas optimizer | approved loose assets -> runtime atlases | padding/extrusion, UV accuracy, mip bleed, byte budget, stable ids | **V1 BUILT + PROVEN** |
-| 11 | Material-map baker | approved albedo -> normal/roughness/emissive proposals | channel ranges, seam preservation, light-rig boards | **V1 BUILT + PROVEN** |
-| 12 | Visual regression foundry | any approved family -> stable comparison corpus | fixed camera, perceptual diff, semantic overlays, receipt diff | **V1 BUILT + PROVEN** |
+| 3 | Ground-field compiler | seamless parents -> large nonrepeating terrain field + path | quilt diversity, Wang closure/hash placement, macro variation, semantic overlays, tile-period A/B, production-engine captures | **V1 BUILT + PROVEN CANDIDATE** |
+| 4 | Modular repeat compiler | component sheet -> infinite course/field tile | toroidal closure, variant balance, seam/cadence board | **V1 BUILT; REAL CANDIDATE REJECTED** |
+| 5 | Prop/kit sheet compiler | related prop sheet -> isolated, named, anchored prop kit | count/order, alpha, footprint, scale ladder, contact board | **V1 BUILT + PROVEN** |
+| 6 | Condition-state factory | pristine asset -> damaged, burned, wet, frozen, corrupted variants | identity mask, damage locality, state ordering, no silhouette fraud | **V1 BUILT + PROVEN** |
+| 7 | Palette harmonizer | admitted art + realm palette -> constrained candidate variants | CIEDE2000, hue/value hierarchy, protected semantic colors | **CANONICAL WRAPPER BUILT + PROVEN** |
+| 8 | Trim and nine-slice compiler | ornament strips/corners -> stretch-safe UI/world trim | cap preservation, center repeat/stretch, every target dimension | **V1 BUILT + PROVEN** |
+| 9 | Decal/stamp compiler | marks sheet -> rotation/scale-safe decal library | alpha fringe, mip/readability, surface bleed, density board | **V1 BUILT + PROVEN** |
+| 10 | Sprite citizenship adapter | raw sprite -> canonical registry preflight + renderer contract | canonical metadata, canvas preservation, real low-light renderer A/B | **ADAPTER BUILT; RENDERER V2 VISUALLY REJECTED** |
+| 11 | Atlas optimizer | approved loose assets -> runtime atlases | padding/extrusion, UV accuracy, mip bleed, byte budget, stable ids | **V1 BUILT + PROVEN** |
+| 12 | Material-map baker | approved albedo -> normal/roughness/emissive proposals | channel ranges, seam preservation, light-rig boards | **V1 BUILT + PROVEN** |
+| 13 | Visual regression foundry | any approved family -> stable comparison corpus | fixed camera, perceptual diff, semantic overlays, receipt diff | **V1 BUILT + PROVEN** |
 
 ### Useful factories that should remain separate
 
@@ -148,7 +150,7 @@ That separation keeps each tool narrow without duplicating provenance and receip
 
 ## V1 suite proof
 
-`build/assetforge_apps.py` implements the eleven non-emote vertical slices and is loaded by the
+`build/assetforge_apps.py` implements the twelve non-emote vertical slices and is loaded by the
 main `build/assetforge.py` command. The retained proof corpus lives at
 `dev/model-qa/assetforge-suite/`.
 
@@ -158,12 +160,13 @@ The suite gate is:
 python3 build/assetforge.py suite self-test --force
 ```
 
-It must report all eleven positive fixtures as `PASS` and all eleven deliberately invalid fixtures
+It must report all twelve positive fixtures as `PASS` and all twelve deliberately invalid fixtures
 as `FAIL`. Each invalid fixture owns a specific bite:
 
 | family | red-first control |
 |---|---|
 | boundary | non-periodic source material |
+| ground field | repeated-single placement bypasses Wang/hash selection and retains exact tile cadence |
 | repeat | empty component sheet |
 | prop kit | isolated-component/id count mismatch |
 | condition | unlicensed silhouette growth |
@@ -430,6 +433,91 @@ The self-test must reject all of:
 4. non-key contamination touching a cell boundary.
 
 The self-test itself exits nonzero if a bad fixture passes or a valid fixture fails.
+
+# Ground-field compiler
+
+## Why this is not another seamless-tile maker
+
+A seamless tile proves only that one image can meet itself. It does not prevent the image's
+internal grass clumps, stones, color patches, or brush marks from repeating as a visible grid.
+`ground-field` consumes seamless material parents and compiles one larger world field through six
+ordered layers:
+
+1. patch-quilt multiple interiors from the base material;
+2. stamp exact Wang edge signatures and generate multiple interiors per signature;
+3. place signatures and interior variants deterministically from world cell + seed;
+4. apply a macro color/roughness field whose cells span multiple Wang cells;
+5. place sparse typed overlays: bare soil, stones, grass clumps, and wear;
+6. smooth a semantic path centerline and composite its material through a full core plus blended
+   shoulder mask.
+
+The real candidate manifest is
+`dev/model-qa/assetforge-real/manifests/ground-field-real.json`. It compiles the tracked B03 meadow
+and worn-path sources into a 15×15-cell, 2880×2880-pixel candidate:
+
+```bash
+python3 build/assetforge.py ground-field compile \
+  dev/model-qa/assetforge-real/manifests/ground-field-real.json \
+  --output-dir dev/model-qa/assetforge-real/runs/ground-field/positive --force
+```
+
+The current receipt records 64 quilted Wang variants, 4,096 exact compatible-neighbor checks, all
+64 variants used across the 225-cell field, a 4% maximum identical-variant share, a 6×5 macro
+field, a 148–238 roughness range, all four semantic overlay classes, seven path controls, and
+matched height/normal/ORM channels. It also compares pixels one tile-period apart: the repeated
+control remains exactly periodic (`0.0`) while the compiled field measures `14.321615`.
+
+V2 normalizes each source material to one world cell before quilting. V1 incorrectly cropped a
+96×96 window from the 1,254×1,254 one-cell meadow source and enlarged that small crop over a whole
+cell, making the material vocabulary read roughly 13× too large. CL-F06 rejected that render.
+
+## Runtime adapter and retained engine proof
+
+`board.groundField` is an optional additive payload on the existing production Theater
+`setBoard()` path:
+
+```js
+groundField: {
+  albedo: "dev/.../field-albedo.png",
+  normal: "dev/.../field-normal.png",
+  orm: "dev/.../field-orm.png",
+  roughness: "dev/.../field-roughness.png",
+  compilerReceipt: "dev/.../receipt.json"
+}
+```
+
+The shared adapter mounts one subdivided `MeshStandardMaterial` plane through either the flat
+tabletop or production interior realizer. Compiled field UVs span 0–1 because the image already
+contains the full 15×15 world field; they do not stretch one source tile over the room. The
+material binds sRGB albedo plus linear normal/ORM, receives production shadows, supplies UV1 for
+AO, and uses trilinear mipmapped minification plus up to 8× anisotropy for the wide oblique camera.
+Albedo magnification remains nearest. Sprite sampling is a separate channel and was not changed.
+Boards without `groundField` are unchanged.
+
+The governed Clayroom proof uses the real production route:
+
+```bash
+node dev/capture-ground-field-clayroom-proof.mjs
+```
+
+Retained evidence:
+
+- compiler receipt: `dev/model-qa/assetforge-real/runs/ground-field/positive/receipt.json`;
+- compiler board: `dev/model-qa/assetforge-real/runs/ground-field/positive/proof-board.png`;
+- governed Clayroom default camera:
+  `dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-compiled-default.png`;
+- same fixture with the repeated-single negative control:
+  `dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-repeated-control.png`;
+- rotated governed Clayroom camera:
+  `dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-compiled-rotated.png`;
+- Clayroom receipt:
+  `dev/model-qa/assetforge-real/runs/ground-field/clayroom-proof/clayroom-proof-receipt.json`.
+
+The route is `genesis.html?clayroom=1&clayfixture=ground-field` →
+`clayRoomBoardFrom` → `interiorBuildBoard` → `setInteriorBoard`. CL-F06 requests zero pieces and
+resolves zero model fallbacks. The earlier flat battlefield-style proof was withdrawn and removed.
+Both compiler and Clayroom receipts are technical `PASS`; the outputs remain candidate-only and
+are not production art admission.
 
 # Boundary auto-tile compiler
 

@@ -1,6 +1,6 @@
 # Assetforge suite proof
 
-This directory is the retained executable proof corpus for the eleven non-emote Assetforge V1
+This directory is the retained executable proof corpus for the twelve non-emote Assetforge
 vertical slices.
 
 Run every proof:

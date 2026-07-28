@@ -176,6 +176,7 @@ const CLAY_ROOM_LIGHTING_BENCH_ID = "cl-f02-lighting-bench";
 const CLAY_ROOM_SPRITE_BENCH_ID = "cl-f03-sprite-citizenship";
 const CLAY_ROOM_MATERIAL_BENCH_ID = "cl-f04-material-bench";
 const CLAY_ROOM_TRIM_BENCH_ID = "cl-f05-trim-bench";
+const CLAY_ROOM_GROUND_FIELD_BENCH_ID = "cl-f06-ground-field";
 const CLAY_ROOM_SPRITE_SCALE_MODES = Object.freeze(["true-scale", "diagnostic-cap"]);
 const CLAY_ROOM_LIGHT_PREVIEW_SEEDS = Object.freeze(["A", "B", "C"]);
 const CLAY_ROOM_LORE_LIGHT_PREVIEWS = Object.freeze([
@@ -222,10 +223,61 @@ function clayRoomFixtureIdFromLocation(){
     if(raw === "trim" || raw === "trim-bench" || raw === CLAY_ROOM_TRIM_BENCH_ID){
       return CLAY_ROOM_TRIM_BENCH_ID;
     }
+    if(raw === "ground" || raw === "ground-field" || raw === CLAY_ROOM_GROUND_FIELD_BENCH_ID){
+      return CLAY_ROOM_GROUND_FIELD_BENCH_ID;
+    }
   } catch(e){}
   // The active reset-ladder checkpoint opens on the fixture under review. Earlier fixtures remain
   // one click away and can be pinned directly with ?clayfixture=room or ?clayfixture=lights.
   return CLAY_ROOM_STRUCTURE_BENCH_ID;
+}
+
+function clayRoomGroundFieldModeFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("groundfield")
+      : null;
+    if(raw === "repeated" || raw === "control") return "repeated-control";
+  } catch(e){}
+  return "compiled";
+}
+
+/* CL-F06 stays on the real clayRoomBoardFrom -> interiorBuildBoard -> setInteriorBoard path, but
+   strips the old creature/dressing presentation cast from this one material proof. The current
+   production walls, floor volumes, camera, lights, shadows, and post path remain; only the optional
+   world-sized field replaces the visible floor surface. */
+function clayRoomBoardForFixture(board){
+  if(!board || S.clayRoomFixtureId !== CLAY_ROOM_GROUND_FIELD_BENCH_ID) return board;
+  const comparisonMode = clayRoomGroundFieldModeFromLocation();
+  const root = "dev/model-qa/assetforge-real/runs/ground-field/positive/";
+  return Object.assign({}, board, {
+    groundField: {
+      fixtureId: CLAY_ROOM_GROUND_FIELD_BENCH_ID,
+      comparisonMode: comparisonMode,
+      albedo: root + (comparisonMode === "repeated-control"
+        ? "repeated-single-baseline.png" : "field-albedo.png"),
+      normal: comparisonMode === "repeated-control" ? null : root + "field-normal.png",
+      orm: comparisonMode === "repeated-control" ? null : root + "field-orm.png",
+      roughness: root + "field-roughness.png",
+      compilerReceipt: root + "receipt.json",
+      roughnessValue: 0.86,
+      normalScale: 1,
+      aoMapIntensity: 0.72
+    },
+    pieces: [],
+    dressing: [],
+    furniture: [],
+    wallProps: [],
+    interactables: [],
+    decals: [],
+    portals: [],
+    combat: null,
+    cameraFit: { mode: "room", maxHeight: 0.5 }
+  });
+}
+
+function clayRoomSetInteriorBoard(board, renderOpts){
+  return setInteriorBoard(clayRoomBoardForFixture(board), renderOpts);
 }
 function clayRoomMaybeAutoMount(){
   // CL-R0 (docs/CLAYROOM-RESET-LADDER.md): this poll now does ONE thing — mount the surface if the
@@ -450,7 +502,7 @@ function clayRoomSetLightingRecipe(recipeId, reason){
   S.clayRoomLightingBaseline = null;
   S.boardKey = null;
   const session = clayRoomMovementSession();
-  setInteriorBoard(
+  clayRoomSetInteriorBoard(
     (session && clayRoomMovementBoardFromState(session.state)) || compiled.board,
     { roomTransition: false, reason: reason || "clayroom-light-recipe" }
   );
@@ -476,7 +528,8 @@ function clayRoomSetFixture(fixtureId, reason){
     && fixtureId !== CLAY_ROOM_LIGHTING_BENCH_ID
     && fixtureId !== CLAY_ROOM_SPRITE_BENCH_ID
     && fixtureId !== CLAY_ROOM_MATERIAL_BENCH_ID
-    && fixtureId !== CLAY_ROOM_TRIM_BENCH_ID){
+    && fixtureId !== CLAY_ROOM_TRIM_BENCH_ID
+    && fixtureId !== CLAY_ROOM_GROUND_FIELD_BENCH_ID){
     return false;
   }
   if(!S.clayRoomCompiled || !S.clayRoomRecord) return false;
@@ -486,11 +539,12 @@ function clayRoomSetFixture(fixtureId, reason){
       ? 0.72 : (fixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
       : (fixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65
         : (fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID ? 0.78
-          : (fixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5 : 1))));
+          : (fixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5
+            : (fixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID ? 0.72 : 1)))));
   S.boardKey = null;
   const session = clayRoomMovementSession();
   const board = (session && clayRoomMovementBoardFromState(session.state)) || S.clayRoomCompiled.board;
-  setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-fixture-switch" });
+  clayRoomSetInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-fixture-switch" });
   if(fixtureId === CLAY_ROOM_TRUTH_FIXTURE_ID) clayRoomMovementRangesRender();
   else clayRoomDisposeMovementOverlay();
   if(typeof S.clayRoomRefreshFixtureControls === "function") S.clayRoomRefreshFixtureControls();
@@ -501,7 +555,8 @@ function clayRoomSetFixture(fixtureId, reason){
       || fixtureId === CLAY_ROOM_LIGHTING_BENCH_ID
       || fixtureId === CLAY_ROOM_SPRITE_BENCH_ID
       || fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
-      || fixtureId === CLAY_ROOM_TRIM_BENCH_ID) && roomOnlySelected){
+      || fixtureId === CLAY_ROOM_TRIM_BENCH_ID
+      || fixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID) && roomOnlySelected){
       const recipe = LIGHT_TUNABLES.profiles[S.clayRoomLightRecipeId];
       const light = recipe && (recipe.lights || []).find(function(row){ return row.enabled !== false; });
       if(light) S.clayRoomWorkbenchSelect(light.id, "fixture switch");
@@ -549,7 +604,7 @@ function clayRoomSetSpriteScaleMode(mode, reason){
   S.boardKey = null;
   const session = clayRoomMovementSession();
   const board = session && clayRoomMovementBoardFromState(session.state);
-  if(board) setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-sprite-scale-mode" });
+  if(board) clayRoomSetInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-sprite-scale-mode" });
   if(typeof S.clayRoomRefreshSprites === "function") S.clayRoomRefreshSprites();
   return true;
 }
@@ -825,6 +880,7 @@ function clayRoomSurfaceMode(){
 function clayRoomSurfaceRoleFor(node, ancestorRole){
   if(!node) return ancestorRole || null;
   const ud = node.userData || {};
+  if(ud.groundField) return "ground-field-proof";                       // CL-F06 compiled field
   if(ud.clayMaterialBenchSurface) return "material-proof";            // CL-F04 candidate material
   const byKind = clayDiagnosticRoleForKind(ud.interiorKind);           // interiorBuildInstancedMesh / room-shell / kit-shell
   if(byKind) return byKind;
@@ -1539,7 +1595,7 @@ function clayRoomRebuildStructureBench(reason){
   const board = session && clayRoomMovementBoardFromState(session.state);
   if(!board) return false;
   S.boardKey = null;
-  setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-structure-rebuild" });
+  clayRoomSetInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-structure-rebuild" });
   return true;
 }
 function clayRoomSetStructureView(view){
@@ -4480,10 +4536,12 @@ function clayRoomAfterInteriorBoardRebuild(){
   clayRoomApplyMoodLayer();
   clayRoomBuildLightOverlays();
   clayRoomDisposeSeamGrid();
-  S.clayGridMesh = clayRoomBuildSeamGrid(
-    S.clayRoomRecord,
-    S.clayRoomCompiled && S.clayRoomCompiled.room
-  );
+  S.clayGridMesh = S.clayRoomFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID
+    ? null
+    : clayRoomBuildSeamGrid(
+        S.clayRoomRecord,
+        S.clayRoomCompiled && S.clayRoomCompiled.room
+      );
   clayRoomTagAllProvenance();
   // pan/zoom survives rebuilds without compounding: capture THIS rebuild's fresh camera fit, then
   // re-derive the pose from fit ∘ offset ∘ zoom (see the CLAY CAMERA PAN/ZOOM block).
@@ -5131,7 +5189,7 @@ function clayRoomApplyMovementBoard(state, reason){
   const board = clayRoomMovementBoardFromState(state);
   if(!board) return;
   S.boardKey = null;
-  setInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-movement-commit" });
+  clayRoomSetInteriorBoard(board, { roomTransition: false, reason: reason || "clayroom-movement-commit" });
   clayRoomMovementRangesRender();
 }
 function clayRoomAnimateMovementReceipt(receipt, onDone, onProgress){
@@ -5823,7 +5881,8 @@ function mountClayRoom(){
     // CL-F04/05 are focused visual comparisons. Collapse the generic object catalog by default so
     // the production renderer keeps a landscape review viewport; the rail remains one click away.
     if(initialFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
-      || initialFixtureId === CLAY_ROOM_TRIM_BENCH_ID) S.clayRoomCatalogCollapsed = true;
+      || initialFixtureId === CLAY_ROOM_TRIM_BENCH_ID
+      || initialFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID) S.clayRoomCatalogCollapsed = true;
 
     const workbench = clayRoomBuildWorkbenchChrome(record);
     const host = workbench.host;
@@ -5846,7 +5905,9 @@ function mountClayRoom(){
     // CL-R3's canonical review is the daylight hero: neutral clay still carries no authored site
     // material, while the shared production sun makes wall thickness, caps, stairs, and slab faces
     // readable without diagnostic bulbs. Other fixtures retain their existing opposing-pair start.
-    const initialLightRecipeId = (initialFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
+    const initialLightRecipeId = initialFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID
+      ? "daylit"
+      : (initialFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID
       || initialFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID
       || initialFixtureId === CLAY_ROOM_TRIM_BENCH_ID)
       ? "daylit"
@@ -5894,7 +5955,8 @@ function mountClayRoom(){
       ? 0.72 : (S.clayRoomFixtureId === CLAY_ROOM_SPRITE_BENCH_ID ? 0.9
         : (S.clayRoomFixtureId === CLAY_ROOM_STRUCTURE_BENCH_ID ? 0.65
           : (S.clayRoomFixtureId === CLAY_ROOM_MATERIAL_BENCH_ID ? 0.78
-            : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5 : 1))));
+            : (S.clayRoomFixtureId === CLAY_ROOM_TRIM_BENCH_ID ? 0.5
+              : (S.clayRoomFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID ? 0.72 : 1)))));
     S.clayRoomStructureView = CLAY_STRUCTURE_BENCH_FIXTURE.defaultView;
     S.clayRoomMaterialMode = CLAY_MATERIAL_BENCH_FIXTURE.defaultMode;
     S.clayRoomTrimMode = CLAY_TRIM_BENCH_FIXTURE.defaultMode;
@@ -5910,8 +5972,9 @@ function mountClayRoom(){
       { type: "door-state", state: initialStructureConnection ? initialStructureConnection.state : "shut" }
     );
     S.clayRoomDiagnosticActive = true;
-    setInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
-    clayRoomMovementRangesRender();
+    clayRoomSetInteriorBoard(clayRoomMovementBoardFromState(GS.clayRoomMovementSession.state) || compiled.board);
+    if(initialFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID) clayRoomDisposeMovementOverlay();
+    else clayRoomMovementRangesRender();
     clayRoomTagAllProvenance();
     markDirty();
     scheduleRender();
@@ -6347,7 +6410,7 @@ function clayRoomMountOverlay(record, host){
   function clayMountReplay(){
     S.boardKey = null;
     if(S.lastBoard && S.lastBoard.kind === "interior3d"){
-      setInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-mount-edit" });
+      clayRoomSetInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-mount-edit" });
     }
   }
   // wall-centre snap: measure the built wall body nearest the door along its passage axis — the
@@ -6545,7 +6608,10 @@ function clayRoomMountOverlay(record, host){
     const actor = session.state.actors.find(function(row){ return row.id === session.fixture.actorId; });
     const connection = session.state.connections.find(function(row){ return row.id === session.fixture.connectionId; });
     const ranges = tqMovementRanges(session.fixture.space, session.state, session.fixture.actorId);
-    if(!readoutOnly) clayRoomRenderMovementOverlay(ranges, session.preview);
+    if(!readoutOnly){
+      if(S.clayRoomFixtureId === CLAY_ROOM_GROUND_FIELD_BENCH_ID) clayRoomDisposeMovementOverlay();
+      else clayRoomRenderMovementOverlay(ranges, session.preview);
+    }
     movePaceBtn.style.background = session.pace === "move" ? "#24516a" : "#2a2a30";
     dashPaceBtn.style.background = session.pace === "dash" ? "#6a4d24" : "#2a2a30";
     autoRouteBtn.style.background = session.route === "auto" ? "#3a3a44" : "#2a2a30";
@@ -7506,7 +7572,7 @@ function clayRoomMountOverlay(record, host){
   rebuildLightsBtn.addEventListener("click", function(){
     if(!S.lastBoard || S.lastBoard.kind !== "interior3d") return;
     S.boardKey = null;
-    setInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-lighting-proof" });
+    clayRoomSetInteriorBoard(S.lastBoard, { roomTransition: false, reason: "clayroom-lighting-proof" });
     clayLightsRender();
   });
   refreshPixelsBtn.addEventListener("click", function(){

@@ -947,7 +947,7 @@ const check = (name, cond, detail = "") =>
     // edit. The invariant this check protects is unchanged and is now asserted in TWO parts: the
     // override is still applied before the first setInteriorBoard projection.
     check("17b. mountClayRoom() sets ITR_ROOM_SHELL from the flag reader before setInteriorBoard runs",
-      /clayCtxSetRoomShell\(clayRoomShellOverrideOn\(\)\);[\s\S]*setInteriorBoard\s*\(\s*clayRoomMovementBoardFromState/.test(mountBody), mountBody);
+      /clayCtxSetRoomShell\(clayRoomShellOverrideOn\(\)\);[\s\S]*(?:clayRoomSetInteriorBoard|setInteriorBoard)\s*\(\s*clayRoomMovementBoardFromState/.test(mountBody), mountBody);
     const shellFnBody = (region.match(/function\s+clayRoomShellOverrideOn\s*\(\)\s*\{([\s\S]*?)\n\}/) || [])[1] || "";
     // 17b2 REWRITTEN for CL-R3a (red-first: the default flip turned the old assertion red before this
     // check changed). Under the 2026-07-23 wall-omission ruling the clay fixture adopts the PRODUCTION
@@ -1392,8 +1392,8 @@ const check = (name, cond, detail = "") =>
   check("30d. state/rebuild helpers explicitly suppress travel-only room transitions",
     /function\s+setInteriorBoard\s*\(data,\s*renderOpts\)/.test(bootSrc)
     && /renderOpts\.roomTransition\s*!==\s*false/.test(bootSrc)
-    && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
-    && /setInteriorBoard\(S\.lastBoard,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
+    && /(?:clayRoomSetInteriorBoard|setInteriorBoard)\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
+    && /(?:clayRoomSetInteriorBoard|setInteriorBoard)\(S\.lastBoard,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
   check("30e. Concept 1 shell exposes persistent Catalog, Scene, Viewport, and Inspector regions",
     /clay-room-workbench-catalog/.test(bootSrc)
     && /clay-room-workbench-scene/.test(bootSrc)
@@ -1512,7 +1512,7 @@ const check = (name, cond, detail = "") =>
   check("31i. session movement truth lives in GS and every movement rebuild suppresses travel fade",
     /GS\.clayRoomMovementSession/.test(bootSrc)
     && /session\.state\s*=\s*committed\.state/.test(bootSrc)
-    && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
+    && /(?:clayRoomSetInteriorBoard|setInteriorBoard)\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc));
   check("31j. live proof exposes revision, actor, Connection, exact ranges, preview, receipt, and overlay",
     /window\.Theater\._clayMovementProofForTest/.test(bootSrc)
     && /stateRevision/.test(bootSrc) && /lastReceipt/.test(bootSrc)
@@ -1931,7 +1931,7 @@ const check = (name, cond, detail = "") =>
     && /function\s+clayRoomSetStructureDoorState/.test(bootSrc)
     && /tqConnectionStateCommit\(session\.fixture\.space,\s*session\.state/.test(bootSrc)
     && /clayRoomRebuildStructureBench/.test(bootSrc)
-    && /setInteriorBoard\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
+    && /(?:clayRoomSetInteriorBoard|setInteriorBoard)\(board,\s*\{\s*roomTransition:\s*false/.test(bootSrc)
     && /_claySetStructureStagedForTest/.test(bootSrc)
     && /_claySetStructureDoorStateForTest/.test(bootSrc));
   check("34u. CL-F01 uses the production OSS corner kernel and builds datum-connected foundations with contact overlap",

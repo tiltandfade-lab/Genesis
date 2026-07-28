@@ -542,7 +542,7 @@ function clayRoomSetFixture(fixtureId, reason){
   if(fixtureId === CLAY_ROOM_MATERIAL_BENCH_ID || fixtureId === CLAY_ROOM_TRIM_BENCH_ID){
     S.clayRoomCatalogCollapsed = true;
     clayRoomApplyWorkbenchLayout();
-    setTimeout(function(){ if(S.resizeHandler) S.resizeHandler(); }, 0);
+    setTimeout(function(){ clayRoomResizeAndRestorePose(); }, 0);
   }
   return true;
 }
@@ -4696,6 +4696,34 @@ function clayRoomMountTerrainBench(){
       return Object.assign({}, report, { cameraProjection: clayTerrainCameraProjection() });
     };
     window.Theater._clayTerrainSetViewForTest = function(view){ return clayRoomSetTerrainView(view); };
+    /* THE GOVERNED POSE, for the resize-survival probe (dev/verify-clay-camera-resize.cjs). Read
+       seam reports what the pose actually produced — including the far plane, which is part of it —
+       so a probe can ask the physical question (is the whole content sphere inside the frustum?)
+       rather than eyeball a frame. The setter goes through clayRoomApplyCamPose, the same entry
+       point the drag and wheel handlers use, so the probe exercises the shipped path; it moves the
+       governed pan and zoom only, never bearing or pitch, which the clay-proof contract forbids. */
+    window.Theater._clayCamPoseForTest = function(){
+      if(!S.camera) return null;
+      const t = S.cameraLookTarget || null;
+      return {
+        diagnosticActive: !!S.clayRoomDiagnosticActive,
+        pos: S.camera.position.toArray(),
+        target: t ? t.toArray() : null,
+        far: S.camera.far, near: S.camera.near, aspect: S.camera.aspect,
+        dist: t ? S.camera.position.distanceTo(t) : null,
+        contentRadius: clayRoomPosedContentRadius(),
+        offset: S.clayCamOffset ? { x: S.clayCamOffset.x, z: S.clayCamOffset.z } : null,
+        zoom: S.clayCamZoom != null ? S.clayCamZoom : null,
+        fitPos: S.clayCamFit ? S.clayCamFit.pos.toArray() : null,
+        posedAt: S.clayCamPosedAt ? S.clayCamPosedAt.toArray() : null
+      };
+    };
+    window.Theater._clayCamPoseSetForTest = function(offset, zoom){
+      if(offset) S.clayCamOffset = { x: offset.x, z: offset.z };
+      if(zoom != null) S.clayCamZoom = zoom;
+      clayRoomApplyCamPose();
+      return window.Theater._clayCamPoseForTest();
+    };
     /* THE BACKDROP PLATE. The same frame with the bench hidden and nothing else changed — same
        camera, same lights, same canvas. It is what "nothing is there" looks like at every pixel,
        which is the only honest answer to that question in a frame carrying a vignette gradient: the
@@ -6342,9 +6370,44 @@ function clayRoomApplyCamPose(){
      by one rule instead of one of them being remembered and the other forgotten. */
   S.clayRoomCameraFar = clayRoomGrowCameraFar(
     pos.distanceTo(target) + clayRoomPosedContentRadius() + CLAY_CAM_FAR_MARGIN);
+  /* WHERE THE POSE ACTUALLY PUT THE CAMERA. Both branches land here, so this is the one place that
+     knows the answer; the resize funnel below reads it to tell "the host re-fitted and wiped the
+     pose" from "nothing has touched the camera since", instead of keeping a second copy of the
+     pose math that would drift out of step with this one. */
+  S.clayCamPosedAt = pos.clone();
   S.clayRoomPixelMetricsCache = null;
   markDirty();
   scheduleRender();
+}
+/* THE POSE MUST SURVIVE A RESIZE. Every clay-owned caller of the host resize goes through here and
+   none of them calls S.resizeHandler directly, because that handler ends in placeCamera(), which
+   re-fits the camera to the HOST ROOM and hard-resets S.camera.far to the host's own clip range
+   (theater-camera.js — an absolute assignment at four sites, not a grow). A live viewer who resized
+   the window therefore lost the governed pan, the governed zoom, and — since round 4 made the far
+   plane part of the pose — the clip range that keeps the whole field inside the frustum. On the
+   terrain sheet that is exactly the round-4 defect returning at runtime: half a 24x24 field cut
+   away on a plane perpendicular to the view axis. No capture ever caught it because the capture rig
+   never resizes.
+
+   THE FIT IS RE-CAPTURED, NOT RESTORED. clayCamFit holds the UNPOSED fit and is aspect-dependent;
+   placeCamera has just computed the correct fit for the new aspect and left the camera sitting on
+   it, which is the one moment where capturing cannot fold the pan and zoom into the fit itself. The
+   governed offset and zoom are deltas and survive untouched (clayRoomCaptureCamFit only initialises
+   them when absent). Re-applying a STALE fit instead would answer the new viewport with the old
+   viewport's framing — the narrow-viewport crop the strategic fit above already had to correct. */
+function clayRoomResizeAndRestorePose(){
+  if(S.resizeHandler) S.resizeHandler();
+  if(!S.clayRoomDiagnosticActive || !S.camera) return false;
+  /* Re-capture ONLY when something moved the camera off the pose we last set — i.e. the host resize
+     really re-fitted. If it early-returned (unmounted, no renderer) or the viewport did not actually
+     change, the camera is still posed, and capturing here would fold offset+zoom into the fit and
+     compound them on every later resize. Re-applying, by contrast, is unconditional: the far plane
+     is part of the pose and placeCamera resets it even when the fitted POSITION is unchanged, which
+     is precisely the sheet's default unpanned, unzoomed state — the case that clipped half the
+     field. */
+  if(!S.clayCamPosedAt || !S.camera.position.equals(S.clayCamPosedAt)) clayRoomCaptureCamFit();
+  clayRoomApplyCamPose();
+  return true;
 }
 function clayRoomNodeForSelection(id){
   if(!id || !S.interiorGroup) return null;
@@ -6806,7 +6869,7 @@ function clayRoomBuildWorkbenchChrome(record){
     rail.setAttribute("aria-expanded", S.clayRoomCatalogCollapsed ? "false" : "true");
     clayRoomApplyWorkbenchLayout();
     setTimeout(function(){
-      if(S.resizeHandler) S.resizeHandler();
+      clayRoomResizeAndRestorePose();
       markDirty(); scheduleRender();
     }, 140);
   });
@@ -7213,7 +7276,7 @@ function clayRoomMountOverlay(record, host){
       clayPanelDockRight();
     }
     clayRoomApplyWorkbenchLayout();
-    if(S.resizeHandler) S.resizeHandler();
+    clayRoomResizeAndRestorePose();
   };
   window.addEventListener("resize", S.clayRoomPanelResizeHandler);
 

@@ -1406,3 +1406,47 @@ source, so both have teeth. `dev/measure-clay-terrain-bench.py <dir>` **RESULT: 
 at 100.00% coverage on all three gated frames. `check-manifest` **RESULT: OK**. Determinism **PASS**,
 13 fields, two page loads. All 12 sets re-captured, each now banking two backdrop plates beside its
 four judged frames.
+
+### Clayroom camera — the pose did not survive a resize (2026-07-28, on 4732c829) — PROPOSED
+
+The item round 4 named rather than folded in. `S.resizeHandler` (`src/ui/theater-boot.js`) ends in
+`placeCamera()`, which re-fits the camera to the **host room** and hard-resets `S.camera.far` to
+`camDist + FOG_FAR + 20` — an absolute assignment at four sites in `theater-camera.js`, not a grow.
+Nothing re-applied the clay pose afterwards, so a window resize (or a catalog-rail toggle, or a
+material/trim bench mount) silently discarded the governed pan and zoom, and — since round 4 made the
+far plane part of the pose — the clip range that keeps a field inside the frustum. The captures never
+saw it because the capture rig never resizes.
+
+**Three call sites, not two.** `S.clayRoomPanelResizeHandler`, the catalog toggle, and a third at the
+material/trim bench mount path, which collapses the rail and fires the host resize in a `setTimeout`.
+All three now go through one funnel, `clayRoomResizeAndRestorePose()`, and none calls `S.resizeHandler`
+directly — the same "normalization at the boundary, not in handlers" rule the event contract already
+holds to. A fourth caller added later inherits the fix by construction.
+
+**The fit is RE-CAPTURED, not restored.** `clayCamFit` holds the *unposed* fit and is
+aspect-dependent; `placeCamera` has just computed the correct fit for the new aspect and left the
+camera sitting on it, which is the one moment where capturing cannot fold the pan and zoom into the
+fit itself. Restoring a stale fit would answer the new viewport with the old viewport's framing — the
+narrow-viewport crop the strategic fit already had to correct for. Offset and zoom are deltas and
+survive untouched.
+
+**The guard that looked right and was wrong.** The obvious protection against compounding is "only
+re-capture if the camera moved during the resize." That is false for the default, unpanned, unzoomed
+state — where the posed position *equals* the fit position, nothing appears to move, and yet `far`
+was still reset. It would have let the clipping straight back into exactly the state the sheet ships
+in. So the funnel re-applies unconditionally and re-captures only when the camera has drifted off
+`S.clayCamPosedAt` — the position `clayRoomApplyCamPose` records for itself, so the check reads the
+pose's own answer instead of keeping a second copy of the pose math to drift out of step.
+
+**Gate:** `dev/verify-clay-camera-resize.cjs` — the real page, the real governed pose, a `setViewport`
+that changes both extents *and* aspect (an aspect-preserving resize would let a stale fit pass by
+luck). **10 passed / 0 failed.** Its load-bearing assertion is that the camera sits where the pose
+last put it, red-proven at 9.03 world units off before the fix. Two earlier drafts of this probe
+passed against the unfixed code and were discarded rather than kept: one dollied *in*, which shrinks
+the distance to the target and satisfies the far-plane test trivially, and one compared the camera
+against the captured fit, which differs from the host's fresh fit after any resize and so reads
+"posed" even when the pose is gone. A probe that cannot fail against the defect is not a gate.
+
+**Not done here:** no visual verdict, and no re-capture — the banked CL-F07a frames are unchanged by
+this (the rig never resizes), and `measure` still reports **RESULT: PASS** at 100% coverage over all
+12 sets. Whether the live viewer's re-framing after a resize is the *right* framing is Adam's call.

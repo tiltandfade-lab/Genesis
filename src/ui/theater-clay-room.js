@@ -3999,6 +3999,34 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
   return { group: group, floorH: floorH, cellMeshes: cellMeshes };
 }
 
+/* THE FRAME'S OWN PROJECTION, read off the live camera and the live canvas. Everything a capture
+   needs to turn a world point into a pixel in the banked PNG: the two matrices exactly as the
+   renderer used them (no fov/aspect reconstruction, which is where a projection check would quietly
+   drift from the picture), the canvas's CSS rect inside the page the screenshot framed, and the
+   device pixel ratio the screenshot was taken at. */
+function clayTerrainCameraProjection(){
+  if(!S.camera) return null;
+  S.camera.updateMatrixWorld(true);
+  const view = new THREE.Matrix4().copy(S.camera.matrixWorld).invert();
+  const canvas = (S.renderer && S.renderer.domElement)
+    || (typeof document !== "undefined" ? document.querySelector("canvas") : null);
+  const rect = canvas && canvas.getBoundingClientRect ? canvas.getBoundingClientRect() : null;
+  return {
+    kind: S.camera.isPerspectiveCamera ? "perspective" : "orthographic",
+    fov: S.camera.isPerspectiveCamera ? S.camera.fov : null,
+    aspect: S.camera.aspect != null ? S.camera.aspect : null,
+    near: S.camera.near, far: S.camera.far,
+    position: S.camera.position.toArray(),
+    projectionMatrix: Array.prototype.slice.call(S.camera.projectionMatrix.elements),
+    viewMatrix: Array.prototype.slice.call(view.elements),
+    canvasRect: rect ? { x: rect.x, y: rect.y, width: rect.width, height: rect.height } : null,
+    drawingBuffer: canvas ? { width: canvas.width, height: canvas.height } : null,
+    devicePixelRatio: (typeof window !== "undefined" && window.devicePixelRatio) || 1,
+    clayZoom: S.clayCamZoom || 1,
+    view: S.clayRoomTerrainView || "production"
+  };
+}
+
 function clayTerrainCellWorld(field, originCell, baseY, origin, index){
   const h = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
   const c = field.cells[index];
@@ -4343,8 +4371,21 @@ function clayRoomMountTerrainBench(){
     });
     fieldBuild.group.userData.terrainFieldIndex = index;
     group.add(fieldBuild.group);
+    /* THE DECLARED FOOTPRINT, in world coordinates, straight off the chassis. One row per cell the
+       renderer is contractually required to draw (everything that is not a void), each carrying the
+       world point at the centre of its own top surface — the same clayTerrainCellWorld() the
+       witnesses and the route overlay use, so there is one projection and not two. A capture
+       projects these through the recorded camera and samples the frame at each: a declared cell that
+       lands on backdrop was DECLARED AND NOT DRAWN, which is a number rather than an impression. */
+    const declaredTops = [];
+    field.cells.forEach(function(c){
+      if(c.kind === "void") return;
+      const p = clayTerrainCellWorld(field, originCell, baseY, origin, c.index);
+      declaredTops.push([c.x, c.y, +p.x.toFixed(4), +p.y.toFixed(4), +p.z.toFixed(4),
+        c.inPlayfield ? 1 : 0]);
+    });
     built.push({ field: field, originCell: originCell, floorH: fieldBuild.floorH,
-      cellMeshes: fieldBuild.cellMeshes.length });
+      cellMeshes: fieldBuild.cellMeshes.length, declaredTops: declaredTops });
 
     /* THE SIX-FOOT HUMAN WITNESS ON EVERY RELIEF DATUM IN THE SAME FRAME (§4.2 condition 2). On
        the sheet that is one per piece; elsewhere it is the extremes of the field's own relief. */
@@ -4522,6 +4563,7 @@ function clayRoomMountTerrainBench(){
     view: S.clayRoomTerrainView || "production",
     fitZoom: fitZoom,
     strategicDistanceClamped: S.clayRoomStrategicDistanceClamped || null,
+    cameraFarSizing: S.clayRoomCameraFar || null,
     requestedLightRecipe: requestedLightRecipe,
     appliedLightRecipe: S.clayRoomLightRecipeId
       || (S.clayRoomCompiled && S.clayRoomCompiled.lightRecipeId) || null,
@@ -4537,7 +4579,10 @@ function clayRoomMountTerrainBench(){
         metrics: b.field.metrics,
         pieces: b.field.pieces,
         degradedFrom: b.field.degradedFrom,
-        cellMeshes: b.cellMeshes
+        cellMeshes: b.cellMeshes,
+        /* [cellX, cellY, worldX, worldY(top surface), worldZ, inPlayfield] per non-void cell. */
+        declaredCellTops: b.declaredTops,
+        declaredCellTopsFormat: "[cellX,cellY,worldX,worldYTop,worldZ,inPlayfield]"
       };
     }),
     witnesses: witnesses,
@@ -4639,8 +4684,30 @@ function clayRoomMountTerrainBench(){
     }, 900);
   }
   if(window.Theater){
-    window.Theater._clayTerrainBenchForTest = function(){ return S.clayRoomTerrainReport || null; };
+    /* The report is built ONCE at mount; the camera moves afterwards (the strategic toggle only
+       re-poses it, and pan/zoom re-pose it again). So the projection is read LIVE at probe time and
+       appended — a receipt that carries a mount-time camera would let a capture project every cell
+       through a pose the banked PNG was not taken at. With this block a capture can compute, for
+       every declared cell, the exact pixel it occupies in the frame: that is what makes "did the
+       renderer draw the whole declared field?" countable instead of a thing a viewer must spot. */
+    window.Theater._clayTerrainBenchForTest = function(){
+      const report = S.clayRoomTerrainReport;
+      if(!report) return null;
+      return Object.assign({}, report, { cameraProjection: clayTerrainCameraProjection() });
+    };
     window.Theater._clayTerrainSetViewForTest = function(view){ return clayRoomSetTerrainView(view); };
+    /* THE BACKDROP PLATE. The same frame with the bench hidden and nothing else changed — same
+       camera, same lights, same canvas. It is what "nothing is there" looks like at every pixel,
+       which is the only honest answer to that question in a frame carrying a vignette gradient: the
+       modal-colour version of this test read the ground itself as backdrop the moment the field
+       filled the frame. Visibility only — the group is never detached, so the next render restores
+       it exactly. */
+    window.Theater._clayTerrainSetBenchVisibleForTest = function(visible){
+      if(!S.clayRoomTerrainBenchGroup) return false;
+      S.clayRoomTerrainBenchGroup.visible = !!visible;
+      markDirty(); scheduleRender();
+      return true;
+    };
     window.Theater._clayTerrainSetFrameForTest = function(i){ return clayRoomSetTerrainFrame(i); };
     window.Theater._clayInteriorGroupForTest = function(){ return S.interiorGroup || null; };
   }
@@ -6167,6 +6234,42 @@ function clayRoomProvenanceAudit(){
 // The fitted pose remains the reset/default. 0.12 lets the art director dolly roughly 8.3× closer
 // for feet, shell, and alpha-edge inspection without unlocking bearing or pitch.
 const CLAY_CAM_ZOOM_MIN = 0.12, CLAY_CAM_ZOOM_MAX = 2.5;
+/* Breathing room beyond the posed camera's own content sphere. Terrain columns hang below their
+   own top surface and the host keeps chrome behind the bench; this is the slack that covers both
+   without turning the depth range into a precision problem. */
+const CLAY_CAM_FAR_MARGIN = 12;
+/* The half-diagonal of WHAT IS MOUNTED, in world units. One expression, used by the strategic fit
+   and by the clip-range sizing below, so the camera can never be fitted to one radius and clipped
+   against another. */
+function clayRoomPosedContentRadius(){
+  const terrainSpan = (S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID
+    && S.clayRoomTerrainHalfSpan) ? S.clayRoomTerrainHalfSpan : null;
+  return terrainSpan
+    ? terrainSpan * 1.42 + 1.5
+    : Math.sqrt(
+        Math.pow(S.boardHalfX || 8, 2) + Math.pow(S.boardHalfZ || 8, 2)
+      ) * 1.12 + 1.5; // margin: wall thickness + breathing room
+}
+/* THE FAR PLANE IS PART OF THE POSE — CL-F07a round 4.
+   setInteriorBoard sizes the shared camera's clip range for the 15x15 HOST ROOM's own fit distance
+   (camDist + FOG_FAR + 20 = 116.63). The clay benches then dolly along the view ray, and the
+   terrain sheet's governed fit parks the camera 2.048x further out — 115.98 from the target, 0.65
+   inside its own far plane. Everything more than 0.65 units BEYOND the target was outside the
+   frustum and was never drawn: half of a 24x24 field, cut by a plane perpendicular to the view
+   axis, which reads on screen as a clean diagonal across the grid with the tall pillars surviving
+   (raising a point moves it toward the camera along that axis). The field data was complete
+   throughout; the clip range was the thing that never moved. Sized here, where the pose is set, so
+   a camera and the volume it can see are decided together.
+   GROW-ONLY: no other bench's clip range changes, so this can add geometry to a frame and can never
+   remove any. */
+function clayRoomGrowCameraFar(needed){
+  if(!S.camera || !(needed > 0)) return null;
+  const before = S.camera.far;
+  if(S.camera.far >= needed) return { far: before, needed: needed, grown: false };
+  S.camera.far = needed;
+  if(S.camera.updateProjectionMatrix) S.camera.updateProjectionMatrix();
+  return { far: needed, needed: needed, grown: true, from: before };
+}
 function clayRoomCaptureCamFit(){
   if(!S.camera) return;
   const t = S.cameraLookTarget ? S.cameraLookTarget.clone() : new THREE.Vector3(0, 0, 0);
@@ -6196,20 +6299,22 @@ function clayRoomApplyCamPose(){
     {
       const terrainSpan = (S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID
         && S.clayRoomTerrainHalfSpan) ? S.clayRoomTerrainHalfSpan : null;
-      const halfDiag = terrainSpan
-        ? terrainSpan * 1.42 + 1.5
-        : Math.sqrt(
-            Math.pow(S.boardHalfX || 8, 2) + Math.pow(S.boardHalfZ || 8, 2)
-          ) * 1.12 + 1.5; // margin: wall thickness + breathing room
+      const halfDiag = clayRoomPosedContentRadius();
       const vFov = ((S.camera.fov || 20) * Math.PI / 180) / 2;
       const aspect = S.camera.aspect || 1;
       const hFov = Math.atan(Math.tan(vFov) * aspect);
       /* Never multiply a fit by a fit: on the terrain bench the governed zoom IS the size fit. */
       distance = (halfDiag / Math.tan(Math.min(vFov, hFov))) * (terrainSpan ? 1 : zoom);
       /* And never fit past the FAR PLANE. A camera parked beyond `far` renders an empty frame, which
-         is the failure that got this bench's first strategic pass banked as a brown rectangle. Clamp
-         and record it rather than shipping a blank proof. */
-      const farLimit = (S.camera.far || 100) * 0.8;
+         is the failure that got this bench's first strategic pass banked as a brown rectangle.
+         ROUND 4: the far plane is now SIZED TO THE REQUESTED FIT before this test rather than the
+         fit being cropped to a stale far plane — cropping was treating the symptom of exactly the
+         defect this round fixes, and it was silently pulling the 24x24 sheet's map read 14 units
+         closer than the fit asked for. The clamp stays as the residual safety net (a camera must
+         still sit far enough inside the far plane that the content's own radius fits), and records
+         itself when it fires, which under the sizing above it should not. */
+      clayRoomGrowCameraFar(distance + halfDiag + CLAY_CAM_FAR_MARGIN);
+      const farLimit = (S.camera.far || 100) - halfDiag - 1;
       if(distance > farLimit){
         S.clayRoomStrategicDistanceClamped = { requested: distance, applied: farLimit,
           reason: "camera fit exceeded the far plane" };
@@ -6232,6 +6337,11 @@ function clayRoomApplyCamPose(){
   S.camera.position.copy(pos);
   if(S.cameraLookTarget) S.cameraLookTarget.copy(target);
   S.camera.lookAt(target);
+  /* THE POSE IS NOT SET UNTIL THE VOLUME IT CAN SEE IS SET. Both branches land here, so the
+     production dolly (which is what the sheet's 2.048x fit uses) and the strategic fit are covered
+     by one rule instead of one of them being remembered and the other forgotten. */
+  S.clayRoomCameraFar = clayRoomGrowCameraFar(
+    pos.distanceTo(target) + clayRoomPosedContentRadius() + CLAY_CAM_FAR_MARGIN);
   S.clayRoomPixelMetricsCache = null;
   markDirty();
   scheduleRender();

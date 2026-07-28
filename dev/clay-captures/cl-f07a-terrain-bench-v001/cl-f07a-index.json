@@ -14,6 +14,10 @@
         "01-thirteen-piece-sheet-03-settled-strategic.png",
         "01-thirteen-piece-sheet-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "01-thirteen-piece-sheet-06-production-backdrop-plate.png",
+        "strategic": "01-thirteen-piece-sheet-05-strategic-backdrop-plate.png"
+      },
       "receipt": "01-thirteen-piece-sheet-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -36,6 +40,10 @@
         "02-one-clamp-proof-03-settled-strategic.png",
         "02-one-clamp-proof-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "02-one-clamp-proof-06-production-backdrop-plate.png",
+        "strategic": "02-one-clamp-proof-05-strategic-backdrop-plate.png"
+      },
       "receipt": "02-one-clamp-proof-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -62,6 +70,10 @@
         "03-boundary-sheet-f0-03-settled-strategic.png",
         "03-boundary-sheet-f0-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f0-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f0-05-strategic-backdrop-plate.png"
+      },
       "receipt": "03-boundary-sheet-f0-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -84,6 +96,10 @@
         "03-boundary-sheet-f1-03-settled-strategic.png",
         "03-boundary-sheet-f1-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f1-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f1-05-strategic-backdrop-plate.png"
+      },
       "receipt": "03-boundary-sheet-f1-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -106,6 +122,10 @@
         "03-boundary-sheet-f2-03-settled-strategic.png",
         "03-boundary-sheet-f2-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f2-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f2-05-strategic-backdrop-plate.png"
+      },
       "receipt": "03-boundary-sheet-f2-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -128,6 +148,10 @@
         "03-boundary-sheet-f3-03-settled-strategic.png",
         "03-boundary-sheet-f3-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f3-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f3-05-strategic-backdrop-plate.png"
+      },
       "receipt": "03-boundary-sheet-f3-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -150,6 +174,10 @@
         "03-boundary-sheet-f4-03-settled-strategic.png",
         "03-boundary-sheet-f4-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f4-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f4-05-strategic-backdrop-plate.png"
+      },
       "receipt": "03-boundary-sheet-f4-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -172,6 +200,10 @@
         "03-boundary-sheet-f5-03-settled-strategic.png",
         "03-boundary-sheet-f5-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "03-boundary-sheet-f5-06-production-backdrop-plate.png",
+        "strategic": "03-boundary-sheet-f5-05-strategic-backdrop-plate.png"
+      },
       "receipt": "03-boundary-sheet-f5-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -194,6 +226,10 @@
         "04-route-proof-03-settled-strategic.png",
         "04-route-proof-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "04-route-proof-06-production-backdrop-plate.png",
+        "strategic": "04-route-proof-05-strategic-backdrop-plate.png"
+      },
       "receipt": "04-route-proof-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -216,6 +252,10 @@
         "05-walk-down-16-03-settled-strategic.png",
         "05-walk-down-16-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "05-walk-down-16-06-production-backdrop-plate.png",
+        "strategic": "05-walk-down-16-05-strategic-backdrop-plate.png"
+      },
       "receipt": "05-walk-down-16-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -238,6 +278,10 @@
         "06-support-graph-03-settled-strategic.png",
         "06-support-graph-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "06-support-graph-06-production-backdrop-plate.png",
+        "strategic": "06-support-graph-05-strategic-backdrop-plate.png"
+      },
       "receipt": "06-support-graph-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -260,6 +304,10 @@
         "07-dark-03-settled-strategic.png",
         "07-dark-04-clean-production.png"
       ],
+      "backdropPlates": {
+        "production": "07-dark-06-production-backdrop-plate.png",
+        "strategic": "07-dark-05-strategic-backdrop-plate.png"
+      },
       "receipt": "07-dark-receipt.json",
       "built": true,
       "consoleErrors": 2,
@@ -511,7 +559,7 @@
       }
     ]
   },
-  "generatedAt": "2026-07-28T03:12:51.343Z",
+  "generatedAt": "2026-07-28T03:59:44.685Z",
   "viewport": {
     "width": 1280,
     "height": 720,

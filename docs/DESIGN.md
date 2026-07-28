@@ -1327,3 +1327,82 @@ checks (frame census present, spans scoped to the declaring piece, unowned meshe
 ownership). `dev/measure-clay-terrain-bench.py` **RESULT: PASS** over 12 sets, every set reporting
 `figures = witnesses, foreign = 0, strays = 0`. `check-manifest` **RESULT: OK**. Determinism
 **PASS**. All 12 sets re-captured.
+
+### CL-F07a fix pass, round 4 — half the sheet was never drawn (2026-07-28, on e2e73b0b)
+
+Adam caught it: `01-thirteen-piece-sheet-02-settled-production.png` and `07-dark-02-settled-production.png`
+rendered only part of the 24×24 field — the far half gone along a clean cut, the surviving silhouette
+close enough to the 12×16 kidney footprint to look like a mask leak. It survived three fix rounds
+because **every number in the receipt agreed with the half that was there**: cells 564, frame census
+564, edge density 8.7%, terrain p50 luma 141. The field data was complete throughout.
+
+**THE CAUSE — the far plane was never part of the pose.** `setInteriorBoard` sizes the shared
+camera's clip range for the **15×15 host room's** own fit distance (`camDist + FOG_FAR + 20` =
+116.633). The clay benches then dolly along the view ray, and the terrain sheet's governed fit
+(`fitZoom = spanCells/15 × 1.28` = 2.048 for a 24-cell field) parked the camera **115.98** from its
+target — 0.65 inside its own far plane. Everything more than 0.65 world units *beyond the target*
+fell outside the frustum and was never drawn. The cut is a plane perpendicular to the view axis, so
+it reads on screen as a clean diagonal across the grid, and tall pillars survive past it because
+raising a point moves it *toward* the camera along that axis. Only the two 24×24 scenes were
+affected: the kidney scenes fit at zoom 1.365 (camera 77.32, 39 units of headroom).
+
+**PROVEN BY TOGGLE, NOT BY PIXELS.** With the sheet mounted, the Clayroom's own double-click reset
+(`clayCamZoom → 1`, camera 115.98 → 32.8/32.5/32.8, **no rebuild, no remount, 564 cell meshes before
+and after**) brings the whole field back; the governed wheel dollies back out and the missing half
+returns. One variable moves, the symptom moves with it. The gate then made it predictive: of the 211
+missing cells in the banked frame, **100% lie beyond `far`** — missing depth range
+[116.721, 127.755] against `far` 116.633. A single number partitions drawn from not-drawn.
+
+**THE FIX.** `clayRoomGrowCameraFar()` + `clayRoomPosedContentRadius()` in
+`src/ui/theater-clay-room.js`: the far plane is sized where the pose is set, from
+`distance-to-target + content radius + margin`, on **both** branches, and **grow-only** so no other
+bench's clip range can shrink. The sheet and dark grew 116.633 → 146.525; one-clamp 116.633 →
+124.354; the eight kidney sets kept 116.633 unchanged. The strategic branch's old
+`farLimit = far × 0.8` **clamp was itself treating this symptom** — it was pulling the sheet's 72°
+map read 14 units closer than the fit asked for — so the far plane is now sized to the requested fit
+first and the clamp survives as a geometric safety net (`far − contentRadius − 1`) that records
+itself when it fires. It fires nowhere; `strategicDistanceClamped` is null in all 12 sets.
+
+**THE NEW GATE — pixel coverage, red-first.** `dev/measure-clay-terrain-bench.py` now projects
+**every declared cell top** (the receipt carries `declaredCellTops` per field: one row per non-void
+cell, world coordinates from the same `clayTerrainCellWorld()` the witnesses use) through **that
+frame's own camera** (the receipt carries a live `cameraProjection`: the renderer's two matrices
+verbatim, the canvas rect, the device pixel ratio) and samples the banked PNG there. Cells occluded
+by the field's own heightfield are excluded by an honest ray march and counted separately; volumes
+are not marched, which can only leave a cell in the denominator, never remove one. Gate: **≥ 99% of
+provably-visible declared cells drawn, and ≥ 99% framed**, per scene, on the settled-production, 72°
+strategic, and clean-production frames.
+
+*"Drawn" is decided against a BACKDROP PLATE* — the identical render with the bench hidden, banked
+per pose. The first version tested against the frame's modal colour and inverted itself the moment a
+field filled the frame (the ground became the most common colour, so flat cells read as "nothing":
+boundary-f2's strategic frame measured 0.52% while being completely intact), and it could not
+survive the backdrop's own vignette, which spans 55 luma corner to centre. Against its plate the
+separation is not close: drawn cells measure 72–229 from the plate at the 5th percentile, missing
+cells measure 0, and the tolerance sits at 12.
+
+**Per-scene coverage, all 12 sets, before → after** (clean-production frame): sheet **57.29 → 100.00**
+(283/494 → 494/494), dark **57.29 → 100.00**, and the other ten sets 100.00 → 100.00 — the kidney
+scenes were **not** quietly losing cells inside their irregular outlines. Framed-out cells: sheet and
+dark 2 → 0 (the un-clamped strategic fit now contains the field it is a map of); every other set 0
+throughout.
+
+**THE STANDING LESSON: a rendered footprint must be gate-compared to a declared extent.** Every gate
+this bench had could see *whether* something rendered — none could see whether *all* of it did, and
+"most of it" satisfied all of them. Non-emptiness is not coverage. Half-missing is now exactly as
+countable as all-missing.
+
+**Not fixed here, and named rather than left silent:** a window resize (or a catalog-rail toggle)
+runs `S.resizeHandler → placeCamera()`, which re-places the camera at the host room's fit and resets
+`far` — discarding the governed pan/zoom *and* this round's clip sizing, so a live viewer who resizes
+the window on the sheet would see the far half clipped again. That is a pre-existing pose-loss defect
+affecting all six benches, and changing it changes behaviour Adam has not ruled on, so it is filed
+rather than folded into a one-cause round.
+
+**Gates:** `dev/verify-terrain-bench.mjs` **73 passed / 0 failed** (`--red` 0 passed / 21 failed)
+with two new checks — 17i (the far plane is sized to the posed camera) and 17j (the receipt carries
+the declared footprint and a live camera projection); both verified to fail against the round-3
+source, so both have teeth. `dev/measure-clay-terrain-bench.py <dir>` **RESULT: PASS** over 12 sets
+at 100.00% coverage on all three gated frames. `check-manifest` **RESULT: OK**. Determinism **PASS**,
+13 fields, two page loads. All 12 sets re-captured, each now banking two backdrop plates beside its
+four judged frames.

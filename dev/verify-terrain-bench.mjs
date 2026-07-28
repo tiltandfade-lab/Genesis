@@ -473,6 +473,29 @@ guard("17. frame hygiene", () => {
   check("17h. unowned host meshes are suppressed by ownership, never by a shared tag",
     /clayTerrainHostSuppressed = "unowned"/.test(region)
     && /if\(!node\.isMesh \|\| node\.isLight/.test(region));
+
+  /* 17i — ROUND 4. The far plane is part of the pose. The shared camera's clip range is sized by
+     setInteriorBoard for the 15x15 HOST ROOM; the clay benches then dolly along the view ray, and
+     the terrain sheet's governed fit parked the camera 115.98 from its target against a far plane
+     at 116.63 — so every surface more than 0.65 units beyond the target was clipped away and half
+     the 24x24 sheet was never drawn. Sizing must happen where the pose is set, for BOTH branches,
+     and must only ever GROW (shrinking a shared camera's clip range could remove another bench's
+     geometry). */
+  check("17i. the far plane is sized to the posed camera, not left at the host room's fit",
+    /function clayRoomGrowCameraFar/.test(src)
+    && /function clayRoomPosedContentRadius/.test(src)
+    && /if\(S\.camera\.far >= needed\) return/.test(src)
+    && /S\.clayRoomCameraFar = clayRoomGrowCameraFar\(/.test(src)
+    && /pos\.distanceTo\(target\) \+ clayRoomPosedContentRadius\(\)/.test(src));
+
+  /* 17j — and the receipt must carry what a capture needs to CHECK that: the declared footprint in
+     world coordinates, plus the projection of the camera each frame was actually taken at. Without
+     both, "half the field is missing" stays a thing a viewer has to notice. */
+  check("17j. the receipt carries the declared footprint and a live camera projection",
+    /declaredCellTops/.test(region) && /declaredCellTopsFormat/.test(region)
+    && /function clayTerrainCameraProjection/.test(region)
+    && /projectionMatrix/.test(region) && /canvasRect/.test(region)
+    && /cameraProjection: clayTerrainCameraProjection\(\)/.test(region));
 });
 
 // ============================================================================

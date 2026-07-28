@@ -86,6 +86,23 @@ function pageProbe() {
   };
 }
 
+/* Hide the bench, bank the empty frame, put it back. Visibility only — the group is never
+   detached, and the restore is asserted by the very next probe still reporting its cells. */
+async function plate(page, filename) {
+  const hidden = await page.evaluate(() =>
+    window.Theater._clayTerrainSetBenchVisibleForTest
+      ? window.Theater._clayTerrainSetBenchVisibleForTest(false) : false);
+  await new Promise((r) => setTimeout(r, 450));
+  await page.screenshot({ path: path.join(OUT, filename) });
+  await page.evaluate(() => {
+    if (window.Theater._clayTerrainSetBenchVisibleForTest) {
+      window.Theater._clayTerrainSetBenchVisibleForTest(true);
+    }
+  });
+  await new Promise((r) => setTimeout(r, 450));
+  return hidden;
+}
+
 (async () => {
   const browser = await puppeteer.launch({
     executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -166,6 +183,8 @@ function pageProbe() {
     await new Promise((r) => setTimeout(r, 900));
     const strategicProbe = await page.evaluate(pageProbe);
     await page.screenshot({ path: path.join(OUT, label + "-03-settled-strategic.png") });
+    /* BACKDROP PLATE at the strategic pose — see the production plate below. */
+    await plate(page, label + "-05-strategic-backdrop-plate.png");
     await page.evaluate(() => {
       if (window.Theater && window.Theater._clayTerrainSetViewForTest) {
         window.Theater._clayTerrainSetViewForTest("production");
@@ -182,7 +201,17 @@ function pageProbe() {
       });
     });
     await new Promise((r) => setTimeout(r, 500));
+    /* Probed AGAIN after the chrome is hidden, because hiding the docked panels re-lays out the
+       canvas: the clean frame is the one the pixel-coverage gate reads (nothing in it can be behind
+       a panel), so it must carry its OWN camera projection and canvas rect, not the settled one. */
+    const clean = await page.evaluate(pageProbe);
     await page.screenshot({ path: path.join(OUT, label + "-04-clean-production.png") });
+    /* BACKDROP PLATE at the production pose. The pixel-coverage gate asks, at every declared cell,
+       "is this pixel the frame or is it nothing?" — and in a frame with a vignette gradient no
+       single colour answers that. The plate answers it per pixel: the same camera, the same lights,
+       the same canvas, with the bench hidden. A declared cell whose pixel equals the plate was
+       declared and not drawn. Both plates are small on disk (smooth gradient, no geometry). */
+    await plate(page, label + "-06-production-backdrop-plate.png");
 
     const receipt = {
       fixture: "cl-f07-terrain-bench",
@@ -200,9 +229,16 @@ function pageProbe() {
         label + "-03-settled-strategic.png",
         label + "-04-clean-production.png"
       ],
+      /* Not frames — REFERENCES. The measurement reads these to decide, per pixel, what "nothing"
+         looks like; they are never judged as pictures. */
+      backdropPlates: {
+        production: label + "-06-production-backdrop-plate.png",
+        strategic: label + "-05-strategic-backdrop-plate.png"
+      },
       early: early,
       settled: settled,
       strategic: strategicProbe,
+      clean: clean,
       consoleErrors: consoleErrors,
       consoleWarnings: consoleWarnings.slice(0, 40)
     };
@@ -210,7 +246,8 @@ function pageProbe() {
     index.captures.push({ capture: scene.capture, sceneId: scene.id, label: label,
       frameIndex: scene.frameIndex != null ? scene.frameIndex : null,
       boundary: settled.terrain && settled.terrain.boundary ? settled.terrain.boundary.kind : null,
-      frames: receipt.frames, receipt: label + "-receipt.json",
+      frames: receipt.frames, backdropPlates: receipt.backdropPlates,
+      receipt: label + "-receipt.json",
       built: receipt.claim === "built",
       consoleErrors: consoleErrors.length,
       fingerprints: settled.terrain ? settled.terrain.fields.map((f) => ({ id: f.id, fingerprint: f.fingerprint })) : null });

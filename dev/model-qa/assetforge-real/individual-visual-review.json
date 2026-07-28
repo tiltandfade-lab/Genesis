@@ -1,13 +1,13 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "reviewKind": "individual-real-asset-proof-inspection",
   "reviewedOn": "2026-07-28",
   "reviewer": "Codex",
   "technicalQualification": "PASS",
   "founderReview": "REVISE_AND_CONSOLIDATE",
   "artAdmission": "BLOCKED",
-  "claimBoundary": "Each listed proof board was opened individually at original detail. Adam's subsequent founder review is authoritative and overturns the earlier visual PASS where noted. Mechanical receipts do not override broken period closure, clipped source art, insufficient state strength, or duplicate authority.",
-  "boardsInspected": 13,
+  "claimBoundary": "Every listed board was opened individually at original detail. Mechanical receipts do not override Adam's rulings. New palette, citizenship, and boundary results are prototype-tool candidates, not production art admission; no current sprite is final.",
+  "boardsInspected": 18,
   "reviews": [
     {
       "family": "emote",
@@ -15,15 +15,47 @@
       "proofBoard": "dev/model-qa/assetforge-real/runs/emote/candidate/proof-board.png",
       "proofSha256": "c42a1f23bd26860713bd1734000973dbccdf60331d6eee0784fb8fcea21d9cf1",
       "visualStatus": "REVIEW_REQUIRED",
-      "finding": "All six states read at proof and play scale. Resting is clearly seated; rear view is a true back construction. The rear gauntlet and sword grip show no obvious malformed hand or broken contact in this return. Identity and taste still require Adam."
+      "finding": "All six states read at proof and play scale. Resting is seated and rear view is a true back construction. The rear gauntlet and sword grip show no obvious malformed hand or broken contact in this return. Identity and taste still require Adam."
     },
     {
       "family": "boundary",
-      "run": "candidate",
+      "run": "candidate-navigation",
       "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png",
+      "proofSha256": "6b46eb847b365c742d93abfb7758d65b74584c96a30fdf9889feeeed34f3e2a8",
+      "visualStatus": "NAVIGATION_ONLY",
+      "finding": "The combined four-dialect board is an index. It is not accepted as proof in place of the individual enclosure, path, road, and cliff boards below."
+    },
+    {
+      "family": "boundary-enclosure",
+      "run": "architectural-enclosure",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/architectural-enclosure/proof-board.png",
       "proofSha256": "8815dcf3fc6b05832d839e7a17b42632e2049862cc09103b87287a2f09da5248",
-      "visualStatus": "PASS",
-      "finding": "The material remains coherent across island, hole, donut, L, mirrored L, neck, stair, diagonal, snake, and seeded-field topology proofs; no clipped transition is visible."
+      "visualStatus": "PASS_CANDIDATE",
+      "finding": "The original Blob47 dialect remains coherent across architectural islands, holes, corners, necks, stairs, diagonal contacts, and its all-shapes stress field."
+    },
+    {
+      "family": "boundary-path",
+      "run": "wilderness-path",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-path/proof-board.png",
+      "proofSha256": "614ac0384c5a7e8758d7b2d9dfdcdcffb0ea4fcc8b04f5652e80541787c74b20",
+      "visualStatus": "PASS_CANDIDATE",
+      "finding": "Diagonal ridge trail, game-trail forks, woodland loop, and switchback renders remain continuous through sharp turns and diagonal joins. The organic jitter breaks sterile line regularity without pinching the route. All 256 eight-way masks are covered."
+    },
+    {
+      "family": "boundary-road",
+      "run": "wilderness-road",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/proof-board.png",
+      "proofSha256": "14728cd15eac6429af6f8efa44441e0c2296bd478443ca04b4c5c20c0986bca7",
+      "visualStatus": "PASS_CANDIDATE",
+      "finding": "Meander, forks and dead ends, crossings and loop, and switchbacks and spurs read as a road rather than a wide path because shoulders and paired rut detail remain legible. All 16 cardinal masks are covered."
+    },
+    {
+      "family": "boundary-cliff",
+      "run": "cliff-elevation",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/proof-board.png",
+      "proofSha256": "e2059584b69f0662f27bab8f1111ddce002f8e1d0fd0550e70f5a419629e3f1b",
+      "visualStatus": "PASS_CANDIDATE",
+      "finding": "Escarpment, terraced switchback, mesa and outcrop, and ravine renders expose coherent shaded and striated faces in a dimetric height field. The proof exercises 16 cardinal transitions and four integer elevation bands."
     },
     {
       "family": "repeat",
@@ -32,7 +64,7 @@
       "proofSha256": "3347c33b5ed2892d7b82b57f9956cfdb8f735099cc97ab663a6df316d7157b98",
       "visualStatus": "FAIL",
       "founderFinding": "The infinite repeat result appears changed or broken.",
-      "finding": "Confirmed contract failure: the 512x512 tile does not divide the declared 82px horizontal and 72px vertical course periods. Its wrap interval collapses to 20px horizontally and 8px vertically; forcePeriodic copies only the outermost pixels and produces a false exact-seam PASS."
+      "finding": "Confirmed contract failure: the 512x512 tile does not divide the declared 82px horizontal and 72px vertical course periods. forcePeriodic copies only the outermost pixels and produces a false exact-seam PASS."
     },
     {
       "family": "prop-kit",
@@ -41,7 +73,7 @@
       "proofSha256": "67551a4449beed65e33d00f5ca833191bedb752d7939d58c391cf93baa752287",
       "visualStatus": "FAIL_CURRENT_PROOF",
       "founderFinding": "The camera match is unproved and the sprites visibly clip at the bottom. A 2D stand-in for a 3D object must layer in front of the ground and never be ground-clipped.",
-      "finding": "The cleanup removed foreign fragments, but the proof launders already-clipped leaf sources by restaging them with padding. Chest alpha reaches source y=207/207; shrine reaches y=208/208; barrel reaches top, right, and bottom source edges. The manifest records no 35-degree elevation, 45-degree bearing, 20-degree FOV, or rotation policy, and it does not exercise the production dressing-card ground-depth path."
+      "finding": "Cleanup removed foreign fragments, but the proof restages already-clipped leaf sources. It records no production camera contract and does not exercise the dressing-card ground-depth path."
     },
     {
       "family": "condition",
@@ -50,16 +82,15 @@
       "proofSha256": "0fec6aadf7ffd94ecac7f531ac922310849e09637224eaa8870a465156d6d24a",
       "visualStatus": "REVISE_MORE_AGE",
       "founderFinding": "The condition-state result is a step forward but the aging is too conservative.",
-      "finding": "The state registration proof remains mechanically useful, but the current aged and aged-wet images differ from source by only 0.0125 and 0.0169 respectively. A stronger authored age ladder must be generated by the standing material workbench and then re-verified here."
+      "finding": "The state registration proof remains mechanically useful, but a stronger authored age ladder must be generated by the standing material workbench and then re-verified here."
     },
     {
       "family": "palette",
       "run": "candidate",
       "proofBoard": "dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png",
-      "proofSha256": "e25340c23d1610c020685803f0925b892aa8eaf90ae83c673d5f68cbb6a46d6e",
-      "visualStatus": "CONSOLIDATE_WITH_EXISTING",
-      "founderFinding": "This appears similar to the harmonizer already used by the game; duplicate tools must not survive.",
-      "finding": "Confirmed duplicate authority. Assetforge currently performs Euclidean nearest-RGB mapping, while build/unify-corpus.py already owns perceptual Lab quantization, CIEDE2000 reporting, hue-shift/forbidden-key gates, defringe, and integer-ratio texel normalization. The Assetforge implementation must become a wrapper over that canonical implementation or be retired."
+      "proofSha256": "b8dfc4ff5a0c68bcbbe3ba63400e08fc0baa56264faa3a7f71f5edc92db75902",
+      "visualStatus": "CONSOLIDATED_CANONICAL_PASS",
+      "finding": "Assetforge now calls build/unify-corpus.py for shared defringe, Lab quantization, CIEDE2000 metrics, dominant-hue preservation, and forbidden-chroma checks. The real proof preserves alpha and semantic colors with mean CIEDE2000 4.1830, p95 8.2468, hue shift 3.6507 degrees, value-rank agreement 0.9549, and zero forbidden pixels."
     },
     {
       "family": "trim",
@@ -75,16 +106,23 @@
       "proofBoard": "dev/model-qa/assetforge-real/runs/decal/candidate/proof-board.png",
       "proofSha256": "71171801530f828c39de8687f86e3ad59f439c5864527250154382712473e373",
       "visualStatus": "PASS_WITH_LIMITATION",
-      "finding": "All six crack families remain intact through four rotations with no nominal-cell clipping or chroma fringe. The real decals are deliberately low-contrast; final scene readability remains surface-dependent."
+      "finding": "All six crack families remain intact through four rotations with no nominal-cell clipping or chroma fringe. Final scene readability remains surface-dependent."
     },
     {
       "family": "citizenship",
-      "run": "candidate",
+      "run": "canonical-adapter",
       "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/candidate/proof-board.png",
-      "proofSha256": "ff8e9df259fd4e23af770d9f22487b58b1960feb5ca1b1558e385495f49c8d88",
-      "visualStatus": "CONSOLIDATE_WITH_EXISTING",
-      "founderFinding": "This must build on the current sprite tools rather than create another citizenship system.",
-      "finding": "Confirmed duplicate authority. build/gen-sprite-registry.py already owns footX, footY, worldHeight, heightSource, contentBounds, alphaCutoff, and shadowProfile; src/ui/theater-sprites.js consumes them and the Clayroom citizenship harness proves them. Assetforge must be only a single-asset preflight adapter over those canonical functions."
+      "proofSha256": "ca21b84a2139c39a043a79ca86f47304558cdebd8ec7398d9f3a69ce31cec523",
+      "visualStatus": "CONSOLIDATED_CANONICAL_PASS",
+      "finding": "Assetforge now delegates foot anchors, content bounds, alpha cutoff, shadow profile, and world height to build/gen-sprite-registry.py and preserves the original source canvas. It is an adapter, not a second schema."
+    },
+    {
+      "family": "citizenship",
+      "run": "renderer-v2-low-light",
+      "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png",
+      "proofSha256": "2de78f496c8b829be00fdccb9e95bb0ca1d63290d44bed19fba34c341b04e563",
+      "visualStatus": "PASS_CANDIDATE",
+      "finding": "Real production-renderer A/B crops show less dusty fragmentation under moonlight, torchlight, and magic glow while daylit remains a negative-control context. The contract proves seven mipmapped textures, 63 alpha-to-coverage standee materials, a 0.12 readability floor, and 0.15 realm-tint strength. Prototype art remains unadmitted."
     },
     {
       "family": "atlas",
@@ -93,7 +131,7 @@
       "proofSha256": "e6127c3fad693ebf5f80670587412b020b2d988d0fe01b372e11684614dc126a",
       "visualStatus": "PROMISING_FUTURE_CLAY_PROOF",
       "founderFinding": "Promising route back to sprite items alongside 3D construction; Clayroom and 3D-texturing proof are required later, not now.",
-      "finding": "The pack/extract proof is useful, but it is not yet the canonical runtime atlas lane. It must converge on the existing potpack adoption decision and the documented four-pixel gutter, page-family, UV, alpha, and renderer-integration contract before Clayroom testing."
+      "finding": "The pack/extract proof remains useful but is not yet the canonical runtime atlas lane."
     },
     {
       "family": "material",
@@ -102,7 +140,7 @@
       "proofSha256": "b9373c32942d59d2d698daeb1934c7815be4c10b0a9c3f73f1faecb86d92f9f9",
       "visualStatus": "CONSOLIDATE_WITH_EXISTING",
       "founderFinding": "This is acceptable only if it does not create a slightly different duplicate of the existing material-map machinery.",
-      "finding": "Confirmed duplicate authority. The Assetforge luminance blur, finite-difference normal, and inverted-luma roughness are simpler parallel implementations of the existing periodic normal companion, material workbench, and pinned Material Maker lane. The duplicate baker must be retired; Assetforge may retain only a manifest, quarantine, proof, and receipt adapter over the canonical material pipeline."
+      "finding": "The duplicate baker remains unresolved. Assetforge may retain only manifest, quarantine, proof, and receipt orchestration over the canonical material pipeline."
     },
     {
       "family": "regression",

@@ -87,8 +87,7 @@
       "negativeExpected": "FAIL",
       "negativeActual": "FAIL",
       "negativeFailedGates": [
-        "protectedColorsRepresentable",
-        "everyOpaquePixelInPalette"
+        "protectedColorsRepresentable"
       ],
       "negativeReceipt": "dev/model-qa/assetforge-suite/runs/palette/negative/receipt.json"
     },

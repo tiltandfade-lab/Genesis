@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "reviewKind": "founder-real-asset-review",
   "reviewedOn": "2026-07-28",
   "reviewer": "Adam",
@@ -7,6 +7,7 @@
   "technicalReceiptStatus": "PASS",
   "founderStatus": "REVISE_AND_CONSOLIDATE",
   "runtimeAdmission": "BLOCKED",
+  "claimBoundary": "Adam's rulings remain authoritative. Implementation responses document repaired prototype tools and new proof candidates; they do not convert a technical PASS into art admission or make any current sprite final.",
   "rulings": [
     {
       "family": "repeat",
@@ -30,7 +31,10 @@
       "family": "palette",
       "verdict": "CONSOLIDATE",
       "canonicalAuthority": "build/unify-corpus.py",
-      "requiredNext": "Replace the parallel RGB harmonizer with a wrapper over the canonical Lab/CIEDE2000 pipeline."
+      "implementationResponse": "CONSOLIDATED_CANONICAL_PASS",
+      "proof": "dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png",
+      "finding": "Assetforge now wraps the canonical Lab/CIEDE2000 pipeline and shared defringe instead of owning a nearest-RGB variant. The real candidate preserves alpha and semantic colors, reports mean CIEDE2000 4.1830 and p95 8.2468, shifts dominant hue 3.6507 degrees, preserves value rank at 0.9549, and contains zero forbidden-chroma pixels.",
+      "requiredNext": "Keep build/unify-corpus.py as the only palette algorithm authority. Treat future Assetforge work as manifest, quarantine, proof, and receipt orchestration."
     },
     {
       "family": "trim",
@@ -41,7 +45,18 @@
       "family": "citizenship",
       "verdict": "CONSOLIDATE",
       "canonicalAuthority": "build/gen-sprite-registry.py + src/ui/theater-sprites.js + Clayroom citizenship proof",
-      "requiredNext": "Retain at most a single-asset preflight adapter; do not create a second citizenship schema."
+      "implementationResponse": "CONSOLIDATED_RENDERER_V2_CANDIDATE",
+      "proof": "dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png",
+      "finding": "Assetforge is now a single-asset adapter over the canonical registry contract and preserves the source canvas. The production renderer v2 adds trilinear mipmapped minification, alpha-to-coverage, a 0.12 readability floor, and reduced realm-tint contamination. A hash-bound four-lighting A/B proves the renderer contract on seven real registry sprites; no sprite art is admitted.",
+      "requiredNext": "Retain the one canonical schema and renderer. Adam reviews the low-light A/B as a prototype renderer candidate; individual sprite taste and production admission remain separate."
+    },
+    {
+      "family": "boundary",
+      "verdict": "EXPAND_BEYOND_ARCHITECTURE",
+      "implementationResponse": "EXPANDED_DIALECT_SUITE_CANDIDATE",
+      "proof": "dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png",
+      "finding": "The compiler now retains Blob47 architectural enclosure and adds an eight-way 256-shape wilderness path dialect, a cardinal 16-shape road dialect with shoulders and ruts, and a cardinal transition plus integer-elevation cliff dialect. Each dialect has four individual real-material renders; the combined board is navigation only.",
+      "requiredNext": "Adam reviews the individual path, road, and cliff boards. Technical coverage does not approve their visual language or runtime routing."
     },
     {
       "family": "atlas",

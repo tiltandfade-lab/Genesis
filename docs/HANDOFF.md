@@ -6,6 +6,55 @@ updated: 2026-07-28
 
 # Genesis — Session Hand-off
 
+## Latest (2026-07-28, ASSETFORGE CONSOLIDATION + BOUNDARY V2) [Codex]
+
+Adam's palette, low-light citizenship, and boundary-breadth corrections are implemented as
+prototype-tool candidates. No current sprite is final and no output is runtime-admitted.
+
+- **Palette duplicate resolved:** Assetforge now wraps `build/unify-corpus.py` for shared defringe,
+  Lab palette mapping, CIEDE2000, dominant-hue, and forbidden-chroma checks. The real proof passes
+  with mean/p95 CIEDE2000 `4.1830`/`8.2468`, `3.6507°` hue shift, `0.9549` value-rank agreement,
+  zero forbidden pixels, identical alpha, and preserved semantic colors.
+- **Citizenship duplicate resolved:** Assetforge is a source-canvas-preserving adapter over
+  `build/gen-sprite-registry.py`; it does not own a second foot/height/bounds schema.
+- **Low-light renderer repaired:** `lit-standee-v2` uses trilinear mipmaps, alpha-to-coverage, a
+  `0.12` readability floor, and reduced realm-tint contamination (`0.15`). The real
+  production-renderer A/B covers moonlight, torchlight, magic glow, and a daylit negative control
+  across seven registry sprites and 63 standee materials.
+- **Boundary V2 built:** Blob47 architectural enclosure remains intact. New independent dialects
+  cover 256 eight-way path masks, 16 cardinal road masks with shoulders/ruts, and 16 cliff
+  transitions across four integer elevation bands. Path, road, and cliff each retain four
+  individual real-material renders; the combined board is navigation only.
+- **Real qualification remains green:** 12/12 real candidates pass their mechanical gates and the
+  changed-real-image control rejects, for 13/13 expected outcomes. The hash-bound inspection ledger
+  now lists all individual dialect boards and the citizenship A/B.
+- **Still unresolved from Adam's first review:** repeat period closure, clipped/camera-unproved prop
+  sources and standee-ground depth, stronger condition aging, canonical material-baker
+  consolidation, and later atlas/runtime convergence. These keep overall runtime admission
+  blocked.
+
+Proofs:
+
+- Palette: `dev/model-qa/assetforge-real/runs/palette/candidate/proof-board.png`
+- Citizenship A/B:
+  `dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png`
+- Path: `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-path/proof-board.png`
+- Road: `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/proof-board.png`
+- Cliff: `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/proof-board.png`
+
+Reproduce:
+
+```bash
+python3 build/assetforge.py suite self-test --force
+python3 build/qualify-assetforge-real.py --force
+node dev/capture-clay-sprite-citizenship.cjs \
+  dev/model-qa/assetforge-real/runs/citizenship/renderer-v2
+python3 build/prove-assetforge-citizenship.py
+```
+
+**Next honest promotion:** Adam reviews the five individual proof boards above. Tool consolidation
+is complete for palette/citizenship; visual taste and production routing are not.
+
 ## Latest (2026-07-28, ASSETFORGE FOUNDER REVIEW CORRECTION) [Codex]
 
 Adam's individual review overturned several of the real-qualification visual claims. Technical
@@ -17,9 +66,9 @@ receipts remain useful evidence, but art admission is blocked. The machine-reada
 - Prop cleanup removed neighboring fragments but laundered source-edge clipping. Camera equivalence
   and standee-wins-ground rendering were never tested.
 - Age is too conservative: real changed ratios are only 0.0125 and 0.0169.
-- Palette, citizenship, and material map implementations are parallel duplicates and must become
-  wrappers over `unify-corpus.py`, `gen-sprite-registry.py`/the renderer contract, and the material
-  workbench/Material Maker lane respectively.
+- At review time, palette, citizenship, and material map implementations were parallel duplicates.
+  The newer block above records palette/citizenship consolidation; material consolidation remains
+  open.
 - Trim remains useful as an offline/non-DOM nine-slice tool.
 - Atlas remains promising, but runtime/Clayroom proof is deferred at Adam's request and must first
   converge on the documented potpack atlas contract.

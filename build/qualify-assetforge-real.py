@@ -30,6 +30,32 @@ DEFAULT_OUTPUT = ROOT / "dev" / "model-qa" / "assetforge-real"
 
 FIGHTER = ROOT / "assets" / "sprites" / "spr-pc-human-fighter-male.png"
 FLOOR = ROOT / "assets" / "textures" / "fantasy-floor-1.png"
+WILDERNESS_GRASS = (
+    ROOT
+    / "dev"
+    / "material-lane"
+    / "source-sprites"
+    / "b03-exterior-ground-v001"
+    / "grass-meadow-seamlocked-v001.png"
+)
+WILDERNESS_PATH = (
+    ROOT
+    / "dev"
+    / "material-lane"
+    / "source-sprites"
+    / "b03-exterior-ground-v001"
+    / "worn-path-selected-v001.png"
+)
+WILDERNESS_SCREE = (
+    ROOT
+    / "dev"
+    / "material-lane"
+    / "source-sprites"
+    / "b03-exterior-ground-v001"
+    / "gravel-scree-seamlocked-v001.png"
+)
+ROAD_COBBLE = ROOT / "assets" / "textures-psx" / "polyhaven" / "cobblestone_02_diff_1k.jpg"
+CLIFF_ROCK = ROOT / "assets" / "textures-psx" / "polyhaven" / "rock_06_diff_1k.jpg"
 PLAQUE = ROOT / "assets" / "plaques" / "scene-banner.png"
 DECAL_SOURCE = ROOT / "assets" / "decals" / "source" / "shared-crack-decal-set-3.png"
 DECAL_SHEET = ROOT / "assets" / "decals" / "shared" / "shared-crack-decal-set-3.png"
@@ -220,6 +246,11 @@ def run(output_root: Path, force: bool) -> dict[str, Any]:
     leaf_evidence = [
         image_evidence(FIGHTER, "fighter-sprite", "tracked-live-asset"),
         image_evidence(FLOOR, "fantasy-floor", "tracked-live-asset"),
+        image_evidence(WILDERNESS_GRASS, "boundary-grass", "tracked-production-source"),
+        image_evidence(WILDERNESS_PATH, "boundary-worn-path", "tracked-production-source"),
+        image_evidence(WILDERNESS_SCREE, "boundary-scree", "tracked-production-source"),
+        image_evidence(ROAD_COBBLE, "boundary-road-cobble", "tracked-live-asset"),
+        image_evidence(CLIFF_ROCK, "boundary-cliff-rock", "tracked-live-asset"),
         image_evidence(PLAQUE, "scene-banner", "tracked-live-asset"),
         image_evidence(DECAL_SOURCE, "crack-decal-source-master", "tracked-live-source"),
         image_evidence(DECAL_SHEET, "crack-decal-rgba-sheet", "tracked-live-asset"),
@@ -271,19 +302,71 @@ def run(output_root: Path, force: bool) -> dict[str, Any]:
             {
                 **common,
                 "family": "boundary-autotile",
-                "insideMaterial": {
-                    "tile": apps.repo_path(FLOOR),
-                    "sha256": apps.sha256_file(FLOOR),
-                },
-                "edgeLanguage": {
-                    "borderWidthPx": 7,
-                    "orientationPolicy": "rotatable-organic",
-                    "phasePolicy": "world-locked",
-                },
                 "tileSizePx": 72,
                 "seed": 73129,
-                "allowSeamLock": True,
-                "maxRepairableSourceEdgeDelta": 10,
+                "dialects": [
+                    {
+                        "id": "architectural-enclosure",
+                        "kind": "enclosure",
+                        "insideMaterial": {
+                            "tile": apps.repo_path(FLOOR),
+                            "sha256": apps.sha256_file(FLOOR),
+                        },
+                        "edgeLanguage": {
+                            "borderWidthPx": 7,
+                            "orientationPolicy": "rotatable-organic",
+                            "phasePolicy": "world-locked",
+                        },
+                        "tileSizePx": 72,
+                        "allowSeamLock": True,
+                        "maxRepairableSourceEdgeDelta": 10,
+                    },
+                    {
+                        "id": "wilderness-path",
+                        "kind": "path",
+                        "insideMaterial": {
+                            "tile": apps.repo_path(WILDERNESS_PATH),
+                            "sha256": apps.sha256_file(WILDERNESS_PATH),
+                        },
+                        "outsideMaterial": {
+                            "tile": apps.repo_path(WILDERNESS_GRASS),
+                            "sha256": apps.sha256_file(WILDERNESS_GRASS),
+                        },
+                        "tileSizePx": 72,
+                        "routeWidth": 0.31,
+                        "shoulderWidth": 0.08,
+                    },
+                    {
+                        "id": "wilderness-road",
+                        "kind": "road",
+                        "insideMaterial": {
+                            "tile": apps.repo_path(ROAD_COBBLE),
+                            "sha256": apps.sha256_file(ROAD_COBBLE),
+                        },
+                        "outsideMaterial": {
+                            "tile": apps.repo_path(WILDERNESS_GRASS),
+                            "sha256": apps.sha256_file(WILDERNESS_GRASS),
+                        },
+                        "tileSizePx": 72,
+                        "routeWidth": 0.61,
+                        "shoulderWidth": 0.12,
+                    },
+                    {
+                        "id": "cliff-elevation",
+                        "kind": "cliff",
+                        "insideMaterial": {
+                            "tile": apps.repo_path(CLIFF_ROCK),
+                            "sha256": apps.sha256_file(CLIFF_ROCK),
+                        },
+                        "outsideMaterial": {
+                            "tile": apps.repo_path(WILDERNESS_SCREE),
+                            "sha256": apps.sha256_file(WILDERNESS_SCREE),
+                        },
+                        "tileSizePx": 72,
+                        "faceBandWidth": 0.17,
+                        "seed": 73129,
+                    },
+                ],
             },
         ),
         "repeat": manifest(
@@ -349,7 +432,7 @@ def run(output_root: Path, force: bool) -> dict[str, Any]:
                 "paletteSource": apps.repo_path(PALETTE),
                 "paletteSourceSha256": apps.sha256_file(PALETTE),
                 "palette": fantasy_palette,
-                "maxMeanDistance": 90,
+                "maxMeanDeltaE": 18,
                 "minimumRankAgreement": 0.72,
             },
         ),

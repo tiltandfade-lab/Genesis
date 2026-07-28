@@ -14,6 +14,106 @@ to load every session (the live file keeps the newest entries; see the script fo
 Newest-first, same as the live file — the two files read as one continuous history, live file
 first. Read-only record: never hand-edit, never add entries here directly.
 
+## 2026-07-14 — PHASE-3 WAVE-1: no-spend visual wave + diorama cutaway restore + repo migration [Claude Opus 4.8, orchestrated]
+
+Phase-3 Wave-1 executed as background worktree-isolated Sonnet executors, each personally re-gated
+(harnesses re-run by me, visual units' PNGs READ, never self-report), landed `--no-ff`. Master tip
+after the wave: `a23d2eb2`.
+
+**Added**
+- **P3-1a Poisson dressing** (`src/engine/place-distribution.js`, `placeDistribute`) — seeded
+  Poisson-disk realization of incidental floor dressing behind `ROOM_PLACE_DISTRIBUTE=false`
+  (byte-identical until a follow-up flip). 27/27 (5 red-first), dungeon-dressing 655/0, interior
+  287/0, active-room p95 0.53ms.
+- **W0-c Open5e cross-check** (`build/sync-open5e.py`) — read-only SRD-Data validator vs Open5e
+  `srd-2024` (339/339 name join, 223 representation-format field diffs surfaced); NEVER writes SRD-Data.
+- **E0-1 wall-fixture occlusion-fade** — wall-mounted practicals fade with their occluded wall
+  segment (per-wall-mount body-material clone; append into the `ownerSegIndex` fadeEntry, never
+  overwrite). 32/0 + 3-way isolation proof; capture confirms suppressed torch dims, non-suppressed
+  stays lit. (Grew from a P3-1d out-of-scope finding.)
+- **P3-1e eyeball fixtures** (`dev/battle-gate/eyeball-fixtures/`) — legacy-vs-oss capture pairs
+  (tiered / aperture / dressed room), same scene/camera/crop taste-gate set; frames READ (tiers
+  render under both kernels — a staging gap, not a code defect).
+- **P3-1b depth-state audit** (`dev/audit-depth-state.mjs`) — four-yaw oss capture + material census;
+  PROVEN defect table EMPTY (renderer transparency clean), one latent wall-upper condition flagged for P3-3.
+
+**Fixed**
+- **P3-1d diorama cutaway restoration** — compiled rooms read as OPEN dioramas again, not closed
+  boxes (the C4.1b regression). Camera-side wall-upper band suppression restored via
+  `itrOcclusionClassify` (`wallUpperCameraSideBlockingSet`, `theater-shot.js`); occlusion subjects
+  extended anchors→all mounted figures (`OCCLUSION_SUBJECT_CAP=24`, loud warn). 14/14 red-first,
+  wall-occlusion 23/0, theater-shot 107/0, interior 287/0; before/after loop-gate PNGs READ.
+
+**Changed**
+- **CI scoped to master + PRs** (`.github/workflows/ci.yml`) — a blanket `on: push` (all branches)
+  turned a `git push --all` backup into ~100 failing CI runs (inbox flood); branch backups no longer
+  each trigger a run. Cancelled the active runs; deleted 81 junk `worktree-*` branches from origin.
+- **Repo migrated to an APFS sparsebundle on the Work Drive** (`/Volumes/Genesis/Genesis`) — off the
+  97%-full boot drive. exec bits preserved (git clean, no fileMode churn), all branches + Cowork
+  memory carried over, verified (check-manifest OK, harnesses green, app serves). Launchers +
+  `.claude/launch.json` rerouted; old copy removed (corrupt zip discarded — origin is the backup).
+- **P3-2 Stage B teed up** (`docs/PHASE-3-WAVE-2-SPECS.md`, B1–B4) — GATED on sprite-QA registry
+  coordination (B1 regenerates `sprite-registry.js`).
+
+**Deferred**
+- W0-b PRNG dedup — real surface is 20+ harness files, not 3; re-scope before executing.
+- W0-a struck — MF-3b hit-stop already shipped in BW4B (`17474b45`); wave plan listed a stale unit.
+## 2026-07-14 — Faceted regeneration: generation complete (fantasy realm), canon promoted, salvage + QA
+
+**Added**
+- `dev/model-qa/faceted-sheets/` — the sheet-doc batch architecture that replaced the F-packet lane
+  format: STYLE-CANON.md (Adam's verbatim art direction + decal exemption + prop canon), SHEET-TEMPLATE,
+  refire/redo batch docs, 15+ session prompts, qa-ledger.json (510-file QA verdicts).
+- ~650 raw candidates committed across rounds 1–3 + P/T-series: all 901 figure identities minus a
+  10-identity gap-fill (`session-prompts/gapfill-final.md`, fireable), 56 fx + 43 decal masters
+  (3 sets incl. condition/trace library), 20 extrude item props, 37 dressing components (construction-
+  class routed), 20 icons, 375-item universe (15 sheets), 10-slot floor/wall/trim/face tileset.
+- `salvage-2026-07-14/` — 149 disk-only sprites rescued from broken F10/F11/F7/F3 worktrees.
+- Master (via merge 8a1eb3c4): `docs/ART-DIRECTION-CANON.md` + `docs/FACETED-ART-REGENERATION-
+  PRODUCTION-PLAN.md` + `docs/FACETED-SHEET-TEMPLATE.md`; CLAUDE.md + AGENTS.md both mandate them
+  (the Claude/Codex shared-authority fix + decision-capture rule).
+
+**Changed**
+- Decals are naturalistic surface marks, never triangulated (Adam's ruling, in canon).
+- Props: per-state door/lever/trap generation dropped — §4.1 kit contract enforced (isolated
+  components; engine owns states); §7 master prop prompt restored un-shortened.
+
+**Fixed**
+- F2–F15 audit: F3/F7 fabricated returns, F4/F8 misrouted content, F10/F11 lost to worktree
+  corruption — all salvaged or re-fired; 5+1 crop rejects quarantined (`crop-rejects/`).
+- Volume swept: 20 stale worktrees/dirs removed after salvage; every sprite now lives in git.
+
+**Deferred**
+- Gap-fill session (10 identities) → then Step-E → slice → §9 admission → Adam's sprite-review
+  height pass (5179) → registry regen → engine swap of the 896 pixel sprites.
+- 88 procedural realm-surfaces vs textured floors decision; 11 other realms (~3,420 refs); kit-sheet
+  K1 QA (11 alpha-passed sheets on codex/extruded-prop-pilot).
+
+## 2026-07-13 (later) — OSS adoption research pass + Phase-3 brief + oss stabilization evidence
+
+Closed out the geometry-flip session. Adam asked whether Genesis is "rebuilding the wheel" on open-source;
+answered with a three-agent research pass (reference data · three.js graphics · procgen/infra).
+
+**Added.**
+- **`docs/PHASE-3-DIRECTOR-BRIEF.md`** — Fable's handoff into Phase 3 (flip evidence, a linked path to the
+  full Codex plugin-rec suite + plan, GP-2..4 terrain, the oracle/spend calls that are his, and a
+  smallest-correction-first recommendation). Now with a **§6 OSS-adoption findings** table folded in.
+- **Loop-gate captures regenerated under the oss default** (`dev/battle-gate/dungeon-loop/`) — 5 real
+  dungeons + combat, 5/5 clean, 0 breaks; the committed evidence for the §15 stabilization hold. (The
+  oss PNGs are notably *smaller* than the legacy ones they replace — consistent with the Δ−286-triangle
+  perf finding.)
+
+**Findings (headline: mostly NOT rebuilding the wheel).** Genesis already adopted the non-obvious infra
+(IndexedDB via `store.js`; vendored earcut/polygon-clipping/clipper2; the Codex graphics pin-table), and its
+bespoke systems are correct-by-design (script-owns-rolls, no-stored-terrain, band×lane combat; `postprocessing`
+already correctly rejected). Four genuine adoption candidates surfaced, detailed in the brief §6:
+(1) **`@three.ez/instanced-mesh`** (MIT) for the unbuilt/bespoke R3 sprite-atlas instancing — the big one,
+Fable's Phase-3 call; (2) **Open5e `srd-2024`** (CC-BY-4.0) as a build-time cross-check for the PDF-parsed
+`Reference/SRD-Data/`; (3) **AgX tone-curve** (free, already in vendored three) for the grade pass;
+(4) dedup a triplicated test-seed PRNG into `dev/lib/prng.mjs`.
+
+**Deferred.** Fable weighs in on Phase 3, potentially expands/orchestrates the next waves. All four adoption
+candidates are recommendations, not decisions.
 ## 2026-07-13 — GEOMETRY DEFAULT FLIPPED legacy→oss (§15 step 8) + stabilization hold opened (orchestrated)
 
 Adam **delegated the flip verdict to Claude conditional on sound pre-flip evidence** ("run the pre-flip

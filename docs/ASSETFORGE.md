@@ -1,6 +1,6 @@
 ---
 type: production-machinery-spec
-status: TWELVE-FIRST-VERTICAL-SLICES-BUILT
+status: PROTOTYPE-TOOL-CONSOLIDATION-BUILT
 created: 2026-07-27
 owner: art-pipeline
 first_implementation: build/assetforge.py
@@ -88,7 +88,8 @@ python3 build/assetforge.py emote ingest ...
 python3 build/assetforge.py emote review ...
 python3 build/assetforge.py emote self-test ...
 
-python3 build/assetforge.py boundary init MATERIAL --output JOB.json
+python3 build/assetforge.py boundary init MATERIAL --dialect enclosure --output JOB.json
+python3 build/assetforge.py boundary init MATERIAL --outside-material OUTSIDE.png --dialect path --output JOB.json
 python3 build/assetforge.py boundary compile JOB.json --output-dir DIR
 python3 build/assetforge.py repeat compile JOB.json --output-dir DIR
 python3 build/assetforge.py prop-kit compile JOB.json --output-dir DIR
@@ -120,14 +121,14 @@ The order below is based on reusable leverage, not visual novelty.
 | Order | Factory | Converts | Deterministic proof | Status |
 |---:|---|---|---|---|
 | 1 | Sprite-emote factory | one registered sprite + state vocabulary -> discrete state atlas | identity locks, alpha/chroma, occupancy, baseline, scale, atlas and play-scale board | **V1 BUILT + PROVEN** |
-| 2 | Boundary auto-tile compiler | material field + edge language -> complete connected-boundary set | exhaustive masks, neighbor closure, topology torture maps | **V1 BUILT + PROVEN** |
+| 2 | Boundary auto-tile compiler | paired material fields + enclosure/path/road/cliff dialect -> complete connected-boundary set | exhaustive masks, neighbor closure, topology/elevation renders | **V2 MULTI-DIALECT BUILT + PROVEN** |
 | 3 | Modular repeat compiler | component sheet -> infinite course/field tile | toroidal closure, variant balance, seam/cadence board | **V1 BUILT + PROVEN** |
 | 4 | Prop/kit sheet compiler | related prop sheet -> isolated, named, anchored prop kit | count/order, alpha, footprint, scale ladder, contact board | **V1 BUILT + PROVEN** |
 | 5 | Condition-state factory | pristine asset -> damaged, burned, wet, frozen, corrupted variants | identity mask, damage locality, state ordering, no silhouette fraud | **V1 BUILT + PROVEN** |
-| 6 | Palette harmonizer | admitted art + realm palette -> constrained candidate variants | color-distance budget, value hierarchy, protected semantic colors | **V1 BUILT + PROVEN** |
+| 6 | Palette harmonizer | admitted art + realm palette -> constrained candidate variants | CIEDE2000, hue/value hierarchy, protected semantic colors | **CANONICAL WRAPPER BUILT + PROVEN** |
 | 7 | Trim and nine-slice compiler | ornament strips/corners -> stretch-safe UI/world trim | cap preservation, center repeat/stretch, every target dimension | **V1 BUILT + PROVEN** |
 | 8 | Decal/stamp compiler | marks sheet -> rotation/scale-safe decal library | alpha fringe, mip/readability, surface bleed, density board | **V1 BUILT + PROVEN** |
-| 9 | Sprite citizenship compiler | raw sprite -> scale/foot/contact/thumbnail metadata | bounds, foot anchor, world height, alpha cutoff, fixed-camera card | **V1 BUILT + PROVEN** |
+| 9 | Sprite citizenship adapter | raw sprite -> canonical registry preflight + renderer contract | canonical metadata, canvas preservation, real low-light renderer A/B | **CANONICAL ADAPTER + RENDERER V2 PROVEN** |
 | 10 | Atlas optimizer | approved loose assets -> runtime atlases | padding/extrusion, UV accuracy, mip bleed, byte budget, stable ids | **V1 BUILT + PROVEN** |
 | 11 | Material-map baker | approved albedo -> normal/roughness/emissive proposals | channel ranges, seam preservation, light-rig boards | **V1 BUILT + PROVEN** |
 | 12 | Visual regression foundry | any approved family -> stable comparison corpus | fixed camera, perceptual diff, semantic overlays, receipt diff | **V1 BUILT + PROVEN** |
@@ -195,7 +196,8 @@ python3 build/qualify-assetforge-real.py --force
 The harness requires hydrated, decodable Git LFS content and fails loudly on pointer text or a
 source-hash mismatch. It runs all twelve families against named Genesis assets, including the real
 fighter sprite/emote return, floor and plaque art, slate components, dirty dressing exports, crack
-decals, and the existing material-workbench condition maps. It records:
+decals, the existing material-workbench condition maps, and tracked floor/grass/path/road/rock/scree
+materials for the boundary dialect suite. It records:
 
 - tracked leaf-source paths, byte sizes, SHA-256 hashes, and decode status in
   `dev/model-qa/assetforge-real/source-evidence.json`;
@@ -235,14 +237,39 @@ palette, citizenship, and material maps. The durable review is
   edge. Camera equivalence and production ground-depth behavior were not proved.
 - **Condition:** Assetforge is the state registration/verifier layer. Stronger age generation
   belongs to the canonical material workbench.
-- **Palette:** `build/unify-corpus.py` remains canonical. The parallel nearest-RGB implementation is
-  slated for removal or conversion into a wrapper.
-- **Citizenship:** `build/gen-sprite-registry.py`, `src/ui/theater-sprites.js`, and the Clayroom
-  citizenship proof remain canonical. Assetforge may expose single-asset preflight only.
+- **Palette:** resolved. `build/unify-corpus.py` remains the only algorithm authority; Assetforge
+  now wraps its shared defringe, Lab quantization, CIEDE2000, dominant-hue, forbidden-chroma, alpha,
+  and semantic-color gates.
+- **Citizenship:** resolved at the tool/schema boundary. Assetforge is a source-canvas-preserving
+  single-asset adapter over `build/gen-sprite-registry.py`. The existing Theater renderer now owns
+  the v2 low-light contract and its real Clayroom A/B proof.
 - **Atlas:** retained as a promising compiler, but must converge on the documented potpack/runtime
   atlas contract before later Clayroom proof.
 - **Material maps:** the periodic normal companion, material workbench, and Material Maker lane
   remain canonical. The parallel Assetforge baker is slated for removal or wrapper conversion.
+
+### Consolidation response — 2026-07-28
+
+The palette and citizenship duplication findings are resolved in the prototype toolchain:
+
+- `palette compile` dynamically loads `build/unify-corpus.py` and uses its shared defringe, Lab
+  nearest-palette mapping, CIEDE2000 metrics, dominant-hue gate, and forbidden-chroma gate.
+  Assetforge adds only the manifest/hash validation, semantic-color gate, quarantine, receipt, and
+  proof board. The retained real result reports mean/p95 CIEDE2000 `4.1830`/`8.2468`, dominant-hue
+  shift `3.6507°`, value-rank agreement `0.9549`, and zero forbidden pixels.
+- `citizenship compile` dynamically loads `build/gen-sprite-registry.py` and delegates the
+  `footX`, `footY`, `worldHeight`, `heightSource`, `contentBounds`, `alphaCutoff`, and
+  `shadowProfile` contract. It preserves the source canvas rather than creating a second trimmed
+  coordinate system.
+- `lit-standee-v2` remains in the canonical renderer path. Minification uses trilinear mipmaps,
+  standee materials use alpha-to-coverage, the low-light readability floor is `0.12`, and realm
+  tint strength is `0.15`. The retained A/B compares real v1 and v2 production-renderer captures
+  under moonlight, torchlight, magic glow, and a daylit negative control. It proves seven real
+  registry textures and 63 standee materials:
+  `dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png`.
+
+This is a tool-quality response inside the prototype zone. It does not make any current sprite
+final or admitted.
 
 ## Non-emote V1 contracts
 
@@ -254,15 +281,16 @@ palette, citizenship, and material maps. The durable review is
 - **Condition state:** compares every state to one source identity, locks dimensions, measures
   changed area, enforces declared severity order, and rejects alpha outside a dilated silhouette
   license.
-- **Palette:** maps opaque pixels to a declared palette without losing protected semantic colors,
-  records mean color distance, and proves a minimum value-rank agreement.
+- **Palette:** delegates to the canonical `build/unify-corpus.py` perceptual engine, preserves
+  source alpha and protected semantic colors, and records CIEDE2000 mean/p95, dominant-hue shift,
+  forbidden-chroma count, and value-rank agreement.
 - **Trim/nine-slice:** preserves all four caps byte-for-byte while compiling every declared target
   dimension; targets too small for fixed caps reject.
 - **Decal/stamp:** isolates source marks, defringes transparent pixels, builds the complete
   four-rotation/three-scale matrix, checks half-scale readability, and rejects source bleed.
-- **Sprite citizenship:** keys and trims a raw sprite, computes content bounds and foot anchor,
-  requires explicit world height, and emits the normalized citizen, thumbnail, metadata, and
-  fixed-camera card.
+- **Sprite citizenship:** delegates bounds, foot anchor, world height, alpha cutoff, and shadow
+  profile to `build/gen-sprite-registry.py`, preserves the original source canvas, and emits a
+  preflight card. Renderer proof separately exercises canonical metadata under real light recipes.
 - **Atlas optimizer:** sorts stable ids, shelf-packs with payload-preserving extrusion, emits
   normalized UVs and source hashes, proves byte-exact payload round trips, and enforces a byte
   budget.
@@ -395,9 +423,36 @@ phase resets, and one-cell holes when used as an auto-tile family.
 
 The boundary compiler consumes admitted repeatable fields; it does not replace the repeat compiler.
 
-## Semantic neighbor model
+## V2 dialect matrix
 
-The canonical source key is an eight-neighbor mask:
+The compiler does not force every boundary problem through Blob47. The manifest declares one of
+four named dialects, each with its own topology and proof:
+
+| Dialect | Runtime grammar | Visual job | Exhaustive proof |
+|---|---|---|---|
+| `enclosure` | sanitized eight-neighbor Blob47 | room, manor, church, courtyard, bounded floor field | 256 raw masks -> 47 shapes; 2,312 compatible pairs; topology torture maps |
+| `path` | full eight-neighbor 256 network | narrow wilderness paths, game trails, diagonal ridges, loops, forks | all 256 masks; 49,152 compatible pairs; four real field renders |
+| `road` | cardinal 16 network | wide roads with shoulders, paired ruts, crossings, dead ends | all 16 masks; 128 compatible pairs; four real field renders |
+| `cliff` | cardinal 16 transitions + integer elevation | escarpments, terraces, mesas, outcrops, ravines | all 16 transitions; four elevation bands; four dimetric height-field renders |
+
+`path` and `road` are intentionally different dialects. A road is not a path with a larger brush:
+it owns shoulder width and paired track detail. A cliff is not a material outline: it owns integer
+height and exposes shaded/striated faces between elevation bands.
+
+The real multi-dialect manifest is
+`dev/model-qa/assetforge-real/manifests/boundary-real.json`. Its individual proof boards are:
+
+- `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/architectural-enclosure/proof-board.png`
+- `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-path/proof-board.png`
+- `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/proof-board.png`
+- `dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/proof-board.png`
+
+The combined board at `dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png` is a
+navigation surface only.
+
+## Blob47 enclosure semantic neighbor model
+
+The enclosure dialect's canonical source key is an eight-neighbor mask:
 
 ```text
 N E S W NE SE SW NW
@@ -407,7 +462,7 @@ Cardinal bits say whether the same connected material occupies that neighbor. A 
 meaningful only when both adjacent cardinal bits are present. Sanitizing the 256 possible raw
 eight-bit masks under that rule produces the standard 47 connected “blob” shapes.
 
-The compiler emits both:
+The enclosure compiler emits both:
 
 - all 47 canonical shapes, named by semantic mask rather than atlas position; and
 - a deterministic lookup mapping every raw mask `0..255` to one canonical shape id.
@@ -422,6 +477,23 @@ n1-e1-s0-w0-ne1-se0-sw0-nw0
 ```
 
 ## Family manifest
+
+`boundary init` can author a single dialect:
+
+```bash
+python3 build/assetforge.py boundary init assets/material.png \
+  --dialect enclosure \
+  --output dev/model-qa/jobs/enclosure.json
+
+python3 build/assetforge.py boundary init assets/path.png \
+  --outside-material assets/grass.png \
+  --dialect path \
+  --output dev/model-qa/jobs/path.json
+```
+
+`--outside-material` is required for `path`, `road`, and `cliff`. The real qualification manifest
+uses a suite wrapper whose `dialects` array points to four compiled child manifests, so every
+dialect retains its own receipt and proof.
 
 ```json
 {
@@ -463,7 +535,7 @@ two-material transition records both source hashes and declares which material o
 - `directional-construction`: rotation/flip is forbidden; roof courses, grain, writing, and gravity
   retain their authored direction.
 
-## Compilation algorithm
+## Enclosure compilation algorithm
 
 1. Validate source hashes, dimensions, licenses, alpha mode, and declared orientation policy.
 2. Enumerate all raw masks `0..255`.
@@ -480,10 +552,10 @@ two-material transition records both source hashes and declares which material o
    rects, normalized UVs, and the full 256-entry lookup.
 10. Render exhaustive pair proofs and topology torture maps.
 
-The compiler may later support marching-squares or Wang families, but `boundary-blob47-v1` remains
-a named dialect. A new dialect requires its own negative controls and receipt version.
+`boundary-blob47-v1` remains the named enclosure dialect; it was not broadened into a vague
+universal algorithm. Path, road, and cliff use separate named topology compilers and gates.
 
-## Required proof maps
+## Enclosure proof maps
 
 Every family renders, at minimum:
 
@@ -502,7 +574,7 @@ Every family renders, at minimum:
 The board overlays optional semantic-mask labels outside the beauty capture. It also emits a clean
 capture with no debug marks.
 
-## Mechanical gates
+## Dialect-specific mechanical gates
 
 ### Exhaustive lookup
 
@@ -538,6 +610,23 @@ For every torture map:
 - proof captures preserve exact tile aspect and nearest-neighbor scale;
 - clean and debug boards hash the same compiled tile atlas.
 
+### Path and road networks
+
+- every legal mask has an atlas entry and appears in the seeded stress field;
+- every shared cardinal or diagonal connection agrees across both participating cells;
+- the whole-field renderer remains continuous through turns, forks, loops, crossings, dead ends,
+  switchbacks, and shortcuts;
+- path diagonal joins do not pinch into separated dashes;
+- road shoulders and paired ruts remain distinct from the narrow path language.
+
+### Cliff elevation
+
+- all 16 cardinal transition masks resolve;
+- integer height bands remain stable across repeated compilation;
+- every height discontinuity produces an exposed face with consistent shade and striation;
+- the dimetric proof covers escarpment, terraced switchback, mesa/outcrop, and ravine layouts;
+- at least four elevation bands appear in the retained stress set.
+
 ## Boundary negative controls
 
 The verifier must preserve and reject at least these mutations:
@@ -565,6 +654,9 @@ runtime lookup.
 <family-id>-receipt.json
 ```
 
+The V2 suite additionally emits `dialect-index.json`, a suite receipt, one child directory per
+dialect, one atlas/receipt per child, and four individual field renders per path/road/cliff child.
+
 The receipt records source hashes, dialect/version, seed, orientation policy, all 47 semantic
 shapes, the 256-entry lookup hash, per-gate metrics, torture-map topology results, output hashes,
 and:
@@ -575,7 +667,7 @@ tasteStatus: REVIEW_REQUIRED | APPROVED | REJECTED
 runtimeAdmission: CANDIDATE | ADMITTED
 ```
 
-## Delivery order
+## Historical V1 delivery order
 
 1. Land and use the sprite-emote factory as the shared-envelope proving ground.
 2. Extract common hashing, path, receipt, and proof-board helpers only after the second family shows
@@ -586,5 +678,6 @@ runtimeAdmission: CANDIDATE | ADMITTED
 6. Review the torture maps at play scale.
 7. Only then add two-material transitions or alternate dialects.
 
-This order avoids designing a universal framework around a single art family while still giving the
-next compiler a stable contract.
+That sequence is now complete for the first four dialects. The current next gate is Adam's
+individual visual review of the real path, road, and cliff boards, followed by a separate runtime
+routing decision if any dialect is accepted.

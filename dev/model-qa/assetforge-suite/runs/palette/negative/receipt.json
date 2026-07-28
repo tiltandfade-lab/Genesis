@@ -7,10 +7,14 @@
   "technicalStatus": "FAIL",
   "gates": {
     "sourceHashMatches": true,
+    "paletteSourceHashMatches": true,
     "paletteNonEmpty": true,
     "protectedColorsRepresentable": false,
-    "everyOpaquePixelInPalette": false,
-    "meanColorDistanceWithinBudget": true,
+    "everyOpaquePixelInPalette": true,
+    "alphaByteIdentical": true,
+    "meanCiede2000WithinBudget": true,
+    "dominantHuePreserved": true,
+    "forbiddenChromaAbsent": true,
     "valueHierarchyPreserved": true
   },
   "outputs": {
@@ -18,7 +22,16 @@
     "proofBoard": "dev/model-qa/assetforge-suite/runs/palette/negative/proof-board.png"
   },
   "details": {
-    "meanColorDistance": 0.0,
+    "engineAuthority": "build/unify-corpus.py",
+    "engineAlgorithm": "Lab nearest + CIEDE2000 + dominant-hue + forbidden-chroma + shared defringe",
+    "engineSha256": "70fcfa56e3f24bb2f308fdbe4c4007ba3bb103c959212acb0d6c49ab0814720c",
+    "defringeApplied": true,
+    "meanCiede2000": 0.0,
+    "p95Ciede2000": 0.0,
+    "dominantHueBeforeDeg": 28.546565751996965,
+    "dominantHueAfterDeg": 28.546565751996965,
+    "dominantHueShiftDeg": 0.0,
+    "forbiddenChromaPixelCount": 0,
     "valueRankAgreement": 1.0,
     "outputColorCount": 4,
     "chroma": {

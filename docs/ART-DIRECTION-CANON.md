@@ -1972,3 +1972,31 @@ Binding consequences:
 - Atlas work is promising and may help sprite items coexist with 3D construction. Runtime and
   Clayroom proof are explicitly deferred until Adam requests them; atlas packing alone cannot claim
   renderer batching or successful 3D-texturing integration.
+
+## ASSETFORGE PROTOTYPE-TOOL CONSOLIDATION AND BOUNDARY BREADTH (Adam, 2026-07-28 — binding; verbatim)
+
+> "reolace asset forge's palette harmonizer with the current version, or merge the two and get a best of both worlds thing. No sprites in the current build are the final sprites so nothing is lost, we want the best tools in assetforge first, then we can start to actually develop production assets, right now we are still in the prototype zone
+>
+> i am still unconvinced of the current implemented sprite citizenship, as of now sprites still look crust and dusty in the renderer in low light environments, so the citizenship sucks. I am open to modification of the current imoplementation
+>
+> the boundary tiler was cool, and i could see how that wouild work in manors, churches etc, but i think we want to see a more verbose and versatile version for things like cliffsides, or paths in the wilderness or roads, etc... I would need a set of renders to really believe if works"
+
+Binding consequences:
+
+- Assetforge is presently a prototype-tool program. No sprite in the current build is final or
+  production-admitted; optimize the compilers, renderer contracts, and proofs before producing the
+  production asset set.
+- Palette harmonization has one perceptual algorithm authority: `build/unify-corpus.py`. Assetforge
+  may expose that engine through typed manifests, quarantine, proof boards, and receipts, but may
+  not retain a second color-mapping implementation.
+- Sprite citizenship is judged in the actual production renderer under low-value light, not by an
+  isolated metadata card. Improve the existing registry/renderer path rather than adding a second
+  schema. Low-light proofs must include real sprites, multiple lighting recipes, play-scale crops,
+  and an over-bright negative-control context.
+- Boundary compilation has distinct dialects. Blob47 enclosure serves rooms, manors, churches, and
+  other architecture; wilderness paths require diagonal network grammar; roads require their own
+  width, shoulder, and track language; cliffs require explicit elevation transitions and visible
+  faces. Each dialect must have individual real-material renders. A combined board is navigation
+  only.
+- A mechanical `PASS` establishes a prototype candidate. It does not establish beauty, runtime
+  routing, production-asset admission, or final sprite identity.

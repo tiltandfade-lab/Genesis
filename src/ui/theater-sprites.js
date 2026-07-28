@@ -249,16 +249,13 @@ function spriteTextureFor(entry){
   textureLoader.load(
     path,
     function(tex){
-      // BEAUTY-WAVE-2 BW2-0: magFilter stays Nearest (crisp when magnified — the pixel-art law, a
-      // creature sprite viewed close must show its authored texel grid, not smoothed mush). minFilter
-      // becomes Linear (was Nearest) — a billboard plane shrinks as it recedes/rotates, and
-      // Nearest-minification is what actually produced the "mode-7" shimmer/warp (nearest-picks a
-      // single aliasing texel per screen pixel instead of blending the covered footprint); Linear
-      // minification kills that without needing mipmaps (NPOT-safe — generateMipmaps stays false,
-      // Linear minFilter doesn't require them, only NearestMipmap*/LinearMipmap* variants do).
+      // Citizenship v2: keep authored texels crisp while magnified, but use a real mip pyramid when
+      // minified. The old one-level Linear filter still sampled a high-frequency sprite directly at
+      // play scale; combined with alphaTest it broke small/dark figures into crusty, dusty fragments.
+      // WebGL2 supports NPOT mipmaps, so trilinear minification is valid for the live sprite corpus.
       tex.magFilter = THREE.NearestFilter;
-      tex.minFilter = THREE.LinearFilter;
-      tex.generateMipmaps = false;
+      tex.minFilter = THREE.LinearMipmapLinearFilter;
+      tex.generateMipmaps = true;
       // CL-R1 CAUSAL A/B SEAM (docs/CLAYROOM-RESET-LADDER.md §CL-R1) — Adam, 2026-07-23: "the sprite
       // is back to an overexposed undersaturated crappy looking piece of paper". THE CANDIDATE CAUSE:
       // this loader never tagged the PNG's colour space, while every other authored colour texture in
@@ -372,7 +369,8 @@ function buildSpriteBillboardMesh(tex, w, h, entry){
     ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true })
     : new THREE.MeshLambertMaterial({
         map: tex, emissiveMap: tex, emissive: spritesCtxEmissiveTint(), emissiveIntensity: LIGHT_TUNABLES.spriteEmissiveFloor, // split B7: mutable root `let` (setBoard resets it, setInteriorBoard writes the realm grade) — read through the ctx accessor
-        transparent: true, alphaTest: alphaCutoff, side: THREE.DoubleSide, depthWrite: true
+        transparent: true, alphaTest: alphaCutoff, alphaToCoverage: true,
+        side: THREE.DoubleSide, depthWrite: true
       });
   SPRITE_DEPTH_BIAS_MATERIALS.push(mat);
   // (SPRITE_DEPTH_BIAS_UNITS + the registry are module-scope, declared beside SPRITE_UNLIT_DEBUG.)

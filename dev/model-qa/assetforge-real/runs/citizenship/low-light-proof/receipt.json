@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "proof": "assetforge-sprite-citizenship-v2",
+  "technicalStatus": "PASS",
+  "claimBoundary": "The board compares real production-renderer captures. It proves improved play-scale sampling and low-light color retention on prototype art; it does not admit any sprite art.",
+  "baseline": "lit-standee-v1",
+  "candidate": "lit-standee-v2",
+  "candidateContract": {
+    "readabilityFloor": 0.12,
+    "realmTintStrength": 0.15,
+    "textureCount": 7,
+    "materialCount": 63
+  },
+  "assertions": {
+    "everyLoadedSpriteUsesMipmappedMinification": true,
+    "everyStandeeUsesAlphaToCoverage": true,
+    "rendererUsesCitizenshipV2": true,
+    "rendererUsesPerceptualReadabilityFloor": true
+  },
+  "sources": [
+    {
+      "role": "v1-moonlit / lowest-value stress",
+      "path": "dev/clay-captures/cl-r2-sprite-citizenship/05-dark-production.png",
+      "sha256": "1d8512ea064bc5adeba4a9a2719efc9c3e3f4aa03dce9a0b7949867261bb06b7"
+    },
+    {
+      "role": "v2-moonlit / lowest-value stress",
+      "path": "dev/model-qa/assetforge-real/runs/citizenship/renderer-v2/05-dark-production.png",
+      "sha256": "9141a1db52b73ad5c4a7f6ea3b3a79a7809a14557689f26494af19bb2ca337d3"
+    },
+    {
+      "role": "v1-torchlit / warm-color stress",
+      "path": "dev/clay-captures/cl-r2-sprite-citizenship/06-warm-production.png",
+      "sha256": "d8ce3690df08721da32722e2b321a57dfcfc504ac98b17bb18c247e11687b46a"
+    },
+    {
+      "role": "v2-torchlit / warm-color stress",
+      "path": "dev/model-qa/assetforge-real/runs/citizenship/renderer-v2/06-warm-production.png",
+      "sha256": "03b495806ebef33ac5b699ff84b7551ac91bbd37d94b5e8bd4d32b206e267729"
+    },
+    {
+      "role": "v1-magic glow / cool-color stress",
+      "path": "dev/clay-captures/cl-r2-sprite-citizenship/07-cool-production.png",
+      "sha256": "897903757b61840243114601b62f8026c79fee9515da59d10991bebe54d2d1b0"
+    },
+    {
+      "role": "v2-magic glow / cool-color stress",
+      "path": "dev/model-qa/assetforge-real/runs/citizenship/renderer-v2/07-cool-production.png",
+      "sha256": "7c2194df4bd80110fac517a99477294be3979e1feb0c4895927ddc8ca8589656"
+    },
+    {
+      "role": "v1-daylit / over-bright negative control",
+      "path": "dev/clay-captures/cl-r2-sprite-citizenship/08-day-production.png",
+      "sha256": "bed9c90d3d282fe48821d94de8f0be530640018e517b788e82016465388c7849"
+    },
+    {
+      "role": "v2-daylit / over-bright negative control",
+      "path": "dev/model-qa/assetforge-real/runs/citizenship/renderer-v2/08-day-production.png",
+      "sha256": "8cbb9b5e557de3ac7476228eee27314faa8760e9a8164f28ec7ab7d0bfc9cff5"
+    }
+  ],
+  "candidateCaptureReceipt": "dev/model-qa/assetforge-real/runs/citizenship/renderer-v2/cl-r2-sprite-citizenship-receipt.json",
+  "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png"
+}

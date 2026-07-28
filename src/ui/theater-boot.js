@@ -772,7 +772,7 @@ const ITR_LIGHT_RENDER_GAIN = 4.5;
 //       dark corner <=0.40 of full-bright · torch pool ~0.60-0.85 · nowhere indoors >=0.9.
 const ITR_SCENE_KEY = 0.05;   // tabletop key DirectionalLight, dimmed for the interior channel (mount default 0.72)
 const ITR_SCENE_FILL = 0.02;  // tabletop fill DirectionalLight, dimmed for the interior channel (mount default 0.22)
-const ITR_SPRITE_EMISSIVE_FLOOR = 0.05; // sprite readability floor — emissiveIntensity on the lit billboard's own emissiveMap
+const ITR_SPRITE_EMISSIVE_FLOOR = 0.12; // sprite readability floor — preserves source color identity without reading full-bright
 // CL-R2 follow-up — a neutral, camera-side fill that can affect ONLY sprite faces. The cutout remains
 // on layer 0 for all authored room lights and additionally joins this private layer; the SpotLight
 // exists only on the private layer, casts no shadow, and keeps a gentle inverse-distance falloff.
@@ -2229,7 +2229,7 @@ let SPRITE_UNLIT_DEBUG = false;
 // tint) on the flat tabletop and any realm with no authored grade. setInteriorBoard sets it per board;
 // setBoard resets it to white. A SUBTLE blend (ITR_SPRITE_TINT_STRENGTH) — never a saturated wash.
 let ITR_SPRITE_EMISSIVE_TINT = 0xffffff;
-const ITR_SPRITE_TINT_STRENGTH = 0.5;
+const ITR_SPRITE_TINT_STRENGTH = 0.15;
 // ---- split B7: the standee side shell + buildSpriteBillboardMesh + buildSpriteBillboard moved to
 // src/ui/theater-sprites.js. ----
 
@@ -6152,13 +6152,13 @@ window.Theater._setSpriteSamplingForTest = function(mode){
     const tex = SPRITE_TEXTURE_CACHE[key];
     if(!tex || tex === "pending" || tex === "failed") return;
     tex.magFilter = linearMutation ? THREE.LinearFilter : THREE.NearestFilter;
-    tex.minFilter = THREE.LinearFilter;
-    tex.generateMipmaps = false;
+    tex.minFilter = linearMutation ? THREE.LinearFilter : THREE.LinearMipmapLinearFilter;
+    tex.generateMipmaps = !linearMutation;
     tex.needsUpdate = true;
     changed++;
   });
   markDirty();
-  return { mode: linearMutation ? "linear-mutation" : "production-nearest-mag-linear-min", changed };
+  return { mode: linearMutation ? "linear-no-mipmap-mutation" : "production-nearest-mag-trilinear-min", changed };
 };
 window.Theater.__spriteScreenRects = function(){
   const out = [];
@@ -6884,6 +6884,39 @@ window.Theater._spriteTextureCache = SPRITE_TEXTURE_CACHE;
 window.Theater._spriteAssetPathForTest = spriteAssetPathFor;
 window.Theater._spriteTextureSrcCache = SPRITE_TEXTURE_SRC;
 window.Theater._spriteTextureForTest = spriteTextureFor;
+window.Theater._spriteCitizenshipRenderContractForTest = function(){
+  const textures = [];
+  Object.keys(SPRITE_TEXTURE_CACHE).sort().forEach(function(key){
+    const tex = SPRITE_TEXTURE_CACHE[key];
+    if(!tex || tex === "pending" || tex === "failed") return;
+    textures.push({
+      slug: key,
+      magFilter: tex.magFilter,
+      minFilter: tex.minFilter,
+      generateMipmaps: !!tex.generateMipmaps,
+      colorSpace: tex.colorSpace
+    });
+  });
+  const materials = SPRITE_DEPTH_BIAS_MATERIALS.filter(function(mat){
+    return mat && !mat.disposed && !(mat.userData && mat.userData.retired);
+  }).map(function(mat){
+    return {
+      type: mat.type,
+      emissiveIntensity: mat.emissiveIntensity,
+      emissive: mat.emissive ? mat.emissive.getHex() : null,
+      alphaTest: mat.alphaTest,
+      alphaToCoverage: !!mat.alphaToCoverage,
+      psxExempt: !!(mat.userData && mat.userData.psxExempt)
+    };
+  });
+  return {
+    recipe: "lit-standee-v2",
+    readabilityFloor: LIGHT_TUNABLES.spriteEmissiveFloor,
+    realmTintStrength: ITR_SPRITE_TINT_STRENGTH,
+    textures: textures,
+    materials: materials
+  };
+};
 
 // BEAUTY-WAVE.md VP1 — TEST-ONLY SEAM: exposes interiorBuildPieces directly (the true-scale interior
 // piece sizing this unit fixed) so a harness (dev/verify-dungeon-interior.mjs's VP1 checks) can build

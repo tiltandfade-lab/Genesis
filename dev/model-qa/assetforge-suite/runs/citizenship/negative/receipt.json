@@ -9,8 +9,10 @@
     "sourceHashMatches": true,
     "opaqueContentPresent": true,
     "sourceHasSafeBorder": false,
-    "worldHeightIsExplicit": true,
+    "worldHeightResolved": true,
+    "canonicalContractComplete": true,
     "footAnchorNormalized": true,
+    "sourceCanvasPreserved": true,
     "thumbnailGenerated": true
   },
   "outputs": {
@@ -19,6 +21,9 @@
     "proofBoard": "dev/model-qa/assetforge-suite/runs/citizenship/negative/proof-board.png"
   },
   "details": {
+    "engineAuthority": "build/gen-sprite-registry.py",
+    "rendererAuthority": "src/ui/theater-sprites.js",
+    "coordinateSystem": "original source canvas; normalized top-down anchors",
     "chroma": {
       "requested": "auto",
       "detected": null,

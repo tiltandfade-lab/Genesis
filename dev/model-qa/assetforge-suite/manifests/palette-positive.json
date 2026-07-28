@@ -12,5 +12,5 @@
   "protectedColors": [
     "#D6403D"
   ],
-  "maxMeanDistance": 1
+  "maxMeanDeltaE": 0.01
 }

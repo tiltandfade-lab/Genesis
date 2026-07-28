@@ -456,7 +456,9 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    prop-sheet fragments, and roof-repeat cadence before closure.
 8. ☐ **Assetforge art-admission gate** — Adam reviews the individual retained process proofs (the
    aggregate board is navigation only). First review is complete: repeat + current prop proof
-   rejected; condition needs visibly more age; palette/citizenship/material require consolidation;
-   trim retained; atlas promising with Clayroom proof deferred. Fix period closure and source-edge/
-   camera/depth contracts, replace duplicate algorithms with canonical adapters, then return only
-   the revised individual proofs for admission.
+   rejected; condition needs visibly more age; trim retained; atlas promising with Clayroom proof
+   deferred. Palette consolidation and the citizenship canonical adapter + low-light renderer v2
+   are complete. Boundary V2 now has separate enclosure/path/road/cliff dialects with individual
+   real renders. Remaining tool work is repeat period closure, prop source-edge/camera/depth
+   contracts, stronger canonical age generation, and material-baker consolidation; return only
+   revised individual proofs for admission.

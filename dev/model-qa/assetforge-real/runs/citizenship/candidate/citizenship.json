@@ -2,14 +2,23 @@
   "slug": "spr-pc-human-fighter-male",
   "source": "assets/sprites/spr-pc-human-fighter-male.png",
   "sourceSha256": "d307d7ac9183075b11a7cc922e0bb1dcc71041397727a43c1fac7abc883fa7a8",
+  "footX": 0.83046,
+  "footY": 0.977477,
   "contentBounds": [
-    5,
-    5,
-    169,
-    217
+    0.028736,
+    0.022523,
+    0.971264,
+    0.977477
   ],
-  "footX": 0.850609756097561,
-  "footY": 1.0,
-  "worldHeightFeet": 6,
-  "alphaCutoff": 12
+  "alphaCutoff": 0.5,
+  "shadowProfile": "soft-pool",
+  "worldHeight": 6.0,
+  "heightSource": "overlay",
+  "runtimeContract": {
+    "materialRecipe": "lit-standee-v2",
+    "colorSpace": "srgb",
+    "magnificationFilter": "nearest",
+    "minificationFilter": "trilinear-mipmap",
+    "alphaMode": "registry-cutoff+alpha-to-coverage"
+  }
 }

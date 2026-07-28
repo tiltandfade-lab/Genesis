@@ -8,6 +8,7 @@ one failing control in the suite self-test.
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import math
 import random
@@ -16,7 +17,7 @@ from collections import Counter, deque
 from pathlib import Path
 from typing import Any, Callable
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageFont, ImageOps
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -877,8 +878,841 @@ def torture_fields() -> list[tuple[str, list[list[int]]]]:
     ]
 
 
+def cardinal_mask(field: list[list[int]], x: int, y: int) -> int:
+    height, width = len(field), len(field[0])
+    mask = 0
+    for bit, dx, dy in ((N, 0, -1), (E, 1, 0), (S, 0, 1), (W, -1, 0)):
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < width and 0 <= ny < height and field[ny][nx]:
+            mask |= bit
+    return mask
+
+
+def network_mask(field: list[list[int]], x: int, y: int, eight_way: bool) -> int:
+    mask = cardinal_mask(field, x, y)
+    if not eight_way:
+        return mask
+    height, width = len(field), len(field[0])
+    for bit, dx, dy in ((NE, 1, -1), (SE, 1, 1), (SW, -1, 1), (NW, -1, -1)):
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < width and 0 <= ny < height and field[ny][nx]:
+            mask |= bit
+    return mask
+
+
+def cardinal_mask_id(mask: int) -> str:
+    return "-".join(
+        f"{name}{1 if mask & bit else 0}"
+        for name, bit in (("n", N), ("e", E), ("s", S), ("w", W))
+    )
+
+
+def network_mask_id(mask: int, eight_way: bool) -> str:
+    return mask_id(mask) if eight_way else cardinal_mask_id(mask)
+
+
+def periodic_material(image: Image.Image, size: int) -> Image.Image:
+    return force_periodic(
+        ImageOps.fit(image.convert("RGBA"), (size, size), method=Image.Resampling.LANCZOS)
+    )
+
+
+def line_field(width: int, height: int, paths: list[list[tuple[int, int]]]) -> list[list[int]]:
+    field = [[0 for _ in range(width)] for _ in range(height)]
+    for path in paths:
+        for start, end in zip(path, path[1:]):
+            x0, y0 = start
+            x1, y1 = end
+            dx, dy = x1 - x0, y1 - y0
+            if dx and dy and abs(dx) != abs(dy):
+                raise ValueError("network proof paths must use cardinal or 45-degree segments")
+            steps = max(abs(dx), abs(dy))
+            sx = 0 if dx == 0 else (1 if dx > 0 else -1)
+            sy = 0 if dy == 0 else (1 if dy > 0 else -1)
+            for step in range(steps + 1):
+                field[y0 + sy * step][x0 + sx * step] = 1
+        if len(path) == 1:
+            x, y = path[0]
+            field[y][x] = 1
+    return field
+
+
+def path_torture_paths() -> list[tuple[str, int, int, list[list[tuple[int, int]]]]]:
+    return [
+        (
+            "diagonal-ridge-trail",
+            16,
+            10,
+            [[(0, 8), (3, 5), (3, 3), (6, 0)], [(3, 5), (8, 5), (12, 1), (15, 1)]],
+        ),
+        (
+            "forks-and-game-trails",
+            16,
+            10,
+            [
+                [(0, 5), (5, 5), (9, 1)],
+                [(5, 5), (9, 9)],
+                [(8, 4), (12, 4), (15, 7)],
+            ],
+        ),
+        (
+            "woodland-loop",
+            16,
+            11,
+            [
+                [(1, 5), (5, 1), (10, 1), (14, 5), (10, 9), (5, 9), (1, 5)],
+                [(5, 1), (5, 5), (10, 5), (10, 9)],
+            ],
+        ),
+        (
+            "switchbacks-and-shortcuts",
+            16,
+            11,
+            [
+                [(0, 9), (12, 9), (12, 7), (3, 7), (3, 5), (12, 5), (12, 3), (5, 3), (8, 0)],
+                [(7, 7), (10, 4), (10, 2)],
+                [(5, 5), (8, 8)],
+            ],
+        ),
+    ]
+
+
+def network_torture_fields(dialect: str) -> list[tuple[str, list[list[int]]]]:
+    if dialect == "path":
+        return [
+            (label, line_field(width, height, paths))
+            for label, width, height, paths in path_torture_paths()
+        ]
+    return [
+        (
+            "meandering-through-route",
+            line_field(14, 9, [[(0, 7), (3, 7), (3, 5), (7, 5), (7, 2), (13, 2)]]),
+        ),
+        (
+            "fork-and-dead-ends",
+            line_field(
+                14,
+                9,
+                [
+                    [(0, 4), (7, 4), (7, 1)],
+                    [(7, 4), (11, 4), (11, 7), (13, 7)],
+                    [(4, 4), (4, 7)],
+                ],
+            ),
+        ),
+        (
+            "crossroads-and-loop",
+            line_field(
+                14,
+                10,
+                [
+                    [(0, 5), (13, 5)],
+                    [(6, 0), (6, 9)],
+                    [(2, 2), (10, 2), (10, 8), (2, 8), (2, 2)],
+                ],
+            ),
+        ),
+        (
+            "switchbacks-and-spurs",
+            line_field(
+                14,
+                10,
+                [
+                    [(0, 8), (12, 8), (12, 6), (2, 6), (2, 4), (11, 4), (11, 2), (4, 2), (4, 0)],
+                    [(7, 6), (7, 9)],
+                    [(8, 4), (8, 1)],
+                ],
+            ),
+        ),
+    ]
+
+
+def make_network_tile(
+    outside: Image.Image,
+    inside: Image.Image,
+    mask: int,
+    size: int,
+    route_width: int,
+    shoulder_width: int,
+    dialect: str,
+) -> Image.Image:
+    tile = outside.copy()
+    center = size // 2
+    half = max(2, route_width // 2)
+    shoulder_half = min(size // 2, half + shoulder_width)
+    route_mask = Image.new("L", (size, size), 0)
+    shoulder_mask = Image.new("L", (size, size), 0)
+    route_draw = ImageDraw.Draw(route_mask)
+    shoulder_draw = ImageDraw.Draw(shoulder_mask)
+
+    def draw_shape(draw: ImageDraw.ImageDraw, extent: int) -> None:
+        draw.rounded_rectangle(
+            (center - extent, center - extent, center + extent, center + extent),
+            radius=max(1, extent // 2),
+            fill=255,
+        )
+        if mask & N:
+            draw.rectangle((center - extent, 0, center + extent, center), fill=255)
+        if mask & E:
+            draw.rectangle((center, center - extent, size - 1, center + extent), fill=255)
+        if mask & S:
+            draw.rectangle((center - extent, center, center + extent, size - 1), fill=255)
+        if mask & W:
+            draw.rectangle((0, center - extent, center, center + extent), fill=255)
+        diagonal_width = extent * 2 + 1
+        if mask & NE:
+            draw.line((center, center, size - 1, 0), fill=255, width=diagonal_width)
+        if mask & SE:
+            draw.line((center, center, size - 1, size - 1), fill=255, width=diagonal_width)
+        if mask & SW:
+            draw.line((center, center, 0, size - 1), fill=255, width=diagonal_width)
+        if mask & NW:
+            draw.line((center, center, 0, 0), fill=255, width=diagonal_width)
+
+    draw_shape(shoulder_draw, shoulder_half)
+    draw_shape(route_draw, half)
+    shoulder = ImageEnhance.Brightness(inside).enhance(0.64)
+    tile = Image.composite(shoulder, tile, shoulder_mask)
+    tile = Image.composite(inside, tile, route_mask)
+    details = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    details_draw = ImageDraw.Draw(details, "RGBA")
+    if dialect == "road":
+        rut_offset = max(2, route_width // 5)
+        rut_color = (48, 39, 31, 75)
+        if mask & (N | S):
+            for offset in (-rut_offset, rut_offset):
+                details_draw.line((center + offset, 0, center + offset, size - 1), fill=rut_color, width=1)
+        if mask & (E | W):
+            for offset in (-rut_offset, rut_offset):
+                details_draw.line((0, center + offset, size - 1, center + offset), fill=rut_color, width=1)
+    else:
+        # A restrained irregular wear trace differentiates a footpath from a mechanically clean road.
+        if mask & (N | S):
+            details_draw.line((center, 0, center, size - 1), fill=(80, 58, 31, 44), width=1)
+        if mask & (E | W):
+            details_draw.line((0, center, size - 1, center), fill=(80, 58, 31, 44), width=1)
+        if mask & NE:
+            details_draw.line((center, center, size - 1, 0), fill=(80, 58, 31, 44), width=1)
+        if mask & SE:
+            details_draw.line((center, center, size - 1, size - 1), fill=(80, 58, 31, 44), width=1)
+        if mask & SW:
+            details_draw.line((center, center, 0, size - 1), fill=(80, 58, 31, 44), width=1)
+        if mask & NW:
+            details_draw.line((center, center, 0, 0), fill=(80, 58, 31, 44), width=1)
+    details.putalpha(ImageChops.multiply(details.getchannel("A"), route_mask))
+    tile.alpha_composite(details)
+    return tile
+
+
+def render_network_field(
+    field: list[list[int]],
+    tiles: dict[int, Image.Image],
+    outside: Image.Image,
+    size: int,
+    eight_way: bool = False,
+) -> Image.Image:
+    canvas = Image.new("RGBA", (len(field[0]) * size, len(field) * size), (0, 0, 0, 0))
+    for y, row in enumerate(field):
+        for x, occupied in enumerate(row):
+            tile = tiles[network_mask(field, x, y, eight_way)] if occupied else outside
+            canvas.alpha_composite(tile, (x * size, y * size))
+    return canvas
+
+
+def tiled_material_canvas(material: Image.Image, width: int, height: int) -> Image.Image:
+    canvas = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    for y in range(0, height, material.height):
+        for x in range(0, width, material.width):
+            canvas.alpha_composite(material, (x, y))
+    return canvas
+
+
+def render_continuous_path(
+    paths: list[list[tuple[int, int]]],
+    field_width: int,
+    field_height: int,
+    outside: Image.Image,
+    inside: Image.Image,
+    size: int,
+    route_width: int,
+    shoulder_width: int,
+    seed: int,
+) -> Image.Image:
+    width, height = field_width * size, field_height * size
+    canvas = tiled_material_canvas(outside, width, height)
+    route_mask = Image.new("L", (width, height), 0)
+    shoulder_mask = Image.new("L", (width, height), 0)
+    route_draw = ImageDraw.Draw(route_mask)
+    shoulder_draw = ImageDraw.Draw(shoulder_mask)
+    jitter = {}
+    rng = random.Random(seed)
+
+    def point_for(point: tuple[int, int]) -> tuple[int, int]:
+        if point not in jitter:
+            bound = max(1, round(size * 0.11))
+            jitter[point] = (rng.randint(-bound, bound), rng.randint(-bound, bound))
+        dx, dy = jitter[point]
+        return (
+            round((point[0] + 0.5) * size + dx),
+            round((point[1] + 0.5) * size + dy),
+        )
+
+    def stroke(draw: ImageDraw.ImageDraw, points: list[tuple[int, int]], width_px: int) -> None:
+        draw.line(points, fill=255, width=width_px, joint="curve")
+        radius = width_px // 2
+        for px, py in points:
+            draw.ellipse((px - radius, py - radius, px + radius, py + radius), fill=255)
+
+    def organic_points(path: list[tuple[int, int]]) -> list[tuple[int, int]]:
+        sampled = []
+        for segment_index, (start, end) in enumerate(zip(path, path[1:])):
+            p0, p1 = point_for(start), point_for(end)
+            span = max(abs(end[0] - start[0]), abs(end[1] - start[1]))
+            steps = max(2, span * 2)
+            for step in range(steps + 1):
+                if segment_index and step == 0:
+                    continue
+                amount = step / steps
+                if step == 0:
+                    sampled.append(p0)
+                elif step == steps:
+                    sampled.append(p1)
+                else:
+                    wobble = max(1, round(size * 0.045))
+                    sampled.append(
+                        (
+                            round(p0[0] + (p1[0] - p0[0]) * amount) + rng.randint(-wobble, wobble),
+                            round(p0[1] + (p1[1] - p0[1]) * amount) + rng.randint(-wobble, wobble),
+                        )
+                    )
+        return sampled or [point_for(path[0])]
+
+    for path in paths:
+        points = organic_points(path)
+        stroke(shoulder_draw, points, route_width + shoulder_width * 2)
+        stroke(route_draw, points, route_width)
+    inside_field = tiled_material_canvas(inside, width, height)
+    shoulder_field = ImageEnhance.Brightness(inside_field).enhance(0.62)
+    canvas = Image.composite(shoulder_field, canvas, shoulder_mask)
+    canvas = Image.composite(inside_field, canvas, route_mask)
+    return canvas
+
+
+def network_neighbor_closure(
+    tiles: dict[int, Image.Image],
+    route_width: int,
+    eight_way: bool,
+) -> tuple[bool, int]:
+    center = next(iter(tiles.values())).height // 2
+    half = max(2, route_width // 2)
+    checked = 0
+    for left_mask, left in tiles.items():
+        if not left_mask & E:
+            continue
+        for right_mask, right in tiles.items():
+            if not right_mask & W:
+                continue
+            for y in range(center - half, center + half + 1):
+                if left.getpixel((left.width - 1, y)) != right.getpixel((0, y)):
+                    return False, checked
+            checked += 1
+    for top_mask, top in tiles.items():
+        if not top_mask & S:
+            continue
+        for bottom_mask, bottom in tiles.items():
+            if not bottom_mask & N:
+                continue
+            for x in range(center - half, center + half + 1):
+                if top.getpixel((x, top.height - 1)) != bottom.getpixel((x, 0)):
+                    return False, checked
+            checked += 1
+    if eight_way:
+        for first_mask, first in tiles.items():
+            if not first_mask & SE:
+                continue
+            for second_mask, second in tiles.items():
+                if not second_mask & NW:
+                    continue
+                # Diagonal neighbors meet at one world-space corner; unlike cardinal neighbors
+                # they do not share a full edge strip.
+                if first.getpixel((first.width - 1, first.height - 1)) != second.getpixel((0, 0)):
+                    return False, checked
+                checked += 1
+    return True, checked
+
+
+def compile_network_boundary(
+    config: dict[str, Any],
+    manifest_path: Path,
+    output_dir: Path,
+    force: bool,
+) -> dict[str, Any]:
+    guarded_reset(output_dir, force)
+    size = int(config.get("tileSizePx", 64))
+    dialect = config["kind"]
+    eight_way = dialect == "path"
+    route_width = max(6, round(size * float(config.get("routeWidth", 0.34 if dialect == "path" else 0.58))))
+    shoulder_width = max(2, round(size * float(config.get("shoulderWidth", 0.09))))
+    outside_path = resolve_manifest_path(manifest_path, config["outsideMaterial"]["tile"])
+    inside_path = resolve_manifest_path(manifest_path, config["insideMaterial"]["tile"])
+    outside = periodic_material(Image.open(outside_path), size)
+    inside = periodic_material(Image.open(inside_path), size)
+    shape_masks = range(256) if eight_way else range(16)
+    tiles = {
+        mask: make_network_tile(
+            outside, inside, mask, size, route_width, shoulder_width, dialect
+        )
+        for mask in shape_masks
+    }
+    assets = [(network_mask_id(mask, eight_way), tile) for mask, tile in tiles.items()]
+    atlas_columns = 16 if eight_way else 4
+    atlas, placements = shelf_pack(assets, padding=2, max_width=size * atlas_columns + atlas_columns * 2 + 2)
+    atlas.save(output_dir / "atlas.png")
+    write_json(
+        output_dir / "atlas.json",
+        {
+            "schemaVersion": 1,
+            "dialect": f"boundary-{dialect}-{'eightway256' if eight_way else 'cardinal16'}-v1",
+            "tileSizePx": size,
+            "routeWidthPx": route_width,
+            "shoulderWidthPx": shoulder_width,
+            "canonicalShapes": {
+                network_mask_id(mask, eight_way): {
+                    "mask": mask,
+                    "rect": list(placements[network_mask_id(mask, eight_way)]),
+                }
+                for mask in shape_masks
+            },
+        },
+    )
+    proof_cells = []
+    coverage = set()
+    path_specs = {label: (width, height, paths) for label, width, height, paths in path_torture_paths()}
+    for proof_index, (label, field) in enumerate(network_torture_fields(dialect)):
+        if dialect == "path":
+            field_width, field_height, paths = path_specs[label]
+            rendered = render_continuous_path(
+                paths,
+                field_width,
+                field_height,
+                outside,
+                inside,
+                size,
+                route_width,
+                shoulder_width,
+                int(config.get("seed", 73129)) + proof_index,
+            )
+        else:
+            rendered = render_network_field(field, tiles, outside, size, eight_way)
+        rendered.save(output_dir / f"proof-{label}.png")
+        proof_cells.append((label, rendered))
+        coverage.update(
+            network_mask(field, x, y, eight_way)
+            for y, row in enumerate(field)
+            for x, occupied in enumerate(row)
+            if occupied
+        )
+    seeded = random.Random(int(config.get("seed", 73129)))
+    stress_dimension = 128 if eight_way else 48
+    stress_field = [
+        [1 if seeded.random() > 0.5 else 0 for _ in range(stress_dimension)]
+        for _ in range(stress_dimension)
+    ]
+    stress_coverage = {
+        network_mask(stress_field, x, y, eight_way)
+        for y, row in enumerate(stress_field)
+        for x, occupied in enumerate(row)
+        if occupied
+    }
+    coverage.update(stress_coverage)
+    stress_tiles = {
+        mask: image.resize((8, 8), Image.Resampling.NEAREST)
+        for mask, image in tiles.items()
+    }
+    stress_outside = outside.resize((8, 8), Image.Resampling.NEAREST)
+    render_network_field(stress_field, stress_tiles, stress_outside, 8, eight_way).save(
+        output_dir / "proof-seeded-topology.png"
+    )
+    proof_board(
+        f"{dialect.title()} boundary compiler · endpoints, bends, forks, loops",
+        proof_cells,
+        output_dir / "proof-board.png",
+        (420, 300),
+        2,
+    )
+    closure_ok, checked_pairs = network_neighbor_closure(tiles, route_width, eight_way)
+    expected_shapes = 256 if eight_way else 16
+    gates = {
+        "insideSourceHashMatches": not config["insideMaterial"].get("sha256")
+        or sha256_file(inside_path) == config["insideMaterial"]["sha256"],
+        "outsideSourceHashMatches": not config["outsideMaterial"].get("sha256")
+        or sha256_file(outside_path) == config["outsideMaterial"]["sha256"],
+        "everyNetworkShapeCompiled": len(tiles) == expected_shapes and len(placements) == expected_shapes,
+        "everyNetworkShapeProved": coverage == set(shape_masks),
+        "connectedEdgesCloseExactly": closure_ok and checked_pairs > 0,
+        "allNetworkTortureMapsRendered": len(proof_cells) == 4,
+    }
+    return finish_receipt(
+        f"boundary-{dialect}",
+        manifest_path,
+        output_dir,
+        gates,
+        {
+            "atlas": repo_path(output_dir / "atlas.png"),
+            "metadata": repo_path(output_dir / "atlas.json"),
+            "proofBoard": repo_path(output_dir / "proof-board.png"),
+        },
+        {
+            "topology": "eightway256-network" if eight_way else "cardinal16-network",
+            "routeWidthPx": route_width,
+            "shoulderWidthPx": shoulder_width,
+            "compatibleNeighborPairsChecked": checked_pairs,
+            "shapeCoverage": len(coverage),
+            "seededStressShapeCoverage": len(stress_coverage),
+        },
+    )
+
+
+def cliff_height_fields() -> list[tuple[str, list[list[int]]]]:
+    return [
+        (
+            "escarpment",
+            [[0 if x < 3 + (y % 3) else 1 for x in range(13)] for y in range(9)],
+        ),
+        (
+            "terraced-switchback",
+            [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 0],
+                [0, 1, 1, 2, 2, 2, 2, 2, 2, 1, 1, 0],
+                [0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 0],
+                [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            ],
+        ),
+        (
+            "mesa-and-outcrop",
+            [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0],
+                [0, 1, 2, 2, 2, 1, 0, 0, 1, 1, 1, 0],
+                [0, 1, 2, 3, 2, 1, 0, 0, 1, 2, 1, 0],
+                [0, 1, 2, 2, 2, 1, 0, 0, 1, 1, 1, 0],
+                [0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            ],
+        ),
+        (
+            "ravine",
+            [
+                [2, 2, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2],
+                [2, 2, 2, 1, 0, 0, 1, 2, 2, 2, 2, 2],
+                [2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 2, 2],
+                [2, 2, 1, 0, 0, 0, 0, 1, 1, 2, 2, 2],
+                [2, 2, 1, 0, 0, 0, 0, 0, 1, 1, 2, 2],
+                [2, 2, 1, 1, 0, 0, 0, 0, 1, 2, 2, 2],
+                [2, 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 2],
+                [2, 2, 2, 2, 1, 0, 0, 1, 2, 2, 2, 2],
+            ],
+        ),
+    ]
+
+
+def average_rgb(image: Image.Image) -> tuple[int, int, int]:
+    sample = ImageOps.fit(image.convert("RGB"), (32, 32), method=Image.Resampling.BILINEAR)
+    colors = list(sample.getdata())
+    return tuple(round(sum(pixel[index] for pixel in colors) / len(colors)) for index in range(3))
+
+
+def diamond_texture(material: Image.Image, half_width: int, half_height: int) -> Image.Image:
+    width, height = half_width * 2 + 1, half_height * 2 + 1
+    fitted = ImageOps.fit(material.convert("RGBA"), (width, height), method=Image.Resampling.LANCZOS)
+    mask = Image.new("L", (width, height), 0)
+    ImageDraw.Draw(mask).polygon(
+        [(half_width, 0), (width - 1, half_height), (half_width, height - 1), (0, half_height)],
+        fill=255,
+    )
+    fitted.putalpha(mask)
+    return fitted
+
+
+def render_cliff_height_field(
+    levels: list[list[int]],
+    top_material: Image.Image,
+    outside_material: Image.Image,
+    seed: int,
+) -> Image.Image:
+    half_width, half_height, level_height = 34, 17, 24
+    rows, cols = len(levels), len(levels[0])
+    maximum = max(max(row) for row in levels)
+    margin = 44
+    width = (rows + cols) * half_width + margin * 2
+    height = (rows + cols) * half_height + maximum * level_height + margin * 2
+    canvas = Image.new("RGBA", (width, height), (19, 22, 23, 255))
+    high_top = diamond_texture(top_material, half_width, half_height)
+    low_top = diamond_texture(outside_material, half_width, half_height)
+    face_rgb = average_rgb(top_material)
+    rng = random.Random(seed)
+    base_x = rows * half_width + margin
+
+    def level_at(x: int, y: int) -> int:
+        return levels[y][x] if 0 <= x < cols and 0 <= y < rows else 0
+
+    for diagonal in range(rows + cols - 1):
+        for y in range(rows):
+            x = diagonal - y
+            if not 0 <= x < cols:
+                continue
+            level = levels[y][x]
+            cx = base_x + (x - y) * half_width
+            cy = margin + (x + y) * half_height + (maximum - level) * level_height
+            if level > 0:
+                east_drop = max(0, level - level_at(x + 1, y))
+                south_drop = max(0, level - level_at(x, y + 1))
+                draw = ImageDraw.Draw(canvas, "RGBA")
+                if east_drop:
+                    drop = east_drop * level_height
+                    poly = [
+                        (cx + half_width, cy),
+                        (cx, cy + half_height),
+                        (cx, cy + half_height + drop),
+                        (cx + half_width, cy + drop),
+                    ]
+                    draw.polygon(poly, fill=(*tuple(round(v * 0.58) for v in face_rgb), 255))
+                    for step in range(5, drop, 7):
+                        draw.line(
+                            (cx + half_width, cy + step, cx, cy + half_height + step),
+                            fill=(26, 24, 23, 95),
+                            width=1,
+                        )
+                if south_drop:
+                    drop = south_drop * level_height
+                    poly = [
+                        (cx, cy + half_height),
+                        (cx - half_width, cy),
+                        (cx - half_width, cy + drop),
+                        (cx, cy + half_height + drop),
+                    ]
+                    draw.polygon(poly, fill=(*tuple(round(v * 0.43) for v in face_rgb), 255))
+                    for step in range(5, drop, 7):
+                        draw.line(
+                            (cx - half_width, cy + step, cx, cy + half_height + step),
+                            fill=(18, 17, 16, 110),
+                            width=1,
+                        )
+            top = high_top if level > 0 else low_top
+            canvas.alpha_composite(top, (cx - half_width, cy - half_height))
+            outline = ImageDraw.Draw(canvas, "RGBA")
+            outline.line(
+                [
+                    (cx, cy - half_height),
+                    (cx + half_width, cy),
+                    (cx, cy + half_height),
+                    (cx - half_width, cy),
+                    (cx, cy - half_height),
+                ],
+                fill=(230, 218, 188, 22 if level == 0 else 52),
+                width=1,
+            )
+            if level > 0 and rng.random() < 0.18:
+                outline.ellipse((cx - 2, cy - 1, cx + 2, cy + 2), fill=(35, 31, 28, 90))
+    return canvas
+
+
+def make_cliff_topology_tile(material: Image.Image, mask: int, size: int, border: int) -> Image.Image:
+    tile = material.copy()
+    draw = ImageDraw.Draw(tile, "RGBA")
+    dark = (32, 29, 27, 210)
+    mid = (78, 67, 56, 180)
+    if not mask & N:
+        draw.rectangle((0, 0, size - 1, border), fill=mid)
+    if not mask & E:
+        draw.rectangle((size - border - 1, 0, size - 1, size - 1), fill=dark)
+    if not mask & S:
+        draw.rectangle((0, size - border - 1, size - 1, size - 1), fill=dark)
+    if not mask & W:
+        draw.rectangle((0, 0, border, size - 1), fill=mid)
+    return tile
+
+
+def compile_cliff_boundary(
+    config: dict[str, Any],
+    manifest_path: Path,
+    output_dir: Path,
+    force: bool,
+) -> dict[str, Any]:
+    guarded_reset(output_dir, force)
+    size = int(config.get("tileSizePx", 64))
+    border = max(4, round(size * float(config.get("faceBandWidth", 0.16))))
+    top_path = resolve_manifest_path(manifest_path, config["insideMaterial"]["tile"])
+    outside_path = resolve_manifest_path(manifest_path, config["outsideMaterial"]["tile"])
+    top = periodic_material(Image.open(top_path), size)
+    outside = periodic_material(Image.open(outside_path), size)
+    tiles = {mask: make_cliff_topology_tile(top, mask, size, border) for mask in range(16)}
+    assets = [(cardinal_mask_id(mask), tile) for mask, tile in tiles.items()]
+    atlas, placements = shelf_pack(assets, padding=2, max_width=size * 4 + 10)
+    atlas.save(output_dir / "atlas.png")
+    write_json(
+        output_dir / "atlas.json",
+        {
+            "schemaVersion": 1,
+            "dialect": "boundary-cliff-elevation-v1",
+            "tileSizePx": size,
+            "faceBandWidthPx": border,
+            "canonicalShapes": {
+                cardinal_mask_id(mask): {"mask": mask, "rect": list(placements[cardinal_mask_id(mask)])}
+                for mask in range(16)
+            },
+            "heightSemantics": "integer elevation bands; exposed faces repeat per level delta",
+        },
+    )
+    proof_cells = []
+    maximum_level = 0
+    for index, (label, field) in enumerate(cliff_height_fields()):
+        maximum_level = max(maximum_level, max(max(row) for row in field))
+        rendered = render_cliff_height_field(field, top, outside, int(config.get("seed", 73129)) + index)
+        rendered.save(output_dir / f"proof-{label}.png")
+        proof_cells.append((label, rendered))
+    proof_board(
+        "Cliff boundary compiler · escarpments, terraces, mesas, ravines",
+        proof_cells,
+        output_dir / "proof-board.png",
+        (470, 340),
+        2,
+    )
+    gates = {
+        "insideSourceHashMatches": not config["insideMaterial"].get("sha256")
+        or sha256_file(top_path) == config["insideMaterial"]["sha256"],
+        "outsideSourceHashMatches": not config["outsideMaterial"].get("sha256")
+        or sha256_file(outside_path) == config["outsideMaterial"]["sha256"],
+        "all16CardinalShapesCompiled": len(tiles) == 16 and len(placements) == 16,
+        "multipleElevationBandsProved": maximum_level >= 3,
+        "allCliffTortureMapsRendered": len(proof_cells) == 4,
+        "everyProofHasVisibleFaces": all(image.height > 300 for _, image in proof_cells),
+    }
+    return finish_receipt(
+        "boundary-cliff",
+        manifest_path,
+        output_dir,
+        gates,
+        {
+            "atlas": repo_path(output_dir / "atlas.png"),
+            "metadata": repo_path(output_dir / "atlas.json"),
+            "proofBoard": repo_path(output_dir / "proof-board.png"),
+        },
+        {
+            "topology": "cardinal16+integer-elevation",
+            "heightBandCountProved": maximum_level + 1,
+            "renderDialect": "dimetric-height-field",
+        },
+    )
+
+
+def compile_boundary_dialect_suite(
+    manifest: dict[str, Any],
+    manifest_path: Path,
+    output_dir: Path,
+    force: bool,
+) -> dict[str, Any]:
+    guarded_reset(output_dir, force)
+    generated_manifests = output_dir / "compiled-manifests"
+    generated_manifests.mkdir(parents=True)
+    results = []
+    for config in manifest["dialects"]:
+        dialect_id = config["id"]
+        dialect_dir = output_dir / "dialects" / dialect_id
+        if config["kind"] == "enclosure":
+            child_manifest = {
+                "schemaVersion": 1,
+                "family": "boundary-autotile",
+                "insideMaterial": config["insideMaterial"],
+                "edgeLanguage": config.get("edgeLanguage", {}),
+                "tileSizePx": config.get("tileSizePx", manifest.get("tileSizePx", 64)),
+                "seed": config.get("seed", manifest.get("seed", 73129)),
+                "allowSeamLock": config.get("allowSeamLock", True),
+                "maxRepairableSourceEdgeDelta": config.get("maxRepairableSourceEdgeDelta", 10),
+            }
+            child_path = generated_manifests / f"{dialect_id}.json"
+            write_json(child_path, child_manifest)
+            receipt = compile_boundary(child_path, dialect_dir, True)
+        elif config["kind"] in {"path", "road"}:
+            receipt = compile_network_boundary(config, manifest_path, dialect_dir, True)
+        elif config["kind"] == "cliff":
+            receipt = compile_cliff_boundary(config, manifest_path, dialect_dir, True)
+        else:
+            raise ValueError(f"unsupported boundary dialect: {config['kind']}")
+        results.append(
+            {
+                "id": dialect_id,
+                "kind": config["kind"],
+                "technicalStatus": receipt["technicalStatus"],
+                "failedGates": [name for name, passed in receipt["gates"].items() if not passed],
+                "receipt": repo_path(dialect_dir / "receipt.json"),
+                "proofBoard": receipt["outputs"]["proofBoard"],
+                "details": receipt["details"],
+            }
+        )
+    write_json(
+        output_dir / "dialect-index.json",
+        {"schemaVersion": 1, "dialects": results},
+    )
+    proof_cells = [
+        (
+            f"{result['id']} · {result['technicalStatus']}",
+            Image.open(ROOT / result["proofBoard"]).convert("RGBA"),
+        )
+        for result in results
+    ]
+    proof_board(
+        "Boundary compiler dialect suite · architecture / wilderness / roads / elevation",
+        proof_cells,
+        output_dir / "proof-board.png",
+        (520, 360),
+        2,
+    )
+    kinds = [config["kind"] for config in manifest["dialects"]]
+    network_widths = {
+        result["kind"]: result["details"].get("routeWidthPx")
+        for result in results
+        if result["kind"] in {"path", "road"}
+    }
+    gates = {
+        "dialectIdsUnique": len({config["id"] for config in manifest["dialects"]}) == len(results),
+        "architectureDialectPresent": "enclosure" in kinds,
+        "wildernessPathDialectPresent": "path" in kinds,
+        "roadDialectPresent": "road" in kinds,
+        "cliffElevationDialectPresent": "cliff" in kinds,
+        "everyDialectPassesOwnGates": all(result["technicalStatus"] == "PASS" for result in results),
+        "pathAndRoadRemainDistinct": network_widths.get("path") != network_widths.get("road"),
+        "everyDialectHasIndividualRenders": all(result["proofBoard"] for result in results),
+    }
+    return finish_receipt(
+        "boundary-dialect-suite",
+        manifest_path,
+        output_dir,
+        gates,
+        {
+            "dialectIndex": repo_path(output_dir / "dialect-index.json"),
+            "proofBoard": repo_path(output_dir / "proof-board.png"),
+        },
+        {
+            "dialectCount": len(results),
+            "dialects": results,
+            "claimBoundary": "Each dialect proves its own topology; this board is navigation, not a substitute for the individual renders.",
+        },
+    )
+
+
 def compile_boundary(manifest_path: Path, output_dir: Path, force: bool = False) -> dict[str, Any]:
     manifest = read_json(manifest_path)
+    if manifest.get("dialects"):
+        return compile_boundary_dialect_suite(manifest, manifest_path, output_dir, force)
+    if manifest.get("kind") in {"path", "road"}:
+        return compile_network_boundary(manifest, manifest_path, output_dir, force)
+    if manifest.get("kind") == "cliff":
+        return compile_cliff_boundary(manifest, manifest_path, output_dir, force)
     guarded_reset(output_dir, force)
     source = resolve_manifest_path(manifest_path, manifest["insideMaterial"]["tile"])
     raw_material = Image.open(source).convert("RGBA")
@@ -1291,32 +2125,73 @@ def luminance(rgb: tuple[int, int, int]) -> float:
     return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722
 
 
+_CANONICAL_PALETTE_ENGINE = None
+
+
+def canonical_palette_engine():
+    """Load the standing corpus unifier instead of maintaining duplicate color math here."""
+    global _CANONICAL_PALETTE_ENGINE
+    if _CANONICAL_PALETTE_ENGINE is None:
+        engine_path = ROOT / "build" / "unify-corpus.py"
+        spec = importlib.util.spec_from_file_location("assetforge_canonical_palette_engine", engine_path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError(f"cannot load canonical palette engine: {repo_path(engine_path)}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _CANONICAL_PALETTE_ENGINE = module
+    return _CANONICAL_PALETTE_ENGINE
+
+
 def compile_palette(manifest_path: Path, output_dir: Path, force: bool = False) -> dict[str, Any]:
+    import numpy as np
+
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     source_path = resolve_manifest_path(manifest_path, manifest["source"])
     source, chroma = key_manifest_image(Image.open(source_path), manifest)
+    engine = canonical_palette_engine()
     palette = [hex_rgb(value) for value in manifest["palette"]]
     protected = {hex_rgb(value) for value in manifest.get("protectedColors", [])}
-    output = source.copy()
-    distances = []
-    before_luma = []
-    after_luma = []
-    converted = []
-    for r, g, b, a in source.getdata():
-        if not a:
-            converted.append((0, 0, 0, 0))
-            continue
-        rgb = (r, g, b)
-        nearest = rgb if rgb in protected else min(
-            palette, key=lambda item: sum((item[index] - rgb[index]) ** 2 for index in range(3))
+    working = source.copy()
+    defringe_applied = bool(manifest.get("defringe", True))
+    if defringe_applied:
+        engine.defringe(
+            working,
+            despill=float(manifest.get("despill", 0.25)),
+            erode_excess=int(manifest.get("erodeExcess", 60)),
+            band=int(manifest.get("edgeBandPx", 2)),
         )
-        converted.append((*nearest, a))
-        distances.append(math.sqrt(sum((nearest[index] - rgb[index]) ** 2 for index in range(3))))
-        before_luma.append(luminance(rgb))
-        after_luma.append(luminance(nearest))
-    output.putdata(converted)
+
+    rgba = np.asarray(working, dtype=np.uint8).copy()
+    rgb = rgba[..., :3]
+    alpha = rgba[..., 3]
+    opaque = alpha > 0
+    quantized = engine.quantize_nearest_lab(rgb, palette).astype(np.uint8)
+    protected_mask = np.zeros(alpha.shape, dtype=bool)
+    for color in protected:
+        protected_mask |= np.all(rgb == np.asarray(color, dtype=np.uint8), axis=-1)
+    quantized[protected_mask & opaque] = rgb[protected_mask & opaque]
+    quantized[~opaque] = 0
+    output_rgba = np.dstack([quantized, alpha])
+    output = Image.fromarray(output_rgba, "RGBA")
     output.save(output_dir / "harmonized.png")
+
+    before_opaque = rgb[opaque]
+    after_opaque = quantized[opaque]
+    delta_e = (
+        engine.ciede2000(engine.rgb_to_lab(before_opaque), engine.rgb_to_lab(after_opaque))
+        if before_opaque.size
+        else np.asarray([], dtype=float)
+    )
+    mean_delta_e = float(delta_e.mean()) if delta_e.size else 0.0
+    p95_delta_e = float(np.percentile(delta_e, 95)) if delta_e.size else 0.0
+    before_hue = engine.dominant_hue(rgb, alpha)
+    after_hue = engine.dominant_hue(quantized, alpha)
+    hue_shift = engine.circular_delta_deg(before_hue, after_hue)
+    forbidden_output = engine.min_dist_to_forbidden(quantized, alpha)
+
+    before_luma = [luminance(tuple(int(channel) for channel in value)) for value in before_opaque]
+    after_luma = [luminance(tuple(int(channel) for channel in value)) for value in after_opaque]
     # Pairwise luminance direction agreement is a stable rank proxy without a statistics package.
     agreements = 0
     samples = 0
@@ -1333,19 +2208,31 @@ def compile_palette(manifest_path: Path, output_dir: Path, force: bool = False) 
     for index, color in enumerate(palette):
         chip_draw.rectangle((index * 32, 0, index * 32 + 31, 31), fill=(*color, 255))
     proof_board(
-        "Palette harmonizer",
-        [("source", source), ("harmonized", output), ("realm palette", chips)],
+        "Palette harmonizer · canonical perceptual engine",
+        [("source", source), ("defringed", working), ("harmonized", output), ("realm palette", chips)],
         output_dir / "proof-board.png",
         (240, 200),
-        3,
+        4,
     )
     output_colors = {(r, g, b) for r, g, b, a in output.getdata() if a}
+    allowed_colors = set(palette) | protected
+    palette_source = (
+        resolve_manifest_path(manifest_path, manifest["paletteSource"])
+        if manifest.get("paletteSource")
+        else None
+    )
     gates = {
         "sourceHashMatches": not manifest.get("sourceSha256") or sha256_file(source_path) == manifest["sourceSha256"],
+        "paletteSourceHashMatches": not manifest.get("paletteSourceSha256")
+        or (palette_source is not None and sha256_file(palette_source) == manifest["paletteSourceSha256"]),
         "paletteNonEmpty": bool(palette),
         "protectedColorsRepresentable": protected.issubset(set(palette)),
-        "everyOpaquePixelInPalette": output_colors.issubset(set(palette)),
-        "meanColorDistanceWithinBudget": (sum(distances) / max(1, len(distances))) <= float(manifest.get("maxMeanDistance", 90)),
+        "everyOpaquePixelInPalette": output_colors.issubset(allowed_colors),
+        "alphaByteIdentical": output.getchannel("A").tobytes() == working.getchannel("A").tobytes(),
+        "meanCiede2000WithinBudget": mean_delta_e <= float(manifest.get("maxMeanDeltaE", 18.0)),
+        "dominantHuePreserved": hue_shift is None
+        or hue_shift <= float(manifest.get("maxDominantHueShiftDeg", engine.HUE_SHIFT_THRESHOLD_DEG)),
+        "forbiddenChromaAbsent": forbidden_output == 0,
         "valueHierarchyPreserved": rank_agreement >= float(manifest.get("minimumRankAgreement", 0.72)),
     }
     return finish_receipt(
@@ -1355,7 +2242,16 @@ def compile_palette(manifest_path: Path, output_dir: Path, force: bool = False) 
         gates,
         {"image": repo_path(output_dir / "harmonized.png"), "proofBoard": repo_path(output_dir / "proof-board.png")},
         {
-            "meanColorDistance": sum(distances) / max(1, len(distances)),
+            "engineAuthority": "build/unify-corpus.py",
+            "engineAlgorithm": "Lab nearest + CIEDE2000 + dominant-hue + forbidden-chroma + shared defringe",
+            "engineSha256": sha256_file(ROOT / "build" / "unify-corpus.py"),
+            "defringeApplied": defringe_applied,
+            "meanCiede2000": mean_delta_e,
+            "p95Ciede2000": p95_delta_e,
+            "dominantHueBeforeDeg": before_hue,
+            "dominantHueAfterDeg": after_hue,
+            "dominantHueShiftDeg": hue_shift,
+            "forbiddenChromaPixelCount": forbidden_output,
             "valueRankAgreement": rank_agreement,
             "outputColorCount": len(output_colors),
             "chroma": chroma,
@@ -1602,35 +2498,80 @@ def compile_decal(manifest_path: Path, output_dir: Path, force: bool = False) ->
 
 # Sprite citizenship compiler ---------------------------------------------
 
+_CANONICAL_SPRITE_ENGINE = None
+
+
+def canonical_sprite_engine():
+    """Load the registry's standee contract so Assetforge remains an adapter, not a second schema."""
+    global _CANONICAL_SPRITE_ENGINE
+    if _CANONICAL_SPRITE_ENGINE is None:
+        engine_path = ROOT / "build" / "gen-sprite-registry.py"
+        spec = importlib.util.spec_from_file_location("assetforge_canonical_sprite_engine", engine_path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError(f"cannot load canonical sprite engine: {repo_path(engine_path)}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _CANONICAL_SPRITE_ENGINE = module
+    return _CANONICAL_SPRITE_ENGINE
+
+
 def compile_citizenship(manifest_path: Path, output_dir: Path, force: bool = False) -> dict[str, Any]:
     manifest = read_json(manifest_path)
     guarded_reset(output_dir, force)
     source_path = resolve_manifest_path(manifest_path, manifest["source"])
     source, chroma = key_manifest_image(Image.open(source_path), manifest)
+    engine = canonical_sprite_engine()
     box = alpha_bbox(source)
-    cropped = source.crop(box) if box else Image.new("RGBA", (1, 1), (0, 0, 0, 0))
-    padding = int(manifest.get("paddingPx", 3))
-    citizen = ImageOps.expand(cropped, border=padding, fill=(0, 0, 0, 0))
+    # Citizenship does not rewrite the sprite. The renderer already consumes contentBounds and
+    # foot anchors against the original canvas; cropping/padding here created a competing coordinate
+    # system and made this tool a second, subtly incompatible sprite pipeline.
+    citizen = transparent_rgb_clean(source)
     citizen.save(output_dir / "sprite.png")
     thumbnail = ImageOps.contain(citizen, (96, 96), Image.Resampling.NEAREST)
     thumbnail.save(output_dir / "thumbnail.png")
-    foot_x = 0.5
-    foot_y = 1.0
+    cut_record = None
     if box:
         alpha = source.getchannel("A")
         bottom_y = box[3] - 1
-        contacts = [x for x in range(box[0], box[2]) if alpha.getpixel((x, bottom_y)) > 12]
-        if contacts:
-            foot_x = ((min(contacts) + max(contacts)) / 2 - box[0]) / max(1, box[2] - box[0])
+        contacts = [x for x in range(box[0], box[2]) if alpha.getpixel((x, bottom_y)) > 0]
+        cut_record = {
+            "contentBounds": [
+                box[0] / source.width,
+                box[1] / source.height,
+                box[2] / source.width,
+                box[3] / source.height,
+            ],
+            "footContact": (
+                ((min(contacts) + max(contacts)) / 2) / source.width
+                if contacts
+                else ((box[0] + box[2]) / 2) / source.width
+            ),
+        }
+    authored_overlay = {
+        key: manifest[key]
+        for key in ("footX", "footY", "contentBounds")
+        if key in manifest
+    }
+    contract = engine.standee_contract_for(authored_overlay, cut_record)
+    world_height, height_source = engine.world_height_for(
+        manifest.get("worldHeightFeet"),
+        None,
+        manifest.get("size"),
+    )
     metadata = {
         "slug": manifest["slug"],
         "source": repo_path(source_path),
         "sourceSha256": sha256_file(source_path),
-        "contentBounds": list(box) if box else None,
-        "footX": foot_x,
-        "footY": foot_y,
-        "worldHeightFeet": manifest.get("worldHeightFeet"),
-        "alphaCutoff": 12,
+        **contract,
+        "worldHeight": world_height,
+        "heightSource": height_source,
+        "runtimeContract": {
+            "materialRecipe": "lit-standee-v2",
+            "colorSpace": "srgb",
+            "magnificationFilter": "nearest",
+            "minificationFilter": "trilinear-mipmap",
+            "alphaMode": "registry-cutoff+alpha-to-coverage",
+        },
     }
     write_json(output_dir / "citizenship.json", metadata)
     card = Image.new("RGBA", (180, 180), (54, 48, 42, 255))
@@ -1638,7 +2579,7 @@ def compile_citizenship(manifest_path: Path, output_dir: Path, force: bool = Fal
     draw.line((10, 150, 170, 150), fill=(220, 190, 126, 255), width=2)
     fit = ImageOps.contain(citizen, (130, 130), Image.Resampling.NEAREST)
     card.alpha_composite(fit, ((180 - fit.width) // 2, 150 - fit.height))
-    draw.text((8, 160), f"{manifest['slug']} · {manifest.get('worldHeightFeet')} ft", fill=(245, 238, 220), font=font())
+    draw.text((8, 160), f"{manifest['slug']} · {world_height} ft", fill=(245, 238, 220), font=font())
     card.save(output_dir / "fixed-camera-card.png")
     proof_board(
         "Sprite citizenship",
@@ -1651,8 +2592,12 @@ def compile_citizenship(manifest_path: Path, output_dir: Path, force: bool = Fal
         "sourceHashMatches": not manifest.get("sourceSha256") or sha256_file(source_path) == manifest["sourceSha256"],
         "opaqueContentPresent": box is not None,
         "sourceHasSafeBorder": box is not None and not bbox_touches_edge(source, box),
-        "worldHeightIsExplicit": isinstance(manifest.get("worldHeightFeet"), (int, float)) and manifest["worldHeightFeet"] > 0,
-        "footAnchorNormalized": 0 <= foot_x <= 1 and foot_y == 1.0,
+        "worldHeightResolved": isinstance(world_height, (int, float)) and world_height > 0,
+        "canonicalContractComplete": set(contract) == {
+            "footX", "footY", "contentBounds", "alphaCutoff", "shadowProfile"
+        },
+        "footAnchorNormalized": 0 <= contract["footX"] <= 1 and 0 <= contract["footY"] <= 1,
+        "sourceCanvasPreserved": citizen.size == source.size,
         "thumbnailGenerated": thumbnail.width > 0 and thumbnail.height > 0,
     }
     return finish_receipt(
@@ -1665,7 +2610,12 @@ def compile_citizenship(manifest_path: Path, output_dir: Path, force: bool = Fal
             "metadata": repo_path(output_dir / "citizenship.json"),
             "proofBoard": repo_path(output_dir / "proof-board.png"),
         },
-        {"chroma": chroma},
+        {
+            "engineAuthority": "build/gen-sprite-registry.py",
+            "rendererAuthority": "src/ui/theater-sprites.js",
+            "coordinateSystem": "original source canvas; normalized top-down anchors",
+            "chroma": chroma,
+        },
     )
 
 
@@ -2134,7 +3084,7 @@ def run_suite_self_test(
                 "sourceSha256": sha256_file(palette_source),
                 "palette": ["#705B43", "#455267", "#97774B", "#D6403D"],
                 "protectedColors": ["#D6403D"],
-                "maxMeanDistance": 1,
+                "maxMeanDeltaE": 0.01,
             }),
             manifest_file(output_root, "palette-negative-protected", {
                 "schemaVersion": 1,
@@ -2306,22 +3256,52 @@ def run_suite_self_test(
     return summary
 
 
-def write_boundary_manifest(path: Path, material: Path, tile_size: int = 64) -> dict[str, Any]:
-    payload = {
+def write_boundary_manifest(
+    path: Path,
+    material: Path,
+    tile_size: int = 64,
+    dialect: str = "enclosure",
+    outside_material: Path | None = None,
+) -> dict[str, Any]:
+    if dialect != "enclosure" and outside_material is None:
+        raise SystemExit(f"ERROR: --outside-material is required for boundary dialect '{dialect}'")
+    source = {"tile": repo_path(material), "sha256": sha256_file(material)}
+    outside = (
+        {"tile": repo_path(outside_material), "sha256": sha256_file(outside_material)}
+        if outside_material
+        else {"mode": "transparent"}
+    )
+    payload: dict[str, Any] = {
         "schemaVersion": 1,
         "family": "boundary-autotile",
-        "algorithmVersion": "boundary-blob47-v1",
-        "insideMaterial": {"tile": repo_path(material), "sha256": sha256_file(material)},
-        "outsideMaterial": {"mode": "transparent"},
+        "kind": dialect,
+        "algorithmVersion": (
+            "boundary-blob47-v1"
+            if dialect == "enclosure"
+            else f"boundary-{dialect}-{'eightway256' if dialect == 'path' else 'cardinal16'}-v1"
+        ),
+        "insideMaterial": source,
+        "outsideMaterial": outside,
+        "tileSizePx": tile_size,
+        "seed": 73129,
+        "admission": {"scope": "candidate-only"},
+    }
+    if dialect == "enclosure":
+        payload.update({
         "edgeLanguage": {
             "borderWidthPx": max(3, tile_size // 10),
             "orientationPolicy": "rotatable-organic",
             "phasePolicy": "world-locked",
         },
-        "tileSizePx": tile_size,
-        "seed": 73129,
-        "admission": {"scope": "candidate-only"},
-    }
+        })
+        payload.pop("kind")
+    elif dialect in {"path", "road"}:
+        payload.update({
+            "routeWidth": 0.31 if dialect == "path" else 0.61,
+            "shoulderWidth": 0.08 if dialect == "path" else 0.12,
+        })
+    else:
+        payload.update({"faceBandWidth": 0.17})
     write_json(path, payload)
     return payload
 
@@ -2345,8 +3325,14 @@ def register_parsers(families) -> None:
         )
         test_parser.add_argument("--force", action="store_true")
         if family == "boundary":
-            init_parser = actions.add_parser("init", help="write a boundary-blob47 manifest")
+            init_parser = actions.add_parser("init", help="write an enclosure/path/road/cliff manifest")
             init_parser.add_argument("material", type=Path)
+            init_parser.add_argument(
+                "--dialect",
+                choices=("enclosure", "path", "road", "cliff"),
+                default="enclosure",
+            )
+            init_parser.add_argument("--outside-material", type=Path)
             init_parser.add_argument("--output", type=Path, required=True)
             init_parser.add_argument("--tile-size", type=int, default=64)
             init_parser.add_argument("--force", action="store_true")
@@ -2367,7 +3353,13 @@ def dispatch(args) -> int | None:
     if args.action == "init" and args.family == "boundary":
         if args.output.exists() and not args.force:
             raise SystemExit(f"ERROR: output exists; use --force: {repo_path(args.output)}")
-        result = write_boundary_manifest(args.output, args.material, args.tile_size)
+        result = write_boundary_manifest(
+            args.output,
+            args.material,
+            args.tile_size,
+            args.dialect,
+            args.outside_material,
+        )
         print(json.dumps({"status": "OK", "manifest": repo_path(args.output), "job": result}, indent=2))
         return 0
     if args.action == "self-test":

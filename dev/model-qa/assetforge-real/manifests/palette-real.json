@@ -60,6 +60,6 @@
     "#27342a",
     "#49624f"
   ],
-  "maxMeanDistance": 90,
+  "maxMeanDeltaE": 18,
   "minimumRankAgreement": 0.72
 }

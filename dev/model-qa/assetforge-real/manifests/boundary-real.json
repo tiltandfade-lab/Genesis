@@ -5,17 +5,69 @@
     "admission": "candidate-only"
   },
   "family": "boundary-autotile",
-  "insideMaterial": {
-    "tile": "assets/textures/fantasy-floor-1.png",
-    "sha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b"
-  },
-  "edgeLanguage": {
-    "borderWidthPx": 7,
-    "orientationPolicy": "rotatable-organic",
-    "phasePolicy": "world-locked"
-  },
   "tileSizePx": 72,
   "seed": 73129,
-  "allowSeamLock": true,
-  "maxRepairableSourceEdgeDelta": 10
+  "dialects": [
+    {
+      "id": "architectural-enclosure",
+      "kind": "enclosure",
+      "insideMaterial": {
+        "tile": "assets/textures/fantasy-floor-1.png",
+        "sha256": "f427c445e6c7b8b1c5b7eccc2181d29d81d9619ff2a1a60e8a7093b62b30502b"
+      },
+      "edgeLanguage": {
+        "borderWidthPx": 7,
+        "orientationPolicy": "rotatable-organic",
+        "phasePolicy": "world-locked"
+      },
+      "tileSizePx": 72,
+      "allowSeamLock": true,
+      "maxRepairableSourceEdgeDelta": 10
+    },
+    {
+      "id": "wilderness-path",
+      "kind": "path",
+      "insideMaterial": {
+        "tile": "dev/material-lane/source-sprites/b03-exterior-ground-v001/worn-path-selected-v001.png",
+        "sha256": "3c6014aec5e7c87905d17b69f17fae53d5d0cc0a4f9388709adfdf5730e2c39e"
+      },
+      "outsideMaterial": {
+        "tile": "dev/material-lane/source-sprites/b03-exterior-ground-v001/grass-meadow-seamlocked-v001.png",
+        "sha256": "c22d88681938ce67b8def7ac3d230d408a047358314e4e0946cb1a17dfa5f1bc"
+      },
+      "tileSizePx": 72,
+      "routeWidth": 0.31,
+      "shoulderWidth": 0.08
+    },
+    {
+      "id": "wilderness-road",
+      "kind": "road",
+      "insideMaterial": {
+        "tile": "assets/textures-psx/polyhaven/cobblestone_02_diff_1k.jpg",
+        "sha256": "f94093b25b9512640c3fc82544975bdeaf47170d0fb494e2a30e78b7f011adcf"
+      },
+      "outsideMaterial": {
+        "tile": "dev/material-lane/source-sprites/b03-exterior-ground-v001/grass-meadow-seamlocked-v001.png",
+        "sha256": "c22d88681938ce67b8def7ac3d230d408a047358314e4e0946cb1a17dfa5f1bc"
+      },
+      "tileSizePx": 72,
+      "routeWidth": 0.61,
+      "shoulderWidth": 0.12
+    },
+    {
+      "id": "cliff-elevation",
+      "kind": "cliff",
+      "insideMaterial": {
+        "tile": "assets/textures-psx/polyhaven/rock_06_diff_1k.jpg",
+        "sha256": "0f9f0fc0438f99cdd9e33cfadc9ba01c527f74c1085fdac425e06e6a808a7736"
+      },
+      "outsideMaterial": {
+        "tile": "dev/material-lane/source-sprites/b03-exterior-ground-v001/gravel-scree-seamlocked-v001.png",
+        "sha256": "43bdb6efa8c3306692327137e1ec625e609b4b589bc5952b0fffd136a1b58f2b"
+      },
+      "tileSizePx": 72,
+      "faceBandWidth": 0.17,
+      "seed": 73129
+    }
+  ]
 }

@@ -4009,7 +4009,7 @@ function clayTerrainCellWorld(field, originCell, baseY, origin, index){
   );
 }
 
-function clayTerrainPlaceWitness(group, slug, position, label, failures){
+function clayTerrainPlaceWitness(group, slug, position, label, failures, contact){
   const note = function(why){ if(failures) failures.push({ slug: slug, label: label, why: why }); return null; };
   const entry = (typeof spriteEntryFor === "function") ? spriteEntryFor(slug) : null;
   if(!entry) return note("no sprite registry entry for " + slug);
@@ -4029,10 +4029,186 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures){
   figure.userData.standeeCollisionExcluded = true;
   figure.userData.interiorHeight = built.height;
   figure.userData.clayTerrainWitness = { slug: slug, label: label || null };
+  /* Record the ground this witness was placed ON and the gap it ended at, so "0 refusals" can be
+     checked against "0 levitations" rather than assumed. */
+  if(contact){
+    contact.push({ label: label || null, slug: slug,
+      groundY: Number(position.y.toFixed(4)),
+      standeeY: Number(figure.position.y.toFixed(4)),
+      gap: Number((figure.position.y - position.y).toFixed(4)) });
+  }
   figure.userData.sceneObjectId = "terrain-witness-" + (label || slug);
   group.add(figure);
   return { slug: slug, label: label || null, height: built.height,
     at: { x: position.x, y: position.y, z: position.z } };
+}
+
+/* HOST CHROME. The 15×15 host supplies the calibrated grid, camera, light and shadow receiver
+   exactly as CL-F01 uses it. Everything ELSE it carries is room furniture with nowhere to live on
+   an outdoor field: a door leaf with no wall reads as a dark slab floating in mid-air, and the two
+   diagnostic calibration bulbs — housing plus emitter, at ±4.24 either side of the room's centre
+   line, 1.7 units up — read as two objects hovering above the terrain. Matched on their OWN
+   userData markers, not on interiorKind: the door leaf and the fixture bodies carry no interiorKind
+   at all, which is exactly why the first pass (which only matched interiorKind) missed every one of
+   them. Visibility only — nothing is unmounted or destroyed, so the host bench is whole again the
+   moment another fixture is selected. */
+function clayTerrainSuppressHostChrome(){
+  const suppressed = { shell: 0, door: 0, fixture: 0, mote: 0, overlay: 0 };
+  const root = S.interiorGroup;
+  if(!root || !S.clayRoomRecord) return suppressed;
+  const portalId = S.clayRoomRecord.portal && S.clayRoomRecord.portal.id;
+  /* NEVER match anything the terrain bench itself built. This sweep runs a second time at the tail
+     of the rebuild — by which point clayRoomApplyDiagnosticSurfaces has tagged every routed surface
+     with clayRole/clayRoute, so a `clayRole` bucket matched all 564 terrain cells and hid the whole
+     field (overlay: 577). The matcher is now allow-listed against terrain ownership first and the
+     clayRole bucket is gone: it only ever caught one incidental host mesh, at a cost of being able
+     to erase the entire proof. */
+  const terrainGroup = S.clayRoomTerrainBenchGroup;
+  root.traverse(function(node){
+    const ud = node.userData || {};
+    if(ud.terrainCell || ud.terrainWater || ud.terrainVolume || ud.terrainSpan
+      || ud.clayTerrainWitness || ud.terrainSupportCell || ud.terrainRoute
+      || ud.clayTerrainBench) return;
+    if(terrainGroup){
+      let anc = node.parent, inTerrain = false;
+      while(anc){ if(anc === terrainGroup){ inTerrain = true; break; } anc = anc.parent; }
+      if(inTerrain) return;
+    }
+    const kind = ud.interiorKind;
+    let bucket = null;
+    if(kind === "room-shell-wall-upper" || kind === "room-shell-wall-trim"
+      || kind === "room-shell-wall-stem" || kind === "room-shell-floor"
+      || kind === "skirt" || kind === "portal") bucket = "shell";
+    else if(ud.isDoorLeaf || ud.doorLeaf || (portalId && ud.interactableId === portalId)) bucket = "door";
+    else if(ud.fixtureEmitter || ud.isLightEmitter) bucket = "fixture";
+    else if(ud.motePiece) bucket = "mote";
+    /* The C1A crate, by its diagnostic ROLE rather than by clayRole's mere presence — terrain
+       surfaces are routed as floor/riser, furniture is the host's own prop. Narrow on purpose:
+       matching clayRole at all is what erased the field. */
+    else if(ud.clayRole === "furniture") bucket = "overlay";
+    if(!bucket || node.visible === false) return;
+    node.visible = false;
+    node.userData.clayTerrainHostSuppressed = bucket;
+    suppressed[bucket]++;
+  });
+  /* A fixture BODY is an unmarked sibling of its emitter inside the practical's own group, and the
+     flicker driver WRITES `visible` on those bodies every frame — so hiding them loses the same
+     race the camera-tracking lights lose. DETACH the whole practical group instead, remembering
+     its parent and index so the restore puts it back exactly where it was. */
+  const practicals = [];
+  root.traverse(function(node){
+    if(!(node.userData && node.userData.fixtureEmitter)) return;
+    const par = node.parent;
+    if(!par || par === root || !par.parent) return;
+    if(practicals.indexOf(par) >= 0) return;
+    /* ONLY the emitter's immediate parent, and only if that subtree is purely a practical. Walking
+       three ancestors up detached a shared group and took the entire terrain field off the scene
+       with it — the sheet came back as an empty rectangle with a few standees in it. A detach must
+       be provably surgical before it is allowed to happen. */
+    let holdsOther = false;
+    par.traverse(function(child){
+      const cd = child.userData || {};
+      if(cd.terrainCell || cd.terrainWater || cd.terrainVolume || cd.terrainSpan
+        || cd.clayTerrainWitness || cd.terrainSupportCell || cd.terrainRoute
+        || cd.interiorKind === "room-shell-floor") holdsOther = true;
+    });
+    if(holdsOther) return;
+    practicals.push(par);
+  });
+  S.clayRoomTerrainDetachedPracticals = S.clayRoomTerrainDetachedPracticals || [];
+  practicals.forEach(function(group){
+    const parent = group.parent;
+    if(!parent) return;
+    const index = parent.children.indexOf(group);
+    S.clayRoomTerrainDetachedPracticals.push({ group: group, parent: parent, index: index });
+    parent.remove(group);
+  });
+  /* Report the CUMULATIVE state, not this pass's delta. The sweep runs twice per rebuild and the
+     second pass skips what the first already hid, so a delta reads as "0 suppressed" on a frame
+     where the door and both fixtures are in fact gone — a receipt that says nothing was suppressed
+     while the suppression is working is worse than no receipt. */
+  const total = { shell: 0, door: 0, fixture: 0, mote: 0, overlay: 0 };
+  root.traverse(function(node){
+    const b = node.userData && node.userData.clayTerrainHostSuppressed;
+    if(b && total[b] != null) total[b]++;
+  });
+  total.fixture += (S.clayRoomTerrainDetachedPracticals || []).length;
+  total.detachedPracticals = (S.clayRoomTerrainDetachedPracticals || []).length;
+  return total;
+}
+
+/* WHY THE FIRST DARK CAPTURE WAS NOT DARK. The clay recipe owns S.ambientLight and S.pointLights
+   and reasserts both — the dark profile's authored 0.25 ambient WAS applied, and the receipt's
+   recipe id was honest. But setInteriorBoard's own base rig ALSO hangs lights on the scene that
+   clayRoomApplyLightProfile never touches: a 4.5-intensity AmbientLight, an 18-intensity
+   sprite-camera fill SpotLight, an interior camera key, and three small base lights. In a 15×15
+   room the shell hides most of that rig; the terrain bench suppresses the shell, so it fell on the
+   field unopposed and washed the dark case to pale grey.
+   Zeroing intensity alone is not enough — the camera-tracking fills have their intensity re-driven
+   every frame, so a one-shot zero is overwritten before the capture. `visible` is not on that
+   driver's path. Every original is remembered on the light itself, so nothing is destroyed and a
+   fixture switch restores it. */
+function clayTerrainNeutralizeForeignLights(){
+  const out = [];
+  let root = S.scene;
+  if(!root && S.interiorGroup){ root = S.interiorGroup; while(root.parent) root = root.parent; }
+  if(!root) return out;
+  root.traverse(function(node){
+    if(!node.isLight) return;
+    if(node.userData && node.userData.clayLightId) return;
+    if(!node.userData.clayTerrainForeignLight){
+      node.userData.clayTerrainForeignLight = {
+        type: node.type,
+        role: node.userData.spriteCameraFill ? "sprite-camera-fill"
+          : (node.userData.interiorCameraKey ? "interior-camera-key" : "base-rig"),
+        originalIntensity: Number(node.intensity) || 0,
+        originalVisible: node.visible !== false,
+        color: node.color ? node.color.getHexString() : null
+      };
+    }
+    node.intensity = 0;
+    node.visible = false;
+    out.push(node.userData.clayTerrainForeignLight);
+  });
+  return out;
+}
+
+/* Put every detached practical back exactly where it was, so selecting another Clayroom fixture
+   finds its own bench intact. */
+function clayTerrainRestoreHostChrome(){
+  const held = S.clayRoomTerrainDetachedPracticals || [];
+  held.forEach(function(entry){
+    if(!entry.group || !entry.parent) return;
+    if(entry.group.parent) return;
+    entry.parent.add(entry.group);
+  });
+  S.clayRoomTerrainDetachedPracticals = [];
+  let restored = 0;
+  if(S.interiorGroup){
+    S.interiorGroup.traverse(function(node){
+      if(!(node.userData && node.userData.clayTerrainHostSuppressed)) return;
+      node.visible = true;
+      delete node.userData.clayTerrainHostSuppressed;
+      restored++;
+    });
+  }
+  return restored + held.length;
+}
+
+function clayTerrainRestoreForeignLights(){
+  let root = S.scene;
+  if(!root && S.interiorGroup){ root = S.interiorGroup; while(root.parent) root = root.parent; }
+  if(!root) return 0;
+  let restored = 0;
+  root.traverse(function(node){
+    const rec = node.userData && node.userData.clayTerrainForeignLight;
+    if(!rec) return;
+    node.intensity = rec.originalIntensity;
+    node.visible = rec.originalVisible !== false;
+    delete node.userData.clayTerrainForeignLight;
+    restored++;
+  });
+  return restored;
 }
 
 function clayRoomMountTerrainBench(){
@@ -4072,18 +4248,25 @@ function clayRoomMountTerrainBench(){
     return null;
   }
 
-  /* The 15x15 host supplies the calibrated grid, camera, light and shadow receiver, exactly as
-     CL-F01 uses it. Its perimeter uppers are not specimens and would enclose an outdoor field in
-     a room, so the same suppression the structure bench applies is applied here. */
-  S.interiorGroup.traverse(function(node){
-    const kind = node.userData && node.userData.interiorKind;
-    if(kind === "room-shell-wall-upper" || kind === "room-shell-wall-trim"
-      || kind === "room-shell-wall-stem" || kind === "room-shell-floor"
-      || kind === "skirt" || kind === "portal"){
-      node.visible = false;
-      node.userData.clayTerrainHostSuppressed = true;
-    }
-  });
+  const hostSuppressed = clayTerrainSuppressHostChrome();
+
+  /* THE SCENE'S OWN LIGHT CASE. Declared in the fixture data and asserted here, so every rebuild
+     reasserts it — a one-shot call from a capture rig is silently lost to the next board replay,
+     and "requested dark" then ships as a receipt field with a pale frame beside it. */
+  const requestedLightRecipe = (typeof terrainBenchSceneLightRecipe === "function")
+    ? terrainBenchSceneLightRecipe(sceneId) : null;
+  if(requestedLightRecipe && S.clayRoomLightRecipeId !== requestedLightRecipe){
+    clayRoomSetLightingRecipe(requestedLightRecipe, "cl-f07-scene-light-case");
+  }
+  /* SCOPED TO SCENES THAT DECLARE A LIGHT CASE. Neutralising the base rig in EVERY scene was an
+     overcorrection that had to be caught in the frames: the theater rig is what lights the clay in
+     the first place, so removing it everywhere left the terrain unlit and the sheet came back as an
+     empty brown rectangle with a few emissive standees floating in it. Only a scene that declares
+     its own light case (scene 7) may take the rig down — for every other scene the rig stays and is
+     restored if a previous scene took it. */
+  const foreignLights = requestedLightRecipe
+    ? clayTerrainNeutralizeForeignLights()
+    : (clayTerrainRestoreForeignLights(), []);
 
   const group = new THREE.Group();
   group.name = CL_F07_TERRAIN_BENCH.id + ":" + sceneId;
@@ -4103,6 +4286,7 @@ function clayRoomMountTerrainBench(){
   const built = [];
   const witnesses = [];
   const witnessFailures = [];
+  const witnessContact = [];
   fields.forEach(function(field, index){
     const originCell = { x: cursorX, z: room.y + 7 - field.extent.y / 2 };
     const fieldBuild = clayTerrainBuildFieldGroup(field, originCell, baseY, origin, {
@@ -4124,7 +4308,8 @@ function clayRoomMountTerrainBench(){
         if(!cell || !cell.standable) return;
         const placed = clayTerrainPlaceWitness(fieldBuild.group,
           CL_F07_TERRAIN_BENCH.witnessSlug,
-          clayTerrainCellWorld(field, originCell, baseY, origin, wIdx), piece.id, witnessFailures);
+          clayTerrainCellWorld(field, originCell, baseY, origin, wIdx), piece.id,
+          witnessFailures, witnessContact);
         if(placed) witnesses.push(Object.assign({ piece: piece.id }, placed));
       });
     } else {
@@ -4142,7 +4327,7 @@ function clayRoomMountTerrainBench(){
           const placed = clayTerrainPlaceWitness(fieldBuild.group,
             pIdx === 0 ? CL_F07_TERRAIN_BENCH.witnessSlug : env.slug,
             clayTerrainCellWorld(field, originCell, baseY, origin, pick.cell.index),
-            field.id + ":" + pick.label, witnessFailures);
+            field.id + ":" + pick.label, witnessFailures, witnessContact);
           if(placed) witnesses.push(Object.assign({ datum: pick.label, fieldId: field.id }, placed));
         });
       }
@@ -4227,6 +4412,7 @@ function clayRoomMountTerrainBench(){
 
   S.interiorGroup.add(group);
   S.clayRoomTerrainBenchGroup = group;
+  S.clayRoomTerrainForeignRestorePending = true;
 
   /* The governed zoom is fitted to the FIELD, not to the 15x15 host room: a 24x24 bench sheet or
      six 12x16 boundary frames in a row do not fit a room-sized frame, and a cropped proof frame is
@@ -4254,8 +4440,10 @@ function clayRoomMountTerrainBench(){
     view: S.clayRoomTerrainView || "production",
     fitZoom: fitZoom,
     strategicDistanceClamped: S.clayRoomStrategicDistanceClamped || null,
-    hostSuppressed: ["room-shell-floor", "room-shell-wall-stem", "room-shell-wall-upper",
-      "room-shell-wall-trim", "skirt", "portal"],
+    requestedLightRecipe: requestedLightRecipe,
+    appliedLightRecipe: S.clayRoomLightRecipeId
+      || (S.clayRoomCompiled && S.clayRoomCompiled.lightRecipeId) || null,
+    lightRecipeDrift: !!(requestedLightRecipe && S.clayRoomLightRecipeId !== requestedLightRecipe),
     gridLaw: TERRAIN_GRID_LAW,
     fields: built.map(function(b){
       return {
@@ -4271,6 +4459,11 @@ function clayRoomMountTerrainBench(){
     }),
     witnesses: witnesses,
     witnessFailures: witnessFailures,
+    witnessContact: witnessContact,
+    witnessMaxGap: witnessContact.length
+      ? Number(Math.max.apply(null, witnessContact.map(function(c){ return c.gap; })).toFixed(4)) : null,
+    hostSuppressed: hostSuppressed,
+    foreignLightsNeutralized: foreignLights,
     oneClamp: scene.proof || null,
     route: scene.route ? {
       sourceRow: scene.route.sourceRow, namedEntries: scene.route.namedEntries,
@@ -5026,6 +5219,24 @@ function clayRoomAfterInteriorBoardRebuild(){
   clayRoomSuppressLightingBenchNoise();
   clayRoomApplyDiagnosticSurfaces();
   clayRoomApplyLightProfile(S.clayRoomRecord);
+  /* AFTER the light profile, never before. applyLightProfile is where the theater's key rig is
+     (re)hung AND where the diagnostic practicals are rebuilt, so a terrain frame swept at mount
+     time is always one step behind both. Restores the moment any other fixture is selected, so
+     this costs the other five benches nothing. */
+  if(S.clayRoomFixtureId === CLAY_ROOM_TERRAIN_BENCH_ID){
+    const declaresLightCase = !!(S.clayRoomTerrainReport
+      && S.clayRoomTerrainReport.requestedLightRecipe);
+    const lateLights = declaresLightCase ? clayTerrainNeutralizeForeignLights() : [];
+    const lateChrome = clayTerrainSuppressHostChrome();
+    if(S.clayRoomTerrainReport){
+      S.clayRoomTerrainReport.foreignLightsNeutralized = lateLights;
+      S.clayRoomTerrainReport.hostSuppressed = lateChrome;
+    }
+  } else if(S.clayRoomTerrainForeignRestorePending){
+    clayTerrainRestoreForeignLights();
+    clayTerrainRestoreHostChrome();
+    S.clayRoomTerrainForeignRestorePending = false;
+  }
   clayRoomApplyMoodLayer();
   clayRoomBuildLightOverlays();
   clayRoomDisposeSeamGrid();

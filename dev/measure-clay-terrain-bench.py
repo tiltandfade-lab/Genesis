@@ -28,7 +28,11 @@ from PIL import Image
 
 BACKGROUND_TOLERANCE = 6          # chroma spread under which a pixel counts as flat backdrop
 MIN_CONTENT_PCT = 2.0             # a frame with less than this much non-backdrop rendered nothing
-MIN_EDGE_PCT = 1.5                # below this the frame holds no geometry, only a flat/graded fill
+MIN_EDGE_PCT = 1.5                # on the fixed 200x200 grid an empty region measures 0.00% and a
+                                  # frame with modelled form measures 4.5-6% — a 3x margin either way
+MIN_LUMA_SPREAD = 12.0            # p95-p05: a frame with no modelled form is luma-flat
+WITNESS_MAX_GAP = 0.2             # world units between a standee's foot and the ground it stands on
+DARK_MAX_P95_LUMA = 110.0         # the dark case must actually be dark, not merely labelled dark
 VIEWPORT_CROP = (0.20, 0.05, 0.74, 0.98)   # the canvas column, excluding the docked side panels
 
 
@@ -39,7 +43,12 @@ def frame_stats(path):
     x0, y0, x1, y1 = VIEWPORT_CROP
     box = (int(w * x0), int(h * y0), int(w * x1), int(h * y1))
     crop = img.crop(box)
-    crop = crop.resize((max(1, crop.width // 4), max(1, crop.height // 4)))
+    # FIXED sampling grid, not a //4 divide. Dividing a 1400px-wide crop by 4 leaves 350px of
+    # smooth fog gradient whose neighbouring pixels differ by ~1 luma step each — enough of them
+    # cross a 6-luma threshold to fake ~2% "edges" on a frame with nothing in it, which is how an
+    # empty rectangle scored 2.06 against a 3.0 floor. Resampling to a fixed 200x200 collapses the
+    # gradient (an empty region measures 0.00%) while modelled form still measures 4.5-6%.
+    crop = crop.resize((200, 200))
     px = list(crop.getdata())
     n = len(px)
 
@@ -171,6 +180,11 @@ def measure(capture_dir):
             if f["edgePct"] < MIN_EDGE_PCT:
                 fail("%s: %s frame holds no geometry, only a flat or graded fill "
                      "(edgePct=%.2f)" % (label_of(cap), role, f["edgePct"]))
+            spread = f["p95Luma"] - f["p05Luma"]
+            f["lumaSpread"] = round(spread, 2)
+            if spread < MIN_LUMA_SPREAD:
+                fail("%s: %s frame is luma-flat (p95-p05 = %.1f) — the terrain is unlit or "
+                     "absent, whatever else is in the frame" % (label_of(cap), role, spread))
         if production and strategic:
             # A pair that is identical is not a pair — the strategic pitch never applied.
             same = abs(production["contentPct"] - strategic["contentPct"]) < 0.01 \
@@ -179,6 +193,30 @@ def measure(capture_dir):
             if same:
                 fail(cap["sceneId"] + ": production and strategic frames are identical "
                      "(the 72-degree pitch did not apply)")
+        # --- the three capture-side defects, now measured on every set --------------------
+        max_gap = terrain.get("witnessMaxGap")
+        scene["witnessMaxGap"] = max_gap
+        if max_gap is not None and max_gap > WITNESS_MAX_GAP:
+            fail("%s: a witness is airborne (max gap %.3f > %.3f) — 0 refusals must also "
+                 "mean 0 levitations" % (label_of(cap), max_gap, WITNESS_MAX_GAP))
+
+        requested = terrain.get("requestedLightRecipe")
+        applied = terrain.get("appliedLightRecipe")
+        scene["requestedLightRecipe"] = requested
+        scene["appliedLightRecipe"] = applied
+        if requested and applied != requested:
+            fail("%s: light recipe drift — requested %r, applied %r"
+                 % (label_of(cap), requested, applied))
+        if terrain.get("lightRecipeDrift"):
+            fail("%s: the renderer reported light-recipe drift" % label_of(cap))
+
+        host = terrain.get("hostSuppressed") or {}
+        scene["hostSuppressed"] = host
+        scene["foreignLightsNeutralized"] = len(terrain.get("foreignLightsNeutralized") or [])
+        if not host:
+            fail("%s: no host-chrome suppression recorded — room furniture may be in frame"
+                 % label_of(cap))
+
         if scene["witnessFailures"]:
             fail(cap["sceneId"] + ": %d witness standees refused" % scene["witnessFailures"])
         if cap["sceneId"] in ("thirteen-piece-sheet", "dark") and scene["witnesses"] == 0:
@@ -222,6 +260,23 @@ def measure(capture_dir):
     if gate.get("maxWalkableSlopeDeg") is not None and gate["maxWalkableSlopeDeg"] > 30:
         fail("gate: max walkable slope %s deg exceeds 30" % gate["maxWalkableSlopeDeg"])
 
+    # The dark case has to be dark in the PIXELS. Labelling a pale frame "dark" is precisely the
+    # defect this gate exists for.
+    dark = next((s for s in report["scenes"] if s["sceneId"] == "dark"), None)
+    if dark:
+        f = next((fr for fr in dark["frames"] if "settled-production" in fr["file"]), None)
+        if f:
+            dark["p95Luma"] = f["p95Luma"]
+            if f["p95Luma"] > DARK_MAX_P95_LUMA:
+                fail("dark: the frame is not dark (p95 luma %.1f > %.1f)"
+                     % (f["p95Luma"], DARK_MAX_P95_LUMA))
+        lit = next((s for s in report["scenes"] if s["sceneId"] == "thirteen-piece-sheet"), None)
+        if lit and f:
+            lf = next((fr for fr in lit["frames"] if "settled-production" in fr["file"]), None)
+            if lf and f["p95Luma"] >= lf["p95Luma"]:
+                fail("dark: the dark frame is not darker than the lit sheet "
+                     "(p95 %.1f vs %.1f)" % (f["p95Luma"], lf["p95Luma"]))
+
     det = index.get("determinism") or {}
     report["determinism"] = det
     if det.get("result") != "PASS":
@@ -245,10 +300,11 @@ def main():
     print("  scenes measured: %d" % report["scenesMeasured"])
     for s in report["scenes"]:
         print("  %d %-26s built=%s fields=%d cells=%4d standable=%4d witnesses=%2d "
-              "prodEdge=%5.2f%% stratEdge=%5.2f%%"
+              "prodEdge=%5.2f%% stratEdge=%5.2f%% gap=%s light=%s"
               % (s["capture"], s.get("label") or s["sceneId"], s["built"], s["fieldCount"],
                  s["cellMeshes"], s["standableCells"], s["witnesses"],
-                 s["productionEdgePct"] or 0.0, s["strategicEdgePct"] or 0.0))
+                 s["productionEdgePct"] or 0.0, s["strategicEdgePct"] or 0.0,
+                 s.get("witnessMaxGap"), s.get("appliedLightRecipe") or "-"))
     print("  determinism: %s (%s fields, %s page loads)"
           % (report["determinism"].get("result"),
              report["determinism"].get("fieldsCompared"),

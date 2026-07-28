@@ -32,14 +32,9 @@
       "view": "production",
       "fitZoom": 2.048,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": "dark",
+      "appliedLightRecipe": "dark",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -531,6 +526,145 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "R1-01",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3175,
+          "standeeY": -0.2215,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-02",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.2005,
+          "standeeY": 0.2965,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-03",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 1.2076,
+          "standeeY": 1.3036,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-04",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3167,
+          "standeeY": -0.2207,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-05",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2993,
+          "standeeY": -0.2033,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-06",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2941,
+          "standeeY": -0.1981,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-08",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2705,
+          "standeeY": -0.1745,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-09",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.7113,
+          "standeeY": 0.8073,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-10",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3228,
+          "standeeY": -0.2268,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-11",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2713,
+          "standeeY": -0.1753,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-12",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3298,
+          "standeeY": -0.2338,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-13",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2904,
+          "standeeY": -0.1944,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [
+        {
+          "type": "DirectionalLight",
+          "role": "base-rig",
+          "originalIntensity": 0.05,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "DirectionalLight",
+          "role": "base-rig",
+          "originalIntensity": 0.02,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "HemisphereLight",
+          "role": "base-rig",
+          "originalIntensity": 0.08,
+          "originalVisible": true,
+          "color": "fff1dc"
+        },
+        {
+          "type": "AmbientLight",
+          "role": "base-rig",
+          "originalIntensity": 4.5,
+          "originalVisible": true,
+          "color": "9fb4d8"
+        },
+        {
+          "type": "DirectionalLight",
+          "role": "interior-camera-key",
+          "originalIntensity": 0.1,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "SpotLight",
+          "role": "sprite-camera-fill",
+          "originalIntensity": 9.061298118022393,
+          "originalVisible": true,
+          "color": "fff2df"
+        }
+      ],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -1216,7 +1350,7 @@
           "group": "moteGroup",
           "pos": [
             1.102,
-            0.417,
+            0.424,
             -1.192
           ],
           "size": [
@@ -1237,7 +1371,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.23,
+            1.24,
             0.269
           ],
           "size": [
@@ -1258,7 +1392,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.028,
+            0.042,
             0.691
           ],
           "size": [
@@ -1279,7 +1413,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.507,
+            1.519,
             0.111
           ],
           "size": [
@@ -1300,7 +1434,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            0.63,
+            0.642,
             -0.102
           ],
           "size": [
@@ -1321,7 +1455,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.309,
+            1.323,
             0.104
           ],
           "size": [
@@ -1342,7 +1476,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            0.799,
+            0.812,
             -1.283
           ],
           "size": [
@@ -1363,7 +1497,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            0.894,
+            0.908,
             2.252
           ],
           "size": [
@@ -14248,14 +14382,9 @@
       "view": "production",
       "fitZoom": 2.048,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": "dark",
+      "appliedLightRecipe": "dark",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -14747,6 +14876,145 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "R1-01",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3175,
+          "standeeY": -0.2215,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-02",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.2005,
+          "standeeY": 0.2965,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-03",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 1.2076,
+          "standeeY": 1.3036,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-04",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3167,
+          "standeeY": -0.2207,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-05",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2993,
+          "standeeY": -0.2033,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-06",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2941,
+          "standeeY": -0.1981,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-08",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2705,
+          "standeeY": -0.1745,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-09",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.7113,
+          "standeeY": 0.8073,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-10",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3228,
+          "standeeY": -0.2268,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-11",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2713,
+          "standeeY": -0.1753,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-12",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3298,
+          "standeeY": -0.2338,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-13",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2904,
+          "standeeY": -0.1944,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [
+        {
+          "type": "DirectionalLight",
+          "role": "base-rig",
+          "originalIntensity": 0.05,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "DirectionalLight",
+          "role": "base-rig",
+          "originalIntensity": 0.02,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "HemisphereLight",
+          "role": "base-rig",
+          "originalIntensity": 0.08,
+          "originalVisible": true,
+          "color": "fff1dc"
+        },
+        {
+          "type": "AmbientLight",
+          "role": "base-rig",
+          "originalIntensity": 4.5,
+          "originalVisible": true,
+          "color": "9fb4d8"
+        },
+        {
+          "type": "DirectionalLight",
+          "role": "interior-camera-key",
+          "originalIntensity": 0.1,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "SpotLight",
+          "role": "sprite-camera-fill",
+          "originalIntensity": 9.061298118022393,
+          "originalVisible": true,
+          "color": "fff2df"
+        }
+      ],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -15432,7 +15700,7 @@
           "group": "moteGroup",
           "pos": [
             1.102,
-            0.638,
+            0.645,
             -1.192
           ],
           "size": [
@@ -15453,7 +15721,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.54,
+            1.55,
             0.269
           ],
           "size": [
@@ -15474,7 +15742,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.447,
+            0.46,
             0.691
           ],
           "size": [
@@ -15495,7 +15763,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.882,
+            1.893,
             0.111
           ],
           "size": [
@@ -15516,7 +15784,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            1.012,
+            1.024,
             -0.102
           ],
           "size": [
@@ -15537,7 +15805,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.755,
+            1.769,
             0.104
           ],
           "size": [
@@ -15558,7 +15826,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            1.221,
+            1.234,
             -1.283
           ],
           "size": [
@@ -15579,7 +15847,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.345,
+            1.359,
             2.252
           ],
           "size": [
@@ -28464,14 +28732,9 @@
       "view": "production",
       "fitZoom": 2.048,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": "dark",
+      "appliedLightRecipe": "dark",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -28963,6 +29226,145 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "R1-01",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3175,
+          "standeeY": -0.2215,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-02",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.2005,
+          "standeeY": 0.2965,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-03",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 1.2076,
+          "standeeY": 1.3036,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-04",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3167,
+          "standeeY": -0.2207,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-05",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2993,
+          "standeeY": -0.2033,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-06",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2941,
+          "standeeY": -0.1981,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-08",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2705,
+          "standeeY": -0.1745,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-09",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.7113,
+          "standeeY": 0.8073,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-10",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3228,
+          "standeeY": -0.2268,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-11",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2713,
+          "standeeY": -0.1753,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-12",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3298,
+          "standeeY": -0.2338,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-13",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2904,
+          "standeeY": -0.1944,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [
+        {
+          "type": "DirectionalLight",
+          "role": "base-rig",
+          "originalIntensity": 0.05,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "DirectionalLight",
+          "role": "base-rig",
+          "originalIntensity": 0.02,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "HemisphereLight",
+          "role": "base-rig",
+          "originalIntensity": 0.08,
+          "originalVisible": true,
+          "color": "fff1dc"
+        },
+        {
+          "type": "AmbientLight",
+          "role": "base-rig",
+          "originalIntensity": 4.5,
+          "originalVisible": true,
+          "color": "9fb4d8"
+        },
+        {
+          "type": "DirectionalLight",
+          "role": "interior-camera-key",
+          "originalIntensity": 0.1,
+          "originalVisible": true,
+          "color": "ffffff"
+        },
+        {
+          "type": "SpotLight",
+          "role": "sprite-camera-fill",
+          "originalIntensity": 9.061298118022393,
+          "originalVisible": true,
+          "color": "fff2df"
+        }
+      ],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -29648,7 +30050,7 @@
           "group": "moteGroup",
           "pos": [
             1.102,
-            0.695,
+            0.704,
             -1.192
           ],
           "size": [
@@ -29669,7 +30071,7 @@
           "group": "moteGroup",
           "pos": [
             -0.982,
-            1.621,
+            1.633,
             0.269
           ],
           "size": [
@@ -29690,7 +30092,7 @@
           "group": "moteGroup",
           "pos": [
             -1.403,
-            0.555,
+            0.573,
             0.691
           ],
           "size": [
@@ -29711,7 +30113,7 @@
           "group": "moteGroup",
           "pos": [
             -0.402,
-            1.979,
+            1.994,
             0.111
           ],
           "size": [
@@ -29732,7 +30134,7 @@
           "group": "moteGroup",
           "pos": [
             -0.064,
-            1.112,
+            1.127,
             -0.102
           ],
           "size": [
@@ -29753,7 +30155,7 @@
           "group": "moteGroup",
           "pos": [
             -0.512,
-            1.87,
+            1.889,
             0.104
           ],
           "size": [
@@ -29774,7 +30176,7 @@
           "group": "moteGroup",
           "pos": [
             0.546,
-            1.33,
+            1.347,
             -1.283
           ],
           "size": [
@@ -29795,7 +30197,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.462,
+            1.48,
             2.252
           ],
           "size": [

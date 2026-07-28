@@ -398,6 +398,48 @@ guard("15. renderer boundary", () => {
 });
 
 // ============================================================================
+// 17. The three capture-side defects, gated so they cannot come back
+// ============================================================================
+console.log("17. frame hygiene (regressions found in the first capture packet)");
+guard("17. frame hygiene", () => {
+  /* 17a — the light case is fixture DATA, not a capture-rig argument. The first dark capture
+     rendered pale because the rig's one-shot call was the only thing asserting it. */
+  check("17a. the dark scene declares its light recipe in the fixture data",
+    W.terrainBenchSceneLightRecipe("dark") === "dark"
+    && W.terrainBenchSceneLightRecipe("thirteen-piece-sheet") === null,
+    String(W.terrainBenchSceneLightRecipe("dark")));
+
+  const src = read("src/ui/theater-clay-room.js");
+  const start = src.indexOf("CL-F07 TERRAIN BENCH");
+  const end = src.indexOf("function clayRoomSuppressLightingBenchNoise");
+  const region = start >= 0 && end > start ? src.slice(start, end) : "";
+
+  /* 17b — the recipe the receipt names must be the recipe that lit the frame. */
+  check("17b. the receipt records APPLIED as well as requested light recipe",
+    region.length > 2000 && /appliedLightRecipe/.test(region) && /lightRecipeDrift/.test(region));
+
+  /* 17c — the base rig the clay recipe does not own must be neutralised, and by VISIBILITY too:
+     the camera-tracking fills have their intensity re-driven every frame. */
+  check("17c. foreign scene lights are neutralised by visibility, not intensity alone",
+    /clayTerrainNeutralizeForeignLights/.test(region)
+    && /node\.visible = false/.test(region)
+    && /originalIntensity/.test(region) && /originalVisible/.test(region));
+
+  /* 17d — host room furniture is DETACHED, because the flicker driver writes `visible` on the
+     fixture bodies every frame and a hide loses that race. */
+  check("17d. host practicals are detached (not merely hidden) and restorable",
+    /clayTerrainSuppressHostChrome/.test(region)
+    && /clayTerrainRestoreHostChrome/.test(src)
+    && /parent\.remove\(group\)/.test(region)
+    && /isDoorLeaf/.test(region));
+
+  /* 17e — every witness records the ground it stands on, so "0 refusals" is checkable against
+     "0 levitations" instead of assumed. */
+  check("17e. witness placement records ground contact",
+    /witnessContact/.test(region) && /witnessMaxGap/.test(region) && /groundY/.test(region));
+});
+
+// ============================================================================
 // 16. Manifest
 // ============================================================================
 console.log("16. manifest");

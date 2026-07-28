@@ -45,14 +45,9 @@
       "view": "production",
       "fitZoom": 1.3653333333333333,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -138,6 +133,25 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "cl-f07a-boundary-sheer-cliff:foot",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.288,
+          "standeeY": -0.192,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -776,132 +790,6 @@
           "instanceColorNeutralized": true
         },
         {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
           "role": "furniture",
           "route": "diagnostic-clay",
           "group": "interiorGroup",
@@ -949,7 +837,7 @@
           "group": "moteGroup",
           "pos": [
             5.342,
-            0.413,
+            0.41,
             -1.192
           ],
           "size": [
@@ -970,7 +858,7 @@
           "group": "moteGroup",
           "pos": [
             3.258,
-            1.225,
+            1.221,
             0.269
           ],
           "size": [
@@ -991,7 +879,7 @@
           "group": "moteGroup",
           "pos": [
             -5.643,
-            0.021,
+            0.016,
             0.691
           ],
           "size": [
@@ -1012,7 +900,7 @@
           "group": "moteGroup",
           "pos": [
             -4.642,
-            1.501,
+            1.496,
             0.111
           ],
           "size": [
@@ -1033,7 +921,7 @@
           "group": "moteGroup",
           "pos": [
             -4.304,
-            0.623,
+            0.618,
             -0.102
           ],
           "size": [
@@ -1054,7 +942,7 @@
           "group": "moteGroup",
           "pos": [
             -4.752,
-            1.301,
+            1.295,
             0.104
           ],
           "size": [
@@ -1075,7 +963,7 @@
           "group": "moteGroup",
           "pos": [
             4.786,
-            0.792,
+            0.786,
             -1.283
           ],
           "size": [
@@ -1096,7 +984,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            0.886,
+            0.88,
             2.252
           ],
           "size": [
@@ -5436,14 +5324,9 @@
       "view": "production",
       "fitZoom": 1.3653333333333333,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -5529,6 +5412,25 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "cl-f07a-boundary-sheer-cliff:foot",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.288,
+          "standeeY": -0.192,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -6167,132 +6069,6 @@
           "instanceColorNeutralized": true
         },
         {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
           "role": "furniture",
           "route": "diagnostic-clay",
           "group": "interiorGroup",
@@ -6340,7 +6116,7 @@
           "group": "moteGroup",
           "pos": [
             5.342,
-            0.622,
+            0.627,
             -1.192
           ],
           "size": [
@@ -6361,7 +6137,7 @@
           "group": "moteGroup",
           "pos": [
             3.258,
-            1.519,
+            1.525,
             0.269
           ],
           "size": [
@@ -6382,7 +6158,7 @@
           "group": "moteGroup",
           "pos": [
             -5.643,
-            0.418,
+            0.426,
             0.691
           ],
           "size": [
@@ -6403,7 +6179,7 @@
           "group": "moteGroup",
           "pos": [
             -4.642,
-            1.856,
+            1.863,
             0.111
           ],
           "size": [
@@ -6424,7 +6200,7 @@
           "group": "moteGroup",
           "pos": [
             -4.304,
-            0.986,
+            0.993,
             -0.102
           ],
           "size": [
@@ -6445,7 +6221,7 @@
           "group": "moteGroup",
           "pos": [
             -4.752,
-            1.724,
+            1.732,
             0.104
           ],
           "size": [
@@ -6466,7 +6242,7 @@
           "group": "moteGroup",
           "pos": [
             4.786,
-            1.191,
+            1.199,
             -1.283
           ],
           "size": [
@@ -6487,7 +6263,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.313,
+            1.322,
             2.252
           ],
           "size": [
@@ -10827,14 +10603,9 @@
       "view": "production",
       "fitZoom": 1.3653333333333333,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -10920,6 +10691,25 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "cl-f07a-boundary-sheer-cliff:foot",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.288,
+          "standeeY": -0.192,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -11558,132 +11348,6 @@
           "instanceColorNeutralized": true
         },
         {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
           "role": "furniture",
           "route": "diagnostic-clay",
           "group": "interiorGroup",
@@ -11731,7 +11395,7 @@
           "group": "moteGroup",
           "pos": [
             5.342,
-            0.685,
+            0.689,
             -1.192
           ],
           "size": [
@@ -11752,7 +11416,7 @@
           "group": "moteGroup",
           "pos": [
             3.258,
-            1.606,
+            1.612,
             0.269
           ],
           "size": [
@@ -11773,7 +11437,7 @@
           "group": "moteGroup",
           "pos": [
             -5.643,
-            0.536,
+            0.544,
             0.691
           ],
           "size": [
@@ -11794,7 +11458,7 @@
           "group": "moteGroup",
           "pos": [
             -4.642,
-            1.961,
+            1.969,
             0.111
           ],
           "size": [
@@ -11815,7 +11479,7 @@
           "group": "moteGroup",
           "pos": [
             -4.304,
-            1.094,
+            1.101,
             -0.102
           ],
           "size": [
@@ -11836,7 +11500,7 @@
           "group": "moteGroup",
           "pos": [
             -4.752,
-            1.85,
+            1.858,
             0.104
           ],
           "size": [
@@ -11857,7 +11521,7 @@
           "group": "moteGroup",
           "pos": [
             4.786,
-            1.31,
+            1.319,
             -1.283
           ],
           "size": [
@@ -11878,7 +11542,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.441,
+            1.45,
             2.252
           ],
           "size": [

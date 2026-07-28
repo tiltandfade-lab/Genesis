@@ -40,7 +40,7 @@ var CL_F07_TERRAIN_BENCH = Object.freeze({
       claim: "the 16-cell tray asked for a chasm it cannot hold walks down and records degradedFrom" }),
     Object.freeze({ id: "support-graph", capture: 6, label: "The support-graph proof",
       claim: "the CL-R3 traversability grid projected; zero standable surfaces unreachable without flight" }),
-    Object.freeze({ id: "dark", capture: 7, label: "Dark",
+    Object.freeze({ id: "dark", capture: 7, label: "Dark", lightRecipeId: "dark",
       claim: "terrain in darkness — the edge must stay findable by something diegetic" })
   ]),
   /* The census median arrival: 60'x80' = 12x16 cells = 192. The sheet needs the 80'x80' maximum
@@ -67,6 +67,14 @@ var CL_F07_TERRAIN_BENCH = Object.freeze({
     footing: "wilderness-footing d200 Coverage Area column"
   })
 });
+
+/* The light case a scene declares. Scene 7 is the §4.2 "all rungs" hostile case: darkness may be
+   dark, but the edge must still be findable. Declaring it here means the mount reasserts it on
+   every rebuild instead of trusting a one-shot call from a capture rig. */
+function terrainBenchSceneLightRecipe(sceneId){
+  var scene = CL_F07_TERRAIN_BENCH.scenes.filter(function(s){ return s.id === sceneId; })[0];
+  return (scene && scene.lightRecipeId) || null;
+}
 
 /* Thirteen bays over the 16x16 maximum tray. Each piece is built in its own 4x4 local bay and
    translated — the same piece, moved, which is what a chassis makes possible. */

@@ -32,14 +32,9 @@
       "view": "production",
       "fitZoom": 2.048,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -531,6 +526,102 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "R1-01",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3175,
+          "standeeY": -0.2215,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-02",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.2005,
+          "standeeY": 0.2965,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-03",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 1.2076,
+          "standeeY": 1.3036,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-04",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3167,
+          "standeeY": -0.2207,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-05",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2993,
+          "standeeY": -0.2033,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-06",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2941,
+          "standeeY": -0.1981,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-08",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2705,
+          "standeeY": -0.1745,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-09",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.7113,
+          "standeeY": 0.8073,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-10",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3228,
+          "standeeY": -0.2268,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-11",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2713,
+          "standeeY": -0.1753,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-12",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3298,
+          "standeeY": -0.2338,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-13",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2904,
+          "standeeY": -0.1944,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -1169,132 +1260,6 @@
           "instanceColorNeutralized": true
         },
         {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
           "role": "furniture",
           "route": "diagnostic-clay",
           "group": "interiorGroup",
@@ -1342,7 +1307,7 @@
           "group": "moteGroup",
           "pos": [
             5.342,
-            0.399,
+            0.409,
             -1.192
           ],
           "size": [
@@ -1363,7 +1328,7 @@
           "group": "moteGroup",
           "pos": [
             3.258,
-            1.205,
+            1.219,
             0.269
           ],
           "size": [
@@ -1384,7 +1349,7 @@
           "group": "moteGroup",
           "pos": [
             -5.643,
-            -0.005,
+            0.014,
             0.691
           ],
           "size": [
@@ -1405,7 +1370,7 @@
           "group": "moteGroup",
           "pos": [
             -4.642,
-            1.477,
+            1.494,
             0.111
           ],
           "size": [
@@ -1426,7 +1391,7 @@
           "group": "moteGroup",
           "pos": [
             -4.304,
-            0.599,
+            0.616,
             -0.102
           ],
           "size": [
@@ -1447,7 +1412,7 @@
           "group": "moteGroup",
           "pos": [
             -4.752,
-            1.273,
+            1.293,
             0.104
           ],
           "size": [
@@ -1468,7 +1433,7 @@
           "group": "moteGroup",
           "pos": [
             4.786,
-            0.765,
+            0.784,
             -1.283
           ],
           "size": [
@@ -1489,7 +1454,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            0.858,
+            0.878,
             2.252
           ],
           "size": [
@@ -14426,14 +14391,9 @@
       "view": "production",
       "fitZoom": 2.048,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -14925,6 +14885,102 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "R1-01",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3175,
+          "standeeY": -0.2215,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-02",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.2005,
+          "standeeY": 0.2965,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-03",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 1.2076,
+          "standeeY": 1.3036,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-04",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3167,
+          "standeeY": -0.2207,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-05",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2993,
+          "standeeY": -0.2033,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-06",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2941,
+          "standeeY": -0.1981,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-08",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2705,
+          "standeeY": -0.1745,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-09",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.7113,
+          "standeeY": 0.8073,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-10",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3228,
+          "standeeY": -0.2268,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-11",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2713,
+          "standeeY": -0.1753,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-12",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3298,
+          "standeeY": -0.2338,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-13",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2904,
+          "standeeY": -0.1944,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -15563,132 +15619,6 @@
           "instanceColorNeutralized": true
         },
         {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
           "role": "furniture",
           "route": "diagnostic-clay",
           "group": "interiorGroup",
@@ -15736,7 +15666,7 @@
           "group": "moteGroup",
           "pos": [
             5.342,
-            0.526,
+            0.626,
             -1.192
           ],
           "size": [
@@ -15757,7 +15687,7 @@
           "group": "moteGroup",
           "pos": [
             3.258,
-            1.384,
+            1.524,
             0.269
           ],
           "size": [
@@ -15778,7 +15708,7 @@
           "group": "moteGroup",
           "pos": [
             -5.643,
-            0.235,
+            0.425,
             0.691
           ],
           "size": [
@@ -15799,7 +15729,7 @@
           "group": "moteGroup",
           "pos": [
             -4.642,
-            1.692,
+            1.862,
             0.111
           ],
           "size": [
@@ -15820,7 +15750,7 @@
           "group": "moteGroup",
           "pos": [
             -4.304,
-            0.819,
+            0.993,
             -0.102
           ],
           "size": [
@@ -15841,7 +15771,7 @@
           "group": "moteGroup",
           "pos": [
             -4.752,
-            1.529,
+            1.732,
             0.104
           ],
           "size": [
@@ -15862,7 +15792,7 @@
           "group": "moteGroup",
           "pos": [
             4.786,
-            1.007,
+            1.199,
             -1.283
           ],
           "size": [
@@ -15883,7 +15813,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.117,
+            1.322,
             2.252
           ],
           "size": [
@@ -28820,14 +28750,9 @@
       "view": "production",
       "fitZoom": 2.048,
       "strategicDistanceClamped": null,
-      "hostSuppressed": [
-        "room-shell-floor",
-        "room-shell-wall-stem",
-        "room-shell-wall-upper",
-        "room-shell-wall-trim",
-        "skirt",
-        "portal"
-      ],
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "lightRecipeDrift": false,
       "gridLaw": {
         "cellFeet": 5,
         "cellWorldUnits": 1,
@@ -29319,6 +29244,102 @@
         }
       ],
       "witnessFailures": [],
+      "witnessContact": [
+        {
+          "label": "R1-01",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3175,
+          "standeeY": -0.2215,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-02",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.2005,
+          "standeeY": 0.2965,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-03",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 1.2076,
+          "standeeY": 1.3036,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-04",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3167,
+          "standeeY": -0.2207,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-05",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2993,
+          "standeeY": -0.2033,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-06",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2941,
+          "standeeY": -0.1981,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-08",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2705,
+          "standeeY": -0.1745,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-09",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": 0.7113,
+          "standeeY": 0.8073,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-10",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3228,
+          "standeeY": -0.2268,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-11",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2713,
+          "standeeY": -0.1753,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-12",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.3298,
+          "standeeY": -0.2338,
+          "gap": 0.096
+        },
+        {
+          "label": "R1-13",
+          "slug": "spr-pc-human-fighter-female",
+          "groundY": -0.2904,
+          "standeeY": -0.1944,
+          "gap": 0.096
+        }
+      ],
+      "witnessMaxGap": 0.096,
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": [],
       "oneClamp": null,
       "route": null,
       "walkDown": null,
@@ -29957,132 +29978,6 @@
           "instanceColorNeutralized": true
         },
         {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            -4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.712,
-            0.05
-          ],
-          "size": [
-            0.045,
-            0.045,
-            0.102
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.727,
-            0.12
-          ],
-          "size": [
-            0.086,
-            0.09,
-            0.074
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#33302a",
-          "instanceColorNeutralized": false
-        },
-        {
-          "role": "emitter",
-          "route": "passthrough",
-          "group": "interiorGroup",
-          "pos": [
-            4.24,
-            1.73,
-            0.12
-          ],
-          "size": [
-            0.095,
-            0.1,
-            0.082
-          ],
-          "rotY": 0,
-          "builder": "unattributed",
-          "instances": 1,
-          "textured": false,
-          "colorHex": "#000000",
-          "instanceColorNeutralized": false
-        },
-        {
           "role": "furniture",
           "route": "diagnostic-clay",
           "group": "interiorGroup",
@@ -30130,7 +30025,7 @@
           "group": "moteGroup",
           "pos": [
             5.342,
-            0.568,
+            0.676,
             -1.192
           ],
           "size": [
@@ -30151,7 +30046,7 @@
           "group": "moteGroup",
           "pos": [
             3.258,
-            1.442,
+            1.594,
             0.269
           ],
           "size": [
@@ -30172,7 +30067,7 @@
           "group": "moteGroup",
           "pos": [
             -5.643,
-            0.315,
+            0.52,
             0.691
           ],
           "size": [
@@ -30193,7 +30088,7 @@
           "group": "moteGroup",
           "pos": [
             -4.642,
-            1.763,
+            1.947,
             0.111
           ],
           "size": [
@@ -30214,7 +30109,7 @@
           "group": "moteGroup",
           "pos": [
             -4.304,
-            0.891,
+            1.079,
             -0.102
           ],
           "size": [
@@ -30235,7 +30130,7 @@
           "group": "moteGroup",
           "pos": [
             -4.752,
-            1.614,
+            1.832,
             0.104
           ],
           "size": [
@@ -30256,7 +30151,7 @@
           "group": "moteGroup",
           "pos": [
             4.786,
-            1.087,
+            1.294,
             -1.283
           ],
           "size": [
@@ -30277,7 +30172,7 @@
           "group": "moteGroup",
           "pos": [
             -0.634,
-            1.202,
+            1.423,
             2.252
           ],
           "size": [

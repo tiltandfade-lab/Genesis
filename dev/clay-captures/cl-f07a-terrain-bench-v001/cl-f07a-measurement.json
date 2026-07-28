@@ -18,70 +18,84 @@
       "frames": [
         {
           "file": "01-thirteen-piece-sheet-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 51.339,
-          "edgePct": 4.304,
-          "meanLuma": 101.09,
+          "contentPct": 51.822,
+          "edgePct": 5.172,
+          "meanLuma": 99.21,
           "p05Luma": 25.35,
           "p50Luma": 117.39,
           "p95Luma": 119.61
         },
         {
           "file": "01-thirteen-piece-sheet-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 51.339,
-          "edgePct": 4.307,
-          "meanLuma": 101.09,
+          "contentPct": 51.822,
+          "edgePct": 5.172,
+          "meanLuma": 99.21,
           "p05Luma": 25.35,
           "p50Luma": 117.39,
-          "p95Luma": 119.61
+          "p95Luma": 119.61,
+          "lumaSpread": 94.26
         },
         {
           "file": "01-thirteen-piece-sheet-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
-            32,
+            31,
             29,
             27
           ],
-          "contentPct": 80.53,
-          "edgePct": 8.321,
-          "meanLuma": 74.93,
-          "p05Luma": 24.08,
-          "p50Luma": 81.61,
-          "p95Luma": 119.61
+          "contentPct": 59.58,
+          "edgePct": 7.315,
+          "meanLuma": 66.47,
+          "p05Luma": 22.86,
+          "p50Luma": 29.28,
+          "p95Luma": 118.61,
+          "lumaSpread": 95.75
         },
         {
           "file": "01-thirteen-piece-sheet-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 51.206,
-          "edgePct": 3.79,
-          "meanLuma": 100.29,
-          "p05Luma": 19.94,
+          "contentPct": 51.472,
+          "edgePct": 3.597,
+          "meanLuma": 98.4,
+          "p05Luma": 16.44,
           "p50Luma": 117.39,
           "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 51.339,
-      "strategicContentPct": 80.53,
-      "productionEdgePct": 4.307,
-      "strategicEdgePct": 8.321,
+      "productionContentPct": 51.822,
+      "strategicContentPct": 59.58,
+      "productionEdgePct": 5.172,
+      "strategicEdgePct": 7.315,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -102,70 +116,84 @@
       "frames": [
         {
           "file": "02-one-clamp-proof-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 46.364,
-          "edgePct": 4.153,
-          "meanLuma": 104.91,
-          "p05Luma": 25.43,
+          "contentPct": 46.69,
+          "edgePct": 5.138,
+          "meanLuma": 103.73,
+          "p05Luma": 25.35,
           "p50Luma": 117.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         },
         {
           "file": "02-one-clamp-proof-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 46.364,
-          "edgePct": 4.155,
-          "meanLuma": 104.91,
-          "p05Luma": 25.43,
+          "contentPct": 46.69,
+          "edgePct": 5.138,
+          "meanLuma": 103.73,
+          "p05Luma": 25.35,
           "p50Luma": 117.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 94.26
         },
         {
           "file": "02-one-clamp-proof-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 51.945,
-          "edgePct": 5.163,
-          "meanLuma": 100.56,
-          "p05Luma": 24.57,
-          "p50Luma": 117.39,
-          "p95Luma": 119.82
+          "contentPct": 52.4,
+          "edgePct": 6.516,
+          "meanLuma": 98.62,
+          "p05Luma": 24.35,
+          "p50Luma": 117.32,
+          "p95Luma": 119.61,
+          "lumaSpread": 95.26
         },
         {
           "file": "02-one-clamp-proof-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 46.242,
-          "edgePct": 3.64,
-          "meanLuma": 104.12,
-          "p05Luma": 19.35,
+          "contentPct": 46.33,
+          "edgePct": 3.563,
+          "meanLuma": 102.91,
+          "p05Luma": 16.44,
           "p50Luma": 117.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 46.364,
-      "strategicContentPct": 51.945,
-      "productionEdgePct": 4.155,
-      "strategicEdgePct": 5.163,
+      "productionContentPct": 46.69,
+      "strategicContentPct": 52.4,
+      "productionEdgePct": 5.138,
+      "strategicEdgePct": 6.516,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -186,70 +214,84 @@
       "frames": [
         {
           "file": "03-boundary-sheet-f0-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 57.355,
-          "edgePct": 4.345,
-          "meanLuma": 95.51,
-          "p05Luma": 25.35,
+          "contentPct": 57.71,
+          "edgePct": 5.638,
+          "meanLuma": 93.49,
+          "p05Luma": 25.14,
           "p50Luma": 116.39,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         },
         {
           "file": "03-boundary-sheet-f0-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 57.355,
-          "edgePct": 4.346,
-          "meanLuma": 95.51,
-          "p05Luma": 25.35,
+          "contentPct": 57.71,
+          "edgePct": 5.638,
+          "meanLuma": 93.49,
+          "p05Luma": 25.14,
           "p50Luma": 116.39,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 94.47
         },
         {
           "file": "03-boundary-sheet-f0-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 63.772,
-          "edgePct": 5.262,
-          "meanLuma": 94.32,
-          "p05Luma": 25.64,
-          "p50Luma": 115.39,
-          "p95Luma": 119.82
+          "contentPct": 64.22,
+          "edgePct": 5.608,
+          "meanLuma": 87.84,
+          "p05Luma": 25.35,
+          "p50Luma": 114.61,
+          "p95Luma": 119.61,
+          "lumaSpread": 94.26
         },
         {
           "file": "03-boundary-sheet-f0-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 57.233,
-          "edgePct": 3.831,
-          "meanLuma": 94.72,
-          "p05Luma": 17.14,
+          "contentPct": 57.36,
+          "edgePct": 4.065,
+          "meanLuma": 92.7,
+          "p05Luma": 16.37,
           "p50Luma": 116.39,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 57.355,
-      "strategicContentPct": 63.772,
-      "productionEdgePct": 4.346,
-      "strategicEdgePct": 5.262,
+      "productionContentPct": 57.71,
+      "strategicContentPct": 64.22,
+      "productionEdgePct": 5.638,
+      "strategicEdgePct": 5.608,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -270,70 +312,84 @@
       "frames": [
         {
           "file": "03-boundary-sheet-f1-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.659,
-          "edgePct": 4.194,
-          "meanLuma": 98.82,
+          "contentPct": 54.773,
+          "edgePct": 5.275,
+          "meanLuma": 96.25,
           "p05Luma": 25.35,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         },
         {
           "file": "03-boundary-sheet-f1-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.66,
-          "edgePct": 4.195,
-          "meanLuma": 98.82,
+          "contentPct": 54.773,
+          "edgePct": 5.275,
+          "meanLuma": 96.25,
           "p05Luma": 25.35,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 94.26
         },
         {
           "file": "03-boundary-sheet-f1-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 63.183,
-          "edgePct": 5.298,
-          "meanLuma": 95.43,
-          "p05Luma": 26.35,
-          "p50Luma": 115.39,
-          "p95Luma": 119.82
+          "contentPct": 63.648,
+          "edgePct": 5.612,
+          "meanLuma": 88.42,
+          "p05Luma": 25.35,
+          "p50Luma": 114.68,
+          "p95Luma": 119.61,
+          "lumaSpread": 94.26
         },
         {
           "file": "03-boundary-sheet-f1-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.539,
-          "edgePct": 3.685,
-          "meanLuma": 98.03,
-          "p05Luma": 18.35,
+          "contentPct": 54.422,
+          "edgePct": 3.7,
+          "meanLuma": 95.45,
+          "p05Luma": 16.44,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 54.66,
-      "strategicContentPct": 63.183,
-      "productionEdgePct": 4.195,
-      "strategicEdgePct": 5.298,
+      "productionContentPct": 54.773,
+      "strategicContentPct": 63.648,
+      "productionEdgePct": 5.275,
+      "strategicEdgePct": 5.612,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -354,70 +410,84 @@
       "frames": [
         {
           "file": "03-boundary-sheet-f2-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 53.718,
-          "edgePct": 4.573,
-          "meanLuma": 104.16,
-          "p05Luma": 25.64,
-          "p50Luma": 117.32,
-          "p95Luma": 119.82
+          "contentPct": 53.8,
+          "edgePct": 4.656,
+          "meanLuma": 97.3,
+          "p05Luma": 25.36,
+          "p50Luma": 116.61,
+          "p95Luma": 119.61
         },
         {
           "file": "03-boundary-sheet-f2-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 53.719,
-          "edgePct": 4.578,
-          "meanLuma": 104.16,
-          "p05Luma": 25.64,
-          "p50Luma": 117.32,
-          "p95Luma": 119.82
+          "contentPct": 53.8,
+          "edgePct": 4.656,
+          "meanLuma": 97.3,
+          "p05Luma": 25.36,
+          "p50Luma": 116.61,
+          "p95Luma": 119.61,
+          "lumaSpread": 94.25
         },
         {
           "file": "03-boundary-sheet-f2-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
-            135,
-            116,
-            110
+            31,
+            29,
+            27
           ],
-          "contentPct": 63.021,
-          "edgePct": 5.15,
-          "meanLuma": 100.88,
-          "p05Luma": 29.78,
-          "p50Luma": 115.61,
-          "p95Luma": 119.82
+          "contentPct": 75.237,
+          "edgePct": 5.09,
+          "meanLuma": 88.74,
+          "p05Luma": 28.28,
+          "p50Luma": 114.68,
+          "p95Luma": 119.61,
+          "lumaSpread": 91.33
         },
         {
           "file": "03-boundary-sheet-f2-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 53.598,
-          "edgePct": 4.063,
-          "meanLuma": 103.37,
-          "p05Luma": 21.01,
-          "p50Luma": 117.32,
-          "p95Luma": 119.82
+          "contentPct": 53.45,
+          "edgePct": 3.083,
+          "meanLuma": 96.5,
+          "p05Luma": 20.35,
+          "p50Luma": 116.61,
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 53.719,
-      "strategicContentPct": 63.021,
-      "productionEdgePct": 4.578,
-      "strategicEdgePct": 5.15,
+      "productionContentPct": 53.8,
+      "strategicContentPct": 75.237,
+      "productionEdgePct": 4.656,
+      "strategicEdgePct": 5.09,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -438,70 +508,84 @@
       "frames": [
         {
           "file": "03-boundary-sheet-f3-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.419,
-          "edgePct": 4.946,
-          "meanLuma": 98.93,
-          "p05Luma": 20.29,
+          "contentPct": 54.523,
+          "edgePct": 5.942,
+          "meanLuma": 95.35,
+          "p05Luma": 10.5,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         },
         {
           "file": "03-boundary-sheet-f3-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.421,
-          "edgePct": 4.951,
-          "meanLuma": 98.93,
-          "p05Luma": 20.29,
+          "contentPct": 54.523,
+          "edgePct": 5.942,
+          "meanLuma": 95.35,
+          "p05Luma": 10.5,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 109.11
         },
         {
           "file": "03-boundary-sheet-f3-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 63.172,
-          "edgePct": 6.281,
-          "meanLuma": 95.53,
-          "p05Luma": 20.86,
-          "p50Luma": 115.39,
-          "p95Luma": 119.82
+          "contentPct": 63.612,
+          "edgePct": 6.755,
+          "meanLuma": 87.32,
+          "p05Luma": 10.5,
+          "p50Luma": 114.68,
+          "p95Luma": 119.61,
+          "lumaSpread": 109.11
         },
         {
           "file": "03-boundary-sheet-f3-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.299,
-          "edgePct": 4.432,
-          "meanLuma": 98.14,
-          "p05Luma": 12.58,
+          "contentPct": 54.172,
+          "edgePct": 4.368,
+          "meanLuma": 94.56,
+          "p05Luma": 9.57,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 54.421,
-      "strategicContentPct": 63.172,
-      "productionEdgePct": 4.951,
-      "strategicEdgePct": 6.281,
+      "productionContentPct": 54.523,
+      "strategicContentPct": 63.612,
+      "productionEdgePct": 5.942,
+      "strategicEdgePct": 6.755,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -522,70 +606,84 @@
       "frames": [
         {
           "file": "03-boundary-sheet-f4-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.721,
-          "edgePct": 5.951,
-          "meanLuma": 99.2,
-          "p05Luma": 20.29,
+          "contentPct": 54.903,
+          "edgePct": 6.446,
+          "meanLuma": 95.29,
+          "p05Luma": 12.2,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         },
         {
           "file": "03-boundary-sheet-f4-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.722,
-          "edgePct": 5.954,
-          "meanLuma": 99.2,
-          "p05Luma": 20.29,
+          "contentPct": 54.903,
+          "edgePct": 6.446,
+          "meanLuma": 95.29,
+          "p05Luma": 12.2,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 107.41
         },
         {
           "file": "03-boundary-sheet-f4-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 63.137,
-          "edgePct": 6.682,
-          "meanLuma": 96.77,
-          "p05Luma": 22.72,
-          "p50Luma": 115.39,
-          "p95Luma": 119.82
+          "contentPct": 63.59,
+          "edgePct": 6.779,
+          "meanLuma": 87.74,
+          "p05Luma": 20.29,
+          "p50Luma": 114.68,
+          "p95Luma": 119.61,
+          "lumaSpread": 99.32
         },
         {
           "file": "03-boundary-sheet-f4-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.601,
-          "edgePct": 5.441,
-          "meanLuma": 98.41,
-          "p05Luma": 12.58,
+          "contentPct": 54.553,
+          "edgePct": 4.873,
+          "meanLuma": 94.49,
+          "p05Luma": 9.42,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 54.722,
-      "strategicContentPct": 63.137,
-      "productionEdgePct": 5.954,
-      "strategicEdgePct": 6.682,
+      "productionContentPct": 54.903,
+      "strategicContentPct": 63.59,
+      "productionEdgePct": 6.446,
+      "strategicEdgePct": 6.779,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -606,70 +704,84 @@
       "frames": [
         {
           "file": "03-boundary-sheet-f5-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.292,
-          "edgePct": 4.949,
-          "meanLuma": 104.13,
+          "contentPct": 54.352,
+          "edgePct": 5.247,
+          "meanLuma": 97.78,
           "p05Luma": 25.72,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         },
         {
           "file": "03-boundary-sheet-f5-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.293,
-          "edgePct": 4.955,
-          "meanLuma": 104.13,
+          "contentPct": 54.352,
+          "edgePct": 5.247,
+          "meanLuma": 97.78,
           "p05Luma": 25.72,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 93.89
         },
         {
           "file": "03-boundary-sheet-f5-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 63.144,
-          "edgePct": 5.569,
-          "meanLuma": 101.08,
-          "p05Luma": 32.43,
-          "p50Luma": 115.61,
-          "p95Luma": 119.82
+          "contentPct": 63.57,
+          "edgePct": 5.719,
+          "meanLuma": 89.27,
+          "p05Luma": 28.28,
+          "p50Luma": 114.68,
+          "p95Luma": 119.61,
+          "lumaSpread": 91.33
         },
         {
           "file": "03-boundary-sheet-f5-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.173,
-          "edgePct": 4.436,
-          "meanLuma": 103.34,
-          "p05Luma": 21.01,
+          "contentPct": 54.002,
+          "edgePct": 3.673,
+          "meanLuma": 96.98,
+          "p05Luma": 20.43,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 54.293,
-      "strategicContentPct": 63.144,
-      "productionEdgePct": 4.955,
-      "strategicEdgePct": 5.569,
+      "productionContentPct": 54.352,
+      "strategicContentPct": 63.57,
+      "productionEdgePct": 5.247,
+      "strategicEdgePct": 5.719,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -690,70 +802,84 @@
       "frames": [
         {
           "file": "04-route-proof-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.381,
-          "edgePct": 4.839,
-          "meanLuma": 99.31,
-          "p05Luma": 25.35,
+          "contentPct": 54.447,
+          "edgePct": 6.176,
+          "meanLuma": 97.03,
+          "p05Luma": 25.29,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         },
         {
           "file": "04-route-proof-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.381,
-          "edgePct": 4.838,
-          "meanLuma": 99.31,
-          "p05Luma": 25.35,
+          "contentPct": 54.447,
+          "edgePct": 6.176,
+          "meanLuma": 97.03,
+          "p05Luma": 25.29,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 94.32
         },
         {
           "file": "04-route-proof-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 62.913,
-          "edgePct": 6.736,
-          "meanLuma": 95.53,
-          "p05Luma": 25.72,
+          "contentPct": 63.365,
+          "edgePct": 7.168,
+          "meanLuma": 89.27,
+          "p05Luma": 25.28,
           "p50Luma": 115.39,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 94.33
         },
         {
           "file": "04-route-proof-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.259,
-          "edgePct": 4.325,
-          "meanLuma": 98.52,
-          "p05Luma": 18.35,
+          "contentPct": 54.093,
+          "edgePct": 4.601,
+          "meanLuma": 96.23,
+          "p05Luma": 16.37,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 54.381,
-      "strategicContentPct": 62.913,
-      "productionEdgePct": 4.838,
-      "strategicEdgePct": 6.736,
+      "productionContentPct": 54.447,
+      "strategicContentPct": 63.365,
+      "productionEdgePct": 6.176,
+      "strategicEdgePct": 7.168,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -774,70 +900,84 @@
       "frames": [
         {
           "file": "05-walk-down-16-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
-            136,
-            116,
-            110
+            27,
+            25,
+            24
           ],
-          "contentPct": 74.372,
-          "edgePct": 5.093,
-          "meanLuma": 88.47,
-          "p05Luma": 24.35,
-          "p50Luma": 108.25,
-          "p95Luma": 120.53
+          "contentPct": 70.84,
+          "edgePct": 5.592,
+          "meanLuma": 74.81,
+          "p05Luma": 24.28,
+          "p50Luma": 106.47,
+          "p95Luma": 119.61
         },
         {
           "file": "05-walk-down-16-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
-            136,
-            116,
-            110
+            27,
+            25,
+            24
           ],
-          "contentPct": 74.377,
-          "edgePct": 5.09,
-          "meanLuma": 88.47,
-          "p05Luma": 24.35,
-          "p50Luma": 108.24,
-          "p95Luma": 120.53
+          "contentPct": 70.84,
+          "edgePct": 5.592,
+          "meanLuma": 74.81,
+          "p05Luma": 24.28,
+          "p50Luma": 106.47,
+          "p95Luma": 119.61,
+          "lumaSpread": 95.33
         },
         {
           "file": "05-walk-down-16-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
-            136,
+            135,
             116,
             110
           ],
-          "contentPct": 61.481,
-          "edgePct": 4.481,
-          "meanLuma": 101.29,
-          "p05Luma": 25.43,
-          "p50Luma": 116.47,
-          "p95Luma": 120.53
+          "contentPct": 58.98,
+          "edgePct": 6.083,
+          "meanLuma": 92.87,
+          "p05Luma": 25.35,
+          "p50Luma": 116.39,
+          "p95Luma": 119.61,
+          "lumaSpread": 94.26
         },
         {
           "file": "05-walk-down-16-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
-            136,
-            116,
-            110
+            27,
+            25,
+            24
           ],
-          "contentPct": 74.28,
-          "edgePct": 4.567,
-          "meanLuma": 87.66,
-          "p05Luma": 20.01,
-          "p50Luma": 109.18,
-          "p95Luma": 120.53
+          "contentPct": 70.843,
+          "edgePct": 4.018,
+          "meanLuma": 74.02,
+          "p05Luma": 16.23,
+          "p50Luma": 108.18,
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 74.377,
-      "strategicContentPct": 61.481,
-      "productionEdgePct": 5.09,
-      "strategicEdgePct": 4.481,
+      "productionContentPct": 70.84,
+      "strategicContentPct": 58.98,
+      "productionEdgePct": 5.592,
+      "strategicEdgePct": 6.083,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -858,70 +998,84 @@
       "frames": [
         {
           "file": "06-support-graph-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.382,
-          "edgePct": 6.151,
-          "meanLuma": 99.37,
+          "contentPct": 54.447,
+          "edgePct": 8.412,
+          "meanLuma": 97.14,
           "p05Luma": 25.35,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         },
         {
           "file": "06-support-graph-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.381,
-          "edgePct": 6.151,
-          "meanLuma": 99.37,
+          "contentPct": 54.447,
+          "edgePct": 8.412,
+          "meanLuma": 97.14,
           "p05Luma": 25.35,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61,
+          "lumaSpread": 94.26
         },
         {
           "file": "06-support-graph-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 62.912,
-          "edgePct": 8.428,
-          "meanLuma": 95.63,
-          "p05Luma": 26.35,
-          "p50Luma": 115.39,
-          "p95Luma": 119.82
+          "contentPct": 63.365,
+          "edgePct": 11.152,
+          "meanLuma": 89.5,
+          "p05Luma": 25.35,
+          "p50Luma": 115.18,
+          "p95Luma": 119.61,
+          "lumaSpread": 94.26
         },
         {
           "file": "06-support-graph-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             135,
             116,
             110
           ],
-          "contentPct": 54.26,
-          "edgePct": 5.637,
-          "meanLuma": 98.58,
-          "p05Luma": 18.92,
+          "contentPct": 54.097,
+          "edgePct": 6.837,
+          "meanLuma": 96.34,
+          "p05Luma": 16.44,
           "p50Luma": 116.61,
-          "p95Luma": 119.82
+          "p95Luma": 119.61
         }
       ],
-      "productionContentPct": 54.381,
-      "strategicContentPct": 62.912,
-      "productionEdgePct": 6.151,
-      "strategicEdgePct": 8.428,
+      "productionContentPct": 54.447,
+      "strategicContentPct": 63.365,
+      "productionEdgePct": 8.412,
+      "strategicEdgePct": 11.152,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": null,
+      "appliedLightRecipe": "clay-opposing-pair",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 0,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
@@ -942,74 +1096,89 @@
       "frames": [
         {
           "file": "07-dark-01-early-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             87,
             80,
             88
           ],
-          "contentPct": 49.647,
-          "edgePct": 3.334,
-          "meanLuma": 83.75,
-          "p05Luma": 57.93,
-          "p50Luma": 81.07,
-          "p95Luma": 127.53
+          "contentPct": 50.27,
+          "edgePct": 4.266,
+          "meanLuma": 66.41,
+          "p05Luma": 6.8,
+          "p50Luma": 80.07,
+          "p95Luma": 82.07
         },
         {
           "file": "07-dark-02-settled-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             87,
             80,
             88
           ],
-          "contentPct": 49.649,
-          "edgePct": 3.334,
-          "meanLuma": 83.75,
-          "p05Luma": 57.93,
-          "p50Luma": 81.07,
-          "p95Luma": 127.53
+          "contentPct": 50.27,
+          "edgePct": 4.266,
+          "meanLuma": 66.41,
+          "p05Luma": 6.8,
+          "p50Luma": 80.07,
+          "p95Luma": 82.07,
+          "lumaSpread": 75.27
         },
         {
           "file": "07-dark-03-settled-strategic.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
-            120,
-            128,
-            145
+            3,
+            7,
+            16
           ],
-          "contentPct": 60.388,
-          "edgePct": 6.257,
-          "meanLuma": 99.71,
-          "p05Luma": 58.06,
-          "p50Luma": 106.31,
-          "p95Luma": 127.53
+          "contentPct": 54.288,
+          "edgePct": 5.114,
+          "meanLuma": 39.4,
+          "p05Luma": 5.8,
+          "p50Luma": 16.85,
+          "p95Luma": 81.07,
+          "lumaSpread": 75.27
         },
         {
           "file": "07-dark-04-clean-production.png",
-          "pixels": 115230,
+          "pixels": 40000,
           "backdrop": [
             87,
             80,
             88
           ],
-          "contentPct": 49.525,
-          "edgePct": 2.612,
-          "meanLuma": 82.88,
-          "p05Luma": 18.8,
-          "p50Luma": 81.07,
-          "p95Luma": 127.53
+          "contentPct": 49.91,
+          "edgePct": 3.308,
+          "meanLuma": 65.52,
+          "p05Luma": 6.8,
+          "p50Luma": 80.07,
+          "p95Luma": 82.07
         }
       ],
-      "productionContentPct": 49.649,
-      "strategicContentPct": 60.388,
-      "productionEdgePct": 3.334,
-      "strategicEdgePct": 6.257,
+      "productionContentPct": 50.27,
+      "strategicContentPct": 54.288,
+      "productionEdgePct": 4.266,
+      "strategicEdgePct": 5.114,
       "cameraPairDistinct": true,
+      "witnessMaxGap": 0.096,
+      "requestedLightRecipe": "dark",
+      "appliedLightRecipe": "dark",
+      "hostSuppressed": {
+        "shell": 9,
+        "door": 1,
+        "fixture": 2,
+        "mote": 8,
+        "overlay": 1,
+        "detachedPracticals": 2
+      },
+      "foreignLightsNeutralized": 6,
       "consoleErrors": [
         "Failed to load resource: the server responded with a status of 404 (File not found)",
         "Failed to load resource: the server responded with a status of 404 (File not found)"
-      ]
+      ],
+      "p95Luma": 82.07
     }
   ],
   "gates": {

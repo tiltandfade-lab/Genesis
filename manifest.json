@@ -1733,6 +1733,7 @@
       "type": "logic",
       "owns": [
         "CL_F07_TERRAIN_BENCH",
+        "terrainBenchSceneLightRecipe",
         "terrainBenchSheetSpec",
         "terrainBenchSheetParams",
         "TERRAIN_ONE_CLAMP_BASE",

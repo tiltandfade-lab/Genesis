@@ -1137,3 +1137,68 @@ packet is `dev/clay-captures/cl-f07a-terrain-bench-v001/` — the seven CL-F07a 
 the fixed production camera *and* the governed 72° map-reading pitch, with a receipt per frame
 carrying the committed layout ids, the parameter sets, the construction sentence each piece claims,
 and the rolled source rows.
+
+### CL-F07a fix pass — three capture defects, and what they cost (2026-07-27, stacked on cda3784c)
+
+Fable's independent audit re-derived slope and face ownership from the raw heightfields and
+confirmed the geometry (max walk step 1 quantum = 26.57° everywhere; face records match 2-quantum
+edges 1:1, hill 0/0 vs cliff 20/20). The **frames** carried three defects, all now fixed and all
+now gated. Every one of them was invisible to a green harness, which is the lesson.
+
+**1 · The dark capture was not dark — cause: an unowned base rig, not the recipe.** The clay recipe
+owns `S.ambientLight`/`S.pointLights` and reasserted them correctly; the dark profile's authored
+0.25 ambient *was* applied and the receipt's recipe id was honest. But `setInteriorBoard`'s own rig
+hangs lights the clay profile never touches — a **4.5-intensity AmbientLight** (18× the dark
+recipe's) and an **18.6-intensity sprite-camera-fill SpotLight** among six. In a 15×15 room the
+shell hides most of that rig; the terrain bench suppresses the shell, so it fell on the field
+unopposed. Two further teeth in the same defect: the camera-tracking fills have their **intensity
+re-driven every frame**, so a one-shot zero is overwritten before the capture (they are now
+neutralised by `visible`, which is not on that driver's path); and the recipe was only ever asserted
+by a **one-shot call from the capture rig**, so any later board replay silently dropped it. The
+light case is now **fixture data** (`terrainBenchSceneLightRecipe`), asserted from the mount on every
+rebuild, and the receipt records `requestedLightRecipe` / `appliedLightRecipe` / `lightRecipeDrift`
+so requested-vs-applied drift is visible forever.
+
+**2 · The "two floating standees" were the host's calibration bulbs.** A scripted ground-contact
+audit over all 12 sets found **zero airborne witnesses**: every standee sat at a uniform 0.096 world
+units above its own cell's rendered top, which is the standee base offset. The two objects hovering
+upper-left and upper-right were the Clayroom's diagnostic **calibration bulb practicals** (housing
+plus emitter, at ±4.24 either side of the room's centre line, 1.7 units up) — host bench chrome with
+no wall to live on. Every witness now records `groundY` / `standeeY` / `gap`, and the measurement
+fails any set whose max gap exceeds 0.2, so "0 refusals" is checkable against "0 levitations"
+instead of assumed.
+
+**3 · Host chrome bleed.** The door leaf, the calibration practicals, eight dust motes and the C1A
+crate all carried **no `interiorKind`**, which is exactly why a first pass that matched only on
+`interiorKind` missed every one of them. They are now matched on their own userData markers. The
+practicals are **detached**, not hidden, because the flicker driver writes `visible` on the fixture
+bodies every frame — the same race the camera-tracking lights win. Everything is restored on a
+fixture switch, so the other five benches cost nothing.
+
+**Three self-inflicted regressions in this pass, all caught by looking at the frames, all now
+gated.** They are recorded because the near-misses are the point:
+- Neutralising the base rig in **every** scene, not only the scene that declares a light case, left
+  the terrain unlit: the sheet came back as an empty rectangle with a few emissive standees in it.
+  Scoped to declared light cases.
+- Detaching **three ancestors** up from each emitter tore out a shared group and took the whole
+  terrain field off the scene. The detach is now surgical — the emitter's immediate parent only, and
+  only after proving that subtree holds no terrain.
+- Bucketing `clayRole` as host chrome hid **all 564 terrain cells** (`overlay: 577`), because
+  `clayRoomApplyDiagnosticSurfaces` tags every routed surface with `clayRole`/`clayRoute` before the
+  sweep's second pass. The matcher is now allow-listed against terrain ownership first and matches
+  only `clayRole === "furniture"`.
+
+**And a measurement defect worth naming.** Twice, a frame with no visible terrain **passed** the
+capture gate. The edge-density metric downsampled by `//4`, which left ~350 px of smooth fog
+gradient whose neighbouring pixels each cross a 6-luma step — enough to fake ~2% "edges" on an empty
+frame. Raising the threshold would have been tuning the validator to the answer; the metric's
+*sampling* was fixed instead (a fixed 200×200 grid, on which an empty region measures **0.00%** and
+modelled form measures 4.5–11%). The gate also now fails a luma-flat frame and requires the dark
+frame to be measurably darker than the lit sheet — a frame labelled "dark" is no longer allowed to
+be pale.
+
+**Gates after the fix:** `dev/verify-terrain-bench.mjs` **65 passed / 0 failed** (`--red` 0/21);
+`dev/measure-clay-terrain-bench.py` **RESULT: PASS** over 12 sets; `check-manifest` **RESULT: OK**;
+clay-room 272/0, theater-shot 107/0, standee-verbs 73/0, room-shell 53/0, active-room-only 22/0,
+theater-lighting 21/0, theater-sprites 12/0. Determinism still **PASS**, 13 fields, two page loads.
+All 12 capture sets re-banked. The front-end verdict remains Adam's and Codex's.

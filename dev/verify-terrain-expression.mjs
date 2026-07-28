@@ -71,8 +71,10 @@ const W = freshWin();
 console.log("1. the device registry and the three dressing bins");
 guard("1. registry", () => {
   const devices = W.TERRAIN_EXPRESSION_DEVICES;
-  check("1a. eleven devices, each with an id, a bin and its grounds",
-    devices.length === 11
+  check("1a. twelve devices, each with an id, a bin and its grounds (eleven from the R1 build plus "
+    + "R6's climbable rock bits, added 2026-07-28 in the geometry bin so Adam's preferred MATERIAL "
+    + "rung carries the affordance he has to rule on)",
+    devices.length === 12
     && devices.every(d => d.id && d.key && d.bin && typeof d.grounds === "string" && d.grounds.length > 30),
     "n=" + devices.length);
   const bins = new Set(W.TERRAIN_EXPRESSION_BINS);
@@ -397,13 +399,27 @@ guard("10. renderer boundary", () => {
     /terrainCellStandPlane/.test(region) && /standPlaneFor/.test(region)
     && (region.match(/function standPlaneFor/g) || []).length <= 1);
   const spritesSrc = read("src/ui/theater-sprites.js");
+  /* AMENDED 2026-07-28 by TERRAIN-EXPRESSION-R2 R1. This check used to also assert that the tilt
+     never reached the sprite wrap. Adam's R1 ruling REVERSES that — "the sprite itself should
+     always be fixed at the same angle as its base" — so the wrap now carries the SAME plane
+     rotation composed with its camera pitch, and asserting the old proposition would be asserting
+     against the ruling. What survives unchanged is the part that was never about the sprite: the
+     plinth's conformance lands on the base child, it is derived in WORLD space by counter-rotating
+     the figure's yaw, and the OUTER group's rotation.x stays fall-death's alone. The sprite/base
+     agreement itself is measured, not text-matched, in verify-bw2-2 group 21b-R1 and
+     dev/verify-terrain-standee-r2.cjs. */
   check("10f. the plinth tilt lands on the BASE CHILD's own rotation, never on the outer group "
-    + "(fall-death) and never on the sprite wrap (camera pitch), and it is written in WORLD space "
-    + "by counter-rotating the figure's own yaw",
+    + "(fall-death's channel), and it is written in WORLD space by counter-rotating the figure's "
+    + "own yaw",
     /child\.rotation\.x = tiltX/.test(spritesSrc) && /child\.rotation\.z = tiltZ/.test(spritesSrc)
     && /planeTilt\.dYdx \* cosP - planeTilt\.dYdz \* sinP/.test(spritesSrc)
     && !/fig\.userData\.clayStandeePlaneTilt[\s\S]{0,400}fig\.rotation\.x =/.test(spritesSrc)
     && !/figure\.rotation\.x =/.test(region));
+  check("10f-R1. and the SPRITE now shares that same plane rotation (Adam 2026-07-28, reversing "
+    + "the standee-contract study): the wrap composes the plane quaternion with the camera pitch, "
+    + "and a standee with no stand plane still takes the byte-identical legacy write",
+    /planeQuat/.test(spritesSrc) && /wrap\.quaternion\.copy\(planeQuat\)/.test(spritesSrc)
+    && /wrap\.rotation\.x = tilt;/.test(spritesSrc));
   check("10f2. the tilt has ONE writer — the clay mount records the world gradient and the angles "
     + "themselves are written only in the per-frame facing pass",
     !/base\.rotation\.[xz] =/.test(region) && /clayStandeePlaneTilt/.test(region));

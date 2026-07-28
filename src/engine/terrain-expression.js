@@ -64,7 +64,17 @@ var TERRAIN_EXPRESSION_DEVICES = Object.freeze([
   Object.freeze({ id: "C1", key: "shallowgrade", bin: "geometry", rung: "C",
     label: "the render-only shallow grade (18.0 deg, the corpus's common walkable grade)",
     gameplay: false,
-    grounds: "FFT-SURFACE-GRAMMAR §2.2 — Genesis's only legal slope is 26.565 deg; FFT's common one is 18." })
+    grounds: "FFT-SURFACE-GRAMMAR §2.2 — Genesis's only legal slope is 26.565 deg; FFT's common one is 18." }),
+  /* R2 round, Adam's R6 ruling. GEOMETRY, not decal — the affordance is proud rock, and it rides
+     the MATERIAL rung on purpose so it is present in the frame Adam already said he prefers. It is
+     also the one device in this registry whose `gameplay` flag is honestly TRUE-pending: the relief
+     is render-only today, but the eased DC band it expresses is a gameplay proposal awaiting a
+     founder ruling, and saying so here is cheaper than discovering it later. */
+  Object.freeze({ id: "R6", key: "climbease", bin: "geometry", rung: "R2",
+    label: "climbable rock bits on an eased face (the visible half of the eased DC band)",
+    gameplay: false,
+    gameplayPending: "the eased climb DC is PROPOSED — TERRAIN_CLIMB_EASED, awaiting Adam",
+    grounds: "Adam 2026-07-28 — 'some edges where there are little rock bits that maybe a character can climb with a low or auto DC check vs the standard.'" })
 ]);
 
 var TERRAIN_EXPRESSION_DEVICE_KEYS = Object.freeze(
@@ -116,8 +126,90 @@ function terrainExpressionFlags(rungId, overrides){
     flags[d.key] = on;
     (on ? flags.on : flags.off).push(d.id);
   });
+  /* R2 R4 — WHICH RUNG OF THE GRADE LADDER this render carries. Same discipline as the rung id: an
+     unknown grade throws rather than falling back, because a frame labelled `g4` that quietly
+     rendered `g2` is the identical class of lie. Omitted = the ladder's own default, which is the
+     18.00 deg grade the R1 build shipped, so an un-flagged render is byte-identical to R1. */
+  var gradeId = (overrides && overrides.gradeId != null)
+    ? String(overrides.gradeId) : TERRAIN_GRADE_LADDER_DEFAULT;
+  var grade = terrainGradeById(gradeId);
+  flags.gradeId = grade.id;
+  flags.gradeScale = grade.gradeH;
+  flags.gradeDeg = grade.deg;
+  flags.gradeMode = grade.mode;
   flags.anyDevice = flags.on.length > 0;
   return flags;
+}
+
+/* ─── R4 · THE GRADE LADDER (Adam 2026-07-28: "we just need to change our own rules") ──────────
+   *"i think we literally can express what FFT does, we just need to change our own rules… none of
+   the angles look particularly impossible… though the steepest ones look like they should be the
+   max."*
+
+   The R1 build had ONE render-only grade, 0.65 quanta per cell = 18.00 deg. This is that single
+   step turned into a declared ladder, so Adam can see every angle beside every other one and rule.
+
+   HOW TO READ `gradeH`. It is the multiplier on the cell's own measured gradient, and the gradient
+   is a CENTRAL difference — so `gradeH` is the angle a RUN cell renders (one neighbour a quantum
+   up, the other a quantum down: the stair run and the graded slope, which are the same cell class
+   in an integer heightfield). A one-sided EDGE cell has half that gradient and therefore renders at
+   half the declared step, which is honest and is stated per grade in `edgeDeg`.
+
+   EVERY RUNG IS RENDER-ONLY. The integer heightfield, the walkable census, cover and LOS do not
+   move for any of them — terrainWalkFingerprint is byte-identical across the whole ladder and that
+   is gated, not claimed. Whether Genesis ADOPTS any of these as a logical grade (a real
+   half-quantum height, which changes walkability) is a founder decision and is NOT taken here. */
+var TERRAIN_GRADE_LADDER = Object.freeze([
+  Object.freeze({ id: "g0", gradeH: 0, deg: 0, edgeDeg: 0, mode: "render-only",
+    label: "flat — the chassis as it has always drawn it",
+    grounds: "the control. A cell top with no grade at all; every rung below is measured against it." }),
+  Object.freeze({ id: "g1", gradeH: 0.325, deg: 9.2299, edgeDeg: 4.6451, mode: "render-only",
+    label: "the gentle grade",
+    grounds: "half of FFT's common walkable grade — the register a 1h step across TWO cells implies, and the shallowest fold the eye still reads as a slope rather than as a flat." }),
+  Object.freeze({ id: "g2", gradeH: 0.65, deg: 18.0042, edgeDeg: 9.2299, mode: "render-only",
+    label: "the corpus grade (R1's shipped default)",
+    grounds: "FFT-SURFACE-GRAMMAR §2.2 — the grade the 22-map corpus uses most, measured off image2's move-range quads. This is TERRAIN_SHALLOW_GRADE_H from the R1 build, unchanged." }),
+  Object.freeze({ id: "g3", gradeH: 1.0, deg: 26.5651, edgeDeg: 14.0362, mode: "render-only",
+    label: "the walkable step — Genesis's only currently LEGAL slope",
+    grounds: "1 quantum across 1 cell = TERRAIN_GRID_LAW.walkableStepQuanta. Everything at or under this is already walkable by the one geometric law; rendering it costs no permission at all." }),
+  Object.freeze({ id: "g4", gradeH: 1.1547, deg: 30.0000, edgeDeg: 16.1021, mode: "render-only",
+    label: "PROPOSED MAXIMUM — the stated walk limit",
+    grounds: "TERRAIN_GRID_LAW.maxWalkableSlopeDeg = 30, and TERRAIN_WALK_NOISE_BUDGET_H.maxRenderedStepH = tan(30)*5/2.5 = 1.1547h is already the chassis's own RENDERED ceiling — the number the walkable noise budget is derived from. Nothing steeper can be rendered without contradicting a constant the engine already publishes." })
+]);
+
+var TERRAIN_GRADE_LADDER_DEFAULT = "g2";
+
+/* THE MAXIMUM, PROPOSED (R4 asks for a proposal with evidence, never a silent adoption).
+
+   Adam: *"the steepest ones look like they should be the max."* Two candidates answer that, and
+   they are 3.4 deg apart:
+
+     26.565 deg (g3) — the walkable STEP. One quantum across one cell. It is what the Lipschitz
+       clamp already guarantees between two walk-connected cell centres, so a render at this angle
+       can never overstate what the walk graph permits. Conservative, and provably free.
+     30.000 deg (g4) — the stated LIMIT. TERRAIN_GRID_LAW.maxWalkableSlopeDeg has read 30 since the
+       chassis was written, and TERRAIN_WALK_NOISE_BUDGET_H exists precisely because 30 deg leaves
+       0.1547h of sub-quantum headroom OVER the 1h step — headroom the budget then spends on
+       rendered relief. A rendered 30 deg therefore spends headroom the engine has already
+       published and already licensed, rather than inventing any.
+
+   PROPOSED: g4, 30.000 deg. Grounds: it is the engine's own published limit rather than a new
+   number; the corpus's steepest measures ~31 deg (FFT-SURFACE-GRAMMAR §2.2), so 30 sits just
+   INSIDE what FFT itself does rather than past it; and "the steepest ones look like they should be
+   the max" points at the top of the range, which g3 is not — g3 is the middle of the ladder and is
+   already legal, so adopting it as the ceiling would make the ruling a no-op. Adam rules. */
+var TERRAIN_GRADE_MAX_PROPOSED = Object.freeze({
+  id: "g4", deg: 30.0000, gradeH: 1.1547,
+  status: "PROPOSED — founder ruling required",
+  alternative: "g3 / 26.5651 deg — the walkable step, the conservative reading",
+  logicalAdoption: "NOT TAKEN. Every rung of the ladder is render-only; a LOGICAL grade changes walkability and is a gameplay change requiring Adam's sign-off."
+});
+
+function terrainGradeById(gradeId){
+  var id = gradeId == null ? TERRAIN_GRADE_LADDER_DEFAULT : String(gradeId);
+  var g = TERRAIN_GRADE_LADDER.filter(function(r){ return r.id === id; })[0];
+  if(!g) throw new Error("terrainGradeById: unknown grade " + id);
+  return g;
 }
 
 /* ─── F11 · THE WALK-ONLY FINGERPRINT ─────────────────────────────────────────────────────────
@@ -228,12 +320,32 @@ function terrainCellStandPlane(field, index, flags){
   var c = field.cells[index];
   var on = !!(flags && flags.shallowgrade);
   var g = on ? terrainCellGradient(field, index) : { dx: 0, dz: 0 };
-  var scale = on ? TERRAIN_SHALLOW_GRADE_H : 0;
+  /* R4 — the grade is the LADDER's, not one hard-coded constant. Absent flags fall back to the R1
+     shipped value so every caller that predates the ladder renders exactly what it always did. */
+  var scale = on
+    ? (flags && flags.gradeScale != null ? flags.gradeScale : TERRAIN_SHALLOW_GRADE_H) : 0;
   var dx = g.dx * scale, dz = g.dz * scale;
+  /* R4 — THE DECLARED MAXIMUM IS A CEILING ON THE PLANE, NOT ON EACH AXIS. A cell that falls in
+     BOTH x and z (an outside corner) has gradient magnitude sqrt(2) times the per-axis one, so
+     without this clamp a ladder rung labelled "30 deg" renders 39.2 deg at every corner — the
+     declared angle would be a floor rather than a maximum, which is the opposite of what Adam
+     asked for when he named the steepest ones as the max. Clamped UNIFORMLY (both axes scaled by
+     the same factor) so the plane's ASPECT is preserved and only its steepness is capped: the
+     slope still runs downhill in the true direction, just no faster than the declared rung.
+     Consequence worth stating plainly: this also caps R1's shipped g2 default, whose corner cells
+     previously rendered 24.7 deg against a declared 18. */
+  var mag = Math.sqrt(dx * dx + dz * dz);
+  var capped = false;
+  if(scale > 0 && mag > scale + 1e-12){
+    var k = scale / mag;
+    dx *= k; dz *= k; mag = scale; capped = true;
+  }
   var q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
   /* the steepest rise the plane expresses across one cell, as a slope in degrees */
-  var riseH = Math.sqrt(dx * dx + dz * dz);
+  var riseH = mag;
   return {
+    gradeId: (flags && flags.gradeId) || null,
+    gradeCapped: capped,
     centreH: c.h + c.sub,
     dHdx: dx, dHdz: dz,                        /* quanta per cell */
     dYdx: dx * q, dYdz: dz * q,                /* world units per cell */
@@ -386,6 +498,391 @@ function terrainCellWashFactor(field, index, flags){
   return 1 - t * 0.22;                            /* cavity 0.78x .. curvature 1.22x */
 }
 
+/* ─── R3 · THE OVERHANG LICENCE — overhang needs RULES ────────────────────────────────────────
+   Adam, 2026-07-28, on the three-rung ladder: *"of the three the second one is preferable, though i
+   don't want EVERY single top level plane to overhang… specially on cliffsides, but it doesn't make
+   sense on every single terrain surface… the 3rd image where every single block has an overhang is
+   absolute overkill."*
+
+   So A3's cap overhang stops being a property of every exposed side and becomes a LICENCE a side
+   has to earn. The rule is the deliverable; the geometry is unchanged.
+
+   A SIDE EARNS AN OVERHANG when all four hold:
+     1. it is EXPOSED — the neighbour is lower, void, or off-field. An interior side is a seam
+        between two equal grounds and must stay welded shut or the ground reads as loose tiles.
+     2. the drop below it is a FACE — at least TERRAIN_GRID_LAW.faceStepQuanta (2h = 5 ft). This is
+        the whole of "specially on cliffsides": a face is the thing the engine already calls a
+        cliff, it is guarded, it is never walked, and it is exactly where a coping/cornice reads.
+        A 1h riser is a TREAD and belongs to B2's nosing, which is a different device with a
+        different look — that is the rule that stops every stacked block growing a lip.
+     3. the cell is not a BOULDER. A rounded mass has no coping; a cornice on one reads as a hat.
+     4. the cell is not under water and carries no occupancy volume (thicket / trunk-field). A
+        thicket edge is vegetation, not masonry.
+
+   AND THE SCENE CAP. Even a field that is all cliff may not be all overhang, or the rule collapses
+   back into the universal case Adam rejected. At most `maxSceneShare` of a field's non-void cells
+   may carry an overhang on any side; when the licensed set is larger, the licence is withdrawn
+   from the SHALLOWEST faces first (sort by the cell's deepest licensed drop descending, then by
+   cell index ascending — deterministic, and it keeps the tall faces, which is the bias Adam named).
+
+   Returns per-side booleans plus the reason, so a frame can be interrogated rather than trusted. */
+var TERRAIN_OVERHANG_LAW = Object.freeze({
+  earnsAt: "an exposed side whose drop is >= faceStepQuanta (2h) — a face, i.e. a cliffside",
+  forbidden: Object.freeze([
+    "interior sides (the neighbour is the same height or higher) — the seam stays welded",
+    "1h risers — that drop is a tread and belongs to B2's nosing",
+    "boulder cells — a rounded mass carries no coping",
+    "cells under water (depthH > 0)",
+    "cells carrying an occupancy volume (thicket / trunk-field)"
+  ]),
+  /* PROPOSED. Derived from the measured licensed share across the seven CL-F07 scenes (see
+     docs/DESIGN.md) rather than picked round: the cap sits above every scene's rule-only share so
+     the rule alone governs on real fields, and far enough below 1.0 that the universal case Adam
+     called "absolute overkill" is structurally unreachable. */
+  maxSceneShare: 0.34,
+  status: "PROPOSED — the share is Adam's to move; the rule above is ruled"
+});
+
+/* Which sides of one cell are EXPOSED, and by how much. Engine-side twin of the renderer's own
+   clayTerrainExposedSides, kept here so the licence can be decided without a scene graph. 99 means
+   "off-field or void" — a full-depth drop, which is exactly what a chasm wall is. */
+function terrainCellExposedSides(field, index){
+  var c = field.cells[index];
+  var ex = field.extent.x, ey = field.extent.y;
+  function drop(dx, dy){
+    var nx = c.x + dx, ny = c.y + dy;
+    if(nx < 0 || ny < 0 || nx >= ex || ny >= ey) return 99;
+    var n = field.cells[ny * ex + nx];
+    if(!n || n.kind === "void") return 99;
+    return c.h - n.h;
+  }
+  return { w: drop(-1, 0), e: drop(1, 0), n: drop(0, -1), s: drop(0, 1) };
+}
+
+/* The rule, applied to ONE cell, before the scene cap. */
+function terrainOverhangRuleForCell(field, index){
+  var c = field.cells[index];
+  var out = { w: false, e: false, n: false, s: false, any: false, deepest: 0, reason: null };
+  if(!c || c.kind === "void"){ out.reason = "void"; return out; }
+  if(c.kind === "boulder"){ out.reason = "boulder — a rounded mass carries no coping"; return out; }
+  if(c.depthH > 0){ out.reason = "under water"; return out; }
+  if(c.surface === "thicket" || c.surface === "trunk-field"){
+    out.reason = "occupancy volume — vegetation, not masonry"; return out;
+  }
+  var sides = terrainCellExposedSides(field, index);
+  var face = TERRAIN_GRID_LAW.faceStepQuanta;
+  ["w", "e", "n", "s"].forEach(function(k){
+    var d = sides[k];
+    if(d >= face){ out[k] = true; out.any = true; out.deepest = Math.max(out.deepest, d); }
+  });
+  if(!out.any) out.reason = "no exposed side drops a full face (2h+)";
+  return out;
+}
+
+/* The rule PLUS the scene cap, for a whole field. One pass, deterministic, no scene graph. */
+function terrainOverhangCensus(field, flags){
+  var on = !!(flags && flags.chamfer);
+  var cells = field.cells.length;
+  var live = 0, licensed = [], perCell = new Array(cells);
+  for(var i = 0; i < cells; i++){
+    var c = field.cells[i];
+    if(!c || c.kind === "void"){ perCell[i] = null; continue; }
+    live++;
+    var r = terrainOverhangRuleForCell(field, i);
+    perCell[i] = r;
+    if(r.any) licensed.push(i);
+  }
+  var ruleShare = live ? licensed.length / live : 0;
+  var cap = TERRAIN_OVERHANG_LAW.maxSceneShare;
+  var maxCells = Math.floor(live * cap);
+  var withdrawn = [];
+  if(licensed.length > maxCells){
+    /* keep the TALL faces: deepest drop first, cell index as the deterministic tiebreak */
+    var ranked = licensed.slice().sort(function(a, b){
+      var da = perCell[a].deepest, db = perCell[b].deepest;
+      if(db !== da) return db - da;
+      return a - b;
+    });
+    withdrawn = ranked.slice(maxCells);
+    withdrawn.forEach(function(idx){
+      perCell[idx] = { w: false, e: false, n: false, s: false, any: false,
+        deepest: perCell[idx].deepest, reason: "withdrawn by the scene cap" };
+    });
+  }
+  var finalCells = licensed.length - withdrawn.length;
+  return {
+    on: on,
+    liveCells: live,
+    ruleLicensedCells: licensed.length,
+    ruleShare: Number(ruleShare.toFixed(5)),
+    capShare: cap,
+    capCells: maxCells,
+    withdrawnCells: withdrawn.length,
+    overhangCells: on ? finalCells : 0,
+    finalShare: on && live ? Number((finalCells / live).toFixed(5)) : 0,
+    perCell: perCell,
+    obeysCap: !on || !live || (finalCells / live) <= cap + 1e-9
+  };
+}
+
+/* What the renderer asks, per cell: which sides carry a cap overhang under this field's licence.
+   The census is computed once per field and handed back in, so the scene cap is a field-wide fact
+   rather than something each cell re-derives (which could not see the cap at all). */
+function terrainOverhangSides(census, index){
+  if(!census || !census.on) return { w: false, e: false, n: false, s: false, any: false };
+  var r = census.perCell[index];
+  return r || { w: false, e: false, n: false, s: false, any: false };
+}
+
+/* ─── R5 · THE MEDIUM-ACCESSIBILITY LAW (NEW) ─────────────────────────────────────────────────
+   Adam, 2026-07-28: *"the medium base not being able to fit everywhere is a real stage design
+   issue… There absolutely should be some places where they cant fit, small and tiny creatures
+   should get the advantages in those areas and that's by design, but the majority of most of the
+   map should still be accessible to medium size creatures… i don't think anywhere it is stated
+   that medium creatures need to be able to get around too."*
+
+   He is right that nothing states it. The nearest existing law is docs/DUNGEON-GRAPH.md §2's
+   SCALE-DOMAIN RULE — "a room that merely fits its monster is a prison" — which grows rooms UP to
+   a large resident (src/engine/place-semantics.js dsmFitTestAndGrow). That law is about dungeon
+   ROOMS and about the LARGEST occupant. It says nothing about terrain and nothing about the
+   ordinary Medium body, which is the party. This is the missing floor.
+
+   WHAT "ADMITS A MEDIUM" MEANS, measured rather than asserted: the cell is standable AND the
+   largest disc that can be centred on its stand point without leaving the cell's own usable top or
+   striking a declared intrusion is at least the Medium protected radius. The protected radius is
+   the CIRCUMSCRIBED circle of the plinth's rendered bbox, because the plinth turns with the camera
+   — 0.4155 wu for the ordinary Medium and 0.4660 for the Medium-CAP width the worst witnesses
+   wear. The cap number is the one gated, because a law that only holds for the average body is not
+   a law.
+
+   AND CONNECTIVITY, which is the half a bare percentage cannot see. A field could report 90%
+   Medium-admitting while every admitting cell is an island. So the floor has two clauses: the
+   SHARE, and the requirement that the Medium-admitting cells form ONE walk-connected component
+   that contains every entry cell. A Small/Tiny-only pocket is then legal and bounded BY
+   CONSTRUCTION: it is what is left over outside the main component. */
+var TERRAIN_MEDIUM_ACCESS_LAW = Object.freeze({
+  statement: "A generated field must admit the Medium protected disc on at least minShare of its "
+    + "standable cells (SHARE); the largest walk-connected admitting component must be at least "
+    + "minShare of the largest walk-connected STANDABLE component, so the floor never shatters "
+    + "connectivity the terrain itself provides (COHESION); and every standable entry cell must "
+    + "admit a Medium (ENTRY). The remainder is legal, bounded, and desirable — it is where Small "
+    + "and Tiny earn their advantage.",
+  /* PROPOSED. Measured share across all seven CL-F07 scenes is 100.00% today (see docs/DESIGN.md),
+     so any floor at or under 1.0 costs the chassis nothing now; the number has to be chosen for
+     what it PERMITS later. 0.85 leaves 15% — on the census-median 60x80 arrival (192 cells) that
+     is up to 28 cells, enough for two to four pockets of 7-14 cells, which is the size at which a
+     pocket reads as a place a Small creature can use rather than as one odd square. Below ~0.75 a
+     12x16 arrival can lose a whole quadrant to Small-only ground, which is no longer "the majority
+     of most of the map". Adam's number to move; the two clauses are the law. */
+  minShare: 0.85,
+  mediumProtectedDiameter: 0.8308,
+  mediumCapProtectedDiameter: 0.9320,
+  gatedAgainst: "mediumCap — the worst-case plinth width (0.856 wu) that wraiths and flaming skeletons wear",
+  status: "PROPOSED — the share is Adam's; that a floor must exist at all is the new law"
+});
+
+/* The largest disc, in wu, that can be centred on a cell's stand point without leaving the cell's
+   own usable top. On this chassis a standable cell's top is the full 1x1 plane, so the answer is
+   0.5 wu of radius unless a DECLARED INTRUSION eats into it. Intrusions are supplied by the caller
+   (an occluder site, a prop footprint, a sub-cell corner block, a tread narrower than the cell) —
+   that is the seam through which every future device has to declare what it costs the body that
+   has to stand there, instead of shrinking the usable top silently while still reporting
+   standable:true. That silent shrink is the "green lie" §6 of the R1 build spec named. */
+function terrainCellUsableTopRadius(field, index, intrusions){
+  var c = field.cells[index];
+  if(!c || !c.standable) return 0;
+  var r = 0.5;                                     /* half a cell — the full top plane */
+  if(Array.isArray(intrusions)){
+    for(var i = 0; i < intrusions.length; i++){
+      var it = intrusions[i];
+      if(it == null || it.cell !== index) continue;
+      /* an intrusion is declared as {cell, du, dv, radius} in CELL SPACE, du/dv from the stand
+         point. The usable radius is the distance from the stand point to the intrusion's near
+         edge; an intrusion that covers the stand point leaves nothing. */
+      var d = Math.sqrt(it.du * it.du + it.dv * it.dv) - (it.radius || 0);
+      r = Math.min(r, Math.max(0, d));
+    }
+  }
+  return r;
+}
+
+/* The census. Returns per-field shares plus the connectivity clause, and it never touches a height,
+   a standable flag or a walk edge — it READS them. */
+function terrainMediumAccessCensus(field, opts){
+  var o = opts || {};
+  var need = o.radius == null
+    ? TERRAIN_MEDIUM_ACCESS_LAW.mediumCapProtectedDiameter / 2 : o.radius;
+  var intrusions = o.intrusions || null;
+  var n = field.cells.length;
+  var admits = new Uint8Array(n);
+  var standable = 0, admitting = 0;
+  var radii = [];
+  for(var i = 0; i < n; i++){
+    var c = field.cells[i];
+    if(!c || !c.standable) continue;
+    standable++;
+    var r = terrainCellUsableTopRadius(field, i, intrusions);
+    radii.push(r);
+    if(r >= need - 1e-9){ admits[i] = 1; admitting++; }
+  }
+  /* THE COHESION CLAUSE, and why it is a RATIO rather than "one component".
+     A first cut demanded that every admitting cell sit in one component containing every entry.
+     Measured against the real fixture that is simply wrong: the 24x24 bench SHEET is thirteen
+     separate bays and the 16-cell tray is a field split by its own chasm, so their standable sets
+     are ALREADY several components before any body is considered. Requiring one component would
+     have failed three CL-F07 fields for having the topology they were built to have — a gate
+     failing the fixture rather than the defect.
+     What the law actually cares about is whether the MEDIUM FLOOR SHATTERS what already exists. So
+     compare like with like: the largest ADMITTING component against the largest STANDABLE one. A
+     field the terrain already split stays passing; a field that a body-sized intrusion cuts into
+     stripes does not. */
+  function largestComponent(pred){
+    var seen = new Uint8Array(n), best = 0;
+    for(var s = 0; s < n; s++){
+      if(!pred(s) || seen[s]) continue;
+      var queue = [s], head = 0, size = 0;
+      seen[s] = 1;
+      while(head < queue.length){
+        var cur = queue[head++];
+        size++;
+        var adj = field.walkAdj[cur] || [];
+        for(var k = 0; k < adj.length; k++){
+          var j = adj[k];
+          if(pred(j) && !seen[j]){ seen[j] = 1; queue.push(j); }
+        }
+      }
+      if(size > best) best = size;
+    }
+    return best;
+  }
+  var largestAdmitting = largestComponent(function(i){ return admits[i] === 1; });
+  var largestStandable = largestComponent(function(i){
+    var c = field.cells[i]; return !!(c && c.standable);
+  });
+  var entries = (field.entryCells || []).filter(function(idx){
+    var c = field.cells[idx]; return !!(c && c.standable);
+  });
+  var entriesBlocked = entries.filter(function(idx){ return !admits[idx]; });
+  var share = standable ? admitting / standable : 1;
+  var cohesion = largestStandable ? largestAdmitting / largestStandable : 1;
+  var minShare = TERRAIN_MEDIUM_ACCESS_LAW.minShare;
+  var shareOk = share >= minShare - 1e-9;
+  var cohesionOk = cohesion >= minShare - 1e-9;
+  var entryOk = entriesBlocked.length === 0;
+  return {
+    law: "R5 — the Medium-accessibility floor",
+    fieldId: field.id,
+    needRadius: Number(need.toFixed(4)),
+    standableCells: standable,
+    mediumAdmittingCells: admitting,
+    mediumShare: Number(share.toFixed(5)),
+    largestStandableComponent: largestStandable,
+    largestAdmittingComponent: largestAdmitting,
+    cohesion: Number(cohesion.toFixed(5)),
+    smallTinyOnlyCells: standable - admitting,
+    smallTinyOnlyShare: Number((standable ? (standable - admitting) / standable : 0).toFixed(5)),
+    minUsableRadius: radii.length ? Number(Math.min.apply(null, radii).toFixed(4)) : null,
+    entryCells: entries.length,
+    entriesBlockedToMedium: entriesBlocked.length,
+    /* ALL THREE clauses. A share that passes while the admitting set is shattered is exactly the
+       failure a bare percentage cannot see, so the verdict folds them together. */
+    shareOk: shareOk,
+    cohesionOk: cohesionOk,
+    entryOk: entryOk,
+    ok: shareOk && cohesionOk && entryOk
+  };
+}
+
+/* ─── R6 · THE EASED CLIMB BAND ───────────────────────────────────────────────────────────────
+   Adam, 2026-07-28: *"i like the idea of having some edges where there are little rock bits that
+   maybe a character can climb with a low or auto DC check vs the standard."*
+
+   TERRAIN_GRID_LAW.climbDcBands is already [12, 15, 17] and — measured, not assumed — NOTHING in
+   the engine consumes it: no face carries a DC today. So this authors the mapping AND the eased
+   band in one place, and marks the numbers PROPOSED because a DC is a gameplay value.
+
+   THE AFFORDANCE MUST BE VISIBLE. A face that is easier to climb has to LOOK easier — the relief
+   is the reason the DC is lower, not a decoration applied afterwards. So the same predicate that
+   sets the band is the one the renderer draws from: a face with `eased:true` grows a readable stack
+   of climbable rock bits and nothing else does.
+
+   WHICH FACES EARN IT, deterministically: a face of exactly the minimum height (2h — the shortest
+   thing the engine calls a face) drawn by a seeded per-face bit at `easedRate`. Short faces, so the
+   easy ones are legible as the low ones; seeded, so the same field always has the same easy edges. */
+var TERRAIN_CLIMB_EASED = Object.freeze({
+  status: "PROPOSED — DC values are Adam's; the band and its visible affordance are built",
+  standardBands: TERRAIN_GRID_LAW.climbDcBands,
+  bandForDeltaH: "2h -> 12 · 3h -> 15 · 4h+ -> 17 (the existing three, mapped for the first time)",
+  easedDc: 10,
+  easedAutoAtDeltaH: 2,
+  easedRate: 1 / 3,
+  affordance: "a stack of proud rock bits up the face — drawn only where the band is eased"
+});
+
+function terrainFaceClimb(field, face){
+  var d = Math.abs(face.deltaH);
+  var bands = TERRAIN_GRID_LAW.climbDcBands;
+  var dc = d <= 2 ? bands[0] : (d === 3 ? bands[1] : bands[2]);
+  var eligible = d === TERRAIN_GRID_LAW.faceStepQuanta;
+  var roll = terrainHash32(field.seed + ":climbease:" + face.id) / 4294967296;
+  var eased = eligible && roll < TERRAIN_CLIMB_EASED.easedRate;
+  return {
+    faceId: face.id,
+    deltaH: d,
+    standardDc: dc,
+    eased: eased,
+    dc: eased ? (d <= TERRAIN_CLIMB_EASED.easedAutoAtDeltaH ? 0 : TERRAIN_CLIMB_EASED.easedDc) : dc,
+    auto: eased && d <= TERRAIN_CLIMB_EASED.easedAutoAtDeltaH,
+    reliefBits: eased ? 2 + (terrainHash32(field.seed + ":climbbits:" + face.id) % 3) : 0
+  };
+}
+
+function terrainFaceClimbCensus(field){
+  var rows = (field.faces || []).map(function(f){ return terrainFaceClimb(field, f); });
+  var eased = rows.filter(function(r){ return r.eased; });
+  return {
+    faces: rows.length,
+    easedFaces: eased.length,
+    easedShare: rows.length ? Number((eased.length / rows.length).toFixed(5)) : 0,
+    autoFaces: eased.filter(function(r){ return r.auto; }).length,
+    rows: rows
+  };
+}
+
+/* ─── R2 · THE BASE SKIRT ─────────────────────────────────────────────────────────────────────
+   Adam, 2026-07-28: *"we might need to extend the base down through the floor, so even on hills the
+   base appears to make contact with the full ground, rather than just floating or teetering."*
+
+   The plinth's CONTACT PLANE does not move: the skirt hangs BELOW it, inside the ground, and is
+   purely cosmetic. It may not change the contact Y, the walkable census, or any gate's contact
+   measurement — the nearest-contact gap keeps measuring the contact plane, which is why the skirt
+   is a separate child mesh rather than a taller plinth geometry (a taller geometry would move the
+   bounding box the contact probe reads, and the gate would start measuring the skirt).
+
+   HOW DEEP. Two numbers bound it, and the depth is derived rather than guessed:
+     CEILING — the cap slab is CLAY_TERRAIN_CAP_H = 0.10 wu tall and is the only part of a cell that
+       keeps its full 1x1 top; below it the A3 shaft is inset by up to 0.125 wu on an exposed side.
+       A skirt deeper than the cap could therefore reach into that notch and be seen from a low
+       camera. So depth <= 0.10.
+     FLOOR — the deepest daylight a plinth can open under its own footprint. The plinth conforms to
+       the cell's declared STAND PLANE, but the ground it sits on is the RENDERED top, which carries
+       B4's fold on top of that plane. The fold's amplitude is TERRAIN_WALK_NOISE_BUDGET_H.perCellH
+       (0.07735h = 0.03868 wu) attenuated by r^2, and the worst-case Medium plinth corner sits at
+       r = 0.466/0.5 = 0.932, so r^2 = 0.8686 -> 0.0336 wu of possible dip. Add the 0.006 wu the
+       contact law already embeds and 0.0336 - 0.006 = 0.0276 wu is the daylight to cover.
+
+   0.06 wu is the chosen depth: 2.2x the derived need, and 0.04 wu clear of the cap ceiling. */
+var TERRAIN_BASE_SKIRT = Object.freeze({
+  depthWU: 0.06,
+  capCeilingWU: 0.10,
+  derivedNeedWU: 0.0276,
+  grounds: "fold amplitude 0.03868 wu * r^2 at the worst Medium corner (0.8686) = 0.0336, less the "
+    + "0.006 authored embed = 0.0276 wu of daylight; the cap slab is 0.10 wu, so 0.06 clears the "
+    + "need 2.2x and stays 0.04 inside the ceiling.",
+  cosmeticOnly: "may not change contact Y, the walkable census, or any contact measurement",
+  defaultOn: "terrain witnesses only — the flat tabletop and interior boards are unchanged"
+});
+
 /* ─── F1 / F2 / F3 / F5 · THE STANDEE CONTACT PROBE ───────────────────────────────────────────
    The gate `WITNESS_MAX_GAP` measures the ORIGIN gap, which is 0.096 by construction and cannot
    move — it reads green on a plinth whose uphill corner is 0.217 wu buried and whose downhill
@@ -403,8 +900,16 @@ var TERRAIN_CONTACT_THRESHOLDS = Object.freeze({
   /* F3 — plinth area hanging past the support polygon */
   overhangWarnFrac: 0.0,
   overhangBlockFrac: 0.02,
-  /* F7 — the sprite must NOT tilt with the base; it holds the camera-pitch value and nothing else */
-  spriteTiltDeg: 0.5,
+  /* F7 — REVERSED BY ADAM'S R1 RULING, 2026-07-28: *"the sprite itself should always be fixed at
+     the same angle as its base."* The R1 build (and the standee-contract study it came from) said
+     the opposite — tilt the plinth, keep the card vertical — and this threshold enforced that as
+     `spriteTiltDeg: 0.5`, i.e. "the sprite must NOT tilt with the base". It now enforces the
+     ruling: the ONLY angle between the sprite's world-up and the base's world-up is the constant
+     camera-pitch tilt every standee has always carried, and any deviation past this tolerance is
+     the two coming apart. A physical miniature on a wedge leans with the wedge; that is the
+     tabletop-of-miniatures doctrine applied honestly. */
+  spriteBaseAgreementDeg: 0.5,
+  spriteBaseAgreementLaw: "angle(spriteWorldUp, baseWorldUp) == the camera-pitch constant, exactly",
   /* F6 — a base tilt past the walk law is a bug, never silently clamped */
   maxBaseTiltDeg: 30
 });

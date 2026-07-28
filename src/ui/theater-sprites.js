@@ -562,6 +562,13 @@ function interiorSpriteBillboard(entry, wallHeightCap){
 // is simpler and just as correct as hooking rotate()/placeCamera() separately. A plane is authored
 // facing +Z (buildSpriteBillboard's own PlaneGeometry default); +PI turns that face to point back at
 // the camera position (which sits at angle `yaw` from the board origin, looking inward).
+// TERRAIN-EXPRESSION R2 · R1 scratch. The facing pass runs on every dirty frame over every mounted
+// standee, so the plane/pitch composition allocates nothing: four module-level objects, reused.
+const STANDEE_PLANE_EULER = new THREE.Euler(0, 0, 0, "YXZ");
+const STANDEE_PLANE_QUAT = new THREE.Quaternion();
+const STANDEE_PITCH_QUAT = new THREE.Quaternion();
+const STANDEE_PITCH_AXIS = new THREE.Vector3(1, 0, 0);
+
 function updateSpriteBillboardYaw(){
   updateSpriteCameraFill();
   const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
@@ -618,6 +625,7 @@ function updateSpriteBillboardYaw(){
     // tip and is never written here; the sprite's camera-pitch tilt stays on the wrap below; this
     // writes ONLY the base child's own .x/.z, which nothing else has ever used.
     const planeTilt = fig.userData.clayStandeePlaneTilt;
+    let planeQuat = null;
     if(planeTilt && fig.children){
       const phi = fig.rotation.y;
       const cosP = Math.cos(phi), sinP = Math.sin(phi);
@@ -639,11 +647,65 @@ function updateSpriteBillboardYaw(){
           child.rotation.z = tiltZ;
         }
       }
+      // TERRAIN-EXPRESSION R2 · R1 (Adam 2026-07-28) — THE SPRITE MATCHES ITS BASE. This REVERSES
+      // the standee-contract study, which recommended tilting the plinth and keeping the card
+      // vertical; Adam ruled the opposite: "the sprite itself should always be fixed at the same
+      // angle as its base." A physical miniature on a wedge leans with the wedge, and the whole
+      // engine is a tabletop of miniatures. The exact same Euler the base child just took, so the
+      // two frames are built from ONE pair of angles rather than from two derivations that agree
+      // today (which is how they come apart later).
+      STANDEE_PLANE_EULER.set(tiltX, 0, tiltZ, "YXZ");
+      planeQuat = STANDEE_PLANE_QUAT.setFromEuler(STANDEE_PLANE_EULER);
+    } else if(fig.children){
+      // THE CLEAR PATH, and it is not hypothetical hygiene. Before R2 the conformance was written
+      // only when a stand plane was present and never unwritten, so a figure that LOST its plane
+      // kept a tilted plinth forever while its card went back to vertical — the two coming apart
+      // silently, which is the exact failure R1 exists to forbid. Found by the 21b-R1 teeth probe,
+      // which removes the plane and re-measures: it read 20.64 deg of disagreement instead of the
+      // camera-pitch constant. Production never hits it today (clayTerrainPlaceWitness sets the
+      // flag once at placement), but "conditionally written, never reset" is the HQ2-1 bug shape
+      // and the fix is two lines.
+      for(let i = 0; i < fig.children.length; i++){
+        const child = fig.children[i];
+        if(child && child.userData && child.userData.standeeBase
+          && (child.rotation.x !== 0 || child.rotation.z !== 0)){
+          child.rotation.x = 0;
+          child.rotation.z = 0;
+        }
+      }
     }
     const wrap = fig.userData.standeeWrap;
     if(wrap){
       wrap.rotation.order = "YXZ";
-      wrap.rotation.x = tilt;
+      if(planeQuat){
+        // COMPOSITION ORDER IS THE WHOLE RULING, and it is plane-OUTSIDE, pitch-INSIDE:
+        //     wrap = R_plane * R_cameraPitch
+        // Read right to left, that is "take the card, tilt it back by the camera pitch as it always
+        // was, then lean the whole thing with the ground." The camera-pitch un-foreshortening is
+        // therefore applied in the BASE's frame, which is what makes the sprite's own up sit at
+        // exactly the pitch constant away from the base's up at every grade and every yaw — one
+        // measurable proposition, and the one dev/verify-terrain-standee-r2.cjs asserts. The other
+        // order (pitch outside) also "leans the sprite" and looks plausible in a still, but the
+        // angle between the two ups then varies with the grade, i.e. the sprite would be matching
+        // the ground rather than its base. Quaternion rather than Euler because YXZ cannot express
+        // this composition in three angles without solving for them again — and the base's angles
+        // are already solved.
+        //
+        // A standee with NO plane tilt never enters this branch: it keeps the byte-identical
+        // `wrap.rotation.x = tilt` below, so the flat tabletop and every interior board render
+        // exactly as they did (and verify-bw2-2's fall-death figure still reads its wrap tilt as
+        // the plain camera pitch).
+        wrap.quaternion.copy(planeQuat).multiply(
+          STANDEE_PITCH_QUAT.setFromAxisAngle(STANDEE_PITCH_AXIS, tilt));
+      } else {
+        // the other half of the clear path. Writing the wrap's quaternion above leaves the derived
+        // Euler with non-zero y and z, and `rotation.x = tilt` overwrites only x — so a figure that
+        // lost its stand plane kept two thirds of a stale composition. Second reading of the same
+        // 21b-R1 probe, 47.52 deg. Cleared explicitly; for a standee that never had a plane both
+        // are already 0, so the legacy write below stays byte-identical.
+        if(wrap.rotation.y !== 0 || wrap.rotation.z !== 0){ wrap.rotation.y = 0; wrap.rotation.z = 0; }
+        wrap.rotation.x = tilt;
+      }
     } else {
       fig.rotation.x = tilt;
     }

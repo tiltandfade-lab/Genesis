@@ -19,16 +19,29 @@ const path = require("path");
 const fs = require("fs");
 const puppeteer = require(path.join(process.env.HOME, ".genesis-jsdom", "node_modules", "puppeteer-core"));
 
-const OUT = process.argv[2];
-const PORT = process.argv[3] || "5176";
-const ONLY = process.argv[4] || "all";
+/* R2 (2026-07-28) — named flags for the variants Adam's rulings created. Positional args are kept
+   byte-compatible so every existing invocation banks exactly what it always did; grade, overhang
+   mode and skirt depth are opt-in and are RECORDED IN THE RECEIPT, so a frame can never be
+   mislabelled as a variant it did not render. */
+const FLAGS = {};
+process.argv.slice(2).forEach((a) => {
+  const m = /^--([a-z]+)=(.*)$/.exec(a);
+  if (m) FLAGS[m[1]] = m[2];
+});
+const POS = process.argv.slice(2).filter((a) => !a.startsWith("--"));
+const OUT = POS[0];
+const PORT = POS[1] || "5176";
+const ONLY = POS[2] || "all";
 /* TERRAIN-EXPRESSION §5 — the bin-isolation ladder. One rung per run, over an otherwise identical
    field: same seed, same camera, same layout. Omitted = `naked`, which is the byte-identical legacy
    render, so an un-flagged capture bank is exactly what it was before this build. */
-const RUNG = process.argv[5] || "naked";
-const PROBE = process.argv[6] || null;
-const SEED = process.argv[7] || null;
-if (!OUT) { console.error("usage: node dev/capture-clay-terrain-bench.cjs <outDir> [port] [sceneId|all] [rung] [probe] [seed]"); process.exit(2); }
+const RUNG = FLAGS.rung || POS[3] || "naked";
+const PROBE = FLAGS.probe || POS[4] || null;
+const SEED = FLAGS.seed || POS[5] || null;
+const GRADE = FLAGS.grade || null;
+const OVERHANG = FLAGS.overhang || null;
+const SKIRT = FLAGS.skirt != null ? FLAGS.skirt : null;
+if (!OUT) { console.error("usage: node dev/capture-clay-terrain-bench.cjs <outDir> [port] [sceneId|all] [rung] [probe] [seed] [--grade=g0..g4] [--overhang=rule|universal|none] [--skirt=<wu>]"); process.exit(2); }
 const BASE = "http://127.0.0.1:" + PORT;
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -126,6 +139,7 @@ async function plate(page, filename) {
 
   const index = { fixture: "cl-f07-terrain-bench", proof: "CL-F07a", captures: [],
     determinism: null, gate: null, rung: RUNG, probe: PROBE, seed: SEED,
+    grade: GRADE, overhang: OVERHANG, skirt: SKIRT,
     generatedAt: new Date().toISOString(), viewport: VIEWPORT };
 
   async function openScene(scene) {
@@ -144,7 +158,10 @@ async function plate(page, filename) {
     const url = BASE + "/genesis.html?clayroom=1&clayfixture=terrain&terrainscene=" + scene.id
       + (scene.frameIndex != null ? "&terrainframe=" + scene.frameIndex : "")
       + "&terrainrung=" + RUNG + (PROBE ? "&terrainprobe=" + PROBE : "")
-      + (SEED ? "&terrainseed=" + SEED : "");
+      + (SEED ? "&terrainseed=" + SEED : "")
+      + (GRADE ? "&terraingrade=" + GRADE : "")
+      + (OVERHANG ? "&terrainoverhang=" + OVERHANG : "")
+      + (SKIRT != null ? "&terrainskirt=" + SKIRT : "");
     await page.goto(url, { waitUntil: "load", timeout: 60000 });
     await page.waitForFunction(
       () => document.querySelector("canvas") && document.getElementById("clay-room-overlay"),
@@ -235,6 +252,9 @@ async function plate(page, filename) {
       sceneId: scene.id,
       rung: RUNG,
       probe: PROBE,
+      grade: GRADE,
+      overhang: OVERHANG,
+      skirt: SKIRT,
       frameIndex: scene.frameIndex != null ? scene.frameIndex : null,
       claim: (settled.terrain && settled.terrain.sceneId === scene.id) ? "built" : "NOT BUILT",
       lightRecipeRequested: scene.light,

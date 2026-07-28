@@ -20,6 +20,12 @@
 import * as THREE from "three";
 import { playStandeeVerb, bindStandeeCtx, stopIdleBreathe } from "./standee-verbs.js";
 import { DEFAULT_WALL_CAP_HEIGHT, compileRoomShell, segmentNormal } from "./theater-room-mesh.js";
+/* R1 (2026-07-28) — the camera-pitch constant, imported leaf-to-leaf exactly as this module already
+   takes standee-verbs and theater-room-mesh. The R1 agreement instrument has to know what the ONE
+   permitted angle between a sprite and its base IS, and re-declaring 35 here would be a second
+   truth that drifts the day the camera moves. theater-camera.js imports only three and
+   theater-post.js, so this adds no cycle. */
+import { CAM_ELEV_DEG } from "./theater-camera.js";
 import { tickTweens } from "./theater-verbs.js";
 
 // ---- root-capability mirrors (wired once by clayRoomInit; S re-synced by clayRoomSyncState) ----
@@ -3895,13 +3901,68 @@ function clayRoomTerrainProbeFromLocation(){
   return null;
 }
 
+/* R4 — WHICH RUNG OF THE GRADE LADDER this mount renders. Same discipline as the device rung: an
+   unknown grade throws inside terrainGradeById rather than falling back to the default, because a
+   frame labelled `g4` that quietly drew `g2` is the same lie as a rung that quietly drew naked. */
+function clayRoomTerrainGradeFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terraingrade") : null;
+    if(raw) return String(raw);
+  } catch(e){}
+  return null;
+}
+
 function clayRoomTerrainFlags(){
   const rung = S.clayRoomTerrainRung || clayRoomTerrainRungFromLocation() || "naked";
+  const grade = S.clayRoomTerrainGrade || clayRoomTerrainGradeFromLocation() || null;
   if(typeof terrainExpressionFlags !== "function"){
     return { rungId: "naked", rungIndex: 0, rungLabel: "A0 · NAKED (expression chassis absent)",
       on: [], off: [], anyDevice: false };
   }
-  return terrainExpressionFlags(rung);
+  return terrainExpressionFlags(rung, grade ? { gradeId: grade } : null);
+}
+
+function clayRoomTerrainOverhangFromLocation(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terrainoverhang") : null;
+    if(raw){
+      const v = String(raw);
+      if(["rule", "universal", "none"].indexOf(v) < 0){
+        throw new Error("clayRoomTerrainOverhangFromLocation: unknown mode " + v);
+      }
+      return v;
+    }
+  } catch(e){ if(/unknown mode/.test(String(e && e.message))) throw e; }
+  return null;
+}
+
+/* R2 — the skirt depth, overridable so the packet can show the ruling beside its absence. `0` is
+   the pre-ruling render (no skirt at all) and is what the skirt-invisibility gate proves itself
+   against: with no skirt the margin is exactly minus the daylight, so the check fails for the
+   reason it exists. */
+function clayRoomTerrainSkirtDepth(){
+  try {
+    const raw = window.location && window.location.search
+      ? new URLSearchParams(window.location.search).get("terrainskirt") : null;
+    if(raw != null && raw !== "" && isFinite(Number(raw))) return Math.max(0, Number(raw));
+  } catch(e){}
+  if(S.clayRoomTerrainSkirtDepth != null) return S.clayRoomTerrainSkirtDepth;
+  return (typeof TERRAIN_BASE_SKIRT === "object") ? TERRAIN_BASE_SKIRT.depthWU : 0;
+}
+
+function clayRoomSetTerrainGrade(gradeId){
+  S.clayRoomTerrainGrade = gradeId == null ? null : String(gradeId);
+  if(S.clayRoomFixtureId !== CLAY_ROOM_TERRAIN_BENCH_ID) return false;
+  if(S.clayRoomTerrainBenchGroup && S.clayRoomTerrainBenchGroup.parent){
+    S.clayRoomTerrainBenchGroup.parent.remove(S.clayRoomTerrainBenchGroup);
+    clearGroup(S.clayRoomTerrainBenchGroup);
+  }
+  S.clayRoomTerrainWitnessRetry = false;
+  clayRoomMountTerrainBench();
+  markDirty(); scheduleRender();
+  return true;
 }
 
 function clayRoomSetTerrainRung(rungId){
@@ -4050,32 +4111,91 @@ function clayTerrainJointMesh(field, index, flags, baseY, cx, cz, coarseColour, 
    where neither cover nor pathing is generating. Here that is horizontal banding on the exposed
    face — bedded strata / coursed masonry — which is FFT device #7 and the reason `655bd60e…`
    survives being the most literally cube-stacked map in the corpus. */
-function clayTerrainFaceBands(field, c, sides, topY, faceBottomY, colour, flags){
+function clayTerrainFaceBands(field, c, sides, topY, faceBottomY, colour, flags, insets){
   const group = new THREE.Group();
   const height = topY - faceBottomY;
   if(height < 0.18) return null;
   const bandCount = Math.max(1, Math.min(5, Math.floor(height / 0.22)));
   const rnd = terrainRng(terrainHash32(field.seed + ":band:" + c.x + "," + c.y));
+  /* R3 — A BAND MUST LIE ON THE FACE IT DRESSES. Found by reading the geometry while dropping the
+     proud offset: the bands were positioned at +-0.5, the CELL boundary, while the A3 shaft they
+     dress is inset by up to CLAY_TERRAIN_CHAMFER on an exposed side. So on every overhung cell the
+     bands were not proud of the face at all — they were detached rails hanging 0.10 wu out in the
+     air below the cap, which is exactly the "protruding rails" reading in Adam's frames. The face
+     plane is now taken from the same inset the shaft was built with. */
+  const ins = insets || { w: 0, e: 0, n: 0, s: 0 };
   ["w", "e", "n", "s"].forEach(function(key){
     if(!(sides[key] > 0)) return;
+    const facePlane = 0.5 - (ins[key] || 0);
     for(let i = 0; i < bandCount; i++){
       const frac = (i + 0.5) / bandCount;
       const jitter = flags.jitter ? (rnd() - 0.5) * 0.06 : 0;
       const by = topY - height * frac + jitter;
       const thick = 0.035 + rnd() * 0.03;
-      const proud = 0.022;
+      /* R3, second half (Adam 2026-07-28): the banding read as PROTRUDING RAILS in the R1 frames.
+         *"drop it to a material value change, not a projecting ledge."* 0.022 wu proud is what
+         caught the wrong highlight — it is nearly twice the plinth's own 0.012 bevel thickness,
+         which is the visibility floor at the production read, so it was a ledge by any measure.
+         0.0015 is a flush band: enough to win the depth test against the face it sits on, six times
+         under the visibility floor, so what remains is the TONE change and nothing else. */
+      const proud = 0.0015;
       const tone = clayTerrainScaleHex(colour, flags.jitter ? (0.80 + rnd() * 0.30) : 0.88);
       const geo = (key === "w" || key === "e")
         ? new THREE.BoxGeometry(proud * 2, thick, 0.98)
         : new THREE.BoxGeometry(0.98, thick, proud * 2);
       const mesh = new THREE.Mesh(geo, clayStructureMaterial(tone));
-      mesh.position.set(key === "w" ? -0.5 : (key === "e" ? 0.5 : 0), by,
-        key === "n" ? -0.5 : (key === "s" ? 0.5 : 0));
+      mesh.position.set(key === "w" ? -facePlane : (key === "e" ? facePlane : 0), by,
+        key === "n" ? -facePlane : (key === "s" ? facePlane : 0));
       mesh.castShadow = true; mesh.receiveShadow = true;
       mesh.userData.terrainExpression = "A7-face-band";
       group.add(mesh);
     }
   });
+  return group.children.length ? group : null;
+}
+
+/* R6 — THE CLIMBABLE ROCK BITS. A stack of small proud nubs up ONE exposed side of a cell that owns
+   an eased face, staggered left/right so the eye reads a route rather than a ladder decal. Drawn
+   only where terrainFaceClimb marked the face eased; the count is that same predicate's own
+   reliefBits, so the picture and the DC can never disagree. */
+function clayTerrainClimbBits(field, c, sides, topY, faceBottomY, colour, eased, insets){
+  const group = new THREE.Group();
+  const height = topY - faceBottomY;
+  if(height < 0.2) return null;
+  const ins = insets || { w: 0, e: 0, n: 0, s: 0 };
+  /* the deepest exposed side owns the face — one route per cell, not four */
+  let key = null, best = 0;
+  ["w", "e", "n", "s"].forEach(function(k){ if(sides[k] > best){ best = sides[k]; key = k; } });
+  if(!key) return null;
+  const facePlane = 0.5 - (ins[key] || 0);
+  const rnd = terrainRng(terrainHash32(field.seed + ":climbbits:" + c.x + "," + c.y));
+  const n = Math.max(2, eased.reliefBits || 2);
+  for(let i = 0; i < n; i++){
+    const t = (i + 0.5) / n;
+    const by = faceBottomY + height * t;
+    const along = (i % 2 ? 1 : -1) * (0.10 + rnd() * 0.12);
+    /* SIZE AND VALUE ARE THE AFFORDANCE, and both were set by LOOKING. The first cut used
+       0.10-0.16 wu bits at 0.72-0.88 of the cell tone: at the production camera that is a 6-10 inch
+       lump the same value as the face it sits on, and in the banked crop it was almost impossible
+       to find — an affordance the player cannot read is the tooltip R6 explicitly forbids. These are
+       0.16-0.26 wu (10-16 inches, a real hand- or foothold at 5 ft per cell) and LIGHTER than the
+       face rather than darker, because a proud rock on a shaded vertical catches the key. */
+    const size = 0.16 + rnd() * 0.10;
+    const proud = size * 0.60;
+    const mesh = new THREE.Mesh(new THREE.IcosahedronGeometry(size, 0),
+      clayStructureMaterial(clayTerrainScaleHex(colour, 1.10 + rnd() * 0.18)));
+    const outward = facePlane + proud * 0.5;
+    mesh.position.set(
+      key === "w" ? -outward : (key === "e" ? outward : along),
+      by,
+      key === "n" ? -outward : (key === "s" ? outward : along));
+    mesh.rotation.set(rnd() * 3, rnd() * 3, rnd() * 3);
+    mesh.castShadow = true; mesh.receiveShadow = true;
+    mesh.userData.terrainExpression = "R6-climb-bit";
+    mesh.userData.terrainClimbBit = { cell: c.index, faceId: eased.faceId, dc: eased.dc,
+      auto: !!eased.auto, side: key };
+    group.add(mesh);
+  }
   return group.children.length ? group : null;
 }
 
@@ -4111,6 +4231,37 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
      nothing added — so the A0 control frame is genuinely the control and not a re-implementation
      that happens to look similar. Every device only ever runs on the expressed branch. */
   const flags = (opts && opts.flags) || { anyDevice: false };
+  /* R3 — THE OVERHANG LICENCE, decided ONCE per field. Adam: *"i don't want EVERY single top level
+     plane to overhang… the 3rd image where every single block has an overhang is absolute
+     overkill."* The rule lives in the engine (terrainOverhangCensus); the renderer only obeys it.
+     It has to be a FIELD-WIDE decision because the scene cap cannot be seen from inside one cell. */
+  const overhangCensus = (typeof terrainOverhangCensus === "function")
+    ? terrainOverhangCensus(field, flags) : null;
+  /* THREE MODES, because Adam has to be able to SEE the ruling beside what it replaced:
+       rule       — the licence above. The default, and Adam's ruling.
+       universal  — every exposed side, which is what R1 shipped and what he called overkill. Kept
+                    as a named mode so the comparison capture is the real prior render rather than
+                    a reconstruction, and so the R3 gate has something to fail against.
+       none       — no overhang at all, the third leg of the comparison. */
+  const overhangMode = (opts && opts.overhangMode) || "rule";
+  group.userData.terrainOverhangMode = overhangMode;
+  group.userData.terrainOverhangCensus = overhangCensus ? {
+    liveCells: overhangCensus.liveCells, ruleLicensedCells: overhangCensus.ruleLicensedCells,
+    ruleShare: overhangCensus.ruleShare, overhangCells: overhangCensus.overhangCells,
+    finalShare: overhangCensus.finalShare, withdrawnCells: overhangCensus.withdrawnCells,
+    capShare: overhangCensus.capShare, obeysCap: overhangCensus.obeysCap
+  } : null;
+  /* R6 — which faces carry climbable relief, and therefore the eased DC band. One predicate feeds
+     both the number and the picture, so a face cannot be easy without looking easy. */
+  const climbCensus = (typeof terrainFaceClimbCensus === "function")
+    ? terrainFaceClimbCensus(field) : null;
+  const easedFaceByCell = {};
+  if(climbCensus && flags.climbease){
+    (field.faces || []).forEach(function(f, i){
+      const row = climbCensus.rows[i];
+      if(row && row.eased) easedFaceByCell[f.highIndex] = row;
+    });
+  }
   field.cells.forEach(function(c){
     if(c.kind === "void") return;
     const topH = c.h + c.sub;
@@ -4150,9 +4301,20 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
        chamfer is a cap OVERHANG that lives strictly below the top plane and intrudes 0.000 wu on
        the standee's protected disc at any size (STANDEE-CONTRACT §5's compatibility rule). An
        interior side is never inset, or the ground would read as loose tiles with slots between. */
+    /* R3 — the inset is applied only where the LICENCE says so. Before Adam's ruling every exposed
+       side got it, which is the picture he called overkill; now a side has to earn it (a 2h+ drop:
+       a cliffside) and the field has to be under its scene cap. `licence` is the engine's answer;
+       `applied` records what was actually built, so the gate compares reality against the rule
+       rather than comparing the rule against itself. */
+    const licence = overhangMode === "universal"
+      ? { w: true, e: true, n: true, s: true }
+      : (overhangMode === "none" ? { w: false, e: false, n: false, s: false }
+        : ((typeof terrainOverhangSides === "function")
+          ? terrainOverhangSides(overhangCensus, c.index)
+          : { w: false, e: false, n: false, s: false }));
     const inset = flags.chamfer ? CLAY_TERRAIN_CHAMFER : 0;
-    const iw = sides.w > 0 ? inset : 0, ie = sides.e > 0 ? inset : 0;
-    const inn = sides.n > 0 ? inset : 0, is = sides.s > 0 ? inset : 0;
+    const iw = (sides.w > 0 && licence.w) ? inset : 0, ie = (sides.e > 0 && licence.e) ? inset : 0;
+    const inn = (sides.n > 0 && licence.n) ? inset : 0, is = (sides.s > 0 && licence.s) ? inset : 0;
     const shaftH = Math.max(0.02, capBottomY - (baseY + cellBaseH * h));
     const shaft = new THREE.Mesh(
       new THREE.BoxGeometry(Math.max(0.05, 1 - iw - ie), shaftH, Math.max(0.05, 1 - inn - is)),
@@ -4162,6 +4324,10 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
       c.kind === "guarded-slope" ? "riser" : "floor");
     shaft.castShadow = true;
     shaft.userData.terrainExpression = "A3-shaft";
+    /* WHAT WAS ACTUALLY BUILT, not what was licensed — the gate compares this against the engine's
+       own census, so a renderer that ignored the licence fails rather than agreeing with itself. */
+    shaft.userData.terrainOverhangApplied = { w: iw > 0, e: ie > 0, n: inn > 0, s: is > 0,
+      any: (iw > 0 || ie > 0 || inn > 0 || is > 0), cell: c.index, mode: overhangMode };
     cellGroup.add(shaft);
 
     /* B2 — THE NOSING. FFT's cell-scale stair is tread = 1 cell, riser = 1 Genesis quantum, and the
@@ -4219,8 +4385,24 @@ function clayTerrainBuildFieldGroup(field, originCell, baseY, origin, opts){
     if(flags.facedress){
       const faceBottom = baseY + cellBaseH * h;
       const bands = clayTerrainFaceBands(field, c, sides, capBottomY - 0.05, faceBottom,
-        cellColour, flags);
+        cellColour, flags, { w: iw, e: ie, n: inn, s: is });
       if(bands) cellGroup.add(bands);
+    }
+    /* R6 — THE EASED CLIMB AFFORDANCE, on its OWN device flag rather than riding A7's decal bin.
+       Adam: *"i like the idea of having some edges where there are little rock bits that maybe a
+       character can climb with a low or auto DC check vs the standard."* Proud rock is geometry,
+       not paint, and putting it in the geometry bin is also what makes it present in the MATERIAL
+       rung — the frame Adam has already said he prefers, which is the one it needs to be judged in.
+       The bits are drawn ONLY on a face the same predicate marked eased, so the affordance is the
+       reason for the DC rather than decoration applied next to one. Proud well OVER the 0.012 wu
+       visibility floor, which is the exact opposite of what A7's bands now do. */
+    if(flags.climbease){
+      const eased = easedFaceByCell[c.index];
+      if(eased){
+        const bits = clayTerrainClimbBits(field, c, sides, capBottomY - 0.04,
+          baseY + cellBaseH * h, cellColour, eased, { w: iw, e: ie, n: inn, s: is });
+        if(bits) cellGroup.add(bits);
+      }
     }
     group.add(cellGroup);
   });
@@ -4432,8 +4614,15 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
   const figure = built.group;
   figure.position.set(position.x, interiorStandeeContactY(position.y), position.z);
   const support = interiorStandeeSupportMetrics(built.width, entry.size, 1);
+  /* R2 — THE BASE SKIRT (Adam 2026-07-28): *"we might need to extend the base down through the
+     floor, so even on hills the base appears to make contact with the full ground, rather than just
+     floating or teetering."* Passed as an option rather than baked into every plinth in the game:
+     the flat tabletop and the interior boards stand on slabs whose thickness this build has not
+     measured, and a skirt that pokes out of a thin tile would be a new defect in service of fixing
+     an old one. Terrain is where hills are, so terrain is where the skirt is. */
   const base = buildInteriorBase(support.width, support.depth,
-    S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor);
+    S.lastBoard && S.lastBoard.tileKit && S.lastBoard.tileKit.trimColor,
+    { skirtDepth: clayRoomTerrainSkirtDepth() });
   figure.add(base);
   figure.userData.standeeBaseMesh = base;
   figure.userData.interiorBaseWidth = support.width;
@@ -4475,7 +4664,13 @@ function clayTerrainPlaceWitness(group, slug, position, label, failures, contact
      wide over sloping ground penetrates/floats by +-0.303 wu. It tilts with the plinth. */
   figure.userData.claySupportSurfaceY = position.y;
   figure.userData.clayStandeePlane = { y: position.y, dYdx: dYdx, dYdz: dYdz, tilted: tilted,
-    slopeDeg: plane ? plane.slopeDeg || 0 : 0, normal: plane ? plane.normal || null : null };
+    slopeDeg: plane ? plane.slopeDeg || 0 : 0, normal: plane ? plane.normal || null : null,
+    gradeId: plane ? plane.gradeId || null : null };
+  /* R2 — the sampler for the ground as DRAWN (plane + B4's fold), so the skirt can be measured
+     against the surface a viewer actually sees rather than against the plane the plinth conforms
+     to. Held as a live function; nothing serialises it. */
+  figure.userData.clayStandeeRenderedTopAt = plane ? plane.renderedTopAt || null : null;
+  figure.userData.clayStandeeSkirtDepth = clayRoomTerrainSkirtDepth();
   figure.userData.clayStandeeBaseBox = (function(){
     const geo = base.geometry;
     if(geo && typeof geo.computeBoundingBox === "function"){
@@ -4573,8 +4768,91 @@ function clayTerrainWitnessFacingReport(){
         }
       });
     }
+    /* ─── R1 · DOES THE SPRITE MATCH ITS BASE? ────────────────────────────────────────────────
+       Adam's ruling reverses the standee-contract study: *"the sprite itself should always be
+       fixed at the same angle as its base."* Measured as a PHYSICAL relation between two world
+       matrices, not as a constant match:
+
+         agreementDeg  the angle between the sprite wrap's world up and the base's world up. Every
+                       standee carries a fixed camera-pitch tilt on the wrap (the un-foreshortening
+                       trick), so the two are never identical — but if the sprite leans WITH the
+                       base then that angle is the camera-pitch CONSTANT and nothing else, at every
+                       grade and every yaw. If the sprite stays vertical while the base tilts, the
+                       angle wanders with the grade. One number, and it fails for the right reason.
+         conformDeg    the same claim from the other side: strip the known camera pitch off the
+                       wrap's world orientation and what is left must be the base's own frame. 0 if
+                       they agree. Independent of agreementDeg because it uses the full rotation
+                       rather than one axis — a roll about the view direction moves this and not
+                       that. */
+    let agreementDeg = null, conformDeg = null, spriteWorldUp = null, baseWorldUp = null;
+    if(wrap && baseMesh && typeof wrap.updateMatrixWorld === "function"){
+      wrap.updateMatrixWorld(true);
+      baseMesh.updateMatrixWorld(true);
+      const upOf = function(obj){
+        const e = obj.matrixWorld.elements;              /* column 1 = the local +Y axis */
+        const l = Math.hypot(e[4], e[5], e[6]) || 1;
+        return [e[4] / l, e[5] / l, e[6] / l];
+      };
+      spriteWorldUp = upOf(wrap);
+      baseWorldUp = upOf(baseMesh);
+      const dotUp = Math.max(-1, Math.min(1, spriteWorldUp[0] * baseWorldUp[0]
+        + spriteWorldUp[1] * baseWorldUp[1] + spriteWorldUp[2] * baseWorldUp[2]));
+      agreementDeg = Math.acos(dotUp) * 180 / Math.PI;
+      const qWrap = new THREE.Quaternion(); wrap.getWorldQuaternion(qWrap);
+      const qBase = new THREE.Quaternion(); baseMesh.getWorldQuaternion(qBase);
+      const qPitch = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0),
+        (CAM_ELEV_DEG * Math.PI) / 180);
+      /* wrapWorld = baseWorld * pitch  <=>  wrapWorld * pitch^-1 * baseWorld^-1 = identity */
+      const qConform = qWrap.clone().multiply(qPitch.clone().invert())
+        .multiply(qBase.clone().invert());
+      conformDeg = 2 * Math.acos(Math.min(1, Math.abs(qConform.w))) * 180 / Math.PI;
+    }
+
+    /* ─── R2 · IS THE PLINTH MAKING FULL CONTACT, AND DOES THE SKIRT HIDE THE REST? ───────────
+       Sampled against the ground AS DRAWN (terrainCellTopH — plane plus B4's fold), which no gate
+       before this one did: the contact probe evaluates the stand PLANE, so a fold dipping away
+       under a plinth corner was invisible to every number the R1 build produced.
+         worstDaylightWU  the deepest gap between the plinth's own tilted bottom face and the drawn
+                          ground, over a grid across the footprint. This is the teetering Adam saw.
+         skirtMarginWU    how far the skirt's bottom sits BELOW the drawn ground at the worst
+                          sample. Positive = no camera can see under the base there. With no skirt
+                          it is exactly -worstDaylight, which is what makes this gate red-first. */
+    let skirt = null;
+    const topAt = ud.clayStandeeRenderedTopAt;
+    if(typeof topAt === "function" && baseMesh && cornersWorld){
+      const skirtDepth = ud.clayStandeeSkirtDepth || 0;
+      const samples = [];
+      const hw = box.w / 2, hd = box.d / 2;
+      for(let sx = -1; sx <= 1; sx++){
+        for(let sz = -1; sz <= 1; sz++){
+          samples.push(baseMesh.localToWorld(new THREE.Vector3(sx * hw, box.yMin, sz * hd)));
+        }
+      }
+      let worstDaylight = -Infinity, worstMargin = Infinity;
+      samples.forEach(function(p){
+        const groundY = topAt(p.x, p.z);
+        const daylight = p.y - groundY;                   /* + = the plinth floats here */
+        if(daylight > worstDaylight) worstDaylight = daylight;
+        const margin = groundY - (p.y - skirtDepth);      /* + = the skirt is buried here */
+        if(margin < worstMargin) worstMargin = margin;
+      });
+      skirt = {
+        skirtDepthWU: Number(skirtDepth.toFixed(4)),
+        samples: samples.length,
+        worstDaylightWU: Number(worstDaylight.toFixed(5)),
+        skirtMarginWU: Number(worstMargin.toFixed(5)),
+        hidden: worstMargin > 0
+      };
+    }
+
     out.witnesses.push({
       label: ud.clayTerrainWitness.label, slug: ud.clayTerrainWitness.slug,
+      spriteWorldUp: spriteWorldUp ? spriteWorldUp.map(function(v){ return Number(v.toFixed(6)); }) : null,
+      baseWorldUp: baseWorldUp ? baseWorldUp.map(function(v){ return Number(v.toFixed(6)); }) : null,
+      spriteBaseAgreementDeg: agreementDeg == null ? null : Number(agreementDeg.toFixed(4)),
+      spriteBaseConformDeg: conformDeg == null ? null : Number(conformDeg.toFixed(4)),
+      cameraPitchDeg: CAM_ELEV_DEG,
+      skirt: skirt,
       surfaceClass: ud.clayTerrainWitness.surfaceClass || null,
       envelope: ud.clayTerrainWitness.envelope || null,
       spanCells: ud.clayStandeeSpanCells || null,
@@ -4605,6 +4883,25 @@ function clayTerrainWitnessFacingReport(){
   out.worstFacingErrorDeg = out.witnesses.length
     ? Number(Math.max.apply(null, out.witnesses.map(function(w){ return w.cardPerpErrorDeg; })).toFixed(3))
     : null;
+  /* R1/R2 rollups. `worstSpriteBaseDisagreementDeg` is the DEVIATION from the camera-pitch
+     constant, not the raw angle — so 0 means "the sprite carries exactly the camera pitch relative
+     to its base and nothing else", which is the ruling, at any grade. */
+  const agree = out.witnesses.map(function(w){ return w.spriteBaseAgreementDeg; })
+    .filter(function(v){ return v != null; });
+  out.worstSpriteBaseDisagreementDeg = agree.length
+    ? Number(Math.max.apply(null, agree.map(function(v){ return Math.abs(v - CAM_ELEV_DEG); })).toFixed(4))
+    : null;
+  const conform = out.witnesses.map(function(w){ return w.spriteBaseConformDeg; })
+    .filter(function(v){ return v != null; });
+  out.worstSpriteBaseConformDeg = conform.length
+    ? Number(Math.max.apply(null, conform).toFixed(4)) : null;
+  const skirts = out.witnesses.map(function(w){ return w.skirt; }).filter(Boolean);
+  out.worstDaylightWU = skirts.length
+    ? Number(Math.max.apply(null, skirts.map(function(s){ return s.worstDaylightWU; })).toFixed(5)) : null;
+  out.worstSkirtMarginWU = skirts.length
+    ? Number(Math.min.apply(null, skirts.map(function(s){ return s.skirtMarginWU; })).toFixed(5)) : null;
+  out.skirtSampledWitnesses = skirts.length;
+  out.witnessesWithSkirtVisible = skirts.filter(function(s){ return !s.hidden; }).length;
   out.nonBillboarding = out.witnesses.filter(function(w){ return w.cardPerpErrorDeg > 15; }).length;
   out.distinctYaws = Array.from(new Set(out.witnesses.map(function(w){ return w.yawDeg; })));
   return out;
@@ -4848,15 +5145,38 @@ function clayRoomMountTerrainBench(){
   /* THE EXPRESSION RUNG. Resolved ONCE per mount and handed to every device, so a frame can never
      be half one rung and half another. */
   const expressionFlags = clayRoomTerrainFlags();
+  /* R3 — which overhang mode this mount renders. `rule` is Adam's ruling and the default; the other
+     two exist so the comparison capture shows the ruling beside what it replaced. */
+  const overhangMode = S.clayRoomTerrainOverhang || clayRoomTerrainOverhangFromLocation() || "rule";
   /* ONE publication of the cell's stand plane, read by the renderer that draws the cap AND by the
      standee mount that tilts the plinth. Two derivations would be two truths and the plinth would
      float on one of them (STANDEE-CONTRACT §3(d)'s second rider). */
-  const standPlaneFor = function(field, index){
+  const standPlaneFor = function(field, index, originCell){
     if(typeof terrainCellStandPlane !== "function"){
       return { dYdx: 0, dYdz: 0, slopeDeg: 0, tilt: false, normal: [0, 1, 0] };
     }
     const p = terrainCellStandPlane(field, index, expressionFlags);
+    /* R2 — THE RENDERED TOP, not the stand plane. The plinth conforms to the PLANE, but the ground
+       it visually sits on is the plane PLUS B4's fold, and nothing before this sampled that: the
+       contact probe's planeAt() evaluates the plane, so the fold's dip under a plinth corner was
+       invisible to every gate the R1 build shipped. This closure evaluates what is actually drawn,
+       in world space, for exactly the cell the witness stands on — which is what the skirt has to
+       cover and what "the base appears to make contact with the full ground" has to be measured
+       against. Null when the caller has no origin (the contract probe path supplies one). */
+    let renderedTopAt = null;
+    if(originCell && typeof terrainCellTopH === "function"){
+      const cell = field.cells[index];
+      const q = TERRAIN_GRID_LAW.verticalQuantumWorldUnits;
+      const cx = originCell.x + cell.x - origin.cx + 0.5;
+      const cz = originCell.z + cell.y - origin.cz + 0.5;
+      renderedTopAt = function(wx, wz){
+        const u = Math.max(-0.5, Math.min(0.5, wx - cx));
+        const v = Math.max(-0.5, Math.min(0.5, wz - cz));
+        return baseY + terrainCellTopH(field, index, u, v, expressionFlags) * q;
+      };
+    }
     return { dYdx: p.dYdx, dYdz: p.dYdz, slopeDeg: p.slopeDeg, normal: p.normal,
+      gradeId: p.gradeId, renderedTopAt: renderedTopAt,
       tilt: !!expressionFlags.slopeplinth };
   };
   const fields = scene.fields || [];
@@ -4876,7 +5196,8 @@ function clayRoomMountTerrainBench(){
     const originCell = { x: cursorX, z: room.y + 7 - field.extent.y / 2 };
     const fieldBuild = clayTerrainBuildFieldGroup(field, originCell, baseY, origin, {
       supportOverlay: sceneId === "support-graph",
-      flags: expressionFlags
+      flags: expressionFlags,
+      overhangMode: overhangMode
     });
     fieldBuild.group.userData.terrainFieldIndex = index;
     group.add(fieldBuild.group);
@@ -4894,7 +5215,11 @@ function clayRoomMountTerrainBench(){
         c.inPlayfield ? 1 : 0]);
     });
     built.push({ field: field, originCell: originCell, floorH: fieldBuild.floorH,
-      cellMeshes: fieldBuild.cellMeshes.length, declaredTops: declaredTops });
+      cellMeshes: fieldBuild.cellMeshes.length, declaredTops: declaredTops,
+      /* R3 — the licence the builder actually decided for THIS field, carried forward so the
+         receipt reports the rule beside what was built rather than re-deriving it (and rather than
+         reporting null, which is what reaching for a `group` key this record never had produced). */
+      overhangCensus: fieldBuild.group.userData.terrainOverhangCensus || null });
 
     /* THE SIX-FOOT HUMAN WITNESS ON EVERY RELIEF DATUM IN THE SAME FRAME (§4.2 condition 2). On
        the sheet that is one per piece; elsewhere it is the extremes of the field's own relief. */
@@ -4917,7 +5242,7 @@ function clayRoomMountTerrainBench(){
           CL_F07_TERRAIN_BENCH.witnessSlug,
           clayTerrainCellWorld(field, originCell, baseY, origin, wIdx), piece.id,
           witnessFailures, witnessContact, clayTerrainSameHeightNeighbours(field, wIdx),
-          standPlaneFor(field, wIdx));
+          standPlaneFor(field, wIdx, originCell));
         if(placed) witnesses.push(Object.assign({ piece: piece.id }, placed));
       });
     } else {
@@ -4937,7 +5262,7 @@ function clayRoomMountTerrainBench(){
             clayTerrainCellWorld(field, originCell, baseY, origin, pick.cell.index),
             field.id + ":" + pick.label, witnessFailures, witnessContact,
             clayTerrainSameHeightNeighbours(field, pick.cell.index),
-            standPlaneFor(field, pick.cell.index));
+            standPlaneFor(field, pick.cell.index, originCell));
           if(placed) witnesses.push(Object.assign({ datum: pick.label, fieldId: field.id }, placed));
         });
       }
@@ -4954,7 +5279,7 @@ function clayRoomMountTerrainBench(){
       Object.keys(picks).forEach(function(cls){
         picks[cls].forEach(function(cellIdx, k){
           const env = envs[Math.min(k, envs.length - 1)];
-          const plane = standPlaneFor(field, cellIdx);
+          const plane = standPlaneFor(field, cellIdx, originCell);
           plane.surfaceClass = cls;
           plane.envelope = env.envelope;
           const placed = clayTerrainPlaceWitness(fieldBuild.group, env.slug,
@@ -5125,6 +5450,41 @@ function clayRoomMountTerrainBench(){
         ? TERRAIN_WALK_NOISE_BUDGET_H.perCellH : null,
       capH: CLAY_TERRAIN_CAP_H, chamfer: CLAY_TERRAIN_CHAMFER,
       rollover: CLAY_TERRAIN_ROLLOVER, nosing: CLAY_TERRAIN_NOSING,
+      /* ─── R2 ROUND ADDITIONS ────────────────────────────────────────────────────────────────
+         Every one of Adam's rulings that has a NUMBER puts it in the receipt, so the packet he
+         rules on carries the measurement beside the picture instead of a claim about it. */
+      gradeId: expressionFlags.gradeId || null,
+      gradeDeg: expressionFlags.gradeDeg == null ? null : expressionFlags.gradeDeg,
+      gradeMode: expressionFlags.gradeMode || null,
+      gradeLadder: (typeof TERRAIN_GRADE_LADDER === "object")
+        ? TERRAIN_GRADE_LADDER.map(function(g){
+            return { id: g.id, deg: g.deg, edgeDeg: g.edgeDeg, mode: g.mode, label: g.label }; })
+        : null,
+      gradeMaxProposed: (typeof TERRAIN_GRADE_MAX_PROPOSED === "object")
+        ? TERRAIN_GRADE_MAX_PROPOSED : null,
+      overhangMode: overhangMode,
+      overhangLaw: (typeof TERRAIN_OVERHANG_LAW === "object") ? TERRAIN_OVERHANG_LAW : null,
+      overhangCensus: built.map(function(b){
+        return { id: b.field.id, census: b.overhangCensus || null };
+      }),
+      baseSkirt: (typeof TERRAIN_BASE_SKIRT === "object") ? TERRAIN_BASE_SKIRT : null,
+      baseSkirtDepthApplied: clayRoomTerrainSkirtDepth(),
+      mediumAccessLaw: (typeof TERRAIN_MEDIUM_ACCESS_LAW === "object")
+        ? TERRAIN_MEDIUM_ACCESS_LAW : null,
+      mediumAccessCensus: (typeof terrainMediumAccessCensus === "function")
+        ? built.map(function(b){
+            const c = terrainMediumAccessCensus(b.field);
+            return { id: b.field.id, standable: c.standableCells, admitting: c.mediumAdmittingCells,
+              share: c.mediumShare, cohesion: c.cohesion, smallTinyOnly: c.smallTinyOnlyCells,
+              entriesBlocked: c.entriesBlockedToMedium, ok: c.ok }; })
+        : null,
+      climbEased: (typeof TERRAIN_CLIMB_EASED === "object") ? TERRAIN_CLIMB_EASED : null,
+      climbCensus: (typeof terrainFaceClimbCensus === "function")
+        ? built.map(function(b){
+            const c = terrainFaceClimbCensus(b.field);
+            return { id: b.field.id, faces: c.faces, eased: c.easedFaces, share: c.easedShare,
+              auto: c.autoFaces }; })
+        : null,
       walkFingerprints: (typeof terrainWalkFingerprint === "function")
         ? built.map(function(b){ return { id: b.field.id, walk: terrainWalkFingerprint(b.field) }; })
         : null,
@@ -5198,6 +5558,26 @@ function clayRoomMountTerrainBench(){
         else if(ud.terrainExpression){
           c.expression = (c.expression || 0) + 1;
           if(ud.terrainOccluder) c.occluders = (c.occluders || 0) + 1;
+          /* R3/R6 — COUNTED OFF THE LIVE SCENE, not off the intent. `overhangApplied` is what the
+             renderer actually built, which is the only thing worth comparing against the licence;
+             `climbBits` is the eased-face affordance, so "the affordance is visible" is a number. */
+          if(ud.terrainOverhangApplied){
+            c.overhangShafts = (c.overhangShafts || 0) + 1;
+            if(ud.terrainOverhangApplied.any) c.overhangCellsApplied = (c.overhangCellsApplied || 0) + 1;
+            c.overhangApplied = c.overhangApplied || [];
+            if(ud.terrainOverhangApplied.any){
+              c.overhangApplied.push([ud.terrainOverhangApplied.cell,
+                (ud.terrainOverhangApplied.w ? "w" : "") + (ud.terrainOverhangApplied.e ? "e" : "")
+                + (ud.terrainOverhangApplied.n ? "n" : "") + (ud.terrainOverhangApplied.s ? "s" : "")]);
+            }
+          }
+          if(ud.terrainClimbBit){
+            c.climbBits = (c.climbBits || 0) + 1;
+            c.climbBitFaces = c.climbBitFaces || [];
+            if(c.climbBitFaces.indexOf(ud.terrainClimbBit.faceId) < 0){
+              c.climbBitFaces.push(ud.terrainClimbBit.faceId);
+            }
+          }
         }
         else if(inWitness) c.witnessParts++;
         else if(ud.sceneObjectId || ud.unitId || ud.spriteSlug || ud.bestiaryId) c.foreignFigures++;
@@ -5314,6 +5694,7 @@ function clayRoomMountTerrainBench(){
        clayTerrainWitnessFacingReport's own header for the two defects it exists to count. */
     window.Theater._clayTerrainWitnessFacingForTest = function(){ return clayTerrainWitnessFacingReport(); };
     window.Theater._clayTerrainSetRungForTest = function(id){ return clayRoomSetTerrainRung(id); };
+    window.Theater._clayTerrainSetGradeForTest = function(id){ return clayRoomSetTerrainGrade(id); };
     window.Theater._clayTerrainExpressionForTest = function(){
       return (S.clayRoomTerrainReport && S.clayRoomTerrainReport.expression) || null;
     };

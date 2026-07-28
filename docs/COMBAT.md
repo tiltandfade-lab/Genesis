@@ -253,6 +253,42 @@ their attacks too). Autonomous companion tactics are deferred with the Fable mon
 **Defined fast-follows (not MVP):** the in-app combat tracker UI; auto-objectified terrain→cover;
 per-creature initiative; autonomous monster/companion AI; death-save automation.
 
+## PROPOSED (2026-07-28) — the steep-surface shove bonus
+
+Adam, ruling on the terrain expression ladder (`docs/TERRAIN-EXPRESSION-R2.md` R7): *"maybe on
+steep angled surfaces things like shoves from an advantageous position should get bonuses."*
+**Recorded here as a proposal. NOT built** — no engine code, no table, no event, and terrain owes it
+nothing beyond the fact it now publishes.
+
+**What terrain already provides, as of the R2 pass.** `terrainCellStandPlane(field, index, flags)`
+returns a real plane per cell: `slopeDeg`, the two gradient components, and a unit normal. So "how
+steep is the ground under this creature, and which way does it fall?" is a question the engine can
+already answer for any cell, deterministically, without a renderer. That is the only fact this
+proposal needed and it did not exist before.
+
+**Suggested shape, for Adam to accept, alter, or reject.**
+
+- The bonus is **relational, not absolute**: it belongs to the *difference* between the two
+  combatants' footing, not to steepness as such. Two creatures on the same 30° slope are on level
+  terms with each other; a creature one quantum above another is not.
+- **Uphill advantage on a forced-movement contest.** When a shove (or trip/grapple-displace)
+  crosses a height difference, the higher creature has Advantage — the existing 5.5 lever, no new
+  dice. Height difference is the chassis's own integer `h`, so it is already exact.
+- **Same-cell-height, differing grade** is the case terrain newly makes sayable: a creature standing
+  on the flat pushing one standing on a grade steeper than the walk step gets Advantage; the reverse
+  gets Disadvantage. One threshold, read off `slopeDeg` against `TERRAIN_GRID_LAW.walkableStepQuanta`.
+- **The consequence is the point, not the bonus.** A shove that succeeds downhill should move the
+  target further — the natural expression is the existing `CONSEQUENCE-LADDER` degrees-of-success
+  read, with the slope adding one band rather than adding a modifier nobody can feel.
+- **Never a new roll.** The house rule is that graded outcomes come from margin, not extra dice
+  (`feedback: degrees of failure`), so this rides the existing shove contest.
+
+**Open, and deliberately not answered here:** whether the grade that counts is the LOGICAL one
+(the integer field, which is what walkability uses today) or a RENDERED one from the R4 ladder.
+Those differ — the ladder is render-only by construction — and letting a cosmetic grade change a
+contest would be exactly the "gameplay change wearing a dressing label" the terrain partition
+forbids. **If this is adopted, it must read the logical field.**
+
 ## Open questions
 
 - ⚑ **The advancement re-tune** (the live one): un-gate CR-XP into the primary spine + demote the

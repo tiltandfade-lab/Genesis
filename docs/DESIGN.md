@@ -1451,6 +1451,253 @@ against the captured fit, which differs from the host's fresh fit after any resi
 this (the rig never resizes), and `measure` still reports **RESULT: PASS** at 100% coverage over all
 12 sets. Whether the live viewer's re-framing after a resize is the *right* framing is Adam's call.
 
+## Terrain expression R2 — Adam's seven rulings on the ladder (2026-07-28) — PROPOSED
+
+Built to `docs/TERRAIN-EXPRESSION-R2.md`, which records seven rulings verbatim off the naked /
+material / all ladder. **Several of them reverse what the research recommended, and Adam wins.**
+No visual verdict is taken here; the packet is `dev/clay-captures/cl-f07c-terrain-r2-v001/`.
+
+### R1 — THE SPRITE MATCHES ITS BASE (reverses STANDEE-CONTRACT-NONFLAT §3)
+
+*"the standee on the stairs is a perfect fit, except the sprite itself should always be fixed at the
+same angle as its base."* The study recommended tilting the plinth and keeping the card vertical;
+R1's build shipped that, and `TERRAIN_CONTACT_THRESHOLDS.spriteTiltDeg` enforced it as a law. It is
+now the opposite law and the old constant is **deleted**, not re-commented — a reversed ruling that
+leaves its old constant lying around is a trap for the next reader.
+
+**How it is written.** `updateSpriteBillboardYaw`'s facing pass already solved the plinth's
+conformance angles from the YXZ composition; the wrap now takes *those same two angles* as a
+quaternion, composed with the camera pitch: `wrap = R_plane · R_cameraPitch`. Plane OUTSIDE, pitch
+INSIDE. The order is the whole ruling: with the pitch inside, the un-foreshortening happens in the
+BASE's frame, so the angle between the sprite's world-up and the plinth's world-up is the
+camera-pitch constant and nothing else, at every grade and every yaw. The other order also leans the
+card and looks plausible in a still, but that angle then varies with the grade — the sprite would be
+matching the *ground* rather than its *base*.
+
+**The measurement, and why it is one number.** Every standee carries a fixed 35° camera-pitch tilt,
+so the two frames are never identical; the proposition is that their *difference* is exactly that
+constant. **Measured across five grade rungs × 25 witnesses at free yaw: worst deviation 0.0000°.**
+Before the change, the same instrument read **22.43° at g3 and 24.56° at g4**, growing with the
+grade, which is the signature of a sprite that is not leaning. `verify-bw2-2` group 21b-R1 runs the
+whole argument in one process on a 30° plane: plinth world-up 30.0000° off vertical, sprite world-up
+59.9101° off vertical, agreement 35.0000°; put the wrap back to the R1 write and the same assertion
+reads **25.4783°** and fires.
+
+**A latent bug the teeth probe found.** The conformance was written only when a stand plane was
+present and never un-written, so a figure that LOST its plane kept a tilted plinth forever while its
+card went back to vertical (read 20.64°), and writing the wrap's quaternion left its derived Euler
+with non-zero y and z that `rotation.x = tilt` did not clear (47.52°). Both cleared explicitly.
+Conditionally-written-never-reset is the HQ2-1 bug shape; production never hit it because the flag is
+set once at placement.
+
+### R2 — THE BASE SKIRT (numbers derived, not guessed)
+
+*"we might need to extend the base down through the floor, so even on hills the base appears to make
+contact with the full ground, rather than just floating or teetering."*
+
+**Decision: a separate child mesh, not a taller plinth geometry.** Grounds: every contact gate in the
+repo reads the base mesh's own `geometry.boundingBox`, so a taller geometry would silently repoint
+them at the skirt's bottom face and the nearest-contact gap would begin measuring the thing that is
+meant to be buried. R2 says the gap keeps measuring the CONTACT plane; a child mesh is how that stays
+true. Proved: the corner gaps are **byte-identical with the skirt on and off**.
+
+**Decision: opt-in, terrain only.** Grounds: the flat tabletop's tiles have a thickness this build has
+not measured, and a skirt poking through one would be a new defect in service of an old one.
+
+**Depth 0.06 wu, bounded on both sides.** Below: the fold's amplitude is
+`TERRAIN_WALK_NOISE_BUDGET_H.perCellH` = 0.03868 wu attenuated by r² at the worst Medium corner
+(0.8686) = 0.0336, less the 0.006 authored embed = **0.0276 wu of daylight to cover**. Above: the cap
+slab is `CLAY_TERRAIN_CAP_H` = 0.10 wu and below it the A3 shaft is inset, so a deeper skirt could
+reach the notch and be seen from a low camera. 0.06 clears the need 2.2× and stays 0.04 inside the
+ceiling. The gate recomputes both bounds from the chassis's own constants rather than trusting the
+comment.
+
+**The daylight was real and no previous gate could see it.** The contact probe evaluates the stand
+PLANE; the ground a viewer sees is the plane PLUS B4's fold. Sampling the rendered top under the
+plinth footprint measures **0.0154–0.0223 wu of daylight** per rung — up to 1.9× the 0.012 wu
+visibility floor — on frames whose corner gaps were all green. With the skirt the worst margin is
+**+0.0372 to +0.0446 wu buried**; with `?terrainskirt=0` it is **−0.0154 wu with 11 witnesses
+showing daylight**, which is the gate's own red proof.
+
+### R3 — OVERHANG NEEDS RULES (the ladder's third rung is overkill)
+
+*"i don't want EVERY single top level plane to overhang… specially on cliffsides, but it doesn't make
+sense on every single terrain surface."*
+
+**The rule, stated.** A side earns a cap overhang when it is EXPOSED **and** the drop below it is at
+least `faceStepQuanta` (2h = 5 ft) — a face, which is what the engine already calls a cliff, is
+guarded, and is never walked. Forbidden: interior seams (a welded joint, or the ground reads as loose
+tiles); **1h risers**, because that drop is a tread and belongs to B2's nosing — this is the clause
+that stops every stacked block growing a lip; boulder cells (a rounded mass carries no coping); cells
+under water; cells carrying a thicket or trunk-field volume.
+
+**The scene cap: ≤ 34% of a field's live cells, PROPOSED.** Derived from the measured rule-only share
+across all thirteen CL-F07 fields — 20.83 / 20.83 / 27.08 / 27.08 / 29.43 / 29.43 / 37.50 / 37.50 /
+39.51 / 41.67 / 41.67 / 59.26 / 100.00 % — so it sits just below the median (37.5%) and therefore
+governs the cliff-heavy tail while leaving ordinary fields to the rule. When the licence exceeds the
+cap it is **withdrawn from the shallowest faces first** (deepest drop descending, cell index as the
+deterministic tiebreak), which is Adam's "specially on cliffsides" bias implemented literally. Five
+of thirteen fields are capped; the 8-cell walk-down tray is the honest extreme — every cell of a 4×4
+chasm tray really does stand over a full face, and it is the cap that takes it from 100% to 25%.
+
+**Measured effect on the sheet: 166 of 564 cells (29.4%) against 227 (40.2%) universal.** Stated
+plainly: at whole-sheet scale the two are hard to tell apart; the difference is legible at detail
+scale, which is what the packet's crops are for.
+
+**A7's banding was worse than "proud".** Adam's read was *"drop it to a material value change, not a
+projecting ledge… 0.022 wu proud is what catches the wrong highlight."* Reading the geometry while
+dropping that number found the real defect: the bands were positioned at ±0.5 — the CELL boundary —
+while the shaft they dress is inset by up to 0.125 wu on an exposed side. On every overhung cell they
+were not proud of the face at all; they were **detached rails hanging 0.10 wu out in the air** below
+the cap. Now they sit on the face plane the shaft was actually built with, at 0.0015 wu proud —
+six times under the 0.012 wu visibility floor, so what remains is the tone change and nothing else.
+
+**Three modes ship, not one.** `rule` (the ruling, default), `universal` (what R1 shipped, kept so the
+comparison capture is the real prior render rather than a reconstruction — and so the R3 gate has
+something to fail against), `none`. The gate compares what the renderer BUILT, tagged per shaft,
+against the engine's licence; the universal mode fails that comparison, which is what makes it a gate.
+
+### R4 — PUSH THE ANGLE VARIATION, and a PROPOSED maximum
+
+*"we just need to change our own rules… though the steepest ones look like they should be the max."*
+
+`TERRAIN_GRADE_LADDER` replaces the single 18° constant with five declared render-only rungs. Per
+rung, the angle a RUN cell renders and — stated, not left for a reviewer to discover — the angle a
+one-sided EDGE cell renders, which is half of it:
+
+| rung | quanta/cell | run | edge | what it is |
+|---|---|---|---|---|
+| g0 | 0 | 0.0000° | 0.0000° | flat — the chassis as it always drew it |
+| g1 | 0.325 | 9.2299° | 4.6451° | the gentle grade |
+| g2 | 0.65 | 18.0042° | 9.2299° | the corpus grade — R1's shipped default, unchanged |
+| g3 | 1.0 | 26.5651° | 14.0362° | the walkable step — Genesis's only currently LEGAL slope |
+| g4 | 1.1547 | 30.0000° | 16.1021° | **PROPOSED MAXIMUM** |
+
+**THE PROPOSED MAXIMUM IS 30.000° (g4), and it is a proposal with two candidates, not an adoption.**
+26.565° (g3) is the walkable STEP — what the Lipschitz clamp already guarantees between two
+walk-connected cell centres, so a render at that angle can never overstate the walk graph.
+30.000° (g4) is the stated LIMIT: `TERRAIN_GRID_LAW.maxWalkableSlopeDeg` has read 30 since the
+chassis was written, and `TERRAIN_WALK_NOISE_BUDGET_H.maxRenderedStepH` = tan(30°)·5/2.5 = 1.1547h is
+already the chassis's own RENDERED ceiling — the number the walkable noise budget is *derived from*.
+**Grounds for proposing g4:** it is the engine's own published limit rather than a new number; the FFT
+corpus's steepest walkable measures ≈31°, so 30 sits just inside what FFT itself does; and "the
+steepest ones look like they should be the max" points at the top of the range, which g3 is not —
+g3 is the middle of the ladder and is already legal, so adopting it as the ceiling would make the
+ruling a no-op. **Adam rules.**
+
+**The declared angle is now a CEILING on the plane, not on each axis.** Without this a rung labelled
+30° rendered 39.2° at every outside corner, because a cell falling in both x and z has √2 the
+per-axis gradient — the declared angle would have been a floor. Clamped uniformly so the plane's
+aspect is preserved and only its steepness is capped. Consequence worth stating: this also caps
+**R1's shipped g2 default, whose corner cells previously rendered 24.7° against a declared 18°.**
+
+**Every rung is render-only, and that is now load-bearing.** The walk fingerprint is byte-identical
+across all five rungs in jsdom and again in the browser, and no witness stands on a plane steeper
+than its rung declares (measured steepest per rung: 0.0000 / 9.2299 / 18.0042 / 26.5651 / 30.0000).
+A LOGICAL grade changes walkability and is a gameplay change requiring Adam's sign-off; **not taken.**
+
+### R5 — THE MEDIUM-ACCESSIBILITY LAW (new), and the large-creature law verified
+
+**Step 1, verified rather than assumed. The law Adam remembers EXISTS, and it is not about terrain.**
+`docs/DUNGEON-GRAPH.md` law 2, SCALE-DOMAIN RULE, verbatim: *"A room that merely fits its monster is
+a prison. When a large+ resident rolls, the dungeon scales AROUND it: the connected subgraph the
+creature inhabits (its scale domain — lair chamber + the corridors/rooms it patrols) is built at that
+creature's scale."* It is BUILT: `src/engine/place-semantics.js` assigns a domain to *"every resident
+with `scaleVsHuman >= 2.0`"* and `dsmFitTestAndGrow` **grows** any domain room below `ceil(scale)+2`
+cells per axis, rebuilding the plan and re-verifying reachability. Three qualifications, all
+load-bearing: (a) it is a **dungeon-room** law — nothing in it touches terrain; (b) its trigger is
+`scaleVsHuman ≥ 2.0`, i.e. roughly HUGE, not the D&D size category "Large"; (c) it is **constrained by
+a later accepted ruling** — wave-06 P6.4/P3.4, closed: *"builder/original-use scale is canonical; a
+current occupant must use a compatible inherited domain, an explicitly caused adaptation, or an
+honest mismatch… Arrival alone never retroactively widens corridors or raises ceilings."*
+**And nothing anywhere states a floor for the ordinary Medium body.** Adam's instinct was half right;
+the missing half is exactly R5.
+
+**Step 2, the law, three clauses.** A generated field must admit the Medium protected disc on at
+least `minShare` of its standable cells (SHARE); the largest walk-connected admitting component must
+be at least `minShare` of the largest walk-connected STANDABLE component (COHESION); and every
+standable entry cell must admit a Medium (ENTRY). Gated against the **worst-case 0.932 wu cap disc**,
+not the average 0.831 — a law that only holds for the average body is not a law.
+
+**Why COHESION is a ratio and not "one component".** The first cut demanded one component containing
+every entry. Measured against the real fixture that is simply wrong: the 24×24 bench SHEET is thirteen
+separate bays and the 16-cell tray is split by its own chasm, so their standable sets are already
+several components before any body is considered — the gate would have failed three CL-F07 fields for
+having the topology they were built to have. What the law cares about is whether the Medium floor
+*shrinks* what already exists, so it compares like with like.
+
+**Step 3, the measurement Adam has never had. Every CL-F07 field is 100.00% Medium-accessible,
+cohesion 100.00%, zero entries blocked, zero Small/Tiny-only cells.** All thirteen fields, standable
+counts 8 to 546. So the pockets Adam wants **do not exist yet** — terrain's walk graph is entirely
+size-blind today, and there is nowhere on any generated field where Small or Tiny has an advantage.
+The floor is therefore free to adopt now and is a bound on what comes later.
+
+**`minShare = 0.85`, PROPOSED.** Grounds: measured today is 100%, so the number has to be chosen for
+what it PERMITS, not for what it costs. 15% of the census-median 60×80 arrival (192 cells) is up to 28
+cells — two to four pockets of 7–14 cells, which is the size at which a pocket reads as a place a
+Small creature can use rather than as one odd square. Below ~0.75 a 12×16 arrival can lose a whole
+quadrant, which is no longer "the majority of most of the map".
+
+**Teeth, three ways, red-first.** Intrusions that eat the usable top on 40% of standable cells drop
+the share to 59.89% and FAIL; stripe intrusions keep a PASSING 88.28% share while the largest
+admitting component collapses to 27.97% and fail COHESION — *the share clause alone would have called
+that fine*; blocking only the route-proof field's 8 entries leaves share and cohesion both passing and
+fails ENTRY. A Small body admits where a Medium does not on the same intruded field, so the
+Small/Tiny advantage is measurable rather than asserted.
+
+### R6 — THE EASED CLIMB BAND, with a visible affordance
+
+`TERRAIN_GRID_LAW.climbDcBands` is `[12, 15, 17]` and — measured, not assumed — **nothing in the
+engine consumes it**: no face carries a DC today. So `terrainFaceClimb` authors the mapping for the
+first time (2h→12, 3h→15, 4h+→17) and adds the eased band. **All DC values are PROPOSED**; the
+existing three bands are untouched.
+
+Which faces earn it: a face of exactly the minimum height (2h — the shortest thing the engine calls a
+face), drawn by a seeded per-face bit at 1/3. Short faces, so the easy ones are legible as the low
+ones. Measured: 0–25% of faces per field (sheet 16 of 143, one-clamp cliff 5 of 20, sheer-cliff 0 of
+88). **Eased at 2h is auto (DC 0); above that DC 10.**
+
+**The affordance is the same predicate, not a decoration beside it** — `reliefBits` from
+`terrainFaceClimb` is what the renderer draws, so a face cannot be easy without looking easy. It is
+registered as its **own device (R6, geometry bin)** rather than riding A7's decal bin: proud rock is
+geometry, and the geometry bin is what puts it in the MATERIAL rung — the frame Adam has already said
+he prefers, which is the one it needs to be judged in. Size and value were set **by looking**: the
+first cut (0.10–0.16 wu at 0.72–0.88 tone) was a 6–10 inch lump the same value as its face and was
+almost impossible to find in the banked crop — an affordance the player cannot read is the tooltip R6
+forbids. Now 0.16–0.26 wu (10–16 inches, a real hand- or foothold at 5 ft/cell) and LIGHTER than the
+face, because a proud rock on a shaded vertical catches the key.
+
+### R7 — recorded, not built
+
+The steep-surface shove bonus is written into `docs/COMBAT.md` as a PROPOSED section with a suggested
+shape and one explicit open question: if adopted it must read the LOGICAL grade, never a rung of the
+render-only ladder, or a cosmetic device would be changing a contest.
+
+### Gates
+
+`verify-terrain-bench` 73/0 · `verify-terrain-expression` 70/0 · **`verify-terrain-expression-r2`
+53/0 (new)** · `verify-terrain-standee` 72/0 · **`verify-terrain-standee-r2` 71/0 (new)** ·
+`verify-clay-camera-resize` 10/0 · `verify-bw2-2-floor-contact --with-render` 93/0 ·
+`verify-stage-c-terrain` 60/0 · `verify-clay-room` 272/0 · `check-manifest` OK. Pixel gate on the
+full bank: **100.00% coverage on every frame of every scene, both cameras, determinism PASS over 13
+fields in two page loads, dark p50 luma 6.8 unchanged.**
+
+### What LOOKING found, and what it could not settle
+
+1. **The plinth is the same grey as the ground on the clay bench.** The base mesh is present, visible
+   and opaque at `0x8a8a8a`; the clay diagnostic surface paints the terrain the same value. So on
+   this fixture "the base appears to make contact" is a claim about something a viewer can barely
+   see — the R2 skirt closes real, measured daylight, but the fixture cannot show Adam that it did.
+   Identical in the R1 bank, so it is the fixture's property, not this build's.
+2. **The rule/universal overhang difference does not read at whole-sheet scale**, only at detail
+   scale. The packet carries a 3× crop stack for that reason.
+3. **The climb bits read as pale pebbles, and in the DARK scene they are among the brightest things
+   in the frame.** That is arguably right — §4.2 asks that the edge stay findable in darkness — but
+   it is a taste call and it is Adam's.
+4. **The flat boundary fields read as a paved plaza**, not as wilderness ground: the two-frequency
+   joint plus the fold makes flagstones. Adam ruled the joint in R1; naming it again because the
+   effect is strongest exactly where there is no relief to break it up.
+
 ## Terrain expression — getting off the chonky blocks, with standee proof (2026-07-28) — PROPOSED
 
 Adam, on the fixed CL-F07a frames: *"we just need a bit more expression to get us a little further

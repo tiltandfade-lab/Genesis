@@ -202,7 +202,39 @@ function interiorStandeeContactY(floorTop){
 // is always "flush under local y=0": the group's local y=0 IS the base's own top face, which is also
 // exactly where a floorFrac=0 sprite's own bottom edge sits (buildSpriteBillboardMesh's
 // mesh.position.y=h/2 convention) — one shared local reference point, no separate bookkeeping.
-function buildInteriorBase(width, depth, trimHex){
+/* TERRAIN-EXPRESSION R2 (Adam 2026-07-28) — THE BASE SKIRT. *"we might need to extend the base down
+   through the floor, so even on hills the base appears to make contact with the full ground, rather
+   than just floating or teetering."*
+
+   THREE PROPERTIES THIS SHAPE HAS AND A TALLER PLINTH GEOMETRY WOULD NOT:
+     1. the CONTACT PLANE does not move. Every contact gate in the repo reads the base mesh's own
+        `geometry.boundingBox` (clayStandeeBaseBox -> the nearest-contact probe), so growing the
+        plinth's geometry downward would silently repoint those gates at the skirt's bottom face and
+        the nearest-contact gap would start measuring a thing that is meant to be buried. A separate
+        CHILD mesh leaves the parent geometry — and therefore every existing measurement — exactly
+        as it was. R2 says this in as many words: the gap keeps measuring the CONTACT plane.
+     2. it is opt-in. A skirt is only ever right where the ground is thick; the flat tabletop's tiles
+        have a thickness this build has not measured, and a skirt poking through one would be a new
+        defect in service of an old one. Terrain passes the depth; nothing else does.
+     3. it casts no shadow and receives none. It lives inside solid ground where there is no light
+        to occlude, and a caster buried in geometry is a shadow-acne generator for free. */
+function buildInteriorBaseSkirt(width, depth, mats, skirtDepth){
+  const geo = new THREE.BoxGeometry(Math.max(0.05, width * 0.96), skirtDepth,
+    Math.max(0.05, depth * 0.96));
+  if(typeof geo.translate === "function") geo.translate(0, -skirtDepth / 2, 0);
+  const mat = (Array.isArray(mats) ? mats[0] : mats);
+  const mesh = new THREE.Mesh(geo, mat);
+  /* the plinth's own bottom sits INTERIOR_BASE_HEIGHT + the bevel below the contact origin; the
+     skirt hangs from there, so its top is welded to the plinth's underside rather than floating. */
+  mesh.position.set(0, -INTERIOR_BASE_HEIGHT, 0);
+  mesh.castShadow = false;
+  mesh.receiveShadow = false;
+  mesh.userData.standeeBaseSkirt = true;
+  mesh.userData.skirtDepth = skirtDepth;
+  return mesh;
+}
+
+function buildInteriorBase(width, depth, trimHex, opts){
   const geo = interiorBaseGeoFor(width, depth);
   // BW2-2b item 3 (TURN GLOW): the cache above (interiorBaseMaterialsFor) deliberately shares ONE
   // material set per realm trim color across every standee mounted from the same board — cheap, and
@@ -219,6 +251,13 @@ function buildInteriorBase(width, depth, trimHex){
   mesh.userData.supportWidth = width;
   mesh.userData.supportDepth = depth;
   mesh.userData.supportHeight = INTERIOR_BASE_HEIGHT;
+  const skirtDepth = opts && Number.isFinite(opts.skirtDepth) ? opts.skirtDepth : 0;
+  if(skirtDepth > 0){
+    const skirt = buildInteriorBaseSkirt(width, depth, mats, skirtDepth);
+    mesh.add(skirt);
+    mesh.userData.standeeBaseSkirtMesh = skirt;
+    mesh.userData.standeeBaseSkirtDepth = skirtDepth;
+  }
   return mesh;
 }
 // setBaseGlow(mesh, glowing) — BW2-2b item 3: toggles the acting-standee "your turn" plinth glow by

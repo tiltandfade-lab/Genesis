@@ -1,0 +1,4 @@
+interface:
+  display_name: "Genesis Visual Review"
+  short_description: "Diagnose and iterate on Genesis visuals"
+  default_prompt: "Use $genesis-review-visuals to review this visual surface, identify systemic causes, make a controlled edit, and produce a comparable A/B packet."

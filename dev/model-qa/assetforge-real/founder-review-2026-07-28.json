@@ -45,18 +45,18 @@
       "family": "citizenship",
       "verdict": "CONSOLIDATE",
       "canonicalAuthority": "build/gen-sprite-registry.py + src/ui/theater-sprites.js + Clayroom citizenship proof",
-      "implementationResponse": "CONSOLIDATED_RENDERER_V2_CANDIDATE",
+      "implementationResponse": "CANONICAL_ADAPTER_PASS_RENDERER_V2_VISUAL_FAIL",
       "proof": "dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png",
-      "finding": "Assetforge is now a single-asset adapter over the canonical registry contract and preserves the source canvas. The production renderer v2 adds trilinear mipmapped minification, alpha-to-coverage, a 0.12 readability floor, and reduced realm-tint contamination. A hash-bound four-lighting A/B proves the renderer contract on seven real registry sprites; no sprite art is admitted.",
-      "requiredNext": "Retain the one canonical schema and renderer. Adam reviews the low-light A/B as a prototype renderer candidate; individual sprite taste and production admission remain separate."
+      "finding": "Assetforge is correctly consolidated as a single-asset adapter over the canonical registry contract, but the renderer candidate is visually rejected. Magnification remained nearest while play-scale minification changed from single-level linear to trilinear mipmaps; the mip chain softened the authored pixel sprites and reads extra blurry.",
+      "requiredNext": "Keep the canonical adapter, restore a nearest-neighbor-sharp gameplay read, and solve low-light dust without trilinear softening. Re-prove fixed-scale real sprites under the same lighting set."
     },
     {
       "family": "boundary",
       "verdict": "EXPAND_BEYOND_ARCHITECTURE",
-      "implementationResponse": "EXPANDED_DIALECT_SUITE_CANDIDATE",
+      "implementationResponse": "TOPOLOGY_CANDIDATE_VISUAL_PROOF_FAIL",
       "proof": "dev/model-qa/assetforge-real/runs/boundary/candidate/proof-board.png",
-      "finding": "The compiler now retains Blob47 architectural enclosure and adds an eight-way 256-shape wilderness path dialect, a cardinal 16-shape road dialect with shoulders and ruts, and a cardinal transition plus integer-elevation cliff dialect. Each dialect has four individual real-material renders; the combined board is navigation only.",
-      "requiredNext": "Adam reviews the individual path, road, and cliff boards. Technical coverage does not approve their visual language or runtime routing."
+      "finding": "The expanded mask coverage remains useful technical topology, but the wilderness-path board is not engine-legible. It is a continuous top-down 2D route over a periodic material canvas, not production terrain/camera proof. Its single grass tile repeats brutally; road and cliff boards share the same unresolved one-source repetition class.",
+      "requiredNext": "Build deterministic ground anti-repetition, consume the topology through the production terrain projection, and render governed-camera scenes with standees, elevation/contact, path width, edge blend, intersections, and nearby dressing."
     },
     {
       "family": "atlas",

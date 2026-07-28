@@ -6,6 +6,31 @@ updated: 2026-07-28
 
 # Genesis — Session Hand-off
 
+## Latest (2026-07-28, ASSETFORGE V2 FOUNDER RE-REVIEW) [Codex]
+
+Adam rejected the newest citizenship and path presentation proofs. Their mechanical receipts remain
+useful diagnostics, but the visual claims are withdrawn.
+
+- **Citizenship v2 is too blurry.** The exact change was nearest magnification + one-level linear
+  minification -> nearest magnification + trilinear mipmapped minification. At gameplay scale the
+  sprites are minified, so the mip chain averages authored texels even though close-up magnification
+  still says nearest. Restore a pixel-sharp sampling baseline and solve dark-scene dust without
+  trilinear softening.
+- **Path proof is not engine-legible.** It currently draws a continuous 2D route over a tiled
+  material canvas. It does not consume the production terrain renderer, governed camera, standee
+  scale, elevation, dressing, or runtime material projection. The 256-mask topology compiler may be
+  retained, but the current board is not proof of what players will see.
+- **Ground repetition is unresolved and exposed.** The path helper reduces one grass source to one
+  periodic tile and copies it across the whole field. Runtime interiors have small deterministic
+  room/cell tone variation and 1-3 cover splats, but the live texture pools still contain one variant
+  for most surfaces; none of that breaks the source albedo's repeated landmarks. The prior modular
+  repeat compiler remains rejected because `forcePeriodic` did not close its real course period.
+
+**Next honest build:** (1) pixel-safe sprite sampling A/B in the real low-light renderer; (2) a
+deterministic ground anti-repeat compiler/runtime adapter; (3) an in-engine path scene consuming
+both, with individual camera-scale renders. Do not re-present the current citizenship or path boards
+as visual PASS.
+
 ## Latest (2026-07-28, ASSETFORGE CONSOLIDATION + BOUNDARY V2) [Codex]
 
 Adam's palette, low-light citizenship, and boundary-breadth corrections are implemented as
@@ -17,11 +42,11 @@ prototype-tool candidates. No current sprite is final and no output is runtime-a
   zero forbidden pixels, identical alpha, and preserved semantic colors.
 - **Citizenship duplicate resolved:** Assetforge is a source-canvas-preserving adapter over
   `build/gen-sprite-registry.py`; it does not own a second foot/height/bounds schema.
-- **Low-light renderer repaired:** `lit-standee-v2` uses trilinear mipmaps, alpha-to-coverage, a
+- **Low-light renderer candidate (subsequently rejected above):** `lit-standee-v2` uses trilinear mipmaps, alpha-to-coverage, a
   `0.12` readability floor, and reduced realm-tint contamination (`0.15`). The real
   production-renderer A/B covers moonlight, torchlight, magic glow, and a daylit negative control
   across seven registry sprites and 63 standee materials.
-- **Boundary V2 built:** Blob47 architectural enclosure remains intact. New independent dialects
+- **Boundary V2 topology built; current path presentation rejected above:** Blob47 architectural enclosure remains intact. New independent dialects
   cover 256 eight-way path masks, 16 cardinal road masks with shoulders/ruts, and 16 cliff
   transitions across four integer elevation bands. Path, road, and cliff each retain four
   individual real-material renders; the combined board is navigation only.

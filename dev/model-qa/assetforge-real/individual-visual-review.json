@@ -6,7 +6,7 @@
   "technicalQualification": "PASS",
   "founderReview": "REVISE_AND_CONSOLIDATE",
   "artAdmission": "BLOCKED",
-  "claimBoundary": "Every listed board was opened individually at original detail. Mechanical receipts do not override Adam's rulings. New palette, citizenship, and boundary results are prototype-tool candidates, not production art admission; no current sprite is final.",
+  "claimBoundary": "Every listed board was opened individually at original detail. Mechanical receipts do not override Adam's rulings. Adam subsequently rejected the trilinear citizenship render as blurry, the path board as non-engine-legible, and the repeated single-tile ground field. No current sprite or boundary presentation is final.",
   "boardsInspected": 18,
   "reviews": [
     {
@@ -38,24 +38,25 @@
       "run": "wilderness-path",
       "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-path/proof-board.png",
       "proofSha256": "614ac0384c5a7e8758d7b2d9dfdcdcffb0ea4fcc8b04f5652e80541787c74b20",
-      "visualStatus": "PASS_CANDIDATE",
-      "finding": "Diagonal ridge trail, game-trail forks, woodland loop, and switchback renders remain continuous through sharp turns and diagonal joins. The organic jitter breaks sterile line regularity without pinching the route. All 256 eight-way masks are covered."
+      "visualStatus": "FAIL_NOT_ENGINE_LEGIBLE_AND_REPETITIVE",
+      "founderFinding": "The board does not communicate what a path would actually look like in the engine, and the single ground tile repeats brutally.",
+      "finding": "All 256 masks remain a useful topology result, but the beauty board uses Assetforge's continuous 2D route renderer over a periodically tiled grass canvas. It proves neither the production terrain projection nor an acceptable ground material field."
     },
     {
       "family": "boundary-road",
       "run": "wilderness-road",
       "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/wilderness-road/proof-board.png",
       "proofSha256": "14728cd15eac6429af6f8efa44441e0c2296bd478443ca04b4c5c20c0986bca7",
-      "visualStatus": "PASS_CANDIDATE",
-      "finding": "Meander, forks and dead ends, crossings and loop, and switchbacks and spurs read as a road rather than a wide path because shoulders and paired rut detail remain legible. All 16 cardinal masks are covered."
+      "visualStatus": "REVISE_GROUND_ANTI_REPEAT_AND_ENGINE_PROOF",
+      "finding": "All 16 cardinal masks remain mechanically covered, but the board repeats one grass source and one road source across the field. It is not yet a production terrain/camera proof."
     },
     {
       "family": "boundary-cliff",
       "run": "cliff-elevation",
       "proofBoard": "dev/model-qa/assetforge-real/runs/boundary/candidate/dialects/cliff-elevation/proof-board.png",
       "proofSha256": "e2059584b69f0662f27bab8f1111ddce002f8e1d0fd0550e70f5a419629e3f1b",
-      "visualStatus": "PASS_CANDIDATE",
-      "finding": "Escarpment, terraced switchback, mesa and outcrop, and ravine renders expose coherent shaded and striated faces in a dimetric height field. The proof exercises 16 cardinal transitions and four integer elevation bands."
+      "visualStatus": "REVISE_GROUND_ANTI_REPEAT_AND_ENGINE_PROOF",
+      "finding": "The four elevation bands and 16 cardinal transitions remain mechanically useful, but repeated top/face landmarks and the standalone dimetric harness still require anti-repeat and production terrain/camera proof."
     },
     {
       "family": "repeat",
@@ -121,8 +122,9 @@
       "run": "renderer-v2-low-light",
       "proofBoard": "dev/model-qa/assetforge-real/runs/citizenship/low-light-proof/citizenship-v2-before-after.png",
       "proofSha256": "2de78f496c8b829be00fdccb9e95bb0ca1d63290d44bed19fba34c341b04e563",
-      "visualStatus": "PASS_CANDIDATE",
-      "finding": "Real production-renderer A/B crops show less dusty fragmentation under moonlight, torchlight, and magic glow while daylit remains a negative-control context. The contract proves seven mipmapped textures, 63 alpha-to-coverage standee materials, a 0.12 readability floor, and 0.15 realm-tint strength. Prototype art remains unadmitted."
+      "visualStatus": "FAIL_BLURRY_SAMPLING",
+      "founderFinding": "The newest citizenship sprites look extra blurry; nearest-neighbor sharpness was expected.",
+      "finding": "The A/B proves the trilinear-mipmap renderer contract, but that contract is visually rejected. At gameplay scale the sprites are minified, so averaged mip levels soften authored texels even though magnification remains nearest. Keep the canonical metadata adapter and rework sampling."
     },
     {
       "family": "atlas",

@@ -271,6 +271,25 @@ The palette and citizenship duplication findings are resolved in the prototype t
 This is a tool-quality response inside the prototype zone. It does not make any current sprite
 final or admitted.
 
+### Founder re-review — 2026-07-28
+
+The consolidation is structurally correct, but two visual claims from the response above are
+withdrawn:
+
+- `lit-standee-v2` changed minification from single-level linear sampling to trilinear mipmapped
+  sampling. Magnification remained nearest, but play-scale sprites are minified; the mip chain
+  visibly softened them. Adam rejected the candidate as blurry. The canonical adapter remains, but
+  the renderer recipe returns to `REVISE`.
+- The wilderness-path proof uses Assetforge's continuous 2D field renderer over a repeated material
+  canvas. It proves route topology, not production terrain presentation. Adam could not tell what it
+  would look like in the engine, so it is not an accepted visual proof.
+- The proof helper calls `periodic_material()` once and tiles that result across the field. This
+  makes the source grass landmarks repeat brutally. Seam closure, per-cell tone jitter, and sparse
+  cover splats do not constitute an anti-repetition system.
+
+The next boundary proof must consume a deterministic anti-repeat ground field and run through the
+production terrain renderer with the governed camera, standees, elevation/contact, and dressing.
+
 ## Non-emote V1 contracts
 
 - **Modular repeat:** keys a component sheet, isolates connected components, places every component

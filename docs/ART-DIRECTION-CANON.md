@@ -2000,3 +2000,31 @@ Binding consequences:
   only.
 - A mechanical `PASS` establishes a prototype candidate. It does not establish beauty, runtime
   routing, production-asset admission, or final sprite identity.
+
+## PIXEL-SHARP CITIZENSHIP, ENGINE-LEGIBLE PATHS, AND GROUND ANTI-REPETITION (Adam, 2026-07-28 — binding; verbatim)
+
+> "did you chagne the scaling mode on the sprites? we were using nearest neighbor, the sprites look extra blurry now in the newest citizenship tests
+>
+> i have no idea what i am looking at on that path boundary compiler, what would that actally look like in the engine?
+>
+> and weren't you working on something to help with the ground texture repetition issue? that single tile repeating pattern is brutally repetitive"
+
+Binding consequences:
+
+- The `lit-standee-v2` trilinear-mipmap citizenship candidate is visually rejected. Pixel-sprite
+  citizenship must preserve a nearest-neighbor-sharp gameplay read; solving low-light dust or
+  shimmer may not soften the authored texel structure. Future proofs compare pixel-safe sampling
+  candidates in the real renderer at fixed play scale.
+- A top-down line diagram is not sufficient boundary/path proof. The path compiler must be consumed
+  by the production terrain projection and shown through the governed camera with real scale,
+  standees, elevation/contact, path width, shoulders/edge blend, intersections, and nearby dressing.
+  The viewer should understand the result as a wilderness path without interpreting a compiler
+  schematic.
+- Exact seam closure is necessary but does not solve visible cadence. Repeating one seamless tile
+  across a field is rejected when its internal landmarks form an obvious grid. Ground proof needs a
+  deterministic anti-repetition system—compatible variants or texture quilting, world-locked
+  selection, low-frequency macro variation, and sparse semantic overlays—before boundary beauty
+  renders can pass.
+- The existing per-room/per-cell tone jitter and small cover splats are supporting layers, not an
+  adequate substitute for breaking albedo repetition. The previously rejected `forcePeriodic`
+  modular-repeat output remains rejected.

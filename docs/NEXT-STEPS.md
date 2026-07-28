@@ -457,8 +457,10 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 8. ☐ **Assetforge art-admission gate** — Adam reviews the individual retained process proofs (the
    aggregate board is navigation only). First review is complete: repeat + current prop proof
    rejected; condition needs visibly more age; trim retained; atlas promising with Clayroom proof
-   deferred. Palette consolidation and the citizenship canonical adapter + low-light renderer v2
-   are complete. Boundary V2 now has separate enclosure/path/road/cliff dialects with individual
-   real renders. Remaining tool work is repeat period closure, prop source-edge/camera/depth
-   contracts, stronger canonical age generation, and material-baker consolidation; return only
-   revised individual proofs for admission.
+   deferred. Palette consolidation and the citizenship canonical adapter are complete, but Adam
+   rejected the trilinear-mipmap renderer v2 as blurry. Boundary V2 has separate
+   enclosure/path/road/cliff topology dialects, but Adam rejected the path board as non-engine-legible
+   and the single-tile ground field as brutally repetitive. Next: restore pixel-safe sampling; build
+   deterministic ground anti-repetition; prove paths through the production terrain renderer and
+   governed camera. Repeat period closure, prop source-edge/camera/depth contracts, stronger
+   canonical age generation, and material-baker consolidation also remain.

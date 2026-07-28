@@ -1937,3 +1937,38 @@ found during that inspection remain failures until repaired and rerun; an aggreg
 cannot hide clipped art, dirty sheet fragments, cadence defects, anatomy defects, or other visible
 problems. Real-asset technical qualification still does not grant runtime admission or Adam's taste
 approval.
+
+## ASSETFORGE FIRST REAL-ASSET FOUNDER REVIEW (Adam, 2026-07-28 — binding; verbatim)
+
+> "the infinite repeat compiler seems to have changed or given us broken results
+>
+> the prop/kit compiler might actually work if the angle matches the exact camera angle, i am not sure that it does, but also the sprite clips at the bottom, sprites that are meant to stand in for 3d objects would always layer in front of the ground and never be clipped by the ground
+>
+> condition state factory is a step forward, but i think we need to see MORE age, that's some pretty conservative aging
+>
+> the palette harmonizer is very similar to the process we already had in the game, does this conflict with the standing harmonizer?
+>
+> the trim slice compiler seems very useful, there are CSS tricks to achieve the same effect without cutting a new sprite but it still seems like a useful tool for elongating sprites like that
+>
+> did the sprite citizen compiler build on our current tools? i just want to make sure we don't have several duplicate tools in the system now
+>
+> the atlas optimizer is an actually very promising tool, this might allow us to use sprite items again instead of relying on 3d construction, we have to find the happy balance of both, and test the texturing of the 3d sprites, nice job with that, though i would eventually need to see those proven in the clay room, just not now.
+>
+> material map baker was another that was alreadt formed, as long as we don't have duplicates that are slightly different this is good"
+
+Binding consequences:
+
+- The current real repeat candidate is rejected. Exact equality of the outermost pixel rows cannot
+  substitute for closure of the declared component/course period.
+- A sprite used as a 3D-object stand-in must declare and match the production camera contract. Its
+  leaf art may not already be clipped, and its visible pixels win depth ties against the ground.
+- The retained aged condition state is too conservative. The canonical material lane must propose
+  a visibly stronger age ladder before condition registration is re-reviewed.
+- Palette harmonization, sprite citizenship, and material-map derivation each have one canonical
+  authority. Assetforge may wrap those tools with manifests, quarantine, proof, and receipts; it
+  may not ship a slightly different parallel algorithm or metadata schema.
+- Offline trim/nine-slice compilation remains useful alongside CSS `border-image`/nine-slice UI
+  techniques, particularly for canvas, WebGL, exported textures, and other non-DOM consumers.
+- Atlas work is promising and may help sprite items coexist with 3D construction. Runtime and
+  Clayroom proof are explicitly deferred until Adam requests them; atlas packing alone cannot claim
+  renderer batching or successful 3D-texturing integration.

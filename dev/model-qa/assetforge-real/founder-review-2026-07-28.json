@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "reviewKind": "founder-real-asset-review",
+  "reviewedOn": "2026-07-28",
+  "reviewer": "Adam",
+  "technicalReceipt": "dev/model-qa/assetforge-real/qualification-receipt.json",
+  "technicalReceiptStatus": "PASS",
+  "founderStatus": "REVISE_AND_CONSOLIDATE",
+  "runtimeAdmission": "BLOCKED",
+  "rulings": [
+    {
+      "family": "repeat",
+      "verdict": "FAIL",
+      "finding": "The real infinite-repeat output is broken. A one-pixel edge equality gate is not periodic course closure.",
+      "requiredNext": "Use rectangular period-closed dimensions; require width mod xStep = 0, height mod yStep = 0, and an even course-row count for stagger parity. Remove forcePeriodic as a seam-laundering fallback."
+    },
+    {
+      "family": "prop-kit",
+      "verdict": "FAIL_CURRENT_PROOF",
+      "finding": "Camera equivalence is unproved and the chosen leaf sources are already clipped at image boundaries.",
+      "requiredNext": "Reject edge-clipped leaf art before staging, declare the production 35-degree elevation, 45-degree bearing, 20-degree FOV and rotation policy, and prove the card through the real dressing renderer with standee-wins-ground depth behavior."
+    },
+    {
+      "family": "condition",
+      "verdict": "REVISE_MORE_AGE",
+      "finding": "The current aged state is too conservative.",
+      "requiredNext": "Generate a stronger age ladder in the canonical material workbench, then use Assetforge only to register and verify the selected states."
+    },
+    {
+      "family": "palette",
+      "verdict": "CONSOLIDATE",
+      "canonicalAuthority": "build/unify-corpus.py",
+      "requiredNext": "Replace the parallel RGB harmonizer with a wrapper over the canonical Lab/CIEDE2000 pipeline."
+    },
+    {
+      "family": "trim",
+      "verdict": "RETAIN",
+      "finding": "Useful for offline/world/canvas sprite elongation even where CSS border-image or nine-slice layout can serve DOM UI."
+    },
+    {
+      "family": "citizenship",
+      "verdict": "CONSOLIDATE",
+      "canonicalAuthority": "build/gen-sprite-registry.py + src/ui/theater-sprites.js + Clayroom citizenship proof",
+      "requiredNext": "Retain at most a single-asset preflight adapter; do not create a second citizenship schema."
+    },
+    {
+      "family": "atlas",
+      "verdict": "PROMISING",
+      "finding": "Potential route for sprite items to coexist with 3D construction.",
+      "requiredNext": "Converge on the documented potpack/runtime-atlas contract. Defer Clayroom and 3D-texturing proof until Adam requests it."
+    },
+    {
+      "family": "material",
+      "verdict": "CONSOLIDATE",
+      "canonicalAuthority": "dev/lit-texture-proof/generate-normal-companions.py + dev/material-workbench-proof/generate-condition-maps.py + Material Maker lane",
+      "requiredNext": "Retire the parallel luminance baker; retain only Assetforge orchestration and receipt wrapping over canonical material tools."
+    }
+  ]
+}

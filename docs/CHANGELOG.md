@@ -8,6 +8,26 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-28 — Assetforge founder-review correction [Codex]
+
+**Corrected**
+- Adam's individual review is now authoritative over the earlier aggregate technical PASS.
+  `founder-review-2026-07-28.json` records repeat and prop rejection, stronger-age direction, the
+  consolidation mandate, retained trim utility, and deferred atlas/Clayroom proof.
+- Confirmed the repeat's 512-pixel tile does not close its 82×72 placement period; outer-edge
+  equality was a false seam proxy.
+- Confirmed the prop qualifier restaged already edge-clipped leaf art and proved neither the
+  production camera nor dressing-card ground-depth behavior.
+
+**Consolidation**
+- `build/unify-corpus.py` remains the palette authority.
+- `build/gen-sprite-registry.py` plus the Theater/Clayroom standee contract remain citizenship
+  authority.
+- The periodic normal companion, material workbench, and Material Maker lane remain material-map
+  authority. Parallel Assetforge algorithms are not eligible for production.
+- Atlas remains a promising retained compiler but must converge on the documented potpack/runtime
+  contract; Clayroom proof is explicitly deferred.
+
 ## 2026-07-28 — Assetforge real-asset qualification [Codex]
 
 **Added**

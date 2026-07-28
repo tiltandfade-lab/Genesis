@@ -221,6 +221,29 @@ in favor of deterministic adjacency-aware variant selection.
 This is a technical qualification boundary, not an art-admission boundary. Emote identity/taste,
 material-channel authorship, and every production routing decision remain explicitly reviewable.
 
+### Founder review correction — 2026-07-28
+
+Adam's individual review rejected the current repeat output and the current prop proof, requested a
+stronger age treatment, and required consolidation rather than parallel implementations for
+palette, citizenship, and material maps. The durable review is
+`dev/model-qa/assetforge-real/founder-review-2026-07-28.json`.
+
+- **Repeat:** technical `PASS` is invalid as a production claim. The 512-pixel tile does not close
+  the 82×72 course period; `forcePeriodic` launders the outermost pixels without closing placement
+  phase.
+- **Prop kit:** fragment cleanup works, but every selected leaf source already touches an image
+  edge. Camera equivalence and production ground-depth behavior were not proved.
+- **Condition:** Assetforge is the state registration/verifier layer. Stronger age generation
+  belongs to the canonical material workbench.
+- **Palette:** `build/unify-corpus.py` remains canonical. The parallel nearest-RGB implementation is
+  slated for removal or conversion into a wrapper.
+- **Citizenship:** `build/gen-sprite-registry.py`, `src/ui/theater-sprites.js`, and the Clayroom
+  citizenship proof remain canonical. Assetforge may expose single-asset preflight only.
+- **Atlas:** retained as a promising compiler, but must converge on the documented potpack/runtime
+  atlas contract before later Clayroom proof.
+- **Material maps:** the periodic normal companion, material workbench, and Material Maker lane
+  remain canonical. The parallel Assetforge baker is slated for removal or wrapper conversion.
+
 ## Non-emote V1 contracts
 
 - **Modular repeat:** keys a component sheet, isolates connected components, places every component

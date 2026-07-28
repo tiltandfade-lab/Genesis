@@ -6,6 +6,24 @@ updated: 2026-07-28
 
 # Genesis — Session Hand-off
 
+## Latest (2026-07-28, ASSETFORGE FOUNDER REVIEW CORRECTION) [Codex]
+
+Adam's individual review overturned several of the real-qualification visual claims. Technical
+receipts remain useful evidence, but art admission is blocked. The machine-readable correction is
+`dev/model-qa/assetforge-real/founder-review-2026-07-28.json`.
+
+- Repeat is genuinely broken: 512 does not close the 82×72 staggered-course period; edge-pixel
+  copying produced a false seamless PASS.
+- Prop cleanup removed neighboring fragments but laundered source-edge clipping. Camera equivalence
+  and standee-wins-ground rendering were never tested.
+- Age is too conservative: real changed ratios are only 0.0125 and 0.0169.
+- Palette, citizenship, and material map implementations are parallel duplicates and must become
+  wrappers over `unify-corpus.py`, `gen-sprite-registry.py`/the renderer contract, and the material
+  workbench/Material Maker lane respectively.
+- Trim remains useful as an offline/non-DOM nine-slice tool.
+- Atlas remains promising, but runtime/Clayroom proof is deferred at Adam's request and must first
+  converge on the documented potpack atlas contract.
+
 ## Latest (2026-07-28, ASSETFORGE REAL-ASSET QUALIFICATION) [Codex]
 
 The twelve Assetforge processes now have a retained production-shaped qualification harness in

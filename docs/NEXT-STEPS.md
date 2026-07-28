@@ -455,6 +455,8 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
    regression control rejected. Individual inspection repaired clipped decal branches, foreign
    prop-sheet fragments, and roof-repeat cadence before closure.
 8. ☐ **Assetforge art-admission gate** — Adam reviews the individual retained process proofs (the
-   aggregate board is navigation only), selects any candidates worth keeping, and only then do we
-   design family-specific runtime-registry admission. Emote identity and material-map authorship
-   remain explicitly review-required.
+   aggregate board is navigation only). First review is complete: repeat + current prop proof
+   rejected; condition needs visibly more age; palette/citizenship/material require consolidation;
+   trim retained; atlas promising with Clayroom proof deferred. Fix period closure and source-edge/
+   camera/depth contracts, replace duplicate algorithms with canonical adapters, then return only
+   the revised individual proofs for admission.
